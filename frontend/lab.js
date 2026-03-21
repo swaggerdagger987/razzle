@@ -2573,6 +2573,7 @@ function setUniverse(u) {
   }
 
   state.week = 0;
+  state.tagFilter = false;
   applyUniverseUI();
 
   // If currently on an NFL-only panel and switching to college (or vice versa), go to screener
@@ -2593,6 +2594,7 @@ function setUniverse(u) {
   renderPresets();
   populatePresetSelect();
   renderActiveFilters();
+  updateTagFilterBadge();
   fetchAndRender();
 
   // Invalidate cached panels so they re-fetch with new universe
@@ -2602,6 +2604,7 @@ function setUniverse(u) {
 function setCollegeView(view) {
   if (state.collegeView === view) return;
   state.collegeView = view;
+  state.tagFilter = false;
   try { localStorage.setItem('razzle_college_view', view); } catch(e) {}
   state.offset = 0;
   state.search = "";
@@ -2891,6 +2894,7 @@ function populateSeasonSelect() {
 
 // ─── Week select ─────────────────────────────────────────────────
 let _weekDebounce = null;
+var _weekFetchController = null;
 
 function populateWeekSelect() {
   const weekSel = document.getElementById("weekSelect");
@@ -2907,7 +2911,11 @@ function populateWeekSelect() {
   var season = state.season || 0;
   weekSel.style.display = "";
 
-  fetch(window.location.origin + "/api/available-weeks?season=" + season)
+  // Abort any in-flight week fetch to prevent stale data on rapid season switch
+  if (_weekFetchController) _weekFetchController.abort();
+  _weekFetchController = new AbortController();
+
+  fetch(window.location.origin + "/api/available-weeks?season=" + season, { signal: _weekFetchController.signal })
     .then(function(r) { return r.ok ? r.json() : { weeks: [] }; })
     .then(function(data) {
       state.availableWeeks = data.weeks || [];
@@ -2918,7 +2926,8 @@ function populateWeekSelect() {
       weekSel.innerHTML = html;
       _updateWeekAnnotation();
     })
-    .catch(function() {
+    .catch(function(e) {
+      if (e && e.name === "AbortError") return;
       weekSel.innerHTML = '<option value="0">All Weeks</option>';
     });
 
@@ -5123,7 +5132,18 @@ function computePercentiles() {
 }
 
 function getHeatColor(pct) {
-  // Warm-shifted colors that work on Anthropic sand background
+  var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    // Higher opacity for dark espresso background
+    if (pct >= 90) return "rgba(46, 196, 182, 0.35)";
+    if (pct >= 75) return "rgba(46, 196, 182, 0.20)";
+    if (pct >= 60) return "rgba(46, 196, 182, 0.10)";
+    if (pct <= 10) return "rgba(230, 57, 70, 0.30)";
+    if (pct <= 25) return "rgba(230, 57, 70, 0.18)";
+    if (pct <= 40) return "rgba(230, 57, 70, 0.08)";
+    return "";
+  }
+  // Warm-shifted colors for Anthropic sand background
   if (pct >= 90) return "rgba(46, 196, 182, 0.22)";  // elite green-tinted
   if (pct >= 75) return "rgba(46, 196, 182, 0.12)";  // good green
   if (pct >= 60) return "rgba(46, 196, 182, 0.05)";  // slight green

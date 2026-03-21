@@ -2779,3 +2779,33 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - 11/11 smoke tests pass after all fixes
 - All 4 modified files syntax clean (node --check, py_compile)
 - 0 regressions
+
+---
+
+## Ship Loop Session 26: 3-Agent Sweep (Mar 20)
+
+**Goal**: Parallel sweep with Backend Architect, Frontend Developer, and Accessibility Auditor agents. Focus on new bug patterns: race conditions, state desync, dark mode gaps, a11y.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Silent error swallowing in `_user_had_trial` | P1 | billing.py:205 | `except Exception: pass` could silently grant re-trial on DB error. Now logs warning with exc_info. |
+| 2 | Silent error swallowing in quota/track endpoints | P2 | server.py:987,1009 | Auth failures silently degraded paid users to free quota. Now logs warning with exc_info. |
+| 3 | Week select race condition on rapid season switch | P1 | lab.js:2897 | `populateWeekSelect()` fetch had no AbortController — stale week options could overwrite newer data. Added `_weekFetchController` with abort-on-reentry and AbortError catch guard. |
+| 4 | tagFilter not cleared on universe/college-view switch | P2 | lab.js:2576,2606 | Tag filter state persisted across NFL→college switch, causing ghost filter. Added `state.tagFilter = false` in `setUniverse()` and `setCollegeView()`, plus `updateTagFilterBadge()` call. |
+| 5 | Heat colors invisible in dark mode | P1 | lab.js:5134 | `getHeatColor()` used rgba tuned for light sand background — nearly invisible on dark espresso. Added `isDark` branch with higher opacity values (0.35/0.20/0.10 green, 0.30/0.18/0.08 red). |
+| 6 | Dark mode hover tints too faint in all panels | P1 | lab-panels.css:4868+ | 29 panel table hover rules used `rgba(217,119,87,0.08)` — imperceptible on dark background. Added `[data-theme="dark"]` override block with `0.18` opacity. Also fixed matchup heatmap brightness filter (0.95→1.15 in dark mode). |
+| 7 | Missing aria-label on icon-only buttons | P1 | lab.html:3304-3305,4377 | Undo/redo buttons (unicode glyphs only) and info toggle button lacked `aria-label`. Screen readers announced them without meaningful labels. Added aria-label to all three. |
+
+### Triaged (not fixing this session)
+- Stripe race conditions on early adopter slots / customer creation: Architectural — needs DB-level locking, not a minimal fix
+- Focus trapping in 19 modal dialogs: Large a11y project — needs shared `trapFocus()` utility across all dialogs
+- Panel fetch AbortControllers: Would need to touch every panel render function in lab-panels.js — too large for sweep
+- Full lab-panels.css dark mode block (gold/bronze medal contrast, posColors hex→var): Incremental — started with hover tints which have the highest impact
+- JWT stale plan after upgrade: Server-side enforcement is correct (DB lookup in get_current_user), JWT only affects frontend display until next /api/auth/me call
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All modified files syntax clean (node --check, py_compile)
+- 0 regressions

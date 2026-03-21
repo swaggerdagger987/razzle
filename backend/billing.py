@@ -203,7 +203,7 @@ def _user_had_trial(user_id: int) -> bool:
             if user_row:
                 return True
         except Exception:
-            pass  # Column might not exist yet
+            logger.warning("Failed to check trial_used column for user %s", user_id, exc_info=True)
         return False
 
 

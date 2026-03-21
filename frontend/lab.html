@@ -3301,8 +3301,8 @@
     <div class="toolbar-divider hide-mobile"></div>
 
     <!-- Undo/Redo — only visible when enabled -->
-    <button class="btn-chunky undo-redo-btn" id="undoBtn" onclick="undoState()" title="Undo (Ctrl+Z)" disabled style="font-size:14px; padding:5px 8px;">&#8630;</button>
-    <button class="btn-chunky undo-redo-btn" id="redoBtn" onclick="redoState()" title="Redo (Ctrl+Y)" disabled style="font-size:14px; padding:5px 8px;">&#8631;</button>
+    <button class="btn-chunky undo-redo-btn" id="undoBtn" onclick="undoState()" title="Undo (Ctrl+Z)" aria-label="Undo" disabled style="font-size:14px; padding:5px 8px;">&#8630;</button>
+    <button class="btn-chunky undo-redo-btn" id="redoBtn" onclick="redoState()" title="Redo (Ctrl+Y)" aria-label="Redo" disabled style="font-size:14px; padding:5px 8px;">&#8631;</button>
 
     <!-- Tools dropdown -->
     <div class="tools-dropdown-wrap">
@@ -4374,7 +4374,7 @@
                              '<div class="panel-title-row">' +
                                '<div class="panel-title">' + escapeHtml(label) + '</div>' +
                                '<div class="panel-actions">' +
-                                 '<button class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeAttr(methodId) + '\')" title="How is this calculated?">&#9432;</button>' +
+                                 '<button class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeAttr(methodId) + '\')" title="How is this calculated?" aria-label="How is this calculated?">&#9432;</button>' +
                                  '<button class="btn-panel-action btn-csv-export" onclick="exportPanelCSV(\'' + escapeAttr(panelName) + '\')" title="Export as CSV">CSV</button>' +
                                  '<button class="btn-panel-action" onclick="screenshotPanel(\'' + escapeAttr(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
                                  '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeAttr(panelName) + '\')" title="Copy share link">Share</button>' +

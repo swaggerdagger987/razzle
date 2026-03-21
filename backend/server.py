@@ -985,7 +985,7 @@ async def get_query_quota(request: Request):
                 user_id = result["user"]["id"]
                 plan = result["user"].get("plan", "free")
         except Exception:
-            pass
+            logger.warning("Failed to resolve user for quota check", exc_info=True)
 
     return auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
 
@@ -1006,7 +1006,7 @@ async def track_query(request: Request):
                 user_id = result["user"]["id"]
                 plan = result["user"].get("plan", "free")
         except Exception:
-            pass
+            logger.warning("Failed to resolve user for query tracking", exc_info=True)
 
     # Check quota first
     quota = auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
