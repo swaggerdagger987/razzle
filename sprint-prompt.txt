@@ -59,30 +59,71 @@ Append to sprint-journal.md:
 NEXT: [pick the most important of the 3 questions above]
 ```
 
-### Step 4: Every 10 questions, write a synthesis
+### Step 4: AUTORESEARCH REVIEW (the part that makes this work)
 
-After every 10th question, add a SYNTHESIS section:
+After writing your answer, STOP. Read back through the last 5 answers in the journal. Ask yourself:
+
+**4A. Weak answer audit:**
+- Which of my last 5 answers had confidence below 5? List them.
+- For each weak answer: can I NOW find better data with a different search query? If yes, write a REVISION entry instead of a new question:
+
+```
+---
+## REVISION of Q[X]: [original question]
+**Original confidence**: [N] -> **New confidence**: [N]
+**What changed**: [new data found]
+**Revised answer**: [updated answer with new source]
+```
+
+Revisions count as iterations. The journal gets STRONGER, not just longer.
+
+**4B. Contradiction check:**
+- Does my new answer contradict any previous answer? If yes, flag it:
+
+```
+**CONTRADICTION with Q[X]**: [what conflicts and which answer is right based on evidence]
+```
+
+**4C. Assumption chain audit:**
+- Am I building on an answer that was low-confidence? If Q15 builds on Q8 and Q8 was confidence 3, then Q15 is also shaky. Go back and strengthen Q8 first.
+
+```
+**DEPENDENCY WARNING**: This answer depends on Q[X] (confidence [N]). Strengthening Q[X] first.
+NEXT: [revised version of Q[X] with a more specific search angle]
+```
+
+### Step 5: Every 10 questions, write a synthesis
+
+After every 10th question (counting revisions), add a SYNTHESIS section:
 
 ```
 ---
 ## SYNTHESIS (after Q[N])
 
-**What we now know for certain** (high confidence, multiple sources):
-- [finding 1]
-- [finding 2]
+**What we now know for certain** (confidence 8+, multiple sources):
+- [finding 1] (backed by Q[X], Q[Y])
+- [finding 2] (backed by Q[X])
 
-**What we think but can't prove** (medium confidence):
-- [finding]
+**What we think but can't prove** (confidence 4-7):
+- [finding] (from Q[X], needs: [what data would confirm/deny])
 
-**What we were wrong about** (revised from earlier answers):
-- [finding]
+**What we were wrong about** (revised from earlier):
+- Q[X] said [old thing]. Q[Y] found [new thing]. Revised.
+
+**Weakest links in our research** (confidence below 4):
+- Q[X]: [question] — confidence [N]. This matters because [why].
+- These should be targeted for revision in the next 10 iterations.
 
 **The clearest path to 1,000 paid users based on this research**:
-[2-3 paragraphs. Specific actions. No hand-waving.]
+[2-3 paragraphs. Specific actions. No hand-waving. Every claim references a Q number.]
 
 **Top 5 actions ranked by expected impact**:
-1. [action] — [why, based on which questions/answers]
+1. [action] — [why, backed by Q[X], Q[Y]]
 2. ...
+
+**Next 10 iterations should focus on**:
+- [area where confidence is lowest but stakes are highest]
+- [specific questions to ask]
 
 NEXT: [the question that would most change the strategy if answered differently]
 ```
