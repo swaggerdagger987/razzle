@@ -1846,7 +1846,7 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30, week=None
                 delta = round(second_avg - first_avg, 1)
 
                 current_snap = recent[-1]["snap_pct"]
-                season_avg = round(sum(w["snap_pct"] for w in weeks) / len(weeks), 1)
+                season_avg = round(sum(w["snap_pct"] for w in weeks) / (len(weeks) or 1), 1)
 
                 info = player_info[pid]
                 info["weeks"] = all_weeks_data
