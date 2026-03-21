@@ -2190,7 +2190,7 @@ async def player_profile_page(player_id: str):
         career = data.get("career", {})
         ppr = career.get("fantasy_points_ppr")
         games = career.get("games")
-        pprg = f"{ppr / games:.1f}" if ppr and games else ""
+        pprg = f"{ppr / games:.1f}" if ppr is not None and games else ""
 
         og_title = f"{name} ({pos}, {team}) — Razzle"
         og_desc = f"Player profile for {name}"
