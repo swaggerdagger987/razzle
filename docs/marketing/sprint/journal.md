@@ -679,6 +679,52 @@ Sources:
 
 3. **What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?** (Carried from Q9 — still unanswered and critical for the September timeline.)
 
-## NEXT QUESTION: What should Razzle's Lab screenshots actually look like — what visual format (table, chart, card, infographic) is most screenshottable and shareable on Reddit/group chats?
+## Question 11: What should Razzle's Lab screenshots actually look like — what visual format (table, chart, card, infographic) is most screenshottable and shareable on Reddit/group chats?
+
+**Why this matters**: The entire Reddit content strategy (Q10) depends on screenshots being the hook. If the visual output looks like every other fantasy tool's table, the watermark is invisible. The format determines whether someone saves the image or scrolls past it.
+
+### Answer
+
+**Verdict: Three formats, ranked by shareability. The "heat-colored data table with a headline" is the workhorse; the "player comparison card" is the group-chat weapon; the "grade card" is the save-and-bookmark format.**
+
+Evidence:
+
+1. **The heat-colored table is Reddit's native data format.** PeakedInHighSkool's trade value charts — color-coded tiers, position grouping, player names with trend arrows — are the most consistently upvoted fantasy image on Reddit (weekly front-page posts for 4+ years). The format works because it's SCANNABLE: a Reddit user can glance at the image, find their player, see the color, and immediately know the take. Razzle already has this — the Lab's percentile heat coloring (H key) with position-colored cells is this exact format. **The spec**: Lab screenshot with (a) a bold headline baked into the export ("Target Share Leaders Since 2020 — Who's Actually Elite?"), (b) heat-colored cells so the insight is VISUAL not just numerical, (c) 8-12 rows max (not 50 — crop to the story), (d) razzle.lol watermark bottom-right.
+
+2. **The comparison card is the group-chat weapon.** Razzle's existing compare page (radar chart + stat diff table + PNG export) is already built for this. The format that gets dropped in group chats is always a 1v1: "I keep telling you Amon-Ra is better than CeeDee and HERE'S THE PROOF." Dynasty Dealmaker's 831-upvote post used this exact pattern — personal data that settles an argument. **The spec**: Two-player side-by-side with (a) player photos/names prominent, (b) radar chart overlay showing shape differences, (c) 3-5 key stat diffs with green/red arrows, (d) a verdict line ("Edge: Player A in 4 of 6 categories"), (e) watermark. This already exists in Razzle's compare.js export — the key optimization is making the DEFAULT export crop tight (no browser chrome, no nav bar) and the headline auto-generated from the data.
+
+3. **The grade card is the bookmark/save format.** Data visualization research (Hashmeta, Venngage 2021 survey) confirms that infographic-style content with clear grades/ratings gets saved at higher rates than raw tables. Razzle's Report Card (Fantasy GPA with A+ to F grades) and Player Archetypes ("Workhorse," "Alpha Target") are already this format. The "Spotify Wrapped for fantasy" pattern (Dynasty Daddy) proves personalized grade cards go viral when they include YOUR data. **The spec**: Single-player card with (a) player name + team + position badge, (b) 5-6 grades (efficiency, consistency, SOS, opportunity, overall GPA) as letter grades with color fills, (c) archetype label ("Workhorse RB"), (d) one "verdict" sentence, (e) watermark. Dimensions: 1200x630px (Twitter/Reddit optimal).
+
+4. **What NOT to do:** Pure charts (line graphs, bar charts) without context fail on Reddit. A chart requires the viewer to interpret axes, understand scale, and draw their own conclusion. Tables with headlines tell the viewer WHAT TO THINK. The exception is the radar chart in comparisons — it works because it's a SHAPE comparison (bigger shape = better player) that's instantly legible.
+
+5. **The visual signature that makes Razzle screenshots recognizable:** Sand background (#ede0cf), espresso borders (3px solid), position-colored accents (QB blue, RB teal, WR terracotta, TE purple), Luckiest Guy headlines, Space Mono data. No other fantasy tool uses warm sand tones — the palette IS the brand signal. When someone sees a sand-colored data table in their feed, it should immediately register as "that Razzle thing."
+
+### Self-Critique
+
+**What's backed by data**: PeakedInHighSkool's multi-year Reddit dominance with color-coded tier tables is documented. Dynasty Dealmaker's 831-upvote comparison post is real. Data viz research (Hashmeta, Venngage) confirms infographics/grade cards get higher save rates. The 1200x630px image dimension for social sharing is standard practice.
+
+**What's speculation**: The specific claim that "8-12 rows max" is optimal for Reddit table screenshots is my judgment call — no A/B test exists. Whether Razzle's sand palette is distinctive enough to be recognized "in the wild" is unvalidated. The grade card format hasn't been tested as a Reddit post type for fantasy football specifically — it works for Dynasty Daddy's Wrapped, but that's a different context (end-of-season recap vs. in-season analysis).
+
+**Confidence: 7/10** — The three formats are well-supported by existing viral content patterns. The specific visual specs are informed hypotheses that need real-world testing on Reddit.
+
+Sources:
+- [PeakedInHighSkool Trade Value Charts](https://peakedinhighskool.com/)
+- [PeakedInHighSkool Dynasty Trade Value Charts](https://peakedinhighskool.com/dynasty-trade-value-charts/)
+- [Data Visualization Marketing: Charts That Get Shared — Hashmeta](https://hashmeta.com/blog/data-visualization-marketing-how-to-create-charts-that-get-shared/)
+- [Data Viz for Social Media — Evergreen Data](https://stephanieevergreen.com/data-viz-for-social-media/)
+- [Dynasty Daddy — Fantasy Football Tools](https://dynasty-daddy.com)
+- [Razzle Design Guide (internal)](docs/DESIGN.md)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **How should Razzle run a willingness-to-pay test BEFORE building the full Bureau — landing page with pricing, survey, or waitlist with tier selection?** (Carried from Q10 — the $149 Founding Member price is unvalidated. A pre-launch test could confirm demand with zero Bureau code.)
+
+2. **What is the exact PNG export UX flow — should the Lab auto-crop to visible rows, add a headline prompt, and offer Reddit-optimized dimensions (1200x630) as a one-click action?** (The current export is raw full-page. A "Share to Reddit" button that auto-formats would reduce friction between insight and post.)
+
+3. **What are the first 5 "data drop" posts Razzle should publish on r/DynastyFF — which specific player analyses using which specific Lab views will generate the most engagement during the April-May draft window?** (Moves from format theory to actual content calendar with specific posts.)
+
+## NEXT QUESTION: How should Razzle run a willingness-to-pay test BEFORE building the full Bureau — landing page with pricing, survey, or waitlist with tier selection?
 
 ---
