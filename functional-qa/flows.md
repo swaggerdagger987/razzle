@@ -32,7 +32,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | DONE — PASS (data correct), P1 FUNC-004: all headshots missing on prod |
+| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | RE-AUDIT SESSION 17 — PASS. Post Session 18 XSS fix (esc() on season table + combine data). CMC profile: stats, radar, career arc render. JSON-LD has \u003c escape. 0 JS errors. P1 FUNC-004 (headshots) still open. |
 | 14 | Player profile: Career stats | Career numbers add up across seasons? Per-game averages calculated correctly? | DONE — PASS (Lamar 8 seasons sum exactly matches career totals: GP=124, PPR=2531.04, PassYds=24361) |
 | 15 | Player profile: Game log | Individual game stats shown? Sum of game log = season total? Week numbers correct? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar 2024 game log=17 weeks (1-18 only), 17 GP. |
 | 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | DONE — PASS (Jackson vs Stroud 2024, data aligned, same season) |
@@ -42,8 +42,8 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | RE-AUDIT SESSION 13 — PASS. 2025 data: Nacua#1(24.8yr,23.4PPG,95.8val), Robinson#3(24.1yr,21.8PPG). Age+production reality correct. |
-| 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | DONE — PASS (same clustering note as #18) |
+| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | RE-AUDIT SESSION 17 — PASS. Post Session 18 font-display fixes. Nacua#1(95.8), McBride#2(95.6), Robinson#3(95.4). Position badges use mono font at small sizes, display font on headers. Proper tier spread. 0 JS errors. |
+| 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | RE-AUDIT SESSION 17 — PASS. Post Launch Fix 12 (linked sliders). Sliders sum to 100% (50/30/20 default). API: Nacua 95.8 → Maye 92.0 in tier 1, 85 players total. No clustering. 0 JS errors. |
 | 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | DONE — PASS |
 | 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | DONE — PASS (functional), P2 S-tier bloated (76 players, FUNC-003) |
 | 22 | Aging Curves | Chart renders? Shows realistic age-based decline? Peak age correct per position? | DONE — RB peak correct, P2 WR/TE survivorship bias |
@@ -53,10 +53,10 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 24 | Cheat Sheet | Loads? Sortable? Position ranks correct? Matches screener sort order? | DONE — PASS (4 pos groups, Jackson QB#1 PPG=24.82, tiers+ranks correct) |
+| 24 | Cheat Sheet | Loads? Sortable? Position ranks correct? Matches screener sort order? | RE-AUDIT SESSION 17 — PASS (data). P2 FUNC-016: escapeHtml in onclick should be escapeAttr (near-zero practical risk, nflverse IDs are digits+dashes). |
 | 25 | Weekly Heatmap | Loads? Week selector works? Colors match stat intensity? | RE-AUDIT SESSION 13 — PASS. 2025 data: weeks 1-18 only (FUNC-012 holding). Allen 16GP, Stafford 17GP. |
 | 26 | Weekly Leaders | Loads? Leaders match that week's actual stat leaders? Category switch works? | DONE — PASS. API returns ranked weekly performers (verified Barkley Wk1 2024 = 33.2 PPR, exact calc confirmed). Position filter works (QB-only returns QBs). Season/week navigation, sortable columns, top 3 badges, points tiers (elite/great/good). P2: 0 shows as '-' due to JS falsy (0 || '-'). |
-| 27 | Matchups | Loads? Correct matchups for selected week? Opponent data shown? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Weekly heatmap weeks 1-18 only, Lamar GP=17. |
+| 27 | Matchups | Loads? Correct matchups for selected week? Opponent data shown? | RE-AUDIT SESSION 17 — PASS. Post Session 18 XSS fix (data-pid + addEventListener replaces inline onclick). 32 teams in API. Pro-locked panel correctly gated. Font-display fix applied to table headers. 0 JS errors. |
 | 28 | Stacks | QB-WR/TE stacks shown? Correlation data makes sense? | DONE — PASS (30 stacks, Pearson math correct). P2: min 5 common games too low, small-sample flukes dominate (Dalton+Johnson r=0.988 in 6G). Elite stacks (Allen, Hurts, Burrow) absent from top 30. |
 | 29 | Breakouts | Candidates shown with data? Breakout criteria visible and reasonable? | DONE — PASS (50 candidates, RBS scores present, opp/prod gap logic sound). P2: snap_pct=0 due to FUNC-007 |
 | 30 | Waivers | Waiver targets shown? FAAB values if applicable? Sorted by priority? | DONE — PASS (30 targets, delta math correct, 4-week window). P2: no ownership data, so "waivers" are just trending-up players (Bryce Young #1 = rostered everywhere). No FAAB values. |
