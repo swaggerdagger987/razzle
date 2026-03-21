@@ -6165,7 +6165,7 @@
     function renderStatCard(s, isStrength) {
       var pct = s.percentile || 0;
       var html = '<div class="sw2-stat-card">';
-      html += '<div class="sw2-stat-rank">#' + (s.rank || '-') + '</div>';
+      html += '<div class="sw2-stat-rank">#' + (s.rank != null ? s.rank : '-') + '</div>';
       html += '<div class="sw2-stat-info">';
       html += '<div class="sw2-stat-label">' + escapeHtml(s.label || s.stat || '') + '</div>';
       html += '<div class="sw2-stat-value">' + fmt(s.value) + '</div>';
@@ -6544,7 +6544,7 @@
           } else if (c.key === 'opponent') {
             html += '<td>' + escapeHtml(g.opponent || g.opp || '-') + '</td>';
           } else if (c.key === 'week') {
-            html += '<td class="glo-num">' + (v || '-') + '</td>';
+            html += '<td class="glo-num">' + (v != null ? v : '-') + '</td>';
           } else {
             html += '<td class="glo-num">' + fmt(v, (c.key.indexOf('yards') >= 0 ? 0 : 0)) + '</td>';
           }
@@ -8132,7 +8132,7 @@
           if (p.weight) measStr += (measStr ? ' / ' : '') + p.weight + ' lbs';
 
           html += '<div class="bb-card">';
-          html += '<div class="bb-card-top"><div class="bb-rank">#' + (p.rank || '') + '</div>';
+          html += '<div class="bb-card-top"><div class="bb-rank">#' + (p.rank != null ? p.rank : '') + '</div>';
           html += '<span class="bb-pos-badge ' + posLc + '">' + escapeHtml(p.position || '') + '</span>';
           html += '<div class="bb-info"><div class="bb-name">' + escapeHtml(p.player_name || '') + '</div>';
           html += '<div class="bb-meta">' + escapeHtml(p.school || '') + '</div></div>';

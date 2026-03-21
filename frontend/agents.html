@@ -2315,7 +2315,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
       // Octo: top ranked player stat
       if (rankings.players && rankings.players.length > 0) {
         var top = rankings.players[0];
-        briefing.agents.octo = "Dynasty #1: " + top.full_name + " (DVS " + (top.dynasty_value || 'N/A') + "). The model is confident.";
+        briefing.agents.octo = "Dynasty #1: " + top.full_name + " (DVS " + (top.dynasty_value != null ? top.dynasty_value : 'N/A') + "). The model is confident.";
       } else {
         briefing.agents.octo = "Rankings stable this week. No major model shifts.";
       }
