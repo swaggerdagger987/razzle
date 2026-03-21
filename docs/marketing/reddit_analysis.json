@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-03-21T18:34:42.745467",
+  "generated_at": "2026-03-21T19:51:02.388491",
   "data_summary": {
-    "total_posts": 8267,
+    "total_posts": 9769,
     "total_comments": 655,
     "subreddits": {
-      "DynastyFF": 1337,
-      "SleeperApp": 1319,
-      "fantasyfootball": 1212,
-      "fantasyfootballadvice": 1000,
-      "Fantasy_Football": 999,
-      "FantasyFootballers": 550,
-      "DynastyFootballLeague": 500,
-      "NFL_Draft": 500,
-      "TradeAnalyzerFF": 500,
+      "DynastyFF": 1640,
+      "SleeperApp": 1519,
+      "fantasyfootball": 1411,
+      "fantasyfootballadvice": 1200,
+      "Fantasy_Football": 1199,
+      "FantasyFootballers": 650,
+      "DynastyFootballLeague": 600,
+      "NFL_Draft": 600,
+      "TradeAnalyzerFF": 600,
       "bestball": 101,
       "ffcommish": 101,
       "sportsanalytics": 97,
@@ -21,18 +21,18 @@
   },
   "pain_points": {
     "counts": {
-      "injury_concern": 2565,
-      "aging_decline": 1660,
-      "prospect_research": 583,
-      "rookie_draft": 560,
-      "data_analysis": 361,
-      "rebuild_contend": 350,
-      "league_management": 269,
-      "trade_confusion": 253,
-      "waiver_wire": 159,
-      "value_uncertainty": 115,
-      "tool_complaints": 108,
-      "start_sit": 6
+      "injury_concern": 3018,
+      "aging_decline": 1954,
+      "prospect_research": 694,
+      "rookie_draft": 661,
+      "data_analysis": 426,
+      "rebuild_contend": 418,
+      "league_management": 312,
+      "trade_confusion": 302,
+      "waiver_wire": 186,
+      "value_uncertainty": 136,
+      "tool_complaints": 132,
+      "start_sit": 7
     },
     "examples": {
       "trade_confusion": [
@@ -439,6 +439,13 @@
       },
       {
         "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
+        "score": 7292,
+        "flair": null,
+        "comments": 325,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
         "score": 7290,
         "flair": null,
         "comments": 325,
@@ -495,6 +502,13 @@
       },
       {
         "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
+        "score": 6558,
+        "flair": null,
+        "comments": 726,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
         "score": 6556,
         "flair": null,
         "comments": 726,
@@ -517,6 +531,13 @@
       {
         "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
         "score": 6218,
+        "flair": "Another 49ers Practice Update",
+        "comments": 1595,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
+        "score": 6215,
         "flair": "Another 49ers Practice Update",
         "comments": 1595,
         "sub": "fantasyfootball"
@@ -565,6 +586,13 @@
       },
       {
         "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
+        "score": 5742,
+        "flair": "For Love of the Game!",
+        "comments": 154,
+        "sub": "FantasyFootballers"
+      },
+      {
+        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
         "score": 5741,
         "flair": "For Love of the Game!",
         "comments": 154,
@@ -583,6 +611,13 @@
         "flair": "For Love of the Game!",
         "comments": 154,
         "sub": "FantasyFootballers"
+      },
+      {
+        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
+        "score": 5598,
+        "flair": "Player Discussion",
+        "comments": 330,
+        "sub": "fantasyfootball"
       },
       {
         "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
@@ -663,9 +698,23 @@
       },
       {
         "title": "Pollard to the Pats is a done deal",
+        "score": 5533,
+        "flair": "Misleading",
+        "comments": 1209,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Pollard to the Pats is a done deal",
         "score": 5531,
         "flair": "Misleading",
         "comments": 1209,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Rome Odunze in a BARNBURNER 47-42 win against the Bengals: 0 receptions on 3 targets and 0 total yards.",
+        "score": 5035,
+        "flair": "Player Discussion",
+        "comments": 596,
         "sub": "fantasyfootball"
       },
       {
@@ -723,262 +772,213 @@
         "flair": null,
         "comments": 237,
         "sub": "fantasyfootball"
-      },
-      {
-        "title": "RIP my best friend",
-        "score": 4959,
-        "flair": null,
-        "comments": 237,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "RIP my best friend",
-        "score": 4957,
-        "flair": null,
-        "comments": 237,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "RIP my best friend",
-        "score": 4951,
-        "flair": null,
-        "comments": 237,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "RIP my best friend",
-        "score": 4950,
-        "flair": null,
-        "comments": 237,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Ja'Marr Chase had a career-high THREE tackles to go along with his 2-TD, 110-yard game",
-        "score": 4737,
-        "flair": null,
-        "comments": 164,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Ja'Marr Chase had a career-high THREE tackles to go along with his 2-TD, 110-yard game",
-        "score": 4737,
-        "flair": null,
-        "comments": 164,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Ja'Marr Chase had a career-high THREE tackles to go along with his 2-TD, 110-yard game",
-        "score": 4737,
-        "flair": null,
-        "comments": 164,
-        "sub": "fantasyfootball"
       }
     ],
     "flair_avg_score": {
-      "Misleading": 5536.0,
-      "Reddit Consensus Rankings": 3296.4,
-      "Another 49ers Practice Update": 3284.6,
-      "Breaking News": 2642.6060606060605,
-      "Injury Report": 2476.215189873418,
-      "Travis Hunter Content": 2305.6,
+      "Misleading": 5535.571428571428,
+      "Another 49ers Practice Update": 3302.7586206896553,
+      "Reddit Consensus Rankings": 3297.5,
+      "Breaking News": 2652.051282051282,
+      "Injury Report": 2488.935483870968,
+      "Travis Hunter Content": 2305.6666666666665,
       "Hail to the JCM Hype Train": 2002.0,
       "Training Camp News and Vibes": 1733.0,
-      ":NFL: NFL Question ": 1122.75,
-      "Speculation": 1077.857142857143,
-      ":NFL: League Issue ": 1034.0,
-      ":Sleeper2: Breaking News": 917.7894736842105,
-      "For Love of the Game!": 814.9242424242424,
-      ":Sleeper2: APP/Tech Assistance": 731.7619047619048,
-      ":NFL: NFL Meme": 720.4,
-      ":Sleeper2: NFL/Player News ": 687.5925925925926,
-      "MEGALABOWL!": 677.0,
-      "No Flair": 656.401384083045,
-      "League Discussion": 614.6611570247934,
-      ":Sleeper2: Discussion": 595.2200647249191
+      ":NFL: NFL Question ": 1123.0,
+      "Speculation": 1081.625,
+      ":NFL: League Issue ": 1069.8333333333333,
+      ":Sleeper2: Breaking News": 915.8636363636364,
+      "For Love of the Game!": 823.2866242038217,
+      ":Sleeper2: APP/Tech Assistance": 735.2916666666666,
+      ":NFL: NFL Meme": 719.8,
+      ":Sleeper2: NFL/Player News ": 690.7096774193549,
+      "MEGALABOWL!": 677.6666666666666,
+      "No Flair": 663.4459325396825,
+      "League Discussion": 621.3460207612457,
+      ":Sleeper2: Discussion": 596.6350974930363
     },
     "flair_counts": {
-      "No Flair": 1734,
-      "Player Discussion": 1554,
-      ":Sleeper2: Dynasty": 716,
-      ":NFL: Player Discussion": 443,
-      ":NFL: News": 407,
-      ":Sleeper2: Discussion": 309,
-      "Trade": 307,
-      "League Discussion": 242,
-      ":NFL: Dynasty Trade": 235,
-      "Dynasty - Trade Advice": 193,
-      ":NFL: Miscellaneous ": 176,
-      "Trade - Contending": 155,
-      "Dynasty - Team Advice": 142,
-      "For Love of the Game!": 132,
-      ":Sleeper2: Fantasy Advice": 113,
-      "Redraft - Team Advice": 108,
-      "Discussion": 107,
-      "Team/Trade Help": 101,
-      "Injury Report": 79,
-      "Tools and Resources": 70
+      "No Flair": 2016,
+      "Player Discussion": 1881,
+      ":Sleeper2: Dynasty": 821,
+      ":NFL: Player Discussion": 529,
+      ":NFL: News": 489,
+      "Trade": 369,
+      ":Sleeper2: Discussion": 359,
+      "League Discussion": 289,
+      ":NFL: Dynasty Trade": 284,
+      "Dynasty - Trade Advice": 230,
+      ":NFL: Miscellaneous ": 202,
+      "Trade - Contending": 186,
+      "Dynasty - Team Advice": 172,
+      "For Love of the Game!": 157,
+      "Redraft - Team Advice": 131,
+      ":Sleeper2: Fantasy Advice": 130,
+      "Discussion": 124,
+      "Team/Trade Help": 116,
+      "Injury Report": 93,
+      "Tools and Resources": 89
     },
-    "image_post_count": 4984,
-    "total_posts": 8267
+    "image_post_count": 5882,
+    "total_posts": 9769
   },
   "language": {
     "top_players_mentioned": [
       [
         "Biggest Upset",
-        248
+        310
       ],
       [
         "Closest Matchup",
-        246
+        307
       ],
       [
         "Biggest Blowout",
-        246
+        307
       ],
       [
         "Lowest Scorer",
-        246
+        307
       ],
       [
         "Most Expensive",
-        246
+        307
       ],
       [
         "Waiver Add",
-        246
+        307
       ],
       [
         "Highest Scorer",
-        245
+        306
       ],
       [
         "Points Leader",
-        240
+        300
       ],
       [
         "Malik Willis",
-        187
+        224
       ],
       [
         "Josh Allen",
-        181
+        218
       ],
       [
         "Fantasy Football",
-        172
+        202
       ],
       [
         "North Cackalacky",
-        159
+        197
       ],
       [
         "Cardiac Cats",
-        159
+        197
       ],
       [
         "Ashton Spectres",
-        151
-      ],
-      [
-        "View Poll",
-        149
+        186
       ],
       [
         "Scranton Paper",
-        148
+        183
+      ],
+      [
+        "View Poll",
+        182
       ],
       [
         "The Pit",
-        145
+        181
       ],
       [
         "Kyler Murray",
-        143
+        174
       ],
       [
         "The The",
-        131
+        162
       ],
       [
         "City Ticks",
-        131
+        162
       ],
       [
         "Jaylen Waddle",
-        121
+        148
       ],
       [
         "Kenneth Walker",
-        120
-      ],
-      [
-        "Free Agency",
-        117
+        145
       ],
       [
         "Wilhelm Screams",
-        115
+        142
+      ],
+      [
+        "Free Agency",
+        140
       ],
       [
         "Pennsyltucky Groundhogs",
-        109
-      ],
-      [
-        "Cam Ward",
-        106
-      ],
-      [
-        "Justin Fields",
-        106
-      ],
-      [
-        "Chase Brown",
-        105
+        135
       ],
       [
         "Great White",
-        105
+        131
       ],
       [
-        "Dynasty Fantasy",
-        104
+        "Justin Fields",
+        128
+      ],
+      [
+        "Cam Ward",
+        127
+      ],
+      [
+        "Woodbridge Thirst",
+        126
+      ],
+      [
+        "Bhayshul Tuten",
+        125
       ]
     ],
     "fantasy_term_frequency": {
-      "dynasty": 2638,
-      "ppr": 1446,
-      "playoff": 727,
-      "sf": 671,
-      "tep": 507,
-      "data": 485,
-      "superflex": 470,
-      "sleeper": 394,
-      "championship": 304,
-      "redraft": 265,
-      "rebuild": 237,
-      "keeper": 183,
-      "stats": 180,
-      "startup": 112,
-      "breakout": 111,
-      "bust": 109,
-      "metrics": 98,
-      "faab": 94,
-      "half ppr": 93,
-      "analytics": 91,
-      "contender": 90,
-      "league mate": 83,
-      "standard": 70,
-      "trade value": 66,
-      "trade calculator": 63,
-      "te premium": 59,
-      "waiver wire": 47,
-      "group chat": 42,
-      "leaguemate": 36,
-      "decline": 31,
-      "target share": 25,
-      "trade advice": 23,
-      "regression": 17,
-      "cliff": 9,
+      "dynasty": 3218,
+      "ppr": 1738,
+      "playoff": 849,
+      "sf": 778,
+      "tep": 607,
+      "superflex": 571,
+      "data": 547,
+      "sleeper": 462,
+      "championship": 352,
+      "redraft": 311,
+      "rebuild": 286,
+      "keeper": 214,
+      "stats": 203,
+      "breakout": 136,
+      "startup": 127,
+      "bust": 126,
+      "half ppr": 113,
+      "metrics": 113,
+      "faab": 109,
+      "contender": 105,
+      "league mate": 99,
+      "analytics": 96,
+      "standard": 80,
+      "trade value": 79,
+      "trade calculator": 77,
+      "te premium": 73,
+      "waiver wire": 55,
+      "group chat": 50,
+      "leaguemate": 40,
+      "decline": 38,
+      "target share": 29,
+      "trade advice": 25,
+      "regression": 20,
+      "cliff": 11,
       "snap count": 1
     }
   },
@@ -998,7 +998,7 @@
         "The Dynasty Trade Grades: Volume 1 I’m digging through recent dynasty trades on KeepTradeCut, pulling out the most interesting ones, and grading them to help you start forming ideas on who to buy and",
         "The Dynasty Trade Grades: Volume 4 It’s a new week, which means I’m back grading dynasty fantasy football trades using KeepTradeCut.\n\nIf you’re new to dynasty, KeepTradeCut is a widely used site that"
       ],
-      "neutral": 14
+      "neutral": 20
     },
     "FantasyPros": {
       "positive": [
@@ -1011,7 +1011,7 @@
       "negative": [
         "Yeah, and they got rid of the fantasy pros and other team analysis apps that were in the side of your profile. It sucks because I loved checking out the power rankings and so on for my different leagu"
       ],
-      "neutral": 10
+      "neutral": 12
     },
     "ESPN": {
       "positive": [
@@ -1035,17 +1035,18 @@
         "My fantasy superpower is podcasts After years of wandering though so much bad advice on twitter and reddit, I realized how much expert analysis podcasts give you that costs hundreds if you want to rea",
         "I'm considering resigning as commissioner and from the league. I’ve been running my fantasy league for about seven years now. It started as a small six-team Yahoo league with a tiny buy-in and random"
       ],
-      "neutral": 7
+      "neutral": 9
     },
     "Sleeper": {
       "positive": [
         "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the league for you. $50 entry. its about the challeng",
         "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the league for you. $50 entry. its about the challeng",
         "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the league for you. $50 entry. its about the challeng",
+        "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the league for you. $50 entry. its about the challeng",
         "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the league for you. $50 entry. its about the challeng"
       ],
       "negative": [],
-      "neutral": 7
+      "neutral": 8
     },
     "Dynasty Nerds": {
       "positive": [
@@ -1058,7 +1059,7 @@
       "negative": [
         "Which RBs Will Dominate the Fantasy Playoffs | Advanced Matchup Stats Reveal All We’re one week closer to the fantasy playoffs, and trade deadlines are approaching fast. Our short series continues wit"
       ],
-      "neutral": 37
+      "neutral": 48
     },
     "Dynasty Process": {
       "positive": [],
@@ -1072,7 +1073,7 @@
       "negative": [
         "Dynasty Stock Market - 5 Players Being Traded - Ken Walker Hype Smoke Or Fire? The Dynasty Stock Market is back. We discuss 5 players being traded heavily in Dynasty Fantasy Football the last 7 days."
       ],
-      "neutral": 3
+      "neutral": 5
     }
   }
 }

@@ -2565,6 +2565,105 @@ Sources:
 
 3. **What's the summer content strategy (June-August) between the end of Film Room Finds and the start of NFL season — and when is the next high-engagement window on r/DynastyFF?**
 
-## NEXT QUESTION: What's the ideal watermark design — URL only, URL + logo, or URL + tagline — and where should it be positioned on Lab screenshots to maximize visibility without triggering spam reports?
+## Question 30: What's the ideal watermark design — URL only, URL + logo, or URL + tagline — and where should it be positioned on Lab screenshots to maximize visibility without triggering spam reports?
+
+**Why this matters**: The watermark is the ENTIRE marketing funnel for Reddit screenshots. Every Lab Report post lives or dies on whether viewers notice, remember, and type the URL. Too subtle = no conversions. Too loud = spam reports and mod removal. This is the single design decision that bridges "great OC content" to "site traffic."
+
+### Answer
+
+**Recommendation: URL only ("razzle.lol") in Caveat handwritten font, bottom-right corner, 20-25% opacity. No logo. No tagline.**
+
+Here's why, based on what works in the fantasy football Reddit ecosystem:
+
+**1. The PeakedInHighSkool model proves URL-only works.**
+PeakedInHighSkool's weekly trade value charts — the most-screenshotted fantasy football images on Reddit — use a simple branded URL watermark. No mascot, no tagline, no "visit us" CTA. Just the domain name placed consistently in the same position across every image. After 4+ years of weekly posts, "peakedinhighskool.com" is a household name on r/fantasyfootball. The URL did all the branding work. (Source: [PeakedInHighSkool charts](https://peakedinhighskool.com/fantasy-trade-value-chart/))
+
+**2. Reddit's spam detection is triggered by overt branding, not watermarks.**
+Reddit's self-promotion rules focus on link frequency and posting ratio (the 90/10 guideline), NOT on watermarks within images. r/dataisbeautiful — which has the strictest OC rules — explicitly allows watermarks on data visualizations as long as the poster discloses their data source and tool. Fantasy subs are looser. Watermarks on OC data images are standard practice and NOT treated as self-promotion. (Sources: [Reddit spam policy](https://support.reddithelp.com/hc/en-us/articles/360043504051-Spam), [Reddit self-promotion guide](https://redditservice.com/reddit-self-promotion-rules/))
+
+**3. Logo/mascot watermarks read as "company" — URL watermarks read as "creator."**
+On Reddit, personal creators watermark with URLs. Companies watermark with logos. A Bengal tiger mascot in the corner screams "branded product marketing." A handwritten "razzle.lol" reads as "this is my tool, I made this." Since the Reddit strategy uses a personal account (u/swaggerdagger987), the watermark should match the personal creator energy. Logo = corporate. URL = indie.
+
+**4. Taglines are wasted space.**
+"Fantasy football analytics" or "Your dynasty research lab" adds zero information that the screenshot doesn't already communicate. The data table IS the tagline. Every pixel of watermark text that isn't the URL is a pixel that doesn't drive traffic.
+
+**Specific design specs for Razzle's Lab screenshots:**
+
+| Element | Spec |
+|---------|------|
+| **Text** | `razzle.lol` |
+| **Font** | Caveat (handwritten) — already used in current implementation |
+| **Size** | 28px on export canvas (appears ~14px at screen resolution) |
+| **Color** | Ink color at 20-25% opacity (light mode: `rgba(45,31,20,0.22)`, dark mode: `rgba(237,224,207,0.25)`) |
+| **Position** | Bottom-right corner, 20px from right edge, 30px from bottom |
+| **Agent icon** | KEEP the random agent character icon (already implemented in `drawRazzleWatermark`). This is a collectible/rarity Easter egg that rewards re-shares. It's subtle enough (0.2-0.3 alpha) to not read as branding. |
+| **Shareable URL** | The current implementation shows a truncated page URL below the domain — KEEP this for Lab screenshots. It tells viewers "this is a live tool you can use" and shows the specific filter/view state. |
+| **What to remove** | No tagline. No "powered by" text. No "free at" prefix. Just the URL. |
+
+**Current implementation review (app.js lines 431-453):**
+The existing `drawRazzleWatermark()` function is already close to optimal:
+- Caveat font at 28px ✓
+- Right-aligned, bottom-right ✓
+- 0.25 alpha ✓
+- Random agent icon (collectible rarity) ✓
+- Shareable URL below domain ✓
+
+The only tweak: the fixed on-page watermark (`.ar-watermark` class on standalone pages) uses `var(--ink-faint)` at 14px — this is fine for on-screen but will NOT appear in Reddit screenshot crops. The on-page watermark is irrelevant to the content strategy. Only the PNG export watermark matters.
+
+**What NOT to do:**
+- Don't put the watermark in the center or across data rows (obscures data, triggers annoyance)
+- Don't use >30% opacity (looks aggressive, not "creator attribution")
+- Don't add "FREE" or "Try it" (instant spam classification)
+- Don't rotate the watermark diagonally (stock photo energy, not OC creator energy)
+- Don't put it in the top-left (gets cropped when people share to group chats — mobile crops from top-left)
+
+---
+
+### Self-Critique
+
+1. **I don't have direct evidence of PeakedInHighSkool's specific watermark opacity or font.** I know the charts exist, I know they include a URL, and I know they're the most-shared fantasy images on Reddit — but I haven't seen the exact pixel specs. The recommendation is inferred from the general pattern of successful OC creators, not measured from their images. **Confidence: 8/10** — the principle is sound even if the exact reference implementation isn't pixel-verified.
+
+2. **The "agent icon Easter egg" is untested for Reddit reception.** The random agent character appearing in the watermark corner is a novel touch that could either (a) create "collect them all" sharing behavior, or (b) be too subtle to notice. Since it's at 0.2-0.3 alpha, it's essentially invisible unless you're looking. Low risk, low downside — keep it as a fun detail but don't count on it for conversion.
+
+3. **Reddit mobile crops differently than desktop.** When screenshots are shared in group chats (iMessage, Discord, Slack), the preview thumbnail often crops from center. The bottom-right watermark may be invisible in chat previews. This is fine — the full image on Reddit is the primary conversion surface. Chat sharing is secondary.
+
+4. **I'm not accounting for dark mode vs. light mode visibility.** The current implementation handles both, but the Lab screenshots shared to Reddit will likely be light mode (sand background). The dark mode watermark spec matters less for the Reddit strategy. Light mode should be the optimized case.
+
+5. **The shareable URL line (truncated page URL below "razzle.lol") is a double-edged sword.** It communicates "this is a live tool" (good) but also makes the watermark taller and more visible (slight spam risk). For the Lab Report series specifically, the URL line should show the Lab screener URL with filters visible — this is a FEATURE, not spam, because it tells viewers they can replicate the exact analysis.
+
+**Confidence: 8.5/10** — URL-only in handwritten font at low opacity is the consensus best practice across Reddit OC communities. The existing implementation is already well-designed. The main uncertainty is whether the shareable URL line adds enough value to justify the extra visual weight.
+
+Sources:
+- [Reddit Spam Policy](https://support.reddithelp.com/hc/en-us/articles/360043504051-Spam) — Reddit's official spam definition
+- [Reddit Self-Promotion Rules](https://redditservice.com/reddit-self-promotion-rules/) — 80/20 rule analysis
+- [Self-Promotion on Reddit the Right Way](https://vadimkravcenko.com/qa/self-promotion-on-reddit-the-right-way/) — frequency and format guidance
+- [PeakedInHighSkool Trade Value Charts](https://peakedinhighskool.com/fantasy-trade-value-chart/) — proven watermarked chart model
+- [PeakedInHighSkool Patreon](https://www.patreon.com/posts/reddit-adjusted-88975652) — monetization path from free Reddit content
+- [Subvertadown Compendium 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — 7 years of branded OC on Reddit
+- [Data Visualization Watermark Best Practices](https://fastercapital.com/content/Data-Visualization--Visualizing-Data-with-a-Twist--Watermarks-in-Excel-Charts-and-Graphs.html) — corner placement, 10-15% opacity for data charts
+- [Watermarking for Branding in 2026](https://www.masswatermark.com/2026/02/09/why-watermarking-matters-in-2026-protection-branding-ai-risks/) — watermark as digital signature
+- [r/dataisbeautiful OC tools](https://www.randalolson.com/2016/03/11/what-data-visualization-tools-do-rdataisbeautiful-oc-creators-use/) — OC attribution norms
+
+### Implications for Razzle
+
+1. **The current `drawRazzleWatermark()` implementation (app.js:431-453) is already near-optimal.** No redesign needed. The Caveat font, bottom-right placement, random agent icon, and shareable URL are all correct choices. Keep shipping with the current watermark.
+
+2. **For the Lab Report series screenshots, use the PNG export (not browser screenshots).** The custom canvas export produces a cleaner watermark with shareable URL state. Train the muscle of always exporting via the Lab's built-in export button, not OS-level screenshotting.
+
+3. **Test the watermark at Reddit's display resolution.** Reddit compresses uploaded images. Export at 2x scale (already set in lab.js) but verify the watermark is legible after Reddit's JPEG compression. If the Caveat font becomes blurry at Reddit's resolution, consider switching to Space Mono (monospace) for the URL only.
+
+4. **The on-page fixed watermarks (`.ar-watermark` etc.) serve no marketing purpose.** They're only visible to users already on the site. Consider removing them from standalone pages to reduce visual clutter — or keep them as a subtle brand touch. Either way, they're not part of the Reddit funnel.
+
+5. **Pre-capture a "watermark check" before April 19.** Take a sample Lab screenshot, upload it to Reddit (a test sub or your own profile), open it on mobile, and confirm the watermark is readable. This 5-minute test prevents discovering readability issues on launch day.
+
+### Open Questions
+
+1. **Should the Lab Report series screenshots use light mode or dark mode — and does Reddit's r/DynastyFF user base have a visual preference that affects engagement?**
+
+2. **What's the summer content strategy (June-August) between the end of Lab Report series and the start of NFL season — and when is the next high-engagement window on r/DynastyFF?**
+
+3. **How should the Lab's PNG export be optimized for Reddit's image compression — what resolution, format (PNG vs JPEG), and file size produces the crispest result after Reddit processing?**
+
+## NEXT QUESTION: What's the summer content strategy (June-August) between the end of Lab Report series and the start of NFL season — and when is the next high-engagement window on r/DynastyFF?
 
 ---
