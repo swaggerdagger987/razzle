@@ -2860,3 +2860,42 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 
 ### IMPORTANT: Production DB Needs Rebuild
 All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-only. Production razzle.lol still has the old DB. Human must rebuild terminal.db and upload to GitHub release for Render.
+
+---
+
+## Ship Loop Session 29: Full Codebase Sweep (Mar 21)
+
+**Goal**: Deep security and robustness sweep with zero tickets. All ticket directories empty, TICKETS.md remaining items blocked on external infrastructure.
+
+### Sweep Results
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | LLM endpoint temperature/max_tokens input sanitization | P2 | server.py:1128-1134, 1239-1243 | Both `/api/llm/chat` and `/api/llm/chat-free` passed user-supplied `temperature` and `max_tokens` without type validation. A non-numeric `max_tokens` (e.g., `"foo"`) would crash `min()` with TypeError before the try/except block. Now: temperature clamped to [0.0, 2.0] with float cast + fallback, max_tokens clamped to [1, cap] with int cast + fallback. |
+| 2 | Response cache thread safety | P1 | server.py:36-56 | `_resp_cache` dict accessed concurrently by async middleware and background thread without locking. Eviction path could raise `RuntimeError: dictionary changed size during iteration` or corrupt state. Added `threading.Lock` around all cache reads, writes, and eviction. |
+| 3 | Body size limit bypass via chunked encoding | P1 | server.py:470-491 | `body_size_limit_middleware` only checked `Content-Length` header, which can be omitted with chunked transfer encoding. Attacker could POST unbounded body to exhaust server memory. Now reads actual body for POST/PUT/PATCH without Content-Length and enforces 1 MB limit. |
+| 4 | XSS via escapeHtml in attribute context | P0 | formula-store.js:482 | `escapeHtml` (DOM textContent trick) does NOT escape `"` — used in `value="${escapeHtml(...)}"` attribute. Attacker input containing `"` breaks out of attribute. Changed to `escapeAttr()`. |
+| 5 | XSS via inline onclick with escapeAttr | P0 | lab.js:11389 | Roster search results used inline `onclick` with `escapeAttr`. Browsers decode HTML entities in event handler attributes before JS execution, so `&#39;` decodes back to `'`, allowing JS injection. Replaced with data attributes + `addEventListener` event delegation. |
+| 6 | Missing null checks in fetch/render functions | P1 | lab.js | `fetchAndRenderNFL/Prospects/College`, `applyUniverseUI`, `renderPagination`, `closeTradeAnalyzer` accessed DOM elements without null guards. Added `if (!el) return` or `if (el)` guards to prevent TypeError crashes. |
+
+### Triaged (not fixing this session)
+- Rate limiter thread safety (P2): `defaultdict(list)` rate limiters not locked — slight over-count under high concurrency is acceptable for rate limiters
+- Screener POST cache key normalization (P2): Extra keys in POST body create unique cache entries — capped at 100 entries max
+- Bootstrap status thread safety (P2): GIL provides sufficient protection for simple dict reads/writes
+- Cache key season resolution (P2): `season=None` cache keys waste memory but don't affect correctness
+- Unescaped season values in `<option>` HTML (P2): Integer-only from API, low risk but inconsistent with codebase conventions
+- `_showToast` innerHTML heuristic (P2): Uses innerHTML when message contains `<a href="/"` — latent XSS trap but all current callers use safe internal strings
+- `briefings/save` fetch missing `resp.ok` check (P2): Failed save still triggers `loadLatestBriefing()`, masking failure
+
+### Areas Verified Clean
+- **SQL injection**: All query builders use allowlists (safe_sorts, FILTER_COLUMN_MAP, ops dict) + parameterized queries
+- **Division by zero**: All 40+ division sites guarded with `or 1`, `if > 0`, or `HAVING games >= N` clauses
+- **Auth**: All sensitive endpoints use `require_auth` + `require_plan`, briefing retrieval scoped by user_id (no IDOR)
+- **XSS**: `escapeHtml` used consistently, no `eval()` or `new Function()`, agent nudges validate colors with regex and block `javascript:` URLs
+- **CORS**: Production-only origin (`https://razzle.lol`), dev adds localhost
+- **LLM security**: System messages stripped, message count/length capped, server-controlled system prompt
+- **Password security**: bcrypt 12 rounds, common password blocklist, min 8 chars with complexity
+- **Rate limiting**: IP-based on sensitive endpoints, per-user on LLM proxy, waitlist rate limiter
+- **Secrets**: No hardcoded API keys, no debug endpoints, CORS origins environment-gated
+
+### 11/11 smoke tests pass after fix

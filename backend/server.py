@@ -34,13 +34,15 @@ logger = logging.getLogger("razzle.server")
 # Eliminates both data-level cache lookup and JSON serialization on hits.
 # ---------------------------------------------------------------------------
 _resp_cache: dict = {}  # url_path -> {"body": bytes, "t": float, "headers": dict}
+_resp_cache_lock = __import__("threading").Lock()
 _RESP_CACHE_TTL = 120  # 2 minutes
 _RESP_CACHE_MAX = 100
 
 
 def _resp_cache_get(key: str):
     """Get cached response bytes. Returns (body, headers) or None."""
-    entry = _resp_cache.get(key)
+    with _resp_cache_lock:
+        entry = _resp_cache.get(key)
     if entry and _time.time() - entry["t"] < _RESP_CACHE_TTL:
         return entry["body"], entry["headers"]
     return None
@@ -48,12 +50,12 @@ def _resp_cache_get(key: str):
 
 def _resp_cache_set(key: str, body: bytes, headers: dict):
     """Cache response bytes."""
-    if len(_resp_cache) >= _RESP_CACHE_MAX:
-        # Evict oldest entries — snapshot to avoid RuntimeError on concurrent access
-        oldest = sorted(list(_resp_cache.items()), key=lambda x: x[1]["t"])
-        for k, _ in oldest[:20]:
-            _resp_cache.pop(k, None)
-    _resp_cache[key] = {"body": body, "t": _time.time(), "headers": headers}
+    with _resp_cache_lock:
+        if len(_resp_cache) >= _RESP_CACHE_MAX:
+            oldest = sorted(_resp_cache.items(), key=lambda x: x[1]["t"])
+            for k, _ in oldest[:20]:
+                _resp_cache.pop(k, None)
+        _resp_cache[key] = {"body": body, "t": _time.time(), "headers": headers}
 
 
 # ---------------------------------------------------------------------------
@@ -467,17 +469,28 @@ _RESP_CACHEABLE_PREFIXES = (
 
 @app.middleware("http")
 async def body_size_limit_middleware(request: Request, call_next):
-    """Reject requests with Content-Length exceeding 1 MB."""
+    """Reject requests with body exceeding 1 MB.
+    Checks Content-Length header first, then enforces actual body size
+    for POST/PUT/PATCH to prevent chunked-encoding bypass."""
+    _MAX_BODY = 1_048_576
     content_length = request.headers.get("content-length")
     if content_length:
         try:
-            if int(content_length) > 1_048_576:
+            if int(content_length) > _MAX_BODY:
                 return JSONResponse(
                     {"error": "Request body too large. Maximum size is 1 MB."},
                     status_code=413,
                 )
         except ValueError:
             pass
+    elif request.method in ("POST", "PUT", "PATCH"):
+        # No Content-Length header (chunked encoding) — enforce actual body size
+        body = await request.body()
+        if len(body) > _MAX_BODY:
+            return JSONResponse(
+                {"error": "Request body too large. Maximum size is 1 MB."},
+                status_code=413,
+            )
     return await call_next(request)
 
 
@@ -1125,12 +1138,22 @@ async def llm_chat(request: Request):
     )
     sanitized_messages = [{"role": "system", "content": system_prompt}] + user_messages
 
-    # Sanitize: enforce max_tokens and model (Elite gets the good model)
+    # Sanitize: enforce max_tokens, temperature, and model (Elite gets the good model)
+    try:
+        _temp = float(body.get("temperature", 0.3))
+        _temp = max(0.0, min(_temp, 2.0))
+    except (TypeError, ValueError):
+        _temp = 0.3
+    try:
+        _mt = int(body.get("max_tokens", _LLM_MAX_TOKENS))
+        _mt = max(1, min(_mt, _LLM_MAX_TOKENS))
+    except (TypeError, ValueError):
+        _mt = _LLM_MAX_TOKENS
     llm_body = {
         "model": _LLM_MODEL,
         "messages": sanitized_messages,
-        "temperature": body.get("temperature", 0.3),
-        "max_tokens": min(body.get("max_tokens", _LLM_MAX_TOKENS), _LLM_MAX_TOKENS),
+        "temperature": _temp,
+        "max_tokens": _mt,
     }
 
     # Proxy to LLM provider
@@ -1236,11 +1259,21 @@ async def llm_chat_free(request: Request):
     )
     sanitized_messages = [{"role": "system", "content": system_prompt}] + user_messages
 
+    try:
+        _temp = float(body.get("temperature", 0.3))
+        _temp = max(0.0, min(_temp, 2.0))
+    except (TypeError, ValueError):
+        _temp = 0.3
+    try:
+        _mt = int(body.get("max_tokens", _LLM_FREE_MAX_TOKENS))
+        _mt = max(1, min(_mt, _LLM_FREE_MAX_TOKENS))
+    except (TypeError, ValueError):
+        _mt = _LLM_FREE_MAX_TOKENS
     llm_body = {
         "model": _LLM_FREE_MODEL,
         "messages": sanitized_messages,
-        "temperature": body.get("temperature", 0.3),
-        "max_tokens": min(body.get("max_tokens", _LLM_FREE_MAX_TOKENS), _LLM_FREE_MAX_TOKENS),
+        "temperature": _temp,
+        "max_tokens": _mt,
     }
 
     try:
