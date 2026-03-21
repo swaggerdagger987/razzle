@@ -4454,10 +4454,16 @@ function renderSavedViewsList() {
 }
 
 // ─── Pinned players (sticky comparison rows) ─────────────────────
-var _pinnedDataCache = {}; // player_id -> player object (survives filter changes)
+var _pinnedDataCache = (function() {
+  try { return JSON.parse(localStorage.getItem('razzle_pinned_cache')) || {}; }
+  catch(e) { return {}; }
+})(); // player_id -> player object (persisted across page loads)
 
 function savePinnedPlayers() {
-  try { localStorage.setItem('razzle_pinned_players', JSON.stringify(state.pinnedPlayers)); } catch(e) {}
+  try {
+    localStorage.setItem('razzle_pinned_players', JSON.stringify(state.pinnedPlayers));
+    localStorage.setItem('razzle_pinned_cache', JSON.stringify(_pinnedDataCache));
+  } catch(e) {}
 }
 
 function isPlayerPinned(playerId) {
@@ -4544,10 +4550,18 @@ function renderPinnedRows() {
   const leaderRanks = leadersOn ? computeLeaderRanks() : {};
   let html = "";
 
+  var cacheUpdated = false;
   for (const pid of state.pinnedPlayers) {
-    const player = state.items.find(p => p.player_id === pid) || _pinnedDataCache[pid];
+    const fromItems = state.items.find(p => p.player_id === pid);
+    const player = fromItems || _pinnedDataCache[pid];
     if (!player) continue;
-    if (!_pinnedDataCache[pid]) _pinnedDataCache[pid] = player;
+    if (fromItems && _pinnedDataCache[pid] !== fromItems) {
+      _pinnedDataCache[pid] = fromItems;
+      cacheUpdated = true;
+    } else if (!_pinnedDataCache[pid]) {
+      _pinnedDataCache[pid] = player;
+      cacheUpdated = true;
+    }
     html += buildRowHTML(player, cols, heatOn, pctData, null, barsOn, pctMode, leaderRanks);
   }
 
@@ -4563,6 +4577,11 @@ function renderPinnedRows() {
 
   pinnedBody.innerHTML = html;
   pinnedBody.style.display = "";
+
+  // Persist cache if updated
+  if (cacheUpdated) {
+    try { localStorage.setItem('razzle_pinned_cache', JSON.stringify(_pinnedDataCache)); } catch(e) {}
+  }
 
   // Inject sparklines for pinned rows
   if (cols.includes("trend") && Object.keys(_sparklineCache).length > 1) {
