@@ -1794,3 +1794,71 @@ document.addEventListener("keydown", function(e) {
     }
   });
 })();
+
+/* ===== Ambient Character Peek — ~1/7 page loads ===== */
+(function() {
+  try { if (localStorage.getItem("razzle_no_peek") === "1") return; } catch(e) {}
+  if (Math.random() > (1 / 7)) return;
+
+  // Page → character mapping
+  var pagePeek = {
+    "/lab.html": { icon: "/assets/agents/hawkeye.svg", name: "Hawkeye" },
+    "/league-intel.html": { icon: "/assets/agents/bones.svg", name: "Bones" },
+    "/agents.html": { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+    "/": { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+    "/index.html": { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+    "/pricing.html": { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+  };
+  var path = location.pathname;
+  var agent = pagePeek[path];
+  if (!agent) {
+    // Fallback: rotate through all agents
+    var allAgents = [
+      { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+      { icon: "/assets/agents/dolphin.svg", name: "Dr. Dolphin" },
+      { icon: "/assets/agents/hawkeye.svg", name: "Hawkeye" },
+      { icon: "/assets/agents/bones.svg", name: "Bones" },
+      { icon: "/assets/agents/octo.svg", name: "Octo" },
+      { icon: "/assets/agents/atlas.svg", name: "Atlas" },
+    ];
+    agent = allAgents[Math.floor(Math.random() * allAgents.length)];
+  }
+
+  var peek = document.createElement("div");
+  peek.className = "agent-peek";
+  peek.innerHTML = '<img src="' + agent.icon + '" alt="' + agent.name + '" width="48" height="48">';
+  peek.title = agent.name + " is watching";
+  peek.setAttribute("aria-label", agent.name + " character peek — click to dismiss");
+  peek.setAttribute("role", "button");
+  peek.tabIndex = 0;
+
+  // Style
+  var s = peek.style;
+  s.position = "fixed";
+  s.right = "-48px";
+  s.bottom = "20%";
+  s.width = "48px";
+  s.height = "48px";
+  s.cursor = "pointer";
+  s.zIndex = "999";
+  s.opacity = "0";
+  s.transition = "right 0.6s ease-out, opacity 0.6s ease-out";
+  s.pointerEvents = "auto";
+
+  // Dismiss on click
+  peek.addEventListener("click", function() {
+    s.right = "-48px";
+    s.opacity = "0";
+    setTimeout(function() { if (peek.parentNode) peek.parentNode.removeChild(peek); }, 600);
+  });
+  peek.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); peek.click(); }
+  });
+
+  document.body.appendChild(peek);
+  // Slide in after a delay
+  setTimeout(function() {
+    s.right = "-16px";  // Only partially visible (peeking)
+    s.opacity = "0.7";
+  }, 2000);
+})();
