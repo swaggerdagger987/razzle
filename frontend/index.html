@@ -1007,7 +1007,7 @@ window._miniFilter = function(pos) {
 };
 
 // Fetch live data
-fetch('/api/players?limit=60&sort=ppg&dir=desc&min_gp=4')
+fetch('/api/players?limit=60&sort=ppg&order=desc')
   .then(function(r) { return r.json(); })
   .then(function(data) {
     _miniData = (data.items || data.players || []).map(function(p) {

@@ -111,8 +111,17 @@ def fetch_players(
                 "receiving_fumbles", "receiving_fumbles_lost",
                 "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
                 "offense_snaps", "offense_pct",
-                "full_name", "position", "team", "games", "seasons", "age",
+                "full_name", "position", "team", "games", "seasons", "age", "ppg",
+                # Derived metrics (computed post-query, re-sorted in Python)
                 "half_ppr_ppg", "cpoe", "epa_per_play",
+                "yards_per_carry", "yards_per_rec", "yards_per_target", "catch_rate",
+                "comp_pct", "yards_per_att", "rec_per_game", "targets_per_game",
+                "rush_ypg", "rec_ypg", "pass_ypg", "adot", "snap_share",
+                "td_rate", "fumble_rate", "passer_rating", "ay_per_att",
+                "ppfd", "ppfd_per_game", "yprr",
+                "target_share", "air_yards_share", "wopr", "racr",
+                "passing_epa", "receiving_epa", "rushing_epa", "dakota",
+                "dynasty_value",
             }
             _sort_key = sort_key
             if _sort_key not in safe_sorts:
@@ -148,21 +157,41 @@ def fetch_players(
             where_clause = " AND ".join(where) if where else "1=1"
 
             # Handle sort expression
-            # Derived columns (computed post-query) fall back to PPR sort in SQL
-            _derived_sorts = {"half_ppr_ppg", "cpoe", "epa_per_play"}
-            sort_expr = _sort_key
-            if _sort_key == "seasons":
+            # SQL-sortable columns sort in the query; derived/rate metrics
+            # fall back to PPR in SQL, then re-sort in Python after enrichment
+            _sql_sortable = {
+                "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
+                "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+                "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+                "turnovers", "targets", "carries", "completions", "attempts",
+                "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
+                "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+                "sacks_taken", "sack_yards_lost", "rushing_fumbles",
+                "receiving_fumbles", "receiving_fumbles_lost",
+                "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
+                "offense_snaps", "offense_pct",
+            }
+            _python_sort = _sort_key not in _sql_sortable and _sort_key not in (
+                "ppg", "games", "seasons", "full_name", "position", "team", "age",
+            )
+            _effective_sort = _sort_key if not _python_sort else "fantasy_points_ppr"
+            sort_expr = _effective_sort
+            if _effective_sort == "ppg":
+                sort_expr = "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))"
+            elif _effective_sort == "seasons":
                 sort_expr = "COUNT(DISTINCT s.season)"
-            elif _sort_key == "games":
+            elif _effective_sort == "games":
                 sort_expr = "COUNT(*)"
-            elif _sort_key == "age":
+            elif _effective_sort == "age":
                 sort_expr = "p.age"
-            elif _sort_key in ("full_name", "position", "team"):
-                sort_expr = f"p.{_sort_key}"
-            elif _sort_key in _derived_sorts:
-                sort_expr = "SUM(s.fantasy_points_ppr)"
-            elif _sort_key in safe_sorts:
-                sort_expr = f"SUM(s.{_sort_key})"
+            elif _effective_sort in ("full_name", "position", "team"):
+                sort_expr = f"p.{_effective_sort}"
+            elif _effective_sort in _sql_sortable:
+                sort_expr = f"SUM(s.{_effective_sort})"
+
+            # Over-fetch when Python re-sort needed (derived stats require all rows)
+            sql_limit = max(limit + offset, 500) if _python_sort else limit
+            sql_offset = 0 if _python_sort else offset
 
             query = f"""
                 SELECT
@@ -178,7 +207,7 @@ def fetch_players(
                 ORDER BY {sort_expr} {_sort_dir}
                 LIMIT ? OFFSET ?
             """
-            params.extend([limit, offset])
+            params.extend([sql_limit, sql_offset])
 
             rows = conn.execute(query, params).fetchall()
 
@@ -199,6 +228,13 @@ def fetch_players(
             _enrich_with_dynasty_value(items)
             _enrich_with_team_shares(conn, items, season=_season, career_mode=_career_mode)
             _enrich_with_pbp_stats(conn, items, season=_season, career_mode=_career_mode)
+
+            # Re-sort in Python for derived/rate metrics
+            if _python_sort:
+                reverse = _sort_dir.lower() == "desc"
+                _null_sentinel = float('-inf') if reverse else float('inf')
+                items.sort(key=lambda x: x.get(_sort_key) if x.get(_sort_key) is not None else _null_sentinel, reverse=reverse)
+                items = items[offset:offset + limit]
 
             return {"count": total, "season": "career" if _career_mode else _season, "items": items}
     return _cached(f"fetch_players:{search}:{position}:{positions}:{team}:{sort_key}:{sort_dir}:{limit}:{offset}:{season}", _query)
