@@ -2826,3 +2826,37 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 ### TICKETS.md: All entries DONE (no new work)
 
 ### Entering SWEEP MODE
+
+---
+
+## Ship Loop Session 28: QA Tickets + Data Enrichment (Mar 21)
+
+**Goal**: Consume remaining QA tickets, populate missing DB data, sweep for quality issues.
+
+### QA Tickets Consumed
+
+| Ticket | Severity | Action | Notes |
+|--------|----------|--------|-------|
+| FUNC-030: Deploy ship/launch-fixes | P0 | DONE | Pushed branch to origin. Merge to master + Render redeploy is human task. |
+| FUNC-031: player_season_pbp 0 rows | P1 | DONE | Ran sync_pbp_data() for 2015-2024. 2,729 rows populated. Goal-line, scramble, play-action, garbage time stats now functional locally. |
+
+### Data Enrichment (local DB only — production needs rebuild)
+
+| Task | Result |
+|------|--------|
+| PBP sync (2015-2024) | 2,729 player-season PBP rows: goal-line carries/TDs, scramble stats, play-action, garbage time %, RYOE, drops |
+| Roster sync (2024) | 2,001 players enriched with age, height, weight, college, headshot URLs. Dynasty rankings now have age component. |
+| Bye weeks (2024) | 653 entries across 32 teams |
+| Injuries (2024) | 644 injury entries |
+
+### Sweep Fixes
+
+| Fix | Notes |
+|-----|-------|
+| Garbage time min PPG | Added `ppg >= 5` to stat_padders filter. Previously showed punters/practice squad at 100% GT. Now surfaces fantasy-relevant players (e.g., Rattler 10.5 PPG, 27.7% GT). |
+
+### Backend Code Sweep: CLEAN
+- No division-by-zero risks, SQL injection, bare excepts, or missing null guards found across dashboards.py, analytics.py, tools.py, core.py
+
+### IMPORTANT: Production DB Needs Rebuild
+All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-only. Production razzle.lol still has the old DB. Human must rebuild terminal.db and upload to GitHub release for Render.
