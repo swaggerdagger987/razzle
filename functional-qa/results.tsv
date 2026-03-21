@@ -1880,3 +1880,33 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+flow-10	OK	frontend/lab.js	2278	delegated-star-click	pass	re-audit: FUNC-045 watchlist star fix verified — data-pid + addEventListener, 25 stars with data-pid, apostrophe names safe	high	2026-03-21T04:40
+flow-14	OK	backend/live_data/players.py	743	career-sum-round	pass	re-audit: FUNC-046 IEEE 754 fix verified — McCaffrey 1889.3, Chase 1526.3, Allen 2825.9, 0 artifacts	high	2026-03-21T04:40
+records	OK	backend/live_data/tools.py	1265	records-career-total	pass	records data accuracy verified — all PPG calculations correct, single game/season/career all reasonable	high	2026-03-21T04:40
+seasonpace	P1	frontend/lab-panels.js	5142	spc-games-played	open	FUNC-049: GP column shows '-' — frontend reads p.games_played but API returns games	high	2026-03-21T04:40
+airyards	P1	frontend/lab-panels.js	5431	ay-field-mismatch	open	FUNC-050: AY% shows '-%' (air_yard_pct vs air_yards_share) + GP shows '-' (games_played vs games)	high	2026-03-21T04:40
+reportcard	P1	frontend/lab-panels.js	6277	rpc-field-mismatch	open	FUNC-051: Dom shows '-' (dominator vs dom_rating), GPA sort broken (gpa vs gpa_pct), GP shows '-'	high	2026-03-21T04:40
+streaks	OK	frontend/lab-panels.js	3983	streaks-panel	pass	streaks math verified — averages, deltas, percentages computed from raw values (correct), cold/hot 25 each	high	2026-03-21T04:40
+smoke	OK	-	-	-	pass	11/11 smoke tests passed	high	2026-03-21T04:40
