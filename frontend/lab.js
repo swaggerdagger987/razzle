@@ -1726,7 +1726,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   const posStripeColor = pos === "QB" ? "var(--pos-qb)" : pos === "RB" ? "var(--pos-rb)" : pos === "WR" ? "var(--pos-wr)" : pos === "TE" ? "var(--pos-te)" : "var(--ink-faint)";
   const zebraBg = (rowIdx != null && rowIdx % 2 === 1) ? " background:var(--zebra-stripe, rgba(45,31,20,0.025));" : "";
   let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px; border-left:3px solid ' + posStripeColor + ';' + zebraBg + '">';
-  html += `<td class="col-star" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
+  html += `<td class="col-star" data-pid="${escapeAttr(playKey)}" data-pname="${escapeAttr(player.full_name || player.player_name || '')}" data-pos="${escapeAttr(pos)}" data-team="${escapeAttr(player.team || player.school || '')}" data-universe="${escapeAttr(state.universe)}" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
   html += `<td class="col-select" style="text-align:center; padding:7px 6px;">
     <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
       style="accent-color:${state.universe === 'college' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
@@ -2261,7 +2261,7 @@ function renderProspectTable() {
     // Skip clicks on interactive elements
     var tag = e.target.tagName;
     if (tag === "A" || tag === "INPUT" || tag === "BUTTON" || tag === "SELECT") return;
-    if (e.target.closest("a, input, button, .pin-cell, .tag-picker-popup, .note-editor-popup")) return;
+    if (e.target.closest("a, input, button, .pin-cell, .col-star, .tag-picker-popup, .note-editor-popup")) return;
     var tr = e.target.closest("tr");
     if (!tr) return;
     tr.classList.toggle("row-highlighted");
@@ -2273,6 +2273,14 @@ function renderProspectTable() {
     if (!link) return;
     e.preventDefault();
     openProspectProfile(link.dataset.name, link.dataset.pos, parseInt(link.dataset.year));
+  });
+
+  // Watchlist star — delegated to avoid escapeAttr-in-onclick issues (FUNC-045)
+  tbody.addEventListener("click", function(e) {
+    var star = e.target.closest(".col-star[data-pid]");
+    if (!star) return;
+    e.stopPropagation();
+    toggleWatchlistPlayer(star.dataset.pid, star.dataset.pname, star.dataset.pos, star.dataset.team, star.dataset.universe);
   });
 
   // Double-click stat cell → filter creation (handled on table element below).
