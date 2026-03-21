@@ -564,6 +564,60 @@ Sources:
 
 3. **What is the expected conversion rate from free Lab users to paid Pro subscribers, and how many free users does Razzle need to hit $74K ARR?** (If the Lab-to-Pro conversion rate is 2-3% (SaaS freemium benchmark), Razzle needs 17,000-25,000 free Lab users to hit 500 paying subscribers. Is that realistic for a dynasty fantasy football niche tool?)
 
-## NEXT QUESTION: What is the realistic launch sequence — should the Bureau ship before or after the free Lab has Reddit traction, and what is the minimum traction threshold?
+## Question 9: What is the realistic launch sequence — should the Bureau ship before or after the free Lab has Reddit traction, and what is the minimum traction threshold?
+
+**Why this matters**: The Lab is the free acquisition engine. The Bureau is the paid moat. Ship Bureau too early = no users to convert. Ship too late = competitors copy the concept. This determines the entire 2026 calendar.
+
+### Answer
+
+**Verdict: Lab first, Bureau second. Launch Bureau when the Lab hits ~1,000 weekly active users (WAU) — roughly 3-5 Reddit posts that each cross 50+ upvotes. Don't wait for perfection; wait for signal.**
+
+Evidence:
+
+1. **a16z's freemium framework says the free tier must prove the "aha moment" before the paid tier exists.** Their core principle: "be clear what the user journey is for your product before thinking about pricing and packaging, because the optimum pricing and packaging is derived from and maps to the user journey." For Razzle, the user journey is: discover Lab screenshot on Reddit → try the Lab → connect Sleeper league → see behavioral teasers → want full Bureau. The Bureau can't convert users who haven't experienced steps 1-3. The Lab must be live and generating organic traffic FIRST.
+
+2. **The AnswerSocrates cautionary tale: launch free-only, then monetize = user revolt.** Indie founder James Oliver launched fully free, hit 10,000+ users, then introduced paid tiers. Long-time users pushed back hard. His retrospective: "If I were starting over, I'd launch with freemium from day one to set the right expectations." This means Razzle should show Bureau pricing/teasers from Day 1, even if the Bureau isn't built yet. A "Coming Soon — Founding Member waitlist" page avoids the bait-and-switch perception.
+
+3. **The r/DynastyFF total addressable audience is ~192K subscribers.** Not all are active, and not all will see Razzle posts. Assuming 5-10% of subscribers see a given post, a front-page post reaches 10K-20K eyeballs. If 2-3% click through, that's 200-600 Lab visitors per viral post. To reach 1,000 WAU, Razzle needs 3-5 posts per week landing on the front page, OR one mega-viral post (500+ upvotes) that sustains residual traffic. This is achievable but not trivial — the Lab's screenshottable outputs are the key.
+
+4. **The 1,000 WAU threshold is grounded in conversion math.** From Q8's pricing research: 500 Founding Members at $149/yr = $74K ARR target. Freemium conversion rates run 2-5% (a16z benchmark), with top performers at 5-10%. At 2% conversion: need 25,000 free users who've tried the product. At 5%: need 10,000. These aren't simultaneous users — they're cumulative over the first paid season. If the Lab sustains 1,000 WAU through a 16-week NFL season, that's ~16,000 unique users exposed to Bureau teasers. At 3% conversion = 480 subscribers. Close enough to the 500 target to validate the model.
+
+5. **The recommended launch calendar:**
+   - **Now through August 2026**: Ship the Lab. Post Lab screenshots on Reddit 3-5x/week. Build the "Founding Member" waitlist with Bureau pricing visible. Track WAU.
+   - **Traction gate (target: August)**: 1,000 WAU sustained for 2+ consecutive weeks, OR waitlist hits 200+ signups, OR one Reddit post crosses 300 upvotes. Any ONE of these signals = green light.
+   - **September 2026 (NFL Week 1)**: Bureau launches for Founding Members. The paid tier goes live when real games create real behavioral data (trades, waiver moves, lineup decisions). Behavioral profiling needs in-season data to be useful — launching before Week 1 would show empty profiles.
+   - **If traction gate NOT met by September**: Launch Bureau anyway at NFL Week 1 but at a deeper discount ($99 "Pioneer" rate). Low user base = low conversion pressure, so validate the product with a smaller cohort rather than waiting another year.
+
+6. **Critical: Bureau teaser content must be visible in the free Lab from Day 1.** Show locked Bureau features as blurred/teased cards: "Connect your Sleeper league to see Manager X's panic score" with a Pro badge. This sets the expectation that paid features exist, avoids the AnswerSocrates problem, and creates conversion pressure even before Bureau is built. The teaser IS the marketing.
+
+### Self-Critique
+
+**What's backed by data**: a16z's freemium sequencing framework (free-to-paid conversion timing). AnswerSocrates retrospective on launching free-then-paid. r/DynastyFF's ~192K subscriber count. Freemium conversion benchmarks (2-5% median, 5-10% top). The math from 1,000 WAU × 16 weeks × 3% = ~480 subscribers.
+
+**What's speculation**: The 1,000 WAU threshold is my synthesis, not an industry benchmark. The "3-5 Reddit posts per week on front page" assumption hasn't been tested — Razzle's actual Reddit performance is unknown. The September launch timing assumes the Lab can ship and gain traction in 5 months, which depends on development velocity. The "launch Bureau anyway" fallback at $99 is my recommendation — no direct precedent in fantasy tools.
+
+**Confidence: 7/10** — The sequencing logic (Lab first, Bureau second, teasers from Day 1) is strongly supported by SaaS freemium literature. The specific threshold (1,000 WAU) is defensible math but untested. The NFL season timing constraint (Bureau needs in-season data) is a hard product requirement that independently forces this sequence.
+
+Sources:
+- [The Three Most Common Challenges with Freemium — a16z](https://a16z.com/how-to-optimize-your-free-tier-freemium/)
+- [Bottom Up Pricing & Packaging — a16z](https://a16z.com/2021/03/11/bottom-up-pricing-packaging-let-the-user-journey-be-your-guide/)
+- [What Now: Freemium or Paid? — a16z](https://a16z.com/what-now-freemium-or-paid/)
+- [Smart Micro-SaaS Pricing Strategies — Freemius](https://freemius.com/blog/micro-saas-pricing-strategies/)
+- [The $100K Developer: Build and Sell Niche SaaS — XYZBytes](https://www.xyzbytes.com/blog/100k-developer-saas-guide)
+- [SaaS Freemium Conversion Rates: 2026 Report — First Page Sage](https://firstpagesage.com/seo-blog/saas-freemium-conversion-rates/)
+- [r/DynastyFF Subreddit Stats — SubredditStats](https://subredditstats.com/r/dynastyff)
+- [Freemium Conversion Rate: Key Metric — Monetizely](https://www.getmonetizely.com/articles/freemium-conversion-rate-the-key-metric-that-drives-saas-growth)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What does Razzle's Reddit content strategy look like — what specific post formats, titles, and Lab screenshots will reliably hit the r/DynastyFF front page?** (The entire funnel starts with Reddit posts. Need to reverse-engineer what post formats and titles consistently get upvotes in dynasty subs, then map Razzle's Lab outputs to those formats.)
+
+2. **How should Razzle run a willingness-to-pay test BEFORE building the full Bureau — landing page with pricing, survey, or waitlist with tier selection?** (The $149 recommendation is directional but unvalidated. A pre-launch pricing test could validate the price point with zero code investment.)
+
+3. **What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?** (Can't build all 8 archetypes for launch. Need to pick the 2-3 that generate the most screenshottable, exploitable insights with minimal league history.)
+
+## NEXT QUESTION: What does Razzle's Reddit content strategy look like — what specific post formats, titles, and Lab screenshots will reliably hit the r/DynastyFF front page?
 
 ---
