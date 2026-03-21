@@ -4096,7 +4096,7 @@
       if (!cur.loaded && cur.container) {
         var el = cur.container.querySelector('.lab-panel-content');
         if (el) {
-          el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">' + (typeof getLoadingText === 'function' ? getLoadingText(currentPanel) : razzleLoading()) + '</div></div>';
+          el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">' + escapeHtml(typeof getLoadingText === 'function' ? getLoadingText(currentPanel) : razzleLoading()) + '</div></div>';
           try { cur.render(el); } catch(e) { console.error(e); }
           cur.loaded = true;
         }
@@ -4489,12 +4489,12 @@
         if (!entry.loaded) {
           var contentEl = entry.container.querySelector('.lab-panel-content') || entry.container;
           var panelLoadText = typeof getLoadingText === 'function' ? getLoadingText(panelName) : razzleLoading();
-          contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">' + panelLoadText + '</div></div>';
+          contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">' + escapeHtml(panelLoadText) + '</div></div>';
           try {
             entry.render(contentEl);
           } catch (err) {
             var panelErrText = typeof getErrorText === 'function' ? getErrorText(panelName) : 'something went sideways. Razzle knocked the server off the table. refresh and we\'ll pretend it didn\'t happen.';
-            contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">' + panelErrText + '</div></div>';
+            contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">' + escapeHtml(panelErrText) + '</div></div>';
             console.error('Panel render error (' + panelName + '):', err);
           }
           entry.loaded = true;
