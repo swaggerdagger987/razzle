@@ -1598,3 +1598,46 @@ re-audit	P1	-	-	deployment-gap	open	Session 36 re-audit: FUNC-036 deployment gap
 prod-regression	OK	-	-	-	pass	Session 36: 14 Lab panels tested on prod — 0 JS errors, 0 HTTP errors	100	2026-03-21T01:40
 prod-regression	OK	-	-	-	pass	Session 36: McCaffrey PPR=416.6 matches exact calculation (120.2+60+92.4+42+102)	100	2026-03-21T01:41
 prod-regression	OK	-	-	-	pass	Session 36: Lab visual + dark mode screenshots — no regressions	100	2026-03-21T01:42
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	Session 37: 11/11 smoke tests pass (health, players, position filter, sort, week, screener, no NaN)	100	2026-03-21T01:43
+38	OK	backend/live_data/tools.py	1730	fetch_garbage_time	re-audit	re-audit: ppg>=5 threshold code fix verified in ship/launch-fixes (tools.py:1730). Running server uses old code (no filter). Covered by FUNC-036.	95	2026-03-21T01:50
+34	OK	backend/live_data/tools.py	1658	fetch_garbage_time	re-audit	re-audit: Red zone API working. Jacobs #1 (24 GL carries, 11 GL TDs, 44% rate). td_dependent shows low-PPG scrubs (Pickett 5 PPG) — P2 design.	90	2026-03-21T01:52
+36	P0	backend/live_data/dashboards.py	119	fetch_efficiency_rankings	re-audit	re-audit: FUNC-035 confirmed on prod. QB opportunities=carries only (Dak 53, Mayfield 55, Mahomes 65). Code fix exists (dashboards.py:121-122 adds pass_attempts for QBs). FUNC-036 blocks deploy.	100	2026-03-21T01:55
+39	OK	backend/live_data/tools.py	2902	fetch_game_script	re-audit	re-audit: Game script API works. Classifies by avg_score_differential, not per-player splits. Lamar pos_script (avg_diff=1.4), data correct.	90	2026-03-21T01:56
+63	OK	frontend/league-intel.html	7339	_loadDemoLeague	re-audit	re-audit: Bureau connect card clean. Demo league renders 10 managers but says 12-team. FUNC-041 filed. Bureau APIs: roster-depth-lookup, monte-carlo work correctly.	85	2026-03-21T02:00
+prod	P2	backend/live_data/players.py	-	fetch_players	new	Floating point precision: PPR totals show IEEE 754 artifacts (416.59999999 instead of 416.6). 4/5 top RBs affected. FUNC-040 filed.	95	2026-03-21T02:05
+prod	P2	-	-	-	new	All headshot_url empty on prod (both 2024+2025). Local DB has NFL CDN headshots. Part of FUNC-036 deployment gap — prod DB not rebuilt.	90	2026-03-21T02:06
+prod	OK	-	-	-	pass	Prod regression check: health 200, Lab 0 JS errors, 607 players 2025, screener sort correct. Player/compare/team routes all 200. VORP, opportunity share, dominators all working.	95	2026-03-21T02:08
+prod	OK	-	-	-	pass	FUNC-005 verified fixed on prod: WR dominators now showing (Adams dom=46.9, JSN dom=42.1). 30 total dominators (26 RB + 4 WR).	95	2026-03-21T02:09
