@@ -2620,3 +2620,26 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 | Python compile | All backend .py files compile | Clean |
 | TODO/FIXME | Zero in backend or frontend | Clean |
 | 11/11 smoke tests pass after every fix |
+
+---
+
+## Ship Loop Session 21: Sweep Mode — Data Integrity Fixes (Mar 20)
+
+**Goal**: Deep 3-agent parallel sweep (backend robustness, frontend runtime, data integrity) found 6 real bugs.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | WOPR/G double-divided by games | P0 | core.py:317-318 | `wopr` from `_enrich_with_rate_metrics` is already `AVG()` per game. Dividing by `g` again made values ~17x too small. Removed division. |
+| 2 | Team share queries use wrong team column | P0 | core.py:594-630, dashboards.py:925-941, dashboards.py:1154-1169 | `p.team` (current roster team) instead of `s.team` (game-week team). Wrong dominator rating/rush share/opp share for 73 traded players. Fixed 3 SQL queries across 2 files. |
+| 3 | Heatmap snap_pct always null | P1 | analytics.py:249 | `snap_pct` key set to None but never populated — `offense_pct` was the correct source from `_STAT_SUM_COLS`. Mapped `offense_pct` → `snap_pct`. |
+| 4 | Screener derived sort truncation | P1 | players.py:431-432,490 | Sorting by derived metrics (yards_per_carry, dynasty_value, etc.) only evaluated top 500 by PPR, silently dropping qualifying players. Raised to 2000 and fixed total count. |
+| 5 | formula-store.js localStorage crash | P2 | formula-store.js:222,240,269,273,375 | 5 `localStorage.setItem` calls without try-catch — crashes in Safari private browsing or when storage full. |
+| 6 | Lab page size init mismatch | P2 | lab.js:947 | Old localStorage values (50/100/200) loaded but dropdown only has 25. Caused blank select. Hardcoded to 25. |
+
+### Verified Clean
+- 11/11 smoke tests pass
+- All Python files compile clean
+- All JS files syntax clean
+- 0 regressions
