@@ -2673,3 +2673,32 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All Python files compile clean
 - All JS files syntax clean
 - 0 regressions
+
+---
+
+## Ship Loop Session 23: Ticket Consumption + Sweep (Mar 20)
+
+**Goal**: Consume QA tickets + TICKETS.md backlog, then sweep for new bugs.
+
+### QA Tickets (all VERIFIED FIXED — cleaned up)
+- FUNC-015: Dynasty value formula mismatch (fixed Session 20)
+- FUNC-016: XSS escapeAttr consistency (fixed Session 20)
+- FUNC-017: Breakout badge PPG calc (fixed Session 20)
+
+### TICKETS.md: Push Pin Blinking Fix
+- **Root cause**: Pushpin emoji (U+1F4CC) triggered color emoji font substitution (Segoe UI Emoji) during virtual scroll innerHTML replacement, causing per-frame rendering flicker
+- **Fix**: Replaced emoji with CSS-mask SVG pushpin icon. Uses `background: var(--ink)` with mask data URI. Pin states (faint/active) via CSS classes. Renders instantly via regular font pipeline, no emoji substitution needed. Works in both light and dark mode.
+
+### Sweep Fixes (3-agent parallel: Backend Architect, Frontend Developer, CSS/Design)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Sort direction inverted in 4 panel sortPlayers() | P1 | lab-panels.js (lines 893, 2310, 2525, 3876) | `dir*(vb-va)` was backwards from arrow convention. `dir=-1` showed ▼ but sorted ascending. Fixed to `dir*(va-vb)`. Affects vorp, efficiency, consistency, redzone panels. |
+| 2 | Query limit badge color order | P2 | warroom.js:2633 | `remaining<=1` caught `remaining=0` first, showing orange instead of red when queries exhausted. Swapped check order. |
+| 3 | Canvas null crash on non-Situation Room pages | P1 | warroom.js:83-90, 1060-1117 | `resizeCanvas()` and 6 mouse/touch event listeners accessed `cvs` without null guard. Crashes if `warRoomCanvas` element missing from DOM. Added `if (!cvs)` guards. |
+| 4 | IDP players silently dropped from Bureau roster | P1 | league-intel.html:2054-2058 | `posGroups[pos]` re-check after DEF fallback was always false for IDP positions (DL, LB, DB). Now creates position groups dynamically for any position. |
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All JS files syntax clean (node --check)
+- CSS/Design sweep: 0 border violations, 0 font violations, `#fff` on colored badges is intentional for contrast
