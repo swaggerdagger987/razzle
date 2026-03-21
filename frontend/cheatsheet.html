@@ -450,7 +450,7 @@
           currentTier = p.tier;
           html += '<div class="cs-tier-break">' + escapeHtml(currentTier) + '</div>';
         }
-        html += '<div class="cs-player" onclick="window.location.href=\'/player.html?id=' + escapeHtml(p.player_id) + '\'">';
+        html += '<div class="cs-player" data-pid="' + escapeAttr(p.player_id) + '" style="cursor:pointer">';
         html += '<span class="cs-rank">' + escapeHtml(String(p.rank)) + '</span>';
         html += '<span class="cs-pname">' + escapeHtml(p.full_name) + '</span>';
         html += '<span class="cs-team">' + escapeHtml(p.team) + '</span>';
@@ -462,6 +462,10 @@
     });
 
     grid.innerHTML = html;
+    grid.addEventListener('click', function(e) {
+      var el = e.target.closest('[data-pid]');
+      if (el) window.location.href = '/player.html?id=' + encodeURIComponent(el.dataset.pid);
+    });
   }
 
   window.exportPng = function() {
