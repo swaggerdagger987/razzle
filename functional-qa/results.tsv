@@ -1298,3 +1298,38 @@ all	OK	-	-	smoke_tests	pass	Session 31 smoke: 11/11 pass (local). Prod health OK
 36	P0	backend/live_data/dashboards.py	739	fetch_stock_watch	open	FUNC-028: QB PPO cascade — 3 functions still use broken opportunities=targets+carries. stock_watch(739), report_cards(1244), season_awards(1569) all need s.attempts + QB position check. Prod: "Most Efficient" award = Jared Goff (QB). Report Card: Mayfield eff=A. Stock Watch: Allen falling (score=59).	100	2026-03-21T00:00
 16	OK	-	-	compare	pass	re-audit: /api/players/compare endpoint returns correct data. Trade finder correct (Chase val=93.8, equal targets Bowers/St.Brown/Rice). Career mode WR PPR leaders correct (Adams 2887, Hill 2601).	100	2026-03-21T00:00
 43	OK	-	-	vorp	pass	re-audit: VORP thresholds and math correct. McCaffrey VORP=12.36 (24.51-12.15). Replacement levels sensible. Volume kings RB-dominated (correct). Featured endpoint healthy on prod.	100	2026-03-21T00:00
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+1	OK	frontend/index.html	1012	_miniData	re-audit	re-audit: FUNC-026 FIXED in Ship Loop local (data.items + full_name). Mini-screener loads 15 players with correct names. Not pushed to origin yet.	95	2026-03-21T10:00
+1	OK	frontend/index.html	708	smart-chip	re-audit	re-audit: FUNC-027 FIXED. Smart filter link corrected breakouts→breakout. Confirmed in diff.	100	2026-03-21T10:00
+1	P2	frontend/lab.js	3544	SMART_FILTERS	open	FUNC-029: snap_share thresholds use fraction format (0.5) but data is percentage (50). breakout/workhorses/sleepers snap filters are no-ops.	95	2026-03-21T10:00
+1	P2	frontend/lab.js	3544	SMART_FILTERS	open	3/6 smart filters (breakout, studs, rookies) return 0 on local dev due to NULL age data. Prod has ages. ?sf= URL handler not deployed to prod yet.	90	2026-03-21T10:01
+36	OK	backend/live_data/dashboards.py	639	fetch_stock_watch	re-audit	re-audit: FUNC-028 FIXED in Ship Loop local branch (s.attempts + QB check in stock_watch, report_cards, season_awards). Not deployed.	95	2026-03-21T10:02
+36	P0	-	-	season_awards_prod	re-audit	re-audit: FUNC-028 STILL BROKEN ON PROD. Most Efficient = Goff/Stafford/Rodgers/Burrow (all QBs). Fix awaiting deploy.	100	2026-03-21T10:02
+7	P1	-	-	week_filter_prod	re-audit	re-audit: FUNC-023 STILL BROKEN ON PROD. Allen Wk1 scramble=48 gl_car=17 (season totals, identical to all-weeks). Code fix correct but not deployed.	100	2026-03-21T10:03
+xss	OK	frontend/lab.js	555	showNoteEditor	re-audit	re-audit: XSS fix verified — escapeHtml(name) in note editor title. Ship Loop commit.	100	2026-03-21T10:04
+xss	OK	frontend/lab.js	7916	loadTierData	re-audit	re-audit: XSS fix verified — escapeHtml(position) in tier loading message.	100	2026-03-21T10:04
+xss	OK	frontend/lab.js	8160	loadBigBoard	re-audit	re-audit: XSS fix verified — escapeHtml(position) in big board loading message.	100	2026-03-21T10:04
+xss	OK	frontend/lab.js	8537	loadClassAnalytics	re-audit	re-audit: XSS fix verified — escapeHtml(position) in class analytics loading message.	100	2026-03-21T10:04
+auth	OK	backend/auth.py	636	sync_saved_views	re-audit	re-audit: logger.warning added to sync exception handler. Good improvement, no issues.	100	2026-03-21T10:05
+auth	OK	backend/auth.py	691	sync_watchlist	re-audit	re-audit: logger.warning added to watchlist sync exception handler. Good improvement, no issues.	100	2026-03-21T10:05

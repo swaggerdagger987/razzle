@@ -1,6 +1,7 @@
 # FUNC-027: Smart filter chip URL key mismatch — "breakouts" vs "breakout"
 
 ## Severity: P2
+## Status: RESOLVED — Ship Loop commit bfe8a72 changed index.html ?sf=breakouts → ?sf=breakout. Verified session 32.
 
 ## Summary
 

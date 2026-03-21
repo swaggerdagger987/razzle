@@ -1,6 +1,7 @@
 # FUNC-026: Landing page mini-screener doesn't load data
 
 ## Severity: P1
+## Status: RESOLVED — Ship Loop commit f39dd7b fixed data.items + full_name. Working on running server. Not pushed to origin yet. Verified session 32.
 
 ## Summary
 

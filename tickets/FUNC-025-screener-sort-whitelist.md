@@ -1,6 +1,7 @@
 # FUNC-025: Screener sort silently ignores td_rate, fumble_rate, passer_rating, ay_per_att
 
 ## Severity: P2
+## Status: RESOLVED — Ship Loop commit 6d54a5d added td_rate, fumble_rate, passer_rating, ay_per_att, ppfd, ppfd_per_game, yprr to safe_sorts (players.py:308). Verified session 32.
 
 ## Summary
 

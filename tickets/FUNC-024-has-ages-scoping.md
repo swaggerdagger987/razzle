@@ -3,7 +3,7 @@
 **Severity**: P2 — "This tool is annoying to use"
 **Flow**: 1 (Landing → Lab)
 **Found**: Session 28 (2026-03-20)
-**Status**: OPEN
+**Status**: RESOLVED — Ship Loop commit 6d54a5d added `has_ages = False` before try block (tools.py:34). Verified session 32.
 
 ## Summary
 
