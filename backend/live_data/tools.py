@@ -1726,7 +1726,8 @@ def fetch_garbage_time(season=None, position=None, limit=40):
                 })
 
             # Split into stat padders (high GT%) and clean producers (low GT%)
-            stat_padders = sorted([p for p in players if p["garbage_time_pct"] >= 15],
+            # Min 5 PPG to filter out irrelevant players (punters, practice squad)
+            stat_padders = sorted([p for p in players if p["garbage_time_pct"] >= 15 and p["ppg"] >= 5],
                                   key=lambda x: x["garbage_time_pct"], reverse=True)[:limit]
             clean_producers = sorted([p for p in players if p["garbage_time_pct"] <= 5 and p["ppg"] >= 8],
                                      key=lambda x: x["ppg"], reverse=True)[:limit]
