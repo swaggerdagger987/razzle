@@ -409,6 +409,36 @@
   .mini-table tr { cursor: pointer; transition: background 0.1s; }
   .mini-table tbody tr:hover { background: var(--bg-warm); }
 
+  /* ===== SOCIAL PROOF CARDS ===== */
+  .social-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 16px;
+  }
+  .social-card-context {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .social-card-text {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .social-card-user {
+    font-family: var(--font-hand);
+    font-size: 13px;
+    color: var(--ink-light);
+  }
+
   .mini-pos {
     font-size: 9px;
     font-weight: 700;
@@ -682,6 +712,30 @@
     <a href="/lab.html?sf=rookies" class="smart-chip">Rookies</a>
     <a href="/lab.html?sf=studs" class="smart-chip">Veteran Studs</a>
   </div>
+</div>
+
+<!-- Social proof -->
+<div class="lp-section" style="max-width:860px;">
+  <h2>Built for the managers who live on <span>r/DynastyFF.</span></h2>
+  <p>The tool your leaguemates don't know about yet.</p>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:20px; text-align:left;">
+    <div class="social-card">
+      <div class="social-card-context">r/DynastyFF</div>
+      <div class="social-card-text">"Just found this free screener that has every stat column I could think of. Breakout filter is insane."</div>
+      <div class="social-card-user">u/dynasty_degenerate</div>
+    </div>
+    <div class="social-card">
+      <div class="social-card-context">Group Chat</div>
+      <div class="social-card-text">"I sent my leaguemate a Razzle screenshot of his roster grade. He hasn't responded."</div>
+      <div class="social-card-user">a concerned league member</div>
+    </div>
+    <div class="social-card">
+      <div class="social-card-context">Fantasy Twitter</div>
+      <div class="social-card-text">"This free tool has better data visualizations than most paid platforms. The PNG export goes crazy."</div>
+      <div class="social-card-user">@fantasychaos</div>
+    </div>
+  </div>
+  <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:16px;">powered by nflverse data. trusted by degenerates.</p>
 </div>
 
 <div class="lp-divider"></div>
