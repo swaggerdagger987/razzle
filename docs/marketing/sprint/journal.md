@@ -618,6 +618,67 @@ Sources:
 
 3. **What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?** (Can't build all 8 archetypes for launch. Need to pick the 2-3 that generate the most screenshottable, exploitable insights with minimal league history.)
 
-## NEXT QUESTION: What does Razzle's Reddit content strategy look like — what specific post formats, titles, and Lab screenshots will reliably hit the r/DynastyFF front page?
+## Question 10: What does Razzle's Reddit content strategy look like — what specific post formats, titles, and Lab screenshots will reliably hit the r/DynastyFF front page?
+
+**Why this matters**: From Q9, the entire funnel starts with Reddit. Lab → screenshot → Reddit → click-through → conversion. If Razzle's Reddit posts don't land, nothing else works. Need to reverse-engineer what post formats actually get upvotes in dynasty subs.
+
+### Answer
+
+**Verdict: Three post archetypes dominate r/DynastyFF. Razzle should run a 3-phase content strategy: credibility farming (weeks 1-4), value-first data drops (weeks 5-12), then the "I built a thing" launch post.**
+
+Evidence:
+
+1. **The three post archetypes that consistently hit the r/DynastyFF front page:**
+   - **Player-specific data takes** (100-1300 upvotes): "Is JSN having the most consistent WR season ever?" (1,300 upvotes, r/SleeperApp). "What the data says about Woody Marks' outlook in 2026 and beyond" (38 upvotes, r/fantasyfootball). These posts combine a SPECIFIC player + a DATA-BACKED claim + an implied action (buy/sell/hold). Title formula: **"[Data claim] about [Player Name]'s [specific metric]"**
+   - **Shareable personal data stories** (300-831 upvotes): Dynasty Dealmaker's Report Card got **831 upvotes, 334 comments, and 3 awards** on r/DynastyFF with a Spotify Wrapped-style "grade your trades" tool. One commenter: *"Amazing site. F*** you for making me relive some of these trades."* The virality driver was emotional self-reflection on personal data — not the tool itself. Title formula: **"[Tool that shows YOU something about YOUR league]"**
+   - **Contrarian analysis with receipts** (50-685 upvotes): "Chuba Hubbard is a real time example of how challenging RB value can be in dynasty" (663 upvotes). Posts that take a position against consensus AND back it with data. Title formula: **"[Player everyone thinks X about] is actually [Y] — here's the data"**
+
+2. **The 90/10 credibility rule is mandatory.** SaaS Reddit marketing research uniformly agrees: 90% of your activity must be genuine community participation (answering trade questions, commenting on threads, sharing non-Razzle analysis). Only 10% can be promotional. Reddit users and mods look at your total contribution pattern. Dynasty Nerds built to 43 mentions across dynasty subs by being helpful first, promotional second. Minimum 2-4 weeks and 500+ karma of genuine participation before any "I built" post.
+
+3. **Razzle's 3-phase Reddit playbook:**
+
+   **Phase 1 — Credibility Farming (Weeks 1-4, April-May 2026):**
+   Post 3-5 comments per day on r/DynastyFF answering trade/value/data questions. Use Razzle's Lab data to give better answers than anyone else in the thread, but DON'T link to Razzle yet. Example: someone asks "Is Bijan Robinson a sell-high?" — reply with target share trends, efficiency grades, aging curve data. Build reputation as "the person with the data."
+
+   **Phase 2 — Value-First Data Drops (Weeks 5-12, May-July 2026):**
+   Post 2-3 OC data analysis posts per week. Each post is a standalone Lab screenshot with analysis. The watermark does the marketing. Formats:
+   - **"[Stat] says [Player] is the biggest [buy/sell] in dynasty right now"** — Lab screener screenshot filtered to show the insight, with 3-4 paragraphs of analysis. The screenshot is the hook; the analysis is the value.
+   - **"I tracked [metric] for every [position] since 2015 — here's what stands out"** — Aging curves, efficiency rankings, VORP dashboard screenshots. These are the "reference material" posts that get saved/bookmarked.
+   - **"Your league's [archetype] is costing you championships"** — Behavioral teaser posts. Don't mention Razzle. Just describe the pattern. Plant the seed.
+
+   **Phase 3 — Launch Post (Week 13+, August 2026):**
+   ONE launch post: **"I built a free dynasty research lab with 10 years of data, and I want your feedback"** — no-signup, free Lab link. Key elements from successful tool launches: (a) "free" in title, (b) no login required, (c) ask for feedback (not "check out my product"), (d) include 3-4 Lab screenshots in the post showing real insights, (e) respond to EVERY comment within 2 hours.
+
+4. **Post timing and mechanics:** Post between 9-11 AM EST Tuesday-Thursday for maximum visibility. Respond to every comment within 24 hours to sustain algorithmic momentum. Never argue defensively with critics. Cross-post to r/fantasyfootball (1M+ members) and r/Fantasy_Football (800K) for broader reach after establishing in r/DynastyFF first.
+
+5. **The screenshot-first content rule:** Every data drop post should be designed so that the SCREENSHOT alone tells the story. A Reddit user scrolling their feed should understand the insight from the image before reading any text. This means Lab exports need: (a) clear title/headline in the image, (b) the key insight highlighted or circled, (c) Razzle watermark visible but not obnoxious, (d) position-colored data that's visually distinctive from competing tools.
+
+### Self-Critique
+
+**What's backed by data**: Dynasty Dealmaker Report Card's 831 upvotes proves personal-data-storytelling works. The JSN consistency post (1,300 upvotes) proves player-specific data analysis works. The 90/10 rule is universally endorsed across SaaS Reddit marketing literature. Posting timing (9-11 AM EST, Tue-Thu) is standard Reddit growth advice.
+
+**What's speculation**: The 3-phase timeline (4 weeks credibility → 8 weeks data drops → launch) is my synthesis — no dynasty tool has publicly documented their Reddit launch playbook. The specific title formulas are pattern-matched from top posts but untested for Razzle specifically. Whether Razzle's Lab screenshots are "distinctive enough" to stand out in a feed is unvalidated — this depends on visual design execution. The assumption that 2-3 OC posts per week won't trigger spam filters or mod pushback is also untested.
+
+**Confidence: 8/10** — Post formats that work on r/DynastyFF are well-documented through actual upvote data. The phased credibility-building approach is standard Reddit marketing. The main uncertainty is execution: can Razzle consistently produce screenshots that are compelling enough to get saved and shared?
+
+Sources:
+- [Dynasty Dealmaker Report Card — 831 upvotes on r/DynastyFF](https://www.dynastydealmaker.com/blog/dynasty-daddy-alternative)
+- [Reddit Marketing Guide for SaaS: Complete 2026 Playbook — RedditGrowthDB](https://www.redditgrowthdb.com/guides/reddit-marketing-saas)
+- [Reddit Self-Promotion Rules — ReplyAgent](https://www.replyagent.ai/blog/reddit-self-promotion-rules-naturally-mention-product)
+- [Reddit Marketing for Early-Stage SaaS — SingleGrain](https://www.singlegrain.com/search-everywhere-optimization/reddit-marketing-for-early-stage-saas-startup-growth/)
+- [Razzle Market Research — Reddit Analysis (internal)](docs/marketing/marketing_research.md)
+- [r/DynastyFF Subreddit Stats](https://subredditstats.com/r/dynastyff)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What should Razzle's Lab screenshots actually look like — what visual format (table, chart, card, infographic) is most screenshottable and shareable on Reddit/group chats?** (The entire content strategy depends on screenshots being compelling. Need to spec the exact visual output that gets saved and shared — table with heat coloring? Radar chart comp? Player card with grades?)
+
+2. **How should Razzle run a willingness-to-pay test BEFORE building the full Bureau — landing page with pricing, survey, or waitlist with tier selection?** (From Q8/Q9 — the $149 price point is unvalidated. A pre-launch test could validate with zero code.)
+
+3. **What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?** (Carried from Q9 — still unanswered and critical for the September timeline.)
+
+## NEXT QUESTION: What should Razzle's Lab screenshots actually look like — what visual format (table, chart, card, infographic) is most screenshottable and shareable on Reddit/group chats?
 
 ---
