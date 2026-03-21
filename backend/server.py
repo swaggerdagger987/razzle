@@ -14,10 +14,12 @@ import datetime as _datetime
 import hmac as _hmac
 import html as _html
 import httpx
+import json as _json
 import logging
 import os
 import re
 import sqlite3
+import statistics as _statistics
 import time as _time
 import uvicorn
 
@@ -25,6 +27,7 @@ from collections import defaultdict
 from . import live_data
 from . import auth as auth_module
 from . import billing as billing_module
+from .db import get_db
 from .logging_config import setup_logging
 
 logger = logging.getLogger("razzle.server")
@@ -274,7 +277,6 @@ def bootstrap_database():
 
 def _ensure_season_stats_table():
     """Create player_season_stats as an aggregate from player_week_stats if missing."""
-    from .db import get_db
     with get_db() as conn:
         exists = conn.execute(
             "SELECT name FROM sqlite_master WHERE type='table' AND name='player_season_stats'"
@@ -698,9 +700,7 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     """Catch unhandled exceptions — log full traceback, return generic 500."""
-    import json
-    import sqlite3
-    if isinstance(exc, json.JSONDecodeError) and request.method == "POST":
+    if isinstance(exc, _json.JSONDecodeError) and request.method == "POST":
         return JSONResponse({"error": "invalid JSON body"}, status_code=400)
     # Missing tables (college adapter not run, etc.) → return empty data, not 500
     if isinstance(exc, sqlite3.OperationalError) and "no such table" in str(exc):
@@ -900,8 +900,7 @@ async def auth_link_sleeper(request: Request):
         req = urllib.request.Request(url)
         req.add_header("User-Agent", "razzle/1.0")
         with urllib.request.urlopen(req, timeout=10) as resp:
-            import json
-            data = json.loads(resp.read())
+            data = _json.loads(resp.read())
             if not data or not data.get("user_id"):
                 return JSONResponse({"error": "Sleeper username not found"}, status_code=400)
     except Exception:
@@ -1571,7 +1570,6 @@ async def save_weekly_briefing(request: Request):
     if not week_label or not summary:
         return JSONResponse({"error": "week_label and summary are required"}, status_code=400)
 
-    import json as _json
     result = auth_module.save_weekly_briefing(
         user_id=user["id"],
         league_id=body.get("league_id", ""),
@@ -1694,7 +1692,6 @@ async def screener_query(request: Request):
     client_ip = _get_client_ip(request)
     if not _check_screener_rate(client_ip):
         return JSONResponse({"error": "Rate limited. Try again shortly."}, status_code=429)
-    import json as _json
     body = await request.json()
     # Response-level cache for screener POST (most expensive endpoint)
     cache_key = "screener_post:" + _json.dumps(body, sort_keys=True, default=str)
@@ -1726,7 +1723,6 @@ def filter_options():
 
 @app.get("/api/available-weeks")
 def available_weeks(season: int = 0):
-    from .db import get_db
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
@@ -2173,7 +2169,6 @@ async def lab_with_og_tags(request: Request):
 @app.get("/player/{player_id:path}")
 async def player_profile_page(player_id: str):
     """Serve player.html with dynamic OG meta tags for the specific player."""
-    import re
     player_file = FRONTEND_DIR / "player.html"
     if not player_file.exists():
         return HTMLResponse("Not found", status_code=404)
@@ -2215,7 +2210,6 @@ async def player_profile_page(player_id: str):
 
     # Inject JSON-LD structured data
     try:
-        import json as _json
         jsonld = {
             "@context": "https://schema.org",
             "@type": "Person",
@@ -3298,7 +3292,6 @@ def waivers(season: int = None, position: str = None, window: int = 4):
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
-    import json as _json
     config_path = Path(__file__).parent / "config" / "tools_hub.json"
     try:
         with open(config_path, "r") as f:
@@ -3425,9 +3418,6 @@ async def monte_carlo_projections(request: Request):
         "standard": "fantasy_points_std",
     }.get(scoring, "fantasy_points_ppr")
 
-    import statistics
-    from .db import get_db
-
     try:
         with get_db() as conn:
             if season <= 0:
@@ -3456,8 +3446,8 @@ async def monte_carlo_projections(request: Request):
             for pid in player_ids:
                 weeks = player_weeks.get(pid, [])
                 if len(weeks) >= 2:
-                    mean = statistics.mean(weeks)
-                    stdev = statistics.stdev(weeks)
+                    mean = _statistics.mean(weeks)
+                    stdev = _statistics.stdev(weeks)
                     distributions[pid] = {
                         "mean": round(mean, 2),
                         "stdev": round(stdev, 2),
