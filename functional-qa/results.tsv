@@ -1307,3 +1307,36 @@ smoke	OK	-	-	-	pass	Session 27 smoke: 11/11 prod tests pass (health, players, fi
 5	OK	-	-	-	pass	Special char search verified on prod: Ja'Marr→Chase, Amon-Ra→St.Brown, D'Andre→Swift	high	2026-03-21T02:58:00Z
 43	OK	-	-	-	pass	re-audit: VORP calcs exact — McCaffrey VORP=12.36 = PPG(24.51) - replace(12.15). Thresholds sensible (QB12=17.47, RB24=12.15).	high	2026-03-21T02:58:00Z
 41	OK	-	-	-	pass	re-audit: Consistency rankings data correct — Drake Maye CoV=0.26 StdDev=5.39 PPG=20.7 Grade=A+ (most consistent QB)	high	2026-03-21T02:58:00Z
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	session28:smoke — 11/11 local smoke tests pass	100	2026-03-20T23:00
+1	OK	backend/live_data/tools.py	38	_fetch_featured_uncached	pass	re-audit: Ship Loop NULL age fix verified. Prod: dynasty risers loading, dark mode clean, 0 JS errors	95	2026-03-20T23:07
+1	P2	backend/live_data/tools.py	102	_fetch_featured_uncached	fail	FUNC-024: has_ages scoping — NameError if dynasty_risers block throws, breakout_candidates silently empties	95	2026-03-20T23:07
+8	OK	backend/live_data/college.py	50	_fetch_college_players_uncached	pass	re-audit: Ship Loop _has_table guard verified. Prod: College QBs 2024=633 (Dart/McCord/Ward), WRs=1844, season switch correct	95	2026-03-20T23:10
+8	OK	backend/live_data/college.py	170	_fetch_college_player_profile_uncached	pass	re-audit: college profile Dart 4 seasons, combine+draft data present, try/except for missing tables	95	2026-03-20T23:10
+45	OK	backend/live_data/prospects.py	40	_fetch_prospects_uncached	pass	re-audit: Ship Loop _has_table guards verified across 8 functions. Prod: 2026 QBs=16, Green RPS=72.8	95	2026-03-20T23:10
+46	OK	backend/live_data/tools.py	540	fetch_draft_class	pass	re-audit: _has_table guard for draft_picks. Prod: 2024 class=77, Bo Nix PPG=18.3 (FUNC-011 holding)	95	2026-03-20T23:11
+36	P0	backend/live_data/core.py	258	_enrich_derived_stats	fail	re-audit: FUNC-021/022 confirmed still live. Prescott PPO=5.92, Stafford td_rate=158.6%. Ship Loop did not address	100	2026-03-20T23:12
+36	OK	backend/live_data/core.py	258	_enrich_derived_stats	pass	re-audit: RB/WR derived stats EXACT match to manual calc (McCaffrey td_rate=3.9%, catch_rate=79.1%)	100	2026-03-20T23:12
+36	OK	backend/live_data/core.py	240	_enrich_derived_stats	pass	field names clarified: attempts (not passing_attempts), comp_pct (not completion_pct). FUNC-022 ticket updated	90	2026-03-20T23:13
+panels	OK	-	-	-	pass	regression sweep: leaders/breakouts/consistency/vorp/awards/rankings/tradevalues — 0 JS errors each	95	2026-03-20T23:15
