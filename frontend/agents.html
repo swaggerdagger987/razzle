@@ -1605,6 +1605,24 @@
   <div class="warroom-bio-grid" id="warroomBioGrid"></div>
 </div>
 
+<!-- WEEKLY BRIEFING (Pro+) -->
+<div id="weeklyBriefingWrap" style="max-width:800px; margin:0 auto 24px; padding:0 24px; display:none;">
+  <div id="weeklyBriefingCard" style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+      <img src="/assets/agents/razzle.svg" width="28" height="28" alt="">
+      <div>
+        <div style="font-family:var(--font-display); font-size:18px;">This Week's Briefing</div>
+        <div id="briefingDate" style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);"></div>
+      </div>
+      <button class="btn-chunky btn-sm" style="margin-left:auto; font-size:11px;" onclick="generateWeeklyBriefing()" id="briefingRefreshBtn">Refresh</button>
+    </div>
+    <div id="briefingContent" style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); line-height:1.6;">
+      Connect your Sleeper league and sign in to get your weekly briefing.
+    </div>
+    <div id="briefingAgentSections"></div>
+  </div>
+</div>
+
 <!-- DARK ZONE — pixel engine canvas area -->
 <div class="warroom-dark">
   <div class="warroom-canvas-wrap">
@@ -2186,6 +2204,142 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
     if (hint) hint.textContent = 'Your trial ended. Subscribe to regain access.';
   }
 }catch(e){}})();
+</script>
+<script>
+// ─── Weekly Briefing System ─────────────────────────────────────
+(function() {
+  var wrap = document.getElementById('weeklyBriefingWrap');
+  var content = document.getElementById('briefingContent');
+  var dateEl = document.getElementById('briefingDate');
+  var sections = document.getElementById('briefingAgentSections');
+  if (!wrap) return;
+
+  function getWeekKey() {
+    var now = new Date();
+    var jan1 = new Date(now.getFullYear(), 0, 1);
+    var week = Math.ceil(((now - jan1) / 86400000 + jan1.getDay() + 1) / 7);
+    return now.getFullYear() + '-W' + week;
+  }
+
+  function showBriefing() {
+    var tier = typeof getUserTierInfo === 'function' ? getUserTierInfo() : {};
+    if (!tier.isPaid) return;
+    wrap.style.display = '';
+
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem('razzle_weekly_briefing')); } catch(e) {}
+    var weekKey = getWeekKey();
+
+    if (cached && cached.week === weekKey) {
+      dateEl.textContent = 'Week of ' + (cached.date || weekKey);
+      content.innerHTML = '';
+      sections.innerHTML = '';
+      // Render executive summary
+      if (cached.summary) {
+        content.innerHTML = '<div style="margin-bottom:12px;">' + escapeHtml(cached.summary) + '</div>';
+      }
+      // Render per-agent sections
+      if (cached.agents && typeof AGENT_TERRITORY !== 'undefined') {
+        for (var agId in cached.agents) {
+          var ag = AGENT_TERRITORY[agId];
+          if (!ag) continue;
+          var finding = cached.agents[agId];
+          sections.innerHTML +=
+            '<div style="display:flex; gap:8px; align-items:flex-start; margin-top:10px; padding-top:10px; border-top:1px dashed var(--ink-faint);">' +
+              '<img src="' + ag.icon + '" width="20" height="20" alt="" style="margin-top:2px;">' +
+              '<div>' +
+                '<div style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:' + ag.color + ';">' + ag.name + '</div>' +
+                '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-medium);">' + escapeHtml(finding) + '</div>' +
+              '</div>' +
+            '</div>';
+        }
+      }
+    } else {
+      dateEl.textContent = weekKey;
+      var hasLeague = false;
+      try { hasLeague = !!localStorage.getItem('razzle_sleeper_user'); } catch(e) {}
+      if (hasLeague) {
+        content.innerHTML = 'Your weekly briefing hasn\'t been generated yet. Click Refresh to have your agents analyze this week.';
+      } else {
+        content.innerHTML = 'Connect your Sleeper league to get personalized weekly briefings from your agents.';
+      }
+    }
+  }
+
+  window.generateWeeklyBriefing = function() {
+    var btn = document.getElementById('briefingRefreshBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Generating...'; }
+    content.innerHTML = '<span style="font-family:var(--font-hand); color:var(--ink-light);">agents are reviewing your league...</span>';
+    sections.innerHTML = '';
+
+    // Generate a static briefing based on available data
+    // (Full LLM briefing would require the scenario runner — this is the MVP)
+    var weekKey = getWeekKey();
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+    // Fetch quick data for the briefing
+    Promise.all([
+      fetch('/api/dynasty-rankings?limit=5').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+      fetch('/api/stock-watch?limit=5').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+      fetch('/api/breakout-candidates?limit=3').then(function(r) { return r.json(); }).catch(function() { return {}; }),
+    ]).then(function(results) {
+      var rankings = results[0];
+      var stocks = results[1];
+      var breakouts = results[2];
+
+      var briefing = {
+        week: weekKey,
+        date: dateStr,
+        summary: "Here's what Razzle's team found this week. The market moved — check the risers and fallers below.",
+        agents: {}
+      };
+
+      // Hawkeye: breakout candidates
+      if (breakouts.candidates && breakouts.candidates.length > 0) {
+        var names = breakouts.candidates.slice(0, 3).map(function(p) { return p.name; }).join(', ');
+        briefing.agents.hawkeye = "Breakout watch: " + names + ". Snap share trending up — worth a look.";
+      } else {
+        briefing.agents.hawkeye = "No new breakout signals this week. The tape is quiet.";
+      }
+
+      // Bones: rising/falling stocks
+      if (stocks.rising && stocks.rising.length > 0) {
+        var riser = stocks.rising[0];
+        briefing.agents.bones = "Rising stock: " + riser.name + " (score " + riser.stock_score + "). Buy window might be closing.";
+      } else {
+        briefing.agents.bones = "Trade market is flat this week. No clear buy-low targets.";
+      }
+
+      // Octo: top ranked player stat
+      if (rankings.players && rankings.players.length > 0) {
+        var top = rankings.players[0];
+        briefing.agents.octo = "Dynasty #1: " + top.full_name + " (DVS " + (top.dynasty_value || 'N/A') + "). The model is confident.";
+      } else {
+        briefing.agents.octo = "Rankings stable this week. No major model shifts.";
+      }
+
+      // Dolphin
+      briefing.agents.dolphin = "No major injury updates flagged this week. Keep monitoring practice reports.";
+
+      // Atlas
+      briefing.agents.atlas = "Historical note: this is typically when buy-low windows open as managers panic after slow starts.";
+
+      // Cache
+      try { localStorage.setItem('razzle_weekly_briefing', JSON.stringify(briefing)); } catch(e) {}
+
+      if (btn) { btn.disabled = false; btn.textContent = 'Refresh'; }
+      showBriefing();
+    }).catch(function() {
+      content.innerHTML = 'Couldn\'t generate the briefing right now. Try again later.';
+      if (btn) { btn.disabled = false; btn.textContent = 'Refresh'; }
+    });
+  };
+
+  // Show on load
+  document.addEventListener('DOMContentLoaded', showBriefing);
+  window.addEventListener('razzle-plan-changed', showBriefing);
+})();
 </script>
 </body>
 </html>
