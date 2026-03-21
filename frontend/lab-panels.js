@@ -6838,6 +6838,7 @@
 
     function buildAwardCard(award, isCollege) {
       var w = award.winner;
+      if (!w) return '';
       var pos = (w.position || 'RB').toLowerCase();
       var trophy = TROPHY_MAP[award.key] || '&#x1F3C6;';
       var html = '<div class="aw2-card">';
