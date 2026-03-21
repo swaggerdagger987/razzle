@@ -3081,3 +3081,30 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 - All 14 JS files syntax clean (node --check)
 - All Python files compile clean
 - 0 regressions
+
+---
+
+## Ship Loop Session 35: Data Quality Sweep (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md blocked on external infrastructure. Targeted sweep on QA-reported data quality issues (FUNC-060, FUNC-061/062) and crash-prone patterns.
+
+### Fixes Applied (4 issues across 5 files)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Stock watch null PPO honesty | P1 | dashboards.py, stocks.html, lab-panels.js, reportcard.html | When PPO is null (insufficient opportunities), efficiency_grade returns null instead of fake "C" from 50th-percentile default. Stock score redistributes weight to 3 available metrics (33% each). Frontend renders "-" with dimmed opacity instead of misleading "C" badge. |
+| 2 | Efficiency rankings: exclude QBs from Volume Kings | P1 | dashboards.py | QB pass attempts (500+) aren't comparable to RB/WR/TE touches (targets+carries). Bo Nix had 695 "opportunities" dominating the list. Now filtered to non-QBs. |
+| 3 | College consistency div-by-zero guard | P0 | college.py:1380 | `sum(ppg_values) / n` crashed on empty list. Added `if n == 0: continue`. |
+| 4 | FUNC-061/062 verification | — | — | Season Awards fixes from commit 258a38d confirmed working: Boutte wins Most Efficient (46 opps, PPO 2.7), McCaffrey wins Volume King (46.8% opp share, all RBs in top 5). QA findings are stale. |
+
+### Sweep Coverage (3 parallel agents)
+- **Frontend crash patterns**: All `.toFixed()` guarded, all `.forEach()` on API data use fallbacks, all divisions safe. 0 issues.
+- **Backend crash patterns**: 1 issue found and fixed (college.py div-by-zero). All other divisions properly guarded.
+- **Design/color audit**: All `#fff`/`white` on colored badges correct (contrast requirement). No hardcoded year references (2026) in dynamic code. Agent-config colors are identity colors, intentionally static.
+- **API health check**: 16 key endpoints all return 200.
+
+### Verified Clean
+- 11/11 smoke tests pass
+- All 14 JS files syntax clean (node --check)
+- All Python files compile clean
+- 0 regressions
