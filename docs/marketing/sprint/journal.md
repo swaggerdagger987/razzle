@@ -106,6 +106,58 @@ Sources:
 
 3. **How should the Leaguemate Scouting Report be designed for maximum screenshot-ability — card dimensions, information density, visual style?** (The Wrapped pattern succeeds partly because of its visual format. What's the optimal layout?)
 
-## NEXT QUESTION: What is the minimum viable Bureau demo that proves behavioral profiling value BEFORE the paywall?
+## Question 3: What is the minimum viable Bureau demo that proves behavioral profiling value BEFORE the paywall?
+
+**Why this matters**: The North Star says "The Screener is forever free. The intelligence is what you pay for." But 43% of sports consumers won't pay for anything (Q1 finding). The free tier must deliver enough behavioral insight to create urgency — without giving away the moat.
+
+### Answer
+
+**Verdict: The MVP free demo is a single "League Pulse" card per manager — one behavioral archetype label + one exploitable tendency — visible to everyone in the league. The full scouting report stays behind the paywall.**
+
+Evidence:
+
+1. **The North Star already defines the free tier**: "League odds summary cards — Monte Carlo championship/playoff probabilities per manager" + "Basic roster overview and standings." But this is WRONG as a conversion trigger. Win probabilities are interesting but not actionable enough to create upgrade urgency. Nobody screenshots "You have a 23% chance to win." They DO screenshot "Mike is a Panic Seller — he trades players 48hrs after bad games 6x this season."
+
+2. **The Spotify Wrapped pattern proves "one taste" converts.** Dynasty Daddy's Fantasy Wrapped is completely free — the full recap, not a teaser. The paid tier (Patreon "Club" at ~$5/mo) gates ad-free experience, cheatsheets, and league-infused trade values. The free Wrapped drives Patreon conversions because it demonstrates the platform understands YOUR league. Razzle should follow this pattern: the behavioral LABEL is free ("Panic Seller"), the behavioral EXPLOIT is Pro ("Send this trade Tuesday after a loss").
+
+3. **The "blurred data" paywall pattern is the proven SaaS conversion mechanic.** Show partial results, blur the rest. Razzle's version: every manager in the league gets a free card showing their archetype name, one headline stat (e.g., "traded away 6 players within 48hrs of a bad game"), and their overall "predictability score" (0-100). The full scouting report — exploit windows, trade timing recommendations, negotiation playbook — is blurred with a Pro upgrade CTA.
+
+4. **Sleeper API provides everything needed for a free demo.** Available endpoints (no auth required for read): `/league/{id}/transactions/{round}` (all trades, waivers, drops), `/league/{id}/rosters` (current rosters), `/league/{id}/drafts` + `/draft/{id}/picks` (draft history), `/league/{id}/matchups/{week}` (scores). From this data alone you can compute: trade frequency, roster churn rate, positional draft tendencies, waiver pickup patterns, and win/loss timing correlations. That's enough for the archetype label.
+
+5. **The minimum viable demo has exactly 3 components:**
+   - **Archetype Badge** (FREE): One of 8 behavioral labels per manager — Panic Seller, The Hoarder, Tilt Machine, Draft Creature, Waiver Hawk, Trade Addict, Steady Hand, The Ghost. Computed from transaction frequency, timing, and win/loss correlation.
+   - **Headline Stat** (FREE): One shocking number that proves the label — "Dropped 14 players within 48hrs of a loss" or "Has never initiated a trade in 3 seasons." This is the screenshot trigger.
+   - **Full Scouting Report** (PRO): Exploit windows, trade timing, negotiation angles, pressure map, tendency breakdown. This is the conversion trigger. The card shows a blurred preview with "Unlock with Pro" overlay.
+
+6. **The conversion mechanic is social, not individual.** When one manager connects their league, ALL 12 managers see their archetype badge — even without accounts. The manager who connected shares the link in the group chat. Every manager who sees their badge (especially an embarrassing one) is now in the funnel. The one who wants the exploit on their rival upgrades to Pro. SaaS benchmark: freemium products that create multiplayer value convert at 2-3x the rate of single-player tools (Slack's message history limit works this way — the more your team uses it, the more you feel the limit).
+
+### Self-Critique
+
+**What's backed by data**: Sleeper API endpoints are confirmed — transactions, rosters, drafts, matchups all available without auth. Dynasty Daddy's Wrapped-is-free / Club-is-paid model is confirmed. The "blurred data" paywall pattern is an established SaaS conversion mechanic (Canva, LinkedIn, etc.). Multiplayer freemium converting at higher rates is documented (Slack, Notion).
+
+**What's speculation**: The specific 8 archetypes are invented — no validation that these specific labels resonate. The "one headline stat" format is hypothesized as the screenshot trigger but untested. The claim that embarrassing labels drive group-chat sharing is plausible but unproven. The 2-3x multiplayer conversion multiplier is from B2B SaaS — may not transfer directly to consumer fantasy tools.
+
+**Confidence: 8/10** — The pattern (free label + blurred exploit = Pro conversion) is well-established in SaaS. The Sleeper API data is confirmed sufficient. The social/multiplayer angle is the strongest conversion lever. The specific archetype labels need user testing.
+
+Sources:
+- [Sleeper API Documentation](https://docs.sleeper.com/)
+- [Dynasty Daddy - Free Platform + Club Patreon](https://dynasty-daddy.com)
+- [Dynasty Daddy Patreon - Season 4](https://www.patreon.com/posts/dynasty-daddy-4-137397104)
+- [Mastering Freemium Paywalls - Monetizely](https://www.getmonetizely.com/articles/mastering-freemium-paywalls-strategic-timing-for-saas-success)
+- [SaaS Freemium Conversion Rates 2026 - First Page Sage](https://firstpagesage.com/seo-blog/saas-freemium-conversion-rates/)
+- [How to Turn Freemium Users into Loyal Subscribers - RevenueCat](https://www.revenuecat.com/blog/growth/how-to-turn-freemium-users-into-loyal-subscribers/)
+- [Freemium to Premium Conversion - Kinde](https://www.kinde.com/learn/billing/conversions/freemium-to-premium-converting-free-ai-tool-users-with-smart-billing-triggers/)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What Sleeper API data points are actually available to compute each of the 8 behavioral archetypes, and which archetypes are computationally feasible vs. aspirational?** (The archetype list is invented — need to validate each one against actual API data.)
+
+2. **What is the optimal "embarrassment threshold" for free archetype labels — funny enough to screenshot, not mean enough to alienate?** (Too gentle = no screenshot. Too harsh = user backlash. Where's the line?)
+
+3. **How should the League Pulse page be designed so that one manager connecting their league automatically creates 11 more potential users?** (The multiplayer conversion mechanic needs a specific UX flow — URL sharing, no-account viewing, group chat optimization.)
+
+## NEXT QUESTION: What Sleeper API data points are actually available to compute each of the 8 behavioral archetypes, and which archetypes are computationally feasible vs. aspirational?
 
 ---
