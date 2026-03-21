@@ -463,24 +463,17 @@ def _age_multiplier(position, age):
 def _enrich_with_dynasty_value(items):
     """Compute Dynasty Value Score (DVS) for each player.
 
-    DVS = production_score x age_multiplier
-    production_score: PPR/game normalized to 0-100 (25 PPG = 100)
-    age_multiplier: position-specific curve (0.1 to 1.0)
+    Uses the same composite formula as compute_trade_value() so the screener's
+    dynasty_value column matches the Trade Value Chart, Trade Finder, Dynasty
+    Rankings, and Tier List.  Formula: production 50% + age 30% + scarcity 20%
+    with soft ceiling above 90.
     """
     for item in items:
         ppg = item.get("ppg") or 0
         age = item.get("age")
         pos = item.get("position", "WR")
 
-        # Production score: 25 PPG maps to 100 (elite), capped at 100
-        production = min(100.0, ppg * 4.0)
-
-        # Age multiplier
-        age_mult = _age_multiplier(pos, age)
-
-        # Dynasty value = production weighted by remaining career value
-        dvs = round(production * age_mult, 1)
-        item["dynasty_value"] = dvs
+        item["dynasty_value"] = compute_trade_value(ppg, age, pos)
 
     return items
 
