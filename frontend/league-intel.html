@@ -2105,7 +2105,9 @@ async function connectSleeper() {
   }
 
   btn.disabled = true;
-  btn.textContent = "connecting...";
+  btn.textContent = "connecting\u2026";
+  btn.style.fontFamily = "var(--font-hand)";
+  btn.style.fontSize = "16px";
 
   try {
     // Verify user exists (10s timeout)
@@ -2124,14 +2126,16 @@ async function connectSleeper() {
     showLeagues(username);
   } catch (e) {
     if (e.name === "AbortError") {
-      errorEl.textContent = "field transmission timed out. try again, agent.";
+      errorEl.textContent = "sleeper's servers are napping. try again in a minute.";
     } else if (e.message === "User not found") {
-      errorEl.textContent = "can't find that user. double-check the name \u2014 even Razzle makes typos. rarely, but it happens.";
+      errorEl.textContent = "couldn't find that username on Sleeper. double-check the spelling.";
     } else {
-      errorEl.textContent = "connection dropped. the film room went dark. check your internet and try again.";
+      errorEl.textContent = "sleeper's servers are napping. try again in a minute.";
     }
     btn.disabled = false;
     btn.textContent = "Connect";
+    btn.style.fontFamily = "";
+    btn.style.fontSize = "";
   }
 }
 
@@ -2182,9 +2186,14 @@ async function loadLeagues(userId) {
     const leagues = await resp.json();
 
     if (!leagues || !leagues.length) {
-      container.innerHTML = '<div class="loading-intel">no leagues found this season. either they took the year off, or we need better intel. try another year.</div>';
+      container.innerHTML = '<div class="loading-intel">looks like you\'re not in any leagues this season. check your Sleeper username or explore the <a href="/lab.html" style="color:var(--orange);">free Screener</a> while we figure this out.</div>';
       return;
     }
+
+    // Filter to dynasty/keeper leagues, note if redraft-only
+    var dynastyLeagues = leagues.filter(function(lg) { return (lg.settings?.type || 0) >= 1; });
+    var hasRedraftOnly = dynastyLeagues.length === 0 && leagues.length > 0;
+    if (hasRedraftOnly) dynastyLeagues = leagues; // Show all if no dynasty
 
     let html = "";
     for (const league of leagues) {
@@ -2210,7 +2219,7 @@ async function loadLeagues(userId) {
           </div>
           <div class="league-odds" id="odds-${escapeAttr(league.league_id)}" style="display:none;"></div>
           <div class="league-roster" id="roster-${escapeAttr(league.league_id)}">
-            <div class="loading-intel" style="font-size:18px; padding:16px;">checking the tape...</div>
+            <div class="loading-intel" style="font-size:18px; padding:16px; font-family:var(--font-hand);">hawkeye's reviewing the tape...</div>
           </div>
         </div>`;
     }
@@ -2263,11 +2272,23 @@ async function loadLeagues(userId) {
       existing.updatedAt = Date.now();
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));
     } catch (e) { /* ignore storage errors */ }
+
+    // Auto-expand single league or last-selected league
+    var savedLeague = localStorage.getItem('razzle_selected_league');
+    if (leagues.length === 1) {
+      // Single league: auto-expand
+      var singleCard = document.getElementById('lc-' + leagues[0].league_id);
+      if (singleCard) toggleLeague(singleCard, leagues[0].league_id, userId);
+    } else if (savedLeague) {
+      // Multiple leagues: auto-expand last-selected
+      var savedCard = document.getElementById('lc-' + savedLeague);
+      if (savedCard) toggleLeague(savedCard, savedLeague, userId);
+    }
   } catch (e) {
     var errMsg = e.name === "AbortError"
-      ? "transmission timed out. Sleeper's servers might be napping. give it another shot."
-      : "connection dropped. Razzle fumbled the handoff to Sleeper. check your internet and try again.";
-    container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' + errMsg + '</div>';
+      ? "sleeper's servers are napping. try again in a minute."
+      : "sleeper's servers are napping. try again in a minute.";
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' + errMsg + ' <button class="btn-chunky" style="font-size:11px;padding:4px 12px;margin-left:8px;" onclick="loadLeagues(\'' + escapeAttr(userId) + '\')">retry</button></div>';
     console.error(e);
   }
 }
@@ -2311,6 +2332,9 @@ async function toggleLeague(card, leagueId, userId) {
     card.classList.add("expanded");
   }
   rosterDiv.dataset.loaded = "loading";
+
+  // Save selected league for auto-expand on reload
+  try { localStorage.setItem('razzle_selected_league', leagueId); } catch(e) {}
 
   try {
     // Fetch rosters, users, and players (cached) with 15s timeout
@@ -2543,8 +2567,8 @@ async function toggleLeague(card, leagueId, userId) {
   } catch (e) {
     rosterDiv.dataset.loaded = ""; // Allow retry on failure
     var rosterErr = e.name === "AbortError"
-      ? "field transmission interrupted. tap to retry."
-      : "lost the signal. tap to retry.";
+      ? "sleeper's servers are napping. tap to retry."
+      : "sleeper's servers are napping. tap to retry.";
     rosterDiv.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:16px;">' + rosterErr + '</div>';
     console.error(e);
   }
