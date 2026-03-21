@@ -3546,7 +3546,7 @@ const SMART_FILTERS = {
     label: "Breakout Candidates",
     filters: [
       { key: "age", op: "lte", value: 25 },
-      { key: "snap_share", op: "gte", value: 0.5 },
+      { key: "snap_share", op: "gte", value: 50 },
     ],
     minGP: 6,
   },
@@ -3575,7 +3575,7 @@ const SMART_FILTERS = {
   workhorses: {
     label: "Workhorses",
     filters: [
-      { key: "snap_share", op: "gte", value: 0.65 },
+      { key: "snap_share", op: "gte", value: 65 },
       { key: "targets_per_game", op: "gte", value: 4 },
     ],
     minGP: 6,
@@ -3584,7 +3584,7 @@ const SMART_FILTERS = {
     label: "Sleepers",
     filters: [
       { key: "ppg", op: "lte", value: 12 },
-      { key: "snap_share", op: "gte", value: 0.4 },
+      { key: "snap_share", op: "gte", value: 40 },
     ],
     minGP: 4,
   },
