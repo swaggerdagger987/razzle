@@ -1858,6 +1858,67 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+re-audit	OK	frontend/records.html	222	fmt	pass	re-audit: Ship Loop fmt() function for number formatting. Prod API data clean (no IEEE 754). 0 JS errors. Page Pro-gated on prod.	100	2026-03-21T03:50
+re-audit	OK	frontend/streaks.html	461	bar_chart	pass	re-audit: Ship Loop null guard (scores[j] || 0). Prod API data has 0 null scores. Guard is defensive. 0 JS errors.	100	2026-03-21T03:50
+re-audit	OK	frontend/workload.html	275	flags_map	pass	re-audit: Ship Loop (p.flags || []) null guard + escapeHtml null guard. Prod API: 0 null flags. Guard is defensive. 0 JS errors.	100	2026-03-21T03:50
+re-audit	OK	frontend/seasonpace.html	261	milestones_map	pass	re-audit: Ship Loop (p.milestones || []) null guard + escapeHtml null guard. Prod API: 0 null milestones. Guard is defensive. 0 JS errors.	100	2026-03-21T03:51
+re-audit	OK	frontend/warroom.js	2106	formatLabContext	pass	re-audit: Ship Loop filter key resilience (f.key || f.stat || ?). Correct fallback chain. No regression.	100	2026-03-21T03:51
+re-audit	OK	frontend/warroom.js	2492	callServerLLM	pass	re-audit: Ship Loop clearTimeout moved after resp.json(). Correct — timeout now covers full response lifecycle including body download.	100	2026-03-21T03:51
+re-audit	OK	backend/billing.py	436	trial_used_val	pass	re-audit: Ship Loop trial_used fix — MAX(trial_used, ?) prevents resetting from 1 to 0 on non-trial purchases. trial_used_val=1 only for trials. Correct.	100	2026-03-21T03:52
+re-audit	OK	frontend/lab.js	560	showNoteEditor	pass	re-audit: Ship Loop removed double-escape (name already escapeHtml'd at line 553). Correct fix, not an XSS regression.	100	2026-03-21T03:52
+re-audit	OK	frontend/*.html	-	escapeHtml_null_guard	pass	re-audit: 8 standalone pages got escapeHtml(t) null guard (if t==null return ""). All DOM-based escapeHtml now guarded. No pages missed.	100	2026-03-21T03:53
+10	P1	frontend/lab.js	1729	toggleWatchlistPlayer	ticket	FUNC-045: Watchlist star dead click for apostrophe players. Same escapeAttr-in-onclick pattern as FUNC-044 but on STAR CELL (every screener row). Ja'Marr Chase star is broken.	100	2026-03-21T03:55
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)	100	2026-03-21T03:52
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players	100	2026-03-21T03:52
+smoke	OK	-	-	-	pass	smoke:position_filter — All positions filter correctly	100	2026-03-21T03:52
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending correct	100	2026-03-21T03:52
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data	100	2026-03-21T03:52
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK	100	2026-03-21T03:52
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs correct	100	2026-03-21T03:52
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in 50 players	100	2026-03-21T03:52
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values	100	2026-03-21T03:52
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams	100	2026-03-21T03:52
+29	OK	backend/live_data/analytics.py	756	fetch_breakout_candidates	pass	re-audit: FUNC-043 FIXED — round(,1) eliminates IEEE754. 0/100 artifacts (RB+WR)	95	2026-03-21T04:00
+22	OK	frontend/lab.js	9692	renderACLegend	pass	re-audit: FUNC-044 FIXED — data-name + addEventListener replaces inline onclick	95	2026-03-21T04:00
+10	P1	frontend/lab.js	1729	buildRowHTML	open	re-audit: FUNC-045 STILL OPEN — watchlist star onclick uses escapeAttr(pName) in inline handler	95	2026-03-21T04:00
+14	P2	backend/live_data/players.py	743	_fetch_player_profile_uncached	open	FUNC-046: career totals IEEE754 artifacts (McCaffrey std=1889.299..97, Chase ppr=1526.300..02)	90	2026-03-21T04:05
+4	OK	backend/live_data/players.py	530	_fetch_screener_uncached	pass	POST screener target_share sort verified correct (McCaffrey 0.234 > Bijan 0.198 > Achane 0.188)	95	2026-03-21T04:03
+8	OK	backend/live_data/college.py	-	-	pass	College universe endpoint verified: 631 QBs 2024, Dart (Ole Miss, 3798 pass yds) correct	90	2026-03-21T04:06
+6	OK	backend/live_data/players.py	-	-	pass	2015 season data verified: AB #1 WR (390.2 PPR, 136 rec, 1834 yds) historically accurate	90	2026-03-21T04:07
+64	OK	frontend/warroom.js	3121	-	pass	re-audit: warroom bio card onclick fixed — data-agent-name + addEventListener, escapeHtml on name	95	2026-03-21T04:01
 smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
 smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
 smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
@@ -1880,3 +1941,27 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — 11/11 local smoke tests pass	100	2026-03-21T04:08
+64	OK	frontend/agents.html	164	border	pass	re-audit: Ship Loop 1px→2px border fix on badge element. Cosmetic. Trivial.	100	2026-03-21T04:10
+10	P1	frontend/lab.js	1729	toggleWatchlistPlayer	confirmed	re-audit: FUNC-045 still open. Inline onclick with escapeAttr(pName) still present. Apostrophe names dead-click.	100	2026-03-21T04:12
+14	P2	backend/live_data/players.py	743	career sum	confirmed	re-audit: FUNC-046 still open. IEEE754 artifacts in career totals.	100	2026-03-21T04:12
+2	P0	adapters/nflverse_adapter.py	445	INSERT OR IGNORE	ticket	FUNC-047: 237 players have stale team in players table. Goff=LA(should DET), Barkley=NYG(should PHI), CMC=CAR(should SF). INSERT OR IGNORE never updates team.	100	2026-03-21T04:20
+2	P0	backend/live_data/tools.py	1852	fetch_handcuffs	ticket	FUNC-047 impact: Handcuffs groups by stale p.team — McCaffrey paired with CAR backups, Jacobs as LV handcuff. Completely wrong pairings.	100	2026-03-21T04:22
+2	P0	frontend/lab.js	-	team filter	ticket	FUNC-047 impact: DET filter shows Swift/Hockenson (left years ago), misses Goff/Montgomery (actual DET players). Team filter is broken for any team with player movement.	100	2026-03-21T04:22
+35	P0	backend/live_data	-	target-distribution	ticket	FUNC-047 impact: Target distribution groups by stale team. DET includes Swift's stats from actual 2025 team, corrupting carry/target share calculations.	100	2026-03-21T04:24
+20	OK	-	-	-	pass	re-audit: Trade finder works correctly. Equal targets, buy low, sell high all populated for Chase. API keys: selected_player, equal_targets, buy_low, sell_high.	95	2026-03-21T04:15
+19	OK	-	-	-	pass	re-audit: Trade value chart — 0 IEEE754 artifacts in 200 players. Tier distribution: 33/59/90/18 across 4 tiers. Spread improved (top=94.0, #15=91.3).	90	2026-03-21T04:16
+19	P2	-	-	-	info	Trade values: TE overvaluation persists — McBride #2 (93.9) above Bijan (#3, 93.8). Mahomes at #49 (86.8) seems low for dynasty. Age curve overweights youth.	70	2026-03-21T04:17
+new	P2	backend/live_data/tools.py	1281	career_total	ticket	FUNC-048: Records career total missing seasons range. Shows "None" instead of "2015-2025". Career PPG query has MIN/MAX season but career total query doesn't.	90	2026-03-21T04:30
+new	OK	backend/live_data/tools.py	1181	fetch_records	pass	Records single_game data accurate: Hill 57.9 wk12 2020, Kamara 56.2 wk16 2020, Chase 55.6 wk17 2021. Career PPG sensible: CMC 22.5 in 112G.	95	2026-03-21T04:28
