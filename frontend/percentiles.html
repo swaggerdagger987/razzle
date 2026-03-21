@@ -605,7 +605,8 @@
     fetch('/api/players/quick-search?q=' + encodeURIComponent(initialPlayer) + '&limit=1')
       .then(function(r) { if (!r.ok) throw new Error('search failed'); return r.json(); })
       .then(function(d) {
-        if (d.players && d.players.length > 0) searchInput.value = d.players[0].full_name;
+        var arr = Array.isArray(d) ? d : (d.players || []);
+        if (arr.length > 0) searchInput.value = arr[0].full_name;
       })
       .catch(function() {});
   }

@@ -486,7 +486,7 @@
     }).then(function(data) {
       currentData = data;
       populateSeasons(data.available_seasons, data.season);
-      renderRateChips(data.pos_avg_rates || {});
+      renderRateChips(data.pos_avg_td_rates || {});
       render(data);
     }).catch(function(err) {
       document.getElementById('regContent').innerHTML =
@@ -524,7 +524,7 @@
   /* ---- Render ---- */
   function render(data) {
     var c = document.getElementById('regContent');
-    if (!(data.regression_up || []).length && !(data.regression_down || []).length) {
+    if (!(data.positive_regression || []).length && !(data.negative_regression || []).length) {
       c.innerHTML = '<div class="reg-empty">no regression candidates found for this filter</div>';
       return;
     }
@@ -532,18 +532,18 @@
     var html = '';
 
     // Regression Up section
-    if ((data.regression_up || []).length) {
+    if ((data.positive_regression || []).length) {
       html += '<div class="reg-section">';
       html += '<div class="reg-section-header up">&#x1F4C8; Regression Up — Due for More TDs</div>';
-      html += buildTable(data.regression_up, 'up');
+      html += buildTable(data.positive_regression, 'up');
       html += '</div>';
     }
 
     // Regression Down section
-    if ((data.regression_down || []).length) {
+    if ((data.negative_regression || []).length) {
       html += '<div class="reg-section">';
       html += '<div class="reg-section-header down">&#x1F4C9; Regression Down — TD Rate Unsustainable</div>';
-      html += buildTable(data.regression_down, 'down');
+      html += buildTable(data.negative_regression, 'down');
       html += '</div>';
     }
 
@@ -586,7 +586,7 @@
       { key: 'opportunities', label: 'Opps', cls: 'center' },
       { key: 'actual_tds', label: 'Actual TDs', cls: 'center' },
       { key: 'expected_tds', label: 'Expected TDs', cls: 'center' },
-      { key: 'regression_delta', label: 'Delta', cls: 'center' },
+      { key: 'td_diff', label: 'Delta', cls: 'center' },
       { key: 'td_rate', label: 'TD Rate', cls: 'center' },
       { key: 'pos_avg_td_rate', label: 'Pos Avg', cls: 'center hide-mobile' },
       { key: 'ppg', label: 'PPG', cls: 'center hide-mobile' }
