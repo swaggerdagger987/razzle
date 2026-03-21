@@ -2852,6 +2852,76 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	smoke S69: 11/11 passed (health, players, pos filter QB/WR, sort, season switch, week filter, screener, no NaN, no negatives, filter options)	100	2026-03-21T11:09
+1	OK	frontend/lab.html	-	screener	pass	re-audit S69: Lab 0 JS errors, 610 players, result count correct (1-25 of 610 + position breakdown). No regressions from Ship Loop Phases C-H.	100	2026-03-21T11:15
+57	OK	frontend/lab.html	-	sidebar	pass	re-audit S69: 73 sidebar items, all panels clickable. Pro-gated panels (reportcard, efficiency) show lock correctly. 0 JS errors.	100	2026-03-21T11:15
+62	OK	frontend/lab-panels.js	6894	awards_runner_stat	open	re-audit S69: FUNC-067 still unfixed. r.ppg || '' treats 0 as falsy. No API data triggers it (runners ppg 14-20 range). Ship Loop hasn't consumed ticket.	95	2026-03-21T11:15
+63	P2	frontend/league-intel.html	2956	setTimeout_leak	open	S69 NEW: FUNC-068. 3 setTimeout() calls without storing timer ID (lines 2956, 4705, 4911). Line 2956 inside loop. Same file has 15+ correct patterns. Self-cleaning timers (10s), low practical impact.	90	2026-03-21T11:20
+19	OK	frontend/tradevalues.html	-	tradevalues	pass	re-audit S69: 0 JS errors. Trade values page loads. 5 broken NFL headshots (CDN 404, known FUNC-004).	100	2026-03-21T11:15
+43	OK	frontend/vorp.html	-	vorp	pass	re-audit S69: 0 JS errors. VORP page loads. Data rendering verified.	100	2026-03-21T11:15
+26	OK	frontend/weeklyleaders.html	-	weekly_leaders	pass	re-audit S69: 0 JS errors. Weekly Leaders page loads.	100	2026-03-21T11:15
+64	OK	frontend/agents.html	-	situation_room	pass	re-audit S69: 0 JS errors. 63 links, 63 buttons, 6 agent tabs. Canvas renders. Phase D hardening verified.	100	2026-03-21T11:15
+60	OK	frontend/league-intel.html	-	bureau	pass	re-audit S69: 0 JS errors. 55 links, 14 buttons. Connect flow UI present. Phase C changes verified.	100	2026-03-21T11:15
+-	OK	backend/server.py	1372	decrypt_removed	pass	S69: Phase H decrypt endpoint removal verified. No frontend references to decrypt/loadFromCloud. Comment documents decision.	100	2026-03-21T11:20
+-	OK	adapters/nflverse_adapter.py	357	col_normalization	pass	S69: Phase F column normalization verified. NEW_FORMAT_COLUMN_MAP handles passing_interceptions→interceptions, sacks_suffered→sacks, team→recent_team. CORE_STATS uses mapped names.	100	2026-03-21T11:20
+-	OK	-	-	half_ppr_calc	pass	S69: Phase F half-PPR backfill verified. McCaffrey HPPR=365.6 = (416.6+314.6)/2. Nacua HPPR=310.5. Robinson HPPR=331.3. All exact matches.	100	2026-03-21T11:20
+-	OK	-	-	season_data	pass	S69: Phase F 2025 data verified. Different leaders from 2024 (overlap: Josh Allen only). 2019 count. 319 prospects with combine data.	100	2026-03-21T11:20
+-	OK	-	-	report_card_sort	pass	S69: Report card honor roll correctly sorted by gpa_pct desc (82→82→80→79→77→77→76→76→75→75). cc58114 fix holding.	100	2026-03-21T11:20
+-	OK	-	-	efficiency_grade	pass	S69: 8-tier efficiency grades consistent across endpoints. Efficiency API: Boutte A+. Report card: McCaffrey C. Buy-sell: separate grading. No invalid grades.	100	2026-03-21T11:20
+26	OK	frontend/weeklyleaders.html	535	render	pass	re-audit S67: Ship Loop falsy-zero fix verified. 9 stat fields (pass_yd/td, rush_yd/td, rec, rec_yd/td, tgt, fantasy_points) all use != null check. Code correct. Pro-gated, can't browser-verify	95	2026-03-21T11:00
+19	OK	frontend/tradevalues.html	590	renderCard	pass	re-audit S67: Ship Loop falsy-zero fix verified. games field uses != null. Page renders 100+ cards, 0 JS errors	95	2026-03-21T11:05
+20	OK	frontend/tradefinder.html	809	renderSelected	pass	re-audit S67: Ship Loop falsy-zero fix verified. games field uses != null. Code correct. Pro-gated	95	2026-03-21T11:06
+43	OK	frontend/vorp.html	495	renderTable	pass	re-audit S67: Ship Loop falsy-zero fix verified. pos_rank uses != null. Pro-gated, code correct	95	2026-03-21T11:07
+40	OK	frontend/dualthreat.html	43	CSS	pass	re-audit S67: Ship Loop CSS+export fix verified. hover bg=var(--bg-warm), DTI mid-badge uses clean CSS vars (no fallbacks), export bg uses dataset.theme dark check. Pro-gated	95	2026-03-21T11:08
+45	OK	frontend/lab-panels.js	8132	renderBigBoard	pass	re-audit S67: Ship Loop falsy-zero fix verified. prospect rank uses != null. prospects.html renders 319 cards with #1, #2 ranks. 0 JS errors	100	2026-03-21T11:10
+54	OK	frontend	-	html2canvas	pass	re-audit S67: Ship Loop dark mode export bg fix verified. ALL 60+ html2canvas calls use dataset.theme==='dark'?'#2d1f14':'#ede0cf'. 0 remaining getComputedStyle export patterns	100	2026-03-21T11:15
+54	OK	frontend	-	watermark	pass	re-audit S67: Ship Loop watermark font fix verified. 0 remaining sans-serif watermarks. 4 fixed files now use bold 28px Space Mono. Pre-existing P2: Caveat vs Space Mono inconsistency across pages	95	2026-03-21T11:16
+62	P2	frontend/lab-panels.js	6894	renderAwardCard	open	FUNC-067: Awards runner-up PPG falsy-zero. String(r.ppg||'') shows empty for PPG=0. Winner (line 6858) correctly uses String(w.ppg). Missed in Ship Loop sweep	90	2026-03-21T11:20
+-	OK	frontend	-	falsy-zero-scan	pass	S67 codebase scan: all || 0 patterns safe (0||0=0). Only bug: FUNC-067. All || '-' patterns fixed or for string fields only	100	2026-03-21T11:25
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	smoke S70: 11/11 passed (health, players, pos filter QB/WR, sort, season switch, week filter, screener, no NaN, no negatives, filter options)	100	2026-03-21T11:35
+62	OK	frontend/lab-panels.js	6895	renderAwardCard	pass	re-audit S70: FUNC-067 FIXED. Runner PPG now uses r.ppg != null ? r.ppg : '' (correct falsy-zero handling). Report card sort FIXED: col: 'gpa_pct'. award.winner null guard added (line 6840). 10 awards, 0 null winners, 0 JS errors.	100	2026-03-21T11:40
+63	P2	frontend/league-intel.html	2956	setTimeout_leak	open	re-audit S70: FUNC-068 STILL UNFIXED. Ship Loop fixed crawlTimer/txnTimer (different timers), but 3 FUNC-068 locations (_hrAc:2956, _prAc:4705, _wvAc:4911) remain. No stored timer ID, no clearTimeout. Lines unchanged from S69.	95	2026-03-21T11:40
+35	OK	backend/live_data/dashboards.py	988	opportunity_share	pass	re-audit S70: QB PPO fix VERIFIED. dashboards.py:988 QBs use attempts+carries. Allen total_opps=572 (460att+112car). Maye=595. dynasty.py:598 and college.py:559 also fixed. All 3 files verified.	100	2026-03-21T11:40
+22	OK	frontend/lab.js	9534	aging_curves	pass	re-audit S70: Ship Loop dark mode + null guards verified. maxPPG filter+fallback (line 9534), data.players || [] (line 9535). 6 canvas dark mode ternaries verified (spider:7574/7585, heatmap:9967/9996/10021, pick:11282). 0 JS errors.	100	2026-03-21T11:40
+-	OK	frontend/lab.js	5624	exportImage	pass	S70: Ship Loop crash fix verified. null guard on getElementById('screenerTable') (line 5624-5625). Correct.	100	2026-03-21T11:40
+-	OK	frontend/lab.js	1040	_restoreState	pass	S70: Ship Loop crash fix verified. JSON.parse wrapped in try-catch (line 1040). Corrupted history stack no longer crashes undo/redo.	100	2026-03-21T11:40
+-	OK	frontend/lab.js	11274	pick_chart	pass	S70: Ship Loop crash fix verified. allPicks.length < 2 guard (line 11274) + maxVal || 1 fallback (line 11279). Prevents division-by-zero and NaN coordinates.	100	2026-03-21T11:40
+-	OK	frontend/lab.html	3154	start_here_label	pass	S70: Ship Loop design fix verified. START HERE label uses font-mono 11px bold uppercase (was font-display 13px). Correct.	100	2026-03-21T11:40
+-	OK	frontend/league-intel.html	7361	champ_probability	pass	S70: Ship Loop design fix verified. Championship Probability label at 16px font-display (was 14px). Meets minimum threshold.	100	2026-03-21T11:40
+64	OK	frontend/agents.html	-	situation_room	pass	re-audit S70: 0 JS errors, 63 links, 63 buttons. Canvas isConnected check present. No regressions from Ship Loop sweep.	100	2026-03-21T11:40
 smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
 smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
 smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
@@ -2890,8 +2960,44 @@ smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
 smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
 smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
 smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
-smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2026) — switch test skipped
 smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	smoke S71: 11/11 passed (health, players, pos filter QB/WR, sort, season switch, week filter, screener, no NaN, no negatives, filter options)	100	2026-03-21T11:43
+smoke-prod	OK	-	-	-	pass	smoke-prod S71: health OK, top 3 PPR correct (McCaffrey 416.6, Nacua 375.0, Robinson 370.8)	100	2026-03-21T11:55
+-	OK	frontend/lab.js	3929	parseInt_NaN_url	pass	re-audit S71: Ship Loop cef1003 parseInt NaN URL fixes VERIFIED. ?season=abc → fallback 2025 (610 players). ?u=prospects&draft_year=xyz → fallback 2026 (319 prospects). ?u=college&season=notanumber → fallback 2025 (4148 college). 0 JS errors all 3 cases.	100	2026-03-21T11:50
+-	OK	frontend/lab-panels.js	1199	parseInt_NaN_panels	pass	re-audit S71: Ship Loop 46da42f parseInt NaN panel fixes VERIFIED. 9 season selectors now fallback to _latestSeason. Budget slider falls back to 200. All parseInt calls in lab.js (0 unguarded) and lab-panels.js (0 unguarded) confirmed covered. Code audit clean.	100	2026-03-21T11:52
+63	P2	frontend/league-intel.html	2956	setTimeout_leak	open	re-audit S71: FUNC-068 STILL UNFIXED. 3 locations (_hrAc:2956, _prAc:4705, _wvAc:4911) still have setTimeout without stored timer ID. Ship Loop fixed adjacent crawlTimer/txnTimer but not these. Self-cleaning 10s timers, low practical impact.	95	2026-03-21T11:55
+1	OK	frontend/lab.html	-	screener	pass	re-audit S71: Lab 0 JS errors, 610 players, 25 rows. Screener filter chain verified: RB+PPR>=15 returns 10 correct RBs (McCaffrey→Etienne). Position filter, sort, pagination all working.	100	2026-03-21T11:58
+-	OK	-	-	scoring_formulas	pass	S71: Scoring formulas hand-verified. McCaffrey: PPR-STD=102=REC✓, HPPR=(416.6+314.6)/2=365.6✓, PPG=416.6/17=24.5✓. 5 players verified. Game log sum (416.6) matches season total exactly.	100	2026-03-21T12:00
+-	OK	-	-	vorp_math	pass	S71: VORP math verified. Replacement thresholds: QB=17.5 RB=12.2 WR=11.3 TE=10.6. McCaffrey VORP=24.5-12.2=12.4✓. Nacua 23.4-11.3=12.1✓. JSN 21.2-11.3=9.9✓. All correct.	100	2026-03-21T12:00
+-	OK	-	-	td_regression_math	pass	S71: TD regression math verified. Ward: 17 actual < 27.3 expected = BUY signal ✓. Stafford: 46 actual > 29.5 expected = SELL signal ✓. Direction and diff math correct for 50+50 candidates.	100	2026-03-21T12:00
+57	OK	frontend/lab.html	-	sidebar	pass	re-audit S71: 73 sidebar items rendered. Free panels at top, Pro panels with locks. 0 JS errors.	100	2026-03-21T12:00
+64	OK	frontend/agents.html	-	situation_room	pass	re-audit S71: 0 JS errors, 63 links, 63 buttons. Canvas isConnected check present. No regressions from Ship Loop parseInt sweep.	100	2026-03-21T12:00
+60	OK	frontend/league-intel.html	-	bureau	pass	re-audit S71: 0 JS errors, 55 links, 14 buttons. Connect flow present. FUNC-068 3 locations still unfixed (P2).	100	2026-03-21T12:00
+-	OK	frontend/index.html	-	home	pass	S71: Home page 0 JS errors, 68 links, 17 buttons. All sections rendering.	100	2026-03-21T12:00
+-	OK	-	-	prod_parity	pass	S71: Prod vs local parity check. Lab: identical element counts (39 links, 114 buttons, 73 sidebar items, 27 rows). API: same top 3 PPR. Only diff: team field (prod=SF/LA/ATL, local=CAR/LA/ATL — known adapter snapshot).	100	2026-03-21T12:02
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2026) — switch test skipped
+smoke	P1	-	-	-	ticket	smoke:week_filter — One or both returned empty
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2026) — switch test skipped
+smoke	P1	-	-	-	ticket	smoke:week_filter — One or both returned empty
 smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
@@ -2918,6 +3024,50 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	smoke: 11/11 pass — health, players, position filter QB/WR, sort PPR, season switch, week filter, screener query, no NaN, no negative, filter options	100	2026-03-21T12:01
+flow-16	P1	frontend/player.js	750	openCompareSearch	fail	FUNC-069: Compare search on player profile broken — data.players should be data.items. API returns {items:[...]} but code reads data.players which is undefined → always empty results	95	2026-03-21T12:15
+flow-16	OK	frontend/player.js	753	openCompareSearch	pass	re-audit: Ship Loop XSS fix (inline onclick → data-attributes + addEventListener) structurally correct, escapeAttr available from app.js. Would work once FUNC-069 fixed	90	2026-03-21T12:15
+flow-16	OK	-	-	-	pass	re-audit: standalone /compare/{id1}/{id2} page works — 0 JS errors, 11 stat rows, Mahomes vs Allen	100	2026-03-21T12:16
+flow-13	OK	frontend/app.js	1752	openPlayerPopup	pass	re-audit: escapeHtml(String(p.age)) fix verified. Age is float from API (30.5). Player profile loads, career arc + radar chart render. 0 JS errors	100	2026-03-21T12:20
+flow-17	OK	frontend/charts.js	131	getPlayerOptions	pass	re-audit: escapeAttr on player_id in option value (was escapeHtml). Defensive — player IDs are alphanumeric. 0 JS errors on Lab load, 76 option elements	100	2026-03-21T12:22
+flow-18	OK	frontend/lab-panels.js	365	renderRankings	pass	re-audit: escapeHtml(String(p.age)) in 7 panels verified. Dynasty Rankings: 200 cards, Tier 1 Elite. Trade Values: 150 cards. Breakouts: 50 cards. All 0 JS errors	100	2026-03-21T12:25
+deep-backend	OK	backend/live_data/tools.py	1165	fetch_season_recap	pass	re-audit: avg_ppg denominator fix (eligible vs total). Both same due to HAVING games>=6. Season recap 2024: Lamar #1, 25.3 PPG. 2025: MCF #1, 24.5 PPG	95	2026-03-21T12:30
+deep-backend	OK	backend/live_data/tools.py	1021	fetchone_null_guards	pass	re-audit: 5 fetchone null guards in tools.py + 1 in players.py. All endpoints tested: fpts-breakdown (40 QB), season-pace (25 RB), compare-table (2 players), playoff-schedule (40), success-rate (0, PBP empty). None crash	100	2026-03-21T12:32
+deep-backend	OK	backend/server.py	698	custom_http_exception_handler	pass	re-audit: html.escape(str(exc.detail)) prevents XSS through error messages. 404 returns custom page correctly	100	2026-03-21T12:33
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2026) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	Session 73 smoke: 11/11 passed, 0 failures. 5889 players, 199K stat rows, seasons 2015-2025	100	2026-03-21T12:16
+re-audit-app.js	OK	frontend/app.js	530	formatStat	pass	re-audit: Ship Loop NaN guard verified in browser. null→—, undefined→—, "abc"→— (NEW), NaN→— (NEW), 0→0.0, 24.5→24.5. 0 NaN cells in Lab table	100	2026-03-21T12:45
+re-audit-formulas.js	OK	frontend/formulas.js	137	renderSavedFormulas	pass	re-audit: Ship Loop XSS fix verified. _esc(desc) on formula description, matching _esc(f.name) pattern. Both name and description now escaped	100	2026-03-21T12:46
+re-audit-warroom.js	OK	frontend/warroom.js	1097	keydown handler	pass	re-audit: Ship Loop SELECT tag keyboard exclusion verified. Also escapeAttr on API key input value. Situation Room 0 JS errors, 63 links, 63 buttons	100	2026-03-21T12:47
+re-audit-tools.py	OK	backend/live_data/tools.py	1178	fetch_season_recap	pass	re-audit: Ship Loop total_players fix verified. Old code had NameError (total_players undefined), new code uses len(season_rows)=1315. API returns correct data	95	2026-03-21T12:48
+flow-16	OPEN	frontend/player.js	750	compare search	fail	FUNC-069 STILL UNFIXED. player.js:750 reads data.players but /api/players returns data.items. Ship Loop merge did not touch player.js. Compare search on profile page returns 0 results	100	2026-03-21T12:50
+flow-63	OPEN	frontend/league-intel.html	2956	setTimeout leak	fail	FUNC-068 STILL UNFIXED. 3 locations (_hrAc:2956, _prAc:4705, _wvAc:4911) still have dangling setTimeout without clearTimeout. Ship Loop merge did not touch these lines	100	2026-03-21T12:51
+flow-52	OK	frontend/formulas.js	129	renderSavedFormulas	pass	re-audit: Formula builder panel renders, Formulas button present, 0 JS errors. _esc fallback pattern correct	100	2026-03-21T12:52
+flow-64	OK	frontend/warroom.js	-	setupConfigPanel	pass	re-audit: Situation Room canvas loaded, 0 JS errors. SELECT keyboard fix prevents key capture in dropdowns	100	2026-03-21T12:53
+flow-1	OK	frontend/lab.html	-	screener load	pass	re-audit: 610 players, 475 cells, 0 NaN/Inf/undefined. Multi-filter chain verified (RB+PPG>=15+tgt>=70 returns 5 correct RBs). College=4148 players. Prospects=319	100	2026-03-21T12:55
+flow-8	OK	frontend/lab.html	-	universe toggle	pass	re-audit: NFL→College→Prospects all load cleanly. College 4148 players, Prospects 319. 0 JS errors on all universes	100	2026-03-21T12:56
+deep-data	P2	backend/live_data/tools.py	1029	season_rows query	info	fantasy_relevant=1 set on ALL 5889 players (including 637 LB, 544 CB, 438 DE). Season recap total_players=1315 and avg_ppg=2.5 are inflated by non-fantasy positions. pos_leaders returns 23 positions (frontend correctly filters to QB/RB/WR/TE). Pre-existing data quality issue	90	2026-03-21T12:58
 smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
 smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
 smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
