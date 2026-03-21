@@ -431,19 +431,21 @@ def _handle_checkout_completed(session):
             "SELECT id FROM subscriptions WHERE user_id = ?", (_uid,)
         ).fetchone()
         status = "trialing" if is_trial else "active"
+        is_lifetime = plan_tier.endswith("_lifetime")
+        p_type = "lifetime" if is_lifetime else "subscription"
         if existing:
             conn.execute("""
                 UPDATE subscriptions SET
                     stripe_customer_id = ?, stripe_subscription_id = ?,
                     plan = ?, status = ?, trial_used = 1, trial_end = ?,
-                    updated_at = CURRENT_TIMESTAMP
+                    plan_type = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
-            """, (customer_id, subscription_id, plan_tier, status, trial_end, _uid))
+            """, (customer_id, subscription_id, plan_tier, status, trial_end, p_type, _uid))
         else:
             conn.execute("""
-                INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end)
-                VALUES (?, ?, ?, ?, ?, 1, ?)
-            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_end))
+                INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end, plan_type)
+                VALUES (?, ?, ?, ?, ?, 1, ?, ?)
+            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_end, p_type))
 
         conn.commit()
     logger.info(f"User {user_id} upgraded to {plan_tier} (subscription {subscription_id}, trial={is_trial})")
@@ -453,7 +455,7 @@ def _handle_subscription_updated(subscription):
     """Sync plan when subscription is updated via Stripe portal (plan change, reactivation, etc.).
     Skips lifetime users — their plan is permanent."""
     customer_id = subscription.get("customer")
-    status = subscription.get("status")  # active, past_due, trialing, canceled, etc.
+    status = subscription.get("status") or "unknown"  # active, past_due, trialing, canceled, etc.
     metadata = subscription.get("metadata", {})
     plan_tier = metadata.get("plan_tier")
 
