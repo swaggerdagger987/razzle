@@ -103,7 +103,7 @@ function renderPlayerPage(data, container) {
   html += `<a href="${esc(backHref)}" class="player-back">&larr; ${esc(backLabel)}</a>`;
 
   // Hero card
-  html += `<div class="player-hero">`;
+  html += `<div class="player-hero pos-stripe-${pos.toLowerCase()}">`;
   html += `<div class="player-hero-top">`;
   if (player.headshot_url) {
     html += `<img class="player-hero-headshot" src="${esc(player.headshot_url)}" alt="" onerror="this.style.display='none';">`;

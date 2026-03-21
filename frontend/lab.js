@@ -2133,6 +2133,7 @@ function showHoverCard(playerId, anchorEl) {
   }
 
   card.innerHTML = html;
+  card.className = "hover-card" + (pos ? " pos-stripe-" + pos.toLowerCase() : "");
 
   // Position card near anchor
   const rect = anchorEl.getBoundingClientRect();
@@ -6431,7 +6432,7 @@ function renderProfile(data, container) {
   let html = "";
 
   // Header
-  html += `<div class="profile-header">`;
+  html += `<div class="profile-header" style="border-top:4px solid ${posColor};">`;
   if (player.headshot_url) {
     html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || 'Player')} headshot" onerror="this.style.display='none';">`;
   }
