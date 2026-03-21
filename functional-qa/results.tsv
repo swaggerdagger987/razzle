@@ -1291,10 +1291,3 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
-all	OK	-	-	smoke_tests	pass	Session 31 smoke: 11/11 pass (local). Prod health OK. Lab loads 25/607 players.	100	2026-03-21T00:00
-4	OK	backend/live_data/players.py	308	safe_sorts	re-audit-verified	re-audit FUNC-025 CODE FIX VERIFIED: td_rate, fumble_rate, passer_rating, ay_per_att, ppfd, ppfd_per_game, yprr added to safe_sorts. Python sort route correct (not in sql_sortable → fetch all → enrich → sort). Awaiting Render deploy.	100	2026-03-21T00:00
-1	OK	backend/live_data/tools.py	34	has_ages	re-audit-verified	re-audit FUNC-024 CODE FIX VERIFIED: has_ages = False defined at line 34 before try block. NameError cascade prevented. Awaiting Render deploy.	100	2026-03-21T00:00
-36	OK	backend/live_data/dashboards.py	78	fetch_efficiency_rankings	re-audit-verified	re-audit FUNC-021 CODE FIX VERIFIED: SUM(s.attempts) in query, QB PPO=pass_att+carries, QB td_rate=pass_tds/pass_att. Code correct. Prod STILL broken (Prescott PPO=5.92). Awaiting deploy.	100	2026-03-21T00:00
-36	P0	backend/live_data/dashboards.py	739	fetch_stock_watch	open	FUNC-028: QB PPO cascade — 3 functions still use broken opportunities=targets+carries. stock_watch(739), report_cards(1244), season_awards(1569) all need s.attempts + QB position check. Prod: "Most Efficient" award = Jared Goff (QB). Report Card: Mayfield eff=A. Stock Watch: Allen falling (score=59).	100	2026-03-21T00:00
-16	OK	-	-	compare	pass	re-audit: /api/players/compare endpoint returns correct data. Trade finder correct (Chase val=93.8, equal targets Bowers/St.Brown/Rice). Career mode WR PPR leaders correct (Adams 2887, Hill 2601).	100	2026-03-21T00:00
-43	OK	-	-	vorp	pass	re-audit: VORP thresholds and math correct. McCaffrey VORP=12.36 (24.51-12.15). Replacement levels sensible. Volume kings RB-dominated (correct). Featured endpoint healthy on prod.	100	2026-03-21T00:00
