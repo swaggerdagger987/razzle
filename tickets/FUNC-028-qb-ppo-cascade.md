@@ -85,6 +85,32 @@ d["attempts"] += r[NEW_ATTEMPTS_INDEX] or 0
 ## Files
 - `backend/live_data/dashboards.py` — lines 614-868 (stock_watch), 1071-1384 (report_cards), 1386-1836 (season_awards)
 
+## Session 33 Re-Audit (2026-03-21)
+
+**ALL FOUR functions still broken on PROD.** The "fixed" `fetch_efficiency_rankings` code exists locally but was NEVER DEPLOYED to Render.
+
+Fresh prod evidence:
+```
+/api/efficiency-rankings?season=2025&position=QB (PROD 2026-03-21):
+  Dak Prescott:   PPO=5.92  Opp=53   ← 53 carries only, missing 480+ pass_attempts
+  Baker Mayfield:  PPO=4.94  Opp=55   ← same bug
+  Patrick Mahomes: PPO=4.40  Opp=65   ← screener shows 502 attempts, efficiency ignores them
+
+  Mahomes should have: opp = 502 (attempts) + 65 (carries) = 567, PPO = 0.5
+
+/api/season-awards?season=2025 (PROD 2026-03-21):
+  "Most Efficient" winner: Jared Goff (QB)  ← STILL all QBs, STILL broken
+
+/api/report-cards?season=2025&position=QB (PROD 2026-03-21):
+  Mayfield: efficiency=A, Prescott: efficiency=A  ← STILL inflated
+```
+
+The `attempts` column EXISTS on prod (screener returns `attempts: 502` for Mahomes).
+The efficiency fix code EXISTS locally (dashboards.py lines 78, 121-124).
+The code was **never deployed to Render production.**
+
+**Blocking item**: Push + deploy ship/launch-fixes branch to Render.
+
 ## Related
 - FUNC-021 (original bug, fixed for efficiency_rankings only)
 - Copy the EXACT pattern from `fetch_efficiency_rankings` lines 78, 117-124
