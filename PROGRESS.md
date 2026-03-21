@@ -3415,3 +3415,63 @@ All 9 fixes change `(val || '-')` to `(val != null ? val : '-')` to correctly di
 - 9 findings verified as already fixed (stale QA data)
 - Remaining open findings are deployment-only (code exists, prod needs deploy)
 - 11/11 smoke tests pass
+
+---
+
+## Ship Loop: Sweep Mode (Mar 21)
+
+**Goal**: All QA ticket directories empty, TICKETS.md has only infrastructure-gated items. Fresh 4-agent parallel audit across crash bugs, backend data correctness, design consistency, and dark mode.
+
+### QA Findings Re-Triage
+All 50+ open QA findings verified against current code:
+- FUNC-064 (gradeClass B+/C+): NOT A BUG — charAt(0) correctly maps B+→grade-b, C+→grade-c
+- FUNC-026 (mini-screener): ALREADY FIXED — data.items || data.players fallback exists
+- FUNC-017 (breakout badge): ALREADY FIXED — uses .ppg (per-game average from _enrich_with_derived_stats)
+- FUNC-053 (compare sidebar): ALREADY FIXED — uses career-compare panel key
+- FUNC-027/029 (smart filters): ALREADY FIXED — key is "breakout", thresholds are percentages (50/65/40)
+- FUNC-038/039 (nudge CSS): ALREADY FIXED — border is 2px, keyframes exist in both files
+- FUNC-016 (escapeAttr): ALREADY FIXED — cheatsheet uses data-pid with escapeAttr, no onclick
+- All remaining open findings are deployment gaps (code fixed, prod needs redeploy)
+
+### Crash Bug Fixes (5 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | award.winner null guard | lab-panels.js:6840 | API could return award with null winner → TypeError on .position |
+| 2 | exportImage table null guard | lab.js:5623 | getElementById returns null if no table → TypeError on .querySelectorAll |
+| 3 | data.players || [] guard | lab.js:9601 | Aging curve toggle could crash if API response lacks players key |
+| 4 | _restoreState JSON.parse try-catch | lab.js:1040 | Corrupted history stack would crash undo/redo |
+| 5 | Pick chart allPicks < 2 + maxVal || 1 | lab.js:11273 | 1 pick → division by zero, trade_value=0 → NaN coordinates |
+
+### Backend QB PPO Fixes (3 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | College efficiency QB opportunities | college.py:558 | Was targets+carries for all positions → QBs had inflated PPO. Now attempts+carries for QBs. |
+| 2 | College awards SQL QB opportunities | college.py:2143 | SQL CASE WHEN for position-aware opportunity calculation |
+| 3 | Opportunity share QB opportunities | dashboards.py:986 | Added SUM(s.attempts) to query, QB uses attempts+carries |
+| 4 | Trade finder stock PPO | dynasty.py:583,598 | Added s.attempts and p.position to query, QB uses attempts+carries |
+
+### Canvas Dark Mode Fixes (6 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | Prospect spider chart grid rings | lab.js:7574 | rgba(45,31,20,...) → t.isDark ternary |
+| 2 | Prospect spider chart axis lines | lab.js:7585 | rgba(45,31,20,...) → t.isDark ternary |
+| 3 | Heatmap alternating row bg | lab.js:9967 | rgba(45,31,20,0.03) → t.isDark ternary |
+| 4 | Heatmap cell border | lab.js:9996 | rgba(45,31,20,0.12) → t.isDark ternary |
+| 5 | Heatmap row separator | lab.js:10021 | rgba(45,31,20,0.08) → t.isDark ternary |
+| 6 | Pick chart grid lines | lab.js:11282 | rgba(45,31,20,0.1) → t.isDark ternary |
+
+### Design Compliance Fixes (2 fixes)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | START HERE label | lab.html:3154 | font-display at 13px → font-mono 11px bold uppercase |
+| 2 | Championship Probability label | league-intel.html:7361 | font-display at 14px → 16px |
+
+### Verification
+- All 11 JS files syntax clean (node --check)
+- All Python files compile clean
+- 11/11 smoke tests pass
+- 0 regressions
