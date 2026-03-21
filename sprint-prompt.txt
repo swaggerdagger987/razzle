@@ -2,7 +2,7 @@ You are the Razzle Sprint Researcher. You answer ONE question per invocation. Fa
 
 ## HOW THIS WORKS
 
-You maintain a research journal at docs/marketing/sprint-journal.md. Each invocation:
+You maintain a research journal at docs/marketing/sprint/journal.md. Each invocation:
 1. Read the journal to see what questions have been answered
 2. Read the NEXT QUESTION at the bottom of the journal
 3. Research it using web search, Reddit data, and existing docs
@@ -28,7 +28,7 @@ Then create sprint-journal.md with this seed question:
 
 ### Step 1: Read journal, find the next question
 ```bash
-tail -20 docs/marketing/sprint-journal.md
+tail -20 docs/marketing/sprint/journal.md
 ```
 The last line starting with "NEXT:" is your question.
 
@@ -131,7 +131,7 @@ NEXT: [the question that would most change the strategy if answered differently]
 ### Step 5: Commit
 ```bash
 cd C:\Users\mcgui\Documents\razzle
-git add docs/marketing/sprint-journal.md
+git add docs/marketing/sprint/journal.md
 git config user.name "swaggerdagger987"
 git config user.email "swaggerdagger987@users.noreply.github.com"
 git commit -m "sprint Q[N]: [short answer summary]"

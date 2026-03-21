@@ -18,7 +18,7 @@ for ($i = 1; $i -le $maxIterations; $i++) {
     claude --dangerously-skip-permissions -p $p
 
     # Backup commit from loop
-    git add docs/marketing/sprint-journal.md 2>$null
+    git add docs/marketing/sprint/journal.md 2>$null
     git commit -m "sprint Q$i" 2>$null
 
     if ($i % 10 -eq 0) {
@@ -32,4 +32,4 @@ for ($i = 1; $i -le $maxIterations; $i++) {
 
 Write-Host ""
 Write-Host "  SPRINT COMPLETE. 100 questions answered." -ForegroundColor Green
-Write-Host "  Journal: docs/marketing/sprint-journal.md" -ForegroundColor Green
+Write-Host "  Journal: docs/marketing/sprint/journal.md" -ForegroundColor Green
