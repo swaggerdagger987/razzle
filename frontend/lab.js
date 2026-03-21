@@ -3869,6 +3869,15 @@ function loadStateFromURL() {
   if (params.get("diff") === "1" && state.pinnedPlayers.length >= 2) {
     state.diffMode = true;
   }
+  // Smart filter from URL (e.g., ?sf=breakouts)
+  if (params.has("sf")) {
+    var sfKey = params.get("sf");
+    if (SMART_FILTERS[sfKey]) {
+      var preset = SMART_FILTERS[sfKey];
+      state.filters = [...preset.filters];
+      if (preset.minGP) state.minGP = preset.minGP;
+    }
+  }
 
   if (isProspectView()) {
     if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year"));

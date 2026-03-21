@@ -339,6 +339,27 @@
     line-height: 1.5;
   }
 
+  /* ===== SMART FILTER CHIPS ===== */
+  .smart-chip {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--bg-card);
+    padding: 8px 18px;
+    border: 3px solid var(--ink);
+    border-radius: 20px;
+    box-shadow: 3px 3px 0 var(--ink);
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .smart-chip:hover {
+    background: var(--orange);
+    color: white;
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
   /* ===== PRICING ===== */
   .pricing-section {
     max-width: 960px;
@@ -599,6 +620,20 @@
       <div class="feature-card-title">Shareable URLs</div>
       <div class="feature-card-desc">Every filter, sort, and column saved in the URL. Send the exact view.</div>
     </div>
+  </div>
+</div>
+
+<!-- Smart filter chips — discovery filters -->
+<div class="lp-section" style="max-width:860px;">
+  <h2>One-click <span>discovery filters.</span></h2>
+  <p>These update live as the season plays out.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:16px;">
+    <a href="/lab.html?sf=breakouts" class="smart-chip">Breakout Candidates</a>
+    <a href="/lab.html?sf=buylow" class="smart-chip">Buy Low Targets</a>
+    <a href="/lab.html?sf=workhorses" class="smart-chip">Workhorses</a>
+    <a href="/lab.html?sf=sleepers" class="smart-chip">Sleepers</a>
+    <a href="/lab.html?sf=rookies" class="smart-chip">Rookies</a>
+    <a href="/lab.html?sf=studs" class="smart-chip">Veteran Studs</a>
   </div>
 </div>
 
