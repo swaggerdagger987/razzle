@@ -6,7 +6,7 @@
 function exportPanelCSV(panelName) {
   // Pro+ gating
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);text-decoration:underline;">upgrade now</a>', 'warning');
+    _showToast('CSV export requires Pro.', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
   var panel = document.getElementById('panel-' + panelName);
@@ -5828,7 +5828,7 @@ function exportCSV() {
 
   // Pro+ gating: CSV export requires Pro or Elite plan
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);text-decoration:underline;">upgrade now</a>', 'warning');
+    _showToast('CSV export requires Pro.', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
 

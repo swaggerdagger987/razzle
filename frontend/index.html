@@ -1008,7 +1008,7 @@ window._miniFilter = function(pos) {
 
 // Fetch live data
 fetch('/api/players?limit=60&sort=ppg&order=desc')
-  .then(function(r) { return r.json(); })
+  .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(function(data) {
     _miniData = (data.items || data.players || []).map(function(p) {
       return {
