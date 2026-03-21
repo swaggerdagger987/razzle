@@ -884,8 +884,9 @@
     }
 
     function sortPlayers(players, col, dir) {
+      var sortCol = col === 'vorp_tier' ? 'vorp' : col;
       return players.slice().sort(function(a, b) {
-        var va = a[col], vb = b[col];
+        var va = a[sortCol], vb = b[sortCol];
         if (va == null && vb == null) return 0;
         if (va == null) return 1;
         if (vb == null) return -1;
@@ -911,6 +912,7 @@
 
       var cols = [
         { key: 'full_name', label: 'Player' },
+        { key: 'vorp_tier', label: 'Tier' },
         { key: 'vorp', label: 'VORP' },
         { key: 'ppg', label: 'PPG' },
         { key: 'replacement_ppg', label: 'Repl PPG' },
@@ -936,6 +938,8 @@
         html += '<div class="vorp-player-info"><div class="vorp-player-name">' + pLink(p.full_name, p.player_id) + '</div>';
         html += '<div class="vorp-player-meta"><span class="vorp-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="vorp-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
+        var tierLabels = { elite: 'Elite', starter: 'Starter', flex: 'Flex', fringe: 'Fringe', replacement: 'Replacement' };
+        html += '<td class="center"><span class="vorp-tier-badge ' + tier + '">' + (tierLabels[tier] || tier) + '</span></td>';
         html += '<td class="center"><span class="vorp-badge ' + tier + '">' + sign + fmt(p.vorp, 2) + '</span></td>';
         html += '<td class="center" style="font-weight:700">' + fmt(p.ppg) + '</td>';
         html += '<td class="center" style="color:var(--ink-medium)">' + fmt(p.replacement_ppg) + '</td>';

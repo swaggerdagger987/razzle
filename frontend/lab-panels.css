@@ -714,6 +714,22 @@
 .vorp-badge.flex { background: var(--yellow-light); color: var(--semantic-yellow); border-color: var(--yellow); }
 .vorp-badge.fringe { background: var(--orange-light); color: var(--semantic-orange); border-color: var(--orange); }
 .vorp-badge.replacement { background: var(--red-light); color: var(--semantic-red); border-color: var(--red); }
+.vorp-tier-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 2px solid;
+}
+.vorp-tier-badge.elite { background: var(--green-light); color: var(--semantic-green); border-color: var(--green); }
+.vorp-tier-badge.starter { background: var(--blue-light); color: var(--semantic-blue); border-color: var(--blue); }
+.vorp-tier-badge.flex { background: var(--yellow-light); color: var(--semantic-yellow); border-color: var(--yellow); }
+.vorp-tier-badge.fringe { background: var(--orange-light); color: var(--semantic-orange); border-color: var(--orange); }
+.vorp-tier-badge.replacement { background: var(--red-light); color: var(--semantic-red); border-color: var(--red); }
 .vorp-annotation { font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); white-space: nowrap; }
 
 /* ===== POSITIONAL ADVANTAGE PANEL ===== */

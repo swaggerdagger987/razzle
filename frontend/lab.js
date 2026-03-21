@@ -1199,13 +1199,19 @@ function _syncUndoRedoButtons() {
 })();
 
 // ─── Data fetching ───────────────────────────────────────────────
-// ─── Screener query cache (LRU, 5 entries) ───────────────────────
-var _queryCache = [];  // [{key, data}]
+// ─── Screener query cache (LRU, 5 entries, 5-min TTL) ───────────
+var _queryCache = [];  // [{key, data, ts}]
 var _QUERY_CACHE_MAX = 5;
+var _QUERY_CACHE_TTL = 300000; // 5 minutes
 
 function _queryCacheGet(key) {
+  var now = Date.now();
   for (var i = 0; i < _queryCache.length; i++) {
     if (_queryCache[i].key === key) {
+      if (now - _queryCache[i].ts > _QUERY_CACHE_TTL) {
+        _queryCache.splice(i, 1);
+        return null;
+      }
       // Move to end (most recently used)
       var entry = _queryCache.splice(i, 1)[0];
       _queryCache.push(entry);
@@ -1220,7 +1226,7 @@ function _queryCachePut(key, data) {
   for (var i = 0; i < _queryCache.length; i++) {
     if (_queryCache[i].key === key) { _queryCache.splice(i, 1); break; }
   }
-  _queryCache.push({ key: key, data: data });
+  _queryCache.push({ key: key, data: data, ts: Date.now() });
   if (_queryCache.length > _QUERY_CACHE_MAX) _queryCache.shift();
 }
 
