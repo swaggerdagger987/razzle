@@ -1015,8 +1015,8 @@ fetch('/api/players?limit=60&sort=ppg&order=desc')
         name: p.full_name || p.display_name || p.name || '',
         position: p.position || '',
         ppg: parseFloat(p.ppg) || 0,
-        games: parseInt(p.games_played || p.games) || 0,
-        age: parseInt(p.age) || null
+        games: parseInt(p.games_played || p.games, 10) || 0,
+        age: parseInt(p.age, 10) || null
       };
     });
     _renderMiniRows();

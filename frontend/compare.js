@@ -56,7 +56,7 @@ async function loadComparison(id1, id2) {
       return;
     }
 
-    document.title = _p1Data.player.full_name + " vs " + _p2Data.player.full_name + " — Razzle";
+    document.title = (_p1Data.player.full_name || "Player 1") + " vs " + (_p2Data.player.full_name || "Player 2") + " — Razzle";
     renderComparison(page);
   } catch (err) {
     page.innerHTML =
@@ -276,9 +276,9 @@ function getStatValue(career, games, statDef) {
 }
 
 function getCompareStats(pos) {
-  var f0 = function(v) { return Math.round(v).toLocaleString(); };
-  var f1 = function(v) { return Number(v).toFixed(1); };
-  var fp = function(v) { return Number(v).toFixed(1) + "%"; };
+  var f0 = function(v) { return v != null ? Math.round(v).toLocaleString() : "\u2014"; };
+  var f1 = function(v) { return v != null ? Number(v).toFixed(1) : "\u2014"; };
+  var fp = function(v) { return v != null ? Number(v).toFixed(1) + "%" : "\u2014"; };
 
   var base = [
     { key: "games", label: "Games", fmt: f0 },
