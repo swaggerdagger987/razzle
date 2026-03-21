@@ -3199,3 +3199,40 @@ Audited all open FUNC-001 through FUNC-062 findings from results.tsv. **Every co
 - Full codebase sweep (frontend + backend) found 0 new bugs
 - No bare except blocks, no eval(), no SQL injection vectors, no XSS
 - 0 regressions
+
+---
+
+## Ship Loop Session 38: Grade Scale Sweep + Deep Audit (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md items need external infrastructure. Enter sweep mode.
+
+### Startup
+- Merged origin/qa/findings (already up to date)
+- Merged origin/ceo/strategy (already up to date)
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty
+- TICKETS.md remaining items require Playwright, Claude API, MiroFish
+
+### Grade Scale Consistency (3 files, 4 functions)
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | Player strengths 10-tier → canonical 8-tier | P1 | players.py:1321 | Had D+ and F+ grades not handled by frontend gradeColor(). Converted to canonical 8-tier scale. Also fixed dangling `grade_pct` → `_grade` reference. |
+| 2 | College `_efficiency_grade` 6-tier → 8-tier | P2 | college.py:23 | Was missing B+ and C+ grades. Updated thresholds to match canonical scale. |
+| 3 | College `grade_from_pct` 7-tier → 8-tier | P2 | college.py:1131 | Was missing C+ grade. Updated thresholds to match canonical scale. |
+| 4 | Strengths panel `gradeColor()` robustness | P1 | lab-panels.js:6085 | Changed from exact match (`=== 'D'`) to charAt(0) pattern, matching roster builder's version. Handles any grade variant (D+, D-, etc.). |
+
+### Sweep Results (5+ agents + manual audit)
+- 0 new crash bugs found (all .toFixed(), .split(), Math.min/max already guarded)
+- 0 new XSS vectors (all innerHTML uses escapeHtml)
+- 0 bare except blocks, 0 eval(), 0 alert(), 0 console.log (except branded easter egg)
+- 0 hardcoded 2026 in dynamic code
+- 0 1px solid borders on components (only table row dividers)
+- 0 TODO/FIXME/HACK comments
+- All 12 JS files syntax clean
+- All 16 Python files compile clean
+- 59/59 tests pass
+
+### Verified QA Findings Status
+- FUNC-005 (dominator rec_yd_share null): WORKING — tested locally, shares populated correctly
+- FUNC-007 (snaps null): DATA ISSUE — 5575/18981 rows have snap data locally, prod needs DB rebuild
+- Week filter: WORKING locally (season=2024, week=1 returns games=1). Prior smoke failures were from stale code.
