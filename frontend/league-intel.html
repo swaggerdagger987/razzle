@@ -4172,63 +4172,145 @@ async function loadSelfScout(leagueId, userId, myRoster, rosters, allPlayers, us
       if (avg > strongestPPG) { strongestPPG = avg; strongest = wp; }
     }
 
-    // Render self-scout card
+    // Compute positional grades relative to league
+    var posGrades = {};
+    var posColors = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--orange)', TE: 'var(--pos-te)' };
+    for (var gp in posPlayers) {
+      // Get this user's PPG total for starters at this position
+      var myPosPPG = 0;
+      var need = gp === 'QB' || gp === 'TE' ? 1 : 2;
+      for (var gi = 0; gi < Math.min(need, posPlayers[gp].length); gi++) myPosPPG += posPlayers[gp][gi].ppg;
+
+      // Get all league's PPG at this position
+      var leaguePosVals = [];
+      for (var lr = 0; lr < rosters.length; lr++) {
+        var lrPids = rosters[lr].players || [];
+        var lrPlayers = [];
+        for (var lri = 0; lri < lrPids.length; lri++) {
+          var lrp = allPlayers[lrPids[lri]];
+          if (!lrp || lrp.position !== gp) continue;
+          var lrn = ((lrp.first_name || '') + ' ' + (lrp.last_name || '')).trim();
+          lrPlayers.push(ppgLookup[lrn] || 0);
+        }
+        lrPlayers.sort(function(a, b) { return b - a; });
+        var lrTotal = 0;
+        for (var lrsi = 0; lrsi < Math.min(need, lrPlayers.length); lrsi++) lrTotal += lrPlayers[lrsi];
+        leaguePosVals.push(lrTotal);
+      }
+      leaguePosVals.sort(function(a, b) { return a - b; });
+
+      // Percentile
+      var pctile = 50;
+      if (leaguePosVals.length > 0) {
+        var below = leaguePosVals.filter(function(v) { return v <= myPosPPG; }).length;
+        pctile = Math.round(below / leaguePosVals.length * 100);
+      }
+
+      var grade = 'C';
+      if (pctile >= 85) grade = 'A';
+      else if (pctile >= 60) grade = 'B+';
+      else if (pctile >= 40) grade = 'B';
+      else if (pctile >= 15) grade = 'C';
+      else grade = 'D';
+      if (posPlayers[gp].length === 0) grade = 'F';
+
+      var starterAge = 0;
+      var ageCt = 0;
+      for (var sai = 0; sai < Math.min(need, posPlayers[gp].length); sai++) {
+        var saPid = myPids.find(function(pid) {
+          var pp = allPlayers[pid];
+          return pp && pp.position === gp && ((pp.first_name || '') + ' ' + (pp.last_name || '')).trim() === posPlayers[gp][sai].name;
+        });
+        if (saPid && allPlayers[saPid] && allPlayers[saPid].age > 0) {
+          starterAge += allPlayers[saPid].age;
+          ageCt++;
+        }
+      }
+      var avgStarterAge = ageCt > 0 ? (starterAge / ageCt).toFixed(0) : '?';
+
+      posGrades[gp] = {
+        grade: grade,
+        starterName: posPlayers[gp].length > 0 ? posPlayers[gp][0].name : 'Empty',
+        starterPPG: posPlayers[gp].length > 0 ? posPlayers[gp][0].ppg.toFixed(1) : '0',
+        depth: posPlayers[gp].length,
+        avgAge: avgStarterAge,
+        pctile: pctile
+      };
+    }
+
+    // Competitive window
+    var windowTag = 'CONTENDER';
+    var windowYears = '2-3 years';
+    var avgAgeNum = parseFloat(avgAge);
+    if (isNaN(avgAgeNum)) avgAgeNum = 26;
+    if (rank <= 3 && avgAgeNum < 27) { windowTag = 'CONTENDER'; windowYears = '3+ years'; }
+    else if (rank <= 3) { windowTag = 'CONTENDER'; windowYears = '1-2 years'; }
+    else if (rank <= 6 && avgAgeNum < 26) { windowTag = 'RETOOLING'; windowYears = '2-3 years'; }
+    else if (rank <= 6) { windowTag = 'RETOOLING'; windowYears = '1-2 years'; }
+    else { windowTag = 'REBUILDING'; windowYears = '3+ years to compete'; }
+
+    var windowColor = windowTag === 'CONTENDER' ? 'var(--green)' : windowTag === 'RETOOLING' ? 'var(--orange)' : 'var(--red)';
+
+    // Overall grade
+    var gradeVals = { 'A': 4, 'B+': 3.3, 'B': 3, 'C': 2, 'D': 1, 'F': 0 };
+    var totalGrade = 0;
+    var gCount = 0;
+    for (var og in posGrades) { totalGrade += (gradeVals[posGrades[og].grade] || 2); gCount++; }
+    var avgGrade = gCount > 0 ? totalGrade / gCount : 2;
+    var overallGrade = avgGrade >= 3.5 ? 'A' : avgGrade >= 3 ? 'B+' : avgGrade >= 2.5 ? 'B' : avgGrade >= 1.5 ? 'C' : 'D';
+    var overallColor = overallGrade.startsWith('A') ? 'var(--green)' : overallGrade.startsWith('B') ? 'var(--orange)' : 'var(--ink-medium)';
+
+    // Render self-scout card with Hawkeye agent header
     var html = '<div class="self-scout">';
-    html += '<div class="self-scout-header">';
-    html += '<span class="self-scout-title">your team — ' + escapeHtml(userMap[userId] || "you") + '</span>';
+
+    // Hawkeye agent header
+    html += '<div class="agent-header"><div class="agent-avatar" style="background:var(--pos-rb);">🦅</div><div><div class="agent-name" style="color:var(--pos-rb);">Hawkeye</div><div class="agent-role">Scout</div></div></div>';
+    html += '<div class="agent-quote">i\'ve been watching your roster. here\'s what the tape says.</div>';
+
+    // Roster grade overview
+    html += '<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;">';
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:48px;color:' + overallColor + ';">' + overallGrade + '</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);">ROSTER GRADE</div></div>';
+    html += '<div>';
+    html += '<span class="archetype-badge" style="background:' + windowColor + ';color:var(--bg);border-color:' + windowColor + ';">' + windowTag + '</span>';
+    html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-top:4px;">window: ' + windowYears + '</div>';
+    html += '</div>';
+    html += '<div>';
     html += '<span class="archetype-badge" style="background:var(--orange);color:white;border-color:var(--orange);">' + escapeHtml(archetype) + '</span>';
+    html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-top:4px;">#' + rank + ' of ' + rosters.length + ' &bull; ' + starterPPG.toFixed(1) + ' PPG &bull; avg age ' + avgAge + '</div>';
+    html += '</div>';
     html += '</div>';
 
-    // Stats grid
-    html += '<div class="self-scout-grid">';
-    html += '<div class="self-scout-stat"><div class="self-scout-stat-label">power rank</div>';
-    html += '<div class="self-scout-stat-value">#' + rank + '</div>';
-    html += '<div class="self-scout-stat-sub">of ' + rosters.length + ' teams</div></div>';
+    // Positional Depth Grid (4 cards)
+    html += '<div class="pos-grade-grid">';
+    var positions = ['QB', 'RB', 'WR', 'TE'];
+    for (var pgi = 0; pgi < positions.length; pgi++) {
+      var pg = positions[pgi];
+      var pgd = posGrades[pg];
+      var pgColor = pgd.grade.startsWith('A') ? 'var(--green)' : pgd.grade.startsWith('B') ? 'var(--orange)' : pgd.grade === 'C' ? 'var(--ink-medium)' : 'var(--red)';
+      var strengthFlag = pgd.pctile >= 70 ? 'STRENGTH' : pgd.pctile <= 30 ? 'WEAKNESS' : '';
+      var flagColor = pgd.pctile >= 70 ? 'var(--green)' : 'var(--red)';
 
-    html += '<div class="self-scout-stat"><div class="self-scout-stat-label">starter PPG</div>';
-    html += '<div class="self-scout-stat-value">' + starterPPG.toFixed(1) + '</div>';
-    html += '<div class="self-scout-stat-sub">projected weekly</div></div>';
+      html += '<div class="pos-grade-card" style="border-top:4px solid ' + posColors[pg] + ';">';
+      html += '<div class="pos-grade-pos" style="color:' + posColors[pg] + ';">' + pg + '</div>';
+      html += '<div class="pos-grade-letter" style="color:' + pgColor + ';">' + pgd.grade + '</div>';
+      html += '<div class="pos-grade-detail" style="font-weight:700;">' + escapeHtml(pgd.starterName.split(' ').pop()) + ' ' + pgd.starterPPG + '</div>';
+      html += '<div class="pos-grade-detail">' + pgd.depth + ' deep &bull; age ' + pgd.avgAge + '</div>';
+      if (strengthFlag) {
+        html += '<div style="font-family:var(--font-mono);font-size:9px;color:' + flagColor + ';margin-top:4px;font-weight:700;">' + strengthFlag + '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
 
-    html += '<div class="self-scout-stat"><div class="self-scout-stat-label">avg age</div>';
-    html += '<div class="self-scout-stat-value">' + avgAge + '</div>';
-    html += '<div class="self-scout-stat-sub">' + archetype.toLowerCase() + '</div></div>';
-
-    html += '<div class="self-scout-stat"><div class="self-scout-stat-label">vulnerabilities</div>';
-    html += '<div class="self-scout-stat-value" style="font-size:14px;">';
-    if (vulnerabilities.length > 0) {
-      html += '<span style="color:var(--red);">' + vulnerabilities.join(', ') + ' thin</span>';
+    // Hawkeye's recommendation
+    html += '<div class="agent-quote" style="border-left-color:var(--pos-rb);">';
+    if (weakest && strongest && weakest !== strongest) {
+      html += 'your ' + weakest + ' room needs work. ' + (posPlayers[weakest].length > 0 ? escapeHtml(posPlayers[weakest][0].name) + ' is your best option at ' + posPlayers[weakest][0].ppg.toFixed(1) + ' PPG — ' : '') + 'the tape says buy before the draft. you have surplus ' + strongest + ' to deal from.';
     } else {
-      html += '<span style="color:var(--green);">none</span>';
-    }
-    html += '</div>';
-    html += '<div class="self-scout-stat-sub">' + myPids.length + ' rostered</div></div>';
-    html += '</div>';
-
-    // How opponents see you
-    html += '<div class="self-scout-opponents">';
-    html += '<h4>how opponents see you</h4>';
-    html += '<div class="self-scout-opp-text">';
-    if (weakest && strongest) {
-      html += '"target their ' + weakest + ' — weakest position at ' + weakestPPG.toFixed(1) + ' avg PPG. ';
-      html += 'they have surplus ' + strongest + ' (' + strongestPPG.toFixed(1) + ' PPG avg) — offer to pry one loose."';
-    } else {
-      html += '"balanced roster. no obvious weakness to exploit."';
+      html += 'balanced roster. no glaring weakness, but no dominant position group either. look for a difference-maker at the draft.';
     }
     html += '</div>';
 
-    // Rival quick links
-    html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-top:8px;">rival rosters</div>';
-    html += '<div class="self-scout-rivals">';
-    for (var ri3 = 0; ri3 < rosters.length; ri3++) {
-      var rival = rosters[ri3];
-      if (rival.owner_id === userId) continue;
-      var rivalName = userMap[rival.owner_id] || "Manager";
-      var rivalRecord = (rival.settings?.wins || 0) + "-" + (rival.settings?.losses || 0);
-      html += '<span class="self-scout-rival-chip" onclick="document.getElementById(\'h2hBtn-' + leagueId + '\')?.click();">' + escapeHtml(rivalName) + ' (' + rivalRecord + ')</span>';
-    }
-    html += '</div>';
-
-    html += '</div>'; // opponents
     html += '</div>'; // self-scout
 
     container.innerHTML = html;
