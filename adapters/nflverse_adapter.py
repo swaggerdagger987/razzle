@@ -447,7 +447,12 @@ def backfill_player(conn, row, gsis_map, name_map):
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (player_id, name, first, last, normalize_name(name), pos, team, gsis, headshot, utc_now()))
 
-    # Update headshot_url if player already exists but headshot was missing
+    # Update team and headshot for existing players (INSERT OR IGNORE skips them)
+    if team:
+        conn.execute("""
+            UPDATE players SET team = ?, updated_at = ?
+            WHERE player_id = ? AND (team IS NULL OR team != ?)
+        """, (team, utc_now(), player_id, team))
     if headshot:
         conn.execute("""
             UPDATE players SET headshot_url = ? WHERE player_id = ? AND (headshot_url IS NULL OR headshot_url = '')
@@ -1330,6 +1335,25 @@ def main():
         # Enrich players with age/demographics from roster CSVs
         print(f"\nEnriching players with roster demographics...")
         sync_rosters(conn, sorted(seasons))
+
+        # Refresh players.team from most recent game data
+        print("\nRefreshing players.team from latest game data...")
+        conn.execute("""
+            UPDATE players SET team = (
+                SELECT s.team FROM player_week_stats s
+                WHERE s.player_id = players.player_id
+                    AND s.team IS NOT NULL AND s.team != ''
+                ORDER BY s.season DESC, s.week DESC LIMIT 1
+            ), updated_at = ?
+            WHERE player_id IN (
+                SELECT DISTINCT player_id FROM player_week_stats
+            )
+        """, (utc_now(),))
+        conn.commit()
+        team_updated = conn.execute("""
+            SELECT COUNT(*) FROM players WHERE team IS NOT NULL
+        """).fetchone()[0]
+        print(f"  Updated team for {team_updated} players")
 
         # Build player_season_stats aggregate table
         print("\nBuilding player_season_stats aggregate table...")
