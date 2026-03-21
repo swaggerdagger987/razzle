@@ -1196,7 +1196,7 @@
     var seasonSel = el.querySelector('#lp-av-season');
     var searchInput = el.querySelector('#lp-av-search');
 
-    slider.addEventListener('input', function() { state.budget = parseInt(this.value); budgetDisp.textContent = '$' + state.budget; });
+    slider.addEventListener('input', function() { state.budget = parseInt(this.value) || 200; budgetDisp.textContent = '$' + state.budget; });
     slider.addEventListener('change', function() { fetchData(); });
     rosterInput.addEventListener('change', function() { state.rosterSize = Math.max(8, Math.min(25, parseInt(this.value) || 15)); this.value = state.rosterSize; fetchData(); });
     seasonSel.addEventListener('change', function() { state.season = parseInt(this.value) || 0; fetchData(); });
@@ -5981,7 +5981,7 @@
       });
     }
 
-    el.querySelector('#cmt-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
+    el.querySelector('#cmt-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
     el.querySelector('#cmt-compare-btn').addEventListener('click', function() { loadCompare(); });
 
     function loadCompare() {
@@ -6080,7 +6080,7 @@
     buildPlayerSearch(el, 'sw2-', 'search player...', function(p) {
       loadStrengths(p.player_id);
     });
-    el.querySelector('#sw2-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
+    el.querySelector('#sw2-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
 
     function gradeColor(g) {
       if (!g) return 'var(--ink-light)';
@@ -6332,7 +6332,7 @@
       loadData();
     });
     el.querySelector('#rpc-season').addEventListener('change', function() {
-      curSeason = parseInt(this.value);
+      curSeason = parseInt(this.value) || _latestSeason;
       populateWeekSelect(el, 'rpc-week', this.value, loadData);
       loadData();
     });
@@ -6429,7 +6429,7 @@
       curPos = tab.getAttribute('data-pos') || '';
       loadData();
     });
-    el.querySelector('#fpb-season').addEventListener('change', function() { curSeason = parseInt(this.value); loadData(); });
+    el.querySelector('#fpb-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; loadData(); });
     loadData();
   }});
 
@@ -6455,7 +6455,7 @@
       curPlayer = p;
       loadGameLog();
     });
-    el.querySelector('#glo-season').addEventListener('change', function() { curSeason = parseInt(this.value); if (curPlayer) loadGameLog(); });
+    el.querySelector('#glo-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; if (curPlayer) loadGameLog(); });
 
     function fptsClass(v) {
       if (v >= 30) return 'glo-elite';
@@ -6666,7 +6666,7 @@
       curPos = tab.getAttribute('data-pos') || '';
       loadData();
     });
-    el.querySelector('#arc-season').addEventListener('change', function() { curSeason = parseInt(this.value); loadData(); });
+    el.querySelector('#arc-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; loadData(); });
     loadData();
   }});
 
@@ -6688,7 +6688,7 @@
     buildPlayerSearch(el, 'pbd-', 'search player...', function(p) {
       loadBreakdown(p.player_id, p);
     });
-    el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
+    el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
 
     var compColors = ['#5b7fff', '#2ec4b6', '#d97757', '#8b5cf6', '#e74c3c', '#eab308', '#16a34a', '#f472b6'];
 
@@ -9658,7 +9658,7 @@
 
     // Year selector
     el.querySelector('.dct-year').addEventListener('change', function() {
-      panelState.year = parseInt(this.value);
+      panelState.year = parseInt(this.value) || _latestSeason;
       loadData();
     });
 

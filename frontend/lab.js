@@ -2906,7 +2906,7 @@ function populateSeasonSelect() {
       `<option value="${y}" ${y === state.draftYear ? "selected" : ""}>${y} Draft</option>`
     ).join("");
     sel.onchange = (e) => {
-      state.draftYear = parseInt(e.target.value);
+      state.draftYear = parseInt(e.target.value) || state.draftYear;
       state.offset = 0;
       clearTimeout(_seasonDebounce);
       _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
@@ -2916,7 +2916,7 @@ function populateSeasonSelect() {
       `<option value="${s}" ${s === state.collegeSeason ? "selected" : ""}>${s}</option>`
     ).join("");
     sel.onchange = (e) => {
-      state.collegeSeason = parseInt(e.target.value);
+      state.collegeSeason = parseInt(e.target.value) || state.collegeSeason;
       state.offset = 0;
       clearTimeout(_seasonDebounce);
       _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
@@ -3926,19 +3926,19 @@ function loadStateFromURL() {
   }
 
   if (isProspectView()) {
-    if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year"));
+    if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year")) || state.draftYear;
     if (!params.has("sort")) state.sortKey = "draft_pick";
     if (!params.has("dir")) state.sortDir = "asc";
     if (params.has("cols")) state.prospectColumns = params.get("cols").split(",").filter(function(k) { return PROSPECT_COLUMNS[k]; });
   } else if (state.universe === "college") {
-    if (params.has("season")) state.collegeSeason = parseInt(params.get("season"));
+    if (params.has("season")) state.collegeSeason = parseInt(params.get("season")) || state.collegeSeason;
     if (!params.has("sort")) state.sortKey = "total_yards";
     if (!params.has("dir")) state.sortDir = "desc";
     if (params.has("cols")) state.collegeColumns = params.get("cols").split(",").filter(function(k) { return COLLEGE_COLUMNS[k]; });
   } else {
     if (params.has("season")) {
       const sv = params.get("season");
-      state.season = sv === "career" ? "career" : parseInt(sv);
+      state.season = sv === "career" ? "career" : (parseInt(sv) || state.season);
     }
     if (params.has("week")) state.week = parseInt(params.get("week")) || 0;
     if (params.has("rel")) state.relevance = params.get("rel");
@@ -11218,9 +11218,9 @@ async function _taAddPick(side) {
   const yearSel = document.getElementById("taPickYear" + side.charAt(0).toUpperCase() + side.slice(1));
   const rdSel = document.getElementById("taPickRd" + side.charAt(0).toUpperCase() + side.slice(1));
   const numSel = document.getElementById("taPickNum" + side.charAt(0).toUpperCase() + side.slice(1));
-  const year = parseInt(yearSel.value);
-  const rd = parseInt(rdSel.value);
-  const pk = parseInt(numSel.value);
+  const year = parseInt(yearSel.value) || new Date().getFullYear();
+  const rd = parseInt(rdSel.value) || 1;
+  const pk = parseInt(numSel.value) || 1;
   const pickId = year + "_" + rd + "_" + pk;
 
   const arr = _taState[side];
