@@ -3235,4 +3235,51 @@ Audited all open FUNC-001 through FUNC-062 findings from results.tsv. **Every co
 ### Verified QA Findings Status
 - FUNC-005 (dominator rec_yd_share null): WORKING — tested locally, shares populated correctly
 - FUNC-007 (snaps null): DATA ISSUE — 5575/18981 rows have snap data locally, prod needs DB rebuild
+
+---
+
+## Ship Loop Session 39: Full QA Audit + FUNC-044 Fix (Mar 21)
+
+**Goal**: Consume QA Loop tickets, fix remaining bugs.
+
+### Startup
+- Merged origin/qa/findings (already up to date)
+- Merged origin/ceo/strategy (already up to date)
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty
+- TICKETS.md remaining items require Playwright, Claude API, MiroFish
+
+### Full Audit of QA results.tsv (2615 lines, ~60 unique findings)
+Systematically verified every "open" and "ticket" status entry against current codebase.
+
+**All previously reported bugs are FIXED in code:**
+- FUNC-012 (P0): season_type filters — all 71+ season_type='regular' clauses in place
+- FUNC-017 (P1): Breakout badge — uses PPG with 8+ PPG threshold, 10+ GP requirement
+- FUNC-025 (P2): safe_sorts — td_rate, fumble_rate, passer_rating, ay_per_att all in whitelist
+- FUNC-026 (P1): Mini-screener — data.items with fallback, full_name with fallback
+- FUNC-027 (P2): Smart filter chip — ?sf=breakout matches SMART_FILTERS key correctly
+- FUNC-028 (P0): QB PPO — all 4 functions use pass_attempts + carries for QBs
+- FUNC-029 (P2): snap_share — uses percentage values (50, 65, 40), not fractions
+- FUNC-038 (P2): nudge border — 2px solid (DESIGN.md compliant)
+- FUNC-039 (P2): nudgeFadeIn — keyframes defined at line 121
+- FUNC-042 (P2): over-fetch cap — raised to 5000
+- FUNC-049/050/051 (P1): Field mismatches — all resolved, games||games_played fallback pattern
+- FUNC-052 (P1): TD Regression — positive_regression/negative_regression/pos_avg_td_rates/td_diff all correct
+- FUNC-053 (P1): Compare panel — data-panel="career-compare" matches panelRegistry
+- FUNC-060 (P2): TE PPO — threshold lowered to 20 (verified by QA session 58)
+- FUNC-061 (P1): Most Efficient — filter opportunities>=40 in place
+- FUNC-062 (P1): Volume King — filter position!="QB" in place
+- FUNC-063 (P1): Grade scale — canonical 8-tier everywhere (verified by QA session 63)
+- FUNC-013 (P2): Stock Watch/Buy-Sell — MIN_PPG thresholds (QB:10, RB:5, WR:5, TE:3)
+- FUNC-015 (P2): Dynasty value — screener uses compute_trade_value() same as trade chart
+
+### New Fix: FUNC-044 (P1)
+Trade analyzer autocomplete used `escapeAttr()` in inline `onmousedown` handler — XSS-adjacent for apostrophe names (Ja'Marr Chase). Replaced with data-attribute delegation: `data-side` + `data-pid` attributes, single `mousedown` event listener on autoDiv container. Commit: 13b230b.
+
+### Design Compliance Sweep
+- 0 gradient violations
+- 0 "Loading..." text (all use personality text)
+- 0 unsafe escapeAttr-in-onclick patterns remaining
+- 1px borders only on table row dividers (acceptable)
+
+### Smoke Tests: 11/11 pass
 - Week filter: WORKING locally (season=2024, week=1 returns games=1). Prior smoke failures were from stale code.
