@@ -9,7 +9,7 @@ const AGENT_TERRITORY = {
     icon: "/assets/agents/dolphin.svg",
     color: "#5b7fff",
     columns: ["injury_status", "games_missed", "durability_score", "workload_flag"],
-    panels: ["injury-report", "durability", "workload-sustainability", "workload-monitor"],
+    panels: ["workload", "snapefficiency", "drops", "dualthreat", "targetpremium", "garbagetime", "seasonpace", "pace", "handcuffs"],
     bureau: ["roster-depth-health"],
     one_liners: [
       "Soft tissue injuries have a 40% recurrence rate within 8 weeks.",
@@ -37,7 +37,7 @@ const AGENT_TERRITORY = {
     icon: "/assets/agents/hawkeye.svg",
     color: "#2ec4b6",
     columns: ["target_share", "snap_pct", "snap_share", "route_participation", "wopr", "usage_trend"],
-    panels: ["breakout-finder", "waiver-wire", "usage-trends", "rostership", "breakouts"],
+    panels: ["breakouts", "waivers", "usage", "stocks", "targets", "opportunity", "redzone", "stacks", "matchups", "draftclass", "drafttracker", "prospects", "faab", "weekly", "weeklyleaders", "weeklymvp", "streaks"],
     bureau: ["self-scout-usage", "roster-depth-trends"],
     one_liners: [
       "3 names here weren't on this list 2 weeks ago.",
@@ -65,7 +65,7 @@ const AGENT_TERRITORY = {
     icon: "/assets/agents/bones.svg",
     color: "#8b5cf6",
     columns: ["trade_value", "buy_sell", "contract_value"],
-    panels: ["trade-values", "buy-low-sell-high", "trade-finder", "tradefinder", "tradevalues"],
+    panels: ["tradevalues", "buysell", "tradefinder", "rankings", "tiers", "advantage", "auction", "rosterbuilder", "scarcity", "cheatsheet"],
     bureau: ["trade-finder", "trade-network", "pressure-map", "manager-profiles"],
     one_liners: [
       "Trade market heats up after bye weeks.",
@@ -93,7 +93,7 @@ const AGENT_TERRITORY = {
     icon: "/assets/agents/octo.svg",
     color: "#e87422",
     columns: ["projection", "floor", "ceiling", "ppg", "efficiency", "composite_score", "ppo", "fantasy_points_ppr"],
-    panels: ["monte-carlo", "projections", "efficiency", "aging-curves", "consistency", "vorp", "report-cards"],
+    panels: ["efficiency", "consistency", "vorp", "reportcard", "percentiles", "schedule", "airyards", "tdregression", "correlations", "powerrankings", "explorer", "scoring", "successrate", "fptsbreakdown", "breakdown", "strengths", "archetypes", "gamescript"],
     bureau: ["monte-carlo", "power-rankings", "strength-of-schedule"],
     one_liners: [
       "Players above the curve are beating the model.",
@@ -121,7 +121,7 @@ const AGENT_TERRITORY = {
     icon: "/assets/agents/atlas.svg",
     color: "#d44040",
     columns: ["career_stats", "yoy_delta", "player_comp"],
-    panels: ["career-trajectories", "historical-comps", "season-recaps", "game-logs", "aging", "yoy"],
+    panels: ["career", "career-compare", "comptable", "recap", "gamelog", "aging", "yoy", "records", "awards", "dashboard", "leaders", "team", "playoffs"],
     bureau: ["manager-profiles-history", "transaction-history", "build-profiles"],
     one_liners: [
       "History doesn't repeat, but it rhymes.",
