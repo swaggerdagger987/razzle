@@ -406,6 +406,107 @@ Sources:
 
 3. **What is the realistic timeline and effort estimate to build the behavioral profiling MVP — client-side compute engine, server-side profile storage, and shareable League Pulse page?** (Architecture is designed, archetypes are defined, API data is confirmed. How many dev days to ship a working v1?)
 
-## NEXT QUESTION: What is the competitive landscape for league analysis tools (leaguemate.fyi, Dynasty Assistant, Fantasy Wrapped, FFRec), and what specific gap does Razzle's behavioral profiling fill?
+## Question 7: What is the competitive landscape for league analysis tools, and what specific gap does Razzle's behavioral profiling fill?
+
+**Why this matters**: We've confirmed behavioral profiling is unique (Q1), screenshottable (Q2), feasible (Q4), and architecturally sound (Q6). But "no one does this" isn't a positioning strategy. We need to map where dynasty managers currently spend money on league-specific tools so Razzle can position against the landscape, not just the gap.
+
+### Answer
+
+**Verdict: The league analysis tool market splits into 3 tiers — free commodity tools, $50-70/yr content+tools bundles, and seasonal one-shot recaps. Every competitor operates in the "what happened" layer (history, grades, values). Zero operate in the "what to DO about it" layer (behavioral exploitation). Razzle's Bureau occupies an entirely empty category.**
+
+### The Competitive Map
+
+| Tool | Price | Platform Support | Core Value Prop | League-Specific? |
+|------|-------|-----------------|-----------------|-----------------|
+| **KeepTradeCut** | Free | Universal (manual) | Crowdsourced dynasty values, trade calculator, trade database (25M+ data points) | No — player values only |
+| **Dynasty Daddy** | Free + Patreon Club (~$5/mo) | Sleeper, ESPN, Yahoo, MFL, FFPC, Fleaflicker, Fantrax | Trade calculator, Fantasy Wrapped, league-infused trade values (Club), cheatsheets | Yes — syncs leagues, adjusts values |
+| **leaguemate.fyi** | Free | Sleeper only | League history: all-time records, WAR (Wins Above Replacement), trade grades, draft grades, franchise trajectory, 3-year projections | Yes — deep historical analysis |
+| **Dynasty Nerds** | $50-70/yr (DynastyGM + NerdHerd bundle) | Sleeper, ESPN, MFL, Fleaflicker, FFPC | Trade calculator, league analyzer (power rankings, trade partner finder), rookie guide, Nerd Score (film grades), prospect film room | Yes — league sync, identifies trade partners |
+| **FFRec (ffrec.app)** | Free | Sleeper only | Fantasy Wrapped — broadcast-style season recaps with shareable graphics | Yes — personalized per league |
+| **Dynasty Assistant** | Free | Multi-platform | Track player shares across multiple dynasty leagues, roster values, average ages | Yes — multi-league portfolio view |
+| **League Legacy** | $36/yr | Sleeper, ESPN, Yahoo, Fleaflicker | AI-generated newsletters, league history, records, head-to-head comparisons, league record books | Yes — automated league newsletters |
+| **DynastyProcess** | Free | Manual | Trade calculator built on FantasyPros values, open-source R/Python tools | No — calculator only |
+| **FantasyPros** | Freemium ($30-50/yr) | ESPN, Yahoo, CBS, NFL, Sleeper | League analyzer (power rankings, VORP), Draft Intel (how leaguemates draft in mock sims), My Playbook | Partial — league sync for power rankings |
+
+### Three Market Tiers
+
+**Tier 1: Free Commodity Tools** (KTC, Dynasty Daddy free, DynastyProcess, Dynasty Assistant)
+- Trade calculators, rankings, basic league sync
+- Revenue model: ads, Patreon tips, or pure community projects
+- Moat: none. Values converge across platforms. KTC's crowdsourcing is the only defensible advantage.
+- **Razzle overlap**: The Lab's screener, trade analyzer, and dynasty value chart compete here. Razzle's Lab is differentiated by depth (100+ columns, formulas, college stats) but not by category.
+
+**Tier 2: Content + Tools Bundles** (Dynasty Nerds $50-70/yr, FantasyPros $30-50/yr, League Legacy $36/yr)
+- Expert content (rankings, film grades, rookie guides) packaged with tools
+- Revenue model: annual subscriptions, bundled with community access (Discord/NerdHerd)
+- Moat: expert credibility (film grades, scouting reports) + community lock-in
+- **Razzle overlap**: None. Razzle doesn't produce editorial content or expert rankings. This is a different business model entirely.
+
+**Tier 3: Seasonal Shareable Recaps** (FFRec, Dynasty Daddy Wrapped)
+- One-time seasonal engagement spikes (end-of-season recaps)
+- Revenue model: free viral growth → platform conversion (Dynasty Daddy Club)
+- Moat: design quality of the shareable graphics
+- **Razzle overlap**: The Bureau's shareable League Pulse page competes here for attention, but operates year-round, not seasonally.
+
+### The Gap Razzle Fills
+
+Every competitor answers: **"What happened in my league?"**
+- leaguemate.fyi: What trades happened? Who won them? (WAR, trade grades)
+- FFRec/Wrapped: What were the best moments? (Recaps)
+- Dynasty Nerds: Who should I trade with? (Power rankings, roster strengths)
+- KeepTradeCut: What is this player worth? (Crowdsourced values)
+- League Legacy: What's the story of our league? (Records, newsletters)
+
+Zero competitors answer: **"How does this specific manager BEHAVE, and how do I exploit it?"**
+
+The closest competitor is **FantasyPros Draft Intel**, which shows how managers draft in simulated mock drafts — but this is (a) only for redraft, not dynasty, (b) based on mock draft AI simulations, not real behavioral data, and (c) limited to draft behavior, ignoring trades, waivers, and roster management. It's a weather forecast. Razzle's Bureau is a behavioral surveillance system.
+
+**leaguemate.fyi is the most adjacent competitor** — it uses the same Sleeper API, analyzes league history, and grades trades. But it's purely retrospective. It tells you "Mike lost 3 trades this year." It does NOT tell you "Mike panic-trades after losses — send him an offer Tuesday." The gap between descriptive analytics (what happened) and prescriptive intelligence (what to do) is the Bureau's entire moat.
+
+### Pricing Positioning
+
+| Competitor | Price | What You Get |
+|-----------|-------|-------------|
+| Dynasty Nerds (benchmark) | $70/yr | Expert rankings, film grades, trade calculator, league analyzer, community |
+| League Legacy | $36/yr | Newsletters, history, records |
+| FantasyPros | $30-50/yr | League analyzer, draft intel, waiver recommendations |
+| **Razzle Pro (proposed)** | **$240/yr ($20/mo)** | **Behavioral profiling, exploit windows, full scouting reports, league context AI** |
+
+The 3-4x price premium over Dynasty Nerds is justified ONLY if behavioral profiling delivers a genuinely unique advantage. Dynasty Nerds' 11,000 subscribers prove dynasty managers pay $70 for commodity tools. Razzle is betting that a smaller audience (est. 2,000-3,000) will pay 3x more for something no one else offers. This is the "Tesla not Toyota" positioning — fewer customers, higher value per customer, defensible moat.
+
+**Risk**: At $240/yr, Razzle competes not with Dynasty Nerds but with the user's internal "is this worth a subscription?" threshold. The 43% who won't pay anything (Q1) are gone. The remaining 57% evaluate $240 against their entire digital subscription budget. The Bureau must deliver an "I won a trade I wouldn't have won otherwise" moment within the first week of subscription.
+
+### Self-Critique
+
+**What's backed by data**: All competitor features and pricing are confirmed via official websites, app stores, and Patreon pages. The 3-tier market structure is observable from the pricing distribution. Dynasty Nerds' 11,000 subscribers at $70/yr is confirmed from prior research. leaguemate.fyi's feature set (WAR, trade grades, franchise trajectory) is confirmed from their homepage. FantasyPros Draft Intel's limitations (mock-only, redraft-only) are confirmed from their product page.
+
+**What's speculation**: The claim that "zero competitors answer how managers behave" assumes no stealth-mode startup is building this. The $240/yr pricing positioning assumes behavioral profiling is 3-4x more valuable than expert rankings — this is unvalidated. The "Tesla not Toyota" analogy may not hold: dynasty managers might view ALL tools as commodities and cap their spend at $70/yr regardless of uniqueness. The estimated 2,000-3,000 paying users is a guess with no bottom-up validation.
+
+**Confidence: 8/10** — The competitive landscape mapping is comprehensive and data-backed. The gap analysis (descriptive vs. prescriptive) is the strongest finding. The pricing risk is real and needs willingness-to-pay validation.
+
+Sources:
+- [KeepTradeCut — Crowdsourced Dynasty Rankings](https://keeptradecut.com/)
+- [Dynasty Daddy — Free Fantasy Football Tools](https://dynasty-daddy.com)
+- [Dynasty Daddy Patreon Club — Premium Features](https://www.patreon.com/DynastyDaddy)
+- [leaguemate.fyi — Sleeper League Analytics](https://leaguemate.fyi/)
+- [Dynasty Nerds — Plans and Pricing ($50-70/yr)](https://www.dynastynerds.com/plans-and-pricing/)
+- [FFRec — Fantasy Wrapped for Sleeper](https://www.ffrec.app/)
+- [Dynasty Assistant — Free Multi-Platform Tracker](https://dynastyassistant.com/)
+- [League Legacy — Fantasy League Newsletters ($36/yr)](https://leaguelegacy.io/)
+- [DynastyProcess — Open Source Trade Calculator](https://calc.dynastyprocess.com/)
+- [FantasyPros — League Analyzer & Draft Intel](https://www.fantasypros.com/nfl/myplaybook/league-analyzer.php)
+- [FantasyPros Draft Intel 2026](https://draftwizard.fantasypros.com/football/draft-intel/)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What does the League Pulse page UX flow look like — from "connect your Sleeper league" to "see all 12 manager archetypes" to "upgrade to Pro for the full scouting report"?** (The architecture and competitive positioning are defined. Now the UX needs design: what's the information hierarchy on the shareable page? How does the blur/CTA conversion flow work? What does the og:image look like for social embeds?)
+
+2. **Is $240/yr the right price point, or should Razzle launch at a lower anchor ($99-149/yr) to reduce friction and build the user base before raising prices?** (The competitive map shows $70/yr as the ceiling for commodity tools. $240 is 3.4x that. Willingness-to-pay for a brand-new, unproven category needs validation.)
+
+3. **What is the realistic launch sequence — should the Bureau ship before or after the free Lab has Reddit traction?** (The Lab is the free acquisition engine. The Bureau is the paid moat. Launching the Bureau too early means no users to convert. Launching too late means competitors could copy the concept.)
+
+## NEXT QUESTION: Is $240/yr the right price point, or should Razzle launch at a lower anchor ($99-149/yr) to reduce friction and build the user base before raising prices?
 
 ---
