@@ -1007,7 +1007,10 @@ def _fetch_career_stats_uncached(player_id):
             season_data["catch_rate"] = round(rec / tgt * 100, 1) if tgt > 0 else 0
             season_data["ypr"] = round(rec_yd / rec, 1) if rec > 0 else 0
             season_data["comp_pct"] = round(completions / pass_att * 100, 1) if pass_att > 0 else 0
-            season_data["td_rate"] = round(total_td / max(1, car + tgt) * 100, 1) if (car + tgt) > 0 else 0
+            if pos == "QB" and pass_att > 0:
+                season_data["td_rate"] = round(pass_td / pass_att * 100, 1)
+            else:
+                season_data["td_rate"] = round(total_td / max(1, car + tgt) * 100, 1) if (car + tgt) > 0 else 0
 
             seasons.append(season_data)
 
