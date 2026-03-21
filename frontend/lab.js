@@ -1037,7 +1037,8 @@ function _pushHistory() {
 }
 
 function _restoreState(snap) {
-  const s = JSON.parse(snap);
+  var s; try { s = JSON.parse(snap); } catch(e) { return; }
+  if (!s) return;
   state.position = s.position; state.season = s.season; state.universe = s.universe;
   state.relevance = s.relevance; state.search = s.search; state.week = s.week || 0;
   state.sortKey = s.sortKey; state.sortDir = s.sortDir;
@@ -5621,6 +5622,7 @@ setTimeout(function() {
 // ─── Image export ────────────────────────────────────────────────
 function exportImage() {
   const table = document.getElementById("screenerTable");
+  if (!table) return;
   const rows = table.querySelectorAll("tr");
   if (!rows.length) return;
 
@@ -7569,7 +7571,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
       else ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = ring === 50 ? "rgba(45,31,20,0.2)" : "rgba(45,31,20,0.08)";
+    ctx.strokeStyle = ring === 50 ? (t.isDark ? "rgba(237,224,207,0.2)" : "rgba(45,31,20,0.2)") : (t.isDark ? "rgba(237,224,207,0.08)" : "rgba(45,31,20,0.08)");
     ctx.lineWidth = ring === 50 ? 1.5 : 1;
     ctx.stroke();
   }
@@ -7580,7 +7582,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = "rgba(45,31,20,0.1)";
+    ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.1)" : "rgba(45,31,20,0.1)";
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -9598,7 +9600,7 @@ function renderAgingCurveChart(targetCanvas) {
     "#ffc857", "#e63946", "#8a7565", "#4a9e5c", "#c44daa",
   ];
   let colorIdx = 0;
-  for (const p of data.players) {
+  for (const p of (data.players || [])) {
     if (!_acState.enabledPlayers[p.name]) { colorIdx++; continue; }
     const pts = p.points.filter(pt => pt.age >= minAge && pt.age <= maxAge);
     if (pts.length < 2) { colorIdx++; continue; }
@@ -9962,7 +9964,7 @@ function renderHeatMapChart(targetCanvas) {
 
     // Alternating row bg
     if (r % 2 === 0) {
-      ctx.fillStyle = "rgba(45,31,20,0.03)";
+      ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.03)" : "rgba(45,31,20,0.03)";
       ctx.fillRect(padL, rowY, chartW, cellH);
     }
 
@@ -9991,7 +9993,7 @@ function renderHeatMapChart(targetCanvas) {
       ctx.fillRect(cellX + 1, rowY + 1, cellW - 2, cellH - 2);
 
       // Cell border
-      ctx.strokeStyle = "rgba(45,31,20,0.12)";
+      ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)";
       ctx.lineWidth = 1;
       ctx.strokeRect(cellX, rowY, cellW, cellH);
 
@@ -10016,7 +10018,7 @@ function renderHeatMapChart(targetCanvas) {
     }
 
     // Row separator
-    ctx.strokeStyle = "rgba(45,31,20,0.08)";
+    ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.08)" : "rgba(45,31,20,0.08)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padL, rowY + cellH);
@@ -11269,15 +11271,15 @@ function _taDrawPickChart() {
       if (_taPickCache[key]) allPicks.push(_taPickCache[key]);
     }
   }
-  if (!allPicks.length) return;
+  if (allPicks.length < 2) return;
 
   const pad = { top: 24, bottom: 30, left: 44, right: 16 };
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
-  const maxVal = allPicks[0].trade_value;
+  const maxVal = allPicks[0].trade_value || 1;
 
   // Grid lines
-  ctx.strokeStyle = "rgba(45,31,20,0.1)";
+  ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.1)" : "rgba(45,31,20,0.1)";
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
     const y = pad.top + (plotH * i / 4);

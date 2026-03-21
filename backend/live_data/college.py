@@ -555,7 +555,8 @@ def _fetch_college_efficiency_uncached(season=None, position=None, limit=30):
             total_tds = d["total_tds"] or 0
 
             pos = d["position"] or "ATH"
-            opportunities = carries + targets
+            pass_attempts = d.get("pass_attempts") or 0
+            opportunities = (pass_attempts + carries) if pos == "QB" else (carries + targets)
             touches = carries + receptions
             opp_min = {"QB": 30, "RB": 25, "WR": 20, "TE": 15}.get(pos, 25)
             if opportunities < opp_min:
@@ -2139,7 +2140,10 @@ def _fetch_college_season_awards_uncached(season=None, position=None):
                    + COALESCE(c.pass_tds, 0) * 4 as fpts,
                    COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0) as scrimmage_yards,
                    COALESCE(c.total_tds, 0) as tds,
-                   COALESCE(c.carries, 0) + COALESCE(c.targets, 0) as opportunities,
+                   CASE WHEN c.position = 'QB'
+                        THEN COALESCE(c.pass_attempts, 0) + COALESCE(c.carries, 0)
+                        ELSE COALESCE(c.carries, 0) + COALESCE(c.targets, 0)
+                   END as opportunities,
                    COALESCE(c.receptions, 0) as receptions,
                    COALESCE(c.rush_yards, 0) as rush_yards,
                    COALESCE(c.rec_yards, 0) as rec_yards,

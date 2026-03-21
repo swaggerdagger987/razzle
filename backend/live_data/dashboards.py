@@ -893,7 +893,8 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                        COALESCE(SUM(s.rushing_yards), 0) as total_rush_yards,
                        COALESCE(SUM(s.rushing_tds), 0) as total_rush_tds,
                        ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_pts,
-                       COUNT(DISTINCT s.week) as games
+                       COUNT(DISTINCT s.week) as games,
+                       COALESCE(SUM(s.attempts), 0) as total_attempts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -967,6 +968,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                     "age": r[5],
                     "targets": targets,
                     "carries": carries,
+                    "attempts": r[14],
                     "rec_yards": rec_yards,
                     "rec_tds": rec_tds,
                     "rush_yards": rush_yards,
@@ -983,7 +985,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                 ppg = round(p["total_pts"] / games, 2) if games > 0 else 0
                 p["ppg"] = ppg
 
-                total_opps = p["targets"] + p["carries"]
+                total_opps = (p["attempts"] + p["carries"]) if p["position"] == "QB" else (p["targets"] + p["carries"])
                 p["total_opps"] = total_opps
                 p["targets_per_game"] = round(p["targets"] / games, 1) if games > 0 else 0
                 p["carries_per_game"] = round(p["carries"] / games, 1) if games > 0 else 0
