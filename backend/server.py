@@ -3206,9 +3206,9 @@ def positional_advantage(season: int = None, position: str = None):
 
 
 @app.get("/api/stacks")
-def stacks(season: int = None):
+def stacks(season: int = None, min_games: int = 8):
     try:
-        return live_data.fetch_stacks(season=season)
+        return live_data.fetch_stacks(season=season, min_games=min_games)
     except Exception as e:
         logger.exception("stacks error")
         return JSONResponse({"error": "Failed to fetch stack correlations"}, status_code=500)

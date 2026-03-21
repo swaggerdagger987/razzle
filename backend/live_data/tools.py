@@ -1986,7 +1986,7 @@ def fetch_weekly_mvp(season=None):
     return _cached(f"weekly_mvp:{season}", _query)
 
 
-def fetch_stacks(season=None, limit=30):
+def fetch_stacks(season=None, limit=30, min_games=8):
     """
     Stack correlation finder — QB + WR/TE same-team scoring correlations.
     Computes Pearson correlation between QB weekly scores and their pass
@@ -2046,7 +2046,7 @@ def fetch_stacks(season=None, limit=30):
                 for qb_id in team_qbs[team]:
                     qb_info = player_info[qb_id]
                     qb_weeks = player_weeks[qb_id]
-                    if len(qb_weeks) < 5:
+                    if len(qb_weeks) < min_games:
                         continue
 
                     qb_ppg = sum(qb_weeks.values()) / len(qb_weeks)
@@ -2057,7 +2057,7 @@ def fetch_stacks(season=None, limit=30):
 
                         # Find common weeks
                         common = sorted(set(qb_weeks.keys()) & set(rec_weeks.keys()))
-                        if len(common) < 5:
+                        if len(common) < min_games:
                             continue
 
                         qb_scores = [qb_weeks[w] for w in common]
@@ -2097,7 +2097,7 @@ def fetch_stacks(season=None, limit=30):
                 "available_seasons": available_seasons,
                 "count": len(stacks),
             }
-    return _cached(f"stacks:{season}:{limit}", _query)
+    return _cached(f"stacks:{season}:{limit}:{min_games}", _query)
 
 
 def fetch_positional_advantage(season=None, position=None, limit=40):

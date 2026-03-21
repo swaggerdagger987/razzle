@@ -854,10 +854,11 @@ def compute_trade_value(ppg, age, position):
     raw = prod * 0.50 + age_v * 0.30 + scar * 0.20
     # Soft ceiling: below 90 is linear, above 90 uses log compression
     # so elite players get meaningful spread instead of clustering at 100
+    # Denominator 50 gives wider spread in elite tier (vs 30 which clustered top-25 in 90-96)
     if raw <= 90.0:
         return round(max(0.0, raw), 1)
     excess = raw - 90.0
-    value = 90.0 + 10.0 * (1.0 - math.exp(-excess / 30.0))
+    value = 90.0 + 10.0 * (1.0 - math.exp(-excess / 50.0))
     return round(value, 1)
 
 
