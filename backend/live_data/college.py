@@ -217,29 +217,33 @@ def _fetch_college_player_profile_uncached(player_id):
         name_nospace = latest["player_name"].lower().replace(" ", "")
 
         # Try to match with combine data (try space-stripped first, then alpha-only)
-        combine_row = conn.execute("""
-            SELECT player_name, position, school, draft_year,
-                   height_inches, weight,
-                   forty, bench, vertical, broad_jump, cone, shuttle,
-                   draft_team, draft_round, draft_pick, pfr_id
-            FROM combine_data
-            WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
-            ORDER BY draft_year DESC LIMIT 1
-        """, (name_nospace,)).fetchone()
-
-        # Fallback: broader match for names with apostrophes/hyphens
-        if not combine_row:
-            candidates = conn.execute("""
+        combine_row = None
+        try:
+            combine_row = conn.execute("""
                 SELECT player_name, position, school, draft_year,
                        height_inches, weight,
                        forty, bench, vertical, broad_jump, cone, shuttle,
                        draft_team, draft_round, draft_pick, pfr_id
                 FROM combine_data
-                WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
                 ORDER BY draft_year DESC LIMIT 1
-            """, (name_alpha,)).fetchone()
-            if candidates:
-                combine_row = candidates
+            """, (name_nospace,)).fetchone()
+
+            # Fallback: broader match for names with apostrophes/hyphens
+            if not combine_row:
+                candidates = conn.execute("""
+                    SELECT player_name, position, school, draft_year,
+                           height_inches, weight,
+                           forty, bench, vertical, broad_jump, cone, shuttle,
+                           draft_team, draft_round, draft_pick, pfr_id
+                    FROM combine_data
+                    WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                    ORDER BY draft_year DESC LIMIT 1
+                """, (name_alpha,)).fetchone()
+                if candidates:
+                    combine_row = candidates
+        except Exception:
+            pass  # combine_data table may not exist
 
         combine = None
         if combine_row:
@@ -251,20 +255,8 @@ def _fetch_college_player_profile_uncached(player_id):
             combine["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
 
         # Try to match with draft picks
-        draft_row = conn.execute("""
-            SELECT player_name, position, college, season as draft_year,
-                   round, pick, team as nfl_team,
-                   career_av, games as nfl_games, allpro, probowls,
-                   pass_yards as nfl_pass_yards, pass_tds as nfl_pass_tds,
-                   rush_yards as nfl_rush_yards, rush_tds as nfl_rush_tds,
-                   rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
-                   receptions as nfl_receptions
-            FROM draft_picks
-            WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
-            ORDER BY season DESC LIMIT 1
-        """, (name_nospace,)).fetchone()
-
-        if not draft_row:
+        draft_row = None
+        try:
             draft_row = conn.execute("""
                 SELECT player_name, position, college, season as draft_year,
                        round, pick, team as nfl_team,
@@ -274,9 +266,25 @@ def _fetch_college_player_profile_uncached(player_id):
                        rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
                        receptions as nfl_receptions
                 FROM draft_picks
-                WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
                 ORDER BY season DESC LIMIT 1
+            """, (name_nospace,)).fetchone()
+
+            if not draft_row:
+                draft_row = conn.execute("""
+                    SELECT player_name, position, college, season as draft_year,
+                           round, pick, team as nfl_team,
+                           career_av, games as nfl_games, allpro, probowls,
+                           pass_yards as nfl_pass_yards, pass_tds as nfl_pass_tds,
+                           rush_yards as nfl_rush_yards, rush_tds as nfl_rush_tds,
+                           rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
+                           receptions as nfl_receptions
+                    FROM draft_picks
+                    WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                    ORDER BY season DESC LIMIT 1
             """, (name_alpha,)).fetchone()
+        except Exception:
+            pass  # draft_picks table may not exist
 
         draft = dict(draft_row) if draft_row else None
 

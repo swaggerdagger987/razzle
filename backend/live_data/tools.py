@@ -527,6 +527,20 @@ def fetch_draft_class(draft_year=None, position=None):
     def _query():
         nonlocal draft_year
         with get_db() as conn:
+            # Check if draft_picks table exists
+            table_check = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='draft_picks'"
+            ).fetchone()
+            if not table_check:
+                return {
+                    "draft_year": draft_year or _current_nfl_season(),
+                    "available_classes": [],
+                    "position": position or "ALL",
+                    "summary": {"draft_year": draft_year or _current_nfl_season(), "total_players": 0, "total_ppr": 0, "avg_ppg": 0, "hits": 0, "busts": 0, "hit_rate": 0},
+                    "rounds": [],
+                    "players": [],
+                }
+
             available_classes = [
                 r[0] for r in conn.execute(
                     "SELECT DISTINCT season FROM draft_picks ORDER BY season DESC"
@@ -2962,6 +2976,20 @@ def fetch_draft_class_tracker(draft_year=None, position=None):
     def _query():
         nonlocal draft_year
         with get_db() as conn:
+            # Check if draft_picks table exists
+            table_check = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='draft_picks'"
+            ).fetchone()
+            if not table_check:
+                return {
+                    "draft_year": draft_year or _current_draft_year(),
+                    "available_years": [],
+                    "position": position or "ALL",
+                    "summary": {"total": 0, "hits": 0, "busts": 0, "hit_rate": 0, "bust_rate": 0},
+                    "rounds": [],
+                    "players": [],
+                }
+
             # Available draft years
             year_rows = conn.execute(
                 "SELECT DISTINCT season FROM draft_picks WHERE position IN ('QB','RB','WR','TE') ORDER BY season DESC"
