@@ -552,7 +552,7 @@ function showNoteEditor(playerId, anchorEl) {
     document.body.appendChild(editor);
   }
 
-  editor.innerHTML = `<div class="note-editor-title">${name}</div>`
+  editor.innerHTML = `<div class="note-editor-title">${escapeHtml(name)}</div>`
     + `<textarea class="note-editor-input" id="noteEditorInput" maxlength="140" placeholder="Add a note... (140 chars)">${escapeHtml(existing)}</textarea>`
     + `<div class="note-editor-footer">`
     + `<span class="note-editor-count" id="noteCharCount">${existing.length}/140</span>`
@@ -7913,7 +7913,7 @@ function closeTierView(e) {
 async function loadTierData(position) {
   currentTierPosition = position;
   const contentEl = document.getElementById("tierContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">grading the ${position} prospects...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">grading the ${escapeHtml(position)} prospects...</div>`;
 
   // Highlight active button
   document.querySelectorAll(".tier-pos-btn").forEach(btn => {
@@ -8157,7 +8157,7 @@ function closeBigBoard(e) {
 async function loadBigBoard(position) {
   currentBBPosition = position;
   const contentEl = document.getElementById("bbContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the ${position === "ALL" ? "" : position + " "}board...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the ${position === "ALL" ? "" : escapeHtml(position) + " "}board...</div>`;
 
   document.querySelectorAll(".bb-pos-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.pos === position);
@@ -8534,7 +8534,7 @@ function closeClassAnalytics(e) {
 async function loadClassAnalytics(position) {
   currentCAPosition = position;
   const contentEl = document.getElementById("caContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">analyzing ${position === "ALL" ? "all" : position} draft classes...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">analyzing ${position === "ALL" ? "all" : escapeHtml(position)} draft classes...</div>`;
 
   document.querySelectorAll(".ca-pos-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.pos === position);
