@@ -529,3 +529,63 @@ Annotations use each agent's voice and are displayed when clicking timeline node
 - Sand background, no gradients, no thin 1px borders
 - Dark mode compatible
 - Mobile responsive (agent icons scale, nudges stack properly)
+
+---
+
+## Phase: CEO Ticket — Rarity Watermarks on Screenshot Exports
+
+**Context**: CEO review flagged this as a growth/virality lever. When users export screenshots, the watermark should include a randomly selected agent sprite (1/6 chance each). Creates collectibility and social sharing incentive — users screenshot more to "collect" rare watermarks.
+
+**Exit criterion**: Every screenshot export includes a random agent sprite alongside "razzle.lol" branding.
+
+### Task 1: Implement randomized character watermarks
+
+**Accept when**: Every screenshot export (screener, panels, Bureau) includes a small agent character sprite (roughly 32x32px) in the bottom-right corner alongside "razzle.lol" text. Each of the 6 agents (Razzle, Dr. Dolphin, Hawkeye, Bones, Octo, Atlas) has equal 1/6 probability. The character is visually distinct and recognizable at watermark size. Uses the same SVG icons from the agent avatar set (Layer 1 Foundation Task 1). Users on social media will notice and compare which characters they got.
+
+---
+
+## Phase: CEO Ticket — Prompts Library Page
+
+**Context**: CEO review identified an SEO and thought-leadership opportunity. A /prompts page with copy-paste prompts for ChatGPT/Claude/Situation Room drives organic traffic and establishes Razzle as the AI-assisted fantasy football brand.
+
+**Exit criterion**: /prompts page live with 15+ categorized prompt cards.
+
+### Task 1: Build prompts library page
+
+**Accept when**: `frontend/prompts.html` loads a page with categorized prompt cards. Each card has: prompt title, full prompt text (truncated with expand), category tag (trade analysis, roster evaluation, draft strategy, waiver wire, dynasty startup), suggested agent name + icon, and a "Copy to Clipboard" button. At least 15 prompts across 5 categories. Styled with Razzle card aesthetic (ink borders, sand background, Luckiest Guy headings, Space Mono prompt text). Agent attribution on each card (e.g., "Best with Bones" for trade prompts). Added to main nav.
+
+---
+
+## Phase: CEO Ticket — Stripe Billing Portal
+
+**Context**: CEO review flagged self-serve subscription management as a P1 gap. Pro/Elite subscribers need to manage payment, view invoices, switch plans, and cancel without emailing support.
+
+**Exit criterion**: Authenticated paid users can access Stripe Customer Portal from their account area.
+
+### Task 1: Implement Stripe Customer Portal integration
+
+**Accept when**: Authenticated Pro/Elite users can click "Manage Subscription" from their account area and be redirected to Stripe's hosted Customer Portal. Backend endpoint `POST /api/billing/portal` creates a Stripe portal session and returns the URL. From the portal, users can update payment method, view past invoices, and cancel. Cancellation updates the user's plan_type appropriately. Free users see "Upgrade to Pro" instead of "Manage Subscription." The portal return URL brings users back to razzle.lol.
+
+---
+
+## Phase: CEO Ticket — FAAB Strategy Panel
+
+**Context**: CEO review identified a gap in the Lab. Bureau has waiver tendencies (Hawk score, FAAB tracking) but no Lab panel showing historical FAAB spend patterns. This is a dynasty power-user feature.
+
+**Exit criterion**: Lab has a FAAB Strategy panel with historical spend visualization.
+
+### Task 1: Implement FAAB strategy visualization
+
+**Accept when**: The Lab has a "FAAB Strategy" panel accessible from the sidebar. Shows a bar chart of average FAAB spend by week (weeks 1-17) using canvas rendering. A position filter shows spend breakdown by QB/RB/WR/TE. Includes a "Budget Pacing" guide recommending how much FAAB to reserve per season phase (early/mid/late/playoffs). Data derived from historical Sleeper transaction data. Styled with Razzle card aesthetic. Pro-gated (free users see blurred preview + CTA).
+
+---
+
+## Phase: CEO Ticket — Dark Mode Bureau Audit
+
+**Context**: CEO review flagged that Bureau components haven't been audited for dark mode (espresso flip). The Lab and Situation Room have been fixed, but Bureau odds grid, tab bar, position cards, agent headers, and pro gate overlays may have issues.
+
+**Exit criterion**: All Bureau components render correctly in dark mode.
+
+### Task 1: Fix all dark mode issues in Bureau
+
+**Accept when**: Every Bureau component renders correctly in dark mode: odds cards use espresso card background (`var(--card-bg)`), text is cream/white for legibility, tab bar has appropriate dark styling, position color accents maintain contrast against dark backgrounds, agent headers are styled for dark, pro gate blur overlays work on dark backgrounds. Verified by visual inspection at desktop (1280px) and mobile (480px) widths. No white flashes or unstyled elements when toggling dark mode on league-intel.html.
