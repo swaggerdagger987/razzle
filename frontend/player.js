@@ -72,7 +72,7 @@ function renderPlayerPage(data, container) {
   const posColor = POS_CSS[pos] || "var(--ink)";
   const posHex = POS_COLORS[pos] || "#d97757";
 
-  // Detect breakout (use PPG, not raw totals, to avoid injury-recovery false positives)
+  // Detect breakout (use PPG, require both seasons substantial to avoid injury-recovery false positives)
   let breakoutInfo = null;
   if (seasons && seasons.length >= 2) {
     const sorted = [...seasons].sort((a, b) => a.season - b.season);
@@ -80,7 +80,8 @@ function renderPlayerPage(data, container) {
       const prevPPG = sorted[i - 1].ppg || 0;
       const currPPG = sorted[i].ppg || 0;
       const prevGP = sorted[i - 1].games || 0;
-      if (prevPPG > 3 && prevGP >= 6) {
+      const currGP = sorted[i].games || 0;
+      if (prevPPG >= 8 && prevGP >= 10 && currGP >= 10) {
         const pct = ((currPPG - prevPPG) / prevPPG) * 100;
         if (pct >= 50 && (!breakoutInfo || pct > breakoutInfo.pct)) {
           breakoutInfo = { pct: Math.round(pct), season: sorted[i].season };
