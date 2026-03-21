@@ -2,7 +2,7 @@
 
 **Severity**: P2
 **Flow**: Trade Values (flow 19), Screener (flow 1)
-**Status**: OPEN
+**Status**: VERIFIED FIXED (Session 20 — code fix confirmed, pending deploy)
 
 ## Problem
 

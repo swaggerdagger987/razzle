@@ -2,7 +2,7 @@
 
 **Severity**: P2
 **Flow**: Cheat Sheet (flow 24), Scoring (flow N/A - standalone)
-**Status**: OPEN
+**Status**: VERIFIED FIXED (Session 20 — data-pid + addEventListener pattern applied, pending deploy)
 
 ## Problem
 

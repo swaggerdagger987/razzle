@@ -15,7 +15,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 19 — PASS. FUNC-015 code fix verified: _enrich_with_dynasty_value now calls compute_trade_value(). NOT DEPLOYED: prod Nacua=93.6 (old formula) vs trade_value=95.8 (new). Screener query Python re-sort works correctly. |
+| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 20 — PASS. Prod: 0 JS errors, 25 rows, 69 sidebar items. FUNC-015 code fix verified (compute_trade_value unified). NOT YET DEPLOYED: prod Nacua=75.2 (old), Chase=94.8 vs trade_value=95.8. Weekly filter works (screener/query). All Ship Loop crash guards, dark mode canvas, thread-safe cache verified. |
 | 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | DONE — PASS (all 4 positions clean) |
 | 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | DONE — PASS (RB+800yd = 27, all correct) |
 | 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | DONE — PASS (desc+asc both correct) |
@@ -32,7 +32,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | RE-AUDIT SESSION 19 — PASS (data). Ship Loop N+1 fix verified (batch rate metrics query, combine_data guard). Rate metrics present on prod. FUNC-017 still open (+772% breakout). FUNC-004 (headshots) still open. 0 JS errors. |
+| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | RE-AUDIT SESSION 20 — PASS. Prod: Lamar 8 seasons, 20.3 PPG, 0 JS errors. FUNC-017 FIXED in code (PPG+6GP min). Breakout now shows +164% (2019 MVP) correctly. N+1 fix + combine_data guard verified. Game log SQL column names verified (passing_yards not pass_yards). FUNC-004 (headshots) still open. |
 | 14 | Player profile: Career stats | Career numbers add up across seasons? Per-game averages calculated correctly? | DONE — PASS (Lamar 8 seasons sum exactly matches career totals: GP=124, PPR=2531.04, PassYds=24361) |
 | 15 | Player profile: Game log | Individual game stats shown? Sum of game log = season total? Week numbers correct? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar 2024 game log=17 weeks (1-18 only), 17 GP. |
 | 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | DONE — PASS (Jackson vs Stroud 2024, data aligned, same season) |
@@ -43,7 +43,7 @@
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
 | 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | RE-AUDIT SESSION 19 — PASS. 0 JS errors, 23 rows, 69 sidebar items. 5 broken NFL headshot images (FUNC-004). No regressions from Ship Loop changes. |
-| 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | RE-AUDIT SESSION 19 — PASS. 0 JS errors, 23 rows. FUNC-015 code fix verified correct but NOT YET DEPLOYED. Screener dynasty_value Python re-sort works in screener/query. No regressions. |
+| 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | RE-AUDIT SESSION 20 — PASS. Prod: Chase=95.8, Gibbs=95.0, Robinson=94.7 (sensible top 3). FUNC-015 code fix verified (compute_trade_value unified). NOT DEPLOYED: screener dynasty_value still uses old formula on prod. No regressions from Ship Loop quality passes. |
 | 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | DONE — PASS |
 | 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | DONE — PASS (functional), P2 S-tier bloated (76 players, FUNC-003) |
 | 22 | Aging Curves | Chart renders? Shows realistic age-based decline? Peak age correct per position? | DONE — RB peak correct, P2 WR/TE survivorship bias |
@@ -53,7 +53,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 24 | Cheat Sheet | Loads? Sortable? Position ranks correct? Matches screener sort order? | RE-AUDIT SESSION 17 — PASS (data). P2 FUNC-016: escapeHtml in onclick should be escapeAttr (near-zero practical risk, nflverse IDs are digits+dashes). |
+| 24 | Cheat Sheet | Loads? Sortable? Position ranks correct? Matches screener sort order? | RE-AUDIT SESSION 20 — PASS. FUNC-016 FIXED in code: inline onclick replaced with data-pid + addEventListener pattern (matching matchups.html fix). Pending deploy. |
 | 25 | Weekly Heatmap | Loads? Week selector works? Colors match stat intensity? | RE-AUDIT SESSION 13 — PASS. 2025 data: weeks 1-18 only (FUNC-012 holding). Allen 16GP, Stafford 17GP. |
 | 26 | Weekly Leaders | Loads? Leaders match that week's actual stat leaders? Category switch works? | DONE — PASS. API returns ranked weekly performers (verified Barkley Wk1 2024 = 33.2 PPR, exact calc confirmed). Position filter works (QB-only returns QBs). Season/week navigation, sortable columns, top 3 badges, points tiers (elite/great/good). P2: 0 shows as '-' due to JS falsy (0 || '-'). |
 | 27 | Matchups | Loads? Correct matchups for selected week? Opponent data shown? | RE-AUDIT SESSION 17 — PASS. Post Session 18 XSS fix (data-pid + addEventListener replaces inline onclick). 32 teams in API. Pro-locked panel correctly gated. Font-display fix applied to table headers. 0 JS errors. |

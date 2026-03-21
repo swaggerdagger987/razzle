@@ -2,7 +2,7 @@
 
 **Severity**: P1
 **Flow**: Player Profile (flow 13)
-**Status**: OPEN
+**Status**: VERIFIED FIXED (Session 20 — uses PPG with 6GP min + 3 PPG floor, pending deploy)
 
 ## Problem
 
