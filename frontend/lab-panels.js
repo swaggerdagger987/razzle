@@ -8677,9 +8677,11 @@
     };
 
     function gradeClass(grade) {
-      if (grade === 'A+') return 'grade-aplus'; if (grade === 'A') return 'grade-a';
-      if (grade === 'B') return 'grade-b'; if (grade === 'C') return 'grade-c';
-      if (grade === 'D') return 'grade-d'; return 'grade-f';
+      if (!grade) return 'grade-f';
+      var g = grade.charAt(0);
+      if (g === 'A') return grade === 'A+' ? 'grade-aplus' : 'grade-a';
+      if (g === 'B') return 'grade-b'; if (g === 'C') return 'grade-c';
+      if (g === 'D') return 'grade-d'; return 'grade-f';
     }
 
     var SUPP_COLS = [
