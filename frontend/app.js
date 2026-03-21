@@ -1826,7 +1826,7 @@ document.addEventListener("keydown", function(e) {
 
   var peek = document.createElement("div");
   peek.className = "agent-peek";
-  peek.innerHTML = '<img src="' + agent.icon + '" alt="' + agent.name + '" width="48" height="48">';
+  peek.innerHTML = '<img src="' + escapeAttr(agent.icon) + '" alt="' + escapeAttr(agent.name) + '" width="48" height="48">';
   peek.title = agent.name + " is watching";
   peek.setAttribute("aria-label", agent.name + " character peek — click to dismiss");
   peek.setAttribute("role", "button");
