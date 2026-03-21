@@ -256,7 +256,7 @@ function _pushAllFormulasToServer(token, base) {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ formulas: payload })
-  }).catch(function() {});
+  }).then(function(r) { if (!r.ok) console.warn("Formula import failed:", r.status); }).catch(function() {});
 }
 
 function _showCloudSyncHint(isPaid) {
@@ -308,10 +308,10 @@ function _deleteFormulaFromServer(name) {
     var formulas = data.formulas || [];
     var match = formulas.find(function(f) { return f.name === name; });
     if (match) {
-      fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/user/formulas/" + match.id, {
+      fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/user/formulas/" + encodeURIComponent(match.id), {
         method: "DELETE",
         headers: { "Authorization": "Bearer " + token }
-      }).catch(function() {});
+      }).then(function(r) { if (!r.ok) console.warn("Formula delete failed:", r.status); }).catch(function() {});
     }
   }).catch(function() {});
 }
