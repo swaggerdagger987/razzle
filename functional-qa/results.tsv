@@ -1792,3 +1792,106 @@ smoke-prod	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams	10
 36	OK	backend/live_data/core.py	119	_STAT_SUM_COLS	pass	re-audit: FUNC-040 ROUND(SUM(fantasy_points_*), 1) applied in _STAT_SUM_COLS and inline HPPR. Prod still has IEEE 754 artifacts. Not deployed.	95	2026-03-21T02:50
 63	OK	frontend/league-intel.html	7351	demoManagers	pass	re-audit: FUNC-041 fixed — 12 demo managers now match "12-team" label. RookieSZN + BuyLowSellHigh added. Not deployed.	95	2026-03-21T02:50
 69	OK	frontend/lab.js	1205	_QUERY_CACHE_TTL	pass	re-audit: Frontend cache TTL fixed — 5-min TTL (300000ms), staleness check in _queryCacheGet(). P2 resolved. Not deployed.	95	2026-03-21T02:55
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-prod	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:week_filter — Week filter OK	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values	100	2026-03-21T03:00
+smoke-prod	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams	100	2026-03-21T03:00
+10	OK	frontend/lab.js	4457	_pinnedDataCache	pass	re-audit S41: Pin fix code verified. localStorage persistence (razzle_pinned_cache): load on init (IIFE try/catch), save with IDs, update on render, clear on unpin/clearAll. Max 5 pins * ~2.4KB = ~12KB. Not deployed to prod.	98	2026-03-21T03:05
+4	OK	backend/live_data/players.py	192	fetch_players	pass	re-audit S41: FUNC-042 code fix verified. Count query moved before limit/offset params (correct binding). min(total,5000) cap replaces hardcoded 500/2000. Career WR: 728 total fetched (was truncated to 500). Prod still broken (PPR order on GET). POST endpoint also fixed. Not deployed.	98	2026-03-21T03:10
+36	P2	-	-	-	not-deployed	re-audit S41: IEEE 754 confirmed on prod — Nacua HPPR=310.49999999999994, JSN PPR=359.90000000000003. FUNC-040 ROUND fix in code, not deployed.	95	2026-03-21T03:15
+19	P2	-	-	-	not-deployed	re-audit S41: Trade value spread still 0.5 on prod (top 4: 95.8/95.6/95.4/95.3). FUNC-003 D=50 fix in code, not deployed. McBride (TE) still #2 overall.	95	2026-03-21T03:15
+28	P2	-	-	-	not-deployed	re-audit S41: Stacks still min_games=5 on prod. Flacco+Whiteheart r=0.995 in 6 games still #1. FUNC-028 min_games=8 fix in code, not deployed.	95	2026-03-21T03:15
+3	OK	-	-	-	pass	S41: Screener POST multi-filter chain verified on prod. RB PPR>=150+GP>=10 sorted by target_share: 28 results, sort correct, all filter conditions met.	100	2026-03-21T03:20
+3	OK	-	-	-	pass	S41: Post-filter (catch_rate>=70%) verified on prod. 32 WRs, all pass filter. Pagination consistent (p1 count=82, p2 count=82, no overlap).	100	2026-03-21T03:20
+8	OK	-	-	-	pass	S41: College endpoint verified on prod. GET /api/college/players returns correct data (McCord 4270yd, Ward 4111yd, Dart 3798yd). 633 college QBs 2024.	100	2026-03-21T03:25
+1	OK	-	-	-	pass	S41: Lab page 0 JS errors, 114 buttons, 139 inputs, 69 sidebar items. Compare page 0 errors. Player profile 0 errors. Landing page 0 errors. Pricing page 0 errors.	100	2026-03-21T03:25
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+13	OK	frontend/player.js	84	renderPlayerPage	pass	re-audit S42: Breakout detection tightened (prevPPG>=8, prevGP>=10, currGP>=10). Lamar +183% (2019) still correct. Rate metrics season_type='regular' added (players.py:721). Prod 0 JS errors. Not deployed.	98	2026-03-21T03:30
+29	P2	backend/live_data/analytics.py	756	fetch_breakout_candidates	open	S42: FUNC-043 — 22/50 rbs_score values have IEEE 754 artifacts (e.g., 21.799999999999997). age_bonus=(28-age)*2 where age is float. Fix: round(max(0, gap+age_bonus), 1).	95	2026-03-21T03:35
+29	OK	backend/live_data/analytics.py	705	fetch_breakout_candidates	pass	re-audit S42: season_type='regular' filter on target_share query verified correct. Breakout data sensible.	98	2026-03-21T03:35
+32	OK	backend/live_data/analytics.py	2164	fetch_air_yards	pass	re-audit S42: season_type='regular' filter added to air yards + stat explorer rate metrics. All 7 player_week_metrics queries now filtered. Prod data sensible.	98	2026-03-21T03:40
+36	OK	backend/live_data/core.py	345	_enrich_with_rate_metrics	pass	re-audit S42: season_type='regular' filter in core rate metrics enrichment. All screener rate metrics (target_share, snap_share, WOPR, RACR, EPA, CPOE, DAKOTA) filtered. Not deployed.	98	2026-03-21T03:40
+57	OK	frontend/lab.html	4684	_renderRecentPanels	pass	re-audit S42: escapeHtml→escapeAttr XSS fix verified. escapeAttr encodes single quotes (&#39;) in onclick attributes. Prod 0 JS errors, 69 sidebar items. Not deployed.	98	2026-03-21T03:45
