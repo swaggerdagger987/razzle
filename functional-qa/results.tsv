@@ -2283,3 +2283,47 @@ null-guard	OK	frontend/targets.html	-	team.players	pass	re-audit: Ship Loop team
 37	OK	-	-	-	pass	re-audit: pace-tracker API returns milestones array. McCaffrey 1000 rush yd ON PACE. FUNC-056 fix confirmed	100	2026-03-21T07:10
 36	OK	-	-	-	pass	re-audit: local IEEE 754 clean (round fix works). Prod FUNC-059 still present (416.59999...)	100	2026-03-21T07:10
 19	OK	-	-	-	pass	re-audit: trade values show 33 tier-1, 59 tier-2, 8 tier-3 in top 100. 6 TEs in top 30. TE overvaluation P2 known	90	2026-03-21T07:08
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke: session 56 — 11/11 local smoke tests pass	100	2026-03-21T07:12
+re-audit	OK	backend/live_data/players.py	377	_fetch_screener_uncached	pass	re-audit: FUNC-059 career screener ROUND(SUM,1) fix verified. McCaffrey 2515.3, Henry 2428.4 — 0/10 artifacts	100	2026-03-21T07:15
+re-audit	OK	backend/server.py	302	_ensure_season_stats_table	pass	re-audit: FUNC-059 season stats ROUND(SUM,2) fix verified. McCaffrey PPR=416.6 HPPR=365.6 STD=314.6 — 0/10 artifacts	100	2026-03-21T07:15
+re-audit	OK	adapters/nflverse_adapter.py	701	sync_snap_counts	pass	re-audit: FUNC-058 name_pos_map fallback code correct. Stale team McCaffrey (CAR→SF) would resolve via (search_name,position) lookup. 2 name+pos collisions (Gore Sr/Jr, J.Jones x2) — rare/harmless	100	2026-03-21T07:18
+re-audit	OK	frontend/lab.js	1750	buildRowHTML	pass	re-audit: escapeAttr→escapeJS fix for college player_id verified. All college IDs safe alphanumeric format (00-XXXXXXXX)	100	2026-03-21T07:20
+re-audit	OK	backend/live_data/tools.py	2837	fetch_success_rate	pass	re-audit: FUNC-059 ROUND fix in success_rate+game_script queries. PBP=0 rows so endpoints return empty (expected). SQL syntax correct	100	2026-03-21T07:20
+62	P1	backend/live_data/dashboards.py	1594	fetch_season_awards	ticket	FUNC-061: Season Awards "Most Efficient" — no min opportunity threshold. Efton Chism III (3 targets, 2.06 PPG) wins over elite WRs. PPO=5.50 from 3 opps beats all	95	2026-03-21T07:30
+62	P1	backend/live_data/dashboards.py	1617	fetch_season_awards	ticket	FUNC-062: Season Awards "Volume King" — QB opp share compares pass attempts (numerator) vs team targets+carries (denominator). All top 5 are QBs. Apples-to-oranges formula	95	2026-03-21T07:30
+62	OK	-	-	-	pass	awards: MVP (Nacua WR 23.44PPG), Iron Man (Maye QB CoV=0.26), Schedule Survivor (JTaylor), Dominator (Henry), Best Floor (Maye) — all reasonable	90	2026-03-21T07:30
+3	OK	-	-	-	pass	re-audit: multi-filter RB+rush_yards>=1000 returns 17 players, all correct, sorted desc. Filter intersection verified	100	2026-03-21T07:35
+1	OK	-	-	-	pass	re-audit: 9 panels tested for JS errors (screener/rankings/tradevalues/awards/stock-watch/consistency/aging/efficiency/leaders) — all 0 errors	100	2026-03-21T07:35
