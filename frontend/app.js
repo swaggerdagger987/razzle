@@ -455,18 +455,21 @@ function drawRazzleWatermark(ctx, canvas, opts) {
 /**
  * Show a toast notification. Available on all pages (defined in app.js).
  */
-function _showToast(msg, type, duration) {
+function _showToast(msg, type, duration, link) {
   var existing = document.querySelector('.razzle-toast');
   if (existing) existing.remove();
   var toast = document.createElement('div');
   toast.className = 'razzle-toast';
   if (type === 'warning') toast.style.borderColor = 'var(--orange)';
   if (type === 'error') toast.style.borderColor = 'var(--red)';
-  // Use innerHTML only for messages with trusted internal links (contains <a href="/...)
-  if (msg.indexOf('<a href="/') !== -1) {
-    toast.innerHTML = msg;
-  } else {
-    toast.textContent = msg;
+  toast.textContent = msg;
+  if (link && link.href && link.text) {
+    toast.appendChild(document.createTextNode(' '));
+    var a = document.createElement('a');
+    a.href = link.href;
+    a.textContent = link.text;
+    a.style.cssText = 'color:var(--orange);text-decoration:underline;';
+    toast.appendChild(a);
   }
   document.body.appendChild(toast);
   setTimeout(function() { toast.classList.add('razzle-toast-show'); }, 10);

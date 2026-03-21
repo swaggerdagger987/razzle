@@ -2938,3 +2938,30 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 - All modified JS files syntax clean (node --check)
 - All modified Python files compile clean
 - 0 regressions
+
+---
+
+## Ship Loop Session 31: Triage Cleanup Sweep (Mar 21)
+
+**Goal**: Fix previously-triaged P2 items from Sessions 29-30, sweep agent connective tissue code.
+
+### Fixes Applied (7 bugs across 5 files)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | _showToast innerHTML XSS trap eliminated | P2 | app.js:458, lab.js:9,5831 | Removed innerHTML heuristic (`msg.indexOf('<a href="/')`) — latent XSS if any caller ever passed user-controlled text containing that substring. Refactored to accept optional `link` parameter (`{href, text}`); always uses textContent + DOM-created `<a>`. Two callers (CSV export Pro gate) updated. |
+| 2 | briefings/save missing resp.ok check | P2 | warroom.js:3877 | `.then(function() { loadLatestBriefing(); })` triggered reload even on 4xx/5xx responses, masking save failures. Now checks `resp.ok` before calling `loadLatestBriefing()`. |
+| 3 | agents.html briefing fetch missing resp.ok (×3) | P2 | agents.html:2284-2286 | Three parallel fetches for weekly briefing data (dynasty-rankings, stock-watch, breakout-candidates) skipped resp.ok check — would attempt `.json()` on error responses. Added `if (!r.ok) throw new Error(r.status)` before `.json()`. |
+| 4 | index.html mini-data fetch missing resp.ok | P2 | index.html:1010 | Home page player data fetch skipped resp.ok check. Added guard. |
+
+### Sweep Results
+- **Agent connective tissue** (agent-config.js, agent-nudges.js): Clean. Proper escapeHtml/escapeAttr, color regex validation, javascript: URL blocking, proper event delegation.
+- **FAAB panel** (lab-panels.js:10342): Clean. All hardcoded data, properly escaped.
+- **Ambient character peek** (app.js:1830): Clean. Uses escapeAttr for icon/name.
+- **XSS sweep** (all frontend JS/HTML): No vulnerabilities found. All user/API data properly escaped.
+- **Fetch resp.ok sweep** (all frontend JS/HTML): 4 missing checks found and fixed (see above).
+
+### Verified Clean
+- 11/11 smoke tests pass
+- All modified JS files syntax clean (node --check)
+- 0 regressions

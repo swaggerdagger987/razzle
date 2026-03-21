@@ -3874,7 +3874,7 @@ window.addEventListener('razzle:all-agents-done', function(e) {
       body: JSON.stringify(briefingData),
     }
   )
-  .then(function() { loadLatestBriefing(); })
+  .then(function(resp) { if (resp.ok) loadLatestBriefing(); })
   .catch(function() { /* silent fail */ });
 });
 
