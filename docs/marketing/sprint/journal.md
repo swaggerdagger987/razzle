@@ -903,6 +903,100 @@ Sources:
 
 3. **What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?** (Carried from Q9 — still unanswered and critical for the September timeline. Which 2-3 of the 8 archetypes produce the most screenshottable, exploitable insights with minimal league history?)
 
-## NEXT QUESTION: What should the /pro pricing page copy say — how do you describe behavioral profiling, exploit windows, and manager archetypes to a dynasty manager who's never heard of these concepts?
+## Question 14: What should the /pro pricing page copy say — how do you describe behavioral profiling, exploit windows, and manager archetypes to a dynasty manager who's never heard of these concepts?
+
+**Why this matters**: Q12 designed the fake door pricing test at razzle.lol/pro. The page structure is set: 3 tiers, click tracking, email capture. But the test lives or dies on whether the feature descriptions make dynasty managers click "Lock In Founding Rate." "Behavioral profiling" and "exploit windows" are product-builder jargon. Dynasty managers think in trades, rosters, and winning. The copy has to translate Razzle's unique features into language that makes someone think: "Wait — I NEED that."
+
+### Answer
+
+**Verdict: Kill the jargon. Translate every Bureau feature into a scenario the dynasty manager has LIVED. The copy pattern is: [Thing that happens to you] → [What the Bureau tells you about it] → [What you do with it]. No feature names. Only outcomes.**
+
+Evidence:
+
+1. **How the best dynasty tools describe their features — and why Razzle must be different.** Dynasty Nerds describes its League Analyzer as "shows power rankings, positional strengths for every team, and identifies ideal trade partners." Footballguys' League Dominator says it "considers player performance projections, team needs, and long-term value." These are FUNCTIONAL descriptions — what the tool does. They work for commodity tools because the category is understood. But Razzle's Bureau is a NEW category. Nobody searches for "behavioral profiling for fantasy football." The copy can't describe the category — it must CREATE desire by describing the FEELING of having the information. Dynasty Nerds has 11,000 subscribers by saying "unlimited trades." Razzle can't win that race. Razzle wins by describing an edge nobody else offers.
+
+2. **The copy framework: Scenario → Insight → Action.** SaaS pricing page best practices (PipelineRoad, Userpilot 2026) confirm: pages that lead with OUTCOMES convert 34% better than pages that lead with features. For Razzle, this means every Bureau feature bullet should follow this pattern:
+
+   - **BAD** (feature-first): "Manager behavioral archetypes with 8 classifications"
+   - **BAD** (benefit-first but vague): "Understand your leaguemates better"
+   - **GOOD** (scenario → insight → action): "Know which manager panics after back-to-back losses — and what to offer them on Tuesday"
+
+3. **The specific /pro page copy, tier by tier:**
+
+   **PAGE HEADLINE**: "You know the players. Do you know the managers?"
+
+   **SUB-HEADLINE**: "Every league has a panic seller, a prospect hoarder, and someone who overpays for their favorite team's guys. The Bureau tells you exactly who — and when to strike."
+
+   **TIER 1: Lab Pro — $49/yr**
+   Headline: "The Research Lab, Unlocked"
+   - "Export any Lab view as a shareable image — sand-palette tables your group chat will screenshot"
+   - "Sync saved views and custom formulas across devices"
+   - "Unlimited column presets and comparison exports"
+   - "All 40+ Lab tools with no daily limits"
+
+   **TIER 2: Bureau — ~~$240~~ $149/yr Founding Member** (HERO TIER, "Most Popular" badge)
+   Headline: "Know Your League Like a Scout Knows Film"
+   - "Connect your Sleeper league. We read every trade, every roster move, every draft pick. Then we tell you what it means."
+   - "**Manager Scouting Reports**: 'This manager hoards young WRs, panics on RBs after injury, and always counters $2 above your first offer.' One page per manager. Updated weekly."
+   - "**Trade Windows**: 'Manager X just lost by 40. His RB1 has a bye next week. His panic score is 9/10. Send this offer NOW.' Real-time alerts when a leaguemate's behavior says they'll accept a deal they'd normally reject."
+   - "**League Pulse**: See your entire league's power dynamics on one screen — who's competing, who's rebuilding, who THINKS they're competing but their roster says otherwise."
+   - "**Shareable League Intel**: Generate a League Pulse page your whole league can see. The manager who drops it in the group chat becomes the league's data guy."
+
+   **TIER 3: Bureau+ — $199/yr**
+   Headline: "Your League's Unfair Advantage"
+   - "Everything in Bureau, plus:"
+   - "**AI War Room**: Six AI analysts debate your scenario — should you sell Bijan? Is this trade fair? Get a scouting report, not a number."
+   - "**Priority Features**: Shape the roadmap. Bureau+ members vote on what ships next."
+   - "**Multi-League**: Connect up to 5 Sleeper leagues"
+   - "**Beta Access**: First to test new Bureau features before they go live"
+
+4. **Why this specific language works — the psychology.** Three principles from Footballguys' leaguemate analysis articles and SaaS pricing research:
+
+   - **Recognition over education.** "This manager hoards young WRs" — every dynasty manager immediately pictures someone in their league. The copy works because it DESCRIBES THEIR REALITY, not a feature. They don't need to understand "behavioral profiling." They need to think "holy shit, that's Dave."
+   - **The exploit is the hook, not the analysis.** "Send this offer NOW" is the line that triggers clicks. Dynasty managers don't pay for data — they pay for ADVANTAGE. Footballguys' guide to trades says explicitly: "Know your leaguemates. Use it. All is fair." The copy speaks this language.
+   - **Loss aversion over gain framing.** The sub-headline ("Every league has a panic seller...") implies: "Your leaguemates might already be exploiting YOU, and you don't even know it." SaaS pricing research shows loss aversion (emphasizing what you miss by NOT subscribing) converts better than gain framing (what you get by subscribing).
+
+5. **Words to USE vs. words to AVOID on the /pro page:**
+
+   | USE (dynasty-native) | AVOID (product jargon) |
+   |---|---|
+   | Manager scouting reports | Behavioral profiles |
+   | Trade windows | Exploit windows |
+   | Panic score | Behavioral archetype |
+   | League Pulse | League intelligence dashboard |
+   | "Knows your league" | "Analyzes transaction history" |
+   | "When to strike" | "Actionable timing insights" |
+   | "The manager who always..." | "Pattern recognition across..." |
+   | "Updated weekly" | "Real-time behavioral modeling" |
+
+### Self-Critique
+
+**What's backed by data**: SaaS pricing page research (PipelineRoad, Userpilot 2026) confirms outcome-led copy converts 34% better than feature-led copy. Dynasty Nerds' feature descriptions ("unlimited trades," "identifies ideal trade partners") show the commodity-tool copy standard Razzle needs to exceed. Footballguys' "Know Your Leaguemates" series uses exactly the recognition-based language ("search your league mates on social media... Use it. All is fair.") that validates the exploit-first framing. The 3-tier structure with the $49 anchor and $149 hero matches Q12's fake door test design.
+
+**What's speculation**: Whether "Know which manager panics after back-to-back losses" triggers desire or confusion is untested. The copy assumes dynasty managers have FELT the pain of not knowing leaguemate tendencies — but some managers in casual leagues may not relate. The "panic score" concept is invented here as copy; whether the actual Bureau can compute a meaningful panic score from Sleeper data is an engineering question (Q3/Q9). The claim that recognition ("that's Dave") drives more clicks than education ("behavioral profiling is...") is my hypothesis based on SaaS copy principles applied to dynasty context — no A/B test exists.
+
+**Confidence: 7/10** — The scenario-based copy framework is well-supported by SaaS conversion research and matches how dynasty content (Footballguys, Dynasty Nerds podcasts) already talks about leaguemate analysis. The specific bullet points are informed creative writing, not validated copy. The real test is whether the fake door gets >5% tier clicks with this copy vs. more conventional feature descriptions.
+
+Sources:
+- [Dynasty Nerds Plans & Pricing](https://www.dynastynerds.com/plans-and-pricing/)
+- [Dynasty Nerds Dynasty GM Tools](https://www.dynastynerds.com/dynasty-gm-landing/)
+- [Footballguys: Ultimate Guide to Trades (Know Your Leaguemates)](https://www.footballguys.com/article/2023-ultimate-guide-to-trades)
+- [Fantasy Footballers: Dynasty Trade Secrets](https://www.thefantasyfootballers.com/dynasty/dynasty-trade-secrets-10-tips-for-successful-negotiations-fantasy-football/)
+- [SaaS Pricing Page Best Practices 2026 — PipelineRoad](https://pipelineroad.com/agency/blog/saas-pricing-page-best-practices)
+- [13 Pricing Page Best Practices — Userpilot](https://userpilot.com/blog/pricing-page-best-practices/)
+- [Footballguys League Dominator](https://www.footballguys.com/league-dominator)
+- Prior journal: Q8 (pricing), Q9 (launch sequence), Q12 (fake door test design)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What is Razzle's email capture and nurture strategy — once someone joins the founding member list, what do they receive between now and Bureau launch to stay engaged and convert?** (Carried from Q12 — a 6-month gap between signup and Bureau launch kills conversion unless there's a drip sequence keeping them warm with Lab insights, feature previews, and early access invites.)
+
+2. **What is the minimum viable Bureau feature set for NFL Week 1 launch — which behavioral archetypes ship first, and how much Sleeper data is needed to generate useful profiles?** (Carried from Q9 — still unanswered and critical for the September timeline. Which 2-3 of the 8 archetypes produce the most screenshottable, exploitable insights with minimal league history?)
+
+3. **What does the "Manager Scouting Report" page actually look like — what data points, layout, and visual format would make a dynasty manager screenshot their leaguemate's report and drop it in the group chat?** (The /pro copy promises "one page per manager, updated weekly." What's on that page? This is where copy meets product design.)
+
+## NEXT QUESTION: What is Razzle's email capture and nurture strategy — once someone joins the founding member list, what do they receive between now and Bureau launch to stay engaged and convert?
 
 ---
