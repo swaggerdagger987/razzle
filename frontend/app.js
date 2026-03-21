@@ -374,20 +374,21 @@ function getTrialStatusText() {
 /* ===== Brand Voice — Shared Vocabulary ===== */
 
 var RAZZLE_ERRORS = [
-  "fumbled the data fetch... try again in a sec",
-  "film room's dark right now \u2014 give it another shot",
-  "the tape machine jammed. Razzle's on it",
-  "interception on that request. retry?",
-  "false start on the server. try refreshing",
-  "delay of game \u2014 something went sideways"
+  "fumbled the data fetch. Razzle's chasing it down \u2014 try again in a sec",
+  "film room went dark. check your connection and give it another shot",
+  "something went sideways. Razzle knocked the server off the table. refresh and we'll pretend it didn't happen",
+  "interception on that request. the defense got to us first \u2014 retry?",
+  "delay of game on the server. they're getting their act together \u2014 try refreshing",
+  "connection dropped mid-play. Razzle's running it back \u2014 try again"
 ];
 
 var RAZZLE_EMPTY = [
-  "nobody home for this filter",
-  "the film room's empty. adjust your filters",
-  "zero matches \u2014 either your standards are elite or your filter's off",
-  "Razzle checked everywhere. nothing matches",
-  "clean pocket, no receivers open. try different filters"
+  "nobody home for this filter. everyone's got a down year",
+  "the film room's empty. try loosening those filters",
+  "zero matches \u2014 either your standards are elite or your filter's too tight",
+  "Razzle checked everywhere. nothing matches. we're as surprised as you are",
+  "clean pocket, no receivers open. try different filters",
+  "the scouting report came back blank. adjust and try again"
 ];
 
 var RAZZLE_LOADING = [

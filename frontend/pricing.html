@@ -52,7 +52,7 @@
 
   /* Plan cards */
   .plans-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 40px; }
-  @media (max-width: 900px) { .plans-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .plans-grid { grid-template-columns: 1fr !important; } }
   @media (max-width: 480px) {
     html, body { overflow-x: hidden; }
     .pricing-page { padding: 24px 12px; }
@@ -148,6 +148,12 @@
   .subscribed-banner.visible { display: block; }
   .subscribed-banner p { font-family: var(--font-display); font-size: 16px; margin: 0 0 8px; }
   .subscribed-banner .plan-name-badge { color: var(--orange); }
+
+  .free-chip {
+    font-family: var(--font-mono); font-size: 12px; color: var(--ink);
+    background: var(--bg); padding: 5px 12px; border-radius: 6px;
+    border: 2px solid var(--green);
+  }
 </style>
 </head>
 <body>
@@ -161,8 +167,8 @@
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">AI Agents</a></li>
     <li><a href="/pricing.html" class="active">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -194,8 +200,8 @@
   </div>
 
   <div class="pricing-hero">
-    <h1>Pick Your <span>Playbook</span></h1>
-    <p>The Screener is forever free. Pro and Elite unlock the intelligence.</p>
+    <h1>The Screener is <span>forever free.</span></h1>
+    <p>No account. No catch. No trial that expires. Pro and Elite add the intelligence layer.</p>
   </div>
 
   <!-- Interval toggle -->
@@ -208,31 +214,31 @@
     <span class="save-badge" id="saveBadge">save 33%</span>
   </div>
 
-  <!-- Plan cards -->
-  <div class="plans-grid">
-
-    <!-- FREE -->
-    <div class="plan-card free">
-      <div class="plan-badge">free</div>
-      <div class="plan-name">Free</div>
-      <div class="plan-price" style="font-size:28px;">$0</div>
-      <div class="plan-interval">no card, no catch</div>
-
-      <ul class="plan-features">
-        <li><span class="check">&#10003;</span> Screener (100+ stat columns)</li>
-        <li><span class="check">&#10003;</span> Custom formulas</li>
-        <li><span class="check">&#10003;</span> Shareable views</li>
-        <li><span class="check">&#10003;</span> Compare tool</li>
-        <li><span class="check">&#10003;</span> Trade analyzer</li>
-        <li><span class="check">&#10003;</span> Charts and visualizations</li>
-        <li><span class="check">&#10003;</span> URL state sharing</li>
-        <li><span class="check">&#10003;</span> PNG export</li>
-      </ul>
-
-      <div class="plan-cta">
-        <a href="/lab.html" class="btn-chunky" style="display:block; text-align:center; text-decoration:none;">Open the Screener</a>
-      </div>
+  <!-- What everyone gets — free tier celebration -->
+  <div class="free-celebration" style="background:var(--bg-card); border:3px solid var(--green); border-radius:12px; box-shadow:4px 4px 0 var(--green); padding:32px 28px; margin-bottom:32px; text-align:center;">
+    <div style="font-family:var(--font-display); font-size:22px; margin-bottom:4px;">What everyone gets. <span style="color:var(--green);">Forever.</span></div>
+    <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:20px;">no account, no card, no catch</div>
+    <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:600px; margin:0 auto;">
+      <span class="free-chip">Screener (100+ columns)</span>
+      <span class="free-chip">60+ analytical panels</span>
+      <span class="free-chip">Custom formulas</span>
+      <span class="free-chip">Compare tool</span>
+      <span class="free-chip">Trade analyzer</span>
+      <span class="free-chip">Charts &amp; heat maps</span>
+      <span class="free-chip">PNG export</span>
+      <span class="free-chip">Shareable URLs</span>
+      <span class="free-chip">Sleeper connection</span>
+      <span class="free-chip">10 seasons of data</span>
     </div>
+    <div style="margin-top:20px;">
+      <a href="/lab.html" class="btn-chunky" style="display:inline-block; text-align:center; text-decoration:none; font-size:14px; padding:10px 28px;">Open the Screener</a>
+    </div>
+  </div>
+
+  <!-- Upgrade cards -->
+  <div style="font-family:var(--font-display); font-size:20px; text-align:center; margin-bottom:20px;">Want more? <span style="color:var(--orange);">Two ways to upgrade.</span></div>
+
+  <div class="plans-grid" style="grid-template-columns:1fr 1fr;">
 
     <!-- PRO -->
     <div class="plan-card">
@@ -242,10 +248,10 @@
       <div class="plan-interval" id="proInterval">that's <span class="yearly-price">$6.67/mo</span> — save 33%</div>
 
       <ul class="plan-features">
-        <li><span class="check">&#10003;</span> 20 AI queries/day (bring your own API key)</li>
+        <li><span class="check">&#10003;</span> <span class="highlight">Everything free, plus:</span></li>
+        <li><span class="check">&#10003;</span> 20 AI queries/day — you provide a free API key (~$1-3/mo)</li>
         <li><span class="check">&#10003;</span> League-contextualized agents</li>
         <li><span class="check">&#10003;</span> Unlimited custom formulas</li>
-        <li><span class="check">&#10003;</span> Formula Store full access</li>
         <li><span class="check">&#10003;</span> Cloud sync (formulas, watchlist, views)</li>
         <li><span class="check">&#10003;</span> CSV export</li>
         <li><span class="check">&#10003;</span> Compare up to 4 players</li>
@@ -266,15 +272,13 @@
       <div class="plan-interval" id="eliteInterval">that's <span class="yearly-price">$12.50/mo</span> — save 37%</div>
 
       <ul class="plan-features">
-        <li><span class="check">&#10003;</span> <span class="highlight">Unlimited</span> AI queries (included)</li>
-        <li><span class="check">&#10003;</span> <span class="highlight">No API key needed</span> — we pay for it</li>
+        <li><span class="check">&#10003;</span> <span class="highlight">Everything in Pro, plus:</span></li>
+        <li><span class="check">&#10003;</span> <span class="highlight">Unlimited AI queries — nothing to set up</span></li>
+        <li><span class="check">&#10003;</span> <span class="highlight">No API key needed — we handle it</span></li>
         <li><span class="check">&#10003;</span> <span class="highlight">Agent memory</span> (multi-season, per-league)</li>
         <li><span class="check">&#10003;</span> <span class="highlight">Weekly Razzle briefings</span></li>
-        <li><span class="check">&#10003;</span> Everything in Pro, plus:</li>
         <li><span class="check">&#10003;</span> Priority data refresh</li>
-        <li><span class="check">&#10003;</span> League-contextualized agents</li>
         <li><span class="check">&#10003;</span> Full historical data (2015+)</li>
-        <li><span class="check">&#10003;</span> Cloud sync everywhere</li>
         <li><span class="check">&#10003;</span> 7-day free trial</li>
       </ul>
 
@@ -282,6 +286,10 @@
         <button class="btn-primary" style="background:var(--purple); border-color:var(--ink);" onclick="handleCheckout('elite')">Get Elite</button>
       </div>
     </div>
+  </div>
+
+  <div style="text-align:center; margin:16px 0 8px;">
+    <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light); background:var(--bg-card); display:inline-block; padding:8px 20px; border:2px dashed var(--ink-faint); border-radius:8px;">Pro and Elite have the same features. The only difference is who provides the AI.<br>Pro: you bring a free API key (~$1-3/mo). Elite: we handle everything.</div>
   </div>
 
   <!-- Promo code -->
@@ -324,8 +332,9 @@
 
         <!-- AI -->
         <tr class="group-row"><td colspan="4">Situation Room (AI)</td></tr>
-        <tr><td>Generic AI queries</td><td class="limit">5/day (basic model)</td><td class="limit">20/day (your key)</td><td class="yes">Unlimited</td></tr>
-        <tr><td>League-contextualized AI</td><td class="no">&mdash;</td><td class="yes">Your key</td><td class="yes">Included</td></tr>
+        <tr><td>Generic AI queries</td><td class="limit">5/day</td><td class="limit">20/day</td><td class="yes">Unlimited</td></tr>
+        <tr><td>League-contextualized AI</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>AI setup</td><td class="limit">Built-in</td><td class="limit">Free API key (~$1-3/mo)</td><td class="yes">Nothing — we handle it</td></tr>
         <tr><td>Agent memory</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td></tr>
         <tr><td>Weekly briefings</td><td class="no">&mdash;</td><td class="no">&mdash;</td><td class="yes">&#10003;</td></tr>
 
@@ -352,8 +361,8 @@
     <div style="max-width:680px; margin:0 auto;">
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What is BYOK (Bring Your Own Key)?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Pro users bring their own API key from OpenRouter, OpenAI, or Anthropic. You pay the LLM provider directly for usage (usually pennies per query). Elite users don't need a key — we cover all AI costs.</div>
+        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What's the difference between Pro and Elite?</div>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Same features. The only difference is who provides the AI. Pro: you create a free API key from OpenRouter (60 seconds, costs $1-3/month in usage). Elite: we handle everything — no key, no setup, unlimited queries. Think of Pro as the DIY option and Elite as the easy button.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
@@ -426,8 +435,8 @@
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
       <a href="/" class="footer-link">Home</a>
       <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
+      <a href="/league-intel.html" class="footer-link">League Intel</a>
+      <a href="/agents.html" class="footer-link">AI Agents</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
     </div>

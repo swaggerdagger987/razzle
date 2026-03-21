@@ -2981,29 +2981,43 @@ setupScenarioPanel();
 
   var BIOS = [
     { name: 'Razzle', animal: 'Bengal Tiger', emoji: '\uD83D\uDC2F', role: 'Chief of Staff', color: '#d97757', sprite: 'char_0',
-      specialty: 'synthesizes all intel, delivers the final call' },
+      specialty: 'synthesizes all intel, delivers the final call',
+      quote: 'I already watched the tape. twice.',
+      tags: ['synthesis', 'final call', 'leadership'], isLeader: true },
     { name: 'Medical', animal: 'Owl', emoji: '\uD83E\uDD89', role: 'Medical Analyst', color: '#5b7fff', sprite: 'char_1',
-      specialty: 'injury timelines, return-to-play risk' },
+      specialty: 'injury timelines, return-to-play risk',
+      quote: 'the MRI doesn\'t lie. neither do I.',
+      tags: ['injuries', 'return-to-play', 'risk'] },
     { name: 'Scout', animal: 'Eagle', emoji: '\uD83E\uDD85', role: 'Scout', color: '#2ec4b6', sprite: 'char_2',
-      specialty: 'breakout detection, usage trends' },
+      specialty: 'breakout detection, usage trends',
+      quote: 'I saw it in the snap counts three weeks ago.',
+      tags: ['breakouts', 'usage', 'trends'] },
     { name: 'Diplomat', animal: 'Bear', emoji: '\uD83D\uDC3B', role: 'Diplomat', color: '#8b5cf6', sprite: 'char_3',
-      specialty: 'trade strategy, leaguemate profiling' },
+      specialty: 'trade strategy, leaguemate profiling',
+      quote: 'I know what your leaguemate needs before they do.',
+      tags: ['trades', 'negotiation', 'profiling'] },
     { name: 'Quant', animal: 'Fox', emoji: '\uD83E\uDD8A', role: 'Quant', color: '#e87422', sprite: 'char_4',
-      specialty: 'valuations, championship probability' },
+      specialty: 'valuations, championship probability',
+      quote: 'the numbers don\'t have feelings. that\'s why I trust them.',
+      tags: ['valuations', 'probability', 'analytics'] },
     { name: 'Historian', animal: 'Elephant', emoji: '\uD83D\uDC18', role: 'Historian', color: '#d44040', sprite: 'char_5',
-      specialty: 'league precedents, pattern recognition' },
+      specialty: 'league precedents, pattern recognition',
+      quote: 'this exact pattern happened in 2019. want to know how it ended?',
+      tags: ['precedents', 'patterns', 'history'] },
   ];
 
-  grid.innerHTML = BIOS.map(function(a) {
-    return '<div class="warroom-bio-card">' +
+  grid.innerHTML = BIOS.map(function(a, idx) {
+    var cardClass = 'warroom-bio-card' + (a.isLeader ? ' razzle-card' : '');
+    var tagsHtml = a.tags.map(function(t) { return '<span class="warroom-bio-tag">' + t + '</span>'; }).join('');
+    return '<div class="' + cardClass + '">' +
       '<div class="warroom-bio-stripe" style="background:' + a.color + '"></div>' +
       '<div class="warroom-bio-body">' +
-        '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + a.sprite + '.png\'); background-position:0 0; background-size:224px 96px;"></div>' +
-        '<div>' +
-          '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.emoji + ' ' + a.name + '</div>' +
-          '<div class="warroom-bio-role">' + a.role + ' <span style="font-family:var(--font-hand,Caveat,cursive); font-size:12px; opacity:0.7;">(' + a.animal + ')</span></div>' +
-          '<div class="warroom-bio-specialty">' + a.specialty + '</div>' +
-        '</div>' +
+        '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + a.sprite + '.png\'); background-position:0 0; background-size:448px 192px;"></div>' +
+        '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.emoji + ' ' + a.name + '</div>' +
+        '<div class="warroom-bio-role">' + a.role + (a.isLeader ? ' <span style="font-family:var(--font-mono); font-size:9px; background:var(--orange); color:white; padding:1px 6px; border-radius:3px;">LEADER</span>' : '') + '</div>' +
+        '<div class="warroom-bio-quote">"' + a.quote + '"</div>' +
+        '<div class="warroom-bio-tags">' + tagsHtml + '</div>' +
+        '<button class="warroom-bio-ask" onclick="var i=document.getElementById(\'scenarioInput\'); if(i){i.focus();i.placeholder=\'Ask ' + a.name + '...\';}" style="color:' + a.color + '">Ask ' + a.name + '</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -3090,12 +3104,30 @@ function renderBriefingCard(agentId, content, isError) {
     contextPill = '<span class="briefing-generic-hint">generic analysis \u2014 upgrade for league-specific intel</span>';
   }
 
-  // Free model footer
+  // Free model footer + contextual upsell
   var freeFooter = '';
   var agentEntry = agentResults.get(agentId);
   if (agentEntry && agentEntry.freeModel) {
     var modelShort = (agentEntry.freeModel || 'unknown').split('/').pop().split(':')[0];
     freeFooter = '<div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);padding:8px 0 0;border-top:2px dashed var(--ink-faint);margin-top:8px;">powered by ' + escapeHtml(modelShort) + ' \u2014 <a href="/pricing.html" style="color:var(--orange);">upgrade to Pro</a> for premium models</div>';
+  }
+
+  // Contextual upsell for free-mode (no league context)
+  var upsellBlock = '';
+  if (!isLeagueContextMode() && !isProUser()) {
+    var UPSELL_EXAMPLES = [
+      'which of your leaguemates needs this player most — and what to ask for in return',
+      'how this move changes your championship odds from X% to Y%',
+      'your rivals\' roster weaknesses and trade history patterns',
+      'whether this player fits your specific scoring settings and roster construction',
+      'which leaguemate panic-traded a similar player last season — and how to exploit it'
+    ];
+    var upsellExample = UPSELL_EXAMPLES[agentId % UPSELL_EXAMPLES.length];
+    upsellBlock = '<div style="background:rgba(217,119,87,0.08);border:2px dashed var(--orange);border-radius:8px;padding:12px;margin-top:10px;">' +
+      '<div style="font-family:var(--font-mono);font-size:11px;color:var(--orange);font-weight:700;margin-bottom:4px;">With your league connected, ' + escapeHtml(agent.name) + ' would also tell you:</div>' +
+      '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);line-height:1.5;">' + escapeHtml(upsellExample) + '</div>' +
+      '<a href="/league-intel.html" style="display:inline-block;margin-top:8px;font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--orange);text-decoration:none;">Connect your league + upgrade to Pro &rarr;</a>' +
+    '</div>';
   }
 
   return '<div class="' + cardClass + collapsed + '" data-briefing-agent="' + agentId + '">' +
@@ -3106,7 +3138,7 @@ function renderBriefingCard(agentId, content, isError) {
       contextPill +
       '<span class="briefing-card-toggle">' + toggleText + '</span>' +
     '</div>' +
-    '<div class="briefing-card-body">' + bodyHtml + freeFooter + '</div>' +
+    '<div class="briefing-card-body">' + bodyHtml + upsellBlock + freeFooter + '</div>' +
   '</div>';
 }
 
