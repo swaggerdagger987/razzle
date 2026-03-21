@@ -3880,7 +3880,7 @@ function loadStateFromURL() {
   if (params.get("diff") === "1" && state.pinnedPlayers.length >= 2) {
     state.diffMode = true;
   }
-  // Smart filter from URL (e.g., ?sf=breakouts)
+  // Smart filter from URL (e.g., ?sf=breakout)
   if (params.has("sf")) {
     var sfKey = params.get("sf");
     if (SMART_FILTERS[sfKey]) {
