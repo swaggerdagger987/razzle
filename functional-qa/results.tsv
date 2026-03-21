@@ -2383,3 +2383,57 @@ re-audit	OK	backend/auth.py	8	import_json	pass	re-audit: Ship Loop hoisted impor
 43	OK	backend/live_data/dashboards.py	616	fetch_stock_watch	pass	re-audit: FUNC-060 still open. 14/19 rising TEs null PPO, eff_grade=C fallback. Import refactor didn't change logic. No regression	95	2026-03-21T11:40
 62	OK	backend/live_data/dashboards.py	1406	fetch_season_awards	pass	re-audit: FUNC-061/062 still open. Chism III still wins Most Efficient (3 opps), Bo Nix still Volume King (all QBs). Import refactor didn't change logic. No regression	95	2026-03-21T11:40
 all	OK	-	-	-	pass	browser: session 57 — Lab loaded (0 JS errors), awards/stocks/consistency/efficiency/opportunity/vorp/breakouts/buysell panels all 0 JS errors. College toggle 0 errors (26 rows)	100	2026-03-21T11:41
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke: session 58 — server healthy, Lab loads 25 rows, 0 JS errors	100	2026-03-21T14:30
+re-audit	OK	backend/live_data/dashboards.py	748	fetch_stock_watch	pass	re-audit: FUNC-060 VERIFIED FIXED. TE PPO threshold lowered to 20 (was 50). Rising TEs: 17/20 now have PPO (was 2/20). 3 remaining nulls legitimate (<20 opps). NOTE: pycache must be cleared after code merges	100	2026-03-21T14:31
+re-audit	OK	backend/live_data/dashboards.py	1734	fetch_season_awards	pass	re-audit: FUNC-061 VERIFIED FIXED. Most Efficient filter p["opportunities"]>=40 working. Winner: Boutte (PPO=2.7, 14G). P2: Boutte only 8.86 PPG (low-volume efficiency winner, threshold could be higher)	95	2026-03-21T14:31
+re-audit	OK	backend/live_data/dashboards.py	1760	fetch_season_awards	pass	re-audit: FUNC-062 VERIFIED FIXED. Volume King filter p["position"]!="QB" working. Winner: McCaffrey (RB). All runners are RBs (Jeanty, Robinson, JTaylor). NOTE: stale pycache was serving old bytecode — clearing __pycache__ required	100	2026-03-21T14:31
+re-audit	OK	backend/live_data/dashboards.py	128	fetch_efficiency_rankings	pass	re-audit: position-specific opp thresholds (TE:20) working. 30 TEs in most_efficient (Kraft PPO=2.6 #1), 30 in volume_kings (McBride 169 opps #1). 6 TEs with 20-30 opps (edge cases, expected)	100	2026-03-21T14:32
+re-audit	OK	backend/live_data/college.py	571	_fetch_college_efficiency	pass	re-audit: college position-specific thresholds (TE:15) working. 28 TEs returned. DJ Williams PPO=2.82 #1. Kacmarek 18 opps included (>15 threshold)	100	2026-03-21T14:32
+re-audit	OK	backend/live_data/dashboards.py	1260	fetch_report_cards	pass	re-audit: TE threshold 20 in report cards working. 25 honor roll TEs (Goedert A, Kelce B+, Bowers B+), 25 needs improvement. All reasonable	100	2026-03-21T14:32
+re-audit	OK	frontend/player.js	729	openCompareSearch	pass	re-audit: Ship Loop null guard (_profileData.player||{}).full_name verified. Defensive — normal flow unaffected. McCaffrey profile opens from Lab click, 0 JS errors	100	2026-03-21T14:33
+re-audit	OK	frontend/app.js	516	apiFetch	pass	re-audit: Ship Loop try-catch on localStorage in 401 handler + checkAuth. Defensive for quota/blocked storage. Normal auth flow unaffected. 0 JS errors	100	2026-03-21T14:33
+re-audit	OK	frontend/formulas.js	259	_pushAllFormulasToServer	pass	re-audit: catch handler now logs error message (was silent swallow). No behavior change. Formula store listing verified working	100	2026-03-21T14:33
