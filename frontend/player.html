@@ -17,11 +17,11 @@
 <meta name="twitter:description" content="Deep-dive player profile. Season stats, career arc, combine measurables, dynasty value, and trade comps all in one card.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
 <meta name="description" content="Fantasy football player profile on razzle.lol. Season stats, career trajectory, combine data, dynasty trade value, and comparable players.">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="/styles.css">
 <style>
   .player-page {
     max-width: 900px;
@@ -321,8 +321,8 @@
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/lab.html" class="active">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">AI Agents</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -350,8 +350,9 @@
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
       <a href="/" class="footer-link">Home</a>
       <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
+      <a href="/league-intel.html" class="footer-link">League Intel</a>
+      <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
     </div>
@@ -409,8 +410,8 @@
   <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
 </div>
 
-<script src="app.js"></script>
-<script src="player.js"></script>
+<script src="/app.js"></script>
+<script src="/player.js"></script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 </body>
 </html>

@@ -3,6 +3,7 @@ NFL player CRUD functions — search, screener, profiles, comparisons, boom/bust
 Extracted from _monolith.py in Phase 27 Task 3.
 """
 
+import json
 import logging
 import re
 import statistics
@@ -111,8 +112,17 @@ def fetch_players(
                 "receiving_fumbles", "receiving_fumbles_lost",
                 "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
                 "offense_snaps", "offense_pct",
-                "full_name", "position", "team", "games", "seasons", "age",
+                "full_name", "position", "team", "games", "seasons", "age", "ppg",
+                # Derived metrics (computed post-query, re-sorted in Python)
                 "half_ppr_ppg", "cpoe", "epa_per_play",
+                "yards_per_carry", "yards_per_rec", "yards_per_target", "catch_rate",
+                "comp_pct", "yards_per_att", "rec_per_game", "targets_per_game",
+                "rush_ypg", "rec_ypg", "pass_ypg", "adot", "snap_share",
+                "td_rate", "fumble_rate", "passer_rating", "ay_per_att",
+                "ppfd", "ppfd_per_game", "yprr",
+                "target_share", "air_yards_share", "wopr", "racr",
+                "passing_epa", "receiving_epa", "rushing_epa", "dakota",
+                "dynasty_value",
             }
             _sort_key = sort_key
             if _sort_key not in safe_sorts:
@@ -148,28 +158,62 @@ def fetch_players(
             where_clause = " AND ".join(where) if where else "1=1"
 
             # Handle sort expression
-            # Derived columns (computed post-query) fall back to PPR sort in SQL
-            _derived_sorts = {"half_ppr_ppg", "cpoe", "epa_per_play"}
-            sort_expr = _sort_key
-            if _sort_key == "seasons":
+            # SQL-sortable columns sort in the query; derived/rate metrics
+            # fall back to PPR in SQL, then re-sort in Python after enrichment
+            _sql_sortable = {
+                "fantasy_points_ppr", "fantasy_points_half_ppr", "fantasy_points_std",
+                "passing_yards", "passing_tds", "rushing_yards", "rushing_tds",
+                "receiving_yards", "receiving_tds", "receptions", "touchdowns",
+                "turnovers", "targets", "carries", "completions", "attempts",
+                "passing_air_yards", "receiving_air_yards", "receiving_yards_after_catch",
+                "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
+                "sacks_taken", "sack_yards_lost", "rushing_fumbles",
+                "receiving_fumbles", "receiving_fumbles_lost",
+                "sack_fumbles", "sack_fumbles_lost", "fumbles", "fumbles_lost",
+                "offense_snaps", "offense_pct",
+            }
+            _python_sort = _sort_key not in _sql_sortable and _sort_key not in (
+                "ppg", "games", "seasons", "full_name", "position", "team", "age",
+            )
+            _effective_sort = _sort_key if not _python_sort else "fantasy_points_ppr"
+            sort_expr = _effective_sort
+            if _effective_sort == "ppg":
+                sort_expr = "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))"
+            elif _effective_sort == "seasons":
                 sort_expr = "COUNT(DISTINCT s.season)"
-            elif _sort_key == "games":
+            elif _effective_sort == "games":
                 sort_expr = "COUNT(*)"
-            elif _sort_key == "age":
+            elif _effective_sort == "age":
                 sort_expr = "p.age"
-            elif _sort_key in ("full_name", "position", "team"):
-                sort_expr = f"p.{_sort_key}"
-            elif _sort_key in _derived_sorts:
-                sort_expr = "SUM(s.fantasy_points_ppr)"
-            elif _sort_key in safe_sorts:
-                sort_expr = f"SUM(s.{_sort_key})"
+            elif _effective_sort in ("full_name", "position", "team"):
+                sort_expr = f"p.{_effective_sort}"
+            elif _effective_sort in _sql_sortable:
+                sort_expr = f"SUM(s.{_effective_sort})"
+
+            # Count total (for pagination) — run before main query so we can
+            # use actual total as over-fetch limit for python-sorted queries
+            count_query = f"""
+                SELECT COUNT(DISTINCT p.player_id)
+                FROM players p
+                JOIN player_week_stats s ON p.player_id = s.player_id
+                WHERE {where_clause}
+            """
+            total = conn.execute(count_query, params).fetchone()[0]
+
+            # Over-fetch when Python re-sort needed (derived stats require all rows)
+            if _python_sort:
+                sql_limit = min(total, 5000)
+                sql_offset = 0
+            else:
+                sql_limit = limit
+                sql_offset = offset
 
             query = f"""
                 SELECT
                     p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
                     COUNT(*) as games,
                     COUNT(DISTINCT s.season) as seasons,
-                    COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as fantasy_points_half_ppr,
+                    ROUND(COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)), 1) as fantasy_points_half_ppr,
                     {_STAT_SUM_COLS}
                 FROM players p
                 JOIN player_week_stats s ON p.player_id = s.player_id
@@ -178,18 +222,9 @@ def fetch_players(
                 ORDER BY {sort_expr} {_sort_dir}
                 LIMIT ? OFFSET ?
             """
-            params.extend([limit, offset])
+            params.extend([sql_limit, sql_offset])
 
             rows = conn.execute(query, params).fetchall()
-
-            # Count total (for pagination)
-            count_query = f"""
-                SELECT COUNT(DISTINCT p.player_id)
-                FROM players p
-                JOIN player_week_stats s ON p.player_id = s.player_id
-                WHERE {where_clause}
-            """
-            total = conn.execute(count_query, params[:-2]).fetchone()[0]
 
             items = [dict(r) for r in rows]
             _enrich_with_derived_stats(items)
@@ -199,6 +234,13 @@ def fetch_players(
             _enrich_with_dynasty_value(items)
             _enrich_with_team_shares(conn, items, season=_season, career_mode=_career_mode)
             _enrich_with_pbp_stats(conn, items, season=_season, career_mode=_career_mode)
+
+            # Re-sort in Python for derived/rate metrics
+            if _python_sort:
+                reverse = _sort_dir.lower() == "desc"
+                _null_sentinel = float('-inf') if reverse else float('inf')
+                items.sort(key=lambda x: x.get(_sort_key) if x.get(_sort_key) is not None else _null_sentinel, reverse=reverse)
+                items = items[offset:offset + limit]
 
             return {"count": total, "season": "career" if _career_mode else _season, "items": items}
     return _cached(f"fetch_players:{search}:{position}:{positions}:{team}:{sort_key}:{sort_dir}:{limit}:{offset}:{season}", _query)
@@ -216,8 +258,8 @@ def _fetch_screener_uncached(body):
         week = body.get("week", 0)
         sort_key = body.get("sort_key", "fantasy_points_ppr")
         sort_dir = body.get("sort_direction", "desc")
-        limit = min(body.get("limit", 200), 1000)
-        offset = body.get("offset", 0)
+        limit = max(1, min(_safe_int(body.get("limit", 200), 200), 1000))
+        offset = max(0, _safe_int(body.get("offset", 0)))
         filters = body.get("filters", [])[:50]
         relevance = body.get("relevance", "fantasy")
 
@@ -305,6 +347,8 @@ def _fetch_screener_uncached(body):
             "passing_epa", "receiving_epa", "rushing_epa", "dakota", "cpoe",
             # Derived post-enrichment
             "half_ppr_ppg", "epa_per_play",
+            "td_rate", "fumble_rate", "passer_rating", "ay_per_att",
+            "ppfd", "ppfd_per_game", "yprr",
             # Dynasty value
             "dynasty_value", "age",
         }
@@ -331,7 +375,7 @@ def _fetch_screener_uncached(body):
             "ppg": "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))",
             "games": "COUNT(*)",
             "seasons": "COUNT(DISTINCT s.season)",
-            "fantasy_points_ppr": "SUM(s.fantasy_points_ppr)",
+            "fantasy_points_ppr": "ROUND(SUM(s.fantasy_points_ppr), 1)",
             "completions": "SUM(s.completions)",
             "pass_attempts": "SUM(s.attempts)",
             "passing_yards": "SUM(s.passing_yards)",
@@ -412,12 +456,25 @@ def _fetch_screener_uncached(body):
         else:
             order_expr = f"SUM(s.{effective_sort})"
 
+        # Count total first — needed for python-sort over-fetch limit
+        count_query = f"""
+            SELECT COUNT(*) FROM (
+                SELECT p.player_id
+                FROM players p
+                JOIN player_week_stats s ON p.player_id = s.player_id
+                WHERE {where_clause}
+                GROUP BY p.player_id
+                {having_clause}
+            )
+        """
+        total = conn.execute(count_query, params).fetchone()[0]
+
         query = f"""
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
                 COUNT(*) as games,
                 COUNT(DISTINCT s.season) as seasons,
-                COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as fantasy_points_half_ppr,
+                ROUND(COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)), 1) as fantasy_points_half_ppr,
                 {_STAT_SUM_COLS}
             FROM players p
             JOIN player_week_stats s ON p.player_id = s.player_id
@@ -430,7 +487,7 @@ def _fetch_screener_uncached(body):
         # When sorting by derived/rate metric or applying post-filters, fetch all matching
         # rows so Python sort/filter operates on complete dataset before pagination
         if python_sort or post_filters:
-            sql_limit = 2000
+            sql_limit = min(total, 5000)
             sql_offset = 0
         else:
             sql_limit = limit
@@ -438,20 +495,6 @@ def _fetch_screener_uncached(body):
         params.extend([sql_limit, sql_offset])
 
         rows = conn.execute(query, params).fetchall()
-
-        # Count
-        count_query = f"""
-            SELECT COUNT(*) FROM (
-                SELECT p.player_id
-                FROM players p
-                JOIN player_week_stats s ON p.player_id = s.player_id
-                WHERE {where_clause}
-                GROUP BY p.player_id
-                {having_clause}
-            )
-        """
-        count_params = params[:-2]  # exclude limit/offset
-        total = conn.execute(count_query, count_params).fetchone()[0]
 
         items = [dict(r) for r in rows]
         _enrich_with_derived_stats(items)
@@ -489,7 +532,6 @@ def _fetch_screener_uncached(body):
             reverse = sort_dir.lower() == "desc"
             _null_sentinel = float('-inf') if reverse else float('inf')
             items.sort(key=lambda x: x.get(sort_key) if x.get(sort_key) is not None else _null_sentinel, reverse=reverse)
-            total = len(items)
 
         # Apply pagination after post-filtering and Python re-sort
         if python_sort or post_filters:
@@ -570,8 +612,7 @@ def fetch_screener_sparklines(player_ids, season=0):
                 if pid not in sparklines:
                     sparklines[pid] = []
             return {"sparklines": sparklines, "season": _season}
-    import json as _json
-    _ck = f"sparklines:{_json.dumps(sorted(ids))}:{season}"
+    _ck = f"sparklines:{json.dumps(sorted(ids))}:{season}"
     return _cached(_ck, _query)
 
 
@@ -677,6 +718,7 @@ def _fetch_player_profile_uncached(player_id):
                 SELECT m.season, m.stat_key, AVG(m.stat_value) as avg_val
                 FROM player_week_metrics m
                 WHERE m.player_id = ? AND m.stat_key IN ({stat_placeholders})
+                  AND m.season_type = 'regular'
                 GROUP BY m.season, m.stat_key
             """, [player_id] + list(RATE_METRICS)).fetchall()
             rate_lookup = {}
@@ -698,7 +740,7 @@ def _fetch_player_profile_uncached(player_id):
                          "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
                          "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
                          "offense_snaps"]:
-                career[key] = sum(s.get(key) or 0 for s in seasons)
+                career[key] = round(sum(s.get(key) or 0 for s in seasons), 1)
             career["seasons"] = len(seasons)
             _enrich_with_derived_stats([career])
 
@@ -825,7 +867,7 @@ def _fetch_team_roster_uncached(team=None, season=None):
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
                 p.headshot_url,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games,
                 SUM(s.passing_yards) as passing_yards,
                 SUM(s.passing_tds) as passing_tds,
@@ -924,9 +966,9 @@ def _fetch_career_stats_uncached(player_id):
             SELECT
                 s.season,
                 COUNT(DISTINCT s.week) as games,
-                SUM(s.fantasy_points_ppr) as total_ppr,
-                COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as total_hppr,
-                SUM(s.fantasy_points_std) as total_std,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
+                ROUND(COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)), 1) as total_hppr,
+                ROUND(SUM(s.fantasy_points_std), 1) as total_std,
                 SUM(s.receptions) as rec,
                 SUM(s.targets) as tgt,
                 SUM(s.receiving_yards) as rec_yd,
@@ -1007,7 +1049,10 @@ def _fetch_career_stats_uncached(player_id):
             season_data["catch_rate"] = round(rec / tgt * 100, 1) if tgt > 0 else 0
             season_data["ypr"] = round(rec_yd / rec, 1) if rec > 0 else 0
             season_data["comp_pct"] = round(completions / pass_att * 100, 1) if pass_att > 0 else 0
-            season_data["td_rate"] = round(total_td / max(1, car + tgt) * 100, 1) if (car + tgt) > 0 else 0
+            if pos == "QB" and pass_att > 0:
+                season_data["td_rate"] = round(pass_td / pass_att * 100, 1)
+            else:
+                season_data["td_rate"] = round(total_td / max(1, car + tgt) * 100, 1) if (car + tgt) > 0 else 0
 
             seasons.append(season_data)
 
@@ -1135,7 +1180,7 @@ def _fetch_player_percentiles_uncached(player_id, season=None):
         rows = conn.execute("""
             SELECT
                 s.player_id,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games,
                 SUM(s.receptions) as rec,
                 SUM(s.targets) as tgt,
@@ -1344,7 +1389,7 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
                 SUM(receiving_yards) as rec_yd,
                 SUM(receiving_tds) as rec_td,
                 SUM(receptions) as rec,
-                SUM(fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT week) as games,
                 SUM(turnovers) as turnovers
             FROM player_week_stats
@@ -1514,7 +1559,7 @@ def _fetch_compare_table_uncached(player_ids, season=None):
         cursor.execute(f"""
             SELECT p.player_id, p.full_name, p.position, p.team,
                    COUNT(DISTINCT s.week) as games,
-                   COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts,
+                   ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_fpts,
                    COALESCE(SUM(s.passing_yards), 0) as pass_yd,
                    COALESCE(SUM(s.passing_tds), 0) as pass_td,
                    COALESCE(SUM(s.interceptions), 0) as ints,
@@ -1627,7 +1672,7 @@ def _fetch_player_boom_bust_uncached(player_id, season=0):
         # Position rank by consistency among same-position players
         all_pos_players = conn.execute("""
             SELECT s.player_id,
-                   AVG(s.fantasy_points_ppr) as avg_ppg,
+                   ROUND(AVG(s.fantasy_points_ppr), 1) as avg_ppg,
                    GROUP_CONCAT(s.fantasy_points_ppr) as scores_csv
             FROM player_week_stats s
             JOIN players p ON s.player_id = p.player_id

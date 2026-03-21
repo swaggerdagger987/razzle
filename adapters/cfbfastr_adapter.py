@@ -552,8 +552,9 @@ def sync_combine_data(conn):
         conn.commit()
 
     total = conn.execute("SELECT COUNT(*) FROM combine_data").fetchone()[0]
-    recent = conn.execute("SELECT COUNT(*) FROM combine_data WHERE draft_year >= 2025").fetchone()[0]
-    print(f"  Combine data: {total} total rows, {recent} for 2025+ draft classes.")
+    current_year = datetime.now().year
+    recent = conn.execute("SELECT COUNT(*) FROM combine_data WHERE draft_year >= ?", (current_year - 1,)).fetchone()[0]
+    print(f"  Combine data: {total} total rows, {recent} for {current_year - 1}+ draft classes.")
 
 
 # ---------------------------------------------------------------------------

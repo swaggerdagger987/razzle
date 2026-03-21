@@ -12,6 +12,26 @@ from .core import FANTASY_POSITIONS, _cached, _CACHE_TTL_STABLE, _current_nfl_se
 
 logger = logging.getLogger("razzle.live_data.dashboards")
 
+
+def _grade_from_percentile(pct):
+    """Convert a 0-100 percentile to a letter grade (8-tier scale)."""
+    if pct >= 95:
+        return "A+"
+    if pct >= 85:
+        return "A"
+    if pct >= 75:
+        return "B+"
+    if pct >= 65:
+        return "B"
+    if pct >= 50:
+        return "C+"
+    if pct >= 35:
+        return "C"
+    if pct >= 25:
+        return "D"
+    return "F"
+
+
 _EFFICIENCY_ANNOTATIONS = [
     "does more with less",
     "ruthlessly efficient",
@@ -63,7 +83,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.week) as games,
                     SUM(s.targets) as targets,
                     SUM(s.carries) as carries,
@@ -74,7 +94,8 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                     SUM(s.receiving_yards_after_catch) as yac,
                     SUM(s.receiving_tds) as rec_tds,
                     SUM(s.rushing_tds) as rush_tds,
-                    SUM(s.passing_tds) as pass_tds
+                    SUM(s.passing_tds) as pass_tds,
+                    SUM(s.attempts) as pass_attempts
                 FROM players p
                 JOIN player_week_stats s
                     ON s.player_id = p.player_id AND s.season = ?
@@ -113,16 +134,21 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 rec_tds = r[14] or 0
                 rush_tds = r[15] or 0
                 pass_tds = r[16] or 0
+                pass_attempts = r[17] or 0
                 pos = r[2] or "RB"
 
-                # Opportunities = targets + carries (for QBs: attempts/carries)
-                opportunities = targets + carries
+                # Opportunities: QBs use pass attempts + carries; others use targets + carries
+                if pos == "QB":
+                    opportunities = pass_attempts + carries
+                else:
+                    opportunities = targets + carries
                 touches = receptions + carries
                 total_yards = rec_yards + rush_yards
                 total_tds = rec_tds + rush_tds + pass_tds
 
-                # Skip players with too few opportunities
-                if opportunities < 50:
+                # Skip players with too few opportunities (position-specific)
+                opp_min = {"QB": 50, "RB": 50, "WR": 40, "TE": 20}.get(pos, 50)
+                if opportunities < opp_min:
                     continue
 
                 ppg = round(total_ppr / games, 2)
@@ -130,7 +156,11 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 ypt = round(total_yards / touches, 2) if touches > 0 else 0
                 catch_rate = round(receptions / targets * 100, 1) if targets > 0 else 0
                 yac_per_rec = round(yac / receptions, 2) if receptions > 0 else 0
-                td_rate = round(total_tds / touches * 100, 1) if touches > 0 else 0
+                # TD rate: QBs use passing TDs / pass attempts; others use total TDs / touches
+                if pos == "QB":
+                    td_rate = round(pass_tds / pass_attempts * 100, 1) if pass_attempts > 0 else 0
+                else:
+                    td_rate = round(total_tds / touches * 100, 1) if touches > 0 else 0
 
                 players.append({
                     "player_id": pid,
@@ -177,8 +207,9 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
             for i, p in enumerate(most_efficient):
                 p["annotation"] = _EFFICIENCY_ANNOTATIONS[i % len(_EFFICIENCY_ANNOTATIONS)]
 
-            # Volume Kings: most opportunities (with grade for context)
-            volume_kings = sorted(players, key=lambda x: x["opportunities"], reverse=True)[:limit]
+            # Volume Kings: most opportunities — exclude QBs (pass attempts aren't comparable to touches)
+            non_qb = [p for p in players if p["position"] != "QB"]
+            volume_kings = sorted(non_qb, key=lambda x: x["opportunities"], reverse=True)[:limit]
             for i, p in enumerate(volume_kings):
                 p["annotation"] = _VOLUME_ANNOTATIONS[i % len(_VOLUME_ANNOTATIONS)]
 
@@ -216,7 +247,7 @@ _WILD_CARD_ANNOTATIONS = [
 def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
     """Return consistency rankings: rock solid (low CoV) and wild cards (high CoV)."""
     def _query():
-        import math
+
 
         with get_db() as conn:
             # Determine season + available seasons
@@ -262,7 +293,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                 }
 
             # Group weekly scores by player
-            from collections import defaultdict
+
             player_info = {}
             player_weeks = defaultdict(list)
             for r in rows:
@@ -406,7 +437,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             # Step 1: Build defense PPG-allowed-by-position grid for this season
             def_rows = conn.execute("""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -464,7 +495,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
                 }
 
             # Step 3: Aggregate per player
-            from collections import defaultdict
+
             player_agg = defaultdict(lambda: {
                 "opp_ppg_list": [], "total_pts": 0, "games": 0, "team": "",
             })
@@ -500,7 +531,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
                 if ppg < 2:
                     continue
 
-                avg_opp_ppg = round(sum(d["opp_ppg_list"]) / len(d["opp_ppg_list"]), 1)
+                avg_opp_ppg = round(sum(d["opp_ppg_list"]) / (len(d["opp_ppg_list"]) or 1), 1)
                 info = player_info[pid]
                 pos = info["position"]
 
@@ -607,8 +638,8 @@ def fetch_stock_watch(season=None, position=None, limit=30):
     into a 0-100 stock score.  Rising = undervalued (stock > PPG rank).
     Falling = overvalued (stock < PPG rank)."""
     def _query():
-        import math
-        from collections import defaultdict
+
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -628,6 +659,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 SELECT s.player_id, p.full_name, p.position, p.team,
                        p.headshot_url, p.age,
                        s.fantasy_points_ppr, s.targets, s.carries,
+                       s.attempts,
                        s.opponent_team, s.week
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -651,7 +683,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
             # ---- Build defense PPG-allowed grid for SOS ----
             def_rows = conn.execute("""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -679,7 +711,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
             # ---- Aggregate per player ----
             player_info = {}
             player_weeks = defaultdict(list)  # weekly fantasy pts
-            player_opps = defaultdict(lambda: {"targets": 0, "carries": 0, "total_pts": 0, "games": 0})
+            player_opps = defaultdict(lambda: {"targets": 0, "carries": 0, "attempts": 0, "total_pts": 0, "games": 0})
             player_sos = defaultdict(list)  # opp ppg allowed per week
 
             for r in rows:
@@ -697,13 +729,15 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 pts = r[6] or 0
                 targets = r[7] or 0
                 carries = r[8] or 0
-                opp = r[9] or ""
+                attempts = r[9] or 0
+                opp = r[10] or ""
                 pos = r[2] or "RB"
 
                 player_weeks[pid].append(pts)
                 d = player_opps[pid]
                 d["targets"] += targets
                 d["carries"] += carries
+                d["attempts"] += attempts
                 d["total_pts"] += pts
                 d["games"] += 1
 
@@ -726,9 +760,13 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 if ppg < MIN_PPG.get(pos, 5):
                     continue
 
-                # Efficiency: PPO
-                opportunities = opps_d["targets"] + opps_d["carries"]
-                ppo = round(total_pts / opportunities, 2) if opportunities > 50 else None
+                # Efficiency: PPO — QBs use pass attempts + carries
+                if pos == "QB":
+                    opportunities = opps_d["attempts"] + opps_d["carries"]
+                else:
+                    opportunities = opps_d["targets"] + opps_d["carries"]
+                opp_threshold = {"QB": 50, "RB": 50, "WR": 40, "TE": 20}.get(pos, 50)
+                ppo = round(total_pts / opportunities, 2) if opportunities > opp_threshold else None
 
                 # Consistency: CoV
                 mean = sum(weeks) / n
@@ -782,34 +820,26 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 rank = sum(1 for v in sorted_vals if v < val)
                 return round(rank / count * 100, 1)
 
-            def grade_from_percentile(pct):
-                if pct >= 95:
-                    return "A+"
-                elif pct >= 85:
-                    return "A"
-                elif pct >= 70:
-                    return "B"
-                elif pct >= 45:
-                    return "C"
-                elif pct >= 25:
-                    return "D"
-                return "F"
-
             for p in players:
                 ppg_pct = percentile_rank(p["ppg"], ppg_sorted, n_total)
-                ppo_pct = percentile_rank(p["ppo"], ppo_vals, n_ppo) if p["ppo"] is not None else 50
+                has_ppo = p["ppo"] is not None
+                ppo_pct = percentile_rank(p["ppo"], ppo_vals, n_ppo) if has_ppo else None
                 # Inverse CoV: lower CoV = better, so count values ABOVE
-                cov_pct = (sum(1 for v in cov_vals if v > p["cov"]) / n_cov * 100) if p["cov"] is not None and n_cov > 0 else 50
+                has_cov = p["cov"] is not None and n_cov > 0
+                cov_pct = (sum(1 for v in cov_vals if v > p["cov"]) / n_cov * 100) if has_cov else 50
                 sos_pct = percentile_rank(p["sos_delta"], sos_sorted, n_sos)
 
-                # Composite stock score: 25% each
-                stock_score = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
+                # Composite stock score: redistribute weight when PPO missing
+                if ppo_pct is not None:
+                    stock_score = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
+                else:
+                    stock_score = round(cov_pct * 0.333 + sos_pct * 0.333 + ppg_pct * 0.334)
 
                 p["stock_score"] = stock_score
                 p["ppg_pct"] = round(ppg_pct)
-                p["efficiency_grade"] = grade_from_percentile(ppo_pct)
-                p["consistency_grade"] = grade_from_percentile(cov_pct)
-                p["sos_grade"] = grade_from_percentile(sos_pct)
+                p["efficiency_grade"] = _grade_from_percentile(ppo_pct) if ppo_pct is not None else None
+                p["consistency_grade"] = _grade_from_percentile(cov_pct)
+                p["sos_grade"] = _grade_from_percentile(sos_pct)
                 # Stock delta: positive = undervalued (stock > production rank)
                 p["stock_delta"] = stock_score - round(ppg_pct)
 
@@ -865,7 +895,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
     For RB/QB: Rush Dominator = (player rush yards / team rush yards) * 100
     """
     def _query():
-        from collections import defaultdict
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -895,7 +925,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                        COALESCE(SUM(s.receiving_tds), 0) as total_rec_tds,
                        COALESCE(SUM(s.rushing_yards), 0) as total_rush_yards,
                        COALESCE(SUM(s.rushing_tds), 0) as total_rush_tds,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_pts,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_pts,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1068,8 +1098,8 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
       20% PPG, 20% opportunity share.
     """
     def _query():
-        import math
-        from collections import defaultdict
+
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -1094,6 +1124,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 SELECT s.player_id, p.full_name, p.position, p.team,
                        p.headshot_url, p.age,
                        s.fantasy_points_ppr, s.targets, s.carries,
+                       s.attempts,
                        s.receiving_yards, s.receiving_tds,
                        s.rushing_yards,
                        s.opponent_team, s.week
@@ -1122,7 +1153,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
             def_params = [_season, _week] if _week > 0 else [_season]
             def_rows = conn.execute(f"""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1179,7 +1210,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
             player_info = {}
             player_weeks = defaultdict(list)
             player_opps = defaultdict(lambda: {
-                "targets": 0, "carries": 0, "total_pts": 0, "games": 0,
+                "targets": 0, "carries": 0, "attempts": 0, "total_pts": 0, "games": 0,
                 "rec_yards": 0, "rec_tds": 0, "rush_yards": 0,
             })
             player_sos = defaultdict(list)
@@ -1199,16 +1230,18 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 pts = r[6] or 0
                 targets = r[7] or 0
                 carries = r[8] or 0
-                rec_yards = r[9] or 0
-                rec_tds = r[10] or 0
-                rush_yards = r[11] or 0
-                opp = r[12] or ""
+                attempts = r[9] or 0
+                rec_yards = r[10] or 0
+                rec_tds = r[11] or 0
+                rush_yards = r[12] or 0
+                opp = r[13] or ""
                 pos = r[2] or "RB"
 
                 player_weeks[pid].append(pts)
                 d = player_opps[pid]
                 d["targets"] += targets
                 d["carries"] += carries
+                d["attempts"] += attempts
                 d["total_pts"] += pts
                 d["games"] += 1
                 d["rec_yards"] += rec_yards
@@ -1232,8 +1265,14 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 if ppg < 2:
                     continue
 
-                opportunities = opps_d["targets"] + opps_d["carries"]
-                if opportunities < 50:
+                # Opportunities: QBs use pass attempts + carries
+                pos = info["position"]
+                if pos == "QB":
+                    opportunities = opps_d["attempts"] + opps_d["carries"]
+                else:
+                    opportunities = opps_d["targets"] + opps_d["carries"]
+                opp_min = {"QB": 50, "RB": 50, "WR": 40, "TE": 20}.get(pos, 50)
+                if opportunities < opp_min:
                     continue
 
                 # Efficiency: PPO
@@ -1298,23 +1337,6 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 rank = sum(1 for v in sorted_vals if v < val)
                 return round(rank / count * 100, 1)
 
-            def grade_from_percentile(pct):
-                if pct >= 95:
-                    return "A+"
-                elif pct >= 85:
-                    return "A"
-                elif pct >= 75:
-                    return "B+"
-                elif pct >= 65:
-                    return "B"
-                elif pct >= 50:
-                    return "C+"
-                elif pct >= 35:
-                    return "C"
-                elif pct >= 25:
-                    return "D"
-                return "F"
-
             for p in players:
                 ppg_pct = percentile_rank(p["ppg"], ppg_sorted, n_total)
                 ppo_pct = percentile_rank(p["ppo"], ppo_sorted, n_total)
@@ -1327,10 +1349,10 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 gpa_pct = round(ppo_pct * 0.20 + cov_pct * 0.20 + sos_pct * 0.20 + ppg_pct * 0.20 + opp_pct * 0.20)
 
                 p["gpa_pct"] = gpa_pct
-                p["gpa_grade"] = grade_from_percentile(gpa_pct)
-                p["efficiency_grade"] = grade_from_percentile(ppo_pct)
-                p["consistency_grade"] = grade_from_percentile(cov_pct)
-                p["sos_grade"] = grade_from_percentile(sos_pct)
+                p["gpa_grade"] = _grade_from_percentile(gpa_pct)
+                p["efficiency_grade"] = _grade_from_percentile(ppo_pct)
+                p["consistency_grade"] = _grade_from_percentile(cov_pct)
+                p["sos_grade"] = _grade_from_percentile(sos_pct)
                 p["stock_score"] = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
 
             # Honor Roll: highest composite GPA
@@ -1383,8 +1405,8 @@ def fetch_season_awards(season=None, position=None):
     Dominator (dominator rating), Red Zone King (GL TDs), Best Floor (10th pctile).
     """
     def _query():
-        import math
-        from collections import defaultdict
+
+
 
         with get_db() as conn:
             row = conn.execute(
@@ -1404,6 +1426,7 @@ def fetch_season_awards(season=None, position=None):
                 SELECT s.player_id, p.full_name, p.position, p.team,
                        p.headshot_url, p.age,
                        s.fantasy_points_ppr, s.targets, s.carries,
+                       s.attempts,
                        s.receiving_yards, s.receiving_tds,
                        s.rushing_yards,
                        s.opponent_team, s.week
@@ -1428,7 +1451,7 @@ def fetch_season_awards(season=None, position=None):
             # Build defense PPG-allowed grid for SOS
             def_rows = conn.execute("""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1477,7 +1500,7 @@ def fetch_season_awards(season=None, position=None):
             player_info = {}
             player_weeks = defaultdict(list)
             player_opps = defaultdict(lambda: {
-                "targets": 0, "carries": 0, "total_pts": 0, "games": 0,
+                "targets": 0, "carries": 0, "attempts": 0, "total_pts": 0, "games": 0,
                 "rec_yards": 0, "rec_tds": 0, "rush_yards": 0,
             })
             player_sos = defaultdict(list)
@@ -1524,16 +1547,18 @@ def fetch_season_awards(season=None, position=None):
                 pts = r[6] or 0
                 targets = r[7] or 0
                 carries = r[8] or 0
-                rec_yards = r[9] or 0
-                rec_tds = r[10] or 0
-                rush_yards = r[11] or 0
-                opp = r[12] or ""
+                attempts = r[9] or 0
+                rec_yards = r[10] or 0
+                rec_tds = r[11] or 0
+                rush_yards = r[12] or 0
+                opp = r[13] or ""
                 pos = r[2] or "RB"
 
                 player_weeks[pid].append(pts)
                 d = player_opps[pid]
                 d["targets"] += targets
                 d["carries"] += carries
+                d["attempts"] += attempts
                 d["total_pts"] += pts
                 d["games"] += 1
                 d["rec_yards"] += rec_yards
@@ -1557,7 +1582,12 @@ def fetch_season_awards(season=None, position=None):
                 if ppg < 2:
                     continue
 
-                opportunities = opps_d["targets"] + opps_d["carries"]
+                # Opportunities: QBs use pass attempts + carries
+                pos = info["position"]
+                if pos == "QB":
+                    opportunities = opps_d["attempts"] + opps_d["carries"]
+                else:
+                    opportunities = opps_d["targets"] + opps_d["carries"]
 
                 # Efficiency: PPO
                 ppo = round(total_pts / opportunities, 2) if opportunities > 0 else 0
@@ -1633,23 +1663,6 @@ def fetch_season_awards(season=None, position=None):
                 rank = sum(1 for v in sorted_vals if v < val)
                 return round(rank / n_total * 100, 1) if n_total > 0 else 50
 
-            def grade_from_percentile(pct):
-                if pct >= 95:
-                    return "A+"
-                elif pct >= 85:
-                    return "A"
-                elif pct >= 75:
-                    return "B+"
-                elif pct >= 65:
-                    return "B"
-                elif pct >= 50:
-                    return "C+"
-                elif pct >= 35:
-                    return "C"
-                elif pct >= 25:
-                    return "D"
-                return "F"
-
             for p in players:
                 ppg_pct = pct_rank(p["ppg"], ppg_sorted)
                 ppo_pct = pct_rank(p["ppo"], ppo_sorted)
@@ -1660,7 +1673,7 @@ def fetch_season_awards(season=None, position=None):
                 # Composite GPA
                 gpa_pct = round(ppo_pct * 0.20 + cov_pct * 0.20 + sos_pct * 0.20 + ppg_pct * 0.20 + opp_pct * 0.20)
                 p["gpa_pct"] = gpa_pct
-                p["gpa_grade"] = grade_from_percentile(gpa_pct)
+                p["gpa_grade"] = _grade_from_percentile(gpa_pct)
 
                 # Stock score
                 stock_score = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
@@ -1676,9 +1689,9 @@ def fetch_season_awards(season=None, position=None):
                 age_bonus = max(0, min(30, 30 - (p["age"] - 21))) / 30 * 100  # 21yo=100, 31yo=0
                 p["breakout_score"] = round(opp_pct * 0.5 + age_bonus * 0.3 + ppg_pct * 0.2, 1)
 
-                p["efficiency_grade"] = grade_from_percentile(ppo_pct)
-                p["consistency_grade"] = grade_from_percentile(cov_pct)
-                p["sos_grade"] = grade_from_percentile(sos_pct)
+                p["efficiency_grade"] = _grade_from_percentile(ppo_pct)
+                p["consistency_grade"] = _grade_from_percentile(cov_pct)
+                p["sos_grade"] = _grade_from_percentile(sos_pct)
 
             # Build award categories
             award_defs = [
@@ -1697,6 +1710,7 @@ def fetch_season_awards(season=None, position=None):
                     "sort_key": "ppo",
                     "stat_label": "PPO",
                     "stat_fn": lambda p: str(p["ppo"]),
+                    "filter": lambda p: p["opportunities"] >= 40,
                 },
                 {
                     "key": "iron_man",
@@ -1722,6 +1736,7 @@ def fetch_season_awards(season=None, position=None):
                     "sort_key": "opp_share",
                     "stat_label": "Opp%",
                     "stat_fn": lambda p: str(p["opp_share"]) + "%",
+                    "filter": lambda p: p["position"] != "QB",
                 },
                 {
                     "key": "breakout_star",
@@ -1768,7 +1783,8 @@ def fetch_season_awards(season=None, position=None):
             awards = []
             for ad in award_defs:
                 reverse = ad.get("reverse", True)
-                sorted_players = sorted(players, key=lambda x: x[ad["sort_key"]], reverse=reverse)
+                eligible = [p for p in players if ad.get("filter", lambda _: True)(p)]
+                sorted_players = sorted(eligible, key=lambda x: x[ad["sort_key"]], reverse=reverse)
                 top5 = sorted_players[:5]
                 if not top5:
                     continue
@@ -1840,7 +1856,7 @@ def fetch_vorp(season=None, position=None, limit=30):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.week) as games
                 FROM players p
                 JOIN player_week_stats s
@@ -1953,7 +1969,7 @@ _CORR_STATS = {
     "ypc": ("CASE WHEN SUM(s.carries) > 0 THEN SUM(s.rushing_yards) * 1.0 / SUM(s.carries) ELSE NULL END", "YPC"),
     "ypr": ("CASE WHEN SUM(s.receptions) > 0 THEN SUM(s.receiving_yards) * 1.0 / SUM(s.receptions) ELSE NULL END", "YPR"),
     "snap_pct": ("AVG(s.offense_pct)", "Snap%"),
-    "td_rate": ("CASE WHEN (SUM(s.carries) + SUM(s.targets)) > 0 THEN SUM(s.touchdowns) * 100.0 / (SUM(s.carries) + SUM(s.targets)) ELSE NULL END", "TD Rate"),
+    "td_rate": ("CASE WHEN p.position = 'QB' THEN CASE WHEN SUM(s.attempts) > 0 THEN SUM(s.passing_tds) * 100.0 / SUM(s.attempts) ELSE NULL END ELSE CASE WHEN (SUM(s.carries) + SUM(s.targets)) > 0 THEN SUM(s.touchdowns) * 100.0 / (SUM(s.carries) + SUM(s.targets)) ELSE NULL END END", "TD Rate"),
 }
 
 

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#2ec4b6">
+  <!-- Hawk: angular head + beak + fierce eye -->
+  <ellipse cx="10" cy="10" rx="7" ry="6.5"/>
+  <polygon points="3,10 0,11 3,12" fill="#e87422"/>
+  <circle cx="6.5" cy="9" r="2" fill="#fff"/>
+  <circle cx="6" cy="9" r="1" fill="#2d1f14"/>
+  <path d="M8,6 Q10,3 14,4 Q12,6 10,6Z" fill="#1a9e92"/>
+  <path d="M12,13 Q14,15 16,14" fill="none" stroke="#1a9e92" stroke-width="1.2"/>
+</svg>

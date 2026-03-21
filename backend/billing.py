@@ -203,7 +203,7 @@ def _user_had_trial(user_id: int) -> bool:
             if user_row:
                 return True
         except Exception:
-            pass  # Column might not exist yet
+            logger.warning("Failed to check trial_used column for user %s", user_id, exc_info=True)
         return False
 
 
@@ -433,19 +433,20 @@ def _handle_checkout_completed(session):
         status = "trialing" if is_trial else "active"
         is_lifetime = plan_tier.endswith("_lifetime")
         p_type = "lifetime" if is_lifetime else "subscription"
+        trial_used_val = 1 if is_trial else 0
         if existing:
             conn.execute("""
                 UPDATE subscriptions SET
                     stripe_customer_id = ?, stripe_subscription_id = ?,
-                    plan = ?, status = ?, trial_used = 1, trial_end = ?,
+                    plan = ?, status = ?, trial_used = MAX(trial_used, ?), trial_end = ?,
                     plan_type = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
-            """, (customer_id, subscription_id, plan_tier, status, trial_end, p_type, _uid))
+            """, (customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type, _uid))
         else:
             conn.execute("""
                 INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end, plan_type)
-                VALUES (?, ?, ?, ?, ?, 1, ?, ?)
-            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_end, p_type))
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type))
 
         conn.commit()
     logger.info(f"User {user_id} upgraded to {plan_tier} (subscription {subscription_id}, trial={is_trial})")

@@ -296,8 +296,8 @@
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/lab.html" class="active">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">AI Agents</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -337,8 +337,8 @@
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
       <a href="/" class="footer-link">Home</a>
       <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
+      <a href="/league-intel.html" class="footer-link">League Intel</a>
+      <a href="/agents.html" class="footer-link">AI Agents</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
     </div>
@@ -497,7 +497,7 @@
       const tierBreaks = posData.tier_breaks || [];
       let nextBreakIdx = 0;
 
-      posData.players.forEach(function(p) {
+      (posData.players || []).forEach(function(p) {
         // Check if we need to insert a tier break before this player
         while (nextBreakIdx < tierBreaks.length && p.rank > tierBreaks[nextBreakIdx].end) {
           var tb = tierBreaks[nextBreakIdx];

@@ -72,8 +72,8 @@
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/lab.html" class="active">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">AI Agents</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -117,8 +117,8 @@
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
       <a href="/" class="footer-link">Home</a>
       <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
+      <a href="/league-intel.html" class="footer-link">League Intel</a>
+      <a href="/agents.html" class="footer-link">AI Agents</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
     </div>
@@ -180,6 +180,7 @@
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 function escapeHtml(t) {
+  if (t == null) return "";
   const d = document.createElement("div");
   d.appendChild(document.createTextNode(t));
   return d.innerHTML;
@@ -294,9 +295,8 @@ function exportPNG() {
   const el = document.getElementById("sr-container");
   html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(canvas => {
     const ctx = canvas.getContext("2d");
-    ctx.font = "bold 28px 'Space Mono', monospace";
-    ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.15)' : 'rgba(45,31,20,0.13)';
-    ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20);
+    if (typeof drawRazzleWatermark === 'function') { drawRazzleWatermark(ctx, canvas); }
+    else { ctx.font = "bold 28px 'Space Mono', monospace"; ctx.fillStyle = 'rgba(45,31,20,0.13)'; ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }
     const link = document.createElement("a");
     link.download = "razzle-success-rate.png";
     link.href = canvas.toDataURL();

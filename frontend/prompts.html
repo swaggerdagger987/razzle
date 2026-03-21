@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Library — Razzle</title>
+<meta property="og:title" content="Prompt Library — Razzle">
+<meta property="og:description" content="Copy-paste fantasy football prompts for ChatGPT, Claude, and Razzle's AI agents. Trade analysis, roster evaluation, draft strategy, and more.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://razzle.lol/prompts.html">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prompt Library — Razzle">
+<meta name="twitter:description" content="Copy-paste fantasy football prompts for ChatGPT, Claude, and Razzle's AI agents.">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
+<meta name="description" content="Razzle's Prompt Library: 15+ curated fantasy football prompts for AI assistants. Trade analysis, roster evaluation, draft strategy, waiver wire, and dynasty startup.">
+<link rel="canonical" href="https://razzle.lol/prompts.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .prompts-page { max-width: 800px; margin: 0 auto; padding: 40px 24px 60px; }
+  .prompts-hero { text-align: center; margin-bottom: 32px; }
+  .prompts-hero h1 { font-family: var(--font-display); font-size: 28px; margin-bottom: 6px; }
+  .prompts-hero p { font-family: var(--font-hand); font-size: 18px; color: var(--ink-medium); }
+
+  .prompt-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
+  .prompt-filter {
+    font-family: var(--font-mono); font-size: 11px; padding: 6px 14px;
+    border: 2px solid var(--ink); border-radius: 20px; cursor: pointer;
+    background: transparent; color: var(--ink); transition: all 0.15s;
+  }
+  .prompt-filter:hover, .prompt-filter.active {
+    background: var(--orange); color: var(--bg); border-color: var(--orange);
+  }
+
+  .prompt-grid { display: grid; gap: 16px; }
+
+  .prompt-card {
+    background: var(--bg-card); border: 3px solid var(--ink); border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink); padding: 20px; transition: all 0.15s;
+  }
+  .prompt-card:hover { box-shadow: 6px 6px 0 var(--ink); transform: translate(-1px, -1px); }
+
+  .prompt-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .prompt-title { font-family: var(--font-display); font-size: 16px; }
+  .prompt-meta { display: flex; gap: 6px; align-items: center; }
+  .prompt-cat {
+    font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+    padding: 2px 8px; border: 2px solid var(--ink); border-radius: 8px;
+    white-space: nowrap;
+  }
+  .prompt-agent {
+    font-family: var(--font-mono); font-size: 9px; padding: 2px 8px;
+    border-radius: 8px; white-space: nowrap;
+  }
+
+  .prompt-text {
+    font-family: var(--font-mono); font-size: 12px; line-height: 1.5;
+    color: var(--ink-medium); background: var(--bg); border: 2px dashed var(--ink-faint);
+    border-radius: 8px; padding: 12px; margin: 8px 0; white-space: pre-wrap;
+    max-height: 120px; overflow: hidden; position: relative; cursor: pointer;
+  }
+  .prompt-text.expanded { max-height: none; }
+  .prompt-text::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+    background: linear-gradient(transparent, var(--bg)); pointer-events: none;
+  }
+  .prompt-text.expanded::after { display: none; }
+
+  .prompt-actions { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+  .copy-btn {
+    font-family: var(--font-mono); font-size: 11px; padding: 4px 14px;
+    border: 2px solid var(--ink); border-radius: 8px; background: var(--bg-card);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .copy-btn:hover { background: var(--orange); color: var(--bg); border-color: var(--orange); }
+  .copy-btn.copied { background: var(--green); color: var(--bg); border-color: var(--green); }
+  .use-btn {
+    font-family: var(--font-mono); font-size: 11px; padding: 4px 14px;
+    border: 2px solid var(--orange); border-radius: 8px; background: var(--orange);
+    color: var(--bg); cursor: pointer; text-decoration: none; transition: all 0.15s;
+  }
+  .use-btn:hover { box-shadow: 2px 2px 0 var(--ink); }
+
+  @media (max-width: 768px) {
+    .prompts-page { padding: 24px 12px 40px; }
+    .prompt-header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<nav class="topnav" aria-label="Main navigation">
+  <a href="/" class="logo"><div class="logo-mark">&#x1F42F;</div><div class="logo-text">Razzle<span class="accent">.lol</span></div></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">Screener</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">AI Agents</a></li>
+    <li><a href="/prompts.html" class="active">Prompts</a></li>
+    <li><a href="/pricing.html">Pricing</a></li>
+  </ul>
+  <div class="nav-auth" id="nav-auth">
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
+  </div>
+</nav>
+
+<main class="prompts-page">
+  <div class="prompts-hero">
+    <div style="font-size:40px; margin-bottom:8px;">&#x1F42F;</div>
+    <h1>Prompt Library</h1>
+    <p>copy-paste prompts for ChatGPT, Claude, or Razzle's Situation Room</p>
+  </div>
+
+  <div class="prompt-filters" id="promptFilters">
+    <button class="prompt-filter active" onclick="filterPrompts('all')">All</button>
+    <button class="prompt-filter" onclick="filterPrompts('trade')">Trade Analysis</button>
+    <button class="prompt-filter" onclick="filterPrompts('roster')">Roster Evaluation</button>
+    <button class="prompt-filter" onclick="filterPrompts('draft')">Draft Strategy</button>
+    <button class="prompt-filter" onclick="filterPrompts('waiver')">Waiver Wire</button>
+    <button class="prompt-filter" onclick="filterPrompts('dynasty')">Dynasty Startup</button>
+  </div>
+
+  <div class="prompt-grid" id="promptGrid"></div>
+</main>
+
+<footer class="site-footer">
+  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
+  <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
+</footer>
+
+<script src="app.js"></script>
+<script>
+var PROMPTS = [
+  { cat: 'trade', title: 'Should I Accept This Trade?', agent: 'Razzle', agentColor: 'var(--orange)',
+    text: 'I play in a [12/10/8]-team [PPR/Half PPR/Standard] [Dynasty/Keeper/Redraft] league.\n\nI was offered: [Player A] for my [Player B].\n\nMy current roster:\nQB: [list QBs]\nRB: [list RBs]\nWR: [list WRs]\nTE: [list TEs]\n\nMy record is [X-Y]. Am I contending or rebuilding?\n\nAnalyze the trade value, positional need, and whether this helps my championship odds. Give me a clear accept or reject with reasoning.' },
+
+  { cat: 'trade', title: 'Find My Best Trade Target', agent: 'Bones', agentColor: 'var(--pos-te)',
+    text: 'I need to upgrade at [position]. My league is [12]-team [PPR] [Dynasty].\n\nMy roster:\n[paste roster]\n\nMy tradeable assets (players I\'m willing to move):\n[list players]\n\nWho should I target? Give me 3 realistic trade targets at [position] ranked by value, and suggest what package I\'d need to offer for each. Consider the other manager\'s likely willingness to trade.' },
+
+  { cat: 'trade', title: 'Evaluate My Trade Value Chart Position', agent: 'Octo', agentColor: 'var(--pos-te)',
+    text: 'Rank these players by dynasty trade value in a [12]-team [PPR] league: [Player 1], [Player 2], [Player 3], [Player 4], [Player 5].\n\nFor each player, give:\n1. Estimated trade value (1-100 scale)\n2. Key driver of value (age, production, situation)\n3. Buy/Hold/Sell recommendation\n4. One realistic trade comp (a player of similar value)' },
+
+  { cat: 'roster', title: 'Full Roster Evaluation', agent: 'Hawkeye', agentColor: 'var(--pos-rb)',
+    text: 'Grade my roster for a [12]-team [PPR] [Dynasty] league.\n\nQB: [list]\nRB: [list]\nWR: [list]\nTE: [list]\nPicks: [list draft picks]\n\nFor each position group, give:\n1. Letter grade (A-F)\n2. Starter quality assessment\n3. Depth rating\n4. Biggest risk\n\nThen give an overall assessment: Am I a contender, retooler, or rebuilder? What\'s my competitive window? What\'s my #1 priority move?' },
+
+  { cat: 'roster', title: 'Identify My Roster Weaknesses', agent: 'Hawkeye', agentColor: 'var(--pos-rb)',
+    text: 'My [12]-team [PPR] [Dynasty] roster:\n[paste full roster]\n\nIdentify my 3 biggest weaknesses. For each:\n1. Why it\'s a problem\n2. How it hurts my championship odds\n3. One specific player I should target to fix it\n4. What I\'d need to give up (realistic trade package)' },
+
+  { cat: 'roster', title: 'Contender or Rebuilder Decision', agent: 'Razzle', agentColor: 'var(--orange)',
+    text: 'I\'m [X-Y] in a [12]-team [PPR] [Dynasty] league. My roster:\n[paste roster]\n\nShould I be buying or selling right now? Give me:\n1. Honest contender/rebuilder classification with reasoning\n2. If contending: what move puts me over the top?\n3. If rebuilding: which veterans should I sell, and what picks/young players should I target?\n4. The one move I should make THIS WEEK' },
+
+  { cat: 'draft', title: 'Rookie Draft Board', agent: 'Hawkeye', agentColor: 'var(--pos-rb)',
+    text: 'Build me a top-24 rookie draft board for a [12]-team [PPR] [1QB/Superflex] dynasty league.\n\nFor each prospect:\n1. Rank and name\n2. Position and college\n3. NFL landing spot (if known) or projected range\n4. Dynasty ceiling and floor comparison\n5. Risk level (Low/Medium/High)\n\nThen tell me: where are the value sweet spots in this draft class? Which tier drop-offs should I target?' },
+
+  { cat: 'draft', title: 'Should I Trade This Pick?', agent: 'Octo', agentColor: 'var(--pos-te)',
+    text: 'I have the [1.03/1.06/2.01/etc] pick in my dynasty rookie draft. My league is [12]-team [PPR] [1QB/Superflex].\n\nMy roster needs: [list positions/needs]\n\nShould I:\nA) Draft the BPA at my pick\nB) Trade back for more capital\nC) Trade the pick for a proven player\n\nWhat\'s the expected value of this pick slot historically? Who\'s likely available? What veteran player would be a fair return?' },
+
+  { cat: 'draft', title: 'Startup Draft Strategy', agent: 'Razzle', agentColor: 'var(--orange)',
+    text: 'I\'m entering a [12]-team [PPR] [Superflex/1QB] dynasty startup draft. I have pick [X] in the first round (snake draft).\n\nGive me:\n1. My first 3 round targets by name\n2. Overall strategy (Stars & Scrubs vs Balanced vs Youth)\n3. Positions to target early vs wait on\n4. 3 sleeper picks for rounds 8-12\n5. One player everyone will overdraft that I should avoid' },
+
+  { cat: 'waiver', title: 'Waiver Wire Priority List', agent: 'Hawkeye', agentColor: 'var(--pos-rb)',
+    text: 'It\'s Week [X] of the NFL season. I\'m in a [12]-team [PPR] [Dynasty/Redraft] league with [FAAB/Waiver Priority] waivers.\n\nMy roster:\n[paste roster]\n\nTop waiver adds available:\n[list available players]\n\nRank the top 5 waiver adds for me by priority. For each:\n1. Why I should pick them up\n2. Who to drop from my roster\n3. FAAB bid recommendation (% of remaining budget)\n4. Short-term vs long-term value' },
+
+  { cat: 'waiver', title: 'FAAB Budget Strategy', agent: 'Octo', agentColor: 'var(--pos-te)',
+    text: 'I have $[X] remaining FAAB budget out of $[total]. It\'s Week [X] of the season.\n\nMy record: [X-Y]\nPlayoff odds: [contender/fringe/rebuilding]\n\nHow should I pace my remaining budget? Give me:\n1. How much to reserve for playoffs (if contending)\n2. Maximum single-player bid recommendation\n3. General bidding strategy for my situation\n4. When to go all-in vs stay disciplined' },
+
+  { cat: 'dynasty', title: 'Age-Adjusted Dynasty Rankings', agent: 'Octo', agentColor: 'var(--pos-te)',
+    text: 'Rank the top 10 dynasty assets at [QB/RB/WR/TE] for a [12]-team [PPR] league, weighted 60% production and 40% age/longevity.\n\nFor each player:\n1. Current rank and projected value trajectory (rising/stable/declining)\n2. Age and years of peak production remaining\n3. Key risk factor\n4. One-sentence dynasty outlook' },
+
+  { cat: 'dynasty', title: 'Buy Low / Sell High Targets', agent: 'Bones', agentColor: 'var(--pos-te)',
+    text: 'Give me your top 5 BUY LOW and top 5 SELL HIGH dynasty targets right now in [PPR] leagues.\n\nFor each:\n1. Player name and position\n2. Current perceived value vs actual value\n3. Why the market is wrong\n4. Target acquisition/sale price (draft pick equivalent)\n5. Timeline (when does this pay off?)' },
+
+  { cat: 'dynasty', title: 'Rebuild Blueprint', agent: 'Razzle', agentColor: 'var(--orange)',
+    text: 'I\'m rebuilding in a [12]-team [PPR] dynasty league. My roster:\n[paste roster]\n\nBuild me a 2-year rebuild plan:\n1. Which veterans to sell immediately (and target returns)\n2. Which young players to build around\n3. Draft pick accumulation targets (how many 1sts/2nds do I need?)\n4. What record/roster should I have after Year 1?\n5. When should I flip from seller to buyer?\n6. Name one win-now player I should target in Year 2' },
+
+  { cat: 'trade', title: 'Draft Pick Trade Calculator', agent: 'Octo', agentColor: 'var(--pos-te)',
+    text: 'In my dynasty league, I\'m considering trading:\nI give: [list players/picks]\nI receive: [list players/picks]\n\nConvert all draft picks to player value equivalents and tell me:\n1. Total value given vs received\n2. Who wins the trade and by how much\n3. Whether the pick values change if my team is good (late picks) or bad (early picks)\n4. Break-even scenario: what would the pick need to become to make this fair?' },
+];
+
+function renderPrompts(filter) {
+  var grid = document.getElementById('promptGrid');
+  var filtered = filter === 'all' ? PROMPTS : PROMPTS.filter(function(p) { return p.cat === filter; });
+  var html = '';
+  for (var i = 0; i < filtered.length; i++) {
+    var p = filtered[i];
+    var catLabel = p.cat.charAt(0).toUpperCase() + p.cat.slice(1);
+    html += '<div class="prompt-card" data-cat="' + p.cat + '">';
+    html += '<div class="prompt-header">';
+    html += '<div class="prompt-title">' + escapeHtml(p.title) + '</div>';
+    html += '<div class="prompt-meta">';
+    html += '<span class="prompt-cat">' + catLabel + '</span>';
+    html += '<span class="prompt-agent" style="background:' + p.agentColor + ';color:var(--bg);">' + escapeHtml(p.agent) + '</span>';
+    html += '</div></div>';
+    html += '<div class="prompt-text" id="pt-' + i + '" onclick="this.classList.toggle(\'expanded\')">' + escapeHtml(p.text) + '</div>';
+    html += '<div class="prompt-actions">';
+    html += '<button class="copy-btn" onclick="copyPrompt(' + i + ', this)">Copy</button>';
+    html += '<a class="use-btn" href="/agents.html" onclick="prefillPrompt(' + i + ')">Use in Situation Room</a>';
+    html += '</div></div>';
+  }
+  grid.innerHTML = html;
+}
+
+function filterPrompts(cat) {
+  var btns = document.querySelectorAll('.prompt-filter');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', btns[i].textContent.toLowerCase().includes(cat) || (cat === 'all' && i === 0));
+  renderPrompts(cat);
+}
+
+function copyPrompt(idx, btn) {
+  var text = PROMPTS[idx].text;
+  try {
+    navigator.clipboard.writeText(text).then(function() {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  } catch(e) {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  }
+}
+
+function prefillPrompt(idx) {
+  try { localStorage.setItem('razzle_prefill_scenario', PROMPTS[idx].text); } catch(e) {}
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+renderPrompts('all');
+
+// Analytics
+try { fetch('/api/analytics/pageview', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({page:'/prompts.html',referrer:document.referrer||'',timestamp:new Date().toISOString()}) }); } catch(e) {}
+</script>
+</body>
+</html>

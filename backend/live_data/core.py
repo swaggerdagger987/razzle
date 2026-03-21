@@ -116,8 +116,8 @@ RATE_METRICS = ["target_share", "air_yards_share", "wopr", "racr", "passing_epa"
 
 # Shared stat SUM columns used across multiple query functions
 _STAT_SUM_COLS = """
-            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
-            SUM(s.fantasy_points_std) as fantasy_points_std,
+            ROUND(SUM(s.fantasy_points_ppr), 1) as fantasy_points_ppr,
+            ROUND(SUM(s.fantasy_points_std), 1) as fantasy_points_std,
             SUM(s.passing_yards) as passing_yards,
             SUM(s.passing_tds) as passing_tds,
             SUM(s.rushing_yards) as rushing_yards,
@@ -209,6 +209,11 @@ def _safe_div(a, b, decimals=1):
 def _enrich_with_derived_stats(items):
     """Add derived efficiency stats computed from existing aggregates."""
     for item in items:
+        # Round totals to avoid IEEE 754 artifacts (e.g. 416.59999999 → 416.6)
+        for _fk in ("fantasy_points_ppr", "fantasy_points_std", "fantasy_points_half_ppr"):
+            _fv = item.get(_fk)
+            if isinstance(_fv, float):
+                item[_fk] = round(_fv, 1)
         g = item.get("games") or 1
         item["ppg"] = _safe_div(item.get("fantasy_points_ppr") or 0, g)
         item["yards_per_carry"] = _safe_div(item.get("rushing_yards") or 0, item.get("carries") or 0)
@@ -255,18 +260,29 @@ def _enrich_with_derived_stats(items):
             item["passer_rating"] = None
             item["ay_per_att"] = None
 
-        # TD Rate: total TDs / (carries + targets)
+        # TD Rate and Fumble Rate: position-specific formulas for QBs
         car = item.get("carries") or 0
         tgt = item.get("targets") or 0
-        total_opps = car + tgt
-        tds = item.get("touchdowns") or 0
-        item["td_rate"] = round(tds / total_opps * 100, 1) if total_opps > 0 else None
-
-        # Fumble Rate: fumbles_lost / (carries + receptions)
         rec = item.get("receptions") or 0
         fl = item.get("fumbles_lost") or 0
-        touch_opps = car + rec
-        item["fumble_rate"] = round(fl / touch_opps * 100, 1) if touch_opps > 0 else None
+        pos = (item.get("position") or "").upper()
+        att = item.get("attempts") or 0
+
+        if pos == "QB" and att > 0:
+            # QBs: TD rate = passing TDs / pass attempts
+            p_td = item.get("passing_tds") or 0
+            item["td_rate"] = round(p_td / att * 100, 1)
+            # QBs: Fumble rate = fumbles_lost / (pass attempts + carries)
+            qb_plays = att + car
+            item["fumble_rate"] = round(fl / qb_plays * 100, 1) if qb_plays > 0 else None
+        else:
+            # Non-QBs: TD rate = total TDs / (carries + targets)
+            total_opps = car + tgt
+            tds = item.get("touchdowns") or 0
+            item["td_rate"] = round(tds / total_opps * 100, 1) if total_opps > 0 else None
+            # Non-QBs: Fumble rate = fumbles_lost / (carries + receptions)
+            touch_opps = car + rec
+            item["fumble_rate"] = round(fl / touch_opps * 100, 1) if touch_opps > 0 else None
 
         # Points Per First Down scoring: standard + 1pt per first down
         pass_fd = item.get("passing_first_downs") or 0
@@ -331,7 +347,7 @@ def _enrich_with_rate_metrics(conn, items, season=None, career_mode=False, week=
     placeholders = ",".join("?" * len(player_ids))
     stat_placeholders = ",".join("?" * len(RATE_METRICS))
 
-    where = f"m.player_id IN ({placeholders}) AND m.stat_key IN ({stat_placeholders})"
+    where = f"m.player_id IN ({placeholders}) AND m.stat_key IN ({stat_placeholders}) AND m.season_type = 'regular'"
     params = list(player_ids) + list(RATE_METRICS)
 
     if not career_mode and season:
@@ -384,7 +400,7 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
 
     # Get per-season PPR totals for all returned players
     rows = conn.execute(f"""
-        SELECT player_id, season, SUM(fantasy_points_ppr) as ppr
+        SELECT player_id, season, ROUND(SUM(fantasy_points_ppr), 1) as ppr
         FROM player_week_stats
         WHERE player_id IN ({placeholders}) AND season_type = 'regular'
         GROUP BY player_id, season
@@ -481,6 +497,11 @@ def _enrich_with_dynasty_value(items):
 def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False, week=0):
     """Fetch play-by-play derived stats from player_season_pbp table."""
     if not items:
+        return items
+
+    # PBP data is season-level only (no week column) — skip for per-week queries
+    # to avoid showing season totals alongside single-week core stats
+    if week and int(week) > 0:
         return items
 
     player_ids = [item["player_id"] for item in items if item.get("player_id")]
@@ -838,10 +859,11 @@ def compute_trade_value(ppg, age, position):
     raw = prod * 0.50 + age_v * 0.30 + scar * 0.20
     # Soft ceiling: below 90 is linear, above 90 uses log compression
     # so elite players get meaningful spread instead of clustering at 100
+    # Denominator 50 gives wider spread in elite tier (vs 30 which clustered top-25 in 90-96)
     if raw <= 90.0:
         return round(max(0.0, raw), 1)
     excess = raw - 90.0
-    value = 90.0 + 10.0 * (1.0 - math.exp(-excess / 30.0))
+    value = 90.0 + 10.0 * (1.0 - math.exp(-excess / 50.0))
     return round(value, 1)
 
 

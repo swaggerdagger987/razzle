@@ -14,17 +14,22 @@ import datetime as _datetime
 import hmac as _hmac
 import html as _html
 import httpx
+import json as _json
 import logging
 import os
 import re
 import sqlite3
+import statistics as _statistics
 import time as _time
+import urllib.request as _urllib_request
+import uuid as _uuid
 import uvicorn
 
 from collections import defaultdict
 from . import live_data
 from . import auth as auth_module
 from . import billing as billing_module
+from .db import get_db
 from .logging_config import setup_logging
 
 logger = logging.getLogger("razzle.server")
@@ -34,13 +39,15 @@ logger = logging.getLogger("razzle.server")
 # Eliminates both data-level cache lookup and JSON serialization on hits.
 # ---------------------------------------------------------------------------
 _resp_cache: dict = {}  # url_path -> {"body": bytes, "t": float, "headers": dict}
+_resp_cache_lock = __import__("threading").Lock()
 _RESP_CACHE_TTL = 120  # 2 minutes
 _RESP_CACHE_MAX = 100
 
 
 def _resp_cache_get(key: str):
     """Get cached response bytes. Returns (body, headers) or None."""
-    entry = _resp_cache.get(key)
+    with _resp_cache_lock:
+        entry = _resp_cache.get(key)
     if entry and _time.time() - entry["t"] < _RESP_CACHE_TTL:
         return entry["body"], entry["headers"]
     return None
@@ -48,12 +55,12 @@ def _resp_cache_get(key: str):
 
 def _resp_cache_set(key: str, body: bytes, headers: dict):
     """Cache response bytes."""
-    if len(_resp_cache) >= _RESP_CACHE_MAX:
-        # Evict oldest entries — snapshot to avoid RuntimeError on concurrent access
-        oldest = sorted(list(_resp_cache.items()), key=lambda x: x[1]["t"])
-        for k, _ in oldest[:20]:
-            _resp_cache.pop(k, None)
-    _resp_cache[key] = {"body": body, "t": _time.time(), "headers": headers}
+    with _resp_cache_lock:
+        if len(_resp_cache) >= _RESP_CACHE_MAX:
+            oldest = sorted(_resp_cache.items(), key=lambda x: x[1]["t"])
+            for k, _ in oldest[:20]:
+                _resp_cache.pop(k, None)
+        _resp_cache[key] = {"body": body, "t": _time.time(), "headers": headers}
 
 
 # ---------------------------------------------------------------------------
@@ -272,7 +279,6 @@ def bootstrap_database():
 
 def _ensure_season_stats_table():
     """Create player_season_stats as an aggregate from player_week_stats if missing."""
-    from .db import get_db
     with get_db() as conn:
         exists = conn.execute(
             "SELECT name FROM sqlite_master WHERE type='table' AND name='player_season_stats'"
@@ -297,9 +303,9 @@ def _ensure_season_stats_table():
                 SUM(targets) as targets,
                 SUM(touchdowns) as touchdowns,
                 SUM(turnovers) as turnovers,
-                SUM(fantasy_points_ppr) as fantasy_points_ppr,
-                COALESCE(SUM(fantasy_points_half_ppr), SUM(fantasy_points_ppr) - 0.5 * SUM(receptions)) as fantasy_points_half_ppr,
-                SUM(fantasy_points_std) as fantasy_points_std,
+                ROUND(SUM(fantasy_points_ppr), 2) as fantasy_points_ppr,
+                ROUND(COALESCE(SUM(fantasy_points_half_ppr), SUM(fantasy_points_ppr) - 0.5 * SUM(receptions)), 2) as fantasy_points_half_ppr,
+                ROUND(SUM(fantasy_points_std), 2) as fantasy_points_std,
                 SUM(completions) as completions,
                 SUM(attempts) as attempts,
                 SUM(offense_snaps) as offense_snaps,
@@ -467,17 +473,28 @@ _RESP_CACHEABLE_PREFIXES = (
 
 @app.middleware("http")
 async def body_size_limit_middleware(request: Request, call_next):
-    """Reject requests with Content-Length exceeding 1 MB."""
+    """Reject requests with body exceeding 1 MB.
+    Checks Content-Length header first, then enforces actual body size
+    for POST/PUT/PATCH to prevent chunked-encoding bypass."""
+    _MAX_BODY = 1_048_576
     content_length = request.headers.get("content-length")
     if content_length:
         try:
-            if int(content_length) > 1_048_576:
+            if int(content_length) > _MAX_BODY:
                 return JSONResponse(
                     {"error": "Request body too large. Maximum size is 1 MB."},
                     status_code=413,
                 )
         except ValueError:
             pass
+    elif request.method in ("POST", "PUT", "PATCH"):
+        # No Content-Length header (chunked encoding) — enforce actual body size
+        body = await request.body()
+        if len(body) > _MAX_BODY:
+            return JSONResponse(
+                {"error": "Request body too large. Maximum size is 1 MB."},
+                status_code=413,
+            )
     return await call_next(request)
 
 
@@ -531,7 +548,6 @@ async def static_cache_middleware(request: Request, call_next):
 @app.middleware("http")
 async def request_logging_middleware(request: Request, call_next):
     """Log every HTTP request with method, path, status, duration, and request ID."""
-    import uuid as _uuid
     # Generate or propagate request ID
     req_id = request.headers.get("X-Request-ID") or _uuid.uuid4().hex[:12]
     path = request.url.path
@@ -685,9 +701,13 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     """Catch unhandled exceptions — log full traceback, return generic 500."""
-    import json
-    if isinstance(exc, json.JSONDecodeError) and request.method == "POST":
+    if isinstance(exc, _json.JSONDecodeError) and request.method == "POST":
         return JSONResponse({"error": "invalid JSON body"}, status_code=400)
+    # Missing tables (college adapter not run, etc.) → return empty data, not 500
+    if isinstance(exc, sqlite3.OperationalError) and "no such table" in str(exc):
+        logger.warning("Missing table on %s %s: %s", request.method, request.url.path, exc)
+        if request.url.path.startswith("/api/"):
+            return JSONResponse({"items": [], "count": 0, "error": "data not available"}, status_code=200)
     logger.exception("Unhandled exception on %s %s", request.method, request.url.path)
     if request.url.path.startswith("/api/"):
         return JSONResponse({"error": "Internal server error"}, status_code=500)
@@ -875,14 +895,12 @@ async def auth_link_sleeper(request: Request):
         return JSONResponse({"error": "Invalid Sleeper username"}, status_code=400)
 
     # Validate against Sleeper API
-    import urllib.request
     try:
         url = f"https://api.sleeper.app/v1/user/{sleeper_username}"
-        req = urllib.request.Request(url)
+        req = _urllib_request.Request(url)
         req.add_header("User-Agent", "razzle/1.0")
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            import json
-            data = json.loads(resp.read())
+        with _urllib_request.urlopen(req, timeout=10) as resp:
+            data = _json.loads(resp.read())
             if not data or not data.get("user_id"):
                 return JSONResponse({"error": "Sleeper username not found"}, status_code=400)
     except Exception:
@@ -985,7 +1003,7 @@ async def get_query_quota(request: Request):
                 user_id = result["user"]["id"]
                 plan = result["user"].get("plan", "free")
         except Exception:
-            pass
+            logger.warning("Failed to resolve user for quota check", exc_info=True)
 
     return auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
 
@@ -1006,7 +1024,7 @@ async def track_query(request: Request):
                 user_id = result["user"]["id"]
                 plan = result["user"].get("plan", "free")
         except Exception:
-            pass
+            logger.warning("Failed to resolve user for query tracking", exc_info=True)
 
     # Check quota first
     quota = auth_module.check_query_quota(user_id=user_id, ip_address=ip, plan=plan)
@@ -1119,12 +1137,22 @@ async def llm_chat(request: Request):
     )
     sanitized_messages = [{"role": "system", "content": system_prompt}] + user_messages
 
-    # Sanitize: enforce max_tokens and model (Elite gets the good model)
+    # Sanitize: enforce max_tokens, temperature, and model (Elite gets the good model)
+    try:
+        _temp = float(body.get("temperature", 0.3))
+        _temp = max(0.0, min(_temp, 2.0))
+    except (TypeError, ValueError):
+        _temp = 0.3
+    try:
+        _mt = int(body.get("max_tokens", _LLM_MAX_TOKENS))
+        _mt = max(1, min(_mt, _LLM_MAX_TOKENS))
+    except (TypeError, ValueError):
+        _mt = _LLM_MAX_TOKENS
     llm_body = {
         "model": _LLM_MODEL,
         "messages": sanitized_messages,
-        "temperature": body.get("temperature", 0.3),
-        "max_tokens": min(body.get("max_tokens", _LLM_MAX_TOKENS), _LLM_MAX_TOKENS),
+        "temperature": _temp,
+        "max_tokens": _mt,
     }
 
     # Proxy to LLM provider
@@ -1201,9 +1229,6 @@ async def llm_chat_free(request: Request):
             "limit": quota.get("limit", 5),
         }, status_code=429)
 
-    # Record the query
-    auth_module.record_query(user_id=user["id"], ip_address=ip)
-
     # Parse request
     try:
         body = await request.json()
@@ -1233,11 +1258,21 @@ async def llm_chat_free(request: Request):
     )
     sanitized_messages = [{"role": "system", "content": system_prompt}] + user_messages
 
+    try:
+        _temp = float(body.get("temperature", 0.3))
+        _temp = max(0.0, min(_temp, 2.0))
+    except (TypeError, ValueError):
+        _temp = 0.3
+    try:
+        _mt = int(body.get("max_tokens", _LLM_FREE_MAX_TOKENS))
+        _mt = max(1, min(_mt, _LLM_FREE_MAX_TOKENS))
+    except (TypeError, ValueError):
+        _mt = _LLM_FREE_MAX_TOKENS
     llm_body = {
         "model": _LLM_FREE_MODEL,
         "messages": sanitized_messages,
-        "temperature": body.get("temperature", 0.3),
-        "max_tokens": min(body.get("max_tokens", _LLM_FREE_MAX_TOKENS), _LLM_FREE_MAX_TOKENS),
+        "temperature": _temp,
+        "max_tokens": _mt,
     }
 
     try:
@@ -1265,6 +1300,8 @@ async def llm_chat_free(request: Request):
             return JSONResponse({"error": "Agent returned an unexpected response. Try again."}, status_code=502)
         # Tag response with free model info
         data["_razzle_free_model"] = _LLM_FREE_MODEL
+        # Record quota only on success (don't burn quota on LLM failures)
+        auth_module.record_query(user_id=user["id"], ip_address=ip)
         live_data.log_event("agent_query", "free")
         return JSONResponse(data)
     except httpx.TimeoutException:
@@ -1533,7 +1570,6 @@ async def save_weekly_briefing(request: Request):
     if not week_label or not summary:
         return JSONResponse({"error": "week_label and summary are required"}, status_code=400)
 
-    import json as _json
     result = auth_module.save_weekly_briefing(
         user_id=user["id"],
         league_id=body.get("league_id", ""),
@@ -1656,7 +1692,6 @@ async def screener_query(request: Request):
     client_ip = _get_client_ip(request)
     if not _check_screener_rate(client_ip):
         return JSONResponse({"error": "Rate limited. Try again shortly."}, status_code=429)
-    import json as _json
     body = await request.json()
     # Response-level cache for screener POST (most expensive endpoint)
     cache_key = "screener_post:" + _json.dumps(body, sort_keys=True, default=str)
@@ -1688,7 +1723,6 @@ def filter_options():
 
 @app.get("/api/available-weeks")
 def available_weeks(season: int = 0):
-    from .db import get_db
     with get_db() as conn:
         if not season:
             row = conn.execute("SELECT MAX(season) FROM player_week_stats").fetchone()
@@ -2135,7 +2169,6 @@ async def lab_with_og_tags(request: Request):
 @app.get("/player/{player_id:path}")
 async def player_profile_page(player_id: str):
     """Serve player.html with dynamic OG meta tags for the specific player."""
-    import re
     player_file = FRONTEND_DIR / "player.html"
     if not player_file.exists():
         return HTMLResponse("Not found", status_code=404)
@@ -2152,7 +2185,7 @@ async def player_profile_page(player_id: str):
         career = data.get("career", {})
         ppr = career.get("fantasy_points_ppr")
         games = career.get("games")
-        pprg = f"{ppr / games:.1f}" if ppr and games else ""
+        pprg = f"{ppr / games:.1f}" if ppr is not None and games else ""
 
         og_title = f"{name} ({pos}, {team}) — Razzle"
         og_desc = f"Player profile for {name}"
@@ -2177,7 +2210,6 @@ async def player_profile_page(player_id: str):
 
     # Inject JSON-LD structured data
     try:
-        import json as _json
         jsonld = {
             "@context": "https://schema.org",
             "@type": "Person",
@@ -3201,9 +3233,9 @@ def positional_advantage(season: int = None, position: str = None):
 
 
 @app.get("/api/stacks")
-def stacks(season: int = None):
+def stacks(season: int = None, min_games: int = 8):
     try:
-        return live_data.fetch_stacks(season=season)
+        return live_data.fetch_stacks(season=season, min_games=min_games)
     except Exception as e:
         logger.exception("stacks error")
         return JSONResponse({"error": "Failed to fetch stack correlations"}, status_code=500)
@@ -3260,7 +3292,6 @@ def waivers(season: int = None, position: str = None, window: int = 4):
 @app.get("/api/tools-hub")
 def tools_hub():
     """Return the static tools catalog organized by category."""
-    import json as _json
     config_path = Path(__file__).parent / "config" / "tools_hub.json"
     try:
         with open(config_path, "r") as f:
@@ -3387,9 +3418,6 @@ async def monte_carlo_projections(request: Request):
         "standard": "fantasy_points_std",
     }.get(scoring, "fantasy_points_ppr")
 
-    import statistics
-    from .db import get_db
-
     try:
         with get_db() as conn:
             if season <= 0:
@@ -3418,8 +3446,8 @@ async def monte_carlo_projections(request: Request):
             for pid in player_ids:
                 weeks = player_weeks.get(pid, [])
                 if len(weeks) >= 2:
-                    mean = statistics.mean(weeks)
-                    stdev = statistics.stdev(weeks)
+                    mean = _statistics.mean(weeks)
+                    stdev = _statistics.stdev(weeks)
                     distributions[pid] = {
                         "mean": round(mean, 2),
                         "stdev": round(stdev, 2),

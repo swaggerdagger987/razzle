@@ -399,15 +399,21 @@ def fetch_csv(url):
 # ---------------------------------------------------------------------------
 
 def build_player_lookup(conn):
-    """Build gsis_id -> player_id and (name, team, pos) -> player_id maps."""
+    """Build gsis_id -> player_id, (name, team, pos) -> player_id, and
+    (name, pos) -> player_id maps.  The third map is a fallback for when
+    the players.team is stale (e.g. McCaffrey listed as CAR instead of SF)."""
     gsis_map = {}
     name_map = {}
+    name_pos_map = {}
     for row in conn.execute("SELECT player_id, gsis_id, search_name, team, position FROM players"):
         if row["gsis_id"]:
             gsis_map[row["gsis_id"]] = row["player_id"]
         if row["search_name"]:
             name_map[(row["search_name"], row["team"], row["position"])] = row["player_id"]
-    return gsis_map, name_map
+            # Fallback: (name, position) without team — last writer wins,
+            # but collisions are rare for fantasy-relevant positions
+            name_pos_map[(row["search_name"], row["position"])] = row["player_id"]
+    return gsis_map, name_map, name_pos_map
 
 
 def resolve_player_id(row, gsis_map, name_map):
@@ -447,7 +453,12 @@ def backfill_player(conn, row, gsis_map, name_map):
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (player_id, name, first, last, normalize_name(name), pos, team, gsis, headshot, utc_now()))
 
-    # Update headshot_url if player already exists but headshot was missing
+    # Update team and headshot for existing players (INSERT OR IGNORE skips them)
+    if team:
+        conn.execute("""
+            UPDATE players SET team = ?, updated_at = ?
+            WHERE player_id = ? AND (team IS NULL OR team != ?)
+        """, (team, utc_now(), player_id, team))
     if headshot:
         conn.execute("""
             UPDATE players SET headshot_url = ? WHERE player_id = ? AND (headshot_url IS NULL OR headshot_url = '')
@@ -489,7 +500,7 @@ def process_season(conn, season):
         rows = [normalize_csv_row(r, fmt) for r in rows]
     print(f"  Got {len(rows)} rows from CSV.")
 
-    gsis_map, name_map = build_player_lookup(conn)
+    gsis_map, name_map, _ = build_player_lookup(conn)
 
     stats_batch = []
     metrics_batch = []
@@ -690,7 +701,7 @@ def sync_snap_counts(conn, seasons=None):
         seasons = [current_nfl_season()]
 
     total_updated = 0
-    gsis_map, name_map = build_player_lookup(conn)
+    gsis_map, name_map, name_pos_map = build_player_lookup(conn)
 
     for season in seasons:
         url = SNAP_COUNTS_URL.format(season=season)
@@ -712,24 +723,27 @@ def sync_snap_counts(conn, seasons=None):
             if week is None:
                 continue
 
-            # Resolve player via pfr_player_id or name+team
             pfr_id = (row.get("pfr_player_id") or "").strip()
             player_name = (row.get("player") or "").strip()
             team = (row.get("team") or "").strip().upper()
-
-            # Try gsis lookup by pfr_id (won't match, different ID space)
-            # Use name+team+position matching instead
             search = normalize_name(player_name)
             pid = None
 
-            # Try all positions for this name+team combo
+            # 1) Try name+team+position (exact match)
             for pos in ("QB", "RB", "WR", "TE", "FB", "K", "P"):
                 if (search, team, pos) in name_map:
                     pid = name_map[(search, team, pos)]
                     break
 
+            # 2) Fallback: name+position without team (handles stale players.team)
             if not pid:
-                # Try gsis_map in case pfr_id overlaps
+                for pos in ("QB", "RB", "WR", "TE", "FB", "K", "P"):
+                    if (search, pos) in name_pos_map:
+                        pid = name_pos_map[(search, pos)]
+                        break
+
+            # 3) Try gsis_map in case pfr_id overlaps
+            if not pid:
                 if pfr_id and pfr_id in gsis_map:
                     pid = gsis_map[pfr_id]
 
@@ -860,7 +874,7 @@ def sync_pbp_data(conn, seasons=None):
     if seasons is None:
         seasons = [current_nfl_season()]
 
-    gsis_map, name_map = build_player_lookup(conn)
+    gsis_map, name_map, _ = build_player_lookup(conn)
 
     for season in seasons:
         url = PBP_URL.format(season=season)
@@ -1188,7 +1202,7 @@ def sync_injuries(conn, seasons=None):
     if seasons is None:
         seasons = [current_nfl_season()]
 
-    gsis_map, name_map = build_player_lookup(conn)
+    gsis_map, name_map, _ = build_player_lookup(conn)
 
     for season in seasons:
         url = INJURIES_URL.format(season=season)
@@ -1331,6 +1345,25 @@ def main():
         print(f"\nEnriching players with roster demographics...")
         sync_rosters(conn, sorted(seasons))
 
+        # Refresh players.team from most recent game data
+        print("\nRefreshing players.team from latest game data...")
+        conn.execute("""
+            UPDATE players SET team = (
+                SELECT s.team FROM player_week_stats s
+                WHERE s.player_id = players.player_id
+                    AND s.team IS NOT NULL AND s.team != ''
+                ORDER BY s.season DESC, s.week DESC LIMIT 1
+            ), updated_at = ?
+            WHERE player_id IN (
+                SELECT DISTINCT player_id FROM player_week_stats
+            )
+        """, (utc_now(),))
+        conn.commit()
+        team_updated = conn.execute("""
+            SELECT COUNT(*) FROM players WHERE team IS NOT NULL
+        """).fetchone()[0]
+        print(f"  Updated team for {team_updated} players")
+
         # Build player_season_stats aggregate table
         print("\nBuilding player_season_stats aggregate table...")
         conn.execute("DROP TABLE IF EXISTS player_season_stats")
@@ -1351,9 +1384,9 @@ def main():
                 SUM(targets) as targets,
                 SUM(touchdowns) as touchdowns,
                 SUM(turnovers) as turnovers,
-                SUM(fantasy_points_ppr) as fantasy_points_ppr,
-                SUM(fantasy_points_half_ppr) as fantasy_points_half_ppr,
-                SUM(fantasy_points_std) as fantasy_points_std,
+                ROUND(SUM(fantasy_points_ppr), 2) as fantasy_points_ppr,
+                ROUND(SUM(fantasy_points_half_ppr), 2) as fantasy_points_half_ppr,
+                ROUND(SUM(fantasy_points_std), 2) as fantasy_points_std,
                 SUM(completions) as completions,
                 SUM(attempts) as attempts,
                 SUM(offense_snaps) as offense_snaps,

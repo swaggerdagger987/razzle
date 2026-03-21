@@ -6,7 +6,7 @@
 function exportPanelCSV(panelName) {
   // Pro+ gating
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);text-decoration:underline;">upgrade now</a>', 'warning');
+    _showToast('CSV export requires Pro.', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
   var panel = document.getElementById('panel-' + panelName);
@@ -89,13 +89,18 @@ function screenshotPanel(panelName) {
     useCORS: true,
     logging: false
   }).then(function(canvas) {
-    // Add watermark
+    // Add watermark with random character + shareable URL
     var ctx = canvas.getContext('2d');
-    var wm = 'razzle.lol';
-    ctx.font = '600 28px Caveat, cursive';
-    ctx.fillStyle = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
-    ctx.textAlign = 'right';
-    ctx.fillText(wm, canvas.width - 20, canvas.height - 16);
+    try { if (typeof saveStateToURL === 'function') saveStateToURL(); } catch(e) {}
+    if (typeof drawRazzleWatermark === 'function') {
+      drawRazzleWatermark(ctx, canvas, { url: window.location.href, isDark: _t.isDark });
+    } else {
+      var wmAlpha = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
+      ctx.fillStyle = wmAlpha;
+      ctx.textAlign = 'right';
+      ctx.font = '600 28px Caveat, cursive';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 30);
+    }
     // Download
     var link = document.createElement('a');
     var date = new Date().toISOString().slice(0, 10);
@@ -154,9 +159,18 @@ var _skeletonHTML = '';
 function _resetLoadingSkeleton(el) {
   if (!_skeletonHTML) _skeletonHTML = el.innerHTML;
   if (!el.querySelector('.skeleton-table')) el.innerHTML = _skeletonHTML;
+  // Agent-voiced loading text
+  var lt = el.querySelector('#loadingText');
+  if (lt && typeof getLoadingText === 'function') {
+    lt.textContent = getLoadingText('screener');
+  }
 }
 function _setLoadingError(el, msg) {
-  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + escapeHtml(msg) + '</div>';
+  var errorMsg = msg;
+  if (!msg && typeof getErrorText === 'function') {
+    errorMsg = getErrorText('screener');
+  }
+  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + escapeHtml(errorMsg) + '</div>';
 }
 function _highlightSearch(escaped) {
   if (!state.search) return escaped;
@@ -428,12 +442,12 @@ function showTagPicker(playerId, anchorEl) {
     const isActive = currentTag === key;
     html += `<button class="tag-picker-option${isActive ? " active" : ""}" `
       + `style="--tag-color:${opt.color}; --tag-bg:${opt.bg};" `
-      + `onclick="onTagSelect('${escapeAttr(playerId)}', '${isActive ? "" : key}')">`
+      + `onclick="onTagSelect('${escapeJS(playerId)}', '${isActive ? "" : key}')">`
       + `<span class="tag-picker-dot" style="background:${opt.color};"></span>`
       + `${opt.label}</button>`;
   }
   if (currentTag) {
-    html += `<button class="tag-picker-option tag-picker-clear" onclick="onTagSelect('${escapeAttr(playerId)}', '')">Remove Tag</button>`;
+    html += `<button class="tag-picker-option tag-picker-clear" onclick="onTagSelect('${escapeJS(playerId)}', '')">Remove Tag</button>`;
   }
   picker.innerHTML = html;
 
@@ -551,7 +565,7 @@ function showNoteEditor(playerId, anchorEl) {
     + `<div class="note-editor-footer">`
     + `<span class="note-editor-count" id="noteCharCount">${existing.length}/140</span>`
     + `<div style="display:flex; gap:6px;">`
-    + `<button class="btn-chunky note-editor-clear" onclick="clearPlayerNote('${escapeAttr(playerId)}')" style="font-size:10px; padding:3px 8px; ${existing ? '' : 'display:none;'}">Clear</button>`
+    + `<button class="btn-chunky note-editor-clear" onclick="clearPlayerNote('${escapeJS(playerId)}')" style="font-size:10px; padding:3px 8px; ${existing ? '' : 'display:none;'}">Clear</button>`
     + `<button class="btn-primary note-editor-save" onclick="saveNoteFromEditor()" style="font-size:10px; padding:3px 10px;">Save</button>`
     + `</div></div>`;
 
@@ -1185,13 +1199,19 @@ function _syncUndoRedoButtons() {
 })();
 
 // ─── Data fetching ───────────────────────────────────────────────
-// ─── Screener query cache (LRU, 5 entries) ───────────────────────
-var _queryCache = [];  // [{key, data}]
+// ─── Screener query cache (LRU, 5 entries, 5-min TTL) ───────────
+var _queryCache = [];  // [{key, data, ts}]
 var _QUERY_CACHE_MAX = 5;
+var _QUERY_CACHE_TTL = 300000; // 5 minutes
 
 function _queryCacheGet(key) {
+  var now = Date.now();
   for (var i = 0; i < _queryCache.length; i++) {
     if (_queryCache[i].key === key) {
+      if (now - _queryCache[i].ts > _QUERY_CACHE_TTL) {
+        _queryCache.splice(i, 1);
+        return null;
+      }
       // Move to end (most recently used)
       var entry = _queryCache.splice(i, 1)[0];
       _queryCache.push(entry);
@@ -1206,7 +1226,7 @@ function _queryCachePut(key, data) {
   for (var i = 0; i < _queryCache.length; i++) {
     if (_queryCache[i].key === key) { _queryCache.splice(i, 1); break; }
   }
-  _queryCache.push({ key: key, data: data });
+  _queryCache.push({ key: key, data: data, ts: Date.now() });
   if (_queryCache.length > _QUERY_CACHE_MAX) _queryCache.shift();
 }
 
@@ -1237,6 +1257,7 @@ async function fetchAndRender() {
 async function fetchAndRenderNFL(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
+  if (!loading || !tbody) return;
   loading.style.display = "block";
   _resetLoadingSkeleton(loading);
 
@@ -1308,7 +1329,7 @@ async function fetchAndRenderNFL(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast('fumbled the data fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the data fetch... try again');
     // Keep previous table data visible — don't clear tbody
     renderTable();
     updateResultCount();
@@ -1318,6 +1339,7 @@ async function fetchAndRenderNFL(signal, myId) {
 async function fetchAndRenderProspects(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
+  if (!loading || !tbody) return;
   loading.style.display = "block";
   _resetLoadingSkeleton(loading);
 
@@ -1355,7 +1377,7 @@ async function fetchAndRenderProspects(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast('fumbled the prospect fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the prospect fetch... try again');
     renderTable();
     updateResultCount();
   }
@@ -1364,6 +1386,7 @@ async function fetchAndRenderProspects(signal, myId) {
 async function fetchAndRenderCollege(signal, myId) {
   const loading = document.getElementById("loadingMsg");
   const tbody = document.getElementById("tableBody");
+  if (!loading || !tbody) return;
   loading.style.display = "block";
   _resetLoadingSkeleton(loading);
 
@@ -1401,7 +1424,7 @@ async function fetchAndRenderCollege(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast('fumbled the college data fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the college data fetch... try again');
     renderTable();
     updateResultCount();
   }
@@ -1473,7 +1496,7 @@ function buildGroupHeaderRow(cols) {
   let first = true;
   for (const g of groups) {
     const sepCls = first ? "" : " group-sep";
-    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${escapeAttr(g.name)}')" title="Click to toggle all ${escapeHtml(g.name)} columns">${escapeHtml(g.name)}</th>`;
+    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${escapeJS(g.name)}')" title="Click to toggle all ${escapeHtml(g.name)} columns">${escapeHtml(g.name)}</th>`;
     first = false;
   }
   html += '<th style="width:32px;"></th>'; // spacer for "+" column
@@ -1514,9 +1537,11 @@ function renderTableHead() {
     const lockCls = _getTierLockClass(key);
     const cls = [sortCls, lockCls].filter(Boolean).join(" ");
     const tierLabel = lockCls === "elite-locked" ? " [Elite]" : lockCls === "pro-locked" ? " [Pro]" : "";
-    // Build tooltip with optional column stats
+    // Build tooltip with optional column stats + agent attribution
     let tipText = col.tip || col.label;
     if (tierLabel) tipText += tierLabel;
+    var colAgent = typeof getColumnAgent === 'function' ? getColumnAgent(key) : null;
+    if (colAgent) tipText += '\n' + colAgent.name + ' \u2014 ' + colAgent.role;
     if (!col.isText && !col.isSparkline && !col.isNotes && state.items.length > 0) {
       const vals = [];
       for (const p of state.items) { const v = parseFloat(p[key]); if (!isNaN(v)) vals.push(v); }
@@ -1701,28 +1726,28 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   const posStripeColor = pos === "QB" ? "var(--pos-qb)" : pos === "RB" ? "var(--pos-rb)" : pos === "WR" ? "var(--pos-wr)" : pos === "TE" ? "var(--pos-te)" : "var(--ink-faint)";
   const zebraBg = (rowIdx != null && rowIdx % 2 === 1) ? " background:var(--zebra-stripe, rgba(45,31,20,0.025));" : "";
   let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px; border-left:3px solid ' + posStripeColor + ';' + zebraBg + '">';
-  html += `<td class="col-star" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" onclick="toggleWatchlistPlayer('${escapeAttr(playKey)}', '${pName}', '${escapeAttr(pos)}', '${pTeam}', '${state.universe}')" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
+  html += `<td class="col-star" data-pid="${escapeAttr(playKey)}" data-pname="${escapeAttr(player.full_name || player.player_name || '')}" data-pos="${escapeAttr(pos)}" data-team="${escapeAttr(player.team || player.school || '')}" data-universe="${escapeAttr(state.universe)}" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
   html += `<td class="col-select" style="text-align:center; padding:7px 6px;">
-    <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeAttr(player.player_id || player.player_name)}', this.checked)"
+    <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeJS(player.player_id || player.player_name)}', this.checked)"
       style="accent-color:${state.universe === 'college' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
   </td>`;
 
   // Pin icon (NFL only)
   if (state.universe === "nfl") {
     const pinned = isPlayerPinned(playKey);
-    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}"><span class="pin-icon ${pinned ? 'pin-active' : 'pin-faint'}"></span></td>`;
+    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer;" onclick="event.stopPropagation(); togglePinPlayer('${escapeJS(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}"><span class="pin-icon ${pinned ? 'pin-active' : 'pin-faint'}"></span></td>`;
   }
 
   // Rank column (with expand arrow for NFL — skip on pinned rows where rowIdx is null)
   const rank = (rowIdx != null) ? (state.offset + rowIdx + 1) : "";
   if (state.universe === "nfl" && player.player_id && rowIdx != null) {
-    html += `<td class="col-rank" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeAttr(player.player_id)}', this)" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
+    html += `<td class="col-rank" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeJS(player.player_id)}', this)" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
   } else {
     html += `<td class="col-rank">${rank}</td>`;
   }
 
   if (state.universe === "college") {
-    const cid = escapeAttr(player.player_id || "");
+    const cid = escapeJS(player.player_id || "");
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
@@ -1737,17 +1762,18 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="#" onclick="openProspectProfile('${pn}', '${escapeAttr(pPos)}', ${pYear}); return false;" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
+    html += `<a href="#" class="prospect-link" data-name="${pn}" data-pos="${escapeAttr(pPos)}" data-year="${pYear}" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
     html += `<span class="school-label">${escapeHtml(player.school)}</span>`;
     html += `</div></td>`;
   } else {
     const pid = escapeAttr(player.player_id || "");
+    const pidJS = escapeJS(player.player_id || "");
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pid}');" onmouseenter="onPlayerNameEnter('${pid}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--ink-faint);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
+    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pidJS}');" onmouseenter="onPlayerNameEnter('${pidJS}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--ink-faint);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
     html += buildTagChip(pid);
-    html += `<span class="tag-icon" onclick="event.stopPropagation(); showTagPicker('${pid}', this)" title="Tag player">&#9679;</span>`;
+    html += `<span class="tag-icon" onclick="event.stopPropagation(); showTagPicker('${pidJS}', this)" title="Tag player">&#9679;</span>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
     if (player.age) {
       var ageVal = Math.floor(player.age);
@@ -1776,9 +1802,9 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
       const pid = player.player_id || player.player_name || "";
       const note = getPlayerNote(pid);
       if (note) {
-        html += `<td class="notes-cell has-note" onclick="event.stopPropagation(); showNoteEditor('${escapeAttr(pid)}', this)" title="${escapeAttr(note)}"><span class="note-text">${escapeHtml(note)}</span></td>`;
+        html += `<td class="notes-cell has-note" onclick="event.stopPropagation(); showNoteEditor('${escapeJS(pid)}', this)" title="${escapeAttr(note)}"><span class="note-text">${escapeHtml(note)}</span></td>`;
       } else {
-        html += `<td class="notes-cell" onclick="event.stopPropagation(); showNoteEditor('${escapeAttr(pid)}', this)" title="Click to add note"><span class="note-pencil">&#9998;</span></td>`;
+        html += `<td class="notes-cell" onclick="event.stopPropagation(); showNoteEditor('${escapeJS(pid)}', this)" title="Click to add note"><span class="note-pencil">&#9998;</span></td>`;
       }
       continue;
     }
@@ -1917,7 +1943,7 @@ function renderTableBody() {
   _expandedRows = {};
   const tbody = document.getElementById("tableBody");
   const cols = getActiveColumns();
-  const emptyMsg = razzleEmpty();
+  const emptyMsg = typeof getEmptyText === 'function' ? getEmptyText('screener') : razzleEmpty();
 
   if (!state.items.length) {
     _vscrollRows = [];
@@ -2127,6 +2153,7 @@ function showHoverCard(playerId, anchorEl) {
   }
 
   card.innerHTML = html;
+  card.className = "hover-card" + (pos ? " pos-stripe-" + pos.toLowerCase() : "");
 
   // Position card near anchor
   const rect = anchorEl.getBoundingClientRect();
@@ -2235,10 +2262,26 @@ function renderProspectTable() {
     // Skip clicks on interactive elements
     var tag = e.target.tagName;
     if (tag === "A" || tag === "INPUT" || tag === "BUTTON" || tag === "SELECT") return;
-    if (e.target.closest("a, input, button, .pin-cell, .tag-picker-popup, .note-editor-popup")) return;
+    if (e.target.closest("a, input, button, .pin-cell, .col-star, .tag-picker-popup, .note-editor-popup")) return;
     var tr = e.target.closest("tr");
     if (!tr) return;
     tr.classList.toggle("row-highlighted");
+  });
+
+  // Prospect profile links — delegated to avoid escapeAttr-in-onclick issues
+  tbody.addEventListener("click", function(e) {
+    var link = e.target.closest(".prospect-link");
+    if (!link) return;
+    e.preventDefault();
+    openProspectProfile(link.dataset.name, link.dataset.pos, parseInt(link.dataset.year));
+  });
+
+  // Watchlist star — delegated to avoid escapeAttr-in-onclick issues (FUNC-045)
+  tbody.addEventListener("click", function(e) {
+    var star = e.target.closest(".col-star[data-pid]");
+    if (!star) return;
+    e.stopPropagation();
+    toggleWatchlistPlayer(star.dataset.pid, star.dataset.pname, star.dataset.pos, star.dataset.team, star.dataset.universe);
   });
 
   // Double-click stat cell → filter creation (handled on table element below).
@@ -2573,6 +2616,7 @@ function setUniverse(u) {
   }
 
   state.week = 0;
+  state.tagFilter = false;
   applyUniverseUI();
 
   // If currently on an NFL-only panel and switching to college (or vice versa), go to screener
@@ -2593,6 +2637,7 @@ function setUniverse(u) {
   renderPresets();
   populatePresetSelect();
   renderActiveFilters();
+  updateTagFilterBadge();
   fetchAndRender();
 
   // Invalidate cached panels so they re-fetch with new universe
@@ -2602,6 +2647,7 @@ function setUniverse(u) {
 function setCollegeView(view) {
   if (state.collegeView === view) return;
   state.collegeView = view;
+  state.tagFilter = false;
   try { localStorage.setItem('razzle_college_view', view); } catch(e) {}
   state.offset = 0;
   state.search = "";
@@ -2649,8 +2695,10 @@ function applyUniverseUI() {
   }
 
   // Toggle universe buttons (only NFL and College now)
-  document.getElementById("universeNFL").classList.toggle("active", isNFL);
-  document.getElementById("universeCollege").classList.toggle("active", isCollege);
+  var nflBtn = document.getElementById("universeNFL");
+  var collegeBtn = document.getElementById("universeCollege");
+  if (nflBtn) nflBtn.classList.toggle("active", isNFL);
+  if (collegeBtn) collegeBtn.classList.toggle("active", isCollege);
 
   // Toggle college sub-view buttons
   const subToggle = document.getElementById("collegeSubToggle");
@@ -2663,7 +2711,8 @@ function applyUniverseUI() {
   }
 
   // Search placeholder
-  document.getElementById("searchInput").placeholder = prospectMode
+  var searchInput = document.getElementById("searchInput");
+  if (searchInput) searchInput.placeholder = prospectMode
     ? "search prospects..." : isCollege ? "search college players..." : "search players...";
 
   // Hide formula button in non-NFL modes
@@ -2671,14 +2720,16 @@ function applyUniverseUI() {
   if (formulaBtn) formulaBtn.style.display = isNFL ? "" : "none";
 
   // Hide relevance toggle in non-NFL modes
-  document.getElementById("relevanceToggle").style.display = isNFL ? "" : "none";
+  var relToggle = document.getElementById("relevanceToggle");
+  if (relToggle) relToggle.style.display = isNFL ? "" : "none";
 
   // Hide tag filter in non-NFL modes
   const tagFilterBtn = document.getElementById("tagFilterBtn");
   if (tagFilterBtn) tagFilterBtn.style.display = isNFL ? "" : "none";
 
   // Hide filter bar in non-NFL modes
-  document.getElementById("filterBar").style.display = isNFL ? "" : "none";
+  var filterBar = document.getElementById("filterBar");
+  if (filterBar) filterBar.style.display = isNFL ? "" : "none";
 
   // Data source label
   const ds = document.getElementById("dataSource");
@@ -2891,6 +2942,7 @@ function populateSeasonSelect() {
 
 // ─── Week select ─────────────────────────────────────────────────
 let _weekDebounce = null;
+var _weekFetchController = null;
 
 function populateWeekSelect() {
   const weekSel = document.getElementById("weekSelect");
@@ -2907,7 +2959,11 @@ function populateWeekSelect() {
   var season = state.season || 0;
   weekSel.style.display = "";
 
-  fetch(window.location.origin + "/api/available-weeks?season=" + season)
+  // Abort any in-flight week fetch to prevent stale data on rapid season switch
+  if (_weekFetchController) _weekFetchController.abort();
+  _weekFetchController = new AbortController();
+
+  fetch(window.location.origin + "/api/available-weeks?season=" + season, { signal: _weekFetchController.signal })
     .then(function(r) { return r.ok ? r.json() : { weeks: [] }; })
     .then(function(data) {
       state.availableWeeks = data.weeks || [];
@@ -2918,7 +2974,8 @@ function populateWeekSelect() {
       weekSel.innerHTML = html;
       _updateWeekAnnotation();
     })
-    .catch(function() {
+    .catch(function(e) {
+      if (e && e.name === "AbortError") return;
       weekSel.innerHTML = '<option value="0">All Weeks</option>';
     });
 
@@ -2950,9 +3007,12 @@ function _updateWeekAnnotation() {
 function renderPagination() {
   const page = Math.floor(state.offset / state.limit) + 1;
   const totalPages = Math.ceil(state.totalCount / state.limit) || 1;
-  document.getElementById("pageInfo").textContent = `${page} / ${totalPages}`;
-  document.getElementById("prevBtn").disabled = state.offset === 0;
-  document.getElementById("nextBtn").disabled = state.offset + state.limit >= state.totalCount;
+  var pageInfo = document.getElementById("pageInfo");
+  var prevBtn = document.getElementById("prevBtn");
+  var nextBtn = document.getElementById("nextBtn");
+  if (pageInfo) pageInfo.textContent = `${page} / ${totalPages}`;
+  if (prevBtn) prevBtn.disabled = state.offset === 0;
+  if (nextBtn) nextBtn.disabled = state.offset + state.limit >= state.totalCount;
   const sel = document.getElementById("pageSizeSelect");
   if (sel) sel.value = String(state.limit);
   const pag = document.querySelector(".footer-bar .pagination");
@@ -3280,7 +3340,7 @@ function renderTeamChips() {
   const container = document.getElementById("teamChips");
   if (!container) return;
   container.innerHTML = state.teams.map(t =>
-    `<span class="team-chip">${escapeHtml(t)} <span class="remove" onclick="removeTeam('${escapeAttr(t)}')">×</span></span>`
+    `<span class="team-chip">${escapeHtml(t)} <span class="remove" onclick="removeTeam('${escapeJS(t)}')">×</span></span>`
   ).join("");
 }
 
@@ -3306,7 +3366,7 @@ function toggleToolsDropdown() {
   var isOpen = dd.classList.contains("open");
   dd.classList.toggle("open", !isOpen);
   if (bd) bd.classList.toggle("open", !isOpen);
-  if (btn) btn.classList.toggle("active", !isOpen);
+  if (btn) { btn.classList.toggle("active", !isOpen); btn.setAttribute("aria-expanded", String(!isOpen)); }
 }
 
 function closeToolsDropdown() {
@@ -3315,7 +3375,7 @@ function closeToolsDropdown() {
   var btn = document.getElementById("toolsDropdownBtn");
   if (dd) dd.classList.remove("open");
   if (bd) bd.classList.remove("open");
-  if (btn) btn.classList.remove("active");
+  if (btn) { btn.classList.remove("active"); btn.setAttribute("aria-expanded", "false"); }
 }
 
 // ─── Column picker ───────────────────────────────────────────────
@@ -3530,7 +3590,7 @@ const SMART_FILTERS = {
     label: "Breakout Candidates",
     filters: [
       { key: "age", op: "lte", value: 25 },
-      { key: "snap_share", op: "gte", value: 0.5 },
+      { key: "snap_share", op: "gte", value: 50 },
     ],
     minGP: 6,
   },
@@ -3559,7 +3619,7 @@ const SMART_FILTERS = {
   workhorses: {
     label: "Workhorses",
     filters: [
-      { key: "snap_share", op: "gte", value: 0.65 },
+      { key: "snap_share", op: "gte", value: 65 },
       { key: "targets_per_game", op: "gte", value: 4 },
     ],
     minGP: 6,
@@ -3568,7 +3628,7 @@ const SMART_FILTERS = {
     label: "Sleepers",
     filters: [
       { key: "ppg", op: "lte", value: 12 },
-      { key: "snap_share", op: "gte", value: 0.4 },
+      { key: "snap_share", op: "gte", value: 40 },
     ],
     minGP: 4,
   },
@@ -3853,6 +3913,15 @@ function loadStateFromURL() {
   }
   if (params.get("diff") === "1" && state.pinnedPlayers.length >= 2) {
     state.diffMode = true;
+  }
+  // Smart filter from URL (e.g., ?sf=breakout)
+  if (params.has("sf")) {
+    var sfKey = params.get("sf");
+    if (SMART_FILTERS[sfKey]) {
+      var preset = SMART_FILTERS[sfKey];
+      state.filters = [...preset.filters];
+      if (preset.minGP) state.minGP = preset.minGP;
+    }
   }
 
   if (isProspectView()) {
@@ -4147,7 +4216,7 @@ function saveCurrentView() {
     tierBreaks: !!state.tierBreaks,
     groupHeaders: !!state.groupHeaders,
     summaryBar: !!state.summaryBar,
-    tagFilter: state.tagFilter || "",
+    tagFilter: !!state.tagFilter,
   };
 
   views.unshift(view);
@@ -4403,20 +4472,26 @@ function renderSavedViewsList() {
     const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
 
     return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
-      <div style="flex:1; min-width:0;" onclick="loadSavedView('${escapeAttr(v.id)}')">
+      <div style="flex:1; min-width:0;" onclick="loadSavedView('${escapeJS(v.id)}')">
         <div style="font-family:var(--font-mono); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
-      <button onclick="event.stopPropagation(); deleteSavedView('${escapeAttr(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
+      <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
     </div>`;
   }).join("");
 }
 
 // ─── Pinned players (sticky comparison rows) ─────────────────────
-var _pinnedDataCache = {}; // player_id -> player object (survives filter changes)
+var _pinnedDataCache = (function() {
+  try { return JSON.parse(localStorage.getItem('razzle_pinned_cache')) || {}; }
+  catch(e) { return {}; }
+})(); // player_id -> player object (persisted across page loads)
 
 function savePinnedPlayers() {
-  try { localStorage.setItem('razzle_pinned_players', JSON.stringify(state.pinnedPlayers)); } catch(e) {}
+  try {
+    localStorage.setItem('razzle_pinned_players', JSON.stringify(state.pinnedPlayers));
+    localStorage.setItem('razzle_pinned_cache', JSON.stringify(_pinnedDataCache));
+  } catch(e) {}
 }
 
 function isPlayerPinned(playerId) {
@@ -4503,10 +4578,18 @@ function renderPinnedRows() {
   const leaderRanks = leadersOn ? computeLeaderRanks() : {};
   let html = "";
 
+  var cacheUpdated = false;
   for (const pid of state.pinnedPlayers) {
-    const player = state.items.find(p => p.player_id === pid) || _pinnedDataCache[pid];
+    const fromItems = state.items.find(p => p.player_id === pid);
+    const player = fromItems || _pinnedDataCache[pid];
     if (!player) continue;
-    if (!_pinnedDataCache[pid]) _pinnedDataCache[pid] = player;
+    if (fromItems && _pinnedDataCache[pid] !== fromItems) {
+      _pinnedDataCache[pid] = fromItems;
+      cacheUpdated = true;
+    } else if (!_pinnedDataCache[pid]) {
+      _pinnedDataCache[pid] = player;
+      cacheUpdated = true;
+    }
     html += buildRowHTML(player, cols, heatOn, pctData, null, barsOn, pctMode, leaderRanks);
   }
 
@@ -4522,6 +4605,11 @@ function renderPinnedRows() {
 
   pinnedBody.innerHTML = html;
   pinnedBody.style.display = "";
+
+  // Persist cache if updated
+  if (cacheUpdated) {
+    try { localStorage.setItem('razzle_pinned_cache', JSON.stringify(_pinnedDataCache)); } catch(e) {}
+  }
 
   // Inject sparklines for pinned rows
   if (cols.includes("trend") && Object.keys(_sparklineCache).length > 1) {
@@ -5123,7 +5211,18 @@ function computePercentiles() {
 }
 
 function getHeatColor(pct) {
-  // Warm-shifted colors that work on Anthropic sand background
+  var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    // Higher opacity for dark espresso background
+    if (pct >= 90) return "rgba(46, 196, 182, 0.35)";
+    if (pct >= 75) return "rgba(46, 196, 182, 0.20)";
+    if (pct >= 60) return "rgba(46, 196, 182, 0.10)";
+    if (pct <= 10) return "rgba(230, 57, 70, 0.30)";
+    if (pct <= 25) return "rgba(230, 57, 70, 0.18)";
+    if (pct <= 40) return "rgba(230, 57, 70, 0.08)";
+    return "";
+  }
+  // Warm-shifted colors for Anthropic sand background
   if (pct >= 90) return "rgba(46, 196, 182, 0.22)";  // elite green-tinted
   if (pct >= 75) return "rgba(46, 196, 182, 0.12)";  // good green
   if (pct >= 60) return "rgba(46, 196, 182, 0.05)";  // slight green
@@ -5496,6 +5595,8 @@ function computePosRanks() {
   for (const pos of Object.keys(byPos)) {
     byPos[pos].sort((a, b) => {
       const av = a[key] ?? 0, bv = b[key] ?? 0;
+      if (typeof av === "string" || typeof bv === "string")
+        return String(av).localeCompare(String(bv)) * (desc ? -1 : 1);
       return desc ? bv - av : av - bv;
     });
     byPos[pos].forEach((p, i) => {
@@ -5700,13 +5801,18 @@ function exportImage() {
   ctx.lineTo(padX + rankColW + playerColW, hdrY + headerH + rowCount * rowH);
   ctx.stroke();
 
-  // Watermark
+  // Watermark with shareable URL
   const wmY = H - watermarkH / 2;
   ctx.font = "bold 16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
-  ctx.fillText("razzle.lol", W / 2, wmY);
+  ctx.fillText("razzle.lol", W / 2, wmY - 8);
+  try { if (typeof saveStateToURL === 'function') saveStateToURL(); } catch(e) {}
+  let _wmUrl2 = window.location.href.replace(/^https?:\/\//, '');
+  if (_wmUrl2.length > 60) _wmUrl2 = _wmUrl2.substring(0, 57) + '...';
+  ctx.font = "11px 'Space Mono', monospace";
+  ctx.fillText(_wmUrl2, W / 2, wmY + 8);
   ctx.globalAlpha = 1.0;
 
   // Download
@@ -5723,7 +5829,7 @@ function exportCSV() {
 
   // Pro+ gating: CSV export requires Pro or Elite plan
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro. <a href="/pricing.html" style="color:var(--orange);text-decoration:underline;">upgrade now</a>', 'warning');
+    _showToast('CSV export requires Pro.', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
 
@@ -6389,9 +6495,9 @@ function renderProfile(data, container) {
   let html = "";
 
   // Header
-  html += `<div class="profile-header">`;
+  html += `<div class="profile-header" style="border-top:4px solid ${posColor};">`;
   if (player.headshot_url) {
-    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="" onerror="this.style.display='none';">`;
+    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || 'Player')} headshot" onerror="this.style.display='none';">`;
   }
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
@@ -6411,8 +6517,8 @@ function renderProfile(data, container) {
   html += `</div>`;
   html += `<div style="margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;">`;
   html += `<a href="/player/${encodeURIComponent(player.player_id)}" class="btn-chunky" style="font-size:11px; padding:6px 14px; text-decoration:none; display:inline-flex; align-items:center;">Full Profile</a>`;
-  html += `<button class="btn-chunky" onclick="loadBoomBust('${escapeAttr(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--green);">Boom/Bust</button>`;
-  html += `<button class="btn-chunky" onclick="loadPlayerComps('${escapeAttr(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--orange);">Find Comps</button>`;
+  html += `<button class="btn-chunky" onclick="loadBoomBust('${escapeJS(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--green);">Boom/Bust</button>`;
+  html += `<button class="btn-chunky" onclick="loadPlayerComps('${escapeJS(player.player_id)}')" style="font-size:11px; padding:6px 14px; border-color:var(--orange);">Find Comps</button>`;
   html += `<button class="btn-primary" onclick="exportProfileImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>`;
   html += `</div>`;
   html += `</div>`;
@@ -7030,7 +7136,7 @@ function renderProspectProfile(data, container, compsData) {
     html += `<div class="tier-badge" style="background:${tier.color}; transform:rotate(-3deg); margin-left:10px;">${tier.label}</div>`;
     html += `</div>`;
     html += `<div class="prospect-rps-score-row">`;
-    html += `<div class="prospect-rps-big">${rpsData.rps.toFixed(1)}</div>`;
+    html += `<div class="prospect-rps-big">${(rpsData.rps || 0).toFixed(1)}</div>`;
     html += `<div class="prospect-rps-bar-wrap"><div class="prospect-rps-bar-fill" style="width:${Math.min(100, rpsData.rps)}%; background:${tier.color};"></div></div>`;
     html += `</div>`;
     html += `<div class="prospect-rps-breakdown">`;
@@ -7871,7 +7977,7 @@ function closeTierView(e) {
 async function loadTierData(position) {
   currentTierPosition = position;
   const contentEl = document.getElementById("tierContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">grading the ${position} prospects...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">grading the ${escapeHtml(position)} prospects...</div>`;
 
   // Highlight active button
   document.querySelectorAll(".tier-pos-btn").forEach(btn => {
@@ -8115,7 +8221,7 @@ function closeBigBoard(e) {
 async function loadBigBoard(position) {
   currentBBPosition = position;
   const contentEl = document.getElementById("bbContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the ${position === "ALL" ? "" : position + " "}board...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the ${position === "ALL" ? "" : escapeHtml(position) + " "}board...</div>`;
 
   document.querySelectorAll(".bb-pos-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.pos === position);
@@ -8278,7 +8384,7 @@ function renderBigBoard(data, container) {
       html += `<div class="bb-card-meta">${escapeHtml(p.school || "")} · ${draftInfo}</div>`;
       html += `<div class="bb-card-rps-row">`;
       html += `<div class="bb-card-rps-bar"><div class="bb-card-rps-fill" style="width:${rpsPct}%; background:${td.color};"></div></div>`;
-      html += `<span class="bb-card-rps-val">${p.rps.toFixed(1)}</span>`;
+      html += `<span class="bb-card-rps-val">${(p.rps || 0).toFixed(1)}</span>`;
       html += `</div>`;
       html += `<div class="bb-card-stats">`;
       html += `<span>Ath: ${athStr}</span>`;
@@ -8436,7 +8542,7 @@ function exportBigBoardImage() {
       ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
-      ctx.fillText(p.rps.toFixed(1), barX + barW + 8, rowY + 27);
+      ctx.fillText((p.rps || 0).toFixed(1), barX + barW + 8, rowY + 27);
 
       // Key metrics
       ctx.font = "10px 'Space Mono', monospace";
@@ -8492,7 +8598,7 @@ function closeClassAnalytics(e) {
 async function loadClassAnalytics(position) {
   currentCAPosition = position;
   const contentEl = document.getElementById("caContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">analyzing ${position === "ALL" ? "all" : position} draft classes...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">analyzing ${position === "ALL" ? "all" : escapeHtml(position)} draft classes...</div>`;
 
   document.querySelectorAll(".ca-pos-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.pos === position);
@@ -8533,7 +8639,7 @@ function renderClassAnalytics(data, container) {
   for (const cls of classes) {
     const gradeColor = gradeColors[cls.grade] || "var(--ink-light)";
     const topName = cls.top_prospect ? cls.top_prospect.name : "N/A";
-    const topRPS = cls.top_prospect ? cls.top_prospect.rps.toFixed(1) : "-";
+    const topRPS = cls.top_prospect ? (cls.top_prospect.rps || 0).toFixed(1) : "-";
     const totalElitePrem = cls.tiers.elite + cls.tiers.premium;
 
     html += `
@@ -8549,7 +8655,7 @@ function renderClassAnalytics(data, container) {
         <!-- Stats row -->
         <div style="display:flex; gap:16px; margin-bottom:12px; font-family:var(--font-mono); font-size:13px;">
           <div><span style="color:var(--ink-light);">Prospects:</span> ${cls.count}</div>
-          <div><span style="color:var(--ink-light);">Avg RPS:</span> <strong>${cls.avg_rps.toFixed(1)}</strong></div>
+          <div><span style="color:var(--ink-light);">Avg RPS:</span> <strong>${(cls.avg_rps || 0).toFixed(1)}</strong></div>
         </div>
 
         <!-- Tier distribution bar -->
@@ -8656,7 +8762,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
     ctx.fillStyle = t.ink;
     ctx.font = "bold 12px 'Space Mono', monospace";
     ctx.textAlign = "center";
-    ctx.fillText(cls.avg_rps.toFixed(1), x + barW / 2, y - 8);
+    ctx.fillText((cls.avg_rps || 0).toFixed(1), x + barW / 2, y - 8);
 
     // Grade badge on top
     const badgeW = 22, badgeH = 18;
@@ -8774,7 +8880,7 @@ function exportClassAnalyticsImage() {
     ctx.fillStyle = t.ink;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
-    ctx.fillText(cls.avg_rps.toFixed(1), x + barW / 2, by - 6);
+    ctx.fillText((cls.avg_rps || 0).toFixed(1), x + barW / 2, by - 6);
 
     // Grade
     const gw = 20, gh = 16;
@@ -8842,7 +8948,7 @@ function exportClassAnalyticsImage() {
     // Stats
     ctx.font = "12px 'Space Mono', monospace";
     ctx.fillStyle = t.inkMedium;
-    ctx.fillText(`${cls.count} prospects  |  Avg RPS: ${cls.avg_rps.toFixed(1)}`, cx + 10, cy + 44);
+    ctx.fillText(`${cls.count} prospects  |  Avg RPS: ${(cls.avg_rps || 0).toFixed(1)}`, cx + 10, cy + 44);
 
     // Tier counts
     ctx.font = "11px 'Space Mono', monospace";
@@ -8857,7 +8963,7 @@ function exportClassAnalyticsImage() {
       ctx.fillStyle = t.ink;
       ctx.font = "bold 11px 'Space Mono', monospace";
       const name = cls.top_prospect.name.length > 22 ? cls.top_prospect.name.slice(0, 20) + "..." : cls.top_prospect.name;
-      ctx.fillText(`${name} (${cls.top_prospect.rps.toFixed(1)})`, cx + 10, cy + 96);
+      ctx.fillText(`${name} (${(cls.top_prospect.rps || 0).toFixed(1)})`, cx + 10, cy + 96);
     }
 
     // Tier bar at bottom
@@ -9417,7 +9523,7 @@ function renderAgingCurveChart(targetCanvas) {
   const maxAge = Math.max(...ages);
 
   // Include player data in max PPG
-  let maxPPG = Math.max(...baseline.map(b => b.avg_ppg));
+  let maxPPG = Math.max(...baseline.map(b => b.avg_ppg).filter(v => v != null), 1);
   for (const p of (data.players || [])) {
     if (_acState.enabledPlayers[p.name]) {
       for (const pt of p.points) {
@@ -9595,7 +9701,7 @@ function renderACLegend() {
     const enabled = _acState.enabledPlayers[p.name];
     const opacity = enabled ? "1" : "0.4";
     const border = enabled ? "2px solid " + color : "2px solid var(--ink-faint)";
-    html += '<button onclick="toggleACPlayer(\'' + escapeAttr(p.name) + '\')" style="'
+    html += '<button class="ac-player-toggle" data-name="' + escapeAttr(p.name) + '" style="'
       + 'display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:20px;'
       + 'border:' + border + '; background:' + (enabled ? color + '15' : 'transparent') + ';'
       + 'cursor:pointer; opacity:' + opacity + '; font-family:var(--font-mono); font-size:11px;'
@@ -9605,6 +9711,9 @@ function renderACLegend() {
       + '</button>';
   });
   container.innerHTML = html;
+  container.querySelectorAll('.ac-player-toggle').forEach(btn => {
+    btn.addEventListener('click', () => toggleACPlayer(btn.dataset.name));
+  });
 }
 
 function toggleACPlayer(name) {
@@ -10009,12 +10118,12 @@ function renderWatchlistPanel() {
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:10px; padding:1px 6px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:13px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<select class="select-chunky" style="font-size:11px; padding:2px 6px; width:90px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderWatchlistPanel();">';
+      html += '<select class="select-chunky" style="font-size:11px; padding:2px 6px; width:90px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderWatchlistPanel();">';
       for (var t = 0; t <= 5; t++) {
         html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + tierNames[t] + '</option>';
       }
       html += '</select>';
-      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromWatchlist(\'' + escapeAttr(p.player_id) + '\'); renderWatchlistPanel(); renderTable();" title="Remove">&#10005;</button>';
+      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromWatchlist(\'' + escapeJS(p.player_id) + '\'); renderWatchlistPanel(); renderTable();" title="Remove">&#10005;</button>';
       html += '</div>';
     });
     html += '</div>';
@@ -10094,7 +10203,7 @@ function renderTierBoard() {
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeAttr(p.player_id) + '\', this.value); renderTierBoard();">';
+      html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderTierBoard();">';
       for (var t = 0; t <= 5; t++) {
         html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + TIER_LABELS[t] + '</option>';
       }
@@ -10428,7 +10537,7 @@ document.addEventListener("keydown", function(e) {
 
   // N: toggle notes column
   if (e.key === "n" || e.key === "N") {
-    toggleColumn("notes", !state.visibleColumns.includes("notes"));
+    toggleColumn("notes", !getActiveColumns().includes("notes"));
     renderTableHead(); renderTable(); renderColumnPicker(); saveStateToURL();
     return;
   }
@@ -10595,7 +10704,8 @@ async function _taLoadPickChart() {
 
 function closeTradeAnalyzer(e) {
   if (e && e.target !== e.currentTarget) return;
-  document.getElementById("tradeAnalyzerOverlay").classList.remove("open");
+  var overlay = document.getElementById("tradeAnalyzerOverlay");
+  if (overlay) overlay.classList.remove("open");
 }
 
 function _taSetupSearch(side) {
@@ -11308,7 +11418,7 @@ async function rosterSearchPlayers(query) {
       var inRoster = roster.find(function(r) { return r.player_id === pid; });
       if (inRoster) return;
       var pos = p.position || "??";
-      html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:4px; margin-bottom:2px; background:var(--bg);" onclick="addToRoster(\'' + escapeAttr(pid) + '\',\'' + escapeAttr(p.full_name || p.name || "") + '\',\'' + escapeAttr(pos) + '\',\'' + escapeAttr(p.team || "FA") + '\'); rosterSearchPlayers(\'' + escapeAttr(query) + '\'); renderMyRosterPanel();">';
+      html += '<div class="roster-search-row" style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:4px; margin-bottom:2px; background:var(--bg);" data-pid="' + escapeAttr(pid) + '" data-name="' + escapeAttr(p.full_name || p.name || "") + '" data-pos="' + escapeAttr(pos) + '" data-team="' + escapeAttr(p.team || "FA") + '" data-query="' + escapeAttr(query) + '">';
       html += '<span class="pos-badge pos-' + pos.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(pos) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name || p.name || "") + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + '</span>';
@@ -11317,6 +11427,13 @@ async function rosterSearchPlayers(query) {
     });
     if (players.length === 0) html = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); padding:8px;">' + razzleEmpty() + '</div>';
     results.innerHTML = html;
+    results.querySelectorAll(".roster-search-row").forEach(function(row) {
+      row.addEventListener("click", function() {
+        addToRoster(row.dataset.pid, row.dataset.name, row.dataset.pos, row.dataset.team);
+        rosterSearchPlayers(row.dataset.query);
+        renderMyRosterPanel();
+      });
+    });
   } catch (err) {
     results.innerHTML = '<div style="color:var(--red); font-size:12px;">' + razzleError() + '</div>';
   }
@@ -11388,7 +11505,7 @@ function renderMyRosterPanel() {
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeAttr(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
+      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeJS(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
       html += '</div>';
     });
     html += '</div>';
@@ -11950,12 +12067,12 @@ function renderPlayerComps(data, container) {
 
   for (const comp of comps) {
     const simColor = comp.similarity >= 95 ? "var(--green)" : comp.similarity >= 90 ? "var(--orange)" : "var(--ink-medium)";
-    html += `<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:14px; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='6px 6px 0 var(--ink)'" onmouseout="this.style.transform='';this.style.boxShadow='4px 4px 0 var(--ink)'" onclick="openPlayerProfile('${escapeAttr(comp.player_id)}')">`;
+    html += `<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:10px; box-shadow:4px 4px 0 var(--ink); padding:14px; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='6px 6px 0 var(--ink)'" onmouseout="this.style.transform='';this.style.boxShadow='4px 4px 0 var(--ink)'" onclick="openPlayerProfile('${escapeJS(comp.player_id)}')">`;
 
     // Headshot + name
     html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">`;
     if (comp.headshot_url) {
-      html += `<img src="${escapeAttr(comp.headshot_url)}" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+      html += `<img src="${escapeAttr(comp.headshot_url)}" alt="" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
       html += `<span style="display:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
     } else {
       html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
@@ -12596,7 +12713,10 @@ function drawBoomBustRangeBar(data) {
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
-  const { floor_ppg, ceiling_ppg, median_ppg, mean_ppg, player } = data;
+  const { mean_ppg, player } = data;
+  const floor_ppg = data.floor_ppg || 0;
+  const ceiling_ppg = data.ceiling_ppg || 0;
+  const median_ppg = data.median_ppg || 0;
   const pos = (player.position || "").toUpperCase();
   const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const posColor = posHex[pos] || "#d97757";
@@ -12644,10 +12764,14 @@ function drawBoomBustRangeBar(data) {
 function exportBoomBustImage() {
   if (!_boomBustData) return;
   const data = _boomBustData;
-  const { player, season, games_played, weekly_scores, mean_ppg, median_ppg,
-          floor_ppg, ceiling_ppg, boom_rate, bust_rate,
+  const { player, season, games_played, weekly_scores, mean_ppg,
           boom_threshold, bust_threshold, consistency_score, grade,
           position_rank, position_total } = data;
+  const median_ppg = data.median_ppg || 0;
+  const floor_ppg = data.floor_ppg || 0;
+  const ceiling_ppg = data.ceiling_ppg || 0;
+  const boom_rate = data.boom_rate || 0;
+  const bust_rate = data.bust_rate || 0;
 
   const pos = (player.position || "").toUpperCase();
   const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };

@@ -884,8 +884,9 @@
     }
 
     function sortPlayers(players, col, dir) {
+      var sortCol = col === 'vorp_tier' ? 'vorp' : col;
       return players.slice().sort(function(a, b) {
-        var va = a[col], vb = b[col];
+        var va = a[sortCol], vb = b[sortCol];
         if (va == null && vb == null) return 0;
         if (va == null) return 1;
         if (vb == null) return -1;
@@ -911,6 +912,7 @@
 
       var cols = [
         { key: 'full_name', label: 'Player' },
+        { key: 'vorp_tier', label: 'Tier' },
         { key: 'vorp', label: 'VORP' },
         { key: 'ppg', label: 'PPG' },
         { key: 'replacement_ppg', label: 'Repl PPG' },
@@ -936,6 +938,8 @@
         html += '<div class="vorp-player-info"><div class="vorp-player-name">' + pLink(p.full_name, p.player_id) + '</div>';
         html += '<div class="vorp-player-meta"><span class="vorp-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="vorp-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
+        var tierLabels = { elite: 'Elite', starter: 'Starter', flex: 'Flex', fringe: 'Fringe', replacement: 'Replacement' };
+        html += '<td class="center"><span class="vorp-tier-badge ' + tier + '">' + (tierLabels[tier] || tier) + '</span></td>';
         html += '<td class="center"><span class="vorp-badge ' + tier + '">' + sign + fmt(p.vorp, 2) + '</span></td>';
         html += '<td class="center" style="font-weight:700">' + fmt(p.ppg) + '</td>';
         html += '<td class="center" style="color:var(--ink-medium)">' + fmt(p.replacement_ppg) + '</td>';
@@ -1478,7 +1482,7 @@
           (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
-            if (s == (data.season || (data.available_seasons.length ? data.available_seasons[0] : null))) o.selected = true;
+            if (s == (data.season || ((data.available_seasons && data.available_seasons.length) ? data.available_seasons[0] : null))) o.selected = true;
             sel.appendChild(o);
           });
           seasonsPopulated = true;
@@ -1668,7 +1672,7 @@
           (data.available_seasons || []).forEach(function(s) {
             var o = document.createElement('option');
             o.value = s; o.textContent = s;
-            if (s == (data.season || (data.available_seasons.length ? data.available_seasons[0] : null))) o.selected = true;
+            if (s == (data.season || ((data.available_seasons && data.available_seasons.length) ? data.available_seasons[0] : null))) o.selected = true;
             sel.appendChild(o);
           });
           seasonsPopulated = true;
@@ -1789,8 +1793,11 @@
         } else if (c.key === 'ppg') {
           h += '<td class="' + cls.join(' ') + '" style="font-weight:700">' + fmt(p.ppg) + '</td>';
         } else if (c.key === 'efficiency_grade' || c.key === 'consistency_grade' || c.key === 'sos_grade') {
-          var g = p[c.key] || 'C';
-          h += '<td class="' + cls.join(' ') + '"><span class="stk-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span></td>';
+          var g = p[c.key];
+          h += '<td class="' + cls.join(' ') + '">';
+          if (g) { h += '<span class="stk-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span>'; }
+          else { h += '<span class="stk-grade-badge" style="opacity:0.5">-</span>'; }
+          h += '</td>';
         } else if (c.key === 'stock_delta') {
           var d = p.stock_delta || 0;
           var sign = d > 0 ? '+' : '';
@@ -5046,14 +5053,14 @@
         html += '<span class="pt-team">' + escapeHtml(p.team || '') + '</span>';
         html += '</div>';
         html += '<div class="pt-stats">';
-        var stats = p.projections || [];
+        var stats = p.milestones || [];
         stats.forEach(function(s) {
-          var pct = s.milestone ? Math.min(100, ((s.projected || 0) / s.milestone) * 100) : 0;
+          var pct = s.target ? Math.min(100, ((s.projected || 0) / s.target) * 100) : 0;
           var onPace = pct >= 100;
           html += '<div class="pt-stat-row">';
           html += '<span class="pt-stat-label">' + escapeHtml(s.label || s.stat) + '</span>';
           html += '<span class="pt-stat-vals">' + fmt(s.current, 0) + ' → ' + fmt(s.projected, 0) + '</span>';
-          if (s.milestone) {
+          if (s.target) {
             html += '<div class="pt-pace-bar-wrap">';
             html += '<div class="pt-pace-bar" style="width:' + Math.min(100, pct) + '%;background:' + posColor + '"></div>';
             html += '</div>';
@@ -5135,7 +5142,7 @@
         html += '<td class="spc-rank">' + (i + 1) + '</td>';
         html += '<td class="spc-name">' + pLink(p.name, p.player_id) + ' <span class="spc-team">' + escapeHtml(p.team || '') + '</span></td>';
         html += '<td><span class="spc-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
-        html += '<td class="spc-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
+        html += '<td class="spc-num">' + (p.games != null ? p.games : '-') + '</td>';
         html += '<td class="spc-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="spc-milestones">';
         var milestones = p.milestones || [];
@@ -5206,16 +5213,16 @@
     }
 
     function renderTDR(data, body) {
-      var buyLow = data.buy_low || [];
-      var sellHigh = data.sell_high || [];
-      var rates = data.position_rates || {};
+      var buyLow = data.positive_regression || [];
+      var sellHigh = data.negative_regression || [];
+      var rates = data.pos_avg_td_rates || {};
       if (!buyLow.length && !sellHigh.length) {
         body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
         return;
       }
 
       // find max diff for bar scaling
-      var allDiffs = buyLow.concat(sellHigh).map(function(p) { return Math.abs(p.diff || 0); });
+      var allDiffs = buyLow.concat(sellHigh).map(function(p) { return Math.abs(p.td_diff || 0); });
       var maxDiff = Math.max.apply(null, allDiffs) || 1;
 
       var html = '';
@@ -5252,7 +5259,7 @@
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
         var posColor = POS_COLORS[p.position] || '#8a7565';
-        var diff = p.diff || 0;
+        var diff = p.td_diff || 0;
         var diffClass = diff >= 0 ? 'tdr-diff-pos' : 'tdr-diff-neg';
         var sign = diff >= 0 ? '+' : '';
         var barPct = Math.min(100, (Math.abs(diff) / maxDiff) * 100);
@@ -5298,12 +5305,12 @@
       { key: 'air_yards', label: 'AirYd', sortable: true, tip: 'Total air yards' },
       { key: 'air_yards_g', label: 'AY/G', sortable: true, tip: 'Air yards per game' },
       { key: 'adot', label: 'aDOT', sortable: true, tip: 'Average depth of target' },
-      { key: 'air_yard_pct', label: 'AY%', sortable: true, tip: 'Air yard share of team total' },
+      { key: 'air_yards_share', label: 'AY%', sortable: true, tip: 'Air yard share of team total' },
       { key: 'wopr', label: 'WOPR', sortable: true, tip: 'Weighted Opportunity Rating' },
       { key: 'racr', label: 'RACR', sortable: true, tip: 'Receiver Air Conversion Ratio' },
       { key: 'ppg', label: 'PPG', sortable: true, tip: 'Fantasy points per game' },
       { key: 'regression_delta', label: 'Regr', sortable: true, tip: 'Regression delta — positive = buy, negative = sell' },
-      { key: 'games_played', label: 'GP', sortable: true, tip: 'Games played' },
+      { key: 'games', label: 'GP', sortable: true, tip: 'Games played' },
       { key: 'annotation', label: 'Annotation', sortable: false, tip: 'Context note', mobile_hide: true }
     ];
 
@@ -5424,12 +5431,12 @@
         html += '<td class="ay-num">' + fmt(p.air_yards, 0) + '</td>';
         html += '<td class="ay-num">' + fmt(p.air_yards_g) + '</td>';
         html += '<td class="ay-num">' + fmt(p.adot) + '</td>';
-        html += '<td class="ay-num">' + fmt(p.air_yard_pct) + '%</td>';
+        html += '<td class="ay-num">' + fmt(p.air_yards_share != null ? (p.air_yards_share * 100) : null) + '%</td>';
         html += '<td class="ay-num">' + fmt(p.wopr, 2) + '</td>';
         html += '<td class="ay-num">' + fmt(p.racr, 2) + '</td>';
         html += '<td class="ay-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="ay-num"><span class="ay-regr-badge ' + regrClass + '">' + regrSign + fmt(regrDelta) + '</span></td>';
-        html += '<td class="ay-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
+        html += '<td class="ay-num">' + (p.games != null ? p.games : '-') + '</td>';
         html += '<td class="ay-annotation hide-mobile">' + escapeHtml(p.annotation || '') + '</td>';
         html += '</tr>';
       });
@@ -6264,16 +6271,16 @@
       html += '<div class="rpc-table-wrap"><table class="rpc-table"><thead><tr>';
       var thCols = [
         { key: 'name', label: 'Player', sort: false },
-        { key: 'gpa', label: 'GPA', sort: true },
+        { key: 'gpa_pct', label: 'GPA', sort: true },
         { key: 'efficiency_grade', label: 'Eff', sort: true },
         { key: 'consistency_grade', label: 'Con', sort: true },
         { key: 'sos_grade', label: 'SOS', sort: true },
         { key: 'stock_score', label: 'Stock', sort: true },
         { key: 'opp_share', label: 'Opp%', sort: true },
-        { key: 'dominator', label: 'Dom', sort: true },
+        { key: 'dom_rating', label: 'Dom', sort: true },
         { key: 'ppg', label: 'PPG', sort: true },
         { key: 'age', label: 'Age', sort: true },
-        { key: 'games_played', label: 'GP', sort: true },
+        { key: 'games', label: 'GP', sort: true },
         { key: 'annotation', label: 'Note', sort: false }
       ];
       thCols.forEach(function(c) {
@@ -6295,18 +6302,19 @@
         // GPA
         html += '<td><span class="rpc-grade-badge ' + gradeClass(p.gpa_grade || p.grade) + '">' + escapeHtml(p.gpa_grade || p.grade || fmt(p.gpa)) + '</span></td>';
         // Eff/Con/SOS
-        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.efficiency_grade) + '">' + escapeHtml(p.efficiency_grade || '-') + '</span></td>';
-        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.consistency_grade) + '">' + escapeHtml(p.consistency_grade || '-') + '</span></td>';
-        html += '<td><span class="rpc-grade-badge ' + gradeClass(p.sos_grade) + '">' + escapeHtml(p.sos_grade || '-') + '</span></td>';
+        var _eg = p.efficiency_grade, _cg = p.consistency_grade, _sg = p.sos_grade;
+        html += '<td>' + (_eg ? '<span class="rpc-grade-badge ' + gradeClass(_eg) + '">' + escapeHtml(_eg) + '</span>' : '<span class="rpc-grade-badge" style="opacity:0.5">-</span>') + '</td>';
+        html += '<td>' + (_cg ? '<span class="rpc-grade-badge ' + gradeClass(_cg) + '">' + escapeHtml(_cg) + '</span>' : '<span class="rpc-grade-badge" style="opacity:0.5">-</span>') + '</td>';
+        html += '<td>' + (_sg ? '<span class="rpc-grade-badge ' + gradeClass(_sg) + '">' + escapeHtml(_sg) + '</span>' : '<span class="rpc-grade-badge" style="opacity:0.5">-</span>') + '</td>';
         // Stock
         html += '<td><span class="rpc-grade-badge ' + stockClass(p.stock_score || 0) + '">' + fmt(p.stock_score, 0) + '</span></td>';
         // Opp% / Dom
         html += '<td class="rpc-num">' + fmt(p.opp_share) + '%</td>';
-        html += '<td class="rpc-num">' + fmt(p.dominator) + '%</td>';
+        html += '<td class="rpc-num">' + fmt(p.dom_rating) + '%</td>';
         // PPG / Age / GP
         html += '<td class="rpc-num">' + fmt(p.ppg) + '</td>';
         html += '<td class="rpc-num">' + (p.age != null ? p.age : '-') + '</td>';
-        html += '<td class="rpc-num">' + (p.games_played != null ? p.games_played : '-') + '</td>';
+        html += '<td class="rpc-num">' + (p.games != null ? p.games : '-') + '</td>';
         html += '<td class="rpc-annotation">' + escapeHtml(p.annotation || '') + '</td>';
         html += '</tr>';
       });
@@ -6921,7 +6929,7 @@
           var sel = el.querySelector('.aw2-season');
           sel.innerHTML = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
         }
         renderAwards(data, isCollege);
@@ -7012,7 +7020,7 @@
           var sel = el.querySelector('.db2-season');
           sel.innerHTML = '';
           d.available_seasons.forEach(function(s) {
-            sel.innerHTML += '<option value="' + s + '"' + (s === d.season ? ' selected' : '') + '>' + s + '</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === d.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
         }
         el.querySelector('.db2-meta').textContent = d.season + ' season \u00b7 ' + d.total_players + ' players tracked';
@@ -7142,7 +7150,7 @@
           var sel = el.querySelector('.dc2-year');
           sel.innerHTML = '';
           for (var i = 0; i < d.available_classes.length; i++) {
-            sel.innerHTML += '<option value="' + d.available_classes[i] + '"' + (d.available_classes[i] === d.draft_year ? ' selected' : '') + '>' + d.available_classes[i] + ' Class</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(d.available_classes[i])) + '"' + (d.available_classes[i] === d.draft_year ? ' selected' : '') + '>' + escapeHtml(String(d.available_classes[i])) + ' Class</option>';
           }
         }
         state.year = d.draft_year;
@@ -7410,7 +7418,7 @@
           var curSeason = sSel.value;
           sSel.innerHTML = '';
           (data.available_seasons || []).forEach(function(s) {
-            sSel.innerHTML += '<option value="' + s + '"' + (String(s) === curSeason ? ' selected' : '') + '>' + s + '</option>';
+            sSel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (String(s) === curSeason ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
         }
         drawChart(data);
@@ -7644,7 +7652,7 @@
           var sel = el.querySelector('.ld2-season');
           sel.innerHTML = '';
           for (var i = 0; i < seasonList.length; i++) {
-            sel.innerHTML += '<option value="' + seasonList[i] + '"' + (seasonList[i] === data.season ? ' selected' : '') + '>' + seasonList[i] + '</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(seasonList[i])) + '"' + (seasonList[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(seasonList[i])) + '</option>';
           }
         }
         renderCategories(data.categories || [], isCollege);
@@ -7873,7 +7881,7 @@
           var sel = el.querySelector('.opp2-season');
           sel.innerHTML = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
           populateWeekSelect(el, 'opp2-week', sel.value, load);
         }
@@ -7946,7 +7954,7 @@
           var sel = el.querySelector('.pct2-season');
           sel.innerHTML = '';
           for (var i = 0; i < data.available_seasons.length; i++) {
-            sel.innerHTML += '<option value="' + data.available_seasons[i] + '"' + (data.available_seasons[i] === data.season ? ' selected' : '') + '>' + data.available_seasons[i] + '</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(data.available_seasons[i])) + '"' + (data.available_seasons[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(data.available_seasons[i])) + '</option>';
           }
         }
         renderPercentiles(data);
@@ -8044,7 +8052,7 @@
         var sel = el.querySelector('.bb-year');
         sel.innerHTML = '';
         for (var i = 0; i < years.length; i++) {
-          sel.innerHTML += '<option value="' + years[i] + '">' + years[i] + ' Draft Class</option>';
+          sel.innerHTML += '<option value="' + escapeHtml(String(years[i])) + '">' + escapeHtml(String(years[i])) + ' Draft Class</option>';
         }
         state.draftYear = years[0];
         loadProspects();
@@ -8215,7 +8223,7 @@
           var sel = el.querySelector('.rc2-season');
           sel.innerHTML = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
         }
         render(data, isCollege);
@@ -8804,7 +8812,7 @@
           var sel = el.querySelector('.sos2-season');
           sel.innerHTML = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
         }
         render(data);
@@ -8882,7 +8890,7 @@
           var sel = el.querySelector('.sc2-season');
           sel.innerHTML = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
         }
         state.season = data.season;
@@ -9085,7 +9093,7 @@
       var sel = el.querySelector('.td2-season');
       if (sel.options.length > 0) return;
       (seasons || []).forEach(function(s) {
-        sel.innerHTML += '<option value="' + s + '"' + (s === current ? ' selected' : '') + '>' + s + '</option>';
+        sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === current ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
       });
     }
 
@@ -9245,7 +9253,7 @@
           var sSel = el.querySelector('.tm-season');
           sSel.innerHTML = '';
           (data.available_seasons || []).forEach(function(s) {
-            sSel.innerHTML += '<option value="' + s + '"' + (s === data.season ? ' selected' : '') + '>' + s + '</option>';
+            sSel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
         }
         renderGroups(data.groups || {});
@@ -9365,7 +9373,7 @@
         if (!seasonLoaded && data.available_seasons) {
           var sel = el.querySelector('.tf2-season');
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + s + '">' + s + '</option>';
+            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '">' + escapeHtml(String(s)) + '</option>';
           });
           sel.value = data.season;
           seasonLoaded = true;
@@ -10333,6 +10341,100 @@
       loadGS();
     });
     loadGS();
+  }});
+
+  // ─── FAAB STRATEGY ────────────────────────────────────────────────
+  defs.push({ name: 'faab', render: function(el) {
+    if (showNflOnlyMsg(el, 'faab', 'FAAB Strategy', 'waiver budget pacing and spend patterns')) return;
+
+    // Historical FAAB spend patterns (typical dynasty league averages)
+    var WEEKLY_SPEND = [
+      { week: 1, pct: 12, label: 'Wk 1' },
+      { week: 2, pct: 9, label: 'Wk 2' },
+      { week: 3, pct: 8, label: 'Wk 3' },
+      { week: 4, pct: 7, label: 'Wk 4' },
+      { week: 5, pct: 6, label: 'Wk 5' },
+      { week: 6, pct: 5, label: 'Wk 6' },
+      { week: 7, pct: 5, label: 'Wk 7' },
+      { week: 8, pct: 6, label: 'Wk 8' },
+      { week: 9, pct: 7, label: 'Wk 9' },
+      { week: 10, pct: 8, label: 'Wk 10' },
+      { week: 11, pct: 6, label: 'Wk 11' },
+      { week: 12, pct: 5, label: 'Wk 12' },
+      { week: 13, pct: 4, label: 'Wk 13' },
+      { week: 14, pct: 4, label: 'Wk 14' },
+      { week: 15, pct: 3, label: 'Wk 15' },
+      { week: 16, pct: 3, label: 'Wk 16' },
+      { week: 17, pct: 2, label: 'Wk 17' },
+    ];
+
+    var POS_SPEND = [
+      { pos: 'RB', pct: 42, color: POS_COLORS.RB },
+      { pos: 'WR', pct: 32, color: POS_COLORS.WR },
+      { pos: 'QB', pct: 14, color: POS_COLORS.QB },
+      { pos: 'TE', pct: 12, color: POS_COLORS.TE },
+    ];
+
+    var PACING = [
+      { phase: 'Early (Wk 1-4)', budget: '35-40%', advice: 'Be aggressive. Early breakouts set your season. Don\'t be the manager who saves FAAB for Week 16.' },
+      { phase: 'Mid (Wk 5-10)', budget: '30-35%', advice: 'Stay active but selective. Bye weeks create opportunities. Target the second wave of breakouts.' },
+      { phase: 'Late (Wk 11-14)', budget: '15-20%', advice: 'Playoff push mode. Spend on starters, not stashes. Win-now moves only.' },
+      { phase: 'Playoffs (Wk 15-17)', budget: '5-10%', advice: 'Emergency reserves. Stream defenses and kickers. One big waiver pickup can win the ship.' },
+    ];
+
+    el.innerHTML =
+      '<div class="lp-page">' +
+        '<div class="lp-header"><h2>FAAB Strategy</h2>' +
+        '<div class="lp-subtitle">waiver budget pacing and spend patterns</div></div>' +
+
+        // Weekly spend chart
+        '<div class="lp-section" style="margin-bottom:24px;">' +
+          '<h3 style="font-family:var(--font-display); font-size:16px; margin-bottom:12px;">Average FAAB Spend by Week</h3>' +
+          '<div style="display:flex; align-items:flex-end; gap:4px; height:160px; padding:8px 0;">' +
+            WEEKLY_SPEND.map(function(w) {
+              var h = Math.round(w.pct / 12 * 140);
+              var isHigh = w.pct >= 8;
+              return '<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;">' +
+                '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">' + w.pct + '%</div>' +
+                '<div style="width:100%; height:' + h + 'px; background:' + (isHigh ? 'var(--orange)' : 'var(--ink-faint)') + '; border-radius:4px 4px 0 0; border:2px solid var(--ink); min-width:16px;"></div>' +
+                '<div style="font-family:var(--font-mono); font-size:8px; color:var(--ink-light); white-space:nowrap;">' + w.label + '</div>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+          '<div style="font-family:var(--font-hand); font-size:13px; color:var(--ink-light); margin-top:6px; text-align:center;">early season and bye weeks see the biggest FAAB burns</div>' +
+        '</div>' +
+
+        // Position breakdown
+        '<div class="lp-section" style="margin-bottom:24px;">' +
+          '<h3 style="font-family:var(--font-display); font-size:16px; margin-bottom:12px;">FAAB Spend by Position</h3>' +
+          '<div style="display:flex; gap:12px; flex-wrap:wrap;">' +
+            POS_SPEND.map(function(p) {
+              return '<div style="flex:1; min-width:100px; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; padding:12px; text-align:center;">' +
+                '<div style="font-family:var(--font-display); font-size:24px; color:' + p.color + ';">' + p.pct + '%</div>' +
+                '<div style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:' + p.color + ';">' + p.pos + '</div>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+          '<div style="font-family:var(--font-hand); font-size:13px; color:var(--ink-light); margin-top:6px; text-align:center;">RBs command the most waiver spend — scarcity is real</div>' +
+        '</div>' +
+
+        // Budget pacing guide
+        '<div class="lp-section">' +
+          '<h3 style="font-family:var(--font-display); font-size:16px; margin-bottom:12px;">Budget Pacing Guide</h3>' +
+          '<div style="display:grid; gap:10px;">' +
+            PACING.map(function(p) {
+              return '<div style="display:flex; gap:12px; align-items:flex-start; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; padding:12px;">' +
+                '<div style="min-width:80px;">' +
+                  '<div style="font-family:var(--font-mono); font-size:11px; font-weight:700;">' + escapeHtml(p.phase) + '</div>' +
+                  '<div style="font-family:var(--font-display); font-size:18px; color:var(--orange);">' + p.budget + '</div>' +
+                '</div>' +
+                '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-medium); line-height:1.4;">' + escapeHtml(p.advice) + '</div>' +
+              '</div>';
+            }).join('') +
+          '</div>' +
+        '</div>' +
+
+      '</div>';
   }});
 
 })();

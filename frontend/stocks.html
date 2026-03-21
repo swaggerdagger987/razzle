@@ -305,8 +305,8 @@
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/lab.html" class="active">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">AI Agents</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -353,8 +353,8 @@
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
       <a href="/" class="footer-link">Home</a>
       <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
+      <a href="/league-intel.html" class="footer-link">League Intel</a>
+      <a href="/agents.html" class="footer-link">AI Agents</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
     </div>
@@ -518,9 +518,13 @@
       } else if (col.key === 'ppg') {
         html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p.ppg) + '</td>';
       } else if (col.key === 'efficiency_grade' || col.key === 'consistency_grade' || col.key === 'sos_grade') {
-        var g = p[col.key] || 'C';
+        var g = p[col.key];
         html += '<td class="' + classes.join(' ') + '">';
-        html += '<span class="stk-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span>';
+        if (g) {
+          html += '<span class="stk-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span>';
+        } else {
+          html += '<span class="stk-grade-badge" style="opacity:0.5;">-</span>';
+        }
         html += '</td>';
       } else if (col.key === 'stock_delta') {
         var d = p.stock_delta || 0;
@@ -615,7 +619,7 @@
     currentData = data;
     var body = document.getElementById('stk-body');
 
-    if (!data || (!data.rising.length && !data.falling.length)) {
+    if (!data || (!(data.rising || []).length && !(data.falling || []).length)) {
       body.innerHTML = '<div class="stk-empty">no stock watch data found for this selection</div>';
       return;
     }

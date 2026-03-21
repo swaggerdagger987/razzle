@@ -31,27 +31,39 @@ def _fetch_featured_uncached():
         season = row[0] if row and row[0] else _current_nfl_season()
 
         results = {}
+        has_ages = False
 
         # 1. Dynasty Risers — young + productive (PPG/age ratio)
+        #    Fallback to top PPG if age data is unavailable
         try:
-            rows = conn.execute("""
+            has_ages = conn.execute(
+                "SELECT COUNT(*) FROM players WHERE age IS NOT NULL AND age > 0 AND fantasy_relevant = 1"
+            ).fetchone()[0] > 10
+
+            if has_ages:
+                age_filter = "AND p.age IS NOT NULL AND p.age > 0 AND p.age <= 26"
+            else:
+                age_filter = ""
+
+            rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team, p.age,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM players p
                 JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
                     AND s.season_type = 'regular'
                 WHERE p.position IN ('QB','RB','WR','TE')
-                  AND p.age IS NOT NULL AND p.age > 0 AND p.age <= 26
                   AND p.fantasy_relevant = 1
+                  {age_filter}
                 GROUP BY p.player_id
                 HAVING games >= 8
-                ORDER BY (total_ppr / games) DESC
+                ORDER BY (total_ppr / NULLIF(games, 0)) DESC
                 LIMIT 5
             """, (season,)).fetchall()
 
             results["dynasty_risers"] = [{
-                "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
+                "name": r[1], "position": r[2], "team": r[3],
+                "age": round(r[4]) if r[4] else None,
                 "ppg": round(r[5] / r[6], 1) if r[6] else 0, "games": r[6]
             } for r in rows]
         except Exception:
@@ -88,9 +100,10 @@ def _fetch_featured_uncached():
 
         # 3. Breakout Candidates — high target share, below-average PPG (upside)
         try:
-            rows = conn.execute("""
+            breakout_age_filter = "AND p.age IS NOT NULL AND p.age <= 27" if has_ages else ""
+            rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team, p.age,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games,
                        SUM(s.targets) as total_targets,
                        SUM(s.receptions) as total_rec
@@ -98,8 +111,8 @@ def _fetch_featured_uncached():
                 JOIN player_week_stats s ON p.player_id = s.player_id AND s.season = ?
                     AND s.season_type = 'regular'
                 WHERE p.position IN ('WR','TE')
-                  AND p.age IS NOT NULL AND p.age <= 27
                   AND p.fantasy_relevant = 1
+                  {breakout_age_filter}
                 GROUP BY p.player_id
                 HAVING games >= 8 AND total_targets >= 50
                 ORDER BY (CAST(total_targets AS FLOAT) / games) DESC
@@ -107,7 +120,8 @@ def _fetch_featured_uncached():
             """, (season,)).fetchall()
 
             results["breakout_candidates"] = [{
-                "name": r[1], "position": r[2], "team": r[3], "age": round(r[4]),
+                "name": r[1], "position": r[2], "team": r[3],
+                "age": round(r[4]) if r[4] else None,
                 "ppg": round(r[5] / r[6], 1) if r[6] else 0,
                 "tpg": round(r[7] / r[6], 1) if r[6] else 0,
                 "games": r[6]
@@ -140,8 +154,8 @@ def fetch_scoring_comparison(season=None, position=None, limit=40):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
-                    COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)) as total_half,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
+                    ROUND(COALESCE(SUM(s.fantasy_points_half_ppr), SUM(s.fantasy_points_ppr) - 0.5 * SUM(s.receptions)), 1) as total_half,
                     SUM(s.receptions) as total_rec,
                     COUNT(DISTINCT s.week) as games
                 FROM players p
@@ -411,7 +425,7 @@ def fetch_player_archetypes(season=None, position=None):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team, p.age,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.week) as games,
                     SUM(s.receptions) as total_rec,
                     SUM(s.targets) as total_tgt,
@@ -527,6 +541,20 @@ def fetch_draft_class(draft_year=None, position=None):
     def _query():
         nonlocal draft_year
         with get_db() as conn:
+            # Check if draft_picks table exists
+            table_check = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='draft_picks'"
+            ).fetchone()
+            if not table_check:
+                return {
+                    "draft_year": draft_year or _current_nfl_season(),
+                    "available_classes": [],
+                    "position": position or "ALL",
+                    "summary": {"draft_year": draft_year or _current_nfl_season(), "total_players": 0, "total_ppr": 0, "avg_ppg": 0, "hits": 0, "busts": 0, "hit_rate": 0},
+                    "rounds": [],
+                    "players": [],
+                }
+
             available_classes = [
                 r[0] for r in conn.execute(
                     "SELECT DISTINCT season FROM draft_picks ORDER BY season DESC"
@@ -548,7 +576,7 @@ def fetch_draft_class(draft_year=None, position=None):
                     d.player_name, d.position, d.round, d.pick, d.team as draft_team,
                     d.college,
                     p.player_id, p.team as current_team, p.age,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.season) as seasons_played,
                     COUNT(DISTINCT s.season || '-' || s.week) as total_games
                 FROM draft_picks d
@@ -752,7 +780,7 @@ def fetch_pace_tracker(season=None, position=None, limit=50):
                        COALESCE(SUM(s.receptions), 0) as total_rec,
                        COALESCE(SUM(s.targets), 0) as total_tgt,
                        COALESCE(SUM(s.carries), 0) as total_car,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -946,7 +974,7 @@ def fetch_streaks(season=None, position=None, window=4, limit=25, week=None):
                     continue
 
                 recent = weeks[-window:]
-                recent_avg = sum(w["fpts"] for w in recent) / len(recent)
+                recent_avg = sum(w["fpts"] for w in recent) / (len(recent) or 1)
                 delta = recent_avg - season_avg
                 delta_pct = round((delta / season_avg) * 100, 1) if season_avg else 0
 
@@ -1000,7 +1028,7 @@ def fetch_season_recap(season=None):
             cursor.execute("""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week) as games,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND s.season_type = 'regular'
@@ -1096,7 +1124,7 @@ def fetch_season_recap(season=None):
             cursor.execute("""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week) as games,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_fpts
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND s.season_type = 'regular'
@@ -1185,7 +1213,7 @@ def fetch_records(position=None, limit=10):
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        s.season, COUNT(DISTINCT s.week) as games,
-                       SUM(s.fantasy_points_ppr) as total_fpts
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_fpts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE p.fantasy_relevant = 1 AND s.season_type = 'regular' {pos_filter}
@@ -1210,7 +1238,7 @@ def fetch_records(position=None, limit=10):
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week || '-' || s.season) as games,
-                       SUM(s.fantasy_points_ppr) as total_fpts,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_fpts,
                        MIN(s.season) as first_season,
                        MAX(s.season) as last_season
                 FROM player_week_stats s
@@ -1237,7 +1265,9 @@ def fetch_records(position=None, limit=10):
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week || '-' || s.season) as games,
-                       SUM(s.fantasy_points_ppr) as total_fpts
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_fpts,
+                       MIN(s.season) as first_season,
+                       MAX(s.season) as last_season
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE p.fantasy_relevant = 1 AND s.season_type = 'regular' {pos_filter}
@@ -1255,6 +1285,7 @@ def fetch_records(position=None, limit=10):
                     "position": r[2] or "RB", "team": r[3] or "FA",
                     "games": games, "total_fpts": round(total, 1),
                     "ppg": round(total / games, 1),
+                    "seasons": f"{r[6]}-{r[7]}",
                 })
 
             return {
@@ -1384,7 +1415,7 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
             # Build defense PPG-allowed-by-position for the season
             cursor.execute("""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1558,7 +1589,7 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
                        SUM(s.rushing_tds) as rush_td,
                        SUM(s.receiving_tds) as rec_td,
                        SUM(s.interceptions) as ints,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1698,7 +1729,8 @@ def fetch_garbage_time(season=None, position=None, limit=40):
                 })
 
             # Split into stat padders (high GT%) and clean producers (low GT%)
-            stat_padders = sorted([p for p in players if p["garbage_time_pct"] >= 15],
+            # Min 5 PPG to filter out irrelevant players (punters, practice squad)
+            stat_padders = sorted([p for p in players if p["garbage_time_pct"] >= 15 and p["ppg"] >= 5],
                                   key=lambda x: x["garbage_time_pct"], reverse=True)[:limit]
             clean_producers = sorted([p for p in players if p["garbage_time_pct"] <= 5 and p["ppg"] >= 8],
                                      key=lambda x: x["ppg"], reverse=True)[:limit]
@@ -1826,7 +1858,7 @@ def fetch_handcuffs(season=None, limit=30):
                        SUM(s.rushing_tds) as total_rush_td,
                        SUM(s.targets) as total_tgt,
                        SUM(s.receptions) as total_rec,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1957,7 +1989,7 @@ def fetch_weekly_mvp(season=None):
     return _cached(f"weekly_mvp:{season}", _query)
 
 
-def fetch_stacks(season=None, limit=30):
+def fetch_stacks(season=None, limit=30, min_games=8):
     """
     Stack correlation finder — QB + WR/TE same-team scoring correlations.
     Computes Pearson correlation between QB weekly scores and their pass
@@ -2017,7 +2049,7 @@ def fetch_stacks(season=None, limit=30):
                 for qb_id in team_qbs[team]:
                     qb_info = player_info[qb_id]
                     qb_weeks = player_weeks[qb_id]
-                    if len(qb_weeks) < 5:
+                    if len(qb_weeks) < min_games:
                         continue
 
                     qb_ppg = sum(qb_weeks.values()) / len(qb_weeks)
@@ -2028,7 +2060,7 @@ def fetch_stacks(season=None, limit=30):
 
                         # Find common weeks
                         common = sorted(set(qb_weeks.keys()) & set(rec_weeks.keys()))
-                        if len(common) < 5:
+                        if len(common) < min_games:
                             continue
 
                         qb_scores = [qb_weeks[w] for w in common]
@@ -2068,7 +2100,7 @@ def fetch_stacks(season=None, limit=30):
                 "available_seasons": available_seasons,
                 "count": len(stacks),
             }
-    return _cached(f"stacks:{season}:{limit}", _query)
+    return _cached(f"stacks:{season}:{limit}:{min_games}", _query)
 
 
 def fetch_positional_advantage(season=None, position=None, limit=40):
@@ -2096,7 +2128,7 @@ def fetch_positional_advantage(season=None, position=None, limit=40):
             # Get all player season stats
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
-                       SUM(s.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -2210,7 +2242,8 @@ def fetch_td_regression(season=None, position=None, limit=50):
                     opportunities = carries + targets
                     actual_tds = rush_td + rec_td
 
-                if opportunities < 20:
+                opp_min = {"QB": 20, "RB": 20, "WR": 15, "TE": 10}.get(pos, 20)
+                if opportunities < opp_min:
                     continue
 
                 td_rate = actual_tds / opportunities if opportunities > 0 else 0
@@ -2802,7 +2835,7 @@ def fetch_success_rate(season=None, position=None, limit=50, week=None):
                        SUM(w.attempts) as pass_att,
                        SUM(w.passing_yards) as pass_yds,
                        SUM(w.passing_tds) as pass_tds,
-                       SUM(w.fantasy_points_ppr) as total_ppr,
+                       ROUND(SUM(w.fantasy_points_ppr), 1) as total_ppr,
                        COUNT(DISTINCT w.week) as games
                 FROM player_season_pbp pb
                 JOIN players p ON p.player_id = pb.player_id
@@ -2894,7 +2927,7 @@ def fetch_game_script(season=None, position=None, limit=40, week=None):
             rows = conn.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        pb.avg_score_differential, pb.garbage_time_pct,
-                       SUM(w.fantasy_points_ppr) as tot_ppr,
+                       ROUND(SUM(w.fantasy_points_ppr), 1) as tot_ppr,
                        COUNT(DISTINCT w.week) as gp
                 FROM player_season_pbp pb
                 JOIN players p ON p.player_id = pb.player_id
@@ -2962,6 +2995,20 @@ def fetch_draft_class_tracker(draft_year=None, position=None):
     def _query():
         nonlocal draft_year
         with get_db() as conn:
+            # Check if draft_picks table exists
+            table_check = conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='draft_picks'"
+            ).fetchone()
+            if not table_check:
+                return {
+                    "draft_year": draft_year or _current_draft_year(),
+                    "available_years": [],
+                    "position": position or "ALL",
+                    "summary": {"total": 0, "hits": 0, "busts": 0, "hit_rate": 0, "bust_rate": 0},
+                    "rounds": [],
+                    "players": [],
+                }
+
             # Available draft years
             year_rows = conn.execute(
                 "SELECT DISTINCT season FROM draft_picks WHERE position IN ('QB','RB','WR','TE') ORDER BY season DESC"

@@ -629,7 +629,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team, p.age,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.week) as games,
                     AVG(s.offense_pct) as avg_snap_pct,
                     SUM(s.targets) as targets,
@@ -702,6 +702,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                 WHERE player_id IN ({placeholders})
                   AND season = ?
                   AND stat_key = 'target_share'
+                  AND season_type = 'regular'
                   {metrics_week_filter}
                 GROUP BY player_id
             """, metrics_params).fetchall()
@@ -752,7 +753,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                     gap = p["opportunity_pct"] - p["production_pct"]
                     # Age bonus: younger = higher breakout potential
                     age_bonus = max(0, (28 - (p["age"] or 27)) * 2)
-                    p["rbs_score"] = max(0, gap + age_bonus)
+                    p["rbs_score"] = round(max(0, gap + age_bonus), 1)
                     del p["_opp_raw"]
 
             # Flatten, sort by RBS, take top N
@@ -841,7 +842,7 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team, p.age,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.week) as games,
                     SUM(s.rushing_yards) as rush_yds,
                     SUM(s.carries) as carries,
@@ -1096,7 +1097,7 @@ def fetch_stat_explorer(season=None, position=None, x_stat="targets_g", y_stat="
                     p.player_id, p.full_name, p.position, p.team, p.age,
                     p.headshot_url,
                     COUNT(DISTINCT s.week) as games,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     SUM(s.targets) as total_targets,
                     SUM(s.receptions) as total_receptions,
                     SUM(s.receiving_yards) as total_rec_yards,
@@ -1171,6 +1172,7 @@ def fetch_stat_explorer(season=None, position=None, x_stat="targets_g", y_stat="
                     WHERE m.player_id IN ({placeholders})
                       AND m.stat_key IN ({stat_ph})
                       AND m.season = ?
+                      AND m.season_type = 'regular'
                     GROUP BY m.player_id, m.stat_key
                 """, pid_list + rate_keys + [season]).fetchall()
 
@@ -1384,7 +1386,7 @@ def fetch_weekly_heatmap(season=None, position=None, limit=40):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team, p.headshot_url,
                     COUNT(DISTINCT s.week) as games,
-                    SUM(s.fantasy_points_ppr) as total_pts,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_pts,
                     CAST(SUM(s.fantasy_points_ppr) AS REAL) / COUNT(DISTINCT s.week) as ppg
                 FROM players p
                 JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
@@ -1484,7 +1486,7 @@ def fetch_target_distribution(season=None, team=None, week=None):
                     COALESCE(SUM(s.rushing_yards), 0) as rush_yards,
                     COALESCE(SUM(s.receiving_tds), 0) as rec_tds,
                     COALESCE(SUM(s.rushing_tds), 0) as rush_tds,
-                    COALESCE(SUM(s.fantasy_points_ppr), 0) as ppr_pts
+                    ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as ppr_pts
                 FROM players p
                 JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
                 WHERE p.position IN ('QB', 'RB', 'WR', 'TE')
@@ -1581,7 +1583,7 @@ def fetch_matchup_heatmap(season=None, position=None):
                 SELECT
                     s.opponent_team as defense,
                     p.position,
-                    COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr
+                    ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -1670,7 +1672,7 @@ def fetch_matchup_heatmap(season=None, position=None):
                         p.player_id, p.full_name, p.position, p.team, p.headshot_url,
                         s.opponent_team as defense,
                         COUNT(DISTINCT s.week) as games_vs,
-                        COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                        ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                         ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0) * 1.0 / MAX(1, COUNT(DISTINCT s.week)), 1) as ppg_vs
                     FROM player_week_stats s
                     JOIN players p ON p.player_id = s.player_id
@@ -1844,7 +1846,7 @@ def fetch_usage_trends(season=None, position=None, window=5, limit=30, week=None
                 delta = round(second_avg - first_avg, 1)
 
                 current_snap = recent[-1]["snap_pct"]
-                season_avg = round(sum(w["snap_pct"] for w in weeks) / len(weeks), 1)
+                season_avg = round(sum(w["snap_pct"] for w in weeks) / (len(weeks) or 1), 1)
 
                 info = player_info[pid]
                 info["weeks"] = all_weeks_data
@@ -1936,7 +1938,7 @@ def fetch_year_over_year(season=None, position=None, metric="ppg", limit=25):
                     p.player_id, p.full_name, p.position, p.team, p.age,
                     p.headshot_url,
                     COUNT(DISTINCT s.week) as games,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     SUM(s.targets) as total_targets,
                     SUM(s.receptions) as total_receptions,
                     SUM(s.receiving_yards) as total_rec_yards,
@@ -2093,7 +2095,7 @@ def fetch_air_yards(season=None, position=None, limit=25):
                     p.player_id, p.full_name, p.position, p.team, p.age,
                     p.headshot_url,
                     COUNT(DISTINCT s.week) as games,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     SUM(s.targets) as total_targets,
                     SUM(s.receptions) as total_receptions,
                     SUM(s.receiving_yards) as total_rec_yards,
@@ -2159,6 +2161,7 @@ def fetch_air_yards(season=None, position=None, limit=25):
                 WHERE m.player_id IN ({placeholders})
                   AND m.stat_key IN ({stat_ph})
                   AND m.season = ?
+                  AND m.season_type = 'regular'
                 GROUP BY m.player_id, m.stat_key
             """, pid_list + rate_keys + [season]).fetchall()
 
@@ -2256,7 +2259,7 @@ def fetch_redzone_usage(season=None, position=None, limit=30, week=None):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.week) as games,
                     SUM(s.rushing_tds) as rush_tds,
                     SUM(s.receiving_tds) as rec_tds,

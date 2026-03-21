@@ -5,11 +5,19 @@ College football functions — cfb player stats, analytics, records, awards.
 import logging
 import math
 import re
+from collections import defaultdict
 
 from ..db import get_db
 from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived, TEAM_ABBREV
 
 logger = logging.getLogger("razzle.live_data.college")
+
+
+def _has_table(conn, table_name):
+    """Check if a table exists in the database."""
+    return conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,)
+    ).fetchone() is not None
 
 
 def _efficiency_grade(percentile):
@@ -41,6 +49,8 @@ def _fetch_college_players_uncached(
 ):
     """Return paginated college player stats from cfb_player_season_stats."""
     with get_db() as conn:
+        if not _has_table(conn, "cfb_player_season_stats"):
+            return {"items": [], "count": 0, "season": season or _current_nfl_season(), "available_seasons": []}
 
         # Default to latest season
         if not season:
@@ -162,6 +172,8 @@ def fetch_college_players(search="", position="", positions="", team="", confere
 def _fetch_college_player_profile_uncached(player_id):
     """Return a rich college player profile with all seasons + combine/draft data."""
     with get_db() as conn:
+        if not _has_table(conn, "cfb_player_season_stats"):
+            return {"player": None, "seasons": [], "combine": None, "draft": None}
         # Get all seasons for this player
         seasons = conn.execute("""
             SELECT player_id, player_name, position, team, conference, season,
@@ -217,29 +229,33 @@ def _fetch_college_player_profile_uncached(player_id):
         name_nospace = latest["player_name"].lower().replace(" ", "")
 
         # Try to match with combine data (try space-stripped first, then alpha-only)
-        combine_row = conn.execute("""
-            SELECT player_name, position, school, draft_year,
-                   height_inches, weight,
-                   forty, bench, vertical, broad_jump, cone, shuttle,
-                   draft_team, draft_round, draft_pick, pfr_id
-            FROM combine_data
-            WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
-            ORDER BY draft_year DESC LIMIT 1
-        """, (name_nospace,)).fetchone()
-
-        # Fallback: broader match for names with apostrophes/hyphens
-        if not combine_row:
-            candidates = conn.execute("""
+        combine_row = None
+        try:
+            combine_row = conn.execute("""
                 SELECT player_name, position, school, draft_year,
                        height_inches, weight,
                        forty, bench, vertical, broad_jump, cone, shuttle,
                        draft_team, draft_round, draft_pick, pfr_id
                 FROM combine_data
-                WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
                 ORDER BY draft_year DESC LIMIT 1
-            """, (name_alpha,)).fetchone()
-            if candidates:
-                combine_row = candidates
+            """, (name_nospace,)).fetchone()
+
+            # Fallback: broader match for names with apostrophes/hyphens
+            if not combine_row:
+                candidates = conn.execute("""
+                    SELECT player_name, position, school, draft_year,
+                           height_inches, weight,
+                           forty, bench, vertical, broad_jump, cone, shuttle,
+                           draft_team, draft_round, draft_pick, pfr_id
+                    FROM combine_data
+                    WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                    ORDER BY draft_year DESC LIMIT 1
+                """, (name_alpha,)).fetchone()
+                if candidates:
+                    combine_row = candidates
+        except Exception:
+            pass  # combine_data table may not exist
 
         combine = None
         if combine_row:
@@ -251,20 +267,8 @@ def _fetch_college_player_profile_uncached(player_id):
             combine["draft_team"] = TEAM_ABBREV.get(dt, dt[:3] if dt else None)
 
         # Try to match with draft picks
-        draft_row = conn.execute("""
-            SELECT player_name, position, college, season as draft_year,
-                   round, pick, team as nfl_team,
-                   career_av, games as nfl_games, allpro, probowls,
-                   pass_yards as nfl_pass_yards, pass_tds as nfl_pass_tds,
-                   rush_yards as nfl_rush_yards, rush_tds as nfl_rush_tds,
-                   rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
-                   receptions as nfl_receptions
-            FROM draft_picks
-            WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
-            ORDER BY season DESC LIMIT 1
-        """, (name_nospace,)).fetchone()
-
-        if not draft_row:
+        draft_row = None
+        try:
             draft_row = conn.execute("""
                 SELECT player_name, position, college, season as draft_year,
                        round, pick, team as nfl_team,
@@ -274,9 +278,25 @@ def _fetch_college_player_profile_uncached(player_id):
                        rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
                        receptions as nfl_receptions
                 FROM draft_picks
-                WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                WHERE LOWER(REPLACE(player_name, ' ', '')) = ?
                 ORDER BY season DESC LIMIT 1
+            """, (name_nospace,)).fetchone()
+
+            if not draft_row:
+                draft_row = conn.execute("""
+                    SELECT player_name, position, college, season as draft_year,
+                           round, pick, team as nfl_team,
+                           career_av, games as nfl_games, allpro, probowls,
+                           pass_yards as nfl_pass_yards, pass_tds as nfl_pass_tds,
+                           rush_yards as nfl_rush_yards, rush_tds as nfl_rush_tds,
+                           rec_yards as nfl_rec_yards, rec_tds as nfl_rec_tds,
+                           receptions as nfl_receptions
+                    FROM draft_picks
+                    WHERE LOWER(REPLACE(REPLACE(REPLACE(player_name, ' ', ''), '''', ''), '-', '')) = ?
+                    ORDER BY season DESC LIMIT 1
             """, (name_alpha,)).fetchone()
+        except Exception:
+            pass  # draft_picks table may not exist
 
         draft = dict(draft_row) if draft_row else None
 
@@ -296,6 +316,8 @@ def fetch_college_player_profile(player_id):
 def _fetch_college_filter_options_uncached():
     """Return available filter values for the college screener."""
     with get_db() as conn:
+        if not _has_table(conn, "cfb_player_season_stats"):
+            return {"seasons": [], "teams": [], "conferences": [], "positions": []}
 
         seasons = [r[0] for r in conn.execute(
             "SELECT DISTINCT season FROM cfb_player_season_stats ORDER BY season DESC"
@@ -546,9 +568,11 @@ def _fetch_college_efficiency_uncached(season=None, position=None, limit=30):
             total_yards = d["total_yards"] or 0
             total_tds = d["total_tds"] or 0
 
+            pos = d["position"] or "ATH"
             opportunities = carries + targets
             touches = carries + receptions
-            if opportunities < 30:
+            opp_min = {"QB": 30, "RB": 25, "WR": 20, "TE": 15}.get(pos, 25)
+            if opportunities < opp_min:
                 continue
 
             # Approximate fantasy points (standard college scoring: 0.1 yd, 6 TD, 1 rec PPR)
@@ -1058,7 +1082,9 @@ def _fetch_college_stock_watch_uncached(season=None, position=None, limit=30):
 
             # Efficiency: points per opportunity
             opportunities = carries + targets + (d["pass_attempts"] or 0)
-            ppo = round(fpts / opportunities, 2) if opportunities > 20 else None
+            col_pos = d["position"] or "ATH"
+            col_opp_min = {"QB": 25, "RB": 20, "WR": 15, "TE": 10}.get(col_pos, 20)
+            ppo = round(fpts / opportunities, 2) if opportunities > col_opp_min else None
 
             # Yards per touch
             touches = carries + receptions
@@ -1290,7 +1316,7 @@ def fetch_college_scarcity(season=None):
 
 def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
     """College consistency: cross-season per-game stat variance for multi-year players."""
-    import math as _math
+
 
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -1322,7 +1348,7 @@ def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
             return {"season": season, "available_seasons": available_seasons,
                     "rock_solid": [], "wild_cards": []}
 
-        from collections import defaultdict
+
         player_seasons = defaultdict(list)
         player_info = {}
         for r in rows:
@@ -1353,6 +1379,8 @@ def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
                 continue
             ppg_values = [s["ppg"] for s in seasons_data]
             n = len(ppg_values)
+            if n == 0:
+                continue
             total_games = sum(s["games"] for s in seasons_data)
             mean = sum(ppg_values) / n
             if mean < 2:
@@ -1360,7 +1388,7 @@ def _fetch_college_consistency_uncached(season=None, position=None, limit=30):
 
             if n >= 2:
                 variance = sum((v - mean) ** 2 for v in ppg_values) / (n - 1)
-                stddev = _math.sqrt(variance)
+                stddev = math.sqrt(variance)
             else:
                 stddev = 0.0
             cov = round(stddev / mean, 3) if mean > 0 else 0
@@ -1499,7 +1527,7 @@ def fetch_college_workload(season=None, position=None, limit=50):
 
 def _fetch_college_dual_threat_uncached(season=None, position=None, limit=50):
     """College dual-threat index: rush + receiving versatility."""
-    import math as _math
+
 
     with get_db() as conn:
         available_seasons = _cfb_available_seasons(conn)
@@ -1547,7 +1575,7 @@ def _fetch_college_dual_threat_uncached(season=None, position=None, limit=50):
 
             rush_comp = max(rush_yd_pg, 0.1)
             rec_comp = max(rec_yd_pg, 0.1)
-            dti = _math.sqrt(rush_comp * rec_comp)
+            dti = math.sqrt(rush_comp * rec_comp)
 
             total = rush_yd + rec_yd
             rush_pct = (rush_yd / total * 100) if total > 0 else 50
@@ -1703,7 +1731,7 @@ def _fetch_college_aging_curves_uncached(position=None):
         rows = conn.execute(query, pos_params).fetchall()
 
         # Group by player, assign experience year
-        from collections import defaultdict
+
         player_seasons: dict = {}
         for r in rows:
             d = dict(r)

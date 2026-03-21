@@ -374,20 +374,21 @@ function getTrialStatusText() {
 /* ===== Brand Voice — Shared Vocabulary ===== */
 
 var RAZZLE_ERRORS = [
-  "fumbled the data fetch... try again in a sec",
-  "film room's dark right now \u2014 give it another shot",
-  "the tape machine jammed. Razzle's on it",
-  "interception on that request. retry?",
-  "false start on the server. try refreshing",
-  "delay of game \u2014 something went sideways"
+  "fumbled the data fetch. Razzle's chasing it down \u2014 try again in a sec",
+  "film room went dark. check your connection and give it another shot",
+  "something went sideways. Razzle knocked the server off the table. refresh and we'll pretend it didn't happen",
+  "interception on that request. the defense got to us first \u2014 retry?",
+  "delay of game on the server. they're getting their act together \u2014 try refreshing",
+  "connection dropped mid-play. Razzle's running it back \u2014 try again"
 ];
 
 var RAZZLE_EMPTY = [
-  "nobody home for this filter",
-  "the film room's empty. adjust your filters",
-  "zero matches \u2014 either your standards are elite or your filter's off",
-  "Razzle checked everywhere. nothing matches",
-  "clean pocket, no receivers open. try different filters"
+  "nobody home for this filter. everyone's got a down year",
+  "the film room's empty. try loosening those filters",
+  "zero matches \u2014 either your standards are elite or your filter's too tight",
+  "Razzle checked everywhere. nothing matches. we're as surprised as you are",
+  "clean pocket, no receivers open. try different filters",
+  "the scouting report came back blank. adjust and try again"
 ];
 
 var RAZZLE_LOADING = [
@@ -412,21 +413,63 @@ function razzleError() { return RAZZLE_ERRORS[Math.floor(Math.random() * RAZZLE_
 function razzleEmpty() { return RAZZLE_EMPTY[Math.floor(Math.random() * RAZZLE_EMPTY.length)]; }
 function razzleLoading() { return RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)]; }
 
+/* ===== Rarity Watermark — Random Character on Screenshots ===== */
+var _wmAgentIcons = [
+  "/assets/agents/razzle.svg", "/assets/agents/dolphin.svg",
+  "/assets/agents/hawkeye.svg", "/assets/agents/bones.svg",
+  "/assets/agents/octo.svg", "/assets/agents/atlas.svg"
+];
+var _wmImgCache = {};
+(function() {
+  for (var i = 0; i < _wmAgentIcons.length; i++) {
+    var img = new Image();
+    img.src = _wmAgentIcons[i];
+    _wmImgCache[_wmAgentIcons[i]] = img;
+  }
+})();
+
+function drawRazzleWatermark(ctx, canvas, opts) {
+  opts = opts || {};
+  var isDark = opts.isDark || (document.documentElement.dataset && document.documentElement.dataset.theme === "dark");
+  var wmAlpha = isDark ? "rgba(237, 224, 207, 0.25)" : "rgba(45, 31, 20, 0.25)";
+  var pick = _wmAgentIcons[Math.floor(Math.random() * _wmAgentIcons.length)];
+  var img = _wmImgCache[pick];
+  if (img && img.complete && img.naturalWidth > 0) {
+    var sz = 32;
+    ctx.globalAlpha = isDark ? 0.3 : 0.2;
+    ctx.drawImage(img, canvas.width - 180, canvas.height - sz - 16, sz, sz);
+    ctx.globalAlpha = 1.0;
+  }
+  ctx.fillStyle = wmAlpha;
+  ctx.textAlign = "right";
+  ctx.font = "600 28px Caveat, cursive";
+  ctx.fillText("razzle.lol", canvas.width - 20, canvas.height - 30);
+  if (opts.url) {
+    var u = opts.url.replace(/^https?:\/\//, "");
+    if (u.length > 60) u = u.substring(0, 57) + "...";
+    ctx.font = '400 16px "Space Mono", monospace';
+    ctx.fillText(u, canvas.width - 20, canvas.height - 12);
+  }
+}
+
 /**
  * Show a toast notification. Available on all pages (defined in app.js).
  */
-function _showToast(msg, type, duration) {
+function _showToast(msg, type, duration, link) {
   var existing = document.querySelector('.razzle-toast');
   if (existing) existing.remove();
   var toast = document.createElement('div');
   toast.className = 'razzle-toast';
   if (type === 'warning') toast.style.borderColor = 'var(--orange)';
   if (type === 'error') toast.style.borderColor = 'var(--red)';
-  // Use innerHTML only for messages with trusted internal links (contains <a href="/...)
-  if (msg.indexOf('<a href="/') !== -1) {
-    toast.innerHTML = msg;
-  } else {
-    toast.textContent = msg;
+  toast.textContent = msg;
+  if (link && link.href && link.text) {
+    toast.appendChild(document.createTextNode(' '));
+    var a = document.createElement('a');
+    a.href = link.href;
+    a.textContent = link.text;
+    a.style.cssText = 'color:var(--orange);text-decoration:underline;';
+    toast.appendChild(a);
   }
   document.body.appendChild(toast);
   setTimeout(function() { toast.classList.add('razzle-toast-show'); }, 10);
@@ -448,6 +491,12 @@ function escapeAttr(str) {
   return String(str).replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+/** Escape a string for use inside a JavaScript string literal (e.g. inline onclick handlers). */
+function escapeJS(str) {
+  if (!str) return "";
+  return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+}
+
 const API_BASE = window.location.origin;
 
 function getAuthHeaders() {
@@ -464,8 +513,7 @@ async function apiFetch(path, options = {}) {
   options.headers = Object.assign({}, authHeaders, options.headers || {});
   const resp = await fetch(url, options);
   if (resp.status === 401) {
-    localStorage.removeItem("razzle_token");
-    localStorage.removeItem("razzle_user");
+    try { localStorage.removeItem("razzle_token"); localStorage.removeItem("razzle_user"); } catch (e) {}
     if (typeof openAuthModal === "function") openAuthModal();
     throw new Error("session expired. sign in again.");
   }
@@ -919,13 +967,12 @@ async function checkAuth() {
       headers: { "Authorization": "Bearer " + token }
     });
     if (!resp.ok) {
-      localStorage.removeItem("razzle_token");
-      localStorage.removeItem("razzle_user");
+      try { localStorage.removeItem("razzle_token"); localStorage.removeItem("razzle_user"); } catch (e) {}
       updateAuthUI(null);
       return;
     }
     var data = await resp.json();
-    localStorage.setItem("razzle_user", JSON.stringify(data.user));
+    try { localStorage.setItem("razzle_user", JSON.stringify(data.user)); } catch (e) {}
     updateAuthUI(data.user);
   } catch (e) {
     // Network error — keep cached user if any
@@ -1708,7 +1755,7 @@ function openPlayerPopup(playerId) {
     if (stats) {
       html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-bottom:16px;">';
       var keys = [
-        { k: "games_played", l: "GP" }, { k: "fantasy_points_ppr", l: "PPR" },
+        { k: "games", l: "GP" }, { k: "fantasy_points_ppr", l: "PPR" },
         { k: "targets", l: "TGT" }, { k: "receptions", l: "REC" },
         { k: "receiving_yards", l: "REC YD" }, { k: "rushing_yards", l: "RUSH YD" },
         { k: "passing_yards", l: "PASS YD" }, { k: "total_tds", l: "TD" },
@@ -1753,4 +1800,72 @@ document.addEventListener("keydown", function(e) {
       if (typeof checkAuth === "function") checkAuth();
     }
   });
+})();
+
+/* ===== Ambient Character Peek — ~1/7 page loads ===== */
+(function() {
+  try { if (localStorage.getItem("razzle_no_peek") === "1") return; } catch(e) {}
+  if (Math.random() > (1 / 7)) return;
+
+  // Page → character mapping
+  var pagePeek = {
+    "/lab.html": { icon: "/assets/agents/hawkeye.svg", name: "Hawkeye" },
+    "/league-intel.html": { icon: "/assets/agents/bones.svg", name: "Bones" },
+    "/agents.html": { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+    "/": { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+    "/index.html": { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+    "/pricing.html": { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+  };
+  var path = location.pathname;
+  var agent = pagePeek[path];
+  if (!agent) {
+    // Fallback: rotate through all agents
+    var allAgents = [
+      { icon: "/assets/agents/razzle.svg", name: "Razzle" },
+      { icon: "/assets/agents/dolphin.svg", name: "Dr. Dolphin" },
+      { icon: "/assets/agents/hawkeye.svg", name: "Hawkeye" },
+      { icon: "/assets/agents/bones.svg", name: "Bones" },
+      { icon: "/assets/agents/octo.svg", name: "Octo" },
+      { icon: "/assets/agents/atlas.svg", name: "Atlas" },
+    ];
+    agent = allAgents[Math.floor(Math.random() * allAgents.length)];
+  }
+
+  var peek = document.createElement("div");
+  peek.className = "agent-peek";
+  peek.innerHTML = '<img src="' + escapeAttr(agent.icon) + '" alt="' + escapeAttr(agent.name) + '" width="48" height="48">';
+  peek.title = agent.name + " is watching";
+  peek.setAttribute("aria-label", agent.name + " character peek — click to dismiss");
+  peek.setAttribute("role", "button");
+  peek.tabIndex = 0;
+
+  // Style
+  var s = peek.style;
+  s.position = "fixed";
+  s.right = "-48px";
+  s.bottom = "20%";
+  s.width = "48px";
+  s.height = "48px";
+  s.cursor = "pointer";
+  s.zIndex = "999";
+  s.opacity = "0";
+  s.transition = "right 0.6s ease-out, opacity 0.6s ease-out";
+  s.pointerEvents = "auto";
+
+  // Dismiss on click
+  peek.addEventListener("click", function() {
+    s.right = "-48px";
+    s.opacity = "0";
+    setTimeout(function() { if (peek.parentNode) peek.parentNode.removeChild(peek); }, 600);
+  });
+  peek.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); peek.click(); }
+  });
+
+  document.body.appendChild(peek);
+  // Slide in after a delay
+  setTimeout(function() {
+    s.right = "-16px";  // Only partially visible (peeking)
+    s.opacity = "0.7";
+  }, 2000);
 })();

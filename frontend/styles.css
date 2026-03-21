@@ -767,6 +767,12 @@ a.btn-pro-upgrade:focus-visible {
 .chip.active[data-pos="TE"] { background: var(--pos-te); }
 .chip.active[data-pos="ALL"] { background: var(--ink); color: var(--bg); }
 
+/* ===== POSITION STRIPE — 4px colored top border on player cards ===== */
+.pos-stripe-qb { border-top: 4px solid var(--pos-qb) !important; }
+.pos-stripe-rb { border-top: 4px solid var(--pos-rb) !important; }
+.pos-stripe-wr { border-top: 4px solid var(--pos-wr) !important; }
+.pos-stripe-te { border-top: 4px solid var(--pos-te) !important; }
+
 /* ===== LOADING ===== */
 .loading-msg {
   font-family: var(--font-hand);
@@ -791,9 +797,8 @@ a.btn-pro-upgrade:focus-visible {
 .skeleton-cell {
   height: 16px;
   border-radius: 4px;
-  background: linear-gradient(90deg, var(--bg-warm) 25%, var(--bg-card) 50%, var(--bg-warm) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  background: var(--bg-warm);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 .skeleton-header .skeleton-cell {
   height: 12px;
@@ -802,9 +807,9 @@ a.btn-pro-upgrade:focus-visible {
 .skeleton-row:nth-child(odd) .skeleton-cell {
   animation-delay: 0.15s;
 }
-@keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
 }
 
 /* ===== SEARCH HIGHLIGHT ===== */
@@ -1508,6 +1513,11 @@ tr:hover .notes-cell .note-pencil {
   25% { content: '.'; }
   50% { content: '..'; }
   75% { content: '...'; }
+}
+
+@keyframes nudgeFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ===== REDUCED MOTION ===== */

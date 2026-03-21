@@ -2,12 +2,22 @@
 Prospect functions — combine data, athletic profiles, tiers, comparisons.
 """
 
+import datetime as _dt
 import logging
 import math
 
 from ..db import get_db
 
 logger = logging.getLogger("razzle.live_data.prospects")
+
+
+def _has_table(conn, table_name):
+    """Check if a table exists in the database."""
+    return conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,)
+    ).fetchone() is not None
+
+
 from .core import (
     _cached, _CACHE_TTL_STABLE,
     _current_draft_year,
@@ -27,8 +37,9 @@ def _fetch_prospects_uncached(
     draft_year=0,
 ):
     """Return prospect data from combine + draft picks, joined."""
-    import datetime as _dt
     with get_db() as conn:
+        if not _has_table(conn, "combine_data"):
+            return {"items": [], "count": 0, "years": [], "schools": [], "positions": []}
 
         _cur_year = _dt.datetime.now().year
         if not draft_year or draft_year < 2000 or draft_year > _cur_year + 2:
@@ -178,6 +189,8 @@ def fetch_prospects(
 def _fetch_prospect_years_uncached():
     """Return available draft years for the prospect screener."""
     with get_db() as conn:
+        if not _has_table(conn, "combine_data"):
+            return {"years": [], "schools": [], "positions": []}
         years = [r[0] for r in conn.execute(
             "SELECT DISTINCT draft_year FROM combine_data ORDER BY draft_year DESC"
         ).fetchall()]
@@ -198,6 +211,8 @@ def fetch_prospect_years():
 def _fetch_prospect_profile_uncached(name, position="", draft_year=0):
     """Return a rich prospect profile with combine data and position-group percentiles."""
     with get_db() as conn:
+        if not _has_table(conn, "combine_data"):
+            return None
 
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
@@ -425,6 +440,8 @@ def _fetch_college_for_prospect(conn, prospect):
 def _fetch_prospect_comps_uncached(name, position="", draft_year=0, limit=5):
     """Find NFL players with the most similar combine athletic profiles."""
     with get_db() as conn:
+        if not _has_table(conn, "combine_data"):
+            return {"prospect": name, "comps": [], "draft_year": draft_year or _current_draft_year()}
 
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
@@ -590,6 +607,8 @@ def fetch_prospect_comps(name, position="", draft_year=0, limit=5):
 def _fetch_prospect_tiers_uncached(position, draft_year=0):
     """Return prospects at a position grouped by athletic percentile tier."""
     with get_db() as conn:
+        if not _has_table(conn, "combine_data"):
+            return {"tiers": {}, "draft_year": draft_year or _current_draft_year(), "position": position or ""}
 
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
@@ -693,6 +712,8 @@ def fetch_prospect_tiers(position, draft_year=0):
 def _fetch_prospects_compare_uncached(names, draft_year=0):
     """Return combine data + percentiles for multiple prospects (for comparison)."""
     with get_db() as conn:
+        if not _has_table(conn, "combine_data"):
+            return {"draft_year": draft_year or _current_draft_year(), "prospects": []}
 
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
@@ -723,6 +744,13 @@ def _fetch_prospect_scores_uncached(position="", draft_year=0):
     RPS = avg athletic percentile (60%) + draft capital value (30%) + size score (10%).
     """
     with get_db() as conn:
+        # Check if combine_data table exists
+        table_check = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='combine_data'"
+        ).fetchone()
+        if not table_check:
+            return {"prospects": [], "draft_year": draft_year or _current_draft_year(), "position": position.upper() if position else "ALL"}
+
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
             draft_year = row[0] if row and row[0] else _current_draft_year()
@@ -820,7 +848,7 @@ def _fetch_prospect_scores_uncached(position="", draft_year=0):
             wt = p.get("weight")
             if wt and pos in size_benchmarks:
                 all_wts = size_benchmarks[pos]["values"]
-                size_pct = sum(1 for w in all_wts if w < wt) / len(all_wts) * 100
+                size_pct = sum(1 for w in all_wts if w < wt) / max(len(all_wts), 1) * 100
                 size_score = round(min(100, size_pct), 1)
             else:
                 size_score = 50  # default median
@@ -860,6 +888,8 @@ def _fetch_draft_class_analytics_uncached(position=""):
     Returns per-year breakdown: count, avg RPS, tier distribution, top prospect, class grade.
     """
     with get_db() as conn:
+        if not _has_table(conn, "combine_data"):
+            return {"classes": [], "position": position.upper() if position else "ALL"}
         # Get all available draft years
         years = [r[0] for r in conn.execute(
             "SELECT DISTINCT draft_year FROM combine_data ORDER BY draft_year ASC"
@@ -882,8 +912,8 @@ def _fetch_draft_class_analytics_uncached(position=""):
             })
             continue
 
-        rps_values = [p["rps"] for p in prospects]
-        avg_rps = round(sum(rps_values) / len(rps_values), 1)
+        rps_values = [p["rps"] for p in prospects if p.get("rps") is not None]
+        avg_rps = round(sum(rps_values) / max(len(rps_values), 1), 1)
 
         # Tier distribution
         tiers = {"elite": 0, "premium": 0, "solid": 0, "flier": 0}
@@ -944,6 +974,9 @@ def _fetch_athletic_radar_uncached(position="", draft_year=0):
     and percentile ranks for forty, bench, vertical, broad_jump, cone, shuttle.
     """
     with get_db() as conn:
+        if not _has_table(conn, "combine_data"):
+            return {"prospects": [], "draft_year": draft_year or _current_draft_year(), "position": position.upper() if position else "ALL"}
+
         if not draft_year:
             row = conn.execute("SELECT MAX(draft_year) FROM combine_data").fetchone()
             draft_year = row[0] if row and row[0] else _current_draft_year()

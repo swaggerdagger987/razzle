@@ -124,7 +124,7 @@ def init_formula_store_tables():
 
 
 def _seed_formula_store(conn):
-    import json
+
     seeds = [
         {
             "name": "PPR Workhorse",
@@ -221,7 +221,7 @@ def _seed_formula_store(conn):
 
 def publish_formula(name: str, description: str, position_tags: list,
                     stat_weights: dict, creator_name: str) -> dict:
-    import json
+
 
     # Reject any field containing HTML tags to prevent stored XSS
     html_err = _validate_no_html(
@@ -250,7 +250,7 @@ def publish_formula(name: str, description: str, position_tags: list,
 
 def fetch_formula_store(position: str = "", sort: str = "newest",
                         search: str = "", limit: int = 50, offset: int = 0) -> dict:
-    import json
+
     with get_db() as conn:
 
         where_parts = []
@@ -306,7 +306,7 @@ def fetch_formula_store(position: str = "", sort: str = "newest",
 
 
 def get_formula_detail(formula_id: int) -> dict:
-    import json
+
     with get_db() as conn:
         row = conn.execute(
             "SELECT id, name, description, position_tags, stat_weights, creator_name, created_at, rating_sum, rating_count FROM formula_store WHERE id = ?",

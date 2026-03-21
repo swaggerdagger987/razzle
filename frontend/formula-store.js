@@ -479,7 +479,7 @@ function renderFormulaStore() {
     <div class="store-controls">
       <div class="store-search-row">
         <input type="search" class="input-chunky" placeholder="search formulas..."
-          value="${escapeHtml(storeState.search)}" oninput="setStoreSearch(this.value)"
+          value="${escapeAttr(storeState.search)}" oninput="setStoreSearch(this.value)"
           autocomplete="off" style="flex:1; max-width:300px;">
         <div style="display:flex; gap:4px;">${posChips}</div>
       </div>

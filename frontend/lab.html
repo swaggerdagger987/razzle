@@ -180,6 +180,18 @@
   .sidebar-recent.has-items {
     display: block;
   }
+  .start-here-hint {
+    display: block;
+    font-family: var(--font-hand);
+    font-size: 12px;
+    color: var(--ink-light);
+    line-height: 1.2;
+    margin-top: 1px;
+  }
+  .start-here-item {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
   .sidebar-recent-label {
     font-family: var(--font-mono);
     font-size: 9px;
@@ -3112,8 +3124,8 @@
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/lab.html" class="active">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/league-intel.html">League Intel</a></li>
+    <li><a href="/agents.html">AI Agents</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -3135,6 +3147,17 @@
     <div class="sidebar-favorites" id="sidebarFavorites">
       <div class="sidebar-recent-label">Favorites</div>
       <div class="sidebar-recent-chips" id="sidebarFavChips"></div>
+    </div>
+
+    <!-- START HERE — for first-time visitors -->
+    <div class="sidebar-start-here" id="sidebarStartHere" style="display:none;">
+      <div style="font-family:var(--font-display); font-size:13px; color:var(--orange); padding:0 12px 4px; letter-spacing:0.5px;">START HERE</div>
+      <a class="lab-sidebar-item start-here-item" data-panel="screener" onclick="switchPanel('screener');_trackStartHere()">The Screener<span class="start-here-hint">the research lab</span></a>
+      <a class="lab-sidebar-item start-here-item" data-panel="rankings" onclick="switchPanel('rankings');_trackStartHere()">Dynasty Rankings<span class="start-here-hint">know what your roster is worth</span></a>
+      <a class="lab-sidebar-item start-here-item" data-panel="tradevalues" onclick="switchPanel('tradevalues');_trackStartHere()">Trade Values<span class="start-here-hint">every player's trade stock</span></a>
+      <a class="lab-sidebar-item start-here-item" data-panel="breakouts" onclick="switchPanel('breakouts');_trackStartHere()">Breakout Finder<span class="start-here-hint">find your next sleeper</span></a>
+      <a class="lab-sidebar-item start-here-item" data-panel="career-compare" onclick="switchPanel('career-compare');_trackStartHere()">Compare<span class="start-here-hint">head-to-head matchups</span></a>
+      <div style="border-bottom:2px dashed var(--ink-faint); margin:8px 12px;"></div>
     </div>
 
     <div class="sidebar-recent" id="sidebarRecent">
@@ -3168,6 +3191,7 @@
     <a class="lab-sidebar-item pro-locked" data-panel="buysell" data-icon="&#x21C5;" onclick="switchPanel('buysell')">Buy / Sell<span class="sidebar-tooltip">Buy / Sell</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="stocks" data-icon="&#x2197;" onclick="switchPanel('stocks')">Stock Watch<span class="sidebar-tooltip">Stock Watch</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="waivers" data-icon="&#x2295;" onclick="switchPanel('waivers')">Waivers<span class="sidebar-tooltip">Waivers</span></a>
+    <a class="lab-sidebar-item pro-locked" data-panel="faab" data-icon="&#x1F4B0;" onclick="switchPanel('faab')">FAAB Strategy<span class="sidebar-tooltip">FAAB Strategy</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="scarcity" data-icon="&#x25EF;" onclick="switchPanel('scarcity')">Scarcity<span class="sidebar-tooltip">Scarcity</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="handcuffs" data-icon="&#x26D3;" onclick="switchPanel('handcuffs')">Handcuffs<span class="sidebar-tooltip">Handcuffs</span></a>
 
@@ -3205,8 +3229,6 @@
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F393;</span><span class="cat-text">College</span></div>
     <a class="lab-sidebar-item pro-locked" data-panel="draftclass" data-icon="&#x1F4CB;" onclick="switchPanel('draftclass')">Draft Class Analytics<span class="sidebar-tooltip">Draft Class Analytics</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="percentiles" data-icon="%" onclick="switchPanel('percentiles')">Percentiles<span class="sidebar-tooltip">Percentiles</span></a>
-    <a class="lab-sidebar-item pro-locked" data-panel="mockdraft" data-icon="&#x1F3AF;" onclick="switchPanel('mockdraft')">Mock Draft<span class="sidebar-tooltip">Simulate a dynasty rookie draft</span></a>
-    <a class="lab-sidebar-item pro-locked" data-panel="proradar" data-icon="&#x25CE;" onclick="switchPanel('proradar')">Athletic Radar<span class="sidebar-tooltip">Prospect combine spider charts</span></a>
     <a class="lab-sidebar-item pro-locked" data-panel="drafttracker" data-icon="&#x1F4C5;" onclick="switchPanel('drafttracker')">Draft Class Tracker<span class="sidebar-tooltip">How each draft class performed in fantasy</span></a>
 
     <div class="lab-sidebar-category"><span class="cat-icon" style="display:none">&#x1F464;</span><span class="cat-text">Player Tools</span></div>
@@ -3263,6 +3285,7 @@
 
 <!-- PANEL: SCREENER (default) -->
 <div class="lab-panel" id="panel-screener">
+<div id="lab-nudge-container"></div>
 
 <!-- TOOLBAR -->
 <div class="lab-container">
@@ -3301,12 +3324,12 @@
     <div class="toolbar-divider hide-mobile"></div>
 
     <!-- Undo/Redo — only visible when enabled -->
-    <button class="btn-chunky undo-redo-btn" id="undoBtn" onclick="undoState()" title="Undo (Ctrl+Z)" disabled style="font-size:14px; padding:5px 8px;">&#8630;</button>
-    <button class="btn-chunky undo-redo-btn" id="redoBtn" onclick="redoState()" title="Redo (Ctrl+Y)" disabled style="font-size:14px; padding:5px 8px;">&#8631;</button>
+    <button class="btn-chunky undo-redo-btn" id="undoBtn" onclick="undoState()" title="Undo (Ctrl+Z)" aria-label="Undo" disabled style="font-size:14px; padding:5px 8px;">&#8630;</button>
+    <button class="btn-chunky undo-redo-btn" id="redoBtn" onclick="redoState()" title="Redo (Ctrl+Y)" aria-label="Redo" disabled style="font-size:14px; padding:5px 8px;">&#8631;</button>
 
     <!-- Tools dropdown -->
     <div class="tools-dropdown-wrap">
-      <button class="btn-chunky tools-dropdown-btn" id="toolsDropdownBtn" onclick="toggleToolsDropdown()">Tools &#9662;</button>
+      <button class="btn-chunky tools-dropdown-btn" id="toolsDropdownBtn" onclick="toggleToolsDropdown()" aria-expanded="false" aria-haspopup="true">Tools &#9662;</button>
       <div class="tools-dropdown" id="toolsDropdown">
         <!-- VIEW -->
         <div class="tools-dropdown-section">
@@ -3425,7 +3448,7 @@
         <div class="skeleton-row"><div class="skeleton-cell" style="width:26%"></div><div class="skeleton-cell" style="width:16%"></div><div class="skeleton-cell" style="width:13%"></div><div class="skeleton-cell" style="width:17%"></div><div class="skeleton-cell" style="width:20%"></div></div>
         <div class="skeleton-row"><div class="skeleton-cell" style="width:30%"></div><div class="skeleton-cell" style="width:15%"></div><div class="skeleton-cell" style="width:15%"></div><div class="skeleton-cell" style="width:20%"></div><div class="skeleton-cell" style="width:20%"></div></div>
       </div>
-      <div style="text-align:center; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); margin-top:12px;">pulling film...</div>
+      <div id="loadingText" style="text-align:center; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); margin-top:12px;">pulling film...</div>
     </div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; padding:6px 12px; font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">
       <span><span style="background:var(--green); color:white; padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">85+</span> DVS Elite</span>
@@ -3468,9 +3491,9 @@
 </div>
 
 <!-- FILTER MODAL -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="filterModalOverlay" onclick="closeFilterModal(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleFilter" class="filter-modal-overlay" id="filterModalOverlay" onclick="closeFilterModal(event)">
   <div class="filter-modal" onclick="event.stopPropagation()">
-    <h3>Add Filter</h3>
+    <h3 id="dlgTitleFilter">Add Filter</h3>
     <div class="filter-modal-row">
       <select class="select-chunky" id="filterStat" style="flex:2"></select>
       <select class="select-chunky" id="filterOp" style="flex:1">
@@ -3490,9 +3513,9 @@
 </div>
 
 <!-- COLUMN PICKER -->
-<div role="dialog" aria-modal="true" class="column-picker-overlay" id="columnPickerOverlay" onclick="closeColumnPicker(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleColumns" class="column-picker-overlay" id="columnPickerOverlay" onclick="closeColumnPicker(event)">
   <div class="column-picker" onclick="event.stopPropagation()">
-    <h3>Columns</h3>
+    <h3 id="dlgTitleColumns">Columns</h3>
     <input type="text" id="columnPickerSearch" placeholder="Search columns..." oninput="filterColumnPicker(this.value)" style="width:100%; padding:8px 12px; margin-bottom:10px; font-family:var(--font-mono); font-size:13px; border:3px solid var(--ink); border-radius:8px; background:var(--bg); box-sizing:border-box;">
     <div class="preset-bar" id="presetBar"></div>
     <div id="columnGroups"></div>
@@ -3503,9 +3526,9 @@
 </div>
 
 <!-- FORMULA BUILDER -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="formulaOverlay" onclick="closeFormulaBuilder(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleFormula" class="filter-modal-overlay" id="formulaOverlay" onclick="closeFormulaBuilder(event)">
   <div class="filter-modal" style="width:440px;" onclick="event.stopPropagation()">
-    <h3>Custom Formula</h3>
+    <h3 id="dlgTitleFormula">Custom Formula</h3>
     <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:12px;">
       blend stats into a weighted score <span class="pro-locked" style="font-family:var(--font-mono); font-size:10px; color:var(--ink-faint);">unlimited</span>
     </p>
@@ -3523,10 +3546,10 @@
 </div>
 
 <!-- CHART PANEL -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="chartOverlay" onclick="closeChartPanel(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleCharts" class="filter-modal-overlay" id="chartOverlay" onclick="closeChartPanel(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:820px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-      <h3>Charts</h3>
+      <h3 id="dlgTitleCharts">Charts</h3>
       <div style="display:flex; gap:6px;">
         <button class="btn-chunky" id="chartTabRadar" onclick="switchChartTab('radar')">Radar</button>
         <button class="btn-chunky" id="chartTabScatter" onclick="switchChartTab('scatter')">Scatter</button>
@@ -3540,7 +3563,7 @@
 
     <!-- Canvas -->
     <div id="chartCanvasWrap" style="overflow-x:auto;">
-      <canvas id="chartCanvas" width="760" height="460" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>
+      <canvas id="chartCanvas" role="img" aria-label="Player statistics chart" width="760" height="460" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); width:100%;"></canvas>
     </div>
 
     <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
@@ -3551,12 +3574,12 @@
 </div>
 
 <!-- PLAYER COMPARE PANEL -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="compareOverlay" onclick="closeCompare(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleCompare" class="filter-modal-overlay" id="compareOverlay" onclick="closeCompare(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:860px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
-    <h3>Player Comparison</h3>
+    <h3 id="dlgTitleCompare">Player Comparison</h3>
     <div id="compareContent"></div>
     <div style="margin-top:16px; text-align:center;">
-      <canvas id="compareRadar" width="400" height="400" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>
+      <canvas id="compareRadar" role="img" aria-label="Player comparison radar chart" width="400" height="400" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
       <button class="btn-chunky" onclick="closeCompare()">Close</button>
@@ -3565,9 +3588,9 @@
 </div>
 
 <!-- SHARE MODAL -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="shareOverlay" onclick="closeShareModal(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleShare" class="filter-modal-overlay" id="shareOverlay" onclick="closeShareModal(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
-    <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Share This View</h3>
+    <h3 id="dlgTitleShare" style="margin:0 0 16px 0; font-family:var(--font-display);">Share This View</h3>
 
     <!-- Shareable URL -->
     <div style="margin-bottom:16px;">
@@ -3606,9 +3629,9 @@
 </div>
 
 <!-- SAVED VIEWS OVERLAY -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="savedViewsOverlay" onclick="closeSavedViews(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleSavedViews" class="filter-modal-overlay" id="savedViewsOverlay" onclick="closeSavedViews(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
-    <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Saved Views</h3>
+    <h3 id="dlgTitleSavedViews" style="margin:0 0 16px 0; font-family:var(--font-display);">Saved Views</h3>
 
     <!-- Save current view -->
     <div style="margin-bottom:16px; padding-bottom:16px; border-bottom:2px dashed var(--ink-faint);">
@@ -3630,9 +3653,9 @@
 </div>
 
 <!-- CUSTOM SCORING OVERLAY -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="customScoringOverlay" onclick="closeCustomScoring(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleScoring" class="filter-modal-overlay" id="customScoringOverlay" onclick="closeCustomScoring(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:480px; max-width:95vw;" onclick="event.stopPropagation()">
-    <h3 style="margin:0 0 12px 0; font-family:var(--font-display);">Custom Scoring</h3>
+    <h3 id="dlgTitleScoring" style="margin:0 0 12px 0; font-family:var(--font-display);">Custom Scoring</h3>
     <p style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light); margin:0 0 16px 0;">build your own fantasy scoring system</p>
 
     <!-- Config name -->
@@ -3660,9 +3683,9 @@
 </div>
 
 <!-- RANKINGS EXPORT OVERLAY -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="rankingsExportOverlay" onclick="closeRankingsExport(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleExport" class="filter-modal-overlay" id="rankingsExportOverlay" onclick="closeRankingsExport(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:500px; max-width:95vw;" onclick="event.stopPropagation()">
-    <h3 style="margin:0 0 16px 0; font-family:var(--font-display);">Export Rankings</h3>
+    <h3 id="dlgTitleExport" style="margin:0 0 16px 0; font-family:var(--font-display);">Export Rankings</h3>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <div>
         <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Position</label>
@@ -3686,10 +3709,10 @@
 </div>
 
 <!-- PROSPECT TIER VIEW -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="tierOverlay" onclick="closeTierView(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleTiers" class="filter-modal-overlay" id="tierOverlay" onclick="closeTierView(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:900px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
-      <h3 style="margin:0;">Draft Class Athletic Tiers</h3>
+      <h3 id="dlgTitleTiers" style="margin:0;">Draft Class Athletic Tiers</h3>
       <div id="tierPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
       <button class="btn-primary" onclick="exportTierImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
@@ -3703,10 +3726,10 @@
 </div>
 
 <!-- BIG BOARD OVERLAY -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="bigBoardOverlay" onclick="closeBigBoard(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleBigBoard" class="filter-modal-overlay" id="bigBoardOverlay" onclick="closeBigBoard(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
-      <h3 style="margin:0;">Razzle Big Board</h3>
+      <h3 id="dlgTitleBigBoard" style="margin:0;">Razzle Big Board</h3>
       <div id="bbPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
       <button class="btn-primary" id="bbExportBtn" onclick="exportBigBoardImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
@@ -3720,10 +3743,10 @@
 </div>
 
 <!-- CLASS ANALYTICS OVERLAY -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="classAnalyticsOverlay" onclick="closeClassAnalytics(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleClassAnalytics" class="filter-modal-overlay" id="classAnalyticsOverlay" onclick="closeClassAnalytics(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
-      <h3 style="margin:0;">Draft Class Analytics</h3>
+      <h3 id="dlgTitleClassAnalytics" style="margin:0;">Draft Class Analytics</h3>
       <div id="caPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
       <button class="btn-primary" id="caExportBtn" onclick="exportClassAnalyticsImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
@@ -3737,10 +3760,10 @@
 </div>
 
 <!-- TRADE ANALYZER OVERLAY -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="tradeAnalyzerOverlay" onclick="closeTradeAnalyzer(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleTradeAnalyzer" class="filter-modal-overlay" id="tradeAnalyzerOverlay" onclick="closeTradeAnalyzer(event)">
   <div class="trade-analyzer-modal" onclick="event.stopPropagation()">
     <div class="trade-analyzer-header">
-      <h3 style="margin:0; font-family:var(--font-display); font-size:22px;">Trade Analyzer</h3>
+      <h3 id="dlgTitleTradeAnalyzer" style="margin:0; font-family:var(--font-display); font-size:22px;">Trade Analyzer</h3>
       <span style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">check the math on that deal</span>
       <button class="btn-chunky" onclick="closeTradeAnalyzer()" style="margin-left:auto; font-size:12px; padding:4px 14px;">Close</button>
     </div>
@@ -3814,16 +3837,16 @@
         <span style="font-family:var(--font-mono); font-size:14px;">Pick Value Curve</span>
         <span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">dynasty draft capital at a glance</span>
       </div>
-      <canvas id="taPickChartCanvas" width="720" height="220" style="border:3px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%; display:block;"></canvas>
+      <canvas id="taPickChartCanvas" role="img" aria-label="Trade analyzer pick value chart" width="720" height="220" style="border:3px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%; display:block;"></canvas>
     </div>
   </div>
 </div>
 
 <!-- TRADE VALUE CHART OVERLAY -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="tradeValuesOverlay" onclick="closeTradeValues(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleTradeValues" class="filter-modal-overlay" id="tradeValuesOverlay" onclick="closeTradeValues(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
-      <h3 style="margin:0; font-family:var(--font-display);">Trade Values</h3>
+      <h3 id="dlgTitleTradeValues" style="margin:0; font-family:var(--font-display);">Trade Values</h3>
       <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">dynasty trade currency</div>
       <div id="tvPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
       <button class="btn-primary" id="tvExportBtn" onclick="exportTradeValuesPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
@@ -3872,7 +3895,7 @@
 </div>
 
 <!-- PLAYER PROFILE MODAL -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="profileOverlay" onclick="closeProfile(event)">
+<div role="dialog" aria-modal="true" aria-label="Player Profile" class="filter-modal-overlay" id="profileOverlay" onclick="closeProfile(event)">
   <div class="profile-modal" onclick="event.stopPropagation()">
     <div id="profileContent">
       <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling film...</div>
@@ -3887,9 +3910,9 @@
 <div id="playerHoverCard" class="hover-card" style="display:none;" onmouseenter="clearTimeout(_hoverTimer)" onmouseleave="hideHoverCard()"></div>
 
 <!-- PUBLISH TO STORE -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="publishOverlay" onclick="closePublishFlow(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitlePublish" class="filter-modal-overlay" id="publishOverlay" onclick="closePublishFlow(event)">
   <div class="filter-modal" style="width:420px;" onclick="event.stopPropagation()">
-    <h3>Publish to Store</h3>
+    <h3 id="dlgTitlePublish">Publish to Store</h3>
     <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:12px;">
       share your formula with the community
     </p>
@@ -3930,11 +3953,11 @@
 </div>
 
 <!-- FORMULA STORE -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="storeOverlay" onclick="closeFormulaStore(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleStore" class="filter-modal-overlay" id="storeOverlay" onclick="closeFormulaStore(event)">
   <div class="store-modal" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
       <div>
-        <h3 style="font-family:var(--font-display); font-size:22px;">Formula Store</h3>
+        <h3 id="dlgTitleStore" style="font-family:var(--font-display); font-size:22px;">Formula Store</h3>
         <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">community-built scoring formulas <span class="pro-locked" style="font-family:var(--font-mono); font-size:10px; color:var(--ink-faint);">full access</span></p>
       </div>
       <button class="btn-chunky" onclick="closeFormulaStore()">Close</button>
@@ -3944,33 +3967,33 @@
 </div>
 
 <!-- AGING CURVES -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="agingCurvesOverlay" onclick="closeAgingCurves(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleAgingCurves" class="filter-modal-overlay" id="agingCurvesOverlay" onclick="closeAgingCurves(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
-      <h3 style="margin:0; font-family:var(--font-display);">Aging Curves</h3>
+      <h3 id="dlgTitleAgingCurves" style="margin:0; font-family:var(--font-display);">Aging Curves</h3>
       <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">how players age at each position...</div>
       <div id="acPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
       <button class="btn-primary" id="acExportBtn" onclick="exportAgingCurvesPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
     <div id="acChartContainer" style="position:relative;">
-      <canvas id="acCanvas" width="900" height="500" style="width:100%; border:2px solid var(--ink); border-radius:8px; background:var(--bg);"></canvas>
+      <canvas id="acCanvas" role="img" aria-label="Aging curves chart by position" width="900" height="500" style="width:100%; border:2px solid var(--ink); border-radius:8px; background:var(--bg);"></canvas>
     </div>
     <div id="acLegend" style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;"></div>
   </div>
 </div>
 
 <!-- HEAT MAP -->
-<div role="dialog" aria-modal="true" class="filter-modal-overlay" id="heatMapOverlay" onclick="closeHeatMap(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleHeatMap" class="filter-modal-overlay" id="heatMapOverlay" onclick="closeHeatMap(event)">
   <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:1000px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
-      <h3 style="margin:0; font-family:var(--font-display);">Heat Map</h3>
+      <h3 id="dlgTitleHeatMap" style="margin:0; font-family:var(--font-display);">Heat Map</h3>
       <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">positional stat percentiles...</div>
       <div id="hmPositionBtns" style="display:flex; gap:6px;"></div>
       <div id="hmGroupBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
       <button class="btn-primary" id="hmExportBtn" onclick="exportHeatMapPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
     <div id="hmChartContainer" style="position:relative; overflow-x:auto;">
-      <canvas id="hmCanvas" width="960" height="900" style="width:100%; border:2px solid var(--ink); border-radius:8px; background:var(--bg);"></canvas>
+      <canvas id="hmCanvas" role="img" aria-label="Positional stat percentile heat map" width="960" height="900" style="width:100%; border:2px solid var(--ink); border-radius:8px; background:var(--bg);"></canvas>
     </div>
     <div id="hmLegend" style="margin-top:12px; display:flex; align-items:center; gap:12px; justify-content:center;">
       <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">0th</span>
@@ -3986,13 +4009,13 @@
 </main>
 
 <script src="app.js"></script>
+<script src="agent-config.js"></script>
+<script src="agent-nudges.js"></script>
 <script defer src="lab.js"></script>
 <script defer src="formulas.js"></script>
 <script defer src="formula-store.js"></script>
 <script defer src="charts.js"></script>
 <script defer src="lab-panels.js"></script>
-<script defer src="lab-mockdraft.js"></script>
-<script defer src="lab-prospect-radar.js"></script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 
 <!-- LAB PANEL SWITCHING + REGISTRY -->
@@ -4018,7 +4041,7 @@
   var FREE_PANELS = {
     screener: true, rankings: true, tiers: true, tradevalues: true,
     cheatsheet: true, breakouts: true, weekly: true, prospects: true,
-    dashboard: true, leaders: true
+    dashboard: true, leaders: true, 'career-compare': true
   };
 
   // ─── escapeHtml fallback (in case app.js fails to load) ────────
@@ -4069,7 +4092,7 @@
       if (!cur.loaded && cur.container) {
         var el = cur.container.querySelector('.lab-panel-content');
         if (el) {
-          el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">' + razzleLoading() + '</div></div>';
+          el.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">' + escapeHtml(typeof getLoadingText === 'function' ? getLoadingText(currentPanel) : razzleLoading()) + '</div></div>';
           try { cur.render(el); } catch(e) { console.error(e); }
           cur.loaded = true;
         }
@@ -4101,6 +4124,13 @@
     document.addEventListener('DOMContentLoaded', _registerDeferredPanels);
   }
 
+  // ─── Trigger Elite nudges after page settles ───────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      if (typeof checkNudges === 'function') checkNudges('lab', 'lab-nudge-container');
+    }, 3000);
+  });
+
   // ─── Lock icons on Pro sidebar items for free users ────────────
   function _updateSidebarLocks() {
     var paid = typeof isPaidUser === 'function' && isPaidUser();
@@ -4116,6 +4146,37 @@
   _updateSidebarLocks();
   document.addEventListener('DOMContentLoaded', _updateSidebarLocks);
   window.addEventListener('razzle-plan-changed', _updateSidebarLocks);
+
+  // ─── Agent attribution on sidebar categories (Pro+) ────────────
+  var CATEGORY_AGENTS = {
+    'Rankings & Values': 'bones',
+    'Performance': 'octo',
+    'Game Analysis': 'hawkeye',
+    'Trends & Projections': 'atlas',
+    'Records & History': 'atlas',
+    'League Tools': 'bones',
+  };
+  function _updateSidebarAgents() {
+    var paid = typeof isPaidUser === 'function' && isPaidUser();
+    document.querySelectorAll('.lab-sidebar-category').forEach(function(cat) {
+      var existing = cat.querySelector('.cat-agent');
+      if (existing) existing.remove();
+      if (!paid || typeof AGENT_TERRITORY === 'undefined') return;
+      var catText = cat.querySelector('.cat-text');
+      var name = catText ? catText.textContent.trim() : '';
+      var agentId = CATEGORY_AGENTS[name];
+      if (!agentId) return;
+      var agent = AGENT_TERRITORY[agentId];
+      if (!agent) return;
+      var badge = document.createElement('span');
+      badge.className = 'cat-agent';
+      badge.style.cssText = 'display:inline-flex; align-items:center; gap:3px; margin-left:6px; font-family:var(--font-hand); font-size:10px; opacity:0.5; font-weight:400; letter-spacing:0;';
+      badge.innerHTML = '<img src="' + agent.icon + '" width="12" height="12" alt="" style="vertical-align:middle;">' + agent.name;
+      catText.parentNode.insertBefore(badge, catText.nextSibling);
+    });
+  }
+  document.addEventListener('DOMContentLoaded', _updateSidebarAgents);
+  window.addEventListener('razzle-plan-changed', _updateSidebarAgents);
 
   // CSV export lock styling for free users
   // Hide CSV button on panels without table data (checks on render + after async load)
@@ -4176,7 +4237,8 @@
     proradar: 'Athletic Radar',
     drafttracker: 'Draft Class Tracker',
     powerrankings: 'Power Rankings',
-    gamescript: 'Game Script'
+    gamescript: 'Game Script',
+    faab: 'FAAB Strategy'
   };
 
   var PANEL_FLAVORS = {
@@ -4248,7 +4310,8 @@
     proradar: 'see who\'s a freak athlete and who\'s just hype',
     drafttracker: 'how each draft class actually produced in fantasy',
     powerrankings: 'which teams have the most dynasty firepower?',
-    gamescript: 'who produces when their team is winning vs losing?'
+    gamescript: 'who produces when their team is winning vs losing?',
+    faab: 'when to be aggressive vs conservative with your budget'
   };
 
   // Panel methodology descriptions (top 10 complex panels + generic fallback)
@@ -4374,13 +4437,29 @@
                              '<div class="panel-title-row">' +
                                '<div class="panel-title">' + escapeHtml(label) + '</div>' +
                                '<div class="panel-actions">' +
-                                 '<button class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeAttr(methodId) + '\')" title="How is this calculated?">&#9432;</button>' +
-                                 '<button class="btn-panel-action btn-csv-export" onclick="exportPanelCSV(\'' + escapeAttr(panelName) + '\')" title="Export as CSV">CSV</button>' +
-                                 '<button class="btn-panel-action" onclick="screenshotPanel(\'' + escapeAttr(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
-                                 '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeAttr(panelName) + '\')" title="Copy share link">Share</button>' +
+                                 '<button class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeJS(methodId) + '\')" title="How is this calculated?" aria-label="How is this calculated?">&#9432;</button>' +
+                                 '<button class="btn-panel-action btn-csv-export" onclick="exportPanelCSV(\'' + escapeJS(panelName) + '\')" title="Export as CSV">CSV</button>' +
+                                 '<button class="btn-panel-action" onclick="screenshotPanel(\'' + escapeJS(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
+                                 '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeJS(panelName) + '\')" title="Copy share link">Share</button>' +
                                '</div>' +
                              '</div>' +
                              (flavor ? '<div class="panel-flavor">' + escapeHtml(flavor) + '</div>' : '') +
+                             (function() {
+                               var pa = typeof getPanelAgent === 'function' ? getPanelAgent(panelName) : null;
+                               if (!pa) return '';
+                               var html = '<div class="panel-agent-attr" style="font-family:var(--font-hand); font-size:13px; opacity:0.6; display:flex; align-items:center; gap:5px; margin-top:2px;">' +
+                                 '<img src="' + escapeAttr(pa.icon) + '" alt="" width="20" height="20" style="vertical-align:middle;">' +
+                                 '<span>' + escapeHtml(pa.name) + '</span></div>';
+                               // One-liner insight (Pro+ only)
+                               var paid = typeof isPaidUser === 'function' && isPaidUser();
+                               if (paid && typeof getOneLiner === 'function') {
+                                 var liner = getOneLiner(panelName);
+                                 if (liner) {
+                                   html += '<div class="panel-one-liner" style="font-family:var(--font-hand); font-size:14px; opacity:0.5; font-style:italic; margin-top:4px; max-width:500px;">' + escapeHtml(liner) + '</div>';
+                                 }
+                               }
+                               return html;
+                             })() +
                              '<div class="panel-methodology" id="' + escapeAttr(methodId) + '" style="display:none;">' + escapeHtml(methodText) + '</div>';
           section.appendChild(header);
 
@@ -4405,11 +4484,13 @@
         // Lazy-load: render on first access
         if (!entry.loaded) {
           var contentEl = entry.container.querySelector('.lab-panel-content') || entry.container;
-          contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">' + razzleLoading() + '</div></div>';
+          var panelLoadText = typeof getLoadingText === 'function' ? getLoadingText(panelName) : razzleLoading();
+          contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg">' + escapeHtml(panelLoadText) + '</div></div>';
           try {
             entry.render(contentEl);
           } catch (err) {
-            contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">something broke... try refreshing</div></div>';
+            var panelErrText = typeof getErrorText === 'function' ? getErrorText(panelName) : 'something went sideways. Razzle knocked the server off the table. refresh and we\'ll pretend it didn\'t happen.';
+            contentEl.innerHTML = '<div class="lab-panel-loading"><div class="loading-msg" style="color:var(--red);">' + escapeHtml(panelErrText) + '</div></div>';
             console.error('Panel render error (' + panelName + '):', err);
           }
           entry.loaded = true;
@@ -4438,6 +4519,17 @@
     // Update recently viewed panels
     _updateRecentPanels(panelName);
 
+    // Track panel visits for Start Here auto-collapse
+    try {
+      var _pv = parseInt(localStorage.getItem('razzle_panel_visits') || '0', 10);
+      _pv++;
+      localStorage.setItem('razzle_panel_visits', String(_pv));
+      if (_pv >= 5) {
+        var _sh = document.getElementById('sidebarStartHere');
+        if (_sh) _sh.style.display = 'none';
+      }
+    } catch(e) {}
+
     // Update URL state (include universe if not NFL)
     var urlParams = new URLSearchParams();
     if (panelName !== 'screener') urlParams.set('panel', panelName);
@@ -4461,6 +4553,31 @@
       document.getElementById('labSidebar').classList.add('collapsed');
     }
   } catch(e) {}
+
+  // ─── Start Here section for new users ──────────────────────────
+  (function _initStartHere() {
+    try {
+      var visits = parseInt(localStorage.getItem('razzle_panel_visits') || '0', 10);
+      var dismissed = localStorage.getItem('razzle_start_here_dismissed');
+      var el = document.getElementById('sidebarStartHere');
+      if (!el) return;
+      if (visits < 5 && !dismissed) {
+        el.style.display = 'block';
+      }
+    } catch(e) {}
+  })();
+
+  window._trackStartHere = function() {
+    try {
+      var visits = parseInt(localStorage.getItem('razzle_panel_visits') || '0', 10);
+      visits++;
+      localStorage.setItem('razzle_panel_visits', String(visits));
+      if (visits >= 5) {
+        var el = document.getElementById('sidebarStartHere');
+        if (el) el.style.display = 'none';
+      }
+    } catch(e) {}
+  };
 
   // ─── Sidebar keyboard navigation ─────────────────────────────
   (function() {
@@ -4560,7 +4677,7 @@
     wrapper.classList.add('has-items');
     container.innerHTML = display.map(function(p) {
       var label = PANEL_LABELS[p] || p;
-      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeHtml(p) + '\')">' + escapeHtml(label) + '</a>';
+      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeJS(p) + '\')">' + escapeHtml(label) + '</a>';
     }).join('');
   }
 
@@ -4614,7 +4731,7 @@
     wrapper.classList.add('has-items');
     container.innerHTML = favs.map(function(p) {
       var label = PANEL_LABELS[p] || p;
-      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeHtml(p) + '\')">' + escapeHtml(label) + '</a>';
+      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeJS(p) + '\')">' + escapeHtml(label) + '</a>';
     }).join('');
   }
 

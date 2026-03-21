@@ -42,7 +42,7 @@ def _fetch_trade_values_uncached(player_ids):
         query = f"""
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             LEFT JOIN player_week_stats s
@@ -188,7 +188,7 @@ def _fetch_dynasty_rankings_uncached(season=None, position=None, limit=200):
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
                 p.headshot_url,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s
@@ -402,7 +402,7 @@ def _fetch_trade_value_chart_uncached(season=None, position=None, limit=150):
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
                 p.headshot_url,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s
@@ -493,7 +493,7 @@ def _fetch_trade_finder_uncached(player_id, season=None):
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
                 p.headshot_url,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s
@@ -553,7 +553,7 @@ def _fetch_trade_finder_uncached(player_id, season=None):
             # Look up basic player info for a helpful error message
             basic = conn.execute("""
                 SELECT p.player_id, p.full_name, p.position, p.team, p.headshot_url,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total,
                        COUNT(DISTINCT s.week) as gp
                 FROM players p
                 LEFT JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
@@ -743,7 +743,7 @@ def fetch_league_trade_values(player_names, season=None):
         rows = conn.execute("""
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s
@@ -844,7 +844,7 @@ def fetch_roster_depth_lookup(player_names, season=None):
 
         rows = conn.execute("""
             SELECT p.full_name, p.position, p.team,
-                   SUM(s.fantasy_points_ppr) as total_ppr,
+                   ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                    COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s ON s.player_id = p.player_id AND s.season = ?
@@ -919,7 +919,7 @@ def _fetch_roster_grade_uncached(player_ids, season=None):
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
                 p.headshot_url,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             LEFT JOIN player_week_stats s
@@ -1082,7 +1082,7 @@ def _fetch_auction_values_uncached(season=None, budget=200, roster_size=15):
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
                 p.headshot_url,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s
@@ -1195,7 +1195,7 @@ def _fetch_dynasty_dashboard_uncached(season=None):
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
                 p.headshot_url,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s
@@ -1347,7 +1347,7 @@ def _fetch_tier_list_uncached(season=None, position=None):
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
                 p.headshot_url,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s
@@ -1435,7 +1435,7 @@ def _fetch_dynasty_power_rankings_uncached(season=None):
         rows = conn.execute("""
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age,
-                SUM(s.fantasy_points_ppr) as total_ppr,
+                ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                 COUNT(DISTINCT s.week) as games
             FROM players p
             JOIN player_week_stats s
