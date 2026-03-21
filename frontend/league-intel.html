@@ -1677,8 +1677,22 @@
       </div>
       <div class="connect-error" id="connectError"></div>
       <div id="connectWarning" style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-top:8px;">stored locally in your browser — sign up to save</div>
-      <div style="margin-top:16px;font-family:var(--font-hand);font-size:14px;color:var(--ink-light);">Coming soon: <span style="font-family:var(--font-mono);font-size:11px;background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">ESPN</span> <span style="font-family:var(--font-mono);font-size:11px;background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">Yahoo</span></div>
-      <div style="margin-top:16px;font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">Don't use Sleeper? <a href="/lab.html" style="color:var(--orange);">explore the free Screener</a></div>
+      <div style="margin-top:20px;border-top:2px dashed var(--ink-faint);padding-top:16px;">
+        <div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin-bottom:8px;">Don't use Sleeper?</div>
+        <div style="display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:340px;margin:0 auto;">
+          <input type="email" class="input-chunky" id="espnYahooEmail" placeholder="your@email.com" style="flex:1;min-width:160px;font-size:12px;" aria-label="Email for ESPN/Yahoo notification">
+          <button class="btn-chunky" style="font-size:11px;padding:8px 14px;white-space:nowrap;" onclick="_saveWaitlistEmail()">Notify me</button>
+        </div>
+        <div id="waitlistFeedback" style="font-family:var(--font-hand);font-size:13px;color:var(--green);margin-top:4px;min-height:18px;"></div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-top:4px;">
+          <span style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">ESPN</span>
+          <span style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">Yahoo</span> support coming soon
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <button class="btn-chunky" style="font-size:13px;padding:10px 24px;background:var(--bg-warm);" onclick="_loadDemoLeague()">See a demo league</button>
+        <div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);margin-top:4px;">sample data — see what the Bureau looks like</div>
+      </div>
     </div>
   </div>
 
@@ -6561,6 +6575,84 @@ function disconnect() {
   Object.keys(_mcState).forEach(function(k) { delete _mcState[k]; });
   document.getElementById("connectView").style.display = "block";
   document.getElementById("leaguesView").style.display = "none";
+}
+
+// ESPN/Yahoo waitlist email capture
+function _saveWaitlistEmail() {
+  var email = (document.getElementById("espnYahooEmail").value || "").trim();
+  var feedback = document.getElementById("waitlistFeedback");
+  if (!email || !email.includes("@")) {
+    feedback.textContent = "enter a valid email";
+    feedback.style.color = "var(--red)";
+    return;
+  }
+  // Save locally (will integrate with backend later)
+  try {
+    var emails = JSON.parse(localStorage.getItem("razzle_waitlist") || "[]");
+    if (!emails.includes(email)) emails.push(email);
+    localStorage.setItem("razzle_waitlist", JSON.stringify(emails));
+  } catch(e) {}
+  // Also try to send to backend
+  fetch("/api/waitlist", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({email: email, platform: "espn_yahoo"})
+  }).catch(function() {});
+  feedback.textContent = "you're on the list. we'll ping you.";
+  feedback.style.color = "var(--green)";
+  document.getElementById("espnYahooEmail").value = "";
+}
+
+// Demo league mode
+function _loadDemoLeague() {
+  document.getElementById("connectView").style.display = "none";
+  document.getElementById("leaguesView").style.display = "block";
+  document.getElementById("connectedUser").textContent = "demo_league";
+
+  var container = document.getElementById("leaguesView");
+  var leaguesHtml = '<div class="leagues-header">' +
+    '<h2>Demo League</h2>' +
+    '<div><span class="user-badge">demo_league</span>' +
+    '<button class="btn-chunky" style="margin-left:8px;font-size:11px;" onclick="disconnect()">Exit Demo</button></div>' +
+    '</div>' +
+    '<div style="background:var(--orange-light,#f7e4d8);border:3px solid var(--orange);border-radius:10px;padding:12px 16px;margin-bottom:16px;text-align:center;">' +
+    '<div style="font-family:var(--font-hand);font-size:16px;color:var(--ink);">This is sample data. Connect your Sleeper league to see YOUR league.</div>' +
+    '</div>';
+
+  // Demo league card with fake managers and odds
+  var demoManagers = [
+    {name: "DynastyKing2024", record: "9-4", champOdds: 23.4, playoffOdds: 89.2, isYou: true},
+    {name: "TacoTuesday", record: "8-5", champOdds: 18.7, playoffOdds: 82.1, isYou: false},
+    {name: "RedZoneKing_99", record: "7-6", champOdds: 14.2, playoffOdds: 71.5, isYou: false},
+    {name: "PointsChaser", record: "7-6", champOdds: 12.8, playoffOdds: 68.3, isYou: false},
+    {name: "WaiverWire_Hero", record: "6-7", champOdds: 9.1, playoffOdds: 52.7, isYou: false},
+    {name: "TradeAddict", record: "6-7", champOdds: 7.5, playoffOdds: 44.9, isYou: false},
+    {name: "SleepingGiant", record: "5-8", champOdds: 5.8, playoffOdds: 31.2, isYou: false},
+    {name: "TankCommander", record: "5-8", champOdds: 3.2, playoffOdds: 18.6, isYou: false},
+    {name: "RebuildMode", record: "4-9", champOdds: 2.9, playoffOdds: 12.4, isYou: false},
+    {name: "LuckyBounces", record: "3-10", champOdds: 1.4, playoffOdds: 6.8, isYou: false},
+  ];
+
+  leaguesHtml += '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:20px;margin-bottom:20px;">';
+  leaguesHtml += '<div style="font-family:var(--font-display);font-size:20px;margin-bottom:4px;">Dynasty Legends League</div>';
+  leaguesHtml += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-bottom:16px;">12-team Dynasty Superflex | 2024 Season</div>';
+  leaguesHtml += '<div style="font-family:var(--font-display);font-size:14px;color:var(--orange);margin-bottom:12px;">Championship Probability</div>';
+
+  demoManagers.forEach(function(m) {
+    var border = m.isYou ? "border:3px solid var(--orange);box-shadow:3px 3px 0 var(--orange);" : "border:2px solid var(--ink-faint);";
+    var youBadge = m.isYou ? ' <span style="font-family:var(--font-mono);font-size:9px;background:var(--orange);color:white;padding:1px 6px;border-radius:3px;">YOU</span>' : '';
+    leaguesHtml += '<div style="background:var(--bg);' + border + 'border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">';
+    leaguesHtml += '<div><span style="font-family:var(--font-mono);font-size:13px;font-weight:700;">' + m.name + '</span>' + youBadge + '<br><span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">' + m.record + '</span></div>';
+    leaguesHtml += '<div style="text-align:right;"><div style="font-family:var(--font-display);font-size:18px;color:var(--orange);">' + m.champOdds + '%</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);">playoff: ' + m.playoffOdds + '%</div></div>';
+    leaguesHtml += '</div>';
+  });
+
+  leaguesHtml += '</div>';
+  leaguesHtml += '<div style="text-align:center;margin-top:20px;">' +
+    '<a href="#" onclick="disconnect();return false;" class="btn-chunky" style="font-size:13px;padding:10px 24px;background:var(--orange);color:white;text-decoration:none;">Connect YOUR league to see real data</a>' +
+    '</div>';
+
+  container.innerHTML = leaguesHtml;
 }
 </script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
