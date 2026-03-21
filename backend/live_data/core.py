@@ -342,7 +342,7 @@ def _enrich_with_rate_metrics(conn, items, season=None, career_mode=False, week=
     placeholders = ",".join("?" * len(player_ids))
     stat_placeholders = ",".join("?" * len(RATE_METRICS))
 
-    where = f"m.player_id IN ({placeholders}) AND m.stat_key IN ({stat_placeholders})"
+    where = f"m.player_id IN ({placeholders}) AND m.stat_key IN ({stat_placeholders}) AND m.season_type = 'regular'"
     params = list(player_ids) + list(RATE_METRICS)
 
     if not career_mode and season:

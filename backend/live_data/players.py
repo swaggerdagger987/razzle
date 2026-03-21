@@ -718,6 +718,7 @@ def _fetch_player_profile_uncached(player_id):
                 SELECT m.season, m.stat_key, AVG(m.stat_value) as avg_val
                 FROM player_week_metrics m
                 WHERE m.player_id = ? AND m.stat_key IN ({stat_placeholders})
+                  AND m.season_type = 'regular'
                 GROUP BY m.season, m.stat_key
             """, [player_id] + list(RATE_METRICS)).fetchall()
             rate_lookup = {}
