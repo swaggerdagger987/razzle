@@ -2216,3 +2216,70 @@ data-audit	P2	backend/live_data/core.py	-	compute_screener	FUNC-059	IEEE 754 art
 prod-audit	P0	backend/live_data/players.py	-	fetch_players	existing	FUNC-042 still on prod: GET /api/players sort by target_share returns PPR order instead	95	2026-03-21T07:15
 prod-audit	OK	-	-	-	pass	Prod edge cases: invalid season=empty, bad search=empty, no-position=works. All clean	100	2026-03-21T07:18
 prod-visual	OK	-	-	-	pass	Prod Lab + home page visual audit: 0 JS errors, correct layout, proper design, dark mode clean	95	2026-03-21T07:20
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)	100	2026-03-21T06:55
+smoke	OK	-	-	-	pass	smoke:all 11 tests pass (players, filters, sort, season, week, screener, nan, negative, options)	100	2026-03-21T06:55
+xss-audit	OK	frontend/app.js	495	escapeJS	pass	re-audit: Ship Loop escapeAttr→escapeJS fix correct. All inline handlers updated. 0 JS errors across lab/index/league-intel/agents	100	2026-03-21T06:58
+xss-audit	OK	frontend/lab.js	-	buildRowHTML	pass	re-audit: Player IDs all clean alphanumeric (no special chars). escapeJS non-breaking for actual data	100	2026-03-21T06:58
+null-guard	OK	frontend/lab.js	-	RPS toFixed	pass	re-audit: Ship Loop RPS null guards (|| 0) verified. 0/319 prospects have null RPS	100	2026-03-21T07:00
+null-guard	OK	frontend/tiers.html	-	tier.players	pass	re-audit: Ship Loop tier.players||[] guard verified. F tier returns [] (not null). 6 tiers, 390 total players	100	2026-03-21T07:00
+null-guard	OK	frontend/targets.html	-	team.players	pass	re-audit: Ship Loop team.players guard verified. All 32 teams have players arrays	100	2026-03-21T07:00
+43	P2	backend/live_data/dashboards.py	746	fetch_stock_watch	ticket	FUNC-060: PPO null for 20/21 TEs in stock-watch (>50 opp threshold too high for TEs). Efficiency grade always C fallback	90	2026-03-21T07:05
+13	OK	-	-	-	pass	re-audit: compare page HTTP 200, player page HTTP 200 — FUNC-053/056 fixes verified	100	2026-03-21T07:10
+37	OK	-	-	-	pass	re-audit: pace-tracker API returns milestones array. McCaffrey 1000 rush yd ON PACE. FUNC-056 fix confirmed	100	2026-03-21T07:10
+36	OK	-	-	-	pass	re-audit: local IEEE 754 clean (round fix works). Prod FUNC-059 still present (416.59999...)	100	2026-03-21T07:10
+19	OK	-	-	-	pass	re-audit: trade values show 33 tier-1, 59 tier-2, 8 tier-3 in top 100. 6 TEs in top 30. TE overvaluation P2 known	90	2026-03-21T07:08
