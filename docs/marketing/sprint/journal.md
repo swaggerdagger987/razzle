@@ -2451,6 +2451,120 @@ Sources:
 
 3. **What specific college WR metrics does Razzle's Lab screener currently expose — and does the heat coloring work correctly in College mode for the Lemon vs Tate vs Tyson comparison?**
 
-## NEXT QUESTION: How should the "Film Room Finds" series be structured across Weeks 5-8 (April 19 through May 17) to align with NFL Draft week and rookie draft ADP shifts?
+## Question 29: How should the "Film Room Finds" series be structured across Weeks 5-8 (April 19 through May 17) to align with NFL Draft week and rookie draft ADP shifts?
+
+**Why this matters**: The first data drop (Q27-28) establishes Razzle's presence. But one post is a blip. A SERIES builds a brand. The 4-week window from April 19 to May 17 contains the single highest-engagement period in dynasty fantasy football: NFL Draft week (April 23-25) and the subsequent rookie draft season (May-June). Mistime the cadence and you waste the warmup. Nail it and you become a recurring fixture on r/DynastyFF.
+
+### Answer
+
+**Verdict: 5 posts across 4 weeks, structured around a single narrative arc — "the data before the draft vs. the data after." Each post builds on the last, and the NFL Draft is the inflection point that splits the series into two halves.**
+
+**The Series Arc: "Film Room Finds"**
+
+The series tells one story in two acts:
+- **Act 1 (Pre-Draft)**: "Here's what the tape says about this class" — efficiency data, college metrics, historical comparisons
+- **Act 2 (Post-Draft)**: "Here's how landing spots changed everything" — ADP shifts, opportunity scores, before/after analysis
+
+This arc is powerful because it creates a REASON to come back. Readers of the pre-draft analysis are invested in seeing the post-draft update. It mirrors exactly what every dynasty manager does in their head during draft week: re-evaluating their pre-draft rankings in light of landing spots.
+
+**The 5-Post Calendar:**
+
+**Post 1 — Saturday April 19 (Week 5, Day 1)**
+Title: `[OC] Film Room Finds Vol. 1: I analyzed 3 years of WR efficiency data — Makai Lemon is the clear WR1 and the Ohio State tax is fooling everyone`
+Content: The Lemon vs. Tate vs. Tyson analysis from Q28. Heat-colored Lab screenshot. Markdown table. "Am I wrong?" hook.
+Goal: Establish the series brand. Generate debate. Prove you do data, not vibes.
+Timing: Saturday morning 10 AM ET. Pre-draft hype is building, people browsing dynasty content over the weekend.
+
+**Post 2 — Wednesday April 23 (Draft Day 1, morning)**
+Title: `[OC] Film Room Finds Vol. 2: My pre-draft rookie board — the 5 players I'm targeting and 3 I'm fading, with data`
+Content: Broader than WR — cover the full first-round rookie class. Use the Lab's Rookie Big Board (prospects.html) screenshot showing RPS tiers. Include a "pre-draft rankings" table that readers can compare against post-draft. Explicitly say: "I'll be back after the draft to see what changed."
+Goal: Create a bookmark. Readers save this post knowing the follow-up is coming. Also captures the massive Draft Day 1 traffic surge — r/DynastyFF activity spikes 3-5x on Day 1 of the NFL Draft based on historical Reddit traffic patterns.
+Timing: Wednesday morning 10 AM ET, BEFORE Round 1 starts at 8 PM ET. This gives 10 hours of engagement before the draft reshuffles everything.
+
+**Post 3 — Saturday April 26 (Draft weekend, post-Day 3)**
+Title: `[OC] Film Room Finds Vol. 3: The draft changed EVERYTHING — my biggest risers, fallers, and one pick that broke my model`
+Content: This is the money post. Side-by-side "before vs. after" tables showing how landing spots shifted your rankings. Use the Lab screener to show the same players from Vol. 1 but now with landing spot context. Highlight 2-3 specific ADP shifts:
+- The 2025 precedent: Jack Bech rose from 4th-round ADP to 2nd-round after landing with the Raiders at #58. RJ Harvey went from mid-3rd to late 1st in Sean Payton's system. These kinds of dramatic shifts are what dynasty managers LIVE for.
+- Frame as: "Here's what I said in Vol. 1 → here's what actually happened → here's my new take."
+Goal: This is the highest-engagement post. Post-draft analysis posts generate peak discussion because everyone is re-ranking simultaneously. The "before vs. after" framing is intrinsically shareable — people compare their own rankings to yours.
+Timing: Saturday morning 10 AM ET. By Saturday, all 7 rounds are done. People are digesting. This is prime rookie draft prep time.
+
+**Post 4 — Wednesday April 30 (Week 7)**
+Title: `[OC] Film Room Finds Vol. 4: The landing spot value map — which rookies gained the most from draft capital + situation`
+Content: Deeper analysis than Vol. 3. Introduce an "Opportunity Score" concept: a composite of draft capital (round/pick), team depth chart position, and projected target/carry share. Use the Lab to show players sorted by this composite. This post plants the seed for Razzle as a tool — the Opportunity Score isn't something other sites calculate, and the watermarked screenshot shows it coming from the Lab.
+Goal: Differentiate from the 50 other "post-draft rankings" posts. The unique metric gives people something to argue about AND something they can't get elsewhere.
+Timing: Wednesday morning 10 AM ET. Dynasty managers are deep in rookie draft prep. Most platform rookie drafts happen in May-June — this post lands during active prep.
+
+**Post 5 — Wednesday May 7 or Saturday May 10 (Week 8)**
+Title: `[OC] Film Room Finds Vol. 5: Rookie draft cheat sheet — my final board with the numbers behind every pick`
+Content: The payoff post. Synthesize everything from Vols. 1-4 into a final rookie ranking with data backing. Use the Lab's Draft Cheat Sheet (cheatsheet.html) or Rookie Big Board with post-draft data. Include a printable/screenshottable summary table. End with: "That's the end of Film Room Finds for draft season. I'll be back when the games start. If you want to run these numbers yourself, the tool I used is in the watermark."
+Goal: Convert readers to site visitors. This is the ONLY post where you directly acknowledge the tool (and only in the closing line). By Vol. 5, readers have seen the watermark in 5 screenshots. The soft CTA feels earned, not promotional.
+Timing: Wednesday or Saturday morning. This lands when most dynasty rookie drafts are actively being scheduled/executed.
+
+**Why this cadence works:**
+
+1. **Two posts per week during draft week (April 23-26).** Draft week is the Super Bowl of dynasty content. You need to be present. The pre-draft post (Vol. 2) and post-draft post (Vol. 3) bookend the event.
+
+2. **Weekly cadence otherwise.** Once per week matches the Subvertadown/PeakedInHighSkool model that built recurring followings. Too frequent = fatigue. Too infrequent = forgotten.
+
+3. **The before/after structure creates narrative tension.** Vol. 2 sets predictions. Vol. 3 grades them. This is the same mechanic that makes sports betting content addictive — accountability to your prior takes.
+
+4. **Each post escalates.** Vol. 1 = one position (WR). Vol. 2 = full class. Vol. 3 = draft reactions. Vol. 4 = unique metric. Vol. 5 = actionable cheat sheet. The series gets progressively more useful as readers approach their actual rookie drafts.
+
+5. **The watermark does ALL the marketing work.** Five screenshots across 4 weeks = 5 touchpoints with the razzle.lol URL. By Vol. 5, curious readers have seen the watermark enough to type it into their browser. The closing CTA is just permission to act on existing curiosity.
+
+**What to do if a post underperforms:**
+
+- If Vol. 1 gets <15 upvotes: Don't panic. Check comments — engagement matters more than votes. Refine the title for Vol. 2 based on what comments focused on.
+- If Vol. 2 gets buried by draft-day news: Expected. Draft-day posts compete with breaking news. The value of Vol. 2 is the BOOKMARK — people come back to compare after the draft.
+- If Vol. 3 is the breakout: Double down. Cross-post a summary to r/fantasyfootball (different audience, higher reach). This is the post most likely to hit 100+ upvotes because the "before/after" framing is inherently interesting.
+
+---
+
+### Self-Critique
+
+1. **The 5-post cadence is an educated projection, not validated data.** I based it on the Subvertadown weekly model (7 years of weekly posts) and Dynasty Nerds' numbered series format ("Volume X"). But I don't have specific data on how r/DynastyFF responds to a NEW series from a NEW account posting multiple times per week during draft week. The community might welcome it (data-hungry before rookie drafts) or might flag it as spam (too many posts from an unknown account). Mitigation: Space posts by 3+ days minimum, and if Vol. 1 gets negative feedback about frequency, skip Vol. 2 and go straight to Vol. 3 (post-draft is the higher-value post anyway).
+
+2. **The ADP shift analysis in Vol. 3 requires real-time data.** The 2025 precedent (Bech rising from 4th to 2nd round, RJ Harvey from 3rd to 1st) shows ADP shifts are dramatic and data-rich. But Razzle will need to manually capture pre-draft ADP (from KeepTradeCut, FantasyPros, or Fantasy Football Calculator) to have a "before" baseline. The Lab's database updates from nflverse may not have real-time ADP data. This needs to be planned before April 23.
+
+3. **The "Opportunity Score" in Vol. 4 is a custom metric that doesn't exist yet.** This is a product feature proposal disguised as a content idea. If the Opportunity Score isn't built into the Lab by April 30, this post becomes a manual analysis with the Lab as visual support — still works, but less "tool-driven."
+
+4. **I'm assuming the warm-up (Weeks 1-4) succeeds.** If the account hasn't reached ~100+ karma by April 19, the first content post may get auto-filtered or receive skeptical responses. The calendar should have a "delay trigger" — if karma is below 75 by April 12, push Vol. 1 to April 22 (Tuesday before draft) and compress the series.
+
+5. **Post-draft content is the highest-value window for tool marketing.** Every dynasty manager is re-ranking their board after the draft. They're actively looking for data, analysis, and tools. Vols. 3-5 are the conversion-driving posts. If resources are limited, sacrifice Vol. 1 or Vol. 2 before sacrificing Vols. 3-5.
+
+**Confidence: 7.5/10** — Strong structural logic (before/after arc, escalating utility, weekly cadence). The draft-aligned timing is almost certainly correct — every major dynasty content creator publishes post-draft analysis within 48 hours. The main uncertainty is whether 5 posts from a new-ish account feels like too much to the community. The mitigation (space by 3+ days, be ready to compress) is sound.
+
+Sources:
+- [2025 Rookie ADP Risers and Fallers — Fantasy Points](https://www.fantasypoints.com/nfl/articles/2025/rookie-adp-risers-and-fallers) — Jack Bech (4th→2nd round), RJ Harvey (3rd→late 1st) post-draft ADP shifts
+- [Post-Draft Dynasty Mock: Landing Spots Impact Fantasy — SI](https://www.si.com/nfl/post-draft-dynasty-mock-rookie-landing-spots-impact-fantasy-2025-beyond) — landing spot analysis format
+- [2025 Dynasty Rookie Rankings: Post NFL Draft — PlayerProfiler](https://www.playerprofiler.com/article/2025-dynasty-rookie-rankings-post-nfl-draft/) — post-draft re-ranking cadence
+- [Fantasy Football Winners/Losers Day 1 — PFF](https://www.pff.com/news/fantasy-football-winners-and-losers-from-day-1-of-the-2025-nfl-draft) — Day 1 reaction content format
+- [2026 NFL Draft Dates — NFL.com](https://www.nfl.com/news/2026-nfl-draft-dates-times-location-how-to-watch-and-more) — April 23-25, Pittsburgh
+- [Subvertadown Compendium 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — weekly recurring series model
+- [Dynasty Nerds — Film Room](https://www.dynastynerds.com/film-room-signup/) — existing "Film Room" branding by competitor (note: may want to differentiate series name)
+- Prior journal: Q26 (warm-up calendar, April 19 first drop), Q27 (text+image format, series seeding), Q28 (Lemon WR1 take, Lab screenshot specs)
+
+### Implications for Razzle
+
+1. **Rename consideration: Dynasty Nerds already has a "Film Room" product** (prospect video analysis at $99/yr). "Film Room Finds" is close enough to cause confusion. Consider alternatives: **"The Tape Room"** (from Q27), **"Razzle's Lab Report"** (ties directly to the product), or **"Stat Check"** (simple, data-forward). Recommendation: **"Lab Report"** — it brands every post as coming from the Lab, which is the product you're marketing.
+
+2. **Pre-capture ADP baselines before April 23.** Screenshot or scrape pre-draft rookie ADP from KeepTradeCut and FantasyPros on April 22. You need the "before" numbers to write the Vol. 3 "before/after" post. This is a non-negotiable prep step.
+
+3. **Build the "Opportunity Score" metric into the Lab by April 28** if possible. Draft capital (round/pick) + team depth chart data is available from nflverse within 24 hours of the draft. A simple composite (draft capital weight + team target share available) would make Vol. 4 genuinely unique. If not buildable in time, Vol. 4 becomes a manual analysis — still valuable, just less tool-differentiated.
+
+4. **Vol. 3 (post-draft) is the make-or-break post.** If only one post goes viral, it's this one. Invest the most time here. The "before/after" framing with side-by-side Lab screenshots is the highest-shareability format in the series.
+
+5. **After Vol. 5, go quiet for 2-3 weeks.** Resume commenting only. The next content opportunity is June-July (dynasty startup draft season) or August (redraft prep). Don't over-post after the series ends.
+
+### Open Questions
+
+1. **Should the series be called "Film Room Finds" (competitor conflict with Dynasty Nerds), "Lab Report" (product-tied), or "Stat Check" (neutral) — and does the name affect engagement or SEO?**
+
+2. **What's the ideal watermark design — URL only, URL + logo, or URL + tagline — and where should it be positioned to maximize visibility without triggering spam reports?**
+
+3. **What's the summer content strategy (June-August) between the end of Film Room Finds and the start of NFL season — and when is the next high-engagement window on r/DynastyFF?**
+
+## NEXT QUESTION: What's the ideal watermark design — URL only, URL + logo, or URL + tagline — and where should it be positioned on Lab screenshots to maximize visibility without triggering spam reports?
 
 ---
