@@ -140,14 +140,19 @@ function renderAgentNudge(containerId, nudge) {
   var agent = (typeof AGENT_TERRITORY !== "undefined") ? AGENT_TERRITORY[nudge.agent] : null;
   if (!agent) return;
 
+  var esc = typeof escapeHtml === "function" ? escapeHtml : function(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); };
+  var safeColor = /^#[0-9a-fA-F]{3,8}$/.test(agent.color) ? agent.color : "var(--orange)";
+  var safeIcon = agent.icon && agent.icon.indexOf("javascript:") === -1 ? esc(agent.icon) : "";
+  var safeLink = nudge.link && nudge.link.indexOf("javascript:") === -1 ? esc(nudge.link) : "#";
+
   var el = document.createElement("div");
   el.className = "agent-nudge";
-  el.style.cssText = "display:flex; align-items:center; gap:8px; padding:8px 14px; margin:8px 0; border:2px solid " + agent.color + "; border-radius:8px; background:var(--bg-card); font-size:13px; animation:nudgeFadeIn 0.4s ease-out;";
+  el.style.cssText = "display:flex; align-items:center; gap:8px; padding:8px 14px; margin:8px 0; border:2px solid " + safeColor + "; border-radius:8px; background:var(--bg-card); font-size:13px; animation:nudgeFadeIn 0.4s ease-out;";
   el.innerHTML =
-    '<img src="' + agent.icon + '" width="16" height="16" alt="" style="flex-shrink:0;">' +
-    '<span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:' + agent.color + ';">' + agent.name + '</span>' +
-    '<span style="font-family:var(--font-hand); font-size:14px; flex:1;">' + nudge.message + '</span>' +
-    '<a href="' + nudge.link + '" style="font-family:var(--font-mono); font-size:11px; color:var(--orange); text-decoration:none; white-space:nowrap;">' + nudge.link_label + ' &rarr;</a>' +
+    '<img src="' + safeIcon + '" width="16" height="16" alt="" style="flex-shrink:0;">' +
+    '<span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:' + safeColor + ';">' + esc(agent.name) + '</span>' +
+    '<span style="font-family:var(--font-hand); font-size:14px; flex:1;">' + esc(nudge.message) + '</span>' +
+    '<a href="' + safeLink + '" style="font-family:var(--font-mono); font-size:11px; color:var(--orange); text-decoration:none; white-space:nowrap;">' + esc(nudge.link_label) + ' &rarr;</a>' +
     '<button style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--ink-light); padding:0 2px;" title="Dismiss" aria-label="Dismiss nudge">&times;</button>';
 
   el.querySelector("button").addEventListener("click", function() {
