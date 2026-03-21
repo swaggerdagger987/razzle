@@ -429,7 +429,7 @@ def _fetch_screener_uncached(body):
         # When sorting by derived/rate metric or applying post-filters, fetch all matching
         # rows so Python sort/filter operates on complete dataset before pagination
         if python_sort or post_filters:
-            sql_limit = 500
+            sql_limit = 2000
             sql_offset = 0
         else:
             sql_limit = limit
@@ -486,7 +486,9 @@ def _fetch_screener_uncached(body):
         # Re-sort in Python if sorting by a derived/rate metric
         if python_sort:
             reverse = sort_dir.lower() == "desc"
-            items.sort(key=lambda x: x.get(sort_key) or 0, reverse=reverse)
+            _null_sentinel = float('-inf') if reverse else float('inf')
+            items.sort(key=lambda x: x.get(sort_key) if x.get(sort_key) is not None else _null_sentinel, reverse=reverse)
+            total = len(items)
 
         # Apply pagination after post-filtering and Python re-sort
         if python_sort or post_filters:

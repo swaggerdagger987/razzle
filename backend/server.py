@@ -686,7 +686,7 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
 async def global_exception_handler(request: Request, exc: Exception):
     """Catch unhandled exceptions — log full traceback, return generic 500."""
     import json
-    if isinstance(exc, (json.JSONDecodeError, ValueError)) and request.method == "POST":
+    if isinstance(exc, json.JSONDecodeError) and request.method == "POST":
         return JSONResponse({"error": "invalid JSON body"}, status_code=400)
     logger.exception("Unhandled exception on %s %s", request.method, request.url.path)
     if request.url.path.startswith("/api/"):

@@ -2620,3 +2620,56 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 | Python compile | All backend .py files compile | Clean |
 | TODO/FIXME | Zero in backend or frontend | Clean |
 | 11/11 smoke tests pass after every fix |
+
+---
+
+## Ship Loop Session 21: Sweep Mode — Data Integrity Fixes (Mar 20)
+
+**Goal**: Deep 3-agent parallel sweep (backend robustness, frontend runtime, data integrity) found 6 real bugs.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | WOPR/G double-divided by games | P0 | core.py:317-318 | `wopr` from `_enrich_with_rate_metrics` is already `AVG()` per game. Dividing by `g` again made values ~17x too small. Removed division. |
+| 2 | Team share queries use wrong team column | P0 | core.py:594-630, dashboards.py:925-941, dashboards.py:1154-1169 | `p.team` (current roster team) instead of `s.team` (game-week team). Wrong dominator rating/rush share/opp share for 73 traded players. Fixed 3 SQL queries across 2 files. |
+| 3 | Heatmap snap_pct always null | P1 | analytics.py:249 | `snap_pct` key set to None but never populated — `offense_pct` was the correct source from `_STAT_SUM_COLS`. Mapped `offense_pct` → `snap_pct`. |
+| 4 | Screener derived sort truncation | P1 | players.py:431-432,490 | Sorting by derived metrics (yards_per_carry, dynasty_value, etc.) only evaluated top 500 by PPR, silently dropping qualifying players. Raised to 2000 and fixed total count. |
+| 5 | formula-store.js localStorage crash | P2 | formula-store.js:222,240,269,273,375 | 5 `localStorage.setItem` calls without try-catch — crashes in Safari private browsing or when storage full. |
+| 6 | Lab page size init mismatch | P2 | lab.js:947 | Old localStorage values (50/100/200) loaded but dropdown only has 25. Caused blank select. Hardcoded to 25. |
+
+### Verified Clean
+- 11/11 smoke tests pass
+- All Python files compile clean
+- All JS files syntax clean
+- 0 regressions
+
+---
+
+## Ship Loop Session 22: 3-Agent Deep Sweep — 9 Bug Fixes (Mar 20)
+
+**Goal**: Parallel sweep with Backend Architect, Frontend Developer, and Data Integrity agents. Found 9 real bugs.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Register button text not restored on validation failure | P0 | app.js:856-859 | Validation early-returns restored `btn.disabled = false` but not `btn.textContent = origText` — button showed "creating account..." permanently |
+| 2 | Half-PPR fallback triggered on valid zero value | P0 | core.py:232-233 | `if not hppr` is True when `hppr = 0.0` (valid score). Changed to `if hppr is None`. Previously produced negative half-PPR for zero-point players with receptions |
+| 3 | PPFD scoring used PPR instead of Standard as base | P1 | core.py:276 | Comment said "standard + 1pt per first down" but code used `fantasy_points_ppr`. PPR double-counts receptions. Now uses `fantasy_points_std` with PPR-receptions fallback |
+| 4 | YAC per reception used wrong calculation | P1 | dashboards.py:63-130 | Was computing `max(0, rec_yards - air_yards)` which is wrong because `receiving_air_yards` includes incomplete targets. Now queries `receiving_yards_after_catch` directly |
+| 5 | Ascending sort on derived stats put nulls first | P1 | players.py:488-489 | `sort(key=lambda x: x.get(k) or 0)` treats None as 0, which sorts to top in ascending. Now uses `float('inf')` sentinel for nulls in ascending, `float('-inf')` in descending |
+| 6 | Diff mode stale baseline after season/week change | P1 | lab.js:4551 | Cache key was `baseId:itemCount` — if new season had same row count, stale baseline was reused. Added `season` and `week` to cache key |
+| 7 | ValueError masking in global exception handler | P1 | server.py:689 | `isinstance(exc, (json.JSONDecodeError, ValueError))` caught non-JSON ValueErrors from endpoint logic and returned misleading "invalid JSON body" 400 error. Narrowed to `json.JSONDecodeError` only |
+| 8 | N shortcut toggled notes column without re-rendering | P2 | lab.js:10416-10417 | `toggleColumn()` modifies state but doesn't render. Added `renderTableHead(); renderTable(); renderColumnPicker(); saveStateToURL()` |
+| 9 | Team totals for opp share filtered by fantasy_relevant | P2 | dashboards.py (3 queries) | `AND p.fantasy_relevant = 1` on team total denominators excluded non-fantasy players, inflating every player's opportunity share and dominator rating. Removed filter from opportunity share (line 940), report cards (line 1167), and season awards (line 1503). Also fixed awards query using `p.team` instead of `s.team` |
+
+### False Positives (investigated, not bugs)
+- `openPlayerPopup` in lab-panels.js — agent reported as undefined but it IS defined in app.js (loaded sync before lab-panels.js defer)
+- Page size locked to 25 — intentional per prior fix (Session 7, preventing slow loads)
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All Python files compile clean
+- All JS files syntax clean
+- 0 regressions
