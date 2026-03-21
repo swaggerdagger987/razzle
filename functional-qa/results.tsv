@@ -2551,3 +2551,32 @@ flow-20	OK	backend/live_data/dynasty.py	470	fetch_trade_finder	pass	re-audit: La
 skeleton	OK	frontend/styles.css	797	skeleton-cell	pass	Ship Loop: gradient shimmer→opacity pulse. No gradient (design compliant). Old animation fully removed. 0 references to skeleton-shimmer.	100	2026-03-21T08:35
 flow-33	OK	backend/live_data/dashboards.py	-	snap_efficiency	pass	re-audit: 50 players, 0 nulls, 0 outliers. Nacua 23.6/45.4=0.52 verified. 25 rows in panel, 0 JS errors. P2: no min snap threshold.	95	2026-03-21T08:38
 flow-40	OK	backend/live_data/dashboards.py	-	dual_threat	pass	re-audit: DTI geometric mean verified 5/5 (Robinson 64.8, McCaffrey 62.0, Gibbs 51.1). 0 QBs (rush+rec only). 0 JS errors.	95	2026-03-21T08:40
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2026) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	smoke: 11/11 tests pass (health, players, position filter, sort, season, week, screener, no NaN)	100	2026-03-21T09:00
+flow-stock	OK	backend/live_data/dashboards.py	818	has_ppo	pass	re-audit: Ship Loop null PPO fix VERIFIED. Sinnott (null PPO) eff_grade=None, stock_score=44 (33/33/34 weight). Trautman (has PPO) eff_grade=A. 0 wrong grades. Stale server issue — needed port change.	95	2026-03-21T09:05
+flow-36	OK	backend/live_data/dashboards.py	191	non_qb	pass	re-audit: Ship Loop QB exclusion VERIFIED. 0 QBs in Volume Kings (was 26 on stale server). Top 5: McCaffrey/Robinson/Taylor/Cook/Jeanty (all RB). PPO math verified 5/5. Sort order correct.	100	2026-03-21T09:10
+flow-frontend	OK	frontend/lab-panels.js	1796	grade_render	pass	re-audit: Ship Loop null grade rendering VERIFIED. stocks.html, reportcard.html, lab-panels.js (stock + report card sections) all use `if (g) { badge } else { - at 0.5 opacity }`. Code confirmed correct across 3 files.	95	2026-03-21T09:15
+flow-college	OK	backend/live_data/college.py	1382	n_zero_guard	pass	re-audit: Ship Loop div-by-zero guard VERIFIED. `if n == 0: continue` prevents ZeroDivisionError. College consistency: 30 rock + 30 wild, 0 NaN/Inf. P2: single-season players (CoV=0.0) dominate Rock Solid (pre-existing).	95	2026-03-21T09:20
+flow-eff	P1	backend/live_data/dashboards.py	172,803,1333	grade_from_percentile	open	NEW: grade_from_percentile uses 6-tier scale (Stock Watch, Efficiency) vs 8-tier scale (Report Card, Awards). 46 mismatches across 32 common players. McCaffrey eff=D(stock) vs C(report). FUNC-063 filed.	95	2026-03-21T09:25
+flow-awards	OK	backend/live_data/dashboards.py	1766	volume_king_filter	pass	re-audit: Season Awards Volume King filter (p.position != QB) confirmed at line 1766. McCaffrey wins, not a QB. Red Zone King=Rodgers stat=0 is known local PBP issue.	90	2026-03-21T09:28
