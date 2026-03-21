@@ -245,9 +245,14 @@ function renderStatDiffTable(p1, p2, c1, c2, pos1, pos2, color1, color2) {
     var bar = "";
     var absTotal = (v1 != null && v2 != null) ? (Math.abs(v1) + Math.abs(v2)) : 0;
     if (absTotal > 0 && isFinite(absTotal)) {
-      var pct1 = (Math.abs(v1) / absTotal) * 100;
-      bar = '<span class="compare-diff-bar" style="width:' + Math.max(pct1, 5) + '%; background:' + color1 + '; opacity:0.5;"></span>' +
-            '<span class="compare-diff-bar" style="width:' + Math.max(100 - pct1, 5) + '%; background:' + color2 + '; opacity:0.5;"></span>';
+      var pct1 = Math.max((Math.abs(v1) / absTotal) * 100, 5);
+      var pct2 = Math.max(100 - pct1, 5);
+      // Normalize so they sum to exactly 100%
+      var pctTotal = pct1 + pct2;
+      pct1 = (pct1 / pctTotal) * 100;
+      pct2 = (pct2 / pctTotal) * 100;
+      bar = '<span class="compare-diff-bar" style="width:' + pct1 + '%; background:' + color1 + '; opacity:0.5;"></span>' +
+            '<span class="compare-diff-bar" style="width:' + pct2 + '%; background:' + color2 + '; opacity:0.5;"></span>';
     }
 
     html += '<tr>';

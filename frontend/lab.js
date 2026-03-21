@@ -1713,9 +1713,9 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer;" onclick="event.stopPropagation(); togglePinPlayer('${escapeAttr(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}"><span class="pin-icon ${pinned ? 'pin-active' : 'pin-faint'}"></span></td>`;
   }
 
-  // Rank column (with expand arrow for NFL)
+  // Rank column (with expand arrow for NFL — skip on pinned rows where rowIdx is null)
   const rank = (rowIdx != null) ? (state.offset + rowIdx + 1) : "";
-  if (state.universe === "nfl" && player.player_id) {
+  if (state.universe === "nfl" && player.player_id && rowIdx != null) {
     html += `<td class="col-rank" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeAttr(player.player_id)}', this)" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
   } else {
     html += `<td class="col-rank">${rank}</td>`;
@@ -9504,6 +9504,7 @@ function renderAgingCurveChart(targetCanvas) {
     }
     ctx.stroke();
     ctx.setLineDash([]);
+    ctx.globalAlpha = 1.0;
 
     // Data points
     for (const pt of pts) {

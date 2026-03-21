@@ -170,10 +170,15 @@ function drawRadar() {
     }
   }
 
-  // Find max values for normalization
+  // Find min/max values for normalization (supports negative stats like EPA)
+  const minVals = {};
   const maxVals = {};
   for (const s of stats) {
-    maxVals[s] = state.items.reduce(function(mx, i) { return Math.max(mx, Math.abs(i[s] || 0)); }, 1);
+    const vals = state.items.map(function(i) { return i[s] || 0; });
+    minVals[s] = vals.reduce(function(mn, v) { return Math.min(mn, v); }, 0);
+    maxVals[s] = vals.reduce(function(mx, v) { return Math.max(mx, v); }, 1);
+    // Ensure range is at least 1 to avoid division by zero
+    if (maxVals[s] - minVals[s] < 0.001) maxVals[s] = minVals[s] + 1;
   }
 
   // Draw grid
@@ -221,7 +226,8 @@ function drawRadar() {
     for (let i = 0; i <= n; i++) {
       const si = i % n;
       const angle = si * angleStep - Math.PI / 2;
-      const val = (player[stats[si]] || 0) / maxVals[stats[si]];
+      const raw = player[stats[si]] || 0;
+      const val = (raw - minVals[stats[si]]) / (maxVals[stats[si]] - minVals[stats[si]]);
       const r = R * Math.max(0, Math.min(1, val));
       const x = cx + r * Math.cos(angle);
       const y = cy + r * Math.sin(angle);
@@ -237,7 +243,8 @@ function drawRadar() {
     // Draw dots
     for (let i = 0; i < n; i++) {
       const angle = i * angleStep - Math.PI / 2;
-      const val = (player[stats[i]] || 0) / maxVals[stats[i]];
+      const raw = player[stats[i]] || 0;
+      const val = (raw - minVals[stats[i]]) / (maxVals[stats[i]] - minVals[stats[i]]);
       const r = R * Math.max(0, Math.min(1, val));
       const x = cx + r * Math.cos(angle);
       const y = cy + r * Math.sin(angle);
