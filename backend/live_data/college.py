@@ -21,16 +21,20 @@ def _has_table(conn, table_name):
 
 
 def _efficiency_grade(percentile):
-    """Convert a 0-100 percentile to a letter grade."""
+    """Convert a 0-100 percentile to a letter grade (canonical 8-tier)."""
     if percentile >= 95:
         return "A+"
-    elif percentile >= 85:
+    if percentile >= 85:
         return "A"
-    elif percentile >= 70:
+    if percentile >= 75:
+        return "B+"
+    if percentile >= 65:
         return "B"
-    elif percentile >= 45:
+    if percentile >= 50:
+        return "C+"
+    if percentile >= 35:
         return "C"
-    elif percentile >= 25:
+    if percentile >= 25:
         return "D"
     return "F"
 
@@ -1127,15 +1131,17 @@ def _fetch_college_stock_watch_uncached(season=None, position=None, limit=30):
         def grade_from_pct(pct):
             if pct >= 95:
                 return "A+"
-            elif pct >= 85:
+            if pct >= 85:
                 return "A"
-            elif pct >= 70:
+            if pct >= 75:
                 return "B+"
-            elif pct >= 55:
+            if pct >= 65:
                 return "B"
-            elif pct >= 40:
+            if pct >= 50:
+                return "C+"
+            if pct >= 35:
                 return "C"
-            elif pct >= 25:
+            if pct >= 25:
                 return "D"
             return "F"
 

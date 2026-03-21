@@ -3199,3 +3199,87 @@ Audited all open FUNC-001 through FUNC-062 findings from results.tsv. **Every co
 - Full codebase sweep (frontend + backend) found 0 new bugs
 - No bare except blocks, no eval(), no SQL injection vectors, no XSS
 - 0 regressions
+
+---
+
+## Ship Loop Session 38: Grade Scale Sweep + Deep Audit (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md items need external infrastructure. Enter sweep mode.
+
+### Startup
+- Merged origin/qa/findings (already up to date)
+- Merged origin/ceo/strategy (already up to date)
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty
+- TICKETS.md remaining items require Playwright, Claude API, MiroFish
+
+### Grade Scale Consistency (3 files, 4 functions)
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | Player strengths 10-tier → canonical 8-tier | P1 | players.py:1321 | Had D+ and F+ grades not handled by frontend gradeColor(). Converted to canonical 8-tier scale. Also fixed dangling `grade_pct` → `_grade` reference. |
+| 2 | College `_efficiency_grade` 6-tier → 8-tier | P2 | college.py:23 | Was missing B+ and C+ grades. Updated thresholds to match canonical scale. |
+| 3 | College `grade_from_pct` 7-tier → 8-tier | P2 | college.py:1131 | Was missing C+ grade. Updated thresholds to match canonical scale. |
+| 4 | Strengths panel `gradeColor()` robustness | P1 | lab-panels.js:6085 | Changed from exact match (`=== 'D'`) to charAt(0) pattern, matching roster builder's version. Handles any grade variant (D+, D-, etc.). |
+
+### Sweep Results (5+ agents + manual audit)
+- 0 new crash bugs found (all .toFixed(), .split(), Math.min/max already guarded)
+- 0 new XSS vectors (all innerHTML uses escapeHtml)
+- 0 bare except blocks, 0 eval(), 0 alert(), 0 console.log (except branded easter egg)
+- 0 hardcoded 2026 in dynamic code
+- 0 1px solid borders on components (only table row dividers)
+- 0 TODO/FIXME/HACK comments
+- All 12 JS files syntax clean
+- All 16 Python files compile clean
+- 59/59 tests pass
+
+### Verified QA Findings Status
+- FUNC-005 (dominator rec_yd_share null): WORKING — tested locally, shares populated correctly
+- FUNC-007 (snaps null): DATA ISSUE — 5575/18981 rows have snap data locally, prod needs DB rebuild
+
+---
+
+## Ship Loop Session 39: Full QA Audit + FUNC-044 Fix (Mar 21)
+
+**Goal**: Consume QA Loop tickets, fix remaining bugs.
+
+### Startup
+- Merged origin/qa/findings (already up to date)
+- Merged origin/ceo/strategy (already up to date)
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty
+- TICKETS.md remaining items require Playwright, Claude API, MiroFish
+
+### Full Audit of QA results.tsv (2615 lines, ~60 unique findings)
+Systematically verified every "open" and "ticket" status entry against current codebase.
+
+**All previously reported bugs are FIXED in code:**
+- FUNC-012 (P0): season_type filters — all 71+ season_type='regular' clauses in place
+- FUNC-017 (P1): Breakout badge — uses PPG with 8+ PPG threshold, 10+ GP requirement
+- FUNC-025 (P2): safe_sorts — td_rate, fumble_rate, passer_rating, ay_per_att all in whitelist
+- FUNC-026 (P1): Mini-screener — data.items with fallback, full_name with fallback
+- FUNC-027 (P2): Smart filter chip — ?sf=breakout matches SMART_FILTERS key correctly
+- FUNC-028 (P0): QB PPO — all 4 functions use pass_attempts + carries for QBs
+- FUNC-029 (P2): snap_share — uses percentage values (50, 65, 40), not fractions
+- FUNC-038 (P2): nudge border — 2px solid (DESIGN.md compliant)
+- FUNC-039 (P2): nudgeFadeIn — keyframes defined at line 121
+- FUNC-042 (P2): over-fetch cap — raised to 5000
+- FUNC-049/050/051 (P1): Field mismatches — all resolved, games||games_played fallback pattern
+- FUNC-052 (P1): TD Regression — positive_regression/negative_regression/pos_avg_td_rates/td_diff all correct
+- FUNC-053 (P1): Compare panel — data-panel="career-compare" matches panelRegistry
+- FUNC-060 (P2): TE PPO — threshold lowered to 20 (verified by QA session 58)
+- FUNC-061 (P1): Most Efficient — filter opportunities>=40 in place
+- FUNC-062 (P1): Volume King — filter position!="QB" in place
+- FUNC-063 (P1): Grade scale — canonical 8-tier everywhere (verified by QA session 63)
+- FUNC-013 (P2): Stock Watch/Buy-Sell — MIN_PPG thresholds (QB:10, RB:5, WR:5, TE:3)
+- FUNC-015 (P2): Dynasty value — screener uses compute_trade_value() same as trade chart
+
+### New Fix: FUNC-044 (P1)
+Trade analyzer autocomplete used `escapeAttr()` in inline `onmousedown` handler — XSS-adjacent for apostrophe names (Ja'Marr Chase). Replaced with data-attribute delegation: `data-side` + `data-pid` attributes, single `mousedown` event listener on autoDiv container. Commit: 13b230b.
+
+### Design Compliance Sweep
+- 0 gradient violations
+- 0 "Loading..." text (all use personality text)
+- 0 unsafe escapeAttr-in-onclick patterns remaining
+- 1px borders only on table row dividers (acceptable)
+
+### Smoke Tests: 11/11 pass
+- Week filter: WORKING locally (season=2024, week=1 returns games=1). Prior smoke failures were from stale code.

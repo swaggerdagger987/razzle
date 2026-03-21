@@ -1317,21 +1317,19 @@ def _fetch_player_strengths_uncached(player_id, season=None, top_n=4):
     strengths = sorted_pcts[:top_n]
     weaknesses = sorted_pcts[-top_n:][::-1]  # reverse so worst is first
 
-    # Assign grades to each
-    def grade_pct(p):
+    # Assign grades to each (canonical 8-tier scale)
+    def _grade(p):
         if p >= 95: return "A+"
         if p >= 85: return "A"
         if p >= 75: return "B+"
         if p >= 65: return "B"
-        if p >= 55: return "C+"
-        if p >= 45: return "C"
-        if p >= 35: return "D+"
+        if p >= 50: return "C+"
+        if p >= 35: return "C"
         if p >= 25: return "D"
-        if p >= 15: return "F+"
         return "F"
 
     for item in strengths + weaknesses:
-        item["grade"] = grade_pct(item["percentile"])
+        item["grade"] = _grade(item["percentile"])
 
     # Average percentile
     avg_pct = round(sum(p["percentile"] for p in percentiles) / (len(percentiles) or 1))
@@ -1342,7 +1340,7 @@ def _fetch_player_strengths_uncached(player_id, season=None, top_n=4):
         "available_seasons": pct_data.get("available_seasons", []),
         "position_pool": pct_data.get("position_pool", 0),
         "avg_percentile": avg_pct,
-        "overall_grade": grade_pct(avg_pct),
+        "overall_grade": _grade(avg_pct),
         "strengths": strengths,
         "weaknesses": weaknesses,
         "all_percentiles": percentiles,
