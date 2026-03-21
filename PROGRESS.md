@@ -3323,3 +3323,68 @@ Trade analyzer autocomplete used `escapeAttr()` in inline `onmousedown` handler 
 - Backend: 0 missing season_type filters, 0 JOIN mismatches, 0 div-by-zero, 0 bare excepts
 - Frontend: 0 unguarded .toFixed/.split/.forEach, 0 Math.max/min on empty arrays
 - Standalone HTML: 68/68 pages pass all checks (app.js order, seasons, .catch, escapeHtml, overflow-x)
+
+### Falsy-Zero Display Sweep (Session 40 continued)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | 8 stat columns (pass_yd/td, rush_yd/td, rec, rec_yd/td, tgt) | weeklyleaders.html | `(val || '-')` → `(val != null ? val : '-')` |
+| 2 | fantasy_points field fallback | weeklyleaders.html | `p.fantasy_points || 0` → null-safe ternary |
+| 3 | games and age columns | index.html | Home page mini-table |
+| 4 | games played | tradefinder.html | Selected player card |
+| 5 | games played | tradevalues.html | Trade value cards |
+| 6 | fantasy_points fallback | lab-panels.js:6542 | `g.fantasy_points || g.fpts || 0` → null-safe ternary chain |
+| 7 | age | auction.html | Auction value table |
+| 8 | age | rosterbuilder.html | Roster builder player list |
+| 9 | pos_rank | vorp.html | VORP ranking table |
+
+All 9 fixes change `(val || '-')` to `(val != null ? val : '-')` to correctly display zero values.
+
+---
+
+## Ship Loop Session 41: Deep Sweep (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md items blocked on external infrastructure. Sweep mode.
+
+### Startup
+- Merged origin/qa/findings (already up to date)
+- Merged origin/ceo/strategy (already up to date)
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty
+- 11/11 smoke tests pass
+
+### 4-Agent Parallel Sweep Results
+
+| Agent | Scope | Findings |
+|-------|-------|----------|
+| Explore (falsy-zero) | All frontend files for `\|\| '-'` on numeric values | 4 bugs found |
+| Explore (dark mode) | agent-config.js, agent-nudges.js, standalone HTML pages | 3 bugs found (dualthreat.html) |
+| Explore (backend) | All backend Python for div-by-zero, fetchone, validation | 0 real bugs (all false positives — existing guards sufficient) |
+| Explore (UX robustness) | All fetch .catch(), resp.ok, .toFixed(), .split(), XSS | 0 bugs — all clean |
+
+### Fixes Applied (14 total)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Falsy-zero: rank in stat strength card | P2 | lab-panels.js:6168 | `s.rank \|\| '-'` → `s.rank != null ? s.rank : '-'` |
+| 2 | Falsy-zero: week in game log | P2 | lab-panels.js:6547 | `v \|\| '-'` → `v != null ? v : '-'` |
+| 3 | Falsy-zero: rank in Big Board card | P2 | lab-panels.js:8135 | `p.rank \|\| ''` → `p.rank != null ? p.rank : ''` |
+| 4 | Falsy-zero: dynasty_value in Octo briefing | P2 | agents.html:2318 | `top.dynasty_value \|\| 'N/A'` → null-safe ternary |
+| 5 | Dark mode export: wrong approach | P1 | dualthreat.html:297 | `getComputedStyle` → explicit `dataset.theme` check |
+| 6 | Hardcoded rgba hover | P2 | dualthreat.html:46 | `rgba(217,119,87,0.08)` → `var(--bg-warm)` |
+| 7 | Unnecessary CSS var fallbacks | P2 | dualthreat.html:52 | Removed hardcoded fallback hex from `--yellow-light`/`--yellow`/`--ink-medium` |
+| 8 | Dark mode export consistency | P1 | cheatsheet.html:474 | `getComputedStyle` → `dataset.theme` check |
+| 9 | Dark mode export consistency | P1 | consistency.html:668 | `getComputedStyle` → `dataset.theme` check |
+| 10 | Dark mode export consistency | P1 | draftclass.html:654 | `getComputedStyle` → `dataset.theme` check |
+| 11 | Dark mode export consistency | P1 | comptable.html:601 | `getComputedStyle` → `dataset.theme` check |
+| 12 | Dark mode export consistency | P1 | dashboard.html:611 | `getComputedStyle` → `dataset.theme` check |
+| 13 | Dark mode export consistency | P1 | drops.html:313 | `getComputedStyle` → `dataset.theme` check |
+| 14 | Watermark font: sans-serif → Space Mono | P2 | dashboard.html, archetypes.html, auction.html, tiers.html | 4 pages had `24px sans-serif` instead of brand font |
+
+### Verified Clean
+- All 12 JS files syntax clean
+- 11/11 smoke tests pass
+- 0 regressions
+- Backend: all fetchone()[0] calls safe (COUNT(*) always returns row, MAX() with `or` fallback)
+- Backend: all division-by-zero guarded by preceding min-count checks
+- Frontend: 0 unguarded .toFixed/.split/.forEach, 0 missing .catch(), 0 XSS vectors
+- 0 remaining `getComputedStyle` export patterns (all use `dataset.theme` now)

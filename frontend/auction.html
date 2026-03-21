@@ -507,7 +507,7 @@
     if (typeof html2canvas !== 'undefined') {
       html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(function(canvas) {
         var ctx = canvas.getContext('2d');
-        ctx.font = '24px sans-serif';
+        ctx.font = "bold 28px 'Space Mono', monospace";
         ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.15)' : 'rgba(45,31,20,0.12)';
         ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
         var link = document.createElement('a');
@@ -625,7 +625,7 @@
       html += '<td>' + escapeHtml(p.full_name) + '</td>';
       html += '<td><span class="av-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
       html += '<td>' + escapeHtml(p.team) + '</td>';
-      html += '<td>' + escapeHtml(String(p.age || '-')) + '</td>';
+      html += '<td>' + (p.age != null ? escapeHtml(String(p.age)) : '-') + '</td>';
       html += '<td><span class="av-dollar ' + tierClass(p.tier) + '">$' + escapeHtml(String(p.auction_value)) + '</span></td>';
       html += '<td>';
       html += '<div class="av-tv-bar"><div class="av-tv-fill" style="width:' + Math.min(100, p.trade_value) + '%"></div></div>';

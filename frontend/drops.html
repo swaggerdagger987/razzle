@@ -310,7 +310,7 @@ function render() {
 
 function exportPNG() {
   const el = document.getElementById("dr-container");
-  html2canvas(el, { backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#ede0cf', scale: 2 }).then(canvas => {
+  html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(canvas => {
     const ctx = canvas.getContext("2d");
     if (typeof drawRazzleWatermark === 'function') { drawRazzleWatermark(ctx, canvas); }
     else { ctx.font = "bold 28px 'Space Mono', monospace"; ctx.fillStyle = 'rgba(45,31,20,0.13)'; ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }
