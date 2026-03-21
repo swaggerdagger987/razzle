@@ -2124,6 +2124,133 @@ Sources:
 
 3. **How does Razzle handle the free-to-paid transition on Reddit?** Subvertadown introduced a paid tier after years of free content and faced some backlash. Razzle's "Screener is forever free, Bureau is paid" model is cleaner, but the community transition still needs careful framing.
 
-## NEXT QUESTION: Should Razzle use a personal Reddit account or a branded one — and what does the specific 4-week comment warm-up calendar look like for r/DynastyFF?
+## Q26: Should Razzle use a personal Reddit account or a branded one — and what does the specific 4-week comment warm-up calendar look like for r/DynastyFF?
+
+**Why this matters**: The account choice determines how the community perceives Razzle's posts from day one. A wrong choice means every future post fights an uphill credibility battle. The warm-up calendar is the concrete execution plan that turns Q25's strategy into action.
+
+### Answer
+
+**Verdict: Personal account (u/swaggerdagger987 or a new personal handle), NOT a branded u/razzle_lol account. The evidence is overwhelming.**
+
+#### The Case for Personal Over Branded
+
+Every successful fantasy football tool builder on Reddit used a personal account:
+
+1. **Subvertadown** — personal pseudonym (u/subvertadown), not u/SubvertadownProjections. Posted for 8 years under a personal name. The brand grew FROM the person, not the other way around. When he launched a paid tier, the personal credibility carried the transition.
+
+2. **PeakedInHighSkool** — personal pseudonym (Alex Korff). Built the most-referenced trade resource on r/fantasyfootball under a personal handle. Later revealed his real name as the brand grew.
+
+3. **Dynasty Daddy** — launched by a developer (G-Sher on GitHub) under a personal account, not u/DynastyDaddyOfficial. The 831-upvote launch post worked because it felt like "a person built this for the community," not "a company is marketing at the community."
+
+4. **KeepTradeCut** — the developers participate in r/DynastyFF discussions under personal accounts, not a brand account.
+
+**The marketing research consensus (2026):**
+- "Many successful brand presences on Reddit are through the founder's personal account, which feels more authentic and is better received" ([BrandScout](https://brandscout.net/blog/reddit-username-strategy))
+- "Use a personal username, not your company name. Company-named accounts signal promotional intent and reduce trust" ([RedditGrowthDB](https://www.redditgrowthdb.com/guides/reddit-marketing-saas))
+- "u/BuyOurProduct or u/AcmeMarketingTeam immediately trigger suspicion and downvotes" ([BrandScout](https://brandscout.net/blog/reddit-username-strategy))
+- Reddit's golden rule: "It's perfectly fine to be a Redditor with a website. It's not okay to be a website with a Reddit account."
+
+**Recommendation for Razzle:** Use u/swaggerdagger987 (the existing account). It has organic history, which is more credible than a brand-new account. When eventually posting Lab content, use the format: "Full disclosure: I built razzle.lol" — transparent, personal, not corporate. If creating a new account is preferred, use a personal-feeling pseudonym, NOT u/razzle_lol or u/RazzleAnalytics.
+
+#### The 4-Week r/DynastyFF Comment Warm-Up Calendar
+
+Based on Reddit warm-up best practices ([Market Clarity](https://mktclarity.com/blogs/news/reddit-how-to-warmup), [ReplyAgent](https://www.replyagent.ai/blog/how-promote-saas-reddit-without-getting-banned)) adapted to the r/DynastyFF context:
+
+**Pre-requisites (Day 0):**
+- Verify email on the Reddit account
+- Set a non-promotional profile bio (e.g., "Dynasty degenerate. Data nerd. Bengals fan.")
+- Subscribe to: r/DynastyFF, r/fantasyfootball, r/Fantasy_Football, r/NFL_Draft, r/nfl, plus 10-15 casual subs (r/nba, r/CFB, r/sports, general interest)
+- Upload a profile avatar (accounts with default avatar look like bots)
+
+**WEEK 1 (Days 1-7): Listen and Light Engagement**
+- Goal: 15-25 comment karma, establish activity pattern
+- Daily: Browse r/DynastyFF for 15-20 min, upvote 5-10 posts
+- Comment 2-3 times per day, ONLY on r/DynastyFF threads you genuinely have opinions on
+- Target thread types: trade advice threads ("Rate my trade"), player discussion ("What are we doing with [Player X]?"), roster help
+- Comment style: Short, helpful, opinionated. "I'd hold. His target share is trending up and the OC change should help." NOT paragraphs of analysis yet.
+- Also comment 1-2 times/day on casual subs (build diverse history)
+- ZERO mentions of any tool, site, or project. You are just a dynasty manager.
+
+**WEEK 2 (Days 8-14): Establish Expertise Pattern**
+- Goal: 50-75 cumulative karma, recognized as knowledgeable
+- Increase to 3-5 comments/day on r/DynastyFF
+- Start adding data to comments: "His WOPR ranked 8th among WRs last year" or "He had a 22% target share in games without [teammate]"
+- Engage in deeper threads: roster construction debates, startup draft strategy, format discussions (SF vs 1QB, TEP)
+- Reply to OTHER people's analysis with thoughtful follow-ups
+- Participate in recurring threads (daily trade thread, price check threads)
+- Continue 1-2 casual sub comments/day
+- Still ZERO tool/site mentions.
+
+**WEEK 3 (Days 15-21): Become a Regular**
+- Goal: 100+ cumulative karma, name recognition from frequent commenters
+- Comment 4-6 times/day on r/DynastyFF, focusing on quality
+- Start longer-form comments: mini-analysis in response to player debates (3-5 sentences with specific stats)
+- Engage in "controversial" takes with data backing: "I'm fading [popular player] because..." — generates discussion and visibility
+- Reply to posts within the first hour (early comments get more upvotes, "rising" post strategy)
+- Begin noting where data gaps exist in community discussions (natural setup for later: "I couldn't find a good tool for this, so I built one")
+- If anyone asks "where did you find that stat?" — answer with the public source (nflverse, PFR, etc.), NOT your tool. Too early.
+
+**WEEK 4 (Days 22-28): Ready for First Data Drop**
+- Goal: 150+ karma, established commenter, ready for first content post
+- Maintain 3-5 comments/day
+- By end of week 4, your comment history shows: 80+ genuine dynasty comments, diverse thread participation, data-literate analysis, zero self-promotion
+- Plan your first content post for Week 5, Day 1: an original analysis post (NOT a tool announcement)
+- Format: "[OC] I analyzed 3 years of rookie draft data and found..." with a watermarked Lab screenshot as the data source
+- The screenshot drives curiosity. The URL in the watermark is the only "promotion." If people ask about the tool, you answer transparently.
+
+**Key timing for Razzle (March 2026):**
+- Week 1: March 22-28 (start now)
+- Week 2: March 29 - April 4
+- Week 3: April 5-11
+- Week 4: April 12-18
+- First data drop: April 19-20 (5 days before NFL Draft April 24)
+- NFL Draft week content: April 24-27 (peak dynasty Reddit traffic)
+
+This puts the first content post right before the NFL Draft — the biggest dynasty content moment of the spring.
+
+---
+
+### Self-Critique
+
+1. **The warm-up calendar is adapted from general Reddit marketing guides, not dynasty-specific data.** The comment frequency (3-5/day) and karma targets (100+ by week 3) are based on cross-industry warm-up playbooks. r/DynastyFF may have different karma dynamics — smaller community means fewer upvotes per comment, so 100 karma by week 3 may be optimistic. Adjust targets if engagement is lower than expected.
+
+2. **I could not verify whether u/swaggerdagger987 already has karma and post history.** If it has existing activity (especially in fantasy football subs), the warm-up period can be shortened significantly. If it's a fresh account with zero history, the full 4-week calendar applies.
+
+3. **The "personal over branded" recommendation is strongly supported** by both the fantasy football case studies (Subvertadown, PeakedInHighSkool, Dynasty Daddy, KeepTradeCut all used personal accounts) AND the 2026 Reddit marketing consensus. This is the highest-confidence recommendation in this answer.
+
+4. **The Week 5 "data drop" timing (April 19-20) is strategically sound** — it lands right before the NFL Draft, which is peak dynasty content season. But it assumes the Lab has screenshot-worthy content ready by then. If the product isn't ready for compelling screenshots, delay the data drop rather than posting mediocre content.
+
+**Confidence: 9/10** — The personal-over-branded verdict is essentially unanimous across all sources and all fantasy football case studies. The 4-week calendar is well-grounded in Reddit warm-up best practices, with the main uncertainty being karma velocity in a mid-size subreddit (126K subscribers).
+
+Sources:
+- [BrandScout — Reddit Username Strategy](https://brandscout.net/blog/reddit-username-strategy) — personal vs branded account analysis
+- [RedditGrowthDB — Reddit Marketing Guide for SaaS 2026](https://www.redditgrowthdb.com/guides/reddit-marketing-saas) — SaaS promotion playbook
+- [Market Clarity — How To Warm Up a Reddit Account (100+ Users)](https://mktclarity.com/blogs/news/reddit-how-to-warmup) — week-by-week warm-up schedule, karma targets
+- [ReplyAgent — How to Promote SaaS on Reddit Without Getting Banned 2026](https://www.replyagent.ai/blog/how-promote-saas-reddit-without-getting-banned) — 90/10 rule, account hygiene
+- [Multilogin — How to Warm Up a Reddit Account 2026](https://multilogin.com/blog/how-to-warm-up-a-reddit-account/) — 30-day warm-up guide
+- [Subvertadown — Compendium of Reddit Posts 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — 8-year personal account case study
+- [PeakedInHighSkool — Fantasy Football Tools](https://peakedinhighskool.com/) — personal brand → product pipeline
+- [Dynasty Daddy GitHub (G-Sher)](https://github.com/G-Sher/dynasty-daddy) — open-source personal account launch
+- Prior journal: Q25 (Reddit seeding strategy, case studies, subreddit targeting, timing)
+
+### Implications for Razzle
+
+1. **Use u/swaggerdagger987. Start commenting today (March 21).** Every day of delay compresses the window before the April 24 NFL Draft. The 4-week warm-up calendar puts the first data drop on April 19 — just 5 days before the draft. Missing this window means waiting until May for rookie draft season.
+
+2. **Never create u/razzle_lol as a posting account.** A branded account can exist for profile/link purposes, but all community engagement must come from the personal account. When Razzle is mentioned, it should feel like "a dynasty manager who built a tool," not "a tool company with a Reddit account."
+
+3. **The comment warm-up is not optional.** Skipping straight to a data drop post from a cold account will get the post removed or buried. The 4 weeks of genuine commenting is the investment that makes every future post succeed.
+
+4. **Track karma daily during the warm-up.** If karma is below target by week 2 (50+), increase comment quality/frequency rather than extending the timeline. The NFL Draft window is fixed.
+
+### Open Questions
+
+1. **What specific r/DynastyFF thread types get the most engagement during March-April, and which ones should Razzle's account prioritize for comment karma?** (Price check threads? Trade advice? Rookie mock drafts? Controversy takes?)
+
+2. **Should Razzle's first data drop be a text post with embedded screenshots, or an image post with analysis in comments?** Each format has different engagement dynamics on Reddit.
+
+3. **What does the Week 5-8 content calendar look like after the warm-up — and how does it sync with NFL Draft week and rookie draft season?**
+
+## NEXT QUESTION: What specific r/DynastyFF thread types and content formats get the most engagement during March-April pre-draft season, and what should Razzle's first data drop post look like?
 
 ---
