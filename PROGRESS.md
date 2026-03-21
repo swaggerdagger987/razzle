@@ -2752,3 +2752,30 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - All JS files syntax clean (node --check)
 - All Python files compile clean
 - 0 regressions
+
+---
+
+## Ship Loop Session 25: 3-Agent Sweep (Mar 20)
+
+**Goal**: Parallel sweep with Backend Architect, Frontend Developer, and Data Integrity agents. Found 5 real bugs.
+
+### Fixes Applied
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Payment failure instantly downgrades user plan | P0 | billing.py:522-539 | `_handle_payment_failed` was downgrading to free on first `invoice.payment_failed`. Stripe retries payments over days before cancelling. Now only marks subscription status as `payment_failed`; actual downgrade deferred to `_handle_subscription_deleted`. |
+| 2 | Radar chart hides negative EPA values | P1 | charts.js:174-230 | `Math.abs` normalization clamped all negative values to 0 on radar. Changed to min/max range normalization so negative EPA displays proportionally (worst=center, best=edge). |
+| 3 | Pinned row expand creates orphan DOM elements | P1 | lab.js:1718 | `buildRowHTML` added expand arrow to pinned rows (rowIdx=null). Clicking inserts expand row into pinned tbody where virtual scroll never cleans it up. Now skips expand arrow when rowIdx is null. |
+| 4 | Aging curves player dots/labels drawn at 70% alpha | P2 | lab.js:9506 | globalAlpha was set to 0.7 for dashed connecting lines but not restored before drawing data point circles and name labels. Moved alpha restore before data points. |
+| 5 | Compare diff bar widths sum to >100% at extremes | P2 | compare.js:248-251 | `Math.max(pct, 5)` min-clamp caused pct1+pct2 to exceed 100% (e.g., 5%+99%=104%). Now normalizes both clamped widths so they sum to exactly 100%. |
+
+### Triaged (not fixing)
+- Consistency rankings return empty with week param: Known — frontend already excludes week selector for consistency panel (Session 23 triage)
+- Pinned rows get percentiles from current view population: Arguable UX — comparing pinned player against current view is valid behavior
+- Quick search cache uses raw input as key: Cache-inefficient but not a correctness bug
+- Data integrity/HTML sweep: Clean — 0 new bugs across 15+ HTML pages, all API routes match
+
+### Verified Clean
+- 11/11 smoke tests pass after all fixes
+- All 4 modified files syntax clean (node --check, py_compile)
+- 0 regressions
