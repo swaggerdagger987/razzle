@@ -2016,3 +2016,92 @@ free-panels	OK	-	-	-	pass	tiers: renders but S-tier still bloated (known P2 FUNC
 home	OK	-	-	-	pass	index.html: 0 JS errors, 68 links, 17 buttons, live data table. Clean.	100	2026-03-21T05:18
 prod	OK	-	-	-	pass	prod lab.html: 0 JS errors, 69 sidebar items, screener loads. Clean.	100	2026-03-21T05:19
 field-audit	OK	frontend/lab-panels.js	-	-	pass	Systematic field mismatch audit: 8 panels verified clean (cheatsheet, weekly, dashboard, leaders, tiers, records, opportunity, schedule). 1 minor: awards w.ppo guarded by if-check (P2).	95	2026-03-21T05:25
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+37	P1	frontend/regression.html	527	render	FUNC-055	regression.html uses regression_up/regression_down but API returns positive_regression/negative_regression — Ship Loop null guards mask broken page (always empty)	100	2026-03-21T05:30
+37	P1	frontend/regression.html	489	loadData	FUNC-055	regression.html uses pos_avg_rates but API returns pos_avg_td_rates — rate chips never render	100	2026-03-21T05:30
+37	P1	frontend/regression.html	589	buildTable	FUNC-055	regression.html uses regression_delta column but API returns td_diff — delta column shows undefined	100	2026-03-21T05:30
+37	P1	frontend/lab-panels.js	5053	renderPT	FUNC-056	pace tracker Lab panel uses p.projections but API returns p.milestones — milestone section always empty	100	2026-03-21T05:32
+37	P1	frontend/lab-panels.js	5055	renderPT	FUNC-056	pace tracker Lab panel uses s.milestone but API returns s.target — progress bar pct always 0	100	2026-03-21T05:32
+re-audit	OK	frontend/comptable.html	395	autocomplete	pass	re-audit: Ship Loop fixed p.name→p.full_name and array response handling — code correct	95	2026-03-21T05:28
+re-audit	OK	frontend/app.js	1754	openPlayerPopup	pass	re-audit: Ship Loop fixed games_played→games in popup key stats — matches API	95	2026-03-21T05:28
+re-audit	OK	frontend/draftclass.html	461	renderData	pass	re-audit: Ship Loop added d.summary||{} and d.players||[] null guards — defensive, correct	95	2026-03-21T05:28
+re-audit	OK	frontend/*.html	-	null-guards	pass	re-audit: 12 standalone pages got ||[] null guards before .length — all field names match APIs (verified 9/9)	95	2026-03-21T05:29
+re-audit	OK	frontend/*.html	-	season-cutoff	pass	re-audit: 4 pages (advantage, fptsbreakdown, pace, streaks) season cutoff >=6→>=8 — correct (Sept start)	95	2026-03-21T05:29
+smoke-local	OK	-	-	-	pass	smoke:all 11 tests pass against localhost:8000	100	2026-03-21T05:27
+smoke-prod	OK	-	-	-	pass	smoke:all 11 tests pass against razzle.lol	100	2026-03-21T05:29
+37	P1	frontend/lab-panels.js	5213	renderTDR	FUNC-052-reconfirm	re-audit: FUNC-052 still broken — buy_low/sell_high/position_rates/diff field names unchanged	100	2026-03-21T05:25
+57	P1	frontend/lab.html	3159	sidebar	FUNC-053-reconfirm	re-audit: FUNC-053 still broken — data-panel=compare has no panel definition	100	2026-03-21T05:25
+57	P2	frontend/lab.html	3232	sidebar	FUNC-054-reconfirm	re-audit: FUNC-054 still broken — mockdraft/proradar sidebar items have no panel definitions	100	2026-03-21T05:25
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+flow-37	P1	frontend/lab-panels.js	5213	renderTDR	re-audit-pass	re-audit: FUNC-052 FIXED — lab-panels.js TD regression field names corrected (positive_regression, negative_regression, pos_avg_td_rates, td_diff). Code verified.	HIGH	2026-03-21T12:00:00Z
+flow-37	P1	frontend/regression.html	527	renderReg	open	FUNC-055 STILL BROKEN — standalone regression.html still uses regression_up/regression_down/pos_avg_rates/regression_delta. Redirects to Lab panel (which works), but embedded view always empty.	HIGH	2026-03-21T12:00:00Z
+flow-37	P1	frontend/lab-panels.js	5053	renderPace	open	FUNC-056 STILL BROKEN — pace tracker lab panel uses p.projections instead of p.milestones, s.milestone instead of s.target. Progress bars always empty.	HIGH	2026-03-21T12:00:00Z
+flow-16	P1	frontend/lab.html	3159	sidebar	re-audit-pass	re-audit: FUNC-053 FIXED — Compare sidebar item now points to career-compare panel, added to FREE_PANELS. Loads correctly with 3 player slots.	HIGH	2026-03-21T12:00:00Z
+flow-57	P2	frontend/lab.html	3231	sidebar	re-audit-pass	re-audit: FUNC-054 FIXED — mockdraft and proradar dead sidebar links removed. 0 orphan panels found.	HIGH	2026-03-21T12:00:00Z
+flow-13	P2	frontend/career.html	965	initialLoad	new	FUNC-057 — career.html initial URL load uses d.players (old format) but API returns array. Search input stays empty on ?player= URL. Data still loads correctly.	MEDIUM	2026-03-21T12:00:00Z
+flow-13	P2	frontend/percentiles.html	608	initialLoad	new	FUNC-057 — same bug in percentiles.html line 608. Search input empty on ?player= URL load.	MEDIUM	2026-03-21T12:00:00Z
+visual	OK	-	-	-	pass	Visual sweep: breakouts, leaders, dashboard, tradevalues, cheatsheet, weekly, screener all render correctly post-merge. 0 JS errors across 7 panels.	HIGH	2026-03-21T12:00:00Z
