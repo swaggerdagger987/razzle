@@ -1461,3 +1461,74 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-local	OK	-	-	-	pass	smoke: 11/11 local pass	100	2026-03-21T01:09
+smoke-prod	OK	-	-	-	pass	smoke: 11/11 prod pass	100	2026-03-21T01:10
+flow-1	OK	frontend/lab.js	3559	-	pass	re-audit: FUNC-029 snap_share thresholds fixed (50/65/40), prod verified 9 RBs >= 65%	100	2026-03-21T01:11
+flow-36	P0	backend/live_data/dashboards.py	78	fetch_efficiency_rankings	open	re-audit: QB efficiency still broken on prod. Dak opp=53 should be 653. Code fix exists but NOT deployed. FUNC-035	100	2026-03-21T01:12
+flow-35	OK	backend/live_data/analytics.py	-	-	pass	re-audit: FUNC-005 RESOLVED. WR dominator data working on prod (Adams 46.9, JSN 42.1)	100	2026-03-21T01:13
+flow-19	P2	backend/live_data/dashboards.py	-	fetch_trade_value_chart	info	re-audit: FUNC-003 clustering persists (top 25 all tier 1, 90.7-95.8). TE overvaluation (5 TEs in top 25). Low GP players (8GP) ranked highly	90	2026-03-21T01:14
+new-features	P1	-	-	-	open	deployment gap: agent SVGs 404, prompts.html 404, nav labels wrong, brand copy wrong on prod. FUNC-036	100	2026-03-21T01:15
+new-features	P2	frontend/prompts.html	105	-	open	prompts.html nav replaces Pricing with Prompts (funnel break) and page is orphaned (no links). FUNC-037	95	2026-03-21T01:16
+new-features	P2	frontend/agent-nudges.js	145	renderAgentNudge	open	nudge border 1.5px violates DESIGN.md 2px minimum. FUNC-038	90	2026-03-21T01:17
+new-features	OK	frontend/agent-config.js	-	-	pass	agent-config.js: clean config, XSS-safe usage in lab.html (escapeHtml/escapeAttr), typeof guards	100	2026-03-21T01:18
+new-features	OK	frontend/app.js	1798	-	pass	ambient character peek: accessible, dismissible, localStorage opt-out, randomized, clean	100	2026-03-21T01:19
+new-features	OK	frontend/app.js	416	drawRazzleWatermark	pass	rarity watermark: 6 agent icons, image cache, DPI-aware, dark mode aware	100	2026-03-21T01:20
+new-features	OK	frontend/lab-panels.js	10339	-	pass	FAAB Strategy panel: hardcoded data (100% sum), XSS-safe, design-compliant	100	2026-03-21T01:21
+new-features	OK	frontend/warroom.js	3695	-	pass	weekly briefing: escapeHtml on all content, Elite-gated, safeParse handles arrays/strings	100	2026-03-21T01:22
+data-check	OK	-	-	-	pass	McCaffrey PPR cross-check: 414.6 calc vs 416.6 actual (2.0pt diff from passing TD). OK	95	2026-03-21T01:23
+data-check	OK	-	-	-	pass	scoring math: Spears PPR/HPPR/STD diffs match rec/g exactly. Formula correct	100	2026-03-21T01:24
