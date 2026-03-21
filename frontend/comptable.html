@@ -375,7 +375,7 @@
 
     document.querySelectorAll('.ct-chip-x').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        selectedPlayers.splice(parseInt(btn.getAttribute('data-idx')), 1);
+        selectedPlayers.splice(parseInt(btn.getAttribute('data-idx')) || 0, 1);
         renderChips();
         writeURL();
       });
