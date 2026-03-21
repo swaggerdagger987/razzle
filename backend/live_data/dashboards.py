@@ -743,7 +743,8 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                     opportunities = opps_d["attempts"] + opps_d["carries"]
                 else:
                     opportunities = opps_d["targets"] + opps_d["carries"]
-                ppo = round(total_pts / opportunities, 2) if opportunities > 50 else None
+                opp_threshold = {"QB": 50, "RB": 50, "WR": 40, "TE": 20}.get(pos, 50)
+                ppo = round(total_pts / opportunities, 2) if opportunities > opp_threshold else None
 
                 # Consistency: CoV
                 mean = sum(weeks) / n
