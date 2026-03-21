@@ -142,7 +142,7 @@ function renderAgentNudge(containerId, nudge) {
 
   var el = document.createElement("div");
   el.className = "agent-nudge";
-  el.style.cssText = "display:flex; align-items:center; gap:8px; padding:8px 14px; margin:8px 0; border:1.5px solid " + agent.color + "; border-radius:8px; background:var(--bg-card); font-size:13px; animation:nudgeFadeIn 0.4s ease-out;";
+  el.style.cssText = "display:flex; align-items:center; gap:8px; padding:8px 14px; margin:8px 0; border:2px solid " + agent.color + "; border-radius:8px; background:var(--bg-card); font-size:13px; animation:nudgeFadeIn 0.4s ease-out;";
   el.innerHTML =
     '<img src="' + agent.icon + '" width="16" height="16" alt="" style="flex-shrink:0;">' +
     '<span style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:' + agent.color + ';">' + agent.name + '</span>' +
