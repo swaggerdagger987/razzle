@@ -374,7 +374,7 @@ def _fetch_screener_uncached(body):
             "ppg": "(SUM(s.fantasy_points_ppr) / MAX(1, COUNT(*)))",
             "games": "COUNT(*)",
             "seasons": "COUNT(DISTINCT s.season)",
-            "fantasy_points_ppr": "SUM(s.fantasy_points_ppr)",
+            "fantasy_points_ppr": "ROUND(SUM(s.fantasy_points_ppr), 1)",
             "completions": "SUM(s.completions)",
             "pass_attempts": "SUM(s.attempts)",
             "passing_yards": "SUM(s.passing_yards)",
