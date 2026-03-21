@@ -580,7 +580,7 @@
     currentData = data;
     var body = document.getElementById('con-body');
 
-    if (!data || (!data.rock_solid.length && !data.wild_cards.length)) {
+    if (!data || (!(data.rock_solid || []).length && !(data.wild_cards || []).length)) {
       body.innerHTML = '<div class="con-empty">no consistency data found for this selection</div>';
       return;
     }

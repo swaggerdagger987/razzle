@@ -595,7 +595,7 @@
 
     renderThresholds(data.replacement_thresholds);
 
-    if (!data || (!data.league_winners.length && !data.replacement_level.length)) {
+    if (!data || (!(data.league_winners || []).length && !(data.replacement_level || []).length)) {
       body.innerHTML = '<div class="vorp-empty">no VORP data found for this selection</div>';
       return;
     }

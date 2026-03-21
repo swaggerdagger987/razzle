@@ -612,7 +612,7 @@
     currentData = data;
     var body = document.getElementById('opp-body');
 
-    if (!data || (!data.alpha_dogs.length && !data.dominators.length)) {
+    if (!data || (!(data.alpha_dogs || []).length && !(data.dominators || []).length)) {
       body.innerHTML = '<div class="opp-empty">no opportunity share data found for this selection</div>';
       return;
     }

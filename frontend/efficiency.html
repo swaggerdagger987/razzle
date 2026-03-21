@@ -578,7 +578,7 @@
     currentData = data;
     var body = document.getElementById('eff-body');
 
-    if (!data || (!data.most_efficient.length && !data.volume_kings.length)) {
+    if (!data || (!(data.most_efficient || []).length && !(data.volume_kings || []).length)) {
       body.innerHTML = '<div class="eff-empty">no efficiency data found for this selection</div>';
       return;
     }

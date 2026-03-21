@@ -596,7 +596,7 @@
       html += buildTable(data.risers, 'risers');
       html += buildTable(data.fallers, 'fallers');
 
-      if (!data.risers.length && !data.fallers.length) {
+      if (!(data.risers || []).length && !(data.fallers || []).length) {
         html = '<div class="usage-empty">no usage trend data available for this filter</div>';
       }
 

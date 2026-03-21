@@ -2965,3 +2965,40 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 - 11/11 smoke tests pass
 - All modified JS files syntax clean (node --check)
 - 0 regressions
+
+---
+
+## Ship Loop Session 32: Full Codebase Sweep (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md blocked on external infrastructure. 4-agent parallel sweep + manual audit.
+
+### Fixes Applied (1 bug across 1 file)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Player popup `games_played` → `games` field mismatch | P2 | app.js:1754 | Player popup (openPlayerPopup) read `stats.games_played` for GP stat, but profile API returns `games`. GP never displayed in popup. |
+| 2 | Season cutoff `>= 6` (July) → `>= 8` (September) | P2 | advantage.html, fptsbreakdown.html, pace.html, streaks.html | 4 pages used July cutoff while canonical _latestSeason uses September. Would break in Jul/Aug by trying to load non-existent current-year data. |
+| 3 | comptable.html quick-search response shape mismatch | P1 | comptable.html | API returns flat array, code expected `{players:[]}`. Autocomplete was completely broken — never showed results. Also `p.name` → `p.full_name` (blank names). URL init had same bug. |
+| 4 | 7 pages: `.length` on undefined API arrays | P1 | consistency, efficiency, opportunity, stocks, schedule, reportcard, regression | `data.x.length` crashes with TypeError if API returns partial response. Fixed with `(data.x \|\| []).length` guards. |
+| 5 | draftclass.html null guards | P1 | draftclass.html | `d.summary` and `d.players` accessed without null checks. Added `\|\| {}` and `\|\| []` guards. |
+| 6 | 4 more `.length` on undefined arrays | P1 | airyards, redzone, usage, vorp | Same crash pattern as #4. Added `(data.x \|\| []).length` guards. |
+| 7 | regression.html inner `.length` checks | P2 | regression.html | Early-return guard fixed in #4, but inner section rendering still accessed `.length` directly — would crash if one array existed but the other was undefined. |
+
+### Verified Clean (manual sweep + 4 parallel agents)
+- 11/11 smoke tests pass
+- 59/59 pytest tests pass
+- All 14 JS files syntax clean (node --check)
+- All Python files compile clean
+- 0 remaining 1px solid borders in CSS/JS (table row dividers are intentional)
+- 0 cold gray hex values (#333-#eee) in CSS/JS
+- 0 font-display at <16px violations
+- 0 missing resp.ok checks on frontend fetches
+- 0 unescaped innerHTML with user data (XSS)
+- 0 remaining field name mismatches (games_played/air_yard_pct/dominator scope)
+- _showToast uses textContent (XSS-safe after Session 31 refactor)
+- setInterval in warroom.js properly managed (visibilitychange pause/resume)
+- Agent connective tissue (agent-config.js, agent-nudges.js) properly escaped
+- Monte Carlo worker has proper edge case guards (Box-Muller log(0), z-score clamp)
+- boom-bust `games_played` field is internally consistent (API + frontend) — not changed
+- All season cutoffs now consistently use `>= 8` (September) — 0 remaining `>= 6` or `>= 7`
+- All f-string SQL in prospects.py uses hardcoded column names from dicts/whitelists — no injection risk

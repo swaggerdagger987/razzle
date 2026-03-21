@@ -524,7 +524,7 @@
   /* ---- Render ---- */
   function render(data) {
     var c = document.getElementById('regContent');
-    if (!data.regression_up.length && !data.regression_down.length) {
+    if (!(data.regression_up || []).length && !(data.regression_down || []).length) {
       c.innerHTML = '<div class="reg-empty">no regression candidates found for this filter</div>';
       return;
     }
@@ -532,7 +532,7 @@
     var html = '';
 
     // Regression Up section
-    if (data.regression_up.length) {
+    if ((data.regression_up || []).length) {
       html += '<div class="reg-section">';
       html += '<div class="reg-section-header up">&#x1F4C8; Regression Up — Due for More TDs</div>';
       html += buildTable(data.regression_up, 'up');
@@ -540,7 +540,7 @@
     }
 
     // Regression Down section
-    if (data.regression_down.length) {
+    if ((data.regression_down || []).length) {
       html += '<div class="reg-section">';
       html += '<div class="reg-section-header down">&#x1F4C9; Regression Down — TD Rate Unsustainable</div>';
       html += buildTable(data.regression_down, 'down');

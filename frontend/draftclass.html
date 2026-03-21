@@ -461,7 +461,7 @@
   }
 
   function renderData(d) {
-    var s = d.summary;
+    var s = d.summary || {};
     var html = '';
 
     // Summary chips
@@ -508,7 +508,7 @@
     }
     html += '</tr></thead><tbody>';
 
-    var players = sortPlayers(d.players);
+    var players = sortPlayers(d.players || []);
     for (var pi = 0; pi < players.length; pi++) {
       var p = players[pi];
       html += '<tr' + (p.player_id ? ' data-pid="' + escapeHtml(p.player_id) + '"' : '') + '>';
