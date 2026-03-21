@@ -1018,7 +1018,8 @@ def fetch_season_recap(season=None):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                row = cursor.fetchone()
+                season = (row[0] if row else None) or _current_nfl_season()
 
             # Available seasons
             cursor.execute("SELECT DISTINCT season FROM player_week_stats ORDER BY season DESC")
@@ -1161,8 +1162,8 @@ def fetch_season_recap(season=None):
             busts.sort(key=lambda x: x["delta"])
 
             # 6. Season stats summary
-            total_players = len(season_rows)
-            avg_ppg = round(sum(r[5] / r[4] for r in season_rows if r[4]) / total_players, 1) if total_players else 0
+            eligible = [r for r in season_rows if r[4]]
+            avg_ppg = round(sum(r[5] / r[4] for r in eligible) / len(eligible), 1) if eligible else 0
 
             return {
                 "season": season,
@@ -1410,7 +1411,8 @@ def fetch_playoff_schedule(season=None, position=None, limit=40):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                row = cursor.fetchone()
+                season = (row[0] if row else None) or _current_nfl_season()
 
             # Build defense PPG-allowed-by-position for the season
             cursor.execute("""
@@ -1571,7 +1573,8 @@ def fetch_fpts_breakdown(season=None, position=None, limit=40):
 
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_week_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                row = cursor.fetchone()
+                season = (row[0] if row else None) or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2402,7 +2405,8 @@ def fetch_season_pace(season=None, position=None, limit=50):
             cursor = conn.cursor()
             if not season:
                 cursor.execute("SELECT MAX(season) FROM player_season_stats")
-                season = cursor.fetchone()[0] or _current_nfl_season()
+                row = cursor.fetchone()
+                season = (row[0] if row else None) or _current_nfl_season()
 
             pos_filter = ""
             params = [season]
@@ -2813,7 +2817,8 @@ def fetch_success_rate(season=None, position=None, limit=50, week=None):
         with get_db() as conn:
             if not season:
                 cur = conn.execute("SELECT MAX(season) FROM player_season_pbp")
-                season = cur.fetchone()[0] or _current_nfl_season()
+                row = cur.fetchone()
+                season = (row[0] if row else None) or _current_nfl_season()
 
             pos_filter = ""
             params = [season]

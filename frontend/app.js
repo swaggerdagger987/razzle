@@ -1749,7 +1749,7 @@ function openPlayerPopup(playerId) {
     }
     html += '<div>';
     html += '<div style="font-family:var(--font-display);font-size:22px;">' + escapeHtml(p.full_name) + '</div>';
-    html += '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">' + escapeHtml(pos) + ' · ' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + p.age : '') + '</div>';
+    html += '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">' + escapeHtml(pos) + ' · ' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + escapeHtml(String(p.age)) : '') + '</div>';
     html += '</div></div>';
     // Key stats
     var stats = data.seasons && data.seasons.length ? data.seasons[data.seasons.length - 1] : null;

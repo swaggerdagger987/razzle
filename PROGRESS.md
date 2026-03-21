@@ -3567,3 +3567,41 @@ All 50+ open QA findings verified against current code:
 - All 11 JS files syntax clean (node --check)
 - 11/11 smoke tests pass
 - 0 regressions
+
+---
+
+## Ship Loop Session 42: 4-Agent Parallel Sweep (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md items blocked on external infrastructure. 4-agent parallel sweep (backend robustness, frontend crash bugs, standalone HTML panels, security).
+
+### Startup
+- Merged origin/qa/findings (already up to date)
+- Merged origin/ceo/strategy (already up to date)
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty
+- 11/11 smoke tests pass, 59/59 pytest pass, 12/12 JS syntax clean
+
+### 4-Agent Parallel Audit Results
+
+| Agent | Scope | Findings |
+|-------|-------|----------|
+| Backend Architect | All 16 Python files: div-by-zero, _safe_int, SQL columns, season_type, fetchone, thread safety, connection leaks | 1 data correctness bug (avg_ppg denominator) |
+| Frontend Developer | All 12 JS files: .toFixed, .split, .forEach, Math.max, division, resp.ok, parseInt | 0 new bugs — all patterns clean after 40+ prior sweeps |
+| HTML Panel QA | 18 standalone pages: app.js order, season defaults, .catch, null guards, dark mode export, watermark font, overflow-x | 0 new bugs — all 18 pages pass all 7 checks |
+| Security Engineer | XSS, inline handlers, innerHTML, attribute escaping, SQL injection, info leakage | 5 findings (1 reflected XSS server.py, 3 attribute escaping, 1 unescaped playerId fallback) |
+
+### Fixes Applied (6 total)
+
+| # | Fix | Severity | File | Notes |
+|---|-----|----------|------|-------|
+| 1 | avg_ppg denominator counts only eligible players | P2 | tools.py:1165 | Numerator summed PPG for players with games>0, but denominator used total_players (including 0-game rows), deflating average |
+| 2 | HTMLResponse escapes exc.detail | P1 | server.py:698 | `str(exc.detail)` rendered as raw HTML — latent reflected XSS. Now uses `html.escape()` |
+| 3 | escapeHtml → escapeAttr in option value attribute | P2 | charts.js:131 | `escapeHtml()` doesn't encode `"` — wrong for `value="..."` attributes |
+| 4 | Inline onclick → data attributes + event delegation | P1 | player.js:751-756 | Compare search results used inline `onclick` with `encodeURIComponent()` (doesn't encode `'`). Replaced with data-current/data-target attributes + addEventListener |
+| 5 | Unescaped playerId fallback → escapeHtml | P2 | lab.js:553 | Note editor title used raw playerId when player not found in state.items |
+
+### Verified Clean
+- 11/11 smoke tests pass
+- 12/12 JS files syntax clean (node --check)
+- All Python files compile clean
+- 59/59 pytest tests pass
+- 0 regressions

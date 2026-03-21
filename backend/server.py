@@ -695,7 +695,8 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
         four_oh_four = FRONTEND_DIR / "404.html"
         if four_oh_four.exists():
             return HTMLResponse(content=four_oh_four.read_text(), status_code=404)
-    return HTMLResponse(content=str(exc.detail), status_code=exc.status_code)
+    from html import escape as _html_escape
+    return HTMLResponse(content=_html_escape(str(exc.detail)), status_code=exc.status_code)
 
 
 @app.exception_handler(Exception)

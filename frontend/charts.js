@@ -128,7 +128,7 @@ function getPlayerOptions() {
     ? state.selectedPlayers
     : state.items.slice(0, 20);
   return players.map(p =>
-    `<option value="${escapeHtml(p.player_id)}">${escapeHtml(p.full_name)} (${escapeHtml(p.position)} - ${escapeHtml(p.team)})</option>`
+    `<option value="${escapeAttr(p.player_id)}">${escapeHtml(p.full_name)} (${escapeHtml(p.position)} - ${escapeHtml(p.team)})</option>`
   ).join("");
 }
 
