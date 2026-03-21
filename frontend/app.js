@@ -1751,7 +1751,7 @@ function openPlayerPopup(playerId) {
     if (stats) {
       html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-bottom:16px;">';
       var keys = [
-        { k: "games_played", l: "GP" }, { k: "fantasy_points_ppr", l: "PPR" },
+        { k: "games", l: "GP" }, { k: "fantasy_points_ppr", l: "PPR" },
         { k: "targets", l: "TGT" }, { k: "receptions", l: "REC" },
         { k: "receiving_yards", l: "REC YD" }, { k: "rushing_yards", l: "RUSH YD" },
         { k: "passing_yards", l: "PASS YD" }, { k: "total_tds", l: "TD" },

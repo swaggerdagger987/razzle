@@ -2965,3 +2965,32 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 - 11/11 smoke tests pass
 - All modified JS files syntax clean (node --check)
 - 0 regressions
+
+---
+
+## Ship Loop Session 32: Full Codebase Sweep (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md blocked on external infrastructure. 4-agent parallel sweep + manual audit.
+
+### Fixes Applied (1 bug across 1 file)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Player popup `games_played` → `games` field mismatch | P2 | app.js:1754 | Player popup (openPlayerPopup) read `stats.games_played` for GP stat, but profile API returns `games`. GP never displayed in popup. |
+
+### Verified Clean (manual sweep + 4 parallel agents)
+- 11/11 smoke tests pass
+- 59/59 pytest tests pass
+- All 14 JS files syntax clean (node --check)
+- All Python files compile clean
+- 0 remaining 1px solid borders in CSS/JS (table row dividers are intentional)
+- 0 cold gray hex values (#333-#eee) in CSS/JS
+- 0 font-display at <16px violations
+- 0 missing resp.ok checks on frontend fetches
+- 0 unescaped innerHTML with user data (XSS)
+- 0 remaining field name mismatches (games_played/air_yard_pct/dominator scope)
+- _showToast uses textContent (XSS-safe after Session 31 refactor)
+- setInterval in warroom.js properly managed (visibilitychange pause/resume)
+- Agent connective tissue (agent-config.js, agent-nudges.js) properly escaped
+- Monte Carlo worker has proper edge case guards (Box-Muller log(0), z-score clamp)
+- boom-bust `games_played` field is internally consistent (API + frontend) — not changed
