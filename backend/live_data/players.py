@@ -667,12 +667,22 @@ def _fetch_player_profile_uncached(player_id):
         seasons = [dict(r) for r in rows]
         _enrich_with_derived_stats(seasons)
 
-        # Enrich each season with rate metrics
-        for season_row in seasons:
-            items_for_rate = [{"player_id": player_id, **season_row}]
-            _enrich_with_rate_metrics(conn, items_for_rate, season=season_row["season"])
-            for metric in RATE_METRICS:
-                season_row[metric] = items_for_rate[0].get(metric)
+        # Enrich each season with rate metrics (single query for all seasons)
+        if seasons:
+            stat_placeholders = ",".join("?" * len(RATE_METRICS))
+            rate_rows = conn.execute(f"""
+                SELECT m.season, m.stat_key, AVG(m.stat_value) as avg_val
+                FROM player_week_metrics m
+                WHERE m.player_id = ? AND m.stat_key IN ({stat_placeholders})
+                GROUP BY m.season, m.stat_key
+            """, [player_id] + list(RATE_METRICS)).fetchall()
+            rate_lookup = {}
+            for r in rate_rows:
+                rate_lookup.setdefault(r[0], {})[r[1]] = round(r[2], 3) if r[2] is not None else None
+            for season_row in seasons:
+                s_rates = rate_lookup.get(season_row["season"], {})
+                for metric in RATE_METRICS:
+                    season_row[metric] = s_rates.get(metric)
 
         # Career totals
         career = {}
@@ -691,9 +701,12 @@ def _fetch_player_profile_uncached(player_id):
 
         # Combine/draft data (match by name + position)
         combine = None
+        has_combine = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='combine_data'"
+        ).fetchone()
         name = player.get("full_name", "")
         pos = player.get("position", "")
-        if name and pos:
+        if has_combine and name and pos:
             search_name = re.sub(r"[^a-z]", "", name.lower())
             combine_row = conn.execute("""
                 SELECT c.*, d.career_av, d.draft_av, d.allpro, d.probowls, d.seasons_started
