@@ -1836,3 +1836,35 @@ re-audit	OK	backend/server.py	1142	llm_chat	pass	re-audit: Ship 3ed5b36 LLM sani
 22	P1	frontend/lab.js	1765	openProspectProfile	ticket	FUNC-044: Same escapeAttr-in-onclick pattern for prospect profile links. Prospect names with apostrophes would dead-click.	90	2026-03-21T03:35
 19	OK	backend/live_data/core.py	857	dynasty_value	pass	re-audit: Ship 2fcc021 trade value spread fix verified. Top 4 spread=1.8 (Chase 95.8, Gibbs 95.2, Bijan 94.7, Bowers 94.0). TE overval reduced (2 TEs in top 30, was 5). P2 residual: all top-30 still tier 1.	90	2026-03-21T03:40
 29	OK	-	-	-	pass	re-audit: FUNC-043 still open — 25/50 breakout candidates have IEEE 754 rbs_score artifacts. Ticket unchanged.	100	2026-03-21T03:36
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+re-audit	OK	frontend/records.html	222	fmt	pass	re-audit: Ship Loop fmt() function for number formatting. Prod API data clean (no IEEE 754). 0 JS errors. Page Pro-gated on prod.	100	2026-03-21T03:50
+re-audit	OK	frontend/streaks.html	461	bar_chart	pass	re-audit: Ship Loop null guard (scores[j] || 0). Prod API data has 0 null scores. Guard is defensive. 0 JS errors.	100	2026-03-21T03:50
+re-audit	OK	frontend/workload.html	275	flags_map	pass	re-audit: Ship Loop (p.flags || []) null guard + escapeHtml null guard. Prod API: 0 null flags. Guard is defensive. 0 JS errors.	100	2026-03-21T03:50
+re-audit	OK	frontend/seasonpace.html	261	milestones_map	pass	re-audit: Ship Loop (p.milestones || []) null guard + escapeHtml null guard. Prod API: 0 null milestones. Guard is defensive. 0 JS errors.	100	2026-03-21T03:51
+re-audit	OK	frontend/warroom.js	2106	formatLabContext	pass	re-audit: Ship Loop filter key resilience (f.key || f.stat || ?). Correct fallback chain. No regression.	100	2026-03-21T03:51
+re-audit	OK	frontend/warroom.js	2492	callServerLLM	pass	re-audit: Ship Loop clearTimeout moved after resp.json(). Correct — timeout now covers full response lifecycle including body download.	100	2026-03-21T03:51
+re-audit	OK	backend/billing.py	436	trial_used_val	pass	re-audit: Ship Loop trial_used fix — MAX(trial_used, ?) prevents resetting from 1 to 0 on non-trial purchases. trial_used_val=1 only for trials. Correct.	100	2026-03-21T03:52
+re-audit	OK	frontend/lab.js	560	showNoteEditor	pass	re-audit: Ship Loop removed double-escape (name already escapeHtml'd at line 553). Correct fix, not an XSS regression.	100	2026-03-21T03:52
+re-audit	OK	frontend/*.html	-	escapeHtml_null_guard	pass	re-audit: 8 standalone pages got escapeHtml(t) null guard (if t==null return ""). All DOM-based escapeHtml now guarded. No pages missed.	100	2026-03-21T03:53
+10	P1	frontend/lab.js	1729	toggleWatchlistPlayer	ticket	FUNC-045: Watchlist star dead click for apostrophe players. Same escapeAttr-in-onclick pattern as FUNC-044 but on STAR CELL (every screener row). Ja'Marr Chase star is broken.	100	2026-03-21T03:55
