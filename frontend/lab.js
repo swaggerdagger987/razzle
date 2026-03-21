@@ -3315,7 +3315,7 @@ function toggleToolsDropdown() {
   var isOpen = dd.classList.contains("open");
   dd.classList.toggle("open", !isOpen);
   if (bd) bd.classList.toggle("open", !isOpen);
-  if (btn) btn.classList.toggle("active", !isOpen);
+  if (btn) { btn.classList.toggle("active", !isOpen); btn.setAttribute("aria-expanded", String(!isOpen)); }
 }
 
 function closeToolsDropdown() {
@@ -3324,7 +3324,7 @@ function closeToolsDropdown() {
   var btn = document.getElementById("toolsDropdownBtn");
   if (dd) dd.classList.remove("open");
   if (bd) bd.classList.remove("open");
-  if (btn) btn.classList.remove("active");
+  if (btn) { btn.classList.remove("active"); btn.setAttribute("aria-expanded", "false"); }
 }
 
 // ─── Column picker ───────────────────────────────────────────────
@@ -4156,7 +4156,7 @@ function saveCurrentView() {
     tierBreaks: !!state.tierBreaks,
     groupHeaders: !!state.groupHeaders,
     summaryBar: !!state.summaryBar,
-    tagFilter: state.tagFilter || "",
+    tagFilter: !!state.tagFilter,
   };
 
   views.unshift(view);
@@ -5516,6 +5516,8 @@ function computePosRanks() {
   for (const pos of Object.keys(byPos)) {
     byPos[pos].sort((a, b) => {
       const av = a[key] ?? 0, bv = b[key] ?? 0;
+      if (typeof av === "string" || typeof bv === "string")
+        return String(av).localeCompare(String(bv)) * (desc ? -1 : 1);
       return desc ? bv - av : av - bv;
     });
     byPos[pos].forEach((p, i) => {
@@ -6411,7 +6413,7 @@ function renderProfile(data, container) {
   // Header
   html += `<div class="profile-header">`;
   if (player.headshot_url) {
-    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="" onerror="this.style.display='none';">`;
+    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || 'Player')} headshot" onerror="this.style.display='none';">`;
   }
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
@@ -10448,7 +10450,7 @@ document.addEventListener("keydown", function(e) {
 
   // N: toggle notes column
   if (e.key === "n" || e.key === "N") {
-    toggleColumn("notes", !state.visibleColumns.includes("notes"));
+    toggleColumn("notes", !getActiveColumns().includes("notes"));
     renderTableHead(); renderTable(); renderColumnPicker(); saveStateToURL();
     return;
   }
@@ -11975,7 +11977,7 @@ function renderPlayerComps(data, container) {
     // Headshot + name
     html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">`;
     if (comp.headshot_url) {
-      html += `<img src="${escapeAttr(comp.headshot_url)}" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+      html += `<img src="${escapeAttr(comp.headshot_url)}" alt="" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
       html += `<span style="display:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
     } else {
       html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:white; font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;

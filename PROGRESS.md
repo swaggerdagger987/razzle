@@ -2809,3 +2809,20 @@ week_filter failure (10/11) is a stale server process issue, not a code bug. Ver
 - 11/11 smoke tests pass after all fixes
 - All modified files syntax clean (node --check, py_compile)
 - 0 regressions
+
+---
+
+## Ship Loop Session 27: QA Ticket Triage + Sweep (Mar 20)
+
+**Goal**: Consume FUNC-019 and FUNC-020 QA tickets, then sweep.
+
+### QA Tickets Consumed
+
+| Ticket | Severity | Action | Notes |
+|--------|----------|--------|-------|
+| FUNC-019: SEO routes broken on production | P0 | ESCALATE (human) | Deployment gap — `<base href="/">` fix exists in ship/launch-fixes (confirmed at player.html:4, compare.html:4, team.html:4) but not deployed to master. Requires human: `git merge ship/launch-fixes` into master + Render redeploy. |
+| FUNC-020: Derived column sort wrong order | P1 | ESCALATE (human) | Same deployment gap — `sql_limit=2000` (players.py:433) and null sentinel sort (players.py:490) exist in ship/launch-fixes. Requires same merge + deploy as FUNC-019. |
+
+### TICKETS.md: All entries DONE (no new work)
+
+### Entering SWEEP MODE
