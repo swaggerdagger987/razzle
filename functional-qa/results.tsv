@@ -1092,3 +1092,35 @@ prod-pages	OK	-	-	-	pass	prod: 0 JS errors on tradevalues, tradefinder, rosterbu
 prod-pages	OK	-	-	-	pass	prod: 0 JS errors on Lab panel switch (?panel=rankings/tiers/tradevalues/breakouts/weeklyheatmap/dashboard/leaders)	100	2026-03-20T21:38
 prod-pages	P1	frontend/player.html	-	-	open	prod: FUNC-018 still broken — /player/00-0033280 returns 3 JS errors (MIME type text/html)	100	2026-03-20T21:38
 prod-perf	OK	-	-	-	info	prod: derived metric sort ~1.4s vs SQL sort ~0.4s — sql_limit 2000 may increase to ~3-5s	80	2026-03-20T21:39
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+flow-13	P0	frontend/player.html	4	base-href	re-audit	re-audit: FUNC-018 code fix verified locally (base href="/"). Prod /player/{id} still broken (3 JS errors). FUNC-019 filed.	100	2026-03-21T01:55
+flow-16	P0	frontend/compare.html	4	base-href	re-audit	re-audit: FUNC-018 code fix verified locally. Prod /compare/{id1}/{id2} still broken. FUNC-019 covers.	100	2026-03-21T01:55
+flow-4	P1	frontend/lab-panels.js	893	sortPlayers	re-audit	re-audit: sort direction fix verified (va-vb corrects inverted sort). Prod derived sorts return PPR order (FUNC-020).	100	2026-03-21T01:55
+flow-4	P1	backend/live_data/players.py	431	sql_limit	re-audit	re-audit: sql_limit 500→2000 fix verified in code. Prod still at 500. FUNC-020 filed.	100	2026-03-21T01:55
+flow-10	OK	frontend/lab.html	1443	pin-icon	re-audit	re-audit: push pin emoji→CSS-mask SVG icon. 26 .pin-icon elements render. Theme-aware. No blinking.	100	2026-03-21T01:55
+flow-60	OK	frontend/app.js	849	register	re-audit	re-audit: registration button origText restore on all 4 validation paths + finally block. No regressions.	100	2026-03-21T01:55
+prod-sweep	OK	-	-	-	pass	prod sweep: 24 pages tested (4 main + 20 standalone panels), all 0 JS errors. No regressions.	100	2026-03-21T01:55
+prod-sweep	P0	-	-	-	fail	prod: /player/{id}, /compare/{id1}/{id2}, /team/{abbr} SEO routes broken (3/3/2 JS errors). FUNC-019.	100	2026-03-21T01:55
+prod-sweep	P1	-	-	-	fail	prod: derived column sorts (WOPR, target_share) return PPR order, not sorted by metric. FUNC-020.	100	2026-03-21T01:55
+prod-sweep	P1	-	-	-	fail	prod: 3 concurrent derived sort requests caused 502 crash (~40s recovery). Likely OOM on Render free tier.	90	2026-03-21T01:55
