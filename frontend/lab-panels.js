@@ -890,7 +890,7 @@
         if (va == null) return 1;
         if (vb == null) return -1;
         if (typeof va === 'string') return dir * va.localeCompare(String(vb));
-        return dir * ((Number(vb) || 0) - (Number(va) || 0));
+        return dir * ((Number(va) || 0) - (Number(vb) || 0));
       });
     }
 
@@ -2307,7 +2307,7 @@
         if (va == null) return 1;
         if (vb == null) return -1;
         if (typeof va === 'string') return dir * va.localeCompare(String(vb));
-        return dir * ((Number(vb) || 0) - (Number(va) || 0));
+        return dir * ((Number(va) || 0) - (Number(vb) || 0));
       });
     }
 
@@ -2522,7 +2522,7 @@
         if (va == null) return 1;
         if (vb == null) return -1;
         if (typeof va === 'string') return dir * va.localeCompare(String(vb));
-        return dir * ((Number(vb) || 0) - (Number(va) || 0));
+        return dir * ((Number(va) || 0) - (Number(vb) || 0));
       });
     }
 
@@ -3873,7 +3873,7 @@
         if (va == null) return 1;
         if (vb == null) return -1;
         if (typeof va === 'string') return dir * va.localeCompare(String(vb));
-        return dir * ((Number(vb) || 0) - (Number(va) || 0));
+        return dir * ((Number(va) || 0) - (Number(vb) || 0));
       });
     }
 
