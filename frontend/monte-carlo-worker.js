@@ -47,8 +47,8 @@ function simulate(rosterPlayers, distributions, rosterIds, playoffSpots, SIMS, e
   var rosterLosses = new Array(nRosters);
   for (var wi = 0; wi < nRosters; wi++) {
     var rp = rosterPlayers[rosterIds[wi]];
-    rosterWins[wi] = rp.wins || 0;
-    rosterLosses[wi] = rp.losses || 0;
+    rosterWins[wi] = (rp && rp.wins) || 0;
+    rosterLosses[wi] = (rp && rp.losses) || 0;
   }
 
   // Reusable arrays to avoid allocation in hot loop

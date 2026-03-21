@@ -375,7 +375,7 @@
 
     document.querySelectorAll('.ct-chip-x').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        selectedPlayers.splice(parseInt(btn.getAttribute('data-idx')), 1);
+        selectedPlayers.splice(parseInt(btn.getAttribute('data-idx')) || 0, 1);
         renderChips();
         writeURL();
       });
@@ -598,7 +598,7 @@
   document.getElementById('ctExport').addEventListener('click', function() {
     var root = document.getElementById('ctRoot');
     if (typeof html2canvas === 'undefined') return;
-    html2canvas(root, { backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#ede0cf', scale: 2 }).then(function(canvas) {
+    html2canvas(root, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = 'bold 16px Space Mono, monospace';
       ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.15)' : 'rgba(45,31,20,0.12)';

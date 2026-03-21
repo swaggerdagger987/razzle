@@ -846,9 +846,9 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 function adjustColor(hex, amount) {
-  var r = parseInt(hex.slice(1, 3), 16);
-  var g = parseInt(hex.slice(3, 5), 16);
-  var b = parseInt(hex.slice(5, 7), 16);
+  var r = parseInt(hex.slice(1, 3), 16) || 0;
+  var g = parseInt(hex.slice(3, 5), 16) || 0;
+  var b = parseInt(hex.slice(5, 7), 16) || 0;
   r = Math.max(0, Math.min(255, r + amount));
   g = Math.max(0, Math.min(255, g + amount));
   b = Math.max(0, Math.min(255, b + amount));

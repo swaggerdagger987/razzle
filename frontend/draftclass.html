@@ -392,7 +392,7 @@
 
   // URL state
   var params = new URLSearchParams(window.location.search);
-  if (params.get('year')) state.year = parseInt(params.get('year'), 10);
+  if (params.get('year')) state.year = parseInt(params.get('year'), 10) || state.year;
   if (params.get('pos')) state.position = params.get('pos');
 
   // Position tabs
@@ -651,7 +651,7 @@
   window.exportDcPng = function() {
     var el = document.getElementById('dc-content');
     if (!el || typeof html2canvas === 'undefined') return;
-    html2canvas(el, { backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#ede0cf', scale: 2 }).then(function(canvas) {
+    html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = 'bold 20px "Space Mono", monospace';
       ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.18)' : 'rgba(45,31,20,0.15)';

@@ -189,18 +189,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                     continue
                 rank = sum(1 for v in ppo_values if v < p["ppo"])
                 percentile = rank / n * 100
-                if percentile >= 95:
-                    p["grade"] = "A+"
-                elif percentile >= 85:
-                    p["grade"] = "A"
-                elif percentile >= 70:
-                    p["grade"] = "B"
-                elif percentile >= 45:
-                    p["grade"] = "C"
-                elif percentile >= 25:
-                    p["grade"] = "D"
-                else:
-                    p["grade"] = "F"
+                p["grade"] = _grade_from_percentile(percentile)
 
             # Most Efficient: highest PPO
             most_efficient = sorted(players, key=lambda x: x["ppo"], reverse=True)[:limit]
@@ -354,18 +343,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                 # Lower CoV = more consistent = higher percentile
                 rank = sum(1 for v in cov_values if v > p["cov"])
                 percentile = rank / total * 100
-                if percentile >= 95:
-                    p["grade"] = "A+"
-                elif percentile >= 85:
-                    p["grade"] = "A"
-                elif percentile >= 70:
-                    p["grade"] = "B"
-                elif percentile >= 45:
-                    p["grade"] = "C"
-                elif percentile >= 25:
-                    p["grade"] = "D"
-                else:
-                    p["grade"] = "F"
+                p["grade"] = _grade_from_percentile(percentile)
 
             # Rock Solid: lowest CoV (most consistent)
             rock_solid = sorted(players, key=lambda x: x["cov"])[:limit]
@@ -567,18 +545,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             total = len(players)
             for i, p in enumerate(players):
                 percentile = ((total - 1 - i) / max(total - 1, 1)) * 100
-                if percentile >= 95:
-                    p["grade"] = "A+"
-                elif percentile >= 85:
-                    p["grade"] = "A"
-                elif percentile >= 70:
-                    p["grade"] = "B"
-                elif percentile >= 45:
-                    p["grade"] = "C"
-                elif percentile >= 25:
-                    p["grade"] = "D"
-                else:
-                    p["grade"] = "F"
+                p["grade"] = _grade_from_percentile(percentile)
 
             # Schedule Suppressed: hardest schedule (highest sos_delta)
             suppressed = [p for p in players if p["sos_delta"] > 0]
@@ -926,7 +893,8 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                        COALESCE(SUM(s.rushing_yards), 0) as total_rush_yards,
                        COALESCE(SUM(s.rushing_tds), 0) as total_rush_tds,
                        ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_pts,
-                       COUNT(DISTINCT s.week) as games
+                       COUNT(DISTINCT s.week) as games,
+                       COALESCE(SUM(s.attempts), 0) as total_attempts
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -1000,6 +968,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                     "age": r[5],
                     "targets": targets,
                     "carries": carries,
+                    "attempts": r[14],
                     "rec_yards": rec_yards,
                     "rec_tds": rec_tds,
                     "rush_yards": rush_yards,
@@ -1016,7 +985,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                 ppg = round(p["total_pts"] / games, 2) if games > 0 else 0
                 p["ppg"] = ppg
 
-                total_opps = p["targets"] + p["carries"]
+                total_opps = (p["attempts"] + p["carries"]) if p["position"] == "QB" else (p["targets"] + p["carries"])
                 p["total_opps"] = total_opps
                 p["targets_per_game"] = round(p["targets"] / games, 1) if games > 0 else 0
                 p["carries_per_game"] = round(p["carries"] / games, 1) if games > 0 else 0

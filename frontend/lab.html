@@ -3151,7 +3151,7 @@
 
     <!-- START HERE — for first-time visitors -->
     <div class="sidebar-start-here" id="sidebarStartHere" style="display:none;">
-      <div style="font-family:var(--font-display); font-size:13px; color:var(--orange); padding:0 12px 4px; letter-spacing:0.5px;">START HERE</div>
+      <div style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--orange); padding:0 12px 4px; letter-spacing:0.5px; text-transform:uppercase;">START HERE</div>
       <a class="lab-sidebar-item start-here-item" data-panel="screener" onclick="switchPanel('screener');_trackStartHere()">The Screener<span class="start-here-hint">the research lab</span></a>
       <a class="lab-sidebar-item start-here-item" data-panel="rankings" onclick="switchPanel('rankings');_trackStartHere()">Dynasty Rankings<span class="start-here-hint">know what your roster is worth</span></a>
       <a class="lab-sidebar-item start-here-item" data-panel="tradevalues" onclick="switchPanel('tradevalues');_trackStartHere()">Trade Values<span class="start-here-hint">every player's trade stock</span></a>
@@ -3779,7 +3779,7 @@
           <div class="trade-autocomplete" id="taAutoGive"></div>
         </div>
         <div class="trade-pick-row">
-          <select id="taPickYearGive"><option>2025</option><option>2026</option><option>2027</option></select>
+          <select id="taPickYearGive"></select>
           <select id="taPickRdGive"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
           <select id="taPickNumGive"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
           <button class="btn-chunky" onclick="_taAddPick('give')">+ Pick</button>
@@ -3808,7 +3808,7 @@
           <div class="trade-autocomplete" id="taAutoGet"></div>
         </div>
         <div class="trade-pick-row">
-          <select id="taPickYearGet"><option>2025</option><option>2026</option><option>2027</option></select>
+          <select id="taPickYearGet"></select>
           <select id="taPickRdGet"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
           <select id="taPickNumGet"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
           <button class="btn-chunky" onclick="_taAddPick('get')">+ Pick</button>
@@ -4233,8 +4233,6 @@
     dashboard: 'Dashboard', schedule: 'Schedule / SOS', opportunity: 'Opportunity Share',
     records: 'Records', recap: 'Season Recap', awards: 'Awards', leaders: 'Stat Leaders',
     explorer: 'Explorer', targets: 'Target Distribution', team: 'Team Rosters',
-    mockdraft: 'Mock Draft',
-    proradar: 'Athletic Radar',
     drafttracker: 'Draft Class Tracker',
     powerrankings: 'Power Rankings',
     gamescript: 'Game Script',
@@ -4306,8 +4304,6 @@
     explorer: 'scatter plots and custom stat exploration',
     targets: 'who\'s getting fed on each team?',
     team: 'full roster views by team',
-    mockdraft: 'pick your squad before anyone else does',
-    proradar: 'see who\'s a freak athlete and who\'s just hype',
     drafttracker: 'how each draft class actually produced in fantasy',
     powerrankings: 'which teams have the most dynasty firepower?',
     gamescript: 'who produces when their team is winning vs losing?',
@@ -4326,10 +4322,8 @@
     dualthreat: 'Dual-Threat Index uses the geometric mean of rushing and receiving production (yards, TDs, touches). Geometric mean rewards balance — a player must contribute in BOTH to score high. Primarily for RBs and QBs.',
     targetpremium: 'Target Premium composite: YPT (yards per target) + catch rate + YAC/rec (yards after catch) + aDOT (target depth). Measures target quality over quantity — who does the most per target?',
     consistency: 'Consistency grade is based on inverse Coefficient of Variation (StdDev / Mean PPG). Lower CoV = more consistent. A+ = rock solid weekly scores. F = wild swings. Minimum 6 games and 2 PPG to qualify.',
-    mockdraft: 'Simulates a dynasty rookie draft using Razzle Prospect Scores (RPS) as the draft board. CPU teams pick best available by RPS. Snake or linear draft order. Pick grades compare your selection number to the prospect\'s RPS rank — picking later than their rank = Value/Steal, earlier = Reach.',
-    proradar: 'Spider chart visualizes prospect combine metrics as position-relative percentiles: 40-yard dash, bench press, vertical jump, broad jump, 3-cone drill, shuttle. Percentiles are calculated against all players at the same position in the combine database. Compare up to 3 prospects side by side.'
   };
-  var PANEL_METHOD_DEFAULT = 'Player statistics sourced from publicly available NFL and NCAA data (2015-2025).';
+  var PANEL_METHOD_DEFAULT = 'Player statistics sourced from publicly available NFL and NCAA data (2015-' + (new Date().getMonth() >= 8 ? new Date().getFullYear() : new Date().getFullYear() - 1) + ').';
 
   // Map each panel to its sidebar category for breadcrumbs
   var PANEL_CATEGORIES = {};

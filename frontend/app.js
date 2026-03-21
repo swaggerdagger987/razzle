@@ -491,10 +491,11 @@ function escapeAttr(str) {
   return String(str).replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-/** Escape a string for use inside a JavaScript string literal (e.g. inline onclick handlers). */
+/** Escape a string for use inside a JavaScript string literal in HTML attributes (e.g. inline onclick handlers).
+ *  Uses hex escapes so output never contains literal quotes or angle brackets — safe in both JS and HTML attribute contexts. */
 function escapeJS(str) {
   if (!str) return "";
-  return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+  return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\x27").replace(/"/g, "\\x22").replace(/</g, "\\x3c").replace(/>/g, "\\x3e").replace(/&/g, "\\x26").replace(/\n/g, "\\n").replace(/\r/g, "\\r");
 }
 
 const API_BASE = window.location.origin;
@@ -527,7 +528,9 @@ async function apiFetch(path, options = {}) {
 
 function formatStat(val, decimals = 1) {
   if (val === null || val === undefined) return "—";
-  return Number(val).toFixed(decimals);
+  var n = Number(val);
+  if (isNaN(n)) return "—";
+  return n.toFixed(decimals);
 }
 
 function posClass(pos) {
@@ -1452,11 +1455,11 @@ function renderCmdResults(items, sectionLabel) {
   var els = _cmdResultsEl.querySelectorAll(".cmd-palette-item");
   els.forEach(function(el) {
     el.addEventListener("click", function() {
-      _cmdActiveIdx = parseInt(el.dataset.idx);
+      _cmdActiveIdx = parseInt(el.dataset.idx, 10) || 0;
       cmdSelect();
     });
     el.addEventListener("mouseenter", function() {
-      _cmdActiveIdx = parseInt(el.dataset.idx);
+      _cmdActiveIdx = parseInt(el.dataset.idx, 10) || 0;
       updateCmdActive();
     });
   });
@@ -1675,7 +1678,7 @@ window.addEventListener("razzle-plan-changed", function(e) {
     "fantasy football, but make it cinema.",
     "the waiver wire whisperer.",
     "data > vibes (but vibes help).",
-    "pulling film since 2025.",
+    "pulling film since " + Math.min(new Date().getFullYear(), 2025) + ".",
     "Razzle never sleeps. your opponents do."
   ];
   var footer = document.querySelector(".site-footer .footer-tagline, .site-footer [data-tagline]");
@@ -1748,7 +1751,7 @@ function openPlayerPopup(playerId) {
     }
     html += '<div>';
     html += '<div style="font-family:var(--font-display);font-size:22px;">' + escapeHtml(p.full_name) + '</div>';
-    html += '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">' + escapeHtml(pos) + ' · ' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + p.age : '') + '</div>';
+    html += '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">' + escapeHtml(pos) + ' · ' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + escapeHtml(String(p.age)) : '') + '</div>';
     html += '</div></div>';
     // Key stats
     var stats = data.seasons && data.seasons.length ? data.seasons[data.seasons.length - 1] : null;

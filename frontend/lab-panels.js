@@ -362,7 +362,7 @@
           html += '<div class="rankings-meta">';
           html += '<span class="rankings-pos-badge ' + posLc + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="rankings-team">' + escapeHtml(p.team) + '</span>';
-          if (p.age) html += '<span class="rankings-age ' + ageCls + '">Age ' + p.age + '</span>';
+          if (p.age) html += '<span class="rankings-age ' + ageCls + '">Age ' + escapeHtml(String(p.age)) + '</span>';
           html += '</div></div>';
           html += '<div class="rankings-scores">';
           html += '<div class="rankings-value">' + fmt(p.dynasty_value) + ' <span style="font-size:10px;font-weight:400;color:var(--ink-light)">DVS</span></div>';
@@ -645,7 +645,7 @@
       html += '<div class="tv-player-meta">';
       html += '<span class="tv-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
       html += '<span class="tv-team-label">' + escapeHtml(p.team) + '</span>';
-      if (p.age) html += '<span class="tv-age">age ' + p.age + '</span>';
+      if (p.age) html += '<span class="tv-age">age ' + escapeHtml(String(p.age)) + '</span>';
       html += '</div></div>';
       html += '<div class="tv-bar-area"><div class="tv-bar-track"><div class="tv-bar-fill ' + pos + '" style="width:' + pct + '%"></div></div>';
       html += '<div class="tv-value">' + fmt(p.trade_value) + '</div></div>';
@@ -1196,7 +1196,7 @@
     var seasonSel = el.querySelector('#lp-av-season');
     var searchInput = el.querySelector('#lp-av-search');
 
-    slider.addEventListener('input', function() { state.budget = parseInt(this.value); budgetDisp.textContent = '$' + state.budget; });
+    slider.addEventListener('input', function() { state.budget = parseInt(this.value) || 200; budgetDisp.textContent = '$' + state.budget; });
     slider.addEventListener('change', function() { fetchData(); });
     rosterInput.addEventListener('change', function() { state.rosterSize = Math.max(8, Math.min(25, parseInt(this.value) || 15)); this.value = state.rosterSize; fetchData(); });
     seasonSel.addEventListener('change', function() { state.season = parseInt(this.value) || 0; fetchData(); });
@@ -1509,7 +1509,7 @@
           } else {
             html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
           }
-          if (p.age) html += '<span class="breakout-age-badge ' + ac + '">' + ac + ' ' + p.age + '</span>';
+          if (p.age) html += '<span class="breakout-age-badge ' + ac + '">' + ac + ' ' + escapeHtml(String(p.age)) + '</span>';
           html += '</div></div>';
           html += '<div class="breakout-rbs"><div class="breakout-rbs-score">' + escapeHtml(String(rbsVal)) + '</div>';
           html += '<div class="breakout-rbs-label">' + (isCollege ? 'BKO' : 'RBS') + '</div></div></div>';
@@ -1636,7 +1636,7 @@
       h += '<div class="buysell-info"><div class="buysell-name">' + pLink(p.name, p.player_id) + '</div>';
       h += '<div class="buysell-meta"><span class="buysell-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
       h += '<span class="buysell-team">' + escapeHtml(p.team) + '</span>';
-      if (p.age) h += '<span class="buysell-age-badge ' + ac + '">' + ac + ' ' + p.age + '</span>';
+      if (p.age) h += '<span class="buysell-age-badge ' + ac + '">' + ac + ' ' + escapeHtml(String(p.age)) + '</span>';
       h += '</div></div>';
       h += '<div class="buysell-badges"><div class="buysell-grade ' + gc + '">' + escapeHtml(p.efficiency_grade) + '</div>';
       h += '<div class="buysell-grade-label">efficiency</div></div></div>';
@@ -5612,7 +5612,7 @@
       html += '<div class="cst-player-name">' + escapeHtml(p.full_name || p.name || '') + '</div>';
       html += '<span class="cst-pos-badge" style="background:' + posColor + '">' + escapeHtml(pos) + '</span>';
       html += '<span class="cst-team">' + escapeHtml(p.team || '') + '</span>';
-      if (p.age) html += '<span class="cst-age">Age ' + p.age + '</span>';
+      if (p.age) html += '<span class="cst-age">Age ' + escapeHtml(String(p.age)) + '</span>';
       html += '<span class="cst-traj" style="background:' + trajColors[trajectory] + '">' + trajLabels[trajectory] + '</span>';
       html += '</div></div>';
 
@@ -5981,7 +5981,7 @@
       });
     }
 
-    el.querySelector('#cmt-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
+    el.querySelector('#cmt-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
     el.querySelector('#cmt-compare-btn').addEventListener('click', function() { loadCompare(); });
 
     function loadCompare() {
@@ -6080,14 +6080,15 @@
     buildPlayerSearch(el, 'sw2-', 'search player...', function(p) {
       loadStrengths(p.player_id);
     });
-    el.querySelector('#sw2-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
+    el.querySelector('#sw2-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
 
     function gradeColor(g) {
       if (!g) return 'var(--ink-light)';
-      if (g === 'A+' || g === 'A') return 'var(--green)';
-      if (g === 'B+' || g === 'B') return 'var(--blue)';
-      if (g === 'C+' || g === 'C') return 'var(--yellow)';
-      if (g === 'D') return 'var(--orange)';
+      var c = g.charAt(0);
+      if (c === 'A') return 'var(--green)';
+      if (c === 'B') return 'var(--blue)';
+      if (c === 'C') return 'var(--yellow)';
+      if (c === 'D') return 'var(--orange)';
       return 'var(--red)';
     }
     function barColor(pct) {
@@ -6164,7 +6165,7 @@
     function renderStatCard(s, isStrength) {
       var pct = s.percentile || 0;
       var html = '<div class="sw2-stat-card">';
-      html += '<div class="sw2-stat-rank">#' + (s.rank || '-') + '</div>';
+      html += '<div class="sw2-stat-rank">#' + (s.rank != null ? s.rank : '-') + '</div>';
       html += '<div class="sw2-stat-info">';
       html += '<div class="sw2-stat-label">' + escapeHtml(s.label || s.stat || '') + '</div>';
       html += '<div class="sw2-stat-value">' + fmt(s.value) + '</div>';
@@ -6180,8 +6181,8 @@
   defs.push({ name: 'reportcard', render: function(el) {
     var curPos = '';
     var curSeason = _latestSeason;
-    var honorSort = { col: 'gpa', asc: false };
-    var needsSort = { col: 'gpa', asc: true };
+    var honorSort = { col: 'gpa_pct', asc: false };
+    var needsSort = { col: 'gpa_pct', asc: true };
     var lastData = null;
 
     var GRADE_ORDER = { 'A+': 8, 'A': 7, 'B+': 6, 'B': 5, 'C+': 4, 'C': 3, 'D': 2, 'F': 1 };
@@ -6331,7 +6332,7 @@
       loadData();
     });
     el.querySelector('#rpc-season').addEventListener('change', function() {
-      curSeason = parseInt(this.value);
+      curSeason = parseInt(this.value) || _latestSeason;
       populateWeekSelect(el, 'rpc-week', this.value, loadData);
       loadData();
     });
@@ -6428,7 +6429,7 @@
       curPos = tab.getAttribute('data-pos') || '';
       loadData();
     });
-    el.querySelector('#fpb-season').addEventListener('change', function() { curSeason = parseInt(this.value); loadData(); });
+    el.querySelector('#fpb-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; loadData(); });
     loadData();
   }});
 
@@ -6454,7 +6455,7 @@
       curPlayer = p;
       loadGameLog();
     });
-    el.querySelector('#glo-season').addEventListener('change', function() { curSeason = parseInt(this.value); if (curPlayer) loadGameLog(); });
+    el.querySelector('#glo-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; if (curPlayer) loadGameLog(); });
 
     function fptsClass(v) {
       if (v >= 30) return 'glo-elite';
@@ -6538,12 +6539,12 @@
         colDefs.forEach(function(c) {
           var v = g[c.key];
           if (c.key === 'fantasy_points' || c.key === 'fpts') {
-            var fpts = g.fantasy_points || g.fpts || 0;
+            var fpts = g.fantasy_points != null ? g.fantasy_points : (g.fpts != null ? g.fpts : 0);
             html += '<td class="glo-num ' + fptsClass(fpts) + '">' + fmt(fpts) + '</td>';
           } else if (c.key === 'opponent') {
             html += '<td>' + escapeHtml(g.opponent || g.opp || '-') + '</td>';
           } else if (c.key === 'week') {
-            html += '<td class="glo-num">' + (v || '-') + '</td>';
+            html += '<td class="glo-num">' + (v != null ? v : '-') + '</td>';
           } else {
             html += '<td class="glo-num">' + fmt(v, (c.key.indexOf('yards') >= 0 ? 0 : 0)) + '</td>';
           }
@@ -6646,7 +6647,7 @@
           html += '<span class="arc-player-pos" style="background:' + pPosColor + '">' + escapeHtml(p.position || '') + '</span>';
           html += '<span class="arc-player-name">' + escapeHtml(p.full_name || p.name || '') + '</span>';
           html += '<span class="arc-player-team">' + escapeHtml(p.team || '') + '</span>';
-          if (p.age) html += '<span class="arc-player-age">Age ' + p.age + '</span>';
+          if (p.age) html += '<span class="arc-player-age">Age ' + escapeHtml(String(p.age)) + '</span>';
           html += '<span class="arc-player-ppg">' + fmt(p.ppg) + ' ppg</span>';
           if (p.key_stat) html += '<span class="arc-player-stat">' + escapeHtml(p.key_stat) + '</span>';
           html += '</div>';
@@ -6665,7 +6666,7 @@
       curPos = tab.getAttribute('data-pos') || '';
       loadData();
     });
-    el.querySelector('#arc-season').addEventListener('change', function() { curSeason = parseInt(this.value); loadData(); });
+    el.querySelector('#arc-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; loadData(); });
     loadData();
   }});
 
@@ -6687,7 +6688,7 @@
     buildPlayerSearch(el, 'pbd-', 'search player...', function(p) {
       loadBreakdown(p.player_id, p);
     });
-    el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value); });
+    el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
 
     var compColors = ['#5b7fff', '#2ec4b6', '#d97757', '#8b5cf6', '#e74c3c', '#eab308', '#16a34a', '#f472b6'];
 
@@ -6837,6 +6838,7 @@
 
     function buildAwardCard(award, isCollege) {
       var w = award.winner;
+      if (!w) return '';
       var pos = (w.position || 'RB').toLowerCase();
       var trophy = TROPHY_MAP[award.key] || '&#x1F3C6;';
       var html = '<div class="aw2-card">';
@@ -6890,7 +6892,7 @@
           html += '<span class="aw2-runner-pos ' + rPos + '">' + escapeHtml(r.position) + '</span>';
           html += '<span class="aw2-runner-name">' + escapeHtml(r.name) + '</span>';
           if (isCollege && r.team) html += '<span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(r.team) + '</span>';
-          html += '<span class="aw2-runner-stat">' + escapeHtml(isCollege ? String(r.ppg || '') + ' PPG' : (r.key_stat || '')) + '</span>';
+          html += '<span class="aw2-runner-stat">' + escapeHtml(isCollege ? String(r.ppg != null ? r.ppg : '') + ' PPG' : (r.key_stat || '')) + '</span>';
           html += '</div>';
         });
         html += '</div>';
@@ -8131,7 +8133,7 @@
           if (p.weight) measStr += (measStr ? ' / ' : '') + p.weight + ' lbs';
 
           html += '<div class="bb-card">';
-          html += '<div class="bb-card-top"><div class="bb-rank">#' + (p.rank || '') + '</div>';
+          html += '<div class="bb-card-top"><div class="bb-rank">#' + (p.rank != null ? p.rank : '') + '</div>';
           html += '<span class="bb-pos-badge ' + posLc + '">' + escapeHtml(p.position || '') + '</span>';
           html += '<div class="bb-info"><div class="bb-name">' + escapeHtml(p.player_name || '') + '</div>';
           html += '<div class="bb-meta">' + escapeHtml(p.school || '') + '</div></div>';
@@ -8533,14 +8535,6 @@
         });
         ac.innerHTML = html;
         ac.style.display = html ? 'block' : 'none';
-        ac.querySelectorAll('.rbld-ac-item').forEach(function(item) {
-          item.addEventListener('click', function() {
-            var pid = this.getAttribute('data-pid');
-            addPlayer(pid);
-            ac.style.display = 'none';
-            el.querySelector('.rbld-search').value = '';
-          });
-        });
       }).catch(function() {
         var ac = el.querySelector('.rbld-autocomplete');
         if (ac) ac.style.display = 'none';
@@ -8657,6 +8651,16 @@
       searchTimeout = setTimeout(function() { searchPlayers(q); }, 200);
     });
 
+    // Event delegation for autocomplete items (avoids listener leak per search)
+    el.querySelector('.rbld-autocomplete').addEventListener('click', function(e) {
+      var item = e.target.closest('.rbld-ac-item');
+      if (!item) return;
+      var pid = item.getAttribute('data-pid');
+      addPlayer(pid);
+      this.style.display = 'none';
+      el.querySelector('.rbld-search').value = '';
+    });
+
     document.addEventListener('click', function(e) {
       if (!e.target.closest('.rbld-search-area')) el.querySelector('.rbld-autocomplete').style.display = 'none';
     });
@@ -8676,9 +8680,11 @@
     };
 
     function gradeClass(grade) {
-      if (grade === 'A+') return 'grade-aplus'; if (grade === 'A') return 'grade-a';
-      if (grade === 'B') return 'grade-b'; if (grade === 'C') return 'grade-c';
-      if (grade === 'D') return 'grade-d'; return 'grade-f';
+      if (!grade) return 'grade-f';
+      var g = grade.charAt(0);
+      if (g === 'A') return grade === 'A+' ? 'grade-aplus' : 'grade-a';
+      if (g === 'B') return 'grade-b'; if (g === 'C') return 'grade-c';
+      if (g === 'D') return 'grade-d'; return 'grade-f';
     }
 
     var SUPP_COLS = [
@@ -9287,7 +9293,7 @@
           var ageBadge = '';
           if (p.age) {
             var ageCls = p.age <= 25 ? 'young' : p.age <= 28 ? 'prime' : 'aging';
-            ageBadge = '<span class="tm-age-badge ' + ageCls + '">' + p.age + '</span>';
+            ageBadge = '<span class="tm-age-badge ' + ageCls + '">' + escapeHtml(String(p.age)) + '</span>';
           }
           html += '<li class="tm-player-row" data-pid="' + escapeAttr(p.player_id) + '">';
           html += '<span class="tm-player-rank">' + (i + 1) + '</span>';
@@ -9654,7 +9660,7 @@
 
     // Year selector
     el.querySelector('.dct-year').addEventListener('change', function() {
-      panelState.year = parseInt(this.value);
+      panelState.year = parseInt(this.value) || _latestSeason;
       loadData();
     });
 

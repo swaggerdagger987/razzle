@@ -550,7 +550,7 @@ function showNoteEditor(playerId, anchorEl) {
 
   const existing = getPlayerNote(playerId);
   const player = state.items.find(p => p.player_id === playerId);
-  const name = player ? escapeHtml(player.full_name) : playerId;
+  const name = player ? escapeHtml(player.full_name) : escapeHtml(playerId);
 
   let editor = document.getElementById("noteEditor");
   if (!editor) {
@@ -560,7 +560,7 @@ function showNoteEditor(playerId, anchorEl) {
     document.body.appendChild(editor);
   }
 
-  editor.innerHTML = `<div class="note-editor-title">${name}</div>`
+  editor.innerHTML = `<div class="note-editor-title">${escapeHtml(name)}</div>`
     + `<textarea class="note-editor-input" id="noteEditorInput" maxlength="140" placeholder="Add a note... (140 chars)">${escapeHtml(existing)}</textarea>`
     + `<div class="note-editor-footer">`
     + `<span class="note-editor-count" id="noteCharCount">${existing.length}/140</span>`
@@ -1037,7 +1037,8 @@ function _pushHistory() {
 }
 
 function _restoreState(snap) {
-  const s = JSON.parse(snap);
+  var s; try { s = JSON.parse(snap); } catch(e) { return; }
+  if (!s) return;
   state.position = s.position; state.season = s.season; state.universe = s.universe;
   state.relevance = s.relevance; state.search = s.search; state.week = s.week || 0;
   state.sortKey = s.sortKey; state.sortDir = s.sortDir;
@@ -1589,6 +1590,8 @@ var _colResize = { active: false, key: null, startX: 0, startW: 0 };
 function _initColResizeHandles() {
   var handles = document.querySelectorAll(".col-resize-handle");
   for (var i = 0; i < handles.length; i++) {
+    handles[i].removeEventListener("mousedown", _onColResizeStart);
+    handles[i].removeEventListener("dblclick", _onColResizeReset);
     handles[i].addEventListener("mousedown", _onColResizeStart);
     handles[i].addEventListener("dblclick", _onColResizeReset);
   }
@@ -2623,7 +2626,7 @@ function setUniverse(u) {
   if (typeof window.switchPanel === 'function' && typeof window._currentPanelName === 'string') {
     var curPanel = window._currentPanelName;
     var NFL_ONLY = ['rankings','tiers','tradevalues','vorp','advantage','auction','cheatsheet','buysell','stocks','waivers','handcuffs','scarcity','snapefficiency','workload','dualthreat','targetpremium','drops','garbagetime','weekly','matchups','stacks','redzone','streaks','weeklyleaders','weeklymvp','playoffs','gamescript','pace','seasonpace','tdregression','airyards','dashboard','rosterbuilder','tradefinder','scoring','schedule','opportunity','targets','team','powerrankings','records','recap','awards','reportcard','fptsbreakdown','gamelog','archetypes','breakdown','comptable','strengths','career','career-compare'];
-    var COLLEGE_ONLY = ['draftclass','prospects','percentiles','proradar','drafttracker'];
+    var COLLEGE_ONLY = ['draftclass','prospects','percentiles','drafttracker'];
     if ((u === 'college' && NFL_ONLY.indexOf(curPanel) !== -1) ||
         (u === 'nfl' && COLLEGE_ONLY.indexOf(curPanel) !== -1)) {
       window.switchPanel('screener');
@@ -2777,7 +2780,7 @@ function applyUniverseUI() {
     'breakdown', 'comptable', 'strengths', 'career', 'career-compare'
   ];
   var COLLEGE_ONLY_PANELS = [
-    'draftclass', 'prospects', 'percentiles', 'proradar', 'drafttracker'
+    'draftclass', 'prospects', 'percentiles', 'drafttracker'
   ];
   document.querySelectorAll('.lab-sidebar-item[data-panel]').forEach(function(item) {
     var panel = item.getAttribute('data-panel');
@@ -2905,7 +2908,7 @@ function populateSeasonSelect() {
       `<option value="${y}" ${y === state.draftYear ? "selected" : ""}>${y} Draft</option>`
     ).join("");
     sel.onchange = (e) => {
-      state.draftYear = parseInt(e.target.value);
+      state.draftYear = parseInt(e.target.value) || state.draftYear;
       state.offset = 0;
       clearTimeout(_seasonDebounce);
       _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
@@ -2915,7 +2918,7 @@ function populateSeasonSelect() {
       `<option value="${s}" ${s === state.collegeSeason ? "selected" : ""}>${s}</option>`
     ).join("");
     sel.onchange = (e) => {
-      state.collegeSeason = parseInt(e.target.value);
+      state.collegeSeason = parseInt(e.target.value) || state.collegeSeason;
       state.offset = 0;
       clearTimeout(_seasonDebounce);
       _seasonDebounce = setTimeout(() => fetchAndRender(), 200);
@@ -2928,7 +2931,7 @@ function populateSeasonSelect() {
     sel.innerHTML = html;
     sel.onchange = (e) => {
       var val = e.target.value;
-      state.season = val === "career" ? "career" : parseInt(val);
+      state.season = val === "career" ? "career" : (parseInt(val, 10) || _nflYear);
       state.week = 0;
       state.offset = 0;
       clearTimeout(_seasonDebounce);
@@ -3925,19 +3928,19 @@ function loadStateFromURL() {
   }
 
   if (isProspectView()) {
-    if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year"));
+    if (params.has("draft_year")) state.draftYear = parseInt(params.get("draft_year")) || state.draftYear;
     if (!params.has("sort")) state.sortKey = "draft_pick";
     if (!params.has("dir")) state.sortDir = "asc";
     if (params.has("cols")) state.prospectColumns = params.get("cols").split(",").filter(function(k) { return PROSPECT_COLUMNS[k]; });
   } else if (state.universe === "college") {
-    if (params.has("season")) state.collegeSeason = parseInt(params.get("season"));
+    if (params.has("season")) state.collegeSeason = parseInt(params.get("season")) || state.collegeSeason;
     if (!params.has("sort")) state.sortKey = "total_yards";
     if (!params.has("dir")) state.sortDir = "desc";
     if (params.has("cols")) state.collegeColumns = params.get("cols").split(",").filter(function(k) { return COLLEGE_COLUMNS[k]; });
   } else {
     if (params.has("season")) {
       const sv = params.get("season");
-      state.season = sv === "career" ? "career" : parseInt(sv);
+      state.season = sv === "career" ? "career" : (parseInt(sv) || state.season);
     }
     if (params.has("week")) state.week = parseInt(params.get("week")) || 0;
     if (params.has("rel")) state.relevance = params.get("rel");
@@ -5621,6 +5624,7 @@ setTimeout(function() {
 // ─── Image export ────────────────────────────────────────────────
 function exportImage() {
   const table = document.getElementById("screenerTable");
+  if (!table) return;
   const rows = table.querySelectorAll("tr");
   if (!rows.length) return;
 
@@ -7569,7 +7573,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
       else ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = ring === 50 ? "rgba(45,31,20,0.2)" : "rgba(45,31,20,0.08)";
+    ctx.strokeStyle = ring === 50 ? (t.isDark ? "rgba(237,224,207,0.2)" : "rgba(45,31,20,0.2)") : (t.isDark ? "rgba(237,224,207,0.08)" : "rgba(45,31,20,0.08)");
     ctx.lineWidth = ring === 50 ? 1.5 : 1;
     ctx.stroke();
   }
@@ -7580,7 +7584,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = "rgba(45,31,20,0.1)";
+    ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.1)" : "rgba(45,31,20,0.1)";
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -9157,7 +9161,7 @@ function setupTradeSearchInput(side) {
       const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
       autoDiv.innerHTML = matches.map(p => {
         const pc = posColors[p.position] || getCanvasTheme().ink;
-        return '<div style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);" onmousedown="addToTradeSide(\'' + side + '\', \'' + escapeAttr(p.player_id || p.full_name) + '\')">'
+        return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);">'
           + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:#fff; background:' + pc + '; padding:1px 5px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + p._tv + '</span>'
@@ -9169,6 +9173,12 @@ function setupTradeSearchInput(side) {
 
   input.addEventListener("blur", () => {
     setTimeout(() => { autoDiv.style.display = "none"; }, 200);
+  });
+
+  autoDiv.addEventListener("mousedown", (e) => {
+    const row = e.target.closest(".tv-auto-row");
+    if (!row) return;
+    addToTradeSide(row.dataset.side, row.dataset.pid);
   });
 }
 
@@ -9592,7 +9602,7 @@ function renderAgingCurveChart(targetCanvas) {
     "#ffc857", "#e63946", "#8a7565", "#4a9e5c", "#c44daa",
   ];
   let colorIdx = 0;
-  for (const p of data.players) {
+  for (const p of (data.players || [])) {
     if (!_acState.enabledPlayers[p.name]) { colorIdx++; continue; }
     const pts = p.points.filter(pt => pt.age >= minAge && pt.age <= maxAge);
     if (pts.length < 2) { colorIdx++; continue; }
@@ -9956,7 +9966,7 @@ function renderHeatMapChart(targetCanvas) {
 
     // Alternating row bg
     if (r % 2 === 0) {
-      ctx.fillStyle = "rgba(45,31,20,0.03)";
+      ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.03)" : "rgba(45,31,20,0.03)";
       ctx.fillRect(padL, rowY, chartW, cellH);
     }
 
@@ -9985,7 +9995,7 @@ function renderHeatMapChart(targetCanvas) {
       ctx.fillRect(cellX + 1, rowY + 1, cellW - 2, cellH - 2);
 
       // Cell border
-      ctx.strokeStyle = "rgba(45,31,20,0.12)";
+      ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)";
       ctx.lineWidth = 1;
       ctx.strokeRect(cellX, rowY, cellW, cellH);
 
@@ -10010,7 +10020,7 @@ function renderHeatMapChart(targetCanvas) {
     }
 
     // Row separator
-    ctx.strokeStyle = "rgba(45,31,20,0.08)";
+    ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.08)" : "rgba(45,31,20,0.08)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padL, rowY + cellH);
@@ -10685,10 +10695,22 @@ const _taState = { give: [], get: [], valueCache: {} };
 
 function openTradeAnalyzer() {
   document.getElementById("tradeAnalyzerOverlay").classList.add("open");
+  _taPopulatePickYears();
   // Focus give search
   setTimeout(() => document.getElementById("taSearchGive").focus(), 100);
   // Load pick value chart
   _taLoadPickChart();
+}
+
+function _taPopulatePickYears() {
+  var baseYear = new Date().getFullYear();
+  ["Give", "Get"].forEach(function(side) {
+    var sel = document.getElementById("taPickYear" + side);
+    if (!sel || sel.options.length > 0) return;
+    for (var y = baseYear; y <= baseYear + 2; y++) {
+      sel.add(new Option(y, y));
+    }
+  });
 }
 
 async function _taLoadPickChart() {
@@ -11210,9 +11232,9 @@ async function _taAddPick(side) {
   const yearSel = document.getElementById("taPickYear" + side.charAt(0).toUpperCase() + side.slice(1));
   const rdSel = document.getElementById("taPickRd" + side.charAt(0).toUpperCase() + side.slice(1));
   const numSel = document.getElementById("taPickNum" + side.charAt(0).toUpperCase() + side.slice(1));
-  const year = parseInt(yearSel.value);
-  const rd = parseInt(rdSel.value);
-  const pk = parseInt(numSel.value);
+  const year = parseInt(yearSel.value) || new Date().getFullYear();
+  const rd = parseInt(rdSel.value) || 1;
+  const pk = parseInt(numSel.value) || 1;
   const pickId = year + "_" + rd + "_" + pk;
 
   const arr = _taState[side];
@@ -11263,15 +11285,15 @@ function _taDrawPickChart() {
       if (_taPickCache[key]) allPicks.push(_taPickCache[key]);
     }
   }
-  if (!allPicks.length) return;
+  if (allPicks.length < 2) return;
 
   const pad = { top: 24, bottom: 30, left: 44, right: 16 };
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
-  const maxVal = allPicks[0].trade_value;
+  const maxVal = allPicks[0].trade_value || 1;
 
   // Grid lines
-  ctx.strokeStyle = "rgba(45,31,20,0.1)";
+  ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.1)" : "rgba(45,31,20,0.1)";
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
     const y = pad.top + (plotH * i / 4);
@@ -11348,6 +11370,20 @@ function _taDrawPickChart() {
 
 // Initialize trade analyzer search inputs
 (function initTradeAnalyzer() {
+  // Dynamically populate pick year selects (current year + 2)
+  var baseYear = new Date().getFullYear();
+  ["Give", "Get"].forEach(function(side) {
+    var sel = document.getElementById("taPickYear" + side);
+    if (sel) {
+      sel.innerHTML = "";
+      for (var y = baseYear; y <= baseYear + 2; y++) {
+        var opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        sel.appendChild(opt);
+      }
+    }
+  });
   _taSetupSearch("give");
   _taSetupSearch("get");
 })();
@@ -12812,7 +12848,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = t.inkMedium;
   ctx.font = "13px 'Space Mono', monospace";
   ctx.textAlign = "left";
-  ctx.fillText(`${player.team || "FA"} · ${season} Season · ${games_played} Games · Avg ${mean_ppg} PPR/G`, 20, 80);
+  ctx.fillText(`${player.team || "FA"} · ${season || ""} Season · ${games_played || 0} Games · Avg ${mean_ppg || 0} PPR/G`, 20, 80);
 
   // Grade sticker
   ctx.save();
@@ -12828,7 +12864,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = t.white;
   ctx.font = "bold 32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
-  ctx.fillText(grade, 0, 12);
+  ctx.fillText(safeGrade, 0, 12);
   ctx.restore();
 
   // Stat cards row
@@ -12838,7 +12874,7 @@ function exportBoomBustImage() {
     { label: "CEILING", value: ceiling_ppg.toFixed(1), color: "#2ec4b6" },
     { label: "BOOM%", value: boom_rate.toFixed(0) + "%", color: "#2ec4b6" },
     { label: "BUST%", value: bust_rate.toFixed(0) + "%", color: "#e63946" },
-    { label: "RANK", value: `#${position_rank}`, color: posColor },
+    { label: "RANK", value: `#${position_rank || "—"}`, color: posColor },
   ];
   const cardW = 105, cardH = 60, startX = 20, startY = 100;
   for (let i = 0; i < cardStats.length; i++) {

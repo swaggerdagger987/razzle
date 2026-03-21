@@ -590,11 +590,11 @@
       html += '<div class="breakout-bars">';
       html += '<div class="breakout-bar-group">';
       html += '<div class="breakout-bar-label"><span>Opportunity</span><span>' + escapeHtml(String(p.opportunity_pct)) + '%</span></div>';
-      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + parseFloat(p.opportunity_pct) + '%"></div></div>';
+      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill opportunity" style="width:' + (parseFloat(p.opportunity_pct) || 0) + '%"></div></div>';
       html += '</div>';
       html += '<div class="breakout-bar-group">';
       html += '<div class="breakout-bar-label"><span>Production</span><span>' + escapeHtml(String(p.production_pct)) + '%</span></div>';
-      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + parseFloat(p.production_pct) + '%"></div></div>';
+      html += '<div class="breakout-bar-track"><div class="breakout-bar-fill production" style="width:' + (parseFloat(p.production_pct) || 0) + '%"></div></div>';
       html += '</div>';
       html += '</div>';
 

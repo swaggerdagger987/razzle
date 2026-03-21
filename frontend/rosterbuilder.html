@@ -633,6 +633,9 @@
             document.getElementById('rb-search').value = '';
           });
         });
+      })
+      .catch(function() {
+        document.getElementById('rb-autocomplete').style.display = 'none';
       });
   }
 
@@ -742,7 +745,7 @@
       html += '<span class="rb-ac-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
       html += '<span class="rb-player-name">' + escapeHtml(p.full_name) + '</span>';
       html += '<span class="rb-player-team">' + escapeHtml(p.team) + '</span>';
-      html += '<span class="rb-player-age">' + escapeHtml(String(p.age || '-')) + '</span>';
+      html += '<span class="rb-player-age">' + (p.age != null ? escapeHtml(String(p.age)) : '-') + '</span>';
       html += '<span class="rb-player-tv">' + fmt(p.trade_value) + '</span>';
       html += '<span class="rb-player-vorp ' + vorpClass + '">' + (p.vorp >= 0 ? '+' : '') + fmt(p.vorp) + '</span>';
       html += '<button class="rb-remove-btn" data-pid="' + escapeHtml(p.player_id) + '" title="Remove">&times;</button>';

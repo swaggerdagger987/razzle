@@ -747,15 +747,34 @@ function openCompareSearch() {
         .then(function(data) {
           var results = document.getElementById("compareSearchResults");
           if (!results) return;
-          var players = data.players || [];
+          var players = data.items || data.players || [];
           results.innerHTML = players.map(function(p) {
             if (p.player_id === currentId) return "";
-            return '<div onclick="window.location.href=\'/compare/' + encodeURIComponent(currentId) + '/' + encodeURIComponent(p.player_id) + '\'" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;" onmouseover="this.style.background=\'var(--bg-warm)\'" onmouseout="this.style.background=\'transparent\'">' +
+            return '<div class="compare-search-item" data-current="' + escapeAttr(currentId) + '" data-target="' + escapeAttr(p.player_id) + '" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;">' +
               '<span style="font-weight:700;">' + esc(p.full_name) + '</span> <span style="color:var(--ink-light);">' + esc(p.position || "") + ' ' + esc(p.team || "") + '</span></div>';
           }).join("");
+          // Event delegation handled below (avoids listener leak per search)
         }).catch(function() {});
     }, 250);
   });
+
+  // Event delegation for compare search results (avoids listener leak per search)
+  var resultsEl = document.getElementById("compareSearchResults");
+  if (resultsEl) {
+    resultsEl.addEventListener("click", function(e) {
+      var item = e.target.closest(".compare-search-item");
+      if (!item) return;
+      window.location.href = "/compare/" + encodeURIComponent(item.dataset.current) + "/" + encodeURIComponent(item.dataset.target);
+    });
+    resultsEl.addEventListener("mouseover", function(e) {
+      var item = e.target.closest(".compare-search-item");
+      if (item) item.style.background = "var(--bg-warm)";
+    });
+    resultsEl.addEventListener("mouseout", function(e) {
+      var item = e.target.closest(".compare-search-item");
+      if (item) item.style.background = "transparent";
+    });
+  }
 }
 
 function copyPlayerURL() {

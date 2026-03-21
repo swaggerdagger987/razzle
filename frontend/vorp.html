@@ -495,7 +495,7 @@
       } else if (col.key === 'replacement_ppg') {
         html += '<td class="' + classes.join(' ') + '" style="color:var(--ink-medium);">' + fmt(p.replacement_ppg) + '</td>';
       } else if (col.key === 'pos_rank') {
-        html += '<td class="' + classes.join(' ') + '">' + escapeHtml(String(p.pos_rank || '-')) + '</td>';
+        html += '<td class="' + classes.join(' ') + '">' + (p.pos_rank != null ? escapeHtml(String(p.pos_rank)) : '-') + '</td>';
       } else if (col.key === 'annotation') {
         html += '<td class="' + classes.join(' ') + '"><span class="vorp-annotation">' + escapeHtml(p.annotation || '') + '</span></td>';
       } else {

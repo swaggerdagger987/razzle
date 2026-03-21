@@ -8,7 +8,7 @@ import re
 from collections import defaultdict
 
 from ..db import get_db
-from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived, TEAM_ABBREV
+from .core import _cached, _CACHE_TTL_STABLE, _current_nfl_season, _enrich_college_derived, TEAM_ABBREV, _efficiency_grade
 
 logger = logging.getLogger("razzle.live_data.college")
 
@@ -19,20 +19,6 @@ def _has_table(conn, table_name):
         "SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,)
     ).fetchone() is not None
 
-
-def _efficiency_grade(percentile):
-    """Convert a 0-100 percentile to a letter grade."""
-    if percentile >= 95:
-        return "A+"
-    elif percentile >= 85:
-        return "A"
-    elif percentile >= 70:
-        return "B"
-    elif percentile >= 45:
-        return "C"
-    elif percentile >= 25:
-        return "D"
-    return "F"
 
 
 def _fetch_college_players_uncached(
@@ -569,7 +555,8 @@ def _fetch_college_efficiency_uncached(season=None, position=None, limit=30):
             total_tds = d["total_tds"] or 0
 
             pos = d["position"] or "ATH"
-            opportunities = carries + targets
+            pass_attempts = d.get("pass_attempts") or 0
+            opportunities = (pass_attempts + carries) if pos == "QB" else (carries + targets)
             touches = carries + receptions
             opp_min = {"QB": 30, "RB": 25, "WR": 20, "TE": 15}.get(pos, 25)
             if opportunities < opp_min:
@@ -1127,15 +1114,17 @@ def _fetch_college_stock_watch_uncached(season=None, position=None, limit=30):
         def grade_from_pct(pct):
             if pct >= 95:
                 return "A+"
-            elif pct >= 85:
+            if pct >= 85:
                 return "A"
-            elif pct >= 70:
+            if pct >= 75:
                 return "B+"
-            elif pct >= 55:
+            if pct >= 65:
                 return "B"
-            elif pct >= 40:
+            if pct >= 50:
+                return "C+"
+            if pct >= 35:
                 return "C"
-            elif pct >= 25:
+            if pct >= 25:
                 return "D"
             return "F"
 
@@ -2151,7 +2140,10 @@ def _fetch_college_season_awards_uncached(season=None, position=None):
                    + COALESCE(c.pass_tds, 0) * 4 as fpts,
                    COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0) as scrimmage_yards,
                    COALESCE(c.total_tds, 0) as tds,
-                   COALESCE(c.carries, 0) + COALESCE(c.targets, 0) as opportunities,
+                   CASE WHEN c.position = 'QB'
+                        THEN COALESCE(c.pass_attempts, 0) + COALESCE(c.carries, 0)
+                        ELSE COALESCE(c.carries, 0) + COALESCE(c.targets, 0)
+                   END as opportunities,
                    COALESCE(c.receptions, 0) as receptions,
                    COALESCE(c.rush_yards, 0) as rush_yards,
                    COALESCE(c.rec_yards, 0) as rec_yards,

@@ -510,7 +510,7 @@
           nextBreakIdx++;
         }
 
-        var pct = maxPpg > 0 ? (p.ppg / maxPpg) * 100 : 0;
+        var pct = maxPpg > 0 ? ((p.ppg || 0) / maxPpg) * 100 : 0;
         chartsHtml += '<div class="scarcity-bar-row" data-pid="' + escapeHtml(p.player_id) + '" title="' + escapeHtml(p.name) + ' (' + escapeHtml(p.team) + ') — ' + escapeHtml(String(p.ppg)) + ' PPG">' +
           '<div class="scarcity-bar-rank">' + escapeHtml(String(p.rank)) + '</div>' +
           '<div class="scarcity-bar-name">' + escapeHtml(p.name) + '</div>' +

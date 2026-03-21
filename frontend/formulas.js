@@ -134,7 +134,7 @@ function renderSavedFormulas() {
       return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--ink-faint); gap:6px;">
         <div style="flex:1; min-width:0;">
           <strong style="font-family:var(--font-mono); font-size:13px;">${_esc(f.name)}</strong>
-          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${desc}</span>
+          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${_esc(desc)}</span>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
           ${publishBtn}

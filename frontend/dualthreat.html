@@ -43,13 +43,13 @@
   .dt-table th:first-child, .dt-table th:nth-child(2), .dt-table th:nth-child(3) { text-align: left; }
   .dt-table td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--ink-faint); }
   .dt-table td:first-child, .dt-table td:nth-child(2), .dt-table td:nth-child(3) { text-align: left; }
-  .dt-table tbody tr:hover { background: rgba(217,119,87,0.08); }
+  .dt-table tbody tr:hover { background: var(--bg-warm); }
   .dt-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
   .dt-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: #fff; }
   .dt-dti-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 2px solid; }
   .dt-dti-elite { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
   .dt-dti-high { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
-  .dt-dti-mid { background: var(--yellow-light, #fef9c3); color: var(--ink-medium, #854d0e); border-color: var(--yellow, #854d0e); }
+  .dt-dti-mid { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--yellow); }
   .dt-dti-low { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .dt-split-bar { display: flex; height: 14px; border-radius: 3px; overflow: hidden; border: 2px solid var(--ink-faint); }
   .dt-split-rush { background: var(--green); }
@@ -213,8 +213,8 @@ function initSeasons() {
       t.classList.toggle("active", t.dataset.pos === state.position);
     });
   }
-  state.season = parseInt(sel.value);
-  sel.addEventListener("change", () => { state.season = parseInt(sel.value); updateURL(); loadData(); });
+  state.season = parseInt(sel.value, 10) || 0;
+  sel.addEventListener("change", () => { state.season = parseInt(sel.value, 10) || 0; updateURL(); loadData(); });
 }
 
 function updateURL() {
@@ -294,7 +294,7 @@ function render() {
 
 function exportPNG() {
   const el = document.getElementById("dt-container");
-  html2canvas(el, { backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#ede0cf', scale: 2 }).then(canvas => {
+  html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(canvas => {
     const ctx = canvas.getContext("2d");
     if (typeof drawRazzleWatermark === 'function') { drawRazzleWatermark(ctx, canvas); }
     else { ctx.font = "bold 28px 'Space Mono', monospace"; ctx.fillStyle = 'rgba(45,31,20,0.13)'; ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }

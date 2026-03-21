@@ -977,8 +977,8 @@ function _renderMiniRows() {
     html += '<td><span class="mini-pos" style="background:' + posCol + ';">' + _escHtml(p.position || '') + '</span></td>';
     html += '<td style="text-align:left; font-weight:600;">' + _escHtml(p.name || '') + '</td>';
     html += '<td>' + (p.ppg != null ? p.ppg.toFixed(1) : '-') + '</td>';
-    html += '<td>' + (p.games || '-') + '</td>';
-    html += '<td>' + (p.age || '-') + '</td>';
+    html += '<td>' + (p.games != null ? p.games : '-') + '</td>';
+    html += '<td>' + (p.age != null ? p.age : '-') + '</td>';
     html += '</tr>';
   }
   tbody.innerHTML = html;

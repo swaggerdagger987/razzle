@@ -2606,6 +2606,7 @@ async function crawlLeagueHistory(leagueId, maxSeasons) {
       chain.push({ leagueId: currentId, season: league.season || "?", name: league.name });
       currentId = league.previous_league_id || null;
     } catch (e) {
+      clearTimeout(crawlTimer);
       break;
     }
   }
@@ -2809,6 +2810,7 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
     feedDiv.classList.remove("activity-loading");
 
   } catch (e) {
+    clearTimeout(txnTimer);
     console.error("Activity feed error:", e);
     feedDiv.innerHTML = '<div class="activity-loading" style="color:var(--red);">field transmission interrupted. activity feed went dark.</div>';
   }
@@ -2951,11 +2953,12 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       var rosterFetches = [];
       for (var hi = 1; hi < historyChain.length; hi++) {
         (function(entry) {
-          var _hrAc = new AbortController(); setTimeout(function() { _hrAc.abort(); }, 10000);
+          var _hrAc = new AbortController(); var _hrTimer = setTimeout(function() { _hrAc.abort(); }, 10000);
           rosterFetches.push(
             fetch(SLEEPER_API + "/league/" + entry.leagueId + "/rosters", { signal: _hrAc.signal })
               .then(function(r) { return r.ok ? r.json() : []; })
               .then(function(rosterData) {
+                clearTimeout(_hrTimer);
                 var map = {};
                 var standings = {};
                 for (var rx = 0; rx < rosterData.length; rx++) {
@@ -2971,6 +2974,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
                 historicalStandings[entry.leagueId] = standings;
               })
               .catch(function() {
+                clearTimeout(_hrTimer);
                 historicalRosterMaps[entry.leagueId] = {};
                 historicalStandings[entry.leagueId] = {};
               })
@@ -3644,8 +3648,8 @@ function toggleComparePanel() {
 
 function runComparison() {
   if (!_compareCards || _compareCards.length < 2) return;
-  var aIdx = parseInt(document.getElementById('mgrCompareA').value);
-  var bIdx = parseInt(document.getElementById('mgrCompareB').value);
+  var aIdx = parseInt(document.getElementById('mgrCompareA').value, 10) || 0;
+  var bIdx = parseInt(document.getElementById('mgrCompareB').value, 10) || 0;
   if (aIdx === bIdx) { bIdx = aIdx === 0 ? 1 : 0; }
   var a = _compareCards[aIdx];
   var b = _compareCards[bIdx];
@@ -4700,8 +4704,9 @@ async function loadPowerRankings(leagueId, userId, rosters, allPlayers, userMap)
     // Get league playoff settings
     var playoffTeams = 6; // default
     try {
-      var _prAc = new AbortController(); setTimeout(function() { _prAc.abort(); }, 10000);
+      var _prAc = new AbortController(); var _prTimer = setTimeout(function() { _prAc.abort(); }, 10000);
       var leagueResp = await fetch(SLEEPER_API + "/league/" + leagueId, { signal: _prAc.signal });
+      clearTimeout(_prTimer);
       if (leagueResp.ok) {
         var leagueSettings = await leagueResp.json();
         playoffTeams = leagueSettings.settings?.playoff_teams || 6;
@@ -4906,8 +4911,9 @@ async function loadWaiverTendencies(leagueId, userId, rosters, allPlayers, userM
     var isFAAB = false;
     var faabBudget = 100; // default
     try {
-      var _wvAc = new AbortController(); setTimeout(function() { _wvAc.abort(); }, 10000);
+      var _wvAc = new AbortController(); var _wvTimer = setTimeout(function() { _wvAc.abort(); }, 10000);
       var leagueResp = await fetch(SLEEPER_API + "/league/" + leagueId, { signal: _wvAc.signal });
+      clearTimeout(_wvTimer);
       if (leagueResp.ok) {
         var leagueData = await leagueResp.json();
         var waiverType = leagueData.settings?.waiver_type || 0;
@@ -7356,7 +7362,7 @@ function _loadDemoLeague() {
   leaguesHtml += '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:20px;margin-bottom:20px;">';
   leaguesHtml += '<div style="font-family:var(--font-display);font-size:20px;margin-bottom:4px;">Dynasty Legends League</div>';
   leaguesHtml += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-bottom:16px;">12-team Dynasty Superflex | 2024 Season</div>';
-  leaguesHtml += '<div style="font-family:var(--font-display);font-size:14px;color:var(--orange);margin-bottom:12px;">Championship Probability</div>';
+  leaguesHtml += '<div style="font-family:var(--font-display);font-size:16px;color:var(--orange);margin-bottom:12px;">Championship Probability</div>';
 
   demoManagers.forEach(function(m) {
     var border = m.isYou ? "border:3px solid var(--orange);box-shadow:3px 3px 0 var(--orange);" : "border:2px solid var(--ink-faint);";
