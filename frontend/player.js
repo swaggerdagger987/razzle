@@ -747,7 +747,7 @@ function openCompareSearch() {
         .then(function(data) {
           var results = document.getElementById("compareSearchResults");
           if (!results) return;
-          var players = data.players || [];
+          var players = data.items || data.players || [];
           results.innerHTML = players.map(function(p) {
             if (p.player_id === currentId) return "";
             return '<div class="compare-search-item" data-current="' + escapeAttr(currentId) + '" data-target="' + escapeAttr(p.player_id) + '" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;">' +

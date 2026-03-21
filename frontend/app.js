@@ -1678,7 +1678,7 @@ window.addEventListener("razzle-plan-changed", function(e) {
     "fantasy football, but make it cinema.",
     "the waiver wire whisperer.",
     "data > vibes (but vibes help).",
-    "pulling film since 2025.",
+    "pulling film since " + Math.min(new Date().getFullYear(), 2025) + ".",
     "Razzle never sleeps. your opponents do."
   ];
   var footer = document.querySelector(".site-footer .footer-tagline, .site-footer [data-tagline]");
