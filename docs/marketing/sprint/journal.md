@@ -1707,6 +1707,75 @@ Sources:
 
 3. **What should Razzle's initial Reddit seeding strategy look like — which subreddits, what post formats, what time of day, and how many posts before it feels like spam?** (The `/go` funnel depends on Reddit screenshots being posted. But cold-posting your own tool's screenshots is a fast path to getting banned. What's the authentic way to seed this?)
 
-## NEXT QUESTION: How should Razzle's free tier limit Bureau access — by number of scouting reports generated, by league count, or by feature depth (e.g., stat block free, exploit playbook Pro-only)?
+## Question 23: How should Razzle's free tier limit Bureau access — by number of scouting reports generated, by league count, or by feature depth (e.g., stat block free, exploit playbook Pro-only)?
+
+**Why this matters**: The Bureau is both the conversion engine and the viral distribution channel. Too much gated = no one sees enough to screenshot it → no Reddit/group-chat distribution → no flywheel. Too little gated = users get everything free → no reason to pay → $0 revenue. The gating model directly determines whether the scouting report card achieves its dual purpose: marketing asset AND revenue trigger.
+
+### Answer
+
+**Verdict: Gate by feature depth (Zone 4 Exploit Playbook = Pro-only), NOT by usage limits or league count. Give away the provocative parts (archetype badge, Bones quote, stat block) and lock the actionable parts (exploit playbook, pressure map depth).**
+
+Evidence:
+
+1. **Feature-depth gating preserves the viral loop that usage limits would kill.** The scouting report card (Q17) has 5 zones: Identity Strip, Bones Quote, Stat Block, Exploit Playbook, and Activity Sparkline. Zones 1-3 + 5 are the screenshot triggers — "Dave is a PANIC SELLER" with a snarky Bones quote is what gets dropped in the group chat. Zone 4 (Exploit Playbook: "send trade offers Tuesday after his losses") is the paywall conversion trigger. If you gate by league count ("1 free league, pay for more"), a user who connects their only league gets everything for free — and they're the most likely to screenshot because they see their actual leaguemates. If you gate by report count ("3 free scouting reports"), you artificially limit screenshots to 3 managers per league — in a 12-team league, the user misses 9 potential gossip targets.
+
+2. **Competitor data confirms feature-depth gating converts better in fantasy tools.** Dynasty Nerds gates by feature depth: free users get 3 trades/day on the trade calculator, premium unlocks unlimited trades + league sync + rankings + rookie guide. Their premium has 11,000 subscribers at $70/yr. KeepTradeCut is entirely free (crowdsourced model — gating would destroy their data engine). Dynasty Daddy is entirely free. FantasyPros gates by feature depth: basic rankings free, Draft Assistant and custom scoring require PRO ($39.99/season), MVP ($59.99), or HOF ($99.99). DLF is almost entirely behind a paywall — content-first model. The fantasy tools that successfully monetize use feature depth, not usage caps. The ones that use usage caps (Dynasty Nerds' 3 trades/day) use it as a TASTE gate, not a hard wall — you can still see the tool's output, just not use it unlimited.
+
+3. **SaaS freemium data supports feature-depth for Razzle's specific situation.** Usage-limited freemium plans convert 73% better than feature-limited plans in DEVELOPER tools (Demogo 2025 analysis). But the key qualifier is "developer tools" — products where users hit usage walls through natural workflow (API calls, storage, builds). For analytics and insight products, the Stanford benchmark says successful freemium delivers 40-50% of full product value for free. Razzle's free Bureau should deliver about 40-50% of total value — which maps perfectly to Zones 1-3 + 5 (identity, personality, stats, sparkline) free, Zone 4 (exploits) Pro-only.
+
+4. **The specific gating model for Razzle's Bureau:**
+
+   | Component | Free | Pro |
+   |-----------|------|-----|
+   | **Scouting report card** — Zones 1-3, 5 (archetype, Bones quote, stat block, sparkline) | Full access, all managers | Full access |
+   | **Scouting report card** — Zone 4 (Exploit Playbook) | Blurred with Pro lock icon | Full access |
+   | **League count** | Unlimited | Unlimited |
+   | **Manager count per league** | All managers visible | All managers |
+   | **Pressure map** | Top 3 managers shown | All managers |
+   | **Compare section** | Basic (free comparison note) | Deep manager intel |
+   | **Trade matches (league-specific)** | Locked teaser card | Full access |
+   | **PNG export of scouting card** | Free — WITH watermark (`razzle.lol/go`) | Free — optional watermark removal |
+   | **Bones quote style** | Template-based (still fun) | Template-based (same) |
+
+5. **Critical design decision: PNG export MUST be free.** This is counterintuitive — exports are traditionally a Pro feature (FantasyPros gates export behind PRO). But Razzle's entire growth model depends on screenshots being shared. Every PNG export is a marketing asset with a `razzle.lol/go` watermark. Gating export behind Pro kills the flywheel before it starts. The scouting card PNG is an AD that the user voluntarily distributes. You don't charge people to run your ads. Dynasty Daddy gets this — everything is free because distribution IS the product's moat.
+
+6. **Why NOT usage limits.** Three specific failure modes:
+   - **League count limit** (e.g., "1 free league"): Most dynasty managers have 1-3 leagues. A "1 free league" gate means 60-70% of users never hit the wall. Those who do hit it have the weakest conversion signal — they're connecting MORE leagues, meaning they're power users who will comparison-shop alternatives. Power users are the LAST cohort to convert on usage limits because they know substitutes exist.
+   - **Report count limit** (e.g., "5 free reports/month"): Creates a perverse incentive to NOT use the product. Every report consumed burns a token. Users hoard tokens for important moments instead of browsing casually. Casual browsing is what generates screenshots. A report-limited user generates fewer screenshots → less distribution → slower flywheel.
+   - **Time limit / trial** (e.g., "14-day free trial"): The Bureau's value peaks during NFL season (September-January). A March trial converts almost nobody because there's no real data to analyze. A September trial converts well but creates a 6-month dead period where the product is invisible to free users. Warning users before they hit limits increases conversion 31.4% (First Page Sage 2026), but Razzle doesn't want users hitting limits at all — the free tier should be permanently generous on everything except the exploitation layer.
+
+7. **The conversion trigger is the blur, not the wall.** Q22 already established that the `/go` landing page shows two sample cards with Zone 4 blurred. This pattern extends to the Bureau itself. When a free user views any manager's scouting card, Zones 1-3 + 5 render fully. Zone 4 renders blurred with a lock icon and copy: "exploit playbook — Pro" with a one-line teaser visible through the blur ("send trade offers after his—"). The existing `league-intel.html` code already uses this pattern: `renderPressureMap()` shows top 3 for free, remainder locked; trade matches show a teaser card with "subscribe to Pro to unlock league-specific trade matches." The Zone 4 blur is a natural extension of this existing UX.
+
+### Self-Critique
+
+**What's backed by data**: Dynasty Nerds' 11K subscribers at $70/yr with feature-depth gating is confirmed from their tools page. FantasyPros' tier structure (Basic/PRO/MVP/HOF) with feature-depth gating is confirmed from their pricing. The 73% higher conversion for usage-limited plans is from Demogo's 2025 analysis, but applies to developer tools specifically — not analytics products. Stanford's 40-50% free value benchmark is widely cited in SaaS freemium literature. The existing Razzle code (`renderPressureMap`, trade match teaser) confirms the blur/lock pattern is already built. First Page Sage's 31.4% conversion lift from pre-limit warnings is from their 2026 freemium report.
+
+**What's speculation**: The claim that keeping PNG export free generates more value through distribution than it loses through forgone revenue is a hypothesis — no A/B test data for fantasy tools specifically. The "40-50% value = Zones 1-3 + 5" mapping is my estimate, not a measured percentage. Whether the Zone 4 blur creates curiosity (conversion) or frustration (churn) depends entirely on how good Zones 1-3 are — if the free zones feel complete, users may not feel they need Zone 4. The assumption that power users comparison-shop rather than convert may be wrong for a product with ZERO competitors in behavioral profiling. The leaguemate exploit data may be TOO valuable to leave blurred — some users might pay just to PREVENT leaguemates from seeing their exploit playbook (defensive purchase motivation), which changes the pricing calculus entirely.
+
+**Confidence: 8/10** — Feature-depth gating is clearly the right model for a product whose free tier IS the marketing engine. The specific zone-level gating (1-3+5 free, 4 Pro) aligns with the scouting card design and existing code patterns. The main uncertainty is whether Zone 4 alone provides enough perceived value to justify $149/yr — if users feel Zones 1-3 already told them everything they need, the exploit playbook may feel like a "nice to have" rather than a "must have."
+
+Sources:
+- [FantasyPros: Best Fantasy Football Tools 2026](https://www.fantasypros.com/2026/02/best-fantasy-football-tools/) — tier structure, feature gating
+- [Dynasty Nerds: Dynasty Tools](https://www.dynastynerds.com/dynasty-tools/) — 3 free trades/day, premium unlocks
+- [KeepTradeCut: About](https://keeptradecut.com/about) — free crowdsourced model
+- [Dynasty Daddy](https://dynasty-daddy.com/) — fully free analytics platform
+- [Demogo: Feature Gating Strategies for SaaS Freemium (2025)](https://demogo.com/2025/06/25/feature-gating-strategies-for-your-saas-freemium-model-to-boost-conversions/) — 73% higher conversion for usage-limited (dev tools caveat)
+- [First Page Sage: SaaS Freemium Conversion Rates 2026](https://firstpagesage.com/seo-blog/saas-freemium-conversion-rates/) — 31.4% lift from pre-limit warnings
+- [Userpilot: Freemium Conversion Rate Guide](https://userpilot.com/blog/freemium-conversion-rate/) — 40-50% free value benchmark
+- [Stripe: Freemium Pricing Explained](https://stripe.com/resources/more/freemium-pricing-explained) — feature vs usage gating frameworks
+- Razzle codebase: `frontend/league-intel.html` line 3558 (pressure map free = top 3), line 3916 (trade match teaser card)
+- Prior journal: Q17 (scouting report 5-zone design), Q22 (/go landing page with blurred Zone 4 samples), Q12 (fake door pricing test)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What's the data retention and privacy story — does Razzle store manager behavioral data server-side, and what does the privacy page say about analyzing other people's Sleeper league activity?** (Behavioral profiling of *other people's* transaction history raises privacy questions. Users might feel uncomfortable knowing their leaguemates can see their panic score. What's the ethical messaging?)
+
+2. **What should Razzle's initial Reddit seeding strategy look like — which subreddits, what post formats, what time of day, and how many posts before it feels like spam?** (The `/go` funnel depends on Reddit screenshots being posted. But cold-posting your own tool's screenshots is a fast path to getting banned. What's the authentic way to seed this?)
+
+3. **Should Razzle offer a "defensive purchase" — where a manager pays to HIDE their own scouting report from leaguemates, or to see who has viewed their report?** (If behavioral profiling is powerful enough to exploit, some managers will want to BLOCK it. This creates a second revenue stream from the same feature — one user pays to see exploits, another pays to hide them. Is this adversarial pricing ethical and sustainable?)
+
+## NEXT QUESTION: What's the data retention and privacy story — does Razzle store manager behavioral data server-side, and what does the privacy page say about analyzing other people's Sleeper league activity?
 
 ---
