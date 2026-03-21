@@ -833,3 +833,34 @@ spot-check	OK	-	-	-	pass	Rankings page prod: Tier 1 Elite — Nacua 95.8, McBrid
 spot-check	OK	-	-	-	pass	Trade Values page prod: Linked sliders (50/30/20), 85 players, Nacua #1 TV=95.8 down to Maye #15 TV=92.0. No clustering. 0 JS errors.	95	2026-03-20T19:57
 spot-check	OK	-	-	-	pass	Player profile prod (CMC): Stats, radar chart, career arc all render. JSON-LD present. 0 JS errors.	95	2026-03-20T19:57
 spot-check	OK	-	-	-	pass	Lab screener prod: 607 players, PPR sorted, 2025, QB:11 RB:8 WR:5 TE:1 page 1. Breakouts panel loads with cards. 0 JS errors.	95	2026-03-20T19:57
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke-all	OK	-	-	-	pass	re-audit: 11/11 smoke tests pass (health, players, position filter QB+WR, sort, season, week, screener, NaN, negatives, filter-options)	100	2026-03-20T20:03
+19-tradevalues	OK	frontend/tradevalues.html	-	-	pass	re-audit: 0 JS errors, dark mode clean, position-colored bars, tier spread correct, 85 players in API	95	2026-03-20T20:06
+19-tradevalues	OK	frontend/lab-panels.js	773	linkedSliderUpdate	pass	re-audit: linked sliders sum to 100% (50/30/20 default), proportional redistribution, URL state persistence, reset works	95	2026-03-20T20:08
+18-rankings	OK	frontend/rankings.html	-	-	pass	re-audit: 0 JS errors, dark mode clean, position badges correct, Nacua#1(95.8), tier labels visible	95	2026-03-20T20:06
+13-playerprofile	P1	frontend/player.js	80	breakoutInfo	open	FUNC-017: breakout badge uses raw fantasy_points_ppr totals instead of PPG. CMC shows +772% (injury recovery, not breakout). prev>20 threshold too low.	95	2026-03-20T20:05
+13-playerprofile	OK	frontend/player.html	-	-	pass	re-audit: 0 JS errors, stats render, radar+career arc charts, combine data, season log. JSON-LD XSS fix (Session 18) intact.	90	2026-03-20T20:05
+1-lab	OK	frontend/lab.html	-	-	pass	re-audit: 607 players, 0 JS errors, 25/page, position breakdown in count. Panel switching works (stacks, vorp, tradevalues).	95	2026-03-20T20:07
+15-func015	INFO	backend/live_data/core.py	463	_enrich_with_dynasty_value	pending-deploy	re-audit: FUNC-015 code fix correct — _enrich_with_dynasty_value delegates to compute_trade_value(). Edge cases safe (null age→50, zero ppg→35). NOT YET DEPLOYED to prod.	95	2026-03-20T20:04
+16-func016	P2	frontend/cheatsheet.html	453	-	open	re-audit: FUNC-016 still open — escapeHtml in onclick, should be escapeAttr. scoring.html:491 also still open.	85	2026-03-20T20:04
