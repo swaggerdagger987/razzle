@@ -3323,3 +3323,19 @@ Trade analyzer autocomplete used `escapeAttr()` in inline `onmousedown` handler 
 - Backend: 0 missing season_type filters, 0 JOIN mismatches, 0 div-by-zero, 0 bare excepts
 - Frontend: 0 unguarded .toFixed/.split/.forEach, 0 Math.max/min on empty arrays
 - Standalone HTML: 68/68 pages pass all checks (app.js order, seasons, .catch, escapeHtml, overflow-x)
+
+### Falsy-Zero Display Sweep (Session 40 continued)
+
+| # | Fix | File | Notes |
+|---|-----|------|-------|
+| 1 | 8 stat columns (pass_yd/td, rush_yd/td, rec, rec_yd/td, tgt) | weeklyleaders.html | `(val || '-')` → `(val != null ? val : '-')` |
+| 2 | fantasy_points field fallback | weeklyleaders.html | `p.fantasy_points || 0` → null-safe ternary |
+| 3 | games and age columns | index.html | Home page mini-table |
+| 4 | games played | tradefinder.html | Selected player card |
+| 5 | games played | tradevalues.html | Trade value cards |
+| 6 | fantasy_points fallback | lab-panels.js:6542 | `g.fantasy_points || g.fpts || 0` → null-safe ternary chain |
+| 7 | age | auction.html | Auction value table |
+| 8 | age | rosterbuilder.html | Roster builder player list |
+| 9 | pos_rank | vorp.html | VORP ranking table |
+
+All 9 fixes change `(val || '-')` to `(val != null ? val : '-')` to correctly display zero values.
