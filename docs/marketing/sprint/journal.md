@@ -1776,6 +1776,77 @@ Sources:
 
 3. **Should Razzle offer a "defensive purchase" — where a manager pays to HIDE their own scouting report from leaguemates, or to see who has viewed their report?** (If behavioral profiling is powerful enough to exploit, some managers will want to BLOCK it. This creates a second revenue stream from the same feature — one user pays to see exploits, another pays to hide them. Is this adversarial pricing ethical and sustainable?)
 
-## NEXT QUESTION: What's the data retention and privacy story — does Razzle store manager behavioral data server-side, and what does the privacy page say about analyzing other people's Sleeper league activity?
+## Question 24: What's the data retention and privacy story — does Razzle store manager behavioral data server-side, and what does the privacy page say about analyzing other people's Sleeper league activity?
+
+**Why this matters**: The Bureau profiles leaguemates who never signed up for Razzle. A user connects their Sleeper league, and Razzle generates behavioral scores (panic index, positional bias, trade aggression) for all 12 managers — 11 of whom may have never heard of Razzle. This is profiling third parties using their public API data. If a leaguemate discovers their "panic score" is being shared, it could create backlash, regulatory questions, or platform trust issues that kill the product before it scales.
+
+### Answer
+
+**Verdict: Razzle is legally safe because Sleeper's API data is public and read-only by design — but ethically, the privacy page needs to be transparent about WHAT is computed and HOW, and the product should never display real Sleeper usernames to non-leaguemates.**
+
+Evidence:
+
+1. **Sleeper's API is deliberately public and unauthenticated.** The [Sleeper API docs](https://docs.sleeper.com/) explicitly state: "This is a read-only HTTP API... No API Token is necessary." Transactions (trades, waivers, free agent pickups), rosters, matchups, and draft results are all accessible to anyone with a league ID — no authentication required. Sleeper made a design decision that this data is public. Razzle is not scraping private data or bypassing access controls; it's reading an intentionally open API. This is the same data any league member can see in-app. Razzle just computes derived metrics from it.
+
+2. **The critical legal distinction: Razzle computes DERIVED INSIGHTS, not raw personal data.** A "panic score" is a statistical derivation (correlation between losses and roster moves within 48 hours). It's computed from public transaction timestamps and matchup outcomes. Under CCPA, "personal information" includes "inferences drawn from any of the information identified in this subdivision to create a profile about a consumer" — BUT this applies only to California businesses with $25M+ revenue, 100K+ consumers, or 50%+ revenue from data sales. Razzle hits none of these thresholds at launch. Under GDPR, behavioral profiling of EU users requires a lawful basis — but Sleeper is US-based, the data is voluntarily published via public API, and Razzle doesn't identify people beyond their Sleeper display names (which users chose to make public).
+
+3. **What competitors do — and don't disclose.** Dynasty Daddy connects Sleeper leagues with zero privacy disclosures beyond a basic cookie notice. KeepTradeCut's crowdsourced model collects user votes with no consent beyond ToS acceptance. Dynasty Nerds collects "name, email, mailing address, phone number, and payment information" plus automatic device/browser tracking. MFL Modern explicitly states it collects "league ID numbers, franchise information, league settings, trade history, draft results, and roster information" when users log in. NONE of these tools profile non-users' behavior — but NONE of them disclose what they derive from league data either. Razzle should be BETTER than the industry standard, not just match it.
+
+4. **The current Razzle architecture is already privacy-friendly by accident.** Checking the codebase: league data is fetched live from Sleeper's API on each page load, cached in-browser via `localStorage` (keys: `razzle_sleeper_user`, `razzle_selected_league`, `razzle_league_context`). Behavioral profiles are computed client-side in `league-intel.html`. No manager behavioral data is stored server-side. No transaction histories persist in `terminal.db`. The backend's only Sleeper touchpoint is `/api/refresh-league-data` which re-fetches from Sleeper's API. This means: **if a user clears their browser or disconnects, all behavioral data disappears.** This is a strong privacy position — Razzle is a LENS on public data, not a WAREHOUSE of private data.
+
+5. **The recommended data retention model:**
+
+   | Data Type | Storage | Retention | Deletable? |
+   |-----------|---------|-----------|------------|
+   | Sleeper username | Server-side (user account) | Until account deletion | Yes — disconnect button |
+   | League rosters/matchups | Client-side only (live API fetch) | Session/cache only | Auto-clears |
+   | Transaction history (raw) | Never stored — fetched live | None | N/A |
+   | Behavioral scores (panic, aggression, etc.) | Client-side only (computed in browser) | Session only | Auto-clears |
+   | Scouting report cards (Bureau) | Client-side (rendered, not saved) | Session only | Auto-clears |
+   | PNG exports of scouting cards | User's device only | User controls | User deletes |
+   | Pro features (league context for agents) | Server-side per API call, not persisted | Request-scoped | N/A |
+
+6. **What the privacy page MUST say (5 key disclosures):**
+   - **"We don't store your league data."** Razzle fetches league information from Sleeper's public API in real-time. Nothing is saved to our servers. Close the tab and it's gone.
+   - **"We compute insights, not collect secrets."** Behavioral scores (like trade tendencies) are calculated in your browser from publicly available league activity — the same data any league member can see in the Sleeper app.
+   - **"Your leaguemates' data stays in your browser."** Scouting reports for other managers are generated locally and never transmitted to Razzle's servers.
+   - **"You can disconnect anytime."** Removing your Sleeper connection deletes your username from our system. No league data persists because none was ever stored.
+   - **"We never share league data with anyone."** Not advertisers, not other users outside your league, not data brokers. Period.
+
+7. **The one design constraint this creates: NO cross-league profiling.** The temptation will be to aggregate a manager's behavior across multiple leagues (if their Sleeper username appears in multiple connected leagues from different users). This must be architecturally prevented. Each user's Bureau view should ONLY show data from leagues THEY are a member of. If User A and User B are both in League X, they each see the same profiles for League X — but User A cannot see User B's data from League Y. Since all computation is client-side and league-scoped, this is already enforced by architecture.
+
+### Self-Critique
+
+**What's backed by data**: Sleeper API being public and unauthenticated is confirmed from official docs. CCPA thresholds ($25M revenue, 100K consumers, 50% data sales revenue) are codified law. The Razzle codebase analysis confirming client-side-only storage is verified from the actual code (`localStorage` keys, no server-side persistence of league data). Dynasty Nerds and MFL Modern privacy policy details are from their published policies. The GDPR distinction about voluntarily published data and lawful basis is established precedent.
+
+**What's speculation**: The claim that "leaguemates won't be upset" is untested — some people WILL feel uncomfortable seeing their panic score quantified, regardless of whether the data was technically public. The assumption that client-side computation shields Razzle from privacy liability may not hold if Razzle later adds server-side agent processing (the Situation Room agents need league context for LLM calls, which means sending manager data to OpenRouter/Anthropic APIs — a third-party data transfer that the privacy page must disclose). The "no cross-league profiling" constraint is architecturally enforced NOW but could break if Razzle adds server-side caching for performance. The assertion that Razzle falls below CCPA thresholds is true at launch but becomes false if the product succeeds — a privacy page written for 100 users needs to scale to 100K users without requiring a rewrite.
+
+**Confidence: 7/10** — The legal position is solid (public API, client-side computation, below regulatory thresholds). The ethical position is strong if the privacy page is transparent. The risk is social, not legal: a viral Reddit post titled "This tool calculates your leaguemates' panic score without their consent" could create a backlash regardless of legal standing. The mitigation is to frame the Bureau as "analyzing YOUR league" not "profiling your opponents" — same data, very different framing. The biggest unresolved gap is what happens when Pro users' league context gets sent to LLM APIs (Situation Room) — that's a genuine third-party data transfer that needs disclosure.
+
+Sources:
+- [Sleeper API Documentation](https://docs.sleeper.com/) — public, read-only, no authentication required
+- [Sleeper General Terms of Use](https://support.sleeper.com/en/articles/5486620-general-terms-of-use) — platform terms
+- [Sleeper API Guide (SportsFirst)](https://www.sportsfirst.net/post/sleeper-api-explained-a-complete-guide-for-developers-fantasy-founders) — no auth, rate limits
+- [Sleeper API Guide (Zuplo)](https://zuplo.com/learning-center/sleeper-api) — data scope, public access
+- [Dynasty Nerds Privacy Policy](https://www.dynastynerds.com/privacy-policy/) — data collection disclosures
+- [Dynasty Daddy Privacy](https://dynasty-daddy.com/privacy) — minimal disclosures
+- [MFL Modern Privacy](https://www.mflmodern.com/privacy) — league data collection disclosed
+- [CCPA vs GDPR on Automated Decision-Making (Berkeley Tech Law Journal)](https://btlj.org/2025/04/ccpa-vs-gdpr-on-automated-decision-making/) — profiling frameworks
+- [First-Party Data Collection & Compliance 2025 (SecurePrivacy)](https://secureprivacy.ai/blog/first-party-data-collection-compliance-gdpr-ccpa-2025) — consent requirements
+- [Marketing Data Privacy Compliance 2025 (Dataslayer)](https://www.dataslayer.ai/blog/marketing-data-privacy-compliance-guide-gdpr-ccpa-us-state-laws) — behavioral tracking
+- Razzle codebase: `frontend/league-intel.html` lines 2079-2342 (localStorage, client-side computation)
+- Prior journal: Q1 (behavioral profiling willingness-to-pay), Q17 (scouting report 5-zone design), Q21 (minimum history for profiling), Q23 (free tier gating)
+
+---
+
+### Next 3 Questions This Raises
+
+1. **What should Razzle's initial Reddit seeding strategy look like — which subreddits, what post formats, what time of day, and how many posts before it feels like spam?** (The `/go` funnel depends on Reddit screenshots being posted. But cold-posting your own tool's screenshots is a fast path to getting banned. What's the authentic way to seed this?)
+
+2. **When Pro users send league context to Situation Room agents (LLM API calls), what data gets transmitted to third-party AI providers, and how should the privacy page disclose this?** (Client-side computation keeps the Bureau clean, but the Situation Room sends prompts containing manager names, roster data, and behavioral scores to OpenRouter/Anthropic. This is a third-party data transfer that changes the privacy calculus.)
+
+3. **Should Razzle offer a "defensive purchase" — where a manager pays to HIDE their own scouting report from leaguemates, or to see who has viewed their report?** (If behavioral profiling is powerful enough to exploit, some managers will want to BLOCK it. This creates a second revenue stream from the same feature.)
+
+## NEXT QUESTION: What should Razzle's initial Reddit seeding strategy look like — which subreddits, what post formats, what time of day, and how many posts before it feels like spam?
 
 ---
