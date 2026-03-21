@@ -31,6 +31,7 @@ def _fetch_featured_uncached():
         season = row[0] if row and row[0] else _current_nfl_season()
 
         results = {}
+        has_ages = False
 
         # 1. Dynasty Risers — young + productive (PPG/age ratio)
         #    Fallback to top PPG if age data is unavailable
