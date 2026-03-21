@@ -4437,10 +4437,10 @@
                              '<div class="panel-title-row">' +
                                '<div class="panel-title">' + escapeHtml(label) + '</div>' +
                                '<div class="panel-actions">' +
-                                 '<button class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeAttr(methodId) + '\')" title="How is this calculated?" aria-label="How is this calculated?">&#9432;</button>' +
-                                 '<button class="btn-panel-action btn-csv-export" onclick="exportPanelCSV(\'' + escapeAttr(panelName) + '\')" title="Export as CSV">CSV</button>' +
-                                 '<button class="btn-panel-action" onclick="screenshotPanel(\'' + escapeAttr(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
-                                 '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeAttr(panelName) + '\')" title="Copy share link">Share</button>' +
+                                 '<button class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeJS(methodId) + '\')" title="How is this calculated?" aria-label="How is this calculated?">&#9432;</button>' +
+                                 '<button class="btn-panel-action btn-csv-export" onclick="exportPanelCSV(\'' + escapeJS(panelName) + '\')" title="Export as CSV">CSV</button>' +
+                                 '<button class="btn-panel-action" onclick="screenshotPanel(\'' + escapeJS(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
+                                 '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeJS(panelName) + '\')" title="Copy share link">Share</button>' +
                                '</div>' +
                              '</div>' +
                              (flavor ? '<div class="panel-flavor">' + escapeHtml(flavor) + '</div>' : '') +
@@ -4677,7 +4677,7 @@
     wrapper.classList.add('has-items');
     container.innerHTML = display.map(function(p) {
       var label = PANEL_LABELS[p] || p;
-      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeAttr(p) + '\')">' + escapeHtml(label) + '</a>';
+      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeJS(p) + '\')">' + escapeHtml(label) + '</a>';
     }).join('');
   }
 
@@ -4731,7 +4731,7 @@
     wrapper.classList.add('has-items');
     container.innerHTML = favs.map(function(p) {
       var label = PANEL_LABELS[p] || p;
-      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeAttr(p) + '\')">' + escapeHtml(label) + '</a>';
+      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeJS(p) + '\')">' + escapeHtml(label) + '</a>';
     }).join('');
   }
 

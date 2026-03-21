@@ -491,6 +491,12 @@ function escapeAttr(str) {
   return String(str).replace(/&/g, "&amp;").replace(/'/g, "&#39;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+/** Escape a string for use inside a JavaScript string literal (e.g. inline onclick handlers). */
+function escapeJS(str) {
+  if (!str) return "";
+  return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, "\\n").replace(/\r/g, "\\r");
+}
+
 const API_BASE = window.location.origin;
 
 function getAuthHeaders() {

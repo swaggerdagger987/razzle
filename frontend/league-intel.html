@@ -2212,14 +2212,14 @@ async function loadLeagues(userId) {
 
       html += `
         <div class="league-card" id="lc-${escapeAttr(league.league_id)}" data-scoring="${escapeAttr(scoringType.toLowerCase().replace(' ', '_'))}" data-user="${escapeAttr(userId)}">
-          <div class="league-header" onclick="toggleLeague(this.parentElement, '${escapeAttr(league.league_id)}', '${escapeAttr(userId)}')" style="cursor:pointer;">
+          <div class="league-header" onclick="toggleLeague(this.parentElement, '${escapeJS(league.league_id)}', '${escapeJS(userId)}')" style="cursor:pointer;">
             <span class="league-name">${escapeHtml(league.name)}</span>
             <div class="league-meta">
               <span>${escapeHtml(String(totalRosters))}-team</span>
               <span>${escapeHtml(scoringType)}</span>
               <span>${escapeHtml(leagueType)}</span>
               <span>${escapeHtml(String(season))}</span>
-              <button id="odds-btn-${escapeAttr(league.league_id)}" class="btn-chunky" style="font-size:10px; padding:3px 10px; margin-left:8px; border-color:var(--green);" onclick="event.stopPropagation(); runLeagueOdds('${escapeAttr(league.league_id)}', '${escapeAttr(userId)}', '${escapeAttr(scoringType.toLowerCase().replace(' ', '_'))}');">League Odds</button>
+              <button id="odds-btn-${escapeAttr(league.league_id)}" class="btn-chunky" style="font-size:10px; padding:3px 10px; margin-left:8px; border-color:var(--green);" onclick="event.stopPropagation(); runLeagueOdds('${escapeJS(league.league_id)}', '${escapeJS(userId)}', '${escapeJS(scoringType.toLowerCase().replace(' ', '_'))}');">League Odds</button>
             </div>
           </div>
           <div class="league-odds" id="odds-${escapeAttr(league.league_id)}" style="display:none;"></div>
@@ -2293,7 +2293,7 @@ async function loadLeagues(userId) {
     var errMsg = e.name === "AbortError"
       ? "sleeper's servers are napping. try again in a minute."
       : "sleeper's servers are napping. try again in a minute.";
-    container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' + errMsg + ' <button class="btn-chunky" style="font-size:11px;padding:4px 12px;margin-left:8px;" onclick="loadLeagues(\'' + escapeAttr(userId) + '\')">retry</button></div>';
+    container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' + errMsg + ' <button class="btn-chunky" style="font-size:11px;padding:4px 12px;margin-left:8px;" onclick="loadLeagues(\'' + escapeJS(userId) + '\')">retry</button></div>';
     console.error(e);
   }
 }
@@ -2408,11 +2408,11 @@ async function toggleLeague(card, leagueId, userId) {
 
     // TAB BAR
     html += '<div class="bureau-tabs" id="bureau-tabs-' + leagueId + '">';
-    html += '<button class="bureau-tab active" data-tab="overview" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'overview\')"><span class="tab-dot" style="background:var(--orange);"></span>Overview</button>';
-    html += '<button class="bureau-tab" data-tab="selfscout" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'selfscout\')"><span class="tab-dot" style="background:var(--pos-rb);"></span>Self-Scout</button>';
-    html += '<button class="bureau-tab" data-tab="rivals" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'rivals\')">' + (paid ? '' : '<span class="tab-lock">🔒</span>') + '<span class="tab-dot" style="background:var(--pos-te);"></span>Rivals</button>';
-    html += '<button class="bureau-tab" data-tab="trades" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'trades\')">' + (paid ? '' : '<span class="tab-lock">🔒</span>') + '<span class="tab-dot" style="background:var(--pos-te);"></span>Trades</button>';
-    html += '<button class="bureau-tab" data-tab="history" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'history\')">' + (paid ? '' : '<span class="tab-lock">🔒</span>') + '<span class="tab-dot" style="background:var(--red, #e63946);"></span>History</button>';
+    html += '<button class="bureau-tab active" data-tab="overview" onclick="switchBureauTab(\'' + escapeJS(leagueId) + '\',\'overview\')"><span class="tab-dot" style="background:var(--orange);"></span>Overview</button>';
+    html += '<button class="bureau-tab" data-tab="selfscout" onclick="switchBureauTab(\'' + escapeJS(leagueId) + '\',\'selfscout\')"><span class="tab-dot" style="background:var(--pos-rb);"></span>Self-Scout</button>';
+    html += '<button class="bureau-tab" data-tab="rivals" onclick="switchBureauTab(\'' + escapeJS(leagueId) + '\',\'rivals\')">' + (paid ? '' : '<span class="tab-lock">🔒</span>') + '<span class="tab-dot" style="background:var(--pos-te);"></span>Rivals</button>';
+    html += '<button class="bureau-tab" data-tab="trades" onclick="switchBureauTab(\'' + escapeJS(leagueId) + '\',\'trades\')">' + (paid ? '' : '<span class="tab-lock">🔒</span>') + '<span class="tab-dot" style="background:var(--pos-te);"></span>Trades</button>';
+    html += '<button class="bureau-tab" data-tab="history" onclick="switchBureauTab(\'' + escapeJS(leagueId) + '\',\'history\')">' + (paid ? '' : '<span class="tab-lock">🔒</span>') + '<span class="tab-dot" style="background:var(--red, #e63946);"></span>History</button>';
     html += '</div>';
 
     // ===== OVERVIEW TAB (default) =====
@@ -6382,12 +6382,12 @@ function _mcRenderScenario(leagueId) {
     html += '<div style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">';
     html += '<span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);">ACTIVE:</span>';
     for (var epid in excluded) {
-      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--red);color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcToggleInjury(\'' + escapeAttr(leagueId) + '\',\'' + escapeAttr(epid) + '\')">' + escapeHtml(_mcGetPlayerName(epid)) + ' OUT ×</span>';
+      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--red);color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcToggleInjury(\'' + escapeJS(leagueId) + '\',\'' + escapeJS(epid) + '\')">' + escapeHtml(_mcGetPlayerName(epid)) + ' OUT ×</span>';
     }
     for (var t = 0; t < trades.length; t++) {
-      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--orange);color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcRemoveTrade(\'' + escapeAttr(leagueId) + '\',' + t + ')">' + escapeHtml(_mcGetPlayerName(trades[t].playerA)) + ' ↔ ' + escapeHtml(_mcGetPlayerName(trades[t].playerB)) + ' ×</span>';
+      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--orange);color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcRemoveTrade(\'' + escapeJS(leagueId) + '\',' + t + ')">' + escapeHtml(_mcGetPlayerName(trades[t].playerA)) + ' ↔ ' + escapeHtml(_mcGetPlayerName(trades[t].playerB)) + ' ×</span>';
     }
-    html += '<span style="font-family:var(--font-mono);font-size:10px;color:var(--red);cursor:pointer;text-decoration:underline;" onclick="_mcResetScenarios(\'' + escapeAttr(leagueId) + '\')">reset all</span>';
+    html += '<span style="font-family:var(--font-mono);font-size:10px;color:var(--red);cursor:pointer;text-decoration:underline;" onclick="_mcResetScenarios(\'' + escapeJS(leagueId) + '\')">reset all</span>';
     html += '</div>';
   }
 
@@ -6414,7 +6414,7 @@ function _mcRenderScenario(leagueId) {
     html += '<option value="' + escapeAttr(allP[pi].pid) + '">' + escapeHtml(allP[pi].name) + ' (' + allP[pi].pos + ', ' + escapeHtml(allP[pi].owner) + ')</option>';
   }
   html += '</select>';
-  html += '<button class="btn-chunky" style="font-size:10px;padding:2px 10px;border-color:var(--red);" onclick="_mcToggleInjuryFromSelect(\'' + escapeAttr(leagueId) + '\')">Mark Out</button>';
+  html += '<button class="btn-chunky" style="font-size:10px;padding:2px 10px;border-color:var(--red);" onclick="_mcToggleInjuryFromSelect(\'' + escapeJS(leagueId) + '\')">Mark Out</button>';
   html += '</div>';
 
   // Trade what-if: pick two players from different rosters
@@ -6433,7 +6433,7 @@ function _mcRenderScenario(leagueId) {
     html += '<option value="' + escapeAttr(allP[pb].pid) + '">' + escapeHtml(allP[pb].name) + ' (' + escapeHtml(allP[pb].owner) + ')</option>';
   }
   html += '</select>';
-  html += '<button class="btn-chunky" style="font-size:10px;padding:2px 10px;border-color:var(--orange);" onclick="_mcExecuteTrade(\'' + escapeAttr(leagueId) + '\')">Simulate Trade</button>';
+  html += '<button class="btn-chunky" style="font-size:10px;padding:2px 10px;border-color:var(--orange);" onclick="_mcExecuteTrade(\'' + escapeJS(leagueId) + '\')">Simulate Trade</button>';
   html += '</div>';
 
   html += '</div>';
@@ -6908,7 +6908,7 @@ function _bureauRenderScoutPreview(leagueId, posGroups, allPlayers, distribution
   }
 
   html += '</div>';
-  html += '<div style="text-align:center;"><button class="btn-chunky" style="font-size:11px;padding:6px 16px;" onclick="switchBureauTab(\'' + escapeAttr(leagueId) + '\',\'selfscout\')">Full Self-Scout Report</button></div>';
+  html += '<div style="text-align:center;"><button class="btn-chunky" style="font-size:11px;padding:6px 16px;" onclick="switchBureauTab(\'' + escapeJS(leagueId) + '\',\'selfscout\')">Full Self-Scout Report</button></div>';
   previewDiv.innerHTML = html;
 }
 
