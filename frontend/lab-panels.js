@@ -7273,7 +7273,7 @@
         ctx.font = 'bold 11px "Space Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText('Rd ' + r.round, x + barW / 2, h - 14);
-        ctx.fillText(Number(r.avg_ppg).toFixed(1), x + barW / 2, y - 6);
+        ctx.fillText((Number(r.avg_ppg) || 0).toFixed(1), x + barW / 2, y - 6);
       });
     }
 
@@ -7366,6 +7366,7 @@
     }
 
     function formatTickValue(v) {
+      if (v == null || isNaN(v)) return "0";
       if (Math.abs(v) >= 100) return Math.round(v).toString();
       if (Math.abs(v) >= 1) return v.toFixed(1);
       return v.toFixed(2);
@@ -7562,8 +7563,8 @@
           if (p.conference) teamLine += ' (' + escapeHtml(p.conference) + ')';
           tooltip.innerHTML = '<div style="font-weight:700">' + escapeHtml(p.name) + '</div>' +
             '<div>' + teamLine + '</div>' +
-            '<div>' + escapeHtml(xLabel) + ': ' + Number(p.x).toFixed(1) + '</div>' +
-            '<div>' + escapeHtml(yLabel) + ': ' + Number(p.y).toFixed(1) + '</div>';
+            '<div>' + escapeHtml(xLabel) + ': ' + (Number(p.x) || 0).toFixed(1) + '</div>' +
+            '<div>' + escapeHtml(yLabel) + ': ' + (Number(p.y) || 0).toFixed(1) + '</div>';
           tooltip.style.display = 'block';
           var wrapRect = wrap.getBoundingClientRect();
           var tipX = e.clientX - wrapRect.left + 15;

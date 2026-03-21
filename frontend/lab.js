@@ -12350,7 +12350,7 @@ function exportCompsImage() {
   // Subtitle
   ctx.fillStyle = t.inkLight;
   ctx.font = "12px 'Space Mono', monospace";
-  ctx.fillText(`${pos} · ${player.team || "FA"} · ${season} Season · ${player.ppg} PPR PPG`, padX, padY + 48);
+  ctx.fillText(`${pos} · ${player.team || "FA"} · ${season} Season · ${player.ppg || 0} PPR PPG`, padX, padY + 48);
 
   // Position badge
   ctx.fillStyle = pColor;
@@ -12406,7 +12406,7 @@ function exportCompsImage() {
     ctx.fillText(c.full_name, padX + 52, cardY + 28);
     ctx.fillStyle = t.inkLight;
     ctx.font = "11px 'Space Mono', monospace";
-    ctx.fillText(`${c.team || "FA"} · ${c.games}G · ${c.ppg} PPG`, padX + 52, cardY + 46);
+    ctx.fillText(`${c.team || "FA"} · ${c.games || 0}G · ${c.ppg || 0} PPG`, padX + 52, cardY + 46);
 
     // Similarity score
     const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : "#5c4a3d";
