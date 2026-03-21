@@ -63,7 +63,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.week) as games,
                     SUM(s.targets) as targets,
                     SUM(s.carries) as carries,
@@ -415,7 +415,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             # Step 1: Build defense PPG-allowed-by-position grid for this season
             def_rows = conn.execute("""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -661,7 +661,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
             # ---- Build defense PPG-allowed grid for SOS ----
             def_rows = conn.execute("""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -910,7 +910,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                        COALESCE(SUM(s.receiving_tds), 0) as total_rec_tds,
                        COALESCE(SUM(s.rushing_yards), 0) as total_rush_yards,
                        COALESCE(SUM(s.rushing_tds), 0) as total_rush_tds,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_pts,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_pts,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1138,7 +1138,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
             def_params = [_season, _week] if _week > 0 else [_season]
             def_rows = conn.execute(f"""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1452,7 +1452,7 @@ def fetch_season_awards(season=None, position=None):
             # Build defense PPG-allowed grid for SOS
             def_rows = conn.execute("""
                 SELECT s.opponent_team, p.position,
-                       COALESCE(SUM(s.fantasy_points_ppr), 0) as total_ppr,
+                       ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
                        COUNT(DISTINCT s.week) as games
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1871,7 +1871,7 @@ def fetch_vorp(season=None, position=None, limit=30):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
-                    SUM(s.fantasy_points_ppr) as total_ppr,
+                    ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
                     COUNT(DISTINCT s.week) as games
                 FROM players p
                 JOIN player_week_stats s

@@ -116,8 +116,8 @@ RATE_METRICS = ["target_share", "air_yards_share", "wopr", "racr", "passing_epa"
 
 # Shared stat SUM columns used across multiple query functions
 _STAT_SUM_COLS = """
-            SUM(s.fantasy_points_ppr) as fantasy_points_ppr,
-            SUM(s.fantasy_points_std) as fantasy_points_std,
+            ROUND(SUM(s.fantasy_points_ppr), 1) as fantasy_points_ppr,
+            ROUND(SUM(s.fantasy_points_std), 1) as fantasy_points_std,
             SUM(s.passing_yards) as passing_yards,
             SUM(s.passing_tds) as passing_tds,
             SUM(s.rushing_yards) as rushing_yards,
@@ -395,7 +395,7 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
 
     # Get per-season PPR totals for all returned players
     rows = conn.execute(f"""
-        SELECT player_id, season, SUM(fantasy_points_ppr) as ppr
+        SELECT player_id, season, ROUND(SUM(fantasy_points_ppr), 1) as ppr
         FROM player_week_stats
         WHERE player_id IN ({placeholders}) AND season_type = 'regular'
         GROUP BY player_id, season
