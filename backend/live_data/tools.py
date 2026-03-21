@@ -1265,7 +1265,9 @@ def fetch_records(position=None, limit=10):
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        COUNT(DISTINCT s.week || '-' || s.season) as games,
-                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_fpts
+                       ROUND(SUM(s.fantasy_points_ppr), 1) as total_fpts,
+                       MIN(s.season) as first_season,
+                       MAX(s.season) as last_season
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE p.fantasy_relevant = 1 AND s.season_type = 'regular' {pos_filter}
@@ -1283,6 +1285,7 @@ def fetch_records(position=None, limit=10):
                     "position": r[2] or "RB", "team": r[3] or "FA",
                     "games": games, "total_fpts": round(total, 1),
                     "ppg": round(total / games, 1),
+                    "seasons": f"{r[6]}-{r[7]}",
                 })
 
             return {
