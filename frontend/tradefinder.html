@@ -809,7 +809,7 @@
     html += '<div class="tf-sel-stats">';
     html += '<div class="tf-sel-stat"><div class="tf-sel-stat-val">' + fmt(sel.trade_value) + '</div><div class="tf-sel-stat-label">Trade Value</div></div>';
     html += '<div class="tf-sel-stat"><div class="tf-sel-stat-val">' + fmt(sel.ppg) + '</div><div class="tf-sel-stat-label">PPG</div></div>';
-    html += '<div class="tf-sel-stat"><div class="tf-sel-stat-val">' + escapeHtml(String(sel.games || '-')) + '</div><div class="tf-sel-stat-label">GP</div></div>';
+    html += '<div class="tf-sel-stat"><div class="tf-sel-stat-val">' + (sel.games != null ? escapeHtml(String(sel.games)) : '-') + '</div><div class="tf-sel-stat-label">GP</div></div>';
     html += '<div class="tf-sel-stat"><div class="tf-sel-stat-val">' + (sel.stock_score !== undefined ? escapeHtml(String(sel.stock_score)) : '-') + '</div><div class="tf-sel-stat-label">Stock</div></div>';
     html += '</div></div>';
 

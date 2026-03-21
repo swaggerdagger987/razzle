@@ -6539,7 +6539,7 @@
         colDefs.forEach(function(c) {
           var v = g[c.key];
           if (c.key === 'fantasy_points' || c.key === 'fpts') {
-            var fpts = g.fantasy_points || g.fpts || 0;
+            var fpts = g.fantasy_points != null ? g.fantasy_points : (g.fpts != null ? g.fpts : 0);
             html += '<td class="glo-num ' + fptsClass(fpts) + '">' + fmt(fpts) + '</td>';
           } else if (c.key === 'opponent') {
             html += '<td>' + escapeHtml(g.opponent || g.opp || '-') + '</td>';

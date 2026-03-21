@@ -590,7 +590,7 @@
     // Stats
     html += '<div class="tv-stats">';
     html += '<div class="tv-stat"><div>' + fmt(p.ppg) + '</div><div class="tv-stat-label">PPG</div></div>';
-    html += '<div class="tv-stat"><div>' + escapeHtml(String(p.games || '-')) + '</div><div class="tv-stat-label">GP</div></div>';
+    html += '<div class="tv-stat"><div>' + (p.games != null ? escapeHtml(String(p.games)) : '-') + '</div><div class="tv-stat-label">GP</div></div>';
     html += '</div>';
 
     // Tier badge
