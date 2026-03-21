@@ -6891,7 +6891,7 @@
           html += '<span class="aw2-runner-pos ' + rPos + '">' + escapeHtml(r.position) + '</span>';
           html += '<span class="aw2-runner-name">' + escapeHtml(r.name) + '</span>';
           if (isCollege && r.team) html += '<span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(r.team) + '</span>';
-          html += '<span class="aw2-runner-stat">' + escapeHtml(isCollege ? String(r.ppg || '') + ' PPG' : (r.key_stat || '')) + '</span>';
+          html += '<span class="aw2-runner-stat">' + escapeHtml(isCollege ? String(r.ppg != null ? r.ppg : '') + ' PPG' : (r.key_stat || '')) + '</span>';
           html += '</div>';
         });
         html += '</div>';
