@@ -15,7 +15,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 18 — PASS. 607 players, 25/page, 0 JS errors. Panel switching (stacks, vorp, tradevalues) works. FUNC-015 code fix awaiting deploy (screener dynasty_value still old formula on prod). |
+| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 19 — PASS. FUNC-015 code fix verified: _enrich_with_dynasty_value now calls compute_trade_value(). NOT DEPLOYED: prod Nacua=93.6 (old formula) vs trade_value=95.8 (new). Screener query Python re-sort works correctly. |
 | 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | DONE — PASS (all 4 positions clean) |
 | 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | DONE — PASS (RB+800yd = 27, all correct) |
 | 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | DONE — PASS (desc+asc both correct) |
@@ -32,7 +32,7 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | RE-AUDIT SESSION 18 — PASS (data), P1 FUNC-017 (breakout badge uses raw totals not PPG — CMC +772% is injury recovery, not breakout). JSON-LD XSS fix intact. 0 JS errors. FUNC-004 (headshots) still open. |
+| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | RE-AUDIT SESSION 19 — PASS (data). Ship Loop N+1 fix verified (batch rate metrics query, combine_data guard). Rate metrics present on prod. FUNC-017 still open (+772% breakout). FUNC-004 (headshots) still open. 0 JS errors. |
 | 14 | Player profile: Career stats | Career numbers add up across seasons? Per-game averages calculated correctly? | DONE — PASS (Lamar 8 seasons sum exactly matches career totals: GP=124, PPR=2531.04, PassYds=24361) |
 | 15 | Player profile: Game log | Individual game stats shown? Sum of game log = season total? Week numbers correct? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar 2024 game log=17 weeks (1-18 only), 17 GP. |
 | 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | DONE — PASS (Jackson vs Stroud 2024, data aligned, same season) |
@@ -42,8 +42,8 @@
 
 | # | Flow | What to Test | Status |
 |---|------|-------------|--------|
-| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | RE-AUDIT SESSION 18 — PASS. Nacua#1(95.8), McBride#2(95.6), Robinson#3(95.4). Dark mode clean (espresso palette). Position badges correct. 0 JS errors. |
-| 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | RE-AUDIT SESSION 18 — PASS. Linked sliders verified (proportional redistribution, URL state, reset). Dark mode clean. FUNC-015 code fix correct but NOT YET DEPLOYED (screener dv still old formula on prod). 0 JS errors. |
+| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | RE-AUDIT SESSION 19 — PASS. 0 JS errors, 23 rows, 69 sidebar items. 5 broken NFL headshot images (FUNC-004). No regressions from Ship Loop changes. |
+| 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | RE-AUDIT SESSION 19 — PASS. 0 JS errors, 23 rows. FUNC-015 code fix verified correct but NOT YET DEPLOYED. Screener dynasty_value Python re-sort works in screener/query. No regressions. |
 | 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | DONE — PASS |
 | 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | DONE — PASS (functional), P2 S-tier bloated (76 players, FUNC-003) |
 | 22 | Aging Curves | Chart renders? Shows realistic age-based decline? Peak age correct per position? | DONE — RB peak correct, P2 WR/TE survivorship bias |

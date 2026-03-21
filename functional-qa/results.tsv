@@ -864,3 +864,44 @@ smoke-all	OK	-	-	-	pass	re-audit: 11/11 smoke tests pass (health, players, posit
 1-lab	OK	frontend/lab.html	-	-	pass	re-audit: 607 players, 0 JS errors, 25/page, position breakdown in count. Panel switching works (stacks, vorp, tradevalues).	95	2026-03-20T20:07
 15-func015	INFO	backend/live_data/core.py	463	_enrich_with_dynasty_value	pending-deploy	re-audit: FUNC-015 code fix correct — _enrich_with_dynasty_value delegates to compute_trade_value(). Edge cases safe (null age→50, zero ppg→35). NOT YET DEPLOYED to prod.	95	2026-03-20T20:04
 16-func016	P2	frontend/cheatsheet.html	453	-	open	re-audit: FUNC-016 still open — escapeHtml in onclick, should be escapeAttr. scoring.html:491 also still open.	85	2026-03-20T20:04
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+flow-13	OK	backend/live_data/players.py	670	_fetch_player_profile_uncached	pass	re-audit session 19: Ship Loop N+1 rate metrics fix verified — batch query (GROUP BY season, stat_key) functionally equivalent to old per-season loop. Rate metrics present on prod: target_share=0.235, wopr=0.41 for CMC 2025.	high	2026-03-20
+flow-13	OK	backend/live_data/players.py	701	_fetch_player_profile_uncached	pass	re-audit session 19: combine_data table existence guard added — defensive fix, table exists on prod, combine data returns (weight=202, forty=4.48).	high	2026-03-20
+flow-13	P1	frontend/player.js	80	breakoutInfo	open	re-audit session 19: FUNC-017 still open — CMC shows BREAKOUT +772% (2025) on prod. Uses fantasy_points_ppr raw totals (47.8→416.6) not PPG (11.9→24.5). Threshold prev>20 too low.	high	2026-03-20
+flow-1	OK	backend/live_data/core.py	463	_enrich_with_dynasty_value	pass	re-audit session 19: FUNC-015 code fix verified — _enrich_with_dynasty_value now calls compute_trade_value(ppg, age, pos). NOT YET DEPLOYED: prod Nacua shows 93.6 (old min(100,ppg*4)) vs trade_value 95.8.	high	2026-03-20
+flow-19	OK	backend/live_data/core.py	476	compute_trade_value	pass	re-audit session 19: FUNC-015 unified formula correct in code. Screener query Python re-sort works (93.6→91.2→87.2→86.4→84.8 desc). Awaiting deploy to prod.	high	2026-03-20
+flow-18	OK	-	-	-	pass	re-audit session 19: rankings page clean. 0 JS errors, 23 table rows, 69 sidebar items. 5 broken NFL headshot images (FUNC-004 existing).	high	2026-03-20
+flow-19	OK	-	-	-	pass	re-audit session 19: trade values page clean. 0 JS errors, 23 table rows. 5 broken NFL headshot images (FUNC-004 existing).	high	2026-03-20
+smoke	OK	-	-	-	pass	session 19: 11/11 smoke tests pass (localhost:8000). All positions, sort, filters, NaN/Inf checks clean.	high	2026-03-20
