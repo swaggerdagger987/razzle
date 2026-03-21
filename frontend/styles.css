@@ -797,9 +797,8 @@ a.btn-pro-upgrade:focus-visible {
 .skeleton-cell {
   height: 16px;
   border-radius: 4px;
-  background: linear-gradient(90deg, var(--bg-warm) 25%, var(--bg-card) 50%, var(--bg-warm) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  background: var(--bg-warm);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 .skeleton-header .skeleton-cell {
   height: 12px;
@@ -808,9 +807,9 @@ a.btn-pro-upgrade:focus-visible {
 .skeleton-row:nth-child(odd) .skeleton-cell {
   animation-delay: 0.15s;
 }
-@keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
 }
 
 /* ===== SEARCH HIGHLIGHT ===== */
