@@ -2623,7 +2623,7 @@ function setUniverse(u) {
   if (typeof window.switchPanel === 'function' && typeof window._currentPanelName === 'string') {
     var curPanel = window._currentPanelName;
     var NFL_ONLY = ['rankings','tiers','tradevalues','vorp','advantage','auction','cheatsheet','buysell','stocks','waivers','handcuffs','scarcity','snapefficiency','workload','dualthreat','targetpremium','drops','garbagetime','weekly','matchups','stacks','redzone','streaks','weeklyleaders','weeklymvp','playoffs','gamescript','pace','seasonpace','tdregression','airyards','dashboard','rosterbuilder','tradefinder','scoring','schedule','opportunity','targets','team','powerrankings','records','recap','awards','reportcard','fptsbreakdown','gamelog','archetypes','breakdown','comptable','strengths','career','career-compare'];
-    var COLLEGE_ONLY = ['draftclass','prospects','percentiles','proradar','drafttracker'];
+    var COLLEGE_ONLY = ['draftclass','prospects','percentiles','drafttracker'];
     if ((u === 'college' && NFL_ONLY.indexOf(curPanel) !== -1) ||
         (u === 'nfl' && COLLEGE_ONLY.indexOf(curPanel) !== -1)) {
       window.switchPanel('screener');
@@ -2777,7 +2777,7 @@ function applyUniverseUI() {
     'breakdown', 'comptable', 'strengths', 'career', 'career-compare'
   ];
   var COLLEGE_ONLY_PANELS = [
-    'draftclass', 'prospects', 'percentiles', 'proradar', 'drafttracker'
+    'draftclass', 'prospects', 'percentiles', 'drafttracker'
   ];
   document.querySelectorAll('.lab-sidebar-item[data-panel]').forEach(function(item) {
     var panel = item.getAttribute('data-panel');

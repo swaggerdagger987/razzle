@@ -2606,6 +2606,7 @@ async function crawlLeagueHistory(leagueId, maxSeasons) {
       chain.push({ leagueId: currentId, season: league.season || "?", name: league.name });
       currentId = league.previous_league_id || null;
     } catch (e) {
+      clearTimeout(crawlTimer);
       break;
     }
   }
@@ -2809,6 +2810,7 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
     feedDiv.classList.remove("activity-loading");
 
   } catch (e) {
+    clearTimeout(txnTimer);
     console.error("Activity feed error:", e);
     feedDiv.innerHTML = '<div class="activity-loading" style="color:var(--red);">field transmission interrupted. activity feed went dark.</div>';
   }

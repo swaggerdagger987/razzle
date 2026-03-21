@@ -6181,8 +6181,8 @@
   defs.push({ name: 'reportcard', render: function(el) {
     var curPos = '';
     var curSeason = _latestSeason;
-    var honorSort = { col: 'gpa', asc: false };
-    var needsSort = { col: 'gpa', asc: true };
+    var honorSort = { col: 'gpa_pct', asc: false };
+    var needsSort = { col: 'gpa_pct', asc: true };
     var lastData = null;
 
     var GRADE_ORDER = { 'A+': 8, 'A': 7, 'B+': 6, 'B': 5, 'C+': 4, 'C': 3, 'D': 2, 'F': 1 };
