@@ -2602,3 +2602,104 @@ smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correc
 smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
 smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
 smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+re-audit-36	OK	frontend/efficiency.html	501	-	pass	re-audit: td_rate null guard verified, QB exclusion confirmed (0 QBs in Volume Kings), 23 rows 0 JS errors	100	2026-03-21T09:05
+re-audit-45	OK	frontend/lab.js	8387	renderBigBoard	pass	re-audit: RPS null guard (p.rps||0).toFixed(1) verified, 319 prospects 0 null RPS, prospects.html 0 JS errors	100	2026-03-21T09:05
+re-audit-46	OK	frontend/lab.js	8762	drawClassAnalyticsChart	pass	re-audit: avg_rps null guard (cls.avg_rps||0).toFixed(1) in 3 places, draftclass.html 5 canvases 0 JS errors	100	2026-03-21T09:05
+re-audit-22	OK	frontend/lab.js	9523	renderAgingCurveChart	pass	re-audit: maxPPG null filter .filter(v=>v!=null) prevents -Infinity, aging.html 0 JS errors, 0 data locally	100	2026-03-21T09:05
+re-audit-41	OK	frontend/lab.js	12713	drawBoomBustRangeBar	pass	re-audit: boom/bust null guards (floor/ceiling/median_ppg, boom/bust_rate ||0), defensive only, code safe	100	2026-03-21T09:05
+re-audit-63	OK	frontend/league-intel.html	6208	_mcSimulate	pass	re-audit: MC roster null guard (!roster||!roster.players), worker.js:34 same. playoffs.html weeks||[] guard. 0 JS errors	100	2026-03-21T09:05
+re-audit-62	OK	-	-	-	pass	re-audit: 15 standalone pages spot-checked post-merge, ALL 0 JS errors. No regressions from Ship Loop null guard sweep	100	2026-03-21T09:05
+verify-FUNC063	P1	backend/live_data/dashboards.py	172,803	grade_from_percentile	open	FUNC-063 still present: 6-tier scale (lines 172,803) vs 8-tier scale (lines 1333,1676). Efficiency Rankings has 0 B+/C+ grades, Report Card has them	95	2026-03-21T09:05
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+36	P1	frontend/efficiency.html	422	gradeClass	fail	re-audit FUNC-063: backend 8-tier grade scale fixed, but frontend gradeClass only maps A+/A/B/C/D — B+ and C+ return undefined (unstyled badge)	95	2026-03-21T09:30
+36	P1	frontend/consistency.html	422	gradeClass	fail	re-audit FUNC-063: identical to efficiency.html — B+/C+ grades return undefined from gradeClass	95	2026-03-21T09:30
+36	P1	frontend/schedule.html	435	gradeClass	fail	re-audit FUNC-063: B+/C+ grades fall through to grade-f (RED) — above-average players shown as failures	95	2026-03-21T09:30
+36	P1	frontend/stocks.html	440	gradeClass	fail	re-audit FUNC-063: identical to schedule.html — B+/C+ grades render as RED	95	2026-03-21T09:30
+36	P1	frontend/lab-panels.js	8678	gradeClass	fail	re-audit FUNC-063: SOS Lab panel gradeClass uses exact match — B+/C+ fall through to grade-f (RED)	95	2026-03-21T09:30
+36	OK	backend/live_data/dashboards.py	14	_grade_from_percentile	pass	re-audit FUNC-063: shared 8-tier function verified (1 def, 0 old inline, 15 call sites). B+ at 75%, C+ at 50%	100	2026-03-21T09:30
+36	OK	backend/live_data/core.py	212	_enrich_with_derived_stats	pass	re-audit: IEEE 754 rounding fix clean — McCaffrey 416.6, Robinson 370.8, 10 RBs all artifact-free	100	2026-03-21T09:30
+62	OK	backend/live_data/dashboards.py	-	fetch_stock_watch	pass	re-audit: stock_watch returns B+ (11) and C+ (15) grades with limit=50. Data correct	100	2026-03-21T09:30
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values	100	2026-03-21T09:41
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams	100	2026-03-21T09:41
+4	OK	backend/live_data/players.py	-	fetch_players	pass	re-audit FUNC-042: GET /api/players sort=target_share now correctly sorts by target_share (JSN 0.368 > Wilson 0.354 > Chase 0.321). Fixed.	100	2026-03-21T09:45
+36	OK	backend/live_data/dashboards.py	16	_grade_from_percentile	pass	re-audit: fresh server confirms all 8 grades (A+/A/B+/B/C+/C/D/F) across stock-watch, report-cards, efficiency endpoints	100	2026-03-21T09:45
+36	P1	frontend/efficiency.html	422	gradeClass	fail	re-audit FUNC-064: still open. B+/C+ fall through to grade-f (RED) in 5 frontend files	95	2026-03-21T09:45
+62	OK	backend/live_data/dashboards.py	-	fetch_report_cards	pass	re-audit: report cards MCF GPA_pct=82 B+, Nacua GPA_pct=82 B+. 10 season awards with sensible winners	100	2026-03-21T09:45
+all	OK	frontend/*.html	-	-	pass	bulk test: all 50 standalone HTML pages HTTP 200, 0 JS errors	100	2026-03-21T09:30
+all	OK	frontend/index.html	-	topnav	pass	topnav consistency: 7 links across all 5 primary pages (index, lab, league-intel, agents, pricing)	100	2026-03-21T09:30
+all	OK	backend/live_data/players.py	-	_fetch_screener_uncached	pass	screener filters work correctly with key/op/value format. Chained RB+games>=10+PPR>=200 returns 21 correct players	100	2026-03-21T09:20
+all	OK	backend/live_data/core.py	-	_enrich_with_derived_stats	pass	half-PPR verified: MCF (416.6+314.6)/2=365.6, Robinson 331.3, Gibbs 328.4, Allen 364.6 (QB PPR=STD)	100	2026-03-21T09:20
