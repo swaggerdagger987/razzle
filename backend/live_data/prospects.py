@@ -2,6 +2,7 @@
 Prospect functions — combine data, athletic profiles, tiers, comparisons.
 """
 
+import datetime as _dt
 import logging
 import math
 
@@ -36,7 +37,6 @@ def _fetch_prospects_uncached(
     draft_year=0,
 ):
     """Return prospect data from combine + draft picks, joined."""
-    import datetime as _dt
     with get_db() as conn:
         if not _has_table(conn, "combine_data"):
             return {"items": [], "count": 0, "years": [], "schools": [], "positions": []}

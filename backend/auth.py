@@ -5,6 +5,7 @@ Uses a separate users.db to persist across terminal.db rebuilds.
 
 import base64
 import hashlib
+import json
 import os
 import re
 import secrets
@@ -617,7 +618,6 @@ def get_saved_views(user_id: int) -> dict:
 
 def sync_saved_views(user_id: int, views: list) -> dict:
     """Sync saved views from client. Idempotent — replaces all views for user."""
-    import json
     if not isinstance(views, list):
         return {"error": "views must be a list", "status": 400}
     with get_users_db() as conn:

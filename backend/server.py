@@ -21,6 +21,8 @@ import re
 import sqlite3
 import statistics as _statistics
 import time as _time
+import urllib.request as _urllib_request
+import uuid as _uuid
 import uvicorn
 
 from collections import defaultdict
@@ -546,7 +548,6 @@ async def static_cache_middleware(request: Request, call_next):
 @app.middleware("http")
 async def request_logging_middleware(request: Request, call_next):
     """Log every HTTP request with method, path, status, duration, and request ID."""
-    import uuid as _uuid
     # Generate or propagate request ID
     req_id = request.headers.get("X-Request-ID") or _uuid.uuid4().hex[:12]
     path = request.url.path
@@ -894,12 +895,11 @@ async def auth_link_sleeper(request: Request):
         return JSONResponse({"error": "Invalid Sleeper username"}, status_code=400)
 
     # Validate against Sleeper API
-    import urllib.request
     try:
         url = f"https://api.sleeper.app/v1/user/{sleeper_username}"
-        req = urllib.request.Request(url)
+        req = _urllib_request.Request(url)
         req.add_header("User-Agent", "razzle/1.0")
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with _urllib_request.urlopen(req, timeout=10) as resp:
             data = _json.loads(resp.read())
             if not data or not data.get("user_id"):
                 return JSONResponse({"error": "Sleeper username not found"}, status_code=400)

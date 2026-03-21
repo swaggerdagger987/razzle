@@ -3,6 +3,7 @@ NFL player CRUD functions — search, screener, profiles, comparisons, boom/bust
 Extracted from _monolith.py in Phase 27 Task 3.
 """
 
+import json
 import logging
 import re
 import statistics
@@ -611,8 +612,7 @@ def fetch_screener_sparklines(player_ids, season=0):
                 if pid not in sparklines:
                     sparklines[pid] = []
             return {"sparklines": sparklines, "season": _season}
-    import json as _json
-    _ck = f"sparklines:{_json.dumps(sorted(ids))}:{season}"
+    _ck = f"sparklines:{json.dumps(sorted(ids))}:{season}"
     return _cached(_ck, _query)
 
 
