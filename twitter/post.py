@@ -203,32 +203,12 @@ def log_to_results(draft: dict, tweet_id: str, status: str):
 
 def get_ready_drafts() -> list:
     """
-    Returns list of draft file paths from queue/approved/
-    where the filename timestamp <= now.
+    Returns all .md files from queue/approved/, sorted by filename.
+    Posts oldest first. If it's approved, it's ready — no schedule gating.
     """
     if not QUEUE_DIR.exists():
         return []
-
-    now = datetime.now()
-    ready = []
-
-    for f in sorted(QUEUE_DIR.glob("*.md")):
-        # Parse timestamp from filename: YYYY-MM-DD_HH-MM_type.md
-        match = re.match(r"(\d{4}-\d{2}-\d{2})_(\d{2}-\d{2})_", f.name)
-        if match:
-            date_str = match.group(1)
-            time_str = match.group(2).replace("-", ":")
-            try:
-                scheduled = datetime.strptime(f"{date_str} {time_str}", "%Y-%m-%d %H:%M")
-                if scheduled <= now:
-                    ready.append(f)
-            except ValueError:
-                print(f"  Warning: could not parse timestamp from {f.name}, skipping.")
-        else:
-            # No timestamp in filename — post immediately
-            ready.append(f)
-
-    return ready
+    return sorted(QUEUE_DIR.glob("*.md"))
 
 
 def move_to_posted(filepath: Path):
