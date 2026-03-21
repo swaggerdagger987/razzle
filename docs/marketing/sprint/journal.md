@@ -2354,6 +2354,103 @@ Sources:
 
 3. **What's the ideal watermark design — URL only, URL + logo, or URL + tagline — and where should it be positioned to maximize visibility without triggering spam reports?**
 
-## NEXT QUESTION: What specific 2026 rookie class contrarian take has the most debate potential for Razzle's first data drop — and which Lab view produces the most compelling screenshot to support it?
+## Question 28: What specific 2026 rookie class contrarian take has the most debate potential for Razzle's first data drop — and which Lab view produces the most compelling screenshot to support it?
+
+**Why this matters**: The first r/DynastyFF data drop (targeting April 19) needs a contrarian take backed by data that dynasty managers can't ignore. The take must be specific enough to generate debate ("you're wrong" comments = engagement), not so outlandish it gets dismissed, and supported by a Lab screenshot that looks like real analysis, not a hot take.
+
+### Answer
+
+**Winner: "Makai Lemon is the WR1 of this class and it's not close — here's the 3-year per-game efficiency data that proves it."**
+
+This is the highest-debate-potential contrarian take for three reasons:
+
+**1. The community is split 3 ways — and Lemon is the underdog.**
+
+The 2026 WR1 debate between Carnell Tate (Ohio State), Jordyn Tyson (Arizona State), and Makai Lemon (USC) is the hottest discourse in dynasty right now. Multiple expert sources confirm no consensus exists: Destin Adams has Tate WR1, Adam Holt has Tyson WR1, Tyler Forness has Lemon WR1. But the *dynasty community* ADP currently favors Tate or Tyson — Lemon is the contrarian pick. Arguing FOR the underdog generates more engagement than arguing against the favorite, because people who agree feel validated and people who disagree feel compelled to respond.
+
+**2. The data case for Lemon is genuinely strong — not just cherry-picked.**
+
+- 91.4 PFF Receiving Grade — **1st among 94 qualified WRs** in 2025
+- 3.13 Yards Per Route Run — **1st in the class** (89th percentile historically)
+- One of only 6 WRs in the last 5 seasons to clear 3.0 YPRR against BOTH man and zone coverage
+- 1,156 receiving yards (3rd), 50 first downs (1st), 21 missed tackles forced (3rd)
+- Won the Biletnikoff Award over Jeremiah Smith and Skyler Bell
+- Sophomore-to-junior leap: 52 catches/764 yards/3 TDs → 79 catches/1,156 yards/11 TDs
+
+This isn't a "trust me bro" take. It's a "here are 6 metrics that all point the same direction" take. That's exactly what Razzle's Lab is built for.
+
+**3. The Ohio State tax is a real debate trigger.**
+
+One Roto Street Journal analysis explicitly identified an "imaginary tax" on Tate because Jeremiah Smith is his teammate — people assume Tate is elite because Smith is elite. Calling this out with data (Lemon's per-game efficiency > Tate's) is the kind of "you've been thinking about this wrong" framing that drives Reddit engagement.
+
+**Why not the other potential takes?**
+
+- **"Mendoza is overvalued in SF"** — Decent debate, but the community already knows he lacks rushing upside. Too consensus-adjacent. Not contrarian enough.
+- **"Love isn't worth 1.01"** — Too hot. He's the Doak Walker winner, Heisman finalist, and consensus 1.01 everywhere. Arguing against Love looks uninformed, not contrarian. The data would need to be overwhelming, and it isn't.
+- **"RB2 doesn't matter — fade all RBs after Love"** — True but boring. Doesn't generate screenshots or debate, just agreement.
+
+**Which Lab view produces the best screenshot?**
+
+The **Lab Screener in College mode** is the weapon here. The screenshot should show:
+
+- **Universe**: College (2025 season)
+- **Position filter**: WR
+- **Columns**: Player, School, Games, Rec/G, Yards/G, YPR, TDs, Yards Per Route Run (if available), PFF Grade (if available)
+- **Sort**: By Yards/G or a composite metric descending
+- **Heat coloring ON** (H key) — so Lemon's cells glow orange/green at the top while Tate's and Tyson's are cooler
+
+The key visual: Lemon's row should have the most orange/green cells across efficiency metrics, while Tate and Tyson have more mixed coloring. The heat map tells the story at a glance — even before reading the analysis.
+
+**Alternative screenshot**: The **Rookie Big Board** (`/prospects.html`) with RPS tiers showing Lemon's composite score, but this is less compelling because the RPS score includes combine measurables and draft capital that may not favor Lemon yet (pre-draft). The raw efficiency data in the Lab screener is the stronger visual.
+
+---
+
+### Self-Critique
+
+1. **Strong confidence on the take selection.** The 3-way WR1 debate is confirmed by multiple sources (PFF, Roto Street Journal, Draft Sharks, FantasyPros, TWSN) as the primary dynasty discourse point in March 2026. Lemon's data advantage is real and multi-metric, not cherry-picked.
+
+2. **The PFF data (91.4 grade, 3.13 YPRR) is from PFF's own reporting**, not my projection. However, I cannot confirm whether Razzle's database includes PFF grades or YPRR — it depends on whether nflverse or cfbfastR expose these metrics. The Lab screener definitely has receptions, yards, TDs, and per-game rates. PFF-specific grades would need to be verified against the actual college data in terminal.db.
+
+3. **The "Tate is riding the Jeremiah Smith halo" angle is specifically called out in the Roto Street Journal analysis** — this isn't my invention. It's an existing undercurrent that Razzle can crystallize with data.
+
+4. **Landing spot risk**: The NFL Draft (April 24) is 5 days after the planned first post (April 19). If Lemon lands in a terrible situation, the take ages poorly fast. But that's actually GOOD — it creates a reason for a follow-up post ("Vol. 2: How the Draft Changed Everything").
+
+5. **I haven't verified which specific columns Razzle's college mode screener exposes.** The memory says the Lab has College mode and 100+ columns, but the specific metrics available for WR comparison need to be confirmed against the actual frontend code.
+
+**Confidence: 8/10** — High confidence on take selection and debate potential. Medium confidence on the specific screenshot layout (depends on which college metrics are actually in the screener).
+
+Sources:
+- [Makai Lemon vs Carnell Tate vs Jordyn Tyson — Roto Street Journal](https://www.rotostreetjournal.com/2026/02/26/makai-lemon-vs-carnell-tate-vs-jordyn-tyson-who-is-the-best-wr-in-2026-dynasty-drafts/)
+- [Why USC's Makai Lemon is my early WR1 — PFF (Sikkema)](https://www.pff.com/news/draft-sikkema-usc-makai-lemon-early-wr1-2026-nfl-draft)
+- [Makai Lemon Dynasty Value — Draft Sharks](https://www.draftsharks.com/article/makai-lemon-dynasty-value)
+- [2026 Dynasty Rookie Rankings — Draft Sharks (Updated March 18)](https://www.draftsharks.com/article/2026-rookie-rankings)
+- [2026 Dynasty Rookie WR Rankings Post Combine — TWSN](https://twsn.net/2026/03/16/2026-dynasty-fantasy-football-wr-rankings-combine/)
+- [Battle for Top WR in 2026 NFL Draft — A to Z Sports](https://atozsports.com/nfl-draft/2026-nfl-draft-battle-to-be-the-top-wr-a-look-at-the-case-ohio-state-carnell-tate-arizona-state-jordyn-tyson-usc-makai-lemon/)
+- [Mike Clay's 2026 Rookie Rankings — ESPN](https://www.espn.com/fantasy/football/story/_/id/48100578/fantasy-football-rankings-2026-nfl-rookies-draft-preview)
+- [Mendoza Superflex Rankings — Draft Sharks](https://www.draftsharks.com/article/2026-superflex-rookie-rankings)
+- [Makai Lemon College Stats — Sports Reference](https://www.sports-reference.com/cfb/players/makai-lemon-1.html)
+- Prior journal: Q27 (first data drop format), Q13 (data drop concepts), Q10 (Reddit content strategy)
+
+### Implications for Razzle
+
+1. **The first data drop title**: `[OC] I analyzed 3 years of WR efficiency data and Makai Lemon is the clear WR1 of this class — here's why the Ohio State tax is fooling everyone`
+
+2. **The screenshot must show heat-colored per-game efficiency columns** with Lemon, Tate, and Tyson all visible. Lemon's row should visually dominate with warm colors. If the college screener doesn't have YPRR, use Yards/Rec, Rec/G, Yards/G, and TDs as the comparison metrics.
+
+3. **The post body should include a markdown table** comparing the Big 3 on 5-6 metrics, plus the full screenshot showing the broader class. The table is for skimmers; the screenshot is for credibility.
+
+4. **Prepare a follow-up "Vol. 2" post for April 25-26** (day after NFL Draft) that re-analyzes the same data with landing spot context. This turns one take into a two-part series.
+
+5. **Before the post, verify which college WR metrics are in terminal.db** and ensure the Lab screener can produce the exact screenshot described. If YPRR isn't available, the case still works with standard per-game stats — Lemon leads in Rec/G (6.6) and Yards/G (96.3) regardless.
+
+### Open Questions
+
+1. **How should the "Film Room Finds" series be structured across Weeks 5-8 to align with NFL Draft week (April 24) and rookie draft ADP shifts?**
+
+2. **What's the ideal watermark design — URL only, URL + logo, or URL + tagline — and where should it be positioned to maximize visibility without triggering spam reports?**
+
+3. **What specific college WR metrics does Razzle's Lab screener currently expose — and does the heat coloring work correctly in College mode for the Lemon vs Tate vs Tyson comparison?**
+
+## NEXT QUESTION: How should the "Film Room Finds" series be structured across Weeks 5-8 (April 19 through May 17) to align with NFL Draft week and rookie draft ADP shifts?
 
 ---
