@@ -1672,7 +1672,7 @@ def _fetch_player_boom_bust_uncached(player_id, season=0):
         # Position rank by consistency among same-position players
         all_pos_players = conn.execute("""
             SELECT s.player_id,
-                   AVG(s.fantasy_points_ppr) as avg_ppg,
+                   ROUND(AVG(s.fantasy_points_ppr), 1) as avg_ppg,
                    GROUP_CONCAT(s.fantasy_points_ppr) as scores_csv
             FROM player_week_stats s
             JOIN players p ON s.player_id = p.player_id
