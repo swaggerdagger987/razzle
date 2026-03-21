@@ -524,7 +524,7 @@
   /* ---- Render ---- */
   function render(data) {
     var c = document.getElementById('regContent');
-    if (!data.regression_up.length && !data.regression_down.length) {
+    if (!(data.regression_up || []).length && !(data.regression_down || []).length) {
       c.innerHTML = '<div class="reg-empty">no regression candidates found for this filter</div>';
       return;
     }

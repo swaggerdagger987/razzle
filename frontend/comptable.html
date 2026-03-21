@@ -393,19 +393,19 @@
     if (q.length < 2) { acList.style.display = 'none'; return; }
     acTimer = setTimeout(function() {
       fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
-        .then(function(r) { return r.ok ? r.json() : { players: [] }; })
+        .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(function(data) {
-          var players = data.players || [];
+          var players = Array.isArray(data) ? data : (data.players || []);
           if (!players.length) { acList.style.display = 'none'; return; }
           acIdx = -1;
           acList.innerHTML = players.map(function(p, i) {
             var pc = POS_COLORS[p.position] || '#8a7565';
             var already = selectedPlayers.some(function(s) { return s.id === p.player_id; });
             return '<div class="ct-ac-item"' + (already ? ' style="opacity:0.4"' : '') +
-              ' data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.name) +
+              ' data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) +
               '" data-pos="' + escapeHtml(p.position) + '" data-team="' + escapeHtml(p.team) +
               '" data-idx="' + i + '">' +
-              '<span>' + escapeHtml(p.name) + ' <span style="color:' + pc + ';font-weight:700;font-size:11px">' +
+              '<span>' + escapeHtml(p.full_name) + ' <span style="color:' + pc + ';font-weight:700;font-size:11px">' +
               escapeHtml(p.position) + '</span></span>' +
               '<span style="color:var(--ink-light)">' + escapeHtml(p.team) + '</span></div>';
           }).join('');
@@ -633,11 +633,12 @@
     var loaded = 0;
     pids.forEach(function(pid) {
       fetch('/api/players/quick-search?q=' + encodeURIComponent(pid) + '&limit=1')
-        .then(function(r) { return r.ok ? r.json() : { players: [] }; })
+        .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(function(data) {
-          var p = (data.players || [])[0];
+          var arr = Array.isArray(data) ? data : (data.players || []);
+          var p = arr[0];
           if (p) {
-            selectedPlayers.push({ id: p.player_id, name: p.name, position: p.position, team: p.team });
+            selectedPlayers.push({ id: p.player_id, name: p.full_name, position: p.position, team: p.team });
           }
           loaded++;
           if (loaded === pids.length) {

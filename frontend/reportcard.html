@@ -614,7 +614,7 @@
     currentData = data;
     var body = document.getElementById('rc-body');
 
-    if (!data || (!data.honor_roll.length && !data.needs_improvement.length)) {
+    if (!data || (!(data.honor_roll || []).length && !(data.needs_improvement || []).length)) {
       body.innerHTML = '<div class="rc-empty">no report card data found for this selection</div>';
       return;
     }

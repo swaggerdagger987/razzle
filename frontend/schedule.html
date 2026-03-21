@@ -590,7 +590,7 @@
     currentData = data;
     var body = document.getElementById('sos-body');
 
-    if (!data || (!data.schedule_suppressed.length && !data.schedule_inflated.length)) {
+    if (!data || (!(data.schedule_suppressed || []).length && !(data.schedule_inflated || []).length)) {
       body.innerHTML = '<div class="sos-empty">no strength of schedule data found for this selection</div>';
       return;
     }
