@@ -189,9 +189,23 @@ def fetch_players(
             elif _effective_sort in _sql_sortable:
                 sort_expr = f"SUM(s.{_effective_sort})"
 
+            # Count total (for pagination) — run before main query so we can
+            # use actual total as over-fetch limit for python-sorted queries
+            count_query = f"""
+                SELECT COUNT(DISTINCT p.player_id)
+                FROM players p
+                JOIN player_week_stats s ON p.player_id = s.player_id
+                WHERE {where_clause}
+            """
+            total = conn.execute(count_query, params).fetchone()[0]
+
             # Over-fetch when Python re-sort needed (derived stats require all rows)
-            sql_limit = max(limit + offset, 500) if _python_sort else limit
-            sql_offset = 0 if _python_sort else offset
+            if _python_sort:
+                sql_limit = min(total, 5000)
+                sql_offset = 0
+            else:
+                sql_limit = limit
+                sql_offset = offset
 
             query = f"""
                 SELECT
@@ -210,15 +224,6 @@ def fetch_players(
             params.extend([sql_limit, sql_offset])
 
             rows = conn.execute(query, params).fetchall()
-
-            # Count total (for pagination)
-            count_query = f"""
-                SELECT COUNT(DISTINCT p.player_id)
-                FROM players p
-                JOIN player_week_stats s ON p.player_id = s.player_id
-                WHERE {where_clause}
-            """
-            total = conn.execute(count_query, params[:-2]).fetchone()[0]
 
             items = [dict(r) for r in rows]
             _enrich_with_derived_stats(items)
@@ -450,6 +455,19 @@ def _fetch_screener_uncached(body):
         else:
             order_expr = f"SUM(s.{effective_sort})"
 
+        # Count total first — needed for python-sort over-fetch limit
+        count_query = f"""
+            SELECT COUNT(*) FROM (
+                SELECT p.player_id
+                FROM players p
+                JOIN player_week_stats s ON p.player_id = s.player_id
+                WHERE {where_clause}
+                GROUP BY p.player_id
+                {having_clause}
+            )
+        """
+        total = conn.execute(count_query, params).fetchone()[0]
+
         query = f"""
             SELECT
                 p.player_id, p.full_name, p.position, p.team, p.age, p.college, p.headshot_url,
@@ -468,7 +486,7 @@ def _fetch_screener_uncached(body):
         # When sorting by derived/rate metric or applying post-filters, fetch all matching
         # rows so Python sort/filter operates on complete dataset before pagination
         if python_sort or post_filters:
-            sql_limit = 2000
+            sql_limit = min(total, 5000)
             sql_offset = 0
         else:
             sql_limit = limit
@@ -476,20 +494,6 @@ def _fetch_screener_uncached(body):
         params.extend([sql_limit, sql_offset])
 
         rows = conn.execute(query, params).fetchall()
-
-        # Count
-        count_query = f"""
-            SELECT COUNT(*) FROM (
-                SELECT p.player_id
-                FROM players p
-                JOIN player_week_stats s ON p.player_id = s.player_id
-                WHERE {where_clause}
-                GROUP BY p.player_id
-                {having_clause}
-            )
-        """
-        count_params = params[:-2]  # exclude limit/offset
-        total = conn.execute(count_query, count_params).fetchone()[0]
 
         items = [dict(r) for r in rows]
         _enrich_with_derived_stats(items)
@@ -527,7 +531,6 @@ def _fetch_screener_uncached(body):
             reverse = sort_dir.lower() == "desc"
             _null_sentinel = float('-inf') if reverse else float('inf')
             items.sort(key=lambda x: x.get(sort_key) if x.get(sort_key) is not None else _null_sentinel, reverse=reverse)
-            total = len(items)
 
         # Apply pagination after post-filtering and Python re-sort
         if python_sort or post_filters:
