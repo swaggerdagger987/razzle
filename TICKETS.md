@@ -19,6 +19,28 @@ All tickets below implement the Agent Connective Tissue design. Full design doc:
 
 ---
 
+## Phase: P0 — League Intel Is Broken + Nav Names Changed Without Permission
+
+**PRIORITY: P0 — core product page is broken and brand names were changed.**
+
+### Task 1: Fix League Intel (Bureau of Intelligence)
+
+**Accept when**: league-intel.html fully works again — Sleeper connection flow, league loading, odds cards, self-scout, trade finder, all Bureau features functional. Test the full flow: enter a Sleeper username, select a league, see odds cards. If any step fails, fix it. This was working before the ship loop touched it.
+
+### Task 2: Restore original nav names
+
+The ship loop renamed the navigation tabs. The correct names are:
+
+- **"Fourth Down Lab"** (not "Lab" or "The Lab" or "Screener")
+- **"Bureau of Intelligence"** (not "Bureau" or "League Intel")
+- **"Situation Room"** (this one may be correct, verify)
+
+These are the BRAND NAMES. They are not suggestions. Do not rename them to be "self-describing" or "simpler." The names ARE the brand.
+
+**Accept when**: All navigation links, page titles, headers, and any references across the entire site use the exact names: "Fourth Down Lab", "Bureau of Intelligence", "Situation Room". Check: index.html nav, app.js nav builder, all page `<title>` tags, all H1/H2 headers, pricing page feature lists, any marketing copy. Grep for "League Intel", "The Lab", "AI Agents" and replace with the correct brand names.
+
+---
+
 ## Phase: P0 — Agent Presence Is Invisible (Ship Loop Claimed Done But Nothing Shows)
 
 **PRIORITY: P0 — the entire agent connective tissue design is not visible on the live site.**
