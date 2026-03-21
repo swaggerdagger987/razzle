@@ -1032,3 +1032,63 @@ prod-browser	OK	-	-	-	pass	Prod lab.html: 0 JS errors, 25 tbody rows, 607 player
 prod-browser	OK	-	-	-	pass	Prod panels (rankings/breakouts/tradevalues/efficiency/stocks/vorp/reportcard/opportunity/awards/consistency/schedule): all 21 rows, 0 JS errors	100	2026-03-20T20:56
 prod-browser	OK	-	-	-	pass	Prod index.html: 0 JS errors, 73 links+buttons. Pricing.html: 0 errors, 16 buttons. agents.html: 0 errors, 1 canvas.	100	2026-03-20T20:57
 prod-api	OK	-	-	-	pass	Prod 2024 QB stats verified: Lamar 430PPR/17GP/4INT/41TD, Burrow 372/17/9INT/43TD, Allen 372/16/6INT/28TD. Interceptions present and correct.	100	2026-03-20T20:57
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Single-season DB (2024) — switch test skipped
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=17gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+re-audit-32	OK	backend/live_data/core.py	316	_enrich_with_epa_per_play	pass	re-audit: WOPR/G fix code verified — AVG(stat_value) already per-game, no double-division	95	2026-03-20T21:30
+re-audit-35	OK	backend/live_data/core.py	593	_enrich_with_team_shares	pass	re-audit: team shares fix code verified — s.team (historical) replaces p.team (current)	95	2026-03-20T21:30
+re-audit-35	OK	backend/live_data/dashboards.py	925	fetch_opportunity_share	pass	re-audit: opportunity share team totals fix code verified — s.team + removed fantasy_relevant filter	95	2026-03-20T21:30
+re-audit-35	OK	backend/live_data/dashboards.py	1152	fetch_report_cards	pass	re-audit: report cards team totals fix code verified — s.team	95	2026-03-20T21:31
+re-audit-35	OK	backend/live_data/dashboards.py	1488	fetch_season_awards	pass	re-audit: awards team totals fix code verified — s.team	95	2026-03-20T21:31
+re-audit-36	OK	backend/live_data/dashboards.py	71	fetch_efficiency_rankings	pass	re-audit: YAC fix code verified — actual receiving_yards_after_catch replaces rec_yards-air_yards proxy	95	2026-03-20T21:31
+re-audit-44	OK	backend/live_data/core.py	232	_enrich_with_derived_stats	pass	re-audit: half-PPR falsy fix — hppr is None (not 'not hppr') preserves 0.0 values	95	2026-03-20T21:31
+re-audit-44	OK	backend/live_data/core.py	275	_enrich_with_derived_stats	pass	re-audit: STD fallback — PPR - receptions when fantasy_points_std is null	95	2026-03-20T21:31
+re-audit-60	OK	frontend/app.js	856	handleRegister	pass	re-audit: button text restored on validation errors + finally block	95	2026-03-20T21:32
+re-audit-4	OK	backend/live_data/players.py	486	_fetch_screener_uncached	pass	re-audit: null sentinel for derived sort — -inf/inf for None values, prevents wrong ordering	95	2026-03-20T21:32
+re-audit-4	OK	backend/live_data/players.py	429	_fetch_screener_uncached	pass	re-audit: sql_limit 500→2000 for derived metric sorts — ensures complete dataset for Python re-sort	90	2026-03-20T21:32
+prod-data	OK	-	-	-	pass	prod: Barkley PPR=232.3 matches manual calc (rush_yd*0.1+rush_td*6+rec*1+rec_yd*0.1+rec_td*6) exactly	100	2026-03-20T21:33
+prod-data	OK	-	-	-	pass	prod: Half-PPR = PPR - 0.5*receptions for all top 10 players (delta=0.0)	100	2026-03-20T21:33
+prod-data	OK	-	-	-	pass	prod: STD = PPR - receptions for all top 10 players (delta=0.0)	100	2026-03-20T21:34
+prod-data	OK	-	-	-	pass	prod: WOPR sort (descending) returns correct order — Wilson 0.925 > JSN 0.867 > St.Brown 0.746	100	2026-03-20T21:34
+prod-data	OK	-	-	-	pass	prod: target_share sort (desc) correct — JSN 0.357 > Wilson 0.354 > Chase 0.321	100	2026-03-20T21:34
+prod-data	OK	-	-	-	pass	prod: career mode aggregation correct — Wilson 2890.1 PPR/157GP/11 seasons	100	2026-03-20T21:35
+prod-data	OK	-	-	-	pass	prod: report cards GPA correct — CMC A (91pct), Robinson B+ (SOS=F, schedule-inflated)	100	2026-03-20T21:35
+prod-data	OK	-	-	-	pass	prod: dynasty dashboard — Nacua #1 TV (95.8), RB scarcity 9.3 PPG dropoff	100	2026-03-20T21:36
+prod-data	OK	-	-	-	pass	prod: matchup heatmap 32 teams, ARI RB 26.2 PPG allowed (rank 3)	100	2026-03-20T21:36
+prod-data	OK	-	-	-	pass	prod: season awards 10 categories — Allen MVP, Goff Most Efficient, Maye Iron Man	100	2026-03-20T21:36
+prod-pages	OK	-	-	-	pass	prod: 0 JS errors on lab.html, agents.html, league-intel.html, index.html	100	2026-03-20T21:37
+prod-pages	OK	-	-	-	pass	prod: 0 JS errors on breakouts, efficiency, consistency, stocks, vorp, awards	100	2026-03-20T21:37
+prod-pages	OK	-	-	-	pass	prod: 0 JS errors on tradevalues, tradefinder, rosterbuilder, cheatsheet	100	2026-03-20T21:37
+prod-pages	OK	-	-	-	pass	prod: 0 JS errors on Lab panel switch (?panel=rankings/tiers/tradevalues/breakouts/weeklyheatmap/dashboard/leaders)	100	2026-03-20T21:38
+prod-pages	P1	frontend/player.html	-	-	open	prod: FUNC-018 still broken — /player/00-0033280 returns 3 JS errors (MIME type text/html)	100	2026-03-20T21:38
+prod-perf	OK	-	-	-	info	prod: derived metric sort ~1.4s vs SQL sort ~0.4s — sql_limit 2000 may increase to ~3-5s	80	2026-03-20T21:39
