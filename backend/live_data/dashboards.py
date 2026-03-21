@@ -923,7 +923,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
             tt_week_filter = "AND s.week = ?" if _week > 0 else ""
             tt_params = [_season, _week] if _week > 0 else [_season]
             tt_rows = conn.execute(f"""
-                SELECT p.team,
+                SELECT s.team,
                        COALESCE(SUM(s.targets), 0),
                        COALESCE(SUM(s.carries), 0),
                        COALESCE(SUM(s.receiving_yards), 0),
@@ -937,7 +937,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   {tt_week_filter}
-                GROUP BY p.team
+                GROUP BY s.team
             """, tt_params).fetchall()
             for tr in tt_rows:
                 t = team_totals[tr[0] or "FA"]
@@ -1152,7 +1152,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
             tt_week_filter = "AND s.week = ?" if _week > 0 else ""
             tt_params = [_season, _week] if _week > 0 else [_season]
             tt_rows = conn.execute(f"""
-                SELECT p.team,
+                SELECT s.team,
                        COALESCE(SUM(s.targets), 0),
                        COALESCE(SUM(s.carries), 0),
                        COALESCE(SUM(s.receiving_yards), 0),
@@ -1165,7 +1165,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                   AND p.position IN ('QB', 'RB', 'WR', 'TE')
                   AND p.fantasy_relevant = 1
                   {tt_week_filter}
-                GROUP BY p.team
+                GROUP BY s.team
             """, tt_params).fetchall()
             for tr in tt_rows:
                 t = team_totals[tr[0] or "FA"]

@@ -246,7 +246,7 @@ def fetch_heatmap(position="WR", group="production", season=None):
                 d["yards_per_reception"] = _safe_div(d.get("receiving_yards") or 0, d.get("receptions"), 1)
                 d["yards_per_target"] = _safe_div(d.get("receiving_yards") or 0, d.get("targets"), 1)
                 d["catch_rate"] = _safe_div((d.get("receptions") or 0) * 100, d.get("targets"), 1)
-                d["snap_pct"] = None  # will be filled from rate metrics
+                d["snap_pct"] = round(d.get("offense_pct") or 0, 1) or None
                 all_players.append(d)
 
             # Enrich with rate metrics from player_week_metrics

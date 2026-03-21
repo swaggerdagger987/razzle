@@ -944,7 +944,7 @@ const state = {
   sortDir: "desc",
   sortKey2: "",
   sortDir2: "desc",
-  limit: (function() { try { var v = parseInt(localStorage.getItem("razzle_page_size")); return [25,50,100,200].includes(v) ? v : 25; } catch(e) { return 25; } })(),
+  limit: 25,
   offset: 0,
   filters: [],
   teams: [],    // selected team abbreviations for team filter

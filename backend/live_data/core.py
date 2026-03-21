@@ -313,9 +313,9 @@ def _enrich_with_epa_per_play(items):
             item["epa_per_play"] = round(total_epa / total_plays, 3)
         else:
             item["epa_per_play"] = None
-        # WOPR per game (wopr is populated by _enrich_with_rate_metrics)
+        # WOPR per game (wopr from _enrich_with_rate_metrics is already AVG per game)
         wopr_val = item.get("wopr")
-        item["wopr_per_game"] = round(wopr_val / g, 3) if wopr_val and g > 0 else None
+        item["wopr_per_game"] = round(wopr_val, 3) if wopr_val else None
     return items
 
 
@@ -593,14 +593,13 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False, week=0
 
     if career_mode:
         team_query = f"""
-            SELECT p.team,
+            SELECT s.team,
                    SUM(s.receiving_yards) as team_rec_yds,
                    SUM(s.receiving_tds) as team_rec_tds,
                    SUM(s.carries) as team_carries
-            FROM players p
-            JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE p.team IN ({team_placeholders}) AND s.season_type = 'regular'
-            GROUP BY p.team
+            FROM player_week_stats s
+            WHERE s.team IN ({team_placeholders}) AND s.season_type = 'regular'
+            GROUP BY s.team
         """
         team_rows = conn.execute(team_query, team_list).fetchall()
         team_map = {}
@@ -614,14 +613,13 @@ def _enrich_with_team_shares(conn, items, season=None, career_mode=False, week=0
         week = _safe_int(week)
         week_clause = " AND s.week = ?" if week > 0 else ""
         team_query = f"""
-            SELECT p.team,
+            SELECT s.team,
                    SUM(s.receiving_yards) as team_rec_yds,
                    SUM(s.receiving_tds) as team_rec_tds,
                    SUM(s.carries) as team_carries
-            FROM players p
-            JOIN player_week_stats s ON p.player_id = s.player_id
-            WHERE p.team IN ({team_placeholders}) AND s.season = ? AND s.season_type = 'regular'{week_clause}
-            GROUP BY p.team
+            FROM player_week_stats s
+            WHERE s.team IN ({team_placeholders}) AND s.season = ? AND s.season_type = 'regular'{week_clause}
+            GROUP BY s.team
         """
         team_params = team_list + [s] + ([week] if week > 0 else [])
         team_rows = conn.execute(team_query, team_params).fetchall()

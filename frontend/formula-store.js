@@ -219,7 +219,7 @@ async function installFormula(formulaId) {
     // Add to installed list
     if (!storeState.installed.includes(formulaId)) {
       storeState.installed.push(formulaId);
-      localStorage.setItem("razzle_store_installed", JSON.stringify(storeState.installed));
+      try { localStorage.setItem("razzle_store_installed", JSON.stringify(storeState.installed)); } catch (e) {}
     }
 
     // Convert stat_weights to components format
@@ -237,7 +237,7 @@ async function installFormula(formulaId) {
         fromStore: true,
         storeId: formulaId
       });
-      localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas));
+      try { localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas)); } catch (e) {}
 
       // Register column
       const key = `formula_${formula.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
@@ -266,11 +266,11 @@ function uninstallFormula(formulaId) {
   if (!formula) return;
 
   storeState.installed = storeState.installed.filter(id => id !== formulaId);
-  localStorage.setItem("razzle_store_installed", JSON.stringify(storeState.installed));
+  try { localStorage.setItem("razzle_store_installed", JSON.stringify(storeState.installed)); } catch (e) {}
 
   // Remove from user formulas
   state.formulas = state.formulas.filter(f => f.name !== formula.name);
-  localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas));
+  try { localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas)); } catch (e) {}
 
   const key = `formula_${formula.name.toLowerCase().replace(/[^a-z0-9]/g, "_")}`;
   if (typeof COLUMNS !== "undefined") delete COLUMNS[key];
@@ -372,7 +372,7 @@ async function submitPublish() {
   if (!positions.length) positions.push("QB", "RB", "WR", "TE");
 
   // Save creator name for future
-  localStorage.setItem("razzle_store_username", creator);
+  try { localStorage.setItem("razzle_store_username", creator); } catch (e) {}
 
   // Check duplicate
   if (isFormulaPublished(name)) {
