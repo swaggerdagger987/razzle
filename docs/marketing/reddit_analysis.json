@@ -1,0 +1,957 @@
+{
+  "generated_at": "2026-03-20T23:16:55.303359",
+  "data_summary": {
+    "total_posts": 275,
+    "total_comments": 655,
+    "subreddits": {
+      "DynastyFF": 135,
+      "SleeperApp": 120,
+      "fantasyfootball": 20
+    }
+  },
+  "pain_points": {
+    "counts": {
+      "injury_concern": 170,
+      "aging_decline": 122,
+      "prospect_research": 42,
+      "rookie_draft": 39,
+      "data_analysis": 27,
+      "rebuild_contend": 20,
+      "tool_complaints": 5,
+      "league_management": 5,
+      "trade_confusion": 5,
+      "waiver_wire": 4,
+      "value_uncertainty": 4
+    },
+    "examples": {
+      "trade_confusion": [
+        {
+          "title": "Made this fake calculator to mess with my friends when proposing trade offers - no matter what you p",
+          "score": 1297,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1mqi21k/made_this_fake_calculator_to_mess_with_my_friends/"
+        },
+        {
+          "title": "Made this fake calculator to mess with my friends when proposing trade offers - no matter what you p",
+          "score": 1298,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1mqi21k/made_this_fake_calculator_to_mess_with_my_friends/"
+        },
+        {
+          "title": "Dolphins Not Listening to Trade Offers for De'Von Achane [Schefter]",
+          "score": 64,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rxg44i/dolphins_not_listening_to_trade_offers_for_devon/"
+        },
+        {
+          "title": "I think this is a fair trade right?",
+          "score": 872,
+          "sub": "SleeperApp",
+          "url": "https://www.reddit.com/r/SleeperApp/comments/1ocm536/i_think_this_is_a_fair_trade_right/"
+        }
+      ],
+      "start_sit": [],
+      "waiver_wire": [
+        {
+          "title": "Dynasty Commissioner Help: Trade partner backed out of a confirmed deal citing \"injury concerns.\"",
+          "score": 553,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rr4wud/dynasty_commissioner_help_trade_partner_backed/"
+        },
+        {
+          "title": "Create Your League's Own Pro-Football-Reference In Minutes!",
+          "score": 35,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rxbiz9/create_your_leagues_own_profootballreference_in/"
+        },
+        {
+          "title": "Collusion or Roster Management?",
+          "score": 512,
+          "sub": "SleeperApp",
+          "url": "https://www.reddit.com/r/SleeperApp/comments/1o4whg7/collusion_or_roster_management/"
+        }
+      ],
+      "rookie_draft": [
+        {
+          "title": "Dynasty Trade Grades: Volume 7",
+          "score": 3,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz58ra/dynasty_trade_grades_volume_7/"
+        },
+        {
+          "title": "Sadly, you can’t hit a home run on every pick in a rebuild",
+          "score": 1268,
+          "sub": "SleeperApp",
+          "url": "https://www.reddit.com/r/SleeperApp/comments/1oeb0ci/sadly_you_cant_hit_a_home_run_on_every_pick_in_a/"
+        },
+        {
+          "title": "Ashton Jeanty. To. The. Moon.",
+          "score": 1123,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1k14l4q/ashton_jeanty_to_the_moon/"
+        },
+        {
+          "title": "The most traded dynasty asset in the past 7 days on sleeper is.... the 2026 1.06?",
+          "score": 114,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rywzd7/the_most_traded_dynasty_asset_in_the_past_7_days/"
+        },
+        {
+          "title": "Should I push to contend or should I wait another year",
+          "score": 3,
+          "sub": "SleeperApp",
+          "url": "https://www.reddit.com/r/SleeperApp/comments/1rz9oc3/should_i_push_to_contend_or_should_i_wait_another/"
+        }
+      ],
+      "value_uncertainty": [
+        {
+          "title": "Jon Gruden interviewing Dart pre-draft:\"I want you to change your playstyle...it's reckless, it's ca",
+          "score": 685,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1oui28a/jon_gruden_interviewing_dart_predrafti_want_you/"
+        },
+        {
+          "title": "My fantasy superpower is podcasts",
+          "score": 76,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1ryinma/my_fantasy_superpower_is_podcasts/"
+        }
+      ],
+      "tool_complaints": [
+        {
+          "title": "Dynasty Trade Grades: Volume 7",
+          "score": 3,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz58ra/dynasty_trade_grades_volume_7/"
+        },
+        {
+          "title": "Jon Gruden interviewing Dart pre-draft:\"I want you to change your playstyle...it's reckless, it's ca",
+          "score": 685,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1oui28a/jon_gruden_interviewing_dart_predrafti_want_you/"
+        },
+        {
+          "title": "Chuba Hubbard is a real time example of how challenging RB value can be in dynasty",
+          "score": 663,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1olqys5/chuba_hubbard_is_a_real_time_example_of_how/"
+        },
+        {
+          "title": "Dynasty Trade Grades: Volume 7",
+          "score": 4,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz58ra/dynasty_trade_grades_volume_7/"
+        },
+        {
+          "title": "Romeo Doubs vs Michael Wilson",
+          "score": 33,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1ry7edv/romeo_doubs_vs_michael_wilson/"
+        }
+      ],
+      "league_management": [
+        {
+          "title": "Official: [Index] - For All Your Team/League Questions - February 2026",
+          "score": 8,
+          "sub": "fantasyfootball",
+          "url": "https://www.reddit.com/r/fantasyfootball/comments/1qt3dxe/official_index_for_all_your_teamleague_questions/"
+        },
+        {
+          "title": "Dynasty Commissioner Help: Trade partner backed out of a confirmed deal citing \"injury concerns.\"",
+          "score": 553,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rr4wud/dynasty_commissioner_help_trade_partner_backed/"
+        },
+        {
+          "title": "Create Your League's Own Pro-Football-Reference In Minutes!",
+          "score": 35,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rxbiz9/create_your_leagues_own_profootballreference_in/"
+        },
+        {
+          "title": "@Jsonan2 is a scammer",
+          "score": 932,
+          "sub": "SleeperApp",
+          "url": "https://www.reddit.com/r/SleeperApp/comments/1nyowdu/jsonan2_is_a_scammer/"
+        },
+        {
+          "title": "Collusion or Roster Management?",
+          "score": 512,
+          "sub": "SleeperApp",
+          "url": "https://www.reddit.com/r/SleeperApp/comments/1o4whg7/collusion_or_roster_management/"
+        }
+      ],
+      "rebuild_contend": [
+        {
+          "title": "Dynasty Trade Grades: Volume 7",
+          "score": 3,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz58ra/dynasty_trade_grades_volume_7/"
+        },
+        {
+          "title": "Sadly, you can’t hit a home run on every pick in a rebuild",
+          "score": 1268,
+          "sub": "SleeperApp",
+          "url": "https://www.reddit.com/r/SleeperApp/comments/1oeb0ci/sadly_you_cant_hit_a_home_run_on_every_pick_in_a/"
+        },
+        {
+          "title": "Dynasty Trade Grades: Volume 7",
+          "score": 4,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz58ra/dynasty_trade_grades_volume_7/"
+        },
+        {
+          "title": "I created a draft assistance tool",
+          "score": 8,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rygi22/i_created_a_draft_assistance_tool/"
+        },
+        {
+          "title": "When will you run your rookie draft? (2026 timing options)",
+          "score": 14,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rx878h/when_will_you_run_your_rookie_draft_2026_timing/"
+        }
+      ],
+      "prospect_research": [
+        {
+          "title": "It’s been three months and 21 days since Jordyn Tyson last played a game. According to Dane Brugler,",
+          "score": 84,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rzekxf/its_been_three_months_and_21_days_since_jordyn/"
+        },
+        {
+          "title": "Chris Bell Dolittle Score",
+          "score": 35,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz9zvr/chris_bell_dolittle_score/"
+        },
+        {
+          "title": "It's official - Kenyon Sadiq posts a 4.39 to earn the title of fastest 40 ever run by a TE at the Co",
+          "score": 778,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rgoxwu/its_official_kenyon_sadiq_posts_a_439_to_earn_the/"
+        },
+        {
+          "title": "Why is there still no clue about what team will sign Njoku? (Also what teams need a TE and are likel",
+          "score": 24,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1ryx4hk/why_is_there_still_no_clue_about_what_team_will/"
+        },
+        {
+          "title": "2026 NFL Draft — WRs w/ 2.5+ Career Yards Per Route Run vs Both Zone and Man Coverage",
+          "score": 50,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1ryztan/2026_nfl_draft_wrs_w_25_career_yards_per_route/"
+        }
+      ],
+      "data_analysis": [
+        {
+          "title": "What the data says about Woody Marks outlook in 2026 and beyond",
+          "score": 38,
+          "sub": "fantasyfootball",
+          "url": "https://www.reddit.com/r/fantasyfootball/comments/1rz5ol4/what_the_data_says_about_woody_marks_outlook_in/"
+        },
+        {
+          "title": "Is JSN having the most consistent WR season ever?",
+          "score": 1300,
+          "sub": "SleeperApp",
+          "url": "https://www.reddit.com/r/SleeperApp/comments/1p5v0k7/is_jsn_having_the_most_consistent_wr_season_ever/"
+        },
+        {
+          "title": "Why is there still no clue about what team will sign Njoku? (Also what teams need a TE and are likel",
+          "score": 24,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1ryx4hk/why_is_there_still_no_clue_about_what_team_will/"
+        },
+        {
+          "title": "2026 NFL Draft — WRs w/ 2.5+ Career Yards Per Route Run vs Both Zone and Man Coverage",
+          "score": 50,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1ryztan/2026_nfl_draft_wrs_w_25_career_yards_per_route/"
+        },
+        {
+          "title": "After endless debates, Kenneth Walker and Zach Charbonnet finished with an IDENTICAL fantasy PPG mar",
+          "score": 1233,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1pyr9fl/after_endless_debates_kenneth_walker_and_zach/"
+        }
+      ],
+      "injury_concern": [
+        {
+          "title": "What the data says about Woody Marks outlook in 2026 and beyond",
+          "score": 38,
+          "sub": "fantasyfootball",
+          "url": "https://www.reddit.com/r/fantasyfootball/comments/1rz5ol4/what_the_data_says_about_woody_marks_outlook_in/"
+        },
+        {
+          "title": "TY Hilton has announced his retirement from the NFL",
+          "score": 824,
+          "sub": "fantasyfootball",
+          "url": "https://www.reddit.com/r/fantasyfootball/comments/1rxgpvn/ty_hilton_has_announced_his_retirement_from_the/"
+        },
+        {
+          "title": "It’s been three months and 21 days since Jordyn Tyson last played a game. According to Dane Brugler,",
+          "score": 84,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rzekxf/its_been_three_months_and_21_days_since_jordyn/"
+        },
+        {
+          "title": "Chris Bell Dolittle Score",
+          "score": 35,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz9zvr/chris_bell_dolittle_score/"
+        },
+        {
+          "title": "Dynasty Trade Grades: Volume 7",
+          "score": 3,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz58ra/dynasty_trade_grades_volume_7/"
+        }
+      ],
+      "aging_decline": [
+        {
+          "title": "Chris Bell Dolittle Score",
+          "score": 35,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz9zvr/chris_bell_dolittle_score/"
+        },
+        {
+          "title": "Dynasty Trade Grades: Volume 7",
+          "score": 3,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz58ra/dynasty_trade_grades_volume_7/"
+        },
+        {
+          "title": "Trade Addicts Podcast Dynasty AMA",
+          "score": 11,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rz3ldf/trade_addicts_podcast_dynasty_ama/"
+        },
+        {
+          "title": "Rondale Moore dies at 25.",
+          "score": 500,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1rb8w6p/rondale_moore_dies_at_25/"
+        },
+        {
+          "title": "Top 60 Dynasty Fantasy Football Tight End Rankings: Post-Free Agency",
+          "score": 25,
+          "sub": "DynastyFF",
+          "url": "https://www.reddit.com/r/DynastyFF/comments/1ryw2f0/top_60_dynasty_fantasy_football_tight_end/"
+        }
+      ]
+    }
+  },
+  "top_content": {
+    "top_50": [
+      {
+        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
+        "score": 7289,
+        "flair": null,
+        "comments": 325,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
+        "score": 6556,
+        "flair": null,
+        "comments": 726,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
+        "score": 6219,
+        "flair": "Another 49ers Practice Update",
+        "comments": 1595,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
+        "score": 5589,
+        "flair": "Player Discussion",
+        "comments": 330,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Pollard to the Pats is a done deal",
+        "score": 5531,
+        "flair": "Misleading",
+        "comments": 1209,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Rome Odunze in a BARNBURNER 47-42 win against the Bengals: 0 receptions on 3 targets and 0 total yards.",
+        "score": 5031,
+        "flair": "Player Discussion",
+        "comments": 596,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "RIP my best friend",
+        "score": 4963,
+        "flair": null,
+        "comments": 237,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Ja'Marr Chase had a career-high THREE tackles to go along with his 2-TD, 110-yard game",
+        "score": 4734,
+        "flair": null,
+        "comments": 164,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Ja’Marr Chase broke his own Bengals franchise record for catches in a game. Chase - 16 catches, 161 yards, TD on 23 targ",
+        "score": 4532,
+        "flair": null,
+        "comments": 586,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "BREAKING: Maxx Crosby has left the building after the Raiders informed him they want to shut him down the last two games",
+        "score": 4358,
+        "flair": null,
+        "comments": 675,
+        "sub": "fantasyfootball"
+      },
+      {
+        "title": "Wow: An NFL assistant coach on Shedeur Sanders, via @TomPelissero “The worst formal interview I’ve ever been in in my li",
+        "score": 2248,
+        "flair": ":NFL: News",
+        "comments": 286,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Wow: An NFL assistant coach on Shedeur Sanders, via @TomPelissero “The worst formal interview I’ve ever been in in my li",
+        "score": 2246,
+        "flair": ":NFL: News",
+        "comments": 286,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Huge trade just went down in our league",
+        "score": 1714,
+        "flair": ":Sleeper2: Dynasty",
+        "comments": 53,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Huge trade just went down in our league",
+        "score": 1713,
+        "flair": ":Sleeper2: Dynasty",
+        "comments": 53,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "What a difference an hour makes",
+        "score": 1668,
+        "flair": "Player Discussion",
+        "comments": 112,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "What a difference an hour makes",
+        "score": 1666,
+        "flair": "Player Discussion",
+        "comments": 112,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Why is skattebos portrait like this whilst everyone else is the same? lol",
+        "score": 1541,
+        "flair": ":Sleeper2: Discussion",
+        "comments": 82,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Why is skattebos portrait like this whilst everyone else is the same? lol",
+        "score": 1537,
+        "flair": ":Sleeper2: Discussion",
+        "comments": 82,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Sleeper - please don’t turn IR players to questionable unless they have actually practiced",
+        "score": 1407,
+        "flair": ":Sleeper2: APP/Tech Assistance",
+        "comments": 167,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Sleeper - please don’t turn IR players to questionable unless they have actually practiced",
+        "score": 1404,
+        "flair": ":Sleeper2: APP/Tech Assistance",
+        "comments": 167,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Colston Loveland had more receiving yards in his first playoff game than Travis Kelce ever had in a playoff game",
+        "score": 1364,
+        "flair": "Player Discussion",
+        "comments": 166,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Colston Loveland had more receiving yards in his first playoff game than Travis Kelce ever had in a playoff game",
+        "score": 1363,
+        "flair": "Player Discussion",
+        "comments": 166,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "How many fantasy points if this happened today?",
+        "score": 1307,
+        "flair": ":Sleeper2: Discussion",
+        "comments": 117,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "How many fantasy points if this happened today?",
+        "score": 1305,
+        "flair": ":Sleeper2: Discussion",
+        "comments": 117,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Is JSN having the most consistent WR season ever?",
+        "score": 1304,
+        "flair": ":Sleeper2: Discussion",
+        "comments": 249,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Is JSN having the most consistent WR season ever?",
+        "score": 1300,
+        "flair": ":Sleeper2: Discussion",
+        "comments": 249,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Made this fake calculator to mess with my friends when proposing trade offers - no matter what you put on each side, the",
+        "score": 1298,
+        "flair": "Tools and Resources",
+        "comments": 63,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Made this fake calculator to mess with my friends when proposing trade offers - no matter what you put on each side, the",
+        "score": 1297,
+        "flair": "Tools and Resources",
+        "comments": 63,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Sadly, you can’t hit a home run on every pick in a rebuild",
+        "score": 1273,
+        "flair": ":Sleeper2: Dynasty",
+        "comments": 69,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Sadly, you can’t hit a home run on every pick in a rebuild",
+        "score": 1268,
+        "flair": ":Sleeper2: Dynasty",
+        "comments": 69,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Ekeler: Saluting a PPR legend",
+        "score": 1259,
+        "flair": "Player Discussion",
+        "comments": 106,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Ekeler: Saluting a PPR legend",
+        "score": 1259,
+        "flair": "Player Discussion",
+        "comments": 106,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "After endless debates, Kenneth Walker and Zach Charbonnet finished with an IDENTICAL fantasy PPG mark (10.1) this season",
+        "score": 1240,
+        "flair": "Player Discussion",
+        "comments": 192,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "After endless debates, Kenneth Walker and Zach Charbonnet finished with an IDENTICAL fantasy PPG mark (10.1) this season",
+        "score": 1233,
+        "flair": "Player Discussion",
+        "comments": 192,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "The impossible has happened. A tie for both Points and League Median",
+        "score": 1188,
+        "flair": ":Sleeper2: Discussion",
+        "comments": 110,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "The impossible has happened. A tie for both Points and League Median",
+        "score": 1185,
+        "flair": ":Sleeper2: Discussion",
+        "comments": 110,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Is that a bad trade for me? I would be receiving the entire lions defense.",
+        "score": 1159,
+        "flair": ":Sleeper2: Fantasy Advice",
+        "comments": 44,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Is that a bad trade for me? I would be receiving the entire lions defense.",
+        "score": 1159,
+        "flair": ":Sleeper2: Fantasy Advice",
+        "comments": 44,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "YOU DEVS ARE RUINING THE APP",
+        "score": 1152,
+        "flair": ":Sleeper2: Breaking News",
+        "comments": 192,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "YOU DEVS ARE RUINING THE APP",
+        "score": 1148,
+        "flair": ":Sleeper2: Breaking News",
+        "comments": 192,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "[TheBlockSpot] Jaxson Dart. 1st Rd QB. HC fired. Cam Ward. 1st Rd QB. HC fired. Caleb Williams. 1st Rd QB. HC fired. Dra",
+        "score": 1134,
+        "flair": "Player Discussion",
+        "comments": 187,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "[TheBlockSpot] Jaxson Dart. 1st Rd QB. HC fired. Cam Ward. 1st Rd QB. HC fired. Caleb Williams. 1st Rd QB. HC fired. Dra",
+        "score": 1128,
+        "flair": "Player Discussion",
+        "comments": 187,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Ashton Jeanty. To. The. Moon.",
+        "score": 1123,
+        "flair": ":NFL: News",
+        "comments": 161,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Ashton Jeanty. To. The. Moon.",
+        "score": 1117,
+        "flair": ":NFL: News",
+        "comments": 161,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Jameson Williams has scored more than 16.6 or less than 6.6 in each game this season (PPR)",
+        "score": 1095,
+        "flair": ":Sleeper2: NFL/Player News ",
+        "comments": 25,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Jameson Williams has scored more than 16.6 or less than 6.6 in each game this season (PPR)",
+        "score": 1088,
+        "flair": ":Sleeper2: NFL/Player News ",
+        "comments": 25,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "Mike McDaniel and Jim Harbaugh just walked into our hotel",
+        "score": 1062,
+        "flair": ":NFL: News",
+        "comments": 188,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Mike McDaniel and Jim Harbaugh just walked into our hotel",
+        "score": 1054,
+        "flair": ":NFL: News",
+        "comments": 188,
+        "sub": "DynastyFF"
+      },
+      {
+        "title": "Josh Allen - 1st Woman Starting QB",
+        "score": 1052,
+        "flair": ":Sleeper2: Discussion",
+        "comments": 106,
+        "sub": "SleeperApp"
+      },
+      {
+        "title": "BRO IS NOT QUESTIONABLE HE IS OUT",
+        "score": 1045,
+        "flair": ":Sleeper2: Breaking News",
+        "comments": 30,
+        "sub": "SleeperApp"
+      }
+    ],
+    "flair_avg_score": {
+      "Another 49ers Practice Update": 6219.0,
+      "Misleading": 5531.0,
+      "No Flair": 3136.909090909091,
+      ":Sleeper2: APP/Tech Assistance": 1122.0,
+      ":Sleeper2: Breaking News": 964.5,
+      ":Sleeper2: Discussion": 860.96875,
+      ":Sleeper2: Fantasy Advice": 846.8,
+      ":Sleeper2: NFL/Player News ": 789.6,
+      "Speculation": 741.0,
+      ":NFL: News": 716.2352941176471,
+      "League Discussion": 682.6666666666666,
+      "Player Discussion": 572.9350649350649,
+      "Help!": 557.0,
+      "Satire": 553.0,
+      "Tools and Resources": 458.625,
+      ":NFL: Injury Report": 292.3333333333333,
+      "Dynasty Theory": 180.85714285714286,
+      ":Sleeper2: Dynasty": 159.9344262295082,
+      "Dynasty": 40.0,
+      "Daily Thread": 8.0
+    },
+    "flair_counts": {
+      "Player Discussion": 77,
+      ":Sleeper2: Dynasty": 61,
+      ":NFL: News": 34,
+      ":Sleeper2: Discussion": 32,
+      "No Flair": 11,
+      "Tools and Resources": 8,
+      "Dynasty Theory": 7,
+      "🔥 Megathread": 6,
+      ":Sleeper2: Fantasy Advice": 5,
+      ":Sleeper2: NFL/Player News ": 5,
+      ":Sleeper2: Misc Discussion": 4,
+      ":Sleeper2: Breaking News": 4,
+      ":NFL: Injury Report": 3,
+      ":Sleeper2: APP/Tech Assistance": 3,
+      "League Discussion": 3,
+      ":Sleeper2: Mod Announcement": 2,
+      ":Sleeper2: Player Discussion": 2,
+      "Speculation": 1,
+      "Misleading": 1,
+      "Another 49ers Practice Update": 1
+    },
+    "image_post_count": 178,
+    "total_posts": 275
+  },
+  "language": {
+    "top_players_mentioned": [
+      [
+        "Malik Willis",
+        15
+      ],
+      [
+        "Kyler Murray",
+        12
+      ],
+      [
+        "Trade Addicts",
+        12
+      ],
+      [
+        "Isaiah Likely",
+        11
+      ],
+      [
+        "Bhayshul Tuten",
+        9
+      ],
+      [
+        "Colston Loveland",
+        9
+      ],
+      [
+        "Jordyn Tyson",
+        8
+      ],
+      [
+        "Makai Lemon",
+        8
+      ],
+      [
+        "Von Achane",
+        8
+      ],
+      [
+        "Jaylen Waddle",
+        8
+      ],
+      [
+        "Drake London",
+        8
+      ],
+      [
+        "Cam Ward",
+        8
+      ],
+      [
+        "Josh Allen",
+        7
+      ],
+      [
+        "Kenneth Walker",
+        7
+      ],
+      [
+        "Trevor Lawrence",
+        7
+      ],
+      [
+        "Chris Bell",
+        6
+      ],
+      [
+        "Elijah Sarratt",
+        6
+      ],
+      [
+        "Follow Fantasy",
+        6
+      ],
+      [
+        "Puka Nacua",
+        6
+      ],
+      [
+        "Bijan Robinson",
+        6
+      ],
+      [
+        "Dynasty Fantasy",
+        6
+      ],
+      [
+        "Individual Team",
+        6
+      ],
+      [
+        "Help Megathread",
+        6
+      ],
+      [
+        "Daily Trade",
+        6
+      ],
+      [
+        "Team Help",
+        6
+      ],
+      [
+        "Zay Flowers",
+        5
+      ],
+      [
+        "Marvin Harrison",
+        5
+      ],
+      [
+        "James Cook",
+        5
+      ],
+      [
+        "Rome Odunze",
+        5
+      ],
+      [
+        "Free Agency",
+        5
+      ]
+    ],
+    "fantasy_term_frequency": {
+      "dynasty": 224,
+      "ppr": 73,
+      "sf": 44,
+      "sleeper": 38,
+      "tep": 33,
+      "superflex": 32,
+      "data": 22,
+      "playoff": 16,
+      "bust": 15,
+      "rebuild": 15,
+      "championship": 12,
+      "redraft": 10,
+      "startup": 8,
+      "stats": 7,
+      "breakout": 6,
+      "league mate": 5,
+      "keeper": 4,
+      "half ppr": 4,
+      "metrics": 4,
+      "waiver wire": 3,
+      "contender": 3,
+      "target share": 2,
+      "decline": 2,
+      "group chat": 2,
+      "standard": 1,
+      "trade calculator": 1,
+      "faab": 1,
+      "cliff": 1,
+      "regression": 1,
+      "analytics": 1,
+      "leaguemate": 1
+    }
+  },
+  "tool_sentiment": {
+    "KeepTradeCut": {
+      "positive": [
+        "Dynasty Trade Grades: Volume 7 Another week has passed, and with free agency settling in, I took a look at more trades involving some big names that made moves this offseason. It feels like there are",
+        "Chuba Hubbard is a real time example of how challenging RB value can be in dynasty Before I write anything, I have no shares of Hubbard. \n\nChuba Hubbard received 4th round draft capital (not great, no",
+        "Dynasty Trade Grades: Volume 7 Another week has passed, and with free agency settling in, I took a look at more trades involving some big names that made moves this offseason. It feels like there are"
+      ],
+      "negative": [],
+      "neutral": 1
+    },
+    "FantasyPros": {
+      "positive": [
+        "Jon Gruden interviewing Dart pre-draft:\"I want you to change your playstyle...it's reckless, it's careless, it's dangerous...You're going to be in that concussion protocol tent and I'm going to be hol"
+      ],
+      "negative": [
+        "Yeah, and they got rid of the fantasy pros and other team analysis apps that were in the side of your profile. It sucks because I loved checking out the power rankings and so on for my different leagu"
+      ],
+      "neutral": 0
+    },
+    "ESPN": {
+      "positive": [],
+      "negative": [],
+      "neutral": 0
+    },
+    "Yahoo": {
+      "positive": [
+        "Create Your League's Own Pro-Football-Reference In Minutes! Site (no login required): [https://www.leaguehistory.app](https://www.leaguehistory.app)\n\nDemo league: [https://www.leaguehistory.app/demo\\_"
+      ],
+      "negative": [
+        "My fantasy superpower is podcasts After years of wandering though so much bad advice on twitter and reddit, I realized how much expert analysis podcasts give you that costs hundreds if you want to rea"
+      ],
+      "neutral": 1
+    },
+    "Sleeper": {
+      "positive": [],
+      "negative": [],
+      "neutral": 0
+    },
+    "Dynasty Nerds": {
+      "positive": [],
+      "negative": [],
+      "neutral": 5
+    },
+    "Dynasty Process": {
+      "positive": [],
+      "negative": [],
+      "neutral": 0
+    },
+    "PlayerProfiler": {
+      "positive": [],
+      "negative": [],
+      "neutral": 0
+    }
+  }
+}
