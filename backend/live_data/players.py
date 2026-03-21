@@ -740,7 +740,7 @@ def _fetch_player_profile_uncached(player_id):
                          "passing_first_downs", "rushing_first_downs", "receiving_first_downs",
                          "sacks_taken", "sack_yards_lost", "fumbles", "fumbles_lost",
                          "offense_snaps"]:
-                career[key] = sum(s.get(key) or 0 for s in seasons)
+                career[key] = round(sum(s.get(key) or 0 for s in seasons), 1)
             career["seasons"] = len(seasons)
             _enrich_with_derived_stats([career])
 
