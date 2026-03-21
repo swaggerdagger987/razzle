@@ -89,19 +89,18 @@ function screenshotPanel(panelName) {
     useCORS: true,
     logging: false
   }).then(function(canvas) {
-    // Add watermark with shareable URL
+    // Add watermark with random character + shareable URL
     var ctx = canvas.getContext('2d');
-    var wmAlpha = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
-    ctx.fillStyle = wmAlpha;
-    ctx.textAlign = 'right';
-    ctx.font = '600 28px Caveat, cursive';
-    ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 30);
-    // Add current URL below domain
     try { if (typeof saveStateToURL === 'function') saveStateToURL(); } catch(e) {}
-    var _wmUrl = window.location.href.replace(/^https?:\/\//, '');
-    if (_wmUrl.length > 60) _wmUrl = _wmUrl.substring(0, 57) + '...';
-    ctx.font = '400 16px "Space Mono", monospace';
-    ctx.fillText(_wmUrl, canvas.width - 20, canvas.height - 12);
+    if (typeof drawRazzleWatermark === 'function') {
+      drawRazzleWatermark(ctx, canvas, { url: window.location.href, isDark: _t.isDark });
+    } else {
+      var wmAlpha = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
+      ctx.fillStyle = wmAlpha;
+      ctx.textAlign = 'right';
+      ctx.font = '600 28px Caveat, cursive';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 30);
+    }
     // Download
     var link = document.createElement('a');
     var date = new Date().toISOString().slice(0, 10);
@@ -160,9 +159,18 @@ var _skeletonHTML = '';
 function _resetLoadingSkeleton(el) {
   if (!_skeletonHTML) _skeletonHTML = el.innerHTML;
   if (!el.querySelector('.skeleton-table')) el.innerHTML = _skeletonHTML;
+  // Agent-voiced loading text
+  var lt = el.querySelector('#loadingText');
+  if (lt && typeof getLoadingText === 'function') {
+    lt.textContent = getLoadingText('screener');
+  }
 }
 function _setLoadingError(el, msg) {
-  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + escapeHtml(msg) + '</div>';
+  var errorMsg = msg;
+  if (!msg && typeof getErrorText === 'function') {
+    errorMsg = getErrorText('screener');
+  }
+  el.innerHTML = '<div style="text-align:center; font-family:var(--font-hand); font-size:22px; color:var(--ink-light); padding:40px 20px;">' + escapeHtml(errorMsg) + '</div>';
 }
 function _highlightSearch(escaped) {
   if (!state.search) return escaped;
@@ -1314,7 +1322,7 @@ async function fetchAndRenderNFL(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast('fumbled the data fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the data fetch... try again');
     // Keep previous table data visible — don't clear tbody
     renderTable();
     updateResultCount();
@@ -1361,7 +1369,7 @@ async function fetchAndRenderProspects(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast('fumbled the prospect fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the prospect fetch... try again');
     renderTable();
     updateResultCount();
   }
@@ -1407,7 +1415,7 @@ async function fetchAndRenderCollege(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast('fumbled the college data fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the college data fetch... try again');
     renderTable();
     updateResultCount();
   }
@@ -1520,9 +1528,11 @@ function renderTableHead() {
     const lockCls = _getTierLockClass(key);
     const cls = [sortCls, lockCls].filter(Boolean).join(" ");
     const tierLabel = lockCls === "elite-locked" ? " [Elite]" : lockCls === "pro-locked" ? " [Pro]" : "";
-    // Build tooltip with optional column stats
+    // Build tooltip with optional column stats + agent attribution
     let tipText = col.tip || col.label;
     if (tierLabel) tipText += tierLabel;
+    var colAgent = typeof getColumnAgent === 'function' ? getColumnAgent(key) : null;
+    if (colAgent) tipText += '\n' + colAgent.name + ' \u2014 ' + colAgent.role;
     if (!col.isText && !col.isSparkline && !col.isNotes && state.items.length > 0) {
       const vals = [];
       for (const p of state.items) { const v = parseFloat(p[key]); if (!isNaN(v)) vals.push(v); }
@@ -1923,7 +1933,7 @@ function renderTableBody() {
   _expandedRows = {};
   const tbody = document.getElementById("tableBody");
   const cols = getActiveColumns();
-  const emptyMsg = razzleEmpty();
+  const emptyMsg = typeof getEmptyText === 'function' ? getEmptyText('screener') : razzleEmpty();
 
   if (!state.items.length) {
     _vscrollRows = [];
@@ -3546,7 +3556,7 @@ const SMART_FILTERS = {
     label: "Breakout Candidates",
     filters: [
       { key: "age", op: "lte", value: 25 },
-      { key: "snap_share", op: "gte", value: 0.5 },
+      { key: "snap_share", op: "gte", value: 50 },
     ],
     minGP: 6,
   },
@@ -3575,7 +3585,7 @@ const SMART_FILTERS = {
   workhorses: {
     label: "Workhorses",
     filters: [
-      { key: "snap_share", op: "gte", value: 0.65 },
+      { key: "snap_share", op: "gte", value: 65 },
       { key: "targets_per_game", op: "gte", value: 4 },
     ],
     minGP: 6,
@@ -3584,7 +3594,7 @@ const SMART_FILTERS = {
     label: "Sleepers",
     filters: [
       { key: "ppg", op: "lte", value: 12 },
-      { key: "snap_share", op: "gte", value: 0.4 },
+      { key: "snap_share", op: "gte", value: 40 },
     ],
     minGP: 4,
   },
