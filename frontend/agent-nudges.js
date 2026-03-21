@@ -113,6 +113,15 @@ var AGENT_NUDGES = [
   },
 ];
 
+// ─── Inject keyframes (once) ────────────────────────────────────────
+(function() {
+  if (document.getElementById("agent-nudge-keyframes")) return;
+  var s = document.createElement("style");
+  s.id = "agent-nudge-keyframes";
+  s.textContent = "@keyframes nudgeFadeIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }";
+  document.head.appendChild(s);
+})();
+
 // ─── Session State ──────────────────────────────────────────────────
 var _nudgeSessionKey = "razzle_nudge_session";
 var _nudgeDismissKey = "razzle_nudge_dismissed";
