@@ -2978,6 +2978,9 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 |---|-----|----------|-------|-------|
 | 1 | Player popup `games_played` → `games` field mismatch | P2 | app.js:1754 | Player popup (openPlayerPopup) read `stats.games_played` for GP stat, but profile API returns `games`. GP never displayed in popup. |
 | 2 | Season cutoff `>= 6` (July) → `>= 8` (September) | P2 | advantage.html, fptsbreakdown.html, pace.html, streaks.html | 4 pages used July cutoff while canonical _latestSeason uses September. Would break in Jul/Aug by trying to load non-existent current-year data. |
+| 3 | comptable.html quick-search response shape mismatch | P1 | comptable.html | API returns flat array, code expected `{players:[]}`. Autocomplete was completely broken — never showed results. Also `p.name` → `p.full_name` (blank names). URL init had same bug. |
+| 4 | 7 pages: `.length` on undefined API arrays | P1 | consistency, efficiency, opportunity, stocks, schedule, reportcard, regression | `data.x.length` crashes with TypeError if API returns partial response. Fixed with `(data.x \|\| []).length` guards. |
+| 5 | draftclass.html null guards | P1 | draftclass.html | `d.summary` and `d.players` accessed without null checks. Added `\|\| {}` and `\|\| []` guards. |
 
 ### Verified Clean (manual sweep + 4 parallel agents)
 - 11/11 smoke tests pass
