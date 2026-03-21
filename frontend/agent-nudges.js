@@ -180,7 +180,7 @@ function checkNudges(pageName, containerId) {
   // Elite-only
   if (typeof getUserTierInfo !== "function") return;
   var tier = getUserTierInfo();
-  if (!tier || tier.tier !== "elite") return;
+  if (!tier || !tier.isElite) return;
 
   // Session cap: max 5
   if (_getNudgeCount() >= 5) return;

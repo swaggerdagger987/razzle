@@ -394,9 +394,9 @@
     if (q.length < 2) { acList.style.display = 'none'; return; }
     acTimer = setTimeout(function() {
       fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
-        .then(function(r) { return r.ok ? r.json() : { players: [] }; })
+        .then(function(r) { return r.ok ? r.json() : []; })
         .then(function(data) {
-          var players = data.players || [];
+          var players = Array.isArray(data) ? data : (data.players || []);
           if (!players.length) { acList.style.display = 'none'; return; }
           acIdx = -1;
           acList.innerHTML = players.map(function(p, i) {

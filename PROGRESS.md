@@ -3003,3 +3003,38 @@ All data enrichments (PBP, roster demographics, bye weeks, injuries) are local-o
 - boom-bust `games_played` field is internally consistent (API + frontend) — not changed
 - All season cutoffs now consistently use `>= 8` (September) — 0 remaining `>= 6` or `>= 7`
 - All f-string SQL in prospects.py uses hardcoded column names from dicts/whitelists — no injection risk
+
+---
+
+## Ship Loop Session 33: 3-Agent Parallel Sweep (Mar 21)
+
+**Goal**: Ticket directories empty, TICKETS.md blocked on external infrastructure. 3-agent parallel sweep (backend, frontend, HTML panels).
+
+### QA Results Review
+- FUNC-002 (search hyphens/apostrophes) and FUNC-005 (dominators rec_yd_share null) — both work correctly in our codebase, were production deployment gaps
+
+### Fixes Applied (10 bugs across 9 files)
+
+| # | Fix | Severity | Files | Notes |
+|---|-----|----------|-------|-------|
+| 1 | Division by zero on `len(all_wts)` in prospect size benchmarks | P0 | prospects.py:851 | `/ len(all_wts)` → `/ max(len(all_wts), 1)`. Empty weight list = ZeroDivisionError crash on prospect scoring. |
+| 2 | Division by zero on `len(rps_values)` in draft class summary | P0 | prospects.py:916 | `/ len(rps_values)` → `/ max(len(rps_values), 1)`. Also added `p.get("rps") is not None` filter. |
+| 3 | Agent nudges never fire — wrong property check | P1 | agent-nudges.js:183 | `tier.tier !== "elite"` → `!tier.isElite`. getUserTierInfo() returns `{isElite: bool}`, not `{tier: "elite"}`. All 12 cross-product nudges were silently disabled. |
+| 4 | Career page autocomplete broken — wrong API response shape | P1 | career.html:543 | `data.players \|\| []` → `Array.isArray(data) ? data : (data.players \|\| [])`. /api/players/quick-search returns flat array, not {players:[]}. |
+| 5 | Career compare autocomplete broken — same issue | P1 | career-compare.html:529 | Same fix as #4. |
+| 6 | Game log autocomplete broken — same issue | P1 | gamelog.html:397-399 | Same fix as #4. Also fixed error fallback from `{players:[]}` to `[]`. |
+| 7 | Percentiles page autocomplete broken — same issue | P1 | percentiles.html:423 | Same fix as #4. |
+| 8 | Canvas `.toFixed()` crash on null ppg in career chart | P1 | career.html:919 | `seasons[di].ppg.toFixed(1)` → `(seasons[di].ppg \|\| 0).toFixed(1)` |
+| 9 | Canvas `.toFixed()` crash on null ppg in career compare chart | P1 | career-compare.html:852 | `sorted[di].ppg.toFixed(1)` → `(sorted[di].ppg \|\| 0).toFixed(1)` |
+| 10 | Canvas `.toFixed()` crash on null avg_ppg in draft class chart | P1 | draftclass.html:641 | `r.avg_ppg.toFixed(1)` → `(r.avg_ppg \|\| 0).toFixed(1)` |
+
+### Triaged (not fixing)
+- DOM null dereference in modal open/close functions (formulas.js, charts.js, lab.js): These elements exist in lab.html which always loads these JS files. Not reachable in production.
+- Rate limiter thread safety: GIL provides sufficient protection for CPython dict operations. Slight over-count under high concurrency is acceptable.
+- Screener POST cache key size: Capped at 100 entries max, body limited to 1MB.
+
+### Verified Clean
+- 11/11 smoke tests pass
+- All 14 JS files syntax clean (node --check)
+- All Python files compile clean
+- 0 regressions

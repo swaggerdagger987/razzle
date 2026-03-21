@@ -420,7 +420,7 @@
       fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
         .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
         .then(function(data) {
-          var players = data.players || [];
+          var players = Array.isArray(data) ? data : (data.players || []);
           if (players.length === 0) { dropdown.style.display = 'none'; return; }
           var html = '';
           for (var i = 0; i < players.length; i++) {

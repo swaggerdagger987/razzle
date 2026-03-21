@@ -540,7 +540,7 @@
     fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
       .then(function(r) { if (!r.ok) throw new Error('search failed'); return r.json(); })
       .then(function(data) {
-        var players = data.players || [];
+        var players = Array.isArray(data) ? data : (data.players || []);
         if (players.length === 0) { hideDropdown(); return; }
         dropdownItems = players;
         highlightIdx = -1;
@@ -916,7 +916,7 @@
       ctx.fillStyle = t.ink;
       ctx.font = 'bold 12px "Space Mono", monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(seasons[di].ppg.toFixed(1), dx, dy - 12);
+      ctx.fillText((seasons[di].ppg || 0).toFixed(1), dx, dy - 12);
     }
 
     // Y-axis label
