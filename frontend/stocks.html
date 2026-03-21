@@ -518,9 +518,13 @@
       } else if (col.key === 'ppg') {
         html += '<td class="' + classes.join(' ') + '" style="font-weight:700;">' + fmt(p.ppg) + '</td>';
       } else if (col.key === 'efficiency_grade' || col.key === 'consistency_grade' || col.key === 'sos_grade') {
-        var g = p[col.key] || 'C';
+        var g = p[col.key];
         html += '<td class="' + classes.join(' ') + '">';
-        html += '<span class="stk-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span>';
+        if (g) {
+          html += '<span class="stk-grade-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span>';
+        } else {
+          html += '<span class="stk-grade-badge" style="opacity:0.5;">-</span>';
+        }
         html += '</td>';
       } else if (col.key === 'stock_delta') {
         var d = p.stock_delta || 0;

@@ -515,9 +515,13 @@
         html += '<span class="rc-gpa-badge ' + gradeClass(g) + '">' + escapeHtml(g) + '</span>';
         html += '</td>';
       } else if (col.key === 'efficiency_grade' || col.key === 'consistency_grade' || col.key === 'sos_grade') {
-        var gr = p[col.key] || 'C';
+        var gr = p[col.key];
         html += '<td class="' + classes.join(' ') + '">';
-        html += '<span class="rc-grade ' + gradeClass(gr) + '">' + escapeHtml(gr) + '</span>';
+        if (gr) {
+          html += '<span class="rc-grade ' + gradeClass(gr) + '">' + escapeHtml(gr) + '</span>';
+        } else {
+          html += '<span class="rc-grade" style="opacity:0.5;">-</span>';
+        }
         html += '</td>';
       } else if (col.key === 'stock_score') {
         var ss = p.stock_score || 0;

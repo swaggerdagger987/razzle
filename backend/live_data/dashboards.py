@@ -187,8 +187,9 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
             for i, p in enumerate(most_efficient):
                 p["annotation"] = _EFFICIENCY_ANNOTATIONS[i % len(_EFFICIENCY_ANNOTATIONS)]
 
-            # Volume Kings: most opportunities (with grade for context)
-            volume_kings = sorted(players, key=lambda x: x["opportunities"], reverse=True)[:limit]
+            # Volume Kings: most opportunities — exclude QBs (pass attempts aren't comparable to touches)
+            non_qb = [p for p in players if p["position"] != "QB"]
+            volume_kings = sorted(non_qb, key=lambda x: x["opportunities"], reverse=True)[:limit]
             for i, p in enumerate(volume_kings):
                 p["annotation"] = _VOLUME_ANNOTATIONS[i % len(_VOLUME_ANNOTATIONS)]
 
@@ -814,17 +815,22 @@ def fetch_stock_watch(season=None, position=None, limit=30):
 
             for p in players:
                 ppg_pct = percentile_rank(p["ppg"], ppg_sorted, n_total)
-                ppo_pct = percentile_rank(p["ppo"], ppo_vals, n_ppo) if p["ppo"] is not None else 50
+                has_ppo = p["ppo"] is not None
+                ppo_pct = percentile_rank(p["ppo"], ppo_vals, n_ppo) if has_ppo else None
                 # Inverse CoV: lower CoV = better, so count values ABOVE
-                cov_pct = (sum(1 for v in cov_vals if v > p["cov"]) / n_cov * 100) if p["cov"] is not None and n_cov > 0 else 50
+                has_cov = p["cov"] is not None and n_cov > 0
+                cov_pct = (sum(1 for v in cov_vals if v > p["cov"]) / n_cov * 100) if has_cov else 50
                 sos_pct = percentile_rank(p["sos_delta"], sos_sorted, n_sos)
 
-                # Composite stock score: 25% each
-                stock_score = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
+                # Composite stock score: redistribute weight when PPO missing
+                if ppo_pct is not None:
+                    stock_score = round(ppo_pct * 0.25 + cov_pct * 0.25 + sos_pct * 0.25 + ppg_pct * 0.25)
+                else:
+                    stock_score = round(cov_pct * 0.333 + sos_pct * 0.333 + ppg_pct * 0.334)
 
                 p["stock_score"] = stock_score
                 p["ppg_pct"] = round(ppg_pct)
-                p["efficiency_grade"] = grade_from_percentile(ppo_pct)
+                p["efficiency_grade"] = grade_from_percentile(ppo_pct) if ppo_pct is not None else None
                 p["consistency_grade"] = grade_from_percentile(cov_pct)
                 p["sos_grade"] = grade_from_percentile(sos_pct)
                 # Stock delta: positive = undervalued (stock > production rank)
