@@ -13,9 +13,81 @@ The database file `data/terminal.db` uses WAL journal mode locally. Uploading it
 
 ---
 
-## DESIGN REFERENCE
+## PRIORITY ORDER
 
-All tickets below implement the Agent Connective Tissue design. Full design doc: `docs/plans/2026-03-20-agent-connective-tissue-design.md`. Read it before starting any ticket.
+Tickets are executed top-to-bottom. P0 CEO fixes first (front door is broken), then autoresearch (self-improvement flywheel), then agent layers, then features.
+
+Design doc: `docs/plans/2026-03-20-agent-connective-tissue-design.md`
+CEO tickets: `razzle-ceo/tickets/ceo/` (full BEFORE/AFTER specs in each file)
+
+---
+
+## Phase: P0 CEO Fix — Landing Page Hero (Sell the Screener, Not AI)
+
+**PRIORITY: P0 — actively losing conversions.**
+**CEO ticket**: `razzle-ceo/tickets/ceo/20260320-200001-001-landing-hero-screener-first.md` (read for full BEFORE/AFTER)
+
+The hero headline "ChatGPT doesn't know your league. Razzle does." positions Razzle as an AI competitor. The Screener is the front door. The hero should sell the free research lab, not win an argument against ChatGPT. The ChatGPT line belongs in the Bureau/Situation Room sections lower on the page.
+
+### Task 1: Rewrite landing page hero to sell the Screener
+
+**Accept when**: The hero headline sells the free Screener (e.g., "The fantasy football research lab. Forever free."). The ChatGPT comparison line moves to the Bureau section lower on the page. Primary CTA is "Open the Screener" (large, prominent). Secondary CTA is "Connect your league" (smaller, below). The subheadline communicates: free tool, real data, no signup required.
+
+---
+
+## Phase: P0 CEO Fix — Live Mini-Screener on Landing Page
+
+**PRIORITY: P0 — static mockup gets zero screenshots.**
+**CEO ticket**: `razzle-ceo/tickets/ceo/20260320-200002-002-landing-live-screener-embed.md`
+
+The landing page shows a static mockup of fake player rows. Nobody screenshots a picture of a tool — they screenshot the tool itself. Replace the mockup with a live, interactive mini-screener showing real data from the API.
+
+### Task 1: Build live mini-screener component for landing page
+
+**Accept when**: The landing page hero section (or immediately below it) contains a live mini-screener that: fetches real player data from `/api/players`, shows top 15-20 players with 4-5 visible columns (name, position, PPG, target share, fantasy points), is sortable by clicking column headers, uses the same Razzle design language as the full Lab screener (sand background, position colors, Space Mono data), includes a "Open the full Screener" CTA below. The mini-screener is responsive (stacks cleanly on mobile).
+
+---
+
+## Phase: P0 CEO Fix — Landing Page Section Order
+
+**PRIORITY: P0 — front-loads paid features before demonstrating value.**
+**CEO ticket**: `razzle-ceo/tickets/ceo/20260320-200003-003-landing-section-order-funnel.md`
+
+The landing page should follow the conversion funnel: free value first, paid features second.
+
+### Task 1: Reorder landing page sections to match conversion funnel
+
+**Accept when**: Landing page sections in this order: (1) Hero selling Screener + live mini-screener, (2) "What you get for free" section (Screener features, formula builder, export), (3) "Connect your league" section (Bureau teaser — championship odds, roster analysis), (4) "Meet the team" section (6 agents, Situation Room preview), (5) Pricing, (6) Footer. More space given to free features (sections 1-2) than paid features (sections 3-4).
+
+---
+
+## Phase: P0 CEO Fix — Bureau Demo Mode for Non-Sleeper Users
+
+**PRIORITY: P0 — ESPN/Yahoo users see a brick wall.**
+**CEO ticket**: `razzle-ceo/tickets/ceo/20260320-200007-007-bureau-sleeper-only-wall.md`
+
+The Bureau is a dead end for non-Sleeper users. ESPN/Yahoo shows "Coming soon" with no fallback. Add a demo mode with sample league data and an email capture for ESPN/Yahoo waitlist.
+
+### Task 1: Build Bureau demo mode with sample league data
+
+**Accept when**: Non-Sleeper users see two options on the Bureau page: (1) Connect Sleeper (existing flow), (2) "Try with a sample league" button that loads a pre-built demo league with realistic data. The demo league shows all Bureau features (odds cards, self-scout, trade finder) with sample data so users understand the value before connecting their own league. Demo data is clearly labeled "Sample League" so users know it's not their data.
+
+### Task 2: ESPN/Yahoo email capture
+
+**Accept when**: Below the Sleeper connection, ESPN/Yahoo sections show an email input: "Drop your email. We'll notify you when ESPN/Yahoo support launches." Emails stored in users.db. No timeline promised. Styled as a Razzle card with warm copy (not corporate).
+
+---
+
+## Phase: P0 CEO Fix — Bureau League Odds Above the Fold
+
+**PRIORITY: P0 — most screenshot-worthy feature is hidden.**
+**CEO ticket**: `razzle-ceo/tickets/ceo/20260320-200013-013-bureau-league-odds-above-fold.md`
+
+After connecting a Sleeper league, championship/playoff odds should be the FIRST thing visible — not buried behind a "League Odds" button. This is the most screenshot-worthy, group-chat-shareable element in the product.
+
+### Task 1: Make league odds the default Bureau view after connecting
+
+**Accept when**: After a user connects their Sleeper league and expands a league card, the default view shows Monte Carlo championship/playoff odds cards for all managers. Each card shows: manager name, record, championship %, playoff %. Sorted by championship probability (highest first). The current roster/standings/activity views are accessible via tabs but NOT the default. The odds cards are the "I need this" moment — they should be immediate.
 
 ---
 
@@ -136,6 +208,113 @@ This config is the single source of truth for where agents appear. The autoresea
 
 ---
 
+## Phase: Autoresearch Engine — Synthetic User Simulation (PRIORITY: SELF-IMPROVEMENT)
+
+**Context**: Build the Playwright + LLM persona simulation engine that generates synthetic user journeys to pre-optimize agent placement, copy, and timing. This is the foundation of the autoresearch self-improvement loop. WITHOUT THIS, the agents never learn. This is what turns the conveyor belt into a flywheel.
+
+**Design ref**: `docs/plans/2026-03-20-agent-connective-tissue-design.md` — Section "Autoresearch Self-Improvement Engine"
+
+**Exit criterion**: 20+ user personas defined. Simulation runner executes full site journeys via Playwright with Sonnet making navigation decisions. All interactions instrumented and logged.
+
+### Task 1: Create user persona definitions
+
+**Accept when**: `self-improvement/personas/` directory contains 20+ JSON persona files. Each defines:
+```json
+{
+  "id": "dynasty-veteran",
+  "description": "Plays in 5 dynasty leagues, trades weekly, data-obsessed, knows advanced stats",
+  "experience": "expert",
+  "league_format": "dynasty",
+  "behavior": "power_user",
+  "goals": ["find trade targets", "evaluate prospects", "optimize roster"],
+  "patience": "high",
+  "upgrade_likelihood": "medium",
+  "session_length": "long"
+}
+```
+Personas span: dynasty veteran, redraft casual, first-timer, trade junkie, data nerd, lurker, mobile-only, prospect obsessed, weekly grinder, commissioner, IDP enthusiast, DFS crossover, podcast listener, spreadsheet migrator, group chat screenshot sharer, auction league player, keeper league player, best ball player, superflex player, TE premium player.
+
+### Task 2: Build simulation runner
+
+**Accept when**: `self-improvement/simulate.py` runs a single simulated user journey:
+1. Launches Playwright browser pointed at localhost (or razzle.lol)
+2. Takes a screenshot at each navigation step
+3. Sends screenshot + persona context to Sonnet via Claude API
+4. Sonnet responds with the next action (click element, scroll, hover, navigate, leave)
+5. Executes the action, captures the result
+6. Logs every interaction to `self-improvement/simulation-log.jsonl`
+7. Continues until persona "leaves" (Sonnet decides session is over) or max 50 steps
+8. Supports running N sessions per persona via CLI args: `python simulate.py --persona dynasty-veteran --sessions 50`
+
+### Task 3: Build instrumentation layer
+
+**Accept when**: The simulation runner captures these metrics per interaction:
+- Agent callout impressions (which agent callouts were visible on screen)
+- Agent callout clicks (which were engaged with)
+- Agent callout dismissals (which were explicitly closed)
+- Hover duration on any element with agent attribution
+- Navigation path (ordered list of pages/panels visited)
+- Time-on-page per page/panel
+- Conversion events (detected by page transitions: pricing page visit, checkout page visit)
+- Feature discovery (which panels/tools were found and used)
+- Session depth (total pages visited)
+- Session duration (total simulated time)
+All logged to `simulation-log.jsonl` with consistent schema.
+
+### Task 4: Build batch runner
+
+**Accept when**: `self-improvement/run_batch.py` orchestrates a full simulation cycle:
+1. Reads all persona files from `self-improvement/personas/`
+2. Runs N sessions per persona (configurable, default 50)
+3. Parallelizes across personas (configurable concurrency)
+4. Aggregates results into `self-improvement/batch-results.json`
+5. CLI: `python run_batch.py --sessions-per-persona 50 --concurrency 4`
+
+---
+
+## Phase: Autoresearch Engine — Self-Reflection Loop (PRIORITY: SELF-IMPROVEMENT)
+
+**Context**: After simulation data is collected, each agent independently analyzes their own performance and updates their placement/copy/timing config. Razzle then synthesizes cross-agent strategy. All analysis runs on Opus except the simulation sessions themselves (Sonnet).
+
+**Design ref**: `docs/plans/2026-03-20-agent-connective-tissue-design.md` — Loops 2, 3, and 4
+
+**Exit criterion**: Each agent produces insights and updated config. Razzle produces cross-agent strategy. Peer review catches issues. Updated config deploys to frontend.
+
+### Task 1: Build per-agent self-reflection runner
+
+**Accept when**: `self-improvement/reflect.py` runs self-reflection for one agent:
+1. Reads `simulation-log.jsonl` filtered to that agent's placements
+2. Calculates: CTR per placement, CTR per copy variant, engagement by persona type, timing patterns
+3. Sends data + agent persona to Opus via Claude API
+4. Agent writes insights, placement config, copy variants, and timing rules
+5. CLI: `python reflect.py --agent dolphin` or `python reflect.py --all`
+
+### Task 2: Build Razzle strategy session
+
+**Accept when**: `self-improvement/strategize.py` runs Razzle's cross-agent synthesis:
+1. Reads all 6 agents' insight files and placement configs
+2. Sends to Opus with Razzle's persona + strategy prompt
+3. Razzle writes `self-improvement/razzle-strategy.md` and `self-improvement/cross-agent-stitching.json`
+4. CLI: `python strategize.py`
+
+### Task 3: Build peer review runner
+
+**Accept when**: `self-improvement/peer_review.py` runs peer review:
+1. Each agent reviews one other agent's proposed changes
+2. Reviewer checks for: brand drift, spam creep, territory cannibalization
+3. Flagged items go to Razzle for arbitration
+4. CLI: `python peer_review.py`
+
+### Task 4: Build config deployment
+
+**Accept when**: `self-improvement/deploy_config.py` merges approved configs into `frontend/agent-config-optimized.json`, bumps versions, logs to `optimization-log.tsv`. Frontend reads optimized config at runtime, falls back to defaults.
+
+### Task 5: Build full autoresearch cycle runner
+
+**Accept when**: `self-improvement/run_cycle.py` orchestrates one complete cycle: simulate → reflect → strategize → peer review → deploy → log. Optional `--auto-revert` flag reverts if metrics regress.
+
+---
+
 ## Phase: Agent Presence — Layer 2 Domain Ownership (Pro Tier)
 
 **Context**: For Pro users, agents become more visible. Panel groups in the Lab sidebar get agent attribution. Agent-voiced contextual one-liners appear at the top of panels. The locked Situation Room shows pixel agents walking around with a demo briefing peekable.
@@ -224,157 +403,6 @@ Selects the single most relevant nudge and renders it. If no nudge is relevant, 
 ### Task 4: Situation Room callbacks
 
 **Accept when**: When agents respond in the Situation Room (warroom.js briefing output), they reference data the user has seen elsewhere. Implementation: read Lab context from localStorage and Bureau context (connected league) and inject references into the agent system prompt. Example additions to system prompt: "The user has been looking at [player] in the Lab. Their injury status is [status]. Reference this if relevant — say 'You saw the durability flag in the Lab.'" This makes agent responses feel continuous with the rest of the product.
-
----
-
-## Phase: Autoresearch Engine — Synthetic User Simulation
-
-**Context**: Build the Playwright + LLM persona simulation engine that generates synthetic user journeys to pre-optimize agent placement, copy, and timing. This is the foundation of the autoresearch self-improvement loop.
-
-**Design ref**: `docs/plans/2026-03-20-agent-connective-tissue-design.md` — Section "Autoresearch Self-Improvement Engine"
-
-**Exit criterion**: 20+ user personas defined. Simulation runner executes full site journeys via Playwright with Sonnet making navigation decisions. All interactions instrumented and logged.
-
-### Task 1: Create user persona definitions
-
-**Accept when**: `self-improvement/personas/` directory contains 20+ JSON persona files. Each defines:
-```json
-{
-  "id": "dynasty-veteran",
-  "description": "Plays in 5 dynasty leagues, trades weekly, data-obsessed, knows advanced stats",
-  "experience": "expert",
-  "league_format": "dynasty",
-  "behavior": "power_user",
-  "goals": ["find trade targets", "evaluate prospects", "optimize roster"],
-  "patience": "high",
-  "upgrade_likelihood": "medium",
-  "session_length": "long"
-}
-```
-Personas span: dynasty veteran, redraft casual, first-timer, trade junkie, data nerd, lurker, mobile-only, prospect obsessed, weekly grinder, commissioner, IDP enthusiast, DFS crossover, podcast listener, spreadsheet migrator, group chat screenshot sharer, auction league player, keeper league player, best ball player, superflex player, TE premium player.
-
-### Task 2: Build simulation runner
-
-**Accept when**: `self-improvement/simulate.py` runs a single simulated user journey:
-1. Launches Playwright browser pointed at localhost (or razzle.lol)
-2. Takes a screenshot at each navigation step
-3. Sends screenshot + persona context to Sonnet via Claude API
-4. Sonnet responds with the next action (click element, scroll, hover, navigate, leave)
-5. Executes the action, captures the result
-6. Logs every interaction to `self-improvement/simulation-log.jsonl`:
-   ```json
-   {"persona": "dynasty-veteran", "session": "abc123", "step": 5, "page": "/lab.html", "action": "click", "target": "#breakout-panel", "agent_callout_visible": "hawkeye-breakout-note", "agent_callout_clicked": true, "timestamp": "2026-03-20T14:30:00Z"}
-   ```
-7. Continues until persona "leaves" (Sonnet decides session is over) or max 50 steps
-8. Supports running N sessions per persona via CLI args: `python simulate.py --persona dynasty-veteran --sessions 50`
-
-### Task 3: Build instrumentation layer
-
-**Accept when**: The simulation runner captures these metrics per interaction:
-- Agent callout impressions (which agent callouts were visible on screen)
-- Agent callout clicks (which were engaged with)
-- Agent callout dismissals (which were explicitly closed)
-- Hover duration on any element with agent attribution
-- Navigation path (ordered list of pages/panels visited)
-- Time-on-page per page/panel
-- Conversion events (detected by page transitions: pricing page visit, checkout page visit)
-- Feature discovery (which panels/tools were found and used)
-- Session depth (total pages visited)
-- Session duration (total simulated time)
-All logged to `simulation-log.jsonl` with consistent schema.
-
-### Task 4: Build batch runner
-
-**Accept when**: `self-improvement/run_batch.py` orchestrates a full simulation cycle:
-1. Reads all persona files from `self-improvement/personas/`
-2. Runs N sessions per persona (configurable, default 50)
-3. Parallelizes across personas (configurable concurrency)
-4. Aggregates results into `self-improvement/batch-results.json`:
-   ```json
-   {
-     "batch_id": "2026-03-20-001",
-     "total_sessions": 1000,
-     "personas": 20,
-     "sessions_per_persona": 50,
-     "metrics": {
-       "overall_ctr": 0.23,
-       "conversion_rate": 0.041,
-       "avg_session_depth": 4.2,
-       "top_agent": "bones",
-       "worst_agent": "atlas"
-     },
-     "per_agent": { ... },
-     "per_persona": { ... }
-   }
-   ```
-5. CLI: `python run_batch.py --sessions-per-persona 50 --concurrency 4`
-
----
-
-## Phase: Autoresearch Engine — Self-Reflection Loop
-
-**Context**: After simulation data is collected, each agent independently analyzes their own performance and updates their placement/copy/timing config. Razzle then synthesizes cross-agent strategy. All analysis runs on Opus except the simulation sessions themselves (Sonnet).
-
-**Design ref**: `docs/plans/2026-03-20-agent-connective-tissue-design.md` — Loops 2, 3, and 4
-
-**Exit criterion**: Each agent produces insights and updated config. Razzle produces cross-agent strategy. Peer review catches issues. Updated config deploys to frontend.
-
-### Task 1: Build per-agent self-reflection runner
-
-**Accept when**: `self-improvement/reflect.py` runs self-reflection for one agent:
-1. Reads `simulation-log.jsonl` filtered to that agent's placements
-2. Calculates: CTR per placement, CTR per copy variant, engagement by persona type, timing patterns
-3. Sends data + agent persona to Opus via Claude API with prompt: "You are {agent}. Here is your engagement data. What's working? What's not? What should you change? Output updated placement config."
-4. Agent writes:
-   - `self-improvement/{agent}-insights.md` — what they learned
-   - `self-improvement/{agent}-placement.json` — updated placement config (same schema as `AGENT_TERRITORY` but with performance data and enabled/disabled flags)
-   - `self-improvement/{agent}-copy-variants.json` — tested copy with scores
-   - `self-improvement/{agent}-timing.json` — timing/frequency rules
-5. CLI: `python reflect.py --agent dolphin`
-6. `python reflect.py --all` runs all 6 sequentially
-
-### Task 2: Build Razzle strategy session
-
-**Accept when**: `self-improvement/strategize.py` runs Razzle's cross-agent synthesis:
-1. Reads all 6 agents' insight files and placement configs
-2. Sends to Opus with Razzle's persona + strategy prompt: "You are Razzle. You've read your team's self-assessments. Optimize the cross-agent stitching. Resolve conflicts. Identify the highest-converting paths. What nudges should connect which products?"
-3. Razzle writes:
-   - `self-improvement/razzle-strategy.md` — cross-agent observations and decisions
-   - `self-improvement/cross-agent-stitching.json` — updated nudge definitions and priorities
-4. CLI: `python strategize.py`
-
-### Task 3: Build peer review runner
-
-**Accept when**: `self-improvement/peer_review.py` runs peer review:
-1. Each agent reviews one other agent's proposed changes (rotation: Dolphin→Hawkeye→Bones→Octo→Atlas→Dolphin, Razzle reviews all)
-2. Sends reviewing agent's persona + reviewed agent's changes to Opus
-3. Reviewer checks for: brand drift, spam creep, territory cannibalization, copy that sounds wrong for the character
-4. Output: approve or flag with specific feedback
-5. Flagged items go to Razzle for arbitration
-6. CLI: `python peer_review.py`
-
-### Task 4: Build config deployment
-
-**Accept when**: `self-improvement/deploy_config.py` takes the approved configs and:
-1. Merges all agent placement configs into a single `frontend/agent-config-optimized.json`
-2. Merges copy variants into the frontend config
-3. Merges timing rules
-4. Bumps version number on each agent's config
-5. Logs to `self-improvement/optimization-log.tsv`: cycle, version, total_ctr, conversion_rate, avg_session_depth, churn_rate, best_agent, worst_agent, new_placements, killed_placements, notes
-6. Frontend reads from `agent-config-optimized.json` at runtime if it exists, falls back to `agent-config.js` defaults
-7. CLI: `python deploy_config.py`
-
-### Task 5: Build full autoresearch cycle runner
-
-**Accept when**: `self-improvement/run_cycle.py` orchestrates one complete cycle:
-1. Run batch simulation (`run_batch.py`)
-2. Run self-reflection for all 6 agents (`reflect.py --all`)
-3. Run Razzle strategy session (`strategize.py`)
-4. Run peer review (`peer_review.py`)
-5. Deploy config (`deploy_config.py`)
-6. Log cycle results
-7. CLI: `python run_cycle.py --sessions-per-persona 50`
-8. Optional: `--auto-revert` flag — if overall metrics regress vs previous cycle, auto-revert to last config
 
 ---
 
