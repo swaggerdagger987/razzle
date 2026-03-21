@@ -3475,3 +3475,48 @@ All 50+ open QA findings verified against current code:
 - All Python files compile clean
 - 11/11 smoke tests pass
 - 0 regressions
+
+---
+
+## Ship Loop: Sweep Mode (Mar 21 — second pass)
+
+**Goal**: All ticket directories empty (qa/, ceo/, manual/). TICKETS.md has only infrastructure-gated items. Fresh 4-agent parallel audit.
+
+### Startup
+- Merged origin/qa/findings (results.tsv conflict resolved, accepted QA version)
+- Merged origin/ceo/strategy (already up to date)
+- tickets/qa/, tickets/ceo/, tickets/manual/ all empty
+- 11/11 smoke tests pass
+
+### 4-Agent Parallel Sweep Results
+
+| Agent | Scope | Findings |
+|-------|-------|----------|
+| Explore (crash bugs) | All frontend JS for null guards, division-by-zero, falsy-zero, JSON.parse, DOM null | 0 new bugs — all patterns clean, previous 5 crash guards verified in place |
+| Explore (backend) | All Python for SQL errors, fetchone, div-by-zero, stat formulas, validation, connection leaks | 0 bugs — all safe_sorts whitelists, parameterized queries, context managers, division guards |
+| Explore (design compliance) | All CSS/JS/HTML for 1px borders, cold grays, gradients, fonts, position colors | 3 gradient uses found — all utility patterns (loading skeleton stripes, text truncation fade, data bar fill), not decorative gradients. No real violations. |
+| Explore (dark mode) | All canvas/SVG drawing, inline styles, export functions | 6 accent color hardcodings reported — all false positives per DESIGN.md ("The orange accent stays the same — it works on both"). Position/accent colors don't change in dark mode. |
+
+### Additional Manual Sweep
+
+| Pattern | Result |
+|---------|--------|
+| `\|\| '-'` falsy-zero in JS | 2 hits — both on string fields (grade, opponent), not numeric. Not bugs. |
+| `border: 1px solid` in JS/HTML/CSS | 0 violations (table cell exemptions only) |
+| `#fff` in JS | All on colored backgrounds for contrast (correct) or theme-aware (app.js:57) |
+| `sans-serif` in JS/HTML | 0 hits — all watermarks use Space Mono |
+| `console.log` | Only branded easter eggs in app.js (intentional) |
+| `localhost` in JS | 0 hits |
+| Cold grays (#ddd etc) | Only in warroom.js pixel art (exempt) |
+| `new Date().getFullYear()` | 3 hits in lab.js — all correct (2 draft-year contexts, 1 computes _nflYear) |
+| Missing app.js include | 0 — all HTML pages include it |
+| Missing escapeHtml | Static pages (404, about) and pages with external JS (compare, player) or own helper (index). All safe. |
+| Bare `except:` in Python | 0 hits |
+| SQL injection in Python | 0 — all dynamic SQL uses whitelists and parameterized queries |
+| TODO/FIXME in code | 1 hit — empty AdSense pub ID (awaiting account approval, known) |
+
+### Summary
+- **0 bugs found, 0 fixes needed**
+- Codebase is production-clean across all dimensions: crash safety, data correctness, design compliance, dark mode, security
+- 11/11 smoke tests pass
+- Previous sweep fixes (14 UI + 5 crash guards) all verified in place
