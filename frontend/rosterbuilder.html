@@ -633,6 +633,9 @@
             document.getElementById('rb-search').value = '';
           });
         });
+      })
+      .catch(function() {
+        document.getElementById('rb-autocomplete').style.display = 'none';
       });
   }
 
