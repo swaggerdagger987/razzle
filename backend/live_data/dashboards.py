@@ -637,6 +637,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 SELECT s.player_id, p.full_name, p.position, p.team,
                        p.headshot_url, p.age,
                        s.fantasy_points_ppr, s.targets, s.carries,
+                       s.attempts,
                        s.opponent_team, s.week
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -688,7 +689,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
             # ---- Aggregate per player ----
             player_info = {}
             player_weeks = defaultdict(list)  # weekly fantasy pts
-            player_opps = defaultdict(lambda: {"targets": 0, "carries": 0, "total_pts": 0, "games": 0})
+            player_opps = defaultdict(lambda: {"targets": 0, "carries": 0, "attempts": 0, "total_pts": 0, "games": 0})
             player_sos = defaultdict(list)  # opp ppg allowed per week
 
             for r in rows:
@@ -706,13 +707,15 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 pts = r[6] or 0
                 targets = r[7] or 0
                 carries = r[8] or 0
-                opp = r[9] or ""
+                attempts = r[9] or 0
+                opp = r[10] or ""
                 pos = r[2] or "RB"
 
                 player_weeks[pid].append(pts)
                 d = player_opps[pid]
                 d["targets"] += targets
                 d["carries"] += carries
+                d["attempts"] += attempts
                 d["total_pts"] += pts
                 d["games"] += 1
 
@@ -735,8 +738,11 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 if ppg < MIN_PPG.get(pos, 5):
                     continue
 
-                # Efficiency: PPO
-                opportunities = opps_d["targets"] + opps_d["carries"]
+                # Efficiency: PPO — QBs use pass attempts + carries
+                if pos == "QB":
+                    opportunities = opps_d["attempts"] + opps_d["carries"]
+                else:
+                    opportunities = opps_d["targets"] + opps_d["carries"]
                 ppo = round(total_pts / opportunities, 2) if opportunities > 50 else None
 
                 # Consistency: CoV
@@ -1103,6 +1109,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 SELECT s.player_id, p.full_name, p.position, p.team,
                        p.headshot_url, p.age,
                        s.fantasy_points_ppr, s.targets, s.carries,
+                       s.attempts,
                        s.receiving_yards, s.receiving_tds,
                        s.rushing_yards,
                        s.opponent_team, s.week
@@ -1188,7 +1195,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
             player_info = {}
             player_weeks = defaultdict(list)
             player_opps = defaultdict(lambda: {
-                "targets": 0, "carries": 0, "total_pts": 0, "games": 0,
+                "targets": 0, "carries": 0, "attempts": 0, "total_pts": 0, "games": 0,
                 "rec_yards": 0, "rec_tds": 0, "rush_yards": 0,
             })
             player_sos = defaultdict(list)
@@ -1208,16 +1215,18 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 pts = r[6] or 0
                 targets = r[7] or 0
                 carries = r[8] or 0
-                rec_yards = r[9] or 0
-                rec_tds = r[10] or 0
-                rush_yards = r[11] or 0
-                opp = r[12] or ""
+                attempts = r[9] or 0
+                rec_yards = r[10] or 0
+                rec_tds = r[11] or 0
+                rush_yards = r[12] or 0
+                opp = r[13] or ""
                 pos = r[2] or "RB"
 
                 player_weeks[pid].append(pts)
                 d = player_opps[pid]
                 d["targets"] += targets
                 d["carries"] += carries
+                d["attempts"] += attempts
                 d["total_pts"] += pts
                 d["games"] += 1
                 d["rec_yards"] += rec_yards
@@ -1241,7 +1250,12 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 if ppg < 2:
                     continue
 
-                opportunities = opps_d["targets"] + opps_d["carries"]
+                # Opportunities: QBs use pass attempts + carries
+                pos = info["position"]
+                if pos == "QB":
+                    opportunities = opps_d["attempts"] + opps_d["carries"]
+                else:
+                    opportunities = opps_d["targets"] + opps_d["carries"]
                 if opportunities < 50:
                     continue
 
@@ -1413,6 +1427,7 @@ def fetch_season_awards(season=None, position=None):
                 SELECT s.player_id, p.full_name, p.position, p.team,
                        p.headshot_url, p.age,
                        s.fantasy_points_ppr, s.targets, s.carries,
+                       s.attempts,
                        s.receiving_yards, s.receiving_tds,
                        s.rushing_yards,
                        s.opponent_team, s.week
@@ -1486,7 +1501,7 @@ def fetch_season_awards(season=None, position=None):
             player_info = {}
             player_weeks = defaultdict(list)
             player_opps = defaultdict(lambda: {
-                "targets": 0, "carries": 0, "total_pts": 0, "games": 0,
+                "targets": 0, "carries": 0, "attempts": 0, "total_pts": 0, "games": 0,
                 "rec_yards": 0, "rec_tds": 0, "rush_yards": 0,
             })
             player_sos = defaultdict(list)
@@ -1533,16 +1548,18 @@ def fetch_season_awards(season=None, position=None):
                 pts = r[6] or 0
                 targets = r[7] or 0
                 carries = r[8] or 0
-                rec_yards = r[9] or 0
-                rec_tds = r[10] or 0
-                rush_yards = r[11] or 0
-                opp = r[12] or ""
+                attempts = r[9] or 0
+                rec_yards = r[10] or 0
+                rec_tds = r[11] or 0
+                rush_yards = r[12] or 0
+                opp = r[13] or ""
                 pos = r[2] or "RB"
 
                 player_weeks[pid].append(pts)
                 d = player_opps[pid]
                 d["targets"] += targets
                 d["carries"] += carries
+                d["attempts"] += attempts
                 d["total_pts"] += pts
                 d["games"] += 1
                 d["rec_yards"] += rec_yards
@@ -1566,7 +1583,12 @@ def fetch_season_awards(season=None, position=None):
                 if ppg < 2:
                     continue
 
-                opportunities = opps_d["targets"] + opps_d["carries"]
+                # Opportunities: QBs use pass attempts + carries
+                pos = info["position"]
+                if pos == "QB":
+                    opportunities = opps_d["attempts"] + opps_d["carries"]
+                else:
+                    opportunities = opps_d["targets"] + opps_d["carries"]
 
                 # Efficiency: PPO
                 ppo = round(total_pts / opportunities, 2) if opportunities > 0 else 0
