@@ -1,5 +1,14 @@
 /* Razzle — Shareable Player Comparison Page */
 
+function _getPosColors() {
+  var s = getComputedStyle(document.documentElement);
+  return {
+    QB: s.getPropertyValue('--pos-qb').trim() || "#5b7fff",
+    RB: s.getPropertyValue('--pos-rb').trim() || "#2ec4b6",
+    WR: s.getPropertyValue('--pos-wr').trim() || "#d97757",
+    TE: s.getPropertyValue('--pos-te').trim() || "#8b5cf6"
+  };
+}
 var POS_COLORS = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
 var POS_CSS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
 
@@ -572,8 +581,9 @@ function exportComparePNG() {
   var c1 = _p1Data.career || {}, c2 = _p2Data.career || {};
   var pos1 = (p1.position || "").toUpperCase();
   var pos2 = (p2.position || "").toUpperCase();
-  var color1 = POS_COLORS[pos1] || "#d97757";
-  var color2 = POS_COLORS[pos2] || "#8b5cf6";
+  var _pc = _getPosColors();
+  var color1 = _pc[pos1] || "#d97757";
+  var color2 = _pc[pos2] || "#8b5cf6";
   if (pos1 === pos2) color2 = adjustColor(color1, -30);
 
   var t = getCanvasTheme();
@@ -602,7 +612,7 @@ function exportComparePNG() {
   ctx.arc(W / 2, 80, 28, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
-  ctx.fillStyle = "#d97757";
+  ctx.fillStyle = _pc.WR || "#d97757";
   ctx.font = "bold 20px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, 87);
