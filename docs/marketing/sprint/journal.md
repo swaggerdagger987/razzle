@@ -4093,4 +4093,107 @@ Sources:
 
 3. **Should `draft_night_updater.py` also trigger an automatic PNG screenshot export of the updated Prospect board (via headless browser) so the posting workflow is: run script → screenshot auto-saved → drag into Twitter/Reddit — removing the manual "refresh Lab, open share modal, download PNG" step?**
 
-## NEXT QUESTION: Should Razzle prepare "trade value shift" content for Draft Day — showing how veteran dynasty values change when their team drafts a replacement (e.g., "Swift's value dropped 15% after Bears drafted Jeremiyah Love") — and what's the minimum-viable data model for that calculation?
+---
+
+## Q46: Should Razzle prepare "trade value shift" content for Draft Day — showing how veteran dynasty values change when their team drafts a replacement (e.g., "Swift's value dropped 15% after Bears drafted Jeremiyah Love") — and what's the minimum-viable data model for that calculation?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**YES — this is high-value content that writes itself from data Razzle already computes. But keep the model dead simple: pre-draft value snapshot → post-draft recalculated value → delta. Don't try to predict the market; show the math and let Reddit argue about it.**
+
+#### Why This Content Works
+
+Draft Day "winner/loser" takes are the single most shared dynasty content format each April. FantasyLife publishes ["Dynasty Diary: Veterans Rising and Falling"](https://www.fantasylife.com/articles/dynasty/dynasty-fantasy-football-diary-the-2025-nfl-draft-impact-players-and-veterans-rising-and-falling) after every draft. FantasyPoints runs a ["Dynasty Market Report: NFL Draft"](https://www.fantasypoints.com/nfl/articles/2025/dynasty-market-report-nfl-draft) edition. PlayerProfiler publishes ["5 RBs to sell before the draft"](https://www.playerprofiler.com/article/dynasty-sells-5-running-backs-to-sell-before-the-nfl-draft/) articles that get thousands of shares.
+
+But **none of them show the math**. They say "Swift's value takes a hit" — they don't say "Swift dropped from 62.3 to 54.1 on our model because his production share projection dropped 18%." That gap is exactly where Razzle's Lab screenshots live: data-backed, visual, screenshotable.
+
+#### What Competitors Do
+
+- **KTC (KeepTradeCut):** Crowdsourced values update organically over days/weeks post-draft as users submit new KTC matchups. No instant recalculation. No before/after comparison view.
+- **FantasyCalc:** Algorithmically derived from real trade data. Updates lag behind the draft by days to weeks as leagues execute post-draft trades. No live draft-day shifts.
+- **Draft Sharks:** Expert-set values updated monthly. May release a post-draft chart, but it's a new static chart — not a diff against the previous version.
+- **Footballguys:** Monthly dynasty trade value chart with manual expert updates. No programmatic before/after.
+
+**Nobody offers a computed, instant before/after value shift with the math visible.** They all publish prose articles ("X's value takes a hit") or update their charts without showing the delta.
+
+#### Minimum-Viable Data Model
+
+Razzle already has `compute_trade_value(ppg, age, position)` in `backend/live_data/core.py:853` — a 0-100 composite score (50% production, 30% age, 20% scarcity). The draft-day shift only needs to modify the **production component** for affected veterans.
+
+**Pre-draft:** Snapshot each veteran's current trade value. Store as a simple JSON or SQLite table: `{player_id, pre_draft_value, timestamp}`.
+
+**Post-draft recalculation — two approaches (pick one):**
+
+1. **Simple touch share penalty (recommended).** When a team drafts a skill-position player in rounds 1-3, apply a flat penalty to same-position veterans on that roster:
+   - Round 1 pick at same position: -12% to production component
+   - Round 2: -8%
+   - Round 3: -5%
+   - Same-position veteran on a team that DIDN'T draft competition: +0% (unchanged)
+   - Veteran whose team drafted at a DIFFERENT position: 0% (unchanged)
+
+   This is crude but directionally correct and, critically, **defensible**. You can explain the formula in 15 words.
+
+2. **Projected touch share split (more accurate, more work).** Model expected touches for the rookie based on draft capital (Round 1 RBs historically get ~45% of team carries by Week 6) and subtract from the veteran's current per-game stats. Recalculate PPG → recalculate trade value. This is better but requires historical draft capital → usage curves that don't exist in Razzle's data yet.
+
+**Recommendation: Option 1.** A flat penalty by draft round is simple, explainable, and produces screenshotable deltas. The content is "D'Andre Swift: 62.3 → 54.1 (-13.2%)" next to a Lab screenshot showing the trade value chart sorted by biggest losers.
+
+#### The Content Format
+
+A single Lab screenshot of the Trade Value Chart (`/tradevalues.html`) filtered to "Biggest Draft Losers" — veterans sorted by value delta descending. Add a `draft_impact` column showing the before/after. The heat coloring does the rest: deep red for big drops, green for unaffected.
+
+This is a **tweet + Reddit post** that takes 30 seconds to create once the data is computed. "The Lab recalculated every veteran's dynasty value based on where their team's picks landed. Here are the biggest losers. 📉"
+
+#### Implementation Cost
+
+- Pre-draft snapshot: 10 lines Python (query all trade values, write to `draft_value_snapshots` table)
+- Post-draft recalc: 20 lines Python (look up which teams drafted which positions, apply penalty, recompute)
+- Delta display: 15 lines JS (add `pre_draft_value` and `value_delta` columns to trade value chart)
+- Total: ~45 lines of code, 1-2 hours of work
+
+This should be built in the April sprint alongside `draft_night_updater.py` (Q45).
+
+---
+
+### Self-Critique
+
+1. **The flat percentage penalty by draft round is an oversimplification.** A team drafting a Round 1 RB when they already have an elite starter (e.g., CMC's 49ers drafting an RB) has a different impact than a team with an aging starter. The model doesn't account for incumbent quality. **Confidence: 7/10** — but the simplicity IS the feature. Users can argue about edge cases in the replies, which drives engagement.
+
+2. **The claim that "nobody offers computed before/after" is based on search results.** KTC's value graph does technically show historical value over time — a user could screenshot before and after. But it's not presented as a "draft impact" view, and the values update slowly via crowdsourcing, not instantly via formula. **Confidence: 8/10.**
+
+3. **The -12%/-8%/-5% penalties are made up.** They need calibration against historical data (how much did KTC values actually shift for veterans when their team drafted a replacement?). For MVP content, directionally reasonable is enough — but should be validated before presenting as authoritative. **Confidence: 6/10.**
+
+4. **This content only works if published FAST — within hours of each round ending.** If FantasyLife and FantasyPoints publish their prose "winners and losers" articles first, Razzle's data-backed version still has a visual moat (the screenshot). But speed matters for Twitter impressions. The `draft_night_updater.py` + automated recalc pipeline needs to be tested before draft day. **Confidence: 8/10.**
+
+Sources:
+- [FantasyLife Dynasty Diary: 2025 Draft Veterans Rising/Falling](https://www.fantasylife.com/articles/dynasty/dynasty-fantasy-football-diary-the-2025-nfl-draft-impact-players-and-veterans-rising-and-falling)
+- [FantasyPoints Dynasty Market Report: 2025 NFL Draft](https://www.fantasypoints.com/nfl/articles/2025/dynasty-market-report-nfl-draft)
+- [PlayerProfiler: 5 RBs to Sell Before the Draft](https://www.playerprofiler.com/article/dynasty-sells-5-running-backs-to-sell-before-the-nfl-draft/)
+- [KeepTradeCut Dynasty Rankings](https://keeptradecut.com/dynasty-rankings)
+- [FantasyCalc Trade Calculator](https://fantasycalc.com/trade-calculator)
+- [Draft Sharks Dynasty Trade Value Chart](https://www.draftsharks.com/trade-value-chart/dynasty/ppr)
+- [Footballguys Dynasty Trade Value Chart](https://www.footballguys.com/article/2026-dynasty-trade-value-chart-february)
+- [Javelin: How KTC Value Adjustment Works](https://www.javelinfantasyfootball.com/2022/09/30/how-the-ktc-adjustment/)
+
+### Implications for Razzle
+
+1. **Build a pre-draft value snapshot script** (`scripts/snapshot_trade_values.py`) — run it April 21 to capture every player's trade value. Store in `draft_value_snapshots` table. ~10 lines.
+
+2. **Add draft impact recalculation to `draft_night_updater.py`** — when recording a pick, auto-apply the production penalty to same-position veterans on that team and recompute their trade values. ~20 lines on top of Q45's script.
+
+3. **Add "Draft Impact" view to the Trade Value Chart** — sort by `value_delta`, show before/after columns, heat-color the delta column (red=drop, green=safe). ~15 lines JS.
+
+4. **Calibrate the penalty percentages before April.** Pull historical KTC data (if scrapeable) or use DynastyProcess.com's trade database to validate that Round 1 same-position picks historically cause ~10-15% dynasty value drops for incumbents.
+
+5. **Pre-write the tweet and Reddit post templates.** "The Lab recalculated every veteran's dynasty value after Round 1. Biggest losers: [screenshot]." Have these drafted in the content queue so posting is copy-paste on draft night.
+
+### Open Questions
+
+1. **What's the optimal Twitter thread format for Draft Day — individual tweets per pick (more impressions per tweet, better for algorithmic reach) vs. a rolling thread (easier to follow, single bookmark point)?**
+
+2. **Should `draft_night_updater.py` also trigger an automatic PNG screenshot export of the updated Prospect board (via headless browser) so the posting workflow is: run script → screenshot auto-saved → drag into Twitter/Reddit?**
+
+3. **Should Razzle offer a "Draft War Room" email/notification where users input their dynasty roster, and Razzle sends them a personalized "your roster impact" summary after each round — showing which of THEIR players gained or lost value based on landing spots?**
+
+## NEXT QUESTION: What's the optimal Twitter thread format for Draft Day — individual tweets per pick (more impressions per tweet, better for algorithmic reach) vs. a rolling thread (easier to follow, single bookmark point)?
