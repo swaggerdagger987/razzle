@@ -7325,4 +7325,127 @@ Sources:
 
 3. **What does the complete "Screenshot Playbook" look like — a single doc mapping each debate topic to its Saved View name, Lab URL, comment template, and sample comment — and should it live in docs/marketing/ or as a pinned note in the sprint journal?**
 
-## NEXT QUESTION: What is the optimal daily comment schedule for the April 1-15 warm-up period — which hours, which threads, how many comments per day, and what's the escalation plan if karma accumulation is behind the 80-120 target by Day 10?
+## Q78: What is the optimal daily comment schedule for the April 1-15 warm-up period — which hours, which threads, how many comments per day, and what's the escalation plan if karma accumulation is behind the 80-120 target by Day 10?
+
+**Date**: 2026-03-21
+
+### Answer
+
+**Post 3-4 comments per day in two time windows (7-9 AM EST and 5-7 PM EST), targeting daily trade threads in Week 1 and prospect/general discussion in Week 2. If behind by Day 10, expand to 5-6 comments/day, add r/nfl free agency threads, and shift to higher-variance contrarian takes. Here's the complete schedule.**
+
+#### The Two Daily Windows
+
+Reddit engagement data consistently shows two peak windows for US-audience subreddits:
+
+- **Morning window: 7-9 AM EST.** Fantasy football fans browsing before work or during commutes. Posts submitted 9-11 AM EST get +730% median upvotes vs off-peak ([Upvote.net study](https://www.mexc.co/en-PH/news/933006)). Comments posted at 7-9 AM land early in threads, catching the morning wave. This is the PRIMARY window — post 2 comments here.
+
+- **Evening window: 5-7 PM EST.** Post-work browsing spike. New daily trade threads and discussion posts appear. Less competitive than morning (fewer "early bird" commenters), but threads from that day still have active engagement. Post 1-2 comments here.
+
+**Avoid: 11 PM-6 AM EST.** Dead zone. Comments posted overnight get buried under morning activity with zero engagement, wasting CQS-building opportunities. Also avoid mid-afternoon (1-3 PM EST) — threads from morning are cooling off but evening threads haven't started.
+
+#### The 15-Day Schedule
+
+| Day | Date | Subreddit Split | Comments/Day | Thread Types | Morning (7-9 AM) | Evening (5-7 PM) |
+|-----|------|----------------|--------------|--------------|-------------------|-------------------|
+| 1 | Apr 1 | r/fantasyfootball 100% | 3 | Free agency reactions, trade advice | 2 trade thread replies | 1 free agency reaction |
+| 2 | Apr 2 | r/fantasyfootball 100% | 3 | Trade advice, general discussion | 2 trade thread replies | 1 general discussion |
+| 3 | Apr 3 | r/fantasyfootball 75%, r/nfl 25% | 3 | Mock draft, trade advice | 1 trade reply + 1 r/nfl take | 1 trade reply |
+| 4 | Apr 4 | r/fantasyfootball 75%, r/DynastyFF 25% | 3 | Trade advice (first DynastyFF comment) | 2 r/fantasyfootball | 1 r/DynastyFF trade thread |
+| 5 | Apr 5 | r/fantasyfootball 50%, r/DynastyFF 50% | 4 | Trade threads both subs | 1 each sub | 1 each sub |
+| 6 | Apr 6 | r/DynastyFF 50%, r/fantasyfootball 50% | 3 | Weekend: prospect takes, trade threads | 2 morning (1 each sub) | 1 evening |
+| 7 | Apr 7 | r/DynastyFF 75%, r/fantasyfootball 25% | 3 | Prospect rankings, trade advice | 2 r/DynastyFF | 1 r/fantasyfootball |
+| 8 | Apr 8 | r/DynastyFF 75%, r/fantasyfootball 25% | 4 | Trade threads, prospect debates | 2 r/DynastyFF + 1 r/ff | 1 r/DynastyFF |
+| 9 | Apr 9 | r/DynastyFF 100% | 3 | Daily trade thread, general discussion | 2 trade replies | 1 general/prospect |
+| 10 | Apr 10 | r/DynastyFF 100% | 3 | **CHECKPOINT: karma audit** | 2 trade replies | 1 contrarian take |
+| 11 | Apr 11 | r/DynastyFF 100% | 3-4 | Trade threads, rookie rankings | 2 trade replies | 1-2 prospect takes |
+| 12 | Apr 12 | r/DynastyFF 100% | 3-4 | Weekend: hot takes thread | 2 prospect/trade | 1-2 general |
+| 13 | Apr 13 | r/DynastyFF 100% | 3-4 | Rookie mock reactions, trade threads | 2 trade/prospect | 1-2 prospect |
+| 14 | Apr 14 | r/DynastyFF 100% | 4 | Pre-draft hype building | 2 analytical takes | 2 trade replies |
+| 15 | Apr 15 | r/DynastyFF 100% | 3 + TEST POST | **Test post day** (per Q70) | 1 text post + 1 comment | 1 trade reply |
+
+**Total: 48-53 comments over 15 days. Target: 80-120 total karma.**
+
+#### Thread Selection Priority (by time of day)
+
+**Morning (7-9 AM EST):**
+1. **Daily Trade Megathread** — always exists, always has activity. Sort by New, reply to the 3-5 newest trade questions that haven't been answered. Use Template 1 (verdict + one stat + acknowledge). This is the bread-and-butter karma source at 3-8/comment.
+2. **Breaking free agency news** — if a signing dropped overnight, the reaction thread is live. Template 2 (player + team + one-word impact + dynasty action). Worth 10-40 karma if you're in the first 10 comments.
+3. **Prospect/mock draft discussion** — if a new mock draft was published that morning by a major outlet (FantasyPros, Dynasty Nerds). Template 3 (ranking opinion + one measurable).
+
+**Evening (5-7 PM EST):**
+1. **New discussion posts** — sort r/DynastyFF by New. Find posts from the last 2-3 hours with < 10 comments. An early analytical reply on a fresh thread earns more karma than the 50th reply on a morning thread.
+2. **Daily Trade Megathread refresh** — new trade questions appear in the evening. Reply to 1-2 fresh ones.
+3. **"Hot takes" or "unpopular opinions" threads** — these appear 2-3x per week. Template 4 (contrarian + one stat). High karma variance (5-30) but excellent for engagement.
+
+#### Day 10 Checkpoint: The Escalation Plan
+
+On April 10, audit total karma. Three scenarios:
+
+**Scenario A: On track (60-120 karma).** Stay the course. The current pace will land 80-120+ by Day 15. No changes needed. Continue 3 comments/day, r/DynastyFF focused.
+
+**Scenario B: Behind (30-59 karma).** Karma accumulation is slow, likely because off-season thread traffic is lower than expected or comments are landing in dead threads. Escalation:
+
+1. **Increase to 5-6 comments/day** (add a third window: 12-1 PM EST lunch break).
+2. **Add r/nfl back** — 1-2 comments/day on free agency or roster move threads. r/nfl has 10x the traffic of r/DynastyFF, so even average comments earn 5-10 karma.
+3. **Shift to higher-variance templates.** Move from safe trade-thread advice (3-8 karma) to contrarian hot takes (3-30 karma). The Mahomes sell comment (Q75 Comment 3) is designed for this — it generates 10-20 angry replies, each of which earns reply-karma.
+4. **Target "rising" threads.** Switch from sort-by-New to sort-by-Rising. Rising threads have momentum — your comment rides the wave.
+5. **Post one prospect ranking comment per day with a bold take.** "Green over Tate at 1.03" generates engagement through disagreement. In the April pre-draft window, every ranking take gets replies.
+
+**Expected recovery: 5-6 comments/day × 5 days × 4-8 avg karma = 100-240 additional karma. Should bring total to 130-300.**
+
+**Scenario C: Critically behind (< 30 karma).** Something is wrong — either comments are being silently removed (CQS issue), or the account has a shadow restriction. Escalation:
+
+1. **Check if comments are visible.** Open the account's profile in an incognito browser. If comments are missing, the account may have a shadow restriction from CQS issues.
+2. **Verify email + phone if not already done.** This is the single biggest CQS unlock.
+3. **Post in higher-traffic, easier-karma subs for 3 days.** r/AskReddit (comment on rising threads), r/nfl (free agency takes), r/sports (any take). These subs have massive traffic and generous upvoting patterns. Target 20-30 karma from these subs.
+4. **Return to r/DynastyFF on Day 13** with ~50+ total karma. If still filtered, message the mods: "Hey, new to posting here — big dynasty nerd. Are there posting requirements I should be aware of?" Mods will typically whitelist genuine users.
+5. **Delay the April 15 test post to April 17** if needed. This gives 4 extra days before the April 21 OC target.
+
+#### Weekend vs Weekday Adjustments
+
+**Weekdays (Mon-Fri):** Standard schedule. Morning + evening windows. Trade threads are most active Tuesday-Thursday.
+
+**Weekends (Sat-Sun):** Shift morning window later to 9-11 AM EST (weekend browsing starts later). Weekend threads tend to be "fun" discussions — hot takes, "who would you rather" polls, prospect debates. These earn slightly less karma per comment but face less competition. Post 2-3 comments total on weekends, not 3-4.
+
+### Self-Critique
+
+1. **The two-window strategy is well-supported by Reddit-wide data but not fantasy-football-specific.** The 7-9 AM and 5-7 PM EST windows come from general Reddit engagement research. Fantasy football subs may have slightly different peaks — dynasty managers skew younger (25-40), which could shift morning activity later. However, the directional pattern (morning + evening peaks) is robust across all US-audience subreddits. **Confidence: 7/10 on exact hours, 9/10 on the two-window pattern.**
+
+2. **The 80-120 karma target in 15 days is achievable but not guaranteed.** Q70's math estimated 60-170 karma from 45-75 comments. This schedule has 48-53 comments, targeting the middle of that range. The key variable is how many comments "land" (5+ upvotes) vs. float (1-2 upvotes). Off-season traffic reduces the ceiling but also reduces competition. **Confidence: 7/10.**
+
+3. **The Scenario C escalation (posting in r/AskReddit for karma) is a common warm-up tactic but carries CQS risk if the pattern looks like "karma farming then pivoting to a niche sub."** Reddit's CQS algorithm may flag accounts that rapidly shift from high-traffic general subs to niche communities. The mitigation is to keep some r/fantasyfootball comments running in parallel, maintaining a "football fan" profile throughout. **Confidence: 6/10 on CQS risk assessment.**
+
+4. **The "test post on April 15" strategy from Q70 is the strongest risk mitigation in this entire plan.** Even if karma accumulation is slow, one successful text post proves automod clearance. **Confidence: 9/10.**
+
+5. **Weekend adjustment recommendation is based on general browsing patterns, not measured r/DynastyFF activity.** Dynasty fantasy football may actually have HIGHER weekend engagement since managers trade more on weekends. The "shift later" recommendation is safe but the 2-3 comments target could be conservative. **Confidence: 5/10.**
+
+Sources:
+- [Upvote.net — 1,000-Post Reddit Marketing Study](https://www.mexc.co/en-PH/news/933006) — 9-11 AM EST = +730% median upvotes, statements beat questions by 16%
+- [RecurPost — Best Time to Post on Reddit 2026](https://recurpost.com/blog/best-time-to-post-on-reddit/) — 6-8 AM weekday mornings, 7-9 PM evenings
+- [Single Grain — Best Times to Post on Reddit 2026](https://www.singlegrain.com/search-everywhere-optimization/best-times-to-post-on-reddit-for-maximum-engagement/) — 9-11 AM and 2-4 PM EST weekday peaks
+- [Chameleon Mode — Reddit Karma Farming Rules](https://chameleonmode.com/how-to-farm-reddit-karma/) — 5-10 comments/day, 14-day warm-up schedule, 10:1 promotional ratio
+- [IPFoxy — Reddit Account Warm-Up Guide 2026](https://www.ipfoxy.com/blog/ideas-inspiration/5535) — Days 1-4 observation, Days 5-9 participation, Days 10-14 establishment
+- [r/DynastyFF Subreddit Stats](https://subredditstats.com/r/dynastyff) — 126K subscribers, ~2 comments/hour average
+- Sprint Q70 (CQS analysis, karma math), Q71 (subreddit split), Q74 (comment templates), Q75 (ready-to-post comments)
+
+### Implications for Razzle
+
+1. **Set two daily alarms: 7 AM EST and 5 PM EST.** These are the comment windows. Treat them like meetings — 15-20 minutes each, post 2 comments in the morning and 1-2 in the evening. Total daily time commitment: ~35 minutes.
+
+2. **Pre-write comment shells the night before.** Using the Q75 ready-to-post comments as templates, draft 2-3 comments each evening that can be adapted to whatever trade questions or discussions are live in the morning. This reduces the morning session to "find thread → adapt comment → post" in under 10 minutes.
+
+3. **Track every comment in `scripts/reddit_warmup_log.csv`.** Columns: date, time_est, subreddit, thread_type, comment_summary, upvotes_24h, upvotes_48h. This log is the data source for the Day 10 checkpoint — if average upvotes per comment is below 2, trigger Scenario B escalation.
+
+4. **April 10 is a hard checkpoint.** No skipping. Open incognito, check total karma, review which comment types are earning and which are flat. If Scenario B or C, execute the escalation plan immediately — don't wait for "things to pick up."
+
+5. **The April 15 test post should be a simple "price check" or "rate my trade" text post, NOT an OC analysis.** The test validates automod clearance, not content quality. Use: "12-team SF PPR. Give: Mahomes + 2.06. Get: Bijan + 1.08. Competing roster. Thoughts?" This reads as a genuine user, generates trade advice replies (building more karma), and confirms the account can create posts in r/DynastyFF.
+
+### Open Questions
+
+1. **Should Razzle add a "Reddit crop" export mode to the Lab's PNG export — limiting visible rows to 8-12, using 4:3 aspect ratio, and auto-including a title/subtitle — so screenshots are feed-optimized without manual cropping?**
+
+2. **What does the complete "Screenshot Playbook" look like — a single doc mapping each debate topic to its Saved View name, Lab URL, comment template, and sample comment — and should it live in docs/marketing/ or as a pinned note in the sprint journal?**
+
+3. **What is the optimal format and timing for the first OC post on r/DynastyFF (April 16-21) — image post vs text post with embedded image, title formula, flair selection, and the best day of the week for maximum first-post visibility?**
+
+## NEXT QUESTION: Should Razzle add a "Reddit crop" export mode to the Lab's PNG export — limiting visible rows to 8-12, using 4:3 aspect ratio, and auto-including a title/subtitle — so screenshots are feed-optimized without manual cropping?
