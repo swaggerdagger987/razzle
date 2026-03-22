@@ -8822,4 +8822,102 @@ Sources:
 
 3. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral — should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
 
-## NEXT QUESTION: What should Post #2 look like — same Report Card format with different filters (position-specific grades? rookie-only? post-draft updated grades?) or a completely different view (Stock Watch, Buy Low/Sell High) to test which format gets more engagement?
+## Q90: What should Post #2 look like — same Report Card format with different filters (position-specific grades? rookie-only? post-draft updated grades?) or a completely different view (Stock Watch, Buy Low/Sell High) to test which format gets more engagement?
+
+**Date:** 2026-03-21
+**Category:** Content Strategy / Post Series
+**Prior context:** Q87 (first OC post — Report Card, April 21), Q79 (format/timing), Q73 (hot debates), Q84 (post-mortem spreadsheet), Q88 (visual polish)
+
+### Answer
+
+**Same format. Post #2 is an RB-only Report Card, posted the Tuesday after the NFL Draft (April 28). Do NOT switch to a different view. One post is a post. Two posts with the same visual identity is a series. The "Fantasy GPA" concept needs repetition before it compounds.**
+
+Here's the decision framework:
+
+#### Why Same Format Beats Different Format for Post #2
+
+**1. Series brand > format variety.** The dynasty content creators with the most Reddit traction run recurring series: Dynasty Nerds publishes "Grade the Trade" weekly with the same format — submissions, letter grades, analysis. Subvertadown's weekly kicker/DST rankings use an identical table format every week. These became recognizable because the format repeated. Razzle's "Fantasy GPA Report Card" needs the same treatment. If Post #1 gets 80 upvotes and Post #2 switches to Stock Watch, nobody connects them. If Post #2 is another Report Card with the same grade badges, people think: "oh, it's the report card person again."
+
+**2. A/B testing principle: change one variable.** Post #1 = ALL positions, Honor Roll. Post #2 = RB-only grades. Same visual language, same grade badges, same 5-dimension breakdown. The only variable is the position filter. This tells you: does position-specific content outperform cross-position? That's an actionable signal. Switching to Stock Watch changes everything — format, visual language, data dimensions, title structure — and you learn nothing about what specifically drove the engagement difference.
+
+**3. The Report Card has no direct competitor.** Stock Watch, Buy Low/Sell High — these are published weekly by Dynasty Nerds, FantasyPros, PlayerProfiler, and The Fantasy Footballers. Razzle's Stock Watch is better (data-backed, not vibes), but it's entering a crowded lane. The "Fantasy GPA" report card with letter grades is unique. Nobody else grades dynasty players like a school transcript. Abandoning that novelty after one post wastes the competitive advantage before it compounds.
+
+**4. RB is the maximum-debate position.** Running backs are the most traded, most volatile, and most debated position in dynasty. An RB-only Report Card showing Kenneth Walker at B+ and Breece Hall at C- will generate more debate than a cross-position Honor Roll where those RBs are buried among 15 WRs. Position-specific grading isolates the comparisons people actually make when trading: "Is Walker better than Hall?" The Report Card gives a 5-dimensional answer.
+
+**5. Post-draft timing creates natural narrative.** The NFL Draft is April 24, 2026. Post #2 on April 28 (Tuesday, 4 days after the draft) lands when every dynasty manager is re-evaluating their RB room. The grades are 2025 season data — they don't change — but the first comment wraps them in draft context: "Bijan Robinson just got a 2nd-round backup drafted. His A+ opportunity grade may drop in 2026. Sell window?" This makes the data timely without requiring any code changes.
+
+#### The Exact Post #2
+
+**Title:**
+```
+[OC] I ran every dynasty RB through the Fantasy GPA system — only 4 earned an A or higher. Here's the full RB Report Card.
+```
+
+- References "Fantasy GPA" by name — reinforces the concept from Post #1
+- Position-specific ("every dynasty RB") narrows the hook
+- Scarcity signal ("only 4 earned an A") creates curiosity
+- Same "[OC]" tag, same format, same voice
+
+**Image:** Report Card page with Position filter = RB. Top 15-20 RBs by Fantasy GPA. Same Share Mode PNG (1200x960), same grade badges, same watermark.
+
+**First comment structure (same as Post #1, adapted):**
+- What you're looking at (same 5-metric explanation)
+- The RB-specific takeaway (who's graded highest, who's surprisingly low)
+- Post-draft context: "After this week's draft, [Player X]'s opportunity grade may shift. Here's where they stand on production alone."
+- "Drop an RB name and I'll pull the full card."
+
+#### The Post #3 Fork
+
+Post #3 is when you test a different format — but only if Post #1 and #2 establish a baseline. Two scenarios:
+
+**If Posts #1 and #2 both exceed 50 upvotes:** The Report Card format works. Post #3 = WR Report Card (continue the position series). Posts #4-5 test Stock Watch or Buy Low/Sell High to compare engagement against the established Report Card baseline.
+
+**If Post #1 or #2 underperforms (<30 upvotes):** The format may not resonate, or the timing/title was wrong. Check the post-mortem spreadsheet (Q84). If the upvote ratio is high (>90%) but views are low, the title didn't hook — change the title approach, not the format. If the ratio is low (<80%), the content itself didn't resonate — then Post #3 should test a different view (Buy Low/Sell High, which is the most popular dynasty content format).
+
+#### What About Rookie-Only or Post-Draft Updated Grades?
+
+**Rookie-only Report Card:** Not for Post #2. Rookies don't have NFL stats — the Fantasy GPA can't grade them on efficiency, consistency, or PPG. A rookie post requires college data, which is a different methodology. Save the rookie angle for a dedicated "Rookie Big Board" post using /prospects.html after the draft, but don't call it a "Report Card" — it confuses the brand.
+
+**Post-draft updated grades:** The grades are 2025 season data. They don't change. But the NARRATIVE changes — the first comment adds draft context ("Player X's team just drafted his replacement in round 2"). This is the right approach: same data screenshot, new narrative wrapper. Don't try to modify the grading algorithm to account for draft capital — that's a new feature that risks being wrong and undermines the "data-driven" positioning.
+
+### Self-Critique
+
+1. **The "same format builds a series" argument is well-supported but assumes Post #1 gets enough traction to be recognized.** If Post #1 gets 15 upvotes and 3 comments, nobody remembers the format. Post #2 being the same format reinforces nothing because there's nothing to reinforce. However, even a modest Post #1 (30-50 upvotes) is sufficient — the regulars who commented will recognize the format in Post #2. **Confidence: 7/10.**
+
+2. **RB-only may limit the audience.** A cross-position Honor Roll appeals to every dynasty manager. An RB-only post only appeals to managers with RB trade questions. However, the narrower focus generates deeper debate — everyone has an opinion about the RB they own, and position-specific comparisons are more actionable than cross-position rankings. The engagement-per-reader should be higher even if reach is lower. **Confidence: 8/10.**
+
+3. **The "no competitor" claim for Report Card format may be overstated.** Dynasty Daddy had a "Report Card" feature that got 831 upvotes (cited in Q87). PlayerProfiler uses letter grades for prospect profiles. The specific combination of 5-metric composite GPA with position-colored badges in a comic-strip aesthetic is unique, but letter-grade fantasy content is not novel. **Confidence: 6/10 on uniqueness, 9/10 on visual distinctiveness.**
+
+4. **Post-draft timing (April 28) assumes the draft doesn't produce a dominant storyline that drowns out analytical content.** If a surprise QB goes #1 or a massive trade happens, the first week after the draft is all hot takes and reactions, not data analysis. The Report Card might feel too analytical for that moment. Mitigation: if the draft produces a major storyline, lead the first comment with it ("Everyone's talking about [surprise pick]. Here's how the RB room reshuffles around it"). **Confidence: 7/10.**
+
+5. **The "change one variable" A/B testing argument is sound in theory but Reddit isn't a controlled experiment.** Post #1 on April 21 and Post #2 on April 28 differ in far more than position filter: different day of the news cycle, different competing posts, different algorithmic mood. The position-filter variable is isolated in principle but confounded in practice. This doesn't invalidate the approach — it just means you're getting directional signals, not statistical proof. Same as Q84's conclusion. **Confidence: 8/10.**
+
+Sources:
+- [Content Strategy: The Consistency Problem Nobody Talks About](https://buckleyplanet.com/2026/03/content-strategy-the-consistency-problem-nobody-talks-about/) — recurring format builds audience anticipation
+- [Shopify: Best Practices for A/B Testing Social Media Posts](https://www.shopify.com/blog/ab-testing-social-media) — change one variable at a time
+- [SingleGrain: Creating Viral Reddit Posts](https://www.singlegrain.com/digital-marketing-strategy/creating-viral-reddit-posts-content-ideas-that-drive-engagement/) — master first-hour engagement, match format to subreddit
+- [Dynasty Nerds: Grade the Trade series](https://www.dynastynerds.com/trades/grade-the-trade-reviewing-reddit-submissions-july-6th/) — recurring same-format series pattern
+- [King Fantasy Sports: Dynasty Stock Watch](https://www.kingfantasysports.com/dynasty-stock-watch-buy-low-wrs-for-2024/) — crowded format lane
+- Sprint Q87 (first OC post — Report Card, "Fantasy GPA" concept), Q79 (format/timing), Q84 (post-mortem spreadsheet), Q88 (visual polish)
+
+### Implications for Razzle
+
+1. **Post #2 = RB Report Card, April 28 (Tuesday after NFL Draft).** Same Share Mode PNG format, same grade badges, same 5-metric breakdown. Position filter = RB. Title references "Fantasy GPA" by name to reinforce the brand from Post #1.
+
+2. **The "Fantasy GPA" is the concept to protect.** Every post should use the phrase "Fantasy GPA" in either the title or the first comment. This is the sticky language that becomes associated with Razzle. If people start saying "what's his GPA?" in unrelated threads, that's a win.
+
+3. **Do not build new features for Post #2.** The Report Card page already supports position filtering. The Share Mode canvas draw (Q89) works for both ALL and RB-only views. Post #2 requires zero new code — just a different filter setting in the screenshot.
+
+4. **The post-mortem spreadsheet (Q84) after Post #1 determines whether Post #3 stays in the Report Card lane or pivots.** The decision rule: if upvotes > 50 and ratio > 90%, continue with WR Report Card for Post #3. If upvotes < 30, pivot to Buy Low/Sell High for Post #3. The spreadsheet IS the A/B test results table.
+
+5. **After Posts #1-3 establish the Report Card series, Post #4 or #5 tests a different format.** This is when Stock Watch or Buy Low/Sell High enters the rotation. By then you have 3 data points for Report Card engagement and can compare against a new format with a real baseline.
+
+### Open Questions
+
+1. **Should the first reply-to-player-request screenshot use the same Share Mode (full Honor Roll cropped to just that player's row) or a different format (expanded single-player profile card with all 5 grades visualized as a radar chart)?**
+
+2. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral — should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
+
+3. **Should the Report Card series eventually become a weekly or biweekly recurring post with a predictable schedule (e.g., "Fantasy GPA Tuesday") — and at what point does recurring frequency risk becoming spammy on r/DynastyFF?**
+
+## NEXT QUESTION: Should the first reply-to-player-request screenshot use the same Share Mode (full Honor Roll cropped to just that player's row) or a different format (expanded single-player profile card with all 5 grades visualized as a radar chart)?
