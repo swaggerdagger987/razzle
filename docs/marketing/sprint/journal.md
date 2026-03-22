@@ -7448,4 +7448,121 @@ Sources:
 
 3. **What is the optimal format and timing for the first OC post on r/DynastyFF (April 16-21) — image post vs text post with embedded image, title formula, flair selection, and the best day of the week for maximum first-post visibility?**
 
+---
+
+## Q79: What is the optimal format and timing for the first OC post on r/DynastyFF (April 16-21) — image post vs text post with embedded image, title formula, flair selection, and the best day of the week for maximum first-post visibility?
+
+### Answer
+
+**Use an image post (not text post) with a Lab screenshot as the primary image. Post on Tuesday April 21 at 8-9 AM EST. Use the [Discussion] flair. Title formula: "[Position] [Contrarian Claim] — [Data Source] [Visualization Type]".**
+
+#### Format: Image Post Wins
+
+Image posts outperform text posts on Reddit by every measurable metric:
+
+- **40% higher click-through rates** from thumbnails in mobile feeds (over 50% of Reddit traffic is mobile). The Lab screenshot becomes a thumbnail that stops the scroll — position-colored cells, heat maps, and the razzle.lol watermark are all visible in preview.
+- **65% more upvotes** than text-only posts across Reddit. In r/movies, image posts averaged 33,913 upvotes vs 22,385 for text posts. While r/DynastyFF is smaller, the directional advantage holds.
+- **Algorithm advantage**: Reddit's ranking algorithm rewards early momentum (upvote velocity in first 60 minutes). Image posts earn faster initial upvotes because they require zero click-through to consume — the chart IS the content.
+
+**Critical detail**: Use a direct image upload (not a link post to imgur). Reddit native image posts get the full-width mobile preview. Link posts get a tiny thumbnail. This alone can determine whether the post reaches Rising.
+
+The text analysis goes in the **first comment**, not the post body. Image posts don't have body text on Reddit. Post the image, then immediately comment with 3-4 paragraphs of analysis + the methodology. This also seeds the comment section (posts with early comments rank higher).
+
+#### Title Formula
+
+Based on Reddit engagement research, titles with numbers and curiosity gaps outperform generic titles by ~300%. The formula for r/DynastyFF OC:
+
+**Template**: `[OC] [Contrarian Claim Using a Number] — data from [source]`
+
+Examples:
+- `[OC] Kenneth Walker's 4.6 YPC was top-5 among all RBs — but his dynasty value says RB18. Here's why the gap matters.`
+- `[OC] Only 3 rookie WRs since 2015 hit 900+ yards AND ran sub-4.40 — one of them is in this draft class.`
+- `[OC] I built a tool that ranks every dynasty player by 5 composite metrics. Here's who's overvalued.`
+
+Rules:
+1. **Lead with the data point, not the tool.** "I built a tool" is less engaging than "Kenneth Walker's 4.6 YPC." The tool is the credibility — the take is the hook.
+2. **Include [OC] tag.** r/DynastyFF doesn't require it, but it signals effort and filters you from the daily trade noise.
+3. **Keep under 120 characters.** Long titles get truncated on mobile. The contrarian claim must be fully visible in the first line.
+4. **No question titles for OC.** Statements earn 16% more engagement than questions (per 1,000-post Reddit marketing study). Assert a position.
+
+#### Flair Selection
+
+r/DynastyFF uses flair categories including Discussion, Trade, Rookie, and others. For the first OC post:
+
+- **Use [Discussion] flair** — it's the broadest category and signals "come debate this." Rookie flair works if the post is specifically about prospects, but Discussion casts a wider net.
+- **Avoid Trade flair** — trade posts are expected to be personal roster questions, which get funneled to the daily megathread. OC analysis with Trade flair may get auto-removed.
+- **If an "Analysis" or "OC" flair exists**, use it. But [Discussion] is the safe default that works on every fantasy football subreddit.
+
+#### Timing: Tuesday April 21, 8-9 AM EST
+
+The optimal day and time, considering both Reddit-wide data and the pre-draft calendar:
+
+**Why Tuesday specifically:**
+1. **Tuesday-Thursday are the highest-engagement weekdays on Reddit** — users are settled into the work week and browsing during morning breaks. Posts on Tuesday 7-9 AM EST consistently outperform other days.
+2. **April 21 is a Tuesday and 3 days before the NFL Draft (April 24).** Draft anticipation is at fever pitch. Every dynasty manager is refreshing r/DynastyFF for prospect takes. This is the highest-traffic week of the dynasty calendar.
+3. **Monday April 20 is too early** — it's the start of the week and the Q51 content cadence reserved Monday for the "Draft Preview" tweet/thread, not the Reddit OC post. Tuesday gives one day for the preview to circulate.
+4. **Wednesday/Thursday April 22-23 is too late** — draft night is Thursday evening. Posts on Wednesday compete with breaking news (final mock drafts, insider reports). By Thursday morning, attention shifts to live coverage.
+
+**Why 8-9 AM EST:**
+- Peak engagement window for 100k+ subscriber subreddits is 8-10 AM EST on weekdays.
+- Reddit's algorithm rewards upvote velocity in the first 60 minutes. Posting at 8 AM catches the East Coast morning browse AND gives 4 hours before West Coast lunch traffic reinforces the post's momentum.
+- r/DynastyFF skews 25-40 age range, many checking Reddit at work. 8 AM catches the "arrive at office, open Reddit" window.
+
+#### First Comment Structure
+
+Post the image, then immediately (within 60 seconds) drop this comment:
+
+```
+**What you're looking at:** [1-sentence description of the visualization]
+
+**The takeaway:** [2-3 sentences with the key insight — this is the "why should I care"]
+
+**Methodology:** [1-2 sentences — "Data from nflverse, 2015-2025 seasons, half-PPR scoring. Built with razzle.lol."]
+
+Happy to run any player through this if you want to see where they fall. Drop a name below.
+```
+
+The final line is the engagement trigger — it invites comments, which feed the algorithm. Every reply is a chance to drop another Lab screenshot in the thread.
+
+### Self-Critique
+
+1. **The "image post beats text post" data is from Reddit-wide studies (r/movies, general subreddit averages), not from r/DynastyFF specifically.** Fantasy football discussion subs may behave differently — their culture values long-form text analysis (SubvertADown's posts are text-heavy). However, the thumbnail advantage on mobile is platform-level, not community-specific. The compromise (image post + analysis in first comment) captures both advantages. **Confidence: 7/10.**
+
+2. **The April 21 Tuesday timing is strong on calendar logic but assumes r/DynastyFF has typical weekday traffic patterns.** Dynasty subs may actually peak on weekends when managers are actively trading. However, pre-draft week is atypical — it's the one week where weekday traffic should exceed weekends because of daily news drops (final prospect rankings, combine re-evaluations, insider reports). **Confidence: 8/10 on the week, 6/10 on the exact day.**
+
+3. **The title formula recommendation ("lead with the data point, not the tool") directly contradicts the Q51 cadence which recommended leading with the tool for brand awareness.** The Q51 cadence was designed for a multi-post week where later posts could build on established credibility. For the FIRST post, the data hook matters more than the brand. If the post succeeds, commenters will ask "what tool is this?" — which is the watermark funnel working as designed. **Confidence: 8/10.**
+
+4. **The "immediately post first comment" tactic is well-documented for Reddit OC but may look self-promotional if the comment is too polished.** The structure above intentionally reads casual ("Happy to run any player through this") rather than corporate ("Visit razzle.lol for more analytics"). But there's a fine line. **Confidence: 7/10.**
+
+5. **The [Discussion] flair recommendation is a safe guess, not confirmed.** r/DynastyFF may have updated their flair system, added an [Analysis] flair, or have specific automod rules for image posts. The April 15 test post (Q78) will validate flair options — check what flairs are available in the dropdown before committing. **Confidence: 5/10 — must verify on the actual sub.**
+
+Sources:
+- [Single Grain — Reddit Image Hosting ROI Guide](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/) — image posts 65% more upvotes, 38% of all Reddit submissions are images
+- [FasterCapital — Reddit Thumbnail Optimization](https://fastercapital.com/content/Reddit-post-thumbnail--Optimizing-Reddit-Post-Thumbnails-for-Increased-Click-Through-Rates.html) — 40% higher CTR with thumbnails, 50%+ mobile traffic
+- [Single Grain — Creating Viral Reddit Posts](https://www.singlegrain.com/digital-marketing-strategy/creating-viral-reddit-posts-content-ideas-that-drive-engagement/) — titles with numbers/curiosity gaps outperform by 300%, first 60 minutes critical
+- [RecurPost — Best Time to Post on Reddit 2026](https://recurpost.com/blog/best-time-to-post-on-reddit/) — Tuesday 7-9 AM EST peak, midweek highest engagement
+- [SocialBu — Best Time to Post on Reddit 2026](https://socialbu.com/blog/best-time-to-post-on-reddit) — weekday mornings 8-10 AM EST
+- [MEXC/Upvote.net — 1,000-Post Reddit Study](https://www.mexc.co/en-PH/news/933006) — statements beat questions by 16%
+- Sprint Q51 (pre-draft content cadence), Q53 (warm-up plan), Q70 (CQS analysis), Q75 (ready-to-post comments), Q78 (daily schedule)
+
+### Implications for Razzle
+
+1. **Lock in April 21 (Tuesday) 8 AM EST as the first OC post time.** Set a calendar reminder. Have the Lab screenshot ready the night before (April 20). The image should be the strongest Saved View from Q76 — likely the Walker Efficiency preset or the Rookie Combine preset, depending on which debate is hottest that week.
+
+2. **The first comment is pre-written but must feel spontaneous.** Draft it on April 20 but adapt the specific player names and numbers to whatever's trending on r/DynastyFF that morning. Check the Daily Trade Megathread at 7 AM — whatever player is being debated most, work them into the comment.
+
+3. **Prepare a "response arsenal" of 3-4 additional Lab screenshots.** When commenters drop player names ("run Breece Hall"), reply within 5-10 minutes with a fresh screenshot. This is the engagement loop: each reply is a new watermark impression and demonstrates the tool's depth. Pre-stage screenshots for the 5 most-debated dynasty players (per Q75: Walker, Hall, Mahomes, Pierce, rookies).
+
+4. **Do NOT mention razzle.lol in the title, first comment, or any reply unless directly asked "what tool is this?"** The watermark does the work. Mentioning the URL unprompted violates Reddit's 10:1 promotional ratio and risks CQS penalties. The correct response to "what tool is this?" is: "It's razzle.lol — free dynasty analytics tool I've been building. The heat colors are the thing that makes it useful for trade debates imo."
+
+5. **Monitor the post every 30 minutes for 4 hours after posting (8 AM - 12 PM).** Reply to every comment. The algorithm rewards posts with active OP engagement. If the post reaches Rising within 2 hours, it's working. If it's flat after 2 hours, cross-post a variant to r/fantasyfootball to capture broader traffic.
+
+### Open Questions
+
+1. **Should Razzle add a "Reddit crop" export mode to the Lab's PNG export — limiting visible rows to 8-12, using 4:3 aspect ratio, and auto-including a title/subtitle — so screenshots are feed-optimized without manual cropping?**
+
+2. **What does the complete "Screenshot Playbook" look like — a single doc mapping each debate topic to its Saved View name, Lab URL, comment template, and sample comment — and should it live in docs/marketing/ or as a pinned note in the sprint journal?**
+
+3. **What is the optimal "response comment" workflow when r/DynastyFF commenters request player lookups — should Razzle pre-generate 20-30 player screenshots as a library, or generate them live from the Lab during the 4-hour post-monitoring window?**
+
 ## NEXT QUESTION: Should Razzle add a "Reddit crop" export mode to the Lab's PNG export — limiting visible rows to 8-12, using 4:3 aspect ratio, and auto-including a title/subtitle — so screenshots are feed-optimized without manual cropping?
