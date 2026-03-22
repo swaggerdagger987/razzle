@@ -4481,3 +4481,96 @@ Sources:
 3. **How should Razzle handle the Reddit post comments section during and after posting — should there be pre-written "discussion starter" comments for each position group to seed engagement?**
 
 ## NEXT QUESTION: Should Razzle pre-write "discussion starter" comments for each position group (QBs drafted, RBs drafted, WRs drafted, TEs drafted) and post them immediately after the Round 1 recap to seed engagement and organize discussion?
+
+---
+
+## Q50: Should Razzle pre-write discussion starter comments per position group and post them immediately after the Round 1 recap to seed engagement?
+
+**Date:** 2026-03-21
+**Category:** Content Strategy / Reddit Engagement
+
+### Answer
+
+**YES — post exactly 4 position-group comments immediately after the recap post goes live, plus one methodology comment. Five total OP comments within 5 minutes of posting. This is the single highest-leverage move for draft night Reddit engagement.**
+
+#### Why This Works: The Algorithm Math
+
+Reddit's ranking algorithm weighs **engagement velocity** — the ratio of upvotes and comments to post age. A post that accumulates 5 thoughtful comments in its first 10 minutes signals to the algorithm that this is an active, high-quality discussion. Reddit's "Community-First" algorithm (2025 update) explicitly prioritizes comment activity as a quality indicator: posts with active discussion threads stay visible in Hot longer than posts with equivalent upvotes but minimal comments.
+
+Two early, thoughtful comments outperform twenty passive upvotes for algorithmic ranking. Five structured OP comments — each asking a specific question — create **five separate reply threads**, which multiplies the comment count as people respond to each one.
+
+#### The Five Comments (Pre-Written Templates)
+
+**Comment 1: QBs Drafted** — "The QB class through Round 1: [names]. [Specific take — e.g., 'Wilson at 1.08 means 4 QBs went top-10 for the first time since 2021']. How does this move your SF rookie draft board? Are you still buying [consensus QB1] at 1.01?"
+
+**Comment 2: RBs Drafted** — "RB landing spots: [names + teams]. [Specific take — e.g., 'Only 2 RBs in Round 1 — lightest since 2014']. Which back got the best situation? Worst?"
+
+**Comment 3: WRs Drafted** — "WR haul: [names + teams]. [Specific take about the class]. Who's your WR1 now that we know landing spots?"
+
+**Comment 4: TEs Drafted** — "TE watch: [names, if any in Round 1]. [Take on TE scarcity or specific landing spot]. Does [top TE prospect] move into your top 12 dynasty TEs?"
+
+**Comment 5: Methodology** — "Built this with razzle.lol's Lab — college stats, prospect scores, landing spot context all in one screener. Happy to answer questions about the data or methodology." (This is the ONE soft mention — positioned as attribution, not promotion.)
+
+#### Why Pre-Write, Not Improvise
+
+Draft night is a live event. The window between Round 1 ending and posting the recap is ~25-30 minutes (per Q49's production workflow). In that window, you're updating data, screenshotting the Lab, assembling the gallery, writing the post body, AND writing analysis. Adding 5 improvised comments would add 15-20 minutes. Pre-writing the templates NOW — with blanks for player names and takes — cuts comment posting to under 5 minutes. Fill in 2-3 names and one hot take per comment.
+
+#### What NOT To Do
+
+- **Don't post more than 5 OP comments.** More than that looks like you're talking to yourself and risks the "OP is astroturfing" perception. Five is the sweet spot: enough to organize discussion, few enough to feel natural.
+- **Don't ask fake questions you already answered in the post.** Each comment should prompt a DIFFERENT discussion than the post body. The post says who won/lost; the comments ask "what do YOU think about [specific player]?"
+- **Don't use sockpuppet accounts.** Reddit detects coordinated behavior. One authentic account (the branded Razzle account from Q26) is correct. Transparency is a signal of trust in niche communities.
+- **Don't drop links in comments.** The watermark on gallery images is the only funnel. Comments mentioning "razzle.lol" more than once will trigger self-promotion flags.
+
+#### Timing Protocol
+
+1. Post the recap (markdown table + image gallery) — T+0
+2. Immediately post Comment 5 (Methodology) — T+1 min
+3. Post Comments 1-4 (position groups, most exciting first) — T+2 to T+5 min
+4. Monitor replies for the next 60 minutes, responding to every comment — this is the critical algorithmic window
+5. After 60 minutes, check back every 2-3 hours for the next 12 hours
+
+#### The Engagement Multiplier
+
+Each position-group comment becomes a mini-thread. If even 3 people reply to each of the 4 position comments, that's 12 additional comments in the first hour — on top of any organic discussion the post generates. Reddit sees: 1 post + 5 OP comments + 12 replies = 18 comments in Hour 1. That's enough velocity to push the post to Hot in r/DynastyFF (a sub where most posts get 5-15 comments total).
+
+### Self-Critique
+
+1. **The "two early comments outperform twenty upvotes" claim comes from marketing agency blogs (Signals, TheRedditMarketingAgency), not peer-reviewed research or Reddit's official documentation.** The directional signal is strong — Reddit's official "Planting Seeds" guide confirms that early engagement matters — but the specific ratio is marketing copy. **Confidence: 7/10.**
+
+2. **The claim that 5 OP comments is the sweet spot is a judgment call, not empirically tested.** Reddit's official "Planting Seeds" guide for community managers recommends leaving the first comment yourself to kickstart discussion, but doesn't specify a number. More than 5 risks looking like OP is dominating their own thread. Fewer than 4 misses the position-group structure. **Confidence: 6/10 — should test with 3 vs 5 in earlier posts.**
+
+3. **The assumption that r/DynastyFF posts typically get 5-15 comments is based on casual observation, not systematic measurement.** High-quality OC posts (like SubvertADown's weekly rankings) regularly get 50-100+ comments. Razzle's first post won't have that credibility yet. **Confidence: 5/10 — should scrape actual comment counts before draft night.**
+
+4. **The methodology comment positioning is well-supported.** Reddit's self-promotion guidelines consistently recommend transparency and attribution over stealth marketing. "Built with [tool]" reads as OC methodology, not advertising. **Confidence: 8/10.**
+
+Sources:
+- [Planting Seeds — Encouraging and Maintaining an Active Community — Reddit Help](https://support.reddithelp.com/hc/en-us/articles/15484360497812-Planting-seeds-aka-Encouraging-and-maintaining-an-active-community)
+- [Reddit Algorithm Explained: Why 94% of Posts Fail — Signals Agency](https://signals.sh/reddit-algorithm-explained/)
+- [The Reddit Algorithm — How Does It Work? — The Reddit Marketing Agency](https://www.theredditmarketingagency.com/post/how-the-reddit-algo-works-for-marketing)
+- [How Reddit Upvotes Boost Your Post Visibility — UpvoteMax](https://upvotemax.com/how-reddit-upvotes-help)
+- [Reddit Self-Promotion Rules: Naturally Mention Your Product — ReplyAgent](https://www.replyagent.ai/blog/reddit-self-promotion-rules-naturally-mention-product)
+- [Using Reddit for Organic Brand Promotion — Franki T](https://www.francescatabor.com/articles/2025/8/21/using-reddit-for-organic-brand-promotion-a-step-by-step-guide)
+- [How to Get More Reddit Comments: 13 Effective Ways — MediaMister](https://www.mediamister.com/blog/how-to-get-more-reddit-comments/)
+
+### Implications for Razzle
+
+1. **Pre-write the 5 comment templates NOW.** Create `scripts/reddit_draft_comments.md` with the 4 position-group templates + methodology comment. Leave blanks for player names, teams, and hot takes. On draft night, fill in blanks in 5 minutes.
+
+2. **Test the pattern BEFORE draft night.** The week before the draft (April 21-23), post a "Pre-Draft Dynasty Big Board" to r/DynastyFF with 3-4 OP position-group comments. Measure: do the comments get replies? Does the post reach Hot? This gives data before the high-stakes draft night post.
+
+3. **Scrape r/DynastyFF comment baselines.** Before draft night, measure the median comment count on Hot posts in r/DynastyFF to calibrate expectations. If the median is 20, then 18 comments in Hour 1 is a strong signal. If it's 50, the bar is higher.
+
+4. **Build a draft-night checklist.** The production workflow from Q49 (update DB → screenshot Lab → assemble gallery → post) should include "post 5 seeding comments" as an explicit step. Total time budget: 25 min for post + 5 min for comments = 30 min from Round 1 ending to fully seeded discussion.
+
+5. **Monitor and respond for 60 minutes.** The early reply window is algorithmically critical. Block 60 minutes post-posting for active engagement — answering questions, expanding on takes, responding to disagreements. This is not optional; it's the difference between Hot and buried.
+
+### Open Questions
+
+1. **Should Razzle scrape r/DynastyFF Hot post comment counts and engagement patterns for the 30 days before Draft Day to establish baselines for what "good" looks like — and what tool/script is needed?**
+
+2. **What is the optimal pre-draft content cadence for the week before the draft (April 21-23) to build follower count, test the position-group comment pattern, and set expectations for draft night coverage?**
+
+3. **Should Razzle automate Lab screenshot generation for draft night — a headless browser script that captures preset views after each DB update — to compress the 10-minute manual screenshot step to under 1 minute?**
+
+## NEXT QUESTION: What is the optimal pre-draft content cadence for the week before the NFL Draft (April 21-23, 2026) to build Reddit/Twitter follower count, test engagement patterns, and set audience expectations for draft night coverage?
