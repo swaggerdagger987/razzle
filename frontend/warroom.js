@@ -2680,12 +2680,6 @@ function _setLocalQueryCount(count) {
   localStorage.setItem('razzle_query_count', JSON.stringify({ date: today, count: count }));
 }
 
-function incrementQueryCount() {
-  var newCount = getTodayQueryCount() + 1;
-  _setLocalQueryCount(newCount);
-  return newCount;
-}
-
 /**
  * Server-side query tracking. Call BEFORE making LLM request.
  * Returns { allowed, used, limit, remaining, plan } or null on error.
@@ -3253,25 +3247,6 @@ function renderBriefingCard(agentId, content, isError) {
       '<span class="briefing-card-toggle">' + toggleText + '</span>' +
     '</div>' +
     '<div class="briefing-card-body">' + bodyHtml + upsellBlock + freeFooter + '</div>' +
-  '</div>';
-}
-
-function renderLoadingCard(agentId) {
-  var agent = AGENT_DEFS[agentId];
-  if (!agent) return '';
-
-  var isRazzle = agentId === 0;
-  var cardClass = 'briefing-card loading' + (isRazzle ? ' razzle-card' : '');
-
-  return '<div class="' + cardClass + '" data-briefing-agent="' + agentId + '">' +
-    '<div class="briefing-card-header">' +
-      '<span class="briefing-card-dot" style="background:' + agent.color + '"></span>' +
-      '<span class="briefing-card-name">' + escapeHtml(agent.name) + '</span>' +
-      '<span class="briefing-card-role">' + escapeHtml(agent.role) + '</span>' +
-    '</div>' +
-    '<div class="briefing-card-body">' +
-      '<div class="briefing-card-loading-text">pulling film...</div>' +
-    '</div>' +
   '</div>';
 }
 
