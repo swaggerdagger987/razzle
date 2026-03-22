@@ -6601,4 +6601,102 @@ By April 15, the account is 25 days old with ~80-120 karma. Make one low-stakes 
 
 3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
 
-## NEXT QUESTION: Should the Reddit account's first-ever comment be in r/DynastyFF (building subreddit-specific karma) or in a higher-traffic sub like r/fantasyfootball (faster karma accumulation, lower scrutiny) — and what's the optimal split between target sub and feeder subs during the 15-day warm-up?
+## Q71: Should the Reddit account's first-ever comment be in r/DynastyFF or in a higher-traffic sub like r/fantasyfootball — and what's the optimal split between target sub and feeder subs during the 15-day warm-up?
+
+**Date**: 2026-03-21
+
+### Answer
+
+**Start in r/fantasyfootball and r/nfl for the first 5 days, then shift to r/DynastyFF. The optimal split is 60/40 feeder-to-target in Week 1, flipping to 30/70 in Week 2. Never start cold in your target sub.**
+
+Evidence:
+
+**1. Niche subs earn karma ~30% faster per comment, but large subs provide safer first-day cover.**
+
+Karma-building research shows niche communities (50K-200K members) yield higher karma-per-comment because contributions are more visible and valued. But for a brand-new account (0 karma, 0 history), the first 3-5 comments set the CQS trajectory. Posting your first-ever comment in r/DynastyFF — a 126K-member community where regulars notice new voices — creates more scrutiny than posting in r/fantasyfootball (2M+ members) where new commenters are invisible in the daily noise. The large sub provides "karma cover" — a few upvotes from r/fantasyfootball before your first r/DynastyFF comment means automod sees a non-zero-karma account, not a brand-new one.
+
+**2. Subreddit-specific karma matters, but total karma matters MORE for automod.**
+
+Reddit's automod can check both total karma and subreddit-specific karma. However, the overwhelmingly common configuration is total comment karma threshold + account age. Subreddit-specific karma checks are used primarily by mega-subs (r/memes, r/AskReddit) to prevent drive-by posting. Hobby subs like r/DynastyFF are far more likely to use total karma gates. This means karma earned anywhere counts — r/fantasyfootball karma satisfies r/DynastyFF automod.
+
+**3. The "familiar face" effect requires at least 10 comments in the target sub before OC posting.**
+
+When a new account posts OC analysis, the community checks post history. A history of only r/fantasyfootball comments reads as "redraft player trying to promote something to dynasty managers." A history with 15+ r/DynastyFF comments on trade threads, prospect discussions, and roster advice reads as "one of us." The goal isn't just clearing automod — it's building contextual credibility.
+
+**4. The optimal 15-day split:**
+
+| Days | r/fantasyfootball | r/DynastyFF | r/nfl / other | Total/day |
+|------|------------------|-------------|---------------|-----------|
+| 1-5 (April 1-5) | 2 comments/day | 0-1 comments/day | 1 comment/day | 3-4 |
+| 6-10 (April 6-10) | 1 comment/day | 2-3 comments/day | 0-1 comment/day | 3-4 |
+| 11-15 (April 11-15) | 0-1 comment/day | 3-4 comments/day | 0 | 3-4 |
+
+**Week 1 rationale:** r/fantasyfootball's March activity centers on free agency reactions and early mock drafts. These threads get 50-200 comments. An early, data-informed comment ("Gainwell's 73 receptions last year make him PPR-relevant in Tampa") earns 5-15 karma with zero risk. By Day 5, the account has ~30-50 karma and a clean CQS — enough to start commenting in r/DynastyFF without looking suspicious.
+
+**Week 2 rationale:** Shift to r/DynastyFF. April 6-15 is peak dynasty offseason activity — rookie rankings debates, startup draft prep, trade advice threads. Comment in daily trade threads (easy karma, high volume) and prospect discussions (higher karma per comment, builds analyst credibility). Target 2-3 comments per day with substance: "At 1.04 I'm taking Love over Mendoza because the rushing upside gap is massive — Love's 18.2 PPG vs Mendoza's 14.1 in games started." By Day 15, the account should have 80-120 total karma with 15+ r/DynastyFF comments visible in history.
+
+**Week 3 (April 11-15) rationale:** Almost exclusively r/DynastyFF. This is the final credibility push before the April 16 OC post. The last 5 comments before the first OC post should be high-quality analytical takes in r/DynastyFF threads — they'll be the most recent items in the post history when people check.
+
+**5. Thread targeting by comment type (highest karma-per-comment first):**
+
+| Thread Type | Expected Karma/Comment | When |
+|-------------|----------------------|------|
+| Breaking free agency signing reactions | 10-30 | Days 1-5 (if signings happen in late March) |
+| Prospect debate threads ("Who's WR1?") | 5-15 | Days 6-15 |
+| "Rate my trade" responses | 3-8 | Anytime (daily threads, high volume) |
+| Mock draft / rookie ranking comments | 5-15 | Days 8-15 |
+| Roster construction advice | 3-10 | Days 6-15 |
+| "Who would you rather" threads | 2-5 | Filler — use when no better threads are active |
+
+**6. Comment style — natural, not template:**
+
+Write comments as a dynasty manager sharing opinions, not a marketer building karma. Lead with the take, not the reasoning. Be slightly opinionated. Use stats when relevant but don't force them. Examples:
+
+- **Good:** "I'm fading Tyson everywhere. His YPRR is good but he's a contested-catch specialist on a team that just added a slot receiver. Lemon is the safer bet at 1.03."
+- **Bad:** "Great analysis! I agree with your ranking." (Zero substance, CQS-harmful if it's a pattern)
+- **Bad:** "As someone who tracks college stats, I'd note that..." (Stilted, sounds like a persona)
+
+### Self-Critique
+
+1. **The "start in r/fantasyfootball then migrate" strategy is supported by karma-building guides** that recommend niche subs for higher karma velocity. But I'm INVERTING this — recommending large subs first, then niche. The reason is specific to Razzle's situation: the target sub (r/DynastyFF) is where the OC will post. First impressions matter more there. Using r/fantasyfootball as the warm-up gym before entering the target arena is the safer play. **Confidence: 7/10** — could be wrong if r/DynastyFF-specific karma turns out to be checked by automod.
+
+2. **The "30-50 karma by Day 5" estimate is conservative.** In r/fantasyfootball during offseason (lower traffic, less competition), a thoughtful free-agency comment could hit 50+ karma on its own if the thread goes hot. Or it could get 2 upvotes if the thread dies. The variance is high. The calendar should be treated as a floor, not a prediction. **Confidence: 6/10 on exact numbers.**
+
+3. **The "15+ r/DynastyFF comments in history" credibility threshold is my judgment, not empirical.** No research specifically measures how many comments a dynasty community needs to see before accepting a new poster. The principle (contextual credibility) is well-established. **Confidence: 7/10.**
+
+4. **r/fantasyfootball in late March / early April is QUIET.** It's deep offseason. Daily thread volume drops 60-80% from in-season. This means fewer opportunities per day but also less competition per thread. Comments that would be buried in September may be the top comment in March. **Confidence: 8/10 this works in Razzle's favor.**
+
+5. **Comment karma from r/fantasyfootball IS transferable to r/DynastyFF automod checks.** Total comment karma is the standard automod check, not per-sub karma. **Confidence: 9/10.**
+
+Sources:
+- [How to Get First 1000 Reddit Karma Fast (2026) — MediaFast](https://www.mediafa.st/how-to-get-your-first-1000-reddit-karma)
+- [Reddit Karma Guide 2026 — KarmaGuy](https://karmaguy.io/en/blog/reddit-karma-guide)
+- [Reddit Karma Farming Guide (2026) — Reppit AI](https://reppit.ai/blog/reddit-karma-farming-guide)
+- [Reddit Account Warm-Up Guide 2026 — IPFoxy](https://www.ipfoxy.com/blog/ideas-inspiration/5535)
+- [0 to 500 Reddit Karma in 2 Weeks — WappKit](https://www.wappkit.com/blog/reddit-karma-fast-guide-2026)
+- [Reddit Karma Requirements Guide — Postiz](https://postiz.com/blog/reddit-karma-requirements)
+- [How to Get Karma on Reddit — Multilogin](https://multilogin.com/blog/how-to-get-karma-on-reddit/)
+- [r/DynastyFF Subreddit Stats](https://subredditstats.com/r/dynastyff)
+- Sprint Q53 (warm-up calendar), Q69 (account creation), Q70 (CQS analysis)
+
+### Implications for Razzle
+
+1. **First comment goes in r/fantasyfootball or r/nfl, not r/DynastyFF.** Post a substantive take on a free agency signing or roster move. Get 5-15 karma. Repeat 2-3 times on Day 1. The account enters r/DynastyFF on Day 3-5 with non-zero karma and 2-3 days of age — a much safer first impression.
+
+2. **By April 10, pivot fully to r/DynastyFF.** The last 5-7 days before OC posting (April 16) should be exclusively r/DynastyFF comments. Anyone who clicks the username sees "this person lives in dynasty subs."
+
+3. **Track comments in `scripts/reddit_warmup_log.csv`.** Columns: date, subreddit, thread_title, comment_summary, upvotes_24h. This log also serves as content research — which takes resonate, which fall flat.
+
+4. **The April 15 test post (from Q70) should be in r/DynastyFF, NOT r/fantasyfootball.** The test validates the target sub's automod. A test post in a different sub tells you nothing about r/DynastyFF's filters.
+
+5. **Never delete a comment that underperforms.** CQS penalizes deletion. A -2 karma comment is better left than deleted. Accept the variance and move on.
+
+### Open Questions
+
+1. **What specific comment templates work best for fantasy football subreddits during the March-April off-season — trade advice, mock draft reactions, free agency analysis, or prospect evaluation — and which generates the highest karma-per-comment in this time window?**
+
+2. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
+
+3. **Should Razzle build a Reddit comment quality checker — a simple rubric (has stat? has take? >2 sentences? no links?) — to ensure every warm-up comment meets CQS-safe quality standards before posting?**
+
+## NEXT QUESTION: What specific comment templates work best for fantasy football subreddits during the March-April off-season — trade advice, mock draft reactions, free agency analysis, or prospect evaluation — and which generates the highest karma-per-comment in this time window?
