@@ -5666,4 +5666,104 @@ Playwright's `screenshot.py` reads this file, iterates URLs, captures each at 25
 
 3. **What pre-draft "hype content" should Razzle post to r/DynastyFF in the 2-3 weeks before draft night to establish presence and credibility, so that the draft night recap post isn't from an unknown account?**
 
-## NEXT QUESTION: What pre-draft "hype content" should Razzle post to r/DynastyFF in the 2-3 weeks before draft night to establish presence and credibility, so that the draft night recap post isn't from an unknown account?
+## Q62: What pre-draft "hype content" should Razzle post to r/DynastyFF in the 2-3 weeks before draft night to establish presence and credibility, so that the draft night recap post isn't from an unknown account?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Post 3-4 standalone data analysis pieces to r/DynastyFF between April 1-15, each solving a real community pain point with Lab screenshots. No product launch. No "check out my tool." Just original data analysis that happens to use Razzle's Lab as the visualization layer. The watermark on screenshots is the only funnel. By draft night, the username is "that data person who posts good analysis" — not "some unknown account."**
+
+#### The Core Strategy: "Data Analyst" Identity, Not "Tool Creator"
+
+The #1 mistake fantasy tool creators make on Reddit is announcing themselves as tool creators. DraftKick's case study shows the failure mode: they posted a launch announcement, got 14,000 views, and ONE comment. Dynasty Daddy and KeepTradeCut succeeded because they were community members first — posting analysis that used their tools, not posting about their tools.
+
+Razzle's pre-draft hype content must follow the same pattern. The Reddit account (warmed up per Q53 since March 24) transitions from commenting to posting OC analysis. The OC happens to include Lab screenshots with the razzle.lol watermark. Curious users visit the URL. That's the entire funnel.
+
+Reddit's 90/10 self-promotion rule applies to the account's total history, not individual posts. By April 1, the account has ~8 days of commenting (~32 comments, ~100+ karma). Four OC posts over 15 days keeps the ratio at 32:4 = 89/11% — borderline but defensible because the posts are native image/text OC, not external links.
+
+#### The 4-Post Pre-Draft Calendar (April 1-15)
+
+**Post 1 (April 2, Wednesday) — "Aging Curve Anomaly"**
+- **Title:** "I tracked PPG-by-age for every dynasty-relevant player since 2015. Here are the 5 guys who are defying their aging curves heading into 2026."
+- **Format:** Text post with 2 embedded Lab screenshots (Aging Curves page, filtered to anomaly players; Stat Explorer scatter with age vs. PPG). 300-word writeup naming the 5 players with stat backing.
+- **Why this works:** Aging decline is the #2 pain point on r/DynastyFF (2,332 mentions in market research). Posts that name specific players with data generate debate. "Defying aging curves" implies both buy candidates (still undervalued) and sell candidates (regression incoming). Both sides argue.
+- **Target engagement:** 30-80 upvotes, 20-40 comments. This is the calibration post — test screenshot formatting, comment seeding (OP drops position-group breakdown comments), and posting time.
+
+**Post 2 (April 6, Sunday) — "Rookie Class Comparison"**
+- **Title:** "I compared the 2026 rookie class to every class since 2017 using college production data. This class is historically [X] at [position]."
+- **Format:** Image post. Lab Prospect Board screenshot (heat-colored, 2x PNG per Q59) with college stats. OP comment with methodology and specific comps ("The last time a QB class had this college completion% profile was 2021 — and that class produced [names]").
+- **Why this works:** Prospect research is #3 pain point (802 mentions). Rookie draft is #4 (754 mentions). April is peak rookie draft prep — every dynasty manager is finalizing their board. Historical class comparisons are evergreen engagement drivers because they give concrete reference points. The "since 2017" framing signals genuine data depth, not vibes.
+- **Target engagement:** 50-150 upvotes. This is the highest-ceiling post because it taps into the dominant April conversation (the draft).
+
+**Post 3 (April 10, Thursday) — "The Veterans Getting Replaced"**
+- **Title:** "5 veterans who lose the most dynasty value if their team drafts their replacement in Round 1. Data + the trade windows you have left."
+- **Format:** Text post with Trade Value chart screenshot + Buy/Sell page screenshot. Name the 5 veterans, show their current trade value, and explain the scenario where they lose value (e.g., "If Bears draft [RB] at 1.04, Roschon Johnson's target share drops from X% to Y% based on historical backfield splits when teams add a 1st-round RB").
+- **Why this works:** Trade confusion (#8, 350 mentions) and value uncertainty (#11, 164 mentions). Dynasty managers are actively making pre-draft trades. This post gives them ammunition: "trade this veteran NOW before their value tanks." Urgency + actionable advice = engagement. The "trade windows you have left" framing creates FOMO.
+- **Target engagement:** 40-100 upvotes, 30-50 comments. Veteran value debates are the most comment-dense threads on r/DynastyFF.
+
+**Post 4 (April 14, Monday) — "2025 Redraft Dry Run Gallery"**
+- **Title:** "I built a system to visualize post-draft dynasty impact in real time. Here's what it looks like applied to the 2025 draft — the 2026 version goes live draft night."
+- **Format:** Reddit image gallery (5-6 Lab screenshots from Q61 preset views, applied to 2025 data). Pick Board, QB Class, RB Tiers, WR Winners, Trade Value Movers. Each image has the branded bottom bar (Q58). OP comment: "Planning to post a full Round 1 recap gallery within 30 minutes of the last pick Thursday night. Feedback on the format welcome."
+- **Why this works:** This is the ONLY post that mentions "draft night" — it frames Razzle's coverage as a community service ("feedback welcome"), not self-promotion. The 2025 retrospective has inherent value (people can validate the visualizations against a draft they already know). The "goes live draft night" creates anticipation. Anyone who sees this post will look for the account on April 23.
+- **Target engagement:** 30-60 upvotes. Gallery posts get fewer upvotes but higher save rates — people bookmark them to reference later. The real win is that draft night viewers will remember the username.
+
+#### Spacing and Risk Management
+
+- **4 posts across 14 days = 1 post every 3.5 days.** This is within the safe range for a warmed-up account (Q26 established max 2-3 posts/week; Q51 pushes to 4/week only during the high-activity draft week).
+- **Wednesday-Sunday-Thursday-Monday spacing** avoids posting on consecutive days, which triggers Reddit's spam heuristics.
+- **If Post 1 or Post 2 gets auto-removed:** Message the mods immediately with a friendly note ("Hi, I posted some OC analysis and it seems to have been caught by the filter — any chance you can approve it?"). Account will have 30+ days of age and 100+ karma by then, making this request credible.
+- **If engagement is low (under 10 upvotes) on Posts 1-2:** Don't panic. Smaller analytical posts on r/DynastyFF routinely get 10-30 upvotes — the community values depth over virality. Adjust Post 3 timing to a peak hour (Tuesday 12 PM ET) and make the title more provocative.
+
+#### What NOT to Post
+
+- **"I built a tool" launch posts.** Not until post-draft at the earliest. Tool announcements from unknown accounts get 0 engagement or hostile "another fantasy tool, great" responses.
+- **Generic mock drafts.** Everyone posts mock drafts. Razzle's edge is data depth, not draft order opinions.
+- **Link posts to razzle.lol.** External links trigger spam filters and get downvoted. All content is native Reddit (images + text). The watermark on screenshots is the only URL.
+- **Posts about Razzle's features.** No "we have 100+ columns" or "free screener." The Lab sells itself through screenshots. If the visualization is good, people visit the watermark URL. If it's not, no amount of feature-listing helps.
+
+### Self-Critique
+
+1. **The 4-post plan assumes the account clears spam filters by April 2.** The account will be ~12 days old with ~100 karma — risky for a first text post with embedded images. Post 1 may need to be a pure text post (no images) to avoid the image-spam filter. **Confidence: 6/10 — have a backup text-only version of Post 1 ready.**
+
+2. **"30-80 upvotes" targets are aspirational.** The median r/DynastyFF analytical post gets 10-30 upvotes. Posts that name specific players and take a stance can break 50+. Posts that include data visualizations (not common on the sub) may outperform. But 30+ is not guaranteed. **Confidence: 5/10 on specific targets, 8/10 on the content strategy.**
+
+3. **Post 4 (the dry run gallery) is the closest to self-promotion.** "I built a system" explicitly positions the poster as a tool creator. Framing it as "here's what the 2025 draft looked like through this lens" + "feedback on the format" softens it, but sophisticated Redditors will recognize it as a product preview. This is intentional — by Post 4, the account has 3 OC posts of genuine analysis establishing credibility. The reveal works because trust has been earned. **Confidence: 7/10.**
+
+4. **The player-specific takes in Posts 1 and 3 could age badly.** If a named player gets traded or injured between writing and posting, the analysis becomes irrelevant. Build each post from fresh Lab data within 24 hours of posting, not weeks in advance. **Confidence: 9/10 — this is an execution detail, not a strategy risk.**
+
+5. **r/DynastyFF may have specific rules against "tool promotion" that aren't publicly documented.** Some fantasy subs have blanket bans on tool posts from new accounts. The warm-up commenting (Q53) mitigates this, but if the mods decide Posts 3-4 are promotional, they can remove them without warning. Having 3 weeks of genuine commenting history is the best defense. **Confidence: 6/10 on mod reception, 9/10 on the warm-up mitigating the risk.**
+
+### Sources
+- [DraftKick: Launching on the Fantasy Football Subreddit — DraftKick](https://draftkick.com/blog/good-and-bad-of-launching-on-fantasy-football-subreddit/)
+- [Reddit Self-Promotion Rules 2026 — ReplyAgent](https://www.replyagent.ai/blog/reddit-self-promotion-rules-naturally-mention-product)
+- [How to Promote SaaS on Reddit Without Getting Banned — ReplyAgent](https://www.replyagent.ai/blog/how-promote-saas-reddit-without-getting-banned)
+- [Self-Promote on Reddit the Right Way — Vadim Kravcenko](https://vadimkravcenko.com/qa/self-promotion-on-reddit-the-right-way/)
+- [Reddit Marketing: Self-Promote and Get Traffic — Grow & Convert](https://www.growandconvert.com/marketing/reddit-marketing/)
+- [Build Your Brand Through Reddit Organic Marketing — Online Optimism](https://onlineoptimism.com/resource/build-your-brand-reddit-organic-marketing-ultimate-guide/)
+- [Reddit Marketing 101: 33 Expert Tips — Signity Solutions](https://www.signitysolutions.com/blog/reddit-marketing-expert-tips)
+- Razzle market research: r/DynastyFF pain points (docs/marketing/marketing_research.md)
+- Sprint Q51: Pre-draft content cadence (April 16-22)
+- Sprint Q53: Reddit account warm-up plan (March 24 - April 15)
+
+### Implications for Razzle
+
+1. **Write Post 1 ("Aging Curve Anomaly") by March 28.** Even though it posts April 2, having the analysis written early allows time to refine the Lab screenshots and test the crop/watermark. Store as `scripts/predraft_content/post1_aging_curves.md`.
+
+2. **The 4 pre-draft posts (April 1-15) + 4 draft-week posts (April 16-22) = 8 OC posts over 22 days.** Combined with 23+ days of commenting, the account's total history by draft night will be: ~90 comments + 8 OC posts = 92% non-promotional. Well within Reddit's guidelines.
+
+3. **Post 2 (Rookie Class Comparison) is the highest-leverage content to invest in.** It taps into the peak April topic (rookie draft prep), uses Razzle's unique college data advantage (cfbfastR adapter), and the comparison framing is inherently shareable. Spend the most time making this screenshot pixel-perfect.
+
+4. **Post 4 (2025 Dry Run Gallery) is also the Q61 screenshot pipeline test.** Running all 10 presets against 2025 data tests the Playwright pipeline, branded bar, and gallery format. If any preset view looks broken, there are 9 days to fix it before draft night.
+
+5. **Create a content tracking spreadsheet.** `scripts/predraft_content_tracker.csv` with columns: `post_number, date, title, subreddit, upvotes_1h, upvotes_24h, comments_1h, comments_24h, saves, watermark_clicks`. Track every post's performance to calibrate the draft-week cadence (Q51).
+
+### Open Questions
+
+1. **Should Razzle cross-post any of the 4 pre-draft OC pieces to r/fantasyfootball (2.2M members) for broader reach — or save that sub exclusively for the draft night recap and August redraft content?**
+
+2. **What specific commenting "voice" should the Razzle account use during the warm-up and OC phases — data-analyst ("the numbers say X"), scout ("watching the tape, I see Y"), or trade-advisor ("you should sell Z now because...") — and does consistency matter more than adaptability?**
+
+3. **How should Razzle handle negative reception (downvotes, hostile comments, mod removal) on any of the 4 pre-draft posts — retreat, engage, or ignore — and at what threshold does negative reception warrant changing the draft-night plan?**
+
+## NEXT QUESTION: Should Razzle cross-post any of the 4 pre-draft OC pieces to r/fantasyfootball (2.2M members) for broader reach — or save that sub exclusively for the draft night recap and August redraft content?
