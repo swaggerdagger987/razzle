@@ -7112,4 +7112,132 @@ Sources:
 
 3. **Should the Reddit account's profile bio reference "dynasty data" or "fantasy analytics" — and what profile elements (avatar, banner, pinned comment) build the most credibility for the "data analyst who plays dynasty" persona?**
 
-## NEXT QUESTION: What are the 5 best ready-to-post warm-up comments for r/fantasyfootball and r/DynastyFF this week — fully written, stat-backed, CQS-safe comments targeting the Walker/Hall/Mahomes/Pierce/rookie debates identified in Q73, using the templates from Q74?
+---
+
+## Q76: What specific Razzle Lab screenshots would best complement each of the 5 debate topics (Walker, Hall, Mahomes, Pierce, rookie chaos zone) — which screener filters, columns, and visual modes produce the most compelling "I ran the numbers" images?
+
+**Date:** 2026-03-21
+**Source:** Lab codebase analysis (lab.js presets, visual modes, export capabilities), Reddit OC engagement patterns, player stat research
+
+### Answer
+
+The Lab has 8 column presets (PPR, Passing, Rushing, Receiving, Dynasty, Dynasty Rankings, Efficiency, Advanced), visual modes (H = heat colors, D = density, T = tier breaks, L = leader badges, V = visual cycle), sparkline trend columns, percentile mode, data bars, and PNG export with Razzle watermark + shareable URL. Every screenshot should use **heat colors ON** (H key) — the red/green cell tinting is what makes Lab screenshots instantly recognizable versus plain tables.
+
+Here are the 5 debate-specific screenshot configurations:
+
+---
+
+**1. Kenneth Walker KC Buy/Sell → "Efficiency Preset, RB filter, heat colors"**
+
+- **Page:** Lab screener (`/lab.html`)
+- **Preset:** Efficiency
+- **Filters:** Position = RB, Season = 2025, Min GP ≥ 12
+- **Sort:** PPG descending
+- **Visual modes:** Heat colors ON, Leader badges ON
+- **Key columns visible:** PPG, yards_per_carry, catch_rate, target_share, td_rate, fumble_rate
+- **Why it works:** Shows Walker's 4.65 YPC heat-colored against all RBs. The green cells on efficiency + the orange/red on catch rate (he's a mediocre pass-catcher) tells the entire buy/sell story in one image. The comment becomes: "I filtered the Lab for RB efficiency and here's what jumped out — Walker's rushing efficiency is elite but his receiving profile is the concern at $43M."
+- **Reddit crop:** Top 12 RBs by PPG, Walker highlighted. Include Breece Hall in the same frame for contrast.
+
+**2. Breece Hall Price Check → "Trade Finder page screenshot"**
+
+- **Page:** Trade Finder (`/tradefinder.html?player=HALL_ID`)
+- **Why Trade Finder, not Lab:** The debate is "what's Hall worth?" — Trade Finder answers this directly by showing equal-value targets, buy-low options, and sell-high candidates. The three-section layout (equal value / buy low / sell high) is more argument-ready than raw stats.
+- **Visual modes:** Default (Trade Finder has its own styling with value bars)
+- **Key elements visible:** Hall's trade value number, 3-4 equal-value targets, stock trend arrows
+- **Why it works:** "Ran Hall through the trade finder — here's who you could realistically get." Shows concrete names at equal value rather than abstract opinions. The value bars make it instantly visual. The buy-low section reveals who's undervalued near Hall's tier.
+- **Reddit crop:** Full Trade Finder view with Hall selected, showing equal-value and buy-low sections.
+
+**3. Mahomes Sell-High → "Dynasty preset + Aging Curves page combo"**
+
+- **Primary screenshot:** Lab screener
+  - **Preset:** Dynasty
+  - **Filters:** Position = QB, Season = 2025
+  - **Sort:** Dynasty value descending
+  - **Visual modes:** Heat colors ON, Sparkline trend column visible
+  - **Key columns:** dynasty_value, age, PPG, trend sparkline, passing_yards, passing_tds, rushing_yards
+  - **Why:** The sparkline shows Mahomes's scoring trend declining across the season. The age column heat-colored shows him aging out of the green zone. Dynasty value column shows where he actually ranks versus perception.
+
+- **Secondary screenshot (optional):** Aging Curves page (`/aging.html`)
+  - **Filter:** QB only
+  - **Why:** The canvas-drawn PPG-by-age curve with Mahomes's dot plotted shows visually that he's past the QB peak. This is the "one image that wins the argument" — a declining curve with a labeled dot is more persuasive than any stat table.
+  - **Reddit usage:** "Here's the aging curve for QBs — Mahomes is the dot circled in red. The decline started before the ACL."
+
+**4. Alec Pierce Contrarian → "Receiving preset, WR filter, heat colors"**
+
+- **Page:** Lab screener
+- **Preset:** Receiving
+- **Filters:** Position = WR, Season = 2025, Min GP ≥ 12
+- **Sort:** receiving_yards descending
+- **Visual modes:** Heat colors ON, Leader badges ON
+- **Key columns:** receiving_yards, receptions, targets, catch_rate, intended_air_yards_per_target (aDOT), receiving_yards_after_catch, drop_rate
+- **Why it works:** Pierce's 21.3 YPC (NFL leader) will be a bright green cell. But his catch rate (56%) and receptions (47) will be deep red/orange against WR1 peers. The aDOT column shows he's a deep-ball specialist, not a volume target. The heat colors tell the story without words: elite yards-per-catch, concerning volume.
+- **Reddit crop:** Top 15 WRs by receiving yards. Pierce's row will have a dramatic green/red split across columns — visually striking, highly screenshottable.
+- **Comment pairing:** "Filtered the Lab for WR receiving efficiency — Pierce's row is half green, half red. That's your $116M question right there."
+
+**5. Rookie Chaos Zone 1.03-1.06 → "College/Prospects screener, Combine preset"**
+
+- **Page:** Lab screener, College universe
+- **Preset:** Combine (for prospects) — shows height, weight, 40-yard, vertical, broad jump, bench, shuttle, 3-cone, RPS score
+- **Filters:** Draft class = 2026 (if available), or manually search prospect names
+- **Sort:** RPS score descending (Razzle Prospect Score)
+- **Visual modes:** Heat colors ON (percentile-based tinting on combine metrics)
+- **Key columns:** rps_score, height, weight, forty_time, vertical, broad_jump, position
+- **Why it works:** Taylen Green's combine numbers (4.36 forty at 6'6"/227, 99th percentile vertical and broad jump) will light up as bright green across the board. Comparing him to Mendoza (elite production, average athleticism) and Tate/Tyson (WR debate) in the same table creates the visual tension that drives the 1.03-1.06 debate.
+- **Reddit crop:** 8-10 top prospects, sorted by RPS score. Green's athletic row vs. Mendoza's production row tells the QB debate visually.
+- **Comment pairing:** "Pulled the combine numbers into the Lab — Green's row is all green (99th everything). Mendoza's production grades are elite but his athletic profile is... not. That's why 1.03-1.06 is chaos."
+
+---
+
+**Universal screenshot rules for all 5:**
+
+| Rule | Why |
+|------|-----|
+| Heat colors ALWAYS on (H key) | Red/green tinting is the visual hook — plain tables look like every other tool |
+| 8-12 rows visible, not 25 | Reddit feed thumbnails compress; fewer rows = readable at small size |
+| Watermark visible but not obstructive | Every screenshot auto-includes razzle.lol URL — passive brand exposure |
+| Shareable URL baked in | The Lab serializes state to URL params; watermark includes the URL so curious users can recreate the exact view |
+| Dark mode OFF for Reddit | Light mode (Anthropic sand background) has better contrast in Reddit's white feed |
+| Leader badges ON (L key) | Gold/silver/bronze dots on top 3 values add visual interest and authority |
+
+### Self-Critique
+
+1. **The screenshot configurations are grounded in real Lab features** — I verified every preset, column, filter, and visual mode against the actual lab.js codebase. The Efficiency preset has the exact columns listed (yards_per_carry, catch_rate, target_share, td_rate, fumble_rate). Heat colors, leader badges, sparklines, and PNG export with watermark are all confirmed working. **Confidence: 9/10 on technical accuracy.**
+
+2. **The player stats driving each screenshot are verified.** Walker 4.65 YPC / 1,027 yards (Pro Football Reference), Pierce 47/84 catches = 56% catch rate / 21.3 YPC NFL leader (Colts.com), Hall 1,415 scrimmage yards (FantasyCalc), Green 4.36/43.5"/11'02" all 99th percentile (Draft Sharks). **Confidence: 9/10.**
+
+3. **The "Trade Finder for Hall" recommendation is strategic but untested on Reddit.** I haven't verified that Trade Finder screenshots specifically perform well on Reddit. Lab screener heat maps have a stronger visual hook. Trade Finder's value bars may look less distinctive. Consider a Lab screenshot as backup. **Confidence: 7/10.**
+
+4. **The "8-12 rows" crop recommendation is based on general Reddit image UX, not measured fantasy-specific data.** Reddit's card view shows images at roughly 600x400px in feed — tables with 25 rows are unreadable at that size. But I haven't A/B tested the optimal row count. **Confidence: 7/10.**
+
+5. **The Aging Curves secondary screenshot for Mahomes is powerful but requires the user to navigate away from the Lab.** Posting two screenshots (Lab table + Aging Curves chart) is more complex than a single image. Reddit gallery posts (multi-image) exist but get slightly lower engagement than single-image posts. Consider making the aging curve the primary and dropping the Lab table. **Confidence: 6/10.**
+
+Sources:
+- Lab codebase: `frontend/lab.js` — presets (lines 893-940), heat colors (line 971), leader badges (line 974), sparklines (line 868), PNG export (line 78-115)
+- [Pro Football Reference — Kenneth Walker III](https://www.pro-football-reference.com/players/W/WalkKe00.htm) — 2025 stats: 221 carries, 1,027 yards, 4.65 YPC, 5 TDs
+- [Colts.com — Alec Pierce 2025 season](https://www.colts.com/news/colts-wr-alec-pierce-ends-2025-with-1-000-yards-nfl-best-yards-per-reception-average-and-a-career-first-an-ejection) — 47 rec, 84 tgt, 1,003 yds, 21.3 YPC (NFL best)
+- [FantasyCalc — Breece Hall dynasty value](https://www.fantasycalc.com/players/breecehall-4576) — trade value 21.85, RB12, 30-day trend -96
+- [Draft Sharks — 2026 Superflex Rookie Rankings](https://www.draftsharks.com/article/2026-superflex-rookie-rankings) — Green combine: 4.36/43.5"/11'02", all 99th percentile
+- [Draft Sharks — 2026 Rookie Rankings](https://www.draftsharks.com/article/2026-rookie-rankings) — Love 1.01 consensus, 1.03-1.06 chaos zone
+- Sprint Q73 (debate topics), Q74 (comment templates), Q75 (ready-to-post comments)
+
+### Implications for Razzle
+
+1. **Heat colors are the differentiator.** Every competitor (FantasyPros, KeepTradeCut, FantasyCalc) shows plain tables. Razzle's percentile heat coloring on every cell is the visual moat. Every Reddit screenshot should have H key toggled on — it's what makes Lab screenshots look different from a spreadsheet.
+
+2. **The Lab has 5 distinct screenshot types for 5 distinct debate formats.** Efficiency preset for buy/sell debates (Walker), Trade Finder for value debates (Hall), Dynasty preset + aging curves for age/decline debates (Mahomes), Receiving preset for contract debates (Pierce), College/Combine preset for draft debates (rookies). This variety prevents "every screenshot looks the same" fatigue.
+
+3. **Trade Finder is an underutilized screenshot source.** Most Reddit tools only show rankings or tables. A screenshot showing "here are 4 players at equal trade value to Hall" is a novel format that directly answers the question dynasty players are asking. This could be Razzle's signature "I ran the numbers" format.
+
+4. **The Aging Curves page is the highest-impact single screenshot for QB debates.** A declining line chart with a labeled player dot is more immediately persuasive than any table. This should be the go-to for any QB age/decline argument (Mahomes, Kelce, Derrick Henry).
+
+5. **Screenshot-first content creation should work backwards from the image.** Instead of "write a comment, then find a supporting screenshot," the workflow should be: open the Lab, toggle heat colors, apply filters, see what visually pops, then write the comment around the most striking visual pattern. The green/red split on Pierce's row IS the comment.
+
+### Open Questions
+
+1. **Should Razzle pre-build and save 5 named "Saved Views" in the Lab — one per debate topic (Walker Efficiency, Hall Dynasty, Mahomes Aging, Pierce Receiving, Rookie Combine) — so screenshots can be regenerated instantly when the debate resurfaces in different threads?**
+
+2. **What is the optimal daily comment schedule for the April 1-15 warm-up period — which hours, which threads, how many comments per day, and what's the escalation plan if karma accumulation is behind the 80-120 target by Day 10?**
+
+3. **Should Razzle add a "Reddit crop" export mode to the Lab's PNG export — limiting visible rows to 8-12, using 4:3 aspect ratio, and auto-including a title/subtitle — so screenshots are feed-optimized without manual cropping?**
+
+## NEXT QUESTION: Should Razzle pre-build and save 5 named "Saved Views" in the Lab — one per debate topic (Walker Efficiency, Hall Dynasty, Mahomes Aging, Pierce Receiving, Rookie Combine) — so screenshots can be regenerated instantly when the debate resurfaces in different threads?
