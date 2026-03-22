@@ -8123,3 +8123,131 @@ Sources:
 3. **Should Razzle build a lightweight "share page" (razzle.lol/share/{id}) that renders a saved screenshot with Open Graph meta tags — so when the URL is pasted into Reddit/Discord/Twitter, it auto-generates a rich preview card with the Lab screenshot as the thumbnail?**
 
 ## NEXT QUESTION: What is the optimal post-OC-post analytics workflow — which metrics should Razzle track after each Reddit post (upvotes, comment count, watermark-driven site visits, new user signups) and how should they feed back into the next post's strategy?
+
+
+---
+
+## Q84: What is the optimal post-OC-post analytics workflow -- which metrics should Razzle track after each Reddit post (upvotes, comment count, watermark-driven site visits, new user signups) and how should they feed back into the next post strategy?
+
+*Date: 2026-03-21*
+
+### Answer
+
+**Track 5 metrics across 3 layers (Reddit, Razzle, Conversion), log them in a simple spreadsheet after each post, and use a 3-post rolling comparison to steer content decisions. Do NOT build custom analytics infrastructure -- use what already exists plus manual logging.**
+
+#### The 3-Layer Measurement Stack
+
+**Layer 1: Reddit Metrics (manual, from Reddit UI + Reddit Pro)**
+
+| Metric | Where to find | When to check | Why it matters |
+|--------|--------------|---------------|----------------|
+| **Upvotes (score)** | Post page | T+1h, T+4h, T+24h, T+48h | Visibility proxy -- determines how many people see the post |
+| **Upvote ratio** | Post page (desktop, below post) | T+4h, T+24h | Quality signal -- below 75% means polarizing, above 90% means consensus value |
+| **Comment count** | Post page | T+4h, T+24h | Engagement depth -- comments matter more than upvotes for community tools |
+| **Saves** | Reddit Pro (Post Insights) | T+48h | Strongest signal -- indicates real utility worth returning to |
+| **Post views** | Reddit Pro (Post Insights) | T+48h | Reach -- how many people saw the post (unique views) |
+
+Reddit Pro is free. Sign up at reddit.com/reddit-pro. It provides hourly view counts for the first 48 hours post-publish, plus saves. This is the only way to get view counts on organic posts -- the standard Reddit UI does not show them.
+
+**Layer 2: Razzle Site Metrics (from existing analytics)**
+
+Razzle already has POST /api/analytics/pageview tracking on every page and a GET /api/analytics/summary admin endpoint. The key gap: **referrer is sent by the frontend but discarded by the backend.** One fix unlocks Reddit attribution:
+
+**Upgrade needed:** Store the referrer field that 70+ pages already send. Add a referrer TEXT column to the pageviews table. Then filter by referrer LIKE '%reddit.com%' to see Reddit-driven traffic. This is a 15-minute backend change -- no new infrastructure.
+
+| Metric | How to get | Why it matters |
+|--------|-----------|----------------|
+| **Reddit referral pageviews** | Filter pageviews by referrer containing reddit.com | Direct attribution -- how many people clicked through |
+| **Pages per Reddit session** | Pageviews within 30 min of a Reddit referral | Engagement depth -- did they explore or bounce |
+| **Lab usage from Reddit** | Pageviews to /lab.html with Reddit referrer | Core conversion -- the Lab is the product |
+
+**Do NOT add UTM parameters to Reddit links.** UTM-tagged links look like marketing spam on Reddit and will get the post downvoted or removed. The watermark on screenshots (razzle.lol) drives direct/type-in traffic, which shows up as empty referrer in analytics. Track this indirectly: compare total site traffic on post day vs. baseline. A spike in direct traffic on post day means the watermark is working.
+
+**Layer 3: Conversion Events (from existing events table)**
+
+The events table already tracks register, login, sleeper_connect, trial_start, checkout, and agent_query. No changes needed -- just check event counts for the 48 hours after each Reddit post.
+
+| Metric | How to get | Why it matters |
+|--------|-----------|----------------|
+| **New registrations** | events WHERE event_type='register' AND created_at > post_time | Ultimate conversion -- did the post create users |
+| **Sleeper connections** | events WHERE event_type='sleeper_connect' AND created_at > post_time | Product engagement -- did they bring their league |
+
+#### The Post-Mortem Spreadsheet
+
+After each OC post, fill in one row of a Google Sheet (or local CSV):
+
+```
+Date | Subreddit | Topic | Player | Post_Type |
+Upvotes_1h | Upvotes_4h | Upvotes_24h | Upvote_Ratio |
+Comments_24h | Saves_48h | Views_48h |
+Reddit_Referrals_48h | Lab_Views_48h | Registrations_48h |
+Comment_Replies_Made | Player_Requests_Received |
+Top_Requested_Player | Notes
+```
+
+This takes 5 minutes to fill in at T+48h. The critical columns are: **Saves** (content quality), **Reddit Referrals** (click-through), **Registrations** (conversion). Everything else is context.
+
+#### The Feedback Loop (3-Post Rolling)
+
+After 3 posts, patterns emerge. Compare:
+
+1. **Which topic got the most saves?** Double down on that debate category in the playbook (Q82)
+2. **Which screenshot style got the highest upvote ratio?** Make that the default Share Mode preset
+3. **Which post time got the most views?** Refine the posting schedule (Q79 said Tuesday 8-9 AM EST)
+4. **Which comment replies generated the most follow-up questions?** Those players go into the Tier 1 pre-stage list (Q81)
+5. **Did Reddit referrals spike on post day?** If yes, the link-in-comment strategy works. If no, the watermark-only strategy is working instead (adjust expectations)
+
+**Decision rule:** If a post gets fewer than 50 upvotes and below 90% ratio on r/DynastyFF (126K subscribers), the content did not resonate -- change the topic category, not the format. If a post gets above 100 upvotes but fewer than 5 Reddit referrals, the screenshot is interesting but not driving clicks -- add a more compelling reason to visit the Lab in the comment.
+
+#### What NOT to Build
+
+- **No custom Reddit scraper.** Manual checking at 3 time intervals is sufficient for 1-2 posts per week. Automation makes sense at 10+ posts/week.
+- **No dashboard.** A spreadsheet with 20 rows (10 weeks x 2 posts) is more actionable than a dashboard. Dashboards are for teams; this is a solo operator workflow.
+- **No cohort analysis.** With fewer than 100 registrations expected in the first month, cohort analysis is noise. Track raw counts.
+- **No A/B testing infrastructure.** With 1-2 posts per week, each post is inherently different. Compare sequentially, not simultaneously.
+
+### Self-Critique
+
+1. **The 3-layer measurement stack is well-grounded.** Reddit Pro provides views/saves (confirmed by Reddit Help docs), Razzle existing pageview/event tracking covers site-side metrics, and the referrer fix is minimal. No new tools required. **Confidence: 9/10.**
+
+2. **The "do not use UTM parameters on Reddit" advice is strongly supported.** Multiple Reddit marketing guides (Karmic, SingleGrain) confirm that UTM-tagged links look spammy in organic Reddit contexts. The watermark-driven attribution model (direct traffic spike on post day) is the accepted approach for organic Reddit marketing. **Confidence: 9/10.**
+
+3. **The r/DynastyFF benchmarks (50 upvotes, 90% ratio) are estimated, not verified.** SubredditStats shows 126K subscribers but does not provide per-post engagement benchmarks. OC analysis posts on r/DynastyFF typically range from 20-200 upvotes based on anecdotal observation, but I could not find published benchmarks. The 50-upvote threshold is a reasonable starting point that should be calibrated after the first 3 posts. **Confidence: 6/10 on the specific numbers.**
+
+4. **The "saves are the strongest signal" claim is well-documented.** Multiple sources (Sprout Social, Reddit marketing guides) identify saves as the highest-intent engagement action on Reddit -- higher than upvotes or comments. Reddit Pro is the only way to access save counts on your own posts. **Confidence: 9/10.**
+
+5. **The referrer storage fix (adding a column to pageviews) is technically simple but unverified.** The codebase confirms that 70+ pages already send document.referrer in the request body but the backend discards it. Adding referrer TEXT to the pageviews table and extracting it in log_pageview() is straightforward. However, Referrer-Policy strict-origin-when-cross-origin means the referrer will be the origin only (e.g. https://www.reddit.com/) with no path -- sufficient for Reddit attribution but will not tell you which subreddit or post drove the traffic. **Confidence: 8/10.**
+
+6. **The feedback loop 3-post rolling comparison is pragmatic but may not reach statistical significance.** With 1-2 posts per week, 3 posts takes 2-3 weeks. Content performance on Reddit is highly variable (time of day, competing posts, Reddit algorithm mood). The 3-post rolling window provides directional signals, not statistical proof. This is appropriate for the scale -- formal significance testing requires 30+ data points. **Confidence: 7/10.**
+
+Sources:
+- [Reddit Help: Post and Comment Insights](https://support.reddithelp.com/hc/en-us/articles/35363096996500-Post-Comment-Insights) -- native post metrics (views, upvotes, saves)
+- [Reddit Help: Reddit Pro Features](https://support.reddithelp.com/hc/en-us/articles/24389311835028-Reddit-Pro-Features) -- free analytics dashboard with post views and engagement
+- [Karmic: Reddit Organic Tracking, Attribution, and Measurement](https://www.withkarmic.com/blog/reddit-marketing-measurement-and-attribution) -- multi-signal attribution, no tidy dashboards
+- [SingleGrain: How to Measure Reddit ROI and Attribution in 2025](https://www.singlegrain.com/search-everywhere-optimization/how-to-measure-reddit-roi-and-attribution-in-2025/) -- UTM setup, GA4 integration, attribution models
+- [SingleGrain: Reddit Image Hosting Visual Content ROI](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/) -- image post engagement metrics, 38% of submissions are images
+- [Sprout Social: Social Media Metrics 2026](https://sproutsocial.com/insights/social-media-metrics/) -- saves as strongest engagement signal
+- [SubredditStats: r/DynastyFF](https://subredditstats.com/r/dynastyff) -- 126K subscribers, activity patterns
+- Razzle codebase: backend/live_data/storage.py (pageviews + events tables, referrer discarded), backend/server.py (analytics endpoints)
+
+### Implications for Razzle
+
+1. **One backend fix enables Reddit attribution: store the referrer.** Add referrer TEXT DEFAULT '' to the pageviews table and extract data.get('referrer', '') in the log_pageview() function. This is a 15-minute change that should ship before the first OC post (April 21). Every other analytics need is already covered by existing infrastructure.
+
+2. **Reddit Pro is mandatory before the first post.** Sign up at reddit.com/reddit-pro (free). It is the only way to see post views and saves -- the two most important metrics for content quality assessment. Without Reddit Pro, you are flying blind on reach.
+
+3. **The post-mortem spreadsheet is the analytics product, not a dashboard.** Create a Google Sheet with the 18 columns listed above. Fill in one row per post at T+48h. After 3 posts (roughly 2 weeks), review the sheet and make one strategic adjustment (topic, time, format, or comment style). This is the feedback loop -- simple, manual, and sufficient for the posting cadence.
+
+4. **Watermark attribution is indirect but real.** The razzle.lol watermark on Lab screenshots drives type-in/direct traffic that cannot be attributed via referrer. Measure this by comparing site traffic on post days vs. non-post days. A consistent spike on post days means the watermark is working. If no spike, consider adding "Full interactive version at razzle.lol/lab" to the comment (Q75 already includes this).
+
+5. **The decision rule (50 upvotes / 90% ratio threshold) should be calibrated after 3 posts.** r/DynastyFF engagement varies widely by topic and time of year. The first 3 posts establish your baseline. Adjust the thresholds based on actual performance, not pre-launch estimates.
+
+### Open Questions
+
+1. **Should the playbook include a "Player Request Log" template -- a simple table where the operator records every player name requested during each monitoring session -- and should that log feed into an automated Tier 1 pre-stage list that evolves across multiple OC posts?**
+
+2. **Should Razzle build a lightweight "share page" (razzle.lol/share/{id}) that renders a saved screenshot with Open Graph meta tags -- so when the URL is pasted into Reddit/Discord/Twitter, it auto-generates a rich preview card with the Lab screenshot as the thumbnail?**
+
+3. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral -- should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
+
+## NEXT QUESTION: Should the playbook include a "Player Request Log" template -- a simple table where the operator records every player name requested during each monitoring session -- and should that log feed into an automated Tier 1 pre-stage list that evolves across multiple OC posts?
