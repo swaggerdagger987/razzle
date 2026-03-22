@@ -4197,3 +4197,104 @@ Sources:
 3. **Should Razzle offer a "Draft War Room" email/notification where users input their dynasty roster, and Razzle sends them a personalized "your roster impact" summary after each round — showing which of THEIR players gained or lost value based on landing spots?**
 
 ## NEXT QUESTION: What's the optimal Twitter thread format for Draft Day — individual tweets per pick (more impressions per tweet, better for algorithmic reach) vs. a rolling thread (easier to follow, single bookmark point)?
+
+---
+
+## Q47: Optimal Twitter thread format for Draft Day — individual tweets per pick vs. rolling thread?
+
+**Date:** 2026-03-21
+**Category:** Content Strategy / Twitter Format
+
+### Answer
+
+**Individual tweets per pick. Not a thread.** Here is why.
+
+#### The Algorithm Math
+
+Twitter treats threads asymmetrically. The first tweet gets standard algorithmic distribution, but subsequent tweets receive **reduced distribution** -- shown primarily to users who already engaged with the first tweet. Buffer found threads get 63% more *total* impressions than a single tweet, but that compares thread-vs-one-tweet, not thread-vs-many-standalone-tweets.
+
+The critical insight: **each standalone tweet gets its own shot at the For You feed.** If Razzle posts 32 individual tweets (one per Round 1 pick), each tweet independently enters the algorithm. A thread of 32 tweets gives you one entry point. The math favors standalone tweets for maximum total reach during a high-velocity live event.
+
+#### How Draft Night Actually Works on Twitter
+
+Draft night is a **firehose event**. Users are refreshing, searching hashtags (#NFLDraft, player names), and responding to the pick they care about. A thread buries Pick 28 under 27 other tweets. A standalone tweet about Pick 28 shows up when that user searches for the player name.
+
+Fantasy accounts like PFF, FantasyLife, and KeepTradeCut post **individual tweets per pick** during draft night. They do not thread them. The pattern is proven: standalone visual tweet with hashtag, player tag, and engagement from that pick fan base.
+
+#### Razzle Optimal Draft Night Format
+
+**Round 1 (Thursday evening): Individual tweets, one per pick.**
+- Format: "Pick [#]: [Player] to [Team]. [One-line dynasty take]. [Lab screenshot showing prospect stats + team depth]. #NFLDraft #DynastyFF"
+- Post within 2-3 minutes of each pick
+- Each tweet includes a Lab screenshot (the watermark does the marketing)
+- Each tweet is independently searchable and algorithmically distributed
+
+**End of Round 1: Summary thread (4-5 tweets).**
+- "Round 1 is in the books. Here are the biggest dynasty winners and losers from The Lab"
+- Tweet 2: Biggest veteran value drops (Trade Value Chart screenshot sorted by delta)
+- Tweet 3: Best landing spots for rookies
+- Tweet 4: Worst landing spots
+- Tweet 5: "Full Lab breakdown at razzle.lol -- every prospect, every stat, updated in real time."
+- This thread captures the **post-round recap audience**
+
+**Rounds 2-3 (Friday): Batched tweets, 3-5 picks per tweet.**
+- Attention drops in later rounds -- individual tweets per pick yields diminishing returns
+- Group picks: "Picks 33-37: [screenshot of updated prospect board]. Dynasty risers: [names]. Fallers: [names]."
+- Post every 15-20 minutes instead of per-pick
+
+**Rounds 4-7 (Saturday): One summary tweet per round.**
+- "Round 4 complete. [Lab screenshot]. Dynasty-relevant names: [2-3 players]."
+- Most Round 4-7 picks are irrelevant to dynasty
+
+#### Why NOT a Rolling Thread
+
+1. **Discovery penalty.** Users searching "#NFLDraft [player name]" find standalone tweets, not tweet #23 buried in a thread.
+2. **Engagement isolation.** If Pick 3 tweet goes viral (surprise QB pick), a standalone tweet captures ALL the engagement. In a thread, virality lifts the thread but dilutes per-tweet metrics.
+3. **Retweet friction.** Users retweet standalone tweets freely. Retweeting one tweet from a thread shows "Show this thread" -- the recipient has to click through, reducing engagement.
+4. **Timeline clutter is manageable.** 32 tweets in 3 hours is aggressive, but draft night followers expect volume. Accounts that tweet 50+ times during the draft gain followers because users specifically follow fantasy accounts for draft night coverage.
+
+#### The One Exception: Bookmark Thread
+
+Post a **single pinned tweet** before the draft starts: "DRAFT NIGHT TRACKER: I will be posting dynasty impact analysis for every pick with Lab screenshots. Bookmark this and follow along."
+
+This gives users a single reference point to bookmark. But the actual content goes out as individual tweets.
+
+### Self-Critique
+
+1. **The "63% more impressions" stat from Buffer compares threads vs single tweets, not threads vs multiple standalone tweets.** I am extrapolating that standalone tweets x N > thread impressions, which is directionally correct but not directly measured. **Confidence: 7/10.**
+
+2. **The claim that PFF/FantasyLife/KTC post individual tweets per pick is based on observed behavior from past drafts, not a formal study.** I have not verified 2025 specific draft night feeds. **Confidence: 8/10** -- this is standard industry practice for live events.
+
+3. **The Round 2-3 batching and Round 4-7 summary recommendations are judgment calls.** There is no data on optimal tweet frequency by round. The logic (attention drops after Round 1) is sound but specific groupings (3-5 picks per tweet) are arbitrary. **Confidence: 6/10.**
+
+4. **The "32 tweets in 3 hours will not lose followers" claim is anecdotal.** For a new account with few followers, this risk is lower (you are not annoying an established audience). **Confidence: 7/10.**
+
+Sources:
+- [Buffer: Twitter Threads Generate Higher Reach, Engagement](https://buffer.com/resources/twitter-thread-experiment/)
+- [Typefully: How to Make Killer Twitter Threads in 2026](https://typefully.com/blog/how-to-make-killer-twitter-threads)
+- [Tweet Archivist: Twitter Algorithm Explained 2026](https://www.tweetarchivist.com/twitter-algorithm-explained-2025)
+- [OpenTweet: How the Twitter/X Algorithm Works in 2026](https://opentweet.io/blog/how-twitter-x-algorithm-works-2026)
+- [Sprout Social: How the Twitter Algorithm Works in 2026](https://sproutsocial.com/insights/twitter-algorithm/)
+- [Footballguys: How to Maximize Twitter for Fantasy Football](https://www.footballguys.com/article/how-to-maximize-twitter-for-fantasy-football)
+
+### Implications for Razzle
+
+1. **Pre-write 32 tweet templates for Round 1** -- one per pick slot. Format: "Pick [#]: [PLAYER] to [TEAM]. [Dynasty take]. #NFLDraft #DynastyFF" + screenshot placeholder. On draft night, fill in name/team/take, attach screenshot, post.
+
+2. **Build a draft_night_tweeter.py script** that takes pick number, player name, and team as input, generates the tweet text from the template, and opens the Lab screenshot URL for that player. Automate content prep so posting is copy-paste.
+
+3. **Schedule the Round 1 summary thread in advance.** Write the "Round 1 winners and losers" thread skeleton now. On draft night, plug in the names and screenshots. Post within 15 minutes of the last Round 1 pick.
+
+4. **Pin a "Draft Night Tracker" tweet before the draft starts** (6 PM ET April 24). This is the bookmark anchor.
+
+5. **Do not overinvest in Rounds 4-7.** One summary tweet per round is sufficient. Dynasty relevance drops after Round 3.
+
+### Open Questions
+
+1. **Should Razzle automate Lab screenshot generation for draft night -- headless browser captures triggered by draft_night_updater.py -- so the workflow is: enter pick, script updates DB + captures screenshot, drag screenshot into tweet?**
+
+2. **What is the right pre-draft content cadence for the week before the draft (April 21-23) to build follower count and set expectations for draft night coverage?**
+
+3. **Should Razzle cross-post draft night content to Reddit (r/DynastyFF, r/fantasyfootball) in real-time, or wait until after Round 1 and post a single comprehensive recap thread?**
+
+## NEXT QUESTION: Should Razzle cross-post draft night content to Reddit (r/DynastyFF, r/fantasyfootball) in real-time, or wait until after Round 1 and post a single comprehensive recap thread?
