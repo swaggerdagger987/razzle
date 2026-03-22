@@ -4297,4 +4297,78 @@ Sources:
 
 3. **Should Razzle cross-post draft night content to Reddit (r/DynastyFF, r/fantasyfootball) in real-time, or wait until after Round 1 and post a single comprehensive recap thread?**
 
-## NEXT QUESTION: Should Razzle cross-post draft night content to Reddit (r/DynastyFF, r/fantasyfootball) in real-time, or wait until after Round 1 and post a single comprehensive recap thread?
+## Q48: Should Razzle cross-post draft night content to Reddit (r/DynastyFF, r/fantasyfootball) in real-time, or wait until after Round 1 and post a single comprehensive recap thread?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Post-round recap threads on Reddit. Real-time individual posts on Twitter. Do NOT real-time cross-post to Reddit during the draft. Reddit's megathread culture, moderation patterns, and algorithmic dynamics all punish real-time spam from new accounts — and reward high-effort recap OC posted AFTER the chaos.**
+
+#### Why Real-Time Reddit Posts During the Draft Are a Bad Idea
+
+1. **Megathread dominance.** Both r/DynastyFF (~192K members) and r/fantasyfootball (~2M members) pin megathreads during the NFL Draft. Individual posts about specific picks get removed or downvoted as "belongs in the megathread." Mods actively enforce this during high-traffic live events to prevent the sub from being flooded.
+
+2. **Comments in megathreads get buried.** A Draft Night megathread accumulates thousands of comments within hours. Research on Reddit megathreads confirms that "initial posts dominate visibility while later contributions are buried" — posting a comment with a Lab screenshot at Pick 15 means it's invisible by Pick 20. Megathread comments are sorted by "new" during live events, so your content has a ~5-minute visibility window before being pushed down.
+
+3. **New account + rapid posting = spam filter.** Razzle's Reddit account will be 4-5 weeks old by Draft Day (per Q26 warm-up calendar). Reddit's spam detection flags accounts that post multiple times in quick succession, especially if those posts link to an external domain (razzle.lol). Even without explicit removal, Reddit's algorithm deprioritizes posts from low-karma accounts that post frequently. Posting 10 individual pick reactions in 2 hours from a new account is the exact pattern that triggers rate limiting.
+
+4. **Reddit's algorithm rewards post-event synthesis, not play-by-play.** The Reddit upvote algorithm prioritizes "vote velocity" — how quickly upvotes accumulate in the first hour. A well-crafted recap post published after Round 1 ends (when 192K dynasty managers are looking for synthesis, not raw takes) will receive concentrated upvotes in that critical window. A real-time post published mid-draft competes against 500 other comments and posts for attention.
+
+#### The Correct Reddit Strategy for Draft Night
+
+**Post THREE recap threads across the weekend, timed to the natural breaks:**
+
+1. **Post-Round 1 (Thursday ~11:30 PM ET):** "Round 1 Dynasty Impact: Landing Spot Winners & Losers with Data Screenshots" on r/DynastyFF. A single, comprehensive post with a table of every skill-position pick, Lab screenshots showing college stats + team context for each, and before/after value takes. This is the crown jewel. Post within 30 minutes of Round 1 ending.
+
+2. **Post-Day 2 (Friday ~11 PM ET):** "Rounds 2-3 Landing Spots: Updated Rookie Big Board" on r/DynastyFF. Updated Prospect screener screenshot with all drafted players and landing-spot-adjusted analysis. This catches the RB/WR value picks that matter most for dynasty rookie drafts.
+
+3. **Post-Draft Complete (Saturday evening):** "Complete 2026 Post-Draft Rookie Rankings with Lab Data" on BOTH r/DynastyFF and r/fantasyfootball. The definitive visual post. This one can go to r/fantasyfootball because post-draft rookie rankings are relevant to redraft managers too.
+
+#### Why Recaps Win on Reddit
+
+- **No competition.** During the draft, everyone is posting hot takes. After the draft, the supply of high-effort OC with data visualizations drops to near zero. Footballguys, Dynasty Nerds, and Fantasy Points publish text articles — nobody publishes heat-colored data table screenshots. Razzle owns the visual niche.
+- **Search longevity.** Reddit posts rank in Google. "2026 NFL Draft dynasty landing spots" will surface Razzle's recap post for weeks. A real-time comment in a megathread never ranks.
+- **90/10 rule safety.** Three high-quality OC posts across a weekend (with no links to razzle.lol in the post body — just watermarked screenshots) reads as genuine community contribution, not self-promotion.
+
+### Self-Critique
+
+1. **The claim that r/DynastyFF pins megathreads during the draft is based on standard subreddit behavior for live events, not verified for 2025.** Most sports subreddits pin megathreads for major events, and r/DynastyFF's 192K membership makes this extremely likely. **Confidence: 8/10.**
+
+2. **The "comments get buried" argument is well-supported by research.** JonLuca's blog analysis of Reddit megathreads and Locall.host's megathread analysis both confirm that late comments in high-volume threads receive negligible engagement. **Confidence: 9/10.**
+
+3. **The spam filter concern is the strongest argument.** Reddit's documentation confirms that accounts posting multiple times rapidly, especially with external links, trigger automated rate limiting. A 4-week-old account is still in the risk zone. **Confidence: 9/10.**
+
+4. **The "no competition after the draft" claim may be slightly overconfident.** Dynasty Nerds and FantasyPros publish post-draft rankings within 24 hours — but these are text articles linked from Reddit, not native visual OC. Razzle's format (data table screenshots) is genuinely differentiated. **Confidence: 7/10.**
+
+Sources:
+- [10 Fascinating Insights into the World of Reddit Megathreads](https://locall.host/what-is-a-reddit-megathread/)
+- [The Rise of Megathreads on Reddit — JonLuca's Blog](https://blog.jonlu.ca/posts/the-rise-of-megathreads-on-reddit)
+- [Reddit Algorithm Explained: Why 94% of Posts Fail — Signals](https://signals.sh/reddit-algorithm-explained/)
+- [How the Reddit Algorithm Works — OnlySocial](https://onlysocial.io/reddit-algorithm/)
+- [Reddit Self-Promotion Rules — Reddit Service](https://redditservice.com/reddit-self-promotion-rules/)
+- [Avoiding Reddit's Spam Filters — SingleGrain](https://www.singlegrain.com/social-media-management/best-practices/avoiding-reddits-spam-filters-best-practices-for-promotion/)
+- [Reddit's Impact on NFL Draft Fever — The Football Educator](https://thefootballeducator.com/reddit-nfl-draft/)
+- [r/DynastyFF Subreddit Stats — GummySearch](https://gummysearch.com/r/DynastyFF/)
+
+### Implications for Razzle
+
+1. **Twitter = real-time, Reddit = recap.** Do NOT try to do both simultaneously during the draft. Real-time energy goes to Twitter (individual tweets per pick, Q47). Reddit energy goes to post-round recaps. This also solves the bandwidth problem — one person cannot live-tweet AND post to Reddit simultaneously.
+
+2. **Pre-write the recap post skeleton NOW.** Create a template for the "Round 1 Dynasty Impact" post with placeholder rows for each pick. On Draft Night, fill in names/teams/takes, attach screenshots, and post within 30 minutes of Round 1 ending. The faster the recap hits Reddit, the more upvotes it captures before competitors.
+
+3. **Keep razzle.lol links OUT of the Reddit posts.** The watermark on screenshots is the funnel. The post body should be pure OC — table, screenshots, analysis. If someone asks "what tool is this?" in the comments, THEN respond with the link. This avoids self-promotion flags and reads as genuine community contribution.
+
+4. **r/fantasyfootball only gets the post-draft-complete recap (Saturday).** This sub is redraft-focused, so individual round recaps won't resonate. But the definitive "here's your 2026 rookie class ranked" post will interest both dynasty and redraft managers.
+
+5. **Time the Saturday post for morning (10-11 AM ET).** Reddit engagement peaks on weekend mornings. The post-draft-complete recap is evergreen content — it doesn't need to be instant. Post it when the algorithm will give it maximum first-hour velocity.
+
+### Open Questions
+
+1. **Should Razzle automate Lab screenshot generation for draft night — headless browser captures triggered by draft_night_updater.py — so the workflow is: enter pick, script updates DB + captures screenshot, drag screenshot into tweet?**
+
+2. **What is the right pre-draft content cadence for the week before the draft (April 21-23) to build follower count and set expectations for draft night coverage?**
+
+3. **What specific format should the Round 1 recap post use — a Reddit table with inline image links, an imgur album, or a single long-form image with all picks compiled into one visual?**
+
+## NEXT QUESTION: What specific format should the Round 1 recap post use on r/DynastyFF — a Reddit markdown table with linked screenshots, an imgur album, or a single compiled infographic-style image?
