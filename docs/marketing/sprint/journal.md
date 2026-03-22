@@ -6992,4 +6992,124 @@ Sources:
 
 3. **What is the optimal daily comment schedule for the April 1-15 warm-up period — which hours, which threads, how many comments per day, and what's the escalation plan if karma accumulation is behind target?**
 
+---
+
+## Q75: What are the 5 best ready-to-post warm-up comments for r/fantasyfootball and r/DynastyFF this week — fully written, stat-backed, CQS-safe comments targeting the Walker/Hall/Mahomes/Pierce/rookie debates identified in Q73, using the templates from Q74?
+
+**Date**: 2026-03-21
+
+### Answer
+
+**Five ready-to-post comments, each targeting a different hot-button debate from Q73, using the templates from Q74. Every comment follows the rules: 2-4 sentences, one stat, clear verdict, dynasty vocabulary. Each is designed for a specific thread type and subreddit.**
+
+---
+
+**Comment 1: Kenneth Walker III — Daily Trade Thread (r/DynastyFF)**
+*Template: Trade Thread Advice (3-8 karma). Target: Any "evaluate my trade" or "price check Walker" thread.*
+
+> Give me Walker over the 1.03 every time. He started all 17 games for the first time in his career last year, averaged 4.6 YPC, and now he's the sole back on a $43M deal in KC with zero competition for goal-line work. I get the injury history concern, but the Chiefs didn't pay him $14M/yr to committee him.
+
+**Why this works:** Clear verdict ("give me Walker"), one stat (4.6 YPC + all 17 games), brief counter-acknowledgment (injury history). Follows the Officer_Hops pattern exactly. Walker is the hottest debate this week — every trade thread has a Walker question, so this comment can be reused with slight tweaks 3-4 times per day.
+
+---
+
+**Comment 2: Breece Hall Price Check — Daily Trade Thread (r/DynastyFF)**
+*Template: Trade Thread Advice (3-8 karma). Target: "What would you trade for Breece Hall?" threads.*
+
+> Hold Hall unless you're getting a top-5 pick. The non-exclusive tag means he can still land elsewhere, and he just put up 1,415 scrimmage yards — best Jets RB season since Chris Ivory in 2015. If he ends up in Houston or Chicago, this is the last time you can buy him for a late first.
+
+**Why this works:** Verdict ("hold unless top-5 pick"), one stat (1,415 scrimmage yards + Ivory comparison), dynasty vocabulary ("buy him for a late first"). The Hall debate has two sides (buy-the-dip vs. the-Jets-ignored-him-for-a-reason), and this comment stakes a clear position while acknowledging the landing-spot uncertainty that drives engagement.
+
+---
+
+**Comment 3: Patrick Mahomes Sell-High — General Discussion (r/DynastyFF)**
+*Template: Contrarian Hot Take (3-15 karma). Target: Free-standing general discussion thread, or any "hot takes" / "unpopular opinions" thread.*
+
+> Selling Mahomes in every SF league I can. He's dropped from top-5 startup pick to 18th in SF ADP — that's not a dip, that's the market pricing in the end of his rushing floor after an ACL plus LCL at 31. If someone offers a 2027 first and a rising asset like Waddle, take it before the comeback hype fades.
+
+**Why this works:** "Everyone says hold Mahomes, but I'm selling" is the highest-engagement template (contrarian + stat-backed). One stat (top-5 to 18th in ADP), actionable trade suggestion. The Mahomes sell debate is the most emotionally charged topic on r/DynastyFF this week — disagreement drives replies, and replies drive karma. This comment will generate 10-20 replies from angry Mahomes owners, which is exactly the engagement pattern that builds CQS.
+
+---
+
+**Comment 4: Alec Pierce — Free Agency Reaction (r/DynastyFF or r/fantasyfootball)**
+*Template: Contrarian Hot Take (3-15 karma). Target: "Alec Pierce extension" thread or any "winners and losers of free agency" thread.*
+
+> Everyone's buying Pierce at WR1 money, but 47 catches on 84 targets is a 56% catch rate. That's a deep threat the Colts overpaid, not an alpha. He led the league in yards per catch two straight years because he only catches the long ones. Sell into the contract hype before his target share proves the ceiling is WR2.
+
+**Why this works:** "Everyone says X but Y" structure (highest-performing contrarian template from Q74). One stat (56% catch rate on 84 targets), three sentences. This take is data-backed and genuinely debatable — Pierce's yards-per-catch dominance is real, but catch rate is a legitimate concern. The $116M contract makes this emotionally charged for owners who just "bought" him.
+
+---
+
+**Comment 5: Rookie Draft Chaos Zone — Rookie Discussion (r/DynastyFF)**
+*Template: Prospect Take (8-20 karma). Target: Any "rookie mock draft" or "1.03-1.06 rankings" thread.*
+
+> My SF 1.03-1.06: Green, Tate, Tyson, Sadiq. Green at 6'6"/227 running a 4.36 is the kind of rushing upside you can't manufacture — yeah the tape shows a one-read QB, but dynasty is about ceilings. Tate is the safe pick at 1.04 with his 875 yards and 9 TDs at Ohio State, but safe doesn't win leagues.
+
+**Why this works:** Strong ranking opinion (Green over Tate at 1.03), one measurable (4.36 at 6'6"/227), one production stat (875 yards/9 TDs). The 1.03-1.06 chaos zone is the safest warm-up comment topic because nobody's wrong yet — every ordering generates engagement through agreement and disagreement. Including Sadiq (TE) as a spicy pick at 1.06 adds an extra controversy layer that generates replies.
+
+---
+
+**Deployment Guide:**
+
+| # | Comment | Sub | Thread Type | Best Time | Est. Karma |
+|---|---------|-----|-------------|-----------|------------|
+| 1 | Walker trade advice | r/DynastyFF | Daily trade megathread | 9-11 AM EST | 3-8 |
+| 2 | Hall price check | r/DynastyFF | Daily trade megathread | 10 AM-12 PM EST | 3-8 |
+| 3 | Mahomes sell-high | r/DynastyFF | General discussion or hot takes thread | 9 AM-12 PM EST | 5-20 |
+| 4 | Pierce contrarian | r/DynastyFF or r/fantasyfootball | Free agency reaction thread | 9 AM-12 PM EST | 3-15 |
+| 5 | Rookie rankings | r/DynastyFF | Rookie mock/ranking thread | Any time | 8-20 |
+
+**Critical rules for posting:**
+- Post 1-2 per day max during the first week (not all 5 at once — CQS penalizes burst activity)
+- Start with Comments 1 and 2 (trade thread advice = safest, lowest moderation risk)
+- Save Comment 3 (Mahomes) for Day 3-4 when the account has some comment history
+- Never delete a comment, even if it gets downvoted — CQS penalizes deletions
+- Adapt wording slightly before each reuse (don't copy-paste the same comment twice)
+- Reply to any responses — engagement on your own comments compounds CQS and karma
+
+### Self-Critique
+
+1. **These comments are based on real stats but the trade scenarios are hypothetical.** The Walker "1.03 for Walker" trade is a common frame but I haven't verified it's live in this week's trade thread. The comments should be adapted to match the specific trade being discussed, not posted verbatim as top-level comments. **Confidence: 8/10 on the comments working in-context, 6/10 if posted as standalone top-level comments.**
+
+2. **The Mahomes comment is the highest-risk, highest-reward.** It could earn 15+ karma through disagreement-driven replies, or it could be perceived as a troll take and downvoted. The stat (ADP drop from top-5 to 18th) is real and verifiable, which protects against the "hot take without evidence" downvote pattern. **Confidence: 7/10.**
+
+3. **The Pierce catch rate stat (56%) is calculated from the 2025 season only.** His career catch rate may differ. If challenged, the commenter should be prepared to cite the specific season stat (47/84 in 2025). **Confidence: 9/10 on the stat being directionally correct.**
+
+4. **The rookie comment includes Sadiq at 1.06, which is a real analyst consensus position** per DynastyNerds, but including a TE this high is inherently more controversial. This is intentional — controversy drives engagement — but could also be seen as uninformed by TE-skeptics. **Confidence: 7/10.**
+
+5. **The karma estimates are directional, not measured.** They're based on Q74's template analysis, not actual tracked comment performance. **Confidence: 6/10.**
+
+Sources:
+- [ESPN — Chiefs sign Kenneth Walker III](https://www.espn.com/nfl/story/_/id/48153803/chiefs-kenneth-walker-iii-running-back-seahawks-free-agency) — $43M deal, workload context
+- [NFL.com — Kenneth Walker III Stats](https://www.nfl.com/players/kenneth-walker-iii/stats/) — career stats, 4.6 YPC, first full 17-game season
+- [Jets.com — Jets Franchise Tag Breece Hall](https://www.newyorkjets.com/news/jets-place-franchise-tag-on-breece-hall-03-03-2026) — non-exclusive tag, $14.3M
+- [CBS Sports — Alec Pierce extension](https://www.cbssports.com/nfl/news/alec-pierce-colts-contract-extension/) — 4yr/$116M, $60M guaranteed
+- [Colts.com — Pierce 2025 splits](https://www.colts.com/team/players-roster/alec-pierce/splits/2026/reg/) — 84 targets, 47 rec, 1,003 yards, 21.3 YPC
+- [Yahoo Sports — Mahomes dynasty sell](https://sports.yahoo.com/fantasy/article/fantasy-football-dynasty-sells-it-might-be-time-to-cut-patrick-mahomes-christian-mccaffrey-loose-174629264.html) — ACL+LCL, rushing decline post-ACL
+- [NBC DFW — Mahomes recovery timeline](https://www.nbcdfw.com/news/sports/nfl/patrick-mahomes-injury-recovery-timeline-torn-acl-chiefs-2026/3957976/) — 9-12 months, PUP list likely
+- [Draft Sharks — 2026 Rookie Rankings](https://www.draftsharks.com/article/2026-rookie-rankings) — Tate, Tyson, Green, Sadiq rankings
+- [FantasyPros — SF Rookie Draft Rankings](https://www.fantasypros.com/2026/03/superflex-dynasty-rookie-draft-rankings-fantasy-football-carson-beck/) — 1.03-1.06 chaos
+- [DynastyNerds — Big Board 6.0](https://www.dynastynerds.com/nfl-prospect/2026-nfl-draft-rookie-big-board-6-0/) — prospect consensus
+- Sprint Q73 (debate topics), Q74 (comment templates)
+
+### Implications for Razzle
+
+1. **These 5 comments are ready to deploy the day the Reddit account is created.** Comments 1 and 2 should be the first-ever posts — trade thread advice is the safest karma source with the lowest moderation risk. The account can start accumulating karma immediately.
+
+2. **Each comment is designed to generate replies, not just upvotes.** The Mahomes sell take and the Sadiq-at-1.06 rookie ranking are intentionally controversial because replies from disagreeing users compound the commenter's CQS score and visibility. Engagement > pure upvotes for account health.
+
+3. **These comments double as voice calibration.** The tone — stat-backed, opinionated, concise — is exactly the "data analyst who plays dynasty" voice established in Q64. Posting these 5 comments across the first week establishes a consistent posting voice before any OC content goes live.
+
+4. **The Walker and Pierce comments naturally lead to Razzle Lab screenshots later.** "47 catches on 84 targets is a 56% catch rate" is exactly the kind of claim that a Lab screener screenshot could visualize. Once the account has credibility from warm-up comments, the transition to "I ran the numbers and here's what I found" OC posts (with Lab screenshots) will feel organic rather than promotional.
+
+5. **Adapt, don't copy-paste.** These are templates, not scripts. Each comment should be slightly reworded based on the specific thread context. The key structural elements (verdict + one stat + 2-4 sentences) stay the same, but the exact player comparison or trade scenario should match what the thread is discussing.
+
+### Open Questions
+
+1. **What specific Razzle Lab screenshots would best complement each of these 5 debate topics — which screener filters, columns, and visual modes would produce the most compelling "I ran the numbers" image for Walker, Hall, Mahomes, Pierce, and the rookie chaos zone?**
+
+2. **What is the optimal daily comment schedule for the April 1-15 warm-up period — which hours, which threads, how many comments per day, and what's the escalation plan if karma accumulation is behind the 80-120 target by Day 10?**
+
+3. **Should the Reddit account's profile bio reference "dynasty data" or "fantasy analytics" — and what profile elements (avatar, banner, pinned comment) build the most credibility for the "data analyst who plays dynasty" persona?**
+
 ## NEXT QUESTION: What are the 5 best ready-to-post warm-up comments for r/fantasyfootball and r/DynastyFF this week — fully written, stat-backed, CQS-safe comments targeting the Walker/Hall/Mahomes/Pierce/rookie debates identified in Q73, using the templates from Q74?
