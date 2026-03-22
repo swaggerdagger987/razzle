@@ -7240,4 +7240,89 @@ Sources:
 
 3. **Should Razzle add a "Reddit crop" export mode to the Lab's PNG export — limiting visible rows to 8-12, using 4:3 aspect ratio, and auto-including a title/subtitle — so screenshots are feed-optimized without manual cropping?**
 
-## NEXT QUESTION: Should Razzle pre-build and save 5 named "Saved Views" in the Lab — one per debate topic (Walker Efficiency, Hall Dynasty, Mahomes Aging, Pierce Receiving, Rookie Combine) — so screenshots can be regenerated instantly when the debate resurfaces in different threads?
+---
+
+## Q77: Should Razzle pre-build and save 5 named "Saved Views" in the Lab — one per debate topic (Walker Efficiency, Hall Dynasty, Mahomes Aging, Pierce Receiving, Rookie Combine) — so screenshots can be regenerated instantly when the debate resurfaces in different threads?
+
+**Date:** 2026-03-21
+**Source:** Lab codebase analysis (saved views implementation in lab.js), visual branding research, Reddit OC engagement patterns, Q76 screenshot configurations
+
+### Answer
+
+**Yes — but with modifications. Pre-build the views, share them as URL presets rather than localStorage-only saves, and treat them as a "screenshot arsenal" that gets updated weekly, not a static set of 5.**
+
+Here's the reasoning:
+
+**1. The technical capability already exists and is robust.**
+
+The Lab's Saved Views (Phase 115) store everything needed to recreate a screenshot: universe, position, season, sort, filters, visual modes (heat colors, leader badges, tier breaks, density), column widths, and column selection. The `saveCurrentView()` function captures 23 state properties. Views sync to server for Pro users via `/api/user/views/sync`. Max 20 views per user. Loading a view fully restores the screener to the exact saved state. This means a saved view IS a one-click screenshot generator — load view, hit export, done.
+
+**2. Five static views is the wrong number. Build a rotating library of 8-12.**
+
+The March 2026 debate landscape (Walker/Hall/Mahomes/Pierce/rookies) is ephemeral. By April 15, free agency signings will create 3-4 new debates (landing spot bumps, depth chart changes). By Draft Day (April 24), the rookie debates will completely reshape. Static views go stale. Instead:
+
+- **Week 1 (Apr 1-7):** 5 warm-up views per Q76 (Walker Efficiency, Hall Trade Finder, Mahomes Dynasty, Pierce Receiving, Rookie Combine)
+- **Week 2 (Apr 8-14):** Retire 1-2 stale views, add 1-2 new views based on that week's hottest threads (free agency reactions, trade rumors)
+- **Post-Draft (Apr 25+):** Complete refresh — 5-6 new views around landing spots, rookie ADP shifts, draft capital surprises
+
+Target: **8-12 active views at any time**, never more than 3 weeks old. This keeps the screenshot arsenal fresh while maintaining the one-click regeneration benefit.
+
+**3. URL state is more powerful than localStorage for this use case.**
+
+The Lab already serializes state to URL params. Instead of relying solely on Saved Views (localStorage, per-device), create **bookmarkable URLs** for each screenshot configuration. Benefits:
+
+- Shareable between team members (if Razzle ever has content collaborators)
+- Accessible from any device without login
+- Can be embedded in the sprint journal itself for instant access
+- The watermark already includes the shareable URL, so Reddit viewers can recreate the exact view
+
+The workflow becomes: open bookmark → verify data is current → toggle heat colors → export PNG → crop to 8-12 rows → post. Under 60 seconds per screenshot.
+
+**4. Visual consistency builds brand recognition on Reddit.**
+
+Research on visual identity consistency confirms that uniform application of design elements across touchpoints accelerates brand recognition and builds trust ([Siteimprove](https://www.siteimprove.com/blog/visual-consistency-meaning/), [ZigPoll](https://www.zigpoll.com/content/how-does-visual-identity-consistency-across-multiple-digital-platforms-impact-consumer-brand-recognition-and-loyalty)). For Reddit OC, this translates to: every Razzle screenshot should have the same visual signature — Anthropic sand background, heat-colored cells, leader badges, razzle.lol watermark. Saved Views enforce this consistency because the visual modes (heatColors: true, leaderBadges: true) are baked into the saved state. Without saved views, the content creator might forget to toggle heat colors or switch to the wrong preset, breaking visual consistency.
+
+**5. Pre-built views also serve as onboarding for new users who click through from Reddit.**
+
+When a Reddit user clicks the watermark URL, they land in the Lab with the exact filters/columns/visual modes from the screenshot. If that view is also available as a named Saved View, the user can bookmark it or clone it as a starting point for their own analysis. This creates a **"try it yourself"** conversion funnel: see screenshot → click URL → explore the view → save their own view → become a regular user.
+
+### Self-Critique
+
+1. **The technical analysis is grounded in actual code.** I verified the `saveCurrentView()` function captures all 23 state properties (lines 4194-4223 of lab.js), the 20-view max, and the server sync capability. The URL state serialization is also confirmed. **Confidence: 9/10.**
+
+2. **The "rotating library" recommendation is strategic but untested.** I haven't verified that fantasy football content creators actually use rotating preset libraries. The recommendation is based on the observation that debates are ephemeral (which is well-documented in Q73), not on measured content creator workflows. **Confidence: 7/10.**
+
+3. **The visual consistency → brand recognition link is supported by general branding research but not fantasy-sports-specific data.** Siteimprove and ZigPoll research on visual identity consistency applies broadly, but I haven't found studies measuring whether consistent screenshot formatting specifically improves Reddit engagement for fantasy football OC. **Confidence: 6/10.**
+
+4. **The "under 60 seconds per screenshot" workflow estimate is optimistic.** It assumes the data in the Lab is already current (no manual refresh needed), the crop is trivial, and no adjustments are needed to the view. In practice, a content creator might need to adjust filters, change the season, or resize columns. Realistic estimate: 2-3 minutes per screenshot. **Confidence: 6/10.**
+
+5. **The onboarding funnel (screenshot → URL → explore → save) is speculative.** I haven't measured click-through rates on Lab watermark URLs, nor do I have data on what percentage of Reddit users who click through actually save their own views. This is a reasonable hypothesis but unvalidated. **Confidence: 5/10.**
+
+Sources:
+- Lab codebase: `frontend/lab.js` — saveCurrentView() (lines 4186-4238), loadSavedView() (lines 4240-4290), URL state serialization, server sync (lines 4370-4418)
+- [Siteimprove — Visual Consistency in Branding](https://www.siteimprove.com/blog/visual-consistency-meaning/) — uniform design elements accelerate recognition
+- [ZigPoll — Visual Identity Consistency Impact](https://www.zigpoll.com/content/how-does-visual-identity-consistency-across-multiple-digital-platforms-impact-consumer-brand-recognition-and-loyalty) — consistent visual cues enable instant brand identification
+- [Online Optimism — Reddit Graphic Size Guide](https://onlineoptimism.com/resource/comprehensive-graphic-size-guide-for-reddit/) — image formatting for Reddit feed
+- Sprint Q76 (screenshot configurations), Q75 (warm-up comments), Q73 (debate topics)
+
+### Implications for Razzle
+
+1. **Build the initial 5 Saved Views NOW, before the April 1 warm-up period.** Use the exact configurations from Q76 (Walker Efficiency, Hall Trade Finder, Mahomes Dynasty, Pierce Receiving, Rookie Combine). Name them with a consistent prefix like "Reddit: Walker Efficiency" so they're instantly identifiable in the dropdown.
+
+2. **Create a "Screenshot Playbook" doc that maps each view to its debate topic, comment template (Q74), and ready-to-post comment (Q75).** This is the content creator's cheat sheet: open the playbook, find today's debate, load the named view, export, pair with the pre-written comment structure, post. The entire workflow should be documented in one place.
+
+3. **Add a weekly "view refresh" step to the content calendar.** Every Sunday: review which debates are hot on r/DynastyFF, retire stale views, create 1-2 new views for emerging debates. This prevents the screenshot arsenal from going stale.
+
+4. **URL bookmarks should supplement Saved Views, not replace them.** Saved Views (localStorage + server sync) are the primary tool for the content creator workflow. URL bookmarks are the fallback and the mechanism for Reddit reader click-through. Both should exist for each debate screenshot.
+
+5. **The 20-view max is generous for this use case.** With 8-12 Reddit screenshot views and room for 8-12 personal analysis views, the limit won't be hit. No code changes needed.
+
+### Open Questions
+
+1. **What is the optimal daily comment schedule for the April 1-15 warm-up period — which hours, which threads, how many comments per day, and what's the escalation plan if karma accumulation is behind the 80-120 target by Day 10?**
+
+2. **Should Razzle add a "Reddit crop" export mode to the Lab's PNG export — limiting visible rows to 8-12, using 4:3 aspect ratio, and auto-including a title/subtitle — so screenshots are feed-optimized without manual cropping?**
+
+3. **What does the complete "Screenshot Playbook" look like — a single doc mapping each debate topic to its Saved View name, Lab URL, comment template, and sample comment — and should it live in docs/marketing/ or as a pinned note in the sprint journal?**
+
+## NEXT QUESTION: What is the optimal daily comment schedule for the April 1-15 warm-up period — which hours, which threads, how many comments per day, and what's the escalation plan if karma accumulation is behind the 80-120 target by Day 10?
