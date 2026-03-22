@@ -2664,6 +2664,108 @@ Sources:
 
 3. **How should the Lab's PNG export be optimized for Reddit's image compression — what resolution, format (PNG vs JPEG), and file size produces the crispest result after Reddit processing?**
 
-## NEXT QUESTION: What's the summer content strategy (June-August) between the end of Lab Report series and the start of NFL season — and when is the next high-engagement window on r/DynastyFF?
+## Question 31: What's the summer content strategy (June-August) between the end of Lab Report series and the start of NFL season — and when is the next high-engagement window on r/DynastyFF?
+
+**Why this matters**: The Lab Report series ends around May 10-17. NFL regular season starts September 10. That's a 4-month gap. If Razzle goes dark, the community forgets u/swaggerdagger987 exists. If Razzle over-posts, it burns the personal account's goodwill. The summer strategy must maintain presence without exhausting content.
+
+### Answer
+
+**The summer has THREE distinct engagement windows, not one long drought. Map content to each window and go quiet between them.**
+
+**Window 1: Rookie Draft Season (late May – mid June)**
+Dynasty leagues run rookie drafts in the 2-4 weeks after the NFL Draft (April 23-25). This is the HIGHEST engagement period on r/DynastyFF outside of NFL regular season. Managers are actively debating rookie values, making trades to move up/down draft boards, and seeking data to validate picks.
+
+Content plays:
+- **"Post-Draft Lab Report: Rookie ADP vs. College Production"** — Use the Lab's College mode to show which rookies' ADPs are disconnected from their college efficiency stats. This is the direct sequel to the Lab Report series and uses the same screenshot format.
+- **"Rookie Draft Value Finder"** — Lab screenshot showing rookies whose draft capital (pick invested) exceeds their current dynasty ADP. The community is desperate for "who's being overdrafted/underdrafted" data during this window.
+- Frequency: 1 post per week for 3 weeks (late May, early June, mid June). Comment actively on rookie draft threads (3-5/day).
+
+**Window 2: The Dead Zone (mid June – mid July)**
+OTAs end in early June. Mandatory minicamps wrap mid-June. Then NOTHING until training camp in mid-July. Dynasty Nerds calls July "a strange time of purgatory." r/DynastyFF traffic drops 40-60% vs. draft season. This is NOT a content window — it's a maintenance window.
+
+Strategy: **Comment-only. No OC posts.** Stay visible in daily threads (trade advice, roster help, "who would you rather" debates). 2-3 comments per day. Build karma quietly. The worst thing Razzle can do is post mid-tier OC during the dead zone when engagement is low — it'll get 30 upvotes instead of 300 and train the algorithm to suppress future posts.
+
+**Window 3: Training Camp + Preseason (mid July – early September)**
+Training camp opens mid-July. Hall of Fame Game is August 6 (Cardinals vs. Panthers). Preseason Week 1 is August 13. Fantasy draft season (redraft) opens August 1 on most platforms. r/DynastyFF and r/fantasyfootball BOTH spike hard. This is the second-biggest engagement window of the year.
+
+Content plays:
+- **"Camp Hype vs. Data Reality"** — Lab screenshots comparing training camp hype players (beat reporter tweets) against their actual efficiency data. This is contrarian catnip. Every August, someone claims a backup RB "looks explosive in camp" — show the data that agrees or disagrees.
+- **"Redraft Cheat Sheet from the Lab"** — Expand from dynasty-only to capture the massive redraft audience (r/fantasyfootball is 10x the size of r/DynastyFF). Lab screenshots of custom scoring format rankings.
+- **"Year 2 Breakout Tracker"** — Which 2025 rookies showed efficiency gains that predict a breakout? Lab data on sophomore players with improved per-game metrics.
+- **Bureau Teaser** — If the Bureau/Scouting Reports are ready, August is the month to soft-launch. Drop ONE scouting report screenshot as a "sneak peek" in a comment or standalone post. The timing is perfect: managers are evaluating leaguemates before drafts.
+- Frequency: 1-2 posts per week from late July through early September. This is the push.
+
+**Key 2026 dates to anchor content around:**
+
+| Date | Event | Content Opportunity |
+|------|-------|-------------------|
+| Apr 23-25 | NFL Draft | Lab Report Vol 2-3 (already planned) |
+| May 1-11 | Rookie minicamps | Rookie Lab screenshots |
+| Late May-June | Dynasty rookie drafts | ADP vs. production posts |
+| Mid June-Mid July | Dead zone | Comments only, no OC |
+| Mid July | Training camp opens | Camp hype vs. data |
+| Aug 1 | Fantasy platforms open | Redraft cheat sheets |
+| Aug 6 | Hall of Fame Game | Season is REAL, go heavy |
+| Aug 13 | Preseason Week 1 | Snap count / usage data |
+| Sep 10 | Regular season kickoff | Weekly Lab Reports begin |
+
+**The PeakedInHighSkool/Subvertadown model for summer:**
+Both creators go quiet during the dead zone. PeakedInHighSkool's trade value charts are weekly during season, but the summer cadence drops to biweekly or monthly updates. Subvertadown goes fully dark until preseason projections. Neither forces content during low-engagement windows. They let the audience come to them when the calendar creates demand.
+
+**Razzle's summer cadence summary:**
+- Late May – mid June: 3 OC posts (rookie draft data)
+- Mid June – mid July: 0 OC posts (comments only)
+- Late July – early September: 6-8 OC posts (camp + redraft + Bureau teaser)
+- Total summer output: ~10 posts across 4 months
+
+---
+
+### Self-Critique
+
+1. **I'm estimating r/DynastyFF summer traffic drops at "40-60%" without hard data.** This is inferred from the Dynasty Nerds calendar descriptions ("purgatory," "frozen values") and general Reddit seasonal patterns, not from actual subreddit analytics. The directional claim (engagement drops significantly mid-June to mid-July) is almost certainly correct, but the magnitude is a guess. **Confidence: 7/10** on the specific number, **9/10** on the pattern.
+
+2. **The "comment-only during dead zone" advice assumes the account has enough karma by June.** If the warm-up calendar (Q26) goes as planned, u/swaggerdagger987 should have 150+ karma by mid-June. But if the warm-up is delayed or the account gets flagged, the dead zone commenting strategy might not be enough to maintain visibility. The fallback is to resume OC posting earlier (late June) to rebuild momentum.
+
+3. **I'm conflating r/DynastyFF and r/fantasyfootball audiences for the August window.** The dynasty sub is year-round; the redraft sub (r/fantasyfootball) explodes in August but has different norms. Cross-posting or adapting Lab content for both subs is high-leverage but requires understanding each sub's rules separately. r/fantasyfootball may have stricter self-promotion rules and different content preferences (they care about current-year rankings, not dynasty values).
+
+4. **The Bureau teaser timing (August) depends on the Bureau being built.** If the product roadmap doesn't deliver scouting reports by August, this window is wasted. The summer content strategy should NOT depend on Bureau completion — the Lab-only content (camp hype vs. data, redraft cheat sheets) works independently.
+
+5. **I haven't researched whether the "Camp Hype vs. Data Reality" format has been done before on r/DynastyFF.** If it's already a common post type, Razzle needs a differentiated angle (e.g., Lab screenshots with specific filters, not just generic "here's what the data says"). The format is strong conceptually but needs to be verified as non-redundant.
+
+**Confidence: 8/10** — The three-window model maps directly to the NFL calendar and dynasty manager behavior patterns. The specific content recommendations are strong for Windows 1 and 3. The dead zone strategy (go quiet) is validated by how established creators handle the same period.
+
+Sources:
+- [Dynasty Nerds June Calendar](https://www.dynastynerds.com/strategy/june-dynasty-fantasy-football-calendar-roster-to-do-list/) — June as rookie draft frenzy
+- [Dynasty Nerds July Calendar](https://www.dynastynerds.com/strategy/july-dynasty-fantasy-football-calendar-roster-to-do-list/) — July as "purgatory" period
+- [Dynasty Nerds August Calendar](https://www.dynastynerds.com/strategy/august-dynasty-fantasy-football-calendar/) — August volatility and price swings
+- [Footballguys Dynasty Preseason Calendar](https://www.footballguys.com/article/2025-decoding-dynasty-calendar-dynasty-preseason) — Training camp engagement patterns
+- [2026 NFL Important Dates](https://operations.nfl.com/gameday/nfl-schedule/2026-important-nfl-dates/) — Official NFL calendar
+- [Pro Football Network 2026 Season Dates](https://www.profootballnetwork.com/when-2026-nfl-season-start-dates-otas-training-camp-preseason/) — OTAs, camp, preseason dates
+- [2026 Hall of Fame Game](https://www.nfl.com/news/cardinals-panthers-to-face-off-in-2026-pro-football-hall-of-fame-game) — Aug 6 Cardinals vs Panthers
+- [Belly Up Sports Fantasy Calendar](https://bellyupsports.com/2025/12/2026-nfl-fantasy-calendar/) — Fantasy platform open dates
+- [Subvertadown Compendium](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — Seasonal posting cadence pattern
+- [PeakedInHighSkool Trade Value Charts](https://peakedinhighskool.com/fantasy-trade-value-chart/) — Summer cadence reference
+
+### Implications for Razzle
+
+1. **Build a content calendar NOW for May-September.** Don't wing it. Block out the 10 post dates with placeholder topics. The three-window model gives natural pacing: push (May-June) → rest (June-July) → push hard (July-September).
+
+2. **The rookie draft window (late May – mid June) is the Lab Report series sequel.** Same format, same screenshots, same voice — just pivot from NFL Draft analysis to dynasty rookie draft ADP analysis. This is the easiest content to produce because the Lab already has the data.
+
+3. **August is the BIGGER opportunity than April for total reach.** r/fantasyfootball (2M+ subscribers) wakes up in August while r/DynastyFF (200K+) stays active. If Razzle can produce redraft-friendly Lab content, August's addressable audience is 10x larger than April's. Consider creating Lab presets specifically for redraft scoring formats.
+
+4. **The Bureau teaser in August is the highest-stakes content moment.** A single scouting report screenshot dropped at the right time — when managers are sizing up leaguemates before drafts — could be the virality catalyst. But only if the product exists. Plan B if Bureau isn't ready: a "Player Report Card" screenshot (already built at /reportcard.html) serves a similar "evaluate this player for me" function.
+
+5. **The dead zone (mid June – mid July) is development time.** Use the 4 quiet weeks to build Bureau features, polish Lab presets for August, and pre-create content templates. Don't waste the dead zone trying to market into low engagement.
+
+### Open Questions
+
+1. **What specific r/fantasyfootball post formats and rules differ from r/DynastyFF — and how should Razzle adapt Lab screenshots for the redraft audience in August?**
+
+2. **Should Razzle cross-post the same Lab Report content to both r/DynastyFF and r/fantasyfootball, or create separate content for each sub — and what are the cross-posting norms on Reddit?**
+
+3. **What does the "Camp Hype vs. Data Reality" post look like specifically — which training camp narratives from past years (2024, 2025) generated the most Reddit engagement, and what data contradicted or confirmed the hype?**
+
+## NEXT QUESTION: What specific r/fantasyfootball post formats and rules differ from r/DynastyFF — and how should Razzle adapt Lab screenshots for the redraft audience in August?
 
 ---
