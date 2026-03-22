@@ -10018,4 +10018,116 @@ Sources:
 
 3. **What is the operational workflow for responding to player requests in real-time during a Reddit post — can Playwright generate and upload a GPA Card within 60 seconds of a comment, or does Razzle need a pre-generated cache of 50+ cards?**
 
+---
+
+## Q100: What is the operational workflow for responding to player requests in real-time during a Reddit post?
+
+**Date**: 2026-03-22
+**Depends on**: Q99 (A/B test format), Q98 (image hosting), Q95 (pre-stage package)
+
+### Answer
+
+**Pre-generate a cache of 50+ cards. Do not attempt real-time Playwright generation during a live Reddit post.**
+
+#### Why Real-Time Generation Is Too Risky
+
+The hero + comment cards format (Q99's predicted winner) depends on fast replies. Reddit's algorithm gives the first 30-90 minutes disproportionate weight — early engagement is 8x more likely to push a post to the front page. Every minute spent generating a card is a minute of dead air in the comment thread.
+
+Real-time Playwright generation has three speed bottlenecks:
+
+1. **Browser startup**: Playwright's `sync_playwright` cold-starts Chromium in ~2-4 seconds. The existing `screenshot.py` uses `wait_until="networkidle"` + a 2-second sleep per page load. That's ~4-6 seconds per card *minimum*, assuming the local server is running.
+
+2. **API fetch latency**: Each card needs data from `/api/report-cards`. Locally this is ~50ms. But if running against the Render deployment, add 200-500ms network latency per request.
+
+3. **Reddit upload**: Reddit's media upload API (`/api/media/asset.json`) requires a multi-step process — POST to get an S3 presigned URL, upload the image, wait for a WebSocket confirmation, then compose the comment with the `media_metadata` rich text JSON. PRAW does not natively support inline images in comment replies. You'd need raw API calls. Estimated 3-5 seconds per image upload + comment post.
+
+**Total per-card latency: 10-15 seconds best case, 30+ seconds worst case.** If 20 people request cards in the first 10 minutes, you're underwater.
+
+#### The Pre-Generated Cache Strategy
+
+Generate cards for **all fantasy-relevant players** (not just 50) before posting. The `/api/report-cards` endpoint already returns data for all QB/RB/WR/TE with `fantasy_relevant=1`. For 2025, that's approximately 200-250 players.
+
+**Generation pipeline** (single Playwright run):
+
+1. Fetch all report card data: `GET /api/report-cards?season=2025&limit=50` per position (4 requests)
+2. Open `export-card.html` template once in headless Chromium
+3. Loop: inject player data via `page.evaluate()`, screenshot the card element
+4. At 2x resolution (2400px wide), each element screenshot takes ~200-500ms
+5. **Total for 250 players: ~2-3 minutes** (250 × 500ms + 4s browser startup)
+
+Store all PNGs in a flat directory: `cards/2025/{player_id}.png`
+
+**Pre-generation cost: 3 minutes of compute, zero cost (local Playwright), run once per week.**
+
+#### The Reply Workflow (Manual, Not Botted)
+
+Do NOT use a Reddit bot. r/DynastyFF mods actively ban bots, and automated replies violate Reddit's moderator guidelines for authentic participation. The workflow is manual but fast:
+
+1. **Post goes live.** First comment (pre-written) explains methodology + "reply with a player name for their card."
+2. **Monitor comments.** Use Reddit's notification system or the post page.
+3. **When someone requests a player:**
+   - Search the `cards/2025/` directory for the player's card PNG (instant — local file lookup)
+   - Upload the image to Reddit via the comment composer's image button (or via PRAW's `subreddit.upload_image` + raw rich text API if scripting the upload)
+   - Add 2 custom sentences about the player (the 20% manual from Q95): "His 3.7 GPA is dragged down by a brutal schedule — SOS grade of D+. Buy low window if you believe in talent over situation."
+   - Post the reply
+4. **Time per reply: 30-60 seconds** (find file + type 2 sentences + upload + post). This is sustainable for 20 replies over 2 hours.
+
+#### Why 250 Cards, Not 50
+
+The "request a player" hook will surface long-tail names. Dynasty players ask about Khalil Shakir, not just Ja'Marr Chase. If someone requests a player and Razzle says "I don't have a card for him," that's a credibility hit. Pre-generating all 250 fantasy-relevant players costs 3 minutes and eliminates this risk entirely.
+
+For players NOT in the report card data (rookies, deep sleepers), use the "GPA PENDING" badge from Q96 — a static 400x200 image that works for everyone.
+
+#### PRAW Comment Image Upload: The Technical Gap
+
+PRAW 7.7+ supports inline images in **submissions** (`InlineImage` objects in `subreddit.submit()`), but **not in comment replies**. To upload images in comments, you need:
+
+1. Upload image via `POST /api/media/asset.json` (raw Reddit API)
+2. Get the `media_id` from the response
+3. Post comment using rich text JSON with `media_metadata` referencing the `media_id`
+
+This is ~30 lines of Python wrapping raw API calls. Not built into PRAW. Build this as a standalone `reddit_reply.py` utility.
+
+### Self-Critique
+
+1. **The 200-500ms per element screenshot estimate is an assumption.** Playwright's `element.screenshot()` performance depends on element complexity, CSS rendering, and system resources. The existing `screenshot.py` uses full-page screenshots with 2-second sleeps, which is conservative. Element-level screenshots of a single card (400x600px) should be faster, but this needs benchmarking. **Confidence: 7/10.**
+
+2. **"250 fantasy-relevant players" count is approximate.** The actual number depends on how `fantasy_relevant=1` is defined in the DB. Could be 180, could be 300. Either way, under 5 minutes of generation time. **Confidence: 8/10.**
+
+3. **The PRAW comment image limitation is accurate as of PRAW 7.7.** Reddit's rich text API for comments supports inline media, but PRAW's `comment.reply()` method only accepts text. The raw API workaround is well-documented in third-party libraries like `reddit-api-image-upload` (npm/GitHub). **Confidence: 9/10.**
+
+4. **"Don't use a bot" advice assumes r/DynastyFF enforces anti-bot rules.** Most fantasy subs do, but verify the specific sub rules before posting. If they allow bots (e.g., u/sleikiern runs automated trade calculators in some subs), a monitoring bot could shave reply time to <10 seconds. **Confidence: 7/10.**
+
+5. **Manual reply sustainability at 20 replies / 2 hours is feasible for one person.** But if a post goes viral (200+ comments), the operator would need to triage — reply to the top 20 most-upvoted requests and pin a "full report card at razzle.lol/reportcard" comment for the rest. **Confidence: 9/10.**
+
+Sources:
+- [PRAW Subreddit Submit Documentation](https://praw.readthedocs.io/en/stable/code_overview/models/subreddit.html) — InlineImage support in submissions only
+- [Reddit API Image Upload](https://github.com/VityaSchel/reddit-api-image-upload) — raw API for media uploads
+- [Reddit Comment Image Help](https://support.reddithelp.com/hc/en-us/articles/10516331142932-How-do-I-add-images-in-comments) — UI-level image upload
+- [Reddit Algorithm Explained 2025](https://signals.sh/reddit-algorithm-explained/) — first 30-90 minutes critical window
+- [Reddit Algorithm Visibility](https://www.singlegrain.com/search-everywhere-optimization/how-to-hack-reddits-algorithm-for-maximum-visibility-2/) — early engagement 8x multiplier
+- [PRAW Reply Bot Tutorial](https://praw.readthedocs.io/en/stable/tutorials/reply_bot.html) — comment stream monitoring
+- [How to Build a Reddit Bot 2025](https://www.wappkit.com/blog/how-to-build-reddit-bot-python-2025) — PRAW setup and rate limits
+- Razzle codebase: `twitter/screenshot.py` (existing Playwright infrastructure), `backend/live_data/dashboards.py` (report card API)
+
+### Implications for Razzle
+
+1. **Build the full pre-generation pipeline now.** Script: `scripts/generate_gpa_cards.py` — fetches all report card data, opens export-card.html in Playwright, loops all players, saves PNGs to `cards/{season}/`. Run once per week during the season, once before each Reddit post in the offseason. Total build: ~150 lines of Python + the export-card.html template.
+
+2. **Build `scripts/reddit_reply.py` for image-in-comment uploads.** Wraps Reddit's raw `/api/media/asset.json` endpoint + rich text comment posting. Input: player_id + custom text. Output: comment with inline GPA Card image. ~30-50 lines. This fills the PRAW gap.
+
+3. **Pre-generate for the April 21 first post.** Before the first OC post, run the generation pipeline against 2025 season data. Store all 250 cards. Verify each card renders correctly (spot-check 10). This is a one-time 5-minute task.
+
+4. **Triage plan for high-volume posts.** If a post gets >50 player requests: reply to the 20 most-upvoted, pin a redirect comment for the rest. Don't ghost anyone — acknowledge with "Great pick — full GPA breakdown at razzle.lol/reportcard" for requests you can't card.
+
+5. **Benchmark Playwright element screenshots before committing to the pipeline.** Run a quick test: generate 10 cards, time each one. If element screenshots average >1 second, optimize by keeping the browser context open and reusing the page (already planned in Q95). If >2 seconds, consider a canvas-to-PNG approach in Node.js instead of Playwright.
+
+### Open Questions
+
+1. **What's the optimal veteran comp methodology — should comps be based on college production profile similarity (Dominator Rating, Breakout Age), draft capital similarity (pick range), or physical archetype similarity (height/weight/speed) — and does the comp need to be accurate or just conversation-starting?**
+
+2. **Should Razzle pre-compute and cache weekly GPA deltas (week-over-week grade changes) to power "risers and fallers" narrative hooks in Reddit posts — and what is the minimum storage needed?**
+
+3. **What is the complete build order for the Reddit OC post pipeline — export-card.html template, generate_gpa_cards.py, reddit_reply.py, and first-comment template — and what is the critical path to having all four ready by April 14 (one week before the April 21 first post)?**
+
 ## NEXT QUESTION: What is the operational workflow for responding to player requests in real-time during a Reddit post — can Playwright generate and upload a GPA Card within 60 seconds of a comment, or does Razzle need a pre-generated cache of 50+ cards?
