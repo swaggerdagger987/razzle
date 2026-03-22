@@ -3291,6 +3291,93 @@ Sources:
 
 3. **How should the ADP Reality Check series handle bye weeks and injury news — should it incorporate real-time ADP movement during preseason, or stick to static weekly snapshots?**
 
-## NEXT QUESTION: Should Razzle add a "Copy shareable link" button to the Lab toolbar that auto-appends UTM params for the current platform (Reddit/Twitter/Discord)?
+## Q37: Should Razzle add a "Copy shareable link" button to the Lab toolbar that auto-appends UTM params for the current platform (Reddit/Twitter/Discord)?
+
+**Short answer: No new button needed — upgrade the existing share modal to auto-append UTM params behind the scenes.**
+
+Razzle already has a share modal (`openShareModal()` in lab.js) with: shareable URL + Copy URL button, PNG/CSV export, Copy as Reddit Table, and a Reddit title generator. The infrastructure is there. The gap is that the copied URL is a raw `window.location.href` with no attribution tracking.
+
+**What to build (minimal, ~20 lines of JS):**
+
+Add a platform selector to the existing share modal — three radio buttons or pill toggles: **Reddit** | **Twitter/X** | **Discord** | **Raw** (default). When the user copies the URL, auto-append UTM params based on the selection:
+
+```
+?preset=redraft&sort=adp_half_ppr&dir=asc
+  &utm_source=reddit&utm_medium=post&utm_campaign=lab_share    (Reddit)
+  &utm_source=twitter&utm_medium=tweet&utm_campaign=lab_share   (Twitter)
+  &utm_source=discord&utm_medium=message&utm_campaign=lab_share (Discord)
+```
+
+The "Raw" option copies the URL with no UTM params (for bookmarking, DMs, etc.).
+
+**Why platform-specific UTMs matter more than a generic share button:**
+
+1. **Attribution clarity.** GA4 treats `utm_source=reddit` and `utm_source=twitter` as separate rows. When a Reddit post drives 500 clicks, you see exactly where they came from without guessing. [UTM best practices](https://linkutm.com/blog/utm-best-practices) confirm that standardized lowercase source names yield 29% better attribution accuracy.
+
+2. **Content strategy feedback loop.** Razzle's GTM is Reddit-first (r/DynastyFF → r/fantasyfootball). UTM data tells you which *platform* converts, not just which *page* gets traffic. If Discord links drive 3x the engagement per click vs Reddit, that changes the content calendar.
+
+3. **No URL shortener needed yet.** UTM-appended URLs are long and ugly, but Reddit post bodies accept long URLs fine (they're hyperlinked, not displayed raw). Twitter's 280-char limit is the only constraint — but Razzle tweets will use the watermark-in-screenshot funnel, not direct links. Discord embeds show the page title regardless of URL length.
+
+**Competitive landscape:**
+
+- **KeepTradeCut**: "Copy URL" on trade calculator and power rankings — no UTM params, no platform selection. Basic clipboard copy.
+- **FantasyPros**: No shareable URL feature on their tools. Rankings pages use static URLs.
+- **Dynasty Daddy**: No share feature.
+- **PeakedInHighSkool**: Shares via image posts (no URL sharing needed — the watermark IS the attribution).
+
+Razzle's existing share modal is already more sophisticated than any competitor. Adding platform-aware UTMs makes it the only fantasy tool that tracks *where* its content gets shared.
+
+**Implementation priority: LOW (July, alongside Redraft preset build).**
+
+This is a 30-minute feature. Don't build it now — build it when the Redraft preset and ADP data exist (July), so the first shareable link actually points to something worth sharing. The UTM params only matter when there's traffic to track.
+
+**UTM naming convention to standardize now:**
+
+| Parameter | Value | Rule |
+|-----------|-------|------|
+| utm_source | reddit, twitter, discord | Always lowercase platform name |
+| utm_medium | post, tweet, message, comment | Content format on that platform |
+| utm_campaign | lab_share, adp_reality_check_w1, etc. | Snake_case, descriptive |
+| utm_content | (optional) | Use for A/B tests: `cta_top` vs `cta_bottom` |
+
+Document this in `docs/marketing/utm-conventions.md` before July so every shared link follows the same format from day one.
+
+---
+
+### Self-Critique
+
+1. **This is a solved problem, not a research question.** The answer is straightforward engineering advice — add UTMs to an existing copy function. The research value is in the naming convention standardization and the "when to build it" prioritization, not the "should we build it" question. **Confidence: 9/10.**
+
+2. **I assumed GA4 is the analytics backend.** Razzle currently uses a custom `POST /api/analytics/pageview` endpoint, not GA4. UTM params in the URL won't automatically flow into Razzle's analytics unless the backend parses `utm_source` from the request URL and stores it. This is a ~5-line addition to the pageview endpoint but it's not free. **Confidence: 8/10** that UTMs are worth it regardless — even if Razzle doesn't parse them today, adding GA4 later (or using Render's server logs) makes historical UTM data retroactively useful.
+
+3. **The Web Share API was considered and rejected.** `navigator.share()` opens the native OS share sheet (great on mobile), but it doesn't let you control UTM params per platform — the user picks the destination, and you can't know which platform they chose. For Razzle's attribution needs, explicit platform selection is better than native share. **Confidence: 7/10** — could revisit for mobile UX later.
+
+Sources:
+- [UTM Best Practices 2026](https://linkutm.com/blog/utm-best-practices) — case sensitivity, naming conventions, 29% attribution improvement
+- [UX Considerations for Web Sharing (CSS-Tricks)](https://css-tricks.com/ux-considerations-for-web-sharing/) — share button patterns, Web Share API limitations
+- [Web Share API (MDN)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API) — browser support, native share sheet behavior
+- [Hootsuite UTM Guide](https://blog.hootsuite.com/how-to-use-utm-parameters/) — platform-specific UTM examples
+- [Buffer UTM Code Guide](https://buffer.com/library/utm-guide/) — social media UTM tracking patterns
+- Razzle codebase: `frontend/lab.js:4087-4123` (existing share modal), `frontend/lab.html:3591-3620` (share overlay HTML)
+
+### Implications for Razzle
+
+1. **Don't build a new button.** Upgrade the existing share modal in `openShareModal()` to include platform radio pills and append UTMs to the copied URL. ~20 lines of JS, ~10 lines of HTML.
+
+2. **Standardize UTM naming NOW, build the feature in July.** Write `docs/marketing/utm-conventions.md` with the naming table above. When the Redraft preset ships, the share feature ships alongside it.
+
+3. **Parse UTMs server-side.** Add `utm_source`, `utm_medium`, `utm_campaign` columns to the analytics pageview table. Parse from `document.location.search` in the frontend pageview call. ~5 lines backend, ~5 lines frontend.
+
+4. **The "Copy as Reddit Table" button is the real attribution hack.** When someone pastes a Reddit markdown table from Razzle, the table itself is the content — no link needed. But the share modal's Reddit title generator already includes the Lab URL. The UTM-appended URL in the Reddit title is the conversion path: title → click → Lab view with preset applied.
+
+### Open Questions
+
+1. **Should the Lab's existing `POST /api/analytics/pageview` endpoint parse and store UTM params from the URL, or should Razzle add GA4/Plausible for campaign attribution?**
+
+2. **What is the optimal image format and resolution for Reddit-embedded screenshots — PNG vs JPEG, dimensions, and how does Reddit's image compression affect heat-colored cells?**
+
+3. **Should Razzle add a "Share to Reddit" button that pre-fills a Reddit submission form (title + body + link) via reddit.com/submit URL params?**
+
+## NEXT QUESTION: Should the Lab's existing analytics endpoint parse and store UTM params from the URL, or should Razzle add a lightweight analytics service like Plausible/PostHog for campaign attribution?
 
 ---
