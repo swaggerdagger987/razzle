@@ -3631,6 +3631,96 @@ Sources:
 
 3. **What is the optimal "Reddit Post Kit" UX — should it be a tab in the existing share modal, a separate button, or a step-by-step wizard that guides users through creating a high-quality [OC] post?**
 
-## NEXT QUESTION: Should the Lab's screenshot export include a "Reddit crop" mode that limits the visible rows to 8-12 players for feed-friendly readability, versus the current full-table capture?
+---
 
-## NEXT QUESTION: Should Razzle add a "Share to Reddit" button that pre-fills a Reddit submission form (title + body + link) via reddit.com/submit URL params?
+## Q41: Should the Lab's screenshot export include a "Reddit crop" mode that limits the visible rows to 8-12 players for feed-friendly readability, versus the current full-table capture?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Yes — add a "Reddit crop" mode, but implement it as canvas cropping on the existing screenshot, not as a separate capture. Target 10 rows at 4:3 aspect ratio (1200×900 logical, 2400×1800 at 2x). This is a small, high-leverage addition to the screenshot pipeline.**
+
+#### Why Cropping Matters for Reddit
+
+Reddit's feed display behavior punishes tall images:
+
+- **Card View (default on mobile)**: Images taller than ~5:4 get cropped with a "See Full Image" button, hiding the bottom portion. A 25-row screener table produces roughly a 3:5 (portrait) image — most of it hidden in the feed. Users must tap to expand, which kills engagement.
+- **Classic View**: All images are cropped to 5:4 aspect ratio automatically. The bottom two-thirds of a full-table screenshot is invisible.
+- **Optimal display**: 4:3 landscape (1200×900px) displays in-feed without cropping on both mobile and desktop. This is the universal sweet spot across Reddit guides (RatioSize, LiftBurst, Online Optimism all converge on this).
+
+The current `screenshotPanel()` captures the entire `.lab-panel-content` at `scale: 2`. With 25 rows (default page size), that's roughly 1200×2000+ pixels — a 3:5 portrait that gets brutally cropped in Reddit feeds.
+
+#### Why 10 Rows Is the Sweet Spot
+
+- **Readability**: At 1200×900 (4:3), 10 data rows + header + watermark fills the frame cleanly. 8 rows leaves too much whitespace. 12 rows requires smaller font at 2x, reducing the heat-coloring impact that makes Razzle screenshots distinctive.
+- **Content density**: 10 rows shows enough to be a real analysis (not cherry-picked) but few enough that each player name and stat is readable on a phone screen without zooming.
+- **Competitive context**: KTC and FantasyPros don't offer screenshot export at all. Dynasty Daddy has no crop mode. A Reddit-optimized screenshot is a feature no competitor has.
+
+#### Implementation: Canvas Crop, Not DOM Crop
+
+Don't modify the DOM or create a separate capture target. Instead:
+
+1. Capture the full panel with `html2canvas` as today (the existing `screenshotPanel()` function).
+2. After rendering, use canvas `drawImage()` to extract a cropped region — top N rows worth of pixel height from the rendered canvas.
+3. Calculate crop height: measure the actual rendered header row height + (10 × row height) from the DOM before capture, then multiply by `scale: 2`.
+4. Draw the cropped region onto a new canvas sized at 4:3 (2400×1800 at 2x). Add the watermark to the cropped canvas.
+5. Download the cropped version.
+
+This approach is ~15 lines of JS on top of the existing pipeline. No new library. No DOM manipulation.
+
+```javascript
+// Pseudocode for Reddit crop
+var headerH = thead.offsetHeight * 2; // scale:2
+var rowH = firstTbodyRow.offsetHeight * 2;
+var cropH = headerH + (10 * rowH);
+var cropCanvas = document.createElement('canvas');
+cropCanvas.width = fullCanvas.width;
+cropCanvas.height = Math.min(cropH, fullCanvas.height);
+var ctx = cropCanvas.getContext('2d');
+ctx.drawImage(fullCanvas, 0, 0, fullCanvas.width, cropH, 0, 0, fullCanvas.width, cropH);
+drawRazzleWatermark(ctx, cropCanvas, opts);
+```
+
+#### UX: Toggle, Not Default
+
+Add a checkbox in the share modal or a "Reddit Crop (Top 10)" option next to the Export PNG button. Don't make it the default — users who want the full table for Discord or personal use should keep getting it. The Reddit crop is an explicit opt-in that signals "I'm posting this to Reddit."
+
+---
+
+### Self-Critique
+
+1. **The "10 rows" number is design judgment, not empirical.** I tested the math: at 1200px wide, a header + 10 rows at ~40px each = ~440px content + padding ≈ 500-550px, which fits 4:3 (1200×900) with room for watermark and whitespace. But the actual row height depends on font size, density mode, and column count. Should be tested empirically before hardcoding. **Confidence: 7/10.**
+
+2. **Reddit's cropping behavior varies by Reddit version (old vs new vs mobile app vs third-party apps).** The 4:3 recommendation works universally, but some users on old.reddit.com see different preview behavior. Targeting 4:3 is the safest bet. **Confidence: 8/10.**
+
+3. **Canvas cropping after html2canvas render is proven.** The `drawImage()` crop approach is well-documented and used in production by many html2canvas implementations. No library risk. **Confidence: 9/10.**
+
+Sources:
+- [Reddit Image Size Guide (LiftBurst)](https://liftburst.com/en/blog/reddit-image-size-guide-perfect-dimensions-for-maximum-engagement) — 4:3 optimal, card view cropping behavior
+- [Reddit Aspect Ratios Complete Guide (RatioSize)](https://ratiosize.com/platform-page/reddit.html) — 1200×900 dimensions, mobile feed behavior
+- [Reddit Graphic Size Guide (Online Optimism)](https://onlineoptimism.com/resource/comprehensive-graphic-size-guide-for-reddit/) — classic view 5:4 crop, center-weighted display
+- [Reddit Post Images: Formats That Get Upvoted (SocialPixOptimizer)](https://socialpixoptimizer.com/academy/reddit-post-images-formats-that-get-upvoted-and-shared/) — landscape vs portrait engagement
+- [html2canvas Partial Snapshot (CodeProject)](https://www.codeproject.com/Articles/1104766/Partial-Snapshot-of-a-Web-Page-Using-HTML-canvas) — canvas crop approach
+- [html2canvas crop (CodePen)](https://codepen.io/mishamean/pen/rYvXVw) — drawImage crop implementation
+- Razzle codebase: `frontend/lab.js:78-117` (screenshotPanel), `frontend/lab.js:86-90` (scale:2, html2canvas options), `frontend/lab.js:961` (default limit: 25 rows)
+
+### Implications for Razzle
+
+1. **Add a "Reddit Crop (Top 10)" toggle to the share modal.** When enabled, Export PNG crops to the first 10 data rows at 4:3 aspect ratio. ~15 lines of JS. Build alongside the Reddit Post Kit upgrade from Q40.
+
+2. **Keep the full-table export as default.** Reddit crop is opt-in. Power users exporting for Discord, league chats, or personal reference want the full table.
+
+3. **Sort order matters more than ever.** When only 10 rows are visible, the sort determines the entire narrative. The share modal should hint: "Screenshot shows your current top 10 — sort by the stat you want to highlight."
+
+4. **Heat coloring is the differentiator in cropped screenshots.** At 10 rows, every cell is readable. The position-colored heat tinting becomes the visual hook that makes the screenshot unmistakably Razzle. This is the moat — no competitor has screenshot export with per-position heat coloring.
+
+### Open Questions
+
+1. **Should the Reddit crop mode automatically sort by the most "interesting" stat (highest variance, most controversial ranking) to maximize engagement, or always respect the user's current sort?**
+
+2. **When the Reddit Post Kit (Q40) bundles title + URL + screenshot, should the cropped screenshot filename include the preset name and position filter (e.g., `razzle_dynasty_WR_top10_2026-03-21.png`) for better organization when users accumulate multiple exports?**
+
+3. **Should the share modal include a live preview of the cropped screenshot (thumbnail) so users can see exactly what will be exported before downloading?**
+
+## NEXT QUESTION: Should the share modal include a live preview thumbnail of the cropped screenshot so users can verify what will be exported before downloading?
