@@ -3907,4 +3907,95 @@ Sources:
 
 3. **Should Razzle track which export format users click most (PNG vs CSV vs Clipboard vs Reddit Table) via analytics events, to inform which format gets the most prominent position in the share modal?**
 
-## NEXT QUESTION: Should the Export PNG button label dynamically update based on current state (row count, crop mode, position filter) to serve as inline preview-by-description?
+## Q44: What specific content should Razzle publish during NFL Draft weekend (April 23-25, 2026) to maximize dynasty community traffic — and what's the hour-by-hour posting cadence?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**The NFL Draft is dynasty fantasy football's Super Bowl. Razzle has exactly 33 days (April 23-25 in Pittsburgh) to prepare a three-day content blitz that turns Draft Day chaos into Razzle.lol traffic. The strategy: pre-staged screenshots + real-time landing spot reactions + post-draft value shift tables.**
+
+#### Why Draft Weekend Is the #1 Traffic Opportunity
+
+The dynasty community's engagement peaks during the NFL Draft more than any other event. Every pick triggers an immediate cascade: "What does this mean for my rookie draft?" "Who just got nuked?" "What's the new 1.01?" Footballguys published instant first-round dynasty reactions within hours of the 2025 Draft. Fantasy Points ran a "Dynasty Market Report" tracking value shifts pick-by-pick. Dynasty Nerds published landing spot analysis for every skill position pick. This is the one weekend where dynasty managers refresh Reddit and Twitter constantly for 72 hours straight.
+
+#### The Three-Day Content Plan
+
+**Pre-Draft (April 20-22) — Stage the ammo:**
+- Screenshot the Lab's Prospect Big Board (/prospects.html) with RPS tiers and post to r/DynastyFF: "My pre-draft rookie board — let's see how landing spots shake it up"
+- Screenshot the Dynasty Trade Value Chart (/tradevalues.html) for veterans likely to be affected (e.g., incumbent RBs/WRs on teams with top picks)
+- These "before" screenshots become the anchor for "after" comparisons
+
+**Day 1 — Thursday April 23 (Round 1, 8pm ET):**
+- **During picks 1-10:** Tweet individual pick reactions using Lab screenshots showing the landed player's college stats + the team's existing depth (from /team/{abbr}). One screenshot per pick, watermarked.
+- **After Round 1 (~11pm ET):** Post a r/DynastyFF megathread: "Round 1 Landing Spot Winners & Losers — Lab Screenshots" with a table of every skill-position pick, before/after value assessment, and Lab screenshots of the player profile.
+- **Cadence:** 1 tweet per pick (every 10-15 min during Round 1), 1 Reddit megapost after Round 1 ends.
+
+**Day 2 — Friday April 24 (Rounds 2-3, 7pm ET):**
+- The RB/WR value picks happen here. Rounds 2-3 are where dynasty rookie draft values swing hardest.
+- **During picks:** Tweet the biggest fantasy-relevant landing spots (skip punters/OL).
+- **After Round 3 (~11pm ET):** Post "Updated Rookie Big Board After 3 Rounds" — screenshot the Lab with Prospect mode filtered to drafted players, sorted by new landing-spot-adjusted value.
+- **Key content:** "Winners and Losers: Which veterans just lost their job?" using Lab screenshots of team depth charts.
+
+**Day 3 — Saturday April 25 (Rounds 4-7, noon ET):**
+- Lower engagement, but dynasty degens are still watching.
+- **Post-draft:** "Complete 2026 Rookie Draft Board — Post-NFL-Draft Edition" on Reddit. This is the crown jewel. Lab screenshot with all drafted prospects, landing spots noted, tier breaks applied.
+- **Tweet thread:** "5 veterans whose dynasty value just cratered after Draft weekend" — each with a Lab screenshot.
+
+#### What Razzle Needs Ready by April 23
+
+1. **Landing spot data in the Lab.** The College/Prospect mode needs a "Team" column showing NFL landing spot. This can be manually updated pick-by-pick on Draft night (or via a simple JSON mapping updated in real-time).
+2. **Pre-staged screenshot templates.** The Reddit crop mode (Q41, 4:3 aspect, top 10 rows) must be built. Draft night screenshots need to be shareable immediately — not "let me crop this in Paint."
+3. **Team depth chart screenshots.** The /team/{abbr} page screenshots showing existing roster + new pick context.
+4. **"Before/After" comparison format.** Side-by-side screener screenshots: "Pre-Draft Big Board" vs "Post-Draft Big Board" showing tier shifts.
+5. **Reddit account warm-up (Q26).** The posting account needs 4+ weeks of organic commenting history by April 23. Starting this week (March 21) gives exactly enough runway.
+
+#### What NOT to Do
+
+- **Don't try to be first.** ESPN, NFL Network, and 50 fantasy podcasters will tweet faster. Razzle's edge is the DATA VISUAL, not the hot take. Be 15 minutes late with a beautiful Lab screenshot rather than 15 seconds early with text-only.
+- **Don't automate draft tracking.** Manually updating a JSON file with landing spots is fine for 30 skill-position picks across 3 days. Building a real-time NFL Draft API integration for a once-a-year event is over-engineering.
+- **Don't post during the actual pick announcements.** Post BETWEEN picks when people are scrolling. The 10-minute gaps between Round 1 picks are prime posting windows.
+
+---
+
+### Self-Critique
+
+1. **The "33 days to prepare" timeline is tight but achievable.** Reddit crop mode (Q41) is ~15 lines of JS. Landing spot column in Prospect mode is a data field addition. The Reddit account warm-up is the real bottleneck — it requires 4 weeks of consistent organic commenting starting NOW. **Confidence: 8/10.**
+
+2. **The "1 tweet per pick" cadence during Round 1 assumes Razzle has someone live-tweeting.** This is a one-person operation. Manually updating landing spots, taking screenshots, cropping, and posting — that's ~5 minutes per pick during a live event. 32 picks in Round 1, but only ~10-15 are skill positions worth covering. Feasible but intense. **Confidence: 7/10.**
+
+3. **The assumption that Lab screenshots will differentiate from competitors' draft coverage is the core bet.** Footballguys, Dynasty Nerds, Fantasy Points all publish text-based landing spot reactions. None of them export heat-colored, watermarked data tables. If Razzle's screenshots are genuinely more visually compelling and data-rich than a text tweet saying "Jeanty to the Raiders is the 1.01 lock" — the visual wins. But this requires the screenshots to actually look great at Reddit/Twitter card dimensions. **Confidence: 7/10 — needs the Reddit crop mode and heat coloring working perfectly.**
+
+4. **The "before/after" comparison format is a strong hook but requires pre-staging.** The "before" screenshots must be taken and saved before Draft Day. If the Prospect Big Board changes between now and April 23 (data updates, UI changes), the comparison breaks. Freeze the "before" screenshots 1-2 days pre-draft. **Confidence: 9/10.**
+
+Sources:
+- [2025 NFL Draft First-Round Dynasty Reaction - Footballguys](https://www.footballguys.com/article/2025-nfl-draft-first-round-dynasty-reaction)
+- [Dynasty Market Report: 2025 NFL Draft - Fantasy Points](https://www.fantasypoints.com/nfl/articles/2025/dynasty-market-report-nfl-draft)
+- [Rookie Landing Spots - Dynasty Nerds](https://www.dynastynerds.com/nfl-prospect/rookie-landing-spots-top-dynasty-destinations-for-2025-nfl-draft/)
+- [2026 NFL Draft Dates and Schedule - NFL.com](https://www.nfl.com/news/2026-nfl-draft-dates-times-location-how-to-watch-and-more)
+- [2026 NFL Draft Prospect Primer - Fantasy Footballers](https://www.thefantasyfootballers.com/dynasty/the-2026-nfl-draft-prospect-primer-fantasy-football/)
+- [Post-Draft Dynasty Mock - SI](https://www.si.com/nfl/post-draft-dynasty-mock-rookie-landing-spots-impact-fantasy-2025-beyond)
+- [Dynasty Rookie Draft Rankings 2026 - FantasyPros](https://www.fantasypros.com/2026/03/dynasty-rookie-draft-rankings-fantasy-football-emmett-johnson/)
+- [2026 Rookie Rankings Top 100 - Draft Sharks](https://www.draftsharks.com/article/2026-rookie-rankings)
+
+### Implications for Razzle
+
+1. **Start Reddit account warm-up THIS WEEK (March 21).** Q26 established the 4-week calendar. April 23 minus 4 weeks = March 26. There is zero margin. Begin organic commenting on r/DynastyFF by Monday March 24 at the latest.
+
+2. **Build the Reddit crop mode (Q41) in the next sprint.** This is the highest-priority feature for Draft Day content. Full-table screenshots won't work in Twitter cards or Reddit mobile feeds. The 4:3, top-10-rows crop is essential.
+
+3. **Add a "Landing Spot" (NFL Team) column to the Prospect screener mode.** Pre-populate with mock draft consensus for top prospects. On Draft night, update manually pick-by-pick. This makes the Lab screenshot immediately relevant — "look, you can see his college stats AND where he just landed."
+
+4. **Pre-stage "before" screenshots on April 21.** Save the Prospect Big Board, top veteran trade values, and team depth screenshots as PNG files. These become the "before" half of comparison posts.
+
+5. **The three-day content plan is the highest-ROI marketing Razzle can do before August.** NFL Draft weekend is the ONLY event between now and preseason where the dynasty community is all online simultaneously for 72 hours. Missing it means waiting until August for the next comparable traffic opportunity.
+
+### Open Questions
+
+1. **Should Razzle build a lightweight "Draft Night Command Center" page that tracks landing spots in real-time as picks happen — a single-page dashboard showing picks + Lab prospect data + team context — or is manually updating the Prospect screener sufficient?**
+
+2. **What's the optimal Twitter thread format for Draft Day — individual tweets per pick (more impressions per tweet) vs. a rolling thread updated with each pick (easier to follow but lower per-tweet reach)?**
+
+3. **Should Razzle prepare "trade value shift" content showing how veteran players' dynasty values change based on their team drafting a replacement (e.g., "D'Andre Swift's value just dropped 15% because the Bears drafted Jeremiyah Love") — and what data would power that calculation?**
+
+## NEXT QUESTION: Should Razzle build a lightweight "Draft Night Command Center" page that tracks landing spots in real-time — or is manually updating the Prospect screener sufficient for Draft weekend content?
