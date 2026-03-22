@@ -1,20 +1,21 @@
 {
-  "generated_at": "2026-03-21T23:43:33.807950",
+  "generated_at": "2026-03-22T00:58:12.610679",
   "data_summary": {
-    "total_posts": 14424,
+    "total_posts": 16033,
     "total_comments": 655,
     "subreddits": {
-      "DynastyFF": 2240,
-      "SleeperApp": 2119,
-      "fantasyfootball": 2008,
-      "Fantasy_Football": 1899,
-      "fantasyfootballadvice": 1800,
-      "FantasyFootballers": 950,
-      "DynastyFootballLeague": 900,
-      "NFL_Draft": 900,
-      "TradeAnalyzerFF": 900,
+      "DynastyFF": 2544,
+      "SleeperApp": 2319,
+      "fantasyfootball": 2207,
+      "Fantasy_Football": 2099,
+      "fantasyfootballadvice": 2000,
+      "FantasyFootballers": 1050,
+      "DynastyFootballLeague": 1000,
+      "NFL_Draft": 1000,
+      "TradeAnalyzerFF": 1000,
       "sportsbetting": 134,
       "SideProject": 120,
+      "nfl": 106,
       "startups": 104,
       "bestball": 101,
       "ffcommish": 101,
@@ -24,18 +25,18 @@
   },
   "pain_points": {
     "counts": {
-      "injury_concern": 4419,
-      "aging_decline": 2876,
-      "prospect_research": 994,
-      "rookie_draft": 951,
-      "rebuild_contend": 618,
-      "data_analysis": 596,
-      "league_management": 446,
-      "trade_confusion": 445,
-      "waiver_wire": 274,
-      "value_uncertainty": 206,
-      "tool_complaints": 204,
-      "start_sit": 10
+      "injury_concern": 4902,
+      "aging_decline": 3182,
+      "prospect_research": 1109,
+      "rookie_draft": 1058,
+      "rebuild_contend": 690,
+      "data_analysis": 663,
+      "trade_confusion": 494,
+      "league_management": 491,
+      "waiver_wire": 301,
+      "value_uncertainty": 229,
+      "tool_complaints": 228,
+      "start_sit": 11
     },
     "examples": {
       "trade_confusion": [
@@ -427,561 +428,561 @@
   "top_content": {
     "top_50": [
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7301,
+        "title": "[Highlight] Bad Bunny, Lady Gaga, & Ricky Martin's Super Bowl LX Halftime Show",
+        "score": 42776,
+        "flair": "Highlight",
+        "comments": 4718,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Yates] The Chiefs have now been eliminated from the playoffs.",
+        "score": 37714,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
+        "comments": 2367,
+        "sub": "nfl"
       },
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7293,
+        "title": "[Highlight] Caleb Williams unreal touchdown to Cole Kmet!",
+        "score": 34661,
+        "flair": "Highlight",
+        "comments": 2538,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Fox censors \"Fuck ICE\" chant from fan during national anthem",
+        "score": 33768,
+        "flair": "Highlight",
+        "comments": 1186,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Joe Flacco: \"I used to see guys sitting at the bar by themselves eating and I used to feel so bad for them a",
+        "score": 31242,
+        "flair": "Highlight",
+        "comments": 1298,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Gunner Olszewski throws TD to Jameis Winston",
+        "score": 29349,
+        "flair": "Highlight",
+        "comments": 1303,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Rich Eisen on Butker's missed extra point \"Harrison Butker, interestingly enough, is wide right\"",
+        "score": 29291,
+        "flair": "Highlight",
+        "comments": 1034,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] A young Eagles fan interviewed after the game: “This was my Christmas present and I got a loss… I want AJ Br",
+        "score": 29245,
+        "flair": "Highlight",
+        "comments": 1345,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Tom Brady: \"This statue isn't just for Pats fans. It'll also give all the Jets fans something to throw their",
+        "score": 28428,
+        "flair": "Highlight",
+        "comments": 1257,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Schefter] After a historic 19-season run in Pittsburgh, Mike Tomlin just informed his team that he is stepping down as ",
+        "score": 28265,
+        "flair": "Rumor",
+        "comments": 3615,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Chris Jones: “You don’t even have 100 yards”, Jalen Hurts “We won the fucking game shut yo ass up”",
+        "score": 28217,
+        "flair": "Highlight",
+        "comments": 1902,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Jaguars kicker Cam Little breaks NFL record with 68-yard field goal",
+        "score": 27922,
+        "flair": "Highlight",
+        "comments": 1163,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Arizona Cardinals defensive linemen L.J. Collier and Dalvin Tomlinson get approached by a photographer in Ja",
+        "score": 27041,
+        "flair": "Highlight",
+        "comments": 954,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Tom Brady explaining how to throw the ball in the wind",
+        "score": 26629,
+        "flair": "Highlight",
+        "comments": 1530,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Josh Allen shows up to his postgame press conference with tears in his eyes: \"I let my teammates down tonigh",
+        "score": 26455,
+        "flair": "Highlight",
+        "comments": 3639,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlights] CAM LITTLE NAILS A 70 YARD FIELD GOAL!",
+        "score": 25949,
+        "flair": "Highlight",
+        "comments": 1656,
+        "sub": "nfl"
+      },
+      {
+        "title": "Chicago got a Pope before getting a 4000 yard passer",
+        "score": 25089,
+        "flair": "Offseason Post",
+        "comments": 712,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] WR DJ Moore wore a cheese grater hat in the locker room after beating the Packers",
+        "score": 23651,
+        "flair": "Highlight",
+        "comments": 834,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Ben Johnson: \"F*ck the Packers, f*ck them\"",
+        "score": 23556,
+        "flair": "Highlight",
+        "comments": 2244,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Dak spits first",
+        "score": 23158,
+        "flair": "Highlight",
+        "comments": 2563,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Mayfield, on 3rd and 14, converts with a scramble as he extends for the first down",
+        "score": 22456,
+        "flair": "Highlight",
+        "comments": 1235,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Browns DT Shelby Harris on Jauan Jennings: \"He's a hoe, and I want that known. Like I see why he got punched",
+        "score": 22384,
+        "flair": "Highlight",
+        "comments": 1489,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Schneidman] The Packers blow an 18-point lead and their season is over. A stunning and inexplicable collapse.",
+        "score": 22074,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
+        "comments": 2989,
+        "sub": "nfl"
       },
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7292,
+        "title": "[Highlight] Texans owner Cal McNair gets a high five from CJ Stroud",
+        "score": 21808,
+        "flair": "Highlight",
+        "comments": 861,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Awesome post-game exchange between a reporter and Jaguars HC Liam Coen",
+        "score": 21797,
+        "flair": "Highlight",
+        "comments": 994,
+        "sub": "nfl"
+      },
+      {
+        "title": "John Harbaugh is out as the Ravens head coach.",
+        "score": 21373,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
+        "comments": 4936,
+        "sub": "nfl"
       },
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7292,
+        "title": "[Highlight] Ben Johnson celebrates the win with his team",
+        "score": 20453,
+        "flair": "Highlight",
+        "comments": 1501,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Mahomes throws a pick 6 to Devin Lloyd!",
+        "score": 20165,
+        "flair": "Highlight",
+        "comments": 1045,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Myles Garrett sets single-season sack record with 23",
+        "score": 19931,
+        "flair": "Highlight",
+        "comments": 1977,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Chargers social media team puts the final nail in Kansas City’s coffin",
+        "score": 19695,
+        "flair": "Highlight",
+        "comments": 426,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] PHI vs DAL - Jalen Carter ejected from the game",
+        "score": 19533,
+        "flair": "Highlight",
+        "comments": 2702,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Kenneth Walker III is Super Bowl LX MVP",
+        "score": 19365,
+        "flair": "Highlight",
+        "comments": 1268,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Justin Fields after today’s win: “I'm going to get pretty vulnerable right here. This week I found myself in",
+        "score": 19288,
+        "flair": "Highlight",
+        "comments": 1526,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Nick Foles] Note for the Broncos and their fans: I know it has been an emotional 24 hours. I feel for Bo and the team, ",
+        "score": 19226,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
+        "comments": 674,
+        "sub": "nfl"
       },
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7292,
+        "title": "[Schefter] In the first 45 minutes after John Harbaugh was fired this afternoon, his agent Bryan Harlan said he received",
+        "score": 19204,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
+        "comments": 2131,
+        "sub": "nfl"
       },
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7292,
+        "title": "[Highlight] Eagles block kick, Jordan Davis returns for touchdown",
+        "score": 19042,
+        "flair": "Highlight",
+        "comments": 1363,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Cam Skattebo and Ryan Fitzpatrick rip their shirts off on set",
+        "score": 18993,
+        "flair": "Highlight",
+        "comments": 1277,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Cam Bynum wacky celebration after picking off Tua",
+        "score": 18747,
+        "flair": "Highlight",
+        "comments": 638,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Rob Gronkowski signing a 1-day contract to retire a Patriot. Robert Kraft offers to make it a 2-day contract",
+        "score": 18744,
+        "flair": "Roster Move",
+        "comments": 552,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Pelissero] The #Cowboys are trading All-Pro Micah Parsons to the #Packers & they agreed to a 4-year, $188M deal done",
+        "score": 18710,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
+        "comments": 5634,
+        "sub": "nfl"
       },
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7290,
+        "title": "[Highlight] Aaron Rodgers tackled by his OT Broderick Jones",
+        "score": 18598,
+        "flair": "Highlight",
+        "comments": 1567,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] IND vs SEA - Philip Rivers throws a TD in his return from retirement",
+        "score": 18512,
+        "flair": "Highlight",
+        "comments": 751,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] ESPN displays Rashee Rice's criminal history after he's penalized for taunting",
+        "score": 18288,
+        "flair": "Highlight",
+        "comments": 1427,
+        "sub": "nfl"
+      },
+      {
+        "title": "Since Caleb Williams told P Tory Taylor \"You're Not Going To Punt Too Much Here\" Taylor has punted 92 Times, more than a",
+        "score": 18258,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
+        "comments": 708,
+        "sub": "nfl"
       },
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7289,
+        "title": "[Pitts] Kyle Pitts Calls Out Teammates After Attending Rondale Moore's Funeral: \"Crazy how only about 6 maybe 7 of your ",
+        "score": 18126,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
+        "comments": 1005,
+        "sub": "nfl"
       },
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7288,
+        "title": "[Highlight] Caleb Williams shredding cheese after the Bears comeback win",
+        "score": 17891,
+        "flair": "Highlight",
+        "comments": 1028,
+        "sub": "nfl"
+      },
+      {
+        "title": "[Highlight] Cam Skattebo on facing Saquon Barkley: \n\n\"No disrespect at all, it was an Eagles vs Giants tonight. It wasn'",
+        "score": 17849,
+        "flair": "Highlight",
+        "comments": 895,
+        "sub": "nfl"
+      },
+      {
+        "title": "Mike Tomlin told his team, “I think it’s best for the organization for me to step down.” Aaron Rodgers, sobbing, said, “",
+        "score": 17781,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
+        "comments": 1919,
+        "sub": "nfl"
       },
       {
-        "title": "Most receiving yards in a season in NFL history:\n\n1) Calvin Johnson — 1,964 (in 2012)\n\n2) Cooper Kupp — 1,947 (in 2021)\n",
-        "score": 7286,
+        "title": "[Highlight] Mike Vrabel on if he would cut off his vital male appendage for a Super Bowl: \"I mean, I’d probably cut it i",
+        "score": 17649,
+        "flair": "Highlight",
+        "comments": 581,
+        "sub": "nfl"
+      },
+      {
+        "title": "Cam Skattebo had a surprise visitor at Penn Presbyterian on Monday: Eagles Do-it-all Chief of Security Dom DiSandro, who",
+        "score": 17488,
         "flair": null,
-        "comments": 325,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6565,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6563,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6561,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6560,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6558,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6558,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6557,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6556,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6556,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "AJ Brown to fantasy owners: \"if you have me, get rid of me\"",
-        "score": 6551,
-        "flair": null,
-        "comments": 726,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "I wrote a 680-page Interactive Book on Computer Science Algorithms",
-        "score": 6241,
-        "flair": null,
-        "comments": 865,
-        "sub": "SideProject"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6219,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6218,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6218,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6216,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6215,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6214,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6213,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6212,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6211,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Christian McCaffrey just surfaced on 49ers practice report as limited by calf issue",
-        "score": 6209,
-        "flair": "Another 49ers Practice Update",
-        "comments": 1595,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "just made my first SaaS! 🎉",
-        "score": 5772,
-        "flair": null,
-        "comments": 240,
-        "sub": "SideProject"
-      },
-      {
-        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
-        "score": 5749,
-        "flair": "For Love of the Game!",
-        "comments": 154,
-        "sub": "FantasyFootballers"
-      },
-      {
-        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
-        "score": 5745,
-        "flair": "For Love of the Game!",
-        "comments": 154,
-        "sub": "FantasyFootballers"
-      },
-      {
-        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
-        "score": 5744,
-        "flair": "For Love of the Game!",
-        "comments": 154,
-        "sub": "FantasyFootballers"
-      },
-      {
-        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
-        "score": 5743,
-        "flair": "For Love of the Game!",
-        "comments": 154,
-        "sub": "FantasyFootballers"
-      },
-      {
-        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
-        "score": 5742,
-        "flair": "For Love of the Game!",
-        "comments": 154,
-        "sub": "FantasyFootballers"
-      },
-      {
-        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
-        "score": 5741,
-        "flair": "For Love of the Game!",
-        "comments": 154,
-        "sub": "FantasyFootballers"
-      },
-      {
-        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
-        "score": 5741,
-        "flair": "For Love of the Game!",
-        "comments": 154,
-        "sub": "FantasyFootballers"
-      },
-      {
-        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
-        "score": 5739,
-        "flair": "For Love of the Game!",
-        "comments": 154,
-        "sub": "FantasyFootballers"
-      },
-      {
-        "title": "Last Week My Friend Passed Away… and Our Fantasy Match Ended in a Perfect Tie",
-        "score": 5738,
-        "flair": "For Love of the Game!",
-        "comments": 154,
-        "sub": "FantasyFootballers"
-      },
-      {
-        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
-        "score": 5598,
-        "flair": "Player Discussion",
-        "comments": 330,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
-        "score": 5598,
-        "flair": "Player Discussion",
-        "comments": 330,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
-        "score": 5595,
-        "flair": "Player Discussion",
-        "comments": 330,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
-        "score": 5594,
-        "flair": "Player Discussion",
-        "comments": 330,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
-        "score": 5593,
-        "flair": "Player Discussion",
-        "comments": 330,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
-        "score": 5590,
-        "flair": "Player Discussion",
-        "comments": 330,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
-        "score": 5589,
-        "flair": "Player Discussion",
-        "comments": 330,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
-        "score": 5589,
-        "flair": "Player Discussion",
-        "comments": 330,
-        "sub": "fantasyfootball"
-      },
-      {
-        "title": "Last year, Aaron Rodgers said that he plans to “call aliens” using meditation circles and green lasers. This morning on ",
-        "score": 5589,
-        "flair": "Player Discussion",
-        "comments": 330,
-        "sub": "fantasyfootball"
+        "comments": 983,
+        "sub": "nfl"
       }
     ],
     "flair_avg_score": {
-      "Misleading": 5536.2,
-      "Another 49ers Practice Update": 3336.048780487805,
-      "Reddit Consensus Rankings": 3298.0,
-      "Breaking News": 2668.6491228070176,
-      "Injury Report": 2511.1111111111113,
-      "Travis Hunter Content": 2305.777777777778,
+      "Offseason Post": 25089.0,
+      "Highlight": 16112.67857142857,
+      "Misleading": 5536.272727272727,
+      "Rumor": 4363.875,
+      "Another 49ers Practice Update": 3343.3555555555554,
+      "Reddit Consensus Rankings": 3297.8,
+      "Roster Move": 3192.1666666666665,
+      "Breaking News": 2672.1111111111113,
+      "Injury Report": 2515.7449664429532,
+      "Travis Hunter Content": 2306.2,
       "Hail to the JCM Hype Train": 2002.0,
       "Training Camp News and Vibes": 1733.0,
-      ":NFL: League Issue ": 1141.4,
+      ":NFL: League Issue ": 1151.090909090909,
       ":NFL: NFL Question ": 1123.0,
-      "Speculation": 1092.4545454545455,
-      ":Sleeper2: Breaking News": 912.5806451612904,
-      "For Love of the Game!": 837.875,
+      "Speculation": 1095.9166666666667,
+      ":Sleeper2: Breaking News": 912.0588235294117,
+      "For Love of the Game!": 840.7626459143969,
       "YOLO ": 780.4285714285714,
-      ":Sleeper2: APP/Tech Assistance": 741.3939393939394,
-      ":NFL: NFL Meme": 720.1555555555556,
-      ":Sleeper2: NFL/Player News ": 697.1860465116279,
-      "No Flair": 692.2173038229377,
-      "MEGALABOWL!": 677.6666666666666,
-      "League Discussion": 626.946386946387
+      "No Flair": 757.6506828528073,
+      ":Sleeper2: APP/Tech Assistance": 742.8611111111111
     },
     "flair_counts": {
-      "No Flair": 2982,
-      "Player Discussion": 2682,
-      ":Sleeper2: Dynasty": 1142,
-      ":NFL: Player Discussion": 819,
-      ":NFL: News": 661,
-      "Trade": 555,
-      ":Sleeper2: Discussion": 509,
-      ":NFL: Dynasty Trade": 455,
-      "League Discussion": 429,
-      "Dynasty - Trade Advice": 341,
-      ":NFL: Miscellaneous ": 296,
-      "Trade - Contending": 279,
-      "Dynasty - Team Advice": 262,
-      "For Love of the Game!": 232,
-      "Redraft - Team Advice": 200,
-      "Discussion": 184,
-      ":Sleeper2: Fantasy Advice": 181,
-      "Team/Trade Help": 161,
-      "Injury Report": 135,
-      "Tools and Resources": 122
+      "No Flair": 3295,
+      "Player Discussion": 3012,
+      ":Sleeper2: Dynasty": 1251,
+      ":NFL: Player Discussion": 905,
+      ":NFL: News": 738,
+      "Trade": 617,
+      ":Sleeper2: Discussion": 559,
+      ":NFL: Dynasty Trade": 504,
+      "League Discussion": 478,
+      "Dynasty - Trade Advice": 378,
+      ":NFL: Miscellaneous ": 322,
+      "Trade - Contending": 310,
+      "Dynasty - Team Advice": 292,
+      "For Love of the Game!": 257,
+      "Redraft - Team Advice": 223,
+      "Discussion": 201,
+      ":Sleeper2: Fantasy Advice": 198,
+      "Team/Trade Help": 176,
+      "Injury Report": 149,
+      "Tools and Resources": 141
     },
-    "image_post_count": 8628,
-    "total_posts": 14424
+    "image_post_count": 9620,
+    "total_posts": 16033
   },
   "language": {
     "top_players_mentioned": [
       [
         "Biggest Upset",
-        496
+        558
       ],
       [
         "Closest Matchup",
-        490
+        551
       ],
       [
         "Biggest Blowout",
-        490
+        551
       ],
       [
         "Lowest Scorer",
-        490
+        551
       ],
       [
         "Most Expensive",
-        490
+        551
       ],
       [
         "Waiver Add",
-        490
+        551
       ],
       [
         "Highest Scorer",
-        489
+        550
       ],
       [
         "Points Leader",
-        480
+        540
       ],
       [
         "Josh Allen",
-        322
+        361
       ],
       [
         "Malik Willis",
-        321
+        359
       ],
       [
         "North Cackalacky",
-        311
+        349
       ],
       [
         "Cardiac Cats",
-        311
+        349
       ],
       [
         "View Poll",
-        298
+        331
       ],
       [
         "Fantasy Football",
-        295
+        326
       ],
       [
         "Ashton Spectres",
-        291
+        326
       ],
       [
         "The Pit",
-        289
+        325
       ],
       [
         "Scranton Paper",
-        288
+        323
       ],
       [
         "The The",
-        255
+        286
       ],
       [
         "City Ticks",
-        255
+        286
       ],
       [
         "Kyler Murray",
-        251
+        282
       ],
       [
         "Wilhelm Screams",
-        223
+        250
       ],
       [
         "Jaylen Waddle",
-        219
+        247
       ],
       [
         "Pennsyltucky Groundhogs",
-        213
+        239
       ],
       [
         "Kenneth Walker",
-        210
+        236
       ],
       [
         "Great White",
-        209
+        235
       ],
       [
         "Free Agency",
-        202
+        230
       ],
       [
         "Woodbridge Thirst",
-        198
+        222
       ],
       [
         "Justin Fields",
-        192
+        215
+      ],
+      [
+        "Bhayshul Tuten",
+        210
       ],
       [
         "Apocalypse Peak",
-        187
-      ],
-      [
-        "Clown Punchers",
-        187
+        210
       ]
     ],
     "fantasy_term_frequency": {
-      "dynasty": 4548,
-      "ppr": 2582,
-      "playoff": 1207,
-      "sf": 1116,
-      "tep": 889,
-      "superflex": 849,
-      "data": 745,
-      "sleeper": 640,
-      "championship": 497,
-      "redraft": 439,
-      "rebuild": 427,
-      "keeper": 318,
-      "startup": 295,
-      "stats": 269,
-      "breakout": 193,
-      "bust": 176,
-      "half ppr": 168,
-      "metrics": 165,
-      "faab": 158,
-      "contender": 145,
-      "league mate": 142,
-      "te premium": 124,
-      "standard": 121,
-      "trade value": 118,
-      "analytics": 116,
-      "trade calculator": 110,
-      "waiver wire": 80,
-      "group chat": 72,
-      "decline": 56,
-      "leaguemate": 52,
-      "target share": 38,
-      "trade advice": 31,
-      "regression": 26,
-      "cliff": 17,
+      "dynasty": 5104,
+      "ppr": 2876,
+      "playoff": 1342,
+      "sf": 1228,
+      "tep": 996,
+      "superflex": 950,
+      "data": 807,
+      "sleeper": 708,
+      "championship": 557,
+      "redraft": 485,
+      "rebuild": 478,
+      "keeper": 349,
+      "startup": 311,
+      "stats": 293,
+      "breakout": 219,
+      "bust": 195,
+      "half ppr": 187,
+      "metrics": 180,
+      "faab": 173,
+      "contender": 163,
+      "league mate": 158,
+      "te premium": 139,
+      "standard": 133,
+      "trade value": 131,
+      "trade calculator": 124,
+      "analytics": 121,
+      "waiver wire": 88,
+      "group chat": 80,
+      "decline": 63,
+      "leaguemate": 56,
+      "target share": 42,
+      "trade advice": 33,
+      "regression": 30,
+      "cliff": 19,
       "snap count": 1
     }
   },
@@ -1001,7 +1002,7 @@
         "The Dynasty Trade Grades: Volume 1 I’m digging through recent dynasty trades on KeepTradeCut, pulling out the most interesting ones, and grading them to help you start forming ideas on who to buy and",
         "The Dynasty Trade Grades: Volume 4 It’s a new week, which means I’m back grading dynasty fantasy football trades using KeepTradeCut.\n\nIf you’re new to dynasty, KeepTradeCut is a widely used site that"
       ],
-      "neutral": 27
+      "neutral": 31
     },
     "FantasyPros": {
       "positive": [
@@ -1014,7 +1015,7 @@
       "negative": [
         "Yeah, and they got rid of the fantasy pros and other team analysis apps that were in the side of your profile. It sucks because I loved checking out the power rankings and so on for my different leagu"
       ],
-      "neutral": 18
+      "neutral": 20
     },
     "ESPN": {
       "positive": [
@@ -1038,7 +1039,7 @@
         "My fantasy superpower is podcasts After years of wandering though so much bad advice on twitter and reddit, I realized how much expert analysis podcasts give you that costs hundreds if you want to rea",
         "I'm considering resigning as commissioner and from the league. I’ve been running my fantasy league for about seven years now. It started as a small six-team Yahoo league with a tiny buy-in and random"
       ],
-      "neutral": 12
+      "neutral": 14
     },
     "Sleeper": {
       "positive": [
@@ -1049,7 +1050,7 @@
         "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the league for you. $50 entry. its about the challeng"
       ],
       "negative": [],
-      "neutral": 11
+      "neutral": 12
     },
     "Dynasty Nerds": {
       "positive": [
@@ -1062,7 +1063,7 @@
       "negative": [
         "Which RBs Will Dominate the Fantasy Playoffs | Advanced Matchup Stats Reveal All We’re one week closer to the fantasy playoffs, and trade deadlines are approaching fast. Our short series continues wit"
       ],
-      "neutral": 68
+      "neutral": 77
     },
     "Dynasty Process": {
       "positive": [],
@@ -1076,7 +1077,7 @@
       "negative": [
         "Dynasty Stock Market - 5 Players Being Traded - Ken Walker Hype Smoke Or Fire? The Dynasty Stock Market is back. We discuss 5 players being traded heavily in Dynasty Fantasy Football the last 7 days."
       ],
-      "neutral": 8
+      "neutral": 10
     }
   }
 }

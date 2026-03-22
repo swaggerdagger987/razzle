@@ -1,8 +1,8 @@
 # Razzle Market Research — Reddit Analysis
 
-Generated: 2026-03-21
-Data: 14424 posts, 655 comments
-Subreddits: r/DynastyFF (2240), r/SleeperApp (2119), r/fantasyfootball (2008), r/Fantasy_Football (1899), r/fantasyfootballadvice (1800), r/FantasyFootballers (950), r/DynastyFootballLeague (900), r/NFL_Draft (900), r/TradeAnalyzerFF (900), r/sportsbetting (134), r/SideProject (120), r/startups (104), r/bestball (101), r/ffcommish (101), r/sportsanalytics (97), r/NFLDraft (51)
+Generated: 2026-03-22
+Data: 16033 posts, 655 comments
+Subreddits: r/DynastyFF (2544), r/SleeperApp (2319), r/fantasyfootball (2207), r/Fantasy_Football (2099), r/fantasyfootballadvice (2000), r/FantasyFootballers (1050), r/DynastyFootballLeague (1000), r/NFL_Draft (1000), r/TradeAnalyzerFF (1000), r/sportsbetting (134), r/SideProject (120), r/nfl (106), r/startups (104), r/bestball (101), r/ffcommish (101), r/sportsanalytics (97), r/NFLDraft (51)
 
 ---
 
@@ -12,18 +12,18 @@ Ranked by frequency across all posts and comments:
 
 | Rank | Pain Point | Mentions | Razzle Solution |
 |------|-----------|----------|-----------------|
-| 1 | Injury Concern | 4419 | Dr. Dolphin (Medical) + Injury panel + Durability ratings |
-| 2 | Aging Decline | 2876 | Atlas (Historian) + Aging Curves panel + Career Trajectories |
-| 3 | Prospect Research | 994 | Hawkeye (Scout) + College data + Draft Class panel |
-| 4 | Rookie Draft | 951 | Hawkeye + Atlas + Big Board + Prospect panels |
-| 5 | Rebuild Contend | 618 | Bureau Self-Scout + Monte Carlo odds + Razzle briefing |
-| 6 | Data Analysis | 596 | The entire Lab — target share, snap %, usage, efficiency, everything |
-| 7 | League Management | 446 | Bureau of Intelligence — league analysis, not management |
-| 8 | Trade Confusion | 445 | Bones (Diplomat) + Trade Finder + Trade Values panel |
-| 9 | Waiver Wire | 274 | Hawkeye (Scout) + Waiver Wire panel + FAAB strategy |
-| 10 | Value Uncertainty | 206 | Octo (Quant) + Trade Values + floor/ceiling projections |
-| 11 | Tool Complaints | 204 | The Lab itself — free, better data, better UX |
-| 12 | Start Sit | 10 | Razzle verdict + Situation Room briefing |
+| 1 | Injury Concern | 4902 | Dr. Dolphin (Medical) + Injury panel + Durability ratings |
+| 2 | Aging Decline | 3182 | Atlas (Historian) + Aging Curves panel + Career Trajectories |
+| 3 | Prospect Research | 1109 | Hawkeye (Scout) + College data + Draft Class panel |
+| 4 | Rookie Draft | 1058 | Hawkeye + Atlas + Big Board + Prospect panels |
+| 5 | Rebuild Contend | 690 | Bureau Self-Scout + Monte Carlo odds + Razzle briefing |
+| 6 | Data Analysis | 663 | The entire Lab — target share, snap %, usage, efficiency, everything |
+| 7 | Trade Confusion | 494 | Bones (Diplomat) + Trade Finder + Trade Values panel |
+| 8 | League Management | 491 | Bureau of Intelligence — league analysis, not management |
+| 9 | Waiver Wire | 301 | Hawkeye (Scout) + Waiver Wire panel + FAAB strategy |
+| 10 | Value Uncertainty | 229 | Octo (Quant) + Trade Values + floor/ceiling projections |
+| 11 | Tool Complaints | 228 | The Lab itself — free, better data, better UX |
+| 12 | Start Sit | 11 | Razzle verdict + Situation Room briefing |
 
 ### Top Examples per Pain Point
 
@@ -96,94 +96,44 @@ Ranked by frequency across all posts and comments:
 
 | Flair | Avg Score | Post Count |
 |-------|-----------|------------|
+| Offseason Post | 25089 | 0 |
+| Highlight | 16113 | 0 |
 | Misleading | 5536 | 0 |
-| Another 49ers Practice Update | 3336 | 0 |
+| Rumor | 4364 | 0 |
+| Another 49ers Practice Update | 3343 | 0 |
 | Reddit Consensus Rankings | 3298 | 0 |
-| Breaking News | 2669 | 0 |
-| Injury Report | 2511 | 135 |
+| Roster Move | 3192 | 0 |
+| Breaking News | 2672 | 0 |
+| Injury Report | 2516 | 149 |
 | Travis Hunter Content | 2306 | 0 |
 | Hail to the JCM Hype Train | 2002 | 0 |
 | Training Camp News and Vibes | 1733 | 0 |
-| :NFL: League Issue  | 1141 | 0 |
+| :NFL: League Issue  | 1151 | 0 |
 | :NFL: NFL Question  | 1123 | 0 |
-| Speculation | 1092 | 0 |
-| :Sleeper2: Breaking News | 913 | 0 |
-| For Love of the Game! | 838 | 232 |
-| YOLO  | 780 | 0 |
-| :Sleeper2: APP/Tech Assistance | 741 | 0 |
+| Speculation | 1096 | 0 |
 
 ### Top 20 Posts by Score
 
-1. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7301 upvotes, 325 comments (r/fantasyfootball)
-2. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7293 upvotes, 325 comments (r/fantasyfootball)
-3. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7292 upvotes, 325 comments (r/fantasyfootball)
-4. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7292 upvotes, 325 comments (r/fantasyfootball)
-5. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7292 upvotes, 325 comments (r/fantasyfootball)
-6. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7292 upvotes, 325 comments (r/fantasyfootball)
-7. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7290 upvotes, 325 comments (r/fantasyfootball)
-8. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7289 upvotes, 325 comments (r/fantasyfootball)
-9. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7288 upvotes, 325 comments (r/fantasyfootball)
-10. **Most receiving yards in a season in NFL history:
-
-1) Calvin Johnson — 1,964 (in 2012)
-
-2) Cooper Kupp — 1,947 (in 2021)
-** — 7286 upvotes, 325 comments (r/fantasyfootball)
-11. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6565 upvotes, 726 comments (r/fantasyfootball)
-12. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6563 upvotes, 726 comments (r/fantasyfootball)
-13. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6561 upvotes, 726 comments (r/fantasyfootball)
-14. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6560 upvotes, 726 comments (r/fantasyfootball)
-15. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6558 upvotes, 726 comments (r/fantasyfootball)
-16. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6558 upvotes, 726 comments (r/fantasyfootball)
-17. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6557 upvotes, 726 comments (r/fantasyfootball)
-18. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6556 upvotes, 726 comments (r/fantasyfootball)
-19. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6556 upvotes, 726 comments (r/fantasyfootball)
-20. **AJ Brown to fantasy owners: "if you have me, get rid of me"** — 6551 upvotes, 726 comments (r/fantasyfootball)
+1. **[Highlight] Bad Bunny, Lady Gaga, & Ricky Martin's Super Bowl LX Halftime Show** — 42776 upvotes, 4718 comments (r/nfl)
+2. **[Yates] The Chiefs have now been eliminated from the playoffs.** — 37714 upvotes, 2367 comments (r/nfl)
+3. **[Highlight] Caleb Williams unreal touchdown to Cole Kmet!** — 34661 upvotes, 2538 comments (r/nfl)
+4. **[Highlight] Fox censors "Fuck ICE" chant from fan during national anthem** — 33768 upvotes, 1186 comments (r/nfl)
+5. **[Highlight] Joe Flacco: "I used to see guys sitting at the bar by themselves eating and I used to feel so bad for them a** — 31242 upvotes, 1298 comments (r/nfl)
+6. **[Highlight] Gunner Olszewski throws TD to Jameis Winston** — 29349 upvotes, 1303 comments (r/nfl)
+7. **[Highlight] Rich Eisen on Butker's missed extra point "Harrison Butker, interestingly enough, is wide right"** — 29291 upvotes, 1034 comments (r/nfl)
+8. **[Highlight] A young Eagles fan interviewed after the game: “This was my Christmas present and I got a loss… I want AJ Br** — 29245 upvotes, 1345 comments (r/nfl)
+9. **[Highlight] Tom Brady: "This statue isn't just for Pats fans. It'll also give all the Jets fans something to throw their** — 28428 upvotes, 1257 comments (r/nfl)
+10. **[Schefter] After a historic 19-season run in Pittsburgh, Mike Tomlin just informed his team that he is stepping down as ** — 28265 upvotes, 3615 comments (r/nfl)
+11. **[Highlight] Chris Jones: “You don’t even have 100 yards”, Jalen Hurts “We won the fucking game shut yo ass up”** — 28217 upvotes, 1902 comments (r/nfl)
+12. **[Highlight] Jaguars kicker Cam Little breaks NFL record with 68-yard field goal** — 27922 upvotes, 1163 comments (r/nfl)
+13. **[Highlight] Arizona Cardinals defensive linemen L.J. Collier and Dalvin Tomlinson get approached by a photographer in Ja** — 27041 upvotes, 954 comments (r/nfl)
+14. **[Highlight] Tom Brady explaining how to throw the ball in the wind** — 26629 upvotes, 1530 comments (r/nfl)
+15. **[Highlight] Josh Allen shows up to his postgame press conference with tears in his eyes: "I let my teammates down tonigh** — 26455 upvotes, 3639 comments (r/nfl)
+16. **[Highlights] CAM LITTLE NAILS A 70 YARD FIELD GOAL!** — 25949 upvotes, 1656 comments (r/nfl)
+17. **Chicago got a Pope before getting a 4000 yard passer** — 25089 upvotes, 712 comments (r/nfl)
+18. **[Highlight] WR DJ Moore wore a cheese grater hat in the locker room after beating the Packers** — 23651 upvotes, 834 comments (r/nfl)
+19. **[Highlight] Ben Johnson: "F*ck the Packers, f*ck them"** — 23556 upvotes, 2244 comments (r/nfl)
+20. **[Highlight] Dak spits first** — 23158 upvotes, 2563 comments (r/nfl)
 
 ---
 
@@ -193,63 +143,63 @@ Ranked by frequency across all posts and comments:
 
 | Player | Mentions |
 |--------|----------|
-| Biggest Upset | 496 |
-| Closest Matchup | 490 |
-| Biggest Blowout | 490 |
-| Lowest Scorer | 490 |
-| Most Expensive | 490 |
-| Waiver Add | 490 |
-| Highest Scorer | 489 |
-| Points Leader | 480 |
-| Josh Allen | 322 |
-| Malik Willis | 321 |
-| North Cackalacky | 311 |
-| Cardiac Cats | 311 |
-| View Poll | 298 |
-| Fantasy Football | 295 |
-| Ashton Spectres | 291 |
-| The Pit | 289 |
-| Scranton Paper | 288 |
-| The The | 255 |
-| City Ticks | 255 |
-| Kyler Murray | 251 |
+| Biggest Upset | 558 |
+| Closest Matchup | 551 |
+| Biggest Blowout | 551 |
+| Lowest Scorer | 551 |
+| Most Expensive | 551 |
+| Waiver Add | 551 |
+| Highest Scorer | 550 |
+| Points Leader | 540 |
+| Josh Allen | 361 |
+| Malik Willis | 359 |
+| North Cackalacky | 349 |
+| Cardiac Cats | 349 |
+| View Poll | 331 |
+| Fantasy Football | 326 |
+| Ashton Spectres | 326 |
+| The Pit | 325 |
+| Scranton Paper | 323 |
+| The The | 286 |
+| City Ticks | 286 |
+| Kyler Murray | 282 |
 
 ### Fantasy Term Frequency
 
 | Term | Mentions |
 |------|----------|
-| dynasty | 4548 |
-| ppr | 2582 |
-| playoff | 1207 |
-| sf | 1116 |
-| tep | 889 |
-| superflex | 849 |
-| data | 745 |
-| sleeper | 640 |
-| championship | 497 |
-| redraft | 439 |
-| rebuild | 427 |
-| keeper | 318 |
-| startup | 295 |
-| stats | 269 |
-| breakout | 193 |
-| bust | 176 |
-| half ppr | 168 |
-| metrics | 165 |
-| faab | 158 |
-| contender | 145 |
-| league mate | 142 |
-| te premium | 124 |
-| standard | 121 |
-| trade value | 118 |
-| analytics | 116 |
+| dynasty | 5104 |
+| ppr | 2876 |
+| playoff | 1342 |
+| sf | 1228 |
+| tep | 996 |
+| superflex | 950 |
+| data | 807 |
+| sleeper | 708 |
+| championship | 557 |
+| redraft | 485 |
+| rebuild | 478 |
+| keeper | 349 |
+| startup | 311 |
+| stats | 293 |
+| breakout | 219 |
+| bust | 195 |
+| half ppr | 187 |
+| metrics | 180 |
+| faab | 173 |
+| contender | 163 |
+| league mate | 158 |
+| te premium | 139 |
+| standard | 133 |
+| trade value | 131 |
+| trade calculator | 124 |
 
 ---
 
 ## Tool Sentiment — What People Say About Competitors
 
 
-### KeepTradeCut (37 mentions)
+### KeepTradeCut (41 mentions)
 **Complaints:**
 - "Alec Pierce - What am I missing? **Alec Pierce**
 
@@ -270,7 +220,7 @@ These trades are JUICY, s..."
 Chuba Hubba..."
 - "Dynasty Trade Grades: Volume 7 Another week has passed, and with free agency settling in, I took a look at more trades involving some big names that m..."
 
-### FantasyPros (24 mentions)
+### FantasyPros (26 mentions)
 **Complaints:**
 - "Yeah, and they got rid of the fantasy pros and other team analysis apps that were in the side of your profile. It sucks because I loved checking out t..."
 **Praise:**
@@ -282,7 +232,7 @@ Chuba Hubba..."
 **Praise:**
 - "Rate our in-person Draft! 10-team 2QB/2Flex/IDP PPR. This is our 5th year in this league and the stakes have never been higher. We bought one of those..."
 
-### Yahoo (22 mentions)
+### Yahoo (24 mentions)
 **Complaints:**
 - "My fantasy superpower is podcasts After years of wandering though so much bad advice on twitter and reddit, I realized how much expert analysis podcas..."
 - "My fantasy superpower is podcasts After years of wandering though so much bad advice on twitter and reddit, I realized how much expert analysis podcas..."
@@ -296,13 +246,13 @@ Chuba Hubba..."
 ..."
 - "This might be the most disrespectful thing anyone has done to me. I sent a trade offer almost two weeks ago to a (maybe former) friend in my yahoo lea..."
 
-### Sleeper (16 mentions)
+### Sleeper (17 mentions)
 **Praise:**
 - "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the..."
 - "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the..."
 - "need 2 sickos for dynasty Sflex TEP PPC sleeper league honorable degens only. if you do your own scouting, player rankings/equity analysis this is the..."
 
-### Dynasty Nerds (74 mentions)
+### Dynasty Nerds (83 mentions)
 **Complaints:**
 - "Which RBs Will Dominate the Fantasy Playoffs | Advanced Matchup Stats Reveal All We’re one week closer to the fantasy playoffs, and trade deadlines ar..."
 **Praise:**
@@ -310,7 +260,7 @@ Chuba Hubba..."
 - "Dynasty Fallout From 2026 NFL Free Agency Free Agency has begun and things are off to a wild start, as they usually are! In this article we are going ..."
 - "Bryce Lance Rookie Profile (2026) — Dynasty Fantasy The YAC Receiver? Full **2026 Rookie Profile** on wide receiver **Bryce Lance** from North Dakota ..."
 
-### PlayerProfiler (10 mentions)
+### PlayerProfiler (12 mentions)
 **Complaints:**
 - "Dynasty Stock Market - 5 Players Being Traded - Ken Walker Hype Smoke Or Fire? The Dynasty Stock Market is back. We discuss 5 players being traded hea..."
 **Praise:**
