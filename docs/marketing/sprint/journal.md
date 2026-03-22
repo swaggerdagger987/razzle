@@ -8920,4 +8920,125 @@ Sources:
 
 3. **Should the Report Card series eventually become a weekly or biweekly recurring post with a predictable schedule (e.g., "Fantasy GPA Tuesday") — and at what point does recurring frequency risk becoming spammy on r/DynastyFF?**
 
+## Q91: Should the first reply-to-player-request screenshot use the same Share Mode (full Honor Roll cropped to just that player's row) or a different format (expanded single-player profile card with all 5 grades visualized as a radar chart)?
+
+**Date:** 2026-03-21
+**Category:** Content Format / Reply Workflow
+**Prior context:** Q87 (first OC post reply strategy — "drop a name and I'll pull their card"), Q88 (visual polish — thumbnail legibility), Q89 (canvas draw vs html2canvas), Q80 (Share Mode spec)
+
+### Answer
+
+**Neither. Build a standalone single-player "Fantasy GPA Card" — a purpose-built 1200x630 canvas image showing one player's name, position badge, overall GPA badge (large), the 5 individual grade badges (medium), and one key stat line. Not a table row. Not a radar chart. A card.**
+
+Here's why both original options fail, and what to build instead:
+
+#### Why NOT a Cropped Table Row
+
+A cropped row from the Honor Roll table is a fragment, not a piece of content. It has column headers that only make sense in the context of the full table. The grade badges are 11px — illegible at Reddit comment-image size (comments render images at ~320px wide on mobile). A single row cropped from a 1200x960 image would be ~1200x60 — an aspect ratio that Reddit's image preview stretches or letterboxes. You'd be asking people to zoom in to read a table cell.
+
+The Report Card Share Mode (1200x960 with 15-20 rows) works for the **post image** because people tap to expand. But in a **comment reply**, the image is inline and small. A table fragment fails at that size.
+
+#### Why NOT a Full Radar Chart
+
+Radar charts are powerful for **comparison** (two overlapping polygons tell a story) but weak for **single-player evaluation**. A lone pentagon on a radar chart communicates shape but not meaning — you need the labels, the axis scales, and a reference shape to interpret it. At Reddit comment image size (~320px wide), the axis labels become unreadable. PlayerProfiler uses radar charts in their prospect profiles and they work because users have time to study them — but in a Reddit comment thread, people scan for 2 seconds.
+
+The existing radar in `player.js` uses 5 volume-based axes (Pass Yds, Rush Yds, etc.) — not the same 5 dimensions as the Fantasy GPA (Efficiency, Consistency, SOS, PPG, Opportunity). You'd need a new radar implementation for GPA dimensions, and the axes would be percentile-based (0-100), making the shape less meaningful (a player with all B grades would be a nearly-perfect pentagon — visually boring).
+
+#### What to Build: The Fantasy GPA Card
+
+A standalone canvas-drawn card at **1200x630** (the universal Open Graph / social share safe size). One player. One card. Readable at 320px comment width AND at full resolution when tapped.
+
+**Layout (all manual canvas, following `compare.js:drawExportPlayerCard` pattern):**
+
+```
+┌──────────────────────────────────────────────────┐
+│ [Position color stripe - full width, 8px]        │
+│                                                  │
+│  [POS]  PLAYER NAME                    GPA: A+   │
+│  badge  Team · Age · Draft Rd X        (large)   │
+│                                                  │
+│  ┌────┐ ┌────┐ ┌────┐ ┌────┐ ┌────┐             │
+│  │ A  │ │ B+ │ │ C  │ │ A  │ │ B  │             │
+│  │EFF │ │CON │ │SOS │ │PPG │ │OPP │             │
+│  └────┘ └────┘ └────┘ └────┘ └────┘             │
+│                                                  │
+│  PPG: 18.4  │  Stock: 82  │  GP: 16             │
+│                                                  │
+│                              razzle.lol 🐯       │
+└──────────────────────────────────────────────────┘
+```
+
+**Why this format wins:**
+
+1. **Readable at every size.** The GPA badge is 48px+ in the source image — legible even at 320px width. The 5 grade badges are 36px — still readable. Compare to the Honor Roll's 11px badges (4px at thumbnail size).
+
+2. **Self-contained.** No column headers, no surrounding rows, no context needed. A person seeing this card with zero context understands: "This player got a B+ overall, with these sub-grades." That's the entire information payload.
+
+3. **Debatable.** Five grade badges create five attack surfaces. Someone sees Kenneth Walker's card with an A in efficiency but a D in SOS, and they HAVE to comment: "His SOS grade is unfair because..." That's the engagement loop.
+
+4. **Fast to generate.** The canvas draw is deterministic — no DOM dependencies, no CORS risk, no html2canvas flakiness. One function: `drawPlayerGPACard(ctx, playerData)`, ~100 lines following the `drawExportPlayerCard` pattern. The user flow: Report Card page → click player row → popup shows the card → "Copy to Clipboard" button → paste into Reddit comment. Under 30 seconds.
+
+5. **Consistent with the series brand.** The card uses the same position colors, same grade badge color scale, same "Fantasy GPA" language as the Honor Roll post. When someone sees 3-4 of these cards in the comment thread, they reinforce the Report Card visual identity. A radar chart would break the visual continuity.
+
+6. **Optimized for the reply workflow.** Per the Q87 response strategy, each player request needs a screenshot in <60 seconds. Pre-staging 8-10 cards is trivial: open Report Card → filter → click each top player → save card. During live engagement, clicking any player row generates a fresh card instantly.
+
+#### Implementation Details
+
+- **Canvas size:** 1200x630 (OG-safe, works in Reddit comments, Discord embeds, Twitter cards)
+- **Function:** `drawPlayerGPACard(ctx, player)` in `reportcard.html` (standalone, per Q89 YAGNI principle)
+- **Font stack:** Luckiest Guy (player name, GPA), Space Mono (stats, sub-grades), Caveat (watermark)
+- **Data source:** The `/api/report-cards` response already returns per-player grades — no new endpoint needed
+- **Interaction:** Click player row in Report Card → modal/popover shows live canvas preview → "Download" and "Copy" buttons
+- **Headshots:** Skip for V1. Use position-colored circle with player initials (avoids nflverse CORS risk per Q88). Add headshots in V2 after confirming CORS headers work.
+- **Estimated effort:** 100-120 lines of canvas code, 2-3 hours, following the proven `drawExportPlayerCard` pattern
+
+#### What About Both Formats?
+
+Don't build both. The card is the reply format. The full Honor Roll Share Mode (1200x960) is the post format. Two formats, two use cases, zero confusion:
+
+| Context | Format | Size |
+|---------|--------|------|
+| **OC post image** | Honor Roll table (15-20 rows, all grades) | 1200x960 |
+| **Comment reply** | Single-player GPA Card | 1200x630 |
+
+The card is not a degraded version of the table. It's a purpose-built format for a different context. The table shows breadth ("look at all these players graded"). The card shows depth ("here's exactly how this ONE player grades out").
+
+### Self-Critique
+
+1. **The 1200x630 size assumption needs validation on Reddit.** Reddit comments support image uploads, but the rendering width varies by platform (mobile app, old.reddit, new.reddit, mobile web). The claim that 1200x630 is universally readable at 320px width means the GPA badge would render at ~13px — still small. A 1200x630 image at 320px display is 167px tall. The grade badges would each be ~24px display width. Readable but not generous. An alternative is 900x600 (3:2 ratio) which renders wider on mobile. **Confidence: 6/10 on exact dimensions — test before finalizing.**
+
+2. **"Under 30 seconds per reply" assumes the card generation is instant.** Canvas `toBlob()` + clipboard write is fast (~200ms), but the human workflow includes: find comment → decide to reply → click player in Report Card → wait for card render → copy → switch to Reddit → paste → add text → submit. Realistically 45-60 seconds for a practiced operator, not 30. Still within the <90 second window from Q87. **Confidence: 8/10.**
+
+3. **Skipping headshots reduces visual appeal.** Dynasty Daddy's player cards and KeepTradeCut's rankings both show headshots. Position-colored circles with initials are a workaround that looks intentionally stylized (like the comic-strip aesthetic) OR looks like a broken image, depending on execution. The "initials in a circle" pattern needs to look like a design choice, not a fallback. Use the exact position colors from DESIGN.md and Luckiest Guy font for the initials. **Confidence: 7/10.**
+
+4. **The "five attack surfaces" engagement claim is strong but unproven.** It's plausible that five visible grades generate more debate than a single composite score, because each grade can be individually contested. But this assumes Redditors care about methodology enough to argue about SOS vs Efficiency. In practice, most dynasty debate is "Player A vs Player B" not "is this player's consistency grade fair?" The card's real engagement driver might be the overall GPA ("how is Walker only a B+?") not the sub-grades. The sub-grades add credibility but the headline GPA drives debate. **Confidence: 7/10 on engagement mechanism.**
+
+5. **The YAGNI principle (build only for Report Card, extract later) is correct for V1 but the card format will be needed for every page that does player requests.** If Stock Watch or Buy Low/Sell High become future post formats, they'll need their own card variants (Stock Card with trend arrow, B/S Card with value delta). Planning for extensibility now would mean building a `drawPlayerCard(ctx, player, config)` function with configurable sections. But Q89 says don't generalize until Post #3. Correct: ship the specific card, generalize when forced. **Confidence: 9/10 on YAGNI approach.**
+
+Sources:
+- Code audit: `frontend/compare.js:686-769` (drawExportPlayerCard — 85 lines, manual canvas pattern), `frontend/player.js:331-455` (radar chart — 5-axis, position-specific), `frontend/reportcard.html:702-716` (current html2canvas export)
+- [Open Graph Image Best Practices](https://ogp.me/) — 1200x630 universal safe size for social sharing
+- [Reddit Image Post Formatting Guide](https://www.reddit.com/r/help/wiki/faq/) — comment image rendering varies by platform
+- Sprint Q87 (reply workflow: "drop a name and I'll pull their card"), Q88 (thumbnail legibility: 11px→18px grade badges), Q89 (canvas draw decision: manual > html2canvas), Q80 (Share Mode spec)
+
+### Implications for Razzle
+
+1. **Build `drawPlayerGPACard(ctx, player)` in `reportcard.html` as a standalone function.** ~100-120 lines of canvas code following the `compare.js:drawExportPlayerCard` pattern. Position stripe, player name, GPA badge (large), 5 grade badges (medium), stat line, watermark. Skip headshots for V1.
+
+2. **Two export formats, two buttons.** The Report Card page gets two export actions: "Share Honor Roll" (existing html2canvas → 1200x960 table) and "Share Player Card" (new canvas → 1200x630 card, triggered by clicking a player row). The Honor Roll export is the post image. The Player Card export is the comment reply image.
+
+3. **Pre-stage 8-10 player cards the morning of each OC post.** Open Report Card → click each likely-requested player → save card to a folder. During live engagement, paste from folder for instant replies. Generate fresh cards for unexpected requests using the click-to-card workflow.
+
+4. **The card reinforces the "Fantasy GPA" brand on every reply.** Each card in the comment thread shows the same grade badge design, same position colors, same watermark. Five cards in a thread = five watermarked images = five impressions of "razzle.lol" for lurkers. The table-row crop would show the watermark once at the bottom — the card shows it on every single reply.
+
+5. **Test the exact card dimensions on Reddit before April 21.** Upload a 1200x630 test image as a Reddit comment reply in a throwaway thread. Check rendering on: new.reddit desktop, old.reddit, Reddit iOS app, Reddit Android app. If the grade badges are illegible on any platform, increase to 1200x800 or switch to 900x600. This test takes 10 minutes and prevents a bad surprise on launch day.
+
+### Open Questions
+
+1. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral — should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
+
+2. **Should the Report Card series eventually become a weekly or biweekly recurring post with a predictable schedule (e.g., "Fantasy GPA Tuesday") — and at what point does recurring frequency risk becoming spammy on r/DynastyFF?**
+
+3. **What is the optimal number of pre-staged player cards to prepare before each OC post — and which players should be prioritized (most-owned dynasty players, most-traded, most-debated on Reddit in the prior week)?**
+
 ## NEXT QUESTION: Should the first reply-to-player-request screenshot use the same Share Mode (full Honor Roll cropped to just that player's row) or a different format (expanded single-player profile card with all 5 grades visualized as a radar chart)?
