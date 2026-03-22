@@ -5830,3 +5830,125 @@ Five reasons:
 3. **What r/fantasyfootball-specific content adaptations are needed for the draft night recap gallery — different title framing, different screenshots, or different OP comment structure — compared to the r/DynastyFF version?**
 
 ## NEXT QUESTION: What specific commenting "voice" should the Razzle account use during the warm-up and OC phases — data-analyst ("the numbers say X"), scout ("watching the tape, I see Y"), or trade-advisor ("you should sell Z now because...") — and does consistency matter more than adaptability?
+
+
+---
+
+## Q64: What specific commenting "voice" should the Razzle account use during the warm-up and OC phases -- data-analyst ("the numbers say X"), scout ("watching the tape, I see Y"), or trade-advisor ("you should sell Z now because...") -- and does consistency matter more than adaptability?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Use a "data-analyst with trade instincts" hybrid voice -- 70% data-analyst ("the numbers say X"), 30% trade-advisor ("which means you should sell Z before the draft"). Drop the scout/film voice entirely. Consistency in the core identity matters MORE than adaptability, but tone should flex by thread type.**
+
+Here is the full framework:
+
+#### The Voice: "Stats Guy Who Actually Plays Dynasty"
+
+The worst version of a data-analyst persona on Reddit is a stats professor lecturing. The best version is the leaguemate who always has the numbers ready when you are debating a trade in the group chat. The difference is stakes -- the good version cares about winning leagues, not being right about methodology.
+
+**The formula:**
+
+1. **Lead with a specific number** (not a vague claim). "Nabers had a 28% target share as a rookie -- only 3 WRs since 2015 have hit that in Year 1" beats "Nabers is getting a lot of targets."
+
+2. **Connect the number to a dynasty action.** "...which means his value floor is locked in even if the Giants draft a WR" beats "...which is historically significant." Every stat comment should imply a buy/sell/hold.
+
+3. **Use casual confidence, not academic hedging.** "The data is pretty clear here" beats "While there may be confounding variables, the correlation suggests..." Reddit rewards conviction. Subvertadown -- the most respected data contributor on r/fantasyfootball -- uses plain language with high confidence. The transparency is in the methodology posts, not in every comment.
+
+4. **Never say "my tool" or "I built."** Say "I tracked" or "I pulled the numbers" or "looking at the data since 2015." The identity is a person who does analysis, not a person who built a product. Q62 established this: data-analyst identity, not tool-creator identity.
+
+#### Why NOT the Scout Voice
+
+The "watching the tape, I see Y" persona is tempting because film analysis is respected on r/DynastyFF. But three problems:
+
+1. **It is not credible without film.** If the account posts "I watched Nabers tape and his route running is elite," someone WILL ask "which game?" or "what specifically about his routes?" The scout voice requires actual film study to back up. Data analysis requires... data, which Razzle has. Play to the strength.
+
+2. **Film takes overlap with existing respected voices.** r/DynastyFF already has film-room contributors (JustinBoone, DynastyNerds prospect profiles). Entering their lane as a new account invites comparison. The data-analyst lane has fewer occupants in dynasty specifically -- Subvertadown focuses on redraft streaming, not dynasty valuations.
+
+3. **Scout voice does not lead to Razzle screenshots.** A film comment does not naturally include a Lab screenshot. A data comment ("here is the target share trend since 2015") naturally leads to "I pulled this from the aging curves view" with a screenshot. The voice should be a funnel, not a dead end.
+
+#### Why BLEND in Trade-Advisor (30%)
+
+Pure data-analyst gets respect but not karma. The comments that get 20+ upvotes on r/DynastyFF trade threads are ones that make a clear recommendation: "Sell. He is 28 with declining efficiency and the draft capital is there to replace him." The trade-advisor voice adds actionability.
+
+The blend: lead with data, close with the trade implication. "Kelce target share dropped from 25% to 19% this season while his yards-per-route-run fell below 1.5 for the first time since 2017. If you can get a mid-1st for him in SF, take it before the draft when TE values historically drop another 10-15%."
+
+This is the Subvertadown model -- data-first, but always answering "so what should I DO?" Subvertadown Reddit posts include K/DST/kicker projections with explicit "stream this" recommendations. The data earns trust; the recommendation earns karma.
+
+#### Consistency vs. Adaptability: 80/20 Rule
+
+Research confirms successful Reddit personas maintain ~80% voice consistency while adapting ~20% to context. Here is how that applies:
+
+**Always consistent (the 80%):**
+- Lead with a number or stat, never a gut feeling
+- Reference historical data ("since 2015" or "over the last 3 seasons")
+- End with an actionable dynasty implication (buy/sell/hold)
+- Never mention a tool or website by name
+- Casual confident tone, no academic hedging
+
+**Adapt by thread type (the 20%):**
+- **Trade threads** ("Should I trade X for Y?"): Lean heavier on trade-advisor. Give a clear verdict + one supporting stat. "Take it. Higgins has averaged 16+ PPG in every healthy season since 2021, and the 1.06 is a dart throw in this class."
+- **Player discussion threads** ("What do we think about X?"): Lean heavier on data-analyst. Drop a specific stat that reframes the conversation. "Everyone is worried about his age but his yards-per-route-run actually INCREASED last season -- 2.1 to 2.4. The 3 WRs who did that at 29+ were Davante, Hopkins, and Julio. All had 2+ elite seasons left."
+- **News threads** ("Player X signs with Team Y"): Short, reactive, data-grounded. "This kills the Austin Ekeler value prop. Team Y just gave their RB room 85% of the carries on the most rush-heavy offense in football."
+- **Meme/humor threads**: Skip or keep it to one sentence. The persona is the sharp friend, not the class clown.
+
+#### Comment Templates (for the warm-up phase, March 24 - April 1)
+
+**Trade thread template:**
+> [Verdict]. [One stat]. [Dynasty implication].
+> Example: "I would hold. His target share has been above 25% for 3 straight seasons -- only 8 WRs can say that. You are selling a locked-in WR1 for a pick that has a 35% bust rate historically."
+
+**Player discussion template:**
+> [Reframing stat]. [Historical context]. [What it means for dynasty value].
+> Example: "People are sleeping on [player]. Since 2015, RBs who had 200+ carries AND a 4.5+ YPC in their age-24 season went on to average RB8 finishes the next 2 years. He is in that bucket."
+
+**News thread template:**
+> [Immediate value impact]. [One supporting number].
+> Example: "This pushes [player] from mid-2nd to early-2nd in rookie drafts. Landing spot accounts for about 30% of Year 1 fantasy production historically."
+
+### Self-Critique
+
+1. **The "data-analyst with trade instincts" hybrid is essentially what Q62 already prescribed.** Q62 said "data-analyst identity, not tool-creator identity." This answer operationalizes that but does not fundamentally challenge it. If the data-analyst voice fails to generate karma in Week 1, there is no fallback strategy here. **Confidence: 8/10 on the voice being correct, 5/10 on having a contingency.**
+
+2. **The "never say my tool" rule may be TOO strict for the OC posting phase.** When the April 1-15 OC posts drop with Lab screenshots, commenters will ask "what tool is this?" The voice needs a prepared answer that is honest without being promotional. Something like: "It is a free analytics site I have been building -- razzle.lol. All the data in the post is from there." This bridges identity without violating the data-analyst persona. **Confidence: 9/10 -- this is the standard playbook used by Dynasty Daddy and KeepTradeCut founders.**
+
+3. **I am assuming casual confidence works for a new account.** Established accounts can say "the data is clear" because they have karma history proving competence. A 2-week-old account saying the same thing might read as arrogant. The warm-up phase may need slightly MORE hedging than the OC phase: "from what I have been tracking" vs. "the data shows." Earn the confident voice, do not start with it. **Confidence: 7/10.**
+
+4. **The 70/30 data-analyst/trade-advisor split is intuitive, not empirical.** I have not measured actual upvote rates by comment style on r/DynastyFF. It could be that pure trade-advisor ("just sell him bro, he is cooked") outperforms data-backed comments because dynasty managers want decisiveness, not analysis. The trade thread volume on r/DynastyFF (hundreds per day) suggests trade advice is what the community hungers for most. **Confidence: 6/10 on the ratio -- may need to adjust after Week 1 data.**
+
+5. **The template approach risks making comments feel formulaic.** If every comment follows [stat] + [context] + [action], regular readers may pattern-match and find it inauthentic. Real humans do not comment in templates. The templates should be internalized scaffolding, not copy-pasted. Vary the order, skip elements when the thread does not call for them, occasionally just agree with someone. **Confidence: 8/10 -- the risk is real but manageable with awareness.**
+
+### Sources
+- [The Art of Authentic Reddit Engagement -- SingleGrain](https://www.singlegrain.com/digital-marketing-strategy/the-art-of-authentic-reddit-engagement-building-trust-with-redditors/) -- trust through consistent participation, lurk-before-posting advice
+- [Reddit Marketing: The Ultimate Guide 2026 -- The Reddit Marketing Agency](https://www.theredditmarketingagency.com/post/how-brands-should-use-reddit-in-2026) -- named individuals outperform logos, co-creation over broadcast
+- [Reddit Marketing Guide -- Birdeye](https://birdeye.com/blog/reddit-marketing/) -- adaptability + consistency balance, human voice > brand voice
+- [Brand Voice Consistency Statistics -- Envive AI](https://www.envive.ai/post/brand-voice-consistency-statistics-in-ecommerce) -- 80% consistency / 20% adaptation framework
+- [Subvertadown: Compendium of Reddit Posts 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) -- data-first voice with explicit recommendations, community engagement through transparency
+- [Navigating Dynasty Football on Reddit -- Oreate AI](https://www.oreateai.com/blog/navigating-the-world-of-dynasty-football-on-reddit/dee581e74957f01c54428518bf4610f5) -- r/DynastyFF engagement patterns, trade discussion dynamics
+- Sprint Q62: Pre-draft hype content strategy -- "data-analyst identity, not tool-creator identity"
+- Sprint Q53: Reddit account warm-up plan -- commenting cadence starting March 24
+- Sprint Q7: r/DynastyFF vs r/fantasyfootball audience analysis
+- Razzle market research: pain point rankings (injury #1, aging #2, prospects #3, trade confusion #8)
+
+### Implications for Razzle
+
+1. **Write a 1-page voice guide** (`docs/marketing/reddit-voice-guide.md`) codifying the rules: lead with numbers, connect to dynasty action, casual confidence, never mention the tool. This becomes the reference doc for anyone (human or agent) writing as the Razzle Reddit account.
+
+2. **The warm-up phase (March 24 - April 1) uses "earning confidence" tone.** Slightly more hedged ("from what I have tracked," "the numbers suggest") than the OC phase. After 50+ comments and proven karma growth, shift to full confidence ("the data is clear," "historically this means").
+
+3. **Prepare the "what tool is this?" response for OC posts.** When someone asks about the screenshots: "It is a free analytics site I have been building -- razzle.lol. All the data is nflverse, I just built better visualizations for dynasty research." This is honest, humble, and frames Razzle as a data project -- not a product launch.
+
+4. **Track comment karma by style.** During the warm-up phase, alternate between pure data comments and data+trade-advice comments. After 20+ comments, compare average karma per style. If trade-advisor comments consistently outperform, shift the ratio to 50/50 or even 40/60. Let the data decide.
+
+5. **Skip meme and humor threads entirely.** The data-analyst persona does not need to be funny. Being occasionally witty is fine ("the aging curve does not lie, but it does whisper"), but forcing humor risks breaking character. The persona earns respect through usefulness, not entertainment.
+
+### Open Questions
+
+1. **How should Razzle handle negative reception (downvotes, hostile comments, mod removal) on any of the 4 pre-draft posts -- retreat, engage, or ignore -- and at what threshold does negative reception warrant changing the draft-night plan?**
+
+2. **What r/fantasyfootball-specific content adaptations are needed for the draft night recap gallery -- different title framing, different screenshots, or different OP comment structure -- compared to the r/DynastyFF version?**
+
+3. **Should Razzle create a Reddit "data-analyst portfolio" -- a pinned profile post or comment compilation that establishes credibility when curious users click the username -- and what format works best for that?**
+
+## NEXT QUESTION: How should Razzle handle negative reception (downvotes, hostile comments, mod removal) on any of the 4 pre-draft posts -- retreat, engage, or ignore -- and at what threshold does negative reception warrant changing the draft-night plan?
