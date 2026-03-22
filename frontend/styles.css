@@ -63,6 +63,8 @@
   --radius-lg: 20px;
   --shadow-chunky: 4px 4px 0 var(--ink);
   --zebra-stripe: rgba(45,31,20,0.025);
+  --medal-gold: #ffd700;
+  --medal-bronze: #cd7f32;
 }
 
 /* ===== DARK MODE — Espresso flip ===== */
@@ -95,6 +97,9 @@
   --semantic-red: #e06060;
   --semantic-red-light: #3d1f1f;
   --zebra-stripe: rgba(237,224,207,0.04);
+
+  --medal-gold: #ffd700;
+  --medal-bronze: #cd7f32;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1543,4 +1548,26 @@ tr:hover .notes-cell .note-pencil {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ===== DARK MODE OVERRIDES — DES-017 through DES-020 ===== */
+[data-theme="dark"] .btn-primary {
+  color: var(--bg);
+}
+[data-theme="dark"] .nav-links a.active {
+  color: var(--bg);
+}
+[data-theme="dark"] .nav-plan-pro,
+[data-theme="dark"] .nav-plan-elite {
+  color: var(--bg);
+}
+[data-theme="dark"] .auth-tab.active {
+  color: var(--bg);
+}
+[data-theme="dark"] .chip.active {
+  color: var(--bg);
+}
+[data-theme="dark"] .cmd-palette-item .player-headshot-fallback,
+[data-theme="dark"] .cmd-palette-pos {
+  color: var(--bg);
 }
