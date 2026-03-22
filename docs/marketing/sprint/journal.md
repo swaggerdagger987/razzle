@@ -8347,4 +8347,111 @@ Sources:
 
 3. **Should the post-mortem spreadsheet live as a Google Sheet (accessible from phone during monitoring) or as a local CSV in the repo (version-controlled, queryable) — and what's the optimal format for a solo operator who needs both mobile access and long-term data retention?**
 
+---
+
+## Q86: Should Razzle build a share page with Open Graph meta tags for rich preview cards when Lab URLs are pasted into Reddit/Discord/Twitter?
+
+**Date**: 2026-03-21
+**Category**: Product Engineering / Distribution
+**Prior context**: Q80 (Share Mode spec, 1200x960 PNG export), Q82 (screenshot playbook), Q73 (Reddit engagement strategy)
+
+### Answer
+
+**Yes, but NOT yet — and when you build it, skip dynamic server-side image generation entirely. The MVP is a static share page template that uses the existing PNG export as og:image, served from a `/s/{id}` route. Build it after the first 3 OC posts, not before. The current workflow (upload screenshot directly to Reddit as image post) outperforms any link-post-with-preview approach for Reddit engagement.**
+
+#### The Core Tension: Image Posts vs. Link Posts on Reddit
+
+This is the critical insight that changes everything about the share page's purpose. Research shows image posts on Reddit generate significantly more engagement than link posts — native visual posts in 2024 generated over 10,000 more upvotes on average than link posts ([SingleGrain](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/)). Image-based submissions rose 24% year-over-year in popular subreddits ([SocialPixOptimizer](https://socialpixoptimizer.com/academy/reddit-post-images-formats-that-get-upvoted-and-shared/)).
+
+**For Reddit OC posts, the share page is irrelevant.** The Q80 Share Mode (download PNG → upload to Reddit as image post) is already the optimal Reddit workflow. A link post to `razzle.lol/s/abc123` with an og:image preview card will always underperform a native image upload on Reddit. The share page does NOT solve the Reddit engagement problem.
+
+#### Where the Share Page Actually Matters
+
+The share page solves a different problem: **secondary distribution** — when people reshare the Lab URL in places that render Open Graph previews:
+
+1. **Discord servers** — fantasy football Discord channels render og:image embeds inline. A Lab screenshot preview card makes the link visually compelling without requiring the sharer to also upload the PNG separately.
+2. **Twitter/X** — a `twitter:card` summary_large_image turns a plain URL into a visual card. This matters for the @razzle_lol account's engagement workflow (Q73).
+3. **Slack/iMessage/WhatsApp** — private sharing channels that render link previews. These are the "dark social" referral paths that don't show up in Reddit analytics but drive signups.
+4. **Reddit comments** — when replying to player debates with a link (not the OC post itself), the og:image preview makes the comment more clickable.
+
+#### The MVP Architecture (When You Build It)
+
+**Do NOT use Puppeteer, Playwright, or any headless browser for dynamic OG image generation.** Razzle is on Render's basic tier. A headless Chrome instance per share request would blow through memory and add 2-5 seconds of latency. Instead:
+
+1. **Share Mode (Q80) generates a 1200x960 PNG client-side** using the existing canvas pipeline.
+2. **Client uploads the PNG** to a `/api/share` endpoint → backend stores it (filesystem or S3-compatible blob).
+3. **Backend assigns a short ID** (8-char alphanumeric) → returns `razzle.lol/s/{id}`.
+4. **The `/s/{id}` route serves a minimal HTML page** with OG meta tags pointing to the stored PNG:
+
+```html
+<meta property="og:image" content="https://razzle.lol/api/share/{id}/image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:title" content="Razzle Lab — WR Efficiency Rankings">
+<meta property="og:description" content="Fantasy football analytics from razzle.lol">
+<meta name="twitter:card" content="summary_large_image">
+```
+
+5. **The page also includes a JS redirect** to the full Lab URL with the saved state, so human visitors land in the Lab, not a static page.
+
+Total backend: one POST endpoint, one GET route, one image-serving route. ~50 lines of Python. Storage: PNG files in a `/data/shares/` directory (Render's ephemeral disk is fine for MVP — images are expendable).
+
+#### Why Not Now
+
+The share page requires Share Mode (Q80) to be built first — that's the PNG generation pipeline. Share Mode is currently specced but not implemented. Build order:
+
+1. **Share Mode** (Q80) — client-side PNG export with watermark ← build this first
+2. **First 3 OC posts** using the manual workflow (download PNG → upload to Reddit)
+3. **Share page** (this Q86) — after validating that people actually click Lab URLs in comments
+
+Building the share page before the first OC post is premature. You don't yet know if anyone will reshare Lab URLs in Discord/Twitter. The manual PNG upload workflow handles Reddit engagement (the primary channel). The share page is a convenience feature for secondary channels — build it when you have evidence those channels matter.
+
+#### OG Image Dimensions
+
+The universal safe size is **1200x630 pixels** (1.91:1 ratio) ([MyOGImage](https://myogimage.com/blog/og-image-size-meta-tags-complete-guide), [share-preview.com](https://share-preview.com/blog/open-graph-image-size)). Reddit crops to 1.91:1 on new Reddit, square on old Reddit. Twitter uses 2:1 but accepts 1.91:1 with minimal cropping. Discord requires minimum 600x315.
+
+The Q80 Share Mode exports at 1200x960 (taller, for Reddit image posts). The share page's og:image should crop or letterbox to 1200x630 for optimal preview rendering. Two options: (a) generate a second 1200x630 crop during Share Mode export, or (b) serve the 1200x960 image and accept platform cropping. Option (b) is simpler and acceptable — keep important content in the center 80% of the image ([OpenGraphPlus](https://opengraphplus.com/consumers/reddit/images)).
+
+### Self-Critique
+
+1. **"Image posts outperform link posts on Reddit" is well-sourced but the magnitude may vary by subreddit.** r/DynastyFF is a niche text-heavy community — image posts do well there, but the 10,000+ upvote gap is from mainstream subreddits. Dynasty subs have lower overall vote counts. The directional claim (image > link) is still correct for r/DynastyFF based on observation. **Confidence: 8/10.**
+
+2. **"Render's ephemeral disk is fine for MVP" means share links break on redeploy.** Every Render deploy wipes the filesystem. Shared PNGs would disappear. Mitigation: accept this for MVP (shared links have a ~1 week lifespan between deploys), or use Render's persistent disk ($0.25/GB/month), or upload to GitHub releases / R2 / S3. For MVP validation, ephemeral is acceptable — you're testing whether anyone uses the feature, not building permanent infrastructure. **Confidence: 7/10.**
+
+3. **The "JS redirect to Lab" pattern may confuse crawlers.** If Googlebot or Embedly hits `/s/{id}` and gets redirected via JS, it may not see the OG tags. Solution: serve OG tags in the initial HTML response (server-side rendered), then redirect only in `<script>`. Crawlers parse the `<head>` before executing JS, so they'll see the OG tags. Human browsers execute the JS and redirect. This is a standard pattern. **Confidence: 9/10.**
+
+4. **Storage could become a problem at scale.** Each 1200x960 PNG is ~200-500KB. At 100 shares/day, that's 50MB/day or 1.5GB/month. Not a problem for months, but eventually needs a cleanup cron or TTL. For MVP, irrelevant. **Confidence: 9/10.**
+
+5. **The claim "build it after 3 OC posts" is a judgment call.** A counter-argument: having the share page ready for the first OC post means comment replies can include rich-preview links from day one, maximizing secondary distribution from the start. Counter-counter: building Share Mode + share page + OC post content simultaneously is too much work for a solo operator. Ship the OC post with manual screenshots first, iterate. **Confidence: 7/10.**
+
+Sources:
+- [SingleGrain: Reddit Image Hosting Guide](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/) — image posts outperform link posts by 10,000+ upvotes
+- [SocialPixOptimizer: Reddit Post Images](https://socialpixoptimizer.com/academy/reddit-post-images-formats-that-get-upvoted-and-shared/) — 24% YoY increase in image submissions
+- [MyOGImage: OG Image Size Guide 2026](https://myogimage.com/blog/og-image-size-meta-tags-complete-guide) — 1200x630 universal safe size
+- [share-preview.com: OG Image Size Guide](https://share-preview.com/blog/open-graph-image-size) — platform-specific dimensions
+- [OpenGraphPlus: Reddit Link Preview](https://opengraphplus.com/consumers/reddit/images) — Reddit crops to 1.91:1, keep content in center 80%
+- [James Fisher: How Reddit Thumbnails Work](https://jameshfisher.com/2017/08/16/reddit-oembed-open-graph/) — Reddit uses Embedly to fetch og:image
+- [fjlein/typst-dynamic-og-image](https://github.com/fjlein/typst-dynamic-og-image) — lightweight dynamic OG image generation (considered and rejected for MVP)
+- Sprint Q80 (Share Mode spec — 1200x960 PNG export, watermark, canvas pipeline)
+- Sprint Q82 (screenshot playbook — operational workflow for OC posts)
+- Sprint Q73 (Reddit engagement strategy — primary distribution channel)
+
+### Implications for Razzle
+
+1. **Do NOT build the share page before the first OC post.** The manual workflow (Share Mode PNG → Reddit image upload) is sufficient and actually superior for Reddit engagement. The share page is a secondary-channel optimization.
+
+2. **When you build it, the architecture is trivial:** one POST endpoint to store a PNG + metadata, one GET route serving OG-tagged HTML with JS redirect, one image-serving route. ~50 lines of Python, no external dependencies, no headless browser.
+
+3. **Currently, all 70+ pages use the same static `og-image.png` for og:image.** This means every Lab URL shared on Discord/Twitter/Slack shows the same generic Razzle preview — not the specific data the user was looking at. The share page fixes this by making each shared link show its own screenshot as the preview image.
+
+4. **The existing 1200x960 PNG from Share Mode works as og:image without modification.** Platforms will crop to their preferred ratio (1.91:1 for Reddit/Facebook, 2:1 for Twitter). Just keep the Razzle watermark and key data in the center 80% of the image.
+
+### Open Questions
+
+1. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral — should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
+
+2. **Should the post-mortem spreadsheet live as a Google Sheet (accessible from phone during monitoring) or as a local CSV in the repo (version-controlled, queryable) — and what's the optimal format for a solo operator who needs both mobile access and long-term data retention?**
+
+3. **What does the first OC post on r/DynastyFF actually look like — what's the title, the body structure, which Saved View screenshot leads, and what's the call-to-action that drives traffic to the Lab without looking promotional?**
+
 ## NEXT QUESTION: Should Razzle build a lightweight "share page" (razzle.lol/share/{id}) that renders a saved screenshot with Open Graph meta tags — so when the URL is pasted into Reddit/Discord/Twitter, it auto-generates a rich preview card with the Lab screenshot as the thumbnail?
