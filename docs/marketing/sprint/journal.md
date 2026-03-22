@@ -9299,4 +9299,114 @@ Sources:
 
 3. **What does the complete pre-stage package look like for Post #1 — 12 GPA Card images + 12 reply templates + the Honor Roll screenshot + the first comment text — and can it all be generated from a single script run?**
 
-## NEXT QUESTION: Should the Report Card series eventually become a weekly or biweekly recurring post with a predictable schedule (e.g., "Fantasy GPA Tuesday") — and at what point does recurring frequency risk becoming spammy on r/DynastyFF?
+## Q94: Should the Report Card series eventually become a weekly or biweekly recurring post with a predictable schedule (e.g., "Fantasy GPA Tuesday") — and at what point does recurring frequency risk becoming spammy on r/DynastyFF?
+
+**Date:** 2026-03-21
+**Category:** Content Cadence / Community Risk
+**Prior context:** Q90 (Post #2 = same format, RB-only), Q87 (first OC post), Q84 (post-mortem spreadsheet), Q79 (timing/format), Q64 (commenting voice)
+
+### Answer
+
+**Not weekly. Biweekly maximum during the offseason (March-August). Weekly ONLY during the NFL regular season (September-January) when new data drops every Tuesday. And never call it "Fantasy GPA Tuesday" — branded schedule names signal marketer, not community member.**
+
+Here's the frequency framework, phase by phase:
+
+#### Phase 1: Establishment (Posts #1-3, April 21 - May 12)
+
+**Cadence: one post per week for 3 weeks, then pause.**
+
+Posts #1-3 (Q87/Q90 plan: All-Position → RB → WR Report Card) land weekly to establish the "Fantasy GPA" concept through repetition. Three consecutive weeks is the minimum for Reddit users to recognize a recurring format. But this is the CEILING for offseason weekly posting. After Post #3, take a 2-3 week break. Reasons:
+
+1. **Reddit's 90/10 rule.** Only 10% of your total account activity can be self-promotional. Three consecutive OC posts in three weeks requires heavy non-promotional commenting between posts to maintain the ratio. At 3 comments/day during the warm-up (Q78), you'll have ~45-60 comments by Post #1. Three weekly OC posts in weeks 4-6 pushes your promotional ratio toward 5-7% — safe, but getting close. A pause lets comment activity rebuild the ratio buffer.
+
+2. **Offseason data is STATIC.** The Report Card grades are 2025 season data. They don't change week-to-week. A weekly "new grades!" post with identical numbers is immediately exposed as content-mill behavior. The 3-post establishment burst works because each post filters differently (all, RB, WR) — each feels fresh. Post #4 as QB Report Card a week later with the same static data starts feeling like you're just slicing the same spreadsheet.
+
+3. **r/DynastyFF offseason engagement is lower.** The sub's active users drop significantly in the March-June offseason compared to August-January. Weekly posts to a smaller audience means the same regulars see every post — and fatigue hits faster when the same 200 users see your content 4+ times in a month.
+
+#### Phase 2: Offseason Maintenance (May - August)
+
+**Cadence: biweekly (every 2 weeks), different angles each time.**
+
+After the 3-post establishment burst + 2-week pause, shift to biweekly posts that use the Fantasy GPA framework but vary the angle:
+
+| Post | Timing | Angle | Why It's Fresh |
+|------|--------|-------|----------------|
+| #4 | ~May 26 | QB Report Card | New position slice |
+| #5 | ~June 9 | TE Report Card | Completes position set |
+| #6 | ~June 23 | "GPA vs ADP" (mismatch analysis) | New data dimension (ADP) |
+| #7 | ~July 7 | "Biggest GPA Risers/Fallers from 2024→2025" | Year-over-year angle |
+| #8 | ~July 21 | "Which RBs Grade Better in PPR vs Standard?" | Scoring format angle |
+| #9 | ~August 4 | "Redraft GPA Report Card" for r/fantasyfootball | New sub, same format |
+
+Each post uses the same visual identity (grade badges, "Fantasy GPA" language, watermark) but provides a genuinely new insight. This is the subvertadown model: same format, new data angle, predictable but not annoying frequency.
+
+#### Phase 3: In-Season Weekly (September - January)
+
+**Cadence: weekly, because the data actually updates.**
+
+Once the NFL season starts, player stats change every week. NOW a weekly "Fantasy GPA Update" makes sense because:
+- Grades shift based on new game data (genuine new information)
+- Dynasty managers make weekly roster decisions (actionable timing)
+- The sub's activity peaks (larger audience absorbs more frequent posts)
+- In-season weekly OC is expected — subvertadown, BeerSheets, and trade value charts all post weekly during the season without spam complaints
+
+The in-season cadence: post Tuesday or Wednesday (after Monday Night Football, before Thursday waivers). This is when dynasty managers are evaluating their rosters. Don't brand it "Fantasy GPA Tuesday" — just post consistently on Tuesdays. The community will notice the pattern organically. **Branded schedule names are a red flag.** When someone titles their post "Week 8 Fantasy GPA Tuesday Report Card," Reddit reads it as a marketing newsletter, not a community contribution.
+
+#### The Spam Threshold: 3 Signals to Watch
+
+How do you know when frequency is becoming spammy? Track these in the post-mortem spreadsheet (Q84):
+
+1. **Upvote ratio declining below 85%.** Reddit shows the % of upvotes vs downvotes. If Post #1 gets 94% upvote ratio and Post #5 gets 82%, the community is splitting on whether your content belongs. Below 80% = pull back immediately.
+
+2. **Comment-to-upvote ratio declining.** If Post #1 gets 80 upvotes / 40 comments (0.5 ratio) and Post #5 gets 80 upvotes / 12 comments (0.15 ratio), people are upvoting out of familiarity but not engaging. The content is recognized but no longer interesting. This is the silent death of a series.
+
+3. **Mod message or removal.** If a post gets removed or a mod comments "this is becoming too frequent," that's an explicit signal. Respond graciously, skip a week, and ask the mod what cadence they consider appropriate. Most mods will tell you — and then you have explicit permission at that cadence.
+
+#### Why NOT to Use a Branded Day Name
+
+Subvertadown never called his posts "Kicker Tuesday." BeerSheets never said "BeerSheets Wednesday." They just posted on a consistent day. The community gave them the recognition organically: "oh, subvertadown's weekly rankings are up." **The community naming the pattern is a sign of success. You naming the pattern is a sign of marketing.**
+
+If Razzle's posts get popular enough, someone will comment "it's Report Card day!" That's the signal that the series has brand equity. You can't manufacture that signal by putting it in the title.
+
+### Self-Critique
+
+1. **The "offseason data is static" argument assumes the Report Card can't incorporate new data sources during the offseason.** Free agency signings, OTA reports, and training camp buzz could theoretically update grades. But the Fantasy GPA is built on production stats (efficiency, consistency, PPG), not situation metrics. Adding situation data would change the methodology mid-series and undermine trust. Better to keep the grades static and add narrative context in comments. **Confidence: 8/10.**
+
+2. **The biweekly offseason cadence (Posts #4-9) assumes sustained engagement across 6 posts with static underlying data.** Even with different angles, the novelty of letter-grade fantasy content may wear off after 4-5 posts. Mitigation: the ADP mismatch post (#6) and scoring format post (#8) introduce new data dimensions, not just new filters. These feel fundamentally different even though the visual format is the same. **Confidence: 7/10.**
+
+3. **The "never brand the day" advice may be wrong for Twitter.** On Twitter, branded recurring content ("Waiver Wire Wednesday") works because the hashtag creates discoverability. Reddit doesn't use hashtags, so branded days serve no discovery function — they only signal self-promotion. The advice is platform-specific. **Confidence: 8/10 for Reddit, 5/10 for Twitter.**
+
+4. **The 3-post weekly burst in Phase 1 is aggressive for a new account.** Three OC posts in three consecutive weeks from an account with 2-3 weeks of comment history could trigger mod suspicion. The saving grace: each post is genuinely different content (all-position, RB, WR), not the same post resubmitted. And the warm-up phase (Q78) builds 45-60 comments before the first OC post. This is within the 90/10 ratio. **Confidence: 7/10.**
+
+5. **The in-season weekly cadence assumes the GPA calculation updates automatically with new game data.** If updating grades requires manual work (re-running adapters, checking data quality), weekly posts may not be sustainable. The current nflverse adapter syncs weekly, so grades SHOULD auto-update. But this needs verification before committing to a weekly schedule. **Confidence: 6/10 on automation readiness.**
+
+Sources:
+- [Reddit's 90/10 Rule Explained](https://gleam.io/faq/marketing-and-growth-strategies/promotion/reddit-90-10-rule-explained) — 90% genuine participation, 10% self-promotional
+- [Content Fatigue in 2025: Lessons & Fixes for 2026](https://easycontent.io/resources/content-fatigue-2025-lessons-2026-fixes/) — quality over frequency, audience fatigue signals
+- [How to Avoid Reddit Spam Rules: Complete Guide](https://painonsocial.com/blog/how-to-avoid-reddit-spam-rules) — account ratio management, mod enforcement patterns
+- [Subvertadown: Compendium of Reddit Posts 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — 7-year weekly series, same format, organic community recognition
+- [How to Market on Reddit Without Getting Banned](https://www.onlinemoderation.com/market-on-reddit-without-getting-banned/) — community-first approach, frequency calibration
+- [Reddit Self-Promotion Rules: Naturally Mention Your Product](https://www.replyagent.ai/blog/reddit-self-promotion-rules-naturally-mention-product) — 90/10 ratio across account history, not per post
+- Sprint Q90 (Post #2 = RB Report Card, same format), Q87 (first OC post), Q84 (post-mortem spreadsheet), Q78 (warm-up commenting schedule)
+
+### Implications for Razzle
+
+1. **The posting calendar is now concrete:** 3 weekly posts (April 21, 28, May 5) → 2-week pause → biweekly through August → weekly during NFL season. This is the master schedule. Print it.
+
+2. **Each biweekly offseason post needs a genuinely new angle, not just a new position filter.** After the 4-position set (All/RB/WR/QB/TE), shift to cross-cutting analysis: GPA vs ADP, year-over-year changes, scoring format impact. These angles keep the format recognizable while providing fresh insights.
+
+3. **Track the 3 spam signals (upvote ratio, comment-to-upvote ratio, mod feedback) in the post-mortem spreadsheet (Q84).** Add columns: `upvote_ratio`, `comment_upvote_ratio`, `mod_action`. Review after every post. If any signal triggers, extend the interval by 1 week.
+
+4. **The in-season weekly schedule requires verifying that GPA grades auto-update when nflverse syncs new game data.** Before committing to weekly in-season posts, test: run the adapter after a Week 1 game → check that Report Card grades change → confirm the Share Mode PNG reflects updated grades. If this isn't automated, weekly posting is unsustainable.
+
+5. **Never put "Tuesday" or any day name in the post title.** Post consistently on Tuesdays. Let the community notice. If someone comments "hey it's report card day," quote-reply that comment in the next post's first comment. That's organic brand building.
+
+### Open Questions
+
+1. **What does the complete pre-stage package look like for Post #1 — 12 GPA Card images + 12 reply templates + the Honor Roll screenshot + the first comment text — and can it all be generated from a single script run?**
+
+2. **Should Razzle build a "season mode" toggle for the Report Card that auto-updates grades after each NFL week — and what's the minimum backend work to make weekly in-season posts sustainable without manual data intervention?**
+
+3. **What is the optimal cross-posting strategy between r/DynastyFF and r/fantasyfootball — should the same Report Card post go to both subs simultaneously, or should r/fantasyfootball get a separate "Redraft GPA" version on a staggered schedule?**
+
+## NEXT QUESTION: What does the complete pre-stage package look like for Post #1 — 12 GPA Card images + 12 reply templates + the Honor Roll screenshot + the first comment text — and can it all be generated from a single script run?
