@@ -3803,4 +3803,108 @@ Sources:
 
 3. **Should Razzle add a "screenshot history" feature (last 5 exports cached in memory) so users can re-download without re-rendering, and would this reduce the perceived need for a preview?**
 
+---
+
+## Q43: Should the Export PNG button label dynamically update based on current state (e.g., "Download PNG (25 rows)" vs "Download PNG (Top 10, 4:3)") to serve as inline preview-by-description?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**YES — dynamically update the Export PNG button label to reflect exactly what will be downloaded. This is a zero-cost, high-clarity UX pattern that eliminates the need for a preview thumbnail and follows established conventions from Gmail, Apple Mail, and data table libraries.**
+
+#### The Pattern: Selection-Aware Action Labels
+
+The best precedent is Gmail's bulk action pattern: select 5 emails → the button reads "Archive 5 conversations," not just "Archive." Apple Mail does the same: "Move 3 Messages." The action verb stays constant; the object description updates to reflect the current selection. This pattern works because:
+
+1. **It answers "what will happen?" without a preview.** The label IS the preview — in text form.
+2. **Zero rendering cost.** String interpolation is <1ms. Compare to html2canvas preview at 300ms–2s (Q42).
+3. **It naturally handles multiple export modes.** When the Reddit crop toggle (Q41) is added, the label switches between modes without needing separate buttons or a preview pane.
+
+DataTables' Buttons extension explicitly supports "Dynamic text" as a customization option for export buttons — the pattern is common enough that data table libraries build it in as a first-class feature.
+
+#### What Razzle Should Display
+
+Current share modal button: `Download PNG` (static, line 3608 of lab.html).
+
+Proposed dynamic labels:
+
+| State | Button Label |
+|-------|-------------|
+| Default (25 rows visible) | `Download PNG (25 rows)` |
+| Page size 50, 50 rows visible | `Download PNG (50 rows)` |
+| Reddit crop toggled on | `Download PNG (Top 10, 4:3)` |
+| Filtered to WR only, 12 results | `Download PNG (12 rows)` |
+
+The row count comes from `state.items.length` (already available in lab.js — used at line 3053 for the result count display). The Reddit crop mode (when built per Q41) adds a boolean toggle. The label update is a single ternary:
+
+```js
+const rowCount = state.items.length;
+const label = redditCropMode
+  ? 'Download PNG (Top 10, 4:3)'
+  : `Download PNG (${rowCount} rows)`;
+```
+
+This is ~3 lines of code in `openShareModal()`, which already runs synchronously in <16ms.
+
+#### Why This Is Better Than a Preview Thumbnail
+
+Q42 rejected the live preview thumbnail for four reasons: render cost, unnecessary for WYSIWYG, dead-end failure mode, and modal bloat. Dynamic labels solve the same user need (know what you're getting) with none of those costs:
+
+- **No render cost** — string interpolation vs. html2canvas pipeline
+- **No modal bloat** — text fits in the existing button, no additional DOM elements
+- **No failure mode** — the label is always accurate because it reads from the same state that drives the export
+- **WYSIWYG reinforcement** — "25 rows" tells you "what you see is what you get, and here's exactly how many rows that is"
+
+#### Should CSV and Clipboard Buttons Also Update?
+
+Yes, but simpler. CSV exports all filtered results (not just the current page), so: `Download CSV (142 players)` using `state.totalCount`. Copy to Clipboard and Copy as Reddit Table operate on the visible page, so they match the PNG label: `Copy to Clipboard (25 rows)`.
+
+This creates a consistent pattern across all four export buttons in the share modal — each label tells you exactly what data is included.
+
+#### Implementation Notes
+
+1. **Update labels in `openShareModal()`.** The function already runs on modal open (lab.js:4087). Add 4 lines to set `textContent` on each button.
+2. **Don't update labels reactively** (e.g., on every filter change). Only update when the modal opens. The modal is stateless between opens — no stale label risk.
+3. **Keep the button text short.** `Download PNG (25 rows)` is 24 characters. Don't add preset name or position filter to the button — that's what the Reddit title field is for.
+4. **Mobile consideration.** The share modal's export row already wraps with `flex-wrap: wrap` (lab.html:3607). Slightly longer button labels won't break the layout — they'll just wrap to the next line on narrow screens, which is fine.
+
+---
+
+### Self-Critique
+
+1. **The Gmail/Apple Mail pattern is a strong precedent but applies to destructive/move actions, not exports.** Deleting 5 emails has higher stakes than downloading a PNG — the "how many" matters more when the action is irreversible. For exports, the count is informational, not protective. Still, informational labels are strictly better than uninformative ones. **Confidence: 8/10.**
+
+2. **"3 lines of code" is accurate for the PNG button.** Updating all 4 export buttons in `openShareModal()` is ~8 lines. The `state.items.length` and `state.totalCount` values are already computed before the modal opens, so no async work is needed. **Confidence: 9/10.**
+
+3. **The claim that CSV exports all filtered results (not just the current page) needs verification.** The current `exportCSV()` function should be checked — if it only exports the visible page, the label should show `state.items.length`, not `state.totalCount`. This affects whether the CSV label says "(25 rows)" or "(142 players)". **Confidence: 6/10 — needs code verification before implementation.**
+
+Sources:
+- [Button Label Best Practices (Uxcel)](https://app.uxcel.com/courses/ui-components-n-patterns/button-label-best-practices-673) — commands should reflect the state the system will move into
+- [5 Rules for Button Labels (UX Movement)](https://uxmovement.com/buttons/5-rules-for-choosing-the-right-words-on-button-labels/) — action verb + noun pattern
+- [UI Copy Guidelines (NN/g)](https://www.nngroup.com/articles/ui-copy/) — labels should communicate subsequent states while preserving space
+- [Export Pattern (Carbon Design System)](https://carbondesignsystem.com/community/patterns/export-pattern/) — simple exports need no dialog, just clear labeling
+- [DataTables Buttons Export (DataTables)](https://datatables.net/extensions/buttons/examples/initialisation/export.html) — dynamic text as first-class button customization
+- [Button UI Design Guide (Design Monks)](https://www.designmonks.co/blog/button-ui) — dynamic buttons respond to user inputs and context
+- [Writing UX Copy for Buttons (DESK)](https://vanschneider.com/blog/ux-writing/writing-ux-copy-for-buttons-and-links/) — button copy should answer "what happens when I click this?"
+- Razzle codebase: `frontend/lab.html:3607-3611` (share modal export buttons), `frontend/lab.js:4087-4099` (openShareModal), `frontend/lab.js:3050-3067` (resultCount display using state.items.length)
+
+### Implications for Razzle
+
+1. **Update all 4 export button labels in `openShareModal()` to include row/player counts.** PNG and Clipboard show `state.items.length` (visible rows). CSV shows `state.totalCount` (all filtered results, pending verification). Reddit Table shows `state.items.length`.
+
+2. **When Reddit crop mode ships (Q41), the PNG button label switches to "Download PNG (Top 10, 4:3)".** This single label change communicates the crop, the row count, and the aspect ratio — replacing the need for a preview thumbnail entirely.
+
+3. **Do NOT add preset name or position filter to button labels.** Keep them short. The Reddit title field already contains that context. Button labels answer "how much data?" — the title answers "what data?"
+
+4. **Verify `exportCSV()` scope before labeling.** If CSV exports only the visible page, label it with `state.items.length`. If it exports all filtered results, label it with `state.totalCount`. Mislabeling the count is worse than no count at all.
+
+### Open Questions
+
+1. **Should the export filename also become dynamic — matching the button label context (e.g., `razzle_screener_25rows_2026-03-21.png` vs `razzle_screener_top10_reddit_2026-03-21.png`) — so the downloaded file is self-documenting?**
+
+2. **Should the "Copy as Reddit Table" button show a character count estimate (e.g., "Copy as Reddit Table (~2.1KB)") since Reddit has a 40,000-character comment limit and large tables can approach it?**
+
+3. **Should Razzle track which export format users click most (PNG vs CSV vs Clipboard vs Reddit Table) via analytics events, to inform which format gets the most prominent position in the share modal?**
+
 ## NEXT QUESTION: Should the Export PNG button label dynamically update based on current state (row count, crop mode, position filter) to serve as inline preview-by-description?
