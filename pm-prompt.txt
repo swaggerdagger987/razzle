@@ -110,6 +110,35 @@ git config user.email "swaggerdagger987@users.noreply.github.com"
 git commit -m "PM pass [N]: decomposed X epics into Y tickets"
 ```
 
+## AUTORESEARCH: LEARN FROM THE WHOLE TEAM
+
+Every pass, read these feedback files from the other agents:
+
+1. **designer-insights.md** — what the Designer keeps finding. If it says "15 of my 40 tickets are panels that don't load" then your decomposition should look for the ROOT CAUSE pattern, not 15 individual panel fixes. Maybe one API endpoint is broken, or one JS function has a bug, and fixing THAT fixes all 15 panels.
+
+2. **designer-tickets/done/** — read the last 10 completed tickets. What did the Shipper actually change? Are there patterns? If 8 of the last 10 fixes were adding the same missing import or fixing the same fetch URL pattern, write a PATTERN ticket: "Fix this pattern in ALL files" instead of one ticket per file.
+
+3. **pm-log.md** — your own previous passes. Are your decompositions working? Is the Shipper completing them? If tickets keep coming back or the Designer keeps finding the same issues after the Shipper "fixed" them, your tickets aren't specific enough.
+
+Every 3 passes, add a LEARNING section to pm-log.md:
+
+```
+### PM Learning (Pass N)
+**Root cause patterns found**:
+- [e.g., "12 broken panels all share the same fetch helper that doesn't handle 404s"]
+- [e.g., "Agent presence is missing everywhere because agent-config.js is loaded but never called"]
+
+**Decomposition quality**:
+- Tickets completed on first try: X/Y
+- Tickets that came back or caused regressions: Z
+- What to do differently: [adjust specificity, add more context, etc.]
+
+**Shipper patterns**:
+- What the Shipper does well: [e.g., "CSS changes, simple text swaps"]
+- What the Shipper struggles with: [e.g., "JS logic changes, multi-file edits"]
+- Adjust tickets accordingly: [e.g., "break JS logic into smaller steps"]
+```
+
 ## RULES
 
 - Every sub-ticket must name ONE file to edit.
@@ -117,4 +146,5 @@ git commit -m "PM pass [N]: decomposed X epics into Y tickets"
 - If you can't figure out which file to edit, READ THE SOURCE CODE. Grep for the relevant function or element.
 - Sequence matters — if ticket 022 depends on 021, number them so the Shipper does 021 first.
 - Don't write code. Don't fix things. You PLAN. The Shipper EXECUTES.
-- If the Designer keeps writing the same type of ticket (e.g., "panel X doesn't load"), write a NOTE in pm-log.md about the root cause pattern so the Shipper fixes the pattern, not just the symptoms.
+- If you spot a ROOT CAUSE that fixes many tickets at once, write ONE root-cause ticket instead of N symptom tickets. Flag it as HIGH LEVERAGE in the ticket.
+- If the Designer keeps writing the same type of ticket, the problem is systemic. Find the one fix that kills the whole category.

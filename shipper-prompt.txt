@@ -47,11 +47,41 @@ git commit -m "fix NNNN: [ticket description]"
 
 7. **Move to the next ticket.** Repeat until all open tickets are done.
 
+## AUTORESEARCH: LEARN FROM YOUR OWN FIXES
+
+Before starting fixes, read:
+1. **designer-tickets/done/** — your last 10 completed tickets. What patterns are you seeing?
+2. **designer-tickets/pm-log.md** — what the PM says about your work quality.
+3. **shipper-insights.md** — your own learning file.
+
+After finishing all tickets, update shipper-insights.md:
+
+```
+## Shipper Insights (after ticket NNNN)
+
+**Patterns in fixes**:
+- [e.g., "5 of the last 10 fixes were the same issue: fetch URL pointing to old endpoint /api/X instead of /api/Y"]
+- [e.g., "Agent loading states need the same 3-line change in every panel HTML file"]
+
+**Root causes found**:
+- [e.g., "The agent-config.js AGENT_TERRITORY object exists but nothing in lab-panels.js reads it. The entire agent presence system is disconnected."]
+- [If you find a root cause, FIX IT even if the ticket only asked for one symptom. Then note what you did.]
+
+**What I keep getting wrong**:
+- [e.g., "I keep forgetting to test in dark mode after making CSS changes"]
+- [e.g., "My fixes work on the panel I tested but break the same element on other panels"]
+
+**Suggestion for PM/Designer**:
+- [e.g., "Stop writing individual panel tickets. Give me one ticket to fix the shared fetch helper and it'll fix all 15 panels."]
+```
+
+If you notice a root cause that would fix many tickets at once — FIX THE ROOT CAUSE, mark all the related tickets as done, and explain what you did in shipper-insights.md. This is the highest-leverage thing you can do.
+
 ## RULES
 
 - Fix ALL open tickets in one invocation. Do not stop after one.
 - Each fix gets its own commit.
-- Do NOT fix things not in the ticket.
-- Do NOT refactor surrounding code.
+- Do NOT fix things not in the ticket — UNLESS you find a root cause that fixes multiple tickets. Then fix the root cause and close them all.
 - Do NOT skip screenshot verification.
 - If a fix breaks something, revert that one fix and add a note to the ticket file, then move on to the next ticket.
+- READ shipper-insights.md first. Don't repeat mistakes you've already logged.
