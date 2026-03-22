@@ -5041,4 +5041,139 @@ Sources:
 
 3. **What watermark placement and style should Razzle use on draft night Lab screenshots — subtle bottom-right domain text (razzle.lol) vs. semi-transparent diagonal overlay — to maximize the watermark funnel (Q48) without making screenshots look spammy on Reddit?**
 
-## NEXT QUESTION: What is the exact JSON structure of ESPN's draft API response — specifically, does the rounds endpoint return player names and teams inline, or does it return nested $ref links that require additional API calls per pick — and how does this affect polling speed?
+## Q56: What is the exact JSON structure of ESPN's draft API response — inline data vs nested $ref links — and how does this affect polling speed?
+
+**Question:** Does the rounds endpoint return player names and teams inline, or does it return nested $ref links that require additional API calls per pick — and how does this affect polling speed?
+
+### Answer
+
+**ESPN has TWO completely different draft API architectures. One is useless for Razzle. The other is perfect.**
+
+**Endpoint 1: `sports.core.api.espn.com/v2/.../draft/rounds` — AVOID. Uses $ref links.**
+
+This "core API" returns pick metadata only. Player and team data are `$ref` URL pointers:
+
+```json
+{
+  "picks": [{
+    "pick": 1, "overall": 1, "round": 1, "traded": false,
+    "status": {"name": "SELECTION_MADE"},
+    "athlete": {"$ref": "http://sports.core.api.espn.com/v2/.../athletes/12345"},
+    "team": {"$ref": "http://sports.core.api.espn.com/v2/.../teams/10"}
+  }]
+}
+```
+
+To get player names for 32 picks = 32 additional HTTP requests (one per `$ref`). Plus 32 more for team names. That's **65 HTTP requests per poll cycle** — slow, fragile, and rude to ESPN's servers.
+
+The `/draft/athletes?limit=500` endpoint is the same story: returns 943 `$ref` links, not actual athlete objects. Each link requires a follow-up request.
+
+**Endpoint 2: `site.web.api.espn.com/apis/site/v2/sports/football/nfl/draft?season=2025` — USE THIS. Everything inline.**
+
+This "site web API" (ESPN's frontend BFF layer) returns complete pick data in a single response:
+
+```json
+{
+  "picks": [{
+    "pick": 1, "overall": 1, "round": 1, "traded": false,
+    "tradeNote": "From CLE",
+    "status": "SELECTION_MADE",
+    "athlete": {
+      "id": 12345,
+      "displayName": "Cam Ward",
+      "position": {"abbreviation": "QB"},
+      "team": {"abbreviation": "MIA", "name": "Hurricanes"},
+      "attributes": [
+        {"name": "rank", "displayValue": "1"},
+        {"name": "overall", "displayValue": "8"},
+        {"name": "grade", "displayValue": "92"}
+      ]
+    },
+    "teamId": 10
+  }]
+}
+```
+
+**One GET request. All 32 picks. Player names, positions, college teams, grades, trade notes — all inline.** No `$ref` resolution needed.
+
+**Polling math for draft night:**
+- Round 1: ~32 picks over ~3 hours (7 PM - 11 PM ET)
+- Poll every 60 seconds = ~240 requests total
+- Each request: single HTTP GET, ~50-100KB JSON response
+- Parse time: <10ms (Python `json.loads`)
+- **Total per-poll latency: <500ms** (network round trip + parse)
+
+The `teamId` field is an ESPN integer, not an NFL abbreviation. Requires a static 32-row mapping table:
+
+| teamId | Abbr | teamId | Abbr | teamId | Abbr |
+|--------|------|--------|------|--------|------|
+| 1 | ATL | 12 | KC | 22 | ARI |
+| 2 | BUF | 13 | LV | 24 | LAC |
+| 3 | CHI | 14 | LAR | 29 | CAR |
+| 4 | CIN | 15 | MIA | 30 | JAX |
+| 5 | CLE | 16 | MIN | 33 | BAL |
+| 6 | DAL | 17 | NE | 34 | HOU |
+| 7 | DEN | 18 | NO | ... | ... |
+| 8 | DET | 19 | NYJ |
+| 9 | GB | 20 | NYG |
+| 10 | TEN | 21 | PHI |
+| 11 | IND | 23 | PIT |
+
+(Full 32-team mapping from `site.api.espn.com/apis/site/v2/sports/football/nfl/teams`)
+
+**Filter by round:** Add `?season=2025&round=1` to get only Round 1 picks. Reduces payload and parse time.
+
+Sources:
+- [ESPN NFL API Endpoints (nntrn gist)](https://gist.github.com/nntrn/ee26cb2a0716de0947a0a4e9a157bc1c)
+- [ESPN Hidden API Guide — ScrapeCreators](https://scrapecreators.com/blog/espn-api-free-sports-data)
+- [ESPN Hidden API Guide — Zuplo](https://zuplo.com/learning-center/espn-hidden-api-guide)
+- [Public ESPN API Docs (pseudo-r)](https://github.com/pseudo-r/Public-ESPN-API)
+- Live verification: fetched `site.web.api.espn.com/apis/site/v2/sports/football/nfl/draft?season=2025` and `sports.core.api.espn.com/v2/.../draft/rounds` on 2026-03-21
+
+### Self-Critique
+
+1. **The site.web.api endpoint returning inline data is confirmed by live fetch on 2026-03-21.** The 2025 draft data is fully populated (all 7 rounds, SELECTION_MADE status). This is not speculation. **Confidence: 10/10.**
+
+2. **The core API using $ref links is also confirmed by live fetch.** Athlete and team fields are literally `{"$ref": "http://..."}` strings, not objects. **Confidence: 10/10.**
+
+3. **The teamId mapping is partially confirmed.** I retrieved 23 of 32 teams from the ESPN teams endpoint (the response was truncated). The remaining 9 teams (NYG=20, NYJ=19, PHI=21, PIT=23, SEA=26, SF=25, TB=27, WAS=28, LAR=14) are inferred from ESPN's known ID scheme but should be verified by fetching the full teams endpoint. **Confidence: 8/10 on the full mapping — the pattern is consistent but 9 IDs need verification.**
+
+4. **The round filter parameter (`?round=1`) is assumed from the URL pattern but not explicitly tested.** The `?season=2025` parameter works (confirmed). Round filtering should work based on how ESPN's BFF APIs typically accept query params, but test it. **Confidence: 7/10.**
+
+5. **Real-time update speed during an active draft is not confirmed.** I tested against 2025 data (completed draft), which shows all picks immediately. During a live 2026 draft, the site.web.api may have caching (30s? 60s?) that delays new picks from appearing. There's no way to test this until draft night. The 60-second poll interval provides enough buffer for typical CDN cache TTLs. **Confidence: 6/10 on exact latency during live draft.**
+
+### Implications for Razzle
+
+1. **Use `site.web.api.espn.com/apis/site/v2/sports/football/nfl/draft?season=2026` as the SOLE data source for draft night.** One endpoint, one request, all data inline. Do NOT use the core API's $ref-based endpoints — they require 65+ follow-up requests and add complexity for zero benefit.
+
+2. **Build the ESPN team ID mapping table NOW.** Fetch the full 32-team list from `site.api.espn.com/apis/site/v2/sports/football/nfl/teams`, hardcode it as a Python dict in `espn_draft_scraper.py`. This never changes.
+
+3. **The poller logic is trivially simple:**
+   ```python
+   while True:
+       resp = requests.get(ESPN_DRAFT_URL)
+       picks = resp.json()["picks"]
+       new_picks = [p for p in picks if p["overall"] not in seen_picks]
+       for pick in new_picks:
+           write_to_db(pick)
+           seen_picks.add(pick["overall"])
+       if len(seen_picks) >= 32:
+           trigger_pipeline()
+           break
+       time.sleep(60)
+   ```
+   That's the entire draft night poller. ~20 lines of Python. No $ref resolution, no secondary requests, no complexity.
+
+4. **Pre-test against 2025 data immediately.** The 2025 draft endpoint is live and fully populated. Build `espn_draft_scraper.py`, point it at `?season=2025`, verify it parses all 32 Round 1 picks correctly. Then on draft night, change `2025` to `2026`.
+
+5. **The `athlete.id` field enables prospect mapping.** Each pick includes ESPN's athlete ID. Pre-build a mapping table: ESPN athlete ID → Razzle prospect ID for the top 50 consensus prospects. Fetch ESPN's prospect rankings page before draft night to get the IDs. For surprise picks not in the mapping, fall back to name matching.
+
+### Open Questions
+
+1. **Should Razzle pre-populate terminal.db with a draft_picks table schema and the top 50 prospect profiles (name, school, position, headshot URL) BEFORE draft night — so the ESPN poller only needs to write pick_number and team, and the Lab can immediately render full prospect cards?**
+
+2. **What watermark placement and style should Razzle use on draft night Lab screenshots — subtle bottom-right domain text (razzle.lol) vs. semi-transparent diagonal overlay — to maximize the watermark funnel (Q48) without making screenshots look spammy on Reddit?**
+
+3. **What is the optimal Reddit post format for a draft night recap — a single mega-post with all 32 picks and embedded screenshots, or a structured post with a pick table plus separate top-level comments per position group — to maximize engagement and comment depth?**
+
+## NEXT QUESTION: Should Razzle pre-populate terminal.db with a draft_picks table schema and the top 50 prospect profiles BEFORE draft night — and what data should be pre-loaded to minimize the gap between "pick announced" and "Lab renders full prospect card"?
