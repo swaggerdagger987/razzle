@@ -9041,4 +9041,131 @@ Sources:
 
 3. **What is the optimal number of pre-staged player cards to prepare before each OC post — and which players should be prioritized (most-owned dynasty players, most-traded, most-debated on Reddit in the prior week)?**
 
-## NEXT QUESTION: Should the first reply-to-player-request screenshot use the same Share Mode (full Honor Roll cropped to just that player's row) or a different format (expanded single-player profile card with all 5 grades visualized as a radar chart)?
+## Q92: What is the optimal number of pre-staged player cards to prepare before each OC post — and which players should be prioritized (most-owned dynasty players, most-traded, most-debated on Reddit in the prior week)?
+
+**Date:** 2026-03-21
+**Category:** Content Operations / Launch Execution
+**Prior context:** Q91 (Fantasy GPA Card format — 1200x630 standalone card), Q87 (reply workflow — "drop a name and I'll pull their card"), Q90 (Post #2 = RB Report Card)
+
+### Answer
+
+**Pre-stage exactly 12 player cards. Prioritize by Reddit discussion frequency, not by dynasty ranking or ownership rate. The 12 cards should cover the players most likely to be requested in a r/DynastyFF comment thread — which are the players people are already arguing about.**
+
+Here's the selection framework, backed by actual Reddit scrape data from r/DynastyFF (2,793 posts analyzed from March 2026):
+
+#### Why 12 Cards, Not 8 or 20
+
+- **8 is too few.** The top 8 most-discussed players cover ~60% of likely requests. The 9th-12th players (Nabers, Hall, McBride, Odunze) are all high-frequency discussion targets. Cutting at 8 means generating cards live for ~40% of requests — breaking the <60 second reply target from Q87.
+- **20 is too many.** Preparation time scales linearly: 12 cards × 30 seconds = 6 minutes of pre-staging. 20 cards × 30 seconds = 10 minutes. The 13th-20th most-discussed players get requested maybe once per thread. Generate those live. The goal is to cover the burst of requests in the first 30 minutes (when the post is hot), not every possible request.
+- **12 gives ~80% coverage.** Based on the Reddit discussion frequency data, the top 12 players account for the vast majority of "price check" and "what do you think about X" requests in dynasty threads.
+
+#### The Selection Algorithm
+
+**Step 1: Reddit Discussion Frequency (primary signal)**
+
+From our r/DynastyFF scrape (2,793 posts, March 2026), ranked by mention count:
+
+| Rank | Player | Mentions | Why They're Discussed |
+|------|--------|----------|----------------------|
+| 1 | Ja'Marr Chase | 131 | Consensus dynasty WR1, 1.01 debate |
+| 2 | Bijan Robinson | 79 | Top dynasty RB asset, ATL offense |
+| 3 | Ashton Jeanty | 78 | Rookie hype, draft landing spot speculation |
+| 4 | De'Von Achane | 68 | Polarizing — elite efficiency, injury risk |
+| 5 | Kenneth Walker | 68 | Chiefs trade, new offense debates |
+| 6 | Jaxon Smith-Njigba | 64 | Monster 2025, top-3 dynasty WR debate |
+| 7 | James Cook | 59 | Usage trends, Bills backfield |
+| 8 | Jahmyr Gibbs | 57 | Lions bellcow, elite asset |
+| 9 | Jaylen Waddle | 53 | Broncos trade — massive value shift |
+| 10 | Malik Nabers | 46 | Young WR1, rising fast |
+| 11 | Breece Hall | 46 | Buy low candidate, declining value |
+| 12 | Trey McBride | 43 | TE1 sell-high debate |
+
+**Step 2: Cross-reference with Polarization (engagement multiplier)**
+
+Players people AGREE on don't generate comment requests. Players people ARGUE about do. Cross-referencing with FantasyPros' "10 Polarizing Dynasty Players" list (Feb 2026):
+
+- **High polarization (expect 2-3x request rate):** Achane, Walker, Breece Hall, Brian Thomas Jr., Trey Benson, Jordan Addison
+- **Consensus (1x request rate):** Chase, Bijan, JSN, Gibbs — people ask these to validate, not to debate
+- **Situation-dependent (spiking now):** Waddle (Broncos trade), Jeanty (pre-draft), McBride (sell-high window)
+
+**Step 3: Position Coverage**
+
+The 12 cards should cover all 4 positions. If the top 12 by discussion frequency are all WR/RB (likely), swap the lowest-ranked RB/WR for the highest-discussed QB and TE:
+
+- **QB slot:** Jayden Daniels or Lamar Jackson (both top-discussed QBs in dynasty)
+- **TE slot:** McBride already in top 12. If not, Sam LaPorta.
+
+#### Final Pre-Stage List for Post #1 (All-Position Report Card, April 21)
+
+| # | Player | Position | Rationale |
+|---|--------|----------|-----------|
+| 1 | Ja'Marr Chase | WR | Most discussed player period. Everyone wants his card. |
+| 2 | Bijan Robinson | RB | Dynasty RB1. Validation requests. |
+| 3 | De'Von Achane | RB | Most polarizing player. "How is he only a B+?" fuel. |
+| 4 | Jaxon Smith-Njigba | WR | Breakout star. Top-3 WR debate. |
+| 5 | Kenneth Walker | RB | Chiefs trade. Value shift = requests. |
+| 6 | Jahmyr Gibbs | RB | Top-5 dynasty RB. Consensus validation. |
+| 7 | Jaylen Waddle | WR | Broncos trade creates instant demand. |
+| 8 | Malik Nabers | WR | Young WR1 hype, rising fast. |
+| 9 | Breece Hall | RB | Buy low? People want the grade to confirm. |
+| 10 | Trey McBride | TE | TE1 sell-high. Only TE in the 12. |
+| 11 | Ashton Jeanty | RB | Rookie — may not have GPA data (no NFL stats). Skip if no data. Replace with James Cook. |
+| 12 | Jayden Daniels | QB | Top young QB. Only QB in the 12. |
+
+**Jeanty note:** Rookies won't have Fantasy GPA grades (no 2025 NFL stats to grade). If Jeanty is requested, reply with: "Rookies don't have enough NFL tape for a GPA yet — but here's [player comparison card] for a veteran comp." This is actually a great engagement hook because it drives a follow-up question.
+
+#### For Post #2 (RB Report Card, April 28)
+
+Replace WR/TE/QB cards with RB-only. The 12 pre-staged RB cards:
+
+Bijan, Achane, Walker, Gibbs, Hall, Cook, Bucky Irving, Saquon Barkley, Kyren Williams, Derrick Henry, Jonathan Taylor, Travis Etienne
+
+#### Workflow on Post Day
+
+1. **T-30 min:** Open Report Card → position filter (ALL for Post #1) → click each of the 12 players → download card → save to `~/razzle-cards/april-21/` folder
+2. **T-0:** Post goes live
+3. **First 30 min:** Reply to every comment. For the 12 pre-staged players, paste from folder (<15 seconds). For others, generate live (<60 seconds).
+4. **T+60 min:** Check which unexpected players got requested. Generate those cards. Add to folder for future threads.
+
+### Self-Critique
+
+1. **The Reddit scrape data is from a single week (March 20-21, 2026).** Discussion frequency shifts with news cycles. Waddle spiked because of the Broncos trade. By April 21, the NFL Draft (April 24) will dominate conversation — rookies like Jeanty and the new 1.01 pick will spike in frequency. **The pre-stage list should be regenerated 48 hours before post day using fresh scrape data.** Confidence: 9/10 on the methodology, 6/10 on the specific names holding until April 21.
+
+2. **"12 cards = 80% coverage" is an estimate, not a measurement.** The actual coverage rate depends on the specific thread's comment distribution. A thread about RB rankings will skew requests toward RBs. The all-position Report Card post will distribute requests more evenly. The 80% estimate assumes a roughly proportional distribution matching Reddit discussion frequency. True coverage rate is unknowable until Post #1 is live. **Confidence: 7/10.**
+
+3. **The pre-staging workflow assumes the Fantasy GPA Card (Q91) is already built.** As of today (March 21), it isn't. The card needs to be built before the pre-staging workflow matters. If the card build takes 3 hours (Q91 estimate) and testing takes 1 hour, the total investment is 4 hours of dev + 6 minutes of pre-staging. The dev time dwarfs the staging time. **Confidence: 9/10 on priorities.**
+
+4. **Consensus players (Chase, Bijan, JSN) may get fewer requests than expected.** People don't ask "what's Chase's GPA?" because they already know he's elite. They ask about the polarizing cases (Achane, Hall, Walker) where the grade might surprise them. The pre-stage list should be weighted toward polarizing players, not consensus tops. But the consensus players MUST be in the list because if someone asks for Chase and you don't have it, it looks unprepared. **Confidence: 8/10.**
+
+5. **12 cards × 2 formats (Honor Roll + GPA Card) = 24 total images.** For Post #1 you also need the main Honor Roll post image (1200x960). Total pre-stage: 1 Honor Roll screenshot + 12 GPA Cards = 13 images. At 30 seconds each = ~7 minutes. This is fast enough to re-generate with different filters if needed. **Confidence: 9/10.**
+
+Sources:
+- Razzle Reddit scrape: `data/reddit/reddit_scrape_2026-03-20_23-18-58.json` — 2,793 posts from r/DynastyFF and r/fantasyfootball, March 2026
+- [10 Polarizing Dynasty Players to Buy, Sell, or Hold](https://www.fantasypros.com/2026/02/10-polarizing-dynasty-players-to-buy-sell-or-hold-fantasy-football/) — FantasyPros, Feb 2026
+- [Dynasty Fantasy Football: Is Chase, JSN, or Bijan the 1.01?](https://www.profootballnetwork.com/fantasy-football/dynasty-number-one-pick-jamarr-chase-jaxon-smith-njigba-bijan-robinson/) — Pro Football Network
+- [Pro Football Network Top 10 Dynasty Rankings](https://www.profootballnetwork.com/fantasy-football/dynasty-fantasy-rankings-wild-card-2026/) — January 2026
+- [14 Dynasty Trade Targets Experts Love](https://www.fantasypros.com/2026/03/12-dynasty-trade-targets-experts-love-2026-fantasy-football/) — FantasyPros, March 2026
+- [Dynasty Buys and Sells: March 2026](https://www.fantasypoints.com/nfl/articles/2026/dynasty-buys-and-sells-march) — Fantasy Points
+- Sprint Q91 (GPA Card format), Q87 (reply workflow), Q90 (Post #2 = RB-only), Q84 (post-mortem spreadsheet)
+
+### Implications for Razzle
+
+1. **Build the Reddit scrape → player frequency pipeline as a reusable script.** Before each OC post, run the scraper for the prior 7 days, count player mentions, output a ranked list. This takes the guesswork out of pre-staging. The scraper already exists at `scripts/reddit_scraper.py` — add a `--player-frequency` output mode.
+
+2. **The pre-stage list is a living document, not a fixed list.** Regenerate it 48 hours before each post using fresh Reddit data. The NFL Draft (April 24) will massively shift which players are discussed. Post #2 (April 28) will need a completely different list than Post #1 (April 21).
+
+3. **Rookies are a reply engagement trap (in a good way).** When someone requests a rookie's GPA card and you reply "rookies don't have enough NFL tape for a GPA yet — but I can pull [veteran comp]'s card," that generates a follow-up reply. Two replies per request = 2x the thread depth = more visibility for the post. Don't build rookie GPAs. Let the absence create conversation.
+
+4. **Pre-stage the 12 cards AND write the reply text templates.** Each card reply should follow the pattern: "[Player GPA Card image] [One sentence takeaway]. His [weakest grade dimension] grade might surprise you — [brief explanation]. What do you think?" This drives replies. Write the 12 takeaway sentences during pre-staging, not live during the thread.
+
+5. **Track which cards get the most engagement (upvotes on the reply comment).** After each post, record: player name, reply upvotes, follow-up comments generated. This data feeds the pre-stage list for the next post. The post-mortem spreadsheet from Q84 should include a "card engagement" column.
+
+### Open Questions
+
+1. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral — should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
+
+2. **Should the Report Card series eventually become a weekly or biweekly recurring post with a predictable schedule (e.g., "Fantasy GPA Tuesday") — and at what point does recurring frequency risk becoming spammy on r/DynastyFF?**
+
+3. **What reply text template maximizes engagement on a Fantasy GPA Card comment reply — should the template focus on the surprising grade (controversy bait), the overall GPA (validation/challenge), or a comparison to another player at the same position (debate fuel)?**
+
+## NEXT QUESTION: What reply text template maximizes engagement on a Fantasy GPA Card comment reply — should the template focus on the surprising grade (controversy bait), the overall GPA (validation/challenge), or a comparison to another player at the same position (debate fuel)?
