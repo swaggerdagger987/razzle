@@ -9626,4 +9626,94 @@ Sources:
 
 3. **What is the optimal Reddit image hosting strategy — direct image upload (i.redd.it), Imgur album link, or inline image in a text post — and which format maximizes both visibility and watermark retention?**
 
-## NEXT QUESTION: Should the pre-stage script also generate a "no GPA yet" card for rookies (Jeanty, Ashton Jeanty, Travis Hunter) who will inevitably get requested but have no NFL stats — and what does that card look like?
+## Q96: Should the pre-stage script also generate a "no GPA yet" card for rookies (Jeanty, Travis Hunter, etc.) who will inevitably get requested but have no NFL stats — and what does that card look like?
+
+**Answer: No. Do not build a rookie GPA card. The text-only redirect is strategically superior. But DO build one generic "GPA PENDING" badge image (not a per-player card) to drop alongside the text reply.**
+
+### Why No Rookie Card
+
+Q92 already established the core insight: rookie requests are an **engagement trap in your favor**. When someone requests "do Ashton Jeanty," a text reply like *"Rookies don't have NFL tape yet — GPA requires real game data. But here's Breece Hall's card, the closest veteran comp"* does three things a rookie card cannot:
+
+1. **Redirects to a real GPA card.** The redirect shows a fully-graded card with the razzle.lol watermark. A "no GPA yet" card with empty grades or question marks is a dead-end — no data to debate, nothing to screenshot, no watermark impression on meaningful content.
+
+2. **Generates follow-up replies (2× thread depth).** The commenter responds to your redirect ("why Hall and not Bijan?"), which creates a second reply opportunity with ANOTHER veteran card. Each reply is a new watermark impression. A rookie card closes the conversation — "oh, no data, ok."
+
+3. **Zero build cost.** No template, no per-player data lookup, no canvas code, no edge cases for players with partial college data vs. combine-only vs. UDFA. Every minute spent on a rookie card template is a minute not spent on the 12 real GPA cards that drive the post's value.
+
+### What PlayerProfiler and Dynasty Nerds Do (and Why It Doesn't Apply)
+
+[PlayerProfiler](https://www.playerprofiler.com/rookie-guide-scouting-report/) builds full rookie prospect profiles with college Dominator Rating, Breakout Age, combine metrics, and NFL player comparisons. [Dynasty Nerds](https://www.dynastynerds.com/dynasty-tools/combine-results/) has a Combine Tracker with Nerd Athletic Scores and historical comparisons. These work because they're **standalone prospect evaluation tools** — their entire product is the scouting report.
+
+Razzle's Report Card series is about **NFL performance grades**. Grafting college data onto a GPA card breaks the brand promise. A GPA with college stats isn't a GPA — it's a scouting report wearing a GPA costume. Razzle already has a separate Rookie Big Board (`/prospects.html`) for that. Don't cross the streams.
+
+### The Hybrid: One Generic Badge Image
+
+Build a single **"GPA PENDING — No NFL Tape Yet"** badge image. Not a per-player card. One image, reused for every rookie request. Specifications:
+
+- **Size**: 400×200px (small, companion to text — not the main reply)
+- **Design**: Razzle GPA Card aesthetic (Anthropic sand background, 3px ink border, offset shadow)
+- **Content**: "FANTASY GPA: PENDING" in Luckiest Guy, "No NFL tape yet — check back after Week 4" in Space Mono, razzle.lol watermark
+- **Optional**: Caveat-font handwritten annotation: "film room's empty" with a small arrow
+- **Build time**: ~15 minutes (static HTML, one Playwright screenshot, done forever)
+
+This badge accomplishes:
+- Visual brand presence in the reply (better than text-only)
+- Watermark impression even on the redirect
+- Reusable for ALL rookies (Jeanty, Hunter, Love, Simpson, every single one)
+- Creates anticipation: "check back after Week 4" is a retention hook
+
+### Reply Template for Rookie Requests
+
+```
+[Image: GPA PENDING badge]
+
+No NFL tape yet — Fantasy GPA needs real game data to grade.
+
+Closest veteran comp: **[Breece Hall]** → [drop Hall's GPA card image]
+
+Hall's GPA: 3.41 (B+) — A- Efficiency, B Consistency, C+ Schedule.
+[Player Name] projects into a similar usage profile.
+Check back after Week 4 for the real report card.
+
+Built with razzle.lol — free fantasy research lab.
+```
+
+This template gives them TWO images (badge + veteran card = 2 watermark impressions), a veteran comp to debate, and a Week 4 callback hook. Three engagement vectors from one rookie request.
+
+### Self-Critique
+
+1. **The "check back after Week 4" promise creates a content obligation.** If you say "after Week 4" and don't deliver rookie GPA cards in October, you lose credibility. However, the in-season posting cadence (Q94: weekly during season) means you'd naturally produce rookie cards by Week 5. This isn't a new obligation — it's a promise aligned with existing plans. **Confidence: 8/10.**
+
+2. **The veteran comp requires knowing which comp to suggest.** For top rookies (Jeanty→Hall, Hunter→Jefferson, Love→Swift), the comps are obvious. For mid-round picks or obscure requests, you'd need to improvise. The Q92 pre-stage list has 12 players with GPA cards ready — most comp redirects will land on one of those 12. **Confidence: 7/10.**
+
+3. **A 400×200 badge might look too small / throwaway next to a full GPA card.** Reddit image comments scale to fit the thread. The badge needs to be legible at thumbnail size. At 400×200, the "GPA PENDING" text needs to be at least 28px to be readable in a collapsed image preview. Test before deploying. **Confidence: 7/10.**
+
+4. **"No NFL tape yet" may feel dismissive to dynasty managers who consider college production critical.** Counter: the GPA brand is explicitly about NFL performance. Framing it as "we take grading seriously — we don't give grades without real data" is a credibility signal, not a dismissal. But the tone matters. "Film room's empty" (Caveat annotation) softens it with personality. **Confidence: 8/10.**
+
+Sources:
+- [PlayerProfiler NFL Rookie Guide](https://www.playerprofiler.com/rookie-guide-scouting-report/) — full prospect profiles with college analytics
+- [Dynasty Nerds Combine Tracker](https://www.dynastynerds.com/dynasty-tools/combine-results/) — NAS scores, drill results, position breakdowns
+- [Reddit Lead Gen: 30-Day Plan](https://www.subredditsignals.com/blog/reddit-lead-gen-in-2026-the-complete-30-day-plan-no-api-approval-no-ban-risk) — comment-first engagement earns attention before asking
+- Sprint Q92 (rookie engagement trap insight), Q90 (rookies excluded from Report Card), Q94 (in-season weekly cadence)
+
+### Implications for Razzle
+
+1. **Do not add rookie card generation to `generate_prestage.py`.** The script generates 12 veteran GPA cards + Honor Roll + reply templates + first comment. Adding a rookie path means branching logic, college data lookups, a separate canvas template, and testing — all for an image that's inferior to the text redirect. Keep the script focused.
+
+2. **Build the "GPA PENDING" badge as a static asset.** Create it once in `frontend/assets/gpa-pending.png` (or generate it from an HTML template with Playwright). It never changes. It's not per-player. It's a brand asset, not a data visualization.
+
+3. **Pre-write 3-4 veteran comp mappings for the most-requested rookies.** Based on Q92's Reddit scrape frequency data and the 2026 draft class: Jeanty→Hall (workhorse RB), Hunter→Jefferson (alpha WR), Love→Swift (speed back), Simpson→Stroud (pocket passer). Store these in the reply template file so they're ready on post day. Update the comp list 48 hours before each post using fresh scrape data.
+
+4. **The "check back after Week 4" hook is a retention mechanism.** Track which users request rookie cards. When the in-season series starts (Q94: weekly during NFL season), reply to those original commenters with the real card. This creates a callback loop: request → pending → delivery. Reddit notifies users of replies to their comments, so a Week 5 reply to an April comment will surface organically.
+
+5. **If someone insists on seeing rookie data, redirect to the Rookie Big Board.** Razzle already has `/prospects.html` with RPS tiers, percentile bars, and combine data. Reply: "No GPA yet, but here's the full scouting profile → razzle.lol/prospects.html." This drives traffic to the site and shows the tool's depth without breaking the GPA brand.
+
+### Open Questions
+
+1. **Should Razzle build a "season mode" toggle for the Report Card that auto-updates grades after each NFL week — and what's the minimum backend work to make weekly in-season posts sustainable without manual data intervention?**
+
+2. **What is the optimal Reddit image hosting strategy — direct image upload (i.redd.it), Imgur album link, or inline image in a text post — and which format maximizes both visibility and watermark retention?**
+
+3. **What's the optimal veteran comp methodology — should comps be based on college production profile similarity (Dominator Rating, Breakout Age), draft capital similarity (pick range), or physical archetype similarity (height/weight/speed) — and does the comp need to be accurate or just conversation-starting?**
+
+## NEXT QUESTION: Should Razzle build a "season mode" toggle for the Report Card that auto-updates grades after each NFL week — and what's the minimum backend work to make weekly in-season posts sustainable without manual data intervention?
