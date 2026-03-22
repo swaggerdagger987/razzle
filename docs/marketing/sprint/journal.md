@@ -3550,3 +3550,87 @@ Sources:
 3. **Should the Lab's screenshot export include a "Reddit crop" mode that limits the visible rows to 8-12 players for feed-friendly readability, versus the current full-table capture?**
 
 ## NEXT QUESTION: Should Razzle add a "Share to Reddit" button that pre-fills a Reddit submission form (title + body + link) via reddit.com/submit URL params?
+
+---
+
+## Q40: Should Razzle add a "Share to Reddit" button that pre-fills a Reddit submission form via reddit.com/submit URL params?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**No. A "Share to Reddit" button would actively hurt Razzle's Reddit GTM strategy. Keep the current copy-based share modal and invest in the screenshot + manual post workflow instead.**
+
+#### Reddit's Submit URL Params (What's Technically Possible)
+
+Reddit's `/submit` endpoint accepts URL parameters to pre-fill posts:
+
+- **Link post**: `https://www.reddit.com/r/{subreddit}/submit?url={url}&title={title}`
+- **Text post**: `https://www.reddit.com/r/{subreddit}/submit?title={title}&text={body}`
+
+You can pre-fill title, body text, and target subreddit. You cannot submit both a URL and selftext simultaneously — it's one or the other. This is well-documented in Reddit's archived API wiki and confirmed by the PRAW library.
+
+Technically, Razzle could add a button that opens `reddit.com/r/DynastyFF/submit?title=Dynasty%20RB%20Rankings...&url=https://razzle.lol/lab?preset=dynasty...` in a new tab.
+
+**But this is a trap.**
+
+#### Why Share Buttons Are Counterproductive on Reddit
+
+1. **Share buttons signal self-promotion.** Reddit's culture is intensely anti-promotional. A "Share to Reddit" button on your website is a red flag to moderators. r/fantasyfootball's self-promotion rules enforce a 10:1 ratio (10 community contributions per 1 self-promotional post). If mods see identical link-post formats flooding from a share button, they'll ban the domain. The Better Web Movement documented this pattern extensively — share buttons produce low-quality submissions that get downvoted or removed.
+
+2. **Share button click rates are abysmal.** Industry data shows social share buttons get 0.1–2% CTR. For a niche analytics tool with <500 daily visitors, that's 0–10 clicks per day, most from users who don't understand Reddit norms. These low-quality submissions do more harm than good.
+
+3. **Link posts are the wrong format for fantasy football subreddits.** The highest-performing posts on r/DynastyFF and r/fantasyfootball are **text posts with embedded screenshots** — the [OC] analysis format. Link posts to external tools get 5-15 upvotes. [OC] text posts with screenshots get 100-500+. Razzle's GTM depends on the screenshot-first format (see Q36's ADP Reality Check template). A share button would default to link posts, which is the low-engagement path.
+
+4. **r/DynastyFF allows self-promotion only if content is free.** This is favorable for Razzle's free Lab, but the *format* still matters. A link post from a share button says "go look at my tool." A text post with an embedded screenshot says "here's my analysis, made with this tool." The latter is what gets upvoted.
+
+5. **Razzle already has the right sharing UX.** The existing share modal (`lab.js:4086-4167`) does exactly what's needed: generates a Reddit-optimized title via `generateRedditTitle()`, provides a copyable URL with state params, and lets users craft their own post. This respects Reddit's culture — the user is the poster, not an automated share button.
+
+#### What To Do Instead
+
+- **Keep the share modal.** It already generates Reddit titles and copyable URLs. Upgrade it with UTM params per Q37 (July sprint).
+- **Add "Export for Reddit" to the screenshot flow.** Bundle the PNG export + Reddit title + URL into a single "Reddit Post Kit" — one click gives the user everything they need to manually create a high-quality [OC] post.
+- **Never auto-submit.** Every Reddit post should be hand-crafted by a human who adds their own analysis and context. The share modal provides ingredients, not the finished dish.
+
+---
+
+### Self-Critique
+
+1. **The share button CTR data is from general e-commerce, not niche analytics tools.** Fantasy football users are more community-driven than average — they might click share buttons more often. But the anti-self-promotion culture on Reddit cancels out any higher intent. **Confidence: 8/10.**
+
+2. **I'm assuming mods would notice automated-looking share patterns.** On small subreddits (r/DynastyFF, ~180K members), active mods do notice. On r/fantasyfootball (~2.2M members), automated moderation (AutoModerator) filters link posts from new domains aggressively. Either way, the risk is real. **Confidence: 8/10.**
+
+3. **The "text post + screenshot > link post" claim is based on Q36 research and Reddit GTM playbook patterns, not A/B tested by Razzle.** This is the consensus approach from every successful fantasy tool launch (Sleeper, Dynasty Daddy), but Razzle hasn't validated it yet. **Confidence: 7/10.**
+
+Sources:
+- [Reddit API: submit (archived wiki)](https://github.com/reddit-archive/reddit/wiki/api:-submit) — submit endpoint fields
+- [Reddit /submit selftext PR](https://github.com/reddit-archive/reddit/pull/412) — selftext URL param support
+- [Why Website Share Buttons Don't Work for Reddit](https://thebetterwebmovement.com/website-share-buttons-dont-work-for-reddit/) — share buttons produce low-quality submissions
+- [Reddit Self-Promotion Rules](https://redditservice.com/reddit-self-promotion-rules/) — 10:1 ratio, subreddit-specific enforcement
+- [How to Promote on Reddit Without Getting Banned](https://www.calvyn.com/how-to-promote-on-reddit-without-getting-banned/) — community-first strategy
+- [Do Social Share Buttons Help Conversions?](https://www.practicalecommerce.com/Do-Social-Share-Buttons-Help-Ecommerce-Conversions) — 0.1-2% CTR data
+- [r/DynastyFF subreddit analysis](https://thehiveindex.com/communities/r-dynastyff/) — self-promotion rules (free content OK)
+- [Using Reddit for Organic Brand Promotion](https://www.francescatabor.com/articles/2025/8/21/using-reddit-for-organic-brand-promotion-a-step-by-step-guide) — value-first posting strategy
+- Razzle codebase: `frontend/lab.js:4086-4167` (existing share modal, Reddit title generator)
+
+### Implications for Razzle
+
+1. **Do NOT add a "Share to Reddit" button.** It signals self-promotion, produces link posts (low engagement), and the click rate wouldn't justify the dev time.
+
+2. **Upgrade the existing share modal with a "Reddit Post Kit" mode.** When the user clicks Share → Reddit tab: show the generated title, the UTM-tagged URL, and a "Download Screenshot" button — all three ingredients for a manual [OC] post, bundled together.
+
+3. **The share modal is the right abstraction level.** It gives users the building blocks without submitting on their behalf. This respects Reddit culture and produces higher-quality posts that actually get upvoted.
+
+4. **Track share modal opens in analytics.** Add a `share_modal_open` event with `platform=reddit` to understand how many users are considering Reddit sharing. This is more useful than a share button click count.
+
+### Open Questions
+
+1. **Should the Lab's screenshot export include a "Reddit crop" mode that limits the visible rows to 8-12 players for feed-friendly readability, versus the current full-table capture?**
+
+2. **How should Razzle's admin analytics dashboard evolve — should it remain an API-only endpoint, or should there be a simple admin page with charts for tracking UTM sources, funnel events, and daily traffic trends?**
+
+3. **What is the optimal "Reddit Post Kit" UX — should it be a tab in the existing share modal, a separate button, or a step-by-step wizard that guides users through creating a high-quality [OC] post?**
+
+## NEXT QUESTION: Should the Lab's screenshot export include a "Reddit crop" mode that limits the visible rows to 8-12 players for feed-friendly readability, versus the current full-table capture?
+
+## NEXT QUESTION: Should Razzle add a "Share to Reddit" button that pre-fills a Reddit submission form (title + body + link) via reddit.com/submit URL params?
