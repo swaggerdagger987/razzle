@@ -1,6 +1,6 @@
 {
-  "last_ticket_id": 6,
-  "last_run": "2026-03-21",
+  "last_ticket_id": 16,
+  "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
     "lab.html (desktop 1280, mobile 375)",
@@ -17,7 +17,15 @@
     "sitewide footer consistency audit (5 main pages + standalone pages)",
     "agents.html (code review — warroom.js BIOS array vs DESIGN.md agent identities)",
     "about.html (code review — footer check)",
-    "pricing.html (code review — feature matrix, FAQ, dark mode variables)"
+    "pricing.html (code review — feature matrix, FAQ, dark mode variables)",
+    "og-image.png (visual review — tagline audit)",
+    "sitewide 1px border audit (58 panel pages via grep)",
+    "sitewide border-radius audit (index.html, pricing.html)",
+    "sitewide box-shadow audit (styles.css, index.html)",
+    "sitewide font-family audit (nav, buttons, logo)",
+    "agent-config.js vs home page demo cards (name consistency)",
+    "pricing.html vs about.html (panel count copy audit)",
+    "styles.css (auth modal, theme toggle, button classes)"
   ],
   "tickets_written": [
     {
@@ -46,34 +54,104 @@
       "file": "designer-tickets/open/004-watermark-style-inconsistency-sitewide.md",
       "priority": "P2",
       "area": "sitewide",
-      "summary": "Watermark implemented 5 different ways across 15 pages — 3 fonts, 4 opacities, 4 z-indexes. Undermines brand on Reddit screenshots."
+      "summary": "Watermark implemented 5 different ways across 15 pages — 3 fonts, 4 opacities, 4 z-indexes"
     },
     {
       "id": "DES-005",
       "file": "designer-tickets/open/005-prompts-page-missing-full-footer.md",
       "priority": "P2",
       "area": "prompts.html",
-      "summary": "Prompts page has minimal 2-line footer instead of full 6-column nav footer — conversion dead end for SEO funnel traffic"
+      "summary": "Prompts page has minimal 2-line footer instead of full 6-column nav footer"
     },
     {
       "id": "DES-006",
       "file": "designer-tickets/open/006-situation-room-agent-emojis-wrong.md",
       "priority": "P2",
       "area": "agents.html",
-      "summary": "3 of 6 agent emojis/animals wrong on Situation Room — Dolphin shown as Owl, Fox shown as Bear, Octopus shown as Fox. Home page contradicts agents page."
+      "summary": "3 of 6 agent emojis/animals wrong on Situation Room"
+    },
+    {
+      "id": "DES-007",
+      "file": "designer-tickets/open/007-og-image-wrong-tagline.md",
+      "priority": "P0",
+      "area": "sitewide (OG image)",
+      "summary": "OG image says 'bloomberg terminal' — old tagline. Should say 'research lab'. Blocks Twitter launch quality."
+    },
+    {
+      "id": "DES-008",
+      "file": "designer-tickets/open/008-fake-testimonials-home-page.md",
+      "priority": "P1",
+      "area": "index.html",
+      "summary": "3 fabricated testimonials with fake Reddit/Twitter usernames. Credibility risk before Reddit seeding."
+    },
+    {
+      "id": "DES-009",
+      "file": "designer-tickets/open/009-logo-text-wrong-font.md",
+      "priority": "P1",
+      "area": "sitewide (styles.css)",
+      "summary": "Logo 'Razzle.lol' in Space Mono — missing font-family: var(--font-display). Brand identity issue."
+    },
+    {
+      "id": "DES-010",
+      "file": "designer-tickets/open/010-1px-borders-sitewide-panels.md",
+      "priority": "P1",
+      "area": "sitewide (58+ pages)",
+      "summary": "64 occurrences of 1px solid borders on data rows. DESIGN.md says 2px dashed. Supersedes DES-002."
+    },
+    {
+      "id": "DES-011",
+      "file": "designer-tickets/open/011-pricing-card-border-radius-mismatch.md",
+      "priority": "P2",
+      "area": "index.html + pricing.html",
+      "summary": "Pricing cards 12px radius on home, 8px on pricing page. Same component, different pages."
+    },
+    {
+      "id": "DES-012",
+      "file": "designer-tickets/open/012-shadow-size-inconsistency-home.md",
+      "priority": "P2",
+      "area": "index.html",
+      "summary": "social-card and smart-chip use 3px shadow instead of design-spec 4px."
+    },
+    {
+      "id": "DES-013",
+      "file": "designer-tickets/open/013-panel-count-undersell-pricing.md",
+      "priority": "P2",
+      "area": "pricing.html + about.html",
+      "summary": "'60+ panels' on 7 instances across 2 pages. Actual count is 67+. North Star says '70+'."
+    },
+    {
+      "id": "DES-014",
+      "file": "designer-tickets/open/014-agent-name-mismatch-home-demo.md",
+      "priority": "P2",
+      "area": "index.html",
+      "summary": "Demo card says 'The Diplomat' but agent-config.js name is 'Bones'. Brand confusion."
+    },
+    {
+      "id": "DES-015",
+      "file": "designer-tickets/open/015-nav-buttons-wrong-font-per-design-md.md",
+      "priority": "P2",
+      "area": "sitewide (styles.css)",
+      "summary": "Nav links + buttons use mono font but DESIGN.md type scale says display. Spec/code mismatch needs resolution."
+    },
+    {
+      "id": "DES-016",
+      "file": "designer-tickets/open/016-border-radius-ungoverned.md",
+      "priority": "P2",
+      "area": "sitewide (CSS architecture)",
+      "summary": "--radius CSS var (12px) defined but barely used. 7+ hardcoded values across home page alone."
     }
   ],
   "notes": [
-    "Production site (razzle.lol) returned blank HTML in headless browser — may be down or blocking headless",
-    "Backend not running locally so all data-dependent pages show error states (expected)",
-    "Dark mode toggle on mobile nav has only 6px right margin — tight but not clipped",
-    "Fake testimonials on home page will be credibility risk on Reddit",
-    "Agent name inconsistency: DESIGN.md says 'The Fox', agent-config.js says 'Bones', home page says 'THE DIPLOMAT' — now partially covered by DES-006 (emojis/animals), naming decision still open",
-    "--ink-light now ticketed as DES-003 — sitewide P1",
-    "1px solid borders on data rows appear in compare.html and tradevalues.html too — same pattern as DES-002 but sitewide",
-    "tradevalues.html has redirect to lab.html when loaded standalone — consolidation pattern",
-    "Footer audit: 4 main pages have full 6-col footer (index, agents, league-intel, pricing). prompts.html has minimal footer. ~60 standalone panel pages have minimal footer too (acceptable since they redirect to lab.html). about.html has full 6-col footer now.",
-    "Dark mode --ink-light mismatch already covered by DES-003",
-    "Pricing page looks clean — feature matrix, FAQ, interval toggle, mobile breakpoints all solid"
+    "Production site (razzle.lol) still returns blank HTML in headless browser — confirmed 2026-03-22",
+    "OG image is the most impactful fix — every Twitter/Reddit link share shows wrong tagline",
+    "Fake testimonials note promoted to P1 ticket (DES-008)",
+    "Agent name inconsistency now ticketed as DES-014 — 'The Diplomat' vs 'Bones'",
+    "1px solid borders now ticketed as sitewide P1 (DES-010) — supersedes DES-002 scope",
+    "DES-015 is a spec/code mismatch — may result in DESIGN.md update rather than code change",
+    "No rogue font-family (sans-serif, arial, etc.) found in any frontend file — good",
+    "No 'Loading...' text found anywhere — all loading states use personality text — good",
+    "Auth modal styling is clean — proper chunky borders, dark mode support, focus states",
+    "All pages use consistent OG image path — but the image itself has wrong content",
+    "All agent SVG icons exist at /assets/agents/{name}.svg — 6 files present"
   ]
 }
