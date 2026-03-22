@@ -4800,4 +4800,110 @@ Sources:
 
 3. **What does Razzle's Reddit account warm-up activity (March 24 - April 15) need to look like — how many comments per day, which threads to target, what karma threshold to hit — to ensure the pre-draft posts aren't spam-filtered?**
 
+---
+
+## Q53: What does Razzle's Reddit account warm-up activity (March 24 - April 15) need to look like — how many comments per day, which threads to target, what karma threshold to hit — to ensure the pre-draft posts aren't spam-filtered?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Create the account TODAY (March 21), not March 24. Target 200+ comment karma across 3-4 fantasy football subs by April 15. Post 3-5 genuine comments per day on rising threads during peak hours (12-3 PM ET weekdays, 7-10 PM ET weekends). Zero self-promotion until the April 16 content cadence begins. The account must be 25+ days old with a visible comment history before the first OC post.**
+
+#### Why Account Age Matters More Than Karma
+
+Reddit's spam filter applies heightened monitoring to accounts under 30 days old with under 100 karma. Most fantasy football subreddits use AutoModerator with undisclosed karma and account-age thresholds — but industry research consistently shows 30 days + 100 karma clears the majority of filters, and 60 days + 300 karma clears virtually all of them. If the account is created March 21, it hits 26 days by April 16 (first OC post) and 33 days by April 23 (Draft Night). That's tight but workable — every day earlier helps.
+
+#### The 23-Day Warm-Up Plan (March 24 - April 15)
+
+**Phase 1: Lurk & Comment (March 24 - March 30) — 3 comments/day**
+
+Target subs: r/DynastyFF, r/fantasyfootball, r/NFL_Draft, r/nfl. Comment on free agency reaction threads — this is peak offseason discussion. Every landing spot change generates dozens of "what does this mean for dynasty?" threads. Comment with stat-backed takes: "Gainwell's 73 receptions last year make him a PPR floor play in Tampa — 14M/2yr says they're using him in the Ekeler mold." Don't link anything. Don't mention razzle.lol. Just be a knowledgeable fantasy manager.
+
+**Phase 2: Increase Volume (March 31 - April 7) — 4-5 comments/day**
+
+Shift toward r/DynastyFF specifically (this is the April 23 target sub). Comment on rookie ranking posts, mock draft threads, and "rate my roster" threads. Provide actual analysis: "You're light at RB2 but your WR depth is elite — I'd flip one of those WR3s for a mid-1st and target the RB class." Sort by Rising, not Hot — early comments on rising posts earn 3-5x more karma than late comments on viral posts. Target threads posted within the last 1-2 hours.
+
+**Phase 3: Establish Voice (April 8 - April 15) — 5 comments/day**
+
+Start making slightly longer, more analytical comments that preview the "data analyst" voice Razzle will use in OC posts. "I've been tracking target share trends and Nabers' 28% share as a rookie is historically elite — only 3 other rookies hit that since 2015." This primes the community: when the April 16 OC post drops from this account, the username will already be familiar from quality comments.
+
+#### Karma Targets
+
+| Date | Target Karma | Milestone |
+|------|-------------|-----------|
+| March 30 | 50+ | Past the lowest AutoMod thresholds |
+| April 7 | 150+ | Clears most subreddit filters |
+| April 15 | 200-300+ | Comfortable buffer for OC posting |
+
+**How realistic are these numbers?** A thoughtful comment on a rising r/DynastyFF thread averages 5-15 upvotes. A strong take that sparks discussion can hit 30-50+. At 3-5 comments/day with average 5-8 karma each, that's 15-40 karma/day. 200+ in 23 days is conservative. 300+ is achievable with a few viral comments.
+
+#### Threads to Target (March-April 2026 Offseason)
+
+1. **Free agency reactions** (March 24-31): Every signing generates a "[Player] signs with [Team] — Dynasty Impact?" thread. These get 50-200 comments. Comment early with a stat-backed take.
+2. **Mock draft discussions** (ongoing): "Post your 1QB rookie mock" threads are posted daily. Disagree with a pick and explain why with data.
+3. **"Rate my roster" / trade advice threads** (daily): The daily trade threads in r/DynastyFF get dozens of posts. Give 2-3 quick trade evaluations per day. High volume, easy karma, builds goodwill.
+4. **NFL Draft prospect debates** (April 1-22): "Is [Prospect] WR1 of this class?" threads intensify as the draft approaches. Take a stance with college stats.
+5. **Dynasty rankings posts** (weekly): Community members post rankings. Comment with specific disagreements: "I have [Player X] 5 spots higher because his target share delta is +8% YoY."
+
+#### The 90/10 Rule
+
+Reddit's self-promotion guideline: no more than 10% of activity should be promotional. Before the first OC post on April 16, the account will have 23 days × 4 avg comments = ~92 genuine comments with zero promotion. That gives a massive buffer. Even after 4 OC posts during pre-draft week (April 16-22), the ratio stays at ~92 genuine : 4 promotional = 96/4 = well within the 90/10 guideline. The warm-up phase is entirely non-promotional — it's building the "trust bank" that allows the OC content cadence.
+
+#### What NOT To Do
+
+- **Don't comment on posts older than 6 hours** — buried comments earn no karma and look like bot behavior.
+- **Don't use the same opening phrase repeatedly** — "As a dynasty manager..." on every comment gets flagged.
+- **Don't drop razzle.lol links or mention the site** — not once during warm-up. The first mention of razzle.lol comes via the watermark on Lab screenshots in OC posts, never in comments.
+- **Don't comment in subs outside the fantasy football ecosystem** — account history should read like a genuine dynasty enthusiast, not a marketer who posts in 50 random subs.
+- **Don't post any text posts or link posts during warm-up** — comments only. The first post is the April 16 OC (Q51 cadence).
+
+### Self-Critique
+
+1. **The "create account today" advice assumes the account doesn't already exist.** If it was created earlier, the timeline is even more favorable. If it's created after March 24, the 30-day threshold won't be met before April 23 — which is the real risk. **Confidence: 9/10 — account age is the single most important variable and the one with zero workaround.**
+
+2. **Karma targets of 200-300 are achievable but not guaranteed.** r/DynastyFF is a smaller sub (~121K members) than r/fantasyfootball (~300K+). Smaller subs mean fewer eyeballs per comment but also less competition for visibility. The daily trade threads are high-volume, low-karma-per-comment (1-5 upvotes each) but consistent. A breakout comment on a hot free agency thread could deliver 50+ karma in one shot. **Confidence: 7/10 — depends on comment quality and timing.**
+
+3. **The "don't comment outside fantasy football" rule is opinionated.** Some warm-up guides recommend diversifying across subs to look more natural. But for Razzle's purpose, a focused comment history in r/DynastyFF actually helps — when the OC posts drop, anyone who clicks the username sees a consistent fantasy analyst. A history full of r/AskReddit one-liners would undermine credibility. **Confidence: 8/10.**
+
+4. **AutoMod thresholds for r/DynastyFF and r/fantasyfootball are unknown.** No subreddit publishes these. The 100 karma / 30 day estimates are based on industry benchmarks across hundreds of subs. Fantasy football subs may be more or less strict. The only way to know is to attempt a post and see if it's auto-removed. **Confidence: 6/10 on exact threshold, 9/10 on the warm-up strategy being the right approach regardless.**
+
+5. **Peak engagement times (12-3 PM ET) are well-documented** across multiple sources and match when fantasy football content creators publish. During draft week, evening activity (6-10 PM ET) may spike further. **Confidence: 8/10.**
+
+Sources:
+- [How to Warm Up Your Reddit Account — RedReach](https://redreach.ai/guide/how-to-warm-up-reddit-account)
+- [Reddit Account Warm-Up Guide 2026 — IPFoxy](https://www.ipfoxy.com/blog/ideas-inspiration/5535)
+- [Avoiding Reddit's Spam Filters — SingleGrain](https://www.singlegrain.com/social-media-management/best-practices/avoiding-reddits-spam-filters-best-practices-for-promotion/)
+- [How to Warm Up a Reddit Account: 2026 Guide — Multilogin](https://multilogin.com/blog/how-to-warm-up-a-reddit-account/)
+- [How to Avoid Reddit Spam Rules: 2026 Guide — PainOnSocial](https://painonsocial.com/blog/how-to-avoid-reddit-spam-rules)
+- [Getting Started with Reddit: 7 Critical Mistakes — Chameleon](https://chameleonmode.com/getting-started-with-reddit/)
+- [Reddit Karma Building for Marketing — SingleGrain](https://www.singlegrain.com/search-everywhere-optimization/reddit-karma-how-to-build-high-karma-accounts-for-marketing-success/)
+- [How to Farm Karma on Reddit: 2026 Guide — Reppit](https://reppit.ai/blog/reddit-karma-farming-guide)
+- [Reddit Self-Promotion Rules — ReplyAgent](https://www.replyagent.ai/blog/reddit-self-promotion-rules-naturally-mention-product)
+- [Reddit Marketing Strategy for 2026 — Link-Assistant](https://www.link-assistant.com/news/reddit-marketing.html)
+- [Poster Eligibility Guide — Reddit Help](https://support.reddithelp.com/hc/en-us/articles/33702751586836-Poster-Eligibility-Guide-Post-Check)
+- [Spam Policy — Reddit Help](https://support.reddithelp.com/hc/en-us/articles/360043504051-What-constitutes-spam-Am-I-a-spammer)
+
+### Implications for Razzle
+
+1. **Create the Reddit account TODAY (March 21) if it doesn't exist.** Every day of account age is non-recoverable. A March 21 creation date gives 33 days by Draft Night — clearing the 30-day filter. A March 25 creation gives only 29 days — under the threshold. This is the single highest-priority action item from all 53 sprint questions.
+
+2. **Build a daily comment tracker.** Add a row to `scripts/predraft_metrics.csv` or create `scripts/reddit_warmup_log.csv` with columns: `date, subreddit, thread_title, comment_summary, upvotes_24h`. Track karma accumulation daily. If trending below 150 by April 7, increase to 6-7 comments/day.
+
+3. **The warm-up period IS content research.** Every comment is a data point: which takes resonate? Which threads get the most engagement? Which posting times work? By April 15, Razzle will have 23 days of firsthand data on what the r/DynastyFF community responds to — invaluable for calibrating the OC post tone and format.
+
+4. **The April 16 QB deep dive (Q51 Day 1) is the critical test.** If the post is auto-removed, message the mods immediately: "Hi, I posted OC analysis in your sub and it seems to have been caught by the filter. Can you approve it?" Most mods approve genuine OC from new accounts manually. Having 25+ days of comment history in the sub makes this request credible.
+
+5. **Start commenting on r/DynastyFF daily trade threads immediately.** These are the easiest karma source — hundreds of posts per day asking "should I trade X for Y?" A 2-sentence analysis per trade takes 30 seconds and earns 1-5 karma each. Ten of these over a week = 10-50 karma with minimal effort. Stack them with a few longer analytical comments on hot threads for the big karma hits.
+
+### Open Questions
+
+1. **Should Razzle automate Lab screenshot generation for draft night — a headless browser script that captures preset views after each DB update — to compress the 10-minute manual screenshot step to under 1 minute?**
+
+2. **What specific "voice" and commenting style should Razzle use during the warm-up phase — data-forward analyst, hot-take provocateur, helpful trade advisor, or a blend — and does the voice need to match the OC post voice exactly?**
+
+3. **Should Razzle create a second Reddit account as a backup in case the primary account gets flagged or spam-filtered despite the warm-up — or does operating two accounts violate Reddit's TOS and create more risk than it mitigates?**
+
+## NEXT QUESTION: Should Razzle automate Lab screenshot generation for draft night — a headless browser script that captures preset views after each DB update — to compress the 10-minute manual screenshot step to under 1 minute?
+
 ## NEXT QUESTION: What does Razzle's Reddit account warm-up activity (March 24 - April 15) need to look like — how many comments per day, which threads to target, what karma threshold to hit — to ensure the pre-draft posts aren't spam-filtered?
