@@ -8250,4 +8250,101 @@ Sources:
 
 3. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral -- should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
 
-## NEXT QUESTION: Should the playbook include a "Player Request Log" template -- a simple table where the operator records every player name requested during each monitoring session -- and should that log feed into an automated Tier 1 pre-stage list that evolves across multiple OC posts?
+---
+
+## Q85: Should the playbook include a Player Request Log — and should it feed into an automated Tier 1 pre-stage list?
+
+**Date**: 2026-03-21
+**Category**: Content Operations / Feedback Loop
+**Prior context**: Q81 (monitoring workflow, "track which players get requested"), Q82 (screenshot playbook), Q84 (post-mortem spreadsheet)
+
+### Answer
+
+**Yes, add a Player Request Log — but keep it dead simple (one column of player names with tally marks) and do NOT automate the Tier 1 list. The log is a manual tally filled during the monitoring window; the Tier 1 list is a human judgment call made the morning of the next post. Automation at this scale (1-2 posts/week, 10-30 requests per post) adds complexity without value.**
+
+#### Why Log Player Requests At All
+
+Q81 identified this explicitly: "After each OC post, log the player names from comment requests. Over 3-4 posts, patterns will emerge (e.g., 'Hall gets asked about every time'). This data refines the Tier 1 pre-stage list and reduces reliance on the morning-of Tier 2 check."
+
+The core insight: the 5-player Tier 1 pre-stage list from Q81 is currently based on the sprint researcher's analysis of r/DynastyFF debates (Q73/Q75). That's a good starting point, but after 3-4 actual OC posts, real request data should replace the researcher's guesses. The Player Request Log is the feedback mechanism.
+
+Content feedback loop research confirms this pattern: "Take note of feedback that you get repeatedly — those are the recommendations you need to apply ASAP or turn into their own content pieces" ([Penfriend](https://penfriend.ai/blog/creating-audience-feedback-loops)). Player requests ARE the feedback. The players people ask about repeatedly are the players you pre-stage.
+
+#### The Log Template
+
+Add this to the bottom of each post-mortem spreadsheet row (Q84):
+
+```
+Player_Requests (comma-separated): Hall, Walker, Nabers, St. Brown, Addison, Hall, Bowers, Hall
+```
+
+That's it. One field. Comma-separated player names, recorded as they come in during the 4-hour monitoring window. No timestamps, no categories, no metadata. You are logging during an active engagement session — every second of overhead steals from reply time.
+
+**When to log**: Jot down names in a scratchpad (Notepad, phone Notes app) during the monitoring window. Transfer to the spreadsheet at T+48h when filling in the post-mortem row. Do NOT try to maintain a structured table during the live session.
+
+**What counts as a "request"**: Any comment that names a specific player and expects analysis — "run Breece Hall," "what about Addison?", "can you do this for Mahomes?" Ignore generic comments ("nice work", "love this tool") and meta-questions ("what data source do you use?").
+
+#### Why NOT to Automate
+
+At 1-2 posts per week with 10-30 player requests per post, the dataset after 4 weeks is: 40-120 player names. This fits in your head. You do not need:
+
+- **A database or tracking app.** A spreadsheet column is sufficient for 100 data points.
+- **Automated frequency counting.** After 4 posts, you can scan the comma-separated lists and see "Hall appears 7 times, Walker 5 times, Nabers 4 times" by eye. The `COUNTIF` formula in Google Sheets handles this if you want confirmation.
+- **An "automated Tier 1 list generator."** The Tier 1 list isn't just "most requested players" — it's a judgment call that factors in (a) frequency of requests, (b) current debate intensity on r/DynastyFF that week, (c) which Saved Views produce the most compelling screenshots, and (d) what the OC post topic is. A frequency sort cannot capture all four dimensions.
+
+Automation makes sense at 10+ posts/week with 100+ requests per post — roughly the scale where manual scanning becomes unreliable. At 1-2 posts/week, automation is premature infrastructure.
+
+#### How the Log Feeds the Tier 1 List (Manually)
+
+Every 3 posts (the rolling comparison cadence from Q84), review the request log:
+
+1. **Tally player names across all 3 posts.** Who appears 3+ times? Those are "always asked" players → permanent Tier 1.
+2. **Who appeared only once?** Those are noise — don't pre-stage them.
+3. **Who appeared 2 times?** Monitor — one more post confirms or drops them.
+4. **Update the screenshot playbook (Q82)** with the refined Tier 1 list. The playbook's "Guaranteed requests" section should reflect actual data after 3 posts, not the researcher's initial guesses.
+
+Over time, the Tier 1 list becomes data-driven rather than assumption-driven. The transition happens naturally around post 4-6 without any automation.
+
+#### Where the Log Lives
+
+Inside the post-mortem spreadsheet (Q84), not the screenshot playbook. The playbook is an operational runbook for the monitoring session — it should not contain historical data. The spreadsheet is the analytical artifact where post-performance data accumulates. The `Player_Requests` column sits alongside `Upvotes_24h`, `Saves_48h`, and `Registrations_48h`.
+
+### Self-Critique
+
+1. **The "one column of comma-separated names" format is pragmatic but loses context.** It doesn't capture whether the request was a top-level comment (high visibility) or a nested reply (low visibility), or whether the requester seemed like a potential power user vs. a drive-by commenter. However, adding these dimensions makes logging slower during an active session, and the sample size (10-30 per post) is too small for the extra dimensions to matter. **Confidence: 8/10.**
+
+2. **"You can see 'Hall appears 7 times' by eye" assumes clean data entry.** If the operator writes "Hall" sometimes and "Breece Hall" other times, or "Breece" vs "Hall," manual tallying gets messy. Mitigation: use last names only in the log. Dynasty players are usually referenced by last name on Reddit anyway. Edge case: multiple players sharing a last name (e.g., two Johnsons) — add first initial only when ambiguous. **Confidence: 8/10.**
+
+3. **The claim that automation is premature at 1-2 posts/week is a judgment call, not a hard rule.** Some solo operators prefer to automate early because it's fun and reduces cognitive overhead. The counter-argument: at this stage, every hour spent building a request-tracking system is an hour NOT spent on Share Mode (Q80), which is the actual bottleneck. The opportunity cost makes manual logging the right choice pre-launch. **Confidence: 8/10.**
+
+4. **"Permanent Tier 1" players may shift over time.** Breece Hall might be asked about in every April post but disappear in August when the conversation shifts to rookies. The 3-post rolling window handles this naturally — if Hall drops from requests for 3 consecutive posts, he falls off Tier 1. The log doesn't need a "decay" mechanism; the rolling window IS the decay. **Confidence: 9/10.**
+
+5. **This answer depends on the post-mortem spreadsheet (Q84) being maintained.** If the operator stops filling in the spreadsheet after 2 posts, the request log dies with it. The spreadsheet requires 5 minutes at T+48h — low effort, but any manual process risks abandonment. No mitigation except discipline. **Confidence: 7/10 on sustained adoption.**
+
+Sources:
+- [Penfriend: Creating Audience Feedback Loops](https://penfriend.ai/blog/creating-audience-feedback-loops) — track repeated audience requests, turn them into content
+- [FasterCapital: Content Feedback Loop](https://www.fastercapital.com/content/Content-calendar--Content-Feedback-Loop--Closing-the-Circle--Creating-a-Content-Feedback-Loop.html) — feedback as growth tool for creators
+- [Retable: Content Idea Tracking Template](https://www.retable.io/templates/content-idea-tracking-spreadsheet-template) — simple spreadsheet tracking for solo operators
+- Sprint Q81 (monitoring workflow — "track which players get requested")
+- Sprint Q82 (screenshot playbook — operational runbook separate from research)
+- Sprint Q84 (post-mortem spreadsheet — 18 columns, T+48h cadence, 3-post rolling comparison)
+
+### Implications for Razzle
+
+1. **Add one column to the Q84 post-mortem spreadsheet: `Player_Requests`.** Comma-separated last names, logged in scratchpad during monitoring and transferred at T+48h. No new infrastructure, no new document, no automation. This ships in 30 seconds — it's a column header in a Google Sheet.
+
+2. **After 3 posts (~2 weeks), update the screenshot playbook's Tier 1 list with actual data.** Replace the researcher's initial 5 players (Hall, Walker, Nabers, Mahomes, Robinson) with whatever the request log shows. If 3 of the 5 were right, keep them; replace the other 2. The playbook becomes a living document updated every 3 posts.
+
+3. **Do NOT build a request-tracking feature in the Lab.** The temptation is to add a "most requested players" widget or a request counter. This is product scope creep for a marketing operations problem. A spreadsheet column solves it. The Lab should stay focused on being the best screener, not a content management system.
+
+4. **The request log is also a content signal.** If the same player gets requested across multiple posts by different commenters, that player is a content topic — write an OC post specifically about them. The request log doesn't just refine the pre-stage list; it generates new OC post ideas. This is the "feedback loop" in the literal sense: audience requests → content → more requests.
+
+### Open Questions
+
+1. **Should Razzle build a lightweight "share page" (razzle.lol/share/{id}) that renders a saved screenshot with Open Graph meta tags — so when the URL is pasted into Reddit/Discord/Twitter, it auto-generates a rich preview card with the Lab screenshot as the thumbnail?**
+
+2. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral — should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
+
+3. **Should the post-mortem spreadsheet live as a Google Sheet (accessible from phone during monitoring) or as a local CSV in the repo (version-controlled, queryable) — and what's the optimal format for a solo operator who needs both mobile access and long-term data retention?**
+
+## NEXT QUESTION: Should Razzle build a lightweight "share page" (razzle.lol/share/{id}) that renders a saved screenshot with Open Graph meta tags — so when the URL is pasted into Reddit/Discord/Twitter, it auto-generates a rich preview card with the Lab screenshot as the thumbnail?
