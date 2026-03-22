@@ -2853,6 +2853,96 @@ Sources:
 
 3. **What does the first r/fantasyfootball "ADP Reality Check" post look like specifically — title, body structure, screenshot layout, and which players are the strongest ADP divergence candidates for August 2026?**
 
-## NEXT QUESTION: Where can Razzle source current-year ADP data for the Lab — FantasyPros consensus, Underdog ADP, Sleeper ADP, or nflverse — and what are the licensing/scraping implications?
+## Q33: Where can Razzle source current-year ADP data for the Lab — FantasyPros consensus, Underdog ADP, Sleeper ADP, or nflverse — and what are the licensing/scraping implications?
+
+**Date**: 2026-03-21
+
+### Answer
+
+**Fantasy Football Calculator's free REST API is the clear winner. It's the only ADP source with explicit commercial-use licensing, JSON output, no auth, and Python-friendly integration. Razzle should use it as the primary source and build Sleeper-derived ADP as a secondary signal.**
+
+**Source-by-Source Breakdown:**
+
+| Source | API? | ADP Data? | Auth? | Commercial Use? | Format | Risk |
+|--------|------|-----------|-------|-----------------|--------|------|
+| **Fantasy Football Calculator** | YES — REST | Yes (mock drafts) | None | Explicitly free for commercial use | JSON | Very low |
+| **Sleeper** | YES — REST | No dedicated ADP endpoint | None | Free, read-only | JSON | Low (compute ADP from draft picks) |
+| **FantasyPros** | No public API | Consensus ADP on site | N/A | robots.txt blocks /api/, /json/, /xml/ | HTML scrape | High — ToS unclear, scraping blocked |
+| **Underdog** | No public API | Best-ball ADP on site | N/A | No documented access | Third-party aggregators only | High — no direct access |
+| **ESPN** | Undocumented | Yes, internal | Browser cookie required | No — reverse-engineered | JSON (unstable) | Very high — breaks without warning |
+| **nflverse / ffverse** | CSV releases | No ADP dataset | None | Open source | N/A | N/A — doesn't exist |
+| **Yahoo** | OAuth API | Possibly | OAuth tokens | Developer program | XML/JSON | Medium — auth complexity |
+
+**The Play: Fantasy Football Calculator API**
+
+Endpoint: `GET https://fantasyfootballcalculator.com/api/v1/adp/{scoring_format}?teams={count}&year={year}`
+
+- Scoring formats: `standard`, `ppr`, `half-ppr`
+- Team sizes: `8`, `10`, `12`, `14`
+- Year: `2025`, `2026`, etc.
+- Response: JSON array of players with ADP values
+- Rate limit: "Don't call too frequently" — data updates once/day, so one daily fetch is sufficient
+- Attribution: must provide a link/mention to Fantasy Football Calculator
+- License: **explicitly free for personal and commercial use**
+
+This maps perfectly to Razzle's adapter pattern. Build an `adp_adapter.py` that fetches FFC ADP daily, normalizes player names to gsis_id via fuzzy matching against existing player table, and writes to a new `player_adp` table in terminal.db.
+
+**Secondary: Sleeper-Derived ADP**
+
+Sleeper's API exposes individual draft picks via `GET /v1/draft/{draft_id}/picks`. Razzle could aggregate picks across many public leagues to compute a Sleeper-specific ADP. This is more work (need to discover draft IDs, aggregate thousands of picks) but produces a unique data asset — "Sleeper ADP" that no other tool surfaces cleanly. This is a stretch goal, not a launch requirement.
+
+**What NOT to do:**
+
+1. **Don't scrape FantasyPros.** Their robots.txt explicitly blocks /api/, /json/, /xml/ paths with a 5-second crawl delay. Their Terms of Use at fantasypros.com/about/legal/ exist but are vague enough on scraping that legal risk isn't worth it for a free tool. The ffanalytics R package scrapes FantasyPros, but that's an open-source research tool — Razzle is a commercial product.
+
+2. **Don't reverse-engineer ESPN.** Their undocumented API requires extracting browser cookies (espn_s2), changes endpoints without notice (broke in August 2025), and has no license for external use.
+
+3. **Don't build a FantasyPros "consensus" scraper.** The value of consensus ADP can be referenced in post text without importing it into the Lab. Say "FantasyPros consensus has Player X at ADP 15" in the Reddit post body, then show the Lab screenshot with FFC ADP for the actual data column.
+
+---
+
+### Self-Critique
+
+1. **FFC mock draft ADP ≠ real draft ADP.** Fantasy Football Calculator's data comes from their mock draft simulator, not live platform drafts. Mock drafts skew toward more engaged/knowledgeable drafters. The ADP numbers may differ from Sleeper/ESPN/Yahoo live drafts by 5-15 picks for mid-round players. For Razzle's "ADP Reality Check" content, this is actually fine — the narrative is "ADP vs. production data," and any reasonable ADP source works for that comparison. **Confidence: 9/10** that FFC is sufficient for content purposes.
+
+2. **I could not verify the exact FFC API response schema.** The documentation confirms JSON with a players array, but I couldn't retrieve a sample response to confirm field names (e.g., is it `adp`, `average_pick`, or `avg_draft_position`?). The adapter will need to handle the actual response shape. **Confidence: 8/10** that integration will be straightforward — worst case is a 1-hour field-mapping exercise.
+
+3. **FFC attribution requirement is vague.** "A link or mention of some kind" — this could be satisfied by a footer line on the Lab ADP column tooltip ("ADP data via Fantasy Football Calculator") or in the Reddit post methodology section. Low risk. **Confidence: 9/10**.
+
+4. **Sleeper-derived ADP is speculative.** I haven't verified how many public draft IDs are discoverable or whether Sleeper's rate limit (1000 calls/min) is sufficient to aggregate meaningful ADP data. This is a nice-to-have, not a dependency. **Confidence: 5/10** on feasibility without more API exploration.
+
+5. **I haven't checked whether FFC has 2026 preseason data yet.** The ADP API likely doesn't populate until mock drafts begin in volume (June-July). For the August "ADP Reality Check" series, data should be available — but a June/July test fetch is needed to confirm. **Confidence: 7/10** that timing works.
+
+Sources:
+- [Fantasy Football Calculator ADP REST API Documentation](https://help.fantasyfootballcalculator.com/article/42-adp-rest-api) — endpoint format, free commercial use, attribution requirement
+- [Fantasy Football Calculator ADP Page](https://fantasyfootballcalculator.com/adp) — 2026 mock draft data (518+ drafts as of late Aug 2025)
+- [Sleeper API Documentation](https://docs.sleeper.com/) — draft picks endpoint, no ADP endpoint, trending players
+- [FantasyPros Terms of Use](https://www.fantasypros.com/about/legal/) — legal page exists, scraping policy unclear
+- [ffanalytics R Package (GitHub)](https://github.com/FantasyFootballAnalytics/ffanalytics) — scrapes FantasyPros/CBS/ESPN ADP, R-only
+- [ffscrapr Package](https://ffscrapr.ffverse.com/) — Sleeper/MFL/Fleaflicker API wrappers for R
+- [nflverse GitHub](https://github.com/nflverse) — no ADP dataset in nflverse releases
+- [FTN Fantasy ADP](https://ftnfantasy.com/fantasy/nfl/adp) — uses Sleeper draft data, website-only display
+
+### Implications for Razzle
+
+1. **Build `adp_adapter.py` in July.** Single adapter: fetch FFC API daily (one call per scoring format × team size = ~6 calls/day), fuzzy-match player names to gsis_id, write to `player_adp` table. Columns: player_id, name, position, team, adp_standard, adp_ppr, adp_half_ppr, source, fetched_at. This follows the existing adapter pattern (nflverse_adapter.py, cfbfastr_adapter.py).
+
+2. **Add ADP column to Lab screener.** New column in the Redraft Lab preset: "ADP" pulling from player_adp table. Sort by ADP ascending as default for the Redraft preset. The "ADP vs. PPG Rank" delta is the core content metric for the "ADP Reality Check" series.
+
+3. **Attribution: tooltip + post footer.** ADP column header tooltip: "Mock draft ADP via Fantasy Football Calculator." Reddit posts: "ADP data from Fantasy Football Calculator" in methodology section. Satisfies FFC's attribution requirement.
+
+4. **Test the API in June.** Before building the adapter, make a single test call to confirm: (a) 2026 data exists, (b) response schema shape, (c) player name format matches Razzle's player table. This is a 10-minute task.
+
+5. **Sleeper ADP is a Phase 2 differentiator.** If Razzle can aggregate Sleeper draft picks into a "Sleeper ADP" column alongside FFC ADP, that's a unique data point no competitor shows cleanly. But it's not needed for August content — it's a "would be cool" feature for September/October.
+
+### Open Questions
+
+1. **What does the `adp_adapter.py` implementation look like — schema, fuzzy matching strategy, and how does it integrate with the existing adapter pattern and Lab column system?**
+
+2. **Should Razzle create a separate "Redraft Mode" toggle in the Lab UI (alongside NFL/College/Prospects), or is a saved preset with ADP columns sufficient for August content?**
+
+3. **What does the first r/fantasyfootball "ADP Reality Check" post look like specifically — title, body structure, screenshot layout, and which players are the strongest ADP divergence candidates for August 2026?**
+
+## NEXT QUESTION: Should Razzle create a separate "Redraft Mode" toggle in the Lab UI (alongside NFL/College/Prospects), or is a saved preset with ADP columns sufficient for August content?
 
 ---
