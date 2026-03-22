@@ -4573,4 +4573,107 @@ Sources:
 
 3. **Should Razzle automate Lab screenshot generation for draft night — a headless browser script that captures preset views after each DB update — to compress the 10-minute manual screenshot step to under 1 minute?**
 
-## NEXT QUESTION: What is the optimal pre-draft content cadence for the week before the NFL Draft (April 21-23, 2026) to build Reddit/Twitter follower count, test engagement patterns, and set audience expectations for draft night coverage?
+## Q51: What is the optimal pre-draft content cadence for the week before the NFL Draft (April 21-23, 2026) to build Reddit/Twitter follower count, test engagement patterns, and set audience expectations for draft night coverage?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Seven posts across two platforms over seven days (April 16-22). One Reddit post + one Twitter thread per day, escalating intensity toward Draft Night. The cadence is: TEASE → EDUCATE → ENGAGE → PREVIEW. Each post is a dry run for draft night execution — testing screenshots, comment seeding, and the posting workflow before the stakes are real.**
+
+#### The Calendar: April 16-22 (Draft Week Minus One)
+
+The 2026 NFL Draft starts Thursday, April 23 at 8pm ET. The pre-draft week is the last window to build audience, test engagement patterns, and rehearse the content pipeline.
+
+**Wednesday April 16 — "The Tape" (Position Deep Dive)**
+- **Reddit (r/DynastyFF):** "I ran every 2026 QB prospect through 10 college stats. Here's what the data says." Lab Prospect screenshot filtered to QBs, heat-colored, 4:3 crop. Post 10am ET (weekday morning peak per Q10).
+- **Twitter:** Same screenshot as tweet + 3-tweet thread breaking down the top 3 QBs. Tag #DynastyFF #NFLDraft.
+- **Goal:** Test the Lab screenshot format. Measure: does heat coloring read clearly at Twitter card resolution? Does the Reddit crop look clean on mobile?
+
+**Thursday April 17 — "The Board" (Full Big Board Release)**
+- **Reddit (r/DynastyFF):** "My Pre-Draft Rookie Big Board — 30 prospects, RPS tiers, college stats. Let's argue." Full Prospect Big Board screenshot (top 15, 4:3 crop) + native Reddit image gallery with position-group views.
+- **Twitter:** Pin tweet of the Big Board screenshot. "Draft week. Here's my board. Roast it." Standalone tweet, not a thread.
+- **Goal:** This is the ANCHOR post. Q50 established that pre-draft content tests the position-group comment seeding pattern. Post 3 OP comments (QBs, RBs, WRs) to test whether they generate replies. If they do, use 5 comments on draft night. If they flop, drop to 2.
+
+**Friday April 18 — "The Value Play" (Veteran Impact)**
+- **Reddit (r/DynastyFF):** "5 veterans whose dynasty value changes the most based on where the top 5 picks land." Trade value chart screenshots showing current value + projected impact scenarios.
+- **Twitter:** Individual tweet per veteran. "If the Bears draft [RB] at 1.04, what happens to Roschon Johnson's value? Here's the data:" + Lab screenshot.
+- **Goal:** Test the "trade value shift" content format (Q46). This is a rehearsal for the post-draft value shift content.
+
+**Saturday April 19 — "The Conversation" (Community Engagement Day)**
+- **Reddit:** NO new post. Spend 30 minutes commenting on other people's pre-draft posts in r/DynastyFF. Respond to comments on Thursday's Big Board post. Answer questions. Build karma and reputation.
+- **Twitter:** Quote-tweet other dynasty analysts' mock drafts with Razzle's data takes. "Interesting — [analyst] has [player] at 1.03. Our college production data shows [stat]. What do you think?"
+- **Goal:** The 90-9-1 rule (Q50 research). Saturday is a "give back" day — pure engagement, no self-promotion. Reddit's spam detection tracks the ratio of self-posts to community participation. This day keeps the ratio healthy.
+
+**Sunday April 20 — "The Sleeper" (Contrarian Take)**
+- **Reddit (r/DynastyFF):** "The prospect everyone's sleeping on in the 2026 class — and the one stat that proves it." Lab screenshot of a mid-round prospect with standout college metrics that the consensus is undervaluing. Contrarian takes generate the most comments in dynasty communities.
+- **Twitter:** Same take, single tweet with screenshot. "I'm betting on [Player X]. Here's why everyone else is wrong:" — hot takes drive engagement on Twitter.
+- **Goal:** Test a contrarian angle. Dynasty Reddit LOVES arguing about sleepers. This post should generate more comments per upvote than the Big Board.
+
+**Monday April 21 — "The Preview" (Draft Night Setup)**
+- **Reddit (r/DynastyFF):** "I'm running live Lab updates during Round 1 Thursday night. Here's what the screenshots will look like." Post a mock draft-night screenshot showing the Prospect board with "Draft Night" preset columns. Explicitly set the expectation: "I'll post a full recap within 30 minutes of Round 1 ending."
+- **Twitter:** "Draft Night plan: real-time Lab screenshots for every skill position pick. Follow along Thursday at 8pm ET." Pin this tweet, replacing Thursday's Big Board pin.
+- **Goal:** Set audience expectations. People who see this will LOOK for Razzle's recap Thursday night. This is the "tune in" post — converting followers to active watchers.
+
+**Tuesday April 22 — "The Final Board" (Last Update)**
+- **Reddit:** NO new post (two posts in two days looks spammy for a new account; Q26 established max 2-3 posts/week on Reddit).
+- **Twitter:** Updated Big Board if any late-breaking news (trades, injury, pro day) shifted tiers. "Final pre-draft board. Tomorrow we find out who's right." Quick thread with before/after comparison if anything changed.
+- **Goal:** Final "before" snapshot. Save this screenshot as the anchor for post-draft comparison content.
+
+#### Platform-Specific Frequency Rules
+
+**Reddit (r/DynastyFF):** 4 posts in 7 days. This is aggressive for a new account but defensible because each post is original analysis with unique data visualizations. The 10% self-promotion guideline (Reddit's spam rules) applies to the account's TOTAL history, not weekly frequency — if the account has been commenting organically since March 24 (Q44's timeline), four weeks of comments + 4 OC posts is well within bounds. Skip Saturday and Tuesday to space out posts.
+
+**Twitter (@razzle_lol):** Daily posting, 3-5 tweets per day during draft week. For micro accounts under 5K followers, data shows 3-5 daily posts optimize impressions. Draft week is a high-activity period — the timeline moves fast, and audiences expect more content. Mix standalone tweets (screenshots) with quote-tweets (engagement with other analysts) and replies.
+
+#### Why This Cadence, Not More or Less
+
+**Not fewer:** A single pre-draft post gets lost. The dynasty community sees hundreds of mock drafts and big boards in April. Razzle needs multiple touchpoints across the week to register as a name worth following. One post = forgettable. Four posts with consistent, data-rich screenshots = "oh, that tiger logo with the heat map — I've seen that before."
+
+**Not more:** Reddit penalizes frequent posting from new accounts. The spam filter evaluates posting velocity and self-promotion ratio. More than 4-5 posts per week from an account that's only been active for 4 weeks will trigger manual mod review or shadowban risk. Better to post 4 high-quality pieces than 7 mediocre ones.
+
+**Escalating intensity:** The cadence builds from a single position deep-dive (Wednesday) to the full Big Board (Thursday) to contrarian takes (Sunday) to the draft preview (Monday). Each post is slightly higher stakes than the previous one. Followers acquired on Wednesday see Thursday's post in their feed. By Monday, returning viewers are invested.
+
+### Self-Critique
+
+1. **The "one Reddit post per day" cadence on Wed-Thu-Fri is aggressive for a 4-week-old account.** Reddit's spam guidelines say "if a significant portion of your posting links to your own site, you may be a spammer." But Lab screenshots hosted as native Reddit images (not links to razzle.lol) are treated as OC content, not external links. The watermark is the only funnel. **Confidence: 7/10 — would drop Friday's post if Wed/Thu underperform or attract mod attention.**
+
+2. **The "3-5 tweets per day" recommendation for Twitter is well-supported.** Tweet Archivist's 2026 data shows micro accounts (<5K followers) maximize impressions at 3-5 daily posts. During a high-activity event week like the NFL Draft, the upper end (5 tweets) is appropriate. **Confidence: 8/10.**
+
+3. **Saturday's "no post, just comment" strategy is the weakest day.** It's the right move for Reddit health (spam ratio), but it means losing a day of content. The trade-off is worth it — a shadowban in draft week would be catastrophic. **Confidence: 8/10.**
+
+4. **The Monday "preview" post assumes the audience wants to know about draft night coverage in advance.** This works for established creators (Fantasy Footballers announce their draft shows). For a new account, "I'll be posting Thursday night" might come off as presumptuous. Framing matters: "Here's a preview of the format" is better than "tune in to my coverage." **Confidence: 6/10 — test the framing carefully.**
+
+5. **The assumption that 4 weeks of commenting (March 24 - April 22) is sufficient account warm-up is from Q26/Q44.** This is the minimum. If commenting starts late or the account gets flagged early, the pre-draft week posts could be filtered. **Confidence: 7/10.**
+
+Sources:
+- [How Often to Post on Twitter 2026 — Tweet Archivist](https://www.tweetarchivist.com/how-often-to-post-on-twitter-2025)
+- [Twitter Posting Frequency Guide 2026 — Tweet Archivist](https://www.tweetarchivist.com/twitter-posting-frequency-guide-2025)
+- [Social Media Posting Cadence — Sherrilynne Starkie](https://sherrilynnestarkie.com/2025/03/31/social-media-posting-cadence-how-to-get-it-right/)
+- [Optimal Social Media Posting Frequency 2026 — HeyOrca](https://www.heyorca.com/blog/social-media-posting-frequency-by-platform-2026)
+- [Avoiding Reddit Spam Filters — SingleGrain](https://www.singlegrain.com/social-media-management/best-practices/avoiding-reddits-spam-filters-best-practices-for-promotion/)
+- [Reddit Spam Rules Guide 2026 — PainOnSocial](https://painonsocial.com/blog/how-to-avoid-reddit-spam-rules)
+- [Reddit Self-Promotion Rules — ReplyAgent](https://www.replyagent.ai/blog/reddit-self-promotion-rules-naturally-mention-product)
+- [Reddit Posting Strategy Frequency — Trilokana](https://trilokana.com/blog/reddit-posting-strategy-how-often-should-you-post-for-maximum-reach-trilokana-marketing/)
+
+### Implications for Razzle
+
+1. **Build the pre-draft content calendar into the production workflow NOW.** Create `scripts/predraft_content_calendar.md` with the 7-day plan, including specific post titles, screenshot presets, and posting times. This becomes the runbook for April 16-22.
+
+2. **Thursday April 17 is the critical test day.** The Big Board post + 3 OP position-group comments tests the Q50 seeding pattern at lower stakes. If seeded comments generate replies, use 5 on draft night. If not, adjust. This is the "dress rehearsal" for April 23.
+
+3. **Screenshot tooling must be ready by April 16.** The Reddit crop mode (Q41), the Draft Night preset (Q45), and heat coloring must all work together. April 16's QB deep-dive is the first live test. If screenshots don't look right, there are 7 days to fix them before draft night.
+
+4. **Twitter needs daily content starting April 16, not just draft night.** The Q47 strategy (individual tweets per pick) is for April 23+. The pre-draft week is about building the follower base so those draft night tweets reach a larger audience. Each pre-draft tweet with a Lab screenshot is a chance to gain followers who'll see the draft night content.
+
+5. **Save every "before" screenshot as a PNG file on April 22.** These become the left side of "before/after" comparison content. Store them in `scripts/predraft_screenshots/` with descriptive names (e.g., `2026-04-22_prospect_bigboard_predraft.png`).
+
+### Open Questions
+
+1. **Should Razzle automate Lab screenshot generation for draft night — a headless browser script that captures preset views after each DB update — to compress the 10-minute manual screenshot step to under 1 minute?**
+
+2. **What specific metrics should Razzle track during pre-draft week (April 16-22) to measure whether the content cadence is working — and what thresholds trigger a strategy adjustment before draft night?**
+
+3. **Should Razzle create a "Draft Week" landing page on razzle.lol that aggregates all pre-draft content (Big Board, value shifts, sleeper picks) as a bookmark-friendly URL to share — or does that split attention from the Lab?**
+
+## NEXT QUESTION: What specific metrics should Razzle track during pre-draft week (April 16-22) to measure whether the content cadence is working — and what thresholds trigger a strategy adjustment before draft night?
