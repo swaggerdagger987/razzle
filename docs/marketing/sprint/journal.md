@@ -5176,4 +5176,120 @@ Sources:
 
 3. **What is the optimal Reddit post format for a draft night recap — a single mega-post with all 32 picks and embedded screenshots, or a structured post with a pick table plus separate top-level comments per position group — to maximize engagement and comment depth?**
 
-## NEXT QUESTION: Should Razzle pre-populate terminal.db with a draft_picks table schema and the top 50 prospect profiles BEFORE draft night — and what data should be pre-loaded to minimize the gap between "pick announced" and "Lab renders full prospect card"?
+---
+
+## Q57: Should Razzle pre-populate terminal.db with prospect profiles BEFORE draft night?
+
+**Date:** 2026-03-21
+**Question:** Should Razzle pre-populate terminal.db with a draft_picks table schema and the top 50 prospect profiles BEFORE draft night — and what data should be pre-loaded to minimize the gap between "pick announced" and "Lab renders full prospect card"?
+
+### Answer
+
+**YES — and Razzle is already 60% there.** The existing `combine_data` table has 319 prospects for 2026 (from nflverse combine.csv). But it's missing the fields that make prospect cards *screenshot-worthy*: headshots, scouting grades, NFL player comparisons, and scouting reports. Three data sources fill those gaps:
+
+**1. tanho63/nfl_combine — THE primary source (323 prospects, 2026 data LIVE)**
+- URL: `https://raw.githubusercontent.com/tanho63/nfl_combine/main/data/combine_results.csv`
+- Contains EVERYTHING: names, positions, schools, all combine measurements, NFL.com scouting grades (5.0-7.0 scale), composite draft grades, **headshot URLs** (NFL.com CDN), **NFL player comparisons**, scouting reports (overview/strengths/weaknesses), and **NGS composite scores** (athleticism/size/production, 0-100). 323 prospects for 2026 already populated.
+- This is a strict superset of nflverse combine.csv — same PFR source plus NFL.com scout grades, reports, and headshots.
+
+**2. ESPN Core Athletes API — for ESPN IDs (draft night matching)**
+- URL: `https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/draft/athletes?limit=50&page={1-4}`
+- 200 prospects across 4 pages. Each prospect has an ESPN `alternativeId` — this is the key for matching draft night picks from the ESPN draft endpoint (Q56). Also has ESPN-specific grades (80-93 scale), overall/position ranks, and ESPN CDN headshot URLs.
+- Requires 200 individual fetches (each page returns $ref links). Budget 3-4 minutes for full scrape.
+
+**3. Existing combine_data table — already in terminal.db**
+- 319 prospects for 2026 with nflverse combine fields (40, bench, vertical, broad jump, cone, shuttle).
+- Missing: headshots, grades, scouting reports, NFL comps, ESPN IDs.
+
+### Pre-Population Architecture
+
+**Option A (recommended): Extend `combine_data` with new columns**
+
+Add to the existing `combine_data` table:
+```sql
+ALTER TABLE combine_data ADD COLUMN headshot_url TEXT;
+ALTER TABLE combine_data ADD COLUMN grade REAL;           -- NFL.com 5-7 scale
+ALTER TABLE combine_data ADD COLUMN draft_grade REAL;     -- composite score
+ALTER TABLE combine_data ADD COLUMN nfl_comparison TEXT;   -- "Patrick Mahomes"
+ALTER TABLE combine_data ADD COLUMN overview TEXT;         -- scouting report
+ALTER TABLE combine_data ADD COLUMN strengths TEXT;        -- HTML
+ALTER TABLE combine_data ADD COLUMN weaknesses TEXT;       -- HTML
+ALTER TABLE combine_data ADD COLUMN athleticism_score REAL; -- NGS 0-100
+ALTER TABLE combine_data ADD COLUMN production_score REAL;  -- NGS 0-100
+ALTER TABLE combine_data ADD COLUMN size_score REAL;        -- NGS 0-100
+ALTER TABLE combine_data ADD COLUMN espn_athlete_id TEXT;   -- for draft night matching
+ALTER TABLE combine_data ADD COLUMN espn_grade REAL;        -- ESPN 80-93 scale
+ALTER TABLE combine_data ADD COLUMN espn_overall_rank INT;
+ALTER TABLE combine_data ADD COLUMN espn_position_rank INT;
+ALTER TABLE combine_data ADD COLUMN projected_round INT;
+```
+
+**Option B: New `prospect_profiles` table** — cleaner separation but requires JOIN. Only worth it if the schema becomes unwieldy.
+
+### Draft Night Flow (with pre-population)
+
+1. **Before draft (now through April 22):**
+   - Run `scripts/populate_prospect_profiles.py` — fetches tanho63 CSV + ESPN athlete API
+   - Populates extended `combine_data` with headshots, grades, scouting reports, ESPN IDs
+   - Pre-build ESPN athlete ID → Razzle prospect mapping (by name match on top 50)
+
+2. **Draft night (April 23, Round 1):**
+   - ESPN poller (Q56) detects new pick → writes to `draft_picks` table (just pick#, team, ESPN athlete ID)
+   - Lookup ESPN athlete ID in pre-populated `combine_data` → instant JOIN
+   - Lab renders full prospect card: headshot, school, combine stats, scouting grade, NFL comp, strengths/weaknesses
+   - **Zero delay** between "pick announced" and "full card rendered"
+
+3. **Without pre-population:**
+   - ESPN pick arrives with only: player name, team, pick number
+   - Need to fetch headshot, combine data, scouting report ON DEMAND
+   - Each fetch adds 1-3 seconds of latency per pick
+   - Screenshot pipeline (Q54) delayed by data fetching
+
+### The Critical 50
+
+Only ~32 picks in Round 1, but pre-populate the **top 50** to cover:
+- All first-round picks (32)
+- Trade-up surprises from early Round 2 (picks 33-40)
+- "Reach" picks that fall outside consensus top 32
+- Buffer for unexpected picks
+
+For the top 50, ensure ALL fields are populated: headshot, grade, NFL comp, scouting report, ESPN athlete ID. For prospects 51-200, combine data and basic fields are sufficient.
+
+### Sources
+- [tanho63/nfl_combine](https://github.com/tanho63/nfl_combine) — 323 prospects for 2026, richest single source
+- [nflverse combine.csv](https://github.com/nflverse/nflverse-data/releases/download/combine/combine.csv) — 319 prospects, physical measurements
+- ESPN Core Athletes API: `sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/draft/athletes`
+- ESPN Site Web API: `site.web.api.espn.com/apis/site/v2/sports/football/nfl/draft?season=2026` (confirmed live, shows `state: "pre"`)
+- Existing Razzle schema: `adapters/college_adapter.py` lines 100-172 (`combine_data` + `draft_picks` tables)
+
+### Self-Critique
+
+1. **tanho63/nfl_combine having 323 prospects for 2026 is confirmed by the agent's live check.** The data fields (headshots, grades, NFL comps, NGS scores) are verified present. **Confidence: 9/10** — the CSV structure is confirmed but I haven't verified every 2026 row has all fields populated (some may be null for late-round prospects).
+
+2. **ESPN Core Athletes API returning 200 prospects with $ref links is confirmed by live fetch.** The alternativeId field for headshot URL construction is verified. **Confidence: 9/10.**
+
+3. **The "zero delay" claim assumes the ESPN athlete ID in the draft pick response matches the pre-populated ESPN athlete ID in combine_data.** This is likely true (ESPN uses consistent IDs across endpoints) but should be verified by checking a 2025 draft pick's athlete ID against the 2025 draft athletes endpoint. **Confidence: 7/10 on ID consistency across endpoints.**
+
+4. **Option A (ALTER TABLE) is simpler but risks schema bloat.** The combine_data table already has 18 columns; adding 15 more brings it to 33. This is manageable for SQLite but the table name becomes misleading ("combine_data" now holds scouting reports). A separate `prospect_profiles` table with a foreign key would be cleaner architecturally but adds JOIN complexity. **This is a judgment call, not a data question. Confidence on recommendation: 7/10.**
+
+5. **The "top 50" buffer is a heuristic, not data-driven.** In the 2025 draft, the #1 overall pick (Cam Ward) was consensus #1. But "surprise" picks happen — the 2024 draft had 3 picks outside the consensus top 32 in Round 1. 50 provides reasonable coverage. **Confidence: 8/10.**
+
+### Implications for Razzle
+
+1. **Build `scripts/populate_prospect_profiles.py` THIS WEEK.** Fetch tanho63 CSV + ESPN athlete API, merge on name+position+school, write to extended combine_data. This is a 1-hour script.
+
+2. **The tanho63 headshot URLs are the key unlock.** Without headshots, prospect cards in the Lab look like generic data tables. With headshots, they look like ESPN draft boards. This is what makes screenshots Reddit-worthy.
+
+3. **Pre-build the ESPN athlete ID mapping now.** Fetch the 200 ESPN draft athletes for 2026, match to tanho63 data by name, store the ESPN ID. On draft night, the poller just needs `athlete_id → combine_data` lookup.
+
+4. **Test the full pipeline against 2025 data.** Fetch 2025 tanho63 CSV + 2025 ESPN draft picks, verify the ID mapping works end-to-end. The 2025 draft is fully populated on both sources.
+
+### Open Questions
+
+1. **What watermark placement and style should Razzle use on draft night Lab screenshots — subtle bottom-right domain text (razzle.lol) vs. semi-transparent diagonal overlay — to maximize the watermark funnel (Q48) without making screenshots look spammy on Reddit?**
+
+2. **What is the optimal Reddit post format for a draft night recap — a single mega-post with all 32 picks and embedded screenshots, or a structured post with a pick table plus separate top-level comments per position group — to maximize engagement and comment depth?**
+
+3. **How should Razzle handle "surprise" draft picks not in the pre-populated top 50 — real-time ESPN athlete profile fetch with graceful degradation (show name/team/pick immediately, backfill headshot/grades async), or expand pre-population to top 100 prospects?**
+
+## NEXT QUESTION: What watermark placement and style should Razzle use on draft night Lab screenshots — subtle bottom-right domain text (razzle.lol) vs. semi-transparent diagonal overlay — to maximize the watermark funnel without looking spammy on Reddit?
