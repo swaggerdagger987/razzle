@@ -8454,4 +8454,171 @@ Sources:
 
 3. **What does the first OC post on r/DynastyFF actually look like — what's the title, the body structure, which Saved View screenshot leads, and what's the call-to-action that drives traffic to the Lab without looking promotional?**
 
-## NEXT QUESTION: Should Razzle build a lightweight "share page" (razzle.lol/share/{id}) that renders a saved screenshot with Open Graph meta tags — so when the URL is pasted into Reddit/Discord/Twitter, it auto-generates a rich preview card with the Lab screenshot as the thumbnail?
+---
+
+## Q87: What does the first OC post on r/DynastyFF actually look like — what's the title, the body structure, which Saved View screenshot leads, and what's the call-to-action that drives traffic to the Lab without looking promotional?
+
+**Date**: 2026-03-21
+**Category**: Content Strategy / Reddit Launch
+**Prior context**: Q73 (hot debates), Q74 (comment templates), Q75 (warm-up comments), Q76 (screenshot configs), Q79 (format/timing), Q80 (Share Mode), Q82 (screenshot playbook), Q84 (post-mortem analytics)
+
+### Answer
+
+**Use the Player Report Card view (/reportcard.html) as the lead screenshot — it's the most visually distinctive and debate-triggering tool in the Lab. Title: "[OC] I graded every dynasty-relevant player like a school report card — here's the 2025 Honor Roll and who needs to repeat a grade." Post as a native image upload on Tuesday April 21 at 8 AM EST. All analysis goes in the first comment, ending with "drop a name and I'll pull their card."**
+
+#### Why the Report Card View Wins as Post #1
+
+The Report Card is Razzle's best Reddit weapon for five reasons:
+
+1. **Instant visual hook.** The Report Card shows letter grades (A+ through F) with color-coded badges across 5 dimensions (efficiency, consistency, SOS, PPG, opportunity share). At thumbnail size on mobile, the grade badges are legible and the position colors pop. No other dynasty tool presents data as a "school report card" — it's visually novel.
+
+2. **Maximum debate surface area.** A post showing Kenneth Walker at B+ and Breece Hall at C- guarantees 50+ comments. Every dynasty manager has a player they think is misgraded. Disagreement IS engagement. The composite GPA (Fantasy GPA aggregating 5 sub-grades at 20% each) is opinionated enough to provoke debate but data-backed enough to survive scrutiny.
+
+3. **Natural follow-up requests.** "Drop a name below" works perfectly because each player has a unique card with 5 sub-grades. Running a requested player takes 10 seconds (type name in Lab, screenshot, reply). Each reply is another Lab screenshot with watermark — compounding visibility.
+
+4. **Broad appeal.** A report card with 25 players on the Honor Roll covers every roster. Someone in the thread owns at least 3-4 of these players. A single-player post (e.g., "Kenneth Walker efficiency analysis") only engages Walker owners/sellers.
+
+5. **Memorable format.** "Fantasy GPA" is sticky language. If the post gets any traction, people will say "what's his GPA?" in future threads — associating the concept with Razzle's Lab.
+
+#### The Exact Post
+
+**Title:**
+```
+[OC] I graded every dynasty-relevant player like a report card — here's the 2025 Honor Roll and who needs to repeat a grade
+```
+
+- 114 characters (under 120 limit)
+- Leads with the concept ("graded like a report card"), not the tool
+- "Honor Roll" and "repeat a grade" are instantly understood metaphors
+- No tool name in title — avoids self-promotion signal
+- Statement, not question (16% more engagement per Q79 research)
+- [OC] tag signals effort content
+
+**Alternative titles** (rank-ordered by predicted engagement):
+1. `[OC] I built a "Fantasy GPA" grading every dynasty player on 5 metrics — some of your guys are failing`
+2. `[OC] Only 6 RBs earned an A or higher across efficiency + consistency + opportunity — here's the full report card`
+3. `[OC] I ran 200+ players through 5 composite grades — the most overvalued dynasty player might surprise you`
+
+Use title #1 if the account has enough karma that "I built" won't trigger self-promotion filters. Use the primary title if karma is still low — it's pure content, zero promotion signal.
+
+**Image:**
+Screenshot of the Report Card page (/reportcard.html) with these settings:
+- Position filter: ALL (shows cross-position Honor Roll)
+- Season: 2025
+- Top 15-20 players visible (Honor Roll section)
+- Grade badges clearly visible (A+, A, B+, etc.)
+- Sub-grade badges (efficiency, consistency, SOS, PPG, opp share) visible per player
+- razzle.lol watermark in bottom-right corner
+- Share Mode ON: 1200x960 PNG, clean crop, no browser chrome
+
+The screenshot must show recognizable names in the top 10 — players that r/DynastyFF actively debates (if Kenneth Walker shows up at B+, that alone drives 20 comments about whether he's a buy or sell).
+
+**Upload method:** Native Reddit image upload (NOT imgur link, NOT text post). This gives full-width mobile preview and maximum thumbnail visibility.
+
+**Flair:** [Discussion] — broadest category, safest for first post. If r/DynastyFF has an [Analysis] or [OC] flair, use that instead (verify during April 15 test post per Q78).
+
+#### The First Comment (posted within 60 seconds of the image)
+
+```
+**What you're looking at:** Every dynasty-relevant player graded on 5 metrics —
+efficiency (PPO), consistency (CoV), strength of schedule, PPG, and opportunity
+share. Each metric is 20% of the composite "Fantasy GPA." Honor Roll = top 25
+overall. Needs Improvement = bottom 25.
+
+**The takeaway:** The usual suspects at the top aren't surprising (Ja'Marr Chase,
+Bijan Robinson), but the gaps between sub-grades tell the real story. [PLAYER X]
+has an A+ in efficiency but a C- in opportunity — that's a buy signal if volume
+increases. [PLAYER Y] has the opposite: A+ opportunity, D efficiency. That's a
+sell-high if you can get a first for him.
+
+**Why this matters for dynasty:** Trade calculators give you one number. This
+gives you five dimensions. A player with straight A's is untouchable. A player
+with one A and four C's is exploitable — the market overvalues the A and ignores
+the C's.
+
+Data from nflverse, 2015-2025 seasons, half-PPR scoring.
+
+**Drop a name below and I'll pull their full card.** Curious what the sub thinks
+of the grades — roast away.
+```
+
+Key design decisions in this comment:
+- **No URL.** The watermark on the screenshot handles discovery. Posting a URL in the first comment on a first-post looks promotional and may trigger automod.
+- **"Roast away"** — signals humility and invites disagreement. r/DynastyFF rewards self-deprecation over salesmanship.
+- **"Drop a name"** — the engagement trigger. Every reply is a chance to post another Lab screenshot. 10 requests = 10 more watermarked images in the thread.
+- **Specific player callouts** — fill in [PLAYER X] and [PLAYER Y] with whoever is most debated that week (likely from Q73's Tier 1 list). These names must appear in the screenshot.
+- **"Trade calculators give you one number. This gives you five."** — positions Razzle against KTC/FantasyCalc without naming them. Dynasty managers immediately think "this is better than what I use" without feeling sold to.
+
+#### The Response Workflow (first 4 hours)
+
+1. **T+0 min:** Post image. Immediately post first comment.
+2. **T+5 min:** Upvote is live. Check "New" to confirm the post appears (not caught by automod).
+3. **T+15-30 min:** First comments arrive. Reply to EVERY comment in the first hour — this is when the algorithm decides if the post reaches "Rising." Each reply should be substantive (2-3 sentences + screenshot if they request a player).
+4. **T+1-2 hours:** If a player request comes in, reply with a screenshot of that player's Report Card (Share Mode PNG, cropped to just their row). Include one sentence of analysis: "Interesting — [Player] gets an A in efficiency but the schedule was soft. SOS grade of D drags the overall GPA down."
+5. **T+2-4 hours:** Engagement should plateau. Do NOT post the Lab URL yet. Wait until someone explicitly asks "where can I look up my own players?" or "what tool is this?" THEN reply with the URL in a conversational way: "It's a thing I've been building — razzle.lol/reportcard. Still in beta but all the data is there. Feedback welcome."
+6. **T+4-24 hours:** Monitor for cross-posts, DMs, or mentions in other subs. Check watermark-driven traffic in analytics (Q84 workflow).
+
+#### What NOT to Do on Post #1
+
+1. **Do NOT include a URL in the post title or first comment.** The watermark handles this. The moment you post a link unprompted, you become "a website with a Reddit account" instead of "a Redditor who built something cool."
+2. **Do NOT cross-post to r/fantasyfootball simultaneously.** First post goes to r/DynastyFF only. Cross-post to r/fantasyfootball on Post #2 (1-2 weeks later) once the r/DynastyFF post has social proof.
+3. **Do NOT respond defensively to grade criticism.** If someone says "this is garbage, Walker is clearly an A+" — reply with: "What's your case? His efficiency numbers are elite but the consistency grade pulls him down. Interested in what you're seeing that the model misses." Turn critics into contributors.
+4. **Do NOT post during NFL Draft night (April 24-26).** All OC content is invisible during the draft. The Tuesday April 21 slot gives 3 days before the draft consumes all attention.
+5. **Do NOT use the word "free" in the title or comment.** It triggers the self-promotion radar. Let people discover the tool is free on their own — that surprise creates goodwill.
+
+#### Why Report Card Over Other Views
+
+Considered and rejected:
+- **Buy Low/Sell High (/buysell.html):** Good but binary — it only says buy or sell. The Report Card gives 5 dimensions of nuance, which generates more debate per player.
+- **Trade Values (/tradevalues.html):** Too similar to KTC — r/DynastyFF will immediately compare it to KeepTradeCut and say "how is this different?" The Report Card has no direct competitor in the dynasty space.
+- **Stock Watch (/stocks.html):** Good for Post #2 or #3 (rising/falling stocks is a proven Reddit format), but the Report Card is more novel for Post #1.
+- **Efficiency Rankings (/efficiency.html):** Too narrow — only shows one dimension. The Report Card's 5-grade composite is the unique selling point.
+- **Lab screener (/lab.html):** Too generic — a sortable table doesn't stop the scroll. The Report Card's letter grades are the visual differentiator.
+
+### Self-Critique
+
+1. **The Report Card view assumes the grades are defensible.** If Kenneth Walker gets an F in consistency because of injury games, commenters will say "garbage methodology — he was injured, remove those weeks." The GPA methodology MUST handle this gracefully (either exclude injured weeks or explain why they're included). If the grades look arbitrary, the post dies in "New." **Confidence: 7/10 — depends on methodology robustness.**
+
+2. **"Drop a name below" could generate 30+ requests in 2 hours.** Each request requires screenshotting a player's card, cropping, uploading to Reddit, and writing 1-2 sentences of analysis. A solo operator needs to be at the computer for 4 hours straight. If the post takes off and requests overwhelm, reply with: "Getting a ton of requests — going through them in order. Will hit everyone by tonight." **Confidence: 8/10 — this is a good problem to have.**
+
+3. **The title "[OC] I graded every dynasty-relevant player like a report card" may underperform compared to a specific player callout.** A title like "[OC] Kenneth Walker's dynasty grade dropped after the KC signing — here's the full report card" would attract the Walker debate crowd specifically, which is the highest-engagement crowd per Q73. Counter-argument: the broader title attracts MORE total viewers even if per-viewer engagement is slightly lower. For Post #1, breadth > depth. **Confidence: 6/10 — could go either way.**
+
+4. **The "no URL in first comment" strategy is conservative.** Some successful tool launches on Reddit (Dynasty Daddy, LeagueHistory.app) included the URL in the first comment without penalty. The risk calculus: including the URL might get 1-2 extra skeptical comments ("this is just an ad") but also drives 5x more traffic. For a FIRST post on a new account, the conservative approach is safer. For Post #2+, include the URL. **Confidence: 7/10.**
+
+5. **The April 21 timing is 3 days before the NFL Draft. The post topic (2025 season grades) might feel stale.** Counter: r/DynastyFF is constantly debating 2025 season performance to inform 2026 draft and trade decisions. Season grades are evergreen for dynasty — they inform CURRENT trade values. The pre-draft context actually helps: "check his 2025 grades before deciding if you should trade him for a rookie pick." **Confidence: 8/10.**
+
+6. **r/DynastyFF has 126K subscribers (per SubredditStats) — a successful OC post might get 50-200 upvotes and 30-80 comments.** This is NOT r/fantasyfootball (2M+ subscribers). Expectations should be calibrated. 50 upvotes and 30 comments on Post #1 is a win. 200+ upvotes means the format works and should be repeated weekly. Under 20 upvotes means the topic or timing missed — pivot for Post #2. **Confidence: 8/10.**
+
+Sources:
+- [SubredditStats: r/DynastyFF](https://subredditstats.com/r/dynastyff) — 126K subscribers, niche but active
+- [SingleGrain: Reddit Image Hosting ROI](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/) — image posts outperform link posts
+- [ReplyAgent: Reddit Self-Promotion Rules 2026](https://www.replyagent.ai/blog/reddit-self-promotion-rules-naturally-mention-product) — 90/10 rule, value-first principle
+- [Reddit Help: Running Promotions](https://support.reddithelp.com/hc/en-us/articles/22755369815700-Running-promotions-on-Reddit) — official promotion guidelines
+- [Calvyn: Promote on Reddit Without Getting Banned](https://www.calvyn.com/how-to-promote-on-reddit-without-getting-banned/) — "be a Redditor with a website, not a website with a Reddit account"
+- [MarketingExamples: Self Promotion on Reddit](https://marketingexamples.com/content/reddit) — key to self-promotion is value-first
+- [PeakedInHighSkool](https://peakedinhighskool.com/) — reference for how a Reddit-native FF tool grew organically through weekly OC posts
+- [Dynasty Daddy](https://dynasty-daddy.com/) — Fantasy Wrapped goes viral every January; Report Card feature got 831 upvotes
+- [Oreate AI: Dynasty Football on Reddit](https://www.oreateai.com/blog/navigating-the-world-of-dynasty-football-on-reddit/) — community values data-backed analysis, personal narratives, humor
+- Sprint Q73 (hot debates), Q74 (comment templates), Q75 (warm-up comments), Q76 (screenshot configs), Q79 (format/timing/title formula), Q80 (Share Mode spec), Q82 (screenshot playbook), Q84 (post-mortem analytics)
+
+### Implications for Razzle
+
+1. **The Report Card page (/reportcard.html) must be visually polished before April 21.** Specifically: grade badges must be legible at 50% zoom (mobile thumbnail), the Honor Roll section must show at least 15 players without scrolling, and the razzle.lol watermark must be visible but not distracting. This is the page that represents Razzle to r/DynastyFF for the first time.
+
+2. **Pre-fill the specific player callouts in the first comment the morning of April 21.** Check r/DynastyFF at 7 AM EST. Whatever player debate is hottest that morning, use that player as [PLAYER X] in the comment. The Report Card grades are static (2025 season data), but the FRAMING should match the morning's news cycle.
+
+3. **Clear 4 hours (8 AM - noon EST) for active monitoring on April 21.** The first 60 minutes determine whether the post reaches "Rising." Every comment needs a reply. Every player request needs a screenshot. This is not a "post and walk away" strategy — it's a live engagement session.
+
+4. **Success metric for Post #1: 50+ upvotes, 30+ comments, 5+ player request replies with screenshots.** If achieved, repeat the format with a different view (Stock Watch for Post #2, Buy Low/Sell High for Post #3) on a weekly cadence. If under 20 upvotes, pivot topic (try a single-player deep dive for Post #2 instead of the broad report card).
+
+5. **Dynasty Daddy's Report Card feature got 831 upvotes on Reddit — proof that this exact format works.** Razzle's version adds the 5-dimension grade breakdown that Dynasty Daddy doesn't have. The differentiation is in the sub-grades: efficiency + consistency + SOS + PPG + opportunity share, each independently graded. This level of granularity creates more debate surface area per player.
+
+### Open Questions
+
+1. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral — should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
+
+2. **What specific visual polish does the Report Card page need before April 21 — are the grade badges legible at thumbnail size, does the Honor Roll show enough players without scrolling, and does the Share Mode PNG crop cleanly to show the most debatable players?**
+
+3. **What should Post #2 look like — same Report Card format with different filters (position-specific grades? rookie-only? post-draft updated grades?) or a completely different view (Stock Watch, Buy Low/Sell High) to test which format gets more engagement?**
+
+## NEXT QUESTION: What specific visual polish does the Report Card page need before April 21 — are the grade badges legible at thumbnail size, does the Honor Roll show enough players without scrolling, and does the Share Mode PNG crop cleanly to show the most debatable players?
