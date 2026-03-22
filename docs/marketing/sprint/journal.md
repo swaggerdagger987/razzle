@@ -4904,6 +4904,71 @@ Sources:
 
 3. **Should Razzle create a second Reddit account as a backup in case the primary account gets flagged or spam-filtered despite the warm-up — or does operating two accounts violate Reddit's TOS and create more risk than it mitigates?**
 
-## NEXT QUESTION: Should Razzle automate Lab screenshot generation for draft night — a headless browser script that captures preset views after each DB update — to compress the 10-minute manual screenshot step to under 1 minute?
+---
 
-## NEXT QUESTION: What does Razzle's Reddit account warm-up activity (March 24 - April 15) need to look like — how many comments per day, which threads to target, what karma threshold to hit — to ensure the pre-draft posts aren't spam-filtered?
+## Q54: Should Razzle automate Lab screenshot generation for draft night?
+
+**Question:** Should Razzle automate Lab screenshot generation for draft night — a headless browser script that captures preset views after each DB update — to compress the 10-minute manual screenshot step to under 1 minute?
+
+### Answer
+
+**YES — and it's already 80% built.** The existing `twitter/screenshot.py` (177 lines, Playwright-based) already generates Lab screenshots in headless Chromium at 1280×900px. It supports position filters, column sorting, panel views (breakouts, efficiency, usage-trends), and batch mode (20 screenshots in one run). The infrastructure is production-tested — 18+ screenshots already exist in `/twitter/screenshots/`.
+
+**What's missing for draft night is the trigger layer — not the screenshot engine.**
+
+The draft night timeline (from Q49) demands a Round 1 recap post within 30 minutes of the last pick. That 30-minute window includes: (1) DB update with new pick data, (2) screenshot generation, (3) markdown table assembly, (4) Reddit post submission, (5) five OP comments posted. Manual screenshots would consume 10+ minutes of that window. Automated screenshots compress step 2 to under 60 seconds.
+
+**The draft night screenshot script needs exactly 3 additions to screenshot.py:**
+
+1. **Preset views array** — 8-12 hardcoded URL+selector combos representing the exact Lab views needed for the recap (full prospect board, QB class, RB class, WR class, trade value shifts, winner spotlight, bust spotlight, team grades). These are known in advance — the views don't change based on who gets drafted.
+
+2. **Batch-with-naming** — Currently batch mode generates random position/sort combos. Draft night needs deterministic filenames (`draft_round1_full_board.png`, `draft_round1_qb_class.png`) so the markdown table builder (Q49's `reddit_draft_recap.py`) can reference them by name.
+
+3. **DB-change trigger** — A watcher that detects when `terminal.db` is updated with new draft pick data and fires the screenshot batch. This can be as simple as polling `stat -c %Y terminal.db` every 30 seconds, or an explicit `--trigger` flag called by the data import script.
+
+**Speed benchmarks:** Playwright headless Chromium launches in ~2 seconds. Each page load + screenshot takes 3-5 seconds (DOM render + network idle wait). For 10 preset views: **30-50 seconds total.** Reusing a single browser context (launch once, navigate 10 times) cuts launch overhead. This is well within the 60-second target.
+
+**The architecture should be: data adapter updates DB → calls screenshot batch → screenshot batch saves PNGs → reddit_draft_recap.py assembles markdown + gallery → PRAW submits post → comment seeder posts 5 OP comments.** A single orchestrator script (`draft_night.py`) chains these steps sequentially. No complex event system needed — it's a linear pipeline triggered manually when Round 1 ends.
+
+**One critical detail:** Screenshots must hit `localhost` (the local dev server running Lab), not `razzle.lol`. The local server reflects the DB update immediately. The production site would require a deploy cycle — adding 3-5 minutes of latency. Run `python backend/server.py` locally and screenshot against `http://localhost:8000/lab.html`.
+
+Sources:
+- [Playwright Screenshots - Checkly Docs](https://www.checklyhq.com/docs/learn/playwright/taking-screenshots/)
+- [Using Playwright to Automatically Generate Screenshots for Documentation — Medium](https://medium.com/@admin_11488/using-playwright-to-automatically-generate-screenshots-for-documentation-2153b8bf045c)
+- [A Complete Guide to Playwright Screenshot Automation — Scrnify](https://scrnify.com/blog/playwright-screenshot-automation-complete-guide)
+- [Screenshots — Playwright Official Docs](https://playwright.dev/docs/screenshots)
+- Existing codebase: `twitter/screenshot.py` (177 lines, Playwright + Chromium)
+
+### Self-Critique
+
+1. **The "already 80% built" claim is accurate.** screenshot.py handles browser launch, page navigation, element selection, and PNG output. The missing pieces (preset views, deterministic naming, trigger) are straightforward additions — probably 50-80 lines of code. **Confidence: 9/10.**
+
+2. **The 30-50 second benchmark is estimated, not measured.** Playwright's cold start is ~2s, but Lab pages load data via API calls that may take 1-3s depending on query complexity. With 10 views, worst case is 50s + potential API timeouts. The only way to validate is to actually run the batch against the local server with a populated DB. **Confidence: 7/10 on exact timing, 9/10 on sub-60s being achievable.**
+
+3. **The "screenshot localhost, not production" advice is critical and non-obvious.** If the draft night operator forgets to start the local server, or screenshots against production before deploying the DB update, every screenshot will show stale data. The script should hard-fail if localhost isn't responding. **Confidence: 9/10.**
+
+4. **The linear pipeline assumption (no parallelism needed) holds for Round 1.** Round 1 has 32 picks over ~3 hours, and the recap posts after all picks are in. There's no need for real-time per-pick screenshots. For future rounds (if Razzle covers Rounds 2-3), a per-pick trigger might be valuable — but that's scope creep for draft night v1. **Confidence: 8/10.**
+
+5. **PRAW (Reddit API) integration is NOT yet built.** The answer assumes reddit_draft_recap.py and PRAW submission exist, but they don't yet. This is a separate build task. The screenshot automation is independent and should be built first. **Confidence: 10/10 — this is a factual observation, not speculation.**
+
+### Implications for Razzle
+
+1. **Don't build a new screenshot tool — extend screenshot.py.** Add a `--draft-night` flag that runs the preset views batch with deterministic filenames. Keep the existing random batch mode for Twitter content generation.
+
+2. **Build the preset views array NOW (before April 24).** The 8-12 Lab URLs with position/sort/filter parameters should be defined and tested against the current DB. This is a 30-minute task that can be done weeks before draft night.
+
+3. **Create `scripts/draft_night.py` as the orchestrator.** One script that chains: (a) run nflverse adapter to pull draft picks, (b) run screenshot batch, (c) run markdown table builder, (d) submit Reddit post, (e) post OP comments. Each step prints timing. Total pipeline target: under 5 minutes from Round 1 end to Reddit post live.
+
+4. **Test the full pipeline with fake draft data before April 24.** Insert mock Round 1 picks into terminal.db, run the pipeline, verify all 10 screenshots generate correctly and the markdown table references them. The Big Board post on April 17 (Q51 cadence) is the dress rehearsal.
+
+5. **The screenshot step is the easiest part of the draft night pipeline.** The harder parts are: (a) getting draft pick data into the DB within minutes of picks happening (nflverse may lag), (b) PRAW integration for Reddit submission, (c) the markdown table builder that formats picks with trade values and grades. Prioritize those over further screenshot optimization.
+
+### Open Questions
+
+1. **How quickly does nflverse publish draft pick data after each Round 1 pick — real-time, end-of-round batch, or next-day — and does Razzle need an alternative real-time draft data source (ESPN API, NFL.com scraper, manual entry) to hit the 30-minute post window?**
+
+2. **Should the draft night orchestrator script include a "dry run" mode that simulates the entire pipeline with mock data — testing DB write, screenshots, markdown generation, and Reddit submission (to a private test subreddit) — to validate the pipeline end-to-end before April 24?**
+
+3. **What watermark placement and style should Razzle use on draft night Lab screenshots — subtle bottom-right domain text (razzle.lol) vs. semi-transparent diagonal overlay — to maximize the watermark funnel (Q48) without making screenshots look spammy on Reddit?**
+
+## NEXT QUESTION: How quickly does nflverse publish draft pick data after each Round 1 pick — real-time, end-of-round batch, or next-day — and does Razzle need an alternative real-time draft data source (ESPN API, NFL.com scraper, manual entry) to hit the 30-minute post window?
