@@ -5951,4 +5951,118 @@ Research confirms successful Reddit personas maintain ~80% voice consistency whi
 
 3. **Should Razzle create a Reddit "data-analyst portfolio" -- a pinned profile post or comment compilation that establishes credibility when curious users click the username -- and what format works best for that?**
 
-## NEXT QUESTION: How should Razzle handle negative reception (downvotes, hostile comments, mod removal) on any of the 4 pre-draft posts -- retreat, engage, or ignore -- and at what threshold does negative reception warrant changing the draft-night plan?
+## Q65: How should Razzle handle negative reception (downvotes, hostile comments, mod removal) on any of the 4 pre-draft posts -- retreat, engage, or ignore -- and at what threshold does negative reception warrant changing the draft-night plan?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Engage selectively on substance, ignore trolls, never retreat by deleting. The draft-night plan only changes if TWO OR MORE of the 4 pre-draft posts get mod-removed AND the mod message indicates a content-type ban (not just a spam-filter catch). Anything short of that — low upvotes, hostile comments, even a single removal — is noise, not signal.**
+
+#### The Three Response Categories
+
+**1. Downvotes (0 or negative score within 2 hours)**
+
+Do NOT delete. Reddit's algorithm gives posts a second chance through "rising" sorts, and early downvotes on analytical posts often reverse as the core audience (dynasty managers, not casual scrollers) finds the content. DraftKick's Reddit launch got minimal engagement initially but generated lasting SEO value from the Reddit link alone.
+
+**Action:** If a post sits at 0-5 upvotes after 4 hours, it simply underperformed. Leave it up. Adjust the NEXT post's title to be more provocative or player-specific (specific names drive clicks — "5 guys defying aging curves" outperforms "aging curve analysis"). Never delete a post to repost — Reddit's spam detection flags reposted content from the same account within 48 hours.
+
+**Threshold for concern:** If Posts 1 AND 2 both finish under 5 upvotes after 24 hours, the content format is wrong — not the strategy. Shift Posts 3-4 to pure text analysis (no screenshots) to test whether the community responds better to long-form text vs. image-heavy posts.
+
+**2. Hostile Comments ("another fantasy tool," "this is self-promotion," "nobody asked")**
+
+These are the most valuable signal. They reveal exactly what the community objects to. Three response protocols:
+
+- **"This is self-promotion" / "you're just advertising":** Engage once, factually. "All the data is from nflverse (public). I just like making charts. Happy to share the methodology if the numbers look off." Then stop. Do NOT defend further. One calm response + walking away reads as confident. Multiple defenses read as guilty. The 90+ comments of non-promotional history speak for themselves — anyone who clicks the profile will see genuine community participation.
+
+- **"Another fantasy tool, great" / eye-roll dismissal:** Ignore completely. These comments get downvoted by the community when the OC is genuinely useful. Responding validates the dismissal. The data in the post is the rebuttal.
+
+- **"Your numbers are wrong" / substantive criticism:** Engage enthusiastically. "Good catch — where are you seeing the discrepancy? I'm pulling from nflverse play-by-play so if there's a data error I want to fix it." This is the golden response. It demonstrates intellectual honesty, invites collaboration, and often converts critics into allies. Subvertadown built his entire reputation on transparent methodology engagement — every post includes a "methodology" section specifically to invite this type of scrutiny.
+
+**Threshold for concern:** If 3+ top-level comments on a single post call it self-promotion AND the post gets downvoted below 0, the community is reading the post as an ad. Pause for 5 days before posting again. When returning, make Post 3 or 4 even more data-focused: no screenshots, pure text analysis, no watermark. Earn back credibility through utility.
+
+**3. Mod Removal**
+
+Two very different scenarios:
+
+- **Auto-filter removal (post disappears immediately, no mod message):** This is mechanical, not personal. Message the mods within 30 minutes: "Hi, I posted some OC dynasty analysis [link] and it looks like it was caught by the filter. My account is [X] days old with [Y] karma — could you take a look? Thanks!" Mods approve 70-80% of legitimate OC from accounts with commenting history. If approved, the post enters the feed with a delayed timestamp — engagement will be lower but still counts toward establishing the username.
+
+- **Active mod removal (mod comment or removal reason given):** Read the reason carefully. If it's a rule violation ("no image posts on weekdays," "flair required"), fix and repost per the rules. If it's "self-promotion" or "no tool posts," this is critical intelligence. Do NOT argue. Reply: "Understood, appreciate the feedback. I'll stick to text analysis going forward." Then adjust ALL remaining posts to pure text, zero screenshots. The watermark funnel is dead for this sub — pivot to building credibility through text analysis alone, and save the visual content for draft night when engagement is highest and mods are most lenient.
+
+**Threshold for plan change:** The draft-night plan changes ONLY if:
+1. Two or more posts are actively mod-removed (not auto-filtered) for content-type reasons, OR
+2. A mod explicitly messages saying "don't post tool content here"
+
+If either happens, the draft-night recap shifts to a pure Reddit markdown table format — no Lab screenshots, no watermark. The data still has value; the delivery changes. Post the visual gallery to Twitter instead, where screenshot content performs better and there are no mod gatekeepers.
+
+#### What NEVER to Do
+
+- **Never delete a post.** Deleted posts leave "[deleted]" tombstones that look guilty. A post with 3 upvotes is still a post on the account's history. A deleted post is a gap that invites suspicion.
+- **Never argue with mods publicly.** One reply acknowledging the removal, then move on. Mod arguments get screenshotted to r/SubredditDrama.
+- **Never create an alt account to repost.** Reddit's IP detection catches this. Account ban is permanent.
+- **Never edit post content after negative reception to make it "less promotional."** Reddit caches original content and users use archive tools. Stealth edits destroy trust.
+- **Never mass-respond to downvoters.** If 5 comments are critical, respond to the most substantive one. Responding to all 5 looks desperate.
+
+#### The Decision Matrix
+
+| Signal | Posts 1-2 | Action | Posts 3-4 |
+|--------|-----------|--------|-----------|
+| Low upvotes (0-10) | Expected variance | Adjust next title | Continue as planned |
+| Hostile comments (1-2) | Normal for OC | Engage substantive, ignore trolls | Continue as planned |
+| Hostile comments (3+) + negative score | Community rejection signal | Pause 5 days | Strip screenshots, pure text |
+| Auto-filter removal | Mechanical | Message mods for approval | Continue as planned |
+| Mod removal (rule-based) | Fixable | Fix and repost per rules | Adjust format to comply |
+| Mod removal (content-type ban) | Strategy problem | Do NOT repost similar content | Pivot to text-only |
+| Two mod removals | Plan change trigger | -- | Shift draft-night to markdown tables, visuals to Twitter |
+
+#### The Emotional Discipline Rule
+
+The biggest risk is not negative reception — it's overreacting to negative reception. A post with 8 upvotes and 4 comments is not a failure. It's a Tuesday on r/DynastyFF. The median analytical post gets 10-30 upvotes. The plan succeeds if the account exists with a history of genuine analysis by draft night — not if every post goes viral.
+
+The DraftKick founder got 14,000 views, 6 signups, and 1 comment on their launch post — and called it a success because Reddit ranked the post in Google search results. The post did its job even though engagement was minimal. Razzle's pre-draft posts serve the same function: they exist on the account's history, proving the username is a real analyst, not a drive-by promoter.
+
+### Self-Critique
+
+1. **The "two mod removals = plan change" threshold may be too high.** If the first mod removal is for "self-promotion" and includes a warning, waiting for a second removal risks an account ban. A single mod removal with an explicit "this is promotional content" message should be treated as seriously as two removals. **Confidence: 7/10 — err on the side of caution with mod relationships.**
+
+2. **The "never delete" rule has one exception I did not address.** If a post contains a factual error that someone calls out (wrong stats, misattributed data), deleting and reposting with corrections is better than leaving wrong data up. An edit with a "EDIT: corrected X, thanks u/commenter" is the better play — it shows accountability. But if the error is fundamental enough to undermine the entire analysis, delete and repost is defensible. **Confidence: 8/10.**
+
+3. **I am assuming mods on r/DynastyFF are reasonable.** Most fantasy football subs have volunteer mods who are themselves dynasty managers. They WANT good OC. But some subs have power mods who enforce rules inconsistently or play favorites with established content creators. There is no way to know r/DynastyFF's mod culture without testing it. The warm-up commenting phase (Q53) is partially a mod-culture intelligence-gathering exercise. **Confidence: 6/10 on predicting mod behavior.**
+
+4. **The "pivot visuals to Twitter" fallback assumes Razzle's Twitter has an audience by draft night.** If the Twitter account is also nascent, the visual content has no distribution channel. The true fallback may be Imgur gallery + Reddit text post linking to Imgur — which avoids Reddit's native image upload restrictions while still embedding visuals. **Confidence: 7/10.**
+
+5. **Emotional discipline is harder than the strategy.** Seeing a post at 0 upvotes after 2 hours of work feels like failure. The rational response is "leave it, adjust the next one." The emotional response is "delete it, nobody cares." Every negative-reception playbook ultimately relies on the operator's emotional regulation. This is worth acknowledging because it is the real failure mode. **Confidence: 9/10.**
+
+### Sources
+- [DraftKick: The Good and the Bad of Launching on the Fantasy Football Subreddit](https://draftkick.com/blog/good-and-bad-of-launching-on-fantasy-football-subreddit/) — 14K views, 1 comment, 6 signups; SEO value from Reddit link
+- [Reddit Marketing: Fix Removed Content & Account Bans — RedReach](https://redreach.ai/guide/reddit-marketing-fix-bans-and-removed-content) — auto-filter vs active removal, mod messaging strategy
+- [How to Launch Your Product on Reddit: The 2025 Playbook — Reddit Radar](https://www.reddit-radar-marketing.com/blog/reddit-product-launch-strategy) — first 2 hours critical, comments section is the real launch
+- [Reddit Reputation Management 2025 — OptimizeUp](https://optimizeup.com/reddit-reputation-management-and-marketing-2025/) — respond once to criticism then disengage
+- [Reddit Self-Promotion Rules 2026 — ReplyAgent](https://www.replyagent.ai/blog/reddit-self-promotion-rules-naturally-mention-product) — 90/10 rule, native content preference
+- [9 Proven Reddit Promotion Tactics 2026 — SubredditSignals](https://www.subredditsignals.com/blog/how-to-use-reddit-for-business-promotion-without-sounding-like-a-marketer-the-value-first-playbook-for-saas-founders) — value-first content, transparency over defensiveness
+- [Subvertadown: Compendium of Reddit Posts 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — methodology transparency as trust builder
+- Sprint Q62: Pre-draft hype content (4-post calendar, format decisions)
+- Sprint Q53: Reddit account warm-up plan (March 24 - April 15)
+- Sprint Q64: Reddit commenting voice (data-analyst identity, engage substantive critics)
+
+### Implications for Razzle
+
+1. **Prepare a text-only fallback version of each post.** Before April 2, write Posts 1-4 in both formats: image+text (primary) and pure text with no screenshots (fallback). If screenshots trigger mod removal or hostile reception, the text version is ready to deploy immediately without scrambling.
+
+2. **Log every post's reception in `scripts/predraft_content_tracker.csv`.** Columns: post_number, date, subreddit, upvotes_1h, upvotes_4h, upvotes_24h, comments, hostile_comments, mod_action, response_action_taken. This data informs draft-night posting decisions in real time.
+
+3. **Write the "what tool is this?" response NOW and store it.** When commenters ask about the screenshots: "It is a free analytics site I have been building — razzle.lol. All the data is nflverse, I just like making better visualizations for dynasty research." This response is pre-approved (Q64). Having it written prevents the temptation to over-explain or get defensive in the moment.
+
+4. **The single most important emotional discipline rule: do not check upvotes for the first 60 minutes after posting.** Post, seed one OP comment, then close the tab. Check back at the 2-hour and 4-hour marks. Early vote counts fluctuate wildly on Reddit due to vote fuzzing. Watching the counter in real time creates anxiety that leads to bad decisions (deleting, editing, panic-commenting).
+
+5. **If the draft-night plan pivots to markdown tables (worst case), the Lab screenshots still have value — just on different channels.** Post the visual gallery to Twitter, Discord fantasy football servers (Q53 identified 3-4 large ones), and as a pinned post on the Reddit profile page. The screenshots are the product; Reddit is just one distribution channel.
+
+### Open Questions
+
+1. **What r/fantasyfootball-specific content adaptations are needed for the draft night recap gallery -- different title framing, different screenshots, or different OP comment structure -- compared to the r/DynastyFF version?**
+
+2. **Should Razzle create a Reddit "data-analyst portfolio" -- a pinned profile post or comment compilation that establishes credibility when curious users click the username -- and what format works best for that?**
+
+3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit -- and what are the server-specific norms for sharing analytical content?**
+
+## NEXT QUESTION: What r/fantasyfootball-specific content adaptations are needed for the draft night recap gallery -- different title framing, different screenshots, or different OP comment structure -- compared to the r/DynastyFF version?
