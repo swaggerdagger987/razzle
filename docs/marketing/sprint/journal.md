@@ -4371,4 +4371,113 @@ Sources:
 
 3. **What specific format should the Round 1 recap post use — a Reddit table with inline image links, an imgur album, or a single long-form image with all picks compiled into one visual?**
 
-## NEXT QUESTION: What specific format should the Round 1 recap post use on r/DynastyFF — a Reddit markdown table with linked screenshots, an imgur album, or a single compiled infographic-style image?
+---
+
+## Q49: What specific format should the Round 1 recap post use on r/DynastyFF — a Reddit markdown table with linked screenshots, an imgur album, or a single compiled infographic-style image?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Use a HYBRID format: Reddit markdown table as the post body + a native Reddit image gallery (up to 20 images) embedded in the same post. NOT an imgur album. NOT a single compiled infographic. The table is the skeleton; the gallery screenshots are the proof.**
+
+#### Why This Hybrid Wins
+
+**1. Native image posts dominate engagement.** Reddit's own data shows image posts generate 10,000+ more upvotes than link posts. Adding images to text posts increases upvotes by 59% on average across top subreddits. Native Reddit image galleries outperform imgur links because they require zero navigation away from the post — users swipe through without leaving. Imgur links add friction and trigger Reddit's algorithmic deprioritization of external links.
+
+**2. Markdown tables alone are too dry.** A pure text table with 32 picks and stat columns is scannable but not screenshottable or shareable. Dynasty managers won't screenshot a markdown table. They WILL screenshot a heat-colored Lab screener showing Tetrick Brown's college stats next to the Cardinals' WR depth chart. The table tells; the screenshots show.
+
+**3. A single compiled infographic is fragile.** One massive image (32 picks × stats) would be either too small to read on mobile (Reddit's dominant platform) or so tall that it requires painful zooming. Reddit's recommended image format is 4:5 portrait or 1:1 square — a 32-row infographic fits neither. A gallery of 8-12 focused screenshots (grouped by position or tier) lets each image be readable at native resolution.
+
+#### The Exact Format
+
+**Post type:** Text post with native image gallery
+
+**Title:** `[OC] Round 1 Dynasty Impact: Landing Spot Winners & Losers with Data` (72 chars — within the 60-80 char sweet spot for upvotes)
+
+**Body structure:**
+
+```
+Quick take intro (2-3 sentences — what Round 1 means for dynasty)
+
+| Pick | Player | Pos | Team | College PPG | Key Stat | Verdict |
+|:-----|:-------|:----|:-----|:------------|:---------|:--------|
+| 1.01 | Name   | WR  | ARI  | 18.2        | 31% tgt  | BUY     |
+| ...  | ...    | ... | ...  | ...         | ...      | ...     |
+
+## Winners (detailed — 3-4 players)
+[Analysis paragraph per player, reference gallery image #]
+
+## Losers (detailed — 3-4 players)
+[Analysis paragraph per player]
+
+## Methodology
+Built with razzle.lol's Lab screener — college stats, prospect scores, landing spot context.
+```
+
+**Image gallery (8-12 images):**
+1. Full Round 1 Lab screenshot (Prospect mode, sorted by pick)
+2-4. Winner spotlights — individual player Lab rows with heat coloring
+5-7. Loser spotlights — same format
+8. Before/after trade value shift screenshot (from Q46 feature)
+9-12. Position group breakdowns (all RBs drafted, all WRs drafted, etc.)
+
+Each gallery image gets a caption — Reddit supports per-image captions natively.
+
+#### Why NOT the Alternatives
+
+- **Imgur album link post:** External link = algorithmic penalty. Link posts get 10K fewer upvotes than native images. Imgur requires users to leave Reddit. Many mobile users won't click through.
+- **Single infographic:** Unreadable on mobile at the dimensions needed for 32 picks. Can't be broken into pieces for discussion. Production time is 3-4x longer than screenshotting the Lab.
+- **Pure markdown table:** Scannable but not visual. No watermark funnel. Doesn't showcase the Lab's design advantage. r/DynastyFF gets dozens of text-only rankings posts — visual OC stands out.
+
+#### Production Workflow for Draft Night
+
+1. Pre-build the markdown table template NOW with all 32 pick slots
+2. As picks happen, fill in player name/team/verdict
+3. After Round 1 ends, refresh Lab's Prospect mode with updated draft_team/round/pick data
+4. Screenshot the Lab (full view + individual spotlights) — ~10 minutes
+5. Create Reddit post: paste table, attach gallery, add analysis — ~15 minutes
+6. Post within 30 minutes of Round 1 ending
+
+Total production time: ~25 minutes if the table template and screenshot workflow are pre-staged.
+
+### Self-Critique
+
+1. **The "59% more upvotes with images" stat is from SingleGrain's analysis of Reddit-wide data across all subreddits.** r/DynastyFF is a niche sports community, not r/pics — the uplift may be smaller. However, the directional signal is strong: visual content outperforms text-only on Reddit universally. **Confidence: 7/10.**
+
+2. **Native Reddit galleries being superior to imgur is well-supported.** Reddit's own platform changes, removal of imgur API support, and algorithmic preference for native content all confirm this. In 2025, imgur links are treated as external links by Reddit's algorithm. **Confidence: 9/10.**
+
+3. **The 60-80 character title sweet spot is from Reddit-wide analysis (SingleGrain/MarketingScoop).** This is a robust finding with large sample sizes. **Confidence: 8/10.**
+
+4. **The claim that a single infographic is unreadable on mobile is a strong assumption but untested for this specific use case.** Fantasy football infographics from PFF and ESPN do get shared, but they're typically 4-6 players, not 32. A 32-pick infographic at 1080px wide would have ~30px per column, which is genuinely hard to read on a phone. **Confidence: 8/10.**
+
+Sources:
+- [Reddit Image Hosting: Marketing Executive's Guide to Visual Content ROI in 2025 — SingleGrain](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/)
+- [Reddit Post Images: Formats That Get Upvoted and Shared — SocialPixOptimizer](https://socialpixoptimizer.com/academy/reddit-post-images-formats-that-get-upvoted-and-shared/)
+- [Reddit Image Size Guide: Perfect Dimensions for Maximum Engagement — LiftBurst](https://liftburst.com/en/blog/reddit-image-size-guide-perfect-dimensions-for-maximum-engagement)
+- [How to Post Multiple Pictures on Reddit — Social Rise](https://social-rise.com/blog/how-to-post-multiple-pictures-on-reddit)
+- [Reddit Formatting Guide — Reddit Help](https://support.reddithelp.com/hc/en-us/articles/360043033952-Formatting-Guide)
+- [Reddit Statistics for 2025 — FoundationInc](https://foundationinc.co/lab/reddit-statistics/)
+- [40 Reddit Statistics, Facts & Trends 2025 — MarketingScoop](https://www.marketingscoop.com/marketing/40-reddit-statistics-facts-trends-to-know-in-2024/)
+
+### Implications for Razzle
+
+1. **Build a Reddit post template script.** Create `scripts/reddit_draft_recap.py` that generates the markdown table from the draft_night_updater.py data. Input: SQLite with drafted players. Output: Reddit-formatted markdown table with pick/player/pos/team/college-stat/verdict columns. Copy-paste into Reddit's text editor.
+
+2. **Pre-stage the screenshot workflow.** Lab's Prospect mode already has the right columns. Create a "Draft Recap" preset in PROSPECT_PRESETS that includes: Rank, Player, Pos, School, Draft Team, Round, Pick, College PPG, Target Share, Yards/Game. Screenshot this after updating data.
+
+3. **Use Reddit's native gallery, NOT imgur.** When creating the post, select "Images & Video" post type, then add the markdown table in the body. Reddit allows text + gallery in a single post. Each image gets a caption — use these to label "Winner: [Player]" or "All RBs Drafted."
+
+4. **Watermark every screenshot.** The gallery images are the funnel. Every Lab screenshot should have the "razzle.lol" watermark visible. When users ask "what tool is this?" in the comments, the answer is already on the image.
+
+5. **Keep razzle.lol OUT of the post body and title.** Only the watermark. The methodology section says "Built with razzle.lol's Lab screener" — that's the only text mention, and it reads as attribution, not promotion.
+
+### Open Questions
+
+1. **Should Razzle automate Lab screenshot generation for draft night — a headless browser script that captures preset views after each DB update — to cut the 10-minute screenshot step to under 1 minute?**
+
+2. **What is the right pre-draft content cadence for the week before the draft (April 21-23) to build follower count and set expectations for draft night coverage?**
+
+3. **How should Razzle handle the Reddit post comments section during and after posting — should there be pre-written "discussion starter" comments for each position group to seed engagement?**
+
+## NEXT QUESTION: Should Razzle pre-write "discussion starter" comments for each position group (QBs drafted, RBs drafted, WRs drafted, TEs drafted) and post them immediately after the Round 1 recap to seed engagement and organize discussion?
