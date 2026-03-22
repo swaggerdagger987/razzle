@@ -3381,3 +3381,87 @@ Sources:
 ## NEXT QUESTION: Should the Lab's existing analytics endpoint parse and store UTM params from the URL, or should Razzle add a lightweight analytics service like Plausible/PostHog for campaign attribution?
 
 ---
+
+## Q38: Should the Lab's existing analytics endpoint parse and store UTM params from the URL, or should Razzle add a lightweight analytics service like Plausible/PostHog for campaign attribution?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Extend the existing custom endpoint. Don't add a third-party service yet.**
+
+Razzle's current analytics system is minimal: a `pageviews` table with `(id, page, created_at)` and an `events` table with `(id, event_type, detail, created_at)`. The `POST /api/analytics/pageview` endpoint receives a page path string and inserts one row. No UTM parsing, no referrer, no session tracking.
+
+**What the upgrade looks like (< 30 lines total):**
+
+1. **Add 3 columns to `pageviews`**: `utm_source TEXT`, `utm_medium TEXT`, `utm_campaign TEXT`. One `ALTER TABLE` migration in `_init_analytics_table()`.
+
+2. **Frontend (5 lines):** In the pageview call, parse `URLSearchParams(window.location.search)` and send `utm_source`, `utm_medium`, `utm_campaign` alongside `page`.
+
+3. **Backend (5 lines):** Accept the three new fields in `log_pageview()`, insert them into the row. Truncate each to 50 chars.
+
+4. **Summary endpoint (5 lines):** Add a `by_source` query: `SELECT utm_source, COUNT(*) FROM pageviews WHERE utm_source IS NOT NULL GROUP BY utm_source ORDER BY cnt DESC`.
+
+That's it. Razzle now knows that 312 pageviews came from `reddit`, 47 from `twitter`, 8 from `discord`. Enough to validate the Reddit-first GTM thesis.
+
+**Why NOT Plausible ($9/mo):**
+
+- Plausible's UTM tracking is automatic and well-built ([Plausible UTM docs](https://plausible.io/docs/manual-link-tagging)). But it solves a problem Razzle doesn't have yet. At pre-launch with <100 daily visitors, the bottleneck is *getting* traffic, not *analyzing* it.
+- Plausible is a second dashboard. Razzle's admin summary endpoint (`GET /api/analytics/summary`) already shows page views by day and funnel events. Adding UTM columns to this keeps everything in one place.
+- $9/mo is cheap, but it's a recurring expense with zero users. The custom solution is free and takes 20 minutes.
+- Plausible's cookie-free tracking is nice but Razzle doesn't set analytics cookies anyway — the custom endpoint is already privacy-first by default.
+
+**Why NOT PostHog (free tier: 1M events/mo):**
+
+- PostHog's free tier is generous ([PostHog pricing](https://posthog.com/pricing)), but it's massive overkill. PostHog is a full product analytics platform (session replay, feature flags, A/B tests, surveys). Razzle needs to count UTM sources.
+- PostHog's JS snippet adds ~70KB to page load. Razzle's current analytics call is 3 lines of inline JS.
+- PostHog's self-hosted version is not recommended for small teams and caps at ~100K events/mo before scaling issues.
+
+**When to add Plausible (the trigger):**
+
+Add Plausible when ANY of these are true:
+- Razzle consistently exceeds 500 unique visitors/day (need real session analytics, bounce rates, geography)
+- You're running paid ads (need conversion attribution that custom SQLite can't do well)
+- You need GDPR compliance documentation (Plausible's EU hosting and no-cookie approach is pre-certified)
+
+Until then, the 3-column SQLite upgrade gives Razzle exactly what Q37 needs: per-platform UTM attribution for Reddit/Twitter/Discord share links.
+
+**One thing to capture that custom analytics misses: referrer.** When someone clicks a Razzle link in a Reddit post, the browser sends `document.referrer = "https://www.reddit.com/..."`. Even without UTMs, the referrer tells you the traffic came from Reddit. Add `referrer TEXT` as a 4th column — it's free insurance for links shared without UTMs (e.g., someone manually pastes a Razzle URL in a comment).
+
+---
+
+### Self-Critique
+
+1. **This answer is biased toward build-over-buy.** Plausible at $9/mo is genuinely cheap, and the time spent maintaining custom analytics (schema migrations, query debugging) may exceed the cost. But at Razzle's current scale (pre-launch, zero traffic), the custom route avoids adding a dependency before there's anything to track. **Confidence: 8/10.**
+
+2. **I'm underweighting PostHog's event tracking.** PostHog's event model (track any custom event with properties) is more flexible than Razzle's `events` table. If Razzle later needs funnel analysis (pageview → share → return visit → signup), PostHog does this natively while custom SQL requires manual funnel queries. But Razzle already has a `log_event()` function with funnel events — it just needs better querying, not a new platform. **Confidence: 7/10.**
+
+3. **The "add Plausible at 500 visitors/day" threshold is arbitrary.** I chose it because below that volume, you can eyeball SQLite query results. Above it, you need dashboards with date ranges, segmentation, and real-time views — which Plausible provides out of the box. The real trigger is when the founder stops being able to answer "where is traffic coming from?" with a single SQL query. **Confidence: 6/10.**
+
+Sources:
+- [Plausible UTM Tracking Docs](https://plausible.io/docs/manual-link-tagging) — automatic UTM grouping, supported params
+- [PostHog Pricing](https://posthog.com/pricing) — 1M free events/mo, feature breakdown
+- [PostHog vs Plausible Comparison](https://posthog.com/blog/posthog-vs-plausible) — scope, pricing, use cases
+- [Solopreneur Analytics Stack 2026](https://f3fundit.com/the-solopreneur-analytics-stack-2026-posthog-vs-plausible-vs-fathom-analytics-and-why-you-should-ditch-google-analytics/) — indie dev analytics comparison
+- [Indie Hackers: What are you using for analytics?](https://www.indiehackers.com/post/what-are-you-using-for-analytics-a34674c257) — community sentiment on self-built vs third-party
+- Razzle codebase: `backend/live_data/storage.py:391-466` (current analytics tables), `backend/server.py:2534-2542` (pageview endpoint)
+
+### Implications for Razzle
+
+1. **Add `utm_source`, `utm_medium`, `utm_campaign`, and `referrer` columns to the `pageviews` table.** Do this in the same July sprint as the UTM share modal from Q37. ~20 lines backend + ~5 lines frontend.
+
+2. **Don't add Plausible or PostHog until 500+ daily visitors.** The custom endpoint is sufficient for validating the Reddit GTM thesis. Track the trigger in PROGRESS.md so you remember to revisit.
+
+3. **Upgrade `get_analytics_summary()` with a `by_source` section.** Group pageviews by `utm_source` so the admin dashboard shows Reddit vs Twitter vs Discord traffic at a glance.
+
+4. **Capture `document.referrer` as a fallback.** Many Reddit visitors will click Razzle links that other users shared (without UTMs). The referrer captures these organic shares that UTMs miss.
+
+### Open Questions
+
+1. **What is the optimal image format and resolution for Reddit-embedded screenshots — PNG vs JPEG, dimensions, and how does Reddit's image compression affect heat-colored cells?**
+
+2. **Should Razzle add a "Share to Reddit" button that pre-fills a Reddit submission form (title + body + link) via reddit.com/submit URL params?**
+
+3. **How should Razzle's admin analytics dashboard evolve — should it remain an API-only endpoint, or should there be a simple admin page with charts for tracking UTM sources, funnel events, and daily traffic trends?**
+
+## NEXT QUESTION: What is the optimal image format and resolution for Reddit-embedded screenshots — PNG vs JPEG, dimensions, and how does Reddit's image compression affect heat-colored cells?
