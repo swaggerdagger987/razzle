@@ -2943,6 +2943,89 @@ Sources:
 
 3. **What does the first r/fantasyfootball "ADP Reality Check" post look like specifically — title, body structure, screenshot layout, and which players are the strongest ADP divergence candidates for August 2026?**
 
-## NEXT QUESTION: Should Razzle create a separate "Redraft Mode" toggle in the Lab UI (alongside NFL/College/Prospects), or is a saved preset with ADP columns sufficient for August content?
+## Q34: Should Razzle create a separate "Redraft Mode" toggle in the Lab UI (alongside NFL/College/Prospects), or is a saved preset with ADP columns sufficient for August content?
+
+**Answer: A new "Redraft" preset is the right move. NOT a new universe toggle.**
+
+The Lab has two architectural layers: **universes** (NFL / College) that switch the entire data source and column definition set, and **presets** (PPR / Passing / Rushing / Dynasty / Efficiency / Advanced) that swap visible columns within a universe. Redraft is not a different data source — it's the same NFL players with different columns prioritized. It belongs at the preset level, not the universe level.
+
+**What the competitors do:**
+
+- **KeepTradeCut**: Entirely separate pages — `/dynasty-rankings` vs `/fantasy-rankings` (redraft). Different URL paths, different databases.
+- **FantasyCalc**: Same pattern — `/dynasty-rankings` vs `/redraft-rankings`. Separate pages.
+- **FantasyPros**: Separate pages — `/nfl/rankings/dynasty-overall.php` vs `/nfl/rankings/ppr.php`.
+- **Dynasty Daddy**: Separate tools branded as "Dynasty Daddy" (dynasty) and "Fantasy Daddy" (redraft).
+
+The industry consensus is **separate surfaces**, not a toggle within one tool. But these are all ranking sites, not screener tools. Razzle's Lab is a single screener that already handles NFL and College via universe switching. Adding a third universe for "Redraft" would be architecturally wrong — it queries the same `player_season_stats` table, same API endpoints, same player IDs. The only differences are: (1) which columns are shown by default, (2) ADP column availability, and (3) possibly default sort order.
+
+**The right implementation: a "Redraft" preset alongside the existing presets.**
+
+Current NFL presets: PPR, Passing, Rushing, Receiving, Dynasty, Dynasty Rankings, Efficiency, Advanced.
+
+New preset:
+```javascript
+redraft: {
+  label: "Redraft",
+  columns: ["adp_half_ppr", "pos_rank", "ppg", "games", "fantasy_points_ppr",
+            "targets", "receptions", "receiving_yards", "rushing_yards",
+            "touchdowns", "target_share", "snap_pct"],
+}
+```
+
+This gives Razzle's August r/fantasyfootball content exactly what it needs: click "Redraft" preset → see ADP column first → sort by ADP ascending → screenshot the "ADP vs PPG" divergence. One click, one screenshot, one Reddit post.
+
+**Why NOT a universe toggle:**
+
+1. **Same data, different lens.** Universe switches change the API query entirely (college vs NFL tables). A redraft preset just changes column visibility within the same NFL data.
+2. **No code duplication.** A new universe would need its own column definitions (`REDRAFT_COLUMNS`), preset set (`REDRAFT_PRESETS`), and potentially separate API params. A preset needs one object literal — 5 lines of code.
+3. **User mental model.** The universe bar means "what kind of players am I looking at?" (NFL pros vs college players). Redraft vs dynasty is "what lens am I analyzing through?" — that's what presets are for.
+4. **Saved Views already exist.** Power users can save a custom "My Redraft Board" view with whatever columns they want. The built-in preset just provides the on-ramp.
+
+**One enhancement worth building:** a small visual indicator when the Redraft preset is active — perhaps the preset bar highlights "Redraft" in a different color, or a subtitle appears: "Current-year ADP + production." This signals "you're in redraft mode" without the architectural weight of a universe toggle.
+
+**For screenshots:** The Redraft preset plus a "sort by ADP ascending" default gives the exact content format needed for "ADP Reality Check" posts. The watermark shows `razzle.lol`, the URL encodes the preset in state params (`?preset=redraft`), and clicking through from Reddit lands you in the same view. Zero friction.
+
+---
+
+### Self-Critique
+
+1. **This answer assumes ADP data exists in the column system.** The `adp_half_ppr` column referenced in the preset doesn't exist yet — it depends on `adp_adapter.py` being built (Q33's implication). The preset definition is correct in principle but can't ship until the ADP data pipeline exists. **Confidence: 9/10** on the architectural decision, but implementation is blocked on Q33's adapter work.
+
+2. **I'm making a UX claim without user testing.** The assertion that "preset is better than universe toggle" is based on architectural analysis and competitor patterns, not user research. It's possible that r/fantasyfootball users who arrive at razzle.lol would look for a "Redraft" tab at the top level and miss it as a preset button. A/B testing this is impractical at Razzle's scale, so the preset approach should ship first with analytics on preset usage to validate. **Confidence: 7/10**.
+
+3. **Competitors use separate pages, not presets.** KTC, FantasyCalc, and FantasyPros all use separate URLs. This could mean the market expects a separate surface. But those tools are ranking lists, not screeners — they don't have Razzle's column-switching architecture. The screener model genuinely is different. **Confidence: 8/10** that the preset approach is correct for Razzle's specific product.
+
+4. **The "Redraft" preset label might confuse dynasty-only users.** Current presets are stat-category-based (Passing, Rushing, etc.) or format-based (Dynasty, PPR). "Redraft" is a league-format label, not a stat category. This could create a "wait, what does this button do?" moment. Mitigation: tooltip on hover ("Columns optimized for redraft/seasonal league analysis"). **Confidence: 8/10**.
+
+Sources:
+- [KeepTradeCut Dynasty Rankings](https://keeptradecut.com/dynasty-rankings) — separate `/dynasty-rankings` vs `/fantasy-rankings` URL paths
+- [KeepTradeCut Fantasy (Redraft) Rankings](https://keeptradecut.com/fantasy-rankings) — separate redraft rankings database
+- [FantasyCalc Dynasty Rankings](https://fantasycalc.com/dynasty-rankings) — separate page for dynasty
+- [FantasyCalc Redraft Rankings](https://fantasycalc.com/redraft-rankings) — separate page for redraft
+- [FantasyPros Dynasty Rankings](https://www.fantasypros.com/nfl/rankings/dynasty-overall.php) — separate dynasty ranking page
+- [Dynasty Daddy](https://dynasty-daddy.com) — separate "Fantasy Daddy" branding for redraft tools
+- Razzle codebase: `frontend/lab.js` lines 893-940 (PRESETS object), lines 943-950 (universe state), lines 3276-3277 (universe toggle HTML)
+
+### Implications for Razzle
+
+1. **Add a "Redraft" preset to the PRESETS object in lab.js.** 5 lines of code. Blocked on ADP column existing in the COLUMNS definition, which is blocked on `adp_adapter.py` (target: July build).
+
+2. **Default sort for Redraft preset: ADP ascending.** When `applyPreset('redraft')` fires, also set `state.sortKey = 'adp_half_ppr'; state.sortDir = 'asc'`. This is a one-line addition to `applyPreset()` — check if the preset key is `'redraft'` and override sort.
+
+3. **URL state encoding.** The preset name should encode into URL params so Reddit click-throughs land in redraft view: `?preset=redraft`. Currently presets don't persist to URL — this is a small enhancement (add `preset` param to `serializeState`/`deserializeState`).
+
+4. **No universe-level changes needed.** The universe bar stays as NFL / College. No new data source, no new column definition set, no new API parameters.
+
+5. **Analytics: track preset usage.** When the Redraft preset ships, log `preset_selected: redraft` events to confirm r/fantasyfootball traffic actually uses it. If <10% of August visitors click it, the preset placement may need to be more prominent (e.g., a banner or default for first-time visitors arriving from r/fantasyfootball links).
+
+### Open Questions
+
+1. **How should Razzle encode preset selection in shareable URLs — and should Reddit click-throughs auto-apply the Redraft preset so visitors see exactly what the screenshot showed?**
+
+2. **What does the first r/fantasyfootball "ADP Reality Check" post look like specifically — title, body structure, screenshot layout, and which stat divergences are the strongest talking points for August 2026?**
+
+3. **Should the Lab's default view change based on referral source — e.g., traffic from r/fantasyfootball defaults to Redraft preset, traffic from r/DynastyFF defaults to Dynasty preset?**
+
+## NEXT QUESTION: How should Razzle encode preset selection in shareable URLs — and should Reddit click-throughs auto-apply the Redraft preset so visitors see exactly what the screenshot showed?
 
 ---
