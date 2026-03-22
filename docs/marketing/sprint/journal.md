@@ -3026,6 +3026,118 @@ Sources:
 
 3. **Should the Lab's default view change based on referral source — e.g., traffic from r/fantasyfootball defaults to Redraft preset, traffic from r/DynastyFF defaults to Dynasty preset?**
 
-## NEXT QUESTION: How should Razzle encode preset selection in shareable URLs — and should Reddit click-throughs auto-apply the Redraft preset so visitors see exactly what the screenshot showed?
+## Q35: How should Razzle encode preset selection in shareable URLs — and should Reddit click-throughs auto-apply the Redraft preset so visitors see exactly what the screenshot showed?
+
+**Date**: 2026-03-21
+**Source**: Codebase analysis (lab.js URL state), web app URL state best practices, competitor patterns
+
+---
+
+### Answer
+
+The current Lab URL state system (`saveStateToURL` / `loadStateFromURL` in lab.js:3740-3900) already serializes 20+ state parameters — universe, position, sort, filters, visual modes, columns — but **does not encode which preset was applied**. When a user clicks a preset, only the resulting column list is saved to `?cols=`. This means the URL captures the *effect* of a preset but not the *intent*. This creates two problems for Reddit click-throughs:
+
+1. **URLs are bloated.** A Redraft preset URL encodes 12 column keys: `?cols=adp_half_ppr,pos_rank,ppg,games,...` (~180 chars just for columns). A `?preset=redraft` param is 16 chars.
+2. **URLs are fragile.** If we add a column to the Redraft preset later, old shared URLs show the old column set. If the URL says `?preset=redraft`, the visitor gets whatever the current Redraft preset includes — always fresh.
+
+**The right design: encode `preset` as a first-class URL parameter, and treat it as a shorthand that overrides `cols`.**
+
+Implementation (3 changes to lab.js):
+
+```
+// In saveStateToURL():
+if (state.activePreset) params.set("preset", state.activePreset);
+// Only encode cols if NO preset is active (custom column set)
+
+// In loadStateFromURL():
+if (params.has("preset")) {
+  const presetKey = params.get("preset");
+  if (PRESETS[presetKey]) {
+    applyPreset(presetKey);
+    state.activePreset = presetKey;
+  }
+}
+
+// In applyPreset():
+state.activePreset = key;
+// Clear activePreset when user manually changes columns
+```
+
+This gives us: `razzle.lol/lab.html?preset=redraft&pos=RB&sort=adp_half_ppr&dir=asc` — 67 chars, human-readable, and self-updating if the preset definition changes.
+
+**Should Reddit click-throughs auto-apply the Redraft preset?**
+
+**Yes, but only via explicit URL params — not via referral detection.**
+
+Referral-based defaults (checking `document.referrer` for `reddit.com/r/fantasyfootball`) are technically possible but create three problems: (1) the `Referrer` header is often stripped by Reddit's redirect chain, especially on mobile apps, (2) it creates a "magic behavior" that users can't understand or reproduce, and (3) it breaks the "URL is the state" principle — the same URL would show different views depending on where you came from.
+
+Instead, the Reddit post links should include the preset param explicitly. The screenshot watermark shows `razzle.lol`, but the actual link in the post body should be:
+
+```
+https://razzle.lol/lab.html?preset=redraft&sort=adp_half_ppr&dir=asc
+```
+
+This means the Reddit visitor sees **exactly** what the screenshot showed. No magic. No referrer sniffing. The URL IS the intent.
+
+**What about UTM tracking?**
+
+Add `utm_source=reddit&utm_medium=post&utm_campaign=adp_reality_check` to the link for analytics, but these params should be *ignored* by the state system — they're for analytics only, not for view state. `loadStateFromURL()` already ignores unknown params, so no code change needed.
+
+**The full Reddit-to-Lab flow:**
+
+1. Poster creates a Lab view: clicks Redraft preset, sorts by ADP ascending, maybe filters to RB only
+2. URL auto-updates: `?preset=redraft&pos=RB&sort=adp_half_ppr&dir=asc`
+3. Poster takes screenshot (watermark shows `razzle.lol`)
+4. Post body includes the full URL with UTM appended
+5. Reddit visitor clicks → lands in identical view
+6. If visitor changes columns manually, `state.activePreset` clears and URL switches from `?preset=` to `?cols=`
+
+**Competitor patterns confirm this approach:**
+
+- **FantasyCalc** encodes league settings in API query params (`?isDynasty=false&numQbs=1&ppr=1`), creating shareable URLs per format
+- **PeakedInHighSkool** posts PNG images with a watermark URL — but the URL goes to a static page, not a dynamic state. Razzle's approach (URL encodes the exact view) is a meaningful upgrade over this model
+- General web best practice per TanStack Router discussions and "URL is your state" patterns: encode intent (preset name) over implementation (column list) when both are available
+
+---
+
+### Self-Critique
+
+1. **The `state.activePreset` tracking adds state management complexity.** Every column-modifying action (drag-reorder, hide column, add column from picker) needs to clear `activePreset`. If we miss one, the URL will say `?preset=redraft` but show different columns. This is a real implementation risk. **Confidence: 7/10** — the approach is correct but the clearing logic needs careful testing.
+
+2. **"Preset overrides cols" creates a precedence question.** What if a URL has both `?preset=redraft&cols=ppg,games`? My recommendation: preset wins, cols is ignored. But this means a user can't share a "modified Redraft" view by preset name — they'd need the cols param. This is the right trade-off (preset = canonical, cols = custom) but should be documented. **Confidence: 9/10**.
+
+3. **Referrer detection dismissal may be premature.** While I'm correct that `document.referrer` is unreliable, a hybrid approach — "if referrer is Reddit AND no URL params exist, default to Redraft" — could improve the experience for visitors who just type `razzle.lol` after seeing a Reddit post. But this creates a "works sometimes" behavior that's worse than "works never." **Confidence: 8/10** that explicit params only is the right call.
+
+4. **UTM params surviving localStorage restore.** If a Reddit visitor arrives with UTM params, the analytics fire. But if they return later without params, `loadStateFromURL()` falls through to localStorage restore, which saved the Redraft state. This is actually desirable — return visitors get their last view. No issue here. **Confidence: 9/10**.
+
+Sources:
+- [Your URL Is Your State (alfy.blog)](https://alfy.blog/2025/10/31/your-url-is-your-state.html) — principles for URL-as-state design
+- [TanStack Router Discussion #1249](https://github.com/TanStack/router/discussions/1249) — best practices for URL state, intent over implementation
+- [FantasyCalc API](https://www.fantasydatapros.com/fantasyfootball/blog/fantasycalc/1) — `?isDynasty=false&numQbs=1&ppr=1` query param pattern
+- [PeakedInHighSkool Live Trade Values](https://peakedinhighskool.com/live-link-trade-value/) — static URL + PNG watermark model (no dynamic state)
+- [Google UTM Parameters](https://support.google.com/analytics/answer/10917952?hl=en) — UTM tracking alongside app state params
+- Razzle codebase: `frontend/lab.js` lines 3740-3900 (saveStateToURL/loadStateFromURL), lines 3685-3709 (applyPreset)
+
+### Implications for Razzle
+
+1. **Add `preset` URL param to saveStateToURL/loadStateFromURL.** Track `state.activePreset` — set on `applyPreset()`, clear on any manual column change. ~15 lines of code across 3 functions.
+
+2. **Preset param takes precedence over cols param.** If both present, preset wins. If only cols, use cols (custom view). If neither, use default (PPR).
+
+3. **Reddit post links must include full state params + UTM.** The watermark shows `razzle.lol` (simple), the post body link shows `razzle.lol/lab.html?preset=redraft&sort=adp_half_ppr&dir=asc&utm_source=reddit` (exact state). Two complementary URLs serving different purposes.
+
+4. **Do NOT implement referrer-based default views.** Unreliable, confusing, and violates URL-as-state. If we want r/fantasyfootball visitors in Redraft mode, put it in the link.
+
+5. **URL readability matters for Reddit.** `?preset=redraft` is more trustworthy to click than `?cols=adp_half_ppr,pos_rank,ppg,...`. Reddit users are wary of sketchy-looking URLs. Short, readable params increase click-through rate.
+
+### Open Questions
+
+1. **What does the first r/fantasyfootball "ADP Reality Check" post look like specifically — title, body structure, screenshot layout, and which stat divergences are the strongest talking points for August 2026?**
+
+2. **Should Razzle add a "Copy shareable link" button to the Lab toolbar that auto-appends UTM params for the current platform (Reddit/Twitter/Discord)?**
+
+3. **How should the Lab handle expired or renamed presets in old shared URLs — graceful fallback to PPR default, or show a "this preset no longer exists" toast?**
+
+## NEXT QUESTION: What does the first r/fantasyfootball "ADP Reality Check" post look like specifically — title, body structure, screenshot layout, and which stat divergences are the strongest talking points for August 2026?
 
 ---
