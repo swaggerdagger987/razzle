@@ -7566,3 +7566,123 @@ Sources:
 3. **What is the optimal "response comment" workflow when r/DynastyFF commenters request player lookups — should Razzle pre-generate 20-30 player screenshots as a library, or generate them live from the Lab during the 4-hour post-monitoring window?**
 
 ## NEXT QUESTION: Should Razzle add a "Reddit crop" export mode to the Lab's PNG export — limiting visible rows to 8-12, using 4:3 aspect ratio, and auto-including a title/subtitle — so screenshots are feed-optimized without manual cropping?
+
+
+---
+
+## Q80: Should Razzle add a "Reddit crop" export mode to the Lab PNG export -- limiting visible rows to 8-12, using 4:3 aspect ratio, and auto-including a title/subtitle -- so screenshots are feed-optimized without manual cropping?
+
+### Answer
+
+**Yes -- build it, but as a "Share Mode" toggle on the existing export, not a separate button. The current export is already 80% there. Three targeted changes make it Reddit-feed-perfect in ~2 hours of dev time.**
+
+#### The Problem with the Current Export
+
+The Lab existing exportScreenerPNG() already includes:
+- Watermark with razzle.lol URL (good)
+- Title bar with context -- mode, position, season, sort column (good)
+- Position-colored badges, alternating rows, sort column highlight (good)
+- Capped at 25 rows (too many for Reddit feeds)
+
+The gap: it renders **dynamically-sized canvas** based on visible columns x 25 rows. The output dimensions are unpredictable -- a 6-column view produces a narrow tall image, while a 12-column view produces a wide short one. Neither is optimized for Reddit feed rendering.
+
+#### Reddit Feed Rendering Rules (the technical constraint)
+
+Reddit has **three rendering contexts**, each with different crop behavior:
+
+1. **Classic View (desktop)**: All images cropped to **5:4 aspect ratio**. Content outside the 5:4 safe zone is invisible in the feed -- users must click "See Full Image."
+2. **Card View (desktop/mobile app)**: Images up to slightly-taller-than-square display fully. Wider images get side padding up to 16:9. Taller images get cropped with a "See Full Image" button.
+3. **Mobile feed (50%+ of traffic)**: Thumbnails at **4:3 (400x300)** drive the click decision. If the critical data is not visible in the thumbnail, the post dies.
+
+**The safe zone**: design for **5:4 ratio** (1200x960 pixels), which survives all three contexts without cropping. 4:3 (1200x900) also works but loses 60px of vertical space for no benefit.
+
+#### The Three Changes
+
+**1. Row limit: 10 rows (not 25)**
+
+10 rows is the sweet spot:
+- **Reddit readability**: At 28px row height on a 960px-tall canvas, 10 data rows + header + title + watermark fits cleanly. 12 rows compresses the watermark. 8 rows wastes space and looks like a teaser instead of a complete analysis.
+- **Q76 research confirmed**: "8-12 rows max for Reddit feed readability" was the recommendation from the Lab screenshot configuration analysis. 10 is the center of that range.
+- **Competitive reference**: SubvertADown weekly position-ranking tables on r/fantasyfootball use 10-12 rows and consistently hit the front page.
+
+**2. Fixed canvas: 1200x960 (5:4 ratio)**
+
+Lock the canvas to 1200x960 regardless of column count. If fewer columns, widen column spacing for readability. If more columns than fit, truncate to the most important 6-8 (player + sort column + 4-6 stats). This ensures:
+- Full visibility in Classic View (5:4 native)
+- No crop in Card View (square-ish passes through)
+- Clean thumbnail at 400x300 (the 5:4 downscales perfectly to 4:3 thumbnail without losing critical content)
+
+**3. Title/subtitle header block**
+
+Replace the current single-line title bar with a two-line header:
+- **Line 1 (title)**: Bold, larger text -- the "take" or filter context. E.g., "RB Efficiency Leaders - 2025 - Half-PPR"
+- **Line 2 (subtitle)**: Smaller text -- the methodology hint. E.g., "Sorted by Fantasy Points Per Opportunity (PPO) - Min 100 touches"
+
+This mimics the structure of high-performing r/DynastyFF OC images (SubvertADown, FantasyPros tier images, PFF graphics). The two-line header makes the screenshot self-explanatory when shared without context.
+
+#### Implementation: Toggle, Not Separate Button
+
+Do not add a new "Reddit Export" button. Instead:
+- Add a **Share Mode toggle** (icon: share/arrow) next to the existing Export PNG button
+- When Share Mode is ON, the export uses 1200x960 canvas, 10 rows, two-line header
+- When Share Mode is OFF, the export uses the current dynamic sizing (for personal use, printing, etc.)
+- Default: Share Mode ON (the primary use case for PNG export is sharing)
+
+This avoids UI clutter. One button, one toggle. The toggle state persists in localStorage.
+
+#### What NOT to Build
+
+- **No auto-cropping of the live table view.** The export is a separate canvas render -- it already does not screenshot the DOM. The crop happens in the canvas drawing code, not as a CSS change.
+- **No platform selector dropdown** ("Reddit / Twitter / Discord"). Over-engineering. Reddit is the only platform where aspect ratio matters for algorithmic visibility. Twitter and Discord render images at arbitrary aspect ratios. One "Share Mode" handles all platforms.
+- **No template gallery or preset titles.** The title is auto-generated from screener state (position, season, sort column). The user adds their "take" via the subtitle field if they want -- but auto-generated context is the 80% solution.
+
+#### Competitor Reference
+
+No fantasy football analytics tool has a "Reddit-optimized export." This is a micro-feature with outsized impact:
+- **FantasyPros**: PNG export exists but outputs full-page screenshots (often 2000px+ tall, terrible in Reddit feeds)
+- **Dynasty Daddy**: No PNG export -- users manually screenshot
+- **KeepTradeCut**: Trade calculator images are well-sized (natural ~4:3) but not optimized for Reddit specifically
+- **SubvertADown**: Manually creates images in a design tool -- the fact that the most-upvoted weekly content on r/fantasyfootball requires manual image creation proves there is a gap
+
+Razzle Share Mode would be the first tool that exports feed-ready analytics images by default. That is a small competitive moat.
+
+### Self-Critique
+
+1. **The 5:4 ratio recommendation is based on Reddit current feed rendering (2025-2026).** Reddit redesigns their feed periodically. If Reddit shifts to a TikTok-style vertical feed or changes crop behavior, the ratio may need updating. However, 5:4 has been stable since the 2018 redesign, so this is a safe bet. **Confidence: 8/10.**
+
+2. **The "10 rows" recommendation is an educated guess**, not A/B tested. SubvertADown uses 10-12, which correlates with front-page success, but correlation does not equal causation -- his content quality may matter more than row count. However, the readability argument stands independently: 10 rows at 28px height is legible on mobile thumbnails. 25 rows is not. **Confidence: 7/10.**
+
+3. **The "2 hours of dev time" estimate assumes the existing exportScreenerPNG() is cleanly refactorable.** Having read the code (lab.js lines 5630-5827), the function is a single 200-line canvas drawing routine. Adding a conditional branch for Share Mode (different canvas size, row limit, header block) is straightforward -- no architectural changes needed. The colW, rowH, and padding constants just get recalculated. **Confidence: 9/10 on feasibility.**
+
+4. **The subtitle field ("add your take") is aspirational.** Most users will not type a custom subtitle. The auto-generated context line (position, season, sort) is the realistic default. The subtitle field is a nice-to-have, not a blocker. **Confidence: 6/10 on user adoption of manual subtitle.**
+
+5. **"Default to Share Mode ON" is a product bet.** If most users export PNGs for personal record-keeping (not sharing), the 10-row limit would annoy them. However, the Lab already has CSV export for data extraction. PNG export is inherently a sharing action -- you export an image to show someone. Defaulting to share-optimized is correct. **Confidence: 8/10.**
+
+Sources:
+- [Reddit Aspect Ratios and Image Sizes -- Complete Guide (RatioSize)](https://ratiosize.com/platform-page/reddit.html) -- 5:4 Classic View crop, 4:3 thumbnail, Card View behavior
+- [Reddit Image Size Guide: Perfect Dimensions (LiftBurst)](https://liftburst.com/en/blog/reddit-image-size-guide-perfect-dimensions-for-maximum-engagement) -- 1200x800 minimum, mobile 60%+ traffic
+- [Reddit Post Images: Formats That Get Upvoted (SocialPixOptimizer)](https://socialpixoptimizer.com/academy/reddit-post-images-formats-that-get-upvoted-and-shared/) -- centered composition, 5:4 safe area
+- [Social Media Image Sizes 2026 (iFormat)](https://iformat.io/blog/social-media-image-size-guide-2026-all-platforms) -- cross-platform dimension reference
+- [Reddit Image Hosting Visual Content ROI (Single Grain)](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/) -- image posts 65% more upvotes
+- Lab export code: frontend/lab.js lines 5630-5827 -- current exportScreenerPNG() implementation
+- Sprint Q76 (Lab screenshot configurations), Q77 (Saved Views), Q79 (image post format)
+
+### Implications for Razzle
+
+1. **Build Share Mode as part of the pre-launch prep (before April 1).** The warm-up commenting phase (Q78) does not need it -- comments use inline screenshots. But the April 21 OC post (Q79) absolutely needs feed-optimized images. Ship Share Mode by March 31.
+
+2. **The fixed 1200x960 canvas also benefits the watermark.** At fixed dimensions, the watermark font size and position can be pixel-perfected once. Currently it scales with canvas width, which means the watermark is tiny on narrow exports and huge on wide ones. Fixed canvas = consistent branding.
+
+3. **Consider pre-setting the row limit to 10 in Saved Views (Q77).** When a Saved View is loaded for screenshot purposes, the Share Mode should auto-engage. The "Screenshot Playbook" mapping (Q79 open question) now has a concrete implementation path: each Saved View + Share Mode ON = one-click Reddit-ready image.
+
+4. **This is the foundation for the "response arsenal" workflow (Q79 implication #3).** When commenters request player lookups, the response flow is: load Saved View -> data refreshes -> click Export PNG (Share Mode ON) -> upload to Reddit reply. Total time: ~15 seconds. Without Share Mode, you would need to screenshot, crop in an image editor, and resize -- 2-3 minutes per response. That delay kills engagement momentum in live threads.
+
+### Open Questions
+
+1. **What does the complete "Screenshot Playbook" look like -- a single doc mapping each debate topic to its Saved View name, Share Mode settings, Lab URL, and comment template -- and should it live in docs/marketing/ or as a feature within the Lab itself (e.g., a "Playbook" panel)?**
+
+2. **What is the optimal "response comment" workflow when r/DynastyFF commenters request player lookups -- should Razzle pre-generate 20-30 player screenshots as a library, or generate them live from the Lab during the 4-hour post-monitoring window?**
+
+3. **Should the Share Mode export include a QR code linking to the live Lab view -- so Reddit mobile users can scan to open the interactive version -- or does a QR code look too "marketing" and risk CQS penalties?**
+
+## NEXT QUESTION: What is the optimal "response comment" workflow when r/DynastyFF commenters request player lookups -- should Razzle pre-generate 20-30 player screenshots as a library, or generate them live from the Lab during the 4-hour post-monitoring window?
