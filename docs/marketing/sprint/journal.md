@@ -6383,4 +6383,100 @@ This is a permanent, irreversible decision. Reddit usernames cannot be changed a
 
 3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
 
-## NEXT QUESTION: Which specific Tier 1 username candidates are actually available on Reddit right now — and should the account be created today (March 21) to maximize account age before the April 1 warm-up commenting phase begins?
+## Q69: Which specific Tier 1 username candidates are actually available on Reddit right now — and should the account be created today (March 21) to maximize account age before the April 1 warm-up commenting phase begins?
+
+*Date: 2026-03-21*
+
+### Answer
+
+#### Username Availability (Checked Live March 21, 2026)
+
+I checked 35 username candidates against Reddit's `username_available.json` API. **33 of 35 are available.** Only `FantasyStatLab` and `DraftDayData` are taken.
+
+**Top 5 Recommendations** (ranked by fit with Q64's "data analyst with trade instincts" voice):
+
+| Rank | Username | Why It Works |
+|------|----------|-------------|
+| 1 | **u/DynastyDataNerd** | "Dynasty" + "Data" = identity keywords. "Nerd" = personal, self-deprecating, human. Easy to type, easy to remember. Matches the 70/30 data-analyst-with-trade-instincts voice perfectly. |
+| 2 | **u/PerGameRates** | Ultra-specific analytics signal. Says "I normalize stats properly" without saying a word. Distinctive — no one else has this as an identity. Downside: slightly more niche/obscure to casual users. |
+| 3 | **u/DynastyStatGuy** | Simple, clean, gendered-but-common Reddit pattern ("\_\_\_Guy"). Signals dynasty + stats. Easy to remember. Less distinctive than #1 and #2 but more broadly accessible. |
+| 4 | **u/TargetShareNerd** | Specific stat-nerd signal. "Target share" is a power-user keyword — anyone who recognizes it is already in the target audience. Downside: WR/TE-skewed term, less natural for QB/RB analysis. |
+| 5 | **u/DynastyByTheNumbers** | Longer but descriptive. "By the numbers" signals methodology. Reads like a column name. Downside: 20 characters (Reddit max), no room for error. |
+
+**Honorable mentions available:** DynastyDataGuy, DynastyNumbers, FilmRoomData, DynastyStatLab, PerGameGuy, DynastyMetrics, PPGAnalyst, SomeDynastyDegen.
+
+**Avoid from Q68 Tier 2 (tiger-adjacent):** TigerStatGuy, BengalFilmNerd, StripedAnalyst — all available but risk connecting username to razzle.lol's Bengal tiger mascot if someone Googles it.
+
+#### Create the Account TODAY — The Math Is Tight
+
+**Account age timeline (if created March 21):**
+
+| Date | Account Age | Milestone |
+|------|------------|-----------|
+| April 1 (warm-up commenting starts) | **11 days** | Likely clears commenting threshold (most subs: 1-7 days) |
+| April 15 (warm-up ends) | **25 days** | Below 30-day posting threshold in many active subs |
+| April 21 (pre-draft posts begin) | **31 days** | Barely clears the common 30-day automod threshold |
+| April 23 (Draft Night) | **33 days** | Safely above 30-day gate, still thin |
+
+**Critical finding:** Most valuable subreddits require [30+ days account age and 50-500 combined karma](https://chameleonmode.com/getting-started-with-reddit/) before allowing posts. r/DynastyFF's specific thresholds aren't publicly documented, but as a 192K-member niche community, it almost certainly has automod age gates.
+
+Creating today (March 21) means the account hits **exactly 31 days** on April 21 — the day Q51's pre-draft content cadence begins. **Every day of delay shrinks this margin.** If the account is created March 25 instead, it's only 27 days old on April 21 — below the 30-day threshold that could silently filter posts.
+
+#### What to Do Immediately After Account Creation
+
+1. **Subscribe** to r/DynastyFF, r/fantasyfootball, r/NFL_Draft, r/CFB, r/nfl (builds subreddit karma association)
+2. **Verify email** (Reddit restricts unverified accounts more aggressively)
+3. **Set avatar and bio** — Q67's bio template: "Fantasy data analyst. Dynasty + college football. All analysis is OC."
+4. **Do NOT comment yet** — Q53's warm-up calendar starts April 1. Let the account age passively for 11 days first.
+5. **Upvote organically** — browse and upvote 5-10 posts per day in subscribed subs. This builds internal reputation signals without triggering spam detection.
+
+#### The Decision
+
+**Create u/DynastyDataNerd today (March 21).** It's the strongest combination of: identity-keyword signaling ("dynasty" + "data"), human warmth ("nerd"), memorability, typing ease, and alignment with the Q64 analyst voice. Reserve u/PerGameRates as a backup if the primary doesn't feel right after a week.
+
+### Self-Critique
+
+1. **Username availability data is live and verified.** I hit Reddit's actual API — these results are ground truth as of March 21, 2026. **Confidence: 10/10.**
+
+2. **The "30-day threshold" is an industry estimate, not r/DynastyFF-specific.** I could not find r/DynastyFF's actual automod config. The 30-day number comes from [general Reddit guidance](https://chameleonmode.com/getting-started-with-reddit/) that "most valuable subreddits require 30+ day account age." r/DynastyFF could be 7 days, could be 60. Creating today hedges against the worst realistic case. **Confidence: 7/10 on exact threshold, 9/10 that creating today is correct regardless.**
+
+3. **The "DynastyDataNerd" recommendation is subjective.** It's my top pick based on Q64 voice alignment, memorability, and the "sounds like a person" test. But username selection is ultimately a taste call. All top 5 options are strong. **Confidence: 8/10.**
+
+4. **I didn't test whether Reddit's username checker has false positives.** The API returning `true` should mean available, but there's a small chance of reserved/banned names not flagged by the API. The only way to confirm is to actually attempt account creation. **Confidence: 9/10 that API results are accurate.**
+
+5. **The "upvote organically" advice is standard Reddit warm-up guidance.** Reddit doesn't publicly confirm that passive upvoting builds reputation signals, but [multiple guides](https://chameleonmode.com/getting-started-with-reddit/) recommend it and it's low-risk. **Confidence: 7/10.**
+
+### Sources
+- Reddit username_available.json API — live queries on 35 candidates, March 21, 2026
+- [Chameleon Mode: Getting Started with Reddit — 7 Critical Mistakes](https://chameleonmode.com/getting-started-with-reddit/) — 30+ day warm-up protocol, 50-500 karma threshold
+- [Reddit Help: Poster Eligibility Guide](https://support.reddithelp.com/hc/en-us/articles/33702751586836-Poster-Eligibility-Guide-Post-Check) — automod age/karma enforcement
+- [REDAccs: Why Reddit Account Age Matters (2026)](https://redaccs.com/age-importance/) — age tier breakdown
+- [ithy: Understanding Reddit's Account Age Minimums](https://ithy.com/article/reddit-account-age-minimums-kpif89rv) — 7-30 day typical ranges
+- [BrandSnag: Reddit Username Checker](https://brandsnag.com/reddit-username-checker) — alternative availability tool
+- Sprint Q64: Data-analyst voice strategy
+- Sprint Q67: Reddit bio template
+- Sprint Q51: Pre-draft content cadence (April 21 start)
+- Sprint Q53: Warm-up commenting calendar (April 1 start)
+- Sprint Q68: Username strategy (Tier 1 recommended)
+
+### Implications for Razzle
+
+1. **Create u/DynastyDataNerd RIGHT NOW.** Today is March 21. The April 21 pre-draft post deadline is exactly 31 days away. This is the last day to create an account that safely clears a 30-day automod gate. Tomorrow is already cutting it.
+
+2. **Write down the password securely.** Reddit account recovery for new accounts without post history is nearly impossible. Use a password manager.
+
+3. **Do NOT start commenting until April 1.** The Q53 warm-up calendar is calibrated for a specific cadence. Starting early with zero karma could look spammy. Let the account age silently.
+
+4. **Reserve u/PerGameRates as backup.** Create a second account if paranoid about automod rejection, but only actively use one. Reddit doesn't prohibit multiple accounts, only ban evasion and vote manipulation.
+
+5. **Update Q67 bio to match chosen username.** "DynastyDataNerd" already signals "data analyst," so the bio can lean more into personality: "Dynasty degenerate who trusts the numbers more than the tape. All analysis is OC." — rather than repeating "data analyst."
+
+### Open Questions
+
+1. **What specific subreddit karma (not just account age) does r/DynastyFF require for posting — and can the April 1-15 warm-up commenting phase realistically accumulate enough comment karma (target: 50-100) to clear the threshold before the April 21 pre-draft posts?**
+
+2. **Should the Reddit account's first-ever comment be in r/DynastyFF (building subreddit-specific karma) or in a lower-stakes sub like r/nfl or r/CFB (lower risk of early-comment scrutiny), and does subreddit-specific karma matter more than total karma for automod clearance?**
+
+3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
+
+## NEXT QUESTION: What specific subreddit karma (not just account age) does r/DynastyFF require for posting — and can the April 1-15 warm-up commenting phase realistically accumulate enough comment karma (target: 50-100) to clear the threshold before the April 21 pre-draft posts?
