@@ -4676,4 +4676,128 @@ Sources:
 
 3. **Should Razzle create a "Draft Week" landing page on razzle.lol that aggregates all pre-draft content (Big Board, value shifts, sleeper picks) as a bookmark-friendly URL to share — or does that split attention from the Lab?**
 
-## NEXT QUESTION: What specific metrics should Razzle track during pre-draft week (April 16-22) to measure whether the content cadence is working — and what thresholds trigger a strategy adjustment before draft night?
+---
+
+## Q52: What specific metrics should Razzle track during pre-draft week (April 16-22) to measure whether the content cadence is working — and what thresholds trigger a strategy adjustment before draft night?
+
+**Date:** 2026-03-21
+
+### Answer
+
+Track **9 metrics** across three tiers: Reddit engagement, Twitter growth, and site conversion. Each metric has a GREEN (on track), YELLOW (adjust), and RED (pivot) threshold. Check metrics daily at 9 PM ET after each day's content has had 12+ hours to settle.
+
+#### Tier 1: Reddit Metrics (r/DynastyFF)
+
+| Metric | GREEN | YELLOW | RED |
+|--------|-------|--------|-----|
+| **Upvotes per post** | 50+ | 15-49 | <15 |
+| **Comments per post** | 10+ | 4-9 | <4 |
+| **Upvote ratio** | >85% | 70-85% | <70% |
+| **Comment replies (from others, not OP)** | 5+ unique users | 2-4 | 0-1 |
+
+**Why these numbers:** r/DynastyFF is a niche subreddit (~200K members). OC analysis posts with data visualizations typically earn 30-100+ upvotes and 10-30 comments. A new account posting quality OC with Lab screenshots should clear the 50-upvote bar if the content resonates. Below 15 upvotes means the content isn't connecting or the spam filter is suppressing visibility. Upvote ratio below 70% means the community is actively downvoting — the content is perceived as spam or low-quality. Comment replies from unique users (not just OP responding) is the strongest signal of genuine engagement vs. talking into a void.
+
+**Data point:** Reddit's own Creator Stats dashboard (rolled out to 90% of desktop users) provides upvote ratio, total views, and community karma per post. Use this directly — no third-party tool needed.
+
+#### Tier 2: Twitter Metrics (@razzle_lol)
+
+| Metric | GREEN | YELLOW | RED |
+|--------|-------|--------|-----|
+| **Impressions per tweet** | 500+ | 100-499 | <100 |
+| **Engagement rate** | >3% | 1-3% | <1% |
+| **Net new followers (weekly)** | 30+ | 10-29 | <10 |
+| **Screenshot saves/bookmarks** | 5+ per tweet | 2-4 | 0-1 |
+
+**Why these numbers:** Micro accounts under 5K followers average 2-5% engagement rates on Twitter. For a niche fantasy football account in draft week (high-activity period), 500 impressions per tweet is achievable with hashtags (#DynastyFF, #NFLDraft, #FantasyFootball) and engagement with larger accounts. Below 100 impressions means the algorithm isn't distributing the content at all. 30 new followers in a week during draft season is realistic for consistent daily posting (0-500 followers in Month 1 is the benchmark for new niche accounts posting daily). Saves/bookmarks are the highest-signal metric on Twitter — a save rate above 2% of impressions indicates lasting value. For Lab screenshots, saves mean "I want to reference this data later" — exactly the behavior that converts to site visits.
+
+#### Tier 3: Site Conversion Metrics (razzle.lol)
+
+| Metric | GREEN | YELLOW | RED |
+|--------|-------|--------|-----|
+| **Daily unique visitors from Reddit/Twitter referral** | 20+ | 5-19 | <5 |
+
+**Why this number:** The watermark funnel (Q41, Q43) is the only conversion mechanism. Users see the `razzle.lol` watermark in Lab screenshots, manually type the URL, and land on the site. This is a high-friction funnel — most users won't bother. A 1-2% conversion rate from Reddit post views to site visits is excellent for organic OC content with no direct links. If a post gets 2,000 views and 20 people visit the site, that's a 1% conversion — strong. Below 5 daily visitors during active posting means the watermark isn't working or the content isn't compelling enough to drive curiosity.
+
+**How to track:** Razzle already has analytics (`POST /api/analytics/pageview`, pageviews table). Filter by referrer containing "reddit.com" or "t.co" (Twitter's link shortener). If referrer is blank (user typed URL directly after seeing watermark), check for traffic spikes that correlate with post timing.
+
+#### Decision Rules
+
+**After Wednesday April 16 (Day 1 — QB deep dive):**
+- All GREEN → Continue cadence as planned.
+- Any YELLOW → Note it but don't change. One data point isn't a trend.
+- Reddit RED → Check if post was caught in spam filter (no views = filter, low upvotes with views = bad content). If filtered, message mods. If bad content, adjust Thursday's Big Board format.
+
+**After Thursday April 17 (Day 2 — Big Board + seeded comments):**
+- Reddit GREEN + comments from seeded threads → Confirm 5-comment pattern for draft night.
+- Reddit YELLOW on comments → Reduce to 3 seeded comments for draft night.
+- Reddit RED on both posts → **Pivot: Drop Friday and Sunday Reddit posts. Focus entirely on Twitter for remaining 5 days. Use the 2 remaining Reddit post "slots" for draft night recap only.**
+- Twitter GREEN → Increase to 5 tweets/day for remaining days.
+- Twitter RED → Shift to more quote-tweet engagement (riding other accounts' distribution) instead of standalone tweets.
+
+**After Friday April 18 (Day 3 — Veteran impact):**
+- 2 of 3 Reddit posts RED → **Hard pivot: No more pre-draft Reddit posts. Save all remaining Reddit equity for the Round 1 recap (Q49). The account is too new and the content isn't landing.**
+- Twitter still RED after 3 days → Audit: are hashtags wrong? Is posting time wrong (8 AM ET vs 12 PM ET vs 6 PM ET)? Switch to the time slot with highest impressions from Days 1-3.
+
+**Saturday April 19 is engagement-only (no posts), so no new data.**
+
+**After Sunday-Monday (Days 5-6):**
+- Site conversion RED all week → The watermark funnel isn't working. Before draft night, add a tiny "razzle.lol" text overlay in a more prominent position on screenshots (still no URL in post body).
+- All GREEN across the week → Full confidence in draft night plan. Execute Q47/Q49/Q50 as designed.
+
+#### What to Track It In
+
+Create a simple spreadsheet: `scripts/predraft_metrics.csv`
+
+```
+date,platform,post_title,upvotes,upvote_ratio,comments,unique_commenters,impressions,engagement_rate,saves,new_followers,site_visits_reddit,site_visits_twitter
+2026-04-16,reddit,QB Deep Dive,...
+2026-04-16,twitter,QB tweet 1,...
+```
+
+Fill it manually each night at 9 PM ET. Seven days of data. This is the "before" measurement that validates or invalidates the entire pre-draft content strategy before committing to draft night.
+
+### Self-Critique
+
+1. **The Reddit upvote thresholds (50+ GREEN) may be too aggressive for a brand-new account.** Even quality OC from unknown posters can stall at 20-30 upvotes if the account has no karma history. The community may be skeptical of a new voice. I've set 15 as the YELLOW floor, which accounts for this — but 50 might be aspirational for Week 1. **Confidence: 6/10 — may need to lower GREEN to 30+ after Day 1 calibration.**
+
+2. **The site conversion metric (20+ daily visitors) is the hardest to measure accurately.** Users who type `razzle.lol` directly after seeing a watermark won't have a Reddit/Twitter referrer — they'll show as direct traffic. Correlating direct traffic spikes with post timing is the best proxy, but it's noisy. **Confidence: 5/10 on measurement accuracy, but the metric itself is the right one to track.**
+
+3. **The "pivot after 2 RED posts" decision rule is data-backed by content marketing pivot frameworks** — the recommendation is to set clear timeframes and develop contingency plans before launch. Two consecutive RED signals in the same platform is sufficient to trigger a strategy change. Three would be safer but burns precious pre-draft days. **Confidence: 7/10.**
+
+4. **Twitter engagement rate benchmarks (3% GREEN) are well-supported.** Micro accounts under 5K followers average 2-5% engagement. During a high-activity event week like the NFL Draft, engagement should be at the upper end because the audience is actively seeking draft content. **Confidence: 8/10.**
+
+5. **The saves/bookmarks metric is the most underrated signal.** Reddit saves are the strongest organic engagement signal according to Reddit's own documentation. Twitter bookmarks similarly indicate lasting value. For data-heavy Lab screenshots, saves = "I'll reference this later" = high purchase intent for a premium analytics tool. **Confidence: 9/10 — this is the single best leading indicator of eventual conversion.**
+
+Sources:
+- [Reddit Benchmarks 2026 — Enrich Labs](https://www.enrichlabs.ai/blog/reddit-benchmarks-2025)
+- [Twitter Engagement Rate Benchmarks 2026 — Tweet Archivist](https://www.tweetarchivist.com/twitter-engagement-benchmarks-2025)
+- [Master X Performance: 8 KPIs for 2026 — Brand24](https://brand24.com/blog/twitter-performance/)
+- [Reddit Post & Comment Insights — Reddit Help](https://support.reddithelp.com/hc/en-us/articles/35363096996500-Post-Comment-Insights)
+- [How to Grow Twitter Following 2026 — Unfollr](https://www.unfollr.com/blog/how-to-grow-your-twitter-following)
+- [From 0 to 500 Twitter Followers 2026 — Postel](https://www.postel.app/blog/How-to-Grow-Your-X-Account-To-500-Followers-in-2025-A-Step-by-Step-Guide)
+- [Reddit Upvote Tracker — PainOnSocial](https://painonsocial.com/blog/reddit-upvote-tracker)
+- [Measuring Reddit Marketing Success — SingleGrain](https://www.singlegrain.com/digital-marketing-strategy/measuring-reddit-marketing-success-key-metrics-and-analytics/)
+- [Product Launch KPIs — ExecViva](https://execviva.com/executive-hub/product-launch-kpis)
+- [15 Social Media KPIs 2026 — Xpoz](https://www.xpoz.ai/blog/best-practices/15-social-media-kpis-you-should-be-tracking-in-2026/)
+
+### Implications for Razzle
+
+1. **Create `scripts/predraft_metrics.csv` before April 16.** The tracking spreadsheet must exist before Day 1 or data collection won't happen. Include columns for all 9 metrics. Populate nightly.
+
+2. **The Thursday April 17 Big Board post is the most important data point of the week.** It tests the Big Board format (Q49), seeded comments (Q50), AND generates 2 days of Reddit data for the pivot decision. If Thursday REDs, the Friday pivot saves 3 Reddit posts for draft night.
+
+3. **Saves/bookmarks should be the primary success metric, not upvotes.** A post with 25 upvotes and 15 saves is more valuable than one with 80 upvotes and 2 saves. Saves indicate the content has reference value — exactly the behavior that converts to razzle.lol visits and eventually Pro subscriptions.
+
+4. **The site conversion metric requires a dashboard or at least a daily SQL query.** `SELECT COUNT(DISTINCT session_id) FROM pageviews WHERE date = '2026-04-16' AND (referrer LIKE '%reddit%' OR referrer LIKE '%t.co%')` — or check for direct traffic spikes correlated with post times.
+
+5. **Build the pivot playbook into `scripts/predraft_content_calendar.md` (from Q51) as an appendix.** "If Reddit RED after Day 2, execute Plan B: [specific changes]." Having the contingency pre-written prevents panic decisions on April 18.
+
+### Open Questions
+
+1. **Should Razzle automate Lab screenshot generation for draft night — a headless browser script that captures preset views after each DB update — to compress the 10-minute manual screenshot step to under 1 minute?**
+
+2. **Should Razzle create a "Draft Week" landing page on razzle.lol that aggregates all pre-draft content (Big Board, value shifts, sleeper picks) as a bookmark-friendly URL to share — or does that split attention from the Lab?**
+
+3. **What does Razzle's Reddit account warm-up activity (March 24 - April 15) need to look like — how many comments per day, which threads to target, what karma threshold to hit — to ensure the pre-draft posts aren't spam-filtered?**
+
+## NEXT QUESTION: What does Razzle's Reddit account warm-up activity (March 24 - April 15) need to look like — how many comments per day, which threads to target, what karma threshold to hit — to ensure the pre-draft posts aren't spam-filtered?
