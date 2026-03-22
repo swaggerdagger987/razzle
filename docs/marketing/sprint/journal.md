@@ -6479,4 +6479,126 @@ Creating today (March 21) means the account hits **exactly 31 days** on April 21
 
 3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
 
-## NEXT QUESTION: What specific subreddit karma (not just account age) does r/DynastyFF require for posting — and can the April 1-15 warm-up commenting phase realistically accumulate enough comment karma (target: 50-100) to clear the threshold before the April 21 pre-draft posts?
+## Q70: What specific subreddit karma (not just account age) does r/DynastyFF require for posting — and can the April 1-15 warm-up commenting phase realistically accumulate enough comment karma (target: 50-100) to clear the threshold before the April 21 pre-draft posts?
+
+*Date: 2026-03-21*
+
+### Answer
+
+#### r/DynastyFF's Specific Thresholds: Unknown but Estimable
+
+r/DynastyFF does not publicly document its automod karma or account age thresholds. This is intentional — Reddit's [Poster Eligibility Guide](https://support.reddithelp.com/hc/en-us/articles/33702751586836-Poster-Eligibility-Guide-Post-Check) notes that moderators deliberately keep thresholds hidden to prevent gaming. No amount of searching will surface the exact numbers.
+
+**Best estimate based on comparable subreddits (100k-200k members, niche hobbyist):**
+
+| Criterion | Likely Threshold | Confidence |
+|-----------|-----------------|------------|
+| Account age | 7-30 days | 8/10 |
+| Total comment karma | 10-100 | 7/10 |
+| Subreddit-specific karma | 0 (likely not checked) | 6/10 |
+| CQS (Contributor Quality Score) | Moderate or higher | 7/10 |
+
+The critical new variable is **CQS** — Reddit's hidden trust metric that [thousands of subreddits now use in AutoModerator filters](https://reppit.ai/blog/reddit-cqs-vs-karma) instead of or alongside karma checks. Some subs require "100 comment karma AND Moderate CQS." A new account with 100 karma but Low CQS could still be silently filtered.
+
+#### CQS: The Hidden Gate That Matters More Than Karma in 2026
+
+CQS (Contributor Quality Score) is a **non-public** trust score Reddit assigns to every account. It has five tiers: Lowest, Low, Moderate, High, Highest. Key factors:
+
+- **Verified email** — essential, boosts CQS immediately
+- **Verified phone number** — significant CQS boost
+- **Two-factor authentication** — additional trust signal
+- **Post/comment removals** — each removal tanks CQS disproportionately
+- **Genuine cross-community engagement** — the strongest positive signal
+- **Behavioral patterns** — rapid-fire commenting or copy-paste patterns trigger flags
+- **VPN/proxy use** — can lower CQS even on legitimate accounts
+
+**Why this matters:** A new account that earns 80 karma but gets 2 comments removed by automod for being too short/low-effort could have a *worse* CQS than an account with 30 karma and zero removals. Quality-per-comment matters more than volume.
+
+#### Can April 1-15 Warm-Up Reach 50-100 Karma? YES — With the Right Strategy
+
+**The math (conservative):**
+
+- 15 days × 3-5 comments/day = 45-75 total comments
+- In fantasy football niche subs, a solid analytical comment gets 3-15 upvotes
+- Assume 40% of comments land (get 5+ upvotes), 50% get 1-3, 10% get 0
+- Conservative estimate: **(45 × 0.4 × 7) + (45 × 0.5 × 2) + (45 × 0.1 × 0) = 126 + 45 = ~170 karma**
+- Pessimistic estimate (lower engagement): **~60-80 karma**
+
+**50-100 karma in 15 days is highly achievable** with consistent, thoughtful commenting. The [0-to-500 karma guide](https://www.wappkit.com/blog/reddit-karma-fast-guide-2026) reports 50 karma within 7 days for focused commenters.
+
+**But the strategy must be CQS-optimized, not karma-optimized:**
+
+| Do This | Don't Do This |
+|---------|---------------|
+| 3-5 thoughtful comments/day across 2-3 subs | 15 one-liner comments across 10 subs |
+| Sort by New/Rising, be early to threads | Comment on Hot posts (buried in 500+ comments) |
+| Respond to others' analysis with substance | Drop generic "great analysis" replies |
+| Comment during peak hours (6-9 AM, 4-7 PM ET) | Post at 2 AM when engagement is dead |
+| Accept karma variance gracefully | Delete low-performing comments (deletion hurts CQS) |
+| Verify email + phone on Day 1 | Skip verification steps |
+
+#### The April 1-15 Warm-Up Calendar (Revised for CQS)
+
+**Week 1 (April 1-7): Foundation — r/fantasyfootball + r/nfl**
+
+Start in the *larger* subs where threads move fast and early comments get buried less. These subs have high comment velocity, meaning thoughtful replies to new posts get seen. Target: 3 comments/day, focus on quality. Don't touch r/DynastyFF yet — your first comments in the target sub should come when you already have some karma credibility.
+
+**Week 2 (April 8-15): Transition to r/DynastyFF**
+
+By April 8, the account is 18 days old with ~40-60 karma and a clean CQS. Begin commenting in r/DynastyFF — but stay in existing threads (trade advice, roster help) rather than creating posts. Target: 2 comments/day in r/DynastyFF, 1-2 in r/fantasyfootball.
+
+**April 15-21: Pre-post testing**
+
+By April 15, the account is 25 days old with ~80-120 karma. Make one low-stakes text post in r/DynastyFF (e.g., a trade question or roster advice thread). If it goes through → automod is cleared. If filtered → message the mods politely ("new to posting here, is there a minimum requirement?"). This gives 6 days to troubleshoot before the April 21 pre-draft OC posts.
+
+#### Subreddit-Specific Karma: Likely Not Required, But Helpful
+
+[Some subreddits check "local karma"](https://leadadvisors.com/blog/how-to-get-karma-on-reddit/) (karma earned within that specific community). However, this is primarily used by extremely high-traffic subs (r/memes, r/AskReddit) to prevent drive-by posting. Niche hobbyist subs like r/DynastyFF more commonly check total comment karma + account age. Building r/DynastyFF-specific karma during Week 2 is good insurance regardless.
+
+### Self-Critique
+
+1. **r/DynastyFF's exact automod thresholds are genuinely unknown.** I cannot find them publicly and no one has posted about being filtered. This is either because thresholds are low (most real users clear them without noticing) or because the sub relies on Reddit's built-in spam filters + CQS rather than custom automod rules. **Confidence: 6/10 on specific numbers, 9/10 on the range being 10-100 karma + 7-30 days age.**
+
+2. **CQS is the biggest new variable since Q51's original Reddit plan.** The entire Q51-Q69 research chain assumed karma + account age were the gates. In 2026, CQS is the primary gatekeeper for many subs. The warm-up strategy MUST be CQS-first, not karma-first. This is a genuine strategic revision. **Confidence: 9/10 that CQS matters, 6/10 that r/DynastyFF specifically uses it in automod.**
+
+3. **The karma accumulation math is realistic but variable.** Fantasy football subs in late March / early April are in off-season mode with lower traffic than September. Free agency and mock draft threads are active but not at peak engagement. My 60-80 pessimistic estimate accounts for this. **Confidence: 7/10.**
+
+4. **The "test post on April 15" strategy is the strongest risk mitigation.** Rather than hoping the automod lets the April 21 OC post through, proactively testing 6 days early gives buffer. If the test post fails, there's time to accumulate more karma or contact mods. **Confidence: 9/10 this is the right approach.**
+
+5. **Phone verification recommendation is new and important.** Previous sprint questions didn't mention verifying a phone number. In 2026's CQS landscape, phone verification is a significant trust boost — potentially worth more than 50 karma points in terms of posting eligibility. **Confidence: 8/10.**
+
+### Sources
+- [Reddit Poster Eligibility Guide](https://support.reddithelp.com/hc/en-us/articles/33702751586836-Poster-Eligibility-Guide-Post-Check) — automod thresholds intentionally hidden
+- [Reppit AI: Reddit CQS vs Karma](https://reppit.ai/blog/reddit-cqs-vs-karma) — thousands of subreddits now use CQS in automod filters, "primary gatekeeper in 2026"
+- [Postiz: Reddit Karma Requirements Guide](https://postiz.com/blog/reddit-karma-requirements) — mid-size subs: 10-100 karma, 30 days age typical
+- [WappKit: 0 to 500 Reddit Karma in 2 Weeks](https://www.wappkit.com/blog/reddit-karma-fast-guide-2026) — 50 karma within 7 days with focused commenting, 3-5 comments per session
+- [LeadAdvisors: How to Get Karma on Reddit](https://leadadvisors.com/blog/how-to-get-karma-on-reddit/) — subreddit-specific "local karma" exists, 5-10 comments/day recommended
+- [IPFoxy: Reddit Account Warm-Up Guide 2026](https://www.ipfoxy.com/blog/ideas-inspiration/5535) — 0-50 karma = new stage, 50-200 = basic active, quality over quantity emphasis
+- [Reddit Help: What is CQS?](https://support.reddithelp.com/hc/en-us/articles/19023371170196-What-is-the-Contributor-Quality-Score) — official CQS documentation
+- [Postpone: Reddit CQS Guide 2025](https://www.postpone.app/blog/understanding-reddits-contributor-quality-score) — CQS factors: verification, removals, behavior patterns
+- [AdaptlyPost: Reddit Karma Requirements Explained](https://adaptlypost.com/en/blog/reddit-karma-requirements-explained-how-to-build-karma) — comment karma > post karma for moderator trust
+- Sprint Q51: Pre-draft content cadence (April 21 start)
+- Sprint Q53: Warm-up commenting calendar (April 1 start)
+- Sprint Q69: Account creation (March 21, DynastyDataNerd)
+
+### Implications for Razzle
+
+1. **Verify email AND phone number on the Reddit account TODAY.** Phone verification is a CQS multiplier that previous sprint questions missed. It's potentially worth more than 50 karma points for posting eligibility. Do this on account creation, not later.
+
+2. **Enable two-factor authentication.** Another CQS trust signal. Takes 30 seconds. Do it now while setting up the account.
+
+3. **Revise the warm-up strategy to be CQS-first.** The Q53 commenting calendar should be updated: fewer comments per day (3-5 max, not 10+), higher quality each, zero deletions, zero copy-paste patterns. Better to post 3 comments that each get 5 upvotes than 10 that get 1 each.
+
+4. **Add the April 15 "test post" checkpoint.** Post a simple text thread (trade question or roster advice) in r/DynastyFF on April 15. If it goes through, the April 21 OC post is green-lit. If filtered, message mods and/or accelerate karma accumulation in the remaining 6 days.
+
+5. **NEVER delete a comment, even if it gets downvoted.** CQS penalizes deletion patterns. If a comment gets -2 karma, leave it. The CQS cost of deletion is worse than the karma loss.
+
+### Open Questions
+
+1. **Should the Reddit account's first-ever comment be in r/DynastyFF (building subreddit-specific karma) or in a higher-traffic sub like r/fantasyfootball (faster karma accumulation, lower scrutiny) — and what's the optimal split between target sub and feeder subs during the 15-day warm-up?**
+
+2. **What specific comment templates work best for fantasy football subreddits during the March-April off-season — trade advice, mock draft reactions, free agency analysis, or prospect evaluation — and which generates the highest karma-per-comment in this time window?**
+
+3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
+
+## NEXT QUESTION: Should the Reddit account's first-ever comment be in r/DynastyFF (building subreddit-specific karma) or in a higher-traffic sub like r/fantasyfootball (faster karma accumulation, lower scrutiny) — and what's the optimal split between target sub and feeder subs during the 15-day warm-up?
