@@ -5766,4 +5766,67 @@ Reddit's 90/10 self-promotion rule applies to the account's total history, not i
 
 3. **How should Razzle handle negative reception (downvotes, hostile comments, mod removal) on any of the 4 pre-draft posts — retreat, engage, or ignore — and at what threshold does negative reception warrant changing the draft-night plan?**
 
-## NEXT QUESTION: Should Razzle cross-post any of the 4 pre-draft OC pieces to r/fantasyfootball (2.2M members) for broader reach — or save that sub exclusively for the draft night recap and August redraft content?
+---
+
+## Q63: Should Razzle cross-post any of the 4 pre-draft OC pieces to r/fantasyfootball (2.2M members) for broader reach — or save that sub exclusively for the draft night recap and August redraft content?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Do NOT cross-post any of the 4 pre-draft OC posts to r/fantasyfootball. Save that sub for draft night (April 23) and August redraft season.**
+
+Five reasons:
+
+**1. r/fantasyfootball is dead in April.** Prior research (Q7) confirmed the sub's traffic is "nearly dead February-June, ramping July, explosive August-December." The 2M+ subscriber count is misleading — daily active users in April are a fraction of peak season. A post that gets 40 upvotes on r/DynastyFF might get 3-5 on r/fantasyfootball in April. Low engagement signals to Reddit's algorithm that the account produces low-quality content, tanking Contributor Quality Score (CQS) for future posts when it matters.
+
+**2. The 4 posts are dynasty-specific content.** Aging curve anomalies (Post 1), rookie class college stat comparisons (Post 2), veteran value depreciation before the draft (Post 3), and a 2025 draft retrospective gallery (Post 4) are all dynasty concerns. The r/fantasyfootball audience is overwhelmingly redraft-focused. Dynasty content on that sub during the offseason routinely gets ignored or receives "wrong sub, try r/DynastyFF" comments. The content-audience mismatch wastes the first impression.
+
+**3. Cross-posting from a new account triggers spam filters.** The account will be 12-26 days old during April 1-14. Reddit's crosspost spam detection is stricter for newer accounts. Cross-posting guidance says accounts need 500+ karma before "aggressive crossposting" (GetUpvotes). The account will have ~100 karma at best. Cross-posting identical content to 2 subs within hours is exactly the pattern automated spam filters flag — max 3-5 communities per 24 hours, spaced 1-2 hours apart, with customized titles (GetUpvotes). Even following best practices, the risk-reward ratio is terrible when the target sub is dormant.
+
+**4. First impressions on r/fantasyfootball are high-stakes.** The first post from the account on r/fantasyfootball sets the algorithmic baseline. If it's a dynasty-focused aging curve post that gets 5 upvotes and 0 comments, Reddit's system categorizes the account as a low-engagement contributor for that sub. If the first post is instead a draft night recap gallery on April 23 — posted when the sub is at peak draft excitement — it can land 100-500+ upvotes and establish the account as a high-quality contributor for the August redraft push.
+
+**5. One sub at a time maximizes credibility depth.** Q53's warm-up plan has the account building 90+ comments on r/DynastyFF over 23 days. Splitting that commenting effort across two subs halves the credibility depth on each. Better to be known as a respected regular on r/DynastyFF by draft night than a vaguely recognized name on two subs.
+
+**The exception that proves the rule:** If Post 2 (Rookie Class Comparison) unexpectedly goes viral on r/DynastyFF (100+ upvotes, 50+ comments), AND r/fantasyfootball has a visible "draft prep" thread going, AND the account has 300+ karma by then — consider a rewritten (not cross-posted) version titled for redraft relevance: "How the 2026 rookie class compares to 2020-2025 — what history says about which draft picks hit." But this is a conditional play, not the plan.
+
+**The plan:** r/DynastyFF gets all 4 pre-draft posts (April 1-14). r/fantasyfootball gets zero content until the draft night recap gallery (April 23, 30 min after r/DynastyFF post per Q60). Then r/fantasyfootball becomes the primary target for August redraft content when the sub's 2M users wake up.
+
+### Self-Critique
+
+1. **"r/fantasyfootball is dead in April" is inferred, not measured.** Q7's research characterized the traffic pattern but didn't provide actual April vs. August user counts. The sub may have 50K-100K daily actives even in April — still 10x smaller than peak but not zero. Some NFL Draft analysis content DOES get traction on r/fantasyfootball in late April. **Confidence: 7/10 — the seasonal pattern is directionally correct but the "dead" characterization may overstate the case.**
+
+2. **I'm assuming the 4 posts won't work on r/fantasyfootball without testing.** Post 2 (Rookie Class) and Post 3 (Veteran Value Loss) have redraft relevance — anyone keeper or dynasty-adjacent cares about aging and rookie landing spots. The decision to hold back is based on risk management, not content quality. **Confidence: 8/10 — the risk-reward calculus clearly favors waiting.**
+
+3. **The "first impression" argument assumes Reddit's algorithm weights the first post more than subsequent ones.** This is likely true for CQS calculations but I couldn't find documentation confirming it. It may be more about cumulative engagement rates than any single post's performance. **Confidence: 6/10 on the mechanism, 9/10 on the strategic conclusion (draft night IS the better first impression regardless).**
+
+4. **I haven't confirmed r/fantasyfootball's current self-promotion rules.** Reddit blocked direct wiki access during research. The sub is known to be strict, but the exact rules about OC analytical content (vs. tool promotion) are uncertain. Some strict subs actually welcome high-quality OC analysis even from new accounts. **Confidence: 5/10 on specific rules, 8/10 on general strictness.**
+
+### Sources
+- [Reddit Crossposting Guide — GetUpvotes](https://getupvotes.com/reddit-crosspost-guide/) — CQS impact, 500+ karma threshold, spam filter triggers
+- [How to Crosspost on Reddit — Social Rise](https://social-rise.com/blog/how-to-crosspost-on-reddit) — relevance requirements, community adaptation
+- [What is Crossposting — Reddit Help](https://support.reddithelp.com/hc/en-us/articles/4835584113684-What-is-Crossposting) — official crossposting rules
+- [The Ultimate Guide to Crossposting on Reddit — Postpone](https://www.postpone.app/blog/crossposting-reddit) — timing and spam avoidance
+- Sprint Q7: r/DynastyFF vs r/fantasyfootball audience analysis — seasonal traffic patterns
+- Sprint Q53: Reddit account warm-up plan — commenting cadence and karma targets
+- Sprint Q60: Reddit draft night recap format — 30-min delay between subs
+
+### Implications for Razzle
+
+1. **Remove r/fantasyfootball from the April 1-14 content calendar.** All 4 pre-draft posts target r/DynastyFF only. No cross-posts. No "adapted versions." Focus all engagement energy on one sub.
+
+2. **Draft night (April 23) becomes the r/fantasyfootball debut.** Post the gallery to r/DynastyFF first, then r/fantasyfootball 30 min later per Q60. This is a NEW post (not a crosspost) with a redraft-flavored title. First impression = draft night excitement + high-quality data visualization.
+
+3. **Build r/fantasyfootball commenting history starting April 15.** After the 4 pre-draft posts on r/DynastyFF, shift ~30% of daily commenting effort to r/fantasyfootball. Engage in NFL Draft threads, mock draft discussions, and keeper league questions. 8 days of commenting before draft night gives the account some presence on the sub.
+
+4. **August redraft content plan should be drafted by late April.** The r/fantasyfootball audience wants: rankings, cheat sheets, scoring format comparisons, waiver wire targets. Razzle's Lab has all of these (auction values, scoring comparison, cheat sheet, stat leaders). Plan 4-6 redraft-specific Lab screenshots for August weekly posts.
+
+### Open Questions
+
+1. **What specific commenting "voice" should the Razzle account use during the warm-up and OC phases — data-analyst ("the numbers say X"), scout ("watching the tape, I see Y"), or trade-advisor ("you should sell Z now because...") — and does consistency matter more than adaptability?**
+
+2. **How should Razzle handle negative reception (downvotes, hostile comments, mod removal) on any of the 4 pre-draft posts — retreat, engage, or ignore — and at what threshold does negative reception warrant changing the draft-night plan?**
+
+3. **What r/fantasyfootball-specific content adaptations are needed for the draft night recap gallery — different title framing, different screenshots, or different OP comment structure — compared to the r/DynastyFF version?**
+
+## NEXT QUESTION: What specific commenting "voice" should the Razzle account use during the warm-up and OC phases — data-analyst ("the numbers say X"), scout ("watching the tape, I see Y"), or trade-advisor ("you should sell Z now because...") — and does consistency matter more than adaptability?
