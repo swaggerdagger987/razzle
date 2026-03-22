@@ -9716,4 +9716,120 @@ Sources:
 
 3. **What's the optimal veteran comp methodology — should comps be based on college production profile similarity (Dominator Rating, Breakout Age), draft capital similarity (pick range), or physical archetype similarity (height/weight/speed) — and does the comp need to be accurate or just conversation-starting?**
 
-## NEXT QUESTION: Should Razzle build a "season mode" toggle for the Report Card that auto-updates grades after each NFL week — and what's the minimum backend work to make weekly in-season posts sustainable without manual data intervention?
+## Q97: Should Razzle build a "season mode" toggle for the Report Card that auto-updates grades after each NFL week — and what's the minimum backend work to make weekly in-season posts sustainable without manual data intervention?
+
+**Answer: Yes, but not as a UI toggle. Build a weekly data sync pipeline (GitHub Actions + Render deploy hook) that refreshes the DB every Thursday morning. The Report Card already computes grades on-demand from whatever data is in the DB — the only missing piece is getting fresh data INTO the DB automatically. Total new code: ~50 lines of GitHub Actions YAML + one --current-season flag on the adapter. No frontend changes needed.**
+
+### Why "Season Mode" Is Already Built
+
+The Report Card (fetch_report_cards() in dashboards.py:1061-1351) computes GPA grades on every request from raw player_week_stats data. There is no pre-computed "grade table" that needs updating. The flow is:
+
+Request -> Cache miss? -> Query player_week_stats -> Compute percentiles -> Grade -> Cache 5 min -> Return
+
+When new week data lands in the DB, the next cache-miss request automatically returns updated grades. There is no "season mode" to toggle on — the grades are always live relative to whatever data exists.
+
+The problem is not computation. It is **data freshness**. Currently, nflverse_adapter.py runs manually on the developer machine, rebuilds the DB, uploads to GitHub release, and Render downloads on deploy. During the NFL season, this manual loop is the bottleneck.
+
+### nflverse Release Schedule (The Clock You Sync To)
+
+Per the [nflverse data schedule](https://nflreadr.nflverse.com/articles/nflverse_data_schedule.html):
+
+- **Player stats update nightly** (3-5 AM ET) during the season
+- **NFL stat corrections land Monday-Wednesday**
+- **Thursday morning data is the cleanest** — all corrections incorporated
+- Play-by-play available within 15 minutes of game end (via raw JSON), but CSV releases lag
+
+**Your sync window: Thursday 6 AM ET.** This gives you clean data with all stat corrections, 3+ days before the next games, and time to generate cards + write reply templates before posting.
+
+### Minimum Viable Pipeline (3 Components)
+
+#### 1. GitHub Actions Cron Job (~30 lines YAML)
+
+A weekly workflow that runs Thursday 11:00 UTC (6 AM ET), checks out the repo, installs Python, runs the adapter with --current-season, uploads the DB to GitHub releases, and triggers a Render deploy hook via curl POST.
+
+**Cost: $0.** GitHub Actions free tier includes 2,000 minutes/month. This job runs once/week for ~3-5 minutes = ~20 minutes/month.
+
+#### 2. Adapter --current-season Flag (~15 lines Python)
+
+Currently nflverse_adapter.py main() processes all seasons (2015-2025). Add a flag that processes only the current season. This drops sync time from 2-5 minutes (11 seasons) to ~20 seconds (1 season, ~300 rows/week).
+
+#### 3. Render Deploy Hook (0 lines of code)
+
+Render provides a deploy hook URL — a POST to that URL triggers a new deploy. The deploy pulls the updated DB from GitHub releases (already configured). No code changes needed.
+
+### What About a Render Cron Job?
+
+[Render cron jobs](https://render.com/docs/cronjobs) cost $1/month minimum. GitHub Actions is free and more flexible. The only advantage of Render cron is that it runs in the same environment as the web service, but since the adapter writes to SQLite (which lives on a persistent disk), running the adapter remotely via GitHub Actions and then deploying is cleaner — no risk of corrupting the DB while the web service is reading it.
+
+### What About APScheduler / In-Process Threading?
+
+Running a scheduler inside the FastAPI process (schedule library, APScheduler, etc.) is fragile:
+
+- **Single-worker risk**: If the scheduler thread dies, no restart mechanism
+- **DB lock contention**: SQLite does not handle concurrent writes well; adapter writing while web service reads = potential locks
+- **Render spin-down**: Free-tier services spin down after inactivity; cron would stop
+- **Deployment restarts**: Every deploy kills the scheduler; missed windows require manual intervention
+
+GitHub Actions is stateless, free, and independent of the web service lifecycle. It is the right tool.
+
+### The Subvertadown Model (Validated by 7 Years of Reddit)
+
+[Subvertadown](https://subvertadown.com/) has posted weekly D/ST and kicker rankings to r/fantasyfootball since 2017. His pipeline: automated model runs -> generates rankings -> manual Reddit post with commentary. The automation handles data; the human handles voice. This is exactly what Razzle should do:
+
+- **Automated**: Data sync (Thursday AM) -> DB refresh -> deploy -> cache invalidation
+- **Manual**: Generate GPA cards (Playwright script, 30 sec) -> write 2 custom sentences per reply template -> post to Reddit
+
+The 80/20 split from Q95 holds: automate the data pipeline, keep the commentary human.
+
+### Weekly Content Pipeline (In-Season)
+
+Tuesday night: nflverse nightly update (stats from Sunday/Monday games)
+Wednesday: NFL stat corrections finalize
+Thursday 6 AM: GitHub Actions syncs current season -> uploads DB -> triggers Render deploy
+Thursday 7 AM: Render deploys with fresh data, cache clears on restart
+Thursday noon: Run generate_prestage.py -> 12 GPA cards + Honor Roll + templates (30 sec)
+Thursday 1 PM: Write 2 custom sentences per top-12 player (10 min)
+Friday morning: Post to r/DynastyFF (timing per Q94: biweekly offseason, weekly in-season)
+
+Total manual time per week: ~15 minutes (card review + custom sentences + post). Everything else is automated.
+
+### Self-Critique
+
+1. **The GitHub Actions approach requires the adapter to run in a clean environment without the existing DB.** Currently the adapter does INSERT OR REPLACE into an existing SQLite file. In GitHub Actions, there is no persistent disk — it needs to either (a) download the existing DB from GitHub releases first, then update it, or (b) rebuild the current season from scratch into a fresh DB, then merge. Option (a) adds one gh release download step. Option (b) would require restructuring the adapter. **Go with (a). Confidence: 8/10.**
+
+2. **Render deploy hook triggers a full redeploy, not just a DB swap.** This means ~2-3 minutes of downtime while Render builds and starts the new instance. For a site with <100 DAU, this is fine. If traffic grows, consider Render zero-downtime deploys (available on paid plans). **Confidence: 9/10.**
+
+3. **Cache invalidation happens naturally on deploy restart.** The in-memory Python cache and response cache are both in-process — when Render restarts the service, caches are empty. No explicit cache_clear() call needed. **Confidence: 9/10.**
+
+4. **The "weekly in-season" cadence (Q94) means 18 posts over an NFL season.** 18 x 15 minutes manual work = 4.5 hours total for the entire season. This is sustainable for a solo operator. The pipeline pays for itself by Week 2. **Confidence: 8/10.**
+
+5. **If nflverse changes their release format or URL structure, the pipeline silently fails.** GitHub Actions will error, but you will not know unless you check. Add a Discord webhook notification on failure. One extra line in the YAML. **Confidence: 7/10 — failure alerting is easy to forget.**
+
+Sources:
+- [nflverse Data Update Schedule](https://nflreadr.nflverse.com/articles/nflverse_data_schedule.html) — nightly updates 3-5 AM ET, stat corrections by Wednesday, Thursday = cleanest
+- [Render Cron Jobs Docs](https://render.com/docs/cronjobs) — $1/month minimum, 12-hour max runtime
+- [Subvertadown Compendium](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — 7 years of weekly automated rankings + manual Reddit posts
+- [uberfastman/fantasy-football-metrics-weekly-report](https://github.com/uberfastman/fantasy-football-metrics-weekly-report) — automated weekly report generation pattern
+- Sprint Q94 (posting cadence), Q95 (pre-stage package), Q93 (reply templates)
+
+### Implications for Razzle
+
+1. **Do NOT build a "season mode" toggle in the frontend.** The Report Card UI already works — it queries the API, which queries the DB. Fresh data in DB = fresh grades in UI. A toggle implies two modes to maintain. There is only one mode: "whatever is in the DB right now."
+
+2. **Build the GitHub Actions workflow as the FIRST in-season prep task (before Week 1).** The workflow is ~30 lines of YAML, testable with workflow_dispatch, and independent of all other work. Ship it in August, test it during preseason games (nflverse covers preseason), and it is battle-tested by Week 1.
+
+3. **Add --current-season flag to nflverse_adapter.py now.** This is a 15-line change that speeds up weekly syncs from minutes to seconds. It also makes the adapter useful for quick local refreshes during development. No reason to defer this.
+
+4. **The Playwright pre-stage script (Q95) should check data freshness before generating cards.** Add a simple check: if the latest week in player_week_stats does not match the current NFL week, warn and abort. This prevents generating stale cards if the Thursday sync failed silently. One SELECT MAX(week) query.
+
+5. **Failure alerting is non-negotiable for production.** Add a Discord webhook notification to the GitHub Actions workflow for both success and failure. When the Thursday sync runs, you get a ping: "Week 12 data synced, 347 rows updated" or "Sync failed: nflverse CSV 404." This is one curl command in the YAML — 15 seconds to add, saves hours of debugging missed syncs.
+
+### Open Questions
+
+1. **What is the optimal Reddit image hosting strategy — direct image upload (i.redd.it), Imgur album link, or inline image in a text post — and which format maximizes both visibility and watermark retention?**
+
+2. **What's the optimal veteran comp methodology — should comps be based on college production profile similarity (Dominator Rating, Breakout Age), draft capital similarity (pick range), or physical archetype similarity (height/weight/speed) — and does the comp need to be accurate or just conversation-starting?**
+
+3. **Should Razzle pre-compute and cache weekly GPA deltas (week-over-week grade changes) to power "risers and fallers" narrative hooks in Reddit posts — and what is the minimum storage needed?**
+
+## NEXT QUESTION: What is the optimal Reddit image hosting strategy — direct image upload (i.redd.it), Imgur album link, or inline image in a text post — and which format maximizes both visibility and watermark retention?
