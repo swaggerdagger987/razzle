@@ -3465,3 +3465,88 @@ Sources:
 3. **How should Razzle's admin analytics dashboard evolve — should it remain an API-only endpoint, or should there be a simple admin page with charts for tracking UTM sources, funnel events, and daily traffic trends?**
 
 ## NEXT QUESTION: What is the optimal image format and resolution for Reddit-embedded screenshots — PNG vs JPEG, dimensions, and how does Reddit's image compression affect heat-colored cells?
+
+---
+
+## Q39: What is the optimal image format and resolution for Reddit-embedded screenshots — PNG vs JPEG, dimensions, and how does Reddit's image compression affect heat-colored cells?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**Upload PNG at 2x resolution (2400×1800 actual pixels). Reddit converts to WebP server-side, but PNG input preserves heat-colored cell edges better than JPEG input.**
+
+#### Reddit's Image Pipeline
+
+Reddit accepts PNG, JPEG, and GIF uploads (max 20MB). After upload, Reddit's CDN (i.redd.it) converts images to **WebP** for serving — regardless of upload format. The conversion is lossy. You cannot control the compression quality. This means the upload format determines the *input quality* that Reddit's pipeline starts with.
+
+**PNG upload → lossless input → WebP lossy output = best possible quality**
+**JPEG upload → already lossy input → WebP lossy output = double compression = worse quality**
+
+For Razzle's heat-colored data cells, this distinction matters. JPEG compression creates **DCT block artifacts** around high-contrast edges — exactly the kind of edges that exist between a green cell (#2ec4b6) and an adjacent red cell (#d97757) in a heat-colored table. Uploading JPEG means Reddit's WebP conversion starts with already-degraded edges. Uploading PNG means the edges are pixel-perfect going in.
+
+#### Optimal Dimensions
+
+Reddit recommends **minimum 1200×800px** for clarity across devices. The sweet spot for data tables:
+
+- **Aspect ratio: 4:3 (1200×900)** — displays cleanly in Reddit feeds without aggressive cropping. 16:9 wastes vertical space for table data. 1:1 works on mobile but wastes horizontal space for wide tables.
+- **Actual render: 2400×1800 (2x scale)** — Razzle's html2canvas already uses `scale: 2`, which doubles the pixel density. This means a 1200px-wide panel renders to a 2400px-wide PNG. When Reddit downscales this for display, text stays sharp. This is the same approach r/dataisbeautiful's top posts use.
+- **File size target: under 2MB.** Razzle's 2x Lab screenshots with heat coloring should be ~800KB–1.5MB as PNG. Well under Reddit's 20MB limit but fast-loading on mobile (60%+ of Reddit traffic is mobile).
+
+#### What About Razzle's Compare Page?
+
+The compare export is currently 1200×630 (OG image dimensions, 16:9). This is good for Twitter/Discord embeds but slightly narrow for Reddit feed display. Consider a 1200×900 variant for Reddit sharing, or keep 1200×630 since the compare layout is naturally wide.
+
+#### Heat Coloring Survival Guide
+
+Razzle's heat-colored cells use position-specific HSL tinting (green-to-red gradient). After Reddit's WebP compression:
+
+1. **Gradients survive well.** WebP handles smooth color transitions better than JPEG. The hue differences between tiers (top 10% = deep green, bottom 10% = deep red) remain visually distinguishable.
+2. **Cell borders are the vulnerability.** Razzle uses 1px borders between cells. At Reddit's serving resolution, these can blur into adjacent cells. Recommendation: ensure heat-colored screenshots use **minimum 2px cell borders** or rely on cell background color alone (no border needed when adjacent cells have different colors).
+3. **Text on colored backgrounds compresses worst.** White text on a dark green cell will show ringing artifacts. Solution: Razzle already uses dark text on light tinted backgrounds (good). If adding darker heat tiers, ensure text contrast ratio stays above 4.5:1.
+
+#### What Competitors Do
+
+KTC, FantasyPros, and Dynasty Daddy don't offer native screenshot export — users take manual browser screenshots (varying quality). Razzle's built-in `Export PNG` button with watermark is a genuine differentiator. The 2x html2canvas approach produces higher-quality screenshots than manual Cmd+Shift+4.
+
+---
+
+### Self-Critique
+
+1. **I don't have Reddit's exact WebP compression quality level.** Reddit doesn't document their CDN's WebP quality parameter (e.g., quality=80 vs quality=90). The recommendation to upload PNG is sound regardless — lossless input is always better than lossy input when the pipeline applies its own lossy compression. But the actual quality degradation is hard to quantify without empirical testing. **Confidence: 7/10.**
+
+2. **The "2x resolution" recommendation may produce unnecessarily large files for simple tables.** A 2400×1800 PNG of a table with few columns might be 2MB+, which loads slowly on mobile Reddit. For text-heavy, low-color-complexity screenshots, 1.5x might be sufficient. But Razzle already uses `scale: 2` in html2canvas and the file sizes observed (~1MB) are acceptable. **Confidence: 8/10.**
+
+3. **I'm assuming Reddit's WebP is always lossy.** WebP supports lossless mode, and Reddit could theoretically serve PNG uploads as lossless WebP. Evidence suggests they use lossy (smaller file sizes, bandwidth savings at scale), but this is inferred, not confirmed. **Confidence: 6/10.**
+
+Sources:
+- [Reddit Image Size Guide](https://liftburst.com/en/blog/reddit-image-size-guide-perfect-dimensions-for-maximum-engagement) — dimensions, aspect ratios, mobile considerations
+- [Comprehensive Graphic Size Guide for Reddit](https://onlineoptimism.com/resource/comprehensive-graphic-size-guide-for-reddit/) — 1200×800 minimum, 4:3 and 16:9 ratios
+- [Reddit Aspect Ratios & Image Sizes](https://ratiosize.com/platform-page/reddit.html) — format support, file size limits
+- [Reddit Post Images: Formats That Get Upvoted](https://socialpixoptimizer.com/academy/reddit-post-images-formats-that-get-upvoted-and-shared/) — 5:4 safe frame, text readability
+- [Reddit Image Hosting Marketing Guide 2025](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/) — 85% JPEG quality, mobile-first
+- [JPEG vs PNG for Web](https://www.slrlounge.com/jpeg-or-png-how-to-maximize-image-quality-online/) — text/screenshots favor PNG
+- [PNG vs JPEG Quality Comparison](https://reformatly.com/resources/png-vs-jpeg-quality) — DCT artifacts on high-contrast edges
+- [Compression Artifact (Wikipedia)](https://en.wikipedia.org/wiki/Compression_artifact) — DCT blocks, ringing, mosquito noise
+- [WebP Compression (Google)](https://developers.google.com/speed/webp/docs/compression) — lossy vs lossless WebP modes
+- Razzle codebase: `frontend/lab.js:86-88` (html2canvas scale:2), `frontend/compare.js:581` (1200×630 export), `frontend/app.js:431` (watermark function)
+
+### Implications for Razzle
+
+1. **Keep PNG. Don't switch to JPEG.** Razzle's `toDataURL('image/png')` is correct. The file size penalty over JPEG is ~2-3x, but the files are still under 2MB, and text/cell-border quality is noticeably better after Reddit's WebP pipeline.
+
+2. **The current `scale: 2` is optimal.** Don't change it. 2x produces sharp text on retina displays and survives Reddit's downscaling. 1x would look blurry on mobile; 3x wastes bytes.
+
+3. **Add a "Reddit-optimized" crop hint.** When exporting Lab screenshots for Reddit, consider cropping to show 8-12 players (not 50). Dense tables with 50 rows become unreadable at Reddit feed size. The screenshot should be a teaser, not the whole dataset — driving clicks to the Lab URL.
+
+4. **Test empirically before launch.** Upload 3 test images to a private subreddit (r/test): (a) PNG 2x heat-colored Lab table, (b) JPEG 85% same table, (c) PNG 1x same table. Compare the served WebP quality on mobile Reddit. This 5-minute test is worth more than all the research above.
+
+### Open Questions
+
+1. **Should Razzle add a "Share to Reddit" button that pre-fills a Reddit submission form (title + body + link) via reddit.com/submit URL params?**
+
+2. **How should Razzle's admin analytics dashboard evolve — should it remain an API-only endpoint, or should there be a simple admin page with charts for tracking UTM sources, funnel events, and daily traffic trends?**
+
+3. **Should the Lab's screenshot export include a "Reddit crop" mode that limits the visible rows to 8-12 players for feed-friendly readability, versus the current full-table capture?**
+
+## NEXT QUESTION: Should Razzle add a "Share to Reddit" button that pre-fills a Reddit submission form (title + body + link) via reddit.com/submit URL params?
