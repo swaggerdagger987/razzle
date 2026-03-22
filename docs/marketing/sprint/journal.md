@@ -6065,4 +6065,127 @@ The DraftKick founder got 14,000 views, 6 signups, and 1 comment on their launch
 
 3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit -- and what are the server-specific norms for sharing analytical content?**
 
-## NEXT QUESTION: What r/fantasyfootball-specific content adaptations are needed for the draft night recap gallery -- different title framing, different screenshots, or different OP comment structure -- compared to the r/DynastyFF version?
+## Q66: What r/fantasyfootball-specific content adaptations are needed for the draft night recap gallery -- different title framing, different screenshots, or different OP comment structure -- compared to the r/DynastyFF version?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**The r/fantasyfootball version needs 5 specific adaptations: redraft-framed title, veteran-impact screenshots instead of prospect-focused ones, a different OP comment structure emphasizing "what this means for YOUR draft," fewer images in the gallery, and zero dynasty jargon. It is NOT a cross-post — it is a separate post built from the same data.**
+
+#### Adaptation 1: Title Reframe — Veteran Impact, Not Rookie Evaluation
+
+**r/DynastyFF title (Q49):** `[OC] Round 1 Dynasty Impact: Landing Spot Winners & Losers with Data`
+
+**r/fantasyfootball title:** `[OC] Round 1 Fantasy Impact: Which Veterans Just Got Helped or Killed by Tonight's Picks`
+
+The difference is fundamental. Dynasty managers care about the rookies themselves — "Is this WR1 in dynasty?" Redraft managers care about what the rookies do to existing players — "Did my Bijan Robinson just lose touches?" The r/fantasyfootball audience does not care about a rookie's college target share. They care that the team drafted the rookie's replacement or complement.
+
+PFF's draft winners/losers articles (consistently the most-shared draft content) always lead with veteran impact: "Jordan Love was a massive winner — Green Bay used their first three picks to improve his supporting cast." FantasyPros' 2025 draft coverage led with "8 NFL Draft Veteran Winners" as a standalone article. The audience wants to know what changed for players they already own or plan to draft in August.
+
+#### Adaptation 2: Screenshot Selection — Veteran Value Shifts Over Prospect Profiles
+
+**r/DynastyFF gallery (Q49, Q61):** 8-12 images focused on prospects — prospect scores, college stats, rookie big board, position breakdowns of drafted players.
+
+**r/fantasyfootball gallery: 5-6 images max, focused on veterans.**
+
+| Image # | r/DynastyFF Version | r/fantasyfootball Version |
+|---------|---------------------|--------------------------|
+| 1 | Full Round 1 prospect board | Trade Value Movers (Q61 preset #5) — veterans whose values shifted |
+| 2-3 | Winner/loser rookie spotlights | Veteran Winners — players whose teams improved around them (e.g., QB whose team drafted OL/WR) |
+| 4-5 | Position group rookie breakdowns | Veteran Losers — players whose roles just got threatened (e.g., RB1 whose team drafted a first-round RB) |
+| 6 | Before/after trade value shift | Scarcity Shift (Q61 preset #9) — which positions got deeper/thinner |
+
+Why fewer images? r/fantasyfootball is a bigger, faster-scrolling sub. Users swipe through 3-5 images, not 12. Mobile dominates. A 12-image gallery feels like homework. 5-6 punchy images with clear captions convert better on the bigger sub.
+
+#### Adaptation 3: OP Comment Structure — "What This Means for Your August Draft"
+
+**r/DynastyFF OP comment:** Position group discussion starters (Q50) — "QBs Drafted" / "RBs Drafted" threads for dynasty managers to debate trade values.
+
+**r/fantasyfootball OP comment:** A single structured comment with three sections:
+
+```
+**Biggest ADP Movers After Round 1:**
+- [Veteran A] goes UP — [reason in one sentence]
+- [Veteran B] goes DOWN — [reason in one sentence]
+- [Rookie X] enters the conversation for redraft — [only if elite landing spot]
+
+**The Overreaction Check:**
+Not every pick destroys a veteran's value. [Player C] owners — don't panic.
+[1-2 sentences explaining why the pick doesn't change as much as Twitter thinks]
+
+**Methodology:** Built with razzle.lol's Lab — nflverse data, no paywalls.
+```
+
+This comment structure mirrors what gets upvoted on r/fantasyfootball: actionable, concise, redraft-focused. Dynasty subs reward depth and nuance. Redraft subs reward speed and decisiveness. The "overreaction check" is a particularly strong r/fantasyfootball format — it's contrarian (the sub loves contrarian takes), it calms panic (useful), and it demonstrates analytical credibility.
+
+#### Adaptation 4: Zero Dynasty Jargon
+
+Words to **remove** from the r/fantasyfootball version:
+- "dynasty" → "fantasy"
+- "trade value" → "ADP" or "draft stock"
+- "buy/sell" → "target/avoid"
+- "rookie big board" → "rookie ADP impact"
+- "landing spot winners" → "fantasy winners"
+- "prospect score" → just reference the stat directly
+
+Words to **add**:
+- "redraft" (audience identifier)
+- "ADP" (the universal language of r/fantasyfootball)
+- "your draft" (makes it personal, not abstract)
+
+The r/DynastyFF post says "Tetrick Brown is WR8 in dynasty after this landing spot." The r/fantasyfootball post says "The Cardinals drafting Tetrick Brown makes Marvin Harrison Jr. a locked-in WR1 — target him if he slips past Round 2 in your draft."
+
+#### Adaptation 5: Timing — 30 Minutes After r/DynastyFF Post
+
+Per Q63, the r/fantasyfootball post goes up 30 minutes after the r/DynastyFF version. This is confirmed as the right approach — but the 30-minute gap is used to **rewrite**, not just re-title. In those 30 minutes:
+1. Swap the gallery images (veteran-focused screenshots should already be captured from Q61 presets)
+2. Rewrite the title and OP comment using the template above
+3. Strip dynasty jargon from the body text
+4. Post as a NEW post (not a crosspost — never crosspost per Q63)
+
+### Self-Critique
+
+1. **The "fewer images" recommendation (5-6 vs 8-12) is based on general Reddit engagement patterns, not r/fantasyfootball-specific data.** I couldn't find gallery-length vs. engagement data specific to fantasy football subs. PeakedInHighSkool posts single images (not galleries) and gets 1K-5K upvotes, which supports the "less is more" thesis but doesn't confirm the optimal gallery length. **Confidence: 7/10.**
+
+2. **The "veteran impact" framing assumes r/fantasyfootball users are active draft night.** Q63 noted the sub is "dead in April" but draft night is the exception — it's the one April event that activates the broader fantasy community. However, the sub may still have 10x fewer active users than August. The post may get 50 upvotes, not 500. That's fine — the goal is establishing account presence, not virality. **Confidence: 8/10 that the framing is right, 5/10 on engagement levels.**
+
+3. **The "overreaction check" comment format is borrowed from Twitter sports discourse.** It works there because reactions are fast and emotional. r/fantasyfootball is slower and more analytical than Twitter. The format might read as condescending if not calibrated carefully — "don't panic" can feel patronizing. Tone it as peer advice, not expert correction. **Confidence: 7/10.**
+
+4. **I haven't confirmed r/fantasyfootball allows gallery posts during draft night.** Some large subs lock posting during major events and funnel everything into megathreads. If r/fantasyfootball creates an "NFL Draft Megathread," standalone posts may be removed. The fallback: post the recap in the megathread as a top-level comment with imgur links. Less visibility but still establishes presence. **Confidence: 6/10 on posting rules, 9/10 on the fallback plan.**
+
+5. **The 30-minute rewrite window is tight.** Swapping 5-6 gallery images, rewriting the title, and adapting the OP comment in 30 minutes while also monitoring r/DynastyFF comments requires either pre-staging everything or accepting some rough edges. Pre-stage the veteran-focused screenshots and the r/fantasyfootball OP comment template BEFORE draft night. Fill in specifics during the 30-minute gap. **Confidence: 8/10 on feasibility with pre-staging.**
+
+### Sources
+- [Fantasy Football: Winners and losers from Day 1 of the 2025 NFL Draft — PFF](https://www.pff.com/news/fantasy-football-winners-and-losers-from-day-1-of-the-2025-nfl-draft) — veteran impact framing as the dominant draft-night content format
+- [8 NFL Draft Veteran Winners (2025 Fantasy Football) — FantasyPros](https://www.fantasypros.com/2025/05/8-nfl-draft-veteran-winners-2025-fantasy-football/) — standalone veteran winner articles as high-engagement format
+- [2024 NFL Draft Winners & Losers (Fantasy Football) — FantasyPros](https://www.fantasypros.com/2024/04/2024-nfl-draft-winners-losers-fantasy-football/) — veteran + rookie combined, redraft-focused framing
+- [NFL Draft Round 1 Fantasy Football Winners & Losers — 4for4](https://www.4for4.com/2024/preseason/nfl-draft-round-1-fantasy-football-winners-losers) — redraft-first analysis structure
+- [Subvertadown Compendium 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — successful r/fantasyfootball posting formats and cadence
+- [r/fantasyfootball Subreddit Stats — GummySearch](https://gummysearch.com/r/fantasyfootball/) — 3.4M members, engagement patterns
+- Sprint Q32: r/fantasyfootball vs r/DynastyFF content strategy differences
+- Sprint Q49: Round 1 recap format for r/DynastyFF (hybrid text + gallery)
+- Sprint Q61: Draft night screenshot presets (10 deterministic Lab URLs)
+- Sprint Q63: Cross-posting decision (save r/fantasyfootball for draft night debut)
+
+### Implications for Razzle
+
+1. **Pre-build TWO post templates, not one.** The r/DynastyFF template (Q49) and the r/fantasyfootball template are different documents. Create `scripts/reddit_draft_recap_redraft.py` alongside the dynasty version. Both pull from the same DB data but output different markdown, different image orders, and different framing.
+
+2. **Add "Veteran Impact" to the Q61 screenshot presets.** The current 10 presets (Q61) are dynasty-focused. Add 2-3 redraft-focused presets: "Veteran Winners" (filter to players whose teams drafted at their position), "Veteran Losers" (same filter, negative framing), "ADP Movers" (sorted by trade value delta). These use the same Playwright pipeline but different Lab URLs.
+
+3. **Write the r/fantasyfootball OP comment template NOW.** The structure is fixed — only the player names and specific takes change on draft night. Having the template ready converts the 30-minute gap from "write from scratch" to "fill in 6-8 blanks."
+
+4. **Prepare a megathread fallback version.** If r/fantasyfootball locks standalone posts during the draft, the recap becomes a top-level comment in the megathread. Format: shorter text (no markdown table — tables render poorly in comments), 2-3 imgur-hosted images (not native gallery — can't embed galleries in comments), and a link to the full r/DynastyFF post for the deep analysis.
+
+5. **The r/fantasyfootball post is the account's FIRST IMPRESSION on that sub (per Q63).** Everything — title, gallery, OP comment — must scream "useful analyst" not "tool promoter." The watermark does the marketing. The content does the credibility. Zero mentions of "check out my tool" in any form.
+
+### Open Questions
+
+1. **Should Razzle create a Reddit "data-analyst portfolio" — a pinned profile post or comment compilation that establishes credibility when curious users click the username — and what format works best for that?**
+
+2. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
+
+3. **Should Razzle prepare a "dynasty-to-redraft translation guide" — a quick reference mapping dynasty concepts (trade value, buy/sell, prospect tiers) to redraft equivalents (ADP value, target/avoid, rookie ADP) — for use in all r/fantasyfootball content?**
+
+## NEXT QUESTION: Should Razzle create a Reddit "data-analyst portfolio" — a pinned profile post or comment compilation that establishes credibility when curious users click the username — and what format works best for that?
