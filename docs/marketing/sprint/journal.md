@@ -8022,4 +8022,104 @@ Sources:
 
 3. **Should the playbook include a "Player Request Log" template — a simple table where the operator records every player name requested during each monitoring session — and should that log feed into an automated Tier 1 pre-stage list that evolves across multiple OC posts?**
 
-## NEXT QUESTION: Should the Lab add a "clipboard copy" feature to Share Mode export — so instead of downloading a PNG file, the image goes directly to clipboard for instant paste into Reddit's comment editor — and does Reddit's comment editor support clipboard image paste?
+---
+
+## Q83: Should the Lab add a "clipboard copy" feature to Share Mode export — so instead of downloading a PNG file, the image goes directly to clipboard for instant paste into Reddit's comment editor — and does Reddit's comment editor support clipboard image paste?
+
+*Date: 2026-03-21*
+
+### Answer
+
+**No — Reddit does not support pasting images from clipboard into comments. Build "Copy to Clipboard" anyway, but for Discord/Twitter/Slack, not Reddit. The Reddit workflow stays file-download → upload-button.**
+
+#### Reddit's Image-in-Comment Reality
+
+Reddit introduced "Images in Comments" in late 2022, but it works exclusively through a **file-upload button** in the Rich Text Editor toolbar — not clipboard paste. The operator clicks the image icon, selects a file from disk, and Reddit uploads it. Key constraints:
+
+- **Ctrl+V paste of images does NOT work** in Reddit's comment editor (neither Rich Text nor Markdown mode)
+- **Old Reddit** (old.reddit.com) has no image support in comments at all — markdown only, link to Imgur
+- **Markdown editor** on new Reddit also has no image upload — only the Rich Text editor has the image button
+- **Mobile app** uses camera roll picker, not clipboard paste
+- **Moderators must enable** "Media in Comments" per-subreddit — it's not on by default
+- Images in comments are capped at **240px max height/width** — tiny thumbnails, not the full-res screenshots Razzle produces
+
+Whether r/DynastyFF and r/fantasyfootball have "Media in Comments" enabled is unknown and irrelevant — even if enabled, the 240px cap makes in-comment images too small for data tables. The established workflow is: **upload full-res image as the post itself** (image post type), or link to Imgur in comments.
+
+#### Reddit Post Editor
+
+The post editor (for creating new posts, not comments) supports file selection and drag-and-drop but **not clipboard paste** either. Image posts use a dedicated "Image" post type. The Rich Text Editor's inline image insertion uses a file picker.
+
+#### The Clipboard API Is Solid — Just Not for Reddit
+
+The browser Clipboard API (`navigator.clipboard.write()`) works excellently for copying PNG images:
+
+| Browser | Support |
+|---------|---------|
+| Chrome | 76+ (2019) |
+| Edge | 79+ (2020) |
+| Firefox | 127+ (2024) |
+| Safari | 13.1+ (2020) |
+
+Technical implementation is clean: `canvas.toBlob('image/png')` → `new ClipboardItem({ 'image/png': Promise.resolve(blob) })` → `navigator.clipboard.write()`. Must be called from a user gesture (click handler). Safari requires the Promise wrapper. HTTPS required.
+
+#### Revised Recommendation
+
+**Build both buttons, but label them correctly:**
+
+1. **"Download PNG" (primary)** — the Reddit workflow. Download file → upload via Reddit's image button or Imgur. This is the core engagement loop.
+2. **"Copy to Clipboard" (secondary)** — for Discord, Twitter, Slack, iMessage, email. These platforms all accept Ctrl+V image paste. This saves the extra step of downloading first.
+
+The Reddit engagement workflow from Q81 stays unchanged:
+```
+Export PNG (download) → Open Reddit → Click image button → Select file → Upload → Add comment text → Post
+```
+
+For Discord (which many dynasty leagues use), the clipboard feature is genuinely valuable:
+```
+Copy to Clipboard → Open Discord → Ctrl+V → Send
+```
+
+**Dev estimate: 30 minutes.** The `exportScreenerPNG()` function already produces a canvas. Add a second click handler that calls `canvas.toBlob()` → `navigator.clipboard.write()` instead of triggering download. Show a toast: "Copied to clipboard — paste into Discord, Twitter, or Slack."
+
+### Self-Critique
+
+1. **The core finding — Reddit doesn't support clipboard paste for images — is well-documented.** Reddit's own help pages confirm the file-upload-only workflow. Multiple third-party guides (Apps UK, ITGeared, TechyHost) confirm no paste support. **Confidence: 9/10.**
+
+2. **The 240px cap on Reddit comment images is a critical detail.** Even if clipboard paste worked, the thumbnail size makes data table screenshots illegible in comments. The established pattern (image post or Imgur link) exists because Reddit intentionally limits in-comment image size. **Confidence: 9/10.**
+
+3. **Whether r/DynastyFF has "Media in Comments" enabled is unverified.** I couldn't find confirmation either way. This doesn't change the recommendation (the 240px cap makes it useless for data tables regardless), but it's a gap. **Confidence: 7/10 on this specific detail.**
+
+4. **The Discord use case is speculative but reasonable.** I didn't research whether dynasty league Discord servers are common enough to justify the feature. Anecdotally, most active dynasty leagues have Discord channels, and the clipboard-paste workflow is significantly faster for Discord than file download. **Confidence: 7/10.**
+
+5. **The "30 minutes dev estimate" assumes the canvas pipeline is clean.** The existing `exportScreenerPNG()` function would need to expose the canvas element (or its blob) to a second handler. If the function currently triggers download as its final step, refactoring it to return a blob requires minor restructuring. **Confidence: 7/10 on the estimate.**
+
+Sources:
+- [Reddit Help: How do I add images in comments?](https://support.reddithelp.com/hc/en-us/articles/10516331142932-How-do-I-add-images-in-comments) — file upload only, mod-controlled
+- [Adweek: Reddit Adding Images to Comments](https://www.adweek.com/media/reddit-adding-images-to-comments-in-subreddits/) — Nov 2022 feature launch
+- [MDN: Clipboard.write()](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/write) — browser support, PNG only
+- [web.dev: Async Clipboard API](https://web.dev/articles/async-clipboard) — implementation patterns, Safari quirks
+- [Frontend Masters: Writing to the Clipboard](https://frontendmasters.com/blog/writing-to-the-clipboard-in-javascript/) — cross-browser patterns
+- [ITGeared: How to Embed Images on Reddit](https://www.itgeared.com/how-to-embed-images-on-reddit/) — post editor: file picker and drag-drop only
+- Sprint Q80 (Share Mode), Q81 (response workflow), Q82 (Screenshot Playbook)
+
+### Implications for Razzle
+
+1. **The Reddit engagement workflow is file-based, period.** Do NOT design any Reddit-facing feature around clipboard paste. The playbook (Q82) should instruct: "Export PNG → save to Downloads → upload via Reddit image button." Any attempt to shortcut this (browser extension, automated upload) adds fragility without saving meaningful time.
+
+2. **"Copy to Clipboard" is a Discord/Twitter/Slack feature, not a Reddit feature.** Label it accordingly. The button tooltip should say "Copy image — paste into Discord, Twitter, or Slack" not "Copy for Reddit." This prevents user confusion and sets correct expectations.
+
+3. **The 240px comment image cap changes the comment strategy.** Even with "Media in Comments" enabled, a Razzle Lab screenshot would be illegible at 240px. For comment replies, the operator should link to the full image (Imgur or razzle.lol share URL) rather than using Reddit's native comment image feature. The OC post itself (image post type) displays full-resolution — that's where the screenshot shines.
+
+4. **Build both export paths in the same Share Mode UI.** Two buttons side by side: "Download PNG" (primary, for Reddit/Imgur) and "Copy to Clipboard" (secondary, for Discord/Twitter). Both use the same canvas pipeline. The toast notification differentiates: download shows "Saved to Downloads," clipboard shows "Copied — paste anywhere."
+
+5. **This finding validates the Q80 Share Mode scope.** Share Mode's 1200x960 PNG at 5:4 ratio was designed for Reddit image posts (not comments). The clipboard finding confirms that the export target is correct: the image goes into a Reddit image post or an Imgur upload, not inline in a comment. No changes needed to the Share Mode spec.
+
+### Open Questions
+
+1. **What is the optimal post-OC-post analytics workflow — which metrics should Razzle track after each Reddit post (upvotes, comment count, watermark-driven site visits, new user signups) and how should they feed back into the next post's strategy?**
+
+2. **Should the playbook include a "Player Request Log" template — a simple table where the operator records every player name requested during each monitoring session — and should that log feed into an automated Tier 1 pre-stage list that evolves across multiple OC posts?**
+
+3. **Should Razzle build a lightweight "share page" (razzle.lol/share/{id}) that renders a saved screenshot with Open Graph meta tags — so when the URL is pasted into Reddit/Discord/Twitter, it auto-generates a rich preview card with the Lab screenshot as the thumbnail?**
+
+## NEXT QUESTION: What is the optimal post-OC-post analytics workflow — which metrics should Razzle track after each Reddit post (upvotes, comment count, watermark-driven site visits, new user signups) and how should they feed back into the next post's strategy?
