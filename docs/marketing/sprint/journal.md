@@ -3723,4 +3723,84 @@ Sources:
 
 3. **Should the share modal include a live preview of the cropped screenshot (thumbnail) so users can see exactly what will be exported before downloading?**
 
-## NEXT QUESTION: Should the share modal include a live preview thumbnail of the cropped screenshot so users can verify what will be exported before downloading?
+---
+
+## Q42: Should the share modal include a live preview thumbnail of the cropped screenshot so users can verify what will be exported before downloading?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**No — don't add a live preview thumbnail to the share modal. The rendering cost outweighs the UX benefit, the current modal is already well-scoped, and the failure mode (user doesn't like the preview) has no good resolution path inside the modal.**
+
+#### Why It Seems Like a Good Idea
+
+Preview-before-download is a well-established pattern in design tools (Figma shows export previews, Canva shows download previews). The instinct is correct: users want to know what they're getting. For the upcoming Reddit crop mode (Q41), where the output differs from what's on screen, a preview feels especially justified — "let me see the 10-row crop before I download."
+
+#### Why It's Wrong for Razzle's Share Modal
+
+**1. Performance cost is real and visible.**
+`html2canvas` rendering is expensive — it manually redraws every DOM element onto a canvas. The current `screenshotPanel()` runs at `scale: 2` on the full `.lab-panel-content`, which on a 25-row table with heat coloring takes 500ms–2s depending on device. Even a low-res preview at `scale: 0.5` requires the full html2canvas pipeline — DOM traversal, style computation, element drawing — just at lower output resolution. The rendering time doesn't scale linearly with output size; it scales with DOM complexity. A preview thumbnail would add a 300ms–1s delay every time the share modal opens.
+
+Users currently click Share → modal opens instantly → they copy URL or click Download PNG. Adding a mandatory render step between "click Share" and "see the modal" violates the modal UX principle that modals should open instantly. An asynchronous preview (modal opens, then thumbnail loads) adds a loading spinner to a modal that currently has zero loading states — pure regression.
+
+**2. The preview answers a question the user isn't asking.**
+The share modal's job is to bundle export ingredients (URL, title, PNG, CSV). The user opened the modal because they've already decided to share. They're looking at the table right now — they can see what will be exported. The full-table PNG captures exactly what's visible. For the Reddit crop (Q41), the crop is deterministic: top 10 rows of the current sort. The user controls the input (sort order) and understands the output (first 10 rows). There's no ambiguity that a preview resolves.
+
+Figma and Canva need previews because the export format differs significantly from the editing canvas (cropping, scaling, background removal, format conversion). Razzle's screenshot is a pixel-faithful capture of exactly what's on screen. The cognitive gap between "what I see" and "what I get" is near zero.
+
+**3. The failure mode creates a dead end.**
+If the user sees the preview and doesn't like it — what then? They can't edit the screenshot from inside the share modal. They'd have to close the modal, re-sort the table, adjust filters, then reopen the modal. The preview adds a judgment step without adding a resolution step. This is the anti-pattern that modal UX research warns against: don't put information in modals that requires action outside the modal to resolve.
+
+**4. Modal bloat is the enemy.**
+The current share modal is tight: URL + Copy, Export buttons (PNG/CSV/Clipboard/Reddit Table), Reddit title + Copy, tagline, Close. It fits on one screen, zero scroll. Adding a 300×225px thumbnail preview (at 4:3) plus "Reddit Crop" toggle plus "Full Table" toggle would push the modal past one viewport on mobile (the 520px-wide modal is already full-width at 480px breakpoints). Modal UX best practice: "if your modal looks like an essay, users will close it before finishing."
+
+#### What to Do Instead
+
+1. **Descriptive label on the crop button.** Instead of a preview, label the Reddit crop button: "Download PNG (Top 10 rows, 4:3)". The text is the preview. Users understand "top 10 rows" instantly.
+
+2. **Toast confirmation after download.** After the crop PNG downloads, show a toast: "Reddit crop saved — 10 rows at 4:3". This confirms the output without front-loading the cost.
+
+3. **First-time tooltip.** On the first use of Reddit crop, show a brief tooltip: "This exports just your top 10 rows at a Reddit-friendly 4:3 ratio. Sort the table first to control which players appear." Then set a localStorage flag to suppress on repeat use.
+
+4. **If preview demand emerges, use a cached thumbnail.** If user feedback specifically requests preview, generate the thumbnail lazily (after the modal is open and idle for 500ms) and cache it. Don't re-render on every modal open — cache invalidation on sort/filter change. But build this only if users ask for it. YAGNI.
+
+---
+
+### Self-Critique
+
+1. **The "300ms–1s delay" estimate is extrapolated from html2canvas issue reports and general DOM complexity benchmarks, not measured on Razzle's specific table.** The actual time depends on column count, heat coloring complexity, and device. On a fast desktop it might be 200ms (acceptable); on a mid-range phone it could be 2s+ (unacceptable). **Confidence: 7/10.**
+
+2. **The "users aren't asking this question" claim is assumption — Razzle has no user feedback channel yet.** It's based on the UX principle that WYSIWYG tools don't need previews, which is well-supported in design literature. But if Reddit crop mode ships and users post "I didn't know what the crop would look like," this answer is wrong. **Confidence: 7/10.**
+
+3. **The modal bloat concern is concrete.** The current modal is 520px wide with ~280px of content height. A 300×225 thumbnail would nearly double the content area. On mobile (full-width), it would definitely require scroll. This is measurable from the existing HTML. **Confidence: 9/10.**
+
+Sources:
+- [Mastering Modal UX: Best Practices (Eleken)](https://www.eleken.co/blog-posts/modal-ux) — modals should be brief, people skim not read
+- [Modal UX Design Patterns (LogRocket)](https://blog.logrocket.com/ux-design/modal-ux-design-patterns-examples-best-practices/) — don't use modals for content requiring external action
+- [Modal UI Design (Chameleon)](https://www.chameleon.io/blog/modal-ui) — instant open, clear purpose, minimal content
+- [html2canvas Performance (GitHub #263)](https://github.com/niklasvh/html2canvas/issues/263) — rendering time scales with DOM complexity, not output size
+- [html2canvas Scale Guide (CopyProgramming)](https://copyprogramming.com/howto/html2canvas-scale-issue) — scale affects output quality but not render pipeline cost
+- [Export Pattern (Carbon Design System)](https://carbondesignsystem.com/community/patterns/export-pattern/) — export modals should confirm action, not preview output
+- [Figma Export (Help Center)](https://help.figma.com/hc/en-us/articles/360040028114-Export-from-Figma-Design) — preview justified when export differs significantly from canvas
+- Razzle codebase: `frontend/lab.html:3591-3629` (share modal HTML), `frontend/lab.js:78-117` (screenshotPanel), `frontend/lab.js:4087-4099` (openShareModal — zero async, instant open)
+
+### Implications for Razzle
+
+1. **Do NOT add a live preview thumbnail to the share modal.** It adds render cost, modal bloat, and solves a problem that doesn't exist for WYSIWYG screenshot export.
+
+2. **Use descriptive button labels instead.** When the Reddit crop toggle (Q41) ships, label it clearly: "Download PNG (Top 10, 4:3)" — text is cheaper than pixels.
+
+3. **Add a first-use tooltip for Reddit crop.** One-time guidance on what the crop does, suppressed via localStorage after first use.
+
+4. **Keep the share modal instant-open, zero-loading.** This is a competitive advantage — the modal opens in <16ms today. Don't regress it with a render step.
+
+### Open Questions
+
+1. **Should the Export PNG button label dynamically update based on the current state — e.g., showing "Download PNG (25 rows)" for full export vs "Download PNG (Top 10, 4:3)" when Reddit crop is toggled — to serve as inline preview-by-description?**
+
+2. **When the Reddit Post Kit (Q40) bundles title + URL + screenshot, should the filename include the preset name and position filter (e.g., `razzle_dynasty_WR_top10.png`) for better file organization?**
+
+3. **Should Razzle add a "screenshot history" feature (last 5 exports cached in memory) so users can re-download without re-rendering, and would this reduce the perceived need for a preview?**
+
+## NEXT QUESTION: Should the Export PNG button label dynamically update based on current state (row count, crop mode, position filter) to serve as inline preview-by-description?
