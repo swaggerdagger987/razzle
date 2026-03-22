@@ -8721,4 +8721,105 @@ Sources:
 
 3. **Should the first reply-to-player-request screenshot use the same Share Mode (full Honor Roll cropped to just that player's row) or a different format (expanded single-player profile card with all 5 grades visualized as a radar chart)?**
 
-## NEXT QUESTION: Should the Share Mode be built as a canvas draw (pixel-perfect, 4-6 hours) or html2canvas capture with manual cropping (faster, 2-3 hours, less reliable) — and does the April 21 deadline make the faster path necessary even if less polished?
+## Q89: Should the Share Mode be built as a canvas draw (pixel-perfect, 4-6 hours) or html2canvas capture with manual cropping (faster, 2-3 hours, less reliable) — and does the April 21 deadline make the faster path necessary even if less polished?
+
+**Date:** 2026-03-21
+**Prior context:** Q80 (Share Mode spec), Q82 (Screenshot Playbook), Q87 (first OC post), Q88 (visual polish audit)
+
+### Answer
+
+**Build the manual canvas draw. Not close.** The April 21 deadline is 31 days away — plenty of time for a 4-6 hour task. The faster path saves 2-3 hours but introduces reliability risk on the single most important image Razzle will ever produce: the first OC post on r/DynastyFF.
+
+Here's the decision matrix:
+
+| Factor | html2canvas | Manual Canvas Draw |
+|--------|-------------|-------------------|
+| **Dev time** | 2-3 hours | 4-6 hours |
+| **Pixel-perfect control** | No — captures whatever the DOM renders, varies by browser/zoom/font loading | Yes — every pixel is deterministic |
+| **Row count control** | Requires hiding DOM rows before capture, then restoring | Just loop 10 times |
+| **Column selection** | Requires hiding DOM columns before capture | Just draw the 7 columns you want |
+| **Headshot CORS** | Known failure mode — html2canvas tainted canvas errors with cross-origin images are the #1 open issue category ([Issue #3020](https://github.com/niklasvh/html2canvas/issues/3020), [Issue #3240](https://github.com/niklasvh/html2canvas/issues/3240), [Issue #592](https://github.com/niklasvh/html2canvas/issues/592)). nflverse CDN CORS headers are untested. | Load headshot as `Image()` with `crossOrigin = 'anonymous'`. If it fails, draw a fallback position-colored circle. Deterministic. |
+| **Font rendering** | Depends on CSS `@font-face` being fully loaded at capture time. Luckiest Guy from Google Fonts can lag on slow connections → fallback serif in the PNG. | `ctx.font = "bold 22px 'Luckiest Guy'"` — if the font isn't loaded, canvas falls back gracefully and you can add a `document.fonts.ready` guard. |
+| **Watermark position** | Unpredictable — canvas size varies with DOM content height. The current code (line 707-710) does `canvas.width - 20, canvas.height - 16` which shifts based on content. | Fixed: `ctx.fillText('razzle.lol', W*2 - 40, H*2 - 32)` where W=1200, H=960. Deterministic. |
+| **Title block** | Would need a DOM element added above the table, styled to match the export. Extra DOM manipulation. | `ctx.fillText('Player Report Card — 2025 Season', ...)` — 3 lines of code. |
+| **Existing codebase pattern** | Used on 10+ pages for quick captures. Works fine for "good enough" exports. | `compare.js` already has `drawExportPlayerCard()` (line 686-769) — a full manual canvas export drawing player cards with rounded rects, position badges, stat boxes, truncated names, and theme support. This is the exact pattern Share Mode needs. |
+| **Browser consistency** | html2canvas renders differently across Chrome/Safari/Firefox. [Known limitations](https://html2canvas.hertzen.com/) include pseudo-elements, gradients, and certain CSS properties. | Canvas 2D API is identical across all modern browsers. Zero cross-browser variance for text and rectangles. |
+| **Reusability** | Each page needs its own DOM manipulation to prep for capture. | A shared `drawShareModeTable(ctx, data, columns, options)` function works for all 70+ pages with different data. |
+
+**The codebase precedent seals the deal.** `compare.js:686-769` already draws player cards with:
+- `roundRect()` for bordered boxes
+- `getCanvasTheme()` for light/dark mode
+- `ctx.measureText()` for name truncation
+- Position-colored badges
+- `Space Mono` for data, `Luckiest Guy` for display text
+
+Share Mode is the same pattern with a table layout instead of cards. Estimated structure:
+
+```
+function drawShareModeReportCard(data, options) {
+  var W = 1200, H = 960, scale = 2;
+  var canvas = document.createElement('canvas');
+  canvas.width = W * scale; canvas.height = H * scale;
+  var ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+
+  // 1. Background (sand or espresso)
+  // 2. Title block (Luckiest Guy 28px + Caveat 18px subtitle)
+  // 3. Position filter badge if not ALL
+  // 4. Table header row (Space Mono 12px, bold)
+  // 5. 10 data rows (player name, GPA badge, 5 sub-grade badges)
+  // 6. Watermark (drawRazzleWatermark)
+  // 7. Return canvas.toDataURL('image/png')
+}
+```
+
+That's ~120-150 lines of canvas drawing code. The `compare.js` export function is 85 lines for a more complex layout (two player cards + radar chart + stat diff table). 4-6 hours is conservative.
+
+**Why the time delta doesn't matter:** The html2canvas path isn't actually 2-3 hours if you include debugging. CORS failures, font timing issues, and DOM prep/restore code eat the time savings. Monday.com's engineering team [documented this extensively](https://engineering.monday.com/capturing-dom-as-image-is-harder-than-you-think-how-we-solved-it-at-monday-com/) — they found that DOM-to-image capture is "harder than you think" and ultimately moved to canvas-based rendering for reliability. The 2-3 hour estimate assumes everything works on the first try. It won't.
+
+**The real timeline risk isn't dev time — it's the live engagement session.** On April 21, each player request reply needs a screenshot in under 60 seconds (Q87 response workflow). html2canvas captures the full page and requires manual cropping in an image editor. Manual canvas draw produces a clean 1200x960 PNG with one click. During a live Reddit engagement session with 10-30 player requests, 60 seconds per screenshot vs 3 minutes per screenshot is the difference between replying to all requests and losing engagement momentum.
+
+### Self-Critique
+
+1. **The 4-6 hour estimate for canvas draw may be optimistic if headshot loading is flaky.** Loading cross-origin images into canvas requires `new Image()` with `crossOrigin = 'anonymous'`, a load handler, and a fallback. If nflverse CDN doesn't send CORS headers, headshots won't work in canvas either. The fallback (position-colored circle with initials) adds 30 min. **Confidence: 7/10 — CORS affects both approaches equally, but canvas gives a cleaner fallback path.**
+
+2. **html2canvas is "good enough" for the other 69 pages.** This recommendation is specifically about the Report Card Share Mode for the April 21 post. The existing html2canvas exports on other pages (buysell, breakouts, awards, etc.) don't need to be replaced — they're personal-use exports, not Reddit-facing marketing images. Don't over-generalize this recommendation. **Confidence: 9/10.**
+
+3. **The reusability argument ("shared utility for 70+ pages") sounds good but may be YAGNI.** Only 3-4 pages will likely need Share Mode in the first month (Report Card, Stock Watch, Buy Low/Sell High, maybe Trade Values). Building a generic `drawShareModeTable()` upfront risks over-engineering. Build it for Report Card first, then extract the pattern when Post #2 needs it. **Confidence: 8/10.**
+
+4. **I haven't verified whether `document.fonts.ready` reliably waits for Google Fonts in all browsers.** If Luckiest Guy hasn't loaded when the canvas draws, the text renders in a fallback font. The `document.fonts.ready` promise should handle this, but edge cases exist (slow CDN, font timeout). Preloading fonts with `<link rel="preload">` is a belt-and-suspenders fix. **Confidence: 7/10.**
+
+5. **monday.com's experience is for a much more complex DOM.** Their tables have thousands of cells, rich formatting, and interactive elements. Razzle's Report Card is a simple 10-row × 7-column table. html2canvas would likely work fine for this scale. The reliability argument is about CORS and fonts, not performance. **Confidence: 8/10 — the CORS risk alone justifies canvas draw.**
+
+Sources:
+- [html2canvas CORS Issue #3020](https://github.com/niklasvh/html2canvas/issues/3020) — useCORS not working as expected
+- [html2canvas CORS Issue #3240](https://github.com/niklasvh/html2canvas/issues/3240) — failed to retrieve external images
+- [html2canvas CORS Issue #592](https://github.com/niklasvh/html2canvas/issues/592) — cross-domain images not rendering
+- [MDN: CORS-enabled images](https://developer.mozilla.org/en-US/docs/Web/HTML/How_to/CORS_enabled_image) — tainted canvas behavior
+- [monday.com: Capturing DOM as Image Is Harder Than You Think](https://engineering.monday.com/capturing-dom-as-image-is-harder-than-you-think-how-we-solved-it-at-monday-com/) — why they moved away from DOM capture
+- [monday.com: Canvas API Deep Dive](https://engineering.monday.com/the-power-of-the-canvas-api-a-deep-dive-into-how-we-transformed-our-table-performance-at-monday-com-part-2/) — canvas performance for tables
+- [Best HTML to Canvas Solutions 2025](https://portalzine.de/best-html-to-canvas-solutions-in-2025/) — landscape overview
+- Direct code audit: `frontend/compare.js:686-769` (manual canvas export pattern), `frontend/reportcard.html:702-716` (current html2canvas export), `frontend/lab.js:60-116` (html2canvas loader + watermark), `frontend/app.js:431` (drawRazzleWatermark)
+- Sprint Q80, Q82, Q87, Q88
+
+### Implications for Razzle
+
+1. **Build the Report Card Share Mode as manual canvas draw. Start from the `compare.js:drawExportPlayerCard` pattern.** Copy the theme handling, `roundRect()`, font setup, and `measureText()` truncation. Replace the card layout with a table layout. Estimated: 120-150 lines, 4-6 hours, done in one sitting.
+
+2. **Add `<link rel="preload" href="[Luckiest Guy font URL]" as="font" crossorigin>` to reportcard.html.** This ensures the display font is loaded before the user clicks "Share Mode." Belt-and-suspenders with `document.fonts.ready`.
+
+3. **Test nflverse headshot CORS headers before building.** Run `curl -I https://a.]espncdn.com/combiner/i?img=/i/headshots/nfl/players/full/[id].png` and check for `Access-Control-Allow-Origin: *`. If present, load headshots into canvas. If not, use position-colored circles with player initials — still looks good and avoids the dependency.
+
+4. **Don't generalize to a shared utility yet.** Build `drawShareModeReportCard()` as a standalone function in `reportcard.html`. When Post #2 needs Share Mode on a different page, extract the common parts then. YAGNI until proven otherwise.
+
+5. **The April 21 deadline has 31 days of buffer for a 4-6 hour task. There is zero time pressure to take shortcuts.** The html2canvas path saves 2-3 hours but introduces debugging risk that could cost more than 2-3 hours. The conservative choice IS the fast choice when you account for debugging time.
+
+### Open Questions
+
+1. **What should Post #2 look like — same Report Card format with different filters (position-specific grades? rookie-only? post-draft updated grades?) or a completely different view (Stock Watch, Buy Low/Sell High) to test which format gets more engagement?**
+
+2. **Should the first reply-to-player-request screenshot use the same Share Mode (full Honor Roll cropped to just that player's row) or a different format (expanded single-player profile card with all 5 grades visualized as a radar chart)?**
+
+3. **What is the minimum viable Sleeper league integration that would make a Reddit OC post go viral — should the first post include a "paste your Sleeper league" call-to-action, or is that too early before the product is polished enough to handle inbound traffic?**
+
+## NEXT QUESTION: What should Post #2 look like — same Report Card format with different filters (position-specific grades? rookie-only? post-draft updated grades?) or a completely different view (Stock Watch, Buy Low/Sell High) to test which format gets more engagement?
