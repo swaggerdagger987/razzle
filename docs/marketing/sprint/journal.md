@@ -6285,4 +6285,102 @@ Pin this to your profile. Mark it as OC. Update it as new posts go live (Posts 3
 
 3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
 
-## NEXT QUESTION: What should Razzle's Reddit username be — should it match the brand (u/razzle_lol, u/RazzleFF) or use a personal-sounding name (u/TigerAnalytics, u/DynastyDataGuy) — and what are the trade-offs for each approach given the "data analyst, not tool creator" identity strategy?
+## Q68: What should Razzle's Reddit username be — should it match the brand (u/razzle_lol, u/RazzleFF) or use a personal-sounding name (u/TigerAnalytics, u/DynastyDataGuy) — and what are the trade-offs for each approach given the "data analyst, not tool creator" identity strategy?
+
+**Date**: 2026-03-21
+
+### Answer
+
+**Use a personal-sounding name, NOT a brand name.** Specifically, use something in the "data-analyst persona" category — a name that signals expertise without naming the tool. The recommendation is a name like **u/DynastyDataNerd**, **u/FantasyFilmRoom**, or **u/TigerStatGuy** — NOT u/razzle_lol or u/RazzleFF.
+
+This is a permanent, irreversible decision. Reddit usernames cannot be changed after creation (the only exception is auto-generated names from Google/Apple signup within 30 days, before any interaction). Choose wrong and you either live with it forever or abandon the account and its karma.
+
+#### Why NOT a Brand Name
+
+1. **Instant suspicion.** Reddit marketing research consistently shows that usernames like "u/BuyOurProduct" or obvious brand handles trigger immediate downvotes and "shill" accusations. A username matching a .lol domain is a red flag to moderators and power users. r/DynastyFF has explicit self-promotion rules — a branded username makes every post look promotional even when the content is genuine OC.
+
+2. **Contradicts the identity strategy.** Q64 established the "data analyst, not tool creator" voice. Q62-Q67 built an entire funnel around the watermark being the only Razzle mention. A branded username undoes all of this — it announces "I am a product" before a single word is read.
+
+3. **Limits future flexibility.** If Razzle pivots, rebrands, or the Reddit account outgrows the product, a branded username is a cage. Subvertadown and PeakedInHighSkool both transcended their Reddit origins — their usernames work as standalone identities. "u/razzle_lol" does not.
+
+#### The Successful Models
+
+| Creator | Username Style | Result |
+|---------|---------------|--------|
+| Subvertadown | Pseudonym (no brand) | Built u/subvertadown → subvertadown.com. Name IS the brand. Username came first. |
+| PeakedInHighSkool | Personal joke name | Alex Korff's Reddit handle → peakedinhighskool.com. Quit his job off Reddit credibility alone. |
+| BeerSheets | Product name (u/Beer4TheBeerGod) | Hybrid — personal username, product has separate name. Works because the username is a personality, not a billboard. |
+
+**The pattern is clear**: every successful Reddit fantasy analyst uses a personal or pseudonymous name, not a product name. The product (website, Patreon, tool) comes later and is named separately.
+
+#### Recommended Username Categories
+
+**Tier 1 — Data-analyst persona (RECOMMENDED):**
+- u/DynastyDataNerd, u/FantasyFilmRoom, u/StatLabAnalyst, u/PerGameRates, u/DynastyByTheNumbers
+- Why: Signals expertise, feels human, matches the Q64 voice. "Data" and "Dynasty" are identity keywords, not product names.
+
+**Tier 2 — Tiger/mascot-adjacent pseudonym:**
+- u/TigerStatGuy, u/BengalFilmNerd, u/StripedAnalyst
+- Why: Subtle nod to Razzle's tiger identity without naming the product. Could feel clever to users who later discover razzle.lol. Risk: slightly "try-hard" if the tiger connection is too forced.
+
+**Tier 3 — Completely personal pseudonym:**
+- u/SomeDynastyDegen, u/WaiverWireJunkie, u/DraftDayData
+- Why: Maximum anonymity, zero brand signal. Works if the goal is pure community blending. Downside: no identity thread connecting username → screenshots → razzle.lol. The funnel relies on watermarks alone.
+
+**Tier 4 — Brand name (NOT RECOMMENDED):**
+- u/razzle_lol, u/RazzleFF, u/RazzleAnalytics
+- Why not: Triggers shill detection, contradicts analyst identity, limits flexibility. Only works for established brands (official AMAs, corporate accounts). Razzle is pre-launch with zero karma.
+
+#### The Decision
+
+**Go with Tier 1.** Pick a name that a real dynasty league nerd would choose for themselves. Check availability on Reddit immediately — good names get taken. Reserve 2-3 options now (create accounts, don't post). The one that "sounds like a person, not a product" is the winner.
+
+**Cross-platform alignment**: The Twitter account is @razzle_lol (brand name). This is fine — Twitter has a different culture where brand handles are normal. Reddit is the exception. Having different names is standard practice (PeakedInHighSkool is u/PeakedInHighSkool on Reddit but @PeakedInHS_FF on Twitter).
+
+### Self-Critique
+
+1. **The "personal name is always better" conclusion is well-supported by evidence.** Every successful fantasy Reddit analyst uses a personal/pseudonymous name. Zero counter-examples found of a brand-named account succeeding in r/DynastyFF or r/fantasyfootball as an OC creator. **Confidence: 9/10.**
+
+2. **The specific Tier 1 name suggestions are illustrative, not researched for availability.** I haven't checked if u/DynastyDataNerd or any of these are taken. Reddit usernames are first-come-first-served and permanently consumed even after deletion. The actual name selection requires real-time availability checks. **Confidence: N/A on specific names.**
+
+3. **The "reserve 2-3 accounts" advice has a Reddit policy nuance.** Reddit technically discourages creating accounts solely to squat on names. Creating multiple accounts is allowed, but using them to manipulate votes or evade bans is not. Reserving accounts and using only one is fine in practice. **Confidence: 8/10.**
+
+4. **I'm less certain about Tier 2 (tiger-adjacent).** The connection between a tiger-themed username and razzle.lol could be delightful ("oh, the tiger in the screenshots matches the username!") or could feel like transparent astroturfing if someone Googles "bengal tiger fantasy football" and finds razzle.lol. The risk is low but nonzero. **Confidence: 6/10 on tiger-themed names being safe.**
+
+5. **The cross-platform name mismatch (Reddit ≠ Twitter) is genuinely fine.** PeakedInHighSkool, Subvertadown, and BeerSheets all have different naming conventions across platforms. Reddit users rarely check Twitter handles. **Confidence: 9/10.**
+
+### Sources
+- [Reddit Help: Can I change my username?](https://support.reddithelp.com/hc/en-us/articles/204579479-Can-I-change-my-username) — usernames are permanent, no changes allowed
+- [BrandScout: Reddit Username Strategy](https://brandscout.net/blog/reddit-username-strategy) — brand usernames trigger suspicion, personal names build trust
+- [Shopify: Reddit Marketing 101](https://www.shopify.com/blog/reddit-marketing) — "Be a redditor with a brand, not a brand with a Reddit account"
+- [Content Marketing Institute: How to Make Reddit Work for Your Brand](https://contentmarketinginstitute.com/content-distribution-promotion/reddit-brands-marketing) — personal rep accounts outperform brand accounts
+- [GIS User: Why Brands Buy Reddit Accounts — and Why It Backfires](https://gisuser.com/2026/03/why-brands-buy-reddit-accounts-and-why-it-often-backfires/) — community detection of promotional accounts
+- [Franki T: Using Reddit for Organic Brand Promotion](https://www.francescatabor.com/articles/2025/8/21/using-reddit-for-organic-brand-promotion-a-step-by-step-guide) — two-account strategy (brand + personal rep)
+- [PeakedInHighSkool: Who the Hell Am I?](https://peakedinhighskool.com/2022/07/27/who-the-hell-am-i/) — Alex Korff built career off Reddit username recognition
+- [Subvertadown Compendium](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — pseudonymous username became the brand
+- [Alex Korff on Twitter (@PeakedInHS_FF)](https://x.com/peakedinhs_ff) — different handle across platforms is standard
+- Sprint Q64: Reddit commenting voice — "data analyst, not tool creator" identity
+- Sprint Q62: Pre-draft OC post plan — watermark-only Razzle mention strategy
+- Sprint Q67: Reddit data-analyst portfolio — pinned profile post (no tool mention)
+
+### Implications for Razzle
+
+1. **Check Reddit username availability TODAY for 3-5 Tier 1 candidates.** Prioritize names with "data," "dynasty," or "stats" — identity keywords that match the Q64 analyst voice. Create the winning account immediately (Reddit accounts build age passively, and age is a credibility signal).
+
+2. **Do NOT create a u/razzle_* account for OC posting.** If you ever need an official brand presence on Reddit (e.g., for an AMA after launch or to claim r/razzle), create that separately later. The OC-posting analyst account must be personal.
+
+3. **Update the Q67 bio template to match the chosen username.** The bio "Fantasy data analyst. Dynasty + college football. All analysis is OC." works regardless of username, but if the username already signals "data analyst" (e.g., u/DynastyDataNerd), the bio can lean more into personality and less into identity-signaling.
+
+4. **The username IS the brand for the first 6 months.** Before razzle.lol has any Reddit recognition, the username is what people remember. Pick one that's easy to type, easy to remember, and reads as "helpful community member" — not "marketer."
+
+5. **Start aging the account immediately after creation.** Subscribe to r/DynastyFF, r/fantasyfootball, r/NFL_Draft, and r/CFB. Upvote a few posts. Don't comment yet (that starts with the Q52 warm-up calendar). But let the account age and accumulate subreddit subscriptions passively.
+
+### Open Questions
+
+1. **Which specific Tier 1 username candidates are actually available on Reddit right now — and should the account be created today (March 21) to maximize account age before the April 1 warm-up commenting phase begins?**
+
+2. **Should the pinned profile post include a "track record" section with specific prediction results (e.g., "called Puka Nacua's breakout in Week 3 analysis") — and when does the account have enough history to make this credible rather than cherry-picked?**
+
+3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
+
+## NEXT QUESTION: Which specific Tier 1 username candidates are actually available on Reddit right now — and should the account be created today (March 21) to maximize account age before the April 1 warm-up commenting phase begins?
