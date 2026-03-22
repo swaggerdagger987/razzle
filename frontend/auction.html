@@ -167,7 +167,7 @@
   .av-table th:hover { color: var(--orange); }
   .av-table td {
     padding: 7px 10px;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
     white-space: nowrap;
   }
   .av-table tr:hover { background: rgba(217,119,87,0.08); }
@@ -279,17 +279,7 @@
     padding: 40px 20px;
   }
 
-  /* Watermark */
-  .av-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-faint);
-    pointer-events: none;
-    z-index: 1;
-  }
+  /* Watermark — uses shared .watermark from styles.css */
 
   @media (max-width: 768px) {
     .av-summary { grid-template-columns: repeat(2, 1fr); }
@@ -363,7 +353,7 @@
   </div>
 </main>
 
-<div class="av-watermark">razzle.lol</div>
+<div class="watermark">razzle.lol</div>
 
 <!-- FOOTER -->
 <div class="site-footer">

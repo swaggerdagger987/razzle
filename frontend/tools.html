@@ -239,17 +239,7 @@
     color: var(--ink-light);
   }
 
-  /* Watermark */
-  .tools-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 13px;
-    color: var(--ink-faint);
-    pointer-events: none;
-    z-index: 1;
-  }
+  /* Watermark — uses shared .watermark from styles.css */
 
   /* Empty search state */
   .tools-empty {
@@ -320,7 +310,7 @@
   </div>
 </main>
 
-<div class="tools-watermark">razzle.lol</div>
+<div class="watermark">razzle.lol</div>
 
 <!-- FOOTER -->
 <div class="site-footer">

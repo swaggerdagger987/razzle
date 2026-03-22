@@ -1170,7 +1170,7 @@
   .screener-table td {
     padding: 7px 14px;
     text-align: right;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
     white-space: nowrap;
     font-family: var(--font-mono);
     font-size: 13px;
@@ -1441,7 +1441,7 @@
   }
   #pinnedBody tr td {
     background: var(--bg-card) !important;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
   }
   #pinnedBody tr td.col-player {
     background: var(--bg-card) !important;
@@ -1671,19 +1671,7 @@
   }
 
   /* ===== WATERMARK ===== */
-  .watermark {
-    position: fixed;
-    bottom: 48px;
-    right: 20px;
-    z-index: 90;
-    font-family: var(--font-display);
-    font-size: 16px;
-    color: var(--ink);
-    opacity: 0.25;
-    pointer-events: none;
-    transform: rotate(-2deg);
-    letter-spacing: 0.5px;
-  }
+  /* Main .watermark block now uses shared style from styles.css */
 
   .watermark span {
     color: var(--orange);
@@ -1977,7 +1965,7 @@
   .profile-season-table td {
     padding: 5px 10px;
     text-align: right;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
     white-space: nowrap;
   }
 

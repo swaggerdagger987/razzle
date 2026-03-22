@@ -128,7 +128,7 @@ Personality that leaks through the seams: section annotations, player card scrib
 | 32px | 700 | Display | Page titles |
 | 20px | 700 | Display | Player names, card headers |
 | 16px | 700 | Display | Section headers, agent names |
-| 14px | 400/600 | Display | Body text, nav links, buttons |
+| 14px | 400/600 | Mono | Body text, nav links, buttons |
 | 13px | 400 | Mono | Stat values, data rows |
 | 12px | 700 | Mono | Badges, chips, small data |
 | 11px | 700 | Display (uppercase) | Section labels, uppercase tags |
@@ -138,6 +138,15 @@ Personality that leaks through the seams: section annotations, player card scrib
 ---
 
 ## Visual Language
+
+### Border Radius Tokens
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--radius-sm` | `8px` | Inputs, small badges, pricing badges, info boxes |
+| `--radius` | `12px` | Cards, containers, modals — the default |
+| `--radius-lg` | `20px` | Pills, chips, agent badges — sticker-shaped |
+
+Use the token, not a hardcoded value. New components should pick the nearest token.
 
 ### Borders & Shadows — "Chunky"
 - **Primary border**: 3px solid `var(--ink)` on cards, containers

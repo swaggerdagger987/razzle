@@ -86,7 +86,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
   }
   .rb-ac-item:hover { background: var(--bg-warm); }
   .rb-ac-item:last-child { border-bottom: none; }
@@ -371,17 +371,7 @@
     box-shadow: 6px 6px 0 var(--ink);
   }
 
-  /* Watermark */
-  .rb-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 13px;
-    color: var(--ink-faint);
-    pointer-events: none;
-    z-index: 1;
-  }
+  /* Watermark — uses shared .watermark from styles.css */
 
   /* Responsive */
   @media (max-width: 768px) {
@@ -472,7 +462,7 @@
   </div>
 </main>
 
-<div class="rb-watermark">razzle.lol</div>
+<div class="watermark">razzle.lol</div>
 
 <!-- FOOTER -->
 <div class="site-footer">

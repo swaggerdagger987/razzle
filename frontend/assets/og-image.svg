@@ -29,10 +29,10 @@
   <text x="600" y="330" text-anchor="middle" font-family="'Luckiest Guy', 'Impact', sans-serif" font-size="72" font-weight="700" fill="#2d1f14">Razzle<tspan fill="#d97757">.lol</tspan></text>
 
   <!-- Tagline -->
-  <text x="600" y="385" text-anchor="middle" font-family="'Space Mono', 'Courier New', monospace" font-size="22" font-weight="700" fill="#5c4a3d">Fantasy Football Research Lab</text>
+  <text x="600" y="385" text-anchor="middle" font-family="'Space Mono', 'Courier New', monospace" font-size="22" font-weight="700" fill="#5c4a3d">The fantasy football research lab. Forever free.</text>
 
   <!-- Subtitle -->
-  <text x="600" y="430" text-anchor="middle" font-family="'Caveat', cursive" font-size="28" fill="#8a7565">NFL + College data. Custom formulas. Share to Reddit.</text>
+  <text x="600" y="430" text-anchor="middle" font-family="'Caveat', cursive" font-size="28" fill="#8a7565">100+ stat columns. Custom formulas. AI agents with league context.</text>
 
   <!-- Position color dots -->
   <circle cx="420" cy="490" r="10" fill="#5b7fff"/>

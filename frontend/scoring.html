@@ -140,7 +140,7 @@
   }
   .sc-table td {
     padding: 8px 10px;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
     white-space: nowrap;
   }
   .sc-table tr:hover td {
@@ -237,17 +237,7 @@
     box-shadow: 6px 6px 0 var(--ink);
   }
 
-  /* Watermark */
-  .sc-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 13px;
-    color: var(--ink-faint);
-    pointer-events: none;
-    z-index: 1;
-  }
+  /* Watermark — uses shared .watermark from styles.css */
 
   @media (max-width: 768px) {
     .sc-table { font-size: 12px; }
@@ -323,7 +313,7 @@
   </div>
 </main>
 
-<div class="sc-watermark">razzle.lol</div>
+<div class="watermark">razzle.lol</div>
 
 <!-- FOOTER -->
 <div class="site-footer">

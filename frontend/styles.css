@@ -22,7 +22,7 @@
 
   --ink: #2d1f14;
   --ink-medium: #5c4a3d;
-  --ink-light: #6d5a4d;
+  --ink-light: #8a7565;
   --ink-faint: #c4b5a5;
 
   --orange: #d97757;
@@ -58,7 +58,9 @@
   --font-mono: 'Space Mono', monospace;
   --font-hand: 'Caveat', cursive;
 
+  --radius-sm: 8px;
   --radius: 12px;
+  --radius-lg: 20px;
   --shadow-chunky: 4px 4px 0 var(--ink);
   --zebra-stripe: rgba(45,31,20,0.025);
 }
@@ -72,7 +74,7 @@
 
   --ink: #ede0cf;
   --ink-medium: #c4b5a5;
-  --ink-light: #b09a88;
+  --ink-light: #8a7565;
   --ink-faint: #5c4a3d;
 
   --orange-light: #5c3325;
@@ -96,6 +98,18 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* Canonical watermark — single source of truth for all pages */
+.watermark {
+  position: fixed;
+  bottom: 10px;
+  right: 14px;
+  font-family: var(--font-hand);
+  font-size: 14px;
+  color: var(--ink-faint);
+  pointer-events: none;
+  z-index: 1;
+}
 
 /* Screener table player name cells */
 .player-name-cell {
@@ -167,6 +181,7 @@ h1, h2, h3 {
 }
 
 .logo-text {
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 20px;
   letter-spacing: -0.5px;

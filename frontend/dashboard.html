@@ -132,7 +132,7 @@
     display: flex;
     align-items: center;
     padding: 8px 16px;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
     gap: 10px;
     font-family: var(--font-mono);
     font-size: 13px;
@@ -193,7 +193,7 @@
     display: flex;
     align-items: center;
     padding: 10px 16px;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
     gap: 12px;
   }
   .db-scar-row:last-child { border-bottom: none; }
@@ -297,17 +297,7 @@
     padding: 40px 20px;
   }
 
-  /* Watermark */
-  .db-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-faint);
-    pointer-events: none;
-    z-index: 1;
-  }
+  /* Watermark — uses shared .watermark from styles.css */
 
   @media (max-width: 768px) {
     .db-grid { grid-template-columns: 1fr; }
@@ -367,7 +357,7 @@
   <div id="db-scarcity-wrap"></div>
 </main>
 
-<div class="db-watermark">razzle.lol</div>
+<div class="watermark">razzle.lol</div>
 
 <!-- FOOTER -->
 <div class="site-footer">

@@ -185,7 +185,7 @@
   .matchups-table tbody td {
     padding: 8px 12px;
     text-align: center;
-    border-bottom: 1px solid var(--ink-faint);
+    border-bottom: 2px dashed var(--ink-faint);
     transition: all 0.15s;
     cursor: pointer;
     position: relative;
@@ -335,17 +335,7 @@
     margin-top: 12px;
   }
 
-  /* Watermark */
-  .matchups-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-faint);
-    pointer-events: none;
-    z-index: 999;
-  }
+  /* Watermark — uses shared .watermark from styles.css */
 
   /* Responsive */
   @media (max-width: 768px) {
@@ -418,7 +408,7 @@
   <div id="matchups-detail" class="matchups-detail"></div>
 </div>
 
-<div class="matchups-watermark">razzle.lol</div>
+<div class="watermark">razzle.lol</div>
 
 <!-- FOOTER -->
 <div class="site-footer">

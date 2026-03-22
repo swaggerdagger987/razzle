@@ -231,17 +231,7 @@
     padding: 40px 20px;
   }
 
-  /* Watermark */
-  .ar-watermark {
-    position: fixed;
-    bottom: 10px;
-    right: 14px;
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-faint);
-    pointer-events: none;
-    z-index: 1;
-  }
+  /* Watermark — uses shared .watermark from styles.css */
 
   @media (max-width: 768px) {
     .ar-players { grid-template-columns: 1fr 1fr; }
@@ -300,7 +290,7 @@
   </div>
 </main>
 
-<div class="ar-watermark">razzle.lol</div>
+<div class="watermark">razzle.lol</div>
 
 <!-- FOOTER -->
 <div class="site-footer">
