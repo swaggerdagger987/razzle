@@ -3138,6 +3138,159 @@ Sources:
 
 3. **How should the Lab handle expired or renamed presets in old shared URLs — graceful fallback to PPR default, or show a "this preset no longer exists" toast?**
 
-## NEXT QUESTION: What does the first r/fantasyfootball "ADP Reality Check" post look like specifically — title, body structure, screenshot layout, and which stat divergences are the strongest talking points for August 2026?
+## Q36: What does the first r/fantasyfootball "ADP Reality Check" post look like specifically — title, body structure, screenshot layout, and which stat divergences are the strongest talking points for August 2026?
+
+**Date**: 2026-03-21
+
+### Answer
+
+**The post is a text post with one embedded Lab screenshot, a 5-player breakdown, and a call-to-action link. It follows the Subvertadown model (data-first text post with personality) rather than the PeakedInHighSkool model (image-only). Here's the exact template.**
+
+**Title formula (pick one per week):**
+
+```
+[OC] The Lab: ADP Reality Check — Week 1 | 5 players your draft board is lying about (Half-PPR)
+```
+
+Title rules: `[OC]` tag for original content. Series name ("The Lab: ADP Reality Check") for recurring recognition. Week number for cadence. Player count for clickability. Scoring format for trust. Under 120 chars for mobile. No clickbait — the data IS the hook.
+
+Alternative title variants for rotation:
+- `[OC] The Lab: ADP Reality Check — Your league is sleeping on [Player] at [Position]ADP [N]`
+- `[OC] I built a free screener and found 5 ADP mispricings you can exploit this week`
+- `[OC] ADP Reality Check: The data says [Player] is a top-[N] [Position] but you're drafting him at [Position][ADP]`
+
+**Body structure (exact template):**
+
+```markdown
+# The Lab: ADP Reality Check — Week 1
+
+I built [The Lab](https://razzle.lol/lab.html?preset=redraft&sort=adp_half_ppr&dir=asc&utm_source=reddit&utm_medium=post&utm_campaign=adp_reality_check_w1), a free fantasy football screener that lets you cross-reference ADP against per-game production data. Each week until kickoff, I'll flag 5 players where the data disagrees with where they're being drafted.
+
+**Methodology:** ADP data from Fantasy Football Calculator (half-PPR, 12-team). Production stats are per-game averages from the 2025 NFL season via nflverse. "ADP Rank" = positional ADP rank. "Production Rank" = positional PPG rank from last season.
+
+---
+
+[Screenshot: Lab in Redraft preset, sorted by ADP, showing 20 players with ADP vs PPG columns highlighted]
+
+---
+
+## 🔻 OVERVALUED (ADP rank >> Production rank)
+
+### 1. [Player Name] — [Position] ADP [N], finished [Position][N] in PPG last year
+
+[2-3 sentences explaining WHY the ADP is inflated. Reference a specific stat: target share decline, snap% drop, quarterback change, touchdown regression. Link to the Lab with a player-specific filter if possible.]
+
+### 2. [Player Name] — [same format]
+
+[Same structure. Different stat angle.]
+
+## 🔺 UNDERVALUED (Production rank >> ADP rank)
+
+### 3. [Player Name] — [Position] ADP [N], finished [Position][N] in PPG
+
+[2-3 sentences. Reference efficiency metrics: PPO, yards per target, catch rate, snap% trend.]
+
+### 4. [Player Name] — [same format]
+
+### 5. [Player Name] — [same format]
+
+---
+
+**The full data set** is at [The Lab — Redraft View](https://razzle.lol/lab.html?preset=redraft&sort=adp_half_ppr&dir=asc). It's free, no login, no paywall. Sort by any column, add filters, compare players side-by-side.
+
+ADP data via [Fantasy Football Calculator](https://fantasyfootballcalculator.com/adp). Production data via [nflverse](https://github.com/nflverse).
+
+---
+
+*This is Week 1 of a weekly series running through September. Feedback welcome — what players should I look at next week?*
+```
+
+**Screenshot layout specifications:**
+
+The Lab screenshot should show:
+- **Preset**: Redraft (active, highlighted in preset bar)
+- **Columns visible** (left to right): Player, Pos, Team, ADP (half-PPR), Pos Rank, PPG, Games, Targets, Receptions, Rec Yards, Rush Yards, TDs, Snap%
+- **Sort**: ADP ascending (lowest ADP at top = most expensive players)
+- **Rows**: 15-20 players visible (enough to see both overvalued and undervalued examples)
+- **Heat coloring**: ON (H key) — makes the PPG vs ADP divergence visually obvious
+- **Watermark**: `razzle.lol` in bottom-right corner
+- **Size**: ~1200×800px for readability when Reddit compresses the image
+
+The heat coloring is the secret weapon. When a player has a high ADP (top of the list) but low PPG (cold/blue coloring), the visual dissonance immediately tells the story. Reddit users process images before text — the screenshot does half the persuading.
+
+**Which stat divergences generate the most Reddit engagement?**
+
+Based on 2025 season data, five archetype divergences consistently drive discussion:
+
+| Divergence Type | Example (2025) | Why Reddit Cares | Likely 2026 Candidates |
+|----------------|----------------|------------------|----------------------|
+| **The Overpaid Veteran** | Saquon Barkley: 370-touch regression (49% avg PPG decline for 370+ touch RBs) | "Don't draft last year's hero" — everyone overdrafts the prior year's breakout | Whoever led RBs in touches in 2025 (likely CMC or Barkley) |
+| **The QB-Dependent Bust** | Brian Thomas Jr: WR4 rookie → WR42 sophomore (J.J. McCarthy effect) | QB carousel victims are always controversial | Any WR whose QB situation changed in offseason |
+| **The Quiet Efficiency King** | George Pickens: drafted as WR3, finished WR5 in PPG | Proving the crowd wrong with per-game data, not total points | Players with high PPO/efficiency but boring narratives |
+| **The Age Discount Steal** | Alvin Kamara/James Conner: top-15 finishers drafted outside top-15 due to age | "Old guys still produce" is perennial Reddit catnip | Veterans 28+ with stable roles, drafted 2+ rounds late |
+| **The Rookie Surprise** | Harold Fannin Jr: 0.8% ESPN roster rate → TE6 finish | Deep sleeper validation makes people feel smart | 2026 draft class rookies being ignored in ADP |
+
+**The strongest talking point for Week 1 is "The Overpaid Veteran."** August drafts are dominated by recency bias — whoever had the best 2025 season gets overdrafted. The data-vs-ADP argument is clearest here because you can show historical regression patterns (e.g., 370-touch RB decline rate) alongside the player's current ADP. This is the "lead with the contrarian take" strategy that Subvertadown uses — the first post needs to provoke discussion, not just inform.
+
+**Week-to-week rotation for the 6-week series:**
+
+| Week | Date | Focus | Lead Player Archetype |
+|------|------|-------|----------------------|
+| 1 | Aug 1 | "Your ADP is lying" (overview) | The Overpaid Veteran |
+| 2 | Aug 8 | "RB Dead Zone" deep dive | RBs drafted rounds 4-7 with best PPG |
+| 3 | Aug 15 | "WR values after preseason Week 1" | WRs with target share changes from camp |
+| 4 | Aug 22 | "Late-round QBs who outproduce early ones" | QB ADP vs PPG |
+| 5 | Aug 29 | "Zero RB proof" or "Roster construction" | Positional scarcity data |
+| 6 | Sep 5 | "Final draft board — full Redraft preset" | Comprehensive top-50 screenshot |
+
+---
+
+### Self-Critique
+
+1. **I can't predict the specific 2026 ADP divergence players.** The template uses 2025 season results as archetypes, but August 2026 ADP data won't exist until FFC mock drafts ramp up in June-July. The divergence categories (overpaid veteran, QB-dependent bust, efficiency king, age discount, rookie surprise) are structural patterns that recur every year — the specific names change. **Confidence: 9/10** on the archetypes, **0/10** on the specific 2026 players. The template is designed to be filled in real-time when ADP data exists.
+
+2. **The text-post format may underperform vs. image posts on r/fantasyfootball.** PeakedInHighSkool posts image-only trade value charts and gets 1K-5K upvotes. This template proposes text + embedded screenshot, which is closer to the Subvertadown model. The risk: text posts require more effort to consume, and the scrolling behavior on mobile may cause readers to skip the analysis. Mitigation: the screenshot is placed early in the body (above the fold on desktop), and the player sections use bold headers for scanning. **Confidence: 7/10** — text + screenshot may need A/B testing against pure image posts.
+
+3. **The 5-player format may be too many or too few.** PeakedInHighSkool shows 50+ players per chart. Subvertadown shows 20+ per position. Five players might feel thin. But for a discussion-oriented text post, 5 is the sweet spot — enough for debate, short enough to read on mobile. Each player section is 2-3 sentences, keeping total post length under 600 words (before the template sections). **Confidence: 8/10**.
+
+4. **The weekly cadence (6 weeks) assumes sustained engagement.** In practice, only PeakedInHighSkool has maintained 15+ weeks of weekly fantasy content with consistent upvotes. Razzle is a new account with no track record. Weeks 1-2 might get 50-100 upvotes; by Week 4-5, the series recognition should compound. But if Week 1 flops, the series should pivot (different title formula, different content focus) rather than repeat the same format. **Confidence: 6/10** on the 6-week plan holding as-is.
+
+5. **The "[OC]" tag is essential but not sufficient for r/fantasyfootball.** The sub has AutoModerator rules that may remove posts from new accounts or accounts with low karma. The warm-up commenting strategy (Q31-Q32) is critical — if u/swaggerdagger987 doesn't have sufficient karma by August, the first ADP Reality Check post may be silently removed. This is the single biggest risk to the content strategy. **Confidence: 9/10** that karma requirements exist, **5/10** that Razzle will have enough by August without deliberate warm-up.
+
+Sources:
+- [PeakedInHighSkool Trade Value Charts](https://peakedinhighskool.com/fantasy-trade-value-chart/) — image-post format, watermark branding, weekly cadence
+- [Subvertadown Compendium 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — text-post series naming, 7-year posting history
+- [ESPN 2025 Fantasy Awards](https://www.espn.com/fantasy/football/story/_/page/FFSundayHighLows-47503166/nfl-2025-season-fantasy-football-winners-losers-year-review) — 2025 season busts (BTJ WR42, Justin Jefferson), breakouts (Pickens WR5, Fannin TE6, Maye QB3)
+- [Pro Football Network 2025 Fantasy Awards](https://www.profootballnetwork.com/fantasy-football/2025-fantasy-awards/) — CMC MVP (25.3 PPG), Ashton Jeanty rookie leader
+- [PFF 2025 Fantasy Surprises: WRs](https://www.pff.com/news/fantasy-football-biggest-surprises-2025-season-wide-receivers) — Pickens breakout stats (128 tgt, 92 rec, 1420 yds, 9 TD)
+- [ADP Rewind: RB Takeaways 2025](https://www.thefantasyfootballers.com/analysis/adp-rewind-rb-takeaways-for-2025-fantasy-football/) — 370-touch RB regression (49% avg decline), veteran RB steal patterns
+- [ADP Rewind: TE Takeaways 2025](https://www.thefantasyfootballers.com/analysis/adp-rewind-te-takeaways-for-2025-fantasy-football/) — Kittle/Bowers/McBride elite tier, Kelce decline
+- [Bleacher Report: Overvalued/Undervalued 2025](https://bleacherreport.com/articles/25229683-most-overvalued-and-undervalued-players-2025-fantasy-football-entering-august) — August timing for overvalued/undervalued content
+- [FantasyPros: 15 Overvalued/Undervalued 2026](https://www.fantasypros.com/2026/02/15-early-overvalued-undervalued-players-2026-fantasy-football/) — early 2026 ADP mispricings
+- [Fantasy Football Calculator ADP API](https://help.fantasyfootballcalculator.com/article/42-adp-rest-api) — data source for the Redraft preset
+
+### Implications for Razzle
+
+1. **Save this post template as `docs/marketing/templates/adp-reality-check.md`.** When ADP data exists in July, filling in the template should take 30 minutes per post — pull up the Lab, identify divergences, write 2-3 sentences per player, screenshot, post.
+
+2. **The screenshot is the product demo.** Every ADP Reality Check post is a Lab advertisement disguised as analysis. The watermark, the link, the "sort by any column" CTA — all point to razzle.lol. The content does the marketing.
+
+3. **Week 1 must be the strongest post.** Lead with the most controversial divergence (The Overpaid Veteran). If the first post gets traction, series recognition compounds. If it flops, iterate on the format before Week 2.
+
+4. **Heat coloring (H key) is the visual differentiator.** No other screener tool posts screenshots with per-position heat-colored cells. When Reddit users see a sea of red/green gradient across 20 players, it's immediately more visually interesting than a plain table. This is the Lab's screenshot advantage over FantasyPros or KTC rankings lists.
+
+5. **The CTA link must include UTM params AND the preset param.** `razzle.lol/lab.html?preset=redraft&sort=adp_half_ppr&dir=asc&utm_source=reddit&utm_medium=post&utm_campaign=adp_reality_check_w1`. The visitor lands in the exact view shown in the screenshot. Zero friction.
+
+6. **Build karma on r/fantasyfootball starting July 15.** The sub wakes up when fantasy platforms open (~Aug 1). Two weeks of daily commenting (July 15-31) should build enough karma to avoid AutoModerator removal on the Week 1 post. Target: 200+ karma from r/fantasyfootball specifically.
+
+### Open Questions
+
+1. **Should Razzle add a "Copy shareable link" button to the Lab toolbar that auto-appends UTM params for the current platform (Reddit/Twitter/Discord)?**
+
+2. **What is the optimal image format and resolution for Reddit-embedded screenshots — PNG vs JPEG, dimensions, and how does Reddit's image compression affect heat-colored cells?**
+
+3. **How should the ADP Reality Check series handle bye weeks and injury news — should it incorporate real-time ADP movement during preseason, or stick to static weekly snapshots?**
+
+## NEXT QUESTION: Should Razzle add a "Copy shareable link" button to the Lab toolbar that auto-appends UTM params for the current platform (Reddit/Twitter/Discord)?
 
 ---
