@@ -5494,4 +5494,93 @@ That's the entire change for 2x resolution. Screenshots stay PNG (already the de
 
 3. **How does Reddit's image gallery feature (multiple images in one post) perform vs single-image posts for engagement — and should draft night use a gallery of 5-6 position-group screenshots or individual posts per position?**
 
-## NEXT QUESTION: What is the optimal Reddit post format for a draft night recap — a single mega-post with all 32 picks and embedded screenshots, or a structured post with a pick table plus separate top-level comments per position group — to maximize engagement and comment depth?
+---
+
+# Q60: Optimal Reddit Post Format for Draft Night Recap — Mega-Post vs Structured Comments vs Gallery
+
+**Date**: 2026-03-21
+**Question**: What is the optimal Reddit post format for a draft night recap — a single mega-post with all 32 picks and embedded screenshots, or a structured post with a pick table plus separate top-level comments per position group — to maximize engagement and comment depth?
+
+### Answer
+
+**Use a hybrid: image gallery post (4-6 Lab screenshots) with a structured text comment dropped immediately by OP.** Not a mega-thread. Not a text-only post. Not individual posts per position.
+
+Here's why, backed by Reddit engagement data:
+
+**1. Image posts dominate Reddit's algorithm.**
+
+In 2025, 38% of all Reddit submissions were image posts, and top photo posts generated 10,000+ more upvotes than link posts. Reddit's algorithm heavily favors native visual content — images hosted on i.redd.it get algorithmic priority over text posts and external links. For Razzle, the Lab screenshots ARE the product. They must be the post format, not an afterthought linked in text.
+
+**2. Engagement velocity matters more than total content.**
+
+Reddit's ranking algorithm weights early upvote velocity — 50 upvotes in the first hour outranks 200 upvotes over 24 hours. A single well-timed image gallery post with 4-6 screenshots will accumulate upvotes faster than a text wall that people have to read to evaluate. The screenshots are instantly scannable — a dynasty user sees the tier list in the thumbnail and upvotes before even clicking.
+
+**3. Mega-threads kill organic engagement for non-mods.**
+
+Mega-threads are mod-pinned consolidation tools. They get stickied but Reddit's algorithm doesn't promote stickied posts to r/all or home feeds. Mega-threads also suppress individual comment visibility — comments past the first 50 get buried. For Razzle's goal (brand awareness + watermark exposure), a mega-thread is the worst format: high comment count but low per-comment visibility, no feed distribution, and the screenshots are buried in a text wall.
+
+**4. Sports subreddits are "wide" not "deep."**
+
+Research on Reddit discussion structures shows sports subreddits attract "wider" comment patterns — many users leaving one comment rather than deep back-and-forth threads. This means structured top-level comments by OP (one per position group) would get fewer replies each than expected. Better to let the community create their own threads organically around the screenshots.
+
+**5. The optimal Razzle draft night post format:**
+
+| Element | Details |
+|---------|---------|
+| **Post type** | Image gallery (4-6 images) |
+| **Image 1** | Full Round 1 pick board — all 32 picks with Razzle trade values |
+| **Image 2** | QB class impact — dynasty value shifts for QBs drafted |
+| **Image 3** | RB tier list — updated dynasty rankings post-landing-spot |
+| **Image 4** | WR/TE winners and losers — target share implications |
+| **Image 5** | Biggest value movers — trade value chart deltas |
+| **Image 6** | (Optional) Trade analyzer screenshot of the night's biggest trade |
+| **OP comment** | Dropped immediately: pick-by-pick table in markdown + methodology note + "built with razzle.lol (free)" |
+| **Title** | "[OC] Round 1 Dynasty Impact — Full analytics breakdown with value shifts, tier updates, and landing spot grades [razzle.lol]" |
+
+**6. Post to r/DynastyFF first, then r/fantasyfootball 30 min later.**
+
+r/DynastyFF (131K members) is the core audience — they care about landing spot impact on dynasty values. r/fantasyfootball (650K+ members) is broader — lead with the redraft-relevant screenshots there. Cross-posting too fast looks spammy; stagger by 30 minutes with slightly different titles. Don't post to r/NFL_Draft — different audience, they care about real football not fantasy.
+
+**7. Timing: post 30-45 minutes after the last Round 1 pick.**
+
+Too fast and data isn't digested. Too slow and you're competing with established analysts. The 30-45 minute window is the sweet spot — draft chaos has settled, users are refreshing for analysis, and professional outlet articles haven't dropped yet. Razzle's advantage: if the ESPN poller + Lab pipeline works, screenshots can be generated within 5 minutes of the last pick. Use the remaining 25-40 minutes to verify data accuracy and craft the OP comment.
+
+### Self-Critique
+
+1. **"Image posts get 10K+ more upvotes" is a platform-wide stat, not fantasy-football specific.** Sports analytics subreddits may behave differently — they're more text-oriented than r/pics. However, the data trend is clear enough: native images > text > links. **Confidence: 7/10.**
+
+2. **"Mega-threads suppress organic reach" is well-established Reddit behavior** but assumes Razzle is posting as a regular user, not a mod. If a sub mod offered to feature Razzle content in the official draft thread, that changes the calculus — but Razzle shouldn't count on that. **Confidence: 8/10.**
+
+3. **The 30-45 minute timing window is my inference, not data-backed.** It's based on general Reddit posting wisdom (post when users are active + before competition). The actual optimal window depends on how fast other analysts post. **Confidence: 5/10.**
+
+4. **Gallery posts vs single image posts**: I couldn't find definitive engagement data comparing gallery vs single-image. Gallery posts risk lower engagement per image (users may not swipe through all 6). A single hero image with the full pick board might outperform a gallery. **Confidence: 5/10 — this needs testing.**
+
+5. **The "wide not deep" sports subreddit research is from an academic study** that may not map perfectly to dynasty fantasy football, which is a more niche, analytical community that does engage in deep threads. **Confidence: 6/10.**
+
+### Implications for Razzle
+
+1. **Build the gallery pipeline**: screenshot.py needs a `--batch` mode that generates 4-6 predetermined Lab views as PNGs in one run. Each screenshot gets the branded bottom bar from Q58.
+2. **Pre-write the OP comment template**: have the markdown table skeleton ready, fill in pick data from the ESPN poller output. Include methodology note and "free at razzle.lol" footer.
+3. **Test gallery format before draft night**: post a "2025 Redraft" gallery to r/DynastyFF as a dry run. Measure upvotes, comments, and whether users swipe through all images.
+4. **Don't over-post**: one gallery post per subreddit per round. Resist the urge to post individual position breakdowns as separate posts — that reads as spam.
+5. **The watermark from Q58 is critical here**: every gallery image gets the branded bar. If users screenshot individual slides, the watermark travels with them.
+
+### Sources
+- [Reddit Image Hosting: Marketing Guide 2025 — SingleGrain](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/)
+- [Reddit Post Images: Formats That Get Upvoted — SocialPixOptimizer](https://socialpixoptimizer.com/academy/reddit-post-images-formats-that-get-upvoted-and-shared/)
+- [Reddit's Upvote Algorithm — SingleGrain](https://www.singlegrain.com/digital-marketing-strategy/reddits-upvote-algorithm-how-to-optimize-for-visibility/)
+- [10 Insights into Reddit Megathreads — Locall.host](https://locall.host/what-is-a-reddit-megathread/)
+- [Characterizing the Structure of Online Conversations Across Reddit — arXiv](https://arxiv.org/html/2209.14836v2)
+- [Creating Viral Reddit Posts — SingleGrain](https://www.singlegrain.com/digital-marketing-strategy/creating-viral-reddit-posts-content-ideas-that-drive-engagement/)
+- [NFL Expands Reddit Relationship — Sportico](https://www.sportico.com/business/tech/2025/nfl-reddit-deal-relationship-highlights-community-1234873708/)
+- [Reddit Image Size Guide — LiftBurst](https://liftburst.com/en/blog/reddit-image-size-guide-perfect-dimensions-for-maximum-engagement)
+
+### Open Questions
+
+1. **Should Razzle pre-build a library of "screenshot presets" — deterministic Lab URLs for specific draft night views (QB class, RB tier list, trade value shifts) — and what 8-12 views would cover the most shareable angles after Round 1?**
+
+2. **How does Reddit's image gallery feature (multiple images in one post) perform vs single-image posts for engagement in analytics/data subreddits — and should draft night use a gallery of 5-6 position-group screenshots or a single hero image with the full board?**
+
+3. **What is the optimal OP comment structure for a data-heavy Reddit post — methodology-first, pick table-first, or hot-takes-first — to maximize comment replies and discussion depth?**
+
+## NEXT QUESTION: Should Razzle pre-build a library of "screenshot presets" — deterministic Lab URLs for specific draft night views (QB class, RB tier list, trade value shifts) — and what 8-12 views would cover the most shareable angles after Round 1?
