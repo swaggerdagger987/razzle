@@ -3998,4 +3998,99 @@ Sources:
 
 3. **Should Razzle prepare "trade value shift" content showing how veteran players' dynasty values change based on their team drafting a replacement (e.g., "D'Andre Swift's value just dropped 15% because the Bears drafted Jeremiyah Love") — and what data would power that calculation?**
 
-## NEXT QUESTION: Should Razzle build a lightweight "Draft Night Command Center" page that tracks landing spots in real-time — or is manually updating the Prospect screener sufficient for Draft weekend content?
+## Q45: Should Razzle build a Draft Night Command Center page — or just update the existing Prospect screener manually on draft night?
+
+**Date:** 2026-03-21
+
+### Answer
+
+**NO — don't build a separate page. The Lab's Prospect mode already IS the command center. It has `draft_team`, `draft_round`, and `draft_pick` columns wired into the backend. Update those fields in the database as picks happen. Screenshots come from the Lab, which is already the screenshotable product. A new page splits engineering attention during a live event and adds zero visual value.**
+
+#### What Razzle Already Has
+
+The Lab's Prospect view (`frontend/lab.js` line 631) already includes:
+- `draft_team` column (NFL team abbreviation)
+- `draft_round` and `draft_pick` columns
+- Full prospect stats (college production, combine, RPS tiers)
+- Heat coloring, sort, filter, position tabs
+- Share modal with PNG export and watermark
+- Reddit title generator
+
+The backend (`backend/live_data/prospects.py`, `college.py`) already normalizes `draft_team` through `TEAM_ABBREV` mapping. The data path exists end-to-end. On draft night, updating the `combine_results` table's `draft_team`/`draft_round`/`draft_pick` fields and clearing the cache is all that's needed. The Lab renders the rest.
+
+#### What Competitors Do (And Don't Do)
+
+**4for4** runs a "Live Fantasy Tracker" — but it's an article, not an app. Pick-by-pick text blurbs with analyst quotes, updated manually as a blog post. No interactive data table. No exportable screenshots.
+
+**Dynasty Daddy** and **FantasyCalc** update their rankings post-draft (next day), not in real-time during picks. Neither offers a live draft-night dashboard.
+
+**NFL.com Draft Tracker** is the canonical source but has zero fantasy context — no dynasty values, no college stats breakdown, no screenshotable data table.
+
+**No competitor offers a heat-colored, filterable data table of prospects with landing spots that updates live during the draft.** The Lab already does this — it just needs the data updated.
+
+#### Why a Separate Page Is Wrong
+
+1. **Splits the funnel.** Every Razzle screenshot should point to `/lab.html`. A separate `/draftnight.html` creates a second URL that doesn't exist after draft weekend. The Lab URL persists — someone who bookmarks it during the draft finds it again in August.
+
+2. **Duplicates work under deadline pressure.** Building a new page means new HTML, new CSS, new JS, new API endpoint, new testing — all for a 72-hour event. On draft night, attention should be on CONTENT (updating data, taking screenshots, posting), not debugging a new page.
+
+3. **The Lab is more powerful.** A "command center" dashboard would show less data than the Lab already does. The Lab has 100+ columns, filters, compare, radar charts, heat coloring. Any purpose-built draft page would be a subset.
+
+4. **One-person operation constraint.** Q44 established this is one person live-tweeting during Round 1. Adding "also, check that the new draft page is rendering correctly" to that workload is a recipe for dropped balls.
+
+#### The Actual Draft Night Workflow
+
+1. **Pre-draft (April 21):** Take "before" screenshots of the Prospect Big Board from the Lab. Save as PNGs.
+2. **During picks:** Run a simple Python script or SQLite UPDATE to set `draft_team`/`draft_round`/`draft_pick` for each skill-position pick. Clear the in-memory cache (hit `/api/cache-clear` or restart).
+3. **Refresh the Lab.** The Prospect view now shows landing spots. Take a screenshot. Post it.
+4. **Between picks:** Filter by position, sort by RPS score, screenshot the updated board. That IS the "command center" — it's the Lab with fresh data.
+
+A lightweight helper script (`scripts/draft_night_updater.py`) that takes `player_name, team, round, pick` as arguments and updates the DB would be more valuable than an entire new page. ~20 lines of Python.
+
+#### What WOULD Be Worth Building (If Time Permits)
+
+Instead of a new page, add one small feature to the existing Lab:
+- **"Draft Night" preset** in the Prospect column selector that auto-selects: `player_name, position, school, draft_team, draft_round, draft_pick, rps_score, rps_tier` — the optimal screenshot columns for draft content. This is 5 lines of JS (add to `PROSPECT_PRESETS` in lab.js).
+
+---
+
+### Self-Critique
+
+1. **The "just update the DB" workflow assumes the cache-clear mechanism works reliably under live-event pressure.** If the in-memory cache holds stale data for 5 minutes, the Lab shows outdated landing spots. Need to verify the cache TTL for prospect endpoints or add a manual cache-bust. **Confidence: 8/10.**
+
+2. **The claim that "no competitor offers a heat-colored prospect table with live landing spots" is based on search results, not exhaustive competitive analysis.** Dynasty Daddy specifically could have a draft-night feature not visible from their homepage. However, their core product is trade calculators and ADP, not data tables. **Confidence: 7/10.**
+
+3. **The "Draft Night preset" suggestion is genuinely low-effort and high-value.** It's 5 lines in the existing `PROSPECT_PRESETS` object. It solves the real problem: "which columns should I show in my screenshot?" without building anything new. **Confidence: 9/10.**
+
+4. **The helper script approach (`draft_night_updater.py`) is the right abstraction.** A CLI tool that takes pick data and updates SQLite is simpler than any UI, works offline, and can be run from a phone via SSH if needed. The bottleneck on draft night is data entry speed, not visualization. **Confidence: 9/10.**
+
+Sources:
+- [4for4 Live Fantasy Tracker Round 1](https://www.4for4.com/2025/preseason/2025-nfl-draft-live-fantasy-tracker-round-1)
+- [4for4 Live Fantasy Tracker Rounds 2-3](https://www.4for4.com/2025/preseason/2025-nfl-draft-live-fantasy-tracker-rounds-2-3)
+- [FantasyLife 2025 NFL Draft Tracker](https://www.fantasylife.com/articles/nfl-draft/2025-nfl-draft-tracker)
+- [Dynasty Daddy](https://dynasty-daddy.com)
+- [FantasyCalc Dynasty Rankings](https://fantasycalc.com/dynasty-rankings)
+- [NFL.com 2026 Draft Tracker](https://www.nfl.com/draft/tracker/picks/)
+- [StickToTheModel Mock Draft Simulator](https://sticktothemodel.com/draft)
+
+### Implications for Razzle
+
+1. **Do NOT build a separate Draft Night page.** The Lab Prospect view is the command center. Invest the saved time in content preparation and Reddit account warm-up instead.
+
+2. **Build `scripts/draft_night_updater.py` — a 20-line CLI tool** that takes `python draft_night_updater.py "Cam Ward" QB MIA 1 1` and updates the `combine_results` table. This is the only engineering work needed for draft night.
+
+3. **Add a "Draft Night" preset to `PROSPECT_PRESETS`** in lab.js — auto-selects the optimal screenshot columns (name, pos, school, NFL team, round, pick, RPS score, tier). Five lines of code.
+
+4. **Verify the prospect endpoint cache TTL.** If it's 5 minutes, either reduce it to 60 seconds for draft weekend or add a manual cache-clear endpoint. Stale data during a live event kills credibility.
+
+5. **The draft night workflow is a content operations problem, not an engineering problem.** The tooling exists. What needs preparation is: pre-staged screenshots (April 21), a quiet terminal with the updater script ready, and the Lab open in a browser with the Draft Night preset loaded.
+
+### Open Questions
+
+1. **Should Razzle prepare "trade value shift" content showing how veteran dynasty values change when their team drafts a replacement — and what's the minimum-viable calculation for "D'Andre Swift's value just dropped 15%"?**
+
+2. **What's the optimal Twitter thread format for Draft Day — individual tweets per pick (more impressions per tweet, better for algorithmic reach) vs. a rolling thread (easier to follow, single bookmark point)?**
+
+3. **Should `draft_night_updater.py` also trigger an automatic PNG screenshot export of the updated Prospect board (via headless browser) so the posting workflow is: run script → screenshot auto-saved → drag into Twitter/Reddit — removing the manual "refresh Lab, open share modal, download PNG" step?**
+
+## NEXT QUESTION: Should Razzle prepare "trade value shift" content for Draft Day — showing how veteran dynasty values change when their team drafts a replacement (e.g., "Swift's value dropped 15% after Bears drafted Jeremiyah Love") — and what's the minimum-viable data model for that calculation?
