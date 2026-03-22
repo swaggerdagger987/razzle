@@ -9832,4 +9832,90 @@ Sources:
 
 3. **Should Razzle pre-compute and cache weekly GPA deltas (week-over-week grade changes) to power "risers and fallers" narrative hooks in Reddit posts — and what is the minimum storage needed?**
 
-## NEXT QUESTION: What is the optimal Reddit image hosting strategy — direct image upload (i.redd.it), Imgur album link, or inline image in a text post — and which format maximizes both visibility and watermark retention?
+## Q98: What is the optimal Reddit image hosting strategy — direct image upload (i.redd.it), Imgur album link, or inline image in a text post — and which format maximizes both visibility and watermark retention?
+
+**Date**: 2026-03-21
+**Cycle time**: ~5 min
+
+### Answer
+
+**Use native Reddit image upload (i.redd.it) for the main post. Always. No exceptions.**
+
+#### The Data Is Overwhelming
+
+Reddit's algorithm measurably favors native uploads over external links. In 2024, top image/video posts generated **10,000+ more upvotes** than link posts. Image-based submissions rose 24% year-over-year in 2025, now accounting for 38% of all Reddit submissions. Imgur's share of Reddit submissions dropped from 15% to below 9% since Reddit launched native hosting. The September 2025 algorithm update further prioritized engagement quality — native content benefits, external links suffer.
+
+This is not subtle. An Imgur link post is algorithmically suppressed compared to the same image uploaded natively.
+
+#### The Three Formats, Ranked
+
+1. **Native image post (i.redd.it)** — **USE THIS.** Full-bleed preview in card view. No click-through required. Algorithm boost. Thumbnail auto-generated. Gallery mode supports up to 20 images (useful for Honor Roll + individual GPA Cards in one post). Image stays on Reddit's CDN permanently.
+
+2. **Text post with inline images** — **USE FOR REPLY COMMENTS ONLY.** Text posts don't generate a visual thumbnail in feeds — the preview shows the first ~300 characters of text. The image is buried below the fold. Fine for detailed analysis where text matters more than the visual, but for OC showcase posts, you lose the feed thumbnail that drives clicks. However, Reddit's comment editor supports inline image uploads — use this for reply GPA Cards in the comments.
+
+3. **Imgur link post** — **NEVER.** Algorithmically suppressed. Requires click-through to Imgur (extra friction). Imgur compresses images. Imgur shows ads around your content. Imgur may require login for uploads. No upside over native Reddit hosting.
+
+#### Watermark Survival Strategy
+
+Reddit's native image hosting compresses images but retains reasonable quality for PNG screenshots. Key considerations:
+
+- **Reddit adds its own watermark** when users save images from the app ("Posted in r/DynastyFF by u/..."). This is toggleable per-user but defaults ON. This actually helps Razzle — it adds attribution when images spread.
+- **Razzle's watermark placement matters for thumbnails.** Reddit crops to approximately 1.91:1 for card view thumbnails. A bottom-corner watermark may get cropped. **Place the watermark in the lower-right quadrant but above the bottom 15% of the image.** This survives both Reddit's thumbnail crop and screenshot cropping by users.
+- **Recommended image dimensions**: 1200×900px (4:3) for single images. This fits Reddit's card view without aggressive cropping and is large enough that the watermark text remains legible even at thumbnail size.
+
+#### Subvertadown's Evolution Validates This
+
+Subvertadown's format evolved over 7 years: plain text → formatted tables → JPEG colored tables → live spreadsheet displays. His Reddit posts now link to his website, but his highest-engagement era was when rankings were posted as images directly on Reddit. The format evolved away from Reddit-native only after establishing a subscriber base that would click through. Razzle is at stage 0 — maximize on-platform visibility first.
+
+#### Gallery Posts for Multi-Image OC
+
+For Post #1 (Honor Roll + GPA Cards), use a **Reddit image gallery post**:
+- Image 1: Honor Roll (the hero image, gets the thumbnail)
+- Images 2-12: Individual top-12 GPA Cards
+- Each image gets a caption (player name + GPA)
+- Gallery posts display as a swipeable album — users browse without leaving Reddit
+- The first image becomes the feed thumbnail, so make the Honor Roll visually compelling
+
+For reply GPA Cards (responding to "do X player"), upload the single card image inline in the comment using Reddit's comment image upload feature.
+
+### Self-Critique
+
+1. **The 10,000+ upvote advantage is for top posts in large subs, not niche subs like r/DynastyFF (150K members).** The relative advantage of native vs external still holds — the algorithm bias is structural — but the absolute numbers will be much smaller. In r/DynastyFF, the difference might be 50-200 upvotes, not 10,000. **Confidence: 8/10 — the direction is right, the magnitude is scaled down.**
+
+2. **Gallery posts may reduce per-image engagement.** Users swipe through galleries fast. A single hero image with GPA Cards in the comments might generate more comment engagement per card (each card reply becomes its own discussion thread). **Confidence: 6/10 — this needs testing. Run Post #1 as gallery, Post #2 as single image + comment cards, compare.**
+
+3. **Reddit image compression could degrade heat-colored cells and small text.** PNG compression on Reddit is lossy for large images. The GPA Card (Q95 design: ~800×400px per card) should survive fine, but the Honor Roll with 25 rows of small text may get blurry. **Export at 2x resolution (2400×1800) so Reddit's compression still leaves a legible result. Confidence: 7/10.**
+
+4. **Reddit's own watermark ("Posted in r/DynastyFF by u/...") could conflict with Razzle's watermark.** If both are in the bottom-right, it looks cluttered. Reddit's watermark appears only when images are saved from the mobile app. Razzle's watermark should be embedded in the image itself, not overlaid by Reddit. **Place Razzle watermark bottom-right of the image content; Reddit's watermark appears below the image boundary. No conflict. Confidence: 9/10.**
+
+5. **I did not find specific data on r/DynastyFF mod rules about image posts.** Some fantasy subs restrict image-only posts or require text context. Need to verify r/DynastyFF allows image/gallery posts for OC content. **Confidence: 5/10 — check sub rules before posting.**
+
+Sources:
+- [Reddit Image Hosting: Marketing Executive's Guide to Visual Content ROI 2025](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/) — 10K+ upvote advantage, 38% image share, 24% YoY growth
+- [The Decline of Imgur on Reddit](https://minimaxir.com/2017/06/imgur-decline/) — Imgur market share drop from 15% to <9%
+- [Reddit Thumbnail Optimization](https://fastercapital.com/content/Reddit-post-thumbnail--Optimizing-Reddit-Post-Thumbnails-for-Increased-Click-Through-Rates.html) — 1.91:1 crop, 1200×630 recommended
+- [Reddit Image Size Guide](https://liftburst.com/en/blog/reddit-image-size-guide-perfect-dimensions-for-maximum-engagement) — dimensions and compression
+- [Subvertadown Compendium](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — format evolution over 7 years
+- Sprint Q89 (Share Mode build), Q95 (pre-stage package), Q87 (first OC post structure)
+
+### Implications for Razzle
+
+1. **The Share Mode export (Q89) must produce images at 2x resolution (minimum 2400px wide).** Reddit's compression is lossy — oversized source images ensure legibility after compression. The Playwright screenshot script should use `deviceScaleFactor: 2` in the browser context.
+
+2. **Watermark placement: bottom-right, 15% above the bottom edge.** This survives Reddit's card view crop (1.91:1 from center) and doesn't conflict with Reddit's own save-image attribution. Use semi-transparent white text on a dark bar, not floating text that competes with data cells.
+
+3. **Post #1 should be a gallery post (Honor Roll first, then 12 GPA Cards).** This maximizes the swipeable content per impression — users see up to 13 images without leaving the post. The Honor Roll as image 1 gets the feed thumbnail. Test against single-image + comment-cards in Post #2 to measure which drives more discussion.
+
+4. **Pre-stage reply cards as standalone PNGs at comment-embeddable size.** Reddit comment image upload works inline. When someone says "do Bijan Robinson," reply with the card image uploaded directly in the comment. This is frictionless — no Imgur link, no "check my website." The card has the watermark; the website URL lives in the OP comment, not the reply.
+
+5. **Verify r/DynastyFF allows image/gallery posts for OC before April 21.** Check the sub rules and recent OC posts. If image-only posts are restricted, use a text post with the Honor Roll image embedded inline as the first element, and individual cards as comment replies. The text post still gets algorithmic penalty on thumbnails, but the content lives natively on Reddit.
+
+### Open Questions
+
+1. **Should Razzle A/B test gallery posts (all cards in one post) vs. single-image posts (Honor Roll hero + individual card replies in comments) — and what metric determines the winner (upvotes, comment count, site visits via watermark)?**
+
+2. **What's the optimal veteran comp methodology — should comps be based on college production profile similarity (Dominator Rating, Breakout Age), draft capital similarity (pick range), or physical archetype similarity (height/weight/speed) — and does the comp need to be accurate or just conversation-starting?**
+
+3. **Should Razzle pre-compute and cache weekly GPA deltas (week-over-week grade changes) to power "risers and fallers" narrative hooks in Reddit posts — and what is the minimum storage needed?**
+
+## NEXT QUESTION: Should Razzle A/B test gallery posts (all cards in one post) vs. single-image posts (Honor Roll hero + individual card replies in comments) — and what metric determines the winner (upvotes, comment count, site visits via watermark)?
