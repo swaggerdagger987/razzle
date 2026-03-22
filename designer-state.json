@@ -1,0 +1,79 @@
+{
+  "last_ticket_id": 6,
+  "last_run": "2026-03-21",
+  "pages_reviewed": [
+    "index.html (desktop 1280+1440, mobile 375)",
+    "lab.html (desktop 1280, mobile 375)",
+    "pricing.html (desktop 1280, mobile 375)",
+    "agents.html (desktop 1280)",
+    "league-intel.html (desktop 1280)",
+    "404.html (desktop 1280)",
+    "index.html (code review — CSS vs DESIGN.md audit)",
+    "styles.css (--ink-light variable audit)",
+    "compare.html (code review)",
+    "tradevalues.html (code review)",
+    "pricing.html (code review — mobile breakpoints)",
+    "sitewide watermark audit (15 pages)",
+    "sitewide footer consistency audit (5 main pages + standalone pages)",
+    "agents.html (code review — warroom.js BIOS array vs DESIGN.md agent identities)",
+    "about.html (code review — footer check)",
+    "pricing.html (code review — feature matrix, FAQ, dark mode variables)"
+  ],
+  "tickets_written": [
+    {
+      "id": "DES-001",
+      "file": "designer-tickets/open/001-orphan-discovery-filter-chip.md",
+      "priority": "P2",
+      "area": "home page",
+      "summary": "Orphan 'Veteran Studs' chip on discovery filters — 6th chip wraps to centered second row alone"
+    },
+    {
+      "id": "DES-002",
+      "file": "designer-tickets/open/002-mini-screener-1px-border-violation.md",
+      "priority": "P2",
+      "area": "home page",
+      "summary": "Mini-screener table rows use 1px solid borders instead of 2px dashed — DESIGN.md violation"
+    },
+    {
+      "id": "DES-003",
+      "file": "designer-tickets/open/003-ink-light-color-mismatch-sitewide.md",
+      "priority": "P1",
+      "area": "sitewide",
+      "summary": "--ink-light is #6d5a4d but DESIGN.md says #8a7565 — 219 usages wrong, kills typographic hierarchy"
+    },
+    {
+      "id": "DES-004",
+      "file": "designer-tickets/open/004-watermark-style-inconsistency-sitewide.md",
+      "priority": "P2",
+      "area": "sitewide",
+      "summary": "Watermark implemented 5 different ways across 15 pages — 3 fonts, 4 opacities, 4 z-indexes. Undermines brand on Reddit screenshots."
+    },
+    {
+      "id": "DES-005",
+      "file": "designer-tickets/open/005-prompts-page-missing-full-footer.md",
+      "priority": "P2",
+      "area": "prompts.html",
+      "summary": "Prompts page has minimal 2-line footer instead of full 6-column nav footer — conversion dead end for SEO funnel traffic"
+    },
+    {
+      "id": "DES-006",
+      "file": "designer-tickets/open/006-situation-room-agent-emojis-wrong.md",
+      "priority": "P2",
+      "area": "agents.html",
+      "summary": "3 of 6 agent emojis/animals wrong on Situation Room — Dolphin shown as Owl, Fox shown as Bear, Octopus shown as Fox. Home page contradicts agents page."
+    }
+  ],
+  "notes": [
+    "Production site (razzle.lol) returned blank HTML in headless browser — may be down or blocking headless",
+    "Backend not running locally so all data-dependent pages show error states (expected)",
+    "Dark mode toggle on mobile nav has only 6px right margin — tight but not clipped",
+    "Fake testimonials on home page will be credibility risk on Reddit",
+    "Agent name inconsistency: DESIGN.md says 'The Fox', agent-config.js says 'Bones', home page says 'THE DIPLOMAT' — now partially covered by DES-006 (emojis/animals), naming decision still open",
+    "--ink-light now ticketed as DES-003 — sitewide P1",
+    "1px solid borders on data rows appear in compare.html and tradevalues.html too — same pattern as DES-002 but sitewide",
+    "tradevalues.html has redirect to lab.html when loaded standalone — consolidation pattern",
+    "Footer audit: 4 main pages have full 6-col footer (index, agents, league-intel, pricing). prompts.html has minimal footer. ~60 standalone panel pages have minimal footer too (acceptable since they redirect to lab.html). about.html has full 6-col footer now.",
+    "Dark mode --ink-light mismatch already covered by DES-003",
+    "Pricing page looks clean — feature matrix, FAQ, interval toggle, mobile breakpoints all solid"
+  ]
+}

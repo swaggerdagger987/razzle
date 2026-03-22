@@ -74,6 +74,19 @@ while ($true) {
     Write-Host ""
     Write-Host "  Cycle $cycle complete." -ForegroundColor Green
 
+    # Commit from the loop script — don't rely on the agent to do it
+    Write-Host "  Committing cycle $cycle..." -ForegroundColor Gray
+    Set-Location $razzleDir
+    git config user.name "swaggerdagger987"
+    git config user.email "swaggerdagger987@users.noreply.github.com"
+    git add docs/marketing/ data/reddit/ 2>$null
+    $commitResult = git commit -m "GTM cycle $cycle`: $(Get-Date -Format 'yyyy-MM-dd HH:mm')" 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "  Committed." -ForegroundColor Green
+    } else {
+        Write-Host "  No changes to commit (agent may have already committed)." -ForegroundColor Gray
+    }
+
     # Show quick stats
     if (Test-Path "$razzleDir\docs\marketing\gtm-report.md") {
         $lines = (Get-Content "$razzleDir\docs\marketing\gtm-report.md" | Measure-Object -Line).Lines

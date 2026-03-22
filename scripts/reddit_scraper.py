@@ -31,8 +31,9 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 USER_AGENT = "razzle-research/1.0 (fantasy football analytics research)"
 
-# Rate limiting: 10 req/min without OAuth
-REQUEST_DELAY = 7.5  # seconds between requests (~8/min, safe margin)
+# Rate limiting: Reddit allows 10 req/min unauthenticated, 100 req/min with OAuth
+# We run at ~8/min without OAuth — safe margin below the 10/min hard limit
+REQUEST_DELAY = 8  # seconds between requests (~7.5/min, safe for sustained use)
 MAX_RETRIES = 3
 
 # All fantasy football subreddits worth scraping
