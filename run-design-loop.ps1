@@ -1,18 +1,17 @@
 # Razzle Design Loop
-# Designer screenshots a page, writes ONE tiny ticket.
-# Shipper fixes it, screenshots the result.
-# Repeat forever. 100-300 small fixes until perfect.
+# Designer screenshots pages, writes 10 tickets per cycle.
+# Shipper fixes all of them.
+# Repeat forever. Leave it running overnight.
 
 $razzleDir = "C:\Users\mcgui\Documents\razzle"
 Set-Location $razzleDir
 
-New-Item -ItemType Directory -Path "$razzleDir\designer-tickets" -Force | Out-Null
+New-Item -ItemType Directory -Path "$razzleDir\designer-tickets\open" -Force | Out-Null
 New-Item -ItemType Directory -Path "$razzleDir\designer-tickets\done" -Force | Out-Null
 New-Item -ItemType Directory -Path "$razzleDir\designer-screenshots" -Force | Out-Null
 
-Write-Host ""
 Write-Host "  RAZZLE DESIGN LOOP" -ForegroundColor Cyan
-Write-Host "  Designer sees. Shipper fixes. One at a time." -ForegroundColor Cyan
+Write-Host "  10 tickets per cycle. Runs forever." -ForegroundColor Cyan
 Write-Host ""
 
 try {
@@ -26,40 +25,36 @@ try {
 $cycle = 1
 
 while ($true) {
-    Write-Host ""
-    Write-Host "  CYCLE $cycle - $(Get-Date -Format 'HH:mm')" -ForegroundColor Cyan
     $doneCount = @(Get-ChildItem "$razzleDir\designer-tickets\done\*.md" -ErrorAction SilentlyContinue).Count
-    Write-Host "  Fixes completed so far: $doneCount" -ForegroundColor Gray
-
-    # DESIGNER: look at the site, write one ticket
     Write-Host ""
-    Write-Host "  [DESIGNER] Reviewing site..." -ForegroundColor Yellow
+    Write-Host "  CYCLE $cycle  $(Get-Date -Format 'HH:mm')  Total fixes: $doneCount" -ForegroundColor Cyan
+
+    # DESIGNER: browse site, write 10 tickets
+    Write-Host "  [DESIGNER] Reviewing site, writing 10 tickets..." -ForegroundColor Yellow
     $dp = Get-Content "$razzleDir\designer-prompt.txt" -Raw
     claude --dangerously-skip-permissions -p $dp
 
-    $ticketCount = @(Get-ChildItem "$razzleDir\designer-tickets\*.md" -ErrorAction SilentlyContinue).Count
-    if ($ticketCount -eq 0) {
-        Write-Host "  Designer found nothing to fix. Waiting 10 min." -ForegroundColor Green
-        Start-Sleep -Seconds 600
+    $openCount = @(Get-ChildItem "$razzleDir\designer-tickets\open\*.md" -ErrorAction SilentlyContinue).Count
+    Write-Host "  Open tickets: $openCount" -ForegroundColor Green
+
+    if ($openCount -eq 0) {
+        Write-Host "  No tickets. Site might be perfect. Checking again in 30 min." -ForegroundColor Green
+        Start-Sleep -Seconds 1800
         continue
     }
 
-    $ticketFile = (Get-ChildItem "$razzleDir\designer-tickets\*.md" | Sort-Object Name | Select-Object -First 1).Name
-    Write-Host "  Ticket: $ticketFile" -ForegroundColor Green
-
-    # SHIPPER: fix the ticket
-    Write-Host ""
-    Write-Host "  [SHIPPER] Fixing..." -ForegroundColor Yellow
+    # SHIPPER: fix all open tickets
+    Write-Host "  [SHIPPER] Fixing $openCount tickets..." -ForegroundColor Yellow
     $sp = Get-Content "$razzleDir\shipper-prompt.txt" -Raw
     claude --dangerously-skip-permissions -p $sp
 
-    # Commit from loop as backup
+    # Backup commit from loop
     git add -A 2>$null
-    $commitMsg = "design fix $cycle - $ticketFile"
-    git commit -m $commitMsg 2>$null
+    git commit -m "design loop cycle $cycle" 2>$null
 
     $doneCount = @(Get-ChildItem "$razzleDir\designer-tickets\done\*.md" -ErrorAction SilentlyContinue).Count
-    Write-Host "  Total fixes: $doneCount" -ForegroundColor Green
+    $remainingOpen = @(Get-ChildItem "$razzleDir\designer-tickets\open\*.md" -ErrorAction SilentlyContinue).Count
+    Write-Host "  Cycle $cycle done. Total fixed: $doneCount  Remaining: $remainingOpen" -ForegroundColor Green
 
     $cycle++
     Start-Sleep -Seconds 5
