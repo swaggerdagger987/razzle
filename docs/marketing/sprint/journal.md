@@ -8621,4 +8621,104 @@ Sources:
 
 3. **What should Post #2 look like — same Report Card format with different filters (position-specific grades? rookie-only? post-draft updated grades?) or a completely different view (Stock Watch, Buy Low/Sell High) to test which format gets more engagement?**
 
-## NEXT QUESTION: What specific visual polish does the Report Card page need before April 21 — are the grade badges legible at thumbnail size, does the Honor Roll show enough players without scrolling, and does the Share Mode PNG crop cleanly to show the most debatable players?
+## Q88: What specific visual polish does the Report Card page need before April 21 — are the grade badges legible at thumbnail size, does the Honor Roll show enough players without scrolling, and does the Share Mode PNG crop cleanly to show the most debatable players?
+
+**Date:** 2026-03-21
+**Prior context:** Q80 (Share Mode spec), Q82 (Screenshot Playbook), Q87 (first OC post structure)
+
+### Answer
+
+I audited every line of the Report Card implementation — both the standalone `reportcard.html` (730 lines) and the Lab panel version in `lab-panels.js` (lines 6181-6341) + `lab-panels.css` (lines 3045-3064). Here's the specific punch list, ordered by impact on the April 21 post.
+
+**Problem 1: Share Mode doesn't exist yet.** The Q80 spec calls for a 1200x960 fixed-canvas export with 10-row limit, title block, and pixel-perfect watermark. The current export (`reportcard.html` line 702-716) uses `html2canvas` to capture the entire `#rc-content` div at 2x scale with a `ctx.fillText` watermark — no fixed canvas, no row limit, no title block. The Lab panel version has NO export at all. This is the single biggest blocker for the April 21 post.
+
+**What to build (2-3 hour estimate):**
+1. Add a Share Mode toggle next to "Export PNG" (default: ON)
+2. When ON: render to a fixed 1200x960 canvas with:
+   - Title block: "Player Report Card — 2025 Season" in Luckiest Guy, 28px
+   - Subtitle: "composite fantasy GPA across 5 metrics" in Caveat, 18px
+   - Honor Roll table: exactly 10 rows (the top 10 by GPA)
+   - Columns: Player, GPA, Eff, Con, SOS, Stock, PPG (drop Opp%, Dom, Age, GP, Annotation — too much noise for a thumbnail)
+   - Watermark: "razzle.lol" in Caveat 24px, bottom-right, 30% opacity
+3. When OFF: current behavior (full page capture, personal use)
+
+**Problem 2: Grade badges are too small for Reddit thumbnails.** Reddit mobile feed renders image posts at ~400px wide. At that scale:
+- The main GPA badge (`.rc-gpa-badge`) is 14px font, 3px+10px padding — renders at roughly 7px on mobile feed. **Barely legible.**
+- The sub-grade badges (`.rc-grade`) are 11px font, 1px+6px padding — **illegible at thumbnail size.** They'll appear as colored blobs with no visible letter.
+- The Lab panel version (`.rpc-grade-badge`) is even smaller: 11px font, 2px+8px padding.
+
+**Fix:** For the Share Mode canvas only (not the interactive page):
+- GPA badge: bump to 18px font, 6px+14px padding, 3px border
+- Sub-grade badges: bump to 14px font, 3px+10px padding, 2px border
+- This ensures grades are readable at 50% zoom (≈Reddit mobile thumbnail)
+
+**Problem 3: Honor Roll shows 25 players by default.** The API call uses `?limit=25` (line 660). For the interactive page, 25 is fine — scroll is expected. For the Share Mode PNG, 25 rows in 960px = ~32px per row including header. That's too dense. The Q80 spec calls for 10 rows. The top 10 is the ideal sweet spot: shows the truly elite names (Chase, Robinson, etc.) and leaves enough vertical space for legible grades.
+
+**Fix:** Share Mode export should re-query with `?limit=10` or simply slice the first 10 from the existing data.
+
+**Problem 4: No visible position filter state in the export.** When the user filters by position (e.g., RB-only), the exported PNG doesn't indicate this anywhere. A Reddit viewer would see "Honor Roll" with all RBs and think the tool only covers running backs.
+
+**Fix:** Add position filter badge to the Share Mode title block: "Player Report Card — 2025 Season — All Positions" or "— Running Backs Only".
+
+**Problem 5: The existing watermark is a fixed-position overlay, not baked into the image.** Line 363: `<div style="position:fixed; bottom:10px; right:14px; ...">razzle.lol</div>`. This appears on the live page but html2canvas may or may not capture it depending on rendering. The `ctx.fillText` approach (line 707-710) does add a watermark to the canvas, but at unpredictable position since the canvas size varies.
+
+**Fix:** Share Mode with fixed 1200x960 canvas means watermark position is deterministic: `ctx.fillText('razzle.lol', 1200*2 - 40, 960*2 - 32)` at scale:2.
+
+**Problem 6: Headshot images may fail in html2canvas.** Player headshots are loaded from nflverse CDN. html2canvas cannot render cross-origin images by default (tainted canvas). This could result in blank circles where headshots should be.
+
+**Fix:** Either:
+- Add `useCORS: true` to html2canvas options (works if CDN has CORS headers)
+- Or draw the Share Mode table manually on canvas (bypasses html2canvas entirely — more work but more reliable and gives pixel-level control)
+
+**Recommended approach:** Build the Share Mode export as a **manual canvas draw** (not html2canvas). This gives pixel-perfect control over the 1200x960 output, avoids CORS headshot issues, and matches what the Lab screener's `exportScreenerPNG` pattern should be. html2canvas is a dependency that can break on any browser update and doesn't give you control over row count or column selection.
+
+**The specific visual state for the April 21 screenshot:**
+- Position: ALL (cross-position Honor Roll for maximum debate surface)
+- Season: 2025
+- Top 10 visible: Ja'Marr Chase, Bijan Robinson, Saquon Barkley, Lamar Jackson, etc.
+- Columns: Player (with headshot), GPA, Eff, Con, SOS, Stock, PPG
+- At least 2-3 players should have mixed grades (e.g., A+ efficiency but C consistency) — these drive comments
+- Watermark: bottom-right, "razzle.lol", 30% opacity
+- No nav bar, no footer, no controls visible in the PNG
+
+### Self-Critique
+
+1. **The "manual canvas draw" recommendation is more work than html2canvas.** Estimated 4-6 hours vs 2-3 hours for the html2canvas approach. But the Lab screener already has precedent for manual canvas drawing in its various export functions (10+ `exportXxxPNG` functions in lab.js). The pattern is established. **Confidence: 8/10 — canvas is more reliable.**
+
+2. **I can't verify actual thumbnail legibility without rendering.** The font size recommendations (18px GPA, 14px sub-grades) are based on the rule-of-thumb that Reddit mobile feed renders at ~33-50% of original image width. A 1200px-wide image at 400px renders text at 33% scale — so 18px becomes ~6px, which is the floor for legibility. This should be tested on an actual phone before April 21. **Confidence: 7/10 — needs real-device testing.**
+
+3. **Dropping columns for Share Mode (removing Opp%, Dom, Age, GP) loses information.** Dynasty managers might want to see age. Counter-argument: the goal of the Share Mode PNG is to provoke debate and drive clicks to the live page. Less is more for thumbnails. Age can be a revelation in the comments: "Wait, this guy is 27 and his efficiency is A+? Sell high." That's engagement, not a bug. **Confidence: 8/10.**
+
+4. **The headshot CORS issue may be a non-issue.** nflverse/ESPN headshot URLs may already have `Access-Control-Allow-Origin: *`. Needs testing. If they do, `useCORS: true` solves it in one line. **Confidence: 6/10 — untested.**
+
+5. **The "position filter badge in title block" suggestion adds complexity.** For the April 21 post, the plan is to use ALL positions. The position badge only matters for subsequent posts. Could defer this to Post #2 prep. **Confidence: 9/10 that it can be deferred.**
+
+Sources:
+- Direct code audit: `frontend/reportcard.html` (730 lines), `frontend/lab-panels.js` (lines 6181-6341), `frontend/lab-panels.css` (lines 3045-3064)
+- Sprint Q80 (Share Mode spec — 1200x960, 10-row limit, title block)
+- Sprint Q82 (Screenshot Playbook — Saved View + Share Mode = one-click Reddit image)
+- Sprint Q87 (first OC post structure — Report Card as lead screenshot)
+- html2canvas docs: cross-origin images require `useCORS: true` or proxy
+- Reddit mobile feed thumbnail behavior: images render at ~400px width in card view
+
+### Implications for Razzle
+
+1. **Share Mode is the #1 dev priority before April 21.** Without it, every screenshot requires manual cropping, resizing, and watermarking — 2-3 minutes per image. With it, one-click. During the live engagement session (Q87 response workflow), speed = engagement. Each player request reply needs a screenshot in under 60 seconds.
+
+2. **Build the Share Mode canvas draw on the Report Card FIRST, then generalize to other pages.** The pattern (fixed canvas, row limit, title block, watermark) should become a shared utility function that all 70+ pages can import. But for April 21, only Report Card needs it.
+
+3. **Test the PNG on a real phone before April 21.** Export at 1200x960, AirDrop to phone, open in Reddit app, verify grade badges are legible in the feed thumbnail. If illegible, bump font sizes further. This 10-minute test could save the entire first OC post.
+
+4. **The April 21 export should crop to JUST the Honor Roll section.** Don't include "Needs Improvement" — it dilutes the thumbnail and makes the image busy. Honor Roll alone is the lead image. Needs Improvement can be a second image in a reply comment ("here's who needs to repeat a grade").
+
+5. **Consider adding a subtle section divider between each tier within Honor Roll** (e.g., A+ players separated from A players by a thin line). This visual grouping makes the grades scannable even at thumbnail size — viewers can see "3 players at A+, 4 at A, 3 at B+" without reading individual badges.
+
+### Open Questions
+
+1. **Should the Share Mode be built as a canvas draw (pixel-perfect, 4-6 hours) or html2canvas capture with manual cropping (faster, 2-3 hours, less reliable) — and does the April 21 deadline make the faster path necessary even if less polished?**
+
+2. **What should Post #2 look like — same Report Card format with different filters (position-specific grades? rookie-only? post-draft updated grades?) or a completely different view (Stock Watch, Buy Low/Sell High) to test which format gets more engagement?**
+
+3. **Should the first reply-to-player-request screenshot use the same Share Mode (full Honor Roll cropped to just that player's row) or a different format (expanded single-player profile card with all 5 grades visualized as a radar chart)?**
+
+## NEXT QUESTION: Should the Share Mode be built as a canvas draw (pixel-perfect, 4-6 hours) or html2canvas capture with manual cropping (faster, 2-3 hours, less reliable) — and does the April 21 deadline make the faster path necessary even if less polished?
