@@ -1,5 +1,5 @@
 {
-  "last_ticket_id": 16,
+  "last_ticket_id": 26,
   "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
@@ -25,133 +25,213 @@
     "sitewide font-family audit (nav, buttons, logo)",
     "agent-config.js vs home page demo cards (name consistency)",
     "pricing.html vs about.html (panel count copy audit)",
-    "styles.css (auth modal, theme toggle, button classes)"
+    "styles.css (auth modal, theme toggle, button classes)",
+    "styles.css (dark mode [data-theme=dark] completeness audit — all overrides)",
+    "styles.css (hardcoded white text audit — 9 instances found)",
+    "lab-panels.css (dark mode audit — tier desc, medals, 40+ badge instances)",
+    "lab-panels.css (overflow-x mobile scroll audit — 7 correct, 6+ missing)",
+    "pricing.html (grid breakpoint audit — 900px jump too abrupt)",
+    "index.html (footer grid minmax audit — 140px too wide for 375px)",
+    "index.html (inline style dark mode bypass audit)",
+    "lab.html (sidebar mobile behavior — transform:translateX confirmed at 768px)"
   ],
   "tickets_written": [
     {
       "id": "DES-001",
-      "file": "designer-tickets/open/001-orphan-discovery-filter-chip.md",
+      "file": "designer-tickets/done/001-orphan-discovery-filter-chip.md",
       "priority": "P2",
       "area": "home page",
       "summary": "Orphan 'Veteran Studs' chip on discovery filters — 6th chip wraps to centered second row alone"
     },
     {
       "id": "DES-002",
-      "file": "designer-tickets/open/002-mini-screener-1px-border-violation.md",
+      "file": "designer-tickets/done/002-mini-screener-1px-border-violation.md",
       "priority": "P2",
       "area": "home page",
       "summary": "Mini-screener table rows use 1px solid borders instead of 2px dashed — DESIGN.md violation"
     },
     {
       "id": "DES-003",
-      "file": "designer-tickets/open/003-ink-light-color-mismatch-sitewide.md",
+      "file": "designer-tickets/done/003-ink-light-color-mismatch-sitewide.md",
       "priority": "P1",
       "area": "sitewide",
       "summary": "--ink-light is #6d5a4d but DESIGN.md says #8a7565 — 219 usages wrong, kills typographic hierarchy"
     },
     {
       "id": "DES-004",
-      "file": "designer-tickets/open/004-watermark-style-inconsistency-sitewide.md",
+      "file": "designer-tickets/done/004-watermark-style-inconsistency-sitewide.md",
       "priority": "P2",
       "area": "sitewide",
       "summary": "Watermark implemented 5 different ways across 15 pages — 3 fonts, 4 opacities, 4 z-indexes"
     },
     {
       "id": "DES-005",
-      "file": "designer-tickets/open/005-prompts-page-missing-full-footer.md",
+      "file": "designer-tickets/done/005-prompts-page-missing-full-footer.md",
       "priority": "P2",
       "area": "prompts.html",
       "summary": "Prompts page has minimal 2-line footer instead of full 6-column nav footer"
     },
     {
       "id": "DES-006",
-      "file": "designer-tickets/open/006-situation-room-agent-emojis-wrong.md",
+      "file": "designer-tickets/done/006-situation-room-agent-emojis-wrong.md",
       "priority": "P2",
       "area": "agents.html",
       "summary": "3 of 6 agent emojis/animals wrong on Situation Room"
     },
     {
       "id": "DES-007",
-      "file": "designer-tickets/open/007-og-image-wrong-tagline.md",
+      "file": "designer-tickets/done/007-og-image-wrong-tagline.md",
       "priority": "P0",
       "area": "sitewide (OG image)",
       "summary": "OG image says 'bloomberg terminal' — old tagline. Should say 'research lab'. Blocks Twitter launch quality."
     },
     {
       "id": "DES-008",
-      "file": "designer-tickets/open/008-fake-testimonials-home-page.md",
+      "file": "designer-tickets/done/008-fake-testimonials-home-page.md",
       "priority": "P1",
       "area": "index.html",
       "summary": "3 fabricated testimonials with fake Reddit/Twitter usernames. Credibility risk before Reddit seeding."
     },
     {
       "id": "DES-009",
-      "file": "designer-tickets/open/009-logo-text-wrong-font.md",
+      "file": "designer-tickets/done/009-logo-text-wrong-font.md",
       "priority": "P1",
       "area": "sitewide (styles.css)",
       "summary": "Logo 'Razzle.lol' in Space Mono — missing font-family: var(--font-display). Brand identity issue."
     },
     {
       "id": "DES-010",
-      "file": "designer-tickets/open/010-1px-borders-sitewide-panels.md",
+      "file": "designer-tickets/done/010-1px-borders-sitewide-panels.md",
       "priority": "P1",
       "area": "sitewide (58+ pages)",
       "summary": "64 occurrences of 1px solid borders on data rows. DESIGN.md says 2px dashed. Supersedes DES-002."
     },
     {
       "id": "DES-011",
-      "file": "designer-tickets/open/011-pricing-card-border-radius-mismatch.md",
+      "file": "designer-tickets/done/011-pricing-card-border-radius-mismatch.md",
       "priority": "P2",
       "area": "index.html + pricing.html",
       "summary": "Pricing cards 12px radius on home, 8px on pricing page. Same component, different pages."
     },
     {
       "id": "DES-012",
-      "file": "designer-tickets/open/012-shadow-size-inconsistency-home.md",
+      "file": "designer-tickets/done/012-shadow-size-inconsistency-home.md",
       "priority": "P2",
       "area": "index.html",
       "summary": "social-card and smart-chip use 3px shadow instead of design-spec 4px."
     },
     {
       "id": "DES-013",
-      "file": "designer-tickets/open/013-panel-count-undersell-pricing.md",
+      "file": "designer-tickets/done/013-panel-count-undersell-pricing.md",
       "priority": "P2",
       "area": "pricing.html + about.html",
       "summary": "'60+ panels' on 7 instances across 2 pages. Actual count is 67+. North Star says '70+'."
     },
     {
       "id": "DES-014",
-      "file": "designer-tickets/open/014-agent-name-mismatch-home-demo.md",
+      "file": "designer-tickets/done/014-agent-name-mismatch-home-demo.md",
       "priority": "P2",
       "area": "index.html",
       "summary": "Demo card says 'The Diplomat' but agent-config.js name is 'Bones'. Brand confusion."
     },
     {
       "id": "DES-015",
-      "file": "designer-tickets/open/015-nav-buttons-wrong-font-per-design-md.md",
+      "file": "designer-tickets/done/015-nav-buttons-wrong-font-per-design-md.md",
       "priority": "P2",
       "area": "sitewide (styles.css)",
       "summary": "Nav links + buttons use mono font but DESIGN.md type scale says display. Spec/code mismatch needs resolution."
     },
     {
       "id": "DES-016",
-      "file": "designer-tickets/open/016-border-radius-ungoverned.md",
+      "file": "designer-tickets/done/016-border-radius-ungoverned.md",
       "priority": "P2",
       "area": "sitewide (CSS architecture)",
       "summary": "--radius CSS var (12px) defined but barely used. 7+ hardcoded values across home page alone."
+    },
+    {
+      "id": "DES-017",
+      "file": "designer-tickets/open/017-btn-primary-invisible-dark-mode.md",
+      "priority": "P1",
+      "area": "sitewide (styles.css)",
+      "summary": "btn-primary uses hardcoded color:white — every CTA button lacks dark mode override"
+    },
+    {
+      "id": "DES-018",
+      "file": "designer-tickets/open/018-nav-active-white-text-dark-mode.md",
+      "priority": "P1",
+      "area": "sitewide (styles.css)",
+      "summary": "Nav active link + Pro/Elite badges use color:white with no dark mode override — navigation broken in dark mode"
+    },
+    {
+      "id": "DES-019",
+      "file": "designer-tickets/open/019-auth-tab-white-text-dark-mode.md",
+      "priority": "P1",
+      "area": "sitewide (styles.css)",
+      "summary": "Auth modal active tab uses color:white — can't tell Login vs Register in dark mode. Conversion path."
+    },
+    {
+      "id": "DES-020",
+      "file": "designer-tickets/open/020-chip-active-white-text-dark-mode.md",
+      "priority": "P1",
+      "area": "sitewide (styles.css)",
+      "summary": "Active position chips + command palette badges use color:white/fff — Screener filtering broken in dark mode"
+    },
+    {
+      "id": "DES-021",
+      "file": "designer-tickets/open/021-tier-description-invisible-dark-mode.md",
+      "priority": "P2",
+      "area": "lab-panels.css",
+      "summary": "Tier list descriptions use hardcoded sand rgba — becomes invisible in dark mode (same color as background)"
+    },
+    {
+      "id": "DES-022",
+      "file": "designer-tickets/open/022-medal-colors-no-dark-mode-override.md",
+      "priority": "P2",
+      "area": "lab-panels.css",
+      "summary": "Gold (#ffd700) and bronze (#cd7f32) medal colors hardcoded in 6 places — no CSS tokens, no dark mode overrides"
+    },
+    {
+      "id": "DES-023",
+      "file": "designer-tickets/open/023-panel-tables-no-mobile-scroll.md",
+      "priority": "P2",
+      "area": "lab-panels.css",
+      "summary": "6+ panel table containers use overflow:hidden — data truncated on mobile instead of horizontal scroll"
+    },
+    {
+      "id": "DES-024",
+      "file": "designer-tickets/open/024-pricing-cards-tablet-cramped.md",
+      "priority": "P2",
+      "area": "pricing.html",
+      "summary": "Pricing cards jump from 3-col to 1-col at 900px — tablets (768-900px) get cramped 3-col layout"
+    },
+    {
+      "id": "DES-025",
+      "file": "designer-tickets/open/025-home-footer-grid-375px-overflow.md",
+      "priority": "P2",
+      "area": "index.html",
+      "summary": "Footer grid minmax(140px) too wide for 375px phones — columns don't fit, layout breaks"
+    },
+    {
+      "id": "DES-026",
+      "file": "designer-tickets/open/026-inline-style-dark-mode-home.md",
+      "priority": "P2",
+      "area": "index.html",
+      "summary": "Home page inline <style> blocks use hardcoded hex colors — bypass dark mode toggle system"
     }
   ],
   "notes": [
-    "Production site (razzle.lol) still returns blank HTML in headless browser — confirmed 2026-03-22",
-    "OG image is the most impactful fix — every Twitter/Reddit link share shows wrong tagline",
-    "Fake testimonials note promoted to P1 ticket (DES-008)",
-    "Agent name inconsistency now ticketed as DES-014 — 'The Diplomat' vs 'Bones'",
-    "1px solid borders now ticketed as sitewide P1 (DES-010) — supersedes DES-002 scope",
-    "DES-015 is a spec/code mismatch — may result in DESIGN.md update rather than code change",
-    "No rogue font-family (sans-serif, arial, etc.) found in any frontend file — good",
-    "No 'Loading...' text found anywhere — all loading states use personality text — good",
-    "Auth modal styling is clean — proper chunky borders, dark mode support, focus states",
-    "All pages use consistent OG image path — but the image itself has wrong content",
+    "Production site (razzle.lol) returns 502 — confirmed 2026-03-22",
+    "DES-001 through DES-016 all completed (moved to done/ folder)",
+    "Dark mode is the dominant theme of DES-017 to DES-020 — systemic issue: hardcoded color:white across 9+ selectors",
+    "No @media (prefers-color-scheme: dark) found — correct, toggle-based only",
+    "CSS variables for dark mode are correctly defined — the issue is components not using them",
+    "Lab sidebar correctly hides on mobile via transform:translateX(100%) at 768px — verified",
+    "40+ position badge color:#fff instances in lab-panels.css — not ticketed (functional on colored backgrounds)",
+    "No gradients found anywhere — good",
+    "No cold grays found — good",
+    "No blue-black ink colors found — good",
+    "Position colors are all correct (QB=blue, RB=teal, WR=terracotta, TE=purple) — good",
+    "Hover-lift effects present and consistent — good",
     "All agent SVG icons exist at /assets/agents/{name}.svg — 6 files present"
   ]
 }
