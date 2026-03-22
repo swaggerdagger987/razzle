@@ -2766,6 +2766,93 @@ Sources:
 
 3. **What does the "Camp Hype vs. Data Reality" post look like specifically — which training camp narratives from past years (2024, 2025) generated the most Reddit engagement, and what data contradicted or confirmed the hype?**
 
-## NEXT QUESTION: What specific r/fantasyfootball post formats and rules differ from r/DynastyFF — and how should Razzle adapt Lab screenshots for the redraft audience in August?
+## Q32: What specific r/fantasyfootball post formats and rules differ from r/DynastyFF — and how should Razzle adapt Lab screenshots for the redraft audience in August?
+
+**Date**: 2026-03-21
+
+### Answer
+
+**The two subs differ in size (16x), content culture, megathread enforcement, and what "useful" means. Razzle needs a separate content strategy for r/fantasyfootball — not cross-posts.**
+
+**Key Structural Differences:**
+
+| Dimension | r/DynastyFF (~126K subs) | r/fantasyfootball (~2M subs) |
+|-----------|--------------------------|------------------------------|
+| **Audience** | Year-round dynasty managers | Seasonal redraft players (Aug-Dec) |
+| **Peak activity** | Consistent year-round, spikes at NFL Draft | 2-4x surge Aug-Sep, near-dead Jan-May |
+| **Post culture** | Discussion-heavy text posts, OC welcome | Heavy megathread enforcement (WDIS, Add/Drop, Trade threads posted 2x/day) |
+| **What gets upvoted** | Prospect evaluations, trade value takes, contrarian analysis | Rankings, cheat sheets, weekly streaming advice, trade value charts |
+| **Self-promo tolerance** | Allowed if content/tools are free | Stricter — dedicated self-promotion guidelines exist, 9:1 contribution ratio expected |
+| **Top creators** | Dynasty Nerds, FantasyCalc, Dynasty Daddy | PeakedInHighSkool (trade value charts as images), Subvertadown (kicker/DST/QB rankings as text tables), BorisChen (tier charts) |
+| **Content format** | Text posts with embedded screenshots work | Image posts (trade value chart PNGs) AND text posts with tiered rankings both succeed |
+| **Subscriber growth** | ~200 daily additions | ~1,930 daily average, 2-4x during Aug-Sep |
+
+**What succeeds on r/fantasyfootball that differs from r/DynastyFF:**
+
+1. **PeakedInHighSkool model**: Weekly image posts (trade value chart PNGs) with a text post body containing methodology + spreadsheet links. Started free, moved to Patreon early access with Tuesday drops. The chart IS the content — the watermark IS the brand. Posts get 1K-5K upvotes weekly during season.
+
+2. **Subvertadown model**: Recurring weekly text-post series with clever names ("Defensive Maneuvers," "But Here's the Kicker," "Two Cents for a Quarterback"). Each post covers one position with tiered rankings + analysis. Free on Reddit, subscription site for full access. Built credibility over 7 years (2017-2024 compendium).
+
+3. **BorisChen model**: Tier-based visualization charts aggregating expert rankings. Pure data, no personality. The visual format makes it instantly screenshot-worthy.
+
+**How Razzle should adapt Lab screenshots for r/fantasyfootball in August:**
+
+1. **Switch to redraft framing.** Dynasty values are irrelevant on r/fantasyfootball. Lab screenshots need to show: current-season PPG, targets/game, snap%, ADP vs. production rank. Remove dynasty trade values from the screener preset.
+
+2. **Create a "Redraft Lab" preset.** Columns: Player, Pos, Team, ADP, PPG (half-PPR), Tgt/G, Snap%, YPT, TD Rate. Sort by ADP. This is the screenshot that redraft managers want — "where is ADP wrong?"
+
+3. **Title formula shifts.** Dynasty: "Makai Lemon is WR1 and here's the film." Redraft: "Your ADP is lying to you about [Player] — here's what the per-game data actually says." Redraft titles need to reference ADP, scoring format (PPR/half/standard), and THIS season.
+
+4. **Format: text post with embedded screenshot.** r/fantasyfootball accepts both image and text posts, but text posts with context + an embedded Lab screenshot will outperform standalone images because the sub rewards discussion, not just data dumps.
+
+5. **Weekly series naming.** Adapt the "Lab Report" series: "The Lab: Week [X] ADP Reality Check" — a recurring weekly format that covers ADP movers, efficiency outliers, and buy/sell windows based on Lab data. This maps to how Subvertadown and PeakedInHighSkool built loyalty through weekly cadence.
+
+6. **Volume matters more here.** r/fantasyfootball's 2M audience means even a 0.1% conversion rate on a 2K-upvote post = 2,000 eyeballs visiting razzle.lol. The August window (Aug 1 - Sep 10) is ~6 weeks. Post weekly = 6 shots at virality vs. 1-2 on r/DynastyFF.
+
+---
+
+### Self-Critique
+
+1. **I could not directly access r/fantasyfootball's sidebar rules.** Reddit blocks web fetching. The specific self-promotion policy wording is inferred from general Reddit 9:1 norms and the existence of a "Self-Promotion Guidelines" link referenced in metadata. The claim that r/fantasyfootball is "stricter" than r/DynastyFF is based on community size (larger subs tend to be stricter) and the existence of dedicated guidelines, not a direct rule comparison. **Confidence: 7/10** on relative strictness, **9/10** on the megathread enforcement being heavier.
+
+2. **The 2M subscriber count may be inflated.** Two data sources give different numbers — subredditstats.com says 2,045,031 while frontpagemetrics shows 727,211. The discrepancy likely reflects different measurement dates or methodology. The directional point (r/fantasyfootball is 10-16x larger than r/DynastyFF) holds regardless. **Confidence: 9/10** on relative size.
+
+3. **I'm assuming the "Redraft Lab" preset content will resonate without testing.** The ADP vs. production angle is validated by PeakedInHighSkool's success (trade values are essentially "is this ADP right?"), but Razzle's specific screenshot format hasn't been tested on a redraft audience. The first August post is effectively a product-market fit test. **Confidence: 7/10**.
+
+4. **The August timing window assumes Razzle has redraft-relevant data by then.** The Lab currently has per-game stats and dynasty values. Redraft ADP data (from FantasyPros, Underdog, etc.) would need to be imported or referenced externally. Without ADP data in the Lab, the "ADP Reality Check" format doesn't work. This is a build dependency. **Confidence: 9/10** that the format is right, **5/10** that the data pipeline will be ready.
+
+5. **I haven't verified whether r/fantasyfootball allows image posts at all times.** Some large subs restrict image posts to specific days or ban them during certain periods. The claim that "image posts work" is based on PeakedInHighSkool consistently posting chart images, not on a verified reading of the rules. **Confidence: 8/10**.
+
+Sources:
+- [r/fantasyfootball Subreddit Stats](https://subredditstats.com/r/fantasyfootball) — subscriber count, activity ranking
+- [r/DynastyFF Subreddit Stats](https://subredditstats.com/r/dynastyff) — 126K subscribers, activity comparison
+- [r/fantasyfootball Front Page Metrics](https://frontpagemetrics.com/r/fantasyfootball) — seasonal growth patterns, 2-4x Aug-Sep surge
+- [PeakedInHighSkool Trade Value Charts](https://peakedinhighskool.com/fantasy-trade-value-chart/) — image post format, Patreon model
+- [PeakedInHighSkool Preseason Round 3](https://peakedinhighskool.com/2022/07/27/reddit-adjusted-fantasy-football-trade-values-preseason-round-3/) — preseason posting cadence
+- [Subvertadown Compendium 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — 7-year posting history, series naming conventions
+- [Subvertadown Pre-season 2023](https://subvertadown.com/article/pre-season-2023-let-s-do-this-) — preseason vs in-season format shift
+- [Reddit Self-Promotion Rules Guide](https://redditservice.com/reddit-self-promotion-rules/) — 9:1 ratio, community-specific policies
+
+### Implications for Razzle
+
+1. **Build a "Redraft Lab" preset in July.** This is the single most important pre-August task. Without redraft-friendly column configs, the Lab screenshots won't speak the r/fantasyfootball language. Current-year per-game stats + ADP + efficiency metrics = the preset.
+
+2. **Do NOT cross-post dynasty content to r/fantasyfootball.** The audiences want fundamentally different things. Dynasty managers care about long-term value and prospect upside. Redraft managers care about THIS season's production and ADP efficiency. Same Lab, different presets, different titles, different analysis framing.
+
+3. **Start warm-up commenting on r/fantasyfootball in late July.** The sub wakes up when fantasy platforms open (~Aug 1). Build karma there separately from r/DynastyFF karma. The two accounts can use the same u/swaggerdagger987 — but the comment voice shifts from "dynasty trade evaluator" to "data-driven drafter."
+
+4. **The weekly "ADP Reality Check" series is the August play.** One post per week, 6 weeks (Aug 1 - Sep 10). Each post: text with Lab screenshot, 3-5 players where ADP diverges from per-game data, contrarian take in title. This mirrors the Subvertadown weekly cadence that built a 7-year following.
+
+5. **ADP data is a hard dependency.** Without current-year ADP in the Lab (or at minimum, referenced in the post body), the redraft angle doesn't work. Investigate: can the nflverse adapter pull ADP data, or does Razzle need a FantasyPros/Underdog ADP feed? This is a Q33-level question.
+
+### Open Questions
+
+1. **Where can Razzle source current-year ADP data for the Lab — FantasyPros consensus, Underdog ADP, Sleeper ADP, or nflverse — and what are the licensing/scraping implications?**
+
+2. **Should Razzle create a separate "Redraft Mode" toggle in the Lab UI (alongside NFL/College/Prospects), or is a saved preset sufficient for August content?**
+
+3. **What does the first r/fantasyfootball "ADP Reality Check" post look like specifically — title, body structure, screenshot layout, and which players are the strongest ADP divergence candidates for August 2026?**
+
+## NEXT QUESTION: Where can Razzle source current-year ADP data for the Lab — FantasyPros consensus, Underdog ADP, Sleeper ADP, or nflverse — and what are the licensing/scraping implications?
 
 ---
