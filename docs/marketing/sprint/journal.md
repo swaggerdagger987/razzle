@@ -7803,4 +7803,223 @@ Sources:
 
 3. **What is the optimal post-OC-post analytics workflow — which metrics should Razzle track after each Reddit post (upvotes, comment count, watermark-driven site visits, new user signups) and how should they feed back into the next post's strategy?**
 
-## NEXT QUESTION: What is the complete Screenshot Playbook document — mapping each debate topic to its Saved View name, Share Mode settings, Lab URL, pre-written comment template, and sample reply text — and should it live as a doc in docs/marketing/ or as a checklist within the sprint journal?
+---
+
+## Q82: What is the complete Screenshot Playbook document — mapping each debate topic to its Saved View name, Share Mode settings, Lab URL, pre-written comment template, and sample reply text — and should it live as a doc in docs/marketing/ or as a checklist within the sprint journal?
+
+**Date:** 2026-03-21
+**Source:** Sprint Q75 (comments), Q76 (screenshot configs), Q77 (Saved Views), Q79 (OC format), Q80 (Share Mode), Q81 (response workflow), content playbook best practices research
+
+### Answer
+
+**The Screenshot Playbook should be a standalone doc at `docs/marketing/screenshot-playbook.md` — not inside the sprint journal. It's an operational runbook, not research. It should contain 5 debate "plays" (expandable to 8-12), each mapping a debate topic to every artifact needed to go from "someone asked about Player X" to "reply posted with screenshot" in under 90 seconds.**
+
+Here's why it should be a standalone doc, and what goes in it:
+
+#### Why a Standalone Doc, Not Journal
+
+The sprint journal is research — questions, answers, self-critiques. It's append-only and now 7,800+ lines. Nobody opens a 7,800-line research log to find a screenshot configuration during a 4-hour Reddit monitoring window. The playbook is an operational document: open it, find the player, follow the steps, post. It should be:
+
+- **Short** — under 200 lines, scannable in 10 seconds
+- **Stable** — updated weekly, not appended daily
+- **Action-oriented** — every section ends with "do this"
+- **Separate from research** — the journal is the "why," the playbook is the "how"
+
+Content playbook best practices confirm this: operational playbooks should be accessible, scannable reference docs — not embedded in strategy documents ([Document360](https://document360.com/blog/business-playbook/), [Content Science Review](https://review.content-science.com/what-is-a-content-playbook/)). The playbook is the cheat sheet you tape to the wall; the journal is the notebook in the drawer.
+
+#### The Complete Playbook Structure
+
+The playbook has 4 sections: Universal Setup, Debate Plays (one per topic), Response Templates, and the Post-Day Checklist.
+
+**Section 1: Universal Setup (one-time config)**
+
+```
+BEFORE EVERY SESSION:
+- Open Lab in browser tab (keep open entire monitoring window)
+- Heat colors ON (H key)
+- Leader badges ON (L key)
+- Share Mode ON (toggle next to Export PNG)
+- Dark mode OFF (light mode for Reddit feed contrast)
+- Verify data freshness indicator shows < 24h
+```
+
+This section exists because Q76 identified 6 universal rules that apply to ALL screenshots. Without a checklist, the operator forgets one toggle and the screenshot looks inconsistent.
+
+**Section 2: The 5 Debate Plays**
+
+Each play is a self-contained card with everything needed to produce a screenshot + reply for one debate topic. Here are the 5 initial plays (from Q76/Q77):
+
+---
+
+**PLAY 1: Kenneth Walker — "Is he worth the price?"**
+
+| Field | Value |
+|-------|-------|
+| **Saved View Name** | `Reddit: Walker Efficiency` |
+| **Lab Page** | Lab screener (`/lab.html`) |
+| **Preset** | Efficiency |
+| **Filters** | Position = RB, Season = 2025, Min GP ≥ 12 |
+| **Sort** | PPG descending |
+| **Visual Modes** | Heat colors ON, Leader badges ON |
+| **Key Columns** | PPG, yards_per_carry, catch_rate, target_share, td_rate |
+| **Share Mode Crop** | Top 12 RBs by PPG (Walker + Hall visible in same frame) |
+| **Lab URL** | `/lab.html?universe=nfl&pos=RB&season=2025&mingp=12&sort=ppg&dir=desc&preset=efficiency&heat=1&leaders=1` |
+| **Comment Template** | "Filtered the Lab for RB efficiency — Walker's rushing numbers are elite [point to green cells], but the catch rate column tells the $43M question [point to red cells]. Heat colors don't lie." |
+| **When to Use** | Any "Walker trade value" or "is Walker worth a first?" thread |
+
+---
+
+**PLAY 2: Breece Hall — "What's he worth in a trade?"**
+
+| Field | Value |
+|-------|-------|
+| **Saved View Name** | `Reddit: Hall Trade Finder` |
+| **Lab Page** | Trade Finder (`/tradefinder.html`) |
+| **Filters** | Search "Breece Hall" |
+| **Visual Modes** | Default (Trade Finder has value bars) |
+| **Key Elements** | Hall's trade value, 3-4 equal-value targets, stock trend arrows |
+| **Share Mode Crop** | Full Trade Finder view — equal value + buy low sections |
+| **Lab URL** | `/tradefinder.html?player=HALL_ID` |
+| **Comment Template** | "Ran Hall through the trade finder — here's who sits at equal value right now. The buy-low section is interesting if you think he lands somewhere with volume." |
+| **When to Use** | Any "price check Hall" or "what can I get for Hall?" thread |
+
+---
+
+**PLAY 3: Patrick Mahomes — "Sell or hold in SF?"**
+
+| Field | Value |
+|-------|-------|
+| **Saved View Name** | `Reddit: Mahomes Dynasty` |
+| **Lab Page** | Lab screener (primary) or Aging Curves `/aging.html` (knockout punch) |
+| **Preset** | Dynasty |
+| **Filters** | Position = QB, Season = 2025 |
+| **Sort** | Dynasty value descending |
+| **Visual Modes** | Heat colors ON, Sparkline trend column ON |
+| **Key Columns** | dynasty_value, age, PPG, trend sparkline, passing_yards, rushing_yards |
+| **Share Mode Crop** | Top 15 QBs by dynasty value — Mahomes's age column heat-colored orange/red |
+| **Lab URL** | `/lab.html?universe=nfl&pos=QB&season=2025&sort=dynasty_value&dir=desc&preset=dynasty&heat=1&spark=1` |
+| **Alt Screenshot** | Aging Curves (`/aging.html?pos=QB`) — the declining line chart with Mahomes's dot is more persuasive than any table |
+| **Comment Template** | "Here's the aging curve for QBs — find Mahomes's dot. The rushing floor was the cheat code, and post-ACL that's gone. The dynasty value column tells you the market already knows." |
+| **When to Use** | Any Mahomes sell/hold debate, SF startup ADP discussion, or QB aging thread |
+
+---
+
+**PLAY 4: Alec Pierce — "Is the contract justified?"**
+
+| Field | Value |
+|-------|-------|
+| **Saved View Name** | `Reddit: Pierce Receiving` |
+| **Lab Page** | Lab screener |
+| **Preset** | Receiving |
+| **Filters** | Position = WR, Season = 2025, Min GP ≥ 12 |
+| **Sort** | receiving_yards descending |
+| **Visual Modes** | Heat colors ON, Leader badges ON |
+| **Key Columns** | receiving_yards, receptions, targets, catch_rate, aDOT, YAC, drop_rate |
+| **Share Mode Crop** | Top 15 WRs by receiving yards — Pierce's row shows green/red split |
+| **Lab URL** | `/lab.html?universe=nfl&pos=WR&season=2025&mingp=12&sort=rec_yd&dir=desc&preset=receiving&heat=1&leaders=1` |
+| **Comment Template** | "Pierce's row in the Lab is half green, half red — that's your $116M question. Elite YPC [green], concerning catch rate and volume [red]. Heat colors make it obvious." |
+| **When to Use** | Any Pierce contract reaction, WR tier list, or "who's overrated?" thread |
+
+---
+
+**PLAY 5: Rookie Chaos Zone 1.03-1.06 — "Who do you take?"**
+
+| Field | Value |
+|-------|-------|
+| **Saved View Name** | `Reddit: Rookie Combine` |
+| **Lab Page** | Lab screener, College universe |
+| **Preset** | Combine |
+| **Filters** | Draft class = 2026 (or manually search prospect names) |
+| **Sort** | RPS score descending |
+| **Visual Modes** | Heat colors ON (percentile tinting on combine metrics) |
+| **Key Columns** | rps_score, height, weight, forty_time, vertical, broad_jump, position |
+| **Share Mode Crop** | 8-10 top prospects — Green's all-green athletic row vs. Mendoza's production row |
+| **Lab URL** | `/lab.html?universe=college&preset=combine&sort=rps&dir=desc&heat=1` |
+| **Comment Template** | "Pulled the combine numbers into the Lab — Green's row is all green (99th percentile everything). Then look at Mendoza's athletic profile. That's why 1.03-1.06 is pure chaos." |
+| **When to Use** | Any rookie mock draft, "1.03 pick advice," or prospect comparison thread |
+
+---
+
+**Section 3: Response Templates (for unexpected player requests)**
+
+When someone asks about a player NOT in the 5 plays above:
+
+```
+QUICK-RESPONSE WORKFLOW (60-90 sec with Share Mode):
+1. Lab tab already open (from Universal Setup)
+2. Type player name in search bar
+3. Apply most relevant preset:
+   - Trade value question → Trade Finder page
+   - Efficiency/value question → Efficiency preset
+   - Dynasty/age question → Dynasty preset + aging curves
+   - Volume/usage question → Receiving or Rushing preset
+4. Heat colors already ON (from Universal Setup)
+5. Click Export PNG (Share Mode ON) → downloads 1200x960 crop
+6. Reply to Reddit comment → upload image → add 1-2 sentences:
+   "[Player]'s heat map tells the story — [point to one green column]
+   but [point to one red column]. The data leans [verdict]."
+```
+
+**Section 4: Post-Day Checklist**
+
+```
+AFTER EACH MONITORING SESSION:
+□ Log which players were requested (for future Tier 1 pre-staging)
+□ Note which screenshot format got the most engagement (table vs chart)
+□ Update Tier 2 pre-stage list for next post based on requests
+□ Retire any Saved Views for debates that have cooled
+□ Add 1-2 new Saved Views for emerging debates
+□ Total time: 10 minutes
+```
+
+#### Why This Structure Works
+
+The playbook is a **decision tree, not a document to read.** In the 4-hour monitoring window (Q81), the operator's loop is:
+
+1. See comment → identify debate topic
+2. Open playbook → find matching Play (or use Section 3 template)
+3. Load Saved View (one click) or follow quick-response workflow
+4. Export PNG → paste comment template → adapt 1-2 sentences → post
+
+Every step is pre-decided. The operator never thinks "which preset should I use?" or "what columns matter for this debate?" — the playbook already made those decisions. This is the difference between a playbook and a strategy doc: strategy docs explain why, playbooks say what to do next.
+
+### Self-Critique
+
+1. **The standalone doc recommendation is well-supported by content playbook best practices.** Operational runbooks should be separate from strategy research — this is standard across content marketing, DevOps, and support documentation. The 200-line limit keeps it scannable. **Confidence: 9/10.**
+
+2. **The 5-play structure directly maps to Q76 screenshot configs and Q77 Saved Views.** Every field in each play card (preset, filters, sort, visual modes, URL) is verified against the Lab codebase. The comment templates are adapted from Q75's ready-to-post comments. **Confidence: 9/10.**
+
+3. **The Lab URLs are approximate — they assume URL state serialization uses these exact param names.** The actual param names in lab.js may differ (e.g., `heat=1` might be `heatColors=true`). The URLs should be tested against the live Lab before the playbook is finalized. **Confidence: 6/10 on URL accuracy, 9/10 on the approach.**
+
+4. **The "60-90 seconds for unexpected requests" estimate depends on Share Mode (Q80) being built.** Without Share Mode, live generation involves manual crop and resize, pushing the time to 2-3 minutes. The playbook should have a "fallback without Share Mode" note. **Confidence: 8/10 if Share Mode exists.**
+
+5. **The Post-Day Checklist's "log which players were requested" step is manual and easy to skip.** Under time pressure during a monitoring session, the operator will prioritize replies over logging. Consider automating this: keep a browser tab with a simple text file, type player names as they come in. Or log after the session ends, not during. **Confidence: 7/10.**
+
+Sources:
+- [Document360 — The Ultimate Guide to Create a Business Playbook](https://document360.com/blog/business-playbook/) — playbooks should be accessible, scannable, and separate from strategy docs
+- [Content Science Review — What Is a Content Playbook?](https://review.content-science.com/what-is-a-content-playbook/) — content playbook = operational script for executing strategy
+- [Scribe — Business Playbook: How to Create One](https://scribe.com/library/business-playbook) — playbooks reduce decision fatigue by pre-making choices
+- [Touchstay — Business Playbook Best Practices](https://touchstay.com/blog/business-playbook) — keep under 200 pages, update regularly, action-oriented
+- Sprint Q75 (comments), Q76 (screenshot configs), Q77 (Saved Views), Q79 (OC post format), Q80 (Share Mode), Q81 (response workflow)
+
+### Implications for Razzle
+
+1. **Create `docs/marketing/screenshot-playbook.md` as a standalone file BEFORE April 1.** The warm-up period (Q78) starts April 1, and while screenshots aren't used until the OC post (April 21), building the playbook early forces a dry run of the complete workflow: load Saved View → export → verify crop → test comment pairing. This surfaces any broken links or missing presets before they matter.
+
+2. **The 5 Saved Views must be created in the Lab and tested before the playbook is written.** The playbook references named views (`Reddit: Walker Efficiency`, etc.) that need to exist in localStorage. Create them using the Q76 configurations, export a test PNG from each, and verify the heat colors, crop, and watermark look correct. The playbook is only as good as the views it points to.
+
+3. **The playbook should be the ONLY document the operator opens during the monitoring window.** It replaces the sprint journal, the Q75 comments doc, and the Q76 configs. If the operator has to cross-reference multiple documents during a live session, the workflow is too slow. Everything needed for a 90-second reply should be in one file.
+
+4. **Weekly refresh cadence matches Q77's rotating library recommendation.** Every Sunday: review the week's r/DynastyFF threads, retire stale plays, add new plays for emerging debates. The playbook should never have more than 12 plays (to stay under 200 lines) or fewer than 5 (to cover the most common requests).
+
+5. **This playbook pattern scales beyond Reddit.** The same play-card format (Saved View + screenshot config + comment template + when-to-use) works for Twitter threads, Discord replies, and eventually email newsletters. The Lab's screenshot infrastructure is the content engine; the playbook is the routing layer that maps debates to screenshots.
+
+### Open Questions
+
+1. **Should the Lab add a "clipboard copy" feature to Share Mode export — so instead of downloading a PNG file, the image goes directly to clipboard for instant paste into Reddit's comment editor — and does Reddit's comment editor support clipboard image paste?**
+
+2. **What is the optimal post-OC-post analytics workflow — which metrics should Razzle track after each Reddit post (upvotes, comment count, watermark-driven site visits, new user signups) and how should they feed back into the next post's strategy?**
+
+3. **Should the playbook include a "Player Request Log" template — a simple table where the operator records every player name requested during each monitoring session — and should that log feed into an automated Tier 1 pre-stage list that evolves across multiple OC posts?**
+
+## NEXT QUESTION: Should the Lab add a "clipboard copy" feature to Share Mode export — so instead of downloading a PNG file, the image goes directly to clipboard for instant paste into Reddit's comment editor — and does Reddit's comment editor support clipboard image paste?
