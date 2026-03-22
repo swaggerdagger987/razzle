@@ -4916,3 +4916,14 @@
 [data-theme="dark"] .cst-totals,
 [data-theme="dark"] .glo-totals { background: rgba(217, 119, 87, 0.12); }
 [data-theme="dark"] .mh-table tbody tr:hover td { filter: brightness(1.15); }
+
+/* ===== MOBILE TABLE SCROLL — DES-023 ===== */
+@media (max-width: 768px) {
+  .tl-tier,
+  .tv-chart-wrap,
+  .vorp-table,
+  .pa-card {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
