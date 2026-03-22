@@ -4971,4 +4971,74 @@ Sources:
 
 3. **What watermark placement and style should Razzle use on draft night Lab screenshots — subtle bottom-right domain text (razzle.lol) vs. semi-transparent diagonal overlay — to maximize the watermark funnel (Q48) without making screenshots look spammy on Reddit?**
 
-## NEXT QUESTION: How quickly does nflverse publish draft pick data after each Round 1 pick — real-time, end-of-round batch, or next-day — and does Razzle need an alternative real-time draft data source (ESPN API, NFL.com scraper, manual entry) to hit the 30-minute post window?
+## Q55: How quickly does nflverse publish draft pick data after Round 1 — and does Razzle need an alternative real-time source?
+
+**Question:** How quickly does nflverse publish draft pick data after each Round 1 pick — real-time, end-of-round batch, or next-day — and does Razzle need an alternative real-time draft data source (ESPN API, NFL.com scraper, manual entry) to hit the 30-minute post window?
+
+### Answer
+
+**Nflverse is NOT real-time. It's batch-updated, sourced from Pro Football Reference, on a 6-hour cycle. Razzle MUST use an alternative source for draft night.**
+
+Here's the data pipeline chain and where it breaks:
+
+**Nflverse draft_picks update schedule:** The `update_draft_picks.yaml` GitHub Action runs at 0, 6, 12, and 18 UTC daily. It scrapes Pro Football Reference, which itself updates draft picks sometime after the draft concludes — typically same-day but not pick-by-pick. PFR's update timing is not documented, but empirically it's hours-to-next-day after the draft ends. The nflverse GitHub Action then picks up PFR's data at the next 6-hour window. **Best case: 6-12 hours after Round 1 ends. Worst case: next day.** This is completely incompatible with Razzle's 30-minute post window.
+
+**The solution: ESPN's undocumented public API.** ESPN provides free, unauthenticated JSON endpoints that update in near-real-time during the draft:
+
+- **Draft rounds:** `sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{YEAR}/draft/rounds`
+- **Draft athletes:** `sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{YEAR}/draft/athletes?limit=500`
+- **Draft status:** `sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{YEAR}/draft/status`
+- **Full draft:** `site.web.api.espn.com/apis/site/v2/sports/football/nfl/draft?season={YEAR}`
+
+These are simple GET requests — no API key, no auth, no rate limit published (but be respectful: poll every 30-60 seconds, not continuously). ESPN's draft tracker page (`espn.com/nfl/draft/live`) consumes these same endpoints, so they update as picks are announced on air.
+
+**Recommended architecture for draft night:**
+
+1. **Primary source: ESPN draft API** — Poll every 60 seconds during Round 1. Parse pick number, team, player name, position. Write to `terminal.db` draft_picks table.
+2. **Mapping layer:** ESPN player IDs → nflverse/Razzle player IDs. Pre-build a mapping table of the top 50 draft-eligible prospects (name + school + position) before draft night. Fuzzy match on name if ESPN's athlete ID doesn't map directly.
+3. **Fallback: Manual entry.** If ESPN's API lags or breaks, a simple CLI script (`python scripts/draft_entry.py --pick 1 --team LV --player "Shedeur Sanders" --pos QB`) lets you manually enter picks in under 10 seconds each. 32 picks × 10 seconds = ~5 minutes worst case.
+4. **Nflverse sync next day.** After the draft, run the normal nflverse adapter to backfill official data, career stats, and combine metrics that ESPN's API won't provide.
+
+**The 2026 draft is April 23 (Round 1), not April 24.** The NFL moved Round 1 to Wednesday evening in Pittsburgh. Rounds 2-3 are April 24, Rounds 4-7 April 25. This changes the timeline from Q49 — the Reddit recap targets Wednesday night / Thursday morning, not Thursday night.
+
+Sources:
+- [nflverse Data Update Schedule](https://nflreadr.nflverse.com/articles/nflverse_data_schedule.html) — draft_picks updates at 0/6/12/18 UTC from PFR
+- [ESPN NFL API Endpoints (nntrn gist)](https://gist.github.com/nntrn/ee26cb2a0716de0947a0a4e9a157bc1c) — draft rounds, athletes, status endpoints
+- [ESPN Hidden API Guide — ScrapeCreators](https://scrapecreators.com/blog/espn-api-free-sports-data) — free, no auth, GET requests
+- [ESPN Draft Tracker Live](https://www.espn.com/nfl/draft/live) — consumes the same API endpoints
+- [2026 NFL Draft Schedule — NFL Operations](https://operations.nfl.com/journey-to-the-nfl/the-nfl-draft/2026-nfl-draft/) — April 23 Round 1, Pittsburgh
+- [nflverse/nfldata draft_picks.csv](https://github.com/nflverse/nfldata/blob/master/data/draft_picks.csv) — PFR-sourced, batch updated
+
+### Self-Critique
+
+1. **The "6-12 hours best case" for nflverse is an informed estimate, not a measured fact.** The GitHub Action runs every 6 hours, but PFR's own update timing is a black box. It's possible PFR updates within an hour of the draft ending, which would put nflverse data availability at the next 6-hour window (potentially 1-7 hours after Round 1). But even the best case (1 hour) is far too slow for a 30-minute window. **Confidence: 9/10 that nflverse is unusable for real-time.**
+
+2. **ESPN's API is undocumented and could break.** ESPN has no SLA, no versioning guarantees, and could change endpoints without notice. The 2025 draft used these same endpoints successfully (based on the gist being actively maintained), but there's nonzero risk they restructure for 2026. **Confidence: 7/10 that the exact endpoints work on April 23, 2026.**
+
+3. **The manual entry fallback is critical and undersold.** Even if ESPN's API works perfectly, having a 10-second-per-pick manual entry script eliminates all API dependency risk. This should be built and tested regardless. **Confidence: 10/10.**
+
+4. **The player ID mapping problem is the real engineering challenge.** ESPN uses its own athlete IDs. Nflverse uses gsis_id. Razzle's prospect data may use a third ID system. Pre-building a 50-prospect mapping table (ESPN athlete ID → Razzle prospect ID) is essential. For surprise picks outside the top 50, the manual entry fallback should accept a raw name string. **Confidence: 8/10 this is solvable with pre-work.**
+
+5. **The April 23 date correction is important.** Q49's entire timeline was built around "Round 1 on April 24." If the recap post targets Thursday morning instead of Thursday night, the posting window is actually more relaxed (post Wednesday night, engagement builds Thursday morning). This is better, not worse. **Confidence: 9/10 — confirmed via NFL Operations page.**
+
+### Implications for Razzle
+
+1. **Build `scripts/espn_draft_scraper.py` — a standalone ESPN draft API poller.** Poll every 60 seconds, parse JSON, write picks to `terminal.db`. This is a ~100-line Python script (requests + sqlite3). Build it before April 15 and test against the 2025 draft endpoint to validate JSON structure.
+
+2. **Build `scripts/draft_entry.py` — the manual fallback.** CLI tool: `--pick 1 --team LV --player "Shedeur Sanders" --pos QB`. Writes directly to terminal.db. This is a 30-line script. Build it first — it's the zero-dependency safety net.
+
+3. **Pre-build the prospect ID mapping table by April 20.** Map the top 50 consensus prospects: name, school, position, ESPN athlete ID (scrape from ESPN's draft page), nflverse prospect ID (if available), Razzle player ID. Store as `data/draft_prospect_map.csv`.
+
+4. **Update the draft night orchestrator (Q54's `draft_night.py`) to chain:** ESPN poller detects all 32 picks → screenshot batch → markdown builder → Reddit post → OP comments. The poller should auto-detect "Round 1 complete" (32 picks in) and trigger the pipeline.
+
+5. **Correct Q49's timeline: Round 1 is April 23 (Wednesday), not April 24.** The recap post goes up Wednesday night ~11:30 PM ET (Round 1 typically ends ~11:15 PM ET). Thursday morning engagement is the payoff window. Update all planning docs to reflect the correct date.
+
+### Open Questions
+
+1. **What is the exact JSON structure of ESPN's draft API response — specifically, does `sports.core.api.espn.com/v2/.../draft/rounds` return player names and teams inline, or does it return nested `$ref` links that require additional API calls per pick — and how does this affect polling speed?**
+
+2. **Should Razzle pre-populate terminal.db with a draft_picks table schema and the top 50 prospect profiles (name, school, position, headshot URL) BEFORE draft night — so the ESPN poller only needs to write pick_number and team, and the Lab can immediately render full prospect cards?**
+
+3. **What watermark placement and style should Razzle use on draft night Lab screenshots — subtle bottom-right domain text (razzle.lol) vs. semi-transparent diagonal overlay — to maximize the watermark funnel (Q48) without making screenshots look spammy on Reddit?**
+
+## NEXT QUESTION: What is the exact JSON structure of ESPN's draft API response — specifically, does the rounds endpoint return player names and teams inline, or does it return nested $ref links that require additional API calls per pick — and how does this affect polling speed?
