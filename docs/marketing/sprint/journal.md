@@ -9409,4 +9409,221 @@ Sources:
 
 3. **What is the optimal cross-posting strategy between r/DynastyFF and r/fantasyfootball — should the same Report Card post go to both subs simultaneously, or should r/fantasyfootball get a separate "Redraft GPA" version on a staggered schedule?**
 
-## NEXT QUESTION: What does the complete pre-stage package look like for Post #1 — 12 GPA Card images + 12 reply templates + the Honor Roll screenshot + the first comment text — and can it all be generated from a single script run?
+## Q95: What does the complete pre-stage package look like for Post #1 — 12 GPA Card images + 12 reply templates + the Honor Roll screenshot + the first comment text — and can it all be generated from a single script run?
+
+**Date:** 2026-03-21
+**Category:** Pre-Stage Automation / Content Pipeline
+**Prior context:** Q91 (GPA Card spec: 1200×630), Q92 (12-player list by Reddit frequency), Q93 (reply template: surprising grade format), Q94 (biweekly cadence)
+
+### Answer
+
+**Yes, it can all be generated from a single script run. The pre-stage package is exactly 15 files: 12 Player GPA Cards (PNG), 1 Honor Roll table (PNG), 1 reply templates file (Markdown), and 1 first-comment text file. Total generation time: ~30 seconds using Playwright Python + the existing Report Card API.**
+
+Here's the complete package and the script that builds it.
+
+#### The 15-File Pre-Stage Package
+
+```
+~/razzle-cards/2026-04-21/
+├── cards/
+│   ├── chase_jamarr.png         # 1200×630 GPA Card
+│   ├── robinson_bijan.png
+│   ├── achane_devon.png
+│   ├── smith-njigba_jaxon.png
+│   ├── walker_kenneth.png
+│   ├── gibbs_jahmyr.png
+│   ├── waddle_jaylen.png
+│   ├── nabers_malik.png
+│   ├── hall_breece.png
+│   ├── mcbride_trey.png
+│   ├── cook_james.png
+│   └── daniels_jayden.png       # 12 cards total
+├── honor_roll.png               # 1200×960 Honor Roll table (top 25)
+├── reply_templates.md           # 12 pre-written reply texts
+└── first_comment.md             # Methodology + "request any player" CTA
+```
+
+#### The Script: `scripts/generate_prestage.py`
+
+One command: `python scripts/generate_prestage.py --date 2026-04-21 --position ALL`
+
+The script does 4 things in sequence:
+
+**Step 1: Fetch data from the Report Card API (~1 second)**
+
+```python
+import requests
+resp = requests.get("http://localhost:8000/api/report-cards?season=2025&limit=100")
+data = resp.json()
+honor_roll = data["honor_roll"]  # top 25 by GPA
+```
+
+Pull the full honor roll. Extract the 12 pre-staged players by matching against the player list (Q92). Each player object already has `fantasy_gpa`, `efficiency_grade`, `consistency_grade`, `sos_grade`, `ppg_grade`, `opportunity_grade`, PPG, and stock score — everything the card needs.
+
+**Step 2: Generate 12 Player GPA Cards via Playwright (~20 seconds)**
+
+The approach: **Playwright Python opens a minimal export HTML template and screenshots the canvas.**
+
+Why Playwright over alternatives:
+- **node-canvas**: Requires rewriting all canvas code in Node. `registerFont()` is broken on Windows since v2.10.2. Not worth it for 12 images.
+- **Pillow**: No CSS, no web fonts, complete reimplementation of card layout. Too much work.
+- **Puppeteer**: Functionally identical to Playwright but requires Node.js sidecar alongside the Python backend.
+- **Playwright Python**: Native `pip install`, reuses existing browser canvas drawing code, zero rewrite.
+
+The workflow:
+
+1. Create `frontend/export-card.html` — a standalone page that renders a single GPA Card on a 1200×630 canvas. It loads the existing drawing functions from `compare.js` (the `drawExportPlayerCard` pattern) and adds a new `drawPlayerGPACard(ctx, player)` function following the Q91 spec: position stripe → position badge (colored initials circle) → player name + team/age → large GPA badge (48px) → 5 grade badges (EFF/CON/SOS/PPG/OPP at 36px each) → stat line → watermark.
+
+2. The script opens `export-card.html` once in Playwright, then loops through 12 players:
+
+```python
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    browser = p.chromium.launch()
+    page = browser.new_page(viewport={"width": 1200, "height": 630})
+    page.goto(f"file:///{export_card_path}")
+
+    for player in prestage_list:
+        page.evaluate(f"renderCard({json.dumps(player)})")
+        page.locator("#card-canvas").screenshot(
+            path=f"cards/{player['slug']}.png"
+        )
+    browser.close()
+```
+
+~1.5 seconds per card × 12 = ~18 seconds. One browser launch, 12 screenshots.
+
+3. For the Honor Roll (1200×960), use a second template (`export-honor-roll.html`) that renders the top-25 table with the same visual language as the Report Card page. Same process: inject data, screenshot.
+
+**Step 3: Generate reply templates (~instant)**
+
+For each of the 12 players, the script writes a reply template following the Q93 surprising-grade format:
+
+```python
+def generate_reply(player):
+    grades = {
+        "Efficiency": player["efficiency_grade"],
+        "Consistency": player["consistency_grade"],
+        "Schedule": player["sos_grade"],
+        "PPG": player["ppg_grade"],
+        "Opportunity": player["opportunity_grade"],
+    }
+    # Find the weakest grade (lowest letter)
+    weakest_dim, weakest_grade = min(grades.items(), key=lambda x: grade_to_num(x[1]))
+    return TEMPLATE.format(
+        name=player["full_name"],
+        gpa=player["fantasy_gpa"],
+        weak_dim=weakest_dim,
+        weak_grade=weakest_grade,
+        # ... explanation and question hook are manual (2 custom sentences)
+    )
+```
+
+The script generates the **structure** of each reply (player name, GPA, weakest grade, dimension name), but the 2 custom sentences (explanation + question hook) must be hand-written. The script outputs a template with `[EXPLAIN]` and `[QUESTION]` placeholders. You fill in 2 sentences per player = 24 sentences total = ~10 minutes of writing.
+
+**Why not fully automate the reply text?** Because the surprising-grade pivot (Q93) requires genuine football insight. "His Consistency grade is a D+" only lands if the explanation references something dynasty managers care about ("his week-to-week scoring variance is top-5 worst among RB1s"). An LLM could generate these, but the voice would feel templated. Hand-writing 2 sentences per player keeps the replies authentic and creates falsifiable claims that drive engagement.
+
+**Step 4: Generate first-comment text (~instant)**
+
+The script writes `first_comment.md` from a template:
+
+```markdown
+**How Fantasy GPA Works**
+
+Each player gets 5 grades:
+- **Efficiency** (PPO) — points per opportunity
+- **Consistency** (CoV) — week-to-week reliability
+- **Schedule** (SOS) — strength of schedule faced
+- **PPG** — raw fantasy production
+- **Opportunity** (Opp Share) — volume share of team's touches/targets
+
+Overall GPA = weighted average (20% each). Grades: A+ to F.
+
+Built with [razzle.lol](https://razzle.lol/reportcard.html) — free fantasy research lab.
+
+**Request any player's GPA card in the comments** and I'll reply with their breakdown.
+```
+
+This is static content. The script writes it once.
+
+#### Full Command-Line Workflow
+
+```bash
+# 48 hours before Post #1 (April 19)
+python scripts/generate_prestage.py --date 2026-04-21 --position ALL
+
+# Output:
+# ✓ Fetched 100 players from /api/report-cards
+# ✓ Generated 12 GPA Cards → ~/razzle-cards/2026-04-21/cards/
+# ✓ Generated Honor Roll → ~/razzle-cards/2026-04-21/honor_roll.png
+# ✓ Generated reply templates → ~/razzle-cards/2026-04-21/reply_templates.md
+# ✓ Generated first comment → ~/razzle-cards/2026-04-21/first_comment.md
+# Total: 15 files in 28 seconds
+
+# Then hand-edit reply_templates.md (fill in 24 custom sentences, ~10 min)
+```
+
+#### What Still Needs to Be Built
+
+| Component | Effort | Dependency |
+|-----------|--------|------------|
+| `drawPlayerGPACard()` canvas function | 100-120 lines JS | Q91 spec |
+| `frontend/export-card.html` template | ~50 lines HTML | drawPlayerGPACard |
+| `frontend/export-honor-roll.html` template | ~80 lines HTML | Existing Report Card styles |
+| `scripts/generate_prestage.py` | ~150 lines Python | Playwright, export templates |
+| Reply template engine (structural) | ~40 lines Python | Grade comparison logic |
+| Install Playwright | `pip install playwright && playwright install chromium` | — |
+
+**Total new code: ~420 lines.** Everything else (API, data, grade calculations) already exists.
+
+#### Post-Day Live Generation
+
+For unexpected player requests after the 12 pre-staged cards are exhausted (T+30 min and beyond):
+
+1. Open Report Card page in browser
+2. Search player → click row → modal with live canvas preview
+3. Right-click canvas → "Save Image As" → reply in <30 seconds
+
+This manual flow handles the long tail. The `drawPlayerGPACard()` function serves both the pre-stage script (Playwright batch) and the live in-browser workflow (user-initiated). One function, two uses.
+
+### Self-Critique
+
+1. **The 30-second generation estimate assumes a warm Playwright browser launch.** First launch downloads ~300MB Chromium binary. After that, cold launch is ~3 seconds, warm is <1 second. The 30-second estimate holds for subsequent runs. **Confidence: 8/10.**
+
+2. **The "hand-write 2 sentences per player" step breaks the single-script-run promise.** The script generates structural templates with placeholders, but the reply text isn't fully automated. A purist answer would say "no, it cannot ALL be generated from a single script run." However, the structural generation saves 80% of the work (card images, honor roll, format scaffolding), and the manual step is intentionally manual for quality reasons. **Confidence: 7/10 on "single script" framing.**
+
+3. **The Playwright approach requires the local backend to be running for the API call.** The script hits `localhost:8000/api/report-cards`. If you want to pre-stage from a machine without the backend, you'd need to either (a) hit the production API at razzle.lol, or (b) bundle the API response as a JSON fixture. Option (b) is cleaner — save the API response once, then the script works offline. **Confidence: 8/10.**
+
+4. **The `export-card.html` template needs custom fonts (Luckiest Guy, Space Mono, Caveat) loaded locally for Playwright to render correctly.** If the fonts are loaded via Google Fonts CDN, Playwright should fetch them. If they're `@font-face` with local files, the file paths need to be correct relative to the HTML template. This is solvable but adds ~10 lines of font setup. **Confidence: 9/10.**
+
+5. **The Honor Roll template (1200×960, top 25) may need column width tuning for long player names.** The existing Report Card page renders at variable width. The fixed-width export template needs to handle names like "Jaxon Smith-Njigba" without overflow. The Q91 spec solved this for single-player cards but not for the 25-row table. **Confidence: 7/10 — needs testing.**
+
+Sources:
+- [Playwright Python Screenshots Documentation](https://playwright.dev/python/docs/screenshots) — `page.locator().screenshot()` for element-level capture
+- [node-canvas registerFont Windows Bug #2285](https://github.com/Automattic/node-canvas/issues/2285) — broken since v2.10.2, no fix as of March 2026
+- [Bannerbear: 8 Tips for Faster Puppeteer Screenshots](https://www.bannerbear.com/blog/ways-to-speed-up-puppeteer-screenshots/) — browser reuse = 5-10× faster
+- [Cardserver: Social Card Renderer Pattern](https://github.com/stevelacey/cardserver) — Puppeteer-based template→screenshot pattern
+- Sprint Q91 (GPA Card spec), Q92 (12-player list), Q93 (reply template), Q94 (posting cadence)
+
+### Implications for Razzle
+
+1. **The critical path item is `drawPlayerGPACard()` — 100-120 lines of canvas code.** Everything else (script, templates, workflow) depends on this function existing. Build it first, test it manually in the browser, then wrap it with Playwright automation. Don't build the automation first.
+
+2. **Playwright Python is the right tool — it reuses existing browser canvas code, runs natively in the Python backend stack, and generates 12 cards in ~20 seconds.** node-canvas and Pillow both require rewriting drawing logic. Puppeteer requires a Node.js sidecar. The tradeoff (300MB Chromium binary, ~1.5s per card) is irrelevant for a 12-card batch.
+
+3. **Save the API response as a JSON fixture alongside the generated cards.** This makes the package self-documenting (you can see exactly what data produced each card) and enables offline generation. `~/razzle-cards/2026-04-21/data.json` — one extra file, high value.
+
+4. **The reply templates are 80% automated, 20% manual by design.** The 2 custom sentences per player are what make replies feel human. Automating them would save 10 minutes but cost authenticity. Keep them manual until you have enough post-mortem data (Q84) to know which explanation patterns work best — then you could build an LLM-assisted template filler that drafts the 2 sentences for human approval.
+
+5. **Build order: (1) drawPlayerGPACard in reportcard.html, (2) export-card.html template, (3) test manually in browser, (4) generate_prestage.py with Playwright, (5) test full pipeline, (6) write reply templates for Post #1's 12 players.** Steps 1-3 are frontend work (~2 hours). Steps 4-5 are script work (~1 hour). Step 6 is writing (~10 minutes).
+
+### Open Questions
+
+1. **Should the pre-stage script also generate a "no GPA yet" card for rookies (Jeanty, Ashton Jeanty, Travis Hunter) who will inevitably get requested but have no NFL stats — and what does that card look like?**
+
+2. **Should Razzle build a "season mode" toggle for the Report Card that auto-updates grades after each NFL week — and what's the minimum backend work to make weekly in-season posts sustainable without manual data intervention?**
+
+3. **What is the optimal Reddit image hosting strategy — direct image upload (i.redd.it), Imgur album link, or inline image in a text post — and which format maximizes both visibility and watermark retention?**
+
+## NEXT QUESTION: Should the pre-stage script also generate a "no GPA yet" card for rookies (Jeanty, Ashton Jeanty, Travis Hunter) who will inevitably get requested but have no NFL stats — and what does that card look like?
