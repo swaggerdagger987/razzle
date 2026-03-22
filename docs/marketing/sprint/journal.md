@@ -9918,4 +9918,104 @@ Sources:
 
 3. **Should Razzle pre-compute and cache weekly GPA deltas (week-over-week grade changes) to power "risers and fallers" narrative hooks in Reddit posts — and what is the minimum storage needed?**
 
-## NEXT QUESTION: Should Razzle A/B test gallery posts (all cards in one post) vs. single-image posts (Honor Roll hero + individual card replies in comments) — and what metric determines the winner (upvotes, comment count, site visits via watermark)?
+---
+
+## Q99: Should Razzle A/B test gallery posts vs. single-image posts — and what metric determines the winner?
+
+**Date**: 2026-03-22
+**Depends on**: Q98 (image hosting), Q95 (pre-stage package), Q87 (first OC post structure)
+
+### Answer
+
+**Yes — run a lightweight 2-post test, not a formal experiment. The winning metric is comment count, not upvotes.**
+
+#### Why Comment Count, Not Upvotes
+
+Reddit's algorithm weights comment activity heavily in ranking. A 1,000-post study found external link posts had a median 233 comments vs 71 for images — and link posts ranked higher *despite* images generating more raw upvotes. The algorithm treats comments as a stronger signal of genuine engagement than passive upvotes. For Razzle's goal (build reputation → convert lurkers → site visits), comments are the multiplier:
+
+- Each comment is a relationship touchpoint (reply with a GPA Card = value delivery)
+- Comment threads appear in Google search ("site:reddit.com [player name] GPA")
+- Comments keep the post alive in "Hot" longer than upvotes alone
+- Every reply card uploaded in comments = another watermark impression
+
+#### Why Not Site Visits Via Watermark
+
+Watermark-driven traffic is **unmeasurable from Reddit's side**. Reddit Post Insights (available to all creators) tracks: views (hourly for 48h), upvotes, comments, shares, and saves. It does *not* track click-throughs to external URLs embedded in images. To measure watermark effectiveness, you'd need server-side analytics on razzle.lol (e.g., referrer=reddit.com spike correlated with post timing). This is a secondary metric you observe, not one you optimize against in the A/B test.
+
+#### The Two Formats to Test
+
+**Post #1 (Gallery format):** Honor Roll as image 1 (gets feed thumbnail) + 12 individual GPA Cards as images 2-13. Each image gets a caption (player name + GPA). Users swipe through. One post, one comment section.
+
+**Post #2 (Hero + Comment Cards):** Single-image post with Honor Roll only. Top comment = methodology explanation + "reply with a player name for their card." Individual GPA Cards uploaded as inline images in reply comments, each spawning its own discussion sub-thread.
+
+#### What to Measure (from Reddit Post Insights)
+
+| Metric | Why it matters | Available in Post Insights? |
+|--------|---------------|---------------------------|
+| **Comments** | Primary signal — drives algorithm ranking and relationship building | Yes |
+| **Views** | Reach proxy — how many feeds the post entered | Yes |
+| **Upvote ratio** | Quality signal — >90% means community approval | Yes (via old Reddit) |
+| **Saves** | Intent signal — "I want to reference this later" = high-value user | Yes |
+| **Shares** | Spread signal — cross-posted to leagues/Discord | Yes |
+
+**Winner criteria**: Post #2 (hero + comment cards) wins if it generates **≥50% more comments** than Post #1 (gallery). If comment counts are within 25%, call it a tie and default to gallery (less effort per post).
+
+#### Prediction: Hero + Comment Cards Wins
+
+The hero + comment cards format structurally generates more comments because:
+1. **Each reply card creates a new discussion thread** — "do Bijan Robinson" → card reply → 3 people debate the grade → 3 more comments
+2. **The "request a player" hook drives participation** — users comment to get something, not just react
+3. **Gallery posts encourage passive consumption** — swipe, upvote, leave. No natural prompt to comment.
+4. **Comment depth > comment count for algorithm** — nested reply chains signal authentic discussion, which Reddit's ranking rewards more than flat comment lists
+
+This mirrors Subvertadown's evolution: his highest-engagement format was always "rankings image + reply threads," not galleries. The discussion *around* the content is the product, not the content alone.
+
+#### Practical Test Design
+
+- **Spacing**: Post #1 and #2 should be 2 weeks apart (per Q94 biweekly cadence), same day/time (Tuesday 10 AM ET per Q93)
+- **Control variables**: Same sub (r/DynastyFF), same account age, same title format ("[OC] Fantasy GPA Report Card — Week X"), same Honor Roll image
+- **Sample size caveat**: n=1 per format is not statistically significant. This is a directional signal, not a p-value test. If the delta is ambiguous, run a third post in whichever format "felt" like it generated better conversations.
+- **Post #3 tiebreaker**: If the first two are within 25% on comments, Post #3 should be hero + comment cards (bias toward the format that builds relationships, even if upvotes are equal).
+
+### Self-Critique
+
+1. **There is no public data directly comparing Reddit gallery vs single-image engagement in niche subs.** The 233-vs-71 comment comparison is for link posts vs image posts, not gallery vs single-image. The gallery-specific prediction is based on structural reasoning (passive swiping vs active requesting), not empirical data. **Confidence: 7/10 — strong logic, no direct proof.**
+
+2. **"≥50% more comments" as the win threshold is arbitrary.** In a sub with 150K members, a popular OC post might get 50-150 comments. A 50% difference (75 vs 50) could be noise from timing, title wording, or which players are hot that week. **Confidence: 5/10 — the threshold needs to be validated against actual first-post numbers. Adjust after Post #1.**
+
+3. **Reddit Post Insights are only available to the post author.** This is fine — Razzle controls the account. But "saves" and "shares" are new metrics in Insights (added late 2025) and may not be available in all clients. Verify the account has access before relying on these. **Confidence: 8/10.**
+
+4. **The "request a player" hook could backfire.** If 40 people request players and Razzle can't generate cards fast enough (each card = Playwright screenshot + upload), the thread becomes a graveyard of unanswered requests. Pre-stage the top 12 cards + have 8-10 more ready for likely requests. Cap replies at ~20 per post to maintain quality. **Confidence: 8/10 — this is a real operational risk, not a measurement risk.**
+
+5. **Server-side analytics for watermark traffic measurement assumes razzle.lol has referrer tracking.** The backend already has POST /api/analytics/pageview (from Phase 10+). Need to confirm it captures HTTP Referer header and can filter for reddit.com. If not, this is a 10-line backend change. **Confidence: 9/10.**
+
+Sources:
+- [1,000-Post Reddit Study: Format and Engagement](https://www.mexc.co/en-PH/news/933006) — median comment counts by format
+- [Reddit Post & Comment Insights](https://support.reddithelp.com/hc/en-us/articles/35363096996500-Post-Comment-Insights) — available metrics
+- [Reddit Pro Features](https://support.reddithelp.com/hc/en-us/articles/24389311835028-Reddit-Pro-Features) — dashboard metrics
+- [Reddit Image Hosting ROI Guide 2025](https://www.singlegrain.com/search-everywhere-optimization/reddit-image-hosting-the-marketing-executives-guide-to-visual-content-roi/) — image vs link performance
+- [Reddit Algorithm Explained 2025](https://signals.sh/reddit-algorithm-explained/) — ranking factors
+- [Beyond Upvotes: Measuring Influence on Reddit](https://dl.acm.org/doi/10.1145/3716554.3716604) — engagement beyond upvotes
+- Sprint Q94 (posting cadence), Q93 (timing), Q98 (image hosting), Q95 (pre-stage package)
+
+### Implications for Razzle
+
+1. **Pre-stage 20+ GPA Cards, not just 12.** The hero + comment cards format will generate player requests beyond the Honor Roll top 12. Have the next 8-10 most-requested players (based on r/DynastyFF post frequency — Bijan, Breece, Amon-Ra, Puka, etc.) ready as PNGs before posting. The Playwright script from Q95 should batch-generate all 20 in one run (~60 seconds).
+
+2. **Add HTTP Referer tracking to the analytics endpoint.** Confirm that POST /api/analytics/pageview captures and stores the Referer header. After each Reddit post, query for pageviews where referer LIKE '%reddit.com%' in the 48h window. This is the only way to measure watermark-to-visit conversion. 10-line backend change.
+
+3. **Set the win threshold after Post #1, not before.** Post #1 (gallery format) establishes the baseline. If it gets 80 comments, the win threshold for Post #2 (hero + cards) is 120 comments. If Post #1 gets 30 comments, the threshold is 45. Don't pre-commit to an absolute number.
+
+4. **Cap reply cards at 20 per post.** After 20 reply cards, pin a comment: "That's 20 GPA Cards for this week — full Report Card for all players at razzle.lol/reportcard." This creates a natural scarcity/redirect funnel without ghosting requesters.
+
+5. **Track saves as the sleeper metric.** Saves indicate "I'll come back to this" — these are the users most likely to visit razzle.lol during the season. If Post #2 generates fewer comments but more saves than Post #1, that's actually a better outcome for long-term conversion. Monitor both.
+
+### Open Questions
+
+1. **What's the optimal veteran comp methodology — should comps be based on college production profile similarity (Dominator Rating, Breakout Age), draft capital similarity (pick range), or physical archetype similarity (height/weight/speed) — and does the comp need to be accurate or just conversation-starting?**
+
+2. **Should Razzle pre-compute and cache weekly GPA deltas (week-over-week grade changes) to power "risers and fallers" narrative hooks in Reddit posts — and what is the minimum storage needed?**
+
+3. **What is the operational workflow for responding to player requests in real-time during a Reddit post — can Playwright generate and upload a GPA Card within 60 seconds of a comment, or does Razzle need a pre-generated cache of 50+ cards?**
+
+## NEXT QUESTION: What is the operational workflow for responding to player requests in real-time during a Reddit post — can Playwright generate and upload a GPA Card within 60 seconds of a comment, or does Razzle need a pre-generated cache of 50+ cards?
