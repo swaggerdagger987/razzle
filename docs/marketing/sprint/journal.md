@@ -6188,4 +6188,101 @@ Per Q63, the r/fantasyfootball post goes up 30 minutes after the r/DynastyFF ver
 
 3. **Should Razzle prepare a "dynasty-to-redraft translation guide" — a quick reference mapping dynasty concepts (trade value, buy/sell, prospect tiers) to redraft equivalents (ADP value, target/avoid, rookie ADP) — for use in all r/fantasyfootball content?**
 
-## NEXT QUESTION: Should Razzle create a Reddit "data-analyst portfolio" — a pinned profile post or comment compilation that establishes credibility when curious users click the username — and what format works best for that?
+---
+
+## Q67: Should Razzle create a Reddit "data-analyst portfolio" — a pinned profile post or comment compilation that establishes credibility when curious users click the username — and what format works best for that?
+
+### Answer
+
+**Yes — but TIMING matters. Create the pinned profile post AFTER the first 2 OC posts land (around April 6-8), not before. A pinned post on a brand-new account with zero community karma reads as marketing, not credibility.**
+
+#### What Reddit Profiles Actually Support
+
+Reddit still allows pinning posts to your user profile (click three-dot menu → "Pin to Profile"). When someone clicks u/YourUsername from a comment thread, the pinned post appears at the top of your profile page. You can also set a short bio in the "About" section (visible on hover cards and mobile). Both features are live as of 2026.
+
+#### What the Successful Accounts Do
+
+1. **Subvertadown** maintains an "Ask Me" post pinned to u/subvertadown — a low-key landing page where followers can ask questions. They also built an external [compendium page](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) cataloging hundreds of Reddit posts by year, position category, and accuracy round-ups. This dual approach (Reddit-native pinned post + external archive) only works because they had 7 years of posts to catalog.
+
+2. **PeakedInHighSkool** (Alex Korff) built credibility purely through consistent weekly trade value chart posts. His Reddit profile IS his portfolio — the post history speaks for itself. No elaborate pinned "about me" needed because the weekly cadence built the reputation organically.
+
+3. **General Reddit pattern**: Profile optimization research shows that Redditors assess credibility by (a) account age, (b) karma in relevant subs, (c) post history consistency, and (d) bio text. The bio hover card is the highest-ROI profile element because it's visible without clicking through.
+
+#### The Format That Works for Razzle's Stage
+
+**Phase 1 (Now through April 1): Bio only.** Set the profile bio to something like: "Fantasy data analyst. Dynasty + college football. All analysis is OC." Short, identity-signaling, zero tool mention. This bio appears on hover cards when someone reads your comments during the warm-up phase (Q52-Q53).
+
+**Phase 2 (After Post 2 lands, ~April 8): Pinned portfolio post.** Create a post to your own profile (r/u_YourUsername) titled something like "My Fantasy Football Analysis — Index." Structure:
+
+```
+## What I Do
+One sentence: I build data visualizations for dynasty and redraft fantasy football.
+
+## Recent Analysis
+- [Post 1 title](link) — aging curve anomalies (Apr 2)
+- [Post 2 title](link) — 2025 rookie class comparison (Apr 6)
+
+## Methodology
+2-3 sentences: nflverse data, 2015-present, per-game rates, positional percentiles.
+No tool mention. No links to razzle.lol.
+
+## AMA
+Drop questions below.
+```
+
+Pin this to your profile. Mark it as OC. Update it as new posts go live (Posts 3, 4, draft night recap). By draft night (April 23), the pinned post has 4-5 linked OC analyses and an active comment thread — making it a credibility page for the wave of users who click your username after the draft recap.
+
+**Phase 3 (Post-draft, May+): Consider an external compendium.** Once you have 10+ OC posts, create a blog-style index on razzle.lol/analysis. Link to it from the pinned Reddit post (by then you have enough Reddit karma that one external link won't read as spam). This mirrors the Subvertadown model but should wait until there's enough content to justify it.
+
+#### What NOT to Do
+
+- **Don't pin a post on a zero-karma account.** The pinned post says "I have a body of work" — if you don't, it reads as a marketing landing page.
+- **Don't mention Razzle, the tool, or razzle.lol in the pinned post.** The watermark in screenshots is the funnel. The pinned post is for analyst credibility, not product promotion.
+- **Don't create a subreddit (r/RazzleFF or similar) yet.** Creating a personal subreddit before having followers is premature. Subvertadown's own sub came years into their Reddit presence.
+- **Don't over-engineer the pinned post.** PeakedInHighSkool proves that consistent OC posts ARE the portfolio. The pinned post is just an index for convenience.
+
+### Self-Critique
+
+1. **The "wait until Post 2" timing is my judgment call, not data-backed.** There's no research on optimal karma thresholds for pinning a portfolio post. My logic: 2 posts + 90 warm-up comments should give ~200-500 karma, which is enough that the profile doesn't look empty. But the exact threshold is arbitrary. **Confidence: 7/10.**
+
+2. **Profile pinning behavior may vary by Reddit client.** Old Reddit, new Reddit, and mobile apps render profile pages differently. The pinned post may not be prominent on all clients. The bio/hover card is more universally visible, which is why Phase 1 focuses there. **Confidence: 8/10 on bio visibility, 6/10 on pinned post visibility across clients.**
+
+3. **The "no tool mention" rule may be too strict for Phase 3.** By May, if the account has 1K+ karma and 10+ OC posts, linking to razzle.lol from the pinned post is low-risk. The community will already know who you are. But I'm keeping the rule strict for Phase 1-2 because the account is new and trust is fragile. **Confidence: 8/10.**
+
+4. **The AMA section in the pinned post is borrowed from Subvertadown's model, which works because they're an established analyst.** A new account asking "AMA" might get zero responses or snarky ones ("who are you?"). Consider phrasing it as "Questions/feedback welcome" instead of "AMA" to set lower expectations. **Confidence: 7/10.**
+
+5. **I couldn't verify what PeakedInHighSkool's actual Reddit profile looks like today.** Their website and Patreon are well-documented, but their Reddit profile state is based on inference from their posting pattern, not direct observation. **Confidence: 6/10 on PeakedInHighSkool profile specifics.**
+
+### Sources
+- [Reddit Help: Community Highlights (Sticky posts)](https://support.reddithelp.com/hc/en-us/articles/15484641176724-Community-Highlights-Sticky-posts) — pinning mechanics for subreddits vs profiles
+- [How to pin post to Reddit profile — iorad](https://www.iorad.com/player/2054262/Reddit---How-to-pin-post-to-profile-) — step-by-step profile pinning tutorial
+- [Reddit Profile Optimization 2025 — OptimizeUp](https://optimizeup.com/reddit-profile-optimization-2025/) — bio, karma, hover card visibility, 4-8 week credibility timeline
+- [How to Use Reddit to Build Credibility — AdGenius](https://adgenius.com/blog/use-reddit-to-build-credibility-and-drive-traffic/) — 2-3 week warm-up before OC, consistency > volume
+- [Subvertadown Compendium 2017-2024](https://subvertadown.com/article/compendium-of-subvertadown-reddit-posts-2017---2024) — external post archive as credibility page, 7 years of weekly posts organized by position + accuracy
+- [PeakedInHighSkool Fantasy Football Tools](https://peakedinhighskool.com/) — Reddit-native credibility built through weekly trade value chart consistency
+- [Reddit Profile Management — Meesh Lin UX](https://meesh.design/redesiging-reddit-user-profiles) — profile showcase widget design for OC creators
+- Sprint Q52: Reddit warm-up commenting cadence (90 comments before first OC post)
+- Sprint Q62: Pre-draft OC post plan (4 posts, April 1-15)
+- Sprint Q64: Reddit commenting voice (data-analyst identity, not tool-creator)
+
+### Implications for Razzle
+
+1. **Write the profile bio NOW.** Before any warm-up commenting begins, set the bio to "Fantasy data analyst. Dynasty + college football. All analysis is OC." This is the most visible profile element and costs nothing.
+
+2. **Create a blank "Analysis Index" draft.** Write the pinned post template now (following the structure above) but DON'T post it until April 8. Pre-staging means you just add links when Post 1 and Post 2 go live.
+
+3. **Add "update pinned post" to the post-publication checklist from Q62.** After each OC post lands (Posts 1-4 + draft recap), add the link to the pinned profile post within 1 hour. This keeps the index current without a separate workflow.
+
+4. **The bio + pinned post replace the need for a separate "introduction post" on any sub.** Q62 already decided against "I built a tool" posts. The pinned profile post is the introduction — but only visible to people who actively seek it out by clicking your username. This is the right level of discoverability: curious users find context, but you're never pushing it.
+
+5. **Track which OC posts drive profile clicks.** Reddit Creator Stats (available for posts with 10+ views) show total views. Monitor whether pinned post views increase after each new OC post — this validates the funnel of "read comment → click username → see portfolio → engage further."
+
+### Open Questions
+
+1. **What should Razzle's Reddit username be — should it match the brand (u/razzle_lol, u/RazzleFF) or use a personal-sounding name (u/TigerAnalytics, u/DynastyDataGuy) — and what are the trade-offs for each approach given the "data analyst, not tool creator" identity strategy?**
+
+2. **Should the pinned profile post include a "track record" section with specific prediction results (e.g., "called Puka Nacua's breakout in Week 3 analysis") — and when does the account have enough history to make this credible rather than cherry-picked?**
+
+3. **What specific Discord fantasy football servers should Razzle join for draft-night content distribution as a backup/complement to Reddit — and what are the server-specific norms for sharing analytical content?**
+
+## NEXT QUESTION: What should Razzle's Reddit username be — should it match the brand (u/razzle_lol, u/RazzleFF) or use a personal-sounding name (u/TigerAnalytics, u/DynastyDataGuy) — and what are the trade-offs for each approach given the "data analyst, not tool creator" identity strategy?
