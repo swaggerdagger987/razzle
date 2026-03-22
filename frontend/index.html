@@ -117,13 +117,13 @@
   }
 
   .btn-hero:hover {
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
   .btn-hero-primary {
     background: var(--orange);
-    color: white;
+    color: var(--text-on-accent);
   }
 
   .btn-hero-secondary {
@@ -142,8 +142,8 @@
   .screener-visual-card {
     background: var(--bg-card);
     border: 3px solid var(--ink);
-    border-radius: 16px;
-    box-shadow: 6px 6px 0 var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
   }
 
@@ -191,7 +191,7 @@
     font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 700;
-    color: white;
+    color: var(--text-on-accent);
     padding: 2px 6px;
     border-radius: 4px;
     border: 2px solid var(--ink);
@@ -294,7 +294,7 @@
     font-size: 10px;
     font-weight: 700;
     padding: 2px 8px;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     border: 2px solid;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -355,9 +355,9 @@
   }
   .smart-chip:hover {
     background: var(--orange);
-    color: white;
+    color: var(--text-on-accent);
     transform: translate(-1px, -1px);
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
 
   /* ===== MINI SCREENER ===== */
@@ -373,7 +373,7 @@
     flex: 1;
     transition: all 0.15s;
   }
-  .mini-tab.active { background: var(--orange); color: white; }
+  .mini-tab.active { background: var(--orange); color: var(--text-on-accent); }
   .mini-tab:hover:not(.active) { background: var(--bg-warm); }
 
   .mini-screener-body {
@@ -413,7 +413,7 @@
   .social-card {
     background: var(--bg-card);
     border: 3px solid var(--ink);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     box-shadow: 4px 4px 0 var(--ink);
     padding: 16px;
   }
@@ -442,7 +442,7 @@
   .mini-pos {
     font-size: 9px;
     font-weight: 700;
-    color: white;
+    color: var(--text-on-accent);
     padding: 1px 5px;
     border-radius: 3px;
     display: inline-block;
@@ -514,7 +514,7 @@
 
   .pricing-badge--elite {
     background: var(--purple);
-    color: white;
+    color: var(--text-on-accent);
   }
 
   .pricing-name {
@@ -835,10 +835,10 @@
 </main>
 <!-- FOOTER -->
 <footer class="site-footer">
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
+  <div class="site-footer-grid">
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
+      <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
       <a href="/lab.html" class="footer-link">Screener</a>
       <a href="/league-intel.html" class="footer-link">League Intel</a>
@@ -849,7 +849,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
+      <div class="site-footer-heading">Dynasty</div>
       <a href="/rankings.html" class="footer-link">Rankings</a>
       <a href="/tradevalues.html" class="footer-link">Trade Values</a>
       <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
@@ -861,7 +861,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
+      <div class="site-footer-heading">Weekly</div>
       <a href="/weekly.html" class="footer-link">Weekly Stats</a>
       <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
       <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
@@ -873,7 +873,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
+      <div class="site-footer-heading">Analytics</div>
       <a href="/targets.html" class="footer-link">Targets</a>
       <a href="/usage.html" class="footer-link">Usage</a>
       <a href="/efficiency.html" class="footer-link">Efficiency</a>
@@ -885,7 +885,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
+      <div class="site-footer-heading">Tools</div>
       <a href="/explorer.html" class="footer-link">Stat Explorer</a>
       <a href="/compare.html" class="footer-link">Compare</a>
       <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>

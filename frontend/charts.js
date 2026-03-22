@@ -888,7 +888,7 @@ function renderCompareTable(players) {
     const posColor = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" }[p.position] || "var(--ink)";
     html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
       <span style="font-family:var(--font-mono); font-size:13px;">${escapeHtml(p.full_name)}</span>
-      <span style="display:inline-block; background:${posColor}; color:white; padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${escapeHtml(p.position)}</span>
+      <span style="display:inline-block; background:${posColor}; color:var(--text-on-accent); padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${escapeHtml(p.position)}</span>
     </th>`;
   }
   html += '</tr>';
@@ -1256,7 +1256,7 @@ function renderProspectCompareTable(prospects) {
     const color = PROSPECT_COMPARE_COLORS[i % PROSPECT_COMPARE_COLORS.length];
     html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
       <span style="font-family:var(--font-mono); font-size:13px;">${p.prospect.player_name}</span>
-      <span style="display:inline-block; background:${color}; color:white; padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${p.prospect.position}</span>
+      <span style="display:inline-block; background:${color}; color:var(--text-on-accent); padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${p.prospect.position}</span>
     </th>`;
   });
   html += '</tr>';

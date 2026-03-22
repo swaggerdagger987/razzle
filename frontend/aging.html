@@ -117,7 +117,7 @@
   }
   .aging-summary-card:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .aging-summary-pos {
     font-family: var(--font-mono);
@@ -126,7 +126,7 @@
     display: inline-block;
     padding: 2px 10px;
     border-radius: 6px;
-    color: #fff;
+    color: var(--text-on-accent);
     margin-bottom: 6px;
   }
   .aging-summary-pos.qb { background: var(--pos-qb); }
@@ -174,7 +174,7 @@
   }
   .aging-card:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .aging-card-header {
     display: flex;
@@ -335,11 +335,11 @@
 <div style="position:fixed; bottom:10px; right:14px; font-family:var(--font-hand); font-size:14px; color:var(--ink-light); opacity:0.7; pointer-events:none; z-index:999;">razzle.lol</div>
 
 <!-- FOOTER -->
-<div class="site-footer">
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
+<footer class="site-footer">
+  <div class="site-footer-grid">
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
+      <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
       <a href="/lab.html" class="footer-link">Screener</a>
       <a href="/league-intel.html" class="footer-link">League Intel</a>
@@ -349,7 +349,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
+      <div class="site-footer-heading">Dynasty</div>
       <a href="/rankings.html" class="footer-link">Rankings</a>
       <a href="/tradevalues.html" class="footer-link">Trade Values</a>
       <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
@@ -361,7 +361,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
+      <div class="site-footer-heading">Weekly</div>
       <a href="/weekly.html" class="footer-link">Weekly Stats</a>
       <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
       <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
@@ -373,7 +373,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
+      <div class="site-footer-heading">Analytics</div>
       <a href="/targets.html" class="footer-link">Targets</a>
       <a href="/usage.html" class="footer-link">Usage</a>
       <a href="/efficiency.html" class="footer-link">Efficiency</a>
@@ -385,7 +385,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
+      <div class="site-footer-heading">Tools</div>
       <a href="/explorer.html" class="footer-link">Stat Explorer</a>
       <a href="/compare.html" class="footer-link">Compare</a>
       <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>
@@ -399,7 +399,7 @@
   </div>
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
   <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
-</div>
+</footer>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="app.js"></script>

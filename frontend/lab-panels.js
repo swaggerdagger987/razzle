@@ -9642,7 +9642,7 @@
 
         html += '<tr>' +
           '<td style="text-align:left; font-weight:600;">' + escapeHtml(p.player_name) + '</td>' +
-          '<td><span style="background:' + posColor + '; color:white; padding:1px 6px; border-radius:3px; font-size:10px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
+          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:3px; font-size:10px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
           '<td>' + p.round + '</td>' +
           '<td>' + p.pick + '</td>' +
           '<td style="font-family:var(--font-mono); font-size:11px;">' + escapeHtml(p.draft_team || '') + '</td>' +
@@ -9651,7 +9651,7 @@
           '<td style="font-weight:700;">' + fmt(p.career_ppg) + '</td>' +
           '<td>' + fmt(p.career_fpts, 0) + '</td>' +
           '<td>' + fmt(p.career_av, 0) + '</td>' +
-          '<td><span style="background:' + verdictColor + '; color:white; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
+          '<td><span style="background:' + verdictColor + '; color:var(--text-on-accent); padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
         '</tr>';
       });
 

@@ -212,7 +212,7 @@
     background: var(--bg-warm);
     color: var(--ink-medium);
     border: 2px solid var(--ink-faint);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.1s;
@@ -531,7 +531,7 @@
   }
   .razzle-onboarding-toast kbd {
     background: var(--orange);
-    color: #fff;
+    color: var(--text-on-accent);
     padding: 2px 7px;
     border-radius: 3px;
     font-weight: 700;
@@ -827,7 +827,7 @@
     border: 2px solid var(--ink);
     border-radius: 20px;
     background: var(--orange);
-    color: white;
+    color: var(--text-on-accent);
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -865,7 +865,7 @@
     position: absolute;
     top: -6px; right: -6px;
     background: var(--orange);
-    color: white;
+    color: var(--text-on-accent);
     font-family: var(--font-mono);
     font-size: 9px;
     font-weight: 700;
@@ -894,7 +894,7 @@
     background: var(--bg-card);
     border: 3px solid var(--ink);
     border-radius: 12px;
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     padding: 24px;
     width: 380px;
     max-width: 90vw;
@@ -1603,7 +1603,7 @@
     font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 700;
-    color: white;
+    color: var(--text-on-accent);
   }
 
   .pos-badge {
@@ -1612,7 +1612,7 @@
     padding: 2px 6px;
     border-radius: 4px;
     border: 2px solid var(--ink);
-    color: white;
+    color: var(--text-on-accent);
     font-family: var(--font-mono);
     text-transform: uppercase;
     flex-shrink: 0;
@@ -1736,7 +1736,7 @@
 
   .universe-toggle.active {
     background: var(--orange);
-    color: white;
+    color: var(--text-on-accent);
     box-shadow: 2px 2px 0 var(--ink);
   }
 
@@ -1760,7 +1760,7 @@
 
   .college-view-btn.active {
     background: var(--pos-qb);
-    color: white;
+    color: var(--text-on-accent);
     box-shadow: 2px 2px 0 var(--ink);
   }
 
@@ -1811,7 +1811,7 @@
     border-radius: 3px;
     border: 2px solid var(--ink);
     background: var(--pos-qb);
-    color: white;
+    color: var(--text-on-accent);
     white-space: nowrap;
   }
 
@@ -1824,7 +1824,7 @@
     background: var(--bg-card);
     border: 3px solid var(--ink);
     border-radius: 12px;
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     padding: 28px;
     width: 780px;
     max-width: 95vw;
@@ -1870,7 +1870,7 @@
     padding: 4px 10px;
     border-radius: 6px;
     border: 3px solid var(--ink);
-    color: white;
+    color: var(--text-on-accent);
     font-family: var(--font-mono);
     text-transform: uppercase;
     flex-shrink: 0;
@@ -1888,7 +1888,7 @@
     border-radius: 20px;
     border: 2px solid var(--ink);
     background: var(--green);
-    color: white;
+    color: var(--text-on-accent);
     box-shadow: 2px 2px 0 var(--ink);
     transform: rotate(-2deg);
     letter-spacing: 0.5px;
@@ -1899,7 +1899,7 @@
     gap: 0;
     margin-bottom: 20px;
     border: 3px solid var(--ink);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
   }
 
@@ -2037,7 +2037,7 @@
     border-radius: 20px;
     border: 2px solid var(--ink);
     background: var(--blue);
-    color: white;
+    color: var(--text-on-accent);
     box-shadow: 2px 2px 0 var(--ink);
     transform: rotate(2deg);
     letter-spacing: 0.5px;
@@ -2109,7 +2109,7 @@
     gap: 14px;
     padding: 12px 14px;
     border: 3px solid var(--ink);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     background: var(--bg);
     box-shadow: 4px 4px 0 var(--ink);
     transition: transform 0.15s, box-shadow 0.15s;
@@ -2124,7 +2124,7 @@
     font-family: var(--font-display);
     font-size: 18px;
     font-weight: 700;
-    color: white;
+    color: var(--text-on-accent);
     min-width: 52px;
     height: 52px;
     display: flex;
@@ -2309,7 +2309,7 @@
     padding: 4px 14px;
     border-radius: 20px;
     border: 2px solid var(--ink);
-    color: white;
+    color: var(--text-on-accent);
     box-shadow: 2px 2px 0 var(--ink);
     transform: rotate(-2deg);
     letter-spacing: 0.5px;
@@ -2325,7 +2325,7 @@
   .tier-card {
     padding: 12px;
     border: 2px solid var(--ink);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     background: var(--bg);
     box-shadow: 2px 2px 0 var(--ink);
     transition: transform 0.15s, box-shadow 0.15s;
@@ -2388,7 +2388,7 @@
     gap: 12px;
     padding: 12px 16px;
     border: 3px solid var(--ink);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     background: var(--bg-card);
     box-shadow: 4px 4px 0 var(--ink);
     transition: transform 0.15s, box-shadow 0.15s;
@@ -2396,7 +2396,7 @@
   }
   .bb-card:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .bb-card-rank {
     font-family: var(--font-display);
@@ -2437,7 +2437,7 @@
     color: var(--bg);
     padding: 2px 8px;
     border: 2px solid var(--ink);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
   }
   .bb-card-meta {
@@ -2500,7 +2500,7 @@
     background: var(--bg-card);
     border: 3px solid var(--ink);
     border-radius: 12px;
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     padding: 24px;
     width: 880px;
     max-width: 95vw;
@@ -2536,14 +2536,14 @@
   .store-card {
     background: var(--bg);
     border: 3px solid var(--ink);
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     padding: 14px;
     box-shadow: 4px 4px 0 var(--ink);
     transition: all 0.12s;
   }
 
   .store-card:hover {
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -2807,7 +2807,7 @@
     background: var(--bg-card);
     border: 3px solid var(--ink);
     border-radius: 12px;
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     padding: 24px;
     width: 800px;
     max-width: 95vw;
@@ -2907,7 +2907,7 @@
     font-family: var(--font-mono);
     font-size: 9px;
     font-weight: bold;
-    color: #fff;
+    color: var(--text-on-accent);
     padding: 2px 6px;
     border-radius: 4px;
     border: 2px solid var(--ink);
@@ -3012,7 +3012,7 @@
     font-family: var(--font-mono);
     font-size: 9px;
     font-weight: bold;
-    color: #fff;
+    color: var(--text-on-accent);
     padding: 2px 6px;
     border-radius: 4px;
     border: 2px solid var(--ink);
@@ -3439,10 +3439,10 @@
       <div id="loadingText" style="text-align:center; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); margin-top:12px;">pulling film...</div>
     </div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; padding:6px 12px; font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">
-      <span><span style="background:var(--green); color:white; padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">85+</span> DVS Elite</span>
-      <span><span style="background:var(--pos-qb); color:white; padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">70+</span> DVS Star</span>
-      <span><span style="background:var(--orange); color:white; padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">55+</span> DVS Starter</span>
-      <span><span style="background:var(--green); color:white; padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">+50%</span> Breakout</span>
+      <span><span style="background:var(--green); color:var(--text-on-accent); padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">85+</span> DVS Elite</span>
+      <span><span style="background:var(--pos-qb); color:var(--text-on-accent); padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">70+</span> DVS Star</span>
+      <span><span style="background:var(--orange); color:var(--text-on-accent); padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">55+</span> DVS Starter</span>
+      <span><span style="background:var(--green); color:var(--text-on-accent); padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">+50%</span> Breakout</span>
       <span style="color:var(--ink-faint);">&#8212; = not applicable for position</span>
     </div>
   </div>
@@ -3535,7 +3535,7 @@
 
 <!-- CHART PANEL -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleCharts" class="filter-modal-overlay" id="chartOverlay" onclick="closeChartPanel(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:820px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:820px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
       <h3 id="dlgTitleCharts">Charts</h3>
       <div style="display:flex; gap:6px;">
@@ -3563,7 +3563,7 @@
 
 <!-- PLAYER COMPARE PANEL -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleCompare" class="filter-modal-overlay" id="compareOverlay" onclick="closeCompare(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:860px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:860px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <h3 id="dlgTitleCompare">Player Comparison</h3>
     <div id="compareContent"></div>
     <div style="margin-top:16px; text-align:center;">
@@ -3577,7 +3577,7 @@
 
 <!-- SHARE MODAL -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleShare" class="filter-modal-overlay" id="shareOverlay" onclick="closeShareModal(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
     <h3 id="dlgTitleShare" style="margin:0 0 16px 0; font-family:var(--font-display);">Share This View</h3>
 
     <!-- Shareable URL -->
@@ -3618,7 +3618,7 @@
 
 <!-- SAVED VIEWS OVERLAY -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleSavedViews" class="filter-modal-overlay" id="savedViewsOverlay" onclick="closeSavedViews(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:520px; max-width:95vw;" onclick="event.stopPropagation()">
     <h3 id="dlgTitleSavedViews" style="margin:0 0 16px 0; font-family:var(--font-display);">Saved Views</h3>
 
     <!-- Save current view -->
@@ -3642,7 +3642,7 @@
 
 <!-- CUSTOM SCORING OVERLAY -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleScoring" class="filter-modal-overlay" id="customScoringOverlay" onclick="closeCustomScoring(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:480px; max-width:95vw;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:480px; max-width:95vw;" onclick="event.stopPropagation()">
     <h3 id="dlgTitleScoring" style="margin:0 0 12px 0; font-family:var(--font-display);">Custom Scoring</h3>
     <p style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light); margin:0 0 16px 0;">build your own fantasy scoring system</p>
 
@@ -3672,7 +3672,7 @@
 
 <!-- RANKINGS EXPORT OVERLAY -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleExport" class="filter-modal-overlay" id="rankingsExportOverlay" onclick="closeRankingsExport(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:500px; max-width:95vw;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:500px; max-width:95vw;" onclick="event.stopPropagation()">
     <h3 id="dlgTitleExport" style="margin:0 0 16px 0; font-family:var(--font-display);">Export Rankings</h3>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <div>
@@ -3698,7 +3698,7 @@
 
 <!-- PROSPECT TIER VIEW -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleTiers" class="filter-modal-overlay" id="tierOverlay" onclick="closeTierView(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:900px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:900px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
       <h3 id="dlgTitleTiers" style="margin:0;">Draft Class Athletic Tiers</h3>
       <div id="tierPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
@@ -3715,7 +3715,7 @@
 
 <!-- BIG BOARD OVERLAY -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleBigBoard" class="filter-modal-overlay" id="bigBoardOverlay" onclick="closeBigBoard(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 id="dlgTitleBigBoard" style="margin:0;">Razzle Big Board</h3>
       <div id="bbPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
@@ -3732,7 +3732,7 @@
 
 <!-- CLASS ANALYTICS OVERLAY -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleClassAnalytics" class="filter-modal-overlay" id="classAnalyticsOverlay" onclick="closeClassAnalytics(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 id="dlgTitleClassAnalytics" style="margin:0;">Draft Class Analytics</h3>
       <div id="caPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
@@ -3832,7 +3832,7 @@
 
 <!-- TRADE VALUE CHART OVERLAY -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleTradeValues" class="filter-modal-overlay" id="tradeValuesOverlay" onclick="closeTradeValues(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 id="dlgTitleTradeValues" style="margin:0; font-family:var(--font-display);">Trade Values</h3>
       <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">dynasty trade currency</div>
@@ -3956,7 +3956,7 @@
 
 <!-- AGING CURVES -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleAgingCurves" class="filter-modal-overlay" id="agingCurvesOverlay" onclick="closeAgingCurves(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:960px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 id="dlgTitleAgingCurves" style="margin:0; font-family:var(--font-display);">Aging Curves</h3>
       <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">how players age at each position...</div>
@@ -3972,7 +3972,7 @@
 
 <!-- HEAT MAP -->
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleHeatMap" class="filter-modal-overlay" id="heatMapOverlay" onclick="closeHeatMap(event)">
-  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:6px 6px 0 var(--ink); padding:24px; width:1000px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
+  <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:1000px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 id="dlgTitleHeatMap" style="margin:0; font-family:var(--font-display);">Heat Map</h3>
       <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">positional stat percentiles...</div>

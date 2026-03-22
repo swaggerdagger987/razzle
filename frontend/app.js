@@ -693,18 +693,18 @@ function _showWelcomeModal(user) {
   }).join("");
 
   overlay.innerHTML =
-    '<div style="background:var(--bg);border:3px solid var(--ink);border-radius:12px;box-shadow:6px 6px 0 var(--ink);max-width:480px;width:100%;padding:32px;text-align:center;position:relative;">' +
+    '<div style="background:var(--bg);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);max-width:480px;width:100%;padding:32px;text-align:center;position:relative;">' +
       '<div style="font-size:48px;margin-bottom:8px;">🐯</div>' +
       '<h2 style="font-family:var(--font-display);font-size:28px;color:var(--ink);margin:0 0 4px;">welcome to the film room.</h2>' +
       '<p style="font-family:var(--font-hand);font-size:18px;color:var(--ink-light);margin:0 0 16px;">you just made the tiger very happy</p>' +
-      '<div style="display:inline-block;background:var(--orange);color:#fff;font-family:var(--font-mono);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;border:2px solid var(--ink);margin-bottom:20px;">' +
+      '<div style="display:inline-block;background:var(--orange);color:var(--text-on-accent);font-family:var(--font-mono);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;border:2px solid var(--ink);margin-bottom:20px;">' +
         escapeHtml(planLabel) + ' — ' + escapeHtml(price) +
       '</div>' +
       '<ul style="list-style:none;padding:0;margin:0 0 24px;text-align:left;">' +
         featureHTML +
       '</ul>' +
       '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
-        '<a href="/league-intel.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--orange);color:#fff;border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Open the Bureau</a>' +
+        '<a href="/league-intel.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--orange);color:var(--text-on-accent);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Open the Bureau</a>' +
         '<a href="/lab.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--bg-warm);color:var(--ink);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Back to the Screener</a>' +
       '</div>' +
       '<button onclick="this.closest(\'div\').parentElement.remove();" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);">&times;</button>' +
@@ -1175,7 +1175,7 @@ function showSleeperPrompt() {
   var trialBanner = "";
   if (isTrial) {
     trialBanner =
-      '<div style="background:var(--orange); color:white; padding:10px 16px; border-radius:8px; border:2px solid var(--ink); margin-bottom:16px; text-align:center;">' +
+      '<div style="background:var(--orange); color:var(--text-on-accent); padding:10px 16px; border-radius:8px; border:2px solid var(--ink); margin-bottom:16px; text-align:center;">' +
         '<div style="font-family:var(--font-mono); font-size:14px;">Pro Trial Active</div>' +
         '<div style="font-family:var(--font-hand); font-size:14px; margin-top:2px;">' + trialDays + ' days of Pro access — no credit card needed</div>' +
       '</div>';
@@ -1705,7 +1705,7 @@ function openPlayerPopup(playerId) {
     var popupBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(0,0,0,0.5)" : "rgba(45,31,20,0.5)";
     overlay.style.cssText = "position:fixed;inset:0;background:" + popupBg + ";z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;";
     overlay.innerHTML =
-      '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:6px 6px 0 var(--ink);max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:24px;position:relative;">' +
+      '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:24px;position:relative;">' +
         '<button onclick="closePlayerPopup()" style="position:absolute;top:8px;right:12px;font-size:24px;background:none;border:none;cursor:pointer;color:var(--ink);font-family:var(--font-display);">&times;</button>' +
         '<div id="razzlePlayerPopupContent"></div>' +
       '</div>';

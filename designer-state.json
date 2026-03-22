@@ -1,5 +1,5 @@
 {
-  "last_ticket_id": 36,
+  "last_ticket_id": 46,
   "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
@@ -47,7 +47,20 @@
     "tradefinder.html (pos-badge + tier-badge color:white, export bg hardcoded)",
     "tradevalues.html (tv-pos-badge color:#fff, export bg hardcoded)",
     "app.js (getCanvasTheme — #fff in light mode white property)",
-    "lab.js (inline style color:white — DVS badge, breakout badge, college badge)"
+    "lab.js (inline style color:white — DVS badge, breakout badge, college badge)",
+    "sitewide footer minmax(140px) audit — 72 files, only index.html fixed (cycle 4)",
+    "sitewide border-radius:10px audit — 50+ instances across styles.css + 20 pages (cycle 4)",
+    "sitewide border-radius:16px audit — 3 pages beyond auth modal (cycle 4)",
+    "sitewide box-shadow:6px at rest audit — 60+ instances, 30+ non-hover (cycle 4)",
+    "styles.css border-radius 3px/6px sub-minimum audit — 7 instances (cycle 4)",
+    "sitewide color:white audit in HTML files — 121 instances across 69 files (cycle 4)",
+    "league-intel.html connect card + JS-generated cards audit (cycle 4)",
+    "pricing.html promo input + free-chip radius audit (cycle 4)",
+    "sitewide <footer> vs <div> semantic audit — 5 correct, 67+ missing (cycle 4)",
+    "about.html full code review — footer, dark mode, CSS vars (cycle 4)",
+    "player.html standalone page code review — badges, radius, shadows (cycle 4)",
+    "sitewide font-family:sans-serif/arial/helvetica audit — 0 found, clean (cycle 4)",
+    "sitewide 'Loading...' text audit — 0 found, all personality text (cycle 4)"
   ],
   "tickets_written": [
     {
@@ -234,95 +247,161 @@
     },
     {
       "id": "DES-027",
-      "file": "designer-tickets/open/027-auth-modal-shadow-8px.md",
+      "file": "designer-tickets/done/027-auth-modal-shadow-8px.md",
       "priority": "P1",
       "area": "sitewide (styles.css)",
       "summary": "Auth modal box-shadow 8px instead of design-spec 4px — only component with oversized shadow"
     },
     {
       "id": "DES-028",
-      "file": "designer-tickets/open/028-auth-modal-radius-16px.md",
+      "file": "designer-tickets/done/028-auth-modal-radius-16px.md",
       "priority": "P1",
       "area": "sitewide (styles.css)",
       "summary": "Auth modal border-radius 16px — orphaned value, not a design token (8/12/20px)"
     },
     {
       "id": "DES-029",
-      "file": "designer-tickets/open/029-cmd-palette-fff-no-dark-override.md",
+      "file": "designer-tickets/done/029-cmd-palette-fff-no-dark-override.md",
       "priority": "P1",
       "area": "sitewide (styles.css)",
       "summary": "Command palette key-label and pos badges use color:#fff with no dark mode override"
     },
     {
       "id": "DES-030",
-      "file": "designer-tickets/open/030-plan-cards-no-hover-state.md",
+      "file": "designer-tickets/done/030-plan-cards-no-hover-state.md",
       "priority": "P1",
       "area": "pricing.html",
       "summary": "Plan cards on conversion page have zero :hover CSS — design guide mandates hover-lift"
     },
     {
       "id": "DES-031",
-      "file": "designer-tickets/open/031-badge-radius-violations-pricing.md",
+      "file": "designer-tickets/done/031-badge-radius-violations-pricing.md",
       "priority": "P2",
       "area": "pricing.html",
       "summary": "Plan badge (4px) and save badge (6px) border-radius below --radius-sm (8px) minimum"
     },
     {
       "id": "DES-032",
-      "file": "designer-tickets/open/032-lab-panels-96-hardcoded-fff.md",
+      "file": "designer-tickets/done/032-lab-panels-96-hardcoded-fff.md",
       "priority": "P2",
       "area": "lab-panels.css (sitewide panels)",
       "summary": "96 instances of color:#fff/white across position/tier/grade badges — should use CSS variable"
     },
     {
       "id": "DES-033",
-      "file": "designer-tickets/open/033-diff-mode-label-white-and-radius.md",
+      "file": "designer-tickets/done/033-diff-mode-label-white-and-radius.md",
       "priority": "P2",
       "area": "styles.css",
       "summary": "Diff-mode label uses hardcoded color:white and border-radius:4px — two violations"
     },
     {
       "id": "DES-034",
-      "file": "designer-tickets/open/034-compare-canvas-hardcoded-hex.md",
+      "file": "designer-tickets/done/034-compare-canvas-hardcoded-hex.md",
       "priority": "P2",
       "area": "compare.js",
       "summary": "Compare page PNG export uses hardcoded hex colors instead of getCanvasTheme() — dark mode exports break"
     },
     {
       "id": "DES-035",
-      "file": "designer-tickets/open/035-elite-cta-inline-style-override.md",
+      "file": "designer-tickets/done/035-elite-cta-inline-style-override.md",
       "priority": "P2",
       "area": "pricing.html",
       "summary": "Elite CTA button + JS banners use inline styles — fragile, can't be overridden by dark mode/media queries"
     },
     {
       "id": "DES-036",
-      "file": "designer-tickets/open/036-nav-plan-badge-radius-4px.md",
+      "file": "designer-tickets/done/036-nav-plan-badge-radius-4px.md",
       "priority": "P2",
       "area": "sitewide (styles.css)",
       "summary": "Nav plan badge + cmd-palette-pos use border-radius:4px — below --radius-sm (8px) design minimum"
+    },
+    {
+      "id": "DES-037",
+      "file": "designer-tickets/open/037-footer-minmax-140px-71-pages.md",
+      "priority": "P1",
+      "area": "sitewide (71 pages)",
+      "summary": "Footer grid minmax(140px) breaks 375px phones on 71 pages — DES-025 only fixed index.html"
+    },
+    {
+      "id": "DES-038",
+      "file": "designer-tickets/open/038-border-radius-10px-orphan-sitewide.md",
+      "priority": "P2",
+      "area": "sitewide (styles.css + 20 pages)",
+      "summary": "border-radius: 10px is not a design token — 50+ instances including logo-mark on every page"
+    },
+    {
+      "id": "DES-039",
+      "file": "designer-tickets/open/039-border-radius-16px-orphan-3-pages.md",
+      "priority": "P2",
+      "area": "about.html, index.html, league-intel.html",
+      "summary": "border-radius: 16px orphan on 3 pages — not a design token (8/12/20)"
+    },
+    {
+      "id": "DES-040",
+      "file": "designer-tickets/open/040-box-shadow-6px-at-rest-sitewide.md",
+      "priority": "P2",
+      "area": "sitewide (20+ pages, lab-panels.css)",
+      "summary": "box-shadow 6px used at rest on 30+ components — should be 4px base, 6px hover per DESIGN.md"
+    },
+    {
+      "id": "DES-041",
+      "file": "designer-tickets/open/041-styles-css-small-radius-orphans.md",
+      "priority": "P2",
+      "area": "styles.css",
+      "summary": "7 elements use border-radius 3px/6px — below design minimum --radius-sm (8px)"
+    },
+    {
+      "id": "DES-042",
+      "file": "designer-tickets/open/042-color-white-121-instances-69-html-files.md",
+      "priority": "P2",
+      "area": "sitewide (69 HTML files)",
+      "summary": "121 instances of color:white/#fff in per-page styles — extends DES-032, total 217 sitewide"
+    },
+    {
+      "id": "DES-043",
+      "file": "designer-tickets/open/043-league-intel-bureau-connect-card-off-spec.md",
+      "priority": "P1",
+      "area": "league-intel.html",
+      "summary": "Bureau connect card has 3 design violations (6px shadow, 16px radius, inline 10px JS cards) — conversion gateway"
+    },
+    {
+      "id": "DES-044",
+      "file": "designer-tickets/open/044-pricing-promo-input-radius-4px.md",
+      "priority": "P2",
+      "area": "pricing.html",
+      "summary": "Promo input (4px) and free-chip (6px) border-radius below --radius-sm (8px) on conversion page"
+    },
+    {
+      "id": "DES-045",
+      "file": "designer-tickets/open/045-footer-no-css-class-all-inline.md",
+      "priority": "P2",
+      "area": "sitewide (72 pages)",
+      "summary": "site-footer has no CSS class — all layout via inline styles across 72 files, prevents theming/maintenance"
+    },
+    {
+      "id": "DES-046",
+      "file": "designer-tickets/open/046-footer-uses-div-not-footer-element.md",
+      "priority": "P2",
+      "area": "sitewide (67+ pages)",
+      "summary": "Footer uses <div> instead of <footer> on 67+ pages — no semantic landmark for accessibility"
     }
   ],
   "notes": [
     "Production site (razzle.lol) returns 502 — confirmed 2026-03-22",
-    "DES-001 through DES-026 all completed (moved to done/ folder)",
-    "DES-027 through DES-036 are new open tickets from cycle 3",
-    "Dark mode is the dominant theme of DES-017 to DES-020 (done) and DES-029, DES-032, DES-033 (new)",
-    "Conversion path (auth + pricing) is the dominant theme of DES-027/028/030/031/035",
-    "CSS token adoption gap remains the systemic root cause (DES-031/032/033/036)",
-    "No @media (prefers-color-scheme: dark) found — correct, toggle-based only",
-    "CSS variables for dark mode are correctly defined — the issue is components not using them",
-    "Lab sidebar correctly hides on mobile via transform:translateX(100%) at 768px — verified",
-    "96 color:#fff instances in lab-panels.css — systemizable with --text-on-accent variable",
-    "No gradients found anywhere (except skeleton loader + fade overlay — acceptable) — good",
+    "DES-001 through DES-036 all completed (moved to done/ folder)",
+    "DES-037 through DES-046 are new open tickets from cycle 4",
+    "Cycle 4 theme: CSS TOKEN GOVERNANCE — radius, shadow, and text-on-accent tokens exist but are massively underused",
+    "Footer is the #1 architecture debt item: duplicated inline styles across 72 files, no shared CSS class",
+    "DES-037 is the highest-leverage single fix: one find-replace, 71 mobile breaks fixed",
+    "DES-042 + DES-032 = 217 total hardcoded white text instances — biggest CSS governance gap remaining",
+    "DES-040 (6px shadow at rest) affects hover-lift physics on 30+ components",
+    "border-radius orphans: 10px (50+ instances), 16px (3 pages), 3px/6px (7 elements in styles.css)",
+    "No rogue font families found (no sans-serif, arial, helvetica) — good discipline",
+    "No generic 'Loading...' text found — all personality text — good discipline",
+    "No gradients found (except skeleton loader + fade overlay — acceptable) — good",
     "No cold grays found outside warroom.js (pixel art, acceptable) — good",
     "No blue-black ink colors found — good",
-    "Position colors are all correct (QB=blue, RB=teal, WR=terracotta, TE=purple) — good",
-    "Hover-lift effects present on most elements but missing on plan cards — ticketed (DES-030)",
-    "All agent SVG icons exist at /assets/agents/{name}.svg — 6 files present",
-    "getCanvasTheme() in app.js provides theme-aware colors — but compare.js doesn't fully use it",
-    "lab.html has 12 color:white instances in player profile/badge inline styles",
-    "compare.js has 6 hardcoded hex color instances in canvas rendering",
-    "Plan cards use CSS vars for background (var(--bg-card)) — should work in dark mode via cascade"
+    "Position colors are 100% correct (QB=blue, RB=teal, WR=terracotta, TE=purple) — good",
+    "Headless browser (gstack browse) renders blank on localhost — Windows platform issue, relied on code review"
   ]
 }

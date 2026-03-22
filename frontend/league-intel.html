@@ -33,8 +33,8 @@
   .connect-card {
     background: var(--bg-card);
     border: 3px solid var(--ink);
-    border-radius: 16px;
-    box-shadow: 6px 6px 0 var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 var(--ink);
     padding: 32px;
     text-align: center;
     max-width: 500px;
@@ -104,7 +104,7 @@
   }
 
   .league-card:not(.expanded):hover {
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -172,7 +172,7 @@
     padding: 1px 5px;
     border-radius: 3px;
     border: 2px solid var(--ink);
-    color: white;
+    color: var(--text-on-accent);
     font-family: var(--font-mono);
     min-width: 24px;
     text-align: center;
@@ -795,7 +795,7 @@
   }
 
   .depth-card:hover {
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1133,7 +1133,7 @@
   }
 
   .power-card:hover {
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1241,7 +1241,7 @@
   }
 
   .sos-card:hover {
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1332,7 +1332,7 @@
   }
 
   .waiver-card:hover {
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1517,7 +1517,7 @@
   }
 
   .build-profile-card:hover {
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1746,7 +1746,7 @@
   }
 
   .bureau-odds-card:hover {
-    box-shadow: 6px 6px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transform: translate(-1px, -1px);
   }
 
@@ -1804,8 +1804,8 @@
   .pos-grade-card {
     background: var(--bg-card);
     border: 3px solid var(--ink);
-    border-radius: 10px;
-    box-shadow: 3px 3px 0 var(--ink);
+    border-radius: var(--radius-sm);
+    box-shadow: 4px 4px 0 var(--ink);
     padding: 12px;
     text-align: center;
   }
@@ -2003,10 +2003,10 @@
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:24px 16px; max-width:900px; margin:0 auto 24px; padding:0 24px; font-family:var(--font-mono); font-size:11px; text-align:left;">
+  <div class="site-footer-grid">
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Razzle</div>
+      <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
       <a href="/lab.html" class="footer-link">Screener</a>
       <a href="/league-intel.html" class="footer-link">League Intel</a>
@@ -2017,7 +2017,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Dynasty</div>
+      <div class="site-footer-heading">Dynasty</div>
       <a href="/rankings.html" class="footer-link">Rankings</a>
       <a href="/tradevalues.html" class="footer-link">Trade Values</a>
       <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
@@ -2029,7 +2029,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Weekly</div>
+      <div class="site-footer-heading">Weekly</div>
       <a href="/weekly.html" class="footer-link">Weekly Stats</a>
       <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
       <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
@@ -2041,7 +2041,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Analytics</div>
+      <div class="site-footer-heading">Analytics</div>
       <a href="/targets.html" class="footer-link">Targets</a>
       <a href="/usage.html" class="footer-link">Usage</a>
       <a href="/efficiency.html" class="footer-link">Efficiency</a>
@@ -2053,7 +2053,7 @@
     </div>
 
     <div>
-      <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--orange); margin-bottom:8px;">Tools</div>
+      <div class="site-footer-heading">Tools</div>
       <a href="/explorer.html" class="footer-link">Stat Explorer</a>
       <a href="/compare.html" class="footer-link">Compare</a>
       <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>
@@ -2439,7 +2439,7 @@ async function toggleLeague(card, leagueId, userId) {
       html += '<div class="rivals-preview-blur">';
       html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">';
       for (var ri = 0; ri < 3; ri++) {
-        html += '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;padding:16px;text-align:center;">';
+        html += '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:var(--radius-sm);padding:16px;text-align:center;">';
         html += '<div style="font-family:var(--font-mono);font-size:13px;font-weight:700;margin-bottom:4px;">Manager Name</div>';
         html += '<div style="font-family:var(--font-mono);font-size:10px;background:var(--pos-te);color:var(--bg);padding:2px 8px;border-radius:8px;display:inline-block;">BEHAVIORAL TAG</div>';
         html += '<div style="margin-top:8px;font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">trades/yr: 4.2 &bull; panic: 62%</div>';
@@ -4345,7 +4345,7 @@ async function loadSelfScout(leagueId, userId, myRoster, rosters, allPlayers, us
     html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-top:4px;">window: ' + windowYears + '</div>';
     html += '</div>';
     html += '<div>';
-    html += '<span class="archetype-badge" style="background:var(--orange);color:white;border-color:var(--orange);">' + escapeHtml(archetype) + '</span>';
+    html += '<span class="archetype-badge" style="background:var(--orange);color:var(--text-on-accent);border-color:var(--orange);">' + escapeHtml(archetype) + '</span>';
     html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-top:4px;">#' + rank + ' of ' + rosters.length + ' &bull; ' + starterPPG.toFixed(1) + ' PPG &bull; avg age ' + avgAge + '</div>';
     html += '</div>';
     html += '</div>';
@@ -5333,7 +5333,7 @@ async function loadTradeNetwork(leagueId, userId, rosters, allPlayers, userMap) 
       avgWeek = mt2.weeks.length > 0 ? avgWeek / mt2.weeks.length : 0;
       var timingLabel = avgWeek <= 5 ? "early mover" : (avgWeek <= 10 ? "mid-season" : "deadline dealer");
       var timingColor = avgWeek <= 5 ? "var(--green)" : (avgWeek <= 10 ? "var(--yellow)" : "var(--red)");
-      html += '<span class="trade-timing-badge" style="background:' + timingColor + ';color:white;border-color:' + timingColor + ';">' + timingLabel + '</span>';
+      html += '<span class="trade-timing-badge" style="background:' + timingColor + ';color:var(--text-on-accent);border-color:' + timingColor + ';">' + timingLabel + '</span>';
 
       // Position tendencies
       var topAcq = _topPos(mt2.posAcquired);
@@ -5622,7 +5622,7 @@ function renderBuildProfiles(container, profiles) {
     html += '<span class="build-profile-name">' + escapeHtml(mgr.name) + '</span>';
     if (mgr.isUser) html += ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--orange);">you</span>';
     html += '</div>';
-    html += '<span class="archetype-badge" style="background:' + mgr.archetypeColor + ';color:white;border-color:' + mgr.archetypeColor + ';">' + escapeHtml(mgr.archetype) + '</span>';
+    html += '<span class="archetype-badge" style="background:' + mgr.archetypeColor + ';color:var(--text-on-accent);border-color:' + mgr.archetypeColor + ';">' + escapeHtml(mgr.archetype) + '</span>';
     html += '</div>';
 
     // Scout report
@@ -6334,7 +6334,7 @@ function _mcRenderOddsCards(results, paid, leagueId) {
     var champColor = r.champPct >= 15 ? 'var(--green)' : r.champPct >= 8 ? 'var(--orange)' : 'var(--ink-light)';
     var playoffColor = r.playoffPct >= 70 ? 'var(--green)' : r.playoffPct >= 40 ? 'var(--orange)' : 'var(--red)';
 
-    html += '<div class="odds-card" style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
+    html += '<div class="odds-card" style="background:var(--bg-card);border:3px solid var(--ink);border-radius:var(--radius-sm);box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
     html += '<div style="font-family:var(--font-mono);font-size:14px;font-weight:700;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
     html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + (isBlurred ? '?-?' : r.wins + '-' + r.losses) + '</div>';
     html += '<div style="display:flex;gap:12px;">';
@@ -6514,7 +6514,7 @@ async function _mcResimulate(leagueId) {
       }
     }
 
-    html += '<div class="odds-card" style="background:var(--bg-card);border:3px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
+    html += '<div class="odds-card" style="background:var(--bg-card);border:3px solid var(--ink);border-radius:var(--radius-sm);box-shadow:4px 4px 0 var(--ink);padding:14px;' + (isBlurred ? 'filter:blur(3px);opacity:0.4;pointer-events:none;' : '') + '">';
     html += '<div style="font-family:var(--font-mono);font-size:14px;font-weight:700;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
     html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + (isBlurred ? '?-?' : r.wins + '-' + r.losses) + '</div>';
     html += '<div style="display:flex;gap:12px;flex-wrap:wrap;">';
@@ -7339,7 +7339,7 @@ function _loadDemoLeague() {
     '<div><span class="user-badge">demo_league</span>' +
     '<button class="btn-chunky" style="margin-left:8px;font-size:11px;" onclick="disconnect()">Exit Demo</button></div>' +
     '</div>' +
-    '<div style="background:var(--orange-light,#f7e4d8);border:3px solid var(--orange);border-radius:10px;padding:12px 16px;margin-bottom:16px;text-align:center;">' +
+    '<div style="background:var(--orange-light,#f7e4d8);border:3px solid var(--orange);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;text-align:center;">' +
     '<div style="font-family:var(--font-hand);font-size:16px;color:var(--ink);">This is sample data. Connect your Sleeper league to see YOUR league.</div>' +
     '</div>';
 
@@ -7366,7 +7366,7 @@ function _loadDemoLeague() {
 
   demoManagers.forEach(function(m) {
     var border = m.isYou ? "border:3px solid var(--orange);box-shadow:3px 3px 0 var(--orange);" : "border:2px solid var(--ink-faint);";
-    var youBadge = m.isYou ? ' <span style="font-family:var(--font-mono);font-size:9px;background:var(--orange);color:white;padding:1px 6px;border-radius:3px;">YOU</span>' : '';
+    var youBadge = m.isYou ? ' <span style="font-family:var(--font-mono);font-size:9px;background:var(--orange);color:var(--text-on-accent);padding:1px 6px;border-radius:3px;">YOU</span>' : '';
     leaguesHtml += '<div style="background:var(--bg);' + border + 'border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">';
     leaguesHtml += '<div><span style="font-family:var(--font-mono);font-size:13px;font-weight:700;">' + m.name + '</span>' + youBadge + '<br><span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">' + m.record + '</span></div>';
     leaguesHtml += '<div style="text-align:right;"><div style="font-family:var(--font-display);font-size:18px;color:var(--orange);">' + m.champOdds + '%</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);">playoff: ' + m.playoffOdds + '%</div></div>';
@@ -7375,7 +7375,7 @@ function _loadDemoLeague() {
 
   leaguesHtml += '</div>';
   leaguesHtml += '<div style="text-align:center;margin-top:20px;">' +
-    '<a href="#" onclick="disconnect();return false;" class="btn-chunky" style="font-size:13px;padding:10px 24px;background:var(--orange);color:white;text-decoration:none;">Connect YOUR league to see real data</a>' +
+    '<a href="#" onclick="disconnect();return false;" class="btn-chunky" style="font-size:13px;padding:10px 24px;background:var(--orange);color:var(--text-on-accent);text-decoration:none;">Connect YOUR league to see real data</a>' +
     '</div>';
 
   container.innerHTML = leaguesHtml;

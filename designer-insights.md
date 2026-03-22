@@ -1,4 +1,4 @@
-## Designer Insights (updated ticket DES-036)
+## Designer Insights (updated ticket DES-046)
 
 ### Patterns Found
 - Home page layout is mostly polished — chunky borders, correct colors, proper font usage
@@ -15,7 +15,7 @@
 - No "Loading..." text found — all loading states use personality text (pulling film, etc.) — good
 - Auth modal is well-styled structurally — proper chunky borders, dark mode CSS var usage, accessible focus states — but has orphaned numerical values (8px shadow, 16px radius)
 - Agent SVG icons all exist at correct paths — no missing assets
-- **Dark mode has a systemic `color: white` problem** — 9+ selectors in styles.css (DES-017 to DES-020, now fixed) PLUS 96 instances in lab-panels.css (DES-032, new)
+- **Dark mode has a systemic `color: white` problem** — 9+ selectors in styles.css (DES-017 to DES-020, now fixed) PLUS 96 instances in lab-panels.css (DES-032) PLUS 121 instances in 69 HTML files (DES-042) = **217 total**
 - CSS variables for dark mode are correctly DEFINED — the gap is components not USING them
 - No gradients, no cold grays, no blue-black ink anywhere — good discipline on banned patterns
 - Position colors are 100% correct across all files — QB=blue, RB=teal, WR=terracotta, TE=purple
@@ -39,36 +39,46 @@
 - **Auth modal is the conversion gateway** — every registration and login passes through it. Orphaned shadow/radius values make it feel like a different product (DES-027, DES-028)
 - **Plan cards need hover-lift** — the pricing page is the decision point. Static cards don't invite interaction (DES-030)
 - **PNG exports ARE marketing** — compare page and Lab exports with hardcoded colors don't match dark mode (DES-034)
+- **Bureau connect card is the conversion engine's front door** — 3 design violations on the first thing a Sleeper-connected user sees (DES-043)
+- **Footer breaks on 71 pages at 375px** — mobile users from Twitter/Reddit hit broken footers everywhere (DES-037)
 
 ### Issue Categories by Impact
 1. **P0 — Launch blockers** — OG image wrong tagline (DES-007) [DONE]
-2. **P1 — Conversion gateway** — auth modal shadow 8px (DES-027), auth modal radius 16px (DES-028), plan cards no hover (DES-030)
-3. **P1 — Sitewide dark mode** — btn-primary (DES-017), nav active (DES-018), auth tab (DES-019), chips (DES-020) [ALL DONE], cmd palette #fff (DES-029)
-4. **P1 — Sitewide design violations** — ink-light color (DES-003), 1px borders (DES-010), logo font (DES-009), fake testimonials (DES-008) [ALL DONE]
-5. **P2 — CSS token adoption** — lab-panels 96x color:#fff (DES-032), nav-plan-badge 4px radius (DES-036), diff-mode label (DES-033), pricing badges (DES-031)
-6. **P2 — Dark mode panels** — tier descriptions (DES-021), medal colors (DES-022) [DONE]
-7. **P2 — Conversion page polish** — elite CTA inline style (DES-035), pricing badges radius (DES-031)
-8. **P2 — Export quality** — compare.js hardcoded hex (DES-034)
-9. **P2 — Mobile responsive** — panel table scroll (DES-023), pricing grid (DES-024), footer grid (DES-025) [ALL DONE]
-10. **P2 — Dark mode home** — inline styles bypass toggle (DES-026) [DONE]
+2. **P1 — Mobile breaking** — footer minmax(140px) on 71 pages (DES-037), Bureau connect card off-spec (DES-043)
+3. **P1 — Conversion gateway** — auth modal shadow 8px (DES-027), auth modal radius 16px (DES-028), plan cards no hover (DES-030) [ALL DONE]
+4. **P1 — Sitewide dark mode** — btn-primary (DES-017), nav active (DES-018), auth tab (DES-019), chips (DES-020) [ALL DONE], cmd palette #fff (DES-029) [DONE]
+5. **P1 — Sitewide design violations** — ink-light color (DES-003), 1px borders (DES-010), logo font (DES-009), fake testimonials (DES-008) [ALL DONE]
+6. **P2 — CSS token governance (THE SYSTEMIC THEME)** — border-radius 10px (DES-038, 50+ instances), 16px (DES-039, 3 pages), 3px/6px (DES-041, 7 elements), box-shadow 6px at rest (DES-040, 30+ components), pricing radius (DES-044)
+7. **P2 — Hardcoded text color** — lab-panels 96x color:#fff (DES-032) [DONE], 69 HTML files 121x color:white (DES-042), diff-mode label (DES-033) [DONE]
+8. **P2 — Footer architecture** — no CSS class (DES-045), no semantic element (DES-046) — root cause of DES-037
+9. **P2 — Conversion page polish** — elite CTA inline style (DES-035) [DONE], pricing badges radius (DES-031) [DONE]
+10. **P2 — Export quality** — compare.js hardcoded hex (DES-034) [DONE]
+11. **P2 — Dark mode panels** — tier descriptions (DES-021), medal colors (DES-022) [DONE]
+12. **P2 — Mobile responsive** — panel table scroll (DES-023), pricing grid (DES-024), footer grid (DES-025) [ALL DONE]
 
-### Emerging Patterns (updated DES-036)
-- **Conversion path is the new frontier** — DES-027, DES-028, DES-030, DES-031, DES-035 are all pricing/auth issues. The conversion funnel has accumulated design debt that needs systematic cleanup.
-- **CSS token adoption gap persists** — DES-031 (badge radius), DES-032 (badge text color), DES-033 (diff label), DES-036 (nav badge radius) all share the same root cause: hardcoded values instead of CSS variables. The design system tokens exist but aren't enforced.
-- **Dark mode color:#fff is a systemic issue** — 96 instances in lab-panels.css alone (DES-032). Previous fixes (DES-017 to DES-020) addressed styles.css but the panel CSS was untouched. Fix pattern: introduce `--text-on-accent` variable, bulk replace.
-- **Canvas exports are a parallel dark mode problem** — CSS variables don't apply to canvas. The `getCanvasTheme()` system in app.js is the right approach, but compare.js and other files don't fully use it (DES-034).
-- **Spec/code divergence** — DESIGN.md says one thing, code does another. DES-015 (nav/button fonts) and DES-003 (ink-light) were both cases where the spec and implementation disagreed. Resolution may require updating the spec rather than the code.
-- **Cross-page component inconsistency** — Same conceptual component (pricing card) rendered with different properties on different pages (DES-011). This happens when components are implemented as page-specific CSS rather than shared classes.
-- **Orphaned values cluster around the auth modal** — 16px radius and 8px shadow are both unique to the auth modal. No other component uses these values. This suggests the modal was built in a rush or before the design system was finalized.
-- **Inline styles on the pricing page** — Elite CTA and JS-generated banners both use `style=` attributes. This is the conversion page — it should have the tightest CSS governance, not the loosest.
+### Emerging Patterns (updated DES-046)
+- **CSS token governance is the dominant systemic issue now** — Cycles 1-3 fixed individual color/dark-mode bugs. Cycle 4 reveals that the DESIGN SYSTEM EXISTS (tokens are defined) but is UNDERENFORCED (code uses magic numbers). 10px radius (50+), 6px shadow at rest (30+), color:white (217 total). The tokens are there. The code doesn't use them.
+- **Footer architecture is the maintenance bottleneck** — DES-037 (71 pages need minmax fix) exists because DES-045 (no CSS class). Every future footer change requires 72 file edits. This is the root cause, not a symptom.
+- **The 72-page duplication problem** — Footer, position badge colors, border-radius, box-shadow — all duplicated per-page rather than shared. This is the architectural debt ceiling. Fixing it once (shared CSS classes) prevents the next 10 tickets.
+- **Conversion path cleanup is nearly complete** — DES-027 through DES-035 covered auth modal, pricing page, and plan cards. DES-043 (Bureau connect card) and DES-044 (promo input) are the remaining items.
+- **Things that are GOOD and should be preserved:**
+  - Zero rogue font families (no sans-serif, arial, helvetica)
+  - Zero generic "Loading..." text (all personality)
+  - Zero gradients (except acceptable skeleton loader)
+  - Zero cold grays (except warroom pixel art)
+  - Zero blue-black ink colors
+  - 100% correct position colors
+  - Dark mode CSS variables are all correctly defined
+  - Agent SVG icons all exist
+  - `getCanvasTheme()` pattern is the right architecture for canvas exports
 
 ### What to Check Next
-- Bureau pages in dark mode (league-intel.html, bureau sections)
-- Formula Store page (formula-store.html) — user-generated content display
-- Player standalone page (/player/{id}) — deep-link from search engines
-- Whether auth modal dark mode actually works visually (vars cascade but no explicit override)
-- Mobile responsive on pricing page AFTER DES-024 fix (verify 2-col works)
-- Screener PNG export in dark mode (does watermark render correctly?)
-- Chart canvas exports across all panel pages (same pattern as compare.js DES-034?)
-- About page styling consistency
+- Formula store page (formula-store.js generates UI — any inline style issues?)
+- Screener PNG export in dark mode (does watermark + background render correctly?)
+- Chart canvas exports across panel pages (same pattern as compare.js DES-034?)
 - Whether skeleton loader gradient (lab.html) looks correct in dark mode
+- about.html footer links to standalone pages — do redirects work?
+- Compare page responsive behavior on mobile
+- agents.html (Situation Room) pixel canvas rendering on different viewport sizes
+- Dark mode on league-intel.html Bureau sections (odds cards, manager profiles)
+- Whether `--text-on-accent: var(--bg)` actually works for dark mode badges on vibrant accents (contrast check)
