@@ -1,5 +1,5 @@
 {
-  "last_ticket_id": 26,
+  "last_ticket_id": 36,
   "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
@@ -33,7 +33,21 @@
     "pricing.html (grid breakpoint audit — 900px jump too abrupt)",
     "index.html (footer grid minmax audit — 140px too wide for 375px)",
     "index.html (inline style dark mode bypass audit)",
-    "lab.html (sidebar mobile behavior — transform:translateX confirmed at 768px)"
+    "lab.html (sidebar mobile behavior — transform:translateX confirmed at 768px)",
+    "lab.html (player profile modal — color:white audit, 12 instances)",
+    "lab.html (hover card — CSS var compliance check)",
+    "styles.css (auth modal — shadow 8px, radius 16px violations)",
+    "styles.css (cmd-palette — #fff badge audit)",
+    "styles.css (plan-card hover state — confirmed missing)",
+    "styles.css (border-radius:4px audit — 4 instances)",
+    "pricing.html (plan-badge 4px, save-badge 6px radius violations)",
+    "pricing.html (elite CTA inline style override, JS-generated banners 10px radius)",
+    "lab-panels.css (comprehensive color:#fff audit — 96 instances across 40+ selectors)",
+    "compare.js (hardcoded hex colors in canvas — POS_COLORS, VS badge, magic RGBAs)",
+    "tradefinder.html (pos-badge + tier-badge color:white, export bg hardcoded)",
+    "tradevalues.html (tv-pos-badge color:#fff, export bg hardcoded)",
+    "app.js (getCanvasTheme — #fff in light mode white property)",
+    "lab.js (inline style color:white — DVS badge, breakout badge, college badge)"
   ],
   "tickets_written": [
     {
@@ -150,88 +164,165 @@
     },
     {
       "id": "DES-017",
-      "file": "designer-tickets/open/017-btn-primary-invisible-dark-mode.md",
+      "file": "designer-tickets/done/017-btn-primary-invisible-dark-mode.md",
       "priority": "P1",
       "area": "sitewide (styles.css)",
       "summary": "btn-primary uses hardcoded color:white — every CTA button lacks dark mode override"
     },
     {
       "id": "DES-018",
-      "file": "designer-tickets/open/018-nav-active-white-text-dark-mode.md",
+      "file": "designer-tickets/done/018-nav-active-white-text-dark-mode.md",
       "priority": "P1",
       "area": "sitewide (styles.css)",
       "summary": "Nav active link + Pro/Elite badges use color:white with no dark mode override — navigation broken in dark mode"
     },
     {
       "id": "DES-019",
-      "file": "designer-tickets/open/019-auth-tab-white-text-dark-mode.md",
+      "file": "designer-tickets/done/019-auth-tab-white-text-dark-mode.md",
       "priority": "P1",
       "area": "sitewide (styles.css)",
       "summary": "Auth modal active tab uses color:white — can't tell Login vs Register in dark mode. Conversion path."
     },
     {
       "id": "DES-020",
-      "file": "designer-tickets/open/020-chip-active-white-text-dark-mode.md",
+      "file": "designer-tickets/done/020-chip-active-white-text-dark-mode.md",
       "priority": "P1",
       "area": "sitewide (styles.css)",
       "summary": "Active position chips + command palette badges use color:white/fff — Screener filtering broken in dark mode"
     },
     {
       "id": "DES-021",
-      "file": "designer-tickets/open/021-tier-description-invisible-dark-mode.md",
+      "file": "designer-tickets/done/021-tier-description-invisible-dark-mode.md",
       "priority": "P2",
       "area": "lab-panels.css",
       "summary": "Tier list descriptions use hardcoded sand rgba — becomes invisible in dark mode (same color as background)"
     },
     {
       "id": "DES-022",
-      "file": "designer-tickets/open/022-medal-colors-no-dark-mode-override.md",
+      "file": "designer-tickets/done/022-medal-colors-no-dark-mode-override.md",
       "priority": "P2",
       "area": "lab-panels.css",
       "summary": "Gold (#ffd700) and bronze (#cd7f32) medal colors hardcoded in 6 places — no CSS tokens, no dark mode overrides"
     },
     {
       "id": "DES-023",
-      "file": "designer-tickets/open/023-panel-tables-no-mobile-scroll.md",
+      "file": "designer-tickets/done/023-panel-tables-no-mobile-scroll.md",
       "priority": "P2",
       "area": "lab-panels.css",
       "summary": "6+ panel table containers use overflow:hidden — data truncated on mobile instead of horizontal scroll"
     },
     {
       "id": "DES-024",
-      "file": "designer-tickets/open/024-pricing-cards-tablet-cramped.md",
+      "file": "designer-tickets/done/024-pricing-cards-tablet-cramped.md",
       "priority": "P2",
       "area": "pricing.html",
       "summary": "Pricing cards jump from 3-col to 1-col at 900px — tablets (768-900px) get cramped 3-col layout"
     },
     {
       "id": "DES-025",
-      "file": "designer-tickets/open/025-home-footer-grid-375px-overflow.md",
+      "file": "designer-tickets/done/025-home-footer-grid-375px-overflow.md",
       "priority": "P2",
       "area": "index.html",
       "summary": "Footer grid minmax(140px) too wide for 375px phones — columns don't fit, layout breaks"
     },
     {
       "id": "DES-026",
-      "file": "designer-tickets/open/026-inline-style-dark-mode-home.md",
+      "file": "designer-tickets/done/026-inline-style-dark-mode-home.md",
       "priority": "P2",
       "area": "index.html",
       "summary": "Home page inline <style> blocks use hardcoded hex colors — bypass dark mode toggle system"
+    },
+    {
+      "id": "DES-027",
+      "file": "designer-tickets/open/027-auth-modal-shadow-8px.md",
+      "priority": "P1",
+      "area": "sitewide (styles.css)",
+      "summary": "Auth modal box-shadow 8px instead of design-spec 4px — only component with oversized shadow"
+    },
+    {
+      "id": "DES-028",
+      "file": "designer-tickets/open/028-auth-modal-radius-16px.md",
+      "priority": "P1",
+      "area": "sitewide (styles.css)",
+      "summary": "Auth modal border-radius 16px — orphaned value, not a design token (8/12/20px)"
+    },
+    {
+      "id": "DES-029",
+      "file": "designer-tickets/open/029-cmd-palette-fff-no-dark-override.md",
+      "priority": "P1",
+      "area": "sitewide (styles.css)",
+      "summary": "Command palette key-label and pos badges use color:#fff with no dark mode override"
+    },
+    {
+      "id": "DES-030",
+      "file": "designer-tickets/open/030-plan-cards-no-hover-state.md",
+      "priority": "P1",
+      "area": "pricing.html",
+      "summary": "Plan cards on conversion page have zero :hover CSS — design guide mandates hover-lift"
+    },
+    {
+      "id": "DES-031",
+      "file": "designer-tickets/open/031-badge-radius-violations-pricing.md",
+      "priority": "P2",
+      "area": "pricing.html",
+      "summary": "Plan badge (4px) and save badge (6px) border-radius below --radius-sm (8px) minimum"
+    },
+    {
+      "id": "DES-032",
+      "file": "designer-tickets/open/032-lab-panels-96-hardcoded-fff.md",
+      "priority": "P2",
+      "area": "lab-panels.css (sitewide panels)",
+      "summary": "96 instances of color:#fff/white across position/tier/grade badges — should use CSS variable"
+    },
+    {
+      "id": "DES-033",
+      "file": "designer-tickets/open/033-diff-mode-label-white-and-radius.md",
+      "priority": "P2",
+      "area": "styles.css",
+      "summary": "Diff-mode label uses hardcoded color:white and border-radius:4px — two violations"
+    },
+    {
+      "id": "DES-034",
+      "file": "designer-tickets/open/034-compare-canvas-hardcoded-hex.md",
+      "priority": "P2",
+      "area": "compare.js",
+      "summary": "Compare page PNG export uses hardcoded hex colors instead of getCanvasTheme() — dark mode exports break"
+    },
+    {
+      "id": "DES-035",
+      "file": "designer-tickets/open/035-elite-cta-inline-style-override.md",
+      "priority": "P2",
+      "area": "pricing.html",
+      "summary": "Elite CTA button + JS banners use inline styles — fragile, can't be overridden by dark mode/media queries"
+    },
+    {
+      "id": "DES-036",
+      "file": "designer-tickets/open/036-nav-plan-badge-radius-4px.md",
+      "priority": "P2",
+      "area": "sitewide (styles.css)",
+      "summary": "Nav plan badge + cmd-palette-pos use border-radius:4px — below --radius-sm (8px) design minimum"
     }
   ],
   "notes": [
     "Production site (razzle.lol) returns 502 — confirmed 2026-03-22",
-    "DES-001 through DES-016 all completed (moved to done/ folder)",
-    "Dark mode is the dominant theme of DES-017 to DES-020 — systemic issue: hardcoded color:white across 9+ selectors",
+    "DES-001 through DES-026 all completed (moved to done/ folder)",
+    "DES-027 through DES-036 are new open tickets from cycle 3",
+    "Dark mode is the dominant theme of DES-017 to DES-020 (done) and DES-029, DES-032, DES-033 (new)",
+    "Conversion path (auth + pricing) is the dominant theme of DES-027/028/030/031/035",
+    "CSS token adoption gap remains the systemic root cause (DES-031/032/033/036)",
     "No @media (prefers-color-scheme: dark) found — correct, toggle-based only",
     "CSS variables for dark mode are correctly defined — the issue is components not using them",
     "Lab sidebar correctly hides on mobile via transform:translateX(100%) at 768px — verified",
-    "40+ position badge color:#fff instances in lab-panels.css — not ticketed (functional on colored backgrounds)",
-    "No gradients found anywhere — good",
-    "No cold grays found — good",
+    "96 color:#fff instances in lab-panels.css — systemizable with --text-on-accent variable",
+    "No gradients found anywhere (except skeleton loader + fade overlay — acceptable) — good",
+    "No cold grays found outside warroom.js (pixel art, acceptable) — good",
     "No blue-black ink colors found — good",
     "Position colors are all correct (QB=blue, RB=teal, WR=terracotta, TE=purple) — good",
-    "Hover-lift effects present and consistent — good",
-    "All agent SVG icons exist at /assets/agents/{name}.svg — 6 files present"
+    "Hover-lift effects present on most elements but missing on plan cards — ticketed (DES-030)",
+    "All agent SVG icons exist at /assets/agents/{name}.svg — 6 files present",
+    "getCanvasTheme() in app.js provides theme-aware colors — but compare.js doesn't fully use it",
+    "lab.html has 12 color:white instances in player profile/badge inline styles",
+    "compare.js has 6 hardcoded hex color instances in canvas rendering",
+    "Plan cards use CSS vars for background (var(--bg-card)) — should work in dark mode via cascade"
   ]
 }
