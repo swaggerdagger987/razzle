@@ -5583,4 +5583,87 @@ Too fast and data isn't digested. Too slow and you're competing with established
 
 3. **What is the optimal OP comment structure for a data-heavy Reddit post — methodology-first, pick table-first, or hot-takes-first — to maximize comment replies and discussion depth?**
 
-## NEXT QUESTION: Should Razzle pre-build a library of "screenshot presets" — deterministic Lab URLs for specific draft night views (QB class, RB tier list, trade value shifts) — and what 8-12 views would cover the most shareable angles after Round 1?
+---
+
+# Q61: Screenshot Presets — Deterministic Lab URLs for Draft Night Views
+
+**Date**: 2026-03-21
+**Question**: Should Razzle pre-build a library of "screenshot presets" — deterministic Lab URLs for specific draft night views (QB class, RB tier list, trade value shifts) — and what 8-12 views would cover the most shareable angles after Round 1?
+
+### Answer
+
+**YES. Build 10 deterministic preset URLs. The Lab's URL state system already supports this — every filter, sort, column set, and visual mode serializes to query params.** Zero new frontend code needed. The presets are just bookmarked URLs fed to Playwright's `screenshot.py`.
+
+Here's why presets matter and what the 10 views should be:
+
+**Why presets instead of ad hoc screenshots:**
+
+Draft night is a 15-minute window between "last pick announced" and "every analyst on Twitter has their take out." Razzle's competitive advantage is the ESPN poller → DB → Lab pipeline producing data-ready views in under 5 minutes. But if you're manually navigating the Lab, choosing columns, setting filters, and toggling heat colors for each screenshot, that 5-minute advantage evaporates. Pre-built URLs mean Playwright hits 10 URLs sequentially, screenshots all 10 in under 30 seconds, applies the branded bar from Q58, and outputs a ready-to-post gallery.
+
+**The 10 preset views (ordered by shareability):**
+
+| # | View | Page | Key URL Params | Why It's Shareable |
+|---|------|------|---------------|-------------------|
+| 1 | **Round 1 Pick Board** | `/prospects.html` | `draft_year=2026` | The anchor image — every pick with Razzle's RPS tier and trade value. Hero image for Reddit gallery. |
+| 2 | **QB Class Dynasty Impact** | `/lab.html` | `pos=QB&sort=dynasty_value&heat=1&cols=dynasty_value,age,pass_yd,pass_td,rush_yd` | Dynasty managers' first question: "How does my QB room change?" Heat colors make value tiers instantly visible. |
+| 3 | **RB Landing Spot Tiers** | `/tiers.html` | `pos=RB` | S/A/B/C/D tiers with landing-spot context. RBs are the most volatile draft-night position — landing spot determines dynasty value more than talent for RBs. |
+| 4 | **WR Winners & Losers** | `/stocks.html` | `pos=WR` | Rising/falling stock arrows on WRs whose target share outlook just changed (new QB, new WR drafted to compete). Veterans affected by rookie WR picks are the biggest discussion drivers. |
+| 5 | **Trade Value Movers** | `/tradevalues.html` | (full board, post-draft values) | Horizontal bar chart showing who gained/lost trade value. The single most actionable view — dynasty managers open trade windows immediately after the draft. |
+| 6 | **Rookie Big Board + Landing Spots** | `/prospects.html` | `draft_year=2026&sort=rps_score` | RPS-scored prospects with landing spot grades. Different from #1 — this is Razzle's proprietary scoring, not just pick order. |
+| 7 | **Biggest Value Pick** | `/tradefinder.html` | `?player={top_value_pick_id}` | Trade Finder for the draft's biggest value pick (e.g., RB who fell to a great landing spot). Shows equal-value trade targets. Highly specific, highly shareable. |
+| 8 | **Veteran Casualties** | `/buysell.html` | (default, post-draft) | Buy Low / Sell High candidates that shifted because their team drafted a replacement. Veterans who just got "replaced" drive the most emotional Reddit comments. |
+| 9 | **Positional Scarcity Shift** | `/scarcity.html` | (default, post-draft) | How the draft class changes the PPG drop-off curve by position. Dynasty managers deciding between "draft RB or WR at 1.03" need this. |
+| 10 | **TE Premium Watch** | `/lab.html` | `pos=TE&sort=dynasty_value&heat=1&cols=dynasty_value,targets,rec_yd,age` | If a TE goes Round 1 (like Bowers in 2024), this becomes the most-discussed position. If no TE goes R1, skip this and use a second WR/RB view instead. |
+
+**Implementation: a `presets.json` config file.**
+
+```json
+{
+  "draft_night_r1": [
+    {"name": "Round 1 Pick Board", "url": "/prospects.html?draft_year=2026", "priority": 1},
+    {"name": "QB Class Impact", "url": "/lab.html?pos=QB&sort=dynasty_value&heat=1", "priority": 2}
+  ]
+}
+```
+
+Playwright's `screenshot.py` reads this file, iterates URLs, captures each at 2560×1800 (2x scale per Q59), applies the branded bar (Q58), and outputs numbered PNGs: `01_pick_board.png`, `02_qb_class.png`, etc. Total pipeline time: ~30 seconds for all 10 screenshots.
+
+**Dynamic preset (view #7):** The Trade Finder view requires a player ID that isn't known until picks are in. Solution: a small script that queries the DB post-draft for the highest-value-delta rookie and injects the ID into the URL. All other 9 views are fully static URLs.
+
+### Self-Critique
+
+1. **The 10 views are my editorial judgment, not data-backed.** I'm inferring shareability from what drives discussion on r/DynastyFF (landing spots, trade values, veteran impact). The actual most-shared view could be something unexpected. **Confidence: 6/10 — test with a "2025 Redraft" dry run.**
+
+2. **Some views depend on post-draft data being in the DB.** If the ESPN poller pipeline has a lag, screenshots of stale data are worse than no screenshots. The pipeline must be tested end-to-end before draft night. **Confidence: 8/10 — this is a known engineering dependency.**
+
+3. **10 views may be too many for a Reddit gallery.** Q60 recommended 4-6 images. Solution: screenshot all 10, but only post the best 5-6 as the gallery. The remaining screenshots become reply-comment material ("someone asked about TE impact — here's that view"). **Confidence: 7/10.**
+
+4. **The URL params I listed are approximate.** The actual Lab URL state has specific column keys (e.g., `fantasy_points_ppr` not `dynasty_value`). The presets need to be built by manually navigating the Lab, configuring each view, and copying the URL from the browser bar. **Confidence: 9/10 — this is mechanical work.**
+
+5. **View #7 (dynamic player ID) adds complexity.** If the script fails to identify the right player, the screenshot breaks. A fallback static URL (e.g., top 5 rookies by RPS score) should be configured. **Confidence: 7/10.**
+
+### Implications for Razzle
+
+1. **Create `scripts/draft_night_presets.json`**: 10 URLs with names and priority. Build by manually configuring each Lab view and copying the URL.
+2. **Add `--preset` flag to `screenshot.py`**: reads presets.json, iterates URLs, outputs numbered PNGs with branded bar.
+3. **Build the dynamic view #7 script**: queries `terminal.db` for max trade-value-delta rookie post-draft, returns a Trade Finder URL.
+4. **Test the full pipeline against 2025 data**: load 2025 draft picks, run all 10 presets, verify screenshots look correct. This is the dry run recommended in Q60.
+5. **Gallery selection**: screenshot all 10, pick best 5-6 based on visual impact and data completeness. Save the rest for comment replies.
+
+### Sources
+- [Dynasty Market Report: 2025 NFL Draft — Fantasy Points](https://www.fantasypoints.com/nfl/articles/2025/dynasty-market-report-nfl-draft)
+- [Ideal NFL Draft Landing Spots — FantasyPros](https://www.fantasypros.com/2025/04/ideal-nfl-draft-landing-spots-dynasty-rookies-fantasy-football/)
+- [Dynasty Fantasy Football Diary: 2025 NFL Draft Impact — FantasyLife](https://www.fantasylife.com/articles/dynasty/dynasty-fantasy-football-diary-the-2025-nfl-draft-impact-players-and-veterans-rising-and-falling)
+- [Post-Draft Dynasty Mock: Rookie Landing Spots — SI](https://www.si.com/nfl/post-draft-dynasty-mock-rookie-landing-spots-impact-fantasy-2025-beyond)
+- [Dynasty Trade Value Chart May 2025 — Footballguys](https://www.footballguys.com/article/2025-dynasty-trade-value-chart-may)
+- Razzle Lab URL state system (`frontend/lab.js` lines 3740-3802)
+
+### Open Questions
+
+1. **What's the optimal Playwright viewport + crop dimensions for screenshots that must work as both Reddit gallery images (near 4:3) and Twitter card previews (2:1) — and should `screenshot.py` output two versions per view or one universal size?**
+
+2. **How should Razzle handle the "2025 Redraft" dry run — post as a real Reddit submission to r/DynastyFF with 5-6 Lab screenshots to test gallery engagement, or post to r/test first to verify rendering and then to r/DynastyFF for real engagement data?**
+
+3. **What pre-draft "hype content" should Razzle post to r/DynastyFF in the 2-3 weeks before draft night to establish presence and credibility, so that the draft night recap post isn't from an unknown account?**
+
+## NEXT QUESTION: What pre-draft "hype content" should Razzle post to r/DynastyFF in the 2-3 weeks before draft night to establish presence and credibility, so that the draft night recap post isn't from an unknown account?
