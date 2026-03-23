@@ -104,7 +104,7 @@
   }
 
   .league-card:not(.expanded):hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -170,7 +170,7 @@
     font-size: 9px;
     font-weight: 700;
     padding: 1px 5px;
-    border-radius: 3px;
+    border-radius: 8px;
     border: 2px solid var(--ink);
     color: var(--text-on-accent);
     font-family: var(--font-mono);
@@ -221,7 +221,7 @@
     font-weight: 700;
     text-transform: uppercase;
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: 8px;
     border: 2px solid var(--ink);
     white-space: nowrap;
     flex-shrink: 0;
@@ -268,7 +268,7 @@
   .activity-trade-side {
     flex: 1;
     padding: 3px 6px;
-    border-radius: 4px;
+    border-radius: 8px;
     background: var(--bg-warm);
   }
 
@@ -330,8 +330,8 @@
   }
 
   .profile-card:hover {
-    box-shadow: 3px 3px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink);
+    transform: translate(-2px, -2px);
   }
 
   .profile-stripe { height: 6px; }
@@ -369,7 +369,7 @@
     font-size: 10px;
     padding: 2px 6px;
     border: 2px solid var(--ink-faint);
-    border-radius: 4px;
+    border-radius: 8px;
     background: var(--bg-warm);
   }
 
@@ -393,7 +393,7 @@
     display: block;
     width: 100%;
     height: 40px;
-    border-radius: 4px;
+    border-radius: 8px;
   }
   .profile-timeline-label {
     font-family: var(--font-mono);
@@ -460,7 +460,7 @@
     font-family: var(--font-mono);
     font-size: 8px;
     padding: 1px 5px;
-    border-radius: 3px;
+    border-radius: 8px;
     border: 2px solid;
     white-space: nowrap;
   }
@@ -538,7 +538,7 @@
     font-size: 11px;
     padding: 4px 8px;
     border: 2px solid var(--ink);
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--bg);
     cursor: pointer;
   }
@@ -581,7 +581,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 8px;
     z-index: 2;
   }
   .pressure-locked-overlay span {
@@ -905,7 +905,7 @@
     width: 12px;
     height: 12px;
     border: 2px solid var(--ink);
-    border-radius: 3px;
+    border-radius: 8px;
     margin-right: 4px;
     vertical-align: middle;
   }
@@ -1210,7 +1210,7 @@
     font-size: 11px;
     padding: 6px 10px;
     border: 2px solid var(--ink);
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--bg-warm);
   }
 
@@ -1304,7 +1304,7 @@
     font-size: 9px;
     padding: 1px 6px;
     border: 2px solid var(--ink);
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--bg-warm);
   }
 
@@ -1975,8 +1975,8 @@
         </div>
         <div id="waitlistFeedback" style="font-family:var(--font-hand);font-size:13px;color:var(--green);margin-top:4px;min-height:18px;"></div>
         <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-top:4px;">
-          <span style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">ESPN</span>
-          <span style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:6px;padding:2px 8px;margin:0 2px;">Yahoo</span> support coming soon
+          <span style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:8px;padding:2px 8px;margin:0 2px;">ESPN</span>
+          <span style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:8px;padding:2px 8px;margin:0 2px;">Yahoo</span> support coming soon
         </div>
       </div>
       <div style="margin-top:16px;">
@@ -2441,7 +2441,7 @@ async function toggleLeague(card, leagueId, userId) {
       for (var ri = 0; ri < 3; ri++) {
         html += '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:var(--radius-sm);padding:16px;text-align:center;">';
         html += '<div style="font-family:var(--font-mono);font-size:13px;font-weight:700;margin-bottom:4px;">Manager Name</div>';
-        html += '<div style="font-family:var(--font-mono);font-size:10px;background:var(--pos-te);color:var(--bg);padding:2px 8px;border-radius:8px;display:inline-block;">BEHAVIORAL TAG</div>';
+        html += '<div style="font-family:var(--font-mono);font-size:10px;background:var(--pos-te);color:var(--text-on-accent);padding:2px 8px;border-radius:8px;display:inline-block;">BEHAVIORAL TAG</div>';
         html += '<div style="margin-top:8px;font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">trades/yr: 4.2 &bull; panic: 62%</div>';
         html += '</div>';
       }
@@ -3305,7 +3305,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
     for (var ci = 0; ci < cards.length; ci++) {
       var c = cards[ci];
       var seasonTag = c.seasonsTracked > 1
-        ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); border:2px solid var(--orange); border-radius:3px; padding:1px 4px; margin-left:6px;">' +
+        ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); border:2px solid var(--orange); border-radius:8px; padding:1px 4px; margin-left:6px;">' +
           c.seasonsTracked + 'yr</span>'
         : '';
 
@@ -3314,7 +3314,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
       html += '<div class="profile-body">';
       html += '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">';
       html += '<div class="profile-name" style="color:' + c.color + '">' + escapeHtml(c.name) + seasonTag + '</div>';
-      html += '<span style="font-family:var(--font-mono);font-size:10px;background:' + c.behaviorColor + ';color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);white-space:nowrap;">' + c.behaviorTag + '</span>';
+      html += '<span style="font-family:var(--font-mono);font-size:10px;background:' + c.behaviorColor + ';color:var(--text-on-accent);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);white-space:nowrap;">' + c.behaviorTag + '</span>';
       html += '</div>';
       var recordText = c.wins + '-' + c.losses;
       if (c.seasonsTracked > 1 && c.allTimeWins + c.allTimeLosses > 0) {
@@ -6389,10 +6389,10 @@ function _mcRenderScenario(leagueId) {
     html += '<div style="margin-bottom:12px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">';
     html += '<span style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);">ACTIVE:</span>';
     for (var epid in excluded) {
-      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--red);color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcToggleInjury(\'' + escapeJS(leagueId) + '\',\'' + escapeJS(epid) + '\')">' + escapeHtml(_mcGetPlayerName(epid)) + ' OUT ×</span>';
+      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--red);color:var(--text-on-accent);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcToggleInjury(\'' + escapeJS(leagueId) + '\',\'' + escapeJS(epid) + '\')">' + escapeHtml(_mcGetPlayerName(epid)) + ' OUT ×</span>';
     }
     for (var t = 0; t < trades.length; t++) {
-      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--orange);color:var(--bg);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcRemoveTrade(\'' + escapeJS(leagueId) + '\',' + t + ')">' + escapeHtml(_mcGetPlayerName(trades[t].playerA)) + ' ↔ ' + escapeHtml(_mcGetPlayerName(trades[t].playerB)) + ' ×</span>';
+      html += '<span style="font-family:var(--font-mono);font-size:10px;background:var(--orange);color:var(--text-on-accent);padding:2px 8px;border-radius:8px;border:2px solid var(--ink);cursor:pointer;" onclick="_mcRemoveTrade(\'' + escapeJS(leagueId) + '\',' + t + ')">' + escapeHtml(_mcGetPlayerName(trades[t].playerA)) + ' ↔ ' + escapeHtml(_mcGetPlayerName(trades[t].playerB)) + ' ×</span>';
     }
     html += '<span style="font-family:var(--font-mono);font-size:10px;color:var(--red);cursor:pointer;text-decoration:underline;" onclick="_mcResetScenarios(\'' + escapeJS(leagueId) + '\')">reset all</span>';
     html += '</div>';
@@ -6401,7 +6401,7 @@ function _mcRenderScenario(leagueId) {
   // Injury toggle: select from roster dropdown
   html += '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;">';
   html += '<label style="font-family:var(--font-mono);font-size:10px;color:var(--ink-medium);">INJURY:</label>';
-  html += '<select id="mc-injury-sel-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:6px;background:var(--bg-card);">';
+  html += '<select id="mc-injury-sel-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:8px;background:var(--bg-card);">';
   html += '<option value="">select player...</option>';
   // Build sorted player list from all rosters
   var allP = [];
@@ -6427,14 +6427,14 @@ function _mcRenderScenario(leagueId) {
   // Trade what-if: pick two players from different rosters
   html += '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">';
   html += '<label style="font-family:var(--font-mono);font-size:10px;color:var(--ink-medium);">TRADE:</label>';
-  html += '<select id="mc-trade-a-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:6px;background:var(--bg-card);max-width:180px;">';
+  html += '<select id="mc-trade-a-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:8px;background:var(--bg-card);max-width:180px;">';
   html += '<option value="">player A...</option>';
   for (var pa = 0; pa < allP.length; pa++) {
     html += '<option value="' + escapeAttr(allP[pa].pid) + '">' + escapeHtml(allP[pa].name) + ' (' + escapeHtml(allP[pa].owner) + ')</option>';
   }
   html += '</select>';
   html += '<span style="font-family:var(--font-mono);font-size:13px;">↔</span>';
-  html += '<select id="mc-trade-b-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:6px;background:var(--bg-card);max-width:180px;">';
+  html += '<select id="mc-trade-b-' + leagueId + '" style="font-family:var(--font-mono);font-size:11px;padding:3px 6px;border:2px solid var(--ink);border-radius:8px;background:var(--bg-card);max-width:180px;">';
   html += '<option value="">player B...</option>';
   for (var pb = 0; pb < allP.length; pb++) {
     html += '<option value="' + escapeAttr(allP[pb].pid) + '">' + escapeHtml(allP[pb].name) + ' (' + escapeHtml(allP[pb].owner) + ')</option>';
@@ -7366,7 +7366,7 @@ function _loadDemoLeague() {
 
   demoManagers.forEach(function(m) {
     var border = m.isYou ? "border:3px solid var(--orange);box-shadow:3px 3px 0 var(--orange);" : "border:2px solid var(--ink-faint);";
-    var youBadge = m.isYou ? ' <span style="font-family:var(--font-mono);font-size:9px;background:var(--orange);color:var(--text-on-accent);padding:1px 6px;border-radius:3px;">YOU</span>' : '';
+    var youBadge = m.isYou ? ' <span style="font-family:var(--font-mono);font-size:9px;background:var(--orange);color:var(--text-on-accent);padding:1px 6px;border-radius:8px;">YOU</span>' : '';
     leaguesHtml += '<div style="background:var(--bg);' + border + 'border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">';
     leaguesHtml += '<div><span style="font-family:var(--font-mono);font-size:13px;font-weight:700;">' + m.name + '</span>' + youBadge + '<br><span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">' + m.record + '</span></div>';
     leaguesHtml += '<div style="text-align:right;"><div style="font-family:var(--font-display);font-size:18px;color:var(--orange);">' + m.champOdds + '%</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);">playoff: ' + m.playoffOdds + '%</div></div>';
