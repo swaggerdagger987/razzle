@@ -1,4 +1,4 @@
-## Designer Insights (updated ticket DES-076)
+## Designer Insights (updated ticket DES-086)
 
 ### Patterns Found
 - Home page layout is mostly polished — chunky borders, correct colors, proper font usage
@@ -52,6 +52,21 @@
 - **Watermark IS dark-mode aware** — isDark check with correct alpha. No ticket needed.
 - **color:white NOW ZERO** — the 217-instance problem from cycles 3-5 is fully resolved.
 
+### Cycle 8 Findings: Accessibility, SEO, and Dark Mode PNG Exports
+- **THREE NEW AUDIT DIMENSIONS** — accessibility (ARIA/focus), SEO (h1/canonical/og:url), and dark mode canvas/PNG exports. Previous cycles focused on CSS consistency (colors, radius, borders). Cycle 8 broadens to quality dimensions that affect conversion differently.
+- **textColorForBg() is a VISIBLE dark mode bug** (DES-079) — returns hardcoded `#2d1f14` (light-mode ink) always. In dark mode, heatmap cell text is dark espresso on dark espresso backgrounds. Near-invisible. This is a user-facing bug, not a code smell.
+- **Trade Analyzer PNG export breaks in dark mode** (DES-080) — `drawSide()` uses `#f2d5d8` / `#d9efec` (light-mode red-light/green-light) hardcoded. These pale pastels look jarring against dark mode export backgrounds. PNG exports are marketing — every shared screenshot carries the watermark.
+- **Comp-finder PNG simColor uses light-mode ink-medium** (DES-086) — `#5c4a3d` on dark background = poor contrast.
+- **SEO has a structural gap** — 67 of 75 pages missing `<link rel="canonical">` and `<meta property="og:url">`. The 8 main pages have both; the 67 panel pages have neither. This is the #1 SEO issue.
+- **5 pages have zero h1 elements** (DES-077) — lab.html (flagship), player.html, compare.html, league-intel.html, 404.html. lab.html is the growth engine and has no heading structure for search engines.
+- **regression.html and tdregression.html share identical `<title>` and `og:title`** — SEO duplicate signal.
+- **ZERO :focus-visible rules on theme toggle and nav links** (DES-081, DES-082) — affects every page. Keyboard users get no visual focus indicator on the most prominent interactive elements.
+- **8+ interactive spans/tds in the Screener lack role="button"** (DES-084) — filter chip remove x, star/watchlist td, pin td, position count badges. Screen readers don't announce them; keyboard users can't reach them. These are CORE screener interactions.
+- **5 dynamic modals/overlays missing role="dialog"** (DES-083) — watchlist, roster, tier board, shortcuts, command palette. Static modals in lab.html all have proper ARIA; dynamic ones don't.
+- **playerHeadshot() injects hardcoded hex inline** (DES-085) — POS_COLOR_MAP hardcoded in app.js. Not a visible dark mode bug (position colors are same both modes) but bypasses the design system.
+- **lab-panels.css has ZERO :focus-visible rules in 4000+ lines** — systemic accessibility gap. Every interactive element in lab panels relies on browser defaults for keyboard focus indication. Not ticketed yet (too broad for one ticket).
+- **outline:none without :focus-visible pair in 6+ input selectors** across agents.html, breakdown.html, strengths.html, tradefinder.html — each removes focus indicators with no replacement.
+
 ### What Matters Most for Conversion
 - **OG image** is seen by more people than the home page itself — it's the preview on every social share (DES-007, FIXED)
 - Home page scroll path must be flawless — every section builds the "this is polished" impression
@@ -66,28 +81,31 @@
 - **Bureau connect card is the conversion engine's front door** — all 3 violations fixed
 - **DOM tier badges** (DES-067, DES-068) affect every panel that shows tiers — users see these constantly
 - **getCanvasTheme accent colors** (DES-069) is a platform fix — solves the problem at the root instead of patching individual symptoms
+- **SEO fundamentals** (canonical, h1) are table stakes — without them, organic traffic is structurally impaired
+- **Keyboard accessibility** directly affects power users — dynasty managers use keyboard shortcuts (J/K navigation, H for heat, etc.), so missing focus-visible on nav/toggle is inconsistent with the keyboard-first design
 
 ### Issue Categories by Impact
-1. **P1 — DOM tier/grade hardcoded hex** — DES-067, DES-068 (easy CSS var swap, no architecture change)
-2. **P2 — Canvas architecture** — DES-069 (keystone fix), then DES-070-072 (downstream cleanup)
-3. **P2 — Consistency bug** — DES-073 (elite+premium same color in 1 of 3 tier definitions)
-4. **P2 — Design rule compliance** — DES-074 (gradient), DES-076 (skeleton radius)
-5. **P2 — Mobile UX** — DES-075 (panel table scroll on mobile)
+1. **P1 — Visible dark mode bugs** — DES-079 (textColorForBg), DES-080 (Trade Analyzer PNG)
+2. **P1 — SEO fundamentals** — DES-077 (h1 on lab.html), DES-078 (canonical/og:url on 67 pages)
+3. **P1 — Keyboard accessibility** — DES-081 (theme toggle focus), DES-084 (interactive spans role=button)
+4. **P2 — Accessibility completeness** — DES-082 (nav focus), DES-083 (modal ARIA)
+5. **P2 — Canvas dark mode consistency** — DES-085 (headshot hex), DES-086 (comp-finder PNG)
 
-### Emerging Patterns (updated DES-076)
-- **Canvas hardcoded hex is now the dominant remaining issue** — ~30 hex color references in canvas code that could read from CSS vars if getCanvasTheme had accent properties.
+### Emerging Patterns (updated DES-086)
+- **Canvas hardcoded hex is now the dominant remaining design system issue** — ~30 hex color references in canvas code that could read from CSS vars if getCanvasTheme had accent properties (DES-069 is still the keystone).
+- **Accessibility is the next major frontier** — cycles 1-7 focused on visual consistency (colors, radius, borders, shadows). Cycle 8 reveals that ARIA attributes and keyboard focus are systematically under-implemented.
+- **SEO was never audited before** — 67 pages missing canonical URLs is a structural gap that predates all design QA work.
+- **PNG export dark mode is a pattern** — DES-080, DES-086, and several more (roster builder, boom/bust) all hardcode light-mode colors in canvas export functions. After DES-069 adds accent colors to the theme object, these become simple replacements.
 - **The codebase has matured significantly** — color:white is zero, sub-minimum radius is down to intentional bar fills, no rogue fonts, no generic loading text, no cold grays.
 - **DRY violations in lab.js** — tier/grade colors defined 6+ times, some with inconsistent values. posColors was consolidated (DES-062) — same pattern needed for tier/grade.
-- **The fix pattern for canvas hex**: (1) Add accent colors to getCanvasTheme, (2) Replace hardcoded hex with theme properties. Same approach that worked for posColors.
-- **Standalone pages are in good shape** — redirect to Lab works, dark mode inherits from CSS vars. Only mobile overflow-x is missing.
 - **Things that are GOOD and should be preserved:**
-  - Zero rogue font families (confirmed cycle 7)
-  - Zero generic "Loading..." text (confirmed cycle 7)
+  - Zero rogue font families (confirmed cycle 8)
+  - Zero generic "Loading..." text (confirmed cycle 8)
   - Zero gradients in CSS classes (2 inline cases were fixed)
-  - Zero cold grays (confirmed cycle 7)
-  - Zero blue-black ink colors (confirmed cycle 7)
-  - Zero color:white/color:#fff in lab.js or HTML pages (confirmed cycle 7)
-  - Zero 1px borders in lab.js (confirmed cycle 7)
+  - Zero cold grays (confirmed cycle 8)
+  - Zero blue-black ink colors (confirmed cycle 8)
+  - Zero color:white/color:#fff in lab.js or HTML pages (confirmed cycle 8)
+  - Zero 1px borders in lab.js (confirmed cycle 8)
   - 100% correct position colors via _POS_COLORS_CSS + _getPosColorsHex()
   - Dark mode CSS variables all correctly defined
   - Agent SVG icons all exist
@@ -96,16 +114,23 @@
   - --text-on-accent contrast verified acceptable in both modes
   - Heat map (getHeatColor) is dark-mode aware
   - Watermark (drawRazzleWatermark) is dark-mode aware
-  - formula-store.js 98% design-compliant (1 issue fixed)
+  - formula-store.js 98% design-compliant
   - All box-shadow:6px instances are on :hover states (correct per design guide)
+  - Static modals in lab.html all have proper role="dialog" + aria-modal + aria-labelledby
+  - Main nav has aria-label="Main navigation"
+  - Lab sidebar has role="navigation" + aria-label
+  - Auth modal uses role="dialog" with labeled inputs
+  - All 75 pages have viewport meta, unique title, unique description
 
-### What to Check Next (Cycle 8)
-- After DES-069 is fixed: verify all canvas exports render correct accent colors in dark mode
-- After DES-067/068: verify draft class and trade value panels look correct in dark mode
-- After DES-075: verify mobile scroll on panel tables at 375px viewport
-- Lab sidebar panel navigation: does switching between panels preserve dark mode correctly?
-- Canvas export file sizes: are PNGs reasonable for sharing on Reddit/Twitter?
-- Accessibility: ARIA labels on tier badges, grade badges, position badges
-- Performance: do the 40+ standalone pages load efficiently as Lab panel iframes?
-- Whether consolidated _POS_COLORS_CSS is used everywhere or if any new code has regressed
-- Print CSS: cheatsheet.html has @media print styles — do any other panels need print support?
+### What to Check Next (Cycle 9)
+- After DES-079: verify heatmap text is legible in dark mode (contrast check)
+- After DES-080: verify Trade Analyzer PNG export looks correct in dark mode
+- After DES-081/082: verify orange focus ring appears on tab navigation through nav and theme toggle
+- lab-panels.css :focus-visible gap — consider a batch ticket for all panel interactive elements
+- outline:none audit in per-page style blocks — 6+ files have it without :focus-visible pair
+- Canvas elements in compare.js and league-intel.html missing role="img" + aria-label
+- Briefing card headers in warroom.js missing role="button" + aria-expanded
+- Context menus in lab.js missing role="menu" + role="menuitem"
+- Agent API key inputs in warroom.js missing aria-label (placeholder only)
+- Print CSS audit — only cheatsheet.html has @media print, is it correct?
+- Whether og:image could be page-specific for high-traffic tool pages (currently generic on 74/75)
