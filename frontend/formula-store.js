@@ -357,10 +357,20 @@ async function submitPublish() {
   const description = document.getElementById("publishDescription").value.trim();
   const creator = document.getElementById("publishCreator").value.trim();
 
+  // Clear previous validation state
+  ["publishName","publishDescription","publishCreator"].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.removeAttribute("aria-invalid"); el.style.borderColor = ""; }
+  });
+  var publishErr = document.getElementById("publishError");
+  if (publishErr) publishErr.textContent = "";
+
   if (!name || !description || !creator) {
-    if (!name) document.getElementById("publishName").style.borderColor = "var(--red)";
-    if (!description) document.getElementById("publishDescription").style.borderColor = "var(--red)";
-    if (!creator) document.getElementById("publishCreator").style.borderColor = "var(--red)";
+    var missing = [];
+    if (!name) { missing.push("formula name"); document.getElementById("publishName").setAttribute("aria-invalid","true"); }
+    if (!description) { missing.push("description"); document.getElementById("publishDescription").setAttribute("aria-invalid","true"); }
+    if (!creator) { missing.push("your name"); document.getElementById("publishCreator").setAttribute("aria-invalid","true"); }
+    if (publishErr) publishErr.textContent = "missing: " + missing.join(", ");
     return;
   }
 

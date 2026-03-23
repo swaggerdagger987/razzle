@@ -3929,14 +3929,15 @@
     <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:12px;">
       share your formula with the community
     </p>
+    <div id="publishError" class="auth-error" role="alert"></div>
     <div class="filter-modal-row">
-      <input type="text" class="input-chunky" id="publishName" placeholder="formula name" style="flex:1" readonly>
+      <input type="text" class="input-chunky" id="publishName" placeholder="formula name" style="flex:1" readonly aria-describedby="publishError">
     </div>
     <div class="filter-modal-row">
-      <input type="text" class="input-chunky" id="publishCreator" placeholder="your name" style="flex:1">
+      <input type="text" class="input-chunky" id="publishCreator" placeholder="your name" style="flex:1" aria-describedby="publishError">
     </div>
     <div class="filter-modal-row">
-      <textarea class="input-chunky" id="publishDescription" placeholder="describe what this formula does..." style="flex:1; min-height:60px; resize:vertical; font-family:var(--font-mono); font-size:12px;"></textarea>
+      <textarea class="input-chunky" id="publishDescription" placeholder="describe what this formula does..." style="flex:1; min-height:60px; resize:vertical; font-family:var(--font-mono); font-size:12px;" aria-describedby="publishError"></textarea>
     </div>
     <div style="margin-bottom:12px;">
       <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); letter-spacing:1px; margin-bottom:6px;">Position Tags</div>
