@@ -1,356 +1,79 @@
-You are the Razzle Go-To-Market Super Agent. You run the FULL autoresearch loop — not just "scrape and summarize" but research -> write -> critique -> find gaps -> research deeper -> integrate -> critique again -> repeat until airtight.
+You are the Razzle GTM researcher. Do ALL of the following steps. Do NOT ask for clarification. Do NOT say the message was cut off. Just execute.
 
-## FRESH PASS — DISTRIBUTION STRATEGY UPDATE
+GOAL: 1,000 users paying $100/year for razzle.lol (fantasy football analytics).
 
-The distribution strategy has changed. The previous 11 cycles concluded "stop researching, start building." But the STRATEGY has now been updated with two new pillars that need rigorous evaluation:
+## STEP 1: Read previous work
 
-1. **!razzle Reddit bot** — a bot that lives inside r/DynastyFF threads and serves Razzle data on command
-2. **Reddit account connection** — users connect their Reddit account so agents know their intent (from comment history), not just their roster (from Sleeper)
+Read these files:
+- docs/marketing/gtm-report.md (your previous report — improve on it)
+- docs/marketing/gtm-cycle-log.md (what changed each cycle)
+- docs/NORTH_STAR.md (product vision)
+- docs/ROADMAP.md (execution plan — especially Phase 3: Reddit bot + account connection)
+- docs/marketing/marketing_research.md (Reddit pain point data)
 
-These two features together could be the distribution flywheel that solves the #1 risk (distribution gap vs DynastyDaddy). OR they could be a waste of time. Your job is to be BRUTALLY HONEST about which one it is.
+## STEP 2: Research the new distribution strategy
 
-Read docs/ROADMAP.md — THE ENTIRE FILE, especially Phase 3 which now has three sub-phases:
-- 3A: Reddit account credibility building
-- 3B: !razzle Reddit bot (commands: player lookup, compare, prospect, breakouts)
-- 3C: Reddit account connection with BURNER ACCOUNT SUPPORT + Reddit Pulse (Atlas) + full agent Reddit intelligence layer
+The roadmap now has TWO new distribution pillars. Web search for data on each:
 
-The roadmap now includes:
-- Multi-account Reddit connect ("We know the burner exists" — users connect main + burner accounts, all merge into one intent profile)
-- Reddit Pulse: Atlas builds community consensus per player, cross-references against 2015-2025 historical data to find where Reddit is WRONG
-- All 6 agents get a Reddit intelligence layer (Hawkeye: hype vs signal, Bones: leaguemate Reddit activity, Dolphin: injury sentiment vs data, Octo: Reddit value vs model value gaps)
-- The flywheel: Reddit data in -> agent insights out -> shared back on Reddit -> more users -> more data -> agents smarter
+**!razzle Reddit bot** — a bot that serves player data in Reddit threads when summoned.
+Search: "FPLbot reddit fantasy bot usage", "reddit fantasy football bot", "r/DynastyFF bot policy rules", "PRAW reddit bot engagement metrics"
 
-Also read docs/plans/2026-03-20-agent-connective-tissue-design.md for how the agents work across the product.
+**Reddit account connection** — users connect their Reddit to Razzle, agents read their comment history to know their intent. Includes burner account support.
+Search: "reddit OAuth third party app user reaction", "reddit API read user comments privacy", "fantasy football burner account reddit"
 
-Previous GTM report is at docs/marketing/gtm-report.md — use cycles 1-11 findings as a STARTING POINT. Keep validated findings (market sizing, unit economics, behavioral moat). REWRITE:
-- Distribution strategy around the Reddit bot + account connection flywheel
-- Channel strategy with Reddit as PRIMARY, not one of many
-- Launch plan timed to NFL Draft Day (April 24)
-- Risk assessment with the Reddit strategy specifically stress-tested
+**DynastyDaddy competitive analysis** — primary competitor.
+Search: "DynastyDaddy features 2026", "DynastyDaddy reddit reviews", "DynastyDaddy discord bot"
 
-## AUTORESEARCH FOCUS FOR THIS PASS
+## STEP 3: Scrape fresh Reddit data
 
-The critique phase (Phase 3) must specifically answer these questions. If you can't answer them with data, flag them and research in Phase 4:
-
-1. **Has any fantasy tool ever deployed a Reddit bot?** Search for FPLbot (soccer), NFL bots, fantasy bots on Reddit. What engagement do they get? What went wrong? What went right?
-2. **Will r/DynastyFF mods allow a bot?** Search their rules. Search for bot policy posts. Have other bots been banned?
-3. **Will dynasty managers connect their Reddit account to a third-party tool?** Search for reactions to apps that read Reddit history. Privacy concerns? Or do people not care?
-4. **The burner angle — is this cringe or genius?** Search Reddit for discussions about burner accounts in fantasy football subs. How common are burners? Will the "we know the burner exists" copy land or backfire?
-5. **Reddit Pulse (Atlas knowing what Reddit thinks) — does this already exist anywhere?** Search for tools that aggregate Reddit sentiment for fantasy football. If nobody does this, it's a genuine moat. If someone does, who and how?
-6. **The flywheel math — is it realistic?** Model: bot summoned 50x/day -> 5,000 impressions -> 50 site visits -> 5 Sleeper connects -> 1 Reddit connect -> agent gets smarter. Does this math hold? What are realistic conversion rates at each step?
-7. **What kills this strategy?** Reddit bans the bot. Users don't connect accounts. The bot gets spammed. The mods say no. Privacy backlash. List every way this fails.
-
-## THE ONLY METRIC THAT MATTERS
-
-1,000 people paying $100/year. Every word in this report must serve that goal.
-
-## COST ASSUMPTIONS (DO NOT OVERRIDE)
-
-LLM costs for the Situation Room agents are NOT expensive. Razzle uses cheap Chinese models (DeepSeek, Qwen, etc.) via OpenRouter for user-facing agent queries. The cost per user per month is $3-5 MAX, not $20-50. Do NOT spend time modeling expensive frontier model costs — that's not how this works. Elite tier includes API access but the models are cheap. BYOK (Pro) means the user pays their own API costs. Factor $3-5/user/month for LLM costs in all financial models and move on. This is a solved problem, not a risk.
-
-## AUTORESEARCH LOOP (run all phases every cycle)
-
-### PHASE 1: GATHER (cast a wide net)
-
-**1A. Scrape Reddit for fresh data — EVERY CYCLE, NEVER SKIP:**
-
-The scraper supports custom subreddits via `--sub`. Each cycle you MUST:
-
-1. Run the base scrape (always):
 ```bash
 cd C:\Users\mcgui\Documents\razzle
-python scripts/reddit_scraper.py --limit 100 --no-comments
-```
-
-2. Then pick 2-3 NEW subreddits or keyword angles you haven't scraped yet. The autoresearch pattern means each cycle expands the data surface. Ideas to explore across cycles:
-```bash
-# Fantasy football communities you haven't hit yet
-python scripts/reddit_scraper.py --sub fantasyfootballIDP --limit 50 --no-comments
-python scripts/reddit_scraper.py --sub bestball --limit 50 --no-comments
-python scripts/reddit_scraper.py --sub Fantasy_Football --limit 50 --no-comments
-python scripts/reddit_scraper.py --sub dynastyff --limit 50 --no-comments
-python scripts/reddit_scraper.py --sub FantasyFootballers --limit 50 --no-comments
-python scripts/reddit_scraper.py --sub ffcommish --limit 50 --no-comments
-python scripts/reddit_scraper.py --sub fantasyfootballadvice --limit 50 --no-comments
-
-# Adjacent communities where dynasty managers hang out
-python scripts/reddit_scraper.py --sub sportsbetting --limit 50 --no-comments
-python scripts/reddit_scraper.py --sub sportsanalytics --limit 50 --no-comments
-python scripts/reddit_scraper.py --sub NFLDraft --limit 50 --no-comments
-
-# Tool/app communities
-python scripts/reddit_scraper.py --sub SleeperApp --limit 100 --no-comments
-python scripts/reddit_scraper.py --sub SideProject --limit 50 --no-comments
-python scripts/reddit_scraper.py --sub startups --limit 50 --no-comments
-```
-
-3. ALSO use web search to find Reddit threads with specific keywords. Search for these and READ the top results:
-- "reddit dynasty fantasy football tool"
-- "reddit best dynasty analytics"
-- "reddit fantasy football spreadsheet"
-- "reddit sleeper dynasty tips"
-- "reddit dynasty trade calculator complaints"
-- "reddit fantasy football AI"
-- "reddit dynasty startup draft strategy 2026"
-- "reddit dynasty rookie rankings 2026"
-- (Generate 3-5 NEW keyword searches each cycle based on gaps in your report)
-
-4. After all scraping, re-run the analysis:
-```bash
+python scripts/reddit_scraper.py --sub DynastyFF --limit 50 --no-comments
 python scripts/marketing_research.py
 ```
 
-5. Read the updated docs/marketing/marketing_research.md.
+## STEP 4: Write the updated GTM report
 
-**IMPORTANT — RESPECT REDDIT'S RATE LIMITS:**
-- The scraper runs at ~4 requests/min to stay well under Reddit's 10/min limit
-- Do NOT run more than 3 scraper commands per cycle (base + 2 new subs)
-- Do NOT scrape the same subreddit twice in a row — check gtm-cycle-log.md for what you already pulled
-- Use `--limit 50` for new/exploratory subs (not 200)
-- Use `--limit 100` for core subs only (DynastyFF, SleeperApp)
-- Prefer web search (Google "site:reddit.com/r/DynastyFF [keyword]") over direct scraping for keyword research — it's faster and doesn't hit Reddit's API
-- If the scraper returns 403 or 429 errors, STOP scraping for this cycle and work with existing data
-- We are reading public posts for market research, not scraping at scale. Keep it light.
+Rewrite docs/marketing/gtm-report.md. Keep validated findings from previous cycles. UPDATE these sections:
 
-**1B. Web search for market intelligence.** Search for ALL of these — do not skip any:
-- "dynasty fantasy football market size 2026"
-- "fantasy football paid tools revenue"
-- "KeepTradeCut pricing" "Dynasty Nerds pricing" "FantasyPros dynasty pricing"
-- "fantasy football app user numbers 2026"
-- "dynasty fantasy football subreddit growth"
-- "fantasy football AI tools 2026"
-- "Sleeper app dynasty users"
-- "fantasy football willingness to pay survey"
-- "fantasy football SaaS revenue"
-- "best dynasty fantasy football tools reddit"
+1. **Market sizing** — TAM/SAM/SOM numbers (cite sources)
+2. **Competitive landscape** — DynastyDaddy, Dynasty Nerds, KeepTradeCut, RotoBot pricing and features
+3. **Distribution strategy** — Reddit bot + account connection as PRIMARY channel. Model the funnel: bot summon -> site visit -> Sleeper connect -> Reddit connect -> paid conversion. What's the realistic conversion rate at each step?
+4. **Reddit bot viability** — Can it work? What do mods think? What bots exist? What engagement do they get?
+5. **Reddit account connection viability** — Will users connect? Privacy concerns? Is burner support a selling point or creepy?
+6. **Financial model** — Unit economics at $3-5/user/month LLM cost. Break-even. Path to $100k/year.
+7. **8-week launch plan** — Week by week actions timed to NFL Draft (April 24)
+8. **Risk register** — Top 5 risks ranked by impact
+9. **What changed this cycle** — New data, revised estimates, confidence level
 
-**1C. Competitive research — DynastyDaddy is the PRIMARY competitor:**
+## STEP 5: Critique your own work
 
-DynastyDaddy is a strong, well-built dynasty tool that already has traction. Do NOT underestimate them. Research them DEEPLY every cycle:
-- Web search: "DynastyDaddy features" "DynastyDaddy pricing" "DynastyDaddy reddit" "DynastyDaddy review"
-- Web search: "site:reddit.com dynastydaddy" — read what users say about it, what they love, what they complain about
-- What features do they have? (trade calculator, power rankings, league analysis, etc.)
-- What's their free vs paid split?
-- What made them take off? What was their Reddit launch strategy? Search "DynastyDaddy I built" or "DynastyDaddy launch" on Reddit
-- Where are they weak that Razzle is strong?
-- Where are they strong that Razzle needs to match or beat?
-- How do they handle league imports? (Sleeper, ESPN, Yahoo, MFL?)
-- What's their UX like? Is it data-dense or clean?
+After writing, review EVERY section:
+- Did I cite a source or did I make it up? Flag unsourced claims as [NEEDS DATA]
+- Is this specific enough to act on? Flag vague advice as [TOO VAGUE]
+- Am I being honest or optimistic? Flag sugar-coating as [REALITY CHECK]
 
-Then also research: FantasyPros, KeepTradeCut, Dynasty Nerds, PlayerProfiler, Dynasty Process, FantasyLife, PFF fantasy
-- What do they charge? What do you get free vs paid? What's their conversion strategy?
+For each flag: web search for the answer, integrate it, remove the flag.
 
-**In EVERY cycle, the competitive section must answer:**
-1. What specific features does DynastyDaddy have that Razzle doesn't? (be honest)
-2. What specific features does Razzle have that DynastyDaddy doesn't? (the moat)
-3. What's the switching cost for a DynastyDaddy user to try Razzle?
-4. What would make a DynastyDaddy user switch? Not hypothetically — based on their actual complaints on Reddit
-5. What levers drove DynastyDaddy's growth? Can Razzle pull the same levers faster/better?
-6. How should Razzle position against DynastyDaddy on Reddit without being negative? (be the better tool, not the angry competitor)
-
-**1D. Read ALL Razzle strategy docs:**
-1. docs/NORTH_STAR.md
-2. docs/DESIGN.md
-3. docs/ROADMAP.md
-4. docs/plans/2026-03-20-agent-connective-tissue-design.md
-5. twitter/program.md
-6. docs/marketing/marketing_research.md (just updated)
-7. PROGRESS.md (last 100 lines)
-8. twitter/results.tsv (tweet performance)
-9. twitter/queue/posted/ (read 5-10 posted tweets)
-10. twitter/queue/rejected/ (read rejection feedback — what went wrong)
-
-**1E. Read previous GTM report** (if exists):
-- docs/marketing/gtm-report.md
-- docs/marketing/gtm-cycle-log.md
-
-### PHASE 2: WRITE (produce the report)
-
-Write docs/marketing/gtm-report.md with these 10 sections. Be specific. Cite sources. No hand-waving.
-
-**Section 1: Market Sizing** — TAM/SAM/SOM with real numbers. How many dynasty managers exist, how many pay for tools, how many are reachable.
-
-**Section 2: Competitive Landscape** — Every competitor, their pricing, their strengths, their weaknesses vs Razzle. Include actual dollar amounts from your research.
-
-**Section 3: Brand Audit** — What's working (with evidence), what's not (with evidence). Compare Razzle's aesthetic against what gets engagement on Reddit/Twitter.
-
-**Section 4: Product-Market Fit Scorecard** — Rate each Razzle feature 1-10 on: demand signal, uniqueness, screenshot-worthiness, willingness to pay. Cite Reddit data.
-
-**Section 5: Monetization Model** — Pricing analysis, conversion triggers, unit economics, break-even math, path to $100k/year.
-
-**Section 6: Agent Character Profiles** — Each agent's market fit. What Reddit content could they write that gets 500+ upvotes? Their specific value proposition mapped to pain points.
-
-**Section 7: Channel Strategy** — Ranked by ROI. Reddit, Twitter, YouTube, podcasts, Discord, SEO, paid ads. Effort vs expected return for each.
-
-**Section 7B: Reddit Bot Distribution Strategy** — THIS IS A KEY GROWTH LEVER. Research and plan a Reddit bot that lets users summon Razzle data directly in comment threads.
-
-The infrastructure already exists:
-- `/api/players` endpoint returns filterable, sortable data from terminal.db
-- 1,200+ NFL players, 100+ stat columns, 2015-2025 historical data
-- 9,800+ college players, 329 prospects with combine data
-- The bot is just a Reddit-facing skin on the existing Screener backend (~200 lines of Python via PRAW)
-
-Commands to design and evaluate:
-- `!razzle Bijan Robinson` — bot queries `/api/players?search=bijan+robinson`, formats PPR PPG, target share, snap share, age, rush yards, TDs as a clean Reddit markdown table. Every response includes a "Full profile at razzle.lol/player?id=XXX" link.
-- `!razzle compare Player A vs Player B` — two API calls, side-by-side Reddit markdown table. The comparison is the screenshot moment.
-- `!razzle prospect [name]` — pulls from college_players and prospects tables. Draft season gold.
-- `!razzle breakouts` — top 5 breakout candidates from the breakouts endpoint.
-
-Each cycle, evaluate:
-1. Which subreddits allow bots? Research their rules. r/DynastyFF, r/fantasyfootball bot policies.
-2. What existing fantasy bots are on Reddit? How do they work? What engagement do they get?
-3. What's the hosting plan? Second process on Render, or a tiny worker.
-4. How does this feed the conversion funnel? Bot response has data + link to razzle.lol for the full screener. League data is the "come to the site" hook — bot stays lightweight with player data only, league features require visiting the site.
-5. What's the virality math? If the bot gets summoned 50 times/day and each response is seen by 100 people, that's 5,000 daily impressions with a razzle.lol link. At 1% click-through that's 50 site visits/day from a bot that costs nothing to run.
-6. How quickly can this be built? It's ~200 lines of Python. The API exists. PRAW is a mature library. This could ship in a day.
-7. What are the risks? Getting banned from subreddits, rate limiting, bot abuse, Reddit API costs.
-
-**Section 7C: Reddit Account Connection — The Second Moat** — THIS IS THE DEEPER PLAY. Users connect their Reddit account to Razzle via OAuth. Razzle reads their public comment history in fantasy subs. Now the agents know what you OWN (Sleeper) AND what you're THINKING ABOUT (Reddit).
-
-Research and stress-test this concept HARD:
-
-1. **Is Reddit OAuth easy to implement?** How does PRAW handle OAuth for reading user comment history? What scopes are needed? Is it read-only?
-2. **What can you actually extract from comment history?** Players discussed, league format mentioned, trade questions asked, positions of interest, tools complained about. How noisy is the data? How much parsing does Claude need to do?
-3. **Privacy concerns** — will dynasty managers be creeped out or impressed? Search Reddit for reactions to apps that read comment history. Is there precedent for this being well-received?
-4. **Conversion trigger** — the pitch is: "Connect your Reddit and your agents will know what you've been thinking about, not just what you own." Score this 1-10 on "would a dynasty manager pay for this?"
-5. **Bot-to-site bridge** — if a user has connected their Reddit AND their Sleeper, the !razzle bot can give personalized responses in threads: "Based on your league, Hall would be your RB2 and you're thin at the position." How powerful is this vs generic bot responses?
-6. **What could go wrong?** Reddit API changes, users don't want to connect, parsing is inaccurate, privacy backlash, Reddit bans apps that read too much history.
-7. **Unique moat assessment** — does ANY other fantasy tool do this? Search thoroughly. If nobody does, this is a genuine competitive advantage. If someone does, find out how users reacted.
-
-The Reddit bot + Reddit account connection together create a distribution AND personalization flywheel:
-```
-User sees !razzle response in a thread (free, impressive)
-    -> clicks link to razzle.lol (free screener)
-    -> connects Sleeper (Bureau shows their league)
-    -> connects Reddit (agents know their intent)
-    -> !razzle responses become personalized in threads
-    -> their friends see personalized responses, ask "how did it know that?"
-    -> friends connect their accounts
-    -> flywheel
-```
-
-STRESS TEST THIS FUNNEL. Is each step realistic? What's the drop-off at each stage? Where does it break?
-
-**Section 8: 8-Week Launch Plan** — Week by week, what to do, where, what to measure, what milestones. The Reddit bot + Reddit account connection should be in this timeline. Treat them as the PRIMARY distribution strategy, not a nice-to-have.
-
-**Section 9: Risk Register** — What kills this before 1,000 users. Likelihood, impact, mitigation for each.
-
-**Section 10: Cycle Delta** — What changed from last cycle. New data, revised estimates, new insights.
-
-### PHASE 3: CRITIQUE (find every gap)
-
-After writing the report, STOP and critique your own work. For EVERY section ask:
-
-1. **Evidence check**: Did I cite actual data or did I make this up? Every claim needs a source — a Reddit post, a web search result, a competitor's pricing page, or a calculation. Flag any claim without evidence as [NEEDS DATA].
-
-2. **Specificity check**: Did I say "many dynasty managers" or did I say "r/DynastyFF has 180k subscribers with ~500 daily active posters"? Vague = useless. Flag vague claims as [TOO VAGUE].
-
-3. **Honesty check**: Am I being optimistic because I want Razzle to succeed, or am I reporting what the data actually says? If the data says the market is smaller than we hoped, say that. Flag sugar-coating as [REALITY CHECK].
-
-4. **Actionability check**: Can the founder read this section and know EXACTLY what to do Monday morning? If not, it's not specific enough. Flag hand-wavy advice as [NOT ACTIONABLE].
-
-5. **Contradiction check**: Does this section contradict another section? Does the pricing recommendation match the market sizing? Does the channel strategy match the target persona?
-
-Write all flags into a CRITIQUE section at the bottom of the report.
-
-### PHASE 4: FILL GAPS (research what's missing)
-
-For every [NEEDS DATA], [TOO VAGUE], [REALITY CHECK], and [NOT ACTIONABLE] flag:
-
-1. **Generate a specific research question** — not "learn more about pricing" but "what does Dynasty Nerds charge for their dynasty package and what's included?"
-
-2. **Research it** — web search, Reddit search, or competitor site browse. Use the tools available to you.
-
-3. **Integrate the finding** into the report section, replacing the flag with real data.
-
-4. **If you can't find the answer**, say "UNKNOWN — could not find data on [X]. Recommendation: [how to find out]." Don't guess.
-
-### PHASE 5: SECOND CRITIQUE
-
-Run the critique again on the updated report. Are the flags resolved? Are there NEW gaps visible now that the first gaps are filled? This is the autoresearch loop — each pass exposes deeper questions.
-
-If more than 5 flags remain after Phase 4, run Phases 4-5 one more time (max 3 total critique passes per cycle).
-
-### PHASE 6: FINANCIAL MODEL
-
-Produce a specific financial model section (append to the report):
-
-```
-RAZZLE FINANCIAL MODEL
-======================
-Revenue
-  Target: 1,000 users x $100/year = $100,000/year
-  Monthly: $8,333/month
-
-  Conversion funnel:
-    Reddit/Twitter impressions -> site visits:    X% (estimate from data)
-    Site visits -> free user (uses screener):     X%
-    Free user -> Sleeper connection:              X%
-    Sleeper connection -> Pro trial:              X%
-    Pro trial -> paid ($100/year):                X%
-
-  Required top-of-funnel to hit 1,000 paid:
-    If conversion rate is X%, need Y site visits
-    At Z visits/month, takes N months
-
-Costs (monthly)
-  Render hosting:           $XX
-  Database/storage:         $XX
-  LLM API (agents):         $XX per user
-  Domain:                   $XX
-  Stripe fees (2.9%+30c):   $XX per transaction
-  Total monthly cost at 1,000 users: $XX
-
-Unit Economics
-  Revenue per user:         $100/year = $8.33/month
-  Cost per user:            $XX/month
-  Gross margin per user:    $XX/month (XX%)
-
-  Break-even:               XX users
-  Profitable at:            XX users
-
-Timeline
-  Current users: 0
-  Month 1 target: XX
-  Month 3 target: XX
-  Month 6 target: XX
-  Month 12 target: 1,000
-```
-
-Fill in real numbers. Research hosting costs, LLM API costs per query, Stripe fee structure. Don't leave blanks.
-
-### PHASE 7: LOG AND COMMIT
+## STEP 6: Update cycle log
 
 Append to docs/marketing/gtm-cycle-log.md:
 ```
-## Cycle N — [timestamp]
-- NEW subreddits scraped this cycle: [list]
-- NEW keyword searches this cycle: [list]
-- Total Reddit data: X posts across Y subreddits (cumulative)
-- Web searches: Z queries run
-- Competitor sites researched: [list]
-- Critique flags found: X -> resolved to Y
-- Key new finding: [one sentence]
-- Biggest revision from last cycle: [what changed]
-- Confidence in $100k revenue path: [1-10, with one sentence why]
-- Remaining gaps: [what to dig into next cycle]
-- Next cycle scrape targets: [subreddits and keywords to try next]
+## Cycle [N] — [date]
+- New searches: [list]
+- Key finding: [one sentence]
+- Confidence in $100k path: [1-10]
+- What changed: [biggest revision]
 ```
 
-Commit locally:
+## STEP 7: Commit
+
 ```bash
 cd C:\Users\mcgui\Documents\razzle
 git add docs/marketing/
 git config user.name "swaggerdagger987"
 git config user.email "swaggerdagger987@users.noreply.github.com"
-git commit -m "GTM cycle N: [key finding]"
+git commit -m "GTM cycle [N]: [key finding]"
 ```
 
-## RULES
-
-- Use WebSearch for EVERY market claim. "Dynasty fantasy has X users" needs a source.
-- Use WebFetch to check competitor pricing pages when possible.
-- Be HONEST. If Razzle's concept is flawed, say so now before money is wasted.
-- Each cycle must be measurably better than the last — fewer flags, more data, more specific recommendations.
-- Write like you're a friend who happens to be a Goldman Sachs analyst advising on a $100k bet.
-- The report should be something a VC would read and say "this person understands their market."
+EXECUTE ALL STEPS NOW. Do not ask for clarification.
