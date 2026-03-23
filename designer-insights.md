@@ -1,5 +1,32 @@
 # Designer Insights
 
+### Cycle 11 — 2026-03-23
+
+**What I did**: Deep type-scale, spacing, voice, and architecture audit. Production site returned blank page (white screen, no errors, no text). Local server failed to start (ImportError: relative import). Pivoted to pure grep-based code audit with 3 subagents (font-size compliance, spacing/gap patterns, loading/empty state text). Ran 30+ targeted grep searches. Cross-referenced all 70 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-071 through DQ-080).
+
+**Quality score**: 9/10 — Discovered the single largest design system violation in the codebase: font-size:10px appears 325+ times but is NOT in the type scale. Combined with 9px (133x), 15px (38x), 22px (49x), 26px (41x), and 28px (26x), there are **612+ off-spec font-size values** — more than all prior DQ tickets combined. Also found 90 tight gap values, 16 generic empty states, 9 uncentralized error messages, 76 undocumented letter-spacing instances, and z-index chaos (14 distinct values in inline HTML).
+
+**What worked**:
+- Subagent pattern for exhaustive grep — one agent per concern (typography, spacing, voice) ran in parallel, found issues I'd have missed with serial searching.
+- Counting total instances per violation revealed severity invisible to visual QA. 325 instances of 10px is not a "fix a few" issue — it's a fundamental design system debt.
+- Cross-referencing font-size values against the DESIGN.md type scale table was the most productive single query this cycle.
+
+**What didn't**:
+- Production site blank (no 502, just white page — possibly a deploy issue or missing frontend). Local server ImportError prevents any visual verification.
+- No screenshots this cycle — all findings are code-level. Some 10px font-sizes may look fine in context (dense data tables), but the design guide says 11px is the floor.
+- Couldn't verify if 22px/26px headers look wrong visually or just happen to be off-spec numerically.
+
+**Pattern spotted**: The typography violations are the codebase's biggest remaining design system debt. Prior cycles (1-10) cleaned colors, borders, shadows, dark mode, gradients, and accessibility. But nobody audited font-sizes against the type scale. The 10px/9px epidemic traces back to standalone panel pages — they were all built with identical `<style>` blocks that used 10px for badges/labels. The Lab (lab.html, lab-panels.css) is the other major source, using 9px and 10px for dense table data.
+
+**Root cause found**: The 66+ standalone HTML pages share a copy-paste template with a `<style>` block containing off-spec font-sizes. When one page was built with `font-size: 10px` for position badges, the template propagated to all subsequent pages. The fix is mechanical: update the template values and find-replace across all pages. Similarly, the `gap: 5px` on player-meta sections exists in 15+ pages because they share the same `.XXX-player-meta` CSS class pattern.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-071 (10px->11px) and DQ-072 (9px->11px) are the highest-impact tickets by sheer volume (458 instances). They're mechanical find-replaces but need spot-checking in dense tables (lab screener, league-intel) to ensure 11px doesn't break column widths.
+- Ship agent: DQ-076 (empty states) and DQ-077 (error centralization) are the quickest wins — 16 string replacements and 9 function calls respectively. Do these first for brand consistency.
+- Ship agent: DQ-075 (gap values) is best done per-file, not as a global replace, since `gap: 2px` in a heatmap cell is different from `gap: 2px` in a stat row.
+
+**What I'd do differently next time**: Get the local server running first. The ImportError (`from . import live_data`) suggests running uvicorn from the wrong directory. Try `cd /c/Users/mcgui/Documents/razzle && python -m uvicorn backend.server:app --host 127.0.0.1 --port 8000`. Visual verification would catch whether 10px text actually looks too small or reads fine in dense data contexts.
+
 ### Cycle 10 — 2026-03-23
 
 **What I did**: Code-level systematic audit. Production site was down (502 Bad Gateway), headless browser returned blank pages from local server (browse tool state-loss between commands). Pivoted to pure grep-based code audit against DESIGN.md. Ran 25+ targeted grep searches across all 75 HTML files, 7 JS files, and 2 CSS files. Focused on areas previous cycles identified as untested: `transition: all`, hover lift patterns, focus-visible coverage, max-width consistency, watermark coverage, drop-shadow sizes, and blur shadows. Cross-referenced all 100 done + 21 open + 60 DQ tickets to ensure zero duplicates. Found and deleted one duplicate (DQ-061 originally duplicated DQ-018). Wrote 10 new tickets (DQ-061 through DQ-070).

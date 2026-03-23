@@ -100,3 +100,27 @@
 | DQ-065 | formulas.js `border-radius: 4px` in inline cssText | formulas.js:273 |
 | DQ-067 | agents.html btn-pro-upgrade hover uses off-spec 5px shadow | agents.html:727 |
 | DQ-070 | agents.html 37 long inline style= attrs — unmaintainable | agents.html |
+
+## Cycle 11 — Type Scale, Spacing, Voice & Architecture (DQ-071 to DQ-080)
+
+### P1
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-071 | **font-size: 10px used 325+ times — not in type scale** | 66+ files (lab-panels.css: 125, lab.html: 43, league-intel.html: 45) |
+| DQ-072 | **font-size: 9px used 133 times — below type scale floor** | 20 files (lab-panels.css: 31, league-intel.html: 34, lab.html: 25, lab.js: 15) |
+
+### P2
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-073 | font-size 22px (49x) and 26px (41x) — off-spec display sizes | 40+ files |
+| DQ-074 | font-size: 15px used 38 times — off-spec (between 14 and 16) | 20 files |
+| DQ-075 | gap values 1-3px across 30+ files — too tight for design system | 30+ files (lab-panels.css: 26, lab.html: 19) |
+| DQ-076 | 16+ pages use generic "no X found" empty states — no personality | 16 HTML files + lab-panels.js |
+| DQ-077 | "fumbled the data fetch" error msg 9+ times — not centralized | 9 files (razzleError() exists but unused) |
+| DQ-078 | font-size: 28px used 26 times — off-spec hero sections | 12 files (pricing: 5, lab-panels.css: 5, index: 3) |
+
+### P3
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-079 | z-index 14 distinct values in inline HTML — no token system | 30+ files (values: 1 to 10001) |
+| DQ-080 | letter-spacing used 76 times with no design system guidance | 20+ files (5 different values, no tokens) |
