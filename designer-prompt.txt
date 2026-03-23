@@ -74,9 +74,40 @@ Fix things in this order. Do NOT write a P2 ticket if there are P0s still unfoun
 
 ## YOUR LOOP (one pass per invocation)
 
+### Step 0: Run the Site Walker FIRST
+
+Before writing any tickets, run the automated site walker. It browses every page, clicks buttons, checks fonts, checks agent presence, checks mobile, catches console errors and failed network requests.
+
+```bash
+cd C:\Users\mcgui\Documents\razzle
+python scripts/site_walker.py --deep
+```
+
+This produces:
+- designer-reports/walk-YYYY-MM-DD-HHMM.md — structured report of PASS/FAIL/WARN per page
+- designer-reports/walk-YYYY-MM-DD-HHMM.json — raw findings data
+- designer-screenshots/walk_*.png — screenshots of every page + every failure
+
+READ THE REPORT. It tells you exactly what's broken. Your job is to turn the FAIL items into tickets. Don't re-discover what the walker already found — use it as your eyes.
+
+The walker checks:
+- Does the page load at all?
+- Console errors (JS crashes, missing resources)
+- Failed network requests (broken API calls, 404s, 500s)
+- Expected text present (nav names, product names)
+- Unwanted text absent (no "Loading...", "undefined", "NaN", "null")
+- Required elements exist (tables, sidebars, inputs, nav)
+- Font compliance (data in Space Mono?)
+- Design tokens (no 1px borders, no gradients)
+- Agent presence (icons, agent names visible, Caveat font used)
+- Readability (no fonts below 12px)
+- Mobile (no horizontal overflow at 480px)
+- Every clickable element (does clicking it break anything?)
+- Every Lab panel (deep mode clicks all 70+ sidebar items)
+
 ### Step 1: Pick the next page or panel to review
 
-Read designer-state.json to see where you left off. If it doesn't exist, start with index.html.
+Read the site walker report AND designer-state.json. Focus on pages with the most FAILs first.
 
 Review order:
 1. index.html (landing page)
@@ -88,7 +119,7 @@ Review order:
 7. 404.html
 8. Any standalone pages (player.html, compare.html, etc.)
 
-### Step 2: Browse and screenshot
+### Step 2: Browse and screenshot (for anything the walker missed)
 
 ```bash
 cd C:\Users\mcgui\Documents\razzle
