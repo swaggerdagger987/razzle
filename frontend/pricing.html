@@ -162,6 +162,23 @@
   }
   .btn-elite { background: var(--purple); border-color: var(--ink); }
   .btn-elite:hover { box-shadow: 3px 3px 0 var(--purple); }
+
+  /* Dark mode overrides */
+  [data-theme="dark"] .plan-card { background: var(--bg-card); }
+  [data-theme="dark"] .plan-features li { color: var(--ink-medium); }
+  [data-theme="dark"] .free-celebration { background: var(--bg-card) !important; }
+  [data-theme="dark"] .free-chip { background: var(--bg-warm); color: var(--ink); }
+  [data-theme="dark"] .feature-matrix td { color: var(--ink-medium); }
+  [data-theme="dark"] .feature-matrix td:first-child { color: var(--ink-medium); }
+  [data-theme="dark"] .feature-matrix th { color: var(--ink); }
+  [data-theme="dark"] .subscribed-banner { background: var(--bg-card); }
+  [data-theme="dark"] .promo-row input { background: var(--bg-card); color: var(--ink); }
+  [data-theme="dark"] .interval-toggle label { color: var(--ink-light); }
+  [data-theme="dark"] .interval-toggle label.active { color: var(--ink); }
+  [data-theme="dark"] .save-badge { color: var(--bg); }
+  [data-theme="dark"] .plan-badge { color: var(--bg); }
+  [data-theme="dark"] #trialBanner { background: var(--orange-light) !important; }
+  [data-theme="dark"] #trialActiveBanner { background: var(--orange-light) !important; }
 </style>
 </head>
 <body>
@@ -228,7 +245,7 @@
     <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:20px;">no account, no card, no catch</div>
     <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:600px; margin:0 auto;">
       <span class="free-chip">Screener (100+ columns)</span>
-      <span class="free-chip">70+ analytical panels</span>
+      <span class="free-chip">70+ analytical panels (preview)</span>
       <span class="free-chip">Custom formulas</span>
       <span class="free-chip">Compare tool</span>
       <span class="free-chip">Trade analyzer</span>
@@ -244,6 +261,9 @@
   </div>
 
   <!-- Upgrade cards -->
+  <div style="text-align:center; margin-bottom:20px; font-family:var(--font-hand); font-size:20px; color:var(--orange);">
+    try Pro free for 7 days. no credit card.
+  </div>
   <div style="font-family:var(--font-display); font-size:20px; text-align:center; margin-bottom:20px;">Want more? <span style="color:var(--orange);">Two ways to upgrade.</span></div>
 
   <div class="plans-grid" style="grid-template-columns:1fr 1fr;">
@@ -296,6 +316,11 @@
     </div>
   </div>
 
+  <div style="text-align:center; margin-top:16px; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">
+    <svg style="width:14px; height:14px; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    Secured by Stripe. Cancel anytime.
+  </div>
+
   <div style="text-align:center; margin:16px 0 8px;">
     <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light); background:var(--bg-card); display:inline-block; padding:8px 20px; border:2px dashed var(--ink-faint); border-radius:8px;">Pro and Elite have the same features. The only difference is who provides the AI.<br>Pro: you bring a free API key (~$1-3/mo). Elite: we handle everything.</div>
   </div>
@@ -327,7 +352,8 @@
         <!-- Screener -->
         <tr class="group-row"><td colspan="4">Screener / Lab</td></tr>
         <tr><td>Lab screener (100+ columns)</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
-        <tr><td>All 70+ analytical panels</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>70+ analytical panels (preview)</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Full panel access (unlocked)</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
         <tr><td>Season selector</td><td class="yes">All (2015+)</td><td class="yes">All (2015+)</td><td class="yes">All (2015+)</td></tr>
         <tr><td>Compare mode</td><td class="limit">2 players</td><td class="yes">4 players</td><td class="yes">4 players</td></tr>
 
@@ -355,7 +381,8 @@
         <!-- League -->
         <tr class="group-row"><td colspan="4">League Tools</td></tr>
         <tr><td>Sleeper connection</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
-        <tr><td>Bureau of Intelligence (rosters, standings)</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Bureau summary (league odds, rosters)</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+        <tr><td>Bureau deep-dive (Self-Scout, Trade Network, Pressure Map, Manager Profiles, Power Rankings)</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
         <tr><td>Roster grading</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
         <tr><td>Trade finder (league-specific)</td><td class="no">&mdash;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
       </tbody>

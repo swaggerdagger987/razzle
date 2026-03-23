@@ -424,9 +424,21 @@ var RAZZLE_LOADING = [
   "analyzing target shares..."
 ];
 
-function razzleError() { return RAZZLE_ERRORS[Math.floor(Math.random() * RAZZLE_ERRORS.length)]; }
-function razzleEmpty() { return RAZZLE_EMPTY[Math.floor(Math.random() * RAZZLE_EMPTY.length)]; }
-function razzleLoading() { return RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)]; }
+function razzleError(panelId) {
+  var pid = panelId || window._currentPanelName;
+  if (pid && typeof getErrorText === 'function') return getErrorText(pid);
+  return RAZZLE_ERRORS[Math.floor(Math.random() * RAZZLE_ERRORS.length)];
+}
+function razzleEmpty(panelId) {
+  var pid = panelId || window._currentPanelName;
+  if (pid && typeof getEmptyText === 'function') return getEmptyText(pid);
+  return RAZZLE_EMPTY[Math.floor(Math.random() * RAZZLE_EMPTY.length)];
+}
+function razzleLoading(panelId) {
+  var pid = panelId || window._currentPanelName;
+  if (pid && typeof getLoadingText === 'function') return getLoadingText(pid);
+  return RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)];
+}
 
 /* ===== Rarity Watermark — Random Character on Screenshots ===== */
 var _wmAgentIcons = [

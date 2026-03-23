@@ -121,6 +121,16 @@
     transform: translate(-2px, -2px);
   }
 
+  .btn-hero:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 2px;
+  }
+
+  .btn-hero:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
   .btn-hero-primary {
     background: var(--orange);
     color: var(--text-on-accent);
@@ -621,7 +631,7 @@
   </ul>
   <div class="nav-auth" id="nav-auth">
     <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
-    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
+    <button type="button" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal();">Sign In</button>
   </div>
 </nav>
 
