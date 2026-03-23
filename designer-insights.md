@@ -970,4 +970,43 @@ The site now has 3 conversion surfaces: home page, pricing page, and agents page
 - Cycle 27: Cross-page dark mode gaps, agents page conversion path, runtime safety
 - Cycle 28: Bureau UX debt, URL state gaps, error differentiation, data freshness
 - Cycle 29: Lab form accessibility, agents page conversion safety, inline style governance
-- **Cycle 30: Warm palette survivors, conversion copy gaps, accessibility consistency**
+- **Cycle 30: WCAG contrast audit, animation governance, performance (sprite loading)**
+
+### Cycle 30 Findings: WCAG Contrast, Animation Governance, Sprite Performance
+
+- **Trade value tier-8 badge: ~3.3:1 contrast (SEVERE)** (DES-317) — P1. `.tv-tier-num.t8` uses `--ink-faint` bg + `--ink-medium` text. The "Cut Bait" tier badge — the one users need to spot to make roster cut decisions — visually merges with its background. Other tiers use strong accent colors.
+- **--ink-light as text color: systemic 3.1:1 contrast across 20+ elements** (DES-318) — P1. `var(--ink-light)` (#8a7565) on `--bg-card` (#f7efe5) fails WCAG AA for normal text. Affects stats, labels, ranks, placeholders, team names throughout the Lab. Root cause: ink-light was designed for borders/dividers, not text.
+- **Character sprites: 32MB loaded eagerly on warroom.js init** (DES-319) — P1. ~30 sprite PNGs (850KB-1.5MB each) loaded via `new Image()` on page load, even if canvas isn't visible. Single largest performance bottleneck on the site. Mobile users must download 32MB before seeing the premium feature.
+- **Transition duration fragmentation: 5 different values** (DES-320) — P2. 59 transition declarations use 0.1s/0.12s/0.15s/0.3s/0.4s for similar interaction types. Same button class uses different durations. Should standardize to 3 tokens.
+- **Progress bar transitions inconsistent** (DES-321) — P2. `.tv-bar-fill` is 0.4s at line 619 but 0.3s at line 1055. 4 of 10 bar fills missing easing function. Same visual element has different animation speeds.
+- **Unused @keyframes nudgeFadeIn** (DES-322) — P3. Defined at styles.css:1631, never referenced. Dead code on every page.
+- **warroom.js STATE_COLORS fallback '#666'** (DES-323) — P2. Cold gray in the Situation Room premium surface. Should be `#8a7565` (ink-light).
+- **Dynasty helper .dh-val.low badge: orange on orange-light = ~2.8:1 contrast** (DES-324) — P2. The "low value" warning badge is the hardest to read. Other value badges pass.
+- **lab-panels.js 3 instances inline border-radius:3px** (DES-325) — P2. Lines 9579, 9580, 9646. Missed by DES-057 (lab.js) and DES-058 (standalone pages).
+- **pricing.html border-radius:13px orphan** (DES-326) — P3. 1px above `--radius` (12px). Close enough to look intentional, but doesn't match any token.
+
+### Things confirmed GOOD in cycle 30:
+- `prefers-reduced-motion: reduce` at styles.css:1637 correctly covers all animations sitewide
+- Zero `will-change` declarations (good — not used where not needed)
+- All 6 @keyframes definitions have matching animation declarations (except nudgeFadeIn)
+- `ease` is the most common timing function — consistent where used
+- Scroll listeners use `{ passive: true }` — still clean from cycle 20
+- No `requestAnimationFrame` abuse — 26 instances all for proper animation scheduling
+- Dark mode body transition (0.3s) is appropriately slower than UI interactions
+- skeleton-pulse animation is smooth and well-timed (1.5s infinite)
+
+### Key Insight: Contrast Is the New Frontier
+Cycles 1-29 systematically addressed CSS consistency, accessibility ARIA, dark mode, conversion copy, and performance. Cycle 30 reveals that COLOR CONTRAST — the most fundamental readability requirement — has systemic gaps:
+- `--ink-light` fails WCAG AA when used as text on light backgrounds (3.1:1)
+- Accent-on-light-accent badges fail (orange on orange-light = 2.8:1)
+- Low-tier indicators are invisible (tier-8 badge)
+
+These aren't edge cases — they affect the Lab's core data display. Fantasy football users scan dense tables. Low-contrast labels on warm sand backgrounds are exactly where readability drops.
+
+### Key Insight: Animation Governance Is Missing
+The design system governs colors (tokens), fonts (3 families), radius (3 values), borders (3px/2px), and shadows (4px 4px 0). But TRANSITIONS have no governance:
+- 5 different durations for similar interactions
+- No CSS custom properties for timing
+- Progress bars animate at different speeds in different panels
+
+This creates a subtle "something is off" feeling that users can sense but can't articulate. Adding 3 transition tokens (fast/base/slow) would unify 59 declarations.
