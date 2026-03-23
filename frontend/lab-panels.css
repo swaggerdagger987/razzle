@@ -83,7 +83,7 @@
   color: var(--ink);
   width: 180px;
 }
-.lp-search::placeholder { color: var(--ink-light); }
+.lp-search::placeholder { color: var(--ink-medium); }
 .lp-ctrl-label {
   font-family: var(--font-mono);
   font-size: 12px;
