@@ -114,12 +114,25 @@ This is the second moat. Sleeper gives Razzle your roster. Reddit gives Razzle y
 | # | Task | Done When |
 |---|------|-----------|
 | 3-11 | Reddit OAuth integration | User connects Reddit account via OAuth on razzle.lol. PRAW handles auth flow. Store Reddit username linked to Razzle account. | User can connect/disconnect Reddit from account settings |
-| 3-12 | Comment history analysis | Pull user's public comment history from fantasy subreddits. Claude (Sonnet) parses for: players discussed, league format mentioned, positions of interest, trade questions asked, tools complained about. | Analysis runs on connect, stores parsed intent profile |
-| 3-13 | Intent profile in Bureau | Connected Reddit user sees an "Intent Profile" card: "Based on your Reddit activity, you've been asking about selling Breece Hall, looking for RB depth, and considering the 1.02 pick." | Intent profile renders with accurate data from their actual Reddit posts |
-| 3-14 | Agent personalization | Agents reference Reddit intent in Situation Room. Bones: "You've been thinking about selling Hall for three weeks. Here's the play." Hawkeye: "You keep asking about breakout WRs — here are 3 your league is sleeping on." | Agent responses reference user's Reddit history naturally |
-| 3-15 | Bot-to-site bridge | When a user summons !razzle in a Reddit thread AND has connected their account, the bot response includes personalized context: "Based on your league, this player would be a good fit at your WR3 spot." | Bot gives personalized responses to connected users |
+| 3-12 | Multi-account support (burners) | Users can connect MULTIPLE Reddit accounts. UI copy: "Add as many accounts as you want. We know the burner exists. Your main. Your 'asking for a friend' account. The one you use when you don't want your leaguemate to see you posting about selling his favorite player. All accounts feed your agents. More context = better analysis. We don't judge. We just read the tape." No usernames displayed publicly, just "3 Reddit accounts connected." | User can connect 2+ accounts, all merge into one intent profile |
+| 3-13 | Comment history analysis | Pull public comment history from ALL connected accounts across fantasy subs. Claude (Sonnet) parses for: players discussed, league format, positions of interest, trade questions, tools complained about. Burner posts are often more honest = richer data. | Merged intent profile from all connected accounts |
+| 3-14 | Reddit Pulse (Atlas) — Elite feature | Atlas continuously ingests community Reddit data and builds consensus per player: bullish/bearish trending, discussion volume, sentiment shifts over time. Every agent gets a "Reddit thinks" layer. Elite briefings include: "Reddit consensus says X. Historical data says Y. The gap is your edge." Atlas cross-references community sentiment against his 2015-2025 database to find where Reddit is wrong. | Elite Situation Room briefings include Reddit Pulse section |
+| 3-15 | Full agent Reddit integration | ALL agents use Reddit data in their domain. Hawkeye: "Reddit is hyping Player X but snap count is flat — narrative, not signal." Bones: "Your leaguemate posted about needing an RB on r/DynastyFF last Tuesday — that's your buyer." Dolphin: "Reddit thinks this injury is minor. Recurrence rate says 40%." Octo: "Reddit values him as WR15. My model says WR8. That's a 7-spot inefficiency." Razzle synthesizes: "Here's what your league thinks, what Reddit thinks, what the data says, and where all three disagree." | All 6 agents reference Reddit data in their responses |
+| 3-16 | Bot-to-site bridge | When a user summons !razzle AND has connected accounts, bot gives personalized context: "Based on your league, this player would be your RB2 and you're thin at the position." Friends see personalized responses, ask "how did it know that?", connect their own accounts. | Personalized bot responses for connected users |
 
-**Why this is nuclear**: No other fantasy tool reads your Reddit activity. Nobody else knows you've been agonizing over a trade for two weeks. The agents don't just analyze your roster — they analyze your MINDSET. That's the level of personalization that makes someone say "this is worth $100/year."
+**Why this is nuclear**: No other fantasy tool reads your Reddit activity. Nobody else knows you've been agonizing over a trade for two weeks across two accounts. The agents don't just analyze your roster — they analyze your MINDSET. The burner account support says "we're dynasty managers too, we get it." That's the level of trust and personalization that makes someone say "this is worth $100/year."
+
+**The flywheel**:
+```
+Reddit data flows in (scraper + user comment histories)
+    -> Atlas builds community consensus per player
+    -> Every agent gets a "Reddit thinks" layer
+    -> Elite users get "Reddit was WRONG about X" insights
+    -> Users share those insights back ON Reddit
+    -> More people discover Razzle from those posts
+    -> More accounts connected (mains AND burners)
+    -> More Reddit data flows in -> Atlas gets smarter -> flywheel accelerates
+```
 
 | # | Task | Done When |
 |---|------|-----------|
