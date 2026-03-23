@@ -1,4 +1,4 @@
-## Designer Insights (updated ticket DES-156)
+## Designer Insights (updated ticket DES-286)
 
 ### Patterns Found
 - Home page layout is mostly polished — chunky borders, correct colors, proper font usage
@@ -67,6 +67,341 @@
 - **lab-panels.css has ZERO :focus-visible rules in 4000+ lines** — systemic accessibility gap. Every interactive element in lab panels relies on browser defaults for keyboard focus indication. Not ticketed yet (too broad for one ticket).
 - **outline:none without :focus-visible pair in 6+ input selectors** across agents.html, breakdown.html, strengths.html, tradefinder.html — each removes focus indicators with no replacement.
 
+### Cycle 20 Findings: Hover Interactions, Contrast Compliance, Platform Adaptation, CSS Governance
+
+- **Home page feature-card, social-card, pricing-card have ZERO :hover states** (DES-207) — DESIGN.md says "hover-lift — interaction should feel physical." Smart chips on the same page HAVE hover. Pricing page plan-cards HAVE hover. The 3 card types on the #1 conversion page are dead flat. Easy fix: 6 lines of CSS.
+- **Demo briefing card text is near-invisible in light mode** (DES-208) — P1. `color: var(--ink-medium)` (#5c4a3d) on `background: var(--bg-ink)` (#1a110a) produces ~2:1 contrast. WCAG AA requires 4.5:1. Works fine in dark mode because `--ink-medium` flips to lighter value. But light mode (the default for first visitors) is broken. These cards sell the Situation Room premium product.
+- **btn-hero:hover shadow unchanged from base** (DES-209) — hover adds translate(-2px, -2px) but shadow stays 4px. DESIGN.md says 6px on hover. The pricing page plan-card gets this right.
+- **Nav user dropdown has zero accessibility** (DES-210) — no aria-expanded, no Escape close, no role="menu". The hamburger menu on the SAME page IS fully accessible. The dropdown is how paid users access subscription management.
+- **font-size:10px — 475 instances across 75 files** (DES-211) — DES-197 covers 9px (141 instances). 10px is even more pervasive and still below the type scale minimum (11px). Heaviest in lab-panels.css (125), lab.html (43), league-intel.html (45).
+- **Feature card icons are platform-dependent emoji** (DES-212) — 📊🧮📸🔗 render differently on Apple/Google/Samsung/Windows. Same class of issue as DES-174 (hero mascot emoji). The first feature section on the home page looks different depending on the visitor's OS.
+- **overflow-x:hidden on html/body at 480px** (DES-213) — index.html and pricing.html both mask horizontal overflow instead of fixing it. If content exceeds viewport width at 375px, users can't scroll to see it.
+- **Safari VoiceOver strips list semantics** (DES-214) — 12 `list-style:none` `<ul>` elements with zero `role="list"`. Includes main nav (75 pages) and pricing plan-features (conversion page). Safari VoiceOver intentionally removes list semantics from unstyled lists.
+- **Search hint "Ctrl+K" doesn't adapt to Mac** (DES-215) — the keyboard handler correctly uses `ctrlKey || metaKey`, but the display text hardcodes "Ctrl+K" on all platforms. Mac users (significant portion of 22-40 tech audience) see the wrong modifier key.
+- **4+ inline-style grids on home page prevent media/dark mode overrides** (DES-216) — feature grid, discovery chips, social proof grid, and mini-screener tabs all use inline `style` attributes. Can't be targeted by `@media` or `[data-theme="dark"]` without `!important`. Same pattern as DES-188 (pricing grid inline) and DES-196 (pricing trial sections).
+
+### Things confirmed GOOD in cycle 20:
+- **Theme-color meta updates dynamically** — `_updateThemeColor()` correctly switches between #ede0cf (sand) and #2d1f14 (espresso) on theme toggle and OS preference change.
+- **OS dark mode preference detection works** — `prefers-color-scheme: dark` media query listener exists and functions correctly when no manual preference is saved.
+- **All external links have `rel="noopener"`** — verified 4/4, no regression from DES-148 fix.
+- **Hamburger mobile menu is fully accessible** — aria-expanded, Escape handler, focus return, inert on main content. Production-quality implementation.
+- **All `<script>` tags on lab.html use `defer`** — lab.js, formulas.js, formula-store.js, charts.js, lab-panels.js all correctly deferred (only app.js remains blocking per DES-167).
+- **Scroll listeners use `{ passive: true }`** — only 2 scroll listeners in JS, both correctly passive.
+- **Zero `window.addEventListener('resize', ...)` in frontend JS** — no resize handlers that could cause jank.
+- **requestAnimationFrame used** (26 instances across 5 files) — proper animation frame scheduling.
+- **Heading hierarchy correct** — index.html (h1 + 6 h2s), pricing.html (h1 + 3 h2s), both well-structured.
+- **CSS variables handle dark mode on home page** — feature-card, social-card, pricing-card all use var() tokens that flip correctly. The demo-card is the only contrast failure.
+- **`escapeHtml()` used consistently** — innerHTML operations properly escape user data.
+
+### Cycle 21 Findings: Conversion Copy, Undefined CSS Classes, Context Continuity
+
+- **"free API key (~$1-3/mo)" is self-contradictory** (DES-217) — P0. Appears on home page Pro card, pricing page Pro card, and pricing explainer chip. "Free" followed by a cost creates cognitive dissonance. Users see hidden costs. The FAQ explains it correctly but the card copy (first thing users read) confuses. This is the highest-priority finding — confusing pricing = lost signups.
+- **Pro feature list differs between home and pricing page** (DES-218) — P1. Home page lists "Bureau deep-dive", "Championship probability" — absent from pricing page. Pricing page lists "Roster grading", "League-contextualized agents" — absent from home page. Users who check both pages get confused. The feature matrix on pricing.html is correct — the card-level summaries disagree.
+- **`.btn` and `.btn-outline` have ZERO CSS definition** (DES-219) — P1. Used on 8 pages. `.btn-primary` IS defined and works. But 4 pages (breakdown, regression, strengths, weeklyleaders) use `class="btn btn-outline"` — neither class exists. Export PNG and retry buttons render as browser defaults. awards.html correctly uses `btn-chunky` — inconsistent pattern.
+- **18+ standalone pages generate headshot <img> without width/height** (DES-220) — P2. CSS classes define dimensions but HTML attributes are missing → CLS. The shared `playerHeadshot()` in app.js DOES include width/height — standalone pages duplicate the pattern without it. DES-200 covered tradefinder.html only.
+- **Duplicate "leaguemates don't know about yet" on home page** (DES-221) — P2. Same phrase at line 731 (subtitle) and 746 (Caveat annotation). Caveat should be a personality aside that ADDS something, not an echo. Reads as copy-paste error.
+- **lab-panels.js search inputs missing aria-label** (DES-222) — P2. `searchWrapHTML()` generates 8+ search inputs with only placeholder text. Standalone pages like breakdown.html correctly use aria-label — the flagship Lab panels don't.
+- **innerHTML += for select option building** (DES-223) — P2. 18 instances in lab-panels.js. Each += forces serialize → concatenate → reparse cycle. Build string first, assign once.
+- **pricing-badge rotate(-2deg) inconsistent with DESIGN.md** (DES-224) — P2. DES-142 fixed rotate(2deg) in styles.css but missed page-specific `<style>` blocks on index.html and pricing.html. The same page has -2deg on save-badge and 3deg on elite badge.
+- **prompts.html + tools.html have zero dark mode page CSS** (DES-225) — P2. Only lab.html and pricing.html have [data-theme="dark"] rules in their page `<style>` blocks. Both pages use CSS vars that auto-flip — needs visual verification.
+- **Mini-screener rows link to generic /lab.html** (DES-226) — P2. All 15 rows `onclick="window.location='/lab.html'"`. User clicks "Patrick Mahomes" → lands on empty screener. Context dropped at peak curiosity. Should link to `/lab.html?search=PlayerName`.
+
+### Things confirmed GOOD in cycle 21:
+- `box-sizing: border-box` universal via `* {}` reset — no box model issues
+- All preconnect hints for Google Fonts present on all 75 pages
+- `razzleError()` personality text used consistently across all error states — no "Error loading data" anywhere
+- Home page mini-screener POS_COLORS use `var()` CSS tokens (not hardcoded hex) — good
+- Error fallback on mini-screener well-handled: "couldn't reach the film room" with link to Screener
+- Pricing FAQ is comprehensive (9 Q&A), well-written, and accurately explains BYOK vs Elite
+- About page uses CSS vars throughout — should auto-flip cleanly in dark mode
+- No `localStorage.getItem` calls without try/catch found in critical paths
+- No duplicate HTML IDs found on home page
+- No `innerHTML +=` outside of select option building (18 instances) — other DOM updates use `innerHTML =`
+
+### Audit Dimension Evolution
+- Cycles 1-7: CSS consistency (borders, radius, shadows, colors, dark mode)
+- Cycle 8: Accessibility (ARIA, focus), SEO (h1, canonical), dark mode exports
+- Cycles 9-11: Deep accessibility (combobox, aria-live, canvas ARIA, tables)
+- Cycles 12-14: Conversion path, agent connective tissue, mobile UX
+- Cycles 15-16: Performance (memory leaks, lazy loading), semantics, brand
+- Cycles 17-18: Mobile touch targets, dark mode native controls, CSS governance
+- Cycles 19-20: Type scale violations, hover interactions, platform adaptation
+- Cycle 21: Conversion COPY — not just visual, but the words that sell
+- **Cycle 22: Auth flow + onboarding friction — the funnel BETWEEN pages**
+- **Cycle 23: Content architecture, copy accuracy & handwritten type scale**
+
+### Key Insight: The Auth Flow Is Unfinished
+Cycle 22 reveals that the auth/onboarding flow — the critical path from "curious visitor" to "paying user" — has fundamental gaps:
+- No password recovery at all (DES-227) — P0 blocker
+- No trial incentive visible at the moment of registration decision (DES-228)
+- Anxiety-inducing copy at the Sleeper connection step (DES-229)
+- Post-checkout copy mismatch undermines trust at the highest-stakes moment (DES-230)
+- No legal/privacy linkage where users provide credentials (DES-231)
+These aren't CSS polish issues. They're the conversion funnel itself — the exact steps a user takes to go from free to paid. Every gap here is a lost user.
+
+### Key Insight: Copy Accuracy Is a Design Issue
+Previous cycles focused on visual and structural quality. Cycle 21 reveals that COPY ACCURACY is equally important:
+- "free API key" + cost = confusion (DES-217)
+- Different features on different pages = mistrust (DES-218)
+- Duplicate phrases = unpolished (DES-221)
+- Context-free links = lost curiosity (DES-226)
+These are "design" issues in the broadest sense — they affect the user's experience at decision points.
+
+### Cycle 22 Findings: Auth Flow, Conversion Friction, Onboarding Polish
+- **No "Forgot Password" flow** (DES-227) — P0. The auth modal has Sign In + Register tabs, ZERO password recovery. Users who forget their password are permanently locked out. Every SaaS product has this. The backend has no /api/auth/reset-password endpoint.
+- **Register form has no trial incentive copy** (DES-228) — P1. The moment a user decides to create an account, there's zero mention of the 7-day Pro trial. Every other surface (home page, pricing, upgrade gate) features it prominently. The register form says: email + password + confirm + Create Account. Add "includes 7-day Pro trial. no credit card."
+- **Sleeper prompt says "permanently"** (DES-229) — P1. "this will permanently link your Sleeper account" creates loss aversion at the critical Sleeper connection step. The behavior (one Sleeper per account) is fine — the copy is punitive.
+- **Welcome modal says "60+ panels" — marketing says 70+** (DES-230) — P1. Post-checkout modal (app.js:774,781) shows "All 60+ analytical panels". DES-156 fixed the same issue in the upgrade gate but missed the welcome modal. Users just paid — copy mismatch at this moment erodes trust.
+- **Auth modal has no Privacy/Terms link** (DES-231) — P1. Users provide email+password with zero legal context. About page HAS a Privacy section (6 bullet points). The auth modal has zero linkage. Stripe compliance also requires accessible terms.
+- **"See full feature comparison" link doesn't anchor to matrix** (DES-232) — P2. Home page link goes to /pricing.html top. The matrix is below 6 sections of content the user already saw.
+- **Pricing FAQ questions are div not h3** (DES-233) — P2. 9 Q&A items look like headings but are plain divs. Screen readers can't navigate to them. Breaks heading hierarchy. Hurts SEO potential for rich FAQ snippets.
+- **Pricing sections missing id for deep links** (DES-234) — P2. Feature matrix, FAQ, and free celebration sections have no id attributes. Can't be linked to from external sources (Reddit, group chats).
+- **About page Contact missing Twitter handle** (DES-235) — P2. Primary distribution channel (Phase 1 roadmap) not discoverable on the page linked from every footer.
+- **Nav dropdown email + caret at 10px** (DES-236) — P2. .nav-dropdown-header and .nav-user-caret both 10px, below the 11px type scale minimum. User identity touchpoint for logged-in users.
+
+### Things confirmed GOOD in cycle 22:
+- Auth modal has proper autocomplete attributes (email, current-password, new-password)
+- Password inputs use type="password" correctly
+- Button disable in handleLogin/handleRegister prevents double-submit
+- Nav dropdown close-on-outside-click works correctly (_dropdownCloseHandler)
+- Auth error messages are generic — no account enumeration ("fumbled the login" not "email not found")
+- Sleeper link error handling includes locked_username case with specific message
+- showWelcomeState() CTA links use correct absolute paths (/agents.html, /lab.html)
+- All target="_blank" links have rel="noopener" — verified in this cycle
+- 404 page has complete meta tags (og:title, og:url, canonical, twitter:image:alt)
+- About page has canonical URL and og:url correctly set
+
+### Cycle 23 Findings: Content Architecture, Copy Accuracy & Handwritten Type Scale
+- **Caveat font used at 14px or below in 97 instances across 44 files** (DES-237) — P2. DESIGN.md minimum is 18px for smaller notes, 24px for annotations. 74 instances at 14px, 23 at 12-13px. Heaviest in league-intel.html (26), standalone watermarks (20+), lab.html (3), agents.html (4). Handwritten personality layer is too small to read.
+- **19 pages use `<div>` instead of `<main>` landmark** (DES-238) — P2. Skip links work (target #main-content) but screen readers don't announce div as landmark. 56 pages are correct; 19 use div. Includes player.html, compare.html, team.html — high-traffic pages.
+- **Year cap 2025 in app.js:1772** (DES-239) — P1. `Math.min(getFullYear(), 2025)` shows wrong year in console Easter egg. One-line fix.
+- **"Social proof" section is feature marketing, not proof** (DES-240) — P1. HTML comment says "Social proof", class is "social-card", h2 references r/DynastyFF — but 3 cards are feature benefits (screener, export, nflverse). `.social-card-user` CSS class exists but unused — social proof was designed but never implemented. Missing credibility signal on #1 conversion page.
+- **"70+ panels (preview)" misleads free users** (DES-241) — P1. pricing.html lines 250, 357. Free users see lock icons, not previews. "Preview" creates false expectation.
+- **Footer has no Twitter link on 73 pages** (DES-242) — P1. Footer says "made for Reddit" + links to about.html. Zero Twitter presence. Phase 1 is Twitter launch — primary distribution channel is invisible from every page. Separate from DES-235 (about page Contact section).
+- **warroom.js:1652 hardcoded "2025 rookie draft class"** (DES-243) — P2. Situation Room sample prompt shows stale year.
+- **Home page CTA buttons have 80+ char inline onclick** (DES-244) — P2. Lines 822, 839. Duplicates logic from app.js startCheckout/handleCheckout. Fragile, untestable. _updateHomeCTAs() at line 921 already manages these buttons via addEventListener — the onclick should use the same pattern.
+- **Easter egg promo codes siloed to pricing.html** (DES-245) — P2. RAZZLEDAZZLE/TIGER/GOAT defined in pricing.html only. app.js validatePromoCode() doesn't know them.
+- **Mini-screener has no loading skeleton** (DES-246) — P2. Single "pulling film..." text line while API loads. Lab screener has proper skeleton. Home page first impression depends on this section looking alive.
+
+### Things confirmed GOOD in cycle 23:
+- Checkout interval format (pro_year/elite_year) is correctly handled by billing.py — NOT a bug
+- Console.log Easter eggs (razzle.help(), tiger ASCII art) are intentional and well-implemented
+- Zero tabindex>0 values anywhere — clean tab order
+- All images have alt attributes (55 intentionally empty for decorative images — correct per WCAG)
+- No duplicate HTML IDs on any page
+- Skip links exist on all 75 pages targeting #main-content
+- _updateHomeCTAs() properly handles paid/trial/expired states with CTA text updates
+- All 56 `<main>` tag pages are correctly structured
+- billing.py docstring explicitly documents interval format: pro_month, pro_year, elite_month, elite_year, ea_*, lifetime_*
+
+### Key Insight: Content Architecture Is a Design Issue
+Cycle 23 reveals that CONTENT STRUCTURE matters as much as visual structure:
+- "Social proof" that isn't social proof is worse than no section at all — it's a missed opportunity AND it reads as dishonest to the r/DynastyFF audience
+- "Preview" copy that doesn't match reality creates trust gaps at conversion decision points
+- Footer social links should match the active distribution channel, not aspirational ones
+- Personality text (Caveat) below its readable size defeats the purpose of having it
+These are all one-line fixes in terms of code, but they're high-impact for user trust and conversion.
+
+### Cycle 24 Findings: Performance UX, Mobile Platform, Conversion Infrastructure
+
+- **Home page mini-screener fetch has no timeout** (DES-247) — P1. The `/api/players` fetch at index.html:1018 has no AbortController or setTimeout. DES-150 covers the Lab screener timeout — this is a DIFFERENT code path on the HOME PAGE. Mobile users on slow connections (62% of traffic) see "pulling film..." indefinitely.
+- **Zero @media print rules in styles.css** (DES-248) — P2. Nav, footer, watermark, dark mode all render when printing. Only cheatsheet.html has print CSS. Noted in cycle 9 audit but never ticketed.
+- **btn-elite:hover shadow 3px — LESS than base 4px** (DES-249) — P2. Pricing page line 166. The Elite CTA ($149.99/yr button) shrinks on hover instead of lifting. Plan cards on the same page correctly do 4px → 6px.
+- **Zero preload hints for critical resources** (DES-250) — P2. No `<link rel="preload">` for styles.css, app.js, or font CSS on any of 75 pages. Browser discovers resources late. Free performance win.
+- **No viewport-fit=cover or safe-area padding** (DES-251) — P2. Zero instances of `env(safe-area-inset-*)` in entire frontend. iPhone notch/Dynamic Island can obscure content in landscape or PWA mode.
+- **JSON-LD missing WebSite+SearchAction** (DES-252) — P2. Only WebApplication schema exists. Missing the schema that enables Google sitelinks search box — free SERP real estate.
+- **Mini-screener fetch omits season parameter** (DES-253) — P2. Home page fetch relies on backend default season. No "2025 Season" label visible. During offseason, unclear which season's data is shown.
+- **Zero private support contact anywhere** (DES-254) — P1. No email, no form, no DM channel besides one Twitter mention on pricing page. Users with billing issues or locked accounts (DES-227) have no support path. Stripe compliance risk.
+- **Pricing interval toggle not in URL** (DES-255) — P2. Monthly/yearly toggle changes prices but URL stays `/pricing.html`. Share link always shows yearly. State lost on refresh.
+- **Mini-screener tabs missing ARIA tablist** (DES-256) — P2. Position filter buttons (ALL/QB/RB/WR/TE) have no role="tablist", no aria-selected, no keyboard arrow navigation. First interactive element visitors encounter.
+
+### Things confirmed GOOD in cycle 24:
+- `apiFetch()` correctly handles 401 — wipes stale token and opens auth modal
+- Theme toggle correctly syncs between desktop and mobile panel
+- Google Fonts use `display=swap` — FOUT handled
+- `sitemap.xml` and `robots.txt` dynamically generated by FastAPI backend — no static file needed
+- Google Fonts preconnect hints present on all pages
+- Mini-screener `.catch()` shows branded error fallback with link to full Screener
+- `_updateHomeCTAs()` correctly handles all tier states (free/trial/paid/expired/elite)
+- Dark mode overlay uses warm espresso rgba — not cold black (DES-140 was fixed)
+
+### Key Insight: Infrastructure Gaps Are Now the Biggest Risk
+Cycle 24 shifts from CSS/visual polish (cycles 1-7), accessibility (8-11), content accuracy (21-23) to INFRASTRUCTURE gaps that affect conversion:
+- No support contact + no forgot password = paying users literally locked out with no recourse
+- No fetch timeout on home page = broken first impression on mobile
+- No preload hints = slower LCP on every page
+- No safe-area padding = content hidden on modern iPhones
+These aren't design issues in the traditional sense — they're the plumbing that converts visitors into users. A beautiful page that loads slowly, breaks on iPhone, and has no support contact still loses customers.
+
+### Audit Dimension Evolution (updated)
+- Cycles 1-7: CSS consistency (borders, radius, shadows, colors, dark mode)
+- Cycle 8: Accessibility (ARIA, focus), SEO (h1, canonical), dark mode exports
+- Cycles 9-11: Deep accessibility (combobox, aria-live, canvas ARIA, tables)
+- Cycles 12-14: Conversion path, agent connective tissue, mobile UX
+- Cycles 15-16: Performance (memory leaks, lazy loading), semantics, brand
+- Cycles 17-18: Mobile touch targets, dark mode native controls, CSS governance
+- Cycles 19-20: Type scale violations, hover interactions, platform adaptation
+- Cycle 21: Conversion COPY — not just visual, but the words that sell
+- Cycle 22: Auth flow + onboarding friction — the funnel BETWEEN pages
+- Cycle 23: Content architecture, copy accuracy & handwritten type scale
+- **Cycle 24: Performance UX, mobile platform, conversion infrastructure**
+- **Cycle 25: Distribution infrastructure — Twitter cards, sharing, OG images, conversion fast paths**
+
+### Cycle 25 Findings: Distribution Infrastructure, Twitter Cards, Sharing, Conversion Fast Paths
+
+- **Zero twitter:site / twitter:creator on all 75 pages** (DES-257) — P1. Phase 1 is Twitter launch. Every shared link creates a Twitter Card but doesn't attribute it to @razzle_lol. Free account attribution on every share — missing from every page. Two meta tags per page, 75 pages.
+- **Pricing page has zero JSON-LD structured data** (DES-258) — P2. Index.html has WebApplication schema. pricing.html (the conversion page) has nothing. 9 FAQ items could enable Google rich FAQ snippets. 3 pricing tiers could enable Product/Offer rich results. Free SERP real estate.
+- **No navigator.share() for mobile sharing** (DES-259) — P2. All share flows use clipboard-only. Mobile users (62%+ of traffic) must manually paste URLs. navigator.share() gives native OS share sheets — one tap instead of four. ~10 call sites across lab.js and compare.js.
+- **Home page has zero aria-live regions for dynamic content** (DES-260) — P2. Mini-screener tbody and CTA buttons update dynamically after page load but don't announce changes to screen readers. The mini-screener is designed to impress — that moment is silent for assistive tech users.
+- **Welcome modal confetti ignores prefers-reduced-motion** (DES-261) — P2. 20 animated particles fire unconditionally after checkout. The `prefersReducedMotion` variable exists at app.js:25 and is used by `_showToast` — but the confetti code doesn't check it. WCAG 2.3.3 violation at the highest-stakes UX moment.
+- **Home page CTAs hardcode yearly interval** (DES-262) — P2. Pro/Elite buttons pass `pro_year`/`elite_year` directly. Users who prefer monthly billing can only get it from pricing.html. The home page (the #1 landing page) forces yearly-only checkout. Add a note: "or $9.99/mo — see pricing".
+- **Only lab.html has a unique OG image — 74 pages share one generic image** (DES-263) — P2. When someone shares /rankings.html, /tradefinder.html, or /pricing.html on Twitter/Reddit, they all show identical previews. No visual differentiation. Create OG images for the 5 highest-traffic pages.
+- **About page Contact section has no direct contact method** (DES-264) — P1. Contact section lists Reddit communities and the domain but no email, no Twitter handle, no DM channel. Users with billing issues or locked accounts have no support path. Stripe compliance risk.
+- **Pricing FAQ is always-expanded — 9 items create excessive mobile scroll** (DES-265) — P2. ~1200px of FAQ content on mobile with no collapse/expand. Replace with `<details>/<summary>` for native accordion behavior, accessibility, and compact layout.
+- **Home page has no fast path for returning visitors to reach pricing** (DES-266) — P2. 6 sections (~4-5 viewport scrolls) before pricing on mobile. No `id="pricing"` anchor on the section. No skip link. Returning visitors who already know the pitch must re-scroll everything.
+
+### Things confirmed GOOD in cycle 25:
+- Toast system (`_showToast`) has `role="alert"` and `aria-live="assertive"` — accessible
+- All `target="_blank"` links use `rel="noopener"` — verified
+- `handleCheckout()` on pricing.html correctly builds interval from toggle state — good
+- `_checkoutInProgress` flag prevents double-click checkout — good
+- Console logs are intentional Easter eggs (razzle.help(), tiger art) or error-only catch blocks — appropriate
+- `escapeHtml()` used consistently across user-facing content injection — no XSS gaps
+- `setInterval` usage is properly cleaned up in warroom.js (`clearInterval` on disconnect/reconnect)
+- All 75 pages load Google Fonts with `display=swap` — FOUT handled
+- Pricing page interval toggle has `role="switch"`, `aria-checked`, and keyboard handler — accessible
+- Pricing page CTA buttons update correctly for trial/paid/expired states via `checkSubscription()`
+
+### Key Insight: Distribution Infrastructure Is the Biggest Gap for Phase 1
+Cycle 25 reveals that the TECHNICAL PLUMBING for distribution — the thing that makes every share, tweet, and link maximally effective — has systemic gaps:
+- No Twitter account attribution on any shared link (DES-257)
+- No native mobile sharing (DES-259)
+- Identical OG images across 74 pages (DES-263)
+- No contact method for users who need help (DES-264)
+- No fast path to pricing for returning visitors (DES-266)
+
+These aren't CSS issues or visual bugs. They're the infrastructure that converts a shared link into a follower, a visitor into a user, and a user into a paying customer. Every gap here is friction in the growth flywheel.
+
+### Cycle 26 Findings: Conversion Copy Precision, Agent Territory, Pricing UX
+
+- **Pricing save-badge reads "save 33%" — Elite actually saves 37%** (DES-267) — P1. The toggle-level badge is the first visual signal of yearly savings value. It never updates from its HTML default. The `updatePricingUI()` function correctly updates each plan card's interval text using `PRICES.pro.save` and `PRICES.elite.save`, but the toggle badge text is static. Also, when monthly is selected, badge hidden via `opacity:0` — screen readers still announce it.
+
+- **Home page Elite card omits "7-day free trial"** (DES-268) — P1. Pro card has "7-day free trial" as highlighted li. Elite card has no mention. Pricing page BOTH cards have trial. Home page inconsistency may signal that trial is Pro-only, pushing Elite-curious users to Pro (lower revenue).
+
+- **Lab sidebar CATEGORY_AGENTS mapping disagrees with HTML icons** (DES-269) — P2. "Trends & Projections" shows dolphin.svg in HTML but JS maps to 'atlas'. 3 categories (College, Teams, Player Tools) have HTML icons but missing from JS mapping entirely. Paid users see mixed agent identity.
+
+- **Footer "made for Reddit" is plain text, not a link** (DES-270) — P2. 73 pages say "made for Reddit" but it's not clickable. About page Contact section has the actual r/DynastyFF link. DES-242 covers missing Twitter link; this is the parallel for Reddit — the community the product is "made for."
+
+- **Pricing card plan names are div not h3** (DES-271) — P2. "Free", "Pro", "Elite" labels on both home and pricing pages use `<div>` instead of `<h3>`. Screen readers can't navigate between plans by heading. Same pattern as DES-233 (FAQ) but on pricing CARDS.
+
+- **Checkout buttons have no visible loading state** (DES-272) — P2. `startCheckout()` sets `_checkoutInProgress = true` but never updates button text or state. 1-3 second gap between click and Stripe redirect feels broken. Auth modal's `handleLogin()` correctly does `btn.disabled = true; btn.textContent = 'signing in...'` — same pattern needed.
+
+- **Home page Pro card says "Bureau deep-dive" but Bureau name never introduced** (DES-273) — P2. Section 4 pitches league connection without naming "the Bureau." First-time visitors reach pricing and see unexplained jargon.
+
+- **Demo briefing card player names may be stale for 2026** (DES-274) — P2. Keenan Allen (34, may retire), Diontae Johnson (off-field issues), "2026 2nd" (date-specific). Demo content is the Situation Room's #1 selling point. Dynasty audience tracks every transaction.
+
+- **Pricing plan cards have no landmark or group role** (DES-275) — P2. Plans-grid div has no `role="group"` or `aria-label`. Individual cards have no `aria-label`. Screen reader users can't efficiently compare plans.
+
+- **Free-celebration section has 8 inline style attributes** (DES-276) — P2. Container alone has 8 CSS properties inline. Forces `!important` in dark mode override. Same pattern as DES-196 (trial banners).
+
+### Things confirmed GOOD in cycle 26:
+- All localStorage operations wrapped in try/catch — no unprotected access
+- XSS properly escaped via `escapeHtml()` on all user-facing innerHTML
+- No hardcoded API URLs — all use `API_BASE` variable or relative paths
+- `setInterval`/`setTimeout` properly cleaned up (warroom.js visibility handler + beforeunload)
+- Watermark function (`drawRazzleWatermark`) is dark-mode aware with correct isDark check
+- Year calculations use dynamic `getFullYear()` across 24+ standalone pages (except DES-239 cap)
+- `PRICES` object correctly defines both savings percentages (Pro 33%, Elite 37%)
+- `handleCheckout()` stores pending checkout intent in sessionStorage for post-auth resume
+- All `target="_blank"` links use `rel="noopener"` — still clean
+- Footer structure identical across all 73 pages with `site-footer-grid` — consistent
+- `_checkoutInProgress` flag prevents double-click checkout — logic is sound
+- Pricing toggle has proper ARIA: `role="switch"`, `aria-checked`, `aria-label`, keyboard handler
+
+### Key Insight: Conversion Copy Precision Matters More Than Visual Polish at This Stage
+Cycle 26 reveals that the site's VISUAL quality is high — the design system is well-followed, dark mode works, accessibility gaps are being systematically closed. The remaining issues are increasingly about COPY PRECISION:
+- Save percentages that understate value (DES-267)
+- Missing trial mention on the highest-value plan (DES-268)
+- Unexplained product terminology (DES-273)
+- Stale demo content (DES-274)
+These are single-word or single-line fixes that have outsized impact on whether a visitor converts. A user who reads "save 33%" when they could save 37% on Elite makes a worse decision. A user who doesn't see "free trial" on Elite might not try the premium tier.
+
+### Audit Dimension Evolution (updated)
+- Cycles 1-7: CSS consistency (borders, radius, shadows, colors, dark mode)
+- Cycle 8: Accessibility (ARIA, focus), SEO (h1, canonical), dark mode exports
+- Cycles 9-11: Deep accessibility (combobox, aria-live, canvas ARIA, tables)
+- Cycles 12-14: Conversion path, agent connective tissue, mobile UX
+- Cycles 15-16: Performance (memory leaks, lazy loading), semantics, brand
+- Cycles 17-18: Mobile touch targets, dark mode native controls, CSS governance
+- Cycles 19-20: Type scale violations, hover interactions, platform adaptation
+- Cycle 21: Conversion COPY — not just visual, but the words that sell
+- Cycle 22: Auth flow + onboarding friction — the funnel BETWEEN pages
+- Cycle 23: Content architecture, copy accuracy & handwritten type scale
+- Cycle 24: Performance UX, mobile platform, conversion infrastructure
+- Cycle 25: Distribution infrastructure — Twitter cards, sharing, OG images
+- **Cycle 26: Conversion copy precision, agent territory, pricing UX**
+- **Cycle 27: Cross-page dark mode gaps, agents page conversion path, runtime safety**
+
+### Cycle 27 Findings: Cross-Page Dark Mode Gaps, Agents Page Conversion, Runtime Safety
+
+- **league-intel.html has ZERO dark mode page CSS** (DES-277) — P1. The Bureau conversion page (7400 lines) has no `[data-theme="dark"]` rules. JS-generated manager profiles, activity feeds, and trade network visualizations use inline styles that can't be targeted by dark mode. DES-187 covers about.html — this is the higher-priority instance because league-intel IS the conversion engine.
+
+- **agents.html has ZERO dark mode page CSS for wrapper UI** (DES-278) — P1. The Situation Room wrapper (pricing cards, feature table, promo code) has zero dark mode overrides. The pixel canvas is correctly always-dark per DESIGN.md, but the surrounding conversion UI isn't.
+
+- **agents.html feature table header flips incorrectly in dark mode** (DES-279) — P2. `background:var(--ink); color:var(--bg)` creates a dark professional header in light mode but a light header in dark mode. Visual intent breaks.
+
+- **agents.html pricing cards use ~40+ inline style properties** (DES-280) — P2. Zero CSS classes. Can't be targeted by `@media` for mobile or `[data-theme="dark"]` for dark mode. Same pattern as DES-276 (pricing) and DES-196 (trial sections) on a different page.
+
+- **agents.html CTA buttons hardcode yearly interval** (DES-281) — P1. Shows "$9.99/month" text but CTA passes `pro_year` to startCheckout. Same pattern as DES-262 (home page), now confirmed on a second conversion surface. Monthly-preference users can only get monthly billing from pricing.html.
+
+- **window.open() without noopener on scatter chart clicks** (DES-282) — P2. 2 instances in explorer.html and lab-panels.js. All `target="_blank"` HTML links correctly use `rel="noopener"`, but JS `window.open()` was missed.
+
+- **draftclass.html missing encodeURIComponent** (DES-283) — P2. Only page that links to `/player/` without URL-encoding the player ID.
+
+- **startCheckout finally block flashes button during redirect** (DES-284) — P2. JS `finally` runs even after `return`. Button briefly shows original text during Stripe redirect on slow networks.
+
+- **404.html zero dark mode page CSS** (DES-285) — P2. Low-traffic but the only error page. Dark mode users who hit a 404 see inverted text-shadow.
+
+- **agents.html "recommended" badge uses color:var(--bg)** (DES-286) — P2. Becomes dark text on orange in dark mode. Should use `var(--text-on-accent)` which pricing.html badges already use correctly.
+
+### Things confirmed GOOD in cycle 27:
+- lab.js has AbortSignal.timeout(15000) on screener fetch — DES-150 addressed with graceful fallback for older browsers
+- Mini-screener table rows have proper `:hover` state (`.mini-table tbody tr:hover { background: var(--bg-warm); }`)
+- Auth modal has correct ARIA: `role="dialog"`, `aria-modal="true"`, `aria-labelledby`, focus management, Escape dismiss
+- Pricing page interval toggle has `role="switch"`, `aria-checked`, keyboard handler — fully accessible
+- `startCheckout` stores pending checkout in sessionStorage for post-auth resume — checkout intent survives auth flow
+- `validatePromoCode` IS in app.js — agents.html can call it (it uses `typeof` guard correctly)
+- All OG meta tags (title, description, image, url, site_name) present on all 6 main pages
+- Mini-screener position filter tabs are proper `<button>` elements (not spans or divs)
+- Home page mini-screener uses CSS vars for position colors (`var(--pos-qb)` etc.) — good design system compliance
+
+### Key Insight: The Agents Page Is an Unreached Conversion Surface
+
+Cycles 21-26 focused heavily on home page and pricing page conversion paths. Cycle 27 reveals that agents.html — the Situation Room — is a THIRD conversion surface that has been almost entirely ignored from a polish perspective:
+- Zero dark mode CSS (DES-278)
+- Massive inline styles (DES-280)
+- Hardcoded yearly interval (DES-281)
+- Broken badge contrast (DES-286)
+- Incorrectly-flipping table header (DES-279)
+
+The Situation Room is where users experience the AI agents in action — the premium product. If they're impressed and click "Get Elite," the conversion UI should be as polished as pricing.html. Right now it's the weakest of the three conversion surfaces.
+
+### Key Insight: Dark Mode CSS Is a Systemic Gap Across Non-Main Pages
+
+DES-187 (about.html) was the first dark mode zero-CSS finding. Cycle 27 adds league-intel.html (DES-277), agents.html (DES-278), and 404.html (DES-285). The pattern: pages built in later phases didn't receive dark mode overrides because CSS var auto-flipping handles ~80% of cases. The remaining 20% (JS-generated inline styles, intentionally-inverted elements, special backgrounds) needs page-level dark mode rules.
+
+### Cycle 19 Findings: Type Scale Violations, Accessibility Blockers, Mobile Defense
+- **font-size:9px appears 141 times across 26 files** (DES-197) — below the DESIGN.md type scale minimum of 11px. Used on position badges, stat labels, and separators throughout the Lab, Trade Analyzer, and panel pages. These are screenshot-visible elements — 9px text is nearly illegible in shared images.
+- **font-weight:bold used 23 times instead of numeric 700** (DES-198) — minor design system governance issue. `bold` = 700 functionally, but breaks grep-based auditing and deviates from the numeric convention used everywhere else.
+- **7 pixel-based line-heights** (DES-199) — lab-panels.css, lab.html, styles.css, tradevalues.html. Pixel line-heights don't scale with user font-size preferences. Small scope, easy fix.
+- **Trade Finder headshot images cause CLS** (DES-200) — 4 `<img>` tags in tradefinder.html lack width/height attributes. Dynamic player results shift layout on mobile as images load. Trade Finder is a conversion tool in Bones' territory.
+- **Pro teaser blur bypassed by keyboard** (DES-201) — P1. `pointer-events:none` blocks mouse but NOT keyboard. Tab key focuses elements behind blurred Pro content in formula-store.js, league-intel.html, and agents.html. This is a conversion gate bypass. Fix: `inert` attribute.
+- **Formula builder row remove is <span onclick>** (DES-202) — no keyboard access, no ARIA, no role="button". The formula builder is a flagship feature marketed on pricing page. Screen reader and keyboard users can't remove formula rows.
+- **white-space:nowrap causes mobile overflow in panels** (DES-203) — 60+ instances in lab-panels.css. Panel table headers and player names set to nowrap push containers wider than mobile viewport, especially inside Lab sidebar iframe.
+- **6 scattered @media breakpoints** (DES-204) — 768px and 480px are well-governed, but 375px (6), 640px (2), 900px (1), and 600px (1) are one-offs. Creates 6 widths to test instead of 3.
+- **Formula builder controls missing aria-label** (DES-205) — 3 controls (stat select, operator select, weight input) all unlabeled. WCAG 1.3.1 and 4.1.2 violation.
+- **No format-detection meta on 75 pages** (DES-206) — mobile Safari auto-links number patterns as phone numbers. Fantasy stat tables full of number patterns (238-1024-7) get blue telephone links.
+
 ### What Matters Most for Conversion
 - **OG image** is seen by more people than the home page itself — it's the preview on every social share (DES-007, FIXED)
 - Home page scroll path must be flawless — every section builds the "this is polished" impression
@@ -85,13 +420,15 @@
 - **Keyboard accessibility** directly affects power users — dynasty managers use keyboard shortcuts (J/K navigation, H for heat, etc.), so missing focus-visible on nav/toggle is inconsistent with the keyboard-first design
 
 ### Issue Categories by Impact
-1. **P1 — Conversion path integrity** — DES-127 (pricing dark mode), DES-128 (feature matrix mismatch), DES-129 (Sign In broken if app.js fails)
-2. **P1 — Visible dark mode bugs** — DES-079 (textColorForBg), DES-080 (Trade Analyzer PNG), DES-127 (pricing page ZERO dark mode rules)
-3. **P1 — SEO fundamentals** — DES-077 (h1 on lab.html), DES-078 (canonical/og:url on 67 pages)
-4. **P2 — Agent connective tissue gaps** — DES-131 (sidebar icons hidden), DES-132 (panels no agent voice), DES-133 (Bureau pricing unclear)
-5. **P2 — Keyboard accessibility** — DES-081 (theme toggle focus), DES-084 (interactive spans role=button), DES-130 (hero CTAs no focus-visible)
-6. **P2 — Accessibility completeness** — DES-082 (nav focus), DES-083 (modal ARIA)
-7. **P3 — Trust signals + mobile polish** — DES-135 (hero :active), DES-136 (Stripe badge), DES-134 (trial messaging)
+1. **P0 — Auth infrastructure** — DES-227 (no forgot password flow)
+2. **P1 — Conversion path integrity** — DES-127 (pricing dark mode), DES-128 (feature matrix mismatch), DES-208 (demo card contrast), DES-228 (no trial incentive at registration), DES-229 (Sleeper "permanently" anxiety), DES-230 (60+ vs 70+ post-checkout), DES-231 (no privacy/terms link)
+3. **P1 — Visible dark mode bugs** — DES-079 (textColorForBg), DES-080 (Trade Analyzer PNG), DES-127 (pricing page ZERO dark mode rules), DES-208 (demo card text invisible in light mode)
+4. **P1 — SEO fundamentals** — DES-077 (h1 on lab.html), DES-078 (canonical/og:url on 67 pages)
+5. **P2 — Deep linking + shareability** — DES-232 (feature comparison anchor), DES-234 (pricing section ids)
+6. **P2 — Keyboard accessibility** — DES-081 (theme toggle focus), DES-084 (interactive spans role=button), DES-130 (hero CTAs no focus-visible), DES-210 (nav dropdown zero ARIA)
+7. **P2 — Heading hierarchy / SEO** — DES-233 (FAQ questions div not h3), DES-235 (about page missing Twitter)
+8. **P2 — Home page polish** — DES-207 (cards no hover-lift), DES-213 (overflow-x:hidden anti-pattern)
+9. **P3 — Design system governance** — DES-211 (10px font-size), DES-236 (nav dropdown 10px), DES-209 (hero shadow), DES-212 (emoji icons), DES-215 (Ctrl+K), DES-216 (inline grids)
 
 ### Cycle 13 Findings: Mobile UX, Dark Mode Polish, Resilience
 - **Zero :active states on .btn-primary and .btn-chunky** (DES-137) — the two most-used button classes in the entire codebase. Every CTA (Get Pro, Add Filter, Export, Apply) gives zero visual feedback when tapped on mobile. `.btn-hero` was fixed by DES-135 but the global classes were missed.
@@ -117,10 +454,98 @@
 - **aging.html legend dot uses hardcoded rgba** (DES-153) — `rgba(138,117,101,0.5)` bypasses CSS variables. Poor contrast in dark mode against espresso background.
 - **pricing.html Twitter link missing rel="noopener"** (DES-148) — only external link in the codebase without this attribute. All others correct.
 
-### Emerging Patterns (updated DES-156)
-- **Conversion path copy accuracy is now a P1 concern** — DES-156 (60+ vs 70+ panels) and DES-128 (feature matrix mismatch) both risk Reddit trust damage. Dynasty managers verify claims. The upgrade gate is seen by EVERY free user who explores locked panels — wrong numbers here are worse than a CSS bug.
-- **The audit has progressed through 6 distinct layers**: (1) Visual consistency (colors, radius, borders, shadows) cycles 1-7, (2) Dark mode completeness cycles 3-8, (3) Accessibility (ARIA, focus, keyboard) cycles 8-11, (4) Conversion funnel integrity cycle 12, (5) Mobile UX + resilience cycle 13, (6) Performance UX + conversion path a11y cycle 14. Each layer reveals the next.
-- **Performance UX is the new frontier** — CLS on the Screener table (DES-149) and missing fetch timeout (DES-150) are first-impression killers. Unlike CSS bugs which are visual-only, these affect perceived quality. A user from Reddit who sees a table jump thinks "unpolished."
+### Cycle 15 Findings: Performance UX, Design System Governance, Conversion Messaging
+- **lab-panels.js has 197 addEventListener with 0 removeEventListener** (DES-157) — the growth engine page accumulates event listeners without cleanup. Extended browsing sessions (exactly how dynasty power users explore) cause progressive slowdown. This is the most impactful performance bug found so far — it affects the page that creates first impressions.
+- **Z-index values are ungoverned — 42 instances across 8 files** (DES-158) — values range from 1 to 99999 with no hierarchy. Six separate elements use z-index:9999. One confetti animation uses 10001, one particle effect uses 99999. When multiple overlays are active (upgrade gate + tooltip + dropdown), stacking order is unpredictable. The upgrade gate is the #1 conversion touchpoint — if it renders behind a tooltip, that's a lost conversion.
+- **Home page free tier pricing card omits "70+ analytical panels"** (DES-159) — pricing.html correctly lists this feature for free tier, but the home page's free tier card doesn't mention panels at all. Since panels are the primary gateway to Pro conversion (seeing locked panels triggers upgrades), hiding their existence on the home page breaks the top of the funnel.
+- **Home page uses <div> instead of <section> for 6+ content blocks** (DES-160) — features, discovery, social proof, Bureau, Situation Room, pricing sections all use generic divs. Screen readers and search crawlers can't identify page landmarks.
+- **5+ buttons in lab.html missing type="button"** (DES-161) — per HTML spec, buttons without type default to type="submit". Currently safe (outside forms) but fragile.
+- **50% of images (19/38) missing loading="lazy"** (DES-162) — 8 agent sidebar icons in lab.html load eagerly on every page load despite being below the fold.
+- **Elite CTA on home page uses inline style instead of .btn-elite class** (DES-163) — pricing.html uses the correct CSS class; home page bypasses it with inline background/font-size/width.
+- **league-intel.html email input missing autocomplete="email"** (DES-164) — the Bureau connection form (conversion engine entry point) doesn't trigger mobile email keyboard or autofill.
+- **40+ JS inline font-size values bypass the design system type scale** (DES-165) — app.js, agent-nudges.js, lab-panels.js hardcode pixel sizes instead of using CSS classes.
+- **warroom.js has 30 addEventListener with 0 removeEventListener** (DES-166) — the Situation Room (premium product) leaks event listeners during AI conversation sessions.
+
+### Things confirmed GOOD in cycle 15:
+- **Zero console.log debug statements** — all 5 instances are intentional developer tools (razzle.help(), razzle.tiger(), razzle.stats()). No debug logging leaking to production. Good discipline.
+- **All target="_blank" links have rel="noopener"** — 4/4 correctly hardened. DES-148 (pricing Twitter link) fix was verified.
+- **No user-scalable=no or maximum-scale=1** — pinch-to-zoom is accessible on all 75 pages.
+- **CSS !important usage is justified** — 36 instances, all for utilities (.hide-mobile), accessibility (prefers-reduced-motion), or error states. No arbitrary !important overriding.
+- **setTimeout/setInterval values are reasonable** — 14 unique delays, all standard UX timing (300ms animations, 2.5s toasts, 8s educational content).
+- **Image formats are appropriate** — SVGs for agent icons, PNGs for pixel art sprites. No unnecessary format bloat.
+
+### Cycle 16 Findings: Web Standards, Privacy, Brand Identity, SEO
+- **app.js (1965 lines) blocks first paint on all 71 pages** (DES-167) — the shared core script has no `defer` attribute. Lab.html correctly defers lab.js/formulas.js/charts.js/lab-panels.js, but app.js (loaded on every page) is never deferred. This is the highest-leverage performance fix: one attribute, 71 pages faster.
+- **29+ player headshot images use alt="" (decorative)** (DES-168) — across 25+ panel pages, player identity images are marked as decorative. Screen readers skip them entirely. Pattern: `<img alt="" ...>` in JS-generated innerHTML. Player name should be in alt text.
+- **signOut() leaks 5 user-generated localStorage keys** (DES-169) — saved_views, custom_scoring, my_roster, pinned_cache, col_widths all persist after logout. On shared computers, next user sees previous user's data. signOut() clears 18 keys but misses these 5.
+- **31+ footer links cause redirect roundtrip** (DES-170) — home page footer links to standalone HTML pages that immediately redirect to `/lab.html?panel=X`. Users clicking footer links get an unnecessary page load. Should link directly to Lab panel URLs.
+- **75 pages use `<a href="#">` for Sign In, only index.html uses `<button>`** (DES-171) — systemic semantic gap. Screen readers announce "link" instead of "button". If JS fails, clicking jumps to page top.
+- **No web app manifest or apple-touch-icon** (DES-172) — zero manifest.json, zero apple-touch-icon. Site can't be installed as PWA. iOS home screen shows screenshot instead of tiger.
+- **10+ fetch calls silently swallow errors** (DES-173) — `.catch(function(){})` on formula sync, watchlist sync, analytics, saved views. User's action appears to succeed but nothing happened.
+- **Hero mascot uses platform-dependent emoji instead of designed SVG** (DES-174) — the first visual impression uses 🐯 which renders differently on Apple/Google/Samsung/Windows. The designed `razzle.svg` exists but isn't used in the hero.
+- **Pricing FAQ has no FAQPage JSON-LD** (DES-175) — 9 Q&A pairs with no structured data. Missing free SERP real estate on the conversion page.
+- **Pricing FAQ uses 100% inline styles** (DES-176) — 36 inline style strings, zero CSS classes. Can't media-query resize for mobile. 12px mono text on 375px screens is at the edge of readability.
+
+### Things confirmed GOOD in cycle 16:
+- **Zero eval() in the entire frontend** — no dynamic code execution. Clean.
+- **Zero document.write()** — no DOM mutation anti-patterns. Clean.
+- **Auth modal inputs have proper autocomplete attributes** — email, current-password, new-password all correct.
+- **All 75 pages have meta description** — SEO fundamentals complete.
+- **All scroll/touch listeners use { passive: true }** — no scroll jank from non-passive listeners.
+- **Clipboard API usage is correct** — navigator.clipboard.writeText with feature detection and try/catch fallback throughout.
+
+### Cycle 17 Findings: Performance UX, Mobile Touch Targets, Dark Mode Native, Accessibility Polish
+- **Google Fonts CSS render-blocks first paint on ALL 75 pages** (DES-177) — `<link rel="stylesheet" href="fonts.googleapis.com...">` prevents any paint until the external CSS downloads. `display=swap` prevents invisible text (FOIT) but the CSS file itself blocks rendering. On slow mobile connections (62% of Twitter/Reddit traffic), this means 200-800ms of blank page. Fix: switch to `media="print" onload="this.media='all'"` non-blocking pattern. One pattern change, 75 pages faster.
+- **8 selectors use `transition: all` instead of specific properties** (DES-178) — forces browser to track all CSS properties for animation, including layout-triggering ones (width, height, margin). Affects nav links, chips, badges, buttons — elements that appear on every page.
+- **78 dead `-webkit-overflow-scrolling: touch` instances across 40 files** (DES-179) — deprecated since iOS 13 (September 2019). Zero effect on any current browser. Heaviest in lab-panels.js (31 instances). Signals stale codebase to source-view inspectors.
+- **Touch targets 24px, below 44px WCAG minimum** (DES-180) — `.nav-search-hint`, `.chip`, `.pos-badge`, `.ccp-chip-rm`, `.rbld-remove-btn` all set `min-height: 24px`. These are CORE screener interactions (position filter, remove filter, search hint). `.auth-modal-close` correctly uses `min-height: 44px` — the pattern exists but wasn't propagated.
+- **6 number inputs show browser-default spinners** (DES-181) — only `.filter-input-sm` in lab.html hides WebKit spinners. 6 other `type="number"` inputs (roster count, formula weights, filter value, etc.) show Chrome/Firefox/Safari native up/down arrows. Breaks the hand-crafted aesthetic.
+- **Zero `scroll-margin-top` / `scroll-padding-top` in entire CSS** (DES-182) — sticky nav (~56px) covers content when navigating to anchor targets. Home page "See what's inside" → `#features` and skip link → `#main-content` both land behind the nav.
+- **No `color-scheme` property** (DES-183) — in dark mode, browser-native UI elements (scrollbars, select dropdown menus, checkbox controls, autofill backgrounds) remain light-themed. 2-line CSS fix completes the dark mode experience.
+- **Zero `aria-current="page"` on active nav links** (DES-184) — nav uses `.active` class for visual indication but screen readers can't identify the current page. All 75 pages have proper `<nav aria-label>` landmarks — this completes the navigation accessibility story.
+- **`prefers-reduced-motion` doesn't disable hover-lift transforms** (DES-185) — transitions become instant (0.01ms) but elements still shift position via `translate(-1px, -1px)`. Instant position jumps can be more disorienting than animated ones for users with vestibular disorders.
+- **Home page `#features` anchor has no smooth scroll** (DES-186) — the secondary hero CTA causes an instant jump. Zero `scroll-behavior: smooth` anywhere in the CSS. `prefers-reduced-motion` already overrides to `auto` — just need to set the smooth default.
+
+### Things confirmed GOOD in cycle 17:
+- **All pages have `lang="en"`** — no missing language declarations.
+- **All pages use `<nav>` with `aria-label="Main navigation"`** — nav landmarks complete.
+- **`outline: none` is always paired with `:focus-visible` replacement** — auth inputs, chunky inputs, selects, cmd palette all correct.
+- **`.topnav` uses `position: sticky`** (not `fixed`) — proper document flow, no content hidden behind nav by default.
+- **API is same-origin** (`window.location.origin`) — no preconnect needed for API calls.
+- **`display=swap` prevents FOIT** — fonts swap in correctly, just the CSS load that blocks.
+- **Preconnect hints for Google Fonts are in place** — DNS+TCP+TLS starts early.
+- **`aria-live` regions are widespread** — 40+ files have proper `role="status" aria-live="polite"` on dynamic content areas.
+- **`aria-describedby` is used on all form inputs** — auth, formula publish, Sleeper connect, pricing promo all link to error regions.
+
+### Cycle 18 Findings: Dark Mode Gaps, Mobile Conversion, Accessibility Inputs, Design System Governance
+- **about.html has ZERO dark mode CSS overrides** (DES-187) — every other main page has 15-20+ dark mode rules. This is the trust/evaluation page where users read about privacy and data handling. Completely broken in dark mode.
+- **pricing.html upgrade grid has inline style defeating CSS breakpoints** (DES-188) — `style="grid-template-columns:1fr 1fr;"` overrides the responsive CSS. At 375px, two pricing cards side by side are ~170px each — too narrow for readable conversion copy.
+- **Home mini-screener sortable `<th onclick>` has zero keyboard support** (DES-189) — no tabindex, no role="button", no aria-sort. This is the front-door demo. DES-109 covers the tr-click accessibility; this covers the th-sort accessibility. Different elements, same page.
+- **7+ search inputs use placeholder as sole accessible label** (DES-190) — lab.html column picker, trade analyzer give/get, trade value comp A/B, auction.html search, tools.html search. The aria-label pattern exists in 12+ other files (breakdown, career, gamelog, etc.) but wasn't propagated everywhere.
+- **Home page conversion CTAs use 120-char inline onclick handlers** (DES-191) — both Get Pro and Get Elite buttons have massive inline JS that checks localStorage, sessionStorage, dispatches to openAuthModal or startCheckout. pricing.html uses clean `onclick="handleCheckout('pro')"` — the correct pattern exists but wasn't used on the home page.
+- **Hero mascot drop-shadow is 3px not DESIGN.md's 4px** (DES-192) — also uses hardcoded rgba that doesn't flip in dark mode.
+- **Two font-size:15px in styles.css** (DES-193) — .input-chunky::placeholder (line 943) and .nav-search-hint (line 1184). Neither 15px value is on the type scale.
+- **Footer across 73 pages uses flat div groups** (DES-195) — no nav landmarks, no list structure, heading divs instead of h3. Search engines and screen readers can't identify footer navigation.
+- **pricing.html trial/celebration/upgrade sections use 8+ massive inline-styled divs** (DES-196) — can't be targeted by dark mode CSS or mobile media queries.
+
+### Things confirmed GOOD in cycle 18:
+- **Zero cursor:pointer on non-interactive elements** — all 17 instances are on buttons, links, or interactive divs with role attributes.
+- **Zero opacity:0 / visibility:hidden traps** — no hidden elements stealing focus or space.
+- **Zero tabindex > 0** — natural tab order preserved everywhere. One tabindex="0" on warroom canvas is correct.
+- **Z-index hierarchy is clear** — watermark(1) < general(1000) < cmd-palette(9000) < modals(9998-9999). No chaos.
+- **All innerHTML user data properly escaped** — escapeHtml() used on all user-generated content in 593 innerHTML operations.
+- **setInterval properly cleaned up** — warroom.js has clearInterval in visibility change handler. No leaks.
+- **All console.error/warn are legitimate** — 21 instances, all for API failures and render errors, no sensitive data.
+- **XSS risk is LOW** — no eval(), no document.write(), all user input escaped, no unvalidated innerHTML.
+
+### Emerging Patterns (updated DES-196)
+- **Conversion path copy accuracy is now a P1 concern** — DES-156 (upgrade gate 60+ vs 70+), DES-159 (home page omits 70+ panels), and DES-128 (feature matrix mismatch) all risk Reddit trust damage. Dynasty managers verify claims. Three surfaces now have inconsistent panel messaging.
+- **about.html is the forgotten page** — every other main page has dark mode, semantic structure improvements, accessibility fixes. about.html has none of these. It was likely built early and never revisited.
+- **Inline styles on conversion pages are a systemic problem** — pricing.html has DES-176 (FAQ), DES-196 (trial/celebration), and DES-188 (grid override). Home page has DES-163 (Elite CTA) and DES-191 (onclick handlers). These inline styles prevent dark mode and mobile CSS from working.
+- **The "pattern exists but wasn't propagated" theme is strengthening** — aria-label exists on 12+ inputs but not 7+ others. handleCheckout() exists on pricing but not home. About.html dark mode skipped while 5 other pages got it. The codebase's quality ceiling is high — it just has consistency gaps.
+- **The audit has progressed through 9 distinct layers**: (1) Visual consistency (colors, radius, borders, shadows) cycles 1-7, (2) Dark mode completeness cycles 3-8, (3) Accessibility (ARIA, focus, keyboard) cycles 8-11, (4) Conversion funnel integrity cycle 12, (5) Mobile UX + resilience cycle 13, (6) Performance UX + conversion path a11y cycle 14, (7) Design system governance + memory management cycle 15, (8) Web standards, privacy, brand identity, SEO cycle 16, (9) Performance UX deep (render-blocking, transitions), mobile touch targets, dark mode native controls, accessibility polish cycle 17. Each layer reveals the next.
+- **Memory leaks are the deepest performance layer yet** — DES-149 (CLS) and DES-150 (fetch timeout) were visible performance issues. DES-157 (197 listeners) and DES-166 (30 listeners) are invisible ones — they degrade over time during extended sessions. Dynasty power users are the exact users who have extended sessions. This is the first time the audit has gone below the visible layer into runtime behavior.
+- **Z-index governance is a design system gap, not a bug** — The 42 scattered z-index values aren't individually wrong. They work by accident. But the system has no hierarchy, so any new modal or overlay is a stacking lottery. Defining CSS custom properties for z-index tiers is a platform fix that prevents future bugs.
 - **Dialog accessibility is systematically missing on dynamic modals** — the upgrade gate (DES-154) joins the earlier DES-083 finding (5 dynamic modals missing role="dialog"). The pattern: static HTML modals (lab.html auth) are correct, JS-created overlays are not. The mobile nav overlay (DES-155) is the same pattern — excellent visual implementation, missing keyboard/screen reader layer.
 - **The "dead control" pattern** — page size dropdown (DES-151) is a control that exists, renders correctly, has a working handler, but offers only one choice. Similar to sidebar cat-icons (DES-131) which exist but are display:none. Multiple built features sitting unused.
 - **Scroll UX is asymmetric** — Lab has a well-designed scroll-to-top button; the 7400-line Bureau page has none. The home page and pricing page also lack scroll helpers. The pattern exists in code but wasn't propagated.
@@ -134,6 +559,13 @@
 - **Agent connective tissue is 60% built, 40% invisible** — sidebar icons CSS-hidden, lab-panels.js never calls agent-voiced functions, Bureau has zero agent presence. (Unchanged from cycle 12.)
 - **Canvas hardcoded hex remains** — ~30 instances. DES-069 (getCanvasTheme accent colors) is still the keystone fix.
 - **Feature matrix contradicts product spec** — "70+ analytical panels" marked ✓ for free tier, but NORTH_STAR says panels are behind lock icons for free users. This is a trust landmine for Reddit.
+- **Web fundamentals gap: the "last 10%"** — The visual design and feature set are impressive. But web standards fundamentals (defer scripts, semantic buttons, PWA manifest, alt text, structured data) are the "last 10%" that separates a project from a production product. These are invisible to most users but visible to Google, screen readers, and savvy Reddit users who inspect source.
+- **Privacy on shared computers** — signOut() clearing 18 keys but missing 5 user-generated stores is the kind of bug that produces "I logged out but my roommate saw my roster" posts. Low frequency, high damage when it happens.
+- **Render-blocking fonts are the #1 remaining performance lever** — DES-167 (app.js defer) was the most impactful script performance fix. DES-177 (non-blocking Google Fonts) is the CSS equivalent. Together they eliminate the two biggest first-paint blockers. After these two, the main render path is: HTML → styles.css → paint. That's optimal.
+- **Touch target compliance follows a predictable pattern** — desktop-first elements (24px badges, 24px chips) work fine with a mouse cursor. On mobile, they're miss-tap magnets. The fix pattern is consistent: add mobile media query `min-height: 44px`. The auth modal close button is the reference implementation.
+- **Dark mode is 95% complete, 5% native** — All custom-styled elements correctly use CSS variables. The remaining 5% is browser-native controls (scrollbars, select menus, autofill) that need `color-scheme: dark` to adapt. This is a 2-line platform fix.
+- **Dead CSS accumulation** — 78 instances of `-webkit-overflow-scrolling: touch` represent 7 years of dead code. Not harmful, but a signal. In a codebase viewed by the target audience (tech-comfortable dynasty managers), dead code patterns reduce trust.
+- **The `<a href="#">` pattern is a codebase-wide infection** — index.html was built correctly (button). All 75 other pages were built from a different template that used the `<a href="#">` pattern. This is a template divergence problem, not a one-off mistake.
 - **Conversion funnel has fragile JS dependencies** — Sign In button, pricing CTAs, and mini-screener all use inline onclick handlers that fail silently if app.js doesn't load. Ad blockers, CDN failures, or slow networks = dead buttons.
 - **Things that are GOOD and should be preserved:**
   - Zero rogue font families (confirmed cycle 8)
