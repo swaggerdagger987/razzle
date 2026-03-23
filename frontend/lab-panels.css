@@ -2951,7 +2951,7 @@
   background: var(--bg-card);
 }
 .ccp-chip-dot { width: 8px; height: 8px; border-radius: 50%; }
-.ccp-chip-rm { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--ink-light); padding: 0 2px; }
+.ccp-chip-rm { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--ink-light); padding: 0 2px; min-width: 24px; min-height: 24px; display: inline-flex; align-items: center; justify-content: center; }
 .ccp-chip-rm:hover { color: var(--ink); }
 
 .ccp-chart-card {
@@ -3516,7 +3516,7 @@
 .rbld-player-vorp { font-size: 11px; }
 .rbld-player-vorp.positive { color: var(--semantic-green); }
 .rbld-player-vorp.negative { color: var(--semantic-red); }
-.rbld-remove-btn { background: none; border: none; color: var(--red); font-size: 18px; cursor: pointer; padding: 0 4px; }
+.rbld-remove-btn { background: none; border: none; color: var(--red); font-size: 18px; cursor: pointer; padding: 0 4px; min-width: 24px; min-height: 24px; display: inline-flex; align-items: center; justify-content: center; }
 .rbld-clear-btn { font-family: var(--font-mono); font-size: 12px; padding: 6px 14px; border: 2px solid var(--ink); border-radius: 8px; background: var(--bg-card); cursor: pointer; margin-top: 10px; }
 .rbld-clear-btn:hover { background: var(--bg-warm); }
 .rbld-grade-empty { font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); text-align: center; padding: 40px 20px; }
