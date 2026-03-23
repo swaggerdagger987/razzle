@@ -1,5 +1,5 @@
 {
-  "last_ticket_id": 126,
+  "last_ticket_id": 136,
   "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
@@ -314,6 +314,17 @@
     "All selects have aria-label — no unlabeled dropdowns found",
     "All 75 pages have <nav aria-label='Main navigation'> — nav landmarks complete",
     "All 75 pages use display=swap for Google Fonts — no FOIT issues",
-    "Good disciplines STILL holding: zero rogue fonts, zero 'Loading...' text, zero cold grays, zero blue-black ink, zero color:white, zero 1px borders, all pages have lang=en, all pages have <nav>, all pages have <footer>"
+    "Good disciplines STILL holding: zero rogue fonts, zero 'Loading...' text, zero cold grays, zero blue-black ink, zero color:white, zero 1px borders, all pages have lang=en, all pages have <nav>, all pages have <footer>",
+    "pricing.html (dark mode CSS audit — ZERO [data-theme=dark] rules) (cycle 12)",
+    "pricing.html (feature matrix — Bureau row not split free/Pro, 70+ panels ✓ for free tier) (cycle 12)",
+    "index.html (Sign In button — <a href=#> with inline onclick) (cycle 12)",
+    "index.html (hero CTAs — no :focus-visible, no :active rules) (cycle 12)",
+    "lab.html (sidebar cat-icon — 12 spans ALL display:none, agent icons hidden) (cycle 12)",
+    "lab-panels.js (agent-voiced loading/empty/error text — ZERO calls to getLoadingText/getEmptyText/getErrorText) (cycle 12)",
+    "agent-config.js (agent territory + agent-voiced functions — all defined, partially consumed) (cycle 12)",
+    "pricing.html (trial messaging — only in Pro card list item and FAQ, not in hero) (cycle 12)",
+    "pricing.html (no Stripe trust badge near checkout CTAs) (cycle 12)",
+    "DES-127 through DES-136 are cycle 12 tickets — CONVERSION PATH + AGENT CONNECTIVE TISSUE + PRICING TRUST",
+    "Cycle 12 theme: conversion funnel integrity — pricing page dark mode, feature matrix accuracy, agent connective tissue visibility, trust signals, CTA accessibility"
   ]
 }

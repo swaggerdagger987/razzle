@@ -1,4 +1,4 @@
-## Designer Insights (updated ticket DES-096)
+## Designer Insights (updated ticket DES-136)
 
 ### Patterns Found
 - Home page layout is mostly polished — chunky borders, correct colors, proper font usage
@@ -85,23 +85,42 @@
 - **Keyboard accessibility** directly affects power users — dynasty managers use keyboard shortcuts (J/K navigation, H for heat, etc.), so missing focus-visible on nav/toggle is inconsistent with the keyboard-first design
 
 ### Issue Categories by Impact
-1. **P1 — Visible dark mode bugs** — DES-079 (textColorForBg), DES-080 (Trade Analyzer PNG)
-2. **P1 — SEO fundamentals** — DES-077 (h1 on lab.html), DES-078 (canonical/og:url on 67 pages)
-3. **P1 — Keyboard accessibility** — DES-081 (theme toggle focus), DES-084 (interactive spans role=button)
-4. **P2 — Accessibility completeness** — DES-082 (nav focus), DES-083 (modal ARIA)
-5. **P2 — Canvas dark mode consistency** — DES-085 (headshot hex), DES-086 (comp-finder PNG)
+1. **P1 — Conversion path integrity** — DES-127 (pricing dark mode), DES-128 (feature matrix mismatch), DES-129 (Sign In broken if app.js fails)
+2. **P1 — Visible dark mode bugs** — DES-079 (textColorForBg), DES-080 (Trade Analyzer PNG), DES-127 (pricing page ZERO dark mode rules)
+3. **P1 — SEO fundamentals** — DES-077 (h1 on lab.html), DES-078 (canonical/og:url on 67 pages)
+4. **P2 — Agent connective tissue gaps** — DES-131 (sidebar icons hidden), DES-132 (panels no agent voice), DES-133 (Bureau pricing unclear)
+5. **P2 — Keyboard accessibility** — DES-081 (theme toggle focus), DES-084 (interactive spans role=button), DES-130 (hero CTAs no focus-visible)
+6. **P2 — Accessibility completeness** — DES-082 (nav focus), DES-083 (modal ARIA)
+7. **P3 — Trust signals + mobile polish** — DES-135 (hero :active), DES-136 (Stripe badge), DES-134 (trial messaging)
 
-### Emerging Patterns (updated DES-086)
+### Emerging Patterns (updated DES-136)
 - **Canvas hardcoded hex is now the dominant remaining design system issue** — ~30 hex color references in canvas code that could read from CSS vars if getCanvasTheme had accent properties (DES-069 is still the keystone).
 - **Accessibility is the next major frontier** — cycles 1-7 focused on visual consistency (colors, radius, borders, shadows). Cycle 8 reveals that ARIA attributes and keyboard focus are systematically under-implemented.
 - **SEO was never audited before** — 67 pages missing canonical URLs is a structural gap that predates all design QA work.
 - **PNG export dark mode is a pattern** — DES-080, DES-086, and several more (roster builder, boom/bust) all hardcode light-mode colors in canvas export functions. After DES-069 adds accent colors to the theme object, these become simple replacements.
 - **The codebase has matured significantly** — color:white is zero, sub-minimum radius is down to intentional bar fills, no rogue fonts, no generic loading text, no cold grays.
 - **DRY violations in lab.js** — tier/grade colors defined 6+ times, some with inconsistent values. posColors was consolidated (DES-062) — same pattern needed for tier/grade.
+- **Agent connective tissue is 60% built, 40% invisible** — agent-config.js is complete, SVGs exist, loading/empty/error text functions are defined, panel headers show agent attribution, elite nudges work. BUT: sidebar icons are CSS-hidden (display:none), lab-panels.js never calls the agent-voiced functions, Bureau has zero agent presence. Layer 1 is partially wired. Layer 2 is incomplete. Layer 3 is done.
+- **Pricing page is the weakest page for dark mode** — literally zero dark mode CSS rules. Every other main page has dark mode support. This is the #1 conversion page.
+- **Feature matrix contradicts product spec** — "70+ analytical panels" marked ✓ for free tier, but NORTH_STAR says panels are behind lock icons for free users. This is a trust landmine for Reddit.
+- **Conversion funnel has fragile JS dependencies** — Sign In button, pricing CTAs, and mini-screener all use inline onclick handlers that fail silently if app.js doesn't load. Ad blockers, CDN failures, or slow networks = dead buttons.
 - **Things that are GOOD and should be preserved:**
   - Zero rogue font families (confirmed cycle 8)
   - Zero generic "Loading..." text (confirmed cycle 8)
   - Zero gradients in CSS classes (2 inline cases were fixed)
+  - Agent watermark rotation works (6 SVG icons on screenshot exports)
+  - Agent easter egg peek works (1-in-7 chance page-specific agent)
+  - Agent panel header attribution works (icon + name, Caveat font)
+  - Agent one-liners work for Pro users (contextual quips from getOneLiner)
+  - Elite nudge system is complete (11 nudges, session cap, dismiss persistence)
+
+### Cycle 12 Findings: Conversion Path + Agent Connective Tissue
+- **Pricing page dark mode is the single highest-priority fix** — the #1 conversion page has NO dark mode rules. Zero. Compare this to index.html and lab.html which both have dark mode.
+- **Feature matrix accuracy is a Reddit trust issue** — dynasty managers on r/DynastyFF verify everything. If the pricing page says free=70+ panels but the product locks them, that's one angry post from "bait-and-switch this tool."
+- **Agent sidebar icons are built but hidden** — the HTML elements exist, the SVGs exist, the territory config exists. Someone set display:none on 12 cat-icon spans and it was never reversed. This is a 1-line CSS fix to unhide + a mapping update to use agent SVGs instead of emoji.
+- **lab-panels.js is the biggest agent personality gap** — 4000+ lines of panel rendering code that never calls getLoadingText/getEmptyText/getErrorText. The main screener uses agent voice; the panels don't. This is where Layer 1 (free personality) breaks down.
+- **Trial messaging is the lowest-hanging conversion fruit** — "7-day free trial, no credit card" is buried in a feature list bullet and FAQ. Moving it to the pricing hero or above CTAs is a copy change with high conversion impact.
+- **Audit scope is shifting from CSS compliance to product integrity** — cycles 1-7 focused on colors, radius, borders, shadows. Cycles 8-11 expanded to accessibility and SEO. Cycle 12 reaches the conversion funnel itself: does the pricing page accurately represent the product? Do the CTAs work under adverse conditions? Is the trust-building stack complete?
   - Zero cold grays (confirmed cycle 8)
   - Zero blue-black ink colors (confirmed cycle 8)
   - Zero color:white/color:#fff in lab.js or HTML pages (confirmed cycle 8)
