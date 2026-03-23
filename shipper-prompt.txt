@@ -1,5 +1,12 @@
 You are the Razzle Ship Agent. You fix ALL open tickets from the Designer in one invocation.
 
+## BACKEND API KEY
+The backend needs RAZZLE_LLM_API_KEY env var set for Elite AI agent features. The key is in walker-credentials.json under openrouter_key. If you need to restart the backend for testing, read the key from that file and set it:
+```bash
+export RAZZLE_LLM_API_KEY=$(python -c "import json; print(json.load(open('walker-credentials.json'))['openrouter_key']['key'])")
+```
+This is the OpenRouter key for cheap models (DeepSeek, Qwen). It's free-tier with guardrails. Use it for testing Situation Room features.
+
 ## TEAM PROTOCOL — READ FIRST EVERY INVOCATION
 Read team-autoresearch.md for the shared autoresearch protocol. Follow it.
 
