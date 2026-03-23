@@ -410,3 +410,23 @@
 [2026-03-23 11:44:04] Posted successfully. 6 drafts remaining in queue.
 [2026-03-23 11:44:04] Next post at ~12:44 (1.0h from now).
 
+[2026-03-23 12:44:04] Queue health: 6 pending, 6 ready to post.
+[2026-03-23 12:44:04] WARNING: Only 6 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 12:44:04] Posting: 2026-04-13_07-00_evidence_jeudy_efficiency.md
+  Uploaded media: 2036121819350970368
+  Posted tweet: 2036121824069550199
+  Logged to results.tsv
+  Moved to posted/: 2026-04-13_07-00_evidence_jeudy_efficiency.md
+[2026-03-23 12:44:07] Posted successfully. 5 drafts remaining in queue.
+[2026-03-23 12:44:07] Next post at ~13:44 (1.0h from now).
+
+[2026-03-23 13:44:07] Queue health: 5 pending, 5 ready to post.
+[2026-03-23 13:44:07] WARNING: Only 5 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 13:44:07] Posting: 2026-04-16_07-00_evidence_jennings_breakout.md
+  Uploaded media: 2036136929553686531
+  Posted tweet: 2036136934318248330
+  Logged to results.tsv
+  Moved to posted/: 2026-04-16_07-00_evidence_jennings_breakout.md
+[2026-03-23 13:44:09] Posted successfully. 4 drafts remaining in queue.
+[2026-03-23 13:44:09] Next post at ~14:44 (1.0h from now).
+

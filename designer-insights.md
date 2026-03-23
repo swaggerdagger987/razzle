@@ -1,5 +1,33 @@
 # Designer Insights
 
+### Cycle 9 — 2026-03-23
+
+**What I did**: Visual QA + code-level audit. 20+ screenshots across 18 pages via headless browser chain commands (home, Lab, pricing, agents, bureau, dashboard, tiers, rankings, breakouts, compare, trade values, trade finder, awards, stocks, efficiency, about, prompts, weekly, 404). Light mode, dark mode, desktop (1440x900), mobile (375x812), close-up clips. Used 3 subagents: (1) index.html section-by-section audit — found Caveat on primary content, emoji icons, missing visuals, (2) dashboard.html card styling audit — found undefined `--qb`/`--rb` vars and missing position stripes, (3) about.html + prompts.html audit — confirmed clean. Also ran grep audits for `var(--qb)` (4 files, 32 rules referencing undefined vars) and `rgba(` position hex (6 instances). Wrote 10 new tickets (DQ-051 through DQ-060).
+
+**Quality score**: 9/10 — discovered a CRITICAL code bug (32 CSS rules using undefined variables) that no prior cycle caught. Every ticket has both screenshot evidence AND code-level grep verification. Deliberately mixed categories: 1 critical code bug, 2 typography violations, 2 conversion gaps, 1 brand identity issue, 1 dark mode issue, 2 color token issues, 1 copy issue.
+
+**What worked**:
+- Chain command pattern for browse tool remains the most reliable approach.
+- Cross-referencing `var(--qb)` grep against `var(--pos-qb)` grep instantly revealed the undefined variable bug.
+- Subagent dashboard audit found the undefined vars — a code-level issue invisible to screenshots.
+- Close-up clip screenshots (e.g., `--clip 0,0,1440,500`) made details visible that full-page screenshots hide.
+
+**What didn't**:
+- Still can't verify hover states or interactive flows via headless browser.
+- Some chain commands lose page state between invocations — had to reload pages.
+- Tablet viewport (768px) still untested.
+
+**Pattern spotted**: The codebase has TWO naming conventions for position colors: `--pos-qb` (defined in styles.css, used in 51 files/481 instances) and `--qb` (NOT defined, used in 4 files/32 rules). The 4 files with wrong names were all built as standalone pages (dashboard, tiers, auction, archetypes) — likely by a different pass than the Lab panels that use the correct names. This is a naming convention drift from rapid development.
+
+**Root cause found**: The undefined `--qb` variables exist because standalone pages were built with shorthand var names that don't match the `:root` definitions in styles.css. The Lab (lab.js, lab-panels.js, lab-panels.css) consistently uses `--pos-qb` (correct). Standalone pages built later used a different convention.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-051 is a 4-file find-and-replace (`--qb` -> `--pos-qb`) that fixes 32 broken CSS rules. Highest impact-per-effort ticket on the board. Do first.
+- Ship agent: DQ-052 is a 3-line CSS change on index.html that fixes the biggest typography violation on the landing page.
+- Ship agent: DQ-056 (meta theme-color) is a ~5-line JS addition to app.js.
+
+**What I'd do differently next time**: Run a systematic `grep` for all CSS `var(--` references and cross-check which ones are defined vs undefined. This automated approach would catch naming drift faster than visual QA.
+
 ### Cycle 8 — 2026-03-23
 
 **What I did**: Full visual QA cycle with 20+ screenshots across 15+ pages. Browsed via local dev server (127.0.0.1:8000) using headless browser chain commands. Covered: home, Lab, pricing, agents, bureau, dashboard, tiers, rankings, breakouts, compare, trade values, trade finder, awards, stocks, about — in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 3 subagents: (1) agents.html footer + dark mode verification (confirmed .warroom-footer exists but unused, no data-theme="dark" forced), (2) pricing.html dark mode contrast analysis (found fallback color risks but main CSS vars OK), (3) Pro gate pattern audit (confirmed only lab.html has the gate, generic across all ~48 panels, bureau does it right with per-tab teasers). Wrote 10 new tickets (DQ-101 through DQ-110).

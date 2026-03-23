@@ -1,6 +1,6 @@
 # Design QA Tickets — Batch 2026-03-23
 
-50 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-6: visual QA with screenshots. Cycle 7: UX/conversion/readability audit (15 pages, light+dark, desktop+mobile, 3 subagent verifications).
+60 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit (20+ screenshots, 3 subagent deep-dives, undefined CSS var discovery).
 
 ## P1 — High Impact (visible on every page)
 
@@ -19,6 +19,8 @@
 | DQ-032 | Agent names don't match DESIGN.md (Bones/Octo/Atlas) | agents.html:1619-1624 |
 | DQ-041 | Pricing dark mode — comparison table text barely readable | pricing.html:169-183 |
 | DQ-042 | Pro gate — 48+ panels identical generic lock, no teaser | lab.html (switchPanel) |
+| DQ-051 | **4 files reference UNDEFINED position color CSS vars** (--qb not --pos-qb) | dashboard, tiers, auction, archetypes (32 rules) |
+| DQ-052 | Home page Caveat font on primary selling content (hero sub + all sections) | index.html:94,235,259 |
 
 ## P2 — Medium Impact (visible in specific views)
 
@@ -51,6 +53,12 @@
 | DQ-047 | Breakouts page — all cards identical weight, no hierarchy | breakouts.html |
 | DQ-048 | Bureau pre-connect — generic form, no feature preview | league-intel.html |
 | DQ-050 | Pricing mobile — comparison table cramped at 375px | pricing.html |
+| DQ-053 | Home feature card icons are generic system emoji (not SVGs) | index.html:693-708 |
+| DQ-054 | Home "Connect Your League" section has no visual/preview | index.html:752-755 |
+| DQ-055 | Brand mascot is system emoji (no custom illustration anywhere) | index.html, 404.html, about.html, all pages (nav) |
+| DQ-056 | Meta theme-color hardcoded to light #ede0cf on all 70+ pages | all pages, app.js |
+| DQ-057 | Dashboard top-5 cards missing position-colored 6px top stripe | dashboard.html:65,488 |
+| DQ-058 | Archetypes/auction hardcode position hex in rgba() backgrounds | archetypes.html:150-153, auction.html:234-235 |
 
 ## P3 — Low Impact (polish)
 
@@ -66,3 +74,5 @@
 | DQ-036 | Dashboard hover hardcoded rgba(217,119,87,0.05) | dashboard.html:145 |
 | DQ-038 | Pro teaser uses custom .btn-pro-upgrade instead of .btn-primary | agents.html, warroom.js |
 | DQ-049 | Pricing dark mode — feature pills harsh teal borders | pricing.html |
+| DQ-059 | Home agent demo card uses wrong name "Bones" (should be "The Fox") | index.html:770 |
+| DQ-060 | Home pricing subtitle — inline Caveat on trust/selling copy | index.html:787 |
