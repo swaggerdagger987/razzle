@@ -1,4 +1,4 @@
-## Designer Insights (updated ticket DES-136)
+## Designer Insights (updated ticket DES-146)
 
 ### Patterns Found
 - Home page layout is mostly polished — chunky borders, correct colors, proper font usage
@@ -93,15 +93,26 @@
 6. **P2 — Accessibility completeness** — DES-082 (nav focus), DES-083 (modal ARIA)
 7. **P3 — Trust signals + mobile polish** — DES-135 (hero :active), DES-136 (Stripe badge), DES-134 (trial messaging)
 
-### Emerging Patterns (updated DES-136)
-- **Canvas hardcoded hex is now the dominant remaining design system issue** — ~30 hex color references in canvas code that could read from CSS vars if getCanvasTheme had accent properties (DES-069 is still the keystone).
-- **Accessibility is the next major frontier** — cycles 1-7 focused on visual consistency (colors, radius, borders, shadows). Cycle 8 reveals that ARIA attributes and keyboard focus are systematically under-implemented.
-- **SEO was never audited before** — 67 pages missing canonical URLs is a structural gap that predates all design QA work.
-- **PNG export dark mode is a pattern** — DES-080, DES-086, and several more (roster builder, boom/bust) all hardcode light-mode colors in canvas export functions. After DES-069 adds accent colors to the theme object, these become simple replacements.
-- **The codebase has matured significantly** — color:white is zero, sub-minimum radius is down to intentional bar fills, no rogue fonts, no generic loading text, no cold grays.
-- **DRY violations in lab.js** — tier/grade colors defined 6+ times, some with inconsistent values. posColors was consolidated (DES-062) — same pattern needed for tier/grade.
-- **Agent connective tissue is 60% built, 40% invisible** — agent-config.js is complete, SVGs exist, loading/empty/error text functions are defined, panel headers show agent attribution, elite nudges work. BUT: sidebar icons are CSS-hidden (display:none), lab-panels.js never calls the agent-voiced functions, Bureau has zero agent presence. Layer 1 is partially wired. Layer 2 is incomplete. Layer 3 is done.
-- **Pricing page is the weakest page for dark mode** — literally zero dark mode CSS rules. Every other main page has dark mode support. This is the #1 conversion page.
+### Cycle 13 Findings: Mobile UX, Dark Mode Polish, Resilience
+- **Zero :active states on .btn-primary and .btn-chunky** (DES-137) — the two most-used button classes in the entire codebase. Every CTA (Get Pro, Add Filter, Export, Apply) gives zero visual feedback when tapped on mobile. `.btn-hero` was fixed by DES-135 but the global classes were missed.
+- **.input-chunky (13px) and .select-chunky (12px) trigger iOS auto-zoom** (DES-138) — the Screener's core filter inputs are below the 16px iOS threshold. Every filter interaction on iPhone zooms the page. Auth inputs (16px) and cmd-palette (18px) are already correct — pattern exists, just not applied to screener controls.
+- **Zero <meta name="theme-color"> in 75 pages** (DES-139) — mobile browser address bar stays default gray/white instead of warm sand. Every competing tool has this. First visual signal of polish on mobile.
+- **Dark mode overlays use cold black rgba(0,0,0)** (DES-140) — 3 instances in styles.css. DESIGN.md explicitly bans cold grays/blacks. Light mode overlay correctly uses warm espresso rgba(45,31,20). Dark mode should use rgba(26,17,10) (bg-ink at opacity).
+- **Column picker height:100vh clips on mobile** (DES-141) — 100vh includes area behind mobile browser chrome. Bottom columns unreachable. Should use 100dvh.
+- **5 instances of rotate(2deg) instead of DESIGN.md's 3deg** (DES-142) — pricing, lab, league-intel. 10+ instances correctly use 3deg. Subtle brand inconsistency.
+- **.footer-link has no :focus-visible** (DES-143) — same gap as DES-082 (nav links, fixed) but for footer. Footer is the fallback navigation.
+- **Zero twitter:image:alt in the codebase** (DES-144) — Twitter is the primary launch channel (Phase 1). Every card missing descriptive alt text.
+- **Zero <noscript> tags** (DES-145) — JS failure = blank page. Ad blockers, slow connections, corporate firewalls. Branded fallback message prevents bounce.
+- **Dark mode ignores OS preference** (DES-146) — no prefers-color-scheme detection. Power users (primary target) who prefer dark mode see light on first visit.
+
+### Emerging Patterns (updated DES-146)
+- **Mobile UX is the dominant remaining conversion risk** — 62% of traffic is mobile per GTM report. Three critical mobile gaps: no :active on CTAs (DES-137), iOS auto-zoom on inputs (DES-138), and 100vh clipping (DES-141). These are more impactful than canvas hex colors or ARIA patterns because they affect EVERY mobile visitor, not just screen reader users.
+- **The audit has progressed through 5 distinct layers**: (1) Visual consistency (colors, radius, borders, shadows) cycles 1-7, (2) Dark mode completeness cycle 3-8, (3) Accessibility (ARIA, focus, keyboard) cycles 8-11, (4) Conversion funnel integrity cycle 12, (5) Mobile UX + resilience cycle 13. Each layer reveals the next.
+- **"Zero X" patterns keep appearing** — zero :active on buttons, zero theme-color, zero noscript, zero prefers-color-scheme, zero twitter:image:alt. The codebase is well-built for its primary case but consistently misses secondary interaction paths (touch feedback, JS failure, OS preference, social accessibility).
+- **Dark mode has one last banned-pattern violation** — the 3 overlay rgba(0,0,0) instances are the last cold colors in the codebase. Everything else correctly uses warm espresso.
+- **Pricing page dark mode now has rules** (DES-127 fixed) but the sticker rotation (DES-142) is still 2deg instead of 3deg.
+- **Agent connective tissue is 60% built, 40% invisible** — sidebar icons CSS-hidden, lab-panels.js never calls agent-voiced functions, Bureau has zero agent presence. (Unchanged from cycle 12.)
+- **Canvas hardcoded hex remains** — ~30 instances. DES-069 (getCanvasTheme accent colors) is still the keystone fix.
 - **Feature matrix contradicts product spec** — "70+ analytical panels" marked ✓ for free tier, but NORTH_STAR says panels are behind lock icons for free users. This is a trust landmine for Reddit.
 - **Conversion funnel has fragile JS dependencies** — Sign In button, pricing CTAs, and mini-screener all use inline onclick handlers that fail silently if app.js doesn't load. Ad blockers, CDN failures, or slow networks = dead buttons.
 - **Things that are GOOD and should be preserved:**

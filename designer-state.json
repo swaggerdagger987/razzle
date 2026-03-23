@@ -1,5 +1,5 @@
 {
-  "last_ticket_id": 136,
+  "last_ticket_id": 146,
   "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
@@ -161,7 +161,17 @@
     "11 standalone pages — empty <th></th> with no aria-label (cycle 11)",
     "58+ pages — overflow-x:auto tables have zero visual scroll indicators (cycle 11)",
     "25 files — 50 inline onerror handlers duplicated, CSP risk (cycle 11)",
-    "67 pages — skip-link targets <span> not <main> landmark (cycle 11)"
+    "67 pages — skip-link targets <span> not <main> landmark (cycle 11)",
+    "styles.css — .btn-primary + .btn-chunky :active state audit — zero :active rules on global buttons (cycle 13)",
+    "styles.css — .input-chunky 13px + .select-chunky 12px — iOS auto-zoom audit (cycle 13)",
+    "sitewide — <meta name=theme-color> audit — zero instances in 75 pages (cycle 13)",
+    "styles.css — dark mode overlay rgba(0,0,0) cold black audit — 3 instances (cycle 13)",
+    "lab.html — column-picker height:100vh mobile clip audit (cycle 13)",
+    "sitewide — rotate(2deg) vs DESIGN.md rotate(3deg) audit — 5 instances of 2deg (cycle 13)",
+    "styles.css — .footer-link :focus-visible audit — zero rules (cycle 13)",
+    "sitewide — twitter:image:alt meta tag audit — zero instances (cycle 13)",
+    "sitewide — <noscript> fallback audit — zero instances in 75 pages (cycle 13)",
+    "app.js — prefers-color-scheme / matchMedia dark mode detection audit — zero instances (cycle 13)"
   ],
   "tickets_written": [
     {"id": "DES-001", "file": "designer-tickets/done/001-orphan-discovery-filter-chip.md", "priority": "P2", "area": "home page", "summary": "Orphan 'Veteran Studs' chip on discovery filters"},
@@ -279,7 +289,17 @@
     {"id": "DES-113", "file": "designer-tickets/pending/113-empty-th-elements-no-accessible-name.md", "priority": "P2", "area": "11 standalone pages", "summary": "11 empty <th></th> elements have no aria-label"},
     {"id": "DES-114", "file": "designer-tickets/pending/114-no-scroll-indicators-on-overflow-tables.md", "priority": "P2", "area": "58+ pages", "summary": "Zero scroll indicators on horizontally scrollable tables"},
     {"id": "DES-115", "file": "designer-tickets/pending/115-inline-onerror-handlers-50-instances.md", "priority": "P2", "area": "25 files", "summary": "50 inline onerror handlers duplicated, CSP violation risk"},
-    {"id": "DES-116", "file": "designer-tickets/pending/116-skip-link-targets-span-not-main.md", "priority": "P3", "area": "67 standalone pages", "summary": "Skip-link targets <span> not <main> landmark element"}
+    {"id": "DES-116", "file": "designer-tickets/pending/116-skip-link-targets-span-not-main.md", "priority": "P3", "area": "67 standalone pages", "summary": "Skip-link targets <span> not <main> landmark element"},
+    {"id": "DES-137", "file": "designer-tickets/open/137-btn-primary-chunky-missing-active-state.md", "priority": "P1", "area": "styles.css (sitewide)", "summary": ".btn-primary + .btn-chunky missing :active state — zero mobile tap feedback"},
+    {"id": "DES-138", "file": "designer-tickets/open/138-input-select-chunky-ios-auto-zoom.md", "priority": "P1", "area": "styles.css (sitewide)", "summary": ".input-chunky 13px + .select-chunky 12px trigger iOS auto-zoom on mobile"},
+    {"id": "DES-139", "file": "designer-tickets/open/139-missing-meta-theme-color-sitewide.md", "priority": "P2", "area": "sitewide (75 pages)", "summary": "Missing <meta name=theme-color> — mobile browser chrome stays default"},
+    {"id": "DES-140", "file": "designer-tickets/open/140-dark-mode-overlays-cold-black-rgba.md", "priority": "P2", "area": "styles.css", "summary": "3 dark mode overlays use rgba(0,0,0) cold black instead of warm espresso"},
+    {"id": "DES-141", "file": "designer-tickets/open/141-column-picker-100vh-clips-mobile.md", "priority": "P2", "area": "lab.html", "summary": "Column picker height:100vh clips behind mobile address bar"},
+    {"id": "DES-142", "file": "designer-tickets/open/142-tier-sticker-rotation-2deg-not-3deg.md", "priority": "P3", "area": "pricing + lab + league-intel", "summary": "5 tier stickers use rotate(2deg) instead of DESIGN.md 3deg"},
+    {"id": "DES-143", "file": "designer-tickets/open/143-footer-link-no-focus-visible.md", "priority": "P2", "area": "styles.css (sitewide)", "summary": ".footer-link missing :focus-visible — keyboard users get no indicator"},
+    {"id": "DES-144", "file": "designer-tickets/open/144-missing-twitter-image-alt-sitewide.md", "priority": "P3", "area": "sitewide (75 pages)", "summary": "Zero twitter:image:alt meta tags — social card accessibility gap"},
+    {"id": "DES-145", "file": "designer-tickets/open/145-no-noscript-fallback-js-pages.md", "priority": "P2", "area": "lab.html + league-intel + agents", "summary": "No <noscript> fallback — JS failure shows blank page"},
+    {"id": "DES-146", "file": "designer-tickets/open/146-dark-mode-no-os-preference-detection.md", "priority": "P2", "area": "app.js", "summary": "Dark mode doesn't detect OS preference via prefers-color-scheme"}
   ],
   "notes": [
     "DES-001 through DES-076 all completed (moved to done/ folder)",
@@ -325,6 +345,14 @@
     "pricing.html (trial messaging — only in Pro card list item and FAQ, not in hero) (cycle 12)",
     "pricing.html (no Stripe trust badge near checkout CTAs) (cycle 12)",
     "DES-127 through DES-136 are cycle 12 tickets — CONVERSION PATH + AGENT CONNECTIVE TISSUE + PRICING TRUST",
-    "Cycle 12 theme: conversion funnel integrity — pricing page dark mode, feature matrix accuracy, agent connective tissue visibility, trust signals, CTA accessibility"
+    "Cycle 12 theme: conversion funnel integrity — pricing page dark mode, feature matrix accuracy, agent connective tissue visibility, trust signals, CTA accessibility",
+    "DES-137 through DES-146 are cycle 13 tickets — MOBILE UX + DARK MODE POLISH + RESILIENCE",
+    "Cycle 13 theme: mobile-first audit — iOS auto-zoom, missing :active states, 100vh clip, theme-color meta, prefers-color-scheme detection, noscript fallback, warm overlay colors",
+    "62% of fantasy football traffic is mobile (GTM report) — mobile UX gaps are conversion killers",
+    "Zero :active rules on .btn-primary/.btn-chunky — every CTA tap gives no feedback on mobile",
+    "Zero <meta name=theme-color> in 75 pages — browser chrome stays cold default",
+    "Zero prefers-color-scheme detection — OS dark mode preference ignored on first visit",
+    "Zero <noscript> tags — JS failure = blank page with no explanation",
+    "Cold black rgba(0,0,0) in 3 dark mode overlays violates DESIGN.md warm-only rule"
   ]
 }
