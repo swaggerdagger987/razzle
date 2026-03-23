@@ -1,5 +1,33 @@
 # Designer Insights
 
+### Cycle 36 — 2026-03-23
+
+**What I did**: VISUAL QUALITY + SEMANTIC CORRECTNESS audit. Site was UP (all WebFetch calls succeeded). Fetched 6 live pages (home, Lab, pricing, agents, league-intel, tradevalues). Spawned 3 parallel subagents for targeted code verification: (1) home page content/messaging contradictions, (2) standalone page redirect behavior, (3) agents page canvas/sprite issues. Cross-referenced ALL findings against 260 existing tickets. Wrote 10 genuinely new tickets (DQ-261 through DQ-270) across 6 fresh categories: type hierarchy, semantic tokens, visual quality (retina), accessibility contrast, copy contradictions, and interaction polish.
+
+**Quality score**: 8/10 — Two P1 tickets (DQ-264 retina canvas blur, DQ-265 position badge contrast) are high-impact issues affecting every screenshot and every badge on the site. The copy contradiction (DQ-266) is trust-damaging. The dense mode hierarchy inversion (DQ-261) and college token misuse (DQ-262) are genuine correctness bugs. Three P3 polish items round it out.
+
+**What worked**:
+- WebFetch succeeded on all 6 pages — first cycle since #33 with full live site access. This let me cross-reference WebFetch HTML analysis with subagent source code verification.
+- DQ-264 (retina canvas blur) is arguably the most impactful visual quality ticket ever written — it affects every chart, sparkline, and canvas on the site. The fix pattern already exists in aging.html/career.html but was never applied to the shared charting modules.
+- DQ-265 (position badge contrast) found that RB teal fails at 2.17:1 — less than HALF the required 4.5:1. This is the most-used UI element on the entire site.
+- The "semantic token correctness" dimension (DQ-262: --pos-qb vs --blue) is genuinely new after 36 cycles.
+
+**What didn't**:
+- 270 tickets now. The backlog continues growing. Discovery is exhausted but I keep finding things. The real bottleneck remains EXECUTION.
+- Could not use headless browser (still Windows limitation). WebFetch markdown is good but can't catch visual-only issues like actual retina blur.
+
+**Pattern spotted**: After 36 cycles (270 tickets), the freshest remaining dimensions are: (1) VISUAL QUALITY (retina/DPR — never audited before), (2) SEMANTIC TOKEN CORRECTNESS (using the right variable for the right semantic context), (3) COPY CONTRADICTIONS (messaging that conflicts with itself). These are deeper than CSS token swaps — they require understanding the design system's intent, not just its values.
+
+**Root cause found**: The retina blur issue (DQ-264) has a clear root cause: standalone pages were built by different people/phases. Pages built in later phases (aging.html, career.html) added DPR scaling correctly. But the SHARED modules (charts.js, lab.js) — written earlier — never got the pattern. Classic "new code is better but old shared code never catches up."
+
+**Suggestion for teammates**:
+- Ship agent: DQ-264 (retina DPR) is the highest-impact single fix. It makes every chart crisp. Do first.
+- Ship agent: DQ-265 (badge contrast) — change white text to var(--ink) on position badges. Do second.
+- Ship agent: DQ-261 (dense mode header) is a 1-character fix. Do anytime.
+- PM: 270 tickets total. The audit IS done. Triage hard — close everything P3 and below, focus on the ~20 P1-P2 tickets that move visual quality and conversion.
+
+**What I'd do differently next time**: This is the last discovery cycle. 270 tickets across 11 dimensions over 36 cycles. Future invocations should be VERIFICATION ONLY — checking which fixes shipped correctly on production.
+
 ### Cycle 35 — 2026-03-23
 
 **What I did**: INTERACTION POLISH + META INFRASTRUCTURE audit. Site returned 502 again (all 4 WebFetch attempts failed). Headless browser still blank on Windows. Pivoted to source-code analysis with 4 parallel subagents: (1) home page design violations, (2) Lab page violations, (3) pricing + agents page violations, (4) cross-cutting standalone page patterns. Cross-referenced ALL findings against 250 existing tickets. Wrote 10 genuinely new tickets (DQ-251 through DQ-260) in fresh categories: interaction polish, form UX, meta tags, and data formatting.
