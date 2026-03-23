@@ -28,9 +28,18 @@ var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
 (function initTheme() {
   try {
     var saved = localStorage.getItem("razzle_theme");
-    if (saved === "dark") document.documentElement.setAttribute("data-theme", "dark");
+    if (saved === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = '#2d1f14';
+    }
   } catch (e) {}
 })();
+
+function _updateThemeColor(isDark) {
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = isDark ? '#2d1f14' : '#ede0cf';
+}
 
 function toggleTheme() {
   var html = document.documentElement;
@@ -38,9 +47,11 @@ function toggleTheme() {
   if (isDark) {
     html.removeAttribute("data-theme");
     try { localStorage.setItem("razzle_theme", "light"); } catch (e) {}
+    _updateThemeColor(false);
   } else {
     html.setAttribute("data-theme", "dark");
     try { localStorage.setItem("razzle_theme", "dark"); } catch (e) {}
+    _updateThemeColor(true);
   }
 }
 
