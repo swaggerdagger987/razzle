@@ -1752,7 +1752,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   const posStripeColor = pos === "QB" ? "var(--pos-qb)" : pos === "RB" ? "var(--pos-rb)" : pos === "WR" ? "var(--pos-wr)" : pos === "TE" ? "var(--pos-te)" : "var(--ink-faint)";
   const zebraBg = (rowIdx != null && rowIdx % 2 === 1) ? " background:var(--zebra-stripe, rgba(45,31,20,0.025));" : "";
   let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px; border-left:3px solid ' + posStripeColor + ';' + zebraBg + '">';
-  html += `<td class="col-star" role="button" tabindex="0" aria-label="${starred ? 'Remove from watchlist' : 'Add to watchlist'}" data-pid="${escapeAttr(playKey)}" data-pname="${escapeAttr(player.full_name || player.player_name || '')}" data-pos="${escapeAttr(pos)}" data-team="${escapeAttr(player.team || player.school || '')}" data-universe="${escapeAttr(state.universe)}" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
+  html += `<td class="col-star" role="button" tabindex="0" aria-label="${starred ? 'Remove from watchlist' : 'Add to watchlist'}" data-pid="${escapeAttr(playKey)}" data-pname="${escapeAttr(player.full_name || player.player_name || '')}" data-pos="${escapeAttr(pos)}" data-team="${escapeAttr(player.team || player.school || '')}" data-universe="${escapeAttr(state.universe)}" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-light);">&#9734;</span>'}</td>`;
   html += `<td class="col-select" style="text-align:center; padding:7px 6px;">
     <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeJS(player.player_id || player.player_name)}', this.checked)"
       style="accent-color:${state.universe === 'college' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
@@ -1868,13 +1868,13 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     const hStyle = cellStyle ? ` style="${cellStyle}"` : "";
     const scAttr = (sc || barClass) ? ` class="${sc}${barClass}"` : "";
     if ((isProspectView() || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
-      html += `<td${scAttr} style="color:var(--ink-faint);">\u2014</td>`;
+      html += `<td${scAttr} style="color:var(--ink-light);">\u2014</td>`;
       continue;
     }
     if (state.universe === "nfl" && isNonApplicableStat(pos, key, val)) {
-      html += `<td${scAttr} style="color:var(--ink-faint);">—</td>`;
+      html += `<td${scAttr} style="color:var(--ink-light);">—</td>`;
     } else if (state.universe === "nfl" && !col.isText && !col.pct && !col.isRate && (val === 0 || val === null || val === undefined) && key !== "age" && key !== "games") {
-      html += `<td${scAttr} style="color:var(--ink-faint);">—</td>`;
+      html += `<td${scAttr} style="color:var(--ink-light);">—</td>`;
     } else if (col.isText) {
       html += `<td${scAttr}>${val ? escapeHtml(val) : "—"}</td>`;
     } else if (pctPcts && pctPcts[key] != null && key !== "age" && key !== "games" && key !== "dynasty_value") {
@@ -2090,7 +2090,7 @@ function injectSparklines() {
     const pid = cell.getAttribute("data-sparkline-pid");
     const pts = _sparklineCache[pid];
     if (!pts || !pts.length) {
-      cell.innerHTML = '<span style="color:var(--ink-faint); font-size:10px;">—</span>';
+      cell.innerHTML = '<span style="color:var(--ink-light); font-size:10px;">—</span>';
       continue;
     }
     cell.innerHTML = buildSparklineSVG(pts);
@@ -3151,7 +3151,7 @@ function updateResultCount() {
   if (_lastFetchTime) {
     var ago = Math.round((Date.now() - _lastFetchTime) / 1000);
     var agoText = ago < 5 ? "just now" : ago < 60 ? ago + "s ago" : Math.floor(ago / 60) + "m ago";
-    parts.push('<span style="color:var(--ink-faint); font-size:10px;" title="Data fetched at ' + escapeAttr(new Date(_lastFetchTime).toLocaleTimeString()) + '">⏱ ' + agoText + '</span>');
+    parts.push('<span style="color:var(--ink-light); font-size:10px;" title="Data fetched at ' + escapeAttr(new Date(_lastFetchTime).toLocaleTimeString()) + '">⏱ ' + agoText + '</span>');
   }
 
   el.innerHTML = parts.join(" · ");
@@ -4888,7 +4888,7 @@ function renderQuickCompare(container) {
   var html = '<span style="font-weight:700; color:' + (posColors[posA] || "var(--ink)") + '; font-size:11px;">' + nameA + '</span>';
   html += ' <span style="color:var(--ink-light); font-size:10px;">vs</span> ';
   html += '<span style="font-weight:700; color:' + (posColors[posB] || "var(--ink)") + '; font-size:11px;">' + nameB + '</span>';
-  html += ' <span style="color:var(--ink-faint);">|</span> ';
+  html += ' <span style="color:var(--ink-light);">|</span> ';
 
   for (var i = 0; i < stats.length; i++) {
     var s = stats[i];
@@ -4902,7 +4902,7 @@ function renderQuickCompare(container) {
     var colorB = winner === "b" ? "font-weight:700; color:var(--green);" : "";
     html += '<span style="font-size:10px; color:var(--ink-light); margin:0 2px;">' + s.label + '</span>';
     html += '<span style="font-size:11px; ' + colorA + '">' + va.toFixed(s.dec) + '</span>';
-    html += '<span style="color:var(--ink-faint); font-size:9px;">/</span>';
+    html += '<span style="color:var(--ink-light); font-size:9px;">/</span>';
     html += '<span style="font-size:11px; ' + colorB + '">' + vb.toFixed(s.dec) + '</span> ';
   }
 
@@ -9255,7 +9255,7 @@ function renderTradeSide(side) {
   document.getElementById("tvTotal" + side).textContent = total;
 
   if (!arr.length) {
-    container.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); text-align:center; padding:8px;">add players above</div>';
+    container.innerHTML = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); text-align:center; padding:8px;">add players above</div>';
     return;
   }
 
@@ -10142,7 +10142,7 @@ function renderWatchlistPanel() {
 
   if (list.length === 0) {
     html += '<p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light); text-align:center; padding:40px 0;">' + razzleEmpty() + '</p>';
-    html += '<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-faint); text-align:center;">click the &#9734; star next to any player in the table</p>';
+    html += '<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light); text-align:center;">click the &#9734; star next to any player in the table</p>';
     html += '</div>';
     overlay.innerHTML = html;
     return;
@@ -10246,7 +10246,7 @@ function renderTierBoard() {
     // Player cards flow
     html += '<div style="display:flex; flex-wrap:wrap; gap:6px; padding:10px 14px; min-height:36px;">';
     if (players.length === 0) {
-      html += '<span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-faint);">empty</span>';
+      html += '<span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">empty</span>';
     }
     players.forEach(function(p) {
       var pc = posColors[p.position] || "var(--ink-light)";
@@ -11513,7 +11513,7 @@ async function rosterSearchPlayers(query) {
       html += '<span style="font-family:var(--font-hand); font-size:12px; color:var(--green); margin-left:auto;">+ add</span>';
       html += '</div>';
     });
-    if (players.length === 0) html = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); padding:8px;">' + razzleEmpty() + '</div>';
+    if (players.length === 0) html = '<div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); padding:8px;">' + razzleEmpty() + '</div>';
     results.innerHTML = html;
     results.querySelectorAll(".roster-search-row").forEach(function(row) {
       row.addEventListener("click", function() {
@@ -11673,7 +11673,7 @@ function renderRosterReport() {
   sortedPlayers.forEach(function(p, i) {
     var bg = i % 2 === 0 ? "var(--bg)" : "var(--bg-card)";
     html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; background:' + bg + '; font-size:12px;">';
-    html += '<span style="font-family:var(--font-mono); color:var(--ink-faint); width:20px;">' + (i + 1) + '</span>';
+    html += '<span style="font-family:var(--font-mono); color:var(--ink-light); width:20px;">' + (i + 1) + '</span>';
     html += '<span class="pos-badge pos-' + (p.position || "wr").toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
     html += '<span style="font-family:var(--font-display); flex:1;">' + escapeHtml(p.full_name) + '</span>';
     html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
@@ -13081,7 +13081,7 @@ function exportBoomBustImage() {
   const toolbar = document.querySelector(".toolbar");
   if (!toolbar) return;
   const hint = document.createElement("div");
-  hint.style.cssText = "font-family:var(--font-mono); font-size:10px; color:var(--ink-faint); padding:2px 0; white-space:nowrap;";
+  hint.style.cssText = "font-family:var(--font-mono); font-size:10px; color:var(--ink-light); padding:2px 0; white-space:nowrap;";
   hint.innerHTML = `<kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">?</kbd> shortcuts`;
   toolbar.appendChild(hint);
 })();

@@ -4367,7 +4367,7 @@
             html += '<div class="mv-cell-pts" style="background:' + color + '">' + fmt(mvp.fpts) + '</div>';
             html += '</div></td>';
           } else {
-            html += '<td style="color:var(--ink-faint)">--</td>';
+            html += '<td style="color:var(--ink-light)">--</td>';
           }
         });
         html += '</tr>';
@@ -4474,7 +4474,7 @@
             html += ' <span style="font-size:10px;font-weight:700">' + fmt(wk.fpts) + '</span>';
             html += '</div></td>';
           } else {
-            html += '<td style="color:var(--ink-faint)">--</td>';
+            html += '<td style="color:var(--ink-light)">--</td>';
           }
         });
         html += '</tr>';

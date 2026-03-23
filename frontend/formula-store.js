@@ -98,7 +98,7 @@ function renderStars(rating, size = 14) {
   for (let i = 0; i < 5; i++) {
     if (i < full) html += `<span style="color:var(--yellow); font-size:${size}px;">&#9733;</span>`;
     else if (i === full && half) html += `<span style="color:var(--yellow); font-size:${size}px;">&#9733;</span>`;
-    else html += `<span style="color:var(--ink-faint); font-size:${size}px;">&#9734;</span>`;
+    else html += `<span style="color:var(--ink-light); font-size:${size}px;">&#9734;</span>`;
   }
   return html;
 }

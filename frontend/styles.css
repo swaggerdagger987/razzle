@@ -113,7 +113,7 @@
   right: 14px;
   font-family: var(--font-hand);
   font-size: 14px;
-  color: var(--ink-faint);
+  color: var(--ink-light);
   pointer-events: none;
   z-index: 1;
 }
@@ -1367,7 +1367,7 @@ body {
 .tag-icon {
   display: inline-block;
   font-size: 8px;
-  color: var(--ink-faint);
+  color: var(--ink-light);
   cursor: pointer;
   vertical-align: middle;
   margin-left: 3px;
@@ -1455,7 +1455,7 @@ tr:hover .tag-icon {
 }
 .notes-cell .note-pencil {
   opacity: 0;
-  color: var(--ink-faint);
+  color: var(--ink-light);
   font-size: 12px;
   transition: opacity 0.15s;
 }

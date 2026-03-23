@@ -480,7 +480,7 @@
 .tl-chip-pos.TE { background: var(--pos-te); }
 .tl-chip-name { font-weight: 600; }
 .tl-chip-tv { font-size: 10px; color: var(--ink-light); }
-.tl-empty-tier { font-family: var(--font-hand); font-size: 14px; color: var(--ink-faint); padding: 8px; }
+.tl-empty-tier { font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); padding: 8px; }
 .tl-tier-desc {
   font-family: var(--font-hand);
   font-size: 12px;
@@ -2212,7 +2212,7 @@
   font-family: var(--font-mono); font-size: 10px;
   color: var(--ink-light); margin-left: 2px;
 }
-.wh-bye { color: var(--ink-faint); font-size: 10px; font-style: italic; }
+.wh-bye { color: var(--ink-light); font-size: 10px; font-style: italic; }
 .wh-score-cell { border-radius: var(--radius-sm); }
 .wh-table tr:hover td { background-color: rgba(217,119,87,0.08); }
 .wh-table tr:hover td.wh-player-cell { background-color: var(--bg-card); }
@@ -4043,7 +4043,7 @@
 .md-cell-empty {
   font-family: var(--font-hand);
   font-size: 13px;
-  color: var(--ink-faint);
+  color: var(--ink-light);
 }
 .md-clock-pulse-cell {
   color: var(--orange);
