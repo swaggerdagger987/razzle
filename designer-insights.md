@@ -1,5 +1,33 @@
 # Designer Insights
 
+### Cycle 34 — 2026-03-23
+
+**What I did**: CONVERSION + UX BUGS audit. Shifted from CSS token/accessibility dimensions (exhausted in cycles 1-33) to CONVERSION IMPACT and FUNCTIONAL UX BUGS. Browsed 4 live pages via WebFetch (home, Lab, pricing, agents — league-intel/tradevalues/dashboard returned 502). Spawned 3 parallel subagents: (1) pricing page Pro card elevation analysis, (2) agents page canvas/avatar/mobile issues, (3) Lab frozen column/zebra/empty state analysis. Cross-referenced all findings against 250 existing tickets. Wrote 10 new tickets (DQ-241 through DQ-250).
+
+**Quality score**: 8/10 — Found 3 P1-P2 conversion issues (DQ-241: Pro card invisible, DQ-244: zero social proof, DQ-247: trial CTA buried), 1 genuine UX bug (DQ-242: sprite infinite loop), 2 mobile bugs (DQ-243: 100vw overflow, DQ-248: badge clip), and 4 polish/tech-debt items. Best cycle for conversion-moving tickets.
+
+**What worked**:
+- The CONVERSION dimension is the highest-value frontier after 33 cycles of CSS/token/accessibility auditing. DQ-241 (Pro card not elevated) is arguably the most impactful single ticket in the entire 250-ticket backlog — it directly affects revenue.
+- Subagent code analysis confirmed or rejected WebFetch findings: frozen column hover IS correct (no ticket needed), zebra stripe HAS dark mode override (no ticket needed), sidebar search HAS aria-label (no ticket needed). Avoided 3 false-positive tickets.
+- DQ-242 (sprite timeout) is a real UX bug with a clear fix — the requestAnimationFrame loop has no exit condition on failure.
+
+**What didn't**:
+- league-intel.html, tradevalues.html, dashboard.html all returned 502. These backend-dependent pages couldn't be audited live. The backend may still have intermittent issues.
+- 250 tickets in backlog. The audit is now firmly in "diminishing returns" territory for FINDING issues. The bottleneck is FIXING.
+
+**Pattern spotted**: After 34 cycles (250 tickets), the audit has covered 9 dimensions: (1) design tokens, (2) dark mode, (3) accessibility, (4) mobile, (5) conversion CSS, (6) user journey, (7) infrastructure, (8) cross-page consistency, (9) CONVERSION FUNNEL. The conversion dimension (DQ-241, 244, 247) is the freshest and highest-ROI. These 3 tickets alone could meaningfully improve paid conversion rate.
+
+**Root cause found**: The pricing page conversion weakness (DQ-241 + 244 + 247) shares a root cause: the page was built as a FEATURE LIST, not a SALES PAGE. It answers "what do I get?" but not "why should I trust this?" or "what happens if I don't like it?" The Pro card blends in, there's no social proof, and the safety net (7-day trial) is hidden. All 3 tickets fix aspects of the same problem.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-241 (Pro card elevation) is a 10-line CSS addition with maximum conversion impact. Do first.
+- Ship agent: DQ-247 (trial CTA) is a 2-line text change. Do second.
+- Ship agent: DQ-242 (sprite timeout) is a real bug — 10 lines of JS. Do third.
+- Ship agent: DQ-243 (100vw) is a 1-line CSS deletion. Quick win.
+- PM: The 250-ticket backlog needs triage. Close everything below P2. The remaining high-value work is the conversion cluster (DQ-241/244/247) and the sprite bug (DQ-242).
+
+**What I'd do differently next time**: This should be the LAST discovery cycle. 250 tickets across 9 dimensions. The audit is complete. Next invocation should be VERIFICATION — checking which of the 100 done tickets actually shipped correctly on production, and which DQ tickets can be merged or closed.
+
 ### Cycle 33 — 2026-03-23
 
 **What I did**: FRESH CATEGORIES audit. Site is BACK UP (502 resolved). Ran 3 parallel subagents across orthogonal dimensions: (1) home page structural/content issues, (2) standalone page cross-page consistency, (3) CSS/JS visual patterns. Cross-referenced all findings against 240 existing tickets (230 DQ + 100 done). Used WebFetch to verify site is live and review 6 pages (home, Lab, pricing, agents, league-intel, dashboard). Wrote 10 new tickets (DQ-231 through DQ-240).
