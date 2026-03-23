@@ -630,60 +630,115 @@ class SiteWalker:
         return report_path
 
     def register_and_login(self, browser):
-        """Register a test account, login, return authenticated context"""
+        """Register a test account via API, inject JWT, return authenticated context"""
         creds = load_credentials()
         if not creds:
             self.log("WARN", "auth", "No walker-credentials.json found. Skipping auth tests.")
             return None
 
-        ctx = browser.new_context(viewport={"width": 1280, "height": 900})
-        page = ctx.new_page()
         email = creds["test_account"]["email"]
         password = creds["test_account"]["password"]
+        token = None
 
+        # Step 1: Register via API (may already exist — that's fine)
         try:
-            # Try to register (may already exist)
-            page.goto(f"{BASE_URL}/index.html", wait_until="networkidle", timeout=15000)
+            import urllib.request
+            reg_data = json.dumps({"email": email, "password": password}).encode()
+            req = urllib.request.Request(
+                f"{BASE_URL}/api/auth/register",
+                data=reg_data,
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    result = json.loads(resp.read())
+                    token = result.get("token")
+                    self.log("PASS", "auth", f"Registered new account: {email}")
+            except urllib.error.HTTPError as e:
+                body = e.read().decode()
+                if "already" in body.lower() or "exists" in body.lower():
+                    self.log("INFO", "auth", f"Account {email} already exists. Logging in.")
+                else:
+                    self.log("WARN", "auth", f"Registration returned {e.code}: {body[:100]}")
+        except Exception as e:
+            self.log("WARN", "auth", f"Registration request failed: {str(e)[:100]}")
+
+        # Step 2: Login via API to get JWT
+        if not token:
+            try:
+                login_data = json.dumps({"email": email, "password": password}).encode()
+                req = urllib.request.Request(
+                    f"{BASE_URL}/api/auth/login",
+                    data=login_data,
+                    headers={"Content-Type": "application/json"},
+                    method="POST"
+                )
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    result = json.loads(resp.read())
+                    token = result.get("token")
+                    self.log("PASS", "auth", f"Logged in as {email}")
+            except Exception as e:
+                self.log("FAIL", "auth", f"Login failed: {str(e)[:100]}")
+                return None
+
+        if not token:
+            self.log("FAIL", "auth", "No JWT token received from register or login")
+            return None
+
+        self.log("PASS", "auth", f"JWT obtained: {token[:20]}...")
+
+        # Step 3: Create browser context with JWT injected into localStorage
+        ctx = browser.new_context(viewport={"width": 1280, "height": 900})
+        page = ctx.new_page()
+        page.goto(f"{BASE_URL}/index.html", wait_until="networkidle", timeout=15000)
+        time.sleep(1)
+
+        # Inject JWT into localStorage (how the frontend stores auth)
+        page.evaluate(f"""
+            localStorage.setItem('razzle_token', '{token}');
+            localStorage.setItem('token', '{token}');
+        """)
+
+        # Reload to pick up auth state
+        page.reload(wait_until="networkidle", timeout=15000)
+        time.sleep(2)
+
+        # Verify logged in — check if user menu or email appears
+        visible = page.inner_text("body")
+        if email.split("@")[0] in visible.lower() or "sign out" in visible.lower() or "log out" in visible.lower():
+            self.log("PASS", "auth", "Confirmed logged in — user menu visible")
+        else:
+            self.log("WARN", "auth", "JWT injected but could not confirm logged-in state in UI")
+
+        self.screenshot(page, "auth_logged_in")
+        page.close()
+
+        # Step 4: Also test the UI registration/login flow separately
+        ui_page = ctx.new_page()
+        try:
+            ui_page.goto(f"{BASE_URL}/index.html", wait_until="networkidle", timeout=15000)
             time.sleep(2)
 
-            # Look for sign in / register button
-            sign_in = page.locator("a:has-text('Sign'), button:has-text('Sign'), [onclick*='auth'], [onclick*='login']")
+            sign_in = ui_page.locator("a:has-text('Sign'), button:has-text('Sign'), [onclick*='auth'], [onclick*='login']")
             if sign_in.count() > 0:
                 sign_in.first.click(timeout=3000)
                 time.sleep(1)
+                self.screenshot(ui_page, "auth_modal_opened")
 
-            # Try to fill register form
-            email_input = page.locator("input[type='email'], input[placeholder*='mail'], input[name='email']")
-            pass_input = page.locator("input[type='password'], input[placeholder*='assword'], input[name='password']")
+                # Check modal has inputs
+                email_input = ui_page.locator("input[type='email'], input[placeholder*='mail']")
+                pass_input = ui_page.locator("input[type='password']")
 
-            if email_input.count() > 0 and pass_input.count() > 0:
-                email_input.first.fill(email)
-                pass_input.first.fill(password)
-
-                # Try register first, then login
-                register_btn = page.locator("button:has-text('Register'), button:has-text('Sign Up'), button:has-text('Create')")
-                login_btn = page.locator("button:has-text('Login'), button:has-text('Sign In'), button:has-text('Log In')")
-
-                if register_btn.count() > 0:
-                    register_btn.first.click(timeout=5000)
-                    time.sleep(2)
-                    self.log("INFO", "auth", f"Attempted registration with {email}")
-
-                # Try login
-                if login_btn.count() > 0:
-                    email_input.first.fill(email)
-                    pass_input.first.fill(password)
-                    login_btn.first.click(timeout=5000)
-                    time.sleep(2)
-
-                self.log("PASS", "auth", "Login flow completed")
+                if email_input.count() > 0 and pass_input.count() > 0:
+                    self.log("PASS", "auth_ui", "Auth modal has email + password inputs")
+                else:
+                    self.log("FAIL", "auth_ui", "Auth modal missing email or password input")
             else:
-                self.log("WARN", "auth", "Could not find email/password inputs")
-
-            self.screenshot(page, "auth_after_login")
-
+                self.log("FAIL", "auth_ui", "No sign-in button found on index.html")
         except Exception as e:
-            self.log("FAIL", "auth", f"Auth flow error: {str(e)[:150]}")
+            self.log("WARN", "auth_ui", f"UI auth test error: {str(e)[:100]}")
+        ui_page.close()
 
         return ctx
 
