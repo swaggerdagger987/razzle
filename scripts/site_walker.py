@@ -25,8 +25,18 @@ REPORT_DIR = PROJECT_DIR / "designer-reports"
 REPORT_DIR.mkdir(exist_ok=True)
 SCREENSHOT_DIR = PROJECT_DIR / "designer-screenshots"
 SCREENSHOT_DIR.mkdir(exist_ok=True)
+CREDS_PATH = PROJECT_DIR / "walker-credentials.json"
 
 BASE_URL = "http://localhost:8000"
+
+
+def load_credentials():
+    """Load test credentials from walker-credentials.json"""
+    if CREDS_PATH.exists():
+        with open(CREDS_PATH, encoding="utf-8") as f:
+            return json.load(f)
+    return None
+
 
 # What we expect to see on each page (from DESIGN.md + NORTH_STAR + agent design)
 EXPECTATIONS = {
@@ -619,8 +629,162 @@ class SiteWalker:
         print(f"Raw data: {json_path}")
         return report_path
 
+    def register_and_login(self, browser):
+        """Register a test account, login, return authenticated context"""
+        creds = load_credentials()
+        if not creds:
+            self.log("WARN", "auth", "No walker-credentials.json found. Skipping auth tests.")
+            return None
+
+        ctx = browser.new_context(viewport={"width": 1280, "height": 900})
+        page = ctx.new_page()
+        email = creds["test_account"]["email"]
+        password = creds["test_account"]["password"]
+
+        try:
+            # Try to register (may already exist)
+            page.goto(f"{BASE_URL}/index.html", wait_until="networkidle", timeout=15000)
+            time.sleep(2)
+
+            # Look for sign in / register button
+            sign_in = page.locator("a:has-text('Sign'), button:has-text('Sign'), [onclick*='auth'], [onclick*='login']")
+            if sign_in.count() > 0:
+                sign_in.first.click(timeout=3000)
+                time.sleep(1)
+
+            # Try to fill register form
+            email_input = page.locator("input[type='email'], input[placeholder*='mail'], input[name='email']")
+            pass_input = page.locator("input[type='password'], input[placeholder*='assword'], input[name='password']")
+
+            if email_input.count() > 0 and pass_input.count() > 0:
+                email_input.first.fill(email)
+                pass_input.first.fill(password)
+
+                # Try register first, then login
+                register_btn = page.locator("button:has-text('Register'), button:has-text('Sign Up'), button:has-text('Create')")
+                login_btn = page.locator("button:has-text('Login'), button:has-text('Sign In'), button:has-text('Log In')")
+
+                if register_btn.count() > 0:
+                    register_btn.first.click(timeout=5000)
+                    time.sleep(2)
+                    self.log("INFO", "auth", f"Attempted registration with {email}")
+
+                # Try login
+                if login_btn.count() > 0:
+                    email_input.first.fill(email)
+                    pass_input.first.fill(password)
+                    login_btn.first.click(timeout=5000)
+                    time.sleep(2)
+
+                self.log("PASS", "auth", "Login flow completed")
+            else:
+                self.log("WARN", "auth", "Could not find email/password inputs")
+
+            self.screenshot(page, "auth_after_login")
+
+        except Exception as e:
+            self.log("FAIL", "auth", f"Auth flow error: {str(e)[:150]}")
+
+        return ctx
+
+    def test_stripe_checkout(self, page, page_name):
+        """Test the Stripe checkout flow with test card"""
+        creds = load_credentials()
+        if not creds:
+            return
+
+        card = creds["stripe_test_card"]
+
+        try:
+            # Find upgrade/subscribe button
+            upgrade_btn = page.locator("button:has-text('Subscribe'), button:has-text('Upgrade'), button:has-text('Start'), a:has-text('Upgrade')")
+            if upgrade_btn.count() == 0:
+                self.log("WARN", page_name, "No upgrade/subscribe button found")
+                return
+
+            upgrade_btn.first.click(timeout=5000)
+            time.sleep(3)
+
+            # Check if Stripe checkout loaded (redirect or iframe)
+            current_url = page.url
+            if "checkout.stripe.com" in current_url:
+                self.log("PASS", page_name, "Stripe checkout redirect works")
+                self.screenshot(page, f"{page_name}_stripe_checkout")
+
+                # Fill test card
+                card_input = page.locator("input[name='cardNumber'], #cardNumber")
+                if card_input.count() > 0:
+                    card_input.first.fill(card["number"])
+                    exp_input = page.locator("input[name='cardExpiry'], #cardExpiry")
+                    if exp_input.count() > 0:
+                        exp_input.first.fill(card["exp"])
+                    cvc_input = page.locator("input[name='cardCvc'], #cardCvc")
+                    if cvc_input.count() > 0:
+                        cvc_input.first.fill(card["cvc"])
+
+                    self.log("PASS", page_name, "Stripe test card filled successfully")
+
+                    # Submit payment
+                    submit = page.locator("button[type='submit'], .SubmitButton")
+                    if submit.count() > 0:
+                        submit.first.click(timeout=10000)
+                        time.sleep(5)
+                        self.screenshot(page, f"{page_name}_stripe_after_submit")
+                        self.log("PASS", page_name, f"Stripe payment submitted. URL: {page.url[:80]}")
+                    else:
+                        self.log("WARN", page_name, "Could not find Stripe submit button")
+                else:
+                    self.log("WARN", page_name, "Stripe checkout loaded but could not find card input")
+            else:
+                self.log("WARN", page_name, f"Upgrade clicked but no Stripe redirect. URL: {current_url[:80]}")
+
+        except PlaywrightTimeout:
+            self.log("FAIL", page_name, "Stripe checkout timed out")
+        except Exception as e:
+            self.log("FAIL", page_name, f"Stripe checkout error: {str(e)[:150]}")
+
+    def test_situation_room(self, page, page_name):
+        """Test the Situation Room AI agent call"""
+        creds = load_credentials()
+        if not creds or creds.get("openrouter_key", {}).get("key", "").startswith("PASTE"):
+            self.log("WARN", page_name, "No OpenRouter key configured. Skipping AI test.")
+            return
+
+        try:
+            # Look for scenario input
+            textarea = page.locator("textarea, input[placeholder*='scenario'], input[placeholder*='question']")
+            if textarea.count() == 0:
+                self.log("WARN", page_name, "No scenario input found in Situation Room")
+                return
+
+            textarea.first.fill("Should I trade Breece Hall for the 1.02 pick?")
+            time.sleep(1)
+
+            # Find submit button
+            submit = page.locator("button:has-text('Run'), button:has-text('Ask'), button:has-text('Submit'), button:has-text('Brief')")
+            if submit.count() > 0:
+                submit.first.click(timeout=5000)
+                time.sleep(10)  # Wait for LLM response
+
+                # Check if any agent responded
+                visible = page.inner_text("body")
+                agent_names = ["Razzle", "Dr. Dolphin", "Hawkeye", "Bones", "Octo", "Atlas"]
+                responded = [name for name in agent_names if name in visible]
+
+                if responded:
+                    self.log("PASS", page_name, f"Agents responded: {', '.join(responded)}")
+                else:
+                    self.log("FAIL", page_name, "No agent responses appeared after submitting scenario")
+
+                self.screenshot(page, f"{page_name}_agent_response")
+            else:
+                self.log("WARN", page_name, "No submit button found for scenario")
+
+        except Exception as e:
+            self.log("FAIL", page_name, f"Situation Room test error: {str(e)[:150]}")
+
     def run(self, pages=None):
-        """Run the full site walk"""
+        """Run the full site walk: unauthenticated, then authenticated with Elite"""
         print(f"Razzle Site Walker")
         print(f"Deep mode: {self.deep}")
         print(f"Base URL: {BASE_URL}")
@@ -629,6 +793,11 @@ class SiteWalker:
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
 
+            # Phase 1: Unauthenticated walk (free user experience)
+            print(f"\n{'='*60}")
+            print(f"  PHASE 1: FREE USER WALK (not logged in)")
+            print(f"{'='*60}")
+
             targets = pages or list(EXPECTATIONS.keys())
             for page_name in targets:
                 expectations = EXPECTATIONS.get(page_name, {
@@ -636,6 +805,53 @@ class SiteWalker:
                     "clickables": [],
                 })
                 self.walk_page(browser, page_name, expectations)
+
+            # Phase 2: Authenticated walk (logged in, test Pro/Elite features)
+            print(f"\n{'='*60}")
+            print(f"  PHASE 2: AUTHENTICATED WALK (logged in)")
+            print(f"{'='*60}")
+
+            auth_ctx = self.register_and_login(browser)
+            if auth_ctx:
+                auth_page = auth_ctx.new_page()
+
+                # Walk authenticated pages
+                for page_name in ["lab.html", "league-intel.html", "agents.html", "pricing.html"]:
+                    try:
+                        auth_page.goto(f"{BASE_URL}/{page_name}", wait_until="networkidle", timeout=15000)
+                        time.sleep(3)
+                        self.screenshot(auth_page, f"auth_{page_name}")
+
+                        # Check for Pro/Elite features visible
+                        visible = auth_page.inner_text("body")
+                        if "upgrade" in visible.lower() or "pro" in visible.lower():
+                            self.log("INFO", f"auth_{page_name}", "Upgrade prompts visible (expected for free account)")
+
+                        # Check agent nudges (Elite only)
+                        nudges = auth_page.locator("[class*='nudge'], [class*='agent-nudge']")
+                        if nudges.count() > 0:
+                            self.log("PASS", f"auth_{page_name}", f"Agent nudges visible: {nudges.count()}")
+
+                    except Exception as e:
+                        self.log("FAIL", f"auth_{page_name}", f"Authenticated page error: {str(e)[:100]}")
+
+                # Test Stripe checkout from pricing page
+                try:
+                    auth_page.goto(f"{BASE_URL}/pricing.html", wait_until="networkidle", timeout=15000)
+                    time.sleep(2)
+                    self.test_stripe_checkout(auth_page, "pricing_checkout")
+                except Exception as e:
+                    self.log("FAIL", "pricing_checkout", f"Stripe test error: {str(e)[:100]}")
+
+                # Test Situation Room AI
+                try:
+                    auth_page.goto(f"{BASE_URL}/agents.html", wait_until="networkidle", timeout=15000)
+                    time.sleep(2)
+                    self.test_situation_room(auth_page, "situation_room_ai")
+                except Exception as e:
+                    self.log("FAIL", "situation_room_ai", f"AI test error: {str(e)[:100]}")
+
+                auth_ctx.close()
 
             browser.close()
 

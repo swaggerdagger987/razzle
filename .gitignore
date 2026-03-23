@@ -3,6 +3,9 @@
 Thumbs.db
 Desktop.ini
 
+# Credentials (never commit)
+walker-credentials.json
+
 # Editor
 .vscode/
 .idea/

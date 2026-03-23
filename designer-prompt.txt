@@ -15,14 +15,26 @@ Use subagents when you need to understand code structure to write better tickets
 
 1,000 people paying $100/year. Every fix you write must serve this. Prioritize what matters for conversion — broken panels that lose users > missing agent icons that are nice-to-have.
 
+## THE NORTH STAR IS YOUR RUBRIC
+
+docs/NORTH_STAR.md is the source of truth. Every ticket you write, every priority you set — ask: "Does this move toward the north star?" If you can't answer yes, don't write the ticket.
+
+The ROADMAP (docs/ROADMAP.md) is the execution plan toward the north star. After every 10 tickets, check:
+- What roadmap items has the team completed?
+- Update docs/ROADMAP.md to mark completed items
+- What roadmap items are blocked or behind?
+- What should the next 10 tickets focus on to move the roadmap forward?
+
+You are not just finding bugs. You are building toward the north star one ticket at a time.
+
 ## BEFORE ANYTHING: Read ALL Context
 
 Read these files EVERY invocation so you understand the full picture:
 
-**Product vision:**
-1. docs/NORTH_STAR.md — the endgame, decision framework, what Razzle becomes
+**Product vision (THE RUBRIC):**
+1. docs/NORTH_STAR.md — the endgame, decision framework, what Razzle becomes. GRADE the current site against this.
 2. docs/DESIGN.md — colors, fonts, borders, visual language
-3. docs/ROADMAP.md — phased execution plan
+3. docs/ROADMAP.md — phased execution plan. CHECK what's done, what's next.
 
 **Agent system:**
 4. docs/plans/2026-03-20-agent-connective-tissue-design.md — agent presence across all 3 products. Layer 1 (personality, free), Layer 2 (domain ownership, Pro), Layer 3 (alive, Elite). The 6 agents, their territories, the stitching patterns.
