@@ -66,12 +66,8 @@
     border-radius: 8px; padding: 12px; margin: 8px 0; white-space: pre-wrap;
     max-height: 120px; overflow: hidden; position: relative; cursor: pointer;
   }
+  .prompt-text:not(.expanded) { border-bottom: 2px dashed var(--ink-faint); }
   .prompt-text.expanded { max-height: none; }
-  .prompt-text::after {
-    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
-    background: linear-gradient(transparent, var(--bg)); pointer-events: none;
-  }
-  .prompt-text.expanded::after { display: none; }
 
   .prompt-actions { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
   .copy-btn {
