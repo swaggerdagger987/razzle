@@ -32,7 +32,21 @@ var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
       document.documentElement.setAttribute("data-theme", "dark");
       var meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.content = '#2d1f14';
+    } else if (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute("data-theme", "dark");
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = '#2d1f14';
     }
+  } catch (e) {}
+  // Listen for OS theme changes when user hasn't set a manual preference
+  try {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      if (!localStorage.getItem('razzle_theme')) {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        if (!e.matches) document.documentElement.removeAttribute('data-theme');
+        _updateThemeColor(e.matches);
+      }
+    });
   } catch (e) {}
 })();
 
