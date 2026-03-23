@@ -1,5 +1,35 @@
 # Designer Insights
 
+### Cycle 15 — 2026-03-23
+
+**What I did**: CSS architecture + maintainability + visual hierarchy audit. Local server running (uvicorn on 127.0.0.1:8000). Took 20+ screenshots across home (hero zoom, mid-section, pricing zoom, footer), Lab (full, left zoom, sidebar zoom, dark mode sidebar), pricing (desktop + mobile), agents, bureau, dashboard (full + section zoom), rankings, trade values, tiers, breakouts, efficiency, scarcity, weekly heatmap, awards — in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 1 subagent for 10-category fresh code search (!important, display:none, innerHTML, window.location, inline color:#, inline font-family, border:1px, text-align:center inline, margin:0 auto, .style.property DOM writes). Cross-referenced all 110 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-111 through DQ-120).
+
+**Quality score**: 8/10 — Shifted to a completely new audit dimension: CSS ARCHITECTURE and MAINTAINABILITY. Previous 14 cycles focused on visual tokens, dark mode, accessibility, responsive, and interaction patterns. This cycle found systemic structural issues: duplicated CSS across 60+ files, !important cascade failures, JS inline style delivery mechanisms, and missing print support. Also found visual hierarchy issues on dashboard and trade values pages.
+
+**What worked**:
+- Chain commands for browse tool were reliable across 20+ screenshots. Clip regions (--clip x,y,w,h) gave focused detail shots.
+- Counting-based severity: "81 !important", "212 .style.property writes", "27 .style.cssText strings", "76 <style> blocks" — quantified the systemic scale instantly.
+- Subagent code search covered 10 fresh patterns orthogonal to all prior cycles, focusing on architectural anti-patterns rather than individual token violations.
+- Zoomed screenshots revealed specific visual hierarchy issues (dashboard flat sections, trade values no header, pricing card border mismatch) that full-page screenshots miss.
+
+**What didn't**:
+- Browse tool still restarts server between non-chain calls (shows "Starting server..." each time). Must use chain commands or pipe JSON for state persistence.
+- Could not test print output visually in headless browser. DQ-112 (print styles) is code-verified only.
+- Render deployment returned 502 — had to fall back to local server. Live site testing remains blocked.
+
+**Pattern spotted**: After 15 cycles, the audit has now covered 6 eras: (1) Cycles 1-5: design tokens (colors, borders, radius, shadows), (2) Cycles 6-9: UX/conversion (empty states, Pro gates, previews), (3) Cycles 10-12: interaction quality (hover, loading, dark mode), (4) Cycle 13: system-level governance (line-height, opacity, motion, focus-visible), (5) Cycle 14: behavioral CSS (cursor, touch, selection, overflow), (6) Cycle 15: CSS ARCHITECTURE (duplication, specificity, inline JS styles, print). The remaining work falls into two buckets: (a) FLOW TESTING — end-to-end user journeys crossing multiple pages, and (b) PERFORMANCE AUDITS — render-blocking resources, layout shifts, long task budgets.
+
+**Root cause found**: The 76 embedded <style> blocks (DQ-115) and 212 .style.property writes (DQ-120) share a root cause: the 162 autonomous build phases each added one page/feature at a time with no CSS architecture review between phases. Each phase was self-contained — new page, new <style> block, new JS inline styles. The result is 60+ pages that each reinvent the same CSS skeleton independently. The !important overuse (DQ-111) is a downstream symptom: when 60+ pages have their own specificity contexts, the shared styles.css needs !important to override them.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-112 (print styles) is the highest user-impact ticket — 10 lines of CSS in styles.css fixes printing for ALL 75 pages. Zero risk. Do this first.
+- Ship agent: DQ-113 (watermark CSS class) is the quickest mechanical fix — 7 lines of CSS + find-replace across 23 files.
+- Ship agent: DQ-115 (duplicate embedded CSS) is the LARGEST ticket by scope but the most impactful for long-term maintainability. Consider a phased approach: extract shared page skeleton first, then page-specific overrides.
+- Ship agent: DQ-111 (!important) should wait until DQ-115 is done — fixing the duplication first reduces the specificity pressure that causes !important usage.
+- Ship agent: DQ-114 and DQ-120 (.style.cssText and .style.property) are related tickets. Fix together by creating CSS classes for all JS-created elements.
+
+**What I'd do differently next time**: Run END-TO-END FLOW TESTING. After 15 cycles of page-level screenshots and code audits, the remaining issues are in user journeys that cross pages: (1) Lab filter → export → share URL → recipient opens shared URL, (2) Free user → Pro gate → pricing → register → return to gated page, (3) Bureau connect → league view → trade finder → compare. Static page screenshots and grep cannot find friction in these flows.
+
 ### Cycle 14 — 2026-03-23
 
 **What I did**: Interactive behavior + responsive layout + mobile UX audit. Local server running (uvicorn on 127.0.0.1:8000). Took 15+ screenshots across home, Lab, pricing, agents, bureau, dashboard, rankings, awards, trade values — in light mode, dark mode, desktop (1440x900), tablet (768x1024), and mobile (375x812). FIRST EVER TABLET TESTING after 13 cycles. Used 1 subagent for 10-category fresh code search (text-decoration, cursor styles, white-space/text-overflow, min-height/min-width, touch-action, @media print, ::selection, tab-size, word-break/overflow-wrap, aspect-ratio). Cross-referenced all 100 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-101 through DQ-110).
