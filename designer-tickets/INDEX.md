@@ -168,3 +168,27 @@
 | DQ-095 | Placeholder text generic — 32/35 inputs say "Search..." not personality language | lab.html, league-intel.html, agents.html, 8+ pages |
 | DQ-096 | backdrop-filter missing -webkit- prefix — Safari blur broken on cmd palette | styles.css:1073 |
 | DQ-098 | opacity values fragmented — 12 distinct values, no semantic tokens | styles.css, agents.html, 30+ pages |
+
+## Cycle 22 — Fresh Code Audit (DQ-131 to DQ-140)
+
+### P1
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-131 | **Sitewide hover translate(-1px) should be (-2px)** — 35 instances, 16 files | styles.css, index.html, lab.html, agents.html, league-intel.html, +11 more |
+
+### P2
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-132 | Agent config non-standard hex colors (#e87422 Octo, #d44040 Atlas) | agent-config.js |
+| DQ-133 | Prompts .prompt-agent badge missing 2px border (vs .prompt-cat) | prompts.html:60 |
+| DQ-134 | Home page 4 different max-widths (760/820/860/960px) — uneven edges | index.html |
+| DQ-136 | Prompts .use-btn hover shadow only 2px, no lift | prompts.html:87 |
+| DQ-139 | 404 tigerWalk CSS animation no prefers-reduced-motion guard | 404.html:98-126 |
+| DQ-140 | Prompts truncated text no visual expand indicator (fade/chevron) | prompts.html:65-72 |
+
+### P3
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-135 | Cheatsheet player link uses old /player.html?id= pattern | cheatsheet.html:461 |
+| DQ-137 | Social-card uses --radius-sm (8px) should be --radius (12px) for cards | index.html:428 |
+| DQ-138 | Prompts filter pills lose ink border on hover — fills solid orange | prompts.html:40-42 |

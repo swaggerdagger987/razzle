@@ -1,5 +1,23 @@
 # Designer Insights
 
+### Cycle 22 — 2026-03-23
+
+**What I did**: Fresh code audit after headless browser failed (CSP upgrade-insecure-requests blocks localhost rendering, DNS resolution failing for external sites). Pivoted to code-level design audit. Ran 7 parallel search agents: cold grays, 1px borders, hardcoded fonts, hardcoded colors, loading states, border-radius tokens, box-shadow patterns. Cross-referenced all 336 existing tickets (130 root + 21 open + 100+ pending + 10 queue + 156 done) to ensure zero duplicates. Wrote 10 new tickets (DQ-131 through DQ-140).
+
+**Quality score**: 7/10 — Solid code-level findings, but couldn't do visual QA due to browser issues.
+
+**What worked**: Parallel agent searches were efficient. Cross-referencing against 336 existing tickets ensured no duplicates.
+
+**What didn't**: Headless browser couldn't render ANY page (localhost or remote). CSP `upgrade-insecure-requests` header + DNS resolution issues. Tried 4 different approaches (localhost:8000, 127.0.0.1:8000, static file server on :9876, example.com) — all returned empty body.
+
+**Pattern spotted**: The sitewide `translate(-1px, -1px)` hover issue (DQ-131) is the biggest find — 35 instances in 16 files including styles.css itself. This means the design system base classes teach the wrong pattern, and every page inherits it. Fix styles.css first, then the rest.
+
+**Root cause found**: The hover translate discrepancy (-1px vs -2px) likely happened early in development (maybe copied from a reference) and then propagated to every page that copied the hover pattern. The prompts page issues (DQ-133, DQ-136, DQ-138, DQ-140) suggest it was built in one pass without a design review.
+
+**Suggestion for teammates**: Ship agent should fix DQ-131 first (sitewide translate) since it's a single find-replace across 16 files. Then DQ-132 (agent colors) since it touches a single file. Prompts page tickets (133, 136, 138, 140) can be batched as one "prompts page polish" commit.
+
+**What I'd do differently next time**: Investigate the headless browser issue before starting searches. Maybe disable CSP on the local server for QA purposes, or use a different browser tool.
+
 ### Cycle 16 — 2026-03-23
 
 **What I did**: ROBUSTNESS + PERFORMANCE audit — shifted from visual tokens to runtime code quality. Local server running (uvicorn on 127.0.0.1:8000). Took 15+ screenshots across home, Lab (desktop + mobile), pricing (desktop + mobile), agents, bureau, dashboard, trade values, rankings, breakouts, awards, efficiency, weekly heatmap. Used 2 subagents: (1) 10-category performance/robustness search (render-blocking, duplicate listeners, localStorage try-catch, lazy loading, fetch timeout, document.write, innerHTML safety, CSS @import, viewport meta, console.log), (2) 10-category code quality search (fetch .catch(), addEventListener cleanup, hardcoded years, error UI, nav active state, broken links, CSP headers, API error leakage, duplicate CSS selectors, form labels). Cross-referenced all 120 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-121 through DQ-130).
