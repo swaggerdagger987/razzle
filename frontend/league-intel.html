@@ -1543,7 +1543,7 @@
     padding: 4px 12px;
     border: 2px solid var(--ink);
     border-radius: 20px;
-    transform: rotate(2deg);
+    transform: rotate(3deg);
     white-space: nowrap;
   }
 
@@ -3558,7 +3558,7 @@ function renderPressureMap(container, cards, isPro) {
   if (scores.length === 0) return;
 
   var html = '<div class="pressure-map">';
-  html += '<div class="pressure-map-title">trade deadline pressure map <span style="font-family:var(--font-hand); font-size:11px; color:var(--ink-light); transform:rotate(2deg); display:inline-block;">who\'s desperate?</span></div>';
+  html += '<div class="pressure-map-title">trade deadline pressure map <span style="font-family:var(--font-hand); font-size:11px; color:var(--ink-light); transform:rotate(3deg); display:inline-block;">who\'s desperate?</span></div>';
 
   // Show top 3 in detail for free, rest blurred
   var visibleCount = isPro ? scores.length : Math.min(3, scores.length);

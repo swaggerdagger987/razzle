@@ -11687,7 +11687,7 @@ function renderRosterReport() {
   html += '</div>';
   // Status badge with explainer
   html += '<div style="text-align:center;">';
-  html += '<div title="Based on total value + average age: high value + young = competing, low value or old = rebuilding" style="background:' + sc + '; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); transform:rotate(2deg); text-transform:uppercase; cursor:help;">' + escapeHtml(r.competing_status) + '</div>';
+  html += '<div title="Based on total value + average age: high value + young = competing, low value or old = rebuilding" style="background:' + sc + '; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); transform:rotate(3deg); text-transform:uppercase; cursor:help;">' + escapeHtml(r.competing_status) + '</div>';
   html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Window</div>';
   html += '</div>';
   html += '</div>';
