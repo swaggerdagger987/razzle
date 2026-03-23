@@ -1,4 +1,4 @@
-## Designer Insights (updated ticket DES-046)
+## Designer Insights (updated ticket DES-056)
 
 ### Patterns Found
 - Home page layout is mostly polished — chunky borders, correct colors, proper font usage
@@ -23,6 +23,15 @@
 - `overflow-x: auto` is applied inconsistently — some panel tables have it, others use `overflow: hidden` (DES-023, fixed)
 - **Conversion path has multiple design debt items** — auth modal shadow/radius orphaned, plan cards no hover, pricing badges sub-minimum radius
 
+### Cycle 5 New Findings: JS-Generated Markup Is the Next Frontier
+- **lab-panels.css has 171 sub-minimum border-radius instances** — this is 24x the size of the styles.css fix (DES-041, 7 instances). It's the single biggest token governance gap remaining.
+- **JS-generated inline styles bypass the CSS design system** — lab-panels.js, league-intel.html JS, and formula-store.js all generate HTML with hardcoded values. CSS-only fixes can't reach this code.
+- **league-intel.html has three separate issues** on the conversion pathway: sub-minimum radius (DES-048), wrong text-on-accent variable (DES-049), and broken hover-lift (DES-050).
+- **Canvas code is well-architectured** — `getCanvasTheme()` in app.js handles bg/ink/white correctly. Only two minor issues found: `#ffffff` instead of `t.white` (charts.js) and `#fff` instead of `var(--text-on-accent)` (lab-panels.js heatmap).
+- **warroom.js is clean** — all hex colors are for pixel art canvas rendering under the Situation Room always-dark exception. No design violations.
+- **--text-on-accent contrast is acceptable** — verified both modes. Light mode white-on-orange = 3.1:1 (passes UI component threshold). Dark mode espresso-on-orange = 5.38:1 (passes AA).
+- **color:var(--bg) vs color:var(--text-on-accent)** — league-intel.html JS badges use `var(--bg)` which gives sand-on-orange in light mode (poor contrast). Should be `var(--text-on-accent)` which gives white in light, espresso in dark.
+
 ### What Matters Most for Conversion
 - **OG image** is seen by more people than the home page itself — it's the preview on every social share (DES-007, FIXED)
 - Home page scroll path must be flawless — every section builds the "this is polished" impression
@@ -36,31 +45,33 @@
 - Panel count on pricing page (60+) undersells the actual product (67+ panels) (DES-013, FIXED)
 - **Dark mode must work perfectly** — power users toggle it, and broken dark mode = "unfinished product"
 - **Pricing page at tablet widths** is a real conversion risk — iPad users are in the target demographic (DES-024, FIXED)
-- **Auth modal is the conversion gateway** — every registration and login passes through it. Orphaned shadow/radius values make it feel like a different product (DES-027, DES-028)
-- **Plan cards need hover-lift** — the pricing page is the decision point. Static cards don't invite interaction (DES-030)
-- **PNG exports ARE marketing** — compare page and Lab exports with hardcoded colors don't match dark mode (DES-034)
-- **Bureau connect card is the conversion engine's front door** — 3 design violations on the first thing a Sleeper-connected user sees (DES-043)
-- **Footer breaks on 71 pages at 375px** — mobile users from Twitter/Reddit hit broken footers everywhere (DES-037)
+- **Auth modal is the conversion gateway** — every registration and login passes through it. Orphaned shadow/radius values make it feel like a different product (DES-027, DES-028, FIXED)
+- **Plan cards need hover-lift** — the pricing page is the decision point. Static cards don't invite interaction (DES-030, FIXED)
+- **PNG exports ARE marketing** — compare page and Lab exports with hardcoded colors don't match dark mode (DES-034, FIXED)
+- **Bureau connect card is the conversion engine's front door** — 3 design violations on the first thing a Sleeper-connected user sees (DES-043, FIXED)
+- **Footer breaks on 71 pages at 375px** — mobile users from Twitter/Reddit hit broken footers everywhere (DES-037, FIXED)
+- **Bureau hover-lift is broken** — league cards hover shadow = base shadow, no lift effect (DES-050, NEW)
+- **Bureau badge contrast in light mode** — color:var(--bg) gives sand text on colored backgrounds (DES-049, NEW)
 
 ### Issue Categories by Impact
 1. **P0 — Launch blockers** — OG image wrong tagline (DES-007) [DONE]
-2. **P1 — Mobile breaking** — footer minmax(140px) on 71 pages (DES-037), Bureau connect card off-spec (DES-043)
-3. **P1 — Conversion gateway** — auth modal shadow 8px (DES-027), auth modal radius 16px (DES-028), plan cards no hover (DES-030) [ALL DONE]
-4. **P1 — Sitewide dark mode** — btn-primary (DES-017), nav active (DES-018), auth tab (DES-019), chips (DES-020) [ALL DONE], cmd palette #fff (DES-029) [DONE]
-5. **P1 — Sitewide design violations** — ink-light color (DES-003), 1px borders (DES-010), logo font (DES-009), fake testimonials (DES-008) [ALL DONE]
-6. **P2 — CSS token governance (THE SYSTEMIC THEME)** — border-radius 10px (DES-038, 50+ instances), 16px (DES-039, 3 pages), 3px/6px (DES-041, 7 elements), box-shadow 6px at rest (DES-040, 30+ components), pricing radius (DES-044)
-7. **P2 — Hardcoded text color** — lab-panels 96x color:#fff (DES-032) [DONE], 69 HTML files 121x color:white (DES-042), diff-mode label (DES-033) [DONE]
-8. **P2 — Footer architecture** — no CSS class (DES-045), no semantic element (DES-046) — root cause of DES-037
-9. **P2 — Conversion page polish** — elite CTA inline style (DES-035) [DONE], pricing badges radius (DES-031) [DONE]
-10. **P2 — Export quality** — compare.js hardcoded hex (DES-034) [DONE]
-11. **P2 — Dark mode panels** — tier descriptions (DES-021), medal colors (DES-022) [DONE]
-12. **P2 — Mobile responsive** — panel table scroll (DES-023), pricing grid (DES-024), footer grid (DES-025) [ALL DONE]
+2. **P1 — Lab panel CSS governance** — 171 sub-minimum radius in lab-panels.css (DES-047)
+3. **P1 — Bureau conversion path** — radius (DES-048), badge contrast (DES-049), hover-lift (DES-050)
+4. **P1 — Mobile breaking** — footer minmax(140px) on 71 pages (DES-037) [DONE]
+5. **P1 — Conversion gateway** — auth modal (DES-027, DES-028), plan cards (DES-030) [ALL DONE]
+6. **P1 — Sitewide dark mode** — btn-primary (DES-017), nav (DES-018), auth (DES-019), chips (DES-020), cmd-palette (DES-029) [ALL DONE]
+7. **P2 — JS inline style governance** — lab-panels.js hex in DOM (DES-051), heatmap #fff (DES-052), formula-store radius (DES-054)
+8. **P2 — Canvas theme compliance** — charts.js #ffffff (DES-053)
+9. **P2 — Compare page polish** — sub-minimum radius (DES-055), no hover-lift (DES-056)
+10. **P2 — CSS token governance** — border-radius 10px (DES-038), 16px (DES-039), box-shadow 6px at rest (DES-040) [ALL DONE]
+11. **P2 — Hardcoded text color** — lab-panels 96x (DES-032) [DONE], 69 HTML files 121x (DES-042) [DONE]
+12. **P2 — Footer architecture** — no CSS class (DES-045), no semantic element (DES-046) [BOTH DONE]
 
-### Emerging Patterns (updated DES-046)
-- **CSS token governance is the dominant systemic issue now** — Cycles 1-3 fixed individual color/dark-mode bugs. Cycle 4 reveals that the DESIGN SYSTEM EXISTS (tokens are defined) but is UNDERENFORCED (code uses magic numbers). 10px radius (50+), 6px shadow at rest (30+), color:white (217 total). The tokens are there. The code doesn't use them.
-- **Footer architecture is the maintenance bottleneck** — DES-037 (71 pages need minmax fix) exists because DES-045 (no CSS class). Every future footer change requires 72 file edits. This is the root cause, not a symptom.
-- **The 72-page duplication problem** — Footer, position badge colors, border-radius, box-shadow — all duplicated per-page rather than shared. This is the architectural debt ceiling. Fixing it once (shared CSS classes) prevents the next 10 tickets.
-- **Conversion path cleanup is nearly complete** — DES-027 through DES-035 covered auth modal, pricing page, and plan cards. DES-043 (Bureau connect card) and DES-044 (promo input) are the remaining items.
+### Emerging Patterns (updated DES-056)
+- **JS-generated markup is the next frontier** — Cycles 1-4 fixed CSS-only issues. Cycle 5 reveals that JS code (lab-panels.js, league-intel.html, formula-store.js) generates HTML with hardcoded values that CSS-only fixes can't reach. The pattern: `style="...border-radius:4px..."` in template literals.
+- **lab-panels.css 171-instance radius problem is the highest-leverage systemic fix** — one file, one find-replace pattern (with exceptions for bar fills). Fixes every Lab panel at once.
+- **Bureau has accumulated design debt** — league-intel.html is the most feature-rich page but also the most design-inconsistent. Three separate tickets from one page (DES-048, 049, 050).
+- **Canvas code is well-architectured but has two minor gaps** — getCanvasTheme() was the right pattern. Only `#ffffff`/`#fff` slipped through in two places.
 - **Things that are GOOD and should be preserved:**
   - Zero rogue font families (no sans-serif, arial, helvetica)
   - Zero generic "Loading..." text (all personality)
@@ -71,14 +82,16 @@
   - Dark mode CSS variables are all correctly defined
   - Agent SVG icons all exist
   - `getCanvasTheme()` pattern is the right architecture for canvas exports
+  - warroom.js pixel art is cleanly isolated under the Situation Room dark exception
+  - --text-on-accent contrast verified acceptable in both modes
 
 ### What to Check Next
-- Formula store page (formula-store.js generates UI — any inline style issues?)
-- Screener PNG export in dark mode (does watermark + background render correctly?)
-- Chart canvas exports across panel pages (same pattern as compare.js DES-034?)
-- Whether skeleton loader gradient (lab.html) looks correct in dark mode
-- about.html footer links to standalone pages — do redirects work?
-- Compare page responsive behavior on mobile
-- agents.html (Situation Room) pixel canvas rendering on different viewport sizes
-- Dark mode on league-intel.html Bureau sections (odds cards, manager profiles)
-- Whether `--text-on-accent: var(--bg)` actually works for dark mode badges on vibrant accents (contrast check)
+- lab-panels.js: more JS-generated inline styles beyond the 7 hex instances found (full grep for style=" in template literals)
+- league-intel.html: remaining `overflow:hidden` on table containers — any truncating data on mobile?
+- lab.js: inline style color/radius/shadow audit (same pattern as lab-panels.js)
+- Standalone panel pages (aging.html, breakouts.html, etc.) — do any still have page-specific CSS with sub-minimum values?
+- Dark mode rendering of formula-store overlay (store-card backgrounds, search input)
+- Player profile modal (lab.html) dark mode completeness — was color:white audit done but radius/shadow not?
+- Whether the 171 lab-panels.css instances include any that were INTENTIONALLY smaller (scrollbar tracks, progress fill bars) — need exceptions list
+- Trade analyzer page (if it exists as standalone) — design compliance
+- Screener PNG export in dark mode — does watermark render with correct dark-mode colors?
