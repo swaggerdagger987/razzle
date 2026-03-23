@@ -6,6 +6,10 @@ Desktop.ini
 # Credentials (never commit)
 walker-credentials.json
 
+# SQLite WAL files (NEVER commit — causes corruption when git touches them)
+*.db-shm
+*.db-wal
+
 # Editor
 .vscode/
 .idea/

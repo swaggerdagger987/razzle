@@ -32,6 +32,58 @@ _pool_lock = threading.Lock()
 
 
 
+CLEAN_DB_PATH = DB_PATH.parent / "terminal_clean.db"
+
+
+def _check_integrity():
+    """Check database integrity on startup. Auto-recover from clean backup if corrupt."""
+    if not DB_PATH.exists():
+        if CLEAN_DB_PATH.exists():
+            logger.warning("terminal.db missing — restoring from terminal_clean.db")
+            import shutil
+            shutil.copy2(str(CLEAN_DB_PATH), str(DB_PATH))
+        else:
+            logger.error("No database found at %s", DB_PATH)
+            return False
+
+    try:
+        conn = sqlite3.connect(str(DB_PATH), timeout=10)
+        result = conn.execute("PRAGMA integrity_check").fetchone()
+        conn.close()
+        if result[0] == "ok":
+            logger.info("Database integrity check: OK")
+            return True
+        else:
+            logger.error("Database integrity check FAILED: %s", result[0])
+    except Exception as e:
+        logger.error("Database corrupt or unreadable: %s", e)
+
+    # Auto-recover from clean backup
+    if CLEAN_DB_PATH.exists():
+        logger.warning("Recovering from terminal_clean.db...")
+        # Remove corrupt WAL files
+        shm = DB_PATH.parent / "terminal.db-shm"
+        wal = DB_PATH.parent / "terminal.db-wal"
+        for f in [shm, wal]:
+            if f.exists():
+                try:
+                    f.unlink()
+                    logger.info("Removed corrupt %s", f.name)
+                except Exception:
+                    pass
+        import shutil
+        shutil.copy2(str(CLEAN_DB_PATH), str(DB_PATH))
+        logger.warning("Database restored from clean backup")
+        return True
+    else:
+        logger.error("No clean backup found at %s — cannot auto-recover", CLEAN_DB_PATH)
+        return False
+
+
+# Run integrity check on module load
+_check_integrity()
+
+
 def _make_conn() -> sqlite3.Connection:
     """Create a fresh SQLite connection with standard settings."""
     conn = sqlite3.connect(str(DB_PATH), timeout=30, check_same_thread=False)
