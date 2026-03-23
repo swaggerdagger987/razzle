@@ -527,6 +527,14 @@ function escapeJS(str) {
   return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\x27").replace(/"/g, "\\x22").replace(/</g, "\\x3c").replace(/>/g, "\\x3e").replace(/&/g, "\\x26").replace(/\n/g, "\\n").replace(/\r/g, "\\r");
 }
 
+// ─── Offline / Online detection ────────────────────────────────
+window.addEventListener('offline', function() {
+  _showToast('You appear to be offline. Reconnect to keep exploring.', 'warning', 0);
+});
+window.addEventListener('online', function() {
+  _showToast('Back online.', null, 2000);
+});
+
 const API_BASE = window.location.origin;
 
 function getAuthHeaders() {
@@ -537,6 +545,7 @@ function getAuthHeaders() {
 }
 
 async function apiFetch(path, options = {}) {
+  if (!navigator.onLine) throw new Error("You're offline — check your connection.");
   const url = API_BASE + path;
   // Auto-include auth headers
   const authHeaders = getAuthHeaders();
