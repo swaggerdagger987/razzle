@@ -1830,9 +1830,9 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
       const pid = player.player_id || player.player_name || "";
       const note = getPlayerNote(pid);
       if (note) {
-        html += `<td class="notes-cell has-note" onclick="event.stopPropagation(); showNoteEditor('${escapeJS(pid)}', this)" title="${escapeAttr(note)}"><span class="note-text">${escapeHtml(note)}</span></td>`;
+        html += `<td class="notes-cell has-note" role="button" tabindex="0" aria-label="Edit note" onclick="event.stopPropagation(); showNoteEditor('${escapeJS(pid)}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();showNoteEditor('${escapeJS(pid)}',this)}" title="${escapeAttr(note)}"><span class="note-text">${escapeHtml(note)}</span></td>`;
       } else {
-        html += `<td class="notes-cell" onclick="event.stopPropagation(); showNoteEditor('${escapeJS(pid)}', this)" title="Click to add note"><span class="note-pencil">&#9998;</span></td>`;
+        html += `<td class="notes-cell" role="button" tabindex="0" aria-label="Add note" onclick="event.stopPropagation(); showNoteEditor('${escapeJS(pid)}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();showNoteEditor('${escapeJS(pid)}',this)}" title="Click to add note"><span class="note-pencil">&#9998;</span></td>`;
       }
       continue;
     }
