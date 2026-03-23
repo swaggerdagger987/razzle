@@ -215,16 +215,73 @@ Three new audit dimensions this cycle — moving beyond ARIA to the visual/physi
   - Error states preserve previous data (don't clear table on fetch failure)
   - Sleeper API errors are specific and helpful ("couldn't find that username", "servers are napping")
 
-### What to Check Next (Cycle 11)
-- After DES-097: verify screen reader announces login error when invalid credentials entered
-- After DES-098: verify --ink-light contrast ratio >= 4.5:1 in dark mode with new override value
-- After DES-099: verify filter chip remove buttons are tappable on 375px mobile viewport
-- After DES-100: verify briefing cards toggle with Enter/Space keys, aria-expanded updates
-- After DES-101: verify a Razzle-voiced toast appears on simulated JS error (throw in console)
-- After DES-102: verify warroom.js agents don't animate with prefers-reduced-motion: reduce
-- og:image could be page-specific for high-traffic tool pages (currently generic on 74/75)
-- Print CSS audit — only cheatsheet.html has @media print
-- SVG icon alt text — do agent SVG icons in sidebar have accessible names?
-- Table caption/summary — do data tables have captions for screen readers?
-- Color-blind safe mode — position colors (QB blue, RB teal, WR terracotta, TE purple) rely on color alone in many places
-- Scroll indicators on horizontally scrolling tables — visual cue that content extends offscreen
+### Cycle 11 Findings: Table Semantics, Sidebar Keyboard Nav, Structural Accessibility
+
+Five new audit dimensions this cycle — moving from ARIA attributes to deeper structural accessibility:
+
+- **Lab sidebar is 100% mouse-only** (DES-107, DES-108) — the product's primary navigation to 70+ panels has ZERO keyboard support. 60+ `<a>` elements have no `href` or `tabindex` (not focusable). 8 category divs have no `role="button"`, no `aria-expanded`, no keyboard handler. This is the single largest accessibility gap remaining — it affects every paid feature.
+- **82+ data tables have no `<caption>`** (DES-110) — lab.html screener is the ONLY table with a screen-reader-visible caption. 45 standalone page tables + 37 lab-panels.js tables are nameless. Screen readers list tables by caption; without one, all 82+ tables are indistinguishable.
+- **Zero `scope="col"` outside lab.js** (DES-111) — lab.js correctly uses `scope="col"` on all 8 header types. But lab-panels.js (37 tables) and all standalone pages (45+ tables) have zero scope attributes. The pattern exists; it just wasn't extended.
+- **Agent SVGs have no `<title>` and are always `alt=""`** (DES-112) — the identity layer described in the agent connective tissue design is invisible to screen readers. 6 SVG files, no titles. All `<img>` references use empty alt.
+- **Zero scroll indicators on 58+ overflow tables** (DES-114) — mobile users from Twitter/Reddit get no visual cue that data extends offscreen. No shadow, no fade, no arrow.
+- **Home page mini-screener rows use `onclick` only** (DES-109) — `<tr onclick="window.location=...">` with no tabindex, role, or keyboard handler. Conversion funnel entry point is mouse-only.
+- **11 empty `<th></th>` have no accessible name** (DES-113) — screen readers say "column header, empty" for spacer/action columns.
+- **50 inline `onerror` handlers duplicated across 25 files** (DES-115) — CSP risk if security headers are added later.
+- **67 pages skip-link targets `<span>` not `<main>`** (DES-116) — functional but suboptimal; the `<main>` landmark exists but isn't the skip-link target.
+
+### Cycle 10 fix verification
+- **DES-097 CONFIRMED FIXED** — `aria-describedby` now links auth modal inputs to error messages. `aria-invalid` is set/removed dynamically. Formula publish and Sleeper connect also fixed.
+- **DES-093 partially fixed** — `aria-live` now present in 40 files (41 instances). Verify completeness per ticket.
+- **DES-092 partially fixed** — `role="alert"` now in 4 files (5 instances). Verify coverage.
+- **Position colors are NOT color-only** — all position badges include text labels (QB/RB/WR/TE). No color-blind ticket needed.
+- **All `<select>` elements have `aria-label`** — no unlabeled dropdowns.
+- **All 75 pages have `<nav aria-label="Main navigation">`** — nav landmarks complete.
+- **All 75 pages use `display=swap` for fonts** — no FOIT issues.
+
+### Issue Categories by Impact (updated DES-116)
+1. **P1 — Lab sidebar keyboard navigation** — DES-107 (panel links not focusable), DES-108 (categories not accessible). THE biggest remaining gap.
+2. **P1 — Home page keyboard accessibility** — DES-109 (mini-screener rows mouse-only). Conversion funnel.
+3. **P1 — Prior cycle keyboard/ARIA** — DES-081, DES-084, DES-087, DES-088, DES-089, DES-090, DES-092, DES-094 (still open)
+4. **P2 — Table semantics** — DES-110 (82+ tables no caption), DES-111 (zero scope=col), DES-113 (empty th)
+5. **P2 — Agent identity** — DES-112 (SVG icons invisible to screen readers)
+6. **P2 — Mobile usability** — DES-114 (no scroll indicators on overflow tables)
+7. **P2 — Code quality / CSP** — DES-115 (50 inline onerror handlers)
+8. **P3 — Landmarks** — DES-116 (skip-link targets span not main)
+
+### Emerging Patterns (updated DES-116)
+- **The visual layer is done. The structural layer is not.** Cycles 1-8 fixed every visual issue: colors, fonts, borders, radius, dark mode, shadows. Cycles 9-10 fixed the ARIA layer: roles, live regions, focus-visible, contrast. Cycle 11 reveals the next layer down: table semantics (caption, scope), sidebar keyboard navigation, and scroll UX. Each cycle peels back one more layer of the accessibility onion.
+- **Lab sidebar keyboard nav is the new #1 gap.** It's the equivalent of finding that the Lab screener's `<th>` elements had no `scope` — the foundational navigation structure is correctly built visually but has zero structural accessibility.
+- **Table semantics follow the same "exists once, not extended" pattern** as previous issues. `<caption>` exists on the screener table. `scope="col"` exists in lab.js. Neither pattern was applied to the 82+ other tables. This is the same root cause as canvas ARIA (static canvases have it, JS-created ones don't) and many other issues.
+- **The position color-blind concern was a false alarm** — every position badge includes text. Good design discipline.
+- **Things that are GOOD and should be preserved:**
+  - Zero rogue font families (confirmed cycle 11)
+  - Zero generic "Loading..." text (confirmed cycle 11)
+  - Zero gradients in CSS classes
+  - Zero cold grays, zero blue-black ink
+  - Zero color:white/color:#fff in lab.js or HTML pages
+  - Zero 1px borders in lab.js
+  - All 75 pages have lang="en"
+  - All 75 pages have skip-to-content links (functional)
+  - All 75 pages have `<nav aria-label="Main navigation">`
+  - All 75 pages have `<footer>` element
+  - All 75 pages use display=swap for fonts
+  - All `<select>` elements have aria-label
+  - Position badges always include text labels (not color-only)
+  - DES-097 form validation ARIA fully implemented
+  - Agent-voiced error copy throughout (razzleError, getErrorText)
+  - lab.js screener table has correct caption + scope=col pattern
+
+### What to Check Next (Cycle 12)
+- After DES-107: verify all sidebar panel links are tabbable and activatable with Enter
+- After DES-108: verify sidebar categories toggle with Enter/Space, aria-expanded updates
+- After DES-109: verify home page mini-screener rows are reachable by Tab and activatable by Enter
+- After DES-110: verify screen reader can identify tables by caption when listing all tables on a page
+- After DES-111: verify screen reader announces column header when navigating data cells
+- After DES-114: verify scroll indicator appears on mobile viewport for wide tables
+- Table `<thead>`/`<tbody>` correctness — are all tables properly structured?
+- `aria-sort` on sortable columns in lab.js — are ascending/descending sort states announced?
+- Page-specific og:image — currently 74/75 pages use generic og-image.png
+- Print CSS — only cheatsheet.html has @media print; rankings, tiers, trade values could benefit
+- `tabindex` on interactive elements in lab-panels.js — are panel-specific controls keyboard-reachable?
+- Form `autocomplete` attribute usage — do login/register forms hint correct autocomplete types? (verified: they do)
+- Error recovery UX — when API calls fail, can users retry without losing state?

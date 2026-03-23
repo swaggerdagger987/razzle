@@ -1,5 +1,5 @@
 {
-  "last_ticket_id": 106,
+  "last_ticket_id": 116,
   "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
@@ -151,7 +151,17 @@
     "--ink-faint used as TEXT color in 53 instances across 20 files — WCAG contrast ~1.8:1 (cycle 10)",
     "formula-store.js submitPublish — color-only validation (red border), no error text, no aria-invalid (cycle 10)",
     "warroom.js canvas help text drawn via ctx.fillText — invisible to screen readers (cycle 10)",
-    "nav-search-hint ~19px height, nav-plan-badge ~18px height — below 24px touch target minimum (cycle 10)"
+    "nav-search-hint ~19px height, nav-plan-badge ~18px height — below 24px touch target minimum (cycle 10)",
+    "lab.html sidebar — 60+ panel links are <a> without href or tabindex, not keyboard focusable (cycle 11)",
+    "lab.html sidebar — 8 category divs have no role=button, tabindex, aria-expanded, or keyboard handler (cycle 11)",
+    "index.html mini-screener — <tr onclick> without tabindex, role=link, or onkeydown handler (cycle 11)",
+    "sitewide data tables — only lab.html screener has <caption>; 82+ tables have none (cycle 11)",
+    "standalone pages + lab-panels.js — zero scope=col on <th> elements (lab.js does it correctly) (cycle 11)",
+    "6 agent SVG icons — no <title> element, all <img> use alt=\"\" treating identity as decorative (cycle 11)",
+    "11 standalone pages — empty <th></th> with no aria-label (cycle 11)",
+    "58+ pages — overflow-x:auto tables have zero visual scroll indicators (cycle 11)",
+    "25 files — 50 inline onerror handlers duplicated, CSP risk (cycle 11)",
+    "67 pages — skip-link targets <span> not <main> landmark (cycle 11)"
   ],
   "tickets_written": [
     {"id": "DES-001", "file": "designer-tickets/done/001-orphan-discovery-filter-chip.md", "priority": "P2", "area": "home page", "summary": "Orphan 'Veteran Studs' chip on discovery filters"},
@@ -259,7 +269,17 @@
     {"id": "DES-103", "file": "designer-tickets/open/103-ink-faint-used-as-text-color.md", "priority": "P2", "area": "lab-panels.css + lab.js + 20 files", "summary": "--ink-faint used as text color in 53 instances — unreadable contrast"},
     {"id": "DES-104", "file": "designer-tickets/open/104-formula-publish-validation-color-only.md", "priority": "P2", "area": "formula-store.js + lab.html", "summary": "Formula publish validation is color-only — no error text, no ARIA"},
     {"id": "DES-105", "file": "designer-tickets/open/105-canvas-help-text-drawn-as-pixels.md", "priority": "P2", "area": "warroom.js + agents.html", "summary": "Pixel canvas help text drawn as pixels, invisible to screen readers"},
-    {"id": "DES-106", "file": "designer-tickets/open/106-nav-search-hint-touch-target-too-small.md", "priority": "P2", "area": "styles.css", "summary": "Nav search hint + plan badge touch targets below 24px minimum"}
+    {"id": "DES-106", "file": "designer-tickets/open/106-nav-search-hint-touch-target-too-small.md", "priority": "P2", "area": "styles.css", "summary": "Nav search hint + plan badge touch targets below 24px minimum"},
+    {"id": "DES-107", "file": "designer-tickets/pending/107-lab-sidebar-panel-links-not-keyboard-focusable.md", "priority": "P1", "area": "lab.html (sidebar)", "summary": "60+ sidebar panel links <a> without href/tabindex — not keyboard focusable"},
+    {"id": "DES-108", "file": "designer-tickets/pending/108-lab-sidebar-categories-not-accessible.md", "priority": "P1", "area": "lab.html (sidebar)", "summary": "8 sidebar category divs missing role=button, tabindex, aria-expanded, keyboard support"},
+    {"id": "DES-109", "file": "designer-tickets/pending/109-home-mini-screener-rows-not-keyboard-accessible.md", "priority": "P1", "area": "index.html", "summary": "Mini-screener <tr onclick> has no tabindex, role, or keyboard handler"},
+    {"id": "DES-110", "file": "designer-tickets/pending/110-data-tables-missing-caption.md", "priority": "P2", "area": "sitewide (82+ tables)", "summary": "82+ data tables missing <caption> for screen readers"},
+    {"id": "DES-111", "file": "designer-tickets/pending/111-table-headers-missing-scope-col.md", "priority": "P2", "area": "sitewide (lab-panels.js + standalone pages)", "summary": "Zero scope=col on <th> in standalone pages and lab-panels.js"},
+    {"id": "DES-112", "file": "designer-tickets/pending/112-agent-svg-icons-no-title-empty-alt.md", "priority": "P2", "area": "assets/agents/ + lab.html + agents.html", "summary": "Agent SVG icons have no <title> and are always used with alt=\"\""},
+    {"id": "DES-113", "file": "designer-tickets/pending/113-empty-th-elements-no-accessible-name.md", "priority": "P2", "area": "11 standalone pages", "summary": "11 empty <th></th> elements have no aria-label"},
+    {"id": "DES-114", "file": "designer-tickets/pending/114-no-scroll-indicators-on-overflow-tables.md", "priority": "P2", "area": "58+ pages", "summary": "Zero scroll indicators on horizontally scrollable tables"},
+    {"id": "DES-115", "file": "designer-tickets/pending/115-inline-onerror-handlers-50-instances.md", "priority": "P2", "area": "25 files", "summary": "50 inline onerror handlers duplicated, CSP violation risk"},
+    {"id": "DES-116", "file": "designer-tickets/pending/116-skip-link-targets-span-not-main.md", "priority": "P3", "area": "67 standalone pages", "summary": "Skip-link targets <span> not <main> landmark element"}
   ],
   "notes": [
     "DES-001 through DES-076 all completed (moved to done/ folder)",
@@ -283,6 +303,17 @@
     "--ink-faint is for borders, not text — 53 uses as text color violate WCAG (DES-103)",
     "Good disciplines STILL holding: zero rogue fonts, zero 'Loading...' text, zero cold grays, zero blue-black ink, zero color:white, zero 1px borders, all pages have lang=en",
     "Error handling is agent-voiced everywhere (razzleError(), getErrorText()) — good brand discipline (cycle 10)",
-    "warroom.js briefing cards are the Situation Room's primary output — must be accessible (DES-100)"
+    "warroom.js briefing cards are the Situation Room's primary output — must be accessible (DES-100)",
+    "DES-107 through DES-116 are cycle 11 tickets — TABLE SEMANTICS + SIDEBAR KEYBOARD + SCROLL INDICATORS + AGENT SVG IDENTITY",
+    "Cycle 11 theme: deeper structural accessibility — table semantics (caption, scope, empty th), sidebar keyboard nav, scroll UX, agent icon identity, CSP readiness",
+    "Lab sidebar is the product's primary navigation to 70+ panels — currently zero keyboard support (DES-107, DES-108)",
+    "DES-097 fix CONFIRMED: aria-describedby and aria-invalid now implemented in auth modal, formula publish, Sleeper connect",
+    "DES-093 partially fixed: aria-live now in 40 files (41 instances) — still verify completeness",
+    "DES-092 partially fixed: role=alert now in 4 files (5 instances) — verify coverage",
+    "All position badges include text labels (QB/RB/WR/TE) — no color-only position indicators, good",
+    "All selects have aria-label — no unlabeled dropdowns found",
+    "All 75 pages have <nav aria-label='Main navigation'> — nav landmarks complete",
+    "All 75 pages use display=swap for Google Fonts — no FOIT issues",
+    "Good disciplines STILL holding: zero rogue fonts, zero 'Loading...' text, zero cold grays, zero blue-black ink, zero color:white, zero 1px borders, all pages have lang=en, all pages have <nav>, all pages have <footer>"
   ]
 }
