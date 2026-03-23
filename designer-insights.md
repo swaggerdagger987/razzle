@@ -1,4 +1,4 @@
-## Designer Insights (updated ticket DES-146)
+## Designer Insights (updated ticket DES-156)
 
 ### Patterns Found
 - Home page layout is mostly polished — chunky borders, correct colors, proper font usage
@@ -105,12 +105,32 @@
 - **Zero <noscript> tags** (DES-145) — JS failure = blank page. Ad blockers, slow connections, corporate firewalls. Branded fallback message prevents bounce.
 - **Dark mode ignores OS preference** (DES-146) — no prefers-color-scheme detection. Power users (primary target) who prefer dark mode see light on first visit.
 
-### Emerging Patterns (updated DES-146)
-- **Mobile UX is the dominant remaining conversion risk** — 62% of traffic is mobile per GTM report. Three critical mobile gaps: no :active on CTAs (DES-137), iOS auto-zoom on inputs (DES-138), and 100vh clipping (DES-141). These are more impactful than canvas hex colors or ARIA patterns because they affect EVERY mobile visitor, not just screen reader users.
-- **The audit has progressed through 5 distinct layers**: (1) Visual consistency (colors, radius, borders, shadows) cycles 1-7, (2) Dark mode completeness cycle 3-8, (3) Accessibility (ARIA, focus, keyboard) cycles 8-11, (4) Conversion funnel integrity cycle 12, (5) Mobile UX + resilience cycle 13. Each layer reveals the next.
-- **"Zero X" patterns keep appearing** — zero :active on buttons, zero theme-color, zero noscript, zero prefers-color-scheme, zero twitter:image:alt. The codebase is well-built for its primary case but consistently misses secondary interaction paths (touch feedback, JS failure, OS preference, social accessibility).
-- **Dark mode has one last banned-pattern violation** — the 3 overlay rgba(0,0,0) instances are the last cold colors in the codebase. Everything else correctly uses warm espresso.
-- **Pricing page dark mode now has rules** (DES-127 fixed) but the sticker rotation (DES-142) is still 2deg instead of 3deg.
+### Cycle 14 Findings: Conversion Path, Performance UX, Accessibility Gaps
+- **Upgrade gate says "60+ panels" — marketing says "70+"** (DES-156) — the conversion modal that convinces free users to check pricing has mismatched copy. NORTH_STAR.md, pricing.html, and DESIGN.md all say 70+. This is a trust issue for Reddit users who verify claims.
+- **Screener table has CLS — empty thead reflows on data load** (DES-149) — the growth engine's flagship table has `<thead></thead>` (empty) and a 5-column skeleton that doesn't match the 10-20 column actual table. When data arrives, visible layout shift occurs. Affects Core Web Vitals and first impression.
+- **No fetch timeout on screener API calls** (DES-150) — the main data fetch has AbortController for dedup but zero timeout. On slow mobile networks (62% of traffic), "pulling film..." spinner shows indefinitely with no error feedback. Browser default timeout is 5-15 minutes.
+- **Sidebar lock icons invisible to screen readers** (DES-147) — 30+ Pro-locked panels use CSS `::after` pseudo-element for the lock emoji. No `aria-label`, no screen reader text. Keyboard users can't distinguish free from locked panels.
+- **Upgrade gate modal has no role="dialog"** (DES-154) — the modal shown to every free user clicking a locked panel has zero accessibility attributes. No `role="dialog"`, no `aria-modal`, no focus trap, no Escape dismiss. Compare with auth modal which correctly has all of these.
+- **Mobile nav has no focus trap** (DES-155) — the overlay panel (z-index 9999) doesn't use `inert` or focus management. Tab key escapes to hidden content behind the overlay. All other aspects of mobile nav are excellent (ARIA, close mechanisms, touch targets).
+- **Page size dropdown is a dead control** (DES-151) — single `<option value="25">25</option>` in a select. Power users browsing 1000+ players must paginate through 40 pages. The `changePageSize()` handler works — just needs 50/100 options added.
+- **league-intel.html (7400 lines) has no scroll-to-top** (DES-152) — the Bureau conversion page is the longest in the codebase with zero scroll navigation helpers. Lab has a well-designed scroll-top button that could be reused.
+- **aging.html legend dot uses hardcoded rgba** (DES-153) — `rgba(138,117,101,0.5)` bypasses CSS variables. Poor contrast in dark mode against espresso background.
+- **pricing.html Twitter link missing rel="noopener"** (DES-148) — only external link in the codebase without this attribute. All others correct.
+
+### Emerging Patterns (updated DES-156)
+- **Conversion path copy accuracy is now a P1 concern** — DES-156 (60+ vs 70+ panels) and DES-128 (feature matrix mismatch) both risk Reddit trust damage. Dynasty managers verify claims. The upgrade gate is seen by EVERY free user who explores locked panels — wrong numbers here are worse than a CSS bug.
+- **The audit has progressed through 6 distinct layers**: (1) Visual consistency (colors, radius, borders, shadows) cycles 1-7, (2) Dark mode completeness cycles 3-8, (3) Accessibility (ARIA, focus, keyboard) cycles 8-11, (4) Conversion funnel integrity cycle 12, (5) Mobile UX + resilience cycle 13, (6) Performance UX + conversion path a11y cycle 14. Each layer reveals the next.
+- **Performance UX is the new frontier** — CLS on the Screener table (DES-149) and missing fetch timeout (DES-150) are first-impression killers. Unlike CSS bugs which are visual-only, these affect perceived quality. A user from Reddit who sees a table jump thinks "unpolished."
+- **Dialog accessibility is systematically missing on dynamic modals** — the upgrade gate (DES-154) joins the earlier DES-083 finding (5 dynamic modals missing role="dialog"). The pattern: static HTML modals (lab.html auth) are correct, JS-created overlays are not. The mobile nav overlay (DES-155) is the same pattern — excellent visual implementation, missing keyboard/screen reader layer.
+- **The "dead control" pattern** — page size dropdown (DES-151) is a control that exists, renders correctly, has a working handler, but offers only one choice. Similar to sidebar cat-icons (DES-131) which exist but are display:none. Multiple built features sitting unused.
+- **Scroll UX is asymmetric** — Lab has a well-designed scroll-to-top button; the 7400-line Bureau page has none. The home page and pricing page also lack scroll helpers. The pattern exists in code but wasn't propagated.
+- **Things confirmed GOOD in cycle 14 (should be preserved):**
+  - Error handling is excellent — 6 randomized football-themed messages, toast with retry buttons, offline detection, panel isolation
+  - Mobile nav is production-ready — hamburger, ARIA, 3 close mechanisms, 44px targets (only focus trap missing)
+  - Pricing page conversion flow is solid — auth->checkout intent, annual/monthly toggle, trial messaging, contextual CTAs
+  - Standalone dark mode: 5/6 pages audited are fully compliant (only aging.html has 1 hardcoded rgba)
+  - Link consistency: zero broken links, all nav targets correct, footers identical across 5 pages
+  - 404 page is delightful and on-brand with tiger animation easter egg
 - **Agent connective tissue is 60% built, 40% invisible** — sidebar icons CSS-hidden, lab-panels.js never calls agent-voiced functions, Bureau has zero agent presence. (Unchanged from cycle 12.)
 - **Canvas hardcoded hex remains** — ~30 instances. DES-069 (getCanvasTheme accent colors) is still the keystone fix.
 - **Feature matrix contradicts product spec** — "70+ analytical panels" marked ✓ for free tier, but NORTH_STAR says panels are behind lock icons for free users. This is a trust landmine for Reddit.

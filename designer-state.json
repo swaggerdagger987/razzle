@@ -1,5 +1,5 @@
 {
-  "last_ticket_id": 146,
+  "last_ticket_id": 156,
   "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
@@ -171,7 +171,22 @@
     "styles.css — .footer-link :focus-visible audit — zero rules (cycle 13)",
     "sitewide — twitter:image:alt meta tag audit — zero instances (cycle 13)",
     "sitewide — <noscript> fallback audit — zero instances in 75 pages (cycle 13)",
-    "app.js — prefers-color-scheme / matchMedia dark mode detection audit — zero instances (cycle 13)"
+    "app.js — prefers-color-scheme / matchMedia dark mode detection audit — zero instances (cycle 13)",
+    "lab.html — sidebar pro-locked items screen reader accessibility audit (cycle 14)",
+    "pricing.html — target=_blank rel=noopener audit — 1 missing on Twitter link (cycle 14)",
+    "lab.html — table CLS audit — empty thead, skeleton mismatch, no min-height (cycle 14)",
+    "lab.js — fetch timeout audit — zero timeout on screener API calls (cycle 14)",
+    "lab.html — page size dropdown audit — single option (25) only (cycle 14)",
+    "league-intel.html — scroll-to-top button audit — zero instances, 7400-line page (cycle 14)",
+    "aging.html — hardcoded rgba dark mode contrast audit — 1 legend dot (cycle 14)",
+    "lab.html — _showUpgradeGate() accessibility audit — no role=dialog, no focus trap (cycle 14)",
+    "app.js — mobile nav focus trap audit — no inert, Tab escapes overlay (cycle 14)",
+    "lab.html — upgrade gate copy audit — says 60+ panels, should be 70+ (cycle 14)",
+    "standalone pages dark mode audit — breakouts, aging, efficiency, tradevalues, vorp, airyards (cycle 14)",
+    "sitewide error state audit — global handler, toast, offline, panel isolation (cycle 14)",
+    "sitewide mobile nav audit — hamburger, breakpoints, ARIA, z-index, close mechanisms (cycle 14)",
+    "sitewide scroll UX audit — Lab has scroll-top, other pages sticky-nav only (cycle 14)",
+    "pricing.html — full CTA flow audit — auth->checkout, toggle, trial messaging (cycle 14)"
   ],
   "tickets_written": [
     {"id": "DES-001", "file": "designer-tickets/done/001-orphan-discovery-filter-chip.md", "priority": "P2", "area": "home page", "summary": "Orphan 'Veteran Studs' chip on discovery filters"},
@@ -299,7 +314,17 @@
     {"id": "DES-143", "file": "designer-tickets/open/143-footer-link-no-focus-visible.md", "priority": "P2", "area": "styles.css (sitewide)", "summary": ".footer-link missing :focus-visible — keyboard users get no indicator"},
     {"id": "DES-144", "file": "designer-tickets/open/144-missing-twitter-image-alt-sitewide.md", "priority": "P3", "area": "sitewide (75 pages)", "summary": "Zero twitter:image:alt meta tags — social card accessibility gap"},
     {"id": "DES-145", "file": "designer-tickets/open/145-no-noscript-fallback-js-pages.md", "priority": "P2", "area": "lab.html + league-intel + agents", "summary": "No <noscript> fallback — JS failure shows blank page"},
-    {"id": "DES-146", "file": "designer-tickets/open/146-dark-mode-no-os-preference-detection.md", "priority": "P2", "area": "app.js", "summary": "Dark mode doesn't detect OS preference via prefers-color-scheme"}
+    {"id": "DES-146", "file": "designer-tickets/open/146-dark-mode-no-os-preference-detection.md", "priority": "P2", "area": "app.js", "summary": "Dark mode doesn't detect OS preference via prefers-color-scheme"},
+    {"id": "DES-147", "file": "designer-tickets/open/147-sidebar-lock-icon-no-screen-reader-text.md", "priority": "P2", "area": "lab.html", "summary": "Sidebar lock icon on Pro panels invisible to screen readers"},
+    {"id": "DES-148", "file": "designer-tickets/open/148-pricing-twitter-link-missing-rel-noopener.md", "priority": "P2", "area": "pricing.html", "summary": "Twitter link missing rel=noopener noreferrer"},
+    {"id": "DES-149", "file": "designer-tickets/open/149-lab-table-cls-empty-thead.md", "priority": "P1", "area": "lab.html", "summary": "Screener table CLS — empty thead reflows on data load"},
+    {"id": "DES-150", "file": "designer-tickets/open/150-no-fetch-timeout-screener-query.md", "priority": "P2", "area": "lab.js", "summary": "No fetch timeout on screener API — silent hang on slow networks"},
+    {"id": "DES-151", "file": "designer-tickets/open/151-page-size-dropdown-single-option.md", "priority": "P3", "area": "lab.html", "summary": "Page size dropdown has only one option (25)"},
+    {"id": "DES-152", "file": "designer-tickets/open/152-league-intel-no-scroll-to-top.md", "priority": "P2", "area": "league-intel.html", "summary": "7400-line Bureau page has no scroll-to-top button"},
+    {"id": "DES-153", "file": "designer-tickets/open/153-aging-html-hardcoded-rgba-dark-mode.md", "priority": "P2", "area": "aging.html", "summary": "Legend dot hardcoded rgba — poor contrast in dark mode"},
+    {"id": "DES-154", "file": "designer-tickets/open/154-upgrade-gate-no-role-dialog.md", "priority": "P2", "area": "lab.html", "summary": "Upgrade gate modal has no role=dialog or focus management"},
+    {"id": "DES-155", "file": "designer-tickets/open/155-mobile-nav-no-focus-trap.md", "priority": "P2", "area": "app.js", "summary": "Mobile nav overlay has no focus trap — Tab escapes to hidden content"},
+    {"id": "DES-156", "file": "designer-tickets/open/156-upgrade-gate-copy-says-60-panels-not-70.md", "priority": "P1", "area": "lab.html", "summary": "Upgrade gate says 60+ panels — marketing says 70+, copy mismatch"}
   ],
   "notes": [
     "DES-001 through DES-076 all completed (moved to done/ folder)",
@@ -346,6 +371,13 @@
     "pricing.html (no Stripe trust badge near checkout CTAs) (cycle 12)",
     "DES-127 through DES-136 are cycle 12 tickets — CONVERSION PATH + AGENT CONNECTIVE TISSUE + PRICING TRUST",
     "Cycle 12 theme: conversion funnel integrity — pricing page dark mode, feature matrix accuracy, agent connective tissue visibility, trust signals, CTA accessibility",
+    "DES-147 through DES-156 are cycle 14 tickets — CONVERSION PATH + PERFORMANCE UX + ACCESSIBILITY",
+    "Cycle 14 theme: conversion funnel integrity — upgrade gate a11y, copy mismatch, CLS, fetch timeout, scroll UX",
+    "DES-156 (P1) and DES-149 (P1) are highest priority — copy mismatch on conversion modal and CLS on growth engine",
+    "Standalone dark mode audit: 5/6 pages clean, only aging.html has 1 hardcoded rgba",
+    "Error handling is excellent — 6 randomized football-themed messages, toast with retry, offline detection",
+    "Mobile nav is production-ready — hamburger, ARIA, 3 close mechanisms, 44px targets, only missing focus trap",
+    "Pricing page conversion flow is solid — auth->checkout, toggle, trial messaging, contextual CTAs",
     "DES-137 through DES-146 are cycle 13 tickets — MOBILE UX + DARK MODE POLISH + RESILIENCE",
     "Cycle 13 theme: mobile-first audit — iOS auto-zoom, missing :active states, 100vh clip, theme-color meta, prefers-color-scheme detection, noscript fallback, warm overlay colors",
     "62% of fantasy football traffic is mobile (GTM report) — mobile UX gaps are conversion killers",
