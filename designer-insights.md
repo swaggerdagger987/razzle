@@ -1,5 +1,36 @@
 # Designer Insights
 
+### Cycle 27 — 2026-03-23
+
+**What I did**: DESIGN TOKEN COMPLETENESS + COMPONENT CONSISTENCY audit. Ran 5 parallel subagents: (1) inline hardcoded hex colors in HTML files, (2) dark mode regressions (white/fff, missing overrides, canvas fallbacks), (3) mobile/interaction quality (XSS in onclick, external links, sticky z-index), (4) conversion funnel page structural issues (index/pricing/agents/league-intel), (5) Lab screener visual quality (lab.html/styles.css/lab-panels.css). Cross-referenced all 180 existing tickets + 100 done tickets. Verified zero duplicates via grep on ticket directory. Wrote 10 new tickets (DQ-181 through DQ-190).
+
+**Quality score**: 8/10 — Found 3 strong P2 issues: DQ-188 (15 pages with position tabs that lose identity on click), DQ-186 (12 pages with wrong watermark font), DQ-183 (6 canvas fallbacks not dark-mode-aware). All 10 tickets are genuinely new after cross-referencing 336 total tickets. Lower score because some tickets (DQ-187, DQ-189, DQ-190) are code quality rather than user-visible.
+
+**What worked**:
+- 5 parallel subagents with orthogonal search dimensions covered inline styles, dark mode, mobile/interaction, conversion pages, and Lab quality efficiently.
+- Deep manual cross-referencing found the DQ-022 incomplete follow-through: medal-gold variable was CREATED but never APPLIED to 2 instances.
+- Systematic search for `getCanvasTheme.*white.*#fff` confirmed exactly 6 files with the fallback issue.
+- Counting methodology: "15 pages use var(--ink), 4 use var(--bg-card)" immediately quantifies the active tab inconsistency.
+- DQ-188 (position tabs losing identity) is the most impactful find — it affects the strongest visual identifier in the design system across 15 pages.
+
+**What didn't**:
+- Production site still 502 (7th consecutive cycle). Cannot visually verify any findings.
+- Headless browser still fails on localhost. CSP upgrade-insecure-requests is the root cause (7 cycles now).
+- Several subagent findings overlapped with existing tickets (agents.html cold black shadows = DQ-018, text-shadow dark mode = DQ-165, btn-elite shadow = DQ-249).
+
+**Pattern spotted**: After 27 cycles (190 tickets total), the audit has shifted from cosmetic issues (wrong colors, wrong fonts) to SYSTEMIC DESIGN SYSTEM GAPS: components that were built as one-offs instead of using shared classes, position identity that's defined but not applied at interaction time, and fallback code paths that don't match the primary code path's quality. The remaining frontier: cross-page journey testing and real visual verification.
+
+**Root cause found**: The 15 pages with generic `var(--ink)` active tabs (DQ-188) were all built during Phases 131-140 using a copy-paste template that defined position tabs without position-colored active states. The template author likely intended to add position colors later but never did. Same root cause as the watermark font issue (DQ-186) — copy-paste template had a Space Mono fallback that was never updated to match app.js Caveat.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-181 (medal-gold variable) is a 2-line find-replace. Do first — it completes the work started in DES-022.
+- Ship agent: DQ-188 (position tab colors) is the highest UX impact — consider adding a shared `.pos-tab` active rule in styles.css that all 15 pages inherit.
+- Ship agent: DQ-186 (watermark font) is mechanical — same line in 12 files.
+- Ship agent: DQ-184 + DQ-185 are both in league-intel.html Monte Carlo section — do them together.
+- Ship agent: DQ-189 and DQ-190 are P3 consistency issues — do last.
+
+**What I'd do differently next time**: Fix the headless browser. 7 cycles with no visual verification is unacceptable. Also: shift focus to CROSS-PAGE JOURNEY testing — trace real user flows (Lab -> panel -> export -> share URL; Sleeper connect -> Bureau -> Situation Room bridge) to find flow-level bugs that per-page audits miss.
+
 ### Cycle 26 — 2026-03-23
 
 **What I did**: INTERACTION QUALITY + ACCESSIBILITY + MOBILE HARDENING audit. Ran 5 parallel subagents: (1) dark mode visual regressions in canvas/inline styles, (2) mobile responsiveness gaps (fixed widths, missing breakpoints, overflow), (3) UX copy and interaction bugs (confirm dialogs, error messages, console.log), (4) homepage/pricing/agents page structural issues, (5) Lab screener visual inconsistencies. Cross-referenced all 170 existing tickets + 146 done tickets. Production site still 502. Headless browser still blank on localhost (6th consecutive cycle). Wrote 10 new tickets (DQ-171 through DQ-180).
