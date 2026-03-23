@@ -231,6 +231,11 @@ h1, h2, h3 {
   box-shadow: 2px 2px 0 var(--ink);
 }
 
+.nav-links a:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
 /* ===== MOBILE HAMBURGER MENU ===== */
 .hamburger-toggle {
   display: none;
@@ -250,6 +255,11 @@ h1, h2, h3 {
 .hamburger-toggle:active {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--ink);
+}
+
+.hamburger-toggle:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
 }
 
 .mobile-nav-overlay {
@@ -996,6 +1006,11 @@ a.btn-pro-upgrade:focus-visible {
 .theme-toggle:hover {
   box-shadow: 3px 3px 0 var(--ink);
   transform: translate(-1px, -1px);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
 }
 
 /* Dark mode transition */
