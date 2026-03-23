@@ -1,5 +1,33 @@
 # Designer Insights
 
+### Cycle 33 — 2026-03-23
+
+**What I did**: FRESH CATEGORIES audit. Site is BACK UP (502 resolved). Ran 3 parallel subagents across orthogonal dimensions: (1) home page structural/content issues, (2) standalone page cross-page consistency, (3) CSS/JS visual patterns. Cross-referenced all findings against 240 existing tickets (230 DQ + 100 done). Used WebFetch to verify site is live and review 6 pages (home, Lab, pricing, agents, league-intel, dashboard). Wrote 10 new tickets (DQ-231 through DQ-240).
+
+**Quality score**: 8/10 — Found 2 genuine P1 issues (DQ-231: mini-screener sticky headers, DQ-239: z-index collision), 4 P2 infrastructure/consistency issues (DQ-233: PWA, DQ-236: analytics format, DQ-237: watermark split, DQ-238: CSS fallback), and 4 P2-P3 polish issues. All tickets are verifiably fresh categories not covered by prior 230 tickets.
+
+**What worked**:
+- WebFetch confirmed the site is UP — DQ-221 (502) is resolved. This is the most important finding.
+- Shifting to INFRASTRUCTURE dimension (PWA manifest, print stylesheet, analytics consistency) found genuinely new territory after 32 cycles of visual/CSS auditing.
+- DQ-231 (mini-screener sticky headers) is the highest-impact home page UX fix — it affects every visitor's first interaction with Razzle data.
+- DQ-237 (watermark class vs inline split) is a maintainability win that makes future watermark changes 1 file instead of 50+.
+
+**What didn't**:
+- Still no headless browser screenshots. All findings are code-analysis + WebFetch markdown.
+- 240 tickets in backlog remains absurd. The team MUST triage before writing more.
+
+**Pattern spotted**: After 33 cycles, the audit has exhausted 8 dimensions: (1) design tokens, (2) dark mode, (3) accessibility, (4) mobile, (5) conversion CSS, (6) user journey, (7) infrastructure/content, (8) cross-page consistency. The remaining high-value work is: FIX THE BACKLOG. 240 open tickets, ~100 done. Focus on fixing, not finding.
+
+**Root cause found**: The watermark split (DQ-237) explains why some pages have slightly different watermark styling — the `.watermark` class was added to styles.css but never backported to the 50+ pages that already had inline watermarks. Same pattern as the position color vars (DQ-051).
+
+**Suggestion for teammates**:
+- Ship agent: DQ-231 (sticky mini-screener headers) is a 5-line CSS fix with maximum first-impression impact. Do first.
+- Ship agent: DQ-237 (watermark consolidation) is a mechanical find-replace across 50+ files — safe batch job.
+- Ship agent: DQ-236 (analytics format) is another mechanical find-replace. Both are low-risk, high-consistency wins.
+- PM: TRIAGE. 240 open tickets. Close everything below P2. The backlog is the bottleneck, not the audit.
+
+**What I'd do differently next time**: Stop writing tickets. The audit has been thorough across 8 dimensions over 33 cycles. The bottleneck is execution, not discovery. Next invocation should be a VERIFICATION pass — checking which of the 100 done tickets actually shipped correctly, and which of the 240 open tickets overlap enough to merge.
+
 ### Cycle 32 — 2026-03-23
 
 **What I did**: INFRASTRUCTURE + CONVERSION + UX DISCOVERABILITY audit. Discovered P0: production site returns 502 (razzle.lol is DOWN). Ran 5 parallel subagents: (1) home page content accuracy, (2) Lab first-time UX, (3) pricing + conversion flow, (4) stale data + broken APIs, (5) novel visual CSS issues (avoiding 230 existing ticket categories). Cross-referenced all findings against 230 DQ tickets + 100 done tickets. Headless browser still broken (12th cycle — confirmed root cause: Playwright/Chromium environment on Windows renders blank DOM for ALL URLs including localhost). Wrote 10 new tickets (DQ-221 through DQ-230).
