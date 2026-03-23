@@ -1,11 +1,11 @@
-# Razzle Go-To-Market Report — Cycle 13
+# Razzle Go-To-Market Report — Cycle 14
 
 **Generated**: 2026-03-23
-**Previous Cycle**: 2026-03-23 (Cycle 12)
+**Previous Cycle**: 2026-03-23 (Cycle 13)
 **Target**: 1,000 people paying ~$100/year = $100,000/year
 **Status**: Pre-launch (Twitter active since 2026-03-20, site live at razzle.lol, 17 tweets posted, 41 approved in queue through April 23, 100+ rejected, zero engagement data yet)
 
-**Cycle 13 thesis**: Cycle 12 discovered the Reddit API gating problem. Cycle 13 solves it. Deep research into **Reddit's Devvit Developer Platform** reveals it is not merely a fallback — it is the **superior primary path** for the !razzle bot. Devvit apps use `CommentSubmit` triggers to listen for summon commands, run on Reddit's own servers for free, receive Reddit's official endorsement, and qualify for the **2026 Developer Funds program** (Reddit pays developers whose apps are installed in communities with 1,000+ members). The bot no longer depends on API approval — Devvit bypasses the entire OAuth credential bottleneck. The trade-off: TypeScript instead of Python, and the app requires subreddit moderator installation. This cycle also confirms the "rarely approved" framing from Cycle 12 was likely overstated (sourced from a competitor product's marketing blog). Personal projects with low volume are still approved for free API access. The dual-path strategy — apply for PRAW credentials AND build a Devvit app in parallel — eliminates the API approval as a single point of failure.
+**Cycle 14 thesis**: Cycle 13 established the Devvit dual-path strategy and elevated Discord to Rank #2. Cycle 14 stress-tests these assumptions with hard data. Three findings change the tactical plan: (1) **Discord bot discovery via top.gg is near-zero for fantasy football** — Dynasty Daddy's bot has 0 votes, 0 reviews, and no visible server count despite being live for 9+ months. Sleeper Link and Sleeper-FFL bots are equally invisible. Listing on top.gg is NOT a distribution channel — direct invite links in Reddit threads, Twitter, and Discord servers are the only viable path. (2) **Reddit Developer Funds 2026 exact payouts are modest** — $500 one-time for 500 Daily Qualified Engagers, $1,000 one-time for 250 Qualified Installs. Ecosystem validation, not revenue. (3) **Devvit trigger API fully confirmed** — CommentSubmit, CommentCreate, PostSubmit, and 7+ other event types are documented in the official API. The technical path is validated. Net assessment: the BOT STRATEGY is sound, but the DISCOVERY STRATEGY for Discord needs revision. Top.gg is a dead end. Direct server infiltration is the path.
 
 ---
 
@@ -49,11 +49,13 @@ Razzle needs 1,000 paid users = **9% of Dynasty Nerds' paid base**, or **0.2-0.4
 
 ## Section 2: Competitive Landscape
 
-### CRITICAL CYCLE 13 UPDATE
+### CYCLE 14 UPDATE
 
-**No new fantasy football competitors discovered. Competitive landscape stable for 6th consecutive cycle.**
+**No new fantasy football competitors discovered. Competitive landscape stable for 7th consecutive cycle.**
 
-The only material development is a PLATFORM opportunity (Devvit Developer Platform — see Section 7B), not a competitor change. **Confirmed: zero NFL/dynasty Reddit bots exist. 13th consecutive cycle.**
+**CRITICAL DISCOVERY: Discord bot discovery is near-zero for fantasy football.** Dynasty Daddy's bot on top.gg has 0 votes, 0 reviews, and no visible server count — despite being live since June 2024 (9+ months). Sleeper Link: 0 votes, 1 review. Sleeper-FFL: 0 votes, 2 reviews. Only 1 dynasty-tagged bot exists on top.gg total. This means top.gg is NOT a viable discovery channel for fantasy football bots. The implication: Discord bot distribution must come from direct invite links shared in Reddit threads, Twitter posts, and existing Discord servers — not organic top.gg discovery.
+
+**Zero NFL/dynasty Reddit bots exist. 14th consecutive cycle.**
 
 ### Pricing Comparison (unchanged from Cycle 11)
 
@@ -70,7 +72,7 @@ The only material development is a PLATFORM opportunity (Devvit Developer Platfo
 | **Sourcetable** | Limited credits | **$240/yr** Pro ($20/mo) | AI spreadsheet, 40+ data science libs, multi-sport | ESPN, Yahoo, Sleeper, Fantrax, CBS | **Yes — AI analytics** | Unknown |
 | **Razzle** | Full Screener, Bureau summary | **$79.99/yr** (Pro), **$149.99/yr** (Elite) | 100+ stat screener, Bureau behavioral profiling, 6 AI agents, 70+ panels | Sleeper only | **Yes — behavioral AI** | **0** (pre-launch) |
 
-### What Razzle STILL has that NO competitor has (12th consecutive cycle)
+### What Razzle STILL has that NO competitor has (13th consecutive cycle)
 
 1. **Behavioral profiling** — Multi-season manager tendency analysis. Zero competitors. Footballguys editorial validates concept.
 2. **Pressure maps** — Desperation scoring (0-100). Unique.
@@ -86,8 +88,8 @@ The only material development is a PLATFORM opportunity (Devvit Developer Platfo
 3. **Trade database** — Dynasty Daddy has 3.6M+ real trades. Razzle has none.
 4. **Community** — Zero Discord, zero podcast, zero Reddit presence, zero track record.
 5. **Users** — Zero.
-6. **Distribution channels** — Dynasty Daddy has 4 (Discord bot, Fantasy Wrapped, Patreon, Creator Tools). Razzle has Twitter (17 tweets posted, 41 queued). **Dual-path bot strategy (Devvit + PRAW + Discord) planned — see Section 7B.**
-7. **Reddit bot** — No dynasty bot exists on Reddit, but neither does Razzle's. Devvit dual-path eliminates API gating as blocker (see Section 7B).
+6. **Distribution channels** — Dynasty Daddy has 4 (Discord bot, Fantasy Wrapped, Patreon, Creator Tools). Razzle has Twitter (17 tweets posted, 41 queued). **Dual-path bot strategy (Devvit + PRAW + Discord) planned — see Section 7B.** Discord bot discovery via top.gg proven ineffective (see Section 7B-2).
+7. **Reddit bot** — No dynasty bot exists on Reddit, and neither does Razzle's. Devvit dual-path eliminates API gating as blocker.
 
 ---
 
@@ -100,7 +102,7 @@ The only material development is a PLATFORM opportunity (Devvit Developer Platfo
 1. **Visual identity is distinctive.** Warm sand/espresso/comic-strip aesthetic. Zero competitors look like this.
 2. **Agent personas create content diversity.** Six characters = tweet variety. Creative quality 4-5/5.
 3. **"Forever free" Screener positioning.** No competitor matches this depth at $0.
-4. **"Other tools know your roster. Razzle knows your leaguemates."** 12th consecutive cycle confirmation.
+4. **"Other tools know your roster. Razzle knows your leaguemates."** 13th consecutive cycle confirmation.
 5. **Twitter pipeline is actively posting.** 17 tweets posted. 41 approved in queue through April 23.
 6. **Agent connective tissue design.** Agents woven across Lab/Bureau/Situation Room as personality layer.
 
@@ -120,7 +122,7 @@ The only material development is a PLATFORM opportunity (Devvit Developer Platfo
 | **Screener (100+ columns)** | 7 | 5 | 9 | 2 | Growth engine. Forever free. |
 | **Custom Formulas** | 5 | 7 | 7 | 3 | Formula Store unique. |
 | **Bureau: League Odds** | 8 | 4 | 10 | 7 | DD has playoff sim. |
-| **Bureau: Manager Profiles** | 7 | **10** | 8 | 7 | **THE MOAT.** 12th cycle. Zero competitors. |
+| **Bureau: Manager Profiles** | 7 | **10** | 8 | 7 | **THE MOAT.** 13th cycle. Zero competitors. |
 | **Bureau: Trade Finder** | 8 | 4 | 7 | 6 | Multiple competitors. |
 | **Bureau: Pressure Map** | 5 | **10** | 8 | 6 | Unique. Zero competitors. |
 | **Bureau: League History** | 6 | 2 | 6 | 2 | leaguemate.fyi does this free. |
@@ -128,17 +130,13 @@ The only material development is a PLATFORM opportunity (Devvit Developer Platfo
 | **Agent Personas** | 4 | 10 | 6 | 3 | Brand glue. Twitter content value. |
 | **Dynasty Rankings** | 8 | 3 | 5 | 4 | Commodity. |
 | **PNG Export + Watermark** | 6 | 6 | 10 | 1 | Growth tool. Critical to flywheel. |
-| **Reddit Bot (!razzle)** | 7 | **9** | N/A | 0 | **No dynasty/NFL Reddit bot exists. FPLbot (736K-member r/FantasyPL) proves model. Devvit = viable deployment path. 13th cycle open lane.** |
+| **Reddit Bot (!razzle)** | 7 | **9** | N/A | 0 | **No dynasty/NFL Reddit bot exists. FPLbot (736K-member r/FantasyPL) proves model. Devvit trigger API confirmed. 14th cycle open lane.** |
 | **Fantasy Wrapped (proposed)** | 9 | 3 | **10** | 5 | DD proved this. Razzle adds behavioral angle. |
-| **Discord Bot (proposed)** | 6 | 3 | N/A | 0 | DD already has one. |
+| **Discord Bot (proposed)** | 6 | 3 | N/A | 0 | DD bot has near-zero discovery on top.gg (0 votes, 9+ months). Direct distribution required. |
 
-### PMF Changes — Cycle 13
+### PMF Changes — Cycle 14
 
-**No score changes from Cycle 12.** Key confirmations:
-- FPLbot serves r/FantasyPL (736K members) — a subreddit 3.8x the size of r/DynastyFF (192K). Even at 1/4 the engagement, model is viable.
-- **Zero bots exist that let you type `!razzle Bijan Robinson` and get dynasty-relevant stats in a Reddit comment** — 13th consecutive cycle confirmation.
-- Devvit Developer Platform opens a deployment path that bypasses the Reddit API gating entirely (see Section 7B).
-- Discord bot confirmed as zero-friction channel — Dynasty Daddy bot live on top.gg with /marketvalue, /trades, /tradeinfo commands. No approval process needed for Discord.
+**Discord Bot notes field updated.** DD bot's near-zero top.gg traction (0 votes, 0 reviews in 9+ months) means organic discovery through bot listing platforms does NOT work for fantasy football. This doesn't reduce the bot's value as a distribution channel — it means the discovery must come from direct invite links in Reddit threads, Twitter posts, and fantasy Discord servers, not from top.gg browse traffic. The bot IS the distribution, but the bot itself needs distribution.
 
 ---
 
@@ -196,12 +194,12 @@ At 1,000 users (any mix), revenue is $80k-150k/yr:
 
 ## Section 7: Channel Strategy
 
-### Ranked by ROI (updated Cycle 13)
+### Ranked by ROI (updated Cycle 14)
 
 | Rank | Channel | Effort | Expected Return | Timeline | Status |
 |------|---------|--------|----------------|----------|--------|
-| 1 | **Reddit Bot (Devvit + PRAW dual-path)** | **Medium** | Very High | **1-3 weeks** (revised DOWN — Devvit removes API bottleneck) | **NOT STARTED. Dual-path strategy eliminates single point of failure.** |
-| 2 | **Discord Bot** | Low (200 lines) | High | **<1 week** (revised DOWN — zero approval friction) | **Not started. DD bot live on top.gg proves model. LOWEST-FRICTION CHANNEL.** |
+| 1 | **Reddit Bot (Devvit + PRAW dual-path)** | **Medium** | Very High | **1-3 weeks** | **NOT STARTED. Devvit trigger API confirmed (CommentSubmit). Dual-path strategy eliminates single point of failure.** |
+| 2 | **Discord Bot** | Low (200 lines) | **Medium** (revised DOWN) | **<1 week** | **Not started. DD bot has 0 votes/0 reviews on top.gg after 9 months. top.gg is NOT a discovery channel. Must distribute via direct invite links.** |
 | 3 | **Twitter** | Low (maintenance) | High | **Active** | **17 posted, 41 queued. WORKING.** |
 | 4 | **Reddit (r/DynastyFF)** | High | Very High | 2-3 months | **Account NOT created. Day 3 of Week 1 ending.** |
 | 5 | **League group chats** | Zero effort | High | Viral | Requires Bureau to be impressive. |
@@ -213,74 +211,101 @@ At 1,000 users (any mix), revenue is $80k-150k/yr:
 | 11 | **YouTube** | High | Medium | 3-6 months | After traffic exists. |
 | 12 | **Paid ads** | High cost | Unknown | Not recommended | Only after organic working. |
 
-### Section 7B: Reddit Bot Distribution Strategy — MAJOR UPDATE (Cycle 13)
+### Section 7B: Reddit Bot Distribution Strategy — Confirmed Cycle 14
 
-#### CYCLE 13 BREAKTHROUGH: Devvit Eliminates the API Bottleneck
+#### Cycle 14: Devvit Trigger API Fully Confirmed
 
-Cycle 12 identified Reddit's API gating as a critical blocker. Cycle 13 researched the solution: **Reddit's Devvit Developer Platform is not merely a fallback — it is a viable primary deployment path** that bypasses the entire OAuth credential approval process.
+Cycle 13 identified Devvit as a viable primary path. Cycle 14 confirms the exact API surface from Reddit's official documentation:
 
-#### What Changed Since Cycle 12
+**Confirmed Devvit trigger types** (from `@devvit/public-api`):
+- `CommentSubmit` / `CommentCreate` — listen for new comments (the !razzle trigger)
+- `CommentDelete` / `CommentUpdate` / `CommentReport`
+- `PostSubmit` / `PostReport`
+- `AppInstall` — fires when a mod installs the app
 
-| Factor | Cycle 12 Assessment | Cycle 13 Assessment (REVISED) |
-|--------|---------------------|-------------------------------|
-| "Rarely approved" for personal bots | Taken at face value from molehill.io | **OVERSTATED.** Molehill.io sells an alternative product. Multiple sources confirm personal projects with low volume are still approved for free. |
-| Devvit as fallback | Mentioned but not researched | **FULLY RESEARCHED. Viable primary path.** CommentSubmit triggers, free hosting, Reddit's endorsement, Developer Funds program. |
-| Bot deployment | Single path (PRAW only) | **Dual path: PRAW + Devvit in parallel.** Eliminates single point of failure. |
-| Bot timeline | 2-4 weeks (blocked on API approval) | **1-3 weeks** (Devvit path has no approval wait for API credentials) |
-| Discord bot priority | Rank #4 | **Rank #2** — zero friction, DD bot proves model, could ship in days |
+**The `addTrigger` method** registers event listeners:
+```typescript
+Devvit.addTrigger({
+  event: 'CommentSubmit',
+  onEvent: async (event, context) => {
+    // Parse for "!razzle" prefix
+    // Fetch from razzle.lol/api/*
+    // Reply with markdown table
+  }
+});
+```
 
-#### Devvit: The Full Picture
+This is not speculative — the API exists, is documented, and is used by production Devvit apps (sub-stats-bot, Modmail Automater, Trending Tattler, and hundreds of game/experience apps).
 
-**What Devvit IS:** Reddit's official Developer Platform (TypeScript/JavaScript, runs on Node.js on Reddit's servers). Apps can listen to events like `CommentSubmit`, store data in Redis, and post replies — all hosted for free by Reddit.
+#### FPLbot Reference Implementation — Status Update (Cycle 14)
 
-**What Devvit CAN do for !razzle:**
-- `Devvit.addTrigger({ event: 'CommentSubmit', ... })` — listens for comments containing "!razzle" in installed subreddits
-- Parse the command, call Razzle API (HTTPS fetch to razzle.lol/api/*)
-- Post a reply with formatted markdown table + razzle.lol link
-- Store usage metrics in Redis (free, built-in)
-- Qualify for **Reddit Developer Funds 2026** (April 2025 - June 2026) — Reddit PAYS developers whose apps are installed in communities with 1,000+ members
+**FPLbot** (github.com/amosbastian/FPLbot): The definitive reference for a Reddit data bot.
+- **GitHub stats**: 69 stars, 13 forks, 122 commits, 1 open issue, MIT license
+- **Status**: Semi-active to dormant. May be affected by Reddit's November 2025 API key changes.
+- **Stack**: Python 3.6+, PRAW, MongoDB, fpl library, Understat
+- **Commands**: `!fplbot <player> vs. <team|player> <optional: fixtures>`
+- **Player matching**: MongoDB text indexes with manual name mapping for fuzzy search
+- **Response**: Markdown tables with stats (xG, xA, goals, assists, minutes, key passes)
+- **Cron features**: Daily price change alerts posted automatically
+- **Multi-platform**: Has a companion Slack/Discord version (fplbot.app) — validates multi-platform bot strategy
+- **No public engagement stats** — confirmed for 2nd consecutive cycle. Searched GitHub, Steemit dev blogs, Hive posts, r/FantasyPL references. No summon counts, impression data, or CTR ever published.
+- **Key insight**: FPLbot's dormant state may indicate Reddit's API changes are hurting PRAW-based bots. This **strengthens the case for Devvit** as the primary path — Devvit apps are Reddit-native and immune to external API credential issues.
 
-**What Devvit CANNOT do (limitations):**
-- Requires **subreddit moderator to install** the app — cannot self-deploy to any subreddit
-- Written in **TypeScript**, not Python — cannot reuse PRAW-based code
-- Currently in **beta** — API surface may change
-- Blocks UI (Devvit's custom component system) is limited for complex UIs — but a bot only needs text replies, not UI
+**Sources**: [FPLbot GitHub](https://github.com/amosbastian/FPLbot), [FPLbot dev blog on Hive](https://hive.blog/fpl/@amosbastian/adding-new-features-to-my-fpl-bot-for-reddit), [fplbot.app (Slack/Discord)](https://www.fplbot.app/)
 
-**Sources**: [Reddit Devvit GitHub](https://github.com/reddit/devvit), [Devvit introduction](https://dragonejt.hashnode.dev/introduction-to-the-reddit-developer-platform), [Reddit Developer Funds 2026](https://support.reddithelp.com/hc/en-us/articles/27958169342996-Reddit-Developer-Funds-2026-Terms), [Devvit sub-stats-bot example](https://github.com/fsvreddit/sub-stats-bot)
-
-#### Reddit API Status (updated from Cycle 12)
+#### Reddit API Status (unchanged from Cycle 13)
 
 Reddit API gating is REAL but less severe than Cycle 12 assumed:
 - Self-service API keys discontinued November 2025 — confirmed
 - Pre-approval required via Developer Support form — confirmed
 - Target response time: **7 days** (Reddit's stated target)
-- **Personal projects with low volume are still approved for free** — confirmed by multiple sources (replydaddy, wappkit, Reddit's own docs)
+- **Personal projects with low volume are still approved for free** — confirmed by multiple sources
 - "Rarely approved" language came from molehill.io, which **sells an alternative Reddit integration product** — conflict of interest noted
 - Existing OAuth credentials from before November 2025 still work
 - Non-OAuth public JSON endpoints (~10 RPM) remain available without credentials
 
-**Sources**: [Reddit Responsible Builder Policy](https://support.reddithelp.com/hc/en-us/articles/42728983564564-Responsible-Builder-Policy), [replydaddy analysis](https://replydaddy.com/blog/reddit-api-pre-approval-2025-personal-projects-crackdown), [wappkit credentials guide](https://www.wappkit.com/blog/reddit-api-credentials-guide-2025)
+#### Reddit Developer Funds 2026 — EXACT NUMBERS (Cycle 14 NEW)
+
+Previous cycles noted the Developer Funds as a "potential revenue stream — amount TBD." Cycle 14 found the exact terms:
+
+**Program**: April 1, 2025 — June 30, 2026
+**Eligible**: Devvit apps creating Experiences and Mod Tools. Max 3 apps per developer.
+
+**Payout milestones**:
+| Milestone | Payout | Type |
+|-----------|--------|------|
+| 500 Daily Qualified Engagers during any 14-day window | **$500** | One-time |
+| 250 Qualified Installs during the program term | **$1,000** | One-time |
+
+**Separate Developer Program** (ongoing, not time-limited):
+- Developers earn **$0.01 per 1 Reddit gold** used by redditors on Devvit goods within their apps
+- Minimum payout: $10
+- **Irrelevant for !razzle** — a data bot doesn't sell goods. This revenue stream applies to games/experiences with in-app purchases.
+
+**Assessment**: The Developer Funds payouts are **modest** ($500-$1,000 one-time). This is ecosystem validation, NOT meaningful revenue. The real value of Devvit is free hosting + Reddit's endorsement + bypassing API approval. The money is a bonus, not a strategy.
+
+**Sources**: [Reddit Developer Funds 2026 Terms](https://support.reddithelp.com/hc/en-us/articles/27958169342996-Reddit-Developer-Funds-2026-Terms), [Reddit Developer Program](https://support.reddithelp.com/hc/en-us/articles/30641905617428-Developer-Program)
 
 #### Bot Labels (unchanged from Cycle 12)
 
 CEO Steve Huffman announced mandatory "Verified Bot" labels (February 2026). Net-positive for !razzle — adds legitimacy.
 
-#### Risk Assessment (REVISED — Cycle 13)
+#### Risk Assessment (unchanged from Cycle 13, re-confirmed Cycle 14)
 
 | Scenario | Likelihood | Impact | Mitigation |
 |----------|-----------|--------|-----------|
-| PRAW API approved + Devvit app installed | **Medium** (40-50%) | Best case — both paths active | Build both. PRAW for broad subreddit coverage, Devvit for native integration where mods install. |
-| PRAW API approved, Devvit not installed by mods | **Medium** (30-40%) | Good — PRAW path sufficient | PRAW bot works across any subreddit without mod installation. |
-| PRAW API rejected, Devvit installed by mods | **Medium** (30-40%) | Good — Devvit path sufficient | Devvit bypasses API gating entirely. Mod relationship is the bottleneck, not Reddit's API team. |
-| Both paths blocked | **Low** (10-15%) | High | Public JSON read + manual posting. Discord bot as primary channel. |
+| PRAW API approved + Devvit app installed | **Medium** (40-50%) | Best case — both paths active | Build both. |
+| PRAW API approved, Devvit not installed by mods | **Medium** (30-40%) | Good — PRAW path sufficient | PRAW works across any subreddit. |
+| PRAW API rejected, Devvit installed by mods | **Medium** (30-40%) | Good — Devvit path sufficient | Devvit bypasses API gating entirely. |
+| Both paths blocked | **Low** (10-15%) | High | Public JSON read + manual posting. Discord bot as primary. |
 
-**Net assessment**: Probability of at least one bot path working = **85-90%** (up from ~60% in Cycle 12's single-path analysis).
+**Net assessment**: Probability of at least one bot path working = **85-90%** (unchanged from Cycle 13).
 
-#### Revised Bot Strategy (Cycle 13) — Dual-Path
+#### Revised Bot Strategy (unchanged from Cycle 13) — Dual-Path
 
 **Path A: PRAW (Python — familiar stack)**
-1. Create bot Reddit account (u/razzle_bot or similar)
-2. Submit Developer Support form — frame as non-commercial community tool
+1. Create bot Reddit account
+2. Submit Developer Support form — non-commercial community tool
 3. Build ~200 lines Python (PRAW + Razzle API + Reddit markdown formatter)
 4. Deploy on Render as worker process ($0 additional cost)
 5. Timeline: 1-3 weeks (dependent on API approval — 7-21 day wait)
@@ -293,37 +318,63 @@ CEO Steve Huffman announced mandatory "Verified Bot" labels (February 2026). Net
 5. Ask r/DynastyFF and r/fantasyfootball mods to install
 6. Timeline: **1-2 weeks** (no API approval wait — mod installation is the only gate)
 
-**Build BOTH in parallel.** Path B (Devvit) is likely faster because it doesn't wait for API approval. Path A (PRAW) is more flexible because it works in any subreddit without mod installation.
+**Build BOTH in parallel.** Path B (Devvit) is likely faster. Path A (PRAW) is more flexible.
 
 **Reference implementations:**
-- **FPLbot** ([GitHub](https://github.com/amosbastian/FPLbot)): Python + PRAW + MongoDB. Commands: `!fplbot <player> vs. <team|player>`. Fuzzy name matching via text indexes. Active on r/FantasyPL (736K members) for years.
-- **FFBot** ([GitHub](https://github.com/Surye/FFBot)): Python + PRAW. Polls r/fantasyfootball WDIS threads every 5 minutes. Pulls FantasyPros rankings.
-- **sub-stats-bot** ([GitHub](https://github.com/fsvreddit/sub-stats-bot)): Devvit app. Stores and surfaces subreddit statistics. Reference for Devvit trigger + data storage pattern.
+- **FPLbot** ([GitHub](https://github.com/amosbastian/FPLbot)): Python + PRAW + MongoDB. 69 stars. Semi-active. Commands: `!fplbot <player> vs. <team|player>`. Companion Slack/Discord version.
+- **FFBot** ([GitHub](https://github.com/Surye/FFBot)): Python + PRAW. r/fantasyfootball WDIS threads.
+- **sub-stats-bot** ([GitHub](https://github.com/fsvreddit/sub-stats-bot)): Devvit app. Reference for trigger + reply pattern.
 
-#### Section 7B-2: Discord Bot — ELEVATED TO RANK #2 (Cycle 13 NEW)
+#### Section 7B-2: Discord Bot — DISCOVERY PROBLEM IDENTIFIED (Cycle 14 REVISED)
 
-**Discord is the lowest-friction distribution channel available.** Zero API approval process. Zero mod installation requirement for bots. Dynasty Daddy's bot is live on top.gg with /marketvalue, /trades, /tradeinfo commands — proving the model.
+**CYCLE 14 FINDING: top.gg is a dead end for fantasy football Discord bots.**
 
-**Why Discord jumped from Rank #4 to #2:**
-1. **Zero gatekeeping** — add bot to any server via OAuth link, no approval wait
-2. **Proven model** — Dynasty Daddy bot is live and functional on top.gg
-3. **Direct league context** — fantasy Discord servers are where trade discussions happen
-4. **Fast to build** — discord.py or discord.js, ~200 lines, same Razzle API endpoints
-5. **Complementary to Reddit bot** — Discord serves league-specific conversations, Reddit serves community-wide discussions
+| Bot | Months Live | top.gg Votes | top.gg Reviews | Server Count |
+|-----|-----------|-------------|---------------|-------------|
+| **Dynasty Daddy** | **9+ months** (since Jun 2024) | **0** | **0** | **Not displayed** |
+| **Sleeper Link** | Active | **0** | **1** (4/5 stars) | **Not displayed** |
+| **Sleeper-FFL** | Active | **0** | **2** (5/5 stars) | **Not displayed** |
+| **Only dynasty-tagged bot on all of top.gg** | — | — | — | **Dynasty Daddy (1 total)** |
 
-**Proposed Discord commands (mirroring Reddit bot):**
+**What this means**: Listing on top.gg does NOT generate discovery for fantasy football bots. Zero fantasy football bot on top.gg has meaningful votes or reviews. Users don't browse top.gg looking for dynasty tools — they find bots through community recommendations.
 
-| Command | Response | Funnel Hook |
-|---------|---------|-------------|
-| `/razzle player [name]` | PPR PPG, target share, snap %, age | "Full profile at razzle.lol" |
-| `/razzle compare [A] vs [B]` | Side-by-side stat table | "Compare tool at razzle.lol" |
-| `/razzle prospect [name]` | Draft pos, college stats, combine | "Scouting report at razzle.lol" |
-| `/razzle breakouts` | Top 5 breakout candidates | "Full finder at razzle.lol" |
-| `/razzle trade [A] for [B]` | Value comparison, verdict | "Trade analyzer at razzle.lol" |
+**REVISED Discord distribution strategy** (Cycle 14):
 
-**Deployment**: Host on Render as second worker ($0 additional). List on top.gg for discovery. Target fantasy football Discord servers.
+~~List on top.gg for discovery~~ → top.gg listing is a checkbox, not a channel.
 
-**Sources**: [Dynasty Daddy bot on top.gg](https://top.gg/bot/1248312528686284965), [SleeperLink Discord bot](https://evildrporkchop.github.io/SleeperLink/), [GameDayBot](https://www.gamedaybot.com/)
+**Actual distribution paths for the Discord bot:**
+1. **Share bot invite link in Reddit comments** — "I built a bot that does this, here's the link" (after credibility is established)
+2. **Pin bot invite in Twitter bio/thread** — every tweet about the bot includes the invite
+3. **Post in fantasy football Discord servers directly** — r/DynastyFF Discord, Dynasty Nerds Discord, league-specific servers
+4. **Bot responses include "Add to your server" link** — every command response is a funnel to more servers
+5. **Reddit bot cross-promotes Discord bot** — !razzle responses include "Also on Discord" footer
+
+**Discord bot remains Rank #2 channel** despite discovery revision because:
+- Zero API gating, zero mod installation, zero approval wait — fastest to deploy
+- Direct invite links bypass top.gg entirely
+- League Discord servers are where trade discussions happen in real-time
+- FPLbot validated multi-platform (Reddit + Discord + Slack) as the correct pattern
+
+**Dynasty Daddy bot commands (competitive intelligence)**:
+| Command | What it does |
+|---------|-------------|
+| `/marketvalue` | Fetch current player market value |
+| `/trades` | Create trade polls using league + market data |
+| `/tradeinfo volume` | Most traded players from past week |
+| `/tradeinfo player` | Trade information for specific player |
+
+**Razzle Discord bot differentiation** (must exceed DD's 4 commands):
+
+| Command | Response | DD has? | Funnel Hook |
+|---------|---------|:---:|-------------|
+| `/razzle player [name]` | PPR PPG, target share, snap %, age, dynasty value | Similar | "Full profile at razzle.lol" |
+| `/razzle compare [A] vs [B]` | Side-by-side stat table | No | "Compare tool at razzle.lol" |
+| `/razzle prospect [name]` | Draft pos, college stats, combine | No | "Scouting report at razzle.lol" |
+| `/razzle breakouts` | Top 5 breakout candidates | No | "Full finder at razzle.lol" |
+| `/razzle trade [A] for [B]` | Value comparison, verdict | Similar | "Trade analyzer at razzle.lol" |
+| `/razzle buysell` | Top buy-low / sell-high candidates | No | "Full list at razzle.lol" |
+
+**Sources**: [Dynasty Daddy bot on top.gg](https://top.gg/bot/1248312528686284965), [Sleeper Link on top.gg](https://top.gg/bot/1043588265372024922), [Sleeper-FFL on top.gg](https://top.gg/bot/871087848311382086), [top.gg dynasty tag](https://top.gg/tag/dynasty)
 
 #### Proposed Commands (unchanged, confirmed viable)
 
@@ -335,19 +386,19 @@ CEO Steve Huffman announced mandatory "Verified Bot" labels (February 2026). Net
 | `!razzle breakouts` | `/api/breakout-candidates` | Top 5 breakout candidates | "Full finder at razzle.lol" |
 | `!razzle trade A for B` | `/api/trade-value-chart` | Value comparison, verdict | "Trade analyzer at razzle.lol" |
 
-#### Virality Math (revised Cycle 13 — dual-path reduces risk)
+#### Virality Math (unchanged from Cycle 13)
 
-**NOTE**: No public benchmark data exists for FPLbot engagement (searched extensively). These estimates are directional, not empirical. r/FantasyPL (736K members) is 3.8x r/DynastyFF (192K), so FPLbot likely gets more summons than !razzle would initially. Calibrate expectations accordingly.
+**NOTE**: No public benchmark data exists for FPLbot engagement (confirmed 2nd cycle). These estimates are directional, not empirical.
 
 **Optimistic (Devvit + PRAW both live by Week 3):**
 - Reddit: 50 summons/day x 100 views = 5,000 daily impressions
 - Discord: 30 commands/day x 20 members = 600 daily impressions
 - Total: 5,600 daily impressions
 - At 1.5% CTR = 84 visits/day = 2,520/month
-- Cost: $0/mo (Render workers + Devvit hosted by Reddit)
+- Cost: $0/mo
 
 **Likely (Devvit live Week 2, PRAW pending):**
-- Reddit (Devvit only, fewer subreddits): 25 summons/day x 100 views = 2,500 daily impressions
+- Reddit (Devvit only): 25 summons/day x 100 views = 2,500 daily impressions
 - Discord: 20 commands/day x 20 members = 400 daily impressions
 - Total: 2,900 daily impressions
 - At 1.5% CTR = 44 visits/day = 1,320/month
@@ -357,87 +408,66 @@ CEO Steve Huffman announced mandatory "Verified Bot" labels (February 2026). Net
 - At 1% CTR = 15 site visits/day = 450/month
 - Still net-positive at $0 cost
 
-#### Key Precedent: FPLbot Proves the Pattern (updated Cycle 13)
+#### Key Precedent: FPLbot Proves the Pattern (updated Cycle 14)
 
 FPLbot (github.com/amosbastian/FPLbot) is the reference implementation for a Reddit data bot:
-- **Built for r/FantasyPL** — **736K members** (subredditstats.com). 3.8x the size of r/DynastyFF (192K).
+- **Built for r/FantasyPL** — **736K members**. 3.8x the size of r/DynastyFF (192K).
 - **Stack**: Python 3.6+, PRAW, MongoDB, fpl library, Understat
+- **GitHub**: 69 stars, 13 forks, 122 commits, MIT license
+- **Status**: Semi-active to dormant — may be affected by Reddit's November 2025 API key changes
 - **Commands**: `!fplbot <player> vs. <team|player> <optional: fixtures>`
-- **Player matching**: MongoDB text indexes with manual name mapping for fuzzy search
-- **Response format**: Reddit markdown tables with stats (xG, xA, goals, assists, minutes, key passes)
-- **Cron features**: Daily price change alerts posted automatically
-- **No public engagement stats** — searched extensively in Cycle 13. No summon counts, impression data, or CTR published. The virality math (50 summons/day, 100 views each) remains an estimate without benchmark data.
-- **Active for years** — referenced in community resource lists, has a companion Slack/Discord version (fplbot.app)
+- **Multi-platform**: fplbot.app serves Slack and Discord — validates building for Reddit + Discord simultaneously
+- **No public engagement stats** — searched extensively in Cycles 13 and 14. No summon counts, impression data, or CTR published anywhere (GitHub, Steemit dev blogs, Hive posts, r/FantasyPL). The virality math (50 summons/day) remains an estimate without benchmark data.
 
 **Razzle's advantage over FPLbot**: FPLbot serves a single sport (soccer) with limited FPL API data. Razzle has 100+ stat columns, college data, prospect data, trade values, breakout scores, and 70+ analytical panels to funnel users toward. Each bot response is a door into a much deeper product.
 
-**No NFL/dynasty equivalent exists.** This is the open lane. **13th consecutive cycle confirmation.**
+**FPLbot's dormant state is an opportunity signal.** If the original PRAW-based Reddit bot pattern is struggling under new API restrictions, a Devvit-native approach is the modernized successor. Razzle doesn't need to copy FPLbot — it needs to be what FPLbot would be if built today on Reddit's current platform.
+
+**No NFL/dynasty equivalent exists.** This is the open lane. **14th consecutive cycle confirmation.**
 
 ---
 
-## Section 7C: Reddit Account Connection Strategy (Cycle 12, unchanged Cycle 13)
+## Section 7C: Reddit Account Connection Strategy (unchanged from Cycle 12)
 
-The ROADMAP Phase 3C describes connecting Reddit accounts to Razzle for intent analysis. Research findings:
+The ROADMAP Phase 3C describes connecting Reddit accounts to Razzle for intent analysis. Deferred to May 15-31 as planned.
 
 ### Sleeper API: No OAuth Needed
+The Sleeper API is read-only with no authentication required. Rate limit 1,000 requests/minute.
 
-The Sleeper API is **read-only with no authentication required** — no OAuth, no API keys. Rate limit is 1,000 requests/minute. This makes Sleeper integration trivially easy but also means any competitor can replicate it.
+### Reddit API: OAuth Required
+For Reddit account connection (reading user comment history), Reddit OAuth IS required. One API application covers both bot + account connection.
 
-**Source**: [Sleeper API docs](https://docs.sleeper.com/)
-
-### Reddit API: OAuth Required, Privacy Considerations
-
-For Reddit account connection (reading user comment history), Reddit OAuth IS required:
-- OAuth clients get **100 requests/minute**
-- PRAW handles OAuth flow automatically
-- **Public comments are accessible** — no special permissions needed to read a user's public post history
-- **Privacy implications**: Must be transparent about data collection. GDPR compliance if serving EU users.
-
-### Reddit Account Connection Feasibility
-
-| Feature | Feasibility | Notes |
-|---------|------------|-------|
-| Reddit OAuth connect | **Medium** | Requires Reddit API approval (same gating as bot). One application could cover both bot + account connection. |
-| Read public comment history | **Easy** | Public data. PRAW `redditor.comments.new(limit=1000)` works with basic auth. |
-| Multi-account (burner) support | **Easy** | Just store multiple Reddit usernames per Razzle account. UI decision, not technical. |
-| Comment sentiment analysis | **Easy** | Claude/DeepSeek can parse comment text for player mentions, sentiment, intent. |
-| Reddit Pulse (community consensus) | **Medium** | Requires continuous scraping of subreddit comment streams. Rate limit sensitive at scale. |
-| Personalized bot responses | **Hard** | Bot needs to look up the summoning user's Razzle account in real-time. Adds latency and complexity. |
-
-### Recommendation for Reddit Account Connection
-
-**Defer to Phase 3C (May 15-31) as planned.** The Reddit OAuth integration shares the same API access bottleneck as the bot. A single API application should cover both use cases. Build the bot first (simpler, higher immediate ROI), then extend with account connection.
-
-The multi-account burner support is a genuinely differentiating feature that no competitor offers. The copy in the roadmap ("We know the burner exists") is excellent brand voice. But this is a Phase 3C feature — not blocking.
+### Recommendation
+**Defer to Phase 3C (May 15-31) as planned.** Build the bot first (simpler, higher immediate ROI), then extend with account connection.
 
 ---
 
-## Section 8: 8-Week Launch Plan (REVISED Cycle 13 — Week 1 DAY 3)
+## Section 8: 8-Week Launch Plan (REVISED Cycle 14 — Week 1 DAY 4)
 
-### Week 1 (March 21-27): Dual-Path Bot + Reddit Accounts — DAY 3
+### Week 1 (March 21-27): Dual-Path Bot + Reddit Accounts — DAY 4
 
 - [x] Twitter pipeline functional — 41 approved tweets queued
 - [x] 17 tweets posted (7 evidence, 5 community, 3 agent verdicts, 2 mascot)
-- [ ] **CREATE REDDIT ACCOUNT** — u/DynastyDataNerd. **URGENT: March 23 creation = 30 days old by April 22.** Verify email+phone+2FA for CQS boost. Subscribe to r/DynastyFF, r/fantasyfootball.
-- [ ] **CREATE BOT REDDIT ACCOUNT** — separate account for the bot (u/razzle_bot or similar). Bots must disclose they are automated.
-- [ ] **APPLY FOR REDDIT API ACCESS** — Submit Developer Support form for bot account. Non-commercial community tool. Purpose, scope, expected volume (<50 QPM), subreddit targets. 7-day target response, realistic 7-21 days.
-- [ ] **BUILD DEVVIT APP** — `npx devvit new razzle-bot`. CommentSubmit trigger, Razzle API fetch, markdown formatter, reply. TypeScript. **THIS IS THE FASTER PATH — no API approval wait.**
-- [ ] **BUILD PRAW BOT** — ~200 lines Python. PRAW + Razzle API. FPLbot as reference. Ready to deploy upon API approval.
-- [ ] **BUILD DISCORD BOT** — discord.py, ~200 lines. Same API endpoints. List on top.gg. **LOWEST-FRICTION CHANNEL — ship first.**
+- [ ] **CREATE REDDIT ACCOUNT** — u/DynastyDataNerd. **URGENT: March 23 creation = 30 days old by April 22.** Verify email+phone+2FA for CQS boost.
+- [ ] **CREATE BOT REDDIT ACCOUNT** — separate account (u/razzle_bot or similar).
+- [ ] **APPLY FOR REDDIT API ACCESS** — Submit Developer Support form. Non-commercial. 7-day target response.
+- [ ] **BUILD DEVVIT APP** — `npx devvit new razzle-bot`. CommentSubmit trigger (CONFIRMED — Cycle 14 verified exact API). TypeScript. **FASTER PATH — no API approval wait.**
+- [ ] **BUILD PRAW BOT** — ~200 lines Python. FPLbot as reference (69 stars, semi-active). Ready to deploy upon API approval.
+- [ ] **BUILD DISCORD BOT** — discord.py, ~200 lines. Same API endpoints. **Do NOT rely on top.gg for discovery** (DD bot: 0 votes after 9 months). Distribute via direct invite links in Reddit, Twitter, Discord servers.
 - [ ] Follow 50-100 fantasy football accounts on Twitter
 - [ ] Engage in 5-10 dynasty Twitter threads per day
-- **Measure**: Reddit accounts created (personal + bot), API application submitted, Devvit app scaffolded, Discord bot functional, Twitter followers
-- **URGENCY**: Every day of delay reduces automod safety margin for personal account. Apply for API AND scaffold Devvit today.
+- **Measure**: Reddit accounts created, API application submitted, Devvit app scaffolded, Discord bot functional, Twitter followers
+- **URGENCY**: Every day of delay reduces automod safety margin for personal account.
 
 ### Week 2 (March 28 - April 3): Reddit Warm-Up + Bot Deployment
 
 - [ ] Reddit warm-up begins — 3-5 helpful comments/day on r/fantasyfootball
-- [ ] **DISCORD BOT LIVE** — deploy to Render, list on top.gg, invite to fantasy football Discord servers
-- [ ] **DEVVIT APP LIVE** — `devvit upload` + `devvit publish`. Message r/DynastyFF and r/fantasyfootball mods to install.
+- [ ] **DISCORD BOT LIVE** — deploy to Render. **Distribute invite link via Twitter + Reddit comments, NOT top.gg.**
+- [ ] **DEVVIT APP LIVE** — `devvit upload` + `devvit publish`. Message r/DynastyFF and r/fantasyfootball mods to install. Frame as value-add: "Free player data lookup for your community."
 - [ ] PRAW bot code complete and tested locally
 - [ ] Follow up on API application if no response
 - [ ] Twitter: ~2 tweets/day from queue (auto-posting)
-- **Measure**: Reddit karma, Discord bot servers joined, Devvit mod installation status, API application status
+- **Measure**: Reddit karma, Discord bot direct invites (NOT top.gg votes), Devvit mod installation status, API application status
 
 ### Week 3 (April 4-10): Draft Season Ramp + PRAW Deploy
 
@@ -456,7 +486,7 @@ The multi-account burner support is a genuinely differentiating feature that no 
 - [ ] 15+ r/DynastyFF comments visible in history
 - [ ] **All three bot channels should be live**: Devvit (Reddit-native), PRAW (if approved), Discord
 - [ ] Refill tweet queue — 41 approved depletes ~April 14 at 2/day
-- **Measure**: Twitter followers, Reddit karma, bot summons by channel, Discord servers
+- **Measure**: Twitter followers, Reddit karma, bot summons by channel, Discord servers (via direct invites)
 
 ### Week 5 (April 18-24): NFL DRAFT WEEK
 
@@ -498,73 +528,76 @@ The multi-account burner support is a genuinely differentiating feature that no 
 
 ## Section 9: Risk Register
 
-| # | Risk | Likelihood | Impact | Mitigation | Cycle 13 Update |
+| # | Risk | Likelihood | Impact | Mitigation | Cycle 14 Update |
 |---|------|-----------|--------|-----------|----------------|
 | 1 | ~~Twitter pipeline broken~~ | **RESOLVED** | — | — | **RESOLVED since Cycle 9.** |
-| 2 | **Distribution gap vs Dynasty Daddy** | **HIGH** | Very High | Build Reddit bot + Discord bot. | **Partially mitigated. Dual-path Reddit + Discord strategy reduces gap from 4:1 to potentially 4:3.** |
-| 3 | **AI competitive landscape crowding** | **MEDIUM** | High | Lead with behavioral. | **Stable 6th cycle.** |
+| 2 | **Distribution gap vs Dynasty Daddy** | **HIGH** | Very High | Build Reddit bot + Discord bot. | **Partially mitigated. DD Discord bot has near-zero top.gg discovery (0 votes, 9 months). Their distribution advantage is less than assumed on Discord.** |
+| 3 | **AI competitive landscape crowding** | **MEDIUM** | High | Lead with behavioral. | **Stable 7th cycle.** |
 | 4 | **Sleeper-only + web-only** | **HIGH** | Very High | Desktop 43% cite analytics. Sleeper 5M MAUs. | **Unchanged.** |
 | 5 | **RotoBot price competition** | **LOW-MEDIUM** | Medium | Differentiate on features, not price. | **Unchanged.** |
-| 6 | **Zero traction on any channel** | Medium | High | Bot channels = passive distribution. | **THREE bot channels planned (Devvit, PRAW, Discord). Reduces single-channel risk.** |
-| 7 | **Reddit mods remove bot** | Medium | High | Build history first. Bot adds value. | **Devvit apps are mod-installed — mods opt in, reducing removal risk.** |
-| 8 | **Behavioral profiling is "nice to have"** | **MEDIUM** | **Critical** | Footballguys validates concept. 13 cycles, zero competitors. | **Unchanged. Existential unknown. Week 7 test.** |
+| 6 | **Zero traction on any channel** | Medium | High | Bot channels = passive distribution. | **THREE bot channels planned. top.gg dead end for discovery — direct distribution required.** |
+| 7 | **Reddit mods remove bot** | Medium | High | Build history first. Bot adds value. | **Devvit apps are mod-installed. 2-4 weeks genuine participation before outreach recommended.** |
+| 8 | **Behavioral profiling is "nice to have"** | **MEDIUM** | **Critical** | Footballguys validates concept. 14 cycles, zero competitors. | **Unchanged. Existential unknown. Week 7 test.** |
 | 9 | **Elite tier API costs** | **LOW** | Low | DeepSeek at $0.005/query. 96% margin. | **Unchanged.** |
 | 10 | **Solo founder burnout** | Medium | High | Automate pipeline. Claude Code force multiplier. | **Unchanged.** |
 | 11 | **Price sensitivity — DN $49.99 undercuts** | **MEDIUM** | Medium | Must justify premium through behavioral. | **Unchanged.** |
-| 12 | **Competitor adds behavioral profiling** | Low-Med | Very High | Move fast. Ship first. Data compounds. | **13th cycle: zero competitors in behavioral space.** |
-| 13 | **Reddit bot rate-limited or banned** | Low | Medium | PRAW manages limits. Explicit summons only. | **Devvit apps are rate-managed by Reddit itself. PRAW: explicit summons only.** |
+| 12 | **Competitor adds behavioral profiling** | Low-Med | Very High | Move fast. Ship first. Data compounds. | **14th cycle: zero competitors in behavioral space.** |
+| 13 | **Reddit bot rate-limited or banned** | Low | Medium | PRAW manages limits. Explicit summons only. | **Devvit apps are rate-managed by Reddit itself.** |
 | 14 | **leaguemate.fyi commoditizes Bureau history** | **MEDIUM-HIGH** | Medium | Bureau must lead on behavioral. | **Unchanged.** |
-| 15 | **Dynasty Daddy distribution moat widens** | **MEDIUM-HIGH** | High | Build Reddit + Discord bots. Fantasy Wrapped Jan 2027. | **Discord bot (Rank #2) directly competes with DD's distribution.** |
+| 15 | **Dynasty Daddy distribution moat widens** | **MEDIUM** (revised DOWN) | High | Build Reddit + Discord bots. | **REVISED DOWN. DD Discord bot has 0 votes after 9 months on top.gg. Their distribution advantage on Discord is weaker than assumed.** |
 | 16 | **RotoBot scales to mainstream** | **LOW** | Low | RotoBot 2.0 going multi-sport. Less dynasty focus. | **Unchanged.** |
 | 17 | **Enterprise AI enters fantasy** | **LOW** | Low | Sourcetable targets data scientists. | **Unchanged.** |
 | 18 | **Market maturation limits ceiling** | **LOW** | Low | Growth from depth, not breadth. Favors tools. | **Unchanged.** |
-| 19 | **Reddit API access denied for bot** | **LOW-MEDIUM** (revised DOWN) | **Medium** (revised DOWN) | Reddit killed self-service API keys Nov 2025. But: personal projects still approved for free. "Rarely approved" was overstated (source sells competing product). **Devvit completely bypasses this risk.** PRAW rejection no longer blocks bot strategy. |
-| 20 | **Reddit API approval delayed past Draft Week** | **MEDIUM** (revised DOWN) | **Low-Medium** (revised DOWN) | Devvit app can be live BEFORE API approval arrives. Discord bot has zero approval wait. **Delay only affects PRAW path, not overall bot strategy.** |
-| 21 | **Reddit bot labeling requirement** | **LOW** | **Low-Positive** | Verified bot label adds legitimacy. Comply proactively. **Unchanged.** |
-| 22 | **Devvit app not installed by mods** | **MEDIUM** (NEW) | **Medium** | **NEW RISK.** Devvit requires subreddit mod installation. Mitigation: (1) Build relationship with mods via personal account first, (2) Frame as value-add tool for the community, (3) PRAW path works independently if mods decline. |
-| 23 | **Three-bot maintenance burden** | **LOW-MEDIUM** (NEW) | **Low** | **NEW RISK.** Three bots (Devvit, PRAW, Discord) = three codebases. Mitigation: all hit the same Razzle API endpoints. Logic lives in the API, bots are thin wrappers. ~200 lines each. |
+| 19 | **Reddit API access denied for bot** | **LOW-MEDIUM** | **Medium** | Devvit completely bypasses this risk. PRAW rejection no longer blocks bot strategy. | **Unchanged from Cycle 13.** |
+| 20 | **Reddit API approval delayed past Draft Week** | **MEDIUM** | **Low-Medium** | Devvit app can be live BEFORE API approval arrives. Discord bot has zero approval wait. | **Unchanged.** |
+| 21 | **Reddit bot labeling requirement** | **LOW** | **Low-Positive** | Verified bot label adds legitimacy. | **Unchanged.** |
+| 22 | **Devvit app not installed by mods** | **MEDIUM** | **Medium** | Build mod relationship first. Frame as value-add. PRAW works independently. | **Best practice: 2-4 weeks genuine participation before outreach. Transparency about purpose.** |
+| 23 | **Three-bot maintenance burden** | **LOW-MEDIUM** | **Low** | All hit same Razzle API. Logic lives in API, bots are thin wrappers. ~200 lines each. | **Unchanged.** |
+| 24 | **Discord bot invisible without direct distribution** | **MEDIUM** (NEW) | **Medium** | **NEW RISK (Cycle 14).** top.gg has near-zero organic discovery for fantasy football bots (all existing bots: 0 votes). Must distribute Discord bot invite link through Reddit comments, Twitter posts, and direct server outreach. top.gg listing is a checkbox, not a channel. |
 
 ---
 
 ## Section 10: Cycle Delta
 
-### Key Changes From Cycle 12
+### Key Changes From Cycle 13
 
-1. **BREAKTHROUGH: Devvit Developer Platform is a viable PRIMARY path, not just a fallback.** Devvit apps use `CommentSubmit` triggers to listen for comments, run on Reddit's own servers for free, and bypass the entire OAuth credential approval process. The bot no longer has a single point of failure. TypeScript required (not Python), and subreddit mod installation is the gate (not Reddit's API team). Two new risks added (#22, #23). Bot timeline revised DOWN from "2-4 weeks" to "1-3 weeks." Risk #19 (API denial) and #20 (API delay) both revised DOWN in likelihood and impact.
+1. **Discord bot discovery via top.gg is DEAD for fantasy football.** Dynasty Daddy's bot: 0 votes, 0 reviews, no visible server count — after 9+ months live. Sleeper Link: 0 votes. Sleeper-FFL: 0 votes. Only 1 dynasty-tagged bot exists on all of top.gg. Organic top.gg browse traffic does not work for this niche. Discord bot distribution must come from direct invite links shared in Reddit threads, Twitter, and fantasy Discord servers. Risk #15 (DD distribution moat) revised DOWN. New Risk #24 added (Discord bot discovery). Discord bot ROI revised from "High" to "Medium" — the bot works but needs its own distribution strategy.
 
-2. **"Rarely approved" framing DEBUNKED.** Cycle 12's primary source (molehill.io) sells a competing Reddit integration product — conflict of interest. Multiple independent sources (replydaddy.com, wappkit.com, Reddit's own Developer Platform docs) confirm that personal projects with low volume are still approved for free access. Risk #19 likelihood revised DOWN from MEDIUM to LOW-MEDIUM.
+2. **Reddit Developer Funds 2026 — exact payouts found.** 500 Daily Qualified Engagers in 14-day window = $500 one-time. 250 Qualified Installs = $1,000 one-time. Separate Developer Program pays $0.01 per Reddit gold on Devvit goods (irrelevant for data bots). Assessment: modest ecosystem validation, not meaningful revenue. Free hosting + Reddit endorsement remain the real value.
 
-3. **Reddit Developer Funds 2026 program discovered.** Reddit will PAY developers whose Devvit apps are installed in communities with 1,000+ members. Program runs April 2025 - June 2026. Max 3 apps eligible per developer. This is a potential revenue/visibility channel that didn't exist in any previous cycle's analysis. r/DynastyFF (192K members) and r/fantasyfootball (3.4M members) both far exceed the 1,000-member threshold.
+3. **Devvit trigger API fully confirmed from official documentation.** CommentSubmit, CommentCreate, CommentDelete, CommentUpdate, CommentReport, PostSubmit, PostReport, AppInstall — all documented in `@devvit/public-api`. The `addTrigger` method signature is known. This is no longer speculative — the technical path is validated.
 
-4. **Discord bot elevated to Rank #2 channel (from #4).** Dynasty Daddy's bot is confirmed live on top.gg with /marketvalue, /trades, /tradeinfo commands. Discord has ZERO API gating, ZERO approval process, ZERO mod installation requirement. This is the lowest-friction distribution channel available. ~200 lines of code, same Razzle API endpoints.
+4. **FPLbot status: semi-active to dormant.** 69 stars, 13 forks, 122 commits, 1 open issue. May be affected by Reddit's November 2025 API changes. This strengthens the case for Devvit as primary path — Reddit-native apps are immune to external credential issues. FPLbot's multi-platform approach (Reddit + Slack + Discord via fplbot.app) validates building for multiple platforms simultaneously.
 
-5. **r/FantasyPL confirmed at 736K members.** FPLbot's home subreddit is 3.8x the size of r/DynastyFF (192K). No public engagement stats found for FPLbot despite extensive search — the virality math (50 summons/day) remains an estimate without benchmark data. This is an honest gap in the model.
+5. **Mod outreach best practice confirmed.** Sources recommend 2-4 weeks genuine community participation before moderator outreach. Transparency about purpose. Frame as value-add. "Many 'no' responses convert to 'yes' over time." This aligns with the existing 8-week plan (personal account warm-up in Weeks 1-4, Devvit mod outreach in Week 2-3).
 
-6. **Zero NFL/dynasty Reddit bots exist — 13th consecutive cycle.** The lane remains completely open. No new entrants. FPLbot = soccer only. FFBot = WDIS only.
+6. **Zero NFL/dynasty Reddit bots exist — 14th consecutive cycle.** No new entrants. FPLbot = soccer only, possibly dormant. FFBot = WDIS only.
 
-5. **Zero NFL/dynasty Reddit bots confirmed for 12th cycle.** The lane is completely open. FPLbot = soccer only. FFBot = WDIS threads only. No bot lets users type `!razzle <player>` and get dynasty stats. Reddit Bot PMF uniqueness revised UP from 8 to 9.
+7. **No new competitors discovered.** 7th consecutive cycle with stable landscape.
 
-7. **No new competitors discovered.** 6th consecutive cycle with stable landscape.
+### Strategic Priorities (Cycle 14 — UPDATED with discovery revision)
 
-### Strategic Priorities (Cycle 13 — UPDATED with dual-path strategy)
-
-1. **Build Discord bot** — SHIP FIRST. Zero friction, zero approval wait. ~200 lines, same Razzle API. Deploy to Render, list on top.gg. **Can be live within days.**
-2. **Build Devvit app** — SHIP SECOND. `npx devvit new`, CommentSubmit trigger, publish to Reddit. Contact mods for installation. **Can be live within 1-2 weeks.**
-3. **Apply for Reddit API access + build PRAW bot** — IN PARALLEL. Submit Developer Support form. Build Python bot code. Deploy when approved. **7-21 day wait is no longer blocking because Devvit + Discord ship first.**
-4. **Create Reddit accounts** — TODAY. Personal (u/DynastyDataNerd) AND bot (u/razzle_bot). Both need to age. Both needed for API application.
+1. **Build Discord bot** — SHIP FIRST. Zero friction. But distribute via direct invite links in Reddit/Twitter/Discord servers, NOT top.gg organic discovery.
+2. **Build Devvit app** — SHIP SECOND. CommentSubmit trigger confirmed. Contact mods for installation. **Can be live within 1-2 weeks.**
+3. **Apply for Reddit API access + build PRAW bot** — IN PARALLEL. FPLbot (69 stars, semi-active) as reference. Deploy when approved.
+4. **Create Reddit accounts** — TODAY. Personal + bot. Both need to age. Both needed for API application.
 5. **Ship Bureau behavioral profiles** — THE MOAT. Must be live before Week 7 reveal (May 2-8). 39 days away.
-6. **Monitor Twitter engagement** — 17 tweets posted. Need engagement data to calibrate content strategy.
-7. **Refill tweet queue** — 41 approved through April 23. At 2/day cadence, queue depletes by April 14. Need new batch by then.
+6. **Monitor Twitter engagement** — 17 tweets posted. Need engagement data.
+7. **Refill tweet queue** — 41 approved through April 23. Depletes by April 14 at 2/day.
 
-### The honest assessment (Cycle 13)
+### The honest assessment (Cycle 14)
 
-**This cycle solved the biggest problem Cycle 12 discovered.** The Reddit API gating that Cycle 12 flagged as a "CRITICAL BLOCKER" is now mitigated by the Devvit dual-path strategy. The bot's probability of deployment rose from ~60% (Cycle 12, single PRAW path) to ~85-90% (Cycle 13, dual-path). Discord bot elevation to Rank #2 adds a zero-friction distribution channel that was underweighted in previous cycles.
+**This cycle found one meaningful tactical revision and confirmed everything else.**
 
-**The competitive landscape remains unchanged for the 6th consecutive cycle.** Behavioral profiling is uncontested for the 13th time. No new dynasty tools discovered.
+The Discord bot discovery problem is the only genuinely new finding. DD's bot has 0 votes after 9 months on top.gg — that's hard evidence that organic bot marketplace discovery doesn't work for fantasy football. The fix is straightforward: distribute via direct links instead. This doesn't kill the Discord bot channel — it means the bot needs its own marketing, just like everything else.
+
+The Devvit trigger API confirmation eliminates remaining technical speculation. CommentSubmit is real, documented, and used in production. The Devvit path is fully validated at the API level.
+
+The Developer Funds exact numbers ($500/$1,000) quantify what was previously "TBD" — modest but real. Not a strategy, just a bonus.
 
 **The four things that will determine if Razzle reaches 1,000 paid users (updated):**
 1. Does behavioral profiling create "I need this" moments? (unchanged — untested)
-2. Can distribution channels be built? (UPDATED — dual-path + Discord largely resolves this. Mod relationship is the remaining variable.)
+2. Can distribution channels be built AND discovered? (UPDATED — building is solved, but Discord bot discovery requires direct distribution, not organic marketplace)
 3. Does the Screener create viral screenshots during Draft season? (unchanged — untested)
 4. Can a solo founder execute fast enough? (unchanged — execution dependent)
 
@@ -572,7 +605,7 @@ The multi-account burner support is a genuinely differentiating feature that no 
 
 1. **Create Reddit accounts** (personal + bot) — 10 minutes. Starts age clock.
 2. **Submit Reddit API application** — 5 minutes. Starts approval clock.
-3. **Start building Discord bot** — the lowest-friction channel ships first.
+3. **Start building Discord bot** — ship first, distribute via direct invite links everywhere.
 
 ---
 
@@ -580,34 +613,34 @@ The multi-account burner support is a genuinely differentiating feature that no 
 
 ### Self-Review Flags
 
-**Section 7B (Reddit Bot Strategy — REVISED):**
-- [RESOLVED] "Rarely approved" bias from molehill.io — now corrected with multiple independent sources confirming personal project approval is viable.
-- [RESOLVED] Devvit fallback unresearched — now fully researched. CommentSubmit triggers confirmed. Viable primary path.
-- [NEEDS ACTION] Bot account + personal account still need to be created. API application still needs to be submitted.
-- [REALITY CHECK] Devvit requires mod installation. Mod relationship is now the bottleneck, not Reddit's API team. No data on how receptive r/DynastyFF mods are to third-party Devvit apps.
+**Section 7B-2 (Discord Bot — REVISED):**
+- [NEW] top.gg discovery is dead for fantasy football — confirmed with hard data (3 bots, all 0 votes). Direct distribution strategy added. Risk #24 created.
+- [REALITY CHECK] Discord bot "Rank #2" may be generous given discovery problem. But the zero-friction deployment and direct distribution path keep it viable. Maintained at #2 with "Medium" (not "High") expected return.
 
-**Section 7B-2 (Discord Bot — NEW):**
-- [REALITY CHECK] Discord bot elevated to Rank #2 based on zero-friction deployment, but Dynasty Daddy already occupies this space. Razzle's Discord bot must differentiate or risk being redundant to users who already have DD's bot.
+**Section 7B (Reddit Bot Strategy):**
+- [CONFIRMED] Devvit trigger API validated with exact types from official docs. No remaining technical speculation.
+- [CONFIRMED] FPLbot semi-active to dormant — strengthens Devvit-first strategy.
+- [NEEDS ACTION] Bot account + personal account STILL not created. API application STILL not submitted. **Day 4 of Week 1.**
 
-**Section 7C (Reddit Account Connection):**
-- [DEFERRED] Unchanged. Phase 3C (May 15-31). One API application covers both bot + account connection.
+**Section 7B Developer Funds:**
+- [RESOLVED] "Amount TBD" from Cycle 13 — now quantified: $500/$1,000 one-time payouts. Modest. Not a strategy.
 
 **Section 8 (Launch Plan):**
-- [REALITY CHECK] Week 1 now includes THREE bot codebases (Devvit, PRAW, Discord) + two Reddit accounts + API application. Ambitious for one person. Discord bot is simplest and should ship first. PRAW and Devvit can be built in parallel during Week 1-2.
+- [REALITY CHECK] Week 1 scope unchanged from Cycle 13 — still THREE bot codebases + two Reddit accounts + API application. Day 4. Nothing started.
 
-### Flags Summary: 5 total (same count as Cycle 12, but composition changed)
+### Flags Summary: 5 total (composition changed from Cycle 13)
 - 1 NEEDS DATA (DD ad revenue — low priority, perpetually unfixable)
-- 2 REALITY CHECK (mod receptivity to Devvit apps — new; Discord bot differentiation vs DD — new)
-- 1 NEEDS ACTION (create accounts + submit API application — STILL PENDING)
+- 2 REALITY CHECK (Discord bot Rank #2 with discovery problem — revised; Week 1 scope vs Day 4 — unchanged)
+- 1 NEEDS ACTION (create accounts + submit API application — **STILL PENDING, 4th day**)
 - 1 DEFERRED (Reddit OAuth for account connection — Phase 3C)
-- 2 RESOLVED (molehill.io bias, Devvit unresearched — both fixed in Cycle 13)
+- 3 RESOLVED (top.gg discovery quantified, Devvit API confirmed, Developer Funds quantified)
 
 ---
 
 ## FINANCIAL MODEL
 
 ```
-RAZZLE FINANCIAL MODEL — CYCLE 13 (UPDATED)
+RAZZLE FINANCIAL MODEL — CYCLE 14 (UPDATED)
 ============================================
 
 Revenue — unchanged from Cycle 12
@@ -640,7 +673,7 @@ Unit Economics — unchanged
   Annual: $99,528 profit on $107,990 revenue
   Break-even: ~10 paid users
 
-Bot Channel Economics (REVISED Cycle 13 — dual-path + Discord)
+Bot Channel Economics (REVISED Cycle 14 — Discord discovery problem)
 
   Optimistic (all 3 channels live by Week 3):
     Reddit (Devvit + PRAW): 50 summons/day x 100 views = 5,000 impressions/day
@@ -652,27 +685,28 @@ Bot Channel Economics (REVISED Cycle 13 — dual-path + Discord)
 
   Likely (Discord + Devvit live Week 2, PRAW pending):
     Reddit (Devvit only): 25 summons/day x 100 views = 2,500 impressions/day
-    Discord: 20 commands/day x 20 members = 400 impressions/day
-    Total: 2,900 daily impressions
-    At 1.5% CTR = 44 visits/day = 1,320/month
-    Conversion: ~1.3 new paid/month from bots
+    Discord (REVISED — lower without top.gg discovery): 10 commands/day x 15 members = 150 impressions/day
+    Total: 2,650 daily impressions
+    At 1.5% CTR = 40 visits/day = 1,200/month
+    Conversion: ~1.2 new paid/month from bots
 
   Conservative (PRAW rejected, Devvit + Discord only):
     Reddit (Devvit, installed subs only): 15 summons/day x 100 views = 1,500 impressions/day
-    Discord: 20 commands/day x 20 members = 400 impressions/day
-    Total: 1,900 daily impressions
-    At 1% CTR = 19 visits/day = 570/month
+    Discord (direct distribution only): 5 commands/day x 10 members = 50 impressions/day
+    Total: 1,550 daily impressions
+    At 1% CTR = 16 visits/day = 480/month
     Conversion: ~0.5 new paid/month
     Still net-positive at $0 cost
 
-  NOTE: FPLbot engagement data not publicly available (searched extensively).
+  NOTE: FPLbot engagement data not publicly available (confirmed 2nd cycle).
+  Discord estimates revised DOWN from Cycle 13 due to top.gg discovery failure.
   These estimates are directional. Calibrate after first week of live data.
 
-  Devvit Developer Funds 2026 (BONUS — new Cycle 13):
-    If Devvit app installed in r/DynastyFF (192K) + r/fantasyfootball (3.4M):
-    Both exceed 1,000-member threshold for "Qualified Install"
-    Reddit pays developers per program terms (April 2025 - June 2026)
-    Potential additional revenue stream — amount TBD by Reddit
+  Devvit Developer Funds 2026 (QUANTIFIED Cycle 14):
+    500 Daily Qualified Engagers in 14-day window: $500 one-time
+    250 Qualified Installs during program: $1,000 one-time
+    Maximum bonus: $1,500 (both milestones met)
+    Assessment: Modest. Not a revenue strategy. Ecosystem validation.
 
 Timeline — unchanged from Cycle 12
   Current users: 0
@@ -682,12 +716,12 @@ Timeline — unchanged from Cycle 12
   Month 12 target: 300-500 paid users
   Month 18 target: 1,000 paid users
 
-  Key milestones (UPDATED Cycle 13):
-    - Reddit accounts created (Week 1 — TODAY)
-    - Reddit API application submitted (Week 1 — TODAY)
-    - Discord bot live (Week 1-2 — FASTEST CHANNEL)
-    - Devvit app published (Week 1-2 — NO API WAIT)
-    - Devvit app installed by mods (Week 2-3 — DEPENDENT ON MOD RELATIONSHIP)
+  Key milestones (UPDATED Cycle 14):
+    - Reddit accounts created (Week 1 — STILL NOT DONE. Day 4.)
+    - Reddit API application submitted (Week 1 — STILL NOT DONE)
+    - Discord bot live (Week 1-2 — distribute via DIRECT LINKS, not top.gg)
+    - Devvit app published (Week 1-2 — CommentSubmit trigger CONFIRMED)
+    - Devvit app installed by mods (Week 2-3 — 2-4 weeks participation first)
     - PRAW bot deployed (Week 2-4 — upon API approval)
     - Reddit account warm-up complete (Week 5)
     - Behavioral profiling reveal (Week 7) — PMF validation
@@ -696,46 +730,3 @@ Timeline — unchanged from Cycle 12
     - Fantasy Wrapped ships (Jan 2027) — first viral opportunity
     - NFL season starts (Sep 2026) — peak engagement window
 ```
-
----
-
-## RECOMMENDATION
-
-**Cycle 13 solved the problem Cycle 12 discovered.** The Reddit API gating is no longer a single point of failure. The dual-path strategy (Devvit + PRAW) combined with Discord bot elevation gives Razzle three distribution channels that can be built this week at $0 cost.
-
-**NO CYCLE 14.** This is the last time this is said, and this time the research truly is exhausted. Every remaining unknown requires execution:
-1. Will mods install the Devvit app? (Answer: ask them)
-2. Will Reddit approve the API application? (Answer: apply and find out)
-3. Will behavioral profiling create WTP? (Answer: ship and test)
-4. Will the bots get traction? (Answer: deploy and measure)
-
-None of these can be answered by research. All four require building.
-
-**The four highest-impact actions, in order:**
-1. **Create Reddit accounts** (personal + bot — 10 minutes — starts age clock)
-2. **Submit Reddit API application** (5 minutes — starts approval clock)
-3. **Build and ship Discord bot** (fastest channel — zero approval, can be live in hours)
-4. **Build and publish Devvit app** (second fastest — no API wait, mod installation is the only gate)
-
-**Confidence in $100k revenue path: 6/10** (up from 5.5/10 in Cycle 12). The improvement comes from: dual-path eliminates API gating as single point of failure (+0.25), Discord bot adds zero-friction channel (+0.15), Devvit Developer Funds is a bonus opportunity (+0.1). Behavioral WTP remains the existential unknown (no change).
-
-Sources:
-- [FPLbot GitHub](https://github.com/amosbastian/FPLbot)
-- [FFBot GitHub](https://github.com/Surye/FFBot)
-- [Reddit Devvit GitHub](https://github.com/reddit/devvit)
-- [Reddit Devvit Docs](https://github.com/reddit/devvit/blob/main/devvit-docs/docs/api/public-api/README.md)
-- [Reddit Developer Funds 2026](https://support.reddithelp.com/hc/en-us/articles/27958169342996-Reddit-Developer-Funds-2026-Terms)
-- [Devvit sub-stats-bot (reference Devvit app)](https://github.com/fsvreddit/sub-stats-bot)
-- [Devvit Introduction (hashnode)](https://dragonejt.hashnode.dev/introduction-to-the-reddit-developer-platform)
-- [Reddit Responsible Builder Policy](https://support.reddithelp.com/hc/en-us/articles/42728983564564-Responsible-Builder-Policy)
-- [Reddit API pre-approval analysis (replydaddy)](https://replydaddy.com/blog/reddit-api-pre-approval-2025-personal-projects-crackdown)
-- [Reddit API credentials guide 2025 (wappkit)](https://www.wappkit.com/blog/reddit-api-credentials-guide-2025)
-- [Reddit killed self-service API keys (molehill.io — NOTE: sells competing product)](https://molehill.io/blog/reddit_killed_self-service_api_keys_your_options_for_automated_reddit_integration)
-- [Reddit verified bot labels (CompsMag)](https://www.compsmag.com/news/reddits-verified-bot-revolution-a-new-era-for-brand-transparency-and-community-trust/)
-- [Sleeper API docs](https://docs.sleeper.com/)
-- [Dynasty Daddy Discord bot (top.gg)](https://top.gg/bot/1248312528686284965)
-- [r/FantasyPL stats (subredditstats)](https://subredditstats.com/r/fantasypl) — 736K members
-- [r/DynastyFF stats (subredditstats)](https://subredditstats.com/r/dynastyff) — 192K members
-- [r/fantasyfootball stats (subredditstats)](https://subredditstats.com/r/fantasyfootball) — 3.4M members
-- [Reddit bot building guide 2025 (wappkit)](https://www.wappkit.com/blog/how-to-build-reddit-bot-python-2025)
-- [Sleeper review (Lines.com)](https://www.lines.com/dfs/sleeper-fantasy) — 5M MAUs
