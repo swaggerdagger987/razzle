@@ -3,6 +3,12 @@
    Styles for native panel rendering inside lab.html
    =================================================================== */
 
+/* ===== Table scroll wrapper (mobile horizontal scroll) ===== */
+.table-scroll-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* ===== Clickable player names in panels ===== */
 .panel-player-link {
   color: var(--ink);

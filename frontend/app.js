@@ -46,6 +46,7 @@ if (document.readyState === "loading") {
 /* ===== Canvas Theme Helper (dark mode palette for canvas draws) ===== */
 function getCanvasTheme() {
   var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  var s = getComputedStyle(document.documentElement);
   return {
     bg: isDark ? "#2d1f14" : "#ede0cf",
     bgWarm: isDark ? "#3b2821" : "#e5d5c3",
@@ -57,6 +58,12 @@ function getCanvasTheme() {
     white: isDark ? "#ede0cf" : "#fff",
     gridLine: isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)",
     subtitleAlpha: isDark ? "rgba(237,224,207,0.5)" : "rgba(45,31,20,0.5)",
+    orange: s.getPropertyValue('--orange').trim() || "#d97757",
+    green: s.getPropertyValue('--green').trim() || "#2ec4b6",
+    blue: s.getPropertyValue('--blue').trim() || "#5b7fff",
+    red: s.getPropertyValue('--red').trim() || "#e63946",
+    purple: s.getPropertyValue('--purple').trim() || "#8b5cf6",
+    yellow: s.getPropertyValue('--yellow').trim() || "#ffc857",
     isDark: isDark
   };
 }

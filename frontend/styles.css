@@ -818,7 +818,7 @@ a.btn-pro-upgrade:focus-visible {
 }
 .skeleton-cell {
   height: 16px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   background: var(--bg-warm);
   animation: skeleton-pulse 1.5s ease-in-out infinite;
 }

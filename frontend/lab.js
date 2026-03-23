@@ -3,6 +3,33 @@
 
 // Position colors — single source of truth
 var _POS_COLORS_CSS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+
+// Shared tier/grade color constants (DOM context — CSS vars)
+var TIER_COLORS_CSS = { elite: "var(--green)", premium: "var(--blue)", solid: "var(--orange)", flier: "var(--purple)" };
+var GRADE_COLORS_CSS = { A: "var(--green)", B: "var(--blue)", C: "var(--orange)", D: "var(--red)" };
+
+// Shared tier/grade color constants (canvas context — reads from theme)
+function _getTierColorsHex() { var t = getCanvasTheme(); return { elite: t.green, premium: t.blue, solid: t.orange, flier: t.purple }; }
+function _getGradeColorsHex() { var t = getCanvasTheme(); return { A: t.green, B: t.blue, C: t.orange, D: t.red }; }
+
+// Trade value tiers (DOM context — CSS vars)
+var TV_TIERS_CSS = [
+  { name: "Elite", min: 85, color: "var(--green)", badge: "ELITE" },
+  { name: "Star", min: 70, color: "var(--blue)", badge: "STAR" },
+  { name: "Starter", min: 55, color: "var(--orange)", badge: "STARTER" },
+  { name: "Bench", min: 0, color: "var(--ink-light)", badge: "BENCH" },
+];
+
+// Trade value tiers (canvas context — hex from theme)
+function _getTVTiersHex() {
+  var t = getCanvasTheme();
+  return [
+    { name: "Elite", min: 85, color: t.green, badge: "ELITE" },
+    { name: "Star", min: 70, color: t.blue, badge: "STAR" },
+    { name: "Starter", min: 55, color: t.orange, badge: "STARTER" },
+    { name: "Bench", min: 0, color: t.inkLight, badge: "BENCH" },
+  ];
+}
 function _getPosColorsHex() {
   var s = getComputedStyle(document.documentElement);
   return { QB: s.getPropertyValue('--pos-qb').trim(), RB: s.getPropertyValue('--pos-rb').trim(), WR: s.getPropertyValue('--pos-wr').trim(), TE: s.getPropertyValue('--pos-te').trim() };
@@ -1825,19 +1852,21 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     const isSortCol = key === state.sortKey;
     const isSort2Col = key === state.sortKey2;
     const sc = isSortCol && !hBg && !barsOn ? "sort-col" : isSort2Col && !hBg && !barsOn ? "sort2-col" : "";
-    // Data bar gradient (takes precedence over heat bg when active)
+    // Data bar (takes precedence over heat bg when active)
     let cellStyle = "";
+    let barClass = "";
     if (barsOn && val != null && typeof val === "number") {
       const bw = getBarWidth(key, val);
       if (bw > 0) {
         const barColor = INVERSE_STATS.has(key) ? "rgba(230,57,70,0.13)" : "rgba(217,119,87,0.18)";
-        cellStyle = `background:linear-gradient(90deg, ${barColor} ${bw}%, transparent ${bw}%);`;
+        cellStyle = `--bar-w:${bw}%;--bar-c:${barColor};`;
+        barClass = " data-bar";
       }
     } else if (hBg) {
       cellStyle = `background:${hBg};`;
     }
     const hStyle = cellStyle ? ` style="${cellStyle}"` : "";
-    const scAttr = sc ? ` class="${sc}"` : "";
+    const scAttr = (sc || barClass) ? ` class="${sc}${barClass}"` : "";
     if ((isProspectView() || state.universe === "college") && !col.isText && (val === 0 || val === null || val === undefined)) {
       html += `<td${scAttr} style="color:var(--ink-faint);">\u2014</td>`;
       continue;
@@ -6179,7 +6208,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     // DVS badge
     const dvs = p._dvs != null ? p._dvs : computeClientDVS(p.ppg, p.age, p.position);
     if (dvs != null) {
-      const dvsColor = dvs >= 85 ? "#2ec4b6" : dvs >= 70 ? "#5b7fff" : dvs >= 55 ? "#d97757" : "#8a7565";
+      const dvsColor = dvs >= 85 ? t.green : dvs >= 70 ? t.blue : dvs >= 55 ? t.orange : t.inkLight;
       const badgeX = padX + 450;
       ctx.fillStyle = dvsColor + "30";
       ctx.fillRect(badgeX, y + 7, 70, 22);
@@ -7433,7 +7462,7 @@ function drawCollegeArc(college, pos) {
 
   // Title
   ctx.font = "bold 14px 'Caveat', cursive";
-  ctx.fillStyle = "#5b7fff";
+  ctx.fillStyle = t.blue;
   ctx.textAlign = "center";
   ctx.fillText(`college ${statLabel.toLowerCase()} by season`, W / 2, 18);
 
@@ -7479,7 +7508,7 @@ function drawCollegeArc(college, pos) {
     if (i === 0) ctx.moveTo(x, y);
     else ctx.lineTo(x, y);
   }
-  ctx.strokeStyle = "#5b7fff";
+  ctx.strokeStyle = t.blue;
   ctx.lineWidth = 3;
   ctx.lineJoin = "round";
   ctx.stroke();
@@ -7491,7 +7520,7 @@ function drawCollegeArc(college, pos) {
 
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, Math.PI * 2);
-    ctx.fillStyle = "#5b7fff";
+    ctx.fillStyle = t.blue;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
@@ -7584,9 +7613,9 @@ function drawProspectSpider(prospect, percentiles, metrics) {
     else ctx.lineTo(x, y);
   }
   ctx.closePath();
-  ctx.fillStyle = "rgba(91, 127, 255, 0.25)";
+  ctx.fillStyle = t.blue + "40";
   ctx.fill();
-  ctx.strokeStyle = "#5b7fff";
+  ctx.strokeStyle = t.blue;
   ctx.lineWidth = 2.5;
   ctx.stroke();
 
@@ -7600,7 +7629,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
 
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, Math.PI * 2);
-    ctx.fillStyle = "#5b7fff";
+    ctx.fillStyle = t.blue;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
@@ -7681,7 +7710,7 @@ function exportProspectImage() {
   // Header
   const posText = content.querySelector(".profile-pos-badge")?.textContent || "";
   const metaText = content.querySelector(".profile-meta")?.textContent || "";
-  ctx.fillStyle = "#5b7fff";
+  ctx.fillStyle = t.blue;
   ctx.fillRect(padX, y, W - padX * 2, 6);
   y += 14;
 
@@ -8083,7 +8112,7 @@ function exportTierImage() {
   y += 30;
 
   // Draw each tier group
-  const tierColors = { elite: "#2ec4b6", above_avg: "#2ec4b6", average: "#ffc857", below_avg: "#d97757", no_data: "#8a7565" };
+  const tierColors = { elite: t.green, above_avg: t.blue, average: t.yellow, below_avg: t.orange, no_data: t.inkLight };
   const tierLabels = { elite: "ELITE", above_avg: "ABOVE AVG", average: "AVERAGE", below_avg: "BELOW AVG", no_data: "NO DATA" };
 
   tierGroups.forEach(g => {
@@ -8403,11 +8432,12 @@ function exportBigBoardImage() {
     const td = getRPSTierDef(p.rps);
     tiers[td.key].push(p);
   }
+  const _tc = _getTierColorsHex();
   const tierDefs = [
-    { key: "elite", label: "ELITE", color: "#2ec4b6" },
-    { key: "premium", label: "PREMIUM", color: "#2ec4b6" },
-    { key: "solid", label: "SOLID", color: "#ffc857" },
-    { key: "flier", label: "FLIER", color: "#d97757" },
+    { key: "elite", label: "ELITE", color: _tc.elite },
+    { key: "premium", label: "PREMIUM", color: _tc.premium },
+    { key: "solid", label: "SOLID", color: _tc.solid },
+    { key: "flier", label: "FLIER", color: _tc.flier },
   ];
 
   // Calculate height
@@ -8608,8 +8638,8 @@ function renderClassAnalytics(data, container) {
   }
 
   const posLabel = data.position === "ALL" ? "All Positions" : data.position;
-  const gradeColors = { A: "var(--green)", B: "var(--blue)", C: "var(--orange)", D: "var(--red)" };
-  const tierColors = { elite: "#d97757", premium: "#5b7fff", solid: "#2ec4b6", flier: "#8b5cf6" };
+  const gradeColors = GRADE_COLORS_CSS;
+  const tierColors = TIER_COLORS_CSS;
 
   // Find max avg RPS for chart scaling
   const maxRPS = Math.max(...classes.map(c => c.avg_rps), 60);
@@ -8697,7 +8727,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
   const totalBarsW = barCount * barW + (barCount - 1) * barGap;
   const startX = PAD_L + (chartW - totalBarsW) / 2;
 
-  const gradeColors = { A: "#2ec4b6", B: "#5b7fff", C: "#d97757", D: "#e63946" };
+  const gradeColors = _getGradeColorsHex();
   const scaleMax = Math.ceil(maxRPS / 10) * 10;
 
   // Y-axis gridlines + labels
@@ -8789,8 +8819,8 @@ function exportClassAnalyticsImage() {
   const classes = currentCAData.classes;
   const posLabel = currentCAData.filterPosition === "ALL" ? "All Positions" : currentCAData.filterPosition;
   const W = 800;
-  const gradeColors = { A: "#2ec4b6", B: "#5b7fff", C: "#d97757", D: "#e63946" };
-  const tierColors = { elite: "#d97757", premium: "#5b7fff", solid: "#2ec4b6", flier: "#8b5cf6" };
+  const gradeColors = _getGradeColorsHex();
+  const tierColors = _getTierColorsHex();
 
   // Calculate height: title + chart + cards
   const chartH = 240;
@@ -9055,12 +9085,7 @@ async function loadTradeValues() {
 
 function renderTradeValueChart() {
   var posColors = _getPosColorsHex();
-  const tiers = [
-    { name: "Elite", min: 85, color: "#2ec4b6", badge: "ELITE" },
-    { name: "Star", min: 70, color: "#5b7fff", badge: "STAR" },
-    { name: "Starter", min: 55, color: "#d97757", badge: "STARTER" },
-    { name: "Bench", min: 0, color: "#8a7565", badge: "BENCH" },
-  ];
+  const tiers = TV_TIERS_CSS;
 
   let filtered = _tvState.players;
   if (_tvState.position !== "ALL") {
@@ -9244,12 +9269,7 @@ function updateTradeBalance() {
 
 function exportTradeValuesPNG() {
   var posColors = _getPosColorsHex();
-  const tiers = [
-    { name: "Elite", min: 85, color: "#2ec4b6", badge: "ELITE" },
-    { name: "Star", min: 70, color: "#5b7fff", badge: "STAR" },
-    { name: "Starter", min: 55, color: "#d97757", badge: "STARTER" },
-    { name: "Bench", min: 0, color: "#8a7565", badge: "BENCH" },
-  ];
+  const tiers = _getTVTiersHex();
 
   let filtered = _tvState.players;
   if (_tvState.position !== "ALL") {

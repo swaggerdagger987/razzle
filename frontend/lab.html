@@ -1050,6 +1050,16 @@
   .screener-table td.sort-col { background: rgba(217, 119, 87, 0.05); }
   .screener-table td.sort2-col { background: rgba(217, 119, 87, 0.025); }
 
+  /* ─── Data bars (no gradient) ─── */
+  .screener-table td.data-bar { position: relative; }
+  .screener-table td.data-bar::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: var(--bar-w, 0%);
+    background: var(--bar-c);
+    pointer-events: none;
+  }
+
   /* ─── Stat leader dots ─── */
   .leader-dot { font-size: 7px; vertical-align: middle; margin-right: 2px; }
   .leader-gold { color: var(--yellow); }
