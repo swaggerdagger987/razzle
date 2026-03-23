@@ -1616,10 +1616,45 @@ var _colResize = { active: false, key: null, startX: 0, startW: 0 };
 function _initColResizeHandles() {
   var handles = document.querySelectorAll(".col-resize-handle");
   for (var i = 0; i < handles.length; i++) {
-    handles[i].removeEventListener("mousedown", _onColResizeStart);
-    handles[i].removeEventListener("dblclick", _onColResizeReset);
-    handles[i].addEventListener("mousedown", _onColResizeStart);
-    handles[i].addEventListener("dblclick", _onColResizeReset);
+    var h = handles[i];
+    h.removeEventListener("mousedown", _onColResizeStart);
+    h.removeEventListener("dblclick", _onColResizeReset);
+    h.removeEventListener("keydown", _onColResizeKeydown);
+    h.addEventListener("mousedown", _onColResizeStart);
+    h.addEventListener("dblclick", _onColResizeReset);
+    h.addEventListener("keydown", _onColResizeKeydown);
+    h.setAttribute("role", "separator");
+    h.setAttribute("tabindex", "0");
+    h.setAttribute("aria-orientation", "vertical");
+    var colKey = h.dataset.col;
+    h.setAttribute("aria-label", "Resize " + colKey + " column");
+    var cw = state.columnWidths[colKey];
+    if (cw) h.setAttribute("aria-valuenow", cw);
+  }
+}
+
+function _onColResizeKeydown(e) {
+  var key = e.target.dataset.col;
+  if (!key) return;
+  var step = 10;
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+    e.preventDefault();
+    var th = e.target.parentElement;
+    var curW = state.columnWidths[key] || th.offsetWidth;
+    var delta = e.key === "ArrowRight" ? step : -step;
+    var newW = Math.max(40, curW + delta);
+    state.columnWidths[key] = newW;
+    var ths = document.querySelectorAll('th[data-col="' + key + '"]');
+    for (var i = 0; i < ths.length; i++) {
+      ths[i].style.width = newW + "px";
+      ths[i].style.minWidth = newW + "px";
+      ths[i].style.maxWidth = newW + "px";
+    }
+    e.target.setAttribute("aria-valuenow", newW);
+    try { localStorage.setItem("razzle_col_widths", JSON.stringify(state.columnWidths)); } catch(ex) {}
+  } else if (e.key === "Enter") {
+    e.preventDefault();
+    _onColResizeReset(e);
   }
 }
 
