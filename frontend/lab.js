@@ -9841,9 +9841,10 @@ function heatColor(pct) {
 }
 
 function textColorForBg(pct) {
-  // Dark text on light cells, light text on very saturated cells
-  if (pct == null) return "#8a7565";
-  return "#2d1f14";
+  // Dark text on light cells — read from CSS vars so dark mode flips correctly
+  const styles = getComputedStyle(document.documentElement);
+  if (pct == null) return styles.getPropertyValue('--ink-light').trim() || "#8a7565";
+  return styles.getPropertyValue('--ink').trim() || "#2d1f14";
 }
 
 async function loadHeatMap() {
