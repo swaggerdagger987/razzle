@@ -1,5 +1,34 @@
 # Designer Insights
 
+### Cycle 31 — 2026-03-23
+
+**What I did**: USER JOURNEY + CONTENT ACCURACY + CONVERSION FUNNEL audit. New approach: instead of more CSS token tickets (backlog already has 346 tickets), focused on what a REAL USER would notice in their first 60 seconds. Ran 7 parallel subagents: (1) home page visual issues, (2) Lab page visual issues, (3) pricing + agents page violations, (4) styles.css token compliance, (5) lab.js + app.js DOM inline styles, (6) user-visible content issues (stale years, placeholder text, broken images), (7) visual hierarchy + first impression analysis. Then ran 3 more: (8) first-time user journey tracing, (9) dark mode visual breaks, (10) remaining fresh visual issues. Cross-referenced all findings against 346 existing tickets (220 DQ + 146 done + 19 open + pending/queue). Headless browser still broken (11th cycle — blank DOM for razzle.lol AND localhost). Wrote 10 new tickets (DES-347 through DES-356).
+
+**Quality score**: 7/10 — Shifted from CSS-level findings to PRODUCT-level findings. Best tickets: DES-347 (100+ columns claim only has 87 NFL columns — verifiable trust issue), DES-350 (mini-screener PPG vs Lab PPR mismatch — data consistency), DES-351 (mini-screener rows click to generic Lab — lost user intent). Weaker tickets: DES-349 (footer /team/KC), DES-352 (chips no tooltips) are P3 polish.
+
+**What worked**:
+- Shifting from CSS tokens to USER JOURNEY analysis found genuinely new issues after 30 cycles of exhaustive code-level auditing. The marketing claim verification (DES-347: "100+ columns" vs 87 actual) is a trust issue no prior cycle caught.
+- Cross-referencing against 346 existing tickets BEFORE writing prevented all duplicates. Every ticket is genuinely new.
+- The mini-screener cluster (DES-350, 351, 353) reveals a coherent problem: the home page preview doesn't match the actual product. This is a CONVERSION issue, not a design issue.
+
+**What didn't**:
+- Headless browser STILL broken (11th cycle). gstack browse loads razzle.lol as blank, localhost as blank. Cannot visually verify ANY findings.
+- 346 tickets in backlog is absurd. The team needs a TRIAGE pass, not more tickets. Recommend closing the bottom 100 P3 tickets.
+- Some findings (DES-354 meta mismatch, DES-352 chip tooltips) are minor quality-of-life, not conversion-moving.
+
+**Pattern spotted**: After 31 cycles (356 tickets total), the audit has moved through 6 distinct phases: (1) design tokens (1-10), (2) dark mode (11-15), (3) accessibility (16-20), (4) mobile (21-25), (5) conversion/CSS (26-30), (6) USER JOURNEY + CONTENT ACCURACY (31). The remaining frontier is LIVE TESTING — actually using the product end-to-end to find bugs that code analysis misses. Requires either fixing the headless browser or manual testing.
+
+**Root cause found**: The mini-screener issues (DES-350, 351, 353) share a root cause: the mini-screener was built as a VISUAL DEMO, not as a functional preview of the Lab. It was designed to look good on the home page, not to be a coherent teaser. The sort metric, row click behavior, and error handling are all "good enough for a demo" but wrong for a conversion funnel.
+
+**Suggestion for teammates**:
+- Ship agent: DES-347 (column count) is a content fix — just change "100+" to "85+" or add more columns. Do first because it's a trust issue.
+- Ship agent: DES-350 + DES-351 should be done TOGETHER — both are about mini-screener ↔ Lab consistency. Change the sort to PPR and add player-specific links.
+- Ship agent: DES-353 (retry button) is a 5-line fix — extract the fetch into a named function.
+- Ship agent: DES-355 + DES-356 are CONVERSION fixes that pair well — "Most Popular" badge + CTA copy reinforcement.
+- PM: Consider triaging the bottom 100 P3 tickets. 356 tickets with 146 done = 210 open. That's unmanageable.
+
+**What I'd do differently next time**: The headless browser has been broken for 11 cycles. Accept it permanently. The next frontier is NOT more code analysis — it's LIVE USER TESTING. Recommend the user manually test the first 60 seconds of the product and report what they notice. Code analysis has diminishing returns after 356 tickets.
+
 ### Cycle 30 — 2026-03-23
 
 **What I did**: TYPOGRAPHY + INTERACTION STATES + UX DISCOVERABILITY audit. Ran 5 parallel subagents: (1) pending ticket backlog inventory (210 tickets), (2) index.html design violations, (3) lab.html design violations, (4) pricing.html + agents.html violations, (5) styles.css token compliance. Then ran 2 more: (6) interaction states + typography + dark mode patterns, (7) user-facing UX gaps across 4 key pages. Cross-referenced all 210 pending + 100 done tickets. Headless browser still broken (10th cycle — DNS resolution fails for external sites, blank DOM for localhost). Wrote 10 new tickets (DQ-211 through DQ-220).
