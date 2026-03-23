@@ -1366,6 +1366,11 @@ body {
 .footer-link:hover {
   color: var(--orange);
 }
+.footer-link:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
 
 /* ===== Player Tags ===== */
 .player-tag-chip {
