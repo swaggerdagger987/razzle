@@ -5689,8 +5689,9 @@ function drawBuildRadar(mgr) {
     Math.min((mgr.posInvestment.WR || 0) / 50, 1),
     Math.min((mgr.posInvestment.TE || 0) / 50, 1)
   ];
-  var t = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {ink:'#2d1f14',inkFaint:'#c4b5a5',inkMedium:'#6d5c4e'};
-  var colors = ["#5b7fff", "#2ec4b6", "#d97757", "#8b5cf6"];
+  var t = getCanvasTheme();
+  var _s = getComputedStyle(document.documentElement);
+  var colors = [_s.getPropertyValue('--pos-qb').trim(), _s.getPropertyValue('--pos-rb').trim(), _s.getPropertyValue('--pos-wr').trim(), _s.getPropertyValue('--pos-te').trim()];
   var angles = [];
   for (var i = 0; i < 4; i++) {
     angles.push(-Math.PI / 2 + (i * Math.PI * 2 / 4));
@@ -5730,9 +5731,9 @@ function drawBuildRadar(mgr) {
     else ctx.lineTo(dx, dy);
   }
   ctx.closePath();
-  ctx.fillStyle = "rgba(217, 119, 87, 0.2)";
+  ctx.fillStyle = colors[2] + "33";
   ctx.fill();
-  ctx.strokeStyle = "#d97757";
+  ctx.strokeStyle = colors[2];
   ctx.lineWidth = 2;
   ctx.stroke();
 
@@ -6306,16 +6307,17 @@ function _mcDrawHistogram(canvas, ptsHistory, name) {
     var y = padT + drawH - barH;
     var pct = bins[b] / ptsHistory.length;
     // Color: green for common, orange for moderate, light for rare
-    ctx.fillStyle = pct > 0.12 ? '#2ec4b6' : pct > 0.06 ? '#d97757' : '#c4b5a4';
+    var ht = getCanvasTheme();
+    var _cs = getComputedStyle(document.documentElement);
+    ctx.fillStyle = pct > 0.12 ? _cs.getPropertyValue('--green').trim() : pct > 0.06 ? _cs.getPropertyValue('--orange').trim() : ht.inkFaint;
     ctx.fillRect(x, y, barW, barH);
-    var ht = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {ink:'#2d1f14',inkMedium:'#6d5c4e'};
     ctx.strokeStyle = ht.ink;
     ctx.lineWidth = 1;
     ctx.strokeRect(x, y, barW, barH);
   }
 
   // X-axis labels (min and max)
-  var ht2 = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {inkMedium:'#6d5c4e'};
+  var ht2 = getCanvasTheme();
   ctx.fillStyle = ht2.inkMedium;
   ctx.font = '9px monospace';
   ctx.textAlign = 'left';
