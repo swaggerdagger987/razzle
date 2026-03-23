@@ -90,3 +90,32 @@
 - Ship agent: DES-329 + DES-330 are mobile-specific — test at 375px viewport after fixing.
 
 **What I'd do differently next time**: Now that the browse tool works with chain commands, future cycles should use snapshot + annotated screenshots (-a -i flags) to document issues with visual overlay evidence. Also, responsive testing at tablet (768px) was skipped — should add that viewport.
+
+### Cycle 5 — 2026-03-23
+
+**What I did**: Full visual + code QA cycle. Took 20+ screenshots across 12 pages (home, Lab, pricing, agents, about, league-intel, tiers, breakouts, tradevalues, weekly, stocks, reportcard, dashboard) in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 4 subagents for targeted code verification. Wrote 10 new tickets (DQ-031 through DQ-040). Total: 40 open tickets.
+
+**Quality score**: 9/10 — first cycle combining visual screenshots with code verification on every finding. Every ticket has both screenshot evidence and exact line numbers. The browse chain command pattern from cycle 4 insights was essential.
+
+**What worked**:
+- Chain command pattern `echo '[["goto","url"],["wait","--networkidle"],["viewport","WxH"],["screenshot","path"]]' | $B chain` is reliable and repeatable.
+- Dark mode testing via `["js","document.documentElement.setAttribute(\"data-theme\",\"dark\")"]` in the chain — works perfectly.
+- Parallel subagents for code verification (about.html, dashboard.html, pricing.html, agents.html) while processing screenshots saved significant time.
+- Cross-page comparison revealed consistent patterns: hover shadows staying at 4px across breakouts/dashboard/tiers (DQ-040).
+
+**What didn't**:
+- Couldn't capture hover states visually (headless browser limitation).
+- Some screenshots at mobile (375px) are too small to read fine text — should crop specific sections.
+- The DES-327 through DES-336 tickets from cycle 4 were never written as files. Need to ensure ALL findings get filed.
+
+**Pattern spotted**: The agents page is the single biggest design spec violation on the entire site. The DESIGN.md "always dark" rule for Situation Room is completely unenforced — only the pixel canvas div is dark, everything else (hero, bio cards, nav, footer) is light sand. DQ-031 is effectively a P0 that reframes the entire page's visual identity.
+
+**Root cause found**: Standalone page hover inconsistency (DQ-040) has a clear root cause: these pages were built in different phases by copying the card-at-rest styling (`4px 4px 0`) but forgetting to implement the hover growth (`6px 6px 0`). Pages built in later phases (pricing, compare) got it right because they referenced earlier, correctly-implemented pages. A CSS utility class like `.card-chunky` with built-in hover rules would prevent future drift.
+
+**Suggestion for teammates**:
+- Ship agent: Fix DQ-031 FIRST — it's the highest-impact single fix. One line of JS in `<head>` transforms the entire agents page.
+- Ship agent: DQ-040 is a 1-line fix per page (change `4px` to `6px` in hover shadow). Do breakouts, dashboard, and tiers together.
+- Ship agent: DQ-033 (tiers rotation) is a 1-line CSS addition with immediate visual payoff — "slapped on, not placed" per DESIGN.md.
+- Ship agent: DQ-037 (redirect flash) is a 3-line fix per page that prevents jarring UX.
+
+**What I'd do differently next time**: Tablet viewport (768px) is still untested. Next cycle should include 768x1024 screenshots. Also should test the Lab with filters active, columns rearranged, and dark mode + heat colors — those compound states may reveal issues invisible in default views.

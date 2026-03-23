@@ -1,6 +1,6 @@
 # Design QA Tickets — Batch 2026-03-23
 
-30 tickets from design audit against DESIGN.md. Cycle 1: code-based token audit. Cycle 2: sitewide pattern audit. Cycle 3: deep pattern audit (typography, dark mode, layout, interactive states).
+40 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycle 5: visual QA with screenshots (home, Lab, pricing, agents, tiers, breakouts, dashboard, weekly, stocks, rankings — light+dark mode, desktop+mobile).
 
 ## P1 — High Impact (visible on every page)
 
@@ -15,6 +15,8 @@
 | DQ-022 | overflow:hidden clips 4px box-shadows on 8 cards | lab-panels.css (8 classes) |
 | DQ-023 | Dark mode overlays still use cold black rgba(0,0,0) | lab.html, player.js |
 | DQ-024 | Correlation heatmap canvas hardcodes #fff text | lab-panels.js:9821,10118 |
+| DQ-031 | Agents page hero+footer on light sand (should be all dark) | agents.html |
+| DQ-032 | Agent names don't match DESIGN.md (Bones/Octo/Atlas) | agents.html:1619-1624 |
 
 ## P2 — Medium Impact (visible in specific views)
 
@@ -35,6 +37,11 @@
 | DQ-026 | cmd-palette-item + nav-dropdown-item missing :focus-visible | styles.css |
 | DQ-028 | 4 interactive elements missing :active press state | agents.html, lab.html, lab-panels.css, styles.css |
 | DQ-029 | Z-index hierarchy undocumented (9999, 10000, 1000) | styles.css |
+| DQ-033 | Tiers tier-letter badges have NO rotation (should be 3deg) | tiers.html:125-146 |
+| DQ-035 | Tiers/Rankings no dark mode overrides for tier colors | tiers.html, rankings.html |
+| DQ-037 | Standalone redirect pages show flash of Pro gate content | stocks.html, reportcard.html, etc. |
+| DQ-039 | Lab mobile toolbar cramped touch targets (<44px) | lab.html |
+| DQ-040 | Standalone page cards hover shadow stays 4px (should grow to 6px) | breakouts.html, dashboard.html, tiers.html |
 
 ## P3 — Low Impact (polish)
 
@@ -46,3 +53,6 @@
 | DQ-019 | Konami confetti hardcoded position color hex values | app.js:1741 |
 | DQ-027 | SVG research-sprawl.svg uses system-ui font fallback | assets/research-sprawl.svg |
 | DQ-030 | Transition timing inconsistent (0.1s vs 0.12s standard) | styles.css, agents.html, lab.html |
+| DQ-034 | Rankings tier badges wrong rotation angle (-2deg vs 3deg) | rankings.html:117 |
+| DQ-036 | Dashboard hover hardcoded rgba(217,119,87,0.05) | dashboard.html:145 |
+| DQ-038 | Pro teaser uses custom .btn-pro-upgrade instead of .btn-primary | agents.html, warroom.js |
