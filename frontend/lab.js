@@ -1,6 +1,13 @@
 /* Razzle — The Lab (screener logic) */
 // escapeHtml and escapeAttr are in app.js (shared)
 
+// Position colors — single source of truth
+var _POS_COLORS_CSS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+function _getPosColorsHex() {
+  var s = getComputedStyle(document.documentElement);
+  return { QB: s.getPropertyValue('--pos-qb').trim(), RB: s.getPropertyValue('--pos-rb').trim(), WR: s.getPropertyValue('--pos-wr').trim(), TE: s.getPropertyValue('--pos-te').trim() };
+}
+
 // ─── Panel Actions (CSV export, Share URL) ─────────────────────
 
 function exportPanelCSV(panelName) {
@@ -2105,7 +2112,7 @@ function showHoverCard(playerId, anchorEl) {
   if (!player) return;
 
   const pos = (player.position || "").toUpperCase();
-  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  var posColors = _POS_COLORS_CSS;
   const posColor = posColors[pos] || "var(--ink)";
 
   // Build card HTML
@@ -3066,7 +3073,7 @@ function updateResultCount() {
       var p = (state.items[i].position || "").toUpperCase();
       if (p) posCounts[p] = (posCounts[p] || 0) + 1;
     }
-    var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+    var posColors = _POS_COLORS_CSS;
     var posOrder = ["QB", "RB", "WR", "TE"];
     var badges = [];
     for (var j = 0; j < posOrder.length; j++) {
@@ -4745,7 +4752,7 @@ function updateSelectionUI() {
   if (bar) {
     if (count > 0) {
       bar.style.display = "";
-      var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+      var posColors = _POS_COLORS_CSS;
       var posCounts = {};
       for (var i = 0; i < state.selectedPlayers.length; i++) {
         var pp = (state.selectedPlayers[i].position || "").toUpperCase();
@@ -4814,7 +4821,7 @@ function renderQuickCompare(container) {
   var nameB = escapeHtml(b.full_name || b.player_name || "");
   var posA = (a.position || "").toUpperCase();
   var posB = (b.position || "").toUpperCase();
-  var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  var posColors = _POS_COLORS_CSS;
 
   var html = '<span style="font-weight:700; color:' + (posColors[posA] || "var(--ink)") + '; font-size:11px;">' + nameA + '</span>';
   html += ' <span style="color:var(--ink-light); font-size:10px;">vs</span> ';
@@ -5686,7 +5693,7 @@ function exportImage() {
   }
 
   // Data rows
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   for (let r = 0; r < rowCount; r++) {
     const player = state.items[r];
     const y = hdrY + headerH + r * rowH;
@@ -6063,7 +6070,7 @@ async function generateRankingsExport() {
 }
 
 function renderRankingsPNG(players, posLabel, sortLabel) {
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   const padX = 30, padY = 30;
   const W = 800;
   const titleH = 50;
@@ -6255,7 +6262,7 @@ function renderCollegeProfile(data, container) {
   }
 
   const pos = (player.position || "").toUpperCase();
-  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  var posColors = _POS_COLORS_CSS;
   const posColor = posColors[pos] || "var(--pos-qb)";
 
   let html = "";
@@ -6450,7 +6457,7 @@ function renderProfile(data, container) {
   }
 
   const pos = (player.position || "").toUpperCase();
-  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  var posColors = _POS_COLORS_CSS;
   const posColor = posColors[pos] || "var(--ink)";
 
   const headlines = getHeadlineStats(pos, career);
@@ -6752,7 +6759,7 @@ function drawProfileArc(seasons, pos) {
   const plotW = W - pad.left - pad.right;
   const plotH = H - pad.top - pad.bottom;
 
-  const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posHex = _getPosColorsHex();
   const lineColor = posHex[pos] || "#d97757";
 
   var t = getCanvasTheme();
@@ -6920,7 +6927,7 @@ function exportProfileImage() {
   ctx.fillStyle = t.bgCard;
   ctx.fillRect(0, 0, W, H);
 
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   const pColor = posColors[pos] || t.ink;
 
   // Position badge
@@ -8315,7 +8322,7 @@ function renderBigBoard(data, container) {
     return;
   }
 
-  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  var posColors = _POS_COLORS_CSS;
 
   // Group by tier
   const tiers = { elite: [], premium: [], solid: [], flier: [] };
@@ -8436,7 +8443,7 @@ function exportBigBoardImage() {
   ctx.fillText("ranked by Razzle Prospect Score (RPS)", W / 2, y + 14);
   y += 28;
 
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   const barW = 120;
   const barH = 10;
 
@@ -8998,7 +9005,7 @@ function closeTradeValues(e) {
 
 function renderTVPositionBtns() {
   var _ink = typeof getCanvasTheme === "function" ? getCanvasTheme().ink : "#2d1f14";
-  const posColors = { ALL: _ink, QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = Object.assign({ALL: _ink}, _getPosColorsHex());
   const container = document.getElementById("tvPositionBtns");
   container.innerHTML = "";
   for (const pos of ["ALL", "QB", "RB", "WR", "TE"]) {
@@ -9047,7 +9054,7 @@ async function loadTradeValues() {
 }
 
 function renderTradeValueChart() {
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   const tiers = [
     { name: "Elite", min: 85, color: "#2ec4b6", badge: "ELITE" },
     { name: "Star", min: 70, color: "#5b7fff", badge: "STAR" },
@@ -9133,7 +9140,7 @@ function setupTradeSearchInput(side) {
         (p.full_name || "").toLowerCase().includes(q)
       ).slice(0, 8);
       if (!matches.length) { autoDiv.style.display = "none"; return; }
-      const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+      var posColors = _getPosColorsHex();
       autoDiv.innerHTML = matches.map(p => {
         const pc = posColors[p.position] || getCanvasTheme().ink;
         return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);">'
@@ -9183,7 +9190,7 @@ function clearTradeSide(side) {
 }
 
 function renderTradeSide(side) {
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   const arr = side === "A" ? _tvState.sideA : _tvState.sideB;
   const container = document.getElementById("tvList" + side);
   const total = arr.reduce((s, p) => s + (p._tv || 0), 0);
@@ -9236,7 +9243,7 @@ function updateTradeBalance() {
 // ─── Trade Value PNG Export ──────────────────────────────────────────
 
 function exportTradeValuesPNG() {
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   const tiers = [
     { name: "Elite", min: 85, color: "#2ec4b6", badge: "ELITE" },
     { name: "Star", min: 70, color: "#5b7fff", badge: "STAR" },
@@ -9745,7 +9752,7 @@ function exportAgingCurvesPNG() {
 
 
 // ===== HEAT MAP =====
-const _hmPosColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+var _hmPosColors = _getPosColorsHex();
 const _hmState = { position: "WR", group: "production", data: null };
 
 function openHeatMap() {
@@ -10091,7 +10098,7 @@ function renderWatchlistPanel() {
     groups[g].push(p);
   });
 
-  var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)", OTHER: "var(--ink-light)" };
+  var posColors = Object.assign({OTHER: "var(--ink-light)"}, _POS_COLORS_CSS);
 
   ["QB", "RB", "WR", "TE", "OTHER"].forEach(function(pos) {
     if (groups[pos].length === 0) return;
@@ -10150,7 +10157,7 @@ function renderTierBoard() {
   var overlay = document.getElementById("tierBoardOverlay");
   if (!overlay) return;
   var list = getWatchlist();
-  var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  var posColors = _POS_COLORS_CSS;
 
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:800px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">';
@@ -10208,7 +10215,7 @@ function exportTierBoardPNG() {
   var list = getWatchlist();
   var tierOrder = [1, 2, 3, 4, 5, 0];
   var tierColorHex = ["#c4b5a5", "#2ec4b6", "#5b7fff", "#d97757", "#8b5cf6", "#e63946"];
-  var posColorHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColorHex = _getPosColorsHex();
 
   var W = 800;
   var TIER_H = 52;
@@ -10721,7 +10728,7 @@ function _taSetupSearch(side) {
         const data = await apiFetch("/api/players?search=" + encodeURIComponent(q) + "&limit=8&relevant=true");
         const players = data.items || [];
         if (!players.length) { autoDiv.style.display = "none"; return; }
-        const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+        var posColors = _getPosColorsHex();
         autoDiv.innerHTML = players.map(p => {
           const pc = posColors[p.position] || getCanvasTheme().ink;
           const pid = p.player_id || p.full_name;
@@ -10786,7 +10793,7 @@ function _taRemovePlayer(side, idx) {
 }
 
 function _taRenderSide(side) {
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   const arr = _taState[side];
   const listId = side === "give" ? "taListGive" : "taListGet";
   const totalId = side === "give" ? "taTotalGive" : "taTotalGet";
@@ -10834,7 +10841,7 @@ function _taUpdateVerdict() {
   }
 
   verdictArea.style.display = "";
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
 
   // Value bars
   const maxVal = Math.max(giveTotal, getTotal, 1);
@@ -10928,7 +10935,7 @@ function exportTradeAnalyzerPNG() {
   if (!_taState.give.length || !_taState.get.length) return;
 
   const W = 1200, H = 630;
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
@@ -11473,7 +11480,7 @@ function renderMyRosterPanel() {
   var overlay = document.getElementById("rosterOverlay");
   if (!overlay) return;
   var list = getMyRoster();
-  var posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  var posColors = _POS_COLORS_CSS;
 
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:700px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   // Header
@@ -11544,7 +11551,7 @@ var _GRADE_COLORS = {
   "F": "#e63946"
 };
 var _STATUS_COLORS = { "competing": "#2ec4b6", "retooling": "#d97757", "rebuilding": "#e63946" };
-var _POS_HEX = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+var _POS_HEX = _getPosColorsHex();
 
 function renderRosterReport() {
   var area = document.getElementById("rosterReportArea");
@@ -12059,7 +12066,7 @@ function renderPlayerComps(data, container) {
   }
 
   const pos = (player.position || "").toUpperCase();
-  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  var posColors = _POS_COLORS_CSS;
   const posColor = posColors[pos] || "var(--ink)";
 
   let html = "";
@@ -12167,7 +12174,7 @@ function drawCompRadar(data) {
 
   const topComp = comps[0];
   const pos = (player.position || "").toUpperCase();
-  const posColorMap = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColorMap = _getPosColorsHex();
   const posColor = posColorMap[pos] || "#d97757";
 
   const W = canvas.width;
@@ -12292,7 +12299,7 @@ function exportCompsImage() {
 
   const { player, comps, stat_keys, stat_labels, target_stats, season } = _compData;
   const pos = (player.position || "").toUpperCase();
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posColors = _getPosColorsHex();
   const pColor = posColors[pos] || getCanvasTheme().ink;
 
   const padX = 30, padY = 30;
@@ -12502,7 +12509,7 @@ function renderBoomBust(data, container) {
           consistency_score, grade, position_rank, position_total } = data;
 
   const pos = (player.position || "").toUpperCase();
-  const posColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
+  var posColors = _POS_COLORS_CSS;
   const posColor = posColors[pos] || "var(--ink)";
 
   // Grade color
@@ -12596,7 +12603,7 @@ function drawBoomBustHistogram(data) {
   const { weekly_scores, boom_threshold, bust_threshold, player } = data;
   const scores = (weekly_scores || []).map(w => w.score);
   const pos = (player.position || "").toUpperCase();
-  const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posHex = _getPosColorsHex();
   const posColor = posHex[pos] || "#d97757";
 
   // Build histogram buckets (5-point buckets)
@@ -12729,7 +12736,7 @@ function drawBoomBustRangeBar(data) {
   const ceiling_ppg = data.ceiling_ppg || 0;
   const median_ppg = data.median_ppg || 0;
   const pos = (player.position || "").toUpperCase();
-  const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posHex = _getPosColorsHex();
   const posColor = posHex[pos] || "#d97757";
 
   const maxVal = Math.max(ceiling_ppg * 1.2, 35);
@@ -12785,7 +12792,7 @@ function exportBoomBustImage() {
   const bust_rate = data.bust_rate || 0;
 
   const pos = (player.position || "").toUpperCase();
-  const posHex = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  var posHex = _getPosColorsHex();
   const posColor = posHex[pos] || "#d97757";
   const safeGrade = grade || "C";
   const gradeColor = safeGrade.startsWith("A") ? "#2ec4b6" :
