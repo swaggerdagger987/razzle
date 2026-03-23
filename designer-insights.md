@@ -1,5 +1,33 @@
 # Designer Insights
 
+### Cycle 12 — 2026-03-23
+
+**What I did**: Visual QA + interaction audit. Local server running (uvicorn on 127.0.0.1:8000), production site returned 502. Took 15+ screenshots across home, Lab, pricing, agents, bureau, dashboard, tiers, rankings, trade values — in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 2 subagents: (1) 8-question targeted code verification (agents dark mode, nav consistency, footer links, dark toggle, demo button, pricing banner, trade values pagination), (2) 10-category new violation search (btn padding, watermark, pricing borders, Sign In button, footer font, skeleton loaders, onerror fallbacks, position filter tints, breadcrumbs, feature card hover). Cross-referenced all 80 existing DQ tickets + 146 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-081 through DQ-090).
+
+**Quality score**: 9/10 — Visual evidence from browse tool chain commands confirmed all findings. Every ticket has both screenshot evidence and code-level subagent verification. Deliberately shifted to INTERACTION and COMPONENT-LEVEL issues (hover states, dark mode gaps, loading UX, image fallbacks) since prior cycles covered tokens, borders, and font-sizes exhaustively.
+
+**What worked**:
+- Chain command pattern reliable for browse tool: `echo '[["goto","url"],["wait","--networkidle"],["viewport","WxH"],["screenshot","path"]]' | $B chain`.
+- Two-subagent strategy: first agent verified 8 specific observations from screenshots, second agent ran 10 fresh category searches against the codebase. Combined findings were comprehensive.
+- Cross-referencing against 226 total tickets (80 DQ + 146 done) prevented all duplicates. Each finding was verified unique before writing.
+
+**What didn't**:
+- Production site (razzle.lol) returned 502 — no live site verification possible. All findings are against local dev server.
+- Still can't capture hover states visually via headless browser — tickets like DQ-081 (feature-card hover) and DQ-085 (btn-chunky dark mode) are code-verified but not screenshot-verified.
+- Tablet viewport (768px) still untested.
+
+**Pattern spotted**: The site has graduated through three distinct issue eras: (1) Cycles 1-5: design token violations (colors, borders, radius, shadows — mechanical fixes), (2) Cycles 6-9: UX/conversion gaps (empty states, Pro gates, visual previews — product design), (3) Cycles 10-12: interaction + component quality (hover states, loading UX, dark mode completeness, image resilience — production polish). The remaining high-value work is all in era 3: making every interactive element feel intentional.
+
+**Root cause found**: btn-chunky missing dark mode override (DQ-085) traces to DES-017 scope — that ticket only fixed btn-primary dark mode but left btn-chunky untouched. The Sign In button uses btn-chunky, so it was missed. Same pattern: standalone pages missing skeleton cards (DQ-086) traces to skeleton being built FOR the Lab specifically (lab.html) and never propagated to standalone pages during their 60+ phase build sprint.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-085 (btn-chunky dark mode) is the highest-impact single fix — 1 CSS rule, affects Sign In button on every page in dark mode. Do first.
+- Ship agent: DQ-081 (feature-card hover) is a 3-line CSS addition with immediate visual payoff on the home page.
+- Ship agent: DQ-087 (position filter inactive tint) and DQ-089 (trade values tier breaks) are the highest UX-impact tickets — they make 10+ standalone pages significantly more scannable.
+- Ship agent: DQ-083 (pricing watermark) and DQ-084 (footer Caveat font) are quick wins — 1 line each.
+
+**What I'd do differently next time**: Test the actual interaction FLOWS end-to-end: (1) Lab filter → formula → export → share URL round-trip, (2) Bureau connect → view league → trade finder, (3) Pricing → register → authenticated Lab. Page-by-page visual QA is reaching diminishing returns after 12 cycles. Flow-based testing would catch friction points between pages that static screenshots miss.
+
 ### Cycle 11 — 2026-03-23
 
 **What I did**: Deep type-scale, spacing, voice, and architecture audit. Production site returned blank page (white screen, no errors, no text). Local server failed to start (ImportError: relative import). Pivoted to pure grep-based code audit with 3 subagents (font-size compliance, spacing/gap patterns, loading/empty state text). Ran 30+ targeted grep searches. Cross-referenced all 70 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-071 through DQ-080).

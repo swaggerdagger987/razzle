@@ -1,6 +1,6 @@
 # Design QA Tickets — Batch 2026-03-23
 
-70 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit (transition:all, hover lift, focus-visible, max-width, watermarks).
+90 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors).
 
 ## P1 — High Impact (visible on every page)
 
@@ -124,3 +124,27 @@
 |--------|---------|-------|
 | DQ-079 | z-index 14 distinct values in inline HTML — no token system | 30+ files (values: 1 to 10001) |
 | DQ-080 | letter-spacing used 76 times with no design system guidance | 20+ files (5 different values, no tokens) |
+
+## Cycle 12 — Visual QA + Interaction Audit (DQ-081 to DQ-090)
+
+### P1
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-085 | btn-chunky no dark mode override — Sign In invisible in dark | styles.css, all pages |
+
+### P2
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-081 | Home feature-card missing hover lift (no :hover rule at all) | index.html:328-352 |
+| DQ-082 | btn-chunky/btn-primary base padding mismatch + 6 inline overrides | styles.css:755,783, pricing.html, agents.html |
+| DQ-086 | Standalone pages have text-only loading — no skeleton cards | dashboard.html, rankings.html, tiers.html, 20+ pages |
+| DQ-087 | Position filter buttons show no position color when inactive | rankings.html, tiers.html, 10+ standalone pages |
+| DQ-088 | Agent icon SVGs missing onerror fallback — broken images on failure | agents.html, index.html |
+| DQ-089 | Trade values 150-player chart has no tier breaks or section headers | tradevalues.html |
+
+### P3
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-083 | Pricing page missing watermark div | pricing.html |
+| DQ-084 | Footer personality text ("made for Reddit") not using Caveat font | index.html:912-913 |
+| DQ-090 | Pricing comparison table thin 1px dividers, invisible in dark mode | pricing.html |
