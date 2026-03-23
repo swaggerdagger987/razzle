@@ -1,5 +1,34 @@
 # Designer Insights
 
+### Cycle 8 — 2026-03-23
+
+**What I did**: Full visual QA cycle with 20+ screenshots across 15+ pages. Browsed via local dev server (127.0.0.1:8000) using headless browser chain commands. Covered: home, Lab, pricing, agents, bureau, dashboard, tiers, rankings, breakouts, compare, trade values, trade finder, awards, stocks, about — in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 3 subagents: (1) agents.html footer + dark mode verification (confirmed .warroom-footer exists but unused, no data-theme="dark" forced), (2) pricing.html dark mode contrast analysis (found fallback color risks but main CSS vars OK), (3) Pro gate pattern audit (confirmed only lab.html has the gate, generic across all ~48 panels, bureau does it right with per-tab teasers). Wrote 10 new tickets (DQ-101 through DQ-110).
+
+**Quality score**: 9/10 — every ticket backed by both screenshot evidence and code-level subagent verification. Deliberately focused on UX/conversion/first-impression issues since the prior 100 done tickets covered most token/code violations. Two P1 tickets (agents footer, Pro gate teasers) have the highest conversion impact.
+
+**What worked**:
+- Chain command pattern via temp file with heredoc is the most reliable approach for browse tool on Windows.
+- Separate screenshot calls that start fresh work as long as chain bundles goto+wait+viewport+screenshot together.
+- Subagent code verification prevented false positives (pricing dark mode CSS vars are correct, it's the visual weight that's the issue, not a broken token).
+- Mobile (375px) screenshots caught issues invisible at desktop — compare.html footer dominance, Lab toolbar cramping.
+
+**What didn't**:
+- Tablet (768px) still untested. Should add next cycle.
+- Can't capture hover/interactive states via headless browser.
+- Some screenshots at mobile are too small to verify font sizes — need clip regions next time.
+
+**Pattern spotted**: The site has graduated from "design system violations" (Cycles 1-5) to "product experience gaps" (Cycles 6-8). The remaining high-value work is all UX: empty states, Pro gates, visual previews, mobile touch targets, visual hierarchy. These are the issues that affect conversion and shareability, not design token compliance.
+
+**Root cause found**: Three tickets (DQ-102 compare empty state, DQ-104 bureau pre-connect, DQ-105 no canvas preview) share a single root cause: features were built as functional tools without a "first impression" design pass. The data pipelines work, but landing states assume users already know what they're looking at. A systematic "first-visit UX" sweep would catch all of these.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-101 (agents footer dark) is a 1-line JS fix (`document.documentElement.setAttribute("data-theme","dark")` in agents.html head) with the biggest single page impact.
+- Ship agent: DQ-106 (pricing dark mode comparison table) is a 2-3 line CSS fix with conversion impact.
+- Ship agent: DQ-103 (Pro gate teasers) is the highest-value ticket but requires per-panel content. Start with just 5 panels.
+- Ship agent: DQ-102, DQ-104, DQ-105 are all the same TYPE of fix (add visual context to an empty/landing state). Batch them.
+
+**What I'd do differently next time**: Test interactive flows end-to-end: (1) Lab filter + formula + export + share URL round-trip, (2) Bureau connect + view league + trade finder, (3) Pricing "Buy" flow. Page-by-page screenshots catch visual issues but miss flow friction.
+
 ### Cycle 7 — 2026-03-23
 
 **What I did**: UX/conversion-focused visual QA cycle. Browsed 15+ pages via local dev server (127.0.0.1:8000) + headless browser chain commands. Took 25+ screenshots across home, Lab, pricing, agents, about, dashboard, rankings, tiers, breakouts, compare, tradefinder, awards, bureau — in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 3 subagents: (1) pricing dark mode contrast verification, (2) home page footer transition check (debunked — no issue), (3) Pro gate pattern analysis across 48+ panels. Wrote 10 new tickets (DQ-041 through DQ-050). Total: 50 open tickets.
