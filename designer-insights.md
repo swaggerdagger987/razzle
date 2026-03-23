@@ -1,5 +1,36 @@
 # Designer Insights
 
+### Cycle 29 — 2026-03-23
+
+**What I did**: CONVERSION FUNNEL + SITUATION ROOM + CROSS-PAGE CONSISTENCY audit. Ran 5 parallel subagents: (1) home page visual hierarchy + nav + footer, (2) Lab screener UI edge cases (alignment, keyboard, virtual scroll), (3) pricing page + auth flow conversion quality, (4) Situation Room briefing cards + urgency badges + dark mode, (5) standalone page cross-page consistency (max-width, loading messages, empty states). Cross-referenced all 200 existing DQ tickets + 100 done tickets. Production site still 502. Headless browser still blank (9th cycle — confirmed not CSP, browser renders empty DOM for all local servers). Wrote 10 new tickets (DQ-201 through DQ-210).
+
+**Quality score**: 8/10 — Found 3 genuine P1 conversion issues (DQ-202: CTA hierarchy, DQ-210: missing "Most Popular" badge, and DQ-201: numeric alignment). Found 2 DESIGN.MD spec violations in Situation Room (DQ-205: briefing card top stripe, DQ-206: urgency badge rotation). Loading message inconsistency (DQ-208) affects 12+ pages. All 10 tickets confirmed non-duplicate via grep against 200 pending + 100 done tickets.
+
+**What worked**:
+- 5 parallel subagents with DIFFERENT dimensions (home, Lab, pricing, Situation Room, standalone pages) efficiently covered conversion, UX, and consistency in one pass.
+- DQ-202 + DQ-210 are the highest-impact finds — pricing page has no CTA hierarchy and no "Most Popular" nudge. These are standard SaaS conversion patterns that Razzle is missing.
+- DQ-205 (briefing card top stripe) is a clear DESIGN.MD violation that distinguishes agent identity — easy fix, high brand polish.
+- DQ-207 (row highlight lost on re-render) is a genuine UX bug, not a cosmetic issue.
+- Cross-referencing caught 5 potential overlaps (DQ-066, DQ-076, DQ-033, DQ-057, DQ-083) and correctly excluded them.
+
+**What didn't**:
+- Production site STILL 502 (9th cycle). Headless browser STILL renders blank DOM for all local servers. This is NOT CSP — python http.server on port 9876 without any headers also renders blank. Likely a Playwright/headless Chromium environment issue on this Windows machine.
+- Cannot visually verify ANY findings. All tickets are code-based analysis.
+- 3 of 10 tickets (DQ-204, DQ-208, DQ-209) are P2 polish rather than P1 conversion/UX.
+
+**Pattern spotted**: After 29 cycles (210 tickets total), the audit has exhausted token-level, dark-mode, and accessibility dimensions. The remaining high-impact frontier is CONVERSION OPTIMIZATION: CTA hierarchy, trust signals, pricing psychology, and visual nudges. These are product design issues, not CSS issues. The next cycle should focus on: (1) user journey code tracing (Lab -> panel -> export -> share URL round-trip), or (2) mobile-specific interaction testing (touch targets, swipe, orientation).
+
+**Root cause found**: The pricing CTA hierarchy problem (DQ-202 + DQ-210) likely happened because all three pricing cards were built in the same phase using the same template. The developer applied `btn-primary` to all paid CTAs without considering that CTA hierarchy requires differentiation. Same root cause as many prior issues: copy-paste template without per-instance customization.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-210 (Most Popular badge) + DQ-202 (CTA hierarchy) should be done TOGETHER — they're both about the same pricing card section and together create the conversion nudge. 15-minute fix.
+- Ship agent: DQ-205 (briefing card stripe) + DQ-206 (urgency badge rotation) are both in agents.html CSS — do them together in one pass.
+- Ship agent: DQ-201 (table alignment) is a mechanical find-replace in lab.js — add text-align:right to numeric data cells.
+- Ship agent: DQ-208 (loading messages) is low-effort — pick 4 approved messages, find-replace the outliers in 12 files.
+- Ship agent: DQ-207 (row highlight) requires adding state.highlightedPlayers — slightly more complex, do last.
+
+**What I'd do differently next time**: The headless browser has been broken for 9 cycles. At this point, STOP trying to fix it and accept code-based analysis as the workflow. Alternatively, try opening Chrome DevTools manually and doing visual inspection via the user's actual browser. Also: 210 tickets is a LOT of backlog. Consider a triage pass to close or merge overlapping low-priority tickets before writing more.
+
 ### Cycle 28 — 2026-03-23
 
 **What I did**: MOBILE RESPONSIVENESS + JS-DOM DESIGN TOKEN + CANVAS TYPOGRAPHY audit. Ran 5 parallel subagents: (1) dark mode regressions, (2) mobile responsiveness gaps, (3) border/shadow/radius tokens, (4) conversion funnel pages, (5) typography and color tokens. Cross-referenced all 190 existing DQ tickets + 100+ done tickets. Wrote 10 new tickets (DQ-191 through DQ-200). Attempted headless browser on razzle.lol (blank) and localhost (blank — CSP upgrade-insecure-requests confirmed as root cause, 8th cycle). Bypassed via python http.server on port 9876 — still blank in headless Chromium (likely GZip/encoding issue).
