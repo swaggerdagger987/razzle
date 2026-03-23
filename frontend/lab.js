@@ -1580,7 +1580,7 @@ function renderTableHead() {
     const tip = ` title="${escapeAttr(tipText)}"`;
     let extra = "";
     if (key === "dynasty_value") {
-      extra = ` <span class="dvs-info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
+      extra = ` <span class="dvs-info" role="button" tabindex="0" aria-label="DVS methodology info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
     }
     // Filter indicator dot
     var filterInfo = _getColumnFilterInfo(key);
@@ -1600,7 +1600,7 @@ function renderTableHead() {
   }
 
   // Quick add column button
-  html += `<th style="width:32px; text-align:center; padding:4px; cursor:pointer; font-size:16px; color:var(--ink-light); border-bottom:3px solid var(--ink);" onclick="openColumnPicker()" title="Add/remove columns (C)">+</th>`;
+  html += `<th style="width:32px; text-align:center; padding:4px; cursor:pointer; font-size:16px; color:var(--ink-light); border-bottom:3px solid var(--ink);" role="button" tabindex="0" aria-label="Add or remove columns" onclick="openColumnPicker()" title="Add/remove columns (C)">+</th>`;
 
   html += "</tr>";
   thead.innerHTML = html;
@@ -1752,7 +1752,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   const posStripeColor = pos === "QB" ? "var(--pos-qb)" : pos === "RB" ? "var(--pos-rb)" : pos === "WR" ? "var(--pos-wr)" : pos === "TE" ? "var(--pos-te)" : "var(--ink-faint)";
   const zebraBg = (rowIdx != null && rowIdx % 2 === 1) ? " background:var(--zebra-stripe, rgba(45,31,20,0.025));" : "";
   let html = '<tr tabindex="0" data-player-id="' + escapeAttr(playKey) + '" style="height:' + getVScrollRowHeight() + 'px; border-left:3px solid ' + posStripeColor + ';' + zebraBg + '">';
-  html += `<td class="col-star" data-pid="${escapeAttr(playKey)}" data-pname="${escapeAttr(player.full_name || player.player_name || '')}" data-pos="${escapeAttr(pos)}" data-team="${escapeAttr(player.team || player.school || '')}" data-universe="${escapeAttr(state.universe)}" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
+  html += `<td class="col-star" role="button" tabindex="0" aria-label="${starred ? 'Remove from watchlist' : 'Add to watchlist'}" data-pid="${escapeAttr(playKey)}" data-pname="${escapeAttr(player.full_name || player.player_name || '')}" data-pos="${escapeAttr(pos)}" data-team="${escapeAttr(player.team || player.school || '')}" data-universe="${escapeAttr(state.universe)}" style="text-align:center; padding:7px 4px; cursor:pointer; font-size:16px;" title="${starred ? 'Remove from watchlist' : 'Add to watchlist'}">${starred ? '<span style="color:var(--orange);">&#9733;</span>' : '<span style="color:var(--ink-faint);">&#9734;</span>'}</td>`;
   html += `<td class="col-select" style="text-align:center; padding:7px 6px;">
     <input type="checkbox" ${selected ? "checked" : ""} onchange="togglePlayerSelect('${escapeJS(player.player_id || player.player_name)}', this.checked)"
       style="accent-color:${state.universe === 'college' ? 'var(--pos-qb)' : 'var(--orange)'}; width:15px; height:15px; cursor:pointer;">
@@ -1761,7 +1761,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   // Pin icon (NFL only)
   if (state.universe === "nfl") {
     const pinned = isPlayerPinned(playKey);
-    html += `<td class="pin-cell col-pin" style="text-align:center; padding:7px 2px; cursor:pointer;" onclick="event.stopPropagation(); togglePinPlayer('${escapeJS(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}"><span class="pin-icon ${pinned ? 'pin-active' : 'pin-faint'}"></span></td>`;
+    html += `<td class="pin-cell col-pin" role="button" tabindex="0" aria-label="${pinned ? 'Unpin player' : 'Pin to top'}" style="text-align:center; padding:7px 2px; cursor:pointer;" onclick="event.stopPropagation(); togglePinPlayer('${escapeJS(playKey)}')" title="${pinned ? 'Unpin player' : 'Pin to top'}"><span class="pin-icon ${pinned ? 'pin-active' : 'pin-faint'}"></span></td>`;
   }
 
   // Rank column (with expand arrow for NFL — skip on pinned rows where rowIdx is null)
@@ -3108,7 +3108,7 @@ function updateResultCount() {
     for (var j = 0; j < posOrder.length; j++) {
       var pp = posOrder[j];
       if (posCounts[pp]) {
-        badges.push('<span style="font-size:10px; font-weight:700; color:' + posColors[pp] + '; cursor:pointer; border-bottom:2px dashed ' + posColors[pp] + ';" onclick="togglePosition(\'' + pp + '\')" title="Filter to ' + pp + '">' + pp + ':' + posCounts[pp] + '</span>');
+        badges.push('<span role="button" tabindex="0" aria-label="Filter to ' + pp + '" style="font-size:10px; font-weight:700; color:' + posColors[pp] + '; cursor:pointer; border-bottom:2px dashed ' + posColors[pp] + ';" onclick="togglePosition(\'' + pp + '\')" title="Filter to ' + pp + '">' + pp + ':' + posCounts[pp] + '</span>');
       }
     }
     if (badges.length) parts.push(badges.join(" "));
@@ -3193,14 +3193,14 @@ function renderActiveFilters() {
 
   // Min GP pill (team chips shown inline next to dropdown)
   if (state.minGP > 0) {
-    html += `<span class="filter-tag" style="background:var(--bg-sand);">GP ≥ ${state.minGP} <span class="remove" onclick="clearMinGP()">×</span></span> `;
+    html += `<span class="filter-tag" style="background:var(--bg-sand);">GP ≥ ${state.minGP} <span class="remove" role="button" tabindex="0" aria-label="Remove GP filter" onclick="clearMinGP()">×</span></span> `;
   }
 
   // Stat filters
   html += state.filters.map((f, i) => {
     const col = getColumnDef(f.key);
     const label = col ? col.label : f.key;
-    return `<span class="filter-tag">${escapeHtml(label)} ${opLabels[f.op] || escapeHtml(String(f.op))} ${escapeHtml(String(f.value))} <span class="remove" onclick="removeFilter(${i})">×</span></span>`;
+    return `<span class="filter-tag">${escapeHtml(label)} ${opLabels[f.op] || escapeHtml(String(f.op))} ${escapeHtml(String(f.value))} <span class="remove" role="button" tabindex="0" aria-label="Remove filter" onclick="removeFilter(${i})">×</span></span>`;
   }).join(" ");
 
   // "Reset All" button when any filters, search, teams, or minGP are active
@@ -3359,7 +3359,7 @@ function renderTeamChips() {
   const container = document.getElementById("teamChips");
   if (!container) return;
   container.innerHTML = state.teams.map(t =>
-    `<span class="team-chip">${escapeHtml(t)} <span class="remove" onclick="removeTeam('${escapeJS(t)}')">×</span></span>`
+    `<span class="team-chip">${escapeHtml(t)} <span class="remove" role="button" tabindex="0" aria-label="Remove team" onclick="removeTeam('${escapeJS(t)}')">×</span></span>`
   ).join("");
 }
 
