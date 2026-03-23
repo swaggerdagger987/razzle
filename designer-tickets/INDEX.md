@@ -1,6 +1,6 @@
 # Design QA Tickets — Batch 2026-03-23
 
-10 tickets from code-based design audit against DESIGN.md.
+20 tickets from design audit against DESIGN.md. Cycle 1: code-based token audit. Cycle 2: sitewide pattern audit.
 
 ## P1 — High Impact (visible on every page)
 
@@ -9,6 +9,8 @@
 | DQ-001 | Dark mode --ink-light wrong hex (#a89888 vs #8a7565) | styles.css:80 |
 | DQ-002 | btn-chunky/btn-primary box-shadow 2px instead of 4px | styles.css:761,789 |
 | DQ-003 | Hover lift missing translate(-2px,-2px) on buttons | styles.css:766,794,1053 |
+| DQ-011 | Sitewide box-shadow undersized (2px/3px instead of 4px) | 22 HTML files, 72 instances |
+| DQ-015 | Tiers page cream text hardcoded rgba, poor contrast | tiers.html:144,217 |
 
 ## P2 — Medium Impact (visible in specific views)
 
@@ -19,6 +21,12 @@
 | DQ-006 | border-radius 3px/4px/6px not in token set | warroom.js, lab-panels.js, lab.js |
 | DQ-007 | charts.js position color map hardcoded 3x | charts.js:341,672,1021 |
 | DQ-008 | charts.js accent colors hardcoded (no dark mode) | charts.js:3-561 |
+| DQ-012 | Off-token border-radius 14px (should be 12px) | archetypes.html, dashboard.html, lab-panels.css, tiers.html |
+| DQ-013 | Off-token border-radius 6px (should be 8px) | lab.html:2246,2493 |
+| DQ-014 | Hover shadow wrong size (5px/3px instead of 6px/4px) | lab.html:2147,475 |
+| DQ-017 | Sort column bg hardcoded terracotta rgba | lab.html:1063-1068 |
+| DQ-018 | Cold black rgba(0,0,0,...) shadows (should be warm brown) | agents.html:39,259,285 |
+| DQ-020 | Dashboard/tiers hover + text-shadow no dark mode override | dashboard.html:145, tiers.html:139 |
 
 ## P3 — Low Impact (polish)
 
@@ -26,3 +34,5 @@
 |--------|---------|-------|
 | DQ-009 | Razzle mascot image empty alt text | agents.html:1633 |
 | DQ-010 | Pixel engine uses 20+ cold gray hex values | warroom.js:418-651 |
+| DQ-016 | Hero mascot drop-shadow hardcoded, invisible in dark mode | index.html:77 |
+| DQ-019 | Konami confetti hardcoded position color hex values | app.js:1741 |
