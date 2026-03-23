@@ -10075,6 +10075,9 @@ function openWatchlistPanel() {
     overlay = document.createElement("div");
     overlay.id = "watchlistOverlay";
     overlay.className = "filter-modal-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", "Watchlist");
     overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
     document.body.appendChild(overlay);
   }
@@ -10161,6 +10164,9 @@ function openTierBoard() {
     overlay = document.createElement("div");
     overlay.id = "tierBoardOverlay";
     overlay.className = "filter-modal-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", "Tier Board");
     overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
     document.body.appendChild(overlay);
   }
@@ -10637,6 +10643,9 @@ function toggleShortcutRef() {
   overlay = document.createElement("div");
   overlay.id = "shortcutRefOverlay";
   overlay.className = "filter-modal-overlay open";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-label", "Keyboard Shortcuts");
   overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
   overlay.innerHTML = `
     <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); max-width:420px; width:90%; padding:24px; margin:auto; margin-top:120px;">
@@ -11427,6 +11436,9 @@ function openMyRoster() {
     overlay = document.createElement("div");
     overlay.id = "rosterOverlay";
     overlay.className = "filter-modal-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", "My Roster");
     overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
     document.body.appendChild(overlay);
   }

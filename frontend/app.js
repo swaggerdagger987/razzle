@@ -1320,7 +1320,7 @@ var _cmdDebounce = null;
 
 function initCommandPalette() {
   // Inject palette HTML into body
-  var html = '<div class="cmd-palette-backdrop" id="cmdPalette">' +
+  var html = '<div class="cmd-palette-backdrop" id="cmdPalette" role="dialog" aria-modal="true" aria-label="Quick Search">' +
     '<div class="cmd-palette">' +
       '<div class="cmd-palette-label">quick search</div>' +
       '<div class="cmd-palette-input-wrap">' +
