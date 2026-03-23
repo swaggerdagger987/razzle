@@ -1770,7 +1770,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   // Rank column (with expand arrow for NFL — skip on pinned rows where rowIdx is null)
   const rank = (rowIdx != null) ? (state.offset + rowIdx + 1) : "";
   if (state.universe === "nfl" && player.player_id && rowIdx != null) {
-    html += `<td class="col-rank" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeJS(player.player_id)}', this)" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
+    html += `<td class="col-rank" role="button" tabindex="0" aria-expanded="false" aria-label="Expand weekly stats" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeJS(player.player_id)}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();toggleRowExpand('${escapeJS(player.player_id)}',this)}" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
   } else {
     html += `<td class="col-rank">${rank}</td>`;
   }
@@ -2331,11 +2331,13 @@ async function toggleRowExpand(playerId, tdEl) {
     delete _expandedRows[playerId];
     var arrow = tdEl.querySelector(".row-expand-arrow");
     if (arrow) arrow.innerHTML = "&#9654;";
+    tdEl.setAttribute("aria-expanded", "false");
     return;
   }
   // Expand: fetch weekly data
   var arrow = tdEl.querySelector(".row-expand-arrow");
   if (arrow) arrow.innerHTML = "&#9660;";
+  tdEl.setAttribute("aria-expanded", "true");
   _expandedRows[playerId] = true;
   var expandTr = document.createElement("tr");
   expandTr.className = "expand-row";
