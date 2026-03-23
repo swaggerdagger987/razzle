@@ -921,3 +921,53 @@ Three new audit dimensions this cycle — aria-sort on sortable tables, error re
 - `autocomplete` attribute on auth form inputs — are email/password fields hinting correct types?
 - Service Worker / PWA consideration — is there a manifest.json for "add to home screen"?
 - CSP headers — is Content-Security-Policy set? Would inline event handlers (onclick, onerror) break if CSP is added?
+
+### Cycle 30 Findings: Warm Palette Survivors, Conversion Copy Gaps, Accessibility Consistency
+
+- **Konami confetti uses hardcoded hex + no reduced motion** (DES-307) — P2. app.js:1741 uses `["#d97757","#5b7fff",...]` while welcome confetti (line 821) correctly uses `var(--orange)` etc. Also uses Web Animations API bypassing CSS prefers-reduced-motion. `prefersReducedMotion` is defined at line 25 but never checked by `_triggerKonami()`.
+- **Cold rgba(0,0,0) — 8 instances across 4 files** (DES-308) — P2. DES-140 fixed styles.css. Survivors: agents.html (3: hero shadow, canvas shadow, placeholder icon), lab.html (3: dark mode overlays + thead shadow), player.js (1: asymmetric overlay — dark cold, light warm), lab-panels.js (1: canvas segment border). Compare: index.html:77 and about.html:42 correctly use warm rgba(45,31,20,...) for identical elements.
+- **Home pricing-badge dark mode contrast** (DES-309) — P1. `.pricing-badge` uses `color:var(--bg)`. Dark mode: #2d1f14 (dark brown) on orange = low contrast. Elite badge on SAME page correctly uses `var(--text-on-accent)`. One-line fix.
+- **Agents.html pricing cards omit "7-day free trial"** (DES-310) — P1. Neither Pro nor Elite list includes trial. Only in small note below. Home page Pro card and pricing page both cards have it. Third conversion surface missing the key incentive.
+- **Agents.html Caveat at 14px in JS-generated briefing UI** (DES-311) — P2. 4 instances (briefing week label, upgrade prompts, cross-agent findings). DESIGN.MD minimum is 18px. These are the premium product's interaction layer.
+- **6 standalone season-selects missing aria-label** (DES-312) — P2. archetypes, auction, cheatsheet, dashboard, scoring, tiers. 20+ other pages correctly have `title="Season" aria-label="Season"`. Inconsistent accessibility.
+- **Dashboard season-select uses all inline styles** (DES-313) — P2. Every other standalone page uses a CSS class for select styling. dashboard.html is the sole outlier with 7 inline style properties. Can't be targeted by dark mode.
+- **No footer-tagline DOM hook — app.js uses fragile text search** (DES-314) — P2. Line 1775 looks for `.footer-tagline` or `[data-tagline]`. Zero matches in any HTML file. Falls through to heuristic search for text containing "razzle". Works today but fragile.
+- **Mini-screener sort has no direction indicator and no aria-sort** (DES-315) — P2. Home page sortable columns (PPG/GP/Age) turn orange when active but show no ▲/▼. Lab screener correctly uses `aria-sort`. The mini-screener is the first interactive element visitors see.
+- **Warroom demo briefings show "???" placeholder text** (DES-316) — P2. 3 instances in context hints: "whether ??? is available on your bench." Reads as unfinished developer debug text. Should be descriptive like "[your backup QB]".
+
+### Things confirmed GOOD in cycle 30:
+- Welcome confetti (app.js:821) correctly uses CSS vars — only Konami version is wrong
+- styles.css has ZERO cold rgba(0,0,0) — DES-140 fix held
+- index.html and about.html hero mascot drop-shadows use warm espresso rgba ✅
+- Pricing page plan-card:hover correctly uses 6px shadow + translate(-2px, -2px) per DESIGN.MD
+- All HTML title tags follow consistent "PageName — Razzle" pattern (75 pages)
+- No 1px borders found in any CSS file — DES-010 fix held
+- No linear-gradient found anywhere — DES-064/065 fixes held
+- No `color: white` found in CSS or HTML — DES-042 mega-fix held
+- Lab screener has correct `aria-sort` on all sortable columns
+- All `target="_blank"` links still have `rel="noopener"`
+
+### Key Insight: Cold rgba Is a Systemic Survivor Pattern
+DES-140 fixed cold rgba in styles.css (the global CSS). But page-specific `<style>` blocks and JS inline styles were never caught. The 8 surviving instances (DES-308) span the 3 most important pages: agents.html (premium product), lab.html (growth engine), and player.js (profile overlay). The root cause: page-specific CSS was written before DES-140 established the warm-only pattern, and nobody swept the page-level styles afterward.
+
+### Key Insight: Conversion Copy Consistency Across 3 Surfaces
+The site now has 3 conversion surfaces: home page, pricing page, and agents page. DES-310 (missing trial) and DES-309 (badge contrast) reveal that the agents page pricing section wasn't synced with updates made to home/pricing. Each surface tells a slightly different story. Users who visit all three pages before deciding get confused by inconsistency.
+
+### Audit Dimension Evolution (updated)
+- Cycles 1-7: CSS consistency (borders, radius, shadows, colors, dark mode)
+- Cycle 8: Accessibility (ARIA, focus), SEO (h1, canonical), dark mode exports
+- Cycles 9-11: Deep accessibility (combobox, aria-live, canvas ARIA, tables)
+- Cycles 12-14: Conversion path, agent connective tissue, mobile UX
+- Cycles 15-16: Performance (memory leaks, lazy loading), semantics, brand
+- Cycles 17-18: Mobile touch targets, dark mode native controls, CSS governance
+- Cycles 19-20: Type scale violations, hover interactions, platform adaptation
+- Cycle 21: Conversion COPY — not just visual, but the words that sell
+- Cycle 22: Auth flow + onboarding friction — the funnel BETWEEN pages
+- Cycle 23: Content architecture, copy accuracy & handwritten type scale
+- Cycle 24: Performance UX, mobile platform, conversion infrastructure
+- Cycle 25: Distribution infrastructure — Twitter cards, sharing, OG images
+- Cycle 26: Conversion copy precision, agent territory, pricing UX
+- Cycle 27: Cross-page dark mode gaps, agents page conversion path, runtime safety
+- Cycle 28: Bureau UX debt, URL state gaps, error differentiation, data freshness
+- Cycle 29: Lab form accessibility, agents page conversion safety, inline style governance
+- **Cycle 30: Warm palette survivors, conversion copy gaps, accessibility consistency**
