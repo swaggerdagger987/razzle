@@ -1010,3 +1010,57 @@ The design system governs colors (tokens), fonts (3 families), radius (3 values)
 - Progress bars animate at different speeds in different panels
 
 This creates a subtle "something is off" feeling that users can sense but can't articulate. Adding 3 transition tokens (fast/base/slow) would unify 59 declarations.
+
+### Cycle 31 Findings: Production Outage, First Impression, Visual Hierarchy, Brand Compliance
+
+- **Production site razzle.lol returns 502** (DES-327) — P0. The live site is completely down. Blank white page. Every shared link resolves to nothing. Local server works fine — the Render deployment is the issue.
+- **Mini-screener shows 1-game sample players in top 15** (DES-328) — P1. Rashee Rice (3 GP), Jimmy Garoppolo (1 GP), Joe Milton (1 GP) ranked alongside 17-game averages. Fantasy players will immediately notice and question data quality. First 3 seconds of a visitor's experience.
+- **Pro gate pages identical/sparse — no teaser content** (DES-329) — P1. 10+ Pro-gated pages show the exact same lock screen: emoji, title, button, whitespace. No preview, no screenshot, no "here's what you're missing." Nothing creates desire to upgrade.
+- **Home Free pricing card visually subordinate to paid cards** (DES-330) — P2. Free card is plain sand, no badge, link CTA. Pro/Elite have colored borders, badges, button CTAs. Inverts the brand hierarchy ("The Screener is the front door").
+- **About page has zero comic-strip personality** (DES-331) — P2. Five text boxes with dashed borders. No mascot, no Caveat annotations, no illustrations. Least personality of any page.
+- **Prompts page nav has extra item absent from other pages** (DES-332) — P2. prompts.html nav includes "Prompts" link; no other page does. Inconsistent navigation.
+- **Tiers page tier labels flat rectangles, not rotated stickers** (DES-333) — P2. DESIGN.md says "slightly rotated (rotate(3deg)) — slapped on, not placed." Tier labels are flat blocks with no rotation, border, or shadow.
+- **Rankings page has no visual tier breaks** (DES-334) — P2. Player chips flow tier-to-tier with only a subtle background tint change. No tier labels, no dividers, no clear grouping.
+- **Home discovery chips flat pills with no shadow/sticker aesthetic** (DES-335) — P2. DESIGN.md says chips should have "2px borders, hover adds shadow + lift." These are flat outlined pills with no shadow or depth.
+- **Standalone panel cards lack visual rank hierarchy** (DES-336) — P2. Breakouts, buysell, etc. show all cards at identical visual weight. #1 breakout looks identical to #30. No spotlight on top results.
+
+### Things confirmed GOOD in cycle 31:
+- Pricing cards on home page have correct 3px borders, 4px offset shadows, 12px radius — design system compliant
+- Home page hero buttons (btn-hero) use Luckiest Guy font, 3px ink border, 4px shadow — correct
+- Dark mode on home page flips correctly — cards, backgrounds, text all use CSS vars that auto-flip
+- Dark mode on Lab page works well — espresso background, orange accents, readable table data
+- Dark mode on pricing page — cards readable, FAQ text readable, toggle works
+- Position colors consistent across all pages (QB=blue, RB=teal, WR=terracotta, TE=purple)
+- Footer structure consistent across pages — same grid layout, same link columns
+- Lab mobile (375px) — toolbar condenses, table is scrollable, player data readable
+- Mini-screener position filter tabs are proper buttons with correct position-color tints
+- Local server returns correct HTML with all meta tags, JSON-LD, fonts — code itself is healthy
+
+### Key Insight: Visual Hierarchy Is the Next Frontier
+
+Cycles 1-30 systematically addressed CSS tokens, dark mode, accessibility, conversion copy, and infrastructure. Cycle 31 reveals that VISUAL HIERARCHY — how the eye moves through a page — has systemic gaps:
+- The home page pricing section subordinates the brand's hero product (Free)
+- Pro gates are empty voids instead of desire-creating teasers
+- Panel pages treat all results equally — no spotlight on top findings
+- Tier pages lack the rotated-sticker aesthetic the design system defines
+- Rankings flow without clear breaks between tiers
+
+The design TOKENS are right (borders, shadows, colors, fonts). What's missing is the COMPOSITION — how those tokens are used to create visual hierarchy, emphasis, and flow. A page can use all the right tokens and still fail if every element has the same visual weight.
+
+### Audit Dimension Evolution (updated)
+- Cycles 1-7: CSS consistency (borders, radius, shadows, colors, dark mode)
+- Cycle 8: Accessibility (ARIA, focus), SEO (h1, canonical), dark mode exports
+- Cycles 9-11: Deep accessibility (combobox, aria-live, canvas ARIA, tables)
+- Cycles 12-14: Conversion path, agent connective tissue, mobile UX
+- Cycles 15-16: Performance (memory leaks, lazy loading), semantics, brand
+- Cycles 17-18: Mobile touch targets, dark mode native controls, CSS governance
+- Cycles 19-20: Type scale violations, hover interactions, platform adaptation
+- Cycle 21: Conversion COPY — the words that sell
+- Cycle 22: Auth flow + onboarding friction
+- Cycle 23: Content architecture, copy accuracy
+- Cycle 24: Performance UX, mobile platform
+- Cycle 25: Distribution infrastructure
+- Cycle 26: Conversion copy precision, pricing UX
+- Cycle 27: Cross-page dark mode, agents conversion
+- Cycles 28-30: Bureau UX, data freshness, contrast, animation
+- **Cycle 31: Visual hierarchy, composition, first-impression data quality, production reliability**
