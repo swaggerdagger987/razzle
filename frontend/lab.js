@@ -338,7 +338,7 @@ function _showWatchlistSyncHint(isPaid) {
   if (existing) existing.remove();
   var badge = document.createElement("span");
   badge.id = "watchlistCloudBadge";
-  badge.style.cssText = "font-family:var(--font-mono); font-size:8px; margin-left:6px; padding:1px 5px; border-radius:3px; vertical-align:middle;";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:8px; margin-left:6px; padding:1px 5px; border-radius:var(--radius-sm); vertical-align:middle;";
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
     badge.style.border = "2px solid var(--pos-qb)";
@@ -4408,7 +4408,7 @@ function _showViewsSyncHint(isPaid) {
 
   var badge = document.createElement("div");
   badge.id = "viewsSyncBadge";
-  badge.style.cssText = "font-family:var(--font-mono); font-size:9px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:4px;";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:9px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:var(--radius-sm);";
 
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
@@ -4435,13 +4435,13 @@ function renderSavedViewsList() {
   const universeBadge = (u) => {
     const colors = { nfl: "var(--orange)", prospects: "var(--blue)", college: "var(--blue)" };
     const labels = { nfl: "NFL", prospects: "PROSP", college: "CFB" };
-    return `<span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[u] || "var(--ink)"}; border-radius:4px; color:${colors[u] || "var(--ink)"}; text-transform:uppercase;">${labels[u] || u}</span>`;
+    return `<span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[u] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[u] || "var(--ink)"}; text-transform:uppercase;">${labels[u] || u}</span>`;
   };
 
   const posBadge = (pos) => {
     if (!pos || pos === "ALL") return "";
     const colors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
-    return ` <span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[pos] || "var(--ink)"}; border-radius:4px; color:${colors[pos] || "var(--ink)"};">${pos}</span>`;
+    return ` <span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[pos] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[pos] || "var(--ink)"};">${pos}</span>`;
   };
 
   container.innerHTML = views.map(v => {
@@ -4454,7 +4454,7 @@ function renderSavedViewsList() {
         <div style="font-family:var(--font-mono); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
-      <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:6px; padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
+      <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
     </div>`;
   }).join("");
 }
@@ -4646,7 +4646,7 @@ function _renderDiffBanner() {
   var banner = document.createElement("div");
   banner.id = "diffModeBanner";
   banner.className = "diff-mode-banner";
-  banner.innerHTML = '<span class="diff-mode-label">DIFF MODE</span> comparing all rows vs <strong>' + escapeHtml(baseline.full_name || baseline.player_name || "Unknown") + '</strong> (first pin) <button onclick="toggleDiffMode()" style="margin-left:8px; cursor:pointer; background:var(--ink); color:var(--bg); border:2px solid var(--ink); border-radius:6px; padding:2px 10px; font-family:var(--font-mono); font-size:11px;">OFF</button>';
+  banner.innerHTML = '<span class="diff-mode-label">DIFF MODE</span> comparing all rows vs <strong>' + escapeHtml(baseline.full_name || baseline.player_name || "Unknown") + '</strong> (first pin) <button onclick="toggleDiffMode()" style="margin-left:8px; cursor:pointer; background:var(--ink); color:var(--bg); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:2px 10px; font-family:var(--font-mono); font-size:11px;">OFF</button>';
   wrap.parentNode.insertBefore(banner, wrap);
 }
 
@@ -4976,7 +4976,7 @@ function renderScoringWeights(weights) {
       <label style="flex:1; font-family:var(--font-mono); font-size:12px;">${s.label}</label>
       <input type="number" step="0.01" data-stat="${s.key}" value="${val}"
         style="width:70px; font-family:var(--font-mono); font-size:12px; padding:4px 6px;
-               border:2px solid var(--ink); border-radius:4px; background:var(--bg); color:var(--ink); text-align:right;">
+               border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink); text-align:right;">
     </div>`;
   }).join("");
 }
@@ -6266,7 +6266,7 @@ function renderCollegeProfile(data, container) {
   html += `<div>`;
   html += `<div class="profile-name">${escapeHtml(player.player_name)}</div>`;
   html += `<div class="profile-meta">${escapeHtml(player.team || "")} · ${escapeHtml(player.conference || "")} · ${player.seasons_played || 0} season${(player.seasons_played || 0) !== 1 ? "s" : ""}</div>`;
-  html += `<span style="display:inline-block; background:var(--pos-qb); color:var(--text-on-accent); font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg);">COLLEGE</span>`;
+  html += `<span style="display:inline-block; background:var(--pos-qb); color:var(--text-on-accent); font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-2deg);">COLLEGE</span>`;
   html += `</div>`;
   html += `</div>`;
 
@@ -6488,7 +6488,7 @@ function renderProfile(data, container) {
   html += `<div class="profile-meta">${teamDisplay} · Age ${displayAge} · ${escapeHtml(player.college || "")} · ${seasonCount} ${seasonLabel}</div>`;
   if (combine && combine.draft_round) {
     const draftPick = combine.draft_overall || combine.draft_pick;
-    html += `<span style="display:inline-block; background:var(--ink); color:var(--bg); font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
+    html += `<span style="display:inline-block; background:var(--ink); color:var(--bg); font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
   }
   if (breakoutInfo) {
     html += `<span class="breakout-badge">BREAKOUT +${breakoutInfo.pct}% (${breakoutInfo.season})</span>`;
@@ -8624,7 +8624,7 @@ function renderClassAnalytics(data, container) {
     html += `
       <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:var(--radius-sm); box-shadow:4px 4px 0 var(--ink); padding:16px; position:relative;">
         <!-- Grade badge -->
-        <div style="position:absolute; top:-10px; right:12px; background:${gradeColor}; color:var(--text-on-accent); font-family:var(--font-display); font-size:18px; font-weight:700; padding:4px 12px; border:2px solid var(--ink); border-radius:6px; box-shadow:2px 2px 0 var(--ink); transform:rotate(3deg);">
+        <div style="position:absolute; top:-10px; right:12px; background:${gradeColor}; color:var(--text-on-accent); font-family:var(--font-display); font-size:18px; font-weight:700; padding:4px 12px; border:2px solid var(--ink); border-radius:var(--radius-sm); box-shadow:2px 2px 0 var(--ink); transform:rotate(3deg);">
           ${cls.grade}
         </div>
 
@@ -8640,7 +8640,7 @@ function renderClassAnalytics(data, container) {
         <!-- Tier distribution bar -->
         <div style="margin-bottom:10px;">
           <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;">Tier Distribution</div>
-          <div style="display:flex; height:20px; border:2px solid var(--ink); border-radius:4px; overflow:hidden;">
+          <div style="display:flex; height:20px; border:2px solid var(--ink); border-radius:var(--radius-sm); overflow:hidden;">
             ${cls.count > 0 ? ['elite','premium','solid','flier'].map(tier => {
               const pct = (cls.tiers[tier] / cls.count * 100);
               return pct > 0 ? `<div style="width:${pct}%; background:${tierColors[tier]}; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:10px; color:var(--text-on-accent); font-weight:700;">${cls.tiers[tier]}</div>` : '';
@@ -9076,7 +9076,7 @@ function renderTradeValueChart() {
     // Tier header with rotated sticker badge
     html += '<div style="margin-bottom:20px;">';
     html += '<div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">';
-    html += '<span style="display:inline-block; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:1px; color:var(--text-on-accent); background:' + tier.color + '; padding:4px 14px; border:2px solid var(--ink); border-radius:4px; transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + tier.badge + '</span>';
+    html += '<span style="display:inline-block; font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:1px; color:var(--text-on-accent); background:' + tier.color + '; padding:4px 14px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + tier.badge + '</span>';
     html += '<span style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">' + tierPlayers.length + ' player' + (tierPlayers.length !== 1 ? 's' : '') + '</span>';
     html += '</div>';
 
@@ -9089,14 +9089,14 @@ function renderTradeValueChart() {
       // Name + position
       html += '<div style="display:flex; align-items:center; gap:6px;">';
       html += '<span style="font-family:var(--font-mono); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(p.full_name) + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:3px; border:2px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm); border:2px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
       html += '</div>';
       // Team + Age
       html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + Math.round(p.age) : '') + '</div>';
       // Trade value bar
       html += '<div style="display:flex; align-items:center; gap:6px;">';
-      html += '<div style="flex:1; height:8px; background:var(--bg-warm); border:2px solid var(--ink-faint); border-radius:4px; overflow:hidden;">';
-      html += '<div style="width:' + barWidth + '%; height:100%; background:' + pc + '; border-radius:4px;"></div>';
+      html += '<div style="flex:1; height:8px; background:var(--bg-warm); border:2px solid var(--ink-faint); border-radius:var(--radius-sm); overflow:hidden;">';
+      html += '<div style="width:' + barWidth + '%; height:100%; background:' + pc + '; border-radius:6px;"></div>';
       html += '</div>';
       html += '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:28px; text-align:right;">' + p._tv + '</span>';
       html += '</div>';
@@ -9137,7 +9137,7 @@ function setupTradeSearchInput(side) {
       autoDiv.innerHTML = matches.map(p => {
         const pc = posColors[p.position] || getCanvasTheme().ink;
         return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);">'
-          + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
+          + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + p._tv + '</span>'
           + '</div>';
@@ -9196,8 +9196,8 @@ function renderTradeSide(side) {
 
   container.innerHTML = arr.map((p, i) => {
     const pc = posColors[p.position] || getCanvasTheme().ink;
-    return '<div style="display:flex; align-items:center; gap:6px; padding:5px 8px; background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; border-left:4px solid ' + pc + ';">'
-      + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 4px; border-radius:3px;">' + escapeHtml(p.position) + '</span>'
+    return '<div style="display:flex; align-items:center; gap:6px; padding:5px 8px; background:var(--bg-card); border:2px solid var(--ink); border-radius:var(--radius-sm); border-left:4px solid ' + pc + ';">'
+      + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 4px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
       + '<span style="font-family:var(--font-mono); font-size:12px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + escapeHtml(p.full_name) + '</span>'
       + '<span style="font-family:var(--font-mono); font-size:12px; font-weight:bold;">' + p._tv + '</span>'
       + '<button onclick="removeFromTradeSide(\'' + side + '\', ' + i + ')" style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--ink-light); padding:0 2px;">×</button>'
@@ -10099,7 +10099,7 @@ function renderWatchlistPanel() {
     html += '<div style="font-family:var(--font-mono); font-size:14px; color:' + posColors[pos] + '; margin-bottom:6px; border-bottom:2px dashed var(--ink-faint); padding-bottom:4px;">' + pos + ' (' + groups[pos].length + ')</div>';
 
     groups[pos].forEach(function(p) {
-      html += '<div style="display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:6px; margin-bottom:3px; background:var(--bg);">';
+      html += '<div style="display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:var(--radius-sm); margin-bottom:3px; background:var(--bg);">';
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:10px; padding:1px 6px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:13px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
@@ -10184,7 +10184,7 @@ function renderTierBoard() {
     players.forEach(function(p) {
       var pc = posColors[p.position] || "var(--ink-light)";
       html += '<div style="display:inline-flex; align-items:center; gap:5px; padding:4px 10px 4px 0; border:2px solid var(--ink); border-radius:8px; background:var(--bg-card); box-shadow:2px 2px 0 var(--ink); font-size:12px;">';
-      html += '<div style="width:5px; align-self:stretch; background:' + pc + '; border-radius:6px 0 0 6px;"></div>';
+      html += '<div style="width:5px; align-self:stretch; background:' + pc + '; border-radius:8px 0 0 8px;"></div>';
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
@@ -10659,7 +10659,7 @@ function toggleShortcutRef() {
 
 function shortcutRow(key, desc) {
   return `<tr style="border-bottom:1px solid var(--ink-faint);">
-    <td style="padding:6px 8px; width:80px;"><kbd style="font-family:var(--font-mono); font-size:13px; background:var(--bg); border:2px solid var(--ink); border-radius:4px; padding:2px 8px; box-shadow:2px 2px 0 var(--ink);">${key}</kbd></td>
+    <td style="padding:6px 8px; width:80px;"><kbd style="font-family:var(--font-mono); font-size:13px; background:var(--bg); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:2px 8px; box-shadow:2px 2px 0 var(--ink);">${key}</kbd></td>
     <td style="padding:6px 8px;">${desc}</td>
   </tr>`;
 }
@@ -10854,12 +10854,12 @@ function _taUpdateVerdict() {
   const barsHtml = '<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">'
     + '<div style="display:flex; align-items:center; gap:8px;">'
     + '<span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; min-width:50px;">Give</span>'
-    + '<div style="flex:1; height:14px; background:var(--bg-warm); border:2px solid var(--ink); border-radius:6px; overflow:hidden; display:flex;">' + giveSegments + '</div>'
+    + '<div style="flex:1; height:14px; background:var(--bg-warm); border:2px solid var(--ink); border-radius:var(--radius-sm); overflow:hidden; display:flex;">' + giveSegments + '</div>'
     + '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:32px; text-align:right;">' + giveTotal + '</span>'
     + '</div>'
     + '<div style="display:flex; align-items:center; gap:8px;">'
     + '<span style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; min-width:50px;">Get</span>'
-    + '<div style="flex:1; height:14px; background:var(--bg-warm); border:2px solid var(--ink); border-radius:6px; overflow:hidden; display:flex;">' + getSegments + '</div>'
+    + '<div style="flex:1; height:14px; background:var(--bg-warm); border:2px solid var(--ink); border-radius:var(--radius-sm); overflow:hidden; display:flex;">' + getSegments + '</div>'
     + '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:32px; text-align:right;">' + getTotal + '</span>'
     + '</div>'
     + '</div>';
@@ -11429,7 +11429,7 @@ async function rosterSearchPlayers(query) {
       var inRoster = roster.find(function(r) { return r.player_id === pid; });
       if (inRoster) return;
       var pos = p.position || "??";
-      html += '<div class="roster-search-row" style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:4px; margin-bottom:2px; background:var(--bg);" data-pid="' + escapeAttr(pid) + '" data-name="' + escapeAttr(p.full_name || p.name || "") + '" data-pos="' + escapeAttr(pos) + '" data-team="' + escapeAttr(p.team || "FA") + '" data-query="' + escapeAttr(query) + '">';
+      html += '<div class="roster-search-row" style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:var(--radius-sm); margin-bottom:2px; background:var(--bg);" data-pid="' + escapeAttr(pid) + '" data-name="' + escapeAttr(p.full_name || p.name || "") + '" data-pos="' + escapeAttr(pos) + '" data-team="' + escapeAttr(p.team || "FA") + '" data-query="' + escapeAttr(query) + '">';
       html += '<span class="pos-badge pos-' + pos.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(pos) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name || p.name || "") + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + '</span>';
@@ -11512,7 +11512,7 @@ function renderMyRosterPanel() {
     html += '<div style="margin-bottom:10px;">';
     html += '<div style="font-family:var(--font-mono); font-size:13px; color:' + pc + '; margin-bottom:4px; border-bottom:2px dashed var(--ink-faint); padding-bottom:3px;">' + pos + ' (' + groups[pos].length + ')</div>';
     groups[pos].forEach(function(p) {
-      html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; border-radius:6px; margin-bottom:2px; background:var(--bg);">';
+      html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; border-radius:var(--radius-sm); margin-bottom:2px; background:var(--bg);">';
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
@@ -11603,7 +11603,7 @@ function renderRosterReport() {
     // Value bar
     var pct = Math.min(100, p.trade_value);
     var pc = _POS_HEX[p.position] || "#d97757";
-    html += '<div style="width:80px; height:14px; background:var(--ink-faint); border-radius:4px; overflow:hidden; border:2px solid var(--ink);">';
+    html += '<div style="width:80px; height:14px; background:var(--ink-faint); border-radius:var(--radius-sm); overflow:hidden; border:2px solid var(--ink);">';
     html += '<div style="width:' + pct + '%; height:100%; background:' + pc + ';"></div>';
     html += '</div>';
     html += '<span style="font-family:var(--font-mono); font-size:12px; font-weight:bold; width:32px; text-align:right;">' + p.trade_value + '</span>';
@@ -13005,6 +13005,6 @@ function exportBoomBustImage() {
   if (!toolbar) return;
   const hint = document.createElement("div");
   hint.style.cssText = "font-family:var(--font-mono); font-size:10px; color:var(--ink-faint); padding:2px 0; white-space:nowrap;";
-  hint.innerHTML = `<kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:2px; padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:2px; padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:2px; padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:2px; padding:0 3px;">?</kbd> shortcuts`;
+  hint.innerHTML = `<kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">?</kbd> shortcuts`;
   toolbar.appendChild(hint);
 })();
