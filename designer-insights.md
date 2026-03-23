@@ -1,5 +1,35 @@
 # Designer Insights
 
+### Cycle 16 — 2026-03-23
+
+**What I did**: ROBUSTNESS + PERFORMANCE audit — shifted from visual tokens to runtime code quality. Local server running (uvicorn on 127.0.0.1:8000). Took 15+ screenshots across home, Lab (desktop + mobile), pricing (desktop + mobile), agents, bureau, dashboard, trade values, rankings, breakouts, awards, efficiency, weekly heatmap. Used 2 subagents: (1) 10-category performance/robustness search (render-blocking, duplicate listeners, localStorage try-catch, lazy loading, fetch timeout, document.write, innerHTML safety, CSS @import, viewport meta, console.log), (2) 10-category code quality search (fetch .catch(), addEventListener cleanup, hardcoded years, error UI, nav active state, broken links, CSP headers, API error leakage, duplicate CSS selectors, form labels). Cross-referenced all 120 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-121 through DQ-130).
+
+**Quality score**: 8/10 — Successfully shifted to a completely new audit dimension (runtime robustness) that no previous cycle touched. All 10 tickets are backed by exact grep counts. The shift from "does it look right?" to "does it survive failure?" addresses the exit criterion for Phase B (Lab Production Hardening). Found the single biggest UX issue remaining: 95 fetch calls with zero error handling means ANY API failure creates a permanent loading state.
+
+**What worked**:
+- Two parallel subagents with non-overlapping search categories (performance patterns vs code quality patterns) covered 20 categories efficiently.
+- Browse tool chain commands reliable for all 15+ screenshots (forward slashes in paths fixed the Windows path issue).
+- Counting-based severity: "95 unhandled fetches" and "110+ without timeout" immediately communicate scale. The Ship agent can prioritize by count.
+- Cross-referencing the verified-good patterns (formula-store.js has .catch() on all 5 fetches, advantage.html has aria-label) provides ready-made code examples for fixes.
+
+**What didn't**:
+- Browse tool path handling required trial-and-error (backslashes rejected, forward slashes work). Wasted 3 attempts.
+- Could not test actual fetch failure behavior visually (would need to intercept network requests). Tickets DQ-121/129 are code-verified, not UX-verified.
+- The "duplicate addEventListener" ticket (DQ-123) is hard to quantify precisely — knowing 195 listeners exist doesn't tell us how many are truly duplicated at runtime. Would need a profiling session.
+
+**Pattern spotted**: After 16 cycles, the audit eras are: (1) design tokens, (2) UX/conversion, (3) interaction quality, (4) system governance, (5) behavioral CSS, (6) CSS architecture, (7) RUNTIME ROBUSTNESS. The remaining work falls into two buckets: (a) INTEGRATION TESTING — multi-page user flows (Lab → export → share → reopen), and (b) LOAD TESTING — how the site behaves with 100+ concurrent users on Render's free tier.
+
+**Root cause found**: The 95 unhandled fetch calls (DQ-121) and the 110+ timeout-less fetches (DQ-122) share the same root cause as DQ-115 (duplicate embedded CSS) and DQ-120 (inline style writes): the 162 autonomous build phases each added features independently without cross-cutting concerns like error handling. Each phase focused on "make this panel work" — not "make this panel survive failure." The result is 72 fetch calls in lab-panels.js that all follow the same pattern: fetch().then(render) with no .catch().
+
+**Suggestion for teammates**:
+- Ship agent: DQ-122 (fetchWithTimeout helper) should be implemented FIRST — it's a single shared utility in app.js that all other fetch fixes can use. 10 lines of code, zero risk.
+- Ship agent: DQ-121 (add .catch) and DQ-129 (error recovery UI) should be done together — adding .catch without a visible error state just converts a silent failure to a logged-but-still-invisible failure.
+- Ship agent: DQ-124 (localStorage try-catch) is the safest mechanical fix — create safeGet/safeSet in app.js, find-replace 42 calls.
+- Ship agent: DQ-123 (addEventListener cleanup) is the most complex ticket — consider Option B (event delegation) for lab-panels.js to eliminate the problem structurally. Option A (remove+add) is simpler but requires touching 195 call sites.
+- Ship agent: DQ-126 (form labels) is purely mechanical — add aria-label to 56 elements. No judgment calls needed.
+
+**What I'd do differently next time**: Run INTEGRATION FLOW TESTING. After 16 cycles of page-level analysis and code-level grep audits, the remaining high-value work is in multi-page user journeys: (1) Lab filter → export PNG → share URL → recipient opens URL — does state survive the round trip? (2) Free user → clicks Pro panel → sees gate → clicks pricing → registers → returns — does the redirect work? (3) Bureau connect → league loads → trade finder → clicks trade target → compare page. These flows cross file boundaries and can't be found by static analysis.
+
 ### Cycle 15 — 2026-03-23
 
 **What I did**: CSS architecture + maintainability + visual hierarchy audit. Local server running (uvicorn on 127.0.0.1:8000). Took 20+ screenshots across home (hero zoom, mid-section, pricing zoom, footer), Lab (full, left zoom, sidebar zoom, dark mode sidebar), pricing (desktop + mobile), agents, bureau, dashboard (full + section zoom), rankings, trade values, tiers, breakouts, efficiency, scarcity, weekly heatmap, awards — in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 1 subagent for 10-category fresh code search (!important, display:none, innerHTML, window.location, inline color:#, inline font-family, border:1px, text-align:center inline, margin:0 auto, .style.property DOM writes). Cross-referenced all 110 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-111 through DQ-120).
