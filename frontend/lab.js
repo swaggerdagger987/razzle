@@ -3092,7 +3092,7 @@ function nextPage() {
 
 function _scrollTableTop() {
   var wrap = document.querySelector(".table-wrap");
-  if (wrap) wrap.scrollTo({ top: 0, behavior: "smooth" });
+  if (wrap) wrap.scrollTo({ top: 0, behavior: (typeof prefersReducedMotion !== 'undefined' && prefersReducedMotion) ? "instant" : "smooth" });
 }
 
 function changePageSize(val) {

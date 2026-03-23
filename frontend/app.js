@@ -21,6 +21,9 @@
   };
 })();
 
+/* ===== Reduced Motion Preference ===== */
+var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* ===== Theme Toggle (Espresso Dark Mode) ===== */
 (function initTheme() {
   try {
@@ -485,11 +488,12 @@ function _showToast(msg, type, duration, link) {
     a.style.cssText = 'color:var(--orange);text-decoration:underline;';
     toast.appendChild(a);
   }
+  if (prefersReducedMotion) toast.style.transition = 'none';
   document.body.appendChild(toast);
-  setTimeout(function() { toast.classList.add('razzle-toast-show'); }, 10);
+  setTimeout(function() { toast.classList.add('razzle-toast-show'); }, prefersReducedMotion ? 0 : 10);
   setTimeout(function() {
     toast.classList.remove('razzle-toast-show');
-    setTimeout(function() { toast.remove(); }, 300);
+    setTimeout(function() { toast.remove(); }, prefersReducedMotion ? 0 : 300);
   }, duration || 2500);
 }
 

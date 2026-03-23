@@ -804,6 +804,7 @@ class Agent {
   }
 
   updateAnimation(dt) {
+    if (typeof prefersReducedMotion !== 'undefined' && prefersReducedMotion) { this.frame = 0; return; }
     this.animTimer += dt;
     if (this.state === STATE.WALK) {
       if (this.animTimer >= ANIM_SPEED) {
