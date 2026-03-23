@@ -1,5 +1,5 @@
 {
-  "last_ticket_id": 56,
+  "last_ticket_id": 66,
   "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
@@ -75,413 +75,100 @@
     "lab-panels.css (border-radius 2-6px sub-minimum count — 171 instances) (cycle 5)",
     "styles.css (border-radius 2-6px sub-minimum count — 2 remaining) (cycle 5)",
     "--text-on-accent contrast verification (light + dark mode — acceptable) (cycle 5)",
-    "warroom.js (pixel art hex colors — all acceptable, Situation Room always-dark exception) (cycle 5)"
+    "warroom.js (pixel art hex colors — all acceptable, Situation Room always-dark exception) (cycle 5)",
+    "lab.js (full inline style border-radius audit — 27 sub-minimum instances) (cycle 6)",
+    "66 standalone HTML pages (border-radius sub-minimum count — ~300 instances) (cycle 6)",
+    "league-intel.html (bar element border-radius — 6 remaining sub-minimum) (cycle 6)",
+    "lab.html (store-card:hover shadow — 4px instead of 6px, no lift) (cycle 6)",
+    "league-intel.html (canvas hardcoded hex — posColors, stroke, fill) (cycle 6)",
+    "lab.js (duplicated posColors objects — 14+ copies with hardcoded hex) (cycle 6)",
+    "lab.js (verdict/sentiment colors — hardcoded #c5a000/#f5eacc/#2ec4b6/#d9efec/#e63946/#f2d5d8) (cycle 6)",
+    "prompts.html (linear-gradient on text overflow fade) (cycle 6)",
+    "lab.html (sparkline-placeholder repeating-linear-gradient + radius:3px) (cycle 6)",
+    "lab.html (formula store publish modal info box radius:6px) (cycle 6)",
+    "formula-store.js (full dark mode compliance check — 98% compliant) (cycle 6)"
   ],
   "tickets_written": [
-    {
-      "id": "DES-001",
-      "file": "designer-tickets/done/001-orphan-discovery-filter-chip.md",
-      "priority": "P2",
-      "area": "home page",
-      "summary": "Orphan 'Veteran Studs' chip on discovery filters — 6th chip wraps to centered second row alone"
-    },
-    {
-      "id": "DES-002",
-      "file": "designer-tickets/done/002-mini-screener-1px-border-violation.md",
-      "priority": "P2",
-      "area": "home page",
-      "summary": "Mini-screener table rows use 1px solid borders instead of 2px dashed — DESIGN.md violation"
-    },
-    {
-      "id": "DES-003",
-      "file": "designer-tickets/done/003-ink-light-color-mismatch-sitewide.md",
-      "priority": "P1",
-      "area": "sitewide",
-      "summary": "--ink-light is #6d5a4d but DESIGN.md says #8a7565 — 219 usages wrong, kills typographic hierarchy"
-    },
-    {
-      "id": "DES-004",
-      "file": "designer-tickets/done/004-watermark-style-inconsistency-sitewide.md",
-      "priority": "P2",
-      "area": "sitewide",
-      "summary": "Watermark implemented 5 different ways across 15 pages — 3 fonts, 4 opacities, 4 z-indexes"
-    },
-    {
-      "id": "DES-005",
-      "file": "designer-tickets/done/005-prompts-page-missing-full-footer.md",
-      "priority": "P2",
-      "area": "prompts.html",
-      "summary": "Prompts page has minimal 2-line footer instead of full 6-column nav footer"
-    },
-    {
-      "id": "DES-006",
-      "file": "designer-tickets/done/006-situation-room-agent-emojis-wrong.md",
-      "priority": "P2",
-      "area": "agents.html",
-      "summary": "3 of 6 agent emojis/animals wrong on Situation Room"
-    },
-    {
-      "id": "DES-007",
-      "file": "designer-tickets/done/007-og-image-wrong-tagline.md",
-      "priority": "P0",
-      "area": "sitewide (OG image)",
-      "summary": "OG image says 'bloomberg terminal' — old tagline. Should say 'research lab'. Blocks Twitter launch quality."
-    },
-    {
-      "id": "DES-008",
-      "file": "designer-tickets/done/008-fake-testimonials-home-page.md",
-      "priority": "P1",
-      "area": "index.html",
-      "summary": "3 fabricated testimonials with fake Reddit/Twitter usernames. Credibility risk before Reddit seeding."
-    },
-    {
-      "id": "DES-009",
-      "file": "designer-tickets/done/009-logo-text-wrong-font.md",
-      "priority": "P1",
-      "area": "sitewide (styles.css)",
-      "summary": "Logo 'Razzle.lol' in Space Mono — missing font-family: var(--font-display). Brand identity issue."
-    },
-    {
-      "id": "DES-010",
-      "file": "designer-tickets/done/010-1px-borders-sitewide-panels.md",
-      "priority": "P1",
-      "area": "sitewide (58+ pages)",
-      "summary": "64 occurrences of 1px solid borders on data rows. DESIGN.md says 2px dashed. Supersedes DES-002."
-    },
-    {
-      "id": "DES-011",
-      "file": "designer-tickets/done/011-pricing-card-border-radius-mismatch.md",
-      "priority": "P2",
-      "area": "index.html + pricing.html",
-      "summary": "Pricing cards 12px radius on home, 8px on pricing page. Same component, different pages."
-    },
-    {
-      "id": "DES-012",
-      "file": "designer-tickets/done/012-shadow-size-inconsistency-home.md",
-      "priority": "P2",
-      "area": "index.html",
-      "summary": "social-card and smart-chip use 3px shadow instead of design-spec 4px."
-    },
-    {
-      "id": "DES-013",
-      "file": "designer-tickets/done/013-panel-count-undersell-pricing.md",
-      "priority": "P2",
-      "area": "pricing.html + about.html",
-      "summary": "'60+ panels' on 7 instances across 2 pages. Actual count is 67+. North Star says '70+'."
-    },
-    {
-      "id": "DES-014",
-      "file": "designer-tickets/done/014-agent-name-mismatch-home-demo.md",
-      "priority": "P2",
-      "area": "index.html",
-      "summary": "Demo card says 'The Diplomat' but agent-config.js name is 'Bones'. Brand confusion."
-    },
-    {
-      "id": "DES-015",
-      "file": "designer-tickets/done/015-nav-buttons-wrong-font-per-design-md.md",
-      "priority": "P2",
-      "area": "sitewide (styles.css)",
-      "summary": "Nav links + buttons use mono font but DESIGN.md type scale says display. Spec/code mismatch needs resolution."
-    },
-    {
-      "id": "DES-016",
-      "file": "designer-tickets/done/016-border-radius-ungoverned.md",
-      "priority": "P2",
-      "area": "sitewide (CSS architecture)",
-      "summary": "--radius CSS var (12px) defined but barely used. 7+ hardcoded values across home page alone."
-    },
-    {
-      "id": "DES-017",
-      "file": "designer-tickets/done/017-btn-primary-invisible-dark-mode.md",
-      "priority": "P1",
-      "area": "sitewide (styles.css)",
-      "summary": "btn-primary uses hardcoded color:white — every CTA button lacks dark mode override"
-    },
-    {
-      "id": "DES-018",
-      "file": "designer-tickets/done/018-nav-active-white-text-dark-mode.md",
-      "priority": "P1",
-      "area": "sitewide (styles.css)",
-      "summary": "Nav active link + Pro/Elite badges use color:white with no dark mode override — navigation broken in dark mode"
-    },
-    {
-      "id": "DES-019",
-      "file": "designer-tickets/done/019-auth-tab-white-text-dark-mode.md",
-      "priority": "P1",
-      "area": "sitewide (styles.css)",
-      "summary": "Auth modal active tab uses color:white — can't tell Login vs Register in dark mode. Conversion path."
-    },
-    {
-      "id": "DES-020",
-      "file": "designer-tickets/done/020-chip-active-white-text-dark-mode.md",
-      "priority": "P1",
-      "area": "sitewide (styles.css)",
-      "summary": "Active position chips + command palette badges use color:white/fff — Screener filtering broken in dark mode"
-    },
-    {
-      "id": "DES-021",
-      "file": "designer-tickets/done/021-tier-description-invisible-dark-mode.md",
-      "priority": "P2",
-      "area": "lab-panels.css",
-      "summary": "Tier list descriptions use hardcoded sand rgba — becomes invisible in dark mode (same color as background)"
-    },
-    {
-      "id": "DES-022",
-      "file": "designer-tickets/done/022-medal-colors-no-dark-mode-override.md",
-      "priority": "P2",
-      "area": "lab-panels.css",
-      "summary": "Gold (#ffd700) and bronze (#cd7f32) medal colors hardcoded in 6 places — no CSS tokens, no dark mode overrides"
-    },
-    {
-      "id": "DES-023",
-      "file": "designer-tickets/done/023-panel-tables-no-mobile-scroll.md",
-      "priority": "P2",
-      "area": "lab-panels.css",
-      "summary": "6+ panel table containers use overflow:hidden — data truncated on mobile instead of horizontal scroll"
-    },
-    {
-      "id": "DES-024",
-      "file": "designer-tickets/done/024-pricing-cards-tablet-cramped.md",
-      "priority": "P2",
-      "area": "pricing.html",
-      "summary": "Pricing cards jump from 3-col to 1-col at 900px — tablets (768-900px) get cramped 3-col layout"
-    },
-    {
-      "id": "DES-025",
-      "file": "designer-tickets/done/025-home-footer-grid-375px-overflow.md",
-      "priority": "P2",
-      "area": "index.html",
-      "summary": "Footer grid minmax(140px) too wide for 375px phones — columns don't fit, layout breaks"
-    },
-    {
-      "id": "DES-026",
-      "file": "designer-tickets/done/026-inline-style-dark-mode-home.md",
-      "priority": "P2",
-      "area": "index.html",
-      "summary": "Home page inline <style> blocks use hardcoded hex colors — bypass dark mode toggle system"
-    },
-    {
-      "id": "DES-027",
-      "file": "designer-tickets/done/027-auth-modal-shadow-8px.md",
-      "priority": "P1",
-      "area": "sitewide (styles.css)",
-      "summary": "Auth modal box-shadow 8px instead of design-spec 4px — only component with oversized shadow"
-    },
-    {
-      "id": "DES-028",
-      "file": "designer-tickets/done/028-auth-modal-radius-16px.md",
-      "priority": "P1",
-      "area": "sitewide (styles.css)",
-      "summary": "Auth modal border-radius 16px — orphaned value, not a design token (8/12/20px)"
-    },
-    {
-      "id": "DES-029",
-      "file": "designer-tickets/done/029-cmd-palette-fff-no-dark-override.md",
-      "priority": "P1",
-      "area": "sitewide (styles.css)",
-      "summary": "Command palette key-label and pos badges use color:#fff with no dark mode override"
-    },
-    {
-      "id": "DES-030",
-      "file": "designer-tickets/done/030-plan-cards-no-hover-state.md",
-      "priority": "P1",
-      "area": "pricing.html",
-      "summary": "Plan cards on conversion page have zero :hover CSS — design guide mandates hover-lift"
-    },
-    {
-      "id": "DES-031",
-      "file": "designer-tickets/done/031-badge-radius-violations-pricing.md",
-      "priority": "P2",
-      "area": "pricing.html",
-      "summary": "Plan badge (4px) and save badge (6px) border-radius below --radius-sm (8px) minimum"
-    },
-    {
-      "id": "DES-032",
-      "file": "designer-tickets/done/032-lab-panels-96-hardcoded-fff.md",
-      "priority": "P2",
-      "area": "lab-panels.css (sitewide panels)",
-      "summary": "96 instances of color:#fff/white across position/tier/grade badges — should use CSS variable"
-    },
-    {
-      "id": "DES-033",
-      "file": "designer-tickets/done/033-diff-mode-label-white-and-radius.md",
-      "priority": "P2",
-      "area": "styles.css",
-      "summary": "Diff-mode label uses hardcoded color:white and border-radius:4px — two violations"
-    },
-    {
-      "id": "DES-034",
-      "file": "designer-tickets/done/034-compare-canvas-hardcoded-hex.md",
-      "priority": "P2",
-      "area": "compare.js",
-      "summary": "Compare page PNG export uses hardcoded hex colors instead of getCanvasTheme() — dark mode exports break"
-    },
-    {
-      "id": "DES-035",
-      "file": "designer-tickets/done/035-elite-cta-inline-style-override.md",
-      "priority": "P2",
-      "area": "pricing.html",
-      "summary": "Elite CTA button + JS banners use inline styles — fragile, can't be overridden by dark mode/media queries"
-    },
-    {
-      "id": "DES-036",
-      "file": "designer-tickets/done/036-nav-plan-badge-radius-4px.md",
-      "priority": "P2",
-      "area": "sitewide (styles.css)",
-      "summary": "Nav plan badge + cmd-palette-pos use border-radius:4px — below --radius-sm (8px) design minimum"
-    },
-    {
-      "id": "DES-037",
-      "file": "designer-tickets/done/037-footer-minmax-140px-71-pages.md",
-      "priority": "P1",
-      "area": "sitewide (71 pages)",
-      "summary": "Footer grid minmax(140px) breaks 375px phones on 71 pages — DES-025 only fixed index.html"
-    },
-    {
-      "id": "DES-038",
-      "file": "designer-tickets/done/038-border-radius-10px-orphan-sitewide.md",
-      "priority": "P2",
-      "area": "sitewide (styles.css + 20 pages)",
-      "summary": "border-radius: 10px is not a design token — 50+ instances including logo-mark on every page"
-    },
-    {
-      "id": "DES-039",
-      "file": "designer-tickets/done/039-border-radius-16px-orphan-3-pages.md",
-      "priority": "P2",
-      "area": "about.html, index.html, league-intel.html",
-      "summary": "border-radius: 16px orphan on 3 pages — not a design token (8/12/20)"
-    },
-    {
-      "id": "DES-040",
-      "file": "designer-tickets/done/040-box-shadow-6px-at-rest-sitewide.md",
-      "priority": "P2",
-      "area": "sitewide (20+ pages, lab-panels.css)",
-      "summary": "box-shadow 6px used at rest on 30+ components — should be 4px base, 6px hover per DESIGN.md"
-    },
-    {
-      "id": "DES-041",
-      "file": "designer-tickets/done/041-styles-css-small-radius-orphans.md",
-      "priority": "P2",
-      "area": "styles.css",
-      "summary": "7 elements use border-radius 3px/6px — below design minimum --radius-sm (8px)"
-    },
-    {
-      "id": "DES-042",
-      "file": "designer-tickets/done/042-color-white-121-instances-69-html-files.md",
-      "priority": "P2",
-      "area": "sitewide (69 HTML files)",
-      "summary": "121 instances of color:white/#fff in per-page styles — extends DES-032, total 217 sitewide"
-    },
-    {
-      "id": "DES-043",
-      "file": "designer-tickets/done/043-league-intel-bureau-connect-card-off-spec.md",
-      "priority": "P1",
-      "area": "league-intel.html",
-      "summary": "Bureau connect card has 3 design violations (6px shadow, 16px radius, inline 10px JS cards) — conversion gateway"
-    },
-    {
-      "id": "DES-044",
-      "file": "designer-tickets/done/044-pricing-promo-input-radius-4px.md",
-      "priority": "P2",
-      "area": "pricing.html",
-      "summary": "Promo input (4px) and free-chip (6px) border-radius below --radius-sm (8px) on conversion page"
-    },
-    {
-      "id": "DES-045",
-      "file": "designer-tickets/done/045-footer-no-css-class-all-inline.md",
-      "priority": "P2",
-      "area": "sitewide (72 pages)",
-      "summary": "site-footer has no CSS class — all layout via inline styles across 72 files, prevents theming/maintenance"
-    },
-    {
-      "id": "DES-046",
-      "file": "designer-tickets/done/046-footer-uses-div-not-footer-element.md",
-      "priority": "P2",
-      "area": "sitewide (67+ pages)",
-      "summary": "Footer uses <div> instead of <footer> on 67+ pages — no semantic landmark for accessibility"
-    },
-    {
-      "id": "DES-047",
-      "file": "designer-tickets/open/047-lab-panels-css-171-sub-minimum-radius.md",
-      "priority": "P1",
-      "area": "lab-panels.css (all Lab panels)",
-      "summary": "171 instances of border-radius 2-6px below --radius-sm (8px) minimum — affects all Lab panels"
-    },
-    {
-      "id": "DES-048",
-      "file": "designer-tickets/open/048-league-intel-sub-minimum-radius.md",
-      "priority": "P1",
-      "area": "league-intel.html (Bureau)",
-      "summary": "16+ sub-minimum border-radius in CSS + JS — Bureau conversion pathway"
-    },
-    {
-      "id": "DES-049",
-      "file": "designer-tickets/open/049-league-intel-badge-color-var-bg-not-text-on-accent.md",
-      "priority": "P1",
-      "area": "league-intel.html (Bureau JS badges)",
-      "summary": "4 JS badges use color:var(--bg) instead of var(--text-on-accent) — poor light mode contrast"
-    },
-    {
-      "id": "DES-050",
-      "file": "designer-tickets/open/050-league-intel-hover-lift-broken.md",
-      "priority": "P1",
-      "area": "league-intel.html (Bureau cards)",
-      "summary": "League-card hover shadow = base shadow (no lift). Profile-card hover lift too subtle."
-    },
-    {
-      "id": "DES-051",
-      "file": "designer-tickets/open/051-lab-panels-js-hardcoded-hex-dom-inline.md",
-      "priority": "P2",
-      "area": "lab-panels.js (inline styles)",
-      "summary": "7+ instances of hardcoded hex accent colors in DOM inline styles — should use CSS variables"
-    },
-    {
-      "id": "DES-052",
-      "file": "designer-tickets/open/052-lab-panels-js-heatmap-hardcoded-fff.md",
-      "priority": "P2",
-      "area": "lab-panels.js (matchup heatmap)",
-      "summary": "Heatmap text uses '#fff' instead of var(--text-on-accent) — off-brand in dark mode"
-    },
-    {
-      "id": "DES-053",
-      "file": "designer-tickets/open/053-charts-js-heatmap-hardcoded-ffffff.md",
-      "priority": "P2",
-      "area": "charts.js (canvas heatmap)",
-      "summary": "Canvas heatmap text uses #ffffff instead of t.white — bypasses dark mode theme"
-    },
-    {
-      "id": "DES-054",
-      "file": "designer-tickets/open/054-formula-store-pos-badge-radius-4px.md",
-      "priority": "P2",
-      "area": "formula-store.js",
-      "summary": "Position tag badges use border-radius:4px — below --radius-sm (8px) minimum"
-    },
-    {
-      "id": "DES-055",
-      "file": "designer-tickets/open/055-compare-page-sub-minimum-radius.md",
-      "priority": "P2",
-      "area": "compare.html",
-      "summary": "compare-pos-badge and compare-mini-stat use 6px radius — below --radius-sm (8px)"
-    },
-    {
-      "id": "DES-056",
-      "file": "designer-tickets/open/056-compare-page-no-hover-lift-on-cards.md",
-      "priority": "P2",
-      "area": "compare.html",
-      "summary": "Player cards and stat sections have no :hover state — design guide mandates hover-lift"
-    }
+    {"id": "DES-001", "file": "designer-tickets/done/001-orphan-discovery-filter-chip.md", "priority": "P2", "area": "home page", "summary": "Orphan 'Veteran Studs' chip on discovery filters"},
+    {"id": "DES-002", "file": "designer-tickets/done/002-mini-screener-1px-border-violation.md", "priority": "P2", "area": "home page", "summary": "Mini-screener table rows use 1px solid borders"},
+    {"id": "DES-003", "file": "designer-tickets/done/003-ink-light-color-mismatch-sitewide.md", "priority": "P1", "area": "sitewide", "summary": "--ink-light is #6d5a4d but DESIGN.md says #8a7565"},
+    {"id": "DES-004", "file": "designer-tickets/done/004-watermark-style-inconsistency-sitewide.md", "priority": "P2", "area": "sitewide", "summary": "Watermark implemented 5 different ways across 15 pages"},
+    {"id": "DES-005", "file": "designer-tickets/done/005-prompts-page-missing-full-footer.md", "priority": "P2", "area": "prompts.html", "summary": "Prompts page has minimal 2-line footer"},
+    {"id": "DES-006", "file": "designer-tickets/done/006-situation-room-agent-emojis-wrong.md", "priority": "P2", "area": "agents.html", "summary": "3 of 6 agent emojis/animals wrong"},
+    {"id": "DES-007", "file": "designer-tickets/done/007-og-image-wrong-tagline.md", "priority": "P0", "area": "sitewide", "summary": "OG image says 'bloomberg terminal' — old tagline"},
+    {"id": "DES-008", "file": "designer-tickets/done/008-fake-testimonials-home-page.md", "priority": "P1", "area": "index.html", "summary": "3 fabricated testimonials with fake usernames"},
+    {"id": "DES-009", "file": "designer-tickets/done/009-logo-text-wrong-font.md", "priority": "P1", "area": "sitewide", "summary": "Logo in Space Mono — missing font-display"},
+    {"id": "DES-010", "file": "designer-tickets/done/010-1px-borders-sitewide-panels.md", "priority": "P1", "area": "sitewide", "summary": "64 occurrences of 1px solid borders on data rows"},
+    {"id": "DES-011", "file": "designer-tickets/done/011-pricing-card-border-radius-mismatch.md", "priority": "P2", "area": "index.html + pricing.html", "summary": "Pricing cards 12px radius on home, 8px on pricing"},
+    {"id": "DES-012", "file": "designer-tickets/done/012-shadow-size-inconsistency-home.md", "priority": "P2", "area": "index.html", "summary": "social-card and smart-chip use 3px shadow"},
+    {"id": "DES-013", "file": "designer-tickets/done/013-panel-count-undersell-pricing.md", "priority": "P2", "area": "pricing.html + about.html", "summary": "'60+ panels' but actual count is 67+"},
+    {"id": "DES-014", "file": "designer-tickets/done/014-agent-name-mismatch-home-demo.md", "priority": "P2", "area": "index.html", "summary": "Demo card says 'The Diplomat' but name is 'Bones'"},
+    {"id": "DES-015", "file": "designer-tickets/done/015-nav-buttons-wrong-font-per-design-md.md", "priority": "P2", "area": "sitewide", "summary": "Nav links + buttons use mono font but spec says display"},
+    {"id": "DES-016", "file": "designer-tickets/done/016-border-radius-ungoverned.md", "priority": "P2", "area": "sitewide", "summary": "--radius CSS var defined but barely used"},
+    {"id": "DES-017", "file": "designer-tickets/done/017-btn-primary-invisible-dark-mode.md", "priority": "P1", "area": "sitewide", "summary": "btn-primary uses hardcoded color:white"},
+    {"id": "DES-018", "file": "designer-tickets/done/018-nav-active-white-text-dark-mode.md", "priority": "P1", "area": "sitewide", "summary": "Nav active link + Pro/Elite badges use color:white"},
+    {"id": "DES-019", "file": "designer-tickets/done/019-auth-tab-white-text-dark-mode.md", "priority": "P1", "area": "sitewide", "summary": "Auth modal active tab uses color:white"},
+    {"id": "DES-020", "file": "designer-tickets/done/020-chip-active-white-text-dark-mode.md", "priority": "P1", "area": "sitewide", "summary": "Active position chips use color:white/fff"},
+    {"id": "DES-021", "file": "designer-tickets/done/021-tier-description-invisible-dark-mode.md", "priority": "P2", "area": "lab-panels.css", "summary": "Tier descriptions invisible in dark mode"},
+    {"id": "DES-022", "file": "designer-tickets/done/022-medal-colors-no-dark-mode-override.md", "priority": "P2", "area": "lab-panels.css", "summary": "Gold/bronze medal colors hardcoded"},
+    {"id": "DES-023", "file": "designer-tickets/done/023-panel-tables-no-mobile-scroll.md", "priority": "P2", "area": "lab-panels.css", "summary": "6+ panel tables use overflow:hidden"},
+    {"id": "DES-024", "file": "designer-tickets/done/024-pricing-cards-tablet-cramped.md", "priority": "P2", "area": "pricing.html", "summary": "Pricing cards jump 3-col to 1-col at 900px"},
+    {"id": "DES-025", "file": "designer-tickets/done/025-home-footer-grid-375px-overflow.md", "priority": "P2", "area": "index.html", "summary": "Footer grid minmax(140px) breaks 375px phones"},
+    {"id": "DES-026", "file": "designer-tickets/done/026-inline-style-dark-mode-home.md", "priority": "P2", "area": "index.html", "summary": "Home inline styles bypass dark mode"},
+    {"id": "DES-027", "file": "designer-tickets/done/027-auth-modal-shadow-8px.md", "priority": "P1", "area": "sitewide", "summary": "Auth modal box-shadow 8px instead of 4px"},
+    {"id": "DES-028", "file": "designer-tickets/done/028-auth-modal-radius-16px.md", "priority": "P1", "area": "sitewide", "summary": "Auth modal border-radius 16px orphan"},
+    {"id": "DES-029", "file": "designer-tickets/done/029-cmd-palette-fff-no-dark-override.md", "priority": "P1", "area": "sitewide", "summary": "Command palette uses color:#fff no dark override"},
+    {"id": "DES-030", "file": "designer-tickets/done/030-plan-cards-no-hover-state.md", "priority": "P1", "area": "pricing.html", "summary": "Plan cards have zero :hover CSS"},
+    {"id": "DES-031", "file": "designer-tickets/done/031-badge-radius-violations-pricing.md", "priority": "P2", "area": "pricing.html", "summary": "Plan badge 4px and save badge 6px below minimum"},
+    {"id": "DES-032", "file": "designer-tickets/done/032-lab-panels-96-hardcoded-fff.md", "priority": "P2", "area": "lab-panels.css", "summary": "96 instances of color:#fff/white"},
+    {"id": "DES-033", "file": "designer-tickets/done/033-diff-mode-label-white-and-radius.md", "priority": "P2", "area": "styles.css", "summary": "Diff-mode label color:white and radius:4px"},
+    {"id": "DES-034", "file": "designer-tickets/done/034-compare-canvas-hardcoded-hex.md", "priority": "P2", "area": "compare.js", "summary": "Compare PNG export hardcoded hex colors"},
+    {"id": "DES-035", "file": "designer-tickets/done/035-elite-cta-inline-style-override.md", "priority": "P2", "area": "pricing.html", "summary": "Elite CTA + JS banners use inline styles"},
+    {"id": "DES-036", "file": "designer-tickets/done/036-nav-plan-badge-radius-4px.md", "priority": "P2", "area": "sitewide", "summary": "Nav plan badge + cmd-palette-pos radius:4px"},
+    {"id": "DES-037", "file": "designer-tickets/done/037-footer-minmax-140px-71-pages.md", "priority": "P1", "area": "sitewide", "summary": "Footer grid minmax(140px) breaks 71 pages"},
+    {"id": "DES-038", "file": "designer-tickets/done/038-border-radius-10px-orphan-sitewide.md", "priority": "P2", "area": "sitewide", "summary": "border-radius:10px is not a design token"},
+    {"id": "DES-039", "file": "designer-tickets/done/039-border-radius-16px-orphan-3-pages.md", "priority": "P2", "area": "3 pages", "summary": "border-radius:16px orphan"},
+    {"id": "DES-040", "file": "designer-tickets/done/040-box-shadow-6px-at-rest-sitewide.md", "priority": "P2", "area": "sitewide", "summary": "box-shadow 6px at rest on 30+ components"},
+    {"id": "DES-041", "file": "designer-tickets/done/041-styles-css-small-radius-orphans.md", "priority": "P2", "area": "styles.css", "summary": "7 elements use radius 3px/6px"},
+    {"id": "DES-042", "file": "designer-tickets/done/042-color-white-121-instances-69-html-files.md", "priority": "P2", "area": "sitewide", "summary": "121 instances of color:white in 69 HTML files"},
+    {"id": "DES-043", "file": "designer-tickets/done/043-league-intel-bureau-connect-card-off-spec.md", "priority": "P1", "area": "league-intel.html", "summary": "Bureau connect card 3 design violations"},
+    {"id": "DES-044", "file": "designer-tickets/done/044-pricing-promo-input-radius-4px.md", "priority": "P2", "area": "pricing.html", "summary": "Promo input and free-chip radius below minimum"},
+    {"id": "DES-045", "file": "designer-tickets/done/045-footer-no-css-class-all-inline.md", "priority": "P2", "area": "sitewide", "summary": "site-footer has no CSS class"},
+    {"id": "DES-046", "file": "designer-tickets/done/046-footer-uses-div-not-footer-element.md", "priority": "P2", "area": "sitewide", "summary": "Footer uses div instead of footer element"},
+    {"id": "DES-047", "file": "designer-tickets/done/047-lab-panels-css-171-sub-minimum-radius.md", "priority": "P1", "area": "lab-panels.css", "summary": "171 instances of border-radius 2-6px below minimum"},
+    {"id": "DES-048", "file": "designer-tickets/done/048-league-intel-sub-minimum-radius.md", "priority": "P1", "area": "league-intel.html", "summary": "16+ sub-minimum border-radius (partial fix — 6 remain, see DES-059)"},
+    {"id": "DES-049", "file": "designer-tickets/done/049-league-intel-badge-color-var-bg-not-text-on-accent.md", "priority": "P1", "area": "league-intel.html", "summary": "4 JS badges use color:var(--bg) instead of text-on-accent"},
+    {"id": "DES-050", "file": "designer-tickets/done/050-league-intel-hover-lift-broken.md", "priority": "P1", "area": "league-intel.html", "summary": "League-card hover shadow = base shadow"},
+    {"id": "DES-051", "file": "designer-tickets/done/051-lab-panels-js-hardcoded-hex-dom-inline.md", "priority": "P2", "area": "lab-panels.js", "summary": "7+ hardcoded hex accent colors in DOM inline styles"},
+    {"id": "DES-052", "file": "designer-tickets/done/052-lab-panels-js-heatmap-hardcoded-fff.md", "priority": "P2", "area": "lab-panels.js", "summary": "Heatmap text uses #fff instead of var(--text-on-accent)"},
+    {"id": "DES-053", "file": "designer-tickets/done/053-charts-js-heatmap-hardcoded-ffffff.md", "priority": "P2", "area": "charts.js", "summary": "Canvas heatmap text uses #ffffff instead of t.white"},
+    {"id": "DES-054", "file": "designer-tickets/done/054-formula-store-pos-badge-radius-4px.md", "priority": "P2", "area": "formula-store.js", "summary": "Position tag badges use border-radius:4px"},
+    {"id": "DES-055", "file": "designer-tickets/done/055-compare-page-sub-minimum-radius.md", "priority": "P2", "area": "compare.html", "summary": "compare-pos-badge and compare-mini-stat use 6px radius"},
+    {"id": "DES-056", "file": "designer-tickets/done/056-compare-page-no-hover-lift-on-cards.md", "priority": "P2", "area": "compare.html", "summary": "Player cards and stat sections have no :hover state"},
+    {"id": "DES-057", "file": "designer-tickets/open/057-lab-js-27-sub-minimum-border-radius.md", "priority": "P1", "area": "lab.js (Screener)", "summary": "27 instances of border-radius below 8px in JS-generated inline styles"},
+    {"id": "DES-058", "file": "designer-tickets/open/058-standalone-pages-300-sub-minimum-radius.md", "priority": "P1", "area": "66 standalone HTML pages", "summary": "~300 sub-minimum border-radius in per-page style blocks"},
+    {"id": "DES-059", "file": "designer-tickets/open/059-league-intel-6-remaining-sub-minimum-radius.md", "priority": "P1", "area": "league-intel.html (Bureau bars)", "summary": "6 remaining sub-minimum radius on bar elements — DES-048 incomplete"},
+    {"id": "DES-060", "file": "designer-tickets/open/060-store-card-hover-no-lift.md", "priority": "P1", "area": "lab.html (Formula Store)", "summary": "store-card:hover has 4px shadow instead of 6px — no lift effect"},
+    {"id": "DES-061", "file": "designer-tickets/open/061-league-intel-canvas-hardcoded-hex.md", "priority": "P2", "area": "league-intel.html (Bureau canvas)", "summary": "Canvas charts use hardcoded hex position colors — dark mode breaks"},
+    {"id": "DES-062", "file": "designer-tickets/open/062-lab-js-duplicated-poscolors-hardcoded.md", "priority": "P2", "area": "lab.js (Screener canvas)", "summary": "14+ duplicated posColors objects with hardcoded hex — DRY + dark mode"},
+    {"id": "DES-063", "file": "designer-tickets/open/063-lab-js-verdict-sentiment-colors-hardcoded.md", "priority": "P2", "area": "lab.js (Trade Analyzer)", "summary": "Verdict colors hardcoded (#c5a000, #2ec4b6, #e63946) — dark mode breaks"},
+    {"id": "DES-064", "file": "designer-tickets/open/064-prompts-html-linear-gradient.md", "priority": "P2", "area": "prompts.html", "summary": "Text overflow uses linear-gradient — design guide bans gradients"},
+    {"id": "DES-065", "file": "designer-tickets/open/065-lab-html-sparkline-placeholder-gradient-radius.md", "priority": "P2", "area": "lab.html", "summary": "Sparkline placeholder uses repeating-linear-gradient + radius:3px — two violations"},
+    {"id": "DES-066", "file": "designer-tickets/open/066-lab-js-publish-modal-info-radius-6px.md", "priority": "P2", "area": "lab.html (Formula Store)", "summary": "Publish modal info box uses border-radius:6px below minimum"}
   ],
   "notes": [
     "Production site (razzle.lol) returns 502 — confirmed 2026-03-22",
-    "DES-001 through DES-046 all completed (moved to done/ folder)",
-    "DES-047 through DES-056 are open tickets from cycle 5",
-    "Cycle 5 theme: JS-GENERATED MARKUP — formula-store.js, lab-panels.js, league-intel.html JS all have design system gaps",
-    "lab-panels.css has 171 sub-minimum radius instances — single biggest remaining governance gap (DES-047)",
-    "Bureau (league-intel.html) has 3 separate issues: radius (DES-048), badge contrast (DES-049), hover-lift (DES-050)",
-    "Canvas export code (charts.js, lab-panels.js) correctly uses getCanvasTheme() for bg/ink — only issue is #fff instead of t.white (DES-053)",
-    "warroom.js pixel art hex colors are all acceptable — Situation Room always-dark exception per DESIGN.md",
-    "--text-on-accent contrast verified: light mode white-on-orange = 3.1:1 (passes UI component 3:1), dark mode espresso-on-orange = 5.38:1 (passes AA)",
-    "about.html panel count correctly says '70+' — DES-013 fix held",
-    "No new rogue fonts, no new gradients, no new cold grays, no new blue-black ink — good disciplines still holding"
+    "DES-001 through DES-056 all completed (moved to done/ folder)",
+    "DES-047 through DES-056 were fixed in cycle 5 commits (git log confirms)",
+    "DES-048 fix was PARTIAL — 6 bar element instances remain (covered by DES-059)",
+    "DES-057 through DES-066 are open tickets from cycle 6",
+    "Cycle 6 theme: DEEP INLINE STYLE SWEEP — lab.js (27 radius), 66 HTML pages (~300 radius), canvas hardcoded hex, gradients",
+    "Sub-minimum border-radius is still the dominant issue: ~330 instances across JS + HTML pages remaining after CSS fixes",
+    "Canvas code has a systemic hardcoded hex problem: lab.js (14+ posColors copies), league-intel.html (6 canvas hex), lab.js verdict colors",
+    "Two gradient violations found: prompts.html (text fade) and lab.html (sparkline placeholder striped pattern)",
+    "formula-store.js is 98% design-compliant — only the publish modal info box radius:6px is off",
+    "Good disciplines STILL holding: zero rogue fonts, zero 'Loading...' text, zero cold grays, zero blue-black ink",
+    "All box-shadow:6px instances on hover states are CORRECT per design guide — no new at-rest violations found",
+    "lab.js has an orphaned gold color (#c5a000) that doesn't match any design token — should be --yellow (#ffc857)"
   ]
 }
