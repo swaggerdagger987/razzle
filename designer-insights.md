@@ -271,17 +271,77 @@ Five new audit dimensions this cycle — moving from ARIA attributes to deeper s
   - Agent-voiced error copy throughout (razzleError, getErrorText)
   - lab.js screener table has correct caption + scope=col pattern
 
-### What to Check Next (Cycle 12)
-- After DES-107: verify all sidebar panel links are tabbable and activatable with Enter
-- After DES-108: verify sidebar categories toggle with Enter/Space, aria-expanded updates
-- After DES-109: verify home page mini-screener rows are reachable by Tab and activatable by Enter
-- After DES-110: verify screen reader can identify tables by caption when listing all tables on a page
-- After DES-111: verify screen reader announces column header when navigating data cells
-- After DES-114: verify scroll indicator appears on mobile viewport for wide tables
-- Table `<thead>`/`<tbody>` correctness — are all tables properly structured?
-- `aria-sort` on sortable columns in lab.js — are ascending/descending sort states announced?
-- Page-specific og:image — currently 74/75 pages use generic og-image.png
-- Print CSS — only cheatsheet.html has @media print; rankings, tiers, trade values could benefit
-- `tabindex` on interactive elements in lab-panels.js — are panel-specific controls keyboard-reachable?
-- Form `autocomplete` attribute usage — do login/register forms hint correct autocomplete types? (verified: they do)
-- Error recovery UX — when API calls fail, can users retry without losing state?
+### Cycle 12 Findings: aria-sort, Error Recovery, Screener Interactive Keyboard Gaps
+
+Three new audit dimensions this cycle — aria-sort on sortable tables, error recovery UX, and systematic review of every interactive element in screener rows:
+
+- **ZERO aria-sort attributes in the entire codebase** (DES-117) — 50+ sortable tables across 46 pages, all using visual arrows (Unicode &#9650;/&#9660;) but never setting aria-sort="ascending"/"descending" on the `<th>`. This is the single largest remaining WCAG gap for the screener's accessibility story. The fix is straightforward: state.sortKey and state.sortDir already exist.
+- **No retry button on API errors** (DES-118) — error messages say "try again" as plain text, but there's no clickable retry button. Toast auto-dismisses after 2.5 seconds. First-time visitors from Reddit who hit a Render cold-start timeout see an error flash and then nothing. Previous data is preserved (good), but the recovery path is invisible.
+- **No offline/connection detection** (DES-119) — zero navigator.onLine checks, zero offline event listeners. Mobile traffic (primary from Twitter/Reddit) frequently has intermittent connectivity. Silent failures look like the site is broken.
+- **Sparkline & Notes column headers missing keyboard attrs** (DES-120) — the only two column header types in the screener that skip tabindex="0" and onkeydown. Every other column header (100+) has both. Same code file, different code path.
+- **Tag picker icon is a span onclick** (DES-121) — no role, no tabindex, no onkeydown. Appears in every screener row. Keyboard users can't tag players.
+- **Notes cell is a td onclick** (DES-122) — same pattern as tag picker. No role, no tabindex, no onkeydown. Keyboard users can't add notes.
+- **Column group headers missing keyboard** (DES-123) — th onclick without tabindex or onkeydown. The G-key toggle works, but clicking a specific group header to collapse it requires a mouse.
+- **Row rank/expand td not keyboard accessible** (DES-124) — clicking the rank number expands weekly stats. No role, no tabindex, no aria-expanded, no onkeydown.
+- **Saved views load action is a div onclick** (DES-125) — in the manage modal, the load action is mouse-only. Delete IS a button (correct).
+- **Column resize handles not keyboard accessible** (DES-126) — mousedown only, no role="separator", no arrow key handlers.
+
+### Verified CLEAN This Cycle
+- **Table structure is 100% correct** — all 50 tables across 46 files have `<thead>` and `<tbody>`. lab.html has 2 tbodies (pinned + regular) which is intentional. NO ticket needed.
+- **All tables have scope="col"** — the DES-111 fix was already applied. Confirmed across lab.js and standalone pages.
+- **No broken internal links** — all 39 unique href targets verified against filesystem. 0 broken.
+- **No accidental noindex** — zero robots meta tags with noindex found.
+- **Sitemap covers 69/75 pages** — 3 static pages missing (404, compare, prompts) + 3 dynamic templates intentionally excluded. Minor.
+- **Filter chips DO have role="button" + tabindex="0" + aria-label** — correctly implemented. Missing only Delete/Backspace key support (Enter works via native role=button).
+- **Team chips have role="button" + tabindex="0"** — same pattern as filter chips. Low-priority keyboard gap.
+
+### Issue Categories by Impact (updated DES-126)
+1. **P1 — Screener aria-sort** — DES-117 (50+ tables, 0 instances — the last major WCAG gap)
+2. **P1 — Error recovery UX** — DES-118 (no retry button — conversion blocker on cold starts)
+3. **P1 — Screener row keyboard gaps** — DES-121 (tag picker), DES-122 (notes cell)
+4. **P1 — Screener header keyboard gaps** — DES-120 (sparkline/notes headers)
+5. **P2 — Resilience** — DES-119 (no offline detection)
+6. **P2 — Screener secondary keyboard** — DES-123 (column groups), DES-124 (row expand), DES-125 (saved views)
+7. **P2 — Advanced feature keyboard** — DES-126 (column resize handles)
+8. **P2 — Prior cycle pending** — DES-107-116 still in pending/
+
+### Emerging Patterns (updated DES-126)
+- **The screener's interactive elements follow a clear split:** elements created in the MAIN column header code path (line 1598) have full keyboard+ARIA support. Elements created in SPECIAL code paths (sparkline, notes, tag picker, rank expand) do not. This is a "template vs. exception" pattern — the template is correct, the exceptions are incomplete.
+- **Error recovery is a UX gap, not a code gap.** The error handling code is well-structured (apiFetch, agent-voiced messages, graceful degradation). What's missing is the UI affordance for recovery — a button, not just text.
+- **Table structure is fully mature.** 50/50 tables have thead+tbody. All scope="col" is correct. The remaining table accessibility issue is purely semantic (aria-sort) not structural.
+- **The "onclick on non-button element" pattern is the dominant remaining keyboard gap.** DES-121, 122, 123, 124, 125 are all the same root cause: `<span onclick>`, `<td onclick>`, `<th onclick>`, `<div onclick>` without role/tabindex/onkeydown. A utility function like `makeAccessible(el, label, action)` could solve all of these at once.
+- **Things that are GOOD and should be preserved:**
+  - Zero rogue font families (confirmed cycle 12)
+  - Zero generic "Loading..." text (confirmed cycle 12)
+  - Zero gradients in CSS classes
+  - Zero cold grays, zero blue-black ink
+  - Zero color:white/color:#fff in lab.js or HTML pages
+  - Zero 1px borders in lab.js
+  - All 75 pages have lang="en"
+  - All 75 pages have skip-to-content links
+  - All 75 pages have `<nav aria-label="Main navigation">`
+  - All 75 pages have `<footer>` element
+  - All 75 pages use display=swap for fonts
+  - All `<select>` elements have aria-label
+  - Position badges always include text labels (not color-only)
+  - DES-097 form validation ARIA fully implemented
+  - Agent-voiced error copy throughout (razzleError, getErrorText)
+  - lab.js screener table has correct caption + scope=col
+  - All 50 tables have proper thead+tbody structure (confirmed cycle 12)
+  - All internal links are valid (0 broken, confirmed cycle 12)
+  - No accidental noindex directives (confirmed cycle 12)
+  - Filter/team chip remove buttons have role=button + tabindex + aria-label
+  - Previous data preserved on fetch failure (graceful degradation)
+  - AbortController prevents race conditions on rapid re-queries
+
+### What to Check Next (Cycle 13)
+- After DES-107-116 (pending): verify all 10 pending fixes are implemented correctly
+- After DES-117: verify aria-sort updates dynamically on sort click in screener + standalone pages
+- After DES-118: verify retry button appears on API error, doesn't auto-dismiss, re-triggers the last action
+- After DES-121-122: verify tag picker and notes cell are tabbable and activatable by Enter/Space
+- `lab-panels.js` interactive elements — are panel-specific buttons/chips keyboard accessible? (deferred from cycle 12)
+- Print CSS for key pages — rankings, tiers, trade values, cheat sheet (only cheatsheet has @media print)
+- Page-specific og:image for high-share pages — trade values, dynasty rankings, breakout finder
+- `autocomplete` attribute on auth form inputs — are email/password fields hinting correct types?
+- Service Worker / PWA consideration — is there a manifest.json for "add to home screen"?
+- CSP headers — is Content-Security-Policy set? Would inline event handlers (onclick, onerror) break if CSP is added?
