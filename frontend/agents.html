@@ -1640,7 +1640,7 @@
   <div class="warroom-canvas-wrap">
     <div class="warroom-canvas-label">Situation Room — Live Feed</div>
     <div class="canvas-container" id="canvasContainer">
-      <canvas id="warRoomCanvas" width="960" height="704" role="img" aria-label="Pixel art Situation Room with 6 AI agents working at desks and analyzing data. Click an agent to select them." tabindex="0"></canvas>
+      <canvas id="warRoomCanvas" width="960" height="704" role="img" aria-label="Situation Room pixel canvas. Arrow keys or WASD to move camera. Keys 1-6 to select agents. Click to select. Drag to pan." tabindex="0"></canvas>
       <!-- Placeholder until pixel engine loads -->
       <div class="canvas-placeholder" id="canvasPlaceholder">
         <div class="canvas-placeholder-icon">🐯</div>
@@ -1698,6 +1698,7 @@
       </div>
     </div>
   </div>
+  <p style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);text-align:center;margin:8px 0 0;">Arrow keys: move &middot; 1-6: select agent &middot; Click: select &middot; Drag: pan</p>
 
   <!-- Status bar -->
   <div class="warroom-status">

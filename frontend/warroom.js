@@ -1262,14 +1262,7 @@ function drawHUD() {
     ctx.fillText(label, hudX + 10, cy + 13);
   }
 
-  // Controls hint
-  ctx.globalAlpha = 0.5;
-  ctx.fillStyle = '#fff';
-  ctx.font = '8px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('Arrow keys: move  |  1-6: select agent  |  Click: select  |  Drag: pan', cvs.width / 2, cvs.height - 10);
-  ctx.textAlign = 'left';
-  ctx.globalAlpha = 1;
+  // Controls hint moved to DOM (DES-105)
 
   ctx.restore();
 }
