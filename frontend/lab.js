@@ -12428,7 +12428,7 @@ function exportCompsImage() {
     ctx.fillText(`${c.team || "FA"} · ${c.games || 0}G · ${c.ppg || 0} PPG`, padX + 52, cardY + 46);
 
     // Similarity score
-    const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : "#5c4a3d";
+    const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : (getComputedStyle(document.documentElement).getPropertyValue('--ink-medium').trim() || "#5c4a3d");
     ctx.fillStyle = simColor;
     ctx.font = "bold 28px 'Luckiest Guy', cursive";
     ctx.textAlign = "right";
