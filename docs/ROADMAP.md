@@ -79,20 +79,54 @@ The autonomous loop builds these from TICKETS.md while you focus on Twitter pres
 
 ---
 
-### PHASE 3: REDDIT SEEDING (April 16 - May 31)
+### PHASE 3: REDDIT INTEGRATION (April 16 - May 31)
 
-**Goal:** Build Reddit credibility and seed Razzle screenshots into the fantasy community. By the end of this phase, r/DynastyFF should have seen Razzle screenshots multiple times without knowing it's a coordinated effort.
+**Goal:** Don't just post ON Reddit. Become part of Reddit's infrastructure. The !razzle bot makes Razzle the tool that lives inside the community. Reddit account connection makes every user's experience personalized by their own dynasty history.
+
+#### 3A: Reddit Account + Credibility (April 16-30)
 
 | # | Task | Done When |
 |---|------|-----------|
-| 3-1 | Build posting history | 2+ months of genuine participation on r/DynastyFF and r/fantasyfootball. Helpful comments, analysis, trade advice. No product mentions. | Active, credible account |
-| 3-2 | Seed analysis posts (4-6) | Use Screener screenshots to post genuine analysis. "2026 rookie big board using combine + college data." "Dynasty buy-lows heading into camp." Watermark does the marketing. | 4-6 posts with visible watermark |
-| 3-3 | "I built a thing" post | When posting history is established. "I built a free fantasy football screener." Lab walkthrough with screenshots. Humble builder tone. | Post published with positive engagement |
-| 3-4 | Formula Store seeding | Create 5+ high-quality formulas (dynasty value composite, breakout score, buy-low indicator). Publish to store. Share in relevant threads. | Store has real, useful content |
-| 3-5 | Friends & family beta | Send razzle.lol to 10+ people who play fantasy. Watch them use it. Fix what they hit. | 10+ real humans have used it and given feedback |
-| 3-6 | "Coming soon" hype | Announce ESPN/Yahoo support coming soon. Post Bureau screenshots showing league odds, depth analysis. "Connect your Sleeper league and see this for your team." | Community is aware and interested |
+| 3-1 | Build posting history | 2+ months of genuine participation on r/DynastyFF and r/fantasyfootball. Helpful comments, analysis, trade advice. No product mentions. | Active, credible account with 30+ days age |
+| 3-2 | Seed analysis posts (4-6) | Use Screener screenshots to post genuine analysis. "2026 rookie big board using combine + college data." Watermark does the marketing. | 4-6 posts with visible watermark |
+| 3-3 | Friends & family beta | Send razzle.lol to 10+ people who play fantasy. Watch them use it. Fix what they hit. | 10+ real humans have used it and given feedback |
 
-**Exit criterion:** Reddit has seen Razzle. Screenshots are circulating. Multiple organic "what tool is that?" questions in comments. Friends & family feedback incorporated.
+#### 3B: !razzle Reddit Bot (May 1-15)
+
+The bot makes Razzle's data available inside Reddit threads. Someone types a command, the bot responds with real data from the Razzle API, every response links back to razzle.lol. The bot IS the distribution channel.
+
+| # | Task | Done When |
+|---|------|-----------|
+| 3-4 | Build Reddit bot (PRAW + Razzle API) | ~200 lines Python. Bot listens for mentions via PRAW, queries the existing /api/players endpoint, formats response as Reddit markdown table. | Bot responds to !razzle commands locally |
+| 3-5 | !razzle [player] command | `!razzle Bijan Robinson` returns a markdown table: PPR PPG, target share, snap %, age, rush yards, TDs. Footer: "Full profile at razzle.lol/player?id=XXX" | Bot returns accurate player data with site link |
+| 3-6 | !razzle compare [A] vs [B] command | `!razzle compare Breece Hall vs Bijan Robinson` returns side-by-side markdown table. Two API calls, formatted for Reddit. | Clean comparison table renders in Reddit comments |
+| 3-7 | !razzle prospect [name] command | `!razzle prospect Cam Ward` pulls from college_players and prospects tables. Combine data, college stats, draft projection. | Prospect data renders correctly |
+| 3-8 | !razzle breakouts command | `!razzle breakouts` returns top 5 breakout candidates from /api/breakouts endpoint. | List of breakout candidates with key stats |
+| 3-9 | Deploy bot | Run as persistent process on Render (second worker) or a cheap VPS. Message r/DynastyFF mods for approval. | Bot is live and responding in approved subreddits |
+| 3-10 | Monitor and iterate | Track: how often is the bot summoned, which commands are used most, what players are queried, click-through rate on razzle.lol links. | 1 week of usage data collected |
+
+**Virality math**: If the bot gets summoned 50 times/day and each response is seen by 100 people, that's 5,000 daily impressions with a razzle.lol link. At 1% click-through = 50 site visits/day from a bot that costs nothing to run.
+
+#### 3C: Reddit Account Connection (May 15-31)
+
+This is the second moat. Sleeper gives Razzle your roster. Reddit gives Razzle your INTENT. Together, the agents know what you own AND what you're thinking about.
+
+| # | Task | Done When |
+|---|------|-----------|
+| 3-11 | Reddit OAuth integration | User connects Reddit account via OAuth on razzle.lol. PRAW handles auth flow. Store Reddit username linked to Razzle account. | User can connect/disconnect Reddit from account settings |
+| 3-12 | Comment history analysis | Pull user's public comment history from fantasy subreddits. Claude (Sonnet) parses for: players discussed, league format mentioned, positions of interest, trade questions asked, tools complained about. | Analysis runs on connect, stores parsed intent profile |
+| 3-13 | Intent profile in Bureau | Connected Reddit user sees an "Intent Profile" card: "Based on your Reddit activity, you've been asking about selling Breece Hall, looking for RB depth, and considering the 1.02 pick." | Intent profile renders with accurate data from their actual Reddit posts |
+| 3-14 | Agent personalization | Agents reference Reddit intent in Situation Room. Bones: "You've been thinking about selling Hall for three weeks. Here's the play." Hawkeye: "You keep asking about breakout WRs — here are 3 your league is sleeping on." | Agent responses reference user's Reddit history naturally |
+| 3-15 | Bot-to-site bridge | When a user summons !razzle in a Reddit thread AND has connected their account, the bot response includes personalized context: "Based on your league, this player would be a good fit at your WR3 spot." | Bot gives personalized responses to connected users |
+
+**Why this is nuclear**: No other fantasy tool reads your Reddit activity. Nobody else knows you've been agonizing over a trade for two weeks. The agents don't just analyze your roster — they analyze your MINDSET. That's the level of personalization that makes someone say "this is worth $100/year."
+
+| # | Task | Done When |
+|---|------|-----------|
+| 3-16 | "I built a thing" post | When posting history is established AND the bot is live. "I built a free fantasy football screener — and a Reddit bot that pulls the data into your threads." Include bot demo + Lab screenshots. | Post published with positive engagement |
+| 3-17 | Formula Store seeding | Create 5+ formulas. Share in relevant threads. | Store has real content |
+
+**Exit criterion:** !razzle bot is live and being used in r/DynastyFF. Reddit account connection is functional. Users are getting personalized agent responses. Multiple organic "what bot is that?" questions in threads. The bot IS the growth channel.
 
 ---
 
