@@ -498,16 +498,67 @@ class SiteWalker:
             except Exception as e:
                 self.log("WARN", f"{page_name}#panel_{i}", f"Error: {str(e)[:80]}")
 
+    def compare_with_previous(self):
+        """Compare this walk with the most recent previous walk for trend tracking"""
+        prev_reports = sorted(REPORT_DIR.glob("walk-*.json"), reverse=True)
+        if len(prev_reports) < 1:
+            return None
+
+        # Load most recent previous walk
+        prev_path = prev_reports[0]
+        try:
+            with open(prev_path, encoding="utf-8") as f:
+                prev_findings = json.load(f)
+        except Exception:
+            return None
+
+        prev_fails = set(f"{f['page']}:{f['message']}" for f in prev_findings if f["level"] == "FAIL")
+        curr_fails = set(f"{f['page']}:{f['message']}" for f in self.findings if f["level"] == "FAIL")
+
+        fixed = prev_fails - curr_fails
+        new_breaks = curr_fails - prev_fails
+        persistent = prev_fails & curr_fails
+
+        return {
+            "previous_report": prev_path.name,
+            "previous_fails": len(prev_fails),
+            "current_fails": len(curr_fails),
+            "fixed_since_last": list(fixed)[:20],
+            "new_breaks": list(new_breaks)[:20],
+            "persistent_fails": len(persistent),
+        }
+
     def write_report(self):
-        """Write the full walk report"""
+        """Write the full walk report with trend comparison"""
         ts = datetime.now().strftime("%Y-%m-%d-%H%M")
         report_path = REPORT_DIR / f"walk-{ts}.md"
+
+        # Compare with previous
+        trend = self.compare_with_previous()
 
         lines = []
         lines.append(f"# Site Walk Report - {ts}")
         lines.append(f"")
         lines.append(f"**PASS**: {self.pass_count} | **FAIL**: {self.fail_count} | **WARN**: {self.warn_count}")
         lines.append(f"**Health**: {self.pass_count}/{self.pass_count + self.fail_count} checks passed ({100*self.pass_count/max(1,self.pass_count+self.fail_count):.0f}%)")
+
+        if trend:
+            delta = trend["previous_fails"] - trend["current_fails"]
+            direction = "IMPROVING" if delta > 0 else "REGRESSING" if delta < 0 else "UNCHANGED"
+            lines.append(f"")
+            lines.append(f"## TREND: {direction}")
+            lines.append(f"Previous walk: {trend['previous_fails']} failures | This walk: {trend['current_fails']} failures | Delta: {delta:+d}")
+            lines.append(f"Persistent failures (still broken): {trend['persistent_fails']}")
+            if trend["fixed_since_last"]:
+                lines.append(f"")
+                lines.append(f"### Fixed since last walk ({len(trend['fixed_since_last'])})")
+                for fix in trend["fixed_since_last"][:10]:
+                    lines.append(f"  [+] {fix}")
+            if trend["new_breaks"]:
+                lines.append(f"")
+                lines.append(f"### NEW breaks since last walk ({len(trend['new_breaks'])})")
+                for brk in trend["new_breaks"][:10]:
+                    lines.append(f"  [!] {brk}")
         lines.append(f"")
 
         # Summary of failures
