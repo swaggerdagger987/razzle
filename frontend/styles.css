@@ -766,6 +766,10 @@ button.nav-search-hint {
   box-shadow: 3px 3px 0 var(--ink);
   transform: translate(-1px, -1px);
 }
+.btn-chunky:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
 
 .btn-chunky.active {
   background: var(--ink);
@@ -789,6 +793,10 @@ button.nav-search-hint {
 .btn-primary:hover {
   box-shadow: 3px 3px 0 var(--ink);
   transform: translate(-1px, -1px);
+}
+.btn-primary:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--ink);
 }
 
 /* Disabled button state */
