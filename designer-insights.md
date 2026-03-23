@@ -63,3 +63,30 @@
 - Ship agent: DQ-026 (focus-visible) and DQ-028 (active states) can be done together — they're the same type of fix (add CSS rules) on related elements.
 
 **What I'd do differently next time**: Three cycles of code-only audit is reaching diminishing returns. The remaining issues are increasingly subtle (transition timing, z-index governance). Next cycle should prioritize getting the browse tool working — either by stripping CSP in dev mode or running the server on HTTPS locally. Visual QA would catch layout/spacing/animation issues that code audits cannot.
+
+### Cycle 4 — 2026-03-23
+
+**What I did**: First VISUAL QA cycle — got the headless browser working via local dev server (uvicorn on 127.0.0.1:8000), took 20+ screenshots across home, Lab, pricing, agents, about, tiers, breakouts, weekly, dashboard, trade values, and prompts pages. Checked both light and dark mode, desktop (1440x900) and mobile (375x812). Used 2 subagents for targeted code verification. Wrote 10 new tickets (DES-327 through DES-336).
+
+**Quality score**: 9/10 — this is the first cycle with real visual evidence. Every ticket is confirmed by screenshot AND code. The browse tool chain command (`echo '[...]' | $B chain`) was the breakthrough — individual commands lost state between calls, but chaining goto+wait+screenshot in a single pipe preserved navigation state.
+
+**What worked**:
+- Local dev server solved the live site 502 and headless CSP issues. `python -m uvicorn backend.server:app` on localhost just works.
+- Chain commands for the browse tool: `echo '[["goto","url"],["wait","--networkidle"],["viewport","1440x900"],["screenshot","file.png"]]' | $B chain` — this was the key pattern. Individual `$B goto` then `$B screenshot` lost the page between calls.
+- Scrolling to different page sections via `["js","window.scrollTo(0, Y)"]` in the chain let me capture every section of long pages.
+- Checking both desktop AND mobile caught issues invisible at desktop width (pricing trial banner, Lab toolbar, agents chips).
+
+**What didn't**:
+- Live site (razzle.lol) was intermittently 502 — only got 1 successful load out of ~6 attempts.
+- The browse tool restarts its server between calls, losing all navigation state. This wasted 10 minutes before I figured out the chain pattern.
+
+**Pattern spotted**: The Situation Room (agents.html) is the biggest single design violation on the entire site. DESIGN.md is emphatic that it's "always dark regardless of toggle" but only the pixel canvas container is dark — the hero section, agent bios, and nav bar are all on light sand. This is a P0 that reframes the entire page's identity.
+
+**Root cause found**: agents.html wraps only the warroom canvas in `.warroom-dark` (line 214) while the hero/bio section sits outside it. The fix is architectural — either wrap the entire page in forced dark context or set `data-theme="dark"` on `<html>` at page load. DES-327 + DES-328 together resolve this.
+
+**Suggestion for teammates**:
+- Ship agent: Fix DES-327 + DES-328 FIRST — they're the same root cause (agents.html not fully dark) and fixing them transforms the entire Situation Room experience. Set `data-theme="dark"` on `<html>` in a `<script>` at the top of agents.html and both issues resolve.
+- Ship agent: DES-332 (tier label rotation) is a 1-line CSS fix with maximum visual payoff — it's literally just `transform: rotate(-2deg)`.
+- Ship agent: DES-329 + DES-330 are mobile-specific — test at 375px viewport after fixing.
+
+**What I'd do differently next time**: Now that the browse tool works with chain commands, future cycles should use snapshot + annotated screenshots (-a -i flags) to document issues with visual overlay evidence. Also, responsive testing at tablet (768px) was skipped — should add that viewport.
