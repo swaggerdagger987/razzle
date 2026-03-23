@@ -4524,7 +4524,7 @@ function renderSavedViewsList() {
     const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
 
     return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
-      <div style="flex:1; min-width:0;" onclick="loadSavedView('${escapeJS(v.id)}')">
+      <div style="flex:1; min-width:0;" role="button" tabindex="0" aria-label="Load view: ${escapeAttr(v.name)}" onclick="loadSavedView('${escapeJS(v.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();loadSavedView('${escapeJS(v.id)}')}">
         <div style="font-family:var(--font-mono); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
