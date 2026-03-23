@@ -402,6 +402,56 @@ DES-187 (about.html) was the first dark mode zero-CSS finding. Cycle 27 adds lea
 - **Formula builder controls missing aria-label** (DES-205) — 3 controls (stat select, operator select, weight input) all unlabeled. WCAG 1.3.1 and 4.1.2 violation.
 - **No format-detection meta on 75 pages** (DES-206) — mobile Safari auto-links number patterns as phone numbers. Fantasy stat tables full of number patterns (238-1024-7) get blue telephone links.
 
+### Cycle 28 Findings: Cross-Page UX Gaps, Bureau Polish, URL State, Data Freshness
+
+- **Bureau tabs have no URL deeplink** (DES-287) — P1. `switchBureauTab()` toggles CSS classes but never updates the URL. Users can't share a link to a specific Bureau tab, can't refresh and return to their tab, can't use browser back/forward. This is the League Intel page — users expect to share "look at this Rivals analysis" links.
+- **Sleeper API errors show same message for all failure modes** (DES-288) — P2. Lines 2308-2309 have a ternary that returns identical strings on both branches. Timeout, network error, and server error all say "sleeper's servers are napping." Users can't tell if their username is wrong (fixable) or Sleeper is down (wait). Line 2149 correctly differentiates 404 — the other branches don't.
+- **Pro blurred preview makes CTA overlay hard to read** (DES-289) — P2. `filter:blur(3px); opacity:0.4` on locked content creates visual confusion. The blur looks like a rendering bug, not intentional gatekeeping. CTA text competes with semi-readable blurred text underneath. Better: show 1-2 rows of real unblurred data, then solid overlay with CTA.
+- **"No leagues this season" empty state suggests a bug** (DES-290) — P2. Line 2208: "while we figure this out" implies Razzle is broken. This is a normal state (user hasn't joined a league). No actionable buttons — just an inline link buried in a paragraph. Should suggest demo league and have proper CTAs.
+- **selectedPlayers not serialized to URL** (DES-291) — P2. User selects 4 RBs for comparison, clicks "Share URL" — recipient sees empty selection. `pinnedPlayers` IS serialized (line 3848) but `selectedPlayers` is not. The comparison workflow depends on this state.
+- **Lab modals don't return focus to trigger button on close** (DES-292) — P2. Watchlist, Tier Board, Saved Views overlays close via backdrop click but focus stays inside the hidden modal. Next Tab press jumps unpredictably. Home page hamburger menu correctly returns focus — Lab modals don't follow the same pattern.
+- **No preseason/offseason data freshness warning** (DES-293) — P3. Data freshness indicator shows "5s ago" (fetch time, not data currency). During offseason, users see fresh-looking data that hasn't changed in months. No badge for past-season data either.
+- **Bureau tabs may overflow at 375px mobile** (DES-294) — P2. 5 tabs need ~420px minimum. iPhone SE viewport = 375px. No `overflow-x: auto` or `flex-wrap` on the tab container. 768px media query reduces sizing but no sub-400px breakpoint exists.
+- **Hover card positioning triggers 3 forced reflows** (DES-295) — P3. Lines 2232-2243: reads offsetWidth/Height before display:block (gets 0), writes display:block, then forces another reflow for animation. Can cause flicker on budget Android phones during rapid hovering.
+- **Demo league shows "DynastyKing2024" and "2024 Season"** (DES-296) — P2. Current year is 2026. Demo is the Bureau's first impression for non-Sleeper users. Stale year makes the feature look abandoned.
+
+### Things confirmed GOOD in cycle 28:
+- Brand voice is solid throughout — zero "Loading..." text, all personality-driven loading/error/empty states
+- Zero exclamation marks in primary copy — consistent with "period over exclamation mark" voice rule
+- Error messages use `razzleError()` personality text across all panels
+- Sleeper 404 (user not found) correctly differentiated at line 2149 — good
+- `saveStateToURL()` serializes 25+ state fields including visual modes, pins, and column configs
+- Demo league has complete manager data with realistic names and stats
+- All standalone page links in footer are functional (pages still served)
+- Loading states use personality text throughout ("pulling film...", "checking the tape...")
+
+### Key Insight: The Bureau Is the Least-Polished Conversion Surface
+Cycle 28 reveals that league-intel.html has accumulated the most UX debt:
+- No URL state on tabs (DES-287) — can't share specific analyses
+- Undifferentiated errors (DES-288) — users can't self-fix
+- Confusing blur pattern (DES-289) — looks like a bug, not a feature gate
+- Empty state implies failure (DES-290) — trust-eroding copy
+- Stale demo data (DES-296) — looks unmaintained
+
+The Bureau is supposed to be the bridge from "cool free tool" to "I need this." Right now, the bridge has gaps. Each of these issues is a moment where a curious visitor decides "this isn't ready" and leaves.
+
+### Audit Dimension Evolution (updated)
+- Cycles 1-7: CSS consistency (borders, radius, shadows, colors, dark mode)
+- Cycle 8: Accessibility (ARIA, focus), SEO (h1, canonical), dark mode exports
+- Cycles 9-11: Deep accessibility (combobox, aria-live, canvas ARIA, tables)
+- Cycles 12-14: Conversion path, agent connective tissue, mobile UX
+- Cycles 15-16: Performance (memory leaks, lazy loading), semantics, brand
+- Cycles 17-18: Mobile touch targets, dark mode native controls, CSS governance
+- Cycles 19-20: Type scale violations, hover interactions, platform adaptation
+- Cycle 21: Conversion COPY — not just visual, but the words that sell
+- Cycle 22: Auth flow + onboarding friction — the funnel BETWEEN pages
+- Cycle 23: Content architecture, copy accuracy & handwritten type scale
+- Cycle 24: Performance UX, mobile platform, conversion infrastructure
+- Cycle 25: Distribution infrastructure — Twitter cards, sharing, OG images
+- Cycle 26: Conversion copy precision, agent territory, pricing UX
+- Cycle 27: Cross-page dark mode gaps, agents page conversion path, runtime safety
+- **Cycle 28: Bureau UX debt, URL state gaps, error differentiation, data freshness**
+
 ### What Matters Most for Conversion
 - **OG image** is seen by more people than the home page itself — it's the preview on every social share (DES-007, FIXED)
 - Home page scroll path must be flawless — every section builds the "this is polished" impression
