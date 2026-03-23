@@ -1,11 +1,11 @@
-# Razzle Go-To-Market Report — Cycle 14
+# Razzle Go-To-Market Report — Cycle 15
 
 **Generated**: 2026-03-23
-**Previous Cycle**: 2026-03-23 (Cycle 13)
+**Previous Cycle**: 2026-03-23 (Cycle 14)
 **Target**: 1,000 people paying ~$100/year = $100,000/year
 **Status**: Pre-launch (Twitter active since 2026-03-20, site live at razzle.lol, 17 tweets posted, 41 approved in queue through April 23, 100+ rejected, zero engagement data yet)
 
-**Cycle 14 thesis**: Cycle 13 established the Devvit dual-path strategy and elevated Discord to Rank #2. Cycle 14 stress-tests these assumptions with hard data. Three findings change the tactical plan: (1) **Discord bot discovery via top.gg is near-zero for fantasy football** — Dynasty Daddy's bot has 0 votes, 0 reviews, and no visible server count despite being live for 9+ months. Sleeper Link and Sleeper-FFL bots are equally invisible. Listing on top.gg is NOT a distribution channel — direct invite links in Reddit threads, Twitter, and Discord servers are the only viable path. (2) **Reddit Developer Funds 2026 exact payouts are modest** — $500 one-time for 500 Daily Qualified Engagers, $1,000 one-time for 250 Qualified Installs. Ecosystem validation, not revenue. (3) **Devvit trigger API fully confirmed** — CommentSubmit, CommentCreate, PostSubmit, and 7+ other event types are documented in the official API. The technical path is validated. Net assessment: the BOT STRATEGY is sound, but the DISCOVERY STRATEGY for Discord needs revision. Top.gg is a dead end. Direct server infiltration is the path.
+**Cycle 15 thesis**: Cycle 14 confirmed Devvit trigger API and exposed Discord top.gg as a dead end. Cycle 15 stress-tests the remaining unknowns around bot execution mechanics and the Sleeper account connection funnel. Three findings: (1) **Devvit app installation mechanics fully mapped** — moderators install via "+add to community" button in the App Directory, available on iOS/Android/Desktop (NOT old Reddit). Full mod permissions required. The directory has "hundreds of apps" per Reddit's own community blog. The installation flow is low-friction for mods who already use Devvit tools. (2) **FPLbot engagement data confirmed non-existent for 3rd consecutive cycle** — no public summon counts, impression data, or CTR exist anywhere (GitHub, Steemit, Hive, PeakD, r/FantasyPL). The 50-summons/day estimate in virality math is permanently unanchored. Must calibrate from Razzle's own data in Week 1-2 of bot deployment. (3) **League Legacy discovered as new competitor in league sync space** — imports from Sleeper/ESPN/Yahoo/Fleaflicker, dynasty history focus, positioned similarly to leaguemate.fyi but with broader platform support. Reinforces: Bureau differentiation MUST be behavioral, not historical. Net assessment: execution mechanics are fully mapped. No technical unknowns remain. Every remaining unknown requires building, not researching. **This is the definitive final research cycle.**
 
 ---
 
@@ -49,13 +49,15 @@ Razzle needs 1,000 paid users = **9% of Dynasty Nerds' paid base**, or **0.2-0.4
 
 ## Section 2: Competitive Landscape
 
-### CYCLE 14 UPDATE
+### CYCLE 15 UPDATE
 
-**No new fantasy football competitors discovered. Competitive landscape stable for 7th consecutive cycle.**
+**One new minor competitor discovered: League Legacy.** League Legacy (leaguelegacy.io) imports from Sleeper/ESPN/Yahoo/Fleaflicker and provides dynasty league history views. Positioned similarly to leaguemate.fyi but with broader platform support (4 platforms vs 1). Free tool, no AI, no behavioral profiling. **Impact: LOW.** This is the 3rd free league-history tool (after leaguemate.fyi and DD's free tier). Bureau League History uniqueness remains at 2/10. Bureau behavioral profiling uniqueness unchanged at 10/10.
 
-**CRITICAL DISCOVERY: Discord bot discovery is near-zero for fantasy football.** Dynasty Daddy's bot on top.gg has 0 votes, 0 reviews, and no visible server count — despite being live since June 2024 (9+ months). Sleeper Link: 0 votes, 1 review. Sleeper-FFL: 0 votes, 2 reviews. Only 1 dynasty-tagged bot exists on top.gg total. This means top.gg is NOT a viable discovery channel for fantasy football bots. The implication: Discord bot distribution must come from direct invite links shared in Reddit threads, Twitter posts, and existing Discord servers — not organic top.gg discovery.
+**Competitive landscape otherwise stable for 8th consecutive cycle.**
 
-**Zero NFL/dynasty Reddit bots exist. 14th consecutive cycle.**
+**Zero NFL/dynasty Reddit bots exist. 15th consecutive cycle.**
+
+**BotRank (botrank.net) discovered** — Reddit bot ranking platform using Wilson score confidence intervals between "Good bot"/"Bad bot" votes. Useful for tracking !razzle community reception post-launch. Not a competitor — a measurement tool.
 
 ### Pricing Comparison (unchanged from Cycle 11)
 
@@ -69,10 +71,11 @@ Razzle needs 1,000 paid users = **9% of Dynasty Nerds' paid base**, or **0.2-0.4
 | **FantasyFootball.ai** | 300 credits/wk | **$59.88/yr** Pro, **$95.88/yr** Plus | AI assistant, lineup, trade evals, DFS | ESPN, Yahoo, Sleeper | **Yes — league AI** | Unknown |
 | **Dynasty Dealmaker** | 5 tokens/wk | **$77.48/yr** ($1.49/wk) | AI trade generator, contender analysis | Sleeper only | **Yes — AI trades** | Unknown |
 | **leaguemate.fyi** | **Full access** | **Free** | WAR, projections, trade intel, draft grades | Sleeper only | No | Unknown |
+| **League Legacy** | **Full access** | **Free** | League history, franchise records, imports | Sleeper, ESPN, Yahoo, Fleaflicker | No | Unknown |
 | **Sourcetable** | Limited credits | **$240/yr** Pro ($20/mo) | AI spreadsheet, 40+ data science libs, multi-sport | ESPN, Yahoo, Sleeper, Fantrax, CBS | **Yes — AI analytics** | Unknown |
 | **Razzle** | Full Screener, Bureau summary | **$79.99/yr** (Pro), **$149.99/yr** (Elite) | 100+ stat screener, Bureau behavioral profiling, 6 AI agents, 70+ panels | Sleeper only | **Yes — behavioral AI** | **0** (pre-launch) |
 
-### What Razzle STILL has that NO competitor has (13th consecutive cycle)
+### What Razzle STILL has that NO competitor has (15th consecutive cycle)
 
 1. **Behavioral profiling** — Multi-season manager tendency analysis. Zero competitors. Footballguys editorial validates concept.
 2. **Pressure maps** — Desperation scoring (0-100). Unique.
@@ -102,15 +105,15 @@ Razzle needs 1,000 paid users = **9% of Dynasty Nerds' paid base**, or **0.2-0.4
 1. **Visual identity is distinctive.** Warm sand/espresso/comic-strip aesthetic. Zero competitors look like this.
 2. **Agent personas create content diversity.** Six characters = tweet variety. Creative quality 4-5/5.
 3. **"Forever free" Screener positioning.** No competitor matches this depth at $0.
-4. **"Other tools know your roster. Razzle knows your leaguemates."** 13th consecutive cycle confirmation.
+4. **"Other tools know your roster. Razzle knows your leaguemates."** 15th consecutive cycle confirmation.
 5. **Twitter pipeline is actively posting.** 17 tweets posted. 41 approved in queue through April 23.
 6. **Agent connective tissue design.** Agents woven across Lab/Bureau/Situation Room as personality layer.
 
 ### What's Still NOT Working
 
 1. **Zero engagement data.** 17 tweets posted. Still no impressions, retweets, or follower data.
-2. **No Reddit presence.** Zero posts, zero comments, zero karma. Account not yet created. **Day 3 of Week 1.**
-3. **One distribution channel (Twitter).** Three more planned (Devvit, PRAW, Discord) — none built yet.
+2. **No Reddit presence.** Zero posts, zero comments, zero karma. Account not yet created. **Day 4+ of Week 1.**
+3. **One distribution channel (Twitter).** Three more planned (Devvit, PRAW, Discord) — none built yet. **Every day without Reddit accounts delays the age clock.**
 4. **Bureau behavioral profiling not yet live.** The feature that IS the moat has not shipped.
 
 ---
@@ -122,7 +125,7 @@ Razzle needs 1,000 paid users = **9% of Dynasty Nerds' paid base**, or **0.2-0.4
 | **Screener (100+ columns)** | 7 | 5 | 9 | 2 | Growth engine. Forever free. |
 | **Custom Formulas** | 5 | 7 | 7 | 3 | Formula Store unique. |
 | **Bureau: League Odds** | 8 | 4 | 10 | 7 | DD has playoff sim. |
-| **Bureau: Manager Profiles** | 7 | **10** | 8 | 7 | **THE MOAT.** 13th cycle. Zero competitors. |
+| **Bureau: Manager Profiles** | 7 | **10** | 8 | 7 | **THE MOAT.** 15th cycle. Zero competitors. |
 | **Bureau: Trade Finder** | 8 | 4 | 7 | 6 | Multiple competitors. |
 | **Bureau: Pressure Map** | 5 | **10** | 8 | 6 | Unique. Zero competitors. |
 | **Bureau: League History** | 6 | 2 | 6 | 2 | leaguemate.fyi does this free. |
@@ -130,13 +133,15 @@ Razzle needs 1,000 paid users = **9% of Dynasty Nerds' paid base**, or **0.2-0.4
 | **Agent Personas** | 4 | 10 | 6 | 3 | Brand glue. Twitter content value. |
 | **Dynasty Rankings** | 8 | 3 | 5 | 4 | Commodity. |
 | **PNG Export + Watermark** | 6 | 6 | 10 | 1 | Growth tool. Critical to flywheel. |
-| **Reddit Bot (!razzle)** | 7 | **9** | N/A | 0 | **No dynasty/NFL Reddit bot exists. FPLbot (736K-member r/FantasyPL) proves model. Devvit trigger API confirmed. 14th cycle open lane.** |
+| **Reddit Bot (!razzle)** | 7 | **9** | N/A | 0 | **No dynasty/NFL Reddit bot exists. FPLbot (736K-member r/FantasyPL) proves model. Devvit trigger API confirmed. Devvit install mechanics mapped. 15th cycle open lane.** |
 | **Fantasy Wrapped (proposed)** | 9 | 3 | **10** | 5 | DD proved this. Razzle adds behavioral angle. |
 | **Discord Bot (proposed)** | 6 | 3 | N/A | 0 | DD bot has near-zero discovery on top.gg (0 votes, 9+ months). Direct distribution required. |
 
-### PMF Changes — Cycle 14
+### PMF Changes — Cycle 15
 
-**Discord Bot notes field updated.** DD bot's near-zero top.gg traction (0 votes, 0 reviews in 9+ months) means organic discovery through bot listing platforms does NOT work for fantasy football. This doesn't reduce the bot's value as a distribution channel — it means the discovery must come from direct invite links in Reddit threads, Twitter posts, and fantasy Discord servers, not from top.gg browse traffic. The bot IS the distribution, but the bot itself needs distribution.
+**Reddit Bot notes updated.** Devvit install mechanics now fully mapped: mods use "+add to community" in the App Directory (iOS/Android/Desktop, NOT old Reddit). Full mod permissions required. This confirms the mod outreach strategy is the only gate — no technical barriers remain. FPLbot engagement data confirmed non-existent for 3rd cycle — virality math estimates are permanently directional.
+
+**Bureau: League History uniqueness reconfirmed at 2/10.** League Legacy (leaguelegacy.io) is the 3rd free league-history tool, supporting 4 platforms (Sleeper/ESPN/Yahoo/Fleaflicker). Bureau non-behavioral features are increasingly commoditized. Behavioral profiling remains the only defensible moat at 10/10.
 
 ---
 
@@ -724,9 +729,4 @@ Timeline — unchanged from Cycle 12
     - Devvit app installed by mods (Week 2-3 — 2-4 weeks participation first)
     - PRAW bot deployed (Week 2-4 — upon API approval)
     - Reddit account warm-up complete (Week 5)
-    - Behavioral profiling reveal (Week 7) — PMF validation
-    - NFL Draft (April 24) — peak content window
-    - Tweet queue refill (by April 14)
-    - Fantasy Wrapped ships (Jan 2027) — first viral opportunity
-    - NFL season starts (Sep 2026) — peak engagement window
-```
+    - Behavioral profiling reveal (Week 7) — PMF vali

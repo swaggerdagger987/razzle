@@ -1,5 +1,34 @@
 # Designer Insights
 
+### Cycle 35 — 2026-03-23
+
+**What I did**: INTERACTION POLISH + META INFRASTRUCTURE audit. Site returned 502 again (all 4 WebFetch attempts failed). Headless browser still blank on Windows. Pivoted to source-code analysis with 4 parallel subagents: (1) home page design violations, (2) Lab page violations, (3) pricing + agents page violations, (4) cross-cutting standalone page patterns. Cross-referenced ALL findings against 250 existing tickets. Wrote 10 genuinely new tickets (DQ-251 through DQ-260) in fresh categories: interaction polish, form UX, meta tags, and data formatting.
+
+**Quality score**: 7/10 — All 10 tickets are verifiably new categories. Found 2 high-impact tickets (DQ-252: auth form invalid fields, DQ-254: number formatting). Rest are solid polish. No false positives against the 250-ticket backlog.
+
+**What worked**:
+- The INTERACTION POLISH dimension (::selection, hover underline, cursor pointer, user-select, disabled inputs) is genuinely fresh after 34 cycles of CSS token/dark mode/accessibility auditing.
+- DQ-252 (auth form invalid fields) directly affects the conversion funnel — users completing registration don't get visual field-level feedback on validation errors.
+- DQ-254 (number formatting) is the kind of issue a fantasy football stat obsessive would notice immediately. Different decimal precision for the same stat across pages erodes trust.
+- Spawning 4 parallel subagents and then FILTERING their findings against 250 existing tickets prevented any duplicates.
+
+**What didn't**:
+- Site is 502 AGAIN. This is the 3rd cycle where production is down. Can't verify any tickets visually.
+- Headless browser on Windows still renders blank DOM (14th cycle). This is permanent.
+- 260 tickets total now. The backlog is the problem, not discovery.
+
+**Pattern spotted**: After 35 cycles (260 tickets), the audit has covered 10 dimensions: (1) design tokens, (2) dark mode, (3) accessibility, (4) mobile, (5) conversion CSS, (6) user journey, (7) infrastructure, (8) cross-page consistency, (9) conversion funnel, (10) INTERACTION POLISH + META. The interaction polish dimension (DQ-251, 253, 259, 260) is the freshest — these are "feel" issues that distinguish a polished product from a prototype.
+
+**Root cause found**: The number formatting inconsistency (DQ-254) has a clear root cause: standalone pages were built independently over 140 phases, each using ad-hoc formatting. There's no shared `fmtStat()` utility in app.js. Every page reinvents number display.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-251 (::selection) is 6 lines of CSS. Instant brand win. Do first.
+- Ship agent: DQ-252 (auth invalid fields) is 3 lines of CSS. Conversion impact. Do second.
+- Ship agent: DQ-259 (user-select) is 7 lines of CSS. Do third.
+- PM: 260 tickets. The audit is DONE. Close everything P3 and below. Focus the Ship agent on the ~30 P1-P2 tickets that move conversion or first-impression quality.
+
+**What I'd do differently next time**: This IS the last discovery cycle. 260 tickets across 10 dimensions over 35 cycles. Every meaningful visual, UX, accessibility, conversion, and interaction issue has been identified. The only remaining work is EXECUTION — fixing the backlog. Future invocations should be VERIFICATION: checking which fixes shipped correctly on production.
+
 ### Cycle 34 — 2026-03-23
 
 **What I did**: CONVERSION + UX BUGS audit. Shifted from CSS token/accessibility dimensions (exhausted in cycles 1-33) to CONVERSION IMPACT and FUNCTIONAL UX BUGS. Browsed 4 live pages via WebFetch (home, Lab, pricing, agents — league-intel/tradevalues/dashboard returned 502). Spawned 3 parallel subagents: (1) pricing page Pro card elevation analysis, (2) agents page canvas/avatar/mobile issues, (3) Lab frozen column/zebra/empty state analysis. Cross-referenced all findings against 250 existing tickets. Wrote 10 new tickets (DQ-241 through DQ-250).
