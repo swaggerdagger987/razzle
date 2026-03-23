@@ -10881,16 +10881,16 @@ function _taUpdateVerdict() {
   let verdict, verdictColor, verdictBg;
   if (pctDiff <= 10) {
     verdict = "FAIR";
-    verdictColor = "#c5a000";
-    verdictBg = "#f5eacc";
+    verdictColor = "var(--yellow)";
+    verdictBg = "var(--yellow-light)";
   } else if (diff > 0) {
     verdict = "WIN";
-    verdictColor = "#2ec4b6";
-    verdictBg = "#d9efec";
+    verdictColor = "var(--green)";
+    verdictBg = "var(--green-light)";
   } else {
     verdict = "LOSS";
-    verdictColor = "#e63946";
-    verdictBg = "#f2d5d8";
+    verdictColor = "var(--red)";
+    verdictBg = "var(--red-light)";
   }
 
   const pctLabel = pctDiff <= 10 ? "Even value" : (diff > 0 ? "+" + pctDiff + "% in your favor" : "-" + pctDiff + "% against you");
@@ -11124,19 +11124,20 @@ function exportTradeAnalyzerPNG() {
   const diff = getTotal - giveTotal;
   const avg = (giveTotal + getTotal) / 2;
   const pctDiff = avg > 0 ? Math.round(Math.abs(diff) / avg * 100) : 0;
+  var _cs = getComputedStyle(document.documentElement);
   let verdict, verdictColor, verdictBg;
   if (pctDiff <= 10) {
     verdict = "FAIR";
-    verdictColor = "#c5a000";
-    verdictBg = "#f5eacc";
+    verdictColor = _cs.getPropertyValue('--yellow').trim();
+    verdictBg = _cs.getPropertyValue('--yellow-light').trim();
   } else if (diff > 0) {
     verdict = "WIN";
-    verdictColor = "#2ec4b6";
-    verdictBg = "#d9efec";
+    verdictColor = _cs.getPropertyValue('--green').trim();
+    verdictBg = _cs.getPropertyValue('--green-light').trim();
   } else {
     verdict = "LOSS";
-    verdictColor = "#e63946";
-    verdictBg = "#f2d5d8";
+    verdictColor = _cs.getPropertyValue('--red').trim();
+    verdictBg = _cs.getPropertyValue('--red-light').trim();
   }
 
   ctx.save();
