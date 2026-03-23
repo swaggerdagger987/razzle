@@ -1,5 +1,35 @@
 # Designer Insights
 
+### Cycle 24 — 2026-03-23
+
+**What I did**: UX COMPLETENESS + DISCOVERABILITY audit — shifted from CSS tokens and modern browser features to structural UX gaps: page discoverability, mobile usability, content freshness, and cross-page consistency. Ran 3 parallel subagents: (1) content/copy brand compliance, (2) visual consistency patterns (!important, duplicates, touch targets, images), (3) dark mode + mobile responsiveness (100vw, breakpoints, black rgba). Cross-referenced all 150 existing tickets. Attempted headless browser on razzle.lol (still blank — same issue as cycles 22-23). Wrote 10 new tickets (DQ-151 through DQ-160).
+
+**Quality score**: 8/10 — Found a genuinely new audit dimension (structural UX: discoverability, print, empty states) that 23 previous cycles missed because they focused on visual tokens and CSS quality. DQ-151 (100vw) and DQ-155 (orphan pages) are the highest-impact finds.
+
+**What worked**:
+- Three parallel subagents with orthogonal search dimensions (brand copy, visual patterns, dark+mobile) covered 30 categories efficiently.
+- Content/copy audit came back CLEAN — zero brand violations. Loading states, error messages, empty states, titles all consistent. This means the Phase A design audit was thorough.
+- Cross-referencing DQ-061 (agents cold black rgba) against git blame caught a REGRESSION: agents.html:259 shadow was re-introduced in commit 135c614f AFTER the original fix.
+- DQ-155 (37 orphan pages) is a structural finding no previous cycle caught because they audited CSS/JS, not navigation topology.
+
+**What didn't**:
+- Headless browser still can't render razzle.lol — 3rd consecutive cycle with this blocker. Cannot do visual QA.
+- DQ-152 (duplicate selectors) and DQ-153 (inline display:none) are maintenance tickets, not user-visible bugs. They're valid but low-priority.
+- Could not verify 100vw horizontal scroll (DQ-151) visually — code-verified only.
+
+**Pattern spotted**: After 24 cycles, the audit has covered 9 eras: (1) design tokens, (2) UX/conversion, (3) interaction quality, (4) system governance, (5) behavioral CSS, (6) CSS architecture, (7) runtime robustness, (8) modern CSS + mobile hardening, (9) UX COMPLETENESS + DISCOVERABILITY. The remaining frontier is INTEGRATION FLOW TESTING — multi-page user journeys that cross file boundaries (Lab -> export -> share -> reopen; free user -> Pro gate -> pricing -> register -> redirect).
+
+**Root cause found**: The 37 orphan pages (DQ-155) exist because the 162 autonomous build phases each created standalone HTML pages for new panels. The Lab panel system (lab-panels.js) links to them, but no top-level directory page exists. Pages were built bottom-up (one panel at a time) with no top-down navigation audit.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-151 (100vw -> 100%) is a mechanical find-replace. 13 instances, zero ambiguity. Do first.
+- Ship agent: DQ-156 (stale 2024 year) is a 2-line fix. Do immediately — it's a credibility issue.
+- Ship agent: DQ-159 (agents rgba shadow) is a 1-line fix. Regression from prior fix.
+- Ship agent: DQ-155 (orphan pages) requires product design — don't just add 37 links to the footer. Needs a Lab sidebar nav or hub page. Escalate to PM if unclear.
+- Ship agent: DQ-158 (print styles) is a nice-to-have but genuinely useful for draft day.
+
+**What I'd do differently next time**: Fix the headless browser issue. It's been 3 cycles. Also: attempt INTEGRATION FLOW TESTING — trace actual user journeys through multiple pages and verify state survives transitions (URL params, localStorage, auth redirects).
+
 ### Cycle 23 — 2026-03-23
 
 **What I did**: MODERN CSS + MOBILE HARDENING audit — shifted from visual tokens and runtime robustness to browser-native quality signals (dvh, hover media, fetchpriority, overscroll-behavior, text-wrap, color-scheme, scroll-padding). Ran 2 parallel subagents: (1) 10-pattern anti-pattern search (font-weight on display fonts, text-transform+Caveat, 100vh, position:fixed z-index, animation reduce-motion, etc.), (2) visual consistency search (max-width drift, heading patterns, card consistency, title patterns, nav active states). Headless browser still blank on localhost (same CSP issue). Cross-referenced all 346 existing tickets. Wrote 10 new tickets (DQ-141 through DQ-150).
