@@ -1546,7 +1546,8 @@ function renderTableHead() {
     html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}><span class="pin-icon${pinCount ? ' pin-active' : ''}"></span>${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
   }
   html += '<th scope="col" class="col-rank" title="Overall rank by current sort">#</th>';
-  html += `<th scope="col" class="col-player" onclick="sortBy('${nameKey}', event)">Player`;
+  const playerAriaSort = (state.sortKey === "full_name" || state.sortKey === "player_name") ? (state.sortDir === "asc" ? "ascending" : "descending") : (state.sortKey2 === "full_name" || state.sortKey2 === "player_name") ? (state.sortDir2 === "asc" ? "ascending" : "descending") : "none";
+  html += `<th scope="col" class="col-player" aria-sort="${playerAriaSort}" onclick="sortBy('${nameKey}', event)">Player`;
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
     html += state.sortDir === "asc" ? " &#9650;" : " &#9660;";
   } else if (state.sortKey2 === "full_name" || state.sortKey2 === "player_name") {
@@ -1595,7 +1596,8 @@ function renderTableHead() {
     } else if (col.isNotes) {
       html += `<th scope="col"${tip} data-col="${key}"${dragAttr} style="${cwStyle || 'width:120px; min-width:80px;'}">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     } else {
-      html += `<th scope="col" class="${cls}"${tip} data-col="${key}"${dragAttr} style="${cwStyle}" tabindex="0" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}<div class="col-resize-handle" data-col="${key}"></div></th>`;
+      const ariaSort = state.sortKey === key ? (state.sortDir === "asc" ? "ascending" : "descending") : state.sortKey2 === key ? (state.sortDir2 === "asc" ? "ascending" : "descending") : "none";
+      html += `<th scope="col" class="${cls}"${tip} data-col="${key}"${dragAttr} style="${cwStyle}" tabindex="0" aria-sort="${ariaSort}" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     }
   }
 
