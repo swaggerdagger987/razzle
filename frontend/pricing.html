@@ -304,10 +304,10 @@
   <div class="promo-section">
     <div class="promo-row">
       <input type="text" id="promoCodeInput" placeholder="promo code" autocomplete="off" spellcheck="false"
-        oninput="clearPromoFeedback()" onkeydown="if(event.key==='Enter') validatePromoCode()">
+        aria-describedby="promoCodeFeedback" oninput="clearPromoFeedback()" onkeydown="if(event.key==='Enter') validatePromoCode()">
       <button class="btn-chunky" style="font-size:12px; padding:8px 14px;" onclick="validatePromoCode()">Apply</button>
     </div>
-    <div class="promo-feedback" id="promoCodeFeedback"></div>
+    <div class="promo-feedback" id="promoCodeFeedback" role="alert"></div>
   </div>
 
   <!-- Feature comparison matrix -->

@@ -1963,10 +1963,10 @@
       <h2>Connect Your Sleeper</h2>
       <p>enter your Sleeper username to see your leagues</p>
       <div class="connect-form">
-        <input type="text" class="input-chunky" id="sleeperUsername" placeholder="sleeper username" aria-label="Sleeper username" onkeydown="if(event.key==='Enter'){event.preventDefault();connectSleeper();}">
+        <input type="text" class="input-chunky" id="sleeperUsername" placeholder="sleeper username" aria-label="Sleeper username" aria-describedby="connectError" onkeydown="if(event.key==='Enter'){event.preventDefault();connectSleeper();}">
         <button class="btn-primary" id="connectBtn" onclick="connectSleeper()">Connect</button>
       </div>
-      <div class="connect-error" id="connectError"></div>
+      <div class="connect-error" id="connectError" role="alert"></div>
       <div id="connectWarning" style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-top:8px;">stored locally in your browser — sign up to save</div>
       <div style="margin-top:20px;border-top:2px dashed var(--ink-faint);padding-top:16px;">
         <div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin-bottom:8px;">Don't use Sleeper?</div>
@@ -2099,7 +2099,9 @@ async function connectSleeper() {
 
   var errorEl = document.getElementById("connectError");
   var btn = document.getElementById("connectBtn");
+  var usernameInput = document.getElementById("sleeperUsername");
   errorEl.textContent = "";
+  usernameInput.removeAttribute("aria-invalid");
 
   // Check if account is locked to a different Sleeper username
   var razzleUser = null;
@@ -2107,6 +2109,7 @@ async function connectSleeper() {
   if (razzleUser && razzleUser.sleeper_locked && razzleUser.sleeper_username &&
       razzleUser.sleeper_username.toLowerCase() !== username.toLowerCase()) {
     errorEl.textContent = "Your account is linked to " + razzleUser.sleeper_username + ". One Sleeper ID per account keeps the free trial fair for everyone.";
+    usernameInput.setAttribute("aria-invalid", "true");
     return;
   }
 
@@ -2138,6 +2141,7 @@ async function connectSleeper() {
     } else {
       errorEl.textContent = "sleeper's servers are napping. try again in a minute.";
     }
+    usernameInput.setAttribute("aria-invalid", "true");
     btn.disabled = false;
     btn.textContent = "Connect";
     btn.style.fontFamily = "";

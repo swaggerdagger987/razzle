@@ -752,16 +752,16 @@ function _injectAuthModal() {
         '<button class="auth-tab" data-tab="register" onclick="switchAuthTab(\'register\')">Register</button>' +
       '</div>' +
       '<form id="authLoginForm" class="auth-form" onsubmit="handleLogin(event)">' +
-        '<input type="email" id="authLoginEmail" placeholder="Email" required autocomplete="email" aria-label="Email address">' +
-        '<input type="password" id="authLoginPassword" placeholder="Password" required autocomplete="current-password" aria-label="Password">' +
-        '<div id="authLoginError" class="auth-error"></div>' +
+        '<input type="email" id="authLoginEmail" placeholder="Email" required autocomplete="email" aria-label="Email address" aria-describedby="authLoginError">' +
+        '<input type="password" id="authLoginPassword" placeholder="Password" required autocomplete="current-password" aria-label="Password" aria-describedby="authLoginError">' +
+        '<div id="authLoginError" class="auth-error" role="alert"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Sign In</button>' +
       '</form>' +
       '<form id="authRegisterForm" class="auth-form" style="display:none" onsubmit="handleRegister(event)">' +
-        '<input type="email" id="authRegisterEmail" placeholder="Email" required autocomplete="email" aria-label="Email address">' +
-        '<input type="password" id="authRegisterPassword" placeholder="Password (8+ chars)" required minlength="8" autocomplete="new-password" aria-label="Password (8 characters minimum)">' +
-        '<input type="password" id="authRegisterConfirm" placeholder="Confirm password" required minlength="8" autocomplete="new-password" aria-label="Confirm password">' +
-        '<div id="authRegisterError" class="auth-error"></div>' +
+        '<input type="email" id="authRegisterEmail" placeholder="Email" required autocomplete="email" aria-label="Email address" aria-describedby="authRegisterError">' +
+        '<input type="password" id="authRegisterPassword" placeholder="Password (8+ chars)" required minlength="8" autocomplete="new-password" aria-label="Password (8 characters minimum)" aria-describedby="authRegisterError">' +
+        '<input type="password" id="authRegisterConfirm" placeholder="Confirm password" required minlength="8" autocomplete="new-password" aria-label="Confirm password" aria-describedby="authRegisterError">' +
+        '<div id="authRegisterError" class="auth-error" role="alert"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Create Account</button>' +
       '</form>' +
     '</div>';
@@ -866,13 +866,15 @@ async function handleLogin(e) {
   var password = document.getElementById("authLoginPassword").value;
   var errEl = document.getElementById("authLoginError");
   errEl.textContent = "";
+  document.getElementById("authLoginEmail").removeAttribute("aria-invalid");
+  document.getElementById("authLoginPassword").removeAttribute("aria-invalid");
   try {
     var resp = await fetch(API_BASE + "/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password })
     });
-    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "fumbled the login. check your credentials."; } catch(_) { errEl.textContent = "fumbled the login. try again."; } return; }
+    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "fumbled the login. check your credentials."; } catch(_) { errEl.textContent = "fumbled the login. try again."; } document.getElementById("authLoginEmail").setAttribute("aria-invalid","true"); document.getElementById("authLoginPassword").setAttribute("aria-invalid","true"); return; }
     var data = await resp.json();
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
@@ -882,6 +884,7 @@ async function handleLogin(e) {
     _resumePendingCheckout();
   } catch (err) {
     errEl.textContent = "network fumble. try again.";
+    document.getElementById("authLoginEmail").setAttribute("aria-invalid","true");
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = origText; }
   }
@@ -897,17 +900,18 @@ async function handleRegister(e) {
   var confirm = document.getElementById("authRegisterConfirm").value;
   var errEl = document.getElementById("authRegisterError");
   errEl.textContent = "";
-  if (password !== confirm) { errEl.textContent = "Passwords don't match"; if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
-  if (password.length < 8) { errEl.textContent = "Password must be at least 8 characters"; if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
-  if (!/[a-zA-Z]/.test(password)) { errEl.textContent = "Password must contain at least one letter"; if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
-  if (!/[0-9]/.test(password)) { errEl.textContent = "Password must contain at least one number"; if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
+  ["authRegisterEmail","authRegisterPassword","authRegisterConfirm"].forEach(function(id){document.getElementById(id).removeAttribute("aria-invalid");});
+  if (password !== confirm) { errEl.textContent = "Passwords don't match"; document.getElementById("authRegisterPassword").setAttribute("aria-invalid","true"); document.getElementById("authRegisterConfirm").setAttribute("aria-invalid","true"); if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
+  if (password.length < 8) { errEl.textContent = "Password must be at least 8 characters"; document.getElementById("authRegisterPassword").setAttribute("aria-invalid","true"); if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
+  if (!/[a-zA-Z]/.test(password)) { errEl.textContent = "Password must contain at least one letter"; document.getElementById("authRegisterPassword").setAttribute("aria-invalid","true"); if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
+  if (!/[0-9]/.test(password)) { errEl.textContent = "Password must contain at least one number"; document.getElementById("authRegisterPassword").setAttribute("aria-invalid","true"); if (btn) { btn.disabled = false; btn.textContent = origText; } return; }
   try {
     var resp = await fetch(API_BASE + "/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password })
     });
-    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "couldn't get you signed up. try again."; } catch(_) { errEl.textContent = "couldn't get you signed up. try again."; } return; }
+    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "couldn't get you signed up. try again."; } catch(_) { errEl.textContent = "couldn't get you signed up. try again."; } document.getElementById("authRegisterEmail").setAttribute("aria-invalid","true"); return; }
     var data = await resp.json();
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
@@ -917,6 +921,7 @@ async function handleRegister(e) {
     _resumePendingCheckout();
   } catch (err) {
     errEl.textContent = "network fumble. try again.";
+    document.getElementById("authRegisterEmail").setAttribute("aria-invalid","true");
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = origText; }
   }
