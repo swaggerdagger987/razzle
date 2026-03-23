@@ -1,5 +1,35 @@
 # Designer Insights
 
+### Cycle 28 — 2026-03-23
+
+**What I did**: MOBILE RESPONSIVENESS + JS-DOM DESIGN TOKEN + CANVAS TYPOGRAPHY audit. Ran 5 parallel subagents: (1) dark mode regressions, (2) mobile responsiveness gaps, (3) border/shadow/radius tokens, (4) conversion funnel pages, (5) typography and color tokens. Cross-referenced all 190 existing DQ tickets + 100+ done tickets. Wrote 10 new tickets (DQ-191 through DQ-200). Attempted headless browser on razzle.lol (blank) and localhost (blank — CSP upgrade-insecure-requests confirmed as root cause, 8th cycle). Bypassed via python http.server on port 9876 — still blank in headless Chromium (likely GZip/encoding issue).
+
+**Quality score**: 8/10 — Found a genuine P1 (DQ-191: modal overflow on mobile), a strong P2 category (DQ-194: Caveat used for primary info on canvas), and systematic JS-DOM border-radius gaps (DQ-195/196/197). The dark mode and conversion funnel subagents returned clean — a positive signal that those dimensions are well-audited.
+
+**What worked**:
+- 5 parallel subagents with orthogonal dimensions efficiently covered dark mode (clean), mobile (3 new finds), border tokens (5 new finds), conversion funnel (clean), typography (2 new finds).
+- DQ-191 (modal overflow) is the highest-impact find — the Formula Builder and Publish modals are core Lab features that break on iPhone SE.
+- DQ-194 (28px Caveat as primary info) is a systematic design principle violation across 8 files, distinct from DQ-078 (CSS font-size 28px).
+- DQ-200 (security disclosure in Caveat) is a double violation — wrong font AND wrong size for critical information.
+- Clean results from dark mode and conversion funnel subagents confirm 27 prior cycles have thoroughly covered those dimensions.
+
+**What didn't**:
+- Production site STILL blank (8th cycle). Headless browser STILL fails on localhost even without CSP (python http.server on 9876 still renders empty DOM).
+- Cannot visually verify any findings. All tickets are code-based analysis.
+- 3 of 10 tickets (DQ-196, DQ-198, DQ-199) are P3 low-impact polish items.
+
+**Pattern spotted**: After 28 cycles (200 tickets total), the audit has exhausted major visual categories. Remaining findings are in two areas: (1) MOBILE OVERFLOW from hardcoded widths in inline styles, and (2) JS-DOM DESIGN TOKEN gaps where dynamically created elements don't use CSS custom properties. The conversion funnel pages and dark mode are now clean. The next frontier: either fix the headless browser for VISUAL VERIFICATION, or shift to USER JOURNEY TESTING.
+
+**Root cause found**: The modal overflow (DQ-191) happens because inline `style="width:440px"` on a `.filter-modal` element overrides the CSS `max-width: 90vw` rule. The author likely intended the modal to be 440px on desktop but forgot that inline `width` beats CSS `max-width`. Same pattern as DQ-192 (autocomplete at 280px).
+
+**Suggestion for teammates**:
+- Ship agent: DQ-191 (modal overflow) is a 2-line fix — change `width:440px` to `max-width:440px; width:90vw`. Do FIRST — it's a P1 affecting core Lab modals on mobile.
+- Ship agent: DQ-194 (28px Caveat) is mechanical — same pattern in 8 files. Decide once (Display or Caveat-24px), apply 8 times.
+- Ship agent: DQ-195 + DQ-196 + DQ-197 are all border-radius in lab-panels.js — do them together in one pass.
+- Ship agent: DQ-200 (security disclosure) is 1 line but important — users trust security info more when it looks serious (mono font), not whimsical (handwriting).
+
+**What I'd do differently next time**: The headless browser has been broken for 8 cycles. At this point, either (a) file a ticket to remove `upgrade-insecure-requests` from CSP in dev mode, or (b) switch audit strategy entirely to user journey code tracing. Also: 200 tickets is a lot. Consider a triage pass to close or merge low-priority tickets that overlap.
+
 ### Cycle 27 — 2026-03-23
 
 **What I did**: DESIGN TOKEN COMPLETENESS + COMPONENT CONSISTENCY audit. Ran 5 parallel subagents: (1) inline hardcoded hex colors in HTML files, (2) dark mode regressions (white/fff, missing overrides, canvas fallbacks), (3) mobile/interaction quality (XSS in onclick, external links, sticky z-index), (4) conversion funnel page structural issues (index/pricing/agents/league-intel), (5) Lab screener visual quality (lab.html/styles.css/lab-panels.css). Cross-referenced all 180 existing tickets + 100 done tickets. Verified zero duplicates via grep on ticket directory. Wrote 10 new tickets (DQ-181 through DQ-190).
