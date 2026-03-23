@@ -1,4 +1,4 @@
-## Designer Insights (updated ticket DES-066)
+## Designer Insights (updated ticket DES-076)
 
 ### Patterns Found
 - Home page layout is mostly polished — chunky borders, correct colors, proper font usage
@@ -15,8 +15,8 @@
 - No "Loading..." text found — all loading states use personality text (pulling film, etc.) — good
 - Auth modal is well-styled structurally — proper chunky borders, dark mode CSS var usage, accessible focus states — but has orphaned numerical values (8px shadow, 16px radius)
 - Agent SVG icons all exist at correct paths — no missing assets
-- **Dark mode has a systemic `color: white` problem** — 9+ selectors in styles.css (DES-017 to DES-020, now fixed) PLUS 96 instances in lab-panels.css (DES-032) PLUS 121 instances in 69 HTML files (DES-042) = **217 total**
-- CSS variables for dark mode are correctly DEFINED — the gap is components not USING them
+- **Dark mode has a systemic `color: white` problem** — 9+ selectors in styles.css (DES-017 to DES-020, now fixed) PLUS 96 instances in lab-panels.css (DES-032) PLUS 121 instances in 69 HTML files (DES-042) = **217 total — ALL NOW FIXED**
+- CSS variables for dark mode are correctly DEFINED — the gap was components not USING them
 - No gradients, no cold grays, no blue-black ink anywhere — good discipline on banned patterns
 - Position colors are 100% correct across all files — QB=blue, RB=teal, WR=terracotta, TE=purple
 - Lab sidebar mobile behavior is correct (translateX hide at 768px) — one false alarm from code review
@@ -32,14 +32,25 @@
 - **--text-on-accent contrast is acceptable** — verified both modes
 
 ### Cycle 6 Findings: The Deep Inline Style Sweep
-- **lab.js has 27 sub-minimum border-radius in inline styles** (DES-057) — this is the JS equivalent of what DES-047 fixed in CSS. Affects badges, buttons, bar tracks, and KBD elements across the Screener.
-- **66 standalone HTML pages have ~300 sub-minimum border-radius** (DES-058) — the largest remaining governance gap. Every panel page has 1-32 instances in its `<style>` block. Total ~300 instances.
-- **DES-048 fix was INCOMPLETE** — 6 bar element radius instances still remain on league-intel.html (DES-059). Pressure bar track (3px), depth bar track (4px), waiver bars (3px), and one JS inline style (4px).
-- **store-card:hover has no shadow lift** (DES-060) — hover shadow is 4px (same as rest), should be 6px. Formula Store cards feel dead compared to every other card component.
-- **Canvas hardcoded hex is a systemic pattern** — league-intel.html canvas (DES-061, 6 instances) and lab.js (DES-062, 14+ duplicated posColors objects). These won't adapt to dark mode.
-- **lab.js has an orphaned gold color** — `#c5a000` is used for FAIR verdicts but isn't a design token. Should be `--yellow` (#ffc857). Also, verdict/sentiment colors are all hardcoded hex (DES-063).
-- **Two gradient violations found** — prompts.html text fade (DES-064) and lab.html sparkline placeholder stripes (DES-065). Design guide bans gradients with no exceptions.
-- **formula-store.js is 98% design-compliant** — excellent CSS variable usage. Only the publish modal info box has one 6px radius violation (DES-066).
+- **lab.js had 27 sub-minimum border-radius in inline styles** (DES-057) — FIXED
+- **66 standalone HTML pages had ~300 sub-minimum border-radius** (DES-058) — FIXED (13 remain, all intentional bar fills)
+- **DES-048 fix was INCOMPLETE** — 6 bar element radius instances remained (DES-059) — FIXED
+- **store-card:hover had no shadow lift** (DES-060) — FIXED
+- **Canvas hardcoded hex was a systemic pattern** — posColors consolidated (DES-062 FIXED), verdict colors use CSS vars (DES-063 FIXED)
+- **Two gradient violations found and fixed** — prompts.html (DES-064 FIXED) and lab.html sparkline (DES-065 FIXED)
+- **formula-store.js is 98% design-compliant** — publish modal info box fixed (DES-066 FIXED)
+
+### Cycle 7 Findings: Canvas Accent Color Sweep
+- **getCanvasTheme() is the ROOT CAUSE** (DES-069) — it exposes bg/ink/white but NO accent colors. Every canvas function that needs green/blue/orange/red hardcodes hex directly. Fix this one function, and 30+ downstream hex references become simple `t.green` replacements.
+- **DOM-context code STILL uses hardcoded hex for tier/grade colors** — DES-067 (draft class tierColors) and DES-068 (trade value tiers) generate DOM HTML with `background:#2ec4b6` instead of `background:var(--green)`. These are easy fixes that don't need the getCanvasTheme change.
+- **6+ duplicated tier/grade color objects** (DES-070) — defined separately in different functions with INCONSISTENT values. One copy gives elite and premium the same color (bug, DES-073).
+- **college canvas uses raw #5b7fff 6 times** (DES-071) — should be `t.blue` after DES-069.
+- **DVS badge in canvas export hardcodes threshold colors** (DES-072) — `#2ec4b6`/`#5b7fff`/`#d97757`/`#8a7565` cascade.
+- **Data bar linear-gradient** (DES-074) — functional but technically banned. Can be replaced with div-width pattern.
+- **40+ standalone panel pages missing overflow-x:auto** (DES-075) — tables may truncate on mobile when loaded as Lab panel iframes.
+- **Heat map function IS dark-mode aware** — separate opacity values for light/dark. No ticket needed.
+- **Watermark IS dark-mode aware** — isDark check with correct alpha. No ticket needed.
+- **color:white NOW ZERO** — the 217-instance problem from cycles 3-5 is fully resolved.
 
 ### What Matters Most for Conversion
 - **OG image** is seen by more people than the home page itself — it's the preview on every social share (DES-007, FIXED)
@@ -49,63 +60,52 @@
 - The Screener is the growth engine — its pages need to be screenshot-worthy
 - Mobile experience matters hugely since Twitter/Reddit traffic is mobile-heavy
 - **Watermarks are the #1 brand exposure channel** — every shared screenshot carries them
-- **CSS variable mismatches (DES-003) affect typographic hierarchy sitewide** (FIXED)
 - Pricing page visual parity with home page matters — users bounce between them during conversion decision
-- Panel count on pricing page (60+) undersells the actual product (67+ panels) (DES-013, FIXED)
 - **Dark mode must work perfectly** — power users toggle it, and broken dark mode = "unfinished product"
-- **Pricing page at tablet widths** is a real conversion risk — iPad users are in the target demographic (DES-024, FIXED)
-- **Auth modal is the conversion gateway** — every registration and login passes through it (DES-027, DES-028, FIXED)
-- **Plan cards need hover-lift** — the pricing page is the decision point (DES-030, FIXED)
-- **PNG exports ARE marketing** — compare page and Lab exports with hardcoded colors don't match dark mode (DES-034, FIXED)
-- **Bureau connect card is the conversion engine's front door** — 3 design violations fixed (DES-043, FIXED)
-- **Footer breaks on 71 pages at 375px** — mobile users from Twitter/Reddit hit broken footers everywhere (DES-037, FIXED)
-- **Store-card hover-lift is broken** — Formula Store cards don't pop on hover (DES-060, NEW)
-- **Trade Analyzer verdict colors break in dark mode** — hardcoded hex bg/text (DES-063, NEW)
-- **Canvas position colors don't adapt to dark mode** — 14+ copies of hardcoded hex in lab.js (DES-062, NEW)
+- **PNG exports ARE marketing** — screenshots with hardcoded colors on dark mode look wrong
+- **Bureau connect card is the conversion engine's front door** — all 3 violations fixed
+- **DOM tier badges** (DES-067, DES-068) affect every panel that shows tiers — users see these constantly
+- **getCanvasTheme accent colors** (DES-069) is a platform fix — solves the problem at the root instead of patching individual symptoms
 
 ### Issue Categories by Impact
-1. **P0 — Launch blockers** — OG image wrong tagline (DES-007) [DONE]
-2. **P1 — Sub-minimum radius systemic** — lab.js 27 (DES-057), 66 HTML pages ~300 (DES-058), league-intel bars 6 (DES-059)
-3. **P1 — Hover-lift missing** — store-card (DES-060)
-4. **P1 — Lab panel CSS governance** — 171 sub-minimum radius in lab-panels.css (DES-047) [DONE]
-5. **P1 — Bureau conversion path** — radius (DES-048 DONE), badge contrast (DES-049 DONE), hover-lift (DES-050 DONE)
-6. **P1 — Mobile breaking** — footer minmax(140px) on 71 pages (DES-037) [DONE]
-7. **P1 — Conversion gateway** — auth modal (DES-027, DES-028), plan cards (DES-030) [ALL DONE]
-8. **P1 — Sitewide dark mode** — btn-primary, nav, auth, chips, cmd-palette [ALL DONE]
-9. **P2 — Canvas hardcoded hex** — league-intel (DES-061), lab.js posColors (DES-062), verdict colors (DES-063)
-10. **P2 — Gradient violations** — prompts.html (DES-064), lab.html sparkline (DES-065)
-11. **P2 — Minor radius** — publish modal info box (DES-066)
+1. **P1 — DOM tier/grade hardcoded hex** — DES-067, DES-068 (easy CSS var swap, no architecture change)
+2. **P2 — Canvas architecture** — DES-069 (keystone fix), then DES-070-072 (downstream cleanup)
+3. **P2 — Consistency bug** — DES-073 (elite+premium same color in 1 of 3 tier definitions)
+4. **P2 — Design rule compliance** — DES-074 (gradient), DES-076 (skeleton radius)
+5. **P2 — Mobile UX** — DES-075 (panel table scroll on mobile)
 
-### Emerging Patterns (updated DES-066)
-- **Sub-minimum border-radius is the single most common design violation** — Cycles 1-6 have found it in: styles.css (7), lab-panels.css (171), lab.js (27), league-intel.html (16+6), 66 HTML pages (~300), formula-store.js (1), compare.html (2), pricing.html (3). Total: ~530 instances across the entire codebase. About 300 have been fixed; ~330 remain.
-- **The fix pattern is always the same**: replace `border-radius:[0-7]px` with `var(--radius-sm)` or `8px`. Exception: inner bar fills use 6px to nest inside 8px tracks.
-- **Canvas/JS code is the last frontier** — CSS-only fixes are largely done. Remaining issues are in JavaScript template literals and canvas drawing code. These require manual review since they're string-interpolated.
-- **Hardcoded hex in canvas is a dark mode blocker** — lab.js has 14+ copies of the same posColors object, league-intel.html has 6 canvas hex values. All need to read from CSS variables.
-- **Gradient violations are minor but absolute** — the design guide says "no gradients" and means it. Two found: a text overflow fade and a striped loading placeholder.
-- **formula-store.js is a model of good practice** — 98% design-compliant. Other JS files should follow its pattern of using CSS variables in inline styles.
+### Emerging Patterns (updated DES-076)
+- **Canvas hardcoded hex is now the dominant remaining issue** — ~30 hex color references in canvas code that could read from CSS vars if getCanvasTheme had accent properties.
+- **The codebase has matured significantly** — color:white is zero, sub-minimum radius is down to intentional bar fills, no rogue fonts, no generic loading text, no cold grays.
+- **DRY violations in lab.js** — tier/grade colors defined 6+ times, some with inconsistent values. posColors was consolidated (DES-062) — same pattern needed for tier/grade.
+- **The fix pattern for canvas hex**: (1) Add accent colors to getCanvasTheme, (2) Replace hardcoded hex with theme properties. Same approach that worked for posColors.
+- **Standalone pages are in good shape** — redirect to Lab works, dark mode inherits from CSS vars. Only mobile overflow-x is missing.
 - **Things that are GOOD and should be preserved:**
-  - Zero rogue font families (no sans-serif, arial, helvetica)
-  - Zero generic "Loading..." text (all personality)
-  - Zero gradients in CSS classes (only in 2 specific inline/pseudo-element cases)
-  - Zero cold grays (except warroom pixel art)
-  - Zero blue-black ink colors
-  - 100% correct position colors in CSS
-  - Dark mode CSS variables are all correctly defined
+  - Zero rogue font families (confirmed cycle 7)
+  - Zero generic "Loading..." text (confirmed cycle 7)
+  - Zero gradients in CSS classes (2 inline cases were fixed)
+  - Zero cold grays (confirmed cycle 7)
+  - Zero blue-black ink colors (confirmed cycle 7)
+  - Zero color:white/color:#fff in lab.js or HTML pages (confirmed cycle 7)
+  - Zero 1px borders in lab.js (confirmed cycle 7)
+  - 100% correct position colors via _POS_COLORS_CSS + _getPosColorsHex()
+  - Dark mode CSS variables all correctly defined
   - Agent SVG icons all exist
-  - `getCanvasTheme()` pattern is the right architecture for canvas exports
-  - warroom.js pixel art is cleanly isolated under the Situation Room dark exception
+  - getCanvasTheme() pattern correctly used for bg/ink (just needs accent extension)
+  - warroom.js pixel art cleanly isolated under Situation Room dark exception
   - --text-on-accent contrast verified acceptable in both modes
+  - Heat map (getHeatColor) is dark-mode aware
+  - Watermark (drawRazzleWatermark) is dark-mode aware
+  - formula-store.js 98% design-compliant (1 issue fixed)
   - All box-shadow:6px instances are on :hover states (correct per design guide)
-  - formula-store.js uses CSS vars in 98% of inline styles
 
-### What to Check Next (Cycle 7)
-- lab.js: inline style `color:white`/`color:#fff` audit (separate from radius/hex)
-- lab.js: box-shadow at rest audit (any 6px+ outside :hover?)
-- Standalone HTML pages: `color:white`/`color:#fff` in `<style>` blocks (DES-042 covered CSS, but were they all fixed?)
-- Dark mode rendering of Lab player profile modal — radius and shadow audit done (cycle 6), but color:white in modal content?
-- Trade analyzer page: full dark mode walkthrough (verdict colors are one piece — what about the rest?)
-- Canvas export PNG: does the watermark render correctly in dark mode?
-- Whether DES-047 fix preserved intentional exceptions (scrollbar tracks, skeleton loaders)
-- agents.html: does the pixel Situation Room have any non-pixel-art design violations?
-- Mobile responsive audit of lab.js-generated panels (trade analyzer, roster builder, etc.)
-- Any remaining `overflow:hidden` on data tables that truncate content on mobile
+### What to Check Next (Cycle 8)
+- After DES-069 is fixed: verify all canvas exports render correct accent colors in dark mode
+- After DES-067/068: verify draft class and trade value panels look correct in dark mode
+- After DES-075: verify mobile scroll on panel tables at 375px viewport
+- Lab sidebar panel navigation: does switching between panels preserve dark mode correctly?
+- Canvas export file sizes: are PNGs reasonable for sharing on Reddit/Twitter?
+- Accessibility: ARIA labels on tier badges, grade badges, position badges
+- Performance: do the 40+ standalone pages load efficiently as Lab panel iframes?
+- Whether consolidated _POS_COLORS_CSS is used everywhere or if any new code has regressed
+- Print CSS: cheatsheet.html has @media print styles — do any other panels need print support?
