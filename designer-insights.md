@@ -38,3 +38,28 @@
 - Ship agent: DQ-015 + DQ-020 fix dark mode readability on tiers and dashboard pages.
 
 **What I'd do differently next time**: File a ticket to temporarily disable CSP upgrade-insecure-requests in dev mode so the browse tool can render pages. Visual QA without screenshots is flying blind. Also consider adding a CSS utility class like `.shadow-chunky { box-shadow: 4px 4px 0 var(--ink); }` to prevent future shadow drift.
+
+### Cycle 3 — 2026-03-23
+
+**What I did**: Deep pattern audit targeting 4 specific categories: dark mode gaps, typography violations, spacing/layout issues, and interactive state gaps. Used 4 parallel subagents, each with a focused mandate and explicit "already fixed" exclusion lists to avoid duplicates. Wrote 10 new tickets (DQ-021 through DQ-030). Total: 30 open tickets.
+
+**Quality score**: 8/10 — stronger findings this cycle because the audit scopes were tighter and more specific. Each subagent had a clear category and exclusion list, which eliminated the noise from duplicating past fixes. Still no visual screenshots (Render 502, headless browser CSP issue persists).
+
+**What worked**:
+- Scoped subagents by category (dark mode, typography, layout, interactive) instead of by file produced higher-quality findings with less overlap.
+- The typography audit discovered the biggest single issue: 47 canvas `bold` keywords on Luckiest Guy (DQ-021). This is a subtle but real font rendering problem that was invisible to previous CSS-only audits.
+- The layout audit found the overflow:hidden shadow clipping pattern (DQ-022, 8 cards). This is a genuinely visible bug — chunky shadows are the brand signature and they're being clipped.
+- Explicit exclusion lists in each subagent prompt prevented all 4 agents from re-finding already-ticketed issues.
+
+**What didn't**: Browse tool still can't render. Live site was down (502). The CSP issue is now a known blocker across 3 cycles — needs a real fix, not workarounds.
+
+**Pattern spotted**: Canvas code is the design system's blind spot. CSS variables, dark mode toggles, and design tokens all stop at the canvas boundary. Every canvas function re-invents its own color handling, and most get it wrong for dark mode. The `getCanvasTheme()` helper exists in app.js but many drawing functions either don't use it or use it incompletely.
+
+**Root cause found**: The overflow:hidden on 8 lab-panel cards (DQ-022) all have the same pattern — they set overflow:hidden to clip internal content (like bar charts) but forgot that the outer box-shadow extends 4px past the border. The fix is to move overflow:hidden to an inner wrapper, not the card itself.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-021 (bold removal) is the safest high-volume fix — regex replace, zero visual change expected, but eliminates font rendering risk across 47 canvas draws.
+- Ship agent: DQ-022 (overflow clipping) and DQ-024 (heatmap #fff) are the most visually impactful. Fix these before DQ-023 (cold black overlays) since overlays are transient but shadows and heatmap text are persistent.
+- Ship agent: DQ-026 (focus-visible) and DQ-028 (active states) can be done together — they're the same type of fix (add CSS rules) on related elements.
+
+**What I'd do differently next time**: Three cycles of code-only audit is reaching diminishing returns. The remaining issues are increasingly subtle (transition timing, z-index governance). Next cycle should prioritize getting the browse tool working — either by stripping CSP in dev mode or running the server on HTTPS locally. Visual QA would catch layout/spacing/animation issues that code audits cannot.
