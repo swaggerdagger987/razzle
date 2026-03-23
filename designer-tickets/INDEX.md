@@ -1,6 +1,6 @@
 # Design QA Tickets — Batch 2026-03-23
 
-40 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycle 5: visual QA with screenshots (home, Lab, pricing, agents, tiers, breakouts, dashboard, weekly, stocks, rankings — light+dark mode, desktop+mobile).
+50 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-6: visual QA with screenshots. Cycle 7: UX/conversion/readability audit (15 pages, light+dark, desktop+mobile, 3 subagent verifications).
 
 ## P1 — High Impact (visible on every page)
 
@@ -17,6 +17,8 @@
 | DQ-024 | Correlation heatmap canvas hardcodes #fff text | lab-panels.js:9821,10118 |
 | DQ-031 | Agents page hero+footer on light sand (should be all dark) | agents.html |
 | DQ-032 | Agent names don't match DESIGN.md (Bones/Octo/Atlas) | agents.html:1619-1624 |
+| DQ-041 | Pricing dark mode — comparison table text barely readable | pricing.html:169-183 |
+| DQ-042 | Pro gate — 48+ panels identical generic lock, no teaser | lab.html (switchPanel) |
 
 ## P2 — Medium Impact (visible in specific views)
 
@@ -42,6 +44,13 @@
 | DQ-037 | Standalone redirect pages show flash of Pro gate content | stocks.html, reportcard.html, etc. |
 | DQ-039 | Lab mobile toolbar cramped touch targets (<44px) | lab.html |
 | DQ-040 | Standalone page cards hover shadow stays 4px (should grow to 6px) | breakouts.html, dashboard.html, tiers.html |
+| DQ-043 | Compare page empty state — no illustration or example | compare.html, compare.js |
+| DQ-044 | Rankings player names truncated in cards (~140px) | rankings.html:201-209 |
+| DQ-045 | Tiers chip density too cramped (~6px gap, needs 10-12px) | tiers.html |
+| DQ-046 | Home Situation Room demo is tiny static card, not visual | index.html |
+| DQ-047 | Breakouts page — all cards identical weight, no hierarchy | breakouts.html |
+| DQ-048 | Bureau pre-connect — generic form, no feature preview | league-intel.html |
+| DQ-050 | Pricing mobile — comparison table cramped at 375px | pricing.html |
 
 ## P3 — Low Impact (polish)
 
@@ -56,3 +65,4 @@
 | DQ-034 | Rankings tier badges wrong rotation angle (-2deg vs 3deg) | rankings.html:117 |
 | DQ-036 | Dashboard hover hardcoded rgba(217,119,87,0.05) | dashboard.html:145 |
 | DQ-038 | Pro teaser uses custom .btn-pro-upgrade instead of .btn-primary | agents.html, warroom.js |
+| DQ-049 | Pricing dark mode — feature pills harsh teal borders | pricing.html |
