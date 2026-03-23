@@ -11080,8 +11080,11 @@ function exportTradeAnalyzerPNG() {
     }
   }
 
-  drawSide(giveX, "I GIVE", "#f2d5d8", "#e63946", _taState.give);
-  drawSide(getX, "I GET", "#d9efec", "#2ec4b6", _taState.get);
+  const _taStyles = getComputedStyle(document.documentElement);
+  const _taRedLight = _taStyles.getPropertyValue('--red-light').trim() || "#f2d5d8";
+  const _taGreenLight = _taStyles.getPropertyValue('--green-light').trim() || "#d9efec";
+  drawSide(giveX, "I GIVE", _taRedLight, "#e63946", _taState.give);
+  drawSide(getX, "I GET", _taGreenLight, "#2ec4b6", _taState.get);
 
   // VS divider
   ctx.save();
