@@ -1592,9 +1592,9 @@ function renderTableHead() {
     var cwStyle = cw ? `width:${cw}px; min-width:${cw}px; max-width:${cw}px;` : "";
     var dragAttr = ' draggable="true" ondragstart="_colDragStart(event)" ondragover="_colDragOver(event)" ondrop="_colDrop(event)" ondragend="_colDragEnd(event)"';
     if (col.isSparkline) {
-      html += `<th scope="col"${tip} data-col="${key}"${dragAttr} style="${cwStyle || 'width:80px;'} text-align:center;">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
+      html += `<th scope="col"${tip} data-col="${key}"${dragAttr} tabindex="0" style="${cwStyle || 'width:80px;'} text-align:center;">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     } else if (col.isNotes) {
-      html += `<th scope="col"${tip} data-col="${key}"${dragAttr} style="${cwStyle || 'width:120px; min-width:80px;'}">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
+      html += `<th scope="col"${tip} data-col="${key}"${dragAttr} tabindex="0" style="${cwStyle || 'width:120px; min-width:80px;'}">${col.label}<div class="col-resize-handle" data-col="${key}"></div></th>`;
     } else {
       const ariaSort = state.sortKey === key ? (state.sortDir === "asc" ? "ascending" : "descending") : state.sortKey2 === key ? (state.sortDir2 === "asc" ? "ascending" : "descending") : "none";
       html += `<th scope="col" class="${cls}"${tip} data-col="${key}"${dragAttr} style="${cwStyle}" tabindex="0" aria-sort="${ariaSort}" onclick="sortBy('${key}', event)" ondblclick="openFilterForColumn('${key}')" onkeydown="if(event.key==='Enter'){sortBy('${key}');event.preventDefault();}">${col.label}${extra}<div class="col-resize-handle" data-col="${key}"></div></th>`;
