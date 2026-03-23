@@ -1353,7 +1353,7 @@ async function fetchAndRenderNFL(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the data fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the data fetch... try again', 'error', 0, null, function() { fetchAndRender(); });
     // Keep previous table data visible — don't clear tbody
     renderTable();
     updateResultCount();
@@ -1401,7 +1401,7 @@ async function fetchAndRenderProspects(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the prospect fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the prospect fetch... try again', 'error', 0, null, function() { fetchAndRender(); });
     renderTable();
     updateResultCount();
   }
@@ -1448,7 +1448,7 @@ async function fetchAndRenderCollege(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the college data fetch... try again');
+    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the college data fetch... try again', 'error', 0, null, function() { fetchAndRender(); });
     renderTable();
     updateResultCount();
   }

@@ -470,7 +470,7 @@ function drawRazzleWatermark(ctx, canvas, opts) {
 /**
  * Show a toast notification. Available on all pages (defined in app.js).
  */
-function _showToast(msg, type, duration, link) {
+function _showToast(msg, type, duration, link, retryAction) {
   var existing = document.querySelector('.razzle-toast');
   if (existing) existing.remove();
   var toast = document.createElement('div');
@@ -488,13 +488,24 @@ function _showToast(msg, type, duration, link) {
     a.style.cssText = 'color:var(--orange);text-decoration:underline;';
     toast.appendChild(a);
   }
+  if (retryAction && typeof retryAction === 'function') {
+    toast.appendChild(document.createTextNode(' '));
+    var btn = document.createElement('button');
+    btn.textContent = 'Retry';
+    btn.className = 'btn-chunky';
+    btn.style.cssText = 'margin-left:8px;padding:4px 12px;font-size:12px;font-family:var(--font-mono);cursor:pointer;';
+    btn.onclick = function() { toast.remove(); retryAction(); };
+    toast.appendChild(btn);
+  }
   if (prefersReducedMotion) toast.style.transition = 'none';
   document.body.appendChild(toast);
   setTimeout(function() { toast.classList.add('razzle-toast-show'); }, prefersReducedMotion ? 0 : 10);
-  setTimeout(function() {
-    toast.classList.remove('razzle-toast-show');
-    setTimeout(function() { toast.remove(); }, prefersReducedMotion ? 0 : 300);
-  }, duration || 2500);
+  if (!retryAction) {
+    setTimeout(function() {
+      toast.classList.remove('razzle-toast-show');
+      setTimeout(function() { toast.remove(); }, prefersReducedMotion ? 0 : 300);
+    }, duration || 2500);
+  }
 }
 
 function escapeHtml(str) {
