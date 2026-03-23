@@ -166,15 +166,65 @@
   - Existing :focus-visible pattern in styles.css is correct and consistent
   - agents.html config/roster toggles correctly use aria-expanded
 
-### What to Check Next (Cycle 10)
-- After DES-087: verify orange focus ring appears on all 11 affected inputs when tab-navigating
-- After DES-088: verify context menu items are keyboard-navigable with arrow keys
-- After DES-089: verify lab panel tabs/selects show focus ring on keyboard navigation
-- After DES-090: spot-check 3-4 JS-created canvases for role="img" in DOM inspector
-- After DES-092: verify screen reader announces toast text when action fires
-- After DES-094: verify screen reader announces autocomplete dropdown items
-- Briefing card headers in warroom.js missing role="button" + aria-expanded
-- Whether og:image could be page-specific for high-traffic tool pages (currently generic on 74/75)
+### Cycle 10 Findings: Contrast, Touch Targets, Form Validation, Resilience
+
+Three new audit dimensions this cycle — moving beyond ARIA to the visual/physical accessibility layer:
+
+- **ZERO aria-describedby in the entire codebase** (DES-097) — no form input links to its error message. Auth modal, pricing promo code, Sleeper connect, and formula publish all show error text visually but never announce it. This is the #1 conversion blocker for assistive tech users — if you can't sign up, you can't pay.
+- **ZERO role="alert" in the entire codebase** (DES-097) — dynamic error messages never get announced. The agent-voiced error copy (razzleError(), getErrorText()) is excellent brand work — it just needs to be heard.
+- **--ink-light dark mode contrast fails WCAG AA** (DES-098) — #8a7565 is "shared" between modes per DESIGN.md, but on dark background #2d1f14 it's below 4.5:1 for normal text. 1,122 uses across 86 files. Needs a dark-mode-specific override. Also: 9 placeholder selectors inherit the same problem.
+- **--ink-faint used as text color** (DES-103) — DESIGN.md says "Dividers, dashed borders" but 53 instances use it for text. Contrast ~1.8:1 on sand background — nearly invisible.
+- **Filter chip remove buttons are 13-16px** (DES-099) — the most-used interactive element in the screener fails WCAG 2.5.8 (24px minimum). Mobile traffic from Twitter/Reddit can't hit these reliably.
+- **Briefing card headers are plain div onclick** (DES-100) — no role, no aria-expanded, no keyboard handler. This is the premium product's primary output — the analysis users pay for.
+- **No global error handler** (DES-101) — app.js has no window.onerror or unhandledrejection. The existing agent-voiced error patterns (razzleError, getErrorText, apiFetch) handle expected errors well. Unexpected errors silently kill the page.
+- **89 JS animation calls don't check prefers-reduced-motion** (DES-102) — CSS media query exists and is well-implemented, but JS animations (warroom sprite loop, lab smooth scroll, toast slide) bypass it.
+- **Formula publish is color-only validation** (DES-104) — red border, no text, no aria-invalid. Unique because there's not even an error message container.
+- **Canvas help text is pixels** (DES-105) — warroom.js draws keyboard shortcuts on the canvas. Invisible to screen readers, disappears on interaction.
+- **Nav search hint is 19px tall** (DES-106) — the entry point to global search (Ctrl+K command palette) is below the 24px touch target minimum.
+
+### Issue Categories by Impact (updated DES-106)
+1. **P1 — Form validation accessibility** — DES-097 (zero role=alert, zero aria-describedby — conversion blocker)
+2. **P1 — Color contrast** — DES-098 (--ink-light dark mode), DES-103 (--ink-faint as text)
+3. **P1 — Touch target sizing** — DES-099 (filter chip remove), DES-106 (nav search hint)
+4. **P1 — Situation Room accessibility** — DES-100 (briefing cards), DES-105 (canvas help text)
+5. **P1 — Resilience** — DES-101 (no global error handler)
+6. **P1 — Keyboard accessibility** — DES-081, DES-084, DES-087, DES-089 (from cycle 8-9)
+7. **P1 — Screen reader accessibility** — DES-088, DES-090, DES-092, DES-094 (from cycle 9)
+8. **P2 — Motion sensitivity** — DES-102 (JS animations ignore prefers-reduced-motion)
+9. **P2 — Form validation completeness** — DES-104 (formula publish color-only)
+10. **P2 — Live regions** — DES-093, DES-096 (from cycle 9)
+
+### Emerging Patterns (updated DES-106)
+- **The codebase is visually mature but functionally inaccessible** — 10 cycles of visual QA have eliminated every color, font, radius, border, and dark mode issue. What remains is the invisible layer: ARIA, contrast ratios, touch targets, and error handling. These don't show up in screenshots but directly affect whether users can convert.
+- **Error handling shows a fascinating split** — the agent-voiced ERROR COPY is excellent (razzleError(), getErrorText(), panel-specific messages). But the error CONTAINERS lack every ARIA attribute. The personality is there; the plumbing isn't.
+- **Touch targets are a systemic mobile issue** — filter chips, team chips, compare chips, roster builder chips, nav badges — every small interactive element uses font-size + minimal padding without considering the 24px minimum. A global `.touch-target { min-width: 24px; min-height: 24px; }` utility class could fix many at once.
+- **--ink-light "shared" between modes was a design decision that needs revisiting** — in light mode it's borderline (metadata/labels can be lighter). In dark mode it fails. A dark mode override to ~#a89888 would fix 1,122 uses without changing the light mode aesthetic.
+- **The Situation Room has the largest concentration of remaining a11y issues** — briefing cards (DES-100), canvas help text (DES-105), plus from earlier cycles: missing canvas ARIA (DES-090), no keyboard agent selection documentation. This is the premium product — it should be the most accessible, not the least.
+- **Things that are GOOD and should be preserved:**
+  - Zero rogue font families (confirmed cycle 10)
+  - Zero generic "Loading..." text (confirmed cycle 10)
+  - Zero gradients in CSS classes
+  - Zero cold grays, zero blue-black ink
+  - Zero color:white/color:#fff in lab.js or HTML pages
+  - Zero 1px borders in lab.js
+  - All 75 pages have lang="en"
+  - All 75 pages have skip-to-content links
+  - Agent-voiced error copy throughout (razzleError, getErrorText, panel-specific)
+  - apiFetch() handles 401 gracefully (auto-reopens auth modal)
+  - prefers-reduced-motion CSS media query correctly implemented
+  - Error states preserve previous data (don't clear table on fetch failure)
+  - Sleeper API errors are specific and helpful ("couldn't find that username", "servers are napping")
+
+### What to Check Next (Cycle 11)
+- After DES-097: verify screen reader announces login error when invalid credentials entered
+- After DES-098: verify --ink-light contrast ratio >= 4.5:1 in dark mode with new override value
+- After DES-099: verify filter chip remove buttons are tappable on 375px mobile viewport
+- After DES-100: verify briefing cards toggle with Enter/Space keys, aria-expanded updates
+- After DES-101: verify a Razzle-voiced toast appears on simulated JS error (throw in console)
+- After DES-102: verify warroom.js agents don't animate with prefers-reduced-motion: reduce
+- og:image could be page-specific for high-traffic tool pages (currently generic on 74/75)
 - Print CSS audit — only cheatsheet.html has @media print
-- Error boundary patterns — what happens when API calls fail? Are error states accessible?
-- Reduced motion — does the site respect prefers-reduced-motion for animations/transitions?
+- SVG icon alt text — do agent SVG icons in sidebar have accessible names?
+- Table caption/summary — do data tables have captions for screen readers?
+- Color-blind safe mode — position colors (QB blue, RB teal, WR terracotta, TE purple) rely on color alone in many places
+- Scroll indicators on horizontally scrolling tables — visual cue that content extends offscreen

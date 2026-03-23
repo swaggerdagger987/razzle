@@ -1,5 +1,5 @@
 {
-  "last_ticket_id": 96,
+  "last_ticket_id": 106,
   "last_run": "2026-03-22",
   "pages_reviewed": [
     "index.html (desktop 1280+1440, mobile 375)",
@@ -138,7 +138,20 @@
     "styles.css outline:none WITH :focus-visible pair — .auth-form input, .input-chunky, .select-chunky, .cmd-palette-input all correct (cycle 9)",
     "agents.html API key inputs — already have aria-label, no issue (cycle 9)",
     "sitewide lang=en audit — all 75 pages have it, clean (cycle 9)",
-    "@media print audit — only cheatsheet.html has print CSS (cycle 9)"
+    "@media print audit — only cheatsheet.html has print CSS (cycle 9)",
+    "sitewide aria-describedby audit — ZERO instances in entire frontend/ (cycle 10)",
+    "sitewide role=alert audit — ZERO instances in entire frontend/ (cycle 10)",
+    "auth modal, pricing promo, Sleeper connect, formula publish — all forms lack accessible error feedback (cycle 10)",
+    "--ink-light dark mode contrast audit — #8a7565 on #2d1f14 fails WCAG AA for normal text (cycle 10)",
+    "9 search input ::placeholder selectors use --ink-light — insufficient contrast (cycle 10)",
+    "filter-tag .remove, team-chip .remove — ~13-16px touch targets, WCAG 2.5.8 requires 24px (cycle 10)",
+    "briefing card headers in warroom.js — plain div onclick, no role=button, no aria-expanded, no keyboard (cycle 10)",
+    "app.js — no window.onerror or window.onunhandledrejection handler (cycle 10)",
+    "prefers-reduced-motion — CSS media query exists (styles.css:1614) but 89 JS animation calls unchecked (cycle 10)",
+    "--ink-faint used as TEXT color in 53 instances across 20 files — WCAG contrast ~1.8:1 (cycle 10)",
+    "formula-store.js submitPublish — color-only validation (red border), no error text, no aria-invalid (cycle 10)",
+    "warroom.js canvas help text drawn via ctx.fillText — invisible to screen readers (cycle 10)",
+    "nav-search-hint ~19px height, nav-plan-badge ~18px height — below 24px touch target minimum (cycle 10)"
   ],
   "tickets_written": [
     {"id": "DES-001", "file": "designer-tickets/done/001-orphan-discovery-filter-chip.md", "priority": "P2", "area": "home page", "summary": "Orphan 'Veteran Studs' chip on discovery filters"},
@@ -236,7 +249,17 @@
     {"id": "DES-093", "file": "designer-tickets/open/093-screener-result-count-missing-aria-live.md", "priority": "P2", "area": "lab.html", "summary": "Result count + loading state missing aria-live=polite"},
     {"id": "DES-094", "file": "designer-tickets/open/094-autocomplete-missing-aria-combobox-pattern.md", "priority": "P1", "area": "9+ standalone pages", "summary": "Autocomplete inputs missing ARIA combobox pattern"},
     {"id": "DES-095", "file": "designer-tickets/open/095-skip-to-content-inline-js-75-pages.md", "priority": "P2", "area": "sitewide (75 pages)", "summary": "Skip-to-content links use inline JS instead of CSS class"},
-    {"id": "DES-096", "file": "designer-tickets/open/096-loading-states-standalone-pages-no-aria-live.md", "priority": "P2", "area": "60+ standalone pages", "summary": "Loading/error states missing aria-live on standalone pages"}
+    {"id": "DES-096", "file": "designer-tickets/open/096-loading-states-standalone-pages-no-aria-live.md", "priority": "P2", "area": "60+ standalone pages", "summary": "Loading/error states missing aria-live on standalone pages"},
+    {"id": "DES-097", "file": "designer-tickets/open/097-form-validation-errors-not-accessible.md", "priority": "P1", "area": "auth modal + pricing + Sleeper + formula publish", "summary": "Zero role=alert and zero aria-describedby in entire codebase — form errors silent to screen readers"},
+    {"id": "DES-098", "file": "designer-tickets/open/098-ink-light-dark-mode-contrast-plus-placeholders.md", "priority": "P1", "area": "styles.css + 9 search inputs", "summary": "--ink-light dark mode contrast too low + placeholder text should use --ink-medium"},
+    {"id": "DES-099", "file": "designer-tickets/open/099-filter-chip-remove-buttons-fail-touch-target.md", "priority": "P1", "area": "lab.html + lab-panels.css", "summary": "Filter/team chip remove buttons ~13-16px, WCAG 2.5.8 requires 24px"},
+    {"id": "DES-100", "file": "designer-tickets/open/100-briefing-card-headers-missing-aria.md", "priority": "P1", "area": "warroom.js", "summary": "Briefing card headers missing role=button + aria-expanded + keyboard handler"},
+    {"id": "DES-101", "file": "designer-tickets/open/101-no-global-error-handler.md", "priority": "P1", "area": "app.js", "summary": "No window.onerror or unhandledrejection handler — silent failures"},
+    {"id": "DES-102", "file": "designer-tickets/open/102-js-animations-no-prefers-reduced-motion.md", "priority": "P2", "area": "app.js + lab.js + warroom.js", "summary": "89 JS animation calls don't check prefers-reduced-motion"},
+    {"id": "DES-103", "file": "designer-tickets/open/103-ink-faint-used-as-text-color.md", "priority": "P2", "area": "lab-panels.css + lab.js + 20 files", "summary": "--ink-faint used as text color in 53 instances — unreadable contrast"},
+    {"id": "DES-104", "file": "designer-tickets/open/104-formula-publish-validation-color-only.md", "priority": "P2", "area": "formula-store.js + lab.html", "summary": "Formula publish validation is color-only — no error text, no ARIA"},
+    {"id": "DES-105", "file": "designer-tickets/open/105-canvas-help-text-drawn-as-pixels.md", "priority": "P2", "area": "warroom.js + agents.html", "summary": "Pixel canvas help text drawn as pixels, invisible to screen readers"},
+    {"id": "DES-106", "file": "designer-tickets/open/106-nav-search-hint-touch-target-too-small.md", "priority": "P2", "area": "styles.css", "summary": "Nav search hint + plan badge touch targets below 24px minimum"}
   ],
   "notes": [
     "DES-001 through DES-076 all completed (moved to done/ folder)",
@@ -251,6 +274,15 @@
     "Context menu has no role=menu/menuitem and no keyboard arrow navigation (DES-088)",
     "Good disciplines STILL holding: zero rogue fonts, zero 'Loading...' text, zero cold grays, zero blue-black ink, zero color:white, zero 1px borders, all pages have lang=en",
     "agents.html API key inputs already have aria-label — no issue found",
-    "Only cheatsheet.html has @media print CSS — low priority, not ticketed"
+    "Only cheatsheet.html has @media print CSS — low priority, not ticketed",
+    "DES-097 through DES-106 are cycle 10 tickets — CONTRAST + TOUCH TARGETS + FORM VALIDATION + RESILIENCE",
+    "Cycle 10 theme: three new audit dimensions — color contrast (WCAG 1.4.3), touch target sizing (WCAG 2.5.8), form validation accessibility (WCAG 3.3.1/4.1.3)",
+    "ZERO aria-describedby in entire codebase (DES-097) — form errors are invisible to assistive tech",
+    "ZERO role=alert in entire codebase (DES-097) — dynamic error messages never announced",
+    "--ink-light needs dark mode override — same value both modes violates WCAG AA (DES-098)",
+    "--ink-faint is for borders, not text — 53 uses as text color violate WCAG (DES-103)",
+    "Good disciplines STILL holding: zero rogue fonts, zero 'Loading...' text, zero cold grays, zero blue-black ink, zero color:white, zero 1px borders, all pages have lang=en",
+    "Error handling is agent-voiced everywhere (razzleError(), getErrorText()) — good brand discipline (cycle 10)",
+    "warroom.js briefing cards are the Situation Room's primary output — must be accessible (DES-100)"
   ]
 }
