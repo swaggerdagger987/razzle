@@ -212,3 +212,31 @@
 | DQ-166 | agents.html border-top:1px dashed — should be 2px | agents.html:2271 |
 | DQ-168 | lab-panels.css hover shadows use 3px offset — should be 6px | lab-panels.css:468, :2308 |
 | DQ-169 | Headshot onerror hides image but leaves layout gap — no fallback | 19+ standalone pages |
+
+## Cycle 26 — Interaction Quality + Accessibility (DQ-171 to DQ-180)
+
+### P0
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-172 | **GP filter tag uses non-existent --bg-sand CSS variable** | lab.js:3271 |
+
+### P1
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-171 | **Native confirm() dialogs break Razzle immersion — 3 calls** | formulas.js:99, lab.js:4415, lab.html:3406 |
+| DQ-173 | **breakdown.html canvas 560x560 overflows mobile, no 480px breakpoint** | breakdown.html:634 |
+| DQ-175 | **Pricing interval toggle not keyboard focusable** | pricing.html:236-240 |
+
+### P2
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-174 | **Watermark position:fixed no mobile adjustment — 22 pages** | aging, airyards, awards, +19 more |
+| DQ-176 | Promo code input missing label element | pricing.html:333 |
+| DQ-178 | auction.html search input missing all ARIA attributes | auction.html:350 |
+| DQ-179 | **Home CTA buttons have 10+ line inline onclick handlers** | index.html:822, 839 |
+| DQ-180 | Lab "Reset All" filter tag inline-styled, dark mode can't override | lab.js:3284 |
+
+### P3
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-177 | Console.log ASCII tiger art fires on every page load | app.js:1709-1715 |

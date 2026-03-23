@@ -1,5 +1,36 @@
 # Designer Insights
 
+### Cycle 26 — 2026-03-23
+
+**What I did**: INTERACTION QUALITY + ACCESSIBILITY + MOBILE HARDENING audit. Ran 5 parallel subagents: (1) dark mode visual regressions in canvas/inline styles, (2) mobile responsiveness gaps (fixed widths, missing breakpoints, overflow), (3) UX copy and interaction bugs (confirm dialogs, error messages, console.log), (4) homepage/pricing/agents page structural issues, (5) Lab screener visual inconsistencies. Cross-referenced all 170 existing tickets + 146 done tickets. Production site still 502. Headless browser still blank on localhost (6th consecutive cycle). Wrote 10 new tickets (DQ-171 through DQ-180).
+
+**Quality score**: 8/10 — Found a genuine P0 (DQ-172: non-existent CSS variable causing invisible filter tag), a high-impact UX issue (DQ-171: native confirm dialogs), and systematic mobile gaps (DQ-173, DQ-174). All 10 tickets are non-overlapping with existing 170.
+
+**What worked**:
+- 5 parallel subagents with orthogonal search dimensions efficiently covered dark mode canvas, mobile responsive, UX copy, page structure, and Lab visual consistency.
+- DQ-172 (--bg-sand undefined) is the highest-impact find — a broken CSS variable on the most-used feature (Lab screener GP filter). Should be fixed immediately.
+- DQ-171 (confirm dialogs) hits 3 destructive actions that break immersion. Easy to fix with a reusable modal.
+- Systematic cross-referencing against 170 existing tickets (grep -rl on ticket dir) confirmed zero duplicates.
+- Font audit from cycle 25 confirmed STILL clean. No regressions.
+
+**What didn't**:
+- Production site STILL 502 (6th consecutive cycle observation). Cannot verify any findings visually.
+- Headless browser STILL fails on localhost. This is now a 6-cycle blocker. The CSP upgrade-insecure-requests header is confirmed as the root cause — it upgrades all subresource requests to HTTPS which fail on localhost.
+- Could not visually verify the 560px canvas overflow (DQ-173) or watermark mobile overlap (DQ-174).
+
+**Pattern spotted**: After 26 cycles (180 tickets total), the audit has covered 11 eras: design tokens, UX/conversion, interaction quality, system governance, behavioral CSS, CSS architecture, runtime robustness, modern CSS + mobile hardening, UX completeness + discoverability, integration flow + canvas + export UX, and now INTERACTION QUALITY + ACCESSIBILITY. The codebase is increasingly clean at the token/variable level — remaining issues are structural (native dialogs, missing ARIA, inline JS complexity) rather than cosmetic.
+
+**Root cause found**: The --bg-sand variable (DQ-172) was likely a typo introduced during one of the 162 build phases. The correct variable names follow the pattern --bg, --bg-warm, --bg-card — "sand" appears in DESIGN.md comments but was never tokenized. This suggests the developer wrote from memory instead of checking the actual CSS custom properties.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-172 (--bg-sand undefined) is a 1-LINE fix. Delete the inline style or change to var(--yellow-light). Do FIRST — it's a P0 broken visual.
+- Ship agent: DQ-174 (watermark mobile) is mechanical: add one CSS class in styles.css, find-replace inline styles in 22 files. High reward for medium effort.
+- Ship agent: DQ-171 (confirm dialogs) needs a new razzleConfirm() function in app.js + 3 callsite updates. Medium effort, high UX impact.
+- Ship agent: DQ-175 (pricing toggle keyboard) and DQ-176 (promo label) are both on pricing.html — do them together.
+- Ship agent: DQ-179 (inline onclick CTA) is important for reliability — those CTA buttons are the conversion funnel.
+
+**What I'd do differently next time**: Fix the headless browser. The CSP header blocks localhost rendering. The fix is simple: add a conditional to skip CSP in dev mode (check ENVIRONMENT != production). This has been a blocker for 6 cycles. Also: the remaining ticket frontier is CROSS-PAGE JOURNEY TESTING — tracing actual user flows through multiple pages (Lab -> export -> share URL -> reopen; login -> connect Sleeper -> Bureau -> Situation Room bridge).
+
 ### Cycle 25 — 2026-03-23
 
 **What I did**: INTEGRATION FLOW + DARK MODE CANVAS + MOBILE COVERAGE audit. Ran 5 parallel subagents: (1) hardcoded gray colors, (2) border width violations, (3) font violations, (4) broken internal links + path consistency, (5) dark mode regressions in standalone pages. Also did direct grep searches for: box-shadows with blur/black, loading text violations, 480px breakpoint coverage, canvas watermark dark mode, export button UX, headshot fallback behavior. Cross-referenced all 160 existing tickets + 146 done tickets to eliminate duplicates. Attempted headless browser on razzle.lol (502 — production down) and localhost (blank page — suspected GZip/CSP issue). Wrote 10 new tickets (DQ-161 through DQ-170).
