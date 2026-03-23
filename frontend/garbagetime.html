@@ -28,11 +28,11 @@
   .gt-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
   .gt-header .gt-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
   .gt-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .gt-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
+  .gt-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
   .gt-controls .pos-tabs { display: flex; gap: 4px; }
-  .gt-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .gt-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .gt-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
-  .gt-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .gt-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .gt-export:hover { background: var(--ink); color: var(--bg); }
   .gt-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
@@ -48,13 +48,13 @@
   .gt-table td:first-child, .gt-table td:nth-child(2), .gt-table td:nth-child(3) { text-align: left; }
   .gt-table tbody tr:hover { background: var(--bg-warm); }
   .gt-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .gt-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: var(--text-on-accent); }
-  .gt-pct-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 2px solid; }
+  .gt-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .gt-pct-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
   .gt-pct-high { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .gt-pct-mid { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
   .gt-pct-low { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .gt-bar-cell { width: 80px; }
-  .gt-bar { height: 12px; border-radius: 2px; min-width: 2px; }
+  .gt-bar { height: 12px; border-radius: var(--radius-sm); min-width: 2px; }
   .gt-bar.red { background: var(--orange); }
   .gt-bar.green { background: var(--green); }
   .gt-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }

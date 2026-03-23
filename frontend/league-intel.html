@@ -440,13 +440,13 @@
     height: 14px;
     background: var(--bg-warm);
     border: 2px solid var(--ink-faint);
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
     position: relative;
     overflow: hidden;
   }
   .pressure-bar-fill {
     height: 100%;
-    border-radius: 2px;
+    border-radius: 6px;
     transition: width 0.4s ease;
   }
   .pressure-bar-score {
@@ -839,7 +839,7 @@
     height: 18px;
     background: var(--bg-warm);
     border: 2px solid var(--ink);
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
     display: flex;
   }
@@ -1377,7 +1377,7 @@
     display: flex;
     height: 14px;
     border: 2px solid var(--ink);
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
     margin-top: 6px;
   }
@@ -1386,7 +1386,7 @@
     height: 12px;
     background: var(--bg-warm);
     border: 2px solid var(--ink);
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
     margin-top: 4px;
   }
@@ -5638,7 +5638,7 @@ function renderBuildProfiles(container, profiles) {
 
     // Positional investment — mini bar breakdown
     html += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-bottom:4px;">positional investment</div>';
-    html += '<div style="display:flex;height:18px;border:2px solid var(--ink);border-radius:4px;overflow:hidden;">';
+    html += '<div style="display:flex;height:18px;border:2px solid var(--ink);border-radius:var(--radius-sm);overflow:hidden;">';
     var investPositions = ["QB", "RB", "WR", "TE"];
     var investColors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
     for (var ipi = 0; ipi < investPositions.length; ipi++) {

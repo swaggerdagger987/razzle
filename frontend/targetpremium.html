@@ -28,11 +28,11 @@
   .tp-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
   .tp-header .tp-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
   .tp-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .tp-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
+  .tp-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
   .tp-controls .pos-tabs { display: flex; gap: 4px; }
-  .tp-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .tp-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .tp-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
-  .tp-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .tp-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .tp-export:hover { background: var(--ink); color: var(--bg); }
   .tp-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
@@ -45,14 +45,14 @@
   .tp-table td:first-child, .tp-table td:nth-child(2), .tp-table td:nth-child(3) { text-align: left; }
   .tp-table tbody tr:hover { background: var(--bg-warm); }
   .tp-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .tp-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: var(--text-on-accent); }
-  .tp-premium-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 2px solid; }
+  .tp-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .tp-premium-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
   .tp-premium-elite { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
   .tp-premium-high { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .tp-premium-mid { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
   .tp-premium-low { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .tp-bar-cell { width: 80px; }
-  .tp-bar { height: 12px; border-radius: 2px; background: var(--green); min-width: 2px; }
+  .tp-bar { height: 12px; border-radius: var(--radius-sm); background: var(--green); min-width: 2px; }
   .tp-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
 
   @media (max-width: 768px) {

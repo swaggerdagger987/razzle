@@ -28,11 +28,11 @@
   .sp-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
   .sp-header .sp-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
   .sp-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .sp-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
+  .sp-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
   .sp-controls .pos-tabs { display: flex; gap: 4px; }
-  .sp-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .sp-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .sp-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
-  .sp-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .sp-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .sp-export:hover { background: var(--ink); color: var(--bg); }
   .sp-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
@@ -45,8 +45,8 @@
   .sp-table td:first-child, .sp-table td:nth-child(2), .sp-table td:nth-child(3) { text-align: left; }
   .sp-table tbody tr:hover { background: var(--bg-warm); }
   .sp-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .sp-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: var(--text-on-accent); }
-  .sp-milestone { display: inline-block; font-family: var(--font-mono); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; margin: 1px 2px; border: 2px solid; }
+  .sp-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .sp-milestone { display: inline-block; font-family: var(--font-mono); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); margin: 1px 2px; border: 2px solid; }
   .sp-milestone-gold { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
   .sp-milestone-silver { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
   .sp-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }

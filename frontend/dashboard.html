@@ -206,13 +206,13 @@
     flex: 1;
     height: 12px;
     background: var(--ink-faint);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     position: relative;
     overflow: hidden;
   }
   .db-scar-bar {
     height: 100%;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     transition: width 0.3s;
   }
   .db-scar-bar.QB { background: var(--qb); }
@@ -342,7 +342,7 @@
   </div>
 
   <div class="db-export" style="display:flex; justify-content:center; align-items:center; gap:12px;">
-    <select id="season-select" style="font-family:var(--font-mono); font-size:13px; padding:6px 10px; border:3px solid var(--ink); border-radius:6px; background:var(--bg-card); color:var(--ink);"></select>
+    <select id="season-select" style="font-family:var(--font-mono); font-size:13px; padding:6px 10px; border:3px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg-card); color:var(--ink);"></select>
     <button class="db-export-btn" id="export-btn">Export PNG</button>
   </div>
 

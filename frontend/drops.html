@@ -28,11 +28,11 @@
   .dr-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
   .dr-header .dr-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
   .dr-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .dr-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
+  .dr-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
   .dr-controls .pos-tabs { display: flex; gap: 4px; }
-  .dr-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .dr-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .dr-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
-  .dr-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .dr-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .dr-export:hover { background: var(--ink); color: var(--bg); }
   .dr-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
@@ -48,13 +48,13 @@
   .dr-table td:first-child, .dr-table td:nth-child(2), .dr-table td:nth-child(3) { text-align: left; }
   .dr-table tbody tr:hover { background: rgba(217,119,87,0.08); }
   .dr-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .dr-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: var(--text-on-accent); }
-  .dr-rate-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 2px solid; }
+  .dr-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .dr-rate-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
   .dr-rate-good { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .dr-rate-mid { background: var(--yellow-light, #fef9c3); color: var(--ink-medium, #854d0e); border-color: var(--yellow, #854d0e); }
   .dr-rate-bad { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .dr-bar-cell { width: 60px; }
-  .dr-bar { height: 12px; border-radius: 2px; min-width: 2px; }
+  .dr-bar { height: 12px; border-radius: var(--radius-sm); min-width: 2px; }
   .dr-bar-good { background: var(--semantic-green); }
   .dr-bar-bad { background: var(--semantic-red); }
   .dr-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }

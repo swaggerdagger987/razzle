@@ -86,7 +86,7 @@
     font-size: 11px;
     font-family: var(--font-mono);
     white-space: nowrap;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     z-index: 100;
     pointer-events: none;
   }
@@ -127,7 +127,7 @@
     font-family: var(--font-mono);
     font-size: 11px;
     border: 2px solid var(--ink-faint);
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     background: var(--bg);
     color: var(--ink);
     outline: none;
@@ -457,7 +457,7 @@
     font-weight: 700;
     padding: 4px 10px;
     border: 2px solid var(--ink);
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     background: var(--bg-card);
     color: var(--ink);
     cursor: pointer;
@@ -483,7 +483,7 @@
     padding: 8px 12px;
     margin-top: 6px;
     background: var(--bg-warm);
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     border: 2px dashed var(--ink-faint);
     line-height: 1.4;
   }
@@ -501,7 +501,7 @@
     font-family: var(--font-hand);
     font-size: 18px;
     padding: 10px 24px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     z-index: 9999;
     opacity: 0;
     transition: opacity 0.3s, transform 0.3s;
@@ -522,7 +522,7 @@
     padding: 10px 18px;
     border: 3px solid var(--ink);
     box-shadow: 4px 4px 0 var(--ink);
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     z-index: 9999;
     cursor: pointer;
     opacity: 0;
@@ -533,7 +533,7 @@
     background: var(--orange);
     color: var(--text-on-accent);
     padding: 2px 7px;
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
     font-weight: 700;
     font-size: 14px;
   }
@@ -1070,7 +1070,7 @@
   .colstats-popover {
     position: fixed; z-index: 10001;
     background: var(--bg-card); border: 3px solid var(--ink);
-    box-shadow: 4px 4px 0 var(--ink); border-radius: 6px;
+    box-shadow: 4px 4px 0 var(--ink); border-radius: var(--radius-sm);
     padding: 12px 16px; min-width: 200px; max-width: 260px;
     font-family: var(--font-mono); font-size: 12px;
   }
@@ -1093,7 +1093,7 @@
     display: flex; align-items: flex-end; gap: 3px; height: 40px;
   }
   .colstats-bar {
-    flex: 1; background: var(--orange); border-radius: 2px 2px 0 0;
+    flex: 1; background: var(--orange); border-radius: var(--radius-sm) var(--radius-sm) 0 0;
     min-height: 2px; border: 2px solid var(--ink);
   }
   .colstats-hist-labels {
@@ -1493,7 +1493,7 @@
     height: 22px;
     background: repeating-linear-gradient(90deg, var(--ink-faint) 0px, var(--ink-faint) 4px, transparent 4px, transparent 8px);
     opacity: 0.3;
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
   }
 
   /* ===== HOVER CARD ===== */
@@ -1610,7 +1610,7 @@
     font-size: 10px;
     font-weight: 700;
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     border: 2px solid var(--ink);
     color: var(--text-on-accent);
     font-family: var(--font-mono);
@@ -1808,7 +1808,7 @@
     font-size: 9px;
     font-weight: 700;
     padding: 1px 5px;
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
     border: 2px solid var(--ink);
     background: var(--pos-qb);
     color: var(--text-on-accent);
@@ -1868,7 +1868,7 @@
     font-size: 14px;
     font-weight: 700;
     padding: 4px 10px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     border: 3px solid var(--ink);
     color: var(--text-on-accent);
     font-family: var(--font-mono);
@@ -2210,13 +2210,13 @@
     flex: 1;
     height: 14px;
     background: var(--bg-warm);
-    border-radius: 7px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
     border: 2px solid var(--ink);
   }
   .prospect-rps-bar-fill {
     height: 100%;
-    border-radius: 5px;
+    border-radius: 6px;
     transition: width 0.4s ease;
   }
   .prospect-rps-breakdown {
@@ -2230,7 +2230,7 @@
     align-items: center;
     padding: 8px 14px;
     border: 2px dashed var(--ink-faint);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     min-width: 80px;
   }
   .prospect-rps-comp-val {
@@ -2266,7 +2266,7 @@
     align-items: center;
     padding: 10px 16px;
     border: 2px solid var(--ink);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     background: var(--bg-card);
     box-shadow: 4px 4px 0 var(--ink);
     min-width: 80px;
@@ -2457,13 +2457,13 @@
     height: 10px;
     background: var(--bg-warm);
     border: 2px solid var(--ink-faint);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
     max-width: 180px;
   }
   .bb-card-rps-fill {
     height: 100%;
-    border-radius: 4px;
+    border-radius: 6px;
     transition: width 0.3s;
   }
   .bb-card-rps-val {
@@ -2909,7 +2909,7 @@
     font-weight: bold;
     color: var(--text-on-accent);
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     border: 2px solid var(--ink);
   }
   .trade-player-card .player-info {
@@ -2985,7 +2985,7 @@
     font-size: 12px;
     padding: 4px 6px;
     border: 2px solid var(--ink);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     background: var(--bg-card);
     cursor: pointer;
   }
@@ -3014,7 +3014,7 @@
     font-weight: bold;
     color: var(--text-on-accent);
     padding: 2px 6px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     border: 2px solid var(--ink);
   }
   .trade-pick-card .pick-label {
@@ -3439,10 +3439,10 @@
       <div id="loadingText" style="text-align:center; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); margin-top:12px;">pulling film...</div>
     </div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; padding:6px 12px; font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">
-      <span><span style="background:var(--green); color:var(--text-on-accent); padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">85+</span> DVS Elite</span>
-      <span><span style="background:var(--pos-qb); color:var(--text-on-accent); padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">70+</span> DVS Star</span>
-      <span><span style="background:var(--orange); color:var(--text-on-accent); padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">55+</span> DVS Starter</span>
-      <span><span style="background:var(--green); color:var(--text-on-accent); padding:0 4px; border-radius:4px; border:2px solid var(--ink); font-weight:700;">+50%</span> Breakout</span>
+      <span><span style="background:var(--green); color:var(--text-on-accent); padding:0 4px; border-radius:var(--radius-sm); border:2px solid var(--ink); font-weight:700;">85+</span> DVS Elite</span>
+      <span><span style="background:var(--pos-qb); color:var(--text-on-accent); padding:0 4px; border-radius:var(--radius-sm); border:2px solid var(--ink); font-weight:700;">70+</span> DVS Star</span>
+      <span><span style="background:var(--orange); color:var(--text-on-accent); padding:0 4px; border-radius:var(--radius-sm); border:2px solid var(--ink); font-weight:700;">55+</span> DVS Starter</span>
+      <span><span style="background:var(--green); color:var(--text-on-accent); padding:0 4px; border-radius:var(--radius-sm); border:2px solid var(--ink); font-weight:700;">+50%</span> Breakout</span>
       <span style="color:var(--ink-faint);">&#8212; = not applicable for position</span>
     </div>
   </div>
@@ -3584,7 +3584,7 @@
     <div style="margin-bottom:16px;">
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Shareable URL</label>
       <div style="display:flex; gap:8px; align-items:center;">
-        <input type="text" id="shareURLInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
+        <input type="text" id="shareURLInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
         <button class="btn-primary" id="shareURLCopyBtn" onclick="copyShareURLFromModal()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy URL</button>
       </div>
     </div>
@@ -3604,7 +3604,7 @@
     <div style="margin-bottom:16px;">
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Suggested Reddit Title</label>
       <div style="display:flex; gap:8px; align-items:center;">
-        <input type="text" id="redditTitleInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
+        <input type="text" id="redditTitleInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
         <button class="btn-chunky" id="redditTitleCopyBtn" onclick="copyRedditTitle()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy</button>
       </div>
     </div>
@@ -3625,7 +3625,7 @@
     <div style="margin-bottom:16px; padding-bottom:16px; border-bottom:2px dashed var(--ink-faint);">
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Save Current View</label>
       <div style="display:flex; gap:8px; align-items:center;">
-        <input type="text" id="saveViewName" placeholder="e.g. Dynasty WR Targets" style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
+        <input type="text" id="saveViewName" placeholder="e.g. Dynasty WR Targets" style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
         <button class="btn-primary" onclick="saveCurrentView()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Save</button>
       </div>
     </div>
@@ -3649,7 +3649,7 @@
     <!-- Config name -->
     <div style="margin-bottom:12px;">
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Config Name</label>
-      <input type="text" id="customScoringName" placeholder="e.g. My League" maxlength="20" style="width:100%; box-sizing:border-box; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:6px; background:var(--bg); color:var(--ink);">
+      <input type="text" id="customScoringName" placeholder="e.g. My League" maxlength="20" style="width:100%; box-sizing:border-box; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
     </div>
 
     <!-- Scoring weights -->
@@ -3930,7 +3930,7 @@
         </label>
       </div>
     </div>
-    <div style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light); margin-bottom:12px; padding:8px; background:var(--bg); border-radius:6px; border:2px dashed var(--ink-faint);">
+    <div style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light); margin-bottom:12px; padding:8px; background:var(--bg); border-radius:var(--radius-sm); border:2px dashed var(--ink-faint);">
       weights stay hidden — only stat names are shown in the store
     </div>
     <div class="filter-modal-actions">
@@ -3985,7 +3985,7 @@
     </div>
     <div id="hmLegend" style="margin-top:12px; display:flex; align-items:center; gap:12px; justify-content:center;">
       <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">0th</span>
-      <div style="width:200px; height:14px; border:2px solid var(--ink); border-radius:4px; display:flex; overflow:hidden;"><div style="flex:1; background:var(--red);"></div><div style="flex:1; background:var(--orange);"></div><div style="flex:1; background:var(--yellow);"></div><div style="flex:1; background:var(--green-light);"></div><div style="flex:1; background:var(--green);"></div></div>
+      <div style="width:200px; height:14px; border:2px solid var(--ink); border-radius:var(--radius-sm); display:flex; overflow:hidden;"><div style="flex:1; background:var(--red);"></div><div style="flex:1; background:var(--orange);"></div><div style="flex:1; background:var(--yellow);"></div><div style="flex:1; background:var(--green-light);"></div><div style="flex:1; background:var(--green);"></div></div>
       <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">100th percentile</span>
     </div>
   </div>

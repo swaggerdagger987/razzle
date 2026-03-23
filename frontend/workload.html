@@ -28,11 +28,11 @@
   .wl-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
   .wl-header .wl-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
   .wl-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .wl-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
+  .wl-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
   .wl-controls .pos-tabs { display: flex; gap: 4px; }
-  .wl-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .wl-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .wl-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
-  .wl-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .wl-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .wl-export:hover { background: var(--ink); color: var(--bg); }
   .wl-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
@@ -45,14 +45,14 @@
   .wl-table td:first-child, .wl-table td:nth-child(2), .wl-table td:nth-child(3) { text-align: left; }
   .wl-table tbody tr:hover { background: var(--bg-warm); }
   .wl-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .wl-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: var(--text-on-accent); }
-  .wl-score-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 2px solid; }
+  .wl-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .wl-score-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
   .wl-score-high { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .wl-score-mid { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
   .wl-score-low { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
-  .wl-flag { display: inline-block; font-family: var(--font-mono); font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin: 1px 2px; background: var(--orange); color: var(--text-on-accent); }
+  .wl-flag { display: inline-block; font-family: var(--font-mono); font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); margin: 1px 2px; background: var(--orange); color: var(--text-on-accent); }
   .wl-bar-cell { width: 80px; }
-  .wl-bar { height: 12px; border-radius: 2px; background: var(--orange); min-width: 2px; }
+  .wl-bar { height: 12px; border-radius: var(--radius-sm); background: var(--orange); min-width: 2px; }
   .wl-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
 
   @media (max-width: 768px) {

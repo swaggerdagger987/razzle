@@ -32,13 +32,13 @@
   .rb-controls .pos-tabs { display: flex; gap: 4px; }
   .rb-controls .pos-tab {
     font-family: var(--font-mono); font-size: 12px; padding: 5px 12px;
-    border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card);
+    border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card);
     cursor: pointer; font-weight: 700;
   }
   .rb-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
   .rb-export {
     font-family: var(--font-mono); font-size: 12px; padding: 5px 14px;
-    border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card);
+    border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card);
     cursor: pointer; font-weight: 700;
   }
   .rb-export:hover { background: var(--ink); color: var(--bg); }
@@ -75,11 +75,11 @@
   .rb-rank.bronze { color: var(--orange); }
 
   .rb-pos-chip {
-    font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
+    font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm);
     color: var(--text-on-accent); margin-left: 4px;
   }
   .rb-season-badge {
-    font-size: 10px; padding: 1px 5px; border-radius: 3px;
+    font-size: 10px; padding: 1px 5px; border-radius: var(--radius-sm);
     background: var(--bg); border: 2px solid var(--ink-faint);
   }
   .rb-fpts { font-weight: 700; }

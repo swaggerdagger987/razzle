@@ -28,16 +28,16 @@
   .pa-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
   .pa-header .pa-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
   .pa-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-  .pa-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
+  .pa-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
   .pa-controls .pos-tabs { display: flex; gap: 4px; }
-  .pa-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .pa-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .pa-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
-  .pa-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .pa-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
   .pa-export:hover { background: var(--ink); color: var(--bg); }
   .pa-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
 
   .pa-avgs { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-  .pa-avg-chip { font-family: var(--font-mono); font-size: 11px; padding: 3px 10px; border: 2px solid var(--ink); border-radius: 4px; background: var(--bg-card); }
+  .pa-avg-chip { font-family: var(--font-mono); font-size: 11px; padding: 3px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
   .pa-avg-chip span { font-weight: 700; }
 
   .pa-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
@@ -49,11 +49,11 @@
   .pa-table td:first-child, .pa-table td:nth-child(2), .pa-table td:nth-child(3) { text-align: left; }
   .pa-table tbody tr:hover { background: rgba(217,119,87,0.08); }
   .pa-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .pa-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; color: var(--text-on-accent); }
-  .pa-adv-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 2px solid; }
+  .pa-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .pa-adv-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
   .pa-adv-pos { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .pa-adv-neg { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
-  .pa-bar { display: inline-block; height: 10px; border-radius: 5px; vertical-align: middle; margin-left: 4px; }
+  .pa-bar { display: inline-block; height: 10px; border-radius: var(--radius-sm); vertical-align: middle; margin-left: 4px; }
   .pa-empty { text-align: center; font-family: var(--font-hand); font-size: 15px; color: var(--ink-light); padding: 30px 16px; }
   @media (max-width: 768px) { .pa-table { font-size: 11px; } }
 </style>
