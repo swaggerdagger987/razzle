@@ -440,3 +440,13 @@
 [2026-03-23 14:44:11] Posted successfully. 3 drafts remaining in queue.
 [2026-03-23 14:44:11] Next post at ~15:44 (1.0h from now).
 
+[2026-03-23 15:44:11] Queue health: 3 pending, 3 ready to post.
+[2026-03-23 15:44:11] WARNING: Only 3 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 15:44:11] Posting: 2026-04-18_07-00_evidence_mahomes_decline.md
+  Uploaded media: 2036167148087705600
+  Posted tweet: 2036167152781177218
+  Logged to results.tsv
+  Moved to posted/: 2026-04-18_07-00_evidence_mahomes_decline.md
+[2026-03-23 15:44:14] Posted successfully. 2 drafts remaining in queue.
+[2026-03-23 15:44:14] Next post at ~16:44 (1.0h from now).
+

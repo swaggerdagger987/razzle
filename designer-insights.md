@@ -1,5 +1,34 @@
 # Designer Insights
 
+### Cycle 14 — 2026-03-23
+
+**What I did**: Interactive behavior + responsive layout + mobile UX audit. Local server running (uvicorn on 127.0.0.1:8000). Took 15+ screenshots across home, Lab, pricing, agents, bureau, dashboard, rankings, awards, trade values — in light mode, dark mode, desktop (1440x900), tablet (768x1024), and mobile (375x812). FIRST EVER TABLET TESTING after 13 cycles. Used 1 subagent for 10-category fresh code search (text-decoration, cursor styles, white-space/text-overflow, min-height/min-width, touch-action, @media print, ::selection, tab-size, word-break/overflow-wrap, aspect-ratio). Cross-referenced all 100 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-101 through DQ-110).
+
+**Quality score**: 8/10 — Shifted to a completely new audit dimension: INTERACTIVE BEHAVIOR (cursor affordances, touch UX, selection branding, disabled states) and RESPONSIVE GAPS (tablet viewport, text overflow). All code findings backed by exact grep counts (371 cursor:pointer, 0 ::selection, 0 touch-action, 50 unmatched nowrap). First tablet viewport testing fills a 13-cycle blind spot. Visual screenshots confirmed dashboard subtitle readability issue and home tablet Situation Room overflow.
+
+**What worked**:
+- Chain command pattern for browse tool was reliable for all 15+ screenshots. State persisted correctly across separate chain calls.
+- Tablet testing (768x1024) finally happened and immediately revealed responsive issues that desktop + mobile testing missed (the middle ground where layouts are neither full desktop nor mobile-collapsed).
+- Counting-based severity: "371 cursor:pointer vs 5 cursor:not-allowed" immediately communicates the gap in disabled-state affordances.
+- 10-category code search via subagent covered categories orthogonal to all prior cycles: behavior/interaction rules (cursor, touch-action, selection) vs prior cycles' token/visual rules (colors, borders, radius).
+
+**What didn't**:
+- Browse tool still requires chain commands — separate `$B` calls don't persist navigation state (returns blank page). This has been consistent across all 14 cycles.
+- Could not test actual hover states or cursor changes visually in headless browser. DQ-103 (cursor chaos) and DQ-110 (Pro-locked affordances) are code-verified but not screenshot-verified.
+- Dashboard subtitle readability (DQ-107) needs code verification of actual font-size — visual observation only at this point.
+
+**Pattern spotted**: The codebase has now been audited across 5 distinct eras: (1) Cycles 1-5: design tokens (colors, borders, radius, shadows), (2) Cycles 6-9: UX/conversion (empty states, Pro gates, previews), (3) Cycles 10-12: interaction + component quality (hover states, dark mode, loading UX), (4) Cycle 13: system-level design debt (token governance, accessibility infra), (5) Cycle 14: BEHAVIORAL CSS (cursor, touch, selection, overflow-wrap) + RESPONSIVE GAPS (tablet). The remaining high-value work is in responsive tablet testing and interactive state completeness.
+
+**Root cause found**: The 371-cursor:pointer vs 5-cursor:not-allowed gap traces to a pattern where interactive elements were built incrementally across 162 phases — each phase added cursor:pointer to new elements but nobody ever went back to add disabled/locked states. The Pro-locking system (DQ-110) was bolted on AFTER the UI was built, so locked elements inherited pointer cursor from their unlocked originals. The fix is systemic: a single `.pro-locked` CSS class that overrides cursor + opacity for all gated content.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-101 (::selection) and DQ-102 (touch-action) are the two quickest wins — 4 and 2 lines of CSS respectively. Zero risk. Do these first.
+- Ship agent: DQ-110 (Pro-locked affordances) is the highest UX-impact ticket — it directly affects conversion by setting correct expectations for free users before they click.
+- Ship agent: DQ-104 (nowrap/ellipsis) is the most mechanical fix — find all 50 unmatched nowrap rules in lab-panels.css and add ellipsis pairs. But test at 768px width after fixing.
+- Ship agent: DQ-103 (cursor chaos) is the largest by scope (371 instances, 82 files) and should probably be broken into sub-tasks: (a) add cursor:not-allowed to disabled states first, (b) consolidate inline cursor:pointer to CSS classes later.
+
+**What I'd do differently next time**: Run end-to-end FLOW testing instead of page-by-page visual QA. After 14 cycles of page screenshots, the remaining issues are in transitions between pages and interactive state changes that static screenshots can't capture. Flows to test: (1) Lab filter → export → share URL round-trip, (2) Free user hitting Pro gate → pricing → register flow, (3) Bureau connect → league view → trade finder. These would catch friction that page-level QA misses.
+
 ### Cycle 13 — 2026-03-23
 
 **What I did**: Design system token audit + accessibility gap analysis + cross-browser check. Local server running (uvicorn on 127.0.0.1:8000). Took 12+ screenshots across home, Lab, pricing, agents, bureau, dashboard, rankings, trade values, buy/sell, efficiency — in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 2 subagents: (1) 10-category fresh code search (line-height, prefers-reduced-motion, cursor:pointer, img w/h, text-transform, placeholder text, color:inherit, hover/focus-visible parity, scrollbar styling, backdrop-filter), (2) 10-category visual/UX pattern search (autocomplete, table captions, target_blank security, duplicate IDs, hardcoded #000, opacity consistency, height constraints, font-weight, border-color, @keyframes). Cross-referenced all 90 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-091 through DQ-100).
