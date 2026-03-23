@@ -1267,7 +1267,9 @@ async function fetchAndRender() {
   if (_fetchController) _fetchController.abort();
   _fetchController = new AbortController();
   const myId = ++_fetchId;
-  const signal = _fetchController.signal;
+  const signal = typeof AbortSignal.any === 'function'
+    ? AbortSignal.any([_fetchController.signal, AbortSignal.timeout(15000)])
+    : _fetchController.signal;
 
   if (isProspectView()) {
     return fetchAndRenderProspects(signal, myId);

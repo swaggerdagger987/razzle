@@ -3458,7 +3458,7 @@
     <button class="scroll-top-btn" id="scrollTopBtn" style="display:none;" onclick="var w=document.querySelector('.table-wrap'); if(w) w.scrollTo({top:0, behavior:'smooth'})" title="Scroll to top" aria-label="Scroll to top">&#9650;</button>
     <table class="screener-table" id="screenerTable">
       <caption class="sr-only">NFL Player Statistics Screener</caption>
-      <thead id="tableHead"></thead>
+      <thead id="tableHead" style="min-height:40px;"></thead>
       <tbody id="pinnedBody" style="display:none;"></tbody>
       <tbody id="tableBody"></tbody>
       <tfoot id="tableFoot" style="display:none;"></tfoot>
@@ -3506,6 +3506,8 @@
       <button class="btn-chunky" id="nextBtn" onclick="nextPage()">next →</button>
       <select class="select-chunky" id="pageSizeSelect" onchange="changePageSize(this.value)" style="font-size:11px; padding:4px 6px; margin-left:8px;" title="Rows per page">
         <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
       </select>
     </div>
     <span id="dataSource" style="font-family: var(--font-hand); font-size: 16px; color: var(--ink-light);">
@@ -4162,8 +4164,10 @@
     document.querySelectorAll('.lab-sidebar-item.pro-locked').forEach(function(item) {
       if (paid) {
         item.classList.remove('show-lock');
+        item.removeAttribute('aria-label');
       } else {
         item.classList.add('show-lock');
+        item.setAttribute('aria-label', item.textContent.trim() + ' (Pro — locked)');
       }
     });
   }
@@ -4381,13 +4385,16 @@
       gate.dataset.panel = '__gate__';
       labMain.appendChild(gate);
     }
+    gate.setAttribute('role', 'dialog');
+    gate.setAttribute('aria-modal', 'true');
+    gate.setAttribute('aria-labelledby', 'upgrade-gate-title');
     var label = PANEL_LABELS[panelName] || panelName;
     gate.innerHTML =
       '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:400px; text-align:center; padding:48px 24px;">' +
         '<div style="font-size:48px; margin-bottom:16px;">&#x1F512;</div>' +
-        '<div style="font-family:var(--font-display); font-size:24px; margin-bottom:8px;">' + escapeHtml(label) + ' is a Pro panel</div>' +
-        '<div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-medium); margin-bottom:24px; max-width:400px;">unlock 60+ advanced panels, full historical data, CSV export, and custom formulas with Pro</div>' +
-        '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:14px; padding:10px 28px; text-decoration:none;">See Plans</a>' +
+        '<div id="upgrade-gate-title" style="font-family:var(--font-display); font-size:24px; margin-bottom:8px;">' + escapeHtml(label) + ' is a Pro panel</div>' +
+        '<div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-medium); margin-bottom:24px; max-width:400px;">unlock 70+ advanced panels, full historical data, CSV export, and custom formulas with Pro</div>' +
+        '<a href="/pricing.html" id="upgrade-gate-cta" class="btn-chunky btn-primary" style="font-size:14px; padding:10px 28px; text-decoration:none;">See Plans</a>' +
         '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:12px;">' +
           (typeof getUserTierInfo === 'function' && getUserTierInfo().isTrial
             ? "You're on Pro (" + getUserTierInfo().daysLeft + "d left). Subscribe to keep access."
@@ -4397,6 +4404,8 @@
           ) + '</div>' +
       '</div>';
     gate.style.display = '';
+    var cta = document.getElementById('upgrade-gate-cta');
+    if (cta) cta.focus();
   }
 
   // ─── switchPanel ───────────────────────────────────────────────

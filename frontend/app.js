@@ -209,6 +209,12 @@ function _injectHamburgerMenu() {
     panel.classList.add("open");
     overlay.classList.add("open");
     btn.setAttribute("aria-expanded", "true");
+    // Trap focus: make main content inert
+    var main = document.querySelector("main");
+    if (main) main.setAttribute("inert", "");
+    // Focus first nav link after animation
+    var firstLink = panel.querySelector(".mobile-nav-link");
+    if (firstLink) setTimeout(function() { firstLink.focus(); }, 100);
     // Update sign-in state
     _updateMobileAuthState();
   }
@@ -217,6 +223,11 @@ function _injectHamburgerMenu() {
     panel.classList.remove("open");
     overlay.classList.remove("open");
     btn.setAttribute("aria-expanded", "false");
+    // Restore main content
+    var main = document.querySelector("main");
+    if (main) main.removeAttribute("inert");
+    // Return focus to hamburger button
+    btn.focus();
   }
 
   btn.addEventListener("click", function() {

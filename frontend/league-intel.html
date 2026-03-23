@@ -7397,6 +7397,16 @@ function _loadDemoLeague() {
   container.innerHTML = leaguesHtml;
 }
 </script>
+<button class="scroll-top-btn" id="scrollTopBtn" style="display:none;position:fixed;bottom:24px;right:24px;z-index:50;width:36px;height:36px;border:3px solid var(--ink);border-radius:8px;background:var(--bg-card);box-shadow:4px 4px 0 var(--ink);cursor:pointer;font-size:16px;line-height:30px;text-align:center;color:var(--ink);transition:transform 0.1s;" onclick="window.scrollTo({top:0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'})" title="Scroll to top" aria-label="Scroll to top">&#9650;</button>
+<script>
+(function(){
+  var btn = document.getElementById('scrollTopBtn');
+  if (!btn) return;
+  window.addEventListener('scroll', function() {
+    btn.style.display = window.scrollY > 200 ? '' : 'none';
+  }, {passive: true});
+})();
+</script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 </body>
 </html>
