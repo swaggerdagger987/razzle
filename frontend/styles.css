@@ -272,7 +272,7 @@ h1, h2, h3 {
   background: rgba(45,31,20,0.4);
   z-index: 9998;
 }
-[data-theme="dark"] .mobile-nav-overlay { background: rgba(0,0,0,0.5); }
+[data-theme="dark"] .mobile-nav-overlay { background: rgba(26,17,10,0.6); }
 
 .mobile-nav-overlay.open {
   display: block;
@@ -646,7 +646,7 @@ button.nav-search-hint {
   justify-content: center;
   z-index: 9999;
 }
-[data-theme="dark"] .auth-modal-overlay { background: rgba(0,0,0,0.6); }
+[data-theme="dark"] .auth-modal-overlay { background: rgba(26,17,10,0.7); }
 
 .auth-modal {
   background: var(--bg-card);
@@ -1076,7 +1076,7 @@ body {
   justify-content: center;
   padding-top: 15vh;
 }
-[data-theme="dark"] .cmd-palette-backdrop { background: rgba(0,0,0,0.55); }
+[data-theme="dark"] .cmd-palette-backdrop { background: rgba(26,17,10,0.65); }
 .cmd-palette-backdrop.open {
   display: flex;
 }

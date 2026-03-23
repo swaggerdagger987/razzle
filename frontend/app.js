@@ -761,7 +761,7 @@ function _showWelcomeModal(user) {
       ];
 
   var overlay = document.createElement("div");
-  var overlayBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(0,0,0,0.6)" : "rgba(45,31,20,0.6)";
+  var overlayBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(26,17,10,0.7)" : "rgba(45,31,20,0.6)";
   overlay.style.cssText = "position:fixed;inset:0;background:" + overlayBg + ";z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;";
   overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
 
@@ -1784,7 +1784,7 @@ function openPlayerPopup(playerId) {
   if (!overlay) {
     overlay = document.createElement("div");
     overlay.id = "razzlePlayerPopup";
-    var popupBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(0,0,0,0.5)" : "rgba(45,31,20,0.5)";
+    var popupBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(26,17,10,0.6)" : "rgba(45,31,20,0.5)";
     overlay.style.cssText = "position:fixed;inset:0;background:" + popupBg + ";z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;";
     overlay.innerHTML =
       '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:24px;position:relative;">' +
