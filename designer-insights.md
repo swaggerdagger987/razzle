@@ -451,6 +451,50 @@ The Bureau is supposed to be the bridge from "cool free tool" to "I need this." 
 - Cycle 26: Conversion copy precision, agent territory, pricing UX
 - Cycle 27: Cross-page dark mode gaps, agents page conversion path, runtime safety
 - **Cycle 28: Bureau UX debt, URL state gaps, error differentiation, data freshness**
+- **Cycle 29: Lab form accessibility, agents page conversion safety, inline style governance**
+
+### Cycle 29 Findings: Lab Form Accessibility, Agents Conversion Safety, Inline Style Governance
+
+- **Lab toolbar position chips are `<span onclick>` — not keyboard accessible** (DES-297) — P2. The 5 position filter buttons (All/QB/RB/WR/TE) at lab.html:3319-3323 are `<span>` elements with onclick. No role="button", no tabindex, no keyboard handler. These are the FIRST controls a user interacts with in the Screener. Keyboard-heavy power users (the target audience — they use J/K/H/T shortcuts) can't reach these controls without a mouse.
+
+- **Lab filter modal selects missing aria-label** (DES-298) — P2. filterStat and filterOp selects at lab.html:3524-3531 have no label, no aria-label. Screen readers announce "combobox" with zero context. Different elements from DES-222 (lab-panels search) and DES-205 (formula builder).
+
+- **agents.html "Current Plan" buttons still clickable after visual disable** (DES-299) — P1. Lines 2195-2208 set opacity:0.6 and cursor:default but never set `disabled` attribute. Paid users can still Tab to and click these dead buttons. No feedback on click = feels broken. Conversion surface issue.
+
+- **Lab noscript uses off-palette hardcoded hex** (DES-300) — P3. Lines 3155-3158 use #6b5a4e and #a89585 — neither is a design system color. Both fall between palette values. Also hardcodes font-family names instead of CSS vars.
+
+- **Lab toolbar buttons use inline border-color overrides** (DES-301) — P2. 4 buttons in tools dropdown have `style="border-color:var(--orange)"` etc. while others don't. No CSS classes for button color variants. Can't be overridden by dark mode CSS.
+
+- **Agent badge emojis double-announced by screen readers** (DES-302) — P2. Lines 1619-1624: "tiger face Razzle" instead of just "Razzle". Decorative emoji should be aria-hidden.
+
+- **Weekly briefing teaser overlay text invisible in light mode** (DES-303) — P1. Line 1755: `color:var(--ink)` on `rgba(26,17,10,0.85)` overlay = dark text on dark background. The Elite plan's weekly briefing pitch is unreadable in the default theme. Different element from DES-208 (demo briefing card).
+
+- **Lab sidebar agent icons use repeated inline styles** (DES-304) — P3. Every `<img>` for agent icons repeats `style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6"`. Should be a CSS class.
+
+- **API key input type="password" prevents paste verification** (DES-305) — P2. agents.html:1667 masks the input. Users paste long API keys and can't verify correctness. Silent failures when key is wrong.
+
+- **Lab number inputs missing inputmode for mobile** (DES-306) — P2. lab.html:3438 and 3532 — zero `inputmode` attributes in entire frontend. Mobile numeric keyboard is suboptimal without it.
+
+### Things confirmed GOOD in cycle 29:
+- lab.js table headers ALL have `scope="col"` — 8 instances, all correct
+- styles.css has global `prefers-reduced-motion: reduce` at line 1637 — covers agents.html animations too
+- Lab filter modal has proper `role="dialog"`, `aria-modal`, `aria-labelledby` — well-structured
+- Lab search input has `aria-label="Search players"` — good
+- Season select has `aria-label="Season"` — good
+- All Lab overlay modals (filter, columns, formula, charts, compare, share, saved views) have proper ARIA dialog attributes
+- No duplicate IDs found on lab.html
+- `#main-content` target exists as `<main>` element — skip link works correctly
+
+### Key Insight: The Lab's Interactive Controls Have an Accessibility Gap
+Cycles 8-11 addressed ARIA on modals, canvases, live regions, and comboboxes. Cycle 29 reveals that the Lab's primary INTERACTIVE CONTROLS — the ones users touch first and most often — still have gaps:
+- Position chips: not keyboard accessible (DES-297)
+- Filter selects: no labels (DES-298)
+- Number inputs: no mobile optimization (DES-306)
+
+The Screener is the growth engine. These controls are touched hundreds of times per session. Keyboard users (the target power-user audience) can't use the first thing they see.
+
+### Key Insight: agents.html Has Both Visibility and Safety Bugs
+DES-303 (invisible overlay text) and DES-299 (clickable disabled buttons) are conversion-critical bugs on the same page. The Situation Room is where users decide to upgrade to Elite. A broken pitch (can't read the text) and broken buttons (can click but nothing happens) both erode trust at the decision point.
 
 ### What Matters Most for Conversion
 - **OG image** is seen by more people than the home page itself — it's the preview on every social share (DES-007, FIXED)
