@@ -514,7 +514,7 @@ function renderFormulaCard(formula, userReviews) {
   const validPositions = ["QB", "RB", "WR", "TE"];
   const posTags = (formula.positions || []).filter(p => validPositions.includes(p)).map(p => {
     const colors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
-    return `<span style="font-family:var(--font-mono); font-size:9px; font-weight:700; padding:1px 6px; border-radius:4px; border:2px solid var(--ink); background:${colors[p]}; color:var(--text-on-accent); text-transform:uppercase;">${escapeHtml(p)}</span>`;
+    return `<span style="font-family:var(--font-mono); font-size:9px; font-weight:700; padding:1px 6px; border-radius:8px; border:2px solid var(--ink); background:${colors[p]}; color:var(--text-on-accent); text-transform:uppercase;">${escapeHtml(p)}</span>`;
   }).join(" ");
 
   // Free user: description is partially blurred, actions are gated

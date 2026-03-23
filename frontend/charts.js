@@ -763,7 +763,7 @@ function drawHeatmap() {
         const pctSuffix = col && col.pct ? "%" : "";
         const formatted = dec != null ? Number(val).toFixed(dec) + pctSuffix : val;
         ctx.font = "bold 11px 'Space Mono', monospace";
-        ctx.fillStyle = pct !== null && pct > 75 ? "#ffffff" : t.ink;
+        ctx.fillStyle = pct !== null && pct > 75 ? t.white : t.ink;
         ctx.textAlign = "center";
         ctx.fillText(formatted, x + cellW / 2, y + cellH / 2 + 4);
       } else {
