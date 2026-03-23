@@ -1,5 +1,26 @@
 /* Razzle — shared utilities */
 
+/* ===== Global Error Handlers ===== */
+(function() {
+  var _lastErrorToast = 0;
+  function _globalErrorToast() {
+    var now = Date.now();
+    if (now - _lastErrorToast < 5000) return;
+    _lastErrorToast = now;
+    if (typeof _showToast === 'function') {
+      _showToast(typeof razzleError === 'function' ? razzleError() : 'something went sideways. try refreshing.');
+    }
+  }
+  window.onerror = function(message, source, lineno, colno, error) {
+    if (source && source.indexOf(location.origin) === -1) return false;
+    _globalErrorToast();
+    return false;
+  };
+  window.onunhandledrejection = function(event) {
+    _globalErrorToast();
+  };
+})();
+
 /* ===== Theme Toggle (Espresso Dark Mode) ===== */
 (function initTheme() {
   try {
