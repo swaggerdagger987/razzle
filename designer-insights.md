@@ -1,5 +1,36 @@
 # Designer Insights
 
+### Cycle 23 — 2026-03-23
+
+**What I did**: MODERN CSS + MOBILE HARDENING audit — shifted from visual tokens and runtime robustness to browser-native quality signals (dvh, hover media, fetchpriority, overscroll-behavior, text-wrap, color-scheme, scroll-padding). Ran 2 parallel subagents: (1) 10-pattern anti-pattern search (font-weight on display fonts, text-transform+Caveat, 100vh, position:fixed z-index, animation reduce-motion, etc.), (2) visual consistency search (max-width drift, heading patterns, card consistency, title patterns, nav active states). Headless browser still blank on localhost (same CSP issue). Cross-referenced all 346 existing tickets. Wrote 10 new tickets (DQ-141 through DQ-150).
+
+**Quality score**: 8/10 — Shifted to a genuinely new audit dimension: modern CSS features and mobile-specific hardening. All 10 tickets target issues that previous 22 cycles missed because they're about what's ABSENT (missing attributes, missing media queries, missing CSS properties) rather than what's WRONG (bad values, bad colors).
+
+**What worked**:
+- Two parallel subagents with orthogonal searches (anti-patterns vs visual consistency) covered 20 categories efficiently.
+- Comparing the "correct" pattern (lab.html:966-967 has dvh) against the "incorrect" pattern (styles.css:147 doesn't) makes tickets concrete and verifiable.
+- Counting approach: "143 :hover rules, 0 guarded" immediately communicates systemic scale.
+- The subagents confirmed several patterns are ALREADY CORRECT: prefers-reduced-motion global rule exists, all margin:auto have max-width, all target="_blank" have rel="noopener", color-scheme detection exists in app.js.
+
+**What didn't**:
+- Headless browser still blank on localhost — same CSP issue across 3 consecutive cycles. This is now a systemic blocker for visual QA.
+- Could not verify the scroll-padding-top issue visually (would need to click an anchor link and observe scroll position).
+- DQ-144 (hover guard) is the largest scope ticket — 143 rules across 2 files. Shipper will need to be careful not to break keyboard :focus-visible states.
+
+**Pattern spotted**: After 23 cycles, the audit has covered 7 eras: (1) design tokens, (2) UX/conversion, (3) interaction quality, (4) system governance, (5) behavioral CSS, (6) CSS architecture, (7) runtime robustness, and now (8) MODERN CSS + MOBILE HARDENING. The remaining frontier is INTEGRATION FLOW TESTING — multi-page user journeys that cross file boundaries.
+
+**Root cause found**: The 100vh/dvh gap (DQ-141) shows a pattern: lab.html (the most-iterated file, built across 125+ phases) has the fix, but styles.css (the shared stylesheet, modified less frequently) does not. Individual pages get hardened through QA, but the shared infrastructure drifts because nobody re-audits it after early phases.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-148 (scroll-padding-top) is a ONE-LINE fix in styles.css. Zero risk. Do first.
+- Ship agent: DQ-141 (100dvh) is 3 lines added to styles.css. Zero risk — it's progressive enhancement.
+- Ship agent: DQ-149 (color-scheme) is 2 lines of CSS. Zero risk.
+- Ship agent: DQ-142 (font-weight:400 on Caveat) is a find-delete across 13 files. Mechanical.
+- Ship agent: DQ-144 (hover guard) is HIGHEST IMPACT but HIGHEST COMPLEXITY. Suggest doing it last. Wrap each file's hover rules in one `@media (hover: hover) { }` block.
+- Ship agent: DQ-143 (h1/h2 baseline) should be done WITH DQ-150 (text-wrap:balance) since both add to the same heading rules.
+
+**What I'd do differently next time**: Fix the headless browser issue. The CSP problem has blocked visual QA for 3 cycles. Consider: (1) adding a `--dev` flag to the FastAPI server that skips the CSP header, (2) using a different port/protocol, or (3) running the browser with `--disable-web-security` flag. Visual QA would catch issues that code-level grep cannot (spacing problems, alignment drift, visual hierarchy).
+
 ### Cycle 22 — 2026-03-23
 
 **What I did**: Fresh code audit after headless browser failed (CSP upgrade-insecure-requests blocks localhost rendering, DNS resolution failing for external sites). Pivoted to code-level design audit. Ran 7 parallel search agents: cold grays, 1px borders, hardcoded fonts, hardcoded colors, loading states, border-radius tokens, box-shadow patterns. Cross-referenced all 336 existing tickets (130 root + 21 open + 100+ pending + 10 queue + 156 done) to ensure zero duplicates. Wrote 10 new tickets (DQ-131 through DQ-140).
