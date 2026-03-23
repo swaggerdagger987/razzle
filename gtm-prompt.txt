@@ -9,9 +9,36 @@ The distribution strategy has changed. The previous 11 cycles concluded "stop re
 
 These two features together could be the distribution flywheel that solves the #1 risk (distribution gap vs DynastyDaddy). OR they could be a waste of time. Your job is to be BRUTALLY HONEST about which one it is.
 
-Read docs/ROADMAP.md Phase 3 for the full plan. Then stress-test every assumption in it.
+Read docs/ROADMAP.md — THE ENTIRE FILE, especially Phase 3 which now has three sub-phases:
+- 3A: Reddit account credibility building
+- 3B: !razzle Reddit bot (commands: player lookup, compare, prospect, breakouts)
+- 3C: Reddit account connection with BURNER ACCOUNT SUPPORT + Reddit Pulse (Atlas) + full agent Reddit intelligence layer
 
-Previous GTM report is at docs/marketing/gtm-report.md — use it as a STARTING POINT, not gospel. The distribution sections need to be REWRITTEN with the Reddit bot + account connection as the primary strategy. Keep all the validated findings from cycles 1-11 (market sizing, unit economics, behavioral moat). Rewrite the distribution, channel, and launch plan sections.
+The roadmap now includes:
+- Multi-account Reddit connect ("We know the burner exists" — users connect main + burner accounts, all merge into one intent profile)
+- Reddit Pulse: Atlas builds community consensus per player, cross-references against 2015-2025 historical data to find where Reddit is WRONG
+- All 6 agents get a Reddit intelligence layer (Hawkeye: hype vs signal, Bones: leaguemate Reddit activity, Dolphin: injury sentiment vs data, Octo: Reddit value vs model value gaps)
+- The flywheel: Reddit data in -> agent insights out -> shared back on Reddit -> more users -> more data -> agents smarter
+
+Also read docs/plans/2026-03-20-agent-connective-tissue-design.md for how the agents work across the product.
+
+Previous GTM report is at docs/marketing/gtm-report.md — use cycles 1-11 findings as a STARTING POINT. Keep validated findings (market sizing, unit economics, behavioral moat). REWRITE:
+- Distribution strategy around the Reddit bot + account connection flywheel
+- Channel strategy with Reddit as PRIMARY, not one of many
+- Launch plan timed to NFL Draft Day (April 24)
+- Risk assessment with the Reddit strategy specifically stress-tested
+
+## AUTORESEARCH FOCUS FOR THIS PASS
+
+The critique phase (Phase 3) must specifically answer these questions. If you can't answer them with data, flag them and research in Phase 4:
+
+1. **Has any fantasy tool ever deployed a Reddit bot?** Search for FPLbot (soccer), NFL bots, fantasy bots on Reddit. What engagement do they get? What went wrong? What went right?
+2. **Will r/DynastyFF mods allow a bot?** Search their rules. Search for bot policy posts. Have other bots been banned?
+3. **Will dynasty managers connect their Reddit account to a third-party tool?** Search for reactions to apps that read Reddit history. Privacy concerns? Or do people not care?
+4. **The burner angle — is this cringe or genius?** Search Reddit for discussions about burner accounts in fantasy football subs. How common are burners? Will the "we know the burner exists" copy land or backfire?
+5. **Reddit Pulse (Atlas knowing what Reddit thinks) — does this already exist anywhere?** Search for tools that aggregate Reddit sentiment for fantasy football. If nobody does this, it's a genuine moat. If someone does, who and how?
+6. **The flywheel math — is it realistic?** Model: bot summoned 50x/day -> 5,000 impressions -> 50 site visits -> 5 Sleeper connects -> 1 Reddit connect -> agent gets smarter. Does this math hold? What are realistic conversion rates at each step?
+7. **What kills this strategy?** Reddit bans the bot. Users don't connect accounts. The bot gets spammed. The mods say no. Privacy backlash. List every way this fails.
 
 ## THE ONLY METRIC THAT MATTERS
 
