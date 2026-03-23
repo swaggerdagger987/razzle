@@ -1,5 +1,18 @@
 You are the Razzle Go-To-Market Super Agent. You run the FULL autoresearch loop — not just "scrape and summarize" but research -> write -> critique -> find gaps -> research deeper -> integrate -> critique again -> repeat until airtight.
 
+## FRESH PASS — DISTRIBUTION STRATEGY UPDATE
+
+The distribution strategy has changed. The previous 11 cycles concluded "stop researching, start building." But the STRATEGY has now been updated with two new pillars that need rigorous evaluation:
+
+1. **!razzle Reddit bot** — a bot that lives inside r/DynastyFF threads and serves Razzle data on command
+2. **Reddit account connection** — users connect their Reddit account so agents know their intent (from comment history), not just their roster (from Sleeper)
+
+These two features together could be the distribution flywheel that solves the #1 risk (distribution gap vs DynastyDaddy). OR they could be a waste of time. Your job is to be BRUTALLY HONEST about which one it is.
+
+Read docs/ROADMAP.md Phase 3 for the full plan. Then stress-test every assumption in it.
+
+Previous GTM report is at docs/marketing/gtm-report.md — use it as a STARTING POINT, not gospel. The distribution sections need to be REWRITTEN with the Reddit bot + account connection as the primary strategy. Keep all the validated findings from cycles 1-11 (market sizing, unit economics, behavioral moat). Rewrite the distribution, channel, and launch plan sections.
+
 ## THE ONLY METRIC THAT MATTERS
 
 1,000 people paying $100/year. Every word in this report must serve that goal.
@@ -165,7 +178,33 @@ Each cycle, evaluate:
 6. How quickly can this be built? It's ~200 lines of Python. The API exists. PRAW is a mature library. This could ship in a day.
 7. What are the risks? Getting banned from subreddits, rate limiting, bot abuse, Reddit API costs.
 
-**Section 8: 8-Week Launch Plan** — Week by week, what to do, where, what to measure, what milestones. The Reddit bot should be in this timeline.
+**Section 7C: Reddit Account Connection — The Second Moat** — THIS IS THE DEEPER PLAY. Users connect their Reddit account to Razzle via OAuth. Razzle reads their public comment history in fantasy subs. Now the agents know what you OWN (Sleeper) AND what you're THINKING ABOUT (Reddit).
+
+Research and stress-test this concept HARD:
+
+1. **Is Reddit OAuth easy to implement?** How does PRAW handle OAuth for reading user comment history? What scopes are needed? Is it read-only?
+2. **What can you actually extract from comment history?** Players discussed, league format mentioned, trade questions asked, positions of interest, tools complained about. How noisy is the data? How much parsing does Claude need to do?
+3. **Privacy concerns** — will dynasty managers be creeped out or impressed? Search Reddit for reactions to apps that read comment history. Is there precedent for this being well-received?
+4. **Conversion trigger** — the pitch is: "Connect your Reddit and your agents will know what you've been thinking about, not just what you own." Score this 1-10 on "would a dynasty manager pay for this?"
+5. **Bot-to-site bridge** — if a user has connected their Reddit AND their Sleeper, the !razzle bot can give personalized responses in threads: "Based on your league, Hall would be your RB2 and you're thin at the position." How powerful is this vs generic bot responses?
+6. **What could go wrong?** Reddit API changes, users don't want to connect, parsing is inaccurate, privacy backlash, Reddit bans apps that read too much history.
+7. **Unique moat assessment** — does ANY other fantasy tool do this? Search thoroughly. If nobody does, this is a genuine competitive advantage. If someone does, find out how users reacted.
+
+The Reddit bot + Reddit account connection together create a distribution AND personalization flywheel:
+```
+User sees !razzle response in a thread (free, impressive)
+    -> clicks link to razzle.lol (free screener)
+    -> connects Sleeper (Bureau shows their league)
+    -> connects Reddit (agents know their intent)
+    -> !razzle responses become personalized in threads
+    -> their friends see personalized responses, ask "how did it know that?"
+    -> friends connect their accounts
+    -> flywheel
+```
+
+STRESS TEST THIS FUNNEL. Is each step realistic? What's the drop-off at each stage? Where does it break?
+
+**Section 8: 8-Week Launch Plan** — Week by week, what to do, where, what to measure, what milestones. The Reddit bot + Reddit account connection should be in this timeline. Treat them as the PRIMARY distribution strategy, not a nice-to-have.
 
 **Section 9: Risk Register** — What kills this before 1,000 users. Likelihood, impact, mitigation for each.
 
