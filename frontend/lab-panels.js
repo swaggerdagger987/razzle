@@ -18,6 +18,7 @@
   }
 
   var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var POS_CSS = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--pos-wr)', TE: 'var(--pos-te)' };
 
   // ─── Clickable player name helper ─────────────────────────────
   // Returns HTML for a player name that opens the profile popup on click.
@@ -1127,11 +1128,11 @@
       var maxAdv = Math.max.apply(null, players.map(function(p) { return Math.abs(p.advantage || 0); }).concat([1]));
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#8a7565';
+        var posColor = POS_CSS[p.position] || 'var(--ink-light)';
         var sign = p.advantage > 0 ? '+' : '';
         var badgeClass = p.advantage >= 0 ? 'pa-adv-pos' : 'pa-adv-neg';
         var barWidth = Math.max(2, Math.round(Math.abs(p.advantage) / maxAdv * 80));
-        var barColor = p.advantage >= 0 ? '#2ec4b6' : '#d97757';
+        var barColor = p.advantage >= 0 ? 'var(--green)' : 'var(--orange)';
 
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td class="pa-rank">' + (i + 1) + '</td>';
@@ -1976,7 +1977,7 @@
         html += '</tr></thead><tbody>';
         for (var i = 0; i < targets.length; i++) {
           var p = targets[i];
-          var posColor = POS_COLORS[p.position] || '#8a7565';
+          var posColor = POS_CSS[p.position] || 'var(--ink-light)';
           var sign = p.delta > 0 ? '+' : '';
           html += '<tr>';
           html += '<td class="ww-rank">' + (i + 1) + '</td>';
@@ -1991,7 +1992,7 @@
           html += '<td><div class="ww-recent">';
           for (var j = 0; j < scores.length; j++) {
             var h2 = Math.max(2, Math.round((scores[j] / maxScore) * 20));
-            var barColor = scores[j] >= p.season_avg ? '#2ec4b6' : '#d97757';
+            var barColor = scores[j] >= p.season_avg ? 'var(--green)' : 'var(--orange)';
             html += '<div class="ww-recent-bar" style="height:' + h2 + 'px;background:' + barColor + '" title="' + fmt(scores[j]) + '"></div>';
           }
           html += '</div></td></tr>';
@@ -3375,7 +3376,7 @@
 
       sorted.forEach(function(p, idx) {
         var pos = p.position || 'WR';
-        var posColor = POS_COLORS[pos] || '#d97757';
+        var posColor = POS_CSS[pos] || 'var(--orange)';
         var t = thresholds[pos] || thresholds['WR'] || { p20: 5, p40: 10, p60: 15, p80: 20 };
 
         html += '<tr>';
@@ -3595,7 +3596,7 @@
           var ppg = d.avg_ppg || 0;
           var rank = d.rank || 0;
           var bg = getHeatColor(ppg, posValues[pos]);
-          var textColor = (bg === '#e63946' || bg === '#2ec4b6' || bg === '#8b1a1a' || bg === '#1a5a50') ? '#fff' : 'var(--ink)';
+          var textColor = (bg === '#e63946' || bg === '#2ec4b6' || bg === '#8b1a1a' || bg === '#1a5a50') ? 'var(--text-on-accent)' : 'var(--ink)';
           var annotation = getAnnotation(rank, totalTeams);
 
           html += '<td style="background:' + bg + ';color:' + textColor + ';" data-team="' + escapeAttr(t.team) + '" data-pos="' + pos + '">';
@@ -3636,7 +3637,7 @@
         var html = '<h3>Top scorers vs ' + escapeHtml(team) + ' (' + pos + ')</h3>';
         html += '<div class="mh-detail-players">';
         players.forEach(function(p) {
-          var posColor = POS_COLORS[p.position] || '#8a7565';
+          var posColor = POS_CSS[p.position] || 'var(--ink-light)';
           var img = p.headshot_url ? '<img src="' + escapeAttr(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">' : '';
           html += '<div class="mh-detail-player" data-pid="' + escapeAttr(p.player_id) + '">';
           html += img;
@@ -3740,7 +3741,7 @@
 
       for (var i = 0; i < stacks.length; i++) {
         var s = stacks[i];
-        var posColor = POS_COLORS[s.receiver_pos] || '#8a7565';
+        var posColor = POS_CSS[s.receiver_pos] || 'var(--ink-light)';
         var barWidth = Math.max(0, Math.min(100, Math.round((s.correlation || 0) * 100)));
 
         html += '<tr>';
@@ -4053,7 +4054,7 @@
 
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || '#8a7565';
+        var posColor = POS_CSS[p.position] || 'var(--ink-light)';
         var badgeClass = type === 'hot' ? 'hot' : 'cold';
         var sign = p.delta > 0 ? '+' : '';
 
@@ -4069,7 +4070,7 @@
         html += '<td><div class="str-recent">';
         for (var j = 0; j < scores.length; j++) {
           var h = Math.max(2, Math.round((scores[j] / maxScore) * 20));
-          var barColor = scores[j] >= p.season_avg ? '#2ec4b6' : '#d97757';
+          var barColor = scores[j] >= p.season_avg ? 'var(--green)' : 'var(--orange)';
           html += '<div class="str-recent-bar" style="height:' + h + 'px;background:' + barColor + '"></div>';
         }
         html += '</div></td></tr>';
@@ -4358,7 +4359,7 @@
         html += '<tr><td>Wk ' + escapeHtml(String(wk.week)) + '</td>';
         POSITIONS.forEach(function(pos) {
           var mvp = wk[pos];
-          var color = POS_COLORS[pos] || '#8a7565';
+          var color = POS_CSS[pos] || 'var(--ink-light)';
           if (mvp && mvp.name !== '-') {
             html += '<td><div class="mv-cell">';
             html += '<div class="mv-cell-name">' + escapeHtml(mvp.name) + '</div>';
