@@ -1,5 +1,35 @@
 # Designer Insights
 
+### Cycle 30 — 2026-03-23
+
+**What I did**: TYPOGRAPHY + INTERACTION STATES + UX DISCOVERABILITY audit. Ran 5 parallel subagents: (1) pending ticket backlog inventory (210 tickets), (2) index.html design violations, (3) lab.html design violations, (4) pricing.html + agents.html violations, (5) styles.css token compliance. Then ran 2 more: (6) interaction states + typography + dark mode patterns, (7) user-facing UX gaps across 4 key pages. Cross-referenced all 210 pending + 100 done tickets. Headless browser still broken (10th cycle — DNS resolution fails for external sites, blank DOM for localhost). Wrote 10 new tickets (DQ-211 through DQ-220).
+
+**Quality score**: 8/10 — Found 2 genuine P1 issues: DQ-212 (disabled buttons opacity, accessibility violation) and DQ-215 (Lab first-load empty table, kills first impression). Found 1 P1 conversion issue: DQ-216 (Pro vs Elite difference buried). Strongest new category: INTERACTION STATES (active/pressed button shadows at 1px, box-shadow:none stripping brand identity). Also found a font rendering bug (DQ-211: Luckiest Guy faux-bolding) that affects the logo on every page.
+
+**What worked**:
+- 7 parallel subagents across orthogonal dimensions (backlog inventory, per-page audits, CSS audit, interaction patterns, UX gaps) covered new ground efficiently.
+- The INTERACTION STATES dimension (active/:pressed button shadows, box-shadow:none removal) was untouched by prior 29 cycles. DQ-213 and DQ-214 are genuinely new categories.
+- DQ-211 (logo faux-bold) is a subtle but pervasive rendering bug — Luckiest Guy only ships weight 400, and font-weight:700 causes browser-synthesized bold on every page.
+- UX DISCOVERABILITY dimension (DQ-215, DQ-216, DQ-217) shifts from "CSS is wrong" to "the product isn't communicating its value" — higher impact per ticket.
+
+**What didn't**:
+- Headless browser STILL broken (10th cycle). DNS fails for external sites, blank DOM for all local servers. Root cause is likely Playwright/Chromium environment issue on this Windows machine — not CSP, not server-side.
+- Cannot visually verify ANY findings. All 10 tickets are code-based analysis.
+- 3 of 10 tickets (DQ-218, DQ-219, DQ-220) are P2/P3 polish — necessary but not conversion-moving.
+
+**Pattern spotted**: After 30 cycles (220 tickets total), the audit has moved through 5 distinct phases: (1) design tokens/colors (cycles 1-10), (2) dark mode (cycles 11-15), (3) accessibility/ARIA (cycles 16-20), (4) mobile/responsive (cycles 21-25), (5) conversion/UX (cycles 26-30). The remaining high-impact frontier is USER JOURNEY TESTING: does the actual flow from landing → Lab → filter → export → share work? And INTERACTION QUALITY: do hover/press/focus states feel right? These require either a working browser or manual testing.
+
+**Root cause found**: The button active-state 1px shadows (DQ-213) and box-shadow:none removals (DQ-214) share a root cause: the developer treated shadows as decorative rather than structural. In the Razzle design system, the chunky shadow IS the brand — removing it (even on press) breaks visual identity. The codebase needs a rule: shadows can shrink on interaction but never disappear.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-211 (logo faux-bold) is a 1-line fix — remove font-weight:700 from .logo-text. Do first — it affects every page.
+- Ship agent: DQ-213 (active 1px shadows) is a 4-line find-replace — change 1px to 2px in 4 :active rules.
+- Ship agent: DQ-220 (border-radius tokenization) is a mechanical 16-line find-replace — safest batch job.
+- Ship agent: DQ-215 (Lab first-load) and DQ-216 (pricing Pro vs Elite) are PRODUCT changes, not CSS fixes. They need design thinking, not just code edits. Consider pairing with the PM.
+- Ship agent: DQ-212 (opacity disabled) requires testing in both light and dark mode after the fix.
+
+**What I'd do differently next time**: The headless browser has been broken for 10 cycles. STOP trying. Accept code-based analysis as the permanent workflow for this Windows environment. The next frontier is not "find more CSS bugs" — it's "test the actual user journey." That requires manual testing or a different browser automation approach (maybe Selenium instead of Playwright). Also: 220 tickets in the backlog is too many. Recommend a triage pass to close/merge the bottom 50 low-priority tickets before writing more.
+
 ### Cycle 29 — 2026-03-23
 
 **What I did**: CONVERSION FUNNEL + SITUATION ROOM + CROSS-PAGE CONSISTENCY audit. Ran 5 parallel subagents: (1) home page visual hierarchy + nav + footer, (2) Lab screener UI edge cases (alignment, keyboard, virtual scroll), (3) pricing page + auth flow conversion quality, (4) Situation Room briefing cards + urgency badges + dark mode, (5) standalone page cross-page consistency (max-width, loading messages, empty states). Cross-referenced all 200 existing DQ tickets + 100 done tickets. Production site still 502. Headless browser still blank (9th cycle — confirmed not CSP, browser renders empty DOM for all local servers). Wrote 10 new tickets (DQ-201 through DQ-210).
