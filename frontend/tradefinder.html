@@ -76,6 +76,10 @@
     outline: none;
     box-shadow: 4px 4px 0 var(--ink);
   }
+  .tf-search-input:focus-visible {
+    outline: 3px solid var(--orange);
+    outline-offset: 2px;
+  }
   .tf-autocomplete {
     position: absolute;
     top: 100%;
@@ -430,7 +434,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -459,8 +463,8 @@
 
   <div class="tf-search-area">
     <div class="tf-search-wrap">
-      <input class="tf-search-input" type="text" id="player-search" placeholder="type a player name..." aria-label="Search for a player" autocomplete="off">
-      <div class="tf-autocomplete" id="autocomplete"></div>
+      <input class="tf-search-input" type="text" id="player-search" placeholder="type a player name..." aria-label="Search for a player" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="autocomplete">
+      <div class="tf-autocomplete" id="autocomplete" role="listbox"></div>
     </div>
     <select class="tf-season-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
@@ -469,7 +473,7 @@
     <button class="btn-chunky" id="export-btn" title="Export as PNG" style="display:none;">Export PNG</button>
   </div>
 
-  <div id="tf-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div id="tf-body" role="status" aria-live="polite" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
     <div class="tf-prompt">
       <div class="tf-prompt-icon">&#x1F50D;</div>
       <div class="tf-prompt-text">search for a player to find trade targets</div>
@@ -599,7 +603,7 @@
     var html = '';
     players.forEach(function(p) {
       var pos = (p.position || '').toLowerCase();
-      html += '<div class="tf-ac-item" data-pid="' + escapeHtml(p.player_id) + '">';
+      html += '<div class="tf-ac-item" role="option" data-pid="' + escapeHtml(p.player_id) + '">';
       if (p.headshot_url) {
         html += '<img class="tf-ac-img" src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
       }
@@ -612,6 +616,7 @@
     ac.innerHTML = html;
     ac.style.display = 'block';
     acVisible = true;
+    document.getElementById('player-search').setAttribute('aria-expanded', 'true');
 
     ac.querySelectorAll('.tf-ac-item').forEach(function(item) {
       item.addEventListener('click', function() {
@@ -625,6 +630,7 @@
     var ac = document.getElementById('autocomplete');
     ac.style.display = 'none';
     acVisible = false;
+    document.getElementById('player-search').setAttribute('aria-expanded', 'false');
   }
 
   function selectPlayer(playerId) {

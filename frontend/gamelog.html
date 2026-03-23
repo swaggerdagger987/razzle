@@ -243,7 +243,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -271,11 +271,11 @@
   </div>
 
   <div class="gl-search-wrap">
-    <input type="text" class="gl-search" id="glSearch" placeholder="search for a player..." autocomplete="off" aria-label="Player search">
-    <div class="gl-ac-list" id="glAcList"></div>
+    <input type="text" class="gl-search" id="glSearch" placeholder="search for a player..." autocomplete="off" aria-label="Player search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="glAcList">
+    <div class="gl-ac-list" id="glAcList" role="listbox"></div>
   </div>
 
-  <div id="glContent">
+  <div id="glContent" role="status" aria-live="polite">
     <div class="gl-loading">search for a player to see their game log</div>
   </div>
 </main>
@@ -393,29 +393,31 @@
   searchInput.addEventListener('input', function() {
     clearTimeout(acTimer);
     var q = searchInput.value.trim();
-    if (q.length < 2) { acList.style.display = 'none'; return; }
+    if (q.length < 2) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
     acTimer = setTimeout(function() {
       fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
         .then(function(r) { return r.ok ? r.json() : []; })
         .then(function(data) {
           var players = Array.isArray(data) ? data : (data.players || []);
-          if (!players.length) { acList.style.display = 'none'; return; }
+          if (!players.length) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
           acIdx = -1;
           acList.innerHTML = players.map(function(p, i) {
             var posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');
-            return '<div class="gl-ac-item" data-id="' + escapeHtml(p.player_id) + '" data-idx="' + i + '">' +
+            return '<div class="gl-ac-item" role="option" data-id="' + escapeHtml(p.player_id) + '" data-idx="' + i + '">' +
               '<span>' + escapeHtml(p.name) + ' <span class="gl-ac-pos" style="color:' + posColor + '">' + escapeHtml(p.position) + '</span></span>' +
               '<span style="color:var(--ink-light)">' + escapeHtml(p.team) + '</span></div>';
           }).join('');
           acList.style.display = 'block';
+          searchInput.setAttribute('aria-expanded', 'true');
 
           acList.querySelectorAll('.gl-ac-item').forEach(function(item) {
             item.addEventListener('click', function() {
               selectPlayer(item.getAttribute('data-id'));
               acList.style.display = 'none';
+              searchInput.setAttribute('aria-expanded', 'false');
             });
           });
-        }).catch(function() { acList.style.display = 'none'; });
+        }).catch(function() { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); });
     }, 200);
   });
 
@@ -434,11 +436,12 @@
       e.preventDefault();
       selectPlayer(items[acIdx].getAttribute('data-id'));
       acList.style.display = 'none';
+      searchInput.setAttribute('aria-expanded', 'false');
     }
   });
 
   document.addEventListener('click', function(e) {
-    if (!e.target.closest('.gl-search-wrap')) acList.style.display = 'none';
+    if (!e.target.closest('.gl-search-wrap')) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); }
   });
 
   function selectPlayer(pid) {

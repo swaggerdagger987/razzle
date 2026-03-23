@@ -219,7 +219,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -272,7 +272,7 @@
     <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="explorer-body">
+  <div id="explorer-body" role="status" aria-live="polite">
     <div class="explorer-loading" id="explorer-loading">crunching numbers...</div>
   </div>
 </main>
@@ -422,7 +422,7 @@
     // Create chart container
     var html = '<div class="explorer-count">' + players.length + ' players shown</div>';
     html += '<div class="explorer-chart-wrap" id="chart-wrap">';
-    html += '<canvas class="explorer-canvas" id="scatter-canvas"></canvas>';
+    html += '<canvas class="explorer-canvas" id="scatter-canvas" role="img" aria-label="Stat explorer scatter plot"></canvas>';
     html += '<div class="explorer-tooltip" id="tooltip"></div>';
     html += '</div>';
     body.innerHTML = html;

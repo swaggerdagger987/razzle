@@ -289,7 +289,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -336,7 +336,7 @@
     <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="usage-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div id="usage-body" role="status" aria-live="polite" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
     <div class="usage-loading" id="usage-loading">tracking snap counts...</div>
   </div>
 </main>
@@ -509,7 +509,7 @@
     html += '</td>';
 
     // Sparkline
-    html += '<td class="hide-mobile" style="text-align:center;"><canvas class="usage-sparkline" width="160" height="30" data-weeks=\'' + JSON.stringify(p.weeks) + '\' data-trend="' + escapeHtml(p.trend) + '"></canvas></td>';
+    html += '<td class="hide-mobile" style="text-align:center;"><canvas class="usage-sparkline" width="160" height="30" data-weeks=\'' + JSON.stringify(p.weeks) + '\' data-trend="' + escapeHtml(p.trend) + '" role="img" aria-label="Usage trend sparkline"></canvas></td>';
 
     // Games
     html += '<td style="text-align:center;">' + escapeHtml(String(p.games)) + '</td>';

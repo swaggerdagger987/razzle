@@ -264,7 +264,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -485,7 +485,7 @@
     if (d.rounds && d.rounds.length > 0) {
       html += '<div class="dc-chart-wrap">';
       html += '<div class="dc-chart-title">Average PPG by Round</div>';
-      html += '<canvas class="dc-canvas" id="dc-chart"></canvas>';
+      html += '<canvas class="dc-canvas" id="dc-chart" role="img" aria-label="Draft class average PPG by round chart"></canvas>';
       html += '</div>';
     }
 

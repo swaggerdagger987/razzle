@@ -65,6 +65,7 @@
     outline: none;
   }
   .rb-search:focus { box-shadow: 3px 3px 0 var(--ink); }
+  .rb-search:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
   .rb-autocomplete {
     position: absolute;
     top: 100%;
@@ -392,7 +393,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -420,8 +421,8 @@
   </div>
 
   <div class="rb-search-area">
-    <input type="text" class="rb-search" id="rb-search" placeholder="search players to add..." autocomplete="off">
-    <div class="rb-autocomplete" id="rb-autocomplete"></div>
+    <input type="text" class="rb-search" id="rb-search" placeholder="search players to add..." autocomplete="off" aria-label="Search players" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="rb-autocomplete">
+    <div class="rb-autocomplete" id="rb-autocomplete" role="listbox"></div>
   </div>
 
   <div class="rb-layout">
@@ -581,6 +582,7 @@
       var q = this.value.trim();
       if (q.length < 2) {
         document.getElementById('rb-autocomplete').style.display = 'none';
+        document.getElementById('rb-search').setAttribute('aria-expanded', 'false');
         return;
       }
       state.searchTimeout = setTimeout(function() { searchPlayers(q); }, 200);
@@ -590,6 +592,7 @@
     document.addEventListener('click', function(e) {
       if (!e.target.closest('.rb-search-area')) {
         document.getElementById('rb-autocomplete').style.display = 'none';
+        document.getElementById('rb-search').setAttribute('aria-expanded', 'false');
       }
     });
   }
@@ -607,7 +610,7 @@
         players.forEach(function(p) {
           // Skip if already on roster
           if (state.rosterIds.indexOf(p.player_id) !== -1) return;
-          html += '<div class="rb-ac-item" data-pid="' + escapeHtml(p.player_id) + '">';
+          html += '<div class="rb-ac-item" role="option" data-pid="' + escapeHtml(p.player_id) + '">';
           html += '<span class="rb-ac-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
           html += '<span>' + escapeHtml(p.full_name || p.display_name || '') + '</span>';
           html += '<span class="rb-ac-team">' + escapeHtml(p.team || '') + '</span>';
@@ -615,6 +618,7 @@
         });
         ac.innerHTML = html;
         ac.style.display = html ? 'block' : 'none';
+        document.getElementById('rb-search').setAttribute('aria-expanded', html ? 'true' : 'false');
 
         // Click handlers
         ac.querySelectorAll('.rb-ac-item').forEach(function(item) {
@@ -622,12 +626,14 @@
             var pid = this.getAttribute('data-pid');
             addPlayer(pid);
             ac.style.display = 'none';
+            document.getElementById('rb-search').setAttribute('aria-expanded', 'false');
             document.getElementById('rb-search').value = '';
           });
         });
       })
       .catch(function() {
         document.getElementById('rb-autocomplete').style.display = 'none';
+        document.getElementById('rb-search').setAttribute('aria-expanded', 'false');
       });
   }
 

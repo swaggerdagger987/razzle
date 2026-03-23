@@ -2402,6 +2402,31 @@ function hideContextMenu() {
   _ctxMenuData = null;
 }
 
+function _initContextMenuKeyboard(menu) {
+  menu.addEventListener("keydown", function(ev) {
+    var items = Array.prototype.slice.call(menu.querySelectorAll('.ctx-item'));
+    var idx = items.indexOf(document.activeElement);
+    if (ev.key === "ArrowDown") {
+      ev.preventDefault();
+      var next = idx < items.length - 1 ? idx + 1 : 0;
+      items[next].focus();
+    } else if (ev.key === "ArrowUp") {
+      ev.preventDefault();
+      var prev = idx > 0 ? idx - 1 : items.length - 1;
+      items[prev].focus();
+    } else if (ev.key === "Escape") {
+      ev.preventDefault();
+      ev.stopPropagation();
+      hideContextMenu();
+    } else if (ev.key === "Enter") {
+      ev.preventDefault();
+      if (document.activeElement && document.activeElement.classList.contains('ctx-item')) {
+        document.activeElement.click();
+      }
+    }
+  });
+}
+
 function _ctxMenuAction(action) {
   if (!_ctxMenuData) return;
   var d = _ctxMenuData;
@@ -2497,18 +2522,19 @@ function _ctxMenuAction(action) {
         var menu = document.createElement("div");
         menu.id = "screenerContextMenu";
         menu.className = "screener-context-menu";
+        menu.setAttribute("role", "menu");
         var isNumeric = (col && !col.isText && !col.isSparkline && !col.isNotes);
         var statsOption = isNumeric ?
-          '<div class="ctx-sep"></div><div class="ctx-item" data-action="col-stats" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9776;</span>Column Stats</div>' : '';
+          '<div class="ctx-sep" role="separator"></div><div class="ctx-item" role="menuitem" tabindex="-1" data-action="col-stats" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9776;</span>Column Stats</div>' : '';
         var quickFilterOpts = isNumeric ?
-          '<div class="ctx-sep"></div>' +
-          '<div class="ctx-item" data-action="qf-top10" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9650;</span>Top 10</div>' +
-          '<div class="ctx-item" data-action="qf-top25" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9650;</span>Top 25</div>' +
-          '<div class="ctx-item" data-action="qf-above" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9654;</span>Above Average</div>' +
-          '<div class="ctx-item" data-action="qf-below" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9664;</span>Below Average</div>' : '';
-        menu.innerHTML = '<div class="ctx-item" data-action="hide-col" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#128584;</span>Hide "' + escapeHtml(colLabel) + '"</div>' +
-          '<div class="ctx-item" data-action="sort-asc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#8593;</span>Sort Ascending</div>' +
-          '<div class="ctx-item" data-action="sort-desc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#8595;</span>Sort Descending</div>' + quickFilterOpts + statsOption;
+          '<div class="ctx-sep" role="separator"></div>' +
+          '<div class="ctx-item" role="menuitem" tabindex="-1" data-action="qf-top10" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9650;</span>Top 10</div>' +
+          '<div class="ctx-item" role="menuitem" tabindex="-1" data-action="qf-top25" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9650;</span>Top 25</div>' +
+          '<div class="ctx-item" role="menuitem" tabindex="-1" data-action="qf-above" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9654;</span>Above Average</div>' +
+          '<div class="ctx-item" role="menuitem" tabindex="-1" data-action="qf-below" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#9664;</span>Below Average</div>' : '';
+        menu.innerHTML = '<div class="ctx-item" role="menuitem" tabindex="-1" data-action="hide-col" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#128584;</span>Hide "' + escapeHtml(colLabel) + '"</div>' +
+          '<div class="ctx-item" role="menuitem" tabindex="-1" data-action="sort-asc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#8593;</span>Sort Ascending</div>' +
+          '<div class="ctx-item" role="menuitem" tabindex="-1" data-action="sort-desc" data-col="' + escapeAttr(colKey) + '"><span class="ctx-icon">&#8595;</span>Sort Descending</div>' + quickFilterOpts + statsOption;
         menu.addEventListener("click", function(ev) {
           var item = ev.target.closest(".ctx-item");
           if (!item) return;
@@ -2534,12 +2560,15 @@ function _ctxMenuAction(action) {
             _applyQuickFilter(ck, "below_avg");
           }
         });
+        _initContextMenuKeyboard(menu);
         document.body.appendChild(menu);
         var x = e.clientX, y = e.clientY;
         var mw = menu.offsetWidth, mh = menu.offsetHeight;
         if (x + mw > window.innerWidth) x = window.innerWidth - mw - 8;
         if (y + mh > window.innerHeight) y = window.innerHeight - mh - 8;
         menu.style.left = x + "px"; menu.style.top = y + "px";
+        var firstItem = menu.querySelector('.ctx-item');
+        if (firstItem) firstItem.focus();
         return;
       }
     }
@@ -2565,6 +2594,7 @@ function _ctxMenuAction(action) {
     var menu = document.createElement("div");
     menu.id = "screenerContextMenu";
     menu.className = "screener-context-menu";
+    menu.setAttribute("role", "menu");
 
     var items = [];
     if (state.universe === "nfl") {
@@ -2589,9 +2619,9 @@ function _ctxMenuAction(action) {
     var html = "";
     for (var i = 0; i < items.length; i++) {
       if (items[i].sep) {
-        html += '<div class="ctx-sep"></div>';
+        html += '<div class="ctx-sep" role="separator"></div>';
       } else {
-        html += '<div class="ctx-item" data-action="' + items[i].action + '"><span class="ctx-icon">' + items[i].icon + '</span>' + escapeHtml(items[i].label) + '</div>';
+        html += '<div class="ctx-item" role="menuitem" tabindex="-1" data-action="' + items[i].action + '"><span class="ctx-icon">' + items[i].icon + '</span>' + escapeHtml(items[i].label) + '</div>';
       }
     }
     menu.innerHTML = html;
@@ -2602,6 +2632,7 @@ function _ctxMenuAction(action) {
       if (item && item.dataset.action) _ctxMenuAction(item.dataset.action);
     });
 
+    _initContextMenuKeyboard(menu);
     document.body.appendChild(menu);
 
     var x = e.clientX, y = e.clientY;
@@ -2610,6 +2641,8 @@ function _ctxMenuAction(action) {
     if (y + mh > window.innerHeight) y = window.innerHeight - mh - 8;
     menu.style.left = x + "px";
     menu.style.top = y + "px";
+    var firstItem = menu.querySelector('.ctx-item');
+    if (firstItem) firstItem.focus();
   });
 })();
 

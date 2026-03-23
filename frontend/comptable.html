@@ -208,7 +208,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -237,8 +237,8 @@
 
   <div class="ct-search-area">
     <div class="ct-search-wrap">
-      <input type="text" class="ct-search" id="ctSearch" placeholder="add players to compare (2-8)..." autocomplete="off" aria-label="Add player">
-      <div class="ct-ac-list" id="ctAcList"></div>
+      <input type="text" class="ct-search" id="ctSearch" placeholder="add players to compare (2-8)..." autocomplete="off" aria-label="Add player" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="ctAcList">
+      <div class="ct-ac-list" id="ctAcList" role="listbox"></div>
     </div>
     <div class="ct-selected" id="ctSelected"></div>
   </div>
@@ -250,7 +250,7 @@
     <button class="ct-btn" id="ctExport">Export PNG</button>
   </div>
 
-  <div id="ctContent">
+  <div id="ctContent" role="status" aria-live="polite">
     <div class="ct-loading">add 2+ players above, then hit compare</div>
   </div>
 </main>
@@ -392,18 +392,18 @@
   searchInput.addEventListener('input', function() {
     clearTimeout(acTimer);
     var q = searchInput.value.trim();
-    if (q.length < 2) { acList.style.display = 'none'; return; }
+    if (q.length < 2) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
     acTimer = setTimeout(function() {
       fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
         .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(function(data) {
           var players = Array.isArray(data) ? data : (data.players || []);
-          if (!players.length) { acList.style.display = 'none'; return; }
+          if (!players.length) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
           acIdx = -1;
           acList.innerHTML = players.map(function(p, i) {
             var pc = POS_COLORS[p.position] || '#8a7565';
             var already = selectedPlayers.some(function(s) { return s.id === p.player_id; });
-            return '<div class="ct-ac-item"' + (already ? ' style="opacity:0.4"' : '') +
+            return '<div class="ct-ac-item" role="option"' + (already ? ' style="opacity:0.4"' : '') +
               ' data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) +
               '" data-pos="' + escapeHtml(p.position) + '" data-team="' + escapeHtml(p.team) +
               '" data-idx="' + i + '">' +
@@ -412,11 +412,12 @@
               '<span style="color:var(--ink-light)">' + escapeHtml(p.team) + '</span></div>';
           }).join('');
           acList.style.display = 'block';
+          searchInput.setAttribute('aria-expanded', 'true');
 
           acList.querySelectorAll('.ct-ac-item').forEach(function(item) {
             item.addEventListener('click', function() { addPlayer(item); });
           });
-        }).catch(function() { acList.style.display = 'none'; });
+        }).catch(function() { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); });
     }, 200);
   });
 
@@ -435,11 +436,12 @@
       e.preventDefault();
       addPlayer(items[acIdx]);
       acList.style.display = 'none';
+      searchInput.setAttribute('aria-expanded', 'false');
     }
   });
 
   document.addEventListener('click', function(e) {
-    if (!e.target.closest('.ct-search-wrap')) acList.style.display = 'none';
+    if (!e.target.closest('.ct-search-wrap')) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); }
   });
 
   function addPlayer(el) {
@@ -454,6 +456,7 @@
     });
     searchInput.value = '';
     acList.style.display = 'none';
+    searchInput.setAttribute('aria-expanded', 'false');
     renderChips();
     writeURL();
   }

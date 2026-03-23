@@ -1,4 +1,4 @@
-## Designer Insights (updated ticket DES-086)
+## Designer Insights (updated ticket DES-096)
 
 ### Patterns Found
 - Home page layout is mostly polished — chunky borders, correct colors, proper font usage
@@ -122,15 +122,59 @@
   - Auth modal uses role="dialog" with labeled inputs
   - All 75 pages have viewport meta, unique title, unique description
 
-### What to Check Next (Cycle 9)
-- After DES-079: verify heatmap text is legible in dark mode (contrast check)
-- After DES-080: verify Trade Analyzer PNG export looks correct in dark mode
-- After DES-081/082: verify orange focus ring appears on tab navigation through nav and theme toggle
-- lab-panels.css :focus-visible gap — consider a batch ticket for all panel interactive elements
-- outline:none audit in per-page style blocks — 6+ files have it without :focus-visible pair
-- Canvas elements in compare.js and league-intel.html missing role="img" + aria-label
+### Cycle 9 Findings: Deep ARIA Accessibility Audit
+- **outline:none is used 17 times across 8 files** — 6 have proper :focus-visible pairs (styles.css controls), 11 do NOT (DES-087). The 4 correctly-paired selectors (.auth-form input, .input-chunky, .select-chunky, .cmd-palette-input) establish the pattern; the 11 broken ones just need to match it.
+- **lab-panels.css confirmed ZERO :focus-visible rules** (DES-089) — 4300+ lines, governing 60+ panels, with not a single keyboard focus indicator beyond browser defaults. This is the largest single accessibility gap in the codebase.
+- **28+ JS-created canvas elements have no ARIA** (DES-090) — 14 in lab.js, 10 in lab-panels.js, 2 in charts.js, 2 in compare.js, 2 in player.js. Contrast: the static canvases in lab.html all have proper role="img" + aria-label. The pattern exists; it just wasn't applied to createElement calls.
+- **Context menu is a fully interactive menu with zero ARIA** (DES-088) — creates divs, not menu/menuitem roles. Has no arrow key navigation. This is the right-click menu used constantly by Lab power users.
+- **Toast notifications (_showToast) have no role="alert"** (DES-092) — used across 7 JS files. Screen readers never announce action confirmations.
+- **Autocomplete pattern repeated across 10+ pages with zero combobox attributes** (DES-094) — search input + dropdown + items exist but without role="combobox", role="listbox", role="option", aria-expanded. The same pattern copy-pasted 10 times, all missing the same ARIA.
+- **Result count and loading states have no aria-live** (DES-093) — #resultCount and #loadingText update dynamically without being announced. Standalone pages have the same issue (DES-096).
+- **Skip-to-content links work but use inline JS on all 75 pages** (DES-095) — identical onfocus/onblur handlers repeated 75 times instead of one CSS class.
+- **agents.html API key inputs already have aria-label** — verified clean, no ticket needed.
+- **All 75 pages have lang="en"** — verified clean.
+- **Only cheatsheet.html has @media print CSS** — low priority, not ticketed this cycle.
+
+### Issue Categories by Impact (updated DES-096)
+1. **P1 — Visible dark mode bugs** — DES-079 (textColorForBg), DES-080 (Trade Analyzer PNG)
+2. **P1 — SEO fundamentals** — DES-077 (h1 on lab.html), DES-078 (canonical/og:url on 67 pages)
+3. **P1 — Keyboard accessibility** — DES-081 (theme toggle focus), DES-084 (interactive spans), DES-087 (11 inputs no focus-visible), DES-089 (lab-panels.css zero focus-visible)
+4. **P1 — Screen reader accessibility** — DES-088 (context menu ARIA), DES-090 (28+ canvas no ARIA), DES-092 (toast no alert), DES-094 (autocomplete no combobox)
+5. **P2 — Live regions** — DES-093 (result count), DES-096 (standalone page loading states)
+6. **P2 — Canvas ARIA templates** — DES-091 (10 HTML page canvases)
+7. **P2 — Maintainability** — DES-095 (skip-link inline JS x75)
+
+### Emerging Patterns (updated DES-096)
+- **Accessibility is now the dominant remaining quality gap** — cycles 1-8 cleaned up visual consistency (colors, radius, borders, fonts, dark mode). The codebase looks correct. But it isn't accessible. Cycle 9 reveals that ARIA patterns, keyboard focus, and live regions are systematically missing.
+- **The autocomplete copy-paste pattern** is the clearest example: 10+ pages have the exact same search+dropdown implementation, all missing the exact same ARIA attributes. One template fix could solve all of them.
+- **Canvas ARIA follows the same split as canvas hex colors did** — static HTML canvases are correct (lab.html), JS-created canvases are not. Same root cause: the createElement pattern doesn't include ARIA setup.
+- **Toast is a single-function fix** — _showToast() in app.js is the only toast creator. Add role="alert" once, and all 7 consuming JS files get accessible notifications.
+- **lab-panels.css :focus-visible gap is the accessibility equivalent of the 171-radius ticket** (DES-047) — a systemic gap in one file that affects every panel.
+- **The keyboard-first design philosophy (J/K nav, H for heat, T for tiers, ? for shortcuts) is undermined** by missing :focus-visible on inputs, missing keyboard nav on context menus, and missing ARIA on interactive elements. Dynasty power users are keyboard-heavy — this matters.
+- **Things that are GOOD and should be preserved:**
+  - Zero rogue font families (confirmed cycle 9)
+  - Zero generic "Loading..." text (confirmed cycle 9)
+  - Zero gradients in CSS classes
+  - Zero cold grays
+  - Zero blue-black ink colors
+  - Zero color:white/color:#fff in lab.js or HTML pages
+  - Zero 1px borders in lab.js
+  - All 75 pages have lang="en" (confirmed cycle 9)
+  - All 75 pages have skip-to-content links (functional, just needs CSS class)
+  - agents.html API key inputs have aria-label (confirmed cycle 9)
+  - Static canvases in lab.html have proper role="img" + aria-label
+  - Existing :focus-visible pattern in styles.css is correct and consistent
+  - agents.html config/roster toggles correctly use aria-expanded
+
+### What to Check Next (Cycle 10)
+- After DES-087: verify orange focus ring appears on all 11 affected inputs when tab-navigating
+- After DES-088: verify context menu items are keyboard-navigable with arrow keys
+- After DES-089: verify lab panel tabs/selects show focus ring on keyboard navigation
+- After DES-090: spot-check 3-4 JS-created canvases for role="img" in DOM inspector
+- After DES-092: verify screen reader announces toast text when action fires
+- After DES-094: verify screen reader announces autocomplete dropdown items
 - Briefing card headers in warroom.js missing role="button" + aria-expanded
-- Context menus in lab.js missing role="menu" + role="menuitem"
-- Agent API key inputs in warroom.js missing aria-label (placeholder only)
-- Print CSS audit — only cheatsheet.html has @media print, is it correct?
 - Whether og:image could be page-specific for high-traffic tool pages (currently generic on 74/75)
+- Print CSS audit — only cheatsheet.html has @media print
+- Error boundary patterns — what happens when API calls fail? Are error states accessible?
+- Reduced motion — does the site respect prefers-reduced-motion for animations/transitions?

@@ -451,6 +451,8 @@ function _showToast(msg, type, duration, link) {
   if (existing) existing.remove();
   var toast = document.createElement('div');
   toast.className = 'razzle-toast';
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'assertive');
   if (type === 'warning') toast.style.borderColor = 'var(--orange)';
   if (type === 'error') toast.style.borderColor = 'var(--red)';
   toast.textContent = msg;

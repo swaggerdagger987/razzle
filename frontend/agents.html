@@ -391,6 +391,10 @@
     border-color: var(--orange);
     box-shadow: 0 0 0 2px var(--orange-light);
   }
+  .scenario-textarea:focus-visible {
+    outline: 3px solid var(--orange);
+    outline-offset: 2px;
+  }
 
   .scenario-textarea::placeholder {
     font-family: var(--font-hand);
@@ -1441,6 +1445,10 @@
     border-color: var(--orange);
     box-shadow: 0 0 0 2px var(--orange-light);
   }
+  .config-input:focus-visible {
+    outline: 3px solid var(--orange);
+    outline-offset: 2px;
+  }
 
   .config-btn {
     font-family: var(--font-mono);
@@ -1515,6 +1523,10 @@
     outline: none;
     border-color: var(--orange);
   }
+  .config-agent-key:focus-visible {
+    outline: 3px solid var(--orange);
+    outline-offset: 2px;
+  }
 
   .config-hint {
     font-family: var(--font-hand);
@@ -1560,7 +1572,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- Skip to content (accessibility) -->
 <a href="#scenarioInput" class="skip-link" style="position:absolute; top:-40px; left:0; background:var(--orange); color:var(--bg); padding:8px 16px; z-index:9999; font-family:var(--font-mono); font-size:14px; transition:top 0.2s;">Skip to scenario input</a>

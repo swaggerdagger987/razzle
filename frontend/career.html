@@ -370,7 +370,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -398,11 +398,11 @@
   </div>
 
   <div class="car-search-wrap">
-    <input type="text" class="car-search" id="player-search" placeholder="search for a player..." autocomplete="off" aria-label="Search for a player">
-    <div class="car-dropdown" id="search-dropdown"></div>
+    <input type="text" class="car-search" id="player-search" placeholder="search for a player..." autocomplete="off" aria-label="Search for a player" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="search-dropdown">
+    <div class="car-dropdown" id="search-dropdown" role="listbox"></div>
   </div>
 
-  <div id="car-result"></div>
+  <div id="car-result" role="status" aria-live="polite"></div>
 
   <div class="car-empty" id="car-empty">
     search for a player to see their career timeline
@@ -549,7 +549,7 @@
         var html = '';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          html += '<div class="car-dropdown-item" data-idx="' + i + '">';
+          html += '<div class="car-dropdown-item" role="option" data-idx="' + i + '">';
           html += '<span class="car-dd-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
           html += '<span>' + escapeHtml(p.full_name) + '</span>';
           html += '<span style="color:var(--ink-light); font-size:12px;">' + escapeHtml(p.team) + '</span>';
@@ -557,6 +557,7 @@
         }
         dropdown.innerHTML = html;
         dropdown.style.display = 'block';
+        searchInput.setAttribute('aria-expanded', 'true');
 
         var items = dropdown.querySelectorAll('.car-dropdown-item');
         for (var j = 0; j < items.length; j++) {
@@ -572,6 +573,7 @@
 
   function hideDropdown() {
     dropdown.style.display = 'none';
+    searchInput.setAttribute('aria-expanded', 'false');
     dropdownItems = [];
     highlightIdx = -1;
   }
@@ -655,7 +657,7 @@
     // PPG Chart
     html += '<div class="car-chart-wrap">';
     html += '<div class="car-chart-title">PPG Trajectory</div>';
-    html += '<canvas class="car-canvas" id="ppg-chart"></canvas>';
+    html += '<canvas class="car-canvas" id="ppg-chart" role="img" aria-label="PPG career trend chart"></canvas>';
     html += '</div>';
 
     // Career highs

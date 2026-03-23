@@ -136,6 +136,10 @@
   .sidebar-search:focus {
     border-color: var(--orange);
   }
+  .sidebar-search:focus-visible {
+    outline: 3px solid var(--orange);
+    outline-offset: 2px;
+  }
   .sidebar-search::placeholder {
     color: var(--ink-light);
   }
@@ -3110,7 +3114,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- NAV -->
 <nav class="topnav" aria-label="Main navigation">
@@ -3393,7 +3397,7 @@
     <button class="btn-chunky" id="bigBoardBtn" onclick="openBigBoard()" style="display:none;">Big Board</button>
     <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
 
-    <span class="result-count" id="resultCount"></span>
+    <span class="result-count" id="resultCount" aria-live="polite"></span>
   </div>
 
   <!-- FILTER BAR -->
@@ -3447,7 +3451,7 @@
         <div class="skeleton-row"><div class="skeleton-cell" style="width:26%"></div><div class="skeleton-cell" style="width:16%"></div><div class="skeleton-cell" style="width:13%"></div><div class="skeleton-cell" style="width:17%"></div><div class="skeleton-cell" style="width:20%"></div></div>
         <div class="skeleton-row"><div class="skeleton-cell" style="width:30%"></div><div class="skeleton-cell" style="width:15%"></div><div class="skeleton-cell" style="width:15%"></div><div class="skeleton-cell" style="width:20%"></div><div class="skeleton-cell" style="width:20%"></div></div>
       </div>
-      <div id="loadingText" style="text-align:center; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); margin-top:12px;">pulling film...</div>
+      <div id="loadingText" role="status" aria-live="polite" style="text-align:center; font-family:var(--font-hand); font-size:20px; color:var(--ink-light); margin-top:12px;">pulling film...</div>
     </div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; padding:6px 12px; font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">
       <span><span style="background:var(--green); color:var(--text-on-accent); padding:0 4px; border-radius:var(--radius-sm); border:2px solid var(--ink); font-weight:700;">85+</span> DVS Elite</span>

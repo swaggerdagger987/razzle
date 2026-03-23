@@ -66,6 +66,7 @@
     box-sizing: border-box;
   }
   .bd-search:focus { outline: none; border-color: var(--orange); }
+  .bd-search:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
   .bd-ac-list {
     position: absolute;
     top: 100%;
@@ -331,7 +332,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -359,8 +360,8 @@
   </div>
 
   <div class="bd-search-wrap">
-    <input type="text" class="bd-search" id="bdSearch" placeholder="Search for a player..." autocomplete="off" aria-label="Player search">
-    <div class="bd-ac-list" id="bdAcList"></div>
+    <input type="text" class="bd-search" id="bdSearch" placeholder="Search for a player..." autocomplete="off" aria-label="Player search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="bdAcList">
+    <div class="bd-ac-list" id="bdAcList" role="listbox"></div>
   </div>
 
   <div class="bd-controls" id="bdControls" style="display:none;">
@@ -371,7 +372,7 @@
     <button class="btn btn-outline" id="bdExport" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="bdContent">
+  <div id="bdContent" role="status" aria-live="polite">
     <div class="bd-empty">search for a player to see their points breakdown</div>
   </div>
 </main>
@@ -514,7 +515,7 @@
         acIdx = -1;
         var html = '';
         players.forEach(function(p) {
-          html += '<div class="bd-ac-item" data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '">';
+          html += '<div class="bd-ac-item" role="option" data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '">';
           html += '<span class="bd-ac-pos ' + escapeHtml((p.position || '').toLowerCase()) + '">' + escapeHtml(p.position) + '</span>';
           html += '<span>' + escapeHtml(p.full_name) + '</span>';
           html += '<span class="bd-ac-team">' + escapeHtml(p.team || 'FA') + '</span>';
@@ -522,6 +523,7 @@
         });
         acList.innerHTML = html;
         acList.classList.add('open');
+        searchInput.setAttribute('aria-expanded', 'true');
         acList.querySelectorAll('.bd-ac-item').forEach(function(item) {
           item.addEventListener('click', function() {
             selectPlayer(item.getAttribute('data-id'), item.getAttribute('data-name'));
@@ -539,6 +541,7 @@
     acList.classList.remove('open');
     acList.innerHTML = '';
     acIdx = -1;
+    searchInput.setAttribute('aria-expanded', 'false');
   }
 
   function selectPlayer(pid, name) {
@@ -626,7 +629,7 @@
 
     // Chart + Legend
     html += '<div class="bd-chart-wrap">';
-    html += '<div class="bd-canvas-wrap"><canvas id="bdDonut" width="560" height="560"></canvas>';
+    html += '<div class="bd-canvas-wrap"><canvas id="bdDonut" width="560" height="560" role="img" aria-label="Fantasy points breakdown donut chart"></canvas>';
     html += '<div class="bd-canvas-center"><div class="bd-canvas-ppg">' + fmt(data.ppg, 1) + '</div>';
     html += '<div class="bd-canvas-ppg-label">PPG</div></div></div>';
 

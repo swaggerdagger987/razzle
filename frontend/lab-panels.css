@@ -110,6 +110,13 @@
 .lp-pos-tab:last-child { border-right: none; }
 .lp-pos-tab.active { background: var(--ink); color: var(--bg-card); }
 .lp-pos-tab:hover:not(.active) { background: var(--bg-warm); }
+.lp-select:focus-visible,
+.lp-search:focus-visible,
+.lp-pos-tab:focus-visible,
+.pr-pos-tab:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
 .lp-actions {
   display: flex;
   justify-content: center;
@@ -4334,6 +4341,10 @@
 .pr-search:focus {
   outline: none;
   border-color: var(--orange);
+}
+.pr-search:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
 }
 .pr-pos-tabs {
   display: flex;

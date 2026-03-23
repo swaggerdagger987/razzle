@@ -271,7 +271,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -299,15 +299,15 @@
   </div>
 
   <div class="pct-search-wrap">
-    <input type="text" class="pct-search" id="player-search" placeholder="search for a player..." autocomplete="off" aria-label="Search for a player">
-    <div class="pct-dropdown" id="search-dropdown"></div>
+    <input type="text" class="pct-search" id="player-search" placeholder="search for a player..." autocomplete="off" aria-label="Search for a player" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="search-dropdown">
+    <div class="pct-dropdown" id="search-dropdown" role="listbox"></div>
   </div>
 
   <div class="pct-controls" id="pct-controls" style="display:none;">
     <select class="pct-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
-  <div id="pct-result"></div>
+  <div id="pct-result" role="status" aria-live="polite"></div>
 
   <div class="pct-empty" id="pct-empty">
     search for a player to see their percentile rankings
@@ -417,17 +417,17 @@
   searchInput.addEventListener('input', function() {
     var q = searchInput.value.trim();
     clearTimeout(searchTimer);
-    if (q.length < 2) { dropdown.style.display = 'none'; return; }
+    if (q.length < 2) { dropdown.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
     searchTimer = setTimeout(function() {
       fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
         .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
         .then(function(data) {
           var players = Array.isArray(data) ? data : (data.players || []);
-          if (players.length === 0) { dropdown.style.display = 'none'; return; }
+          if (players.length === 0) { dropdown.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
           var html = '';
           for (var i = 0; i < players.length; i++) {
             var p = players[i];
-            html += '<div class="pct-dropdown-item" data-pid="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '">';
+            html += '<div class="pct-dropdown-item" role="option" data-pid="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '">';
             html += '<span class="pct-dd-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
             html += '<span>' + escapeHtml(p.full_name) + '</span>';
             html += '<span style="color:var(--ink-light); font-size:12px;">' + escapeHtml(p.team) + '</span>';
@@ -435,12 +435,14 @@
           }
           dropdown.innerHTML = html;
           dropdown.style.display = 'block';
+          searchInput.setAttribute('aria-expanded', 'true');
           var items = dropdown.querySelectorAll('.pct-dropdown-item');
           for (var j = 0; j < items.length; j++) {
             items[j].addEventListener('click', function() {
               var pid = this.getAttribute('data-pid');
               var name = this.getAttribute('data-name');
               dropdown.style.display = 'none';
+              searchInput.setAttribute('aria-expanded', 'false');
               searchInput.value = name;
               currentPlayerId = pid;
               var url = new URL(window.location);
@@ -450,17 +452,18 @@
             });
           }
         })
-        .catch(function() { dropdown.style.display = 'none'; });
+        .catch(function() { dropdown.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); });
     }, 250);
   });
 
   searchInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') dropdown.style.display = 'none';
+    if (e.key === 'Escape') { dropdown.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); }
   });
 
   document.addEventListener('click', function(e) {
     if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
       dropdown.style.display = 'none';
+      searchInput.setAttribute('aria-expanded', 'false');
     }
   });
 

@@ -379,6 +379,34 @@ h1, h2, h3 {
   text-decoration: none;
 }
 
+/* Skip-to-content link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 10000;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bg-card);
+  background: var(--ink);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+.skip-link:focus {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  width: auto;
+  height: auto;
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
 @media (max-width: 768px) {
   .hamburger-toggle {
     display: block;
@@ -1484,6 +1512,10 @@ tr:hover .notes-cell .note-pencil {
 .note-editor-input:focus {
   outline: none;
   border-color: var(--orange);
+}
+.note-editor-input:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
 }
 .note-editor-footer {
   display: flex;

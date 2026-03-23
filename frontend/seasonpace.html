@@ -60,7 +60,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
     <div class="logo-mark">🐯</div>
@@ -101,7 +101,7 @@
   <div id="sp-content" style="display:none;">
     <div class="sp-card">
       <div class="sp-card-header">Milestone Watch</div>
-      <div id="sp-table-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch"></div>
+      <div id="sp-table-wrap" role="status" aria-live="polite" style="overflow-x:auto;-webkit-overflow-scrolling:touch"></div>
     </div>
   </div>
 </div>

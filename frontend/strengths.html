@@ -69,6 +69,10 @@
     outline: none;
     border-color: var(--orange);
   }
+  .sw-search:focus-visible {
+    outline: 3px solid var(--orange);
+    outline-offset: 2px;
+  }
   .sw-ac-list {
     position: absolute;
     top: 100%;
@@ -395,7 +399,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -423,8 +427,8 @@
   </div>
 
   <div class="sw-search-wrap">
-    <input type="text" class="sw-search" id="swSearch" placeholder="Search for a player..." autocomplete="off" aria-label="Player search">
-    <div class="sw-ac-list" id="swAcList"></div>
+    <input type="text" class="sw-search" id="swSearch" placeholder="Search for a player..." autocomplete="off" aria-label="Player search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="swAcList">
+    <div class="sw-ac-list" id="swAcList" role="listbox"></div>
   </div>
 
   <div class="sw-controls" id="swControls" style="display:none;">
@@ -601,7 +605,7 @@
         acIdx = -1;
         var html = '';
         players.forEach(function(p) {
-          html += '<div class="sw-ac-item" data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '">';
+          html += '<div class="sw-ac-item" role="option" data-id="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '">';
           html += '<span class="sw-ac-pos ' + escapeHtml((p.position || '').toLowerCase()) + '">' + escapeHtml(p.position) + '</span>';
           html += '<span>' + escapeHtml(p.full_name) + '</span>';
           html += '<span class="sw-ac-team">' + escapeHtml(p.team || 'FA') + '</span>';
@@ -609,6 +613,7 @@
         });
         acList.innerHTML = html;
         acList.classList.add('open');
+        searchInput.setAttribute('aria-expanded', 'true');
 
         acList.querySelectorAll('.sw-ac-item').forEach(function(item) {
           item.addEventListener('click', function() {
@@ -629,6 +634,7 @@
     acList.classList.remove('open');
     acList.innerHTML = '';
     acIdx = -1;
+    searchInput.setAttribute('aria-expanded', 'false');
   }
 
   function selectPlayer(pid, name) {

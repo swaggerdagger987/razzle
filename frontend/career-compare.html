@@ -294,7 +294,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -483,8 +483,8 @@
         html += '<span class="cc-remove" data-rm="' + i + '" title="Remove">&times;</span>';
         html += '</div>';
       } else {
-        html += '<input type="text" class="cc-slot-input" data-slot="' + i + '" placeholder="search player ' + (i + 1) + '..." autocomplete="off" aria-label="Search player ' + (i + 1) + '">';
-        html += '<div class="cc-dropdown" data-dd="' + i + '"></div>';
+        html += '<input type="text" class="cc-slot-input" data-slot="' + i + '" placeholder="search player ' + (i + 1) + '..." autocomplete="off" aria-label="Search player ' + (i + 1) + '" role="combobox" aria-autocomplete="list" aria-expanded="false">';
+        html += '<div class="cc-dropdown" data-dd="' + i + '" role="listbox"></div>';
       }
       html += '</div>';
     }
@@ -523,13 +523,13 @@
     input.addEventListener('input', function() {
       var q = input.value.trim();
       clearTimeout(timer);
-      if (q.length < 2) { dd.style.display = 'none'; return; }
+      if (q.length < 2) { dd.style.display = 'none'; input.setAttribute('aria-expanded', 'false'); return; }
       timer = setTimeout(function() {
         fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=6')
           .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
           .then(function(data) {
             var list = Array.isArray(data) ? data : (data.players || []);
-            if (list.length === 0) { dd.style.display = 'none'; return; }
+            if (list.length === 0) { dd.style.display = 'none'; input.setAttribute('aria-expanded', 'false'); return; }
             var html = '';
             for (var i = 0; i < list.length; i++) {
               var p = list[i];
@@ -539,7 +539,7 @@
                 if (players[x].id === p.player_id) already = true;
               }
               if (already) continue;
-              html += '<div class="cc-dropdown-item" data-pid="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '" data-pos="' + escapeHtml(p.position) + '" data-team="' + escapeHtml(p.team) + '">';
+              html += '<div class="cc-dropdown-item" role="option" data-pid="' + escapeHtml(p.player_id) + '" data-name="' + escapeHtml(p.full_name) + '" data-pos="' + escapeHtml(p.position) + '" data-team="' + escapeHtml(p.team) + '">';
               html += '<span class="cc-dd-pos ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span>';
               html += '<span>' + escapeHtml(p.full_name) + '</span>';
               html += '<span style="color:var(--ink-light); font-size:12px;">' + escapeHtml(p.team) + '</span>';
@@ -547,6 +547,7 @@
             }
             dd.innerHTML = html;
             dd.style.display = html ? 'block' : 'none';
+            input.setAttribute('aria-expanded', html ? 'true' : 'false');
             var items = dd.querySelectorAll('.cc-dropdown-item');
             for (var j = 0; j < items.length; j++) {
               items[j].addEventListener('click', function() {
@@ -555,16 +556,17 @@
                 var pos = this.getAttribute('data-pos');
                 var team = this.getAttribute('data-team');
                 dd.style.display = 'none';
+                input.setAttribute('aria-expanded', 'false');
                 addPlayer(pid, name, pos, team);
               });
             }
           })
-          .catch(function() { dd.style.display = 'none'; });
+          .catch(function() { dd.style.display = 'none'; input.setAttribute('aria-expanded', 'false'); });
       }, 250);
     });
 
     input.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') dd.style.display = 'none';
+      if (e.key === 'Escape') { dd.style.display = 'none'; input.setAttribute('aria-expanded', 'false'); }
     });
   }
 
@@ -622,7 +624,7 @@
     // Chart
     html += '<div class="cc-chart-wrap">';
     html += '<div class="cc-chart-title">PPG Career Trajectory</div>';
-    html += '<canvas class="cc-canvas" id="cc-chart"></canvas>';
+    html += '<canvas class="cc-canvas" id="cc-chart" role="img" aria-label="Career stat comparison line chart"></canvas>';
     html += '<div class="cc-legend" id="cc-legend">';
     for (var i = 0; i < players.length; i++) {
       html += '<div class="cc-legend-item">';

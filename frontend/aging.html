@@ -287,7 +287,7 @@
 </style>
 </head>
 <body>
-<a href="#main-content" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
+<a href="#main-content" class="skip-link">Skip to main content</a>
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
     <div class="logo-mark">🐯</div>
@@ -328,7 +328,7 @@
     <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="aging-body">
+  <div id="aging-body" role="status" aria-live="polite">
     <div class="aging-loading" id="aging-loading">studying the tape...</div>
   </div>
 </main>
@@ -699,7 +699,7 @@
         '<div class="aging-card-annotation">' + escapeHtml(annotation) + '</div>' +
         '</div>' +
         '<div class="aging-chart-wrap">' +
-        '<canvas id="chart-' + posLower + '"></canvas>' +
+        '<canvas id="chart-' + posLower + '" role="img" aria-label="PPG by age curve for ' + posLower.toUpperCase() + '"></canvas>' +
         '<div class="aging-tooltip" id="tooltip-' + posLower + '">' +
         '<div class="aging-tooltip-name"></div>' +
         '<div class="aging-tooltip-detail"></div>' +
