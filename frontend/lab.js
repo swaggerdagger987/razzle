@@ -1520,7 +1520,8 @@ function buildGroupHeaderRow(cols) {
   let first = true;
   for (const g of groups) {
     const sepCls = first ? "" : " group-sep";
-    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" onclick="toggleColumnGroup('${escapeJS(g.name)}')" title="Click to toggle all ${escapeHtml(g.name)} columns">${escapeHtml(g.name)}</th>`;
+    const grpCollapsed = state._collapsedGroups && state._collapsedGroups.has(g.name);
+    html += `<th colspan="${g.span}" class="${sepCls}" style="cursor:pointer;" tabindex="0" role="button" aria-expanded="${!grpCollapsed}" onclick="toggleColumnGroup('${escapeJS(g.name)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleColumnGroup('${escapeJS(g.name)}')}" title="Click to toggle all ${escapeHtml(g.name)} columns">${escapeHtml(g.name)}</th>`;
     first = false;
   }
   html += '<th style="width:32px;"></th>'; // spacer for "+" column
