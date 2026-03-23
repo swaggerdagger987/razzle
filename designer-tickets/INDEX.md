@@ -1,6 +1,6 @@
 # Design QA Tickets — Batch 2026-03-23
 
-60 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit (20+ screenshots, 3 subagent deep-dives, undefined CSS var discovery).
+70 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit (transition:all, hover lift, focus-visible, max-width, watermarks).
 
 ## P1 — High Impact (visible on every page)
 
@@ -76,3 +76,27 @@
 | DQ-049 | Pricing dark mode — feature pills harsh teal borders | pricing.html |
 | DQ-059 | Home agent demo card uses wrong name "Bones" (should be "The Fox") | index.html:770 |
 | DQ-060 | Home pricing subtitle — inline Caveat on trust/selling copy | index.html:787 |
+
+## Cycle 10 — Code-Level Systematic Audit (DQ-061 to DQ-070)
+
+### P1
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-061 | Watermark missing on ~43 pages, split implementation on remaining 32 | 75 HTML files |
+
+### P2
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-062 | `transition: all` performance anti-pattern — 23+ instances | agents.html, aging.html |
+| DQ-063 | agents.html hover lift undersized — 7+ hovers go to 4px not 6px | agents.html |
+| DQ-064 | `outline: none` without `:focus-visible` — 4 new instances | agents.html (3), lab-panels.css (1) |
+| DQ-066 | `max-width` inconsistency — 6+ values across 70+ pages | 70+ standalone HTML |
+| DQ-068 | agents.html agent card drop-shadow(2px) — undersized | agents.html:285 |
+| DQ-069 | lab.html sticky header dark mode cold black blur shadow | lab.html:1040 |
+
+### P3
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-065 | formulas.js `border-radius: 4px` in inline cssText | formulas.js:273 |
+| DQ-067 | agents.html btn-pro-upgrade hover uses off-spec 5px shadow | agents.html:727 |
+| DQ-070 | agents.html 37 long inline style= attrs — unmaintainable | agents.html |

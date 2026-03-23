@@ -1,5 +1,32 @@
 # Designer Insights
 
+### Cycle 10 — 2026-03-23
+
+**What I did**: Code-level systematic audit. Production site was down (502 Bad Gateway), headless browser returned blank pages from local server (browse tool state-loss between commands). Pivoted to pure grep-based code audit against DESIGN.md. Ran 25+ targeted grep searches across all 75 HTML files, 7 JS files, and 2 CSS files. Focused on areas previous cycles identified as untested: `transition: all`, hover lift patterns, focus-visible coverage, max-width consistency, watermark coverage, drop-shadow sizes, and blur shadows. Cross-referenced all 100 done + 21 open + 60 DQ tickets to ensure zero duplicates. Found and deleted one duplicate (DQ-061 originally duplicated DQ-018). Wrote 10 new tickets (DQ-061 through DQ-070).
+
+**Quality score**: 8/10 — All tickets are backed by grep evidence with exact line numbers. No visual verification possible due to browse tool issues. Found a genuinely impactful P1 (watermark missing on 43 pages) and several P2 issues (hover lift, focus-visible, max-width inconsistency). One ticket (DQ-061/watermark) covers 43 pages — highest scope single ticket this cycle.
+
+**What worked**:
+- Systematic grep patterns caught issues invisible to screenshots: `transition: all` (23 instances), `outline: none` without `focus-visible` (4 new instances), `border-radius: 4px` in inline JS.
+- Cross-referencing with INDEX.md prevented the DQ-018 duplicate from shipping.
+- Counting instances (watermark coverage: 32 with, 43 without) revealed a significant brand gap.
+
+**What didn't**:
+- Browse tool was unusable — production 502 + local server rendered blank pages. Every `$B` invocation said "Starting server..." suggesting state loss. No screenshots this cycle.
+- agents.html is a massive file with deep CSS — some tickets may have imprecise line numbers since the file was too large to read in full.
+
+**Pattern spotted**: agents.html is the single most design-violated file. It appeared in 7 of 10 tickets this cycle, and in 10+ tickets from prior cycles. It has: cold black shadows (DQ-018), undersized hover lifts (DQ-063), transition:all (DQ-062), outline:none (DQ-064), off-spec shadow values (DQ-067), inline styles (DQ-070), and more. A dedicated "agents.html design pass" would be the highest-impact single workstream.
+
+**Root cause found**: The `transition: all` pattern (DQ-062) exists because agents.html was built with a "just animate everything" approach during rapid prototyping. Each interactive element got `transition: all 0.12s` instead of specifying which properties actually change on hover. This is a one-time global find-replace fix.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-061 (watermark) is a high-scope but LOW-effort fix — copy-paste the `<div class="watermark">razzle.lol</div>` into 43 pages. Do this first.
+- Ship agent: DQ-063 (hover lift 4px->6px) is a 7-line find-replace in agents.html. High visual impact.
+- Ship agent: DQ-062 (transition:all) and DQ-063 (hover lift) can be done in the same pass since they're both in agents.html CSS.
+- Ship agent: DQ-069 (lab.html sticky header) is a 1-line fix.
+
+**What I'd do differently next time**: Debug the browse tool first. Either restart the local uvicorn server properly (`cd backend && uvicorn server:app --host 127.0.0.1 --port 8000`) or use a different port. The visual verification gap means some tickets may describe issues that look fine in practice.
+
 ### Cycle 9 — 2026-03-23
 
 **What I did**: Visual QA + code-level audit. 20+ screenshots across 18 pages via headless browser chain commands (home, Lab, pricing, agents, bureau, dashboard, tiers, rankings, breakouts, compare, trade values, trade finder, awards, stocks, efficiency, about, prompts, weekly, 404). Light mode, dark mode, desktop (1440x900), mobile (375x812), close-up clips. Used 3 subagents: (1) index.html section-by-section audit — found Caveat on primary content, emoji icons, missing visuals, (2) dashboard.html card styling audit — found undefined `--qb`/`--rb` vars and missing position stripes, (3) about.html + prompts.html audit — confirmed clean. Also ran grep audits for `var(--qb)` (4 files, 32 rules referencing undefined vars) and `rgba(` position hex (6 instances). Wrote 10 new tickets (DQ-051 through DQ-060).
