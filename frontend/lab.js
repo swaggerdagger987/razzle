@@ -1801,7 +1801,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
     html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pidJS}');" onmouseenter="onPlayerNameEnter('${pidJS}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--ink-faint);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
     html += buildTagChip(pid);
-    html += `<span class="tag-icon" onclick="event.stopPropagation(); showTagPicker('${pidJS}', this)" title="Tag player">&#9679;</span>`;
+    html += `<span class="tag-icon" role="button" tabindex="0" aria-label="Tag player" onclick="event.stopPropagation(); showTagPicker('${pidJS}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();showTagPicker('${pidJS}',this)}" title="Tag player">&#9679;</span>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
     if (player.age) {
       var ageVal = Math.floor(player.age);
