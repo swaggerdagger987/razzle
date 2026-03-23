@@ -3238,8 +3238,9 @@ function renderBriefingCard(agentId, content, isError) {
     '</div>';
   }
 
+  var ariaExp = collapsed ? 'false' : 'true';
   return '<div class="' + cardClass + collapsed + '" data-briefing-agent="' + agentId + '">' +
-    '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
+    '<div class="briefing-card-header" role="button" tabindex="0" aria-expanded="' + ariaExp + '" onclick="toggleBriefingCard(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();toggleBriefingCard(this);}">' +
       '<span class="briefing-card-dot" style="background:' + agent.color + '"></span>' +
       '<span class="briefing-card-name">' + escapeHtml(agent.name) + '</span>' +
       '<span class="briefing-card-role">' + escapeHtml(agent.role) + '</span>' +
@@ -3258,7 +3259,7 @@ function renderFollowUpCard(followUp) {
   var bodyHtml = markdownToHtml(followUp.result);
 
   return '<div class="briefing-card followup-card collapsed" data-followup-type="' + followUp.triggerType + '">' +
-    '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
+    '<div class="briefing-card-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleBriefingCard(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();toggleBriefingCard(this);}">' +
       '<span class="briefing-card-dot" style="background:' + targetAgent.color + '"></span>' +
       '<span class="briefing-card-name">' + escapeHtml(targetAgent.name) + '</span>' +
       '<span class="briefing-card-role">' + escapeHtml(targetAgent.role) + '</span>' +
@@ -3274,9 +3275,11 @@ window.toggleBriefingCard = function(header) {
   var card = header.closest('.briefing-card');
   if (!card) return;
   card.classList.toggle('collapsed');
+  var isCollapsed = card.classList.contains('collapsed');
+  header.setAttribute('aria-expanded', String(!isCollapsed));
   var toggle = header.querySelector('.briefing-card-toggle');
   if (toggle) {
-    toggle.textContent = card.classList.contains('collapsed') ? '[expand]' : '[collapse]';
+    toggle.textContent = isCollapsed ? '[expand]' : '[collapse]';
   }
 };
 
@@ -4040,7 +4043,7 @@ function showFirstRunDemo() {
       '<span class="followup-section-sub">auto-triggered by Medical\u2019s injury flag</span>' +
     '</div>' +
     '<div class="briefing-card followup-card collapsed demo-card" data-followup-type="injury-handcuff">' +
-      '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
+      '<div class="briefing-card-header" role="button" tabindex="0" aria-expanded="false" onclick="toggleBriefingCard(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();toggleBriefingCard(this);}">' +
         '<span class="briefing-card-dot" style="background:#2ec4b6"></span>' +
         '<span class="briefing-card-name">Scout</span>' +
         '<span class="briefing-card-role">Scout</span>' +
@@ -4101,9 +4104,10 @@ function renderDemoCard(agentId, content, collapsed) {
   }
 
   var toggleText = collapsed ? '[expand]' : '[collapse]';
+  var demoAriaExp = collapsed ? 'false' : 'true';
 
   return '<div class="' + cardClass + '" data-briefing-agent="' + agentId + '">' +
-    '<div class="briefing-card-header" onclick="toggleBriefingCard(this)">' +
+    '<div class="briefing-card-header" role="button" tabindex="0" aria-expanded="' + demoAriaExp + '" onclick="toggleBriefingCard(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();toggleBriefingCard(this);}">' +
       '<span class="briefing-card-dot" style="background:' + agent.color + '"></span>' +
       '<span class="briefing-card-name">' + escapeHtml(agent.name) + '</span>' +
       '<span class="briefing-card-role">' + escapeHtml(agent.role) + '</span>' +
