@@ -192,3 +192,23 @@
 | DQ-135 | Cheatsheet player link uses old /player.html?id= pattern | cheatsheet.html:461 |
 | DQ-137 | Social-card uses --radius-sm (8px) should be --radius (12px) for cards | index.html:428 |
 | DQ-138 | Prompts filter pills lose ink border on hover — fills solid orange | prompts.html:40-42 |
+
+## Cycle 25 — Integration Flow + Dark Mode + Mobile Hardening (DQ-161 to DQ-170)
+
+### P2
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-161 | **Canvas watermark invisible in dark mode — 10 pages** | drops, gamescript, dualthreat, garbagetime, seasonpace, snapefficiency, successrate, targetpremium, tdregression, workload |
+| DQ-164 | Lab sidebar blurry shadow (-8px 0 24px) breaks comic-strip aesthetic | lab.html:596 |
+| DQ-165 | fptsbreakdown + percentiles text-shadow no dark mode override | fptsbreakdown.html:215, percentiles.html:226 |
+| DQ-167 | **22 standalone pages missing 480px mobile breakpoint** | about, advantage, breakdown, comptable, drops, dualthreat, +16 more |
+| DQ-170 | **Export PNG buttons have no loading feedback (40+ pages)** | all standalone pages with html2canvas |
+
+### P3
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-162 | 4 pages use absolute asset paths while 71 use relative | 404.html, compare.html, player.html, team.html |
+| DQ-163 | 3 loading text strings use generic verbs ("analyzing", "crunching") | airyards.html, explorer.html, lab.js, lab-panels.js |
+| DQ-166 | agents.html border-top:1px dashed — should be 2px | agents.html:2271 |
+| DQ-168 | lab-panels.css hover shadows use 3px offset — should be 6px | lab-panels.css:468, :2308 |
+| DQ-169 | Headshot onerror hides image but leaves layout gap — no fallback | 19+ standalone pages |

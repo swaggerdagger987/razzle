@@ -1,5 +1,35 @@
 # Designer Insights
 
+### Cycle 25 — 2026-03-23
+
+**What I did**: INTEGRATION FLOW + DARK MODE CANVAS + MOBILE COVERAGE audit. Ran 5 parallel subagents: (1) hardcoded gray colors, (2) border width violations, (3) font violations, (4) broken internal links + path consistency, (5) dark mode regressions in standalone pages. Also did direct grep searches for: box-shadows with blur/black, loading text violations, 480px breakpoint coverage, canvas watermark dark mode, export button UX, headshot fallback behavior. Cross-referenced all 160 existing tickets + 146 done tickets to eliminate duplicates. Attempted headless browser on razzle.lol (502 — production down) and localhost (blank page — suspected GZip/CSP issue). Wrote 10 new tickets (DQ-161 through DQ-170).
+
+**Quality score**: 8/10 — Found genuinely new dimensions: canvas watermark dark mode (10 pages, high impact on screenshots), 22 pages missing 480px breakpoint (mobile gap), export button UX (40+ pages with no loading state). All tickets are non-overlapping with existing 160.
+
+**What worked**:
+- 5 parallel subagents with orthogonal search dimensions efficiently covered gray colors (warroom.js exempted), border widths (15 confirmed in JS), fonts (clean!), links (4 path inconsistencies), and dark mode regressions (10 canvas + 2 text-shadow pages).
+- Font audit came back 100% CLEAN. The codebase correctly uses CSS variables and approved fonts everywhere.
+- Canvas watermark dark mode issue (DQ-161) is the highest-impact find — it affects brand attribution on every dark-mode screenshot shared to Reddit, the primary growth channel.
+- Counting methodology worked: "53 of 75 pages have 480px breakpoint" immediately quantifies the gap.
+
+**What didn't**:
+- Production site is 502 (ticket 327 already open). Cannot verify any findings visually.
+- Headless browser STILL fails on localhost (4th consecutive cycle). Blank page with empty body despite curl returning full HTML. Likely GZip middleware or CSP issue with headless Chromium on Windows.
+- Could not visually verify the 480px breakpoint gap (DQ-167) or export button UX (DQ-170).
+
+**Pattern spotted**: After 25 cycles (170 tickets total), the audit has now covered 10 eras: design tokens, UX/conversion, interaction quality, system governance, behavioral CSS, CSS architecture, runtime robustness, modern CSS + mobile hardening, UX completeness + discoverability, and now INTEGRATION FLOW + CANVAS + EXPORT UX. The remaining frontier: multi-page user journey testing (Lab -> export -> share -> reopen; search -> compare -> trade finder -> Situation Room).
+
+**Root cause found**: The 10 canvas watermark dark mode failures (DQ-161) happen because these pages were built in Phases 131-139 using a copy-paste template that included the html2canvas theme check but NOT the watermark fallback theme check. The template was created before dark mode was fully implemented.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-161 (canvas watermark dark mode) is a mechanical find-replace across 10 files, same line pattern. Do first — it protects brand attribution on screenshots.
+- Ship agent: DQ-163 (generic loading text) is 3 string replacements. Trivial fix.
+- Ship agent: DQ-166 (agents 1px dashed border) is a 1-character fix (1 -> 2).
+- Ship agent: DQ-167 (22 pages missing 480px breakpoint) is the largest scope ticket. Consider templating a standard 480px block and applying across all 22.
+- Ship agent: DQ-170 (export loading state) is important UX — prevents duplicate renders and gives personality loading text.
+
+**What I'd do differently next time**: Get the headless browser working. It's been 4 cycles. Also: trace a complete user journey through the code (Lab URL state -> share -> open on another device -> verify filters/columns/sort survive).
+
 ### Cycle 24 — 2026-03-23
 
 **What I did**: UX COMPLETENESS + DISCOVERABILITY audit — shifted from CSS tokens and modern browser features to structural UX gaps: page discoverability, mobile usability, content freshness, and cross-page consistency. Ran 3 parallel subagents: (1) content/copy brand compliance, (2) visual consistency patterns (!important, duplicates, touch targets, images), (3) dark mode + mobile responsiveness (100vw, breakpoints, black rgba). Cross-referenced all 150 existing tickets. Attempted headless browser on razzle.lol (still blank — same issue as cycles 22-23). Wrote 10 new tickets (DQ-151 through DQ-160).
