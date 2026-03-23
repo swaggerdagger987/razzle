@@ -1,6 +1,6 @@
 # Design QA Tickets — Batch 2026-03-23
 
-90 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors).
+100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice.
 
 ## P1 — High Impact (visible on every page)
 
@@ -148,3 +148,23 @@
 | DQ-083 | Pricing page missing watermark div | pricing.html |
 | DQ-084 | Footer personality text ("made for Reddit") not using Caveat font | index.html:912-913 |
 | DQ-090 | Pricing comparison table thin 1px dividers, invisible in dark mode | pricing.html |
+
+## Cycle 13 — Design System Tokens, Accessibility, Cross-Browser, Brand Voice (DQ-091 to DQ-100)
+
+### P2
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-091 | No custom scrollbar colors — default browser scrollbars clash with warm palette | styles.css |
+| DQ-092 | line-height fragmented — 21 distinct values with no design tokens | styles.css, lab-panels.css, 30+ pages |
+| DQ-093 | prefers-reduced-motion — only 1 CSS @media rule, 150+ animated elements unprotected | styles.css |
+| DQ-094 | lab-panels.css — 121 :hover rules vs 5 :focus-visible, keyboard nav dead zone | lab-panels.css |
+| DQ-097 | Dynamic headshot img tags missing width/height — CLS layout shift risk | 11+ standalone HTML files |
+| DQ-099 | All 47 table elements missing caption — WCAG 1.3.1 violation | all HTML files with tables |
+| DQ-100 | Pricing dark mode FAQ/feature description sections unreadable contrast | pricing.html |
+
+### P3
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-095 | Placeholder text generic — 32/35 inputs say "Search..." not personality language | lab.html, league-intel.html, agents.html, 8+ pages |
+| DQ-096 | backdrop-filter missing -webkit- prefix — Safari blur broken on cmd palette | styles.css:1073 |
+| DQ-098 | opacity values fragmented — 12 distinct values, no semantic tokens | styles.css, agents.html, 30+ pages |

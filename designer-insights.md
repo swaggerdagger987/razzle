@@ -1,5 +1,33 @@
 # Designer Insights
 
+### Cycle 13 — 2026-03-23
+
+**What I did**: Design system token audit + accessibility gap analysis + cross-browser check. Local server running (uvicorn on 127.0.0.1:8000). Took 12+ screenshots across home, Lab, pricing, agents, bureau, dashboard, rankings, trade values, buy/sell, efficiency — in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 2 subagents: (1) 10-category fresh code search (line-height, prefers-reduced-motion, cursor:pointer, img w/h, text-transform, placeholder text, color:inherit, hover/focus-visible parity, scrollbar styling, backdrop-filter), (2) 10-category visual/UX pattern search (autocomplete, table captions, target_blank security, duplicate IDs, hardcoded #000, opacity consistency, height constraints, font-weight, border-color, @keyframes). Cross-referenced all 90 existing DQ tickets + 100 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-091 through DQ-100).
+
+**Quality score**: 9/10 — Shifted to a completely new audit dimension: design system TOKEN governance (line-height, opacity) and ACCESSIBILITY gaps (reduced-motion, focus-visible parity, table captions). All findings backed by grep counts. Visual screenshots confirmed pricing dark mode FAQ issue and scrollbar visual clash. No duplicate overlap with any of the 190 prior tickets.
+
+**What worked**:
+- Two-subagent parallel strategy: one agent searched 10 code patterns (typography, motion, keyboard, browser compat), the other searched 10 visual/UX patterns (tables, opacity, fonts, animations). Combined findings covered 20 distinct categories.
+- Browse tool chain commands worked reliably for all 12 screenshots. Dark mode injection via `document.documentElement.setAttribute("data-theme","dark")` worked perfectly in chain.
+- Counting-based severity assessment: finding "121 hover vs 5 focus-visible" is far more actionable than "some panels lack keyboard focus."
+
+**What didn't**:
+- Browse tool still loses state between separate `$B` calls (says "Starting server..." each time). Must use chain commands for multi-step flows.
+- Could not verify scrollbar colors visually in headless browser (scrollbars are OS-level, not rendered in screenshots). Ticket DQ-091 is code-verified but not screenshot-verified.
+- Tablet viewport (768px) still untested after 13 cycles.
+
+**Pattern spotted**: The site has now been audited across 4 eras: (1) Cycles 1-5: design tokens (colors, borders, radius, shadows), (2) Cycles 6-9: UX/conversion (empty states, Pro gates, previews), (3) Cycles 10-12: interaction quality (hover, loading, dark mode completeness), (4) Cycle 13: SYSTEM-LEVEL design debt (token governance, accessibility infrastructure, cross-browser). The remaining high-value work is in era 4: the issues that affect every element on every page through missing system rules rather than individual element fixes.
+
+**Root cause found**: The 121-hover-vs-5-focus-visible gap in lab-panels.css (DQ-094) traces to the fact that done ticket 089 only added focus-visible to form inputs (selects, text inputs) but not to the hundreds of interactive cards, badges, tabs, and buttons inside Lab panels. The original ticket scope was "zero focus-visible" — adding 5 rules technically addressed it, but the coverage is <5% of what keyboard users need.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-093 (prefers-reduced-motion) is the highest-impact single fix — 5 lines of CSS, protects ALL animations site-wide. Do this first.
+- Ship agent: DQ-091 (scrollbar colors) is 8 lines of CSS with immediate visual improvement on every scrollable area.
+- Ship agent: DQ-096 (backdrop-filter webkit prefix) is literally 1 line — zero-risk Safari fix.
+- Ship agent: DQ-094 (lab-panels focus-visible) is the largest ticket by scope (116 rules) but highest accessibility impact. Consider a mechanical approach: for each `:hover` in lab-panels.css, add `, .selector:focus-visible` to the same rule.
+
+**What I'd do differently next time**: Audit the 768px TABLET viewport — 13 cycles and zero tablet testing. Also run a full contrast-ratio check using computed colors (not just eyeballing dark mode). Tools like `getComputedStyle()` via JS injection could calculate actual contrast ratios on rendered elements.
+
 ### Cycle 12 — 2026-03-23
 
 **What I did**: Visual QA + interaction audit. Local server running (uvicorn on 127.0.0.1:8000), production site returned 502. Took 15+ screenshots across home, Lab, pricing, agents, bureau, dashboard, tiers, rankings, trade values — in light mode, dark mode, desktop (1440x900), and mobile (375x812). Used 2 subagents: (1) 8-question targeted code verification (agents dark mode, nav consistency, footer links, dark toggle, demo button, pricing banner, trade values pagination), (2) 10-category new violation search (btn padding, watermark, pricing borders, Sign In button, footer font, skeleton loaders, onerror fallbacks, position filter tints, breadcrumbs, feature card hover). Cross-referenced all 80 existing DQ tickets + 146 done tickets to ensure zero duplicates. Wrote 10 new tickets (DQ-081 through DQ-090).
