@@ -1,5 +1,41 @@
 # Designer Insights
 
+### Cycle 54 — 2026-03-24
+
+**What I did**: INTERACTION LIFECYCLE + FLOATING UI + CONVERSION FLOW audit. Browse tool still blank (21st cycle — headless Chromium on Windows renders empty DOM). Pivoted to source-code analysis. Deployed 5 parallel subagents: (1) Lab keyboard/overlay interaction bugs, (2) home+pricing conversion copy accuracy, (3) DOM leaks and performance, (4) mobile/responsive UX, (5) Bureau+Situation Room UX edge cases. Cross-referenced ALL findings against 420 existing tickets (100+ done, 100+ open/pending/queue). Wrote 10 genuinely new tickets (DQ-421 through DQ-430). Zero duplicates.
+
+**Quality score**: 8/10 — Found 4 P1s (DQ-421 listener leak, DQ-422 modal stacking, DQ-429 Monte Carlo error, DQ-430 API key validation) and 6 P2s (DQ-423 floating UI cleanup, DQ-424 hover timer, DQ-425 duplicate toast, DQ-426 watermark onerror, DQ-427 AbortController leak, DQ-428 saved views mobile). This cycle discovered a new root cause pattern: renderTableBody() as a "floating UI orphan factory" that silently breaks 4 different UI elements.
+
+**What worked**:
+- The keyboard/overlay subagent found DQ-422 (modal stacking) by tracing the global keydown handler's control flow end-to-end. The missing `isAnyOverlayOpen()` guard at line 10530 allows ALL 15+ shortcuts to fire while ANY overlay is open. This is the biggest interaction bug remaining.
+- The DOM leaks subagent found DQ-421 ({once:true} re-attach loop) by understanding the semantic difference between "fire once" and "fire once, re-attach, fire once again" — a subtle pattern that automated tools can't detect.
+- Combining DQ-423 (floating UI cleanup) and DQ-424 (hover timer) into a single root cause (renderTableBody doesn't clean up) reveals that 4 previously separate symptoms share one fix location.
+- The Bureau/Situation Room subagent found 2 conversion-critical issues (DQ-429, DQ-430) that are invisible to Lab-focused auditing.
+
+**What didn't**:
+- Browse tool broken 21st consecutive cycle. Zero visual verification. All findings are source-code-only.
+- The mobile subagent returned 15 findings but 12 were already covered by existing tickets (DQ-154, DQ-303, DQ-301, DQ-144, DQ-191, DQ-309, pending/330, pending/179, DQ-243, etc.). Mobile responsive issues are heavily exhausted.
+- The conversion copy subagent's top finding (agent names mismatch) was covered by 4 existing tickets (DQ-032, DQ-059, DQ-291, DQ-341). The pricing/copy dimension is also nearly exhausted.
+- One subagent falsely claimed warroom.js RAF loop is not cancelled — it IS cancelled via visibilitychange handler (line 1434). Manual verification caught this.
+- Another subagent falsely claimed frozen columns break on mobile — player name IS still sticky (left: 0). Manual verification caught this too.
+
+**Pattern spotted**: After 54 cycles (430 DQ tickets), the remaining productive audit dimensions are:
+1. **INTERACTION LIFECYCLE** — tracing what happens when user actions trigger re-renders while floating UI is open. renderTableBody() is a lifecycle boundary that nothing cleans up before. Other lifecycle boundaries (panel switch, universe change) may have similar gaps.
+2. **CONVERSION EDGE CASES** — Bureau and Situation Room error handling for degenerate inputs (empty roster, invalid API key, no projections). These are first-impression killers for Pro conversion.
+3. **CODE DUPLICATION** — standalone pages (compare.js, player.js) that duplicate centralized utilities (showToast) with degraded implementations.
+
+Design tokens, dark mode, accessibility attributes, systemic CSS patterns, mobile responsive, and general pricing copy are all exhausted.
+
+**Root cause found**: DQ-421/422/423/424 all trace to the same architectural pattern: Lab's floating UI elements (tag picker, note editor, context menu, colStats popover, hover card) are created/positioned independently but have no lifecycle coordination. No central "dismiss all floating UI" function exists, and no lifecycle boundary (renderTable, overlay open, shortcut fire) triggers one.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-422 is highest ROI — one line (`if (isAnyOverlayOpen()) return;`) at lab.js:10530 prevents ALL modal stacking from shortcuts.
+- Ship agent: DQ-423 is a 4-line fix in renderTableBody() that resolves 4 orphaned-floating-UI symptoms at once.
+- Ship agent: DQ-421 + DQ-424 can be batched — both are "clean up timers/listeners in renderTable."
+- Ship agent: DQ-429 + DQ-430 should be batched as "conversion error handling" — both affect the upgrade funnel.
+
+**What I'd do differently next time**: The interaction lifecycle dimension was the strongest finding source. Future cycles should map ALL lifecycle boundaries in lab.js (renderTable, fetchAndRender, switchPanel, setUniverse, closeAllOverlays) and check what each one SHOULD clean up vs what it DOES clean up. This is a systematic approach that will find every remaining orphaned-state bug.
+
 ### Cycle 53 — 2026-03-23
 
 **What I did**: MODAL UX + CONVERSION CLARITY audit. Browse tool still blank (20th cycle — headless Chromium on Windows renders empty DOM, site returns 200 OK via curl). Pivoted to source-code analysis. Deployed 4 parallel subagents: (1) index.html conversion flow + trust signals, (2) pricing.html + checkout/auth flow accuracy, (3) lab.js modal stacking + UX flow + memory leaks, (4) cross-page systemic greps (stale years, console.log, dead links, innerHTML XSS, onclick handlers, loading text). Cross-referenced ALL findings against 390 open + 100 done tickets via targeted grep dedup. Wrote 10 genuinely new tickets (DQ-411 through DQ-420). Zero duplicates.

@@ -1,6 +1,21 @@
 # Design QA Tickets — Batch 2026-03-23
 
-100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice. Cycle 50: boom/bust canvas dark mode, home mini-screener accessibility, sitewide nowrap overflow, position tab ARIA. Cycle 51: UX flow audit — copy accuracy, discoverability, action feedback, label clarity.
+100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice. Cycle 50: boom/bust canvas dark mode, home mini-screener accessibility, sitewide nowrap overflow, position tab ARIA. Cycle 51: UX flow audit — copy accuracy, discoverability, action feedback, label clarity. Cycle 54: interaction lifecycle, modal stacking, floating UI cleanup, conversion flow.
+
+## Cycle 54 — DQ-421 to DQ-430
+
+| Ticket | Priority | Summary | Files |
+|--------|----------|---------|-------|
+| DQ-421 | P1 | Tag picker + note editor {once:true} listener re-attach loop — unbounded accumulation | lab.js:496-508,614-626 |
+| DQ-422 | P1 | Keyboard shortcuts fire while overlays open — causes modal stacking | lab.js:10530,3471,4257,10711 |
+| DQ-423 | P1 | renderTableBody() doesn't dismiss floating UI — orphaned tag picker, note editor, context menu, colStats popover | lab.js:2010 |
+| DQ-424 | P2 | Hover card _hoverTimer fires after table re-render — stale DOM access | lab.js:2259-2270 |
+| DQ-425 | P2 | Compare/Player pages duplicate showToast — missing a11y, bypasses design system | compare.js:892, player.js:804 |
+| DQ-426 | P2 | Watermark image preload missing onerror handler — silent failure | app.js:486-492 |
+| DQ-427 | P2 | AbortController timeout not cleared in catch block — orphaned timers | warroom.js ~1990,2404,2460,2505 |
+| DQ-428 | P2 | Saved Views delete button invisible on touch/mobile — relies on hover | lab.js ~4563 |
+| DQ-429 | P1 | Monte Carlo simulation — no error recovery on empty roster, button state stuck | league-intel.html ~6972-7050 |
+| DQ-430 | P1 | Agent API key saved without validation — no persistent error badge after 401 | warroom.js ~1472, ~2836 |
 
 ## Cycle 51 — DQ-391 to DQ-400
 
