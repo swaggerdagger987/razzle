@@ -1,5 +1,37 @@
 # Designer Insights
 
+### Cycle 55 — 2026-03-24
+
+**What I did**: LIFECYCLE BOUNDARIES + CONVERSION COPY + VISUAL CONSISTENCY + DARK MODE audit. Browse tool still blank (22nd cycle — headless Chromium on Windows renders empty DOM, HTML content length 39 bytes). Pivoted to source-code analysis. Deployed 5 parallel subagents: (1) Lab lifecycle boundary audit (renderTableBody/fetchAndRender/closeAllOverlays), (2) conversion UX edge cases (home→pricing→signup funnel), (3) visual consistency code audit (cold grays, wrong radii, hardcoded colors), (4) Lab sidebar + panel loading system, (5) dark mode visual regressions. Cross-referenced ALL findings against 410 existing tickets (100+ done, 60+ open, 140+ pending/queue). Wrote 10 genuinely new tickets (DQ-411 through DQ-420). Zero duplicates.
+
+**Quality score**: 8/10 — Found 3 P1s (DQ-411 panel fetch abort, DQ-412 fetchAndRender floating UI, DQ-413 closeAllOverlays coverage, DQ-415 terminology mismatch) and 6 P2s (DQ-414 expandedRows race, DQ-416 warroom cold grays, DQ-417 bar radius, DQ-418 pricing clarity, DQ-419 SVG dark mode, DQ-420 panel flavors). This cycle discovered two new root cause patterns: (a) Lab's lifecycle boundaries (fetchAndRender, renderTableBody, switchPanel) have zero floating-UI cleanup, and (b) the warroom pixel engine's entire color palette is cold gray, violating the warm-only design rule.
+
+**What worked**:
+- The lifecycle boundary subagent traced fetchAndRender's 40+ call sites and proved that NO lifecycle boundary dismisses floating UI. DQ-412 is the highest-ROI fix — one dismissAllFloatingUI() call fixes orphaned popovers, hover cards, tag pickers, and context menus.
+- The conversion subagent found DQ-415 (League Intel vs Bureau naming) which is a trust issue that crosses 3+ pages. Previous tickets addressed individual copy issues but never the systemic naming inconsistency.
+- The visual consistency subagent found 30+ cold gray hex values in warroom.js (DQ-416) — a clear design system violation that was never flagged because previous audits focused on styles.css and lab-panels.css, not canvas drawing code.
+- The panel loading subagent confirmed 30+ fetch calls in lab-panels.js with zero AbortControllers (DQ-411), distinct from the existing DQ-157 event listener leak ticket.
+
+**What didn't**:
+- Browse tool broken 22nd consecutive cycle. Headless Chromium on Windows returns HTML length of 39 bytes. Zero visual verification.
+- The dark mode subagent returned findings that heavily overlapped with warroom.js cold grays (already found by visual consistency subagent). Only 1 genuinely new finding (DQ-419 research-sprawl.svg) survived dedup.
+- Several conversion subagent findings were duplicates of existing tickets: href="#" sign-in (DQ-171), mini screener loading (DQ-246), API key cost confusion (DQ-217).
+
+**Pattern spotted**: After 55 cycles (420 tickets), the remaining productive audit dimensions are narrowing to:
+1. **LIFECYCLE COORDINATION** — Lab's floating UI has no central lifecycle manager. Each overlay (popover, tag picker, note editor, context menu, hover card) was built independently. No lifecycle boundary (fetchAndRender, renderTable, switchPanel, closeAllOverlays) coordinates their dismissal. This is the single biggest architectural gap remaining.
+2. **CANVAS/PIXEL DRAWING** — warroom.js pixel engine was never audited for design system compliance because it uses canvas drawing (ctx.fillStyle) not CSS. 30+ cold grays found. Other canvas-based elements (charts.js, Lab heatmaps) may have similar gaps.
+3. **CROSS-PAGE NAMING** — Feature names drift between pages (League Intel/Bureau, panel count claims, agent count). Each instance was filed individually but the systemic pattern (no single source of truth for feature names) persists.
+
+**Root cause found**: DQ-411/412/413 all trace to the same architectural gap: Lab has no "floating UI lifecycle manager." Each overlay was built as a standalone feature with its own show/hide logic. No central registry exists. When ANY lifecycle event occurs (re-render, fetch, panel switch), nothing checks "is there floating UI that needs to be dismissed?" The fix is one function: `dismissAllFloatingUI()` that covers all 6 overlay types, called at the top of fetchAndRender(), renderTableBody(), switchPanel(), and closeAllOverlays().
+
+**Suggestion for teammates**:
+- Ship agent: DQ-412 is highest ROI. One `dismissAllFloatingUI()` function + one call at the top of `fetchAndRender()` fixes 4 orphaned-overlay symptoms at once.
+- Ship agent: DQ-413 is a 5-line expansion of closeAllOverlays() that fixes Escape key for 5 overlay types.
+- Ship agent: DQ-411 (panel fetch abort) and DQ-416 (warroom cold grays) are both batch jobs — apply the same pattern across 30+ instances each.
+- Ship agent: DQ-415 (naming mismatch) is a search-and-replace job — pick "Bureau" or "League Intel" and make it consistent everywhere.
+
+**What I'd do differently next time**: The lifecycle coordination dimension is the most architecturally significant finding in 55 cycles. Future cycles should map the complete interaction between Lab's 6 floating UI types and ALL re-render triggers. A state machine diagram (overlay_type x lifecycle_event → expected_behavior) would systematically find every remaining gap.
+
 ### Cycle 54 — 2026-03-24
 
 **What I did**: INTERACTION LIFECYCLE + FLOATING UI + CONVERSION FLOW audit. Browse tool still blank (21st cycle — headless Chromium on Windows renders empty DOM). Pivoted to source-code analysis. Deployed 5 parallel subagents: (1) Lab keyboard/overlay interaction bugs, (2) home+pricing conversion copy accuracy, (3) DOM leaks and performance, (4) mobile/responsive UX, (5) Bureau+Situation Room UX edge cases. Cross-referenced ALL findings against 420 existing tickets (100+ done, 100+ open/pending/queue). Wrote 10 genuinely new tickets (DQ-421 through DQ-430). Zero duplicates.
