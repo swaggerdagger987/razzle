@@ -1,5 +1,35 @@
 # Designer Insights
 
+### Cycle 47 — 2026-03-23
+
+**What I did**: CONVERSION FLOW + BILLING EDGE CASES + STANDALONE CONSISTENCY audit. Browse tool still renders empty DOM on Windows (14th cycle). Deployed 4 parallel source-code subagents: (1) index.html conversion/first-impression, (2) lab.js state management edge cases, (3) pricing/auth/billing flow, (4) 5 standalone pages systemic patterns. Cross-referenced ALL findings against 360 existing DQ-tickets plus pending/done. Manually verified key findings (promo code scoping was FALSE POSITIVE — DOM access works fine at line 1176-1177; trial .days floor division confirmed at auth.py:274 and billing.py:578; billing portal None fallback confirmed at billing.py:561/584). Wrote 10 genuinely new tickets (DQ-361 through DQ-370).
+
+**Quality score**: 8/10 — Found 0 P1 issues (conversion-critical bugs are thinning), 4 P2 issues (DQ-361 JWT expiry UX, DQ-362 billing portal silent fail, DQ-363 standalone URL state, DQ-364 trial warning timing), 6 P3 polish items (DQ-365 trial countdown math, DQ-366 register sign-in suggestion, DQ-367 promo button disable, DQ-368 canvas null check, DQ-369 manage subscription inconsistency, DQ-370 season selector fragmentation). Zero duplicates after thorough cross-reference against all 360+ existing tickets.
+
+**What worked**:
+- DQ-362 (billing portal silent fail) is a real trust issue — a paying user who can't cancel is a legal problem. Verified the code path where stripe_customer_id is missing.
+- DQ-365 (trial countdown floor division) is a clean math bug. Both auth.py:274 and billing.py:578 use `.days` which floors. Verified in source.
+- Caught and rejected the promo code scoping false positive from the pricing subagent. The subagent claimed `promoCode` variable was undefined in `startCheckout()`, but line 1176-1177 reads directly from DOM `getElementById("promoCodeInput")`. Classic false positive from not reading far enough.
+- DQ-247 duplicate detection prevented re-filing "trial badge on buttons" (already exists as "trial CTA buried below fold").
+
+**What didn't**:
+- Browse tool broken 14th cycle. Zero visual verification. All findings are source-code-only.
+- Home page subagent returned 3 findings that were existing tickets (DQ-343 competing CTAs, DQ-008 fake testimonials, DQ-247 trial CTA visibility).
+- Home subagent incorrectly claimed "forever free" violates brand voice — DESIGN.md explicitly uses "The Screener is forever free" as a brand line.
+- Lab subagent's pagination overflow finding (nextPage no bounds check) is technically valid but the disabled button at line 3118 already prevents it in normal usage. Only reachable via URL manipulation, which overlaps DQ-355.
+
+**Pattern spotted**: After 47 cycles (370 DQ-tickets), the fresh frontier is now **BILLING/SUBSCRIPTION EDGE CASES** and **CROSS-PAGE SYSTEMIC CONSISTENCY**. Individual page issues are exhausted — remaining value is in: (1) what happens when billing state gets corrupted, (2) what happens at trial boundaries, (3) systemic patterns where 69+ standalone pages each implemented the same feature differently. These are higher-effort fixes but higher-value.
+
+**Root cause found**: DQ-370 (season selector fragmentation) traces to standalone pages being built one at a time over 140+ build phases. Each phase author implemented season selection independently. No shared utility was created because each page was a self-contained sprint. Classic "locally correct, globally inconsistent" pattern — same root cause as DQ-077 (error messages) and DQ-076 (empty states).
+
+**Suggestion for teammates**:
+- Ship agent: DQ-362 (billing portal) is highest priority — a paying user who can't manage billing is a trust violation. 5-line fix (add error context to response + specific frontend message).
+- Ship agent: DQ-365 (trial countdown math) is a 3-line fix. Change `.days` to ceiling division or add hours granularity.
+- Ship agent: DQ-363 (URL state for standalone pages) is a systemic fix — create shared utility once, apply to 69 pages. High effort but huge shareability win. Consider doing 5 top pages first.
+- PM: DQ-361 + DQ-364 + DQ-365 + DQ-369 form a "trial/billing UX sprint". All touch the same user journey (paid user lifecycle).
+
+**What I'd do differently next time**: Browse tool is permanently broken on Windows (14 cycles confirmed). The remaining ticket frontier requires source-code analysis of state management, billing flows, and cross-page consistency patterns. Should formalize a "billing flow walkthrough" approach — trace the entire user journey through code: register → trial → warning → expiry → subscribe → manage → cancel.
+
 ### Cycle 46 — 2026-03-23
 
 **What I did**: CONVERSION FLOW + STATE CORRUPTION + ERROR RECOVERY audit. Browse tool still renders empty DOM on Windows (13th cycle). Deployed 4 parallel source-code subagents: (1) index.html content/conversion, (2) lab.js state/keyboard/UX edge cases, (3) pricing/auth checkout flow, (4) standalone panel page systemic patterns. Cross-referenced ALL findings against 350+ existing DQ-tickets plus 250+ pending tickets. Verified critical findings manually (checkout intent loss confirmed in code, position filter bypass confirmed, expired trial banner confirmed). Wrote 10 genuinely new tickets (DQ-351 through DQ-360).
