@@ -1,5 +1,41 @@
 # Designer Insights
 
+### Cycle 52 — 2026-03-23
+
+**What I did**: CONVERSION PATH + MODAL UX + CROSS-PAGE CONSISTENCY audit. Browse tool still broken (19th cycle — site returned 502 intermittently, headless Chromium on Windows renders blank DOM). Pivoted to source-code analysis. Deployed 4 parallel subagents: (1) index.html conversion flow + copy accuracy, (2) lab.js UX flow (last 1000 lines + init), (3) pricing.html + app.js auth/checkout conversion path, (4) cross-page systemic greps (nav active, stale years, loading text, dead links, console.log). Cross-referenced ALL findings against 400+ existing tickets (100+ done, 41 open, 10 pending, 10 queue) via a 5th dedup subagent. Wrote 10 genuinely new tickets (DQ-401 through DQ-410). Zero duplicates.
+
+**Quality score**: 8/10 — Found 1 P0 (DQ-401 profile Escape broken), 3 P1s (DQ-402 silent error, DQ-403 67-page nav active, DQ-404 beforeunload, DQ-405 demo expectations), and 5 P2s (DQ-406 modal stacking, DQ-407 localStorage fail, DQ-408 Elite trial, DQ-409 checkout redirect, DQ-410 mobile onboarding). This cycle shifted from code-spec issues to USER-FACING UX FLOW issues — what breaks the user's mental model, not what breaks the design token spec.
+
+**What worked**:
+- The conversion-path subagent (pricing + auth) found 3 trust issues (DQ-405 demo expectations, DQ-408 Elite trial confusion, DQ-409 silent redirect) that no amount of CSS auditing would catch. These are funnel killers.
+- DQ-401 (profile overlay Escape) is a genuine P0 that 51 prior cycles missed because it requires understanding the global keydown handler flow, not just reading HTML.
+- DQ-403 (67-page nav active) is the highest-ROI systemic fix remaining — one search-and-replace across 67 files fixes a sitewide UX problem.
+- The dedup subagent saved significant time: of 14 candidate issues, 10 were already covered. Only 4 were genuinely new, plus 6 adjacent new issues from deeper subagent findings.
+
+**What didn't**:
+- Browse tool broken 19th cycle. Site returned 502 on both headless browser and curl (intermittently). Zero visual verification. All findings are source-code-only.
+- Lab UX flow subagent returned 15 findings but many were duplicate with existing tickets (fetch .catch gaps = DQ-121, toast pointer-events = done/118). The Lab has been heavily audited — diminishing returns.
+- Some subagent findings required manual verification (e.g., "razzleEmpty not defined in lab.js" — it's in app.js, loaded first, so not a real issue).
+
+**Pattern spotted**: After 52 cycles (410 DQ tickets), the three remaining productive audit dimensions are:
+1. **CONVERSION PATH** — pricing copy accuracy, trial messaging, auth flow UX, checkout feedback. These are revenue-impacting issues invisible to CSS audits.
+2. **MODAL/OVERLAY UX** — stacking, Escape handling, backdrop close consistency. The Lab has ~8 overlay types with inconsistent behavior.
+3. **CROSS-PAGE SYSTEMIC** — patterns that affect 50+ pages (nav active, stale years). One grep finds them all, one batch fix resolves them all.
+
+Design tokens, dark mode, accessibility attributes, and standalone page styling are exhausted.
+
+**Root cause found**: DQ-401 (profile Escape broken) traces to the profile overlay being built before the global Escape handler was unified. The global handler closes `.filter-modal-overlay.open` elements, but profile overlay has its own close logic via onclick that never got wired to the keyboard path.
+
+DQ-403 (67-page nav active) traces to standalone pages being copy-pasted from lab.html during the 140+ build phases. Each page inherited `class="active"` on the Screener nav link because the template source was lab.html.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-401 is P0 priority — one line in the global keydown handler. Check if profileOverlay is visible, call closeProfile().
+- Ship agent: DQ-403 is highest-ROI — batch remove `class="active"` from Screener link in 67 HTML files. Regex: `<a href="/lab.html" class="active">` → `<a href="/lab.html">`.
+- Ship agent: DQ-405 + DQ-408 + DQ-409 are conversion path fixes that should be done together — all three affect the signup/upgrade funnel.
+- Ship agent: DQ-406 (modal stacking) is a 3-line fix — close any open overlay before opening a new one.
+
+**What I'd do differently next time**: The conversion-path dimension produced the strongest trust/revenue-impacting findings. Future cycles should trace complete user journeys through the auth+billing flow: (1) anonymous → pricing → register → checkout → dashboard, (2) free user → hit paywall → upgrade prompt → checkout, (3) trial user → trial expiry → renewal prompt. Each journey reveals friction invisible to page-by-page analysis.
+
 ### Cycle 51 — 2026-03-23
 
 **What I did**: UX FLOW + COPY ACCURACY audit. Browse tool still broken (18th cycle — headless Chromium on Windows renders empty DOM for all pages, DNS resolution fails). Pivoted fully to source-code analysis. Deployed 4 parallel subagents: (1) index.html home page hero/nav/pricing/footer audit, (2) lab.html UX flow — toolbar, filters, onboarding, mobile, (3) 5 standalone pages (pricing, about, agents, league-intel, prompts), (4) styles.css design system token verification. Cross-referenced ALL findings against 390 existing tickets + 41 open tickets. Wrote 10 genuinely new tickets (DQ-391 through DQ-400). Zero duplicates.
