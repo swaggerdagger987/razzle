@@ -1,5 +1,34 @@
 # Designer Insights
 
+### Cycle 58 — 2026-03-24
+
+**What I did**: COMPLETED TICKET VERIFICATION + INTERACTION CONSISTENCY + HOME PAGE CARDS + CANVAS TOKENS audit. Browse tool still blank (25th cycle — headless Chromium on Windows, innerHTML length 26 bytes, same empty DOM). Pivoted to source-code analysis. Deployed 5 parallel subagents: (1) home page design violations vs DESIGN.md, (2) Lab screener fresh violations (lab.html, lab.js, lab-panels.js, lab-panels.css), (3) done ticket verification (read 10 done tickets and grep for whether fixes were comprehensive), (4) standalone pages dark mode audit (10 pages), (5) interaction design consistency (buttons, focus, empty states, semantic HTML). Cross-referenced ALL findings against 450 existing tickets (100+ done, 100+ open, DQ-001 through DQ-430). Wrote 10 genuinely new tickets (DQ-451 through DQ-460). Zero duplicates.
+
+**Quality score**: 9/10 — Discovered a goldmine: the "completed ticket verification" dimension. 6 of 10 spot-checked done tickets have INCOMPLETE FIXES — the pattern was marked done but still exists in the codebase. This yielded 4 high-confidence tickets (DQ-452/453/454/455) that are essentially "the fix was never applied." Also found 1 P1 (DQ-451: .btn-outline class used in 8 places but never defined — buttons render unstyled), 2 P2 interaction issues (DQ-456 card hover, DQ-459 focus-visible), 1 P2 design token (DQ-457 soft shadows), 1 P2 color token (DQ-458 canvas hardcoded hex), and 1 P3 semantic HTML (DQ-460 anchor-as-button).
+
+**What worked**:
+- The done ticket verification subagent was the highest-yield strategy in 58 cycles. Spot-checking 10 done tickets revealed: DES-058 still has 305 instances (claimed fixed), DES-045 footer CSS was never created (claimed fixed), DES-003 dark mode ink-light still wrong (claimed partially fixed), DES-090 has 19 unfixed dynamic canvases (claimed fixed), DES-010 has 15 remaining 1px borders in JS (claimed fixed). 6/10 done tickets = incomplete fixes.
+- The interaction subagent found DQ-451 (.btn-outline undefined) which is a P1 — 8 buttons across 4 pages are completely unstyled. This is a genuine broken visual, not a polish issue.
+- The home page subagent confirmed DQ-052 (Caveat on primary content) and DQ-081 (feature-card hover) are still open, then found pricing-card, social-card, and demo-card as 3 ADDITIONAL hover-less card types (DQ-456).
+- The standalone dark mode audit found ALL 10 pages PASS — previous fix cycles were comprehensive for standalone pages.
+
+**What didn't**:
+- Browse tool broken 25th consecutive cycle. Headless Chromium on Windows returns innerHTML length 26 bytes. Zero visual verification.
+- Standalone pages dark mode audit returned zero findings — these pages are clean. Diminishing returns on that dimension.
+- Several subagent findings overlapped with existing tickets (DQ-023 dark overlays, DQ-076 empty states, DQ-011 shadows, DQ-030 transitions). Cross-referencing caught all overlaps before filing.
+
+**Pattern spotted**: COMPLETED TICKET VERIFICATION is the most productive new audit dimension discovered since cycle 55's browser UX patterns. 60% of spot-checked done tickets have incomplete fixes. The pattern: a ticket gets marked "done" because the obvious instances were fixed, but edge cases (JS-generated DOM, canvas drawing, dark mode variants) were missed. Scaling this to all 100+ done tickets would likely yield 50+ incomplete-fix tickets.
+
+**Root cause found**: Incomplete fixes trace to the same pattern: fixes targeted CSS/HTML but missed JavaScript-generated DOM. Most done tickets were about static CSS — but JS files (lab.js, lab-panels.js, charts.js, formulas.js) generate HTML dynamically with inline styles, and those inline styles bypass whatever was fixed in the stylesheet.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-451 is highest ROI — add .btn-outline CSS class to styles.css. 8 buttons immediately go from broken to working.
+- Ship agent: DQ-454 is a 1-line fix (change dark mode --ink-light from #a89888 to #8a7565 in styles.css).
+- Ship agent: DQ-452 is the largest scope (305 instances across 63 files) — consider a batch regex replace.
+- Ship agent: DQ-453 is an architecture improvement (add footer CSS class, replace inline styles in 75 files). Could be a dedicated phase.
+
+**What I'd do differently next time**: Scale the done ticket verification to ALL 100+ done tickets. Read each ticket, grep for the exact pattern it claimed to eliminate, report residuals. Expected yield: 50+ new tickets. This is 10x more productive than finding new issue categories at this point in the audit lifecycle.
+
 ### Cycle 57 — 2026-03-24
 
 **What I did**: ERROR RECOVERY + ANIMATION POLISH + SHARING UX + NAVIGATION CONSISTENCY audit. Browse tool still blank (24th cycle — headless Chromium on Windows, innerHTML length 0 bytes, production site returned 200 but DOM empty). Pivoted to source-code analysis. Deployed 5 parallel subagents: (1) home page content accuracy (numeric claims, pricing consistency, broken links), (2) CSS animation/transition quality (transition:all, reduced-motion, forced layout, modal animation), (3) error state + empty state design quality (silent catches, retry buttons, personality), (4) navigation flow + dead-end pages (orphan pages, footer consistency, nav parity), (5) print stylesheet + sharing UX (Web Share API, clipboard feedback, URL state). Cross-referenced ALL findings against 440 existing tickets (100+ done, 90+ open, 140+ pending, 10 queue). Wrote 10 genuinely new tickets (DQ-441 through DQ-450). Zero duplicates.
