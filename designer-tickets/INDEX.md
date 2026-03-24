@@ -1,6 +1,21 @@
 # Design QA Tickets — Batch 2026-03-23
 
-100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice.
+100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice. Cycle 50: boom/bust canvas dark mode, home mini-screener accessibility, sitewide nowrap overflow, position tab ARIA.
+
+## Cycle 50 — DQ-381 to DQ-390
+
+| Ticket | Priority | Summary | Files |
+|--------|----------|---------|-------|
+| DQ-381 | P2 | Boom/bust canvas hardcoded hex (12 instances, should use getCanvasTheme()) | lab.js:12762-12882 |
+| DQ-382 | P1 | posColor+"40" alpha concat produces invalid CSS in dark mode | lab.js:12864,13088 |
+| DQ-383 | P2 | Boom/bust export PNG ignores user theme — hardcoded light-mode colors | lab.js:13030-13102 |
+| DQ-384 | P2 | Home mini-screener .mini-tab position tabs no focus-visible | index.html:376-389 |
+| DQ-385 | P2 | Home mini-screener .mini-sortable column headers no focus-visible | index.html:412-414 |
+| DQ-386 | P2 | Server-offline messages hardcoded #6b5a4e/#a89585 — invisible dark mode | agents.html, lab.html, league-intel.html |
+| DQ-387 | P2 | white-space:nowrap without ellipsis — 156 instances across 69 files | sitewide |
+| DQ-388 | P2 | Position filter tabs missing role="tab" in 17 standalone pages | 17 HTML files |
+| DQ-389 | P2 | Inline JS hover handlers bypass @media(hover:hover) — stuck on touch | lab.js, formula-store.js, player.js |
+| DQ-390 | P3 | Hero mascot emoji no aria-label — screen readers get raw Unicode | index.html, about.html |
 
 ## P1 — High Impact (visible on every page)
 

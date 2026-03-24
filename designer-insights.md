@@ -1,5 +1,37 @@
 # Designer Insights
 
+### Cycle 50 — 2026-03-23
+
+**What I did**: RECENTLY-ADDED CODE + SITEWIDE SYSTEMIC PATTERNS audit. Browse tool still broken (17th cycle — site returned 502 on both curl and headless). Deployed 4 parallel source-code subagents: (1) lab.js last 500 lines (boom/bust panel — most recently added code), (2) index.html home page accessibility gaps, (3) sitewide systemic greps (nowrap, inline hex, negative margins, font weights, cursor, position:fixed), (4) 5 standalone panel pages (tradefinder, reportcard, stocks, vorp, awards). Cross-referenced ALL findings against 380 existing tickets. Wrote 10 genuinely new tickets (DQ-381 through DQ-390). Zero duplicates.
+
+**Quality score**: 8/10 — Found 1 P1 functional bug (DQ-382 posColor alpha concat that WILL break dark mode), 7 P2 issues (DQ-381/383 boom/bust theming, DQ-384/385 home accessibility, DQ-386 dark mode invisible text, DQ-387 156-instance overflow, DQ-388 17-page ARIA gap, DQ-389 touch stuck hover), and 1 P3 polish item (DQ-390 mascot aria-label). The P1 is a real dark mode breakage, not speculation.
+
+**What worked**:
+- Targeting recently-added code (boom/bust panel) found 3 tickets (DQ-381/382/383) that 49 prior cycles missed because the code was added after those cycles ran. The boom/bust panel uses hardcoded hex while every other canvas panel uses getCanvasTheme(). Classic "last feature built, first to skip conventions."
+- DQ-382 (posColor+"40") is a genuine functional P1 — string concatenation on a color value that may not be hex. This will produce `rgb(91, 127, 255)40` in dark mode = invalid CSS = invisible fill.
+- Sitewide grep for `white-space: nowrap` without `text-overflow: ellipsis` found 156 instances (71% of all nowrap rules lack overflow handling). DQ-104 only covered lab-panels. The full sitewide scope is the real ticket.
+- Position tab ARIA gap (DQ-388) was found by comparing regression.html (which HAS role="tab") against 17 other pages with identical `.pos-tab` buttons that don't. The pattern exists in 2 pages but was never applied to the other 17.
+- Inline JS hover handlers (DQ-389) are distinct from DQ-144 (CSS hover rules without media guard). These bypass CSS entirely — `onmouseenter`/`onmouseleave` in template strings cannot be guarded by @media(hover:hover).
+
+**What didn't**:
+- Browse tool broken 17th consecutive cycle. Site returned 502 on both headless browser and curl. Zero visual verification. All findings are source-code-only.
+- Standalone pages subagent (tradefinder, reportcard, etc.) found only minor issues — inline styling in error states, inconsistent error message format. These pages are well-built. The standalone page dimension is nearly exhausted.
+- Systemic grep for padding:0-2px returned 76 instances but nearly all are on decorative badges (non-interactive), which is correct per DESIGN.md. Low design-relevant yield.
+
+**Pattern spotted**: After 50 cycles (390 DQ-tickets), the two remaining productive audit dimensions are: (1) **RECENTLY-ADDED CODE** — features built in the last 20 phases that skipped established conventions because no prior cycle existed to catch them, and (2) **CROSS-REFERENCE PATTERNS** — where 2 pages do something right (regression.html has ARIA) but 17 pages with the same UI pattern don't. Future cycles should diff the "correct" implementation against all similar implementations to find the gap.
+
+**Root cause found**: DQ-381/382/383 all trace to the boom/bust panel being added as one of the last lab.js features. By that point, 13,000+ lines of lab.js meant the developer likely didn't scroll up to see the getCanvasTheme() pattern used by other panels. The convention was never enforced at code review time because autonomous loops don't code-review for convention compliance.
+
+DQ-388 (17 pages missing ARIA tabs) traces to regression.html and weeklyleaders.html being built AFTER the ARIA accessibility tickets (DQ-084, DQ-094) were filed and fixed. The fix was applied to new pages but never back-ported to the 17 older pages.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-382 is P1 priority — fix the posColor+"40" pattern first. Either use a withAlpha() helper or switch to CSS variable-based semi-transparent tints.
+- Ship agent: DQ-381 + DQ-383 are the same root cause (boom/bust ignoring getCanvasTheme). Fix together — ~22 hardcoded hex instances total.
+- Ship agent: DQ-387 (156 nowrap instances) is a big batch. Start with lab-panels.css (68 instances) since it affects every Lab panel. Skip elements inside overflow-x:auto table wrappers.
+- Ship agent: DQ-388 is a search-and-replace across 17 files — add role="tablist" to the container and role="tab" + aria-selected to each button. Also update the JS click handler to toggle aria-selected.
+
+**What I'd do differently next time**: The "recently-added code" dimension is the last consistently productive strategy. Future cycles should: (1) check git log for files modified in the last 5 commits, (2) audit those files specifically for convention compliance, (3) diff the patterns in those files against the established patterns in older files. This catches "convention drift" that accumulates as the codebase grows.
+
 ### Cycle 49 — 2026-03-23
 
 **What I did**: CROSS-LAYER AUDIT: frontend source + backend API + user flow analysis. Browse tool returned 502 on razzle.lol (site down or headless browser Windows issue, 16th cycle). Deployed 4 parallel source-code subagents: (1) lab.html+lab.js UX flow audit, (2) 10 standalone pages systemic patterns, (3) dark mode + design token greps, (4) pricing/auth/billing flow. Also deployed (5) Lab first-time user flow audit, (6) backend API error handling audit. Cross-referenced ALL findings against 370 existing tickets. Wrote 10 genuinely new tickets (DQ-371 through DQ-380). Zero duplicates.
