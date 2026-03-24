@@ -1,5 +1,34 @@
 # Designer Insights
 
+### Cycle 46 — 2026-03-23
+
+**What I did**: CONVERSION FLOW + STATE CORRUPTION + ERROR RECOVERY audit. Browse tool still renders empty DOM on Windows (13th cycle). Deployed 4 parallel source-code subagents: (1) index.html content/conversion, (2) lab.js state/keyboard/UX edge cases, (3) pricing/auth checkout flow, (4) standalone panel page systemic patterns. Cross-referenced ALL findings against 350+ existing DQ-tickets plus 250+ pending tickets. Verified critical findings manually (checkout intent loss confirmed in code, position filter bypass confirmed, expired trial banner confirmed). Wrote 10 genuinely new tickets (DQ-351 through DQ-360).
+
+**Quality score**: 8/10 — Found 1 P1 (DQ-351 checkout intent lost for EA/Lifetime plans), 6 P2 issues (DQ-352 position filter bypass, DQ-353 expired trial styling, DQ-354 Bureau free/paid clarity, DQ-355 URL param validation, DQ-356 popover listener leak, DQ-357 support link missing, DQ-358 Pro vs Elite table), 2 P3 polish items (DQ-359 freshness timestamp, DQ-360 offseason guidance). Zero duplicates after thorough cross-reference against pending/107-336, DQ-001-350.
+
+**What worked**:
+- DQ-351 (EA/Lifetime checkout intent lost) is the highest-impact conversion bug found. The override function at line 793 was written separately from the original at 586 and missed the sessionStorage write. Classic "fix in one place, miss the copy" pattern.
+- DQ-352 (position filter bypass) is a genuine state trap. The empty array [] when position=ALL + relevance=all means kickers/punters/DEF appear with no visual warning. Verified in source code.
+- Subagent false positive detection: keyboard shortcuts lacking preventDefault sounds serious but single-letter keys don't trigger browser defaults (Ctrl+key does). Caught and rejected.
+- Cross-reference against 250+ pending tickets prevented 4 near-duplicates (DES-159 free tier panels, DES-217 API key copy, DES-218 feature list mismatch, DES-263 OG images).
+
+**What didn't**:
+- Browse tool broken 13th cycle. Zero visual verification. All findings are source-code-only.
+- One subagent (Lab) returned 2 findings that needed manual debunking (keyboard preventDefault false positive, teams XSS risk overstated).
+- Home page subagent repeated known findings (agent names = DQ-032/DQ-059/DQ-341, season count = DQ-311).
+
+**Pattern spotted**: After 46 cycles (360 DQ-tickets), the fresh frontier is **CONVERSION FLOW EDGE CASES** — what happens at the boundary between free and paid (checkout intent loss, trial expiry UX, free vs paid confusion, pricing comparison clarity). These are the highest-value bugs remaining because they directly block revenue. CSS/design/accessibility dimensions are exhausted. Functional UX at the payment boundary is the last high-value dimension.
+
+**Root cause found**: DQ-351 traces to the same root cause as DQ-359 from cycle 43 (html2canvas lazy-load): a function was overridden without inheriting all behavior from the original. The override at line 793 was written to support ea_/lifetime_ prefixes but didn't copy the sessionStorage intent-saving logic from the function it replaced. Classic "extend without understanding the original contract" pattern.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-351 is a 2-line fix (add sessionStorage.setItem before openAuthModal). Highest ROI ticket. Do first.
+- Ship agent: DQ-353 is a 3-line CSS change (different banner styling for expired trial). Quick win.
+- Ship agent: DQ-352 is a UX decision — needs product input on whether "All Players" + "ALL" should show K/DEF/P or not. May want to skip this one and flag for user.
+- PM: Consider grouping DQ-354 + DQ-358 + DQ-360 as a "conversion clarity sprint" — all touch messaging around the free/paid boundary.
+
+**What I'd do differently next time**: Browse tool is permanently broken on Windows (13 cycles). All remaining value is in source-code analysis of conversion flows, error states, and state management. Should formalize this as the approach rather than attempting visual verification each cycle.
+
 ### Cycle 45 — 2026-03-23
 
 **What I did**: UX EDGE CASES + CTA HIERARCHY + METADATA audit. Site is live (200 status via curl). Browse tool still renders empty DOM on Windows (12th cycle). Deployed 4 parallel source-code subagents: (1) index.html content/layout, (2) lab.js event listener leaks, (3) pricing/agents accuracy, (4) 5 standalone page patterns. Cross-referenced ALL findings against 340 existing DQ-tickets. Verified critical findings manually (escapeAttr false positive debunked, note editor leak debunked, resize handler debounce confirmed). Wrote 10 genuinely new tickets (DQ-341 through DQ-350).
