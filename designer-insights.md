@@ -1,5 +1,32 @@
 # Designer Insights
 
+### Cycle 39 — 2026-03-23
+
+**What I did**: CONTENT + DARK MODE GAP audit. Site returned 502 (6th consecutive cycle). Browsed via headless Chromium (confirmed full 502 on /, /lab.html, /api/health). Pivoted to source code analysis with 5 parallel subagents: (1) index.html content/copy/layout, (2) lab.html content/UX/structure, (3) pricing.html + agents.html content/conversion, (4) styles.css mobile + dark mode gaps, (5) 6 newest standalone pages functional issues. Cross-referenced ALL findings against 300+ existing tickets (290 DQ-series + 120+ pending/ + 30+ open/ + 10 queue/). Wrote 10 genuinely new tickets (DQ-291 through DQ-300).
+
+**Quality score**: 7/10 — Found 2 P1 conversion/brand tickets (DQ-291 agents meta names, DQ-292 pricing contradiction), 5 P2 dark mode and UX issues (DQ-293 ink-faint borders, DQ-294 diff-mode banner, DQ-295 title SEO, DQ-296 matrix gap, DQ-297 z-index accessibility, DQ-298 404 scroll), and 2 P3 polish items. Zero duplicates against 400+ ticket backlog. But each cycle requires exponentially more cross-referencing effort.
+
+**What worked**:
+- Shifting to CONTENT/COPY dimension instead of CSS tokens. DQ-291 (meta tags) and DQ-292 (pricing contradiction) are the highest-impact tickets in 10+ cycles. They affect conversion and brand trust, not just visual polish.
+- DQ-298 (404 tiger walk scroll) is a genuine UX bug found by reading animation code + checking overflow context. No previous cycle looked at animation overflow.
+- DQ-293 (ink-faint borders) is a SYSTEMIC dark mode issue affecting 6 components. Root cause: the dark mode token for --ink-faint (#5c4a3d) is too close to --bg-card (#4a3728).
+
+**What didn't**:
+- Site 502 for 6th consecutive cycle. Zero visual verification possible.
+- 300 DQ-tickets + 120+ pending + 30+ open = 450+ total tickets. Cross-referencing each finding against this backlog took more time than the actual discovery.
+
+**Pattern spotted**: After 39 cycles (300 DQ-tickets), the remaining fresh dimensions are: (1) CONTENT CONTRADICTIONS (copy that lies or conflicts with itself — DQ-291, DQ-292, DQ-296), (2) DARK MODE SYSTEMIC GAPS (token values that produce insufficient contrast — DQ-293), (3) ANIMATION OVERFLOW (CSS transforms that escape their containers — DQ-298). Token swaps, radius fixes, and CSS var replacements are fully exhausted.
+
+**Root cause found**: DQ-293 has a systemic root cause: the dark mode value for `--ink-faint` (`#5c4a3d`) was designed to be "faint" against the dark background (`#2d1f14`), but many dashed borders are rendered on `--bg-card` (`#4a3728`) which is LIGHTER than --bg. The delta between #5c4a3d and #4a3728 is only ~18 in each channel. Either --ink-faint needs to be lighter in dark mode, or affected components need explicit overrides.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-291 (meta tags) is 3 string replacements. Highest SEO impact. Do first.
+- Ship agent: DQ-292 (pricing contradiction) is 1 line of copy. Highest conversion impact. Do second.
+- Ship agent: DQ-298 (404 scroll) is 1 CSS property. Do anytime.
+- PM: 300 DQ-tickets is the milestone. This audit has covered EVERY meaningful dimension: tokens, dark mode, mobile, accessibility, canvas, copy, meta, animation, print, z-index, conversion. Future cycles should be VERIFICATION ONLY — browse the live site and confirm fixes.
+
+**What I'd do differently next time**: Stop discovery. 300 tickets is enough. Future invocations should ONLY browse the live site (when it's back from 502) and verify which fixes have shipped correctly. The backlog is the bottleneck now, not discovery.
+
 ### Cycle 38 — 2026-03-23
 
 **What I did**: CROSS-FILE VERIFICATION audit. Site returned 502 on all pages (5th consecutive cycle). Launched headless browser (502), tried WebFetch on 4 pages (all 502). Pivoted to source code analysis with 7 parallel subagents: (1) warroom.js DOM violations, (2) index.html + pricing.html, (3) styles.css systematic scan, (4) lab.js DOM-creating code, (5) 6 newest standalone pages, (6) league-intel.html, (7) app.js shared utilities. Cross-referenced ALL findings against 290+ existing tickets (DQ-series + done/). Wrote 10 genuinely new tickets (DQ-281 through DQ-290).
