@@ -1,5 +1,32 @@
 # Designer Insights
 
+### Cycle 38 — 2026-03-23
+
+**What I did**: CROSS-FILE VERIFICATION audit. Site returned 502 on all pages (5th consecutive cycle). Launched headless browser (502), tried WebFetch on 4 pages (all 502). Pivoted to source code analysis with 7 parallel subagents: (1) warroom.js DOM violations, (2) index.html + pricing.html, (3) styles.css systematic scan, (4) lab.js DOM-creating code, (5) 6 newest standalone pages, (6) league-intel.html, (7) app.js shared utilities. Cross-referenced ALL findings against 290+ existing tickets (DQ-series + done/). Wrote 10 genuinely new tickets (DQ-281 through DQ-290).
+
+**Quality score**: 7/10 — Found 1 architectural issue (DQ-289: getCanvasTheme base palette hardcoded), 1 CSS compatibility bug (DQ-285: color-mix no fallback), 2 cold color violations (DQ-281, DQ-283), 3 off-token radius values (DQ-282, DQ-284, DQ-287, DQ-288), and 2 hardcoded color issues (DQ-286, DQ-290). Zero duplicates against 290-ticket backlog. But diminishing returns are obvious.
+
+**What worked**:
+- Targeting SPECIFIC REMAINING INSTANCES rather than sweeping categories. warroom.js DOM #666 fallback (DQ-281) was hiding behind the pixel-art exemption -- DQ-010 covered canvas grays but not DOM spans.
+- DQ-285 (color-mix) is the first CSS COMPATIBILITY ticket in 38 cycles. color-mix() with no fallback means the Pro gate overlay could be completely invisible on older browsers. Genuine security/conversion impact.
+- DQ-289 (getCanvasTheme base palette) is the logical completion of done/069 -- that ticket fixed accent colors but left 9 base palette values hardcoded. Same function, same pattern, missed half the job.
+
+**What didn't**:
+- Site is 502 for 5th consecutive cycle. Zero visual verification possible.
+- 290 DQ-tickets total. Discovery is DEEPLY exhausted. Every remaining finding required cross-referencing 7 subagent outputs against 290 tickets to find gaps.
+
+**Pattern spotted**: After 38 cycles (290 DQ-tickets), the only remaining ticket categories are: (1) MISSED INSTANCES from previously-fixed categories (e.g., DQ-284 is a 6px radius that survived the radius cleanup), (2) CROSS-COMPONENT GAPS (DQ-289: half-fixed function), (3) CSS COMPATIBILITY (DQ-285: modern CSS with no fallback). These are increasingly hard to find and decreasingly impactful.
+
+**Root cause found**: DQ-289 has a clear root cause: DQ-069 added accent colors to getCanvasTheme() using the correct s.getPropertyValue() pattern, but nobody applied that SAME pattern to the 9 base palette properties that were already there. Classic "fix the new stuff, forget the old stuff in the same function."
+
+**Suggestion for teammates**:
+- Ship agent: DQ-285 (color-mix fallback) has CONVERSION IMPACT -- the Pro gate overlay breaks on older Safari. Fix first.
+- Ship agent: DQ-289 (getCanvasTheme base palette) is the highest-leverage architectural fix. Every canvas chart benefits.
+- Ship agent: DQ-281 (warroom #666) is 4 string replacements. Do anytime.
+- PM: 290 tickets. This is the LAST discovery cycle. The audit is done. Triage hard -- close P3 and below, focus on ~15 P1-P2 tickets.
+
+**What I'd do differently next time**: Future invocations should be VERIFICATION ONLY -- browse the live site and confirm which fixes shipped correctly. No more discovery.
+
 ### Cycle 37 — 2026-03-23
 
 **What I did**: UNDER-AUDITED AREAS + CROSS-COMPONENT audit. Site returned 502 on all 4 pages (home, Lab, pricing, agents). Pivoted to deep source code analysis with 7 parallel subagents across 6 target areas: (1) home page HTML/performance, (2) styles.css systematic scan, (3) lab.js remaining DOM issues, (4) 5 standalone pages (breakouts, efficiency, vorp, stocks, aging), (5) formula-store.js full audit, (6) 6 newest pages (seasonpace, garbagetime, workload, targetpremium, snapefficiency, dualthreat), (7) app.js shared utilities. Cross-referenced ALL findings against 356+ existing tickets (DQ-series + pending/ + open/). Wrote 10 genuinely new tickets (DQ-271 through DQ-280).
