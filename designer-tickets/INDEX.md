@@ -1,6 +1,21 @@
 # Design QA Tickets — Batch 2026-03-23
 
-100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice. Cycle 50: boom/bust canvas dark mode, home mini-screener accessibility, sitewide nowrap overflow, position tab ARIA. Cycle 51: UX flow audit — copy accuracy, discoverability, action feedback, label clarity. Cycle 54: interaction lifecycle, modal stacking, floating UI cleanup, conversion flow.
+100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice. Cycle 50: boom/bust canvas dark mode, home mini-screener accessibility, sitewide nowrap overflow, position tab ARIA. Cycle 51: UX flow audit — copy accuracy, discoverability, action feedback, label clarity. Cycle 54: interaction lifecycle, modal stacking, floating UI cleanup, conversion flow. Cycle 57: error recovery, animation polish, sharing UX, footer consistency.
+
+## Cycle 57 — DQ-441 to DQ-450
+
+| Ticket | Priority | Summary | Files |
+|--------|----------|---------|-------|
+| DQ-441 | P2 | Modal overlays (filter, column-picker) have zero open/close animation — instant display toggle | lab.html:896-956 |
+| DQ-442 | P2 | Error state and empty state visually indistinguishable in standalone panels | breakouts.html:548,555; aging.html:745; lab-panels.js |
+| DQ-443 | P2 | 33 standalone tool pages lack shareable URL state — kills Reddit sharing | tradevalues.html, rankings.html, +31 more |
+| DQ-444 | P2 | 5+ standalone panels still lack retry button — DQ-118 gap | breakouts.html:548, aging.html:745, buysell, scarcity, yoy |
+| DQ-445 | P1 | 10+ lab-panels.js catch handlers are empty — loading hangs forever on API error | lab-panels.js:332,749,1027,1099,1239,1371 |
+| DQ-446 | P3 | hideHoverCard() display:none kills CSS opacity transition — instant disappear | lab.js:2252-2253 |
+| DQ-447 | P3 | 33 standalone pages missing /prompts.html in footer vs main pages | advantage.html +32 more |
+| DQ-448 | P3 | Lab weekly row expand error shows text but no retry button | lab.js:2431 |
+| DQ-449 | P3 | breakouts.html error handler uses .breakouts-empty class — wrong semantics | breakouts.html:325,548,555 |
+| DQ-450 | P2 | agent-nudges.js animation bypasses prefers-reduced-motion — a11y violation | agent-nudges.js:121,159 |
 
 ## Cycle 54 — DQ-421 to DQ-430
 
