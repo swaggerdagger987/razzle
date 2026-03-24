@@ -1,5 +1,40 @@
 # Designer Insights
 
+### Cycle 56 — 2026-03-24
+
+**What I did**: BROWSER UX + SECURITY + ERROR RECOVERY + SHARING audit. Attempted visual browse — production site returned 502 (Render cold start/down). Started local dev server (uvicorn, port 8000, 200 OK) but headless Chromium on Windows still renders blank DOM (23rd cycle, innerHTML length 26 bytes). Pivoted to source-code analysis with 6 parallel subagents: (1) stale years + dead endpoints + XSS + debug console, (2) feature count + broken links + copy consistency + pricing accuracy, (3) orphaned CSS + duplicate listeners + race conditions + localStorage quota + focus traps, (4) standalone panel page audit (dark mode, nav, error states, loading, viewport, SEO), (5) JWT expiry + cross-tab sync + popstate + clipboard + offline + Enter key, (6) CSS specificity + inline styles + breakpoints + z-index. Additionally: (7) double-click protection + tab titles + favicon + empty states + rate limits + stale cache, (8) og:image + twitter cards + canonical URLs + JSON-LD + sitemap + 404 page + URL state sharing. Cross-referenced ALL findings against 430 existing tickets (100+ done, 70+ open, 100+ pending, 10 queue). Wrote 10 genuinely new tickets (DQ-431 through DQ-440). Zero duplicates.
+
+**Quality score**: 7/10 — Found 1 P1 (DQ-435 formula publish double-click), 4 P2s (DQ-431 cross-tab sync, DQ-432 popstate, DQ-433 SRI, DQ-437 canonical, DQ-439 rate limit), and 4 P3s (DQ-434 dead SVGs, DQ-436 favicon dark mode, DQ-438 stale warning, DQ-440 tab title). This cycle pivoted to BROWSER UX patterns (back button, multi-tab, rate limiting) — a fresh dimension after 55 cycles of design tokens, accessibility, and interaction lifecycle.
+
+**What worked**:
+- The session/auth subagent found DQ-431 (cross-tab sync) and DQ-432 (popstate) — two fundamental browser UX patterns that 55 prior cycles missed because they're invisible in static code analysis. You only think about them when you imagine multi-tab or back-button usage.
+- The security subagent found DQ-433 (SRI missing) — a distinct angle from DQ-364 (CDN fallback). Both address the same script tags but fix different risks.
+- The edge case subagent found DQ-435 (formula publish double-click) by comparing the publish flow against the auth/checkout flows that DO have protection. Pattern: "find the exception to an otherwise consistent pattern."
+- Starting the local dev server worked (200 OK, full HTML returned by curl) — headless Chromium is the broken link, not the site.
+
+**What didn't**:
+- Browse tool broken 23rd consecutive cycle. Headless Chromium on Windows returns innerHTML length of 26 bytes even from localhost:8000. Production site was also 502 (Render cold start). Zero visual verification again.
+- 6 of 8 subagent runs produced findings that were ENTIRELY covered by existing tickets. The codebase has been audited so thoroughly that most dimensions are exhausted. Stale years (DQ-128, pending/239), localStorage try-catch (DQ-124), event listener leaks (pending/157), !important abuse (DQ-111), z-index chaos (DQ-029), inline styles (pending/216), missing aria-labels (pending/190) — all already filed.
+- The standalone panel page audit (subagent 4) found zero issues across 10 sampled pages. Dark mode, nav, errors, loading, viewport, SEO all pass.
+
+**Pattern spotted**: After 56 cycles (440 tickets), the only remaining productive audit dimensions are:
+1. **BROWSER UX PATTERNS** — multi-tab sync, back/forward navigation, rate limit feedback, stale data indicators. These require imagining real user workflows, not reading code structure.
+2. **SECURITY HARDENING** — SRI hashes, CSP compatibility, third-party dependency integrity. These are defense-in-depth measures, not visible bugs.
+3. **MICRO-POLISH** — favicon dark mode, contextual tab titles, staleness warnings. Low severity, high brand polish.
+
+Design tokens, dark mode, accessibility, CSS architecture, interaction lifecycle, conversion copy, mobile responsive, print styles, and systemic code patterns are ALL exhausted.
+
+**Root cause found**: DQ-431/432 trace to the same architectural pattern: the Lab was built as a single-page experience where URL state is a convenience feature, not a navigation mechanism. `replaceState` (not `pushState`) means no history entries are created. No `popstate` listener means no restoration on back. No `storage` listener means no cross-tab awareness. The fix for both is to treat the Lab as a proper single-page app with history management.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-435 is highest ROI — 3-line fix (disable button + re-enable in finally) prevents duplicate formula submissions.
+- Ship agent: DQ-433 is a batch job — same SRI attribute addition across 10 files. Generate the hash once, apply everywhere.
+- Ship agent: DQ-431 + DQ-432 can be paired as "Lab browser UX" — both add event listeners to window (storage, popstate).
+- Ship agent: DQ-437 is a 1-line fix (remove canonical tag from 404.html).
+- Ship agent: DQ-434 is a 3-file delete (unused SVGs).
+
+**What I'd do differently next time**: The browser UX dimension was the strongest new source after 55 cycles. Future cycles should systematically walk user WORKFLOWS, not code paths: "User opens tab → filters → leaves → comes back → what breaks?" "User opens 3 tabs → logs in on one → what happens on the others?" "User hits rate limit → what does the error say?" This workflow-first thinking finds issues that code-first analysis misses.
+
 ### Cycle 55 — 2026-03-24
 
 **What I did**: LIFECYCLE BOUNDARIES + CONVERSION COPY + VISUAL CONSISTENCY + DARK MODE audit. Browse tool still blank (22nd cycle — headless Chromium on Windows renders empty DOM, HTML content length 39 bytes). Pivoted to source-code analysis. Deployed 5 parallel subagents: (1) Lab lifecycle boundary audit (renderTableBody/fetchAndRender/closeAllOverlays), (2) conversion UX edge cases (home→pricing→signup funnel), (3) visual consistency code audit (cold grays, wrong radii, hardcoded colors), (4) Lab sidebar + panel loading system, (5) dark mode visual regressions. Cross-referenced ALL findings against 410 existing tickets (100+ done, 60+ open, 140+ pending/queue). Wrote 10 genuinely new tickets (DQ-411 through DQ-420). Zero duplicates.
