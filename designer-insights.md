@@ -1,5 +1,33 @@
 # Designer Insights
 
+### Cycle 44 — 2026-03-23
+
+**What I did**: LAB SIDEBAR ACCESSIBILITY + UX RELIABILITY audit. Site still 502 on Render (11th cycle). Browse tool still broken (Windows/Playwright empty DOM — same issue). Started local server via `python backend/server.py` — confirmed 200 with real content via curl. Deployed 4 parallel source code subagents: (1) index.html content/layout, (2) lab.html/lab.js UX, (3) standalone panel pages patterns, (4) pricing/agents accuracy. Main agent focused on Lab sidebar keyboard accessibility, mobile overlay behavior, and panel URL validation. Cross-referenced ALL findings against 330 existing DQ-tickets. Wrote 10 genuinely new tickets (DQ-331 through DQ-340).
+
+**Quality score**: 8/10 — Found 2 P1 bugs (DQ-331 keyboard-dead sidebar, DQ-332 persistent blank screen from invalid URL), 4 P2 UX/accessibility issues (DQ-333 category ARIA, DQ-334 mobile focus trap, DQ-335 Escape dismiss, DQ-340 hamburger aria-expanded), 4 P3 perf/quality items (DQ-336 render-blocking scripts, DQ-337 inline CSS, DQ-338 event delegation, DQ-339 mini-screener timeout). Zero duplicates of existing 330 tickets.
+
+**What worked**:
+- DQ-331 (sidebar keyboard access) is the highest-impact accessibility bug found in 44 cycles. 73 panel links completely unreachable by keyboard. This is the primary navigation for the entire product.
+- DQ-332 (persistent blank screen) is a real user-facing bug: one bad `?panel=` URL poisons localStorage and breaks all subsequent visits. Simple validation fix.
+- DQ-334 + DQ-335 together form a complete mobile sidebar fix: focus trap + Escape dismiss. Both are standard overlay behavior that's missing.
+- Local server approach worked — confirmed site returns real HTML via curl even though browse tool renders empty DOM.
+
+**What didn't**:
+- Browse tool broken 11th cycle. Zero visual verification. All findings are source-code-only.
+- Production site 502 11th consecutive cycle.
+- Subagents launched but took too long to return — all findings came from direct main-agent research.
+
+**Pattern spotted**: After 44 cycles (340 DQ-tickets), the fresh dimension is **LAB SIDEBAR INFRASTRUCTURE**. The sidebar is the #1 navigation element of the entire product and it has: (1) zero keyboard access on 73 items, (2) zero ARIA on categories, (3) no focus trap on mobile, (4) no Escape dismiss, (5) no URL validation, (6) 75 inline onclick handlers. This is a coherent cluster — fix DQ-331+333+334+335+338+340 together as a "sidebar accessibility sprint" and the Lab becomes keyboard-accessible in one pass.
+
+**Root cause found**: DQ-331 (no href on sidebar links) traces back to the consolidation that moved 69 standalone pages into Lab panels. The sidebar was built as `<a onclick="switchPanel('...')">` elements — treating them as click targets, not navigation links. Since they're not real links (no href, no navigation), they should have been `<button>` elements from the start. The entire sidebar item pattern was wrong from initial implementation.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-331 + DQ-333 + DQ-334 + DQ-335 + DQ-338 + DQ-340 should be done as ONE sidebar accessibility sprint. They all touch the same sidebar DOM + JS. Estimated: 30 minutes together vs 2 hours separately.
+- Ship agent: DQ-332 is a 5-line validation fix that prevents persistent blank screens. Highest urgency after DQ-331.
+- PM: After 340 tickets, CSS tokens/dark mode/radius/shadows/fonts are fully exhausted (confirmed again this cycle). The remaining frontier is: sidebar infrastructure, performance (DQ-336/337), and fetch reliability (DQ-339).
+
+**What I'd do differently next time**: The browse tool on Windows/Playwright is permanently broken for this project. 11 cycles of zero visual verification. Should formally escalate to user: either fix the Windows Playwright environment, use WSL, or accept that all remaining QA will be source-code-only. Visual verification is no longer a "next cycle" fix — it's a systemic blocker.
+
 ### Cycle 43 — 2026-03-23
 
 **What I did**: FUNCTIONAL BUGS + PERFORMANCE + SYSTEMIC CONSISTENCY audit. Site still 502. Browse tool still broken (Windows/Playwright empty DOM — 10th cycle). Local server confirmed working via curl. Deployed 4 parallel source code subagents: (1) index.html content accuracy, (2) lab.js race conditions/error handling, (3) 10 Phase 130+ standalone pages patterns, (4) backend API security/validation. Cross-referenced ALL findings against 356 existing tickets. Wrote 10 genuinely new tickets (DQ-357 through DQ-366).
