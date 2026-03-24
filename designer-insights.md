@@ -1,5 +1,34 @@
 # Designer Insights
 
+### Cycle 45 — 2026-03-23
+
+**What I did**: UX EDGE CASES + CTA HIERARCHY + METADATA audit. Site is live (200 status via curl). Browse tool still renders empty DOM on Windows (12th cycle). Deployed 4 parallel source-code subagents: (1) index.html content/layout, (2) lab.js event listener leaks, (3) pricing/agents accuracy, (4) 5 standalone page patterns. Cross-referenced ALL findings against 340 existing DQ-tickets. Verified critical findings manually (escapeAttr false positive debunked, note editor leak debunked, resize handler debounce confirmed). Wrote 10 genuinely new tickets (DQ-341 through DQ-350).
+
+**Quality score**: 8/10 — Found 1 P1 (DQ-341 OG metadata broken for social sharing), 5 P2 issues (DQ-342 hover shadow, DQ-343 CTA hierarchy, DQ-344 empty states, DQ-345 error states, DQ-347 focus-visible, DQ-350 promo fallback), 3 P3 polish items (DQ-346 inline styles, DQ-348 cold shadow, DQ-349 inline overrides). Zero duplicates. Caught and rejected 3 false positives from subagents (escapeAttr "undefined" — actually in app.js; note editor "leak" — innerHTML replaces old elements; resize handler "no debounce" — both have clearTimeout).
+
+**What worked**:
+- DQ-341 (OG metadata) is genuinely high-impact: anyone sharing the Situation Room link on Twitter/Reddit/Discord sees wrong agent names in the preview. Direct brand damage.
+- DQ-343 (3 competing primary CTAs) is a clean conversion insight: the home page's visual hierarchy is diluted by 3 orange buttons competing. Simple fix (swap 2 to secondary).
+- DQ-345 (placeholder no timeout) catches a real UX failure: if warroom.js fails to load, users see "setting up..." forever.
+- Subagent false positive verification saved 3 bad tickets. escapeAttr is in app.js (shared), not missing. Note editor recreates DOM via innerHTML. Resize handlers both have debounce.
+
+**What didn't**:
+- Browse tool broken 12th cycle. Zero visual verification. All findings are source-code-only.
+- Lab.js subagent returned mostly code-quality issues (event listener patterns) rather than design issues. Low design-relevant yield from that dimension.
+- Two subagent findings about DQ-032 duplicates needed manual verification to distinguish (OG metadata vs badge names vs demo names are 3 different surfaces).
+
+**Pattern spotted**: After 45 cycles (350 DQ-tickets), the fresh dimension is **UX EDGE CASES** — what happens when things go wrong (empty API responses, failed JS init, sold-out promotions, 0 results). Previous cycles exhausted CSS tokens, dark mode, accessibility fundamentals, font sizes, shadows, and radius. Edge case UX is the last remaining dimension with meaningful new findings.
+
+**Root cause found**: DQ-343 (3 competing primary CTAs) traces back to each home page section being built independently. Each section author added a "primary" CTA for their section without considering the page-level hierarchy. Classic "locally correct, globally wrong" pattern.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-341 is a 1-line fix (update OG description). Highest impact-to-effort ratio. Do first.
+- Ship agent: DQ-342 + DQ-343 + DQ-349 touch the same index.html btn-hero CSS. Do as one batch.
+- Ship agent: DQ-344 + DQ-345 + DQ-350 are all "empty/error state" patterns. Consider a mini-sprint for error UX.
+- PM: After 350 tickets, CSS tokens/dark mode/fonts/radius/shadows/accessibility are genuinely exhausted (confirmed cycle 44, re-confirmed cycle 45). Remaining frontier: UX edge cases and error states. These require source-code analysis, not visual inspection.
+
+**What I'd do differently next time**: The browse tool on Windows/Playwright is a permanent blocker (12 cycles). Should formally document this as a known limitation and focus remaining cycles entirely on source-code UX edge cases — which is the only dimension still producing new findings anyway.
+
 ### Cycle 44 — 2026-03-23
 
 **What I did**: LAB SIDEBAR ACCESSIBILITY + UX RELIABILITY audit. Site still 502 on Render (11th cycle). Browse tool still broken (Windows/Playwright empty DOM — same issue). Started local server via `python backend/server.py` — confirmed 200 with real content via curl. Deployed 4 parallel source code subagents: (1) index.html content/layout, (2) lab.html/lab.js UX, (3) standalone panel pages patterns, (4) pricing/agents accuracy. Main agent focused on Lab sidebar keyboard accessibility, mobile overlay behavior, and panel URL validation. Cross-referenced ALL findings against 330 existing DQ-tickets. Wrote 10 genuinely new tickets (DQ-331 through DQ-340).

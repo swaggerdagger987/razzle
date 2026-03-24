@@ -240,3 +240,27 @@
 | Ticket | Summary | Files |
 |--------|---------|-------|
 | DQ-177 | Console.log ASCII tiger art fires on every page load | app.js:1709-1715 |
+
+## Cycle 45 — UX Edge Cases + CTA Hierarchy + Metadata (DQ-341 to DQ-350)
+
+### P1
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-341 | **Agents page OG metadata uses old role names (Scout, Quant, Medic)** | agents.html:9 |
+
+### P2
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-342 | Home btn-hero hover shadow stays 4px instead of growing to 6px | index.html:121-124 |
+| DQ-343 | Home page has 3 competing btn-hero-primary CTAs — broken hierarchy | index.html:647,683,755 |
+| DQ-344 | Dashboard top5/trends render blank sections when empty | dashboard.html:485-513 |
+| DQ-345 | Situation Room canvas placeholder has no timeout or error state | agents.html:1654-1658 |
+| DQ-347 | Home page smart-chips have no :focus-visible state | index.html:355-373 |
+| DQ-350 | Pricing promo cards have no expiration/sold-out fallback | pricing.html:737-758 |
+
+### P3
+| Ticket | Summary | Files |
+|--------|---------|-------|
+| DQ-346 | Pricing promo cards built entirely with inline styles (40+ lines) | pricing.html:740-779 |
+| DQ-348 | Canvas placeholder icon uses cold black rgba(0,0,0) drop-shadow | agents.html:285 |
+| DQ-349 | Home section CTAs override btn-hero sizing with inline styles | index.html:683,755,778 |
