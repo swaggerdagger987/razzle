@@ -1,5 +1,34 @@
 # Designer Insights
 
+### Cycle 43 — 2026-03-23
+
+**What I did**: FUNCTIONAL BUGS + PERFORMANCE + SYSTEMIC CONSISTENCY audit. Site still 502. Browse tool still broken (Windows/Playwright empty DOM — 10th cycle). Local server confirmed working via curl. Deployed 4 parallel source code subagents: (1) index.html content accuracy, (2) lab.js race conditions/error handling, (3) 10 Phase 130+ standalone pages patterns, (4) backend API security/validation. Cross-referenced ALL findings against 356 existing tickets. Wrote 10 genuinely new tickets (DQ-357 through DQ-366).
+
+**Quality score**: 8/10 — Found 1 P1 data corruption bug (DQ-357 dynasty sparkline race), 4 P2 systemic issues (DQ-358 hover tokens, DQ-359 html2canvas perf, DQ-361 error strings, DQ-363 sync AbortController, DQ-365 dark mode hover), 4 P3 consistency items (DQ-360 POS_COLORS duplication, DQ-362 title/H1 mismatch, DQ-364 CDN fallback, DQ-366 loading text). Zero duplicates. First cycle to find the html2canvas performance regression (250KB blocking on 50+ pages).
+
+**What worked**:
+- DQ-358 + DQ-365 together are the most impactful pair: 40+ hardcoded rgba values AND invisible dark mode hovers. Fixing both with one `--orange-hover` CSS var + dark override is a clean systemic fix.
+- DQ-359 (html2canvas lazy-load) is the biggest remaining perf win. 250KB blocking script on 50+ pages when Phase B-7 already solved this for lab.js. Classic "fixed in main, missed the copies."
+- DQ-357 (dynasty sparkline race) is the highest-severity functional bug: silent data corruption from a missing AbortController.
+- DQ-363 (watchlist/views race) is distinct from DQ-324 (silent catch). DQ-324 covers PUSH errors. This covers PULL race conditions.
+
+**What didn't**:
+- Browse tool broken 10th cycle. Zero visual verification.
+- Site 502 10th consecutive cycle.
+- The index.html content subagent mostly found things already ticketed (100+ columns = DQ-347, agent names = DQ-032/DQ-291). Low novelty yield.
+
+**Pattern spotted**: After 43 cycles (366 tickets), the fresh dimensions are: (1) RACE CONDITIONS in fetch calls without AbortController (DQ-357, DQ-363 — there may be more in other files), (2) PERFORMANCE regressions where a fix was applied to one file but not propagated to copies (DQ-359 html2canvas, DQ-360 POS_COLORS), (3) DARK MODE interaction feedback (DQ-365 — hover states that are technically correct but visually invisible). CSS tokens, accessibility, and content accuracy are genuinely exhausted.
+
+**Root cause found**: DQ-359 has a clear root cause: Phase B-7 lazy-loaded html2canvas in lab.js but the 50+ standalone pages were built from a template that includes the synchronous script tag. Nobody audited the copies when the main file was fixed. Same "fix main, miss copies" pattern as DQ-327 (raw fetch), DQ-360 (POS_COLORS), and DQ-323 (shallow clone).
+
+**Suggestion for teammates**:
+- Ship agent: DQ-358 + DQ-365 should be done together. Define `--orange-hover` with dark mode override, then find-and-replace 40+ instances. Biggest visual impact.
+- Ship agent: DQ-357 (AbortController on sparkline) is 5 lines of JS. Highest data-integrity impact. Do next.
+- Ship agent: DQ-359 + DQ-364 should be done together. Create shared lazy-load function in app.js, remove 50+ script tags, use jsdelivr as primary CDN.
+- PM: 366 tickets. The ONLY remaining fresh dimensions are race conditions, perf regressions in copies, and dark mode interaction feedback. All other dimensions exhausted. Visual verification is the #1 blocker.
+
+**What I'd do differently next time**: Visual verification remains the bottleneck. 10 cycles without browse. Should escalate the Windows/Playwright issue to the user — maybe try WSL or a different headless browser. Source code audits have diminishing returns at 366 tickets.
+
 ### Cycle 42 — 2026-03-23
 
 **What I did**: FUNCTIONAL BUGS + API ROBUSTNESS + NAVIGATION CONSISTENCY audit. Site still returning Render 502 (9th consecutive cycle). Browse tool confirms empty DOM (same Windows/Playwright issue). Verified site returns 200 status but `<title>502</title>` content via curl. Pivoted to 4 parallel source code subagents: (1) index.html content accuracy + conversion copy, (2) lab.js functional bugs (race conditions, cache, error handling), (3) backend API edge cases (validation, SQL, DoS), (4) standalone pages broken patterns + consistency. Cross-referenced ALL findings against 320 existing DQ-tickets. Wrote 10 genuinely new tickets (DQ-321 through DQ-330).
