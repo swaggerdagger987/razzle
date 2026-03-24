@@ -1,5 +1,43 @@
 # Designer Insights
 
+### Cycle 51 — 2026-03-23
+
+**What I did**: UX FLOW + COPY ACCURACY audit. Browse tool still broken (18th cycle — headless Chromium on Windows renders empty DOM for all pages, DNS resolution fails). Pivoted fully to source-code analysis. Deployed 4 parallel subagents: (1) index.html home page hero/nav/pricing/footer audit, (2) lab.html UX flow — toolbar, filters, onboarding, mobile, (3) 5 standalone pages (pricing, about, agents, league-intel, prompts), (4) styles.css design system token verification. Cross-referenced ALL findings against 390 existing tickets + 41 open tickets. Wrote 10 genuinely new tickets (DQ-391 through DQ-400). Zero duplicates.
+
+**Quality score**: 8/10 — Found 1 P1 trust issue (DQ-391 pricing page lies about Pro/Elite feature parity), 8 P2 UX/copy issues (DQ-392 stale example, DQ-393 invisible action, DQ-394 cryptic hint, DQ-395 backwards label, DQ-396 unclear heading, DQ-397 missing expand cue, DQ-398 z-index collision, DQ-399 no visible labels), and 1 P2 discoverability issue (DQ-400 Smart Filters buried). This cycle deliberately shifted from design-token/code-spec issues to USER-EXPERIENCE flow issues — what a real person encounters.
+
+**What worked**:
+- The UX flow lens found what 50 cycles of design-spec auditing missed. DQ-391 (pricing lies) is a trust-destroying copy error that no amount of CSS token auditing would catch. A user reads "same features" and compares the two columns — they'll never trust the brand again.
+- DQ-393 (prompts invisible action) is a broken feedback loop that makes a feature useless. The "Use in Situation Room" button does something, but the user can't tell.
+- DQ-400 (Smart Filters buried) is a product-level insight: the best beginner feature is hidden behind expert controls.
+- DQ-395 ("Fantasy Only" backwards label) is the kind of semantic issue that causes confusion in every session but never rises to "bug" severity.
+- styles.css audit confirmed the design system tokens are 100% correct — no drift in the CSS custom properties themselves.
+
+**What didn't**:
+- Browse tool broken 18th cycle. The headless Chromium on Windows cannot render ANY page — not even a static test HTML file served via Python http.server. DNS resolution also fails (ERR_NAME_NOT_RESOLVED for example.com). This is a system-level issue, not a site issue.
+- The styles.css subagent found only 2 issues (z-index collision, missing print styles). The CSS file is clean — 50 prior cycles of token auditing have been effective.
+- About page audit yielded mostly cosmetic findings (self-linking, font attribution). The page is simple and correct.
+
+**Pattern spotted**: After 51 cycles, the productive audit dimensions have shifted completely:
+1. ~~Design tokens~~ — exhausted (CSS is clean)
+2. ~~Dark mode~~ — exhausted (most overrides in place)
+3. ~~Accessibility attributes~~ — diminishing returns (ARIA, focus-visible mostly covered)
+4. **UX FLOW** — fresh frontier: what does a real user experience? Copy accuracy, action feedback, label clarity, feature discoverability
+5. **CROSS-PAGE CONSISTENCY** — do similar features work the same way across pages?
+6. **CONVERSION PATH** — does the funnel from home → Lab → pricing → signup have gaps?
+
+**Root cause found**: DQ-391 (pricing "same features" lie) traces to the pricing page being written early in the build phases when Pro and Elite truly DID have the same features (only API key source differed). As Elite gained exclusive features (memory, briefings, unlimited queries) over subsequent phases, nobody updated the comparison copy. Classic "copy drift" — the marketing text froze while the product evolved.
+
+DQ-400 (Smart Filters buried) traces to the filter bar being built incrementally: position filter first, then team, then season, then GP, then manual filter, then Smart Filters LAST. Each addition was appended to the end. Nobody rearranged by user importance.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-391 is the highest priority across ALL open tickets. A lie on the pricing page is worse than any design token violation. One sentence change.
+- Ship agent: DQ-393 + DQ-397 are prompts.html fixes that should be done together — the page needs both action feedback and expand indicators.
+- Ship agent: DQ-398 (z-index) is a 1-line fix. Change `.razzle-toast` from 9999 to 10001.
+- Ship agent: DQ-400 (Smart Filters position) requires moving a DOM element, not creating new code. Test that tab order and filter logic still work after the move.
+
+**What I'd do differently next time**: The UX flow dimension produced the strongest findings this cycle. Future cycles should simulate complete user journeys: (1) brand new visitor → home → Lab → first filter → "how do I export?", (2) Sleeper user → Bureau → "where are trade suggestions?", (3) power user → Situation Room → "how do I set up my API key?". Each journey reveals friction that single-page analysis misses.
+
 ### Cycle 50 — 2026-03-23
 
 **What I did**: RECENTLY-ADDED CODE + SITEWIDE SYSTEMIC PATTERNS audit. Browse tool still broken (17th cycle — site returned 502 on both curl and headless). Deployed 4 parallel source-code subagents: (1) lab.js last 500 lines (boom/bust panel — most recently added code), (2) index.html home page accessibility gaps, (3) sitewide systemic greps (nowrap, inline hex, negative margins, font weights, cursor, position:fixed), (4) 5 standalone panel pages (tradefinder, reportcard, stocks, vorp, awards). Cross-referenced ALL findings against 380 existing tickets. Wrote 10 genuinely new tickets (DQ-381 through DQ-390). Zero duplicates.

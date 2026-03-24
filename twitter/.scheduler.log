@@ -450,3 +450,53 @@
 [2026-03-23 15:44:14] Posted successfully. 2 drafts remaining in queue.
 [2026-03-23 15:44:14] Next post at ~16:44 (1.0h from now).
 
+[2026-03-23 16:44:14] Queue health: 2 pending, 2 ready to post.
+[2026-03-23 16:44:14] WARNING: Only 2 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 16:44:14] Posting: 2026-04-21_07-00_evidence_dowdle_undrafted.md
+  Uploaded media: 2036182256671182848
+  Posted tweet: 2036182275272970462
+  Logged to results.tsv
+  Moved to posted/: 2026-04-21_07-00_evidence_dowdle_undrafted.md
+[2026-03-23 16:44:19] Posted successfully. 1 drafts remaining in queue.
+[2026-03-23 16:44:19] Next post at ~17:44 (1.0h from now).
+
+[2026-03-23 17:44:19] Queue health: 1 pending, 1 ready to post.
+[2026-03-23 17:44:19] WARNING: Only 1 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 17:44:19] Posting: 2026-04-23_07-00_evidence_chase_brown_dual.md
+  Uploaded media: 2036197378764451841
+  Posted tweet: 2036197382736511212
+  Logged to results.tsv
+  Moved to posted/: 2026-04-23_07-00_evidence_chase_brown_dual.md
+[2026-03-23 17:44:21] Posted successfully. 0 drafts remaining in queue.
+[2026-03-23 17:44:21] Next post at ~18:44 (1.0h from now).
+
+[2026-03-23 18:44:21] Queue health: 0 pending, 0 ready to post.
+[2026-03-23 18:44:21] WARNING: Only 0 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 18:44:21] CRITICAL: Queue empty. No content to post. Run Creator + Reviewer agents.
+[2026-03-23 18:44:21] No drafts ready to post.
+[2026-03-23 18:44:21] Next post at ~19:44 (1.0h from now).
+
+[2026-03-23 19:44:21] Queue health: 0 pending, 0 ready to post.
+[2026-03-23 19:44:21] WARNING: Only 0 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 19:44:21] CRITICAL: Queue empty. No content to post. Run Creator + Reviewer agents.
+[2026-03-23 19:44:21] No drafts ready to post.
+[2026-03-23 19:44:21] Next post at ~20:44 (1.0h from now).
+
+[2026-03-23 20:44:21] Queue health: 0 pending, 0 ready to post.
+[2026-03-23 20:44:21] WARNING: Only 0 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 20:44:21] CRITICAL: Queue empty. No content to post. Run Creator + Reviewer agents.
+[2026-03-23 20:44:21] No drafts ready to post.
+[2026-03-23 20:44:21] Next post at ~21:44 (1.0h from now).
+
+[2026-03-23 21:44:21] Queue health: 0 pending, 0 ready to post.
+[2026-03-23 21:44:21] WARNING: Only 0 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 21:44:21] CRITICAL: Queue empty. No content to post. Run Creator + Reviewer agents.
+[2026-03-23 21:44:21] No drafts ready to post.
+[2026-03-23 21:44:21] Next post at ~22:44 (1.0h from now).
+
+[2026-03-23 22:44:21] Queue health: 0 pending, 0 ready to post.
+[2026-03-23 22:44:21] WARNING: Only 0 draft(s) remaining. Run the Creator agent to generate more.
+[2026-03-23 22:44:21] CRITICAL: Queue empty. No content to post. Run Creator + Reviewer agents.
+[2026-03-23 22:44:21] No drafts ready to post.
+[2026-03-23 22:44:21] Next post at ~23:44 (1.0h from now).
+

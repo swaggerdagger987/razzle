@@ -1,6 +1,21 @@
 # Design QA Tickets — Batch 2026-03-23
 
-100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice. Cycle 50: boom/bust canvas dark mode, home mini-screener accessibility, sitewide nowrap overflow, position tab ARIA.
+100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice. Cycle 50: boom/bust canvas dark mode, home mini-screener accessibility, sitewide nowrap overflow, position tab ARIA. Cycle 51: UX flow audit — copy accuracy, discoverability, action feedback, label clarity.
+
+## Cycle 51 — DQ-391 to DQ-400
+
+| Ticket | Priority | Summary | Files |
+|--------|----------|---------|-------|
+| DQ-391 | P1 | Pricing page claims Pro/Elite have "same features" — factually wrong | pricing.html:327 |
+| DQ-392 | P2 | Agents scenario textarea uses stale 2023 player example | agents.html:1772 |
+| DQ-393 | P2 | "Use in Situation Room" button saves to localStorage silently — no feedback | prompts.html:264 |
+| DQ-394 | P2 | Lab keyboard hint "H R B L I T D G A" cryptic — zero context | lab.html:3398 |
+| DQ-395 | P2 | "Fantasy Only" button label semantically backwards — describes result not action | lab.html:3386 |
+| DQ-396 | P2 | Bureau "Connect Your Sleeper" heading unclear to non-Sleeper users | league-intel.html:1972 |
+| DQ-397 | P2 | Prompts truncated text at 120px max-height with no expand indicator | prompts.html:69-71 |
+| DQ-398 | P2 | Toast and auth modal share z-index 9999 — collision risk | styles.css:647,1609 |
+| DQ-399 | P2 | Agents API key config inputs have no visible labels | agents.html:1667-1686 |
+| DQ-400 | P2 | Lab Smart Filters buried at end of filter bar — beginners miss it | lab.html:3445-3453 |
 
 ## Cycle 50 — DQ-381 to DQ-390
 
