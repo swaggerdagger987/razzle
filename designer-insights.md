@@ -1,5 +1,38 @@
 # Designer Insights
 
+### Cycle 49 — 2026-03-23
+
+**What I did**: CROSS-LAYER AUDIT: frontend source + backend API + user flow analysis. Browse tool returned 502 on razzle.lol (site down or headless browser Windows issue, 16th cycle). Deployed 4 parallel source-code subagents: (1) lab.html+lab.js UX flow audit, (2) 10 standalone pages systemic patterns, (3) dark mode + design token greps, (4) pricing/auth/billing flow. Also deployed (5) Lab first-time user flow audit, (6) backend API error handling audit. Cross-referenced ALL findings against 370 existing tickets. Wrote 10 genuinely new tickets (DQ-371 through DQ-380). Zero duplicates.
+
+**Quality score**: 8/10 — Found 2 P1 issues (DQ-377 naked API endpoints, DQ-379 college endpoints), 1 regression (DQ-373 page-size options DQ-151 was marked done but JS still blocks 50/100), 1 high-impact systemic issue (DQ-371 export dark mode colors duplicated 65 times), 3 P2 design/UX issues (DQ-374 parallel pricing card CSS, DQ-375 comps silent empty, DQ-376 misleading BYOK copy), 1 P2 reliability issue (DQ-378 roster-value response shape), and 2 P3 polish items (DQ-372 canvas resize debounce, DQ-380 hardcoded year in meta). Crossed into backend territory because the API error handling directly causes user-facing UX failures.
+
+**What worked**:
+- Lab first-time user flow audit found the screener is in excellent shape: loading states, empty states, error handling, mobile responsiveness, keyboard navigation, onboarding — all solid. Phase B hardening has paid off.
+- DQ-373 (page-size regression) was caught by reading the JS validation that DQ-151's HTML fix didn't address. The fix added options 50/100 to HTML but the JS `if (![25].includes(size)) return;` still blocks them.
+- DQ-371 (65-page export duplication) was found by grep for `2d1f14.*ede0cf` across all HTML files. Pure systemic grep yield — invisible to page-by-page review.
+- Backend API audit revealed 57+ endpoints without error handling. These directly cause blank panels and console errors for users.
+- DQ-374 (parallel pricing card classes) was found by tracing why dark mode doesn't fully work on home page pricing — the answer is two separate CSS class hierarchies that drift independently.
+
+**What didn't**:
+- Browse tool broken 16th cycle. Site returned 502. Zero visual verification.
+- Standalone pages subagent returned mostly watermark findings (DQ-113/DQ-237 already cover) and hardcoded export colors (converted to DQ-371).
+- Dark mode grep subagent found zero genuinely new issues — all patterns already covered by existing tickets. The dark mode audit dimension is exhausted.
+- Several subagent findings required manual debunking: btn-chunky + btn-primary dual class looked wrong but is the intentional architecture (btn-chunky = base, btn-primary = fill override).
+
+**Pattern spotted**: After 49 cycles (380 DQ-tickets), the fresh frontier is **CROSS-LAYER ISSUES** — problems that span frontend + backend. Individual frontend design issues are nearly exhausted. The remaining high-impact issues are: (1) backend error handling that causes user-visible failures, (2) response shape inconsistencies that frontend can't handle, (3) copy/messaging that misrepresents the product. These require reading both server.py and the frontend code together.
+
+**Root cause found**: DQ-373 (page-size regression) traces to the Ship Loop item 7 that restricted pageSize to [25] for performance. DQ-151 was marked done after adding HTML options, but nobody checked if the JS accepted them. Classic "fixed the symptom, missed the validation" pattern — same root cause as DQ-339 (6px radius regression).
+
+DQ-371 (65-page export duplication) traces to standalone pages being built one at a time over 140+ phases. Each phase copy-pasted the export function including the hardcoded ternary. No shared helper existed because the first page to add export didn't anticipate 64 more pages doing the same thing.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-377 + DQ-379 are highest priority — 57+ naked endpoints means any database hiccup crashes the entire app for users. Consider adding a global exception handler middleware instead of wrapping each endpoint individually.
+- Ship agent: DQ-371 is the single highest-ROI design system fix. Extract `getExportBackground()` to app.js, then search-and-replace across 65 files.
+- Ship agent: DQ-373 is a 1-line fix — either remove the 50/100 options from HTML or expand the JS validation. Do whichever matches the product intent.
+- Ship agent: DQ-374 should be part of a "pricing card unification" sprint with DQ-309 (badge contrast) and DQ-355 (home pricing badge).
+
+**What I'd do differently next time**: The cross-layer approach (reading server.py + frontend together) found what 48 cycles of frontend-only review missed. Future cycles should trace specific user journeys through both layers: (1) new user → Lab → first query → error, (2) Pro user → checkout → trial → billing, (3) college mode → NCAA toggle → college panel. Each journey reveals cross-layer issues invisible to single-file analysis.
+
 ### Cycle 48 — 2026-03-23
 
 **What I did**: SYSTEMIC DESIGN TOKEN SWEEP + DARK MODE GAPS audit. Browse tool still renders empty DOM on Windows (15th cycle). Deployed 4 parallel source-code subagents: (1) index.html content/conversion, (2) lab.js DOM-generated styles, (3) 5 late-phase standalone pages (garbagetime, seasonpace, targetpremium, workload, snapefficiency), (4) pricing/auth/billing dark mode. Then ran targeted greps for systemic patterns: 3px shadows, translate(-1px), border-radius:6px, font-size:15px. Cross-referenced ALL findings against 336 existing tickets. Wrote 10 genuinely new tickets (DQ-337 through DQ-346). Zero duplicates.
