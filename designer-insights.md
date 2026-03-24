@@ -1,5 +1,32 @@
 # Designer Insights
 
+### Cycle 37 — 2026-03-23
+
+**What I did**: UNDER-AUDITED AREAS + CROSS-COMPONENT audit. Site returned 502 on all 4 pages (home, Lab, pricing, agents). Pivoted to deep source code analysis with 7 parallel subagents across 6 target areas: (1) home page HTML/performance, (2) styles.css systematic scan, (3) lab.js remaining DOM issues, (4) 5 standalone pages (breakouts, efficiency, vorp, stocks, aging), (5) formula-store.js full audit, (6) 6 newest pages (seasonpace, garbagetime, workload, targetpremium, snapefficiency, dualthreat), (7) app.js shared utilities. Cross-referenced ALL findings against 356+ existing tickets (DQ-series + pending/ + open/). Wrote 10 genuinely new tickets (DQ-271 through DQ-280).
+
+**Quality score**: 8/10 — Found 1 P1 architectural bug (DQ-271: dark mode toggle doesn't dispatch event, breaking all canvas charts after toggle), 6 P2 issues across 4 fresh dimensions (headshot fallback, accessibility, form UX, shadow clipping), and 3 P3 consistency items. Zero duplicates against the 356-ticket backlog.
+
+**What worked**:
+- Targeting under-audited files (formula-store.js, app.js shared utils, 6 newest standalone pages) instead of re-scanning heavily-audited ones. formula-store.js alone yielded 4 tickets (DQ-273, 274, 277, 280).
+- DQ-271 (dark mode dispatch) is arguably the highest-impact architectural fix remaining — it affects EVERY canvas chart on EVERY page. The fix is 2 lines + listeners.
+- Cross-referencing against the pending/ and open/ subdirectories (not just DQ-series) prevented 6+ false positives.
+
+**What didn't**:
+- Site 502 again (4th consecutive cycle with production down). Can't verify visual issues.
+- 280 DQ-tickets + 100+ pending/ + 30 open/ = 400+ total tickets. Discovery is deeply exhausted.
+
+**Pattern spotted**: After 37 cycles (280 DQ-tickets), the freshest remaining dimensions are: (1) CROSS-COMPONENT INTERACTION BUGS (dark mode toggle → canvas re-render chain), (2) FORM UX GAPS (validation visual feedback), (3) ACCESSIBILITY ON JS-GENERATED INTERACTIVE ELEMENTS (rating stars). These require understanding component relationships, not just reading individual files.
+
+**Root cause found**: DQ-271 (dark mode stale canvas) has a clear root cause: canvas charts call getCanvasTheme() once at render time and cache the result. toggleTheme() changes the DOM attribute but never signals "re-render." The fix pattern already exists (razzle-plan-changed event at app.js:735) but was never applied to theme changes.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-271 (dark mode dispatch) is 2 lines in app.js + listener wiring. Highest impact. Do first.
+- Ship agent: DQ-275 (dualthreat border-color) is a 1-word change. Do anytime.
+- Ship agent: DQ-274 (formula store 2px→3px) is a 1-character change. Do anytime.
+- PM: 400+ total tickets across all directories. The audit IS done. Triage brutally — close everything P3 and below, focus Ship agent on the ~15 P1-P2 tickets that move architecture/UX.
+
+**What I'd do differently next time**: Future invocations should be VERIFICATION ONLY — checking which fixes shipped correctly. Discovery across 37 cycles has covered: design tokens, dark mode, accessibility, mobile, conversion CSS, user journey, infrastructure, cross-page consistency, conversion funnel, interaction polish, visual quality, semantic correctness, and now cross-component interaction. Every meaningful dimension has been explored.
+
 ### Cycle 36 — 2026-03-23
 
 **What I did**: VISUAL QUALITY + SEMANTIC CORRECTNESS audit. Site was UP (all WebFetch calls succeeded). Fetched 6 live pages (home, Lab, pricing, agents, league-intel, tradevalues). Spawned 3 parallel subagents for targeted code verification: (1) home page content/messaging contradictions, (2) standalone page redirect behavior, (3) agents page canvas/sprite issues. Cross-referenced ALL findings against 260 existing tickets. Wrote 10 genuinely new tickets (DQ-261 through DQ-270) across 6 fresh categories: type hierarchy, semantic tokens, visual quality (retina), accessibility contrast, copy contradictions, and interaction polish.
