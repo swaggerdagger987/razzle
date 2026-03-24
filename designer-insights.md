@@ -1,5 +1,35 @@
 # Designer Insights
 
+### Cycle 59 — 2026-03-24
+
+**What I did**: DONE TICKET VERIFICATION (batch 2) + JS INLINE STYLE AUDIT + STANDALONE PAGE CONSISTENCY audit. Browse tool still blank (26th cycle — headless Chromium on Windows, production loads 200 but DOM empty). Pivoted to source-code analysis. Deployed 5 parallel subagents: (1) done ticket verification batch 2 (DES-020/023/026/030/037/042/045/046/058/075), (2) lab.html fresh violations vs DESIGN.md, (3) styles.css token compliance, (4) JS inline style violations across 6 main JS files, (5) 10 standalone panel pages design consistency. Cross-referenced ALL findings against 460+ existing tickets (100+ done, 100+ open, 150+ pending). Wrote 10 genuinely new tickets (DQ-461 through DQ-470). Zero duplicates.
+
+**Quality score**: 8/10 — Done ticket verification confirmed 8/10 tickets COMPLETE (good news: most fixes stick), but found 2 INCOMPLETE (DES-058: 13 remaining sub-8px radius, DES-075: 2 pages missing overflow-x). JS audit found 6 genuinely new violation patterns across player.js, lab.js, lab-panels.js, warroom.js. Standalone audit found 2 systemic patterns (empty state text, export watermark hardcoding). All 10 tickets are actionable, scoped, and have clear acceptance criteria.
+
+**What worked**:
+- Done ticket verification batch 2 had a different profile than batch 1: 8/10 COMPLETE vs 4/10 in cycle 58. This suggests the earlier tickets (DES-020 through DES-046) were fixed more thoroughly than the later ones (DES-058+). The two incomplete tickets yielded high-confidence DQ-461 and DQ-462.
+- JS inline style audit was the highest-yield new dimension. Found player.js cold black overlay (DQ-464), lab.js 12 hardcoded heat colors (DQ-465), lab.js PNG fallback hex (DQ-466), lab-panels.js cold canvas overlay (DQ-467) — 4 tickets from one subagent.
+- Standalone page audit found two systemic "not wrong but not right" patterns: 9/10 pages skip razzleEmpty() (DQ-468) and 10/10 duplicate export colors (DQ-469). These are maintainability, not visual bugs, but they're the type of ticket that prevents future drift.
+- warroom.js wrong yellows (#ffcc00 vs #ffc857) was a subtle color drift catch — nobody would notice visually but it's the kind of thing that compounds.
+
+**What didn't**:
+- Browse tool broken 26th consecutive cycle. Headless Chromium on Windows returns empty DOM from both production and localhost. Zero visual verification. This is the single biggest gap in the audit — we're catching code violations but can't catch visual rendering issues.
+- lab.html audit returned ALL findings already tracked (DES-197, DES-211, DES-237, DES-198, DQ-358, DQ-452). lab.html is exhaustively audited at this point.
+- styles.css had only 1 violation (line 1461: border-radius 6px, related to DQ-417). The stylesheet is essentially clean.
+
+**Pattern spotted**: The JS-generated DOM violation surface area is still rich. Previous cycles (58) identified the pattern but focused on done ticket verification. This cycle confirmed: lab.js, lab-panels.js, and player.js each have 2-4 genuinely new color/token violations in canvas and inline style code. warroom.js is the worst offender overall (DQ-416 + DQ-463 + palette constants) but that's already well-documented.
+
+**Root cause found**: The heat color system in lab.js (DQ-465) and the PNG export fallback pattern (DQ-466) share a root cause: functions that need CSS variable values at runtime but can't read them from the DOM during canvas/export operations. The workaround was hardcoded hex — but `getComputedStyle()` works fine for this. Same for player.js overlay (DQ-464): the dark mode branch was written before the warm-overlay convention was established.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-461 is a batch regex fix (13 files, same pattern: replace `border-radius: [4-7]px` with `8px`). Low risk.
+- Ship agent: DQ-462 is 2 files, wrap tables in overflow-x:auto div. Quick win for mobile.
+- Ship agent: DQ-464 is a 1-line fix in player.js. Change `rgba(0,0,0,0.5)` to `rgba(45,31,20,0.7)`.
+- Ship agent: DQ-468 is a batch find-replace across 9 files. Call razzleEmpty() instead of hardcoded strings.
+- Ship agent: DQ-469 is best fixed by adding a shared `getExportColors()` to app.js, then updating 10 files to use it.
+
+**What I'd do differently next time**: Continue done ticket verification — still have 70+ done tickets unverified. Also consider auditing the remaining JS files not yet covered: league-intel.js, formula-store.js, compare.js. The browse tool issue on Windows needs a different approach entirely — perhaps a local HTTP server + different browser binary, or just accept code-only analysis as the permanent mode.
+
 ### Cycle 58 — 2026-03-24
 
 **What I did**: COMPLETED TICKET VERIFICATION + INTERACTION CONSISTENCY + HOME PAGE CARDS + CANVAS TOKENS audit. Browse tool still blank (25th cycle — headless Chromium on Windows, innerHTML length 26 bytes, same empty DOM). Pivoted to source-code analysis. Deployed 5 parallel subagents: (1) home page design violations vs DESIGN.md, (2) Lab screener fresh violations (lab.html, lab.js, lab-panels.js, lab-panels.css), (3) done ticket verification (read 10 done tickets and grep for whether fixes were comprehensive), (4) standalone pages dark mode audit (10 pages), (5) interaction design consistency (buttons, focus, empty states, semantic HTML). Cross-referenced ALL findings against 450 existing tickets (100+ done, 100+ open, DQ-001 through DQ-430). Wrote 10 genuinely new tickets (DQ-451 through DQ-460). Zero duplicates.
