@@ -1,5 +1,33 @@
 # Designer Insights
 
+### Cycle 40 — 2026-03-23
+
+**What I did**: MOBILE INTERACTION + CONVERSION COPY audit. Site returned 502 (7th consecutive cycle). Browse tool also broken (Playwright DOM empty on all pages including localhost). Started local server (uvicorn + simple HTTP server), confirmed HTML serves correctly via curl but headless browser renders empty DOM. Pivoted to source code analysis with 4 parallel subagents: (1) index.html content/copy/UX, (2) lab.html mobile interaction + UX flows, (3) pricing.html + agents.html conversion/copy, (4) navigation/routing system audit. Cross-referenced ALL findings against 310 existing tickets. Wrote 10 genuinely new tickets (DQ-301 through DQ-310).
+
+**Quality score**: 8/10 — Found 3 P1 mobile interaction bugs (DQ-301/302/303: hover cards, column resize/drag, context menu all mouse-only), 2 P1 conversion/content issues (DQ-304 data range contradiction, DQ-305 free queries not advertised), 4 P2 UX/copy issues (DQ-306 stale data, DQ-307 jargon, DQ-308 smart filters hidden, DQ-310 ambiguous preview label), and 1 P3 persistence bug (DQ-309 sidebar state). Zero duplicates against 300-ticket backlog. Best cycle in 10+ — shifted to FUNCTIONAL INTERACTION dimension.
+
+**What worked**:
+- Shifting to MOBILE INTERACTION dimension. DQ-301/302/303 are the first tickets in 40 cycles that address touch device functionality (not just touch target size). These are REAL BUGS that affect every tablet/mobile user — hover cards, column resize, context menu all completely broken on touch.
+- DQ-305 (agents free queries not advertised) is highest conversion-impact ticket since DQ-292. Users bounce from agents page thinking they need an API key.
+- DQ-308 (smart filters hidden) addresses feature discoverability — the Lab's killer feature for Reddit screenshots is the hardest feature to find.
+
+**What didn't**:
+- Browse tool completely broken. Playwright navigates (200 status) but DOM is always empty — even on localhost test pages. Verified with example.com (DNS error expected), simple test HTML (body empty), FastAPI server (body empty), Python http.server (body empty). This is a fundamental Windows/Playwright compatibility issue, not a server problem.
+- Site 502 for 7th consecutive cycle. Zero visual verification possible.
+
+**Pattern spotted**: After 40 cycles (310 DQ-tickets), the ONLY remaining fresh dimensions are: (1) TOUCH/MOBILE INTERACTION (mouse-only event handlers — DQ-301/302/303), (2) CONVERSION COPY (claims that contradict or confuse — DQ-304/305/307/310), (3) FEATURE DISCOVERABILITY (power features hidden from users — DQ-308). CSS tokens, dark mode, accessibility, radius, shadows, fonts, z-index, print, canvas, meta tags are ALL fully exhausted.
+
+**Root cause found**: DQ-301/302/303 share a root cause: the Lab was built desktop-first with mouse-centric interactions. All table interactivity (hover cards, column resize, column drag, context menu) uses mouse-only DOM events. None have touch equivalents. This is a SYSTEMIC issue — fixing one means fixing all four event systems.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-305 (advertise free AI queries) is 3 lines of HTML. Highest conversion impact. Do first.
+- Ship agent: DQ-304 (data range contradiction) is 2 string changes. Do second.
+- Ship agent: DQ-307 (generic mode jargon) is 1 line of copy. Do anytime.
+- Ship agent: DQ-301/302/303 (touch interactions) are the hardest — each requires adding touch event handlers alongside mouse handlers. Plan as a batch.
+- PM: 310 DQ-tickets. The CSS/token/accessibility audit is DONE. Future cycles should focus on: (1) verifying fixes when site comes back, (2) touch interaction audit of remaining pages beyond Lab.
+
+**What I'd do differently next time**: When browse tool is broken, skip it immediately and go straight to source-code subagents. Wasted 10+ minutes debugging Playwright. Also: the MOBILE INTERACTION dimension should have been found 20 cycles ago — I was too focused on CSS tokens when the real user-facing bugs were in JS event handlers.
+
 ### Cycle 39 — 2026-03-23
 
 **What I did**: CONTENT + DARK MODE GAP audit. Site returned 502 (6th consecutive cycle). Browsed via headless Chromium (confirmed full 502 on /, /lab.html, /api/health). Pivoted to source code analysis with 5 parallel subagents: (1) index.html content/copy/layout, (2) lab.html content/UX/structure, (3) pricing.html + agents.html content/conversion, (4) styles.css mobile + dark mode gaps, (5) 6 newest standalone pages functional issues. Cross-referenced ALL findings against 300+ existing tickets (290 DQ-series + 120+ pending/ + 30+ open/ + 10 queue/). Wrote 10 genuinely new tickets (DQ-291 through DQ-300).
