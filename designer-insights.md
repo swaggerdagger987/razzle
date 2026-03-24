@@ -1,5 +1,36 @@
 # Designer Insights
 
+### Cycle 48 — 2026-03-23
+
+**What I did**: SYSTEMIC DESIGN TOKEN SWEEP + DARK MODE GAPS audit. Browse tool still renders empty DOM on Windows (15th cycle). Deployed 4 parallel source-code subagents: (1) index.html content/conversion, (2) lab.js DOM-generated styles, (3) 5 late-phase standalone pages (garbagetime, seasonpace, targetpremium, workload, snapefficiency), (4) pricing/auth/billing dark mode. Then ran targeted greps for systemic patterns: 3px shadows, translate(-1px), border-radius:6px, font-size:15px. Cross-referenced ALL findings against 336 existing tickets. Wrote 10 genuinely new tickets (DQ-337 through DQ-346). Zero duplicates.
+
+**Quality score**: 8/10 — Found 2 major systemic issues (DQ-337 hover shadow magnitude + DQ-338 hover translate magnitude = 62 combined instances), 1 regression (DQ-339 border-radius:6px persists despite DQ-057/058 being DONE), 1 typography scale violation (DQ-340 font-size:15px, 50 instances), 4 dark mode gaps (DQ-341 btn-elite, DQ-342 hex fallback, DQ-343 autofill, DQ-344 promo cards), 2 page-specific issues (DQ-345 seasonpace badges, DQ-346 garbagetime headers). The hover magnitude tickets are the highest-impact systemic fix remaining.
+
+**What worked**:
+- Grep-based systemic audit found what 47 cycles of page-by-page review missed. The `box-shadow: 3px 3px 0` pattern (27 instances) and `translate(-1px,-1px)` (35 instances) have been present since the beginning — they look "close enough" visually but are exactly half the design spec.
+- DQ-339 exposed a regression: DQ-057/058 were marked DONE but 22 instances of `border-radius: 6px` persist. Either the fix was incomplete or later phases reintroduced them.
+- DQ-340 (font-size:15px, 50 instances) is a clean type scale violation that DQ-193 only partially covered (placeholder text only, not content).
+- Subagent false positive rejection: home page agent re-filed DQ-192 and DQ-209 (already pending). Pricing agent re-filed DQ-227/228/231 (already pending). All caught and excluded.
+
+**What didn't**:
+- Browse tool broken 15th cycle. Zero visual verification. All findings are source-code grep and subagent analysis.
+- Lab.js subagent focused heavily on border-radius:8px hardcoded (should be var(--radius-sm)) which is technically correct value but not using the CSS variable. Borderline between "code quality" and "design violation" — excluded since 8px matches the token value.
+- Standalone pages subagent returned mostly data validation edge cases (bar overflow, null checks) rather than design violations. Low design-relevant yield from that dimension.
+
+**Pattern spotted**: After 48 cycles (346 DQ-tickets), the fresh frontier is **SYSTEMIC GREP SWEEPS FOR NEAR-MISS VALUES**. Page-by-page visual review is exhausted. What remains are values that are "close but wrong" — 3px instead of 4px, 15px instead of 14px, 6px radius instead of 8px. These are invisible to casual visual inspection but violate the design system. A single grep finds dozens of instances that 47 cycles of visual review missed.
+
+**Root cause found**: DQ-337/338 (hover at half magnitude) traces to the original implementation predating the design guide finalization. The hover pattern `3px + translate(-1px)` was probably the first draft, and the design guide later specified `6px + translate(-2px)`. The guide was written, the existing code was never updated. Classic "spec written after implementation, implementation never reconciled" pattern.
+
+DQ-339 (6px radius regression) traces to standalone pages being built in phases 68-140, each independently choosing border-radius values. DQ-057/058 fixed lab.js and some standalone pages, but later phases (auction, pace, prospects, etc.) reintroduced 6px without checking the design tokens.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-337 + DQ-338 are the highest-ROI tickets. They're search-and-replace operations (27 + 35 instances) but fix the most visible design guide deviation. Do them together — they're the same hover pattern.
+- Ship agent: DQ-339 is also search-and-replace (22 instances of `6px` → `8px`). Include the 4 instances in lab-panels.js.
+- Ship agent: DQ-340 (font-size:15px) requires per-instance judgment (14px vs 16px) — not a blind replace. Start with styles.css and lab-panels.css since those affect the most elements.
+- Ship agent: DQ-341/342/343/344 are all dark mode gaps on the pricing/auth flow — the monetization surface. Fix these as a batch.
+
+**What I'd do differently next time**: The systemic grep approach is the last productive dimension. Future cycles should run greps for: font-size values not on the type scale, box-shadow values not in {2px,4px,6px}, border-radius values not in {8px,12px,20px}, any remaining hardcoded hex colors in inline styles. This is mechanical but catches what visual review can't.
+
 ### Cycle 47 — 2026-03-23
 
 **What I did**: CONVERSION FLOW + BILLING EDGE CASES + STANDALONE CONSISTENCY audit. Browse tool still renders empty DOM on Windows (14th cycle). Deployed 4 parallel source-code subagents: (1) index.html conversion/first-impression, (2) lab.js state management edge cases, (3) pricing/auth/billing flow, (4) 5 standalone pages systemic patterns. Cross-referenced ALL findings against 360 existing DQ-tickets plus pending/done. Manually verified key findings (promo code scoping was FALSE POSITIVE — DOM access works fine at line 1176-1177; trial .days floor division confirmed at auth.py:274 and billing.py:578; billing portal None fallback confirmed at billing.py:561/584). Wrote 10 genuinely new tickets (DQ-361 through DQ-370).
