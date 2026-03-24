@@ -1,5 +1,34 @@
 # Designer Insights
 
+### Cycle 41 — 2026-03-23
+
+**What I did**: FIRST IMPRESSION + CONVERSION FUNNEL + NEW USER UX audit. Site returned 502 (8th consecutive cycle). Browse tool still broken (Playwright DOM empty on localhost — same Windows/Playwright compatibility issue). Started local server (uvicorn port 8000), confirmed HTML serves correctly via curl. Pivoted to 4 parallel source code subagents: (1) index.html first-impression/content accuracy, (2) lab.html new-user experience/onboarding, (3) pricing.html → signup conversion funnel, (4) cross-page navigation consistency. Cross-referenced ALL findings against 320+ existing tickets (310 DQ-series + queue/pending/open). Wrote 10 genuinely new tickets (DQ-311 through DQ-320).
+
+**Quality score**: 8/10 — Found 3 P1 issues (DQ-311 factual error on home page, DQ-312 hidden onboarding section, DQ-313 missing refund policy), 5 P2 conversion/UX issues (DQ-314 misleading CTA text, DQ-315 empty trial banner, DQ-316 404 no footer, DQ-317 destructive error handler, DQ-318 expired trial no persuasion), 2 P3 consistency items (DQ-319 sign-in element type, DQ-320 JSON-LD gap). Zero duplicates. First cycle focused entirely on CONVERSION FUNNEL — a dimension barely touched in 40 prior cycles.
+
+**What worked**:
+- DQ-311 ("10 seasons" → should be "11 seasons") is the simplest, highest-impact ticket in 41 cycles. A factual error on the home page that any visitor could catch. 2 string replacements.
+- DQ-312 (START HERE hidden) explains WHY the Lab overwhelms new users — the guided onboarding section EXISTS in the HTML but is never displayed. The code is there; it just needs to be toggled on.
+- DQ-313 (no refund policy) is the highest-impact conversion ticket since DQ-292. Standard SaaS table stakes. Reddit users will notice its absence.
+- DQ-314/315/318 form a CONVERSION COPY TRIO targeting the trial lifecycle: pre-signup (misleading CTA), during-trial (empty value prop), post-trial (no persuasion). Fixing all three improves the entire funnel.
+
+**What didn't**:
+- Site 502 for 8th consecutive cycle. Zero visual verification possible. All findings are source-code-only.
+- Browse tool still broken on Windows. Same Playwright empty DOM issue as cycles 39-40.
+
+**Pattern spotted**: After 41 cycles (320 DQ-tickets), the CONVERSION FUNNEL dimension is where all remaining high-impact tickets live. DQ-311/312/313/314/315/318 are all conversion-impacting — they affect whether a visitor becomes a user. CSS tokens, dark mode, accessibility are exhausted. The remaining frontier is: does the CONTENT actually convert visitors? Does the COPY tell the truth? Does the UX GUIDE new users?
+
+**Root cause found**: DQ-312 has a clear root cause: the START HERE section was added as a sidebar feature (lab.html line 3177) but the JS that should show it on first visit was never written. The `style="display:none"` was meant to be toggled by init code, but that init code doesn't exist. Classic "HTML shipped, JS forgot."
+
+**Suggestion for teammates**:
+- Ship agent: DQ-311 (10→11 seasons) is 2 string replacements. Highest credibility impact. Do first.
+- Ship agent: DQ-314 ("Sign Up Free" → "Start 7-Day Trial") is 1 string replacement. Do second.
+- Ship agent: DQ-312 (START HERE visible for new users) is 3 lines of JS. Do third.
+- Ship agent: DQ-313 (refund policy) requires product decision on terms. Flag for user.
+- PM: The CONVERSION COPY dimension should be the focus of future cycles. Every remaining CSS/accessibility ticket is P3 or lower. Conversion copy is where the real value is.
+
+**What I'd do differently next time**: When the site comes back from 502, the ONLY useful work is visual verification. Run the browse tool on every page and diff against source-code expectations. Stop writing new discovery tickets — 320 is enough. Verify existing fixes.
+
 ### Cycle 40 — 2026-03-23
 
 **What I did**: MOBILE INTERACTION + CONVERSION COPY audit. Site returned 502 (7th consecutive cycle). Browse tool also broken (Playwright DOM empty on all pages including localhost). Started local server (uvicorn + simple HTTP server), confirmed HTML serves correctly via curl but headless browser renders empty DOM. Pivoted to source code analysis with 4 parallel subagents: (1) index.html content/copy/UX, (2) lab.html mobile interaction + UX flows, (3) pricing.html + agents.html conversion/copy, (4) navigation/routing system audit. Cross-referenced ALL findings against 310 existing tickets. Wrote 10 genuinely new tickets (DQ-301 through DQ-310).
