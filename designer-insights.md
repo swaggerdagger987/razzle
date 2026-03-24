@@ -1,5 +1,35 @@
 # Designer Insights
 
+### Cycle 42 — 2026-03-23
+
+**What I did**: FUNCTIONAL BUGS + API ROBUSTNESS + NAVIGATION CONSISTENCY audit. Site still returning Render 502 (9th consecutive cycle). Browse tool confirms empty DOM (same Windows/Playwright issue). Verified site returns 200 status but `<title>502</title>` content via curl. Pivoted to 4 parallel source code subagents: (1) index.html content accuracy + conversion copy, (2) lab.js functional bugs (race conditions, cache, error handling), (3) backend API edge cases (validation, SQL, DoS), (4) standalone pages broken patterns + consistency. Cross-referenced ALL findings against 320 existing DQ-tickets. Wrote 10 genuinely new tickets (DQ-321 through DQ-330).
+
+**Quality score**: 8/10 — Found 1 P0 infrastructure (DQ-330 site 502), 2 P1 navigation bugs (DQ-321 obsolete player links, DQ-322 missing URL encoding), 5 P2 functional/security issues (DQ-323 cache corruption, DQ-324 silent sync failures, DQ-325 offset DoS, DQ-327 raw fetch missing auth, DQ-329 filter float bounds), 2 P3 maintenance (DQ-326 review length, DQ-328 escapeHtml duplication). Zero duplicates. First cycle to find a genuine DATA CORRUPTION bug (DQ-323).
+
+**What worked**:
+- DQ-323 (cache corruption) is the highest-impact functional bug found in 42 cycles. Prospects/College fetches shallow-assign items while NFL deep-clones — subsequent sort mutations corrupt cached data. Root cause: the deep-clone line was added to NFL path (Phase 32 QA) but never propagated to Prospects/College paths added later.
+- DQ-321 (player link pattern) catches 2 pages using an obsolete routing pattern. Simple to fix, high impact on consistency.
+- DQ-327 (12 pages using raw fetch) is a systemic finding: all Phase 130+ pages skip apiFetch(), meaning Pro users get no auth headers on those endpoints.
+- DQ-330 (site 502) finally escalates the infrastructure issue to P0. 9 cycles of zero visual verification is the single biggest blocker.
+
+**What didn't**:
+- Site 502 for 9th consecutive cycle. Zero visual verification possible. All findings are source-code-only.
+- Browse tool still renders empty DOM on Windows. Same Playwright issue as cycles 34-41.
+- Home page subagent returned mostly known issues (DQ-311, DQ-314 already ticketed). Low novelty yield for that dimension.
+
+**Pattern spotted**: After 42 cycles (330 DQ-tickets), the remaining fresh dimensions are: (1) FUNCTIONAL JS BUGS (cache corruption, shallow copies, missing clone — DQ-323), (2) API INPUT VALIDATION (unbounded params, extreme values — DQ-325/329), (3) CONSISTENCY GAPS (routing patterns, fetch helpers — DQ-321/322/327), (4) SILENT FAILURE PATTERNS (empty catch blocks — DQ-324). CSS tokens, dark mode, accessibility, radius, shadows, fonts, conversion copy are all exhausted.
+
+**Root cause found**: DQ-323 has a clear root cause: when the deep-clone fix was added to the NFL fetch path (lab.js line 1334) during Phase 32 QA, the Prospects and College fetch paths (added in earlier phases) were not updated. Classic "fix in one branch, miss the parallel branches." DQ-327 has a similar root cause: the 12 newest standalone pages (Phase 130+) were scaffolded with raw fetch() instead of apiFetch() because they were built from a template that predates the apiFetch() helper.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-321 (player link pattern) is 2 string replacements. Highest navigation impact. Do first.
+- Ship agent: DQ-323 (cache corruption) is 2 line additions. Highest data integrity impact. Do second.
+- Ship agent: DQ-322 (encodeURIComponent) is 1 function call addition. Do third.
+- Ship agent: DQ-330 (site 502) requires infrastructure investigation, not a code fix. Flag for user.
+- PM: 330 DQ-tickets. The CSS/accessibility/conversion audit is DONE. The only remaining fresh dimensions are: functional JS bugs, API validation, and systemic consistency gaps. Future cycles should focus on VISUAL VERIFICATION once the site comes back from 502.
+
+**What I'd do differently next time**: When the site comes back from 502, stop writing new tickets entirely. The ONLY useful work is: (1) visually verify that the 100+ shipped fixes actually look correct, (2) screenshot each page and diff against DESIGN.md expectations. 330 tickets is enough discovery. Verification is the bottleneck now.
+
 ### Cycle 41 — 2026-03-23
 
 **What I did**: FIRST IMPRESSION + CONVERSION FUNNEL + NEW USER UX audit. Site returned 502 (8th consecutive cycle). Browse tool still broken (Playwright DOM empty on localhost — same Windows/Playwright compatibility issue). Started local server (uvicorn port 8000), confirmed HTML serves correctly via curl. Pivoted to 4 parallel source code subagents: (1) index.html first-impression/content accuracy, (2) lab.html new-user experience/onboarding, (3) pricing.html → signup conversion funnel, (4) cross-page navigation consistency. Cross-referenced ALL findings against 320+ existing tickets (310 DQ-series + queue/pending/open). Wrote 10 genuinely new tickets (DQ-311 through DQ-320).
