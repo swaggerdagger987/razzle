@@ -301,6 +301,11 @@ function copyPrompt(idx, btn) {
 
 function prefillPrompt(idx) {
   try { localStorage.setItem('razzle_prefill_scenario', PROMPTS[idx].text); } catch(e) {}
+  // Show toast before navigation
+  var toast = document.createElement('div');
+  toast.textContent = 'Prompt loaded — taking you to the Situation Room...';
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:8px;font-family:var(--font-mono);font-size:13px;z-index:9999;box-shadow:4px 4px 0 var(--orange);';
+  document.body.appendChild(toast);
 }
 
 function escapeHtml(str) {
