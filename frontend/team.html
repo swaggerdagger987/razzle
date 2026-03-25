@@ -619,18 +619,11 @@
   document.getElementById("teamExportBtn").addEventListener("click", function() {
     var page = document.getElementById("teamPage");
     if (!page) return;
-    if (!window.html2canvas) {
-      var s = document.createElement("script");
-      s.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
-      s.onload = function() { doExport(page); };
-      document.head.appendChild(s);
-    } else {
-      doExport(page);
-    }
+    doExport(page);
   });
 
   function doExport(el) {
-    html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true }).then(function(canvas) {
+    loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true }); }).then(function(canvas) {
       var ctx = canvas.getContext("2d");
       ctx.font = "bold 18px 'Space Mono', monospace";
       ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.25)' : 'rgba(45,31,20,0.25)';

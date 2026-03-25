@@ -411,7 +411,6 @@
   <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
 </footer>
 
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="app.js"></script>
 <script>
 (function() {
@@ -678,20 +677,18 @@
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
     var el = document.getElementById('sos-content');
-    if (typeof html2canvas !== 'undefined') {
-      html2canvas(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(function(canvas) {
-        var ctx = canvas.getContext('2d');
-        ctx.font = '24px Caveat, cursive';
-        ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.3)' : 'rgba(45,31,20,0.3)';
-        ctx.textAlign = 'right';
-        ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
+    loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = '24px Caveat, cursive';
+      ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.3)' : 'rgba(45,31,20,0.3)';
+      ctx.textAlign = 'right';
+      ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
 
-        var link = document.createElement('a');
-        link.download = 'razzle-schedule-sos.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      });
-    }
+      var link = document.createElement('a');
+      link.download = 'razzle-schedule-sos.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
   });
 
   // Analytics pageview

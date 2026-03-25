@@ -324,7 +324,6 @@
   <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
 </footer>
 
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="app.js"></script>
 <script>
 (function() {
@@ -604,8 +603,7 @@
 
   document.getElementById('ctExport').addEventListener('click', function() {
     var root = document.getElementById('ctRoot');
-    if (typeof html2canvas === 'undefined') return;
-    html2canvas(root, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }).then(function(canvas) {
+    loadHtml2Canvas().then(function(h2c) { return h2c(root, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = 'bold 16px Space Mono, monospace';
       ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.15)' : 'rgba(45,31,20,0.12)';

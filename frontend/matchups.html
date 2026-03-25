@@ -482,7 +482,6 @@
 </footer>
 
 <script src="app.js"></script>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
 (function() {
   'use strict';
@@ -750,14 +749,13 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
-    if (typeof html2canvas === 'undefined') return;
     var root = document.getElementById('matchups-root');
-    html2canvas(root, {
+    loadHtml2Canvas().then(function(h2c) { return h2c(root, {
       backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf',
       scale: 2,
       useCORS: true,
       logging: false,
-    }).then(function(canvas) {
+    }); }).then(function(canvas) {
       // Add watermark
       var ctx = canvas.getContext('2d');
       ctx.font = '24px Caveat, cursive';

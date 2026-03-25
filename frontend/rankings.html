@@ -504,26 +504,18 @@
   // ---- PNG Export ----
   document.getElementById("rankingsExportBtn").addEventListener("click", async function() {
     var el = document.getElementById("rankingsPage");
-    if (!el || typeof html2canvas === "undefined") {
-      // Dynamically load html2canvas if not present
-      var script = document.createElement("script");
-      script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
-      script.onload = function() { doExport(); };
-      document.head.appendChild(script);
-      return;
-    }
     doExport();
   });
 
   function doExport() {
     var el = document.getElementById("rankingsPage");
-    if (!el || typeof html2canvas === "undefined") return;
-    html2canvas(el, {
+    if (!el) return;
+    loadHtml2Canvas().then(function(h2c) { return h2c(el, {
       backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf',
       scale: 2,
       useCORS: true,
       logging: false,
-    }).then(function(canvas) {
+    }); }).then(function(canvas) {
       // Add watermark
       var ctx = canvas.getContext("2d");
       ctx.font = "bold 16px 'Space Mono', monospace";
