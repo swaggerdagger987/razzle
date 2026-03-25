@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 # DQ-419: research-sprawl.svg has hardcoded light colors, invisible in dark mode
 
 **Priority**: P2

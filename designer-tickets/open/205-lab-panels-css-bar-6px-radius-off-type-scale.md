@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 # DQ-417: lab-panels.css bar elements use 6px border-radius (off type scale)
 
 **Priority**: P2

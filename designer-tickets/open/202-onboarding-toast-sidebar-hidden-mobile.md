@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 # DQ-410: First-Time Onboarding Toast References Invisible Sidebar on Mobile
 
 **Priority**: P2 (UX friction)

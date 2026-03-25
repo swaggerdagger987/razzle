@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 # DQ-416: Warroom.js pixel engine uses 30+ cold gray hex values
 
 **Priority**: P2

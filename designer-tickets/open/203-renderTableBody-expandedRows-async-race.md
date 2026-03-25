@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 # DQ-414: renderTableBody() resets _expandedRows before async fetch completes
 
 **Priority**: P2
