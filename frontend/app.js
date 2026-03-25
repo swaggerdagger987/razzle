@@ -476,6 +476,26 @@ function razzleLoading(panelId) {
   return RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)];
 }
 
+/* ===== Lazy html2canvas loader ===== */
+function loadHtml2Canvas() {
+  return new Promise((resolve, reject) => {
+    if (window.html2canvas) { resolve(window.html2canvas); return; }
+    const s = document.createElement('script');
+    s.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+    s.onload = () => resolve(window.html2canvas);
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+/* ===== Styled error HTML helper ===== */
+function razzleErrorHTML(retryFn) {
+  return '<div style="text-align:center;padding:40px;font-family:var(--font-hand);font-size:22px;color:var(--red);">' +
+    razzleError() +
+    (retryFn ? ' <button class="btn-chunky" onclick="' + retryFn + '" style="margin-left:12px">retry</button>' : '') +
+  '</div>';
+}
+
 /* ===== Rarity Watermark — Random Character on Screenshots ===== */
 var _wmAgentIcons = [
   "/assets/agents/razzle.svg", "/assets/agents/dolphin.svg",
