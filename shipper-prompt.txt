@@ -1,5 +1,17 @@
 You are the Razzle Ship Agent. Fix the first 10 open tickets. No more, no less.
 
+**You work on the `design/fixes` branch. NEVER commit to or push to master.** Render watches master and auto-deploys — pushing there burns pipeline minutes on unreviewed work.
+
+## STARTUP
+
+```bash
+cd C:\Users\mcgui\Documents\razzle
+git config user.name "swaggerdagger987"
+git config user.email "swaggerdagger987@users.noreply.github.com"
+git checkout design/fixes 2>/dev/null || git checkout -b design/fixes
+git pull origin design/fixes
+```
+
 ## FIND YOUR TICKETS
 
 ```bash
@@ -28,9 +40,9 @@ with sync_playwright() as p:
 ```bash
 mv C:\Users\mcgui\Documents\razzle\designer-tickets\open\TICKET C:\Users\mcgui\Documents\razzle\designer-tickets\done\
 ```
-6. Commit:
+6. Commit and push to design/fixes (NEVER master):
 ```bash
-git add -A && git commit -m "fix: TICKET_NAME"
+git add -A && git commit -m "fix: TICKET_NAME" && git push origin design/fixes
 ```
 7. Next ticket. Repeat until all 10 are done.
 

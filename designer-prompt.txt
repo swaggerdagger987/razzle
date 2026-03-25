@@ -100,9 +100,13 @@ Read designer-insights.md, then append:
 
 ## STEP 5: Commit
 
+**You work on the `design/fixes` branch. NEVER commit to or push to master.**
+
 ```bash
+git checkout design/fixes 2>/dev/null || git checkout -b design/fixes
 git add designer-tickets/ designer-state.json designer-insights.md designer-reports/
 git commit -m "design: 10 tickets from walker report"
+git push origin design/fixes
 ```
 
 ## RULES

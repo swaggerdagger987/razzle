@@ -5,17 +5,19 @@ STARTUP — run these steps in order:
 1. cd C:\Users\mcgui\Documents\razzle
 2. git config user.name "swaggerdagger987"
 3. git config user.email "swaggerdagger987@users.noreply.github.com"
-4. Read TICKETS.md FIRST — this is the priority queue
-5. If TICKETS.md has pending phase specs, consume the FIRST one:
+4. git checkout ship/launch-fixes 2>/dev/null || git checkout -b ship/launch-fixes
+5. git pull origin ship/launch-fixes
+6. Read TICKETS.md FIRST — this is the priority queue
+7. If TICKETS.md has pending phase specs, consume the FIRST one:
    - Copy it into LOOP-TASKS.md as the current phase (replace the current state)
    - Remove it from TICKETS.md (delete that phase spec)
-   - Commit the TICKETS.md change: git add TICKETS.md && git commit -m "Consume ticket: [phase name]" && git push origin master
+   - Commit the TICKETS.md change: git add TICKETS.md && git commit -m "Consume ticket: [phase name]" && git push origin ship/launch-fixes
    - Execute the first PENDING task in the new phase
-6. If TICKETS.md has no pending phases, fall back to LOOP-TASKS.md:
+8. If TICKETS.md has no pending phases, fall back to LOOP-TASKS.md:
    - Read LOOP-TASKS.md — find the next PENDING or FAIL task
    - If there are PENDING or FAIL tasks, execute the next one
    - Read PROGRESS.md — current phase status
-7. If BOTH TICKETS.md and LOOP-TASKS.md are empty/complete, enter POLISH MODE:
+9. If BOTH TICKETS.md and LOOP-TASKS.md are empty/complete, enter POLISH MODE:
    - Read docs/NORTH_STAR.md — the endgame vision
    - Read docs/DESIGN.md — visual rules
    - Read docs/ROADMAP.md — what "done" looks like
@@ -33,8 +35,8 @@ STARTUP — run these steps in order:
    - Track which pages have been polished in PROGRESS.md under "Polish Pass"
    - When all pages are polished, start over — there is always more to polish
    - STILL check TICKETS.md at the start of every invocation — new tickets interrupt polish mode
-8. Read docs/DESIGN.md — visual rules
-9. Read CLAUDE.md — project rules
+10. Read docs/DESIGN.md — visual rules
+11. Read CLAUDE.md — project rules
 
 Only read docs/NORTH_STAR.md or docs/ROADMAP.md when you need to make a product decision not covered by the current task spec.
 
@@ -46,7 +48,7 @@ EXECUTION — Do exactly ONE task per invocation:
 4) If PASS: Update LOOP-TASKS.md status to PASS with result notes. Update PROGRESS.md task to DONE. Then:
    git add -A
    git commit -m "Phase [name] Task [N]: [description]"
-   git push origin master
+   git push origin ship/launch-fixes
    If push fails, retry once. If it fails again, log it and continue.
 5) If FAIL: Update LOOP-TASKS.md with incremented attempt count and specific failure reason. Do NOT retry. Stop. Let the next invocation handle it with fresh context.
 6) If a task hits 3 failed attempts, mark it BLOCKED in LOOP-TASKS.md, log the blocker in PROGRESS.md, and move to the next unblocked task.
@@ -59,7 +61,8 @@ PHASE TRANSITION — When all tasks in the current phase show PASS:
 4) On next invocation, STARTUP step 4 will check TICKETS.md for the next phase automatically.
 
 GIT — CRITICAL RULES:
-- You MUST run "git push origin master" after EVERY commit. No exceptions. Render deploys from GitHub, not local.
+- You work on `ship/launch-fixes`. NEVER push to master. Render watches master and auto-deploys — only the human merges to master.
+- You MUST run "git push origin ship/launch-fixes" after EVERY commit. No exceptions.
 - Always set user.name and user.email before committing.
 - One task per invocation. Do it well. Push it. Stop.
 
