@@ -4421,6 +4421,7 @@
   // ─── switchPanel ───────────────────────────────────────────────
   window.switchPanel = function(panelName) {
     if (panelName === currentPanel) return;
+    if (typeof window._abortPanelFetches === 'function') window._abortPanelFetches();
 
     // Tier gate: non-free panels require Pro/Elite
     if (!FREE_PANELS[panelName] && typeof isPaidUser === 'function' && !isPaidUser()) {

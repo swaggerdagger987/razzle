@@ -8,6 +8,14 @@
 
   var _latestSeason = (function() { var n = new Date(); return n.getMonth() >= 8 ? n.getFullYear() : n.getFullYear() - 1; })();
 
+  // AbortController for panel fetches — aborted on panel switch
+  var _panelController = new AbortController();
+  window._abortPanelFetches = function() {
+    _panelController.abort();
+    _panelController = new AbortController();
+  };
+  function _panelSignal() { return _panelController.signal; }
+
   var defs = window._labPanelDefs = window._labPanelDefs || [];
 
   function fmt(v, dec) {
@@ -140,7 +148,7 @@
       var season = seasonSel.value || '';
       if (season) url += '&season=' + season;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -172,7 +180,7 @@
         url += '&position=' + encodeURIComponent(state.position);
       }
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -306,7 +314,7 @@
             if (list) list.remove();
             return;
           }
-          fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=5').then(function(r) {
+          fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=5', { signal: _panelSignal() }).then(function(r) {
             if (!r.ok) throw new Error('search failed');
             return r.json();
           }).then(function(results) {
@@ -473,7 +481,7 @@
       if (state.position) params.push('position=' + state.position);
       var url = '/api/tier-list' + (params.length ? '?' + params.join('&') : '');
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       }).then(function(data) {
@@ -731,7 +739,7 @@
       if (season) url += '&season=' + season;
       if (currentPosition) url += '&position=' + currentPosition;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -1009,7 +1017,7 @@
       if (season) url += '&season=' + season;
       if (currentPosition) url += '&position=' + currentPosition;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -1080,7 +1088,7 @@
       el.querySelector('#lp-pa-content').innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       el.querySelector('#lp-pa-avgs').innerHTML = '';
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -1221,7 +1229,7 @@
       var url = '/api/auction-values?budget=' + state.budget + '&roster_size=' + state.rosterSize;
       if (state.season > 0) url += '&season=' + state.season;
 
-      fetch(url).then(function(r) { if (!r.ok) throw new Error('err'); return r.json(); })
+      fetch(url, { signal: _panelSignal() }).then(function(r) { if (!r.ok) throw new Error('err'); return r.json(); })
       .then(function(data) {
         state.data = data;
         if (!seasonsLoaded && data.available_seasons) {
@@ -1353,7 +1361,7 @@
       var url = '/api/cheat-sheet?format=' + state.format;
       if (state.season) url += '&season=' + state.season;
 
-      fetch(url).then(function(r) { if (!r.ok) throw new Error('err'); return r.json(); })
+      fetch(url, { signal: _panelSignal() }).then(function(r) { if (!r.ok) throw new Error('err'); return r.json(); })
       .then(function(data) {
         state.data = data;
         if (!seasonsLoaded && data.available_seasons) {
@@ -1477,7 +1485,7 @@
       var boWeekVal = parseInt((el.querySelector('#bo-week') || {}).value) || 0;
       if (!isCollege && boWeekVal > 0) url += '&week=' + boWeekVal;
 
-      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#bo-season');
           (data.available_seasons || []).forEach(function(s) {
@@ -1667,7 +1675,7 @@
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
 
-      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#bs-season');
           (data.available_seasons || []).forEach(function(s) {
@@ -1888,7 +1896,7 @@
       if (season) url += '&season=' + season;
       if (curPos) url += '&position=' + curPos;
 
-      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#stk-season');
           (data.available_seasons || []).forEach(function(s) {
@@ -1953,7 +1961,7 @@
       if (season) url += '&season=' + encodeURIComponent(season);
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
-      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#ww-season');
           sel.innerHTML = '';
@@ -2042,7 +2050,7 @@
       var baseUrl = isCollege ? '/api/college/scarcity' : '/api/positional-scarcity';
       var url = season ? baseUrl + '?season=' + season : baseUrl;
 
-      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#sc-season');
           (data.available_seasons || []).forEach(function(s) {
@@ -2149,7 +2157,7 @@
       var url = '/api/handcuffs';
       if (season) url += '?season=' + encodeURIComponent(season);
 
-      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#hc-season');
           sel.innerHTML = '';
@@ -2384,7 +2392,7 @@
       var effWeekVal = parseInt((el.querySelector('#eff-week') || {}).value) || 0;
       if (!isCollege && effWeekVal > 0) url += '&week=' + effWeekVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -2598,7 +2606,7 @@
       var conWeekVal = parseInt((el.querySelector('#con-week') || {}).value) || 0;
       if (!isCollege && conWeekVal > 0) url += '&week=' + conWeekVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -2676,7 +2684,7 @@
       if (season) url += '?season=' + season;
       if (curPos) url += (url.indexOf('?') > -1 ? '&' : '?') + 'position=' + curPos;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -2784,7 +2792,7 @@
       if (season) url += '?season=' + season;
       if (curPos) url += (url.indexOf('?') > -1 ? '&' : '?') + 'position=' + curPos;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -2891,7 +2899,7 @@
       if (season) url += '?season=' + season;
       if (curPos) url += (url.indexOf('?') > -1 ? '&' : '?') + 'position=' + curPos;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -2986,7 +2994,7 @@
       var tpWeekVal = parseInt((el.querySelector('#tp-week') || {}).value) || 0;
       if (tpWeekVal > 0) url += '&week=' + tpWeekVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -3115,7 +3123,7 @@
       var drWeekVal = parseInt((el.querySelector('#dr-week') || {}).value) || 0;
       if (drWeekVal > 0) url += '&week=' + drWeekVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -3222,7 +3230,7 @@
       else url += '?season=' + _latestSeason;
       if (curPos) url += '&position=' + curPos;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -3324,7 +3332,7 @@
       if (season) url += '&season=' + season;
       if (posParam) url += '&position=' + posParam;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -3520,7 +3528,7 @@
       var url = '/api/matchup-heatmap?season=' + season;
       if (posParam) url += '&position=' + posParam;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -3708,7 +3716,7 @@
       var url = '/api/stacks';
       if (season) url += '?season=' + encodeURIComponent(season);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -3947,7 +3955,7 @@
       var rzWeekVal = parseInt((el.querySelector('#rz-week') || {}).value) || 0;
       if (rzWeekVal > 0) url += '&week=' + rzWeekVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -4024,7 +4032,7 @@
       var strWeekVal = parseInt((el.querySelector('#str-week') || {}).value) || 0;
       if (strWeekVal > 0) url += '&week=' + strWeekVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -4172,7 +4180,7 @@
       if (currentWeek) url += 'week=' + encodeURIComponent(currentWeek) + '&';
       if (curPos) url += 'position=' + encodeURIComponent(curPos);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -4324,7 +4332,7 @@
       var url = '/api/weekly-mvp';
       if (season) url += '?season=' + encodeURIComponent(season);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -4420,7 +4428,7 @@
       if (season) url += 'season=' + encodeURIComponent(season) + '&';
       if (curPos) url += 'position=' + encodeURIComponent(curPos) + '&';
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -4540,7 +4548,7 @@
         if (utWeekVal > 0) url += '&week=' + utWeekVal;
       }
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -4721,7 +4729,7 @@
         if (curPos) url += '&position=' + encodeURIComponent(curPos);
       }
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -4850,7 +4858,7 @@
         ? '/api/college/aging-curves?position=' + encodeURIComponent(curPos)
         : '/api/aging-curves?position=' + encodeURIComponent(curPos);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -5028,7 +5036,7 @@
       var url = '/api/pace-tracker?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -5115,7 +5123,7 @@
       var url = '/api/season-pace?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -5203,7 +5211,7 @@
       var url = '/api/td-regression?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -5337,7 +5345,7 @@
       var url = '/api/air-yards?limit=25&season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -5470,7 +5478,7 @@
       if (q.length < 2) { list.innerHTML = ''; list.style.display = 'none'; return; }
       clearTimeout(timer);
       timer = setTimeout(function() {
-        fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8').then(function(r) {
+        fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8', { signal: _panelSignal() }).then(function(r) {
           if (!r.ok) throw new Error('API error');
           return r.json();
         }).then(function(data) {
@@ -5532,7 +5540,7 @@
     var sel = el.querySelector('#' + selectId);
     if (!sel) return;
     if (!season) { sel.style.display = 'none'; return; }
-    fetch(window.location.origin + '/api/available-weeks?season=' + season)
+    fetch(window.location.origin + '/api/available-weeks?season=' + season, { signal: _panelSignal() })
       .then(function(r) { return r.ok ? r.json() : { weeks: [] }; })
       .then(function(data) {
         var weeks = data.weeks || [];
@@ -5574,7 +5582,7 @@
     function loadCareer(pid) {
       var content = el.querySelector('#cst-content');
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
-      fetch('/api/career-stats?player_id=' + encodeURIComponent(pid)).then(function(r) {
+      fetch('/api/career-stats?player_id=' + encodeURIComponent(pid), { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -5773,7 +5781,7 @@
     function loadPlayerData(entry) {
       var content = el.querySelector('#ccp-content');
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
-      fetch('/api/career-stats?player_id=' + encodeURIComponent(entry.player_id)).then(function(r) {
+      fetch('/api/career-stats?player_id=' + encodeURIComponent(entry.player_id), { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -5990,7 +5998,7 @@
       var ids = selectedPlayers.map(function(p) { return p.player_id; }).join(',');
       var content = el.querySelector('#cmt-content');
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
-      fetch('/api/compare-table?players=' + encodeURIComponent(ids) + '&season=' + curSeason).then(function(r) {
+      fetch('/api/compare-table?players=' + encodeURIComponent(ids) + '&season=' + curSeason, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -6103,7 +6111,7 @@
     function loadStrengths(pid) {
       var content = el.querySelector('#sw2-content');
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
-      fetch('/api/player-strengths?player_id=' + encodeURIComponent(pid) + '&season=' + curSeason).then(function(r) {
+      fetch('/api/player-strengths?player_id=' + encodeURIComponent(pid) + '&season=' + curSeason, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -6222,7 +6230,7 @@
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
       var rpcWeekVal = parseInt((el.querySelector('#rpc-week') || {}).value) || 0;
       if (rpcWeekVal > 0) url += '&week=' + rpcWeekVal;
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -6364,7 +6372,7 @@
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/fpts-breakdown?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -6469,7 +6477,7 @@
       if (!curPlayer) return;
       var content = el.querySelector('#glo-content');
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
-      fetch('/api/game-log?player_id=' + encodeURIComponent(curPlayer.player_id) + '&season=' + curSeason).then(function(r) {
+      fetch('/api/game-log?player_id=' + encodeURIComponent(curPlayer.player_id) + '&season=' + curSeason, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -6615,7 +6623,7 @@
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
       var url = '/api/player-archetypes?season=' + curSeason;
       if (curPos) url += '&position=' + encodeURIComponent(curPos);
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -6696,7 +6704,7 @@
     function loadBreakdown(pid, playerInfo) {
       var content = el.querySelector('#pbd-content');
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
-      fetch('/api/points-breakdown?player_id=' + encodeURIComponent(pid) + '&season=' + curSeason).then(function(r) {
+      fetch('/api/points-breakdown?player_id=' + encodeURIComponent(pid) + '&season=' + curSeason, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -6923,7 +6931,7 @@
       if (awState.season) params.push('season=' + encodeURIComponent(awState.season));
       url += params.join('&');
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -7015,7 +7023,7 @@
       var url = '/api/dynasty-dashboard';
       if (state.season > 0) url += '?season=' + state.season;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(d) {
@@ -7144,7 +7152,7 @@
       if (state.position) p.push('position=' + state.position);
       if (p.length) url += '?' + p.join('&');
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('fail');
         return r.json();
       }).then(function(d) {
@@ -7392,7 +7400,7 @@
       if (season) url += '&season=' + season;
       if (position) url += '&position=' + position;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -7646,7 +7654,7 @@
         if (ldState.season) url += '&season=' + ldState.season;
       }
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -7877,7 +7885,7 @@
       var opp2WeekVal = parseInt((el.querySelector('#opp2-week') || {}).value) || 0;
       if (opp2WeekVal > 0) url += '&week=' + opp2WeekVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -7946,7 +7954,7 @@
       var url = '/api/player-percentiles?player_id=' + encodeURIComponent(playerId);
       if (season) url += '&season=' + season;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('fail');
         return r.json();
       }).then(function(data) {
@@ -8047,7 +8055,7 @@
       '</div>';
 
     function loadYears() {
-      fetch('/api/prospect-options').then(function(r) {
+      fetch('/api/prospect-options', { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('fail');
         return r.json();
       }).then(function(data) {
@@ -8071,7 +8079,7 @@
       var url = '/api/prospect-scores?draft_year=' + (state.draftYear || '');
       if (state.position) url += '&position=' + encodeURIComponent(state.position);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('fail');
         return r.json();
       }).then(function(data) {
@@ -8219,7 +8227,7 @@
       var url = isCollege ? '/api/college/season-recap?' : '/api/season-recap?';
       if (season) url += 'season=' + encodeURIComponent(season);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -8364,7 +8372,7 @@
       }
       if (currentPosition) url += 'position=' + encodeURIComponent(currentPosition);
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) { render(data, isCollege); }).catch(function() {
@@ -8522,7 +8530,7 @@
       '</div>';
 
     function searchPlayers(query) {
-      fetch('/api/players/quick-search?q=' + encodeURIComponent(query) + '&limit=8').then(function(r) {
+      fetch('/api/players/quick-search?q=' + encodeURIComponent(query) + '&limit=8', { signal: _panelSignal() }).then(function(r) {
         return r.ok ? r.json() : { players: [] };
       }).then(function(data) {
         var players = data.players || data || [];
@@ -8563,7 +8571,8 @@
       fetch('/api/roster-grade', {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify({ player_ids: rosterIds })
+        body: JSON.stringify({ player_ids: rosterIds }),
+        signal: _panelSignal()
       }).then(function(r) {
         if (r.status === 401 || r.status === 403) {
           el.querySelector('.rbld-grade-empty').style.display = 'block';
@@ -8812,7 +8821,7 @@
       if (season) url += '&season=' + season;
       if (currentPosition) url += '&position=' + currentPosition;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -8889,7 +8898,7 @@
       if (state.season) url += 'season=' + state.season + '&';
       if (state.position) url += 'position=' + state.position;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('fail');
         return r.json();
       }).then(function(data) {
@@ -8968,7 +8977,7 @@
       var sr2WeekVal = parseInt((el.querySelector('#sr2-week') || {}).value) || 0;
       if (sr2WeekVal > 0) url += '&week=' + sr2WeekVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -9082,7 +9091,7 @@
       if (team) url += 'team=' + team + '&';
       if (td2WeekVal > 0) url += 'week=' + td2WeekVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -9240,7 +9249,7 @@
       if (season) params.push('season=' + season);
       if (params.length) url += '?' + params.join('&');
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -9370,7 +9379,7 @@
       var url = '/api/trade-finder?player_id=' + encodeURIComponent(playerId);
       if (season) url += '&season=' + season;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -9538,7 +9547,7 @@
       var posParam = panelState.position ? '&position=' + encodeURIComponent(panelState.position) : '';
       var contentEl = el.querySelector('.dct-content');
       contentEl.innerHTML = '<div class="lp-loading">reviewing the tape...</div>';
-      fetch('/api/draft-class-tracker?' + yearParam.replace(/^&/, '') + posParam)
+      fetch('/api/draft-class-tracker?' + yearParam.replace(/^&/, '') + posParam, { signal: _panelSignal() })
         .then(function(r) { if (!r.ok) throw new Error('fail'); return r.json(); })
         .then(function(data) {
           panelState.data = data;
@@ -9708,7 +9717,7 @@
       if (panelState.selectedCell) {
         url += '&x_stat=' + encodeURIComponent(panelState.selectedCell.x) + '&y_stat=' + encodeURIComponent(panelState.selectedCell.y);
       }
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -10013,7 +10022,7 @@
       var url = '/api/dynasty-power-rankings';
       if (seasonVal && seasonVal !== '0') url += '?season=' + seasonVal;
 
-      fetch(url).then(function(r) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) {
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) {
@@ -10303,7 +10312,7 @@
       var gsWeekVal = parseInt((el.querySelector('#gs-week') || {}).value) || 0;
       if (gsWeekVal > 0) url += '&week=' + gsWeekVal;
 
-      fetch(url).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
+      fetch(url, { signal: _panelSignal() }).then(function(r) { if (!r.ok) throw new Error('API error'); return r.json(); }).then(function(data) {
         if (!seasonsPopulated && data.available_seasons) {
           var sel = el.querySelector('#gs-season');
           (data.available_seasons || []).forEach(function(s) {
