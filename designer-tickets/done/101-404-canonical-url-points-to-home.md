@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 ---
 id: DQ-437
-priority: P2
+priority: P1
 area: frontend/404.html
 section: SEO
 type: incorrect meta tag

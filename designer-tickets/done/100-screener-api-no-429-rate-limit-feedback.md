@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 ---
 id: DQ-439
-priority: P2
+priority: P1
 area: frontend/lab.js
 section: error handling / UX
 type: missing error differentiation

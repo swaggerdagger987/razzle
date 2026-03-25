@@ -632,6 +632,11 @@ async function apiFetch(path, options = {}) {
     if (typeof openAuthModal === "function") openAuthModal();
     throw new Error("session expired. sign in again.");
   }
+  if (resp.status === 429) {
+    var retryAfter = resp.headers.get('Retry-After');
+    var waitMsg = retryAfter ? ' Try again in ' + retryAfter + 's.' : ' Wait a moment and try again.';
+    throw new Error('Slow down — too many requests.' + waitMsg);
+  }
   if (!resp.ok) throw new Error("the server fumbled. try again in a sec.");
   try {
     return await resp.json();
@@ -2010,3 +2015,22 @@ document.addEventListener("keydown", function(e) {
     s.opacity = "0.7";
   }, 2000);
 })();
+
+/* ========== URL State Helpers (standalone pages) ========== */
+function savePageState(params) {
+  var sp = new URLSearchParams();
+  Object.keys(params).forEach(function(k) {
+    if (params[k] != null && params[k] !== '') sp.set(k, params[k]);
+  });
+  var qs = sp.toString();
+  history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+}
+
+function restorePageState(defaults) {
+  var sp = new URLSearchParams(location.search);
+  var result = {};
+  Object.keys(defaults).forEach(function(k) {
+    result[k] = sp.get(k) || defaults[k];
+  });
+  return result;
+}

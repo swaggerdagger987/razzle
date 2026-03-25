@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 ---
 id: DES-445
-priority: P1
+priority: P0
 area: error recovery
 section: Lab panels
 type: bug

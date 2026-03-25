@@ -337,7 +337,10 @@
               dropdown.appendChild(row);
             });
             input.parentNode.appendChild(dropdown);
-          }).catch(function() {});
+          }).catch(function() {
+            var existing = content.querySelector('.dh-compare-results');
+            if (existing) existing.remove();
+          });
         }, 250);
       });
     }
