@@ -3566,6 +3566,7 @@ function showColumnStatsPopover(colKey, anchorEl) {
   var col = getColumnDef(colKey);
   if (!col || col.isText || col.isSparkline || col.isNotes) return;
 
+  try {
   // Collect values from current items
   var vals = [];
   for (var i = 0; i < state.items.length; i++) {
@@ -3648,6 +3649,23 @@ function showColumnStatsPopover(colKey, anchorEl) {
     var wrap = document.querySelector(".table-wrap");
     if (wrap) wrap.addEventListener("scroll", _colStatsScrollDismiss, { passive: true });
   }, 0);
+  } catch (err) {
+    console.error("Column stats error:", err);
+    dismissColumnStatsPopover();
+    var errPop = document.createElement("div");
+    errPop.id = "colStatsPopover";
+    errPop.className = "colstats-popover";
+    errPop.innerHTML = '<div style="padding:16px;text-align:center;font-family:var(--font-hand);font-size:16px;color:var(--red);">' +
+      "couldn\u2019t pull stats for this column. right-click again to retry." + '</div>';
+    document.body.appendChild(errPop);
+    var rect = anchorEl.getBoundingClientRect();
+    errPop.style.left = (rect.left + rect.width / 2 - errPop.offsetWidth / 2) + "px";
+    errPop.style.top = (rect.bottom + 4) + "px";
+    setTimeout(function() {
+      document.addEventListener("click", _colStatsOutsideClick, true);
+      document.addEventListener("keydown", _colStatsEscDismiss, true);
+    }, 0);
+  }
 }
 
 function _colStatsOutsideClick(e) {
