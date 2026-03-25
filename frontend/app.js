@@ -1180,6 +1180,24 @@ function updateAuthUI(user) {
   window.dispatchEvent(new CustomEvent("razzle-plan-changed", { detail: user }));
 }
 
+// ─── Cross-tab localStorage sync ──────────────────────────────────
+window.addEventListener('storage', function(e) {
+  if (e.key === 'razzle_token' || e.key === 'razzle_user') {
+    try {
+      var user = JSON.parse(localStorage.getItem('razzle_user'));
+      updateAuthUI(user || null);
+    } catch(_) { updateAuthUI(null); }
+  }
+  if (e.key === 'razzle_theme') {
+    var theme = e.newValue;
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }
+});
+
 var _checkoutInProgress = false;
 async function startCheckout(interval) {
   if (_checkoutInProgress) return;
