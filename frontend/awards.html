@@ -501,12 +501,13 @@
     return 'poor';
   }
 
-  function buildAwardCard(award) {
+  function buildAwardCard(award, idx) {
     var w = award.winner;
     var pos = (w.position || 'RB').toLowerCase();
     var trophy = TROPHY_MAP[award.key] || '&#x1F3C6;';
+    var rankClass = idx === 0 ? ' card-hero' : idx <= 2 ? ' card-spotlight' : '';
 
-    var html = '<div class="aw-card">';
+    var html = '<div class="aw-card' + rankClass + '">';
 
     // Header
     html += '<div class="aw-card-header">';
@@ -579,8 +580,8 @@
     }
 
     var html = '<div class="aw-grid">';
-    data.awards.forEach(function(award) {
-      html += buildAwardCard(award);
+    data.awards.forEach(function(award, idx) {
+      html += buildAwardCard(award, idx);
     });
     html += '</div>';
     body.innerHTML = html;
