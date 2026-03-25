@@ -585,7 +585,7 @@
     return html;
   }
 
-  function renderCard(p, isBuy) {
+  function renderCard(p, isBuy, idx) {
     var pos = (p.position || 'WR').toLowerCase();
     var ac = ageClass(p.age);
     var al = ageLabel(p.age);
@@ -593,8 +593,9 @@
     var type = isBuy ? 'buy' : 'sell';
     var maxMismatch = 60;
     var barWidth = Math.min(100, Math.round(((p.mismatch_score || 0) / (maxMismatch || 1)) * 100));
+    var rankClass = idx === 0 ? ' card-hero' : idx <= 2 ? ' card-spotlight' : '';
 
-    var html = '<div class="buysell-card" data-pid="' + escapeHtml(p.player_id) + '">';
+    var html = '<div class="buysell-card' + rankClass + '" data-pid="' + escapeHtml(p.player_id) + '">';
     html += '<div class="buysell-card-top ' + pos + '"></div>';
     html += '<div class="buysell-card-body">';
 
@@ -645,8 +646,8 @@
       return '<div class="buysell-empty">no ' + (isBuy ? 'buy low' : 'sell high') + ' candidates found</div>';
     }
     var html = '<div class="buysell-list">';
-    players.forEach(function(p) {
-      html += renderCard(p, isBuy);
+    players.forEach(function(p, idx) {
+      html += renderCard(p, isBuy, idx);
     });
     html += '</div>';
     return html;
