@@ -482,6 +482,8 @@ function loadHtml2Canvas() {
     if (window.html2canvas) { resolve(window.html2canvas); return; }
     const s = document.createElement('script');
     s.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+    s.integrity = 'sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H';
+    s.crossOrigin = 'anonymous';
     s.onload = () => resolve(window.html2canvas);
     s.onerror = () => {
       const s2 = document.createElement('script');

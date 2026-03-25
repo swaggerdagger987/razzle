@@ -103,9 +103,17 @@ function _loadHtml2Canvas(cb) {
   _html2canvasLoading = true;
   _html2canvasRetries = 0;
   var s = document.createElement('script');
-  s.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+  s.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+  s.integrity = 'sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H';
+  s.crossOrigin = 'anonymous';
   s.onload = function() { _html2canvasLoading = false; cb(); };
-  s.onerror = function() { _html2canvasLoading = false; _showToast(razzleError()); };
+  s.onerror = function() {
+    var s2 = document.createElement('script');
+    s2.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+    s2.onload = function() { _html2canvasLoading = false; cb(); };
+    s2.onerror = function() { _html2canvasLoading = false; _showToast(razzleError()); };
+    document.head.appendChild(s2);
+  };
   document.head.appendChild(s);
 }
 
