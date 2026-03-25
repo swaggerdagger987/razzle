@@ -1,184 +1,173 @@
-# Design QA Tickets — 2026-03-25
+# Design QA Tickets — 2026-03-25 (v2)
 
-Audit of all frontend files against `docs/DESIGN.md`. 10 tickets, ordered by severity.
+Audit method: Code-based CSS/HTML/JS audit against `docs/DESIGN.md`.
+Live site: Render returning 502 at time of audit; ran against local dev server.
 
 ---
 
-## TICKET 1 — HIGH: warroom.js has 50+ hardcoded cold gray hex values
+## TICKET 1 — HIGH: warroom.js has ~40 hardcoded cold gray hex values
 
 **Rule violated**: "Cold grays anywhere — even dark mode stays warm (brown, not gray)"
 
-**Files**: `frontend/warroom.js`
+**File**: `frontend/warroom.js`
 
-**Evidence** (sample):
-- Line 59: `boardFrame: '#444444'`
-- Line 67: `coffeeAccent: '#888888'`
-- Line 69: `trophyBase: '#666666'`
-- Line 77: `wbFrame: '#aaaaaa'`
-- Line 85: `bubbleBorder: '#333333'`
-- Lines 418-650: dozens of `px()` calls with `'#333'`, `'#555'`, `'#666'`, `'#ccc'`, `'#ddd'`, `'#888'`, `'#aaa'`
-- Lines 1039-1071: more `px()` and `ctx.fillStyle` with `'#333'`, `'#999'`, `'#888'`, `'#555'`, `'#ccc'`
-- Line 1251: `let dotColor = '#666'`
-- Line 1328: `STATE_COLORS fallback '#666'`
+**Evidence**: 39 cold gray shorthand values (`#333`, `#444`, `#555`, `#666`, `#888`, `#999`, `#aaa`, `#ccc`, `#ddd`) used in the pixel engine palette, furniture sprites, bubbles, debug indicators. These are the only cold grays in the entire frontend — the rest of the codebase is clean.
 
-**Total**: ~50+ cold gray values across the pixel engine color palette, furniture sprites, UI overlays, and debug indicators.
+**Fix**: Create a `PIXEL_PALETTE` object at top of file mapping each cold gray to a warm espresso equivalent:
+- `#333` -> `#3b2821`, `#444` -> `#4a3728`, `#555` -> `#5c4a3d`, `#666` -> `#6b5a4e`
+- `#888` -> `#8a7565`, `#999` -> `#a08878`, `#aaa` -> `#b0a090`, `#ccc` -> `#c4b5a5`, `#ddd` -> `#d5c8b8`
 
-**Fix**: Create a warm-shifted pixel palette object at top of file. Map every cold gray to a warm espresso equivalent:
-- `#333` → `#3b2821` (warm dark)
-- `#444` → `#4a3728` (mocha)
-- `#555` → `#5c4a3d` (ink-medium)
-- `#666` → `#6b5a4e` (warm mid)
-- `#888` → `#8a7565` (ink-light)
-- `#999` → `#a08878`
-- `#aaa` → `#b0a090`
-- `#ccc` → `#c4b5a5` (ink-faint)
-- `#ddd` → `#d5c8b8`
+**Severity**: HIGH — 39 brand violations in a single file. Situation Room canvas will look cold/out-of-place.
 
 ---
 
-## TICKET 2 — MEDIUM: lab-panels.css has 30+ non-standard border-radius values
+## TICKET 2 — HIGH: Noscript fallback blocks use hardcoded colors (dark mode broken)
 
-**Rule violated**: "Use the token, not a hardcoded value. New components should pick the nearest token." Tokens are 8px, 12px, 20px.
+**Rule violated**: Colors must use CSS variables to flip in dark mode.
+
+**Files**:
+- `agents.html:1604,1607`
+- `lab.html:3155,3158`
+- `league-intel.html:2535,2538`
+
+**Evidence**: Inline `color:#6b5a4e` and `color:#a89585` — neither is a design token. They won't flip in dark mode, causing dark-text-on-dark-background for noscript users.
+
+**Fix**: Add `.noscript-msg` and `.noscript-sub` classes in `styles.css`:
+```css
+.noscript-msg { color: var(--ink-medium); font-family: var(--font-mono); }
+.noscript-sub { color: var(--ink-light); font-family: var(--font-hand); }
+```
+Replace all 6 inline style blocks.
+
+**Severity**: HIGH — dark mode breakage + off-palette colors on 3 core pages.
+
+---
+
+## TICKET 3 — MEDIUM: 25+ panel cards missing hover-lift effect
+
+**Rule violated**: "Hover lift — interaction should feel physical" (DESIGN.md Do section)
 
 **File**: `frontend/lab-panels.css`
 
-**Evidence** (all lines):
-- Line 411: `border-radius: 14px` → use `var(--radius)` (12px)
-- Line 618: `border-radius: 6px` → use `var(--radius-sm)` (8px)
-- Line 619: `border-radius: 4px` → use `var(--radius-sm)` (8px)
-- Line 765: `border-radius: 5px` → use `var(--radius-sm)` (8px)
-- Lines 797-798: `border-radius: 4px` x2
-- Line 1997: `border-radius: 3px`
-- Line 2225: `border-radius: 4px`
-- Line 2370: `border-radius: 3px`
-- Lines 2754-2755: `border-radius: 4px` x2
-- Lines 2807-2808: `border-radius: 4px` x2
-- Lines 3031-3032: `border-radius: 3px` x2
-- Lines 3039-3040: `border-radius: 7px` x2
-- Line 3098: `border-radius: 4px`
-- Lines 3313-3314: `border-radius: 4px` x2
-- Lines 3420-3421: `border-radius: 6px` x2
-- Lines 3452-3453: `border-radius: 4px` x2
-- Lines 3529-3530: `border-radius: 4px` x2
-- Line 3609: `border-radius: 4px`
-- Line 3621: `border-radius: 6px`
+Only 5 of 30+ card classes have `:hover` styles (`.rankings-card`, `.breakout-card`, `.buysell-card`, `.scarcity-summary-card`, `.scarcity-card`).
 
-**Fix**: For progress bar tracks/fills (most of these), add a new token `--radius-bar: 4px` or use `var(--radius-sm)`. Thin inline bars (3-6px) could use `border-radius: 999px` for pill-shaped bars. For containers at 14px, use `var(--radius)` (12px).
+Missing hover on: `.pa-card`, `.ww-card`, `.hc-card`, `.se-card`, `.wl-card`, `.dt-card`, `.tp-card`, `.dr-card`, `.gt-card`, `.sk-card`, `.mv-card`, `.po-card`, `.ag-card`, `.pt-card`, `.spc-card`, `.cst-player-card`, `.sw2-player-card`, `.fpb-card`, `.glo-player-card`, and 6+ more.
+
+**Fix**: Add `transition: transform 0.15s, box-shadow 0.15s;` to each card base rule, and a shared hover pattern:
+```css
+.pa-card:hover, .ww-card:hover, .hc-card:hover /* ... */ {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+```
+
+**Severity**: MEDIUM — 25+ panels feel flat/static vs. the 5 that lift.
 
 ---
 
-## TICKET 3 — MEDIUM: 15+ HTML files use hardcoded border-radius in page `<style>` blocks
+## TICKET 4 — MEDIUM: 30+ non-standard border-radius values in lab-panels.css
 
-**Rule violated**: Border radius should use CSS variable tokens.
+**Rule violated**: "Use the token, not a hardcoded value" — tokens are 8px, 12px, 20px.
 
-**Files and lines**:
-- `auction.html:219` — `border-radius: 6px`
-- `breakouts.html:258` — `border-radius: 6px`
-- `buysell.html:326` — `border-radius: 6px`
-- `lab.html:2246` — `border-radius: 6px`
-- `lab.html:2493` — `border-radius: 6px`
-- `percentiles.html:213` — `border-radius: 6px 0 0 4px`
-- `prospects.html:300` — `border-radius: 6px`
-- `pace.html:231` — `border-radius: 6px`
-- `rosterbuilder.html:292` — `border-radius: 6px`
-- `scarcity.html:234` — `border-radius: 6px`
-- `league-intel.html:451, 2126, 2204, 2370` — `border-radius: 6px`
-- `archetypes.html:115` — `border-radius: 14px`
-- `dashboard.html:113` — `border-radius: 14px`
-- `tiers.html:120` — `border-radius: 14px`
+**File**: `frontend/lab-panels.css`
 
-**Fix**: Replace `6px` with `var(--radius-sm)` (8px). Replace `14px` with `var(--radius)` (12px).
+**Evidence**: 7 different non-token values used for bars:
+- 1px (line 2487), 2px (6 instances), 3px (5 instances), 4px (12 instances), 5px (1), 6px (4), 7px (2)
+- Plus `14px` on `.tl-outer-card` (line 411) — should be `var(--radius)` (12px)
+
+**Fix**: Standardize bars to two tiers: `2px` for micro-bars (<10px height), `4px` for regular bars. Consider `--radius-bar: 4px` token. Fix `.tl-outer-card` to `var(--radius)`.
+
+**Severity**: MEDIUM — cumulative visual inconsistency across 30+ elements.
 
 ---
 
-## TICKET 4 — MEDIUM: Noscript fallbacks use hardcoded colors, break dark mode
+## TICKET 5 — MEDIUM: 25+ inline badges use 1px vertical padding (cramped)
 
-**Rule violated**: "Cold grays anywhere — even dark mode stays warm" + dark mode won't flip.
+**Rule violated**: Badges should feel chunky and sticker-like, not cramped.
 
-**Files and lines**:
-- `agents.html:1604` — `color:#6b5a4e` (hardcoded, won't flip in dark mode)
-- `agents.html:1607` — `color:#a89585` (hardcoded)
-- `lab.html:3155` — `color:#6b5a4e` (hardcoded)
-- `lab.html:3158` — `color:#a89585` (hardcoded)
-- `league-intel.html:2535` — `color:#6b5a4e` (hardcoded)
-- `league-intel.html:2538` — `color:#a89585` (hardcoded)
+**Files**: `frontend/lab.js` (13 instances), `charts.js`, `formula-store.js`, `league-intel.html`, `warroom.js`
 
-Also hardcoded `font-family` in inline styles at these same locations instead of using CSS classes.
+**Evidence**: Pattern `padding:1px 5px` or `padding:1px 6px` repeated 25+ times in inline badge styles across JS template literals.
 
-**Fix**: Create a `.noscript-msg` CSS class in `styles.css` with `color: var(--ink-medium)` and `font-family: var(--font-mono)`. Replace all 6 inline style blocks with the class. This also fixes dark mode for noscript users.
+**Fix**: Change `padding:1px Xpx` -> `padding:2px Xpx`. Better: extract a `.badge-inline` CSS utility class to replace 25+ identical inline style strings.
+
+**Severity**: MEDIUM — badges feel thin/cramped instead of chunky-sticker.
 
 ---
 
-## TICKET 5 — MEDIUM: 25+ inline badges use 1px vertical padding
+## TICKET 6 — MEDIUM: Hardcoded medal/rank colors not using CSS variables
 
-**Rule violated**: Design system badges use chunky styling. `padding: 1px` makes badges feel cramped and thin — out of character for the comic-strip aesthetic.
+**Rule violated**: Colors should use CSS variables for dark mode support.
 
-**File**: `frontend/lab.js` (primary), plus `charts.js`, `formula-store.js`, `league-intel.html`, `warroom.js`
+**File**: `frontend/lab-panels.css`
+- Line 603: `.tv-rank.top1 { color: #b8860b; }` (dark goldenrod — no CSS var)
+- Line 605: `.tv-rank.top3 { color: #a0522d; }` (sienna — no CSS var)
 
-**Evidence** (sample from lab.js):
-- Line 1930: `padding:1px 8px`
-- Line 1934: `padding:1px 6px`
-- Line 2195: `padding:1px 5px`
-- Line 9199: `padding:1px 5px`
-- Line 9247: `padding:1px 5px`
-- Line 10209: `padding:1px 6px`
-- Line 10297: `padding:1px 5px`
-- Line 11552: `padding:1px 5px`
-- Line 11635: `padding:1px 5px`
-- Line 11719: `padding:1px 5px`
+While `--medal-gold` and `--medal-bronze` exist in `:root`, these rank text colors use different shades that aren't tokenized and won't adapt to dark mode.
 
-Also: `charts.js:891,1259`, `formula-store.js:527`, `league-intel.html:2881,3028,3039,3073,4389`, `warroom.js:3113`
+**Fix**: Add `--rank-gold: #b8860b` and `--rank-bronze: #a0522d` to `:root` with dark mode overrides in `[data-theme="dark"]`.
 
-**Fix**: Change `padding:1px Xpx` → `padding:2px Xpx` across all inline badge styles. Consider extracting a `.badge-sm` utility class to DRY up 25+ identical inline style strings.
+**Severity**: MEDIUM — rank colors invisible or low-contrast in dark mode.
 
 ---
 
-## TICKET 6 — MEDIUM: JS files use hardcoded border-radius in inline styles
+## TICKET 7 — MEDIUM: JS files use hardcoded border-radius in inline styles
 
-**Rule violated**: Border radius should use CSS variable tokens.
+**Rule violated**: "Use the token, not a hardcoded value."
 
-**Files and lines**:
-- `lab-panels.js:9577` — `border-radius:6px`
-- `lab-panels.js:9579, 9580` — `border-radius:3px`
-- `lab-panels.js:9600` — `border-radius:6px`
-- `lab-panels.js:9646` — `border-radius:3px`
-- `charts.js:891` — `border-radius:4px`
-- `charts.js:1259` — `border-radius:4px`
-- `formulas.js:132` — `border-radius:4px`
-- `formulas.js:273` — `border-radius:4px`
-- `league-intel.html:2881, 3028, 3073, 3123` — `border-radius:6px` and `4px` in JS template literals
+**Files**:
+- `lab-panels.js:9577,9579,9580,9600,9646` — `border-radius:3px` and `6px`
+- `charts.js:891,1259` — `border-radius:4px`
+- `formulas.js:132,273` — `border-radius:4px`
+- `league-intel.html:2881,3028,3073,3123` — `border-radius:6px` and `4px` in JS template literals
 
-**Fix**: Replace hardcoded values with `var(--radius-sm)` in inline style strings. CSS vars work in inline styles.
+~14 instances total.
 
----
+**Fix**: Replace hardcoded values with `var(--radius-sm)` in inline style strings. CSS variables work in inline styles: `style="border-radius:var(--radius-sm)"`.
 
-## TICKET 7 — LOW: Soft blur box-shadow on screener sticky header
-
-**Rule violated**: "Box shadows: `4px 4px 0 var(--ink)` on cards, containers" — design says chunky offset, not blur.
-
-**File**: `frontend/lab.html`
-- Line 1037: `box-shadow: 0 4px 8px rgba(45,31,20,0.08)` (light mode)
-- Line 1040: `box-shadow: 0 4px 8px rgba(0,0,0,0.25)` (dark mode)
-
-This is a functional scroll-indicator shadow on the sticky `<thead>`, not a decorative card shadow.
-
-**Fix**: Replace with `box-shadow: 0 3px 0 var(--ink-faint)` for a chunky bottom-edge shadow. Or keep as-is — it's a functional UX indicator.
+**Severity**: MEDIUM — inconsistent with the CSS-variable-based design system.
 
 ---
 
-## TICKET 8 — LOW: league-intel.html duplicates inline badge styles 6+ times
+## TICKET 8 — LOW: matchups.html hardcodes `#fff` instead of CSS variable
 
-**Rule violated**: Maintainability / DRY. Same badge pattern repeated in JS template literals.
+**Rule violated**: White text on accent should use `var(--text-on-accent)`.
 
-**File**: `frontend/league-intel.html`
-- Line 2881: `<span style="font-family:var(--font-mono);font-size:8px;background:var(--orange);color:var(--text-on-accent);padding:1px 5px;border-radius:6px;margin-left:4px;">`
-- Line 3028: Similar inline badge
-- Line 3039: Similar inline badge
-- Line 3073: Similar inline badge
-- Line 3123: Similar inline badge with `border-radius:4px`
-- Line 4389: Similar inline badge
+**File**: `frontend/matchups.html:643`
+```js
+var textColor = (bg === redVal || bg === greenVal) ? '#fff' : 'var(--ink)';
+```
 
-**Fix**: Add a `.badge-you` CSS class:
+**Fix**: Change `'#fff'` to `'var(--text-on-accent)'`. The variable exists for exactly this purpose and properly handles dark mode.
+
+**Severity**: LOW — works in light mode, minor dark mode contrast drift.
+
+---
+
+## TICKET 9 — LOW: research-sprawl.svg uses system fonts
+
+**Rule violated**: Only Luckiest Guy, Space Mono, and Caveat are approved fonts.
+
+**File**: `frontend/assets/research-sprawl.svg`
+- Uses `font-family="system-ui, -apple-system, sans-serif"` — no Razzle font at all.
+
+Other SVGs (`og-image.svg`, `og-image-lab.svg`) correctly use `'Luckiest Guy', 'Impact', sans-serif`.
+
+**Fix**: Change to `font-family="'Space Mono', monospace"` or `"'Luckiest Guy', cursive"`.
+
+**Severity**: LOW — SVG is decorative, not heavily visible.
+
+---
+
+## TICKET 10 — LOW: league-intel.html duplicates inline badge styles 6+ times
+
+**Rule violated**: DRY / maintainability. Same badge pattern repeated in JS template literals.
+
+**File**: `frontend/league-intel.html` — lines 2881, 3028, 3039, 3073, 3123, 4389
+
+All use the same ~120-char inline style string for "YOU" badges.
+
+**Fix**: Add `.badge-you` class in styles.css:
 ```css
 .badge-you {
   font-family: var(--font-mono);
@@ -189,49 +178,29 @@ This is a functional scroll-indicator shadow on the sticky `<thead>`, not a deco
   border-radius: var(--radius-sm);
 }
 ```
-Replace all 6+ inline style strings with `class="badge-you"`.
+Replace 6 inline style blocks with `class="badge-you"`.
 
----
-
-## TICKET 9 — LOW: research-sprawl.svg uses system fonts with no Razzle fallback
-
-**Rule violated**: "Don't use system fonts (Arial, Helvetica, sans-serif) as primary"
-
-**File**: `frontend/assets/research-sprawl.svg:1`
-- `font-family="system-ui, -apple-system, sans-serif"` — no Razzle design system font at all.
-
-The OG image SVGs (`og-image.svg`, `og-image-lab.svg`) correctly use `'Luckiest Guy', 'Impact', sans-serif`.
-
-**Fix**: Change to `font-family="'Luckiest Guy', 'Impact', sans-serif"` or `"'Space Mono', monospace"` depending on the text content.
-
----
-
-## TICKET 10 — LOW: backdrop-filter blur on command palette overlay
-
-**Rule violated**: Borderline — design says no soft/blurry effects.
-
-**File**: `frontend/styles.css:1084`
-- `backdrop-filter: blur(4px)` on `.cmd-palette-backdrop`
-
-**Fix (optional)**: Replace with a solid semi-transparent overlay `background: rgba(45,31,20,0.6)` without blur. Or keep as-is — backdrop blur on modal overlays is a standard UX pattern distinct from decorative blurry box-shadows.
+**Severity**: LOW — functional, just hard to maintain.
 
 ---
 
 ## Summary
 
-| # | Severity | File(s) | Issue | Instances |
-|---|----------|---------|-------|-----------|
-| 1 | HIGH | warroom.js | Cold gray hex values in pixel engine | ~50 |
-| 2 | MEDIUM | lab-panels.css | Non-standard border-radius (3-7px, 14px) | ~30 |
-| 3 | MEDIUM | 15 HTML files | Hardcoded border-radius in `<style>` blocks | ~20 |
-| 4 | MEDIUM | 3 HTML files | Noscript hardcoded colors, no dark mode | 6 |
-| 5 | MEDIUM | lab.js + 4 others | 1px vertical padding on inline badges | ~25 |
-| 6 | MEDIUM | JS files | Hardcoded border-radius in inline styles | ~14 |
-| 7 | LOW | lab.html | Soft blur shadow on sticky thead | 2 |
-| 8 | LOW | league-intel.html | Duplicate inline badge styles | ~6 |
+| # | Sev | File(s) | Issue | Count |
+|---|-----|---------|-------|-------|
+| 1 | HIGH | warroom.js | Cold gray hex values in pixel engine | ~39 |
+| 2 | HIGH | 3 HTML files | Noscript hardcoded colors, dark mode broken | 6 |
+| 3 | MED | lab-panels.css | 25+ panel cards missing hover-lift | ~25 |
+| 4 | MED | lab-panels.css | Non-standard border-radius (1-7px, 14px) | ~30 |
+| 5 | MED | lab.js + 4 others | 1px badge padding (cramped) | ~25 |
+| 6 | MED | lab-panels.css | Hardcoded medal/rank colors, no dark mode | 2 |
+| 7 | MED | JS files | Hardcoded border-radius in inline styles | ~14 |
+| 8 | LOW | matchups.html | #fff instead of var(--text-on-accent) | 1 |
 | 9 | LOW | SVG assets | System font in research-sprawl.svg | 1 |
-| 10 | LOW | styles.css | backdrop-filter blur on cmd palette | 1 |
+| 10 | LOW | league-intel.html | Duplicate inline badge styles | ~6 |
 
-**Total violations**: ~155 instances across ~20 files
+**Total**: ~149 individual violations across ~20 files.
 
-**Clean areas**: No gradients. No 1px borders on cards/containers. No "Loading..." text (all personality). Position colors correct. `styles.css` `:root` variables match DESIGN.md exactly. Dark mode tokens correct. No cold grays in CSS (only in warroom.js canvas code).
+**What's clean**: No gradients anywhere. No 1px borders on cards/containers. No "Loading..." text (all personality-driven). Position colors correct everywhere. `:root` variables match DESIGN.md exactly. Dark mode tokens correct. No forbidden fonts in CSS. No cold grays in any CSS file. Shared `styles.css` is excellent.
+
+**Overall grade: A-** — The design system is well-implemented. Issues are polish-level (warroom.js canvas palette is the biggest offender) rather than structural.
