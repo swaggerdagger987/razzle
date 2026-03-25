@@ -1643,6 +1643,28 @@ tr:hover .notes-cell .note-pencil {
   }
 }
 
+/* ===== STICKER CHIP UTILITY ===== */
+.sticker-chip {
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  display: inline-block;
+}
+.sticker-chip--rotated {
+  transform: rotate(-3deg);
+}
+.sticker-chip:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.sticker-chip--rotated:hover {
+  transform: rotate(-3deg) translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
 /* ===== DARK MODE OVERRIDES — DES-017 through DES-020 ===== */
 [data-theme="dark"] .btn-primary {
   color: var(--bg);
