@@ -486,11 +486,12 @@
     return section === 'alpha_dogs' ? ALPHA_COLUMNS : DOM_COLUMNS;
   }
 
-  function buildPlayerRow(p, section) {
+  function buildPlayerRow(p, section, idx) {
     var pos = (p.position || 'RB').toLowerCase();
     var cols = getColumns(section);
+    var rankClass = idx === 0 ? ' card-hero' : idx <= 2 ? ' card-spotlight' : '';
 
-    var html = '<tr data-pid="' + escapeHtml(p.player_id) + '">';
+    var html = '<tr class="' + rankClass.trim() + '" data-pid="' + escapeHtml(p.player_id) + '">';
 
     cols.forEach(function(col) {
       var classes = [];
@@ -604,8 +605,8 @@
     html += '<table class="opp-table" data-section="' + section + '">';
     html += buildTableHeader(section);
     html += '<tbody>';
-    sorted.forEach(function(p) {
-      html += buildPlayerRow(p, section);
+    sorted.forEach(function(p, idx) {
+      html += buildPlayerRow(p, section, idx);
     });
     html += '</tbody></table>';
     html += '</div>';
