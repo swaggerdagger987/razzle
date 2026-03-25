@@ -71,10 +71,19 @@
     font-family: var(--font-mono); font-size: 12px; line-height: 1.5;
     color: var(--ink-medium); background: var(--bg); border: 2px dashed var(--ink-faint);
     border-radius: 8px; padding: 12px; margin: 8px 0; white-space: pre-wrap;
-    max-height: 120px; overflow: hidden; position: relative; cursor: pointer;
+    max-height: 120px; overflow: hidden; position: relative;
   }
-  .prompt-text:not(.expanded) { border-bottom: 2px dashed var(--ink-faint); }
+  .prompt-text:not(.expanded)::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 32px;
+    background: linear-gradient(transparent, var(--bg)); pointer-events: none;
+  }
   .prompt-text.expanded { max-height: none; }
+  .prompt-text.expanded::after { display: none; }
+  .prompt-expand-toggle {
+    font-family: var(--font-hand); font-size: 14px; color: var(--orange);
+    cursor: pointer; display: inline-block; margin-top: 4px;
+  }
+  .prompt-expand-toggle:hover { text-decoration: underline; }
 
   .prompt-actions { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
   .copy-btn {
@@ -262,7 +271,8 @@ function renderPrompts(filter) {
     html += '<span class="prompt-cat">' + catLabel + '</span>';
     html += '<span class="prompt-agent" style="background:' + p.agentColor + ';color:var(--bg);">' + escapeHtml(p.agent) + '</span>';
     html += '</div></div>';
-    html += '<div class="prompt-text" id="pt-' + i + '" onclick="this.classList.toggle(\'expanded\')">' + escapeHtml(p.text) + '</div>';
+    html += '<div class="prompt-text" id="pt-' + i + '">' + escapeHtml(p.text) + '</div>';
+    html += '<span class="prompt-expand-toggle" onclick="var t=document.getElementById(\'pt-' + i + '\');t.classList.toggle(\'expanded\');this.textContent=t.classList.contains(\'expanded\')?\'Read less\':\'Read more\'">Read more</span>';
     html += '<div class="prompt-actions">';
     html += '<button class="copy-btn" onclick="copyPrompt(' + i + ', this)">Copy</button>';
     html += '<a class="use-btn" href="/agents.html" onclick="prefillPrompt(' + i + ')">Use in Situation Room</a>';
