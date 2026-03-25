@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 # DQ-408: Elite Card Says "7-Day Free Trial" But Doesn't Clarify Which Tier
 
-**Priority**: P2 (conversion friction)
+**Priority**: P1 (misleading pricing — conversion friction)
 **Category**: Copy Accuracy
 **Page**: pricing.html
 

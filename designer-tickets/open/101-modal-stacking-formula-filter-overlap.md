@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 # DQ-406: Modal Stacking Not Prevented (Formula + Filter Can Overlap)
 
-**Priority**: P2 (UX friction)
+**Priority**: P1 (UX friction — broken interaction)
 **Category**: Modal UX
 **Page**: lab.html (Screener)
 

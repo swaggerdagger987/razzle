@@ -1170,8 +1170,17 @@ function _syncUndoRedoButtons() {
     if (inp) inp.value = state.minGP;
   }
 
+  // Detect localStorage unavailability (private browsing, disabled)
+  var _lsAvailable = (function() { try { localStorage.setItem("_ls_test", "1"); localStorage.removeItem("_ls_test"); return true; } catch(e) { return false; } })();
+  if (!_lsAvailable) {
+    var banner = document.createElement("div");
+    banner.style.cssText = "background:var(--orange);color:#fff;text-align:center;padding:8px 16px;font-family:var(--font-mono);font-size:12px;position:sticky;top:0;z-index:200;";
+    banner.textContent = "private browsing detected \u2014 your filters and notes won\u2019t be saved between sessions";
+    document.body.prepend(banner);
+  }
+
   // First-visit hint: single onboarding toast (merged, works with URL params)
-  var hasVisited = (function() { try { return localStorage.getItem("razzle_lab_visited"); } catch(e) { return "1"; } })();
+  var hasVisited = (function() { try { return localStorage.getItem("razzle_lab_visited"); } catch(e) { return null; } })();
   if (!hasVisited) {
     try { localStorage.setItem("razzle_lab_visited", "1"); localStorage.setItem("razzle_shortcuts_shown", "1"); } catch(e) {}
     setTimeout(function() {

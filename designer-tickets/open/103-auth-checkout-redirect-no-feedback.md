@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 # DQ-409: Auth → Checkout Redirect Has No User Feedback
 
-**Priority**: P2 (conversion friction)
+**Priority**: P1 (conversion funnel breakage)
 **Category**: Conversion Path
 **Page**: pricing.html + app.js
 

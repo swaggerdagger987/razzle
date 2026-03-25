@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 # DQ-407: localStorage Failure Silently Loses All State (Privacy Mode)
 
-**Priority**: P2 (data loss for privacy users)
+**Priority**: P1 (data loss for privacy users)
 **Category**: State Persistence
 **Page**: lab.html (Screener)
 

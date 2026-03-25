@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 # DQ-405: Home Page Demo Briefing Creates False Paywall Expectations
 
-**Priority**: P1 (trust / conversion damage)
+**Priority**: P2 (trust / expectation management)
 **Category**: Copy Accuracy / Conversion
 **Page**: index.html (Home)
 
