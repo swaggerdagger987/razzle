@@ -641,12 +641,14 @@
       tab.classList.add('active');
       currentPosition = tab.getAttribute('data-pos') || '';
       var season = document.getElementById('season-select').value;
+      savePageState({ pos: currentPosition, season: season });
       loadData(season, currentPosition);
     });
   });
 
   // Season change handler
   document.getElementById('season-select').addEventListener('change', function() {
+    savePageState({ pos: currentPosition, season: this.value });
     loadData(this.value, currentPosition);
   });
 
@@ -679,8 +681,25 @@
   // Quick search (Ctrl+K)
   if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
 
+  // Restore URL state
+  var urlState = restorePageState({ pos: '', season: '' });
+  if (urlState.pos) {
+    currentPosition = urlState.pos;
+    document.querySelectorAll('.breakouts-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === urlState.pos);
+    });
+  }
+  if (urlState.season) {
+    var sel = document.getElementById('season-select');
+    var opt = document.createElement('option');
+    opt.value = urlState.season;
+    opt.textContent = urlState.season;
+    opt.selected = true;
+    sel.appendChild(opt);
+  }
+
   // Load
-  loadData();
+  loadData(urlState.season || '', urlState.pos || '');
 })();
 </script>
 </body>

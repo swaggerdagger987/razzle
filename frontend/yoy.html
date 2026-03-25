@@ -278,26 +278,7 @@
     padding: 60px 20px;
   }
 
-  /* Empty state */
-  .yoy-empty {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-
-  /* Error with retry */
-  .yoy-error {
-    text-align: center;
-    padding: 60px 20px;
-  }
-  .yoy-error-msg {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--red);
-    margin-bottom: 12px;
-  }
+  /* Empty state and error — use shared .panel-empty / .panel-error from styles.css */
 
   /* Season pair label */
   .yoy-pair-label {
@@ -469,6 +450,23 @@
   var currentPosition = '';
   var currentMetric = 'ppg';
 
+  // Restore URL state
+  var urlState = restorePageState({pos: '', metric: '', season: ''});
+  if (urlState.pos) currentPosition = urlState.pos;
+  if (urlState.metric) currentMetric = urlState.metric;
+
+  // Sync UI from URL state
+  if (currentPosition) {
+    document.querySelectorAll('.yoy-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === currentPosition);
+    });
+  }
+  if (urlState.metric) document.getElementById('metric-select').value = urlState.metric;
+
+  function _saveState() {
+    savePageState({ pos: currentPosition, metric: currentMetric, season: document.getElementById('season-select').value });
+  }
+
   function escapeHtml(str) {
     if (!str) return '';
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -577,17 +575,17 @@
   function render(data) {
     var body = document.getElementById('yoy-body');
     if (!data) {
-      body.innerHTML = '<div class="yoy-error"><div class="yoy-error-msg">couldn\'t load the data...</div><button class="btn-chunky" onclick="location.reload()">Retry</button></div>';
+      body.innerHTML = '<div class="panel-error">' + (typeof razzleError === 'function' ? razzleError() : 'something went wrong') + '<br><button onclick="location.reload()">retry</button></div>';
       return;
     }
 
     if (data.error) {
-      body.innerHTML = '<div class="yoy-empty">' + escapeHtml(data.error) + '</div>';
+      body.innerHTML = '<div class="panel-empty">' + escapeHtml(data.error) + '<span class="hint">try a different position or season</span></div>';
       return;
     }
 
     if ((!data.risers || !data.risers.length) && (!data.fallers || !data.fallers.length)) {
-      body.innerHTML = '<div class="yoy-empty">no year-over-year data for these filters</div>';
+      body.innerHTML = '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no data found') + '<span class="hint">try a different position or season</span></div>';
       return;
     }
 
@@ -652,6 +650,7 @@
       this.classList.add('active');
       currentPosition = this.getAttribute('data-pos') || '';
       loadData();
+      _saveState();
     });
   }
 
@@ -659,11 +658,13 @@
   document.getElementById('metric-select').addEventListener('change', function() {
     currentMetric = this.value || 'ppg';
     loadData();
+    _saveState();
   });
 
   // Season selector
   document.getElementById('season-select').addEventListener('change', function() {
     loadData();
+    _saveState();
   });
 
   // Export PNG
@@ -685,7 +686,15 @@
   // Analytics
   fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/yoy.html', referrer: document.referrer || '' }) }).catch(function(){});
 
-  // Initial load
+  // Initial load — pass restored season so first fetch uses it
+  if (urlState.season) {
+    var _ss = document.getElementById('season-select');
+    var _opt = document.createElement('option');
+    _opt.value = urlState.season;
+    _opt.textContent = urlState.season;
+    _opt.selected = true;
+    _ss.appendChild(_opt);
+  }
   loadData();
 })();
 </script>

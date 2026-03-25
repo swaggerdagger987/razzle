@@ -455,6 +455,7 @@
       sel.appendChild(opt);
     });
     sel.addEventListener('change', function() {
+      savePageState({ season: sel.value });
       loadData(parseInt(sel.value));
     });
   }
@@ -464,6 +465,10 @@
     if (!bodyEl) return;
 
     const positions = data.positions;
+    if (!positions || !Object.keys(positions).length) {
+      bodyEl.innerHTML = '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no data found') + '<span class="hint">try a different position or season</span></div>';
+      return;
+    }
     const ranking = data.scarcity_ranking || [];
 
     // Summary cards
@@ -579,8 +584,9 @@
   // Quick search (Ctrl+K)
   if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
 
-  // Load
-  loadData();
+  // Restore URL state + load
+  var restored = restorePageState({ season: '' });
+  loadData(restored.season ? parseInt(restored.season) : undefined);
 })();
 </script>
 </body>

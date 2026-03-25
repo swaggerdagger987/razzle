@@ -583,23 +583,34 @@
     });
   }
 
+  function saveTargetsState() {
+    savePageState({
+      mode: activeMode === 'targets' ? '' : activeMode,
+      team: document.getElementById('team-select').value,
+      season: document.getElementById('season-select').value
+    });
+  }
+
   // Mode tabs
   document.querySelectorAll('.targets-mode-tab').forEach(function(tab) {
     tab.addEventListener('click', function() {
       document.querySelectorAll('.targets-mode-tab').forEach(function(t) { t.classList.remove('active'); });
       tab.classList.add('active');
       activeMode = tab.getAttribute('data-mode');
+      saveTargetsState();
       if (currentData) renderDistribution(currentData);
     });
   });
 
   // Season selector
   document.getElementById('season-select').addEventListener('change', function() {
+    saveTargetsState();
     loadData();
   });
 
   // Team selector
   document.getElementById('team-select').addEventListener('change', function() {
+    saveTargetsState();
     loadData();
   });
 
@@ -622,6 +633,31 @@
 
   // Analytics
   fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/targets.html' }) }).catch(function() {});
+
+  // Restore URL state
+  var urlState = restorePageState({ mode: '', team: '', season: '' });
+  if (urlState.mode) {
+    activeMode = urlState.mode;
+    document.querySelectorAll('.targets-mode-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-mode') || '') === urlState.mode);
+    });
+  }
+  if (urlState.team) {
+    var teamSel = document.getElementById('team-select');
+    var opt = document.createElement('option');
+    opt.value = urlState.team;
+    opt.textContent = urlState.team;
+    opt.selected = true;
+    teamSel.appendChild(opt);
+  }
+  if (urlState.season) {
+    var seasonSel = document.getElementById('season-select');
+    var sopt = document.createElement('option');
+    sopt.value = urlState.season;
+    sopt.textContent = urlState.season;
+    sopt.selected = true;
+    seasonSel.appendChild(sopt);
+  }
 
   // Load on init
   loadData();

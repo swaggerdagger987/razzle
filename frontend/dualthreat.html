@@ -59,7 +59,7 @@
   .dt-split-rush { background: var(--green); }
   .dt-split-rec { background: var(--orange); }
   .dt-split-cell { width: 100px; }
-  .dt-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
+  /* .dt-empty removed — uses .panel-empty from styles.css */
 
   @media (max-width: 768px) {
     .dt-page { padding: 16px 12px 40px; }
@@ -208,10 +208,10 @@ function initSeasons() {
     opt.value = y; opt.textContent = y;
     sel.appendChild(opt);
   }
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("season")) sel.value = params.get("season");
-  if (params.get("position")) {
-    state.position = params.get("position").toUpperCase();
+  const _restored = restorePageState({ season: '', position: '' });
+  if (_restored.season) sel.value = _restored.season;
+  if (_restored.position) {
+    state.position = _restored.position.toUpperCase();
     document.querySelectorAll(".pos-tab").forEach(t => {
       t.classList.toggle("active", t.dataset.pos === state.position);
     });
@@ -221,11 +221,7 @@ function initSeasons() {
 }
 
 function updateURL() {
-  const params = new URLSearchParams();
-  if (state.season) params.set("season", state.season);
-  if (state.position) params.set("position", state.position);
-  const qs = params.toString();
-  history.replaceState(null, "", qs ? "?" + qs : window.location.pathname);
+  savePageState({ season: state.season || '', position: state.position });
 }
 
 document.querySelectorAll(".pos-tab").forEach(tab => {
@@ -249,7 +245,9 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("dt-loading").textContent = razzleError();
+    document.getElementById("dt-loading").style.display = "none";
+    document.getElementById("dt-content").style.display = "";
+    document.getElementById("dt-table-wrap").innerHTML = '<div class="panel-error">' + razzleError() + '<br><button class="btn-chunky" onclick="loadData()">retry</button></div>';
   }
 }
 
@@ -267,7 +265,7 @@ function render() {
   const wrap = document.getElementById("dt-table-wrap");
 
   if (players.length === 0) {
-    wrap.innerHTML = '<div class="dt-empty">no dual-threat players found for this filter</div>';
+    wrap.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
     return;
   }
 

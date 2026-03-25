@@ -498,7 +498,9 @@
     if (!btn) return;
     document.querySelectorAll(".rankings-filter-btn").forEach(function(b) { b.classList.remove("active"); });
     btn.classList.add("active");
-    loadRankings(btn.getAttribute("data-pos"));
+    var pos = btn.getAttribute("data-pos") || "";
+    savePageState({ pos: pos });
+    loadRankings(pos);
   });
 
   // ---- PNG Export ----
@@ -530,8 +532,16 @@
     });
   }
 
+  // ---- Restore URL state ----
+  var urlState = restorePageState({ pos: '' });
+  if (urlState.pos) {
+    document.querySelectorAll(".rankings-filter-btn").forEach(function(b) {
+      b.classList.toggle("active", (b.getAttribute("data-pos") || "") === urlState.pos);
+    });
+  }
+
   // ---- Initial load ----
-  loadRankings("");
+  loadRankings(urlState.pos || "");
 })();
 </script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>

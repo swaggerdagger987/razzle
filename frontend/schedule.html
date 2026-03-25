@@ -429,6 +429,21 @@
   var currentPosition = '';
   var currentData = null;
 
+  // Restore URL state
+  var urlState = restorePageState({pos: '', season: ''});
+  if (urlState.pos) currentPosition = urlState.pos;
+
+  // Sync UI from URL state
+  if (currentPosition) {
+    document.querySelectorAll('.sos-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === currentPosition);
+    });
+  }
+
+  function _saveState() {
+    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value });
+  }
+
   // Sort state per section
   var sortState = {
     schedule_suppressed: { col: 'sos_delta', dir: -1 },
@@ -667,11 +682,13 @@
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
     loadData();
+    _saveState();
   });
 
   // Season change
   document.getElementById('season-select').addEventListener('change', function() {
     loadData();
+    _saveState();
   });
 
   // Export PNG
@@ -698,7 +715,15 @@
     body: JSON.stringify({ page: '/schedule.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
-  // Initial load
+  // Initial load — pass restored season so first fetch uses it
+  if (urlState.season) {
+    var _ss = document.getElementById('season-select');
+    var _opt = document.createElement('option');
+    _opt.value = urlState.season;
+    _opt.textContent = urlState.season;
+    _opt.selected = true;
+    _ss.appendChild(_opt);
+  }
   loadData();
 })();
 </script>

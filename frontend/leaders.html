@@ -473,7 +473,7 @@
       renderCategories(data.categories || []);
     } catch (err) {
       state.loading = false;
-      content.innerHTML = '<div class="leaders-empty">' + razzleError() + '</div>';
+      content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
     }
   }
 
@@ -483,7 +483,7 @@
   // ---- Render category cards ----
   function renderCategories(categories) {
     if (!categories.length) {
-      content.innerHTML = '<div class="leaders-empty">no stat leaders found</div>';
+      content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       return;
     }
 
@@ -555,12 +555,14 @@
     this.querySelectorAll(".leaders-filter-btn").forEach(function(b) { b.classList.remove("active"); });
     btn.classList.add("active");
     state.position = btn.getAttribute("data-pos") || "";
+    savePageState({ season: state.season || '', position: state.position });
     loadLeaders();
   });
 
   // ---- Season selector ----
   seasonSelect.addEventListener("change", function() {
     state.season = parseInt(this.value, 10) || 0;
+    savePageState({ season: state.season || '', position: state.position });
     loadLeaders();
   });
 
@@ -585,6 +587,18 @@
       link.href = canvas.toDataURL("image/png");
       link.click();
     });
+  }
+
+  // ---- Restore URL state ----
+  var restored = restorePageState({ season: '', position: '' });
+  if (restored.position) {
+    state.position = restored.position;
+    document.querySelectorAll(".leaders-filter-btn").forEach(function(b) {
+      b.classList.toggle("active", (b.getAttribute("data-pos") || "") === state.position);
+    });
+  }
+  if (restored.season) {
+    state.season = parseInt(restored.season, 10) || 0;
   }
 
   // ---- Initial load ----

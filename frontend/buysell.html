@@ -724,12 +724,14 @@
       tab.classList.add('active');
       currentPosition = tab.getAttribute('data-pos') || '';
       var season = document.getElementById('season-select').value;
+      savePageState({ season: season, position: currentPosition });
       loadData(season, currentPosition);
     });
   });
 
   // Season change handler
   document.getElementById('season-select').addEventListener('change', function() {
+    savePageState({ season: this.value, position: currentPosition });
     loadData(this.value, currentPosition);
   });
 
@@ -762,8 +764,15 @@
   // Quick search (Ctrl+K)
   if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
 
-  // Load
-  loadData();
+  // Restore URL state + load
+  var restored = restorePageState({ season: '', position: '' });
+  if (restored.position) {
+    currentPosition = restored.position;
+    document.querySelectorAll('.buysell-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === currentPosition);
+    });
+  }
+  loadData(restored.season || undefined, currentPosition || undefined);
 })();
 </script>
 </body>

@@ -1,12 +1,13 @@
 <!-- PM: ready -->
 ---
 id: DQ-438
-priority: P3
+priority: P1
 area: frontend/lab.js
 section: data freshness / UX
 type: missing visual feedback
 status: open
 cycle: 56
+pm_note: bumped from P3 to P1 — stale data during game day causes wrong lineup decisions
 ---
 
 # Data freshness indicator has no visual warning for stale data (30+ minutes)

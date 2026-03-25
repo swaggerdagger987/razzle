@@ -471,6 +471,21 @@
   var currentPosition = '';
   var currentData = null;
 
+  // Restore URL state
+  var urlState = restorePageState({pos: '', season: ''});
+  if (urlState.pos) currentPosition = urlState.pos;
+
+  // Sync UI from URL state
+  if (currentPosition) {
+    document.querySelectorAll('.air-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === currentPosition);
+    });
+  }
+
+  function _saveState() {
+    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value });
+  }
+
   // Sort state per section
   var sortState = { buy_low: { col: 'regression_delta', dir: -1 }, sell_high: { col: 'regression_delta', dir: 1 } };
 
@@ -688,11 +703,13 @@
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
     loadData();
+    _saveState();
   });
 
   // Season select
   document.getElementById('season-select').addEventListener('change', function() {
     loadData();
+    _saveState();
   });
 
   // Export PNG
@@ -714,7 +731,15 @@
   // Analytics
   fetch('/api/analytics/pageview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ page: '/airyards.html', referrer: document.referrer || '' }) }).catch(function(){});
 
-  // Initial load
+  // Initial load — pass restored season so first fetch uses it
+  if (urlState.season) {
+    var _ss = document.getElementById('season-select');
+    var _opt = document.createElement('option');
+    _opt.value = urlState.season;
+    _opt.textContent = urlState.season;
+    _opt.selected = true;
+    _ss.appendChild(_opt);
+  }
   loadData();
 })();
 </script>

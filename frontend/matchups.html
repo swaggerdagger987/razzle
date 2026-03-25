@@ -737,6 +737,7 @@
       activePosition = this.getAttribute('data-pos');
       sortCol = null;
       sortAsc = true;
+      savePageState({ pos: activePosition === 'ALL' ? '' : activePosition, season: document.getElementById('season-select').value });
       loadData();
     });
   });
@@ -744,6 +745,7 @@
   // Season selector
   document.getElementById('season-select').addEventListener('change', function() {
     sortCol = null;
+    savePageState({ pos: activePosition === 'ALL' ? '' : activePosition, season: this.value });
     loadData();
   });
 
@@ -776,6 +778,23 @@
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ page: '/matchups.html', referrer: document.referrer || '' })
   }).catch(function() {});
+
+  // Restore URL state
+  var urlState = restorePageState({ pos: '', season: '' });
+  if (urlState.pos) {
+    activePosition = urlState.pos;
+    document.querySelectorAll('.matchups-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === urlState.pos);
+    });
+  }
+  if (urlState.season) {
+    var sel = document.getElementById('season-select');
+    var opt = document.createElement('option');
+    opt.value = urlState.season;
+    opt.textContent = urlState.season;
+    opt.selected = true;
+    sel.appendChild(opt);
+  }
 
   // Initial load
   loadData();

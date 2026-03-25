@@ -58,7 +58,7 @@
   .pa-adv-pos { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .pa-adv-neg { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .pa-bar { display: inline-block; height: 10px; border-radius: var(--radius-sm); vertical-align: middle; margin-left: 4px; }
-  .pa-empty { text-align: center; font-family: var(--font-hand); font-size: 15px; color: var(--ink-light); padding: 30px 16px; }
+  /* .pa-empty removed — uses .panel-empty from styles.css */
   @media (max-width: 768px) { .pa-table { font-size: 11px; } }
 </style>
 </head>
@@ -201,15 +201,10 @@
   var currentPosition = '';
 
   function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { season: p.get('season') || '', pos: p.get('pos') || '' };
+    return restorePageState({ season: '', pos: '' });
   }
   function writeURL(season, pos) {
-    var p = new URLSearchParams();
-    if (season) p.set('season', season);
-    if (pos) p.set('pos', pos);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+    savePageState({ season: season, pos: pos });
   }
 
   function load() {
@@ -233,7 +228,7 @@
       renderAvgs(data.pos_averages);
       render(data);
     }).catch(function() {
-      document.getElementById('paContent').innerHTML = razzleErrorHTML();
+      document.getElementById('paContent').innerHTML = '<div class="panel-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 
@@ -270,7 +265,7 @@
     var players = data.players || [];
 
     if (!players.length) {
-      document.getElementById('paContent').innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="pa-empty">' + razzleEmpty() + '</div></div>';
+      document.getElementById('paContent').innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div></div>';
       return;
     }
 

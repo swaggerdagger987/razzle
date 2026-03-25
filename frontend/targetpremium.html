@@ -57,7 +57,7 @@
   .tp-premium-low { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .tp-bar-cell { width: 80px; }
   .tp-bar { height: 12px; border-radius: var(--radius-sm); background: var(--green); min-width: 2px; }
-  .tp-empty { text-align: center; padding: 40px 16px; font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
+  /* .tp-empty removed — uses .panel-empty from styles.css */
 
   @media (max-width: 768px) {
     .tp-page { padding: 16px 12px 40px; }
@@ -205,24 +205,16 @@ function initSeasons() {
     opt.value = y; opt.textContent = y;
     sel.appendChild(opt);
   }
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("season")) sel.value = params.get("season");
-  if (params.get("position")) {
-    state.position = params.get("position").toUpperCase();
+  const restored = restorePageState({ season: '', position: '' });
+  if (restored.season) sel.value = restored.season;
+  if (restored.position) {
+    state.position = restored.position.toUpperCase();
     document.querySelectorAll(".pos-tab").forEach(t => {
       t.classList.toggle("active", t.dataset.pos === state.position);
     });
   }
   state.season = parseInt(sel.value, 10) || 0;
-  sel.addEventListener("change", () => { state.season = parseInt(sel.value, 10) || 0; updateURL(); loadData(); });
-}
-
-function updateURL() {
-  const params = new URLSearchParams();
-  if (state.season) params.set("season", state.season);
-  if (state.position) params.set("position", state.position);
-  const qs = params.toString();
-  history.replaceState(null, "", qs ? "?" + qs : window.location.pathname);
+  sel.addEventListener("change", () => { state.season = parseInt(sel.value, 10) || 0; savePageState({ season: state.season, position: state.position }); loadData(); });
 }
 
 document.querySelectorAll(".pos-tab").forEach(tab => {
@@ -230,7 +222,7 @@ document.querySelectorAll(".pos-tab").forEach(tab => {
     document.querySelectorAll(".pos-tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
     state.position = tab.dataset.pos;
-    updateURL();
+    savePageState({ season: state.season, position: state.position });
     loadData();
   });
 });
@@ -246,7 +238,9 @@ async function loadData() {
     state.data = await resp.json();
     render();
   } catch (e) {
-    document.getElementById("tp-loading").textContent = razzleError();
+    document.getElementById("tp-loading").style.display = "none";
+    document.getElementById("tp-content").style.display = "";
+    document.getElementById("tp-table-wrap").innerHTML = '<div class="panel-error">' + razzleError() + '<br><button class="btn-chunky" onclick="loadData()">retry</button></div>';
   }
 }
 
@@ -264,7 +258,7 @@ function render() {
   const wrap = document.getElementById("tp-table-wrap");
 
   if (players.length === 0) {
-    wrap.innerHTML = '<div class="tp-empty">no target premium data found for this filter</div>';
+    wrap.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
     return;
   }
 

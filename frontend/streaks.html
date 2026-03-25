@@ -350,19 +350,7 @@
   var currentPosition = '';
   var currentData = null;
 
-  /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { season: p.get('season') || '', pos: p.get('pos') || '', window: p.get('window') || '' };
-  }
-  function writeURL(season, pos, win) {
-    var p = new URLSearchParams();
-    if (season) p.set('season', season);
-    if (pos) p.set('pos', pos);
-    if (win && win !== '4') p.set('window', win);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
+  /* ---- URL state (uses shared helpers from app.js) ---- */
 
   /* ---- Fetch ---- */
   function load() {
@@ -371,7 +359,7 @@
     var season = selSeason.value || '';
     var win = selWindow.value || '4';
     var pos = currentPosition;
-    writeURL(season, pos, win);
+    savePageState({ season: season, pos: pos, window: win });
 
     var url = '/api/streaks?window=' + encodeURIComponent(win);
     if (season) url += '&season=' + encodeURIComponent(season);
@@ -387,7 +375,7 @@
       populateSeasons(data.season);
       render(data);
     }).catch(function() {
-      document.getElementById('strContent').innerHTML = '<div class="str-loading">something went sideways. Razzle knocked the data cable loose. try refreshing</div>';
+      document.getElementById('strContent').innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
     });
   }
 
@@ -420,7 +408,7 @@
     if (hot.length) {
       html += renderTable(hot, 'hot');
     } else {
-      html += '<div class="str-empty">no hot streaks found</div>';
+      html += '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
     }
     html += '</div>';
 
@@ -430,7 +418,7 @@
     if (cold.length) {
       html += renderTable(cold, 'cold');
     } else {
-      html += '<div class="str-empty">no cold streaks found</div>';
+      html += '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
     }
     html += '</div>';
 
@@ -510,7 +498,7 @@
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
-  var init = readURL();
+  var init = restorePageState({ season: '', pos: '', window: '' });
   if (init.pos) {
     currentPosition = init.pos;
     document.querySelectorAll('.pos-tab').forEach(function(b) {

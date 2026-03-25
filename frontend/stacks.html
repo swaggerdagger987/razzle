@@ -298,17 +298,7 @@
     TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
   };
 
-  /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { season: p.get('season') || '' };
-  }
-  function writeURL(season) {
-    var p = new URLSearchParams();
-    if (season) p.set('season', season);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
+  /* ---- URL state (uses shared helpers from app.js) ---- */
 
   function corrClass(c) {
     if (c >= 0.6) return 'sk-corr-high';
@@ -321,7 +311,7 @@
   function load() {
     var selSeason = document.getElementById('skSeason');
     var season = selSeason.value || '';
-    writeURL(season);
+    savePageState({ season: season });
 
     var url = '/api/stacks';
     if (season) url += '?season=' + encodeURIComponent(season);
@@ -335,7 +325,7 @@
       populateSeasons(data.season);
       render(data);
     }).catch(function() {
-      document.getElementById('skContent').innerHTML = '<div class="sk-loading">interception on that request. retry?</div>';
+      document.getElementById('skContent').innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
     });
   }
 
@@ -360,7 +350,7 @@
     var stacks = data.stacks || [];
 
     if (!stacks.length) {
-      document.getElementById('skContent').innerHTML = '<div class="sk-card"><div class="sk-card-header">Stack Finder</div><div class="sk-empty">no correlation data found</div></div>';
+      document.getElementById('skContent').innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different season</span></div>';
       return;
     }
 
@@ -419,7 +409,7 @@
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
-  var init = readURL();
+  var init = restorePageState({ season: '' });
   if (init.season) {
     var sel = document.getElementById('skSeason');
     var opt = document.createElement('option');

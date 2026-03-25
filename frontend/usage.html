@@ -434,6 +434,23 @@
   var currentPosition = '';
   var currentWindow = 5;
 
+  // Restore URL state
+  var urlState = restorePageState({pos: '', window: '', season: ''});
+  if (urlState.pos) currentPosition = urlState.pos;
+  if (urlState.window) currentWindow = parseInt(urlState.window) || 5;
+
+  // Sync UI from URL state
+  if (currentPosition) {
+    document.querySelectorAll('.usage-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === currentPosition);
+    });
+  }
+  if (urlState.window) document.getElementById('window-select').value = urlState.window;
+
+  function _saveState() {
+    savePageState({ pos: currentPosition, window: String(currentWindow), season: document.getElementById('season-select').value });
+  }
+
   function drawSparkline(canvas, weeks, trend) {
     var ctx = canvas.getContext('2d');
     var w = canvas.width;
@@ -626,6 +643,7 @@
       currentPosition = tab.getAttribute('data-pos') || '';
       var season = document.getElementById('season-select').value;
       loadData(season, currentPosition, currentWindow);
+      _saveState();
     });
   });
 
@@ -634,11 +652,13 @@
     currentWindow = parseInt(this.value) || 5;
     var season = document.getElementById('season-select').value;
     loadData(season, currentPosition, currentWindow);
+    _saveState();
   });
 
   // Season change handler
   document.getElementById('season-select').addEventListener('change', function() {
     loadData(this.value, currentPosition, currentWindow);
+    _saveState();
   });
 
   // Export PNG
@@ -669,7 +689,7 @@
   if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
 
   // Load
-  loadData();
+  loadData(urlState.season || '', currentPosition, currentWindow);
 })();
 </script>
 </body>

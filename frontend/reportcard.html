@@ -280,24 +280,15 @@
     white-space: nowrap;
   }
 
-  /* Loading / Empty / Error */
-  .rc-loading, .rc-empty {
+  /* Loading */
+  .rc-loading {
     text-align: center;
     padding: 60px 20px;
     font-family: var(--font-hand);
     font-size: 22px;
     color: var(--ink-light);
   }
-  .rc-error {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--red);
-  }
-  .rc-error button {
-    margin-top: 12px;
-  }
+  /* Empty / Error — use shared .panel-empty / .panel-error from styles.css */
 
   /* Responsive */
   @media (max-width: 768px) {
@@ -587,7 +578,7 @@
   function buildTable(players, section) {
     if (!players || !players.length) {
       var label = section === 'honor_roll' ? 'honor roll players' : 'players needing improvement';
-      return '<div class="rc-empty">no ' + label + ' found for this filter</div>';
+      return '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no ' + label + ' found') + '<span class="hint">try a different position or season</span></div>';
     }
 
     var isHonor = section === 'honor_roll';
@@ -623,7 +614,7 @@
     var body = document.getElementById('rc-body');
 
     if (!data || (!(data.honor_roll || []).length && !(data.needs_improvement || []).length)) {
-      body.innerHTML = '<div class="rc-empty">no report card data found for this selection</div>';
+      body.innerHTML = '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no data found') + '<span class="hint">try a different position or season</span></div>';
       return;
     }
 
@@ -682,7 +673,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="rc-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="panel-error">' + (typeof razzleError === 'function' ? razzleError() : 'something went wrong') + '<br><button onclick="location.reload()">retry</button></div>';
     });
   }
 
@@ -694,11 +685,13 @@
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
     var season = document.getElementById('season-select').value;
+    savePageState({ pos: currentPosition, season: season });
     fetchData(currentPosition, season);
   });
 
   // Season select
   document.getElementById('season-select').addEventListener('change', function() {
+    savePageState({ pos: currentPosition, season: this.value });
     fetchData(currentPosition, this.value);
   });
 
@@ -726,8 +719,25 @@
     body: JSON.stringify({ page: '/reportcard.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
+  // Restore URL state
+  var _restored = restorePageState({ pos: '', season: '' });
+  if (_restored.pos) {
+    currentPosition = _restored.pos;
+    document.querySelectorAll('.rc-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === _restored.pos);
+    });
+  }
+  if (_restored.season) {
+    var _sel = document.getElementById('season-select');
+    var _opt = document.createElement('option');
+    _opt.value = _restored.season;
+    _opt.textContent = _restored.season;
+    _opt.selected = true;
+    _sel.appendChild(_opt);
+  }
+
   // Initial load
-  fetchData('', '');
+  fetchData(currentPosition, _restored.season);
 })();
 </script>
 </body>

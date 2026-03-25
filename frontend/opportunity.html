@@ -262,24 +262,15 @@
     white-space: nowrap;
   }
 
-  /* Loading / Empty / Error */
-  .opp-loading, .opp-empty {
+  /* Loading */
+  .opp-loading {
     text-align: center;
     padding: 60px 20px;
     font-family: var(--font-hand);
     font-size: 22px;
     color: var(--ink-light);
   }
-  .opp-error {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--red);
-  }
-  .opp-error button {
-    margin-top: 12px;
-  }
+  /* Empty / Error — use shared .panel-empty / .panel-error from styles.css */
 
   /* Responsive */
   @media (max-width: 768px) {
@@ -581,7 +572,7 @@
   function buildTable(players, section) {
     if (!players || !players.length) {
       var label = section === 'alpha_dogs' ? 'alpha dogs' : 'dominator leaders';
-      return '<div class="opp-empty">no ' + label + ' found for this filter</div>';
+      return '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no ' + label + ' found') + '<span class="hint">try a different position or season</span></div>';
     }
 
     var isAlpha = section === 'alpha_dogs';
@@ -617,7 +608,7 @@
     var body = document.getElementById('opp-body');
 
     if (!data || (!(data.alpha_dogs || []).length && !(data.dominators || []).length)) {
-      body.innerHTML = '<div class="opp-empty">no opportunity share data found for this selection</div>';
+      body.innerHTML = '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no data found') + '<span class="hint">try a different position or season</span></div>';
       return;
     }
 
@@ -677,7 +668,7 @@
       }
       render(data);
     }).catch(function(err) {
-      body.innerHTML = '<div class="opp-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+      body.innerHTML = '<div class="panel-error">' + (typeof razzleError === 'function' ? razzleError() : 'something went wrong') + '<br><button onclick="location.reload()">retry</button></div>';
     });
   }
 
@@ -688,11 +679,13 @@
     document.querySelectorAll('.opp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
+    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value });
     loadData();
   });
 
   // Season change
   document.getElementById('season-select').addEventListener('change', function() {
+    savePageState({ pos: currentPosition, season: this.value });
     loadData();
   });
 
@@ -719,6 +712,23 @@
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ page: '/opportunity.html', referrer: document.referrer || '' })
   }).catch(function() {});
+
+  // Restore URL state
+  var _restored = restorePageState({ pos: '', season: '' });
+  if (_restored.pos) {
+    currentPosition = _restored.pos;
+    document.querySelectorAll('.opp-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === _restored.pos);
+    });
+  }
+  if (_restored.season) {
+    var _sel = document.getElementById('season-select');
+    var _opt = document.createElement('option');
+    _opt.value = _restored.season;
+    _opt.textContent = _restored.season;
+    _opt.selected = true;
+    _sel.appendChild(_opt);
+  }
 
   // Initial load
   loadData();
