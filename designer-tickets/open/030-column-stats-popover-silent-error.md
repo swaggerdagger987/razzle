@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 # DQ-402: Column Stats Popover Fails Silently on API Error
 
 **Priority**: P1 (broken UX)

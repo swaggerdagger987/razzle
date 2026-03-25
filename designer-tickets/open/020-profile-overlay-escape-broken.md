@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 # DQ-401: Player Profile Overlay Not Closable with Escape Key
 
 **Priority**: P0 (broken)

@@ -1619,7 +1619,7 @@ tr:hover .notes-cell .note-pencil {
   font-size: 18px;
   padding: 10px 24px;
   border-radius: var(--radius-sm);
-  z-index: 9999;
+  z-index: 10001;
   opacity: 0;
   transition: opacity 0.3s, transform 0.3s;
   pointer-events: none;
