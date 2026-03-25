@@ -1,5 +1,10 @@
 /* Razzle — Formula Builder */
 
+window.addEventListener('beforeunload', function(e) {
+  var overlay = document.getElementById('formulaOverlay');
+  if (overlay && overlay.classList.contains('open')) { e.preventDefault(); }
+});
+
 function openFormulaBuilder() {
   document.querySelectorAll('.filter-modal-overlay.open').forEach(function(el) { el.classList.remove('open'); });
   document.getElementById("formulaOverlay").classList.add("open");
