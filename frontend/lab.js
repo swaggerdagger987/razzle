@@ -10509,6 +10509,12 @@ document.addEventListener("keydown", function(e) {
       e.preventDefault();
       return;
     }
+    var profileOv = document.getElementById("profileOverlay");
+    if (profileOv && profileOv.classList.contains("open")) {
+      profileOv.classList.remove("open");
+      e.preventDefault();
+      return;
+    }
     if (isAnyOverlayOpen()) {
       closeAllOverlays();
       e.preventDefault();
