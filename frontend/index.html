@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#ede0cf">
 <title>Razzle — Fantasy Football Research Lab</title>
 <meta property="og:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
-<meta property="og:description" content="Free fantasy football research lab. 100+ stat columns, custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
+<meta property="og:description" content="Free fantasy football research lab. 150+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://razzle.lol/">
@@ -15,10 +15,10 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
-<meta name="twitter:description" content="Free fantasy football research lab. 100+ stat columns, custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
+<meta name="twitter:description" content="Free fantasy football research lab. 150+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
 <meta name="twitter:image:alt" content="Razzle — Free Fantasy Football Research Lab">
-<meta name="description" content="Razzle is a free fantasy football research lab. 100+ stat columns, custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
+<meta name="description" content="Razzle is a free fantasy football research lab. 150+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <link rel="canonical" href="https://razzle.lol/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -365,11 +365,13 @@
     text-decoration: none;
     transition: all 0.15s;
   }
+  .smart-chip:nth-child(odd) { transform: rotate(-1deg); }
+  .smart-chip:nth-child(even) { transform: rotate(1deg); }
   .smart-chip:hover {
     background: var(--orange);
     color: var(--text-on-accent);
-    transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0 var(--ink);
+    transform: translate(-2px, -2px) rotate(0deg);
+    box-shadow: 5px 5px 0 var(--ink);
   }
 
   /* ===== MINI SCREENER ===== */
@@ -496,6 +498,14 @@
     flex: 1;
   }
 
+  .pricing-card--free {
+    border-color: var(--rb);
+    position: relative;
+  }
+  .pricing-badge--free {
+    background: var(--rb);
+    color: var(--text-on-accent);
+  }
   .pricing-card--highlight {
     border-color: var(--orange);
     position: relative;
@@ -642,7 +652,7 @@
 <div class="hero">
   <div class="hero-mascot">🐯</div>
   <h1>The fantasy football research lab. <span>Forever free.</span></h1>
-  <div class="hero-sub">100+ stat columns. Custom formulas. Shareable views. No account required. No catch.</div>
+  <div class="hero-sub">150+ stat columns. Custom formulas. Shareable views. No account required. No catch.</div>
   <div class="hero-cta">
     <a href="/lab.html" class="btn-hero btn-hero-primary">Open the Screener</a>
     <a href="#features" class="btn-hero btn-hero-secondary">See what's inside</a>
@@ -691,7 +701,7 @@
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-top:24px; text-align:left;">
     <div class="feature-card">
       <div class="feature-card-icon">📊</div>
-      <div class="feature-card-title">100+ Stat Columns</div>
+      <div class="feature-card-title">150+ Stat Columns</div>
       <div class="feature-card-desc">NFL, college, and prospect data. 10 seasons deep. Every metric that matters.</div>
     </div>
     <div class="feature-card">
@@ -732,7 +742,7 @@
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:20px; text-align:left;">
     <div class="social-card">
       <div class="social-card-context">The Screener</div>
-      <div class="social-card-text">100+ stat columns. Custom formulas. Every filter you've ever wished for. Forever free.</div>
+      <div class="social-card-text">150+ stat columns. Custom formulas. Every filter you've ever wished for. Forever free.</div>
     </div>
     <div class="social-card">
       <div class="social-card-context">Share to Win</div>
@@ -762,6 +772,19 @@
   <h2>Six AI agents that <span>already know your league.</span></h2>
   <p>Personalized briefings. Trade strategies. Championship probability. All contextualized to your roster and your rivals.</p>
 
+  <div style="background:var(--bg-ink); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:16px; margin-bottom:16px; text-align:center;">
+    <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Situation Room — Live Preview</div>
+    <div style="display:flex; gap:16px; justify-content:center; align-items:center; flex-wrap:wrap;">
+      <span style="font-size:28px;">🐯</span>
+      <span style="font-size:28px;">🦊</span>
+      <span style="font-size:28px;">🐬</span>
+      <span style="font-size:28px;">🦅</span>
+      <span style="font-size:28px;">🐙</span>
+      <span style="font-size:28px;">🐘</span>
+    </div>
+    <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); margin-top:8px; margin-bottom:0;">your analysts are already working</p>
+  </div>
+
   <div class="briefing-example">
     <div class="demo-card">
       <div class="agent-name">🐯 Razzle <span class="urgency urgency-urgent">urgent</span></div>
@@ -788,13 +811,14 @@
 
   <div class="pricing-cols">
     <!-- FREE -->
-    <div class="pricing-card">
+    <div class="pricing-card pricing-card--free">
+      <div class="pricing-badge pricing-badge--free">forever free</div>
       <div class="pricing-name">Free</div>
       <div class="pricing-price">$0</div>
       <div class="pricing-note">no card, no catch</div>
       <ul class="pricing-list">
         <li>Full Screener (NFL + College + Prospects)</li>
-        <li>100+ stat columns, 10 seasons of data</li>
+        <li>150+ stat columns across NFL, college, and prospects</li>
         <li>Custom formulas</li>
         <li>Charts, heat maps, PNG export</li>
         <li>Shareable URLs</li>

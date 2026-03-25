@@ -23,9 +23,11 @@ var _p2Data = null;
   var ids = getIdsFromURL();
   if (!ids || ids.length < 2) {
     document.getElementById("comparePage").innerHTML =
-      '<div class="compare-loading">' +
-      '<div class="compare-loading-text">need two player IDs to compare</div>' +
-      '<a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>' +
+      '<div class="compare-loading" style="max-width:480px;margin:60px auto;text-align:center;">' +
+      '<div style="font-size:48px;margin-bottom:12px;">🐯</div>' +
+      '<div style="font-family:var(--font-display);font-size:22px;margin-bottom:8px;">Pick two players first, boss.</div>' +
+      '<div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);margin-bottom:20px;">Select two players in the Lab and click Compare, or paste a compare URL.</div>' +
+      '<a href="/lab.html" class="btn-chunky" style="display:inline-block;text-decoration:none;">Back to the Lab</a>' +
       '</div>';
     return;
   }

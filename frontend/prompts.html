@@ -34,11 +34,16 @@
   .prompt-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; justify-content: center; }
   .prompt-filter {
     font-family: var(--font-mono); font-size: 11px; padding: 6px 14px;
-    border: 2px solid var(--ink); border-radius: 20px; cursor: pointer;
-    background: transparent; color: var(--ink); transition: all 0.15s;
+    border: 3px solid var(--ink); border-radius: 20px; cursor: pointer;
+    background: var(--bg-card); color: var(--ink); transition: all 0.15s;
+    box-shadow: 3px 3px 0 var(--ink);
   }
-  .prompt-filter:hover, .prompt-filter.active {
-    background: var(--orange); color: var(--bg); border-color: var(--orange);
+  .prompt-filter:hover {
+    transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink);
+  }
+  .prompt-filter.active {
+    background: var(--orange); color: var(--text-on-accent); border-color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
   }
 
   .prompt-grid { display: grid; gap: 16px; }

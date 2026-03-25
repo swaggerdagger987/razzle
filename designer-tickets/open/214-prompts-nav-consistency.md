@@ -29,16 +29,15 @@ This creates two problems: (1) inconsistent navigation across pages, and (2) the
 Snapshot of prompts.html nav: `Home | Screener | League Intel | AI Agents | Prompts | Pricing`
 Snapshot of index.html nav: `Home | Screener | League Intel | AI Agents | Pricing`
 
-## Suggested fix
+## PM decision: Option B (remove from prompts.html)
 
-Pick one:
+**File**: `frontend/prompts.html`
 
-**Option A (add everywhere):** Add "Prompts" to the nav on all 75 pages, between "AI Agents" and "Pricing". This makes the page discoverable but adds a 6th nav item.
+Remove the "Prompts" nav link from the `<nav>` element in prompts.html so it matches every other page. One file, one deletion.
 
-**Option B (remove from prompts.html):** Remove the "Prompts" nav link from prompts.html so all pages match. Prompts remains discoverable via the footer.
+Rationale: Option A touches 75 files for a non-critical nav link. Option C requires building a dropdown component that doesn't exist. Option B is a 1-line fix that restores consistency. Prompts remains discoverable via the footer.
 
-**Option C (nest under AI Agents):** Make "Prompts" a sub-link under "AI Agents" in a dropdown, since prompts are agent-related content.
+## Accept when
 
-## Why this matters
-
-Inconsistent navigation breaks user expectations. A page that only exists in its own nav feels like an orphan.
+- prompts.html nav matches index.html nav exactly (Home | Screener | League Intel | AI Agents | Pricing)
+- No other files changed

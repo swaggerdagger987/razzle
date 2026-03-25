@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 ---
 id: DES-347
-priority: P2
+priority: P1
 area: home page, about page, meta tags
 section: marketing claims
 type: content accuracy

@@ -1,6 +1,7 @@
+<!-- PM: ready -->
 ---
 id: DES-348
-priority: P2
+priority: P1
 area: lab.html
 section: first-time user experience
 type: ux / copy

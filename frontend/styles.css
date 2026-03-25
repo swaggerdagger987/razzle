@@ -841,6 +841,17 @@ a.btn-pro-upgrade:focus-visible {
 .chip.active[data-pos="TE"] { background: var(--pos-te); }
 .chip.active[data-pos="ALL"] { background: var(--ink); color: var(--bg); }
 
+/* ===== CARD RANK HIERARCHY — visual weight for top results ===== */
+.card-hero {
+  border-width: 3px;
+  box-shadow: 5px 5px 0 var(--ink);
+  padding: 20px;
+}
+.card-spotlight {
+  border-width: 2px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
 /* ===== POSITION STRIPE — 4px colored top border on player cards ===== */
 .pos-stripe-qb { border-top: 4px solid var(--pos-qb) !important; }
 .pos-stripe-rb { border-top: 4px solid var(--pos-rb) !important; }
