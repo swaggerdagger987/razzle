@@ -3905,7 +3905,7 @@ function saveStateToURL() {
 
   const qs = params.toString();
   const newURL = window.location.pathname + (qs ? "?" + qs : "");
-  history.replaceState(null, "", newURL);
+  history.pushState(null, "", newURL);
 
   // Auto-save key state to localStorage for restore on next visit
   try {
@@ -4202,6 +4202,12 @@ function loadStateFromURL() {
 
   renderActiveFilters();
 }
+
+// ─── Popstate: restore state on browser back/forward ──────────────
+window.addEventListener('popstate', function() {
+  loadStateFromURL();
+  fetchAndRender();
+});
 
 function openShareModal() {
   saveStateToURL();
