@@ -331,7 +331,7 @@
       populateSeasons(data.season);
       render(data);
     }).catch(function() {
-      document.getElementById('mvContent').innerHTML = '<div class="mv-loading">fumbled the data fetch... try again in a sec</div>';
+      document.getElementById('mvContent').innerHTML = razzleErrorHTML();
     });
   }
 

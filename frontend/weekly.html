@@ -462,7 +462,7 @@
         renderHeatmap(data);
       })
       .catch(function() {
-        document.getElementById('weekly-body').innerHTML = '<div class="weekly-loading">fumbled the data... <button class="btn-chunky" onclick="location.reload()" style="margin-left:12px">retry</button></div>';
+        document.getElementById('weekly-body').innerHTML = razzleErrorHTML('location.reload()');
       });
   }
 

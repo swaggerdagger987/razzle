@@ -233,7 +233,7 @@
       renderAvgs(data.pos_averages);
       render(data);
     }).catch(function() {
-      document.getElementById('paContent').innerHTML = '<div class="pa-loading">fumbled the data fetch... try again in a sec</div>';
+      document.getElementById('paContent').innerHTML = razzleErrorHTML();
     });
   }
 

@@ -459,7 +459,7 @@
         renderDistribution(data);
       })
       .catch(function() {
-        document.getElementById('targets-body').innerHTML = '<div class="targets-loading">fumbled the data... <button class="btn-chunky" onclick="location.reload()" style="margin-left:12px">retry</button></div>';
+        document.getElementById('targets-body').innerHTML = razzleErrorHTML('location.reload()');
       });
   }
 
