@@ -43,7 +43,7 @@ const C = {
   turf1:       '#1e5c28',
   turf2:       '#267832',
   turf3:       '#1a4c22',
-  turfLine:    '#e8e8e8',
+  turfLine:    '#c4b5a5',
   deskTop:     '#5c3a1a',
   deskFront:   '#4a2e14',
   deskLeg:     '#3c2410',
@@ -52,37 +52,37 @@ const C = {
   screenBg:    '#0c200c',
   tableDark:   '#3c2410',
   tableTop:    '#5a3818',
-  tvFrame:     '#222222',
+  tvFrame:     '#2d1f14',
   tvScreen:    '#0a1e3a',
   tvGlow:      '#3388cc',
-  boardBg:     '#1a1a1a',
-  boardFrame:  '#444444',
+  boardBg:     '#1a110a',
+  boardFrame:  '#3d2e22',
   shelfWood:   '#6a4a28',
   shelfBook1:  '#cc3030',
   shelfBook2:  '#3060cc',
   shelfBook3:  '#30aa50',
   plantPot:    '#8a5a30',
   plantLeaf:   '#2a8c3a',
-  coffeeMach:  '#444444',
-  coffeeAccent:'#888888',
+  coffeeMach:  '#3d2e22',
+  coffeeAccent:'#8a7565',
   trophy:      '#d4aa40',
-  trophyBase:  '#666666',
+  trophyBase:  '#5c4a3d',
   clockFace:   '#e8e0cc',
-  clockFrame:  '#444444',
+  clockFrame:  '#3d2e22',
   helmetBase:  '#1a2844',
   helmetStripe:'#d97757', // Razzle terracotta
-  phone:       '#222222',
+  phone:       '#2d1f14',
   phoneRed:    '#cc2222',
   whiteboard:  '#e8e4d8',
-  wbFrame:     '#aaaaaa',
-  chairSeat:   '#3a3a3a',
-  chairBack:   '#2a2a2a',
+  wbFrame:     '#c4b5a5',
+  chairSeat:   '#3d2e22',
+  chairBack:   '#2d1f14',
   bannerBg:    '#d97757', // Razzle terracotta
   bannerText:  '#2d1f14',
   nameTag:     'rgba(0,0,0,0.7)',
-  nameText:    '#ffffff',
-  bubbleBg:    '#ffffff',
-  bubbleBorder:'#333333',
+  nameText:    '#f7efe5',
+  bubbleBg:    '#f7efe5',
+  bubbleBorder:'#2d1f14',
 };
 
 // ── CANVAS SETUP ───────────────────────────────────────────────────────
@@ -415,16 +415,16 @@ function drawDesk(f) {
     px(mx + 3, my + 3 + line * 3, lw, 2, C.monitorGlow);
   }
   if (cursorOn) px(mx + 14, my + 9, 2, 2, C.monitorGlow);
-  px(mx + 8, my + 14, 4, 3, '#333');
-  px(x + w / 2 - 8, y + 20, 16, 4, '#333');
-  px(x + w / 2 - 7, y + 21, 14, 2, '#555');
+  px(mx + 8, my + 14, 4, 3, '#2d1f14');
+  px(x + w / 2 - 8, y + 20, 16, 4, '#2d1f14');
+  px(x + w / 2 - 7, y + 21, 14, 2, '#5c4a3d');
 }
 
 function drawPixelFootball(x, y) {
   ctx.fillStyle = '#8B4513';
   ctx.fillRect(x, y + 1, 8, 4);
   ctx.fillRect(x + 1, y, 6, 6);
-  ctx.fillStyle = '#fff';
+  ctx.fillStyle = '#f7efe5';
   ctx.fillRect(x + 3, y + 1, 1, 4);
   ctx.fillRect(x + 2, y + 2, 3, 1);
 }
@@ -453,8 +453,8 @@ function drawWarTable(f) {
   ctx.textBaseline = 'alphabetic';
   // Papers
   px(x + 14, y + 12, 12, 8, '#e8e0cc');
-  px(x + 15, y + 13, 8, 1, '#666');
-  px(x + 15, y + 15, 6, 1, '#666');
+  px(x + 15, y + 13, 8, 1, '#5c4a3d');
+  px(x + 15, y + 15, 6, 1, '#5c4a3d');
   px(x + w - 30, y + h - 22, 10, 7, '#ddd8c8');
   drawPixelFootball(x + w - 45, y + 14);
 }
@@ -464,19 +464,19 @@ function drawCoffee(f) {
   drawPixelRect(x + 4, y + 4, 24, 28, C.coffeeMach, C.coffeeAccent);
   px(x + 8, y + 8, 16, 8, '#1a3a1a');
   px(x + 9, y + 9, 4, 2, '#33cc33');
-  px(x + 10, y + 20, 12, 8, '#333');
+  px(x + 10, y + 20, 12, 8, '#2d1f14');
   px(x + 13, y + 22, 6, 5, '#e8e0cc');
   px(x + 12, y + 22, 8, 1, '#d0c8b0');
   const t = now();
   const steamPhase = Math.floor(t / 300) % 4;
   ctx.globalAlpha = 0.4;
-  px(x + 14 + (steamPhase % 2), y + 18 - steamPhase, 2, 2, '#ccc');
-  px(x + 16 - (steamPhase % 2), y + 16 - steamPhase, 2, 2, '#ccc');
+  px(x + 14 + (steamPhase % 2), y + 18 - steamPhase, 2, 2, '#c4b5a5');
+  px(x + 16 - (steamPhase % 2), y + 16 - steamPhase, 2, 2, '#c4b5a5');
   ctx.globalAlpha = 1;
   px(x + 30, y + 26, 6, 5, '#e8e0cc');
   const steam2 = Math.floor(t / 400) % 3;
   ctx.globalAlpha = 0.3;
-  px(x + 31 + steam2 % 2, y + 22 - steam2, 2, 2, '#ddd');
+  px(x + 31 + steam2 % 2, y + 22 - steam2, 2, 2, '#c4b5a5');
   ctx.globalAlpha = 1;
 }
 
@@ -518,7 +518,7 @@ function drawClock(f) {
   const t = now();
   const sec = (t / 1000) % 60;
   const min = (t / 60000) % 60;
-  ctx.strokeStyle = '#333';
+  ctx.strokeStyle = '#2d1f14';
   ctx.lineWidth = 2;
   const mAngle = (min / 60) * Math.PI * 2 - Math.PI / 2;
   ctx.beginPath(); ctx.moveTo(x, y);
@@ -531,7 +531,7 @@ function drawClock(f) {
   ctx.lineTo(x + Math.cos(sAngle) * 9, y + Math.sin(sAngle) * 9);
   ctx.stroke();
   ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2);
-  ctx.fillStyle = '#333'; ctx.fill();
+  ctx.fillStyle = '#2d1f14'; ctx.fill();
 }
 
 function drawBanner(f) {
@@ -569,7 +569,7 @@ function drawTrophyCase(f) {
   const sparkle = Math.floor(t / 400) % 6;
   if (sparkle < 2) {
     ctx.globalAlpha = 0.7;
-    px(tx + sparkle * 3, ty - 1, 2, 2, '#fff');
+    px(tx + sparkle * 3, ty - 1, 2, 2, '#f7efe5');
     ctx.globalAlpha = 1;
   }
 }
@@ -583,7 +583,7 @@ function drawHelmet(f) {
   ctx.fill();
   ctx.fillStyle = C.helmetStripe;
   ctx.fillRect(x + 6, y - 1, 4, 16);
-  ctx.fillStyle = '#888';
+  ctx.fillStyle = '#8a7565';
   ctx.fillRect(x + 14, y + 6, 4, 2);
   ctx.fillRect(x + 14, y + 10, 4, 2);
 }
@@ -613,10 +613,10 @@ function drawWhiteboard(f) {
     ctx.beginPath(); ctx.moveTo(bx + dx - 3, by + dy - 3); ctx.lineTo(bx + dx + 3, by + dy + 3); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(bx + dx + 3, by + dy - 3); ctx.lineTo(bx + dx - 3, by + dy + 3); ctx.stroke();
   }
-  px(x + w / 2 - 20, y + h - 6, 40, 4, '#aaa');
+  px(x + w / 2 - 20, y + h - 6, 40, 4, '#c4b5a5');
   px(x + w / 2 - 15, y + h - 8, 6, 4, '#d97757');
   px(x + w / 2 - 5, y + h - 8, 6, 4, '#5b7fff');
-  px(x + w / 2 + 5, y + h - 8, 6, 4, '#333');
+  px(x + w / 2 + 5, y + h - 8, 6, 4, '#2d1f14');
 }
 
 function drawChair(f) {
@@ -631,24 +631,24 @@ function drawChair(f) {
 function drawPhone(f) {
   const x = f.x * TILE + 4, y = f.y * TILE + 4;
   px(x + 2, y + 8, 20, 14, C.phone);
-  px(x + 4, y + 4, 16, 6, '#333');
-  px(x + 3, y + 2, 6, 6, '#111');
-  px(x + 13, y + 2, 6, 6, '#111');
-  px(x + 5, y + 1, 12, 3, '#111');
+  px(x + 4, y + 4, 16, 6, '#2d1f14');
+  px(x + 3, y + 2, 6, 6, '#2d1f14');
+  px(x + 13, y + 2, 6, 6, '#2d1f14');
+  px(x + 5, y + 1, 12, 3, '#2d1f14');
   const t = now();
   const blink = Math.floor(t / 800) % 2;
   px(x + 10, y + 14, 4, 3, blink ? C.phoneRed : '#881111');
-  px(x + 22, y + 14, 4, 2, '#333');
+  px(x + 22, y + 14, 4, 2, '#2d1f14');
 }
 
 function drawCabinet(f) {
   const x = f.x * TILE, y = f.y * TILE;
   const h = (f.h || 1) * TILE;
-  drawPixelRect(x + 4, y + 2, TILE - 8, h - 4, '#555', '#444');
+  drawPixelRect(x + 4, y + 2, TILE - 8, h - 4, '#5c4a3d', '#3d2e22');
   for (let i = 0; i < Math.floor(h / TILE); i++) {
     const dy = y + 4 + i * TILE;
-    px(x + 6, dy + 10, TILE - 12, 1, '#333');
-    px(x + TILE / 2 - 2, dy + 8, 4, 2, '#888');
+    px(x + 6, dy + 10, TILE - 12, 1, '#2d1f14');
+    px(x + TILE / 2 - 2, dy + 8, 4, 2, '#8a7565');
   }
 }
 
@@ -690,7 +690,7 @@ function spawnParticle(x, y, type) {
     size: 2 + Math.random() * 2,
     color: type === 'confetti'
       ? ['#d97757','#5b7fff','#2ec4b6','#ffc857','#8b5cf6'][Math.floor(Math.random()*5)]
-      : type === 'dust' ? '#a09070' : '#ddd',
+      : type === 'dust' ? '#a09070' : '#c4b5a5',
   });
 }
 
@@ -1036,8 +1036,8 @@ class Agent {
       case 'typing':
         for (let i = 0; i < 3; i++) {
           const dotOn = (phase + i) % 4 !== 3;
-          if (dotOn) px(x + 6 + i * 6, y + 8, 4, 4, '#333');
-          else px(x + 6 + i * 6, y + 9, 4, 3, '#999');
+          if (dotOn) px(x + 6 + i * 6, y + 8, 4, 4, '#2d1f14');
+          else px(x + 6 + i * 6, y + 9, 4, 3, '#8a7565');
         }
         break;
       case 'think': {
@@ -1045,7 +1045,7 @@ class Agent {
         ctx.beginPath();
         ctx.arc(x + bubW / 2, y + 8, 5, 0, Math.PI * 2);
         ctx.fill();
-        px(x + bubW / 2 - 1, y + 13, 3, 3, '#888');
+        px(x + bubW / 2 - 1, y + 13, 3, 3, '#8a7565');
         if (phase < 2) {
           ctx.globalAlpha = 0.5;
           for (let a = 0; a < 4; a++) {
@@ -1059,7 +1059,7 @@ class Agent {
       case 'discuss':
         for (let i = 0; i < 3; i++) {
           const lw = 8 + ((phase + i) % 3) * 4;
-          px(x + 4, y + 4 + i * 5, Math.min(lw, bubW - 8), 2, '#555');
+          px(x + 4, y + 4 + i * 5, Math.min(lw, bubW - 8), 2, '#5c4a3d');
         }
         break;
       case 'coffee': {
@@ -1067,8 +1067,8 @@ class Agent {
         px(x + 9, y + 7, 8, 6, '#4a2e14');
         const s = phase;
         ctx.globalAlpha = 0.5;
-        px(x + 10 + (s % 2), y + 2 + s, 2, 2, '#ccc');
-        px(x + 14 - (s % 2), y + 3 + (s + 1) % 3, 2, 2, '#ccc');
+        px(x + 10 + (s % 2), y + 2 + s, 2, 2, '#c4b5a5');
+        px(x + 14 - (s % 2), y + 3 + (s + 1) % 3, 2, 2, '#c4b5a5');
         ctx.globalAlpha = 1;
         break;
       }
@@ -1248,7 +1248,7 @@ function drawHUD() {
       ctx.strokeRect(hudX + 0.5, cy + 0.5, tw - 1, chipH - 1);
     }
 
-    let dotColor = '#666';
+    let dotColor = '#5c4a3d';
     if (a.state === STATE.WALK) dotColor = '#33cc55';
     else if (a.state === STATE.WORK_DESK || a.state === STATE.ANALYZE_BOARD) dotColor = '#3388cc';
     else if (a.state === STATE.THINK) dotColor = '#ccaa33';
@@ -1257,7 +1257,7 @@ function drawHUD() {
     else if (a.state === STATE.COFFEE) dotColor = '#8B6914';
     px(hudX + 3, cy + chipH / 2 - 2, 4, 4, dotColor);
 
-    ctx.fillStyle = a.selected ? a.color : '#ccc';
+    ctx.fillStyle = a.selected ? a.color : '#c4b5a5';
     ctx.globalAlpha = 1;
     ctx.fillText(label, hudX + 10, cy + 13);
   }
@@ -1325,7 +1325,7 @@ const STATE_LABELS = {
 };
 
 const STATE_COLORS = {
-  [STATE.IDLE]: '#666',
+  [STATE.IDLE]: '#5c4a3d',
   [STATE.WALK]: '#33cc55',
   [STATE.WORK_DESK]: '#3388cc',
   [STATE.ANALYZE_BOARD]: '#3388cc',
@@ -1371,7 +1371,7 @@ function buildRoster() {
       <div class="roster-name" style="color:${a.color}">${a.name}</div>
       <div class="roster-role">${a.role}</div>
       <div class="roster-status">
-        <span class="roster-dot" style="background:${STATE_COLORS[a.state] || '#666'}"></span>
+        <span class="roster-dot" style="background:${STATE_COLORS[a.state] || '#5c4a3d'}"></span>
         ${STATE_LABELS[a.state] || 'idle'}
       </div>
     `;
@@ -1402,7 +1402,7 @@ function updateRosterStatus() {
     const statusEl = row.querySelector('.roster-status');
     if (statusEl) {
       const dot = statusEl.querySelector('.roster-dot');
-      if (dot) dot.style.background = STATE_COLORS[a.state] || '#666';
+      if (dot) dot.style.background = STATE_COLORS[a.state] || '#5c4a3d';
       statusEl.lastChild.textContent = ' ' + (STATE_LABELS[a.state] || 'idle');
     }
   });
