@@ -6712,10 +6712,13 @@ function renderProfile(data, container) {
   }
 }
 
+let _dynastyAbort = null;
 function loadDynastySparkline(playerId, container) {
+  if (_dynastyAbort) _dynastyAbort.abort();
+  _dynastyAbort = new AbortController();
   const el = container.querySelector('#profile-dynasty-sparkline');
   if (!el) return;
-  fetch(`/api/dynasty-history?players=${encodeURIComponent(playerId)}`)
+  fetch(`/api/dynasty-history?players=${encodeURIComponent(playerId)}`, { signal: _dynastyAbort.signal })
     .then(r => r.ok ? r.json() : null)
     .then(data => {
       if (!data || !data.players || !data.players.length) return;
@@ -6767,7 +6770,7 @@ function loadDynastySparkline(playerId, container) {
       sparkHtml += '</div></div>';
       el.innerHTML = sparkHtml;
     })
-    .catch(() => {});
+    .catch(err => { if (err.name !== 'AbortError') console.warn('dynasty sparkline:', err.message); });
 }
 
 function getHeadlineStats(pos, career) {
