@@ -1603,7 +1603,7 @@ async def priority_data_refresh(request: Request):
     sleeper_username = user.get("sleeper_username")
     if not sleeper_username:
         return JSONResponse(
-            {"error": "No Sleeper username linked. Connect your account in League Intel first."},
+            {"error": "No Sleeper username linked. Connect your account in the Bureau first."},
             status_code=400,
         )
     # Return the username so the client can trigger a fresh Sleeper API pull
