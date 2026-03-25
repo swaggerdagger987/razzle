@@ -165,7 +165,7 @@
         }
         renderTiers(data.tiers || [], content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -187,7 +187,7 @@
         state.historyData = data;
         renderHistory(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -204,7 +204,7 @@
       html += '</div>';
 
       if (!players.length || !seasons.length) {
-        html += '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        html += '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         content.innerHTML = html;
         setupCompareSearch(content);
         return;
@@ -347,7 +347,7 @@
 
     function renderTiers(tiers, content) {
       if (!tiers.length) {
-        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var html = '';
@@ -385,7 +385,7 @@
         html += '</div></div>';
       }
       if (!html) {
-        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       content.innerHTML = html;
@@ -502,7 +502,7 @@
         el.querySelector('#lp-tl-meta').textContent = data.season + ' season \u00b7 ' + data.total_players + ' players';
         renderTiers(data.tiers || [], tiersEl);
       }).catch(function(err) {
-        tiersEl.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        tiersEl.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -532,7 +532,7 @@
         html += '</div></div>';
       });
       if (searchQuery && !anyVisible) {
-        container.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        container.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       container.innerHTML = html;
@@ -700,7 +700,7 @@
       var players = filterBySearch(reweighted);
 
       if (!players.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -758,7 +758,7 @@
         }
         render(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -908,7 +908,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
 
       var isW = section === 'league_winners';
       var title = isW ? 'League Winners' : 'Replacement Level';
@@ -989,7 +989,7 @@
       var replacements = filterBySearch(data.replacement_level || []);
 
       if (!winners.length && !replacements.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -1036,7 +1036,7 @@
         }
         renderVorp(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -1108,7 +1108,7 @@
         renderAvgs(data.pos_averages);
         renderPA(data);
       }).catch(function() {
-        el.querySelector('#lp-pa-content').innerHTML = '<div class="lp-error">the tape machine jammed — give it another shot</div>';
+        el.querySelector('#lp-pa-content').innerHTML = '<div class="panel-error">the tape machine jammed — give it another shot<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -1127,7 +1127,7 @@
       var players = data.players || [];
       var content = el.querySelector('#lp-pa-content');
       if (!players.length) {
-        content.innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="lp-empty">' + razzleEmpty() + '</div></div>';
+        content.innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="panel-empty">' + razzleEmpty() + '</div></div>';
         return;
       }
       var html = '<div class="pa-card">';
@@ -1248,7 +1248,7 @@
         renderSummary();
         renderTable();
       }).catch(function() {
-        tableEl.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        tableEl.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -1280,7 +1280,7 @@
         return state.sortDir * (bv - av);
       });
 
-      if (!players.length) { tableEl.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+      if (!players.length) { tableEl.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
       var html = '<table class="av-table"><thead><tr>';
       var cols = [
@@ -1380,7 +1380,7 @@
         state.season = data.season;
         renderCS();
       }).catch(function() {
-        el.querySelector('#lp-cs-loading').textContent = razzleError();
+        el.querySelector('#lp-cs-loading').innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -1501,7 +1501,7 @@
           if (!isCollege) populateWeekSelect(el, 'bo-week', sel.value, loadBO);
         }
         var candidates = data.candidates || [];
-        if (!candidates.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+        if (!candidates.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var html = '<div class="breakouts-grid">';
         candidates.forEach(function(p) {
@@ -1552,7 +1552,7 @@
             var _pid = card.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#bo-pos-tabs').addEventListener('click', function(e) {
@@ -1663,7 +1663,7 @@
     }
 
     function renderColumn(players, isBuy) {
-      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       var h = '<div class="buysell-list">';
       players.forEach(function(p) { h += renderCard(p, isBuy); });
       h += '</div>';
@@ -1707,7 +1707,7 @@
             var _pid = card.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#bs-pos-tabs').addEventListener('click', function(e) {
@@ -1838,7 +1838,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       var isRising = section === 'rising';
       var icon = isRising ? '&#x1F4C8;' : '&#x1F4C9;';
       var title = isRising ? 'Rising Stocks' : 'Falling Stocks';
@@ -1867,7 +1867,7 @@
       currentData = data;
       var body = el.querySelector('#stk-body');
       if (!data || (!(data.rising && data.rising.length) && !(data.falling && data.falling.length))) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       body.innerHTML = buildTable(data.rising, 'rising') + buildTable(data.falling, 'falling');
@@ -1911,7 +1911,7 @@
           seasonsPopulated = true;
         }
         render(data);
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#stk-pos-tabs').addEventListener('click', function(e) {
@@ -1979,7 +1979,7 @@
         var targets = data.targets || [];
         var html = '<div class="ww-card"><div class="ww-card-header">Waiver Wire Targets (' + escapeHtml(String(data.count || 0)) + ')</div>';
         if (!targets.length) {
-          html += '<div class="lp-empty">' + razzleEmpty() + '</div></div>';
+          html += '<div class="panel-empty">' + razzleEmpty() + '</div></div>';
           body.innerHTML = html;
           return;
         }
@@ -2010,7 +2010,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#ww-pos-tabs').addEventListener('click', function(e) {
@@ -2132,7 +2132,7 @@
             var _pid = row.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#sc-season').addEventListener('change', loadSC);
@@ -2175,7 +2175,7 @@
 
         var hcs = data.handcuffs || [];
         if (!hcs.length) {
-          body.innerHTML = '<div class="hc-card"><div class="hc-card-header">Handcuff Rankings</div><div class="lp-empty">' + razzleEmpty() + '</div></div>';
+          body.innerHTML = '<div class="hc-card"><div class="hc-card-header">Handcuff Rankings</div><div class="panel-empty">' + razzleEmpty() + '</div></div>';
           return;
         }
 
@@ -2203,7 +2203,7 @@
 
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#hc-season').addEventListener('change', loadHC);
@@ -2331,7 +2331,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       var isEff = section === 'most_efficient';
       var title = isEff ? 'Most Efficient' : 'Volume Kings';
       var headerClass = isEff ? 'efficient' : 'volume';
@@ -2362,7 +2362,7 @@
       currentData = data;
       var body = el.querySelector('#eff-body');
       if (!data || (!(data.most_efficient || []).length && !(data.volume_kings || []).length)) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       body.innerHTML = buildTable(data.most_efficient || [], 'most_efficient') + buildTable(data.volume_kings || [], 'volume_kings');
@@ -2411,7 +2411,7 @@
           if (!isCollege) populateWeekSelect(el, 'eff-week', sel.value, loadEFF);
         }
         render(data);
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#eff-pos-tabs').addEventListener('click', function(e) {
@@ -2546,7 +2546,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       var isSolid = section === 'rock_solid';
       var title = isSolid ? 'Rock Solid' : 'Wild Cards';
       var headerClass = isSolid ? 'solid' : 'wild';
@@ -2576,7 +2576,7 @@
       currentData = data;
       var body = el.querySelector('#con-body');
       if (!data || (!(data.rock_solid || []).length && !(data.wild_cards || []).length)) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       body.innerHTML = buildTable(data.rock_solid || [], 'rock_solid') + buildTable(data.wild_cards || [], 'wild_cards');
@@ -2625,7 +2625,7 @@
           if (!isCollege) populateWeekSelect(el, 'con-week', sel.value, loadCON);
         }
         render(data);
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#con-pos-tabs').addEventListener('click', function(e) {
@@ -2705,11 +2705,11 @@
           seasonsPopulated = true;
         }
         if (!isCollege && data.has_snap_data === false) {
-          body.innerHTML = '<div class="lp-empty">snap data not available for ' + escapeHtml(String(data.season)) + ' — snap counts require NFL tracking data which may not be available for all seasons</div>';
+          body.innerHTML = '<div class="panel-empty">snap data not available for ' + escapeHtml(String(data.season)) + ' — snap counts require NFL tracking data which may not be available for all seasons</div>';
           return;
         }
         var players = data.players || [];
-        if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+        if (!players.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var ptsLabel = isCollege ? 'Pts/Tch' : 'Pts/Snap';
         var volLabel = isCollege ? 'Tch/G' : 'Snaps/G';
@@ -2739,7 +2739,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#se-pos-tabs').addEventListener('click', function(e) {
@@ -2810,7 +2810,7 @@
           seasonsPopulated = true;
         }
         var players = data.players || [];
-        if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+        if (!players.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var maxWL = Math.max.apply(null, players.map(function(p) { return p.workload || 0; }).concat([1]));
         var showSnaps = !isCollege;
@@ -2845,7 +2845,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#wl-pos-tabs').addEventListener('click', function(e) {
@@ -2917,7 +2917,7 @@
           seasonsPopulated = true;
         }
         var players = data.players || [];
-        if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+        if (!players.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var html = '<div class="dt-card"><div class="dt-card-header">Dual-Threat Rankings</div>';
         html += '<table class="dt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
@@ -2942,7 +2942,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#dt-pos-tabs').addEventListener('click', function(e) {
@@ -3013,7 +3013,7 @@
           populateWeekSelect(el, 'tp-week', sel.value, loadTP);
         }
         var players = data.players || [];
-        if (!players.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+        if (!players.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var html = '<div class="tp-card"><div class="tp-card-header">Target Quality Rankings</div>';
         html += '<table class="tp-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
@@ -3036,7 +3036,7 @@
         }
         html += '</tbody></table></div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#tp-pos-tabs').addEventListener('click', function(e) {
@@ -3088,7 +3088,7 @@
     }
 
     function renderDropTable(players, type) {
-      if (!players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       var maxDrops = Math.max.apply(null, players.map(function(p) { return p.drops || 0; }).concat([1]));
       var barCls = type === 'sure' ? 'dr-bar-good' : 'dr-bar-bad';
       var isGood = type === 'sure';
@@ -3143,14 +3143,14 @@
         }
         var sure = data.sure_hands || [];
         var butter = data.butterfingers || [];
-        if (!sure.length && !butter.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+        if (!sure.length && !butter.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var html = '<div class="dr-grid">';
         html += '<div class="dr-card"><div class="dr-card-header sure">Sure Hands</div>' + renderDropTable(sure, 'sure') + '</div>';
         html += '<div class="dr-card"><div class="dr-card-header butter">Butterfingers</div>' + renderDropTable(butter, 'butter') + '</div>';
         html += '</div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#dr-pos-tabs').addEventListener('click', function(e) {
@@ -3198,7 +3198,7 @@
 
     function buildGTCard(title, cls, players, isPadders) {
       if (!players.length) {
-        return '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div><div class="lp-empty">' + razzleEmpty() + '</div></div>';
+        return '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div><div class="panel-empty">' + razzleEmpty() + '</div></div>';
       }
       var maxVal = Math.max.apply(null, players.map(function(p) { return (isPadders ? p.garbage_time_pct : p.ppg) || 0; }).concat([1]));
       var html = '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div>';
@@ -3249,14 +3249,14 @@
         }
         var padders = data.stat_padders || [];
         var clean = data.clean_producers || [];
-        if (!padders.length && !clean.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+        if (!padders.length && !clean.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var html = '<div class="gt-sections">';
         html += buildGTCard('Stat Padders — High Garbage Time %', 'padders', padders, true);
         html += buildGTCard('Clean Producers — Low Garbage Time %', 'clean', clean, false);
         html += '</div>';
         body.innerHTML = html;
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#gt-pos-tabs').addEventListener('click', function(e) {
@@ -3352,14 +3352,14 @@
         }
         renderWH(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderWH(data) {
       var body = el.querySelector('#wh-body');
       if (!data.players || !data.players.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -3548,14 +3548,14 @@
         }
         renderMH(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderMH(data) {
       var body = el.querySelector('#mh-body');
       if (!data.teams || !data.teams.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -3735,7 +3735,7 @@
         }
         renderSK(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -3975,7 +3975,7 @@
         }
         renderRZ(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -4053,7 +4053,7 @@
         }
         renderSTR(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -4203,14 +4203,14 @@
         updateWeekUI();
         renderWKL(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderWKL(data) {
       var body = el.querySelector('#wkl-body');
       var leaders = data.leaders || [];
-      if (!leaders.length) { body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+      if (!leaders.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
       var sorted = leaders.slice().sort(function(a, b) {
         var va = a[sortState.col], vb = b[sortState.col];
@@ -4351,7 +4351,7 @@
         }
         renderMV(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -4447,7 +4447,7 @@
         }
         renderPO(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -4557,7 +4557,7 @@
       }).then(function(data) {
         renderUT(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -4595,7 +4595,7 @@
       var risers = data.risers || [];
       var fallers = data.fallers || [];
       if (!risers.length && !fallers.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var html = '';
@@ -4738,7 +4738,7 @@
       }).then(function(data) {
         renderYY(data, body, isCollege);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -4746,7 +4746,7 @@
       var risers = data.risers || [];
       var fallers = data.fallers || [];
       if (!risers.length && !fallers.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var label = isCollege ? 'YPG' : (metricLabels[curMetric] || curMetric);
@@ -4867,7 +4867,7 @@
       }).then(function(data) {
         renderAG(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -4875,7 +4875,7 @@
       var curve = data.curve || [];
       var peak = data.peak || {};
       if (!curve.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var html = '<div class="ag-chart-wrap"><canvas id="ag-canvas" width="600" height="350" role="img" aria-label="Aging curve trend line chart"></canvas></div>';
@@ -5045,14 +5045,14 @@
       }).then(function(data) {
         renderPT(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderPT(data, body) {
       var players = data.players || [];
       if (!players.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var html = '<div class="pt-grid">';
@@ -5132,14 +5132,14 @@
       }).then(function(data) {
         renderSPC(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderSPC(data, body) {
       var players = data.players || [];
       if (!players.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var eliteMilestones = ['5000 pass yd', '40 pass TD', '1500 rush yd', '1500 rec yd',
@@ -5220,7 +5220,7 @@
       }).then(function(data) {
         renderTDR(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -5229,7 +5229,7 @@
       var sellHigh = data.negative_regression || [];
       var rates = data.pos_avg_td_rates || {};
       if (!buyLow.length && !sellHigh.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -5354,7 +5354,7 @@
       }).then(function(data) {
         renderAY(data, body);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -5372,7 +5372,7 @@
       var buyLow = data.buy_low || [];
       var sellHigh = data.sell_high || [];
       if (!buyLow.length && !sellHigh.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -5575,7 +5575,7 @@
         '<div class="lp-header"><h2>Career Stats Timeline</h2>' +
         '<div class="lp-subtitle">a player\'s full career arc</div></div>' +
         '<div class="lp-controls">' + searchWrapHTML('cst-', 'search player...') + '</div>' +
-        '<div id="cst-content"><div class="lp-empty">search for a player to view career stats</div></div>' +
+        '<div id="cst-content"><div class="panel-empty">search for a player to view career stats</div></div>' +
       '</div>';
 
     buildPlayerSearch(el, 'cst-', 'search player...', function(p) {
@@ -5591,7 +5591,7 @@
       }).then(function(data) {
         renderCareer(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -5752,7 +5752,7 @@
         '<div class="lp-subtitle">overlay career arcs for up to 3 players</div></div>' +
         '<div class="lp-controls">' + searchWrapHTML('ccp-', 'add player (max 3)...') + '</div>' +
         '<div id="ccp-chips" class="ccp-chips"></div>' +
-        '<div id="ccp-content"><div class="lp-empty">search and add players to compare careers</div></div>' +
+        '<div id="ccp-content"><div class="panel-empty">search and add players to compare careers</div></div>' +
       '</div>';
 
     buildPlayerSearch(el, 'ccp-', 'add player...', function(p) {
@@ -5791,14 +5791,14 @@
         entry.data = data;
         renderComparison();
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderComparison() {
       var content = el.querySelector('#ccp-content');
       var loaded = players.filter(function(p) { return p.data; });
-      if (!loaded.length) { content.innerHTML = '<div class="lp-empty">search and add players to compare careers</div>'; return; }
+      if (!loaded.length) { content.innerHTML = '<div class="panel-empty">search and add players to compare careers</div>'; return; }
 
       var html = '<div class="ccp-chart-card"><canvas id="ccp-canvas" width="700" height="280" role="img" aria-label="Career comparison trend line chart"></canvas></div>';
 
@@ -5966,7 +5966,7 @@
           '<button class="btn-primary" id="cmt-compare-btn">Compare</button>' +
         '</div>' +
         '<div id="cmt-chips" class="cmt-chips"></div>' +
-        '<div id="cmt-content"><div class="lp-empty">add 2-8 players then click Compare</div></div>' +
+        '<div id="cmt-content"><div class="panel-empty">add 2-8 players then click Compare</div></div>' +
       '</div>';
 
     buildPlayerSearch(el, 'cmt-', 'add player...', function(p) {
@@ -5997,7 +5997,7 @@
     el.querySelector('#cmt-compare-btn').addEventListener('click', function() { loadCompare(); });
 
     function loadCompare() {
-      if (selectedPlayers.length < 2) { el.querySelector('#cmt-content').innerHTML = '<div class="lp-empty">add at least 2 players</div>'; return; }
+      if (selectedPlayers.length < 2) { el.querySelector('#cmt-content').innerHTML = '<div class="panel-empty">add at least 2 players</div>'; return; }
       var ids = selectedPlayers.map(function(p) { return p.player_id; }).join(',');
       var content = el.querySelector('#cmt-content');
       content.innerHTML = '<div class="lp-loading">' + razzleLoading() + '</div>';
@@ -6007,12 +6007,12 @@
       }).then(function(data) {
         renderTable(data.players || data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderTable(data, content) {
-      if (!data || !data.length) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+      if (!data || !data.length) { content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
       // Sort
       data.sort(function(a, b) {
         var va = a[sortCol], vb = b[sortCol];
@@ -6086,7 +6086,7 @@
           searchWrapHTML('sw2-', 'search player...') +
           '<select class="lp-select" id="sw2-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="sw2-content"><div class="lp-empty">search for a player to see their profile</div></div>' +
+        '<div id="sw2-content"><div class="panel-empty">search for a player to see their profile</div></div>' +
       '</div>';
 
     buildPlayerSearch(el, 'sw2-', 'search player...', function(p) {
@@ -6120,7 +6120,7 @@
       }).then(function(data) {
         renderStrengths(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -6240,7 +6240,7 @@
         lastData = data;
         renderCards(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -6381,12 +6381,12 @@
       }).then(function(data) {
         renderBreakdown(data.players || data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderBreakdown(players, content) {
-      if (!players || !players.length) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+      if (!players || !players.length) { content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
       // Legend
       var html = '<div class="fpb-legend">';
@@ -6460,7 +6460,7 @@
           searchWrapHTML('glo-', 'search player...') +
           '<select class="lp-select" id="glo-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="glo-content"><div class="lp-empty">search for a player to view game log</div></div>' +
+        '<div id="glo-content"><div class="panel-empty">search for a player to view game log</div></div>' +
       '</div>';
 
     buildPlayerSearch(el, 'glo-', 'search player...', function(p) {
@@ -6486,7 +6486,7 @@
       }).then(function(data) {
         renderGameLog(data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -6632,12 +6632,12 @@
       }).then(function(data) {
         renderArchetypes(data.archetypes || data, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderArchetypes(archetypes, content) {
-      if (!archetypes || !archetypes.length) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+      if (!archetypes || !archetypes.length) { content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
       var html = '<div class="arc-grid">';
       archetypes.forEach(function(arch) {
         var archPlayers = arch.players || [];
@@ -6694,7 +6694,7 @@
           searchWrapHTML('pbd-', 'search player...') +
           '<select class="lp-select" id="pbd-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="pbd-content"><div class="lp-empty">search for a player to see scoring breakdown</div></div>' +
+        '<div id="pbd-content"><div class="panel-empty">search for a player to see scoring breakdown</div></div>' +
       '</div>';
 
     buildPlayerSearch(el, 'pbd-', 'search player...', function(p) {
@@ -6713,7 +6713,7 @@
       }).then(function(data) {
         renderBreakdown(data, playerInfo, content);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -6948,14 +6948,14 @@
         }
         renderAwards(data, isCollege);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderAwards(data, isCollege) {
       var content = el.querySelector('.aw2-content');
       if (!data || !data.awards || !data.awards.length) {
-        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var html = '<div class="aw2-grid">';
@@ -7097,7 +7097,7 @@
         scHtml += '</div>';
         el.querySelector('.db2-scarcity').innerHTML = scHtml;
       }).catch(function() {
-        el.querySelector('.db2-grid').innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        el.querySelector('.db2-grid').innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -7170,7 +7170,7 @@
         state.year = d.draft_year;
         renderData(d);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -7438,7 +7438,7 @@
         }
         drawChart(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -7446,7 +7446,7 @@
       var body = el.querySelector('.exp-body');
       var players = data.players || [];
       if (!players.length) {
-        body.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -7672,14 +7672,14 @@
         }
         renderCategories(data.categories || [], isCollege);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderCategories(categories, isCollege) {
       var content = el.querySelector('.ld2-content');
       if (!categories.length) {
-        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var html = '<div class="ld2-grid">';
@@ -7839,7 +7839,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       var isAlpha = section === 'alpha_dogs';
       var icon = isAlpha ? '&#x1F43A;' : '&#x1F451;';
       var title = isAlpha ? 'Alpha Dogs' : 'Dominator Rating Leaders';
@@ -7856,7 +7856,7 @@
       currentData = data;
       var content = el.querySelector('.opp2-content');
       if (!data || (!(data.alpha_dogs && data.alpha_dogs.length) && !(data.dominators && data.dominators.length))) {
-        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var html = buildTable(data.alpha_dogs, 'alpha_dogs') + buildTable(data.dominators, 'dominators');
@@ -7902,7 +7902,7 @@
         }
         render(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -7942,7 +7942,7 @@
           searchWrapHTML('pct2-', 'search a player...') +
           '<select class="lp-select pct2-season" style="display:none">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div class="pct2-result"><div class="lp-empty">search for a player to see their percentile rankings</div></div>' +
+        '<div class="pct2-result"><div class="panel-empty">search for a player to see their percentile rankings</div></div>' +
       '</div>';
 
     buildPlayerSearch(el, 'pct2-', 'search a player...', function(selected) {
@@ -7962,7 +7962,7 @@
         return r.json();
       }).then(function(data) {
         if (data.error) {
-          result.innerHTML = '<div class="lp-empty">' + escapeHtml(data.error) + '</div>';
+          result.innerHTML = '<div class="panel-empty">' + escapeHtml(data.error) + '</div>';
           return;
         }
         if (data.available_seasons) {
@@ -7974,19 +7974,19 @@
         }
         renderPercentiles(data);
       }).catch(function() {
-        result.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        result.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
     function renderPercentiles(data) {
       var p = data.player;
-      if (!p) { el.querySelector('.pct2-result').innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+      if (!p) { el.querySelector('.pct2-result').innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
       var pos = p.position || 'WR';
       var pcts = data.percentiles || [];
       var result = el.querySelector('.pct2-result');
 
       if (!pcts.length) {
-        result.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        result.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -8089,7 +8089,7 @@
         state.data = data;
         renderBoard(data.prospects || []);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -8112,7 +8112,7 @@
 
     function renderBoard(prospects) {
       var content = el.querySelector('.bb-content');
-      if (!prospects.length) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+      if (!prospects.length) { content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
       var tiers = groupByTier(prospects);
       var html = '';
@@ -8243,7 +8243,7 @@
         }
         render(data, isCollege);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">the tape machine jammed — give it another shot</div>';
+        content.innerHTML = '<div class="panel-error">the tape machine jammed — give it another shot<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -8379,7 +8379,7 @@
         if (!r.ok) throw new Error('API error');
         return r.json();
       }).then(function(data) { render(data, isCollege); }).catch(function() {
-        content.innerHTML = '<div class="lp-error">the tape machine jammed — give it another shot</div>';
+        content.innerHTML = '<div class="panel-error">the tape machine jammed — give it another shot<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -8778,7 +8778,7 @@
     }
 
     function buildTable(players, section) {
-      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       var isSuppressed = section === 'schedule_suppressed';
       var title = isSuppressed ? '&#x1F6E1; Schedule Suppressed' : '&#x1F36D; Schedule Inflated';
       var st = sortState[section];
@@ -8794,7 +8794,7 @@
       currentData = data;
       var content = el.querySelector('.sos2-content');
       if (!data || (!(data.schedule_suppressed && data.schedule_suppressed.length) && !(data.schedule_inflated && data.schedule_inflated.length))) {
-        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
       var html = buildTable(data.schedule_suppressed, 'schedule_suppressed') + buildTable(data.schedule_inflated, 'schedule_inflated');
@@ -8837,7 +8837,7 @@
         }
         render(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -8870,7 +8870,7 @@
       '</div>';
 
     function buildTable(players) {
-      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       var html = '<table class="sc2-table"><thead><tr>';
       html += '<th>Pos</th><th>Player</th><th>Team</th>';
       html += '<th>PPR PPG</th><th>Half PPG</th><th>Std PPG</th>';
@@ -8916,7 +8916,7 @@
         state.season = data.season;
         render(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -8987,7 +8987,7 @@
         state.data = data;
         render(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -8995,7 +8995,7 @@
       var content = el.querySelector('.sr2-content');
       var players = data.players || [];
       if (!players.length) {
-        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -9105,7 +9105,7 @@
         if (td2SeasonSel && td2SeasonSel.value) populateWeekSelect(el, 'td2-week', td2SeasonSel.value, load);
         renderDistribution(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + (typeof razzleError === 'function' ? razzleError() : 'fumbled the data...') + '</div>';
+        content.innerHTML = '<div class="panel-error">' + (typeof razzleError === 'function' ? razzleError() : 'fumbled the data...') + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -9128,7 +9128,7 @@
     function renderDistribution(data) {
       var content = el.querySelector('.td2-content');
       if (!data.teams || !data.teams.length) {
-        content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>';
+        content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
         return;
       }
 
@@ -9278,7 +9278,7 @@
         }
         renderGroups(data.groups || {});
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -9286,7 +9286,7 @@
       var content = el.querySelector('.tm-content');
       var totalPlayers = 0;
       for (var k in groups) totalPlayers += (groups[k] || []).length;
-      if (!totalPlayers) { content.innerHTML = '<div class="lp-empty">' + razzleEmpty() + '</div>'; return; }
+      if (!totalPlayers) { content.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
       var html = '<div class="tm-groups">';
       for (var g = 0; g < GROUP_ORDER.length; g++) {
@@ -9356,7 +9356,7 @@
           searchWrapHTML('tf2-', 'search a player...') +
           '<select class="lp-select tf2-season"></select>' +
         '</div>' +
-        '<div class="tf2-body"><div class="lp-empty">search for a player to find trade targets</div></div>' +
+        '<div class="tf2-body"><div class="panel-empty">search for a player to find trade targets</div></div>' +
       '</div>';
 
     buildPlayerSearch(el, 'tf2-', 'search a player...', function(selected) {
@@ -9387,7 +9387,7 @@
         return r.json();
       }).then(function(data) {
         if (data.error) {
-          body.innerHTML = '<div class="lp-error">' + escapeHtml(data.message || data.error) + '</div>';
+          body.innerHTML = '<div class="panel-error">' + escapeHtml(data.message || data.error) + '</div>';
           return;
         }
         if (!seasonLoaded && data.available_seasons) {
@@ -9402,7 +9402,7 @@
         targetPosFilter = '';
         render(data);
       }).catch(function() {
-        body.innerHTML = '<div class="lp-error">' + (typeof razzleError === 'function' ? razzleError() : 'the trade finder fumbled... try again.') + '</div>';
+        body.innerHTML = '<div class="panel-error">' + (typeof razzleError === 'function' ? razzleError() : 'the trade finder fumbled... try again.') + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -9416,7 +9416,7 @@
         var msg = 'no targets found';
         if (sectionId === 'buylow') msg = 'no falling-stock players near this value range';
         else if (sectionId === 'sellhigh') msg = 'no rising-stock players near this value range';
-        return '<div class="lp-empty">' + msg + '</div>';
+        return '<div class="panel-empty">' + msg + '</div>';
       }
       var html = '<table class="tf2-table"><thead><tr>';
       html += '<th>Player</th><th>Pos</th><th>Team</th><th>Value</th><th>Diff</th><th>Stock</th><th class="hide-mobile">PPG</th><th class="hide-mobile">Tier</th>';
@@ -9443,7 +9443,7 @@
     function render(data) {
       var body = el.querySelector('.tf2-body');
       var sel = data.selected_player;
-      if (!sel) { body.innerHTML = '<div class="lp-error">player data not available</div>'; return; }
+      if (!sel) { body.innerHTML = '<div class="panel-error">player data not available</div>'; return; }
 
       var pos = (sel.position || 'RB').toLowerCase();
       var html = '<div class="tf2-selected-card">';
@@ -9725,7 +9725,7 @@
         return r.json();
       }).then(function(data) {
         if (data.error) {
-          content.innerHTML = '<div class="lp-error">' + escapeHtml(data.error) + '</div>';
+          content.innerHTML = '<div class="panel-error">' + escapeHtml(data.error) + '</div>';
           return;
         }
         renderCorrelations(data, content);
@@ -9739,7 +9739,7 @@
           });
         }
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        content.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -10045,7 +10045,7 @@
 
         drawChart(data);
       }).catch(function() {
-        loadEl.innerHTML = '<div class="lp-error">' + razzleError() + '</div>';
+        loadEl.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -10283,7 +10283,7 @@
     }
 
     function renderTable(players, isPositive) {
-      if (!players || !players.length) return '<div class="lp-empty">' + razzleEmpty() + '</div>';
+      if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       var h = '<table class="gs-table"><thead><tr>';
       h += '<th>#</th><th>Player</th><th>Team</th><th>GP</th>';
       h += '<th title="Fantasy Points Per Game (PPR)">PPG</th><th title="Average Score Differential — positive means team was winning">Avg Diff</th><th title="Garbage Time % — % of stats scored in garbage time">GT%</th></tr></thead><tbody>';
@@ -10345,7 +10345,7 @@
             var _pid = row.getAttribute('data-pid'); if (typeof openPlayerPopup === 'function') openPlayerPopup(_pid); else window.location.href = '/player/' + encodeURIComponent(_pid);
           });
         });
-      }).catch(function() { body.innerHTML = '<div class="lp-error">' + razzleError() + '</div>'; });
+      }).catch(function() { body.innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>'; });
     }
 
     el.querySelector('#gs-pos-tabs').addEventListener('click', function(e) {
