@@ -1,206 +1,178 @@
-# Design QA Tickets — 2026-03-25 (v2)
+# Design QA Tickets — 2026-03-25 (v3)
 
-Audit method: Code-based CSS/HTML/JS audit against `docs/DESIGN.md`.
-Live site: Render returning 502 at time of audit; ran against local dev server.
-
----
-
-## TICKET 1 — HIGH: warroom.js has ~40 hardcoded cold gray hex values
-
-**Rule violated**: "Cold grays anywhere — even dark mode stays warm (brown, not gray)"
-
-**File**: `frontend/warroom.js`
-
-**Evidence**: 39 cold gray shorthand values (`#333`, `#444`, `#555`, `#666`, `#888`, `#999`, `#aaa`, `#ccc`, `#ddd`) used in the pixel engine palette, furniture sprites, bubbles, debug indicators. These are the only cold grays in the entire frontend — the rest of the codebase is clean.
-
-**Fix**: Create a `PIXEL_PALETTE` object at top of file mapping each cold gray to a warm espresso equivalent:
-- `#333` -> `#3b2821`, `#444` -> `#4a3728`, `#555` -> `#5c4a3d`, `#666` -> `#6b5a4e`
-- `#888` -> `#8a7565`, `#999` -> `#a08878`, `#aaa` -> `#b0a090`, `#ccc` -> `#c4b5a5`, `#ddd` -> `#d5c8b8`
-
-**Severity**: HIGH — 39 brand violations in a single file. Situation Room canvas will look cold/out-of-place.
+Audit of razzle.lol frontend against `docs/DESIGN.md`. 10 tickets ordered by severity.
+Method: Full codebase walk — CSS, HTML, JS (styles.css, lab-panels.css, lab.js, charts.js, warroom.js, app.js, agent-config.js, formulas.js, player.js, lab-panels.js + 10 HTML pages).
 
 ---
 
-## TICKET 2 — HIGH: Noscript fallback blocks use hardcoded colors (dark mode broken)
+## TICKET 1: Warroom pixel palette uses 30+ cold grays instead of warm espresso tones
+**Severity**: HIGH
+**File**: `frontend/warroom.js` lines 35-86
+**Violation**: DESIGN.md says "Never blue-black ink" and "No cold grays anywhere — even dark mode stays warm (brown, not gray)."
 
-**Rule violated**: Colors must use CSS variables to flip in dark mode.
+The Situation Room pixel palette object hardcodes 30+ cold gray hex values: `#222222`, `#333333`, `#444444`, `#555555`, `#666666`, `#888888`, `#999999`, `#aaaaaa`, `#cccccc`, `#dddddd`. These are used for furniture sprites, speech bubbles, UI chrome, and pixel art throughout the canvas.
 
-**Files**:
-- `agents.html:1604,1607`
-- `lab.html:3155,3158`
-- `league-intel.html:2535,2538`
+**Expected**: All grays should be warm-shifted to the espresso brown family (`--ink`, `--ink-medium`, `--ink-light`, `--ink-faint`) or warm equivalents like `#3b2821`, `#5c4a3d`, `#8a7565`, `#c4b5a5`. The pixel engine's entire palette needs a warm-shift pass.
 
-**Evidence**: Inline `color:#6b5a4e` and `color:#a89585` — neither is a design token. They won't flip in dark mode, causing dark-text-on-dark-background for noscript users.
-
-**Fix**: Add `.noscript-msg` and `.noscript-sub` classes in `styles.css`:
-```css
-.noscript-msg { color: var(--ink-medium); font-family: var(--font-mono); }
-.noscript-sub { color: var(--ink-light); font-family: var(--font-hand); }
-```
-Replace all 6 inline style blocks.
-
-**Severity**: HIGH — dark mode breakage + off-palette colors on 3 core pages.
+**Instances**: ~38 hardcoded cold gray hex values in warroom.js alone.
 
 ---
 
-## TICKET 3 — MEDIUM: 25+ panel cards missing hover-lift effect
+## TICKET 2: Canvas chart colors hardcoded — dark mode breaks for all canvas features
+**Severity**: HIGH
+**Files**: `frontend/charts.js`, `frontend/lab.js`, `frontend/lab-panels.js`
+**Violation**: DESIGN.md says "Dark mode available site-wide via toggle. CSS variables handle the rest."
 
-**Rule violated**: "Hover lift — interaction should feel physical" (DESIGN.md Do section)
+Canvas drawing operations (`ctx.fillStyle`, `ctx.strokeStyle`) use hardcoded hex values like `"#d97757"`, `"#5b7fff"`, `"#2ec4b6"`, `"#e63946"` directly instead of reading CSS variables via `getComputedStyle`. When dark mode flips the CSS variables, canvas elements (career arc, sparklines, radar charts, scatter plots, bar charts) do not respond.
 
-**File**: `frontend/lab-panels.css`
+**Key locations**:
+- `charts.js` lines 3, 379, 387, 450, 491, 533, 549, 561 — CHART_COLORS array + stroke/fill calls
+- `lab.js` lines 9605, 9977, 12797-12917, 13002-13101 — boom/bust charts, trend lines
+- `lab-panels.js` lines 4951, 7268, 9956, 10083 — panel canvases
 
-Only 5 of 30+ card classes have `:hover` styles (`.rankings-card`, `.breakout-card`, `.buysell-card`, `.scarcity-summary-card`, `.scarcity-card`).
+**Expected**: All canvas color values should be read from CSS variables at render time via `getComputedStyle(document.documentElement).getPropertyValue('--orange')` or the existing `getCanvasTheme()` helper.
 
-Missing hover on: `.pa-card`, `.ww-card`, `.hc-card`, `.se-card`, `.wl-card`, `.dt-card`, `.tp-card`, `.dr-card`, `.gt-card`, `.sk-card`, `.mv-card`, `.po-card`, `.ag-card`, `.pt-card`, `.spc-card`, `.cst-player-card`, `.sw2-player-card`, `.fpb-card`, `.glo-player-card`, and 6+ more.
-
-**Fix**: Add `transition: transform 0.15s, box-shadow 0.15s;` to each card base rule, and a shared hover pattern:
-```css
-.pa-card:hover, .ww-card:hover, .hc-card:hover /* ... */ {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 var(--ink);
-}
-```
-
-**Severity**: MEDIUM — 25+ panels feel flat/static vs. the 5 that lift.
+**Instances**: ~50 hardcoded hex values across 3 files.
 
 ---
 
-## TICKET 4 — MEDIUM: 30+ non-standard border-radius values in lab-panels.css
+## TICKET 3: Undocumented chart color palette introduces off-brand colors
+**Severity**: HIGH
+**Files**: `frontend/lab.js` lines 9707-9708, `frontend/agent-config.js`
+**Violation**: DESIGN.md says "More than one accent color per component" is forbidden, and all colors must be from the approved palette.
 
-**Rule violated**: "Use the token, not a hardcoded value" — tokens are 8px, 12px, 20px.
+Two color arrays define 11-color palettes for multi-series charts that include colors NOT in DESIGN.md: `#e87422` (burnt orange, not `--orange`), `#4a9e5c` (forest green, not `--green`), `#c44daa` (magenta, not in palette at all), `#d44040` (dark red, not `--red`).
 
-**File**: `frontend/lab-panels.css`
+Agent config (`agent-config.js` line 94) also uses `#e87422` for The Fox agent.
 
-**Evidence**: 7 different non-token values used for bars:
-- 1px (line 2487), 2px (6 instances), 3px (5 instances), 4px (12 instances), 5px (1), 6px (4), 7px (2)
-- Plus `14px` on `.tl-outer-card` (line 411) — should be `var(--radius)` (12px)
-
-**Fix**: Standardize bars to two tiers: `2px` for micro-bars (<10px height), `4px` for regular bars. Consider `--radius-bar: 4px` token. Fix `.tl-outer-card` to `var(--radius)`.
-
-**Severity**: MEDIUM — cumulative visual inconsistency across 30+ elements.
+**Expected**: All chart and agent colors should come from the DESIGN.md palette. If more than 5 series colors are needed, use light tint variants (`--orange-light`, `--green-light`, etc.) not invented colors.
 
 ---
 
-## TICKET 5 — MEDIUM: 25+ inline badges use 1px vertical padding (cramped)
+## TICKET 4: Agent colors defined in two places — single source of truth missing
+**Severity**: MEDIUM
+**Files**: `frontend/agent-config.js` lines 10-150, `frontend/warroom.js` lines 719-729 + 3079-3099
+**Violation**: Design consistency — agent colors hardcoded in two separate files with potential for drift.
 
-**Rule violated**: Badges should feel chunky and sticker-like, not cramped.
+Agent persona colors are hardcoded as hex strings in both `agent-config.js` (6 agents, lines 10-150) and `warroom.js` (pixel engine agent definitions lines 719-729, plus bio card definitions lines 3079-3099). Any color change requires updating 3 locations.
 
-**Files**: `frontend/lab.js` (13 instances), `charts.js`, `formula-store.js`, `league-intel.html`, `warroom.js`
-
-**Evidence**: Pattern `padding:1px 5px` or `padding:1px 6px` repeated 25+ times in inline badge styles across JS template literals.
-
-**Fix**: Change `padding:1px Xpx` -> `padding:2px Xpx`. Better: extract a `.badge-inline` CSS utility class to replace 25+ identical inline style strings.
-
-**Severity**: MEDIUM — badges feel thin/cramped instead of chunky-sticker.
+**Expected**: Single source of truth for agent colors. Define in CSS variables (`--agent-razzle`, `--agent-dolphin`, etc.) or in one JS config object imported by both files.
 
 ---
 
-## TICKET 6 — MEDIUM: Hardcoded medal/rank colors not using CSS variables
+## TICKET 5: 15 inline `border-bottom:1px` dividers violate "no thin borders" rule
+**Severity**: MEDIUM
+**Files**: `frontend/charts.js`, `frontend/lab.js`, `frontend/player.js`, `frontend/formulas.js`, `frontend/lab-panels.js`
+**Violation**: DESIGN.md says "No thin 1px borders" and "Secondary border: 2px solid."
 
-**Rule violated**: Colors should use CSS variables for dark mode support.
+Inline styles on `<tr>` and `<div>` elements use `border-bottom:1px solid var(--ink-faint)` as row separators in:
+- `charts.js` lines 904, 908, 1270, 1274, 1295, 1304, 1312, 1316 (8 instances)
+- `lab.js` lines 2401, 2417, 9275, 10808 (4 instances)
+- `formulas.js` line 134
+- `player.js` line 749
+- `lab-panels.js` line 10196
 
-**File**: `frontend/lab-panels.css`
-- Line 603: `.tv-rank.top1 { color: #b8860b; }` (dark goldenrod — no CSS var)
-- Line 605: `.tv-rank.top3 { color: #a0522d; }` (sienna — no CSS var)
-
-While `--medal-gold` and `--medal-bronze` exist in `:root`, these rank text colors use different shades that aren't tokenized and won't adapt to dark mode.
-
-**Fix**: Add `--rank-gold: #b8860b` and `--rank-bronze: #a0522d` to `:root` with dark mode overrides in `[data-theme="dark"]`.
-
-**Severity**: MEDIUM — rank colors invisible or low-contrast in dark mode.
-
----
-
-## TICKET 7 — MEDIUM: JS files use hardcoded border-radius in inline styles
-
-**Rule violated**: "Use the token, not a hardcoded value."
-
-**Files**:
-- `lab-panels.js:9577,9579,9580,9600,9646` — `border-radius:3px` and `6px`
-- `charts.js:891,1259` — `border-radius:4px`
-- `formulas.js:132,273` — `border-radius:4px`
-- `league-intel.html:2881,3028,3073,3123` — `border-radius:6px` and `4px` in JS template literals
-
-~14 instances total.
-
-**Fix**: Replace hardcoded values with `var(--radius-sm)` in inline style strings. CSS variables work in inline styles: `style="border-radius:var(--radius-sm)"`.
-
-**Severity**: MEDIUM — inconsistent with the CSS-variable-based design system.
+**Expected**: Replace `1px` with `2px` on all dividers. Use `2px dashed var(--ink-faint)` for internal card dividers per DESIGN.md "Dashed dividers" rule.
 
 ---
 
-## TICKET 8 — LOW: matchups.html hardcodes `#fff` instead of CSS variable
+## TICKET 6: 16 off-token border-radius values (3px, 4px, 6px) in inline JS styles
+**Severity**: MEDIUM
+**Files**: `frontend/charts.js`, `frontend/formulas.js`, `frontend/warroom.js`, `frontend/lab.js`, `frontend/lab-panels.js`
+**Violation**: DESIGN.md defines three radius tokens: `--radius-sm: 8px`, `--radius: 12px`, `--radius-lg: 20px`. "Use the token, not a hardcoded value."
 
-**Rule violated**: White text on accent should use `var(--text-on-accent)`.
+Inline styles use non-token values:
+- `border-radius:4px` — 6 instances (position badges in charts.js, formulas.js, lab-panels.js)
+- `border-radius:3px` — 5 instances (LEADER badge in warroom.js, progress bars in lab-panels.js)
+- `border-radius:6px` — 5 instances (bar fill, container cards in lab.js, lab-panels.js)
 
-**File**: `frontend/matchups.html:643`
+**Expected**: Map to nearest token — `3px`/`4px`/`6px` should all become `var(--radius-sm)` (8px). Inline styles should reference the CSS variable.
+
+---
+
+## TICKET 7: `getCanvasTheme()` in app.js has redundant hardcoded fallback block
+**Severity**: LOW
+**File**: `frontend/app.js` lines 100-115
+**Violation**: DRY principle / maintainability. Lines 100-107 hardcode the entire color palette as an if/else ternary, but lines 110-115 already read from `getComputedStyle` — making the fallback dead code that can drift from CSS.
+
 ```js
-var textColor = (bg === redVal || bg === greenVal) ? '#fff' : 'var(--ink)';
+// Lines 100-107: hardcoded (redundant)
+bg: isDark ? "#2d1f14" : "#ede0cf",
+bgWarm: isDark ? "#3b2821" : "#e5d5c3", ...
+
+// Lines 110-115: reads CSS vars (correct approach)
+const s = getComputedStyle(document.documentElement);
 ```
 
-**Fix**: Change `'#fff'` to `'var(--text-on-accent)'`. The variable exists for exactly this purpose and properly handles dark mode.
-
-**Severity**: LOW — works in light mode, minor dark mode contrast drift.
+**Expected**: Remove the hardcoded fallback block. Use only the `getComputedStyle` path. If a CSS-before-paint race is a concern, defer canvas draws to `DOMContentLoaded` rather than maintaining a parallel color definition.
 
 ---
 
-## TICKET 9 — LOW: research-sprawl.svg uses system fonts
+## TICKET 8: Position color objects duplicated across 4+ JS files
+**Severity**: LOW
+**Files**: `frontend/lab.js` ~line 9544, `frontend/charts.js` line 3, `frontend/lab-panels.js`, `frontend/warroom.js`
+**Violation**: Design system consistency — position colors (`QB:#5b7fff, RB:#2ec4b6, WR:#d97757, TE:#8b5cf6`) are copy-pasted as object literals in 4+ JavaScript files.
 
-**Rule violated**: Only Luckiest Guy, Space Mono, and Caveat are approved fonts.
+Example from `lab.js`:
+```js
+const _acPosColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+```
 
-**File**: `frontend/assets/research-sprawl.svg`
-- Uses `font-family="system-ui, -apple-system, sans-serif"` — no Razzle font at all.
+This same object appears in `charts.js`, `lab-panels.js`, and `warroom.js` with varying names.
 
-Other SVGs (`og-image.svg`, `og-image-lab.svg`) correctly use `'Luckiest Guy', 'Impact', sans-serif`.
-
-**Fix**: Change to `font-family="'Space Mono', monospace"` or `"'Luckiest Guy', cursive"`.
-
-**Severity**: LOW — SVG is decorative, not heavily visible.
+**Expected**: Define position colors once — either as CSS variables read via `getComputedStyle` (preferred, enables dark mode), or as a single exported constant in `app.js` that all files reference.
 
 ---
 
-## TICKET 10 — LOW: league-intel.html duplicates inline badge styles 6+ times
+## TICKET 9: Warroom speech bubble and canvas UI uses pure `#000` and `#fff`
+**Severity**: LOW
+**File**: `frontend/warroom.js` lines 427, 934, 987
+**Violation**: DESIGN.md says ink is `--ink` (`#2d1f14`), not black. Card background is `--bg-card`, not white.
 
-**Rule violated**: DRY / maintainability. Same badge pattern repeated in JS template literals.
+Speech bubbles use `#fff` for background and `#000`/`#333` for text. In the Razzle design system, "white" should be `--bg-card` (`#f7efe5`) and "black" should be `--ink` (`#2d1f14`). Using pure black/white breaks the warm sand/espresso aesthetic.
 
-**File**: `frontend/league-intel.html` — lines 2881, 3028, 3039, 3073, 3123, 4389
+**Expected**: Replace `#fff` with the cream value from `--bg-card` and `#000` with the espresso value from `--ink`. For the pixel art canvas, read these values from CSS vars or the `getCanvasTheme()` helper.
 
-All use the same ~120-char inline style string for "YOU" badges.
+---
 
-**Fix**: Add `.badge-you` class in styles.css:
-```css
-.badge-you {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  background: var(--orange);
-  color: var(--text-on-accent);
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-}
-```
-Replace 6 inline style blocks with `class="badge-you"`.
+## TICKET 10: Inline styles dominate JS-rendered components — root cause of tickets 5, 6, 8
+**Severity**: LOW (systemic / tech debt)
+**Files**: `frontend/lab.js`, `frontend/charts.js`, `frontend/lab-panels.js`, `frontend/player.js`, `frontend/formulas.js`
+**Violation**: Design maintainability. Hundreds of `style="..."` attributes in innerHTML strings embed design decisions (colors, spacing, fonts, borders, radii) directly in JavaScript, making them invisible to CSS-level changes and dark mode toggles.
 
-**Severity**: LOW — functional, just hard to maintain.
+Examples:
+- `lab.js` line 4589: 140+ character inline style for search result cards
+- `charts.js` line 891: position badge styling inline
+- `lab.js` line 10204: modal container styling inline
+- `lab.js` line 10313: tier badge styling inline
+
+**Expected**: Extract repeated inline style patterns into CSS classes in `styles.css` or `lab-panels.css`. This would:
+1. Make dark mode automatic (CSS vars resolve correctly in stylesheets)
+2. Reduce JS bundle size
+3. Make design changes possible from one CSS edit instead of find-and-replace across JS
+4. Allow the design system tokens to propagate
+
+This is the root cause behind tickets 5, 6, and 8.
 
 ---
 
 ## Summary
 
-| # | Sev | File(s) | Issue | Count |
-|---|-----|---------|-------|-------|
-| 1 | HIGH | warroom.js | Cold gray hex values in pixel engine | ~39 |
-| 2 | HIGH | 3 HTML files | Noscript hardcoded colors, dark mode broken | 6 |
-| 3 | MED | lab-panels.css | 25+ panel cards missing hover-lift | ~25 |
-| 4 | MED | lab-panels.css | Non-standard border-radius (1-7px, 14px) | ~30 |
-| 5 | MED | lab.js + 4 others | 1px badge padding (cramped) | ~25 |
-| 6 | MED | lab-panels.css | Hardcoded medal/rank colors, no dark mode | 2 |
-| 7 | MED | JS files | Hardcoded border-radius in inline styles | ~14 |
-| 8 | LOW | matchups.html | #fff instead of var(--text-on-accent) | 1 |
-| 9 | LOW | SVG assets | System font in research-sprawl.svg | 1 |
-| 10 | LOW | league-intel.html | Duplicate inline badge styles | ~6 |
+| # | Ticket | Severity | Instances | Root Cause |
+|---|--------|----------|-----------|------------|
+| 1 | Warroom cold grays | HIGH | ~38 | Pixel palette not warm-shifted |
+| 2 | Canvas ignores dark mode | HIGH | ~50 | Hardcoded hex in ctx calls |
+| 3 | Off-brand chart colors | HIGH | ~6 | Undocumented palette |
+| 4 | Agent colors in 2 places | MEDIUM | 18 | No single source of truth |
+| 5 | 1px thin borders | MEDIUM | 15 | Inline styles bypass design tokens |
+| 6 | Off-token border-radius | MEDIUM | 16 | Inline styles bypass design tokens |
+| 7 | Redundant getCanvasTheme | LOW | 1 | Dead code / drift risk |
+| 8 | Position colors duplicated | LOW | 4+ files | No shared constant |
+| 9 | Pure black/white in warroom | LOW | ~5 | Should be espresso/cream |
+| 10 | Inline styles in JS | LOW | 100s | Systemic tech debt |
 
-**Total**: ~149 individual violations across ~20 files.
+**Total design violations**: ~150 instances across 7 files.
 
-**What's clean**: No gradients anywhere. No 1px borders on cards/containers. No "Loading..." text (all personality-driven). Position colors correct everywhere. `:root` variables match DESIGN.md exactly. Dark mode tokens correct. No forbidden fonts in CSS. No cold grays in any CSS file. Shared `styles.css` is excellent.
+**What's clean**: CSS files (`styles.css`, `lab-panels.css`) are fully compliant. No gradients anywhere. No wrong font families. No "Loading..." text (all themed). HTML pages use correct structure. The design system is well-defined — the violations are all in JavaScript-rendered content that bypasses it.
 
-**Overall grade: A-** — The design system is well-implemented. Issues are polish-level (warroom.js canvas palette is the biggest offender) rather than structural.
+**Highest-impact fix**: Create a centralized theme-aware color helper and migrate canvas operations to use it (fixes tickets 1, 2, 3, 7, 8, 9 in one pass).

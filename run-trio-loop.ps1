@@ -244,6 +244,9 @@ finally {
     $manualTickets = (Get-ChildItem "$repoDir\tickets\manual\*.md" -ErrorAction SilentlyContinue).Count
     Write-Host "  Tickets remaining: QA=$qaTickets CEO=$ceoTickets Manual=$manualTickets" -ForegroundColor White
     Write-Host ""
-    Write-Host "  To merge: cd $repoDir && git merge ship/launch-fixes && git push origin master" -ForegroundColor DarkGray
+    Write-Host "  To merge when ready:" -ForegroundColor DarkGray
+    Write-Host "    cd $repoDir" -ForegroundColor DarkGray
+    Write-Host "    git merge ship/launch-fixes" -ForegroundColor DarkGray
+    Write-Host "    git push origin master  # only when reviewed!" -ForegroundColor DarkGray
     Write-Host ""
 }
