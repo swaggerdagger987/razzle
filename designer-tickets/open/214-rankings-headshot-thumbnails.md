@@ -1,7 +1,7 @@
 <!-- PM: ready -->
 ---
 id: DES-346
-priority: P3
+priority: P2
 area: rankings.html
 section: player chips
 type: visual / shareability
