@@ -275,6 +275,7 @@ function removeFromWatchlist(playerId) {
 }
 
 // ─── Watchlist Cloud Sync (Pro+ users) ──────────────────────────
+var _watchlistPullAbort = null;
 function syncWatchlistFromCloud() {
   var token = localStorage.getItem("razzle_token");
   if (!token) {
@@ -282,9 +283,12 @@ function syncWatchlistFromCloud() {
     return;
   }
 
+  if (_watchlistPullAbort) _watchlistPullAbort.abort();
+  _watchlistPullAbort = new AbortController();
   var base = typeof API_BASE !== "undefined" ? API_BASE : "";
   fetch(base + "/api/user/watchlist", {
-    headers: { "Authorization": "Bearer " + token }
+    headers: { "Authorization": "Bearer " + token },
+    signal: _watchlistPullAbort.signal
   }).then(function(r) {
     if (r.status === 403) {
       // Free user — show upgrade hint
@@ -4423,6 +4427,7 @@ function deleteSavedView(id) {
 
 // ── Saved Views Cloud Sync (Pro+ feature) ────────────────────────
 
+var _viewsPullAbort = null;
 function syncSavedViewsFromCloud() {
   var token = localStorage.getItem("razzle_token");
   if (!token) return;
@@ -4431,9 +4436,12 @@ function syncSavedViewsFromCloud() {
     return;
   }
 
+  if (_viewsPullAbort) _viewsPullAbort.abort();
+  _viewsPullAbort = new AbortController();
   var base = (typeof API_BASE !== "undefined" ? API_BASE : "");
   fetch(base + "/api/user/views", {
-    headers: { "Authorization": "Bearer " + token }
+    headers: { "Authorization": "Bearer " + token },
+    signal: _viewsPullAbort.signal
   }).then(function(r) {
     if (!r.ok) throw new Error("fetch failed");
     return r.json();
