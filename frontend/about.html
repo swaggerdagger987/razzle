@@ -35,10 +35,15 @@
   .about-hero {
     text-align: center;
     margin-bottom: 40px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 32px 24px;
   }
 
   .about-hero-mascot {
-    font-size: 56px;
+    font-size: 72px;
     filter: drop-shadow(3px 3px 0 rgba(45, 31, 20, 0.15));
     transform: rotate(-3deg);
     display: inline-block;
@@ -58,6 +63,15 @@
     font-family: var(--font-hand);
     font-size: 20px;
     color: var(--ink-medium);
+  }
+
+  .about-hero-tagline {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-top: 6px;
+    transform: rotate(-1deg);
+    display: inline-block;
   }
 
   .about-section {
@@ -203,6 +217,7 @@
     <div class="about-hero-mascot">&#x1F42F;</div>
     <h1>About <span>Razzle</span></h1>
     <div class="about-hero-sub">the fine print, if you're into that sort of thing</div>
+    <div class="about-hero-tagline">yep, that's me — the tiger behind the numbers</div>
   </div>
 
   <!-- DATA SOURCES -->
