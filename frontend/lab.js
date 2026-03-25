@@ -2030,6 +2030,7 @@ function onTableScroll() {
 }
 
 function renderTableBody() {
+  if (_expandAbort) { _expandAbort.abort(); _expandAbort = null; }
   _expandedRows = {};
   const tbody = document.getElementById("tableBody");
   const cols = getActiveColumns();
@@ -2380,6 +2381,7 @@ function renderProspectTable() {
 
 // ─── Row expand (weekly breakdown) ───────────────────────────────
 var _expandedRows = {};  // playerId → true
+var _expandAbort = null; // AbortController for pending expand fetches
 
 async function toggleRowExpand(playerId, tdEl) {
   var tr = tdEl.closest("tr");
@@ -2406,8 +2408,9 @@ async function toggleRowExpand(playerId, tdEl) {
   tr.after(expandTr);
 
   try {
+    if (!_expandAbort) _expandAbort = new AbortController();
     var season = state.season === "career" ? 0 : (state.season || 0);
-    var data = await apiFetch("/api/players/" + encodeURIComponent(playerId) + "/weeks?season=" + season);
+    var data = await apiFetch("/api/players/" + encodeURIComponent(playerId) + "/weeks?season=" + season, { signal: _expandAbort.signal });
     if (!_expandedRows[playerId]) return; // collapsed before response
     var weeks = data.weeks || data || [];
     if (!Array.isArray(weeks) || weeks.length === 0) {
