@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 # DQ-463: warroom.js Lightbulb Animation Uses Wrong Yellow (#ffcc00 vs #ffc857)
 
 **Priority**: P3

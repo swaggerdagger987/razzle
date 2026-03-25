@@ -1041,7 +1041,7 @@ class Agent {
         }
         break;
       case 'think': {
-        ctx.fillStyle = phase % 2 === 0 ? '#ffcc00' : '#ddaa00';
+        ctx.fillStyle = phase % 2 === 0 ? '#ffc857' : '#c9a040';
         ctx.beginPath();
         ctx.arc(x + bubW / 2, y + 8, 5, 0, Math.PI * 2);
         ctx.fill();
@@ -1050,7 +1050,7 @@ class Agent {
           ctx.globalAlpha = 0.5;
           for (let a = 0; a < 4; a++) {
             const angle = (a / 4) * Math.PI * 2 + t / 600;
-            px(x + bubW / 2 + Math.cos(angle) * 7, y + 8 + Math.sin(angle) * 7, 2, 2, '#ffcc00');
+            px(x + bubW / 2 + Math.cos(angle) * 7, y + 8 + Math.sin(angle) * 7, 2, 2, '#ffc857');
           }
           ctx.globalAlpha = 1;
         }

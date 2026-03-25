@@ -377,6 +377,15 @@
   var chartRect = null;
   var plotPoints = []; // [{x, y, px, py, player}]
 
+  // Restore URL state
+  var _urlState = restorePageState({ x: '', y: '', pos: '', season: '' });
+  if (_urlState.pos) {
+    currentPosition = _urlState.pos;
+    document.querySelectorAll('.explorer-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === currentPosition);
+    });
+  }
+
   // Chart margins
   var MARGIN = { top: 20, right: 30, bottom: 50, left: 60 };
 
@@ -395,13 +404,13 @@
       var xOpt = document.createElement('option');
       xOpt.value = m;
       xOpt.textContent = label;
-      if (m === 'targets_g') xOpt.selected = true;
+      if ((_urlState.x && m === _urlState.x) || (!_urlState.x && m === 'targets_g')) xOpt.selected = true;
       xSel.appendChild(xOpt);
 
       var yOpt = document.createElement('option');
       yOpt.value = m;
       yOpt.textContent = label;
-      if (m === 'ppg') yOpt.selected = true;
+      if ((_urlState.y && m === _urlState.y) || (!_urlState.y && m === 'ppg')) yOpt.selected = true;
       ySel.appendChild(yOpt);
     });
   }
@@ -691,6 +700,15 @@
     });
   }
 
+  function _saveExplorerState() {
+    savePageState({
+      x: document.getElementById('x-select').value,
+      y: document.getElementById('y-select').value,
+      pos: currentPosition,
+      season: document.getElementById('season-select').value
+    });
+  }
+
   // Position tabs
   document.getElementById('pos-tabs').addEventListener('click', function(e) {
     var tab = e.target.closest('.explorer-pos-tab');
@@ -698,13 +716,14 @@
     document.querySelectorAll('.explorer-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
+    _saveExplorerState();
     loadData();
   });
 
   // Axis selects
-  document.getElementById('x-select').addEventListener('change', loadData);
-  document.getElementById('y-select').addEventListener('change', loadData);
-  document.getElementById('season-select').addEventListener('change', loadData);
+  document.getElementById('x-select').addEventListener('change', function() { _saveExplorerState(); loadData(); });
+  document.getElementById('y-select').addEventListener('change', function() { _saveExplorerState(); loadData(); });
+  document.getElementById('season-select').addEventListener('change', function() { _saveExplorerState(); loadData(); });
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {

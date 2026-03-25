@@ -219,6 +219,15 @@
   };
   var currentPosition = '';
 
+  // Restore URL state
+  var _urlState = restorePageState({ pos: '' });
+  if (_urlState.pos) {
+    currentPosition = _urlState.pos;
+    document.querySelectorAll('.pos-tab').forEach(function(b) {
+      b.classList.toggle('active', (b.getAttribute('data-pos') || '') === currentPosition);
+    });
+  }
+
   function posChip(pos) {
     var c = POS_COLORS[pos] || 'var(--ink-light)';
     return '<span class="rb-pos-chip" style="background:' + c + '">' + escapeHtml(pos) + '</span>';
@@ -315,6 +324,7 @@
       document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       currentPosition = btn.getAttribute('data-pos') || '';
+      savePageState({ pos: currentPosition });
       load();
     });
   });

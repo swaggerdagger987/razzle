@@ -2118,6 +2118,7 @@
 <script src="agent-config.js"></script>
 <script src="warroom.js"></script>
 <script>
+restorePageState({});
 fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
 
 // Trial expiry banner logic

@@ -118,7 +118,7 @@ var AGENT_NUDGES = [
   if (document.getElementById("agent-nudge-keyframes")) return;
   var s = document.createElement("style");
   s.id = "agent-nudge-keyframes";
-  s.textContent = "@keyframes nudgeFadeIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }";
+  s.textContent = "@keyframes nudgeFadeIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } } @media (prefers-reduced-motion: reduce) { .agent-nudge { animation: none !important; } }";
   document.head.appendChild(s);
 })();
 

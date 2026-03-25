@@ -448,8 +448,13 @@
   var seasonSelect = document.getElementById('season-select');
   var currentSeason = 0;
 
+  // Restore URL state
+  var urlState = restorePageState({ season: '' });
+  if (urlState.season) currentSeason = parseInt(urlState.season, 10) || 0;
+
   seasonSelect.addEventListener('change', function() {
     currentSeason = parseInt(this.value, 10) || 0;
+    savePageState({ season: currentSeason });
     fetchDashboard();
   });
 

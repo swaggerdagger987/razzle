@@ -297,7 +297,7 @@
   }
   .pct-bar-fill {
     height: 100%;
-    border-radius: 6px;
+    border-radius: 8px;
     transition: width 0.3s;
   }
   .pct-val {
@@ -471,6 +471,16 @@
   var content = document.getElementById("prospectsContent");
   var yearSelect = document.getElementById("prospectsYear");
 
+  // Restore URL state
+  var _urlState = restorePageState({ pos: '', year: '' });
+  if (_urlState.pos) {
+    state.position = _urlState.pos;
+    document.querySelectorAll(".prospects-filter-btn").forEach(function(b) {
+      b.classList.toggle("active", (b.getAttribute("data-pos") || "") === state.position);
+    });
+  }
+  if (_urlState.year) state.draftYear = parseInt(_urlState.year, 10) || 0;
+
   var TIER_CONFIG = [
     { key: "elite", min: 80, label: "Elite", annotation: "freaks of nature" },
     { key: "premium", min: 60, label: "Premium", annotation: "day 1-2 impact" },
@@ -500,7 +510,12 @@
         opt.textContent = years[i] + " Draft Class";
         yearSelect.appendChild(opt);
       }
-      state.draftYear = years[0];
+      // Use URL-restored year if valid, otherwise default to first year
+      if (state.draftYear && years.indexOf(state.draftYear) !== -1) {
+        yearSelect.value = state.draftYear;
+      } else {
+        state.draftYear = years[0];
+      }
       loadProspects();
     } catch (err) {
       yearSelect.innerHTML = '<option value="">no draft classes found</option>';
@@ -674,6 +689,10 @@
     });
   }
 
+  function _saveProspectsState() {
+    savePageState({ pos: state.position, year: state.draftYear });
+  }
+
   // ---- Position filter buttons ----
   document.getElementById("prospectsFilters").addEventListener("click", function(e) {
     var btn = e.target.closest(".prospects-filter-btn");
@@ -681,12 +700,14 @@
     document.querySelectorAll(".prospects-filter-btn").forEach(function(b) { b.classList.remove("active"); });
     btn.classList.add("active");
     state.position = btn.getAttribute("data-pos") || "";
+    _saveProspectsState();
     loadProspects();
   });
 
   // ---- Draft year selector ----
   yearSelect.addEventListener("change", function() {
     state.draftYear = parseInt(this.value) || 0;
+    _saveProspectsState();
     loadProspects();
   });
 

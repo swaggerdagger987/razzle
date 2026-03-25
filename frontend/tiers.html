@@ -397,9 +397,20 @@
   var seasonSelect = document.getElementById('season-select');
   var posTabs = document.getElementById('pos-tabs');
 
+  // Restore URL state
+  var urlState = restorePageState({ pos: '', season: '' });
+  if (urlState.pos) {
+    state.position = urlState.pos;
+    posTabs.querySelectorAll('.tl-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-pos') || '') === state.position);
+    });
+  }
+  if (urlState.season) state.season = parseInt(urlState.season, 10) || 0;
+
   // Season select
   seasonSelect.addEventListener('change', function() {
     state.season = parseInt(this.value, 10) || 0;
+    savePageState({ pos: state.position, season: state.season });
     fetchData();
   });
 
@@ -410,6 +421,7 @@
     posTabs.querySelectorAll('.tl-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     state.position = tab.getAttribute('data-pos');
+    savePageState({ pos: state.position, season: state.season });
     fetchData();
   });
 

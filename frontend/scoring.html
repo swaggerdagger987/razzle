@@ -410,12 +410,23 @@
   function init() {
     if (window.__razzleAnalytics) window.__razzleAnalytics('scoring');
 
+    // Restore URL state
+    var urlState = restorePageState({ pos: '', season: '' });
+    if (urlState.pos) {
+      state.position = urlState.pos;
+      document.querySelectorAll('.sc-pos-tab').forEach(function(t) {
+        t.classList.toggle('active', (t.getAttribute('data-pos') || '') === state.position);
+      });
+    }
+    if (urlState.season) state.season = parseInt(urlState.season, 10) || 0;
+
     // Position tabs
     document.querySelectorAll('.sc-pos-tab').forEach(function(tab) {
       tab.addEventListener('click', function() {
         state.position = this.getAttribute('data-pos');
         document.querySelectorAll('.sc-pos-tab').forEach(function(t) { t.classList.remove('active'); });
         this.classList.add('active');
+        savePageState({ pos: state.position, season: state.season });
         fetchData();
       });
     });
@@ -423,6 +434,7 @@
     // Season select
     document.getElementById('season-select').addEventListener('change', function() {
       state.season = parseInt(this.value) || 0;
+      savePageState({ pos: state.position, season: state.season });
       fetchData();
     });
 

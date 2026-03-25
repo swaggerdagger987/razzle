@@ -373,17 +373,29 @@
       body: JSON.stringify({ page: '/cheatsheet.html', referrer: document.referrer || '' })
     }).catch(function() {});
 
+    // Restore URL state
+    var urlState = restorePageState({ fmt: 'ppr', season: '' });
+    if (urlState.fmt) {
+      state.format = urlState.fmt;
+      document.querySelectorAll('.cs-fmt-tab').forEach(function(t) {
+        t.classList.toggle('active', t.getAttribute('data-fmt') === state.format);
+      });
+    }
+    if (urlState.season) state.season = parseInt(urlState.season, 10) || 0;
+
     document.querySelectorAll('.cs-fmt-tab').forEach(function(tab) {
       tab.addEventListener('click', function() {
         state.format = this.getAttribute('data-fmt');
         document.querySelectorAll('.cs-fmt-tab').forEach(function(t) { t.classList.remove('active'); });
         this.classList.add('active');
+        savePageState({ fmt: state.format, season: state.season });
         fetchData();
       });
     });
 
     document.getElementById('season-select').addEventListener('change', function() {
       state.season = parseInt(this.value) || 0;
+      savePageState({ fmt: state.format, season: state.season });
       fetchData();
     });
 

@@ -659,6 +659,16 @@ function posClass(pos) {
 // Position color map for headshot fallback initials
 var POS_COLOR_MAP = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
 
+function getPosColors() {
+  var s = getComputedStyle(document.documentElement);
+  return {
+    QB: s.getPropertyValue('--pos-qb').trim() || '#5b7fff',
+    RB: s.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
+    WR: s.getPropertyValue('--pos-wr').trim() || '#d97757',
+    TE: s.getPropertyValue('--pos-te').trim() || '#8b5cf6'
+  };
+}
+
 function playerHeadshot(player, pos) {
   var url = player.headshot_url;
   var size = 28;

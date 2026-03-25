@@ -2457,7 +2457,13 @@ async function toggleRowExpand(playerId, tdEl) {
   } catch (err) {
     console.error("Weekly expand error:", err);
     if (_expandedRows[playerId]) {
-      expandTr.querySelector(".expand-content").textContent = razzleError();
+      var ec = expandTr.querySelector(".expand-content");
+      ec.innerHTML = escapeHtml(razzleError()) + ' <button class="btn-chunky" style="margin-left:8px;font-size:11px;padding:2px 10px;">retry</button>';
+      ec.querySelector("button").addEventListener("click", function() {
+        delete _expandedRows[playerId];
+        expandTr.remove();
+        toggleRowExpand(playerId, tdEl);
+      });
     }
   }
 }

@@ -111,6 +111,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 16px;
+    overflow-x: auto;
   }
 
   .breakout-card {
@@ -255,7 +256,7 @@
   }
   .breakout-bar-fill {
     height: 100%;
-    border-radius: 6px;
+    border-radius: 8px;
     transition: width 0.3s ease;
   }
   .breakout-bar-fill.opportunity {
@@ -321,13 +322,12 @@
     padding: 60px 20px;
   }
 
-  /* Empty state */
-  .breakouts-empty {
+  /* Error state */
+  .breakouts-error {
     text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 60px 20px;
+    padding: 40px 20px;
+    color: var(--ink-medium);
+    border-left: 4px solid var(--red);
   }
 
   /* Responsive */

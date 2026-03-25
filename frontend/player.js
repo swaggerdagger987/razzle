@@ -719,7 +719,7 @@ function openCompareSearch() {
   // Create a search overlay
   var overlay = document.createElement("div");
   overlay.id = "compareOverlay";
-  var overlayBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(0,0,0,0.5)" : "rgba(45,31,20,0.5)";
+  var overlayBg = document.documentElement.getAttribute("data-theme") === "dark" ? "rgba(26,17,10,0.7)" : "rgba(45,31,20,0.5)";
   overlay.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;background:" + overlayBg + ";z-index:9999;display:flex;align-items:center;justify-content:center;";
   overlay.innerHTML = '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:24px;width:380px;max-width:90vw;">' +
     '<div style="font-family:var(--font-display);font-size:18px;margin-bottom:12px;">Compare ' + esc((_profileData.player || {}).full_name || "Player") + ' with...</div>' +

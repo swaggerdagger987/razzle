@@ -216,7 +216,7 @@
   }
   .av-tv-fill {
     height: 100%;
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--orange);
   }
 
@@ -456,12 +456,36 @@
   var tableWrap = document.getElementById('table-wrap');
   var posSummary = document.getElementById('pos-summary');
 
+  // Restore URL state
+  var urlState = restorePageState({ pos: 'ALL', budget: '', roster: '', season: '' });
+  if (urlState.pos) {
+    state.position = urlState.pos;
+    posTabs.querySelectorAll('.av-pos-tab').forEach(function(t) {
+      t.classList.toggle('active', t.getAttribute('data-pos') === state.position);
+    });
+  }
+  if (urlState.budget) {
+    state.budget = parseInt(urlState.budget, 10) || 200;
+    budgetSlider.value = state.budget;
+    budgetDisplay.textContent = '$' + state.budget;
+  }
+  if (urlState.roster) {
+    state.rosterSize = parseInt(urlState.roster, 10) || 15;
+    rosterInput.value = state.rosterSize;
+  }
+  if (urlState.season) state.season = parseInt(urlState.season, 10) || 0;
+
+  function _saveAuctionState() {
+    savePageState({ pos: state.position, budget: state.budget, roster: state.rosterSize, season: state.season });
+  }
+
   // Budget slider
   budgetSlider.addEventListener('input', function() {
     state.budget = parseInt(this.value, 10) || 200;
     budgetDisplay.textContent = '$' + state.budget;
   });
   budgetSlider.addEventListener('change', function() {
+    _saveAuctionState();
     fetchData();
   });
 
@@ -469,12 +493,14 @@
   rosterInput.addEventListener('change', function() {
     state.rosterSize = Math.max(8, Math.min(25, parseInt(this.value, 10) || 15));
     this.value = state.rosterSize;
+    _saveAuctionState();
     fetchData();
   });
 
   // Season select
   seasonSelect.addEventListener('change', function() {
     state.season = parseInt(this.value, 10) || 0;
+    _saveAuctionState();
     fetchData();
   });
 
@@ -485,6 +511,7 @@
     posTabs.querySelectorAll('.av-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     state.position = tab.getAttribute('data-pos');
+    _saveAuctionState();
     renderTable();
   });
 

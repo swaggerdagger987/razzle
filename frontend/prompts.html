@@ -284,6 +284,7 @@ function renderPrompts(filter) {
 function filterPrompts(cat) {
   var btns = document.querySelectorAll('.prompt-filter');
   for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', btns[i].textContent.toLowerCase().includes(cat) || (cat === 'all' && i === 0));
+  savePageState({ cat: cat === 'all' ? '' : cat });
   renderPrompts(cat);
 }
 
@@ -324,7 +325,13 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-renderPrompts('all');
+// Restore URL state
+var _urlState = restorePageState({ cat: '' });
+if (_urlState.cat) {
+  filterPrompts(_urlState.cat);
+} else {
+  renderPrompts('all');
+}
 
 // Analytics
 try { fetch('/api/analytics/pageview', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({page:'/prompts.html',referrer:document.referrer||'',timestamp:new Date().toISOString()}) }); } catch(e) {}

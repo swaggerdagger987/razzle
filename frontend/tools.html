@@ -404,9 +404,19 @@
     searchQuery: ''
   };
 
+  // Restore URL state
+  var _urlState = restorePageState({ cat: '', q: '' });
+  if (_urlState.cat) state.activeCategory = _urlState.cat;
+  if (_urlState.q) state.searchQuery = _urlState.q;
+
   function init() {
     // Analytics
     if (window.__razzleAnalytics) window.__razzleAnalytics('tools');
+
+    // Restore search input from URL
+    if (state.searchQuery) {
+      document.getElementById('tools-search').value = state.searchQuery;
+    }
 
     fetch('/api/tools-hub')
       .then(function(r) {
@@ -424,6 +434,7 @@
 
     document.getElementById('tools-search').addEventListener('input', function(e) {
       state.searchQuery = e.target.value.toLowerCase().trim();
+      savePageState({ cat: state.activeCategory === 'all' ? '' : state.activeCategory, q: state.searchQuery });
       applyFilters();
     });
   }
@@ -439,12 +450,20 @@
     });
     document.getElementById('cat-tabs').innerHTML = tabsHtml;
 
+    // Restore active category tab from URL
+    if (state.activeCategory !== 'all') {
+      document.querySelectorAll('.tools-cat-tab').forEach(function(t) {
+        t.classList.toggle('active', t.getAttribute('data-cat') === state.activeCategory);
+      });
+    }
+
     // Tab click handlers
     document.querySelectorAll('.tools-cat-tab').forEach(function(tab) {
       tab.addEventListener('click', function() {
         state.activeCategory = this.getAttribute('data-cat');
         document.querySelectorAll('.tools-cat-tab').forEach(function(t) { t.classList.remove('active'); });
         this.classList.add('active');
+        savePageState({ cat: state.activeCategory === 'all' ? '' : state.activeCategory, q: state.searchQuery });
         applyFilters();
       });
     });
@@ -475,6 +494,11 @@
       html += '</div>';
     });
     container.innerHTML = html;
+
+    // Apply URL-restored filters after render
+    if (state.activeCategory !== 'all' || state.searchQuery) {
+      applyFilters();
+    }
   }
 
   function applyFilters() {

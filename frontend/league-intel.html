@@ -448,7 +448,7 @@
   }
   .pressure-bar-fill {
     height: 100%;
-    border-radius: 6px;
+    border-radius: 8px;
     transition: width 0.4s ease;
   }
   .pressure-bar-score {
@@ -2123,7 +2123,7 @@
   .demo-depth-bar-fill {
     height: 100%;
     background: var(--green);
-    border-radius: 6px;
+    border-radius: 8px;
     transition: width 0.5s ease;
   }
 
@@ -2201,7 +2201,7 @@
 
   .demo-pressure-fill {
     height: 100%;
-    border-radius: 6px;
+    border-radius: 8px;
     transition: width 0.4s ease;
   }
 
@@ -2367,7 +2367,7 @@
     align-items: center;
     justify-content: center;
     border: 2px solid var(--ink);
-    border-radius: 6px;
+    border-radius: 8px;
   }
 
   .demo-schedule-week.easy {
@@ -2678,6 +2678,7 @@
 <script src="app.js"></script>
 <script src="agent-config.js"></script>
 <script src="agent-nudges.js"></script>
+<script>restorePageState({});</script>
 <script>document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { if (typeof checkNudges === 'function') checkNudges('bureau', 'bureau-nudge-container'); }, 3000); });</script>
 
 <!-- ===== DEMO LEAGUE DATA + TAB RENDERING ===== -->
@@ -2878,7 +2879,7 @@ function _renderDemoOverview() {
   for (var i = 0; i < D.managers.length; i++) {
     var m = D.managers[i];
     var youClass = m.isYou ? ' is-you' : '';
-    var youBadge = m.isYou ? '<span style="font-family:var(--font-mono);font-size:8px;background:var(--orange);color:var(--text-on-accent);padding:1px 5px;border-radius:6px;margin-left:4px;">YOU</span>' : '';
+    var youBadge = m.isYou ? '<span style="font-family:var(--font-mono);font-size:8px;background:var(--orange);color:var(--text-on-accent);padding:1px 5px;border-radius:8px;margin-left:4px;">YOU</span>' : '';
     h += '<div class="demo-mc-card' + youClass + '">';
     h += '<div class="demo-mc-name">' + escapeHtml(m.name) + youBadge + '</div>';
     h += '<div class="demo-mc-record">' + escapeHtml(m.record) + '</div>';
@@ -3070,7 +3071,7 @@ function _renderDemoRankings() {
     h += '<div class="demo-power-card">';
     h += '<div class="demo-power-rank" style="color:' + rankColor + ';">' + (i + 1) + '</div>';
     h += '<div class="demo-power-info">';
-    h += '<div class="demo-power-name">' + escapeHtml(m.name) + (m.isYou ? ' <span style="font-family:var(--font-mono);font-size:9px;background:var(--orange);color:var(--text-on-accent);padding:1px 5px;border-radius:6px;">YOU</span>' : '') + '</div>';
+    h += '<div class="demo-power-name">' + escapeHtml(m.name) + (m.isYou ? ' <span style="font-family:var(--font-mono);font-size:9px;background:var(--orange);color:var(--text-on-accent);padding:1px 5px;border-radius:8px;">YOU</span>' : '') + '</div>';
     h += '<div class="demo-power-detail">' + escapeHtml(m.record) + ' | ' + escapeHtml(m.buildProfile) + '</div>';
     h += '<div class="demo-power-components">';
     h += '<span class="demo-component-chip">Roster: <strong>' + m.rosterStrength + '</strong></span>';
@@ -3120,7 +3121,7 @@ function _renderDemoSchedule() {
     var hardCount = m.scheduleWeeks.filter(function(w) { return w === 'H'; }).length;
 
     h += '<div class="demo-schedule-row">';
-    h += '<div class="demo-schedule-name">' + escapeHtml(m.name) + (m.isYou ? ' <span style="font-size:8px;background:var(--orange);color:var(--text-on-accent);padding:0 4px;border-radius:4px;">YOU</span>' : '') + '</div>';
+    h += '<div class="demo-schedule-name">' + escapeHtml(m.name) + (m.isYou ? ' <span style="font-size:8px;background:var(--orange);color:var(--text-on-accent);padding:0 4px;border-radius:8px;">YOU</span>' : '') + '</div>';
     h += '<div class="demo-schedule-weeks">';
     for (var w = 0; w < m.scheduleWeeks.length; w++) {
       var wk = m.scheduleWeeks[w];

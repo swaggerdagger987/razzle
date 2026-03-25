@@ -111,6 +111,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
+    overflow-x: auto;
   }
 
   .buysell-column {
@@ -323,7 +324,7 @@
   }
   .buysell-mismatch-fill {
     height: 100%;
-    border-radius: 6px;
+    border-radius: 8px;
     transition: width 0.3s ease;
   }
   .buysell-mismatch-fill.buy { background: var(--green); opacity: 0.7; }
