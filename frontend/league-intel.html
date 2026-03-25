@@ -1931,6 +1931,581 @@
     .pos-grade-grid { grid-template-columns: repeat(2, 1fr); }
     .bureau-tab { font-size: 10px; padding: 6px 10px; }
   }
+
+  /* ===== DEMO BUREAU: Sticky tab bar + sections ===== */
+  .demo-bureau-tabs {
+    display: flex;
+    gap: 0;
+    background: var(--bg);
+    border-bottom: 3px solid var(--ink);
+    margin: 0 -24px;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .demo-bureau-tab {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 18px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--ink-light);
+    white-space: nowrap;
+    border-bottom: 4px solid transparent;
+    margin-bottom: -3px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .demo-bureau-tab:hover { color: var(--ink); }
+
+  .demo-bureau-tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--orange);
+  }
+
+  .demo-tab-section {
+    display: none;
+    padding-top: 20px;
+  }
+
+  .demo-tab-section.active { display: block; }
+
+  /* Overview Monte Carlo grid */
+  .demo-mc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .demo-mc-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius-sm);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 14px;
+    text-align: center;
+    transition: all 0.12s;
+  }
+
+  .demo-mc-card:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .demo-mc-card.is-you {
+    border-color: var(--orange);
+    box-shadow: 4px 4px 0 var(--orange);
+  }
+
+  .demo-mc-name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 2px;
+  }
+
+  .demo-mc-record {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+  }
+
+  .demo-mc-champ {
+    font-family: var(--font-display);
+    font-size: 24px;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .demo-mc-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Storylines */
+  .demo-storyline {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .demo-storyline-agent {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .demo-storyline-text {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-medium);
+    line-height: 1.3;
+  }
+
+  /* Self-scout position grades */
+  .demo-pos-grades {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .demo-pos-grade {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius-sm);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 14px;
+    text-align: center;
+  }
+
+  .demo-pos-grade-letter {
+    font-family: var(--font-display);
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .demo-pos-grade-pos {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .demo-pos-grade-detail {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-top: 4px;
+  }
+
+  /* Depth meter */
+  .demo-depth-meter {
+    margin: 16px 0;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+  }
+
+  .demo-depth-bar-track {
+    height: 20px;
+    background: var(--bg-warm);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .demo-depth-bar-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+  }
+
+  /* Build profile badge */
+  .demo-build-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border: 3px solid var(--ink);
+    border-radius: 20px;
+    transform: rotate(-2deg);
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+
+  /* Rivals cards grid */
+  .demo-rivals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .demo-rival-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 14px;
+    transition: all 0.12s;
+  }
+
+  .demo-rival-card:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .demo-rival-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .demo-rival-record {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+  }
+
+  .demo-behavior-chip {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border: 2px solid;
+    border-radius: 20px;
+    transform: rotate(-1deg);
+    margin-bottom: 6px;
+  }
+
+  .demo-pressure-track {
+    height: 12px;
+    background: var(--bg-warm);
+    border: 2px solid var(--ink-faint);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .demo-pressure-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.4s ease;
+  }
+
+  .demo-pressure-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--ink-light);
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2px;
+  }
+
+  /* Trade history */
+  .demo-trade-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .demo-trade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .demo-trade-sides {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    align-items: start;
+  }
+
+  .demo-trade-side {
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-warm);
+  }
+
+  .demo-trade-arrow {
+    font-size: 18px;
+    color: var(--ink-light);
+    align-self: center;
+  }
+
+  .demo-trade-player {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 2px 0;
+  }
+
+  .demo-trade-verdict {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink-medium);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 2px dashed var(--ink-faint);
+  }
+
+  /* Power rankings */
+  .demo-power-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.12s;
+  }
+
+  .demo-power-card:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .demo-power-rank {
+    font-family: var(--font-display);
+    font-size: 26px;
+    min-width: 36px;
+    text-align: center;
+    color: var(--ink);
+  }
+
+  .demo-power-info { flex: 1; min-width: 0; }
+
+  .demo-power-name {
+    font-family: var(--font-display);
+    font-size: 15px;
+  }
+
+  .demo-power-detail {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  .demo-power-right {
+    text-align: right;
+    min-width: 70px;
+  }
+
+  .demo-power-score {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .demo-power-components {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .demo-component-chip {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    padding: 1px 6px;
+    border: 2px solid var(--ink-faint);
+    border-radius: 8px;
+    background: var(--bg-warm);
+  }
+
+  /* Schedule difficulty */
+  .demo-schedule-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 2px dashed var(--ink-faint);
+  }
+
+  .demo-schedule-row:last-child { border-bottom: none; }
+
+  .demo-schedule-name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 140px;
+  }
+
+  .demo-schedule-weeks {
+    display: flex;
+    gap: 3px;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+
+  .demo-schedule-week {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    width: 28px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+  }
+
+  .demo-schedule-week.easy {
+    background: var(--green-light);
+    color: var(--green);
+    border-color: var(--green);
+  }
+
+  .demo-schedule-week.medium {
+    background: var(--bg-warm);
+    color: var(--ink-medium);
+  }
+
+  .demo-schedule-week.hard {
+    background: var(--red-light);
+    color: var(--red);
+    border-color: var(--red);
+  }
+
+  /* Sleeper connect bottom card */
+  .demo-connect-bottom {
+    background: var(--bg-card);
+    border: 3px solid var(--orange);
+    border-radius: var(--radius);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 28px;
+    text-align: center;
+    margin-top: 32px;
+  }
+
+  .demo-connect-bottom h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+
+  .demo-connect-bottom p {
+    font-family: var(--font-hand);
+    font-size: 18px;
+    color: var(--ink-medium);
+    margin-bottom: 16px;
+  }
+
+  .demo-connect-form {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .demo-connect-form input { width: 240px; }
+
+  .demo-connected-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border: 2px solid var(--green);
+    border-radius: 20px;
+    background: var(--green-light);
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+
+  /* Demo mode banner */
+  .demo-banner {
+    background: var(--orange-light);
+    border: 3px solid var(--orange);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  /* Section headings inside tabs */
+  .demo-section-heading {
+    font-family: var(--font-display);
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .demo-section-sub {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-medium);
+    margin-bottom: 16px;
+  }
+
+  /* Roster list in self-scout */
+  .demo-roster-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .demo-roster-player {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Mobile overrides for demo sections */
+  @media (max-width: 768px) {
+    .demo-bureau-tabs {
+      margin: 0 -12px;
+      padding: 0 12px;
+    }
+    .demo-bureau-tab { font-size: 11px; padding: 10px 12px; }
+    .demo-mc-grid { grid-template-columns: repeat(2, 1fr); }
+    .demo-rivals-grid { grid-template-columns: 1fr; }
+    .demo-pos-grades { grid-template-columns: repeat(2, 1fr); }
+    .demo-trade-sides { grid-template-columns: 1fr; }
+    .demo-trade-arrow { text-align: center; }
+    .demo-schedule-name { min-width: 100px; font-size: 10px; }
+    .demo-connect-form { flex-direction: column; align-items: center; }
+    .demo-connect-form input { width: 100%; }
+    .demo-roster-list { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .demo-bureau-tabs {
+      margin: 0 -8px;
+      padding: 0 8px;
+    }
+    .demo-bureau-tab { font-size: 10px; padding: 8px 8px; }
+    .demo-mc-grid { grid-template-columns: 1fr; }
+    .demo-pos-grades { grid-template-columns: repeat(2, 1fr); }
+    .demo-schedule-weeks { gap: 2px; }
+    .demo-schedule-week { width: 22px; height: 18px; font-size: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -1965,20 +2540,45 @@
   </noscript>
   <h1 class="sr-only">Bureau of Intelligence — Razzle</h1>
   <div id="bureau-nudge-container"></div>
-  <!-- Connect Card (shown when no username) -->
-  <div id="connectView">
-    <div class="connect-card">
-      <div style="font-size:48px; margin-bottom:12px;">🐯</div>
-      <h2>Connect Your Sleeper</h2>
-      <p>enter your Sleeper username to see your leagues</p>
-      <div class="connect-form">
+
+  <!-- DEMO VIEW: shown by default, hidden when Sleeper connected -->
+  <div id="demoView">
+    <div class="demo-banner" id="demoBanner">
+      Sample data from a demo league. <a href="#demoConnectCard" style="color:var(--orange);font-weight:700;">Connect your Sleeper</a> to see YOUR league.
+    </div>
+
+    <!-- Sticky tab bar -->
+    <div class="demo-bureau-tabs" id="demoTabBar" role="tablist" aria-label="Bureau sections">
+      <button class="demo-bureau-tab active" role="tab" aria-selected="true" data-tab="overview" onclick="_switchDemoTab('overview')">Overview</button>
+      <button class="demo-bureau-tab" role="tab" aria-selected="false" data-tab="selfscout" onclick="_switchDemoTab('selfscout')">Self-Scout</button>
+      <button class="demo-bureau-tab" role="tab" aria-selected="false" data-tab="rivals" onclick="_switchDemoTab('rivals')">Rivals</button>
+      <button class="demo-bureau-tab" role="tab" aria-selected="false" data-tab="trades" onclick="_switchDemoTab('trades')">Trades</button>
+      <button class="demo-bureau-tab" role="tab" aria-selected="false" data-tab="rankings" onclick="_switchDemoTab('rankings')">Power Rankings</button>
+      <button class="demo-bureau-tab" role="tab" aria-selected="false" data-tab="schedule" onclick="_switchDemoTab('schedule')">Schedule</button>
+    </div>
+
+    <!-- Tab sections rendered by JS -->
+    <div id="demoTabOverview" class="demo-tab-section active" role="tabpanel"></div>
+    <div id="demoTabSelfscout" class="demo-tab-section" role="tabpanel"></div>
+    <div id="demoTabRivals" class="demo-tab-section" role="tabpanel"></div>
+    <div id="demoTabTrades" class="demo-tab-section" role="tabpanel"></div>
+    <div id="demoTabRankings" class="demo-tab-section" role="tabpanel"></div>
+    <div id="demoTabSchedule" class="demo-tab-section" role="tabpanel"></div>
+
+    <!-- Sleeper connection at the bottom -->
+    <div class="demo-connect-bottom" id="demoConnectCard">
+      <div style="font-size:40px; margin-bottom:8px;">🐯</div>
+      <h3>See this for YOUR league</h3>
+      <p>connect your Sleeper username and all this data becomes real</p>
+      <div class="demo-connect-form">
         <input type="text" class="input-chunky" id="sleeperUsername" placeholder="sleeper username" aria-label="Sleeper username" aria-describedby="connectError" onkeydown="if(event.key==='Enter'){event.preventDefault();connectSleeper();}">
         <button class="btn-primary" id="connectBtn" onclick="connectSleeper()">Connect</button>
       </div>
       <div class="connect-error" id="connectError" role="alert"></div>
       <div id="connectWarning" style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-top:8px;">stored locally in your browser — sign up to save</div>
-      <div style="margin-top:20px;border-top:2px dashed var(--ink-faint);padding-top:16px;">
-        <div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin-bottom:8px;">Don't use Sleeper?</div>
+      <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:12px;">We only read your league data. Nothing is shared.</div>
+      <div style="margin-top:16px;border-top:2px dashed var(--ink-faint);padding-top:12px;">
+        <div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-medium);margin-bottom:6px;">Don't use Sleeper?</div>
         <div style="display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:340px;margin:0 auto;">
           <input type="email" class="input-chunky" id="espnYahooEmail" placeholder="your@email.com" style="flex:1;min-width:160px;font-size:12px;" aria-label="Email for ESPN/Yahoo notification">
           <button class="btn-chunky" style="font-size:11px;padding:8px 14px;white-space:nowrap;" onclick="_saveWaitlistEmail()">Notify me</button>
@@ -1989,14 +2589,10 @@
           <span style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:8px;padding:2px 8px;margin:0 2px;">Yahoo</span> support coming soon
         </div>
       </div>
-      <div style="margin-top:16px;">
-        <button class="btn-chunky" style="font-size:13px;padding:10px 24px;background:var(--bg-warm);" onclick="_loadDemoLeague()">See a demo league</button>
-        <div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);margin-top:4px;">sample data — see what the Bureau looks like</div>
-      </div>
     </div>
   </div>
 
-  <!-- Leagues View (shown after connection) -->
+  <!-- LEAGUES VIEW: shown after Sleeper connection -->
   <div id="leaguesView" style="display:none;">
     <div class="leagues-header">
       <h2>Your Leagues</h2>
@@ -2083,6 +2679,476 @@
 <script src="agent-config.js"></script>
 <script src="agent-nudges.js"></script>
 <script>document.addEventListener('DOMContentLoaded', function() { setTimeout(function() { if (typeof checkNudges === 'function') checkNudges('bureau', 'bureau-nudge-container'); }, 3000); });</script>
+
+<!-- ===== DEMO LEAGUE DATA + TAB RENDERING ===== -->
+<script>
+// ── Expanded demo league data ─────────────────────────────────────
+var DEMO_LEAGUE = {
+  name: "Dynasty Legends League",
+  settings: "12-team Dynasty Superflex | Half PPR | 2025 Season",
+  managers: [
+    { id: 1, name: "DynastyKing2024", record: "9-4", wins: 9, losses: 4, fpts: 1842.6, champOdds: 23.4, playoffOdds: 89.2, isYou: true,
+      archetype: "TRADE ADDICT", archetypeColor: "var(--purple)", desperation: 12,
+      profile: "Constantly reshuffling. Sends 3 offers before breakfast. Always looking for that edge.",
+      roster: [{name:"Patrick Mahomes",pos:"QB"},{name:"Ja'Marr Chase",pos:"WR"},{name:"Bijan Robinson",pos:"RB"},{name:"Sam LaPorta",pos:"TE"},{name:"Garrett Wilson",pos:"WR"},{name:"De'Von Achane",pos:"RB"},{name:"Drake London",pos:"WR"},{name:"Dalton Kincaid",pos:"TE"},{name:"Jayden Daniels",pos:"QB"},{name:"Brian Thomas Jr",pos:"WR"},{name:"Trey Benson",pos:"RB"},{name:"Keon Coleman",pos:"WR"},{name:"Brock Bowers",pos:"TE"},{name:"Rashee Rice",pos:"WR"},{name:"Javonte Williams",pos:"RB"}],
+      posGrades: {QB:"A",RB:"B+",WR:"A",TE:"A-"}, depthScore: 82, buildProfile: "Stars & Scrubs",
+      powerScore: 92, rosterStrength: 95, depth: 82, activity: 88, sosDifficulty: 45,
+      scheduleWeeks: ["E","M","H","E","E","M","H","H","M","E","M","H","E","E"] },
+    { id: 2, name: "TacoTuesday", record: "8-5", wins: 8, losses: 5, fpts: 1764.2, champOdds: 18.7, playoffOdds: 82.1, isYou: false,
+      archetype: "HOARDER", archetypeColor: "var(--pos-te)", desperation: 28,
+      profile: "Sits on a mountain of draft picks. Won't trade anyone. Waiting for 'the right deal.'",
+      roster: [{name:"Josh Allen",pos:"QB"},{name:"Saquon Barkley",pos:"RB"},{name:"CeeDee Lamb",pos:"WR"},{name:"Travis Kelce",pos:"TE"},{name:"Chris Olave",pos:"WR"},{name:"Josh Jacobs",pos:"RB"},{name:"Diontae Johnson",pos:"WR"},{name:"Pat Freiermuth",pos:"TE"}],
+      posGrades: {QB:"A-",RB:"B",WR:"B+",TE:"B"}, depthScore: 68, buildProfile: "Balanced",
+      powerScore: 87, rosterStrength: 88, depth: 68, activity: 35, sosDifficulty: 52,
+      scheduleWeeks: ["M","H","E","M","E","H","M","E","H","M","E","M","H","E"] },
+    { id: 3, name: "RedZoneKing_99", record: "7-6", wins: 7, losses: 6, fpts: 1698.8, champOdds: 14.2, playoffOdds: 71.5, isYou: false,
+      archetype: "STEADY HAND", archetypeColor: "var(--pos-rb)", desperation: 35,
+      profile: "Doesn't panic. Rarely makes mistakes. Always in the playoff picture.",
+      roster: [{name:"Lamar Jackson",pos:"QB"},{name:"Derrick Henry",pos:"RB"},{name:"Tyreek Hill",pos:"WR"},{name:"Mark Andrews",pos:"TE"},{name:"Amon-Ra St. Brown",pos:"WR"},{name:"James Cook",pos:"RB"},{name:"Jaylen Waddle",pos:"WR"},{name:"Cole Kmet",pos:"TE"}],
+      posGrades: {QB:"B+",RB:"B",WR:"A-",TE:"B-"}, depthScore: 71, buildProfile: "Win Now",
+      powerScore: 81, rosterStrength: 82, depth: 71, activity: 62, sosDifficulty: 58,
+      scheduleWeeks: ["H","E","M","H","M","E","E","M","H","E","M","M","E","H"] },
+    { id: 4, name: "PointsChaser", record: "7-6", wins: 7, losses: 6, fpts: 1721.4, champOdds: 12.8, playoffOdds: 68.3, isYou: false,
+      archetype: "AGGRESSIVE", archetypeColor: "var(--orange)", desperation: 42,
+      profile: "Chases the hot hand every week. High risk, high reward. Roster turnover is wild.",
+      roster: [{name:"Jalen Hurts",pos:"QB"},{name:"Breece Hall",pos:"RB"},{name:"DK Metcalf",pos:"WR"},{name:"George Kittle",pos:"TE"},{name:"Mike Evans",pos:"WR"},{name:"Tony Pollard",pos:"RB"},{name:"DeVonta Smith",pos:"WR"},{name:"Evan Engram",pos:"TE"}],
+      posGrades: {QB:"B",RB:"B-",WR:"B+",TE:"B"}, depthScore: 59, buildProfile: "Hero RB",
+      powerScore: 78, rosterStrength: 80, depth: 59, activity: 91, sosDifficulty: 61,
+      scheduleWeeks: ["E","M","M","H","H","E","M","E","M","H","E","H","M","E"] },
+    { id: 5, name: "WaiverWire_Hero", record: "6-7", wins: 6, losses: 7, fpts: 1632.1, champOdds: 9.1, playoffOdds: 52.7, isYou: false,
+      archetype: "WAIVER WARRIOR", archetypeColor: "var(--green)", desperation: 55,
+      profile: "Lives on the wire. Somehow always finds the breakout before everyone else.",
+      roster: [{name:"Anthony Richardson",pos:"QB"},{name:"Jonathan Taylor",pos:"RB"},{name:"Davante Adams",pos:"WR"},{name:"Dallas Goedert",pos:"TE"},{name:"Terry McLaurin",pos:"WR"},{name:"Najee Harris",pos:"RB"},{name:"Christian Kirk",pos:"WR"},{name:"David Njoku",pos:"TE"}],
+      posGrades: {QB:"C+",RB:"B",WR:"B-",TE:"C+"}, depthScore: 65, buildProfile: "Balanced",
+      powerScore: 72, rosterStrength: 70, depth: 65, activity: 95, sosDifficulty: 48,
+      scheduleWeeks: ["M","E","H","E","M","H","E","M","E","H","H","E","M","M"] },
+    { id: 6, name: "TradeAddict_OG", record: "6-7", wins: 6, losses: 7, fpts: 1601.7, champOdds: 7.5, playoffOdds: 44.9, isYou: false,
+      archetype: "PANIC SELLER", archetypeColor: "var(--red)", desperation: 72,
+      profile: "Two losses in a row and the fire sale starts. Sells low, buys high. Exploitable.",
+      roster: [{name:"Trevor Lawrence",pos:"QB"},{name:"Travis Etienne",pos:"RB"},{name:"Brandon Aiyuk",pos:"WR"},{name:"Kyle Pitts",pos:"TE"},{name:"DJ Moore",pos:"WR"},{name:"Rachaad White",pos:"RB"},{name:"Courtland Sutton",pos:"WR"},{name:"Taysom Hill",pos:"TE"}],
+      posGrades: {QB:"C",RB:"C+",WR:"B-",TE:"C"}, depthScore: 48, buildProfile: "Retooling",
+      powerScore: 65, rosterStrength: 63, depth: 48, activity: 82, sosDifficulty: 55,
+      scheduleWeeks: ["H","H","E","M","E","M","H","E","M","E","M","H","E","M"] },
+    { id: 7, name: "SleepingGiant", record: "5-8", wins: 5, losses: 8, fpts: 1554.3, champOdds: 5.8, playoffOdds: 31.2, isYou: false,
+      archetype: "PATIENT", archetypeColor: "var(--pos-qb)", desperation: 38,
+      profile: "Building for the future. Young roster, stacked with picks. Scary in 2 years.",
+      roster: [{name:"Caleb Williams",pos:"QB"},{name:"Jahmyr Gibbs",pos:"RB"},{name:"Rome Odunze",pos:"WR"},{name:"Trey McBride",pos:"TE"},{name:"Quentin Johnston",pos:"WR"},{name:"Zach Charbonnet",pos:"RB"},{name:"Jaxon Smith-Njigba",pos:"WR"},{name:"Dalton Schultz",pos:"TE"}],
+      posGrades: {QB:"B-",RB:"B-",WR:"C+",TE:"B"}, depthScore: 72, buildProfile: "Youth Movement",
+      powerScore: 58, rosterStrength: 55, depth: 72, activity: 45, sosDifficulty: 62,
+      scheduleWeeks: ["E","M","M","E","H","H","M","H","E","M","E","E","H","M"] },
+    { id: 8, name: "TankCommander", record: "5-8", wins: 5, losses: 8, fpts: 1489.6, champOdds: 3.2, playoffOdds: 18.6, isYou: false,
+      archetype: "TANKER", archetypeColor: "var(--ink-medium)", desperation: 15,
+      profile: "Intentionally losing for picks. Roster is a museum of future assets.",
+      roster: [{name:"Drake Maye",pos:"QB"},{name:"Bucky Irving",pos:"RB"},{name:"George Pickens",pos:"WR"},{name:"Cade Otton",pos:"TE"},{name:"Ladd McConkey",pos:"WR"},{name:"Jaylen Wright",pos:"RB"},{name:"Xavier Legette",pos:"WR"},{name:"Ben Sinnott",pos:"TE"}],
+      posGrades: {QB:"C",RB:"C",WR:"C+",TE:"C"}, depthScore: 55, buildProfile: "Full Rebuild",
+      powerScore: 45, rosterStrength: 42, depth: 55, activity: 28, sosDifficulty: 70,
+      scheduleWeeks: ["H","M","E","H","M","E","H","M","E","H","M","E","H","M"] },
+    { id: 9, name: "RebuildMode", record: "4-9", wins: 4, losses: 9, fpts: 1412.5, champOdds: 2.9, playoffOdds: 12.4, isYou: false,
+      archetype: "REBUILDER", archetypeColor: "var(--pos-qb)", desperation: 22,
+      profile: "Tore it down last year. The picks are starting to hit. Rising fast.",
+      roster: [{name:"Bo Nix",pos:"QB"},{name:"Jonathon Brooks",pos:"RB"},{name:"Malik Nabers",pos:"WR"},{name:"Ja'Tavion Sanders",pos:"TE"},{name:"Xavier Worthy",pos:"WR"},{name:"MarShawn Lloyd",pos:"RB"},{name:"Adonai Mitchell",pos:"WR"},{name:"Luke Musgrave",pos:"TE"}],
+      posGrades: {QB:"C-",RB:"C-",WR:"B-",TE:"C"}, depthScore: 50, buildProfile: "Rebuilding",
+      powerScore: 40, rosterStrength: 38, depth: 50, activity: 55, sosDifficulty: 65,
+      scheduleWeeks: ["M","E","H","M","H","E","E","H","M","E","H","M","E","H"] },
+    { id: 10, name: "LuckyBounces", record: "3-10", wins: 3, losses: 10, fpts: 1398.2, champOdds: 1.4, playoffOdds: 6.8, isYou: false,
+      archetype: "UNLUCKY", archetypeColor: "var(--ink-light)", desperation: 65,
+      profile: "Points scored say they're decent. Record says otherwise. Wrong matchup every week.",
+      roster: [{name:"Dak Prescott",pos:"QB"},{name:"Aaron Jones",pos:"RB"},{name:"Stefon Diggs",pos:"WR"},{name:"T.J. Hockenson",pos:"TE"},{name:"Amari Cooper",pos:"WR"},{name:"D'Andre Swift",pos:"RB"},{name:"Michael Pittman Jr",pos:"WR"},{name:"Hunter Henry",pos:"TE"}],
+      posGrades: {QB:"B-",RB:"C+",WR:"C+",TE:"B-"}, depthScore: 52, buildProfile: "Win Now (Fading)",
+      powerScore: 38, rosterStrength: 45, depth: 52, activity: 40, sosDifficulty: 72,
+      scheduleWeeks: ["H","H","M","E","E","H","M","H","M","E","M","H","E","M"] },
+    { id: 11, name: "RookieSZN", record: "3-10", wins: 3, losses: 10, fpts: 1355.1, champOdds: 0.8, playoffOdds: 4.1, isYou: false,
+      archetype: "PROSPECT HUGGER", archetypeColor: "var(--pos-wr)", desperation: 18,
+      profile: "Refuses to trade rookies. Every handcuff is 'the next big thing.' Perpetual hope.",
+      roster: [{name:"C.J. Stroud",pos:"QB"},{name:"Rico Dowdle",pos:"RB"},{name:"Tank Dell",pos:"WR"},{name:"Isaiah Likely",pos:"TE"},{name:"Jordan Addison",pos:"WR"},{name:"Chase Brown",pos:"RB"},{name:"Rashid Shaheed",pos:"WR"},{name:"Chigoziem Okonkwo",pos:"TE"}],
+      posGrades: {QB:"B",RB:"D+",WR:"C",TE:"C-"}, depthScore: 40, buildProfile: "Youth Gamble",
+      powerScore: 32, rosterStrength: 35, depth: 40, activity: 50, sosDifficulty: 58,
+      scheduleWeeks: ["M","E","E","H","M","H","E","M","H","E","M","E","H","H"] },
+    { id: 12, name: "BuyLowSellHigh", record: "2-11", wins: 2, losses: 11, fpts: 1288.4, champOdds: 0.3, playoffOdds: 1.7, isYou: false,
+      archetype: "VALUE HUNTER", archetypeColor: "var(--green)", desperation: 82,
+      profile: "Always trading, but bad at it. Thinks they're getting deals. They're not.",
+      roster: [{name:"Daniel Jones",pos:"QB"},{name:"Devin Singletary",pos:"RB"},{name:"Jahan Dotson",pos:"WR"},{name:"Juwan Johnson",pos:"TE"},{name:"Darnell Mooney",pos:"WR"},{name:"Antonio Gibson",pos:"RB"},{name:"Josh Palmer",pos:"WR"},{name:"Tyler Conklin",pos:"TE"}],
+      posGrades: {QB:"D",RB:"D+",WR:"D+",TE:"D"}, depthScore: 30, buildProfile: "Lost Cause",
+      powerScore: 22, rosterStrength: 20, depth: 30, activity: 78, sosDifficulty: 50,
+      scheduleWeeks: ["E","H","M","E","H","M","E","H","M","E","H","M","E","H"] }
+  ],
+  trades: [
+    { id: 1, week: "Week 6", side1mgr: "DynastyKing2024", side2mgr: "TradeAddict_OG",
+      side1gets: [{name:"Brandon Aiyuk",pos:"WR"}], side2gets: [{name:"Brian Thomas Jr",pos:"WR"},{name:"2025 2nd",pos:"PICK"}],
+      verdict: "Dynasty edge to Side B. BTJ's age profile is elite. Aiyuk is the safer floor." },
+    { id: 2, week: "Week 4", side1mgr: "TacoTuesday", side2mgr: "PointsChaser",
+      side1gets: [{name:"Tony Pollard",pos:"RB"}], side2gets: [{name:"2025 1st",pos:"PICK"},{name:"2026 2nd",pos:"PICK"}],
+      verdict: "Massive overpay for a depreciating RB. Taco wins this one in the short term only." },
+    { id: 3, week: "Week 8", side1mgr: "WaiverWire_Hero", side2mgr: "BuyLowSellHigh",
+      side1gets: [{name:"Darnell Mooney",pos:"WR"},{name:"2025 3rd",pos:"PICK"}], side2gets: [{name:"Terry McLaurin",pos:"WR"}],
+      verdict: "Robbery. McLaurin is worth 2x that package. BuyLow living up to the name, ironically." },
+    { id: 4, week: "Week 10", side1mgr: "SleepingGiant", side2mgr: "RedZoneKing_99",
+      side1gets: [{name:"James Cook",pos:"RB"}], side2gets: [{name:"Jaxon Smith-Njigba",pos:"WR"},{name:"2025 2nd",pos:"PICK"}],
+      verdict: "Fair deal. Cook for a playoff push vs JSN for dynasty upside. Both sides get what they need." },
+    { id: 5, week: "Week 3", side1mgr: "PointsChaser", side2mgr: "RebuildMode",
+      side1gets: [{name:"Malik Nabers",pos:"WR"}], side2gets: [{name:"DeVonta Smith",pos:"WR"},{name:"2025 1st",pos:"PICK"},{name:"2026 1st",pos:"PICK"}],
+      verdict: "Nabers is a stud but two 1sts plus a solid WR2 is hard to turn down. Rebuild wins long-term." },
+    { id: 6, week: "Week 12", side1mgr: "TradeAddict_OG", side2mgr: "TankCommander",
+      side1gets: [{name:"George Pickens",pos:"WR"}], side2gets: [{name:"Courtland Sutton",pos:"WR"},{name:"2025 2nd",pos:"PICK"}],
+      verdict: "Pickens upside is obvious but the volatility is real. Tank gets fair return for a rebuild piece." },
+    { id: 7, week: "Week 7", side1mgr: "DynastyKing2024", side2mgr: "LuckyBounces",
+      side1gets: [{name:"Amari Cooper",pos:"WR"}], side2gets: [{name:"Keon Coleman",pos:"WR"},{name:"2026 3rd",pos:"PICK"}],
+      verdict: "Win-now rental vs dynasty upside. Cooper adds a floor for the playoff push." }
+  ],
+  storylines: [
+    { agent: "Hawkeye", emoji: "🦅", text: "DynastyKing2024 has the deepest WR corps in the league. Three WR1s on the roster. Championship or bust." },
+    { agent: "Bones", emoji: "🦴", text: "TradeAddict_OG just hit desperation level 72. They're 6-7 and selling assets. This is your buy window." },
+    { agent: "Atlas", emoji: "🐙", text: "Monte Carlo says BuyLowSellHigh has a 0.3% championship chance. Their schedule gets harder. Consider vulturing their best assets." }
+  ]
+};
+
+// ── Tab switching ──────────────────────────────────────────────────
+function _switchDemoTab(tabName) {
+  var tabs = document.querySelectorAll('#demoTabBar .demo-bureau-tab');
+  for (var i = 0; i < tabs.length; i++) {
+    var isActive = tabs[i].dataset.tab === tabName;
+    tabs[i].classList.toggle('active', isActive);
+    tabs[i].setAttribute('aria-selected', isActive ? 'true' : 'false');
+  }
+  var sections = ['overview','selfscout','rivals','trades','rankings','schedule'];
+  for (var s = 0; s < sections.length; s++) {
+    var el = document.getElementById('demoTab' + sections[s].charAt(0).toUpperCase() + sections[s].slice(1));
+    if (el) el.classList.toggle('active', sections[s] === tabName);
+  }
+}
+
+// ── Render all demo tabs ──────────────────────────────────────────
+function _renderDemoTabs() {
+  _renderDemoOverview();
+  _renderDemoSelfScout();
+  _renderDemoRivals();
+  _renderDemoTrades();
+  _renderDemoRankings();
+  _renderDemoSchedule();
+}
+
+// ── Helper: position color ────────────────────────────────────────
+function _demoPosColor(pos) {
+  pos = (pos || '').toUpperCase();
+  if (pos === 'QB') return 'var(--pos-qb)';
+  if (pos === 'RB') return 'var(--pos-rb)';
+  if (pos === 'WR') return 'var(--pos-wr)';
+  if (pos === 'TE') return 'var(--pos-te)';
+  return 'var(--ink-medium)';
+}
+
+// ── Helper: grade color ───────────────────────────────────────────
+function _demoGradeColor(grade) {
+  var g = (grade || '').charAt(0);
+  if (g === 'A') return 'var(--green)';
+  if (g === 'B') return 'var(--pos-qb)';
+  if (g === 'C') return 'var(--orange)';
+  return 'var(--red)';
+}
+
+// ── Helper: pressure bar color ────────────────────────────────────
+function _demoPressureColor(score) {
+  if (score >= 70) return 'var(--red)';
+  if (score >= 50) return 'var(--orange)';
+  if (score >= 30) return 'var(--pos-qb)';
+  return 'var(--green)';
+}
+
+// ── OVERVIEW TAB ──────────────────────────────────────────────────
+function _renderDemoOverview() {
+  var el = document.getElementById('demoTabOverview');
+  if (!el) return;
+  var D = DEMO_LEAGUE;
+  var me = D.managers[0];
+
+  var h = '';
+
+  // League header
+  h += '<div style="text-align:center;margin-bottom:20px;">';
+  h += '<div style="font-family:var(--font-display);font-size:20px;">' + escapeHtml(D.name) + '</div>';
+  h += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">' + escapeHtml(D.settings) + '</div>';
+  h += '</div>';
+
+  // Executive summary
+  h += '<div class="demo-section-heading">Here\'s your league at a glance</div>';
+  h += '<div class="demo-section-sub">Monte Carlo ran 10,000 simulations. Here\'s who\'s winning the math war.</div>';
+
+  // Monte Carlo grid
+  h += '<div class="demo-mc-grid">';
+  for (var i = 0; i < D.managers.length; i++) {
+    var m = D.managers[i];
+    var youClass = m.isYou ? ' is-you' : '';
+    var youBadge = m.isYou ? '<span style="font-family:var(--font-mono);font-size:8px;background:var(--orange);color:var(--text-on-accent);padding:1px 5px;border-radius:6px;margin-left:4px;">YOU</span>' : '';
+    h += '<div class="demo-mc-card' + youClass + '">';
+    h += '<div class="demo-mc-name">' + escapeHtml(m.name) + youBadge + '</div>';
+    h += '<div class="demo-mc-record">' + escapeHtml(m.record) + '</div>';
+    h += '<div class="demo-mc-champ" style="color:' + (m.champOdds >= 10 ? 'var(--orange)' : 'var(--ink)') + ';">' + m.champOdds + '%</div>';
+    h += '<div class="demo-mc-label">championship</div>';
+    h += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);margin-top:4px;">playoff: ' + m.playoffOdds + '%</div>';
+    h += '</div>';
+  }
+  h += '</div>';
+
+  // Top 3 storylines
+  h += '<div class="demo-section-heading" style="margin-top:24px;">Top Storylines</div>';
+  for (var s = 0; s < D.storylines.length; s++) {
+    var st = D.storylines[s];
+    h += '<div class="demo-storyline">';
+    h += '<div class="demo-storyline-agent">' + st.emoji + ' ' + escapeHtml(st.agent) + '</div>';
+    h += '<div class="demo-storyline-text">' + escapeHtml(st.text) + '</div>';
+    h += '</div>';
+  }
+
+  el.innerHTML = h;
+}
+
+// ── SELF-SCOUT TAB ────────────────────────────────────────────────
+function _renderDemoSelfScout() {
+  var el = document.getElementById('demoTabSelfscout');
+  if (!el) return;
+  var me = DEMO_LEAGUE.managers[0];
+
+  var h = '';
+
+  // Agent header
+  h += '<div class="agent-header"><div class="agent-avatar" style="background:var(--pos-rb);">🦅</div><div><div class="agent-name" style="color:var(--pos-rb);">Hawkeye</div><div class="agent-role">Scout</div></div></div>';
+  h += '<div class="agent-quote">"Your WR room is elite. The RB depth behind your top two is where I\'d focus this offseason."</div>';
+
+  h += '<div class="demo-section-heading">' + escapeHtml(me.name) + '\'s Roster Analysis</div>';
+  h += '<div class="demo-section-sub">' + escapeHtml(me.record) + ' | ' + me.fpts.toFixed(1) + ' total points</div>';
+
+  // Position grades
+  h += '<div class="demo-pos-grades">';
+  var positions = ['QB','RB','WR','TE'];
+  for (var p = 0; p < positions.length; p++) {
+    var pos = positions[p];
+    var grade = me.posGrades[pos] || 'C';
+    h += '<div class="demo-pos-grade">';
+    h += '<div class="demo-pos-grade-letter" style="color:' + _demoGradeColor(grade) + ';">' + escapeHtml(grade) + '</div>';
+    h += '<div class="demo-pos-grade-pos" style="color:' + _demoPosColor(pos) + ';">' + pos + '</div>';
+    h += '<div class="demo-pos-grade-detail">starter quality</div>';
+    h += '</div>';
+  }
+  h += '</div>';
+
+  // Depth score
+  h += '<div class="demo-depth-meter">';
+  h += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+  h += '<div style="font-family:var(--font-mono);font-size:12px;font-weight:700;">Depth Score</div>';
+  h += '<div style="font-family:var(--font-display);font-size:20px;color:' + (me.depthScore >= 70 ? 'var(--green)' : 'var(--orange)') + ';">' + me.depthScore + '</div>';
+  h += '</div>';
+  h += '<div class="demo-depth-bar-track"><div class="demo-depth-bar-fill" style="width:' + me.depthScore + '%;background:' + (me.depthScore >= 70 ? 'var(--green)' : 'var(--orange)') + ';"></div></div>';
+  h += '<div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);margin-top:6px;">' + (me.depthScore >= 70 ? 'Strong bench. You can survive injuries.' : 'Thin bench. One injury could sink the season.') + '</div>';
+  h += '</div>';
+
+  // Build profile badge
+  h += '<div style="margin:16px 0;">';
+  h += '<div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Build Profile</div>';
+  h += '<span class="demo-build-badge">' + escapeHtml(me.buildProfile) + '</span>';
+  h += '</div>';
+
+  // Roster list
+  h += '<div style="margin-top:20px;padding-top:16px;border-top:2px dashed var(--ink-faint);">';
+  h += '<div style="font-family:var(--font-mono);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Full Roster</div>';
+  h += '<div class="demo-roster-list">';
+  for (var r = 0; r < me.roster.length; r++) {
+    var pl = me.roster[r];
+    h += '<div class="demo-roster-player">';
+    h += '<span class="roster-pos ' + pl.pos.toLowerCase() + '" style="background:' + _demoPosColor(pl.pos) + ';">' + escapeHtml(pl.pos) + '</span>';
+    h += '<span>' + escapeHtml(pl.name) + '</span>';
+    h += '</div>';
+  }
+  h += '</div></div>';
+
+  el.innerHTML = h;
+}
+
+// ── RIVALS TAB ────────────────────────────────────────────────────
+function _renderDemoRivals() {
+  var el = document.getElementById('demoTabRivals');
+  if (!el) return;
+  var D = DEMO_LEAGUE;
+
+  var h = '';
+
+  // Agent header
+  h += '<div class="agent-header"><div class="agent-avatar" style="background:var(--pos-te);">🦴</div><div><div class="agent-name" style="color:var(--pos-te);">Bones</div><div class="agent-role">Diplomat</div></div></div>';
+  h += '<div class="agent-quote">"I\'ve profiled all 11 opponents. Here\'s who to target and who to avoid."</div>';
+
+  h += '<div class="demo-section-heading">Manager Profiles</div>';
+  h += '<div class="demo-section-sub">Behavioral archetypes based on transaction history, trade patterns, and roster decisions.</div>';
+
+  // Rivals grid (skip manager[0] which is "you")
+  h += '<div class="demo-rivals-grid">';
+  for (var i = 1; i < D.managers.length; i++) {
+    var m = D.managers[i];
+    h += '<div class="demo-rival-card">';
+    h += '<div class="demo-rival-name">' + escapeHtml(m.name) + '</div>';
+    h += '<div class="demo-rival-record">' + escapeHtml(m.record) + ' | ' + m.fpts.toFixed(0) + ' pts</div>';
+    h += '<div class="demo-behavior-chip" style="border-color:' + m.archetypeColor + ';background:' + m.archetypeColor + ';color:var(--text-on-accent);">' + escapeHtml(m.archetype) + '</div>';
+    h += '<div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-medium);margin:6px 0;line-height:1.3;">' + escapeHtml(m.profile) + '</div>';
+    // Desperation bar
+    h += '<div class="demo-pressure-label"><span>Desperation</span><span style="font-weight:700;color:' + _demoPressureColor(m.desperation) + ';">' + m.desperation + '</span></div>';
+    h += '<div class="demo-pressure-track"><div class="demo-pressure-fill" style="width:' + m.desperation + '%;background:' + _demoPressureColor(m.desperation) + ';"></div></div>';
+    h += '</div>';
+  }
+  h += '</div>';
+
+  el.innerHTML = h;
+}
+
+// ── TRADES TAB ────────────────────────────────────────────────────
+function _renderDemoTrades() {
+  var el = document.getElementById('demoTabTrades');
+  if (!el) return;
+  var D = DEMO_LEAGUE;
+
+  var h = '';
+
+  // Agent header
+  h += '<div class="agent-header"><div class="agent-avatar" style="background:var(--pos-te);">🦴</div><div><div class="agent-name" style="color:var(--pos-te);">Bones</div><div class="agent-role">Diplomat</div></div></div>';
+  h += '<div class="agent-quote">"Every trade tells a story. Here\'s who\'s getting fleeced and who\'s building an empire."</div>';
+
+  h += '<div class="demo-section-heading">Recent Trade History</div>';
+  h += '<div class="demo-section-sub">' + D.trades.length + ' trades this season. Here\'s the breakdown.</div>';
+
+  for (var t = 0; t < D.trades.length; t++) {
+    var tr = D.trades[t];
+    h += '<div class="demo-trade-card">';
+    h += '<div class="demo-trade-header">';
+    h += '<span style="font-family:var(--font-mono);font-size:11px;font-weight:700;">' + escapeHtml(tr.week) + '</span>';
+    h += '</div>';
+
+    h += '<div class="demo-trade-sides">';
+    // Side 1
+    h += '<div class="demo-trade-side">';
+    h += '<div style="font-family:var(--font-mono);font-size:10px;font-weight:700;margin-bottom:4px;">' + escapeHtml(tr.side1mgr) + ' gets:</div>';
+    for (var s1 = 0; s1 < tr.side1gets.length; s1++) {
+      var p1 = tr.side1gets[s1];
+      h += '<div class="demo-trade-player"><span class="roster-pos ' + p1.pos.toLowerCase() + '" style="background:' + _demoPosColor(p1.pos) + ';font-size:8px;padding:1px 4px;">' + escapeHtml(p1.pos) + '</span> ' + escapeHtml(p1.name) + '</div>';
+    }
+    h += '</div>';
+
+    h += '<div class="demo-trade-arrow">&#8644;</div>';
+
+    // Side 2
+    h += '<div class="demo-trade-side">';
+    h += '<div style="font-family:var(--font-mono);font-size:10px;font-weight:700;margin-bottom:4px;">' + escapeHtml(tr.side2mgr) + ' gets:</div>';
+    for (var s2 = 0; s2 < tr.side2gets.length; s2++) {
+      var p2 = tr.side2gets[s2];
+      h += '<div class="demo-trade-player"><span class="roster-pos ' + (p2.pos === 'PICK' ? '' : p2.pos.toLowerCase()) + '" style="background:' + (p2.pos === 'PICK' ? 'var(--ink-medium)' : _demoPosColor(p2.pos)) + ';font-size:8px;padding:1px 4px;">' + escapeHtml(p2.pos) + '</span> ' + escapeHtml(p2.name) + '</div>';
+    }
+    h += '</div>';
+    h += '</div>'; // end trade-sides
+
+    // Verdict
+    h += '<div class="demo-trade-verdict">🦴 ' + escapeHtml(tr.verdict) + '</div>';
+    h += '</div>';
+  }
+
+  el.innerHTML = h;
+}
+
+// ── POWER RANKINGS TAB ────────────────────────────────────────────
+function _renderDemoRankings() {
+  var el = document.getElementById('demoTabRankings');
+  if (!el) return;
+  var D = DEMO_LEAGUE;
+
+  var h = '';
+
+  h += '<div class="demo-section-heading">Composite Power Rankings</div>';
+  h += '<div class="demo-section-sub">Weighted composite: roster strength (40%) + depth (20%) + activity (20%) + schedule difficulty (20%).</div>';
+
+  // Sort by powerScore
+  var sorted = D.managers.slice().sort(function(a, b) { return b.powerScore - a.powerScore; });
+
+  for (var i = 0; i < sorted.length; i++) {
+    var m = sorted[i];
+    var rankColor = i < 3 ? 'var(--orange)' : (i < 6 ? 'var(--ink)' : 'var(--ink-light)');
+
+    h += '<div class="demo-power-card">';
+    h += '<div class="demo-power-rank" style="color:' + rankColor + ';">' + (i + 1) + '</div>';
+    h += '<div class="demo-power-info">';
+    h += '<div class="demo-power-name">' + escapeHtml(m.name) + (m.isYou ? ' <span style="font-family:var(--font-mono);font-size:9px;background:var(--orange);color:var(--text-on-accent);padding:1px 5px;border-radius:6px;">YOU</span>' : '') + '</div>';
+    h += '<div class="demo-power-detail">' + escapeHtml(m.record) + ' | ' + escapeHtml(m.buildProfile) + '</div>';
+    h += '<div class="demo-power-components">';
+    h += '<span class="demo-component-chip">Roster: <strong>' + m.rosterStrength + '</strong></span>';
+    h += '<span class="demo-component-chip">Depth: <strong>' + m.depth + '</strong></span>';
+    h += '<span class="demo-component-chip">Activity: <strong>' + m.activity + '</strong></span>';
+    h += '<span class="demo-component-chip">SOS: <strong>' + (100 - m.sosDifficulty) + '</strong></span>';
+    h += '</div>';
+    h += '</div>';
+    h += '<div class="demo-power-right">';
+    h += '<div class="demo-power-score" style="color:' + rankColor + ';">' + m.powerScore + '</div>';
+    h += '<div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);">composite</div>';
+    h += '</div>';
+    h += '</div>';
+  }
+
+  el.innerHTML = h;
+}
+
+// ── SCHEDULE TAB ──────────────────────────────────────────────────
+function _renderDemoSchedule() {
+  var el = document.getElementById('demoTabSchedule');
+  if (!el) return;
+  var D = DEMO_LEAGUE;
+
+  var h = '';
+
+  h += '<div class="demo-section-heading">Remaining Schedule Difficulty</div>';
+  h += '<div class="demo-section-sub">Green = easy matchup. Red = tough matchup. Who has the smoothest path to the playoffs?</div>';
+
+  // Legend
+  h += '<div style="display:flex;gap:12px;margin-bottom:16px;font-family:var(--font-mono);font-size:10px;">';
+  h += '<span><span class="demo-schedule-week easy" style="display:inline-flex;width:auto;padding:0 6px;">E</span> Easy</span>';
+  h += '<span><span class="demo-schedule-week medium" style="display:inline-flex;width:auto;padding:0 6px;">M</span> Medium</span>';
+  h += '<span><span class="demo-schedule-week hard" style="display:inline-flex;width:auto;padding:0 6px;">H</span> Hard</span>';
+  h += '</div>';
+
+  // Sort by number of easy weeks (descending)
+  var sorted = D.managers.slice().sort(function(a, b) {
+    var aEasy = a.scheduleWeeks.filter(function(w) { return w === 'E'; }).length;
+    var bEasy = b.scheduleWeeks.filter(function(w) { return w === 'E'; }).length;
+    return bEasy - aEasy;
+  });
+
+  for (var i = 0; i < sorted.length; i++) {
+    var m = sorted[i];
+    var easyCount = m.scheduleWeeks.filter(function(w) { return w === 'E'; }).length;
+    var hardCount = m.scheduleWeeks.filter(function(w) { return w === 'H'; }).length;
+
+    h += '<div class="demo-schedule-row">';
+    h += '<div class="demo-schedule-name">' + escapeHtml(m.name) + (m.isYou ? ' <span style="font-size:8px;background:var(--orange);color:var(--text-on-accent);padding:0 4px;border-radius:4px;">YOU</span>' : '') + '</div>';
+    h += '<div class="demo-schedule-weeks">';
+    for (var w = 0; w < m.scheduleWeeks.length; w++) {
+      var wk = m.scheduleWeeks[w];
+      var wkClass = wk === 'E' ? 'easy' : (wk === 'H' ? 'hard' : 'medium');
+      h += '<span class="demo-schedule-week ' + wkClass + '">W' + (w + 1) + '</span>';
+    }
+    h += '</div>';
+    h += '<div style="font-family:var(--font-mono);font-size:10px;min-width:60px;text-align:right;">';
+    h += '<span style="color:var(--green);">' + easyCount + 'E</span> / <span style="color:var(--red);">' + hardCount + 'H</span>';
+    h += '</div>';
+    h += '</div>';
+  }
+
+  el.innerHTML = h;
+}
+
+// ── Render demo on page load ──────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // Only render demo if no Sleeper user is connected
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem("razzle_user")); } catch(e) {}
+  var sleeperUser = (user && user.sleeper_username) || localStorage.getItem("razzle_sleeper_user");
+  if (!sleeperUser) {
+    _renderDemoTabs();
+  }
+});
+</script>
+
 <script>
 const SLEEPER_API = "https://api.sleeper.app/v1";
 
@@ -2159,7 +3225,8 @@ async function connectSleeper() {
 }
 
 async function showLeagues(username) {
-  document.getElementById("connectView").style.display = "none";
+  var demoView = document.getElementById("demoView");
+  if (demoView) demoView.style.display = "none";
   document.getElementById("leaguesView").style.display = "block";
   document.getElementById("connectedUser").textContent = username;
 
@@ -7313,7 +8380,12 @@ function disconnect() {
   localStorage.removeItem("razzle_league_context");
   // Clear Monte Carlo simulation state to prevent leaks across league reconnections
   Object.keys(_mcState).forEach(function(k) { delete _mcState[k]; });
-  document.getElementById("connectView").style.display = "block";
+  // Show demo view, hide leagues view
+  var demoView = document.getElementById("demoView");
+  if (demoView) {
+    demoView.style.display = "";
+    _renderDemoTabs();
+  }
   document.getElementById("leaguesView").style.display = "none";
 }
 
@@ -7345,56 +8417,13 @@ function _saveWaitlistEmail() {
 
 // Demo league mode
 function _loadDemoLeague() {
-  document.getElementById("connectView").style.display = "none";
-  document.getElementById("leaguesView").style.display = "block";
-  document.getElementById("connectedUser").textContent = "demo_league";
-
-  var container = document.getElementById("leaguesView");
-  var leaguesHtml = '<div class="leagues-header">' +
-    '<h2>Demo League</h2>' +
-    '<div><span class="user-badge">demo_league</span>' +
-    '<button class="btn-chunky" style="margin-left:8px;font-size:11px;" onclick="disconnect()">Exit Demo</button></div>' +
-    '</div>' +
-    '<div style="background:var(--orange-light,#f7e4d8);border:3px solid var(--orange);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;text-align:center;">' +
-    '<div style="font-family:var(--font-hand);font-size:16px;color:var(--ink);">This is sample data. Connect your Sleeper league to see YOUR league.</div>' +
-    '</div>';
-
-  // Demo league card with fake managers and odds
-  var demoManagers = [
-    {name: "DynastyKing2024", record: "9-4", champOdds: 23.4, playoffOdds: 89.2, isYou: true},
-    {name: "TacoTuesday", record: "8-5", champOdds: 18.7, playoffOdds: 82.1, isYou: false},
-    {name: "RedZoneKing_99", record: "7-6", champOdds: 14.2, playoffOdds: 71.5, isYou: false},
-    {name: "PointsChaser", record: "7-6", champOdds: 12.8, playoffOdds: 68.3, isYou: false},
-    {name: "WaiverWire_Hero", record: "6-7", champOdds: 9.1, playoffOdds: 52.7, isYou: false},
-    {name: "TradeAddict", record: "6-7", champOdds: 7.5, playoffOdds: 44.9, isYou: false},
-    {name: "SleepingGiant", record: "5-8", champOdds: 5.8, playoffOdds: 31.2, isYou: false},
-    {name: "TankCommander", record: "5-8", champOdds: 3.2, playoffOdds: 18.6, isYou: false},
-    {name: "RebuildMode", record: "4-9", champOdds: 2.9, playoffOdds: 12.4, isYou: false},
-    {name: "LuckyBounces", record: "3-10", champOdds: 1.4, playoffOdds: 6.8, isYou: false},
-    {name: "RookieSZN", record: "3-10", champOdds: 0.8, playoffOdds: 4.1, isYou: false},
-    {name: "BuyLowSellHigh", record: "2-11", champOdds: 0.3, playoffOdds: 1.7, isYou: false},
-  ];
-
-  leaguesHtml += '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:20px;margin-bottom:20px;">';
-  leaguesHtml += '<div style="font-family:var(--font-display);font-size:20px;margin-bottom:4px;">Dynasty Legends League</div>';
-  leaguesHtml += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin-bottom:16px;">12-team Dynasty Superflex | 2024 Season</div>';
-  leaguesHtml += '<div style="font-family:var(--font-display);font-size:16px;color:var(--orange);margin-bottom:12px;">Championship Probability</div>';
-
-  demoManagers.forEach(function(m) {
-    var border = m.isYou ? "border:3px solid var(--orange);box-shadow:3px 3px 0 var(--orange);" : "border:2px solid var(--ink-faint);";
-    var youBadge = m.isYou ? ' <span style="font-family:var(--font-mono);font-size:9px;background:var(--orange);color:var(--text-on-accent);padding:1px 6px;border-radius:8px;">YOU</span>' : '';
-    leaguesHtml += '<div style="background:var(--bg);' + border + 'border-radius:8px;padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">';
-    leaguesHtml += '<div><span style="font-family:var(--font-mono);font-size:13px;font-weight:700;">' + m.name + '</span>' + youBadge + '<br><span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">' + m.record + '</span></div>';
-    leaguesHtml += '<div style="text-align:right;"><div style="font-family:var(--font-display);font-size:18px;color:var(--orange);">' + m.champOdds + '%</div><div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-light);">playoff: ' + m.playoffOdds + '%</div></div>';
-    leaguesHtml += '</div>';
-  });
-
-  leaguesHtml += '</div>';
-  leaguesHtml += '<div style="text-align:center;margin-top:20px;">' +
-    '<a href="#" onclick="disconnect();return false;" class="btn-chunky" style="font-size:13px;padding:10px 24px;background:var(--orange);color:var(--text-on-accent);text-decoration:none;">Connect YOUR league to see real data</a>' +
-    '</div>';
-
-  container.innerHTML = leaguesHtml;
+  // Show the demo view (new tabbed layout)
+  var demoView = document.getElementById("demoView");
+  if (demoView) {
+    demoView.style.display = "";
+    _renderDemoTabs();
+  }
+  document.getElementById("leaguesView").style.display = "none";
 }
 </script>
 <button class="scroll-top-btn" id="scrollTopBtn" style="display:none;position:fixed;bottom:24px;right:24px;z-index:50;width:36px;height:36px;border:3px solid var(--ink);border-radius:8px;background:var(--bg-card);box-shadow:4px 4px 0 var(--ink);cursor:pointer;font-size:16px;line-height:30px;text-align:center;color:var(--ink);transition:transform 0.1s;" onclick="window.scrollTo({top:0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'})" title="Scroll to top" aria-label="Scroll to top">&#9650;</button>
