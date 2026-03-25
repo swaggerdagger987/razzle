@@ -490,10 +490,11 @@
     { key: 'annotation', label: '', hide: true, nosort: true, tip: '' }
   ];
 
-  function buildPlayerRow(p) {
+  function buildPlayerRow(p, idx) {
     var pos = (p.position || 'RB').toLowerCase();
+    var rankClass = idx === 0 ? ' card-hero' : idx <= 2 ? ' card-spotlight' : '';
 
-    var html = '<tr data-pid="' + escapeHtml(p.player_id) + '">';
+    var html = '<tr class="' + rankClass.trim() + '" data-pid="' + escapeHtml(p.player_id) + '">';
 
     COLUMNS.forEach(function(col) {
       var classes = [];
@@ -610,8 +611,8 @@
     html += '<table class="rc-table" data-section="' + section + '">';
     html += buildTableHeader(section);
     html += '<tbody>';
-    sorted.forEach(function(p) {
-      html += buildPlayerRow(p);
+    sorted.forEach(function(p, idx) {
+      html += buildPlayerRow(p, idx);
     });
     html += '</tbody></table>';
     html += '</div>';
