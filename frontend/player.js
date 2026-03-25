@@ -54,11 +54,7 @@ async function loadPlayer(playerId) {
 
     renderPlayerPage(data, page);
   } catch (err) {
-    page.innerHTML = `
-      <div class="player-loading">
-        <div class="player-loading-text" style="color:var(--red);">fumbled the data fetch... try again in a sec.</div>
-        <a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>
-      </div>`;
+    page.innerHTML = razzleErrorHTML();
   }
 }
 

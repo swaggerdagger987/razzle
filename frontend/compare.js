@@ -70,11 +70,7 @@ async function loadComparison(id1, id2) {
     document.title = (_p1Data.player.full_name || "Player 1") + " vs " + (_p2Data.player.full_name || "Player 2") + " — Razzle";
     renderComparison(page);
   } catch (err) {
-    page.innerHTML =
-      '<div class="compare-loading">' +
-      '<div class="compare-loading-text" style="color:var(--red);">fumbled the data fetch... try again in a sec.</div>' +
-      '<a href="/lab.html" class="btn-primary" style="margin-top:16px;">Back to Screener</a>' +
-      '</div>';
+    page.innerHTML = razzleErrorHTML();
   }
 }
 
