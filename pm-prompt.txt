@@ -41,6 +41,17 @@ Reviewed: X tickets. Decomposed: Y. Root causes found: Z.
 git add designer-tickets/ && git commit -m "PM: reviewed 20 tickets"
 ```
 
+## AUTORESEARCH (lightweight — after processing tickets)
+
+Append to pm-log.md:
+```
+### Pass [N]
+- Root causes found: [list any — these are the highest-leverage finds]
+- Decomposition quality: [are shipper-insights.md showing first-try fixes? if not, tickets need more detail]
+- Suggestion for designer: [stop writing X type tickets, focus on Y]
+- Suggestion for shipper: [pattern to watch for]
+```
+
 ## RULES
 - Only read first 20 tickets. Not all 741.
 - Do not write code. Do not fix anything.

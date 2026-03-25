@@ -37,9 +37,25 @@ git add -A && git commit -m "fix: TICKET_NAME"
 ## BACKEND API KEY
 If you need it for testing AI features, read walker-credentials.json for the OpenRouter key.
 
+## AUTORESEARCH (lightweight — do this AFTER fixing all 10)
+
+Read shipper-insights.md (if it exists). Then append:
+
+```
+### After tickets DQ-NNN to DQ-NNN
+- Fixes that worked first try: X/10
+- Fixes that broke something: X/10
+- Pattern spotted: [any recurring issue across tickets]
+- Root cause found: [if one fix could have solved multiple tickets]
+- Suggestion for designer: [what tickets to stop writing]
+```
+
+If you spot a root cause across multiple tickets — fix the root cause, close all related tickets, note it in insights.
+
 ## RULES
 - ONLY the first 10 tickets. Stop after 10.
 - ONE file per fix. Do not refactor other files.
-- Do not read designer-insights.md, pm-log.md, team-autoresearch.md, NORTH_STAR.md, or any other context file. You don't need strategy. You need to fix 10 tickets.
+- Do not read NORTH_STAR.md, ROADMAP.md, GTM reports, or marketing docs. You don't need strategy.
+- DO read shipper-insights.md (2 min) — don't repeat past mistakes.
 - If a ticket is unclear, skip it and move to the next one.
 - If a fix breaks the page, revert it and move on.

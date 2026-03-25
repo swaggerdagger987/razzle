@@ -56,6 +56,20 @@ git add designer-tickets/ designer-state.json designer-insights.md designer-repo
 git commit -m "design: 10 tickets from walker report"
 ```
 
+## AUTORESEARCH (lightweight — after writing tickets)
+
+Read designer-insights.md. Then append:
+
+```
+### Cycle [N]
+- Walker health score: X% (PASS / PASS+FAIL)
+- Trend vs last cycle: IMPROVING / REGRESSING / FLAT
+- Top ticket category this cycle: [broken-panel / agent-presence / brand / etc]
+- Pattern: [what keeps showing up]
+- Should stop writing tickets about: [category that's been fixed]
+- Should focus on: [category with most remaining FAILs]
+```
+
 ## RULES
 - 10 tickets max per invocation
 - Each ticket names ONE file to edit
