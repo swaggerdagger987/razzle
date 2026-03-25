@@ -348,10 +348,14 @@ function closePublishFlow(e) {
 }
 
 async function submitPublish() {
+  var publishBtn = document.querySelector('.publish-submit-btn');
+  if (publishBtn && publishBtn.disabled) return;
+  if (publishBtn) { publishBtn.disabled = true; publishBtn.textContent = 'publishing...'; }
+
   const overlay = document.getElementById("publishOverlay");
   const formulaName = overlay.dataset.formulaName;
   const formula = state.formulas.find(f => f.name === formulaName);
-  if (!formula) return;
+  if (!formula) { if (publishBtn) { publishBtn.disabled = false; publishBtn.textContent = 'Publish'; } return; }
 
   const name = document.getElementById("publishName").value.trim();
   const description = document.getElementById("publishDescription").value.trim();
@@ -439,6 +443,8 @@ async function submitPublish() {
   } catch (e) {
     console.error("Publish failed:", e);
     showStoreToast("couldn't publish. Razzle's on it.");
+  } finally {
+    if (publishBtn) { publishBtn.disabled = false; publishBtn.textContent = 'Publish'; }
   }
 }
 

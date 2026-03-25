@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 # DQ-420: PANEL_FLAVORS incomplete — many Lab sidebar panels have no subtitle
 
 **Priority**: P2
