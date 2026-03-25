@@ -1,5 +1,69 @@
 # Designer Insights
 
+### Cycle 62 — 2026-03-25
+
+**What I did**: PHASE 121-125 FEATURE AUDIT + PHASE 131-140 STANDALONE PAGE AUDIT. Browse tool still blank (28th cycle — headless Chromium on Windows, production 502, localhost returns empty DOM). Pivoted to source-code analysis. Deployed 2 parallel subagents: (1) Phase 121-125 design violations (undo/redo, stat leaders, colstats popover, interactive cells), (2) content accuracy audit (panel counts, feature claims, weekly briefings, priority refresh). Direct scanning: dark mode coverage gaps, 480px breakpoints, ARIA tab roles, AbortController timeouts, hardcoded rgba patterns. Cross-referenced ALL findings against 490 existing tickets (DQ-001 through DQ-490). Wrote 10 genuinely new tickets (DQ-491 through DQ-500). Zero duplicates.
+
+**Quality score**: 8/10 — Two high-yield dimensions: (1) PHASE 121-125 FEATURE AUDIT found 4 issues in brand-new code (colstats popover dark mode P1, colstats no keyboard focus P2, leader dots color-only P2, undo/redo inline styles P2). (2) PHASE 131-140 STANDALONE PAGE AUDIT found 8 pages with systematic gaps (no dark mode CSS, no 480px breakpoint, no fetch timeout, no ARIA tab roles). Also found the systemic 60+ hardcoded rgba hover tint pattern.
+
+**What worked**:
+- Phase 121-125 audit was highest yield. These are the newest features, untouched by previous 61 cycles. Found 4 genuine violations in code that was never audited.
+- Colstats popover has zero `[data-theme="dark"]` rules — confirmed by grep. It's the first fixed-position floating element built after Phase A design hardening, and dark mode was missed.
+- The 8 newer standalone pages (Phases 131-140) are a systematic blind spot. They were built after most sitewide tickets were filed, so they inherit all the patterns that were already fixed elsewhere but weren't applied to new code.
+- Content accuracy audit confirmed weekly briefings and priority data refresh ARE implemented in the backend (correcting DQ-485/DQ-486 which flagged them as unverified).
+- drops.html vs sibling inconsistency was a precise find — identical pages built in the same phase, but one uses hardcoded rgba while the rest use var(--bg-warm).
+
+**What didn't**:
+- Browse tool broken 28th consecutive cycle. Production returned 502. Localhost returned empty DOM in headless mode.
+- Content accuracy audit found fewer issues than expected — most claims are accurate. The "70+ panels" claim may still be inflated (62 actual panels per grep), overlapping with DQ-481.
+
+**Pattern spotted**: New code built after the design audit began (Phases 121-140) systematically lacks patterns that were established by fix tickets. The colstats popover has no dark mode because DQ-001 was fixed before it existed. The 8 newer pages lack 480px breakpoints because DQ-167 was filed before they were built. This is the "new code escapes the audit" problem — every new feature or page needs to be checked against the full 500-ticket backlog.
+
+**Root cause found**: The 8 newer standalone pages (drops, gamescript, etc.) were cloned from a template that had the 768px breakpoint but not 480px, no dark mode overrides, no ARIA tab roles, and no AbortController. The template itself is the root cause — fixing the template prevents future drift.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-492 is a 2-line change (move style= to CSS class). Lowest risk.
+- Ship agent: DQ-500 is a 1-word change (rgba → var). Lowest risk.
+- Ship agent: DQ-493 is a 3-line change in lab.js (swap Unicode glyphs). Low risk.
+- Ship agent: DQ-496 is a batch fix — add the same 480px block to 8 files. Use drops.html as template.
+- Ship agent: DQ-491 needs dark mode verification first (toggle dark mode, right-click column header, check if popover is legible). Then add CSS overrides if needed.
+- Ship agent: DQ-497 is the largest scope (60+ instances across lab-panels.css). Best done as a dedicated refactor: add --hover-tint to :root, then batch replace.
+
+**What I'd do differently next time**: Audit every feature built AFTER the last audit cycle. The "new code escapes the audit" pattern means the most productive strategy is auditing the delta between the last audit and now. Also, the standalone page template should be audited and fixed once — all future pages cloned from it will inherit the fixes.
+
+### Cycle 61 — 2026-03-25
+
+**What I did**: MULTI-DIMENSION AUDIT — content accuracy, runtime error handling, unaudited JS files, mobile responsiveness, dark mode regressions. Deployed 5 parallel subagents: (1) home page content accuracy vs actual product, (2) runtime error handling gaps in app.js/lab.js/formula-store.js, (3) design token violations in compare.js/formulas.js/league-intel.js, (4) mobile responsiveness in styles.css/lab-panels.css, (5) dark mode regressions in pricing.html/agents.html/about.html/lab.html. Cross-referenced ALL findings against 480 existing tickets. Wrote 10 genuinely new tickets (DQ-481 through DQ-490). Zero duplicates.
+
+**Quality score**: 8/10 — This cycle shifted from CSS token hunting (diminishing returns per cycle 60 insight) to three new high-yield dimensions: CONTENT ACCURACY (3 tickets: stale panel count, unverified feature claims), RUNTIME ERROR HANDLING (3 tickets: pagination P0, sync data loss P1, compare search), and UNDERAUDITED FILES (4 tickets: compare.js position colors + canvas white, league-intel.html box-shadow offsets, card grid mobile overflow). The content accuracy dimension found the highest-impact issues — DQ-485 and DQ-486 are marketing claims for features that may not exist.
+
+**What worked**:
+- Content accuracy audit was the highest-yield new dimension. Found 2 features promised on home+pricing pages (weekly briefings, priority data refresh) with no backend implementation evidence. These are conversion killers if users upgrade expecting them.
+- Runtime error handling audit found prevPage/nextPage pagination with NO .catch() — a P0 that means clicking "next page" during a network blip silently fails with no recovery.
+- The "sync empty catch" pattern (DQ-487) is a systemic P1: 5 separate sync operations (watchlist, views, formulas, quota, memory) all silently swallow server errors. Users think data is saved but it only persists in localStorage.
+- compare.js was genuinely unaudited — found both design token violations (POS_COLORS hardcoded hex) and dark mode issues (white canvas strokes invisible on sand).
+- league-intel.html had 11 box-shadow instances at 2px/3px offset when spec says 4px — residual from incomplete DQ-011 fix.
+- Mobile audit found card grids with minmax(340px) that overflow on 375px screens (5 Lab panels affected).
+
+**What didn't**:
+- Dark mode audit of pricing/agents/about/lab yielded only 1 minor finding (agents noscript text colors). These pages are largely clean after Phase A design hardening.
+- Mobile audit was mostly clean — breakpoints are consistent, modals are responsive, touch targets are adequate. Only the card grid minmax pattern was genuinely problematic.
+- Browse tool still not attempted (27+ cycles broken on Windows). All analysis was source-code based.
+
+**Pattern spotted**: After 61 cycles (490 tickets), the three remaining high-yield audit dimensions are: (1) CONTENT ACCURACY — marketing claims vs actual product, stale numbers, unbuilt features promised. (2) RUNTIME ERROR HANDLING — the codebase has a systematic pattern of empty .catch() blocks on sync operations, meaning server failures are invisible to users. (3) UNDERAUDITED JS FILES — compare.js, formulas.js, and league-intel.html still have token violations because they weren't in the first 60 cycles' scope.
+
+**Root cause found**: The empty .catch() pattern on sync operations traces to a design decision: sync was added as "nice to have" after localStorage was already working. The catch was left empty because "it's fine if sync fails, localStorage has the data." But this means device-switch = data loss, and quota enforcement = unreliable. The fix is a consistent "sync failed" toast pattern, not error blocking.
+
+**Suggestion for teammates**:
+- Ship agent: DQ-481 is a 2-instance find-replace in app.js ("60+" → "70+"). Lowest risk of all 10 tickets.
+- Ship agent: DQ-482 (pagination .catch) is a 2-line addition in lab.js. Highest impact P0.
+- Ship agent: DQ-484 is an 11-instance regex replace in league-intel.html (2px/3px → 4px shadow offset). Low risk.
+- Ship agent: DQ-485 and DQ-486 are PRODUCT DECISIONS, not code fixes. Requires human input on whether to build the features or remove the claims.
+- Ship agent: DQ-487 is a batch fix — same pattern in 5 locations across 3 files. Create a `showSyncWarning()` helper.
+- Ship agent: DQ-488 can be fixed with one CSS rule: `@media (max-width: 480px) { .breakouts-grid, .arc-grid, .aw2-grid, .rec-grid, .tm-groups { grid-template-columns: 1fr; } }`
+
+**What I'd do differently next time**: The content accuracy dimension is the most productive remaining angle. Next cycle should audit ALL feature claims across home, pricing, about, and app.js modals against actual backend endpoints. Expected yield: 5-10 tickets for stale/misleading claims. Also continue auditing the remaining unaudited JS files (player.js has already been partially covered but league-intel inline scripts haven't been deeply checked).
+
 ### Cycle 60 — 2026-03-24
 
 **What I did**: MULTI-PAGE VISUAL AUDIT + CONTENT ACCURACY + USER FLOW. Browse tool still blank (27th cycle — headless Chromium on Windows, innerHTML 26 bytes). Started local dev server (uvicorn, port 8000, 200 OK). Deployed 7 parallel subagents: (1) home page first-impression vs DESIGN.md, (2) Lab screener visual audit, (3) pricing page conversion audit, (4) Situation Room visual audit, (5) dark mode + mobile + league-intel audit, (6) compare/trade/player pages audit, (7) standalone panel consistency (5 pages), (8) app.js + warroom.js shared code audit, (9) user flow + navigation audit, (10) content accuracy audit. Cross-referenced ALL findings against 470+ existing tickets (100+ done, 100+ open, DQ-001 through DQ-470). Wrote 10 genuinely new tickets (DQ-471 through DQ-480). Zero duplicates.

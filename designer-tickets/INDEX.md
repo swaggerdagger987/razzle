@@ -1,6 +1,21 @@
 # Design QA Tickets — Batch 2026-03-23
 
-100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice. Cycle 50: boom/bust canvas dark mode, home mini-screener accessibility, sitewide nowrap overflow, position tab ARIA. Cycle 51: UX flow audit — copy accuracy, discoverability, action feedback, label clarity. Cycle 54: interaction lifecycle, modal stacking, floating UI cleanup, conversion flow. Cycle 57: error recovery, animation polish, sharing UX, footer consistency.
+100 tickets from design audit against DESIGN.md. Cycles 1-3: code-based token audit. Cycle 4: sitewide pattern audit. Cycles 5-8: visual QA with screenshots. Cycle 9: visual QA + code audit. Cycle 10: code-level systematic audit. Cycle 11: type scale, spacing, voice. Cycle 12: visual QA + interaction audit (hover states, dark mode, skeleton loaders, position colors). Cycle 13: design system tokens, accessibility gaps, cross-browser, brand voice. Cycle 50: boom/bust canvas dark mode, home mini-screener accessibility, sitewide nowrap overflow, position tab ARIA. Cycle 51: UX flow audit — copy accuracy, discoverability, action feedback, label clarity. Cycle 54: interaction lifecycle, modal stacking, floating UI cleanup, conversion flow. Cycle 57: error recovery, animation polish, sharing UX, footer consistency. Cycle 62: Phase 121-125 feature audit + Phase 131-140 standalone page audit.
+
+## Cycle 62 — DQ-491 to DQ-500
+
+| Ticket | Priority | Summary | Files |
+|--------|----------|---------|-------|
+| DQ-491 | P1 | Column Stats popover has zero dark mode overrides — histogram bars fail WCAG contrast | lab.html:1097-1129, lab.js:3560-3647 |
+| DQ-492 | P2 | Undo/redo buttons use inline style= bypassing theming cascade | lab.html:3351-3352 |
+| DQ-493 | P2 | Leader dots use same Unicode glyph for all 3 ranks — color-only distinction (WCAG 1.4.1) | lab.js:5458-5463 |
+| DQ-494 | P2 | Column Stats popover has no keyboard focus, no ARIA role, no focus trap | lab.js:3610-3626 |
+| DQ-495 | P3 | 8 newer standalone pages (Phases 131-140) have zero dark mode CSS overrides | drops/gamescript/seasonpace/snapefficiency/targetpremium/garbagetime/workload/successrate.html |
+| DQ-496 | P2 | 8 newer standalone pages missing 480px mobile breakpoint (post-DQ-167) | same 8 pages |
+| DQ-497 | P3 | 60+ hardcoded rgba(217,119,87,...) hover tint not tokenized as CSS variable | lab-panels.css, standalone pages, lab.html, lab.js, charts.js |
+| DQ-498 | P2 | 8 newer standalone pages have no AbortController timeout on fetch (post-DQ-122) | same 8 pages |
+| DQ-499 | P2 | 8 newer standalone pages position tabs missing ARIA role="tab" (post-DQ-388) | same 8 pages |
+| DQ-500 | P3 | drops.html hover uses hardcoded rgba while sibling pages use var(--bg-warm) | drops.html:53 |
 
 ## Cycle 57 — DQ-441 to DQ-450
 

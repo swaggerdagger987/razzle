@@ -1,6 +1,8 @@
+<!-- PM: SUPERSEDED by Bureau Epic (000-P0). Absorbed into DES-006. -->
 ---
 id: DES-339
 priority: P2
+status: superseded
 area: league-intel.html
 section: pre-connect state
 type: visual / conversion
