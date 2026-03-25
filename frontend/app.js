@@ -481,9 +481,15 @@ function loadHtml2Canvas() {
   return new Promise((resolve, reject) => {
     if (window.html2canvas) { resolve(window.html2canvas); return; }
     const s = document.createElement('script');
-    s.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+    s.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
     s.onload = () => resolve(window.html2canvas);
-    s.onerror = reject;
+    s.onerror = () => {
+      const s2 = document.createElement('script');
+      s2.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+      s2.onload = () => resolve(window.html2canvas);
+      s2.onerror = reject;
+      document.head.appendChild(s2);
+    };
     document.head.appendChild(s);
   });
 }
