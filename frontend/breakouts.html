@@ -558,14 +558,15 @@
 
     var html = '<div class="breakouts-grid">';
 
-    candidates.forEach(function(p) {
+    candidates.forEach(function(p, idx) {
       var pos = (p.position || 'WR').toLowerCase();
       var posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--orange').trim() || '#d97757');
       var ac = ageClass(p.age);
       var al = ageLabel(p.age);
       var gap = p.opportunity_pct - p.production_pct;
+      var rankClass = idx === 0 ? ' card-hero' : idx <= 2 ? ' card-spotlight' : '';
 
-      html += '<div class="breakout-card" data-pid="' + escapeHtml(p.player_id) + '">';
+      html += '<div class="breakout-card' + rankClass + '" data-pid="' + escapeHtml(p.player_id) + '">';
       html += '<div class="breakout-card-top ' + pos + '"></div>';
       html += '<div class="breakout-card-body">';
 
