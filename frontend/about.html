@@ -83,6 +83,27 @@
     margin-bottom: 24px;
   }
 
+  .about-section--hero {
+    border-width: 4px;
+    box-shadow: 5px 5px 0 var(--ink);
+    border-top: 6px solid var(--orange);
+  }
+
+  .about-section--data { border-top: 4px solid var(--pos-rb); }
+  .about-section--privacy { border-top: 4px solid var(--pos-qb); }
+  .about-section--tech { border-top: 4px solid var(--pos-te); }
+
+  .about-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .about-grid-2col { grid-template-columns: 1fr; }
+  }
+
   .about-section h2 {
     font-family: var(--font-display);
     font-size: 18px;
@@ -223,14 +244,14 @@
   </div>
 
   <!-- DATA SOURCES -->
-  <div class="about-section">
+  <div class="about-section about-section--data">
     <h2>Where does the data come from?</h2>
     <p>Player statistics are sourced from publicly available NFL and NCAA data. League data comes from Sleeper's public API when you connect your league. All raw stats are public domain facts. Our derived analytics (trade values, VORP, breakout detection, agent intelligence) are original work.</p>
     <div class="annotation">all the numbers are real. the analysis on top is ours.</div>
   </div>
 
   <!-- WHAT WE BUILD -->
-  <div class="about-section">
+  <div class="about-section about-section--hero">
     <h2>What Razzle Is</h2>
     <p>Razzle is the fantasy football research lab. The Screener is forever free — 150+ stat columns across NFL, college, and prospects. 70+ analytical panels, custom formulas, and shareable views. The intelligence is what you pay for.</p>
     <ul>
@@ -242,7 +263,7 @@
   </div>
 
   <!-- PRIVACY -->
-  <div class="about-section">
+  <div class="about-section about-section--privacy">
     <h2>Privacy</h2>
     <ul>
       <li>We store your email and a bcrypt-hashed password. We never store raw passwords.</li>
@@ -255,8 +276,9 @@
     <div class="annotation" style="transform:rotate(1deg);">we don't sell your data. period.</div>
   </div>
 
+  <div class="about-grid-2col">
   <!-- OPEN SOURCE -->
-  <div class="about-section">
+  <div class="about-section about-section--tech" style="margin-bottom:0;">
     <h2>Technology</h2>
     <p>Razzle is built with vanilla HTML, CSS, and JavaScript. No React. No Vue. No npm. The backend is Python FastAPI with SQLite. The pixel Situation Room uses the Canvas API. Charts are hand-rolled Canvas renders.</p>
     <p>Fonts: <a href="https://fonts.google.com/specimen/Luckiest+Guy" target="_blank" rel="noopener">Luckiest Guy</a>, <a href="https://fonts.google.com/specimen/Space+Mono" target="_blank" rel="noopener">Space Mono</a>, <a href="https://fonts.google.com/specimen/Caveat" target="_blank" rel="noopener">Caveat</a>. All served via Google Fonts.</p>
@@ -264,13 +286,14 @@
   </div>
 
   <!-- CONTACT -->
-  <div class="about-section">
+  <div class="about-section" style="margin-bottom:0;">
     <h2>Contact</h2>
     <p>Found a bug? Have a feature request? Want to discuss a trade your league won't stop arguing about?</p>
     <ul>
       <li>Reddit: look for Razzle on <a href="https://reddit.com/r/DynastyFF" target="_blank" rel="noopener">r/DynastyFF</a> and <a href="https://reddit.com/r/fantasyfootball" target="_blank" rel="noopener">r/fantasyfootball</a></li>
       <li>Domain: <a href="https://razzle.lol">razzle.lol</a></li>
     </ul>
+  </div>
   </div>
 
   <div class="about-footer">
