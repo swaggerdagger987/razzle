@@ -189,8 +189,8 @@
   }
 
   .player-pos-dot {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     border: 2px solid var(--ink);
     flex-shrink: 0;
@@ -524,6 +524,7 @@
       html += '<td class="player-cell"><div class="player-cell-inner" data-pid="' + escapeHtml(p.player_id) + '">';
       html += '<span class="player-rank">' + (idx + 1) + '</span>';
       html += '<span class="player-pos-dot" style="background:' + posColor + '"></span>';
+      html += '<span style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:' + posColor + ';margin-right:4px;">' + escapeHtml(pos) + '</span>';
       html += '<span>' + escapeHtml(p.name) + '</span>';
       html += '<span class="player-team">' + escapeHtml(p.team) + '</span>';
       html += '</div></td>';
