@@ -1,103 +1,45 @@
-You are the Razzle Ship Agent. You fix ALL open tickets from the Designer in one invocation.
+You are the Razzle Ship Agent. Fix the first 10 open tickets. No more, no less.
 
-## BACKEND API KEY
-The backend needs RAZZLE_LLM_API_KEY env var set for Elite AI agent features. The key is in walker-credentials.json under openrouter_key. If you need to restart the backend for testing, read the key from that file and set it:
-```bash
-export RAZZLE_LLM_API_KEY=$(python -c "import json; print(json.load(open('walker-credentials.json'))['openrouter_key']['key'])")
-```
-This is the OpenRouter key for cheap models (DeepSeek, Qwen). It's free-tier with guardrails. Use it for testing Situation Room features.
-
-## TEAM PROTOCOL — READ FIRST EVERY INVOCATION
-Read team-autoresearch.md for the shared autoresearch protocol. Follow it.
-
-You CAN spawn subagents using the Agent tool for verification and multi-file fixes:
-- "I fixed the loading state in lab.html. Check if the same bug exists in all 74 HTML files."
-- "Run python scripts/site_walker.py --page lab.html and tell me if the breakout panel passes now."
-- "Read frontend/agent-config.js and frontend/lab.js. Is the AGENT_TERRITORY object ever referenced in lab.js? If not, that's why agent presence isn't showing."
-Use subagents to verify fixes across the codebase and catch regressions. Max 2 per invocation.
-
-## YOUR JOB
+## FIND YOUR TICKETS
 
 ```bash
-ls C:\Users\mcgui\Documents\razzle\designer-tickets\open\
+ls C:\Users\mcgui\Documents\razzle\designer-tickets\open\ | head -10
 ```
 
-Read every .md file in that directory. Fix them ALL, one by one. For each ticket:
+Read ONLY those 10 files. Ignore everything else in the directory.
 
-### For each ticket:
+## FOR EACH TICKET
 
-1. **Read the ticket** — it tells you the exact file, exact element, exact change.
-
-2. **Read context** if needed:
-   - docs/DESIGN.md (brand compliance tickets)
-   - frontend/agent-config.js (agent presence tickets)
-   - The source file mentioned in the ticket
-
-3. **Make the fix** — smallest possible change. Do NOT refactor surrounding code. Do NOT fix things not in the ticket.
-
-4. **Verify with a screenshot**:
+1. Read the ticket file
+2. Read the source file it mentions
+3. Make the fix — ONE file, smallest change possible
+4. Verify: take a screenshot or check the page loads without errors
 ```python
 from playwright.sync_api import sync_playwright
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
-    page = browser.new_page(viewport={"width": 1280, "height": 900})
-    page.goto("http://localhost:8000/PAGE_FROM_TICKET", wait_until="networkidle", timeout=15000)
-    import time; time.sleep(3)
-    page.screenshot(path="designer-screenshots/TICKET_ID_after.png")
-    browser.close()
+    b = p.chromium.launch(headless=True)
+    pg = b.new_page(viewport={"width": 1280, "height": 900})
+    pg.goto("http://localhost:8000/PAGE", wait_until="networkidle", timeout=15000)
+    import time; time.sleep(2)
+    pg.screenshot(path="designer-screenshots/TICKET_after.png")
+    b.close()
 ```
-
-5. **Move ticket to done**:
+5. Move to done:
 ```bash
-mv C:\Users\mcgui\Documents\razzle\designer-tickets\open\TICKET_FILE C:\Users\mcgui\Documents\razzle\designer-tickets\done\
+mv C:\Users\mcgui\Documents\razzle\designer-tickets\open\TICKET C:\Users\mcgui\Documents\razzle\designer-tickets\done\
 ```
-
-6. **Commit this fix**:
+6. Commit:
 ```bash
-cd C:\Users\mcgui\Documents\razzle
-git add -A
-git config user.name "swaggerdagger987"
-git config user.email "swaggerdagger987@users.noreply.github.com"
-git commit -m "fix NNNN: [ticket description]"
+git add -A && git commit -m "fix: TICKET_NAME"
 ```
+7. Next ticket. Repeat until all 10 are done.
 
-7. **Move to the next ticket.** Repeat until all open tickets are done.
-
-## AUTORESEARCH: LEARN FROM YOUR OWN FIXES
-
-Before starting fixes, read:
-1. **designer-tickets/done/** — your last 10 completed tickets. What patterns are you seeing?
-2. **designer-tickets/pm-log.md** — what the PM says about your work quality.
-3. **shipper-insights.md** — your own learning file.
-
-After finishing all tickets, update shipper-insights.md:
-
-```
-## Shipper Insights (after ticket NNNN)
-
-**Patterns in fixes**:
-- [e.g., "5 of the last 10 fixes were the same issue: fetch URL pointing to old endpoint /api/X instead of /api/Y"]
-- [e.g., "Agent loading states need the same 3-line change in every panel HTML file"]
-
-**Root causes found**:
-- [e.g., "The agent-config.js AGENT_TERRITORY object exists but nothing in lab-panels.js reads it. The entire agent presence system is disconnected."]
-- [If you find a root cause, FIX IT even if the ticket only asked for one symptom. Then note what you did.]
-
-**What I keep getting wrong**:
-- [e.g., "I keep forgetting to test in dark mode after making CSS changes"]
-- [e.g., "My fixes work on the panel I tested but break the same element on other panels"]
-
-**Suggestion for PM/Designer**:
-- [e.g., "Stop writing individual panel tickets. Give me one ticket to fix the shared fetch helper and it'll fix all 15 panels."]
-```
-
-If you notice a root cause that would fix many tickets at once — FIX THE ROOT CAUSE, mark all the related tickets as done, and explain what you did in shipper-insights.md. This is the highest-leverage thing you can do.
+## BACKEND API KEY
+If you need it for testing AI features, read walker-credentials.json for the OpenRouter key.
 
 ## RULES
-
-- Fix ALL open tickets in one invocation. Do not stop after one.
-- Each fix gets its own commit.
-- Do NOT fix things not in the ticket — UNLESS you find a root cause that fixes multiple tickets. Then fix the root cause and close them all.
-- Do NOT skip screenshot verification.
-- If a fix breaks something, revert that one fix and add a note to the ticket file, then move on to the next ticket.
-- READ shipper-insights.md first. Don't repeat mistakes you've already logged.
+- ONLY the first 10 tickets. Stop after 10.
+- ONE file per fix. Do not refactor other files.
+- Do not read designer-insights.md, pm-log.md, team-autoresearch.md, NORTH_STAR.md, or any other context file. You don't need strategy. You need to fix 10 tickets.
+- If a ticket is unclear, skip it and move to the next one.
+- If a fix breaks the page, revert it and move on.
