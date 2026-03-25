@@ -1,6 +1,7 @@
 /* Razzle — Formula Builder */
 
 function openFormulaBuilder() {
+  document.querySelectorAll('.filter-modal-overlay.open').forEach(function(el) { el.classList.remove('open'); });
   document.getElementById("formulaOverlay").classList.add("open");
   document.getElementById("formulaName").value = "";
   document.getElementById("formulaComponents").innerHTML = "";

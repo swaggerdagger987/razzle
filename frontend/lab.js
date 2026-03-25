@@ -3225,6 +3225,7 @@ function populateFilterStatSelect() {
 }
 
 function openFilterModal() {
+  document.querySelectorAll('.filter-modal-overlay.open').forEach(function(el) { el.classList.remove('open'); });
   document.getElementById("filterModalOverlay").classList.add("open");
   document.getElementById("filterValue").value = "";
   document.getElementById("filterValue").focus();
