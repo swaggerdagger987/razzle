@@ -9093,7 +9093,7 @@
         if (td2SeasonSel && td2SeasonSel.value) populateWeekSelect(el, 'td2-week', td2SeasonSel.value, load);
         renderDistribution(data);
       }).catch(function() {
-        content.innerHTML = '<div class="lp-error">fumbled the data...</div>';
+        content.innerHTML = '<div class="lp-error">' + (typeof razzleError === 'function' ? razzleError() : 'fumbled the data...') + '</div>';
       });
     }
 

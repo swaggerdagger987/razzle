@@ -1359,7 +1359,7 @@ async function fetchAndRenderNFL(signal, myId) {
   } catch (e) {
     if (e.name === 'AbortError') return;
     loading.style.display = "none";
-    _showToast(typeof getErrorText === 'function' ? getErrorText('screener') : 'fumbled the data fetch... try again', 'error', 0, null, function() { fetchAndRender(); });
+    _showToast(typeof razzleError === 'function' ? razzleError() : 'fumbled the data fetch... try again', 'error', 0, null, function() { fetchAndRender(); });
     // Keep previous table data visible — don't clear tbody
     renderTable();
     updateResultCount();
@@ -6359,7 +6359,7 @@ async function openPlayerProfile(playerId) {
     const data = await apiFetch(`/api/players/${encodeURIComponent(playerId)}/profile`);
     renderProfile(data, content);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the data fetch... try again in a sec.</div>`;
+    content.innerHTML = razzleErrorHTML();
   }
 }
 
@@ -9182,7 +9182,7 @@ async function loadTradeValues() {
     document.getElementById("tvCalculator").style.display = "";
     setupTradeCalcSearch();
   } catch (err) {
-    content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--orange);">fumbled the data fetch...</div>';
+    content.innerHTML = razzleErrorHTML();
     console.error("Trade values load failed:", err);
   }
 }
