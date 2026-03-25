@@ -1276,6 +1276,7 @@ let _fetchController = null;
 let _fetchId = 0;
 
 async function fetchAndRender() {
+  closeAllOverlays();
   _pushHistory();
   if (_fetchController) _fetchController.abort();
   _fetchController = new AbortController();
