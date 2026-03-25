@@ -3001,7 +3001,7 @@ function togglePosition(pos) {
 function toggleRelevance() {
   state.relevance = state.relevance === "fantasy" ? "all" : "fantasy";
   const btn = document.getElementById("relevanceToggle");
-  btn.textContent = state.relevance === "fantasy" ? "Fantasy Only" : "All Players";
+  btn.textContent = state.relevance === "fantasy" ? "Fantasy Relevant" : "All Players";
   btn.classList.toggle("active", state.relevance === "all");
   state.offset = 0;
   fetchAndRender();
@@ -4425,7 +4425,7 @@ function loadSavedView(id) {
   });
   document.getElementById("searchInput").value = state.search;
   const relBtn = document.getElementById("relevanceToggle");
-  relBtn.textContent = state.relevance === "all" ? "All Players" : "Fantasy Only";
+  relBtn.textContent = state.relevance === "all" ? "All Players" : "Fantasy Relevant";
   relBtn.classList.toggle("active", state.relevance === "all");
   applyUniverseUI();
   populateSeasonSelect();
