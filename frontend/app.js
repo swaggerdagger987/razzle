@@ -77,11 +77,11 @@ function _injectThemeToggle() {
   btn.setAttribute("aria-label", "Toggle dark mode");
   btn.title = "Toggle dark mode";
   var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-  btn.textContent = isDark ? "\u2600" : "\u263D";
+  btn.innerHTML = isDark ? "\u2600 <span style='font-size:11px;font-family:var(--font-mono);margin-left:4px;'>Light</span>" : "\u263D <span style='font-size:11px;font-family:var(--font-mono);margin-left:4px;'>Dark</span>";
   btn.addEventListener("click", function() {
     toggleTheme();
     var nowDark = document.documentElement.getAttribute("data-theme") === "dark";
-    btn.textContent = nowDark ? "\u2600" : "\u263D";
+    btn.innerHTML = nowDark ? "\u2600 <span style='font-size:11px;font-family:var(--font-mono);margin-left:4px;'>Light</span>" : "\u263D <span style='font-size:11px;font-family:var(--font-mono);margin-left:4px;'>Dark</span>";
   });
   nav.appendChild(btn);
 }
