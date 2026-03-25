@@ -421,11 +421,15 @@ async def lifespan(app):
     loop = asyncio.get_running_loop()
     loop.set_default_executor(ThreadPoolExecutor(max_workers=20))
     # Essential tables first (fast, < 100ms) — server can respond immediately
-    auth_module.initialize_users_db()
-    billing_module.initialize_subscriptions_table()
-    live_data.init_waitlist_table()
-    live_data.init_formula_store_tables()
-    live_data._init_analytics_table()
+    # Wrapped in try/except so the server starts even if DB init fails (502 prevention)
+    try:
+        auth_module.initialize_users_db()
+        billing_module.initialize_subscriptions_table()
+        live_data.init_waitlist_table()
+        live_data.init_formula_store_tables()
+        live_data._init_analytics_table()
+    except Exception as e:
+        logger.error("Startup DB init failed (server will start degraded): %s", e, exc_info=True)
     # Heavy data sync in background thread (may take minutes on cold start)
     t = threading.Thread(target=_background_bootstrap, daemon=True)
     t.start()
