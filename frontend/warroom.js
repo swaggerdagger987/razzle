@@ -3225,7 +3225,7 @@ function renderBriefingCard(agentId, content, isError) {
       'which leaguemate panic-traded a similar player last season — and how to exploit it'
     ];
     var upsellExample = UPSELL_EXAMPLES[agentId % UPSELL_EXAMPLES.length];
-    upsellBlock = '<div style="background:rgba(217,119,87,0.08);border:2px dashed var(--orange);border-radius:8px;padding:12px;margin-top:10px;">' +
+    upsellBlock = '<div style="background:var(--orange-hover);border:2px dashed var(--orange);border-radius:8px;padding:12px;margin-top:10px;">' +
       '<div style="font-family:var(--font-mono);font-size:11px;color:var(--orange);font-weight:700;margin-bottom:4px;">With your league connected, ' + escapeHtml(agent.name) + ' would also tell you:</div>' +
       '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);line-height:1.5;">' + escapeHtml(upsellExample) + '</div>' +
       '<a href="/league-intel.html" style="display:inline-block;margin-top:8px;font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--orange);text-decoration:none;">Connect your league + upgrade to Pro &rarr;</a>' +

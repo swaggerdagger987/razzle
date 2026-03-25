@@ -1898,7 +1898,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     if (barsOn && val != null && typeof val === "number") {
       const bw = getBarWidth(key, val);
       if (bw > 0) {
-        const barColor = INVERSE_STATS.has(key) ? "rgba(230,57,70,0.13)" : "rgba(217,119,87,0.18)";
+        const barColor = INVERSE_STATS.has(key) ? "rgba(230,57,70,0.13)" : "var(--orange-hover)";
         cellStyle = `--bar-w:${bw}%;--bar-c:${barColor};`;
         barClass = " data-bar";
       }
