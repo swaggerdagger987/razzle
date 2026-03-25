@@ -10510,12 +10510,22 @@ function exportTierBoardPNG() {
 // ─── Keyboard shortcuts ────────────────────────────────────────
 
 function isAnyOverlayOpen() {
-  const overlays = document.querySelectorAll(".filter-modal-overlay.open");
-  return overlays.length > 0;
+  if (document.querySelectorAll(".filter-modal-overlay.open").length > 0) return true;
+  if (document.getElementById("colStatsPopover")) return true;
+  if (_tagPickerVisible) return true;
+  if (_noteEditorVisible) return true;
+  if (document.getElementById("screenerContextMenu")) return true;
+  if (_hoverCardVisible) return true;
+  return false;
 }
 
 function closeAllOverlays() {
   document.querySelectorAll(".filter-modal-overlay.open").forEach(el => el.classList.remove("open"));
+  dismissColumnStatsPopover();
+  hideTagPicker();
+  hideNoteEditor();
+  hideContextMenu();
+  hideHoverCard();
 }
 
 function isInputFocused() {
