@@ -1051,6 +1051,7 @@ function _resumePendingCheckout() {
     var pending = sessionStorage.getItem("razzle_pending_checkout");
     if (pending) {
       sessionStorage.removeItem("razzle_pending_checkout");
+      if (typeof _showToast === 'function') _showToast('heading to checkout...', 'info');
       setTimeout(function() { startCheckout(pending); }, 500);
     }
   } catch(_) {}
