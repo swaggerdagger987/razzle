@@ -615,7 +615,7 @@
 .tv-team-label { font-family: var(--font-mono); font-size: 11px; color: var(--ink-medium); }
 .tv-age { font-family: var(--font-mono); font-size: 10px; color: var(--ink-light); }
 .tv-bar-area { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
-.tv-bar-track { flex: 1; height: 22px; background: var(--bg); border: 2px solid var(--ink-faint); border-radius: 6px; overflow: hidden; position: relative; }
+.tv-bar-track { flex: 1; height: 22px; background: var(--bg); border: 2px solid var(--ink-faint); border-radius: 8px; overflow: hidden; position: relative; }
 .tv-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
 .tv-bar-fill.qb { background: var(--pos-qb); }
 .tv-bar-fill.rb { background: var(--pos-rb); }
@@ -3310,7 +3310,7 @@
 .db2-scar-pos.RB { background: var(--pos-rb); }
 .db2-scar-pos.WR { background: var(--pos-wr); }
 .db2-scar-pos.TE { background: var(--pos-te); }
-.db2-scar-bar-wrap { flex: 1; height: 18px; background: var(--bg-warm); border-radius: 4px; overflow: hidden; }
+.db2-scar-bar-wrap { flex: 1; height: 18px; background: var(--bg-warm); border-radius: 8px; overflow: hidden; }
 .db2-scar-bar { height: 100%; border-radius: 4px; }
 .db2-scar-bar.QB { background: var(--pos-qb); }
 .db2-scar-bar.RB { background: var(--pos-rb); }
@@ -3417,8 +3417,8 @@
 .pct2-bars { max-width: 600px; margin: 0 auto; }
 .pct2-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .pct2-bar-label { font-family: var(--font-mono); font-size: 11px; min-width: 100px; text-align: right; color: var(--ink-light); }
-.pct2-bar-track { flex: 1; height: 24px; background: var(--bg-warm); border-radius: 6px; overflow: hidden; }
-.pct2-bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; transition: width 0.3s; }
+.pct2-bar-track { flex: 1; height: 24px; background: var(--bg-warm); border-radius: 8px; overflow: hidden; }
+.pct2-bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; transition: width 0.3s; }
 .pct2-bar-pctile { font-family: var(--font-mono); font-size: 10px; font-weight: 700; color: var(--text-on-accent); }
 .pct2-bar-value { font-family: var(--font-mono); font-size: 11px; min-width: 50px; font-weight: 700; }
 
@@ -3618,7 +3618,7 @@
 .td2-team-name { font-family: var(--font-mono); font-size: 16px; }
 .td2-team-abbr { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); margin-left: 8px; }
 .td2-team-totals { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
-.td2-dist-bar { display: flex; height: 32px; border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+.td2-dist-bar { display: flex; height: 32px; border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
 .td2-dist-seg { display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .td2-seg-label { font-family: var(--font-mono); font-size: 9px; font-weight: 700; white-space: nowrap; }
 .td2-annotation { font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); margin-bottom: 8px; }
