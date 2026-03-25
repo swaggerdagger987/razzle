@@ -1,23 +1,24 @@
+<!-- PM: ready -->
 ---
 id: DQ-364
 priority: P3
-area: 50+ standalone HTML pages
+area: frontend/app.js
 section: external dependency
 type: reliability / single point of failure
 status: open
 ---
 
-# 50+ pages depend on html2canvas.hertzen.com CDN with no fallback
+# Add fallback CDN to loadHtml2Canvas() in app.js
 
 ## What's wrong
 
-All standalone pages load html2canvas from `https://html2canvas.hertzen.com/dist/html2canvas.min.js` — a personal domain, not a major CDN. If hertzen.com goes down, every export/screenshot button on every standalone page breaks silently.
+The `loadHtml2Canvas()` lazy loader in app.js (shipped in commit dc639ba) loads from `html2canvas.hertzen.com` — a personal domain, not a major CDN. If hertzen.com goes down, every export/screenshot button breaks silently.
 
-lab.js:106 uses the same URL for its lazy-load. No page has a fallback CDN or error handler for script load failure.
+**NOTE**: The sync `<script>` tags were already removed sitewide (commit f0fc7e3). This ticket is now scoped to adding a fallback CDN URL to the existing lazy loader in app.js — a one-file change.
 
 ## Where
 
-50+ `<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>` tags across all standalone pages, plus lab.js:106.
+`frontend/app.js` — the `loadHtml2Canvas()` function.
 
 ## Suggested fix
 

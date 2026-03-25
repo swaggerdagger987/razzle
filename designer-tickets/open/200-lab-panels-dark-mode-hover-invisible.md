@@ -1,3 +1,4 @@
+<!-- PM: ready -->
 ---
 id: DQ-365
 priority: P2
@@ -5,6 +6,7 @@ area: frontend/lab-panels.css
 section: dark mode
 type: visual / dark mode gap
 status: open
+depends_on: DQ-358
 ---
 
 # Lab panel table hovers invisible in dark mode — no opacity adjustment

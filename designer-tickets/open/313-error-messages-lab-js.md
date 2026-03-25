@@ -2,7 +2,7 @@
 ---
 id: DQ-361d
 parent: 361 (Error Messages Bypass razzleError)
-priority: P2
+priority: P3
 area: frontend/lab.js, frontend/lab-panels.js
 section: error handling
 type: brand voice / DRY
