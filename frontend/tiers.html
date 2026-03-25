@@ -130,6 +130,13 @@
     justify-content: center;
     padding: 12px 8px;
     border-right: 3px solid var(--ink);
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    border-radius: var(--radius-sm);
+    transform: rotate(-3deg);
+    margin: 6px -4px 6px 6px;
+    position: relative;
+    z-index: 1;
   }
   .tl-tier-letter {
     font-family: var(--font-display);
@@ -244,9 +251,10 @@
       flex-direction: row;
       min-width: auto;
       border-right: none;
-      border-bottom: 3px solid var(--ink);
       padding: 8px 16px;
       gap: 8px;
+      margin: 6px 6px -4px 6px;
+      transform: rotate(-2deg);
     }
     .tl-tier-letter { font-size: 24px; }
     .tl-tier-desc { max-width: none; }
