@@ -678,7 +678,7 @@
             <th style="width:30px;">#</th>
             <th style="width:36px;">POS</th>
             <th style="text-align:left;">Player</th>
-            <th class="mini-sortable" data-sort="ppg" onclick="_miniSort('ppg')">PPG</th>
+            <th class="mini-sortable" data-sort="fantasy_points_ppr" onclick="_miniSort('fantasy_points_ppr')">Total</th>
             <th class="mini-sortable" data-sort="games" onclick="_miniSort('games')">GP</th>
             <th class="mini-sortable" data-sort="age" onclick="_miniSort('age')">Age</th>
           </tr>
@@ -979,7 +979,7 @@ window.addEventListener('razzle-plan-changed', _updateHomeCTAs);
 var _miniData = [];
 var _miniPos = '';
 var _miniSort = function(key) { /* defined below */ };
-var _miniSortKey = 'ppg';
+var _miniSortKey = 'fantasy_points_ppr';
 var _miniSortDir = 'desc';
 
 var POS_COLORS = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--pos-wr)', TE: 'var(--pos-te)' };
@@ -1008,7 +1008,7 @@ function _renderMiniRows() {
     html += '<td style="color:var(--ink-light);">' + (i + 1) + '</td>';
     html += '<td><span class="mini-pos" style="background:' + posCol + ';">' + _escHtml(p.position || '') + '</span></td>';
     html += '<td style="text-align:left; font-weight:600;">' + _escHtml(p.name || '') + '</td>';
-    html += '<td>' + (p.ppg != null ? p.ppg.toFixed(1) : '-') + '</td>';
+    html += '<td>' + (p.fantasy_points_ppr != null ? p.fantasy_points_ppr.toFixed(1) : '-') + '</td>';
     html += '<td>' + (p.games != null ? p.games : '-') + '</td>';
     html += '<td>' + (p.age != null ? p.age : '-') + '</td>';
     html += '</tr>';
@@ -1039,7 +1039,7 @@ window._miniFilter = function(pos) {
 };
 
 // Fetch live data
-fetch('/api/players?limit=60&sort=ppg&order=desc&min_games=8')
+fetch('/api/players?limit=60&sort=fantasy_points_ppr&order=desc&min_games=8')
   .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(function(data) {
     _miniData = (data.items || data.players || []).map(function(p) {
@@ -1047,6 +1047,7 @@ fetch('/api/players?limit=60&sort=ppg&order=desc&min_games=8')
         name: p.full_name || p.display_name || p.name || '',
         position: p.position || '',
         ppg: parseFloat(p.ppg) || 0,
+        fantasy_points_ppr: parseFloat(p.fantasy_points_ppr) || 0,
         games: parseInt(p.games_played || p.games, 10) || 0,
         age: parseInt(p.age, 10) || null
       };
