@@ -63,6 +63,7 @@
   --radius-lg: 20px;
   --shadow-chunky: 4px 4px 0 var(--ink);
   --zebra-stripe: rgba(45,31,20,0.025);
+  --orange-hover: rgba(217,119,87,0.08);
   --medal-gold: #ffd700;
   --medal-bronze: #cd7f32;
   --text-on-accent: white;
@@ -97,6 +98,7 @@
   --semantic-orange-light: #3d2010;
   --semantic-red: #e06060;
   --semantic-red-light: #3d1f1f;
+  --orange-hover: rgba(217,119,87,0.12);
   --zebra-stripe: rgba(237,224,207,0.04);
   --text-on-accent: var(--bg);
 
