@@ -642,7 +642,7 @@
 
   function renderColumn(players, isBuy) {
     if (!players || !players.length) {
-      return '<div class="buysell-empty">no ' + (isBuy ? 'buy low' : 'sell high') + ' candidates found</div>';
+      return '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no data found') + '<span class="hint">try a different position or season</span></div>';
     }
     var html = '<div class="buysell-list">';
     players.forEach(function(p, idx) {
@@ -713,7 +713,7 @@
         });
       });
     } catch(e) {
-      bodyEl.innerHTML = '<div class="buysell-empty">' + razzleError() + '</div>';
+      bodyEl.innerHTML = '<div class="panel-error">' + (typeof razzleError === 'function' ? razzleError() : 'something went wrong') + '<br><button onclick="location.reload()">retry</button></div>';
     }
   }
 

@@ -440,7 +440,7 @@
       renderData(currentData);
       populateSeasons(currentData.available_seasons, currentData.season);
     } catch (err) {
-      if (loadingEl) loadingEl.textContent = razzleError();
+      bodyEl.innerHTML = '<div class="panel-error">' + (typeof razzleError === 'function' ? razzleError() : 'something went wrong') + '<br><button onclick="location.reload()">retry</button></div>';
     }
   }
 

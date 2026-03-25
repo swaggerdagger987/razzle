@@ -640,7 +640,7 @@
         render(data);
       })
       .catch(function() {
-        body.innerHTML = '<div class="yoy-error"><div class="yoy-error-msg">interception on that request. retry?</div><button class="btn-chunky" onclick="location.reload()">Retry</button></div>';
+        body.innerHTML = '<div class="panel-error">' + (typeof razzleError === 'function' ? razzleError() : 'something went wrong') + '<br><button onclick="location.reload()">retry</button></div>';
       });
   }
 

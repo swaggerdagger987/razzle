@@ -544,14 +544,14 @@
 
       renderCards(data, bodyEl);
     } catch(e) {
-      bodyEl.innerHTML = '<div class="breakouts-empty">' + razzleError() + '</div>';
+      bodyEl.innerHTML = '<div class="panel-error">' + (typeof razzleError === 'function' ? razzleError() : 'something went wrong') + '<br><button onclick="location.reload()">retry</button></div>';
     }
   }
 
   function renderCards(data, bodyEl) {
     var candidates = data.candidates || [];
     if (!candidates.length) {
-      bodyEl.innerHTML = '<div class="breakouts-empty">no breakout candidates found for this filter</div>';
+      bodyEl.innerHTML = '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no data found') + '<span class="hint">try a different position or season</span></div>';
       return;
     }
 
