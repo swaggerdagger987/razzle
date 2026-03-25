@@ -1004,7 +1004,7 @@ function _renderMiniRows() {
   for (var i = 0; i < rows.length; i++) {
     var p = rows[i];
     var posCol = POS_COLORS[p.position] || 'var(--ink-light)';
-    html += '<tr onclick="window.location=\'/lab.html\'">';
+    html += '<tr onclick="window.location=\'/lab.html?search=' + encodeURIComponent(p.name) + '\'">';
     html += '<td style="color:var(--ink-light);">' + (i + 1) + '</td>';
     html += '<td><span class="mini-pos" style="background:' + posCol + ';">' + _escHtml(p.position || '') + '</span></td>';
     html += '<td style="text-align:left; font-weight:600;">' + _escHtml(p.name || '') + '</td>';
