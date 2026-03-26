@@ -2275,7 +2275,12 @@ function hideHoverCard() {
   const card = document.getElementById("playerHoverCard");
   if (card) {
     card.classList.remove("visible");
-    card.style.display = "none";
+    card.addEventListener("transitionend", function handler() {
+      card.removeEventListener("transitionend", handler);
+      card.style.display = "none";
+    }, { once: true });
+    // Safety fallback in case transition doesn't fire
+    setTimeout(function() { card.style.display = "none"; }, 200);
   }
   _hoverCardVisible = false;
 }
@@ -3929,6 +3934,15 @@ function saveStateToURL() {
   const newURL = window.location.pathname + (qs ? "?" + qs : "");
   history.pushState(null, "", newURL);
 
+  // Update tab title with context
+  var titleParts = [];
+  if (state.position && state.position !== "ALL") titleParts.push(state.position);
+  if (state.search) titleParts.push('"' + state.search + '"');
+  titleParts.push(state.universe === "college" ? "College Screener" :
+                  state.universe === "prospects" ? "Prospect Screener" : "Screener");
+  titleParts.push("Razzle");
+  document.title = titleParts.join(" \u2014 ");
+
   // Auto-save key state to localStorage for restore on next visit
   try {
     localStorage.setItem("razzle_last_state", JSON.stringify({
@@ -5364,26 +5378,35 @@ function computePercentiles() {
   return result;
 }
 
+var HEAT_COLORS = {
+  dark: {
+    green90: "rgba(46, 196, 182, 0.35)",
+    green75: "rgba(46, 196, 182, 0.20)",
+    green60: "rgba(46, 196, 182, 0.10)",
+    red10:   "rgba(230, 57, 70, 0.30)",
+    red25:   "rgba(230, 57, 70, 0.18)",
+    red40:   "rgba(230, 57, 70, 0.08)"
+  },
+  light: {
+    green90: "rgba(46, 196, 182, 0.22)",
+    green75: "rgba(46, 196, 182, 0.12)",
+    green60: "rgba(46, 196, 182, 0.05)",
+    red10:   "rgba(230, 57, 70, 0.18)",
+    red25:   "rgba(230, 57, 70, 0.10)",
+    red40:   "rgba(230, 57, 70, 0.04)"
+  }
+};
+
 function getHeatColor(pct) {
   var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-  if (isDark) {
-    // Higher opacity for dark espresso background
-    if (pct >= 90) return "rgba(46, 196, 182, 0.35)";
-    if (pct >= 75) return "rgba(46, 196, 182, 0.20)";
-    if (pct >= 60) return "rgba(46, 196, 182, 0.10)";
-    if (pct <= 10) return "rgba(230, 57, 70, 0.30)";
-    if (pct <= 25) return "rgba(230, 57, 70, 0.18)";
-    if (pct <= 40) return "rgba(230, 57, 70, 0.08)";
-    return "";
-  }
-  // Warm-shifted colors for Anthropic sand background
-  if (pct >= 90) return "rgba(46, 196, 182, 0.22)";  // elite green-tinted
-  if (pct >= 75) return "rgba(46, 196, 182, 0.12)";  // good green
-  if (pct >= 60) return "rgba(46, 196, 182, 0.05)";  // slight green
-  if (pct <= 10) return "rgba(230, 57, 70, 0.18)";   // poor red-tinted
-  if (pct <= 25) return "rgba(230, 57, 70, 0.10)";   // below avg red
-  if (pct <= 40) return "rgba(230, 57, 70, 0.04)";   // slight red
-  return "";  // neutral (40-60th percentile)
+  var c = isDark ? HEAT_COLORS.dark : HEAT_COLORS.light;
+  if (pct >= 90) return c.green90;
+  if (pct >= 75) return c.green75;
+  if (pct >= 60) return c.green60;
+  if (pct <= 10) return c.red10;
+  if (pct <= 25) return c.red25;
+  if (pct <= 40) return c.red40;
+  return "";
 }
 
 function toggleHeatColors() {
@@ -7891,7 +7914,7 @@ function exportProspectImage() {
     const rpsVal = rpsSection.querySelector(".prospect-rps-big")?.textContent || "";
     const tierBadge = rpsSection.querySelector(".tier-badge");
     const tierLabel = tierBadge?.textContent || "";
-    const tierColor = tierBadge?.style.background || "#ffc857";
+    const tierColor = tierBadge?.style.background || t.yellow;
     const compBoxes = rpsSection.querySelectorAll(".prospect-rps-component");
 
     // Section border
@@ -7973,7 +7996,7 @@ function exportProspectImage() {
       const pctText = row.querySelector(".prospect-metric-pct")?.textContent || "";
       const bar = row.querySelector(".prospect-metric-bar");
       const barWidth = bar ? parseFloat(bar.style.width) || 0 : 0;
-      const barColor = bar ? bar.style.background : "#c4b5a5";
+      const barColor = bar ? bar.style.background : t.inkFaint;
 
       ctx.font = "12px 'Space Mono', monospace";
       ctx.fillStyle = t.ink;
@@ -8020,7 +8043,7 @@ function exportProspectImage() {
     cards.forEach(card => {
       const simEl = card.querySelector(".prospect-comp-sim");
       const simText = simEl?.textContent || "";
-      const simBg = simEl?.style.background || "#2ec4b6";
+      const simBg = simEl?.style.background || t.green;
       const compName = card.querySelector(".prospect-comp-name")?.textContent || "";
       const compMeta = card.querySelector(".prospect-comp-meta")?.textContent || "";
       const compStats = card.querySelector(".prospect-comp-stats")?.textContent || "";
@@ -8264,7 +8287,7 @@ function exportTierImage() {
     if (!badge || cards.length === 0) return;
 
     const badgeText = badge.textContent.toUpperCase();
-    const badgeColor = badge.style.background || "#8a7565";
+    const badgeColor = badge.style.background || t.inkLight;
 
     // Draw badge
     ctx.save();

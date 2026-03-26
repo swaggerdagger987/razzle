@@ -10127,7 +10127,7 @@
             ctx.fillStyle = seg.color;
             ctx.fillRect(x, y, segW, barH);
             // Subtle right border between segments
-            ctx.fillStyle = th.isDark ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.3)';
+            ctx.fillStyle = th.isDark ? 'rgba(45,31,20,0.4)' : 'rgba(247,239,229,0.4)';
             ctx.fillRect(x + segW - 1, y, 1, barH);
           }
           x += segW;
