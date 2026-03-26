@@ -1,18 +1,18 @@
 <!-- PM: ready -->
 ---
-id: DQ-360c
+id: DQ-360b
 parent: 360 (POS_COLORS Duplicate Inline)
 priority: P3
 area: 5 standalone HTML pages
 section: inline JavaScript
 type: DRY / maintainability
 status: open
-depends_on: DQ-360a
+pm_note: DQ-360a was never ticketed but getPosColors() already ships in app.js — unblocked
 ---
 
-# Replace inline POS_COLORS declarations in batch 2 (5 pages)
+# Replace inline POS_COLORS declarations in batch 1 (5 pages)
 
-**Files**: `frontend/dualthreat.html`, `frontend/tdregression.html`, `frontend/advantage.html`, `frontend/weeklymvp.html`, `frontend/weeklyleaders.html`
+**Files**: `frontend/workload.html`, `frontend/targetpremium.html`, `frontend/seasonpace.html`, `frontend/garbagetime.html`, `frontend/snapefficiency.html`
 
 ## What to do
 
@@ -30,14 +30,12 @@ Replace with:
 const POS_COLORS = getPosColors();
 ```
 
-Final sweep: `grep -rn 'getPropertyValue.*--pos-qb' frontend/*.html` should return 0 matches (excluding app.js).
-
 ## Accept when
 
-- Zero inline POS_COLORS blocks remain in any standalone HTML page
-- Position colors still render correctly
+- No inline `getPropertyValue("--pos-qb")` blocks remain in these 5 files
+- Position colors still render correctly on each page
 - Each page loads app.js before its own script
 
-## Depends on
+## Root cause
 
-DQ-360a (shared function must exist first)
+Parent epic DQ-360. Shared `getPosColors()` already exists in `app.js`.

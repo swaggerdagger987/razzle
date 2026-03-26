@@ -119,6 +119,7 @@
       <a href="/lab.html" class="footer-link">Screener</a>
       <a href="/league-intel.html" class="footer-link">Bureau</a>
       <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
     </div>
@@ -168,7 +169,6 @@
       <a href="/auction.html" class="footer-link">Auction Values</a>
       <a href="/dashboard.html" class="footer-link">Dashboard</a>
       <a href="/prospects.html" class="footer-link">Prospects</a>
-      <a href="/team/KC" class="footer-link">Teams</a>
     </div>
 
   </div>
@@ -191,13 +191,7 @@
     return Number(v).toFixed(dec === undefined ? 1 : dec);
   }
 
-  var _cs = getComputedStyle(document.documentElement);
-  var POS_COLORS = {
-    QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
-    RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
-    WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
-    TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
-  };
+  var POS_COLORS = getPosColors();
   var currentPosition = '';
 
   function readURL() {

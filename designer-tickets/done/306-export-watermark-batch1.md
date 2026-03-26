@@ -1,18 +1,18 @@
 <!-- PM: ready -->
 ---
-id: DQ-469c
+id: DQ-469b
 parent: 469 (Standalone Export Watermark Epic)
 priority: P3
 area: 5 standalone HTML pages
 section: DRY / design tokens
 type: maintainability
 status: open
-depends_on: DQ-469a
+pm_note: DQ-469a was never ticketed but getExportColors() already ships in app.js — unblocked
 ---
 
-# Replace hardcoded export watermark colors — batch 2 (5 pages)
+# Replace hardcoded export watermark colors — batch 1 (5 pages)
 
-**Files**: `frontend/awards.html`, `frontend/stocks.html`, `frontend/opportunity.html`, `frontend/garbagetime.html`, `frontend/dualthreat.html`
+**Files**: `frontend/breakouts.html`, `frontend/efficiency.html`, `frontend/consistency.html`, `frontend/vorp.html`, `frontend/reportcard.html`
 
 ## What to do
 
@@ -34,13 +34,12 @@ ctx.fillStyle = exportColors.watermark;
 html2canvas(el, { backgroundColor: exportColors.bg })
 ```
 
-Final sweep: `grep -rn "rgba(237,224,207" frontend/*.html` should return 0 matches.
-
 ## Accept when
 
-- Zero hardcoded export watermark colors remain in any standalone HTML page
+- No `rgba(237,224,207` or `rgba(45,31,20` in these 5 files
+- No `#2d1f14` or `#ede0cf` in export sections of these 5 files
 - PNG export still works correctly in both light and dark mode
 
-## Depends on
+## Root cause
 
-DQ-469a (shared function must exist first)
+Parent epic DQ-469. Shared `getExportColors()` already exists in `app.js`.

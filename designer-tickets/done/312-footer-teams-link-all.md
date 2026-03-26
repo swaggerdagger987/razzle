@@ -24,6 +24,10 @@ Remove the "Teams" footer link entirely. There is no teams index page, and linki
 2. Remove the "Teams" link from each footer
 3. Verify: `grep -rn "/team/KC" frontend/*.html` — remaining matches should only be in non-footer contexts (e.g., team roster content links)
 
+## Root cause
+
+RC-003 (footer template drift) — no shared footer template, each page has its own copy. This ticket is a band-aid; will be obsoleted when RC-003 ships.
+
 ## Accept when
 
 - Zero `/team/KC` matches in `<footer>` sections across all pages

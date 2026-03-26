@@ -350,6 +350,7 @@
       <a href="/lab.html" class="footer-link">Screener</a>
       <a href="/league-intel.html" class="footer-link">Bureau</a>
       <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
     </div>
@@ -399,7 +400,6 @@
       <a href="/auction.html" class="footer-link">Auction Values</a>
       <a href="/dashboard.html" class="footer-link">Dashboard</a>
       <a href="/prospects.html" class="footer-link">Prospects</a>
-      <a href="/team/KC" class="footer-link">Teams</a>
     </div>
 
   </div>
@@ -714,10 +714,10 @@
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
     var el = document.getElementById('stk-content');
-    loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
+    var _ec = getExportColors(); loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: _ec.bg, scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = '24px Caveat, cursive';
-      ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.3)' : 'rgba(45,31,20,0.3)';
+      ctx.fillStyle = getExportColors().watermark;
       ctx.textAlign = 'right';
       ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
 

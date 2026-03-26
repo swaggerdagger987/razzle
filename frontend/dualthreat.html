@@ -125,6 +125,7 @@
       <a href="/lab.html" class="footer-link">Screener</a>
       <a href="/league-intel.html" class="footer-link">Bureau</a>
       <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
     </div>
@@ -174,7 +175,6 @@
       <a href="/auction.html" class="footer-link">Auction Values</a>
       <a href="/dashboard.html" class="footer-link">Dashboard</a>
       <a href="/prospects.html" class="footer-link">Prospects</a>
-      <a href="/team/KC" class="footer-link">Teams</a>
     </div>
 
   </div>
@@ -191,13 +191,7 @@ function escapeHtml(t) {
   return d.innerHTML;
 }
 
-var _cs = getComputedStyle(document.documentElement);
-const POS_COLORS = {
-  QB: _cs.getPropertyValue('--pos-qb').trim() || '#5b7fff',
-  RB: _cs.getPropertyValue('--pos-rb').trim() || '#2ec4b6',
-  WR: _cs.getPropertyValue('--pos-wr').trim() || '#d97757',
-  TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
-};
+const POS_COLORS = getPosColors();
 let state = { season: null, position: "", data: null };
 
 function initSeasons() {
@@ -295,10 +289,10 @@ function render() {
 
 function exportPNG() {
   const el = document.getElementById("dt-container");
-  loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(canvas => {
+  var _ec = getExportColors(); loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: _ec.bg, scale: 2 }); }).then(canvas => {
     const ctx = canvas.getContext("2d");
     if (typeof drawRazzleWatermark === 'function') { drawRazzleWatermark(ctx, canvas); }
-    else { ctx.font = "bold 28px 'Space Mono', monospace"; ctx.fillStyle = 'rgba(45,31,20,0.13)'; ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }
+    else { ctx.font = "bold 28px 'Space Mono', monospace"; ctx.fillStyle = getExportColors().watermark; ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }
     const link = document.createElement("a");
     link.download = "razzle-dual-threat.png";
     link.href = canvas.toDataURL();
