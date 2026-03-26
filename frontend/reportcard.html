@@ -578,7 +578,7 @@
   function buildTable(players, section) {
     if (!players || !players.length) {
       var label = section === 'honor_roll' ? 'honor roll players' : 'players needing improvement';
-      return '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no ' + label + ' found') + '<span class="hint">try a different position or season</span></div>';
+      return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
     }
 
     var isHonor = section === 'honor_roll';
@@ -614,7 +614,7 @@
     var body = document.getElementById('rc-body');
 
     if (!data || (!(data.honor_roll || []).length && !(data.needs_improvement || []).length)) {
-      body.innerHTML = '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no data found') + '<span class="hint">try a different position or season</span></div>';
+      body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       return;
     }
 

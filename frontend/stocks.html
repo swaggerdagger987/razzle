@@ -594,7 +594,7 @@
   function buildTable(players, section) {
     if (!players || !players.length) {
       var label = section === 'rising' ? 'rising stocks' : 'falling stocks';
-      return '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no ' + label + ' found') + '<span class="hint">try a different position or season</span></div>';
+      return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
     }
 
     var isRising = section === 'rising';
@@ -630,7 +630,7 @@
     var body = document.getElementById('stk-body');
 
     if (!data || (!(data.rising || []).length && !(data.falling || []).length)) {
-      body.innerHTML = '<div class="panel-empty">' + (typeof razzleEmpty === 'function' ? razzleEmpty() : 'no data found') + '<span class="hint">try a different position or season</span></div>';
+      body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
       return;
     }
 

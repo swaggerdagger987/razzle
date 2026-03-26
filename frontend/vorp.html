@@ -532,7 +532,7 @@
   function buildTable(players, section) {
     if (!players || !players.length) {
       var label = section === 'league_winners' ? 'league winners' : 'replacement-level players';
-      return '<div class="panel-empty">no ' + label + ' found for this filter<span class="hint">try a different position or season</span></div>';
+      return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
     }
 
     var isWinners = section === 'league_winners';

@@ -117,6 +117,15 @@ function getCanvasTheme() {
   };
 }
 
+/* ===== Export Colors (shared across all pages) ===== */
+function getExportColors() {
+  var isDark = document.documentElement.dataset.theme === 'dark';
+  return {
+    bg: isDark ? '#2d1f14' : '#ede0cf',
+    watermark: isDark ? 'rgba(237,224,207,0.3)' : 'rgba(45,31,20,0.3)'
+  };
+}
+
 /* ===== Mobile Hamburger Menu ===== */
 
 function _injectHamburgerMenu() {

@@ -9200,7 +9200,7 @@ function closeTradeValues(e) {
 }
 
 function renderTVPositionBtns() {
-  var _ink = typeof getCanvasTheme === "function" ? getCanvasTheme().ink : "#2d1f14";
+  var _ink = getCanvasTheme().ink;
   var posColors = Object.assign({ALL: _ink}, _getPosColorsHex());
   const container = document.getElementById("tvPositionBtns");
   container.innerHTML = "";
@@ -10010,7 +10010,7 @@ function textColorForBg(pct) {
   // Dark text on light cells — read from CSS vars so dark mode flips correctly
   const styles = getComputedStyle(document.documentElement);
   if (pct == null) return styles.getPropertyValue('--ink-light').trim() || "#8a7565";
-  return styles.getPropertyValue('--ink').trim() || "#2d1f14";
+  return styles.getPropertyValue('--ink').trim() || getCanvasTheme().ink;
 }
 
 async function loadHeatMap() {
@@ -10578,6 +10578,12 @@ function closeAllOverlays() {
   hideNoteEditor();
   hideContextMenu();
   hideHoverCard();
+  // Dismiss keyboard shortcut / onboarding toast
+  var onboarding = document.querySelector(".razzle-onboarding-toast");
+  if (onboarding) onboarding.remove();
+  // Dismiss any active toast
+  var toast = document.querySelector(".razzle-toast");
+  if (toast) toast.remove();
 }
 
 function isInputFocused() {
