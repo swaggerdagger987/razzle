@@ -2993,3 +2993,41 @@ smoke	OK	-	-	-	pass	S75 smoke: 11/11 passed. health, players, position_filter (Q
 lab-full	OK	frontend/lab.html	-	-	pass	S75 browser: Lab 0 JS errors, 0 crashes, 73 sidebar items, 114 buttons, 139 inputs, 27 table rows, 25 images.	100	2026-03-21T12:51
 standalone	OK	-	-	-	pass	S75 browser: breakouts.html, buysell.html, scarcity.html, auction.html — all 0 JS errors, 0 crashes. 5 broken NFL headshot images (CDN, not ours).	95	2026-03-21T12:58
 data-players	OK	frontend/player.js	750	data.players	pass	S75 systematic: searched 60+ data.players references. Only /api/players and /api/screener/query return items. Only player.js:750 is broken (FUNC-069). index.html:1013 already handles both (data.items || data.players). All other references hit endpoints returning {players:[...]}.	100	2026-03-21T12:55
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	smoke:health — Server healthy (HTTP 200)
+smoke	OK	-	-	-	pass	smoke:players_returns_data — Returns 200 players
+smoke	OK	-	-	-	pass	smoke:position_filter_qb — All 50 checked are QBs
+smoke	OK	-	-	-	pass	smoke:position_filter_wr — All 50 checked are WRs
+smoke	OK	-	-	-	pass	smoke:sort_ppr_desc — PPR sort descending is correct
+smoke	OK	-	-	-	pass	smoke:season_switch — Different seasons return different data
+smoke	OK	-	-	-	pass	smoke:week_filter — Week filter OK: season=16gp, week1=1gp
+smoke	OK	-	-	-	pass	smoke:screener_query — Screener returns 10 RBs, all correct
+smoke	OK	-	-	-	pass	smoke:no_nan_stats — No NaN/Inf in first 50 players
+smoke	OK	-	-	-	pass	smoke:no_negative_stats — No impossible negative values
+smoke	OK	-	-	-	pass	smoke:filter_options — Returns positions and teams
+smoke	OK	-	-	-	pass	S76 smoke: 11/11 passed. health, players, position_filter (QB/WR), sort_ppr, season_switch, week_filter, screener_query, no_nan, no_negative, filter_options.	100	2026-03-21T13:01
+lab-full	OK	frontend/lab.html	-	-	pass	S76 browser: Lab 0 JS errors, 27 table rows, 610 players, 146 data-panels. Visual screenshot clean.	100	2026-03-21T13:02
+flow-16	OK	frontend/player.js	750	openCompareSearch	pass	re-audit S76: FUNC-069 FIXED on master (ffc88e0). Line 750 now reads data.items || data.players || []. API /api/players returns {items:[...]}. Compare search functional.	100	2026-03-21T13:03
+flow-63	P2	frontend/league-intel.html	2293	loadLeagues	open	re-audit S76: FUNC-070 — dead conditional in loadLeagues catch. Both AbortError and default branch produce identical message. Phase C AbortController timeouts working, error handling functional, but error messages not differentiated.	90	2026-03-21T13:04
+flow-63	P2	frontend/league-intel.html	2574	toggleLeague	open	re-audit S76: FUNC-070 — dead conditional in toggleLeague catch. Both AbortError and default branch produce identical message. Retry on failure works correctly (dataset.loaded reset to empty string).	90	2026-03-21T13:04
+flow-63	OK	frontend/league-intel.html	2117	connectSleeper	pass	re-audit S76: Phase C AbortController verified. 10s timeout, differentiated errors (AbortError/not found/default), button re-enable on error. Clean.	95	2026-03-21T13:04
+flow-63	OK	frontend/league-intel.html	3837	loadLeagueTradeFinder	pass	re-audit S76: Phase C trade finder AbortController verified. 15s timeout, 403 fallback, escapeJS on userId, proper error states. Clean.	95	2026-03-21T13:05
+flow-63	OK	frontend/league-intel.html	6632	switchBureauTab	pass	re-audit S76: Phase C lazy-load tab switching verified. Duplicate load prevention (dataset key), bureauCtx reference, proper gating. Clean.	95	2026-03-21T13:05
+flow-63	OK	frontend/league-intel.html	6157	prefillScenario	pass	re-audit S76: Bridge CTAs verified. 5 bridge paths (manager profiles, pressure map, trade finder, trades, waivers). escapeJsString on user data. localStorage round-trip works.	95	2026-03-21T13:05
+flow-64	OK	frontend/warroom.js	1727	initWarroom	pass	re-audit S76: Situation Room prefill verified. Reads razzle_prefill_scenario from localStorage, sets input value, removes key, focuses input. 0 JS errors. 63 links, 63 buttons.	95	2026-03-21T13:06
+flow-64	OK	frontend/agents.html	-	-	pass	re-audit S76: Situation Room 0 JS errors, 0 crashes. Bridge from Bureau → SitRoom correctly wires via localStorage.	95	2026-03-21T13:06
+standalone	OK	-	-	-	pass	S76 browser: breakouts.html, tradevalues.html, rankings.html, pricing.html — all 0 JS errors.	95	2026-03-21T13:07
+sweep-fix	OK	frontend/lab.js	12815	exportBoomBustImage	pass	S76: safeGrade (grade || "C") verified. NaN fallbacks on season, games_played, mean_ppg, position_rank all correct.	95	2026-03-21T13:07
+sweep-fix	OK	frontend/lab.js	10705	_taPopulatePickYears	pass	S76: Dynamic pick year population verified. baseYear+0 to baseYear+2 (2026/2027/2028). Guard against double-population (sel.options.length > 0). Only path to open = openTradeAnalyzer().	95	2026-03-21T13:07
+sweep-fix	OK	frontend/lab.html	4326	PANEL_METHOD_DEFAULT	pass	S76: Dynamic year range verified. March 2026 → getMonth()=2 < 8 → "2015-2025". Correct for current data.	95	2026-03-21T13:07
+sweep-fix	OK	frontend/app.js	1681	footer-tagline	pass	S76: Dynamic year verified. Math.min(getFullYear(), 2025) = 2025. But target selector (.site-footer .footer-tagline) doesn't exist on any page — dead code (pre-existing).	80	2026-03-21T13:08
