@@ -170,7 +170,7 @@ function _injectHamburgerMenu() {
   var panelHTML = '<div class="mobile-nav-header">' +
     '<div class="logo-mark" style="width:32px;height:32px;font-size:18px;">\uD83D\uDC2F</div>' +
     '<div class="logo-text">Razzle<span class="accent">.lol</span></div>' +
-    '<button class="mobile-nav-close" aria-label="Close navigation menu">\u2715</button>' +
+    '<button type="button" class="mobile-nav-close" aria-label="Close navigation menu">\u2715</button>' +
   '</div>' +
   '<div class="mobile-nav-links">';
 
@@ -182,7 +182,7 @@ function _injectHamburgerMenu() {
 
   panelHTML += '</div>' +
   '<div style="padding:8px 16px 0;">' +
-    '<button class="btn-chunky btn-sm" style="width:100%;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="if(typeof openCmdPalette===\'function\'){openCmdPalette();document.querySelector(\'.mobile-nav-overlay\').click();}" aria-label="Open search">' +
+    '<button type="button" class="btn-chunky btn-sm" style="width:100%;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="if(typeof openCmdPalette===\'function\'){openCmdPalette();document.querySelector(\'.mobile-nav-overlay\').click();}" aria-label="Open search">' +
     '\uD83D\uDD0D Search players &amp; tools</button>' +
   '</div>' +
   '<div class="mobile-nav-footer">' +
@@ -569,7 +569,7 @@ function loadHtml2Canvas() {
 function razzleErrorHTML(retryFn) {
   return '<div style="text-align:center;padding:40px;font-family:var(--font-hand);font-size:20px;color:var(--red);">' +
     razzleError() +
-    (retryFn ? ' <button class="btn-chunky" onclick="' + retryFn + '" style="margin-left:12px">retry</button>' : '') +
+    (retryFn ? ' <button type="button" class="btn-chunky" onclick="' + retryFn + '" style="margin-left:12px">retry</button>' : '') +
   '</div>';
 }
 
@@ -937,7 +937,7 @@ function _showWelcomeModal(user) {
         '<a href="/league-intel.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--orange);color:var(--text-on-accent);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Open the Bureau</a>' +
         '<a href="/lab.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--bg-warm);color:var(--ink);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Back to the Screener</a>' +
       '</div>' +
-      '<button onclick="this.closest(\'div\').parentElement.remove();" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);">&times;</button>' +
+      '<button type="button" onclick="this.closest(\'div\').parentElement.remove();" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);">&times;</button>' +
     '</div>';
 
   document.body.appendChild(overlay);
@@ -968,18 +968,18 @@ function _injectAuthModal() {
   modal.style.display = "none";
   modal.innerHTML =
     '<div class="auth-modal">' +
-      '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close sign-in dialog">&times;</button>' +
+      '<button type="button" class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close sign-in dialog">&times;</button>' +
       '<h2 id="auth-modal-title" class="sr-only">Sign In or Register</h2>' +
       '<div class="auth-tabs">' +
-        '<button class="auth-tab active" data-tab="login" onclick="switchAuthTab(\'login\')">Sign In</button>' +
-        '<button class="auth-tab" data-tab="register" onclick="switchAuthTab(\'register\')">Register</button>' +
+        '<button type="button" class="auth-tab active" data-tab="login" onclick="switchAuthTab(\'login\')">Sign In</button>' +
+        '<button type="button" class="auth-tab" data-tab="register" onclick="switchAuthTab(\'register\')">Register</button>' +
       '</div>' +
       '<form id="authLoginForm" class="auth-form" onsubmit="handleLogin(event)">' +
         '<input type="email" id="authLoginEmail" placeholder="Email" required autocomplete="email" aria-label="Email address" aria-describedby="authLoginError">' +
         '<input type="password" id="authLoginPassword" placeholder="Password" required autocomplete="current-password" aria-label="Password" aria-describedby="authLoginError">' +
         '<div id="authLoginError" class="auth-error" role="alert"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Sign In</button>' +
-        '<div style="text-align:center;margin-top:8px;"><a href="#" onclick="showForgotPassword(); return false;" style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Forgot password?</a></div>' +
+        '<div style="text-align:center;margin-top:8px;"><button type="button" onclick="showForgotPassword();" style="background:none;border:none;padding:0;cursor:pointer;font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Forgot password?</button></div>' +
       '</form>' +
       '<form id="authRegisterForm" class="auth-form" style="display:none" onsubmit="handleRegister(event)">' +
         '<input type="email" id="authRegisterEmail" placeholder="Email" required autocomplete="email" aria-label="Email address" aria-describedby="authRegisterError">' +
@@ -1009,7 +1009,7 @@ function _injectNavAuthButton() {
       existingBtn.id = "navSignIn";
       span.appendChild(existingBtn);
     } else {
-      span.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn" class="btn-chunky btn-sm">Sign In</a>';
+      span.innerHTML = '<button type="button" onclick="openAuthModal();" id="navSignIn" class="btn-chunky btn-sm">Sign In</button>';
     }
     authContainer.appendChild(span);
     return;
@@ -1019,7 +1019,7 @@ function _injectNavAuthButton() {
   if (!nav) return;
   var li = document.createElement("li");
   li.id = "navAuthItem";
-  li.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn">Sign In</a>';
+  li.innerHTML = '<button type="button" onclick="openAuthModal();" id="navSignIn" class="btn-chunky btn-sm">Sign In</button>';
   nav.appendChild(li);
 }
 
@@ -1164,14 +1164,14 @@ function _showVerificationMessage(email) {
   var inner = modal.querySelector(".auth-modal");
   if (!inner) return;
   inner.innerHTML =
-    '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
+    '<button type="button" class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
     '<h2 style="font-family:var(--font-display);font-size:20px;text-align:center;margin-bottom:12px;">Check Your Email</h2>' +
     '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">' +
       'We sent a verification link to <strong>' + (typeof escapeHtml === 'function' ? escapeHtml(email) : email) + '</strong>. ' +
       'Click it to verify your account and unlock your 7-day Pro trial.' +
     '</p>' +
     '<p style="font-family:var(--font-mono);font-size:12px;text-align:center;color:var(--ink-light);margin-top:16px;">' +
-      'Didn\'t get it? <a href="#" onclick="_resendVerification(\'' + email.replace(/'/g, "\\'") + '\'); return false;" style="color:var(--accent);">Resend</a>' +
+      'Didn\'t get it? <button type="button" onclick="_resendVerification(\'' + email.replace(/'/g, "\\'") + '\');" style="background:none;border:none;padding:0;cursor:pointer;color:var(--accent);font:inherit;">Resend</button>' +
     '</p>' +
     '<div id="verifyResendMsg" style="font-family:var(--font-mono);font-size:12px;text-align:center;color:var(--ink-light);min-height:18px;margin-top:8px;"></div>';
 }
@@ -1198,7 +1198,7 @@ function showForgotPassword() {
   var inner = modal.querySelector(".auth-modal");
   if (!inner) return;
   inner.innerHTML =
-    '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
+    '<button type="button" class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
     '<h2 style="font-family:var(--font-display);font-size:20px;text-align:center;margin-bottom:16px;">Reset Password</h2>' +
     '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">Enter your email and we\'ll send you a reset link.</p>' +
     '<form id="authForgotForm" class="auth-form" onsubmit="handleForgotPassword(event)">' +
@@ -1206,7 +1206,7 @@ function showForgotPassword() {
       '<div id="authForgotMsg" class="auth-error" role="status"></div>' +
       '<button type="submit" class="btn-chunky btn-primary auth-submit">Send Reset Link</button>' +
     '</form>' +
-    '<div style="text-align:center;margin-top:12px;"><a href="#" onclick="showLoginFromReset(); return false;" style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Back to sign in</a></div>';
+    '<div style="text-align:center;margin-top:12px;"><button type="button" onclick="showLoginFromReset();" style="background:none;border:none;padding:0;cursor:pointer;font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Back to sign in</button></div>';
   var emailInput = document.getElementById("authForgotEmail");
   if (emailInput) setTimeout(function() { emailInput.focus(); }, 50);
 }
@@ -1280,7 +1280,7 @@ function _showTrialExpiredModal() {
       '<h2 style="font-family:var(--font-display);font-size:20px;margin:0 0 8px;">your pro trial ended</h2>' +
       '<p style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin:0 0 20px;">you explored the full film room for 7 days. keep the edge with Pro.</p>' +
       '<a href="/pricing.html" class="btn-chunky btn-primary" style="display:inline-block;margin-bottom:12px;font-size:14px;padding:10px 24px;">see Pro plans</a><br>' +
-      '<button onclick="this.closest(\'#trialExpiredModal\').remove()" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);font-size:12px;padding:8px;">maybe later</button>' +
+      '<button type="button" onclick="this.closest(\'#trialExpiredModal\').remove()" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);font-size:12px;padding:8px;">maybe later</button>' +
     '</div>';
   document.body.appendChild(overlay);
 }
@@ -1347,7 +1347,7 @@ function updateAuthUI(user) {
       dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--ink-light); cursor:default;">sleeper: ' + escapeHtml(user.sleeper_username) + '</div>';
     }
     if (isPaid && !isTrial) {
-      dropdownItems += '<a href="#" onclick="openManageSubscription(); return false;" class="nav-dropdown-item">Manage Subscription</a>';
+      dropdownItems += '<button type="button" onclick="openManageSubscription();" class="nav-dropdown-item">Manage Subscription</button>';
     } else if (isTrial) {
       dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Keep Pro — Subscribe</a>';
     } else if (user.plan_source === "trial" && !user.trial_active) {
@@ -1356,11 +1356,11 @@ function updateAuthUI(user) {
       dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Subscribe to Pro</a>';
     }
     dropdownItems += '<div class="nav-dropdown-divider"></div>';
-    dropdownItems += '<a href="#" onclick="signOut(); return false;" class="nav-dropdown-item nav-dropdown-signout">Sign Out</a>';
+    dropdownItems += '<button type="button" onclick="signOut();" class="nav-dropdown-item nav-dropdown-signout">Sign Out</button>';
 
     item.innerHTML =
       '<div class="nav-user-dropdown">' +
-        '<button class="nav-user-trigger" aria-label="User menu" aria-expanded="false" aria-haspopup="true" onclick="var el=this.parentElement;el.classList.toggle(\'open\');this.setAttribute(\'aria-expanded\',el.classList.contains(\'open\'))">' +
+        '<button type="button" class="nav-user-trigger" aria-label="User menu" aria-expanded="false" aria-haspopup="true" onclick="var el=this.parentElement;el.classList.toggle(\'open\');this.setAttribute(\'aria-expanded\',el.classList.contains(\'open\'))">' +
           badge +
           '<span class="nav-user-name">' + displayName + '</span>' +
           '<span class="nav-user-caret">&#9662;</span>' +
@@ -1383,7 +1383,7 @@ function updateAuthUI(user) {
       }, 3000);
     }
   } else {
-    item.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn" class="btn-chunky btn-sm">Sign In</a>';
+    item.innerHTML = '<button type="button" onclick="openAuthModal();" id="navSignIn" class="btn-chunky btn-sm">Sign In</button>';
   }
   // Notify lock icons and tier-gated UI to re-evaluate
   window.dispatchEvent(new CustomEvent("razzle-plan-changed", { detail: user }));
@@ -1545,7 +1545,7 @@ function showSleeperPrompt() {
   }
 
   inner.innerHTML =
-    '<button class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
+    '<button type="button" class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
     trialBanner +
     '<div style="text-align:center; margin-bottom:16px;">' +
       '<div style="font-size:40px;">&#x1F42F;</div>' +
@@ -1559,7 +1559,7 @@ function showSleeperPrompt() {
       '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); padding:4px 0;">this will permanently link your Sleeper account to your Razzle account</div>' +
       '<div id="sleeperLinkError" style="font-family:var(--font-mono); font-size:12px; color:var(--red); min-height:16px;"></div>' +
       '<button type="submit" class="btn-chunky btn-primary auth-submit">Connect</button>' +
-      '<a href="#" onclick="showWelcomeState(); return false;" style="text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</a>' +
+      '<button type="button" onclick="showWelcomeState();" style="background:none;border:none;padding:0;cursor:pointer;text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</button>' +
     '</form>';
 }
 
@@ -1575,7 +1575,7 @@ function showWelcomeState() {
   var hasSleeper = user && user.sleeper_username;
 
   inner.innerHTML =
-    '<button class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
+    '<button type="button" class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
     '<div style="text-align:center; padding:8px 0;">' +
       '<div style="font-size:48px;">&#x1F42F;</div>' +
       '<h3 style="font-family:var(--font-display); font-size:20px; margin-top:8px;">Welcome to Razzle</h3>' +
@@ -2190,7 +2190,7 @@ function openPlayerPopup(playerId) {
     overlay.style.cssText = "position:fixed;inset:0;background:" + popupBg + ";z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;";
     overlay.innerHTML =
       '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:24px;position:relative;">' +
-        '<button onclick="closePlayerPopup()" style="position:absolute;top:8px;right:12px;font-size:24px;background:none;border:none;cursor:pointer;color:var(--ink);font-family:var(--font-display);">&times;</button>' +
+        '<button type="button" onclick="closePlayerPopup()" style="position:absolute;top:8px;right:12px;font-size:24px;background:none;border:none;cursor:pointer;color:var(--ink);font-family:var(--font-display);">&times;</button>' +
         '<div id="razzlePlayerPopupContent"></div>' +
       '</div>';
     overlay.addEventListener("click", function(e) {
@@ -2215,7 +2215,7 @@ function openPlayerPopup(playerId) {
     // Header
     html += '<div style="display:flex;align-items:center;gap:12px;border-left:6px solid ' + posColor + ';padding-left:12px;margin-bottom:16px;">';
     if (p.headshot_url) {
-      html += '<img src="' + escapeAttr(p.headshot_url) + '" alt="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--ink);object-fit:cover;" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+      html += '<img src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--ink);object-fit:cover;" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
     }
     html += '<div>';
     html += '<div style="font-family:var(--font-display);font-size:20px;">' + escapeHtml(p.full_name) + '</div>';

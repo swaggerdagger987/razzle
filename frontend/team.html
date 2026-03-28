@@ -667,7 +667,7 @@
         // Headshot
         var imgHtml;
         if (p.headshot_url) {
-          imgHtml = '<img class="player-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+          imgHtml = '<img class="player-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
           imgHtml += '<span class="player-headshot-fallback" style="display:none">' + escapeHtml((p.full_name || "?").substring(0, 2).toUpperCase()) + '</span>';
         } else {
           imgHtml = '<span class="player-headshot-fallback">' + escapeHtml((p.full_name || "?").substring(0, 2).toUpperCase()) + '</span>';

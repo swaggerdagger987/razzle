@@ -35,7 +35,7 @@
 
 <!-- NAV -->
 <nav class="topnav" aria-label="Main navigation">
-  <button class="lab-menu-toggle btn-chunky" aria-label="Toggle sidebar" aria-expanded="false" style="font-size:18px; padding:4px 10px; line-height:1;">&#9776;</button>
+  <button type="button" class="lab-menu-toggle btn-chunky" aria-label="Toggle sidebar" aria-expanded="false" style="font-size:18px; padding:4px 10px; line-height:1;">&#9776;</button>
   <a href="/" class="logo">
     <div class="logo-mark">🐯</div>
     <div class="logo-text">Razzle<span class="accent">.lol</span></div>
@@ -48,8 +48,8 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
-    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
+    <button type="button" class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <button type="button" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal();">Sign In</button>
   </div>
 </nav>
 
@@ -111,7 +111,7 @@
     <!-- PRO PANELS -->
     <div class="lab-sidebar-category lab-sidebar-pro-divider sidebar-cat-pro-parent" style="color:var(--orange); cursor:default;"><span class="cat-icon" style="display:none">&#x1F512;</span><span class="cat-text">PRO</span></div>
 
-    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/bones.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Bones"></span><span class="cat-text">Rankings &amp; Values</span><span class="cat-chevron">&#x25B8;</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/bones.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Bones" loading="lazy"></span><span class="cat-text">Rankings &amp; Values</span><span class="cat-chevron">&#x25B8;</span></div>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="vorp" data-icon="&#x2191;">VORP<span class="sidebar-tooltip">Value Over Replacement Player</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="advantage" data-icon="&#x25C6;">Positional Advantage<span class="sidebar-tooltip">Scoring edge over position average</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="auction" data-icon="$">Auction Values<span class="sidebar-tooltip">Auction Values</span></a>
@@ -122,7 +122,7 @@
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="scarcity" data-icon="&#x25EF;">Scarcity<span class="sidebar-tooltip">Scarcity</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="handcuffs" data-icon="&#x26D3;">Handcuffs<span class="sidebar-tooltip">Handcuffs</span></a>
 
-    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/octo.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Octo"></span><span class="cat-text">Performance</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/octo.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Octo" loading="lazy"></span><span class="cat-text">Performance</span></div>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="efficiency" data-icon="&#x26A1;">Efficiency<span class="sidebar-tooltip">Efficiency</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="consistency" data-icon="&#x2261;">Consistency<span class="sidebar-tooltip">Consistency</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="snapefficiency" data-icon="&#x23F1;">Snap Efficiency<span class="sidebar-tooltip">Fantasy points per snap</span></a>
@@ -134,7 +134,7 @@
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="successrate" data-icon="&#x2713;">Success Rate<span class="sidebar-tooltip">Positive play rate (EPA-based)</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="correlations" data-icon="&#x2234;">Correlations<span class="sidebar-tooltip">Which stats predict fantasy PPG?</span></a>
 
-    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/hawkeye.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Hawkeye"></span><span class="cat-text">Game Analysis</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/hawkeye.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Hawkeye" loading="lazy"></span><span class="cat-text">Game Analysis</span></div>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="matchups" data-icon="&#x2694;">Matchups<span class="sidebar-tooltip">Matchups</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="stacks" data-icon="&#x25A4;">Stacks<span class="sidebar-tooltip">QB + pass catcher correlations</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="redzone" data-icon="&#x25A0;">Red Zone<span class="sidebar-tooltip">Red Zone</span></a>
@@ -144,7 +144,7 @@
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="playoffs" data-icon="&#x1F3C6;">Playoffs<span class="sidebar-tooltip">Playoffs</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="gamescript" data-icon="&#x1F3AC;">Game Script<span class="sidebar-tooltip">Fantasy production in winning vs losing scripts</span></a>
 
-    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/dolphin.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Dr. Dolphin"></span><span class="cat-text">Trends &amp; Projections</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/dolphin.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Dr. Dolphin" loading="lazy"></span><span class="cat-text">Trends &amp; Projections</span></div>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="usage" data-icon="&#x2935;">Usage Trends<span class="sidebar-tooltip">Usage Trends</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="yoy" data-icon="&#x21C4;">Year-over-Year<span class="sidebar-tooltip">Year-over-Year</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="aging" data-icon="&#x231B;">Aging Curves<span class="sidebar-tooltip">Aging Curves</span></a>
@@ -153,12 +153,12 @@
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="tdregression" data-icon="&#x2248;">TD Regression<span class="sidebar-tooltip">Expected vs actual touchdowns</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="airyards" data-icon="&#x2708;">Air Yards<span class="sidebar-tooltip">Target depth and air yard share</span></a>
 
-    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/hawkeye.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Hawkeye"></span><span class="cat-text">College</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/hawkeye.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Hawkeye" loading="lazy"></span><span class="cat-text">College</span></div>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="draftclass" data-icon="&#x1F4CB;">Draft Class Analytics<span class="sidebar-tooltip">Draft Class Analytics</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="percentiles" data-icon="%">Percentiles<span class="sidebar-tooltip">Percentiles</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="drafttracker" data-icon="&#x1F4C5;">Draft Class Tracker<span class="sidebar-tooltip">How each draft class performed in fantasy</span></a>
 
-    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/atlas.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Atlas"></span><span class="cat-text">Player Tools</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/atlas.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Atlas" loading="lazy"></span><span class="cat-text">Player Tools</span></div>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="career" data-icon="&#x1F4C4;">Career Stats<span class="sidebar-tooltip">Career Stats</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="career-compare" data-icon="&#x2B0C;">Career Compare<span class="sidebar-tooltip">Career Compare</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="comptable" data-icon="&#x2263;">Compare Table<span class="sidebar-tooltip">Compare Table</span></a>
@@ -169,27 +169,27 @@
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="archetypes" data-icon="&#x2726;">Archetypes<span class="sidebar-tooltip">Archetypes</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="breakdown" data-icon="&#x25E9;">Scoring Breakdown<span class="sidebar-tooltip">Donut chart: scoring category %</span></a>
 
-    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/bones.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Bones"></span><span class="cat-text">League Tools</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/bones.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Bones" loading="lazy"></span><span class="cat-text">League Tools</span></div>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="rosterbuilder" data-icon="&#x1F4CB;">Roster Builder<span class="sidebar-tooltip">Roster Builder</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="tradefinder" data-icon="&#x21C6;">Trade Finder<span class="sidebar-tooltip">Trade Finder</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="scoring" data-icon="&#x2116;">Scoring Comparison<span class="sidebar-tooltip">Scoring Comparison</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="schedule" data-icon="&#x1F4C5;">Schedule / SOS<span class="sidebar-tooltip">Schedule / SOS</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="opportunity" data-icon="&#x25CE;">Opportunity Share<span class="sidebar-tooltip">Opportunity Share</span></a>
 
-    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/atlas.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Atlas"></span><span class="cat-text">Records &amp; History</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/atlas.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Atlas" loading="lazy"></span><span class="cat-text">Records &amp; History</span></div>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="records" data-icon="&#x1F4D6;">Records<span class="sidebar-tooltip">Records</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="recap" data-icon="&#x1F4F0;">Season Recap<span class="sidebar-tooltip">Season Recap</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="awards" data-icon="&#x1F3C5;">Awards<span class="sidebar-tooltip">Awards</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="explorer" data-icon="&#x1F9ED;">Explorer<span class="sidebar-tooltip">Explorer</span></a>
 
-    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/hawkeye.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Hawkeye"></span><span class="cat-text">Teams</span></div>
+    <div class="lab-sidebar-category"><span class="cat-icon"><img src="/assets/agents/hawkeye.svg" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;opacity:0.6" alt="Hawkeye" loading="lazy"></span><span class="cat-text">Teams</span></div>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="targets" data-icon="&#x25CE;">Target Distribution<span class="sidebar-tooltip">Target Distribution</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="team" data-icon="&#x1F465;">Team Rosters<span class="sidebar-tooltip">Team Rosters</span></a>
     <a href="#" class="lab-sidebar-item pro-locked" data-panel="powerrankings" data-icon="&#x1F3C6;">Power Rankings<span class="sidebar-tooltip">Which teams have the most dynasty value?</span></a>
 
   </div>
 
-  <button class="lab-sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Toggle sidebar">
+  <button type="button" class="lab-sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Toggle sidebar">
     <span id="sidebarToggleIcon">&raquo;</span>
   </button>
 </aside>
@@ -200,12 +200,12 @@
 <!-- PERSISTENT UNIVERSE TOGGLE BAR -->
 <div class="universe-bar" id="universeBar">
   <div class="universe-bar-inner">
-    <button class="btn-chunky universe-toggle active" id="universeNFL" onclick="setUniverse('nfl')">NFL</button>
-    <button class="btn-chunky universe-toggle" id="universeCollege" onclick="setUniverse('college')">College</button>
+    <button type="button" class="btn-chunky universe-toggle active" id="universeNFL" onclick="setUniverse('nfl')">NFL</button>
+    <button type="button" class="btn-chunky universe-toggle" id="universeCollege" onclick="setUniverse('college')">College</button>
   </div>
   <div class="college-sub-toggle" id="collegeSubToggle" style="display:none;">
-    <button class="btn-chunky college-view-btn active" id="collegeViewStats" onclick="setCollegeView('stats')">Season Stats</button>
-    <button class="btn-chunky college-view-btn" id="collegeViewProspects" onclick="setCollegeView('prospects')">Draft Prospects</button>
+    <button type="button" class="btn-chunky college-view-btn active" id="collegeViewStats" onclick="setCollegeView('stats')">Season Stats</button>
+    <button type="button" class="btn-chunky college-view-btn" id="collegeViewProspects" onclick="setCollegeView('prospects')">Draft Prospects</button>
   </div>
   <span class="universe-bar-label" id="universeLabel" style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light);">NFL universe</span>
 </div>
@@ -243,60 +243,60 @@
     <div class="toolbar-divider hide-mobile"></div>
 
     <div class="toolbar-section">
-      <button class="btn-chunky" onclick="openColumnPicker()">Columns</button>
-      <button class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
-      <button class="btn-chunky" onclick="openFilterModal()">+ Filter</button>
+      <button type="button" class="btn-chunky" onclick="openColumnPicker()">Columns</button>
+      <button type="button" class="btn-chunky" id="formulaBtn" onclick="openFormulaBuilder()">Formulas</button>
+      <button type="button" class="btn-chunky" onclick="openFilterModal()">+ Filter</button>
     </div>
 
     <div class="toolbar-divider hide-mobile"></div>
 
     <!-- Undo/Redo — only visible when enabled -->
-    <button class="btn-chunky undo-redo-btn" id="undoBtn" onclick="undoState()" title="Undo (Ctrl+Z)" aria-label="Undo" disabled style="font-size:14px; padding:5px 8px;">&#8630;</button>
-    <button class="btn-chunky undo-redo-btn" id="redoBtn" onclick="redoState()" title="Redo (Ctrl+Y)" aria-label="Redo" disabled style="font-size:14px; padding:5px 8px;">&#8631;</button>
+    <button type="button" class="btn-chunky undo-redo-btn" id="undoBtn" onclick="undoState()" title="Undo (Ctrl+Z)" aria-label="Undo" disabled style="font-size:14px; padding:5px 8px;">&#8630;</button>
+    <button type="button" class="btn-chunky undo-redo-btn" id="redoBtn" onclick="redoState()" title="Redo (Ctrl+Y)" aria-label="Redo" disabled style="font-size:14px; padding:5px 8px;">&#8631;</button>
 
     <!-- Tools dropdown -->
     <div class="tools-dropdown-wrap">
-      <button class="btn-chunky tools-dropdown-btn" id="toolsDropdownBtn" onclick="toggleToolsDropdown()" aria-expanded="false" aria-haspopup="true">Tools &#9662;</button>
+      <button type="button" class="btn-chunky tools-dropdown-btn" id="toolsDropdownBtn" onclick="toggleToolsDropdown()" aria-expanded="false" aria-haspopup="true">Tools &#9662;</button>
       <div class="tools-dropdown" id="toolsDropdown">
         <!-- VIEW -->
         <div class="tools-dropdown-section">
           <div class="tools-dropdown-label">View</div>
           <div class="tools-dropdown-grid">
-            <button class="btn-chunky" onclick="openChartPanel(); closeToolsDropdown();">Charts</button>
-            <button class="btn-chunky" onclick="openCompare(); closeToolsDropdown();" id="compareBtn" title="Select 2+ players with checkboxes first">Compare</button>
-            <button class="btn-chunky" id="watchlistBtn" onclick="openWatchlistPanel(); closeToolsDropdown();" style="border-color:var(--orange);">Watchlist</button>
-            <button class="btn-chunky" onclick="openMyRoster(); closeToolsDropdown();" style="border-color:var(--green);">My Roster</button>
+            <button type="button" class="btn-chunky" onclick="openChartPanel(); closeToolsDropdown();">Charts</button>
+            <button type="button" class="btn-chunky" onclick="openCompare(); closeToolsDropdown();" id="compareBtn" title="Select 2+ players with checkboxes first">Compare</button>
+            <button type="button" class="btn-chunky" id="watchlistBtn" onclick="openWatchlistPanel(); closeToolsDropdown();" style="border-color:var(--orange);">Watchlist</button>
+            <button type="button" class="btn-chunky" onclick="openMyRoster(); closeToolsDropdown();" style="border-color:var(--green);">My Roster</button>
             <select class="select-chunky" id="savedViewSelect" onchange="loadSavedView(this.value); closeToolsDropdown();" title="Saved views" style="max-width:140px;">
               <option value="">Views...</option>
             </select>
-            <button class="btn-chunky" onclick="saveCurrentView(); closeToolsDropdown();" style="font-size:12px;">Save View</button>
-            <button class="btn-chunky" onclick="openSavedViews(); closeToolsDropdown();">Manage Views</button>
+            <button type="button" class="btn-chunky" onclick="saveCurrentView(); closeToolsDropdown();" style="font-size:12px;">Save View</button>
+            <button type="button" class="btn-chunky" onclick="openSavedViews(); closeToolsDropdown();">Manage Views</button>
           </div>
         </div>
         <!-- EXPORT -->
         <div class="tools-dropdown-section">
           <div class="tools-dropdown-label">Export</div>
           <div class="tools-dropdown-grid">
-            <button class="btn-chunky btn-csv-export" onclick="exportCSV(); closeToolsDropdown();" title="Export CSV" aria-label="Export CSV">CSV</button>
-            <button class="btn-chunky" onclick="openShareModal(); closeToolsDropdown();" style="border-color:var(--orange);">Share</button>
-            <button class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport(); closeToolsDropdown();" style="display:none;">Export Rankings</button>
+            <button type="button" class="btn-chunky btn-csv-export" onclick="exportCSV(); closeToolsDropdown();" title="Export CSV" aria-label="Export CSV">CSV</button>
+            <button type="button" class="btn-chunky" onclick="openShareModal(); closeToolsDropdown();" style="border-color:var(--orange);">Share</button>
+            <button type="button" class="btn-chunky" id="exportRankingsBtn" onclick="openRankingsExport(); closeToolsDropdown();" style="display:none;">Export Rankings</button>
           </div>
         </div>
         <!-- DISPLAY -->
         <div class="tools-dropdown-section">
           <div class="tools-dropdown-label">Display</div>
           <div class="tools-dropdown-grid">
-            <button class="btn-chunky settings-btn" id="relevanceToggle" onclick="toggleRelevance()">Fantasy Relevant</button>
-            <button class="btn-chunky settings-btn" id="heatColorsBtn" onclick="toggleHeatColors()" title="Percentile coloring (H)">Heat</button>
-            <button class="btn-chunky settings-btn" id="percentileModeBtn" onclick="togglePercentileMode()" title="Percentile ranks (R)">Pctl</button>
-            <button class="btn-chunky settings-btn" id="dataBarsBtn" onclick="toggleDataBars()" title="Inline data bars (B)">Bars</button>
-            <button class="btn-chunky settings-btn" id="leaderBadgesBtn" onclick="toggleLeaderBadges()" title="Top 3 badges (L)">Top 3</button>
-            <button class="btn-chunky settings-btn" id="diffModeBtn" onclick="toggleDiffMode()" title="Diff vs pinned (I)">Diff</button>
-            <button class="btn-chunky settings-btn" id="tierBreaksBtn" onclick="toggleTierBreaks()" title="Tier dividers (T)">Tiers</button>
-            <button class="btn-chunky settings-btn" id="densityBtn" onclick="toggleDensity()" title="Compact rows (D)">Dense</button>
-            <button class="btn-chunky settings-btn" id="groupHeadersBtn" onclick="toggleGroupHeaders()" title="Column groups (G)">Groups</button>
-            <button class="btn-chunky settings-btn" id="summaryBarBtn" onclick="toggleSummaryBar()" title="Summary row (A)">Summary</button>
-            <button class="btn-chunky settings-btn" onclick="openCustomScoring()">Custom Scoring</button>
+            <button type="button" class="btn-chunky settings-btn" id="relevanceToggle" onclick="toggleRelevance()">Fantasy Relevant</button>
+            <button type="button" class="btn-chunky settings-btn" id="heatColorsBtn" onclick="toggleHeatColors()" title="Percentile coloring (H)">Heat</button>
+            <button type="button" class="btn-chunky settings-btn" id="percentileModeBtn" onclick="togglePercentileMode()" title="Percentile ranks (R)">Pctl</button>
+            <button type="button" class="btn-chunky settings-btn" id="dataBarsBtn" onclick="toggleDataBars()" title="Inline data bars (B)">Bars</button>
+            <button type="button" class="btn-chunky settings-btn" id="leaderBadgesBtn" onclick="toggleLeaderBadges()" title="Top 3 badges (L)">Top 3</button>
+            <button type="button" class="btn-chunky settings-btn" id="diffModeBtn" onclick="toggleDiffMode()" title="Diff vs pinned (I)">Diff</button>
+            <button type="button" class="btn-chunky settings-btn" id="tierBreaksBtn" onclick="toggleTierBreaks()" title="Tier dividers (T)">Tiers</button>
+            <button type="button" class="btn-chunky settings-btn" id="densityBtn" onclick="toggleDensity()" title="Compact rows (D)">Dense</button>
+            <button type="button" class="btn-chunky settings-btn" id="groupHeadersBtn" onclick="toggleGroupHeaders()" title="Column groups (G)">Groups</button>
+            <button type="button" class="btn-chunky settings-btn" id="summaryBarBtn" onclick="toggleSummaryBar()" title="Summary row (A)">Summary</button>
+            <button type="button" class="btn-chunky settings-btn" onclick="openCustomScoring()">Custom Scoring</button>
           </div>
           <div class="tools-dropdown-hint">press <kbd>?</kbd> for all keyboard shortcuts</div>
         </div>
@@ -304,12 +304,12 @@
         <div class="tools-dropdown-section">
           <div class="tools-dropdown-label">Analysis</div>
           <div class="tools-dropdown-grid">
-            <button class="btn-chunky" onclick="openTradeAnalyzer(); closeToolsDropdown();" style="border-color:var(--orange);">Trade</button>
-            <button class="btn-chunky" onclick="openFormulaStore(); closeToolsDropdown();">Formula Store</button>
-            <button class="btn-chunky" id="tagFilterBtn" onclick="toggleTagFilter(); closeToolsDropdown();" oncontextmenu="event.preventDefault(); if(getTaggedCount()>0){if(!this.dataset.confirming){this.dataset.confirming='1';this.textContent='sure? right-click again';var _b=this;setTimeout(function(){delete _b.dataset.confirming;_b.textContent='Tags';},3000);return;}delete this.dataset.confirming;this.textContent='Tags';clearAllTags();}" title="Show only tagged players. Right-click to clear all.">Tags</button>
-            <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues(); closeToolsDropdown();" style="display:none; border-color:var(--orange);">Trade Values</button>
-            <button class="btn-chunky" id="agingCurvesBtn" onclick="openAgingCurves(); closeToolsDropdown();" style="display:none; border-color:var(--green);">Aging Curves</button>
-            <button class="btn-chunky" id="heatMapBtn" onclick="openHeatMap(); closeToolsDropdown();" style="display:none; border-color:var(--red);">Heat Map</button>
+            <button type="button" class="btn-chunky" onclick="openTradeAnalyzer(); closeToolsDropdown();" style="border-color:var(--orange);">Trade</button>
+            <button type="button" class="btn-chunky" onclick="openFormulaStore(); closeToolsDropdown();">Formula Store</button>
+            <button type="button" class="btn-chunky" id="tagFilterBtn" onclick="toggleTagFilter(); closeToolsDropdown();" oncontextmenu="event.preventDefault(); if(getTaggedCount()>0){if(!this.dataset.confirming){this.dataset.confirming='1';this.textContent='sure? right-click again';var _b=this;setTimeout(function(){delete _b.dataset.confirming;_b.textContent='Tags';},3000);return;}delete this.dataset.confirming;this.textContent='Tags';clearAllTags();}" title="Show only tagged players. Right-click to clear all.">Tags</button>
+            <button type="button" class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues(); closeToolsDropdown();" style="display:none; border-color:var(--orange);">Trade Values</button>
+            <button type="button" class="btn-chunky" id="agingCurvesBtn" onclick="openAgingCurves(); closeToolsDropdown();" style="display:none; border-color:var(--green);">Aging Curves</button>
+            <button type="button" class="btn-chunky" id="heatMapBtn" onclick="openHeatMap(); closeToolsDropdown();" style="display:none; border-color:var(--red);">Heat Map</button>
           </div>
         </div>
       </div>
@@ -317,9 +317,9 @@
     <div class="tools-dropdown-backdrop" id="toolsDropdownBackdrop" onclick="closeToolsDropdown()"></div>
 
     <!-- Hidden mode-specific buttons -->
-    <button class="btn-chunky" id="tiersBtn" onclick="openTierView()" style="display:none;">Tiers</button>
-    <button class="btn-chunky" id="bigBoardBtn" onclick="openBigBoard()" style="display:none;">Big Board</button>
-    <button class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
+    <button type="button" class="btn-chunky" id="tiersBtn" onclick="openTierView()" style="display:none;">Tiers</button>
+    <button type="button" class="btn-chunky" id="bigBoardBtn" onclick="openBigBoard()" style="display:none;">Big Board</button>
+    <button type="button" class="btn-chunky" id="classAnalyticsBtn" onclick="openClassAnalytics()" style="display:none;">Class Analytics</button>
 
     <span class="result-count" id="resultCount" aria-live="polite"></span>
   </div>
@@ -353,12 +353,12 @@
       <option value="sleepers">Sleepers (PPG ≤12, Snap% ≥40)</option>
     </select>
     <div id="activeFilters"></div>
-    <button class="add-filter-btn" onclick="openFilterModal()">+ add filter</button>
+    <button type="button" class="add-filter-btn" onclick="openFilterModal()">+ add filter</button>
   </div>
 
   <!-- TABLE -->
   <div class="table-wrap">
-    <button class="scroll-top-btn" id="scrollTopBtn" style="display:none;" onclick="var w=document.querySelector('.table-wrap'); if(w) w.scrollTo({top:0, behavior:'smooth'})" title="Scroll to top" aria-label="Scroll to top">&#9650;</button>
+    <button type="button" class="scroll-top-btn" id="scrollTopBtn" style="display:none;" onclick="var w=document.querySelector('.table-wrap'); if(w) w.scrollTo({top:0, behavior:'smooth'})" title="Scroll to top" aria-label="Scroll to top">&#9650;</button>
     <table class="screener-table" id="screenerTable">
       <caption class="sr-only">NFL Player Statistics Screener</caption>
       <thead id="tableHead" style="min-height:40px;"></thead>
@@ -391,10 +391,10 @@
     <span class="bulk-count" id="bulkCount"></span>
     <span class="bulk-names" id="bulkNames"></span>
     <div id="quickCompareStrip" style="display:none; flex:1; overflow-x:auto; white-space:nowrap;"></div>
-    <button class="btn-chunky" id="bulkCompareBtn" onclick="openCompare()" style="border-color:var(--orange);">Compare</button>
-    <button class="btn-chunky" id="bulkPinBtn" onclick="bulkPinSelected()" title="Pin selected players to top for comparison">Pin</button>
-    <button class="btn-chunky" onclick="openChartPanel()">Chart</button>
-    <button class="btn-chunky" onclick="clearSelection()" style="border-color:var(--ink-light);">Clear</button>
+    <button type="button" class="btn-chunky" id="bulkCompareBtn" onclick="openCompare()" style="border-color:var(--orange);">Compare</button>
+    <button type="button" class="btn-chunky" id="bulkPinBtn" onclick="bulkPinSelected()" title="Pin selected players to top for comparison">Pin</button>
+    <button type="button" class="btn-chunky" onclick="openChartPanel()">Chart</button>
+    <button type="button" class="btn-chunky" onclick="clearSelection()" style="border-color:var(--ink-light);">Clear</button>
   </div>
 
   <!-- WATERMARK -->
@@ -404,9 +404,9 @@
   <div class="footer-bar">
     <span>razzle.lol</span>
     <div class="pagination">
-      <button class="btn-chunky" id="prevBtn" onclick="prevPage()">← prev</button>
+      <button type="button" class="btn-chunky" id="prevBtn" onclick="prevPage()">← prev</button>
       <span id="pageInfo"></span>
-      <button class="btn-chunky" id="nextBtn" onclick="nextPage()">next →</button>
+      <button type="button" class="btn-chunky" id="nextBtn" onclick="nextPage()">next →</button>
       <select class="select-chunky" id="pageSizeSelect" onchange="changePageSize(this.value)" style="font-size:11px; padding:4px 6px; margin-left:8px;" title="Rows per page">
         <option value="25">25</option>
         <option value="50">50</option>
@@ -435,8 +435,8 @@
       <input type="number" class="input-chunky" id="filterValue" placeholder="0" style="flex:1" inputmode="numeric" aria-label="Filter value" onkeydown="if(event.key==='Enter'){event.preventDefault();addFilter();}">
     </div>
     <div class="filter-modal-actions">
-      <button class="btn-chunky" onclick="closeFilterModal()">Never Mind</button>
-      <button class="btn-primary" onclick="addFilter()">Add</button>
+      <button type="button" class="btn-chunky" onclick="closeFilterModal()">Never Mind</button>
+      <button type="button" class="btn-primary" onclick="addFilter()">Add</button>
     </div>
   </div>
 </div>
@@ -449,7 +449,7 @@
     <div class="preset-bar" id="presetBar"></div>
     <div id="columnGroups"></div>
     <div style="margin-top: 16px; display: flex; gap: 8px; justify-content: flex-end;">
-      <button class="btn-primary" onclick="closeColumnPicker()">Done</button>
+      <button type="button" class="btn-primary" onclick="closeColumnPicker()">Done</button>
     </div>
   </div>
 </div>
@@ -465,10 +465,10 @@
       <input type="text" class="input-chunky" id="formulaName" placeholder="formula name" style="flex:1">
     </div>
     <div id="formulaComponents"></div>
-    <button class="add-filter-btn" onclick="addFormulaComponent()" style="margin:8px 0;">+ add stat</button>
+    <button type="button" class="add-filter-btn" onclick="addFormulaComponent()" style="margin:8px 0;">+ add stat</button>
     <div class="filter-modal-actions">
-      <button class="btn-chunky" onclick="closeFormulaBuilder()">Never Mind</button>
-      <button class="btn-primary" onclick="saveFormula()">Save Formula</button>
+      <button type="button" class="btn-chunky" onclick="closeFormulaBuilder()">Never Mind</button>
+      <button type="button" class="btn-primary" onclick="saveFormula()">Save Formula</button>
     </div>
     <div id="savedFormulas" style="margin-top:16px; border-top:2px dashed var(--ink-faint); padding-top:12px;"></div>
   </div>
@@ -480,10 +480,10 @@
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
       <h3 id="dlgTitleCharts">Charts</h3>
       <div style="display:flex; gap:6px;">
-        <button class="btn-chunky" id="chartTabRadar" onclick="switchChartTab('radar')">Radar</button>
-        <button class="btn-chunky" id="chartTabScatter" onclick="switchChartTab('scatter')">Scatter</button>
-        <button class="btn-chunky" id="chartTabTrend" onclick="switchChartTab('trend')">Trend</button>
-        <button class="btn-chunky" id="chartTabHeatmap" onclick="switchChartTab('heatmap')">Heat Map</button>
+        <button type="button" class="btn-chunky" id="chartTabRadar" onclick="switchChartTab('radar')">Radar</button>
+        <button type="button" class="btn-chunky" id="chartTabScatter" onclick="switchChartTab('scatter')">Scatter</button>
+        <button type="button" class="btn-chunky" id="chartTabTrend" onclick="switchChartTab('trend')">Trend</button>
+        <button type="button" class="btn-chunky" id="chartTabHeatmap" onclick="switchChartTab('heatmap')">Heat Map</button>
       </div>
     </div>
 
@@ -496,8 +496,8 @@
     </div>
 
     <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:8px;">
-      <button class="btn-primary" id="chartExportBtn" onclick="exportChartPNG()" style="display:none;">Export PNG</button>
-      <button class="btn-chunky" onclick="closeChartPanel()">Close</button>
+      <button type="button" class="btn-primary" id="chartExportBtn" onclick="exportChartPNG()" style="display:none;">Export PNG</button>
+      <button type="button" class="btn-chunky" onclick="closeChartPanel()">Close</button>
     </div>
   </div>
 </div>
@@ -511,7 +511,7 @@
       <canvas id="compareRadar" role="img" aria-label="Player comparison radar chart" width="400" height="400" style="border:2px solid var(--ink); border-radius:8px; background:var(--bg); max-width:100%;"></canvas>
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
-      <button class="btn-chunky" onclick="closeCompare()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeCompare()">Close</button>
     </div>
   </div>
 </div>
@@ -526,7 +526,7 @@
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Shareable URL</label>
       <div style="display:flex; gap:8px; align-items:center;">
         <input type="text" id="shareURLInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
-        <button class="btn-primary" id="shareURLCopyBtn" onclick="copyShareURLFromModal()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy URL</button>
+        <button type="button" class="btn-primary" id="shareURLCopyBtn" onclick="copyShareURLFromModal()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy URL</button>
       </div>
     </div>
 
@@ -534,10 +534,10 @@
     <div style="margin-bottom:16px;">
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Export Data</label>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="btn-chunky" onclick="exportImage(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download PNG</button>
-        <button class="btn-chunky btn-csv-export" onclick="exportCSV(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download CSV</button>
-        <button class="btn-chunky" id="clipboardCopyBtn" onclick="copyTableToClipboard()" style="font-size:12px; padding:6px 14px;">Copy to Clipboard</button>
-        <button class="btn-chunky" onclick="copyTableAsReddit()" style="font-size:12px; padding:6px 14px; border-color:var(--orange);">Copy as Reddit Table</button>
+        <button type="button" class="btn-chunky" onclick="exportImage(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download PNG</button>
+        <button type="button" class="btn-chunky btn-csv-export" onclick="exportCSV(); closeShareModal();" style="font-size:12px; padding:6px 14px;">Download CSV</button>
+        <button type="button" class="btn-chunky" id="clipboardCopyBtn" onclick="copyTableToClipboard()" style="font-size:12px; padding:6px 14px;">Copy to Clipboard</button>
+        <button type="button" class="btn-chunky" onclick="copyTableAsReddit()" style="font-size:12px; padding:6px 14px; border-color:var(--orange);">Copy as Reddit Table</button>
       </div>
     </div>
 
@@ -546,13 +546,13 @@
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Suggested Reddit Title</label>
       <div style="display:flex; gap:8px; align-items:center;">
         <input type="text" id="redditTitleInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
-        <button class="btn-chunky" id="redditTitleCopyBtn" onclick="copyRedditTitle()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy</button>
+        <button type="button" class="btn-chunky" id="redditTitleCopyBtn" onclick="copyRedditTitle()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy</button>
       </div>
     </div>
 
     <p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin:8px 0 16px 0;">screenshots are billboards. share generously.</p>
     <div style="display:flex; justify-content:flex-end;">
-      <button class="btn-chunky" onclick="closeShareModal()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeShareModal()">Close</button>
     </div>
   </div>
 </div>
@@ -567,7 +567,7 @@
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Save Current View</label>
       <div style="display:flex; gap:8px; align-items:center;">
         <input type="text" id="saveViewName" placeholder="e.g. Dynasty WR Targets" style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
-        <button class="btn-primary" onclick="saveCurrentView()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Save</button>
+        <button type="button" class="btn-primary" onclick="saveCurrentView()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Save</button>
       </div>
     </div>
 
@@ -576,7 +576,7 @@
 
     <p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin:12px 0 16px 0;">your setups, always ready. <span class="pro-locked" style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">cloud sync</span></p>
     <div style="display:flex; justify-content:flex-end;">
-      <button class="btn-chunky" onclick="closeSavedViews()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeSavedViews()">Close</button>
     </div>
   </div>
 </div>
@@ -598,15 +598,15 @@
 
     <!-- Save / Load / Delete -->
     <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
-      <button class="btn-primary" onclick="saveCustomScoring()" style="font-size:11px; padding:6px 14px;">Save & Apply</button>
+      <button type="button" class="btn-primary" onclick="saveCustomScoring()" style="font-size:11px; padding:6px 14px;">Save & Apply</button>
       <select class="select-chunky" id="customScoringSelect" onchange="loadCustomScoringConfig(this.value)" style="flex:1; font-size:11px;">
         <option value="">Load saved...</option>
       </select>
-      <button class="btn-chunky" onclick="deleteCustomScoring()" style="font-size:11px; padding:6px 10px; color:var(--red);">Delete</button>
+      <button type="button" class="btn-chunky" onclick="deleteCustomScoring()" style="font-size:11px; padding:6px 10px; color:var(--red);">Delete</button>
     </div>
 
     <div style="display:flex; justify-content:flex-end;">
-      <button class="btn-chunky" onclick="closeCustomScoring()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeCustomScoring()">Close</button>
     </div>
   </div>
 </div>
@@ -630,8 +630,8 @@
       </div>
       <p id="rankingsPreview" style="font-family:var(--font-hand); font-size:18px; color:var(--ink-medium); margin:4px 0;"></p>
       <div style="display:flex; justify-content:flex-end; gap:8px;">
-        <button class="btn-chunky" onclick="closeRankingsExport()">Never Mind</button>
-        <button class="btn-primary" onclick="generateRankingsExport()">Generate PNG</button>
+        <button type="button" class="btn-chunky" onclick="closeRankingsExport()">Never Mind</button>
+        <button type="button" class="btn-primary" onclick="generateRankingsExport()">Generate PNG</button>
       </div>
     </div>
   </div>
@@ -643,13 +643,13 @@
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
       <h3 id="dlgTitleTiers" style="margin:0;">Draft Class Athletic Tiers</h3>
       <div id="tierPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
-      <button class="btn-primary" onclick="exportTierImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+      <button type="button" class="btn-primary" onclick="exportTierImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
     <div id="tierContent">
       <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">pick a position above</div>
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
-      <button class="btn-chunky" onclick="closeTierView()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeTierView()">Close</button>
     </div>
   </div>
 </div>
@@ -660,13 +660,13 @@
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 id="dlgTitleBigBoard" style="margin:0;">Razzle Big Board</h3>
       <div id="bbPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
-      <button class="btn-primary" id="bbExportBtn" onclick="exportBigBoardImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+      <button type="button" class="btn-primary" id="bbExportBtn" onclick="exportBigBoardImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
     <div id="bbContent">
       <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">scouting the board...</div>
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
-      <button class="btn-chunky" onclick="closeBigBoard()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeBigBoard()">Close</button>
     </div>
   </div>
 </div>
@@ -677,13 +677,13 @@
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
       <h3 id="dlgTitleClassAnalytics" style="margin:0;">Draft Class Analytics</h3>
       <div id="caPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
-      <button class="btn-primary" id="caExportBtn" onclick="exportClassAnalyticsImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+      <button type="button" class="btn-primary" id="caExportBtn" onclick="exportClassAnalyticsImage()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
     <div id="caContent">
       <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">analyzing draft classes...</div>
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
-      <button class="btn-chunky" onclick="closeClassAnalytics()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeClassAnalytics()">Close</button>
     </div>
   </div>
 </div>
@@ -694,7 +694,7 @@
     <div class="trade-analyzer-header">
       <h3 id="dlgTitleTradeAnalyzer" style="margin:0; font-family:var(--font-display); font-size:20px;">Trade Analyzer</h3>
       <span style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">check the math on that deal</span>
-      <button class="btn-chunky" onclick="closeTradeAnalyzer()" style="margin-left:auto; font-size:12px; padding:4px 14px;">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeTradeAnalyzer()" style="margin-left:auto; font-size:12px; padding:4px 14px;">Close</button>
     </div>
 
     <div class="trade-analyzer-sides">
@@ -711,7 +711,7 @@
           <select id="taPickYearGive"></select>
           <select id="taPickRdGive"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
           <select id="taPickNumGive"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
-          <button class="btn-chunky" onclick="_taAddPick('give')">+ Pick</button>
+          <button type="button" class="btn-chunky" onclick="_taAddPick('give')">+ Pick</button>
         </div>
         <div class="trade-player-list" id="taListGive">
           <div class="trade-empty-hint">add players or picks to trade away</div>
@@ -740,7 +740,7 @@
           <select id="taPickYearGet"></select>
           <select id="taPickRdGet"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
           <select id="taPickNumGet"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
-          <button class="btn-chunky" onclick="_taAddPick('get')">+ Pick</button>
+          <button type="button" class="btn-chunky" onclick="_taAddPick('get')">+ Pick</button>
         </div>
         <div class="trade-player-list" id="taListGet">
           <div class="trade-empty-hint">add players or picks to acquire</div>
@@ -757,7 +757,7 @@
       <div id="taValueBars"></div>
       <div id="taVerdict"></div>
       <div id="taCommentary"></div>
-      <button class="btn-primary" onclick="exportTradeAnalyzerPNG()" style="margin-top:14px; font-size:12px; padding:6px 18px;">Export PNG</button>
+      <button type="button" class="btn-primary" onclick="exportTradeAnalyzerPNG()" style="margin-top:14px; font-size:12px; padding:6px 18px;">Export PNG</button>
     </div>
 
     <!-- Pick Value Chart -->
@@ -778,7 +778,7 @@
       <h3 id="dlgTitleTradeValues" style="margin:0; font-family:var(--font-display);">Trade Values</h3>
       <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">dynasty trade currency</div>
       <div id="tvPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
-      <button class="btn-primary" id="tvExportBtn" onclick="exportTradeValuesPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+      <button type="button" class="btn-primary" id="tvExportBtn" onclick="exportTradeValuesPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
     <div id="tvContent">
       <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">pulling trade film...</div>
@@ -799,7 +799,7 @@
             <span style="font-family:var(--font-mono); font-size:12px;">TOTAL</span>
             <span id="tvTotalA" style="font-family:var(--font-mono); font-size:16px; font-weight:bold;">0</span>
           </div>
-          <button class="btn-chunky" onclick="clearTradeSide('A')" style="font-size:11px; padding:3px 10px; margin-top:6px;">Clear</button>
+          <button type="button" class="btn-chunky" onclick="clearTradeSide('A')" style="font-size:11px; padding:3px 10px; margin-top:6px;">Clear</button>
         </div>
         <div id="tvBalance" style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding-top:30px;">
           <div style="font-family:var(--font-mono); font-size:14px; font-weight:bold; padding:8px 14px; border:2px solid var(--ink); border-radius:8px;" id="tvBalanceBadge">—</div>
@@ -813,12 +813,12 @@
             <span style="font-family:var(--font-mono); font-size:12px;">TOTAL</span>
             <span id="tvTotalB" style="font-family:var(--font-mono); font-size:16px; font-weight:bold;">0</span>
           </div>
-          <button class="btn-chunky" onclick="clearTradeSide('B')" style="font-size:11px; padding:3px 10px; margin-top:6px;">Clear</button>
+          <button type="button" class="btn-chunky" onclick="clearTradeSide('B')" style="font-size:11px; padding:3px 10px; margin-top:6px;">Clear</button>
         </div>
       </div>
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
-      <button class="btn-chunky" onclick="closeTradeValues()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeTradeValues()">Close</button>
     </div>
   </div>
 </div>
@@ -830,7 +830,7 @@
       <div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">pulling film...</div>
     </div>
     <div style="margin-top:12px; display:flex; justify-content:flex-end;">
-      <button class="btn-chunky" onclick="closeProfile()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeProfile()">Close</button>
     </div>
   </div>
 </div>
@@ -876,8 +876,8 @@
       weights stay hidden — only stat names are shown in the store
     </div>
     <div class="filter-modal-actions">
-      <button class="btn-chunky" onclick="closePublishFlow()">Never Mind</button>
-      <button class="btn-primary" onclick="submitPublish()">Publish</button>
+      <button type="button" class="btn-chunky" onclick="closePublishFlow()">Never Mind</button>
+      <button type="button" class="btn-primary" onclick="submitPublish()">Publish</button>
     </div>
   </div>
 </div>
@@ -890,7 +890,7 @@
         <h3 id="dlgTitleStore" style="font-family:var(--font-display); font-size:20px;">Formula Store</h3>
         <p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">community-built scoring formulas <span class="pro-locked" style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">full access</span></p>
       </div>
-      <button class="btn-chunky" onclick="closeFormulaStore()">Close</button>
+      <button type="button" class="btn-chunky" onclick="closeFormulaStore()">Close</button>
     </div>
     <div id="storeContent"></div>
   </div>
@@ -903,7 +903,7 @@
       <h3 id="dlgTitleAgingCurves" style="margin:0; font-family:var(--font-display);">Aging Curves</h3>
       <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">how players age at each position...</div>
       <div id="acPositionBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
-      <button class="btn-primary" id="acExportBtn" onclick="exportAgingCurvesPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+      <button type="button" class="btn-primary" id="acExportBtn" onclick="exportAgingCurvesPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
     <div id="acChartContainer" style="position:relative;">
       <canvas id="acCanvas" role="img" aria-label="Aging curves chart by position" width="900" height="500" style="width:100%; border:2px solid var(--ink); border-radius:8px; background:var(--bg);"></canvas>
@@ -920,7 +920,7 @@
       <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">positional stat percentiles...</div>
       <div id="hmPositionBtns" style="display:flex; gap:6px;"></div>
       <div id="hmGroupBtns" style="display:flex; gap:6px; margin-left:auto;"></div>
-      <button class="btn-primary" id="hmExportBtn" onclick="exportHeatMapPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
+      <button type="button" class="btn-primary" id="hmExportBtn" onclick="exportHeatMapPNG()" style="font-size:11px; padding:6px 14px;">Export PNG</button>
     </div>
     <div id="hmChartContainer" style="position:relative; overflow-x:auto;">
       <canvas id="hmCanvas" role="img" aria-label="Positional stat percentile heat map" width="960" height="900" style="width:100%; border:2px solid var(--ink); border-radius:8px; background:var(--bg);"></canvas>
@@ -1385,10 +1385,10 @@
                              '<div class="panel-title-row">' +
                                '<div class="panel-title">' + escapeHtml(label) + '</div>' +
                                '<div class="panel-actions">' +
-                                 '<button class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeJS(methodId) + '\')" title="How is this calculated?" aria-label="How is this calculated?">&#9432;</button>' +
-                                 '<button class="btn-panel-action btn-csv-export" onclick="exportPanelCSV(\'' + escapeJS(panelName) + '\')" title="Export as CSV">CSV</button>' +
-                                 '<button class="btn-panel-action" onclick="screenshotPanel(\'' + escapeJS(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
-                                 '<button class="btn-panel-action" onclick="sharePanelURL(\'' + escapeJS(panelName) + '\')" title="Copy share link">Share</button>' +
+                                 '<button type="button" class="btn-panel-action btn-info-toggle" onclick="toggleMethodology(\'' + escapeJS(methodId) + '\')" title="How is this calculated?" aria-label="How is this calculated?">&#9432;</button>' +
+                                 '<button type="button" class="btn-panel-action btn-csv-export" onclick="exportPanelCSV(\'' + escapeJS(panelName) + '\')" title="Export as CSV">CSV</button>' +
+                                 '<button type="button" class="btn-panel-action" onclick="screenshotPanel(\'' + escapeJS(panelName) + '\')" title="Screenshot as PNG">PNG</button>' +
+                                 '<button type="button" class="btn-panel-action" onclick="sharePanelURL(\'' + escapeJS(panelName) + '\')" title="Copy share link">Share</button>' +
                                '</div>' +
                              '</div>' +
                              (flavor ? '<div class="panel-flavor">' + escapeHtml(flavor) + '</div>' : '') +

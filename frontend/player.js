@@ -107,7 +107,7 @@ function renderPlayerPage(data, container) {
   html += `<div class="player-hero pos-stripe-${pos.toLowerCase()}">`;
   html += `<div class="player-hero-top">`;
   if (player.headshot_url) {
-    html += `<img class="player-hero-headshot" src="${esc(player.headshot_url)}" alt="" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>';">`;
+    html += `<img class="player-hero-headshot" src="${esc(player.headshot_url)}" alt="Player headshot" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>';">`;
   }
   html += `<div class="player-pos-badge" style="background:${posColor};">${pos}</div>`;
   html += `<div style="flex:1; min-width:0;">`;

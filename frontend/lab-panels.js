@@ -221,7 +221,7 @@
         var posLc = (p.position || '').toLowerCase();
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><div class="dh-player-cell">';
-        if (p.headshot_url) html += '<img class="dh-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+        if (p.headshot_url) html += '<img class="dh-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
         html += '<div><div class="dh-name">' + pLink(p.full_name, p.player_id) + '</div>';
         html += '<span class="rankings-pos-badge ' + posLc + '">' + escapeHtml(p.position) + '</span>';
         html += ' <span class="dh-team">' + escapeHtml(p.team) + '</span></div></div></td>';
@@ -648,7 +648,7 @@
       var html = '<div class="tv-row" data-pid="' + escapeAttr(p.player_id) + '">';
       html += '<div class="tv-rank' + rankClass + '">' + escapeHtml(String(p.rank)) + '</div>';
       if (p.headshot_url) {
-        html += '<img class="tv-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+        html += '<img class="tv-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       } else {
         html += '<div class="tv-headshot"></div>';
       }
@@ -946,7 +946,7 @@
         var sign = p.vorp > 0 ? '+' : '';
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><div class="vorp-player-cell">';
-        if (p.headshot_url) html += '<img class="vorp-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+        if (p.headshot_url) html += '<img class="vorp-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
         html += '<div class="vorp-player-info"><div class="vorp-player-name">' + pLink(p.full_name, p.player_id) + '</div>';
         html += '<div class="vorp-player-meta"><span class="vorp-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="vorp-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
@@ -1512,7 +1512,7 @@
           html += '<div class="breakout-card-top ' + pos + '"></div><div class="breakout-card-body">';
           html += '<div class="breakout-card-row1">';
           html += '<div class="breakout-rank">' + escapeHtml(String(p.rank)) + '</div>';
-          if (p.headshot_url) html += '<img class="breakout-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+          if (p.headshot_url) html += '<img class="breakout-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           html += '<div class="breakout-info"><div class="breakout-name">' + pLink(p.name, p.player_id) + '</div>';
           html += '<div class="breakout-meta"><span class="breakout-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           if (isCollege && p.conference) {
@@ -1644,7 +1644,7 @@
       h += '<div class="buysell-card-top ' + pos + '"></div><div class="buysell-card-body">';
       h += '<div class="buysell-card-row1">';
       h += '<div class="buysell-rank">' + escapeHtml(String(p.rank)) + '</div>';
-      if (p.headshot_url) h += '<img class="buysell-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+      if (p.headshot_url) h += '<img class="buysell-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       h += '<div class="buysell-info"><div class="buysell-name">' + pLink(p.name, p.player_id) + '</div>';
       h += '<div class="buysell-meta"><span class="buysell-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
       h += '<span class="buysell-team">' + escapeHtml(p.team) + '</span>';
@@ -1794,7 +1794,7 @@
         if (c.hide) cls.push('hide-mobile');
         if (c.key === 'name') {
           h += '<td><div class="stk-player-cell">';
-          if (p.headshot_url) h += '<img class="stk-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+          if (p.headshot_url) h += '<img class="stk-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           h += '<div class="stk-player-info"><div class="stk-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="stk-player-meta"><span class="stk-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="stk-team-label">' + escapeHtml(p.team) + '</span>';
@@ -2293,7 +2293,7 @@
         if (c.key === 'name') {
           var isCollegeEff = typeof state !== 'undefined' && state.universe === 'college';
           h += '<td><div class="eff-player-cell">';
-          if (p.headshot_url) h += '<img class="eff-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+          if (p.headshot_url) h += '<img class="eff-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           h += '<div class="eff-player-info"><div class="eff-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="eff-player-meta"><span class="eff-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="eff-team-label">' + escapeHtml(p.team) + '</span>';
@@ -2508,7 +2508,7 @@
         if (c.key === 'name') {
           var isCollegeCon = typeof state !== 'undefined' && state.universe === 'college';
           h += '<td><div class="con-player-cell">';
-          if (p.headshot_url) h += '<img class="con-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+          if (p.headshot_url) h += '<img class="con-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           h += '<div class="con-player-info"><div class="con-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="con-player-meta"><span class="con-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="con-team-label">' + escapeHtml(p.team) + '</span>';
@@ -3649,7 +3649,7 @@
         html += '<div class="mh-detail-players">';
         players.forEach(function(p) {
           var posColor = POS_CSS[p.position] || 'var(--ink-light)';
-          var img = p.headshot_url ? '<img src="' + escapeAttr(p.headshot_url) + '" alt="" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">' : '';
+          var img = p.headshot_url ? '<img src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">' : '';
           html += '<div class="mh-detail-player" data-pid="' + escapeAttr(p.player_id) + '">';
           html += img;
           html += '<div><div class="mh-detail-name">' + escapeHtml(p.name) + '</div>';
@@ -3844,7 +3844,7 @@
 
         if (col.key === 'name') {
           html += '<td><div class="rz-player-cell">';
-          if (p.headshot_url) html += '<img class="rz-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+          if (p.headshot_url) html += '<img class="rz-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           html += '<div class="rz-player-info"><div class="rz-player-name">' + pLink(p.name, p.player_id) + '</div>';
           html += '<div class="rz-player-meta"><span class="rz-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="rz-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
@@ -4636,7 +4636,7 @@
         html += '<tr>';
         html += '<td class="ut-rank">' + (i + 1) + '</td>';
         html += '<td class="ut-player-cell">';
-        if (!isCollege && p.headshot_url) html += '<img class="ut-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy">';
+        if (!isCollege && p.headshot_url) html += '<img class="ut-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy">';
         html += '<span class="ut-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="ut-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ut-team">' + escapeHtml(p.team || '') + '</span>';
@@ -4780,7 +4780,7 @@
         html += '<tr>';
         html += '<td class="yy-rank">' + (i + 1) + '</td>';
         html += '<td class="yy-player-cell">';
-        if (!isCollege && p.headshot_url) html += '<img class="yy-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy">';
+        if (!isCollege && p.headshot_url) html += '<img class="yy-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy">';
         html += '<span class="yy-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="yy-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="yy-team">' + escapeHtml(p.team || '') + '</span>';
@@ -5434,7 +5434,7 @@
         html += '<tr>';
         // player cell
         html += '<td class="ay-player-cell">';
-        if (p.headshot_url) html += '<img class="ay-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy">';
+        if (p.headshot_url) html += '<img class="ay-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy">';
         html += '<span class="ay-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="ay-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ay-team">' + escapeHtml(p.team || '') + '</span>';
@@ -6050,7 +6050,7 @@
           if (c.key === 'name') {
             var posColor = POS_COLORS[p.position] || '#8a7565';
             html += '<td class="cmt-player-cell">';
-            if (p.headshot_url) html += '<img class="cmt-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+            if (p.headshot_url) html += '<img class="cmt-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
             html += '<span>' + escapeHtml(p.full_name || p.name || '') + '</span>';
             html += '<span class="cmt-pos" style="background:' + posColor + '">' + escapeHtml(p.position || '') + '</span>';
             html += '</td>';
@@ -6310,7 +6310,7 @@
         html += '<tr>';
         // Player cell
         html += '<td class="rpc-player-cell">';
-        if (p.headshot_url) html += '<img class="rpc-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+        if (p.headshot_url) html += '<img class="rpc-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
         html += '<span class="rpc-name">' + escapeHtml(p.full_name || p.name || '') + '</span>';
         html += '<span class="rpc-pos" style="background:' + posColor + '">' + escapeHtml(p.position || '') + '</span>';
         html += '<span class="rpc-team">' + escapeHtml(p.team || '') + '</span>';
@@ -6863,7 +6863,7 @@
       html += '</div></div>';
       html += '<div class="aw2-winner" data-pid="' + escapeAttr(w.player_id) + '">';
       if (!isCollege && w.headshot_url) {
-        html += '<img class="aw2-winner-headshot" src="' + escapeAttr(w.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+        html += '<img class="aw2-winner-headshot" src="' + escapeAttr(w.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       }
       html += '<div class="aw2-winner-info">';
       html += '<div class="aw2-winner-name">' + escapeHtml(w.name) + '</div>';
@@ -6902,7 +6902,7 @@
           html += '<div class="aw2-runner-row" data-pid="' + escapeAttr(r.player_id) + '">';
           html += '<span class="aw2-runner-rank">' + (i + 2) + '</span>';
           if (!isCollege && r.headshot_url) {
-            html += '<img class="aw2-runner-headshot" src="' + escapeAttr(r.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+            html += '<img class="aw2-runner-headshot" src="' + escapeAttr(r.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           }
           html += '<span class="aw2-runner-pos ' + rPos + '">' + escapeHtml(r.position) + '</span>';
           html += '<span class="aw2-runner-name">' + escapeHtml(r.name) + '</span>';
@@ -7820,7 +7820,7 @@
       cols.forEach(function(col) {
         if (col.key === 'name') {
           html += '<td><div class="opp2-player-cell">';
-          if (p.headshot_url) html += '<img class="opp2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+          if (p.headshot_url) html += '<img class="opp2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           html += '<div><div class="opp2-player-name">' + escapeHtml(p.name) + '</div>';
           html += '<div class="opp2-player-meta"><span class="opp2-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span> ' + escapeHtml(p.team) + '</div></div></div></td>';
         } else if (col.key === 'opp_share') {
@@ -8769,7 +8769,7 @@
       cols.forEach(function(col) {
         if (col.key === 'name') {
           html += '<td><div class="sos2-player-cell">';
-          if (p.headshot_url) html += '<img class="sos2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+          if (p.headshot_url) html += '<img class="sos2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           html += '<div><div class="sos2-player-name">' + escapeHtml(p.name) + '</div>';
           html += '<div class="sos2-player-meta"><span class="sos2-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span> ' + escapeHtml(p.team) + '</div></div></div></td>';
         } else if (col.key === 'grade') {
@@ -8912,7 +8912,7 @@
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><span class="sc2-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td>';
-        if (p.headshot_url) html += '<img class="sc2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'" loading="lazy">';
+        if (p.headshot_url) html += '<img class="sc2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'" loading="lazy">';
         html += escapeHtml(p.full_name) + '</td>';
         html += '<td>' + escapeHtml(p.team) + '</td>';
         html += '<td>' + fmt(p.ppg_ppr) + '</td><td>' + fmt(p.ppg_half) + '</td><td>' + fmt(p.ppg_std) + '</td>';
@@ -9465,7 +9465,7 @@
         var pos = (p.position || 'RB').toLowerCase();
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><div class="tf2-player-cell">';
-        if (p.headshot_url) html += '<img class="tf2-row-img" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+        if (p.headshot_url) html += '<img class="tf2-row-img" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
         html += '<span>' + escapeHtml(p.full_name) + '</span></div></td>';
         html += '<td><span class="tf2-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td>' + escapeHtml(p.team) + '</td>';
@@ -9487,7 +9487,7 @@
 
       var pos = (sel.position || 'RB').toLowerCase();
       var html = '<div class="tf2-selected-card">';
-      if (sel.headshot_url) html += '<img class="tf2-sel-headshot" src="' + escapeAttr(sel.headshot_url) + '" alt="" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+      if (sel.headshot_url) html += '<img class="tf2-sel-headshot" src="' + escapeAttr(sel.headshot_url) + '" alt="Player headshot" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       html += '<div class="tf2-sel-info"><div class="tf2-sel-name">' + escapeHtml(sel.full_name) + '</div>';
       html += '<div class="tf2-sel-meta"><span class="tf2-pos-badge ' + pos + '">' + escapeHtml(sel.position) + '</span>';
       html += '<span>' + escapeHtml(sel.team) + '</span>';

@@ -36,7 +36,7 @@ function addFormulaComponent() {
     <span style="font-family:var(--font-mono); font-size:12px;">×</span>
     <input type="number" class="input-chunky formula-weight" value="100" style="flex:1; width:60px;" placeholder="weight %">
     <span style="font-family:var(--font-mono); font-size:12px;">%</span>
-    <span style="cursor:pointer; color:var(--red); font-weight:700; font-size:16px;" onclick="this.parentElement.remove()">×</span>
+    <button type="button" style="cursor:pointer; color:var(--red); font-weight:700; font-size:16px; background:none; border:none; padding:0; line-height:1;" onclick="this.parentElement.remove()">×</button>
   `;
   container.appendChild(row);
 }

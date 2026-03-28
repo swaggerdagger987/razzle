@@ -571,7 +571,7 @@
       html += '<div class="breakout-card-row1">';
       html += '<div class="breakout-rank">' + escapeHtml(String(p.rank)) + '</div>';
       if (p.headshot_url) {
-        html += '<img class="breakout-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
+        html += '<img class="breakout-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       }
       html += '<div class="breakout-info">';
       html += '<div class="breakout-name">' + escapeHtml(p.name) + '</div>';

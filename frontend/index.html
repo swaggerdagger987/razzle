@@ -667,7 +667,7 @@
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <button type="button" class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <button type="button" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal();">Sign In</button>
   </div>
 </nav>
@@ -681,7 +681,7 @@
   <div class="hero-cta">
     <a href="/lab.html" class="btn-hero btn-hero-primary">Open the Screener</a>
     <a href="#features" class="btn-hero btn-hero-secondary desktop-only-cta">See what's inside</a>
-    <button class="btn-hero btn-hero-secondary mobile-signup-cta" onclick="if(typeof openAuthModal==='function')openAuthModal('register');">Sign Up Free</button>
+    <button type="button" class="btn-hero btn-hero-secondary mobile-signup-cta" onclick="if(typeof openAuthModal==='function')openAuthModal('register');">Sign Up Free</button>
   </div>
   <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:8px;">no signup needed — just open it</div>
 </div>
@@ -691,11 +691,11 @@
   <div class="screener-visual-card">
     <!-- Position filter tabs -->
     <div class="mini-screener-tabs" role="tablist" aria-label="Position filter" style="display:flex; gap:0; border-bottom:3px solid var(--ink);">
-      <button class="mini-tab active" role="tab" aria-selected="true" data-pos="" onclick="_miniFilter('')">ALL</button>
-      <button class="mini-tab" role="tab" aria-selected="false" data-pos="QB" onclick="_miniFilter('QB')">QB</button>
-      <button class="mini-tab" role="tab" aria-selected="false" data-pos="RB" onclick="_miniFilter('RB')">RB</button>
-      <button class="mini-tab" role="tab" aria-selected="false" data-pos="WR" onclick="_miniFilter('WR')">WR</button>
-      <button class="mini-tab" role="tab" aria-selected="false" data-pos="TE" onclick="_miniFilter('TE')">TE</button>
+      <button type="button" class="mini-tab active" role="tab" aria-selected="true" data-pos="" onclick="_miniFilter('')">ALL</button>
+      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="QB" onclick="_miniFilter('QB')">QB</button>
+      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="RB" onclick="_miniFilter('RB')">RB</button>
+      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="WR" onclick="_miniFilter('WR')">WR</button>
+      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="TE" onclick="_miniFilter('TE')">TE</button>
     </div>
     <!-- Live data table -->
     <div id="miniScreenerBody" class="mini-screener-body" aria-label="Live screener preview">
@@ -872,7 +872,7 @@
         <li>CSV export + compare up to 4</li>
         <li class="highlight">7-day free trial</li>
       </ul>
-      <button id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','pro_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Get Pro</button>
+      <button type="button" id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','pro_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Get Pro</button>
     </div>
 
     <!-- ELITE -->
@@ -889,7 +889,7 @@
         <li class="highlight">Weekly Razzle briefings</li>
         <li>Priority data refresh</li>
       </ul>
-      <button id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','elite_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
+      <button type="button" id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','elite_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
     </div>
   </div>
 
@@ -1093,7 +1093,7 @@ function _fetchMiniScreener() {
     })
     .catch(function() {
       var tb = document.getElementById('miniScreenerRows');
-      if (tb) tb.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; font-family:var(--font-hand); color:var(--ink-light);">couldn\'t reach the film room. <a href="#" onclick="_fetchMiniScreener(); return false;" style="color:var(--orange); text-decoration:underline;">try again</a> or <a href="/lab.html" style="color:var(--orange);">open the screener</a> directly.</td></tr>';
+      if (tb) tb.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; font-family:var(--font-hand); color:var(--ink-light);">couldn\'t reach the film room. <button type="button" onclick="_fetchMiniScreener();" style="background:none;border:none;padding:0;cursor:pointer;color:var(--orange); text-decoration:underline;font:inherit;">try again</button> or <a href="/lab.html" style="color:var(--orange);">open the screener</a> directly.</td></tr>';
     })
     .finally(function() { clearTimeout(timeoutId); });
 }

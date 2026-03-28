@@ -12460,7 +12460,7 @@ function renderPlayerComps(data, container) {
     // Headshot + name
     html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">`;
     if (comp.headshot_url) {
-      html += `<img src="${escapeAttr(comp.headshot_url)}" alt="" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.onerror=null;this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+      html += `<img src="${escapeAttr(comp.headshot_url)}" alt="Player headshot" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.onerror=null;this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
       html += `<span style="display:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
     } else {
       html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
