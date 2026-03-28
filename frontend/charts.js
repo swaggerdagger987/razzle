@@ -576,7 +576,7 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
   // Title
   const col = COLUMNS[statKey];
   const statLabel = col ? col.label : statKey;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(`${playerName} — ${statLabel} ${subtitle}`, pad.left, 20);
@@ -673,7 +673,7 @@ function drawHeatmap() {
   const posColor = posColors[pos] || "#d97757";
 
   // Title
-  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(`${pos} Heat Map — Positional Percentiles`, padL, 26);
@@ -1095,7 +1095,7 @@ function exportNFLCompareImage() {
     // Player name
     ctx.textAlign = "left";
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 18px 'Luckiest Guy', cursive";
+    ctx.font = "18px 'Luckiest Guy', cursive";
     const nameX = badgeX + badgeW + 8;
     ctx.fillText(p.full_name, nameX, cardY + 32);
 

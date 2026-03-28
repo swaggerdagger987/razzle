@@ -596,13 +596,13 @@ async function exportPlayerPNG() {
   roundRect(ctx, 60, 50, 80, 60, 8);
   ctx.stroke();
   ctx.fillStyle = t.white;
-  ctx.font = "bold 32px 'Luckiest Guy', cursive";
+  ctx.font = "32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, 100, 92);
 
   // Player name
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 42px 'Luckiest Guy', cursive";
+  ctx.font = "42px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(p.full_name || "", 160, 92);
 
@@ -626,7 +626,7 @@ async function exportPlayerPNG() {
     ctx.stroke();
 
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 28px 'Luckiest Guy', cursive";
+    ctx.font = "28px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, x + boxW / 2, y + 38);
 

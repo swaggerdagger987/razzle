@@ -6009,7 +6009,7 @@ function exportImage() {
 
   // Watermark with shareable URL
   const wmY = H - watermarkH / 2;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -6309,7 +6309,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
   ctx.fillRect(0, 0, W, H);
 
   // Title
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Dynasty Top ${players.length} ${posLabel}`, W / 2, padY + 28);
@@ -7160,14 +7160,14 @@ function exportProfileImage() {
   ctx.lineWidth = 2;
   ctx.strokeRect(padX, padY, 50, 36);
   ctx.fillStyle = t.white;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, padX + 25, padY + 24);
 
   // Name + meta
   ctx.textAlign = "left";
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 28px 'Luckiest Guy', cursive";
+  ctx.font = "28px 'Luckiest Guy', cursive";
   ctx.fillText(name, padX + 64, padY + 28);
   ctx.fillStyle = t.inkLight;
   ctx.font = "12px 'Space Mono', monospace";
@@ -7191,7 +7191,7 @@ function exportProfileImage() {
       ctx.stroke();
     }
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 22px 'Luckiest Guy', cursive";
+    ctx.font = "22px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].val, x + sbW / 2, sbY + 32);
     ctx.fillStyle = t.inkLight;
@@ -7248,7 +7248,7 @@ function exportProfileImage() {
 
   // Watermark
   const wmY = H - watermarkH / 2;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -7908,7 +7908,7 @@ function exportProspectImage() {
   ctx.fillRect(padX, y, W - padX * 2, 6);
   y += 14;
 
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(`${posText}  ${name}`, padX + 8, y + 24);
@@ -7926,7 +7926,7 @@ function exportProspectImage() {
       const val = box.querySelector(".profile-stat-value")?.textContent || "";
       const lbl = box.querySelector(".profile-stat-label")?.textContent || "";
       const bx = padX + i * boxW;
-      ctx.font = "bold 20px 'Luckiest Guy', cursive";
+      ctx.font = "20px 'Luckiest Guy', cursive";
       ctx.fillStyle = t.ink;
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 24);
@@ -7975,7 +7975,7 @@ function exportProspectImage() {
     ctx.restore();
 
     // RPS big number
-    ctx.font = "bold 36px 'Luckiest Guy', cursive";
+    ctx.font = "36px 'Luckiest Guy', cursive";
     ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     ctx.fillText(rpsVal, padX + 14, y + 68);
@@ -8133,7 +8133,7 @@ function exportProspectImage() {
       ctx.lineWidth = 2;
       ctx.strokeRect(bx, y, boxW, 50);
 
-      ctx.font = "bold 16px 'Luckiest Guy', cursive";
+      ctx.font = "16px 'Luckiest Guy', cursive";
       ctx.fillStyle = t.ink;
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 22);
@@ -8145,7 +8145,7 @@ function exportProspectImage() {
   }
 
   // Watermark
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -8294,7 +8294,7 @@ function exportTierImage() {
   let y = padY;
 
   // Title
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`${state.season} ${currentTierPosition} Athletic Tiers`, W / 2, y + 24);
@@ -8379,7 +8379,7 @@ function exportTierImage() {
       if (pctEl) {
         const pctText = pctEl.textContent;
         const pctColor = pctEl.style.color;
-        ctx.font = "bold 18px 'Luckiest Guy', cursive";
+        ctx.font = "18px 'Luckiest Guy', cursive";
         ctx.fillStyle = pctColor;
         ctx.textAlign = "right";
         ctx.fillText(pctText, cx + cardW - 8, cy + 24);
@@ -8392,7 +8392,7 @@ function exportTierImage() {
   });
 
   // Watermark
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -8656,7 +8656,7 @@ function exportBigBoardImage() {
   let y = padY;
 
   // Title
-  ctx.font = "bold 26px 'Luckiest Guy', cursive";
+  ctx.font = "26px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Big Board — ${currentBBData.position} ${currentBBData.draft_year}`, W / 2, y + 26);
@@ -8708,7 +8708,7 @@ function exportBigBoardImage() {
       ctx.strokeRect(padX, rowY, W - padX * 2, rowH - 2);
 
       // Rank
-      ctx.font = "bold 16px 'Luckiest Guy', cursive";
+      ctx.font = "16px 'Luckiest Guy', cursive";
       ctx.fillStyle = posColor;
       ctx.textAlign = "center";
       ctx.fillText(`${p.rank}`, padX + 22, rowY + 27);
@@ -9037,7 +9037,7 @@ function exportClassAnalyticsImage() {
   // Title
   let y = 0;
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Draft Class Analytics — ${posLabel}`, W / 2, y + 32);
   ctx.font = "16px 'Caveat', cursive";
@@ -9152,7 +9152,7 @@ function exportClassAnalyticsImage() {
     // Year
     ctx.textAlign = "left";
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 18px 'Luckiest Guy', cursive";
+    ctx.font = "18px 'Luckiest Guy', cursive";
     ctx.fillText(cls.year.toString(), cx + 10, cy + 24);
 
     // Stats
@@ -9509,7 +9509,7 @@ function exportTradeValuesPNG() {
   ctx.fillRect(0, 0, W, H);
 
   // Title
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   const posLabel = _tvState.position === "ALL" ? "Dynasty" : _tvState.position;
@@ -9874,7 +9874,7 @@ function renderAgingCurveChart(targetCanvas) {
   ctx.fillText(_acState.position + " avg", xScale(lastB.age) + 8, yScale(lastB.avg_ppg) + 4);
 
   // Title
-  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(_acState.position + " Aging Curve", padL, 24);
@@ -10105,7 +10105,7 @@ function renderHeatMapChart(targetCanvas) {
   ctx.fillRect(0, 0, totalW, totalH);
 
   // Title
-  ctx.font = "bold 22px 'Luckiest Guy', cursive";
+  ctx.font = "22px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(_hmState.position + " Heat Map", padL, 30);
@@ -10468,7 +10468,7 @@ function exportTierBoardPNG() {
 
   // Header
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillText("Tier Board", 24, 38);
   ctx.fillStyle = t.inkLight;
   ctx.font = "18px 'Caveat', cursive";
@@ -11206,7 +11206,7 @@ function exportTradeAnalyzerPNG() {
   ctx.strokeRect(4, 4, W - 8, H - 8);
 
   // Title
-  ctx.font = "bold 28px 'Luckiest Guy', cursive";
+  ctx.font = "28px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText("Razzle Trade Analyzer", W / 2, 44);
@@ -11322,7 +11322,7 @@ function exportTradeAnalyzerPNG() {
   // VS divider
   ctx.save();
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 22px 'Luckiest Guy', cursive";
+  ctx.font = "22px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, topY + 200);
   ctx.restore();
@@ -11414,7 +11414,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fillRect(-bw / 2 + 3, -bh / 2 + 3 + bh, bw, 3);
   ctx.globalAlpha = 1.0;
   ctx.fillStyle = verdictColor;
-  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(verdict, 0, 7);
   ctx.restore();
@@ -12063,7 +12063,7 @@ function exportRosterTeamCard() {
 
   // Header
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 28px 'Luckiest Guy', cursive";
+  ctx.font = "28px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("MY DYNASTY ROSTER", W / 2, 44);
   ctx.font = "16px 'Caveat', cursive";
@@ -12082,13 +12082,13 @@ function exportRosterTeamCard() {
   _roundRect(ctx, 30, y + 5, 70, 55, 10);
   ctx.stroke();
   ctx.fillStyle = t.white;
-  ctx.font = "bold 32px 'Luckiest Guy', cursive";
+  ctx.font = "32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(r.grade, 65, y + 42);
 
   // Total value
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 26px 'Luckiest Guy', cursive";
+  ctx.font = "26px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(r.total_value + " pts", 120, y + 30);
   ctx.font = "14px 'Space Mono', monospace";
@@ -12267,7 +12267,7 @@ function exportRosterTeamCard() {
 
   // Watermark
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.globalAlpha = 0.3;
   ctx.fillText("razzle.lol", W - 20, H - 12);
@@ -12586,7 +12586,7 @@ function exportCompsImage() {
 
   // Header
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`PLAYER COMPS — ${player.full_name}`, padX, padY + 28);
 
@@ -12638,14 +12638,14 @@ function exportCompsImage() {
     ctx.lineWidth = 2;
     ctx.strokeRect(padX + 10, cardY + 10, 30, 30);
     ctx.fillStyle = t.white;
-    ctx.font = "bold 16px 'Luckiest Guy', cursive";
+    ctx.font = "16px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(`#${i + 1}`, padX + 25, cardY + 30);
 
     // Name + team
     ctx.textAlign = "left";
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 18px 'Luckiest Guy', cursive";
+    ctx.font = "18px 'Luckiest Guy', cursive";
     ctx.fillText(c.full_name, padX + 52, cardY + 28);
     ctx.fillStyle = t.inkLight;
     ctx.font = "11px 'Space Mono', monospace";
@@ -12654,7 +12654,7 @@ function exportCompsImage() {
     // Similarity score
     const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : (getComputedStyle(document.documentElement).getPropertyValue('--ink-medium').trim() || "#5c4a3d");
     ctx.fillStyle = simColor;
-    ctx.font = "bold 28px 'Luckiest Guy', cursive";
+    ctx.font = "28px 'Luckiest Guy', cursive";
     ctx.textAlign = "right";
     ctx.fillText(`${c.similarity}%`, W - padX - 16, cardY + 35);
     ctx.fillStyle = t.inkLight;
@@ -13075,7 +13075,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = t.ink;
   ctx.fillRect(0, 0, 800, 56);
   ctx.fillStyle = t.bgCard;
-  ctx.font = "bold 22px 'Luckiest Guy', cursive";
+  ctx.font = "22px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`BOOM/BUST PROFILE — ${player.full_name}`, 20, 36);
 
@@ -13083,7 +13083,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = posColor;
   ctx.fillRect(700, 10, 80, 36);
   ctx.fillStyle = t.white;
-  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, 740, 35);
 
@@ -13105,7 +13105,7 @@ function exportBoomBustImage() {
   ctx.lineWidth = 3;
   ctx.stroke();
   ctx.fillStyle = t.white;
-  ctx.font = "bold 32px 'Luckiest Guy', cursive";
+  ctx.font = "32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(safeGrade, 0, 12);
   ctx.restore();
@@ -13130,7 +13130,7 @@ function exportBoomBustImage() {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.fillStyle = cardStats[i].color;
-    ctx.font = "bold 22px 'Luckiest Guy', cursive";
+    ctx.font = "22px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(cardStats[i].value, x + cardW / 2, startY + 28);
     ctx.fillStyle = t.inkMedium;
