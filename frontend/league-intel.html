@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ede0cf">
-<title>Bureau of Intelligence — Razzle</title>
+<title>Your League Intel — Razzle</title>
 <meta property="og:title" content="Bureau of Intelligence — Razzle">
 <meta property="og:description" content="League intelligence for your Sleeper leagues. Roster grades, manager behavioral profiles, positional depth analysis, and trade opportunities your leaguemates are missing.">
 <meta property="og:site_name" content="razzle.lol">
@@ -311,8 +311,8 @@
   }
 
   .profiles-trigger button:hover {
-    box-shadow: 3px 3px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink);
+    transform: translate(-2px, -2px);
   }
 
   .profile-grid {
@@ -516,8 +516,8 @@
     transition: all 0.12s;
   }
   .mgr-compare-btn:hover {
-    box-shadow: 3px 3px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink);
+    transform: translate(-2px, -2px);
   }
   .mgr-compare-panel {
     margin-top: 10px;
@@ -605,8 +605,8 @@
     transition: all 0.12s;
   }
   .pressure-locked-overlay a:hover {
-    box-shadow: 3px 3px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink);
+    transform: translate(-2px, -2px);
   }
 
   /* ===== LEAGUE TRADE FINDER ===== */
@@ -633,8 +633,8 @@
   }
 
   .trade-finder-trigger button:hover {
-    box-shadow: 3px 3px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink);
+    transform: translate(-2px, -2px);
     background: var(--orange);
     color: var(--bg);
   }
@@ -1749,7 +1749,7 @@
 
   .bureau-odds-card:hover {
     box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
   }
 
   .bureau-odds-card.is-user {
@@ -1995,8 +1995,8 @@
   }
 
   .demo-mc-card:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 5px 5px 0 var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
   }
 
   .demo-mc-card.is-you {
@@ -2159,8 +2159,8 @@
   }
 
   .demo-rival-card:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 5px 5px 0 var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
   }
 
   .demo-rival-name {
@@ -2280,8 +2280,8 @@
   }
 
   .demo-power-card:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 5px 5px 0 var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
   }
 
   .demo-power-rank {
@@ -2519,9 +2519,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html" class="active">Bureau</a></li>
-    <li><a href="/agents.html">AI Agents</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html" class="active">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -2532,10 +2532,10 @@
 
 <main class="intel-container" id="main-content">
   <noscript>
-    <div style="text-align:center; padding:48px 24px; font-family:'Space Mono',monospace; color:#6b5a4e;">
-      <p style="font-family:'Luckiest Guy',cursive; font-size:24px; margin-bottom:12px;">JavaScript required</p>
+    <div style="text-align:center; padding:48px 24px; font-family:var(--font-mono); color:var(--ink-medium);">
+      <p style="font-family:var(--font-display); font-size:24px; margin-bottom:12px;">JavaScript required</p>
       <p>The Bureau needs JavaScript to run. Please enable it or check your ad blocker.</p>
-      <p style="font-family:'Caveat',cursive; font-size:18px; margin-top:16px; color:#a89585;">intel doesn't gather itself...</p>
+      <p style="font-family:var(--font-hand); font-size:18px; margin-top:16px; color:var(--ink-light);">intel doesn't gather itself...</p>
     </div>
   </noscript>
   <h1 class="sr-only">Bureau of Intelligence — Razzle</h1>
@@ -2614,9 +2614,9 @@
     <div>
       <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
+      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
       <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
@@ -3272,7 +3272,12 @@ async function loadLeagues(userId) {
     const leagues = await resp.json();
 
     if (!leagues || !leagues.length) {
-      container.innerHTML = '<div class="loading-intel">looks like you\'re not in any leagues this season. check your Sleeper username or explore the <a href="/lab.html" style="color:var(--orange);">free Screener</a> while we figure this out.</div>';
+      var _month = new Date().getMonth();
+      var _isOffseason = _month >= 1 && _month <= 7;
+      var _emptyMsg = _isOffseason
+        ? 'leagues haven\'t opened for the new season yet \u2014 check back when your league drafts. explore the <a href="/lab.html" style="color:var(--orange);">Fourth Down Lab</a> in the meantime.'
+        : 'no leagues found for this username. double-check your Sleeper username or explore the <a href="/lab.html" style="color:var(--orange);">Fourth Down Lab</a>.';
+      container.innerHTML = '<div class="loading-intel">' + _emptyMsg + '</div>';
       return;
     }
 
@@ -3353,7 +3358,8 @@ async function loadLeagues(userId) {
           scoringBonusRecTE: lg.scoring_settings?.bonus_rec_te || 0,
         };
       });
-      const existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
+      var existing = {};
+      try { existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}"); } catch(e) { existing = {}; }
       existing.leagues = leagueMeta;
       existing.updatedAt = Date.now();
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));
@@ -3372,7 +3378,7 @@ async function loadLeagues(userId) {
     }
   } catch (e) {
     var errMsg = e.name === "AbortError"
-      ? "sleeper's servers are napping. try again in a minute."
+      ? "sleeper's servers timed out. check your connection and try again."
       : "sleeper's servers are napping. try again in a minute.";
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' + errMsg + ' <button class="btn-chunky" style="font-size:11px;padding:4px 12px;margin-left:8px;" onclick="loadLeagues(\'' + escapeJS(userId) + '\')">retry</button></div>';
     console.error(e);
@@ -3619,7 +3625,8 @@ async function toggleLeague(card, leagueId, userId) {
           rosterPlayers.push({ name: p.name, pos: p.pos, team: p.team });
         }
       }
-      const existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
+      var existing = {};
+      try { existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}"); } catch(e) { existing = {}; }
       existing.roster = rosterPlayers;
       existing.record = { wins, losses, fpts };
       const rivals = rosters
@@ -3653,7 +3660,7 @@ async function toggleLeague(card, leagueId, userId) {
   } catch (e) {
     rosterDiv.dataset.loaded = ""; // Allow retry on failure
     var rosterErr = e.name === "AbortError"
-      ? "sleeper's servers are napping. tap to retry."
+      ? "roster fetch timed out. tap to retry."
       : "sleeper's servers are napping. tap to retry.";
     rosterDiv.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:16px;">' + rosterErr + '</div>';
     console.error(e);
@@ -3767,7 +3774,8 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
           time: txn.status_updated
         };
       });
-      var existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
+      var existing = {};
+      try { existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}"); } catch(e) { existing = {}; }
       existing.recentActivity = ctxTxns;
       existing.activityUpdatedAt = Date.now();
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));
@@ -8037,7 +8045,8 @@ async function runLeagueOdds(leagueId, userId, scoring) {
     });
 
     if (allPlayerIds.length === 0) {
-      oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--ink-light);">no roster data found</div>';
+      oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--ink-light);">no roster data found — connect a league first</div>';
+      if (oddsBtn) { oddsBtn.disabled = false; oddsBtn.style.opacity = '1'; }
       return;
     }
 

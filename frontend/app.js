@@ -102,7 +102,7 @@ function getCanvasTheme() {
     bgCard: isDark ? "#4a3728" : "#f7efe5",
     ink: isDark ? "#ede0cf" : "#2d1f14",
     inkMedium: isDark ? "#c4b5a5" : "#5c4a3d",
-    inkLight: isDark ? "#8a7565" : "#8a7565",
+    inkLight: isDark ? "#a89888" : "#6d5c4e",
     inkFaint: isDark ? "#5c4a3d" : "#c4b5a5",
     white: isDark ? "#ede0cf" : "#fff",
     gridLine: isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)",
@@ -149,6 +149,8 @@ function _injectHamburgerMenu() {
   // Create slide-out panel
   var panel = document.createElement("div");
   panel.className = "mobile-nav-panel";
+  panel.setAttribute("role", "navigation");
+  panel.setAttribute("aria-label", "Mobile navigation");
 
   // Determine current page for active link
   var path = window.location.pathname;
@@ -159,8 +161,8 @@ function _injectHamburgerMenu() {
 
   var links = [
     { href: "/", label: "Home" },
-    { href: "/lab.html", label: "Screener" },
-    { href: "/league-intel.html", label: "Bureau" },
+    { href: "/lab.html", label: "Fourth Down Lab" },
+    { href: "/league-intel.html", label: "Bureau of Intelligence" },
     { href: "/agents.html", label: "Situation Room" },
     { href: "/pricing.html", label: "Pricing" }
   ];
@@ -178,6 +180,10 @@ function _injectHamburgerMenu() {
   }
 
   panelHTML += '</div>' +
+  '<div style="padding:8px 16px 0;">' +
+    '<button class="btn-chunky btn-sm" style="width:100%;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="if(typeof openCmdPalette===\'function\'){openCmdPalette();document.querySelector(\'.mobile-nav-overlay\').click();}" aria-label="Open search">' +
+    '\uD83D\uDD0D Search players &amp; tools</button>' +
+  '</div>' +
   '<div class="mobile-nav-footer">' +
     '<div class="mobile-nav-actions" id="mobile-nav-actions"></div>' +
   '</div>';
@@ -386,6 +392,45 @@ function refreshPlanGating() {
   if (typeof checkAuth === "function") checkAuth();
 }
 
+/* ===== Server Plan Revalidation (anti-tamper) ===== */
+
+var _planRevalidateInterval = null;
+var _PLAN_REVALIDATE_MS = 5 * 60 * 1000; // 5 minutes
+
+function _revalidatePlanFromServer() {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  fetch("/api/auth/me", {
+    headers: { "Authorization": "Bearer " + token }
+  }).then(function(resp) {
+    if (!resp.ok) return;
+    return resp.json();
+  }).then(function(data) {
+    if (!data || !data.user) return;
+    var serverPlan = data.user.plan || "free";
+    try {
+      var stored = JSON.parse(localStorage.getItem("razzle_user") || "null");
+      if (stored && stored.plan !== serverPlan) {
+        stored.plan = serverPlan;
+        localStorage.setItem("razzle_user", JSON.stringify(stored));
+        refreshPlanGating();
+      }
+    } catch (e) { /* ignore parse errors */ }
+  }).catch(function() { /* silent — don't disrupt UX on network failure */ });
+}
+
+function _startPlanRevalidation() {
+  if (_planRevalidateInterval) return;
+  _revalidatePlanFromServer(); // immediate check on load
+  _planRevalidateInterval = setInterval(_revalidatePlanFromServer, _PLAN_REVALIDATE_MS);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", _startPlanRevalidation);
+} else {
+  _startPlanRevalidation();
+}
+
 /* ===== Tier-Aware CTA Helpers ===== */
 
 /**
@@ -468,6 +513,16 @@ var RAZZLE_LOADING = [
   "scouting the next breakout...",
   "analyzing target shares..."
 ];
+
+// Randomize hardcoded "pulling film..." loading text across all pages
+document.addEventListener("DOMContentLoaded", function() {
+  var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    if (walker.currentNode.textContent.trim() === "pulling film...") {
+      walker.currentNode.textContent = RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)];
+    }
+  }
+});
 
 function razzleError(panelId) {
   var pid = panelId || window._currentPanelName;
@@ -635,6 +690,10 @@ async function apiFetch(path, options = {}) {
   // Auto-include auth headers
   const authHeaders = getAuthHeaders();
   options.headers = Object.assign({}, authHeaders, options.headers || {});
+  // 15s timeout for all API calls (standalone pages don't have their own)
+  if (!options.signal) {
+    options.signal = AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined;
+  }
   const resp = await fetch(url, options);
   if (resp.status === 401) {
     try { localStorage.removeItem("razzle_token"); localStorage.removeItem("razzle_user"); } catch (e) {}
@@ -749,9 +808,16 @@ function _detectCheckoutReturn() {
   var cleanUrl = window.location.pathname + (remaining ? "?" + remaining : "") + window.location.hash;
   window.history.replaceState({}, "", cleanUrl);
 
-  // Show upgrade toast
+  // Progressive status messages during checkout confirmation
+  var _checkoutStages = [
+    "payment received \u2014 activating your plan...",
+    "setting up your Pro access...",
+    "almost there \u2014 configuring your account...",
+    "finalizing your upgrade...",
+    "just a moment \u2014 syncing with Stripe..."
+  ];
   if (typeof _showToast === "function") {
-    _showToast("processing your subscription...");
+    _showToast(_checkoutStages[0]);
   }
 
   var token = localStorage.getItem("razzle_token");
@@ -772,6 +838,11 @@ function _detectCheckoutReturn() {
 
   function pollForPlanChange() {
     attempts++;
+    // Show progressive stage message
+    if (typeof _showToast === "function" && attempts > 1) {
+      var stageIdx = Math.min(attempts - 1, _checkoutStages.length - 1);
+      _showToast(_checkoutStages[stageIdx]);
+    }
     fetch(API_BASE + "/api/auth/me", {
       headers: { "Authorization": "Bearer " + token }
     }).then(function(r) { if (!r.ok) throw new Error("poll failed"); return r.json(); }).then(function(data) {
@@ -789,9 +860,9 @@ function _detectCheckoutReturn() {
       } else if (attempts < maxAttempts) {
         setTimeout(pollForPlanChange, pollInterval);
       } else {
-        // Give up after 10 polls — show clear error with next steps
+        // Give up after 10 polls — reassure user with clear next steps
         if (typeof _showToast === "function") {
-          _showToast("still processing. if your plan doesn't activate within a few minutes, try refreshing the page or contact us.", "warning", 10000);
+          _showToast("payment confirmed by Stripe \u2014 your plan will update momentarily. try refreshing, or visit your billing portal if needed.", "warning", 15000);
         }
       }
     }).catch(function() {
@@ -799,7 +870,7 @@ function _detectCheckoutReturn() {
         setTimeout(pollForPlanChange, pollInterval);
       } else {
         if (typeof _showToast === "function") {
-          _showToast("couldn't confirm your subscription. try refreshing the page. if the issue persists, your payment was received and we'll sort it out — reach out via the About page.", "error", 10000);
+          _showToast("payment received but confirmation is taking longer than usual. your upgrade will activate shortly \u2014 try refreshing. reach out via the About page if it doesn't resolve.", "warning", 15000);
         }
       }
     });
@@ -901,6 +972,7 @@ function _injectAuthModal() {
         '<input type="password" id="authLoginPassword" placeholder="Password" required autocomplete="current-password" aria-label="Password" aria-describedby="authLoginError">' +
         '<div id="authLoginError" class="auth-error" role="alert"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Sign In</button>' +
+        '<div style="text-align:center;margin-top:8px;"><a href="#" onclick="showForgotPassword(); return false;" style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Forgot password?</a></div>' +
       '</form>' +
       '<form id="authRegisterForm" class="auth-form" style="display:none" onsubmit="handleRegister(event)">' +
         '<input type="email" id="authRegisterEmail" placeholder="Email" required autocomplete="email" aria-label="Email address" aria-describedby="authRegisterError">' +
@@ -1072,6 +1144,62 @@ async function handleRegister(e) {
   }
 }
 
+function showForgotPassword() {
+  var modal = document.getElementById("authModal");
+  if (!modal) return;
+  var inner = modal.querySelector(".auth-modal");
+  if (!inner) return;
+  inner.innerHTML =
+    '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
+    '<h2 style="font-family:var(--font-display);font-size:22px;text-align:center;margin-bottom:16px;">Reset Password</h2>' +
+    '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">Enter your email and we\'ll send you a reset link.</p>' +
+    '<form id="authForgotForm" class="auth-form" onsubmit="handleForgotPassword(event)">' +
+      '<input type="email" id="authForgotEmail" placeholder="Email" required autocomplete="email" aria-label="Email address">' +
+      '<div id="authForgotMsg" class="auth-error" role="status"></div>' +
+      '<button type="submit" class="btn-chunky btn-primary auth-submit">Send Reset Link</button>' +
+    '</form>' +
+    '<div style="text-align:center;margin-top:12px;"><a href="#" onclick="showLoginFromReset(); return false;" style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Back to sign in</a></div>';
+  var emailInput = document.getElementById("authForgotEmail");
+  if (emailInput) setTimeout(function() { emailInput.focus(); }, 50);
+}
+
+function showLoginFromReset() {
+  // Re-render the auth modal with login/register tabs
+  var modal = document.getElementById("authModal");
+  if (modal) modal.remove();
+  _injectAuthModal();
+  openAuthModal();
+}
+
+async function handleForgotPassword(e) {
+  e.preventDefault();
+  var btn = e.target.querySelector('button[type="submit"]');
+  var origText = btn ? btn.textContent : "";
+  if (btn) { btn.disabled = true; btn.textContent = "sending..."; }
+  var email = document.getElementById("authForgotEmail").value.trim();
+  var msgEl = document.getElementById("authForgotMsg");
+  msgEl.textContent = "";
+  msgEl.style.color = "";
+  try {
+    var resp = await fetch(API_BASE + "/api/auth/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email })
+    });
+    var data = await resp.json();
+    if (data.message) {
+      msgEl.style.color = "var(--ink)";
+      msgEl.textContent = data.message;
+    } else if (data.error) {
+      msgEl.textContent = data.error;
+    }
+  } catch (err) {
+    msgEl.textContent = "network error. try again.";
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = origText; }
+  }
+}
+
 function _resumePendingCheckout() {
   try {
     var pending = sessionStorage.getItem("razzle_pending_checkout");
@@ -1084,26 +1212,27 @@ function _resumePendingCheckout() {
 }
 
 function signOut() {
-  localStorage.removeItem("razzle_token");
-  localStorage.removeItem("razzle_user");
-  localStorage.removeItem("razzle_formulas");
-  localStorage.removeItem("razzle_last_state");
-  localStorage.removeItem("razzle_recent_players");
-  localStorage.removeItem("razzle_league_context");
-  localStorage.removeItem("razzle_prefill_scenario");
-  localStorage.removeItem("razzle_query_count");
-  localStorage.removeItem("razzle_store_ratings");
-  localStorage.removeItem("razzle_store_installed");
-  localStorage.removeItem("razzle_store_reviews");
-  localStorage.removeItem("razzle_store_my_published");
-  localStorage.removeItem("razzle_store_username");
-  localStorage.removeItem("razzle_agent_config");
-  localStorage.removeItem("razzle_sleeper_user");
-  localStorage.removeItem("razzle_sleeper_user_id");
-  localStorage.removeItem("razzle_watchlist");
-  localStorage.removeItem("razzle_player_tags");
-  localStorage.removeItem("razzle_player_notes");
+  // Clear ALL razzle_ keys — warroom memory, saved views, pins, preferences, etc.
+  Object.keys(localStorage).forEach(function(k) {
+    if (k.startsWith("razzle_")) localStorage.removeItem(k);
+  });
   updateAuthUI(null);
+}
+
+function _showTrialExpiredModal() {
+  if (document.getElementById("trialExpiredModal")) return;
+  var overlay = document.createElement("div");
+  overlay.id = "trialExpiredModal";
+  overlay.style.cssText = "position:fixed;inset:0;background:rgba(45,31,20,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;";
+  overlay.innerHTML =
+    '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:var(--radius);box-shadow:4px 4px 0 var(--ink);padding:32px;max-width:420px;width:90%;text-align:center;">' +
+      '<div style="font-size:40px;margin-bottom:12px;">🐯</div>' +
+      '<h2 style="font-family:var(--font-display);font-size:22px;margin:0 0 8px;">your pro trial ended</h2>' +
+      '<p style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin:0 0 20px;">you explored the full film room for 7 days. keep the edge with Pro.</p>' +
+      '<a href="/pricing.html" class="btn-chunky btn-primary" style="display:inline-block;margin-bottom:12px;font-size:14px;padding:10px 24px;">see Pro plans</a><br>' +
+      '<button onclick="this.closest(\'#trialExpiredModal\').remove()" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);font-size:12px;padding:8px;">maybe later</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
 }
 
 async function checkAuth() {
@@ -1119,6 +1248,12 @@ async function checkAuth() {
       return;
     }
     var data = await resp.json();
+    // Detect trial→expired transition
+    var prevUser = null;
+    try { prevUser = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
+    if (prevUser && prevUser.trial_active && data.user && !data.user.trial_active && data.user.plan_source === "trial") {
+      _showTrialExpiredModal();
+    }
     try { localStorage.setItem("razzle_user", JSON.stringify(data.user)); } catch (e) {}
     updateAuthUI(data.user);
   } catch (e) {
@@ -1489,13 +1624,54 @@ var _cmdActiveIdx = -1;
 var _cmdItems = [];
 var _cmdDebounce = null;
 
+// Static panel list for command palette search
+var CMD_PANELS = [
+  {n:"The Screener",p:"screener"},{n:"Dynasty Rankings",p:"rankings"},{n:"Tiers",p:"tiers"},
+  {n:"Trade Values",p:"tradevalues"},{n:"VORP",p:"vorp"},{n:"Positional Advantage",p:"advantage"},
+  {n:"Auction Values",p:"auction"},{n:"Cheat Sheet",p:"cheatsheet"},{n:"Breakouts",p:"breakouts"},
+  {n:"Buy / Sell",p:"buysell"},{n:"Stock Watch",p:"stocks"},{n:"Waivers",p:"waivers"},
+  {n:"Scarcity",p:"scarcity"},{n:"Handcuffs",p:"handcuffs"},{n:"Efficiency",p:"efficiency"},
+  {n:"Consistency",p:"consistency"},{n:"Snap Efficiency",p:"snapefficiency"},
+  {n:"Workload Monitor",p:"workload"},{n:"Dual-Threat",p:"dualthreat"},
+  {n:"Target Premium",p:"targetpremium"},{n:"Drop Rate",p:"drops"},
+  {n:"Garbage Time",p:"garbagetime"},{n:"Success Rate",p:"successrate"},
+  {n:"Correlations",p:"correlations"},{n:"Weekly Heatmap",p:"weekly"},
+  {n:"Matchups",p:"matchups"},{n:"Stacks",p:"stacks"},{n:"Red Zone",p:"redzone"},
+  {n:"Streaks",p:"streaks"},{n:"Weekly Leaders",p:"weeklyleaders"},
+  {n:"Weekly MVP Grid",p:"weeklymvp"},{n:"Playoffs",p:"playoffs"},
+  {n:"Usage Trends",p:"usage"},{n:"Year-over-Year",p:"yoy"},{n:"Aging Curves",p:"aging"},
+  {n:"Season Pace",p:"seasonpace"},{n:"TD Regression",p:"tdregression"},
+  {n:"Air Yards",p:"airyards"},{n:"Big Board",p:"prospects"},
+  {n:"Draft Class Analytics",p:"draftclass"},{n:"Percentiles",p:"percentiles"},
+  {n:"Career Stats",p:"career"},{n:"Career Compare",p:"career-compare"},
+  {n:"Compare Table",p:"comptable"},{n:"Strengths",p:"strengths"},
+  {n:"Report Card",p:"reportcard"},{n:"Points Breakdown",p:"fptsbreakdown"},
+  {n:"Game Log",p:"gamelog"},{n:"Archetypes",p:"archetypes"},
+  {n:"Scoring Breakdown",p:"breakdown"},{n:"Roster Builder",p:"rosterbuilder"},
+  {n:"Trade Finder",p:"tradefinder"},{n:"Scoring Comparison",p:"scoring"},
+  {n:"Dashboard",p:"dashboard"},{n:"Schedule / SOS",p:"schedule"},
+  {n:"Opportunity Share",p:"opportunity"},{n:"Records",p:"records"},
+  {n:"Season Recap",p:"recap"},{n:"Awards",p:"awards"},{n:"Stat Leaders",p:"leaders"},
+  {n:"Explorer",p:"explorer"},{n:"Target Distribution",p:"targets"},
+  {n:"Team Rosters",p:"team"},{n:"Draft Class Tracker",p:"drafttracker"},
+  {n:"Power Rankings",p:"powerrankings"},{n:"Game Script",p:"gamescript"},
+  {n:"FAAB Strategy",p:"faab"}
+];
+
+function _searchPanels(query) {
+  var q = query.toLowerCase();
+  return CMD_PANELS.filter(function(p) {
+    return p.n.toLowerCase().indexOf(q) !== -1 || p.p.toLowerCase().indexOf(q) !== -1;
+  }).slice(0, 5);
+}
+
 function initCommandPalette() {
   // Inject palette HTML into body
   var html = '<div class="cmd-palette-backdrop" id="cmdPalette" role="dialog" aria-modal="true" aria-label="Quick Search">' +
     '<div class="cmd-palette">' +
       '<div class="cmd-palette-label">quick search</div>' +
       '<div class="cmd-palette-input-wrap">' +
-        '<input class="cmd-palette-input" id="cmdInput" type="text" placeholder="Search players... (Ctrl+K)" autocomplete="off" />' +
+        '<input class="cmd-palette-input" id="cmdInput" type="text" placeholder="Search players or panels... (Ctrl+K)" autocomplete="off" />' +
       '</div>' +
       '<div class="cmd-palette-results" id="cmdResults"></div>' +
       '<div class="cmd-palette-hint">' +
@@ -1557,6 +1733,15 @@ function initCommandPalette() {
     if (e.key === "Escape" && _cmdPaletteEl.classList.contains("open")) {
       closeCmdPalette();
     }
+    // Focus trap: Tab/Shift+Tab cycle within palette
+    if (e.key === "Tab" && _cmdPaletteEl.classList.contains("open")) {
+      var focusable = _cmdPaletteEl.querySelectorAll('input, button, [tabindex]:not([tabindex="-1"])');
+      if (focusable.length > 0) {
+        var first = focusable[0], last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
   });
 }
 
@@ -1577,16 +1762,81 @@ function closeCmdPalette() {
 }
 
 async function cmdSearch(query) {
+  // Search panels first (instant, client-side)
+  var panelMatches = _searchPanels(query);
   try {
     var data = await apiFetch("/api/players/quick-search?q=" + encodeURIComponent(query) + "&limit=8");
-    _cmdItems = data || [];
+    // Combine: panels first (marked with _isPanel), then players
+    _cmdItems = panelMatches.map(function(p) { return { _isPanel: true, _panelName: p.n, _panelId: p.p }; })
+      .concat(data || []);
     _cmdActiveIdx = _cmdItems.length > 0 ? 0 : -1;
-    renderCmdResults(_cmdItems, "Results");
+    _renderMixedResults(panelMatches, data || []);
   } catch (e) {
-    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">fumbled the search... try again.</div>';
-    _cmdItems = [];
-    _cmdActiveIdx = -1;
+    // Still show panel results even if player API fails
+    if (panelMatches.length > 0) {
+      _cmdItems = panelMatches.map(function(p) { return { _isPanel: true, _panelName: p.n, _panelId: p.p }; });
+      _cmdActiveIdx = 0;
+      _renderMixedResults(panelMatches, []);
+    } else {
+      _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">fumbled the search... try again.</div>';
+      _cmdItems = [];
+      _cmdActiveIdx = -1;
+    }
   }
+}
+
+function _renderMixedResults(panels, players) {
+  var html = "";
+  if (panels.length > 0) {
+    html += '<div class="cmd-palette-section">Panels</div>';
+    panels.forEach(function(p, i) {
+      var activeClass = i === _cmdActiveIdx ? " active" : "";
+      html += '<div class="cmd-palette-item' + activeClass + '" data-idx="' + i + '">' +
+        '<span style="font-size:16px;width:28px;text-align:center;">&#x25A3;</span>' +
+        '<div class="cmd-palette-item-info">' +
+          '<div class="cmd-palette-item-name">' + escapeHtml(p.n) + '</div>' +
+          '<div class="cmd-palette-item-meta">Lab Panel</div>' +
+        '</div>' +
+      '</div>';
+    });
+  }
+  if (players.length > 0) {
+    html += '<div class="cmd-palette-section">Players</div>';
+    var offset = panels.length;
+    players.forEach(function(p, i) {
+      var idx = offset + i;
+      var pos = (p.position || "").toUpperCase();
+      var posLc = pos.toLowerCase();
+      var team = p.team || "FA";
+      var ppg = p.ppg != null ? Number(p.ppg).toFixed(1) : "\u2014";
+      var activeClass = idx === _cmdActiveIdx ? " active" : "";
+      html += '<div class="cmd-palette-item' + activeClass + '" data-idx="' + idx + '">' +
+        playerHeadshot(p, pos) +
+        '<span class="cmd-palette-pos ' + posLc + '">' + escapeHtml(pos) + '</span>' +
+        '<div class="cmd-palette-item-info">' +
+          '<div class="cmd-palette-item-name">' + escapeHtml(p.full_name || p.player_name || "") + '</div>' +
+          '<div class="cmd-palette-item-meta">' + escapeHtml(team) + '</div>' +
+        '</div>' +
+        '<div class="cmd-palette-item-ppg">' + ppg + ' ppg</div>' +
+      '</div>';
+    });
+  }
+  if (!panels.length && !players.length) {
+    html = '<div class="cmd-palette-status">' + razzleEmpty() + '</div>';
+  }
+  _cmdResultsEl.innerHTML = html;
+  // Click/hover handlers
+  var els = _cmdResultsEl.querySelectorAll(".cmd-palette-item");
+  els.forEach(function(el) {
+    el.addEventListener("click", function() {
+      _cmdActiveIdx = parseInt(el.dataset.idx, 10) || 0;
+      cmdSelect();
+    });
+    el.addEventListener("mouseenter", function() {
+      _cmdActiveIdx = parseInt(el.dataset.idx, 10) || 0;
+      updateCmdActive();
+    });
+  });
 }
 
 function renderCmdResults(items, sectionLabel) {
@@ -1648,10 +1898,15 @@ function updateCmdActive() {
 
 function cmdSelect() {
   if (_cmdActiveIdx < 0 || _cmdActiveIdx >= _cmdItems.length) return;
-  var player = _cmdItems[_cmdActiveIdx];
-  addToRecentlyViewed(player);
+  var item = _cmdItems[_cmdActiveIdx];
   closeCmdPalette();
-  openPlayerPopup(player.player_id);
+  if (item._isPanel) {
+    // Navigate to Lab panel
+    window.location.href = "/lab.html?panel=" + encodeURIComponent(item._panelId);
+  } else {
+    addToRecentlyViewed(item);
+    openPlayerPopup(item.player_id);
+  }
 }
 
 /* Recently Viewed — stored in localStorage */
@@ -1809,7 +2064,7 @@ window.addEventListener("razzle-plan-changed", function(e) {
     for (var i = 0; i < 50; i++) {
       var c = document.createElement("div");
       c.style.cssText = "position:fixed;width:8px;height:8px;border-radius:50%;z-index:99999;pointer-events:none;";
-      c.style.background = ["#d97757","#5b7fff","#2ec4b6","#8b5cf6","#ffc857"][i % 5];
+      c.style.background = ["var(--orange)","var(--pos-qb)","var(--pos-rb)","var(--pos-te)","var(--yellow)"][i % 5];
       c.style.left = Math.random() * 100 + "vw";
       c.style.top = "-10px";
       document.body.appendChild(c);

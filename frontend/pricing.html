@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ede0cf">
-<title>Pricing — Razzle</title>
+<title>Razzle Pricing — The Screener Is Free Forever</title>
 <meta property="og:title" content="Pricing — Razzle">
 <meta property="og:description" content="The Screener is forever free. Pro adds league intelligence. Elite gets six AI agents who know your league inside out.">
 <meta property="og:site_name" content="razzle.lol">
@@ -38,7 +38,7 @@
   .interval-toggle label.active { color: var(--ink); }
   .interval-toggle .toggle-track {
     width: 48px; height: 26px; background: var(--ink-faint); border: 2px solid var(--ink);
-    border-radius: 13px; cursor: pointer; position: relative; transition: background 0.2s;
+    border-radius: var(--radius-lg); cursor: pointer; position: relative; transition: background 0.2s;
   }
   .interval-toggle .toggle-track.yearly { background: var(--orange); border-color: var(--ink); }
   .interval-toggle .toggle-knob {
@@ -163,7 +163,7 @@
     border: 2px solid var(--green);
   }
   .btn-elite { background: var(--purple); border-color: var(--ink); }
-  .btn-elite:hover { box-shadow: 3px 3px 0 var(--purple); }
+  .btn-elite:hover { box-shadow: 4px 4px 0 var(--purple); }
 
   /* Dark mode overrides */
   [data-theme="dark"] .plan-card { background: var(--bg-card); }
@@ -193,9 +193,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">AI Agents</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html" class="active">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -234,14 +234,14 @@
   <!-- Interval toggle -->
   <div class="interval-toggle">
     <label id="monthlyLabel" onclick="setPricingInterval('month')">Monthly</label>
-    <div class="toggle-track yearly" id="intervalToggle" onclick="toggleInterval()" role="switch" aria-checked="true" aria-label="Toggle monthly or yearly pricing" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();toggleInterval();}">
+    <button type="button" class="toggle-track yearly" id="intervalToggle" onclick="toggleInterval()" role="switch" aria-checked="true" aria-label="Toggle monthly or yearly pricing" style="border:none;cursor:pointer;">
       <div class="toggle-knob"></div>
-    </div>
+    </button>
     <label id="yearlyLabel" class="active" onclick="setPricingInterval('year')">Yearly</label>
     <span class="save-badge" id="saveBadge">save 33%</span>
   </div>
 
-  <!-- What everyone gets — free tier celebration -->
+  <!-- What everyone gets -->
   <div class="free-celebration" style="background:var(--bg-card); border:3px solid var(--green); border-radius:12px; box-shadow:4px 4px 0 var(--green); padding:32px 28px; margin-bottom:32px; text-align:center;">
     <div style="font-family:var(--font-display); font-size:22px; margin-bottom:4px;">What everyone gets. <span style="color:var(--green);">Forever.</span></div>
     <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:20px;">no account, no card, no catch</div>
@@ -275,11 +275,11 @@
       <div class="plan-badge">the film room upgrade</div>
       <div class="plan-name">Pro</div>
       <div class="plan-price" id="proPrice">$79.99<span>/yr</span></div>
-      <div class="plan-interval" id="proInterval">that's <span class="yearly-price">$6.67/mo</span> — save 33%</div>
+      <div class="plan-interval" id="proInterval">that's <span class="yearly-price">$6.67/mo</span> — save 33%<br><span style="font-size:11px;color:var(--ink-light);">billed annually at $79.99</span></div>
 
       <ul class="plan-features">
         <li><span class="check">&#10003;</span> <span class="highlight">Everything free, plus:</span></li>
-        <li><span class="check">&#10003;</span> 20 AI queries/day — you provide a free API key (~$1-3/mo)</li>
+        <li><span class="check">&#10003;</span> 20 AI queries/day (API key required)</li>
         <li><span class="check">&#10003;</span> League-contextualized agents</li>
         <li><span class="check">&#10003;</span> Unlimited custom formulas</li>
         <li><span class="check">&#10003;</span> Cloud sync (formulas, watchlist, views)</li>
@@ -299,7 +299,7 @@
       <div class="plan-badge">full war machine</div>
       <div class="plan-name">Elite</div>
       <div class="plan-price" id="elitePrice">$149.99<span>/yr</span></div>
-      <div class="plan-interval" id="eliteInterval">that's <span class="yearly-price">$12.50/mo</span> — save 37%</div>
+      <div class="plan-interval" id="eliteInterval">that's <span class="yearly-price">$12.50/mo</span> — save 37%<br><span style="font-size:11px;color:var(--ink-light);">billed annually at $149.99</span></div>
 
       <ul class="plan-features">
         <li><span class="check">&#10003;</span> <span class="highlight">Everything in Pro, plus:</span></li>
@@ -470,9 +470,9 @@
     <div>
       <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
+      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
       <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
@@ -565,9 +565,9 @@
       yearlyLabel.classList.add('active');
 
       document.getElementById('proPrice').innerHTML = PRICES.pro.year + '<span>/yr</span>';
-      document.getElementById('proInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.pro.monthlyEquiv + '/mo</span> — save ' + PRICES.pro.save;
+      document.getElementById('proInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.pro.monthlyEquiv + '/mo</span> — save ' + PRICES.pro.save + '<br><span style="font-size:11px;color:var(--ink-light);">billed annually at ' + PRICES.pro.year + '</span>';
       document.getElementById('elitePrice').innerHTML = PRICES.elite.year + '<span>/yr</span>';
-      document.getElementById('eliteInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.elite.monthlyEquiv + '/mo</span> — save ' + PRICES.elite.save;
+      document.getElementById('eliteInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.elite.monthlyEquiv + '/mo</span> — save ' + PRICES.elite.save + '<br><span style="font-size:11px;color:var(--ink-light);">billed annually at ' + PRICES.elite.year + '</span>';
     } else {
       toggle.classList.remove('yearly');
       badge.style.opacity = '0';

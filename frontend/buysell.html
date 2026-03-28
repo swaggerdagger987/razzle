@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ede0cf">
 <title>Buy Low / Sell High — Razzle</title>
-<script>if(window.self===window.top)window.location.replace('/lab.html?panel=buysell');</script>
 <meta property="og:title" content="Buy Low / Sell High — Razzle">
 <meta property="og:description" content="Players whose efficiency doesn't match their dynasty price tag. Buy the undervalued, sell the overvalued. Data-backed trade timing.">
 <meta property="og:site_name" content="razzle.lol">
@@ -95,6 +94,34 @@
     color: var(--bg-card);
   }
   .buysell-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Scoring format toggle */
+  .buysell-scoring-tabs {
+    display: flex;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .buysell-scoring-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    background: var(--bg-card);
+    color: var(--accent);
+    border: none;
+    border-right: 2px solid var(--accent);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .buysell-scoring-tab:last-child { border-right: none; }
+  .buysell-scoring-tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .buysell-scoring-tab:hover:not(.active) {
     background: var(--bg-warm);
   }
 
@@ -409,9 +436,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">AI Agents</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -436,6 +463,11 @@
       <button class="buysell-pos-tab" data-pos="TE">TE</button>
     </div>
     <select class="buysell-season-select" id="season-select" title="Season" aria-label="Season"></select>
+    <div class="buysell-scoring-tabs" id="scoring-tabs">
+      <button class="buysell-scoring-tab active" data-scoring="ppr">PPR</button>
+      <button class="buysell-scoring-tab" data-scoring="half_ppr">Half</button>
+      <button class="buysell-scoring-tab" data-scoring="std">Std</button>
+    </div>
   </div>
 
   <div class="buysell-actions">
@@ -457,9 +489,9 @@
     <div>
       <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
+      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
       <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
@@ -536,6 +568,7 @@
   }
 
   var currentPosition = '';
+  var currentScoring = 'ppr';
 
   function ageClass(age) {
     if (!age) return 'prime';
@@ -660,6 +693,7 @@
     var url = '/api/buy-sell-candidates?limit=15';
     if (season) url += '&season=' + season;
     if (position) url += '&position=' + position;
+    if (currentScoring !== 'ppr') url += '&scoring=' + currentScoring;
 
     try {
       var resp = await fetch(url);
@@ -725,15 +759,27 @@
       tab.classList.add('active');
       currentPosition = tab.getAttribute('data-pos') || '';
       var season = document.getElementById('season-select').value;
-      savePageState({ season: season, position: currentPosition });
+      savePageState({ season: season, position: currentPosition, scoring: currentScoring });
       loadData(season, currentPosition);
     });
   });
 
   // Season change handler
   document.getElementById('season-select').addEventListener('change', function() {
-    savePageState({ season: this.value, position: currentPosition });
+    savePageState({ season: this.value, position: currentPosition, scoring: currentScoring });
     loadData(this.value, currentPosition);
+  });
+
+  // Scoring tab handler
+  document.getElementById('scoring-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.buysell-scoring-tab');
+    if (!tab) return;
+    document.querySelectorAll('.buysell-scoring-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentScoring = tab.getAttribute('data-scoring') || 'ppr';
+    var season = document.getElementById('season-select').value;
+    savePageState({ season: season, position: currentPosition, scoring: currentScoring });
+    loadData(season, currentPosition);
   });
 
   // Export PNG
@@ -766,11 +812,17 @@
   if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
 
   // Restore URL state + load
-  var restored = restorePageState({ season: '', position: '' });
+  var restored = restorePageState({ season: '', position: '', scoring: 'ppr' });
   if (restored.position) {
     currentPosition = restored.position;
     document.querySelectorAll('.buysell-pos-tab').forEach(function(t) {
       t.classList.toggle('active', (t.getAttribute('data-pos') || '') === currentPosition);
+    });
+  }
+  if (restored.scoring && ['ppr','half_ppr','std'].indexOf(restored.scoring) !== -1) {
+    currentScoring = restored.scoring;
+    document.querySelectorAll('.buysell-scoring-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-scoring') || '') === currentScoring);
     });
   }
   loadData(restored.season || undefined, currentPosition || undefined);

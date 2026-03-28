@@ -16,7 +16,7 @@ services:
     disk:
       name: razzle-data
       mountPath: /data
-      sizeGB: 1
+      sizeGB: 2
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.0"

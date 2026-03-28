@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ede0cf">
 <title>Value Over Replacement — Razzle</title>
-<script>if(window.self===window.top)window.location.replace('/lab.html?panel=vorp');</script>
 <meta property="og:title" content="Value Over Replacement — Razzle">
 <meta property="og:description" content="How much better is your player than a waiver wire replacement? VORP rankings cut through positional noise to show true fantasy value.">
 <meta property="og:site_name" content="razzle.lol">
@@ -95,6 +94,34 @@
     color: var(--bg-card);
   }
   .vorp-pos-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
+  /* Scoring format toggle */
+  .vorp-scoring-tabs {
+    display: flex;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .vorp-scoring-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    background: var(--bg-card);
+    color: var(--accent);
+    border: none;
+    border-right: 2px solid var(--accent);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .vorp-scoring-tab:last-child { border-right: none; }
+  .vorp-scoring-tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .vorp-scoring-tab:hover:not(.active) {
     background: var(--bg-warm);
   }
 
@@ -302,9 +329,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">AI Agents</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -327,6 +354,11 @@
       <button class="vorp-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
       <button class="vorp-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
       <button class="vorp-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+    </div>
+    <div class="vorp-scoring-tabs" id="scoring-tabs">
+      <button class="vorp-scoring-tab active" data-scoring="ppr">PPR</button>
+      <button class="vorp-scoring-tab" data-scoring="half_ppr">Half</button>
+      <button class="vorp-scoring-tab" data-scoring="std">Std</button>
     </div>
     <select class="vorp-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
@@ -352,9 +384,9 @@
     <div>
       <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
+      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
       <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
@@ -428,6 +460,7 @@
   }
 
   var currentPosition = '';
+  var currentScoring = 'ppr';
   var currentData = null;
 
   // Sort state per section
@@ -631,6 +664,7 @@
     var url = '/api/vorp?limit=30';
     if (season) url += '&season=' + season;
     if (currentPosition) url += '&position=' + currentPosition;
+    if (currentScoring !== 'ppr') url += '&scoring=' + currentScoring;
 
     fetch(url).then(function(resp) {
       if (!resp.ok) throw new Error('API error ' + resp.status);
@@ -660,13 +694,24 @@
     document.querySelectorAll('.vorp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
-    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value });
+    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value, scoring: currentScoring });
     loadData();
+  });
+
+  // Scoring format tab clicks
+  document.getElementById('scoring-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.vorp-scoring-tab');
+    if (!tab) return;
+    document.querySelectorAll('.vorp-scoring-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentScoring = tab.getAttribute('data-scoring') || 'ppr';
+    loadData();
+    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value, scoring: currentScoring });
   });
 
   // Season change
   document.getElementById('season-select').addEventListener('change', function() {
-    savePageState({ pos: currentPosition, season: this.value });
+    savePageState({ pos: currentPosition, season: this.value, scoring: currentScoring });
     loadData();
   });
 
@@ -695,11 +740,17 @@
   }).catch(function() {});
 
   // Restore URL state
-  var _restored = restorePageState({ pos: '', season: '' });
+  var _restored = restorePageState({ pos: '', season: '', scoring: 'ppr' });
   if (_restored.pos) {
     currentPosition = _restored.pos;
     document.querySelectorAll('.vorp-pos-tab').forEach(function(t) {
       t.classList.toggle('active', (t.getAttribute('data-pos') || '') === _restored.pos);
+    });
+  }
+  if (_restored.scoring && ['ppr','half_ppr','std'].indexOf(_restored.scoring) !== -1) {
+    currentScoring = _restored.scoring;
+    document.querySelectorAll('.vorp-scoring-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-scoring') || '') === currentScoring);
     });
   }
   if (_restored.season) {

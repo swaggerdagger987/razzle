@@ -741,7 +741,7 @@ def fetch_prospects_compare(names, draft_year=0):
 def _fetch_prospect_scores_uncached(position="", draft_year=0):
     """Compute Razzle Prospect Score (RPS) for all prospects at a position.
 
-    RPS = avg athletic percentile (60%) + draft capital value (30%) + size score (10%).
+    RPS = avg athletic percentile (40%) + draft capital value (35%) + size score (25%).
     """
     with get_db() as conn:
         # Check if combine_data table exists
@@ -854,12 +854,12 @@ def _fetch_prospect_scores_uncached(position="", draft_year=0):
                 size_score = 50  # default median
             p["size_score"] = size_score
 
-            # RPS composite: athletic 60% + draft capital 30% + size 10%
+            # RPS composite: athletic 40% + draft capital 35% + size 25%
             if athletic_avg is not None:
-                rps = round(athletic_avg * 0.6 + draft_capital * 0.3 + size_score * 0.1, 1)
+                rps = round(athletic_avg * 0.4 + draft_capital * 0.35 + size_score * 0.25, 1)
             else:
-                # No combine data — use draft capital + size only, penalize missing data
-                rps = round(draft_capital * 0.5 + size_score * 0.2, 1)
+                # No combine data — use draft capital + size only
+                rps = round(draft_capital * 0.55 + size_score * 0.3, 1)
             p["rps"] = rps
 
             prospects.append(p)

@@ -25,7 +25,7 @@
     return n.toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var POS_COLORS = (typeof getPosColors === "function") ? getPosColors() : { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
   var POS_CSS = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--pos-wr)', TE: 'var(--pos-te)' };
 
   // ─── Clickable player name helper ─────────────────────────────
@@ -1108,7 +1108,7 @@
         renderAvgs(data.pos_averages);
         renderPA(data);
       }).catch(function() {
-        el.querySelector('#lp-pa-content').innerHTML = '<div class="panel-error">the tape machine jammed — give it another shot<br><button onclick="location.reload()">retry</button></div>';
+        el.querySelector('#lp-pa-content').innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -3742,7 +3742,7 @@
     function renderSK(data) {
       var body = el.querySelector('#sk-body');
       var stacks = data.stacks || [];
-      if (!stacks.length) { body.innerHTML = '<div class="sk-card"><div class="sk-card-header">Stack Finder</div><div class="sk-empty">no correlation data found</div></div>'; return; }
+      if (!stacks.length) { body.innerHTML = '<div class="sk-card"><div class="sk-card-header">Stack Finder</div><div class="sk-empty">' + razzleEmpty() + '</div></div>'; return; }
 
       var html = '<div class="sk-card">';
       html += '<div class="sk-card-header">Best QB + WR/TE Stacks (' + escapeHtml(String(data.count)) + ' pairs)</div>';
@@ -3899,7 +3899,7 @@
     function buildSection(players, section) {
       if (!players || !players.length) {
         var label = section === 'dominators' ? 'goal-line dominators' : 'TD-dependent players';
-        return '<div class="rz-empty">no ' + label + ' found</div>';
+        return '<div class="rz-empty">' + razzleEmpty() + '</div>';
       }
       var isDom = section === 'dominators';
       var icon = isDom ? '&#x1F3C8;' : '&#x1F4A5;';
@@ -3924,7 +3924,7 @@
       currentData = data;
       var body = el.querySelector('#rz-body');
       if (!data || (!(data.dominators && data.dominators.length) && !(data.td_dependent && data.td_dependent.length))) {
-        body.innerHTML = '<div class="rz-empty">no red zone data found</div>';
+        body.innerHTML = '<div class="rz-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = buildSection(data.dominators, 'dominators');
@@ -4097,10 +4097,10 @@
 
       var html = '<div class="str-columns">';
       html += '<div class="str-section"><div class="str-section-header hot">On Fire</div>';
-      html += hot.length ? renderTable(hot, 'hot') : '<div class="str-empty">no hot streaks found</div>';
+      html += hot.length ? renderTable(hot, 'hot') : '<div class="str-empty">' + razzleEmpty() + '</div>';
       html += '</div>';
       html += '<div class="str-section"><div class="str-section-header cold">Ice Cold</div>';
-      html += cold.length ? renderTable(cold, 'cold') : '<div class="str-empty">no cold streaks found</div>';
+      html += cold.length ? renderTable(cold, 'cold') : '<div class="str-empty">' + razzleEmpty() + '</div>';
       html += '</div></div>';
       body.innerHTML = html;
     }
@@ -4454,7 +4454,7 @@
     function renderPO(data) {
       var body = el.querySelector('#po-body');
       var players = data.players || [];
-      if (!players.length) { body.innerHTML = '<div class="po-empty">no playoff data found</div>'; return; }
+      if (!players.length) { body.innerHTML = '<div class="po-empty">' + razzleEmpty() + '</div>'; return; }
 
       var html = '<div class="po-card">';
       html += '<div class="po-card-header">Playoff Matchup Rankings — Wk 14-17 (' + escapeHtml(String(data.count || 0)) + ' players)</div>';
@@ -5698,7 +5698,7 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // Area fill
@@ -5727,15 +5727,15 @@
           var y = pad.t + ch - (v / maxPPG) * ch;
           ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = posColor; ctx.fill();
           ctx.strokeStyle = t.white; ctx.lineWidth = 2; ctx.stroke();
-          ctx.fillStyle = t.ink; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = t.ink; ctx.font = 'bold 10px "Space Mono", monospace'; ctx.textAlign = 'center';
           ctx.fillText(fmt(v), x, y - 10);
           // Season label
-          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace';
           ctx.fillText(String(seasons[i].season || ''), x, pad.t + ch + 16);
         });
         // Y-axis label
         ctx.save(); ctx.translate(12, pad.t + ch / 2); ctx.rotate(-Math.PI / 2);
-        ctx.fillStyle = t.inkLight; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+        ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace'; ctx.textAlign = 'center';
         ctx.fillText('PPG', 0, 0); ctx.restore();
       }
     }
@@ -5743,7 +5743,7 @@
 
   // ─── 38. CAREER COMPARISON ──────────────────────────────────────
   defs.push({ name: 'career-compare', render: function(el) {
-    var slotColors = ['#d97757', '#5b7fff', '#2ec4b6'];
+    var slotColors = [POS_COLORS.WR, POS_COLORS.QB, POS_COLORS.RB];
     var players = []; // {player_id, full_name, position, team, data}
 
     el.innerHTML =
@@ -5887,13 +5887,13 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // X labels
         xYears.forEach(function(yr, i) {
           var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
-          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'center';
           ctx.fillText(yr, x, pad.t + ch + 16);
         });
 
@@ -6356,7 +6356,7 @@
   defs.push({ name: 'fptsbreakdown', render: function(el) {
     var curPos = '';
     var curSeason = _latestSeason;
-    var compColors = { pass_yd: '#5b7fff', rush_yd: '#2ec4b6', rec_yd: '#d97757', rec: '#8b5cf6', td: '#e74c3c' };
+    var compColors = { pass_yd: POS_COLORS.QB, rush_yd: POS_COLORS.RB, rec_yd: POS_COLORS.WR, rec: POS_COLORS.TE, td: '#e63946' };
     var compLabels = { pass_yd: 'Pass Yd', rush_yd: 'Rush Yd', rec_yd: 'Rec Yd', rec: 'Receptions', td: 'Touchdowns' };
 
     el.innerHTML =
@@ -6702,7 +6702,7 @@
     });
     el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
 
-    var compColors = ['#5b7fff', '#2ec4b6', '#d97757', '#8b5cf6', '#e74c3c', '#eab308', '#16a34a', '#f472b6'];
+    var compColors = ['#5b7fff', '#2ec4b6', '#d97757', '#8b5cf6', '#e63946', '#ffc857', '#2ec4b6', '#d97757'];
 
     function loadBreakdown(pid, playerInfo) {
       var content = el.querySelector('#pbd-content');
@@ -6805,7 +6805,7 @@
             var lx = cx + Math.cos(midAngle) * labelR;
             var ly = cy + Math.sin(midAngle) * labelR;
             ctx.fillStyle = (typeof getCanvasTheme === 'function' ? getCanvasTheme().white : '#fff');
-            ctx.font = 'bold 11px monospace';
+            ctx.font = 'bold 11px "Space Mono", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(fmt(pct, 0) + '%', lx, ly);
@@ -6816,11 +6816,11 @@
 
         // Center label
         ctx.fillStyle = t.ink;
-        ctx.font = 'bold 24px monospace';
+        ctx.font = 'bold 24px "Space Mono", monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(fmt(ppg), cx, cy - 8);
-        ctx.font = '12px monospace';
+        ctx.font = '12px "Space Mono", monospace';
         ctx.fillStyle = t.inkLight;
         ctx.fillText('PPG', cx, cy + 12);
       }
@@ -7068,15 +7068,15 @@
         var gHtml = '';
         gHtml += '<div class="db2-section"><div class="db2-section-header risers">&#x2197; Rising Stocks</div>';
         (d.risers || []).forEach(function(p, i) { gHtml += playerRow(p, i, 'up', '+' + escapeHtml(String(p.rank_diff))); });
-        if (!d.risers || !d.risers.length) gHtml += '<div class="db2-row">no risers found</div>';
+        if (!d.risers || !d.risers.length) gHtml += '<div class="db2-row">' + razzleEmpty() + '</div>';
         gHtml += '</div>';
         gHtml += '<div class="db2-section"><div class="db2-section-header fallers">&#x2198; Falling Stocks</div>';
         (d.fallers || []).forEach(function(p, i) { gHtml += playerRow(p, i, 'down', escapeHtml(String(p.rank_diff))); });
-        if (!d.fallers || !d.fallers.length) gHtml += '<div class="db2-row">no fallers found</div>';
+        if (!d.fallers || !d.fallers.length) gHtml += '<div class="db2-row">' + razzleEmpty() + '</div>';
         gHtml += '</div>';
         gHtml += '<div class="db2-section"><div class="db2-section-header value">&#x1F4A1; Value Picks</div>';
         (d.value_picks || []).forEach(function(p, i) { gHtml += playerRow(p, i, 'tv', escapeHtml(String(p.trade_value))); });
-        if (!d.value_picks || !d.value_picks.length) gHtml += '<div class="db2-row">no value picks found</div>';
+        if (!d.value_picks || !d.value_picks.length) gHtml += '<div class="db2-row">' + razzleEmpty() + '</div>';
         gHtml += '</div>';
         el.querySelector('.db2-grid').innerHTML = gHtml;
 
@@ -9413,9 +9413,7 @@
 
     function buildTargetTable(targets, sectionId) {
       if (!targets.length) {
-        var msg = 'no targets found';
-        if (sectionId === 'buylow') msg = 'no falling-stock players near this value range';
-        else if (sectionId === 'sellhigh') msg = 'no rising-stock players near this value range';
+        var msg = razzleEmpty();
         return '<div class="panel-empty">' + msg + '</div>';
       }
       var html = '<table class="tf2-table"><thead><tr>';
@@ -9586,10 +9584,10 @@
       rounds.forEach(function(rd) {
         var hitPct = rd.hit_rate;
         var barColor = hitPct >= 50 ? 'var(--green)' : hitPct >= 30 ? 'var(--orange)' : 'var(--red)';
-        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:100px; text-align:center;">' +
+        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:8px 12px; min-width:100px; text-align:center;">' +
           '<div style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
-          '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:3px;">' +
-            '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:3px;"></div>' +
+          '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:4px;">' +
+            '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:4px;"></div>' +
           '</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +
             rd.hits + '/' + rd.total + ' hits (' + hitPct + '%)' +
@@ -9609,7 +9607,7 @@
         var pd = positions[pos];
         if (!pd) return;
         var color = POS_COLORS[pos] || '#8a7565';
-        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:90px; text-align:center; border-left:4px solid ' + color + ';">' +
+        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:8px 12px; min-width:90px; text-align:center; border-left:4px solid ' + color + ';">' +
           '<div style="font-family:var(--font-mono); font-size:14px; color:' + color + ';">' + pos + '</div>' +
           '<div style="font-family:var(--font-mono); font-size:12px;">' + pd.total + ' drafted</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +
@@ -9655,7 +9653,7 @@
 
         html += '<tr>' +
           '<td style="text-align:left; font-weight:600;">' + escapeHtml(p.player_name) + '</td>' +
-          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:3px; font-size:10px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
+          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:4px; font-size:10px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
           '<td>' + p.round + '</td>' +
           '<td>' + p.pick + '</td>' +
           '<td style="font-family:var(--font-mono); font-size:11px;">' + escapeHtml(p.draft_team || '') + '</td>' +
@@ -9830,7 +9828,7 @@
           ctx.strokeRect(x, y, cellSize - 2, cellSize - 2);
           // Value text
           if (r !== null && r !== undefined) {
-            ctx.fillStyle = Math.abs(r) > 0.5 ? '#fff' : t.ink;
+            ctx.fillStyle = Math.abs(r) > 0.5 ? t.white : t.ink;
             ctx.font = 'bold 11px "Space Mono", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -9999,7 +9997,7 @@
   defs.push({ name: 'powerrankings', render: function(el) {
     if (showNflOnlyMsg(el, 'powerrankings', 'Dynasty Power Rankings', 'which NFL teams have the most fantasy-valuable rosters')) return;
 
-    var POS_COLS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+    var POS_COLS = POS_COLORS;
     var panelData = null;
     var selectedTeam = null;
 
@@ -10012,7 +10010,7 @@
           '<select class="lp-select pr-season"></select>' +
         '</div>' +
         '<div class="pr-chart-wrap" style="margin:16px 0;">' +
-          '<canvas id="pr-canvas" width="800" height="900" role="img" aria-label="Dynasty power rankings bar chart" style="width:100%;max-width:800px;border:3px solid var(--ink);border-radius:6px;box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"></canvas>' +
+          '<canvas id="pr-canvas" width="800" height="900" role="img" aria-label="Dynasty power rankings bar chart" style="width:100%;max-width:800px;border:3px solid var(--ink);border-radius:var(--radius-sm);box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"></canvas>' +
         '</div>' +
         '<div class="pr-detail" id="pr-detail" style="display:none;"></div>' +
         '<div class="pr-loading"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
@@ -10185,7 +10183,7 @@
        { label: 'WR', val: t.wr_value, col: POS_COLS.WR },
        { label: 'TE', val: t.te_value, col: POS_COLS.TE }].forEach(function(g) {
         var pct = t.total_value > 0 ? Math.round(g.val / t.total_value * 100) : 0;
-        html += '<div style="background:' + g.col + '22;border:2px solid ' + g.col + ';border-radius:6px;padding:6px 12px;font-family:var(--font-mono);font-size:12px;">';
+        html += '<div style="background:' + g.col + '22;border:2px solid ' + g.col + ';border-radius:var(--radius-sm);padding:6px 12px;font-family:var(--font-mono);font-size:12px;">';
         html += '<span style="font-weight:bold;color:' + g.col + ';">' + g.label + '</span> ';
         html += '<span style="color:var(--ink);">' + fmt(g.val, 0) + '</span> ';
         html += '<span style="color:var(--ink-light);">(' + pct + '%)</span>';
@@ -10205,7 +10203,7 @@
         html += '<th style="text-align:right;padding:4px 6px;">Value</th></tr>';
         t.top_players.forEach(function(p) {
           var posColor = POS_COLS[p.position] || '#8a7565';
-          html += '<tr style="border-bottom:1px solid var(--ink-faint);">';
+          html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
           html += '<td style="padding:4px 6px;">' + escapeHtml(p.full_name) + '</td>';
           html += '<td style="text-align:center;padding:4px 6px;color:' + posColor + ';font-weight:bold;">' + escapeHtml(p.position) + '</td>';
           html += '<td style="text-align:right;padding:4px 6px;">' + fmt(p.ppg) + '</td>';
@@ -10246,7 +10244,7 @@
   // ===== GAME SCRIPT =====
   defs.push({ name: 'gamescript', render: function(el) {
     if (showNflOnlyMsg(el, 'gamescript', 'Game Script', 'see how game script affects fantasy production')) return;
-    var POS_COLS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+    var POS_COLS = POS_COLORS;
     var curPos = '';
     var seasonsPopulated = false;
 

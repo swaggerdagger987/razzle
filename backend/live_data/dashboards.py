@@ -8,7 +8,7 @@ import math
 from collections import defaultdict
 
 from ..db import get_db
-from .core import FANTASY_POSITIONS, _cached, _CACHE_TTL_STABLE, _current_nfl_season, _safe_int
+from .core import FANTASY_POSITIONS, _cached, _CACHE_TTL_STABLE, _current_nfl_season, _safe_int, _scoring_factor
 
 logger = logging.getLogger("razzle.live_data.dashboards")
 
@@ -59,7 +59,7 @@ _VOLUME_ANNOTATIONS = [
 ]
 
 
-def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
+def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None, scoring="ppr"):
     """Return efficiency rankings: most efficient and volume kings."""
     def _query():
         with get_db() as conn:
@@ -119,6 +119,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                     "volume_kings": [],
                 }
 
+            adj = _scoring_factor(scoring)
             players = []
             for r in rows:
                 pid = r[0]
@@ -137,6 +138,9 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 pass_attempts = r[17] or 0
                 pos = r[2] or "RB"
 
+                # Adjust fantasy points for scoring format
+                total_pts = total_ppr + adj * receptions
+
                 # Opportunities: QBs use pass attempts + carries; others use targets + carries
                 if pos == "QB":
                     opportunities = pass_attempts + carries
@@ -151,8 +155,8 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 if opportunities < opp_min:
                     continue
 
-                ppg = round(total_ppr / games, 2)
-                ppo = round(total_ppr / opportunities, 2) if opportunities > 0 else 0
+                ppg = round(total_pts / games, 2)
+                ppo = round(total_pts / opportunities, 2) if opportunities > 0 else 0
                 ypt = round(total_yards / touches, 2) if touches > 0 else 0
                 catch_rate = round(receptions / targets * 100, 1) if targets > 0 else 0
                 yac_per_rec = round(yac / receptions, 2) if receptions > 0 else 0
@@ -209,7 +213,7 @@ def fetch_efficiency_rankings(season=None, position=None, limit=30, week=None):
                 "volume_kings": volume_kings,
             }
 
-    return _cached(f"efficiency_rankings:{season}:{position}:{limit}:{week}", _query)
+    return _cached(f"efficiency_rankings:{season}:{position}:{limit}:{week}:{scoring}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -233,7 +237,7 @@ _WILD_CARD_ANNOTATIONS = [
 ]
 
 
-def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
+def fetch_consistency_rankings(season=None, position=None, limit=30, week=None, scoring="ppr"):
     """Return consistency rankings: rock solid (low CoV) and wild cards (high CoV)."""
     def _query():
 
@@ -260,7 +264,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                 SELECT
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
-                    s.fantasy_points_ppr, s.week
+                    s.fantasy_points_ppr, s.week, COALESCE(s.receptions, 0) as rec
                 FROM players p
                 JOIN player_week_stats s
                     ON s.player_id = p.player_id AND s.season = ?
@@ -282,7 +286,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                 }
 
             # Group weekly scores by player
-
+            adj = _scoring_factor(scoring)
             player_info = {}
             player_weeks = defaultdict(list)
             for r in rows:
@@ -295,7 +299,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                         "team": r[3] or "FA",
                         "headshot_url": r[4] or "",
                     }
-                pts = r[5] or 0
+                pts = (r[5] or 0) + adj * (r[7] or 0)
                 player_weeks[pid].append(pts)
 
             # Compute stats for players with >= 6 games
@@ -362,7 +366,7 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None):
                 "wild_cards": wild_cards,
             }
 
-    return _cached(f"consistency_rankings:{season}:{position}:{limit}:{week}", _query)
+    return _cached(f"consistency_rankings:{season}:{position}:{limit}:{week}:{scoring}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -600,7 +604,7 @@ _FALLING_ANNOTATIONS = [
 ]
 
 
-def fetch_stock_watch(season=None, position=None, limit=30):
+def fetch_stock_watch(season=None, position=None, limit=30, scoring="ppr"):
     """Composite dynasty stock watch — blends efficiency, consistency, SOS, and PPG
     into a 0-100 stock score.  Rising = undervalued (stock > PPG rank).
     Falling = overvalued (stock < PPG rank)."""
@@ -627,7 +631,8 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                        p.headshot_url, p.age,
                        s.fantasy_points_ppr, s.targets, s.carries,
                        s.attempts,
-                       s.opponent_team, s.week
+                       s.opponent_team, s.week,
+                       COALESCE(s.receptions, 0) as rec
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -676,6 +681,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 league_avg[pos] = sum(vals) / len(vals) if vals else 0
 
             # ---- Aggregate per player ----
+            adj = _scoring_factor(scoring)
             player_info = {}
             player_weeks = defaultdict(list)  # weekly fantasy pts
             player_opps = defaultdict(lambda: {"targets": 0, "carries": 0, "attempts": 0, "total_pts": 0, "games": 0})
@@ -693,7 +699,8 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                         "age": r[5],
                     }
 
-                pts = r[6] or 0
+                rec = r[12] or 0
+                pts = (r[6] or 0) + adj * rec
                 targets = r[7] or 0
                 carries = r[8] or 0
                 attempts = r[9] or 0
@@ -712,7 +719,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 player_sos[pid].append(opp_allows)
 
             # ---- Compute metrics per player (min 8 games, position PPG floor) ----
-            MIN_PPG = {"QB": 10, "RB": 5, "WR": 5, "TE": 3}
+            MIN_PPG = {"QB": 12, "RB": 8, "WR": 8, "TE": 5}
             players = []
             for pid, weeks in player_weeks.items():
                 n = len(weeks)
@@ -722,9 +729,11 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 opps_d = player_opps[pid]
                 total_pts = opps_d["total_pts"]
                 games = opps_d["games"]
+                if games < 6:
+                    continue
                 ppg = round(total_pts / games, 2) if games > 0 else 0
                 pos = info["position"]
-                if ppg < MIN_PPG.get(pos, 5):
+                if ppg < MIN_PPG.get(pos, 8):
                     continue
 
                 # Efficiency: PPO — QBs use pass attempts + carries
@@ -832,7 +841,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 "falling": falling,
             }
 
-    return _cached(f"stock_watch:{season}:{position}:{limit}", _query)
+    return _cached(f"stock_watch:{season}:{position}:{limit}:{scoring}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -1058,7 +1067,7 @@ _NEEDS_WORK_ANNOTATIONS = [
 ]
 
 
-def fetch_report_cards(season=None, position=None, limit=25, week=None):
+def fetch_report_cards(season=None, position=None, limit=25, week=None, scoring="ppr"):
     """Composite player report card — aggregates efficiency, consistency,
     SOS, stock score, and opportunity share into a Fantasy GPA (A+ to F).
 
@@ -1096,7 +1105,8 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                        s.attempts,
                        s.receiving_yards, s.receiving_tds,
                        s.rushing_yards,
-                       s.opponent_team, s.week
+                       s.opponent_team, s.week,
+                       COALESCE(s.receptions, 0) as rec
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -1176,6 +1186,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 t["rush_yards"] = tr[5]
 
             # Aggregate per player
+            adj = _scoring_factor(scoring)
             player_info = {}
             player_weeks = defaultdict(list)
             player_opps = defaultdict(lambda: {
@@ -1196,7 +1207,8 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                         "age": r[5],
                     }
 
-                pts = r[6] or 0
+                rec = r[15] or 0
+                pts = (r[6] or 0) + adj * rec
                 targets = r[7] or 0
                 carries = r[8] or 0
                 attempts = r[9] or 0
@@ -1348,7 +1360,7 @@ def fetch_report_cards(season=None, position=None, limit=25, week=None):
                 "needs_improvement": needs_improvement,
             }
 
-    return _cached(f"report_cards:{season}:{position}:{limit}:{week}", _query)
+    return _cached(f"report_cards:{season}:{position}:{limit}:{week}:{scoring}", _query)
 
 
 _AWARD_ANNOTATIONS = {
@@ -1811,7 +1823,7 @@ _VORP_ANNOTATIONS = {
 _REPLACEMENT_RANKS = {"QB": 12, "RB": 24, "WR": 36, "TE": 12}
 
 
-def fetch_vorp(season=None, position=None, limit=30):
+def fetch_vorp(season=None, position=None, limit=30, scoring="ppr"):
     """Return VORP rankings: league winners and replacement-level players."""
     def _query():
         with get_db() as conn:
@@ -1826,7 +1838,8 @@ def fetch_vorp(season=None, position=None, limit=30):
                     p.player_id, p.full_name, p.position, p.team,
                     p.headshot_url,
                     ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
-                    COUNT(DISTINCT s.week) as games
+                    COUNT(DISTINCT s.week) as games,
+                    COALESCE(SUM(s.receptions), 0) as total_rec
                 FROM players p
                 JOIN player_week_stats s
                     ON s.player_id = p.player_id AND s.season = ?
@@ -1849,11 +1862,14 @@ def fetch_vorp(season=None, position=None, limit=30):
                 }
 
             # Build player list with PPG
+            adj = _scoring_factor(scoring)
             all_players = []
             for r in rows:
                 games = r[6] or 1
                 total_ppr = r[5] or 0
-                ppg = round(total_ppr / games, 2)
+                total_rec = r[7] or 0
+                total_pts = total_ppr + adj * total_rec
+                ppg = round(total_pts / games, 2)
                 all_players.append({
                     "player_id": r[0],
                     "full_name": r[1] or "Unknown",
@@ -1918,7 +1934,7 @@ def fetch_vorp(season=None, position=None, limit=30):
                 "replacement_level": replacement_level,
             }
 
-    return _cached(f"vorp:{season}:{position}:{limit}", _query)
+    return _cached(f"vorp:{season}:{position}:{limit}:{scoring}", _query)
 
 
 # ---------------------------------------------------------------------------

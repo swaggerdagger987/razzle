@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ede0cf">
-<title>Screener — Razzle</title>
-<meta property="og:title" content="Screener — Razzle">
+<title>Razzle Lab — 100+ Stats, Custom Formulas, Forever Free</title>
+<meta property="og:title" content="Fourth Down Lab — Razzle">
 <meta property="og:description" content="The Screener: filter 1,200+ NFL players and 9,800+ college players across 100+ stat columns. Custom formulas, heat maps, radar charts. Forever free.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
@@ -14,7 +14,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Screener — Razzle">
+<meta name="twitter:title" content="Fourth Down Lab — Razzle">
 <meta name="twitter:description" content="The Screener: filter 1,200+ NFL players and 9,800+ college players across 100+ stat columns. Custom formulas, heat maps, radar charts. Forever free.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image-lab.png">
 <meta name="twitter:image:alt" content="Razzle — Free Fantasy Football Research Lab">
@@ -471,8 +471,8 @@
     white-space: nowrap;
   }
   .btn-panel-action:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .btn-panel-action:active {
     transform: translate(0, 0);
@@ -593,7 +593,8 @@
     }
     .lab-sidebar.open {
       transform: translateX(0);
-      box-shadow: -8px 0 24px rgba(45, 31, 20, 0.15);
+      border-right: 2px dashed var(--ink-faint);
+      box-shadow: none;
     }
     .lab-main {
       margin-right: 0;
@@ -905,7 +906,7 @@
     visibility: hidden;
     transition: opacity 0.15s ease, visibility 0.15s;
   }
-  [data-theme="dark"] .filter-modal-overlay { background: rgba(0,0,0,0.5); }
+  [data-theme="dark"] .filter-modal-overlay { background: rgba(26,17,10,0.6); }
 
   .filter-modal-overlay.open { opacity: 1; visibility: visible; }
 
@@ -957,7 +958,7 @@
     align-items: flex-start;
     justify-content: flex-end;
   }
-  [data-theme="dark"] .column-picker-overlay { background: rgba(0,0,0,0.5); }
+  [data-theme="dark"] .column-picker-overlay { background: rgba(26,17,10,0.6); }
 
   .column-picker-overlay.open { display: flex; }
 
@@ -1040,10 +1041,12 @@
     z-index: 10;
   }
   .screener-table thead.thead-shadow th {
-    box-shadow: 0 4px 8px rgba(45,31,20,0.08);
+    border-bottom: 3px solid var(--ink);
+    box-shadow: none;
   }
   [data-theme="dark"] .screener-table thead.thead-shadow th {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    border-bottom: 3px solid var(--ink);
+    box-shadow: none;
   }
 
   .screener-table th {
@@ -1066,12 +1069,12 @@
 
   .screener-table th.sort-asc::after { content: " ▲"; font-size: 9px; }
   .screener-table th.sort-desc::after { content: " ▼"; font-size: 9px; }
-  .screener-table th.sort-asc, .screener-table th.sort-desc { background: rgba(217, 119, 87, 0.08); }
+  .screener-table th.sort-asc, .screener-table th.sort-desc { background: rgba(var(--sort-highlight), 0.08); }
   .screener-table th.sort2-asc::after { content: " △2"; font-size: 8px; opacity: 0.5; }
   .screener-table th.sort2-desc::after { content: " ▽2"; font-size: 8px; opacity: 0.5; }
-  .screener-table th.sort2-asc, .screener-table th.sort2-desc { background: rgba(217, 119, 87, 0.06); }
-  .screener-table td.sort-col { background: rgba(217, 119, 87, 0.05); }
-  .screener-table td.sort2-col { background: rgba(217, 119, 87, 0.025); }
+  .screener-table th.sort2-asc, .screener-table th.sort2-desc { background: rgba(var(--sort-highlight), 0.06); }
+  .screener-table td.sort-col { background: rgba(var(--sort-highlight), 0.05); }
+  .screener-table td.sort2-col { background: rgba(var(--sort-highlight), 0.025); }
 
   /* ─── Data bars (no gradient) ─── */
   .screener-table td.data-bar { position: relative; }
@@ -1132,6 +1135,16 @@
   .colstats-hist-labels {
     display: flex; justify-content: space-between;
     font-size: 9px; color: var(--ink-light); margin-top: 2px;
+  }
+  [data-theme="dark"] .colstats-popover {
+    background: var(--bg-card); border-color: var(--ink-faint);
+  }
+  [data-theme="dark"] .colstats-bar {
+    background: var(--orange); border-color: var(--ink-faint);
+  }
+  [data-theme="dark"] .colstats-label,
+  [data-theme="dark"] .colstats-val {
+    color: var(--ink);
   }
   .screener-table .col-rank { width: 36px; text-align: center; font-size: 11px; color: var(--ink-light); font-weight: 600; padding: 7px 2px; white-space: nowrap; }
 
@@ -2150,7 +2163,7 @@
 
   .prospect-comp-card:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
   }
 
   .prospect-comp-sim {
@@ -2365,8 +2378,8 @@
   }
 
   .tier-card:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
   }
 
   .tier-card-name {
@@ -2934,8 +2947,8 @@
     transition: transform 0.1s, box-shadow 0.1s;
   }
   .trade-player-card:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .trade-player-card .pos-badge {
     font-family: var(--font-mono);
@@ -3039,8 +3052,8 @@
     transition: transform 0.1s, box-shadow 0.1s;
   }
   .trade-pick-card:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .trade-pick-card .pick-round-badge {
     font-family: var(--font-mono);
@@ -3145,9 +3158,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html" class="active">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">AI Agents</a></li>
+    <li><a href="/lab.html" class="active">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -3158,10 +3171,10 @@
 
 <main id="main-content">
 <noscript>
-  <div style="text-align:center; padding:48px 24px; font-family:'Space Mono',monospace; color:#6b5a4e;">
-    <p style="font-family:'Luckiest Guy',cursive; font-size:24px; margin-bottom:12px;">JavaScript required</p>
+  <div style="text-align:center; padding:48px 24px; font-family:var(--font-mono); color:var(--ink-medium);">
+    <p style="font-family:var(--font-display); font-size:24px; margin-bottom:12px;">JavaScript required</p>
     <p>The Lab needs JavaScript to run. Please enable it or check your ad blocker.</p>
-    <p style="font-family:'Caveat',cursive; font-size:18px; margin-top:16px; color:#a89585;">pulling film requires electricity...</p>
+    <p style="font-family:var(--font-hand); font-size:18px; margin-top:16px; color:var(--ink-light);">pulling film requires electricity...</p>
   </div>
 </noscript>
 <h1 class="sr-only">Razzle Screener — Fantasy Football Research Lab</h1>
@@ -3409,7 +3422,7 @@
           <div class="tools-dropdown-grid">
             <button class="btn-chunky" onclick="openTradeAnalyzer(); closeToolsDropdown();" style="border-color:var(--orange);">Trade</button>
             <button class="btn-chunky" onclick="openFormulaStore(); closeToolsDropdown();">Formula Store</button>
-            <button class="btn-chunky" id="tagFilterBtn" onclick="toggleTagFilter(); closeToolsDropdown();" oncontextmenu="event.preventDefault(); if(getTaggedCount()>0 && confirm('Clear all player tags?')) clearAllTags();" title="Show only tagged players. Right-click to clear all.">Tags</button>
+            <button class="btn-chunky" id="tagFilterBtn" onclick="toggleTagFilter(); closeToolsDropdown();" oncontextmenu="event.preventDefault(); if(getTaggedCount()>0){if(!this.dataset.confirming){this.dataset.confirming='1';this.textContent='sure? right-click again';var _b=this;setTimeout(function(){delete _b.dataset.confirming;_b.textContent='Tags';},3000);return;}delete this.dataset.confirming;this.textContent='Tags';clearAllTags();}" title="Show only tagged players. Right-click to clear all.">Tags</button>
             <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues(); closeToolsDropdown();" style="display:none; border-color:var(--orange);">Trade Values</button>
             <button class="btn-chunky" id="agingCurvesBtn" onclick="openAgingCurves(); closeToolsDropdown();" style="display:none; border-color:var(--green);">Aging Curves</button>
             <button class="btn-chunky" id="heatMapBtn" onclick="openHeatMap(); closeToolsDropdown();" style="display:none; border-color:var(--red);">Heat Map</button>
@@ -4478,7 +4491,13 @@
           header.className = 'lab-panel-header';
           var methodText = PANEL_METHODS[panelName] || PANEL_METHOD_DEFAULT;
           var methodId = 'method-' + panelName;
-          header.innerHTML = '<span class="breadcrumb">' + escapeHtml('Screener > ' + cat + ' > ' + label) + '</span>' +
+          header.innerHTML = '<span class="breadcrumb">' +
+                             '<a href="#" onclick="switchPanel(\'screener\');return false;" style="color:var(--orange);text-decoration:none;">Screener</a>' +
+                             ' &gt; ' +
+                             '<span style="color:var(--ink-light);">' + escapeHtml(cat) + '</span>' +
+                             ' &gt; ' +
+                             '<span>' + escapeHtml(label) + '</span>' +
+                           '</span>' +
                              '<div class="panel-title-row">' +
                                '<div class="panel-title">' + escapeHtml(label) + '</div>' +
                                '<div class="panel-actions">' +
@@ -4557,6 +4576,9 @@
     }
 
     currentPanel = panelName;
+    // Update tab title with panel name
+    var panelLabel = PANEL_LABELS[panelName] || panelName;
+    document.title = (panelName === 'screener' ? 'Razzle Lab \u2014 100+ Stats, Custom Formulas, Forever Free' : panelLabel + ' \u2014 Razzle Lab');
 
     // Save last panel to localStorage for session memory
     try { localStorage.setItem('razzle_last_panel', panelName); } catch(e) {}
@@ -4863,6 +4885,7 @@
     }
 
     var saved = getSavedState();
+    var isFirstVisit = Object.keys(saved).length === 0 && !localStorage.getItem('razzle_lab_visited');
 
     cats.forEach(function(cat, idx) {
       // Skip non-collapsible parent headers
@@ -4876,9 +4899,18 @@
         cat.appendChild(chevron);
       }
 
-      // Restore saved state
+      // On first visit, collapse Pro categories so free panels are prominent
       var catKey = 'cat_' + idx;
-      if (saved[catKey]) applyCatState(cat, true);
+      if (isFirstVisit) {
+        // Collapse all Pro sub-categories (not the FREE PANELS section)
+        var catText = (cat.querySelector('.cat-text') || {}).textContent || '';
+        if (catText !== 'FREE PANELS') {
+          applyCatState(cat, true);
+          saved[catKey] = true;
+        }
+      } else if (saved[catKey]) {
+        applyCatState(cat, true);
+      }
 
       // Click handler
       cat.addEventListener('click', function() {
@@ -4893,6 +4925,9 @@
         saveState(s);
       });
     });
+
+    // Save first-visit collapsed state
+    if (isFirstVisit) saveState(saved);
 
     // Expose for search override
     window._restoreCatCollapseState = function() {
@@ -4927,6 +4962,8 @@
         // Restore all items
         items.forEach(function(item) { item.classList.remove('search-hidden'); });
         cats.forEach(function(cat) { cat.classList.remove('search-hidden'); });
+        var emptyHide = document.getElementById('sidebarSearchEmpty');
+        if (emptyHide) emptyHide.style.display = 'none';
         // Restore category collapse state
         if (typeof _restoreCatCollapseState === 'function') _restoreCatCollapseState();
         return;
@@ -4962,6 +4999,21 @@
 
       // Override category collapse — show matching items regardless
       if (typeof _overrideCatForSearch === 'function') _overrideCatForSearch();
+
+      // Show empty state if no matches
+      var emptyEl = document.getElementById('sidebarSearchEmpty');
+      var anyVisible = false;
+      for (var k = 0; k < items.length; k++) {
+        if (!items[k].classList.contains('search-hidden')) { anyVisible = true; break; }
+      }
+      if (!emptyEl) {
+        emptyEl = document.createElement('div');
+        emptyEl.id = 'sidebarSearchEmpty';
+        emptyEl.style.cssText = 'padding:16px 12px;font-family:var(--font-hand);font-size:14px;color:var(--ink-light);text-align:center;';
+        emptyEl.textContent = 'nothing matches that search, coach.';
+        sidebar.appendChild(emptyEl);
+      }
+      emptyEl.style.display = anyVisible ? 'none' : 'block';
     });
 
     // Click search icon in collapsed mode → expand sidebar and focus

@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#ede0cf">
 <title>Razzle — Fantasy Football Research Lab</title>
 <meta property="og:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
-<meta property="og:description" content="Free fantasy football research lab. 150+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
+<meta property="og:description" content="Free fantasy football research lab. 100+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://razzle.lol/">
@@ -15,10 +15,10 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
-<meta name="twitter:description" content="Free fantasy football research lab. 150+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
+<meta name="twitter:description" content="Free fantasy football research lab. 100+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
 <meta name="twitter:image:alt" content="Razzle — Free Fantasy Football Research Lab">
-<meta name="description" content="Razzle is a free fantasy football research lab. 150+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
+<meta name="description" content="Razzle is a free fantasy football research lab. 100+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <link rel="canonical" href="https://razzle.lol/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -74,7 +74,7 @@
 
   .hero-mascot {
     font-size: 80px;
-    filter: drop-shadow(3px 3px 0 rgba(45,31,20,0.15));
+    filter: drop-shadow(4px 4px 0 var(--shadow-drop));
     transform: rotate(-3deg);
     display: inline-block;
     margin-bottom: 20px;
@@ -91,8 +91,8 @@
   .hero h1 span { color: var(--orange); }
 
   .hero-sub {
-    font-family: var(--font-hand);
-    font-size: 24px;
+    font-family: var(--font-mono);
+    font-size: 20px;
     color: var(--ink-medium);
     margin-bottom: 32px;
     line-height: 1.3;
@@ -141,6 +141,11 @@
   .btn-hero-secondary {
     background: var(--bg-card);
     color: var(--ink);
+  }
+  .mobile-signup-cta { display: none; }
+  @media (max-width: 768px) {
+    .mobile-signup-cta { display: inline-block; }
+    .desktop-only-cta { display: none; }
   }
 
   /* ===== SCREENER VISUAL ===== */
@@ -256,8 +261,8 @@
   .lp-section h2 span { color: var(--orange); }
 
   .lp-section p {
-    font-family: var(--font-hand);
-    font-size: 20px;
+    font-family: var(--font-mono);
+    font-size: 16px;
     color: var(--ink-medium);
     margin-bottom: 20px;
     line-height: 1.4;
@@ -371,7 +376,7 @@
     background: var(--orange);
     color: var(--text-on-accent);
     transform: translate(-2px, -2px) rotate(0deg);
-    box-shadow: 5px 5px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
   }
 
   /* ===== MINI SCREENER ===== */
@@ -499,11 +504,11 @@
   }
 
   .pricing-card--free {
-    border-color: var(--rb);
+    border-color: var(--pos-rb);
     position: relative;
   }
   .pricing-badge--free {
-    background: var(--rb);
+    background: var(--pos-rb);
     color: var(--text-on-accent);
   }
   .pricing-card--highlight {
@@ -636,9 +641,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/" class="active">Home</a></li>
-    <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html" title="Connect your Sleeper league">Bureau</a></li>
-    <li><a href="/agents.html" title="AI agents for your league">AI Agents</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html" title="Connect your Sleeper league">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html" title="AI agents for your league">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -652,10 +657,11 @@
 <div class="hero">
   <div class="hero-mascot">🐯</div>
   <h1>The fantasy football research lab. <span>Forever free.</span></h1>
-  <div class="hero-sub">150+ stat columns. Custom formulas. Shareable views. No account required. No catch.</div>
+  <div class="hero-sub">100+ stat columns across NFL, college &amp; prospects. Custom formulas. Shareable views. No account required.</div>
   <div class="hero-cta">
     <a href="/lab.html" class="btn-hero btn-hero-primary">Open the Screener</a>
-    <a href="#features" class="btn-hero btn-hero-secondary">See what's inside</a>
+    <a href="#features" class="btn-hero btn-hero-secondary desktop-only-cta">See what's inside</a>
+    <button class="btn-hero btn-hero-secondary mobile-signup-cta" onclick="if(typeof openAuthModal==='function')openAuthModal('register');">Sign Up Free</button>
   </div>
   <div style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light); margin-top:8px;">no signup needed — just open it</div>
 </div>
@@ -702,7 +708,7 @@
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-top:24px; text-align:left;">
     <div class="feature-card">
       <div class="feature-card-icon">📊</div>
-      <div class="feature-card-title">150+ Stat Columns</div>
+      <div class="feature-card-title">100+ Stat Columns</div>
       <div class="feature-card-desc">NFL, college, and prospect data. 10 seasons deep. Every metric that matters.</div>
     </div>
     <div class="feature-card">
@@ -743,7 +749,7 @@
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:20px; text-align:left;">
     <div class="social-card">
       <div class="social-card-context">The Screener</div>
-      <div class="social-card-text">150+ stat columns. Custom formulas. Every filter you've ever wished for. Forever free.</div>
+      <div class="social-card-text">100+ stat columns. Custom formulas. Every filter you've ever wished for. Forever free.</div>
     </div>
     <div class="social-card">
       <div class="social-card-context">Share to Win</div>
@@ -774,7 +780,7 @@
   <p>Personalized briefings. Trade strategies. Championship probability. All contextualized to your roster and your rivals.</p>
 
   <div style="background:var(--bg-ink); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:16px; margin-bottom:16px; text-align:center;">
-    <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Situation Room — Live Preview</div>
+    <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Situation Room — Live Preview</div>
     <div style="display:flex; gap:16px; justify-content:center; align-items:center; flex-wrap:wrap;">
       <span style="font-size:28px;">🐯</span>
       <span style="font-size:28px;">🦊</span>
@@ -783,10 +789,10 @@
       <span style="font-size:28px;">🐙</span>
       <span style="font-size:28px;">🐘</span>
     </div>
-    <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-faint); margin-top:8px; margin-bottom:0;">your analysts are already working</p>
+    <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:8px; margin-bottom:0;">your analysts are already working</p>
   </div>
 
-  <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-faint); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; text-align:center;">Demo — connect your Sleeper league + Pro to get briefings like this</div>
+  <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; text-align:center;">Demo — connect your Sleeper league + Pro to get briefings like this</div>
   <div class="briefing-example">
     <div class="demo-card">
       <div class="agent-name">🐯 Razzle <span class="urgency urgency-urgent">urgent</span></div>
@@ -820,7 +826,7 @@
       <div class="pricing-note">no card, no catch</div>
       <ul class="pricing-list">
         <li>Full Screener (NFL + College + Prospects)</li>
-        <li>150+ stat columns across NFL, college, and prospects</li>
+        <li>100+ stat columns across NFL, college, and prospects</li>
         <li>Custom formulas</li>
         <li>Charts, heat maps, PNG export</li>
         <li>Shareable URLs</li>
@@ -879,9 +885,9 @@
     <div>
       <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
+      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
       <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
@@ -889,49 +895,49 @@
 
     <div>
       <div class="site-footer-heading">Dynasty</div>
-      <a href="/rankings.html" class="footer-link">Rankings</a>
-      <a href="/tradevalues.html" class="footer-link">Trade Values</a>
-      <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
-      <a href="/tiers.html" class="footer-link">Tiers</a>
-      <a href="/vorp.html" class="footer-link">VORP</a>
-      <a href="/aging.html" class="footer-link">Aging Curves</a>
-      <a href="/buysell.html" class="footer-link">Buy/Sell</a>
-      <a href="/archetypes.html" class="footer-link">Archetypes</a>
+      <a href="/lab.html?panel=rankings" class="footer-link">Rankings</a>
+      <a href="/lab.html?panel=tradevalues" class="footer-link">Trade Values</a>
+      <a href="/lab.html?panel=tradefinder" class="footer-link">Trade Finder</a>
+      <a href="/lab.html?panel=tiers" class="footer-link">Tiers</a>
+      <a href="/lab.html?panel=vorp" class="footer-link">VORP</a>
+      <a href="/lab.html?panel=aging" class="footer-link">Aging Curves</a>
+      <a href="/lab.html?panel=buysell" class="footer-link">Buy/Sell</a>
+      <a href="/lab.html?panel=archetypes" class="footer-link">Archetypes</a>
     </div>
 
     <div>
       <div class="site-footer-heading">Weekly</div>
-      <a href="/weekly.html" class="footer-link">Weekly Stats</a>
-      <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
-      <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
-      <a href="/matchups.html" class="footer-link">Matchups</a>
-      <a href="/waivers.html" class="footer-link">Waivers</a>
-      <a href="/schedule.html" class="footer-link">Schedule</a>
-      <a href="/stocks.html" class="footer-link">Stocks</a>
-      <a href="/playoffs.html" class="footer-link">Playoffs</a>
+      <a href="/lab.html?panel=weekly" class="footer-link">Weekly Stats</a>
+      <a href="/lab.html?panel=weeklyleaders" class="footer-link">Week Leaders</a>
+      <a href="/lab.html?panel=weeklymvp" class="footer-link">Weekly MVP</a>
+      <a href="/lab.html?panel=matchups" class="footer-link">Matchups</a>
+      <a href="/lab.html?panel=waivers" class="footer-link">Waivers</a>
+      <a href="/lab.html?panel=schedule" class="footer-link">Schedule</a>
+      <a href="/lab.html?panel=stocks" class="footer-link">Stocks</a>
+      <a href="/lab.html?panel=playoffs" class="footer-link">Playoffs</a>
     </div>
 
     <div>
       <div class="site-footer-heading">Analytics</div>
-      <a href="/targets.html" class="footer-link">Targets</a>
-      <a href="/usage.html" class="footer-link">Usage</a>
-      <a href="/efficiency.html" class="footer-link">Efficiency</a>
-      <a href="/airyards.html" class="footer-link">Air Yards</a>
-      <a href="/redzone.html" class="footer-link">Red Zone</a>
-      <a href="/consistency.html" class="footer-link">Consistency</a>
-      <a href="/breakouts.html" class="footer-link">Breakouts</a>
-      <a href="/opportunity.html" class="footer-link">Opportunity</a>
+      <a href="/lab.html?panel=targets" class="footer-link">Targets</a>
+      <a href="/lab.html?panel=usage" class="footer-link">Usage</a>
+      <a href="/lab.html?panel=efficiency" class="footer-link">Efficiency</a>
+      <a href="/lab.html?panel=airyards" class="footer-link">Air Yards</a>
+      <a href="/lab.html?panel=redzone" class="footer-link">Red Zone</a>
+      <a href="/lab.html?panel=consistency" class="footer-link">Consistency</a>
+      <a href="/lab.html?panel=breakouts" class="footer-link">Breakouts</a>
+      <a href="/lab.html?panel=opportunity" class="footer-link">Opportunity</a>
     </div>
 
     <div>
       <div class="site-footer-heading">Tools</div>
-      <a href="/explorer.html" class="footer-link">Stat Explorer</a>
+      <a href="/lab.html?panel=explorer" class="footer-link">Stat Explorer</a>
       <a href="/compare.html" class="footer-link">Compare</a>
-      <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>
-      <a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a>
-      <a href="/auction.html" class="footer-link">Auction Values</a>
-      <a href="/dashboard.html" class="footer-link">Dashboard</a>
-      <a href="/prospects.html" class="footer-link">Prospects</a>
+      <a href="/lab.html?panel=rosterbuilder" class="footer-link">Roster Builder</a>
+      <a href="/lab.html?panel=cheatsheet" class="footer-link">Cheat Sheet</a>
+      <a href="/lab.html?panel=auction" class="footer-link">Auction Values</a>
+      <a href="/lab.html?panel=dashboard" class="footer-link">Dashboard</a>
+      <a href="/lab.html?panel=prospects" class="footer-link">Prospects</a>
     </div>
 
   </div>

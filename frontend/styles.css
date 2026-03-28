@@ -22,8 +22,10 @@
 
   --ink: #2d1f14;
   --ink-medium: #5c4a3d;
-  --ink-light: #8a7565;
+  --ink-light: #6d5c4e;
   --ink-faint: #c4b5a5;
+  --shadow-text: rgba(45,31,20,0.2);
+  --shadow-drop: rgba(45,31,20,0.15);
 
   --orange: #d97757;
   --orange-light: #f7e4d8;
@@ -42,6 +44,8 @@
   --pos-rb: #2ec4b6;
   --pos-wr: #d97757;
   --pos-te: #8b5cf6;
+
+  --sort-highlight: 217, 119, 87;
 
   --semantic-green: #2e7d52;
   --semantic-green-light: #e8f0e4;
@@ -80,6 +84,10 @@
   --ink-medium: #c4b5a5;
   --ink-light: #a89888;
   --ink-faint: #5c4a3d;
+  --shadow-text: rgba(237,224,207,0.15);
+  --shadow-drop: rgba(237,224,207,0.15);
+
+  --sort-highlight: 237, 224, 207;
 
   --orange-light: #5c3325;
   --yellow-light: #4a3a1e;
@@ -760,22 +768,30 @@ button.nav-search-hint {
   background: var(--bg-card);
   color: var(--ink);
   cursor: pointer;
-  box-shadow: 2px 2px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   transition: all 0.12s;
 }
 
 .btn-chunky:hover {
-  box-shadow: 3px 3px 0 var(--ink);
-  transform: translate(-1px, -1px);
+  box-shadow: 6px 6px 0 var(--ink);
+  transform: translate(-2px, -2px);
 }
 .btn-chunky:active {
   transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
 }
 
 .btn-chunky.active {
   background: var(--ink);
   color: var(--bg);
+}
+
+[data-theme="dark"] .btn-chunky {
+  border-color: var(--ink-light);
+  box-shadow: 4px 4px 0 var(--ink-light);
+}
+[data-theme="dark"] .btn-chunky:hover {
+  box-shadow: 6px 6px 0 var(--ink-light);
 }
 
 .btn-primary {
@@ -788,17 +804,17 @@ button.nav-search-hint {
   background: var(--orange);
   color: var(--text-on-accent);
   cursor: pointer;
-  box-shadow: 2px 2px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   transition: all 0.12s;
 }
 
 .btn-primary:hover {
-  box-shadow: 3px 3px 0 var(--ink);
-  transform: translate(-1px, -1px);
+  box-shadow: 6px 6px 0 var(--ink);
+  transform: translate(-2px, -2px);
 }
 .btn-primary:active {
   transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
 }
 
 /* Disabled button state */
@@ -846,12 +862,19 @@ a.btn-pro-upgrade:focus-visible {
 /* ===== CARD RANK HIERARCHY — visual weight for top results ===== */
 .card-hero {
   border-width: 3px;
-  box-shadow: 5px 5px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   padding: 20px;
 }
 .card-spotlight {
   border-width: 2px;
   box-shadow: 4px 4px 0 var(--ink);
+}
+.card-hover {
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.card-hover:hover {
+  box-shadow: 6px 6px 0 var(--ink);
+  transform: translate(-2px, -2px);
 }
 
 /* ===== POSITION STRIPE — 4px colored top border on player cards ===== */
@@ -930,7 +953,7 @@ a.btn-pro-upgrade:focus-visible {
 
 /* ===== PANEL ERROR / EMPTY STATES ===== */
 .panel-error {
-  border-left: 4px solid var(--red, #e74c3c);
+  border-left: 4px solid var(--red, #e63946);
   background: var(--card-bg);
   padding: 24px;
   text-align: center;
@@ -966,7 +989,7 @@ a.btn-pro-upgrade:focus-visible {
 }
 
 .input-chunky:focus {
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
 }
 .input-chunky:focus-visible {
   outline: 3px solid var(--orange);
@@ -1039,6 +1062,8 @@ a.btn-pro-upgrade:focus-visible {
 }
 
 @media (max-width: 480px) {
+  /* WCAG 2.5.8: minimum 24px touch targets */
+  .chip, .btn-chunky, .btn-primary { min-height: 24px; min-width: 24px; }
   .topnav {
     padding: 6px 8px;
     gap: 4px;
@@ -1086,7 +1111,7 @@ a.btn-pro-upgrade:focus-visible {
 }
 
 .theme-toggle:hover {
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   transform: translate(-1px, -1px);
 }
 
@@ -1355,11 +1380,11 @@ body {
   .cmd-palette-results {
     max-height: 320px;
   }
-  /* Auth Modal — full width on small phones */
+  /* Auth Modal — full width on small phones with safe margin */
   .auth-modal {
     padding: 16px;
     width: 100%;
-    max-width: 100vw;
+    max-width: calc(100vw - 32px);
     border-radius: 12px;
   }
   .auth-form input {
@@ -1406,6 +1431,27 @@ body {
   outline: 3px solid var(--orange);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+/* Footer mobile: collapse grid, limit visible categories */
+@media (max-width: 480px) {
+  .site-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 12px;
+    max-height: 260px;
+    overflow: hidden;
+    position: relative;
+  }
+  .site-footer-grid::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(transparent, var(--bg));
+    pointer-events: none;
+  }
 }
 
 /* ===== Player Tags ===== */
@@ -1682,7 +1728,7 @@ tr:hover .notes-cell .note-pencil {
 /* ===== STICKER CHIP UTILITY ===== */
 .sticker-chip {
   border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   border-radius: var(--radius-sm);
   padding: 4px 12px;
   font-family: var(--font-display);
@@ -1694,11 +1740,11 @@ tr:hover .notes-cell .note-pencil {
 }
 .sticker-chip:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
 }
 .sticker-chip--rotated:hover {
   transform: rotate(-3deg) translate(-2px, -2px);
-  box-shadow: 5px 5px 0 var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
 }
 
 /* ===== DARK MODE OVERRIDES — DES-017 through DES-020 ===== */

@@ -1,6 +1,6 @@
 /* Razzle — Standalone Player Profile Page */
 
-const POS_COLORS = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+const POS_COLORS = (typeof getPosColors === "function") ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
 const POS_CSS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
 
 let _profileData = null;
@@ -34,9 +34,13 @@ function getPlayerIdFromURL() {
 async function loadPlayer(playerId) {
   const page = document.getElementById("playerPage");
   try {
-    const resp = await fetch(`/api/players/${encodeURIComponent(playerId)}/profile`);
+    const ac = new AbortController();
+    const timeout = setTimeout(function() { ac.abort(); }, 10000);
+    const resp = await fetch(`/api/players/${encodeURIComponent(playerId)}/profile`, { signal: ac.signal });
+    clearTimeout(timeout);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
+    if (!data || typeof data !== 'object') throw new Error('empty response');
     _profileData = data;
 
     if (!data.player || !data.player.full_name) {
@@ -592,13 +596,13 @@ async function exportPlayerPNG() {
   roundRect(ctx, 60, 50, 80, 60, 8);
   ctx.stroke();
   ctx.fillStyle = t.white;
-  ctx.font = "bold 32px 'Luckiest Guy', cursive";
+  ctx.font = "32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, 100, 92);
 
   // Player name
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 42px 'Luckiest Guy', cursive";
+  ctx.font = "42px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(p.full_name || "", 160, 92);
 
@@ -622,7 +626,7 @@ async function exportPlayerPNG() {
     ctx.stroke();
 
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 28px 'Luckiest Guy', cursive";
+    ctx.font = "28px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, x + boxW / 2, y + 38);
 
@@ -746,7 +750,7 @@ function openCompareSearch() {
           var players = data.items || data.players || [];
           results.innerHTML = players.map(function(p) {
             if (p.player_id === currentId) return "";
-            return '<div class="compare-search-item" data-current="' + escapeAttr(currentId) + '" data-target="' + escapeAttr(p.player_id) + '" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;">' +
+            return '<div class="compare-search-item" data-current="' + escapeAttr(currentId) + '" data-target="' + escapeAttr(p.player_id) + '" style="padding:8px 12px;cursor:pointer;border-bottom:2px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;">' +
               '<span style="font-weight:700;">' + esc(p.full_name) + '</span> <span style="color:var(--ink-light);">' + esc(p.position || "") + ' ' + esc(p.team || "") + '</span></div>';
           }).join("");
           // Event delegation handled below (avoids listener leak per search)

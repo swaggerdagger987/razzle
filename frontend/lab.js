@@ -34,13 +34,16 @@ function _getPosColorsHex() {
   var s = getComputedStyle(document.documentElement);
   return { QB: s.getPropertyValue('--pos-qb').trim(), RB: s.getPropertyValue('--pos-rb').trim(), WR: s.getPropertyValue('--pos-wr').trim(), TE: s.getPropertyValue('--pos-te').trim() };
 }
+function _hexAlpha(hex, alpha) {
+  return hex + Math.round(alpha * 255).toString(16).padStart(2, '0');
+}
 
 // ─── Panel Actions (CSV export, Share URL) ─────────────────────
 
 function exportPanelCSV(panelName) {
   // Pro+ gating
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro.', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
+    _showToast('CSV export is a Pro feature', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
   var panel = document.getElementById('panel-' + panelName);
@@ -69,7 +72,7 @@ function exportPanelCSV(panelName) {
     return;
   }
   var csv = rows.join('\n');
-  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
   var date = new Date().toISOString().slice(0, 10);
@@ -79,7 +82,7 @@ function exportPanelCSV(panelName) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  _showToast('CSV exported');
+  _showToast("tape's in your hands");
 }
 
 function _csvCell(val) {
@@ -151,7 +154,7 @@ function screenshotPanel(panelName) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    _showToast('screenshot saved');
+    _showToast('film captured \u2014 share it');
   }).catch(function() {
     _showToast('fumbled the screenshot — try again');
   });
@@ -247,6 +250,16 @@ function saveWatchlist(list) {
   if (typeof _pushWatchlistAfterChange === "function") _pushWatchlistAfterChange();
 }
 
+// Cross-tab sync: when another tab changes the watchlist, reload it
+window.addEventListener("storage", function(e) {
+  if (e.key === "razzle_watchlist") {
+    _watchlistCache = null;
+    getWatchlist();
+    updateWatchlistBadge();
+    if (typeof renderTable === "function") renderTable();
+  }
+});
+
 function isOnWatchlist(playerId) {
   return _watchlistSet.has(playerId);
 }
@@ -256,6 +269,9 @@ function toggleWatchlistPlayer(playerId, name, position, team, universe) {
   var idx = list.findIndex(function(p) { return p.player_id === playerId; });
   if (idx >= 0) {
     list.splice(idx, 1);
+    saveWatchlist(list);
+    renderTable();
+    if (typeof _showToast === "function") _showToast("off the board");
   } else {
     list.push({
       player_id: playerId,
@@ -266,9 +282,10 @@ function toggleWatchlistPlayer(playerId, name, position, team, universe) {
       tier: 0,
       added_at: Date.now()
     });
+    saveWatchlist(list);
+    renderTable();
+    if (typeof _showToast === "function") _showToast("on the board");
   }
-  saveWatchlist(list);
-  renderTable();
 }
 
 function setWatchlistTier(playerId, tier) {
@@ -465,6 +482,7 @@ function updateTagFilterBadge() {
 
 // Tag picker popup
 let _tagPickerVisible = false;
+let _tagPickerListenerAttached = false;
 
 function showTagPicker(playerId, anchorEl) {
   let picker = document.getElementById("tagPicker");
@@ -472,6 +490,9 @@ function showTagPicker(playerId, anchorEl) {
     picker = document.createElement("div");
     picker.id = "tagPicker";
     picker.className = "tag-picker";
+    picker.setAttribute("role", "dialog");
+    picker.setAttribute("aria-modal", "true");
+    picker.setAttribute("aria-label", "Player tags");
     document.body.appendChild(picker);
   }
 
@@ -504,19 +525,14 @@ function showTagPicker(playerId, anchorEl) {
   picker.style.left = left + "px";
   _tagPickerVisible = true;
 
-  // Close on outside click (once)
-  setTimeout(function() {
-    document.addEventListener("click", _closeTagPickerOutside, { once: true });
-  }, 0);
-}
-
-function _closeTagPickerOutside(e) {
-  const picker = document.getElementById("tagPicker");
-  if (picker && !picker.contains(e.target)) {
-    hideTagPicker();
-  } else if (picker) {
-    // Re-attach if clicked inside
-    document.addEventListener("click", _closeTagPickerOutside, { once: true });
+  // Close on outside click — persistent listener, checks visibility
+  if (!_tagPickerListenerAttached) {
+    _tagPickerListenerAttached = true;
+    document.addEventListener("click", function(e) {
+      if (!_tagPickerVisible) return;
+      var picker = document.getElementById("tagPicker");
+      if (picker && !picker.contains(e.target)) hideTagPicker();
+    });
   }
 }
 
@@ -576,6 +592,7 @@ function setPlayerNote(playerId, text) {
 }
 
 let _noteEditorVisible = false;
+let _noteEditorListenerAttached = false;
 let _noteEditorPlayerId = null;
 
 function showNoteEditor(playerId, anchorEl) {
@@ -592,6 +609,9 @@ function showNoteEditor(playerId, anchorEl) {
     editor = document.createElement("div");
     editor.id = "noteEditor";
     editor.className = "note-editor-popup";
+    editor.setAttribute("role", "dialog");
+    editor.setAttribute("aria-modal", "true");
+    editor.setAttribute("aria-label", "Player notes");
     document.body.appendChild(editor);
   }
 
@@ -623,18 +643,14 @@ function showNoteEditor(playerId, anchorEl) {
     if (e.key === "Escape") { e.stopPropagation(); hideNoteEditor(); }
   });
 
-  // Close on outside click (delayed to avoid immediate close)
-  setTimeout(function() {
-    document.addEventListener("click", _closeNoteEditorOutside, { once: true });
-  }, 50);
-}
-
-function _closeNoteEditorOutside(e) {
-  const editor = document.getElementById("noteEditor");
-  if (editor && !editor.contains(e.target)) {
-    hideNoteEditor();
-  } else if (editor) {
-    document.addEventListener("click", _closeNoteEditorOutside, { once: true });
+  // Close on outside click — persistent listener, checks visibility
+  if (!_noteEditorListenerAttached) {
+    _noteEditorListenerAttached = true;
+    document.addEventListener("click", function(e) {
+      if (!_noteEditorVisible) return;
+      var editor = document.getElementById("noteEditor");
+      if (editor && !editor.contains(e.target)) hideNoteEditor();
+    });
   }
 }
 
@@ -1130,6 +1146,16 @@ function _syncUndoRedoButtons() {
   loadCustomScoringColumns();
   loadStateFromURL();
 
+  // S2-021: Notify free users when shared URL contains tier-locked columns
+  if (typeof _showToast === "function" && state.visibleColumns && state.visibleColumns.length > 0) {
+    var _lockedCols = state.visibleColumns.filter(function(k) { return _getTierLockClass(k); });
+    if (_lockedCols.length > 0) {
+      setTimeout(function() {
+        _showToast(_lockedCols.length + " column" + (_lockedCols.length > 1 ? "s" : "") + " in this shared view require Pro to see full data", "info", 6000);
+      }, 1500);
+    }
+  }
+
   // Dynamic year fallbacks (shared by try + catch)
   const _curYear = new Date().getFullYear();
   const _nflYear = new Date().getMonth() >= 8 ? _curYear : _curYear - 1;
@@ -1182,7 +1208,7 @@ function _syncUndoRedoButtons() {
   var _lsAvailable = (function() { try { localStorage.setItem("_ls_test", "1"); localStorage.removeItem("_ls_test"); return true; } catch(e) { return false; } })();
   if (!_lsAvailable) {
     var banner = document.createElement("div");
-    banner.style.cssText = "background:var(--orange);color:#fff;text-align:center;padding:8px 16px;font-family:var(--font-mono);font-size:12px;position:sticky;top:0;z-index:200;";
+    banner.style.cssText = "background:var(--orange);color:var(--text-on-accent);text-align:center;padding:8px 16px;font-family:var(--font-mono);font-size:12px;position:sticky;top:0;z-index:200;";
     banner.textContent = "private browsing detected \u2014 your filters and notes won\u2019t be saved between sessions";
     document.body.prepend(banner);
   }
@@ -1865,7 +1891,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += buildTagChip(pid);
     html += `<span class="tag-icon" role="button" tabindex="0" aria-label="Tag player" onclick="event.stopPropagation(); showTagPicker('${pidJS}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();showTagPicker('${pidJS}',this)}" title="Tag player">&#9679;</span>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
-    if (player.age) {
+    if (player.age && !state.density) {
       var ageVal = Math.floor(player.age);
       var ageCls = ageVal <= 24 ? "age-young" : ageVal <= 27 ? "age-prime" : ageVal <= 29 ? "age-aging" : "age-vet";
       html += `<span class="age-badge ${ageCls}" title="Age ${ageVal}">${ageVal}</span>`;
@@ -1984,9 +2010,9 @@ function renderVisibleRows() {
   // Lazy build: only construct HTML for rows about to become visible
   if (_vscrollRenderCtx) {
     var ctx = _vscrollRenderCtx;
-    // Build 10 extra rows above/below the visible+buffer range for smoother scrolling
-    var lazyStart = Math.max(0, startRow - 10);
-    var lazyEnd = Math.min(totalRows, endRow + 10);
+    // Build 20 extra rows above/below the visible+buffer range for smoother fast scrolling
+    var lazyStart = Math.max(0, startRow - 20);
+    var lazyEnd = Math.min(totalRows, endRow + 20);
     for (var li = lazyStart; li < lazyEnd; li++) {
       if (_vscrollRows[li] === undefined && state.items[li]) {
         _vscrollRows[li] = buildRowHTML(state.items[li], ctx.cols, ctx.heatOn, ctx.pctData, li, ctx.barsOn, ctx.pctMode, ctx.leaderRanks, ctx.colDefMap);
@@ -2032,6 +2058,12 @@ function onTableScroll() {
 }
 
 function renderTableBody() {
+  // Dismiss floating UI before rebuilding table DOM
+  if (typeof hideTagPicker === 'function') hideTagPicker();
+  if (typeof hideNoteEditor === 'function') hideNoteEditor();
+  if (typeof dismissColumnStatsPopover === 'function') dismissColumnStatsPopover();
+  var ctxMenu = document.querySelector('.ctx-menu');
+  if (ctxMenu) ctxMenu.style.display = 'none';
   if (_expandAbort) { _expandAbort.abort(); _expandAbort = null; }
   _expandedRows = {};
   const tbody = document.getElementById("tableBody");
@@ -2426,7 +2458,7 @@ async function toggleRowExpand(playerId, tdEl) {
     }
     // Build mini table
     var html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:11px;">';
-    html += '<tr style="border-bottom:1px solid var(--ink-faint);">';
+    html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
     html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Wk</th>';
     html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Opp</th>';
     html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">FPts</th>';
@@ -2442,7 +2474,7 @@ async function toggleRowExpand(playerId, tdEl) {
     for (var w of weeks) {
       var fpts = parseFloat(w.fantasy_points_ppr || w.fantasy_points || 0).toFixed(1);
       var fptsColor = fpts >= 20 ? 'color:var(--green); font-weight:700;' : fpts < 5 ? 'color:var(--red);' : '';
-      html += '<tr style="border-bottom:1px solid var(--ink-faint);">';
+      html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
       var _n = function(v) { var n = parseInt(v); return isNaN(n) ? 0 : n; };
       html += '<td style="padding:2px 6px;">' + escapeHtml(String(w.week || "")) + '</td>';
       html += '<td style="padding:2px 6px;">' + escapeHtml(w.opponent || w.recent_team || "") + '</td>';
@@ -2524,8 +2556,8 @@ function _ctxMenuAction(action) {
       _showToast("highlights cleared");
       break;
     case "copy":
-      try { navigator.clipboard.writeText(d.pName).then(function() { _showToast("copied to clipboard"); }).catch(function() { _showToast("fumbled the copy — try again"); }); }
-      catch(e) { _showToast("fumbled the copy — try again"); }
+      try { navigator.clipboard.writeText(d.pName).then(function() { _showToast("copied to clipboard"); }).catch(function() { _fallbackCopy(d.pName); _showToast("copied to clipboard"); }); }
+      catch(e) { _fallbackCopy(d.pName); _showToast("copied to clipboard"); }
       break;
   }
   hideContextMenu();
@@ -3232,7 +3264,7 @@ function updateResultCount() {
     var ago = Math.round((Date.now() - _lastFetchTime) / 1000);
     var agoText = ago < 5 ? "just now" : ago < 60 ? ago + "s ago" : Math.floor(ago / 60) + "m ago";
     var agoStyle = 'color:var(--ink-light); font-size:10px;';
-    if (ago > 3600) { agoStyle = 'color:var(--red, #e74c3c); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
+    if (ago > 3600) { agoStyle = 'color:var(--red, #e63946); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
     else if (ago > 1800) { agoStyle = 'color:var(--orange, #d97757); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
     parts.push('<span style="' + agoStyle + '" title="Data fetched at ' + escapeAttr(new Date(_lastFetchTime).toLocaleTimeString()) + '">⏱ ' + agoText + '</span>');
   }
@@ -3310,7 +3342,7 @@ function renderActiveFilters() {
 
   // Min GP pill (team chips shown inline next to dropdown)
   if (state.minGP > 0) {
-    html += `<span class="filter-tag" style="background:var(--bg-sand);">GP ≥ ${state.minGP} <span class="remove" role="button" tabindex="0" aria-label="Remove GP filter" onclick="clearMinGP()">×</span></span> `;
+    html += `<span class="filter-tag" style="background:var(--yellow-light);">GP ≥ ${state.minGP} <span class="remove" role="button" tabindex="0" aria-label="Remove GP filter" onclick="clearMinGP()">×</span></span> `;
   }
 
   // Stat filters
@@ -3782,6 +3814,8 @@ const SMART_FILTERS = {
     minGP: 4,
   },
 };
+// Plural alias for smart filter URL keys
+SMART_FILTERS["breakouts"] = SMART_FILTERS["breakout"];
 
 function applySmartFilter(key) {
   if (!key) return;
@@ -4486,8 +4520,15 @@ function loadSavedView(id) {
   _showToast("loaded: " + view.name);
 }
 
-function deleteSavedView(id) {
-  if (!confirm("Delete this saved view?")) return;
+function deleteSavedView(id, btn) {
+  if (btn && !btn.dataset.confirming) {
+    btn.dataset.confirming = "1";
+    btn.textContent = "sure?";
+    btn.style.color = "var(--red)";
+    setTimeout(function() { if (btn.dataset.confirming) { delete btn.dataset.confirming; btn.textContent = "✕"; btn.style.color = ""; } }, 3000);
+    return;
+  }
+  if (btn) { delete btn.dataset.confirming; }
   const views = getSavedViews().filter(v => v.id !== id);
   try { localStorage.setItem("razzle_saved_views", JSON.stringify(views)); } catch(e) {}
   populateSavedViewSelect();
@@ -4644,7 +4685,7 @@ function renderSavedViewsList() {
         <div style="font-family:var(--font-mono); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
-      <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
+      <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}', this)" style="background:none; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
     </div>`;
   }).join("");
 }
@@ -5116,7 +5157,8 @@ function computeFormulaValues() {
           totalWeight += Math.abs(comp.weight);
         }
       }
-      player[key] = totalWeight > 0 ? Math.round(score * 10) / 10 : null;
+      var result = totalWeight > 0 ? Math.round(score * 10) / 10 : null;
+      player[key] = (result !== null && isFinite(result)) ? result : null;
     }
   }
 }
@@ -5981,7 +6023,7 @@ function exportImage() {
 
   // Watermark with shareable URL
   const wmY = H - watermarkH / 2;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -6007,7 +6049,7 @@ function exportCSV() {
 
   // Pro+ gating: CSV export requires Pro or Elite plan
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro.', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
+    _showToast('export all ' + state.items.length + ' rows as CSV \u2014 Pro feature', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
 
@@ -6281,7 +6323,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
   ctx.fillRect(0, 0, W, H);
 
   // Title
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Dynasty Top ${players.length} ${posLabel}`, W / 2, padY + 28);
@@ -6373,7 +6415,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     if (dvs != null) {
       const dvsColor = dvs >= 85 ? t.green : dvs >= 70 ? t.blue : dvs >= 55 ? t.orange : t.inkLight;
       const badgeX = padX + 450;
-      ctx.fillStyle = dvsColor + "30";
+      ctx.fillStyle = _hexAlpha(dvsColor, 0.19);
       ctx.fillRect(badgeX, y + 7, 70, 22);
       ctx.strokeStyle = dvsColor;
       ctx.lineWidth = 1.5;
@@ -7132,14 +7174,14 @@ function exportProfileImage() {
   ctx.lineWidth = 2;
   ctx.strokeRect(padX, padY, 50, 36);
   ctx.fillStyle = t.white;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, padX + 25, padY + 24);
 
   // Name + meta
   ctx.textAlign = "left";
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 28px 'Luckiest Guy', cursive";
+  ctx.font = "28px 'Luckiest Guy', cursive";
   ctx.fillText(name, padX + 64, padY + 28);
   ctx.fillStyle = t.inkLight;
   ctx.font = "12px 'Space Mono', monospace";
@@ -7163,7 +7205,7 @@ function exportProfileImage() {
       ctx.stroke();
     }
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 22px 'Luckiest Guy', cursive";
+    ctx.font = "22px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].val, x + sbW / 2, sbY + 32);
     ctx.fillStyle = t.inkLight;
@@ -7220,7 +7262,7 @@ function exportProfileImage() {
 
   // Watermark
   const wmY = H - watermarkH / 2;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -7880,7 +7922,7 @@ function exportProspectImage() {
   ctx.fillRect(padX, y, W - padX * 2, 6);
   y += 14;
 
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(`${posText}  ${name}`, padX + 8, y + 24);
@@ -7898,7 +7940,7 @@ function exportProspectImage() {
       const val = box.querySelector(".profile-stat-value")?.textContent || "";
       const lbl = box.querySelector(".profile-stat-label")?.textContent || "";
       const bx = padX + i * boxW;
-      ctx.font = "bold 20px 'Luckiest Guy', cursive";
+      ctx.font = "20px 'Luckiest Guy', cursive";
       ctx.fillStyle = t.ink;
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 24);
@@ -7947,7 +7989,7 @@ function exportProspectImage() {
     ctx.restore();
 
     // RPS big number
-    ctx.font = "bold 36px 'Luckiest Guy', cursive";
+    ctx.font = "36px 'Luckiest Guy', cursive";
     ctx.fillStyle = t.ink;
     ctx.textAlign = "left";
     ctx.fillText(rpsVal, padX + 14, y + 68);
@@ -8105,7 +8147,7 @@ function exportProspectImage() {
       ctx.lineWidth = 2;
       ctx.strokeRect(bx, y, boxW, 50);
 
-      ctx.font = "bold 16px 'Luckiest Guy', cursive";
+      ctx.font = "16px 'Luckiest Guy', cursive";
       ctx.fillStyle = t.ink;
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 22);
@@ -8117,7 +8159,7 @@ function exportProspectImage() {
   }
 
   // Watermark
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -8266,7 +8308,7 @@ function exportTierImage() {
   let y = padY;
 
   // Title
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`${state.season} ${currentTierPosition} Athletic Tiers`, W / 2, y + 24);
@@ -8351,7 +8393,7 @@ function exportTierImage() {
       if (pctEl) {
         const pctText = pctEl.textContent;
         const pctColor = pctEl.style.color;
-        ctx.font = "bold 18px 'Luckiest Guy', cursive";
+        ctx.font = "18px 'Luckiest Guy', cursive";
         ctx.fillStyle = pctColor;
         ctx.textAlign = "right";
         ctx.fillText(pctText, cx + cardW - 8, cy + 24);
@@ -8364,7 +8406,7 @@ function exportTierImage() {
   });
 
   // Watermark
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -8628,7 +8670,7 @@ function exportBigBoardImage() {
   let y = padY;
 
   // Title
-  ctx.font = "bold 26px 'Luckiest Guy', cursive";
+  ctx.font = "26px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Big Board — ${currentBBData.position} ${currentBBData.draft_year}`, W / 2, y + 26);
@@ -8680,7 +8722,7 @@ function exportBigBoardImage() {
       ctx.strokeRect(padX, rowY, W - padX * 2, rowH - 2);
 
       // Rank
-      ctx.font = "bold 16px 'Luckiest Guy', cursive";
+      ctx.font = "16px 'Luckiest Guy', cursive";
       ctx.fillStyle = posColor;
       ctx.textAlign = "center";
       ctx.fillText(`${p.rank}`, padX + 22, rowY + 27);
@@ -9009,7 +9051,7 @@ function exportClassAnalyticsImage() {
   // Title
   let y = 0;
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Draft Class Analytics — ${posLabel}`, W / 2, y + 32);
   ctx.font = "16px 'Caveat', cursive";
@@ -9124,7 +9166,7 @@ function exportClassAnalyticsImage() {
     // Year
     ctx.textAlign = "left";
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 18px 'Luckiest Guy', cursive";
+    ctx.font = "18px 'Luckiest Guy', cursive";
     ctx.fillText(cls.year.toString(), cx + 10, cy + 24);
 
     // Stats
@@ -9294,7 +9336,7 @@ function renderTradeValueChart() {
       // Trade value bar
       html += '<div style="display:flex; align-items:center; gap:6px;">';
       html += '<div style="flex:1; height:8px; background:var(--bg-warm); border:2px solid var(--ink-faint); border-radius:var(--radius-sm); overflow:hidden;">';
-      html += '<div style="width:' + barWidth + '%; height:100%; background:' + pc + '; border-radius:6px;"></div>';
+      html += '<div style="width:' + barWidth + '%; height:100%; background:' + pc + '; border-radius:var(--radius-sm);"></div>';
       html += '</div>';
       html += '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:28px; text-align:right;">' + p._tv + '</span>';
       html += '</div>';
@@ -9334,7 +9376,7 @@ function setupTradeSearchInput(side) {
       var posColors = _getPosColorsHex();
       autoDiv.innerHTML = matches.map(p => {
         const pc = posColors[p.position] || getCanvasTheme().ink;
-        return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);">'
+        return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:2px solid var(--ink-faint);">'
           + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + p._tv + '</span>'
@@ -9481,7 +9523,7 @@ function exportTradeValuesPNG() {
   ctx.fillRect(0, 0, W, H);
 
   // Title
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   const posLabel = _tvState.position === "ALL" ? "Dynasty" : _tvState.position;
@@ -9846,7 +9888,7 @@ function renderAgingCurveChart(targetCanvas) {
   ctx.fillText(_acState.position + " avg", xScale(lastB.age) + 8, yScale(lastB.avg_ppg) + 4);
 
   // Title
-  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(_acState.position + " Aging Curve", padL, 24);
@@ -10077,7 +10119,7 @@ function renderHeatMapChart(targetCanvas) {
   ctx.fillRect(0, 0, totalW, totalH);
 
   // Title
-  ctx.font = "bold 22px 'Luckiest Guy', cursive";
+  ctx.font = "22px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(_hmState.position + " Heat Map", padL, 30);
@@ -10360,7 +10402,7 @@ function renderTierBoard() {
   html += '<button class="btn-chunky" onclick="openWatchlistPanel(); closeTierBoard();">Back</button>';
   html += '<button class="btn-chunky" onclick="closeTierBoard(event)">Close</button>';
   html += '</div></div>';
-  html += '<p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:16px;">drag-free tier assignment — use dropdowns to move players between tiers</p>';
+  html += '<p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:16px;">use the dropdowns to move players between tiers</p>';
 
   // Render tiers 1-5 then untiered (0)
   var tierOrder = [1, 2, 3, 4, 5, 0];
@@ -10440,7 +10482,7 @@ function exportTierBoardPNG() {
 
   // Header
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillText("Tier Board", 24, 38);
   ctx.fillStyle = t.inkLight;
   ctx.font = "18px 'Caveat', cursive";
@@ -10641,6 +10683,14 @@ document.addEventListener("keydown", function(e) {
 
   // Don't intercept when typing in inputs
   if (isInputFocused()) return;
+
+  // Don't fire shortcuts when any modal/overlay is open (except Escape handled above)
+  if (isAnyOverlayOpen()) return;
+  if (document.querySelector('.column-picker-overlay')) return;
+  if (document.querySelector('#shortcutRef[style*="flex"]')) return;
+  if (document.querySelector('#savedViewsModal')) return;
+  if (document.querySelector('#shareModal')) return;
+  if (document.querySelector('.auth-modal-overlay[style*="flex"]')) return;
 
   // / or Ctrl+K: focus search
   if (e.key === "/" || (e.key === "k" && (e.ctrlKey || e.metaKey))) {
@@ -10883,7 +10933,7 @@ function toggleShortcutRef() {
 }
 
 function shortcutRow(key, desc) {
-  return `<tr style="border-bottom:1px solid var(--ink-faint);">
+  return `<tr style="border-bottom:2px solid var(--ink-faint);">
     <td style="padding:6px 8px; width:80px;"><kbd style="font-family:var(--font-mono); font-size:13px; background:var(--bg); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:2px 8px; box-shadow:2px 2px 0 var(--ink);">${key}</kbd></td>
     <td style="padding:6px 8px;">${desc}</td>
   </tr>`;
@@ -11170,7 +11220,7 @@ function exportTradeAnalyzerPNG() {
   ctx.strokeRect(4, 4, W - 8, H - 8);
 
   // Title
-  ctx.font = "bold 28px 'Luckiest Guy', cursive";
+  ctx.font = "28px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText("Razzle Trade Analyzer", W / 2, 44);
@@ -11286,7 +11336,7 @@ function exportTradeAnalyzerPNG() {
   // VS divider
   ctx.save();
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 22px 'Luckiest Guy', cursive";
+  ctx.font = "22px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, topY + 200);
   ctx.restore();
@@ -11378,7 +11428,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fillRect(-bw / 2 + 3, -bh / 2 + 3 + bh, bw, 3);
   ctx.globalAlpha = 1.0;
   ctx.fillStyle = verdictColor;
-  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(verdict, 0, 7);
   ctx.restore();
@@ -12027,7 +12077,7 @@ function exportRosterTeamCard() {
 
   // Header
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 28px 'Luckiest Guy', cursive";
+  ctx.font = "28px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("MY DYNASTY ROSTER", W / 2, 44);
   ctx.font = "16px 'Caveat', cursive";
@@ -12046,13 +12096,13 @@ function exportRosterTeamCard() {
   _roundRect(ctx, 30, y + 5, 70, 55, 10);
   ctx.stroke();
   ctx.fillStyle = t.white;
-  ctx.font = "bold 32px 'Luckiest Guy', cursive";
+  ctx.font = "32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(r.grade, 65, y + 42);
 
   // Total value
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 26px 'Luckiest Guy', cursive";
+  ctx.font = "26px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(r.total_value + " pts", 120, y + 30);
   ctx.font = "14px 'Space Mono', monospace";
@@ -12231,7 +12281,7 @@ function exportRosterTeamCard() {
 
   // Watermark
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.globalAlpha = 0.3;
   ctx.fillText("razzle.lol", W - 20, H - 12);
@@ -12550,7 +12600,7 @@ function exportCompsImage() {
 
   // Header
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 24px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`PLAYER COMPS — ${player.full_name}`, padX, padY + 28);
 
@@ -12602,14 +12652,14 @@ function exportCompsImage() {
     ctx.lineWidth = 2;
     ctx.strokeRect(padX + 10, cardY + 10, 30, 30);
     ctx.fillStyle = t.white;
-    ctx.font = "bold 16px 'Luckiest Guy', cursive";
+    ctx.font = "16px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(`#${i + 1}`, padX + 25, cardY + 30);
 
     // Name + team
     ctx.textAlign = "left";
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 18px 'Luckiest Guy', cursive";
+    ctx.font = "18px 'Luckiest Guy', cursive";
     ctx.fillText(c.full_name, padX + 52, cardY + 28);
     ctx.fillStyle = t.inkLight;
     ctx.font = "11px 'Space Mono', monospace";
@@ -12618,7 +12668,7 @@ function exportCompsImage() {
     // Similarity score
     const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : (getComputedStyle(document.documentElement).getPropertyValue('--ink-medium').trim() || "#5c4a3d");
     ctx.fillStyle = simColor;
-    ctx.font = "bold 28px 'Luckiest Guy', cursive";
+    ctx.font = "28px 'Luckiest Guy', cursive";
     ctx.textAlign = "right";
     ctx.fillText(`${c.similarity}%`, W - padX - 16, cardY + 35);
     ctx.fillStyle = t.inkLight;
@@ -12974,7 +13024,7 @@ function drawBoomBustRangeBar(data) {
   // Floor-ceiling range bar
   const floorX = toX(floor_ppg);
   const ceilX = toX(ceiling_ppg);
-  ctx.fillStyle = posColor + "40";
+  ctx.fillStyle = _hexAlpha(posColor, 0.25);
   ctx.fillRect(floorX, barY, ceilX - floorX, barH);
   ctx.strokeStyle = posColor;
   ctx.lineWidth = 2;
@@ -13039,7 +13089,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = t.ink;
   ctx.fillRect(0, 0, 800, 56);
   ctx.fillStyle = t.bgCard;
-  ctx.font = "bold 22px 'Luckiest Guy', cursive";
+  ctx.font = "22px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`BOOM/BUST PROFILE — ${player.full_name}`, 20, 36);
 
@@ -13047,7 +13097,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = posColor;
   ctx.fillRect(700, 10, 80, 36);
   ctx.fillStyle = t.white;
-  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, 740, 35);
 
@@ -13069,7 +13119,7 @@ function exportBoomBustImage() {
   ctx.lineWidth = 3;
   ctx.stroke();
   ctx.fillStyle = t.white;
-  ctx.font = "bold 32px 'Luckiest Guy', cursive";
+  ctx.font = "32px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(safeGrade, 0, 12);
   ctx.restore();
@@ -13094,7 +13144,7 @@ function exportBoomBustImage() {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.fillStyle = cardStats[i].color;
-    ctx.font = "bold 22px 'Luckiest Guy', cursive";
+    ctx.font = "22px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(cardStats[i].value, x + cardW / 2, startY + 28);
     ctx.fillStyle = t.inkMedium;
@@ -13198,7 +13248,7 @@ function exportBoomBustImage() {
   const flX = rbToX(floor_ppg);
   const ceX = rbToX(ceiling_ppg);
   const mdX = rbToX(median_ppg);
-  ctx.fillStyle = posColor + "40";
+  ctx.fillStyle = _hexAlpha(posColor, 0.25);
   ctx.fillRect(flX, rbY, ceX - flX, 18);
   ctx.strokeStyle = posColor;
   ctx.lineWidth = 2;

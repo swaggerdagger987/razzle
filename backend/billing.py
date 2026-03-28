@@ -115,8 +115,54 @@ def initialize_subscriptions_table():
             conn.execute("ALTER TABLE subscriptions ADD COLUMN plan_type TEXT DEFAULT 'subscription'")
         except Exception:
             logger.debug("plan_type column already exists or migration failed", exc_info=True)
+        # Early adopter reservation table for atomic slot checking
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS ea_reservations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                tier TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                expires_at TIMESTAMP NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
         conn.commit()
     logger.info("Subscriptions table initialized")
+
+
+def _reserve_ea_slot(user_id: int, tier: str, limit: int, plan_filter: str) -> dict | None:
+    """Atomically reserve an early adopter slot. Returns error dict or None on success."""
+    with auth_module.get_users_db() as conn:
+        # Clean up expired reservations first
+        conn.execute("DELETE FROM ea_reservations WHERE expires_at < CURRENT_TIMESTAMP")
+        # Atomic check: count confirmed users + active reservations
+        confirmed = conn.execute(
+            f"SELECT COUNT(*) FROM users WHERE plan IN {plan_filter}"
+        ).fetchone()[0]
+        reserved = conn.execute(
+            "SELECT COUNT(*) FROM ea_reservations WHERE tier = ? AND expires_at > CURRENT_TIMESTAMP",
+            (tier,),
+        ).fetchone()[0]
+        if confirmed + reserved >= limit:
+            conn.commit()
+            return {"error": f"Early adopter {tier.title()} spots are full", "status": 400}
+        # Reserve slot (expires in 30 minutes — Stripe checkout timeout)
+        conn.execute(
+            "INSERT INTO ea_reservations (user_id, tier, expires_at) VALUES (?, ?, datetime('now', '+30 minutes'))",
+            (user_id, tier),
+        )
+        conn.commit()
+    return None
+
+
+def _clear_ea_reservation(user_id: int, tier: str):
+    """Clear reservation after successful checkout completion."""
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("DELETE FROM ea_reservations WHERE user_id = ? AND tier = ?", (user_id, tier))
+            conn.commit()
+    except Exception:
+        logger.exception("Failed to clear EA reservation for user %s", user_id)
 
 
 def get_subscriber_counts() -> dict:
@@ -244,18 +290,28 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
     if raw_plan in ("pro", "elite", "pro_lifetime", "elite_lifetime"):
         return {"error": "You already have an active subscription. Manage it from your billing portal.", "status": 400}
 
+    # Secondary check: catch the race between checkout creation and webhook processing
+    with auth_module.get_users_db() as conn:
+        active_sub = conn.execute(
+            "SELECT id FROM subscriptions WHERE user_id = ? AND status IN ('active', 'trialing') LIMIT 1",
+            (user["id"],),
+        ).fetchone()
+    if active_sub:
+        return {"error": "You already have an active subscription.", "status": 400}
+
     is_lifetime = interval.startswith("lifetime_")
     is_early_adopter = interval.startswith("ea_")
 
-    # Validate early adopter availability
+    # Validate early adopter availability with atomic reservation
     if is_early_adopter:
         if not EA_ENABLED:
             return {"error": "Early adopter pricing is not currently active", "status": 400}
-        counts = get_subscriber_counts()
-        if "elite" in interval and counts["elite_total"] >= EA_ELITE_LIMIT:
-            return {"error": "Early adopter Elite spots are full", "status": 400}
-        if "pro" in interval and "elite" not in interval and counts["pro_total"] >= EA_PRO_LIMIT:
-            return {"error": "Early adopter Pro spots are full", "status": 400}
+        ea_tier = "elite" if "elite" in interval else "pro"
+        ea_limit = EA_ELITE_LIMIT if ea_tier == "elite" else EA_PRO_LIMIT
+        ea_plan_filter = "('elite', 'elite_lifetime')" if ea_tier == "elite" else "('pro', 'pro_lifetime')"
+        reservation_err = _reserve_ea_slot(user["id"], ea_tier, ea_limit, ea_plan_filter)
+        if reservation_err:
+            return reservation_err
 
     # Validate lifetime availability
     if is_lifetime:
@@ -380,6 +436,14 @@ def handle_webhook(payload: bytes, sig_header: str) -> dict:
         _handle_subscription_deleted(data)
     elif event_type == "invoice.payment_failed":
         _handle_payment_failed(data)
+    elif event_type == "invoice.paid":
+        _handle_invoice_paid(data)
+    elif event_type == "charge.dispute.created":
+        _handle_dispute_created(data)
+    elif event_type == "charge.refunded":
+        _handle_charge_refunded(data)
+    elif event_type == "customer.subscription.paused":
+        _handle_subscription_paused(data)
 
     return {"status": "ok"}
 
@@ -452,6 +516,9 @@ def _handle_checkout_completed(session):
             """, (_uid, customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type))
 
         conn.commit()
+    # Clear any early adopter reservation now that checkout is confirmed
+    ea_tier = "elite" if "elite" in plan_tier else "pro"
+    _clear_ea_reservation(_uid, ea_tier)
     logger.info(f"User {user_id} upgraded to {plan_tier} (subscription {subscription_id}, trial={is_trial})")
 
 
@@ -546,6 +613,117 @@ def _handle_payment_failed(invoice):
             logger.warning(f"Payment failed for user {row['id']} — marked payment_failed (plan unchanged, awaiting Stripe retry)")
 
 
+def _handle_invoice_paid(invoice):
+    """Confirm subscription is active after successful recurring payment.
+
+    Handles the case where checkout.session.completed was missed or
+    a renewal payment succeeds — ensures user plan stays in sync.
+    """
+    customer_id = invoice.get("customer")
+    subscription_id = invoice.get("subscription")
+    if not subscription_id:
+        return  # One-time invoices (lifetime deals) don't need sync
+
+    with auth_module.get_users_db() as conn:
+        row = conn.execute("SELECT id, plan FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+        if not row:
+            logger.warning(f"Invoice paid for unknown customer {customer_id}")
+            return
+
+        # Lifetime plans don't need renewal sync
+        if row["plan"] in ("pro_lifetime", "elite_lifetime"):
+            return
+
+        # If user is on free but has an active subscription, restore their plan
+        if row["plan"] == "free":
+            try:
+                sub = stripe.Subscription.retrieve(subscription_id)
+                plan_tier = sub.get("metadata", {}).get("plan_tier", "pro")
+                if plan_tier not in ("pro", "elite"):
+                    plan_tier = "pro"
+                conn.execute("UPDATE users SET plan = ? WHERE id = ?", (plan_tier, row["id"]))
+                conn.execute("""
+                    UPDATE subscriptions SET plan = ?, status = 'active', updated_at = CURRENT_TIMESTAMP
+                    WHERE user_id = ?
+                """, (plan_tier, row["id"]))
+                conn.commit()
+                logger.info(f"User {row['id']} restored to {plan_tier} via invoice.paid")
+            except stripe.error.StripeError:
+                logger.exception(f"Failed to retrieve subscription {subscription_id} for invoice.paid")
+        else:
+            # User already on correct plan — just confirm active status
+            conn.execute("""
+                UPDATE subscriptions SET status = 'active', updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = ?
+            """, (row["id"],))
+            conn.commit()
+
+
+def _handle_dispute_created(dispute):
+    """Log chargeback disputes. Does not auto-downgrade — disputes can be won."""
+    customer_id = dispute.get("customer")
+    amount = dispute.get("amount", 0)
+    reason = dispute.get("reason", "unknown")
+
+    with auth_module.get_users_db() as conn:
+        row = conn.execute("SELECT id, plan, email FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+        if row:
+            logger.warning(
+                f"DISPUTE: user {row['id']} ({row['email']}), amount={amount}, "
+                f"reason={reason}, plan={row['plan']}"
+            )
+        else:
+            logger.warning(f"DISPUTE: unknown customer {customer_id}, amount={amount}, reason={reason}")
+
+
+def _handle_charge_refunded(charge):
+    """Downgrade user to free after a refund."""
+    customer_id = charge.get("customer")
+    if not customer_id:
+        return
+
+    with auth_module.get_users_db() as conn:
+        row = conn.execute("SELECT id, plan FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+        if not row:
+            logger.warning(f"Charge refunded for unknown customer {customer_id}")
+            return
+
+        if row["plan"] in ("pro_lifetime", "elite_lifetime"):
+            logger.info(f"User {row['id']} has lifetime plan — skipping refund downgrade")
+            return
+
+        conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
+        conn.execute("""
+            UPDATE subscriptions SET plan = 'free', status = 'refunded', updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = ?
+        """, (row["id"],))
+        conn.commit()
+        logger.info(f"User {row['id']} downgraded to free after charge refund")
+
+
+def _handle_subscription_paused(subscription):
+    """Set user to free while subscription is paused."""
+    customer_id = subscription.get("customer")
+
+    with auth_module.get_users_db() as conn:
+        row = conn.execute("SELECT id, plan FROM users WHERE stripe_customer_id = ?", (customer_id,)).fetchone()
+        if not row:
+            logger.warning(f"Subscription paused for unknown customer {customer_id}")
+            return
+
+        if row["plan"] in ("pro_lifetime", "elite_lifetime"):
+            logger.info(f"User {row['id']} has lifetime plan — skipping pause downgrade")
+            return
+
+        conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
+        conn.execute("""
+            UPDATE subscriptions SET plan = 'free', status = 'paused', updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = ?
+        """, (row["id"],))
+        conn.commit()
+        logger.info(f"User {row['id']} downgraded to free (subscription paused)")
+
+
 def get_billing_status(user: dict) -> dict:
     """Get current billing status for a user."""
     with auth_module.get_users_db() as conn:
@@ -593,3 +771,85 @@ def get_billing_status(user: dict) -> dict:
             logger.error(f"Portal creation error: {e}")
 
     return result
+
+
+def reconcile_subscriptions():
+    """Sync user plans with Stripe subscription state.
+
+    Runs periodically to catch cases where webhooks failed silently.
+    Queries all paid (non-lifetime) users, checks Stripe, and fixes mismatches.
+    """
+    if not STRIPE_SECRET_KEY:
+        logger.debug("Stripe not configured — skipping reconciliation")
+        return
+
+    fixed = 0
+    errors = 0
+
+    with auth_module.get_users_db() as conn:
+        # Get all paid subscription users (exclude lifetime — those are permanent)
+        rows = conn.execute(
+            "SELECT u.id, u.plan, u.email, s.stripe_subscription_id "
+            "FROM users u JOIN subscriptions s ON u.id = s.user_id "
+            "WHERE u.plan IN ('pro', 'elite') AND s.plan_type = 'subscription' "
+            "AND s.stripe_subscription_id IS NOT NULL"
+        ).fetchall()
+
+    for row in rows:
+        try:
+            sub = stripe.Subscription.retrieve(row["stripe_subscription_id"])
+            stripe_status = sub.get("status", "unknown")
+
+            if stripe_status in ("canceled", "unpaid", "past_due", "paused"):
+                # Stripe says inactive but user still has paid plan — downgrade
+                with auth_module.get_users_db() as conn:
+                    conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
+                    conn.execute(
+                        "UPDATE subscriptions SET plan = 'free', status = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+                        (stripe_status, row["id"]),
+                    )
+                    conn.commit()
+                logger.warning(
+                    f"Reconciliation: user {row['id']} ({row['email']}) downgraded — "
+                    f"Stripe status={stripe_status}, was plan={row['plan']}"
+                )
+                fixed += 1
+        except stripe.error.StripeError as e:
+            logger.error(f"Reconciliation: Stripe API error for user {row['id']}: {e}")
+            errors += 1
+
+    # Also check free users who might have active Stripe subscriptions (webhook missed)
+    with auth_module.get_users_db() as conn:
+        free_rows = conn.execute(
+            "SELECT u.id, u.email, s.stripe_subscription_id "
+            "FROM users u JOIN subscriptions s ON u.id = s.user_id "
+            "WHERE u.plan = 'free' AND s.plan_type = 'subscription' "
+            "AND s.stripe_subscription_id IS NOT NULL AND s.status != 'cancelled'"
+        ).fetchall()
+
+    for row in free_rows:
+        try:
+            sub = stripe.Subscription.retrieve(row["stripe_subscription_id"])
+            stripe_status = sub.get("status", "unknown")
+
+            if stripe_status == "active":
+                plan_tier = sub.get("metadata", {}).get("plan_tier", "pro")
+                if plan_tier not in ("pro", "elite"):
+                    plan_tier = "pro"
+                with auth_module.get_users_db() as conn:
+                    conn.execute("UPDATE users SET plan = ? WHERE id = ?", (plan_tier, row["id"]))
+                    conn.execute(
+                        "UPDATE subscriptions SET plan = ?, status = 'active', updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+                        (plan_tier, row["id"]),
+                    )
+                    conn.commit()
+                logger.warning(
+                    f"Reconciliation: user {row['id']} ({row['email']}) restored to {plan_tier} — "
+                    f"Stripe active but was plan=free"
+                )
+                fixed += 1
+        except stripe.error.StripeError as e:
+            logger.error(f"Reconciliation: Stripe API error for user {row['id']}: {e}")
+            errors += 1
+
+    logger.info(f"Subscription reconciliation complete: {fixed} fixed, {errors} errors, {len(rows) + len(free_rows)} checked")

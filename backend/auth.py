@@ -25,6 +25,9 @@ logger = logging.getLogger("razzle.auth")
 
 _ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 
+# Admin email — auto-promoted to is_admin on login/register
+ADMIN_EMAIL = os.environ.get("RAZZLE_ADMIN_EMAIL", "").strip().lower()
+
 if os.environ.get("ENVIRONMENT") == "production":
     USERS_DB_PATH = Path("/data/users.db")
 else:
@@ -69,23 +72,45 @@ _COMMON_PASSWORDS = frozenset([
 ])
 
 
+import queue as _queue
+
+_users_pool = _queue.Queue(maxsize=5)
+
+
 def get_users_conn():
-    """Get connection to users.db (separate from terminal.db)."""
+    """Get connection to users.db from pool, or create a new one."""
     USERS_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    # Try to reuse a pooled connection
+    try:
+        conn = _users_pool.get_nowait()
+        conn.execute("SELECT 1")  # health check
+        return conn
+    except (_queue.Empty, sqlite3.Error):
+        pass
+    # Create new connection
     conn = sqlite3.connect(str(USERS_DB_PATH), timeout=30)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA cache_size=-8192")  # 8MB cache
     return conn
+
+
+def _return_users_conn(conn):
+    """Return connection to pool, or close if pool is full."""
+    try:
+        _users_pool.put_nowait(conn)
+    except _queue.Full:
+        conn.close()
 
 
 @contextmanager
 def get_users_db():
-    """Context manager for users.db connections. Always closes on exit."""
+    """Context manager for users.db connections. Returns to pool on exit."""
     conn = get_users_conn()
     try:
         yield conn
     finally:
-        conn.close()
+        _return_users_conn(conn)
 
 
 def initialize_users_db():
@@ -198,12 +223,15 @@ def initialize_users_db():
         """)
         conn.commit()
 
-        # Migration: add trial and sleeper lock columns to users table
+        # Migration: add trial, sleeper lock, admin, and password reset columns
         for col, default in [
             ("trial_start", "NULL"),
             ("trial_end", "NULL"),
             ("trial_used", "0"),
             ("sleeper_locked", "0"),
+            ("is_admin", "0"),
+            ("password_reset_token", "NULL"),
+            ("password_reset_expires", "NULL"),
         ]:
             try:
                 conn.execute(f"ALTER TABLE users ADD COLUMN {col} DEFAULT {default}")
@@ -256,6 +284,12 @@ def _user_dict(row) -> dict:
     except (IndexError, KeyError):
         d["sleeper_locked"] = False
 
+    # Admin flag
+    try:
+        d["is_admin"] = bool(row["is_admin"])
+    except (IndexError, KeyError):
+        d["is_admin"] = False
+
     # Trial info
     trial_end_str = None
     try:
@@ -306,6 +340,19 @@ def _validate_password(password: str) -> str | None:
     return None
 
 
+def _maybe_promote_admin(conn, user_id: int, email: str):
+    """Auto-promote user to admin if their email matches RAZZLE_ADMIN_EMAIL."""
+    if ADMIN_EMAIL and email.strip().lower() == ADMIN_EMAIL:
+        conn.execute("UPDATE users SET is_admin = 1 WHERE id = ?", (user_id,))
+        conn.commit()
+        logger.info(f"User {user_id} auto-promoted to admin (matched RAZZLE_ADMIN_EMAIL)")
+
+
+def is_admin_user(user: dict) -> bool:
+    """Check if a user dict has admin privileges."""
+    return bool(user.get("is_admin"))
+
+
 def register(email: str, password: str) -> dict:
     """Register a new user. Returns {token, user}."""
     email = email.strip().lower()
@@ -331,12 +378,15 @@ def register(email: str, password: str) -> dict:
             )
             conn.commit()
             user_id = cursor.lastrowid
+            _maybe_promote_admin(conn, user_id, email)
+            is_admin = ADMIN_EMAIL and email == ADMIN_EMAIL
             # Build user dict with trial active — effective plan will be "pro"
             user = {
                 "id": user_id, "email": email, "plan": "pro",
                 "sleeper_username": None, "trial_active": True,
                 "trial_days_remaining": TRIAL_DURATION_DAYS,
                 "trial_end": trial_end, "plan_source": "trial",
+                "is_admin": is_admin,
             }
             # Token carries "pro" plan during trial for middleware compatibility
             token = _create_token(user_id, email, "pro")
@@ -363,6 +413,9 @@ def login(email: str, password: str) -> dict:
             logger.exception("Password verification error for %s", email)
             return {"error": "Invalid email or password", "status": 401}
 
+        _maybe_promote_admin(conn, row["id"], email)
+        # Re-fetch to pick up is_admin if just promoted
+        row = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         user = _user_dict(row)
         # Token uses effective plan (includes trial upgrade to pro)
         token = _create_token(user["id"], user["email"], user["plan"])
@@ -415,6 +468,136 @@ def link_sleeper(user_id: int, sleeper_username: str) -> dict:
         conn.commit()
         row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
         return {"user": _user_dict(row)}
+
+
+# ── Password Reset ─────────────────────────────────────────────────
+
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+SITE_URL = os.environ.get("SITE_URL", "https://razzle.lol")
+RESET_TOKEN_EXPIRY_HOURS = 1
+
+
+def _send_email(to: str, subject: str, html: str):
+    """Send email via Resend API. In dev mode without API key, logs to console."""
+    if not RESEND_API_KEY:
+        logger.info(f"[DEV EMAIL] To: {to} | Subject: {subject}")
+        logger.info(f"[DEV EMAIL] Body: {html}")
+        return True
+    try:
+        import urllib.request
+        import urllib.error
+        data = json.dumps({
+            "from": "Razzle <noreply@razzle.lol>",
+            "to": [to],
+            "subject": subject,
+            "html": html,
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=data,
+            headers={
+                "Authorization": f"Bearer {RESEND_API_KEY}",
+                "Content-Type": "application/json",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            if resp.status in (200, 201):
+                return True
+            logger.error(f"Resend API returned {resp.status}")
+            return False
+    except Exception:
+        logger.exception("Failed to send email via Resend")
+        return False
+
+
+def forgot_password(email: str) -> dict:
+    """Generate a password reset token and send email. Always returns success
+    (don't leak whether email exists)."""
+    email = email.strip().lower()
+    if not EMAIL_REGEX.match(email):
+        return {"message": "If that email is registered, you'll receive a reset link."}
+
+    with get_users_db() as conn:
+        row = conn.execute("SELECT id, email FROM users WHERE email = ?", (email,)).fetchone()
+        if not row:
+            # Don't reveal whether email exists
+            return {"message": "If that email is registered, you'll receive a reset link."}
+
+        # Generate secure reset token
+        token = secrets.token_urlsafe(32)
+        token_hash = hashlib.sha256(token.encode()).hexdigest()
+        expires = (datetime.now(timezone.utc) + timedelta(hours=RESET_TOKEN_EXPIRY_HOURS)).isoformat()
+
+        conn.execute(
+            "UPDATE users SET password_reset_token = ?, password_reset_expires = ? WHERE id = ?",
+            (token_hash, expires, row["id"]),
+        )
+        conn.commit()
+
+        # Build reset URL
+        reset_url = f"{SITE_URL}/reset-password.html?token={token}"
+
+        _send_email(
+            to=email,
+            subject="Reset your Razzle password",
+            html=(
+                f"<p>Hey,</p>"
+                f"<p>Someone requested a password reset for your Razzle account.</p>"
+                f'<p><a href="{reset_url}" style="background:#d97757;color:#fff;padding:10px 20px;'
+                f'border-radius:6px;text-decoration:none;font-weight:bold;">Reset Password</a></p>'
+                f"<p>This link expires in {RESET_TOKEN_EXPIRY_HOURS} hour.</p>"
+                f"<p>If you didn't request this, just ignore this email.</p>"
+                f"<p>— Razzle</p>"
+            ),
+        )
+
+    return {"message": "If that email is registered, you'll receive a reset link."}
+
+
+def reset_password(token: str, new_password: str) -> dict:
+    """Validate reset token and update password."""
+    if not token or len(token) < 20:
+        return {"error": "Invalid or expired reset link.", "status": 400}
+
+    pw_error = _validate_password(new_password)
+    if pw_error:
+        return {"error": pw_error, "status": 400}
+
+    token_hash = hashlib.sha256(token.encode()).hexdigest()
+
+    with get_users_db() as conn:
+        row = conn.execute(
+            "SELECT id, email, password_reset_token, password_reset_expires FROM users WHERE password_reset_token = ?",
+            (token_hash,),
+        ).fetchone()
+
+        if not row:
+            return {"error": "Invalid or expired reset link.", "status": 400}
+
+        # Check expiry
+        try:
+            expires = datetime.fromisoformat(row["password_reset_expires"].replace("Z", "+00:00"))
+            if datetime.now(timezone.utc) > expires:
+                # Clear expired token
+                conn.execute(
+                    "UPDATE users SET password_reset_token = NULL, password_reset_expires = NULL WHERE id = ?",
+                    (row["id"],),
+                )
+                conn.commit()
+                return {"error": "Reset link has expired. Please request a new one.", "status": 400}
+        except (ValueError, TypeError, AttributeError):
+            return {"error": "Invalid or expired reset link.", "status": 400}
+
+        # Update password and clear reset token
+        new_hash = _hash_password(new_password)
+        conn.execute(
+            "UPDATE users SET password_hash = ?, password_reset_token = NULL, password_reset_expires = NULL WHERE id = ?",
+            (new_hash, row["id"]),
+        )
+        conn.commit()
+        logger.info(f"Password reset for user {row['id']} ({row['email']})")
+
+    return {"message": "Password updated. You can now sign in with your new password."}
 
 
 # ── User Formula CRUD ──────────────────────────────────────────────

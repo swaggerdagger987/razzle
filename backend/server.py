@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pathlib import Path
 import datetime as _datetime
+import heapq as _heapq
 import hmac as _hmac
 import html as _html
 import httpx
@@ -57,8 +58,8 @@ def _resp_cache_set(key: str, body: bytes, headers: dict):
     """Cache response bytes."""
     with _resp_cache_lock:
         if len(_resp_cache) >= _RESP_CACHE_MAX:
-            oldest = sorted(_resp_cache.items(), key=lambda x: x[1]["t"])
-            for k, _ in oldest[:20]:
+            oldest = _heapq.nsmallest(20, _resp_cache.items(), key=lambda x: x[1]["t"])
+            for k, _ in oldest:
                 _resp_cache.pop(k, None)
         _resp_cache[key] = {"body": body, "t": _time.time(), "headers": headers}
 
@@ -78,90 +79,111 @@ def _get_client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
-# Simple in-memory rate limiter for auth endpoints
-_rate_buckets = defaultdict(list)  # ip -> [timestamps]
-_RATE_LIMIT = 10  # max attempts
-_RATE_WINDOW = 60  # per 60 seconds
-_RATE_MAX_IPS = 10000  # max tracked IPs to prevent memory leak
+# SQLite-backed rate limiter — persists across restarts, shared across workers
+_RATE_LIMIT = 10       # auth: 10/60s
+_RATE_WINDOW = 60
+_SENSITIVE_RATE_LIMIT = 5   # billing/API key: 5/60s
+_SENSITIVE_RATE_WINDOW = 60
+_SCREENER_RATE_LIMIT = 30   # screener POST: 30/60s
+_SCREENER_RATE_WINDOW = 60
+_REG_RATE_LIMIT = 3         # registration: 3/24h
+_REG_RATE_WINDOW = 86400
+
+
+def _init_rate_limit_table():
+    """Create rate_limits table in users.db if it doesn't exist."""
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS rate_limits (
+                    bucket TEXT NOT NULL,
+                    key TEXT NOT NULL,
+                    ts REAL NOT NULL
+                )
+            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_rate_bucket_key ON rate_limits(bucket, key)")
+            conn.commit()
+    except Exception:
+        logger.debug("rate_limits table init failed (may already exist)", exc_info=True)
+
+
+def _check_rate(bucket: str, key: str, limit: int, window: int) -> bool:
+    """Generic SQLite-backed rate limiter. Returns True if allowed."""
+    now = _time.time()
+    cutoff = now - window
+    try:
+        with auth_module.get_users_db() as conn:
+            # Clean old entries for this bucket+key
+            conn.execute("DELETE FROM rate_limits WHERE bucket = ? AND key = ? AND ts < ?", (bucket, key, cutoff))
+            # Count current entries
+            count = conn.execute(
+                "SELECT COUNT(*) FROM rate_limits WHERE bucket = ? AND key = ?", (bucket, key)
+            ).fetchone()[0]
+            if count >= limit:
+                conn.commit()
+                return False
+            conn.execute("INSERT INTO rate_limits (bucket, key, ts) VALUES (?, ?, ?)", (bucket, key, now))
+            conn.commit()
+            return True
+    except Exception:
+        logger.debug("Rate limit check failed, allowing request", exc_info=True)
+        return True  # fail open — don't block users on DB errors
+
+
+def _cleanup_rate_limits():
+    """Periodic cleanup of expired rate limit entries."""
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("DELETE FROM rate_limits WHERE ts < ?", (_time.time() - 86400,))
+            conn.commit()
+    except Exception:
+        pass
+
+
+_EMAIL_LOGIN_LIMIT = 5    # max failed attempts per email
+_EMAIL_LOGIN_WINDOW = 300  # per 5 minutes
+
 
 def _check_rate_limit(ip: str) -> bool:
-    """Return True if request is allowed, False if rate limited."""
+    return _check_rate("auth", ip, _RATE_LIMIT, _RATE_WINDOW)
+
+
+def _check_email_login_rate(email: str) -> bool:
+    """Check if email is locked out from login attempts. Read-only check."""
     now = _time.time()
-    # Prune stale IPs if dict grows too large
-    if len(_rate_buckets) > _RATE_MAX_IPS:
-        stale = [k for k, v in _rate_buckets.items() if not v or now - v[-1] > _RATE_WINDOW]
-        for k in stale:
-            del _rate_buckets[k]
-    bucket = _rate_buckets[ip]
-    # Remove old entries
-    _rate_buckets[ip] = [t for t in bucket if now - t < _RATE_WINDOW]
-    if len(_rate_buckets[ip]) >= _RATE_LIMIT:
-        return False
-    _rate_buckets[ip].append(now)
-    return True
+    cutoff = now - _EMAIL_LOGIN_WINDOW
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("DELETE FROM rate_limits WHERE bucket = ? AND key = ? AND ts < ?", ("email_login", email, cutoff))
+            count = conn.execute(
+                "SELECT COUNT(*) FROM rate_limits WHERE bucket = ? AND key = ?", ("email_login", email)
+            ).fetchone()[0]
+            conn.commit()
+            return count < _EMAIL_LOGIN_LIMIT
+    except Exception:
+        return True
 
 
-# Broader rate limiter for billing + API key management (5 requests / 60 seconds per IP)
-_sensitive_rate_buckets = defaultdict(list)
-_SENSITIVE_RATE_LIMIT = 5
-_SENSITIVE_RATE_WINDOW = 60
+def _record_email_login_fail(email: str):
+    """Record a failed login attempt for an email."""
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("INSERT INTO rate_limits (bucket, key, ts) VALUES (?, ?, ?)", ("email_login", email, _time.time()))
+            conn.commit()
+    except Exception:
+        pass
+
 
 def _check_sensitive_rate(ip: str) -> bool:
-    """Rate limit for sensitive mutation endpoints (billing, API key management)."""
-    now = _time.time()
-    if len(_sensitive_rate_buckets) > _RATE_MAX_IPS:
-        stale = [k for k, v in _sensitive_rate_buckets.items()
-                 if not v or now - v[-1] > _SENSITIVE_RATE_WINDOW]
-        for k in stale:
-            del _sensitive_rate_buckets[k]
-    bucket = _sensitive_rate_buckets[ip]
-    _sensitive_rate_buckets[ip] = [t for t in bucket if now - t < _SENSITIVE_RATE_WINDOW]
-    if len(_sensitive_rate_buckets[ip]) >= _SENSITIVE_RATE_LIMIT:
-        return False
-    _sensitive_rate_buckets[ip].append(now)
-    return True
+    return _check_rate("sensitive", ip, _SENSITIVE_RATE_LIMIT, _SENSITIVE_RATE_WINDOW)
 
-
-# Screener rate limiter: 30 requests / 60 seconds per IP
-_screener_rate_buckets = defaultdict(list)
-_SCREENER_RATE_LIMIT = 30
-_SCREENER_RATE_WINDOW = 60
 
 def _check_screener_rate(ip: str) -> bool:
-    """Rate limit for screener POST endpoint."""
-    now = _time.time()
-    if len(_screener_rate_buckets) > _RATE_MAX_IPS:
-        stale = [k for k, v in _screener_rate_buckets.items()
-                 if not v or now - v[-1] > _SCREENER_RATE_WINDOW]
-        for k in stale:
-            del _screener_rate_buckets[k]
-    bucket = _screener_rate_buckets[ip]
-    _screener_rate_buckets[ip] = [t for t in bucket if now - t < _SCREENER_RATE_WINDOW]
-    if len(_screener_rate_buckets[ip]) >= _SCREENER_RATE_LIMIT:
-        return False
-    _screener_rate_buckets[ip].append(now)
-    return True
+    return _check_rate("screener", ip, _SCREENER_RATE_LIMIT, _SCREENER_RATE_WINDOW)
 
-
-# Registration rate limiter: 3 registrations per IP per 24 hours
-_reg_rate_buckets = defaultdict(list)  # ip -> [timestamps]
-_REG_RATE_LIMIT = 3
-_REG_RATE_WINDOW = 86400  # 24 hours
 
 def _check_reg_rate(ip: str) -> bool:
-    """Return True if registration is allowed for this IP, False if rate limited."""
-    now = _time.time()
-    if len(_reg_rate_buckets) > _RATE_MAX_IPS:
-        stale = [k for k, v in _reg_rate_buckets.items()
-                 if not v or now - v[-1] > _REG_RATE_WINDOW]
-        for k in stale:
-            del _reg_rate_buckets[k]
-    bucket = _reg_rate_buckets[ip]
-    _reg_rate_buckets[ip] = [t for t in bucket if now - t < _REG_RATE_WINDOW]
-    if len(_reg_rate_buckets[ip]) >= _REG_RATE_LIMIT:
-        return False
-    _reg_rate_buckets[ip].append(now)
-    return True
+    return _check_rate("registration", ip, _REG_RATE_LIMIT, _REG_RATE_WINDOW)
 
 
 def bootstrap_database():
@@ -419,12 +441,13 @@ async def lifespan(app):
     import asyncio
     from concurrent.futures import ThreadPoolExecutor
     loop = asyncio.get_running_loop()
-    loop.set_default_executor(ThreadPoolExecutor(max_workers=20))
+    loop.set_default_executor(ThreadPoolExecutor(max_workers=8))
     # Essential tables first (fast, < 100ms) — server can respond immediately
     # Wrapped in try/except so the server starts even if DB init fails (502 prevention)
     try:
         auth_module.initialize_users_db()
         billing_module.initialize_subscriptions_table()
+        _init_rate_limit_table()
         live_data.init_waitlist_table()
         live_data.init_formula_store_tables()
         live_data._init_analytics_table()
@@ -433,6 +456,18 @@ async def lifespan(app):
     # Heavy data sync in background thread (may take minutes on cold start)
     t = threading.Thread(target=_background_bootstrap, daemon=True)
     t.start()
+    # Subscription reconciliation — catches missed webhooks every 6 hours
+    async def _reconciliation_loop():
+        import asyncio as _aio
+        await _aio.sleep(300)  # Wait 5 min after startup for things to settle
+        while True:
+            try:
+                billing_module.reconcile_subscriptions()
+            except Exception:
+                logger.exception("Subscription reconciliation failed")
+            await _aio.sleep(6 * 3600)  # Every 6 hours
+    import asyncio
+    asyncio.create_task(_reconciliation_loop())
     yield
 
 
@@ -449,7 +484,7 @@ app = FastAPI(
 # JSON decode errors are handled in global_exception_handler below
 
 _CORS_ORIGINS = ["https://razzle.lol"]
-if os.environ.get("ENVIRONMENT", "development") != "production":
+if os.environ.get("ENVIRONMENT") == "development":
     _CORS_ORIGINS += ["http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:8000"]
 
 app.add_middleware(
@@ -823,6 +858,43 @@ def require_auth(request: Request) -> dict:
 
 
 _PLAN_HIERARCHY = {"free": 0, "pro": 1, "pro_lifetime": 1, "elite": 2, "elite_lifetime": 2}
+_PAYMENT_FAILED_GRACE_DAYS = 3
+
+
+def _reconcile_payment_status(user: dict) -> dict:
+    """Check if user's subscription is payment_failed past grace period.
+    If so, downgrade users.plan to 'free' and return updated user dict."""
+    user_plan = user.get("plan", "free")
+    if user_plan in ("free", "pro_lifetime", "elite_lifetime"):
+        return user
+    try:
+        with auth_module.get_users_db() as conn:
+            sub = conn.execute(
+                "SELECT status, updated_at FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
+                (user["id"],),
+            ).fetchone()
+            if not sub or sub["status"] != "payment_failed":
+                return user
+            updated_at = sub["updated_at"]
+            if not updated_at:
+                return user
+            failed_dt = _datetime.datetime.fromisoformat(str(updated_at).replace("Z", "+00:00"))
+            if failed_dt.tzinfo is None:
+                failed_dt = failed_dt.replace(tzinfo=_datetime.timezone.utc)
+            now = _datetime.datetime.now(_datetime.timezone.utc)
+            if (now - failed_dt).days >= _PAYMENT_FAILED_GRACE_DAYS:
+                conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (user["id"],))
+                conn.execute(
+                    "UPDATE subscriptions SET plan = 'free', status = 'grace_expired', updated_at = CURRENT_TIMESTAMP WHERE user_id = ? AND status = 'payment_failed'",
+                    (user["id"],),
+                )
+                conn.commit()
+                logger.warning(f"User {user['id']} downgraded to free — payment failed grace period expired")
+                user["plan"] = "free"
+    except Exception:
+        logger.exception("Error reconciling payment status for user %s", user.get("id"))
+    return user
+
 
 def require_plan(request: Request, plan: str = "pro"):
     """Verify auth + plan tier. Elite users can access Pro features.
@@ -830,6 +902,7 @@ def require_plan(request: Request, plan: str = "pro"):
     user = require_auth(request)
     if not user:
         return None, JSONResponse({"error": "Authentication required"}, status_code=401)
+    user = _reconcile_payment_status(user)
     user_plan = user.get("plan", "free")
     user_level = _PLAN_HIERARCHY.get(user_plan, 0)
     required_level = _PLAN_HIERARCHY.get(plan, 0)
@@ -866,10 +939,16 @@ async def auth_login(request: Request):
     if not _check_rate_limit(ip):
         return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
     body = await request.json()
-    email = body.get("email", "")
+    email = body.get("email", "").strip().lower()
     password = body.get("password", "")
+    # Per-email lockout: prevent distributed brute force
+    if email and not _check_email_login_rate(email):
+        return JSONResponse({"error": "Account temporarily locked. Try again in a few minutes."}, status_code=429, headers={"Retry-After": "300"})
     result = auth_module.login(email, password)
     if "error" in result:
+        # Record failed attempt against this email
+        if email:
+            _record_email_login_fail(email)
         return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
     live_data.log_event("login")
     return result
@@ -919,6 +998,33 @@ async def auth_link_sleeper(request: Request):
             resp_body["locked_username"] = result["locked_username"]
         return JSONResponse(resp_body, status_code=result["status"])
     live_data.log_event("sleeper_connect", sleeper_username)
+    return result
+
+
+@app.post("/api/auth/forgot-password")
+async def auth_forgot_password(request: Request):
+    """Send password reset email."""
+    ip = _get_client_ip(request)
+    if not _check_rate_limit(ip):
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
+    body = await request.json()
+    email = body.get("email", "").strip()
+    result = auth_module.forgot_password(email)
+    return result
+
+
+@app.post("/api/auth/reset-password")
+async def auth_reset_password(request: Request):
+    """Reset password using token from email."""
+    ip = _get_client_ip(request)
+    if not _check_rate_limit(ip):
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
+    body = await request.json()
+    token = body.get("token", "")
+    new_password = body.get("password", "")
+    result = auth_module.reset_password(token, new_password)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
     return result
 
 
@@ -1064,27 +1170,14 @@ _LLM_TIMEOUT = 25  # seconds
 _LLM_MAX_TOKENS = 2000
 _LLM_FREE_MAX_TOKENS = 1000
 
-# Per-user server-side rate limiter for LLM proxy
-_llm_rate_buckets = defaultdict(list)  # user_id -> [timestamps]
+# Per-user server-side rate limiter for LLM proxy (SQLite-backed)
 _LLM_RATE_LIMIT_ELITE = 100  # max queries per day for Elite (server-side)
 _LLM_RATE_WINDOW = 86400  # 24 hours in seconds
 
 
 def _check_llm_rate(user_id: int) -> bool:
     """Check if user is within LLM rate limit. Returns True if allowed."""
-    now = _time.time()
-    bucket = _llm_rate_buckets[user_id]
-    # Prune old entries
-    _llm_rate_buckets[user_id] = [t for t in bucket if now - t < _LLM_RATE_WINDOW]
-    # Periodically prune stale users to prevent unbounded growth
-    if len(_llm_rate_buckets) > 500:
-        stale = [uid for uid, ts in _llm_rate_buckets.items() if not ts or now - ts[-1] > _LLM_RATE_WINDOW]
-        for uid in stale:
-            del _llm_rate_buckets[uid]
-    if len(_llm_rate_buckets[user_id]) >= _LLM_RATE_LIMIT_ELITE:
-        return False
-    _llm_rate_buckets[user_id].append(now)
-    return True
+    return _check_rate("llm", str(user_id), _LLM_RATE_LIMIT_ELITE, _LLM_RATE_WINDOW)
 
 
 @app.post("/api/llm/chat")
@@ -1273,13 +1366,20 @@ async def llm_chat_free(request: Request):
         _mt = max(1, min(_mt, _LLM_FREE_MAX_TOKENS))
     except (TypeError, ValueError):
         _mt = _LLM_FREE_MAX_TOKENS
+    # Select model based on user tier: Pro/Elite get premium, free gets free model
+    is_paid = plan in ("pro", "elite", "pro_lifetime", "elite_lifetime")
+    selected_model = _LLM_MODEL if is_paid else _LLM_FREE_MODEL
+    selected_max_tokens = _LLM_MAX_TOKENS if is_paid else _LLM_FREE_MAX_TOKENS
+    _mt = max(1, min(_mt, selected_max_tokens))
+
     llm_body = {
-        "model": _LLM_FREE_MODEL,
+        "model": selected_model,
         "messages": sanitized_messages,
         "temperature": _temp,
         "max_tokens": _mt,
     }
 
+    tier_label = "Paid" if is_paid else "Free"
     try:
         async with httpx.AsyncClient(timeout=_LLM_TIMEOUT) as client:
             resp = await client.post(
@@ -1289,11 +1389,11 @@ async def llm_chat_free(request: Request):
                     "Authorization": f"Bearer {_LLM_API_KEY}",
                     "Content-Type": "application/json",
                     "HTTP-Referer": "https://razzle.lol",
-                    "X-Title": "Razzle Situation Room (Free Tier)",
+                    "X-Title": f"Razzle Situation Room ({tier_label} Tier)",
                 },
             )
         if resp.status_code != 200:
-            logger.error(f"Free LLM proxy error: {resp.status_code} {resp.text[:200]}")
+            logger.error(f"{tier_label} LLM proxy error: {resp.status_code} {resp.text[:200]}")
             return JSONResponse(
                 {"error": "Agent is temporarily unavailable. Try again in a moment."},
                 status_code=502,
@@ -1301,10 +1401,11 @@ async def llm_chat_free(request: Request):
         try:
             data = resp.json()
         except Exception:
-            logger.error("Free LLM proxy returned non-JSON response")
+            logger.error(f"{tier_label} LLM proxy returned non-JSON response")
             return JSONResponse({"error": "Agent returned an unexpected response. Try again."}, status_code=502)
-        # Tag response with free model info
-        data["_razzle_free_model"] = _LLM_FREE_MODEL
+        # Tag response with model info for free users
+        if not is_paid:
+            data["_razzle_free_model"] = _LLM_FREE_MODEL
         # Record quota only on success (don't burn quota on LLM failures)
         auth_module.record_query(user_id=user["id"], ip_address=ip)
         live_data.log_event("agent_query", "free")
@@ -2021,7 +2122,7 @@ async def waitlist(request: Request):
     ip = _get_client_ip(request)
     now_ts = _time.time()
     # Prune stale entries to prevent memory leak
-    if len(_waitlist_rate) > 5000:
+    if len(_waitlist_rate) > 500:
         stale = [k for k, v in _waitlist_rate.items() if now_ts - v > 120]
         for k in stale:
             del _waitlist_rate[k]
@@ -2566,11 +2667,12 @@ def breakout_candidates(season: int = 0, position: str = "", limit: int = 50, we
 
 
 @app.get("/api/buy-sell-candidates")
-def buy_sell_candidates(season: int = 0, position: str = "", limit: int = 15):
+def buy_sell_candidates(season: int = 0, position: str = "", limit: int = 15, scoring: str = "ppr"):
     """Return players split into buy-low and sell-high based on efficiency vs dynasty rank."""
     s = season if season > 0 else None
     pos = position.upper() if position else None
-    return live_data.fetch_buy_sell_candidates(season=s, position=pos, limit=max(1, min(limit, 30)))
+    sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+    return live_data.fetch_buy_sell_candidates(season=s, position=pos, limit=max(1, min(limit, 30)), scoring=sc)
 
 
 @app.get("/api/aging-curves")
@@ -2688,26 +2790,28 @@ def redzone_usage(season: int = 0, position: str = "", limit: int = 30, week: in
 
 
 @app.get("/api/efficiency-rankings")
-def efficiency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
+def efficiency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0, scoring: str = "ppr"):
     """Return fantasy efficiency rankings: most efficient + volume kings."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_efficiency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_efficiency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None, scoring=sc)
     except Exception as e:
         logger.exception("efficiency_rankings error")
         return JSONResponse({"error": "Failed to fetch efficiency data"}, status_code=500)
 
 
 @app.get("/api/consistency-rankings")
-def consistency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
+def consistency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0, scoring: str = "ppr"):
     """Return consistency rankings: rock solid (low variance) + wild cards (high variance)."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_consistency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_consistency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None, scoring=sc)
     except Exception as e:
         logger.exception("consistency_rankings error")
         return JSONResponse({"error": "Failed to fetch consistency data"}, status_code=500)
@@ -2727,13 +2831,14 @@ def strength_of_schedule(season: int = 0, position: str = "", limit: int = 30):
 
 
 @app.get("/api/stock-watch")
-def stock_watch(season: int = 0, position: str = "", limit: int = 30):
+def stock_watch(season: int = 0, position: str = "", limit: int = 30, scoring: str = "ppr"):
     """Return dynasty stock watch: rising (undervalued) + falling (overvalued)."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_stock_watch(season=s, position=pos, limit=lim)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_stock_watch(season=s, position=pos, limit=lim, scoring=sc)
     except Exception as e:
         logger.exception("stock_watch error")
         return JSONResponse({"error": "Failed to fetch stock watch data"}, status_code=500)
@@ -2753,13 +2858,14 @@ def opportunity_share(season: int = 0, position: str = "", limit: int = 30, week
 
 
 @app.get("/api/report-cards")
-def report_cards(season: int = 0, position: str = "", limit: int = 25, week: int = 0):
+def report_cards(season: int = 0, position: str = "", limit: int = 25, week: int = 0, scoring: str = "ppr"):
     """Return player report cards with composite Fantasy GPA."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_report_cards(season=s, position=pos, limit=lim, week=week if week > 0 else None)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_report_cards(season=s, position=pos, limit=lim, week=week if week > 0 else None, scoring=sc)
     except Exception as e:
         logger.exception("report_cards error")
         return JSONResponse({"error": "Failed to fetch report card data"}, status_code=500)
@@ -2778,12 +2884,13 @@ def season_awards(season: int = 0, position: str = ""):
 
 
 @app.get("/api/vorp")
-def vorp(season: int = 0, position: str = "", limit: int = 30):
+def vorp(season: int = 0, position: str = "", limit: int = 30, scoring: str = "ppr"):
     """Return Value Over Replacement Player rankings."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
-        return live_data.fetch_vorp(season=s, position=pos, limit=max(1, min(limit, 100)))
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_vorp(season=s, position=pos, limit=max(1, min(limit, 100)), scoring=sc)
     except Exception as e:
         logger.exception("vorp error")
         return JSONResponse({"error": "Failed to fetch VORP data"}, status_code=500)
@@ -2791,8 +2898,7 @@ def vorp(season: int = 0, position: str = "", limit: int = 30):
 
 @app.get("/api/analytics/summary")
 async def analytics_summary(request: Request):
-    secret = request.headers.get("x-admin-secret", "")
-    if not _ADMIN_SECRET or not _hmac.compare_digest(secret, _ADMIN_SECRET):
+    if not _is_admin_request(request):
         return JSONResponse({"error": "unauthorized"}, status_code=403)
     return live_data.get_analytics_summary()
 
@@ -3346,11 +3452,26 @@ def dynasty_power_rankings(season: int = 0):
 _ADMIN_SECRET = os.environ.get("RAZZLE_ADMIN_SECRET", "")
 
 
+def _is_admin_request(request: Request) -> bool:
+    """Check if request is from an admin (JWT+is_admin flag, or legacy x-admin-secret)."""
+    # Check JWT auth first
+    auth_header = request.headers.get("authorization", "")
+    if auth_header.startswith("Bearer "):
+        token = auth_header[7:]
+        user = auth_module.get_current_user(token)
+        if user and auth_module.is_admin_user(user):
+            return True
+    # Fallback: legacy shared secret
+    secret = request.headers.get("x-admin-secret", "")
+    if _ADMIN_SECRET and _hmac.compare_digest(secret, _ADMIN_SECRET):
+        return True
+    return False
+
+
 @app.get("/api/admin/stats")
 async def admin_stats(request: Request):
-    """Return user counts and subscription stats. Protected by X-Admin-Secret header."""
-    secret = request.headers.get("x-admin-secret", "")
-    if not _ADMIN_SECRET or not _hmac.compare_digest(secret, _ADMIN_SECRET):
+    """Return user counts and subscription stats. Protected by admin auth."""
+    if not _is_admin_request(request):
         return JSONResponse({"error": "unauthorized"}, status_code=403)
 
     try:
@@ -3380,13 +3501,57 @@ async def admin_stats(request: Request):
 @app.post("/api/admin/cache-clear")
 async def admin_cache_clear(request: Request):
     """Flush all data caches. Call after uploading new data to persistent disk."""
-    secret = request.headers.get("x-admin-secret", "")
-    if not _ADMIN_SECRET or not _hmac.compare_digest(secret, _ADMIN_SECRET):
+    if not _is_admin_request(request):
         return JSONResponse({"error": "unauthorized"}, status_code=403)
     from .live_data.core import cache_clear
     cache_clear()
     _resp_cache.clear()
     return {"status": "ok", "message": "All caches cleared"}
+
+
+@app.get("/api/admin/users")
+async def admin_users(request: Request):
+    """List all users with plan info. Protected by admin auth."""
+    if not _is_admin_request(request):
+        return JSONResponse({"error": "unauthorized"}, status_code=403)
+    try:
+        with auth_module.get_users_db() as conn:
+            rows = conn.execute(
+                "SELECT id, email, plan, created_at, is_admin FROM users ORDER BY created_at DESC LIMIT 500"
+            ).fetchall()
+            users = [{"id": r["id"], "email": r["email"], "plan": r["plan"],
+                       "created_at": r["created_at"], "is_admin": bool(r["is_admin"])} for r in rows]
+        return JSONResponse({"users": users})
+    except Exception as e:
+        logger.error(f"Admin users error: {e}")
+        return JSONResponse({"error": "internal"}, status_code=500)
+
+
+@app.put("/api/admin/user/{user_id}/plan")
+async def admin_update_plan(user_id: int, request: Request):
+    """Change a user's plan. Protected by admin auth."""
+    if not _is_admin_request(request):
+        return JSONResponse({"error": "unauthorized"}, status_code=403)
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse({"error": "Invalid JSON"}, status_code=400)
+
+    new_plan = body.get("plan", "")
+    if new_plan not in ("free", "pro", "elite", "pro_lifetime", "elite_lifetime"):
+        return JSONResponse({"error": "Invalid plan"}, status_code=400)
+    try:
+        with auth_module.get_users_db() as conn:
+            row = conn.execute("SELECT id, email FROM users WHERE id = ?", (user_id,)).fetchone()
+            if not row:
+                return JSONResponse({"error": "User not found"}, status_code=404)
+            conn.execute("UPDATE users SET plan = ? WHERE id = ?", (new_plan, user_id))
+            conn.commit()
+            logger.info(f"Admin changed user {user_id} ({row['email']}) plan to {new_plan}")
+        return {"status": "ok", "user_id": user_id, "plan": new_plan}
+    except Exception as e:
+        logger.error(f"Admin plan update error: {e}")
+        return JSONResponse({"error": "internal"}, status_code=500)
 
 
 # ---------------------------------------------------------------------------

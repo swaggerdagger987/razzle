@@ -354,7 +354,7 @@ function drawDraftBoard(f) {
   const w = f.w * TILE, h = f.h * TILE;
   drawPixelRect(x + 2, y + 2, w - 4, h - 4, C.boardBg, C.boardFrame);
   ctx.fillStyle = '#d97757';
-  ctx.font = 'bold 10px monospace';
+  ctx.font = 'bold 10px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.fillText('DRAFT BOARD', x + w / 2, y + 14);
   const cardW = 22, cardH = 8, gap = 3;
@@ -445,7 +445,7 @@ function drawWarTable(f) {
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.fillStyle = '#2d1f14';
-  ctx.font = 'bold 9px monospace';
+  ctx.font = 'bold 9px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('RAZZLE', cx, cy);
@@ -545,10 +545,10 @@ function drawBanner(f) {
   ctx.lineTo(x + w - 2, y + h - 4);
   ctx.fill();
   ctx.fillStyle = C.bannerText;
-  ctx.font = 'bold 12px monospace';
+  ctx.font = 'bold 12px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.fillText('RAZZLE', x + w / 2, y + 22);
-  ctx.font = 'bold 9px monospace';
+  ctx.font = 'bold 9px "Space Mono", monospace';
   ctx.fillText('SIT ROOM', x + w / 2, y + 36);
   ctx.textAlign = 'left';
 }
@@ -1005,7 +1005,7 @@ class Agent {
     }
 
     // Name tag
-    ctx.font = 'bold 8px monospace';
+    ctx.font = 'bold 8px "Space Mono", monospace';
     ctx.textAlign = 'center';
     const nameW = ctx.measureText(this.name).width + 8;
     const nameX = this.x - nameW / 2;
@@ -1075,7 +1075,7 @@ class Agent {
       case 'eureka':
         drawPixelFootball(x + 7, y + 4);
         ctx.fillStyle = '#d97757';
-        ctx.font = 'bold 10px monospace';
+        ctx.font = 'bold 10px "Space Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText('!', x + bubW - 6, y + 14);
         ctx.textAlign = 'left';
@@ -1237,7 +1237,7 @@ function drawHUD() {
     const a = agents[i];
     const cy = hudY + i * (chipH + chipGap);
     const label = `${i + 1} ${a.name}`;
-    ctx.font = 'bold 9px monospace';
+    ctx.font = 'bold 9px "Space Mono", monospace';
     const tw = ctx.measureText(label).width + 12;
 
     ctx.globalAlpha = a.selected ? 0.9 : 0.55;
@@ -2657,7 +2657,7 @@ async function runSingleAgent(agentId, scenario) {
 function getDailyQueryLimit() {
   if (isEliteUser()) return Infinity;
   if (isProUser()) return 20;
-  return 5; // free tier
+  return 5; // free plan query limit
 }
 
 function getTodayQueryCount() {
@@ -3110,7 +3110,7 @@ setupScenarioPanel();
       '<div class="warroom-bio-body">' +
         '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + a.sprite + '.png\'); background-position:0 0; background-size:448px 192px;"></div>' +
         '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.emoji + ' ' + escapeHtml(a.name) + '</div>' +
-        '<div class="warroom-bio-role">' + a.role + (a.isLeader ? ' <span style="font-family:var(--font-mono); font-size:9px; background:var(--orange); color:var(--text-on-accent); padding:1px 6px; border-radius:3px;">LEADER</span>' : '') + '</div>' +
+        '<div class="warroom-bio-role">' + a.role + (a.isLeader ? ' <span style="font-family:var(--font-mono); font-size:9px; background:var(--orange); color:var(--text-on-accent); padding:1px 6px; border-radius:4px;">LEADER</span>' : '') + '</div>' +
         '<div class="warroom-bio-quote">"' + a.quote + '"</div>' +
         '<div class="warroom-bio-tags">' + tagsHtml + '</div>' +
         '<button class="warroom-bio-ask" data-agent-name="' + escapeAttr(a.name) + '" style="color:' + a.color + '">Ask ' + escapeHtml(a.name) + '</button>' +
@@ -3612,7 +3612,7 @@ function _renderMemoryEntries(panel, memory, isElite) {
   }
 
   var headerBadge = isElite
-    ? '<div style="font-family:var(--font-mono); font-size:9px; color:var(--pos-qb); text-align:center; margin-bottom:6px; padding:2px 8px; border:2px solid var(--pos-qb); border-radius:3px; display:inline-block;">cloud-synced</div>'
+    ? '<div style="font-family:var(--font-mono); font-size:9px; color:var(--pos-qb); text-align:center; margin-bottom:6px; padding:2px 8px; border:2px solid var(--pos-qb); border-radius:4px; display:inline-block;">cloud-synced</div>'
     : '';
 
   var html = headerBadge ? '<div style="text-align:center;">' + headerBadge + '</div>' : '';
@@ -4157,7 +4157,7 @@ function waitAndStart() {
     ctx.fillStyle = '#2d1f14';
     ctx.fillRect(0, 0, cvs.width, cvs.height);
     ctx.fillStyle = '#d97757';
-    ctx.font = 'bold 14px monospace';
+    ctx.font = 'bold 14px "Space Mono", monospace';
     ctx.textAlign = 'center';
     ctx.fillText('pulling film...', cvs.width / 2, cvs.height / 2);
     const dots = '.'.repeat(Math.floor(now() / 500) % 4);

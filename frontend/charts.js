@@ -338,7 +338,7 @@ function drawScatter() {
   ctx.restore();
 
   // Dots
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColors = typeof getPosColors === 'function' ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   for (const p of data) {
     const x = toX(p[xKey]);
     const y = toY(p[yKey]);
@@ -576,7 +576,7 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
   // Title
   const col = COLUMNS[statKey];
   const statLabel = col ? col.label : statKey;
-  ctx.font = "bold 16px 'Luckiest Guy', cursive";
+  ctx.font = "16px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(`${playerName} — ${statLabel} ${subtitle}`, pad.left, 20);
@@ -669,11 +669,11 @@ function drawHeatmap() {
   ctx.fillRect(0, 0, W, H);
 
   // Position colors
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColors = typeof getPosColors === 'function' ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const posColor = posColors[pos] || "#d97757";
 
   // Title
-  ctx.font = "bold 18px 'Luckiest Guy', cursive";
+  ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(`${pos} Heat Map — Positional Percentiles`, padL, 26);
@@ -901,11 +901,11 @@ function renderCompareTable(players) {
     const maxVal = Math.max(...vals, 0);
 
     html += `<tr>`;
-    html += `<td style="padding:6px 8px; border-bottom:1px solid var(--ink-faint); font-weight:700; font-size:11px;">${col.label}</td>`;
+    html += `<td style="padding:6px 8px; border-bottom:2px solid var(--ink-faint); font-weight:700; font-size:11px;">${col.label}</td>`;
     for (let i = 0; i < players.length; i++) {
       const isBest = vals[i] === maxVal && maxVal > 0;
       const style = isBest ? "font-weight:700; color:var(--green);" : "";
-      html += `<td style="text-align:right; padding:6px 8px; border-bottom:1px solid var(--ink-faint); ${style}">${formatStat(vals[i], col.decimals)}</td>`;
+      html += `<td style="text-align:right; padding:6px 8px; border-bottom:2px solid var(--ink-faint); ${style}">${formatStat(vals[i], col.decimals)}</td>`;
     }
     html += '</tr>';
   }
@@ -1018,7 +1018,7 @@ function exportNFLCompareImage() {
   if (!players || players.length < 2) return;
 
   const radarCanvas = document.getElementById("compareRadar");
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColors = typeof getPosColors === 'function' ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const padX = 30, padY = 30;
   const W = 800;
 
@@ -1095,7 +1095,7 @@ function exportNFLCompareImage() {
     // Player name
     ctx.textAlign = "left";
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 18px 'Luckiest Guy', cursive";
+    ctx.font = "18px 'Luckiest Guy', cursive";
     const nameX = badgeX + badgeW + 8;
     ctx.fillText(p.full_name, nameX, cardY + 32);
 
@@ -1113,7 +1113,7 @@ function exportNFLCompareImage() {
       const dvsW = 80, dvsH = 24;
       const dvsX = cx + playerCardW - dvsW - 10;
       const dvsY = cardY + 60;
-      ctx.fillStyle = dvsColor + "30";
+      ctx.fillStyle = dvsColor + Math.round(0.19 * 255).toString(16).padStart(2, '0');
       ctx.fillRect(dvsX, dvsY, dvsW, dvsH);
       ctx.strokeStyle = dvsColor;
       ctx.lineWidth = 2;
@@ -1267,11 +1267,11 @@ function renderProspectCompareTable(prospects) {
     { key: "weight", label: "Weight", fmt: v => v ? v + " lbs" : "—" },
   ];
   for (const mr of measRows) {
-    html += `<tr><td style="padding:6px 8px; border-bottom:1px solid var(--ink-faint); font-weight:700; font-size:11px;">${mr.label}</td>`;
+    html += `<tr><td style="padding:6px 8px; border-bottom:2px solid var(--ink-faint); font-weight:700; font-size:11px;">${mr.label}</td>`;
     for (const p of prospects) {
       const val = p.prospect[mr.key];
       const display = mr.fmt ? mr.fmt(val) : (val || "—");
-      html += `<td style="text-align:right; padding:6px 8px; border-bottom:1px solid var(--ink-faint);">${display}</td>`;
+      html += `<td style="text-align:right; padding:6px 8px; border-bottom:2px solid var(--ink-faint);">${display}</td>`;
     }
     html += '</tr>';
   }
@@ -1292,7 +1292,7 @@ function renderProspectCompareTable(prospects) {
       }
     }
 
-    html += `<tr><td style="padding:6px 8px; border-bottom:1px solid var(--ink-faint); font-weight:700; font-size:11px;">${m.label}</td>`;
+    html += `<tr><td style="padding:6px 8px; border-bottom:2px solid var(--ink-faint); font-weight:700; font-size:11px;">${m.label}</td>`;
     prospects.forEach((p, i) => {
       const val = p.prospect[m.key];
       const pct = p.percentiles[m.key];
@@ -1301,7 +1301,7 @@ function renderProspectCompareTable(prospects) {
       const pctColor = pct != null ? getPercentileColor(pct) : "var(--ink-faint)";
       const pctLabel = pct != null ? `${Math.round(pct)}th` : "";
       const style = isBest ? "font-weight:700; color:var(--green);" : "";
-      html += `<td style="text-align:right; padding:6px 8px; border-bottom:1px solid var(--ink-faint); ${style}">${display}`;
+      html += `<td style="text-align:right; padding:6px 8px; border-bottom:2px solid var(--ink-faint); ${style}">${display}`;
       if (pctLabel) html += ` <span style="color:${pctColor}; font-size:10px; font-weight:700;">${pctLabel}</span>`;
       html += `</td>`;
     });
@@ -1309,11 +1309,11 @@ function renderProspectCompareTable(prospects) {
   }
 
   // Draft info row
-  html += `<tr><td style="padding:6px 8px; border-bottom:1px solid var(--ink-faint); font-weight:700; font-size:11px;">Draft Capital</td>`;
+  html += `<tr><td style="padding:6px 8px; border-bottom:2px solid var(--ink-faint); font-weight:700; font-size:11px;">Draft Capital</td>`;
   for (const p of prospects) {
     const pr = p.prospect;
     const draftText = pr.draft_round && pr.draft_pick ? `Rd ${pr.draft_round}, #${pr.draft_pick}` : `${pr.draft_year} class`;
-    html += `<td style="text-align:right; padding:6px 8px; border-bottom:1px solid var(--ink-faint);">${draftText}</td>`;
+    html += `<td style="text-align:right; padding:6px 8px; border-bottom:2px solid var(--ink-faint);">${draftText}</td>`;
   }
   html += '</tr>';
 

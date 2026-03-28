@@ -101,8 +101,14 @@ function saveFormula() {
   addFormulaComponent();
 }
 
-function deleteFormula(name) {
-  if (!confirm("Delete formula \"" + name + "\"?")) return;
+function deleteFormula(name, btn) {
+  if (btn && !btn.dataset.confirming) {
+    btn.dataset.confirming = "1";
+    btn.textContent = "sure?";
+    setTimeout(function() { delete btn.dataset.confirming; btn.textContent = "\u00d7"; }, 3000);
+    return;
+  }
+  if (btn) delete btn.dataset.confirming;
   state.formulas = state.formulas.filter(f => f.name !== name);
   try { localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas)); } catch(e) {}
   _deleteFormulaFromServer(name);
@@ -137,7 +143,7 @@ function renderSavedFormulas() {
       const publishBtn = isPublished
         ? `<span style="font-family:var(--font-mono); font-size:9px; color:var(--green); font-weight:700; padding:2px 6px; border:2px solid var(--green); border-radius:4px;">Published</span>`
         : `<button class="btn-chunky" style="font-size:9px; padding:2px 8px;" data-publish-formula="${_escAttr(f.name)}">Publish</button>`;
-      return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--ink-faint); gap:6px;">
+      return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:2px solid var(--ink-faint); gap:6px;">
         <div style="flex:1; min-width:0;">
           <strong style="font-family:var(--font-mono); font-size:13px;">${_esc(f.name)}</strong>
           <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${_esc(desc)}</span>

@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ede0cf">
 <title>Auction Values — Razzle</title>
-<script>if(window.self===window.top)window.location.replace('/lab.html?panel=auction');</script>
 <meta property="og:title" content="Auction Values — Razzle">
 <meta property="og:description" content="Convert dynasty trade values into auction dollar amounts for any budget. Set your total budget, get exact bid prices for every player.">
 <meta property="og:site_name" content="razzle.lol">
@@ -129,10 +128,10 @@
     font-size: 16px;
     margin-bottom: 4px;
   }
-  .av-sum-pos.QB { color: var(--qb); }
-  .av-sum-pos.RB { color: var(--rb); }
-  .av-sum-pos.WR { color: var(--wr); }
-  .av-sum-pos.TE { color: var(--te); }
+  .av-sum-pos.QB { color: var(--pos-qb); }
+  .av-sum-pos.RB { color: var(--pos-rb); }
+  .av-sum-pos.WR { color: var(--pos-wr); }
+  .av-sum-pos.TE { color: var(--pos-te); }
   .av-sum-stat {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -187,10 +186,10 @@
     min-width: 28px;
     text-align: center;
   }
-  .av-pos-badge.QB { background: var(--qb); }
-  .av-pos-badge.RB { background: var(--rb); }
-  .av-pos-badge.WR { background: var(--wr); }
-  .av-pos-badge.TE { background: var(--te); }
+  .av-pos-badge.QB { background: var(--pos-qb); }
+  .av-pos-badge.RB { background: var(--pos-rb); }
+  .av-pos-badge.WR { background: var(--pos-wr); }
+  .av-pos-badge.TE { background: var(--pos-te); }
 
   /* Dollar value */
   .av-dollar {
@@ -200,8 +199,8 @@
   }
   .av-dollar.premium { color: var(--red); }
   .av-dollar.starter { color: var(--orange); }
-  .av-dollar.value { color: var(--rb); }
-  .av-dollar.bargain { color: var(--qb); }
+  .av-dollar.value { color: var(--pos-rb); }
+  .av-dollar.bargain { color: var(--pos-qb); }
   .av-dollar.dollar-tier { color: var(--ink-light); }
 
   /* Trade value bar */
@@ -231,8 +230,8 @@
   }
   .av-tier-badge.premium { background: rgba(212,64,64,0.12); color: var(--red); border-color: var(--red); }
   .av-tier-badge.starter { background: rgba(217,119,87,0.12); color: var(--orange); border-color: var(--orange); }
-  .av-tier-badge.value { background: rgba(46,196,182,0.12); color: var(--rb); border-color: var(--rb); }
-  .av-tier-badge.bargain { background: rgba(91,127,255,0.12); color: var(--qb); border-color: var(--qb); }
+  .av-tier-badge.value { background: rgba(46,196,182,0.12); color: var(--pos-rb); border-color: var(--pos-rb); }
+  .av-tier-badge.bargain { background: rgba(91,127,255,0.12); color: var(--pos-qb); border-color: var(--pos-qb); }
   .av-tier-badge.dollar-tier { background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--ink-light); border-color: var(--ink-faint); }
 
   /* Search */
@@ -306,9 +305,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">AI Agents</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -366,9 +365,9 @@
     <div>
       <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
+      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
       <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>

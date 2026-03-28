@@ -24,6 +24,16 @@ def _current_draft_year():
     """Return the current draft year (same as calendar year)."""
     return _datetime.now().year
 
+
+def _scoring_factor(scoring):
+    """Return the receptions adjustment factor for a scoring format.
+    PPR = 0 adjustment, Half-PPR = -0.5, Standard = -1."""
+    if scoring == "half_ppr":
+        return -0.5
+    if scoring in ("std", "standard"):
+        return -1.0
+    return 0.0
+
 # ---------------------------------------------------------------------------
 # In-memory cache
 # ---------------------------------------------------------------------------

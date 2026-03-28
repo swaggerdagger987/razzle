@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ede0cf">
-<title>Situation Room — Razzle</title>
+<title>AI Agents for Your League — Razzle</title>
 <meta property="og:title" content="Situation Room — Razzle">
-<meta property="og:description" content="Six AI agents who know your league. Scout, Quant, Medic, Diplomat, Historian, and Razzle himself. Drop a scenario, get a Situation Room briefing in seconds.">
+<meta property="og:description" content="Six AI agents who know your league. Hawkeye (Scout), Octo (Quant), Dr. Dolphin (Medical), Bones (Diplomat), Atlas (Historian), and Razzle himself. Drop a scenario, get a briefing in seconds.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://razzle.lol/agents.html">
@@ -15,10 +15,10 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Situation Room — Razzle">
-<meta name="twitter:description" content="Six AI agents who know your league. Scout, Quant, Medic, Diplomat, Historian, and Razzle himself. Drop a scenario, get a briefing in seconds.">
+<meta name="twitter:description" content="Six AI agents who know your league. Hawkeye (Scout), Octo (Quant), Dr. Dolphin (Medical), Bones (Diplomat), Atlas (Historian), and Razzle himself. Drop a scenario, get a briefing in seconds.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
 <meta name="twitter:image:alt" content="Razzle — Free Fantasy Football Research Lab">
-<meta name="description" content="Razzle's Situation Room. Six specialist AI agents with full league context — Scout, Quant, Medic, Diplomat, Historian, and Razzle. Trade strategies, championship probability, and personalized briefings powered by pixel-art intelligence.">
+<meta name="description" content="Razzle's Situation Room. Six specialist AI agents with full league context — Hawkeye, Octo, Dr. Dolphin, Bones, Atlas, and Razzle. Trade strategies, championship probability, and personalized briefings powered by pixel-art intelligence.">
 <link rel="canonical" href="https://razzle.lol/agents.html">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,11 +32,13 @@
     padding: 48px 24px 36px;
     max-width: 800px;
     margin: 0 auto;
+    background: var(--bg-ink);
+    color: var(--ink);
   }
 
   .warroom-hero-mascot {
     font-size: 64px;
-    filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.15));
+    filter: drop-shadow(4px 4px 0 var(--shadow-drop));
     transform: rotate(-3deg);
     display: inline-block;
     margin-bottom: 12px;
@@ -83,7 +85,7 @@
 
   .agent-badge:hover {
     box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
   }
 
   /* ===== AGENT BIO GRID (Situation Room hero) ===== */
@@ -256,7 +258,7 @@
     border: 3px solid var(--ink-medium);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+    box-shadow: 4px 4px 0 var(--ink);
     background: var(--bg);
     position: relative;
     aspect-ratio: 30 / 22;
@@ -282,7 +284,7 @@
 
   .canvas-placeholder-icon {
     font-size: 48px;
-    filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.3));
+    filter: drop-shadow(2px 2px 0 rgba(45,31,20,0.3));
     animation: pulse-glow 2s ease-in-out infinite;
   }
 
@@ -526,7 +528,7 @@
 
   .scenario-chip:hover {
     box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
     background: var(--orange-light);
   }
 
@@ -557,7 +559,7 @@
 
   .scenario-run-all:hover {
     box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
   }
 
   .scenario-run-all:disabled {
@@ -593,7 +595,7 @@
 
   .scenario-agent-btn:hover {
     box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
   }
 
   .scenario-agent-btn:disabled {
@@ -724,7 +726,7 @@
     display: inline-block;
   }
   .pro-teaser-card .btn-pro-upgrade:hover {
-    box-shadow: 5px 5px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1224,7 +1226,7 @@
 
   .pro-upsell-btn:hover {
     box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
   }
 
   .pro-upsell-hint {
@@ -1271,7 +1273,7 @@
 
   .roster-toggle:hover {
     box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
   }
 
   .roster-panel {
@@ -1379,7 +1381,7 @@
 
   .config-toggle:hover {
     box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
   }
 
   .config-panel {
@@ -1469,7 +1471,7 @@
 
   .config-btn:hover {
     box-shadow: 4px 4px 0 var(--ink);
-    transform: translate(-1px, -1px);
+    transform: translate(-2px, -2px);
   }
 
   .config-btn-primary {
@@ -1573,7 +1575,7 @@
   }
 </style>
 </head>
-<body>
+<body style="background:var(--bg-ink);color:var(--ink);">
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- Skip to content (accessibility) -->
@@ -1588,9 +1590,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html" class="active">AI Agents</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html" class="active">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -1601,10 +1603,10 @@
 
 <main id="main-content">
 <noscript>
-  <div style="text-align:center; padding:48px 24px; font-family:'Space Mono',monospace; color:#6b5a4e;">
-    <p style="font-family:'Luckiest Guy',cursive; font-size:24px; margin-bottom:12px;">JavaScript required</p>
+  <div style="text-align:center; padding:48px 24px; font-family:var(--font-mono); color:var(--ink-medium);">
+    <p style="font-family:var(--font-display); font-size:24px; margin-bottom:12px;">JavaScript required</p>
     <p>The Situation Room needs JavaScript to run. Please enable it or check your ad blocker.</p>
-    <p style="font-family:'Caveat',cursive; font-size:18px; margin-top:16px; color:#a89585;">the agents are napping without power...</p>
+    <p style="font-family:var(--font-hand); font-size:18px; margin-top:16px; color:var(--ink-light);">the agents are napping without power...</p>
   </div>
 </noscript>
 <!-- Trial expiry banner (rendered by JS) -->
@@ -1630,7 +1632,7 @@
 <div id="weeklyBriefingWrap" style="max-width:800px; margin:0 auto 24px; padding:0 24px; display:none;">
   <div id="weeklyBriefingCard" style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px;">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-      <img src="/assets/agents/razzle.svg" width="28" height="28" alt="">
+      <img src="/assets/agents/razzle.svg" width="28" height="28" alt="Razzle — Chief of Staff">
       <div>
         <div style="font-family:var(--font-display); font-size:18px;">This Week's Briefing</div>
         <div id="briefingDate" style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);"></div>
@@ -1923,7 +1925,7 @@
         </div>
         <ul style="font-family:var(--font-mono); font-size:11px; padding-left:16px; line-height:1.9; color:var(--ink-medium); margin-bottom:16px;">
           <li>All 6 agents with league context</li>
-          <li>Bring your own API key (BYOK)</li>
+          <li>Uses your OpenRouter API key</li>
           <li>20 AI queries per day</li>
           <li>Full historical data (2015+)</li>
           <li>CSV export + Formula Store</li>
@@ -1992,7 +1994,7 @@
           <tr style="background:var(--bg-card);">
             <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint); color:var(--orange); font-weight:700;">League-contextualized AI</td>
             <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint); text-align:center; color:var(--red);">&#x2717;</td>
-            <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">&#x2713; (BYOK)</td>
+            <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">&#x2713; (API key)</td>
             <td style="padding:8px 12px; border-bottom:2px dashed var(--ink-faint); text-align:center; color:var(--green); font-weight:700;">&#x2713; (included)</td>
           </tr>
           <tr>
@@ -2046,16 +2048,16 @@
 
 </main>
 
-<!-- FOOTER -->
-<footer class="site-footer">
+<!-- FOOTER (dark to match Situation Room) -->
+<footer class="site-footer" style="background:var(--bg-ink);color:var(--ink);">
   <div class="site-footer-grid">
 
     <div>
       <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
+      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
       <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>
@@ -2154,7 +2156,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
     } else if (isTrial && days <= 2) {
       // Trial ending soon
       banner.style.display = "block";
-      var urgencyColor = days <= 1 ? "var(--red, #e74c3c)" : "var(--orange)";
+      var urgencyColor = days <= 1 ? "var(--red, #e63946)" : "var(--orange)";
       var msg = days <= 1
         ? "Your Pro trial ends tomorrow"
         : "Your Pro trial ends in " + days + " days";
@@ -2269,7 +2271,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
           if (!ag) continue;
           var finding = cached.agents[agId];
           sections.innerHTML +=
-            '<div style="display:flex; gap:8px; align-items:flex-start; margin-top:10px; padding-top:10px; border-top:1px dashed var(--ink-faint);">' +
+            '<div style="display:flex; gap:8px; align-items:flex-start; margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint);">' +
               '<img src="' + ag.icon + '" width="20" height="20" alt="" style="margin-top:2px;">' +
               '<div>' +
                 '<div style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:' + ag.color + ';">' + ag.name + '</div>' +

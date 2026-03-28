@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ede0cf">
 <title>Dynasty Dashboard — Razzle</title>
-<script>if(window.self===window.top)window.location.replace('/lab.html?panel=dashboard');</script>
 <meta property="og:title" content="Dynasty Dashboard — Razzle">
 <meta property="og:description" content="Dynasty command center. Top risers, biggest fallers, value picks, and positional scarcity alerts updated daily. Your daily briefing in one screen.">
 <meta property="og:site_name" content="razzle.lol">
@@ -110,7 +109,7 @@
   .db-section {
     background: var(--bg-card);
     border: 3px solid var(--ink);
-    border-radius: 14px;
+    border-radius: var(--radius);
     box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
   }
@@ -142,7 +141,7 @@
     font-size: 13px;
   }
   .db-row:last-child { border-bottom: none; }
-  .db-row:hover { background: rgba(217,119,87,0.05); }
+  .db-row:hover { background: rgba(var(--sort-highlight),0.05); }
   .db-row-rank {
     font-family: var(--font-mono);
     font-size: 14px;
@@ -172,10 +171,10 @@
     min-width: 24px;
     text-align: center;
   }
-  .db-pos.QB { background: var(--qb); }
-  .db-pos.RB { background: var(--rb); }
-  .db-pos.WR { background: var(--wr); }
-  .db-pos.TE { background: var(--te); }
+  .db-pos.QB { background: var(--pos-qb); }
+  .db-pos.RB { background: var(--pos-rb); }
+  .db-pos.WR { background: var(--pos-wr); }
+  .db-pos.TE { background: var(--pos-te); }
 
   /* Chips */
   .db-chip {
@@ -187,10 +186,10 @@
     border: 2px solid;
     white-space: nowrap;
   }
-  .db-chip.up { background: var(--green-light); color: var(--rb); border-color: var(--rb); }
+  .db-chip.up { background: var(--green-light); color: var(--pos-rb); border-color: var(--pos-rb); }
   .db-chip.down { background: var(--red-light); color: var(--red); border-color: var(--red); }
   .db-chip.tv { background: var(--orange-light); color: var(--orange); border-color: var(--orange); }
-  .db-chip.ppg { background: var(--blue-light); color: var(--qb); border-color: var(--qb); }
+  .db-chip.ppg { background: var(--blue-light); color: var(--pos-qb); border-color: var(--pos-qb); }
 
   /* Scarcity bars */
   .db-scar-row {
@@ -219,10 +218,10 @@
     border-radius: var(--radius-sm);
     transition: width 0.3s;
   }
-  .db-scar-bar.QB { background: var(--qb); }
-  .db-scar-bar.RB { background: var(--rb); }
-  .db-scar-bar.WR { background: var(--wr); }
-  .db-scar-bar.TE { background: var(--te); }
+  .db-scar-bar.QB { background: var(--pos-qb); }
+  .db-scar-bar.RB { background: var(--pos-rb); }
+  .db-scar-bar.WR { background: var(--pos-wr); }
+  .db-scar-bar.TE { background: var(--pos-te); }
   .db-scar-info {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -250,10 +249,10 @@
     font-family: var(--font-mono);
     font-size: 15px;
   }
-  .db-trend-pos.QB { color: var(--qb); }
-  .db-trend-pos.RB { color: var(--rb); }
-  .db-trend-pos.WR { color: var(--wr); }
-  .db-trend-pos.TE { color: var(--te); }
+  .db-trend-pos.QB { color: var(--pos-qb); }
+  .db-trend-pos.RB { color: var(--pos-rb); }
+  .db-trend-pos.WR { color: var(--pos-wr); }
+  .db-trend-pos.TE { color: var(--pos-te); }
   .db-trend-stat {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -327,9 +326,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">Screener</a></li>
-    <li><a href="/league-intel.html">Bureau</a></li>
-    <li><a href="/agents.html">AI Agents</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -371,9 +370,9 @@
     <div>
       <div class="site-footer-heading">Razzle</div>
       <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Screener</a>
-      <a href="/league-intel.html" class="footer-link">Bureau</a>
-      <a href="/agents.html" class="footer-link">AI Agents</a>
+      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
+      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
+      <a href="/agents.html" class="footer-link">Situation Room</a>
       <a href="/prompts.html" class="footer-link">Prompts</a>
       <a href="/pricing.html" class="footer-link">Pricing</a>
       <a href="/about.html" class="footer-link">About</a>

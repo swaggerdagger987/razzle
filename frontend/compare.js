@@ -9,7 +9,7 @@ function _getPosColors() {
     TE: s.getPropertyValue('--pos-te').trim() || "#8b5cf6"
   };
 }
-var POS_COLORS = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+var POS_COLORS = (typeof getPosColors === "function") ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
 var POS_CSS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
 
 var _p1Data = null;
@@ -611,7 +611,7 @@ function exportComparePNG() {
   ctx.fill();
   ctx.stroke();
   ctx.fillStyle = _pc.WR || "#d97757";
-  ctx.font = "bold 20px 'Luckiest Guy', cursive";
+  ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, 87);
 
@@ -715,13 +715,13 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
   roundRect(ctx, x + 14, y + 18, 50, 36, 6);
   ctx.stroke();
   ctx.fillStyle = t.white;
-  ctx.font = "bold 22px 'Luckiest Guy', cursive";
+  ctx.font = "22px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, x + 39, y + 44);
 
   // Name
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 26px 'Luckiest Guy', cursive";
+  ctx.font = "26px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   var displayName = player.full_name || "";
   // Truncate if too long
@@ -766,7 +766,7 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
     ctx.stroke();
 
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 20px 'Luckiest Guy', cursive";
+    ctx.font = "20px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, bx + boxW / 2, by + 26);
 
