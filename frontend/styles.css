@@ -857,6 +857,13 @@ a.btn-pro-upgrade:focus-visible {
   border-width: 2px;
   box-shadow: 4px 4px 0 var(--ink);
 }
+.card-hover {
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.card-hover:hover {
+  box-shadow: 6px 6px 0 var(--ink);
+  transform: translate(-2px, -2px);
+}
 
 /* ===== POSITION STRIPE — 4px colored top border on player cards ===== */
 .pos-stripe-qb { border-top: 4px solid var(--pos-qb) !important; }
