@@ -305,18 +305,22 @@ def _user_dict(row) -> dict:
 
     trial_active = False
     trial_days_remaining = 0
+    trial_hours_remaining = 0
     if trial_end_str and d["plan"] == "free":
         try:
             trial_end = datetime.fromisoformat(trial_end_str.replace("Z", "+00:00"))
             now = datetime.now(timezone.utc)
             if trial_end > now:
                 trial_active = True
-                trial_days_remaining = max(0, (trial_end - now).days)
+                delta = trial_end - now
+                trial_days_remaining = max(0, delta.days)
+                trial_hours_remaining = max(0, int(delta.total_seconds() // 3600))
         except (ValueError, TypeError):
             pass
 
     d["trial_active"] = trial_active
     d["trial_days_remaining"] = trial_days_remaining
+    d["trial_hours_remaining"] = trial_hours_remaining if trial_active else 0
     if trial_end_str:
         d["trial_end"] = trial_end_str
 

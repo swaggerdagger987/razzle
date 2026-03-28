@@ -1331,7 +1331,9 @@ function updateAuthUI(user) {
       badge = '<span class="nav-plan-badge nav-plan-elite">Elite' + (user.plan === "elite_lifetime" ? ' ∞' : '') + '</span>';
     } else if (isTrial) {
       var daysLeft = user.trial_days_remaining || 0;
-      badge = '<span class="nav-plan-badge nav-plan-trial">Trial ' + daysLeft + 'd</span>';
+      var hoursLeft = user.trial_hours_remaining || 0;
+      var trialLabel = daysLeft > 0 ? daysLeft + 'd' : (hoursLeft > 0 ? hoursLeft + 'h' : '<1h');
+      badge = '<span class="nav-plan-badge nav-plan-trial">Trial ' + trialLabel + '</span>';
     } else if (user.plan === "pro" || user.plan === "pro_lifetime") {
       badge = '<span class="nav-plan-badge nav-plan-pro">Pro' + (user.plan === "pro_lifetime" ? ' ∞' : '') + '</span>';
     } else {
@@ -1341,7 +1343,10 @@ function updateAuthUI(user) {
     // Dropdown menu items
     var dropdownItems = '';
     if (isTrial) {
-      dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--orange); cursor:default;">Pro trial: ' + (user.trial_days_remaining || 0) + ' days remaining</div>';
+      var _trialDays = user.trial_days_remaining || 0;
+      var _trialHours = user.trial_hours_remaining || 0;
+      var _trialText = _trialDays > 0 ? _trialDays + ' day' + (_trialDays !== 1 ? 's' : '') : (_trialHours > 0 ? _trialHours + ' hour' + (_trialHours !== 1 ? 's' : '') : 'less than 1 hour');
+      dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--orange); cursor:default;">Pro trial: ' + _trialText + ' remaining</div>';
     }
     if (user.sleeper_username) {
       dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--ink-light); cursor:default;">sleeper: ' + escapeHtml(user.sleeper_username) + '</div>';
@@ -1376,9 +1381,15 @@ function updateAuthUI(user) {
       sessionStorage.setItem("razzle_trial_warn", "1");
       setTimeout(function() {
         var days = user.trial_days_remaining || 0;
-        var msg = days === 0
-          ? "your Pro trial expires today. subscribe to keep your access."
-          : "your Pro trial expires in " + days + " day" + (days !== 1 ? "s" : "") + ". subscribe to keep your access.";
+        var hours = user.trial_hours_remaining || 0;
+        var msg;
+        if (days === 0 && hours <= 0) {
+          msg = "your Pro trial expires today. subscribe to keep your access.";
+        } else if (days === 0) {
+          msg = "your Pro trial expires in " + hours + " hour" + (hours !== 1 ? "s" : "") + ". subscribe to keep your access.";
+        } else {
+          msg = "your Pro trial expires in " + days + " day" + (days !== 1 ? "s" : "") + ". subscribe to keep your access.";
+        }
         _showToast(msg, "warning", 10000);
       }, 3000);
     }

@@ -768,8 +768,9 @@ def get_billing_status(user: dict) -> dict:
             result["trial_end"] = trial_end_str
             try:
                 trial_end_dt = datetime.fromisoformat(trial_end_str.replace("Z", "+00:00"))
-                days_left = (trial_end_dt - datetime.now(timezone.utc)).days
-                result["trial_days_remaining"] = max(0, days_left)
+                delta = trial_end_dt - datetime.now(timezone.utc)
+                result["trial_days_remaining"] = max(0, delta.days)
+                result["trial_hours_remaining"] = max(0, int(delta.total_seconds() // 3600))
             except (ValueError, TypeError):
                 pass
 
