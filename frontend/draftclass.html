@@ -549,7 +549,7 @@
     for (var ri = 0; ri < rows.length; ri++) {
       rows[ri].addEventListener('click', function() {
         var pid = this.getAttribute('data-pid');
-        if (pid) window.location.href = '/player/' + pid;
+        if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
       });
     }
 
