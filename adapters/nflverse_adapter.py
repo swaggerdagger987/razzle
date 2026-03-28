@@ -522,6 +522,11 @@ def process_season(conn, season):
         elif season_type in ("POST", "PLAYOFFS"):
             season_type = "post"
 
+        # Guard: weeks > 18 cannot be regular season (playoff contamination)
+        week_num = int(row.get("week") or 0)
+        if week_num > 18 and season_type == "regular":
+            season_type = "post"
+
         # Resolve or backfill player
         pid = resolve_player_id(row, gsis_map, name_map)
         if not pid:
