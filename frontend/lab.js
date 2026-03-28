@@ -40,7 +40,7 @@ function _getPosColorsHex() {
 function exportPanelCSV(panelName) {
   // Pro+ gating
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro.', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
+    _showToast('CSV export is a Pro feature', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
   var panel = document.getElementById('panel-' + panelName);
@@ -6035,7 +6035,7 @@ function exportCSV() {
 
   // Pro+ gating: CSV export requires Pro or Elite plan
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export requires Pro.', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
+    _showToast('export all ' + state.items.length + ' rows as CSV \u2014 Pro feature', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
 
