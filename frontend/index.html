@@ -142,6 +142,11 @@
     background: var(--bg-card);
     color: var(--ink);
   }
+  .mobile-signup-cta { display: none; }
+  @media (max-width: 768px) {
+    .mobile-signup-cta { display: inline-block; }
+    .desktop-only-cta { display: none; }
+  }
 
   /* ===== SCREENER VISUAL ===== */
   .screener-visual {
@@ -655,7 +660,8 @@
   <div class="hero-sub">150+ stat columns. Custom formulas. Shareable views. No account required. No catch.</div>
   <div class="hero-cta">
     <a href="/lab.html" class="btn-hero btn-hero-primary">Open the Screener</a>
-    <a href="#features" class="btn-hero btn-hero-secondary">See what's inside</a>
+    <a href="#features" class="btn-hero btn-hero-secondary desktop-only-cta">See what's inside</a>
+    <button class="btn-hero btn-hero-secondary mobile-signup-cta" onclick="if(typeof openAuthModal==='function')openAuthModal('register');">Sign Up Free</button>
   </div>
   <div style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light); margin-top:8px;">no signup needed — just open it</div>
 </div>
