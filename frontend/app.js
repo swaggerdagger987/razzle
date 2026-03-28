@@ -386,6 +386,45 @@ function refreshPlanGating() {
   if (typeof checkAuth === "function") checkAuth();
 }
 
+/* ===== Server Plan Revalidation (anti-tamper) ===== */
+
+var _planRevalidateInterval = null;
+var _PLAN_REVALIDATE_MS = 5 * 60 * 1000; // 5 minutes
+
+function _revalidatePlanFromServer() {
+  var token = localStorage.getItem("razzle_token");
+  if (!token) return;
+  fetch("/api/auth/me", {
+    headers: { "Authorization": "Bearer " + token }
+  }).then(function(resp) {
+    if (!resp.ok) return;
+    return resp.json();
+  }).then(function(data) {
+    if (!data || !data.user) return;
+    var serverPlan = data.user.plan || "free";
+    try {
+      var stored = JSON.parse(localStorage.getItem("razzle_user") || "null");
+      if (stored && stored.plan !== serverPlan) {
+        stored.plan = serverPlan;
+        localStorage.setItem("razzle_user", JSON.stringify(stored));
+        refreshPlanGating();
+      }
+    } catch (e) { /* ignore parse errors */ }
+  }).catch(function() { /* silent — don't disrupt UX on network failure */ });
+}
+
+function _startPlanRevalidation() {
+  if (_planRevalidateInterval) return;
+  _revalidatePlanFromServer(); // immediate check on load
+  _planRevalidateInterval = setInterval(_revalidatePlanFromServer, _PLAN_REVALIDATE_MS);
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", _startPlanRevalidation);
+} else {
+  _startPlanRevalidation();
+}
+
 /* ===== Tier-Aware CTA Helpers ===== */
 
 /**
