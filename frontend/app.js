@@ -1529,7 +1529,7 @@ async function openManageSubscription() {
     if (data.portal_url) {
       window.location.href = data.portal_url;
     } else {
-      if (typeof _showToast === "function") _showToast("subscription management isn't available right now.", "error"); else _showToast("subscription management isn't available right now.", "error");
+      if (typeof _showToast === "function") _showToast("contact swaggerdagger987@gmail.com to manage your subscription", "warning", 10000);
     }
   } catch (e) {
     if (typeof _showToast === "function") _showToast("connection fumbled. try again.", "error"); else _showToast("connection fumbled. try again.", "error");
