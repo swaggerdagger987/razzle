@@ -96,15 +96,17 @@ if (document.readyState === "loading") {
 function getCanvasTheme() {
   var isDark = document.documentElement.getAttribute("data-theme") === "dark";
   var s = getComputedStyle(document.documentElement);
+  var bg = s.getPropertyValue('--bg').trim() || (isDark ? "#2d1f14" : "#ede0cf");
+  var ink = s.getPropertyValue('--ink').trim() || (isDark ? "#ede0cf" : "#2d1f14");
   return {
-    bg: isDark ? "#2d1f14" : "#ede0cf",
-    bgWarm: isDark ? "#3b2821" : "#e5d5c3",
-    bgCard: isDark ? "#4a3728" : "#f7efe5",
-    ink: isDark ? "#ede0cf" : "#2d1f14",
-    inkMedium: isDark ? "#c4b5a5" : "#5c4a3d",
-    inkLight: isDark ? "#a89888" : "#6d5c4e",
-    inkFaint: isDark ? "#5c4a3d" : "#c4b5a5",
-    white: isDark ? "#ede0cf" : "#fff",
+    bg: bg,
+    bgWarm: s.getPropertyValue('--bg-warm').trim() || (isDark ? "#3b2821" : "#e5d5c3"),
+    bgCard: s.getPropertyValue('--bg-card').trim() || (isDark ? "#4a3728" : "#f7efe5"),
+    ink: ink,
+    inkMedium: s.getPropertyValue('--ink-medium').trim() || (isDark ? "#c4b5a5" : "#5c4a3d"),
+    inkLight: s.getPropertyValue('--ink-light').trim() || (isDark ? "#a89888" : "#6d5c4e"),
+    inkFaint: s.getPropertyValue('--ink-faint').trim() || (isDark ? "#5c4a3d" : "#c4b5a5"),
+    white: isDark ? ink : "#fff",
     gridLine: isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)",
     subtitleAlpha: isDark ? "rgba(237,224,207,0.5)" : "rgba(45,31,20,0.5)",
     orange: s.getPropertyValue('--orange').trim() || "#d97757",
@@ -119,10 +121,10 @@ function getCanvasTheme() {
 
 /* ===== Export Colors (shared across all pages) ===== */
 function getExportColors() {
-  var isDark = document.documentElement.dataset.theme === 'dark';
+  var t = getCanvasTheme();
   return {
-    bg: isDark ? '#2d1f14' : '#ede0cf',
-    watermark: isDark ? 'rgba(237,224,207,0.3)' : 'rgba(45,31,20,0.3)'
+    bg: t.bg,
+    watermark: t.subtitleAlpha
   };
 }
 
@@ -583,6 +585,7 @@ var _wmImgCache = {};
 (function() {
   for (var i = 0; i < _wmAgentIcons.length; i++) {
     var img = new Image();
+    img.onerror = (function(src) { return function() { delete _wmImgCache[src]; }; })(_wmAgentIcons[i]);
     img.src = _wmAgentIcons[i];
     _wmImgCache[_wmAgentIcons[i]] = img;
   }
