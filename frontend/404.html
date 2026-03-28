@@ -101,12 +101,18 @@
   @keyframes tigerWalk {
     0%   { transform: rotate(-5deg) translateX(0); }
     5%   { transform: rotate(-5deg) translateX(0); }
-    25%  { transform: rotate(0deg) translateX(120vw); }
-    26%  { transform: rotate(0deg) scaleX(-1) translateX(120vw); }
+    25%  { transform: rotate(0deg) translateX(100vw); }
+    26%  { transform: rotate(0deg) scaleX(-1) translateX(100vw); }
     50%  { transform: rotate(0deg) scaleX(-1) translateX(0); }
     55%  { transform: rotate(-5deg) scaleX(1) translateX(0); }
     100% { transform: rotate(-5deg) scaleX(1) translateX(0); }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .four-oh-four-mascot { animation: none; }
+  }
+
+  body { overflow-x: hidden; }
 
   .tiger-annotation {
     font-family: var(--font-hand);

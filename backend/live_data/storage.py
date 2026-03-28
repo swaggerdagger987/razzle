@@ -338,6 +338,9 @@ def rate_formula(formula_id: int, rating: int, review: str = "", user_id: int = 
     if rating < 1 or rating > 5:
         return {"status": "error", "message": "rating must be 1-5"}
 
+    if review and len(review) > 500:
+        return {"status": "error", "message": "Review text too long (max 500 chars)"}
+
     # Reject review text containing HTML tags
     html_err = _validate_no_html(review=review)
     if html_err:

@@ -1165,10 +1165,7 @@ function _syncUndoRedoButtons() {
     const [nflOpts, prospectOpts, collegeOpts] = await Promise.all([
       apiFetch("/api/filter-options").catch(function(err) {
         console.error("Failed to load NFL filter options:", err);
-        var labContent = document.getElementById("labContent") || document.querySelector(".lab-main");
-        if (labContent) {
-          labContent.innerHTML = '<div style="text-align:center;padding:40px;font-family:var(--font-mono);color:var(--orange);font-size:15px;border:3px solid var(--ink);background:var(--bg-card);border-radius:8px;margin:24px;">' + razzleError() + '</div>';
-        }
+        if (typeof _showToast === "function") _showToast(razzleError(), "error");
         return { seasons: [], teams: [], positions: [] };
       }),
       apiFetch("/api/prospect-options").catch(() => ({ years: [], schools: [], positions: [] })),
