@@ -492,12 +492,12 @@ function showTagPicker(playerId, anchorEl) {
     picker.className = "tag-picker";
     picker.setAttribute("role", "dialog");
     picker.setAttribute("aria-modal", "true");
-    picker.setAttribute("aria-label", "Player tags");
+    picker.setAttribute("aria-labelledby", "dlgTitleTagPicker");
     document.body.appendChild(picker);
   }
 
   const currentTag = getPlayerTag(playerId);
-  let html = '<div class="tag-picker-title">Tag Player</div>';
+  let html = '<div class="tag-picker-title" id="dlgTitleTagPicker">Tag Player</div>';
   for (const [key, opt] of Object.entries(TAG_OPTIONS)) {
     const isActive = currentTag === key;
     html += `<button class="tag-picker-option${isActive ? " active" : ""}" `
@@ -611,11 +611,11 @@ function showNoteEditor(playerId, anchorEl) {
     editor.className = "note-editor-popup";
     editor.setAttribute("role", "dialog");
     editor.setAttribute("aria-modal", "true");
-    editor.setAttribute("aria-label", "Player notes");
+    editor.setAttribute("aria-labelledby", "dlgTitleNoteEditor");
     document.body.appendChild(editor);
   }
 
-  editor.innerHTML = `<div class="note-editor-title">${escapeHtml(name)}</div>`
+  editor.innerHTML = `<div class="note-editor-title" id="dlgTitleNoteEditor">${escapeHtml(name)}</div>`
     + `<textarea class="note-editor-input" id="noteEditorInput" maxlength="140" placeholder="Add a note... (140 chars)">${escapeHtml(existing)}</textarea>`
     + `<div class="note-editor-footer">`
     + `<span class="note-editor-count" id="noteCharCount">${existing.length}/140</span>`
@@ -10392,7 +10392,7 @@ function openWatchlistPanel() {
     overlay.className = "filter-modal-overlay";
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
-    overlay.setAttribute("aria-label", "Watchlist");
+    overlay.setAttribute("aria-labelledby", "dlgTitleWatchlist");
     overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
     document.body.appendChild(overlay);
   }
@@ -10414,7 +10414,7 @@ function renderWatchlistPanel() {
 
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:600px; max-width:95vw; max-height:85vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">';
-  html += '<h3 style="font-family:var(--font-display); font-size:20px; margin:0;">Watchlist <span style="color:var(--orange);">(' + list.length + ')</span></h3>';
+  html += '<h3 id="dlgTitleWatchlist" style="font-family:var(--font-display); font-size:20px; margin:0;">Watchlist <span style="color:var(--orange);">(' + list.length + ')</span></h3>';
   html += '<div style="display:flex; gap:6px;">';
   if (list.length > 0) {
     html += '<button class="btn-primary" onclick="openTierBoard()">Tier Board</button>';
@@ -10481,7 +10481,7 @@ function openTierBoard() {
     overlay.className = "filter-modal-overlay";
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
-    overlay.setAttribute("aria-label", "Tier Board");
+    overlay.setAttribute("aria-labelledby", "dlgTitleTierBoard");
     overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
     document.body.appendChild(overlay);
   }
@@ -10503,7 +10503,7 @@ function renderTierBoard() {
 
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:800px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">';
-  html += '<h3 style="font-family:var(--font-display); font-size:20px; margin:0;">Tier Board</h3>';
+  html += '<h3 id="dlgTitleTierBoard" style="font-family:var(--font-display); font-size:20px; margin:0;">Tier Board</h3>';
   html += '<div style="display:flex; gap:6px;">';
   html += '<button class="btn-primary" onclick="exportTierBoardPNG()">Export PNG</button>';
   html += '<button class="btn-chunky" onclick="openWatchlistPanel(); closeTierBoard();">Back</button>';
@@ -10990,12 +10990,12 @@ function toggleShortcutRef() {
   overlay.className = "filter-modal-overlay open";
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
-  overlay.setAttribute("aria-label", "Keyboard Shortcuts");
+  overlay.setAttribute("aria-labelledby", "dlgTitleShortcuts");
   overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
   overlay.innerHTML = `
     <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); max-width:420px; width:90%; padding:24px; margin:auto; margin-top:120px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h3 style="font-family:var(--font-display); font-size:18px; margin:0;">Keyboard Shortcuts</h3>
+        <h3 id="dlgTitleShortcuts" style="font-family:var(--font-display); font-size:18px; margin:0;">Keyboard Shortcuts</h3>
         <button class="btn-chunky" onclick="document.getElementById('shortcutRefOverlay').classList.remove('open')" style="font-size:11px; padding:4px 10px;">Close</button>
       </div>
       <table style="width:100%; font-family:var(--font-mono); font-size:12px; border-collapse:collapse;">
@@ -11783,7 +11783,7 @@ function openMyRoster() {
     overlay.className = "filter-modal-overlay";
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
-    overlay.setAttribute("aria-label", "My Roster");
+    overlay.setAttribute("aria-labelledby", "dlgTitleMyRoster");
     overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
     document.body.appendChild(overlay);
   }
@@ -11867,7 +11867,7 @@ function renderMyRosterPanel() {
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:700px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   // Header
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">';
-  html += '<h3 style="font-family:var(--font-display); font-size:20px; margin:0;">My Roster <span style="color:var(--green);">(' + list.length + ')</span></h3>';
+  html += '<h3 id="dlgTitleMyRoster" style="font-family:var(--font-display); font-size:20px; margin:0;">My Roster <span style="color:var(--green);">(' + list.length + ')</span></h3>';
   html += '<div style="display:flex; gap:6px;">';
   if (list.length > 0) {
     html += '<button class="btn-primary" onclick="calculateRosterValue()">Calculate Value</button>';
