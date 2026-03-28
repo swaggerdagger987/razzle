@@ -828,7 +828,7 @@ _AGE_DECAY = {"QB": 0.04, "RB": 0.10, "WR": 0.06, "TE": 0.05}
 _ELITE_PPG = {"QB": 22.0, "RB": 18.0, "WR": 18.0, "TE": 14.0}
 
 # Positional scarcity multipliers (higher = scarcer = more valuable)
-_SCARCITY = {"QB": 0.85, "RB": 1.15, "WR": 1.0, "TE": 0.90}
+_SCARCITY = {"QB": 0.85, "RB": 1.15, "WR": 1.0, "TE": 0.72}
 
 
 def _age_value(age, position):

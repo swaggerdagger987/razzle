@@ -2081,6 +2081,8 @@ def fetch_stacks(season=None, limit=30, min_games=8):
                         corr = num / (den_q * den_r) if den_q > 0 and den_r > 0 else 0
 
                         rec_ppg = sum(rec_scores) / n
+                        if rec_ppg < 5.0:
+                            continue
 
                         stacks.append({
                             "team": team,
