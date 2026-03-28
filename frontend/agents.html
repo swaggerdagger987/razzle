@@ -1734,6 +1734,7 @@
         <div class="config-section">
           <label class="config-label">Model</label>
           <input class="config-input" id="cfgModel" type="text" placeholder="openrouter/auto" value="openrouter/auto" aria-label="LLM model identifier">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);margin:2px 0 6px;">Default "openrouter/auto" picks the best model automatically. For deeper analysis, try "anthropic/claude-3.5-haiku" (~$0.003/query).</div>
           <button class="config-btn" id="cfgApplyModel">Apply to All</button>
         </div>
 
@@ -1889,7 +1890,8 @@
                 <div style="font-family:var(--font-mono); font-size:13px;">Get an API key</div>
                 <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin-top:2px;">
                   Sign up at <a href="https://openrouter.ai" target="_blank" rel="noopener" style="color:var(--orange); text-decoration:underline;">openrouter.ai</a> (routes to Claude, GPT-4, etc. — most queries cost &lt;$0.01), copy your key, then
-                  <a href="#" onclick="event.preventDefault(); document.getElementById('configToggle').click(); document.getElementById('cfgSharedKey').focus();" style="color:var(--orange); text-decoration:underline;">paste it in Config</a>
+                  <a href="#" onclick="event.preventDefault(); document.getElementById('configToggle').click(); document.getElementById('cfgSharedKey').focus();" style="color:var(--orange); text-decoration:underline;">paste it in Config</a>.
+                  Set a <strong>$5/month spending limit</strong> under <a href="https://openrouter.ai/settings/limits" target="_blank" rel="noopener" style="color:var(--orange); text-decoration:underline;">openrouter.ai/settings/limits</a> for peace of mind.
                 </div>
               </div>
             </div>
@@ -1909,6 +1911,27 @@
             </div>
           </div>
           <button onclick="dismissSetupGuide()" style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); background:none; border:none; cursor:pointer; margin-top:6px; text-decoration:underline;">dismiss</button>
+        </div>
+
+        <!-- BYOK FAQ -->
+        <div id="byokFaq" style="margin-bottom:12px;">
+          <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); margin-bottom:6px;">FAQ</div>
+          <details style="margin-bottom:4px; border:2px solid var(--ink-faint); border-radius:6px; background:var(--bg-warm);">
+            <summary style="font-family:var(--font-mono); font-size:12px; color:var(--ink); padding:6px 10px; cursor:pointer; list-style:none; display:flex; align-items:center; gap:6px;"><span style="font-size:10px;">&#9654;</span> What does it cost?</summary>
+            <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); padding:4px 10px 8px 26px; line-height:1.5;">Most queries cost $0.003-$0.01. A $5 budget covers ~500-1,000 queries.</div>
+          </details>
+          <details style="margin-bottom:4px; border:2px solid var(--ink-faint); border-radius:6px; background:var(--bg-warm);">
+            <summary style="font-family:var(--font-mono); font-size:12px; color:var(--ink); padding:6px 10px; cursor:pointer; list-style:none; display:flex; align-items:center; gap:6px;"><span style="font-size:10px;">&#9654;</span> Which model should I use?</summary>
+            <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); padding:4px 10px 8px 26px; line-height:1.5;">openrouter/auto (default) works great. For more detailed analysis, try anthropic/claude-3.5-haiku.</div>
+          </details>
+          <details style="margin-bottom:4px; border:2px solid var(--ink-faint); border-radius:6px; background:var(--bg-warm);">
+            <summary style="font-family:var(--font-mono); font-size:12px; color:var(--ink); padding:6px 10px; cursor:pointer; list-style:none; display:flex; align-items:center; gap:6px;"><span style="font-size:10px;">&#9654;</span> What if my key stops working?</summary>
+            <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); padding:4px 10px 8px 26px; line-height:1.5;">Check your OpenRouter balance at <a href="https://openrouter.ai/credits" target="_blank" rel="noopener" style="color:var(--orange); text-decoration:underline;">openrouter.ai/credits</a>.</div>
+          </details>
+          <details style="margin-bottom:4px; border:2px solid var(--ink-faint); border-radius:6px; background:var(--bg-warm);">
+            <summary style="font-family:var(--font-mono); font-size:12px; color:var(--ink); padding:6px 10px; cursor:pointer; list-style:none; display:flex; align-items:center; gap:6px;"><span style="font-size:10px;">&#9654;</span> Is my key safe?</summary>
+            <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); padding:4px 10px 8px 26px; line-height:1.5;">Your key is stored in your browser session only &mdash; it's never sent to Razzle's servers. Set a spending limit for extra safety.</div>
+          </details>
         </div>
 
         <div class="scenario-actions">
