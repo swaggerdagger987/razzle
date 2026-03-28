@@ -1683,7 +1683,7 @@ const SCENARIO_EXAMPLES = [
   "My opponent has Josh Allen and Stefon Diggs stack this week",
   "Breakout WR candidates on the waiver wire for dynasty stash",
   "Is it worth rostering a backup QB in a 12-team league?",
-  "Evaluating 2025 rookie draft class — who's the 1.01?",
+  "Evaluating " + new Date().getFullYear() + " rookie draft class — who's the 1.01?",
 ];
 
 function setupScenarioPanel() {
