@@ -4,25 +4,15 @@ severity: S2
 category: a11y
 title: Situation Room pixel canvas has no ARIA labels or screen reader description
 source: deep-audit
-status: open
+status: closed-false-positive
 ---
 
-## Problem
+## FALSE POSITIVE
 
-The pixel canvas (30x22 tile grid with sprite agents) is interactive (click/touch agent selection) but has no ARIA labels, alt text, or screen reader equivalent. Canvas content is invisible to assistive technology.
+Investigation found that the canvas ALREADY has a detailed `aria-label` at `frontend/agents.html:1652`:
 
-## Root Cause
+```html
+aria-label="Situation Room pixel canvas. Arrow keys or WASD to move camera. Keys 1-6 to select agents. Click to select. Drag to pan."
+```
 
-`frontend/agents.html` — the canvas element lacks `aria-label` and there is no visually hidden description for screen readers.
-
-## Fix
-
-1. Add `aria-label="Situation Room: six AI agents working in a pixel art office"` to the canvas element
-2. Add a visually hidden `<p class="sr-only">` description listing the agents and their roles
-3. Ensure the canvas container has `role="img"` since it's decorative/illustrative
-
-## Accept When
-
-- The canvas element has an appropriate `aria-label`
-- Screen readers announce a meaningful description of the canvas content
-- Interactive elements within the canvas are documented as keyboard-inaccessible (acceptable for decorative canvas)
+The canvas has keyboard instructions and interaction descriptions for screen readers. No fix needed.

@@ -13,11 +13,20 @@ The auth modal has `width: 340px` at the 768px breakpoint. On a 375px screen (iP
 
 ## Root Cause
 
-`frontend/styles.css` — auth modal mobile breakpoint sets fixed `width: 340px` instead of a responsive value.
+**`frontend/styles.css:1359-1365`** — at mobile breakpoint:
+```css
+.auth-modal {
+  padding: 16px;
+  width: 100%;
+  max-width: 100vw;
+  border-radius: 12px;
+}
+```
+Modal uses `width: 100%; max-width: 100vw` which stretches to full viewport with no exterior margin/safe area. The 16px padding is interior only.
 
 ## Fix
 
-Change width to `width: min(340px, calc(100vw - 32px))` to ensure 16px margin on each side regardless of screen width.
+Add exterior margin guard: `max-width: calc(100vw - 32px)` to ensure 16px safe margin on each side regardless of screen width.
 
 ## Accept When
 
