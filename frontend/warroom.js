@@ -1565,17 +1565,29 @@ function setupConfigPanel() {
     showStatus('base URL updated');
   });
 
-  // Per-agent key save on blur
+  // Per-agent key save on blur + validate
   agentKeysHost.querySelectorAll('.config-agent-row').forEach(row => {
     const id = row.dataset.agentId;
     const input = row.querySelector('.config-agent-key');
-    input.addEventListener('change', () => {
+    input.addEventListener('change', async () => {
+      const key = input.value.trim();
       const cfg = loadAgentConfig();
       const existing = cfg[String(id)] || {};
-      cfg[String(id)] = { ...existing, apiKey: input.value.trim() };
+      cfg[String(id)] = { ...existing, apiKey: key };
       saveAgentConfig(cfg);
-      showStatus(AGENT_DEFS[id].name + ' key saved');
       if (typeof updateApiKeyNotice === 'function') updateApiKeyNotice();
+      if (!key) { showStatus(AGENT_DEFS[id].name + ' key cleared'); input.style.borderColor = ''; return; }
+      // Validate key with a lightweight test call
+      showStatus('validating key...');
+      try {
+        const baseUrl = loadAgentConfig().baseUrl || 'https://openrouter.ai/api/v1';
+        const resp = await fetch(baseUrl + '/models', { headers: { 'Authorization': 'Bearer ' + key }, signal: AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined });
+        if (resp.ok) { showStatus(AGENT_DEFS[id].name + ' key valid'); input.style.borderColor = 'var(--green)'; }
+        else { showStatus(AGENT_DEFS[id].name + ' key invalid (HTTP ' + resp.status + ')'); input.style.borderColor = 'var(--red)'; }
+      } catch (e) {
+        showStatus(AGENT_DEFS[id].name + ' key saved (validation skipped)');
+        input.style.borderColor = '';
+      }
     });
   });
 }
