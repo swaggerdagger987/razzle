@@ -2532,10 +2532,10 @@
 
 <main class="intel-container" id="main-content">
   <noscript>
-    <div style="text-align:center; padding:48px 24px; font-family:'Space Mono',monospace; color:#6b5a4e;">
+    <div style="text-align:center; padding:48px 24px; font-family:'Space Mono',monospace; color:var(--ink-medium);">
       <p style="font-family:'Luckiest Guy',cursive; font-size:24px; margin-bottom:12px;">JavaScript required</p>
       <p>The Bureau needs JavaScript to run. Please enable it or check your ad blocker.</p>
-      <p style="font-family:'Caveat',cursive; font-size:18px; margin-top:16px; color:#a89585;">intel doesn't gather itself...</p>
+      <p style="font-family:'Caveat',cursive; font-size:18px; margin-top:16px; color:var(--ink-light);">intel doesn't gather itself...</p>
     </div>
   </noscript>
   <h1 class="sr-only">Bureau of Intelligence — Razzle</h1>
@@ -3272,7 +3272,12 @@ async function loadLeagues(userId) {
     const leagues = await resp.json();
 
     if (!leagues || !leagues.length) {
-      container.innerHTML = '<div class="loading-intel">looks like you\'re not in any leagues this season. check your Sleeper username or explore the <a href="/lab.html" style="color:var(--orange);">free Screener</a> while we figure this out.</div>';
+      var _month = new Date().getMonth();
+      var _isOffseason = _month >= 1 && _month <= 7;
+      var _emptyMsg = _isOffseason
+        ? 'leagues haven\'t opened for the new season yet \u2014 check back when your league drafts. explore the <a href="/lab.html" style="color:var(--orange);">Screener</a> in the meantime.'
+        : 'no leagues found for this username. double-check your Sleeper username or explore the <a href="/lab.html" style="color:var(--orange);">Screener</a>.';
+      container.innerHTML = '<div class="loading-intel">' + _emptyMsg + '</div>';
       return;
     }
 
