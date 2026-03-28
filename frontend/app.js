@@ -562,7 +562,7 @@ function loadHtml2Canvas() {
 
 /* ===== Styled error HTML helper ===== */
 function razzleErrorHTML(retryFn) {
-  return '<div style="text-align:center;padding:40px;font-family:var(--font-hand);font-size:22px;color:var(--red);">' +
+  return '<div style="text-align:center;padding:40px;font-family:var(--font-hand);font-size:20px;color:var(--red);">' +
     razzleError() +
     (retryFn ? ' <button class="btn-chunky" onclick="' + retryFn + '" style="margin-left:12px">retry</button>' : '') +
   '</div>';
@@ -937,16 +937,18 @@ function _showWelcomeModal(user) {
 
   document.body.appendChild(overlay);
 
-  // CSS confetti burst
-  var style = document.createElement("style");
-  style.textContent = "@keyframes welcome-confetti{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(-200px) rotate(720deg);}}";
-  document.head.appendChild(style);
-  var colors = ["var(--orange)", "var(--pos-qb)", "var(--pos-rb)", "var(--pos-te)", "var(--green)"];
-  for (var ci = 0; ci < 20; ci++) {
-    var dot = document.createElement("div");
-    dot.style.cssText = "position:fixed;width:" + (6 + Math.random() * 8) + "px;height:" + (6 + Math.random() * 8) + "px;background:" + colors[ci % colors.length] + ";border-radius:" + (Math.random() > 0.5 ? "50%" : "2px") + ";left:" + (10 + Math.random() * 80) + "%;top:" + (40 + Math.random() * 30) + "%;z-index:10001;pointer-events:none;animation:welcome-confetti " + (0.8 + Math.random() * 1.2) + "s ease-out forwards;animation-delay:" + (Math.random() * 0.3) + "s;";
-    document.body.appendChild(dot);
-    setTimeout((function(d) { return function() { d.remove(); }; })(dot), 2500);
+  // CSS confetti burst (skip if user prefers reduced motion)
+  if (!prefersReducedMotion) {
+    var style = document.createElement("style");
+    style.textContent = "@keyframes welcome-confetti{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(-200px) rotate(720deg);}}";
+    document.head.appendChild(style);
+    var colors = ["var(--orange)", "var(--pos-qb)", "var(--pos-rb)", "var(--pos-te)", "var(--green)"];
+    for (var ci = 0; ci < 20; ci++) {
+      var dot = document.createElement("div");
+      dot.style.cssText = "position:fixed;width:" + (6 + Math.random() * 8) + "px;height:" + (6 + Math.random() * 8) + "px;background:" + colors[ci % colors.length] + ";border-radius:" + (Math.random() > 0.5 ? "50%" : "2px") + ";left:" + (10 + Math.random() * 80) + "%;top:" + (40 + Math.random() * 30) + "%;z-index:10001;pointer-events:none;animation:welcome-confetti " + (0.8 + Math.random() * 1.2) + "s ease-out forwards;animation-delay:" + (Math.random() * 0.3) + "s;";
+      document.body.appendChild(dot);
+      setTimeout((function(d) { return function() { d.remove(); }; })(dot), 2500);
+    }
   }
 }
 
@@ -1158,7 +1160,7 @@ function _showVerificationMessage(email) {
   if (!inner) return;
   inner.innerHTML =
     '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
-    '<h2 style="font-family:var(--font-display);font-size:22px;text-align:center;margin-bottom:12px;">Check Your Email</h2>' +
+    '<h2 style="font-family:var(--font-display);font-size:20px;text-align:center;margin-bottom:12px;">Check Your Email</h2>' +
     '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">' +
       'We sent a verification link to <strong>' + (typeof escapeHtml === 'function' ? escapeHtml(email) : email) + '</strong>. ' +
       'Click it to verify your account and unlock your 7-day Pro trial.' +
@@ -1192,7 +1194,7 @@ function showForgotPassword() {
   if (!inner) return;
   inner.innerHTML =
     '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
-    '<h2 style="font-family:var(--font-display);font-size:22px;text-align:center;margin-bottom:16px;">Reset Password</h2>' +
+    '<h2 style="font-family:var(--font-display);font-size:20px;text-align:center;margin-bottom:16px;">Reset Password</h2>' +
     '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">Enter your email and we\'ll send you a reset link.</p>' +
     '<form id="authForgotForm" class="auth-form" onsubmit="handleForgotPassword(event)">' +
       '<input type="email" id="authForgotEmail" placeholder="Email" required autocomplete="email" aria-label="Email address">' +
@@ -1270,7 +1272,7 @@ function _showTrialExpiredModal() {
   overlay.innerHTML =
     '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:var(--radius);box-shadow:4px 4px 0 var(--ink);padding:32px;max-width:420px;width:90%;text-align:center;">' +
       '<div style="font-size:40px;margin-bottom:12px;">🐯</div>' +
-      '<h2 style="font-family:var(--font-display);font-size:22px;margin:0 0 8px;">your pro trial ended</h2>' +
+      '<h2 style="font-family:var(--font-display);font-size:20px;margin:0 0 8px;">your pro trial ended</h2>' +
       '<p style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin:0 0 20px;">you explored the full film room for 7 days. keep the edge with Pro.</p>' +
       '<a href="/pricing.html" class="btn-chunky btn-primary" style="display:inline-block;margin-bottom:12px;font-size:14px;padding:10px 24px;">see Pro plans</a><br>' +
       '<button onclick="this.closest(\'#trialExpiredModal\').remove()" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);font-size:12px;padding:8px;">maybe later</button>' +
@@ -2211,7 +2213,7 @@ function openPlayerPopup(playerId) {
       html += '<img src="' + escapeAttr(p.headshot_url) + '" alt="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--ink);object-fit:cover;" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
     }
     html += '<div>';
-    html += '<div style="font-family:var(--font-display);font-size:22px;">' + escapeHtml(p.full_name) + '</div>';
+    html += '<div style="font-family:var(--font-display);font-size:20px;">' + escapeHtml(p.full_name) + '</div>';
     html += '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">' + escapeHtml(pos) + ' · ' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + escapeHtml(String(p.age)) : '') + '</div>';
     html += '</div></div>';
     // Key stats
