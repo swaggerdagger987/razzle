@@ -302,10 +302,10 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None, 
                 pts = (r[5] or 0) + adj * (r[7] or 0)
                 player_weeks[pid].append(pts)
 
-            # Compute stats for players with >= 6 games
+            # Compute stats for players with >= 10 games
             players = []
             for pid, weeks in player_weeks.items():
-                if len(weeks) < 6:
+                if len(weeks) < 10:
                     continue
 
                 info = player_info[pid]
@@ -349,8 +349,8 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None, 
                 percentile = rank / total * 100
                 p["grade"] = _grade_from_percentile(percentile)
 
-            # Rock Solid: lowest CoV (most consistent)
-            rock_solid = sorted(players, key=lambda x: x["cov"])[:limit]
+            # Rock Solid: lowest CoV (most consistent), tiebreak by more games
+            rock_solid = sorted(players, key=lambda x: (x["cov"], -x["games"]))[:limit]
             for i, p in enumerate(rock_solid):
                 p["annotation"] = _ROCK_SOLID_ANNOTATIONS[i % len(_ROCK_SOLID_ANNOTATIONS)]
 

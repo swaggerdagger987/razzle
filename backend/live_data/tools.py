@@ -1808,6 +1808,8 @@ def fetch_snap_efficiency(season=None, position=None, limit=50):
 
                 ppg = ppr / games
                 snaps_pg = snaps / games
+                if snaps_pg < 15.0:
+                    continue
                 pts_per_snap = ppr / snaps if snaps > 0 else 0
 
                 players.append({
@@ -2326,7 +2328,8 @@ def fetch_dual_threat(season=None, position=None, limit=50):
             cursor.execute(f"""
                 SELECT p.player_id, p.full_name, p.position, p.team,
                        s.rushing_yards, s.receiving_yards, s.carries, s.receptions,
-                       s.targets, s.rushing_tds, s.receiving_tds, s.games
+                       s.targets, s.rushing_tds, s.receiving_tds, s.games,
+                       s.passing_yards
                 FROM player_season_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ? AND p.fantasy_relevant = 1
@@ -2345,22 +2348,30 @@ def fetch_dual_threat(season=None, position=None, limit=50):
                 rush_td = r[9] or 0
                 rec_td = r[10] or 0
                 games = r[11] or 1
-
-                # Need contributions in both dimensions
-                if rush_yd < 50 and rec_yd < 50:
-                    continue
+                pass_yd = r[12] or 0
 
                 rush_yd_pg = rush_yd / games
                 rec_yd_pg = rec_yd / games
-                total_yd_pg = rush_yd_pg + rec_yd_pg
                 carries_pg = carries / games
                 rec_pg = receptions / games
 
-                # Dual-threat index: geometric mean of rush and rec yards/game
-                # Rewards balance — 100 rush + 100 rec >> 200 rush + 0 rec
-                rush_component = max(rush_yd_pg, 0.1)
-                rec_component = max(rec_yd_pg, 0.1)
-                dti = math.sqrt(rush_component * rec_component)
+                if pos == "QB":
+                    # QBs: dual threat = pass + rush
+                    if rush_yd < 50:
+                        continue
+                    pass_yd_pg = pass_yd / games
+                    rush_component = max(rush_yd_pg, 0.1)
+                    pass_component = max(pass_yd_pg, 0.1)
+                    dti = math.sqrt(rush_component * pass_component)
+                    total_yd_pg = pass_yd_pg + rush_yd_pg
+                else:
+                    # RB/WR/TE: dual threat = rush + rec
+                    if rush_yd < 50 and rec_yd < 50:
+                        continue
+                    rush_component = max(rush_yd_pg, 0.1)
+                    rec_component = max(rec_yd_pg, 0.1)
+                    dti = math.sqrt(rush_component * rec_component)
+                    total_yd_pg = rush_yd_pg + rec_yd_pg
 
                 # Rush/rec split (0.5 = perfectly balanced)
                 total = rush_yd + rec_yd
