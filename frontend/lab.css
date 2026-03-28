@@ -1041,8 +1041,8 @@
   .screener-table th.sort-asc::after { content: " ▲"; font-size: 11px; }
   .screener-table th.sort-desc::after { content: " ▼"; font-size: 11px; }
   .screener-table th.sort-asc, .screener-table th.sort-desc { background: rgba(var(--sort-highlight), 0.08); }
-  .screener-table th.sort2-asc::after { content: " △2"; font-size: 8px; opacity: 0.5; }
-  .screener-table th.sort2-desc::after { content: " ▽2"; font-size: 8px; opacity: 0.5; }
+  .screener-table th.sort2-asc::after { content: " △2"; font-size: 11px; opacity: 0.5; }
+  .screener-table th.sort2-desc::after { content: " ▽2"; font-size: 11px; opacity: 0.5; }
   .screener-table th.sort2-asc, .screener-table th.sort2-desc { background: rgba(var(--sort-highlight), 0.06); }
   .screener-table td.sort-col { background: rgba(var(--sort-highlight), 0.05); }
   .screener-table td.sort2-col { background: rgba(var(--sort-highlight), 0.025); }
@@ -1065,7 +1065,7 @@
 
   /* ─── Column filter indicator dots ─── */
   .col-filter-dot {
-    font-size: 8px;
+    font-size: 11px;
     color: var(--orange);
     vertical-align: middle;
     margin-left: 2px;
@@ -1264,7 +1264,7 @@
     height: 26px;
   }
   body.dense-mode .tag-chip {
-    font-size: 8px;
+    font-size: 11px;
     padding: 0px 4px;
   }
   body.dense-mode .note-cell-text {
@@ -1444,7 +1444,7 @@
   }
   body.dense-mode .screener-table .group-header-row th {
     padding: 2px 8px 1px;
-    font-size: 8px;
+    font-size: 11px;
   }
 
   /* ─── Pinned rows ─── */
@@ -2635,8 +2635,8 @@
     .screener-table .col-player { left: 0 !important; }
     .player-name-cell { gap: 4px; }
     .player-headshot, .player-headshot-fallback { width: 22px; height: 22px; }
-    .player-headshot-fallback { font-size: 8px; }
-    .pos-badge { font-size: 8px; padding: 1px 4px; }
+    .player-headshot-fallback { font-size: 11px; }
+    .pos-badge { font-size: 11px; padding: 1px 4px; }
     .team-label { font-size: 11px; }
 
     /* Panel content tables in lab-panels */
@@ -2813,7 +2813,7 @@
     .screener-table th, .screener-table td { padding: 4px 6px; font-size: 11px; }
     .screener-table th { font-size: 11px; }
     .pos-badge { font-size: 7px; padding: 1px 3px; }
-    .team-label { font-size: 8px; }
+    .team-label { font-size: 11px; }
     .universe-bar { padding: 4px 8px; }
     .universe-toggle { font-size: 11px; padding: 4px 10px; }
     .college-view-btn { font-size: 11px; padding: 3px 8px; }

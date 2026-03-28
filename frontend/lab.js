@@ -401,7 +401,7 @@ function _showWatchlistSyncHint(isPaid) {
   if (existing) existing.remove();
   var badge = document.createElement("span");
   badge.id = "watchlistCloudBadge";
-  badge.style.cssText = "font-family:var(--font-mono); font-size:8px; margin-left:6px; padding:1px 5px; border-radius:var(--radius-sm); vertical-align:middle;";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:11px; margin-left:6px; padding:1px 5px; border-radius:var(--radius-sm); vertical-align:middle;";
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
     badge.style.border = "2px solid var(--pos-qb)";
@@ -1898,7 +1898,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   // Rank column (with expand arrow for NFL — skip on pinned rows where rowIdx is null)
   const rank = (rowIdx != null) ? (state.offset + rowIdx + 1) : "";
   if (state.universe === "nfl" && player.player_id && rowIdx != null) {
-    html += `<td class="col-rank" role="button" tabindex="0" aria-expanded="false" aria-label="Expand weekly stats" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeJS(player.player_id)}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();toggleRowExpand('${escapeJS(player.player_id)}',this)}" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
+    html += `<td class="col-rank" role="button" tabindex="0" aria-expanded="false" aria-label="Expand weekly stats" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeJS(player.player_id)}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();toggleRowExpand('${escapeJS(player.player_id)}',this)}" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:11px; margin-right:2px;">&#9654;</span>${rank}</td>`;
   } else {
     html += `<td class="col-rank">${rank}</td>`;
   }
@@ -2014,7 +2014,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
       const pctColor = pv >= 90 ? "var(--green)" : pv >= 75 ? "var(--pos-qb)" : pv <= 10 ? "var(--red)" : pv <= 25 ? "var(--ink-light)" : "";
       const pctFw = pv >= 75 || pv <= 25 ? "font-weight:700;" : "";
       const pctSty = (pctColor || pctFw) ? ` style="${pctColor ? "color:" + pctColor + ";" : ""}${pctFw}"` : "";
-      html += `<td${scAttr}${hStyle}><span class="pctl-val"${pctSty} title="${formatStat(val, col.decimals != null ? col.decimals : 1)}">${pv}<sup style="font-size:8px; opacity:0.6;">%</sup></span></td>`;
+      html += `<td${scAttr}${hStyle}><span class="pctl-val"${pctSty} title="${formatStat(val, col.decimals != null ? col.decimals : 1)}">${pv}<sup style="font-size:11px; opacity:0.6;">%</sup></span></td>`;
     } else if (key === "dynasty_value" && typeof val === "number") {
       const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
       const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";

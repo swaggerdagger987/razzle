@@ -10451,7 +10451,7 @@
               return '<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;">' +
                 '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + w.pct + '%</div>' +
                 '<div style="width:100%; height:' + h + 'px; background:' + (isHigh ? 'var(--orange)' : 'var(--ink-faint)') + '; border-radius:4px 4px 0 0; border:2px solid var(--ink); min-width:16px;"></div>' +
-                '<div style="font-family:var(--font-mono); font-size:8px; color:var(--ink-light); white-space:nowrap;">' + w.label + '</div>' +
+                '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); white-space:nowrap;">' + w.label + '</div>' +
               '</div>';
             }).join('') +
           '</div>' +

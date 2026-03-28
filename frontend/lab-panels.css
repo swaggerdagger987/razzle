@@ -3178,7 +3178,7 @@
   font-family: var(--font-mono); font-size: 11px;
 }
 .arc-player:last-child { border-bottom: none; }
-.arc-player-pos { font-size: 8px; color: var(--text-on-accent); padding: 1px 4px; border-radius: var(--radius-sm); font-weight: 700; }
+.arc-player-pos { font-size: 11px; color: var(--text-on-accent); padding: 1px 4px; border-radius: var(--radius-sm); font-weight: 700; }
 .arc-player-name { font-family: var(--font-mono); font-weight: 700; }
 .arc-player-team { color: var(--ink-light); }
 .arc-player-age { color: var(--ink-light); font-size: 11px; }
