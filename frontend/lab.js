@@ -69,7 +69,7 @@ function exportPanelCSV(panelName) {
     return;
   }
   var csv = rows.join('\n');
-  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
   var date = new Date().toISOString().slice(0, 10);
@@ -4496,8 +4496,15 @@ function loadSavedView(id) {
   _showToast("loaded: " + view.name);
 }
 
-function deleteSavedView(id) {
-  if (!confirm("Delete this saved view?")) return;
+function deleteSavedView(id, btn) {
+  if (btn && !btn.dataset.confirming) {
+    btn.dataset.confirming = "1";
+    btn.textContent = "sure?";
+    btn.style.color = "var(--red)";
+    setTimeout(function() { if (btn.dataset.confirming) { delete btn.dataset.confirming; btn.textContent = "✕"; btn.style.color = ""; } }, 3000);
+    return;
+  }
+  if (btn) { delete btn.dataset.confirming; }
   const views = getSavedViews().filter(v => v.id !== id);
   try { localStorage.setItem("razzle_saved_views", JSON.stringify(views)); } catch(e) {}
   populateSavedViewSelect();
@@ -4654,7 +4661,7 @@ function renderSavedViewsList() {
         <div style="font-family:var(--font-mono); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
-      <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}')" style="background:none; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
+      <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}', this)" style="background:none; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
     </div>`;
   }).join("");
 }
