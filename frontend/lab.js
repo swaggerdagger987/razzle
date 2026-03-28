@@ -2288,7 +2288,7 @@ function showHoverCard(playerId, anchorEl) {
   // Build card HTML
   let html = '<div class="hover-card-header">';
   if (player.headshot_url) {
-    html += `<img class="hover-card-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || '')}" onerror="this.style.display='none';">`;
+    html += `<img class="hover-card-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || '')}" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>';">`;
   }
   html += '<div>';
   html += `<div class="hover-card-name">${escapeHtml(player.full_name || "")}${buildTagChip(playerId)}</div>`;
@@ -6824,7 +6824,7 @@ function renderProfile(data, container) {
   // Header
   html += `<div class="profile-header" style="border-top:4px solid ${posColor};">`;
   if (player.headshot_url) {
-    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || 'Player')} headshot" onerror="this.style.display='none';">`;
+    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || 'Player')} headshot" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>';">`;
   }
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
@@ -12472,7 +12472,7 @@ function renderPlayerComps(data, container) {
     // Headshot + name
     html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">`;
     if (comp.headshot_url) {
-      html += `<img src="${escapeAttr(comp.headshot_url)}" alt="" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+      html += `<img src="${escapeAttr(comp.headshot_url)}" alt="" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.onerror=null;this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
       html += `<span style="display:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
     } else {
       html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;

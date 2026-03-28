@@ -744,7 +744,7 @@ function playerHeadshot(player, pos) {
   var bgColor = POS_COLOR_MAP[pos] || "var(--ink-light)";
   if (url) {
     var altText = escapeAttr((player.full_name || player.player_name || "") + " headshot");
-    return '<img class="player-headshot" src="' + escapeAttr(url) + '" alt="' + altText + '" width="' + size + '" height="' + size + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+    return '<img class="player-headshot" src="' + escapeAttr(url) + '" alt="' + altText + '" width="' + size + '" height="' + size + '" loading="lazy" onerror="this.onerror=null;this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
            '<span class="player-headshot-fallback" style="display:none;background:' + bgColor + ';">' + escapeHtml(initials) + '</span>';
   }
   return '<span class="player-headshot-fallback" style="background:' + bgColor + ';">' + escapeHtml(initials) + '</span>';
@@ -2207,7 +2207,7 @@ function openPlayerPopup(playerId) {
     // Header
     html += '<div style="display:flex;align-items:center;gap:12px;border-left:6px solid ' + posColor + ';padding-left:12px;margin-bottom:16px;">';
     if (p.headshot_url) {
-      html += '<img src="' + escapeAttr(p.headshot_url) + '" alt="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--ink);object-fit:cover;" onerror="this.style.display=\'none\'">';
+      html += '<img src="' + escapeAttr(p.headshot_url) + '" alt="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--ink);object-fit:cover;" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
     }
     html += '<div>';
     html += '<div style="font-family:var(--font-display);font-size:22px;">' + escapeHtml(p.full_name) + '</div>';

@@ -604,7 +604,7 @@
       var pos = (p.position || '').toLowerCase();
       html += '<div class="tf-ac-item" role="option" data-pid="' + escapeHtml(p.player_id) + '">';
       if (p.headshot_url) {
-        html += '<img class="tf-ac-img" src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
+        html += '<img class="tf-ac-img" src="' + escapeHtml(p.headshot_url) + '" alt="" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       }
       html += '<div>';
       html += '<div class="tf-ac-name">' + escapeHtml(p.full_name || p.display_name || '') + '</div>';
@@ -658,7 +658,7 @@
           var pos = (data.position || '').toLowerCase();
           var errHtml = '<div class="tf-selected-card" style="justify-content:center;">';
           if (data.headshot_url) {
-            errHtml += '<img class="tf-sel-headshot" src="' + escapeHtml(data.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
+            errHtml += '<img class="tf-sel-headshot" src="' + escapeHtml(data.headshot_url) + '" alt="" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           }
           errHtml += '<div class="tf-sel-info">';
           errHtml += '<div class="tf-sel-name">' + escapeHtml(data.player_name || '') + '</div>';
@@ -750,7 +750,7 @@
       // Player
       html += '<td><div class="tf-player-cell">';
       if (p.headshot_url) {
-        html += '<img class="tf-row-img" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        html += '<img class="tf-row-img" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       }
       html += '<span class="tf-row-name">' + escapeHtml(p.full_name) + '</span>';
       html += '</div></td>';
@@ -800,7 +800,7 @@
     // Selected player card
     html += '<div class="tf-selected-card">';
     if (sel.headshot_url) {
-      html += '<img class="tf-sel-headshot" src="' + escapeHtml(sel.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
+      html += '<img class="tf-sel-headshot" src="' + escapeHtml(sel.headshot_url) + '" alt="" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
     }
     html += '<div class="tf-sel-info">';
     html += '<div class="tf-sel-name">' + escapeHtml(sel.full_name) + '</div>';
