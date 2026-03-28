@@ -823,6 +823,43 @@ def require_auth(request: Request) -> dict:
 
 
 _PLAN_HIERARCHY = {"free": 0, "pro": 1, "pro_lifetime": 1, "elite": 2, "elite_lifetime": 2}
+_PAYMENT_FAILED_GRACE_DAYS = 3
+
+
+def _reconcile_payment_status(user: dict) -> dict:
+    """Check if user's subscription is payment_failed past grace period.
+    If so, downgrade users.plan to 'free' and return updated user dict."""
+    user_plan = user.get("plan", "free")
+    if user_plan in ("free", "pro_lifetime", "elite_lifetime"):
+        return user
+    try:
+        with auth_module.get_users_db() as conn:
+            sub = conn.execute(
+                "SELECT status, updated_at FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
+                (user["id"],),
+            ).fetchone()
+            if not sub or sub["status"] != "payment_failed":
+                return user
+            updated_at = sub["updated_at"]
+            if not updated_at:
+                return user
+            failed_dt = _datetime.datetime.fromisoformat(str(updated_at).replace("Z", "+00:00"))
+            if failed_dt.tzinfo is None:
+                failed_dt = failed_dt.replace(tzinfo=_datetime.timezone.utc)
+            now = _datetime.datetime.now(_datetime.timezone.utc)
+            if (now - failed_dt).days >= _PAYMENT_FAILED_GRACE_DAYS:
+                conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (user["id"],))
+                conn.execute(
+                    "UPDATE subscriptions SET plan = 'free', status = 'grace_expired', updated_at = CURRENT_TIMESTAMP WHERE user_id = ? AND status = 'payment_failed'",
+                    (user["id"],),
+                )
+                conn.commit()
+                logger.warning(f"User {user['id']} downgraded to free — payment failed grace period expired")
+                user["plan"] = "free"
+    except Exception:
+        logger.exception("Error reconciling payment status for user %s", user.get("id"))
+    return user
+
 
 def require_plan(request: Request, plan: str = "pro"):
     """Verify auth + plan tier. Elite users can access Pro features.
@@ -830,6 +867,7 @@ def require_plan(request: Request, plan: str = "pro"):
     user = require_auth(request)
     if not user:
         return None, JSONResponse({"error": "Authentication required"}, status_code=401)
+    user = _reconcile_payment_status(user)
     user_plan = user.get("plan", "free")
     user_level = _PLAN_HIERARCHY.get(user_plan, 0)
     required_level = _PLAN_HIERARCHY.get(plan, 0)
