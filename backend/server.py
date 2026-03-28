@@ -456,6 +456,18 @@ async def lifespan(app):
     # Heavy data sync in background thread (may take minutes on cold start)
     t = threading.Thread(target=_background_bootstrap, daemon=True)
     t.start()
+    # Subscription reconciliation — catches missed webhooks every 6 hours
+    async def _reconciliation_loop():
+        import asyncio as _aio
+        await _aio.sleep(300)  # Wait 5 min after startup for things to settle
+        while True:
+            try:
+                billing_module.reconcile_subscriptions()
+            except Exception:
+                logger.exception("Subscription reconciliation failed")
+            await _aio.sleep(6 * 3600)  # Every 6 hours
+    import asyncio
+    asyncio.create_task(_reconciliation_loop())
     yield
 
 

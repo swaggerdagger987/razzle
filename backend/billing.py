@@ -771,3 +771,85 @@ def get_billing_status(user: dict) -> dict:
             logger.error(f"Portal creation error: {e}")
 
     return result
+
+
+def reconcile_subscriptions():
+    """Sync user plans with Stripe subscription state.
+
+    Runs periodically to catch cases where webhooks failed silently.
+    Queries all paid (non-lifetime) users, checks Stripe, and fixes mismatches.
+    """
+    if not STRIPE_SECRET_KEY:
+        logger.debug("Stripe not configured — skipping reconciliation")
+        return
+
+    fixed = 0
+    errors = 0
+
+    with auth_module.get_users_db() as conn:
+        # Get all paid subscription users (exclude lifetime — those are permanent)
+        rows = conn.execute(
+            "SELECT u.id, u.plan, u.email, s.stripe_subscription_id "
+            "FROM users u JOIN subscriptions s ON u.id = s.user_id "
+            "WHERE u.plan IN ('pro', 'elite') AND s.plan_type = 'subscription' "
+            "AND s.stripe_subscription_id IS NOT NULL"
+        ).fetchall()
+
+    for row in rows:
+        try:
+            sub = stripe.Subscription.retrieve(row["stripe_subscription_id"])
+            stripe_status = sub.get("status", "unknown")
+
+            if stripe_status in ("canceled", "unpaid", "past_due", "paused"):
+                # Stripe says inactive but user still has paid plan — downgrade
+                with auth_module.get_users_db() as conn:
+                    conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
+                    conn.execute(
+                        "UPDATE subscriptions SET plan = 'free', status = ?, updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+                        (stripe_status, row["id"]),
+                    )
+                    conn.commit()
+                logger.warning(
+                    f"Reconciliation: user {row['id']} ({row['email']}) downgraded — "
+                    f"Stripe status={stripe_status}, was plan={row['plan']}"
+                )
+                fixed += 1
+        except stripe.error.StripeError as e:
+            logger.error(f"Reconciliation: Stripe API error for user {row['id']}: {e}")
+            errors += 1
+
+    # Also check free users who might have active Stripe subscriptions (webhook missed)
+    with auth_module.get_users_db() as conn:
+        free_rows = conn.execute(
+            "SELECT u.id, u.email, s.stripe_subscription_id "
+            "FROM users u JOIN subscriptions s ON u.id = s.user_id "
+            "WHERE u.plan = 'free' AND s.plan_type = 'subscription' "
+            "AND s.stripe_subscription_id IS NOT NULL AND s.status != 'cancelled'"
+        ).fetchall()
+
+    for row in free_rows:
+        try:
+            sub = stripe.Subscription.retrieve(row["stripe_subscription_id"])
+            stripe_status = sub.get("status", "unknown")
+
+            if stripe_status == "active":
+                plan_tier = sub.get("metadata", {}).get("plan_tier", "pro")
+                if plan_tier not in ("pro", "elite"):
+                    plan_tier = "pro"
+                with auth_module.get_users_db() as conn:
+                    conn.execute("UPDATE users SET plan = ? WHERE id = ?", (plan_tier, row["id"]))
+                    conn.execute(
+                        "UPDATE subscriptions SET plan = ?, status = 'active', updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+                        (plan_tier, row["id"]),
+                    )
+                    conn.commit()
+                logger.warning(
+                    f"Reconciliation: user {row['id']} ({row['email']}) restored to {plan_tier} — "
+                    f"Stripe active but was plan=free"
+                )
+                fixed += 1
+        except stripe.error.StripeError as e:
+            logger.error(f"Reconciliation: Stripe API error for user {row['id']}: {e}")
+            errors += 1
+
+    logger.info(f"Subscription reconciliation complete: {fixed} fixed, {errors} errors, {len(rows) + len(free_rows)} checked")
