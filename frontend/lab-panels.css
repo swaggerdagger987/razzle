@@ -749,7 +749,7 @@
 .pa-avgs { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
 .pa-avg-chip { font-family: var(--font-mono); font-size: 11px; padding: 3px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
 .pa-avg-chip span { font-weight: 700; }
-.pa-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
+.pa-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); }
 .pa-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--bg); }
 .pa-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
 .pa-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
@@ -1842,7 +1842,7 @@
 .con-table {
   width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px;
   background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm);
-  overflow: hidden; box-shadow: 4px 4px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
 }
 .con-table th {
   font-family: var(--font-mono); font-size: 11px; font-weight: 700;
@@ -1891,7 +1891,7 @@
 /* ===== SNAP EFFICIENCY ===== */
 .se-card {
   background: var(--bg-card); border: 3px solid var(--ink);
-  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink);
 }
 .se-card-header {
   font-family: var(--font-display); font-size: 18px;
@@ -1926,7 +1926,7 @@
 /* ===== WORKLOAD ===== */
 .wl-card {
   background: var(--bg-card); border: 3px solid var(--ink);
-  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink);
 }
 .wl-card-header {
   font-family: var(--font-display); font-size: 18px;
@@ -1965,7 +1965,7 @@
 /* ===== DUAL-THREAT ===== */
 .dt-card {
   background: var(--bg-card); border: 3px solid var(--ink);
-  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink);
 }
 .dt-card-header {
   font-family: var(--font-display); font-size: 18px;
@@ -2002,7 +2002,7 @@
 /* ===== TARGET PREMIUM ===== */
 .tp-card {
   background: var(--bg-card); border: 3px solid var(--ink);
-  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink);
 }
 .tp-card-header {
   font-family: var(--font-display); font-size: 18px;
@@ -2038,7 +2038,7 @@
 .dr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .dr-card {
   background: var(--bg-card); border: 3px solid var(--ink);
-  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink);
 }
 .dr-card-header {
   font-family: var(--font-display); font-size: 18px;
@@ -2077,7 +2077,7 @@
 .gt-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .gt-card {
   background: var(--bg-card); border: 3px solid var(--ink);
-  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink);
 }
 .gt-card-header {
   font-family: var(--font-display); font-size: 18px;
@@ -3136,7 +3136,7 @@
 .arc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
 .arc-card {
   background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm);
-  box-shadow: 4px 4px 0 var(--ink); overflow: hidden;
+  box-shadow: 4px 4px 0 var(--ink);
 }
 .arc-card-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 2px solid var(--ink-faint); }
 .arc-icon { font-size: 24px; }
