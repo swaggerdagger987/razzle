@@ -2444,7 +2444,6 @@ def sitemap_xml():
         ("/career-compare.html", "0.8", "weekly"),
         ("/draftclass.html", "0.8", "weekly"),
         ("/percentiles.html", "0.8", "weekly"),
-        ("/regression.html", "0.8", "weekly"),
         ("/strengths.html", "0.8", "weekly"),
         ("/breakdown.html", "0.8", "weekly"),
         ("/weeklyleaders.html", "0.8", "weekly"),
