@@ -273,6 +273,58 @@
     .team-player-row .player-headshot,
     .team-player-row .player-headshot-fallback { width: 28px; height: 28px; }
     .team-player-stats { gap: 4px; }
+    .team-picker-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+
+  /* Team picker grid */
+  .team-picker { margin-bottom: 32px; }
+  .team-picker-division { margin-bottom: 20px; }
+  .team-picker-division-label {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  .team-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .team-picker-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.1s, box-shadow 0.1s;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .team-picker-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+  .team-picker-abbr {
+    font-family: var(--font-display);
+    font-size: 18px;
+    min-width: 40px;
+  }
+  .team-picker-name {
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+  @media (max-width: 768px) {
+    .team-picker-grid { grid-template-columns: repeat(3, 1fr); }
+    .team-picker-name { display: none; }
   }
 </style>
 </head>
@@ -315,6 +367,8 @@
   <div class="team-actions">
     <button class="btn-chunky" id="teamExportBtn" title="Export as PNG">Export PNG</button>
   </div>
+
+  <div id="teamPicker" class="team-picker" style="display:none;"></div>
 
   <div id="teamContent">
     <div class="team-loading">pulling film...</div>
@@ -403,6 +457,65 @@
   var GROUP_ANNOTATIONS = { QB: "the signal callers", RB: "ground game crew", WR: "pass catchers", TE: "the big targets" };
   var GROUP_ORDER = ["QB", "RB", "WR", "TE"];
 
+  // NFL divisions for team picker
+  var NFL_DIVISIONS = [
+    { label: "AFC East", teams: [
+      { abbr: "BUF", name: "Bills" }, { abbr: "MIA", name: "Dolphins" },
+      { abbr: "NE", name: "Patriots" }, { abbr: "NYJ", name: "Jets" }
+    ]},
+    { label: "AFC North", teams: [
+      { abbr: "BAL", name: "Ravens" }, { abbr: "CIN", name: "Bengals" },
+      { abbr: "CLE", name: "Browns" }, { abbr: "PIT", name: "Steelers" }
+    ]},
+    { label: "AFC South", teams: [
+      { abbr: "HOU", name: "Texans" }, { abbr: "IND", name: "Colts" },
+      { abbr: "JAX", name: "Jaguars" }, { abbr: "TEN", name: "Titans" }
+    ]},
+    { label: "AFC West", teams: [
+      { abbr: "DEN", name: "Broncos" }, { abbr: "KC", name: "Chiefs" },
+      { abbr: "LV", name: "Raiders" }, { abbr: "LAC", name: "Chargers" }
+    ]},
+    { label: "NFC East", teams: [
+      { abbr: "DAL", name: "Cowboys" }, { abbr: "NYG", name: "Giants" },
+      { abbr: "PHI", name: "Eagles" }, { abbr: "WAS", name: "Commanders" }
+    ]},
+    { label: "NFC North", teams: [
+      { abbr: "CHI", name: "Bears" }, { abbr: "DET", name: "Lions" },
+      { abbr: "GB", name: "Packers" }, { abbr: "MIN", name: "Vikings" }
+    ]},
+    { label: "NFC South", teams: [
+      { abbr: "ATL", name: "Falcons" }, { abbr: "CAR", name: "Panthers" },
+      { abbr: "NO", name: "Saints" }, { abbr: "TB", name: "Buccaneers" }
+    ]},
+    { label: "NFC West", teams: [
+      { abbr: "ARI", name: "Cardinals" }, { abbr: "LAR", name: "Rams" },
+      { abbr: "SF", name: "49ers" }, { abbr: "SEA", name: "Seahawks" }
+    ]}
+  ];
+
+  var pickerEl = document.getElementById("teamPicker");
+
+  function showTeamPicker() {
+    var html = "";
+    for (var d = 0; d < NFL_DIVISIONS.length; d++) {
+      var div = NFL_DIVISIONS[d];
+      html += '<div class="team-picker-division">';
+      html += '<div class="team-picker-division-label">' + div.label + '</div>';
+      html += '<div class="team-picker-grid">';
+      for (var t = 0; t < div.teams.length; t++) {
+        var tm = div.teams[t];
+        html += '<a class="team-picker-card" href="/team/' + tm.abbr + '">';
+        html += '<span class="team-picker-abbr">' + tm.abbr + '</span>';
+        html += '<span class="team-picker-name">' + tm.name + '</span>';
+        html += '</a>';
+      }
+      html += '</div></div>';
+    }
+    pickerEl.innerHTML = html;
+    pickerEl.style.display = "";
+    content.innerHTML = "";
+  }
+
   // Get team from URL path /team/{abbr}
   var pathMatch = window.location.pathname.match(/\/team\/([A-Za-z]+)/);
   if (pathMatch) {
@@ -452,6 +565,7 @@
 
   // ---- Fetch team roster ----
   async function loadTeam() {
+    pickerEl.style.display = "none";
     state.loading = true;
     content.innerHTML = '<div class="team-loading">' + razzleLoading() + '</div>';
 
@@ -637,7 +751,11 @@
   }
 
   // ---- Initial load ----
-  loadTeam();
+  if (!state.team) {
+    showTeamPicker();
+  } else {
+    loadTeam();
+  }
 })();
 </script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
