@@ -1553,13 +1553,54 @@ var _cmdActiveIdx = -1;
 var _cmdItems = [];
 var _cmdDebounce = null;
 
+// Static panel list for command palette search
+var CMD_PANELS = [
+  {n:"The Screener",p:"screener"},{n:"Dynasty Rankings",p:"rankings"},{n:"Tiers",p:"tiers"},
+  {n:"Trade Values",p:"tradevalues"},{n:"VORP",p:"vorp"},{n:"Positional Advantage",p:"advantage"},
+  {n:"Auction Values",p:"auction"},{n:"Cheat Sheet",p:"cheatsheet"},{n:"Breakouts",p:"breakouts"},
+  {n:"Buy / Sell",p:"buysell"},{n:"Stock Watch",p:"stocks"},{n:"Waivers",p:"waivers"},
+  {n:"Scarcity",p:"scarcity"},{n:"Handcuffs",p:"handcuffs"},{n:"Efficiency",p:"efficiency"},
+  {n:"Consistency",p:"consistency"},{n:"Snap Efficiency",p:"snapefficiency"},
+  {n:"Workload Monitor",p:"workload"},{n:"Dual-Threat",p:"dualthreat"},
+  {n:"Target Premium",p:"targetpremium"},{n:"Drop Rate",p:"drops"},
+  {n:"Garbage Time",p:"garbagetime"},{n:"Success Rate",p:"successrate"},
+  {n:"Correlations",p:"correlations"},{n:"Weekly Heatmap",p:"weekly"},
+  {n:"Matchups",p:"matchups"},{n:"Stacks",p:"stacks"},{n:"Red Zone",p:"redzone"},
+  {n:"Streaks",p:"streaks"},{n:"Weekly Leaders",p:"weeklyleaders"},
+  {n:"Weekly MVP Grid",p:"weeklymvp"},{n:"Playoffs",p:"playoffs"},
+  {n:"Usage Trends",p:"usage"},{n:"Year-over-Year",p:"yoy"},{n:"Aging Curves",p:"aging"},
+  {n:"Season Pace",p:"seasonpace"},{n:"TD Regression",p:"tdregression"},
+  {n:"Air Yards",p:"airyards"},{n:"Big Board",p:"prospects"},
+  {n:"Draft Class Analytics",p:"draftclass"},{n:"Percentiles",p:"percentiles"},
+  {n:"Career Stats",p:"career"},{n:"Career Compare",p:"career-compare"},
+  {n:"Compare Table",p:"comptable"},{n:"Strengths",p:"strengths"},
+  {n:"Report Card",p:"reportcard"},{n:"Points Breakdown",p:"fptsbreakdown"},
+  {n:"Game Log",p:"gamelog"},{n:"Archetypes",p:"archetypes"},
+  {n:"Scoring Breakdown",p:"breakdown"},{n:"Roster Builder",p:"rosterbuilder"},
+  {n:"Trade Finder",p:"tradefinder"},{n:"Scoring Comparison",p:"scoring"},
+  {n:"Dashboard",p:"dashboard"},{n:"Schedule / SOS",p:"schedule"},
+  {n:"Opportunity Share",p:"opportunity"},{n:"Records",p:"records"},
+  {n:"Season Recap",p:"recap"},{n:"Awards",p:"awards"},{n:"Stat Leaders",p:"leaders"},
+  {n:"Explorer",p:"explorer"},{n:"Target Distribution",p:"targets"},
+  {n:"Team Rosters",p:"team"},{n:"Draft Class Tracker",p:"drafttracker"},
+  {n:"Power Rankings",p:"powerrankings"},{n:"Game Script",p:"gamescript"},
+  {n:"FAAB Strategy",p:"faab"}
+];
+
+function _searchPanels(query) {
+  var q = query.toLowerCase();
+  return CMD_PANELS.filter(function(p) {
+    return p.n.toLowerCase().indexOf(q) !== -1 || p.p.toLowerCase().indexOf(q) !== -1;
+  }).slice(0, 5);
+}
+
 function initCommandPalette() {
   // Inject palette HTML into body
   var html = '<div class="cmd-palette-backdrop" id="cmdPalette" role="dialog" aria-modal="true" aria-label="Quick Search">' +
     '<div class="cmd-palette">' +
       '<div class="cmd-palette-label">quick search</div>' +
       '<div class="cmd-palette-input-wrap">' +
-        '<input class="cmd-palette-input" id="cmdInput" type="text" placeholder="Search players... (Ctrl+K)" autocomplete="off" />' +
+        '<input class="cmd-palette-input" id="cmdInput" type="text" placeholder="Search players or panels... (Ctrl+K)" autocomplete="off" />' +
       '</div>' +
       '<div class="cmd-palette-results" id="cmdResults"></div>' +
       '<div class="cmd-palette-hint">' +
@@ -1641,16 +1682,81 @@ function closeCmdPalette() {
 }
 
 async function cmdSearch(query) {
+  // Search panels first (instant, client-side)
+  var panelMatches = _searchPanels(query);
   try {
     var data = await apiFetch("/api/players/quick-search?q=" + encodeURIComponent(query) + "&limit=8");
-    _cmdItems = data || [];
+    // Combine: panels first (marked with _isPanel), then players
+    _cmdItems = panelMatches.map(function(p) { return { _isPanel: true, _panelName: p.n, _panelId: p.p }; })
+      .concat(data || []);
     _cmdActiveIdx = _cmdItems.length > 0 ? 0 : -1;
-    renderCmdResults(_cmdItems, "Results");
+    _renderMixedResults(panelMatches, data || []);
   } catch (e) {
-    _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">fumbled the search... try again.</div>';
-    _cmdItems = [];
-    _cmdActiveIdx = -1;
+    // Still show panel results even if player API fails
+    if (panelMatches.length > 0) {
+      _cmdItems = panelMatches.map(function(p) { return { _isPanel: true, _panelName: p.n, _panelId: p.p }; });
+      _cmdActiveIdx = 0;
+      _renderMixedResults(panelMatches, []);
+    } else {
+      _cmdResultsEl.innerHTML = '<div class="cmd-palette-status">fumbled the search... try again.</div>';
+      _cmdItems = [];
+      _cmdActiveIdx = -1;
+    }
   }
+}
+
+function _renderMixedResults(panels, players) {
+  var html = "";
+  if (panels.length > 0) {
+    html += '<div class="cmd-palette-section">Panels</div>';
+    panels.forEach(function(p, i) {
+      var activeClass = i === _cmdActiveIdx ? " active" : "";
+      html += '<div class="cmd-palette-item' + activeClass + '" data-idx="' + i + '">' +
+        '<span style="font-size:16px;width:28px;text-align:center;">&#x25A3;</span>' +
+        '<div class="cmd-palette-item-info">' +
+          '<div class="cmd-palette-item-name">' + escapeHtml(p.n) + '</div>' +
+          '<div class="cmd-palette-item-meta">Lab Panel</div>' +
+        '</div>' +
+      '</div>';
+    });
+  }
+  if (players.length > 0) {
+    html += '<div class="cmd-palette-section">Players</div>';
+    var offset = panels.length;
+    players.forEach(function(p, i) {
+      var idx = offset + i;
+      var pos = (p.position || "").toUpperCase();
+      var posLc = pos.toLowerCase();
+      var team = p.team || "FA";
+      var ppg = p.ppg != null ? Number(p.ppg).toFixed(1) : "\u2014";
+      var activeClass = idx === _cmdActiveIdx ? " active" : "";
+      html += '<div class="cmd-palette-item' + activeClass + '" data-idx="' + idx + '">' +
+        playerHeadshot(p, pos) +
+        '<span class="cmd-palette-pos ' + posLc + '">' + escapeHtml(pos) + '</span>' +
+        '<div class="cmd-palette-item-info">' +
+          '<div class="cmd-palette-item-name">' + escapeHtml(p.full_name || p.player_name || "") + '</div>' +
+          '<div class="cmd-palette-item-meta">' + escapeHtml(team) + '</div>' +
+        '</div>' +
+        '<div class="cmd-palette-item-ppg">' + ppg + ' ppg</div>' +
+      '</div>';
+    });
+  }
+  if (!panels.length && !players.length) {
+    html = '<div class="cmd-palette-status">' + razzleEmpty() + '</div>';
+  }
+  _cmdResultsEl.innerHTML = html;
+  // Click/hover handlers
+  var els = _cmdResultsEl.querySelectorAll(".cmd-palette-item");
+  els.forEach(function(el) {
+    el.addEventListener("click", function() {
+      _cmdActiveIdx = parseInt(el.dataset.idx, 10) || 0;
+      cmdSelect();
+    });
+    el.addEventListener("mouseenter", function() {
+      _cmdActiveIdx = parseInt(el.dataset.idx, 10) || 0;
+      updateCmdActive();
+    });
+  });
 }
 
 function renderCmdResults(items, sectionLabel) {
@@ -1712,10 +1818,15 @@ function updateCmdActive() {
 
 function cmdSelect() {
   if (_cmdActiveIdx < 0 || _cmdActiveIdx >= _cmdItems.length) return;
-  var player = _cmdItems[_cmdActiveIdx];
-  addToRecentlyViewed(player);
+  var item = _cmdItems[_cmdActiveIdx];
   closeCmdPalette();
-  openPlayerPopup(player.player_id);
+  if (item._isPanel) {
+    // Navigate to Lab panel
+    window.location.href = "/lab.html?panel=" + encodeURIComponent(item._panelId);
+  } else {
+    addToRecentlyViewed(item);
+    openPlayerPopup(item.player_id);
+  }
 }
 
 /* Recently Viewed — stored in localStorage */
