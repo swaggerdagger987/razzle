@@ -63,7 +63,7 @@
     .pricing-page { padding: 24px 12px; }
     .plan-card { padding: 20px 14px; }
     .plan-name { font-size: 20px; }
-    .plan-price { font-size: 28px; }
+    .plan-price { font-size: 24px; }
     .plan-cta .btn-primary, .plan-cta .btn-chunky { font-size: 13px; padding: 10px 0; }
     .promo-row { flex-direction: column; }
     .promo-row input { width: 100%; }
@@ -120,8 +120,8 @@
   .plan-features .highlight { color: var(--orange); font-weight: 700; }
 
   .plan-cta { width: 100%; }
-  .plan-cta .btn-primary { width: 100%; font-size: 15px; padding: 12px 0; }
-  .plan-cta .btn-chunky { width: 100%; font-size: 15px; padding: 12px 0; }
+  .plan-cta .btn-primary { width: 100%; font-size: 14px; padding: 12px 0; }
+  .plan-cta .btn-chunky { width: 100%; font-size: 14px; padding: 12px 0; }
 
   /* Promo code */
   .promo-section { text-align: center; margin-bottom: 40px; }
@@ -132,7 +132,7 @@
 
   /* Feature matrix */
   .matrix-section { margin-top: 48px; }
-  .matrix-section h2 { font-family: var(--font-display); font-size: 22px; text-align: center; margin: 0 0 20px; }
+  .matrix-section h2 { font-family: var(--font-display); font-size: 20px; text-align: center; margin: 0 0 20px; }
   .feature-matrix { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
   .feature-matrix th { font-family: var(--font-mono); font-size: 13px; padding: 10px 8px;
     border-bottom: 3px solid var(--ink); text-align: center; }
@@ -281,7 +281,7 @@
 
   <!-- What everyone gets -->
   <div class="free-celebration" style="background:var(--bg-card); border:3px solid var(--green); border-radius:12px; box-shadow:4px 4px 0 var(--green); padding:32px 28px; margin-bottom:32px; text-align:center;">
-    <div style="font-family:var(--font-display); font-size:22px; margin-bottom:4px;">What everyone gets. <span style="color:var(--green);">Forever.</span></div>
+    <div style="font-family:var(--font-display); font-size:20px; margin-bottom:4px;">What everyone gets. <span style="color:var(--green);">Forever.</span></div>
     <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:20px;">no account, no card, no catch</div>
     <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:600px; margin:0 auto;">
       <span class="free-chip">Screener (100+ columns)</span>
@@ -776,7 +776,7 @@
           cards.push(
             '<div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:var(--radius); box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
               '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Early Adopter Pro</div>' +
-              '<div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">' + esc(ea.pro.price) + '</div>' +
+              '<div style="font-family:var(--font-display); font-size:24px; color:var(--orange);">' + esc(ea.pro.price) + '</div>' +
               '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + esc(ea.pro.savings) + ' — ' + esc(String(ea.pro.remaining)) + ' of ' + esc(String(ea.pro.limit)) + ' spots left</div>' +
               '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'ea_pro\')">Claim Early Adopter</button>' +
             '</div>'
@@ -786,7 +786,7 @@
           cards.push(
             '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:var(--radius); box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
               '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Early Adopter Elite</div>' +
-              '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple);">' + esc(ea.elite.price) + '</div>' +
+              '<div style="font-family:var(--font-display); font-size:24px; color:var(--purple);">' + esc(ea.elite.price) + '</div>' +
               '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + esc(ea.elite.savings) + ' — ' + esc(String(ea.elite.remaining)) + ' of ' + esc(String(ea.elite.limit)) + ' spots left</div>' +
               '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'ea_elite\')">Claim Early Adopter</button>' +
             '</div>'
@@ -800,7 +800,7 @@
         cards.push(
           '<div style="background:var(--bg-card); border:3px solid var(--green); border-radius:var(--radius); box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Lifetime Pro</div>' +
-            '<div style="font-family:var(--font-display); font-size:28px; color:var(--green);">' + esc(lt.pro_price) + '</div>' +
+            '<div style="font-family:var(--font-display); font-size:24px; color:var(--green);">' + esc(lt.pro_price) + '</div>' +
             '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +
             '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_pro\')">Go Lifetime</button>' +
           '</div>'
@@ -808,7 +808,7 @@
         cards.push(
           '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:var(--radius); box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Lifetime Elite</div>' +
-            '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple);">' + esc(lt.elite_price) + '</div>' +
+            '<div style="font-family:var(--font-display); font-size:24px; color:var(--purple);">' + esc(lt.elite_price) + '</div>' +
             '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +
             '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_elite\')">Go Lifetime</button>' +
           '</div>'

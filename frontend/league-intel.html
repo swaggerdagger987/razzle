@@ -284,7 +284,7 @@
 
   .activity-loading {
     font-family: var(--font-hand);
-    font-size: 15px;
+    font-size: 14px;
     color: var(--ink-light);
     text-align: center;
     padding: 12px;
@@ -356,7 +356,7 @@
 
   .profile-summary {
     font-family: var(--font-hand);
-    font-size: 15px;
+    font-size: 14px;
     color: var(--ink-medium);
     line-height: 1.2;
     margin-bottom: 6px;
@@ -1784,7 +1784,7 @@
 
   .bureau-odds-champ {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: 24px;
     line-height: 1;
     margin-bottom: 2px;
   }
@@ -2274,7 +2274,7 @@
 
   .demo-trade-verdict {
     font-family: var(--font-hand);
-    font-size: 15px;
+    font-size: 14px;
     color: var(--ink-medium);
     margin-top: 8px;
     padding-top: 8px;
@@ -2302,7 +2302,7 @@
 
   .demo-power-rank {
     font-family: var(--font-display);
-    font-size: 26px;
+    font-size: 24px;
     min-width: 36px;
     text-align: center;
     color: var(--ink);
@@ -2312,7 +2312,7 @@
 
   .demo-power-name {
     font-family: var(--font-display);
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .demo-power-detail {
@@ -2416,7 +2416,7 @@
 
   .demo-connect-bottom h3 {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 20px;
     margin-bottom: 6px;
   }
 
@@ -2458,7 +2458,7 @@
     margin-bottom: 16px;
     text-align: center;
     font-family: var(--font-hand);
-    font-size: 15px;
+    font-size: 14px;
     color: var(--ink);
   }
 
@@ -4387,7 +4387,7 @@ async function loadManagerProfiles(leagueId, userId, allPlayers, userMap, roster
 
     // ── Step 5: Render profile cards with season depth ────────────
     var seasonBadge = seasonCount > 1
-      ? '<div style="font-family:var(--font-hand); font-size:15px; color:var(--orange); text-align:center; margin-bottom:10px;">' +
+      ? '<div style="font-family:var(--font-hand); font-size:14px; color:var(--orange); text-align:center; margin-bottom:10px;">' +
         seasonCount + ' seasons of intel' + '</div>'
       : '';
 
@@ -7444,8 +7444,8 @@ function _mcRenderOddsCards(results, paid, leagueId) {
     html += '<div style="font-family:var(--font-mono);font-size:14px;font-weight:700;margin-bottom:4px;">' + escapeHtml(isBlurred ? 'Manager' : r.name) + '</div>';
     html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + (isBlurred ? '?-?' : r.wins + '-' + r.losses) + '</div>';
     html += '<div style="display:flex;gap:12px;">';
-    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + champColor + ';">' + (isBlurred ? '??' : r.champPct) + '%</div><div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">CHAMP</div></div>';
-    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + playoffColor + ';">' + (isBlurred ? '??' : r.playoffPct) + '%</div><div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">PLAYOFF</div></div>';
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:20px;color:' + champColor + ';">' + (isBlurred ? '??' : r.champPct) + '%</div><div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">CHAMP</div></div>';
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:20px;color:' + playoffColor + ';">' + (isBlurred ? '??' : r.playoffPct) + '%</div><div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">PLAYOFF</div></div>';
     html += '<div style="text-align:center;"><div style="font-family:var(--font-mono);font-size:14px;font-weight:700;">' + (isBlurred ? '??' : r.avgPts) + '</div><div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">AVG PTS</div></div>';
     html += '</div>';
     // Mini histogram canvas per card (Pro only, not blurred)
@@ -7486,7 +7486,7 @@ function _mcRenderScenario(leagueId) {
   var trades = st.trades || [];
 
   var html = '<div style="padding:12px 0;">';
-  html += '<div style="font-family:var(--font-mono);font-size:15px;font-weight:700;margin-bottom:8px;">Scenario Explorer</div>';
+  html += '<div style="font-family:var(--font-mono);font-size:14px;font-weight:700;margin-bottom:8px;">Scenario Explorer</div>';
   html += '<div style="font-family:var(--font-hand);font-size:13px;color:var(--ink-light);margin-bottom:12px;">toggle injuries and simulate trades — odds update instantly, no API calls</div>';
 
   // Active scenarios
@@ -7625,14 +7625,14 @@ async function _mcResimulate(leagueId) {
     html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-medium);margin-bottom:8px;">' + (isBlurred ? '?-?' : r.wins + '-' + r.losses) + '</div>';
     html += '<div style="display:flex;gap:12px;flex-wrap:wrap;">';
     // Champ
-    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + champColor + ';">' + (isBlurred ? '??' : r.champPct) + '%</div>';
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:20px;color:' + champColor + ';">' + (isBlurred ? '??' : r.champPct) + '%</div>';
     if (baseLine && !isBlurred) {
       var cd = Math.round((r.champPct - baseLine.champPct) * 10) / 10;
       if (cd !== 0) html += '<div style="font-family:var(--font-mono);font-size:11px;color:' + (cd > 0 ? 'var(--green)' : 'var(--red)') + ';">' + (cd > 0 ? '+' : '') + cd + '%</div>';
     }
     html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);">CHAMP</div></div>';
     // Playoff
-    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:22px;color:' + playoffColor + ';">' + (isBlurred ? '??' : r.playoffPct) + '%</div>';
+    html += '<div style="text-align:center;"><div style="font-family:var(--font-display);font-size:20px;color:' + playoffColor + ';">' + (isBlurred ? '??' : r.playoffPct) + '%</div>';
     if (baseLine && !isBlurred) {
       var pd = r.playoffPct - baseLine.playoffPct;
       if (pd !== 0) html += '<div style="font-family:var(--font-mono);font-size:11px;color:' + (pd > 0 ? 'var(--green)' : 'var(--red)') + ';">' + (pd > 0 ? '+' : '') + pd + '%</div>';

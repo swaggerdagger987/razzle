@@ -854,7 +854,7 @@ async function openCompare() {
       drawProspectCompareSpider(data.prospects);
     } catch (e) {
       document.getElementById("compareContent").innerHTML =
-        '<p style="font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect comparison...</p>';
+        '<p style="font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the prospect comparison...</p>';
       console.error(e);
     }
   } else {
@@ -865,7 +865,7 @@ async function openCompare() {
       drawCompareRadar(data.players);
     } catch (e) {
       document.getElementById("compareContent").innerHTML =
-        '<p style="font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the comparison...</p>';
+        '<p style="font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the comparison...</p>';
       console.error(e);
     }
   }
@@ -1232,7 +1232,7 @@ const PROSPECT_COMPARE_COLORS = ["#5b7fff", "#d97757", "#2ec4b6", "#8b5cf6", "#e
 function renderProspectCompareTable(prospects) {
   if (!prospects || prospects.length < 2) {
     document.getElementById("compareContent").innerHTML =
-      '<p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">need at least 2 prospects with combine data</p>';
+      '<p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">need at least 2 prospects with combine data</p>';
     return;
   }
 

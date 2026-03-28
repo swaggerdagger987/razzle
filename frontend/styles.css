@@ -191,7 +191,7 @@ h1, h2, h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 20px;
   box-shadow: 4px 4px 0 var(--ink);
   transform: rotate(-2deg);
   line-height: 1;
@@ -946,7 +946,7 @@ a.btn-pro-upgrade:focus-visible {
 /* ===== EMPTY STATE ===== */
 .empty-msg {
   font-family: var(--font-hand);
-  font-size: 22px;
+  font-size: 20px;
   color: var(--ink-light);
   text-align: center;
   padding: 40px 20px;
@@ -1000,7 +1000,7 @@ a.btn-pro-upgrade:focus-visible {
 .input-chunky::placeholder {
   color: var(--ink-light);
   font-family: var(--font-hand);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 /* ===== SELECT ===== */
@@ -1244,7 +1244,7 @@ body {
 }
 .cmd-palette-item-name {
   font-family: var(--font-mono);
-  font-size: 15px;
+  font-size: 14px;
   color: var(--ink);
   white-space: nowrap;
   overflow: hidden;

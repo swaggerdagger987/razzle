@@ -6564,7 +6564,7 @@ async function openPlayerProfile(playerId) {
   const overlay = document.getElementById("profileOverlay");
   const content = document.getElementById("profileContent");
   overlay.classList.add("open");
-  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">' + razzleLoading() + '</div>';
+  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">' + razzleLoading() + '</div>';
 
   try {
     const data = await apiFetch(`/api/players/${encodeURIComponent(playerId)}/profile`);
@@ -6584,21 +6584,21 @@ async function openCollegeProfile(playerId) {
   const overlay = document.getElementById("profileOverlay");
   const content = document.getElementById("profileContent");
   overlay.classList.add("open");
-  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the college tape...</div>`;
+  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">scouting the college tape...</div>`;
 
   try {
     const data = await apiFetch(`/api/college/player-profile/${encodeURIComponent(playerId)}`);
     renderCollegeProfile(data, content);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the college data fetch... try again in a sec.</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the college data fetch... try again in a sec.</div>`;
   }
 }
 
 function renderCollegeProfile(data, container) {
-  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>'; return; }
+  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">player not found on the film</div>'; return; }
   const { player, seasons, career, combine, draft } = data;
   if (!player || !player.player_name) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">player not found on the film</div>`;
     return;
   }
 
@@ -6790,10 +6790,10 @@ function getCollegeSeasonColumns(pos) {
 }
 
 function renderProfile(data, container) {
-  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>'; return; }
+  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">player not found on the film</div>'; return; }
   const { player, seasons, career, combine } = data;
   if (!player || !player.full_name) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">player not found on the film</div>`;
     return;
   }
 
@@ -7391,7 +7391,7 @@ async function openProspectProfile(name, position, draftYear) {
   const overlay = document.getElementById("profileOverlay");
   const content = document.getElementById("profileContent");
   overlay.classList.add("open");
-  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the prospect...</div>`;
+  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">scouting the prospect...</div>`;
 
   try {
     const params = new URLSearchParams({ name, position, draft_year: draftYear });
@@ -7401,16 +7401,16 @@ async function openProspectProfile(name, position, draftYear) {
     ]);
     renderProspectProfile(data, content, compsData);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect data... try again in a sec.</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the prospect data... try again in a sec.</div>`;
   }
 }
 
 function renderProspectProfile(data, container, compsData) {
-  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>'; return; }
+  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">prospect not found on the board</div>'; return; }
   const { prospect } = data;
   const percentiles = data.percentiles || {};
   if (!prospect || !prospect.player_name) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">prospect not found on the board</div>`;
     return;
   }
 
@@ -7517,7 +7517,7 @@ function renderProspectProfile(data, container, compsData) {
       const domColor = college.dominator_rating >= 30 ? "var(--green)" : college.dominator_rating >= 20 ? "var(--green)" : "var(--yellow)";
       html += `<div style="display:flex; align-items:center; gap:8px; margin:8px 0 12px 0;">`;
       html += `<span class="tier-badge" style="background:${domColor}; transform:rotate(-2deg); font-size:11px;">${college.dominator_rating.toFixed(1)}% DOM</span>`;
-      html += `<span style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light);">peak dominator rating (team rec share)</span>`;
+      html += `<span style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light);">peak dominator rating (team rec share)</span>`;
       html += `</div>`;
     }
 
@@ -8307,7 +8307,7 @@ function closeTierView(e) {
 async function loadTierData(position) {
   currentTierPosition = position;
   const contentEl = document.getElementById("tierContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">grading the ${escapeHtml(position)} prospects...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">grading the ${escapeHtml(position)} prospects...</div>`;
 
   // Highlight active button
   document.querySelectorAll(".tier-pos-btn").forEach(btn => {
@@ -8318,7 +8318,7 @@ async function loadTierData(position) {
     const data = await apiFetch(`/api/prospect-tiers?position=${position}&draft_year=${state.draftYear || state.season}`);
     renderTierView(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the tier data... try again in a sec.</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the tier data... try again in a sec.</div>`;
   }
 }
 
@@ -8377,7 +8377,7 @@ function renderTierView(data, container) {
   }
 
   if (!hasAnyProspects) {
-    html += `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no ${escapeHtml(data.position)} prospects found for ${escapeHtml(String(data.draft_year))}</div>`;
+    html += `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">no ${escapeHtml(data.position)} prospects found for ${escapeHtml(String(data.draft_year))}</div>`;
   }
 
   container.innerHTML = html;
@@ -8551,7 +8551,7 @@ function closeBigBoard(e) {
 async function loadBigBoard(position) {
   currentBBPosition = position;
   const contentEl = document.getElementById("bbContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the ${position === "ALL" ? "" : escapeHtml(position) + " "}board...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">scouting the ${position === "ALL" ? "" : escapeHtml(position) + " "}board...</div>`;
 
   document.querySelectorAll(".bb-pos-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.pos === position);
@@ -8563,7 +8563,7 @@ async function loadBigBoard(position) {
     currentBBData = data;
     renderBigBoard(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the big board... try again in a sec.</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the big board... try again in a sec.</div>`;
   }
 }
 
@@ -8662,7 +8662,7 @@ function getRPSTierDef(rps) {
 function renderBigBoard(data, container) {
   const prospects = data.prospects || [];
   if (prospects.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no prospects found for ${escapeHtml(String(data.draft_year))} ${escapeHtml(data.position)}</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">no prospects found for ${escapeHtml(String(data.draft_year))} ${escapeHtml(data.position)}</div>`;
     return;
   }
 
@@ -8929,7 +8929,7 @@ function closeClassAnalytics(e) {
 async function loadClassAnalytics(position) {
   currentCAPosition = position;
   const contentEl = document.getElementById("caContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">analyzing ${position === "ALL" ? "all" : escapeHtml(position)} draft classes...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">analyzing ${position === "ALL" ? "all" : escapeHtml(position)} draft classes...</div>`;
 
   document.querySelectorAll(".ca-pos-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.pos === position);
@@ -8941,14 +8941,14 @@ async function loadClassAnalytics(position) {
     currentCAData = { ...data, filterPosition: position };
     renderClassAnalytics(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the analytics... try again in a sec.</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the analytics... try again in a sec.</div>`;
   }
 }
 
 function renderClassAnalytics(data, container) {
   const classes = data.classes || [];
   if (classes.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no draft class data found</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">no draft class data found</div>`;
     return;
   }
 
@@ -9367,7 +9367,7 @@ function renderTVPositionBtns() {
 
 async function loadTradeValues() {
   const content = document.getElementById("tvContent");
-  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling trade film...</div>';
+  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">pulling trade film...</div>';
 
   try {
     const params = new URLSearchParams({
@@ -9453,7 +9453,7 @@ function renderTradeValueChart() {
   }
 
   if (!html) {
-    html = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">' + razzleEmpty() + '</div>';
+    html = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">' + razzleEmpty() + '</div>';
   }
 
   content.innerHTML = html;
@@ -10414,7 +10414,7 @@ function renderWatchlistPanel() {
 
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:600px; max-width:95vw; max-height:85vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">';
-  html += '<h3 style="font-family:var(--font-display); font-size:22px; margin:0;">Watchlist <span style="color:var(--orange);">(' + list.length + ')</span></h3>';
+  html += '<h3 style="font-family:var(--font-display); font-size:20px; margin:0;">Watchlist <span style="color:var(--orange);">(' + list.length + ')</span></h3>';
   html += '<div style="display:flex; gap:6px;">';
   if (list.length > 0) {
     html += '<button class="btn-primary" onclick="openTierBoard()">Tier Board</button>';
@@ -10423,7 +10423,7 @@ function renderWatchlistPanel() {
   html += '</div></div>';
 
   if (list.length === 0) {
-    html += '<p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light); text-align:center; padding:40px 0;">' + razzleEmpty() + '</p>';
+    html += '<p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light); text-align:center; padding:40px 0;">' + razzleEmpty() + '</p>';
     html += '<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light); text-align:center;">click the &#9734; star next to any player in the table</p>';
     html += '</div>';
     overlay.innerHTML = html;
@@ -10503,7 +10503,7 @@ function renderTierBoard() {
 
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:800px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">';
-  html += '<h3 style="font-family:var(--font-display); font-size:22px; margin:0;">Tier Board</h3>';
+  html += '<h3 style="font-family:var(--font-display); font-size:20px; margin:0;">Tier Board</h3>';
   html += '<div style="display:flex; gap:6px;">';
   html += '<button class="btn-primary" onclick="exportTierBoardPNG()">Export PNG</button>';
   html += '<button class="btn-chunky" onclick="openWatchlistPanel(); closeTierBoard();">Back</button>';
@@ -11867,7 +11867,7 @@ function renderMyRosterPanel() {
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:700px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   // Header
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">';
-  html += '<h3 style="font-family:var(--font-display); font-size:22px; margin:0;">My Roster <span style="color:var(--green);">(' + list.length + ')</span></h3>';
+  html += '<h3 style="font-family:var(--font-display); font-size:20px; margin:0;">My Roster <span style="color:var(--green);">(' + list.length + ')</span></h3>';
   html += '<div style="display:flex; gap:6px;">';
   if (list.length > 0) {
     html += '<button class="btn-primary" onclick="calculateRosterValue()">Calculate Value</button>';
@@ -12485,7 +12485,7 @@ function renderPlayerComps(data, container) {
 
     // Similarity score
     html += `<div style="text-align:center; margin:8px 0;">`;
-    html += `<span style="font-family:var(--font-display); font-size:28px; font-weight:700; color:${simColor};">${comp.similarity}%</span>`;
+    html += `<span style="font-family:var(--font-display); font-size:24px; font-weight:700; color:${simColor};">${comp.similarity}%</span>`;
     html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); text-transform:uppercase;">match</div>`;
     html += `</div>`;
 

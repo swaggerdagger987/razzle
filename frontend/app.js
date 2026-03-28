@@ -920,7 +920,7 @@ function _showWelcomeModal(user) {
   overlay.innerHTML =
     '<div style="background:var(--bg);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);max-width:480px;width:100%;padding:32px;text-align:center;position:relative;">' +
       '<div style="font-size:48px;margin-bottom:8px;">🐯</div>' +
-      '<h2 style="font-family:var(--font-display);font-size:28px;color:var(--ink);margin:0 0 4px;">welcome to the film room.</h2>' +
+      '<h2 style="font-family:var(--font-display);font-size:24px;color:var(--ink);margin:0 0 4px;">welcome to the film room.</h2>' +
       '<p style="font-family:var(--font-hand);font-size:18px;color:var(--ink-light);margin:0 0 16px;">you just made the tiger very happy</p>' +
       '<div style="display:inline-block;background:var(--orange);color:var(--text-on-accent);font-family:var(--font-mono);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;border:2px solid var(--ink);margin-bottom:20px;">' +
         escapeHtml(planLabel) + ' — ' + escapeHtml(price) +

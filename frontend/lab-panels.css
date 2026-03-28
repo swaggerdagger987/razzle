@@ -41,7 +41,7 @@
 }
 .lp-header h2 {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: 32px;
   color: var(--ink);
   margin: 0 0 4px;
 }
@@ -593,7 +593,7 @@
 .tv-tier-num.t6 { background: var(--bg); color: var(--ink-medium); }
 .tv-tier-num.t7 { background: var(--red-light); color: var(--semantic-red); }
 .tv-tier-num.t8 { background: var(--ink-faint); color: var(--ink-medium); }
-.tv-tier-label { font-family: var(--font-hand); font-size: 15px; color: var(--ink-light); margin-left: 4px; }
+.tv-tier-label { font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); margin-left: 4px; }
 .tv-tier-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); margin-left: auto; }
 .tv-row {
   display: flex;
@@ -610,8 +610,8 @@
 .tv-row:last-child { border-bottom: none; }
 .tv-rank { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ink-light); width: 32px; text-align: center; flex-shrink: 0; }
 .tv-rank.top1 { color: #b8860b; font-size: 16px; }
-.tv-rank.top2 { color: var(--ink-light); font-size: 15px; }
-.tv-rank.top3 { color: #a0522d; font-size: 15px; }
+.tv-rank.top2 { color: var(--ink-light); font-size: 14px; }
+.tv-rank.top3 { color: #a0522d; font-size: 14px; }
 .tv-headshot { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; flex-shrink: 0; background: var(--bg-warm); }
 .tv-player-info { min-width: 0; width: 140px; flex-shrink: 0; }
 .tv-player-name { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1033,7 +1033,7 @@
 .breakout-rbs { text-align: right; flex-shrink: 0; }
 .breakout-rbs-score {
   font-family: var(--font-mono);
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--orange);
 }
@@ -1180,7 +1180,7 @@
 .buysell-info { flex: 1; min-width: 0; }
 .buysell-name {
   font-family: var(--font-mono);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--ink);
   white-space: nowrap;
@@ -1282,7 +1282,7 @@
 .buysell-mismatch-fill.sell { background: var(--red); opacity: 0.7; }
 .buysell-annotation {
   font-family: var(--font-hand);
-  font-size: 15px;
+  font-size: 14px;
   color: var(--ink-light);
   padding: 4px 0;
   border-top: 2px dashed var(--ink-faint);
@@ -2754,7 +2754,7 @@
   box-shadow: 4px 4px 0 var(--ink); padding: 16px; text-align: center;
 }
 .ag-card-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; color: var(--ink-light); margin-bottom: 4px; }
-.ag-card-value { font-family: var(--font-display); font-size: 28px; color: var(--ink); }
+.ag-card-value { font-family: var(--font-display); font-size: 24px; color: var(--ink); }
 
 /* ===== 33. PACE TRACKER (pt-) ===== */
 .pt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -2863,7 +2863,7 @@
   .yy-player-cell { min-width: 140px; }
   .yy-headshot { width: 24px; height: 24px; }
   .ag-summary { grid-template-columns: repeat(2, 1fr); }
-  .ag-card-value { font-size: 22px; }
+  .ag-card-value { font-size: 20px; }
   .pt-grid { grid-template-columns: repeat(2, 1fr); }
   .spc-table { font-size: 12px; }
   .tdr-columns { grid-template-columns: 1fr; }
@@ -3032,7 +3032,7 @@
 .sw2-pos-badge { font-size: 11px; color: var(--text-on-accent); padding: 2px 6px; border-radius: var(--radius-sm); font-weight: 700; }
 .sw2-team { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); }
 .sw2-overall-grade {
-  font-family: var(--font-display); font-size: 22px; color: var(--text-on-accent); width: 48px; height: 48px;
+  font-family: var(--font-display); font-size: 20px; color: var(--text-on-accent); width: 48px; height: 48px;
   display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); font-weight: 700;
 }
 
@@ -3167,7 +3167,7 @@
 .arc-card-header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 2px solid var(--ink-faint); }
 .arc-icon { font-size: 24px; }
 .arc-card-title { flex: 1; }
-.arc-name { font-family: var(--font-mono); font-size: 15px; color: var(--ink); }
+.arc-name { font-family: var(--font-mono); font-size: 14px; color: var(--ink); }
 .arc-desc { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
 .arc-pos-badge { font-size: 11px; color: var(--text-on-accent); padding: 2px 6px; border-radius: var(--radius-sm); font-weight: 700; }
 .arc-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
@@ -3243,7 +3243,7 @@
   .pbd-details { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 480px) {
-  .cst-player-name { font-size: 15px; }
+  .cst-player-name { font-size: 14px; }
   .cst-chip { min-width: auto; padding: 5px 8px; }
   .cst-chip-val { font-size: 13px; }
   .cmt-player-cell { min-width: 110px; }
@@ -3260,7 +3260,7 @@
 .aw2-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
 .aw2-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 12px; padding: 20px; box-shadow: 4px 4px 0 var(--ink); }
 .aw2-card-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
-.aw2-trophy { font-size: 28px; }
+.aw2-trophy { font-size: 24px; }
 .aw2-card-title { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
 .aw2-card-desc { font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); }
 .aw2-winner { display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--bg-warm); border-radius: 8px; margin-bottom: 10px; cursor: pointer; }
@@ -3283,7 +3283,7 @@
 .aw2-grade.poor { background: var(--semantic-red-light); color: var(--semantic-red); }
 .aw2-annotation { font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); margin-top: 6px; }
 .aw2-winner-stat { text-align: center; margin-left: auto; min-width: 60px; }
-.aw2-stat-value { font-family: var(--font-display); font-size: 22px; color: var(--orange); }
+.aw2-stat-value { font-family: var(--font-display); font-size: 20px; color: var(--orange); }
 .aw2-stat-label { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
 .aw2-runners { border-top: 2px dashed var(--ink-faint); padding-top: 10px; margin-top: 10px; }
 .aw2-runners-title { font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); margin-bottom: 6px; }
@@ -3318,7 +3318,7 @@
 .db2-trend-pos.RB { background: var(--pos-rb); }
 .db2-trend-pos.WR { background: var(--pos-wr); }
 .db2-trend-pos.TE { background: var(--pos-te); }
-.db2-trend-big { font-family: var(--font-display); font-size: 22px; color: var(--ink); }
+.db2-trend-big { font-family: var(--font-display); font-size: 20px; color: var(--ink); }
 .db2-trend-stat { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
 .db2-section { background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px; }
 .db2-section-header { font-family: var(--font-display); font-size: 16px; color: var(--ink); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px dashed var(--ink-faint); }
@@ -3489,7 +3489,7 @@
 .rc2-mvp-label { font-family: var(--font-hand); font-size: 16px; color: var(--ink-light); }
 .rc2-mvp-name { font-family: var(--font-display); font-size: 24px; color: var(--ink); margin: 6px 0; }
 .rc2-mvp-stats { display: flex; justify-content: center; gap: 30px; margin-top: 12px; }
-.rc2-mvp-val { font-family: var(--font-display); font-size: 22px; color: var(--orange); }
+.rc2-mvp-val { font-family: var(--font-display); font-size: 20px; color: var(--orange); }
 .rc2-mvp-lbl { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
 .rc2-pos-leaders { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
 .rc2-pos-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm); padding: 12px 16px; text-align: center; min-width: 130px; }
@@ -3572,7 +3572,7 @@
 .rbld-pos-item.RB .rbld-pos-item-label { color: var(--pos-rb); }
 .rbld-pos-item.WR .rbld-pos-item-label { color: var(--pos-wr); }
 .rbld-pos-item.TE .rbld-pos-item-label { color: var(--pos-te); }
-.rbld-pos-item-count { font-family: var(--font-mono); font-size: 22px; color: var(--ink); }
+.rbld-pos-item-count { font-family: var(--font-mono); font-size: 20px; color: var(--ink); }
 .rbld-pos-item-meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
 
 /* ===== SCHEDULE (SOS) PANEL (sos2-) ===== */
@@ -3772,7 +3772,7 @@
 }
 .lp-nfl-only-text {
   font-family: var(--font-hand);
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1.4;
   color: var(--ink-light);
   transform: rotate(-1deg);
@@ -3830,8 +3830,8 @@
   .lp-page table td { padding: 4px 6px; }
   .lp-pos-tab { padding: 5px 10px; font-size: 11px; }
   .lp-select { font-size: 12px; padding: 5px 8px; }
-  .lp-header h2 { font-size: 22px; }
-  .lp-subtitle { font-size: 15px; }
+  .lp-header h2 { font-size: 20px; }
+  .lp-subtitle { font-size: 14px; }
 }
 /* ===== CORRELATIONS PANEL ===== */
 .corr-section {

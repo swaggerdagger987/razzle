@@ -481,11 +481,11 @@ function renderFormulaStore() {
   let cardsHtml = "";
   if (storeState.loading) {
     cardsHtml = `<div style="text-align:center; padding:40px; grid-column:1/-1;">
-      <p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling formulas...</p>
+      <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">pulling formulas...</p>
     </div>`;
   } else if (!formulas.length) {
     cardsHtml = `<div style="text-align:center; padding:40px; grid-column:1/-1;">
-      <p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no formulas match your filters</p>
+      <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">no formulas match your filters</p>
     </div>`;
   } else {
     cardsHtml = formulas.map(f => renderFormulaCard(f, userReviews)).join("");

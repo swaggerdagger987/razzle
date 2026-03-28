@@ -520,7 +520,7 @@
   }
   .lab-panel-header .panel-flavor {
     font-family: var(--font-hand);
-    font-size: 15px;
+    font-size: 14px;
     color: var(--ink-light);
     margin-top: 2px;
   }
@@ -1870,7 +1870,7 @@
 
   .profile-name {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: 24px;
     line-height: 1.1;
   }
 
@@ -2264,7 +2264,7 @@
     margin-top: 2px;
   }
   @media (max-width: 480px) {
-    .prospect-rps-big { font-size: 28px; }
+    .prospect-rps-big { font-size: 24px; }
     .prospect-rps-breakdown { gap: 10px; }
     .prospect-rps-component { padding: 6px 10px; min-width: 70px; }
     .prospect-rps-comp-val { font-size: 16px; }
@@ -2688,7 +2688,7 @@
       border-radius: 0;
       box-shadow: none;
     }
-    .profile-name { font-size: 22px; }
+    .profile-name { font-size: 20px; }
     .profile-stat-value { font-size: 18px; }
     .profile-stats-bar { flex-wrap: wrap; }
     .profile-stat-box { min-width: 80px; }

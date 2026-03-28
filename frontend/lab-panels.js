@@ -4130,7 +4130,7 @@
           '<div class="lp-header"><h2>Weekly Leaders</h2>' +
           '<div class="lp-subtitle">who went off this week</div></div>' +
           '<div style="text-align:center;padding:60px 20px;">' +
-            '<div style="font-family:var(--font-hand);font-size:22px;color:var(--ink-light);transform:rotate(-1deg);max-width:400px;margin:0 auto;">' +
+            '<div style="font-family:var(--font-hand);font-size:20px;color:var(--ink-light);transform:rotate(-1deg);max-width:400px;margin:0 auto;">' +
               'college stats are season-level only — weekly game data isn\'t available for college players. check <b>Stat Leaders</b> for season totals.' +
             '</div>' +
           '</div>' +
@@ -10235,7 +10235,7 @@
 
       // Top players
       if (t.top_players && t.top_players.length) {
-        html += '<div style="font-family:var(--font-hand);font-size:15px;color:var(--ink-light);margin-bottom:6px;">top dynasty assets</div>';
+        html += '<div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);margin-bottom:6px;">top dynasty assets</div>';
         html += '<table style="width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:12px;">';
         html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
         html += '<th style="text-align:left;padding:4px 6px;">Player</th>';
