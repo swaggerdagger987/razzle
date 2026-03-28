@@ -1524,33 +1524,20 @@ async def delete_api_key(provider: str, request: Request):
 
 @app.get("/api/user/formulas")
 async def get_user_formulas(request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     return auth_module.get_user_formulas(user["id"])
 
 
 @app.post("/api/user/formulas")
 async def save_user_formula(request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     body = await request.json()
     name = body.get("name", "")
     weights = body.get("weights", "")
-
-    # Server-side formula count enforcement for free users
-    plan = user.get("plan", "free")
-    if plan == "free":
-        existing = auth_module.get_user_formulas(user["id"])
-        formula_names = [f["name"] for f in existing.get("formulas", [])]
-        # Allow update of existing formula, but cap new creations at 3
-        if name not in formula_names and len(formula_names) >= 3:
-            return JSONResponse(
-                {"error": "Free plan limited to 3 formulas. Upgrade to Pro for unlimited."},
-                status_code=403,
-            )
-
     result = auth_module.save_user_formula(user["id"], name, weights)
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result["status"])
@@ -1559,9 +1546,9 @@ async def save_user_formula(request: Request):
 
 @app.delete("/api/user/formulas/{formula_id}")
 async def delete_user_formula(formula_id: int, request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     result = auth_module.delete_user_formula(user["id"], formula_id)
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result["status"])
@@ -1570,23 +1557,9 @@ async def delete_user_formula(formula_id: int, request: Request):
 
 @app.post("/api/user/formulas/import")
 async def import_user_formulas(request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
-    plan = user.get("plan", "free")
-    if plan == "free":
-        existing = auth_module.get_user_formulas(user["id"])
-        current_count = len(existing.get("formulas", []))
-        if current_count >= 3:
-            return JSONResponse(
-                {"error": "Free plan limited to 3 formulas. Upgrade to Pro for unlimited."},
-                status_code=403,
-            )
-        # Cap import to stay within 3-formula limit
-        body = await request.json()
-        formulas = body.get("formulas", [])
-        remaining_slots = 3 - current_count
-        return auth_module.import_formulas(user["id"], formulas[:remaining_slots])
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     body = await request.json()
     return auth_module.import_formulas(user["id"], body.get("formulas", []))
 
