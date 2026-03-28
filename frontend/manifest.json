@@ -1,0 +1,9 @@
+{
+  "name": "Razzle - Fantasy Football Research Lab",
+  "short_name": "Razzle",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ede0cf",
+  "theme_color": "#d97757",
+  "icons": []
+}

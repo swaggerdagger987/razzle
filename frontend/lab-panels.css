@@ -2710,7 +2710,7 @@
 .ut-rank { width: 30px; text-align: center; color: var(--ink-light); }
 .ut-player-cell { display: flex; align-items: center; gap: 6px; padding: 6px 10px; min-width: 180px; }
 .ut-headshot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; }
-.ut-name { font-weight: 700; font-size: 13px; white-space: nowrap; }
+.ut-name { font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ut-pos-badge { font-size: 11px; color: var(--text-on-accent); padding: 1px 5px; border-radius: var(--radius-sm); font-weight: 700; }
 .ut-team { font-size: 11px; color: var(--ink-light); }
 .ut-num { text-align: right; padding: 6px 10px; font-variant-numeric: tabular-nums; }
@@ -2730,7 +2730,7 @@
 .yy-rank { width: 30px; text-align: center; color: var(--ink-light); }
 .yy-player-cell { display: flex; align-items: center; gap: 6px; padding: 6px 10px; min-width: 180px; }
 .yy-headshot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; }
-.yy-name { font-weight: 700; font-size: 13px; white-space: nowrap; }
+.yy-name { font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .yy-pos-badge { font-size: 11px; color: var(--text-on-accent); padding: 1px 5px; border-radius: var(--radius-sm); font-weight: 700; }
 .yy-team { font-size: 11px; color: var(--ink-light); }
 .yy-num { text-align: right; padding: 6px 10px; font-variant-numeric: tabular-nums; }
@@ -2816,7 +2816,7 @@
 .tdr-table tbody tr { border-bottom: 2px dashed var(--ink-faint); }
 .tdr-table tbody tr:hover { background: var(--orange-hover); }
 .tdr-rank { width: 24px; text-align: center; color: var(--ink-light); }
-.tdr-name { font-weight: 700; white-space: nowrap; }
+.tdr-name { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tdr-team { font-size: 11px; color: var(--ink-light); }
 .tdr-pos-badge { font-size: 11px; color: var(--text-on-accent); padding: 1px 4px; border-radius: var(--radius-sm); font-weight: 700; }
 .tdr-num { text-align: right; padding: 4px 8px; font-variant-numeric: tabular-nums; }
@@ -2845,7 +2845,7 @@
 .ay-table tbody tr:hover { background: var(--orange-hover); }
 .ay-player-cell { display: flex; align-items: center; gap: 5px; padding: 5px 8px; min-width: 160px; }
 .ay-headshot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; }
-.ay-name { font-weight: 700; font-size: 12px; white-space: nowrap; }
+.ay-name { font-weight: 700; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ay-pos-badge { font-size: 11px; color: var(--text-on-accent); padding: 1px 4px; border-radius: var(--radius-sm); font-weight: 700; }
 .ay-team { font-size: 11px; color: var(--ink-light); }
 .ay-num { text-align: right; padding: 5px 8px; font-variant-numeric: tabular-nums; }
@@ -3086,7 +3086,7 @@
 .rpc-table tbody tr:hover { background: var(--orange-hover); }
 .rpc-player-cell { display: flex; align-items: center; gap: 5px; padding: 5px 8px; min-width: 160px; }
 .rpc-headshot { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--ink); object-fit: cover; }
-.rpc-name { font-weight: 700; font-size: 12px; white-space: nowrap; }
+.rpc-name { font-weight: 700; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rpc-pos { font-size: 11px; color: var(--text-on-accent); padding: 1px 5px; border-radius: var(--radius-sm); font-weight: 700; }
 .rpc-team { font-size: 11px; color: var(--ink-light); }
 .rpc-num { text-align: right; padding: 5px 8px; font-variant-numeric: tabular-nums; }
@@ -3116,7 +3116,7 @@
 .fpb-row:last-child { border-bottom: none; }
 .fpb-rank { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); min-width: 24px; text-align: right; }
 .fpb-player { display: flex; align-items: center; gap: 5px; min-width: 140px; }
-.fpb-name { font-family: var(--font-mono); font-size: 12px; font-weight: 700; white-space: nowrap; }
+.fpb-name { font-family: var(--font-mono); font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fpb-team { font-family: var(--font-mono); font-size: 11px; color: var(--ink-light); }
 .fpb-pos { font-size: 11px; color: var(--text-on-accent); padding: 1px 5px; border-radius: var(--radius-sm); font-weight: 700; }
 .fpb-ppg { font-family: var(--font-mono); font-size: 12px; font-weight: 700; min-width: 40px; text-align: right; }
@@ -3997,6 +3997,8 @@
   font-weight: bold;
   color: var(--ink);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .gs-pos {
   font-size: 11px;

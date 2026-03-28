@@ -2101,6 +2101,7 @@ function renderTableBody() {
   if (typeof hideTagPicker === 'function') hideTagPicker();
   if (typeof hideNoteEditor === 'function') hideNoteEditor();
   if (typeof dismissColumnStatsPopover === 'function') dismissColumnStatsPopover();
+  if (typeof hideHoverCard === 'function') hideHoverCard();
   if (typeof _hoverTimer !== 'undefined') clearTimeout(_hoverTimer);
   var ctxMenu = document.querySelector('.ctx-menu');
   if (ctxMenu) ctxMenu.style.display = 'none';

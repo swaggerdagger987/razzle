@@ -1804,6 +1804,10 @@ input[type="number"] {
   scroll-margin-top: 80px;
 }
 
+/* ===== FAQ COLLAPSIBLE (details/summary) ===== */
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item[open] .faq-chevron { transform: rotate(180deg); }
+
 /* ===== TOUCH DEVICE HOVER GUARD ===== */
 /* Prevent sticky hover states on touch devices (phones, tablets) */
 @media (hover: none) {

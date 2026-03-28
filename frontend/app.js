@@ -2016,9 +2016,28 @@ function renderRecentlyViewed() {
   renderCmdResults(recent, "Recently Viewed");
 }
 
+// Platform-aware shortcut label (Cmd on Mac, Ctrl elsewhere)
+var _isMac = navigator.platform ? navigator.platform.includes('Mac') : (navigator.userAgent ? navigator.userAgent.includes('Mac') : false);
+var _shortcutLabel = _isMac ? '\u2318K' : 'Ctrl+K';
+
+function _patchSearchHints() {
+  // Patch nav bar search hint button
+  var navBtn = document.querySelector('.nav-search-hint');
+  if (navBtn) {
+    navBtn.setAttribute('aria-label', 'Open quick search (' + _shortcutLabel + ')');
+    navBtn.innerHTML = '<kbd>' + _shortcutLabel + '</kbd> Search';
+  }
+  // Patch command palette input placeholder
+  var cmdInput = document.getElementById('cmdInput');
+  if (cmdInput) {
+    cmdInput.placeholder = 'Search players or panels... (' + _shortcutLabel + ')';
+  }
+}
+
 // Init palette on DOM ready
 function _initPalette() {
   initCommandPalette();
+  _patchSearchHints();
 }
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", _initPalette);
