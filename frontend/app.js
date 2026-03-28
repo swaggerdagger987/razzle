@@ -1145,6 +1145,22 @@ function signOut() {
   updateAuthUI(null);
 }
 
+function _showTrialExpiredModal() {
+  if (document.getElementById("trialExpiredModal")) return;
+  var overlay = document.createElement("div");
+  overlay.id = "trialExpiredModal";
+  overlay.style.cssText = "position:fixed;inset:0;background:rgba(45,31,20,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;";
+  overlay.innerHTML =
+    '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:var(--radius);box-shadow:4px 4px 0 var(--ink);padding:32px;max-width:420px;width:90%;text-align:center;">' +
+      '<div style="font-size:40px;margin-bottom:12px;">🐯</div>' +
+      '<h2 style="font-family:var(--font-display);font-size:22px;margin:0 0 8px;">your pro trial ended</h2>' +
+      '<p style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin:0 0 20px;">you explored the full film room for 7 days. keep the edge with Pro.</p>' +
+      '<a href="/pricing.html" class="btn-chunky btn-primary" style="display:inline-block;margin-bottom:12px;font-size:14px;padding:10px 24px;">see Pro plans</a><br>' +
+      '<button onclick="this.closest(\'#trialExpiredModal\').remove()" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);font-size:12px;padding:8px;">maybe later</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+}
+
 async function checkAuth() {
   var token = localStorage.getItem("razzle_token");
   if (!token) { updateAuthUI(null); return; }
@@ -1158,6 +1174,12 @@ async function checkAuth() {
       return;
     }
     var data = await resp.json();
+    // Detect trial→expired transition
+    var prevUser = null;
+    try { prevUser = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
+    if (prevUser && prevUser.trial_active && data.user && !data.user.trial_active && data.user.plan_source === "trial") {
+      _showTrialExpiredModal();
+    }
     try { localStorage.setItem("razzle_user", JSON.stringify(data.user)); } catch (e) {}
     updateAuthUI(data.user);
   } catch (e) {
