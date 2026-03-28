@@ -992,6 +992,7 @@ function _injectAuthModal() {
         '<input type="password" id="authRegisterConfirm" placeholder="Confirm password" required minlength="8" autocomplete="new-password" aria-label="Confirm password" aria-describedby="authRegisterError">' +
         '<div id="authRegisterError" class="auth-error" role="alert"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Create Account</button>' +
+        '<div style="text-align:center;margin-top:6px;font-family:var(--font-hand);font-size:13px;color:var(--ink-light);">includes 7-day Pro trial — no credit card</div>' +
       '</form>' +
     '</div>';
   modal.addEventListener("click", function(e) {
