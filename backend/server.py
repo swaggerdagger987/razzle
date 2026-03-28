@@ -441,7 +441,7 @@ async def lifespan(app):
     import asyncio
     from concurrent.futures import ThreadPoolExecutor
     loop = asyncio.get_running_loop()
-    loop.set_default_executor(ThreadPoolExecutor(max_workers=20))
+    loop.set_default_executor(ThreadPoolExecutor(max_workers=8))
     # Essential tables first (fast, < 100ms) — server can respond immediately
     # Wrapped in try/except so the server starts even if DB init fails (502 prevention)
     try:
