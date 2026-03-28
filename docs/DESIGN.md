@@ -211,9 +211,9 @@ Six AI agents staff the Situation Room. Each has a distinct personality and anal
 - **Razzle** (Bengal Tiger) — Chief of Staff. Orchestrates all agents, delivers prioritized briefings, triages into URGENT / MONITOR / OPPORTUNITY. Doesn't hedge — "no ifs, buts, or maybes. Absolutes." Other tools say "consider starting." Razzle says "start him."
 - **Dr. Dolphin** (Medical) — Injury intelligence. Recovery timelines, return-to-play modeling, performance impact projections. Flags buy-low and sell-high windows around injuries.
 - **Hawkeye** (Scout) — Usage trends, snap counts, breakout detection, waiver targets. The film room analyst who catches things the box score misses.
-- **The Fox** (Diplomat) — Trade negotiation and competitive intelligence. Models opponent psychology, calculates acceptance probability, gives leverage angles. Knows what your rivals need before they do.
-- **The Octopus** (Quant) — Valuations, projections, expected value, championship probability. Leads with the number and the conclusion.
-- **The Elephant** (Historian) — League memory and pattern recognition. Knows your league's past trades, your blind spots, the last time this exact scenario played out.
+- **Bones** (Diplomat) — Trade negotiation and competitive intelligence. Models opponent psychology, calculates acceptance probability, gives leverage angles. Knows what your rivals need before they do.
+- **Octo** (Quant) — Valuations, projections, expected value, championship probability. Leads with the number and the conclusion.
+- **Atlas** (Historian) — League memory and pattern recognition. Knows your league's past trades, your blind spots, the last time this exact scenario played out.
 
 ---
 
