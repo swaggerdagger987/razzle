@@ -13,10 +13,21 @@ Some canvas-drawn charts (aging curves, scatter plot, comparison charts) may sti
 
 ## Root Cause
 
-Hardcoded position colors have been fixed in most places (PROGRESS.md Phase A task 5), but canvas contexts that call `ctx.fillStyle` with raw hex values may remain in:
-- `frontend/charts.js` — comparison chart color palettes
-- `frontend/lab-panels.js:6702` — comparison color array uses Tailwind colors (`#eab308`, `#16a34a`, `#f472b6`)
-- `frontend/lab-panels.js:6356` — TD component color uses `#e74c3c` (Tailwind red, not Razzle red `#e63946`)
+12+ hardcoded hex color definitions instead of using `getCanvasTheme()` (defined in `frontend/app.js:96`):
+
+**charts.js**:
+- Line 3: `CHART_COLORS = ["#d97757", "#5b7fff", "#2ec4b6", "#8b5cf6", "#e63946"]`
+- Line 341: `posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" }`
+- Line 672: Duplicate `posColors`
+- Line 1021: Duplicate `posColors`
+- Lines 379, 387, 533, 549, 561: Hardcoded `"#d97757"` in stroke/fill
+
+**lab-panels.js**:
+- Line 28: `POS_COLORS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' }`
+- Line 5746: `slotColors = ['#d97757', '#5b7fff', '#2ec4b6']`
+- Line 6359: `compColors = { pass_yd: '#5b7fff', rush_yd: '#2ec4b6', rec_yd: '#d97757', ... }`
+- Line 6702: Tailwind colors (`#eab308`, `#16a34a`, `#f472b6`)
+- Line 10002: `POS_COLS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' }`
 
 ## Fix
 

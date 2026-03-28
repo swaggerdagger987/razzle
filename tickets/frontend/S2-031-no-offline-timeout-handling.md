@@ -13,10 +13,13 @@ All pages depend on API calls. If the API is slow or offline, users see "pulling
 
 ## Root Cause
 
-Individual fetch calls in page JS files have varying timeout implementations:
-- `frontend/league-intel.html` uses AbortController with 10s timeout (good)
-- Most other pages have no timeout on their fetch calls
-- No global offline detection or retry mechanism exists
+Lab.js HAS comprehensive timeout handling (`frontend/lab.js:1295` — `AbortSignal.timeout(15000)` plus 7 AbortControllers). But standalone panel pages and app.js do NOT have equivalent timeouts.
+
+- `frontend/lab.js:1295` — 15s timeout (good)
+- `frontend/league-intel.html` — AbortController with 10s timeout (good)
+- **64 standalone panel pages** — NO timeout on fetch calls
+- `frontend/app.js` — NO global timeout wrapper
+- No offline detection (`navigator.onLine`) anywhere
 
 ## Fix
 
