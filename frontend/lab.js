@@ -2101,6 +2101,7 @@ function renderTableBody() {
   if (typeof hideTagPicker === 'function') hideTagPicker();
   if (typeof hideNoteEditor === 'function') hideNoteEditor();
   if (typeof dismissColumnStatsPopover === 'function') dismissColumnStatsPopover();
+  if (typeof _hoverTimer !== 'undefined') clearTimeout(_hoverTimer);
   var ctxMenu = document.querySelector('.ctx-menu');
   if (ctxMenu) ctxMenu.style.display = 'none';
   if (_expandAbort) { _expandAbort.abort(); _expandAbort = null; }
@@ -2523,7 +2524,7 @@ async function toggleRowExpand(playerId, tdEl) {
       return;
     }
     // Build mini table
-    var html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:11px;">';
+    var html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:11px;"><caption class="sr-only">Weekly stat breakdown for selected player</caption>';
     html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
     html += '<th style="padding:3px 6px; text-align:left; font-size:11px; color:var(--ink-light);">Wk</th>';
     html += '<th style="padding:3px 6px; text-align:left; font-size:11px; color:var(--ink-light);">Opp</th>';
@@ -6627,7 +6628,7 @@ function renderCollegeProfile(data, container) {
   if (seasons && seasons.length > 0) {
     const seasonCols = getCollegeSeasonColumns(pos);
     html += `<div class="profile-section-title">College Season Log</div>`;
-    html += `<table class="profile-season-table"><thead><tr>`;
+    html += `<table class="profile-season-table"><caption class="sr-only">College season-by-season statistics</caption><thead><tr>`;
     html += `<th>Year</th><th>Team</th>`;
     for (const c of seasonCols) html += `<th>${c.label}</th>`;
     html += `</tr></thead><tbody>`;
@@ -6861,7 +6862,7 @@ function renderProfile(data, container) {
   if (seasons && seasons.length > 0) {
     const seasonCols = getSeasonColumns(pos);
     html += `<div class="profile-section-title">Season Log</div>`;
-    html += `<table class="profile-season-table"><thead><tr>`;
+    html += `<table class="profile-season-table"><caption class="sr-only">NFL season-by-season statistics</caption><thead><tr>`;
     html += `<th>Year</th>`;
     for (const c of seasonCols) html += `<th>${c.label}</th>`;
     html += `</tr></thead><tbody>`;
@@ -7517,7 +7518,7 @@ function renderProspectProfile(data, container, compsData) {
 
     // Season log table
     html += `<div class="profile-season-table-wrap">`;
-    html += `<table class="profile-season-table">`;
+    html += `<table class="profile-season-table"><caption class="sr-only">Prospect college season log</caption>`;
     html += `<thead><tr>`;
     html += `<th>Year</th><th>Team</th><th>G</th>`;
     // Show columns based on position
@@ -10708,6 +10709,7 @@ function isAnyOverlayOpen() {
   if (_noteEditorVisible) return true;
   if (document.getElementById("screenerContextMenu")) return true;
   if (_hoverCardVisible) return true;
+  if (document.querySelector('.column-picker-overlay')) return true;
   return false;
 }
 
@@ -10718,6 +10720,8 @@ function closeAllOverlays() {
   hideNoteEditor();
   hideContextMenu();
   hideHoverCard();
+  var colPicker = document.querySelector('.column-picker-overlay');
+  if (colPicker) colPicker.remove();
   // Dismiss keyboard shortcut / onboarding toast
   var onboarding = document.querySelector(".razzle-onboarding-toast");
   if (onboarding) onboarding.remove();
@@ -10989,7 +10993,7 @@ function toggleShortcutRef() {
         <h3 id="dlgTitleShortcuts" style="font-family:var(--font-display); font-size:18px; margin:0;">Keyboard Shortcuts</h3>
         <button class="btn-chunky" onclick="document.getElementById('shortcutRefOverlay').classList.remove('open')" style="font-size:11px; padding:4px 10px;">Close</button>
       </div>
-      <table style="width:100%; font-family:var(--font-mono); font-size:12px; border-collapse:collapse;">
+      <table style="width:100%; font-family:var(--font-mono); font-size:12px; border-collapse:collapse;"><caption class="sr-only">Keyboard shortcuts reference</caption>
         <tbody>
           ${shortcutRow("/", "Focus search")}
           ${shortcutRow("Esc", "Close overlay / blur input")}
@@ -12505,7 +12509,7 @@ function renderPlayerComps(data, container) {
 
   // Stat comparison table
   html += `<div class="profile-section-title" style="font-size:14px; margin-top:16px;">Full Stat Comparison</div>`;
-  html += `<table class="profile-season-table"><thead><tr>`;
+  html += `<table class="profile-season-table"><caption class="sr-only">Player comp finder full stat comparison</caption><thead><tr>`;
   html += `<th style="text-align:left;">Stat</th>`;
   html += `<th>${escapeHtml(player.full_name)}</th>`;
   for (const c of comps.slice(0, 3)) {
