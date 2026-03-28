@@ -5513,9 +5513,12 @@
       list.style.display = 'none';
       onSelect({ player_id: id, full_name: name, position: pos, team: team });
     });
-    document.addEventListener('click', function(e) {
-      if (!wrap.contains(e.target)) { list.style.display = 'none'; }
-    });
+    if (!wrap._docClickBound) {
+      wrap._docClickBound = true;
+      document.addEventListener('click', function(e) {
+        if (!wrap.contains(e.target)) { list.style.display = 'none'; }
+      });
+    }
   }
 
   function searchWrapHTML(prefix, placeholder) {
@@ -8697,9 +8700,12 @@
       el.querySelector('.rbld-search').value = '';
     });
 
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.rbld-search-area')) el.querySelector('.rbld-autocomplete').style.display = 'none';
-    });
+    if (!el._docClickBound) {
+      el._docClickBound = true;
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.rbld-search-area')) el.querySelector('.rbld-autocomplete').style.display = 'none';
+      });
+    }
 
     el.querySelector('.rbld-clear-btn').addEventListener('click', function() {
       rosterIds = []; gradeData = null; renderEmpty();
@@ -9622,8 +9628,8 @@
         var barColor = hitPct >= 50 ? 'var(--green)' : hitPct >= 30 ? 'var(--orange)' : 'var(--red)';
         html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:8px 12px; min-width:100px; text-align:center;">' +
           '<div style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
-          '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:4px;">' +
-            '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:4px;"></div>' +
+          '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:8px;">' +
+            '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:8px;"></div>' +
           '</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +
             rd.hits + '/' + rd.total + ' hits (' + hitPct + '%)' +
@@ -9689,7 +9695,7 @@
 
         html += '<tr>' +
           '<td style="text-align:left; font-weight:600;">' + escapeHtml(p.player_name) + '</td>' +
-          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:4px; font-size:11px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
+          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:8px; font-size:11px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
           '<td>' + p.round + '</td>' +
           '<td>' + p.pick + '</td>' +
           '<td style="font-family:var(--font-mono); font-size:11px;">' + escapeHtml(p.draft_team || '') + '</td>' +
@@ -9698,7 +9704,7 @@
           '<td style="font-weight:700;">' + fmt(p.career_ppg) + '</td>' +
           '<td>' + fmt(p.career_fpts, 0) + '</td>' +
           '<td>' + fmt(p.career_av, 0) + '</td>' +
-          '<td><span style="background:' + verdictColor + '; color:var(--text-on-accent); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
+          '<td><span style="background:' + verdictColor + '; color:var(--text-on-accent); padding:2px 8px; border-radius:8px; font-size:11px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
         '</tr>';
       });
 
@@ -10450,7 +10456,7 @@
               var isHigh = w.pct >= 8;
               return '<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;">' +
                 '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + w.pct + '%</div>' +
-                '<div style="width:100%; height:' + h + 'px; background:' + (isHigh ? 'var(--orange)' : 'var(--ink-faint)') + '; border-radius:4px 4px 0 0; border:2px solid var(--ink); min-width:16px;"></div>' +
+                '<div style="width:100%; height:' + h + 'px; background:' + (isHigh ? 'var(--orange)' : 'var(--ink-faint)') + '; border-radius:8px 8px 0 0; border:2px solid var(--ink); min-width:16px;"></div>' +
                 '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); white-space:nowrap;">' + w.label + '</div>' +
               '</div>';
             }).join('') +
