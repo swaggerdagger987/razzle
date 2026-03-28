@@ -1672,6 +1672,15 @@ function initCommandPalette() {
     if (e.key === "Escape" && _cmdPaletteEl.classList.contains("open")) {
       closeCmdPalette();
     }
+    // Focus trap: Tab/Shift+Tab cycle within palette
+    if (e.key === "Tab" && _cmdPaletteEl.classList.contains("open")) {
+      var focusable = _cmdPaletteEl.querySelectorAll('input, button, [tabindex]:not([tabindex="-1"])');
+      if (focusable.length > 0) {
+        var first = focusable[0], last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
   });
 }
 

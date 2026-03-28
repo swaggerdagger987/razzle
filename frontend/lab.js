@@ -490,6 +490,9 @@ function showTagPicker(playerId, anchorEl) {
     picker = document.createElement("div");
     picker.id = "tagPicker";
     picker.className = "tag-picker";
+    picker.setAttribute("role", "dialog");
+    picker.setAttribute("aria-modal", "true");
+    picker.setAttribute("aria-label", "Player tags");
     document.body.appendChild(picker);
   }
 
@@ -606,6 +609,9 @@ function showNoteEditor(playerId, anchorEl) {
     editor = document.createElement("div");
     editor.id = "noteEditor";
     editor.className = "note-editor-popup";
+    editor.setAttribute("role", "dialog");
+    editor.setAttribute("aria-modal", "true");
+    editor.setAttribute("aria-label", "Player notes");
     document.body.appendChild(editor);
   }
 
