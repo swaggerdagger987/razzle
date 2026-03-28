@@ -228,7 +228,7 @@ function getHeadlineStats(pos, career) {
 
 function renderSeasonTable(pos, seasons, career) {
   const cols = getSeasonCols(pos);
-  let html = `<table class="player-season-table"><thead><tr><th>Year</th>`;
+  let html = `<table class="player-season-table"><caption class="sr-only">Season-by-season player statistics</caption><thead><tr><th>Year</th>`;
   for (const c of cols) html += `<th>${c.label}</th>`;
   html += `</tr></thead><tbody>`;
 

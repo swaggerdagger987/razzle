@@ -222,7 +222,7 @@ function renderStatDiffTable(p1, p2, c1, c2, pos1, pos2, color1, color2) {
   var g1 = c1.games || 1, g2 = c2.games || 1;
 
   var html = '<div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">';
-  html += '<table class="compare-stat-table">';
+  html += '<table class="compare-stat-table"><caption class="sr-only">Head-to-head player stat comparison</caption>';
   html += '<thead><tr>';
   html += '<th>Stat</th>';
   html += '<th>' + esc(p1.full_name) + '</th>';

@@ -1419,6 +1419,12 @@ body {
   margin-bottom: 8px;
 }
 
+.site-footer-grid ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 /* ===== Footer Links ===== */
 .footer-link {
   color: var(--ink-light);

@@ -880,7 +880,7 @@ function renderCompareTable(players) {
   const compareStats = ["fantasy_points_ppr", "ppg", "games", "passing_yards", "rushing_yards",
     "receiving_yards", "receptions", "targets", "touchdowns", "turnovers"];
 
-  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;">';
+  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;"><caption class="sr-only">Player comparison statistics</caption>';
 
   // Header
   html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-mono); font-size:11px; text-transform:uppercase;">Stat</th>';
@@ -1248,7 +1248,7 @@ function renderProspectCompareTable(prospects) {
   // Lower is better for time metrics
   const lowerBetter = { forty: true, cone: true, shuttle: true };
 
-  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;">';
+  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;"><caption class="sr-only">Prospect combine and athletic comparison</caption>';
 
   // Header
   html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-mono); font-size:11px; text-transform:uppercase;">Metric</th>';

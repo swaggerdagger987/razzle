@@ -309,9 +309,9 @@
   <div class="plans-grid" style="grid-template-columns:1fr 1fr;">
 
     <!-- PRO -->
-    <div class="plan-card">
+    <div class="plan-card" role="region" aria-labelledby="plan-pro">
       <div class="plan-badge">the film room upgrade</div>
-      <div class="plan-name">Pro</div>
+      <h3 class="plan-name" id="plan-pro">Pro</h3>
       <div class="plan-price" id="proPrice">$79.99<span>/yr</span></div>
       <div class="plan-interval" id="proInterval">that's <span class="yearly-price">$6.67/mo</span> — save 33%<br><span style="font-size:11px;color:var(--ink-light);">billed annually at $79.99</span></div>
 
@@ -333,9 +333,9 @@
     </div>
 
     <!-- ELITE -->
-    <div class="plan-card elite">
+    <div class="plan-card elite" role="region" aria-labelledby="plan-elite">
       <div class="plan-badge">full war machine</div>
-      <div class="plan-name">Elite</div>
+      <h3 class="plan-name" id="plan-elite">Elite</h3>
       <div class="plan-price" id="elitePrice">$149.99<span>/yr</span></div>
       <div class="plan-interval" id="eliteInterval">that's <span class="yearly-price">$12.50/mo</span> — save 37%<br><span style="font-size:11px;color:var(--ink-light);">billed annually at $149.99</span></div>
 
@@ -369,7 +369,7 @@
   <div class="promo-section">
     <div class="promo-row">
       <input type="text" id="promoCodeInput" placeholder="promo code" autocomplete="off" spellcheck="false"
-        aria-describedby="promoCodeFeedback" oninput="clearPromoFeedback()" onkeydown="if(event.key==='Enter') validatePromoCode()">
+        aria-label="Promo code" aria-describedby="promoCodeFeedback" oninput="clearPromoFeedback()" onkeydown="if(event.key==='Enter') validatePromoCode()">
       <button class="btn-chunky" style="font-size:12px; padding:8px 14px;" onclick="validatePromoCode()">Apply</button>
     </div>
     <div class="promo-feedback" id="promoCodeFeedback" role="alert"></div>
@@ -380,6 +380,7 @@
     <h2>The full breakdown</h2>
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
     <table class="feature-matrix">
+      <caption class="sr-only">Feature comparison between Free and Pro plans</caption>
       <thead>
         <tr>
           <th style="width:50%;">Feature</th>
@@ -435,47 +436,47 @@
     <div style="max-width:680px; margin:0 auto;">
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What's the difference between Pro and Elite?</div>
+        <h3 style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What's the difference between Pro and Elite?</h3>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Same features. The only difference is who provides the AI. Pro: you create a free API key from OpenRouter (60 seconds, costs $1-3/month in usage). Elite: we handle everything — no key, no setup, unlimited queries. Think of Pro as the DIY option and Elite as the easy button.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is there a free trial?</div>
+        <h3 style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is there a free trial?</h3>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. Every new account gets 7 days of full Pro access automatically. No credit card required. Just sign up and you're in. After 7 days, you can subscribe to keep Pro or continue using the Screener for free.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Can I cancel anytime?</div>
+        <h3 style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Can I cancel anytime?</h3>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. Cancel from your account at any time. You keep access through the end of your billing period. No cancellation fees, no hassle.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Do I need a Sleeper account?</div>
+        <h3 style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Do I need a Sleeper account?</h3>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">No. The Screener works without Sleeper. But connecting Sleeper unlocks league-contextualized AI — agents analyze YOUR roster, YOUR rivals, YOUR league's scoring settings. That's where the real value is.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What happens when my trial ends?</div>
+        <h3 style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What happens when my trial ends?</h3>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">You keep the Screener and all your saved work — formulas, views, watchlist. Nothing is lost. The Pro panels and Situation Room lock until you subscribe. Pick it back up any time.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Which API keys work with Pro?</div>
+        <h3 style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Which API keys work with Pro?</h3>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">OpenRouter (recommended — gives access to GPT-4o, Claude, Gemini, and more), OpenAI, or Anthropic. Set your key in the Situation Room settings. Your key is encrypted and never logged.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What formats do the agents support?</div>
+        <h3 style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What formats do the agents support?</h3>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">All of them. Redraft, dynasty, keeper, best ball, superflex, 2QB, IDP. The agents detect your league format from Sleeper settings and adapt their analysis automatically. A redraft question gets a different answer than a dynasty question.</div>
       </div>
 
       <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is the Screener really free?</div>
+        <h3 style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is the Screener really free?</h3>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. 100+ stat columns, 70+ analytical panels, custom formulas, radar charts, scatter plots, prospect screener, shareable URLs, image export. All forever free. No account required. The Screener is the product — Pro and Elite unlock the intelligence on top.</div>
       </div>
 
       <div style="padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is my API key safe?</div>
+        <h3 style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is my API key safe?</h3>
         <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Your key is stored in your browser only &mdash; we never see it. Browser extensions on the page could technically read it, so we recommend creating a dedicated key with a monthly spending cap on OpenRouter. That way you're covered even in the worst case.</div>
       </div>
 
@@ -503,67 +504,77 @@
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <div class="site-footer-grid">
+  <nav aria-label="Footer" class="site-footer-grid">
 
     <div>
       <div class="site-footer-heading">Razzle</div>
-      <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
-      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
-      <a href="/prompts.html" class="footer-link">Prompts</a>
-      <a href="/pricing.html" class="footer-link">Pricing</a>
-      <a href="/about.html" class="footer-link">About</a>
+      <ul>
+        <li><a href="/" class="footer-link">Home</a></li>
+        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
+        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
+        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
+        <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
+        <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
+        <li><a href="/about.html" class="footer-link">About</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Dynasty</div>
-      <a href="/rankings.html" class="footer-link">Rankings</a>
-      <a href="/tradevalues.html" class="footer-link">Trade Values</a>
-      <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
-      <a href="/tiers.html" class="footer-link">Tiers</a>
-      <a href="/vorp.html" class="footer-link">VORP</a>
-      <a href="/aging.html" class="footer-link">Aging Curves</a>
-      <a href="/buysell.html" class="footer-link">Buy/Sell</a>
-      <a href="/archetypes.html" class="footer-link">Archetypes</a>
+      <ul>
+        <li><a href="/rankings.html" class="footer-link">Rankings</a></li>
+        <li><a href="/tradevalues.html" class="footer-link">Trade Values</a></li>
+        <li><a href="/tradefinder.html" class="footer-link">Trade Finder</a></li>
+        <li><a href="/tiers.html" class="footer-link">Tiers</a></li>
+        <li><a href="/vorp.html" class="footer-link">VORP</a></li>
+        <li><a href="/aging.html" class="footer-link">Aging Curves</a></li>
+        <li><a href="/buysell.html" class="footer-link">Buy/Sell</a></li>
+        <li><a href="/archetypes.html" class="footer-link">Archetypes</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Weekly</div>
-      <a href="/weekly.html" class="footer-link">Weekly Stats</a>
-      <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
-      <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
-      <a href="/matchups.html" class="footer-link">Matchups</a>
-      <a href="/waivers.html" class="footer-link">Waivers</a>
-      <a href="/schedule.html" class="footer-link">Schedule</a>
-      <a href="/stocks.html" class="footer-link">Stocks</a>
-      <a href="/playoffs.html" class="footer-link">Playoffs</a>
+      <ul>
+        <li><a href="/weekly.html" class="footer-link">Weekly Stats</a></li>
+        <li><a href="/weeklyleaders.html" class="footer-link">Week Leaders</a></li>
+        <li><a href="/weeklymvp.html" class="footer-link">Weekly MVP</a></li>
+        <li><a href="/matchups.html" class="footer-link">Matchups</a></li>
+        <li><a href="/waivers.html" class="footer-link">Waivers</a></li>
+        <li><a href="/schedule.html" class="footer-link">Schedule</a></li>
+        <li><a href="/stocks.html" class="footer-link">Stocks</a></li>
+        <li><a href="/playoffs.html" class="footer-link">Playoffs</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Analytics</div>
-      <a href="/targets.html" class="footer-link">Targets</a>
-      <a href="/usage.html" class="footer-link">Usage</a>
-      <a href="/efficiency.html" class="footer-link">Efficiency</a>
-      <a href="/airyards.html" class="footer-link">Air Yards</a>
-      <a href="/redzone.html" class="footer-link">Red Zone</a>
-      <a href="/consistency.html" class="footer-link">Consistency</a>
-      <a href="/breakouts.html" class="footer-link">Breakouts</a>
-      <a href="/opportunity.html" class="footer-link">Opportunity</a>
+      <ul>
+        <li><a href="/targets.html" class="footer-link">Targets</a></li>
+        <li><a href="/usage.html" class="footer-link">Usage</a></li>
+        <li><a href="/efficiency.html" class="footer-link">Efficiency</a></li>
+        <li><a href="/airyards.html" class="footer-link">Air Yards</a></li>
+        <li><a href="/redzone.html" class="footer-link">Red Zone</a></li>
+        <li><a href="/consistency.html" class="footer-link">Consistency</a></li>
+        <li><a href="/breakouts.html" class="footer-link">Breakouts</a></li>
+        <li><a href="/opportunity.html" class="footer-link">Opportunity</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Tools</div>
-      <a href="/explorer.html" class="footer-link">Stat Explorer</a>
-      <a href="/compare.html" class="footer-link">Compare</a>
-      <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>
-      <a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a>
-      <a href="/auction.html" class="footer-link">Auction Values</a>
-      <a href="/dashboard.html" class="footer-link">Dashboard</a>
-      <a href="/prospects.html" class="footer-link">Prospects</a>
+      <ul>
+        <li><a href="/explorer.html" class="footer-link">Stat Explorer</a></li>
+        <li><a href="/compare.html" class="footer-link">Compare</a></li>
+        <li><a href="/rosterbuilder.html" class="footer-link">Roster Builder</a></li>
+        <li><a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a></li>
+        <li><a href="/auction.html" class="footer-link">Auction Values</a></li>
+        <li><a href="/dashboard.html" class="footer-link">Dashboard</a></li>
+        <li><a href="/prospects.html" class="footer-link">Prospects</a></li>
+      </ul>
     </div>
 
-  </div>
+  </nav>
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
   <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
 </footer>

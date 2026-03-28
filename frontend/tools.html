@@ -313,8 +313,7 @@
   </div>
 </nav>
 
-<span id="main-content"></span>
-<main class="tools-page" id="tools-content">
+<main class="tools-page" id="main-content">
   <div class="tools-header">
     <h1>Tools Hub<span class="tools-total-badge" id="total-badge"></span></h1>
     <div class="tools-subtitle">every analytics tool in one place</div>
@@ -572,7 +571,7 @@
   }
 
   window.exportPng = function() {
-    var el = document.getElementById('tools-content');
+    var el = document.getElementById('main-content');
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = '24px Caveat, cursive';

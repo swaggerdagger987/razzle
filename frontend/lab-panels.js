@@ -211,7 +211,7 @@
       }
 
       html += '<div class="dh-wrap">';
-      html += '<table class="dh-table"><thead><tr>';
+      html += '<table class="dh-table"><caption class="sr-only">Dynasty value history by player and season</caption><thead><tr>';
       html += '<th scope="col">Player</th>';
       seasons.forEach(function(s) { html += '<th class="center">' + escapeHtml(String(s)) + '</th>'; });
       html += '<th class="center">Trend</th>';
@@ -920,7 +920,7 @@
       var html = '<div class="vorp-section">';
       html += '<div class="vorp-section-header ' + hdrCls + '">' + title;
       html += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ') — ' + subtitle + '</span></div>';
-      html += '<table class="vorp-table" data-section="' + section + '"><thead><tr>';
+      html += '<table class="vorp-table" data-section="' + section + '"><caption class="sr-only">Value over replacement player — ' + escapeHtml(title) + '</caption><thead><tr>';
 
       var cols = [
         { key: 'full_name', label: 'Player' },
@@ -1132,7 +1132,7 @@
       }
       var html = '<div class="pa-card">';
       html += '<div class="pa-card-header">Positional Advantage (' + data.count + ' players)</div>';
-      html += '<table class="pa-table"><thead><tr>';
+      html += '<table class="pa-table"><caption class="sr-only">Positional advantage rankings</caption><thead><tr>';
       html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Pos Avg</th><th>Edge</th><th>% Above</th><th></th><th>GP</th>';
       html += '</tr></thead><tbody>';
 
@@ -1282,7 +1282,7 @@
 
       if (!players.length) { tableEl.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
-      var html = '<table class="av-table"><thead><tr>';
+      var html = '<table class="av-table"><caption class="sr-only">Auction values by player</caption><thead><tr>';
       var cols = [
         { key: 'rank', label: '#' }, { key: 'full_name', label: 'Player' },
         { key: 'position', label: 'Pos' }, { key: 'team', label: 'Team' },
@@ -1848,7 +1848,7 @@
       var h = '<div class="stk-section"><div class="stk-section-header ' + section + '">';
       h += '<span class="stk-section-icon ' + section + '">' + icon + '</span> ' + title;
       h += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      h += '<table class="stk-table" data-section="' + section + '"><thead><tr>';
+      h += '<table class="stk-table" data-section="' + section + '"><caption class="sr-only">Dynasty stock watch — ' + escapeHtml(title) + '</caption><thead><tr>';
       COLS.forEach(function(c) {
         var cls = [];
         if (c.key !== 'name') cls.push('center');
@@ -1983,7 +1983,7 @@
           body.innerHTML = html;
           return;
         }
-        html += '<table class="ww-table"><thead><tr>';
+        html += '<table class="ww-table"><caption class="sr-only">Rising players ranked by recent scoring surge</caption><thead><tr>';
         html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>GP</th><th>Szn PPG</th><th>Recent PPG</th><th>Surge</th><th>Last ' + escapeHtml(String(data.window || currentWin)) + '</th>';
         html += '</tr></thead><tbody>';
         for (var i = 0; i < targets.length; i++) {
@@ -2180,7 +2180,7 @@
         }
 
         var html = '<div class="hc-card"><div class="hc-card-header">Handcuff Rankings (' + escapeHtml(String(data.count)) + ' teams)</div>';
-        html += '<table class="hc-table"><thead><tr>';
+        html += '<table class="hc-table"><caption class="sr-only">Handcuff rankings by backup value and starter risk</caption><thead><tr>';
         html += '<th scope="col">#</th><th>Team</th><th>Handcuff</th><th>HC PPG</th><th>HC Car/G</th><th>HC YPC</th><th>Value</th><th>Starter</th><th>Str PPG</th><th>Str Car/G</th><th>Team Rush/G</th>';
         html += '</tr></thead><tbody>';
 
@@ -2342,7 +2342,7 @@
       var h = '<div class="eff-section"><div class="eff-section-header ' + headerClass + '">';
       h += '<span class="eff-section-icon ' + headerClass + '">' + (isEff ? '&#x1F3AF;' : '&#x1F4AA;') + '</span> ';
       h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      h += '<table class="eff-table" data-section="' + section + '"><thead><tr>';
+      h += '<table class="eff-table" data-section="' + section + '"><caption class="sr-only">Fantasy efficiency rankings — ' + escapeHtml(title) + '</caption><thead><tr>';
       cols.forEach(function(c) {
         var cls = [];
         if (c.key !== 'name') cls.push('center');
@@ -2557,7 +2557,7 @@
       var h = '<div class="con-section"><div class="con-section-header ' + headerClass + '">';
       h += '<span class="con-section-icon ' + headerClass + '">' + (isSolid ? '&#x1F3AF;' : '&#x1F3B2;') + '</span> ';
       h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      h += '<table class="con-table" data-section="' + section + '"><thead><tr>';
+      h += '<table class="con-table" data-section="' + section + '"><caption class="sr-only">Fantasy scoring consistency — ' + escapeHtml(title) + '</caption><thead><tr>';
       cols.forEach(function(c) {
         var cls = [];
         if (c.key !== 'name') cls.push('center');
@@ -2717,7 +2717,7 @@
         var headerTitle = isCollege ? 'Points Per Touch Rankings' : 'Points Per Snap Rankings';
         var maxPPS = Math.max.apply(null, players.map(function(p) { return p.pts_per_snap || 0; }).concat([1]));
         var html = '<div class="se-card"><div class="se-card-header">' + headerTitle + '</div>';
-        html += '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
+        html += '<table class="se-table"><caption class="sr-only">Snap efficiency rankings by fantasy points per snap</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
           var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
@@ -2815,7 +2815,7 @@
         var maxWL = Math.max.apply(null, players.map(function(p) { return p.workload || 0; }).concat([1]));
         var showSnaps = !isCollege;
         var html = '<div class="wl-card"><div class="wl-card-header">Workload Rankings</div>';
-        html += '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th>';
+        html += '<table class="wl-table"><caption class="sr-only">Player workload monitor with touches and snap counts</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th>';
         if (showSnaps) html += '<th scope="col">Snp/G</th><th>Snp%</th>';
         html += '<th scope="col">Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
@@ -2920,7 +2920,7 @@
         if (!players.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var html = '<div class="dt-card"><div class="dt-card-header">Dual-Threat Rankings</div>';
-        html += '<table class="dt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
+        html += '<table class="dt-table"><caption class="sr-only">Dual-threat index rankings</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
           var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
@@ -3016,7 +3016,7 @@
         if (!players.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var html = '<div class="tp-card"><div class="tp-card-header">Target Quality Rankings</div>';
-        html += '<table class="tp-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
+        html += '<table class="tp-table"><caption class="sr-only">Target premium rankings by target quality composite</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
           var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
@@ -3093,7 +3093,7 @@
       var barCls = type === 'sure' ? 'dr-bar-good' : 'dr-bar-bad';
       var isGood = type === 'sure';
 
-      var html = '<table class="dr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Drop%</th><th>Drops</th><th>Tgt</th><th>Catch%</th><th>YAC/R</th><th></th></tr></thead><tbody>';
+      var html = '<table class="dr-table"><caption class="sr-only">Player drop rate and catch efficiency rankings</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Drop%</th><th>Drops</th><th>Tgt</th><th>Catch%</th><th>YAC/R</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
         var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
@@ -3202,7 +3202,7 @@
       }
       var maxVal = Math.max.apply(null, players.map(function(p) { return (isPadders ? p.garbage_time_pct : p.ppg) || 0; }).concat([1]));
       var html = '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div>';
-      html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
+      html += '<table class="gt-table"><caption class="sr-only">Garbage time fantasy production — ' + escapeHtml(title) + '</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
         var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
@@ -3376,7 +3376,7 @@
       });
 
       var arrow = sortDir === -1 ? ' \u25BC' : ' \u25B2';
-      var html = '<div class="wh-container"><table class="wh-table"><thead><tr>';
+      var html = '<div class="wh-container"><table class="wh-table"><caption class="sr-only">Weekly scoring heatmap by player and week</caption><thead><tr>';
       html += '<th class="wh-player-col" data-sort="total">Player' + (sortCol === 'total' ? arrow : '') + '</th>';
       weeks.forEach(function(w) {
         html += '<th data-sort="' + w + '">W' + w + (sortCol === w ? arrow : '') + '</th>';
@@ -3582,7 +3582,7 @@
       }
 
       var totalTeams = teams.length;
-      var html = '<div class="mh-table-wrap"><table class="mh-table"><thead><tr>';
+      var html = '<div class="mh-table-wrap"><table class="mh-table"><caption class="sr-only">Matchup heatmap showing average fantasy points allowed by defense</caption><thead><tr>';
       html += '<th class="mh-team-col' + (sortCol === 'team' ? ' sorted' : '') + '" data-sort="team">Team <span class="mh-sort-arrow">' + (sortCol === 'team' ? (sortAsc ? '\u25B2' : '\u25BC') : '\u25B2') + '</span></th>';
 
       positions.forEach(function(pos) {
@@ -3746,7 +3746,7 @@
 
       var html = '<div class="sk-card">';
       html += '<div class="sk-card-header">Best QB + WR/TE Stacks (' + escapeHtml(String(data.count)) + ' pairs)</div>';
-      html += '<table class="sk-table"><thead><tr>';
+      html += '<table class="sk-table"><caption class="sr-only">Best QB and receiver stack combinations</caption><thead><tr>';
       html += '<th scope="col">#</th><th>Team</th><th>QB</th><th>Receiver</th><th>Pos</th><th>Corr</th><th></th><th>QB PPG</th><th>Rec PPG</th><th>Combo</th><th class="hide-mobile">GP</th>';
       html += '</tr></thead><tbody>';
 
@@ -3912,7 +3912,7 @@
 
       var html = '<div class="rz-section">';
       html += '<div class="rz-section-header ' + headerClass + '"><span class="section-icon">' + icon + '</span> ' + title + ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);font-weight:400">(' + players.length + ') — ' + subtitle + '</span></div>';
-      html += '<table class="rz-table" data-section="' + section + '">';
+      html += '<table class="rz-table" data-section="' + section + '"><caption class="sr-only">Red zone and goal-line usage — ' + escapeHtml(title) + '</caption>';
       html += buildHeader(section);
       html += '<tbody>';
       sorted.forEach(function(p) { html += buildRow(p, section); });
@@ -4059,7 +4059,7 @@
 
     function renderTable(players, type) {
       var winLabel = currentData ? currentData.window : 4;
-      var html = '<table class="str-table"><thead><tr>';
+      var html = '<table class="str-table"><caption class="sr-only">Scoring streaks and trends by player</caption><thead><tr>';
       html += '<th scope="col">Player</th><th>Pos</th><th>Szn Avg</th><th>Recent</th><th>Delta</th><th>Last ' + escapeHtml(String(winLabel)) + '</th>';
       html += '</tr></thead><tbody>';
 
@@ -4236,7 +4236,7 @@
         { key: 'tgt', label: 'Tgt', cls: 'center hide-mobile' }
       ];
 
-      var html = '<table class="wkl-table"><thead><tr>';
+      var html = '<table class="wkl-table"><caption class="sr-only">Weekly fantasy scoring leaders</caption><thead><tr>';
       cols.forEach(function(col) {
         var arrow = '';
         var scls = '';
@@ -4362,7 +4362,7 @@
 
       var html = '<div class="mv-card">';
       html += '<div class="mv-card-header">Weekly MVP Grid — ' + escapeHtml(String(data.season)) + ' (' + escapeHtml(String(data.total_weeks)) + ' weeks)</div>';
-      html += '<table class="mv-grid"><thead><tr><th>Week</th>';
+      html += '<table class="mv-grid"><caption class="sr-only">Weekly MVP grid showing top scorer by position each week</caption><thead><tr><th>Week</th>';
       POSITIONS.forEach(function(pos) { html += '<th scope="col">' + pos + '</th>'; });
       html += '</tr></thead><tbody>';
 
@@ -4458,7 +4458,7 @@
 
       var html = '<div class="po-card">';
       html += '<div class="po-card-header">Playoff Matchup Rankings — Wk 14-17 (' + escapeHtml(String(data.count || 0)) + ' players)</div>';
-      html += '<table class="po-table"><thead><tr>';
+      html += '<table class="po-table"><caption class="sr-only">Playoff matchup rankings for weeks 14 through 17</caption><thead><tr>';
       html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>PO PPG</th><th>SOS</th>';
       var weekNums = [14, 15, 16, 17];
       weekNums.forEach(function(w) { html += '<th scope="col">Wk ' + w + '</th>'; });
@@ -4621,7 +4621,7 @@
 
     function buildUTTable(players, isRiser) {
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
-      var html = '<div class="ut-table-wrap"><table class="ut-table"><thead><tr>';
+      var html = '<div class="ut-table-wrap"><table class="ut-table"><caption class="sr-only">Usage trend ' + (isRiser ? 'risers' : 'fallers') + '</caption><thead><tr>';
       if (isCollege) {
         html += '<th scope="col">#</th><th>Player</th><th>YPG</th><th>Delta</th><th>%</th>';
       } else {
@@ -4765,7 +4765,7 @@
     }
 
     function buildYYTable(players, isRiser, label, isCollege) {
-      var html = '<div class="yy-table-wrap"><table class="yy-table"><thead><tr>';
+      var html = '<div class="yy-table-wrap"><table class="yy-table"><caption class="sr-only">Year-over-year stat comparison — ' + escapeHtml(label) + '</caption><thead><tr>';
       if (isCollege) {
         html += '<th scope="col">#</th><th>Player</th><th>Prev YPG</th><th>Curr YPG</th><th>Delta</th><th class="hide-mobile">TD/G</th>';
       } else {
@@ -5145,7 +5145,7 @@
       var eliteMilestones = ['5000 pass yd', '40 pass TD', '1500 rush yd', '1500 rec yd',
         '5000 Pass Yd', '40 Pass TD', '1500 Rush Yd', '1500 Rec Yd'];
       var html = '<div class="spc-card"><h3 class="spc-title">Milestone Watch</h3>';
-      html += '<div class="spc-table-wrap"><table class="spc-table"><thead><tr>';
+      html += '<div class="spc-table-wrap"><table class="spc-table"><caption class="sr-only">Season pace tracker with projected milestones</caption><thead><tr>';
       html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>GP</th><th>PPG</th><th>Milestones</th>';
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
@@ -5266,7 +5266,7 @@
     }
 
     function buildTDRTable(players, isBuy, maxDiff) {
-      var html = '<div class="tdr-table-wrap"><table class="tdr-table"><thead><tr>';
+      var html = '<div class="tdr-table-wrap"><table class="tdr-table"><caption class="sr-only">Touchdown regression — ' + (isBuy ? 'buy candidates' : 'sell candidates') + '</caption><thead><tr>';
       html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>TD</th><th>xTD</th><th>Diff</th><th class="hide-mobile">TD%</th><th class="hide-mobile">Opp</th><th>Bar</th>';
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
@@ -5413,7 +5413,7 @@
 
     function buildAYTable(players, section) {
       var ss = sortState[section];
-      var html = '<div class="ay-table-wrap"><table class="ay-table"><thead><tr>';
+      var html = '<div class="ay-table-wrap"><table class="ay-table"><caption class="sr-only">Air yards analysis — ' + escapeHtml(section === 'buy' ? 'buy low targets' : 'sell high targets') + '</caption><thead><tr>';
       colDefs.forEach(function(c) {
         var mobileClass = c.mobile_hide ? ' hide-mobile' : '';
         var sortArrow = '';
@@ -5654,7 +5654,7 @@
       }
 
       // Season table
-      html += '<div class="cst-table-wrap"><table class="cst-table"><thead><tr>';
+      html += '<div class="cst-table-wrap"><table class="cst-table"><caption class="sr-only">Season-by-season career statistics</caption><thead><tr>';
       html += '<th scope="col">Season</th><th>GP</th><th>PPG</th><th>Total</th>';
       if (pos === 'QB') { html += '<th scope="col">Pass Yd</th><th>Pass TD</th><th>INT</th><th>Rush Yd</th><th>Rush TD</th>'; }
       else if (pos === 'RB') { html += '<th scope="col">Rush Yd</th><th>Rush TD</th><th>Car</th><th>Rec</th><th>Rec Yd</th><th>Rec TD</th>'; }
@@ -5806,7 +5806,7 @@
       var html = '<div class="ccp-chart-card"><canvas id="ccp-canvas" width="700" height="280" role="img" aria-label="Career comparison trend line chart"></canvas></div>';
 
       // Summary comparison table
-      html += '<div class="ccp-table-wrap"><table class="ccp-table"><thead><tr><th>Metric</th>';
+      html += '<div class="ccp-table-wrap"><table class="ccp-table"><caption class="sr-only">Career summary comparison between players</caption><thead><tr><th>Metric</th>';
       loaded.forEach(function(p, i) {
         html += '<th style="color:' + slotColors[i] + '">' + escapeHtml(p.full_name) + '</th>';
       });
@@ -5835,7 +5835,7 @@
       loaded.forEach(function(p) { (p.data.seasons || []).forEach(function(s) { allYears[s.season] = true; }); });
       var years = Object.keys(allYears).sort();
       if (years.length) {
-        html += '<div class="ccp-table-wrap"><table class="ccp-table"><thead><tr><th>Season</th>';
+        html += '<div class="ccp-table-wrap"><table class="ccp-table"><caption class="sr-only">Season-by-season PPG comparison between players</caption><thead><tr><th>Season</th>';
         loaded.forEach(function(p, i) { html += '<th style="color:' + slotColors[i] + '">' + escapeHtml(p.full_name) + '</th>'; });
         html += '</tr></thead><tbody>';
         years.forEach(function(yr) {
@@ -6037,7 +6037,7 @@
         bests[c.key] = best;
       });
 
-      var html = '<div class="cmt-table-wrap"><table class="cmt-table"><thead><tr>';
+      var html = '<div class="cmt-table-wrap"><table class="cmt-table"><caption class="sr-only">Player comparison statistics table</caption><thead><tr>';
       cols.forEach(function(c) {
         var arrow = '';
         if (c.sortable && sortCol === c.key) arrow = sortAsc ? ' &#9650;' : ' &#9660;';
@@ -6284,7 +6284,7 @@
       var sorted = sortPlayers(players, sortState);
       var isHonor = section === 'honor';
       var html = '<div class="rpc-section"><div class="rpc-section-title ' + (isHonor ? 'rpc-honor-title' : 'rpc-needs-title') + '">' + title + '</div>';
-      html += '<div class="rpc-table-wrap"><table class="rpc-table"><thead><tr>';
+      html += '<div class="rpc-table-wrap"><table class="rpc-table"><caption class="sr-only">Player report card grades — ' + escapeHtml(title) + '</caption><thead><tr>';
       var thCols = [
         { key: 'name', label: 'Player', sort: false },
         { key: 'gpa_pct', label: 'GPA', sort: true },
@@ -6541,7 +6541,7 @@
       }
       colDefs.push({ key: 'fantasy_points', label: 'FPTS' });
 
-      html += '<div class="glo-table-wrap"><table class="glo-table"><thead><tr>';
+      html += '<div class="glo-table-wrap"><table class="glo-table"><caption class="sr-only">Player game log with weekly statistics</caption><thead><tr>';
       colDefs.forEach(function(c) {
         var arrow = '';
         if (sortCol === c.key) arrow = sortAsc ? ' &#9650;' : ' &#9660;';
@@ -7202,7 +7202,7 @@
         html += '<canvas class="dc2-canvas" role="img" aria-label="Average PPG by draft round bar chart"></canvas></div>';
       }
 
-      html += '<div class="dc2-table-wrap"><table class="dc2-table"><thead><tr>';
+      html += '<div class="dc2-table-wrap"><table class="dc2-table"><caption class="sr-only">Draft class fantasy producers by pick and production</caption><thead><tr>';
       var cols = [
         { key: 'pick', label: 'Pick' }, { key: 'name', label: 'Player' }, { key: 'position', label: 'Pos' },
         { key: 'draft_team', label: 'Drafted' }, { key: 'current_team', label: 'Team' },
@@ -7863,7 +7863,7 @@
       var st = sortState[section];
       var sorted = sortPlayers(players, st.col, st.dir);
       var html = '<div class="opp2-section"><div class="opp2-section-header ' + (isAlpha ? 'alpha' : 'dominator') + '">' + icon + ' ' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      html += '<table class="opp2-table" data-section="' + section + '">' + buildHeader(section) + '<tbody>';
+      html += '<table class="opp2-table" data-section="' + section + '"><caption class="sr-only">Opportunity share — ' + escapeHtml(title) + '</caption>' + buildHeader(section) + '<tbody>';
       sorted.forEach(function(p) { html += buildRow(p, section); });
       html += '</tbody></table></div>';
       return html;
@@ -8420,7 +8420,7 @@
 
       if (!isCollege) {
         html += '<div class="rec-section"><div class="rec-section-header">Single-Game Records</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Single-game fantasy scoring records</caption><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
         (data.single_game || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
@@ -8431,7 +8431,7 @@
       }
 
       html += '<div class="rec-section"><div class="rec-section-header">' + (isCollege ? 'Best Single Seasons (Fantasy Pts)' : 'Single-Season Records') + '</div>';
-      html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+      html += '<table class="rec-table"><caption class="sr-only">Single-season fantasy scoring records</caption><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
       (data.single_season || []).forEach(function(p, i) {
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
         html += '<td>' + playerCell(p, isCollege) + '</td>';
@@ -8442,7 +8442,7 @@
 
       if (isCollege) {
         html += '<div class="rec-section"><div class="rec-section-header">Best Single Seasons (Total Yards)</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Best single seasons by total yards</caption><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
         (data.season_yards || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
@@ -8452,7 +8452,7 @@
         html += '</tbody></table></div>';
 
         html += '<div class="rec-section"><div class="rec-section-header">Best Single Seasons (TDs)</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>TDs</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Best single seasons by touchdowns</caption><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>TDs</th></tr></thead><tbody>';
         (data.season_tds || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
@@ -8462,7 +8462,7 @@
         html += '</tbody></table></div>';
 
         html += '<div class="rec-section"><div class="rec-section-header">Career Fantasy Points Leaders</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Career fantasy points leaders</caption><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
         (data.career_fpts || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
@@ -8472,7 +8472,7 @@
         html += '</tbody></table></div>';
 
         html += '<div class="rec-section"><div class="rec-section-header">Career Yards Leaders</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Career yards leaders</caption><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
         (data.career_yards || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
@@ -8482,7 +8482,7 @@
         html += '</tbody></table></div>';
       } else {
         html += '<div class="rec-section"><div class="rec-section-header">Career PPG Leaders</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Career fantasy points per game leaders</caption><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
         (data.career_ppg || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
@@ -8491,7 +8491,7 @@
         html += '</tbody></table></div>';
 
         html += '<div class="rec-section"><div class="rec-section-header">Most Career Points</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Most career total fantasy points</caption><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
         (data.career_total || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
@@ -8812,7 +8812,7 @@
       var st = sortState[section];
       var sorted = sortPlayers(players, st.col, st.dir);
       var html = '<div class="sos2-section"><div class="sos2-section-header ' + (isSuppressed ? 'suppressed' : 'inflated') + '">' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      html += '<table class="sos2-table" data-section="' + section + '">' + buildHeader(section) + '<tbody>';
+      html += '<table class="sos2-table" data-section="' + section + '"><caption class="sr-only">Strength of schedule — ' + (isSuppressed ? 'schedule suppressed' : 'schedule inflated') + '</caption>' + buildHeader(section) + '<tbody>';
       sorted.forEach(function(p) { html += buildRow(p, section); });
       html += '</tbody></table></div>';
       return html;
@@ -8901,7 +8901,7 @@
 
     function buildTable(players) {
       if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
-      var html = '<table class="sc2-table"><thead><tr>';
+      var html = '<table class="sc2-table"><caption class="sr-only">Scoring format comparison showing PPR, half-PPR, and standard rankings</caption><thead><tr>';
       html += '<th scope="col">Pos</th><th>Player</th><th>Team</th>';
       html += '<th scope="col">PPR PPG</th><th>Half PPG</th><th>Std PPG</th>';
       html += '<th scope="col">PPR Rank</th><th>Std Rank</th><th>Shift</th>';
@@ -9034,7 +9034,7 @@
       var maxSR = 0;
       players.forEach(function(p) { if (p.success_rate > maxSR) maxSR = p.success_rate; });
 
-      var html = '<table class="sr2-table"><thead><tr>';
+      var html = '<table class="sr2-table"><caption class="sr-only">Rushing success rate rankings</caption><thead><tr>';
       html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>SR%</th><th>Type</th><th>Vol</th><th>PPG</th><th>YPC</th><th></th>';
       html += '</tr></thead><tbody>';
 
@@ -9458,7 +9458,7 @@
         var msg = razzleEmpty();
         return '<div class="panel-empty">' + msg + '</div>';
       }
-      var html = '<table class="tf2-table"><thead><tr>';
+      var html = '<table class="tf2-table"><caption class="sr-only">Trade finder results showing equal value targets</caption><thead><tr>';
       html += '<th scope="col">Player</th><th>Pos</th><th>Team</th><th>Value</th><th>Diff</th><th>Stock</th><th class="hide-mobile">PPG</th><th class="hide-mobile">Tier</th>';
       html += '</tr></thead><tbody>';
       targets.forEach(function(p) {
@@ -9673,7 +9673,7 @@
       }
 
       var html = '<div style="overflow-x:auto;">' +
-        '<table class="screener-table" style="width:100%; font-size:12px;">' +
+        '<table class="screener-table" style="width:100%; font-size:12px;"><caption class="sr-only">Prospect big board rankings</caption>' +
         '<thead><tr>' +
           '<th style="text-align:left;">Player</th>' +
           '<th scope="col">Pos</th>' +
@@ -10236,7 +10236,7 @@
       // Top players
       if (t.top_players && t.top_players.length) {
         html += '<div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);margin-bottom:6px;">top dynasty assets</div>';
-        html += '<table style="width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:12px;">';
+        html += '<table style="width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:12px;"><caption class="sr-only">Top dynasty assets for selected team</caption>';
         html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
         html += '<th style="text-align:left;padding:4px 6px;">Player</th>';
         html += '<th style="text-align:center;padding:4px 6px;">Pos</th>';
@@ -10324,7 +10324,7 @@
 
     function renderTable(players, isPositive) {
       if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
-      var h = '<table class="gs-table"><thead><tr>';
+      var h = '<table class="gs-table"><caption class="sr-only">Game script fantasy performance rankings</caption><thead><tr>';
       h += '<th scope="col">#</th><th>Player</th><th>Team</th><th>GP</th>';
       h += '<th title="Fantasy Points Per Game (PPR)">PPG</th><th title="Average Score Differential — positive means team was winning">Avg Diff</th><th title="Garbage Time % — % of stats scored in garbage time">GT%</th></tr></thead><tbody>';
       players.forEach(function(p, i) {

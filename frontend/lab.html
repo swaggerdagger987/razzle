@@ -234,8 +234,8 @@
 
     <div class="toolbar-section">
       <select class="select-chunky" id="seasonSelect" aria-label="Season"></select>
-      <select class="select-chunky" id="weekSelect" style="display:none;" title="Filter by week"></select>
-      <select class="select-chunky" id="presetSelect" onchange="applyPresetFromToolbar(this.value)" title="Quick column preset">
+      <select class="select-chunky" id="weekSelect" style="display:none;" title="Filter by week" aria-label="Filter by week"></select>
+      <select class="select-chunky" id="presetSelect" onchange="applyPresetFromToolbar(this.value)" title="Quick column preset" aria-label="Column preset">
         <option value="">Preset...</option>
       </select>
     </div>
@@ -266,7 +266,7 @@
             <button type="button" class="btn-chunky" onclick="openCompare(); closeToolsDropdown();" id="compareBtn" title="Select 2+ players with checkboxes first">Compare</button>
             <button type="button" class="btn-chunky" id="watchlistBtn" onclick="openWatchlistPanel(); closeToolsDropdown();" style="border-color:var(--orange);">Watchlist</button>
             <button type="button" class="btn-chunky" onclick="openMyRoster(); closeToolsDropdown();" style="border-color:var(--green);">My Roster</button>
-            <select class="select-chunky" id="savedViewSelect" onchange="loadSavedView(this.value); closeToolsDropdown();" title="Saved views" style="max-width:140px;">
+            <select class="select-chunky" id="savedViewSelect" onchange="loadSavedView(this.value); closeToolsDropdown();" title="Saved views" aria-label="Saved views" style="max-width:140px;">
               <option value="">Views...</option>
             </select>
             <button type="button" class="btn-chunky" onclick="saveCurrentView(); closeToolsDropdown();" style="font-size:12px;">Save View</button>
@@ -330,7 +330,7 @@
 
     <!-- Team filter -->
     <div class="filter-group" id="teamFilterGroup">
-      <select class="select-chunky filter-select-sm" id="teamFilter" onchange="addTeamFromSelect(this)">
+      <select class="select-chunky filter-select-sm" id="teamFilter" onchange="addTeamFromSelect(this)" aria-label="Team filter">
         <option value="">+ Team</option>
       </select>
       <div class="team-chips" id="teamChips"></div>
@@ -339,11 +339,11 @@
     <!-- Min GP filter -->
     <div class="filter-group">
       <input type="number" class="input-chunky filter-input-sm" id="minGPInput"
-             placeholder="Min GP" min="1" max="17"
+             placeholder="Min GP" min="1" max="17" aria-label="Minimum games played"
              onchange="setMinGP(this.value)" onkeydown="if(event.key==='Enter'){setMinGP(this.value);this.blur();}">
     </div>
 
-    <select class="select-chunky filter-select-sm" id="smartFilterSelect" onchange="applySmartFilter(this.value); this.value='';" title="Pre-built filter combos for common analysis" style="border-color:var(--orange);">
+    <select class="select-chunky filter-select-sm" id="smartFilterSelect" onchange="applySmartFilter(this.value); this.value='';" title="Pre-built filter combos for common analysis" aria-label="Smart filters" style="border-color:var(--orange);">
       <option value="">Smart Filters</option>
       <option value="breakout">Breakout Candidates (Age ≤25, Snap% ≥50)</option>
       <option value="buylow">Buy Low (PPG ≤14, Y/CAR ≥4)</option>
@@ -407,7 +407,7 @@
       <button type="button" class="btn-chunky" id="prevBtn" onclick="prevPage()">← prev</button>
       <span id="pageInfo"></span>
       <button type="button" class="btn-chunky" id="nextBtn" onclick="nextPage()">next →</button>
-      <select class="select-chunky" id="pageSizeSelect" onchange="changePageSize(this.value)" style="font-size:11px; padding:4px 6px; margin-left:8px;" title="Rows per page">
+      <select class="select-chunky" id="pageSizeSelect" onchange="changePageSize(this.value)" style="font-size:11px; padding:4px 6px; margin-left:8px;" title="Rows per page" aria-label="Rows per page">
         <option value="25">25</option>
         <option value="50">50</option>
         <option value="100">100</option>
@@ -445,7 +445,7 @@
 <div role="dialog" aria-modal="true" aria-labelledby="dlgTitleColumns" class="column-picker-overlay" id="columnPickerOverlay" onclick="closeColumnPicker(event)">
   <div class="column-picker" onclick="event.stopPropagation()">
     <h3 id="dlgTitleColumns">Columns</h3>
-    <input type="text" id="columnPickerSearch" placeholder="Search columns..." oninput="filterColumnPicker(this.value)" style="width:100%; padding:8px 12px; margin-bottom:10px; font-family:var(--font-mono); font-size:13px; border:3px solid var(--ink); border-radius:8px; background:var(--bg); box-sizing:border-box;">
+    <input type="text" id="columnPickerSearch" placeholder="Search columns..." oninput="filterColumnPicker(this.value)" aria-label="Search columns" style="width:100%; padding:8px 12px; margin-bottom:10px; font-family:var(--font-mono); font-size:13px; border:3px solid var(--ink); border-radius:8px; background:var(--bg); box-sizing:border-box;">
     <div class="preset-bar" id="presetBar"></div>
     <div id="columnGroups"></div>
     <div style="margin-top: 16px; display: flex; gap: 8px; justify-content: flex-end;">
@@ -462,7 +462,7 @@
       blend stats into a weighted score <span class="pro-locked" style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">unlimited</span>
     </p>
     <div class="filter-modal-row">
-      <input type="text" class="input-chunky" id="formulaName" placeholder="formula name" style="flex:1">
+      <input type="text" class="input-chunky" id="formulaName" placeholder="formula name" style="flex:1" aria-label="Formula name">
     </div>
     <div id="formulaComponents"></div>
     <button type="button" class="add-filter-btn" onclick="addFormulaComponent()" style="margin:8px 0;">+ add stat</button>
@@ -525,7 +525,7 @@
     <div style="margin-bottom:16px;">
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Shareable URL</label>
       <div style="display:flex; gap:8px; align-items:center;">
-        <input type="text" id="shareURLInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
+        <input type="text" id="shareURLInput" readonly aria-label="Shareable URL" style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
         <button type="button" class="btn-primary" id="shareURLCopyBtn" onclick="copyShareURLFromModal()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy URL</button>
       </div>
     </div>
@@ -545,7 +545,7 @@
     <div style="margin-bottom:16px;">
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Suggested Reddit Title</label>
       <div style="display:flex; gap:8px; align-items:center;">
-        <input type="text" id="redditTitleInput" readonly style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
+        <input type="text" id="redditTitleInput" readonly aria-label="Reddit title" style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
         <button type="button" class="btn-chunky" id="redditTitleCopyBtn" onclick="copyRedditTitle()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Copy</button>
       </div>
     </div>
@@ -566,7 +566,7 @@
     <div style="margin-bottom:16px; padding-bottom:16px; border-bottom:2px dashed var(--ink-faint);">
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:6px;">Save Current View</label>
       <div style="display:flex; gap:8px; align-items:center;">
-        <input type="text" id="saveViewName" placeholder="e.g. Dynasty WR Targets" style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
+        <input type="text" id="saveViewName" placeholder="e.g. Dynasty WR Targets" aria-label="View name" style="flex:1; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
         <button type="button" class="btn-primary" onclick="saveCurrentView()" style="font-size:11px; padding:6px 14px; white-space:nowrap;">Save</button>
       </div>
     </div>
@@ -590,7 +590,7 @@
     <!-- Config name -->
     <div style="margin-bottom:12px;">
       <label style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; display:block; margin-bottom:4px;">Config Name</label>
-      <input type="text" id="customScoringName" placeholder="e.g. My League" maxlength="20" style="width:100%; box-sizing:border-box; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
+      <input type="text" id="customScoringName" placeholder="e.g. My League" maxlength="20" aria-label="Scoring config name" style="width:100%; box-sizing:border-box; font-family:var(--font-mono); font-size:12px; padding:8px 10px; border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink);">
     </div>
 
     <!-- Scoring weights -->
@@ -599,7 +599,7 @@
     <!-- Save / Load / Delete -->
     <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
       <button type="button" class="btn-primary" onclick="saveCustomScoring()" style="font-size:11px; padding:6px 14px;">Save & Apply</button>
-      <select class="select-chunky" id="customScoringSelect" onchange="loadCustomScoringConfig(this.value)" style="flex:1; font-size:11px;">
+      <select class="select-chunky" id="customScoringSelect" onchange="loadCustomScoringConfig(this.value)" style="flex:1; font-size:11px;" aria-label="Custom scoring config">
         <option value="">Load saved...</option>
       </select>
       <button type="button" class="btn-chunky" onclick="deleteCustomScoring()" style="font-size:11px; padding:6px 10px; color:var(--red);">Delete</button>
@@ -704,13 +704,13 @@
           <span style="font-family:var(--font-mono); font-size:14px; text-transform:uppercase; letter-spacing:1px;">I Give</span>
         </div>
         <div class="trade-search-wrap">
-          <input type="text" class="input-chunky" id="taSearchGive" placeholder="search player..." autocomplete="off">
+          <input type="text" class="input-chunky" id="taSearchGive" placeholder="search player..." autocomplete="off" aria-label="Search player to give">
           <div class="trade-autocomplete" id="taAutoGive"></div>
         </div>
         <div class="trade-pick-row">
-          <select id="taPickYearGive"></select>
-          <select id="taPickRdGive"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
-          <select id="taPickNumGive"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
+          <select id="taPickYearGive" aria-label="Pick year to give"></select>
+          <select id="taPickRdGive" aria-label="Pick round to give"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
+          <select id="taPickNumGive" aria-label="Pick number to give"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
           <button type="button" class="btn-chunky" onclick="_taAddPick('give')">+ Pick</button>
         </div>
         <div class="trade-player-list" id="taListGive">
@@ -733,13 +733,13 @@
           <span style="font-family:var(--font-mono); font-size:14px; text-transform:uppercase; letter-spacing:1px;">I Get</span>
         </div>
         <div class="trade-search-wrap">
-          <input type="text" class="input-chunky" id="taSearchGet" placeholder="search player..." autocomplete="off">
+          <input type="text" class="input-chunky" id="taSearchGet" placeholder="search player..." autocomplete="off" aria-label="Search player to get">
           <div class="trade-autocomplete" id="taAutoGet"></div>
         </div>
         <div class="trade-pick-row">
-          <select id="taPickYearGet"></select>
-          <select id="taPickRdGet"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
-          <select id="taPickNumGet"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
+          <select id="taPickYearGet" aria-label="Pick year to get"></select>
+          <select id="taPickRdGet" aria-label="Pick round to get"><option value="1">Rd 1</option><option value="2">Rd 2</option><option value="3">Rd 3</option><option value="4">Rd 4</option></select>
+          <select id="taPickNumGet" aria-label="Pick number to get"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
           <button type="button" class="btn-chunky" onclick="_taAddPick('get')">+ Pick</button>
         </div>
         <div class="trade-player-list" id="taListGet">
@@ -792,7 +792,7 @@
       <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:start;">
         <div>
           <div style="font-family:var(--font-mono); font-size:13px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Side A</div>
-          <input type="text" class="input-chunky" id="tvSearchA" placeholder="search player..." style="width:100%; margin-bottom:8px; font-size:12px;">
+          <input type="text" class="input-chunky" id="tvSearchA" placeholder="search player..." aria-label="Search player for side A" style="width:100%; margin-bottom:8px; font-size:12px;">
           <div id="tvAutoA" style="display:none; position:absolute; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); max-height:150px; overflow-y:auto; z-index:100; width:280px;"></div>
           <div id="tvListA" style="display:flex; flex-direction:column; gap:6px; min-height:40px;"></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding:6px 10px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-warm);">
@@ -806,7 +806,7 @@
         </div>
         <div>
           <div style="font-family:var(--font-mono); font-size:13px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Side B</div>
-          <input type="text" class="input-chunky" id="tvSearchB" placeholder="search player..." style="width:100%; margin-bottom:8px; font-size:12px;">
+          <input type="text" class="input-chunky" id="tvSearchB" placeholder="search player..." aria-label="Search player for side B" style="width:100%; margin-bottom:8px; font-size:12px;">
           <div id="tvAutoB" style="display:none; position:absolute; background:var(--bg-card); border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); max-height:150px; overflow-y:auto; z-index:100; width:280px;"></div>
           <div id="tvListB" style="display:flex; flex-direction:column; gap:6px; min-height:40px;"></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding:6px 10px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-warm);">
@@ -847,10 +847,10 @@
     </p>
     <div id="publishError" class="auth-error" role="alert"></div>
     <div class="filter-modal-row">
-      <input type="text" class="input-chunky" id="publishName" placeholder="formula name" style="flex:1" readonly aria-describedby="publishError">
+      <input type="text" class="input-chunky" id="publishName" placeholder="formula name" style="flex:1" readonly aria-label="Formula name" aria-describedby="publishError">
     </div>
     <div class="filter-modal-row">
-      <input type="text" class="input-chunky" id="publishCreator" placeholder="your name" style="flex:1" aria-describedby="publishError">
+      <input type="text" class="input-chunky" id="publishCreator" placeholder="your name" style="flex:1" aria-label="Creator name" aria-describedby="publishError">
     </div>
     <div class="filter-modal-row">
       <textarea class="input-chunky" id="publishDescription" placeholder="describe what this formula does..." style="flex:1; min-height:60px; resize:vertical; font-family:var(--font-mono); font-size:12px;" aria-describedby="publishError"></textarea>
