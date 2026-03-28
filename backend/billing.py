@@ -98,28 +98,28 @@ def initialize_subscriptions_table():
         try:
             conn.execute("ALTER TABLE users ADD COLUMN stripe_customer_id TEXT")
         except Exception:
-            logger.debug("stripe_customer_id column already exists or migration failed", exc_info=True)
+            logger.warning("stripe_customer_id column already exists or migration failed", exc_info=True)
         # Add trial_used column to subscriptions if not exists
         try:
             conn.execute("ALTER TABLE subscriptions ADD COLUMN trial_used INTEGER DEFAULT 0")
         except Exception:
-            logger.debug("trial_used column already exists or migration failed", exc_info=True)
+            logger.warning("trial_used column already exists or migration failed", exc_info=True)
         # Add trial_end column to subscriptions if not exists
         try:
             conn.execute("ALTER TABLE subscriptions ADD COLUMN trial_end TIMESTAMP")
         except Exception:
-            logger.debug("trial_end column already exists or migration failed", exc_info=True)
+            logger.warning("trial_end column already exists or migration failed", exc_info=True)
         conn.commit()
         # Add plan_type column for lifetime tracking
         try:
             conn.execute("ALTER TABLE subscriptions ADD COLUMN plan_type TEXT DEFAULT 'subscription'")
         except Exception:
-            logger.debug("plan_type column already exists or migration failed", exc_info=True)
+            logger.warning("plan_type column already exists or migration failed", exc_info=True)
         # Add is_early_adopter flag for accurate EA slot counting
         try:
             conn.execute("ALTER TABLE subscriptions ADD COLUMN is_early_adopter INTEGER DEFAULT 0")
         except Exception:
-            logger.debug("is_early_adopter column already exists or migration failed", exc_info=True)
+            logger.warning("is_early_adopter column already exists or migration failed", exc_info=True)
         # Early adopter reservation table for atomic slot checking
         conn.execute("""
             CREATE TABLE IF NOT EXISTS ea_reservations (
@@ -502,7 +502,7 @@ def _handle_checkout_completed(session):
                 trial_end = datetime.fromtimestamp(sub_obj["trial_end"], tz=timezone.utc).isoformat()
                 is_trial = sub_obj.get("status") == "trialing"
         except Exception:
-            logger.debug("Could not retrieve subscription trial info", exc_info=True)
+            logger.warning("Could not retrieve subscription trial info", exc_info=True)
 
     with auth_module.get_users_db() as conn:
         # Update user plan

@@ -33,6 +33,16 @@ from . import billing as billing_module
 from .db import get_db
 from .logging_config import setup_logging
 
+# Sentry error monitoring — initializes only when SENTRY_DSN env var is set
+_sentry_dsn = os.environ.get("SENTRY_DSN")
+if _sentry_dsn:
+    import sentry_sdk
+    sentry_sdk.init(
+        dsn=_sentry_dsn,
+        environment=os.environ.get("ENVIRONMENT", "development"),
+        traces_sample_rate=0.1,
+    )
+
 logger = logging.getLogger("razzle.server")
 
 # ---------------------------------------------------------------------------
