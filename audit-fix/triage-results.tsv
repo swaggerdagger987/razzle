@@ -155,3 +155,5 @@ timestamp	invocation	finding_ref	severity	confidence	category	ticket_file	root_c
 2026-03-28T22:00:26	5	EDGE-46	-	-	-	n/a	n/a	n/a	COVERED: ink-light hex ticketed as S2-016 + S1-015	n/a	0	SKIP	ink-light wrong hex / contrast
 2026-03-28T22:00:27	5	EDGE-48	-	-	-	n/a	n/a	n/a	COVERED: 1px borders ticketed as S2-008; grep confirms 15 JS + 1 HTML, no broader scope	n/a	0	SKIP	1px borders in 60+ files (overstated)
 2026-03-28T22:00:28	5	EDGE-49	-	-	-	n/a	n/a	n/a	COVERED: Tailwind colors ticketed as S2-009; grep confirms 3 JS + 1 HTML	n/a	0	SKIP	25 Tailwind colors (overstated)
+2026-03-28T22:00:29	5	DT-2	-	-	-	n/a	n/a	n/a	COVERED: Cold rgba shadows ticketed as S2-002 (DES-401) + S2-003 (DES-402)	n/a	0	SKIP	Cold rgba(0,0,0) shadows
+2026-03-28T22:00:30	5	DT-6	-	-	-	n/a	n/a	n/a	COVERED: Cold rgba overlays ticketed as S2-003 (includes player.js:722)	n/a	0	SKIP	Cold rgba overlays
