@@ -927,7 +927,7 @@ a.btn-pro-upgrade:focus-visible {
 .search-hl {
   background: rgba(217, 119, 87, 0.25);
   padding: 0 1px;
-  border-radius: 2px;
+  border-radius: 2px; /* intentional — tight highlight on search text */
   color: inherit;
 }
 [data-theme="dark"] .search-hl {
