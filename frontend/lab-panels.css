@@ -2305,7 +2305,7 @@
   padding: 8px 10px; border: 2px solid var(--ink-faint); border-radius: 8px;
   background: var(--bg); cursor: pointer; transition: all 0.15s;
 }
-.mh-detail-player:hover { box-shadow: 4px 4px 0 var(--ink); transform: translate(-1px,-1px); }
+.mh-detail-player:hover { box-shadow: 4px 4px 0 var(--ink); transform: translate(-2px, -2px); }
 .mh-detail-player img {
   width: 36px; height: 36px; border-radius: 50%;
   border: 2px solid var(--ink-faint); object-fit: cover;
@@ -4152,7 +4152,7 @@
   transition: all 0.15s;
 }
 .md-draft-btn:hover {
-  transform: translate(-1px, -1px);
+  transform: translate(-2px, -2px);
   box-shadow: 4px 4px 0 var(--ink);
 }
 
