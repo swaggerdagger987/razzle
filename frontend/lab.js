@@ -2132,6 +2132,7 @@ function renderTableBody() {
 // ─── Sparkline loading (async, non-blocking) ──────────────────
 let _sparklineCache = {};  // pid -> [pts...]
 let _sparklineAbort = null;
+let _sparklineGen = 0;
 
 function loadScreenerSparklines() {
   // Collect player IDs from current items
@@ -2144,6 +2145,7 @@ function loadScreenerSparklines() {
   // Cancel previous in-flight request
   if (_sparklineAbort) _sparklineAbort.abort();
   _sparklineAbort = new AbortController();
+  const gen = ++_sparklineGen;
 
   // Check which IDs are already cached for this season
   const season = state.season || 0;
@@ -2167,6 +2169,7 @@ function loadScreenerSparklines() {
   })
     .then(r => r.ok ? r.json() : Promise.reject(new Error("sparkline fetch failed")))
     .then(data => {
+      if (gen !== _sparklineGen) return; // stale response, ignore
       const sp = data.sparklines || {};
       for (const pid in sp) _sparklineCache[pid] = sp[pid];
       injectSparklines();
