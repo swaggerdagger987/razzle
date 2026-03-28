@@ -355,7 +355,7 @@
   .tv-tier-badge.t5 { background: var(--purple-light); color: var(--purple); border-color: var(--purple); }
   .tv-tier-badge.t6 { background: var(--bg); color: var(--ink-medium); border-color: var(--ink-faint); }
   .tv-tier-badge.t7 { background: var(--red-light); color: var(--red); border-color: var(--red); }
-  .tv-tier-badge.t8 { background: var(--ink-faint); color: var(--ink-medium); border-color: var(--ink-light); }
+  .tv-tier-badge.t8 { background: var(--ink-faint); color: var(--ink); border-color: var(--ink-light); }
 
   /* Component tooltip */
   .tv-row[title] { position: relative; }
@@ -570,7 +570,7 @@
 
     // Headshot
     if (p.headshot_url) {
-      html += '<img class="tv-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+      html += '<img class="tv-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
     } else {
       html += '<div class="tv-headshot"></div>';
     }

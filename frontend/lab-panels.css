@@ -341,7 +341,7 @@
   white-space: nowrap;
 }
 .dh-table td { padding: 6px; border-bottom: 2px dashed var(--ink-faint); }
-.dh-table tr:hover { background: rgba(217, 119, 87, 0.06); }
+.dh-table tr:hover { background: var(--orange-hover); }
 .dh-table tr[data-pid] { cursor: pointer; }
 .dh-player-cell {
   display: flex;
@@ -368,7 +368,7 @@
 }
 .dh-val.elite { background: var(--green-light); color: var(--semantic-green); }
 .dh-val.solid { background: var(--yellow-light); color: var(--semantic-yellow); }
-.dh-val.low { background: var(--orange-light); color: var(--orange); }
+.dh-val.low { background: var(--orange-light); color: var(--semantic-orange); }
 .dh-val.rep { background: var(--red-light); color: var(--semantic-red); }
 .dh-val.empty { color: var(--ink-light); background: none; }
 .dh-compare-bar {
@@ -2960,7 +2960,7 @@
 .cst-table td { padding: 6px 8px; text-align: right; font-variant-numeric: tabular-nums; }
 .cst-table td:first-child { text-align: left; font-weight: 700; }
 .cst-ppg-cell { font-weight: 700; color: var(--orange); }
-.cst-totals { font-weight: 700; border-top: 2px solid var(--ink); background: rgba(217,119,87,0.05); }
+.cst-totals { font-weight: 700; border-top: 2px solid var(--ink); background: var(--orange-hover); }
 
 /* ===================================================================
    38. CAREER COMPARISON (ccp-)
@@ -3154,7 +3154,7 @@
 .glo-great { font-weight: 700; color: var(--blue); }
 .glo-ok { color: var(--ink); }
 .glo-bad { color: var(--red); }
-.glo-totals { font-weight: 700; border-top: 2px solid var(--ink); background: rgba(217,119,87,0.05); }
+.glo-totals { font-weight: 700; border-top: 2px solid var(--ink); background: var(--orange-hover); }
 
 /* ===================================================================
    44. PLAYER ARCHETYPES (arc-)
@@ -4103,10 +4103,10 @@
 [data-theme="dark"] .ccp-table tbody tr:hover,
 [data-theme="dark"] .cmt-table tbody tr:hover,
 [data-theme="dark"] .rpc-table tbody tr:hover,
-[data-theme="dark"] .glo-table tbody tr:hover { background: rgba(217, 119, 87, 0.18); }
-[data-theme="dark"] .wh-table tr:hover td { background-color: rgba(217, 119, 87, 0.18); }
+[data-theme="dark"] .glo-table tbody tr:hover { background: var(--orange-hover); }
+[data-theme="dark"] .wh-table tr:hover td { background-color: var(--orange-hover); }
 [data-theme="dark"] .cst-totals,
-[data-theme="dark"] .glo-totals { background: rgba(217, 119, 87, 0.12); }
+[data-theme="dark"] .glo-totals { background: var(--orange-hover); }
 [data-theme="dark"] .mh-table tbody tr:hover td { filter: brightness(1.15); }
 
 /* ===== MOBILE TABLE SCROLL — DES-023 ===== */
