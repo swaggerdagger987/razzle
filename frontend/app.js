@@ -1137,7 +1137,15 @@ async function handleRegister(e) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password })
     });
-    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "couldn't get you signed up. try again."; } catch(_) { errEl.textContent = "couldn't get you signed up. try again."; } document.getElementById("authRegisterEmail").setAttribute("aria-invalid","true"); return; }
+    if (!resp.ok) {
+      try { var d = await resp.json(); var errMsg = d.error || d.detail || "couldn't get you signed up. try again."; } catch(_) { var errMsg = "couldn't get you signed up. try again."; }
+      if (resp.status === 409) {
+        errEl.innerHTML = errMsg + ' <button type="button" onclick="switchAuthTab(\'login\')" style="background:none;border:none;color:var(--orange);cursor:pointer;text-decoration:underline;font:inherit;padding:0;">Sign in instead?</button>';
+      } else {
+        errEl.textContent = errMsg;
+      }
+      document.getElementById("authRegisterEmail").setAttribute("aria-invalid","true"); return;
+    }
     var data = await resp.json();
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
