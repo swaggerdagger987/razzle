@@ -894,14 +894,14 @@ function _showWelcomeModal(user) {
 
   var features = isElite
     ? [
-        "All 60+ analytical panels",
+        "All 70+ analytical panels",
         "Full Bureau deep-dive + league intelligence",
         "Situation Room with AI key included",
         "Unlimited formulas + cloud sync",
         "CSV export on every table",
       ]
     : [
-        "All 60+ analytical panels",
+        "All 70+ analytical panels",
         "Full Bureau deep-dive + league intelligence",
         "Situation Room (bring your own AI key)",
         "Unlimited formulas + cloud sync",
