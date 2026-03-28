@@ -150,3 +150,8 @@ timestamp	invocation	finding_ref	severity	confidence	category	ticket_file	root_c
 2026-03-28T22:00:21	5	DQ-014	-	-	-	n/a	n/a	n/a	DUPLICATE: Covered by S3-001 and S3-002	n/a	0	SKIP	Hover shadow wrong size
 2026-03-28T22:00:22	5	DQ-016	-	-	-	n/a	n/a	n/a	DUPLICATE: Already ticketed as S3-004	n/a	0	SKIP	Hero mascot drop-shadow hardcoded
 2026-03-28T22:00:23	5	DQ-018	-	-	-	n/a	n/a	n/a	DUPLICATE: Already ticketed as S2-002	n/a	0	SKIP	Agents cold black shadows
+2026-03-28T22:00:24	5	EDGE-8	-	-	-	n/a	n/a	n/a	COVERED: Missing webhook events ticketed as S1-010 (LAUNCH-P1-3)	n/a	0	SKIP	customer.subscription.updated webhook
+2026-03-28T22:00:25	5	EDGE-40	-	-	-	n/a	n/a	n/a	COVERED: Redirect bounce ticketed as S0-005 (DA-S0-001)	n/a	0	SKIP	Footer links cause redirect bounce
+2026-03-28T22:00:26	5	EDGE-46	-	-	-	n/a	n/a	n/a	COVERED: ink-light hex ticketed as S2-016 + S1-015	n/a	0	SKIP	ink-light wrong hex / contrast
+2026-03-28T22:00:27	5	EDGE-48	-	-	-	n/a	n/a	n/a	COVERED: 1px borders ticketed as S2-008; grep confirms 15 JS + 1 HTML, no broader scope	n/a	0	SKIP	1px borders in 60+ files (overstated)
+2026-03-28T22:00:28	5	EDGE-49	-	-	-	n/a	n/a	n/a	COVERED: Tailwind colors ticketed as S2-009; grep confirms 3 JS + 1 HTML	n/a	0	SKIP	25 Tailwind colors (overstated)
