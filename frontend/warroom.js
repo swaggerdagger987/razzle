@@ -1275,7 +1275,7 @@ function drawHUD() {
     else if (a.state === STATE.WORK_DESK || a.state === STATE.ANALYZE_BOARD) dotColor = '#3388cc';
     else if (a.state === STATE.THINK) dotColor = '#ccaa33';
     else if (a.state === STATE.DISCUSS) dotColor = '#cc6633';
-    else if (a.state === STATE.CELEBRATE) dotColor = '#cc3333';
+    else if (a.state === STATE.CELEBRATE) dotColor = '#ffc857';
     else if (a.state === STATE.COFFEE) dotColor = '#8B6914';
     px(hudX + 3, cy + chipH / 2 - 2, 4, 4, dotColor);
 
@@ -1353,7 +1353,7 @@ const STATE_COLORS = {
   [STATE.ANALYZE_BOARD]: '#3388cc',
   [STATE.DISCUSS]: '#cc6633',
   [STATE.THINK]: '#ccaa33',
-  [STATE.CELEBRATE]: '#cc3333',
+  [STATE.CELEBRATE]: '#ffc857',
   [STATE.COFFEE]: '#8B6914',
 };
 
