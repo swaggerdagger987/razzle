@@ -888,6 +888,7 @@ function copyCompareURL() {
 }
 
 function showToast(msg) {
+  if (typeof _showToast === "function") { _showToast(msg); return; }
   var toast = document.getElementById("compareToast");
   if (!toast) {
     toast = document.createElement("div");

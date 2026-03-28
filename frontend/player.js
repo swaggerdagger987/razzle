@@ -802,6 +802,7 @@ function copyPlayerURL() {
 }
 
 function showToast(msg) {
+  if (typeof _showToast === "function") { _showToast(msg); return; }
   let toast = document.getElementById("playerToast");
   if (!toast) {
     toast = document.createElement("div");
