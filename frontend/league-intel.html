@@ -401,7 +401,7 @@
   }
   .profile-timeline-label {
     font-family: var(--font-mono);
-    font-size: 8px;
+    font-size: 11px;
     color: var(--ink-light);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -462,7 +462,7 @@
   }
   .pressure-bar-tag {
     font-family: var(--font-mono);
-    font-size: 8px;
+    font-size: 11px;
     padding: 1px 5px;
     border-radius: 8px;
     border: 2px solid;
@@ -1914,10 +1914,10 @@
     .league-header { padding: 10px 12px; }
     .league-meta { gap: 4px; }
     .league-meta span { font-size: 11px; }
-    .pressure-bar-name { min-width: 50px; font-size: 8px; }
+    .pressure-bar-name { min-width: 50px; font-size: 11px; }
     .pressure-bar-tag { font-size: 7px; padding: 1px 2px; }
     .trade-match-row { font-size: 11px; gap: 3px; }
-    .trade-matrix { font-size: 8px; overflow-x: auto; display: block; }
+    .trade-matrix { font-size: 11px; overflow-x: auto; display: block; }
     .trade-matrix th, .trade-matrix td { padding: 3px 2px; }
     .power-rank { font-size: 18px; min-width: 24px; }
     .power-card { padding: 8px 10px; }
@@ -2520,7 +2520,7 @@
     .demo-mc-grid { grid-template-columns: 1fr; }
     .demo-pos-grades { grid-template-columns: repeat(2, 1fr); }
     .demo-schedule-weeks { gap: 2px; }
-    .demo-schedule-week { width: 22px; height: 18px; font-size: 8px; }
+    .demo-schedule-week { width: 22px; height: 18px; font-size: 11px; }
   }
 </style>
 </head>
@@ -2893,7 +2893,7 @@ function _renderDemoOverview() {
   for (var i = 0; i < D.managers.length; i++) {
     var m = D.managers[i];
     var youClass = m.isYou ? ' is-you' : '';
-    var youBadge = m.isYou ? '<span style="font-family:var(--font-mono);font-size:8px;background:var(--orange);color:var(--text-on-accent);padding:1px 5px;border-radius:8px;margin-left:4px;">YOU</span>' : '';
+    var youBadge = m.isYou ? '<span style="font-family:var(--font-mono);font-size:11px;background:var(--orange);color:var(--text-on-accent);padding:1px 5px;border-radius:8px;margin-left:4px;">YOU</span>' : '';
     h += '<div class="demo-mc-card' + youClass + '">';
     h += '<div class="demo-mc-name">' + escapeHtml(m.name) + youBadge + '</div>';
     h += '<div class="demo-mc-record">' + escapeHtml(m.record) + '</div>';
@@ -3040,7 +3040,7 @@ function _renderDemoTrades() {
     h += '<div style="font-family:var(--font-mono);font-size:11px;font-weight:700;margin-bottom:4px;">' + escapeHtml(tr.side1mgr) + ' gets:</div>';
     for (var s1 = 0; s1 < tr.side1gets.length; s1++) {
       var p1 = tr.side1gets[s1];
-      h += '<div class="demo-trade-player"><span class="roster-pos ' + p1.pos.toLowerCase() + '" style="background:' + _demoPosColor(p1.pos) + ';font-size:8px;padding:1px 4px;">' + escapeHtml(p1.pos) + '</span> ' + escapeHtml(p1.name) + '</div>';
+      h += '<div class="demo-trade-player"><span class="roster-pos ' + p1.pos.toLowerCase() + '" style="background:' + _demoPosColor(p1.pos) + ';font-size:11px;padding:1px 4px;">' + escapeHtml(p1.pos) + '</span> ' + escapeHtml(p1.name) + '</div>';
     }
     h += '</div>';
 
@@ -3051,7 +3051,7 @@ function _renderDemoTrades() {
     h += '<div style="font-family:var(--font-mono);font-size:11px;font-weight:700;margin-bottom:4px;">' + escapeHtml(tr.side2mgr) + ' gets:</div>';
     for (var s2 = 0; s2 < tr.side2gets.length; s2++) {
       var p2 = tr.side2gets[s2];
-      h += '<div class="demo-trade-player"><span class="roster-pos ' + (p2.pos === 'PICK' ? '' : p2.pos.toLowerCase()) + '" style="background:' + (p2.pos === 'PICK' ? 'var(--ink-medium)' : _demoPosColor(p2.pos)) + ';font-size:8px;padding:1px 4px;">' + escapeHtml(p2.pos) + '</span> ' + escapeHtml(p2.name) + '</div>';
+      h += '<div class="demo-trade-player"><span class="roster-pos ' + (p2.pos === 'PICK' ? '' : p2.pos.toLowerCase()) + '" style="background:' + (p2.pos === 'PICK' ? 'var(--ink-medium)' : _demoPosColor(p2.pos)) + ';font-size:11px;padding:1px 4px;">' + escapeHtml(p2.pos) + '</span> ' + escapeHtml(p2.name) + '</div>';
     }
     h += '</div>';
     h += '</div>'; // end trade-sides
@@ -3135,7 +3135,7 @@ function _renderDemoSchedule() {
     var hardCount = m.scheduleWeeks.filter(function(w) { return w === 'H'; }).length;
 
     h += '<div class="demo-schedule-row">';
-    h += '<div class="demo-schedule-name">' + escapeHtml(m.name) + (m.isYou ? ' <span style="font-size:8px;background:var(--orange);color:var(--text-on-accent);padding:0 4px;border-radius:8px;">YOU</span>' : '') + '</div>';
+    h += '<div class="demo-schedule-name">' + escapeHtml(m.name) + (m.isYou ? ' <span style="font-size:11px;background:var(--orange);color:var(--text-on-accent);padding:0 4px;border-radius:8px;">YOU</span>' : '') + '</div>';
     h += '<div class="demo-schedule-weeks">';
     for (var w = 0; w < m.scheduleWeeks.length; w++) {
       var wk = m.scheduleWeeks[w];
@@ -4669,7 +4669,7 @@ function renderPressureMap(container, cards, isPro) {
 
     if (i < visibleCount) {
       html += '<div class="pressure-bar-row">';
-      html += '<div class="pressure-bar-name">' + escapeHtml(s.name) + ' <span style="font-size:8px; color:var(--ink-light);">' + s.record + '</span></div>';
+      html += '<div class="pressure-bar-name">' + escapeHtml(s.name) + ' <span style="font-size:11px; color:var(--ink-light);">' + s.record + '</span></div>';
       html += '<div class="pressure-bar-track"><div class="pressure-bar-fill" style="width:' + s.score + '%; background:' + pressureColor + ';"></div></div>';
       html += '<div class="pressure-bar-score" style="color:' + pressureColor + ';">' + s.score + '</div>';
       html += '<div class="pressure-bar-tag" style="color:' + pressureLabelColor + '; border-color:' + pressureLabelColor + ';">' + pressureLabel + '</div>';
