@@ -428,10 +428,6 @@
     TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
   };
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   var currentPosition = '';
   var currentWindow = 5;

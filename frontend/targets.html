@@ -430,10 +430,6 @@
   };
   var POS_LIGHT = { QB: 'var(--blue-light)', RB: 'var(--green-light)', WR: 'var(--orange-light)', TE: 'var(--purple-light)' };
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   var currentData = null;
   var activeMode = 'targets';

@@ -502,10 +502,6 @@
     TE: _cs.getPropertyValue('--purple-light').trim() || '#e5dcf7'
   };
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   var currentData = null;
   var activePosition = 'ALL';

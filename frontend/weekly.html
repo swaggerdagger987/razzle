@@ -417,10 +417,6 @@
     { bg: 'var(--green-light)', text: 'var(--green)' },  // top 80%+ — strong green
   ];
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   function getHeatColor(score, thresholds) {
     if (score === null || score === undefined) return null;

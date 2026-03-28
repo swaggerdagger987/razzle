@@ -465,10 +465,6 @@
 (function() {
   'use strict';
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   var TROPHY_MAP = {
     mvp: '&#x1F3C6;',

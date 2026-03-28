@@ -469,10 +469,6 @@
     savePageState({ pos: currentPosition, metric: currentMetric, season: document.getElementById('season-select').value });
   }
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   function formatDelta(val) {
     if (val > 0) return '+' + val;

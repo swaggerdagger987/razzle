@@ -368,10 +368,6 @@
 (function() {
   'use strict';
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   function fmt(v, dec) {
     if (v === null || v === undefined) return '-';

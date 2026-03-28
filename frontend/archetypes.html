@@ -370,10 +370,6 @@
 (function() {
   'use strict';
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   var ICONS = {
     workhorse: '&#x1F3CB;', pass_catcher: '&#x1F3C8;', efficient: '&#x26A1;',
