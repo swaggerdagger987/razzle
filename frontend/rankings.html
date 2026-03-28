@@ -71,7 +71,7 @@
     background: var(--bg-card);
     color: var(--ink);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
   }
   .rankings-filter-btn:first-child { border-radius: 8px 0 0 8px; }
   .rankings-filter-btn:last-child { border-radius: 0 8px 8px 0; }
@@ -157,7 +157,7 @@
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s;
     position: relative;
   }
   .rankings-card:hover {
@@ -322,12 +322,12 @@
     <div class="rankings-season" id="rankingsSeason"></div>
   </div>
 
-  <div class="rankings-filters" id="rankingsFilters">
-    <button class="rankings-filter-btn active" data-pos="">All</button>
-    <button class="rankings-filter-btn pos-qb" data-pos="QB">QB</button>
-    <button class="rankings-filter-btn pos-rb" data-pos="RB">RB</button>
-    <button class="rankings-filter-btn pos-wr" data-pos="WR">WR</button>
-    <button class="rankings-filter-btn pos-te" data-pos="TE">TE</button>
+  <div class="rankings-filters" id="rankingsFilters" role="tablist">
+    <button class="rankings-filter-btn active" data-pos="" role="tab" aria-selected="true">All</button>
+    <button class="rankings-filter-btn pos-qb" data-pos="QB" role="tab" aria-selected="false">QB</button>
+    <button class="rankings-filter-btn pos-rb" data-pos="RB" role="tab" aria-selected="false">RB</button>
+    <button class="rankings-filter-btn pos-wr" data-pos="WR" role="tab" aria-selected="false">WR</button>
+    <button class="rankings-filter-btn pos-te" data-pos="TE" role="tab" aria-selected="false">TE</button>
   </div>
 
   <div class="rankings-actions">

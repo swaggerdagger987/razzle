@@ -88,7 +88,7 @@
     border: none;
     border-right: 2px solid var(--ink);
     cursor: pointer;
-    transition: all 0.12s;
+    transition: background-color 0.12s, color 0.12s;
   }
   .con-pos-tab:last-child { border-right: none; }
   .con-pos-tab.active {
@@ -116,7 +116,7 @@
     border: none;
     border-right: 2px solid var(--accent);
     cursor: pointer;
-    transition: all 0.12s;
+    transition: background-color 0.12s, color 0.12s;
   }
   .con-scoring-tab:last-child { border-right: none; }
   .con-scoring-tab.active {
@@ -330,12 +330,12 @@
   </div>
 
   <div class="con-controls">
-    <div class="con-pos-tabs" id="pos-tabs">
-      <button class="con-pos-tab active" data-pos="" aria-label="All positions">All</button>
-      <button class="con-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
-      <button class="con-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
-      <button class="con-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
-      <button class="con-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+    <div class="con-pos-tabs" id="pos-tabs" role="tablist">
+      <button class="con-pos-tab active" data-pos="" aria-label="All positions" role="tab" aria-selected="true">All</button>
+      <button class="con-pos-tab" data-pos="QB" aria-label="Quarterbacks" role="tab" aria-selected="false">QB</button>
+      <button class="con-pos-tab" data-pos="RB" aria-label="Running Backs" role="tab" aria-selected="false">RB</button>
+      <button class="con-pos-tab" data-pos="WR" aria-label="Wide Receivers" role="tab" aria-selected="false">WR</button>
+      <button class="con-pos-tab" data-pos="TE" aria-label="Tight Ends" role="tab" aria-selected="false">TE</button>
     </div>
     <div class="con-scoring-tabs" id="scoring-tabs">
       <button class="con-scoring-tab active" data-scoring="ppr">PPR</button>

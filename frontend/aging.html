@@ -74,7 +74,7 @@
     background: var(--bg-card);
     color: var(--ink);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: background-color 0.15s, transform 0.15s, box-shadow 0.15s;
   }
   .aging-pos-tab:hover {
     transform: translate(-2px, -2px);
@@ -118,7 +118,7 @@
     box-shadow: 4px 4px 0 var(--ink);
     padding: 14px;
     text-align: center;
-    transition: all 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s;
   }
   .aging-summary-card:hover {
     transform: translate(-2px, -2px);
@@ -175,7 +175,7 @@
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
-    transition: all 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s;
   }
   .aging-card:hover {
     transform: translate(-2px, -2px);
@@ -318,12 +318,12 @@
   </div>
 
   <div class="aging-controls">
-    <div class="aging-pos-tabs">
-      <button class="aging-pos-tab active" data-pos="ALL" aria-label="All positions">All</button>
-      <button class="aging-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
-      <button class="aging-pos-tab" data-pos="RB" aria-label="Running backs">RB</button>
-      <button class="aging-pos-tab" data-pos="WR" aria-label="Wide receivers">WR</button>
-      <button class="aging-pos-tab" data-pos="TE" aria-label="Tight ends">TE</button>
+    <div class="aging-pos-tabs" role="tablist">
+      <button class="aging-pos-tab active" data-pos="ALL" aria-label="All positions" role="tab" aria-selected="true">All</button>
+      <button class="aging-pos-tab" data-pos="QB" aria-label="Quarterbacks" role="tab" aria-selected="false">QB</button>
+      <button class="aging-pos-tab" data-pos="RB" aria-label="Running backs" role="tab" aria-selected="false">RB</button>
+      <button class="aging-pos-tab" data-pos="WR" aria-label="Wide receivers" role="tab" aria-selected="false">WR</button>
+      <button class="aging-pos-tab" data-pos="TE" aria-label="Tight ends" role="tab" aria-selected="false">TE</button>
     </div>
     <select class="aging-season-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>

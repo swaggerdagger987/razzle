@@ -107,12 +107,12 @@
 
   <div class="sr-controls">
     <select id="sr-season" aria-label="Season selector"></select>
-    <div class="pos-tabs">
-      <button class="pos-tab active" data-pos="">ALL</button>
-      <button class="pos-tab" data-pos="QB">QB</button>
-      <button class="pos-tab" data-pos="RB">RB</button>
-      <button class="pos-tab" data-pos="WR">WR</button>
-      <button class="pos-tab" data-pos="TE">TE</button>
+    <div class="pos-tabs" role="tablist">
+      <button class="pos-tab active" data-pos="" role="tab" aria-selected="true">ALL</button>
+      <button class="pos-tab" data-pos="QB" role="tab" aria-selected="false">QB</button>
+      <button class="pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
+      <button class="pos-tab" data-pos="WR" role="tab" aria-selected="false">WR</button>
+      <button class="pos-tab" data-pos="TE" role="tab" aria-selected="false">TE</button>
     </div>
     <button class="sr-export" onclick="exportPNG()">Export PNG</button>
   </div>

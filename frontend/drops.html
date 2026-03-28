@@ -113,11 +113,11 @@
 
   <div class="dr-controls">
     <select id="dr-season" aria-label="Season selector"></select>
-    <div class="pos-tabs">
-      <button class="pos-tab active" data-pos="">ALL</button>
-      <button class="pos-tab" data-pos="WR">WR</button>
-      <button class="pos-tab" data-pos="TE">TE</button>
-      <button class="pos-tab" data-pos="RB">RB</button>
+    <div class="pos-tabs" role="tablist">
+      <button class="pos-tab active" data-pos="" role="tab" aria-selected="true">ALL</button>
+      <button class="pos-tab" data-pos="WR" role="tab" aria-selected="false">WR</button>
+      <button class="pos-tab" data-pos="TE" role="tab" aria-selected="false">TE</button>
+      <button class="pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
     </div>
     <button class="dr-export" onclick="exportPNG()">Export PNG</button>
   </div>

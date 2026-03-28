@@ -88,7 +88,7 @@
     border: none;
     border-right: 2px solid var(--ink);
     cursor: pointer;
-    transition: all 0.12s;
+    transition: background-color 0.12s, color 0.12s;
   }
   .air-pos-tab:last-child { border-right: none; }
   .air-pos-tab.active {
@@ -351,11 +351,11 @@
   </div>
 
   <div class="air-controls">
-    <div class="air-pos-tabs" id="pos-tabs">
-      <button class="air-pos-tab active" data-pos="" aria-label="All positions">All</button>
-      <button class="air-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
-      <button class="air-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
-      <button class="air-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+    <div class="air-pos-tabs" id="pos-tabs" role="tablist">
+      <button class="air-pos-tab active" data-pos="" aria-label="All positions" role="tab" aria-selected="true">All</button>
+      <button class="air-pos-tab" data-pos="WR" aria-label="Wide Receivers" role="tab" aria-selected="false">WR</button>
+      <button class="air-pos-tab" data-pos="RB" aria-label="Running Backs" role="tab" aria-selected="false">RB</button>
+      <button class="air-pos-tab" data-pos="TE" aria-label="Tight Ends" role="tab" aria-selected="false">TE</button>
     </div>
     <select class="air-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>

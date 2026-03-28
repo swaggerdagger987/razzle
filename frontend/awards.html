@@ -88,7 +88,7 @@
     border: none;
     border-right: 2px solid var(--ink);
     cursor: pointer;
-    transition: all 0.12s;
+    transition: background-color 0.12s, color 0.12s;
   }
   .aw-pos-tab:last-child { border-right: none; }
   .aw-pos-tab.active {
@@ -371,12 +371,12 @@
   </div>
 
   <div class="aw-controls">
-    <div class="aw-pos-tabs" id="pos-tabs">
-      <button class="aw-pos-tab active" data-pos="" aria-label="All positions">All</button>
-      <button class="aw-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
-      <button class="aw-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
-      <button class="aw-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
-      <button class="aw-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+    <div class="aw-pos-tabs" id="pos-tabs" role="tablist">
+      <button class="aw-pos-tab active" data-pos="" aria-label="All positions" role="tab" aria-selected="true">All</button>
+      <button class="aw-pos-tab" data-pos="QB" aria-label="Quarterbacks" role="tab" aria-selected="false">QB</button>
+      <button class="aw-pos-tab" data-pos="RB" aria-label="Running Backs" role="tab" aria-selected="false">RB</button>
+      <button class="aw-pos-tab" data-pos="WR" aria-label="Wide Receivers" role="tab" aria-selected="false">WR</button>
+      <button class="aw-pos-tab" data-pos="TE" aria-label="Tight Ends" role="tab" aria-selected="false">TE</button>
     </div>
     <select class="aw-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>

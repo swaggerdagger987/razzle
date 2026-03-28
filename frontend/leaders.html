@@ -73,7 +73,7 @@
     background: var(--bg-card);
     color: var(--ink);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
   }
   .leaders-filter-btn:first-child { border-radius: 8px 0 0 8px; }
   .leaders-filter-btn:last-child { border-radius: 0 8px 8px 0; }
@@ -122,7 +122,7 @@
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
-    transition: all 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s;
   }
   .leaders-card:hover {
     transform: translate(-2px, -2px);
@@ -337,12 +337,12 @@
   </div>
 
   <div class="leaders-controls">
-    <div class="leaders-filters" id="leadersFilters">
-      <button class="leaders-filter-btn active" data-pos="">All</button>
-      <button class="leaders-filter-btn pos-qb" data-pos="QB">QB</button>
-      <button class="leaders-filter-btn pos-rb" data-pos="RB">RB</button>
-      <button class="leaders-filter-btn pos-wr" data-pos="WR">WR</button>
-      <button class="leaders-filter-btn pos-te" data-pos="TE">TE</button>
+    <div class="leaders-filters" id="leadersFilters" role="tablist">
+      <button class="leaders-filter-btn active" data-pos="" role="tab" aria-selected="true">All</button>
+      <button class="leaders-filter-btn pos-qb" data-pos="QB" role="tab" aria-selected="false">QB</button>
+      <button class="leaders-filter-btn pos-rb" data-pos="RB" role="tab" aria-selected="false">RB</button>
+      <button class="leaders-filter-btn pos-wr" data-pos="WR" role="tab" aria-selected="false">WR</button>
+      <button class="leaders-filter-btn pos-te" data-pos="TE" role="tab" aria-selected="false">TE</button>
     </div>
     <select class="leaders-season-select" id="leadersSeason">
       <option value="">pulling film...</option>

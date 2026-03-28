@@ -88,7 +88,7 @@
     border: none;
     border-right: 2px solid var(--ink);
     cursor: pointer;
-    transition: all 0.12s;
+    transition: background-color 0.12s, color 0.12s;
   }
   .yoy-pos-tab:last-child { border-right: none; }
   .yoy-pos-tab.active {
@@ -336,12 +336,12 @@
   </div>
 
   <div class="yoy-controls">
-    <div class="yoy-pos-tabs" id="pos-tabs">
-      <button class="yoy-pos-tab active" data-pos="" aria-label="All positions">All</button>
-      <button class="yoy-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
-      <button class="yoy-pos-tab" data-pos="RB" aria-label="Running backs">RB</button>
-      <button class="yoy-pos-tab" data-pos="WR" aria-label="Wide receivers">WR</button>
-      <button class="yoy-pos-tab" data-pos="TE" aria-label="Tight ends">TE</button>
+    <div class="yoy-pos-tabs" id="pos-tabs" role="tablist">
+      <button class="yoy-pos-tab active" data-pos="" aria-label="All positions" role="tab" aria-selected="true">All</button>
+      <button class="yoy-pos-tab" data-pos="QB" aria-label="Quarterbacks" role="tab" aria-selected="false">QB</button>
+      <button class="yoy-pos-tab" data-pos="RB" aria-label="Running backs" role="tab" aria-selected="false">RB</button>
+      <button class="yoy-pos-tab" data-pos="WR" aria-label="Wide receivers" role="tab" aria-selected="false">WR</button>
+      <button class="yoy-pos-tab" data-pos="TE" aria-label="Tight ends" role="tab" aria-selected="false">TE</button>
     </div>
     <select class="yoy-select" id="metric-select" title="Sort metric" aria-label="Sort metric">
       <option value="ppg" selected>PPG Delta</option>

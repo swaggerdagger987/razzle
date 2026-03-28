@@ -88,7 +88,7 @@
     border: none;
     border-right: 2px solid var(--ink);
     cursor: pointer;
-    transition: all 0.12s;
+    transition: background-color 0.12s, color 0.12s;
   }
   .buysell-pos-tab:last-child { border-right: none; }
   .buysell-pos-tab.active {
@@ -116,7 +116,7 @@
     border: none;
     border-right: 2px solid var(--accent);
     cursor: pointer;
-    transition: all 0.12s;
+    transition: background-color 0.12s, color 0.12s;
   }
   .buysell-scoring-tab:last-child { border-right: none; }
   .buysell-scoring-tab.active {
@@ -195,7 +195,7 @@
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
-    transition: all 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s;
     cursor: pointer;
   }
   .buysell-card:hover {
@@ -458,12 +458,12 @@
   </div>
 
   <div class="buysell-controls">
-    <div class="buysell-pos-tabs" id="pos-tabs">
-      <button class="buysell-pos-tab active" data-pos="">All</button>
-      <button class="buysell-pos-tab" data-pos="QB">QB</button>
-      <button class="buysell-pos-tab" data-pos="RB">RB</button>
-      <button class="buysell-pos-tab" data-pos="WR">WR</button>
-      <button class="buysell-pos-tab" data-pos="TE">TE</button>
+    <div class="buysell-pos-tabs" id="pos-tabs" role="tablist">
+      <button class="buysell-pos-tab active" data-pos="" role="tab" aria-selected="true">All</button>
+      <button class="buysell-pos-tab" data-pos="QB" role="tab" aria-selected="false">QB</button>
+      <button class="buysell-pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
+      <button class="buysell-pos-tab" data-pos="WR" role="tab" aria-selected="false">WR</button>
+      <button class="buysell-pos-tab" data-pos="TE" role="tab" aria-selected="false">TE</button>
     </div>
     <select class="buysell-season-select" id="season-select" title="Season" aria-label="Season"></select>
     <div class="buysell-scoring-tabs" id="scoring-tabs">

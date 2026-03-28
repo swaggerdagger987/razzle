@@ -88,7 +88,7 @@
     border: none;
     border-right: 2px solid var(--ink);
     cursor: pointer;
-    transition: all 0.12s;
+    transition: background-color 0.12s, color 0.12s;
   }
   .rz-pos-tab:last-child { border-right: none; }
   .rz-pos-tab.active {
@@ -322,12 +322,12 @@
   </div>
 
   <div class="rz-controls">
-    <div class="rz-pos-tabs" id="pos-tabs">
-      <button class="rz-pos-tab active" data-pos="" aria-label="All positions">All</button>
-      <button class="rz-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
-      <button class="rz-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
-      <button class="rz-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
-      <button class="rz-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
+    <div class="rz-pos-tabs" id="pos-tabs" role="tablist">
+      <button class="rz-pos-tab active" data-pos="" aria-label="All positions" role="tab" aria-selected="true">All</button>
+      <button class="rz-pos-tab" data-pos="QB" aria-label="Quarterbacks" role="tab" aria-selected="false">QB</button>
+      <button class="rz-pos-tab" data-pos="RB" aria-label="Running Backs" role="tab" aria-selected="false">RB</button>
+      <button class="rz-pos-tab" data-pos="WR" aria-label="Wide Receivers" role="tab" aria-selected="false">WR</button>
+      <button class="rz-pos-tab" data-pos="TE" aria-label="Tight Ends" role="tab" aria-selected="false">TE</button>
     </div>
     <select class="rz-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
