@@ -4872,6 +4872,7 @@
     }
 
     var saved = getSavedState();
+    var isFirstVisit = Object.keys(saved).length === 0 && !localStorage.getItem('razzle_lab_visited');
 
     cats.forEach(function(cat, idx) {
       // Skip non-collapsible parent headers
@@ -4885,9 +4886,18 @@
         cat.appendChild(chevron);
       }
 
-      // Restore saved state
+      // On first visit, collapse Pro categories so free panels are prominent
       var catKey = 'cat_' + idx;
-      if (saved[catKey]) applyCatState(cat, true);
+      if (isFirstVisit) {
+        // Collapse all Pro sub-categories (not the FREE PANELS section)
+        var catText = (cat.querySelector('.cat-text') || {}).textContent || '';
+        if (catText !== 'FREE PANELS') {
+          applyCatState(cat, true);
+          saved[catKey] = true;
+        }
+      } else if (saved[catKey]) {
+        applyCatState(cat, true);
+      }
 
       // Click handler
       cat.addEventListener('click', function() {
@@ -4902,6 +4912,9 @@
         saveState(s);
       });
     });
+
+    // Save first-visit collapsed state
+    if (isFirstVisit) saveState(saved);
 
     // Expose for search override
     window._restoreCatCollapseState = function() {
