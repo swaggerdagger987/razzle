@@ -69,23 +69,45 @@ _COMMON_PASSWORDS = frozenset([
 ])
 
 
+import queue as _queue
+
+_users_pool = _queue.Queue(maxsize=5)
+
+
 def get_users_conn():
-    """Get connection to users.db (separate from terminal.db)."""
+    """Get connection to users.db from pool, or create a new one."""
     USERS_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    # Try to reuse a pooled connection
+    try:
+        conn = _users_pool.get_nowait()
+        conn.execute("SELECT 1")  # health check
+        return conn
+    except (_queue.Empty, sqlite3.Error):
+        pass
+    # Create new connection
     conn = sqlite3.connect(str(USERS_DB_PATH), timeout=30)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA cache_size=-8192")  # 8MB cache
     return conn
+
+
+def _return_users_conn(conn):
+    """Return connection to pool, or close if pool is full."""
+    try:
+        _users_pool.put_nowait(conn)
+    except _queue.Full:
+        conn.close()
 
 
 @contextmanager
 def get_users_db():
-    """Context manager for users.db connections. Always closes on exit."""
+    """Context manager for users.db connections. Returns to pool on exit."""
     conn = get_users_conn()
     try:
         yield conn
     finally:
-        conn.close()
+        _return_users_conn(conn)
 
 
 def initialize_users_db():
