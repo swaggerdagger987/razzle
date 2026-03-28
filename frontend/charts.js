@@ -450,7 +450,7 @@ async function drawWeeklyTrend() {
     ctx.fillStyle = "#e63946";
     ctx.textAlign = "center";
     ctx.fillText(razzleError(), W / 2, H / 2);
-    console.error(e);
+    
   }
 }
 
@@ -491,7 +491,7 @@ async function drawSeasonTrend() {
     ctx.fillStyle = "#e63946";
     ctx.textAlign = "center";
     ctx.fillText(razzleError(), W / 2, H / 2);
-    console.error(e);
+    
   }
 }
 
@@ -855,7 +855,7 @@ async function openCompare() {
     } catch (e) {
       document.getElementById("compareContent").innerHTML =
         '<p style="font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the prospect comparison...</p>';
-      console.error(e);
+      
     }
   } else {
     const ids = state.selectedPlayers.map(p => p.player_id).join(",");
@@ -866,7 +866,7 @@ async function openCompare() {
     } catch (e) {
       document.getElementById("compareContent").innerHTML =
         '<p style="font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the comparison...</p>';
-      console.error(e);
+      
     }
   }
 }

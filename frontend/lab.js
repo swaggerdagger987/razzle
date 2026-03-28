@@ -143,7 +143,7 @@ function screenshotPanel(panelName) {
       var wmAlpha = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
       ctx.fillStyle = wmAlpha;
       ctx.textAlign = 'right';
-      ctx.font = '600 28px Caveat, cursive';
+      ctx.font = '600 24px Caveat, cursive';
       ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 30);
     }
     // Download
@@ -384,7 +384,7 @@ function _pushWatchlistToServer(token, base, list) {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ players: payload })
-  }).catch(function(err) { console.warn("sync failed:", err.message || err); });
+  }).catch(function() {});
 }
 
 function _pushWatchlistAfterChange() {
@@ -1164,7 +1164,6 @@ function _syncUndoRedoButtons() {
   try {
     const [nflOpts, prospectOpts, collegeOpts] = await Promise.all([
       apiFetch("/api/filter-options").catch(function(err) {
-        console.error("Failed to load NFL filter options:", err);
         if (typeof _showToast === "function") _showToast(razzleError(), "error");
         return { seasons: [], teams: [], positions: [] };
       }),
@@ -1190,7 +1189,6 @@ function _syncUndoRedoButtons() {
     populateFilterStatSelect();
     populateTeamFilter();
   } catch (e) {
-    console.error("Failed to load filter options:", e);
     state.season = _nflYear;
   }
 
@@ -2560,7 +2558,6 @@ async function toggleRowExpand(playerId, tdEl) {
     html += '</table>';
     expandTr.querySelector(".expand-content").innerHTML = html;
   } catch (err) {
-    console.error("Weekly expand error:", err);
     if (_expandedRows[playerId]) {
       var ec = expandTr.querySelector(".expand-content");
       ec.innerHTML = escapeHtml(razzleError()) + ' <button class="btn-chunky" style="margin-left:8px;font-size:11px;padding:2px 10px;">retry</button>';
@@ -3827,7 +3824,6 @@ function showColumnStatsPopover(colKey, anchorEl) {
     if (wrap) wrap.addEventListener("scroll", _colStatsScrollDismiss, { passive: true });
   }, 0);
   } catch (err) {
-    console.error("Column stats error:", err);
     dismissColumnStatsPopover();
     var errPop = document.createElement("div");
     errPop.id = "colStatsPopover";
@@ -4727,7 +4723,7 @@ function _pushAllViewsToServer(token, base) {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ views: views })
-  }).catch(function(err) { console.warn("sync failed:", err.message || err); });
+  }).catch(function() {});
 }
 
 function _pushViewsAfterChange() {
@@ -6405,9 +6401,7 @@ async function generateRankingsExport() {
 
     renderRankingsPNG(players.slice(0, count), posLabel, sortLabel);
     closeRankingsExport();
-  } catch (err) {
-    console.error("Rankings export failed:", err);
-  }
+  } catch (err) { /* silent */ }
 }
 
 function renderRankingsPNG(players, posLabel, sortLabel) {
@@ -7007,7 +7001,7 @@ function loadDynastySparkline(playerId, container) {
       sparkHtml += '</div></div>';
       el.innerHTML = sparkHtml;
     })
-    .catch(err => { if (err.name !== 'AbortError') console.warn('dynasty sparkline:', err.message); });
+    .catch(function() {});
 }
 
 function getHeadlineStats(pos, career) {
@@ -7288,7 +7282,7 @@ function exportProfileImage() {
   // Name + meta
   ctx.textAlign = "left";
   ctx.fillStyle = t.ink;
-  ctx.font = "28px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillText(name, padX + 64, padY + 28);
   ctx.fillStyle = t.inkLight;
   ctx.font = "12px 'Space Mono', monospace";
@@ -7312,7 +7306,7 @@ function exportProfileImage() {
       ctx.stroke();
     }
     ctx.fillStyle = t.ink;
-    ctx.font = "22px 'Luckiest Guy', cursive";
+    ctx.font = "20px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].val, x + sbW / 2, sbY + 32);
     ctx.fillStyle = t.inkLight;
@@ -8777,7 +8771,7 @@ function exportBigBoardImage() {
   let y = padY;
 
   // Title
-  ctx.font = "26px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Big Board — ${currentBBData.position} ${currentBBData.draft_year}`, W / 2, y + 26);
@@ -9394,7 +9388,6 @@ async function loadTradeValues() {
     setupTradeCalcSearch();
   } catch (err) {
     content.innerHTML = razzleErrorHTML();
-    console.error("Trade values load failed:", err);
   }
 }
 
@@ -9791,7 +9784,7 @@ async function loadAgingCurves() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "22px 'Caveat', cursive";
+  ctx.font = "20px 'Caveat', cursive";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("pulling aging film...", canvas.width / 2, canvas.height / 2);
@@ -9812,11 +9805,10 @@ async function loadAgingCurves() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = t.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "22px 'Caveat', cursive";
+    ctx.font = "20px 'Caveat', cursive";
     ctx.fillStyle = "#d97757";
     ctx.textAlign = "center";
     ctx.fillText("fumbled the aging data...", canvas.width / 2, canvas.height / 2);
-    console.error("Aging curves load failed:", err);
   }
 }
 
@@ -10169,7 +10161,7 @@ async function loadHeatMap() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "22px 'Caveat', cursive";
+  ctx.font = "20px 'Caveat', cursive";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("pulling positional film...", canvas.width / 2, canvas.height / 2);
@@ -10184,11 +10176,10 @@ async function loadHeatMap() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = th.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "22px 'Caveat', cursive";
+    ctx.font = "20px 'Caveat', cursive";
     ctx.fillStyle = "#d97757";
     ctx.textAlign = "center";
     ctx.fillText("fumbled the heat map data...", canvas.width / 2, canvas.height / 2);
-    console.error("Heat map load failed:", err);
   }
 }
 
@@ -10226,7 +10217,7 @@ function renderHeatMapChart(targetCanvas) {
   ctx.fillRect(0, 0, totalW, totalH);
 
   // Title
-  ctx.font = "22px 'Luckiest Guy', cursive";
+  ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(_hmState.position + " Heat Map", padL, 30);
@@ -11115,7 +11106,6 @@ function _taSetupSearch(side) {
         }).join("");
         autoDiv.style.display = "";
       } catch (err) {
-        console.error("Trade search failed:", err);
         autoDiv.style.display = "none";
       }
     }, 200);
@@ -11151,7 +11141,6 @@ async function _taAddPlayer(side, playerId) {
         _taState.valueCache[playerId] = playerData;
       }
     } catch (err) {
-      console.error("Trade value fetch failed:", err);
     }
   }
   if (!playerData) return;
@@ -11327,7 +11316,7 @@ function exportTradeAnalyzerPNG() {
   ctx.strokeRect(4, 4, W - 8, H - 8);
 
   // Title
-  ctx.font = "28px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText("Razzle Trade Analyzer", W / 2, 44);
@@ -11443,7 +11432,7 @@ function exportTradeAnalyzerPNG() {
   // VS divider
   ctx.save();
   ctx.fillStyle = t.ink;
-  ctx.font = "22px 'Luckiest Guy', cursive";
+  ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, topY + 200);
   ctx.restore();
@@ -11584,7 +11573,6 @@ async function _taFetchPickValues(year) {
     const resp = await apiFetch("/api/trade/pick-values?year=" + year);
     return resp.picks || [];
   } catch (err) {
-    console.error("Pick values fetch failed:", err);
     return [];
   }
 }
@@ -12184,7 +12172,7 @@ function exportRosterTeamCard() {
 
   // Header
   ctx.fillStyle = t.ink;
-  ctx.font = "28px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("MY DYNASTY ROSTER", W / 2, 44);
   ctx.font = "16px 'Caveat', cursive";
@@ -12209,7 +12197,7 @@ function exportRosterTeamCard() {
 
   // Total value
   ctx.fillStyle = t.ink;
-  ctx.font = "26px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(r.total_value + " pts", 120, y + 30);
   ctx.font = "14px 'Space Mono', monospace";
@@ -12775,7 +12763,7 @@ function exportCompsImage() {
     // Similarity score
     const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : (getComputedStyle(document.documentElement).getPropertyValue('--ink-medium').trim() || "#5c4a3d");
     ctx.fillStyle = simColor;
-    ctx.font = "28px 'Luckiest Guy', cursive";
+    ctx.font = "24px 'Luckiest Guy', cursive";
     ctx.textAlign = "right";
     ctx.fillText(`${c.similarity}%`, W - padX - 16, cardY + 35);
     ctx.fillStyle = t.inkLight;
@@ -13196,7 +13184,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = t.ink;
   ctx.fillRect(0, 0, 800, 56);
   ctx.fillStyle = t.bgCard;
-  ctx.font = "22px 'Luckiest Guy', cursive";
+  ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`BOOM/BUST PROFILE — ${player.full_name}`, 20, 36);
 
@@ -13251,7 +13239,7 @@ function exportBoomBustImage() {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.fillStyle = cardStats[i].color;
-    ctx.font = "22px 'Luckiest Guy', cursive";
+    ctx.font = "20px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(cardStats[i].value, x + cardW / 2, startY + 28);
     ctx.fillStyle = t.inkMedium;

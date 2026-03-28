@@ -45,7 +45,6 @@ async function fetchStoreFormulas() {
       ratingCount: Number(f.rating_count) || 0
     }));
   } catch (e) {
-    console.error("Formula store fetch failed:", e);
     storeState.formulas = [];
   }
   storeState.loading = false;
@@ -162,7 +161,6 @@ async function rateFormula(formulaId, rating) {
       await fetchStoreFormulas();
     }
   } catch (e) {
-    console.error("Rate formula failed:", e);
   } finally {
     _ratingInProgress[formulaId] = false;
   }
@@ -193,7 +191,6 @@ async function submitReview(formulaId) {
       await fetchStoreFormulas();
     }
   } catch (e) {
-    console.error("Submit review failed:", e);
   }
 }
 
@@ -256,7 +253,6 @@ async function installFormula(formulaId) {
     showStoreToast("formula imported.");
     renderFormulaStore();
   } catch (e) {
-    console.error("Install formula failed:", e);
     showStoreToast("fumbled the import. try again.");
   }
 }
@@ -441,7 +437,6 @@ async function submitPublish() {
       showStoreToast(data.message || "couldn't publish. Razzle's on it.");
     }
   } catch (e) {
-    console.error("Publish failed:", e);
     showStoreToast("couldn't publish. Razzle's on it.");
   } finally {
     if (publishBtn) { publishBtn.disabled = false; publishBtn.textContent = 'Publish'; }

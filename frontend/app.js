@@ -597,7 +597,7 @@ function drawRazzleWatermark(ctx, canvas, opts) {
   }
   ctx.fillStyle = wmAlpha;
   ctx.textAlign = "right";
-  ctx.font = "600 28px Caveat, cursive";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillText("razzle.lol", canvas.width - 20, canvas.height - 30);
   if (opts.url) {
     var u = opts.url.replace(/^https?:\/\//, "");
@@ -1657,7 +1657,7 @@ function migrateLocalFormulas() {
       body: JSON.stringify({ formulas: formulas })
     }).then(function(r) {
       if (r.ok) localStorage.removeItem("razzle_formulas");
-    }).catch(function(err) { console.warn("sync failed:", err.message || err); });
+    }).catch(function() {});
   } catch (e) { /* ignore */ }
 }
 
