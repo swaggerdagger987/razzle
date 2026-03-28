@@ -1768,3 +1768,9 @@ tr:hover .notes-cell .note-pencil {
 [data-theme="dark"] .cmd-palette-pos {
   color: var(--bg);
 }
+[data-theme="dark"] input:-webkit-autofill,
+[data-theme="dark"] input:-webkit-autofill:hover,
+[data-theme="dark"] input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px var(--bg-card) inset;
+  -webkit-text-fill-color: var(--ink);
+}
