@@ -80,18 +80,38 @@ The TICKETS.md P0 "Agent Presence Invisible" concern was verified:
 
 **All audit findings are either fixed or already decomposed into tickets.**
 
-- 287 triage entries across 24 invocations cover all findings
-- 170+ tickets in tickets/ directory (S0 through S3, CEO, QA)
-- 0 net-new tickets required
+- 288 triage entries across 26 invocations cover all findings
+- 248 tickets in tickets/ directory (S0 through S3, CEO, QA)
+- 1 net-new ticket added from functional QA cross-reference (2026-03-28)
+
+## Functional QA Cross-Reference (2026-03-28 Session 26)
+
+Cross-referenced 15 open FUNC findings against existing tickets. Investigated each at file:line level:
+
+| Finding | Code Status | Action |
+|---|---|---|
+| FUNC-001: seasonSelect null crash | **OPEN** — no guard at lab.js:3039 | **NEW TICKET: S1-041** |
+| FUNC-012 L2: season_type filters | FIXED — all 11 query functions have filters | No ticket needed |
+| FUNC-017: breakout badge PPG | FIXED — c3f39be9 uses PPG + 10-game mins | No ticket needed |
+| FUNC-016: escapeAttr in onclick | FIXED — switched to data-attr + listeners | No ticket needed |
+| FUNC-025: safe_sorts whitelist | FIXED — all 4 columns present | No ticket needed |
+| FUNC-028: QB PPO cascade | Code correct — uses attempts+carries for QBs | No ticket needed |
+| FUNC-029: snap_share thresholds | NOT A BUG — thresholds already percentage | No ticket needed |
+| FUNC-035: QB efficiency | Code fixed — uses pass_attempts; data fix via S1-033 | No ticket needed |
+| FUNC-039: nudgeFadeIn keyframes | FIXED — defined in CSS + runtime injection | No ticket needed |
+| FUNC-042: over-fetch cap 500 | NOT A BUG — LIMIT 5000 in career mode | No ticket needed |
+| FUNC-052: TD Regression fields | FIXED — field names match | No ticket needed |
+| IEEE 754 artifacts | FIXED — all ROUND() calls in place | No ticket needed |
+| Pin player vanish | FIXED — _pinnedDataCache fallback | No ticket needed |
 
 ## Ticket Count Summary
 
 | Severity | Count | Status |
 |---|---|---|
 | S0 | 8 | All OPEN |
-| S1 | 32 | All OPEN |
+| S1 | 33 | All OPEN |
 | S2 | 99 | All OPEN |
 | S3 | 89 | All OPEN |
 | CEO | 18 | All OPEN |
 | QA | 1 | All OPEN |
-| **Total** | **247** | |
+| **Total** | **248** | |
