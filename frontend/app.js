@@ -1434,24 +1434,24 @@ async function startCheckout(interval) {
     });
     if (!resp.ok) {
       _showToast("checkout hit a wall. try again or ping support.", "error");
-      return;
-    }
-    var data = await resp.json();
-    if (data.checkout_url) {
-      window.location.href = data.checkout_url;
-      return; // Don't reset — navigating away
     } else {
-      _showToast(data.error || "checkout got stuffed at the line. give it another shot.", "error");
+      var data = await resp.json();
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+        return; // Don't reset — navigating away
+      } else {
+        _showToast(data.error || "checkout got stuffed at the line. give it another shot.", "error");
+      }
     }
   } catch (e) {
     _showToast("network fumble. try again.", "error");
-  } finally {
-    _checkoutInProgress = false;
-    if (btn && origText) {
-      btn.textContent = origText;
-      btn.disabled = false;
-      btn.style.opacity = "";
-    }
+  }
+  // Restore button state only if we didn't redirect (redirect = page unloads)
+  _checkoutInProgress = false;
+  if (btn && origText) {
+    btn.textContent = origText;
+    btn.disabled = false;
+    btn.style.opacity = "";
   }
 }
 
