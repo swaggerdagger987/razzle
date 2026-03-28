@@ -269,6 +269,9 @@ function toggleWatchlistPlayer(playerId, name, position, team, universe) {
   var idx = list.findIndex(function(p) { return p.player_id === playerId; });
   if (idx >= 0) {
     list.splice(idx, 1);
+    saveWatchlist(list);
+    renderTable();
+    if (typeof _showToast === "function") _showToast("off the board");
   } else {
     list.push({
       player_id: playerId,
@@ -279,9 +282,10 @@ function toggleWatchlistPlayer(playerId, name, position, team, universe) {
       tier: 0,
       added_at: Date.now()
     });
+    saveWatchlist(list);
+    renderTable();
+    if (typeof _showToast === "function") _showToast("on the board");
   }
-  saveWatchlist(list);
-  renderTable();
 }
 
 function setWatchlistTier(playerId, tier) {
