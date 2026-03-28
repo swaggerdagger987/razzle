@@ -26,13 +26,6 @@ def test_filter_options(client):
     assert "seasons" in data
 
 
-def test_featured(client):
-    resp = client.get("/api/featured")
-    assert resp.status_code == 200
-    data = resp.json()
-    assert "season" in data
-
-
 def test_players_with_position_filter(client):
     resp = client.get("/api/players?position=QB")
     assert resp.status_code == 200

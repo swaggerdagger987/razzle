@@ -838,12 +838,6 @@ def health(request: Request):
     )
 
 
-@app.get("/api/featured")
-def featured():
-    data = live_data.fetch_featured()
-    return JSONResponse(content=data, headers={"Cache-Control": "public, max-age=300"})
-
-
 # ---------------------------------------------------------------------------
 # Auth endpoints
 # ---------------------------------------------------------------------------
@@ -1948,14 +1942,6 @@ def draft_class_tracker(draft_year: int = 0, position: str = ""):
     )
 
 
-@app.get("/api/athletic-radar")
-def athletic_radar(position: str = "", draft_year: int = 0):
-    pos = position.strip().upper() if position else ""
-    if pos and pos not in ("QB", "RB", "WR", "TE", "OL", "DL", "LB", "CB", "S", "EDGE"):
-        pos = ""
-    return live_data.fetch_athletic_radar(position=pos, draft_year=draft_year)
-
-
 @app.get("/api/prospect-options")
 def prospect_options():
     return live_data.fetch_prospect_years()
@@ -2026,20 +2012,6 @@ def college_leaders(season: int = None, position: str = "", limit: int = 10):
 @app.get("/api/college/trends")
 def college_trends(season: int = None, position: str = "", limit: int = 30):
     return live_data.fetch_college_trends(
-        season=season, position=position or None, limit=max(1, min(limit, 200)),
-    )
-
-
-@app.get("/api/college/rankings")
-def college_rankings(season: int = None, position: str = "", limit: int = 50):
-    return live_data.fetch_college_rankings(
-        season=season, position=position or None, limit=max(1, min(limit, 200)),
-    )
-
-
-@app.get("/api/college/streaks")
-def college_streaks(season: int = None, position: str = "", limit: int = 25):
-    return live_data.fetch_college_streaks(
         season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
