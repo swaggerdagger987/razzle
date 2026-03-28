@@ -612,7 +612,8 @@ button.nav-search-hint {
   cursor: pointer;
 }
 
-.nav-dropdown-item:hover {
+.nav-dropdown-item:hover,
+.nav-dropdown-item:focus-visible {
   background: var(--bg-warm);
 }
 
@@ -1214,6 +1215,7 @@ body {
   transition: background 0.1s;
 }
 .cmd-palette-item:hover,
+.cmd-palette-item:focus-visible,
 .cmd-palette-item.active {
   background: var(--bg-warm);
 }
