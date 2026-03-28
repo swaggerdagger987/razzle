@@ -61,6 +61,7 @@ SNAP_COUNTS_URL = "https://github.com/nflverse/nflverse-data/releases/download/s
 PBP_URL = "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.csv.gz"
 SCHEDULE_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
 INJURIES_URL = "https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_{season}.csv"
+PLAYERS_URL = "https://github.com/nflverse/nflverse-data/releases/download/players/players.csv"
 
 
 def utc_now():
@@ -836,6 +837,35 @@ def sync_rosters(conn, seasons=None):
     return enriched
 
 
+def sync_headshots(conn):
+    """Fetch nflverse players.csv and backfill headshot_url for all players."""
+    print("  Fetching nflverse players.csv for headshots...")
+    try:
+        rows = fetch_csv(PLAYERS_URL)
+    except Exception as e:
+        print(f"  Players CSV fetch failed: {e}")
+        return 0
+
+    updated = 0
+    for row in rows:
+        gsis = (row.get("gsis_id") or "").strip()
+        if not gsis:
+            continue
+        headshot = (row.get("headshot_url") or row.get("headshot") or "").strip()
+        if not headshot:
+            continue
+        result = conn.execute(
+            "UPDATE players SET headshot_url = ? WHERE (gsis_id = ? OR player_id = ?) AND (headshot_url IS NULL OR headshot_url = '')",
+            (headshot, gsis, gsis),
+        )
+        if result.rowcount > 0:
+            updated += 1
+
+    conn.commit()
+    print(f"  Updated {updated} player headshots from nflverse players.csv.")
+    return updated
+
+
 # ---------------------------------------------------------------------------
 # Play-by-play extraction
 # ---------------------------------------------------------------------------
@@ -1344,6 +1374,10 @@ def main():
         # Enrich players with age/demographics from roster CSVs
         print(f"\nEnriching players with roster demographics...")
         sync_rosters(conn, sorted(seasons))
+
+        # Backfill headshot URLs from nflverse players.csv
+        print(f"\nBackfilling player headshots...")
+        sync_headshots(conn)
 
         # Refresh players.team from most recent game data
         print("\nRefreshing players.team from latest game data...")
