@@ -7598,7 +7598,7 @@
 
       chartCanvas.addEventListener('click', function() {
         if (hoveredPlayer && hoveredPlayer.player_id) {
-          window.open('/player/' + encodeURIComponent(hoveredPlayer.player_id), '_blank');
+          window.open('/player/' + encodeURIComponent(hoveredPlayer.player_id), '_blank', 'noopener');
         }
       });
     }
