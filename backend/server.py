@@ -2095,7 +2095,7 @@ async def waitlist(request: Request):
     ip = _get_client_ip(request)
     now_ts = _time.time()
     # Prune stale entries to prevent memory leak
-    if len(_waitlist_rate) > 5000:
+    if len(_waitlist_rate) > 500:
         stale = [k for k, v in _waitlist_rate.items() if now_ts - v > 120]
         for k in stale:
             del _waitlist_rate[k]
