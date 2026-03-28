@@ -1439,7 +1439,7 @@ async function fetchAndRenderProspects(signal, myId) {
     if (myId !== _fetchId) return; // stale response
 
     tbody.innerHTML = "";
-    state.items = data.items || [];
+    state.items = (data.items || []).map(function(p) { return Object.assign({}, p); });
     state.totalCount = data.count || 0;
     state.draftYear = data.draft_year || state.draftYear;
 
@@ -1486,7 +1486,7 @@ async function fetchAndRenderCollege(signal, myId) {
     if (myId !== _fetchId) return; // stale response
 
     tbody.innerHTML = "";
-    state.items = data.items || [];
+    state.items = (data.items || []).map(function(p) { return Object.assign({}, p); });
     state.totalCount = data.count || 0;
     state.collegeSeason = data.season || state.collegeSeason;
 

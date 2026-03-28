@@ -5,6 +5,7 @@ Extracted from _monolith.py in Phase 27 Task 3.
 
 import json
 import logging
+import math
 import re
 import statistics
 
@@ -410,6 +411,9 @@ def _fetch_screener_uncached(body):
                 fval = float(val)
             except (ValueError, TypeError):
                 continue
+            if math.isinf(fval) or math.isnan(fval):
+                continue
+            fval = max(-1e9, min(fval, 1e9))
             sql_expr = FILTER_COLUMN_MAP.get(key)
             if sql_expr:
                 having.append(f"{sql_expr} {op} ?")
