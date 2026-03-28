@@ -34,9 +34,13 @@ function getPlayerIdFromURL() {
 async function loadPlayer(playerId) {
   const page = document.getElementById("playerPage");
   try {
-    const resp = await fetch(`/api/players/${encodeURIComponent(playerId)}/profile`);
+    const ac = new AbortController();
+    const timeout = setTimeout(function() { ac.abort(); }, 10000);
+    const resp = await fetch(`/api/players/${encodeURIComponent(playerId)}/profile`, { signal: ac.signal });
+    clearTimeout(timeout);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
+    if (!data || typeof data !== 'object') throw new Error('empty response');
     _profileData = data;
 
     if (!data.player || !data.player.full_name) {
