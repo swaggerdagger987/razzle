@@ -1994,9 +1994,9 @@ function renderVisibleRows() {
   // Lazy build: only construct HTML for rows about to become visible
   if (_vscrollRenderCtx) {
     var ctx = _vscrollRenderCtx;
-    // Build 10 extra rows above/below the visible+buffer range for smoother scrolling
-    var lazyStart = Math.max(0, startRow - 10);
-    var lazyEnd = Math.min(totalRows, endRow + 10);
+    // Build 20 extra rows above/below the visible+buffer range for smoother fast scrolling
+    var lazyStart = Math.max(0, startRow - 20);
+    var lazyEnd = Math.min(totalRows, endRow + 20);
     for (var li = lazyStart; li < lazyEnd; li++) {
       if (_vscrollRows[li] === undefined && state.items[li]) {
         _vscrollRows[li] = buildRowHTML(state.items[li], ctx.cols, ctx.heatOn, ctx.pctData, li, ctx.barsOn, ctx.pctMode, ctx.leaderRanks, ctx.colDefMap);
