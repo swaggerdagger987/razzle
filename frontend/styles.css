@@ -786,6 +786,14 @@ button.nav-search-hint {
   color: var(--bg);
 }
 
+[data-theme="dark"] .btn-chunky {
+  border-color: var(--ink-light);
+  box-shadow: 4px 4px 0 var(--ink-light);
+}
+[data-theme="dark"] .btn-chunky:hover {
+  box-shadow: 6px 6px 0 var(--ink-light);
+}
+
 .btn-primary {
   font-family: var(--font-mono);
   font-size: 13px;
