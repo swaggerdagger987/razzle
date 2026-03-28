@@ -101,8 +101,14 @@ function saveFormula() {
   addFormulaComponent();
 }
 
-function deleteFormula(name) {
-  if (!confirm("Delete formula \"" + name + "\"?")) return;
+function deleteFormula(name, btn) {
+  if (btn && !btn.dataset.confirming) {
+    btn.dataset.confirming = "1";
+    btn.textContent = "sure?";
+    setTimeout(function() { delete btn.dataset.confirming; btn.textContent = "\u00d7"; }, 3000);
+    return;
+  }
+  if (btn) delete btn.dataset.confirming;
   state.formulas = state.formulas.filter(f => f.name !== name);
   try { localStorage.setItem("razzle_formulas", JSON.stringify(state.formulas)); } catch(e) {}
   _deleteFormulaFromServer(name);

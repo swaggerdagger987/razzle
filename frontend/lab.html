@@ -3412,7 +3412,7 @@
           <div class="tools-dropdown-grid">
             <button class="btn-chunky" onclick="openTradeAnalyzer(); closeToolsDropdown();" style="border-color:var(--orange);">Trade</button>
             <button class="btn-chunky" onclick="openFormulaStore(); closeToolsDropdown();">Formula Store</button>
-            <button class="btn-chunky" id="tagFilterBtn" onclick="toggleTagFilter(); closeToolsDropdown();" oncontextmenu="event.preventDefault(); if(getTaggedCount()>0 && confirm('Clear all player tags?')) clearAllTags();" title="Show only tagged players. Right-click to clear all.">Tags</button>
+            <button class="btn-chunky" id="tagFilterBtn" onclick="toggleTagFilter(); closeToolsDropdown();" oncontextmenu="event.preventDefault(); if(getTaggedCount()>0){if(!this.dataset.confirming){this.dataset.confirming='1';this.textContent='sure? right-click again';var _b=this;setTimeout(function(){delete _b.dataset.confirming;_b.textContent='Tags';},3000);return;}delete this.dataset.confirming;this.textContent='Tags';clearAllTags();}" title="Show only tagged players. Right-click to clear all.">Tags</button>
             <button class="btn-chunky" id="tradeValuesBtn" onclick="openTradeValues(); closeToolsDropdown();" style="display:none; border-color:var(--orange);">Trade Values</button>
             <button class="btn-chunky" id="agingCurvesBtn" onclick="openAgingCurves(); closeToolsDropdown();" style="display:none; border-color:var(--green);">Aging Curves</button>
             <button class="btn-chunky" id="heatMapBtn" onclick="openHeatMap(); closeToolsDropdown();" style="display:none; border-color:var(--red);">Heat Map</button>
