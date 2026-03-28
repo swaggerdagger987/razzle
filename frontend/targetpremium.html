@@ -226,9 +226,7 @@ async function loadData() {
   let url = "/api/target-premium?season=" + state.season;
   if (state.position) url += "&position=" + state.position;
   try {
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error("API error");
-    state.data = await resp.json();
+    state.data = await apiFetch(url);
     render();
   } catch (e) {
     document.getElementById("tp-loading").style.display = "none";
