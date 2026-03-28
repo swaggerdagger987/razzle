@@ -690,6 +690,10 @@ async function apiFetch(path, options = {}) {
   // Auto-include auth headers
   const authHeaders = getAuthHeaders();
   options.headers = Object.assign({}, authHeaders, options.headers || {});
+  // 15s timeout for all API calls (standalone pages don't have their own)
+  if (!options.signal) {
+    options.signal = AbortSignal.timeout ? AbortSignal.timeout(15000) : undefined;
+  }
   const resp = await fetch(url, options);
   if (resp.status === 401) {
     try { localStorage.removeItem("razzle_token"); localStorage.removeItem("razzle_user"); } catch (e) {}
