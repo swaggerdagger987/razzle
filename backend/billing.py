@@ -115,6 +115,11 @@ def initialize_subscriptions_table():
             conn.execute("ALTER TABLE subscriptions ADD COLUMN plan_type TEXT DEFAULT 'subscription'")
         except Exception:
             logger.debug("plan_type column already exists or migration failed", exc_info=True)
+        # Add is_early_adopter flag for accurate EA slot counting
+        try:
+            conn.execute("ALTER TABLE subscriptions ADD COLUMN is_early_adopter INTEGER DEFAULT 0")
+        except Exception:
+            logger.debug("is_early_adopter column already exists or migration failed", exc_info=True)
         # Early adopter reservation table for atomic slot checking
         conn.execute("""
             CREATE TABLE IF NOT EXISTS ea_reservations (
@@ -135,9 +140,9 @@ def _reserve_ea_slot(user_id: int, tier: str, limit: int, plan_filter: str) -> d
     with auth_module.get_users_db() as conn:
         # Clean up expired reservations first
         conn.execute("DELETE FROM ea_reservations WHERE expires_at < CURRENT_TIMESTAMP")
-        # Atomic check: count confirmed users + active reservations
+        # Atomic check: count confirmed EA subscribers + active reservations
         confirmed = conn.execute(
-            f"SELECT COUNT(*) FROM users WHERE plan IN {plan_filter}"
+            f"SELECT COUNT(*) FROM subscriptions WHERE plan IN {plan_filter} AND is_early_adopter = 1 AND status IN ('active', 'trialing')"
         ).fetchone()[0]
         reserved = conn.execute(
             "SELECT COUNT(*) FROM ea_reservations WHERE tier = ? AND expires_at > CURRENT_TIMESTAMP",
@@ -177,10 +182,19 @@ def get_subscriber_counts() -> dict:
         lifetime_count = conn.execute(
             "SELECT COUNT(*) FROM users WHERE plan IN ('pro_lifetime', 'elite_lifetime')"
         ).fetchone()[0]
+        # Count only EA subscribers for slot cap checking
+        ea_pro_count = conn.execute(
+            "SELECT COUNT(*) FROM subscriptions WHERE plan IN ('pro', 'pro_lifetime') AND is_early_adopter = 1 AND status IN ('active', 'trialing')"
+        ).fetchone()[0]
+        ea_elite_count = conn.execute(
+            "SELECT COUNT(*) FROM subscriptions WHERE plan IN ('elite', 'elite_lifetime') AND is_early_adopter = 1 AND status IN ('active', 'trialing')"
+        ).fetchone()[0]
         return {
             "pro_total": pro_count,
             "elite_total": elite_count,
             "lifetime_total": lifetime_count,
+            "ea_pro_count": ea_pro_count,
+            "ea_elite_count": ea_elite_count,
         }
 
 
@@ -192,17 +206,17 @@ def get_early_adopter_status() -> dict:
             "enabled": EA_ENABLED,
             "pro": {
                 "limit": EA_PRO_LIMIT,
-                "used": counts["pro_total"],
-                "remaining": max(0, EA_PRO_LIMIT - counts["pro_total"]),
-                "available": EA_ENABLED and counts["pro_total"] < EA_PRO_LIMIT,
+                "used": counts["ea_pro_count"],
+                "remaining": max(0, EA_PRO_LIMIT - counts["ea_pro_count"]),
+                "available": EA_ENABLED and counts["ea_pro_count"] < EA_PRO_LIMIT,
                 "price": "$59.99/yr",
                 "savings": "25% off",
             },
             "elite": {
                 "limit": EA_ELITE_LIMIT,
-                "used": counts["elite_total"],
-                "remaining": max(0, EA_ELITE_LIMIT - counts["elite_total"]),
-                "available": EA_ENABLED and counts["elite_total"] < EA_ELITE_LIMIT,
+                "used": counts["ea_elite_count"],
+                "remaining": max(0, EA_ELITE_LIMIT - counts["ea_elite_count"]),
+                "available": EA_ENABLED and counts["ea_elite_count"] < EA_ELITE_LIMIT,
                 "price": "$99.99/yr",
                 "savings": "33% off",
             },
@@ -356,11 +370,11 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
                 "mode": "payment",
                 "success_url": SUCCESS_URL,
                 "cancel_url": CANCEL_URL,
-                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier},
+                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier, "is_early_adopter": "1" if is_early_adopter else "0"},
             }
         else:
             # Subscription mode (regular, early adopter)
-            sub_data = {"metadata": {"plan_tier": plan_tier}}
+            sub_data = {"metadata": {"plan_tier": plan_tier, "is_early_adopter": "1" if is_early_adopter else "0"}}
             if trial_days:
                 sub_data["trial_period_days"] = trial_days
 
@@ -371,7 +385,7 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
                 "mode": "subscription",
                 "success_url": SUCCESS_URL,
                 "cancel_url": CANCEL_URL,
-                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier},
+                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier, "is_early_adopter": "1" if is_early_adopter else "0"},
                 "subscription_data": sub_data,
             }
 
@@ -455,6 +469,7 @@ def _handle_checkout_completed(session):
     metadata = session.get("metadata", {})
     user_id = metadata.get("user_id")
     plan_tier = metadata.get("plan_tier", "pro")  # default to pro for legacy
+    ea_flag = 1 if metadata.get("is_early_adopter") == "1" else 0
 
     # Validate plan tier
     if plan_tier not in ("pro", "elite", "pro_lifetime", "elite_lifetime"):
@@ -506,14 +521,14 @@ def _handle_checkout_completed(session):
                 UPDATE subscriptions SET
                     stripe_customer_id = ?, stripe_subscription_id = ?,
                     plan = ?, status = ?, trial_used = MAX(trial_used, ?), trial_end = ?,
-                    plan_type = ?, updated_at = CURRENT_TIMESTAMP
+                    plan_type = ?, is_early_adopter = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
-            """, (customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type, _uid))
+            """, (customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type, ea_flag, _uid))
         else:
             conn.execute("""
-                INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end, plan_type)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type))
+                INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end, plan_type, is_early_adopter)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type, ea_flag))
 
         conn.commit()
     # Clear any early adopter reservation now that checkout is confirmed
