@@ -2103,6 +2103,7 @@ window.addEventListener("razzle-plan-changed", function(e) {
   });
 
   function _triggerKonami() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     // Confetti burst
     for (var i = 0; i < 50; i++) {
       var c = document.createElement("div");
