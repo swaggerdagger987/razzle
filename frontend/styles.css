@@ -1419,6 +1419,27 @@ body {
   border-radius: var(--radius-sm);
 }
 
+/* Footer mobile: collapse grid, limit visible categories */
+@media (max-width: 480px) {
+  .site-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 12px;
+    max-height: 260px;
+    overflow: hidden;
+    position: relative;
+  }
+  .site-footer-grid::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(transparent, var(--bg));
+    pointer-events: none;
+  }
+}
+
 /* ===== Player Tags ===== */
 .player-tag-chip {
   display: inline-block;
