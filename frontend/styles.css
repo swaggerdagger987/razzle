@@ -1789,6 +1789,21 @@ tr:hover .notes-cell .note-pencil {
   -webkit-text-fill-color: var(--ink);
 }
 
+/* ===== HIDE NUMBER INPUT SPINNERS ===== */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ===== SCROLL MARGIN FOR STICKY NAV ===== */
+[id] {
+  scroll-margin-top: 80px;
+}
+
 /* ===== TOUCH DEVICE HOVER GUARD ===== */
 /* Prevent sticky hover states on touch devices (phones, tablets) */
 @media (hover: none) {
@@ -1808,4 +1823,17 @@ tr:hover .notes-cell .note-pencil {
   .footer-link:hover {
     transform: none !important;
   }
+}
+
+/* ===== DISABLED & LOCKED STATES ===== */
+.pro-locked, .elite-locked {
+  cursor: not-allowed;
+}
+button:disabled, .btn-chunky:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+/* Text links: underline on hover for affordance */
+.footer-link:hover, a.nav-dropdown-item:hover {
+  text-decoration: underline;
 }
