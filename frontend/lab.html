@@ -1136,6 +1136,16 @@
     display: flex; justify-content: space-between;
     font-size: 9px; color: var(--ink-light); margin-top: 2px;
   }
+  [data-theme="dark"] .colstats-popover {
+    background: var(--bg-card); border-color: var(--ink-faint);
+  }
+  [data-theme="dark"] .colstats-bar {
+    background: var(--orange); border-color: var(--ink-faint);
+  }
+  [data-theme="dark"] .colstats-label,
+  [data-theme="dark"] .colstats-val {
+    color: var(--ink);
+  }
   .screener-table .col-rank { width: 36px; text-align: center; font-size: 11px; color: var(--ink-light); font-weight: 600; padding: 7px 2px; white-space: nowrap; }
 
   /* ─── Frozen utility columns (star, checkbox, pin, rank, player) ─── */
