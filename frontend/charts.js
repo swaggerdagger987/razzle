@@ -338,7 +338,7 @@ function drawScatter() {
   ctx.restore();
 
   // Dots
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColors = typeof getPosColors === 'function' ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   for (const p of data) {
     const x = toX(p[xKey]);
     const y = toY(p[yKey]);
@@ -669,7 +669,7 @@ function drawHeatmap() {
   ctx.fillRect(0, 0, W, H);
 
   // Position colors
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColors = typeof getPosColors === 'function' ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const posColor = posColors[pos] || "#d97757";
 
   // Title
@@ -1018,7 +1018,7 @@ function exportNFLCompareImage() {
   if (!players || players.length < 2) return;
 
   const radarCanvas = document.getElementById("compareRadar");
-  const posColors = { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColors = typeof getPosColors === 'function' ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
   const padX = 30, padY = 30;
   const W = 800;
 

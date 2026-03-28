@@ -5743,7 +5743,7 @@
 
   // ─── 38. CAREER COMPARISON ──────────────────────────────────────
   defs.push({ name: 'career-compare', render: function(el) {
-    var slotColors = ['#d97757', '#5b7fff', '#2ec4b6'];
+    var slotColors = [POS_COLORS.WR, POS_COLORS.QB, POS_COLORS.RB];
     var players = []; // {player_id, full_name, position, team, data}
 
     el.innerHTML =
@@ -6356,7 +6356,7 @@
   defs.push({ name: 'fptsbreakdown', render: function(el) {
     var curPos = '';
     var curSeason = _latestSeason;
-    var compColors = { pass_yd: '#5b7fff', rush_yd: '#2ec4b6', rec_yd: '#d97757', rec: '#8b5cf6', td: '#e63946' };
+    var compColors = { pass_yd: POS_COLORS.QB, rush_yd: POS_COLORS.RB, rec_yd: POS_COLORS.WR, rec: POS_COLORS.TE, td: '#e63946' };
     var compLabels = { pass_yd: 'Pass Yd', rush_yd: 'Rush Yd', rec_yd: 'Rec Yd', rec: 'Receptions', td: 'Touchdowns' };
 
     el.innerHTML =
@@ -9999,7 +9999,7 @@
   defs.push({ name: 'powerrankings', render: function(el) {
     if (showNflOnlyMsg(el, 'powerrankings', 'Dynasty Power Rankings', 'which NFL teams have the most fantasy-valuable rosters')) return;
 
-    var POS_COLS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+    var POS_COLS = POS_COLORS;
     var panelData = null;
     var selectedTeam = null;
 
@@ -10246,7 +10246,7 @@
   // ===== GAME SCRIPT =====
   defs.push({ name: 'gamescript', render: function(el) {
     if (showNflOnlyMsg(el, 'gamescript', 'Game Script', 'see how game script affects fantasy production')) return;
-    var POS_COLS = { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+    var POS_COLS = POS_COLORS;
     var curPos = '';
     var seasonsPopulated = false;
 
