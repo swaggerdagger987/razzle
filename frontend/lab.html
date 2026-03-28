@@ -4930,6 +4930,8 @@
         // Restore all items
         items.forEach(function(item) { item.classList.remove('search-hidden'); });
         cats.forEach(function(cat) { cat.classList.remove('search-hidden'); });
+        var emptyHide = document.getElementById('sidebarSearchEmpty');
+        if (emptyHide) emptyHide.style.display = 'none';
         // Restore category collapse state
         if (typeof _restoreCatCollapseState === 'function') _restoreCatCollapseState();
         return;
@@ -4965,6 +4967,21 @@
 
       // Override category collapse — show matching items regardless
       if (typeof _overrideCatForSearch === 'function') _overrideCatForSearch();
+
+      // Show empty state if no matches
+      var emptyEl = document.getElementById('sidebarSearchEmpty');
+      var anyVisible = false;
+      for (var k = 0; k < items.length; k++) {
+        if (!items[k].classList.contains('search-hidden')) { anyVisible = true; break; }
+      }
+      if (!emptyEl) {
+        emptyEl = document.createElement('div');
+        emptyEl.id = 'sidebarSearchEmpty';
+        emptyEl.style.cssText = 'padding:16px 12px;font-family:var(--font-hand);font-size:14px;color:var(--ink-light);text-align:center;';
+        emptyEl.textContent = 'nothing matches that search, coach.';
+        sidebar.appendChild(emptyEl);
+      }
+      emptyEl.style.display = anyVisible ? 'none' : 'block';
     });
 
     // Click search icon in collapsed mode → expand sidebar and focus
