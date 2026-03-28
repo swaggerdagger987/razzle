@@ -384,7 +384,7 @@ function _pushWatchlistToServer(token, base, list) {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ players: payload })
-  }).catch(function() {});
+  }).catch(function(err) { console.warn("sync failed:", err.message || err); });
 }
 
 function _pushWatchlistAfterChange() {
@@ -4617,7 +4617,7 @@ function _pushAllViewsToServer(token, base) {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ views: views })
-  }).catch(function() {});
+  }).catch(function(err) { console.warn("sync failed:", err.message || err); });
 }
 
 function _pushViewsAfterChange() {

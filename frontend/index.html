@@ -1050,7 +1050,9 @@ window._miniFilter = function(pos) {
 function _fetchMiniScreener() {
   var tbody = document.getElementById('miniScreenerRows');
   if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:32px; font-family:var(--font-hand); color:var(--ink-light);">pulling film...</td></tr>';
-  fetch('/api/players?limit=60&sort=fantasy_points_ppr&order=desc&min_games=8')
+  var ctrl = new AbortController();
+  var timeoutId = setTimeout(function() { ctrl.abort(); }, 10000);
+  fetch('/api/players?limit=60&sort=fantasy_points_ppr&order=desc&min_games=8', { signal: ctrl.signal })
     .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(data) {
       _miniData = (data.items || data.players || []).map(function(p) {
@@ -1068,7 +1070,8 @@ function _fetchMiniScreener() {
     .catch(function() {
       var tb = document.getElementById('miniScreenerRows');
       if (tb) tb.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; font-family:var(--font-hand); color:var(--ink-light);">couldn\'t reach the film room. <a href="#" onclick="_fetchMiniScreener(); return false;" style="color:var(--orange); text-decoration:underline;">try again</a> or <a href="/lab.html" style="color:var(--orange);">open the screener</a> directly.</td></tr>';
-    });
+    })
+    .finally(function() { clearTimeout(timeoutId); });
 }
 _fetchMiniScreener();
 </script>

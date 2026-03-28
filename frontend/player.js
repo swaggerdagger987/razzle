@@ -754,7 +754,7 @@ function openCompareSearch() {
               '<span style="font-weight:700;">' + esc(p.full_name) + '</span> <span style="color:var(--ink-light);">' + esc(p.position || "") + ' ' + esc(p.team || "") + '</span></div>';
           }).join("");
           // Event delegation handled below (avoids listener leak per search)
-        }).catch(function() {});
+        }).catch(function(err) { console.warn("sync failed:", err.message || err); });
     }, 250);
   });
 

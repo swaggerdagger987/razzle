@@ -1653,7 +1653,7 @@ function migrateLocalFormulas() {
       body: JSON.stringify({ formulas: formulas })
     }).then(function(r) {
       if (r.ok) localStorage.removeItem("razzle_formulas");
-    }).catch(function() {});
+    }).catch(function(err) { console.warn("sync failed:", err.message || err); });
   } catch (e) { /* ignore */ }
 }
 

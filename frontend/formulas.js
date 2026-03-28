@@ -307,7 +307,7 @@ function _syncFormulaToServer(name, components) {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ name: name, weights: weights })
-  }).catch(function() {});
+  }).catch(function(err) { console.warn("sync failed:", err.message || err); });
 }
 
 function _deleteFormulaFromServer(name) {
@@ -323,7 +323,7 @@ function _deleteFormulaFromServer(name) {
       fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/user/formulas/" + encodeURIComponent(match.id), {
         method: "DELETE",
         headers: { "Authorization": "Bearer " + token }
-      }).then(function(r) { if (!r.ok) console.warn("Formula delete failed:", r.status); }).catch(function() {});
+      }).then(function(r) { if (!r.ok) console.warn("Formula delete failed:", r.status); }).catch(function(err) { console.warn("sync failed:", err.message || err); });
     }
-  }).catch(function() {});
+  }).catch(function(err) { console.warn("sync failed:", err.message || err); });
 }

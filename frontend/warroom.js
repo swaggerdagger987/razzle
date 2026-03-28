@@ -2748,7 +2748,7 @@ function syncQuotaFromServer() {
           _setLocalQueryCount(data.used);
           updateQueryLimitBadge();
         }
-      }).catch(function() {});
+      }).catch(function(err) { console.warn("sync failed:", err.message || err); });
   } catch (e) {}
 }
 
@@ -3651,7 +3651,7 @@ function clearWarRoomMemory() {
       fetch(
         (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/user/memory',
         { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } }
-      ).catch(function() {});
+      ).catch(function(err) { console.warn("sync failed:", err.message || err); });
     }
     _serverMemoryCache = null;
   }
