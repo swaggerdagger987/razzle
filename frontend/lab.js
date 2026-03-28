@@ -478,6 +478,7 @@ function updateTagFilterBadge() {
 
 // Tag picker popup
 let _tagPickerVisible = false;
+let _tagPickerListenerAttached = false;
 
 function showTagPicker(playerId, anchorEl) {
   let picker = document.getElementById("tagPicker");
@@ -517,19 +518,14 @@ function showTagPicker(playerId, anchorEl) {
   picker.style.left = left + "px";
   _tagPickerVisible = true;
 
-  // Close on outside click (once)
-  setTimeout(function() {
-    document.addEventListener("click", _closeTagPickerOutside, { once: true });
-  }, 0);
-}
-
-function _closeTagPickerOutside(e) {
-  const picker = document.getElementById("tagPicker");
-  if (picker && !picker.contains(e.target)) {
-    hideTagPicker();
-  } else if (picker) {
-    // Re-attach if clicked inside
-    document.addEventListener("click", _closeTagPickerOutside, { once: true });
+  // Close on outside click — persistent listener, checks visibility
+  if (!_tagPickerListenerAttached) {
+    _tagPickerListenerAttached = true;
+    document.addEventListener("click", function(e) {
+      if (!_tagPickerVisible) return;
+      var picker = document.getElementById("tagPicker");
+      if (picker && !picker.contains(e.target)) hideTagPicker();
+    });
   }
 }
 
@@ -589,6 +585,7 @@ function setPlayerNote(playerId, text) {
 }
 
 let _noteEditorVisible = false;
+let _noteEditorListenerAttached = false;
 let _noteEditorPlayerId = null;
 
 function showNoteEditor(playerId, anchorEl) {
@@ -636,18 +633,14 @@ function showNoteEditor(playerId, anchorEl) {
     if (e.key === "Escape") { e.stopPropagation(); hideNoteEditor(); }
   });
 
-  // Close on outside click (delayed to avoid immediate close)
-  setTimeout(function() {
-    document.addEventListener("click", _closeNoteEditorOutside, { once: true });
-  }, 50);
-}
-
-function _closeNoteEditorOutside(e) {
-  const editor = document.getElementById("noteEditor");
-  if (editor && !editor.contains(e.target)) {
-    hideNoteEditor();
-  } else if (editor) {
-    document.addEventListener("click", _closeNoteEditorOutside, { once: true });
+  // Close on outside click — persistent listener, checks visibility
+  if (!_noteEditorListenerAttached) {
+    _noteEditorListenerAttached = true;
+    document.addEventListener("click", function(e) {
+      if (!_noteEditorVisible) return;
+      var editor = document.getElementById("noteEditor");
+      if (editor && !editor.contains(e.target)) hideNoteEditor();
+    });
   }
 }
 
