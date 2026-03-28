@@ -514,6 +514,16 @@ var RAZZLE_LOADING = [
   "analyzing target shares..."
 ];
 
+// Randomize hardcoded "pulling film..." loading text across all pages
+document.addEventListener("DOMContentLoaded", function() {
+  var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    if (walker.currentNode.textContent.trim() === "pulling film...") {
+      walker.currentNode.textContent = RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)];
+    }
+  }
+});
+
 function razzleError(panelId) {
   var pid = panelId || window._currentPanelName;
   if (pid && typeof getErrorText === 'function') return getErrorText(pid);
