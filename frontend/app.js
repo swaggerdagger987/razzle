@@ -102,7 +102,7 @@ function getCanvasTheme() {
     bgCard: isDark ? "#4a3728" : "#f7efe5",
     ink: isDark ? "#ede0cf" : "#2d1f14",
     inkMedium: isDark ? "#c4b5a5" : "#5c4a3d",
-    inkLight: isDark ? "#8a7565" : "#8a7565",
+    inkLight: isDark ? "#a89888" : "#6d5c4e",
     inkFaint: isDark ? "#5c4a3d" : "#c4b5a5",
     white: isDark ? "#ede0cf" : "#fff",
     gridLine: isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)",
