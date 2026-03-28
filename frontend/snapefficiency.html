@@ -65,6 +65,17 @@
     .se-header h1 { font-size: 24px; }
     .se-bar-cell { width: 50px; }
   }
+  @media (max-width: 480px) {
+    .se-page { padding: 12px 8px 32px; }
+    .se-header h1 { font-size: 20px; }
+    .se-header .se-subtitle { font-size: 16px; }
+    .se-controls { gap: 8px; }
+    .se-controls .pos-tab { padding: 4px 8px; font-size: 11px; }
+    .se-table { font-size: 11px; }
+    .se-table th, .se-table td { padding: 4px 5px; }
+    .se-bar-cell { width: 35px; }
+    .se-card-header { font-size: 15px; padding: 8px 12px; }
+  }
 
   /* Dark mode */
   [data-theme="dark"] .se-page { color: var(--ink); }

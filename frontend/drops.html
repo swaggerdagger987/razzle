@@ -70,6 +70,17 @@
     .dr-grid { grid-template-columns: 1fr; }
     .dr-bar-cell { width: 40px; }
   }
+  @media (max-width: 480px) {
+    .dr-page { padding: 12px 8px 32px; }
+    .dr-header h1 { font-size: 20px; }
+    .dr-header .dr-subtitle { font-size: 16px; }
+    .dr-controls { gap: 8px; }
+    .dr-controls .pos-tab { padding: 4px 8px; font-size: 11px; }
+    .dr-table { font-size: 11px; }
+    .dr-table th, .dr-table td { padding: 4px 5px; }
+    .dr-bar-cell { width: 30px; }
+    .dr-card-header { font-size: 15px; padding: 8px 12px; }
+  }
 
   /* Dark mode */
   [data-theme="dark"] .dr-page { color: var(--ink); }
@@ -222,6 +233,10 @@ const POS_COLORS = {
 };
 let state = { season: null, position: "", data: null };
 
+function _saveState() {
+  savePageState({ season: state.season || '', position: state.position });
+}
+
 function initSeasons() {
   const sel = document.getElementById("dr-season");
   const _d = new Date(); const now = _d.getMonth() >= 8 ? _d.getFullYear() : _d.getFullYear() - 1;
@@ -230,24 +245,16 @@ function initSeasons() {
     opt.value = y; opt.textContent = y;
     sel.appendChild(opt);
   }
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("season")) sel.value = params.get("season");
-  if (params.get("position")) {
-    state.position = params.get("position").toUpperCase();
+  var urlState = restorePageState({ season: '', position: '' });
+  if (urlState.season) sel.value = urlState.season;
+  if (urlState.position) {
+    state.position = urlState.position.toUpperCase();
     document.querySelectorAll(".pos-tab").forEach(t => {
       t.classList.toggle("active", t.dataset.pos === state.position);
     });
   }
   state.season = parseInt(sel.value, 10) || 0;
-  sel.addEventListener("change", () => { state.season = parseInt(sel.value, 10) || 0; updateURL(); loadData(); });
-}
-
-function updateURL() {
-  const params = new URLSearchParams();
-  if (state.season) params.set("season", state.season);
-  if (state.position) params.set("position", state.position);
-  const qs = params.toString();
-  history.replaceState(null, "", qs ? "?" + qs : window.location.pathname);
+  sel.addEventListener("change", () => { state.season = parseInt(sel.value, 10) || 0; _saveState(); loadData(); });
 }
 
 document.querySelectorAll(".pos-tab").forEach(tab => {
@@ -255,7 +262,7 @@ document.querySelectorAll(".pos-tab").forEach(tab => {
     document.querySelectorAll(".pos-tab").forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
     state.position = tab.dataset.pos;
-    updateURL();
+    _saveState();
     loadData();
   });
 });

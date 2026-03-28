@@ -106,6 +106,17 @@
     .prompts-page { padding: 24px 12px 40px; }
     .prompt-header { flex-direction: column; align-items: flex-start; }
   }
+  @media (max-width: 480px) {
+    .prompts-page { padding: 16px 8px 32px; }
+    .prompts-hero h1 { font-size: 20px; }
+    .prompts-hero p { font-size: 15px; }
+    .prompt-filters { gap: 6px; }
+    .prompt-filter { font-size: 10px; padding: 5px 10px; }
+    .prompt-card { padding: 14px; }
+    .prompt-title { font-size: 14px; }
+    .prompt-text { font-size: 11px; padding: 10px; }
+    .prompt-actions { flex-wrap: wrap; }
+  }
 
   /* Dark mode */
   [data-theme="dark"] .prompt-card { background: var(--bg-card); }
