@@ -530,7 +530,7 @@
   /* All elements with data-pid are clickable player links */
   .lab-panel-content [data-pid] { cursor: pointer; }
   .lab-panel-content tr[data-pid]:hover,
-  .lab-panel-content [data-pid]:hover { background: rgba(217, 119, 87, 0.06); }
+  .lab-panel-content [data-pid]:hover { background: var(--orange-hover); }
 
   .lab-panel-frame {
     width: 100%;
