@@ -2436,7 +2436,7 @@ async function toggleRowExpand(playerId, tdEl) {
     }
     // Build mini table
     var html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:11px;">';
-    html += '<tr style="border-bottom:1px solid var(--ink-faint);">';
+    html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
     html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Wk</th>';
     html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Opp</th>';
     html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">FPts</th>';
@@ -2452,7 +2452,7 @@ async function toggleRowExpand(playerId, tdEl) {
     for (var w of weeks) {
       var fpts = parseFloat(w.fantasy_points_ppr || w.fantasy_points || 0).toFixed(1);
       var fptsColor = fpts >= 20 ? 'color:var(--green); font-weight:700;' : fpts < 5 ? 'color:var(--red);' : '';
-      html += '<tr style="border-bottom:1px solid var(--ink-faint);">';
+      html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
       var _n = function(v) { var n = parseInt(v); return isNaN(n) ? 0 : n; };
       html += '<td style="padding:2px 6px;">' + escapeHtml(String(w.week || "")) + '</td>';
       html += '<td style="padding:2px 6px;">' + escapeHtml(w.opponent || w.recent_team || "") + '</td>';
@@ -9345,7 +9345,7 @@ function setupTradeSearchInput(side) {
       var posColors = _getPosColorsHex();
       autoDiv.innerHTML = matches.map(p => {
         const pc = posColors[p.position] || getCanvasTheme().ink;
-        return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--ink-faint);">'
+        return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:2px solid var(--ink-faint);">'
           + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + p._tv + '</span>'
@@ -10894,7 +10894,7 @@ function toggleShortcutRef() {
 }
 
 function shortcutRow(key, desc) {
-  return `<tr style="border-bottom:1px solid var(--ink-faint);">
+  return `<tr style="border-bottom:2px solid var(--ink-faint);">
     <td style="padding:6px 8px; width:80px;"><kbd style="font-family:var(--font-mono); font-size:13px; background:var(--bg); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:2px 8px; box-shadow:2px 2px 0 var(--ink);">${key}</kbd></td>
     <td style="padding:6px 8px;">${desc}</td>
   </tr>`;

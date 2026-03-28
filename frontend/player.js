@@ -746,7 +746,7 @@ function openCompareSearch() {
           var players = data.items || data.players || [];
           results.innerHTML = players.map(function(p) {
             if (p.player_id === currentId) return "";
-            return '<div class="compare-search-item" data-current="' + escapeAttr(currentId) + '" data-target="' + escapeAttr(p.player_id) + '" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;">' +
+            return '<div class="compare-search-item" data-current="' + escapeAttr(currentId) + '" data-target="' + escapeAttr(p.player_id) + '" style="padding:8px 12px;cursor:pointer;border-bottom:2px solid var(--ink-faint);font-family:var(--font-mono);font-size:13px;">' +
               '<span style="font-weight:700;">' + esc(p.full_name) + '</span> <span style="color:var(--ink-light);">' + esc(p.position || "") + ' ' + esc(p.team || "") + '</span></div>';
           }).join("");
           // Event delegation handled below (avoids listener leak per search)

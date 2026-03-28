@@ -75,7 +75,7 @@
   }
   .prompt-text:not(.expanded)::after {
     content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 32px;
-    background: linear-gradient(transparent, var(--bg)); pointer-events: none;
+    background: var(--bg); opacity: 0.85; pointer-events: none;
   }
   .prompt-text.expanded { max-height: none; }
   .prompt-text.expanded::after { display: none; }

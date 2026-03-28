@@ -10205,7 +10205,7 @@
         html += '<th style="text-align:right;padding:4px 6px;">Value</th></tr>';
         t.top_players.forEach(function(p) {
           var posColor = POS_COLS[p.position] || '#8a7565';
-          html += '<tr style="border-bottom:1px solid var(--ink-faint);">';
+          html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
           html += '<td style="padding:4px 6px;">' + escapeHtml(p.full_name) + '</td>';
           html += '<td style="text-align:center;padding:4px 6px;color:' + posColor + ';font-weight:bold;">' + escapeHtml(p.position) + '</td>';
           html += '<td style="text-align:right;padding:4px 6px;">' + fmt(p.ppg) + '</td>';
