@@ -105,7 +105,7 @@
   border: none;
   border-right: 2px solid var(--ink);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, color 0.15s;
 }
 .lp-pos-tab:last-child { border-right: none; }
 .lp-pos-tab.active { background: var(--ink); color: var(--bg-card); }
@@ -153,7 +153,7 @@
   background: var(--bg-card);
   color: var(--ink);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
 }
 .rankings-filter-btn:first-child { border-radius: 8px 0 0 8px; }
 .rankings-filter-btn:last-child { border-radius: 0 8px 8px 0; }
@@ -218,7 +218,7 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: transform 0.15s, box-shadow 0.15s;
   position: relative;
 }
 .rankings-card:hover {
@@ -814,7 +814,7 @@
   background: var(--bg-card);
   color: var(--ink);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s, color 0.15s;
 }
 .cs-fmt-tab:hover { background: var(--bg-warm); }
 .cs-fmt-tab.active { background: var(--ink); color: var(--bg-card); }
@@ -938,7 +938,7 @@
   border-radius: 12px;
   box-shadow: 4px 4px 0 var(--ink);
   overflow: hidden;
-  transition: all 0.15s;
+  transition: transform 0.15s, box-shadow 0.15s;
   cursor: pointer;
 }
 .breakout-card:hover {
@@ -1128,7 +1128,7 @@
   border-radius: 12px;
   box-shadow: 4px 4px 0 var(--ink);
   overflow: hidden;
-  transition: all 0.15s;
+  transition: transform 0.15s, box-shadow 0.15s;
   cursor: pointer;
 }
 .buysell-card:hover {
@@ -1503,7 +1503,7 @@
   box-shadow: 4px 4px 0 var(--ink);
   padding: 14px;
   text-align: center;
-  transition: all 0.15s;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 .scarcity-summary-card:hover {
   transform: translate(-2px, -2px);
@@ -1552,7 +1552,7 @@
   border-radius: 12px;
   box-shadow: 4px 4px 0 var(--ink);
   overflow: hidden;
-  transition: all 0.15s;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 .scarcity-card:hover {
   transform: translate(-2px, -2px);
@@ -2269,7 +2269,7 @@
 .mh-table tbody td {
   padding: 8px 12px; text-align: center;
   border-bottom: 2px dashed var(--ink-faint);
-  transition: all 0.15s; cursor: pointer; position: relative;
+  transition: filter 0.15s; cursor: pointer; position: relative;
 }
 .mh-table tbody td.mh-team-cell {
   text-align: left; font-family: var(--font-mono);
@@ -2303,7 +2303,7 @@
 .mh-detail-player {
   display: flex; align-items: center; gap: 10px;
   padding: 8px 10px; border: 2px solid var(--ink-faint); border-radius: 8px;
-  background: var(--bg); cursor: pointer; transition: all 0.15s;
+  background: var(--bg); cursor: pointer; transition: box-shadow 0.15s, transform 0.15s;
 }
 .mh-detail-player:hover { box-shadow: 4px 4px 0 var(--ink); transform: translate(-2px, -2px); }
 .mh-detail-player img {
@@ -2499,7 +2499,7 @@
   font-family: var(--font-mono); font-size: 16px; font-weight: 700;
   padding: 4px 10px; border: 2px solid var(--ink); border-radius: 8px;
   background: var(--bg-card); color: var(--ink); cursor: pointer;
-  transition: all 0.12s;
+  transition: background-color 0.12s;
 }
 .wkl-week-btn:hover:not(:disabled) { background: var(--bg-warm); }
 .wkl-week-btn:disabled { opacity: 0.3; cursor: not-allowed; }

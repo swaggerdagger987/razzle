@@ -37,7 +37,7 @@
   .prompt-filter {
     font-family: var(--font-mono); font-size: 11px; padding: 6px 14px;
     border: 3px solid var(--ink); border-radius: 20px; cursor: pointer;
-    background: var(--bg-card); color: var(--ink); transition: all 0.15s;
+    background: var(--bg-card); color: var(--ink); transition: background-color 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s;
     box-shadow: 4px 4px 0 var(--ink);
   }
   .prompt-filter:hover {
@@ -52,7 +52,7 @@
 
   .prompt-card {
     background: var(--bg-card); border: 3px solid var(--ink); border-radius: 12px;
-    box-shadow: 4px 4px 0 var(--ink); padding: 20px; transition: all 0.15s;
+    box-shadow: 4px 4px 0 var(--ink); padding: 20px; transition: box-shadow 0.15s, transform 0.15s;
   }
   .prompt-card:hover { box-shadow: 6px 6px 0 var(--ink); transform: translate(-2px, -2px); }
 
@@ -91,14 +91,14 @@
   .copy-btn {
     font-family: var(--font-mono); font-size: 11px; padding: 4px 14px;
     border: 2px solid var(--ink); border-radius: 8px; background: var(--bg-card);
-    cursor: pointer; transition: all 0.15s;
+    cursor: pointer; transition: background-color 0.15s, color 0.15s, border-color 0.15s;
   }
   .copy-btn:hover { background: var(--orange); color: var(--bg); border-color: var(--orange); }
   .copy-btn.copied { background: var(--green); color: var(--bg); border-color: var(--green); }
   .use-btn {
     font-family: var(--font-mono); font-size: 11px; padding: 4px 14px;
     border: 2px solid var(--orange); border-radius: 8px; background: var(--orange);
-    color: var(--bg); cursor: pointer; text-decoration: none; transition: all 0.15s;
+    color: var(--bg); cursor: pointer; text-decoration: none; transition: box-shadow 0.15s;
   }
   .use-btn:hover { box-shadow: 2px 2px 0 var(--ink); }
 

@@ -9925,7 +9925,7 @@ function renderACLegend() {
       + 'display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:20px;'
       + 'border:' + border + '; background:' + (enabled ? color + '15' : 'transparent') + ';'
       + 'cursor:pointer; opacity:' + opacity + '; font-family:var(--font-mono); font-size:11px;'
-      + 'transition:all 0.15s;">'
+      + 'transition:opacity 0.15s, border-color 0.15s;">'
       + '<span style="width:10px; height:10px; border-radius:50%; background:' + color + '; display:inline-block;"></span>'
       + escapeHtml(p.name) + ' <span style="color:var(--ink-light);">' + p.career_ppg + '</span>'
       + '</button>';

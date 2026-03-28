@@ -116,7 +116,7 @@
     border-radius: 12px;
     cursor: pointer;
     text-decoration: none;
-    transition: all 0.15s;
+    transition: box-shadow 0.15s, transform 0.15s;
     box-shadow: 4px 4px 0 var(--ink);
   }
 
@@ -370,7 +370,7 @@
     border-radius: 20px;
     box-shadow: 4px 4px 0 var(--ink);
     text-decoration: none;
-    transition: all 0.15s;
+    transition: background-color 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s;
   }
   .smart-chip:nth-child(odd) { transform: rotate(-1deg); }
   .smart-chip:nth-child(even) { transform: rotate(1deg); }
@@ -392,7 +392,7 @@
     color: var(--ink-light);
     cursor: pointer;
     flex: 1;
-    transition: all 0.15s;
+    transition: background-color 0.15s, color 0.15s;
   }
   .mini-tab.active { background: var(--orange); color: var(--text-on-accent); }
   .mini-tab:hover:not(.active) { background: var(--bg-warm); }
