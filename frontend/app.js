@@ -1141,25 +1141,10 @@ function _resumePendingCheckout() {
 }
 
 function signOut() {
-  localStorage.removeItem("razzle_token");
-  localStorage.removeItem("razzle_user");
-  localStorage.removeItem("razzle_formulas");
-  localStorage.removeItem("razzle_last_state");
-  localStorage.removeItem("razzle_recent_players");
-  localStorage.removeItem("razzle_league_context");
-  localStorage.removeItem("razzle_prefill_scenario");
-  localStorage.removeItem("razzle_query_count");
-  localStorage.removeItem("razzle_store_ratings");
-  localStorage.removeItem("razzle_store_installed");
-  localStorage.removeItem("razzle_store_reviews");
-  localStorage.removeItem("razzle_store_my_published");
-  localStorage.removeItem("razzle_store_username");
-  localStorage.removeItem("razzle_agent_config");
-  localStorage.removeItem("razzle_sleeper_user");
-  localStorage.removeItem("razzle_sleeper_user_id");
-  localStorage.removeItem("razzle_watchlist");
-  localStorage.removeItem("razzle_player_tags");
-  localStorage.removeItem("razzle_player_notes");
+  // Clear ALL razzle_ keys — warroom memory, saved views, pins, preferences, etc.
+  Object.keys(localStorage).forEach(function(k) {
+    if (k.startsWith("razzle_")) localStorage.removeItem(k);
+  });
   updateAuthUI(null);
 }
 
