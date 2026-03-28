@@ -223,7 +223,7 @@ def initialize_users_db():
         """)
         conn.commit()
 
-        # Migration: add trial, sleeper lock, admin, and password reset columns
+        # Migration: add trial, sleeper lock, admin, password reset, and email verification columns
         for col, default in [
             ("trial_start", "NULL"),
             ("trial_end", "NULL"),
@@ -232,10 +232,16 @@ def initialize_users_db():
             ("is_admin", "0"),
             ("password_reset_token", "NULL"),
             ("password_reset_expires", "NULL"),
+            ("email_verified", "0"),
+            ("email_verify_token", "NULL"),
         ]:
             try:
                 conn.execute(f"ALTER TABLE users ADD COLUMN {col} DEFAULT {default}")
                 conn.commit()
+                # Grandfather existing users as verified when adding the column
+                if col == "email_verified":
+                    conn.execute("UPDATE users SET email_verified = 1 WHERE email_verified = 0 AND created_at < datetime('now', '-1 minute')")
+                    conn.commit()
             except sqlite3.OperationalError:
                 pass  # Column already exists
 
@@ -314,6 +320,12 @@ def _user_dict(row) -> dict:
     if trial_end_str:
         d["trial_end"] = trial_end_str
 
+    # Email verification status
+    try:
+        d["email_verified"] = bool(row["email_verified"])
+    except (IndexError, KeyError):
+        d["email_verified"] = True  # Grandfather untracked users
+
     # Preserve raw DB plan before trial elevation (used by billing checkout check)
     d["raw_plan"] = d["plan"]
 
@@ -354,7 +366,7 @@ def is_admin_user(user: dict) -> bool:
 
 
 def register(email: str, password: str) -> dict:
-    """Register a new user. Returns {token, user}."""
+    """Register a new user. Sends verification email; trial starts on verify."""
     email = email.strip().lower()
     if not EMAIL_REGEX.match(email):
         return {"error": "Invalid email format", "status": 400}
@@ -369,28 +381,45 @@ def register(email: str, password: str) -> dict:
                 return {"error": "Email already registered", "status": 409}
 
             password_hash = _hash_password(password)
-            now = datetime.now(timezone.utc)
-            trial_start = now.isoformat()
-            trial_end = (now + timedelta(days=TRIAL_DURATION_DAYS)).isoformat()
+            # Generate email verification token
+            verify_token = secrets.token_urlsafe(32)
+            verify_token_hash = hashlib.sha256(verify_token.encode()).hexdigest()
+            # Don't start trial yet — trial starts when email is verified
             cursor = conn.execute(
-                "INSERT INTO users (email, password_hash, trial_start, trial_end, trial_used) VALUES (?, ?, ?, ?, 1)",
-                (email, password_hash, trial_start, trial_end),
+                "INSERT INTO users (email, password_hash, trial_used, email_verified, email_verify_token) VALUES (?, ?, 0, 0, ?)",
+                (email, password_hash, verify_token_hash),
             )
             conn.commit()
             user_id = cursor.lastrowid
             _maybe_promote_admin(conn, user_id, email)
             is_admin = ADMIN_EMAIL and email == ADMIN_EMAIL
-            # Build user dict with trial active — effective plan will be "pro"
+
+            # Send verification email
+            verify_url = f"{SITE_URL}/verify-email.html?token={verify_token}"
+            _send_email(
+                to=email,
+                subject="Verify your Razzle account",
+                html=(
+                    f"<p>Welcome to Razzle!</p>"
+                    f"<p>Click below to verify your email and unlock your 7-day Pro trial:</p>"
+                    f'<p><a href="{verify_url}" style="background:#d97757;color:#fff;padding:10px 20px;'
+                    f'border-radius:6px;text-decoration:none;font-weight:bold;">Verify Email</a></p>'
+                    f"<p>If you didn't create this account, just ignore this email.</p>"
+                    f"<p>— Razzle</p>"
+                ),
+            )
+
+            # Log user in with free plan (not pro until verified)
             user = {
-                "id": user_id, "email": email, "plan": "pro",
-                "sleeper_username": None, "trial_active": True,
-                "trial_days_remaining": TRIAL_DURATION_DAYS,
-                "trial_end": trial_end, "plan_source": "trial",
+                "id": user_id, "email": email, "plan": "free",
+                "sleeper_username": None, "trial_active": False,
+                "trial_days_remaining": 0,
+                "plan_source": "free",
                 "is_admin": is_admin,
+                "email_verified": False,
             }
-            # Token carries "pro" plan during trial for middleware compatibility
-            token = _create_token(user_id, email, "pro")
-            return {"token": token, "user": user}
+            token = _create_token(user_id, email, "free")
+            return {"token": token, "user": user, "needs_verification": True}
     except Exception as e:
         if "UNIQUE constraint" in str(e) or "IntegrityError" in type(e).__name__:
             return {"error": "Email already registered", "status": 409}
@@ -468,6 +497,75 @@ def link_sleeper(user_id: int, sleeper_username: str) -> dict:
         conn.commit()
         row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
         return {"user": _user_dict(row)}
+
+
+# ── Email Verification ─────────────────────────────────────────────
+
+def verify_email(token: str) -> dict:
+    """Verify email address and start the Pro trial."""
+    if not token or len(token) < 20:
+        return {"error": "Invalid verification link.", "status": 400}
+
+    token_hash = hashlib.sha256(token.encode()).hexdigest()
+
+    with get_users_db() as conn:
+        row = conn.execute(
+            "SELECT id, email, email_verified FROM users WHERE email_verify_token = ?",
+            (token_hash,),
+        ).fetchone()
+
+        if not row:
+            return {"error": "Invalid or already-used verification link.", "status": 400}
+
+        if row["email_verified"]:
+            return {"message": "Email already verified. You can sign in."}
+
+        # Verify email and start trial
+        now = datetime.now(timezone.utc)
+        trial_start = now.isoformat()
+        trial_end = (now + timedelta(days=TRIAL_DURATION_DAYS)).isoformat()
+
+        conn.execute(
+            "UPDATE users SET email_verified = 1, email_verify_token = NULL, "
+            "trial_start = ?, trial_end = ?, trial_used = 1 WHERE id = ?",
+            (trial_start, trial_end, row["id"]),
+        )
+        conn.commit()
+        logger.info(f"Email verified for user {row['id']} ({row['email']}), trial started")
+
+    return {"message": "Email verified! Your 7-day Pro trial has started. Sign in to get started."}
+
+
+def resend_verification(email: str) -> dict:
+    """Resend verification email. Always returns success (don't leak existence)."""
+    email = email.strip().lower()
+    if not EMAIL_REGEX.match(email):
+        return {"message": "If that email is registered and unverified, you'll receive a verification link."}
+
+    with get_users_db() as conn:
+        row = conn.execute("SELECT id, email, email_verified FROM users WHERE email = ?", (email,)).fetchone()
+        if not row or row["email_verified"]:
+            return {"message": "If that email is registered and unverified, you'll receive a verification link."}
+
+        # Generate new token
+        verify_token = secrets.token_urlsafe(32)
+        verify_token_hash = hashlib.sha256(verify_token.encode()).hexdigest()
+        conn.execute("UPDATE users SET email_verify_token = ? WHERE id = ?", (verify_token_hash, row["id"]))
+        conn.commit()
+
+        verify_url = f"{SITE_URL}/verify-email.html?token={verify_token}"
+        _send_email(
+            to=email,
+            subject="Verify your Razzle account",
+            html=(
+                f"<p>Here's your verification link:</p>"
+                f'<p><a href="{verify_url}" style="background:#d97757;color:#fff;padding:10px 20px;'
+                f'border-radius:6px;text-decoration:none;font-weight:bold;">Verify Email</a></p>'
+                f"<p>— Razzle</p>"
+            ),
+        )
+
+    return {"message": "If that email is registered and unverified, you'll receive a verification link."}
 
 
 # ── Password Reset ─────────────────────────────────────────────────

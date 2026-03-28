@@ -1132,7 +1132,14 @@ async function handleRegister(e) {
     var data = await resp.json();
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
-    if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
+    if (data.needs_verification) {
+      // Show verification message instead of Sleeper prompt
+      _showVerificationMessage(email);
+    } else if (!data.user.sleeper_username) {
+      showSleeperPrompt();
+    } else {
+      closeAuthModal();
+    }
     updateAuthUI(data.user);
     migrateLocalFormulas();
     _resumePendingCheckout();
@@ -1141,6 +1148,40 @@ async function handleRegister(e) {
     document.getElementById("authRegisterEmail").setAttribute("aria-invalid","true");
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = origText; }
+  }
+}
+
+function _showVerificationMessage(email) {
+  var modal = document.getElementById("authModal");
+  if (!modal) return;
+  var inner = modal.querySelector(".auth-modal");
+  if (!inner) return;
+  inner.innerHTML =
+    '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
+    '<h2 style="font-family:var(--font-display);font-size:22px;text-align:center;margin-bottom:12px;">Check Your Email</h2>' +
+    '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">' +
+      'We sent a verification link to <strong>' + (typeof escapeHtml === 'function' ? escapeHtml(email) : email) + '</strong>. ' +
+      'Click it to verify your account and unlock your 7-day Pro trial.' +
+    '</p>' +
+    '<p style="font-family:var(--font-mono);font-size:12px;text-align:center;color:var(--ink-light);margin-top:16px;">' +
+      'Didn\'t get it? <a href="#" onclick="_resendVerification(\'' + email.replace(/'/g, "\\'") + '\'); return false;" style="color:var(--accent);">Resend</a>' +
+    '</p>' +
+    '<div id="verifyResendMsg" style="font-family:var(--font-mono);font-size:12px;text-align:center;color:var(--ink-light);min-height:18px;margin-top:8px;"></div>';
+}
+
+async function _resendVerification(email) {
+  var msgEl = document.getElementById("verifyResendMsg");
+  if (msgEl) msgEl.textContent = "sending...";
+  try {
+    var resp = await fetch(API_BASE + "/api/auth/resend-verification", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email })
+    });
+    var data = await resp.json();
+    if (msgEl) msgEl.textContent = data.message || "Sent!";
+  } catch (err) {
+    if (msgEl) msgEl.textContent = "Failed to resend. Try again.";
   }
 }
 

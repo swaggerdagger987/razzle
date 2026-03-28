@@ -1001,6 +1001,27 @@ async def auth_link_sleeper(request: Request):
     return result
 
 
+@app.get("/api/auth/verify-email")
+async def auth_verify_email(token: str = ""):
+    """Verify email address via token from email link."""
+    result = auth_module.verify_email(token)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    return result
+
+
+@app.post("/api/auth/resend-verification")
+async def auth_resend_verification(request: Request):
+    """Resend email verification link."""
+    ip = _get_client_ip(request)
+    if not _check_rate_limit(ip):
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
+    body = await request.json()
+    email = body.get("email", "").strip()
+    result = auth_module.resend_verification(email)
+    return result
+
+
 @app.post("/api/auth/forgot-password")
 async def auth_forgot_password(request: Request):
     """Send password reset email."""
