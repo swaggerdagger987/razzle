@@ -3353,7 +3353,8 @@ async function loadLeagues(userId) {
           scoringBonusRecTE: lg.scoring_settings?.bonus_rec_te || 0,
         };
       });
-      const existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
+      var existing = {};
+      try { existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}"); } catch(e) { existing = {}; }
       existing.leagues = leagueMeta;
       existing.updatedAt = Date.now();
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));
@@ -3619,7 +3620,8 @@ async function toggleLeague(card, leagueId, userId) {
           rosterPlayers.push({ name: p.name, pos: p.pos, team: p.team });
         }
       }
-      const existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
+      var existing = {};
+      try { existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}"); } catch(e) { existing = {}; }
       existing.roster = rosterPlayers;
       existing.record = { wins, losses, fpts };
       const rivals = rosters
@@ -3767,7 +3769,8 @@ async function loadActivityFeed(leagueId, userMap, allPlayers, rosters) {
           time: txn.status_updated
         };
       });
-      var existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}");
+      var existing = {};
+      try { existing = JSON.parse(localStorage.getItem("razzle_league_context") || "{}"); } catch(e) { existing = {}; }
       existing.recentActivity = ctxTxns;
       existing.activityUpdatedAt = Date.now();
       localStorage.setItem("razzle_league_context", JSON.stringify(existing));

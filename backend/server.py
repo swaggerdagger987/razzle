@@ -139,8 +139,38 @@ def _cleanup_rate_limits():
         pass
 
 
+_EMAIL_LOGIN_LIMIT = 5    # max failed attempts per email
+_EMAIL_LOGIN_WINDOW = 300  # per 5 minutes
+
+
 def _check_rate_limit(ip: str) -> bool:
     return _check_rate("auth", ip, _RATE_LIMIT, _RATE_WINDOW)
+
+
+def _check_email_login_rate(email: str) -> bool:
+    """Check if email is locked out from login attempts. Read-only check."""
+    now = _time.time()
+    cutoff = now - _EMAIL_LOGIN_WINDOW
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("DELETE FROM rate_limits WHERE bucket = ? AND key = ? AND ts < ?", ("email_login", email, cutoff))
+            count = conn.execute(
+                "SELECT COUNT(*) FROM rate_limits WHERE bucket = ? AND key = ?", ("email_login", email)
+            ).fetchone()[0]
+            conn.commit()
+            return count < _EMAIL_LOGIN_LIMIT
+    except Exception:
+        return True
+
+
+def _record_email_login_fail(email: str):
+    """Record a failed login attempt for an email."""
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("INSERT INTO rate_limits (bucket, key, ts) VALUES (?, ?, ?)", ("email_login", email, _time.time()))
+            conn.commit()
+    except Exception:
+        pass
 
 
 def _check_sensitive_rate(ip: str) -> bool:
@@ -896,10 +926,16 @@ async def auth_login(request: Request):
     if not _check_rate_limit(ip):
         return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
     body = await request.json()
-    email = body.get("email", "")
+    email = body.get("email", "").strip().lower()
     password = body.get("password", "")
+    # Per-email lockout: prevent distributed brute force
+    if email and not _check_email_login_rate(email):
+        return JSONResponse({"error": "Account temporarily locked. Try again in a few minutes."}, status_code=429, headers={"Retry-After": "300"})
     result = auth_module.login(email, password)
     if "error" in result:
+        # Record failed attempt against this email
+        if email:
+            _record_email_login_fail(email)
         return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
     live_data.log_event("login")
     return result
