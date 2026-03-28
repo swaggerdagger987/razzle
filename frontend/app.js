@@ -107,8 +107,8 @@ function getCanvasTheme() {
     inkLight: s.getPropertyValue('--ink-light').trim() || (isDark ? "#a89888" : "#6d5c4e"),
     inkFaint: s.getPropertyValue('--ink-faint').trim() || (isDark ? "#5c4a3d" : "#c4b5a5"),
     white: isDark ? ink : "#fff",
-    gridLine: isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)",
-    subtitleAlpha: isDark ? "rgba(237,224,207,0.5)" : "rgba(45,31,20,0.5)",
+    gridLine: ink + "1f",
+    subtitleAlpha: ink + "80",
     orange: s.getPropertyValue('--orange').trim() || "#d97757",
     green: s.getPropertyValue('--green').trim() || "#2ec4b6",
     blue: s.getPropertyValue('--blue').trim() || "#5b7fff",
@@ -1466,7 +1466,7 @@ async function startCheckout(interval) {
       body: JSON.stringify(body)
     });
     if (!resp.ok) {
-      _showToast("checkout hit a wall. try again or ping support.", "error");
+      _showToast("checkout hit a wall. try again or email swaggerdagger987@gmail.com", "error", 10000);
     } else {
       var data = await resp.json();
       if (data.checkout_url) {
