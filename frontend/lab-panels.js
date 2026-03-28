@@ -1108,7 +1108,7 @@
         renderAvgs(data.pos_averages);
         renderPA(data);
       }).catch(function() {
-        el.querySelector('#lp-pa-content').innerHTML = '<div class="panel-error">the tape machine jammed — give it another shot<br><button onclick="location.reload()">retry</button></div>';
+        el.querySelector('#lp-pa-content').innerHTML = '<div class="panel-error">' + razzleError() + '<br><button onclick="location.reload()">retry</button></div>';
       });
     }
 
@@ -3742,7 +3742,7 @@
     function renderSK(data) {
       var body = el.querySelector('#sk-body');
       var stacks = data.stacks || [];
-      if (!stacks.length) { body.innerHTML = '<div class="sk-card"><div class="sk-card-header">Stack Finder</div><div class="sk-empty">no correlation data found</div></div>'; return; }
+      if (!stacks.length) { body.innerHTML = '<div class="sk-card"><div class="sk-card-header">Stack Finder</div><div class="sk-empty">' + razzleEmpty() + '</div></div>'; return; }
 
       var html = '<div class="sk-card">';
       html += '<div class="sk-card-header">Best QB + WR/TE Stacks (' + escapeHtml(String(data.count)) + ' pairs)</div>';
@@ -3899,7 +3899,7 @@
     function buildSection(players, section) {
       if (!players || !players.length) {
         var label = section === 'dominators' ? 'goal-line dominators' : 'TD-dependent players';
-        return '<div class="rz-empty">no ' + label + ' found</div>';
+        return '<div class="rz-empty">' + razzleEmpty() + '</div>';
       }
       var isDom = section === 'dominators';
       var icon = isDom ? '&#x1F3C8;' : '&#x1F4A5;';
@@ -3924,7 +3924,7 @@
       currentData = data;
       var body = el.querySelector('#rz-body');
       if (!data || (!(data.dominators && data.dominators.length) && !(data.td_dependent && data.td_dependent.length))) {
-        body.innerHTML = '<div class="rz-empty">no red zone data found</div>';
+        body.innerHTML = '<div class="rz-empty">' + razzleEmpty() + '</div>';
         return;
       }
       var html = buildSection(data.dominators, 'dominators');
@@ -4097,10 +4097,10 @@
 
       var html = '<div class="str-columns">';
       html += '<div class="str-section"><div class="str-section-header hot">On Fire</div>';
-      html += hot.length ? renderTable(hot, 'hot') : '<div class="str-empty">no hot streaks found</div>';
+      html += hot.length ? renderTable(hot, 'hot') : '<div class="str-empty">' + razzleEmpty() + '</div>';
       html += '</div>';
       html += '<div class="str-section"><div class="str-section-header cold">Ice Cold</div>';
-      html += cold.length ? renderTable(cold, 'cold') : '<div class="str-empty">no cold streaks found</div>';
+      html += cold.length ? renderTable(cold, 'cold') : '<div class="str-empty">' + razzleEmpty() + '</div>';
       html += '</div></div>';
       body.innerHTML = html;
     }
@@ -4454,7 +4454,7 @@
     function renderPO(data) {
       var body = el.querySelector('#po-body');
       var players = data.players || [];
-      if (!players.length) { body.innerHTML = '<div class="po-empty">no playoff data found</div>'; return; }
+      if (!players.length) { body.innerHTML = '<div class="po-empty">' + razzleEmpty() + '</div>'; return; }
 
       var html = '<div class="po-card">';
       html += '<div class="po-card-header">Playoff Matchup Rankings — Wk 14-17 (' + escapeHtml(String(data.count || 0)) + ' players)</div>';
@@ -7068,15 +7068,15 @@
         var gHtml = '';
         gHtml += '<div class="db2-section"><div class="db2-section-header risers">&#x2197; Rising Stocks</div>';
         (d.risers || []).forEach(function(p, i) { gHtml += playerRow(p, i, 'up', '+' + escapeHtml(String(p.rank_diff))); });
-        if (!d.risers || !d.risers.length) gHtml += '<div class="db2-row">no risers found</div>';
+        if (!d.risers || !d.risers.length) gHtml += '<div class="db2-row">' + razzleEmpty() + '</div>';
         gHtml += '</div>';
         gHtml += '<div class="db2-section"><div class="db2-section-header fallers">&#x2198; Falling Stocks</div>';
         (d.fallers || []).forEach(function(p, i) { gHtml += playerRow(p, i, 'down', escapeHtml(String(p.rank_diff))); });
-        if (!d.fallers || !d.fallers.length) gHtml += '<div class="db2-row">no fallers found</div>';
+        if (!d.fallers || !d.fallers.length) gHtml += '<div class="db2-row">' + razzleEmpty() + '</div>';
         gHtml += '</div>';
         gHtml += '<div class="db2-section"><div class="db2-section-header value">&#x1F4A1; Value Picks</div>';
         (d.value_picks || []).forEach(function(p, i) { gHtml += playerRow(p, i, 'tv', escapeHtml(String(p.trade_value))); });
-        if (!d.value_picks || !d.value_picks.length) gHtml += '<div class="db2-row">no value picks found</div>';
+        if (!d.value_picks || !d.value_picks.length) gHtml += '<div class="db2-row">' + razzleEmpty() + '</div>';
         gHtml += '</div>';
         el.querySelector('.db2-grid').innerHTML = gHtml;
 
@@ -9413,9 +9413,7 @@
 
     function buildTargetTable(targets, sectionId) {
       if (!targets.length) {
-        var msg = 'no targets found';
-        if (sectionId === 'buylow') msg = 'no falling-stock players near this value range';
-        else if (sectionId === 'sellhigh') msg = 'no rising-stock players near this value range';
+        var msg = razzleEmpty();
         return '<div class="panel-empty">' + msg + '</div>';
       }
       var html = '<table class="tf2-table"><thead><tr>';
