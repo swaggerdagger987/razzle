@@ -1328,7 +1328,7 @@ body {
 @media (max-width: 480px) {
   .pro-locked::after,
   .elite-locked::after {
-    font-size: 8px;
+    font-size: 11px;
     margin-left: 2px;
   }
 }
@@ -1473,7 +1473,7 @@ body {
 
 .tag-icon {
   display: inline-block;
-  font-size: 8px;
+  font-size: 11px;
   color: var(--ink-light);
   cursor: pointer;
   vertical-align: middle;
@@ -1677,6 +1677,9 @@ tr:hover .notes-cell .note-pencil {
   border-radius: var(--radius-sm);
   letter-spacing: 0.5px;
 }
+
+[data-theme="dark"] .diff-mode-banner { background: #1a2e1a; border-color: var(--green); color: var(--ink); }
+[data-theme="dark"] .diff-mode-label { background: var(--green); color: #1a2e1a; }
 
 /* ── Toast notifications (global — works on all pages) ─────────── */
 .razzle-toast {
