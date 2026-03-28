@@ -1779,3 +1779,24 @@ tr:hover .notes-cell .note-pencil {
   -webkit-box-shadow: 0 0 0 30px var(--bg-card) inset;
   -webkit-text-fill-color: var(--ink);
 }
+
+/* ===== TOUCH DEVICE HOVER GUARD ===== */
+/* Prevent sticky hover states on touch devices (phones, tablets) */
+@media (hover: none) {
+  .card-hover:hover,
+  .sticker-chip:hover,
+  .sticker-chip--rotated:hover {
+    transform: none !important;
+    box-shadow: 4px 4px 0 var(--ink) !important;
+  }
+  .btn-chunky:hover {
+    transform: none !important;
+  }
+  .chip:hover {
+    transform: none !important;
+    box-shadow: 3px 3px 0 var(--ink) !important;
+  }
+  .footer-link:hover {
+    transform: none !important;
+  }
+}
