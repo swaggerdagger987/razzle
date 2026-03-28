@@ -1888,7 +1888,7 @@ window.addEventListener("razzle-plan-changed", function(e) {
     for (var i = 0; i < 50; i++) {
       var c = document.createElement("div");
       c.style.cssText = "position:fixed;width:8px;height:8px;border-radius:50%;z-index:99999;pointer-events:none;";
-      c.style.background = ["#d97757","#5b7fff","#2ec4b6","#8b5cf6","#ffc857"][i % 5];
+      c.style.background = ["var(--orange)","var(--pos-qb)","var(--pos-rb)","var(--pos-te)","var(--yellow)"][i % 5];
       c.style.left = Math.random() * 100 + "vw";
       c.style.top = "-10px";
       document.body.appendChild(c);

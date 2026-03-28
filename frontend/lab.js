@@ -1885,7 +1885,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += buildTagChip(pid);
     html += `<span class="tag-icon" role="button" tabindex="0" aria-label="Tag player" onclick="event.stopPropagation(); showTagPicker('${pidJS}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();showTagPicker('${pidJS}',this)}" title="Tag player">&#9679;</span>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
-    if (player.age) {
+    if (player.age && !state.density) {
       var ageVal = Math.floor(player.age);
       var ageCls = ageVal <= 24 ? "age-young" : ageVal <= 27 ? "age-prime" : ageVal <= 29 ? "age-aging" : "age-vet";
       html += `<span class="age-badge ${ageCls}" title="Age ${ageVal}">${ageVal}</span>`;

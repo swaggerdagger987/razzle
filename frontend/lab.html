@@ -1069,12 +1069,12 @@
 
   .screener-table th.sort-asc::after { content: " ▲"; font-size: 9px; }
   .screener-table th.sort-desc::after { content: " ▼"; font-size: 9px; }
-  .screener-table th.sort-asc, .screener-table th.sort-desc { background: rgba(217, 119, 87, 0.08); }
+  .screener-table th.sort-asc, .screener-table th.sort-desc { background: rgba(var(--sort-highlight), 0.08); }
   .screener-table th.sort2-asc::after { content: " △2"; font-size: 8px; opacity: 0.5; }
   .screener-table th.sort2-desc::after { content: " ▽2"; font-size: 8px; opacity: 0.5; }
-  .screener-table th.sort2-asc, .screener-table th.sort2-desc { background: rgba(217, 119, 87, 0.06); }
-  .screener-table td.sort-col { background: rgba(217, 119, 87, 0.05); }
-  .screener-table td.sort2-col { background: rgba(217, 119, 87, 0.025); }
+  .screener-table th.sort2-asc, .screener-table th.sort2-desc { background: rgba(var(--sort-highlight), 0.06); }
+  .screener-table td.sort-col { background: rgba(var(--sort-highlight), 0.05); }
+  .screener-table td.sort2-col { background: rgba(var(--sort-highlight), 0.025); }
 
   /* ─── Data bars (no gradient) ─── */
   .screener-table td.data-bar { position: relative; }
