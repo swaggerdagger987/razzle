@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from pathlib import Path
 import datetime as _datetime
+import heapq as _heapq
 import hmac as _hmac
 import html as _html
 import httpx
@@ -57,8 +58,8 @@ def _resp_cache_set(key: str, body: bytes, headers: dict):
     """Cache response bytes."""
     with _resp_cache_lock:
         if len(_resp_cache) >= _RESP_CACHE_MAX:
-            oldest = sorted(_resp_cache.items(), key=lambda x: x[1]["t"])
-            for k, _ in oldest[:20]:
+            oldest = _heapq.nsmallest(20, _resp_cache.items(), key=lambda x: x[1]["t"])
+            for k, _ in oldest:
                 _resp_cache.pop(k, None)
         _resp_cache[key] = {"body": body, "t": _time.time(), "headers": headers}
 
