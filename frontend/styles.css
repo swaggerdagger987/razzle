@@ -148,6 +148,9 @@
   font-size: 13px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
 body {
   background: var(--bg);
   color: var(--ink);
@@ -1135,6 +1138,7 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(45, 31, 20, 0.45);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   z-index: 9000;
   align-items: flex-start;
