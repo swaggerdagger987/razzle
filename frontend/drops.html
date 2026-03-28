@@ -68,6 +68,17 @@
     .dr-grid { grid-template-columns: 1fr; }
     .dr-bar-cell { width: 40px; }
   }
+
+  /* Dark mode */
+  [data-theme="dark"] .dr-page { color: var(--ink); }
+  [data-theme="dark"] .dr-header h1 { color: var(--ink); }
+  [data-theme="dark"] .dr-subtitle { color: var(--ink-light); }
+  [data-theme="dark"] .dr-table th { color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .dr-table td { color: var(--ink-medium); border-color: var(--ink-faint); }
+  [data-theme="dark"] .dr-card-header { color: var(--bg); }
+  [data-theme="dark"] .dr-controls .pos-tab { background: var(--bg-card); color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .dr-controls .pos-tab.active { background: var(--ink); color: var(--bg-card); }
+  [data-theme="dark"] .dr-controls select { background: var(--bg-card); color: var(--ink); border-color: var(--ink-faint); }
 </style>
 </head>
 <body>

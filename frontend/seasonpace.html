@@ -58,6 +58,17 @@
     .sp-page { padding: 16px 12px 40px; }
     .sp-header h1 { font-size: 24px; }
   }
+
+  /* Dark mode */
+  [data-theme="dark"] .sp-page { color: var(--ink); }
+  [data-theme="dark"] .sp-header h1 { color: var(--ink); }
+  [data-theme="dark"] .sp-subtitle { color: var(--ink-light); }
+  [data-theme="dark"] .sp-table th { color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .sp-table td { color: var(--ink-medium); border-color: var(--ink-faint); }
+  [data-theme="dark"] .sp-card-header { color: var(--bg); }
+  [data-theme="dark"] .sp-controls .pos-tab { background: var(--bg-card); color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .sp-controls .pos-tab.active { background: var(--ink); color: var(--bg-card); }
+  [data-theme="dark"] .sp-controls select { background: var(--bg-card); color: var(--ink); border-color: var(--ink-faint); }
 </style>
 </head>
 <body>

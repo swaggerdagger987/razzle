@@ -63,6 +63,17 @@
     .se-header h1 { font-size: 24px; }
     .se-bar-cell { width: 50px; }
   }
+
+  /* Dark mode */
+  [data-theme="dark"] .se-page { color: var(--ink); }
+  [data-theme="dark"] .se-header h1 { color: var(--ink); }
+  [data-theme="dark"] .se-subtitle { color: var(--ink-light); }
+  [data-theme="dark"] .se-table th { color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .se-table td { color: var(--ink-medium); border-color: var(--ink-faint); }
+  [data-theme="dark"] .se-card-header { color: var(--bg); }
+  [data-theme="dark"] .se-controls .pos-tab { background: var(--bg-card); color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .se-controls .pos-tab.active { background: var(--ink); color: var(--bg-card); }
+  [data-theme="dark"] .se-controls select { background: var(--bg-card); color: var(--ink); border-color: var(--ink-faint); }
 </style>
 </head>
 <body>
