@@ -1140,6 +1140,16 @@ function _syncUndoRedoButtons() {
   loadCustomScoringColumns();
   loadStateFromURL();
 
+  // S2-021: Notify free users when shared URL contains tier-locked columns
+  if (typeof _showToast === "function" && state.visibleColumns && state.visibleColumns.length > 0) {
+    var _lockedCols = state.visibleColumns.filter(function(k) { return _getTierLockClass(k); });
+    if (_lockedCols.length > 0) {
+      setTimeout(function() {
+        _showToast(_lockedCols.length + " column" + (_lockedCols.length > 1 ? "s" : "") + " in this shared view require Pro to see full data", "info", 6000);
+      }, 1500);
+    }
+  }
+
   // Dynamic year fallbacks (shared by try + catch)
   const _curYear = new Date().getFullYear();
   const _nflYear = new Date().getMonth() >= 8 ? _curYear : _curYear - 1;
@@ -3242,7 +3252,7 @@ function updateResultCount() {
     var ago = Math.round((Date.now() - _lastFetchTime) / 1000);
     var agoText = ago < 5 ? "just now" : ago < 60 ? ago + "s ago" : Math.floor(ago / 60) + "m ago";
     var agoStyle = 'color:var(--ink-light); font-size:10px;';
-    if (ago > 3600) { agoStyle = 'color:var(--red, #e74c3c); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
+    if (ago > 3600) { agoStyle = 'color:var(--red, #e63946); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
     else if (ago > 1800) { agoStyle = 'color:var(--orange, #d97757); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
     parts.push('<span style="' + agoStyle + '" title="Data fetched at ' + escapeAttr(new Date(_lastFetchTime).toLocaleTimeString()) + '">⏱ ' + agoText + '</span>');
   }
