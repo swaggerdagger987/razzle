@@ -3372,7 +3372,7 @@ async function loadLeagues(userId) {
     }
   } catch (e) {
     var errMsg = e.name === "AbortError"
-      ? "sleeper's servers are napping. try again in a minute."
+      ? "sleeper's servers timed out. check your connection and try again."
       : "sleeper's servers are napping. try again in a minute.";
     container.innerHTML = '<div class="loading-intel" style="color:var(--red);">' + errMsg + ' <button class="btn-chunky" style="font-size:11px;padding:4px 12px;margin-left:8px;" onclick="loadLeagues(\'' + escapeJS(userId) + '\')">retry</button></div>';
     console.error(e);
@@ -3653,7 +3653,7 @@ async function toggleLeague(card, leagueId, userId) {
   } catch (e) {
     rosterDiv.dataset.loaded = ""; // Allow retry on failure
     var rosterErr = e.name === "AbortError"
-      ? "sleeper's servers are napping. tap to retry."
+      ? "roster fetch timed out. tap to retry."
       : "sleeper's servers are napping. tap to retry.";
     rosterDiv.innerHTML = '<div class="loading-intel" style="color:var(--red); font-size:16px;">' + rosterErr + '</div>';
     console.error(e);
