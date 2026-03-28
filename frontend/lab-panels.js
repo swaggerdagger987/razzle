@@ -6356,7 +6356,7 @@
   defs.push({ name: 'fptsbreakdown', render: function(el) {
     var curPos = '';
     var curSeason = _latestSeason;
-    var compColors = { pass_yd: '#5b7fff', rush_yd: '#2ec4b6', rec_yd: '#d97757', rec: '#8b5cf6', td: '#e74c3c' };
+    var compColors = { pass_yd: '#5b7fff', rush_yd: '#2ec4b6', rec_yd: '#d97757', rec: '#8b5cf6', td: '#e63946' };
     var compLabels = { pass_yd: 'Pass Yd', rush_yd: 'Rush Yd', rec_yd: 'Rec Yd', rec: 'Receptions', td: 'Touchdowns' };
 
     el.innerHTML =
@@ -6702,7 +6702,7 @@
     });
     el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
 
-    var compColors = ['#5b7fff', '#2ec4b6', '#d97757', '#8b5cf6', '#e74c3c', '#eab308', '#16a34a', '#f472b6'];
+    var compColors = ['#5b7fff', '#2ec4b6', '#d97757', '#8b5cf6', '#e63946', '#ffc857', '#2ec4b6', '#d97757'];
 
     function loadBreakdown(pid, playerInfo) {
       var content = el.querySelector('#pbd-content');

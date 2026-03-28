@@ -161,8 +161,8 @@ function _injectHamburgerMenu() {
 
   var links = [
     { href: "/", label: "Home" },
-    { href: "/lab.html", label: "Screener" },
-    { href: "/league-intel.html", label: "Bureau" },
+    { href: "/lab.html", label: "Fourth Down Lab" },
+    { href: "/league-intel.html", label: "Bureau of Intelligence" },
     { href: "/agents.html", label: "Situation Room" },
     { href: "/pricing.html", label: "Pricing" }
   ];
