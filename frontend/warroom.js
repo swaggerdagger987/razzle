@@ -137,23 +137,45 @@ const AGENT_SPRITES = {
 };
 const ANIM_TYPES = ['walk', 'idle', 'attack', 'jump'];
 
-Object.entries(AGENT_SPRITES).forEach(([agentKey, prefix]) => {
-  spriteSheets[agentKey] = {};
-  ANIM_TYPES.forEach(anim => {
-    const img = new Image();
-    img.onload = () => { spritesLoaded++; };
-    img.src = `assets/characters/${prefix}-${anim}.png`;
-    spriteSheets[agentKey][anim] = img;
-  });
-});
+// Deferred sprite loading — only starts when canvas enters viewport
+let _spritesInitiated = false;
+function loadSprites() {
+  if (_spritesInitiated) return;
+  _spritesInitiated = true;
 
-// Also load old sprites as fallback for bio cards
-const CHAR_NAMES = ['char_0','char_1','char_2','char_3','char_4','char_5'];
-CHAR_NAMES.forEach(name => {
-  const img = new Image();
-  img.src = `assets/characters/${name}.png`;
-  spriteImgs[name] = img;
-});
+  Object.entries(AGENT_SPRITES).forEach(([agentKey, prefix]) => {
+    spriteSheets[agentKey] = {};
+    ANIM_TYPES.forEach(anim => {
+      const img = new Image();
+      img.onload = () => { spritesLoaded++; };
+      img.src = `assets/characters/${prefix}-${anim}.png`;
+      spriteSheets[agentKey][anim] = img;
+    });
+  });
+
+  // Also load old sprites as fallback for bio cards
+  const CHAR_NAMES = ['char_0','char_1','char_2','char_3','char_4','char_5'];
+  CHAR_NAMES.forEach(name => {
+    const img = new Image();
+    img.src = `assets/characters/${name}.png`;
+    spriteImgs[name] = img;
+  });
+}
+
+// Use IntersectionObserver to lazy-load sprites when canvas is near viewport
+const _canvasEl = document.getElementById('warRoomCanvas');
+if (_canvasEl && 'IntersectionObserver' in window) {
+  const _spriteObserver = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      loadSprites();
+      _spriteObserver.disconnect();
+    }
+  }, { rootMargin: '200px' });
+  _spriteObserver.observe(_canvasEl);
+} else {
+  // Fallback: load immediately if no IntersectionObserver or no canvas
+  loadSprites();
+}
 
 // ── COLLISION MAP ──────────────────────────────────────────────────────
 // 0 = blocked, 1 = walkable
