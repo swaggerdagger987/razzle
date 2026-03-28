@@ -25,6 +25,9 @@ logger = logging.getLogger("razzle.auth")
 
 _ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 
+# Admin email — auto-promoted to is_admin on login/register
+ADMIN_EMAIL = os.environ.get("RAZZLE_ADMIN_EMAIL", "").strip().lower()
+
 if os.environ.get("ENVIRONMENT") == "production":
     USERS_DB_PATH = Path("/data/users.db")
 else:
@@ -220,12 +223,13 @@ def initialize_users_db():
         """)
         conn.commit()
 
-        # Migration: add trial and sleeper lock columns to users table
+        # Migration: add trial, sleeper lock, and admin columns to users table
         for col, default in [
             ("trial_start", "NULL"),
             ("trial_end", "NULL"),
             ("trial_used", "0"),
             ("sleeper_locked", "0"),
+            ("is_admin", "0"),
         ]:
             try:
                 conn.execute(f"ALTER TABLE users ADD COLUMN {col} DEFAULT {default}")
@@ -278,6 +282,12 @@ def _user_dict(row) -> dict:
     except (IndexError, KeyError):
         d["sleeper_locked"] = False
 
+    # Admin flag
+    try:
+        d["is_admin"] = bool(row["is_admin"])
+    except (IndexError, KeyError):
+        d["is_admin"] = False
+
     # Trial info
     trial_end_str = None
     try:
@@ -328,6 +338,19 @@ def _validate_password(password: str) -> str | None:
     return None
 
 
+def _maybe_promote_admin(conn, user_id: int, email: str):
+    """Auto-promote user to admin if their email matches RAZZLE_ADMIN_EMAIL."""
+    if ADMIN_EMAIL and email.strip().lower() == ADMIN_EMAIL:
+        conn.execute("UPDATE users SET is_admin = 1 WHERE id = ?", (user_id,))
+        conn.commit()
+        logger.info(f"User {user_id} auto-promoted to admin (matched RAZZLE_ADMIN_EMAIL)")
+
+
+def is_admin_user(user: dict) -> bool:
+    """Check if a user dict has admin privileges."""
+    return bool(user.get("is_admin"))
+
+
 def register(email: str, password: str) -> dict:
     """Register a new user. Returns {token, user}."""
     email = email.strip().lower()
@@ -353,12 +376,15 @@ def register(email: str, password: str) -> dict:
             )
             conn.commit()
             user_id = cursor.lastrowid
+            _maybe_promote_admin(conn, user_id, email)
+            is_admin = ADMIN_EMAIL and email == ADMIN_EMAIL
             # Build user dict with trial active — effective plan will be "pro"
             user = {
                 "id": user_id, "email": email, "plan": "pro",
                 "sleeper_username": None, "trial_active": True,
                 "trial_days_remaining": TRIAL_DURATION_DAYS,
                 "trial_end": trial_end, "plan_source": "trial",
+                "is_admin": is_admin,
             }
             # Token carries "pro" plan during trial for middleware compatibility
             token = _create_token(user_id, email, "pro")
@@ -385,6 +411,9 @@ def login(email: str, password: str) -> dict:
             logger.exception("Password verification error for %s", email)
             return {"error": "Invalid email or password", "status": 401}
 
+        _maybe_promote_admin(conn, row["id"], email)
+        # Re-fetch to pick up is_admin if just promoted
+        row = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         user = _user_dict(row)
         # Token uses effective plan (includes trial upgrade to pro)
         token = _create_token(user["id"], user["email"], user["plan"])

@@ -2853,8 +2853,7 @@ def vorp(season: int = 0, position: str = "", limit: int = 30):
 
 @app.get("/api/analytics/summary")
 async def analytics_summary(request: Request):
-    secret = request.headers.get("x-admin-secret", "")
-    if not _ADMIN_SECRET or not _hmac.compare_digest(secret, _ADMIN_SECRET):
+    if not _is_admin_request(request):
         return JSONResponse({"error": "unauthorized"}, status_code=403)
     return live_data.get_analytics_summary()
 
@@ -3408,11 +3407,26 @@ def dynasty_power_rankings(season: int = 0):
 _ADMIN_SECRET = os.environ.get("RAZZLE_ADMIN_SECRET", "")
 
 
+def _is_admin_request(request: Request) -> bool:
+    """Check if request is from an admin (JWT+is_admin flag, or legacy x-admin-secret)."""
+    # Check JWT auth first
+    auth_header = request.headers.get("authorization", "")
+    if auth_header.startswith("Bearer "):
+        token = auth_header[7:]
+        user = auth_module.get_current_user(token)
+        if user and auth_module.is_admin_user(user):
+            return True
+    # Fallback: legacy shared secret
+    secret = request.headers.get("x-admin-secret", "")
+    if _ADMIN_SECRET and _hmac.compare_digest(secret, _ADMIN_SECRET):
+        return True
+    return False
+
+
 @app.get("/api/admin/stats")
 async def admin_stats(request: Request):
-    """Return user counts and subscription stats. Protected by X-Admin-Secret header."""
-    secret = request.headers.get("x-admin-secret", "")
-    if not _ADMIN_SECRET or not _hmac.compare_digest(secret, _ADMIN_SECRET):
+    """Return user counts and subscription stats. Protected by admin auth."""
+    if not _is_admin_request(request):
         return JSONResponse({"error": "unauthorized"}, status_code=403)
 
     try:
@@ -3442,13 +3456,57 @@ async def admin_stats(request: Request):
 @app.post("/api/admin/cache-clear")
 async def admin_cache_clear(request: Request):
     """Flush all data caches. Call after uploading new data to persistent disk."""
-    secret = request.headers.get("x-admin-secret", "")
-    if not _ADMIN_SECRET or not _hmac.compare_digest(secret, _ADMIN_SECRET):
+    if not _is_admin_request(request):
         return JSONResponse({"error": "unauthorized"}, status_code=403)
     from .live_data.core import cache_clear
     cache_clear()
     _resp_cache.clear()
     return {"status": "ok", "message": "All caches cleared"}
+
+
+@app.get("/api/admin/users")
+async def admin_users(request: Request):
+    """List all users with plan info. Protected by admin auth."""
+    if not _is_admin_request(request):
+        return JSONResponse({"error": "unauthorized"}, status_code=403)
+    try:
+        with auth_module.get_users_db() as conn:
+            rows = conn.execute(
+                "SELECT id, email, plan, created_at, is_admin FROM users ORDER BY created_at DESC LIMIT 500"
+            ).fetchall()
+            users = [{"id": r["id"], "email": r["email"], "plan": r["plan"],
+                       "created_at": r["created_at"], "is_admin": bool(r["is_admin"])} for r in rows]
+        return JSONResponse({"users": users})
+    except Exception as e:
+        logger.error(f"Admin users error: {e}")
+        return JSONResponse({"error": "internal"}, status_code=500)
+
+
+@app.put("/api/admin/user/{user_id}/plan")
+async def admin_update_plan(user_id: int, request: Request):
+    """Change a user's plan. Protected by admin auth."""
+    if not _is_admin_request(request):
+        return JSONResponse({"error": "unauthorized"}, status_code=403)
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse({"error": "Invalid JSON"}, status_code=400)
+
+    new_plan = body.get("plan", "")
+    if new_plan not in ("free", "pro", "elite", "pro_lifetime", "elite_lifetime"):
+        return JSONResponse({"error": "Invalid plan"}, status_code=400)
+    try:
+        with auth_module.get_users_db() as conn:
+            row = conn.execute("SELECT id, email FROM users WHERE id = ?", (user_id,)).fetchone()
+            if not row:
+                return JSONResponse({"error": "User not found"}, status_code=404)
+            conn.execute("UPDATE users SET plan = ? WHERE id = ?", (new_plan, user_id))
+            conn.commit()
+            logger.info(f"Admin changed user {user_id} ({row['email']}) plan to {new_plan}")
+        return {"status": "ok", "user_id": user_id, "plan": new_plan}
+    except Exception as e:
+        logger.error(f"Admin plan update error: {e}")
+        return JSONResponse({"error": "internal"}, status_code=500)
 
 
 # ---------------------------------------------------------------------------
