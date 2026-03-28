@@ -376,7 +376,7 @@ function drawDraftBoard(f) {
   const w = f.w * TILE, h = f.h * TILE;
   drawPixelRect(x + 2, y + 2, w - 4, h - 4, C.boardBg, C.boardFrame);
   ctx.fillStyle = '#d97757';
-  ctx.font = 'bold 10px "Space Mono", monospace';
+  ctx.font = 'bold 11px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.fillText('DRAFT BOARD', x + w / 2, y + 14);
   const cardW = 22, cardH = 8, gap = 3;
@@ -467,7 +467,7 @@ function drawWarTable(f) {
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.fillStyle = '#2d1f14';
-  ctx.font = 'bold 9px "Space Mono", monospace';
+  ctx.font = 'bold 11px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('RAZZLE', cx, cy);
@@ -570,7 +570,7 @@ function drawBanner(f) {
   ctx.font = 'bold 12px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.fillText('RAZZLE', x + w / 2, y + 22);
-  ctx.font = 'bold 9px "Space Mono", monospace';
+  ctx.font = 'bold 11px "Space Mono", monospace';
   ctx.fillText('SIT ROOM', x + w / 2, y + 36);
   ctx.textAlign = 'left';
 }
@@ -1097,7 +1097,7 @@ class Agent {
       case 'eureka':
         drawPixelFootball(x + 7, y + 4);
         ctx.fillStyle = '#d97757';
-        ctx.font = 'bold 10px "Space Mono", monospace';
+        ctx.font = 'bold 11px "Space Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText('!', x + bubW - 6, y + 14);
         ctx.textAlign = 'left';
@@ -1259,7 +1259,7 @@ function drawHUD() {
     const a = agents[i];
     const cy = hudY + i * (chipH + chipGap);
     const label = `${i + 1} ${a.name}`;
-    ctx.font = 'bold 9px "Space Mono", monospace';
+    ctx.font = 'bold 11px "Space Mono", monospace';
     const tw = ctx.measureText(label).width + 12;
 
     ctx.globalAlpha = a.selected ? 0.9 : 0.55;
@@ -3144,7 +3144,7 @@ setupScenarioPanel();
       '<div class="warroom-bio-body">' +
         '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + a.sprite + '.png\'); background-position:0 0; background-size:448px 192px;"></div>' +
         '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.emoji + ' ' + escapeHtml(a.name) + '</div>' +
-        '<div class="warroom-bio-role">' + a.role + (a.isLeader ? ' <span style="font-family:var(--font-mono); font-size:9px; background:var(--orange); color:var(--text-on-accent); padding:1px 6px; border-radius:4px;">LEADER</span>' : '') + '</div>' +
+        '<div class="warroom-bio-role">' + a.role + (a.isLeader ? ' <span style="font-family:var(--font-mono); font-size:11px; background:var(--orange); color:var(--text-on-accent); padding:1px 6px; border-radius:4px;">LEADER</span>' : '') + '</div>' +
         '<div class="warroom-bio-quote">"' + a.quote + '"</div>' +
         '<div class="warroom-bio-tags">' + tagsHtml + '</div>' +
         '<button class="warroom-bio-ask" data-agent-name="' + escapeAttr(a.name) + '" style="color:' + a.color + '">Ask ' + escapeHtml(a.name) + '</button>' +
@@ -3646,7 +3646,7 @@ function _renderMemoryEntries(panel, memory, isElite) {
   }
 
   var headerBadge = isElite
-    ? '<div style="font-family:var(--font-mono); font-size:9px; color:var(--pos-qb); text-align:center; margin-bottom:6px; padding:2px 8px; border:2px solid var(--pos-qb); border-radius:4px; display:inline-block;">cloud-synced</div>'
+    ? '<div style="font-family:var(--font-mono); font-size:11px; color:var(--pos-qb); text-align:center; margin-bottom:6px; padding:2px 8px; border:2px solid var(--pos-qb); border-radius:4px; display:inline-block;">cloud-synced</div>'
     : '';
 
   var html = headerBadge ? '<div style="text-align:center;">' + headerBadge + '</div>' : '';
@@ -3654,18 +3654,18 @@ function _renderMemoryEntries(panel, memory, isElite) {
   memory.forEach(function(m) {
     var ago = formatTimeAgo(m.ts);
     var agentSummary = m.agents.map(function(a) { return escapeHtml(a.name); }).join(', ');
-    var syncIcon = m.synced ? '<span title="Synced to cloud" style="font-size:10px; color:var(--pos-qb); margin-left:4px;">&#9729;</span>' : '';
-    var leagueTag = m.leagueName ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); margin-left:4px;">[' + escapeHtml(m.leagueName) + ']</span>' : '';
+    var syncIcon = m.synced ? '<span title="Synced to cloud" style="font-size:11px; color:var(--pos-qb); margin-left:4px;">&#9729;</span>' : '';
+    var leagueTag = m.leagueName ? '<span style="font-family:var(--font-mono); font-size:11px; color:var(--orange); margin-left:4px;">[' + escapeHtml(m.leagueName) + ']</span>' : '';
 
     html += '<div style="padding:8px 0; border-bottom:2px dashed var(--ink-faint);">';
-    html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + ago + syncIcon + leagueTag + '</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + ago + syncIcon + leagueTag + '</div>';
     html += '<div style="font-family:var(--font-mono); font-size:12px; margin:2px 0;">' + escapeHtml(m.scenario.slice(0, 80)) + (m.scenario.length > 80 ? '...' : '') + '</div>';
-    html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + agentSummary + '</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + agentSummary + '</div>';
     html += '</div>';
   });
 
   html += '<div style="text-align:center; margin-top:8px;">';
-  html += '<button class="btn-chunky" style="font-size:10px; padding:3px 10px;" onclick="clearWarRoomMemory()">clear memory</button>';
+  html += '<button class="btn-chunky" style="font-size:11px; padding:3px 10px;" onclick="clearWarRoomMemory()">clear memory</button>';
   if (!isElite) {
     html += '<div style="font-family:var(--font-hand); font-size:11px; color:var(--ink-light); margin-top:6px;">' + memory.length + '/' + MEMORY_MAX_LOCAL + ' local entries</div>';
   } else {
@@ -3920,7 +3920,7 @@ function toggleBriefingHistory() {
       var leagueTag = b.league_name ? ' [' + escapeHtml(b.league_name) + ']' : '';
       html += '<div style="padding:6px 0; border-bottom:2px dashed var(--ink-faint); cursor:pointer;" data-briefing-id="' + (parseInt(b.id) || 0) + '">';
       html += '<div style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(b.week_label) + leagueTag + '</div>';
-      html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
+      html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
       html += '</div>';
     });
     panel.innerHTML = html;
@@ -4095,7 +4095,7 @@ function showFirstRunDemo() {
   html += '<div class="demo-briefing-cta">' +
     '<p>imagine this analysis with <strong>your roster</strong>, <strong>your opponents</strong>, and <strong>your league\u2019s scoring</strong>.</p>' +
     '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:13px;" id="demoBriefingCta">Sign Up Free</a>' +
-    '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); display:block; margin-top:6px;" id="demoBriefingHint">7-day Pro trial on sign-up</span>' +
+    '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); display:block; margin-top:6px;" id="demoBriefingHint">7-day Pro trial on sign-up</span>' +
   '</div>';
 
   host.innerHTML = html;

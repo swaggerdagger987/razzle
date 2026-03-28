@@ -196,7 +196,7 @@
   .ct-best { color: var(--semantic-green); font-weight: 700; }
 
   .ct-pos-badge {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     padding: 1px 5px;
     border-radius: var(--radius-sm);
@@ -213,7 +213,7 @@
     .ct-header h1 { font-size: 20px; }
     .ct-header .ct-subtitle { font-size: 16px; }
     .ct-controls { gap: 8px; }
-    .ct-table { font-size: 10px; }
+    .ct-table { font-size: 11px; }
     .ct-table th, .ct-table td { padding: 5px 6px; }
     .ct-chip { font-size: 11px; padding: 3px 8px; }
     .ct-search { font-size: 13px; padding: 8px 10px; }
@@ -570,7 +570,7 @@
         var c = cols[j];
         if (c.type === 'text') {
           html += '<td>' + escapeHtml(p.name) + ' <span class="ct-pos-badge" style="background:' + pc + '">' +
-            escapeHtml(p.position) + '</span> <span style="color:var(--ink-light);font-size:10px">' +
+            escapeHtml(p.position) + '</span> <span style="color:var(--ink-light);font-size:11px">' +
             escapeHtml(p.team) + '</span></td>';
         } else {
           var val = p[c.key] || 0;

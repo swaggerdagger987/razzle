@@ -199,7 +199,7 @@
 
   .player-rank {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 11px;
     color: var(--ink-light);
     width: 20px;
     text-align: right;
@@ -208,7 +208,7 @@
 
   .player-team {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 11px;
     color: var(--ink-light);
     margin-left: 2px;
   }
@@ -258,7 +258,7 @@
   /* Bye week cell */
   .bye-cell {
     color: var(--ink-light);
-    font-size: 10px;
+    font-size: 11px;
     font-style: italic;
   }
 
@@ -268,7 +268,7 @@
     .weekly-pos-tab { padding: 5px 10px; font-size: 12px; }
     .heatmap-table td { font-size: 11px; padding: 4px 3px; min-width: 36px; }
     .heatmap-table td.player-cell { min-width: 130px; font-size: 12px; }
-    .heatmap-table th { font-size: 10px; padding: 6px 3px; }
+    .heatmap-table th { font-size: 11px; padding: 6px 3px; }
   }
   @media (max-width: 480px) {
     .weekly-page { padding: 16px 10px 40px; }
@@ -526,7 +526,7 @@
       html += '<td class="player-cell"><div class="player-cell-inner" data-pid="' + escapeHtml(p.player_id) + '">';
       html += '<span class="player-rank">' + (idx + 1) + '</span>';
       html += '<span class="player-pos-dot" style="background:' + posColor + '"></span>';
-      html += '<span style="font-family:var(--font-mono);font-size:9px;font-weight:700;color:' + posColor + ';margin-right:4px;">' + escapeHtml(pos) + '</span>';
+      html += '<span style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:' + posColor + ';margin-right:4px;">' + escapeHtml(pos) + '</span>';
       html += '<span>' + escapeHtml(p.name) + '</span>';
       html += '<span class="player-team">' + escapeHtml(p.team) + '</span>';
       html += '</div></td>';

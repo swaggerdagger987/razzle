@@ -1334,10 +1334,10 @@ function updateAuthUI(user) {
     // Dropdown menu items
     var dropdownItems = '';
     if (isTrial) {
-      dropdownItems += '<div class="nav-dropdown-item" style="font-size:10px; color:var(--orange); cursor:default;">Pro trial: ' + (user.trial_days_remaining || 0) + ' days remaining</div>';
+      dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--orange); cursor:default;">Pro trial: ' + (user.trial_days_remaining || 0) + ' days remaining</div>';
     }
     if (user.sleeper_username) {
-      dropdownItems += '<div class="nav-dropdown-item" style="font-size:10px; color:var(--ink-light); cursor:default;">sleeper: ' + escapeHtml(user.sleeper_username) + '</div>';
+      dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--ink-light); cursor:default;">sleeper: ' + escapeHtml(user.sleeper_username) + '</div>';
     }
     if (isPaid && !isTrial) {
       dropdownItems += '<a href="#" onclick="openManageSubscription(); return false;" class="nav-dropdown-item">Manage Subscription</a>';
@@ -1549,7 +1549,7 @@ function showSleeperPrompt() {
     '</div>' +
     '<form onsubmit="handleSleeperLink(event)" style="display:flex; flex-direction:column; gap:10px;">' +
       '<input type="text" id="sleeperLinkInput" placeholder="Sleeper username" style="font-family:var(--font-mono); font-size:14px; padding:10px 14px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-card);">' +
-      '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); padding:4px 0;">this will permanently link your Sleeper account to your Razzle account</div>' +
+      '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); padding:4px 0;">this will permanently link your Sleeper account to your Razzle account</div>' +
       '<div id="sleeperLinkError" style="font-family:var(--font-mono); font-size:12px; color:var(--red); min-height:16px;"></div>' +
       '<button type="submit" class="btn-chunky btn-primary auth-submit">Connect</button>' +
       '<a href="#" onclick="showWelcomeState(); return false;" style="text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</a>' +
@@ -2228,7 +2228,7 @@ function openPlayerPopup(playerId) {
         if (val != null && val !== 0) {
           html += '<div style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:8px;padding:8px;text-align:center;">';
           html += '<div style="font-family:var(--font-mono);font-size:16px;font-weight:700;">' + formatStat(val, 0) + '</div>';
-          html += '<div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);text-transform:uppercase;">' + keys[i].l + '</div>';
+          html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);text-transform:uppercase;">' + keys[i].l + '</div>';
           html += '</div>';
         }
       }

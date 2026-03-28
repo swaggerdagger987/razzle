@@ -394,7 +394,7 @@ function drawScatter() {
   const labeled = state.selectedPlayers.length > 0
     ? data.filter(p => state.selectedPlayers.some(s => s.player_id === p.player_id))
     : data.slice(0, 8);
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillStyle = t.ink;
   for (const p of labeled) {
@@ -550,7 +550,7 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
   ctx.fill();
 
   // Dots and labels
-  ctx.font = "10px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let i = 0; i < vals.length; i++) {
     const x = toX(i);
@@ -731,7 +731,7 @@ function drawHeatmap() {
     ctx.fillText(shortName, padL + 4, y + cellH / 2 + 4);
 
     // Team badge
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillStyle = t.inkLight;
     ctx.fillText(player.team || "", padL + nameColW - 30, y + cellH / 2 + 3);
 
@@ -803,7 +803,7 @@ function drawHeatmap() {
   ctx.lineWidth = 2;
   ctx.strokeRect(legendX, legendY, legendW, legendH);
 
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText("0%", legendX, legendY + legendH + 12);
@@ -888,7 +888,7 @@ function renderCompareTable(players) {
     const posColor = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" }[p.position] || "var(--ink)";
     html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
       <span style="font-family:var(--font-mono); font-size:13px;">${escapeHtml(p.full_name)}</span>
-      <span style="display:inline-block; background:${posColor}; color:var(--text-on-accent); padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${escapeHtml(p.position)}</span>
+      <span style="display:inline-block; background:${posColor}; color:var(--text-on-accent); padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:11px; margin-left:4px;">${escapeHtml(p.position)}</span>
     </th>`;
   }
   html += '</tr>';
@@ -1125,7 +1125,7 @@ function exportNFLCompareImage() {
 
       // Tier label
       if (dvsLabel) {
-        ctx.font = "bold 9px 'Space Mono', monospace";
+        ctx.font = "bold 11px 'Space Mono', monospace";
         ctx.fillText(dvsLabel, cx + 10 + 18, cardY + 68);
       }
     }
@@ -1152,12 +1152,12 @@ function exportNFLCompareImage() {
   ctx.stroke();
 
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("STAT", padX + 8, tY + 18);
   players.forEach((p, i) => {
     ctx.textAlign = "right";
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText((p.full_name || "").split(" ").pop() || "?", padX + (i + 2) * colW - 8, tY + 18);
   });
 
@@ -1256,7 +1256,7 @@ function renderProspectCompareTable(prospects) {
     const color = PROSPECT_COMPARE_COLORS[i % PROSPECT_COMPARE_COLORS.length];
     html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
       <span style="font-family:var(--font-mono); font-size:13px;">${p.prospect.player_name}</span>
-      <span style="display:inline-block; background:${color}; color:var(--text-on-accent); padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${p.prospect.position}</span>
+      <span style="display:inline-block; background:${color}; color:var(--text-on-accent); padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:11px; margin-left:4px;">${p.prospect.position}</span>
     </th>`;
   });
   html += '</tr>';
@@ -1302,7 +1302,7 @@ function renderProspectCompareTable(prospects) {
       const pctLabel = pct != null ? `${Math.round(pct)}th` : "";
       const style = isBest ? "font-weight:700; color:var(--green);" : "";
       html += `<td style="text-align:right; padding:6px 8px; border-bottom:2px solid var(--ink-faint); ${style}">${display}`;
-      if (pctLabel) html += ` <span style="color:${pctColor}; font-size:10px; font-weight:700;">${pctLabel}</span>`;
+      if (pctLabel) html += ` <span style="color:${pctColor}; font-size:11px; font-weight:700;">${pctLabel}</span>`;
       html += `</td>`;
     });
     html += '</tr>';

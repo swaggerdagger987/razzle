@@ -771,7 +771,7 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
     ctx.fillText(stats[i].value, bx + boxW / 2, by + 26);
 
     ctx.fillStyle = t.inkLight;
-    ctx.font = "9px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillText(stats[i].label, bx + boxW / 2, by + 42);
   }
 }
@@ -802,7 +802,7 @@ function drawRadarOnExport(ctx, cx, cy, R, color1, color2, pos) {
   }
 
   // Labels
-  ctx.font = "9px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   for (var i = 0; i < n; i++) {

@@ -677,7 +677,7 @@ function drawRadarOnCanvas(ctx, cx, cy, R, seasons, career, pos) {
   }
 
   // Labels
-  ctx.font = "10px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   for (let i = 0; i < n; i++) {

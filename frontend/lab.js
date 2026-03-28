@@ -620,8 +620,8 @@ function showNoteEditor(playerId, anchorEl) {
     + `<div class="note-editor-footer">`
     + `<span class="note-editor-count" id="noteCharCount">${existing.length}/140</span>`
     + `<div style="display:flex; gap:6px;">`
-    + `<button class="btn-chunky note-editor-clear" onclick="clearPlayerNote('${escapeJS(playerId)}')" style="font-size:10px; padding:3px 8px; ${existing ? '' : 'display:none;'}">Clear</button>`
-    + `<button class="btn-primary note-editor-save" onclick="saveNoteFromEditor()" style="font-size:10px; padding:3px 10px;">Save</button>`
+    + `<button class="btn-chunky note-editor-clear" onclick="clearPlayerNote('${escapeJS(playerId)}')" style="font-size:11px; padding:3px 8px; ${existing ? '' : 'display:none;'}">Clear</button>`
+    + `<button class="btn-primary note-editor-save" onclick="saveNoteFromEditor()" style="font-size:11px; padding:3px 10px;">Save</button>`
     + `</div></div>`;
 
   // Position near anchor
@@ -1593,7 +1593,7 @@ function renderTableHead() {
   if (state.universe === "nfl") {
     const pinCount = state.pinnedPlayers.length;
     const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
-    html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}><span class="pin-icon${pinCount ? ' pin-active' : ''}"></span>${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
+    html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}><span class="pin-icon${pinCount ? ' pin-active' : ''}"></span>${pinCount ? '<span style="font-size:11px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
   }
   html += '<th scope="col" class="col-rank" title="Overall rank by current sort">#</th>';
   const playerAriaSort = (state.sortKey === "full_name" || state.sortKey === "player_name") ? (state.sortDir === "asc" ? "ascending" : "descending") : (state.sortKey2 === "full_name" || state.sortKey2 === "player_name") ? (state.sortDir2 === "asc" ? "ascending" : "descending") : "none";
@@ -1601,7 +1601,7 @@ function renderTableHead() {
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
     html += state.sortDir === "asc" ? " &#9650;" : " &#9660;";
   } else if (state.sortKey2 === "full_name" || state.sortKey2 === "player_name") {
-    html += ' <span style="opacity:0.4; font-size:10px;">' + (state.sortDir2 === "asc" ? "&#9650;" : "&#9660;") + "2</span>";
+    html += ' <span style="opacity:0.4; font-size:11px;">' + (state.sortDir2 === "asc" ? "&#9650;" : "&#9660;") + "2</span>";
   }
   html += "</th>";
 
@@ -1631,7 +1631,7 @@ function renderTableHead() {
     const tip = ` title="${escapeAttr(tipText)}"`;
     let extra = "";
     if (key === "dynasty_value") {
-      extra = ` <span class="dvs-info" role="button" tabindex="0" aria-label="DVS methodology info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
+      extra = ` <span class="dvs-info" role="button" tabindex="0" aria-label="DVS methodology info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:11px; opacity:0.6;">&#9432;</span>`;
     }
     // Filter indicator dot
     var filterInfo = _getColumnFilterInfo(key);
@@ -1910,7 +1910,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
     html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
-    if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
+    if (player.conference) html += `<span class="school-label" style="font-size:11px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
     html += `</div></td>`;
   } else if (isProspectView()) {
     const pn = escapeAttr(player.player_name || "");
@@ -2231,7 +2231,7 @@ function injectSparklines() {
     const pid = cell.getAttribute("data-sparkline-pid");
     const pts = _sparklineCache[pid];
     if (!pts || !pts.length) {
-      cell.innerHTML = '<span style="color:var(--ink-light); font-size:10px;">—</span>';
+      cell.innerHTML = '<span style="color:var(--ink-light); font-size:11px;">—</span>';
       continue;
     }
     cell.innerHTML = buildSparklineSVG(pts);
@@ -2293,7 +2293,7 @@ function showHoverCard(playerId, anchorEl) {
   html += '<div>';
   html += `<div class="hover-card-name">${escapeHtml(player.full_name || "")}${buildTagChip(playerId)}</div>`;
   html += `<div class="hover-card-meta">`;
-  html += `<span class="pos-badge ${posClass(pos)}" style="font-size:9px; padding:1px 5px;">${escapeHtml(pos)}</span> `;
+  html += `<span class="pos-badge ${posClass(pos)}" style="font-size:11px; padding:1px 5px;">${escapeHtml(pos)}</span> `;
   html += `${escapeHtml(player.team || "FA")}`;
   if (player.age) html += ` · ${Math.floor(player.age)}y`;
   if (player.games) html += ` · ${player.games}gp`;
@@ -2527,17 +2527,17 @@ async function toggleRowExpand(playerId, tdEl) {
     // Build mini table
     var html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:11px;">';
     html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
-    html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Wk</th>';
-    html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Opp</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">FPts</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Pass</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">PTD</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Rush</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">RTD</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Rec</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">RecYd</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">RcTD</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Tgt</th>';
+    html += '<th style="padding:3px 6px; text-align:left; font-size:11px; color:var(--ink-light);">Wk</th>';
+    html += '<th style="padding:3px 6px; text-align:left; font-size:11px; color:var(--ink-light);">Opp</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">FPts</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">Pass</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">PTD</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">Rush</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">RTD</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">Rec</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">RecYd</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">RcTD</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">Tgt</th>';
     html += '</tr>';
     for (var w of weeks) {
       var fpts = parseFloat(w.fantasy_points_ppr || w.fantasy_points || 0).toFixed(1);
@@ -3360,7 +3360,7 @@ function updateResultCount() {
     for (var j = 0; j < posOrder.length; j++) {
       var pp = posOrder[j];
       if (posCounts[pp]) {
-        badges.push('<span role="button" tabindex="0" aria-label="Filter to ' + pp + '" style="font-size:10px; font-weight:700; color:' + posColors[pp] + '; cursor:pointer; border-bottom:2px dashed ' + posColors[pp] + ';" onclick="togglePosition(\'' + pp + '\')" title="Filter to ' + pp + '">' + pp + ':' + posCounts[pp] + '</span>');
+        badges.push('<span role="button" tabindex="0" aria-label="Filter to ' + pp + '" style="font-size:11px; font-weight:700; color:' + posColors[pp] + '; cursor:pointer; border-bottom:2px dashed ' + posColors[pp] + ';" onclick="togglePosition(\'' + pp + '\')" title="Filter to ' + pp + '">' + pp + ':' + posCounts[pp] + '</span>');
       }
     }
     if (badges.length) parts.push(badges.join(" "));
@@ -3370,9 +3370,9 @@ function updateResultCount() {
   if (_lastFetchTime) {
     var ago = Math.round((Date.now() - _lastFetchTime) / 1000);
     var agoText = ago < 5 ? "just now" : ago < 60 ? ago + "s ago" : Math.floor(ago / 60) + "m ago";
-    var agoStyle = 'color:var(--ink-light); font-size:10px;';
-    if (ago > 3600) { agoStyle = 'color:var(--red, #e63946); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
-    else if (ago > 1800) { agoStyle = 'color:var(--orange, #d97757); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
+    var agoStyle = 'color:var(--ink-light); font-size:11px;';
+    if (ago > 3600) { agoStyle = 'color:var(--red, #e63946); font-weight:600; font-size:11px;'; agoText += ' — data may be stale'; }
+    else if (ago > 1800) { agoStyle = 'color:var(--orange, #d97757); font-weight:600; font-size:11px;'; agoText += ' — data may be stale'; }
     parts.push('<span style="' + agoStyle + '" title="Data fetched at ' + escapeAttr(new Date(_lastFetchTime).toLocaleTimeString()) + '">⏱ ' + agoText + '</span>');
   }
 
@@ -3794,7 +3794,7 @@ function showColumnStatsPopover(colKey, anchorEl) {
   pop.id = "colStatsPopover";
   pop.className = "colstats-popover";
   var posCtx = state.position !== "ALL" ? state.position : "All Positions";
-  pop.innerHTML = '<div class="colstats-title">' + escapeHtml(col.label) + ' <span style="font-size:10px; color:var(--ink-light); font-weight:400;">(' + escapeHtml(posCtx) + ')</span></div>' +
+  pop.innerHTML = '<div class="colstats-title">' + escapeHtml(col.label) + ' <span style="font-size:11px; color:var(--ink-light); font-weight:400;">(' + escapeHtml(posCtx) + ')</span></div>' +
     '<div class="colstats-grid">' +
     '<span class="colstats-label">Min</span><span class="colstats-val">' + fmt(min) + '</span>' +
     '<span class="colstats-label">Max</span><span class="colstats-val">' + fmt(max) + '</span>' +
@@ -4746,7 +4746,7 @@ function _showViewsSyncHint(isPaid) {
 
   var badge = document.createElement("div");
   badge.id = "viewsSyncBadge";
-  badge.style.cssText = "font-family:var(--font-mono); font-size:9px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:var(--radius-sm);";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:11px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:var(--radius-sm);";
 
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
@@ -4773,24 +4773,24 @@ function renderSavedViewsList() {
   const universeBadge = (u) => {
     const colors = { nfl: "var(--orange)", prospects: "var(--blue)", college: "var(--blue)" };
     const labels = { nfl: "NFL", prospects: "PROSP", college: "CFB" };
-    return `<span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[u] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[u] || "var(--ink)"}; text-transform:uppercase;">${labels[u] || u}</span>`;
+    return `<span style="font-family:var(--font-mono); font-size:11px; font-weight:700; padding:2px 6px; border:2px solid ${colors[u] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[u] || "var(--ink)"}; text-transform:uppercase;">${labels[u] || u}</span>`;
   };
 
   const posBadge = (pos) => {
     if (!pos || pos === "ALL") return "";
     const colors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
-    return ` <span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[pos] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[pos] || "var(--ink)"};">${pos}</span>`;
+    return ` <span style="font-family:var(--font-mono); font-size:11px; font-weight:700; padding:2px 6px; border:2px solid ${colors[pos] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[pos] || "var(--ink)"};">${pos}</span>`;
   };
 
   container.innerHTML = views.map(v => {
     const date = new Date(v.createdAt);
     const dateStr = isNaN(date.getTime()) ? "" : date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
+    const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
 
     return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
       <div style="flex:1; min-width:0;" role="button" tabindex="0" aria-label="Load view: ${escapeAttr(v.name)}" onclick="loadSavedView('${escapeJS(v.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();loadSavedView('${escapeJS(v.id)}')}">
         <div style="font-family:var(--font-mono); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
-        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
       <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}', this)" style="background:none; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
     </div>`;
@@ -5155,7 +5155,7 @@ function renderQuickCompare(container) {
   var posColors = _POS_COLORS_CSS;
 
   var html = '<span style="font-weight:700; color:' + (posColors[posA] || "var(--ink)") + '; font-size:11px;">' + nameA + '</span>';
-  html += ' <span style="color:var(--ink-light); font-size:10px;">vs</span> ';
+  html += ' <span style="color:var(--ink-light); font-size:11px;">vs</span> ';
   html += '<span style="font-weight:700; color:' + (posColors[posB] || "var(--ink)") + '; font-size:11px;">' + nameB + '</span>';
   html += ' <span style="color:var(--ink-light);">|</span> ';
 
@@ -5169,9 +5169,9 @@ function renderQuickCompare(container) {
     var winner = va > vb ? "a" : vb > va ? "b" : "";
     var colorA = winner === "a" ? "font-weight:700; color:var(--green);" : "";
     var colorB = winner === "b" ? "font-weight:700; color:var(--green);" : "";
-    html += '<span style="font-size:10px; color:var(--ink-light); margin:0 2px;">' + s.label + '</span>';
+    html += '<span style="font-size:11px; color:var(--ink-light); margin:0 2px;">' + s.label + '</span>';
     html += '<span style="font-size:11px; ' + colorA + '">' + va.toFixed(s.dec) + '</span>';
-    html += '<span style="color:var(--ink-light); font-size:9px;">/</span>';
+    html += '<span style="color:var(--ink-light); font-size:11px;">/</span>';
     html += '<span style="font-size:11px; ' + colorB + '">' + vb.toFixed(s.dec) + '</span> ';
   }
 
@@ -6014,7 +6014,7 @@ function exportImage() {
     ctx.fillRect(sx, hdrY, colW, headerH);
   }
 
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("#", padX + rankColW / 2, hdrY + headerH / 2 + 4);
@@ -6061,7 +6061,7 @@ function exportImage() {
     ctx.stroke();
 
     // Rank number
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillStyle = t.inkLight;
     ctx.textAlign = "center";
     ctx.fillText(String(state.offset + r + 1), padX + rankColW / 2, y + 18);
@@ -6075,7 +6075,7 @@ function exportImage() {
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
     ctx.strokeRect(badgeX, y + 6, 26, 16);
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillStyle = t.white;
     ctx.textAlign = "center";
     ctx.fillText(pos, badgeX + 13, y + 18);
@@ -6091,7 +6091,7 @@ function exportImage() {
     ctx.fillText(displayName, badgeX + 32, y + 18);
 
     // Team
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillStyle = t.inkLight;
     ctx.fillText(player.team || "", padX + rankColW + playerColW - 30, y + 18);
 
@@ -6495,7 +6495,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(posBadgeX, y + 8, 30, 20);
     ctx.fillStyle = t.white;
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, posBadgeX + 15, y + 22);
 
@@ -6614,7 +6614,7 @@ function renderCollegeProfile(data, container) {
   html += `<div>`;
   html += `<div class="profile-name">${escapeHtml(player.player_name)}</div>`;
   html += `<div class="profile-meta">${escapeHtml(player.team || "")} · ${escapeHtml(player.conference || "")} · ${player.seasons_played || 0} season${(player.seasons_played || 0) !== 1 ? "s" : ""}</div>`;
-  html += `<span style="display:inline-block; background:var(--pos-qb); color:var(--text-on-accent); font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-2deg);">COLLEGE</span>`;
+  html += `<span style="display:inline-block; background:var(--pos-qb); color:var(--text-on-accent); font-family:var(--font-mono); font-size:11px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-2deg);">COLLEGE</span>`;
   html += `</div>`;
   html += `</div>`;
 
@@ -6836,7 +6836,7 @@ function renderProfile(data, container) {
   html += `<div class="profile-meta">${teamDisplay} · Age ${displayAge} · ${escapeHtml(player.college || "")} · ${seasonCount} ${seasonLabel}</div>`;
   if (combine && combine.draft_round) {
     const draftPick = combine.draft_overall || combine.draft_pick;
-    html += `<span style="display:inline-block; background:var(--ink); color:var(--bg); font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
+    html += `<span style="display:inline-block; background:var(--ink); color:var(--bg); font-family:var(--font-mono); font-size:11px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
   }
   if (breakoutInfo) {
     html += `<span class="breakout-badge">BREAKOUT +${breakoutInfo.pct}% (${breakoutInfo.season})</span>`;
@@ -7209,7 +7209,7 @@ function drawProfileArc(seasons, pos) {
   ctx.translate(14, pad.top + plotH / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.fillStyle = t.inkLight;
-  ctx.font = "10px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("PPR Points", 0, 0);
   ctx.restore();
@@ -7316,7 +7316,7 @@ function exportProfileImage() {
     ctx.textAlign = "center";
     ctx.fillText(stats[i].val, x + sbW / 2, sbY + 32);
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillText(stats[i].label.toUpperCase(), x + sbW / 2, sbY + 52);
   }
 
@@ -7332,7 +7332,7 @@ function exportProfileImage() {
     ctx.strokeRect(padX, tY, W - padX * 2, tableHeaderH);
 
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     for (let i = 0; i < headers.length; i++) {
       ctx.textAlign = i === 0 ? "left" : "right";
       const x = i === 0 ? padX + 8 : padX + (i + 1) * colW - 8;
@@ -7732,7 +7732,7 @@ function renderProspectProfile(data, container, compsData) {
       html += `<div class="prospect-proj-confidence">`;
       html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">Comp confidence:</span> `;
       html += `<span style="font-family:var(--font-mono); font-size:14px; font-weight:700; color:${confColor};">${Math.round(compProjection.confidence)}%</span>`;
-      html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">(${compProjection.compCount} comps with NFL data)</span>`;
+      html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:8px;">(${compProjection.compCount} comps with NFL data)</span>`;
       html += `</div>`;
     }
   }
@@ -7782,7 +7782,7 @@ function drawCollegeArc(college, pos) {
   ctx.fillText(`college ${statLabel.toLowerCase()} by season`, W / 2, 18);
 
   // Y-axis gridlines
-  ctx.font = "10px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "right";
   const gridSteps = 4;
@@ -8122,7 +8122,7 @@ function exportProspectImage() {
       ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
       ctx.fillText(cVal, bx, y + 90);
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(cLbl, bx + 30, y + 90);
     });
@@ -8218,12 +8218,12 @@ function exportProspectImage() {
       ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = t.ink;
       ctx.fillText(compName, padX + 62, y + 20);
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(compMeta, padX + 62, y + 34);
 
       // Stats on right
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkMedium;
       ctx.textAlign = "right";
       ctx.fillText(compStats, W - padX - 8, y + 27);
@@ -8258,7 +8258,7 @@ function exportProspectImage() {
       ctx.fillStyle = t.ink;
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 22);
-      ctx.font = "9px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(lbl, bx + boxW / 2, y + 40);
     });
@@ -8342,7 +8342,7 @@ function renderTierView(data, container) {
 
     html += `<div class="tier-group">`;
     html += `<div class="tier-badge" style="background:${td.color};">${td.label}</div>`;
-    html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
+    html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
     html += `<div class="tier-grid">`;
 
     for (const p of prospects) {
@@ -8487,12 +8487,12 @@ function exportTierImage() {
       ctx.fillText(name.substring(0, 22), cx + 8, cy + 18);
 
       // Meta
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(meta.substring(0, 35), cx + 8, cy + 32);
 
       // Metrics
-      ctx.font = "9px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkMedium;
       ctx.fillText(metrics.substring(0, 45), cx + 8, cy + 48);
 
@@ -8690,7 +8690,7 @@ function renderBigBoard(data, container) {
 
     html += `<div class="bb-tier-group">`;
     html += `<div class="tier-badge" style="background:${td.color}; transform:rotate(-2deg);">${td.label}</div>`;
-    html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
+    html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
     html += `<div class="bb-tier-list">`;
 
     for (const p of tierProspects) {
@@ -8841,7 +8841,7 @@ function exportBigBoardImage() {
       ctx.fillText(p.player_name.substring(0, 22), padX + 44, rowY + 18);
 
       // Meta
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       const draftInfo = p.draft_round && p.draft_pick ? `Rd ${p.draft_round} #${p.draft_pick}` : "UDFA";
       ctx.fillText(`${p.school || ""} · ${draftInfo}`, padX + 44, rowY + 34);
@@ -8852,7 +8852,7 @@ function exportBigBoardImage() {
       ctx.beginPath();
       ctx.roundRect(chipX, rowY + 10, 30, 20, 10);
       ctx.fill();
-      ctx.font = "bold 10px 'Space Mono', monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.fillStyle = t.white;
       ctx.textAlign = "center";
       ctx.fillText(p.position, chipX + 15, rowY + 24);
@@ -8876,7 +8876,7 @@ function exportBigBoardImage() {
       ctx.fillText((p.rps || 0).toFixed(1), barX + barW + 8, rowY + 27);
 
       // Key metrics
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkMedium;
       ctx.textAlign = "right";
       let metricStr = "";
@@ -8995,12 +8995,12 @@ function renderClassAnalytics(data, container) {
           <div style="display:flex; height:20px; border:2px solid var(--ink); border-radius:var(--radius-sm); overflow:hidden;">
             ${cls.count > 0 ? ['elite','premium','solid','flier'].map(tier => {
               const pct = (cls.tiers[tier] / cls.count * 100);
-              return pct > 0 ? `<div style="width:${pct}%; background:${tierColors[tier]}; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:10px; color:var(--text-on-accent); font-weight:700;">${cls.tiers[tier]}</div>` : '';
+              return pct > 0 ? `<div style="width:${pct}%; background:${tierColors[tier]}; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; color:var(--text-on-accent); font-weight:700;">${cls.tiers[tier]}</div>` : '';
             }).join('') : '<div style="width:100%; background:var(--ink-faint);"></div>'}
           </div>
           <div style="display:flex; gap:8px; margin-top:4px; flex-wrap:wrap;">
             ${['elite','premium','solid','flier'].map(tier =>
-              `<span style="font-family:var(--font-mono); font-size:10px; color:${tierColors[tier]}; font-weight:700;">${tier.charAt(0).toUpperCase() + tier.slice(1)}: ${cls.tiers[tier]}</span>`
+              `<span style="font-family:var(--font-mono); font-size:11px; color:${tierColors[tier]}; font-weight:700;">${tier.charAt(0).toUpperCase() + tier.slice(1)}: ${cls.tiers[tier]}</span>`
             ).join('')}
           </div>
         </div>
@@ -9221,7 +9221,7 @@ function exportClassAnalyticsImage() {
     ctx.lineWidth = 1;
     ctx.strokeRect(x + barW / 2 - gw / 2, by - 24, gw, gh);
     ctx.fillStyle = t.white;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText(cls.grade, x + barW / 2, by - 12);
 
     // Year
@@ -9288,7 +9288,7 @@ function exportClassAnalyticsImage() {
 
     // Top prospect
     if (cls.top_prospect) {
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText("Top:", cx + 10, cy + 82);
       ctx.fillStyle = t.ink;
@@ -9436,7 +9436,7 @@ function renderTradeValueChart() {
       // Name + position
       html += '<div style="display:flex; align-items:center; gap:6px;">';
       html += '<span style="font-family:var(--font-mono); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(p.full_name) + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm); border:2px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:11px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm); border:2px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
       html += '</div>';
       // Team + Age
       html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + Math.round(p.age) : '') + '</div>';
@@ -9484,7 +9484,7 @@ function setupTradeSearchInput(side) {
       autoDiv.innerHTML = matches.map(p => {
         const pc = posColors[p.position] || getCanvasTheme().ink;
         return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:2px solid var(--ink-faint);">'
-          + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
+          + '<span style="font-family:var(--font-mono); font-size:11px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + p._tv + '</span>'
           + '</div>';
@@ -9544,7 +9544,7 @@ function renderTradeSide(side) {
   container.innerHTML = arr.map((p, i) => {
     const pc = posColors[p.position] || getCanvasTheme().ink;
     return '<div style="display:flex; align-items:center; gap:6px; padding:5px 8px; background:var(--bg-card); border:2px solid var(--ink); border-radius:var(--radius-sm); border-left:4px solid ' + pc + ';">'
-      + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 4px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
+      + '<span style="font-family:var(--font-mono); font-size:11px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 4px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
       + '<span style="font-family:var(--font-mono); font-size:12px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + escapeHtml(p.full_name) + '</span>'
       + '<span style="font-family:var(--font-mono); font-size:12px; font-weight:bold;">' + p._tv + '</span>'
       + '<button onclick="removeFromTradeSide(\'' + side + '\', ' + i + ')" style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--ink-light); padding:0 2px;">×</button>'
@@ -9658,7 +9658,7 @@ function exportTradeValuesPNG() {
     ctx.lineWidth = 1.5;
     ctx.stroke();
     ctx.fillStyle = t.white;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(g.tier.badge, 0, 4);
     ctx.restore();
@@ -9702,7 +9702,7 @@ function exportTradeValuesPNG() {
 
       // Team + age
       ctx.fillStyle = t.inkLight;
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillText((p.team || "FA") + (p.age ? "  Age " + Math.round(p.age) : ""), padX + 300, ry + 18);
 
       // Trade value bar
@@ -9951,7 +9951,7 @@ function renderAgingCurveChart(targetCanvas) {
 
     // Label at last point
     const last = pts[pts.length - 1];
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillStyle = color;
     ctx.textAlign = "left";
     ctx.fillText((p.name || '').split(" ").pop(), xScale(last.age) + 6, yScale(last.ppg) + 3);
@@ -10296,7 +10296,7 @@ function renderHeatMapChart(targetCanvas) {
     ctx.fillText(displayName, padL + 8, rowY + 18);
 
     // Team badge
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillStyle = posColor;
     const nameW = ctx.measureText(displayName).width;
     ctx.fillText(player.team, padL + 12 + nameW + 4, rowY + 18);
@@ -10446,7 +10446,7 @@ function renderWatchlistPanel() {
 
     groups[pos].forEach(function(p) {
       html += '<div style="display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:var(--radius-sm); margin-bottom:3px; background:var(--bg);">';
-      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:10px; padding:1px 6px;">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:11px; padding:1px 6px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:13px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
       html += '<select class="select-chunky" style="font-size:11px; padding:2px 6px; width:90px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderWatchlistPanel();">';
@@ -10454,7 +10454,7 @@ function renderWatchlistPanel() {
         html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + tierNames[t] + '</option>';
       }
       html += '</select>';
-      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromWatchlist(\'' + escapeJS(p.player_id) + '\'); renderWatchlistPanel(); renderTable();" title="Remove">&#10005;</button>';
+      html += '<button class="btn-chunky" style="font-size:11px; padding:2px 6px; color:var(--red);" onclick="removeFromWatchlist(\'' + escapeJS(p.player_id) + '\'); renderWatchlistPanel(); renderTable();" title="Remove">&#10005;</button>';
       html += '</div>';
     });
     html += '</div>';
@@ -10534,10 +10534,10 @@ function renderTierBoard() {
       var pc = posColors[p.position] || "var(--ink-light)";
       html += '<div style="display:inline-flex; align-items:center; gap:5px; padding:4px 10px 4px 0; border:2px solid var(--ink); border-radius:8px; background:var(--bg-card); box-shadow:2px 2px 0 var(--ink); font-size:12px;">';
       html += '<div style="width:5px; align-self:stretch; background:' + pc + '; border-radius:8px 0 0 8px;"></div>';
-      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:11px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.name) + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderTierBoard();">';
+      html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
+      html += '<select class="select-chunky" style="font-size:11px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderTierBoard();">';
       for (var t = 0; t <= 5; t++) {
         html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + TIER_LABELS[t] + '</option>';
       }
@@ -10668,7 +10668,7 @@ function exportTierBoardPNG() {
       ctx.roundRect(px + 10, py + 6, 24, 16, 4);
       ctx.fill();
       ctx.fillStyle = t.white;
-      ctx.font = "bold 9px 'Space Mono', monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText(p.position, px + 22, py + 18);
       ctx.textAlign = "left";
@@ -10686,7 +10686,7 @@ function exportTierBoardPNG() {
 
       // Team
       ctx.fillStyle = t.inkLight;
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.textAlign = "right";
       ctx.fillText(p.team, px + cardW - 6, py + 18);
       ctx.textAlign = "left";
@@ -11401,7 +11401,7 @@ function exportTradeAnalyzerPNG() {
       ctx.lineWidth = 1.5;
       ctx.stroke();
       ctx.fillStyle = t.white;
-      ctx.font = "bold 10px 'Space Mono', monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText(isPick ? ("RD" + p.round) : p.position, x + 36, cy + 25);
 
@@ -11663,7 +11663,7 @@ function _taDrawPickChart() {
     ctx.lineTo(W - pad.right, y);
     ctx.stroke();
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(Math.round(maxVal * (1 - i / 4)), pad.left - 6, y + 4);
   }
@@ -11705,14 +11705,14 @@ function _taDrawPickChart() {
       ctx.stroke();
       // Label
       ctx.fillStyle = t.ink;
-      ctx.font = "bold 10px 'Space Mono', monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText((pk.pick_label || "").split(" ")[1] || "", x, y - 10);
     }
   }
 
   // Round labels at bottom
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let rd = 1; rd <= 4; rd++) {
     const startIdx = (rd - 1) * 12;
@@ -11819,9 +11819,9 @@ async function rosterSearchPlayers(query) {
       if (inRoster) return;
       var pos = p.position || "??";
       html += '<div class="roster-search-row" style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:var(--radius-sm); margin-bottom:2px; background:var(--bg);" data-pid="' + escapeAttr(pid) + '" data-name="' + escapeAttr(p.full_name || p.name || "") + '" data-pos="' + escapeAttr(pos) + '" data-team="' + escapeAttr(p.team || "FA") + '" data-query="' + escapeAttr(query) + '">';
-      html += '<span class="pos-badge pos-' + pos.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(pos) + '</span>';
+      html += '<span class="pos-badge pos-' + pos.toLowerCase() + '" style="font-size:11px; padding:1px 5px;">' + escapeHtml(pos) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name || p.name || "") + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + '</span>';
       html += '<span style="font-family:var(--font-hand); font-size:12px; color:var(--green); margin-left:auto;">+ add</span>';
       html += '</div>';
     });
@@ -11902,10 +11902,10 @@ function renderMyRosterPanel() {
     html += '<div style="font-family:var(--font-mono); font-size:13px; color:' + pc + '; margin-bottom:4px; border-bottom:2px dashed var(--ink-faint); padding-bottom:3px;">' + pos + ' (' + groups[pos].length + ')</div>';
     groups[pos].forEach(function(p) {
       html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; border-radius:var(--radius-sm); margin-bottom:2px; background:var(--bg);">';
-      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:11px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px; flex:1;">' + escapeHtml(p.name) + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeJS(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
+      html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
+      html += '<button class="btn-chunky" style="font-size:11px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeJS(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
       html += '</div>';
     });
     html += '</div>';
@@ -11950,7 +11950,7 @@ function renderRosterReport() {
   // Grade badge with explainer
   html += '<div style="text-align:center;">';
   html += '<div title="Overall roster strength based on total trade value" style="background:' + gc + '; color:var(--text-on-accent); font-family:var(--font-display); font-size:32px; padding:8px 16px; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg); min-width:60px; text-align:center; cursor:help;">' + escapeHtml(r.grade) + '</div>';
-  html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Roster Grade</div>';
+  html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Roster Grade</div>';
   html += '</div>';
   // Stats
   html += '<div style="flex:1;">';
@@ -11960,7 +11960,7 @@ function renderRosterReport() {
   // Status badge with explainer
   html += '<div style="text-align:center;">';
   html += '<div title="Based on total value + average age: high value + young = competing, low value or old = rebuilding" style="background:' + sc + '; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); transform:rotate(3deg); text-transform:uppercase; cursor:help;">' + escapeHtml(r.competing_status) + '</div>';
-  html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Window</div>';
+  html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Window</div>';
   html += '</div>';
   html += '</div>';
 
@@ -11986,7 +11986,7 @@ function renderRosterReport() {
     var bg = i % 2 === 0 ? "var(--bg)" : "var(--bg-card)";
     html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; background:' + bg + '; font-size:12px;">';
     html += '<span style="font-family:var(--font-mono); color:var(--ink-light); width:20px;">' + (i + 1) + '</span>';
-    html += '<span class="pos-badge pos-' + (p.position || "wr").toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
+    html += '<span class="pos-badge pos-' + (p.position || "wr").toLowerCase() + '" style="font-size:11px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
     html += '<span style="font-family:var(--font-display); flex:1;">' + escapeHtml(p.full_name) + '</span>';
     html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
     // Value bar
@@ -12102,7 +12102,7 @@ function drawRosterAgeChart() {
     var gx = xPos(a);
     ctx.beginPath(); ctx.moveTo(gx, pad.top); ctx.lineTo(gx, H - pad.bottom); ctx.stroke();
     ctx.fillStyle = t.ink;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(a, gx, H - pad.bottom + 14);
   }
@@ -12110,14 +12110,14 @@ function drawRosterAgeChart() {
     var gy = yPos(v);
     ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(W - pad.right, gy); ctx.stroke();
     ctx.fillStyle = t.ink;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(v, pad.left - 4, gy + 3);
   }
 
   // Axis labels
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("AGE", pad.left + plotW / 2, H - 2);
   ctx.save();
@@ -12143,7 +12143,7 @@ function drawRosterAgeChart() {
     // Name label for top players
     if (val >= 40 || players.length <= 10) {
       ctx.fillStyle = t.ink;
-      ctx.font = "9px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.textAlign = "center";
       var lastName = (p.full_name || "").split(" ").slice(-1)[0];
       ctx.fillText(lastName, x, y - 8);
@@ -12302,10 +12302,10 @@ function exportRosterTeamCard() {
   ctx.lineWidth = 1;
   for (var a = Math.ceil(sMinAge); a <= sMaxAge; a += 2) {
     ctx.beginPath(); ctx.moveTo(sxPos(a), scatterY + sPad.top); ctx.lineTo(sxPos(a), scatterY + scatterH - sPad.bottom); ctx.stroke();
-    ctx.fillStyle = t.inkMedium; ctx.font = "9px 'Space Mono', monospace"; ctx.textAlign = "center";
+    ctx.fillStyle = t.inkMedium; ctx.font = "11px 'Space Mono', monospace"; ctx.textAlign = "center";
     ctx.fillText(a, sxPos(a), scatterY + scatterH - sPad.bottom + 12);
   }
-  ctx.fillStyle = t.ink; ctx.font = "bold 9px 'Space Mono', monospace"; ctx.textAlign = "center";
+  ctx.fillStyle = t.ink; ctx.font = "bold 11px 'Space Mono', monospace"; ctx.textAlign = "center";
   ctx.fillText("AGE", scatterX + sPad.left + sPlotW / 2, scatterY + scatterH - 2);
 
   // Dots
@@ -12322,7 +12322,7 @@ function exportRosterTeamCard() {
   });
 
   // Title
-  ctx.fillStyle = t.ink; ctx.font = "bold 10px 'Space Mono', monospace"; ctx.textAlign = "left";
+  ctx.fillStyle = t.ink; ctx.font = "bold 11px 'Space Mono', monospace"; ctx.textAlign = "left";
   ctx.fillText("AGE vs VALUE", scatterX + sPad.left, scatterY + 14);
 
   y += CHART_AREA_H;
@@ -12341,7 +12341,7 @@ function exportRosterTeamCard() {
 
     // Rank
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText((i + 1) + ".", 50, rowY + 16);
 
@@ -12350,7 +12350,7 @@ function exportRosterTeamCard() {
     _roundRect(ctx, 56, rowY + 4, 26, 16, 4);
     ctx.fill();
     ctx.fillStyle = t.white;
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, 69, rowY + 15);
 
@@ -12362,7 +12362,7 @@ function exportRosterTeamCard() {
 
     // Team
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "left";
     var nameW = ctx.measureText(p.full_name || "").width;
     ctx.fillText(p.team || "", 94 + nameW, rowY + 16);
@@ -12456,7 +12456,7 @@ function renderPlayerComps(data, container) {
   // Section header
   html += `<div class="profile-section-title" style="display:flex; align-items:center; justify-content:space-between;">`;
   html += `<span>Player Comps — ${season} Season</span>`;
-  html += `<button class="btn-chunky" onclick="exportCompsImage()" style="font-size:10px; padding:4px 10px;">Export Comps PNG</button>`;
+  html += `<button class="btn-chunky" onclick="exportCompsImage()" style="font-size:11px; padding:4px 10px;">Export Comps PNG</button>`;
   html += `</div>`;
 
   // Annotation
@@ -12486,7 +12486,7 @@ function renderPlayerComps(data, container) {
     // Similarity score
     html += `<div style="text-align:center; margin:8px 0;">`;
     html += `<span style="font-family:var(--font-display); font-size:28px; font-weight:700; color:${simColor};">${comp.similarity}%</span>`;
-    html += `<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); text-transform:uppercase;">match</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); text-transform:uppercase;">match</div>`;
     html += `</div>`;
 
     // Top matching stats
@@ -12779,7 +12779,7 @@ function exportCompsImage() {
     ctx.textAlign = "right";
     ctx.fillText(`${c.similarity}%`, W - padX - 16, cardY + 35);
     ctx.fillStyle = t.inkLight;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText("MATCH", W - padX - 16, cardY + 50);
 
     // Top matching stats
@@ -12906,7 +12906,7 @@ function renderBoomBust(data, container) {
   // Section header
   html += `<div class="profile-section-title" style="display:flex; align-items:center; justify-content:space-between;">`;
   html += `<span>Boom/Bust Profile — ${season} Season</span>`;
-  html += `<button class="btn-chunky" onclick="exportBoomBustImage()" style="font-size:10px; padding:4px 10px;">Export Boom/Bust PNG</button>`;
+  html += `<button class="btn-chunky" onclick="exportBoomBustImage()" style="font-size:11px; padding:4px 10px;">Export Boom/Bust PNG</button>`;
   html += `</div>`;
 
   // Annotation
@@ -12920,7 +12920,7 @@ function renderBoomBust(data, container) {
   html += `<div style="background:${gradeColor}; color:var(--text-on-accent); font-family:var(--font-display); font-size:36px; font-weight:700; width:72px; height:72px; display:flex; align-items:center; justify-content:center; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg);">`;
   html += grade;
   html += `</div>`;
-  html += `<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Consistency</div>`;
+  html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Consistency</div>`;
   html += `</div>`;
 
   // Stat cards
@@ -12940,8 +12940,8 @@ function renderBoomBust(data, container) {
                       st.label === "Bust%" ? "var(--red)" : posColor;
     html += `<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); padding:8px; text-align:center;">`;
     html += `<div style="font-family:var(--font-display); font-size:20px; font-weight:700; color:${cardColor};">${st.value}</div>`;
-    html += `<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-medium); text-transform:uppercase;">${st.label}</div>`;
-    html += `<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">${st.sub}</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); text-transform:uppercase;">${st.label}</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">${st.sub}</div>`;
     html += `</div>`;
   }
   html += `</div>`;
@@ -13043,7 +13043,7 @@ function drawBoomBustHistogram(data) {
 
     // X-axis label
     ctx.fillStyle = t.inkMedium;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(`${i * bucketSize}`, x + barW / 2, pad.top + cH + 16);
   }
@@ -13143,7 +13143,7 @@ function drawBoomBustRangeBar(data) {
   ctx.fillRect(medX - 2, barY - 4, 4, barH + 8);
 
   // Labels
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillStyle = "#e63946";
   ctx.fillText(floor_ppg.toFixed(1), floorX, barY - 4);
@@ -13153,7 +13153,7 @@ function drawBoomBustRangeBar(data) {
   ctx.fillText(ceiling_ppg.toFixed(1), ceilX, barY - 4);
 
   // Tiny labels
-  ctx.font = "9px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("FLOOR", floorX, H - 2);
@@ -13255,7 +13255,7 @@ function exportBoomBustImage() {
     ctx.textAlign = "center";
     ctx.fillText(cardStats[i].value, x + cardW / 2, startY + 28);
     ctx.fillStyle = t.inkMedium;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText(cardStats[i].label, x + cardW / 2, startY + 50);
   }
 
@@ -13304,7 +13304,7 @@ function exportBoomBustImage() {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(x, y, barW, bH);
     ctx.fillStyle = t.inkMedium;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(`${i * bucketSize}`, x + barW / 2, hPad.top + hH + 16);
   }
@@ -13363,7 +13363,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = posColor;
   ctx.fillRect(mdX - 2, rbY - 4, 4, 26);
 
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillStyle = "#e63946";
   ctx.fillText(`${floor_ppg.toFixed(1)} FLOOR`, flX, rbY - 6);
@@ -13393,7 +13393,7 @@ function exportBoomBustImage() {
   const toolbar = document.querySelector(".toolbar");
   if (!toolbar) return;
   const hint = document.createElement("div");
-  hint.style.cssText = "font-family:var(--font-mono); font-size:10px; color:var(--ink-light); padding:2px 0; white-space:nowrap;";
-  hint.innerHTML = `<kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">?</kbd> shortcuts`;
+  hint.style.cssText = "font-family:var(--font-mono); font-size:11px; color:var(--ink-light); padding:2px 0; white-space:nowrap;";
+  hint.innerHTML = `<kbd style="font-size:11px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:11px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:11px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:11px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">?</kbd> shortcuts`;
   toolbar.appendChild(hint);
 })();

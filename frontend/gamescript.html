@@ -47,17 +47,17 @@
   .gs-card-header.winning { background: var(--semantic-green); }
   .gs-card-header.losing { background: var(--semantic-red); }
   .gs-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .gs-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .gs-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 11px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
   .gs-table th:first-child, .gs-table th:nth-child(2), .gs-table th:nth-child(3) { text-align: left; }
   .gs-table td { padding: 6px 8px; text-align: right; border-bottom: 2px dashed var(--ink-faint); }
   .gs-table td:first-child, .gs-table td:nth-child(2), .gs-table td:nth-child(3) { text-align: left; }
   .gs-table tbody tr:hover { background: var(--bg-warm); }
   .gs-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .gs-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .gs-pos-badge { font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
   .gs-diff-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
   .gs-diff-pos { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .gs-diff-neg { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
-  .gs-gt-chip { font-family: var(--font-mono); font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); }
+  .gs-gt-chip { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); }
   .gs-gt-high { background: var(--yellow); color: var(--ink); }
   .gs-gt-low { background: var(--bg-warm); color: var(--ink-medium); }
   .gs-bar-cell { width: 60px; }
@@ -300,7 +300,7 @@ function renderTable(players, type) {
 
     html += '<tr>';
     html += '<td class="gs-rank">' + (i + 1) + '</td>';
-    html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px;">' + escapeHtml(p.team) + '</span></td>';
+    html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:11px;">' + escapeHtml(p.team) + '</span></td>';
     html += '<td><span class="gs-pos-badge" style="background:' + escapeHtml(posColor) + '">' + escapeHtml(p.position) + '</span></td>';
     html += '<td><strong>' + escapeHtml(String(p.ppg)) + '</strong></td>';
     html += '<td><span class="gs-diff-badge ' + diffCls + '">' + diffSign + escapeHtml(String(p.avg_diff)) + '</span></td>';

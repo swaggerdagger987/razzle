@@ -327,7 +327,7 @@
             results.forEach(function(p) {
               var row = document.createElement('div');
               row.innerHTML = '<span class="rankings-pos-badge ' + (p.position || '').toLowerCase() + '">' + escapeHtml(p.position || '') + '</span> ' +
-                escapeHtml(p.full_name || '') + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team || '') + '</span>';
+                escapeHtml(p.full_name || '') + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team || '') + '</span>';
               row.addEventListener('click', function() {
                 if (compareIds.indexOf(p.player_id) === -1 && compareIds.length < 5) {
                   compareIds.push(p.player_id);
@@ -377,7 +377,7 @@
           if (p.age) html += '<span class="rankings-age ' + ageCls + '">Age ' + escapeHtml(String(p.age)) + '</span>';
           html += '</div></div>';
           html += '<div class="rankings-scores">';
-          html += '<div class="rankings-value">' + fmt(p.dynasty_value) + ' <span style="font-size:10px;font-weight:400;color:var(--ink-light)">DVS</span></div>';
+          html += '<div class="rankings-value">' + fmt(p.dynasty_value) + ' <span style="font-size:11px;font-weight:400;color:var(--ink-light)">DVS</span></div>';
           html += '<div class="rankings-ppg">' + fmt(p.ppg) + ' ppg</div>';
           html += '</div></div>';
           rank++;
@@ -1147,7 +1147,7 @@
 
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td class="pa-rank">' + (i + 1) + '</td>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="pa-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td style="font-weight:700">' + fmt(p.ppg) + '</td>';
         html += '<td>' + fmt(p.pos_avg) + '</td>';
@@ -1517,7 +1517,7 @@
           html += '<div class="breakout-meta"><span class="breakout-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           if (isCollege && p.conference) {
             html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
-            html += '<span class="breakout-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+            html += '<span class="breakout-team" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           } else {
             html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
           }
@@ -1798,7 +1798,7 @@
           h += '<div class="stk-player-info"><div class="stk-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="stk-player-meta"><span class="stk-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="stk-team-label">' + escapeHtml(p.team) + '</span>';
-          if (isCollege && p.conference) h += '<span class="stk-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) h += '<span class="stk-team-label" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           h += '</div></div></div></td>';
         } else if (c.key === 'stock_score') {
           h += '<td class="' + cls.join(' ') + '"><span class="stk-score-badge ' + scoreClass(p.stock_score || 0) + '">' + escapeHtml(String(p.stock_score || 0)) + '</span></td>';
@@ -1992,7 +1992,7 @@
           var sign = p.delta > 0 ? '+' : '';
           html += '<tr>';
           html += '<td class="ww-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
           html += '<td><span class="ww-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td>' + escapeHtml(String(p.games)) + '</td>';
           html += '<td>' + fmt(p.season_avg) + '</td>';
@@ -2109,7 +2109,7 @@
             var scTeamLabel = isCollege && p.conference ? p.team + ' · ' + p.conference : p.team;
             html += '<div class="scarcity-bar-row" data-pid="' + escapeAttr(p.player_id) + '" title="' + escapeAttr(p.name + ' (' + scTeamLabel + ') — ' + p.ppg + ' PPG') + '">';
             html += '<div class="scarcity-bar-rank">' + escapeHtml(String(p.rank)) + '</div>';
-            html += '<div class="scarcity-bar-name">' + escapeHtml(p.name) + (isCollege ? '<span style="font-size:10px;color:var(--ink-light);margin-left:4px">' + escapeHtml(p.team || '') + '</span>' : '') + '</div>';
+            html += '<div class="scarcity-bar-name">' + escapeHtml(p.name) + (isCollege ? '<span style="font-size:11px;color:var(--ink-light);margin-left:4px">' + escapeHtml(p.team || '') + '</span>' : '') + '</div>';
             html += '<div class="scarcity-bar-track"><div class="scarcity-bar-fill ' + pl + '" style="width:' + pct.toFixed(1) + '%"></div></div>';
             html += '<div class="scarcity-bar-ppg">' + escapeHtml(String(p.ppg)) + '</div></div>';
           });
@@ -2297,7 +2297,7 @@
           h += '<div class="eff-player-info"><div class="eff-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="eff-player-meta"><span class="eff-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="eff-team-label">' + escapeHtml(p.team) + '</span>';
-          if (isCollegeEff && p.conference) h += '<span class="eff-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollegeEff && p.conference) h += '<span class="eff-team-label" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           h += '</div></div></div></td>';
         } else if (c.key === 'grade') {
           var g = p.grade || 'C';
@@ -2512,7 +2512,7 @@
           h += '<div class="con-player-info"><div class="con-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="con-player-meta"><span class="con-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="con-team-label">' + escapeHtml(p.team) + '</span>';
-          if (isCollegeCon && p.conference) h += '<span class="con-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollegeCon && p.conference) h += '<span class="con-team-label" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           h += '</div></div></div></td>';
         } else if (c.key === 'grade') {
           var g = p.grade || 'C';
@@ -2724,10 +2724,10 @@
           var cls = effClass(p.pts_per_snap);
           var barPct = maxPPS > 0 ? p.pts_per_snap / maxPPS * 100 : 0;
           var teamLabel = escapeHtml(p.team);
-          if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) teamLabel += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="se-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + teamLabel + '</span></td>';
           html += '<td><span class="se-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="se-eff-badge ' + cls + '">' + fmt(p.pts_per_snap, 3) + '</span></td>';
           html += '<td>' + fmt(p.ppg) + '</td>';
@@ -2825,10 +2825,10 @@
           var barPct = maxWL > 0 ? p.workload / maxWL * 100 : 0;
           var flagsHtml = (p.flags || []).map(function(f) { return '<span class="wl-flag">' + escapeHtml(f) + '</span>'; }).join('');
           var teamLabel = escapeHtml(p.team);
-          if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) teamLabel += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="wl-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + teamLabel + '</span></td>';
           html += '<td><span class="wl-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="wl-score-badge ' + cls + '">' + escapeHtml(String(p.workload)) + '</span></td>';
           html += '<td>' + fmt(p.touches_pg) + '</td>';
@@ -2926,10 +2926,10 @@
           var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
           var cls = dtiClass(p.dti);
           var teamLabel = escapeHtml(p.team);
-          if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) teamLabel += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="dt-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + teamLabel + '</span></td>';
           html += '<td><span class="dt-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="dt-dti-badge ' + cls + '">' + escapeHtml(String(p.dti)) + '</span></td>';
           html += '<td>' + fmt(p.rush_yd_pg) + '</td>';
@@ -3023,7 +3023,7 @@
           var cls = premiumClass(p.premium);
           html += '<tr>';
           html += '<td class="tp-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team) + '</span></td>';
           html += '<td><span class="tp-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="tp-premium-badge ' + cls + '">' + escapeHtml(String(p.premium)) + '</span></td>';
           html += '<td>' + fmt(p.targets_pg) + '</td>';
@@ -3101,7 +3101,7 @@
         var cls = rateClass(p.drop_rate, isGood);
         html += '<tr>';
         html += '<td class="dr-rank">' + (i + 1) + '</td>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="dr-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td><span class="dr-rate-badge ' + cls + '">' + fmt(p.drop_rate) + '%</span></td>';
         html += '<td>' + escapeHtml(String(p.drops)) + '</td>';
@@ -3212,7 +3212,7 @@
         var barCls = isPadders ? 'red' : 'green';
         html += '<tr>';
         html += '<td class="gt-rank">' + (i + 1) + '</td>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="gt-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td><span class="gt-pct-badge ' + pCls + '">' + fmt(p.garbage_time_pct) + '%</span></td>';
         html += '<td>' + fmt(p.ppg) + '</td>';
@@ -4070,7 +4070,7 @@
         var sign = p.delta > 0 ? '+' : '';
 
         html += '<tr>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="str-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td>' + fmt(p.season_avg) + '</td>';
         html += '<td>' + fmt(p.recent_avg) + '</td>';
@@ -4468,7 +4468,7 @@
         var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<tr>';
         html += '<td class="po-rank">' + (i + 1) + '</td>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="po-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td style="font-weight:700">' + fmt(p.playoff_ppg) + '</td>';
         html += '<td><span class="po-grade ' + gradeClass(p.sos_grade) + '">' + escapeHtml(p.sos_grade) + '</span></td>';
@@ -4482,7 +4482,7 @@
             html += '<td><div class="po-matchup">';
             html += '<span class="po-grade ' + gradeClass(wk.grade) + '">' + escapeHtml(wk.grade) + '</span>';
             html += ' <span class="po-opp">vs ' + escapeHtml(wk.opponent) + '</span>';
-            html += ' <span style="font-size:10px;font-weight:700">' + fmt(wk.fpts) + '</span>';
+            html += ' <span style="font-size:11px;font-weight:700">' + fmt(wk.fpts) + '</span>';
             html += '</div></td>';
           } else {
             html += '<td style="color:var(--ink-light)">--</td>';
@@ -4640,7 +4640,7 @@
         html += '<span class="ut-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="ut-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ut-team">' + escapeHtml(p.team || '') + '</span>';
-        if (isCollege && p.conference) html += '<span class="ut-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+        if (isCollege && p.conference) html += '<span class="ut-team" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
         html += '</td>';
         if (isCollege) {
           html += '<td class="ut-num">' + fmt(p.curr_ypg) + '</td>';
@@ -4784,7 +4784,7 @@
         html += '<span class="yy-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="yy-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="yy-team">' + escapeHtml(p.team || '') + '</span>';
-        if (isCollege && p.conference) html += '<span class="yy-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+        if (isCollege && p.conference) html += '<span class="yy-team" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
         html += '</td>';
         if (isCollege) {
           html += '<td class="yy-num">' + fmt(p.prev_ypg) + '</td>';
@@ -4975,7 +4975,7 @@
       // X axis labels
       var agChartCollege = typeof state !== 'undefined' && state.universe === 'college';
       ctx.fillStyle = t.inkMedium;
-      ctx.font = '10px Space Mono, monospace';
+      ctx.font = '11px Space Mono, monospace';
       ctx.textAlign = 'center';
       var ageStep = agChartCollege ? 1 : 2;
       for (var a = minAge; a <= maxAge; a += ageStep) {
@@ -5698,7 +5698,7 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // Area fill
@@ -5727,10 +5727,10 @@
           var y = pad.t + ch - (v / maxPPG) * ch;
           ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = posColor; ctx.fill();
           ctx.strokeStyle = t.white; ctx.lineWidth = 2; ctx.stroke();
-          ctx.fillStyle = t.ink; ctx.font = 'bold 10px "Space Mono", monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = t.ink; ctx.font = 'bold 11px "Space Mono", monospace'; ctx.textAlign = 'center';
           ctx.fillText(fmt(v), x, y - 10);
           // Season label
-          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace';
+          ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace';
           ctx.fillText(String(seasons[i].season || ''), x, pad.t + ch + 16);
         });
         // Y-axis label
@@ -5887,13 +5887,13 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // X labels
         xYears.forEach(function(yr, i) {
           var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
-          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace'; ctx.textAlign = 'center';
           ctx.fillText(yr, x, pad.t + ch + 16);
         });
 
@@ -6867,7 +6867,7 @@
       html += '<div class="aw2-winner-meta">';
       html += '<span class="aw2-pos-badge ' + pos + '">' + escapeHtml(w.position) + '</span>';
       html += '<span>' + escapeHtml(w.team) + '</span>';
-      if (isCollege && w.conference) html += '<span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(w.conference) + '</span>';
+      if (isCollege && w.conference) html += '<span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(w.conference) + '</span>';
       html += '<span>' + escapeHtml(String(w.ppg)) + ' PPG</span>';
       html += '</div>';
       if (!isCollege) {
@@ -6903,7 +6903,7 @@
           }
           html += '<span class="aw2-runner-pos ' + rPos + '">' + escapeHtml(r.position) + '</span>';
           html += '<span class="aw2-runner-name">' + escapeHtml(r.name) + '</span>';
-          if (isCollege && r.team) html += '<span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(r.team) + '</span>';
+          if (isCollege && r.team) html += '<span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(r.team) + '</span>';
           html += '<span class="aw2-runner-stat">' + escapeHtml(isCollege ? String(r.ppg != null ? r.ppg : '') + ' PPG' : (r.key_stat || '')) + '</span>';
           html += '</div>';
         });
@@ -7718,7 +7718,7 @@
           html += '<span class="ld2-player-name">' + escapeHtml(playerName) + '</span>';
           html += '<span class="ld2-pos-badge ' + posLower + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="ld2-team">' + escapeHtml(p.team) + '</span>';
-          if (isCollege && p.conference) html += '<span class="ld2-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) html += '<span class="ld2-team" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '</div>';
           html += '<span class="ld2-stat-value">' + escapeHtml(p.stat_display) + '</span>';
           html += '</li>';
@@ -8291,7 +8291,7 @@
         html += '<div class="rc2-pos-card"><div class="rc2-pos-label" style="background:' + pc + '">' + pos + '1</div>';
         if (ldr) {
           html += '<div class="rc2-pos-name">' + escapeHtml(ldr.name) + '</div>';
-          if (isCollege && ldr.team) html += '<div style="font-size:10px;color:var(--ink-light)">' + escapeHtml(ldr.team) + '</div>';
+          if (isCollege && ldr.team) html += '<div style="font-size:11px;color:var(--ink-light)">' + escapeHtml(ldr.team) + '</div>';
           html += '<div class="rc2-pos-stat">' + ldr.total_fpts + ' pts / ' + ldr.ppg + ' PPG</div>';
         } else { html += '<div class="rc2-pos-stat">&mdash;</div>'; }
         html += '</div>';
@@ -8311,13 +8311,13 @@
       if (isCollege) {
         html += '<div class="rc2-section"><div class="rc2-section-header">Top Yardage Producers</div>';
         html += renderList(data.top_yards || [], function(p) {
-          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.total_yards + ' yds</span> ' + p.ppg + ' PPG</span>';
+          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.total_yards + ' yds</span> ' + p.ppg + ' PPG</span>';
         });
         html += '</div>';
 
         html += '<div class="rc2-section"><div class="rc2-section-header">TD Leaders</div>';
         html += renderList(data.top_tds || [], function(p) {
-          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.tds + ' TDs</span></span>';
+          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.tds + ' TDs</span></span>';
         });
         html += '</div>';
       }
@@ -8325,14 +8325,14 @@
       html += '<div class="rc2-section"><div class="rc2-section-header">Biggest Breakouts</div>';
       html += renderList(data.breakouts || [], function(p) {
         var delta = isCollege ? p.delta_ppg : p.delta;
-        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge green">+' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
+        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge green">+' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
       });
       html += '</div>';
 
       html += '<div class="rc2-section"><div class="rc2-section-header">Biggest ' + (isCollege ? 'Declines' : 'Busts') + '</div>';
       html += renderList(data.busts || [], function(p) {
         var delta = isCollege ? p.delta_ppg : p.delta;
-        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge red">' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
+        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge red">' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
       });
       html += '</div>';
 
@@ -8407,8 +8407,8 @@
 
     function playerCell(p, isCollege) {
       var html = escapeHtml(p.name) + posChip(p.position);
-      if (isCollege && p.team) html += ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>';
-      if (isCollege && p.conference) html += ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+      if (isCollege && p.team) html += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>';
+      if (isCollege && p.conference) html += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
       return html;
     }
 
@@ -9039,7 +9039,7 @@
         var ypc = p.ypc != null ? escapeHtml(String(p.ypc)) : '-';
         html += '<tr>';
         html += '<td class="sr2-rank">' + (i + 1) + '</td>';
-        html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="sr2-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td><span class="sr2-rate-badge ' + cls + '">' + fmt(p.success_rate) + '%</span></td>';
         html += '<td><span class="sr2-type-chip">' + escapeHtml(p.sr_type) + '</span></td>';
@@ -9689,7 +9689,7 @@
 
         html += '<tr>' +
           '<td style="text-align:left; font-weight:600;">' + escapeHtml(p.player_name) + '</td>' +
-          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:4px; font-size:10px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
+          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:4px; font-size:11px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
           '<td>' + p.round + '</td>' +
           '<td>' + p.pick + '</td>' +
           '<td style="font-family:var(--font-mono); font-size:11px;">' + escapeHtml(p.draft_team || '') + '</td>' +
@@ -9698,7 +9698,7 @@
           '<td style="font-weight:700;">' + fmt(p.career_ppg) + '</td>' +
           '<td>' + fmt(p.career_fpts, 0) + '</td>' +
           '<td>' + fmt(p.career_av, 0) + '</td>' +
-          '<td><span style="background:' + verdictColor + '; color:var(--text-on-accent); padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
+          '<td><span style="background:' + verdictColor + '; color:var(--text-on-accent); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
         '</tr>';
       });
 
@@ -9947,13 +9947,13 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           sctx.beginPath(); sctx.moveTo(pad.l, gy); sctx.lineTo(pad.l + cw, gy); sctx.stroke();
-          sctx.fillStyle = t.inkLight; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'right';
+          sctx.fillStyle = t.inkLight; sctx.font = '11px "Space Mono", monospace'; sctx.textAlign = 'right';
           sctx.fillText(fmt(yMin + (g / 4) * yRange), pad.l - 5, gy + 3);
         }
         for (var g = 0; g <= 4; g++) {
           var gx = pad.l + (g / 4) * cw;
           sctx.beginPath(); sctx.moveTo(gx, pad.t); sctx.lineTo(gx, pad.t + ch); sctx.stroke();
-          sctx.fillStyle = t.inkLight; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'center';
+          sctx.fillStyle = t.inkLight; sctx.font = '11px "Space Mono", monospace'; sctx.textAlign = 'center';
           sctx.fillText(fmt(xMin + (g / 4) * xRange), gx, pad.t + ch + 16);
         }
 
@@ -10169,7 +10169,7 @@
 
         // Total value label
         ctx.fillStyle = th.ink;
-        ctx.font = '10px "Space Mono", monospace';
+        ctx.font = '11px "Space Mono", monospace';
         ctx.textAlign = 'left';
         ctx.fillText(fmt(t.total_value, 0), x + 4, y + barH / 2 + 4);
 
@@ -10184,7 +10184,7 @@
       // Legend
       var legendX = padLeft;
       var legendY = padTop - 14;
-      ctx.font = '9px "Space Mono", monospace';
+      ctx.font = '11px "Space Mono", monospace';
       ctx.textAlign = 'left';
       ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
         ctx.fillStyle = POS_COLS[pos];
@@ -10449,7 +10449,7 @@
               var h = Math.round(w.pct / 12 * 140);
               var isHigh = w.pct >= 8;
               return '<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;">' +
-                '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">' + w.pct + '%</div>' +
+                '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + w.pct + '%</div>' +
                 '<div style="width:100%; height:' + h + 'px; background:' + (isHigh ? 'var(--orange)' : 'var(--ink-faint)') + '; border-radius:4px 4px 0 0; border:2px solid var(--ink); min-width:16px;"></div>' +
                 '<div style="font-family:var(--font-mono); font-size:8px; color:var(--ink-light); white-space:nowrap;">' + w.label + '</div>' +
               '</div>';

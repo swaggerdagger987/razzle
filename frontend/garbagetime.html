@@ -47,13 +47,13 @@
   .gt-card-header.padders { background: var(--semantic-red); }
   .gt-card-header.clean { background: var(--semantic-green); }
   .gt-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .gt-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .gt-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 11px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
   .gt-table th:first-child, .gt-table th:nth-child(2), .gt-table th:nth-child(3) { text-align: left; }
   .gt-table td { padding: 6px 8px; text-align: right; border-bottom: 2px dashed var(--ink-faint); }
   .gt-table td:first-child, .gt-table td:nth-child(2), .gt-table td:nth-child(3) { text-align: left; }
   .gt-table tbody tr:hover { background: var(--bg-warm); }
   .gt-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .gt-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .gt-pos-badge { font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
   .gt-pct-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
   .gt-pct-high { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
   .gt-pct-mid { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
@@ -297,7 +297,7 @@ function buildCard(title, cls, players, isPadders) {
 
     html += '<tr>';
     html += '<td class="gt-rank">' + (i + 1) + '</td>';
-    html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px;">' + escapeHtml(p.team) + '</span></td>';
+    html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:11px;">' + escapeHtml(p.team) + '</span></td>';
     html += '<td><span class="gt-pos-badge" style="background:' + escapeHtml(posColor) + '">' + escapeHtml(p.position) + '</span></td>';
     html += '<td><span class="gt-pct-badge ' + pctCls + '">' + escapeHtml(String(p.garbage_time_pct)) + '%</span></td>';
     html += '<td>' + escapeHtml(String(p.ppg)) + '</td>';

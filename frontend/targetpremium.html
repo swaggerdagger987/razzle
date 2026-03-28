@@ -44,13 +44,13 @@
   .tp-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
   .tp-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--bg); }
   .tp-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .tp-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .tp-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 11px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
   .tp-table th:first-child, .tp-table th:nth-child(2), .tp-table th:nth-child(3) { text-align: left; }
   .tp-table td { padding: 6px 8px; text-align: right; border-bottom: 2px dashed var(--ink-faint); }
   .tp-table td:first-child, .tp-table td:nth-child(2), .tp-table td:nth-child(3) { text-align: left; }
   .tp-table tbody tr:hover { background: var(--bg-warm); }
   .tp-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .tp-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .tp-pos-badge { font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
   .tp-premium-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
   .tp-premium-elite { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
   .tp-premium-high { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
@@ -287,7 +287,7 @@ function render() {
 
     html += '<tr>';
     html += '<td class="tp-rank">' + (i + 1) + '</td>';
-    html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px;">' + escapeHtml(p.team) + '</span></td>';
+    html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:11px;">' + escapeHtml(p.team) + '</span></td>';
     html += '<td><span class="tp-pos-badge" style="background:' + escapeHtml(posColor) + '">' + escapeHtml(p.position) + '</span></td>';
     html += '<td><span class="tp-premium-badge ' + cls + '">' + escapeHtml(String(p.premium)) + '</span></td>';
     html += '<td>' + escapeHtml(String(p.targets_pg)) + '</td>';

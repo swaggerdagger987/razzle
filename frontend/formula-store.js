@@ -530,7 +530,7 @@ function renderFormulaCard(formula, userReviews) {
   const validPositions = ["QB", "RB", "WR", "TE"];
   const posTags = (formula.positions || []).filter(p => validPositions.includes(p)).map(p => {
     const colors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
-    return `<span style="font-family:var(--font-mono); font-size:9px; font-weight:700; padding:1px 6px; border-radius:8px; border:2px solid var(--ink); background:${colors[p]}; color:var(--text-on-accent); text-transform:uppercase;">${escapeHtml(p)}</span>`;
+    return `<span style="font-family:var(--font-mono); font-size:11px; font-weight:700; padding:1px 6px; border-radius:8px; border:2px solid var(--ink); background:${colors[p]}; color:var(--text-on-accent); text-transform:uppercase;">${escapeHtml(p)}</span>`;
   }).join(" ");
 
   // Free user: description is partially blurred, actions are gated
@@ -548,7 +548,7 @@ function renderFormulaCard(formula, userReviews) {
       <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint);">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
           <div style="display:flex; align-items:center; gap:4px;">
-            <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">rate:</span>
+            <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">rate:</span>
             ${renderClickableStars(formula.id, userRating, 16)}
           </div>
           ${isInstalled
@@ -562,7 +562,7 @@ function renderFormulaCard(formula, userReviews) {
               style="flex:1; font-size:11px; padding:4px 8px;"
               id="review_${parseInt(formula.id) || 0}"
               onkeydown="if(event.key==='Enter') submitReview(${parseInt(formula.id) || 0})">
-            <button class="btn-chunky" style="font-size:10px; padding:3px 8px;" onclick="submitReview(${parseInt(formula.id) || 0})">Post</button>
+            <button class="btn-chunky" style="font-size:11px; padding:3px 8px;" onclick="submitReview(${parseInt(formula.id) || 0})">Post</button>
           </div>
         ` : ""}
         ${existingUserReview ? `
@@ -588,7 +588,7 @@ function renderFormulaCard(formula, userReviews) {
       <div class="store-card-header">
         <div style="flex:1; min-width:0;">
           <div style="font-family:var(--font-display); font-size:16px; line-height:1.2; margin-bottom:4px;">${escapeHtml(formula.name)}</div>
-          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">by ${escapeHtml(formula.creator)}</div>
+          <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">by ${escapeHtml(formula.creator)}</div>
         </div>
         <div style="display:flex; gap:3px; flex-shrink:0;">${posTags}</div>
       </div>
@@ -596,7 +596,7 @@ function renderFormulaCard(formula, userReviews) {
       <div class="store-card-footer">
         <div style="display:flex; align-items:center; gap:6px;">
           ${renderStars(formula.avgRating || 0)}
-          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${(formula.avgRating || 0).toFixed(1)} (${formula.ratingCount || 0})</span>
+          <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">${(formula.avgRating || 0).toFixed(1)} (${formula.ratingCount || 0})</span>
         </div>
       </div>
       ${actionsHtml}

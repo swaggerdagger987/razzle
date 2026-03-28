@@ -141,12 +141,12 @@ function renderSavedFormulas() {
       var _esc = typeof escapeHtml === "function" ? escapeHtml : function(s) { return s; };
       var _escAttr = typeof escapeAttr === "function" ? escapeAttr : function(s) { return s.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };
       const publishBtn = isPublished
-        ? `<span style="font-family:var(--font-mono); font-size:9px; color:var(--green); font-weight:700; padding:2px 6px; border:2px solid var(--green); border-radius:4px;">Published</span>`
-        : `<button class="btn-chunky" style="font-size:9px; padding:2px 8px;" data-publish-formula="${_escAttr(f.name)}">Publish</button>`;
+        ? `<span style="font-family:var(--font-mono); font-size:11px; color:var(--green); font-weight:700; padding:2px 6px; border:2px solid var(--green); border-radius:4px;">Published</span>`
+        : `<button class="btn-chunky" style="font-size:11px; padding:2px 8px;" data-publish-formula="${_escAttr(f.name)}">Publish</button>`;
       return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:2px solid var(--ink-faint); gap:6px;">
         <div style="flex:1; min-width:0;">
           <strong style="font-family:var(--font-mono); font-size:13px;">${_esc(f.name)}</strong>
-          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${_esc(desc)}</span>
+          <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:8px;">${_esc(desc)}</span>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
           ${publishBtn}
@@ -282,7 +282,7 @@ function _showCloudSyncHint(isPaid) {
 
   var badge = document.createElement("div");
   badge.id = "cloudSyncBadge";
-  badge.style.cssText = "font-family:var(--font-mono); font-size:9px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:4px;";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:11px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:4px;";
 
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";

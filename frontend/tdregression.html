@@ -51,13 +51,13 @@
   .tdr-card-header.positive { background: var(--semantic-green); }
   .tdr-card-header.negative { background: var(--semantic-red); }
   .tdr-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
-  .tdr-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 10px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .tdr-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 11px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
   .tdr-table th:first-child, .tdr-table th:nth-child(2), .tdr-table th:nth-child(3) { text-align: left; }
   .tdr-table td { padding: 6px 8px; text-align: right; border-bottom: 2px dashed var(--ink-faint); }
   .tdr-table td:first-child, .tdr-table td:nth-child(2), .tdr-table td:nth-child(3) { text-align: left; }
   .tdr-table tbody tr:hover { background: var(--bg-warm); }
   .tdr-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
-  .tdr-pos-badge { font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .tdr-pos-badge { font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
   .tdr-diff-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
   .tdr-diff-pos { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
   .tdr-diff-neg { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
@@ -84,7 +84,7 @@
     .tdr-bar-cell { width: 35px; }
     .tdr-card-header { font-size: 15px; padding: 8px 12px; }
     .tdr-rates { gap: 6px; }
-    .tdr-rate-chip { font-size: 10px; padding: 2px 8px; }
+    .tdr-rate-chip { font-size: 11px; padding: 2px 8px; }
   }
 </style>
 </head>
@@ -303,7 +303,7 @@ function buildCard(title, cls, players, isPositive) {
 
     html += '<tr>';
     html += '<td class="tdr-rank">' + (i + 1) + '</td>';
-    html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px;">' + escapeHtml(p.team) + '</span></td>';
+    html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:11px;">' + escapeHtml(p.team) + '</span></td>';
     html += '<td><span class="tdr-pos-badge" style="background:' + escapeHtml(posColor) + '">' + escapeHtml(p.position) + '</span></td>';
     html += '<td>' + escapeHtml(String(p.actual_tds)) + '</td>';
     html += '<td>' + escapeHtml(String(p.expected_tds)) + '</td>';

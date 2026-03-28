@@ -468,7 +468,7 @@ h1, h2, h3 {
 
 .nav-search-hint kbd {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   background: var(--bg-warm);
   border: 2px solid var(--ink-light);
   border-radius: var(--radius-sm);
@@ -497,7 +497,7 @@ button.nav-search-hint {
 
 .nav-plan-badge {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   padding: 4px 8px;
@@ -564,7 +564,7 @@ button.nav-search-hint {
 }
 
 .nav-user-caret {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-light);
   transition: transform 0.12s;
 }
@@ -593,7 +593,7 @@ button.nav-search-hint {
 
 .nav-dropdown-header {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-light);
   padding: 8px 12px 4px;
   white-space: nowrap;
@@ -1047,7 +1047,7 @@ a.btn-pro-upgrade:focus-visible {
     padding: 5px 10px;
   }
   .chip {
-    font-size: 10px;
+    font-size: 11px;
     padding: 2px 7px;
   }
   .footer-link {
@@ -1077,7 +1077,7 @@ a.btn-pro-upgrade:focus-visible {
     padding: 4px 8px;
   }
   .nav-user-name { display: none; }
-  .nav-signout { font-size: 10px !important; }
+  .nav-signout { font-size: 11px !important; }
   /* Command Palette — mobile friendly */
   .cmd-palette-backdrop {
     padding-top: 10vh;
@@ -1300,7 +1300,7 @@ body {
    The ::after pseudo adds the lock/diamond icon inline. */
 .pro-locked::after {
   content: '\1F512';
-  font-size: 10px;
+  font-size: 11px;
   opacity: 0.45;
   margin-left: 3px;
   cursor: help;
@@ -1313,7 +1313,7 @@ body {
 
 .elite-locked::after {
   content: '\1F48E';
-  font-size: 10px;
+  font-size: 11px;
   opacity: 0.45;
   margin-left: 3px;
   cursor: help;
@@ -1354,11 +1354,11 @@ body {
     font-size: 13px;
   }
   .btn-chunky, .btn-primary {
-    font-size: 10px;
+    font-size: 11px;
     padding: 4px 7px;
   }
   .chip {
-    font-size: 9px;
+    font-size: 11px;
     padding: 4px 8px;
   }
   .nav-search-hint {
@@ -1460,7 +1460,7 @@ body {
 .player-tag-chip {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 8px;
@@ -1632,7 +1632,7 @@ tr:hover .notes-cell .note-pencil {
 }
 .note-editor-count {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--ink-light);
 }
 
@@ -1672,7 +1672,7 @@ tr:hover .notes-cell .note-pencil {
   background: var(--green);
   color: var(--text-on-accent);
   font-weight: 700;
-  font-size: 10px;
+  font-size: 11px;
   padding: 1px 8px;
   border-radius: var(--radius-sm);
   letter-spacing: 0.5px;
