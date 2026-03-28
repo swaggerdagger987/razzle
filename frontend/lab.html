@@ -1288,28 +1288,33 @@
     gate.setAttribute('aria-labelledby', 'upgrade-gate-title');
     var label = PANEL_LABELS[panelName] || panelName;
     var flavor = PANEL_FLAVORS[panelName] || 'advanced analytics for serious managers';
+    var method = PANEL_METHODS[panelName] || '';
+    var tierInfo = typeof getUserTierInfo === 'function' ? getUserTierInfo() : {};
+    var trialLine = tierInfo.isTrial
+      ? "You're on Pro (" + tierInfo.daysLeft + "d left). Subscribe to keep access."
+      : tierInfo.isExpiredTrial
+        ? "Your trial ended. Subscribe to unlock Pro panels."
+        : "7-day Pro trial on sign-up. Cancel anytime.";
     gate.innerHTML =
       '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:400px; text-align:center; padding:48px 24px;">' +
         '<div style="font-size:48px; margin-bottom:16px;">&#x1F512;</div>' +
         '<div id="upgrade-gate-title" style="font-family:var(--font-display); font-size:24px; margin-bottom:8px;">' + escapeHtml(label) + '</div>' +
         '<div style="font-family:var(--font-hand); font-size:20px; color:var(--ink-medium); margin-bottom:20px; max-width:440px;">' + escapeHtml(flavor) + '</div>' +
-        '<div style="background:var(--bg); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:16px 24px; margin-bottom:24px; text-align:left; max-width:360px;">' +
-          '<div style="font-family:var(--font-mono); font-size:12px; font-weight:700; margin-bottom:10px; color:var(--ink);">What you get with Pro:</div>' +
-          '<div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.8;">' +
-            '&#x2713; 70+ advanced panels like ' + escapeHtml(label) + '<br>' +
-            '&#x2713; Full historical data back to 2015<br>' +
-            '&#x2713; CSV export &amp; custom formulas<br>' +
-            '&#x2713; Player comp finder &amp; trade analyzer' +
-          '</div>' +
-        '</div>' +
-        '<a href="/pricing.html" id="upgrade-gate-cta" class="btn-chunky btn-primary" style="font-size:14px; padding:10px 28px; text-decoration:none;">See Plans</a>' +
-        '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:12px;">' +
-          (typeof getUserTierInfo === 'function' && getUserTierInfo().isTrial
-            ? "You're on Pro (" + getUserTierInfo().daysLeft + "d left). Subscribe to keep access."
-            : typeof getUserTierInfo === 'function' && getUserTierInfo().isExpiredTrial
-              ? "Your trial ended. Subscribe to unlock Pro panels."
-              : "7-day Pro trial on sign-up. Cancel anytime."
-          ) + '</div>' +
+        (method
+          ? '<div style="background:var(--bg); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:16px 24px; margin-bottom:24px; text-align:left; max-width:440px;">' +
+              '<div style="font-family:var(--font-mono); font-size:12px; font-weight:700; margin-bottom:8px; color:var(--ink);">How ' + escapeHtml(label) + ' works:</div>' +
+              '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); line-height:1.7;">' + escapeHtml(method) + '</div>' +
+            '</div>'
+          : '<div style="background:var(--bg); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:16px 24px; margin-bottom:24px; text-align:left; max-width:440px;">' +
+              '<div style="font-family:var(--font-mono); font-size:12px; font-weight:700; margin-bottom:8px; color:var(--ink);">Inside this panel:</div>' +
+              '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); line-height:1.7;">' +
+                'Sortable tables, position filters, and per-player grades for ' + escapeHtml(label.toLowerCase()) + '. ' +
+                'One of 70+ Pro panels with full data back to 2015.' +
+              '</div>' +
+            '</div>'
+        ) +
+        '<a href="/pricing.html" id="upgrade-gate-cta" class="btn-chunky btn-primary" style="font-size:14px; padding:10px 28px; text-decoration:none;">Unlock ' + escapeHtml(label) + '</a>' +
+        '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-top:12px;">' + trialLine + '</div>' +
       '</div>';
     gate.style.display = '';
     var cta = document.getElementById('upgrade-gate-cta');
