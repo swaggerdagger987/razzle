@@ -3299,12 +3299,16 @@ function renderPagination() {
 
 function prevPage() {
   state.offset = Math.max(0, state.offset - state.limit);
-  fetchAndRender().then(function() { requestAnimationFrame(_scrollTableTop); });
+  fetchAndRender()
+    .then(function() { requestAnimationFrame(_scrollTableTop); })
+    .catch(function() { if (typeof _showToast === "function") _showToast(razzleError(), "error"); });
 }
 
 function nextPage() {
   state.offset += state.limit;
-  fetchAndRender().then(function() { requestAnimationFrame(_scrollTableTop); });
+  fetchAndRender()
+    .then(function() { requestAnimationFrame(_scrollTableTop); })
+    .catch(function() { if (typeof _showToast === "function") _showToast(razzleError(), "error"); });
 }
 
 function _scrollTableTop() {
