@@ -234,9 +234,9 @@
   <!-- Interval toggle -->
   <div class="interval-toggle">
     <label id="monthlyLabel" onclick="setPricingInterval('month')">Monthly</label>
-    <div class="toggle-track yearly" id="intervalToggle" onclick="toggleInterval()" role="switch" aria-checked="true" aria-label="Toggle monthly or yearly pricing" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();toggleInterval();}">
+    <button type="button" class="toggle-track yearly" id="intervalToggle" onclick="toggleInterval()" role="switch" aria-checked="true" aria-label="Toggle monthly or yearly pricing" style="border:none;cursor:pointer;">
       <div class="toggle-knob"></div>
-    </div>
+    </button>
     <label id="yearlyLabel" class="active" onclick="setPricingInterval('year')">Yearly</label>
     <span class="save-badge" id="saveBadge">save 33%</span>
   </div>

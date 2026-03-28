@@ -3330,7 +3330,7 @@ function renderActiveFilters() {
 
   // Min GP pill (team chips shown inline next to dropdown)
   if (state.minGP > 0) {
-    html += `<span class="filter-tag" style="background:var(--bg-sand);">GP ≥ ${state.minGP} <span class="remove" role="button" tabindex="0" aria-label="Remove GP filter" onclick="clearMinGP()">×</span></span> `;
+    html += `<span class="filter-tag" style="background:var(--yellow-light);">GP ≥ ${state.minGP} <span class="remove" role="button" tabindex="0" aria-label="Remove GP filter" onclick="clearMinGP()">×</span></span> `;
   }
 
   // Stat filters
