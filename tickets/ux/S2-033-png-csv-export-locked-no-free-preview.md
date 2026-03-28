@@ -13,23 +13,21 @@ Free users see greyed-out CSV buttons with lock icons and no sample export. If s
 
 ## Root Cause
 
-**CSV export gating** — `frontend/lab.js:42`:
+**CSV export gating** — `frontend/lab.js:6009`:
 ```js
-if (typeof isPaidUser === "function" && !isPaidUser()) {
-  _showToast('CSV export requires Pro.', 'warning', ...);
-  return;
-}
+if (typeof isPaidUser === "function" && !isPaidUser()) { ... }
 ```
 
-**PNG export** appears to work for free users (screener screenshots), but CSV is fully locked.
+**PNG export is NOT gated** — `frontend/lab.js:5799` has no `isPaidUser()` check. Free users CAN download PNGs. The "Download PNG" button at `lab.html:3640` is available to all users.
 
-## Fix Options
+So the "every screenshot is a billboard" philosophy IS working for PNGs. The issue is limited to CSV export showing a greyed button with no value demonstration.
 
-1. Allow free users to export limited CSV (top 10 rows only) with a "Upgrade for full export" note in the file
-2. Allow free users to export watermarked PNGs (already the case?) — verify this works
-3. Show a preview of what the CSV would contain (first 5 rows visible, rest blurred)
+## Fix
+
+1. Consider allowing free users to export limited CSV (top 10 rows) with "Upgrade for full export" appended
+2. Or improve the locked CSV button UX — instead of just "CSV export requires Pro", show what they'd get: "Export all 247 rows as CSV — Pro feature"
 
 ## Accept When
 
-- Free users get some form of export to share/screenshot (at minimum watermarked PNG)
-- The export lock communicates what Pro unlocks, not just "no"
+- CSV lock message communicates the value being unlocked (row count, data scope)
+- PNG export confirmed working for free users (already the case)

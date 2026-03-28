@@ -13,7 +13,9 @@ Multiple standalone pages have similar meta descriptions focused on generic "raz
 
 ## Root Cause
 
-Many pages in `frontend/` have meta descriptions that are variations of "Free fantasy football analytics at razzle.lol" without page-specific keywords. These were likely generated from a template.
+Investigation found that most descriptions ARE unique and page-specific (e.g., aging curves, archetypes, air yards each have distinct descriptions). However, some pages may share similar phrasing patterns. The issue is less severe than originally reported.
+
+One specific problem: `frontend/records.html:21` meta description says "since 2020" but the backend query (`backend/live_data/tools.py:1182`) actually queries all seasons with no year filter — the description is misleading.
 
 ## Fix
 

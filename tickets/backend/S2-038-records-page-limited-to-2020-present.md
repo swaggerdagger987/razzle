@@ -13,17 +13,18 @@ The records page appears to only show data from 2020-present, despite the databa
 
 ## Root Cause
 
-The records endpoint in `backend/live_data/` likely has a hardcoded season range starting at 2020, or the records page's season selector only offers 2020+. Needs investigation.
+Investigation found the backend `fetch_records()` at `backend/live_data/tools.py:1182` has NO year filter — it queries ALL seasons. The SQL queries (lines 1195-1251) have no WHERE clause limiting seasons.
+
+The issue is actually in the **meta description** — `frontend/records.html:21` claims data "since 2020" but the data actually spans 2015-2025. The backend is correct; the marketing copy is wrong.
 
 ## Fix
 
-1. Identify the season filter in the records backend endpoint
-2. Expand to include all available seasons (2015-2025)
-3. Update the records page season selector to offer the full range
-4. Verify that historical records display correctly
+1. Update `frontend/records.html:21` meta description to say "since 2015" or remove the year claim
+2. Verify that records from 2015-2019 actually display on the page (the backend serves them, but the frontend may filter)
+3. If the frontend season selector limits to 2020+, expand it
 
 ## Accept When
 
-- Records page shows data from 2015-2025
-- Historical records (e.g., 2019 CMC, 2018 Mahomes) appear in the record book
-- Season selector offers 2015 as the earliest option
+- Meta description accurately reflects the data range
+- Records from 2015-2019 are accessible to users
+- Historical records (2019 CMC, 2018 Mahomes) appear when selected
