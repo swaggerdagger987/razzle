@@ -263,7 +263,7 @@ function render() {
     return;
   }
 
-  let html = '<table class="dt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
+  let html = '<table class="dt-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">DTI</th><th scope="col">Rush/G</th><th scope="col">Rec/G</th><th scope="col">Tot/G</th><th scope="col">Car/G</th><th scope="col">Rec/G</th><th scope="col">Split</th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "#8a7565";

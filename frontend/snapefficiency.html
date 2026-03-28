@@ -271,7 +271,7 @@ function render() {
   }
 
   const maxPPS = Math.max(...players.map(p => p.pts_per_snap), 1);
-  let html = '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Pts/Snap</th><th>PPG</th><th>Snaps/G</th><th>Snaps</th><th>GP</th><th></th></tr></thead><tbody>';
+  let html = '<table class="se-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">Pts/Snap</th><th scope="col">PPG</th><th scope="col">Snaps/G</th><th scope="col">Snaps</th><th scope="col">GP</th><th scope="col"></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "var(--ink-light)";

@@ -357,7 +357,7 @@
     var html = '<div class="sk-card">';
     html += '<div class="sk-card-header">Best QB + WR/TE Stacks (' + escapeHtml(String(data.count)) + ' pairs)</div>';
     html += '<table class="sk-table"><thead><tr>';
-    html += '<th>#</th><th>Team</th><th>QB</th><th>Receiver</th><th>Pos</th><th>Corr</th><th></th><th>QB PPG</th><th>Rec PPG</th><th>Combo PPG</th><th>Games</th>';
+    html += '<th scope="col">#</th><th scope="col">Team</th><th scope="col">QB</th><th scope="col">Receiver</th><th scope="col">Pos</th><th scope="col">Corr</th><th scope="col"></th><th scope="col">QB PPG</th><th scope="col">Rec PPG</th><th scope="col">Combo PPG</th><th scope="col">Games</th>';
     html += '</tr></thead><tbody>';
 
     for (var i = 0; i < stacks.length; i++) {

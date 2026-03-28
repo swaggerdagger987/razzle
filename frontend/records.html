@@ -264,7 +264,7 @@
     // Single-game records
     html += '<div class="rb-section">';
     html += '<div class="rb-section-header">Single-Game Records</div>';
-    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
+    html += '<table class="rb-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Szn</th><th scope="col">Wk</th><th scope="col">PPR</th></tr></thead><tbody>';
     (data.single_game || []).forEach(function(p, i) {
       html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
       html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
@@ -277,7 +277,7 @@
     // Single-season records
     html += '<div class="rb-section">';
     html += '<div class="rb-section-header">Single-Season Records</div>';
-    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+    html += '<table class="rb-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Szn</th><th scope="col">G</th><th scope="col">Total</th><th scope="col">PPG</th></tr></thead><tbody>';
     (data.single_season || []).forEach(function(p, i) {
       html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
       html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
@@ -291,7 +291,7 @@
     // Career PPG leaders
     html += '<div class="rb-section">';
     html += '<div class="rb-section-header">Career PPG Leaders</div>';
-    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
+    html += '<table class="rb-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">G</th><th scope="col">PPG</th><th scope="col">Total</th></tr></thead><tbody>';
     (data.career_ppg || []).forEach(function(p, i) {
       html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
       html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
@@ -304,7 +304,7 @@
     // Career total points
     html += '<div class="rb-section">';
     html += '<div class="rb-section-header">Most Career Points</div>';
-    html += '<table class="rb-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+    html += '<table class="rb-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">G</th><th scope="col">Total</th><th scope="col">PPG</th></tr></thead><tbody>';
     (data.career_total || []).forEach(function(p, i) {
       html += '<tr><td><span class="rb-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
       html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';

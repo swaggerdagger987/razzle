@@ -417,12 +417,12 @@
 
     if (players.length) {
       html += '<table class="po-table"><thead><tr>';
-      html += '<th>#</th><th>Player</th><th>Pos</th><th>PO PPG</th><th>SOS</th>';
+      html += '<th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">PO PPG</th><th scope="col">SOS</th>';
 
       // Dynamic week columns
       var weekNums = [14, 15, 16, 17];
       for (var w = 0; w < weekNums.length; w++) {
-        html += '<th>Wk ' + weekNums[w] + '</th>';
+        html += '<th scope="col">Wk ' + weekNums[w] + '</th>';
       }
       html += '</tr></thead><tbody>';
 

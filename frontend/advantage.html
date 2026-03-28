@@ -266,7 +266,7 @@
     var html = '<div class="pa-card">';
     html += '<div class="pa-card-header">Positional Advantage (' + escapeHtml(String(data.count)) + ' players)</div>';
     html += '<table class="pa-table"><thead><tr>';
-    html += '<th>#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Pos Avg</th><th>Edge</th><th>% Above</th><th></th><th>GP</th>';
+    html += '<th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">PPG</th><th scope="col">Pos Avg</th><th scope="col">Edge</th><th scope="col">% Above</th><th scope="col"></th><th scope="col">GP</th>';
     html += '</tr></thead><tbody>';
 
     var maxAdv = Math.max.apply(null, players.map(function(p) { return Math.abs(p.advantage); }).concat([1]));

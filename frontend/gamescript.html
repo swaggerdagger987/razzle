@@ -280,7 +280,7 @@ function renderTable(players, type) {
   const maxPPG = Math.max(...players.map(p => p.ppg), 1);
   const barCls = type === "win" ? "gs-bar-win" : "gs-bar-lose";
 
-  let html = '<table class="gs-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Avg Diff</th><th>GT%</th><th></th></tr></thead><tbody>';
+  let html = '<table class="gs-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">PPG</th><th scope="col">Avg Diff</th><th scope="col">GT%</th><th scope="col"></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');

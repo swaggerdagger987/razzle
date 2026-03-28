@@ -638,7 +638,7 @@
     // Summary comparison table
     html += '<div class="cc-section-header">Career Summary</div>';
     html += '<div class="cc-table-wrap"><table class="cc-table"><thead><tr>';
-    html += '<th>Metric</th>';
+    html += '<th scope="col">Metric</th>';
     for (var p = 0; p < players.length; p++) {
       html += '<th style="border-left:3px solid ' + SLOT_COLORS[p] + '">' + escapeHtml(players[p].name) + '</th>';
     }
@@ -688,7 +688,7 @@
     // Season-by-season comparison
     html += '<div class="cc-section-header">Season-by-Season PPG</div>';
     html += '<div class="cc-table-wrap"><table class="cc-table"><thead><tr>';
-    html += '<th>Season</th>';
+    html += '<th scope="col">Season</th>';
     for (var sh = 0; sh < players.length; sh++) {
       html += '<th style="border-left:3px solid ' + SLOT_COLORS[sh] + '">' + escapeHtml(players[sh].name) + '</th>';
     }

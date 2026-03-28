@@ -290,7 +290,7 @@ function renderTable(players, type) {
   const barCls = type === "sure" ? "dr-bar-good" : "dr-bar-bad";
   const isGood = type === "sure";
 
-  let html = '<table class="dr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Drop%</th><th>Drops</th><th>Tgt</th><th>Catch%</th><th>YAC/R</th><th></th></tr></thead><tbody>';
+  let html = '<table class="dr-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">Drop%</th><th scope="col">Drops</th><th scope="col">Tgt</th><th scope="col">Catch%</th><th scope="col">YAC/R</th><th scope="col"></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "#8a7565";

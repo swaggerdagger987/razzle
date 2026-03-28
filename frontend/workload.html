@@ -266,7 +266,7 @@ function render() {
   }
 
   const maxWL = Math.max(...players.map(p => p.workload), 1);
-  let html = '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th><th>Snp/G</th><th>Snp%</th><th>Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
+  let html = '<table class="wl-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">Load</th><th scope="col">Tch/G</th><th scope="col">Snp/G</th><th scope="col">Snp%</th><th scope="col">Car/G</th><th scope="col">Tgt/G</th><th scope="col">Flags</th><th scope="col"></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "var(--ink-light)";

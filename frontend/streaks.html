@@ -428,7 +428,7 @@
 
   function renderTable(players, type) {
     var html = '<table class="str-table"><thead><tr>';
-    html += '<th>Player</th><th>Pos</th><th>Szn Avg</th><th>Recent</th><th>Delta</th><th>Last ' + escapeHtml(String(currentData.window)) + '</th>';
+    html += '<th scope="col">Player</th><th scope="col">Pos</th><th scope="col">Szn Avg</th><th scope="col">Recent</th><th scope="col">Delta</th><th scope="col">Last ' + escapeHtml(String(currentData.window)) + '</th>';
     html += '</tr></thead><tbody>';
 
     for (var i = 0; i < players.length; i++) {

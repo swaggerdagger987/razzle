@@ -273,7 +273,7 @@ function buildCard(title, cls, players, isPadders) {
   const maxVal = Math.max(...players.map(p => isPadders ? p.garbage_time_pct : p.ppg), 1);
   let html = '<div class="gt-card"><div class="gt-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div>';
   html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch">';
-  html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
+  html += '<table class="gt-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">GT%</th><th scope="col">PPG</th><th scope="col">Avg Diff</th><th scope="col"></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || (_cs.getPropertyValue('--ink-light').trim() || '#8a7565');

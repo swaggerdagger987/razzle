@@ -278,7 +278,7 @@ function render() {
   }
 
   const maxSR = Math.max(...players.map(p => p.success_rate), 1);
-  let html = '<table class="sr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>SR%</th><th>Type</th><th>Vol</th><th>PPG</th><th>YPC</th><th></th></tr></thead><tbody>';
+  let html = '<table class="sr-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">SR%</th><th scope="col">Type</th><th scope="col">Vol</th><th scope="col">PPG</th><th scope="col">YPC</th><th scope="col"></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "var(--ink-light)";

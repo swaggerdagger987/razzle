@@ -277,7 +277,7 @@ function buildCard(title, cls, players, isPositive) {
 
   const maxDiff = Math.max(...players.map(p => Math.abs(p.td_diff)), 1);
   let html = '<div class="tdr-card"><div class="tdr-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div>';
-  html += '<table class="tdr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>TD</th><th>xTD</th><th>Diff</th><th>TD%</th><th>Opp</th><th></th></tr></thead><tbody>';
+  html += '<table class="tdr-table"><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">TD</th><th scope="col">xTD</th><th scope="col">Diff</th><th scope="col">TD%</th><th scope="col">Opp</th><th scope="col"></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "var(--ink-light)";
