@@ -34,6 +34,9 @@ function _getPosColorsHex() {
   var s = getComputedStyle(document.documentElement);
   return { QB: s.getPropertyValue('--pos-qb').trim(), RB: s.getPropertyValue('--pos-rb').trim(), WR: s.getPropertyValue('--pos-wr').trim(), TE: s.getPropertyValue('--pos-te').trim() };
 }
+function _hexAlpha(hex, alpha) {
+  return hex + Math.round(alpha * 255).toString(16).padStart(2, '0');
+}
 
 // ─── Panel Actions (CSV export, Share URL) ─────────────────────
 
@@ -6401,7 +6404,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     if (dvs != null) {
       const dvsColor = dvs >= 85 ? t.green : dvs >= 70 ? t.blue : dvs >= 55 ? t.orange : t.inkLight;
       const badgeX = padX + 450;
-      ctx.fillStyle = dvsColor + "30";
+      ctx.fillStyle = _hexAlpha(dvsColor, 0.19);
       ctx.fillRect(badgeX, y + 7, 70, 22);
       ctx.strokeStyle = dvsColor;
       ctx.lineWidth = 1.5;
@@ -13010,7 +13013,7 @@ function drawBoomBustRangeBar(data) {
   // Floor-ceiling range bar
   const floorX = toX(floor_ppg);
   const ceilX = toX(ceiling_ppg);
-  ctx.fillStyle = posColor + "40";
+  ctx.fillStyle = _hexAlpha(posColor, 0.25);
   ctx.fillRect(floorX, barY, ceilX - floorX, barH);
   ctx.strokeStyle = posColor;
   ctx.lineWidth = 2;
@@ -13234,7 +13237,7 @@ function exportBoomBustImage() {
   const flX = rbToX(floor_ppg);
   const ceX = rbToX(ceiling_ppg);
   const mdX = rbToX(median_ppg);
-  ctx.fillStyle = posColor + "40";
+  ctx.fillStyle = _hexAlpha(posColor, 0.25);
   ctx.fillRect(flX, rbY, ceX - flX, 18);
   ctx.strokeStyle = posColor;
   ctx.lineWidth = 2;

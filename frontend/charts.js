@@ -1113,7 +1113,7 @@ function exportNFLCompareImage() {
       const dvsW = 80, dvsH = 24;
       const dvsX = cx + playerCardW - dvsW - 10;
       const dvsY = cardY + 60;
-      ctx.fillStyle = dvsColor + "30";
+      ctx.fillStyle = dvsColor + Math.round(0.19 * 255).toString(16).padStart(2, '0');
       ctx.fillRect(dvsX, dvsY, dvsW, dvsH);
       ctx.strokeStyle = dvsColor;
       ctx.lineWidth = 2;
