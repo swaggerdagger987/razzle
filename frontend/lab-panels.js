@@ -268,11 +268,11 @@
         exportBtn.addEventListener('click', function() {
           var wrap = content.querySelector('.dh-wrap');
           if (wrap && typeof html2canvas !== 'undefined') {
-            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            html2canvas(wrap, { backgroundColor: isDark ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true, logging: false }).then(function(canvas) {
+            var _dhTheme = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {bg:'#ede0cf',ink:'#2d1f14'};
+            html2canvas(wrap, { backgroundColor: _dhTheme.bg, scale: 2, useCORS: true, logging: false }).then(function(canvas) {
               var ctx = canvas.getContext('2d');
               ctx.font = '600 24px Caveat, cursive';
-              ctx.fillStyle = isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
+              ctx.fillStyle = _dhTheme.subtitleAlpha || (_dhTheme.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)');
               ctx.textAlign = 'right';
               ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
               var link = document.createElement('a');
@@ -4571,7 +4571,8 @@
       var min = Math.min.apply(null, scores.concat([0]));
       var max = Math.max.apply(null, scores.concat([1]));
       var range = max - min || 1;
-      var color = isRiser ? '#2ec4b6' : '#e63946';
+      var _ut = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {green:'#2ec4b6',red:'#e63946'};
+      var color = isRiser ? _ut.green : _ut.red;
       ctx.strokeStyle = color;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
@@ -4959,14 +4960,14 @@
       if (peak.age) {
         var peakX = xPos(peak.age);
         ctx.setLineDash([4, 4]);
-        ctx.strokeStyle = '#d97757';
+        ctx.strokeStyle = t.orange;
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(peakX, pad.top);
         ctx.lineTo(peakX, pad.top + ch);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = '#d97757';
+        ctx.fillStyle = t.orange;
         ctx.font = '11px Space Mono, monospace';
         ctx.textAlign = 'center';
         ctx.fillText('Peak: ' + peak.age, peakX, pad.top - 4);
@@ -6359,7 +6360,8 @@
   defs.push({ name: 'fptsbreakdown', render: function(el) {
     var curPos = '';
     var curSeason = _latestSeason;
-    var compColors = { pass_yd: POS_COLORS.QB, rush_yd: POS_COLORS.RB, rec_yd: POS_COLORS.WR, rec: POS_COLORS.TE, td: '#e63946' };
+    var _fbTheme = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {red:'#e63946'};
+    var compColors = { pass_yd: POS_COLORS.QB, rush_yd: POS_COLORS.RB, rec_yd: POS_COLORS.WR, rec: POS_COLORS.TE, td: _fbTheme.red };
     var compLabels = { pass_yd: 'Pass Yd', rush_yd: 'Rush Yd', rec_yd: 'Rec Yd', rec: 'Receptions', td: 'Touchdowns' };
 
     el.innerHTML =
@@ -6705,7 +6707,8 @@
     });
     el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
 
-    var compColors = ['#5b7fff', '#2ec4b6', '#d97757', '#8b5cf6', '#e63946', '#ffc857', '#2ec4b6', '#d97757'];
+    var _pbdTheme = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {blue:'#5b7fff',green:'#2ec4b6',orange:'#d97757',purple:'#8b5cf6',red:'#e63946',yellow:'#ffc857'};
+    var compColors = [_pbdTheme.blue, _pbdTheme.green, _pbdTheme.orange, _pbdTheme.purple, _pbdTheme.red, _pbdTheme.yellow, _pbdTheme.green, _pbdTheme.orange];
 
     function loadBreakdown(pid, playerInfo) {
       var content = el.querySelector('#pbd-content');
@@ -7285,7 +7288,7 @@
         var barH = (r.avg_ppg / maxPpg) * (h - 50);
         var x = left + i * (barW + 8);
         var y = h - 30 - barH;
-        ctx.fillStyle = '#d97757';
+        ctx.fillStyle = t.orange;
         ctx.fillRect(x, y, barW, barH);
         ctx.strokeStyle = t.ink;
         ctx.lineWidth = 2;
@@ -7544,7 +7547,7 @@
         var slope = (n * sumXY - sumX * sumY) / denom;
         var intercept = (sumY - slope * sumX) / n;
         if (isFinite(slope) && isFinite(intercept)) {
-          ctx.strokeStyle = 'rgba(217, 119, 87, 0.4)';
+          ctx.strokeStyle = t.orange + '66';
           ctx.lineWidth = 2;
           ctx.setLineDash([6, 4]);
           ctx.beginPath();
@@ -9557,12 +9560,13 @@
   // ═══════════════════════════════════════════════════════════════
   defs.push({ name: 'drafttracker', render: function(el) {
     var panelState = { year: 0, position: '', data: null };
+    var _dtTheme = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {green:'#2ec4b6',blue:'#5b7fff',orange:'#d97757',red:'#e63946',inkLight:'#8a7565'};
     var CLASSIFICATION_COLORS = {
-      stud: '#2ec4b6',
-      hit: '#5b7fff',
-      average: '#d97757',
-      bust: '#e63946',
-      too_early: '#8a7565'
+      stud: _dtTheme.green,
+      hit: _dtTheme.blue,
+      average: _dtTheme.orange,
+      bust: _dtTheme.red,
+      too_early: _dtTheme.inkLight
     };
     var CLASSIFICATION_LABELS = {
       stud: 'Stud',
@@ -9811,7 +9815,7 @@
       html += '<div class="corr-predictors">';
       predictors.forEach(function(p) {
         var pct = Math.round(Math.abs(p.r) * 100);
-        var color = p.r > 0 ? '#2ec4b6' : '#e63946';
+        var color = p.r > 0 ? t.green : t.red;
         html += '<div class="corr-pred-row">' +
           '<span class="corr-pred-label">' + escapeHtml(p.label) + '</span>' +
           '<div class="corr-pred-bar-bg">' +
@@ -10005,7 +10009,7 @@
             sctx.beginPath();
             sctx.moveTo(px1, py1);
             sctx.lineTo(px2, py2);
-            sctx.strokeStyle = '#d97757';
+            sctx.strokeStyle = t.orange;
             sctx.lineWidth = 2;
             sctx.setLineDash([6, 4]);
             sctx.stroke();
@@ -10132,7 +10136,7 @@
 
       // League average line
       var avgX = padLeft + (data.league_average / maxVal) * barAreaW;
-      ctx.strokeStyle = '#d97757';
+      ctx.strokeStyle = th.orange;
       ctx.lineWidth = 1.5;
       ctx.setLineDash([4, 3]);
       ctx.beginPath();
@@ -10167,7 +10171,7 @@
             ctx.fillStyle = seg.color;
             ctx.fillRect(x, y, segW, barH);
             // Subtle right border between segments
-            ctx.fillStyle = th.isDark ? 'rgba(45,31,20,0.4)' : 'rgba(247,239,229,0.4)';
+            ctx.fillStyle = th.isDark ? (th.bg + '66') : (th.bgCard + '66');
             ctx.fillRect(x + segW - 1, y, 1, barH);
           }
           x += segW;

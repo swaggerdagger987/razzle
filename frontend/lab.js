@@ -140,7 +140,7 @@ function screenshotPanel(panelName) {
     if (typeof drawRazzleWatermark === 'function') {
       drawRazzleWatermark(ctx, canvas, { url: window.location.href, isDark: _t.isDark });
     } else {
-      var wmAlpha = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
+      var wmAlpha = _t.subtitleAlpha;
       ctx.fillStyle = wmAlpha;
       ctx.textAlign = 'right';
       ctx.font = '600 24px Caveat, cursive';
@@ -7813,7 +7813,7 @@ function drawCollegeArc(college, pos) {
   ctx.lineTo(pad.left + (values.length - 1) * stepX, pad.top + plotH);
   ctx.lineTo(pad.left, pad.top + plotH);
   ctx.closePath();
-  ctx.fillStyle = "rgba(91,127,255,0.15)";
+  ctx.fillStyle = _hexAlpha(t.blue, 0.15);
   ctx.fill();
 
   // Line
@@ -10152,7 +10152,7 @@ function heatColor(pct) {
 function textColorForBg(pct) {
   // Dark text on light cells — read from CSS vars so dark mode flips correctly
   const styles = getComputedStyle(document.documentElement);
-  if (pct == null) return styles.getPropertyValue('--ink-light').trim() || "#8a7565";
+  if (pct == null) return styles.getPropertyValue('--ink-light').trim() || getCanvasTheme().inkLight;
   return styles.getPropertyValue('--ink').trim() || getCanvasTheme().ink;
 }
 
@@ -12188,7 +12188,7 @@ function exportRosterTeamCard() {
   var y = HEADER_H;
 
   // Grade badge
-  var gc = _GRADE_COLORS[r.grade] || "#d97757";
+  var gc = _GRADE_COLORS[r.grade] || t.orange;
   ctx.fillStyle = gc;
   _roundRect(ctx, 30, y + 5, 70, 55, 10);
   ctx.fill();
@@ -12211,7 +12211,7 @@ function exportRosterTeamCard() {
   ctx.fillText("total dynasty value  |  avg age: " + r.average_age, 120, y + 50);
 
   // Status badge
-  var sc = _STATUS_COLORS[r.competing_status] || "#d97757";
+  var sc = _STATUS_COLORS[r.competing_status] || t.orange;
   var statusText = (r.competing_status || "").toUpperCase();
   ctx.fillStyle = sc;
   var sw = ctx.measureText(statusText).width + 24;
@@ -12551,7 +12551,7 @@ function drawCompRadar(data) {
   const topComp = comps[0];
   const pos = (player.position || "").toUpperCase();
   var posColorMap = _getPosColorsHex();
-  const posColor = posColorMap[pos] || "#d97757";
+  const posColor = posColorMap[pos] || t.orange;
 
   const W = canvas.width;
   const H = canvas.height;
@@ -12767,7 +12767,7 @@ function exportCompsImage() {
     ctx.fillText(`${c.team || "FA"} · ${c.games || 0}G · ${c.ppg || 0} PPG`, padX + 52, cardY + 46);
 
     // Similarity score
-    const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : (getComputedStyle(document.documentElement).getPropertyValue('--ink-medium').trim() || "#5c4a3d");
+    const simColor = c.similarity >= 95 ? t.green : c.similarity >= 90 ? t.orange : t.inkMedium;
     ctx.fillStyle = simColor;
     ctx.font = "24px 'Luckiest Guy', cursive";
     ctx.textAlign = "right";
@@ -12980,7 +12980,7 @@ function drawBoomBustHistogram(data) {
   const scores = (weekly_scores || []).map(w => w.score);
   const pos = (player.position || "").toUpperCase();
   var posHex = _getPosColorsHex();
-  const posColor = posHex[pos] || "#d97757";
+  const posColor = posHex[pos] || t.orange;
 
   // Build histogram buckets (5-point buckets)
   const maxScore = Math.max(...scores, (boom_threshold || 20) + 5);
@@ -13023,9 +13023,9 @@ function drawBoomBustHistogram(data) {
 
     // Color: green for boom, red for bust, position color for middle
     if (bucketMid >= boom_threshold) {
-      ctx.fillStyle = "#2ec4b6";
+      ctx.fillStyle = t.green;
     } else if ((i + 1) * bucketSize <= bust_threshold) {
-      ctx.fillStyle = "#e63946";
+      ctx.fillStyle = t.red;
     } else {
       ctx.fillStyle = posColor;
     }
@@ -13061,7 +13061,7 @@ function drawBoomBustHistogram(data) {
   // Boom threshold line
   const boomX = pad.left + (boom_threshold / bucketSize) * (cW / numBuckets);
   if (boomX < W - pad.right) {
-    ctx.strokeStyle = "#2ec4b6";
+    ctx.strokeStyle = t.green;
     ctx.lineWidth = 2;
     ctx.setLineDash([6, 4]);
     ctx.beginPath();
@@ -13069,7 +13069,7 @@ function drawBoomBustHistogram(data) {
     ctx.lineTo(boomX, pad.top + cH);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = "#2ec4b6";
+    ctx.fillStyle = t.green;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "left";
     ctx.fillText("BOOM", boomX + 4, pad.top + 14);
@@ -13078,7 +13078,7 @@ function drawBoomBustHistogram(data) {
   // Bust threshold line
   const bustX = pad.left + (bust_threshold / bucketSize) * (cW / numBuckets);
   if (bustX > pad.left) {
-    ctx.strokeStyle = "#e63946";
+    ctx.strokeStyle = t.red;
     ctx.lineWidth = 2;
     ctx.setLineDash([6, 4]);
     ctx.beginPath();
@@ -13086,7 +13086,7 @@ function drawBoomBustHistogram(data) {
     ctx.lineTo(bustX, pad.top + cH);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = "#e63946";
+    ctx.fillStyle = t.red;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText("BUST", bustX - 4, pad.top + 14);
@@ -13113,7 +13113,7 @@ function drawBoomBustRangeBar(data) {
   const median_ppg = data.median_ppg || 0;
   const pos = (player.position || "").toUpperCase();
   var posHex = _getPosColorsHex();
-  const posColor = posHex[pos] || "#d97757";
+  const posColor = posHex[pos] || t.orange;
 
   const maxVal = Math.max(ceiling_ppg * 1.2, 35);
   const pad = { left: 40, right: 40 };
@@ -13139,11 +13139,11 @@ function drawBoomBustRangeBar(data) {
   // Labels
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
-  ctx.fillStyle = "#e63946";
+  ctx.fillStyle = t.red;
   ctx.fillText(floor_ppg.toFixed(1), floorX, barY - 4);
   ctx.fillStyle = posColor;
   ctx.fillText(median_ppg.toFixed(1), medX, H - 2);
-  ctx.fillStyle = "#2ec4b6";
+  ctx.fillStyle = t.green;
   ctx.fillText(ceiling_ppg.toFixed(1), ceilX, barY - 4);
 
   // Tiny labels
@@ -13169,12 +13169,12 @@ function exportBoomBustImage() {
 
   const pos = (player.position || "").toUpperCase();
   var posHex = _getPosColorsHex();
-  const posColor = posHex[pos] || "#d97757";
+  const posColor = posHex[pos] || t.orange;
   const safeGrade = grade || "C";
-  const gradeColor = safeGrade.startsWith("A") ? "#2ec4b6" :
-                     safeGrade.startsWith("B") ? "#5b7fff" :
-                     safeGrade.startsWith("C") ? "#d97757" :
-                     safeGrade.startsWith("D") ? "#ffc857" : "#e63946";
+  const gradeColor = safeGrade.startsWith("A") ? t.green :
+                     safeGrade.startsWith("B") ? t.blue :
+                     safeGrade.startsWith("C") ? t.orange :
+                     safeGrade.startsWith("D") ? t.yellow : t.red;
 
   const canvas = document.createElement("canvas");
   canvas.width = 800;
@@ -13228,10 +13228,10 @@ function exportBoomBustImage() {
   // Stat cards row
   const cardStats = [
     { label: "MEDIAN", value: median_ppg.toFixed(1), color: posColor },
-    { label: "FLOOR", value: floor_ppg.toFixed(1), color: "#e63946" },
-    { label: "CEILING", value: ceiling_ppg.toFixed(1), color: "#2ec4b6" },
-    { label: "BOOM%", value: boom_rate.toFixed(0) + "%", color: "#2ec4b6" },
-    { label: "BUST%", value: bust_rate.toFixed(0) + "%", color: "#e63946" },
+    { label: "FLOOR", value: floor_ppg.toFixed(1), color: t.red },
+    { label: "CEILING", value: ceiling_ppg.toFixed(1), color: t.green },
+    { label: "BOOM%", value: boom_rate.toFixed(0) + "%", color: t.green },
+    { label: "BUST%", value: bust_rate.toFixed(0) + "%", color: t.red },
     { label: "RANK", value: `#${position_rank || "—"}`, color: posColor },
   ];
   const cardW = 105, cardH = 60, startX = 20, startY = 100;
@@ -13291,8 +13291,8 @@ function exportBoomBustImage() {
     const bH = (buckets[i] / maxCount) * hH;
     const y = hPad.top + hH - bH;
     const mid = (i + 0.5) * bucketSize;
-    ctx.fillStyle = mid >= boom_threshold ? "#2ec4b6" :
-                    (i + 1) * bucketSize <= bust_threshold ? "#e63946" : posColor;
+    ctx.fillStyle = mid >= boom_threshold ? t.green :
+                    (i + 1) * bucketSize <= bust_threshold ? t.red : posColor;
     ctx.fillRect(x, y, barW, bH);
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
@@ -13305,7 +13305,7 @@ function exportBoomBustImage() {
 
   // Threshold lines
   const boomX = hPad.left + (boom_threshold / bucketSize) * (hW / numBuckets);
-  ctx.strokeStyle = "#2ec4b6";
+  ctx.strokeStyle = t.green;
   ctx.lineWidth = 2;
   ctx.setLineDash([6, 4]);
   ctx.beginPath();
@@ -13313,13 +13313,13 @@ function exportBoomBustImage() {
   ctx.lineTo(boomX, hPad.top + hH);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = "#2ec4b6";
+  ctx.fillStyle = t.green;
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("BOOM", boomX + 4, hPad.top + 14);
 
   const bustX = hPad.left + (bust_threshold / bucketSize) * (hW / numBuckets);
-  ctx.strokeStyle = "#e63946";
+  ctx.strokeStyle = t.red;
   ctx.lineWidth = 2;
   ctx.setLineDash([6, 4]);
   ctx.beginPath();
@@ -13327,7 +13327,7 @@ function exportBoomBustImage() {
   ctx.lineTo(bustX, hPad.top + hH);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = "#e63946";
+  ctx.fillStyle = t.red;
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "right";
   ctx.fillText("BUST", bustX - 4, hPad.top + 14);
@@ -13359,11 +13359,11 @@ function exportBoomBustImage() {
 
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
-  ctx.fillStyle = "#e63946";
+  ctx.fillStyle = t.red;
   ctx.fillText(`${floor_ppg.toFixed(1)} FLOOR`, flX, rbY - 6);
   ctx.fillStyle = posColor;
   ctx.fillText(`${median_ppg.toFixed(1)} MED`, mdX, rbY + 36);
-  ctx.fillStyle = "#2ec4b6";
+  ctx.fillStyle = t.green;
   ctx.fillText(`${ceiling_ppg.toFixed(1)} CEIL`, ceX, rbY - 6);
 
   // Watermark

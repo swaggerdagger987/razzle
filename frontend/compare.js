@@ -83,8 +83,9 @@ function renderComparison(container) {
   var c1 = _p1Data.career || {}, c2 = _p2Data.career || {};
   var pos1 = (p1.position || "").toUpperCase();
   var pos2 = (p2.position || "").toUpperCase();
-  var color1 = POS_COLORS[pos1] || "#d97757";
-  var color2 = POS_COLORS[pos2] || "#8b5cf6";
+  var _ct = getCanvasTheme();
+  var color1 = POS_COLORS[pos1] || _ct.orange;
+  var color2 = POS_COLORS[pos2] || _ct.purple;
   // If same position, use position color + slightly different shade
   if (pos1 === pos2) {
     color2 = adjustColor(color1, -30);
@@ -580,8 +581,8 @@ function exportComparePNG() {
   var pos1 = (p1.position || "").toUpperCase();
   var pos2 = (p2.position || "").toUpperCase();
   var _pc = _getPosColors();
-  var color1 = _pc[pos1] || "#d97757";
-  var color2 = _pc[pos2] || "#8b5cf6";
+  var color1 = _pc[pos1] || t.orange;
+  var color2 = _pc[pos2] || t.purple;
   if (pos1 === pos2) color2 = adjustColor(color1, -30);
 
   var t = getCanvasTheme();
@@ -610,7 +611,7 @@ function exportComparePNG() {
   ctx.arc(W / 2, 80, 28, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
-  ctx.fillStyle = _pc.WR || "#d97757";
+  ctx.fillStyle = _pc.WR || t.orange;
   ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, 87);
@@ -638,7 +639,7 @@ function exportComparePNG() {
 
     // Alternating row bg
     if (i % 2 === 0) {
-      ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.06)" : "rgba(247,239,229,0.5)";
+      ctx.fillStyle = t.isDark ? (t.ink + '0f') : (t.bgCard + '80');
       ctx.fillRect(50, y - 2, W - 100, rowH);
     }
 
@@ -671,13 +672,13 @@ function exportComparePNG() {
   drawRadarOnExport(ctx, radarCx, radarCy, radarR, color1, color2, pos);
 
   // Watermark
-  ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.3)" : "rgba(45,31,20,0.3)";
+  ctx.fillStyle = t.subtitleAlpha;
   ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 50, H - 30);
 
   // Handwritten annotation
-  ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.25)" : "rgba(45,31,20,0.25)";
+  ctx.fillStyle = t.subtitleAlpha;
   ctx.font = "16px 'Caveat', cursive";
   ctx.textAlign = "left";
   ctx.fillText("who would you rather have?", 50, H - 30);
