@@ -2738,8 +2738,30 @@
     .toolbar {
       padding: 6px 8px;
       gap: 4px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
-    .search-box { width: 100px; font-size: 11px; }
+    .toolbar::-webkit-scrollbar { display: none; }
+    .toolbar .btn-chunky {
+      flex-shrink: 0;
+      white-space: nowrap;
+      min-width: 32px;
+      min-height: 32px;
+      padding: 4px 8px;
+      font-size: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 90px;
+    }
+    .toolbar .btn-primary {
+      flex-shrink: 0;
+      min-width: 32px;
+      min-height: 32px;
+    }
+    .toolbar-section { flex-shrink: 0; }
+    .search-box { width: 100px; font-size: 11px; flex-shrink: 0; min-width: 80px; }
     .btn-chunky { font-size: 10px; padding: 4px 8px; }
     .btn-primary { font-size: 10px; padding: 4px 10px; }
     .screener-table th.col-player,
@@ -2771,6 +2793,19 @@
     .toolbar {
       padding: 4px 6px;
       gap: 3px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .toolbar::-webkit-scrollbar { display: none; }
+    .toolbar .btn-chunky {
+      min-width: 28px;
+      min-height: 28px;
+      max-width: 72px;
+      font-size: 9px;
+      padding: 3px 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .search-box { width: 80px; font-size: 10px; padding: 4px 6px; }
     .screener-table th.col-player,

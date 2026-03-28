@@ -190,6 +190,34 @@
   [data-theme="dark"] #trialActiveBanner div { color: var(--ink) !important; }
   [data-theme="dark"] .free-celebration div { color: var(--ink); }
   [data-theme="dark"] .promo-section { color: var(--ink); }
+
+  /* Trial banner mobile compaction */
+  @media (max-width: 480px) {
+    #trialBanner,
+    #trialActiveBanner {
+      padding: 10px 12px !important;
+      margin-bottom: 16px !important;
+    }
+    #trialBanner div:first-child,
+    #trialActiveBanner #trialBannerTitle {
+      font-size: 16px !important;
+    }
+    #trialBanner div:nth-child(2),
+    #trialActiveBanner #trialCountdown {
+      font-size: 11px !important;
+    }
+    #trialBanner .btn-primary,
+    #trialActiveBanner .btn-primary {
+      padding: 8px 16px !important;
+      font-size: 12px !important;
+      margin-top: 8px !important;
+    }
+    .subscribed-banner {
+      padding: 10px 12px;
+      margin-bottom: 16px;
+    }
+    .subscribed-banner p { font-size: 14px; }
+  }
 </style>
 </head>
 <body>
