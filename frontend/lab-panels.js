@@ -5698,7 +5698,7 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // Area fill
@@ -5727,15 +5727,15 @@
           var y = pad.t + ch - (v / maxPPG) * ch;
           ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = posColor; ctx.fill();
           ctx.strokeStyle = t.white; ctx.lineWidth = 2; ctx.stroke();
-          ctx.fillStyle = t.ink; ctx.font = 'bold 10px monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = t.ink; ctx.font = 'bold 10px "Space Mono", monospace'; ctx.textAlign = 'center';
           ctx.fillText(fmt(v), x, y - 10);
           // Season label
-          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace';
           ctx.fillText(String(seasons[i].season || ''), x, pad.t + ch + 16);
         });
         // Y-axis label
         ctx.save(); ctx.translate(12, pad.t + ch / 2); ctx.rotate(-Math.PI / 2);
-        ctx.fillStyle = t.inkLight; ctx.font = '11px monospace'; ctx.textAlign = 'center';
+        ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace'; ctx.textAlign = 'center';
         ctx.fillText('PPG', 0, 0); ctx.restore();
       }
     }
@@ -5887,13 +5887,13 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // X labels
         xYears.forEach(function(yr, i) {
           var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
-          ctx.fillStyle = t.inkLight; ctx.font = '10px monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'center';
           ctx.fillText(yr, x, pad.t + ch + 16);
         });
 
@@ -6805,7 +6805,7 @@
             var lx = cx + Math.cos(midAngle) * labelR;
             var ly = cy + Math.sin(midAngle) * labelR;
             ctx.fillStyle = (typeof getCanvasTheme === 'function' ? getCanvasTheme().white : '#fff');
-            ctx.font = 'bold 11px monospace';
+            ctx.font = 'bold 11px "Space Mono", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(fmt(pct, 0) + '%', lx, ly);
@@ -6816,11 +6816,11 @@
 
         // Center label
         ctx.fillStyle = t.ink;
-        ctx.font = 'bold 24px monospace';
+        ctx.font = 'bold 24px "Space Mono", monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(fmt(ppg), cx, cy - 8);
-        ctx.font = '12px monospace';
+        ctx.font = '12px "Space Mono", monospace';
         ctx.fillStyle = t.inkLight;
         ctx.fillText('PPG', cx, cy + 12);
       }
