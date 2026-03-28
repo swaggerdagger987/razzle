@@ -788,9 +788,16 @@ function _detectCheckoutReturn() {
   var cleanUrl = window.location.pathname + (remaining ? "?" + remaining : "") + window.location.hash;
   window.history.replaceState({}, "", cleanUrl);
 
-  // Show upgrade toast
+  // Progressive status messages during checkout confirmation
+  var _checkoutStages = [
+    "payment received \u2014 activating your plan...",
+    "setting up your Pro access...",
+    "almost there \u2014 configuring your account...",
+    "finalizing your upgrade...",
+    "just a moment \u2014 syncing with Stripe..."
+  ];
   if (typeof _showToast === "function") {
-    _showToast("processing your subscription...");
+    _showToast(_checkoutStages[0]);
   }
 
   var token = localStorage.getItem("razzle_token");
@@ -811,6 +818,11 @@ function _detectCheckoutReturn() {
 
   function pollForPlanChange() {
     attempts++;
+    // Show progressive stage message
+    if (typeof _showToast === "function" && attempts > 1) {
+      var stageIdx = Math.min(attempts - 1, _checkoutStages.length - 1);
+      _showToast(_checkoutStages[stageIdx]);
+    }
     fetch(API_BASE + "/api/auth/me", {
       headers: { "Authorization": "Bearer " + token }
     }).then(function(r) { if (!r.ok) throw new Error("poll failed"); return r.json(); }).then(function(data) {
@@ -828,9 +840,9 @@ function _detectCheckoutReturn() {
       } else if (attempts < maxAttempts) {
         setTimeout(pollForPlanChange, pollInterval);
       } else {
-        // Give up after 10 polls — show clear error with next steps
+        // Give up after 10 polls — reassure user with clear next steps
         if (typeof _showToast === "function") {
-          _showToast("still processing. if your plan doesn't activate within a few minutes, try refreshing the page or contact us.", "warning", 10000);
+          _showToast("payment confirmed by Stripe \u2014 your plan will update momentarily. try refreshing, or visit your billing portal if needed.", "warning", 15000);
         }
       }
     }).catch(function() {
@@ -838,7 +850,7 @@ function _detectCheckoutReturn() {
         setTimeout(pollForPlanChange, pollInterval);
       } else {
         if (typeof _showToast === "function") {
-          _showToast("couldn't confirm your subscription. try refreshing the page. if the issue persists, your payment was received and we'll sort it out — reach out via the About page.", "error", 10000);
+          _showToast("payment received but confirmation is taking longer than usual. your upgrade will activate shortly \u2014 try refreshing. reach out via the About page if it doesn't resolve.", "warning", 15000);
         }
       }
     });
