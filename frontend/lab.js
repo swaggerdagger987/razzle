@@ -5126,7 +5126,8 @@ function computeFormulaValues() {
           totalWeight += Math.abs(comp.weight);
         }
       }
-      player[key] = totalWeight > 0 ? Math.round(score * 10) / 10 : null;
+      var result = totalWeight > 0 ? Math.round(score * 10) / 10 : null;
+      player[key] = (result !== null && isFinite(result)) ? result : null;
     }
   }
 }
