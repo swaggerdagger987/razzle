@@ -5695,9 +5695,9 @@ function computeLeaderRanks() {
 }
 
 function getLeaderDot(rank) {
-  if (rank === 1) return '<span class="leader-dot leader-gold" title="1st">&#9679;</span>';
-  if (rank === 2) return '<span class="leader-dot leader-silver" title="2nd">&#9679;</span>';
-  if (rank === 3) return '<span class="leader-dot leader-bronze" title="3rd">&#9679;</span>';
+  if (rank === 1) return '<span class="leader-dot leader-gold" aria-label="1st place" title="1st">&#9733;</span>';
+  if (rank === 2) return '<span class="leader-dot leader-silver" aria-label="2nd place" title="2nd">&#9670;</span>';
+  if (rank === 3) return '<span class="leader-dot leader-bronze" aria-label="3rd place" title="3rd">&#9679;</span>';
   return "";
 }
 

@@ -423,7 +423,7 @@
 </div>
 
 <!-- FILTER MODAL -->
-<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleFilter" class="filter-modal-overlay" id="filterModalOverlay" onclick="closeFilterModal(event)">
+<div role="dialog" aria-modal="true" aria-labelledby="dlgTitleFilter" class="filter-modal-overlay" id="filterModalOverlay" onclick="closeFilterModal(event)" onkeydown="if(event.key==='Escape'){event.stopPropagation();closeFilterModal();}">
   <div class="filter-modal" onclick="event.stopPropagation()">
     <h3 id="dlgTitleFilter">Add Filter</h3>
     <div class="filter-modal-row">
@@ -435,7 +435,7 @@
         <option value="lt"><</option>
         <option value="eq">=</option>
       </select>
-      <input type="number" class="input-chunky" id="filterValue" placeholder="0" style="flex:1" inputmode="numeric" aria-label="Filter value" onkeydown="if(event.key==='Enter'){event.preventDefault();addFilter();}">
+      <input type="number" class="input-chunky" id="filterValue" placeholder="0" style="flex:1" inputmode="numeric" aria-label="Filter value" onkeydown="if(event.key==='Enter'){event.preventDefault();addFilter();}if(event.key==='Escape'){event.stopPropagation();closeFilterModal();}">
     </div>
     <div class="filter-modal-actions">
       <button type="button" class="btn-chunky" onclick="closeFilterModal()">Never Mind</button>
@@ -941,7 +941,7 @@
 </div><!-- /lab-main -->
 </main>
 
-<script src="app.js"></script>
+<script src="app.js" defer></script>
 <script src="agent-helpers-bundle.js" defer></script>
 <script defer src="lab-bundle.js"></script>
 <script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
@@ -1101,7 +1101,7 @@
       var badge = document.createElement('span');
       badge.className = 'cat-agent';
       badge.style.cssText = 'display:inline-flex; align-items:center; gap:3px; margin-left:6px; font-family:var(--font-hand); font-size:11px; opacity:0.5; font-weight:400; letter-spacing:0;';
-      badge.innerHTML = '<img src="' + agent.icon + '" width="12" height="12" alt="" style="vertical-align:middle;">' + agent.name;
+      badge.innerHTML = '<img src="' + agent.icon + '" width="12" height="12" alt="' + agent.name + '" style="vertical-align:middle;">' + agent.name;
       catText.parentNode.insertBefore(badge, catText.nextSibling);
     });
   }
@@ -1399,7 +1399,7 @@
                                var pa = typeof getPanelAgent === 'function' ? getPanelAgent(panelName) : null;
                                if (!pa) return '';
                                var html = '<div class="panel-agent-attr" style="font-family:var(--font-hand); font-size:13px; opacity:0.6; display:flex; align-items:center; gap:5px; margin-top:2px;">' +
-                                 '<img src="' + escapeAttr(pa.icon) + '" alt="" width="20" height="20" style="vertical-align:middle;">' +
+                                 '<img src="' + escapeAttr(pa.icon) + '" alt="' + escapeAttr(pa.name) + '" width="20" height="20" style="vertical-align:middle;">' +
                                  '<span>' + escapeHtml(pa.name) + '</span></div>';
                                // One-liner insight (Pro+ only)
                                var paid = typeof isPaidUser === 'function' && isPaidUser();
