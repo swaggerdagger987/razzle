@@ -275,7 +275,7 @@
       <div class="plan-badge">the film room upgrade</div>
       <div class="plan-name">Pro</div>
       <div class="plan-price" id="proPrice">$79.99<span>/yr</span></div>
-      <div class="plan-interval" id="proInterval">that's <span class="yearly-price">$6.67/mo</span> — save 33%</div>
+      <div class="plan-interval" id="proInterval">that's <span class="yearly-price">$6.67/mo</span> — save 33%<br><span style="font-size:11px;color:var(--ink-light);">billed annually at $79.99</span></div>
 
       <ul class="plan-features">
         <li><span class="check">&#10003;</span> <span class="highlight">Everything free, plus:</span></li>
@@ -299,7 +299,7 @@
       <div class="plan-badge">full war machine</div>
       <div class="plan-name">Elite</div>
       <div class="plan-price" id="elitePrice">$149.99<span>/yr</span></div>
-      <div class="plan-interval" id="eliteInterval">that's <span class="yearly-price">$12.50/mo</span> — save 37%</div>
+      <div class="plan-interval" id="eliteInterval">that's <span class="yearly-price">$12.50/mo</span> — save 37%<br><span style="font-size:11px;color:var(--ink-light);">billed annually at $149.99</span></div>
 
       <ul class="plan-features">
         <li><span class="check">&#10003;</span> <span class="highlight">Everything in Pro, plus:</span></li>
@@ -565,9 +565,9 @@
       yearlyLabel.classList.add('active');
 
       document.getElementById('proPrice').innerHTML = PRICES.pro.year + '<span>/yr</span>';
-      document.getElementById('proInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.pro.monthlyEquiv + '/mo</span> — save ' + PRICES.pro.save;
+      document.getElementById('proInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.pro.monthlyEquiv + '/mo</span> — save ' + PRICES.pro.save + '<br><span style="font-size:11px;color:var(--ink-light);">billed annually at ' + PRICES.pro.year + '</span>';
       document.getElementById('elitePrice').innerHTML = PRICES.elite.year + '<span>/yr</span>';
-      document.getElementById('eliteInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.elite.monthlyEquiv + '/mo</span> — save ' + PRICES.elite.save;
+      document.getElementById('eliteInterval').innerHTML = 'that\'s <span class="yearly-price">' + PRICES.elite.monthlyEquiv + '/mo</span> — save ' + PRICES.elite.save + '<br><span style="font-size:11px;color:var(--ink-light);">billed annually at ' + PRICES.elite.year + '</span>';
     } else {
       toggle.classList.remove('yearly');
       badge.style.opacity = '0';
