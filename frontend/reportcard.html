@@ -97,6 +97,34 @@
     background: var(--bg-warm);
   }
 
+  /* Scoring format toggle */
+  .rc-scoring-tabs {
+    display: flex;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .rc-scoring-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    background: var(--bg-card);
+    color: var(--accent);
+    border: none;
+    border-right: 2px solid var(--accent);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .rc-scoring-tab:last-child { border-right: none; }
+  .rc-scoring-tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .rc-scoring-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
   /* Actions */
   .rc-actions {
     display: flex;
@@ -342,6 +370,11 @@
       <button class="rc-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
     </div>
     <select class="rc-select" id="season-select" title="Season" aria-label="Season"></select>
+    <div class="rc-scoring-tabs" id="scoring-tabs">
+      <button class="rc-scoring-tab active" data-scoring="ppr">PPR</button>
+      <button class="rc-scoring-tab" data-scoring="half_ppr">Half</button>
+      <button class="rc-scoring-tab" data-scoring="std">Std</button>
+    </div>
   </div>
 
   <div class="rc-actions">
@@ -439,6 +472,7 @@
   }
 
   var currentPosition = '';
+  var currentScoring = 'ppr';
   var currentData = null;
 
   // Sort state per section
@@ -654,6 +688,7 @@
     var url = '/api/report-cards?limit=25';
     if (pos) url += '&position=' + encodeURIComponent(pos);
     if (season) url += '&season=' + encodeURIComponent(season);
+    if (currentScoring !== 'ppr') url += '&scoring=' + currentScoring;
 
     fetch(url).then(function(resp) {
       if (!resp.ok) throw new Error('API error');
@@ -684,14 +719,26 @@
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
     var season = document.getElementById('season-select').value;
-    savePageState({ pos: currentPosition, season: season });
+    savePageState({ pos: currentPosition, season: season, scoring: currentScoring });
     fetchData(currentPosition, season);
   });
 
   // Season select
   document.getElementById('season-select').addEventListener('change', function() {
-    savePageState({ pos: currentPosition, season: this.value });
+    savePageState({ pos: currentPosition, season: this.value, scoring: currentScoring });
     fetchData(currentPosition, this.value);
+  });
+
+  // Scoring format tabs
+  document.getElementById('scoring-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.rc-scoring-tab');
+    if (!tab) return;
+    document.querySelectorAll('.rc-scoring-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentScoring = tab.getAttribute('data-scoring') || 'ppr';
+    var season = document.getElementById('season-select').value;
+    savePageState({ pos: currentPosition, season: season, scoring: currentScoring });
+    fetchData(currentPosition, season);
   });
 
   // Export PNG
@@ -719,11 +766,17 @@
   }).catch(function() {});
 
   // Restore URL state
-  var _restored = restorePageState({ pos: '', season: '' });
+  var _restored = restorePageState({ pos: '', season: '', scoring: 'ppr' });
   if (_restored.pos) {
     currentPosition = _restored.pos;
     document.querySelectorAll('.rc-pos-tab').forEach(function(t) {
       t.classList.toggle('active', (t.getAttribute('data-pos') || '') === _restored.pos);
+    });
+  }
+  if (_restored.scoring && ['ppr','half_ppr','std'].indexOf(_restored.scoring) !== -1) {
+    currentScoring = _restored.scoring;
+    document.querySelectorAll('.rc-scoring-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-scoring') || '') === currentScoring);
     });
   }
   if (_restored.season) {

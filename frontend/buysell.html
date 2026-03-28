@@ -97,6 +97,34 @@
     background: var(--bg-warm);
   }
 
+  /* Scoring format toggle */
+  .buysell-scoring-tabs {
+    display: flex;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .buysell-scoring-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    background: var(--bg-card);
+    color: var(--accent);
+    border: none;
+    border-right: 2px solid var(--accent);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .buysell-scoring-tab:last-child { border-right: none; }
+  .buysell-scoring-tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .buysell-scoring-tab:hover:not(.active) {
+    background: var(--bg-warm);
+  }
+
   /* Actions */
   .buysell-actions {
     display: flex;
@@ -435,6 +463,11 @@
       <button class="buysell-pos-tab" data-pos="TE">TE</button>
     </div>
     <select class="buysell-season-select" id="season-select" title="Season" aria-label="Season"></select>
+    <div class="buysell-scoring-tabs" id="scoring-tabs">
+      <button class="buysell-scoring-tab active" data-scoring="ppr">PPR</button>
+      <button class="buysell-scoring-tab" data-scoring="half_ppr">Half</button>
+      <button class="buysell-scoring-tab" data-scoring="std">Std</button>
+    </div>
   </div>
 
   <div class="buysell-actions">
@@ -535,6 +568,7 @@
   }
 
   var currentPosition = '';
+  var currentScoring = 'ppr';
 
   function ageClass(age) {
     if (!age) return 'prime';
@@ -659,6 +693,7 @@
     var url = '/api/buy-sell-candidates?limit=15';
     if (season) url += '&season=' + season;
     if (position) url += '&position=' + position;
+    if (currentScoring !== 'ppr') url += '&scoring=' + currentScoring;
 
     try {
       var resp = await fetch(url);
@@ -724,15 +759,27 @@
       tab.classList.add('active');
       currentPosition = tab.getAttribute('data-pos') || '';
       var season = document.getElementById('season-select').value;
-      savePageState({ season: season, position: currentPosition });
+      savePageState({ season: season, position: currentPosition, scoring: currentScoring });
       loadData(season, currentPosition);
     });
   });
 
   // Season change handler
   document.getElementById('season-select').addEventListener('change', function() {
-    savePageState({ season: this.value, position: currentPosition });
+    savePageState({ season: this.value, position: currentPosition, scoring: currentScoring });
     loadData(this.value, currentPosition);
+  });
+
+  // Scoring tab handler
+  document.getElementById('scoring-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.buysell-scoring-tab');
+    if (!tab) return;
+    document.querySelectorAll('.buysell-scoring-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentScoring = tab.getAttribute('data-scoring') || 'ppr';
+    var season = document.getElementById('season-select').value;
+    savePageState({ season: season, position: currentPosition, scoring: currentScoring });
+    loadData(season, currentPosition);
   });
 
   // Export PNG
@@ -765,11 +812,17 @@
   if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
 
   // Restore URL state + load
-  var restored = restorePageState({ season: '', position: '' });
+  var restored = restorePageState({ season: '', position: '', scoring: 'ppr' });
   if (restored.position) {
     currentPosition = restored.position;
     document.querySelectorAll('.buysell-pos-tab').forEach(function(t) {
       t.classList.toggle('active', (t.getAttribute('data-pos') || '') === currentPosition);
+    });
+  }
+  if (restored.scoring && ['ppr','half_ppr','std'].indexOf(restored.scoring) !== -1) {
+    currentScoring = restored.scoring;
+    document.querySelectorAll('.buysell-scoring-tab').forEach(function(t) {
+      t.classList.toggle('active', (t.getAttribute('data-scoring') || '') === currentScoring);
     });
   }
   loadData(restored.season || undefined, currentPosition || undefined);

@@ -24,6 +24,7 @@ from .core import (
     _current_nfl_season,
     _enrich_with_rate_metrics,
     _efficiency_grade,
+    _scoring_factor,
     compute_trade_value,
 )
 
@@ -820,7 +821,7 @@ _EFFICIENCY_ANNOTATIONS_SELL = [
 ]
 
 
-def fetch_buy_sell_candidates(season=None, position=None, limit=15):
+def fetch_buy_sell_candidates(season=None, position=None, limit=15, scoring="ppr"):
     """Return players split into buy-low and sell-high based on efficiency vs dynasty rank."""
     def _query():
         nonlocal season
@@ -880,11 +881,14 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
 
             # Build player list with raw stats + dynasty value
             # Position-specific PPG floors to exclude scrub/depth players
+            adj = _scoring_factor(scoring)
             MIN_PPG = {"QB": 10, "RB": 5, "WR": 5, "TE": 3}
             players = []
             for r in rows:
                 games = r[7] or 1
-                ppg = round((r[6] or 0) / games, 2)
+                receptions_total = r[12] or 0
+                total_pts = (r[6] or 0) + adj * receptions_total
+                ppg = round(total_pts / games, 2)
                 pos = r[2] or "WR"
                 if ppg < MIN_PPG.get(pos, 5):
                     continue
@@ -1050,7 +1054,7 @@ def fetch_buy_sell_candidates(season=None, position=None, limit=15):
                 "sell_high": sell_high,
             }
 
-    return _cached(f"buy_sell:{season}:{position}:{limit}", _query)
+    return _cached(f"buy_sell:{season}:{position}:{limit}:{scoring}", _query)
 
 
 # ---------------------------------------------------------------------------

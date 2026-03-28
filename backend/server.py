@@ -2640,11 +2640,12 @@ def breakout_candidates(season: int = 0, position: str = "", limit: int = 50, we
 
 
 @app.get("/api/buy-sell-candidates")
-def buy_sell_candidates(season: int = 0, position: str = "", limit: int = 15):
+def buy_sell_candidates(season: int = 0, position: str = "", limit: int = 15, scoring: str = "ppr"):
     """Return players split into buy-low and sell-high based on efficiency vs dynasty rank."""
     s = season if season > 0 else None
     pos = position.upper() if position else None
-    return live_data.fetch_buy_sell_candidates(season=s, position=pos, limit=max(1, min(limit, 30)))
+    sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+    return live_data.fetch_buy_sell_candidates(season=s, position=pos, limit=max(1, min(limit, 30)), scoring=sc)
 
 
 @app.get("/api/aging-curves")
@@ -2762,26 +2763,28 @@ def redzone_usage(season: int = 0, position: str = "", limit: int = 30, week: in
 
 
 @app.get("/api/efficiency-rankings")
-def efficiency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
+def efficiency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0, scoring: str = "ppr"):
     """Return fantasy efficiency rankings: most efficient + volume kings."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_efficiency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_efficiency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None, scoring=sc)
     except Exception as e:
         logger.exception("efficiency_rankings error")
         return JSONResponse({"error": "Failed to fetch efficiency data"}, status_code=500)
 
 
 @app.get("/api/consistency-rankings")
-def consistency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
+def consistency_rankings(season: int = 0, position: str = "", limit: int = 30, week: int = 0, scoring: str = "ppr"):
     """Return consistency rankings: rock solid (low variance) + wild cards (high variance)."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_consistency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_consistency_rankings(season=s, position=pos, limit=lim, week=week if week > 0 else None, scoring=sc)
     except Exception as e:
         logger.exception("consistency_rankings error")
         return JSONResponse({"error": "Failed to fetch consistency data"}, status_code=500)
@@ -2801,13 +2804,14 @@ def strength_of_schedule(season: int = 0, position: str = "", limit: int = 30):
 
 
 @app.get("/api/stock-watch")
-def stock_watch(season: int = 0, position: str = "", limit: int = 30):
+def stock_watch(season: int = 0, position: str = "", limit: int = 30, scoring: str = "ppr"):
     """Return dynasty stock watch: rising (undervalued) + falling (overvalued)."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_stock_watch(season=s, position=pos, limit=lim)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_stock_watch(season=s, position=pos, limit=lim, scoring=sc)
     except Exception as e:
         logger.exception("stock_watch error")
         return JSONResponse({"error": "Failed to fetch stock watch data"}, status_code=500)
@@ -2827,13 +2831,14 @@ def opportunity_share(season: int = 0, position: str = "", limit: int = 30, week
 
 
 @app.get("/api/report-cards")
-def report_cards(season: int = 0, position: str = "", limit: int = 25, week: int = 0):
+def report_cards(season: int = 0, position: str = "", limit: int = 25, week: int = 0, scoring: str = "ppr"):
     """Return player report cards with composite Fantasy GPA."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_report_cards(season=s, position=pos, limit=lim, week=week if week > 0 else None)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_report_cards(season=s, position=pos, limit=lim, week=week if week > 0 else None, scoring=sc)
     except Exception as e:
         logger.exception("report_cards error")
         return JSONResponse({"error": "Failed to fetch report card data"}, status_code=500)
@@ -2852,12 +2857,13 @@ def season_awards(season: int = 0, position: str = ""):
 
 
 @app.get("/api/vorp")
-def vorp(season: int = 0, position: str = "", limit: int = 30):
+def vorp(season: int = 0, position: str = "", limit: int = 30, scoring: str = "ppr"):
     """Return Value Over Replacement Player rankings."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
-        return live_data.fetch_vorp(season=s, position=pos, limit=max(1, min(limit, 100)))
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_vorp(season=s, position=pos, limit=max(1, min(limit, 100)), scoring=sc)
     except Exception as e:
         logger.exception("vorp error")
         return JSONResponse({"error": "Failed to fetch VORP data"}, status_code=500)
