@@ -10670,6 +10670,14 @@ document.addEventListener("keydown", function(e) {
   // Don't intercept when typing in inputs
   if (isInputFocused()) return;
 
+  // Don't fire shortcuts when any modal/overlay is open (except Escape handled above)
+  if (isAnyOverlayOpen()) return;
+  if (document.querySelector('.column-picker-overlay')) return;
+  if (document.querySelector('#shortcutRef[style*="flex"]')) return;
+  if (document.querySelector('#savedViewsModal')) return;
+  if (document.querySelector('#shareModal')) return;
+  if (document.querySelector('.auth-modal-overlay[style*="flex"]')) return;
+
   // / or Ctrl+K: focus search
   if (e.key === "/" || (e.key === "k" && (e.ctrlKey || e.metaKey))) {
     e.preventDefault();
