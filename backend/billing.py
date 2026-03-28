@@ -115,8 +115,54 @@ def initialize_subscriptions_table():
             conn.execute("ALTER TABLE subscriptions ADD COLUMN plan_type TEXT DEFAULT 'subscription'")
         except Exception:
             logger.debug("plan_type column already exists or migration failed", exc_info=True)
+        # Early adopter reservation table for atomic slot checking
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS ea_reservations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                tier TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                expires_at TIMESTAMP NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
         conn.commit()
     logger.info("Subscriptions table initialized")
+
+
+def _reserve_ea_slot(user_id: int, tier: str, limit: int, plan_filter: str) -> dict | None:
+    """Atomically reserve an early adopter slot. Returns error dict or None on success."""
+    with auth_module.get_users_db() as conn:
+        # Clean up expired reservations first
+        conn.execute("DELETE FROM ea_reservations WHERE expires_at < CURRENT_TIMESTAMP")
+        # Atomic check: count confirmed users + active reservations
+        confirmed = conn.execute(
+            f"SELECT COUNT(*) FROM users WHERE plan IN {plan_filter}"
+        ).fetchone()[0]
+        reserved = conn.execute(
+            "SELECT COUNT(*) FROM ea_reservations WHERE tier = ? AND expires_at > CURRENT_TIMESTAMP",
+            (tier,),
+        ).fetchone()[0]
+        if confirmed + reserved >= limit:
+            conn.commit()
+            return {"error": f"Early adopter {tier.title()} spots are full", "status": 400}
+        # Reserve slot (expires in 30 minutes — Stripe checkout timeout)
+        conn.execute(
+            "INSERT INTO ea_reservations (user_id, tier, expires_at) VALUES (?, ?, datetime('now', '+30 minutes'))",
+            (user_id, tier),
+        )
+        conn.commit()
+    return None
+
+
+def _clear_ea_reservation(user_id: int, tier: str):
+    """Clear reservation after successful checkout completion."""
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("DELETE FROM ea_reservations WHERE user_id = ? AND tier = ?", (user_id, tier))
+            conn.commit()
+    except Exception:
+        logger.exception("Failed to clear EA reservation for user %s", user_id)
 
 
 def get_subscriber_counts() -> dict:
@@ -247,15 +293,16 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
     is_lifetime = interval.startswith("lifetime_")
     is_early_adopter = interval.startswith("ea_")
 
-    # Validate early adopter availability
+    # Validate early adopter availability with atomic reservation
     if is_early_adopter:
         if not EA_ENABLED:
             return {"error": "Early adopter pricing is not currently active", "status": 400}
-        counts = get_subscriber_counts()
-        if "elite" in interval and counts["elite_total"] >= EA_ELITE_LIMIT:
-            return {"error": "Early adopter Elite spots are full", "status": 400}
-        if "pro" in interval and "elite" not in interval and counts["pro_total"] >= EA_PRO_LIMIT:
-            return {"error": "Early adopter Pro spots are full", "status": 400}
+        ea_tier = "elite" if "elite" in interval else "pro"
+        ea_limit = EA_ELITE_LIMIT if ea_tier == "elite" else EA_PRO_LIMIT
+        ea_plan_filter = "('elite', 'elite_lifetime')" if ea_tier == "elite" else "('pro', 'pro_lifetime')"
+        reservation_err = _reserve_ea_slot(user["id"], ea_tier, ea_limit, ea_plan_filter)
+        if reservation_err:
+            return reservation_err
 
     # Validate lifetime availability
     if is_lifetime:
@@ -452,6 +499,9 @@ def _handle_checkout_completed(session):
             """, (_uid, customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type))
 
         conn.commit()
+    # Clear any early adopter reservation now that checkout is confirmed
+    ea_tier = "elite" if "elite" in plan_tier else "pro"
+    _clear_ea_reservation(_uid, ea_tier)
     logger.info(f"User {user_id} upgraded to {plan_tier} (subscription {subscription_id}, trial={is_trial})")
 
 
