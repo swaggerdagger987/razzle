@@ -78,90 +78,81 @@ def _get_client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
-# Simple in-memory rate limiter for auth endpoints
-_rate_buckets = defaultdict(list)  # ip -> [timestamps]
-_RATE_LIMIT = 10  # max attempts
-_RATE_WINDOW = 60  # per 60 seconds
-_RATE_MAX_IPS = 10000  # max tracked IPs to prevent memory leak
+# SQLite-backed rate limiter — persists across restarts, shared across workers
+_RATE_LIMIT = 10       # auth: 10/60s
+_RATE_WINDOW = 60
+_SENSITIVE_RATE_LIMIT = 5   # billing/API key: 5/60s
+_SENSITIVE_RATE_WINDOW = 60
+_SCREENER_RATE_LIMIT = 30   # screener POST: 30/60s
+_SCREENER_RATE_WINDOW = 60
+_REG_RATE_LIMIT = 3         # registration: 3/24h
+_REG_RATE_WINDOW = 86400
+
+
+def _init_rate_limit_table():
+    """Create rate_limits table in users.db if it doesn't exist."""
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS rate_limits (
+                    bucket TEXT NOT NULL,
+                    key TEXT NOT NULL,
+                    ts REAL NOT NULL
+                )
+            """)
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_rate_bucket_key ON rate_limits(bucket, key)")
+            conn.commit()
+    except Exception:
+        logger.debug("rate_limits table init failed (may already exist)", exc_info=True)
+
+
+def _check_rate(bucket: str, key: str, limit: int, window: int) -> bool:
+    """Generic SQLite-backed rate limiter. Returns True if allowed."""
+    now = _time.time()
+    cutoff = now - window
+    try:
+        with auth_module.get_users_db() as conn:
+            # Clean old entries for this bucket+key
+            conn.execute("DELETE FROM rate_limits WHERE bucket = ? AND key = ? AND ts < ?", (bucket, key, cutoff))
+            # Count current entries
+            count = conn.execute(
+                "SELECT COUNT(*) FROM rate_limits WHERE bucket = ? AND key = ?", (bucket, key)
+            ).fetchone()[0]
+            if count >= limit:
+                conn.commit()
+                return False
+            conn.execute("INSERT INTO rate_limits (bucket, key, ts) VALUES (?, ?, ?)", (bucket, key, now))
+            conn.commit()
+            return True
+    except Exception:
+        logger.debug("Rate limit check failed, allowing request", exc_info=True)
+        return True  # fail open — don't block users on DB errors
+
+
+def _cleanup_rate_limits():
+    """Periodic cleanup of expired rate limit entries."""
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("DELETE FROM rate_limits WHERE ts < ?", (_time.time() - 86400,))
+            conn.commit()
+    except Exception:
+        pass
+
 
 def _check_rate_limit(ip: str) -> bool:
-    """Return True if request is allowed, False if rate limited."""
-    now = _time.time()
-    # Prune stale IPs if dict grows too large
-    if len(_rate_buckets) > _RATE_MAX_IPS:
-        stale = [k for k, v in _rate_buckets.items() if not v or now - v[-1] > _RATE_WINDOW]
-        for k in stale:
-            del _rate_buckets[k]
-    bucket = _rate_buckets[ip]
-    # Remove old entries
-    _rate_buckets[ip] = [t for t in bucket if now - t < _RATE_WINDOW]
-    if len(_rate_buckets[ip]) >= _RATE_LIMIT:
-        return False
-    _rate_buckets[ip].append(now)
-    return True
+    return _check_rate("auth", ip, _RATE_LIMIT, _RATE_WINDOW)
 
-
-# Broader rate limiter for billing + API key management (5 requests / 60 seconds per IP)
-_sensitive_rate_buckets = defaultdict(list)
-_SENSITIVE_RATE_LIMIT = 5
-_SENSITIVE_RATE_WINDOW = 60
 
 def _check_sensitive_rate(ip: str) -> bool:
-    """Rate limit for sensitive mutation endpoints (billing, API key management)."""
-    now = _time.time()
-    if len(_sensitive_rate_buckets) > _RATE_MAX_IPS:
-        stale = [k for k, v in _sensitive_rate_buckets.items()
-                 if not v or now - v[-1] > _SENSITIVE_RATE_WINDOW]
-        for k in stale:
-            del _sensitive_rate_buckets[k]
-    bucket = _sensitive_rate_buckets[ip]
-    _sensitive_rate_buckets[ip] = [t for t in bucket if now - t < _SENSITIVE_RATE_WINDOW]
-    if len(_sensitive_rate_buckets[ip]) >= _SENSITIVE_RATE_LIMIT:
-        return False
-    _sensitive_rate_buckets[ip].append(now)
-    return True
+    return _check_rate("sensitive", ip, _SENSITIVE_RATE_LIMIT, _SENSITIVE_RATE_WINDOW)
 
-
-# Screener rate limiter: 30 requests / 60 seconds per IP
-_screener_rate_buckets = defaultdict(list)
-_SCREENER_RATE_LIMIT = 30
-_SCREENER_RATE_WINDOW = 60
 
 def _check_screener_rate(ip: str) -> bool:
-    """Rate limit for screener POST endpoint."""
-    now = _time.time()
-    if len(_screener_rate_buckets) > _RATE_MAX_IPS:
-        stale = [k for k, v in _screener_rate_buckets.items()
-                 if not v or now - v[-1] > _SCREENER_RATE_WINDOW]
-        for k in stale:
-            del _screener_rate_buckets[k]
-    bucket = _screener_rate_buckets[ip]
-    _screener_rate_buckets[ip] = [t for t in bucket if now - t < _SCREENER_RATE_WINDOW]
-    if len(_screener_rate_buckets[ip]) >= _SCREENER_RATE_LIMIT:
-        return False
-    _screener_rate_buckets[ip].append(now)
-    return True
+    return _check_rate("screener", ip, _SCREENER_RATE_LIMIT, _SCREENER_RATE_WINDOW)
 
-
-# Registration rate limiter: 3 registrations per IP per 24 hours
-_reg_rate_buckets = defaultdict(list)  # ip -> [timestamps]
-_REG_RATE_LIMIT = 3
-_REG_RATE_WINDOW = 86400  # 24 hours
 
 def _check_reg_rate(ip: str) -> bool:
-    """Return True if registration is allowed for this IP, False if rate limited."""
-    now = _time.time()
-    if len(_reg_rate_buckets) > _RATE_MAX_IPS:
-        stale = [k for k, v in _reg_rate_buckets.items()
-                 if not v or now - v[-1] > _REG_RATE_WINDOW]
-        for k in stale:
-            del _reg_rate_buckets[k]
-    bucket = _reg_rate_buckets[ip]
-    _reg_rate_buckets[ip] = [t for t in bucket if now - t < _REG_RATE_WINDOW]
-    if len(_reg_rate_buckets[ip]) >= _REG_RATE_LIMIT:
-        return False
-    _reg_rate_buckets[ip].append(now)
-    return True
+    return _check_rate("registration", ip, _REG_RATE_LIMIT, _REG_RATE_WINDOW)
 
 
 def bootstrap_database():
@@ -425,6 +416,7 @@ async def lifespan(app):
     try:
         auth_module.initialize_users_db()
         billing_module.initialize_subscriptions_table()
+        _init_rate_limit_table()
         live_data.init_waitlist_table()
         live_data.init_formula_store_tables()
         live_data._init_analytics_table()
@@ -1102,27 +1094,14 @@ _LLM_TIMEOUT = 25  # seconds
 _LLM_MAX_TOKENS = 2000
 _LLM_FREE_MAX_TOKENS = 1000
 
-# Per-user server-side rate limiter for LLM proxy
-_llm_rate_buckets = defaultdict(list)  # user_id -> [timestamps]
+# Per-user server-side rate limiter for LLM proxy (SQLite-backed)
 _LLM_RATE_LIMIT_ELITE = 100  # max queries per day for Elite (server-side)
 _LLM_RATE_WINDOW = 86400  # 24 hours in seconds
 
 
 def _check_llm_rate(user_id: int) -> bool:
     """Check if user is within LLM rate limit. Returns True if allowed."""
-    now = _time.time()
-    bucket = _llm_rate_buckets[user_id]
-    # Prune old entries
-    _llm_rate_buckets[user_id] = [t for t in bucket if now - t < _LLM_RATE_WINDOW]
-    # Periodically prune stale users to prevent unbounded growth
-    if len(_llm_rate_buckets) > 500:
-        stale = [uid for uid, ts in _llm_rate_buckets.items() if not ts or now - ts[-1] > _LLM_RATE_WINDOW]
-        for uid in stale:
-            del _llm_rate_buckets[uid]
-    if len(_llm_rate_buckets[user_id]) >= _LLM_RATE_LIMIT_ELITE:
-        return False
-    _llm_rate_buckets[user_id].append(now)
-    return True
+    return _check_rate("llm", str(user_id), _LLM_RATE_LIMIT_ELITE, _LLM_RATE_WINDOW)
 
 
 @app.post("/api/llm/chat")
