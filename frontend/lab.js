@@ -1669,9 +1669,11 @@ function _initColResizeHandles() {
     h.removeEventListener("mousedown", _onColResizeStart);
     h.removeEventListener("dblclick", _onColResizeReset);
     h.removeEventListener("keydown", _onColResizeKeydown);
+    h.removeEventListener("touchstart", _onColResizeTouchStart);
     h.addEventListener("mousedown", _onColResizeStart);
     h.addEventListener("dblclick", _onColResizeReset);
     h.addEventListener("keydown", _onColResizeKeydown);
+    h.addEventListener("touchstart", _onColResizeTouchStart, { passive: false });
     h.setAttribute("role", "separator");
     h.setAttribute("tabindex", "0");
     h.setAttribute("aria-orientation", "vertical");
@@ -1756,6 +1758,48 @@ function _onColResizeEnd() {
   document.removeEventListener("mousemove", _onColResizeMove);
   document.removeEventListener("mouseup", _onColResizeEnd);
   document.body.style.cursor = "";
+  document.body.style.userSelect = "";
+  try { localStorage.setItem("razzle_col_widths", JSON.stringify(state.columnWidths)); } catch(e) {}
+}
+
+// Touch equivalents for column resize
+function _onColResizeTouchStart(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  var touch = e.touches[0];
+  var key = e.target.dataset.col;
+  var th = e.target.parentElement;
+  _colResize.active = true;
+  _colResize.key = key;
+  _colResize.startX = touch.clientX;
+  _colResize.startW = th.offsetWidth;
+  document.addEventListener("touchmove", _onColResizeTouchMove, { passive: false });
+  document.addEventListener("touchend", _onColResizeTouchEnd);
+  document.addEventListener("touchcancel", _onColResizeTouchEnd);
+  document.body.style.userSelect = "none";
+}
+
+function _onColResizeTouchMove(e) {
+  if (!_colResize.active) return;
+  e.preventDefault();
+  var touch = e.touches[0];
+  var delta = touch.clientX - _colResize.startX;
+  var newW = Math.max(40, _colResize.startW + delta);
+  state.columnWidths[_colResize.key] = newW;
+  var ths = document.querySelectorAll('th[data-col="' + _colResize.key + '"]');
+  for (var i = 0; i < ths.length; i++) {
+    ths[i].style.width = newW + "px";
+    ths[i].style.minWidth = newW + "px";
+    ths[i].style.maxWidth = newW + "px";
+  }
+}
+
+function _onColResizeTouchEnd() {
+  if (!_colResize.active) return;
+  _colResize.active = false;
+  document.removeEventListener("touchmove", _onColResizeTouchMove);
+  document.removeEventListener("touchend", _onColResizeTouchEnd);
+  document.removeEventListener("touchcancel", _onColResizeTouchEnd);
   document.body.style.userSelect = "";
   try { localStorage.setItem("razzle_col_widths", JSON.stringify(state.columnWidths)); } catch(e) {}
 }
@@ -2332,6 +2376,30 @@ function onPlayerNameLeave() {
   }, 150);
 }
 
+// Touch support for hover cards: tap player name to show, tap elsewhere to dismiss
+(function() {
+  document.addEventListener("touchstart", function(e) {
+    var link = e.target.closest(".col-player a[onmouseenter]");
+    if (link) {
+      // Tapped on a player name link — show hover card
+      var enterAttr = link.getAttribute("onmouseenter") || "";
+      var m = enterAttr.match(/onPlayerNameEnter\('([^']+)'/);
+      if (m) {
+        e.preventDefault();
+        var playerId = m[1];
+        if (_hoverCardVisible) hideHoverCard();
+        showHoverCard(playerId, link);
+        return;
+      }
+    }
+    // Tapped on the hover card itself — keep it open
+    var card = document.getElementById("playerHoverCard");
+    if (card && card.contains(e.target)) return;
+    // Tapped elsewhere — dismiss hover card
+    if (_hoverCardVisible) hideHoverCard();
+  }, { passive: false });
+})();
+
 function renderProspectTable() {
   renderTableHead();
   renderTableBody();
@@ -2756,6 +2824,45 @@ function _ctxMenuAction(action) {
     var firstItem = menu.querySelector('.ctx-item');
     if (firstItem) firstItem.focus();
   });
+
+  // Long-press touch support for context menu (500ms hold)
+  var _longPressTimer = null;
+  var _longPressFired = false;
+
+  table.addEventListener("touchstart", function(e) {
+    var tr = e.target.closest("tbody tr");
+    var th = e.target.closest("thead th");
+    if (!tr && !th) return;
+    _longPressFired = false;
+    var touch = e.touches[0];
+    var tx = touch.clientX, ty = touch.clientY;
+    _longPressTimer = setTimeout(function() {
+      _longPressFired = true;
+      // Synthesize a contextmenu event at the touch coordinates
+      var synth = new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: tx,
+        clientY: ty
+      });
+      (tr || th).dispatchEvent(synth);
+    }, 500);
+  }, { passive: true });
+
+  table.addEventListener("touchmove", function() {
+    if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; }
+  }, { passive: true });
+
+  table.addEventListener("touchend", function(e) {
+    if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; }
+    // If long press already fired, prevent the tap from also triggering
+    if (_longPressFired) { e.preventDefault(); _longPressFired = false; }
+  }, { passive: false });
+
+  table.addEventListener("touchcancel", function() {
+    if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; }
+    _longPressFired = false;
+  }, { passive: true });
 })();
 
 // ─── Universe toggle ─────────────────────────────────────────────
