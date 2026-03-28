@@ -247,6 +247,16 @@ function saveWatchlist(list) {
   if (typeof _pushWatchlistAfterChange === "function") _pushWatchlistAfterChange();
 }
 
+// Cross-tab sync: when another tab changes the watchlist, reload it
+window.addEventListener("storage", function(e) {
+  if (e.key === "razzle_watchlist") {
+    _watchlistCache = null;
+    getWatchlist();
+    updateWatchlistBadge();
+    if (typeof renderTable === "function") renderTable();
+  }
+});
+
 function isOnWatchlist(playerId) {
   return _watchlistSet.has(playerId);
 }
@@ -2524,8 +2534,8 @@ function _ctxMenuAction(action) {
       _showToast("highlights cleared");
       break;
     case "copy":
-      try { navigator.clipboard.writeText(d.pName).then(function() { _showToast("copied to clipboard"); }).catch(function() { _showToast("fumbled the copy — try again"); }); }
-      catch(e) { _showToast("fumbled the copy — try again"); }
+      try { navigator.clipboard.writeText(d.pName).then(function() { _showToast("copied to clipboard"); }).catch(function() { _fallbackCopy(d.pName); _showToast("copied to clipboard"); }); }
+      catch(e) { _fallbackCopy(d.pName); _showToast("copied to clipboard"); }
       break;
   }
   hideContextMenu();
