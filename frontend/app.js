@@ -701,7 +701,9 @@ async function apiFetch(path, options = {}) {
   }
   const resp = await fetch(url, options);
   if (resp.status === 401) {
-    try { localStorage.removeItem("razzle_token"); localStorage.removeItem("razzle_user"); } catch (e) {}
+    // Don't clear state — let user re-auth and resume
+    try { localStorage.removeItem("razzle_token"); } catch (e) {}
+    if (typeof _showToast === "function") _showToast("session expired — sign in to continue", "warning", 8000);
     if (typeof openAuthModal === "function") openAuthModal();
     throw new Error("session expired. sign in again.");
   }
