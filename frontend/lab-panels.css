@@ -940,7 +940,7 @@
 /* ===== BREAKOUTS ===== */
 .breakouts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   gap: 16px;
 }
 .breakout-card {
@@ -3159,7 +3159,7 @@
 /* ===================================================================
    44. PLAYER ARCHETYPES (arc-)
    =================================================================== */
-.arc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.arc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 16px; }
 .arc-card {
   background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm);
   box-shadow: 4px 4px 0 var(--ink);
@@ -3257,7 +3257,7 @@
 }
 
 /* ===== AWARDS PANEL (aw2-) ===== */
-.aw2-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+.aw2-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 20px; }
 .aw2-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: 12px; padding: 20px; box-shadow: 4px 4px 0 var(--ink); }
 .aw2-card-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
 .aw2-trophy { font-size: 24px; }
@@ -3510,7 +3510,7 @@
 .rc2-badge.blue { background: var(--semantic-blue-light); color: var(--semantic-blue); }
 
 /* ===== RECORDS PANEL (rec-) ===== */
-.rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 16px; }
 .rec-section { background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm); padding: 16px; }
 .rec-section-header { font-family: var(--font-display); font-size: 16px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px dashed var(--ink-faint); }
 .rec-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
@@ -3667,7 +3667,7 @@
 .td2-player-share { font-weight: 700; min-width: 36px; text-align: right; }
 
 /* ===== TEAM ROSTER PANEL (tm-) ===== */
-.tm-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.tm-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 16px; }
 .tm-group-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm); overflow: hidden; }
 .tm-group-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; color: var(--text-on-accent); }
 .tm-group-header.pos-qb { background: var(--pos-qb); }
