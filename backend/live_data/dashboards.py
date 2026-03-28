@@ -712,7 +712,7 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 player_sos[pid].append(opp_allows)
 
             # ---- Compute metrics per player (min 8 games, position PPG floor) ----
-            MIN_PPG = {"QB": 10, "RB": 5, "WR": 5, "TE": 3}
+            MIN_PPG = {"QB": 12, "RB": 8, "WR": 8, "TE": 5}
             players = []
             for pid, weeks in player_weeks.items():
                 n = len(weeks)
@@ -722,9 +722,11 @@ def fetch_stock_watch(season=None, position=None, limit=30):
                 opps_d = player_opps[pid]
                 total_pts = opps_d["total_pts"]
                 games = opps_d["games"]
+                if games < 6:
+                    continue
                 ppg = round(total_pts / games, 2) if games > 0 else 0
                 pos = info["position"]
-                if ppg < MIN_PPG.get(pos, 5):
+                if ppg < MIN_PPG.get(pos, 8):
                     continue
 
                 # Efficiency: PPO — QBs use pass attempts + carries
