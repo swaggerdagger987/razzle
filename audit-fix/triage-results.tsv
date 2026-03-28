@@ -157,3 +157,22 @@ timestamp	invocation	finding_ref	severity	confidence	category	ticket_file	root_c
 2026-03-28T22:00:28	5	EDGE-49	-	-	-	n/a	n/a	n/a	COVERED: Tailwind colors ticketed as S2-009; grep confirms 3 JS + 1 HTML	n/a	0	SKIP	25 Tailwind colors (overstated)
 2026-03-28T22:00:29	5	DT-2	-	-	-	n/a	n/a	n/a	COVERED: Cold rgba shadows ticketed as S2-002 (DES-401) + S2-003 (DES-402)	n/a	0	SKIP	Cold rgba(0,0,0) shadows
 2026-03-28T22:00:30	5	DT-6	-	-	-	n/a	n/a	n/a	COVERED: Cold rgba overlays ticketed as S2-003 (includes player.js:722)	n/a	0	SKIP	Cold rgba overlays
+2026-03-28T23:00:01	7	SWEEP-ALL	COMPLETE	HIGH	-	n/a	n/a	n/a	Full cross-reference: all audit sources vs 130+ tickets = 100% coverage	all audit files	0	COMPLETE	EDGE-CASES(74) + DESIGN-TICKETS(10) + DESIGN-QA(10) + a11y(25) + UI-designer(17) + QA-AUDIT + BUGS.md all decomposed
+2026-03-28T23:00:02	7	EDGE-4	STALE	HIGH	ui-bug	n/a	frontend/app.js	1402	Welcome modal link is /agents.html (correct)	app.js	0	STALE	Re-verified
+2026-03-28T23:00:03	7	EDGE-5	STALE	HIGH	ui-bug	n/a	frontend/pricing.html	203	Sign In uses openAuthModal() correctly	pricing.html,index.html	0	STALE	Re-verified
+2026-03-28T23:00:04	7	EDGE-16	STALE	HIGH	ui-bug	n/a	frontend/warroom.js	1598	getAuthToken reads razzle_token correctly	warroom.js	0	STALE	Re-verified
+2026-03-28T23:00:05	7	EDGE-18	STALE	HIGH	security	n/a	backend/server.py	2794	Analytics summary requires x-admin-secret	server.py	0	STALE	Re-verified
+2026-03-28T23:00:06	7	EDGE-19	STALE	HIGH	security	n/a	backend/live_data/prospects.py	60	All 4 LIKE endpoints escape % and _	prospects.py,storage.py,college.py	0	STALE	Re-verified
+2026-03-28T23:00:07	7	EDGE-26	STALE	HIGH	ui-bug	n/a	frontend/warroom.js	1276	rAF loop checks cvs.isConnected	warroom.js	0	STALE	Re-verified
+2026-03-28T23:00:08	7	EDGE-33	STALE	HIGH	performance	n/a	backend/live_data/core.py	86	_cache_locks cleaned in _cache_evict	core.py	0	STALE	Re-verified
+2026-03-28T23:00:09	7	EDGE-35	STALE	MEDIUM	performance	n/a	frontend/lab.js	96	html2canvas lazy-loaded via _loadHtml2Canvas	lab.js	0	STALE	Re-verified
+2026-03-28T23:00:10	7	EDGE-36	STALE	HIGH	security	n/a	backend/server.py	1422	Formula save enforces 3-formula limit for free	server.py	0	STALE	Re-verified
+2026-03-28T23:00:11	7	EDGE-37	STALE	HIGH	security	n/a	backend/server.py	2054	Formula publish gated by require_plan("pro")	server.py	0	STALE	Re-verified
+2026-03-28T23:00:12	7	EDGE-71	STALE	LOW	cleanup	n/a	.gitignore	10	WAL/SHM patterns in .gitignore	.gitignore	0	STALE	Re-verified
+2026-03-28T23:00:13	7	EDGE-73	STALE	LOW	cleanup	n/a	data/	n/a	terminal_clean.db does not exist	data/	0	STALE	Re-verified
+2026-03-28T23:00:14	7	UI-5	STALE	MEDIUM	design	n/a	frontend/archetypes.html	422	Canvas exports use Space Mono not sans-serif	4 HTML files	0	STALE	Re-verified
+2026-03-28T23:00:15	7	UI-9	STALE	MEDIUM	design	n/a	frontend/lab-panels.css	1018	Age badges use CSS vars not hardcoded hex	lab-panels.css	0	STALE	Re-verified
+2026-03-28T23:00:16	7	UI-11	STALE	MEDIUM	design	n/a	frontend/lab.js	n/a	Data bars solid color, no gradient	lab.js	0	STALE	Re-verified
+2026-03-28T23:00:17	7	A11Y-10	COVERED	HIGH	a11y	tickets/a11y/S3-008-dialogs-no-aria-labelledby.md	frontend/lab.js	multiple	Lab dialog focus traps in S3-008 scope	lab.js	0	COVERED	S3-008 covers aria-labelledby AND focus trap
+2026-03-28T23:00:18	7	A11Y-13	STALE	MEDIUM	a11y	n/a	frontend/lab.html	3167	Lab has sr-only h1 heading	lab.html	0	STALE	Re-verified
+2026-03-28T23:00:19	7	A11Y-24	STALE	LOW	a11y	n/a	frontend/app.js	563	Toast has role=alert and aria-live=assertive	app.js	0	STALE	Re-verified
