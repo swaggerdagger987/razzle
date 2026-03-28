@@ -1001,6 +1001,33 @@ async def auth_link_sleeper(request: Request):
     return result
 
 
+@app.post("/api/auth/forgot-password")
+async def auth_forgot_password(request: Request):
+    """Send password reset email."""
+    ip = _get_client_ip(request)
+    if not _check_rate_limit(ip):
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
+    body = await request.json()
+    email = body.get("email", "").strip()
+    result = auth_module.forgot_password(email)
+    return result
+
+
+@app.post("/api/auth/reset-password")
+async def auth_reset_password(request: Request):
+    """Reset password using token from email."""
+    ip = _get_client_ip(request)
+    if not _check_rate_limit(ip):
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
+    body = await request.json()
+    token = body.get("token", "")
+    new_password = body.get("password", "")
+    result = auth_module.reset_password(token, new_password)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    return result
+
+
 # ---------------------------------------------------------------------------
 # Billing endpoints (Stripe)
 # ---------------------------------------------------------------------------

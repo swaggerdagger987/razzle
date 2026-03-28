@@ -972,6 +972,7 @@ function _injectAuthModal() {
         '<input type="password" id="authLoginPassword" placeholder="Password" required autocomplete="current-password" aria-label="Password" aria-describedby="authLoginError">' +
         '<div id="authLoginError" class="auth-error" role="alert"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Sign In</button>' +
+        '<div style="text-align:center;margin-top:8px;"><a href="#" onclick="showForgotPassword(); return false;" style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Forgot password?</a></div>' +
       '</form>' +
       '<form id="authRegisterForm" class="auth-form" style="display:none" onsubmit="handleRegister(event)">' +
         '<input type="email" id="authRegisterEmail" placeholder="Email" required autocomplete="email" aria-label="Email address" aria-describedby="authRegisterError">' +
@@ -1138,6 +1139,62 @@ async function handleRegister(e) {
   } catch (err) {
     errEl.textContent = "network fumble. try again.";
     document.getElementById("authRegisterEmail").setAttribute("aria-invalid","true");
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = origText; }
+  }
+}
+
+function showForgotPassword() {
+  var modal = document.getElementById("authModal");
+  if (!modal) return;
+  var inner = modal.querySelector(".auth-modal");
+  if (!inner) return;
+  inner.innerHTML =
+    '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
+    '<h2 style="font-family:var(--font-display);font-size:22px;text-align:center;margin-bottom:16px;">Reset Password</h2>' +
+    '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">Enter your email and we\'ll send you a reset link.</p>' +
+    '<form id="authForgotForm" class="auth-form" onsubmit="handleForgotPassword(event)">' +
+      '<input type="email" id="authForgotEmail" placeholder="Email" required autocomplete="email" aria-label="Email address">' +
+      '<div id="authForgotMsg" class="auth-error" role="status"></div>' +
+      '<button type="submit" class="btn-chunky btn-primary auth-submit">Send Reset Link</button>' +
+    '</form>' +
+    '<div style="text-align:center;margin-top:12px;"><a href="#" onclick="showLoginFromReset(); return false;" style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Back to sign in</a></div>';
+  var emailInput = document.getElementById("authForgotEmail");
+  if (emailInput) setTimeout(function() { emailInput.focus(); }, 50);
+}
+
+function showLoginFromReset() {
+  // Re-render the auth modal with login/register tabs
+  var modal = document.getElementById("authModal");
+  if (modal) modal.remove();
+  _injectAuthModal();
+  openAuthModal();
+}
+
+async function handleForgotPassword(e) {
+  e.preventDefault();
+  var btn = e.target.querySelector('button[type="submit"]');
+  var origText = btn ? btn.textContent : "";
+  if (btn) { btn.disabled = true; btn.textContent = "sending..."; }
+  var email = document.getElementById("authForgotEmail").value.trim();
+  var msgEl = document.getElementById("authForgotMsg");
+  msgEl.textContent = "";
+  msgEl.style.color = "";
+  try {
+    var resp = await fetch(API_BASE + "/api/auth/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email })
+    });
+    var data = await resp.json();
+    if (data.message) {
+      msgEl.style.color = "var(--ink)";
+      msgEl.textContent = data.message;
+    } else if (data.error) {
+      msgEl.textContent = data.error;
+    }
+  } catch (err) {
+    msgEl.textContent = "network error. try again.";
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = origText; }
   }
