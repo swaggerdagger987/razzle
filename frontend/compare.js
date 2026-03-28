@@ -715,13 +715,13 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
   roundRect(ctx, x + 14, y + 18, 50, 36, 6);
   ctx.stroke();
   ctx.fillStyle = t.white;
-  ctx.font = "22px 'Luckiest Guy', cursive";
+  ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, x + 39, y + 44);
 
   // Name
   ctx.fillStyle = t.ink;
-  ctx.font = "26px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   var displayName = player.full_name || "";
   // Truncate if too long

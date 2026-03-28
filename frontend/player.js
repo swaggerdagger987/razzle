@@ -626,7 +626,7 @@ async function exportPlayerPNG() {
     ctx.stroke();
 
     ctx.fillStyle = t.ink;
-    ctx.font = "28px 'Luckiest Guy', cursive";
+    ctx.font = "24px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, x + boxW / 2, y + 38);
 

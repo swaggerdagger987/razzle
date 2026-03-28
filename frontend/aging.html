@@ -780,7 +780,7 @@
     if (!target) return;
     loadHtml2Canvas().then(function(h2c) { return h2c(target, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
-      ctx.font = '28px Caveat, cursive';
+      ctx.font = '24px Caveat, cursive';
       ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.25)' : 'rgba(45,31,20,0.25)';
       ctx.textAlign = 'right';
       ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);

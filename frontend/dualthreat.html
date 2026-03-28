@@ -300,7 +300,7 @@ function exportPNG() {
   var _ec = getExportColors(); loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: _ec.bg, scale: 2 }); }).then(canvas => {
     const ctx = canvas.getContext("2d");
     if (typeof drawRazzleWatermark === 'function') { drawRazzleWatermark(ctx, canvas); }
-    else { ctx.font = "bold 28px 'Space Mono', monospace"; ctx.fillStyle = getExportColors().watermark; ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }
+    else { ctx.font = "bold 24px 'Space Mono', monospace"; ctx.fillStyle = getExportColors().watermark; ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }
     const link = document.createElement("a");
     link.download = "razzle-dual-threat.png";
     link.href = canvas.toDataURL();

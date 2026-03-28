@@ -656,7 +656,7 @@
     if (!target) return;
     var _ec = getExportColors(); loadHtml2Canvas().then(function(h2c) { return h2c(target, { backgroundColor: _ec.bg, scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
-      ctx.font = '28px Caveat, cursive';
+      ctx.font = '24px Caveat, cursive';
       ctx.fillStyle = getExportColors().watermark;
       ctx.textAlign = 'right';
       ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);

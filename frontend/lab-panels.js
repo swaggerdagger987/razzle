@@ -271,7 +271,7 @@
             var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             html2canvas(wrap, { backgroundColor: isDark ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true, logging: false }).then(function(canvas) {
               var ctx = canvas.getContext('2d');
-              ctx.font = '600 28px Caveat, cursive';
+              ctx.font = '600 24px Caveat, cursive';
               ctx.fillStyle = isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
               ctx.textAlign = 'right';
               ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);

@@ -330,7 +330,7 @@ function exportPNG() {
   loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(canvas => {
     const ctx = canvas.getContext("2d");
     if (typeof drawRazzleWatermark === 'function') { drawRazzleWatermark(ctx, canvas); }
-    else { ctx.font = "bold 28px 'Space Mono', monospace"; ctx.fillStyle = (typeof getExportColors === 'function' ? getExportColors().watermark : 'rgba(45,31,20,0.13)'); ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }
+    else { ctx.font = "bold 24px 'Space Mono', monospace"; ctx.fillStyle = (typeof getExportColors === 'function' ? getExportColors().watermark : 'rgba(45,31,20,0.13)'); ctx.fillText("razzle.lol", canvas.width - 220, canvas.height - 20); }
     const link = document.createElement("a");
     link.download = "razzle-drops.png";
     link.href = canvas.toDataURL();
