@@ -350,7 +350,7 @@
     var hcs = data.handcuffs || [];
 
     if (!hcs.length) {
-      document.getElementById('hcContent').innerHTML = '<div class="hc-card"><div class="hc-card-header">Handcuff Rankings</div><div class="hc-empty">no handcuff data found</div></div>';
+      document.getElementById('hcContent').innerHTML = '<div class="hc-card"><div class="hc-card-header">Handcuff Rankings</div><div class="hc-empty" style="padding:32px 16px;text-align:center;"><div style="font-family:var(--font-hand);font-size:20px;color:var(--ink-medium);margin-bottom:8px;">no carry data for this season yet</div><div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">handcuff rankings are derived from in-season carry shares. try a completed season like 2024.</div></div></div>';
       return;
     }
 
