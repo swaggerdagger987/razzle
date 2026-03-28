@@ -6942,9 +6942,11 @@
         if (data.available_seasons && data.available_seasons.length) {
           var sel = el.querySelector('.aw2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         renderAwards(data, isCollege);
       }).catch(function() {
@@ -7033,9 +7035,11 @@
         if (d.available_seasons) {
           var sel = el.querySelector('.db2-season');
           sel.innerHTML = '';
+          var _opts = '';
           d.available_seasons.forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === d.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === d.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         el.querySelector('.db2-meta').textContent = d.season + ' season \u00b7 ' + d.total_players + ' players tracked';
 
@@ -7163,9 +7167,11 @@
         if (d.available_classes) {
           var sel = el.querySelector('.dc2-year');
           sel.innerHTML = '';
+          var _opts = '';
           for (var i = 0; i < d.available_classes.length; i++) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(d.available_classes[i])) + '"' + (d.available_classes[i] === d.draft_year ? ' selected' : '') + '>' + escapeHtml(String(d.available_classes[i])) + ' Class</option>';
+            _opts += '<option value="' + escapeHtml(String(d.available_classes[i])) + '"' + (d.available_classes[i] === d.draft_year ? ' selected' : '') + '>' + escapeHtml(String(d.available_classes[i])) + ' Class</option>';
           }
+          sel.innerHTML = _opts;
         }
         state.year = d.draft_year;
         renderData(d);
@@ -7419,11 +7425,15 @@
           if (newKeys.length !== mkeys.length || newKeys[0] !== mkeys[0]) {
             xSel.innerHTML = '';
             ySel.innerHTML = '';
+            var _xOpts = '';
+            var _yOpts = '';
             for (var ki = 0; ki < newKeys.length; ki++) {
               var nk = newKeys[ki];
-              xSel.innerHTML += '<option value="' + nk + '"' + (nk === curX ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
-              ySel.innerHTML += '<option value="' + nk + '"' + (nk === curY ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
+              _xOpts += '<option value="' + nk + '"' + (nk === curX ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
+              _yOpts += '<option value="' + nk + '"' + (nk === curY ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
             }
+            xSel.innerHTML = _xOpts;
+            ySel.innerHTML = _yOpts;
             METRIC_LABELS = activeLabels;
             mkeys = newKeys;
           }
@@ -7432,9 +7442,11 @@
           var sSel = el.querySelector('.exp-season');
           var curSeason = sSel.value;
           sSel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sSel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (String(s) === curSeason ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (String(s) === curSeason ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sSel.innerHTML = _opts;
         }
         drawChart(data);
       }).catch(function() {
@@ -7666,9 +7678,11 @@
         if (seasonList.length) {
           var sel = el.querySelector('.ld2-season');
           sel.innerHTML = '';
+          var _opts = '';
           for (var i = 0; i < seasonList.length; i++) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(seasonList[i])) + '"' + (seasonList[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(seasonList[i])) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(seasonList[i])) + '"' + (seasonList[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(seasonList[i])) + '</option>';
           }
+          sel.innerHTML = _opts;
         }
         renderCategories(data.categories || [], isCollege);
       }).catch(function() {
@@ -7895,9 +7909,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.opp2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
           populateWeekSelect(el, 'opp2-week', sel.value, load);
         }
         render(data);
@@ -7968,9 +7984,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.pct2-season');
           sel.innerHTML = '';
+          var _opts = '';
           for (var i = 0; i < data.available_seasons.length; i++) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(data.available_seasons[i])) + '"' + (data.available_seasons[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(data.available_seasons[i])) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(data.available_seasons[i])) + '"' + (data.available_seasons[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(data.available_seasons[i])) + '</option>';
           }
+          sel.innerHTML = _opts;
         }
         renderPercentiles(data);
       }).catch(function() {
@@ -8066,9 +8084,11 @@
         if (!years.length) return;
         var sel = el.querySelector('.bb-year');
         sel.innerHTML = '';
+        var _opts = '';
         for (var i = 0; i < years.length; i++) {
-          sel.innerHTML += '<option value="' + escapeHtml(String(years[i])) + '">' + escapeHtml(String(years[i])) + ' Draft Class</option>';
+          _opts += '<option value="' + escapeHtml(String(years[i])) + '">' + escapeHtml(String(years[i])) + ' Draft Class</option>';
         }
+        sel.innerHTML = _opts;
         state.draftYear = years[0];
         loadProspects();
       }).catch(function() {
@@ -8237,9 +8257,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.rc2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         render(data, isCollege);
       }).catch(function() {
@@ -8831,9 +8853,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.sos2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         render(data);
       }).catch(function() {
@@ -8909,9 +8933,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.sc2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         state.season = data.season;
         render(data);
@@ -9112,17 +9138,21 @@
     function populateSeasons(seasons, current) {
       var sel = el.querySelector('.td2-season');
       if (sel.options.length > 0) return;
+      var _opts = '';
       (seasons || []).forEach(function(s) {
-        sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === current ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+        _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === current ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
       });
+      sel.innerHTML = _opts;
     }
 
     function populateTeams(teams) {
       var sel = el.querySelector('.td2-team');
       if (sel.options.length > 1) return;
+      var _opts = '';
       (teams || []).forEach(function(t) {
-        sel.innerHTML += '<option value="' + escapeAttr(t.team) + '">' + escapeHtml(t.team) + '</option>';
+        _opts += '<option value="' + escapeAttr(t.team) + '">' + escapeHtml(t.team) + '</option>';
       });
+      sel.innerHTML += _opts;
     }
 
     function renderDistribution(data) {
@@ -9264,17 +9294,21 @@
           var sel = el.querySelector('.tm-team');
           if (sel.options.length <= 1) {
             sel.innerHTML = '';
+            var _opts = '';
             data.available_teams.forEach(function(t) {
-              sel.innerHTML += '<option value="' + escapeAttr(t.abbr) + '"' + (t.abbr === data.team ? ' selected' : '') + '>' + escapeHtml(t.name) + '</option>';
+              _opts += '<option value="' + escapeAttr(t.abbr) + '"' + (t.abbr === data.team ? ' selected' : '') + '>' + escapeHtml(t.name) + '</option>';
             });
+            sel.innerHTML = _opts;
           } else { sel.value = data.team; }
         }
         if (data.available_seasons) {
           var sSel = el.querySelector('.tm-season');
           sSel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sSel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sSel.innerHTML = _opts;
         }
         renderGroups(data.groups || {});
       }).catch(function() {
@@ -9392,9 +9426,11 @@
         }
         if (!seasonLoaded && data.available_seasons) {
           var sel = el.querySelector('.tf2-season');
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '">' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '">' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
           sel.value = data.season;
           seasonLoaded = true;
         }
