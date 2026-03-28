@@ -484,7 +484,7 @@ app = FastAPI(
 # JSON decode errors are handled in global_exception_handler below
 
 _CORS_ORIGINS = ["https://razzle.lol"]
-if os.environ.get("ENVIRONMENT", "development") != "production":
+if os.environ.get("ENVIRONMENT") == "development":
     _CORS_ORIGINS += ["http://localhost:8000", "http://localhost:5173", "http://127.0.0.1:8000"]
 
 app.add_middleware(
