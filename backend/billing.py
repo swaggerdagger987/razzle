@@ -290,6 +290,15 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
     if raw_plan in ("pro", "elite", "pro_lifetime", "elite_lifetime"):
         return {"error": "You already have an active subscription. Manage it from your billing portal.", "status": 400}
 
+    # Secondary check: catch the race between checkout creation and webhook processing
+    with auth_module.get_users_db() as conn:
+        active_sub = conn.execute(
+            "SELECT id FROM subscriptions WHERE user_id = ? AND status IN ('active', 'trialing') LIMIT 1",
+            (user["id"],),
+        ).fetchone()
+    if active_sub:
+        return {"error": "You already have an active subscription.", "status": 400}
+
     is_lifetime = interval.startswith("lifetime_")
     is_early_adopter = interval.startswith("ea_")
 
