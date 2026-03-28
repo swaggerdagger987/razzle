@@ -105,6 +105,18 @@
     .prompts-page { padding: 24px 12px 40px; }
     .prompt-header { flex-direction: column; align-items: flex-start; }
   }
+
+  /* Dark mode */
+  [data-theme="dark"] .prompt-card { background: var(--bg-card); }
+  [data-theme="dark"] .prompt-filter { background: var(--bg-card); color: var(--ink); }
+  [data-theme="dark"] .prompt-filter.active { background: var(--orange); color: var(--text-on-accent); }
+  [data-theme="dark"] .prompt-text { background: var(--bg); color: var(--ink-medium); border-color: var(--ink-faint); }
+  [data-theme="dark"] .prompt-text:not(.expanded)::after { background: var(--bg); }
+  [data-theme="dark"] .copy-btn { background: var(--bg-card); color: var(--ink); border-color: var(--ink); }
+  [data-theme="dark"] .copy-btn:hover { background: var(--orange); color: var(--bg); }
+  [data-theme="dark"] .copy-btn.copied { background: var(--green); color: var(--bg); }
+  [data-theme="dark"] .use-btn { color: var(--bg); }
+  [data-theme="dark"] .prompt-cat { color: var(--ink); border-color: var(--ink); }
 </style>
 </head>
 <body>

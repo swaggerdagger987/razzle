@@ -212,6 +212,19 @@
     .about-section { padding: 18px 16px; }
     .about-hero h1 { font-size: 26px; }
   }
+
+  /* Dark mode */
+  [data-theme="dark"] .about-hero { background: var(--bg-card); }
+  [data-theme="dark"] .about-hero-mascot { filter: drop-shadow(4px 4px 0 rgba(237,224,207,0.15)); }
+  [data-theme="dark"] .about-section { background: var(--bg-card); }
+  [data-theme="dark"] .about-section p,
+  [data-theme="dark"] .about-section li { color: var(--ink-medium); }
+  [data-theme="dark"] .about-section h2 { color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .data-source-badge { background: var(--bg-warm); color: var(--ink); border-color: var(--ink); }
+  [data-theme="dark"] .data-source-name { color: var(--ink); }
+  [data-theme="dark"] .data-source-desc { color: var(--ink-light); }
+  [data-theme="dark"] .annotation { color: var(--ink-light); }
+  [data-theme="dark"] .about-footer { color: var(--ink-light); }
 </style>
 </head>
 <body>

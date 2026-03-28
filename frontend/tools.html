@@ -274,6 +274,20 @@
     .tools-search { width: 100%; }
     .tools-controls { flex-direction: column; }
   }
+
+  /* Dark mode */
+  [data-theme="dark"] .tool-card { background: var(--bg-card); }
+  [data-theme="dark"] .tool-card-name { color: var(--ink); }
+  [data-theme="dark"] .tool-card-desc { color: var(--ink-medium); }
+  [data-theme="dark"] .tools-search { background: var(--bg-card); color: var(--ink); border-color: var(--ink); }
+  [data-theme="dark"] .tools-cat-tab { background: var(--bg-card); color: var(--ink); border-color: var(--ink); }
+  [data-theme="dark"] .tools-cat-tab:hover { background: var(--bg-warm); }
+  [data-theme="dark"] .tools-cat-tab.active { background: var(--ink); color: var(--bg-card); }
+  [data-theme="dark"] .cat-count { background: var(--bg-warm); color: var(--ink-medium); border-color: var(--ink-faint); }
+  [data-theme="dark"] .cat-name { color: var(--ink); }
+  [data-theme="dark"] .cat-header { border-color: var(--ink-faint); }
+  [data-theme="dark"] .tools-export button { background: var(--bg-card); color: var(--ink); border-color: var(--ink); }
+  [data-theme="dark"] .tools-total-badge { color: var(--bg); }
 </style>
 </head>
 <body>
