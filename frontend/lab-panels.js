@@ -9586,10 +9586,10 @@
       rounds.forEach(function(rd) {
         var hitPct = rd.hit_rate;
         var barColor = hitPct >= 50 ? 'var(--green)' : hitPct >= 30 ? 'var(--orange)' : 'var(--red)';
-        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:100px; text-align:center;">' +
+        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:8px 12px; min-width:100px; text-align:center;">' +
           '<div style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
-          '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:3px;">' +
-            '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:3px;"></div>' +
+          '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:4px;">' +
+            '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:4px;"></div>' +
           '</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +
             rd.hits + '/' + rd.total + ' hits (' + hitPct + '%)' +
@@ -9609,7 +9609,7 @@
         var pd = positions[pos];
         if (!pd) return;
         var color = POS_COLORS[pos] || '#8a7565';
-        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:6px; padding:8px 12px; min-width:90px; text-align:center; border-left:4px solid ' + color + ';">' +
+        html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:8px 12px; min-width:90px; text-align:center; border-left:4px solid ' + color + ';">' +
           '<div style="font-family:var(--font-mono); font-size:14px; color:' + color + ';">' + pos + '</div>' +
           '<div style="font-family:var(--font-mono); font-size:12px;">' + pd.total + ' drafted</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +
@@ -9655,7 +9655,7 @@
 
         html += '<tr>' +
           '<td style="text-align:left; font-weight:600;">' + escapeHtml(p.player_name) + '</td>' +
-          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:3px; font-size:10px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
+          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:4px; font-size:10px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
           '<td>' + p.round + '</td>' +
           '<td>' + p.pick + '</td>' +
           '<td style="font-family:var(--font-mono); font-size:11px;">' + escapeHtml(p.draft_team || '') + '</td>' +
@@ -10012,7 +10012,7 @@
           '<select class="lp-select pr-season"></select>' +
         '</div>' +
         '<div class="pr-chart-wrap" style="margin:16px 0;">' +
-          '<canvas id="pr-canvas" width="800" height="900" role="img" aria-label="Dynasty power rankings bar chart" style="width:100%;max-width:800px;border:3px solid var(--ink);border-radius:6px;box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"></canvas>' +
+          '<canvas id="pr-canvas" width="800" height="900" role="img" aria-label="Dynasty power rankings bar chart" style="width:100%;max-width:800px;border:3px solid var(--ink);border-radius:var(--radius-sm);box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"></canvas>' +
         '</div>' +
         '<div class="pr-detail" id="pr-detail" style="display:none;"></div>' +
         '<div class="pr-loading"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
@@ -10185,7 +10185,7 @@
        { label: 'WR', val: t.wr_value, col: POS_COLS.WR },
        { label: 'TE', val: t.te_value, col: POS_COLS.TE }].forEach(function(g) {
         var pct = t.total_value > 0 ? Math.round(g.val / t.total_value * 100) : 0;
-        html += '<div style="background:' + g.col + '22;border:2px solid ' + g.col + ';border-radius:6px;padding:6px 12px;font-family:var(--font-mono);font-size:12px;">';
+        html += '<div style="background:' + g.col + '22;border:2px solid ' + g.col + ';border-radius:var(--radius-sm);padding:6px 12px;font-family:var(--font-mono);font-size:12px;">';
         html += '<span style="font-weight:bold;color:' + g.col + ';">' + g.label + '</span> ';
         html += '<span style="color:var(--ink);">' + fmt(g.val, 0) + '</span> ';
         html += '<span style="color:var(--ink-light);">(' + pct + '%)</span>';

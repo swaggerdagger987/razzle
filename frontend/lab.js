@@ -9322,7 +9322,7 @@ function renderTradeValueChart() {
       // Trade value bar
       html += '<div style="display:flex; align-items:center; gap:6px;">';
       html += '<div style="flex:1; height:8px; background:var(--bg-warm); border:2px solid var(--ink-faint); border-radius:var(--radius-sm); overflow:hidden;">';
-      html += '<div style="width:' + barWidth + '%; height:100%; background:' + pc + '; border-radius:6px;"></div>';
+      html += '<div style="width:' + barWidth + '%; height:100%; background:' + pc + '; border-radius:var(--radius-sm);"></div>';
       html += '</div>';
       html += '<span style="font-family:var(--font-mono); font-size:13px; font-weight:bold; min-width:28px; text-align:right;">' + p._tv + '</span>';
       html += '</div>';
