@@ -1311,13 +1311,20 @@ async def llm_chat_free(request: Request):
         _mt = max(1, min(_mt, _LLM_FREE_MAX_TOKENS))
     except (TypeError, ValueError):
         _mt = _LLM_FREE_MAX_TOKENS
+    # Select model based on user tier: Pro/Elite get premium, free gets free model
+    is_paid = plan in ("pro", "elite", "pro_lifetime", "elite_lifetime")
+    selected_model = _LLM_MODEL if is_paid else _LLM_FREE_MODEL
+    selected_max_tokens = _LLM_MAX_TOKENS if is_paid else _LLM_FREE_MAX_TOKENS
+    _mt = max(1, min(_mt, selected_max_tokens))
+
     llm_body = {
-        "model": _LLM_FREE_MODEL,
+        "model": selected_model,
         "messages": sanitized_messages,
         "temperature": _temp,
         "max_tokens": _mt,
     }
 
+    tier_label = "Paid" if is_paid else "Free"
     try:
         async with httpx.AsyncClient(timeout=_LLM_TIMEOUT) as client:
             resp = await client.post(
@@ -1327,11 +1334,11 @@ async def llm_chat_free(request: Request):
                     "Authorization": f"Bearer {_LLM_API_KEY}",
                     "Content-Type": "application/json",
                     "HTTP-Referer": "https://razzle.lol",
-                    "X-Title": "Razzle Situation Room (Free Tier)",
+                    "X-Title": f"Razzle Situation Room ({tier_label} Tier)",
                 },
             )
         if resp.status_code != 200:
-            logger.error(f"Free LLM proxy error: {resp.status_code} {resp.text[:200]}")
+            logger.error(f"{tier_label} LLM proxy error: {resp.status_code} {resp.text[:200]}")
             return JSONResponse(
                 {"error": "Agent is temporarily unavailable. Try again in a moment."},
                 status_code=502,
@@ -1339,10 +1346,11 @@ async def llm_chat_free(request: Request):
         try:
             data = resp.json()
         except Exception:
-            logger.error("Free LLM proxy returned non-JSON response")
+            logger.error(f"{tier_label} LLM proxy returned non-JSON response")
             return JSONResponse({"error": "Agent returned an unexpected response. Try again."}, status_code=502)
-        # Tag response with free model info
-        data["_razzle_free_model"] = _LLM_FREE_MODEL
+        # Tag response with model info for free users
+        if not is_paid:
+            data["_razzle_free_model"] = _LLM_FREE_MODEL
         # Record quota only on success (don't burn quota on LLM failures)
         auth_module.record_query(user_id=user["id"], ip_address=ip)
         live_data.log_event("agent_query", "free")
