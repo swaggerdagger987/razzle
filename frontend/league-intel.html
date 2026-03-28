@@ -8045,7 +8045,8 @@ async function runLeagueOdds(leagueId, userId, scoring) {
     });
 
     if (allPlayerIds.length === 0) {
-      oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--ink-light);">no roster data found</div>';
+      oddsDiv.innerHTML = '<div style="text-align:center;padding:24px;font-family:var(--font-hand);font-size:16px;color:var(--ink-light);">no roster data found — connect a league first</div>';
+      if (oddsBtn) { oddsBtn.disabled = false; oddsBtn.style.opacity = '1'; }
       return;
     }
 

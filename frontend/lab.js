@@ -2058,6 +2058,12 @@ function onTableScroll() {
 }
 
 function renderTableBody() {
+  // Dismiss floating UI before rebuilding table DOM
+  if (typeof hideTagPicker === 'function') hideTagPicker();
+  if (typeof hideNoteEditor === 'function') hideNoteEditor();
+  if (typeof dismissColumnStatsPopover === 'function') dismissColumnStatsPopover();
+  var ctxMenu = document.querySelector('.ctx-menu');
+  if (ctxMenu) ctxMenu.style.display = 'none';
   if (_expandAbort) { _expandAbort.abort(); _expandAbort = null; }
   _expandedRows = {};
   const tbody = document.getElementById("tableBody");
@@ -3808,6 +3814,8 @@ const SMART_FILTERS = {
     minGP: 4,
   },
 };
+// Plural alias for smart filter URL keys
+SMART_FILTERS["breakouts"] = SMART_FILTERS["breakout"];
 
 function applySmartFilter(key) {
   if (!key) return;
