@@ -472,7 +472,7 @@
   }
   .btn-panel-action:hover {
     transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .btn-panel-action:active {
     transform: translate(0, 0);
@@ -593,7 +593,8 @@
     }
     .lab-sidebar.open {
       transform: translateX(0);
-      box-shadow: -8px 0 24px rgba(45, 31, 20, 0.15);
+      border-right: 2px dashed var(--ink-faint);
+      box-shadow: none;
     }
     .lab-main {
       margin-right: 0;
@@ -905,7 +906,7 @@
     visibility: hidden;
     transition: opacity 0.15s ease, visibility 0.15s;
   }
-  [data-theme="dark"] .filter-modal-overlay { background: rgba(0,0,0,0.5); }
+  [data-theme="dark"] .filter-modal-overlay { background: rgba(26,17,10,0.6); }
 
   .filter-modal-overlay.open { opacity: 1; visibility: visible; }
 
@@ -957,7 +958,7 @@
     align-items: flex-start;
     justify-content: flex-end;
   }
-  [data-theme="dark"] .column-picker-overlay { background: rgba(0,0,0,0.5); }
+  [data-theme="dark"] .column-picker-overlay { background: rgba(26,17,10,0.6); }
 
   .column-picker-overlay.open { display: flex; }
 
@@ -1040,10 +1041,12 @@
     z-index: 10;
   }
   .screener-table thead.thead-shadow th {
-    box-shadow: 0 4px 8px rgba(45,31,20,0.08);
+    border-bottom: 3px solid var(--ink);
+    box-shadow: none;
   }
   [data-theme="dark"] .screener-table thead.thead-shadow th {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    border-bottom: 3px solid var(--ink);
+    box-shadow: none;
   }
 
   .screener-table th {
@@ -2150,7 +2153,7 @@
 
   .prospect-comp-card:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
   }
 
   .prospect-comp-sim {
@@ -2366,7 +2369,7 @@
 
   .tier-card:hover {
     transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
 
   .tier-card-name {
@@ -2935,7 +2938,7 @@
   }
   .trade-player-card:hover {
     transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .trade-player-card .pos-badge {
     font-family: var(--font-mono);
@@ -3040,7 +3043,7 @@
   }
   .trade-pick-card:hover {
     transform: translate(-1px, -1px);
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .trade-pick-card .pick-round-badge {
     font-family: var(--font-mono);

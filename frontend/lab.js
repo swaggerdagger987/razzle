@@ -1192,7 +1192,7 @@ function _syncUndoRedoButtons() {
   var _lsAvailable = (function() { try { localStorage.setItem("_ls_test", "1"); localStorage.removeItem("_ls_test"); return true; } catch(e) { return false; } })();
   if (!_lsAvailable) {
     var banner = document.createElement("div");
-    banner.style.cssText = "background:var(--orange);color:#fff;text-align:center;padding:8px 16px;font-family:var(--font-mono);font-size:12px;position:sticky;top:0;z-index:200;";
+    banner.style.cssText = "background:var(--orange);color:var(--text-on-accent);text-align:center;padding:8px 16px;font-family:var(--font-mono);font-size:12px;position:sticky;top:0;z-index:200;";
     banner.textContent = "private browsing detected \u2014 your filters and notes won\u2019t be saved between sessions";
     document.body.prepend(banner);
   }

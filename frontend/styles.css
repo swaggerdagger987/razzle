@@ -765,7 +765,7 @@ button.nav-search-hint {
 }
 
 .btn-chunky:hover {
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   transform: translate(-1px, -1px);
 }
 .btn-chunky:active {
@@ -793,7 +793,7 @@ button.nav-search-hint {
 }
 
 .btn-primary:hover {
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   transform: translate(-1px, -1px);
 }
 .btn-primary:active {
@@ -846,7 +846,7 @@ a.btn-pro-upgrade:focus-visible {
 /* ===== CARD RANK HIERARCHY — visual weight for top results ===== */
 .card-hero {
   border-width: 3px;
-  box-shadow: 5px 5px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   padding: 20px;
 }
 .card-spotlight {
@@ -966,7 +966,7 @@ a.btn-pro-upgrade:focus-visible {
 }
 
 .input-chunky:focus {
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
 }
 .input-chunky:focus-visible {
   outline: 3px solid var(--orange);
@@ -1086,7 +1086,7 @@ a.btn-pro-upgrade:focus-visible {
 }
 
 .theme-toggle:hover {
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   transform: translate(-1px, -1px);
 }
 
@@ -1682,7 +1682,7 @@ tr:hover .notes-cell .note-pencil {
 /* ===== STICKER CHIP UTILITY ===== */
 .sticker-chip {
   border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
   border-radius: var(--radius-sm);
   padding: 4px 12px;
   font-family: var(--font-display);
@@ -1694,11 +1694,11 @@ tr:hover .notes-cell .note-pencil {
 }
 .sticker-chip:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
 }
 .sticker-chip--rotated:hover {
   transform: rotate(-3deg) translate(-2px, -2px);
-  box-shadow: 5px 5px 0 var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
 }
 
 /* ===== DARK MODE OVERRIDES — DES-017 through DES-020 ===== */

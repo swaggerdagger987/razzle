@@ -9830,7 +9830,7 @@
           ctx.strokeRect(x, y, cellSize - 2, cellSize - 2);
           // Value text
           if (r !== null && r !== undefined) {
-            ctx.fillStyle = Math.abs(r) > 0.5 ? '#fff' : t.ink;
+            ctx.fillStyle = Math.abs(r) > 0.5 ? t.white : t.ink;
             ctx.font = 'bold 11px "Space Mono", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';

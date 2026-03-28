@@ -465,7 +465,7 @@
   box-shadow: 2px 2px 0 var(--ink-faint);
   transition: transform 0.1s;
 }
-.tl-player-chip:hover { transform: translateY(-1px); box-shadow: 3px 3px 0 var(--ink-faint); }
+.tl-player-chip:hover { transform: translateY(-1px); box-shadow: 4px 4px 0 var(--ink-faint); }
 .tl-chip-pos {
   display: inline-block;
   font-family: var(--font-mono);
@@ -2305,7 +2305,7 @@
   padding: 8px 10px; border: 2px solid var(--ink-faint); border-radius: 8px;
   background: var(--bg); cursor: pointer; transition: all 0.15s;
 }
-.mh-detail-player:hover { box-shadow: 3px 3px 0 var(--ink); transform: translate(-1px,-1px); }
+.mh-detail-player:hover { box-shadow: 4px 4px 0 var(--ink); transform: translate(-1px,-1px); }
 .mh-detail-player img {
   width: 36px; height: 36px; border-radius: 50%;
   border: 2px solid var(--ink-faint); object-fit: cover;
@@ -4153,7 +4153,7 @@
 }
 .md-draft-btn:hover {
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
 }
 
 /* Recent Picks */
