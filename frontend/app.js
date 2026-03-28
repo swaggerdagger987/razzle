@@ -176,7 +176,8 @@ function _injectHamburgerMenu() {
 
   for (var i = 0; i < links.length; i++) {
     var cls = isActive(links[i].href) ? ' mobile-nav-active' : '';
-    panelHTML += '<a href="' + links[i].href + '" class="mobile-nav-link' + cls + '">' + links[i].label + '</a>';
+    var aria = isActive(links[i].href) ? ' aria-current="page"' : '';
+    panelHTML += '<a href="' + links[i].href + '" class="mobile-nav-link' + cls + '"' + aria + '>' + links[i].label + '</a>';
   }
 
   panelHTML += '</div>' +
