@@ -3175,6 +3175,7 @@ let _seasonDebounce = null;
 
 function populateSeasonSelect() {
   const sel = document.getElementById("seasonSelect");
+  if (!sel) return;
   const allowed = typeof getAllowedSeasons === "function"
     ? getAllowedSeasons(state.seasons)
     : state.seasons;
@@ -6012,7 +6013,7 @@ function exportImage() {
   // Sort column header highlight
   if (sortColIdx >= 0) {
     const sx = padX + rankColW + playerColW + sortColIdx * colW;
-    ctx.fillStyle = "rgba(217, 119, 87, 0.15)";
+    ctx.fillStyle = _hexAlpha(t.orange, 0.15);
     ctx.fillRect(sx, hdrY, colW, headerH);
   }
 
@@ -6050,7 +6051,7 @@ function exportImage() {
     // Sort column highlight on data rows
     if (sortColIdx >= 0) {
       const sx = padX + rankColW + playerColW + sortColIdx * colW;
-      ctx.fillStyle = "rgba(217, 119, 87, 0.06)";
+      ctx.fillStyle = _hexAlpha(t.orange, 0.06);
       ctx.fillRect(sx, y, colW, rowH);
     }
 
@@ -6070,7 +6071,7 @@ function exportImage() {
 
     // Position badge
     const pos = (player.position || "").toUpperCase();
-    const badgeColor = posColors[pos] || "#8a7565";
+    const badgeColor = posColors[pos] || t.inkLight;
     ctx.fillStyle = badgeColor;
     const badgeX = padX + rankColW + 6;
     ctx.fillRect(badgeX, y + 6, 26, 16);
@@ -6458,7 +6459,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
 
     // Alternating bg
     if (i % 2 === 0) {
-      ctx.fillStyle = "rgba(229,213,195,0.3)";
+      ctx.fillStyle = _hexAlpha(t.bgWarm, 0.3);
       ctx.fillRect(padX + 1.5, y, listW - 3, rowH);
     }
 
@@ -6544,7 +6545,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
 
   // Watermark
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "rgba(217, 119, 87, 0.5)";
+  ctx.fillStyle = _hexAlpha(t.orange, 0.5);
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 20, H - 16);
 
@@ -7104,7 +7105,7 @@ function drawProfileArc(seasons, pos) {
   const plotH = H - pad.top - pad.bottom;
 
   var posHex = _getPosColorsHex();
-  const lineColor = posHex[pos] || "#d97757";
+  const lineColor = posHex[pos] || getCanvasTheme().orange;
 
   var t = getCanvasTheme();
   ctx.clearRect(0, 0, W, H);
@@ -7899,7 +7900,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
       else ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = ring === 50 ? (t.isDark ? "rgba(237,224,207,0.2)" : "rgba(45,31,20,0.2)") : (t.isDark ? "rgba(237,224,207,0.08)" : "rgba(45,31,20,0.08)");
+    ctx.strokeStyle = ring === 50 ? _hexAlpha(t.ink, 0.2) : _hexAlpha(t.ink, 0.08);
     ctx.lineWidth = ring === 50 ? 1.5 : 1;
     ctx.stroke();
   }
@@ -7910,7 +7911,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.1)" : "rgba(45,31,20,0.1)";
+    ctx.strokeStyle = _hexAlpha(t.ink, 0.1);
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -8819,7 +8820,7 @@ function exportBigBoardImage() {
     // Prospect rows
     for (const p of tierProspects) {
       const rowY = y;
-      const posColor = posColors[p.position] || "#d97757";
+      const posColor = posColors[p.position] || t.orange;
 
       // Row bg
       ctx.fillStyle = p.rank % 2 === 0 ? t.bgCard : t.bgWarm;
@@ -9080,7 +9081,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
     const y = PAD_T + chartH - barH;
 
     // Bar fill
-    const color = gradeColors[cls.grade] || "#8a7565";
+    const color = gradeColors[cls.grade] || t.inkLight;
     ctx.fillStyle = color;
     ctx.fillRect(x, y, barW, barH);
 
@@ -9200,7 +9201,7 @@ function exportClassAnalyticsImage() {
     const bH = (cls.avg_rps / scaleMax) * (chartH - 60);
     const by = y + chartH - 40 - bH;
 
-    const color = gradeColors[cls.grade] || "#8a7565";
+    const color = gradeColors[cls.grade] || t.inkLight;
     ctx.fillStyle = color;
     ctx.fillRect(x, by, barW, bH);
     ctx.strokeStyle = t.ink;
@@ -9258,7 +9259,7 @@ function exportClassAnalyticsImage() {
     ctx.strokeRect(cx, cy, cardW, cardH);
 
     // Grade badge
-    const color = gradeColors[cls.grade] || "#8a7565";
+    const color = gradeColors[cls.grade] || t.inkLight;
     ctx.fillStyle = color;
     const gbx = cx + cardW - 30, gby = cy + 6;
     ctx.fillRect(gbx, gby, 24, 20);
@@ -9678,7 +9679,7 @@ function exportTradeValuesPNG() {
 
       // Alternating bg
       if (i % 2 === 0) {
-        ctx.fillStyle = "rgba(229,213,195,0.25)";
+        ctx.fillStyle = _hexAlpha(t.bgWarm, 0.25);
         ctx.fillRect(padX, ry, W - padX * 2, rowH);
       }
 
@@ -9709,7 +9710,7 @@ function exportTradeValuesPNG() {
       const barW = 240;
       const barH = 10;
       const barY = ry + 9;
-      ctx.fillStyle = "rgba(229,213,195,0.5)";
+      ctx.fillStyle = _hexAlpha(t.bgWarm, 0.5);
       ctx.fillRect(barX, barY, barW, barH);
       ctx.strokeStyle = t.inkFaint;
       ctx.lineWidth = 0.5;
@@ -9750,12 +9751,7 @@ const _acState = {
   enabledPlayers: {},  // name -> boolean
 };
 
-const _acPosColors = {
-  QB: "#5b7fff",
-  RB: "#2ec4b6",
-  WR: "#d97757",
-  TE: "#8b5cf6",
-};
+var _acPosColors = _getPosColorsHex();
 
 function openAgingCurves() {
   document.getElementById("agingCurvesOverlay").classList.add("open");
@@ -9812,7 +9808,7 @@ async function loadAgingCurves() {
     ctx.fillStyle = t.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = "20px 'Caveat', cursive";
-    ctx.fillStyle = "#d97757";
+    ctx.fillStyle = t.orange;
     ctx.textAlign = "center";
     ctx.fillText("fumbled the aging data...", canvas.width / 2, canvas.height / 2);
   }
@@ -9959,7 +9955,7 @@ function renderAgingCurveChart(targetCanvas) {
   }
 
   // Draw baseline curve (thick, on top)
-  const posColor = _acPosColors[_acState.position] || "#d97757";
+  const posColor = _acPosColors[_acState.position] || getCanvasTheme().orange;
   ctx.strokeStyle = posColor;
   ctx.lineWidth = 3.5;
   ctx.globalAlpha = 0.9;
@@ -10183,7 +10179,7 @@ async function loadHeatMap() {
     ctx.fillStyle = th.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = "20px 'Caveat', cursive";
-    ctx.fillStyle = "#d97757";
+    ctx.fillStyle = th.orange;
     ctx.textAlign = "center";
     ctx.fillText("fumbled the heat map data...", canvas.width / 2, canvas.height / 2);
   }
@@ -10274,14 +10270,14 @@ function renderHeatMapChart(targetCanvas) {
   ctx.fillText("PLAYER", padL + 8, titleH + headerH - 8);
 
   // Rows
-  const posColor = _hmPosColors[_hmState.position] || "#d97757";
+  const posColor = _hmPosColors[_hmState.position] || t.orange;
   for (let r = 0; r < numPlayers; r++) {
     const player = players[r];
     const rowY = titleH + headerH + r * cellH;
 
     // Alternating row bg
     if (r % 2 === 0) {
-      ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.03)" : "rgba(45,31,20,0.03)";
+      ctx.fillStyle = _hexAlpha(t.ink, 0.03);
       ctx.fillRect(padL, rowY, chartW, cellH);
     }
 
@@ -10310,7 +10306,7 @@ function renderHeatMapChart(targetCanvas) {
       ctx.fillRect(cellX + 1, rowY + 1, cellW - 2, cellH - 2);
 
       // Cell border
-      ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)";
+      ctx.strokeStyle = _hexAlpha(t.ink, 0.12);
       ctx.lineWidth = 1;
       ctx.strokeRect(cellX, rowY, cellW, cellH);
 
@@ -10335,7 +10331,7 @@ function renderHeatMapChart(targetCanvas) {
     }
 
     // Row separator
-    ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.08)" : "rgba(45,31,20,0.08)";
+    ctx.strokeStyle = _hexAlpha(t.ink, 0.08);
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padL, rowY + cellH);
@@ -10553,7 +10549,8 @@ function renderTierBoard() {
 function exportTierBoardPNG() {
   var list = getWatchlist();
   var tierOrder = [1, 2, 3, 4, 5, 0];
-  var tierColorHex = ["#c4b5a5", "#2ec4b6", "#5b7fff", "#d97757", "#8b5cf6", "#e63946"];
+  var _tc = getCanvasTheme();
+  var tierColorHex = [_tc.inkFaint, _tc.green, _tc.blue, _tc.orange, _tc.purple, _tc.red];
   var posColorHex = _getPosColorsHex();
 
   var W = 800;
@@ -10642,7 +10639,7 @@ function exportTierBoardPNG() {
       var row = Math.floor(i / 4);
       var px = cx + col * (cardW + CARD_GAP);
       var py = cy + row * (CARD_H + CARD_GAP);
-      var pc = posColorHex[p.position] || "#8a7565";
+      var pc = posColorHex[p.position] || _tc.inkLight;
 
       // Card bg
       ctx.fillStyle = t.bgCard;
@@ -11182,7 +11179,7 @@ function _taRenderSide(side) {
 
   container.innerHTML = arr.map((p, i) => {
     if (p._type === "pick") {
-      const rdColor = _PICK_ROUND_COLORS[p.round] || "#8a7565";
+      const rdColor = _PICK_ROUND_COLORS[p.round] || getCanvasTheme().inkLight;
       return '<div class="trade-pick-card" style="border-left:4px solid ' + rdColor + ';">'
         + '<span class="pick-round-badge" style="background:' + rdColor + ';">RD' + p.round + '</span>'
         + '<span class="pick-label">' + escapeHtml(p.pick_label) + '</span>'
@@ -11223,7 +11220,7 @@ function _taUpdateVerdict() {
 
   // Build segmented bars from player/pick values
   function _barSegment(p) {
-    const pc = p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || "#8a7565") : (posColors[p.position] || "#8a7565");
+    const pc = p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || getCanvasTheme().inkLight) : (posColors[p.position] || getCanvasTheme().inkLight);
     const label = p._type === "pick" ? p.pick_label : p.full_name;
     const w = maxVal > 0 ? ((p.trade_value || 0) / maxVal * 100) : 0;
     return '<div style="width:' + w + '%; height:100%; background:' + pc + '; display:inline-block;" title="' + escapeAttr(label) + ': ' + p.trade_value + '"></div>';
@@ -11381,12 +11378,12 @@ function exportTradeAnalyzerPNG() {
     for (let i = 0; i < Math.min(players.length, 7); i++) {
       const p = players[i];
       const isPick = p._type === "pick";
-      const pc = isPick ? (_PICK_ROUND_COLORS[p.round] || "#8a7565") : (posColors[p.position] || "#8a7565");
+      const pc = isPick ? (_PICK_ROUND_COLORS[p.round] || t.inkLight) : (posColors[p.position] || t.inkLight);
       const cy = cardY + i * (cardH + 4);
 
       // Row bg
       if (i % 2 === 0) {
-        ctx.fillStyle = "rgba(247,239,229,0.8)";
+        ctx.fillStyle = _hexAlpha(t.bgCard, 0.8);
         ctx.fillRect(x + 12, cy, sideW - 24, cardH);
       }
 
@@ -11435,8 +11432,8 @@ function exportTradeAnalyzerPNG() {
   const _taStyles = getComputedStyle(document.documentElement);
   const _taRedLight = _taStyles.getPropertyValue('--red-light').trim() || "#f2d5d8";
   const _taGreenLight = _taStyles.getPropertyValue('--green-light').trim() || "#d9efec";
-  drawSide(giveX, "I GIVE", _taRedLight, "#e63946", _taState.give);
-  drawSide(getX, "I GET", _taGreenLight, "#2ec4b6", _taState.get);
+  drawSide(giveX, "I GIVE", _taRedLight, t.red, _taState.give);
+  drawSide(getX, "I GET", _taGreenLight, t.green, _taState.get);
 
   // VS divider
   ctx.save();
@@ -11461,7 +11458,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fill();
   ctx.stroke();
   function _pngBarColor(p) {
-    return p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || "#8a7565") : (posColors[p.position] || "#8a7565");
+    return p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || t.inkLight) : (posColors[p.position] || t.inkLight);
   }
   let bx = giveX;
   for (const p of _taState.give) {
@@ -11574,7 +11571,7 @@ function exportTradeAnalyzerPNG() {
 
 // ─── Draft Pick Support ──────────────────────────────────────────────
 
-const _PICK_ROUND_COLORS = { 1: "#d97757", 2: "#5b7fff", 3: "#2ec4b6", 4: "#8b5cf6" };
+var _PICK_ROUND_COLORS = (function() { var t = getCanvasTheme(); return { 1: t.orange, 2: t.blue, 3: t.green, 4: t.purple }; })();
 let _taPickCache = null; // cached pick values from API
 
 async function _taFetchPickValues(year) {
@@ -11651,7 +11648,7 @@ function _taDrawPickChart() {
   const maxVal = allPicks[0].trade_value || 1;
 
   // Grid lines
-  ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.1)" : "rgba(45,31,20,0.1)";
+  ctx.strokeStyle = _hexAlpha(t.ink, 0.1);
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
     const y = pad.top + (plotH * i / 4);
@@ -11689,7 +11686,7 @@ function _taDrawPickChart() {
     const pk = allPicks[i];
     const x = pad.left + (i / (allPicks.length - 1)) * plotW;
     const y = pad.top + plotH * (1 - pk.trade_value / maxVal);
-    const rdColor = _PICK_ROUND_COLORS[pk.round] || "#8a7565";
+    const rdColor = _PICK_ROUND_COLORS[pk.round] || t.inkLight;
     const isSelected = selectedPicks.some(s => s.overall === pk.overall);
 
     ctx.fillStyle = rdColor;
@@ -11922,14 +11919,14 @@ function renderMyRosterPanel() {
 
 // ─── Roster Report Rendering ──────────────────────────────────────────
 
-var _GRADE_COLORS = {
-  "A+": "#2ec4b6", "A": "#2ec4b6", "A-": "#2ec4b6",
-  "B+": "#5b7fff", "B": "#5b7fff", "B-": "#5b7fff",
-  "C+": "#d97757", "C": "#d97757", "C-": "#d97757",
-  "D+": "#e63946", "D": "#e63946", "D-": "#e63946",
-  "F": "#e63946"
-};
-var _STATUS_COLORS = { "competing": "#2ec4b6", "retooling": "#d97757", "rebuilding": "#e63946" };
+var _GRADE_COLORS = (function() { var t = getCanvasTheme(); return {
+  "A+": t.green, "A": t.green, "A-": t.green,
+  "B+": t.blue, "B": t.blue, "B-": t.blue,
+  "C+": t.orange, "C": t.orange, "C-": t.orange,
+  "D+": t.red, "D": t.red, "D-": t.red,
+  "F": t.red
+}; })();
+var _STATUS_COLORS = (function() { var t = getCanvasTheme(); return { "competing": t.green, "retooling": t.orange, "rebuilding": t.red }; })();
 var _POS_HEX = _getPosColorsHex();
 
 function renderRosterReport() {
@@ -11937,8 +11934,8 @@ function renderRosterReport() {
   if (!area || !_rosterReport) return;
 
   var r = _rosterReport;
-  var gc = _GRADE_COLORS[r.grade] || "#d97757";
-  var sc = _STATUS_COLORS[r.competing_status] || "#d97757";
+  var gc = _GRADE_COLORS[r.grade] || getCanvasTheme().orange;
+  var sc = _STATUS_COLORS[r.competing_status] || getCanvasTheme().orange;
 
   var html = '<div style="margin-top:16px; border-top:3px solid var(--ink); padding-top:16px;">';
 
@@ -11988,7 +11985,7 @@ function renderRosterReport() {
     html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
     // Value bar
     var pct = Math.min(100, p.trade_value);
-    var pc = _POS_HEX[p.position] || "#d97757";
+    var pc = _POS_HEX[p.position] || getCanvasTheme().orange;
     html += '<div style="width:80px; height:14px; background:var(--ink-faint); border-radius:var(--radius-sm); overflow:hidden; border:2px solid var(--ink);">';
     html += '<div style="width:' + pct + '%; height:100%; background:' + pc + ';"></div>';
     html += '</div>';
@@ -12042,7 +12039,7 @@ function drawRosterPieChart() {
     ctx.moveTo(cx, cy);
     ctx.arc(cx, cy, radius, startAngle, endAngle);
     ctx.closePath();
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
+    ctx.fillStyle = _POS_HEX[sl.pos] || t.inkLight;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
@@ -12053,7 +12050,7 @@ function drawRosterPieChart() {
   // Legend
   var ly = 20;
   slices.forEach(function(sl) {
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
+    ctx.fillStyle = _POS_HEX[sl.pos] || t.inkLight;
     ctx.fillRect(W - 65, ly, 12, 12);
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
@@ -12131,7 +12128,7 @@ function drawRosterAgeChart() {
     var y = yPos(val);
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, Math.PI * 2);
-    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fillStyle = _POS_HEX[p.position] || t.orange;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
@@ -12250,7 +12247,7 @@ function exportRosterTeamCard() {
     ctx.moveTo(pieCx, pieCy);
     ctx.arc(pieCx, pieCy, pieR, startAngle, endAngle);
     ctx.closePath();
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
+    ctx.fillStyle = _POS_HEX[sl.pos] || t.inkLight;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
@@ -12262,7 +12259,7 @@ function exportRosterTeamCard() {
   var ly = y + 20;
   ctx.textAlign = "left";
   slices.forEach(function(sl) {
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
+    ctx.fillStyle = _POS_HEX[sl.pos] || t.inkLight;
     ctx.fillRect(210, ly, 14, 14);
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
@@ -12311,7 +12308,7 @@ function exportRosterTeamCard() {
     var ay = syPos(p.trade_value || 0);
     ctx.beginPath();
     ctx.arc(ax, ay, 4, 0, Math.PI * 2);
-    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fillStyle = _POS_HEX[p.position] || t.orange;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
@@ -12343,7 +12340,7 @@ function exportRosterTeamCard() {
     ctx.fillText((i + 1) + ".", 50, rowY + 16);
 
     // Pos badge
-    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fillStyle = _POS_HEX[p.position] || t.orange;
     _roundRect(ctx, 56, rowY + 4, 26, 16, 4);
     ctx.fill();
     ctx.fillStyle = t.white;
@@ -12370,7 +12367,7 @@ function exportRosterTeamCard() {
     _roundRect(ctx, barX, rowY + 6, barW, barH, 3);
     ctx.fill();
     var pct = Math.min(100, p.trade_value) / 100;
-    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fillStyle = _POS_HEX[p.position] || t.orange;
     _roundRect(ctx, barX, rowY + 6, barW * pct, barH, 3);
     ctx.fill();
 
