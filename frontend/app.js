@@ -1257,6 +1257,8 @@ function signOut() {
   Object.keys(localStorage).forEach(function(k) {
     if (k.startsWith("razzle_")) localStorage.removeItem(k);
   });
+  // Clear session storage (API keys, etc.)
+  try { sessionStorage.removeItem("razzle_agent_config"); } catch(_) {}
   updateAuthUI(null);
 }
 

@@ -1484,7 +1484,7 @@ const DEFAULT_BASE_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 function loadAgentConfig() {
   try {
-    const raw = localStorage.getItem(AGENT_CONFIG_KEY);
+    const raw = sessionStorage.getItem(AGENT_CONFIG_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     return (parsed && typeof parsed === 'object') ? parsed : {};
@@ -1492,7 +1492,7 @@ function loadAgentConfig() {
 }
 
 function saveAgentConfig(cfg) {
-  try { localStorage.setItem(AGENT_CONFIG_KEY, JSON.stringify(cfg)); } catch (_) {}
+  try { sessionStorage.setItem(AGENT_CONFIG_KEY, JSON.stringify(cfg)); } catch (_) {}
 }
 
 function getAgentSettings(agentId) {
