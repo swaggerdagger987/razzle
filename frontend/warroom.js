@@ -2657,7 +2657,7 @@ async function runSingleAgent(agentId, scenario) {
 function getDailyQueryLimit() {
   if (isEliteUser()) return Infinity;
   if (isProUser()) return 20;
-  return 5; // free tier
+  return 5; // free plan query limit
 }
 
 function getTodayQueryCount() {

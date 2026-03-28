@@ -149,6 +149,8 @@ function _injectHamburgerMenu() {
   // Create slide-out panel
   var panel = document.createElement("div");
   panel.className = "mobile-nav-panel";
+  panel.setAttribute("role", "navigation");
+  panel.setAttribute("aria-label", "Mobile navigation");
 
   // Determine current page for active link
   var path = window.location.pathname;

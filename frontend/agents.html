@@ -1601,10 +1601,10 @@
 
 <main id="main-content">
 <noscript>
-  <div style="text-align:center; padding:48px 24px; font-family:'Space Mono',monospace; color:#6b5a4e;">
+  <div style="text-align:center; padding:48px 24px; font-family:'Space Mono',monospace; color:var(--ink-medium);">
     <p style="font-family:'Luckiest Guy',cursive; font-size:24px; margin-bottom:12px;">JavaScript required</p>
     <p>The Situation Room needs JavaScript to run. Please enable it or check your ad blocker.</p>
-    <p style="font-family:'Caveat',cursive; font-size:18px; margin-top:16px; color:#a89585;">the agents are napping without power...</p>
+    <p style="font-family:'Caveat',cursive; font-size:18px; margin-top:16px; color:var(--ink-light);">the agents are napping without power...</p>
   </div>
 </noscript>
 <!-- Trial expiry banner (rendered by JS) -->
@@ -1630,7 +1630,7 @@
 <div id="weeklyBriefingWrap" style="max-width:800px; margin:0 auto 24px; padding:0 24px; display:none;">
   <div id="weeklyBriefingCard" style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px;">
     <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-      <img src="/assets/agents/razzle.svg" width="28" height="28" alt="">
+      <img src="/assets/agents/razzle.svg" width="28" height="28" alt="Razzle — Chief of Staff">
       <div>
         <div style="font-family:var(--font-display); font-size:18px;">This Week's Briefing</div>
         <div id="briefingDate" style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);"></div>
@@ -2154,7 +2154,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
     } else if (isTrial && days <= 2) {
       // Trial ending soon
       banner.style.display = "block";
-      var urgencyColor = days <= 1 ? "var(--red, #e74c3c)" : "var(--orange)";
+      var urgencyColor = days <= 1 ? "var(--red, #e63946)" : "var(--orange)";
       var msg = days <= 1
         ? "Your Pro trial ends tomorrow"
         : "Your Pro trial ends in " + days + " days";

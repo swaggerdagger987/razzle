@@ -79,7 +79,7 @@ function exportPanelCSV(panelName) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  _showToast('CSV exported');
+  _showToast("tape's in your hands");
 }
 
 function _csvCell(val) {
@@ -151,7 +151,7 @@ function screenshotPanel(panelName) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    _showToast('screenshot saved');
+    _showToast('film captured \u2014 share it');
   }).catch(function() {
     _showToast('fumbled the screenshot — try again');
   });
@@ -10388,7 +10388,7 @@ function renderTierBoard() {
   html += '<button class="btn-chunky" onclick="openWatchlistPanel(); closeTierBoard();">Back</button>';
   html += '<button class="btn-chunky" onclick="closeTierBoard(event)">Close</button>';
   html += '</div></div>';
-  html += '<p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:16px;">drag-free tier assignment — use dropdowns to move players between tiers</p>';
+  html += '<p style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:16px;">use the dropdowns to move players between tiers</p>';
 
   // Render tiers 1-5 then untiered (0)
   var tierOrder = [1, 2, 3, 4, 5, 0];
