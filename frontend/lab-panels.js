@@ -1928,10 +1928,10 @@
 
   // ===== WAIVERS =====
   defs.push({ name: 'waivers', render: function(el) {
-    if (showNflOnlyMsg(el, 'waivers', 'Waiver Wire Targets', 'surging lately but low on the season')) return;
+    if (showNflOnlyMsg(el, 'waivers', 'Rising Players', 'surging lately — trending up over recent weeks')) return;
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Waiver Wire Targets</h2>' +
-      '<div class="lp-subtitle">surging lately but low on the season — probably still on your wire</div></div>' +
+      '<div class="lp-header"><h2>Rising Players</h2>' +
+      '<div class="lp-subtitle">surging lately — trending up over recent weeks</div></div>' +
       '<div class="lp-controls">' +
       '<select class="lp-select" id="ww-season" aria-label="Season"></select>' +
       '<select class="lp-select" id="ww-window" aria-label="Window">' +
@@ -1977,7 +1977,7 @@
           seasonsPopulated = true;
         }
         var targets = data.targets || [];
-        var html = '<div class="ww-card"><div class="ww-card-header">Waiver Wire Targets (' + escapeHtml(String(data.count || 0)) + ')</div>';
+        var html = '<div class="ww-card"><div class="ww-card-header">Rising Players (' + escapeHtml(String(data.count || 0)) + ')</div>';
         if (!targets.length) {
           html += '<div class="panel-empty">' + razzleEmpty() + '</div></div>';
           body.innerHTML = html;

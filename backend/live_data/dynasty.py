@@ -1312,9 +1312,9 @@ def _fetch_dynasty_dashboard_uncached(season=None):
 # ---------------------------------------------------------------------------
 
 _TIER_BREAKS = [
-    (80, "S", "Elite — untouchable dynasty cornerstones"),
-    (65, "A", "Blue Chip — premium assets with staying power"),
-    (50, "B", "Solid — reliable starters with upside"),
+    (92, "S", "Elite — untouchable dynasty cornerstones"),
+    (75, "A", "Blue Chip — premium assets with staying power"),
+    (55, "B", "Solid — reliable starters with upside"),
     (35, "C", "Flex — startable but replaceable"),
     (20, "D", "Depth — roster filler with some value"),
     (0, "F", "Cut Bait — minimal dynasty value"),
