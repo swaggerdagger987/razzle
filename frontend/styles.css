@@ -24,6 +24,8 @@
   --ink-medium: #5c4a3d;
   --ink-light: #8a7565;
   --ink-faint: #c4b5a5;
+  --shadow-text: rgba(45,31,20,0.2);
+  --shadow-drop: rgba(45,31,20,0.15);
 
   --orange: #d97757;
   --orange-light: #f7e4d8;
@@ -80,6 +82,8 @@
   --ink-medium: #c4b5a5;
   --ink-light: #a89888;
   --ink-faint: #5c4a3d;
+  --shadow-text: rgba(237,224,207,0.15);
+  --shadow-drop: rgba(237,224,207,0.15);
 
   --orange-light: #5c3325;
   --yellow-light: #4a3a1e;
