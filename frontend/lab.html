@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ede0cf">
-<title>Fourth Down Lab — Razzle</title>
+<title>Razzle Lab — 100+ Stats, Custom Formulas, Forever Free</title>
 <meta property="og:title" content="Fourth Down Lab — Razzle">
 <meta property="og:description" content="The Screener: filter 1,200+ NFL players and 9,800+ college players across 100+ stat columns. Custom formulas, heat maps, radar charts. Forever free.">
 <meta property="og:site_name" content="razzle.lol">
@@ -4576,6 +4576,9 @@
     }
 
     currentPanel = panelName;
+    // Update tab title with panel name
+    var panelLabel = PANEL_LABELS[panelName] || panelName;
+    document.title = (panelName === 'screener' ? 'Razzle Lab \u2014 100+ Stats, Custom Formulas, Forever Free' : panelLabel + ' \u2014 Razzle Lab');
 
     // Save last panel to localStorage for session memory
     try { localStorage.setItem('razzle_last_panel', panelName); } catch(e) {}
