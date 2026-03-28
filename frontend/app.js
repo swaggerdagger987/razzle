@@ -178,6 +178,10 @@ function _injectHamburgerMenu() {
   }
 
   panelHTML += '</div>' +
+  '<div style="padding:8px 16px 0;">' +
+    '<button class="btn-chunky btn-sm" style="width:100%;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="if(typeof openCmdPalette===\'function\'){openCmdPalette();document.querySelector(\'.mobile-nav-overlay\').click();}" aria-label="Open search">' +
+    '\uD83D\uDD0D Search players &amp; tools</button>' +
+  '</div>' +
   '<div class="mobile-nav-footer">' +
     '<div class="mobile-nav-actions" id="mobile-nav-actions"></div>' +
   '</div>';
