@@ -1062,6 +1062,8 @@ a.btn-pro-upgrade:focus-visible {
 }
 
 @media (max-width: 480px) {
+  /* WCAG 2.5.8: minimum 24px touch targets */
+  .chip, .btn-chunky, .btn-primary { min-height: 24px; min-width: 24px; }
   .topnav {
     padding: 6px 8px;
     gap: 4px;
