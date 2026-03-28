@@ -310,7 +310,11 @@ if (document.readyState === "loading") {
 /* ===== Nav Dropdown Close Handler (module-level to avoid listener leaks) ===== */
 var _dropdownCloseHandler = function(e) {
     var dd = document.querySelector(".nav-user-dropdown");
-    if (dd && !dd.contains(e.target)) dd.classList.remove("open");
+    if (dd && !dd.contains(e.target)) {
+      dd.classList.remove("open");
+      var trigger = dd.querySelector(".nav-user-trigger");
+      if (trigger) trigger.setAttribute("aria-expanded", "false");
+    }
 };
 
 /* ===== Tier Gating Helpers ===== */
@@ -1356,12 +1360,12 @@ function updateAuthUI(user) {
 
     item.innerHTML =
       '<div class="nav-user-dropdown">' +
-        '<button class="nav-user-trigger" onclick="this.parentElement.classList.toggle(\'open\')">' +
+        '<button class="nav-user-trigger" aria-label="User menu" aria-expanded="false" aria-haspopup="true" onclick="var el=this.parentElement;el.classList.toggle(\'open\');this.setAttribute(\'aria-expanded\',el.classList.contains(\'open\'))">' +
           badge +
           '<span class="nav-user-name">' + displayName + '</span>' +
           '<span class="nav-user-caret">&#9662;</span>' +
         '</button>' +
-        '<div class="nav-dropdown-menu">' +
+        '<div class="nav-dropdown-menu" role="menu">' +
           '<div class="nav-dropdown-header">' + escapeHtml(user.email) + '</div>' +
           dropdownItems +
         '</div>' +

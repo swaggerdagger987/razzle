@@ -690,12 +690,12 @@
 <div class="screener-visual">
   <div class="screener-visual-card">
     <!-- Position filter tabs -->
-    <div class="mini-screener-tabs" style="display:flex; gap:0; border-bottom:3px solid var(--ink);">
-      <button class="mini-tab active" data-pos="" onclick="_miniFilter('')">ALL</button>
-      <button class="mini-tab" data-pos="QB" onclick="_miniFilter('QB')">QB</button>
-      <button class="mini-tab" data-pos="RB" onclick="_miniFilter('RB')">RB</button>
-      <button class="mini-tab" data-pos="WR" onclick="_miniFilter('WR')">WR</button>
-      <button class="mini-tab" data-pos="TE" onclick="_miniFilter('TE')">TE</button>
+    <div class="mini-screener-tabs" role="tablist" aria-label="Position filter" style="display:flex; gap:0; border-bottom:3px solid var(--ink);">
+      <button class="mini-tab active" role="tab" aria-selected="true" data-pos="" onclick="_miniFilter('')">ALL</button>
+      <button class="mini-tab" role="tab" aria-selected="false" data-pos="QB" onclick="_miniFilter('QB')">QB</button>
+      <button class="mini-tab" role="tab" aria-selected="false" data-pos="RB" onclick="_miniFilter('RB')">RB</button>
+      <button class="mini-tab" role="tab" aria-selected="false" data-pos="WR" onclick="_miniFilter('WR')">WR</button>
+      <button class="mini-tab" role="tab" aria-selected="false" data-pos="TE" onclick="_miniFilter('TE')">TE</button>
     </div>
     <!-- Live data table -->
     <div id="miniScreenerBody" class="mini-screener-body" aria-label="Live screener preview">
@@ -705,9 +705,9 @@
             <th style="width:30px;">#</th>
             <th style="width:36px;">POS</th>
             <th style="text-align:left;">Player</th>
-            <th class="mini-sortable" data-sort="fantasy_points_ppr" onclick="_miniSort('fantasy_points_ppr')">Total</th>
-            <th class="mini-sortable" data-sort="games" onclick="_miniSort('games')">GP</th>
-            <th class="mini-sortable" data-sort="age" onclick="_miniSort('age')">Age</th>
+            <th class="mini-sortable" data-sort="fantasy_points_ppr" aria-sort="descending" onclick="_miniSort('fantasy_points_ppr')">Total</th>
+            <th class="mini-sortable" data-sort="games" aria-sort="none" onclick="_miniSort('games')">GP</th>
+            <th class="mini-sortable" data-sort="age" aria-sort="none" onclick="_miniSort('age')">Age</th>
           </tr>
         </thead>
         <tbody id="miniScreenerRows">
@@ -1044,7 +1044,9 @@ function _renderMiniRows() {
   tbody.innerHTML = html;
   // Update sort headers
   document.querySelectorAll('.mini-sortable').forEach(function(th) {
-    th.classList.toggle('sort-active', th.getAttribute('data-sort') === _miniSortKey);
+    var isActive = th.getAttribute('data-sort') === _miniSortKey;
+    th.classList.toggle('sort-active', isActive);
+    th.setAttribute('aria-sort', isActive ? (_miniSortDir === 'desc' ? 'descending' : 'ascending') : 'none');
   });
 }
 
@@ -1061,7 +1063,9 @@ _miniSort = function(key) {
 window._miniFilter = function(pos) {
   _miniPos = pos;
   document.querySelectorAll('.mini-tab').forEach(function(t) {
-    t.classList.toggle('active', t.getAttribute('data-pos') === pos);
+    var isActive = t.getAttribute('data-pos') === pos;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', String(isActive));
   });
   _renderMiniRows();
 };

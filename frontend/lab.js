@@ -5309,7 +5309,7 @@ function renderScoringWeights(weights) {
     const val = weights ? (weights[s.key] !== undefined ? weights[s.key] : 0) : s.default;
     return `<div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
       <label style="flex:1; font-family:var(--font-mono); font-size:12px;">${s.label}</label>
-      <input type="number" step="0.01" data-stat="${s.key}" value="${val}"
+      <input type="number" step="0.01" data-stat="${s.key}" value="${val}" inputmode="numeric" aria-label="${s.label} weight"
         style="width:70px; font-family:var(--font-mono); font-size:12px; padding:4px 6px;
                border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink); text-align:right;">
     </div>`;

@@ -32,7 +32,7 @@ function addFormulaComponent() {
   row.className = "filter-modal-row";
   row.dataset.idx = idx;
   row.innerHTML = `
-    <select class="select-chunky formula-stat" style="flex:2">${statOptions}</select>
+    <select class="select-chunky formula-stat" style="flex:2" aria-label="Stat for formula component">${statOptions}</select>
     <span style="font-family:var(--font-mono); font-size:12px;">×</span>
     <input type="number" class="input-chunky formula-weight" value="100" style="flex:1; width:60px;" placeholder="weight %">
     <span style="font-family:var(--font-mono); font-size:12px;">%</span>

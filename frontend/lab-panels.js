@@ -118,7 +118,7 @@
           '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
           '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-rankings-season"></select>' +
+          '<select class="lp-select" id="lp-rankings-season" aria-label="Season"></select>' +
           '<input class="lp-search" type="text" id="lp-rankings-search" placeholder="search player...">' +
           '<div class="lp-view-toggle" id="lp-rankings-view">' +
             '<button class="lp-view-btn active" data-view="rankings">Rankings</button>' +
@@ -458,7 +458,7 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-tl-season"></select>' +
+          '<select class="lp-select" id="lp-tl-season" aria-label="Season"></select>' +
           '<input class="lp-search" type="text" id="lp-tl-search" placeholder="search player...">' +
         '</div>' +
         '<div id="lp-tl-tiers"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
@@ -600,7 +600,7 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-tv-season"></select>' +
+          '<select class="lp-select" id="lp-tv-season" aria-label="Season"></select>' +
           '<input class="lp-search" type="text" id="lp-tv-search" placeholder="search player...">' +
         '</div>' +
         '<div class="tv-methodology" id="lp-tv-weights">' +
@@ -878,7 +878,7 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-vorp-season"></select>' +
+          '<select class="lp-select" id="lp-vorp-season" aria-label="Season"></select>' +
           '<input class="lp-search" type="text" id="lp-vorp-search" placeholder="search player...">' +
         '</div>' +
         '<div class="vorp-thresholds" id="lp-vorp-thresholds"></div>' +
@@ -1067,7 +1067,7 @@
         '<div class="lp-header"><h2>Positional Advantage</h2>' +
         '<div class="lp-subtitle">biggest scoring edge over the positional average</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select" id="lp-pa-season"></select>' +
+          '<select class="lp-select" id="lp-pa-season" aria-label="Season"></select>' +
           '<div class="lp-pos-tabs" id="lp-pa-pos">' +
             '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
             '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
@@ -1340,7 +1340,7 @@
             '<button class="cs-fmt-tab" data-fmt="half">Half-PPR</button>' +
             '<button class="cs-fmt-tab" data-fmt="std">Standard</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-cs-season"></select>' +
+          '<select class="lp-select" id="lp-cs-season" aria-label="Season"></select>' +
         '</div>' +
         '<div class="lp-loading" id="lp-cs-loading">' + razzleLoading() + '</div>' +
         '<div class="cs-grid" id="lp-cs-grid" style="display:none"></div>' +
@@ -5523,7 +5523,7 @@
 
   function searchWrapHTML(prefix, placeholder) {
     return '<div class="' + prefix + 'search-wrap lp-search-wrap">' +
-      '<input type="text" class="' + prefix + 'search-input lp-search" placeholder="' + (placeholder || 'search player...') + '">' +
+      '<input type="text" class="' + prefix + 'search-input lp-search" placeholder="' + (placeholder || 'search player...') + '" aria-label="Search players">' +
       '<div class="' + prefix + 'search-list lp-search-list"></div>' +
     '</div>';
   }

@@ -219,11 +219,11 @@
   <div class="toolbar" id="mainToolbar">
     <!-- Position chips -->
     <div class="toolbar-section">
-      <span class="chip active" data-pos="ALL" onclick="togglePosition('ALL')">All</span>
-      <span class="chip" data-pos="QB" onclick="togglePosition('QB')">QB</span>
-      <span class="chip" data-pos="RB" onclick="togglePosition('RB')">RB</span>
-      <span class="chip" data-pos="WR" onclick="togglePosition('WR')">WR</span>
-      <span class="chip" data-pos="TE" onclick="togglePosition('TE')">TE</span>
+      <span class="chip active" data-pos="ALL" role="button" tabindex="0" onclick="togglePosition('ALL')">All</span>
+      <span class="chip" data-pos="QB" role="button" tabindex="0" onclick="togglePosition('QB')">QB</span>
+      <span class="chip" data-pos="RB" role="button" tabindex="0" onclick="togglePosition('RB')">RB</span>
+      <span class="chip" data-pos="WR" role="button" tabindex="0" onclick="togglePosition('WR')">WR</span>
+      <span class="chip" data-pos="TE" role="button" tabindex="0" onclick="togglePosition('TE')">TE</span>
     </div>
 
     <div class="toolbar-divider"></div>
@@ -424,15 +424,15 @@
   <div class="filter-modal" onclick="event.stopPropagation()">
     <h3 id="dlgTitleFilter">Add Filter</h3>
     <div class="filter-modal-row">
-      <select class="select-chunky" id="filterStat" style="flex:2"></select>
-      <select class="select-chunky" id="filterOp" style="flex:1">
+      <select class="select-chunky" id="filterStat" style="flex:2" aria-label="Filter stat"></select>
+      <select class="select-chunky" id="filterOp" style="flex:1" aria-label="Filter operator">
         <option value="gte">≥</option>
         <option value="lte">≤</option>
         <option value="gt">></option>
         <option value="lt"><</option>
         <option value="eq">=</option>
       </select>
-      <input type="number" class="input-chunky" id="filterValue" placeholder="0" style="flex:1" onkeydown="if(event.key==='Enter'){event.preventDefault();addFilter();}">
+      <input type="number" class="input-chunky" id="filterValue" placeholder="0" style="flex:1" inputmode="numeric" aria-label="Filter value" onkeydown="if(event.key==='Enter'){event.preventDefault();addFilter();}">
     </div>
     <div class="filter-modal-actions">
       <button class="btn-chunky" onclick="closeFilterModal()">Never Mind</button>
