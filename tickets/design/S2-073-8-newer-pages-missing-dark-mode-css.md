@@ -11,7 +11,15 @@ status: OPEN
 
 ## Root Cause
 
-These 8 pages were built in later phases and have no `[data-theme="dark"]` CSS rules. When dark mode is toggled, the page background changes but all card backgrounds, text colors, and borders remain light-mode values — creating an unreadable mess.
+These 8 pages were built in later phases and have zero `[data-theme="dark"]` CSS rules in their `<style>` blocks. Verified: `grep -c 'data-theme.*dark' frontend/drops.html` = 0 for all 8 pages. When dark mode is toggled, global vars change the page background but inline `<style>` rules with hardcoded or light-mode-default values override card backgrounds, text colors, and borders — creating an unreadable mess.
+
+**Representative examples** (style blocks that need dark mode overrides):
+- `frontend/drops.html` — `<style>` at lines 28-100, no dark overrides
+- `frontend/gamescript.html` — `<style>` at lines 28-100, no dark overrides
+- `frontend/seasonpace.html` — `<style>` at lines 28-80, no dark overrides
+
+**Reference implementation** (earlier page with proper dark mode):
+- `frontend/aging.html` — has `[data-theme="dark"]` block in its `<style>` section
 
 ## Affected Pages
 

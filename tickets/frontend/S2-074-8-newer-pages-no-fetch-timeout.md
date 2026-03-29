@@ -13,6 +13,16 @@ status: OPEN
 
 These 8 pages (Phases 131-140) use raw `fetch()` without AbortController or timeout. If the API is slow or down, the page shows a loading spinner indefinitely with no timeout or error recovery.
 
+**Representative fetch calls with no timeout**:
+- `frontend/drops.html:255` — `const resp = await fetch(url);`
+- `frontend/gamescript.html:258` — `const resp = await fetch(url);`
+- `frontend/seasonpace.html:227` — `const resp = await fetch(url);`
+- `frontend/snapefficiency.html` — similar pattern
+- `frontend/targetpremium.html` — similar pattern
+
+**Reference implementation** (Lab screener with proper timeout):
+- `frontend/lab.js:1295` — `AbortSignal.timeout(15000)` with AbortController
+
 ## Affected Pages
 
 1. `frontend/drops.html`

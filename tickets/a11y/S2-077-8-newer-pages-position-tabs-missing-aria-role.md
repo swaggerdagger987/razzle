@@ -13,6 +13,12 @@ status: OPEN
 
 Position filter buttons (QB/RB/WR/TE) across 25 standalone pages are `<button>` elements with no `role="tab"`, no `aria-selected`, and no `role="tablist"` on the parent container. Screen readers announce them as generic buttons, not as a tab group.
 
+**Representative examples** (verified):
+- `frontend/drops.html:36` — `.pos-tabs` container: no `role="tablist"`
+- `frontend/drops.html:103-106` — `<button class="pos-tab active" data-pos="">ALL</button>` (no `role="tab"`, no `aria-selected`)
+- `frontend/gamescript.html:104-107` — same pattern
+- `frontend/aging.html:62-82` — `.aging-pos-tabs` and `.aging-pos-tab` (no ARIA roles)
+
 ## Affected Pages (8 newer — DQ-499)
 
 drops.html, gamescript.html, seasonpace.html, snapefficiency.html, targetpremium.html, garbagetime.html, workload.html, successrate.html

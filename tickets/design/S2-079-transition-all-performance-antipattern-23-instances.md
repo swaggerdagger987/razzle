@@ -23,11 +23,22 @@ transition: all 0.15s ease;
 transition: box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
 ```
 
-## Files
+## Files (representative examples)
 
-- `frontend/agents.html` — multiple instances
-- `frontend/aging.html` — instances
-- Other standalone pages
+**styles.css** (5 instances):
+- `frontend/styles.css:218` — `transition: all 0.15s;` (nav links)
+- `frontend/styles.css:448` — `transition: all 0.12s;` (mobile nav)
+- `frontend/styles.css:549` — `transition: all 0.12s;` (nav user)
+- `frontend/styles.css:703` — `transition: all 0.15s;` (auth modal)
+- `frontend/styles.css:764` — `transition: all 0.12s;` (btn-chunky)
+
+**agents.html** (5 instances):
+- `frontend/agents.html:78,105,182,477,524`
+
+**aging.html** (3 instances):
+- `frontend/aging.html:76,120,177`
+
+**lab-panels.css** (~15 instances)
 
 ## Acceptance Criteria
 
