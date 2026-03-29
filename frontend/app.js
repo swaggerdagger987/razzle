@@ -442,19 +442,20 @@ if (document.readyState === "loading") {
 
 /**
  * Get user tier info for CTA personalization.
- * Returns { plan, isTrial, isPaid, isElite, isExpiredTrial, daysLeft }
+ * Returns { plan, isTrial, isPaid, isElite, isExpiredTrial, daysLeft, hoursLeft }
  */
 function getUserTierInfo() {
   var u = null;
   try { u = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
-  if (!u) return { plan: "none", isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0, loggedIn: false };
+  if (!u) return { plan: "none", isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0, hoursLeft: 0, loggedIn: false };
   var plan = u.plan || "free";
   var isTrial = !!(u.trial_active && u.plan_source === "trial");
   var isPaid = plan === "pro" || plan === "elite" || plan === "pro_lifetime" || plan === "elite_lifetime";
   var isElite = plan === "elite" || plan === "elite_lifetime";
   var isExpiredTrial = !!(u.plan_source === "trial" && !u.trial_active);
   var daysLeft = u.trial_days_remaining || 0;
-  return { plan: plan, isTrial: isTrial, isPaid: isPaid, isElite: isElite, isExpiredTrial: isExpiredTrial, daysLeft: daysLeft, loggedIn: true };
+  var hoursLeft = u.trial_hours_remaining || 0;
+  return { plan: plan, isTrial: isTrial, isPaid: isPaid, isElite: isElite, isExpiredTrial: isExpiredTrial, daysLeft: daysLeft, hoursLeft: hoursLeft, loggedIn: true };
 }
 
 /**
@@ -1576,14 +1577,16 @@ function showSleeperPrompt() {
   var user = null;
   try { user = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
   var isTrial = user && user.trial_active && user.plan_source === "trial";
-  var trialDays = (user && user.trial_days_remaining) || 7;
+  var trialDays = (user && user.trial_days_remaining) || 0;
+  var trialHours = (user && user.trial_hours_remaining) || 0;
+  var trialLabel = trialDays >= 1 ? trialDays + ' day' + (trialDays !== 1 ? 's' : '') : (trialHours > 0 ? trialHours + ' hour' + (trialHours !== 1 ? 's' : '') : 'less than 1 hour');
 
   var trialBanner = "";
   if (isTrial) {
     trialBanner =
       '<div style="background:var(--orange); color:var(--text-on-accent); padding:10px 16px; border-radius:8px; border:2px solid var(--ink); margin-bottom:16px; text-align:center;">' +
         '<div style="font-family:var(--font-mono); font-size:14px;">Pro Trial Active</div>' +
-        '<div style="font-family:var(--font-hand); font-size:14px; margin-top:2px;">' + trialDays + ' days of Pro access — no credit card needed</div>' +
+        '<div style="font-family:var(--font-hand); font-size:14px; margin-top:2px;">' + trialLabel + ' of Pro access — no credit card needed</div>' +
       '</div>';
   }
 
