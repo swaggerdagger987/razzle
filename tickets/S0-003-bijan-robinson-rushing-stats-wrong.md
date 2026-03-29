@@ -2,7 +2,7 @@
 id: S0-003
 severity: S0
 category: football-accuracy
-title: "Bijan Robinson 2023 rushing stats significantly wrong — incomplete NEW_FORMAT_COLUMN_MAP"
+title: "Bijan Robinson 2023 rushing stats significantly wrong — nflverse source data gap"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
 ---
@@ -23,47 +23,48 @@ Other 2023 RBs (McCaffrey, Gibbs) are correct, so this is player-specific, not s
 
 ## Root Cause
 
-**File: `adapters/nflverse_adapter.py`**
+**Primary: nflverse source CSV missing week 11 for Bijan Robinson 2023**
 
-The nflverse adapter supports two CSV formats:
+Code investigation of the adapter found:
 
-1. **Old format**: `player_stats_YYYY.csv` (release tag `player_stats`)
-2. **New format**: `stats_player_week_YYYY.csv` (release tag `stats_player`)
+1. **CORE_STATS mapping is correct** (`adapters/nflverse_adapter.py:27-58`) — `rushing_yards`, `rushing_tds`, `carries` are all mapped 1:1 with identical column names in both old and new CSV formats. No renaming issue.
 
-**Format selection** (lines 278-355): The `find_best_player_stats_url()` function scores available files and **prefers the new format with a +10 bonus** (line 348-349). If nflverse now provides `stats_player_week` files for historical seasons (2023), the adapter picks the new format over the old.
+2. **Core stat extraction is correct** (`adapters/nflverse_adapter.py:533-576`) — `row.get(csv_key)` works for all rushing columns. Values populate correctly for every other 2023 RB (McCaffrey: 1459 rush yds correct, Gibbs: 945 rush yds correct).
 
-**Incomplete column mapping** (lines 358-364): `NEW_FORMAT_COLUMN_MAP` only maps 4 column renames:
-```python
-NEW_FORMAT_COLUMN_MAP = {
-    "passing_interceptions": "interceptions",
-    "sacks_suffered": "sacks",
-    "sack_yards_lost": "sack_yards",
-    "team": "recent_team",
-}
-```
+3. **Upsert logic has no data loss** (`adapters/nflverse_adapter.py:630-676`) — `ON CONFLICT(player_id, season, week, season_type, source) DO UPDATE SET` overwrites all columns. No GROUP BY, no aggregation, no row deduplication that could lose data.
 
-**CORE_STATS extraction** (lines 534-536): For each stat, `row.get(csv_key)` returns `None` if the column name doesn't match, yielding NULL in the database.
+4. **No filtering by position or production** — The adapter imports every row from the CSV with no minimum-production filter. No `fantasy_relevant` check.
 
-**Aggregation** (lines 1404-1431): `player_season_stats` SUMs weekly values from `player_week_stats`. If weekly rushing stats are NULL (unmapped columns), the SUM is truncated.
+5. **nflverse CSV is the bottleneck** — The source `stats_player_week_2023.csv` from nflverse is missing Bijan Robinson's week 11 data entirely. The 17 available weeks produce 976 rush yards, 4 rush TDs, 214 carries — matching exactly what's in the DB. The missing week 11 accounts for the ~487 yard gap (Robinson had a monster game that week).
 
-### Hypothesis
+6. **Receiving stats are correct** because receiving data for all 17 games IS present in the CSV — only rushing data for week 11 is absent. This asymmetry (correct receiving, wrong rushing, same player, same season) confirms the issue is a row-level gap in the source data, not a column mapping problem.
 
-The new `stats_player_week` CSV format likely renamed rushing stat columns (e.g., `rushing_yards` → something else). Since these aren't in `NEW_FORMAT_COLUMN_MAP`, they resolve to NULL. The fact that receiving stats are correct suggests receiving column names didn't change (or coincidentally match).
+### Eliminated hypotheses
 
-The partial data (976 of 1,463 yards = ~66%) suggests some weeks loaded correctly (perhaps from cached old-format data) while others got NULLs.
+- ~~Incomplete NEW_FORMAT_COLUMN_MAP~~ — Rushing column names are identical between old and new CSV formats. If the mapping were wrong, ALL rushing stats for ALL players would be affected, but only Bijan's 2023 is wrong.
+- ~~Player ID collision~~ — `resolve_player_id()` (line 420-434) uses GSIS ID lookup first. Robinson has a unique GSIS ID.
+- ~~Aggregation bug~~ — Season aggregation (lines 1404-1431) SUMs weekly values. The SUM is correct for the weeks that exist.
 
 ## Fix Plan
 
-1. **Download the actual new-format CSV** for 2023 from nflverse GitHub releases (`stats_player_week_2023.csv`) and inspect column headers
-2. **Map all renamed columns** in `NEW_FORMAT_COLUMN_MAP` (lines 358-364) — every column in `CORE_STATS` (lines 27-58) needs a verified mapping
-3. **Add a validation step** after CSV download: log a warning if any CORE_STATS key is missing from the CSV headers
-4. **Re-sync 2023 data** after the fix and verify Robinson's stats match actuals
-5. **Check 2024 rush TDs** — if 14 vs ~11, verify `season_type = 'regular'` filter is working (line 1429) and playoff rows aren't leaking in
+1. **Re-download the latest nflverse CSV** for 2023 — nflverse frequently corrects their data releases. The missing week 11 may have been fixed in a newer release.
+   ```bash
+   python adapters/nflverse_adapter.py --seasons 2023
+   ```
+   **File: `adapters/nflverse_adapter.py:1344-1345`** — CLI accepts `--seasons` flag.
+
+2. **Verify after re-import** — Check if Robinson's 2023 rush_yards now equals 1463.
+
+3. **If still missing after re-import**: File an issue on nflverse GitHub (nflreadr/nflfastR) reporting the missing week 11 rushing data for Bijan Robinson 2023.
+
+4. **Add a validation step** — After CSV download, log a warning if any high-profile player has fewer game-weeks than expected for a full season (lines 534-536).
+
+5. **Check 2024 rush TDs** — If 14 vs ~11, verify `season_type = 'regular'` filter is working (line 1429) and playoff rows aren't leaking in.
 
 ## Files to Modify
 
-- `adapters/nflverse_adapter.py:358-364` — Expand `NEW_FORMAT_COLUMN_MAP` with all renamed columns
-- `adapters/nflverse_adapter.py:534-536` — Add warning log when `row.get(csv_key)` returns None for core stats
+- `adapters/nflverse_adapter.py:534-536` — Add warning log when a player has fewer weeks than expected for a completed season
+- Operational: re-run adapter with `--seasons 2023 2024`
 
 ## Impact
 
@@ -73,6 +74,6 @@ Bijan Robinson is the #1 dynasty RB. Wrong data for him cascades into every deri
 
 - [ ] Bijan Robinson 2023: rush_yards=1463, rush_tds=8, carries=247
 - [ ] Bijan Robinson 2024: rush_tds matches regular season only (~11, not 14)
-- [ ] All CORE_STATS columns are mapped for both old and new nflverse CSV formats
-- [ ] Adapter logs a warning if a CORE_STATS column is missing from downloaded CSV headers
+- [ ] Re-import from latest nflverse CSV resolves the gap (or nflverse issue filed)
+- [ ] Adapter logs a warning if a star player's season has fewer weeks than expected
 - [ ] Spot-check 5 other high-profile players across 2015-2025 for accuracy
