@@ -2755,9 +2755,9 @@
   </a>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">Fourth Down Lab</a></li>
-    <li><a href="/league-intel.html" class="active">Bureau of Intelligence</a></li>
-    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/lab.html">The Lab</a></li>
+    <li><a href="/league-intel.html" class="active">Your League</a></li>
+    <li><a href="/agents.html">AI Agents</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
@@ -2851,9 +2851,9 @@
       <div class="site-footer-heading">Razzle</div>
       <ul>
         <li><a href="/" class="footer-link">Home</a></li>
-        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
-        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
-        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
+        <li><a href="/lab.html" class="footer-link">The Lab</a></li>
+        <li><a href="/league-intel.html" class="footer-link">Your League</a></li>
+        <li><a href="/agents.html" class="footer-link">AI Agents</a></li>
         <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
         <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
         <li><a href="/about.html" class="footer-link">About</a></li>
@@ -3520,8 +3520,8 @@ async function loadLeagues(userId) {
       var _month = new Date().getMonth();
       var _isOffseason = _month >= 1 && _month <= 7;
       var _emptyMsg = _isOffseason
-        ? 'leagues haven\'t opened for the new season yet \u2014 check back when your league drafts. explore the <a href="/lab.html" style="color:var(--orange);">Fourth Down Lab</a> in the meantime.'
-        : 'no leagues found for this username. double-check your Sleeper username or explore the <a href="/lab.html" style="color:var(--orange);">Fourth Down Lab</a>.';
+        ? 'leagues haven\'t opened for the new season yet \u2014 check back when your league drafts. explore the <a href="/lab.html" style="color:var(--orange);">The Lab</a> in the meantime.'
+        : 'no leagues found for this username. double-check your Sleeper username or explore the <a href="/lab.html" style="color:var(--orange);">The Lab</a>.';
       container.innerHTML = '<div class="loading-intel">' + _emptyMsg + '</div>';
       return;
     }
