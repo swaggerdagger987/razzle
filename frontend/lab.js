@@ -4258,6 +4258,16 @@ function loadStateFromURL() {
     if (params.has("cols")) state.visibleColumns = params.get("cols").split(",").filter(function(k) { return COLUMNS[k]; });
   }
 
+  // Shared URL tier-locked column toast (S2-021)
+  if (params.has("cols") && typeof _getTierLockClass === "function" && typeof isPaidUser === "function" && !isPaidUser()) {
+    var lockedCols = state.visibleColumns.filter(function(k) { return _getTierLockClass(k); });
+    if (lockedCols.length > 0 && typeof _showToast === "function") {
+      setTimeout(function() {
+        _showToast(lockedCols.length + " column" + (lockedCols.length > 1 ? "s" : "") + " in this shared view require Pro \u2014 upgrade to see full data");
+      }, 1500);
+    }
+  }
+
   // Sync UI
   document.querySelectorAll(".chip[data-pos]").forEach(chip => {
     chip.classList.toggle("active", chip.dataset.pos === state.position);
