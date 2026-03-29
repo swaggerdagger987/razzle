@@ -1958,8 +1958,19 @@ def player_boom_bust(player_id: str, season: int = 0):
 
 
 @app.get("/api/players/compare")
-def players_compare(ids: str = "", season: str = "0"):
+def players_compare(request: Request, ids: str = "", season: str = "0"):
     player_ids = [p.strip() for p in ids.split(",") if p.strip()][:20]
+    # Server-side compare slot enforcement: free=2, pro/elite=4
+    if len(player_ids) > 2:
+        user = require_auth(request)
+        user_plan = (user.get("plan", "free") if user else "free")
+        user_level = _PLAN_HIERARCHY.get(user_plan, 0)
+        max_slots = 4 if user_level >= 1 else 2
+        if len(player_ids) > max_slots:
+            return JSONResponse(
+                {"error": f"Free plan limited to {max_slots} compare slots. Upgrade to Pro for more."},
+                status_code=403,
+            )
     return live_data.fetch_players_compare(player_ids, season=season)
 
 
