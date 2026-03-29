@@ -9,11 +9,14 @@ status: OPEN
 
 # Waivers panel has no roster ownership data — shows rostered players as waiver targets
 
-## Root Cause
+## Root Cause (CONFIRMED 2026-03-29 — code investigation)
 
-The waivers endpoint surfaces "trending up" players based on recent performance delta, but has no ownership percentage data. Without roster ownership context, the panel recommends universally-rostered players (e.g., Bryce Young at #1) as "waiver targets" — players no one can actually pick up on waivers.
+**Endpoint**: `backend/server.py:3287-3294` — `GET /api/waivers`
+**Handler**: `backend/live_data/tools.py:1301-1398` — `fetch_waivers()`
 
-No ownership data source is integrated. Sleeper API provides `owned_count` per player, but this is not fetched or stored.
+The function queries only `player_week_stats` columns: `p.player_id, p.full_name, p.position, p.team, s.week, s.fantasy_points_ppr`. Surge is calculated as recent PPG vs season PPG delta.
+
+**No ownership data exists in the database.** The `player_week_stats` table schema (`adapters/nflverse_adapter.py:152-199`) has no `ownership_pct` column. The Sleeper API `owned_count` field is not fetched or stored by any adapter.
 
 ## Fix
 

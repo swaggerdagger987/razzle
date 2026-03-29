@@ -9,25 +9,23 @@ status: OPEN
 
 # Canvas drawing uses 20+ hardcoded hex colors — dark mode broken
 
-## Root Cause
+## Root Cause (UPDATED 2026-03-29 — code investigation)
 
-Canvas 2D drawing code uses hardcoded hex colors instead of reading CSS variables via `getCanvasTheme()`. In dark mode, these elements render in light-mode colors against dark backgrounds.
+**46 total instances** of hardcoded hex colors in canvas drawing code. `getCanvasTheme()` is defined at `frontend/app.js:96-118` but not used consistently.
 
-## Findings
+### Breakdown by file:
 
-1. **`app.js` `getCanvasTheme()` hardcodes 9 base palette values** (DQ-289) — Instead of reading from `getComputedStyle(document.documentElement)`, the function has fallback hex values that may not match the current theme.
+| File | Count | Key lines |
+|------|-------|-----------|
+| `lab.js` | 23 | 5864,5902,6312,6398,7666,9533,9564,9667,10039,11234,12875,12877,12913,12921,12930,12938,12991,12995,13157,13165,13171,13179,13211,13215 |
+| `charts.js` | 9 | 379,387,450,491,533,549,561,1215,1490 |
+| `warroom.js` | 8 | 356,424,427,442,444,447,521,527 |
+| `lab-panels.js` | 6 | 4962,4969,7279,7532,9968,10095 |
 
-2. **`lab-panels.js` has 5 hardcoded `#d97757`** (DQ-458) — Terracotta position color in canvas drawing won't respond to dark mode. Lines include scatter plot dots and chart annotations.
+### Hardcoded colors found:
+`#d97757`, `#e63946`, `#2ec4b6`, `#5b7fff`, `#8B4513`, `#f7efe5`, `#2d1f14`, `#8a7565`, `#ffc857`, `#000`, and various `rgba()` variants.
 
-3. **Boom/bust canvas functions use hardcoded hex** (DQ-381) — `lab.js` boom/bust range bar and histogram use hardcoded colors instead of `getCanvasTheme()`.
-
-4. **Boom/bust PNG export uses hardcoded light-mode colors** (DQ-383) — Export always renders in light mode regardless of user's current theme.
-
-5. **`warroom.js` canvas draws 5 cold-black `rgba(0,0,0)` overlays** (DQ-477) — Outside the scope of previous dark mode fixes (DES-308).
-
-6. **`compare.js` uses hardcoded `white` stroke/fill** (DQ-490) — Unreadable in light mode on sand background, wrong in dark mode.
-
-7. **Canvas loading screen uses hardcoded hex** (DQ-249) — `waitAndStart()` loading indicator.
+All should use `getCanvasTheme()` properties: `t.ink`, `t.bg`, `t.orange`, `t.posQB`, etc.
 
 ## Fix
 

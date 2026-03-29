@@ -9,17 +9,31 @@ status: OPEN
 
 # 8 newer standalone pages (Phases 131-140) have zero dark mode CSS overrides
 
-## Root Cause
+## Root Cause (UPDATED 2026-03-29 — code investigation)
 
-These 8 pages were built in later phases and have zero `[data-theme="dark"]` CSS rules in their `<style>` blocks. Verified: `grep -c 'data-theme.*dark' frontend/drops.html` = 0 for all 8 pages. When dark mode is toggled, global vars change the page background but inline `<style>` rules with hardcoded or light-mode-default values override card backgrounds, text colors, and borders — creating an unreadable mess.
+Investigation reveals a SPLIT picture:
+- 6 of 8 pages DO have dark mode in `frontend/lab-panels.css:4903-4931` (table styles only)
+- 2 of 8 pages have NO dark mode anywhere
 
-**Representative examples** (style blocks that need dark mode overrides):
-- `frontend/drops.html` — `<style>` at lines 28-100, no dark overrides
-- `frontend/gamescript.html` — `<style>` at lines 28-100, no dark overrides
-- `frontend/seasonpace.html` — `<style>` at lines 28-80, no dark overrides
+### Pages WITH dark mode in lab-panels.css:
+- `workload.html` — `.wl-table` at `lab-panels.css:4910`
+- `snapefficiency.html` — `.se-table` at `lab-panels.css:4909`
+- `dualthreat.html` — `.dt-table` at `lab-panels.css:4911`
+- `targetpremium.html` — `.tp-table` at `lab-panels.css:4912`
+- `garbagetime.html` — `.gt-table` at `lab-panels.css:4914`
+- `seasonpace.html` — `.spc-table` at `lab-panels.css:4923`
 
-**Reference implementation** (earlier page with proper dark mode):
-- `frontend/aging.html` — has `[data-theme="dark"]` block in its `<style>` section
+### Pages with NO dark mode:
+- `successrate.html` — missing from lab-panels.css entirely
+- `gamescript.html` — missing from lab-panels.css entirely
+
+### All 8 pages still lack inline `<style>` dark mode overrides:
+- `drops.html` — `<style>` at lines 28-100, no `[data-theme="dark"]`
+- `gamescript.html` — `<style>` at lines 28-100, no `[data-theme="dark"]`
+- `seasonpace.html` — `<style>` at lines 28-80, no `[data-theme="dark"]`
+- (etc.)
+
+**Reference**: `frontend/aging.html` has proper `[data-theme="dark"]` block in its inline `<style>`
 
 ## Affected Pages
 

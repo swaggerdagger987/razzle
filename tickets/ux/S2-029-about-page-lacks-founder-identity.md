@@ -11,9 +11,14 @@ status: open
 
 The about page uses first-person narrative without identifying the founder. No name, photo, social media link, or team information. Paying users at $80-150/year want to know who they are paying.
 
-## Root Cause
+## Root Cause (CONFIRMED 2026-03-29 — code investigation)
 
-`frontend/about.html` — the page content is intentionally anonymous, written as a brand narrative.
+- `frontend/about.html:256` — "I built this because every fantasy tool I found was either paywalled garbage or a spreadsheet with a logo." — first-person without attribution
+- `frontend/about.html:239-244` — Hero section shows tiger emoji + "About Razzle" heading, no founder info
+- `frontend/about.html:291-295` — Contact section only references Reddit communities and the domain
+- `frontend/about.html:370` — Footer: "made for Reddit" with no individual attribution
+
+No founder name, photo, avatar, or social link anywhere in the document.
 
 ## Fix
 

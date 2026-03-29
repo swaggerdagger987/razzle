@@ -9,14 +9,16 @@ status: OPEN
 
 # 4 pages have zero inline dark mode CSS overrides
 
-## Root Cause
+## Root Cause (CONFIRMED 2026-03-29 — code investigation)
 
-These pages rely entirely on shared `styles.css` dark mode rules and have no page-specific `[data-theme="dark"]` overrides for their custom styled elements:
+These 4 pages have **absolutely zero** `[data-theme="dark"]` CSS rules, no theme-aware code, and only a basic `<meta name="theme-color" content="#ede0cf">` tag:
 
-1. `frontend/prompts.html` — 0 dark mode rules
-2. `frontend/tools.html` — 0 dark mode rules
-3. `frontend/404.html` — 0 dark mode rules
-4. `frontend/about.html` — 0 dark mode rules
+1. `frontend/404.html` — no dark mode CSS, no theme-aware JS
+2. `frontend/about.html` — no dark mode CSS, no theme-aware JS
+3. `frontend/prompts.html` — no dark mode CSS, no theme-aware JS
+4. `frontend/player.html` — no dark mode CSS, no theme-aware JS
+
+**Note**: Original ticket listed `tools.html` but investigation found `player.html` also lacks dark mode entirely. `tools.html` status should be re-verified.
 
 Compare with `frontend/pricing.html` which has 15 inline dark mode rules. Pages with custom card styles, backgrounds, or text colors need page-specific dark overrides.
 
