@@ -1215,7 +1215,8 @@ async def track_query(request: Request):
 # Server-side LLM key for Elite users (never exposed to frontend)
 _LLM_API_KEY = os.environ.get("RAZZLE_LLM_API_KEY", "")  # OpenRouter API key
 _LLM_BASE_URL = os.environ.get("RAZZLE_LLM_BASE_URL", "https://openrouter.ai/api/v1/chat/completions")
-_LLM_MODEL = os.environ.get("RAZZLE_LLM_MODEL", "anthropic/claude-3.5-haiku")  # cost-efficient default
+_LLM_MODEL = os.environ.get("RAZZLE_LLM_MODEL", "anthropic/claude-3.5-haiku")  # Pro tier default
+_LLM_ELITE_MODEL = os.environ.get("RAZZLE_LLM_ELITE_MODEL", _LLM_MODEL)  # Elite tier (configurable upgrade)
 _LLM_FREE_MODEL = os.environ.get("RAZZLE_LLM_FREE_MODEL", "meta-llama/llama-3.1-8b-instruct:free")
 _LLM_TIMEOUT = 25  # seconds
 _LLM_MAX_TOKENS = 2000
@@ -1298,7 +1299,7 @@ async def llm_chat(request: Request):
     except (TypeError, ValueError):
         _mt = _LLM_MAX_TOKENS
     llm_body = {
-        "model": _LLM_MODEL,
+        "model": _LLM_ELITE_MODEL,
         "messages": sanitized_messages,
         "temperature": _temp,
         "max_tokens": _mt,
@@ -1417,9 +1418,15 @@ async def llm_chat_free(request: Request):
         _mt = max(1, min(_mt, _LLM_FREE_MAX_TOKENS))
     except (TypeError, ValueError):
         _mt = _LLM_FREE_MAX_TOKENS
-    # Select model based on user tier: Pro/Elite get premium, free gets free model
+    # Select model based on user tier: Elite gets best, Pro gets premium, free gets free
+    is_elite = plan in ("elite", "elite_lifetime")
     is_paid = plan in ("pro", "elite", "pro_lifetime", "elite_lifetime")
-    selected_model = _LLM_MODEL if is_paid else _LLM_FREE_MODEL
+    if is_elite:
+        selected_model = _LLM_ELITE_MODEL
+    elif is_paid:
+        selected_model = _LLM_MODEL
+    else:
+        selected_model = _LLM_FREE_MODEL
     selected_max_tokens = _LLM_MAX_TOKENS if is_paid else _LLM_FREE_MAX_TOKENS
     _mt = max(1, min(_mt, selected_max_tokens))
 
