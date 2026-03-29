@@ -1067,9 +1067,12 @@ def _fetch_college_stock_watch_uncached(season=None, position=None, limit=30):
             if ppg < 2:
                 continue
 
-            # Efficiency: points per opportunity
-            opportunities = carries + targets + (d["pass_attempts"] or 0)
+            # Efficiency: points per opportunity (QB uses pass_attempts + carries)
             col_pos = d["position"] or "ATH"
+            if col_pos == "QB":
+                opportunities = (d["pass_attempts"] or 0) + carries
+            else:
+                opportunities = carries + targets
             col_opp_min = {"QB": 25, "RB": 20, "WR": 15, "TE": 10}.get(col_pos, 20)
             ppo = round(fpts / opportunities, 2) if opportunities > col_opp_min else None
 
@@ -2340,6 +2343,7 @@ def _fetch_college_stat_explorer_uncached(season=None, position=None, x_stat="to
                    COALESCE(c.carries, 0) as carries,
                    COALESCE(c.targets, 0) as targets,
                    COALESCE(c.receptions, 0) as receptions,
+                   COALESCE(c.pass_attempts, 0) as pass_attempts,
                    (COALESCE(c.rush_yards, 0) + COALESCE(c.rec_yards, 0)) * 0.1
                    + COALESCE(c.total_tds, 0) * 6
                    + COALESCE(c.receptions, 0) * 1.0
@@ -2369,8 +2373,10 @@ def _fetch_college_stat_explorer_uncached(season=None, position=None, x_stat="to
             carries = r[10] or 0
             targets = r[11] or 0
             receptions = r[12] or 0
-            fpts = r[13] or 0
-            opps = carries + targets
+            pass_attempts = r[13] or 0
+            fpts = r[14] or 0
+            pos = r[2] or "ATH"
+            opps = (pass_attempts + carries) if pos == "QB" else (carries + targets)
 
             p = {
                 "player_id": r[0],
