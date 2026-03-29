@@ -202,8 +202,9 @@ def fetch_players(
             total = conn.execute(count_query, params).fetchone()[0]
 
             # Over-fetch when Python re-sort needed (derived stats require all rows)
+            # Capped at 1000 to prevent OOM on concurrent requests (S1-045)
             if _python_sort:
-                sql_limit = min(total, 5000)
+                sql_limit = min(total, 1000)
                 sql_offset = 0
             else:
                 sql_limit = limit
@@ -490,8 +491,9 @@ def _fetch_screener_uncached(body):
         """
         # When sorting by derived/rate metric or applying post-filters, fetch all matching
         # rows so Python sort/filter operates on complete dataset before pagination
+        # Capped at 1000 to prevent OOM on concurrent requests (S1-045)
         if python_sort or post_filters:
-            sql_limit = min(total, 5000)
+            sql_limit = min(total, 1000)
             sql_offset = 0
         else:
             sql_limit = limit
