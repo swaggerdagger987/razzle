@@ -9,7 +9,7 @@ function _getPosColors() {
     TE: s.getPropertyValue('--pos-te').trim() || "#8b5cf6"
   };
 }
-var POS_COLORS = (typeof getPosColors === "function") ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+var POS_COLORS = getPosColors();
 var POS_CSS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
 
 var _p1Data = null;

@@ -25,7 +25,7 @@
     return n.toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = (typeof getPosColors === "function") ? getPosColors() : { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var POS_COLORS = getPosColors();
   var POS_CSS = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--pos-wr)', TE: 'var(--pos-te)' };
 
   // ─── Clickable player name helper ─────────────────────────────
@@ -268,7 +268,7 @@
         exportBtn.addEventListener('click', function() {
           var wrap = content.querySelector('.dh-wrap');
           if (wrap && typeof html2canvas !== 'undefined') {
-            var _dhTheme = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {bg:'#ede0cf',ink:'#2d1f14'};
+            var _dhTheme = getCanvasTheme();
             html2canvas(wrap, { backgroundColor: _dhTheme.bg, scale: 2, useCORS: true, logging: false }).then(function(canvas) {
               var ctx = canvas.getContext('2d');
               ctx.font = '600 24px Caveat, cursive';
@@ -2720,7 +2720,7 @@
         html += '<table class="se-table"><caption class="sr-only">Snap efficiency rankings by fantasy points per snap</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
           var cls = effClass(p.pts_per_snap);
           var barPct = maxPPS > 0 ? p.pts_per_snap / maxPPS * 100 : 0;
           var teamLabel = escapeHtml(p.team);
@@ -2820,7 +2820,7 @@
         html += '<th scope="col">Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
           var cls = scoreClass(p.workload);
           var barPct = maxWL > 0 ? p.workload / maxWL * 100 : 0;
           var flagsHtml = (p.flags || []).map(function(f) { return '<span class="wl-flag">' + escapeHtml(f) + '</span>'; }).join('');
@@ -2923,7 +2923,7 @@
         html += '<table class="dt-table"><caption class="sr-only">Dual-threat index rankings</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
           var cls = dtiClass(p.dti);
           var teamLabel = escapeHtml(p.team);
           if (isCollege && p.conference) teamLabel += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
@@ -3019,7 +3019,7 @@
         html += '<table class="tp-table"><caption class="sr-only">Target premium rankings by target quality composite</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
           var cls = premiumClass(p.premium);
           html += '<tr>';
           html += '<td class="tp-rank">' + (i + 1) + '</td>';
@@ -3096,7 +3096,7 @@
       var html = '<table class="dr-table"><caption class="sr-only">Player drop rate and catch efficiency rankings</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Drop%</th><th>Drops</th><th>Tgt</th><th>Catch%</th><th>YAC/R</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+        var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
         var barPct = maxDrops > 0 ? p.drops / maxDrops * 100 : 0;
         var cls = rateClass(p.drop_rate, isGood);
         html += '<tr>';
@@ -3205,7 +3205,7 @@
       html += '<table class="gt-table"><caption class="sr-only">Garbage time fantasy production — ' + escapeHtml(title) + '</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+        var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
         var pCls = pctClass(p.garbage_time_pct);
         var barVal = isPadders ? p.garbage_time_pct : p.ppg;
         var barPct = maxVal > 0 ? barVal / maxVal * 100 : 0;
@@ -6707,7 +6707,7 @@
     });
     el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
 
-    var _pbdTheme = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {blue:'#5b7fff',green:'#2ec4b6',orange:'#d97757',purple:'#8b5cf6',red:'#e63946',yellow:'#ffc857'};
+    var _pbdTheme = getCanvasTheme();
     var compColors = [_pbdTheme.blue, _pbdTheme.green, _pbdTheme.orange, _pbdTheme.purple, _pbdTheme.red, _pbdTheme.yellow, _pbdTheme.green, _pbdTheme.orange];
 
     function loadBreakdown(pid, playerInfo) {
@@ -9042,7 +9042,7 @@
       html += '</tr></thead><tbody>';
 
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+        var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
         var cls = rateClass(p.success_rate);
         var barPct = maxSR > 0 ? p.success_rate / maxSR * 100 : 0;
         var ypc = p.ypc != null ? escapeHtml(String(p.ypc)) : '-';
@@ -9190,7 +9190,7 @@
           var share = activeMode === 'targets' ? p.target_share : p.carry_share;
           if (!share || share < 2) return;
           otherPct -= share;
-          var posColor = POS_COLORS[p.position] || '#d97757';
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().orange;
           var lightColor = getPosLight()[p.position] || '#f7e4d8';
           var lastName = (p.name || '').split(' ').pop() || p.name || '';
           html += '<div class="td2-dist-seg" style="width:' + share + '%;background:' + lightColor + ';border-right:2px solid ' + posColor + '" title="' + escapeAttr(p.name) + ': ' + share + '%">';
@@ -9212,7 +9212,7 @@
           var share = activeMode === 'targets' ? p.target_share : p.carry_share;
           var count = activeMode === 'targets' ? p.targets : p.carries;
           if (count === 0) return;
-          var posColor = POS_COLORS[p.position] || '#d97757';
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().orange;
           html += '<div class="td2-player-row" data-pid="' + escapeAttr(p.player_id) + '">';
           html += '<div class="td2-player-pos" style="background:' + posColor + '">' + escapeHtml(p.position) + '</div>';
           html += '<div class="td2-player-name">' + escapeHtml(p.name) + '</div>';
@@ -9560,7 +9560,7 @@
   // ═══════════════════════════════════════════════════════════════
   defs.push({ name: 'drafttracker', render: function(el) {
     var panelState = { year: 0, position: '', data: null };
-    var _dtTheme = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {green:'#2ec4b6',blue:'#5b7fff',orange:'#d97757',red:'#e63946',inkLight:'#8a7565'};
+    var _dtTheme = getCanvasTheme();
     var CLASSIFICATION_COLORS = {
       stud: _dtTheme.green,
       hit: _dtTheme.blue,

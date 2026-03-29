@@ -13186,6 +13186,7 @@ function exportBoomBustImage() {
   const boom_rate = data.boom_rate || 0;
   const bust_rate = data.bust_rate || 0;
 
+  var t = getCanvasTheme();
   const pos = (player.position || "").toUpperCase();
   var posHex = _getPosColorsHex();
   const posColor = posHex[pos] || t.orange;
@@ -13199,7 +13200,6 @@ function exportBoomBustImage() {
   canvas.width = 800;
   canvas.height = 700;
   const ctx = canvas.getContext("2d");
-  var t = getCanvasTheme();
 
   // Background
   ctx.fillStyle = t.bg;
