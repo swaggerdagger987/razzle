@@ -5,6 +5,7 @@ category: ux-flow
 title: "CSV export Pro-locked, PNG export ungated — strategy alignment needed"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+duplicate-of: ux/S2-033
 ---
 
 # S2-012: Export PNG and CSV Pro-locked for free users with no preview

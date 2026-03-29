@@ -5,6 +5,7 @@ category: frontend
 title: No global fetch timeout or offline detection — pages show "pulling film..." indefinitely
 source: deep-audit
 status: open
+duplicate-of: S2-010
 ---
 
 ## Problem
