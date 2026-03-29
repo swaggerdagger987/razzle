@@ -1,6 +1,16 @@
 /* Razzle — shared styles (follows DESIGN.md) */
 /* Google Fonts loaded via <link> in HTML <head> — no @import needed */
 
+/* Global :focus-visible for interactive elements (S2-078) */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+select:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
 /* Screen-reader only utility — visually hidden but accessible to assistive tech */
 .sr-only {
   position: absolute;
