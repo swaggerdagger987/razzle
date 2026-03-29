@@ -944,7 +944,7 @@ function _showWelcomeModal(user) {
       '</ul>' +
       '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
         '<a href="/league-intel.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--orange);color:var(--text-on-accent);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Open the Bureau</a>' +
-        '<a href="/lab.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--bg-warm);color:var(--ink);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Back to the Screener</a>' +
+        '<a href="/lab.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--bg-warm);color:var(--ink);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Back to The Lab</a>' +
       '</div>' +
       '<button type="button" onclick="this.closest(\'div\').parentElement.remove();" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);">&times;</button>' +
     '</div>';
@@ -1637,7 +1637,7 @@ function showWelcomeState() {
           (hasSleeper ? 'Enter the Situation Room' : 'Tour the Situation Room') +
         '</a>' +
         '<a href="/lab.html" class="btn-chunky" style="text-decoration:none; text-align:center; font-size:13px; background:var(--bg-card);" onclick="closeAuthModal();">' +
-          'Explore the Screener' +
+          'Explore The Lab' +
         '</a>' +
       '</div>' +
       (!hasSleeper
