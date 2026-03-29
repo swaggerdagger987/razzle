@@ -35,14 +35,14 @@ status: OPEN
 
 Replace hardcoded counts with dynamic helpers or update to correct numbers. Remove or date promises for unbuilt features. Align meta descriptions with actual capabilities per tier.
 
-## Files
+## Files (specific locations)
 
-- `frontend/index.html` — demo data season, title tag, feature claims
-- `frontend/pricing.html` — feature claims
-- `frontend/tools.html` — panel count
-- `frontend/league-intel.html` — Yahoo support claim
-- `frontend/app.js` — Pro upsell text
-- `frontend/records.html` — meta description
+- `frontend/app.js:826,833` — `"All 60+ analytical panels"` (should be 70+)
+- `frontend/records.html:21` — `<meta name="description" content="...since 2020.">` (should be "since 2015")
+- `frontend/league-intel.html:2589` — `Yahoo</span> support coming soon` (undated promise)
+- `frontend/index.html` — demo data season, title tag, feature claims (multiple locations)
+- `frontend/pricing.html` — feature claims ("Weekly Razzle briefings", "Priority data refresh")
+- `frontend/tools.html` — panel count (should be 70+)
 
 ## Acceptance Criteria
 
