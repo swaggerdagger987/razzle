@@ -595,11 +595,7 @@
       hideAutocomplete();
       return;
     }
-    fetch('/api/players/quick-search?q=' + encodeURIComponent(query) + '&limit=8')
-      .then(function(resp) {
-        if (!resp.ok) throw new Error('API error');
-        return resp.json();
-      })
+    apiFetch('/api/players/quick-search?q=' + encodeURIComponent(query) + '&limit=8')
       .then(function(data) {
         var players = data.players || data || [];
         showAutocomplete(players);
@@ -932,7 +928,7 @@
   });
 
   // Analytics pageview
-  fetch('/api/analytics/pageview', {
+  apiFetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ page: '/tradefinder.html', referrer: document.referrer || '' })
@@ -954,10 +950,7 @@
   }
 
   // Pre-populate season selector from trade-value-chart
-  fetch('/api/trade-value-chart?limit=1').then(function(resp) {
-    if (!resp.ok) return;
-    return resp.json();
-  }).then(function(data) {
+  apiFetch('/api/trade-value-chart?limit=1').then(function(data) {
     if (!seasonLoaded && data && data.available_seasons) {
       var seasonSel = document.getElementById('season-select');
       data.available_seasons.forEach(function(s) {

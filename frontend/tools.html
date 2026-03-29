@@ -442,11 +442,7 @@
       document.getElementById('tools-search').value = state.searchQuery;
     }
 
-    fetch('/api/tools-hub')
-      .then(function(r) {
-        if (!r.ok) throw new Error('Failed to load tools');
-        return r.json();
-      })
+    apiFetch('/api/tools-hub')
       .then(function(data) {
         state.categories = data.categories || [];
         state.totalTools = data.total_tools || 0;

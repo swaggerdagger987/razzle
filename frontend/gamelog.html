@@ -406,8 +406,7 @@
     var q = searchInput.value.trim();
     if (q.length < 2) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
     acTimer = setTimeout(function() {
-      fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
-        .then(function(r) { return r.ok ? r.json() : []; })
+      apiFetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
         .then(function(data) {
           var players = Array.isArray(data) ? data : (data.players || []);
           if (!players.length) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
@@ -630,7 +629,7 @@
   }
 
   /* ---- Analytics ---- */
-  fetch('/api/analytics/pageview', {
+  apiFetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ page: '/gamelog.html', referrer: document.referrer || '' })

@@ -1077,7 +1077,7 @@
 
 <script src="app.js" defer></script>
 <script>
-fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
+(typeof apiFetch!=='undefined'?apiFetch:fetch)("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
 
 // Update pricing CTA based on user state (tier-aware)
 function _updateHomeCTAs() {
@@ -1186,8 +1186,7 @@ function _fetchMiniScreener() {
   if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:32px; font-family:var(--font-hand); color:var(--ink-light);">pulling film...</td></tr>';
   var ctrl = new AbortController();
   var timeoutId = setTimeout(function() { ctrl.abort(); }, 10000);
-  fetch('/api/players?limit=60&sort=fantasy_points_ppr&order=desc&min_games=8', { signal: ctrl.signal })
-    .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+  apiFetch('/api/players?limit=60&sort=fantasy_points_ppr&order=desc&min_games=8', { signal: ctrl.signal })
     .then(function(data) {
       _miniData = (data.items || data.players || []).map(function(p) {
         return {

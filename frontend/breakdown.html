@@ -436,8 +436,7 @@
   });
 
   function fetchAc(q) {
-    fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
-      .then(function(r) { return r.ok ? r.json() : []; })
+    apiFetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
       .then(function(players) {
         if (!players.length) { closeAc(); return; }
         acIdx = -1;
@@ -675,8 +674,8 @@
   });
 
   /* ---- Analytics ---- */
-  if (typeof fetch !== 'undefined') {
-    fetch('/api/analytics/pageview', {
+  if (typeof apiFetch !== 'undefined') {
+    apiFetch('/api/analytics/pageview', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ page: 'breakdown', referrer: document.referrer || '' })

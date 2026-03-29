@@ -2295,7 +2295,7 @@
 <script src="warroom-bundle.js"></script>
 <script>
 restorePageState({});
-fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
+apiFetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
 
 // Trial expiry banner logic
 (function() {
@@ -2484,9 +2484,9 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
 
     // Fetch quick data for the briefing
     Promise.all([
-      fetch('/api/dynasty-rankings?limit=5').then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); }).catch(function() { return {}; }),
-      fetch('/api/stock-watch?limit=5').then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); }).catch(function() { return {}; }),
-      fetch('/api/breakout-candidates?limit=3').then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); }).catch(function() { return {}; }),
+      apiFetch('/api/dynasty-rankings?limit=5').catch(function() { return {}; }),
+      apiFetch('/api/stock-watch?limit=5').catch(function() { return {}; }),
+      apiFetch('/api/breakout-candidates?limit=3').catch(function() { return {}; }),
     ]).then(function(results) {
       var rankings = results[0];
       var stocks = results[1];

@@ -609,8 +609,7 @@
   }
 
   function searchPlayers(query) {
-    fetch('/api/players/quick-search?q=' + encodeURIComponent(query) + '&limit=8')
-      .then(function(r) { return r.ok ? r.json() : []; })
+    apiFetch('/api/players/quick-search?q=' + encodeURIComponent(query) + '&limit=8')
       .then(function(players) {
         var ac = document.getElementById('rb-autocomplete');
         if (!players || players.length === 0) {
@@ -681,32 +680,12 @@
   function fetchGrade() {
     if (state.rosterIds.length === 0) return;
 
-    var headers = { 'Content-Type': 'application/json' };
-    var token = localStorage.getItem('razzle_token');
-    if (token) headers['Authorization'] = 'Bearer ' + token;
-
-    fetch('/api/roster-grade', {
+    apiFetch('/api/roster-grade', {
       method: 'POST',
-      headers: headers,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ player_ids: state.rosterIds })
     })
-    .then(function(r) {
-      if (r.status === 401 || r.status === 403) {
-        // Show upgrade prompt instead of grade
-        var el = document.getElementById('gradeResult');
-        if (el) el.innerHTML =
-          '<div style="text-align:center; padding:32px;">' +
-          '<div style="font-family:var(--font-display); font-size:20px; margin-bottom:8px;">Roster Grading is a Pro Feature</div>' +
-          '<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light); margin-bottom:16px;">Build your roster here for free. Unlock grading with Pro.</p>' +
-          '<a href="/pricing.html" class="btn-primary" style="font-size:14px; padding:10px 24px; text-decoration:none;">Subscribe to Pro</a>' +
-          '</div>';
-        return null;
-      }
-      if (!r.ok) throw new Error('Grade failed');
-      return r.json();
-    })
     .then(function(data) {
-      if (!data) return;
       if (data.error) {
         renderEmpty();
         return;
@@ -714,8 +693,15 @@
       state.gradeData = data;
       render();
     })
-    .catch(function() {
-      renderEmpty();
+    .catch(function(err) {
+      // 401/403 from apiFetch means user needs Pro — show upgrade prompt
+      var el = document.getElementById('gradeResult');
+      if (el) el.innerHTML =
+        '<div style="text-align:center; padding:32px;">' +
+        '<div style="font-family:var(--font-display); font-size:20px; margin-bottom:8px;">Roster Grading is a Pro Feature</div>' +
+        '<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light); margin-bottom:16px;">Build your roster here for free. Unlock grading with Pro.</p>' +
+        '<a href="/pricing.html" class="btn-primary" style="font-size:14px; padding:10px 24px; text-decoration:none;">Subscribe to Pro</a>' +
+        '</div>';
     });
   }
 

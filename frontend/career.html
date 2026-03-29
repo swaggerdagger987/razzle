@@ -550,8 +550,7 @@
   });
 
   function doSearch(q) {
-    fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
-      .then(function(r) { if (!r.ok) throw new Error('search failed'); return r.json(); })
+    apiFetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
       .then(function(data) {
         var players = Array.isArray(data) ? data : (data.players || []);
         if (players.length === 0) { hideDropdown(); return; }
@@ -607,8 +606,7 @@
     emptyEl.style.display = 'none';
     resultEl.innerHTML = '<div class="car-loading">' + razzleLoading() + '</div>';
 
-    fetch('/api/career-stats?player_id=' + encodeURIComponent(playerId))
-      .then(function(r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
+    apiFetch('/api/career-stats?player_id=' + encodeURIComponent(playerId))
       .then(function(data) {
         if (data.error) {
           resultEl.innerHTML = '<div class="car-empty">' + escapeHtml(data.error) + '</div>';
@@ -963,7 +961,7 @@
   };
 
   // Analytics
-  fetch('/api/analytics/pageview', {
+  apiFetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ page: '/career.html', referrer: document.referrer || '' })
@@ -973,8 +971,7 @@
   if (initialPlayer) {
     loadCareer(initialPlayer);
     // Try to populate search field
-    fetch('/api/players/quick-search?q=' + encodeURIComponent(initialPlayer) + '&limit=1')
-      .then(function(r) { if (!r.ok) throw new Error('search failed'); return r.json(); })
+    apiFetch('/api/players/quick-search?q=' + encodeURIComponent(initialPlayer) + '&limit=1')
       .then(function(d) {
         var arr = Array.isArray(d) ? d : (d.players || []);
         if (arr.length > 0) {

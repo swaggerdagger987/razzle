@@ -408,8 +408,7 @@
     var q = searchInput.value.trim();
     if (q.length < 2) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
     acTimer = setTimeout(function() {
-      fetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
-        .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      apiFetch('/api/players/quick-search?q=' + encodeURIComponent(q) + '&limit=8')
         .then(function(data) {
           var players = Array.isArray(data) ? data : (data.players || []);
           if (!players.length) { acList.style.display = 'none'; searchInput.setAttribute('aria-expanded', 'false'); return; }
@@ -630,7 +629,7 @@
   });
 
   /* ---- Analytics ---- */
-  fetch('/api/analytics/pageview', {
+  apiFetch('/api/analytics/pageview', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ page: '/comptable.html', referrer: document.referrer || '' })
@@ -651,8 +650,7 @@
     // Fetch names for these IDs
     var loaded = 0;
     pids.forEach(function(pid) {
-      fetch('/api/players/quick-search?q=' + encodeURIComponent(pid) + '&limit=1')
-        .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      apiFetch('/api/players/quick-search?q=' + encodeURIComponent(pid) + '&limit=1')
         .then(function(data) {
           var arr = Array.isArray(data) ? data : (data.players || []);
           var p = arr[0];

@@ -5231,36 +5231,25 @@ async function loadLeagueTradeFinder(leagueId, userId, myRoster, rosters, allPla
     }
 
     // Fetch trade values for all players from Razzle API
-    var token = "";
-    try { token = localStorage.getItem("razzle_token") || ""; } catch(e) {}
-    var headers = { "Content-Type": "application/json" };
-    if (token) headers["Authorization"] = "Bearer " + token;
-
-    var tfCtrl = new AbortController();
-    var tfTimeout = setTimeout(function() { tfCtrl.abort(); }, 15000);
-    var resp = await fetch("/api/league-trade-finder", {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify({ players: allRosterPlayers }),
-      signal: tfCtrl.signal
-    });
-    clearTimeout(tfTimeout);
-
-    if (resp.status === 403) {
-      container.innerHTML =
-        '<div class="trade-finder-gate">' +
-          '<div class="gate-cta">' + (typeof getUserTierInfo === 'function' && getUserTierInfo().isExpiredTrial ? 'your trial ended — ' : '') + 'subscribe to Pro to unlock league-specific trade matches<br>' +
-            '<a href="/pricing.html">see plans &rarr;</a>' +
-          '</div>' +
-        '</div>';
+    var data;
+    try {
+      data = await apiFetch("/api/league-trade-finder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ players: allRosterPlayers })
+      });
+    } catch (e) {
+      // 401/403 → paywall gate; other errors → generic message
+      if (e.message && e.message.indexOf('session expired') === -1) {
+        container.innerHTML =
+          '<div class="trade-finder-gate">' +
+            '<div class="gate-cta">' + (typeof getUserTierInfo === 'function' && getUserTierInfo().isExpiredTrial ? 'your trial ended — ' : '') + 'subscribe to Pro to unlock league-specific trade matches<br>' +
+              '<a href="/pricing.html">see plans &rarr;</a>' +
+            '</div>' +
+          '</div>';
+      }
       return;
     }
-
-    if (!resp.ok) {
-      container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">trade finder hit a snag. give it another shot.</div>';
-      return;
-    }
-    var data = await resp.json();
     if (!data.players || data.players.length === 0) {
       container.innerHTML = '<div class="loading-intel" style="color:var(--ink-light);">assets couldn\'t be cross-referenced. intel incomplete.</div>';
       return;
@@ -5481,23 +5470,18 @@ async function loadSelfScout(leagueId, userId, myRoster, rosters, allPlayers, us
     // Fetch PPG
     var ppgLookup = {};
     if (allRosterPlayers.length > 0) {
-      var ctrl = new AbortController();
-      var timer = setTimeout(function() { ctrl.abort(); }, 15000);
-      var resp = await fetch("/api/roster-depth-lookup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ players: allRosterPlayers }),
-        signal: ctrl.signal
-      });
-      clearTimeout(timer);
-      if (resp.ok) {
-        var data = await resp.json();
+      try {
+        var data = await apiFetch("/api/roster-depth-lookup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ players: allRosterPlayers })
+        });
         if (data.players) {
           for (var k = 0; k < data.players.length; k++) {
             ppgLookup[data.players[k].sleeper_name] = data.players[k].ppg || 0;
           }
         }
-      }
+      } catch(e) { /* gracefully skip PPG enrichment */ }
     }
 
     // Analyze user's roster
@@ -5824,23 +5808,18 @@ async function runH2HComparison(state, leftId, rightId) {
     // Fetch PPG
     var ppgLookup = {};
     if (allRosterPlayers.length > 0) {
-      var ctrl = new AbortController();
-      var timer = setTimeout(function() { ctrl.abort(); }, 15000);
-      var resp = await fetch("/api/roster-depth-lookup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ players: allRosterPlayers }),
-        signal: ctrl.signal
-      });
-      clearTimeout(timer);
-      if (resp.ok) {
-        var data = await resp.json();
+      try {
+        var data = await apiFetch("/api/roster-depth-lookup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ players: allRosterPlayers })
+        });
         if (data.players) {
           for (var k = 0; k < data.players.length; k++) {
             ppgLookup[data.players[k].sleeper_name] = data.players[k].ppg || 0;
           }
         }
-      }
+      } catch(e) { /* gracefully skip PPG enrichment */ }
     }
 
     // Group players by position with PPG for each side
@@ -6003,23 +5982,22 @@ async function loadPowerRankings(leagueId, userId, rosters, allPlayers, userMap)
     // Fetch PPG data
     var ppgLookup = {};
     if (allRosterPlayers.length > 0) {
-      var ctrl = new AbortController();
-      var timer = setTimeout(function() { ctrl.abort(); }, 20000);
-      var resp = await fetch("/api/roster-depth-lookup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ players: allRosterPlayers }),
-        signal: ctrl.signal
-      });
-      clearTimeout(timer);
-      if (resp.ok) {
-        var data = await resp.json();
+      try {
+        var _ppgCtrl = new AbortController();
+        var _ppgTimer = setTimeout(function() { _ppgCtrl.abort(); }, 20000);
+        var data = await apiFetch("/api/roster-depth-lookup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ players: allRosterPlayers }),
+          signal: _ppgCtrl.signal
+        });
+        clearTimeout(_ppgTimer);
         if (data.players) {
           for (var k = 0; k < data.players.length; k++) {
             ppgLookup[data.players[k].sleeper_name] = data.players[k].ppg || 0;
           }
         }
-      }
+      } catch(e) { /* gracefully skip PPG enrichment */ }
     }
 
     // Fetch transactions for activity score
@@ -6779,24 +6757,23 @@ async function loadBuildProfiles(leagueId, userId, rosters, allPlayers, userMap)
     // Fetch PPG data
     var ppgLookup = {};
     if (allRosterPlayers.length > 0) {
-      var ctrl = new AbortController();
-      var timer = setTimeout(function() { ctrl.abort(); }, 20000);
-      var resp = await fetch("/api/roster-depth-lookup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ players: allRosterPlayers }),
-        signal: ctrl.signal
-      });
-      clearTimeout(timer);
-      if (resp.ok) {
-        var data = await resp.json();
+      try {
+        var _ppgCtrl = new AbortController();
+        var _ppgTimer = setTimeout(function() { _ppgCtrl.abort(); }, 20000);
+        var data = await apiFetch("/api/roster-depth-lookup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ players: allRosterPlayers }),
+          signal: _ppgCtrl.signal
+        });
+        clearTimeout(_ppgTimer);
         if (data.players) {
           for (var k = 0; k < data.players.length; k++) {
             var pl = data.players[k];
             ppgLookup[pl.sleeper_name] = pl.ppg || 0;
           }
         }
-      }
+      } catch(e) { /* gracefully skip PPG enrichment */ }
     }
 
     // Analyze each manager
@@ -7133,23 +7110,23 @@ async function loadRosterDepth(leagueId, userId, rosters, allPlayers, userMap) {
     }
 
     // Fetch PPG for all players from Razzle API (free endpoint)
-    var ctrl = new AbortController();
-    var timer = setTimeout(function() { ctrl.abort(); }, 20000);
-    var resp = await fetch("/api/roster-depth-lookup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ players: allRosterPlayers }),
-      signal: ctrl.signal
-    });
-    clearTimeout(timer);
-
-    if (!resp.ok) {
+    var data;
+    try {
+      var _depthCtrl = new AbortController();
+      var _depthTimer = setTimeout(function() { _depthCtrl.abort(); }, 20000);
+      data = await apiFetch("/api/roster-depth-lookup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ players: allRosterPlayers }),
+        signal: _depthCtrl.signal
+      });
+      clearTimeout(_depthTimer);
+    } catch(e) {
       // Fallback: use Sleeper data only (no PPG enrichment)
       renderDepthFromSleeper(container, rosters, allPlayers, userMap, userId);
       return;
     }
 
-    var data = await resp.json();
     var valueLookup = {};
     if (data.players) {
       for (var k = 0; k < data.players.length; k++) {
@@ -8034,13 +8011,11 @@ async function _runBureauMC(leagueId, userId, scoring, rosters, users, allPlayer
 
     // Fetch projections from backend
     var scoringType = scoring === 'half_ppr' ? 'half_ppr' : scoring === 'standard' ? 'standard' : 'ppr';
-    var projResp = await fetch('/api/monte-carlo/projections', {
+    var projData = await apiFetch('/api/monte-carlo/projections', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ player_ids: allPlayerIds.slice(0, 200), scoring: scoringType })
     });
-    if (!projResp.ok) throw new Error('Projection API returned ' + projResp.status);
-    var projData = await projResp.json();
     var distributions = projData.distributions || {};
 
     // Run MC in Web Worker (10K sims)
@@ -8299,13 +8274,11 @@ async function runLeagueOdds(leagueId, userId, scoring) {
 
     // 3. Fetch projection distributions from backend
     var scoringType = scoring === 'half_ppr' ? 'half_ppr' : scoring === 'standard' ? 'standard' : 'ppr';
-    var projResp = await fetch('/api/monte-carlo/projections', {
+    var projData = await apiFetch('/api/monte-carlo/projections', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ player_ids: allPlayerIds.slice(0, 200), scoring: scoringType })
     });
-    if (!projResp.ok) throw new Error('Projection API returned ' + projResp.status);
-    var projData = await projResp.json();
     var distributions = projData.distributions || {};
 
     // 4. Run Monte Carlo simulation (10K sims in Web Worker)
@@ -8405,34 +8378,24 @@ async function loadScheduleStrength(leagueId, userId, rosters, allPlayers, userM
     // 2. Fetch PPG enrichment
     var ppgLookup = {};
     if (allRosterPlayers.length > 0) {
-      var ctrl1 = new AbortController();
-      var timer1 = setTimeout(function() { ctrl1.abort(); }, 15000);
-      var resp1 = await fetch("/api/roster-depth-lookup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ players: allRosterPlayers }),
-        signal: ctrl1.signal
-      });
-      clearTimeout(timer1);
-      if (resp1.ok) {
-        var data1 = await resp1.json();
+      try {
+        var data1 = await apiFetch("/api/roster-depth-lookup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ players: allRosterPlayers })
+        });
         if (data1.players) {
           for (var k = 0; k < data1.players.length; k++) {
             var dp = data1.players[k];
             ppgLookup[dp.sleeper_name] = dp.ppg || 0;
           }
         }
-      }
+      } catch(e) { /* gracefully skip PPG enrichment */ }
     }
 
     // 3. Fetch matchup heatmap (defensive PPG allowed by position)
     var nflYear = new Date().getMonth() >= 8 ? new Date().getFullYear() : new Date().getFullYear() - 1;
-    var ctrl2 = new AbortController();
-    var timer2 = setTimeout(function() { ctrl2.abort(); }, 15000);
-    var resp2 = await fetch("/api/matchup-heatmap?season=" + nflYear, { signal: ctrl2.signal });
-    clearTimeout(timer2);
-    if (!resp2.ok) throw new Error("matchup heatmap unavailable");
-    var heatData = await resp2.json();
+    var heatData = await apiFetch("/api/matchup-heatmap?season=" + nflYear);
 
     // Build defense lookup: { team: { QB: avg_ppg, RB: avg_ppg, ... } }
     var defLookup = {};
@@ -8661,7 +8624,7 @@ function _saveWaitlistEmail() {
     localStorage.setItem("razzle_waitlist", JSON.stringify(emails));
   } catch(e) {}
   // Also try to send to backend
-  fetch("/api/waitlist", {
+  apiFetch("/api/waitlist", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({email: email, platform: "espn_yahoo"})
@@ -8692,6 +8655,6 @@ function _loadDemoLeague() {
   }, {passive: true});
 })();
 </script>
-<script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
+<script>(typeof apiFetch!=='undefined'?apiFetch:fetch)("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
 </body>
 </html>
