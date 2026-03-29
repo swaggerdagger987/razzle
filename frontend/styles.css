@@ -1990,6 +1990,23 @@ input[type="number"] {
   .footer-link:hover {
     transform: none !important;
   }
+  .nav-links a:hover,
+  .mega-col a:hover,
+  .mega-footer a:hover,
+  .mobile-nav-link:hover,
+  .nav-dropdown-item:hover,
+  .nav-dropdown-signout:hover,
+  .nav-signout:hover,
+  .cmd-palette-item:hover,
+  .tag-picker-option:hover,
+  .notes-cell .note-pencil:hover {
+    background: inherit !important;
+    color: inherit !important;
+  }
+  tr:hover .tag-icon,
+  tr:hover .notes-cell .note-pencil {
+    opacity: 1;
+  }
 }
 
 /* ===== DISABLED & LOCKED STATES ===== */
