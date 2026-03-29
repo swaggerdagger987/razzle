@@ -104,7 +104,7 @@ Cross-referenced 15 open FUNC findings against existing tickets. Investigated ea
 | IEEE 754 artifacts | FIXED — all ROUND() calls in place | No ticket needed |
 | Pin player vanish | FIXED — _pinnedDataCache fallback | No ticket needed |
 
-## Ticket Count Summary
+## Ticket Count Summary (Final — Invocation 30)
 
 | Severity | Count | Status |
 |---|---|---|
@@ -115,6 +115,16 @@ Cross-referenced 15 open FUNC findings against existing tickets. Investigated ea
 | CEO | 18 | All OPEN |
 | QA | 1 | All OPEN |
 | **Total** | **303** | |
+
+TSV entries: 465 (285 OPEN, 101 COVERED, 48 STALE, 22 SKIP, 9 other)
+
+## TSV Backfill — Invocation 30 (2026-03-28)
+
+41 ticket files existed but were not tracked in triage-results.tsv. These were created by parallel triage sessions (CEO reviews, designer audits, functional QA) that wrote tickets directly without logging to the TSV. All 41 entries backfilled with invocation=30.
+
+Includes: S1-032 through S1-040, S2-098 through S2-116, S2-124, S3-093 through S3-103, S3-111.
+
+18 CEO tickets (tickets/ceo/) are tracked as ticket files but not in the TSV — these originate from a separate CEO review process.
 
 ## DQ Designer-Ticket Coverage Verification (2026-03-28 Session 27)
 
