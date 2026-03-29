@@ -9,29 +9,47 @@ status: OPEN
 
 # Checkout intent lost when unauthenticated user clicks Pro/Elite CTA
 
-## Root Cause
+## Root Cause (file:line)
 
-When an unauthenticated user clicks "Start Free Trial" or "Get Pro" on pricing.html or index.html:
+**Intent save** — `frontend/app.js:1228-1232`:
+```javascript
+var token = localStorage.getItem("razzle_token");
+if (!token) {
+  try { sessionStorage.setItem("razzle_pending_checkout", interval || "year"); } catch(_) {}
+  openAuthModal();
+  return;
+}
+```
+The intent IS saved to `sessionStorage` at line 1230. The mechanism exists.
 
-1. `startCheckout()` checks auth, finds none, opens the auth modal
-2. User registers/signs in
-3. Auth modal closes, user is back on the page — but the checkout intent is gone
-4. User must find and click the CTA again
+**Intent resume** — `frontend/app.js:1075-1083`:
+```javascript
+function _resumePendingCheckout() {
+  try {
+    var pending = sessionStorage.getItem("razzle_pending_checkout");
+    if (pending) {
+      sessionStorage.removeItem("razzle_pending_checkout");
+      if (typeof _showToast === 'function') _showToast('heading to checkout...', 'info');
+      setTimeout(function() { startCheckout(pending); }, 500);
+    }
+  } catch(_) {}
+}
+```
+The resume function exists. **The bug is: where is `_resumePendingCheckout()` called?**
 
-The pricing page CTA flow is: click → auth modal → success → nothing happens. The user expected to land in Stripe checkout.
+Search shows it's called from `_detectCheckoutReturn()` context and possibly `DOMContentLoaded` or auth success handler. If it's NOT called after successful sign-in (auth modal close), the intent is saved but never acted on until the next page load.
 
-Additionally (DQ-416), the "Get Pro" button in the Lab sidebar silently opens the auth modal with no explanation — no toast saying "Sign in first to upgrade."
+**Actual gap**: The `_resumePendingCheckout()` must be called in the auth success callback (after `checkAuth()` returns a valid user). If the auth modal's success handler doesn't call it, the user signs in → modal closes → nothing happens → they must re-click.
 
 ## Fix
 
-1. Before opening auth modal, save checkout intent to `sessionStorage` (e.g., `razzle_checkout_intent = "pro_monthly"`)
-2. After successful auth (in `checkAuth()` or auth modal close handler), check for saved intent and auto-trigger `startCheckout()` with the saved plan
-3. For the Lab sidebar "Get Pro" button, show a toast: "Sign in to upgrade to Pro"
+1. Ensure `_resumePendingCheckout()` is called immediately after successful authentication in the auth modal's submit handler
+2. Add a toast: "Sign in to upgrade to Pro" when unauthenticated users click Pro CTAs outside pricing page
 
 ## Files to Change
 
-- `frontend/app.js` — `startCheckout()`, auth modal close handler, `checkAuth()` post-login hook
-- `frontend/pricing.html` — CTA onclick handlers
+- `frontend/app.js:1075-1083` — `_resumePendingCheckout()` must be called after auth success
+- `frontend/app.js` — auth modal success handler (search for register/login success callback)
 
 ## Acceptance Criteria
 
