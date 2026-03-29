@@ -241,8 +241,113 @@
   /* Component tooltip */
   .tv-row[title] { position: relative; }
 
+  /* Weight sliders */
+  .tv-weight-sliders {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .tv-slider-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 140px;
+  }
+  .tv-slider-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .tv-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+  .tv-slider-row input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--ink-faint);
+    outline: none;
+    cursor: pointer;
+  }
+  .tv-slider-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--orange);
+    border: 3px solid var(--ink);
+    cursor: grab;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .tv-slider-row input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--orange);
+    border: 3px solid var(--ink);
+    cursor: grab;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .tv-slider-row input[type="range"]::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 4px;
+  }
+  .tv-slider-row input[type="range"]::-moz-range-track {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--ink-faint);
+  }
+  .tv-slider-val {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    min-width: 36px;
+    text-align: right;
+  }
+  .tv-weight-total {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .tv-weight-total .total-num {
+    font-weight: 700;
+    color: var(--green);
+  }
+  .tv-weight-reset {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 2px solid var(--ink-faint);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--ink-light);
+    cursor: pointer;
+    margin-top: 8px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .tv-weight-reset:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
   /* Loading / Empty / Error */
-  .tv-loading, 
+  .tv-loading,
 
   @media (max-width: 768px) {
 
@@ -391,7 +496,7 @@
 
   </nav>
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
-  <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
+  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
 </footer>
 
 <script src="app.js" defer></script>

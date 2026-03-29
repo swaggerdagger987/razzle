@@ -72,16 +72,55 @@
 
   /* Tier section */
   .rankings-tier {
-    margin-bottom: 40px;
+    margin-bottom: 48px;
+    position: relative;
   }
+
+  /* Dashed divider between tier sections */
+  .rankings-tier-divider {
+    height: 3px;
+    margin: 8px 0 40px 0;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--ink-faint) 0,
+      var(--ink-faint) 8px,
+      transparent 8px,
+      transparent 16px
+    );
+    border-radius: 2px;
+  }
+
   .rankings-tier-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-    border-bottom: 3px dashed var(--ink-faint);
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border: 3px solid var(--ink);
+    border-radius: var(--radius-sm);
+    box-shadow: 4px 4px 0 var(--ink);
+    background: var(--bg-card);
+    position: relative;
+    overflow: hidden;
   }
+  /* Colored left stripe on tier header */
+  .rankings-tier-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+  }
+  .tier-1 .rankings-tier-header::before { background: var(--orange); }
+  .tier-2 .rankings-tier-header::before { background: var(--blue); }
+  .tier-3 .rankings-tier-header::before { background: var(--green); }
+  .tier-4 .rankings-tier-header::before { background: var(--purple); }
+  .tier-5 .rankings-tier-header::before { background: var(--yellow); }
+  .tier-6 .rankings-tier-header::before { background: var(--ink-faint); }
+  .tier-7 .rankings-tier-header::before { background: var(--ink-faint); }
+  .tier-8 .rankings-tier-header::before { background: var(--ink-faint); }
+
   .rankings-tier-badge {
     font-family: var(--font-mono);
     font-size: 14px;
@@ -96,8 +135,17 @@
   }
   .rankings-tier-label {
     font-family: var(--font-hand);
-    font-size: 20px;
+    font-size: 22px;
+    color: var(--ink);
+  }
+  .rankings-tier-range {
+    font-family: var(--font-mono);
+    font-size: 11px;
     color: var(--ink-light);
+    padding: 2px 8px;
+    background: var(--bg-warm);
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
   }
   .rankings-tier-count {
     font-family: var(--font-mono);
@@ -111,7 +159,7 @@
   .tier-2 .rankings-tier-badge { background: var(--blue); color: var(--text-on-accent); }
   .tier-3 .rankings-tier-badge { background: var(--green); color: var(--text-on-accent); }
   .tier-4 .rankings-tier-badge { background: var(--purple); color: var(--text-on-accent); }
-  .tier-5 .rankings-tier-badge { background: var(--bg-warm); }
+  .tier-5 .rankings-tier-badge { background: var(--yellow); color: var(--ink); }
   .tier-6 .rankings-tier-badge { background: var(--bg-warm); }
   .tier-7 .rankings-tier-badge { background: var(--bg-warm); color: var(--ink-light); }
   .tier-8 .rankings-tier-badge { background: var(--bg-warm); color: var(--ink-light); }
@@ -358,7 +406,7 @@
 
   </nav>
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
-  <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
+  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
 </footer>
 
 <script src="app.js" defer></script>
@@ -401,10 +449,21 @@
 
     for (var i = 0; i < tiers.length; i++) {
       var tier = tiers[i];
+
+      // Dashed divider between tier sections (not before the first)
+      if (i > 0) {
+        html += '<div class="rankings-tier-divider" aria-hidden="true"></div>';
+      }
+
+      var rankStart = overallRank;
+      var rankEnd = overallRank + tier.players.length - 1;
+      var rangeStr = "#" + rankStart + " — #" + rankEnd;
+
       html += '<div class="rankings-tier tier-' + tier.tier + '">';
       html += '<div class="rankings-tier-header">';
       html += '<div class="rankings-tier-badge">Tier ' + tier.tier + '</div>';
       html += '<div class="rankings-tier-label">' + escapeHtml(tier.label) + '</div>';
+      html += '<div class="rankings-tier-range">' + rangeStr + '</div>';
       html += '<div class="rankings-tier-count">' + tier.players.length + ' players</div>';
       html += '</div>';
       html += '<div class="rankings-grid">';
