@@ -82,6 +82,9 @@ function _injectThemeToggle() {
     toggleTheme();
     var nowDark = document.documentElement.getAttribute("data-theme") === "dark";
     btn.innerHTML = nowDark ? "\u2600 <span style='font-size:11px;font-family:var(--font-mono);margin-left:4px;'>Light</span>" : "\u263D <span style='font-size:11px;font-family:var(--font-mono);margin-left:4px;'>Dark</span>";
+    // Sync mobile toggle
+    var mobileToggle = document.querySelector(".mobile-nav-theme");
+    if (mobileToggle) mobileToggle.textContent = nowDark ? "\u2600 Light Mode" : "\u263D Dark Mode";
   });
   nav.appendChild(btn);
 }

@@ -528,6 +528,9 @@ h1, h2, h3 {
   .nav-search-hint {
     display: none;
   }
+  .theme-toggle {
+    display: none;
+  }
 }
 
 /* ===== NAV AUTH & SEARCH HINT ===== */
