@@ -3522,8 +3522,8 @@ async function loadLeagues(userId) {
       var _month = new Date().getMonth();
       var _isOffseason = _month >= 1 && _month <= 7;
       var _emptyMsg = _isOffseason
-        ? 'leagues haven\'t opened for the new season yet \u2014 check back when your league drafts. explore the <a href="/lab.html" style="color:var(--orange);">The Lab</a> in the meantime.'
-        : 'no leagues found for this username. double-check your Sleeper username or explore the <a href="/lab.html" style="color:var(--orange);">The Lab</a>.';
+        ? 'leagues haven\'t opened for the new season yet \u2014 check back when your league drafts. explore <a href="/lab.html" style="color:var(--orange);">The Lab</a> in the meantime.'
+        : 'no leagues found for this username. double-check your Sleeper username or explore <a href="/lab.html" style="color:var(--orange);">The Lab</a>.';
       container.innerHTML = '<div class="loading-intel">' + _emptyMsg + '</div>';
       return;
     }
