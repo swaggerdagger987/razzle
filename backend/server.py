@@ -400,7 +400,6 @@ def _warm_cache():
     _s = live_data._current_nfl_season()
     warm_targets = [
         ("filter_options", lambda: live_data.get_filter_options()),
-        ("featured", lambda: live_data.fetch_featured()),
         ("dynasty_dashboard", lambda: live_data.fetch_dynasty_dashboard()),
         ("dynasty_rankings", lambda: live_data.fetch_dynasty_rankings()),
         ("trade_value_chart", lambda: live_data.fetch_trade_value_chart()),
@@ -574,7 +573,7 @@ _req_logger = logging.getLogger("razzle.requests")
 
 # Paths that should be cached at response level (GET only, public data)
 _RESP_CACHEABLE_PREFIXES = (
-    "/api/players", "/api/filter-options", "/api/featured",
+    "/api/players", "/api/filter-options",
     "/api/dynasty-dashboard", "/api/dynasty-rankings", "/api/trade-value-chart",
     "/api/stat-leaders", "/api/breakout-candidates", "/api/matchup-heatmap",
     "/api/aging-curves", "/api/weekly-heatmap", "/api/efficiency-rankings",
@@ -759,7 +758,7 @@ _NO_CACHE_PREFIXES = (
 _STABLE_CACHE_PATHS = (
     "/api/aging-curves", "/api/college/aging-curves", "/api/college/records",
     "/api/draft-class", "/api/prospect-scores", "/api/prospect-tiers",
-    "/api/prospect-comps", "/api/athletic-radar", "/api/trade/pick-values",
+    "/api/prospect-comps", "/api/trade/pick-values",
     "/api/records", "/api/career-stats", "/api/college/season-recap",
     "/api/college/season-awards", "/api/season-recap", "/api/season-awards",
 )
