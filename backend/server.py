@@ -3475,7 +3475,7 @@ def waivers(season: int = None, position: str = None, window: int = 4):
         return live_data.fetch_waivers(season=season, position=pos, window=max(1, min(window, 18)))
     except Exception as e:
         logger.exception("waivers error")
-        return JSONResponse({"error": "Failed to fetch waiver targets"}, status_code=500)
+        return JSONResponse({"error": "Failed to fetch rising players"}, status_code=500)
 
 
 @app.get("/api/tools-hub")

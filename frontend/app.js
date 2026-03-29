@@ -1753,7 +1753,7 @@ var CMD_PANELS = [
   {n:"The Screener",p:"screener"},{n:"Dynasty Rankings",p:"rankings"},{n:"Tiers",p:"tiers"},
   {n:"Trade Values",p:"tradevalues"},{n:"VORP",p:"vorp"},{n:"Positional Advantage",p:"advantage"},
   {n:"Auction Values",p:"auction"},{n:"Cheat Sheet",p:"cheatsheet"},{n:"Breakouts",p:"breakouts"},
-  {n:"Buy / Sell",p:"buysell"},{n:"Stock Watch",p:"stocks"},{n:"Waivers",p:"waivers"},
+  {n:"Buy / Sell",p:"buysell"},{n:"Stock Watch",p:"stocks"},{n:"Rising Players",p:"waivers"},
   {n:"Scarcity",p:"scarcity"},{n:"Handcuffs",p:"handcuffs"},{n:"Efficiency",p:"efficiency"},
   {n:"Consistency",p:"consistency"},{n:"Snap Efficiency",p:"snapefficiency"},
   {n:"Workload Monitor",p:"workload"},{n:"Dual-Threat",p:"dualthreat"},
