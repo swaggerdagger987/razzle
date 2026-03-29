@@ -306,6 +306,17 @@
     .player-stat-value { font-size: 18px; }
     .player-combine-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
   }
+
+  /* Dark mode */
+  [data-theme="dark"] .player-hero { background: var(--bg-card); }
+  [data-theme="dark"] .player-section { background: var(--bg-card); }
+  [data-theme="dark"] .player-stat-card { background: var(--bg-card); }
+  [data-theme="dark"] .player-combine-item { background: var(--bg-card); }
+  [data-theme="dark"] .player-chart-wrap canvas { background: var(--bg-card); }
+  [data-theme="dark"] .player-season-table th { color: var(--ink-light); }
+  [data-theme="dark"] .player-season-table td { color: var(--ink-medium); }
+  [data-theme="dark"] .player-breakout-badge { background: var(--bg-card); color: var(--green); border-color: var(--green); }
+  [data-theme="dark"] .player-draft-badge { background: var(--ink-medium); }
 </style>
 </head>
 <body>
