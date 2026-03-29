@@ -782,9 +782,9 @@ function openCompareSearch() {
 function copyPlayerURL() {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(window.location.href).then(() => {
-      showToast("link copied.");
+      _showToast("link copied.");
     }).catch(() => {
-      showToast("fumbled the copy — try again");
+      _showToast("fumbled the copy — try again");
     });
   } else {
     try {
@@ -796,31 +796,11 @@ function copyPlayerURL() {
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      showToast("link copied.");
+      _showToast("link copied.");
     } catch(e) {
-      showToast("fumbled the copy — try again");
+      _showToast("fumbled the copy — try again");
     }
   }
-}
-
-function showToast(msg) {
-  if (typeof _showToast === "function") { _showToast(msg); return; }
-  let toast = document.getElementById("playerToast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "playerToast";
-    toast.style.cssText = `
-      position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-      background:var(--ink); color:var(--bg); padding:10px 24px;
-      border-radius:8px; font-family:var(--font-mono); font-size:14px;
-      z-index:10000; box-shadow:4px 4px 0 var(--ink);
-      transition:opacity 0.3s; pointer-events:none;
-    `;
-    document.body.appendChild(toast);
-  }
-  toast.textContent = msg;
-  toast.style.opacity = "1";
-  setTimeout(() => { toast.style.opacity = "0"; }, 2500);
 }
 
 function esc(str) {
