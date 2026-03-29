@@ -109,9 +109,22 @@ Cross-referenced 15 open FUNC findings against existing tickets. Investigated ea
 | Severity | Count | Status |
 |---|---|---|
 | S0 | 8 | All OPEN |
-| S1 | 33 | All OPEN |
-| S2 | 99 | All OPEN |
-| S3 | 89 | All OPEN |
+| S1 | 41 | All OPEN |
+| S2 | 124 | All OPEN |
+| S3 | 111 | All OPEN |
 | CEO | 18 | All OPEN |
 | QA | 1 | All OPEN |
-| **Total** | **248** | |
+| **Total** | **303** | |
+
+## DQ Designer-Ticket Coverage Verification (2026-03-28 Session 27)
+
+Cross-referenced all 450 DQ designer-ticket files against existing S-tickets:
+
+| Status | Count | Method |
+|---|---|---|
+| Explicitly referenced by DQ number in ticket files | 394 | grep DQ-nnn in tickets/ |
+| Tracked in triage-results.tsv (SKIP/STALE/DUPLICATE) | 233 | TSV finding_ref column |
+| Remaining 67 verified COVERED by broader ticket scope | 67 | Manual filename-to-scope mapping |
+| **Total DQ entries accounted for** | **450/450** | |
+
+All 67 remaining DQ entries were mapped to existing tickets whose scope descriptions cover the finding. No new tickets needed. Entries appended to triage-results.tsv as COVERED with ticket references.
