@@ -1294,8 +1294,12 @@ let lastTime = now();
 let _rafId = null;
 
 function gameLoop() {
-  // Stop loop if canvas was removed from DOM
-  if (!cvs || !cvs.isConnected) { _rafId = null; return; }
+  // Stop loop + intervals if canvas was removed from DOM (in-page navigation)
+  if (!cvs || !cvs.isConnected) {
+    _rafId = null;
+    if (_rosterInterval) { clearInterval(_rosterInterval); _rosterInterval = null; }
+    return;
+  }
   const t = now();
   const dt = Math.min(t - lastTime, 50);
   lastTime = t;
