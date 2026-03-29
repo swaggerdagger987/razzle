@@ -43,7 +43,7 @@ function _hexAlpha(hex, alpha) {
 function exportPanelCSV(panelName) {
   // Pro+ gating
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export is a Pro feature', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
+    _showToast('export this data as CSV \u2014 Pro feature', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
   var panel = document.getElementById('panel-' + panelName);
