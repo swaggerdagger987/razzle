@@ -1,37 +1,57 @@
----
-id: S1-020
-severity: S1
-category: frontend
-title: Standalone analytical pages missing PPR/Half/Standard scoring format selector
-source: deep-audit
-status: open
----
+# S1-020: Standalone pages missing scoring format selector
+
+**Severity**: S1 (Major)
+**Category**: football-accuracy
+**Source**: Deep Audit 2026-03-28, finding S1-007
 
 ## Problem
 
-Many standalone pages display fantasy point values defaulting to PPR without offering a scoring format toggle. Half-PPR is the most common dynasty format — users see rankings that may not match their league. The Lab screener has this selector, but standalone pages do not.
+Multiple standalone analytical pages default to PPR scoring with no way to toggle
+Half-PPR or Standard. Half-PPR is the most common dynasty format. Users see
+PPR-only rankings that may not match their league.
 
 ## Root Cause
 
-Pages confirmed missing scoring format selector:
-- `frontend/scoring.html:292` — has season selector only, no format toggle
-- `frontend/breakdown.html:370` — season selector only
-- `frontend/consistency.html:302-308` — position tabs only
-- `frontend/efficiency.html` — position tabs only
-- `frontend/reportcard.html` — position tabs only
-- `frontend/vorp.html` — position tabs only
-- `frontend/buysell.html` — position tabs only
-- `frontend/stocks.html` — position tabs only
+Pages confirmed missing scoring format selector (with file:line for controls area):
 
-All these pages use PPR fantasy points in calculations but don't let users switch formats.
+1. `frontend/efficiency.html:302-311` — position tabs + season selector only;
+   API call: `/api/efficiency-rankings?limit=30` (no scoring_format param)
+2. `frontend/consistency.html:302-311` — same pattern;
+   API call: `/api/consistency-rankings?limit=30`
+3. `frontend/schedule.html:324-333` — same pattern;
+   API call: `/api/strength-of-schedule?limit=30`
+4. `frontend/breakouts.html:376-385` — same pattern;
+   API call: `/api/breakout-candidates?limit=50`
+5. `frontend/buysell.html:430-439` — same pattern;
+   API call: `/api/buy-sell-candidates?limit=15`
+6. `frontend/scoring.html:292` — season selector only
+7. `frontend/breakdown.html:370` — season selector only
+8. `frontend/reportcard.html` — position tabs only
+9. `frontend/vorp.html` — position tabs only
+10. `frontend/stocks.html` — position tabs only
+
+The Lab screener DOES have a scoring format selector:
+- `frontend/lab-panels.js:1338-1358` — PPR/Half-PPR/Standard tabs
+- API call uses `?format=ppr|half|std`
+
+Backend endpoints also lack scoring_format parameter:
+- `backend/server.py:2691` — `efficiency_rankings()`
+- `backend/server.py:2704` — `consistency_rankings()`
+- `backend/server.py:2717` — `strength_of_schedule()`
+- `backend/server.py:2561` — `breakout_candidates()`
+- `backend/server.py:2569` — `buy_sell_candidates()`
+
+## Expected
+
+Each page should have a PPR / Half-PPR / Standard toggle (matching the Lab's style)
+that passes `scoring_format` to the API endpoint.
 
 ## Fix
 
-Add a PPR / Half-PPR / Standard toggle to all standalone pages that display fantasy point values. Pattern:
-1. Add a 3-button toggle group (similar to position tabs styling)
-2. Default to PPR (most common in dynasty)
-3. Re-fetch data with `?scoring=half_ppr` or `?scoring=std` parameter
-4. Backend endpoints must accept the `scoring` parameter
+1. Add scoring format tabs UI to each standalone page (copy pattern from lab-panels.js:1338-1358)
+2. Pass `&scoring_format=ppr|half|std` in each page's API call
+3. Add `scoring_format` query param handling to backend endpoints
+4. Update the underlying `live_data/` functions to filter by scoring format
 
 ## Accept When
 
