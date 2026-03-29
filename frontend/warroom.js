@@ -1133,8 +1133,56 @@ function selectAgent(idx) {
     agents.forEach(a => { a.selected = false; a.controlled = false; });
     selectedAgent = agents[idx];
     selectedAgent.selected = true;
+    updateMobileAgentCards();
   }
 }
+
+// ── MOBILE AGENT SELECT CARDS ─────────────────────────────────────────
+(function initMobileAgentCards() {
+  const host = document.getElementById('mobileAgentSelect');
+  if (!host) return;
+  AGENT_DEFS.forEach(def => {
+    const card = document.createElement('button');
+    card.className = 'mobile-agent-card' + (def.id === 0 ? ' active' : '');
+    card.dataset.agentId = def.id;
+    card.innerHTML =
+      '<span class="mobile-agent-dot" style="background:' + def.color + '"></span>' +
+      '<span>' + def.name + '</span>' +
+      '<span class="mobile-agent-role">' + def.role + '</span>';
+    card.addEventListener('click', function() {
+      selectAgent(def.id);
+      centerCamOn(agents[def.id].x, agents[def.id].y);
+    });
+    host.appendChild(card);
+  });
+})();
+
+function updateMobileAgentCards() {
+  const host = document.getElementById('mobileAgentSelect');
+  if (!host) return;
+  host.querySelectorAll('.mobile-agent-card').forEach(card => {
+    card.classList.toggle('active', parseInt(card.dataset.agentId) === selectedAgent.id);
+  });
+}
+
+// ── FULLSCREEN TOGGLE ─────────────────────────────────────────────────
+(function initFullscreenToggle() {
+  const btn = document.getElementById('canvasFullscreenBtn');
+  const container = document.getElementById('canvasContainer');
+  if (!btn || !container) return;
+  btn.addEventListener('click', function() {
+    container.classList.toggle('is-fullscreen');
+    btn.textContent = container.classList.contains('is-fullscreen') ? 'Exit' : 'Fullscreen';
+    resizeCanvas();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && container.classList.contains('is-fullscreen')) {
+      container.classList.remove('is-fullscreen');
+      btn.textContent = 'Fullscreen';
+      resizeCanvas();
+    }
+  });
+})();
 
 function handleInput(dt) {
   const a = selectedAgent;
@@ -4113,7 +4161,7 @@ function showFirstRunDemo() {
     var t = getUserTierInfo();
     if (t.isTrial) {
       demoCta.textContent = 'Subscribe to keep Pro';
-      demoHint.textContent = t.daysLeft + ' day' + (t.daysLeft !== 1 ? 's' : '') + ' left on your trial';
+      demoHint.textContent = (t.daysLeft >= 1 ? t.daysLeft + ' day' + (t.daysLeft !== 1 ? 's' : '') : (t.hoursLeft > 0 ? t.hoursLeft + ' hour' + (t.hoursLeft !== 1 ? 's' : '') : 'less than 1 hour')) + ' left on your trial';
     } else if (t.isExpiredTrial) {
       demoCta.textContent = 'Subscribe to Pro';
       demoHint.textContent = 'your trial ended — subscribe to keep access';

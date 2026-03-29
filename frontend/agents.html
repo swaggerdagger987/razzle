@@ -277,6 +277,84 @@
     image-rendering: pixelated;
   }
 
+  /* Fullscreen toggle for mobile */
+  .canvas-fullscreen-btn {
+    display: none;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 20;
+    background: var(--ink);
+    color: var(--sand);
+    border: 2px solid var(--ink-medium);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .canvas-container.is-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    max-height: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    aspect-ratio: auto;
+  }
+
+  .canvas-container.is-fullscreen .canvas-fullscreen-btn {
+    top: 12px;
+    right: 12px;
+  }
+
+  /* Mobile agent select cards */
+  .mobile-agent-select {
+    display: none;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 12px;
+  }
+
+  .mobile-agent-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 2px solid var(--ink-medium);
+    border-radius: 8px;
+    background: var(--card);
+    cursor: pointer;
+    min-height: 44px;
+    min-width: 44px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+    transition: border-color 0.15s;
+  }
+
+  .mobile-agent-card.active {
+    border-color: var(--orange);
+    box-shadow: 2px 2px 0 var(--orange);
+  }
+
+  .mobile-agent-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .mobile-agent-role {
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+
   .canvas-placeholder {
     position: absolute;
     inset: 0;
@@ -1559,6 +1637,8 @@
     .warroom-bio-specialty { font-size: 12px; }
     .warroom-canvas-wrap { padding: 16px; }
     .warroom-dark { min-height: 400px; }
+    .canvas-fullscreen-btn { display: block; }
+    .mobile-agent-select { display: flex; }
     .canvas-placeholder-icon { font-size: 36px; }
     .canvas-placeholder-text { font-size: 18px; }
     .roster-panel { width: 170px; }
@@ -1708,6 +1788,7 @@
   <div class="warroom-canvas-wrap">
     <div class="warroom-canvas-label">Situation Room — Live Feed</div>
     <div class="canvas-container" id="canvasContainer">
+      <button class="canvas-fullscreen-btn" id="canvasFullscreenBtn" aria-label="Toggle fullscreen">Fullscreen</button>
       <canvas id="warRoomCanvas" width="960" height="704" role="img" aria-label="Situation Room pixel canvas. Arrow keys or WASD to move camera. Keys 1-6 to select agents. Click to select. Drag to pan." tabindex="0"></canvas>
       <!-- Placeholder until pixel engine loads -->
       <div class="canvas-placeholder" id="canvasPlaceholder">
@@ -1767,6 +1848,8 @@
         <div id="rosterList"></div>
       </div>
     </div>
+    <!-- Mobile agent selection cards -->
+    <div class="mobile-agent-select" id="mobileAgentSelect"></div>
   </div>
   <p style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);text-align:center;margin:8px 0 0;">Arrow keys: move &middot; 1-6: select agent &middot; Click: select &middot; Drag: pan</p>
 
@@ -2229,6 +2312,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
 
     var isTrial = user.trial_active && user.plan_source === "trial";
     var days = user.trial_days_remaining || 0;
+    var hours = user.trial_hours_remaining || 0;
 
     // Check for expired trial (plan reverted to free, but user had a trial)
     var hadTrial = !!user.trial_end;
@@ -2249,9 +2333,11 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
       // Trial ending soon
       banner.style.display = "block";
       var urgencyColor = days <= 1 ? "var(--red, #e63946)" : "var(--orange)";
-      var msg = days <= 1
-        ? "Your Pro trial ends tomorrow"
-        : "Your Pro trial ends in " + days + " days";
+      var msg = days === 0
+        ? (hours > 0 ? "Your Pro trial ends in " + hours + " hour" + (hours !== 1 ? "s" : "") : "Your Pro trial ends in less than 1 hour")
+        : days === 1
+          ? "Your Pro trial ends tomorrow"
+          : "Your Pro trial ends in " + days + " days";
       banner.innerHTML =
         '<div style="background:var(--bg-card); border:3px solid ' + urgencyColor + '; border-radius:var(--radius-sm); box-shadow:4px 4px 0 var(--ink); padding:14px 20px; margin-top:16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">' +
           '<div>' +
@@ -2278,7 +2364,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
 
   // Update trial note
   if (trialNote) {
-    if (t.isTrial) trialNote.textContent = "You're on Pro (" + t.daysLeft + "d left). Subscribe to keep access.";
+    if (t.isTrial) trialNote.textContent = "You're on Pro (" + (t.daysLeft >= 1 ? t.daysLeft + "d" : (t.hoursLeft > 0 ? t.hoursLeft + "h" : "<1h")) + " left). Subscribe to keep access.";
     else if (t.isExpiredTrial) trialNote.textContent = "Your trial ended. Subscribe to keep Pro access.";
     else if (t.isPaid) trialNote.textContent = "";
   }
@@ -2316,7 +2402,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
     if (cta) cta.style.display = 'none';
   } else if (t.isTrial) {
     btn.textContent = 'Subscribe to Keep Pro';
-    if (hint) hint.textContent = t.daysLeft + ' day' + (t.daysLeft !== 1 ? 's' : '') + ' remaining on your trial.';
+    if (hint) hint.textContent = (t.daysLeft >= 1 ? t.daysLeft + ' day' + (t.daysLeft !== 1 ? 's' : '') : (t.hoursLeft > 0 ? t.hoursLeft + ' hour' + (t.hoursLeft !== 1 ? 's' : '') : 'less than 1 hour')) + ' remaining on your trial.';
   } else if (t.isExpiredTrial) {
     btn.textContent = 'Subscribe to Pro';
     if (hint) hint.textContent = 'Your trial ended. Subscribe to regain access.';
