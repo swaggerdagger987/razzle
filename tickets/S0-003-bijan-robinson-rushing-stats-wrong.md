@@ -5,6 +5,7 @@ category: football-accuracy
 title: "Bijan Robinson 2023 rushing stats significantly wrong — nflverse source data gap"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: [backend/S0-007, backend/S1-033]
 ---
 
 # S0-003: Bijan Robinson 2023 rushing stats significantly wrong

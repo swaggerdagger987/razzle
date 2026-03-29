@@ -5,6 +5,7 @@ category: ux-flow
 title: "Lab toolbar visual complexity"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: ux/S2-027-lab-toolbar-visually-dense.md
 ---
 
 # S2-005: Lab toolbar is visually complex at desktop width

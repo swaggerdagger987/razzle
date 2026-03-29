@@ -5,6 +5,7 @@ category: ux-flow
 title: "Situation Room BYOK setup lacks cost/model guidance"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: ux/S1-023-byok-setup-lacks-cost-model-guidance.md
 ---
 
 # S1-012: Situation Room requires API key setup with no in-app cost guidance

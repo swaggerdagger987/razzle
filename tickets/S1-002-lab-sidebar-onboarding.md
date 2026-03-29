@@ -5,6 +5,7 @@ category: ux-flow
 title: "Lab sidebar overwhelms new users with 70+ panels and no guided onboarding"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: ux/S1-016-lab-sidebar-108-panels-no-progressive-disclosure.md
 ---
 
 # S1-002: Lab sidebar overwhelms new users with 70+ panels

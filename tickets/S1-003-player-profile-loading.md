@@ -5,6 +5,7 @@ category: ui-bug
 title: "Player profile page may show perpetual loading state"
 status: needs-verification
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: frontend/S1-017-player-profile-page-may-fail-silently.md
 ---
 
 # S1-003: Player profile page loading state

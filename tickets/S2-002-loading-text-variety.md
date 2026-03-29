@@ -5,6 +5,7 @@ category: design
 title: "Loading text 'pulling film...' overused across 38 of 51 pages"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: [design/S2-024, design/S2-025]
 ---
 
 # S2-002: Loading text inconsistency — "pulling film..." overused

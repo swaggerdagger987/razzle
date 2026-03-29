@@ -5,6 +5,7 @@ category: ui-bug
 title: "Cheat sheet print CSS exists but needs live verification"
 status: needs-verification
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: frontend/S2-035-cheatsheet-print-css-untested.md
 ---
 
 # S2-014: Cheat sheet print CSS may not be tested

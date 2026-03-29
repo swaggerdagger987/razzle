@@ -5,6 +5,7 @@ category: football-accuracy
 title: "Drop rate uses non-standard PBP definition — needs methodology disclosure"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: [backend/S1-021, frontend/S1-021]
 ---
 
 # S1-009: Puka Nacua drop rate methodology is non-standard

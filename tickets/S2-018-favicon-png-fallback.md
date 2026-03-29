@@ -5,6 +5,7 @@ category: design
 title: "No PNG favicon fallback — SVG only"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: frontend/S2-039-no-png-favicon-fallback.md
 ---
 
 # S2-018: No favicon PNG fallback

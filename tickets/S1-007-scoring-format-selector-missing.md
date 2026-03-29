@@ -5,6 +5,7 @@ category: football-accuracy
 title: "No scoring format selector on 3 standalone analytical pages"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: frontend/S1-020-standalone-pages-missing-scoring-format-selector.md
 ---
 
 # S1-007: No scoring format selector on some standalone pages

@@ -5,6 +5,7 @@ category: football-accuracy
 title: "RPS prospect score excludes college production — methodology concern"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: backend/S2-028-prospects-rps-ignores-production.md
 ---
 
 # S2-007: Prospects page RPS methodology excludes production

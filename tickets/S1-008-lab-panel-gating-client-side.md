@@ -5,6 +5,7 @@ category: security
 title: "Lab panel data gating is client-side only — Pro analytical data accessible via public API"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: security/S0-003-client-tier-gating-localstorage-bypass.md
 ---
 
 # S1-008: Free tier panel gating is client-side only (bypassable)

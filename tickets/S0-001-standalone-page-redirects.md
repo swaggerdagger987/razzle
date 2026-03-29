@@ -5,6 +5,7 @@ category: ux-flow
 title: "Standalone panel pages redirect away when visited directly"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: ux/S0-005-standalone-pages-redirect-break-shared-urls.md (FIXED)
 ---
 
 # S0-001: Standalone panel pages redirect away when visited directly
