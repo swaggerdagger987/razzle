@@ -1,12 +1,12 @@
 ---
-id: S2-119
+id: S2-133
 severity: S2
 category: mobile
 source: DEEP-AUDIT-TICKETS.md (S1-011)
 status: open
 ---
 
-# S2-119: Dark mode toggle may be inaccessible or visually broken on mobile
+# S2-133: Dark mode toggle may be inaccessible or visually broken on mobile
 
 ## Problem
 

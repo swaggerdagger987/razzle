@@ -1,4 +1,4 @@
-# S1-024: 4 standalone pages reference undefined position CSS vars (--qb not --pos-qb)
+# S1-046: 4 standalone pages reference undefined position CSS vars (--qb not --pos-qb)
 
 **Severity**: S1 (High)
 **Category**: design
