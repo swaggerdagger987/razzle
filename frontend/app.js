@@ -525,12 +525,33 @@ var RAZZLE_LOADING = [
   "analyzing target shares..."
 ];
 
-// Randomize hardcoded "pulling film..." loading text across all pages
+// Contextual loading text per page, with random fallback
+var PAGE_LOADING = {
+  trade: "reviewing the tape room...", tradefinder: "scanning trade targets...",
+  tradevalues: "calculating trade values...", matchups: "scouting the defense...",
+  aging: "pulling the career film...", efficiency: "crunching per-snap data...",
+  weekly: "rewinding the game tape...", awards: "counting the votes...",
+  rankings: "ranking the dynasty board...", tiers: "sorting the tier list...",
+  stocks: "checking the stock ticker...", buysell: "spotting buy-low targets...",
+  auction: "calculating auction dollars...", vorp: "computing replacement value...",
+  schedule: "scouting the schedule...", targets: "charting target trees...",
+  airyards: "measuring air yards...", redzone: "studying goal-line film...",
+  consistency: "checking the variance...", scarcity: "measuring positional scarcity...",
+  breakouts: "scouting the next breakout...", prospects: "grading the draft class...",
+  cheatsheet: "printing the cheat sheet...", drops: "reviewing the catch tape...",
+  garbagetime: "filtering garbage time...", dualthreat: "measuring dual-threat ability...",
+  tdregression: "calculating expected TDs...", advantage: "computing positional edge...",
+  pace: "projecting season pace...", stacks: "building stack combos...",
+  records: "searching the record books...", streaks: "tracking hot streaks...",
+  workload: "counting snap loads...", handcuffs: "mapping the handcuff chart..."
+};
 document.addEventListener("DOMContentLoaded", function() {
+  var page = (location.pathname.split("/").pop() || "").replace(".html", "").toLowerCase();
+  var contextual = PAGE_LOADING[page];
   var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (walker.nextNode()) {
     if (walker.currentNode.textContent.trim() === "pulling film...") {
-      walker.currentNode.textContent = RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)];
+      walker.currentNode.textContent = contextual || RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)];
     }
   }
 });
