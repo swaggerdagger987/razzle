@@ -74,6 +74,13 @@ def _cached(key, fn, ttl=None):
         # Evict stale entries first, then LRU if still over limit
         if len(_cache) >= _CACHE_MAX_SIZE:
             _cache_evict(now)
+        # Periodic lock cleanup: prune orphan locks every 100 calls
+        _cached._call_count = getattr(_cached, "_call_count", 0) + 1
+        if _cached._call_count % 100 == 0:
+            with _cache_meta_lock:
+                stale = [k for k in list(_cache_locks.keys()) if k not in _cache]
+                for k in stale:
+                    _cache_locks.pop(k, None)
         result = fn()
         _cache[key] = {"t": now, "v": result, "a": now, "ttl": ttl}
         return result
