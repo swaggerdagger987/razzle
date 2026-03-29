@@ -69,6 +69,15 @@
 <aside class="lab-sidebar" id="labSidebar" role="navigation" aria-label="Screener panels">
   <div class="lab-sidebar-inner">
 
+    <!-- First-visit onboarding card (hidden after dismiss) -->
+    <div class="sidebar-onboard" id="sidebarOnboard" style="display:none;padding:8px 10px;margin:0 8px 8px;background:var(--orange-light,#fff3eb);border:2px solid var(--orange);border-radius:6px;font-family:var(--font-mono);font-size:11px;line-height:1.5;">
+      <div style="font-weight:700;margin-bottom:4px;">New here? Start with these:</div>
+      <div style="margin-bottom:2px;"><a href="#" onclick="event.preventDefault();switchPanel('screener')" style="color:var(--orange);text-decoration:underline;">The Screener</a> — filter any stat</div>
+      <div style="margin-bottom:2px;"><a href="#" onclick="event.preventDefault();switchPanel('weekly')" style="color:var(--orange);text-decoration:underline;">Weekly Heatmap</a> — spot trends fast</div>
+      <div style="margin-bottom:2px;"><a href="#" onclick="event.preventDefault();switchPanel('leaders')" style="color:var(--orange);text-decoration:underline;">Stat Leaders</a> — who's on top</div>
+      <div style="margin-top:4px;"><a href="#" onclick="event.preventDefault();document.getElementById('sidebarOnboard').style.display='none';try{localStorage.setItem('razzle_lab_visited','1')}catch(e){}" style="color:var(--ink-light);font-size:10px;">dismiss</a></div>
+    </div>
+
     <div class="sidebar-search-wrap">
       <input type="text" class="sidebar-search" id="sidebarSearch" placeholder="Search tools..." autocomplete="off" spellcheck="false" aria-label="Search tools">
       <span class="sidebar-tool-count" id="sidebarToolCount"></span>
@@ -1989,8 +1998,12 @@
       });
     });
 
-    // Save first-visit collapsed state
-    if (isFirstVisit) saveState(saved);
+    // Save first-visit collapsed state and show onboarding card
+    if (isFirstVisit) {
+      saveState(saved);
+      var ob = document.getElementById('sidebarOnboard');
+      if (ob) ob.style.display = 'block';
+    }
 
     // Expose for search override
     window._restoreCatCollapseState = function() {
