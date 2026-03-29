@@ -79,7 +79,7 @@ const C = {
   chairBack:   '#2d1f14',
   bannerBg:    '#d97757', // Razzle terracotta
   bannerText:  '#2d1f14',
-  nameTag:     'rgba(0,0,0,0.7)',
+  nameTag:     'rgba(26,17,10,0.7)',
   nameText:    '#f7efe5',
   bubbleBg:    '#f7efe5',
   bubbleBorder:'#2d1f14',
@@ -318,8 +318,8 @@ function drawFloor() {
           const variant = ((c + r * 3) % 3);
           const col = variant === 0 ? C.floorWood1 : variant === 1 ? C.floorWood2 : C.floorWood3;
           px(tx, ty, TILE, TILE, col);
-          px(tx, ty, TILE, 1, 'rgba(0,0,0,0.08)');
-          if ((c + r) % 4 === 0) px(tx + TILE - 1, ty, 1, TILE, 'rgba(0,0,0,0.06)');
+          px(tx, ty, TILE, 1, 'rgba(26,17,10,0.08)');
+          if ((c + r) % 4 === 0) px(tx + TILE - 1, ty, 1, TILE, 'rgba(26,17,10,0.06)');
         }
       }
     } else if (z.type === ZONE_TURF) {
@@ -454,7 +454,7 @@ function drawPixelFootball(x, y) {
 function drawWarTable(f) {
   const x = f.x * TILE, y = f.y * TILE;
   const w = f.w * TILE, h = f.h * TILE;
-  px(x + 4, y + 4, w - 4, h - 4, 'rgba(0,0,0,0.2)');
+  px(x + 4, y + 4, w - 4, h - 4, 'rgba(26,17,10,0.2)');
   drawPixelRect(x, y + 4, w, h - 8, C.tableTop, C.tableDark);
   drawPixelRect(x + 6, y + 8, w - 12, h - 16, null, 'rgba(100,70,30,0.3)');
   // Center emblem — Razzle tiger
@@ -953,7 +953,7 @@ class Agent {
 
       // Shadow
       ctx.globalAlpha = 0.25;
-      ctx.fillStyle = '#000';
+      ctx.fillStyle = '#1a110a';
       ctx.beginPath();
       ctx.ellipse(this.x, this.y + 10, 10, 4, 0, 0, Math.PI * 2);
       ctx.fill();
@@ -1006,7 +1006,7 @@ class Agent {
 
       // Shadow
       ctx.globalAlpha = 0.25;
-      ctx.fillStyle = '#000';
+      ctx.fillStyle = '#1a110a';
       ctx.beginPath();
       ctx.ellipse(this.x, this.y + 10, 10, 4, 0, 0, Math.PI * 2);
       ctx.fill();
@@ -1263,7 +1263,7 @@ function drawHUD() {
     const tw = ctx.measureText(label).width + 12;
 
     ctx.globalAlpha = a.selected ? 0.9 : 0.55;
-    drawPixelRect(hudX, cy, tw, chipH, a.selected ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.5)');
+    drawPixelRect(hudX, cy, tw, chipH, a.selected ? 'rgba(26,17,10,0.8)' : 'rgba(26,17,10,0.5)');
     if (a.selected) {
       ctx.strokeStyle = a.color;
       ctx.lineWidth = 1;

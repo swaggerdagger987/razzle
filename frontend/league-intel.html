@@ -310,13 +310,13 @@
     border: 2px solid var(--ink);
     border-radius: 8px;
     background: var(--bg-warm);
-    box-shadow: 2px 2px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     cursor: pointer;
     transition: box-shadow 0.12s, transform 0.12s;
   }
 
   .profiles-trigger button:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -331,13 +331,13 @@
     background: var(--bg-card);
     border: 2px solid var(--ink);
     border-radius: 8px;
-    box-shadow: 2px 2px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
     transition: box-shadow 0.12s, transform 0.12s;
   }
 
   .profile-card:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -418,7 +418,7 @@
     background: var(--bg-card);
     border: 2px solid var(--ink);
     border-radius: 8px;
-    box-shadow: 2px 2px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
   }
   .pressure-map-title {
     font-family: var(--font-display);
@@ -516,12 +516,12 @@
     border: 2px solid var(--ink);
     border-radius: 8px;
     background: var(--bg-card);
-    box-shadow: 2px 2px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     cursor: pointer;
     transition: box-shadow 0.12s, transform 0.12s;
   }
   .mgr-compare-btn:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
   .mgr-compare-panel {
@@ -530,7 +530,7 @@
     background: var(--bg-card);
     border: 2px solid var(--ink);
     border-radius: 8px;
-    box-shadow: 2px 2px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     display: none;
   }
   .mgr-compare-panel.visible { display: block; }
@@ -606,11 +606,11 @@
     border: 2px solid var(--orange);
     border-radius: 12px;
     background: var(--bg-card);
-    box-shadow: 2px 2px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     transition: box-shadow 0.12s, transform 0.12s;
   }
   .pressure-locked-overlay a:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -632,13 +632,13 @@
     border-radius: 8px;
     background: var(--orange-light);
     color: var(--ink);
-    box-shadow: 2px 2px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     cursor: pointer;
     transition: box-shadow 0.12s, transform 0.12s, background-color 0.12s, color 0.12s;
   }
 
   .trade-finder-trigger button:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
     background: var(--orange);
     color: var(--bg);
@@ -802,7 +802,7 @@
   }
 
   .depth-card:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1140,7 +1140,7 @@
   }
 
   .power-card:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1248,7 +1248,7 @@
   }
 
   .sos-card:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1339,7 +1339,7 @@
   }
 
   .waiver-card:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1524,7 +1524,7 @@
   }
 
   .build-profile-card:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -1753,7 +1753,7 @@
   }
 
   .bureau-odds-card:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -2525,6 +2525,223 @@
     .demo-schedule-weeks { gap: 2px; }
     .demo-schedule-week { width: 22px; height: 18px; font-size: 11px; }
   }
+
+  /* ===== DARK MODE ===== */
+  [data-theme="dark"] .connect-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .connect-card h2 { color: var(--ink); }
+  [data-theme="dark"] .connect-card p { color: var(--ink-medium); }
+  [data-theme="dark"] .connect-form input { background: var(--bg-warm); color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .connect-error { color: var(--semantic-red); }
+
+  [data-theme="dark"] .leagues-header h2 { color: var(--ink); }
+  [data-theme="dark"] .user-badge { background: var(--green-light); color: var(--semantic-green); border-color: var(--ink-faint); }
+
+  [data-theme="dark"] .league-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .league-header { border-color: var(--ink-faint); }
+  [data-theme="dark"] .league-name { color: var(--ink); }
+  [data-theme="dark"] .league-meta { color: var(--ink-light); }
+
+  [data-theme="dark"] .roster-section-title { color: var(--ink-light); border-color: var(--ink-faint); }
+  [data-theme="dark"] .roster-player { color: var(--ink); }
+  [data-theme="dark"] .roster-pos { border-color: var(--ink-faint); }
+
+  [data-theme="dark"] .activity-feed { border-color: var(--ink-faint); }
+  [data-theme="dark"] .activity-feed-header { color: var(--ink-medium); }
+  [data-theme="dark"] .activity-item { border-color: var(--ink-faint); color: var(--ink-medium); }
+  [data-theme="dark"] .activity-type { border-color: var(--ink-faint); }
+  [data-theme="dark"] .activity-manager { color: var(--ink); }
+  [data-theme="dark"] .activity-time { color: var(--ink-light); }
+  [data-theme="dark"] .activity-trade-side { background: var(--bg-warm); }
+
+  [data-theme="dark"] .profile-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .profile-name { color: var(--ink); }
+  [data-theme="dark"] .profile-record { color: var(--ink-light); }
+  [data-theme="dark"] .profile-summary { color: var(--ink-medium); }
+  [data-theme="dark"] .profile-stat { border-color: var(--ink-faint); background: var(--bg-warm); color: var(--ink-medium); }
+  [data-theme="dark"] .profile-stat strong { color: var(--orange); }
+
+  [data-theme="dark"] .profiles-trigger { border-color: var(--ink-faint); }
+  [data-theme="dark"] .profiles-trigger button { background: var(--bg-warm); border-color: var(--ink-faint); color: var(--ink); box-shadow: 4px 4px 0 var(--ink-faint); }
+
+  [data-theme="dark"] .pressure-map { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .pressure-map-title { color: var(--ink); }
+  [data-theme="dark"] .pressure-bar-name { color: var(--ink); }
+  [data-theme="dark"] .pressure-bar-track { background: var(--bg-warm); border-color: var(--ink-faint); }
+  [data-theme="dark"] .pressure-bar-score { color: var(--ink); }
+
+  [data-theme="dark"] .trade-partner-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .trade-partner-name { color: var(--ink); }
+  [data-theme="dark"] .trade-partner-record { color: var(--ink-light); }
+  [data-theme="dark"] .trade-match-row { border-color: var(--ink-faint); color: var(--ink-medium); }
+  [data-theme="dark"] .trade-match-arrow { color: var(--ink-light); }
+  [data-theme="dark"] .trade-match-value { color: var(--ink-light); }
+  [data-theme="dark"] .trade-finder-trigger { border-color: var(--ink-faint); }
+  [data-theme="dark"] .trade-finder-trigger button { background: var(--orange-light); color: var(--ink); border-color: var(--orange); }
+  [data-theme="dark"] .trade-finder-gate { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+
+  [data-theme="dark"] .depth-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .depth-card-header { border-color: var(--ink-faint); }
+  [data-theme="dark"] .depth-card-name { color: var(--ink); }
+  [data-theme="dark"] .depth-score-badge { border-color: var(--ink-faint); color: var(--ink); }
+  [data-theme="dark"] .depth-bar-label { color: var(--ink-medium); }
+  [data-theme="dark"] .depth-bar-track { background: var(--bg-warm); border-color: var(--ink-faint); }
+
+  [data-theme="dark"] .self-scout { background: var(--bg-card); border-color: var(--orange); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .self-scout-title { color: var(--ink); }
+  [data-theme="dark"] .self-scout-header { border-color: var(--ink-faint); }
+  [data-theme="dark"] .self-scout-stat { background: var(--bg-warm); border-color: var(--ink-faint); }
+  [data-theme="dark"] .self-scout-stat-label { color: var(--ink-light); }
+  [data-theme="dark"] .self-scout-stat-value { color: var(--ink); }
+  [data-theme="dark"] .self-scout-stat-sub { color: var(--ink-light); }
+  [data-theme="dark"] .self-scout-opponents { border-color: var(--ink-faint); }
+  [data-theme="dark"] .self-scout-rival-chip { background: var(--bg-card); border-color: var(--ink-faint); color: var(--ink); }
+
+  [data-theme="dark"] .h2h-panel { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .h2h-selectors select { background: var(--bg-card); color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .h2h-col-header { color: var(--ink); border-color: var(--ink-faint); }
+  [data-theme="dark"] .h2h-divider { background: var(--ink-faint); }
+  [data-theme="dark"] .h2h-pos-row { color: var(--ink-medium); border-color: var(--ink-faint); }
+  [data-theme="dark"] .h2h-verdict { background: var(--bg-warm); border-color: var(--ink-faint); }
+  [data-theme="dark"] .h2h-verdict-title { color: var(--ink); }
+
+  [data-theme="dark"] .power-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .power-rank { color: var(--ink); }
+  [data-theme="dark"] .power-name { color: var(--ink); }
+  [data-theme="dark"] .power-detail { color: var(--ink-light); }
+  [data-theme="dark"] .power-score { color: var(--ink); }
+  [data-theme="dark"] .power-tier-badge { border-color: var(--ink-faint); color: var(--ink-medium); }
+  [data-theme="dark"] .power-bracket { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .power-bracket h4 { color: var(--ink); }
+  [data-theme="dark"] .power-bracket-slot { background: var(--bg-warm); border-color: var(--ink-faint); color: var(--ink-medium); }
+  [data-theme="dark"] .power-bracket-seed { color: var(--ink); }
+
+  [data-theme="dark"] .sos-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .sos-rank { color: var(--ink); }
+  [data-theme="dark"] .sos-name { color: var(--ink); }
+  [data-theme="dark"] .sos-detail { color: var(--ink-light); }
+  [data-theme="dark"] .sos-score { color: var(--ink); }
+  [data-theme="dark"] .sos-grade-badge { border-color: var(--ink-faint); color: var(--ink-medium); }
+  [data-theme="dark"] .sos-team-chip { background: var(--bg-warm); border-color: var(--ink-faint); color: var(--ink-medium); }
+
+  [data-theme="dark"] .waiver-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .waiver-card-header { border-color: var(--ink-faint); }
+  [data-theme="dark"] .waiver-card-name { color: var(--ink); }
+  [data-theme="dark"] .hawk-score-badge { border-color: var(--ink-faint); color: var(--ink); }
+  [data-theme="dark"] .waiver-stats { color: var(--ink-light); }
+  [data-theme="dark"] .waiver-stats strong { color: var(--ink); }
+  [data-theme="dark"] .waiver-pos-bar { border-color: var(--ink-faint); }
+  [data-theme="dark"] .waiver-faab-bar { background: var(--bg-warm); border-color: var(--ink-faint); }
+
+  [data-theme="dark"] .trade-matrix th { background: var(--bg-warm); color: var(--ink); }
+  [data-theme="dark"] .trade-matrix td { border-color: var(--ink-faint); color: var(--ink-medium); }
+  [data-theme="dark"] .trade-matrix { border-color: var(--ink-faint); }
+  [data-theme="dark"] .trade-matrix td.self { background: var(--ink-faint); }
+  [data-theme="dark"] .trade-matrix td.has-trades { background: var(--orange-light); color: var(--orange); }
+  [data-theme="dark"] .trade-partner-rec { background: var(--bg-card); border-color: var(--orange); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .trade-tendency-card { background: var(--bg-card); border-color: var(--ink-faint); color: var(--ink-medium); }
+  [data-theme="dark"] .trade-tendency-name { color: var(--ink); }
+  [data-theme="dark"] .trade-timing-badge { border-color: var(--ink-faint); color: var(--ink-medium); }
+
+  [data-theme="dark"] .build-profile-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .build-profile-header { border-color: var(--ink-faint); }
+  [data-theme="dark"] .build-profile-name { color: var(--ink); }
+  [data-theme="dark"] .archetype-badge { border-color: var(--ink-faint); color: var(--ink-medium); }
+  [data-theme="dark"] .build-profile-scout { color: var(--ink-medium); }
+  [data-theme="dark"] .build-profile-stats { color: var(--ink-light); }
+  [data-theme="dark"] .build-profile-stat strong { color: var(--ink); }
+
+  [data-theme="dark"] .bureau-hero { color: var(--ink); }
+  [data-theme="dark"] .bureau-hero-league { color: var(--ink-medium); }
+  [data-theme="dark"] .bureau-hero-rank { background: var(--bg-warm); border-color: var(--ink-faint); color: var(--ink); }
+  [data-theme="dark"] .bureau-hero-annotation { color: var(--ink-light); }
+
+  [data-theme="dark"] .bureau-tabs { border-color: var(--ink-faint); }
+  [data-theme="dark"] .bureau-tab { color: var(--ink-light); }
+  [data-theme="dark"] .bureau-tab:hover { color: var(--ink); }
+  [data-theme="dark"] .bureau-tab.active { color: var(--ink); background: var(--bg); }
+
+  [data-theme="dark"] .agent-header { border-color: var(--ink-faint); }
+  [data-theme="dark"] .agent-avatar { border-color: var(--ink-faint); }
+  [data-theme="dark"] .agent-name { color: var(--ink); }
+  [data-theme="dark"] .agent-role { color: var(--ink-light); }
+  [data-theme="dark"] .agent-quote { color: var(--ink-medium); border-color: var(--ink-faint); }
+
+  [data-theme="dark"] .bureau-odds-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .bureau-odds-card.is-user { border-color: var(--orange); box-shadow: 4px 4px 0 var(--orange); }
+  [data-theme="dark"] .bureau-odds-name { color: var(--ink); }
+  [data-theme="dark"] .bureau-odds-record { color: var(--ink-light); }
+  [data-theme="dark"] .bureau-odds-label { color: var(--ink-light); }
+
+  [data-theme="dark"] .pos-grade-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .pos-grade-pos { color: var(--ink-medium); }
+  [data-theme="dark"] .pos-grade-detail { color: var(--ink-light); }
+
+  [data-theme="dark"] .mgr-compare-btn { background: var(--bg-card); border-color: var(--ink-faint); color: var(--ink); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .mgr-compare-panel { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .mgr-compare-selectors select { background: var(--bg); border-color: var(--ink-faint); color: var(--ink); }
+  [data-theme="dark"] .mgr-compare-stats .stat-label { color: var(--ink-light); }
+
+  [data-theme="dark"] .pressure-locked-overlay { background: color-mix(in srgb, var(--bg) 92%, transparent); }
+  [data-theme="dark"] .pressure-locked-overlay span { color: var(--ink-medium); }
+  [data-theme="dark"] .pressure-locked-overlay a { background: var(--bg-card); border-color: var(--orange); color: var(--orange); box-shadow: 4px 4px 0 var(--ink-faint); }
+
+  [data-theme="dark"] .loading-intel { color: var(--ink-light); }
+
+  /* Demo mode dark overrides */
+  [data-theme="dark"] .demo-bureau-tabs { background: var(--bg); border-color: var(--ink-faint); }
+  [data-theme="dark"] .demo-bureau-tab { color: var(--ink-light); }
+  [data-theme="dark"] .demo-bureau-tab:hover { color: var(--ink); }
+  [data-theme="dark"] .demo-bureau-tab.active { color: var(--ink); }
+
+  [data-theme="dark"] .demo-mc-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .demo-mc-card.is-you { border-color: var(--orange); box-shadow: 4px 4px 0 var(--orange); }
+  [data-theme="dark"] .demo-mc-name { color: var(--ink); }
+  [data-theme="dark"] .demo-mc-record { color: var(--ink-light); }
+  [data-theme="dark"] .demo-mc-label { color: var(--ink-light); }
+
+  [data-theme="dark"] .demo-storyline { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .demo-storyline-agent { color: var(--ink-light); }
+  [data-theme="dark"] .demo-storyline-text { color: var(--ink-medium); }
+
+  [data-theme="dark"] .demo-pos-grade { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .demo-pos-grade-pos { color: var(--ink-medium); }
+  [data-theme="dark"] .demo-pos-grade-detail { color: var(--ink-light); }
+
+  [data-theme="dark"] .demo-depth-meter { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .demo-depth-bar-track { background: var(--bg-warm); border-color: var(--ink-faint); }
+
+  [data-theme="dark"] .demo-rival-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .demo-rival-name { color: var(--ink); }
+  [data-theme="dark"] .demo-rival-record { color: var(--ink-light); }
+  [data-theme="dark"] .demo-pressure-track { background: var(--bg-warm); border-color: var(--ink-faint); }
+  [data-theme="dark"] .demo-pressure-label { color: var(--ink-light); }
+
+  [data-theme="dark"] .demo-trade-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .demo-trade-side { background: var(--bg-warm); }
+  [data-theme="dark"] .demo-trade-arrow { color: var(--ink-light); }
+  [data-theme="dark"] .demo-trade-player { color: var(--ink); }
+  [data-theme="dark"] .demo-trade-verdict { color: var(--ink-medium); border-color: var(--ink-faint); }
+
+  [data-theme="dark"] .demo-power-card { background: var(--bg-card); border-color: var(--ink-faint); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .demo-power-rank { color: var(--ink); }
+  [data-theme="dark"] .demo-power-name { color: var(--ink); }
+  [data-theme="dark"] .demo-power-detail { color: var(--ink-light); }
+  [data-theme="dark"] .demo-power-score { color: var(--ink); }
+  [data-theme="dark"] .demo-component-chip { border-color: var(--ink-faint); background: var(--bg-warm); color: var(--ink-medium); }
+
+  [data-theme="dark"] .demo-schedule-row { border-color: var(--ink-faint); }
+  [data-theme="dark"] .demo-schedule-name { color: var(--ink); }
+  [data-theme="dark"] .demo-schedule-week { border-color: var(--ink-faint); color: var(--ink-medium); }
+
+  [data-theme="dark"] .demo-connect-bottom { background: var(--bg-card); border-color: var(--orange); box-shadow: 4px 4px 0 var(--ink-faint); }
+  [data-theme="dark"] .demo-connect-bottom h3 { color: var(--ink); }
+  [data-theme="dark"] .demo-connect-bottom p { color: var(--ink-medium); }
+  [data-theme="dark"] .demo-connect-form input { background: var(--bg-warm); color: var(--ink); border-color: var(--ink-faint); }
+
+  [data-theme="dark"] .demo-banner { background: var(--orange-light); border-color: var(--orange); color: var(--ink); }
+  [data-theme="dark"] .demo-section-heading { color: var(--ink); }
+  [data-theme="dark"] .demo-section-sub { color: var(--ink-medium); }
+  [data-theme="dark"] .demo-roster-player { color: var(--ink); }
 </style>
 </head>
 <body>
@@ -4700,7 +4917,7 @@ function renderPressureMap(container, cards, isPro) {
 
   if (!isPro && scores.length > visibleCount) {
     html += '<div style="text-align:center; margin-top:8px;">';
-    html += '<a href="/pricing.html" style="font-family:var(--font-mono); font-size:11px; color:var(--orange); text-decoration:none; padding:4px 12px; border:2px solid var(--orange); border-radius:12px; box-shadow:2px 2px 0 var(--ink); display:inline-block; transition:box-shadow 0.12s, transform 0.12s;">unlock full pressure map with Pro</a>';
+    html += '<a href="/pricing.html" style="font-family:var(--font-mono); font-size:11px; color:var(--orange); text-decoration:none; padding:4px 12px; border:2px solid var(--orange); border-radius:12px; box-shadow:4px 4px 0 var(--ink); display:inline-block; transition:box-shadow 0.12s, transform 0.12s;">unlock full pressure map with Pro</a>';
     html += '</div>';
   }
 
