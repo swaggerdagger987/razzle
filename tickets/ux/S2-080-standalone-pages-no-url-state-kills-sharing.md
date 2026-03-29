@@ -11,9 +11,20 @@ status: OPEN
 
 ## Root Cause
 
-33 standalone tool pages have no URL state serialization. When a user selects filters (season, position, scoring format), those selections aren't reflected in the URL. Sharing a link shares the default view, not what the user was looking at.
+33 standalone tool pages have no URL state serialization. No `history.replaceState`, no `URLSearchParams`, no state restoration from URL params. Sharing a link shares the default view, not what the user was looking at.
 
-This directly conflicts with the North Star: "screenshot and share on Reddit." The Lab has URL state (`saveStateToURL`/`restoreStateFromURL`); standalone pages don't.
+**Representative missing state** (verified by code search):
+- `frontend/matchups.html:746` — season select change listener, no `history.replaceState`
+- `frontend/matchups.html:734` — position tab click listener, no URL state update
+- `frontend/weekly.html` — season/position changes not serialized to URL
+- `frontend/consistency.html` — position tab changes not serialized to URL
+
+**Reference implementation** (pages that DO have URL state):
+- `frontend/aging.html:763,774,816` — uses `savePageState()`/`restorePageState()`
+- `frontend/seasonpace.html:208,216` — uses `savePageState()`
+- `frontend/lab.js` — `saveStateToURL()`/`restoreStateFromURL()`
+
+This directly conflicts with the North Star: "screenshot and share on Reddit." The Lab has URL state; standalone pages don't.
 
 ## Affected Pages
 

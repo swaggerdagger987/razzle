@@ -24,11 +24,23 @@ For each `:hover` rule in lab-panels.css that applies to interactive elements (b
 .lp-card:hover, .lp-card:focus-visible { /* existing hover styles */ }
 ```
 
-## Files
+## Files (representative examples)
 
-- `frontend/lab-panels.css` — 121 hover rules need focus-visible counterparts
-- `frontend/agents.html` — 3 outline:none instances
-- `frontend/styles.css` — cmd-palette-item, nav-dropdown-item
+**lab-panels.css** — 121 `:hover` vs 5 `:focus-visible`:
+- `frontend/lab-panels.css:20` — `.panel-player-link:hover` (no `:focus-visible`)
+- `frontend/lab-panels.css:112` — `.lp-pos-tab:hover:not(.active)` (no `:focus-visible`)
+- `frontend/lab-panels.css:161` — `.rankings-filter-btn:hover` (no `:focus-visible`)
+- `frontend/lab-panels.css:224` — `.rankings-card:hover` (no `:focus-visible`)
+- `frontend/lab-panels.css:310` — `.lp-view-btn:hover:not(.active)` (no `:focus-visible`)
+
+**styles.css** — key interactive elements:
+- `frontend/styles.css:607` — `.nav-dropdown-item:hover` (no `:focus-visible`)
+- `frontend/styles.css:1191-1192` — `.cmd-palette-item:hover, .cmd-palette-item.active` (no `:focus-visible`)
+
+**agents.html** — `outline: none` (these DO have `:focus-visible` replacements, OK):
+- `frontend/agents.html:392,396` — `.scenario-textarea` has both (OK)
+- `frontend/agents.html:1446,1450` — `.config-input` has both (OK)
+- `frontend/agents.html:1525,1528` — `.config-agent-key` has both (OK)
 
 ## Acceptance Criteria
 

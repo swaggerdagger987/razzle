@@ -11,7 +11,14 @@ status: OPEN
 
 ## Root Cause
 
-10 standalone pages with canvas-based charts render the "razzle.lol" watermark in light-mode colors (espresso ink on sand), making it invisible when dark mode is active.
+**Shared watermark function** — `frontend/app.js:534,543`:
+```javascript
+var wmAlpha = 'rgba(45,31,20,0.15)';  // line 534 — hardcoded light-mode color
+// ...
+ctx.fillStyle = wmAlpha;               // line 543 — no dark mode check
+```
+
+The `drawWatermark()` in app.js uses hardcoded espresso rgba without checking `document.documentElement.dataset.theme`. Some pages (like `advantage.html:315`, `aging.html:786`) have their own watermark code with theme checks, but these 10 pages use the app.js version without overriding the color.
 
 ## Affected Pages
 
