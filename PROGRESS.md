@@ -87,7 +87,7 @@ Full build history archived in `docs/PROGRESS_ARCHIVE.md`.
 
 **Goal**: Make the Situation Room feel like premium intelligence, not a tech demo. First-run experience, agent execution, cross-agent triggers, context bridge, pixel canvas, error handling, BYOK cloud sync.
 
-**Exit Criterion**: A paying user enters a real fantasy scenario and gets a briefing that feels like it was written by a team of analysts who know their league. The pixel agents feel alive. The experience justifies $240/year.
+**Exit Criterion**: A paying user enters a real fantasy scenario and gets a briefing that feels like it was written by a team of analysts who know their league. The pixel agents feel alive. The experience justifies $149.99/year.
 
 | # | Task | Status | Notes |
 |---|------|--------|-------|
@@ -251,7 +251,7 @@ Systematic page-by-page audit against DESIGN.md and NORTH_STAR.md.
 | 15 | Share modal panel-aware URLs | DONE | openShareModal now includes currentPanel parameter when on non-screener panels. Previously lost panel context on share. |
 
 ### Remaining items (need user input or post-launch):
-- P0-5 Pricing mismatch: North Star says $240/yr, site has $9.99-$19.99/mo. Needs user confirmation of intentional pricing.
+- P0-5 Pricing mismatch: RESOLVED — all docs updated to match live pricing ($79.99/$149.99/yr Pro/Elite).
 - P1-2 Client-side tier gating: bypassable via localStorage. Need server-side enforcement (post-launch).
 - P1-4 Empty AdSense publisher ID: awaiting account approval.
 
