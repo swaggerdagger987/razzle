@@ -2921,13 +2921,14 @@ def stock_watch(season: int = 0, position: str = "", limit: int = 30, scoring: s
 
 
 @app.get("/api/opportunity-share")
-def opportunity_share(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
+def opportunity_share(season: int = 0, position: str = "", limit: int = 30, week: int = 0, scoring: str = "ppr"):
     """Return opportunity share leaders and dominator rating leaders."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_opportunity_share(season=s, position=pos, limit=lim, week=week if week > 0 else None)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_opportunity_share(season=s, position=pos, limit=lim, week=week if week > 0 else None, scoring=sc)
     except Exception as e:
         logger.exception("opportunity_share error")
         return JSONResponse({"error": "Failed to fetch opportunity share data"}, status_code=500)
@@ -2948,12 +2949,13 @@ def report_cards(season: int = 0, position: str = "", limit: int = 25, week: int
 
 
 @app.get("/api/season-awards")
-def season_awards(season: int = 0, position: str = ""):
+def season_awards(season: int = 0, position: str = "", scoring: str = "ppr"):
     """Return fantasy season superlatives / awards."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
-        return live_data.fetch_season_awards(season=s, position=pos)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_season_awards(season=s, position=pos, scoring=sc)
     except Exception as e:
         logger.exception("season_awards error")
         return JSONResponse({"error": "Failed to fetch season awards data"}, status_code=500)

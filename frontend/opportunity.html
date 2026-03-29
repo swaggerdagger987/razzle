@@ -112,6 +112,11 @@
       <button class="opp-pos-tab" data-pos="WR" aria-label="Wide Receivers" role="tab" aria-selected="false">WR</button>
       <button class="opp-pos-tab" data-pos="TE" aria-label="Tight Ends" role="tab" aria-selected="false">TE</button>
     </div>
+    <div class="opp-scoring-tabs" id="scoring-tabs">
+      <button class="opp-scoring-tab active" data-scoring="ppr">PPR</button>
+      <button class="opp-scoring-tab" data-scoring="half_ppr">Half</button>
+      <button class="opp-scoring-tab" data-scoring="std">Std</button>
+    </div>
     <select class="opp-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
@@ -221,6 +226,7 @@
   }
 
   var currentPosition = '';
+  var currentScoring = 'ppr';
   var currentData = null;
 
   // Sort state per section
@@ -449,6 +455,7 @@
     var url = '/api/opportunity-share?limit=30';
     if (season) url += '&season=' + season;
     if (currentPosition) url += '&position=' + currentPosition;
+    if (currentScoring !== 'ppr') url += '&scoring=' + currentScoring;
 
     fetch(url).then(function(resp) {
       if (!resp.ok) throw new Error('API error ' + resp.status);
@@ -471,6 +478,10 @@
     });
   }
 
+  function _saveState() {
+    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value, scoring: currentScoring });
+  }
+
   // Position tab clicks
   document.getElementById('pos-tabs').addEventListener('click', function(e) {
     var tab = e.target.closest('.opp-pos-tab');
@@ -478,14 +489,25 @@
     document.querySelectorAll('.opp-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
-    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value });
     loadData();
+    _saveState();
+  });
+
+  // Scoring format tab clicks
+  document.getElementById('scoring-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.opp-scoring-tab');
+    if (!tab) return;
+    document.querySelectorAll('.opp-scoring-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentScoring = tab.getAttribute('data-scoring') || 'ppr';
+    loadData();
+    _saveState();
   });
 
   // Season change
   document.getElementById('season-select').addEventListener('change', function() {
-    savePageState({ pos: currentPosition, season: this.value });
     loadData();
+    _saveState();
   });
 
   // Export PNG
@@ -514,11 +536,17 @@
   }).catch(function() {});
 
   // Restore URL state
-  var _restored = restorePageState({ pos: '', season: '' });
+  var _restored = restorePageState({ pos: '', season: '', scoring: 'ppr' });
   if (_restored.pos) {
     currentPosition = _restored.pos;
     document.querySelectorAll('.opp-pos-tab').forEach(function(t) {
       t.classList.toggle('active', (t.getAttribute('data-pos') || '') === _restored.pos);
+    });
+  }
+  if (_restored.scoring && ['ppr','half_ppr','std'].indexOf(_restored.scoring) !== -1) {
+    currentScoring = _restored.scoring;
+    document.querySelectorAll('.opp-scoring-tab').forEach(function(t) {
+      t.classList.toggle('active', t.getAttribute('data-scoring') === currentScoring);
     });
   }
   if (_restored.season) {

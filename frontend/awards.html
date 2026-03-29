@@ -272,6 +272,11 @@
       <button class="aw-pos-tab" data-pos="WR" aria-label="Wide Receivers" role="tab" aria-selected="false">WR</button>
       <button class="aw-pos-tab" data-pos="TE" aria-label="Tight Ends" role="tab" aria-selected="false">TE</button>
     </div>
+    <div class="aw-scoring-tabs" id="scoring-tabs">
+      <button class="aw-scoring-tab active" data-scoring="ppr">PPR</button>
+      <button class="aw-scoring-tab" data-scoring="half_ppr">Half</button>
+      <button class="aw-scoring-tab" data-scoring="std">Std</button>
+    </div>
     <select class="aw-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
@@ -389,6 +394,7 @@
   };
 
   var currentPosition = '';
+  var currentScoring = 'ppr';
   var currentData = null;
 
   function gradeClass(grade) {
@@ -502,6 +508,7 @@
     var params = [];
     if (pos) params.push('position=' + encodeURIComponent(pos));
     if (season) params.push('season=' + encodeURIComponent(season));
+    if (currentScoring !== 'ppr') params.push('scoring=' + currentScoring);
     url += params.join('&');
 
     fetch(url).then(function(resp) {
@@ -525,6 +532,10 @@
     });
   }
 
+  function _saveState() {
+    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value, scoring: currentScoring });
+  }
+
   // Position tab handlers
   document.getElementById('pos-tabs').addEventListener('click', function(e) {
     var tab = e.target.closest('.aw-pos-tab');
@@ -533,14 +544,26 @@
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
     var season = document.getElementById('season-select').value;
-    savePageState({ pos: currentPosition, season: season });
     fetchData(currentPosition, season);
+    _saveState();
+  });
+
+  // Scoring format tab clicks
+  document.getElementById('scoring-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.aw-scoring-tab');
+    if (!tab) return;
+    document.querySelectorAll('.aw-scoring-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentScoring = tab.getAttribute('data-scoring') || 'ppr';
+    var season = document.getElementById('season-select').value;
+    fetchData(currentPosition, season);
+    _saveState();
   });
 
   // Season selector handler
   document.getElementById('season-select').addEventListener('change', function() {
-    savePageState({ pos: currentPosition, season: this.value });
     fetchData(currentPosition, this.value);
+    _saveState();
   });
 
   // PNG export
@@ -568,11 +591,17 @@
   }).catch(function() {});
 
   // Restore URL state
-  var _restored = restorePageState({ pos: '', season: '' });
+  var _restored = restorePageState({ pos: '', season: '', scoring: 'ppr' });
   if (_restored.pos) {
     currentPosition = _restored.pos;
     document.querySelectorAll('.aw-pos-tab').forEach(function(t) {
       t.classList.toggle('active', (t.getAttribute('data-pos') || '') === _restored.pos);
+    });
+  }
+  if (_restored.scoring && ['ppr','half_ppr','std'].indexOf(_restored.scoring) !== -1) {
+    currentScoring = _restored.scoring;
+    document.querySelectorAll('.aw-scoring-tab').forEach(function(t) {
+      t.classList.toggle('active', t.getAttribute('data-scoring') === currentScoring);
     });
   }
   if (_restored.season) {

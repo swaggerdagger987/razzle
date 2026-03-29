@@ -174,7 +174,8 @@
 /* ── Scoring Format Toggle ─────────────────────────────────────────── */
 .vorp-scoring-tabs, .stk-scoring-tabs, .con-scoring-tabs,
 .eff-scoring-tabs, .rc-scoring-tabs, .buysell-scoring-tabs, .bd-scoring-tabs,
-.sos-scoring-tabs, .breakouts-scoring-tabs {
+.sos-scoring-tabs, .breakouts-scoring-tabs,
+.opp-scoring-tabs, .aw-scoring-tabs {
   display: flex;
   border: 2px solid var(--accent);
   border-radius: 8px;
@@ -183,7 +184,8 @@
 
 .vorp-scoring-tab, .stk-scoring-tab, .con-scoring-tab,
 .eff-scoring-tab, .rc-scoring-tab, .buysell-scoring-tab, .bd-scoring-tab,
-.sos-scoring-tab, .breakouts-scoring-tab {
+.sos-scoring-tab, .breakouts-scoring-tab,
+.opp-scoring-tab, .aw-scoring-tab {
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 700;
@@ -199,14 +201,16 @@
 .vorp-scoring-tab:last-child, .stk-scoring-tab:last-child,
 .con-scoring-tab:last-child, .eff-scoring-tab:last-child,
 .rc-scoring-tab:last-child, .buysell-scoring-tab:last-child, .bd-scoring-tab:last-child,
-.sos-scoring-tab:last-child, .breakouts-scoring-tab:last-child {
+.sos-scoring-tab:last-child, .breakouts-scoring-tab:last-child,
+.opp-scoring-tab:last-child, .aw-scoring-tab:last-child {
   border-right: none;
 }
 
 .vorp-scoring-tab.active, .stk-scoring-tab.active,
 .con-scoring-tab.active, .eff-scoring-tab.active,
 .rc-scoring-tab.active, .buysell-scoring-tab.active, .bd-scoring-tab.active,
-.sos-scoring-tab.active, .breakouts-scoring-tab.active {
+.sos-scoring-tab.active, .breakouts-scoring-tab.active,
+.opp-scoring-tab.active, .aw-scoring-tab.active {
   background: var(--accent);
   color: #fff;
 }
@@ -214,7 +218,8 @@
 .vorp-scoring-tab:hover:not(.active), .stk-scoring-tab:hover:not(.active),
 .con-scoring-tab:hover:not(.active), .eff-scoring-tab:hover:not(.active),
 .rc-scoring-tab:hover:not(.active), .buysell-scoring-tab:hover:not(.active), .bd-scoring-tab:hover:not(.active),
-.sos-scoring-tab:hover:not(.active), .breakouts-scoring-tab:hover:not(.active) {
+.sos-scoring-tab:hover:not(.active), .breakouts-scoring-tab:hover:not(.active),
+.opp-scoring-tab:hover:not(.active), .aw-scoring-tab:hover:not(.active) {
   background: var(--bg-warm);
 }
 
