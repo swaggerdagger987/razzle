@@ -1418,8 +1418,8 @@
                                var pa = typeof getPanelAgent === 'function' ? getPanelAgent(panelName) : null;
                                if (!pa) return '';
                                var html = '<div class="panel-agent-attr" style="font-family:var(--font-hand); font-size:13px; opacity:0.6; display:flex; align-items:center; gap:5px; margin-top:2px;">' +
-                                 '<img src="' + escapeAttr(pa.icon) + '" alt="' + escapeAttr(pa.name) + '" width="20" height="20" style="vertical-align:middle;">' +
-                                 '<span>' + escapeHtml(pa.name) + '</span></div>';
+                                 '<img src="' + escapeAttr(pa.icon) + '" alt="' + escapeAttr(pa.name) + '" width="20" height="20" loading="lazy" style="vertical-align:middle;" onerror="this.style.display=\'none\'">' +
+                                 '<span>' + escapeHtml(pa.name) + ' \u2014 ' + escapeHtml(pa.role) + '</span></div>';
                                // One-liner insight (Pro+ only)
                                var paid = typeof isPaidUser === 'function' && isPaidUser();
                                if (paid && typeof getOneLiner === 'function') {
