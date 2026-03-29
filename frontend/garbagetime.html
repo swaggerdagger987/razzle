@@ -125,14 +125,14 @@
 
   <div class="gt-controls">
     <select id="gt-season" aria-label="Season selector"></select>
-    <div class="pos-tabs" role="tablist">
+    <div class="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="pos-tab active" data-pos="" role="tab" aria-selected="true">ALL</button>
       <button class="pos-tab" data-pos="QB" role="tab" aria-selected="false">QB</button>
       <button class="pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
       <button class="pos-tab" data-pos="WR" role="tab" aria-selected="false">WR</button>
       <button class="pos-tab" data-pos="TE" role="tab" aria-selected="false">TE</button>
     </div>
-    <button class="gt-export" onclick="exportPNG()">Export PNG</button>
+    <button class="gt-export" onclick="exportPNG(this)">Export PNG</button>
   </div>
 
   <div id="gt-loading" class="gt-loading">pulling film...</div>
@@ -292,7 +292,7 @@ function buildCard(title, cls, players, isPadders) {
 
   const maxVal = Math.max(...players.map(p => isPadders ? p.garbage_time_pct : p.ppg), 1);
   let html = '<div class="gt-card"><div class="gt-card-header ' + escapeHtml(cls) + '">' + escapeHtml(title) + '</div>';
-  html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch">';
+  html += '<div style="overflow-x:auto">';
   html += '<table class="gt-table"><caption class="sr-only">Garbage time fantasy production — ' + escapeHtml(title) + '</caption><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">GT%</th><th scope="col">PPG</th><th scope="col">Avg Diff</th><th scope="col"></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
@@ -317,7 +317,8 @@ function buildCard(title, cls, players, isPadders) {
   return html;
 }
 
-function exportPNG() {
+function exportPNG(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Exporting...'; }
   const el = document.getElementById("main-content");
   var _ec = getExportColors(); loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: _ec.bg, scale: 2 }); }).then(canvas => {
     const ctx = canvas.getContext("2d");
@@ -327,7 +328,7 @@ function exportPNG() {
     link.download = "razzle-garbage-time.png";
     link.href = canvas.toDataURL();
     link.click();
-  });
+  }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
 }
 
 // Analytics

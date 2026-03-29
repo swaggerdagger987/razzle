@@ -127,14 +127,14 @@
 
   <div class="gs-controls">
     <select id="gs-season" aria-label="Season selector"></select>
-    <div class="pos-tabs" role="tablist">
+    <div class="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="pos-tab active" data-pos="" role="tab" aria-selected="true">ALL</button>
       <button class="pos-tab" data-pos="QB" role="tab" aria-selected="false">QB</button>
       <button class="pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
       <button class="pos-tab" data-pos="WR" role="tab" aria-selected="false">WR</button>
       <button class="pos-tab" data-pos="TE" role="tab" aria-selected="false">TE</button>
     </div>
-    <button class="gs-export" onclick="exportPNG()">Export PNG</button>
+    <button class="gs-export" onclick="exportPNG(this)">Export PNG</button>
   </div>
 
   <div id="gs-loading" class="gs-loading">pulling film...</div>
@@ -142,11 +142,11 @@
     <div class="gs-grid">
       <div class="gs-card">
         <div class="gs-card-header winning">Winning Script</div>
-        <div id="gs-win-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch"></div>
+        <div id="gs-win-wrap" style="overflow-x:auto"></div>
       </div>
       <div class="gs-card">
         <div class="gs-card-header losing">Losing Script</div>
-        <div id="gs-lose-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch"></div>
+        <div id="gs-lose-wrap" style="overflow-x:auto"></div>
       </div>
     </div>
   </div>
@@ -327,7 +327,8 @@ function render() {
   document.getElementById("gs-lose-wrap").innerHTML = renderTable(state.data.negative_script || [], "lose");
 }
 
-function exportPNG() {
+function exportPNG(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Exporting...'; }
   const el = document.getElementById("main-content");
   loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(canvas => {
     const ctx = canvas.getContext("2d");
@@ -337,7 +338,7 @@ function exportPNG() {
     link.download = "razzle-gamescript.png";
     link.href = canvas.toDataURL();
     link.click();
-  });
+  }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
 }
 
 // Analytics

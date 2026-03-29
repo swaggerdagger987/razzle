@@ -479,7 +479,7 @@
     <button class="btn-chunky" id="export-btn" title="Export as PNG" style="display:none;">Export PNG</button>
   </div>
 
-  <div id="tf-body" role="status" aria-live="polite" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div id="tf-body" role="status" aria-live="polite" style="overflow-x:auto">
     <div class="tf-prompt">
       <div class="tf-prompt-icon">&#x1F50D;</div>
       <div class="tf-prompt-text">search for a player to find trade targets</div>
@@ -832,7 +832,7 @@
 
     // Position filter tabs
     html += '<div class="tf-target-controls">';
-    html += '<div class="tf-pos-tabs" id="target-pos-tabs">';
+    html += '<div class="tf-pos-tabs" id="target-pos-tabs" role="tablist" aria-label="Position filter">';
     html += '<button class="tf-pos-tab' + (!targetPosFilter ? ' active' : '') + '" data-pos="">All</button>';
     html += '<button class="tf-pos-tab' + (targetPosFilter === 'QB' ? ' active' : '') + '" data-pos="QB">QB</button>';
     html += '<button class="tf-pos-tab' + (targetPosFilter === 'RB' ? ' active' : '') + '" data-pos="RB">RB</button>';

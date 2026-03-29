@@ -149,13 +149,13 @@ function renderPlayerPage(data, container) {
   // Radar chart
   html += `<div class="player-section player-chart-wrap">`;
   html += `<div class="player-section-title">Stat Shape</div>`;
-  html += `<canvas id="playerRadar" width="360" height="320"></canvas>`;
+  html += `<canvas id="playerRadar" width="360" height="320" role="img" aria-label="Player stat shape radar chart"></canvas>`;
   html += `</div>`;
   // Career arc
   if (seasons && seasons.length > 1) {
     html += `<div class="player-section player-chart-wrap">`;
     html += `<div class="player-section-title">Career Arc</div>`;
-    html += `<canvas id="playerArc" width="400" height="320"></canvas>`;
+    html += `<canvas id="playerArc" width="400" height="320" role="img" aria-label="Career arc trend line chart"></canvas>`;
     html += `</div>`;
   }
   html += `</div>`;
@@ -164,7 +164,7 @@ function renderPlayerPage(data, container) {
   if (seasons && seasons.length > 0) {
     html += `<div class="player-section">`;
     html += `<div class="player-section-title">Season Log</div>`;
-    html += `<div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">`;
+    html += `<div style="overflow-x:auto; ">`;
     html += renderSeasonTable(pos, seasons, career);
     html += `</div>`;
     html += `</div>`;

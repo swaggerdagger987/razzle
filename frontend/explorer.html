@@ -257,7 +257,7 @@
     <select class="explorer-select" id="x-select" aria-label="X axis stat"><option value="targets_g">Targets/G</option></select>
     <span class="explorer-axis-label">Y:</span>
     <select class="explorer-select" id="y-select" aria-label="Y axis stat"><option value="ppg">PPG</option></select>
-    <div class="explorer-pos-tabs" id="pos-tabs">
+    <div class="explorer-pos-tabs" id="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="explorer-pos-tab active" data-pos="" aria-label="All positions">All</button>
       <button class="explorer-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
       <button class="explorer-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
@@ -737,6 +737,7 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
     var el = document.getElementById('main-content');
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -748,7 +749,7 @@
       link.download = 'razzle-stat-explorer.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
-    });
+    }).finally(function() { btn.disabled = false; btn.textContent = 'Export PNG'; });
   });
 
   // Resize handler

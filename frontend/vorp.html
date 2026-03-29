@@ -353,7 +353,7 @@
   </div>
 
   <div class="vorp-controls">
-    <div class="vorp-pos-tabs" id="pos-tabs">
+    <div class="vorp-pos-tabs" id="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="vorp-pos-tab active" data-pos="" aria-label="All positions">All</button>
       <button class="vorp-pos-tab" data-pos="QB" aria-label="Quarterbacks">QB</button>
       <button class="vorp-pos-tab" data-pos="RB" aria-label="Running Backs">RB</button>
@@ -375,7 +375,7 @@
     <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="vorp-body" role="status" aria-live="polite" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div id="vorp-body" role="status" aria-live="polite" style="overflow-x:auto">
     <div class="vorp-loading" id="vorp-loading">calculating replacement value...</div>
   </div>
 </main>

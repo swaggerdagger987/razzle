@@ -2594,7 +2594,7 @@
       gap: 6px;
       flex-wrap: nowrap;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      
       scrollbar-width: none;
     }
     .toolbar::-webkit-scrollbar { display: none; }
@@ -2617,7 +2617,7 @@
 
     /* Table: touch-friendly horizontal scroll */
     .table-wrap {
-      -webkit-overflow-scrolling: touch;
+      
       overflow-x: auto;
       overflow-y: auto;
     }
@@ -2642,7 +2642,7 @@
     /* Panel content tables in lab-panels */
     .lp-table-wrap {
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      
     }
     .lp-table th:first-child,
     .lp-table td:first-child {
@@ -2718,7 +2718,7 @@
 
     /* Chart canvas — scale to fit */
     #chartCanvas, #compareRadar { width: 100% !important; height: auto !important; }
-    #chartCanvasWrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    #chartCanvasWrap { overflow-x: auto;  }
 
     /* Chart tab buttons — wrap on mobile */
     #chartOverlay h3 + div,
@@ -2740,7 +2740,7 @@
       gap: 4px;
       flex-wrap: nowrap;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      
       scrollbar-width: none;
     }
     .toolbar::-webkit-scrollbar { display: none; }
@@ -2794,7 +2794,7 @@
       padding: 4px 6px;
       gap: 3px;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      
       scrollbar-width: none;
     }
     .toolbar::-webkit-scrollbar { display: none; }

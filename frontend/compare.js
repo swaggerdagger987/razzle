@@ -116,7 +116,7 @@ function renderComparison(container) {
   // Radar overlay
   html += '<div class="compare-section compare-chart-wrap">';
   html += '<div class="compare-section-title">Stat Shape Overlay</div>';
-  html += '<canvas id="compareRadar" width="400" height="360"></canvas>';
+  html += '<canvas id="compareRadar" width="400" height="360" role="img" aria-label="Player comparison radar chart"></canvas>';
   html += '<div class="compare-legend">';
   html += '<span><span class="compare-legend-dot" style="background:' + color1 + ';"></span>' + esc(p1.full_name) + '</span>';
   html += '<span><span class="compare-legend-dot" style="background:' + color2 + ';"></span>' + esc(p2.full_name) + '</span>';
@@ -129,7 +129,7 @@ function renderComparison(container) {
   if (s1.length > 1 || s2.length > 1) {
     html += '<div class="compare-section compare-chart-wrap">';
     html += '<div class="compare-section-title">Career Arc</div>';
-    html += '<canvas id="compareArc" width="400" height="360"></canvas>';
+    html += '<canvas id="compareArc" width="400" height="360" role="img" aria-label="Career arc comparison chart"></canvas>';
     html += '<div class="compare-legend">';
     html += '<span><span class="compare-legend-dot" style="background:' + color1 + ';"></span>' + esc(p1.full_name) + '</span>';
     html += '<span><span class="compare-legend-dot" style="background:' + color2 + ';"></span>' + esc(p2.full_name) + '</span>';
@@ -222,7 +222,7 @@ function renderStatDiffTable(p1, p2, c1, c2, pos1, pos2, color1, color2) {
   var rows = getCompareStats(pos);
   var g1 = c1.games || 1, g2 = c2.games || 1;
 
-  var html = '<div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">';
+  var html = '<div style="overflow-x:auto; ">';
   html += '<table class="compare-stat-table"><caption class="sr-only">Head-to-head player stat comparison</caption>';
   html += '<thead><tr>';
   html += '<th>Stat</th>';

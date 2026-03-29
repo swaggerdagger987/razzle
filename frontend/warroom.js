@@ -1372,6 +1372,8 @@ function buildRoster() {
     miniCvs.width = 32;
     miniCvs.height = 32;
     miniCvs.className = 'roster-avatar';
+    miniCvs.setAttribute('role', 'img');
+    miniCvs.setAttribute('aria-label', a.name + ' agent avatar');
     const miniCtx = miniCvs.getContext('2d');
     // Try new idle sprite first
     const sheets = spriteSheets[a.spriteKey];

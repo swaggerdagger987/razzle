@@ -353,7 +353,7 @@
   </div>
 
   <div class="air-controls">
-    <div class="air-pos-tabs" id="pos-tabs" role="tablist">
+    <div class="air-pos-tabs" id="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="air-pos-tab active" data-pos="" aria-label="All positions" role="tab" aria-selected="true">All</button>
       <button class="air-pos-tab" data-pos="WR" aria-label="Wide Receivers" role="tab" aria-selected="false">WR</button>
       <button class="air-pos-tab" data-pos="RB" aria-label="Running Backs" role="tab" aria-selected="false">RB</button>
@@ -377,7 +377,7 @@
     <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="air-body" role="status" aria-live="polite" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div id="air-body" role="status" aria-live="polite" style="overflow-x:auto">
     <div class="air-loading" id="air-loading">analyzing air yards data...</div>
   </div>
 </main>
@@ -724,6 +724,7 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
     var el = document.getElementById('main-content');
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -735,7 +736,7 @@
       link.download = 'razzle-air-yards.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
-    });
+    }).finally(function() { btn.disabled = false; btn.textContent = 'Export PNG'; });
   });
 
   // Analytics

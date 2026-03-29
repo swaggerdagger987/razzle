@@ -332,7 +332,7 @@
   </div>
 
   <div class="eff-controls">
-    <div class="eff-pos-tabs" id="pos-tabs" role="tablist">
+    <div class="eff-pos-tabs" id="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="eff-pos-tab active" data-pos="" aria-label="All positions" role="tab" aria-selected="true">All</button>
       <button class="eff-pos-tab" data-pos="QB" aria-label="Quarterbacks" role="tab" aria-selected="false">QB</button>
       <button class="eff-pos-tab" data-pos="RB" aria-label="Running Backs" role="tab" aria-selected="false">RB</button>
@@ -351,7 +351,7 @@
     <button class="btn-chunky" id="export-btn" title="Export as PNG">Export PNG</button>
   </div>
 
-  <div id="eff-body" role="status" aria-live="polite" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div id="eff-body" role="status" aria-live="polite" style="overflow-x:auto">
     <div class="eff-loading" id="eff-loading">running the numbers...</div>
   </div>
 </main>
@@ -732,6 +732,7 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
     var el = document.getElementById('main-content');
     var _ec = getExportColors(); loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: _ec.bg, scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -744,7 +745,7 @@
       link.download = 'razzle-efficiency.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
-    });
+    }).finally(function() { btn.disabled = false; btn.textContent = 'Export PNG'; });
   });
 
   // Analytics pageview

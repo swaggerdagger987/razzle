@@ -96,7 +96,7 @@
 
   <div class="pa-controls">
     <select id="paSeason" aria-label="Season"></select>
-    <div class="pos-tabs">
+    <div class="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="pos-tab active" data-pos="">ALL</button>
       <button class="pos-tab" data-pos="QB">QB</button>
       <button class="pos-tab" data-pos="RB">RB</button>
@@ -108,7 +108,7 @@
 
   <div id="paAvgs"></div>
 
-  <div id="paContent" role="status" aria-live="polite" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div id="paContent" role="status" aria-live="polite" style="overflow-x:auto">
     <div class="pa-loading">pulling film...</div>
   </div>
 </main>

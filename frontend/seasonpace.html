@@ -117,21 +117,21 @@
 
   <div class="sp-controls">
     <select id="sp-season" aria-label="Season selector"></select>
-    <div class="pos-tabs" role="tablist">
+    <div class="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="pos-tab active" data-pos="" role="tab" aria-selected="true">ALL</button>
       <button class="pos-tab" data-pos="QB" role="tab" aria-selected="false">QB</button>
       <button class="pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
       <button class="pos-tab" data-pos="WR" role="tab" aria-selected="false">WR</button>
       <button class="pos-tab" data-pos="TE" role="tab" aria-selected="false">TE</button>
     </div>
-    <button class="sp-export" onclick="exportPNG()">Export PNG</button>
+    <button class="sp-export" onclick="exportPNG(this)">Export PNG</button>
   </div>
 
   <div id="sp-loading" class="sp-loading">pulling film...</div>
   <div id="sp-content" style="display:none;">
     <div class="sp-card">
       <div class="sp-card-header">Milestone Watch</div>
-      <div id="sp-table-wrap" role="status" aria-live="polite" style="overflow-x:auto;-webkit-overflow-scrolling:touch"></div>
+      <div id="sp-table-wrap" role="status" aria-live="polite" style="overflow-x:auto"></div>
     </div>
   </div>
 </main>
@@ -300,7 +300,8 @@ function render() {
   wrap.innerHTML = html;
 }
 
-function exportPNG() {
+function exportPNG(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Exporting...'; }
   const el = document.getElementById("main-content");
   loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(canvas => {
     const ctx = canvas.getContext("2d");
@@ -310,7 +311,7 @@ function exportPNG() {
     link.download = "razzle-season-pace.png";
     link.href = canvas.toDataURL();
     link.click();
-  });
+  }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
 }
 
 // Analytics

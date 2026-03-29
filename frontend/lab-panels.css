@@ -6,7 +6,7 @@
 /* ===== Table scroll wrapper (mobile horizontal scroll) ===== */
 .table-scroll-wrapper {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  
 }
 
 /* ===== Clickable player names in panels ===== */
@@ -904,7 +904,7 @@
   .cs-grid { grid-template-columns: 1fr 1fr; }
   .hide-mobile { display: none !important; }
   /* Dynasty History mobile */
-  .dh-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .dh-wrap { overflow-x: auto;  }
   .dh-table th, .dh-table td { padding: 4px; font-size: 11px; white-space: nowrap; }
   .dh-player-cell { min-width: 140px; }
   .dh-headshot { width: 24px; height: 24px; }
@@ -3803,7 +3803,7 @@
   .lp-page { max-width: 100%; }
 
   /* Panel table containers scroll horizontally — wrap tables, don't change display */
-  .lp-page { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .lp-page { overflow-x: auto;  }
 
   /* Sticky first column for all panel tables */
   .lp-page table th:first-child,
@@ -4118,6 +4118,6 @@
   .vorp-table,
   .pa-card {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    
   }
 }

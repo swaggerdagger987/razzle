@@ -126,13 +126,13 @@
 
   <div class="dr-controls">
     <select id="dr-season" aria-label="Season selector"></select>
-    <div class="pos-tabs" role="tablist">
+    <div class="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="pos-tab active" data-pos="" role="tab" aria-selected="true">ALL</button>
       <button class="pos-tab" data-pos="WR" role="tab" aria-selected="false">WR</button>
       <button class="pos-tab" data-pos="TE" role="tab" aria-selected="false">TE</button>
       <button class="pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
     </div>
-    <button class="dr-export" onclick="exportPNG()">Export PNG</button>
+    <button class="dr-export" onclick="exportPNG(this)">Export PNG</button>
   </div>
 
   <div id="dr-loading" class="dr-loading">pulling film...</div>
@@ -140,11 +140,11 @@
     <div class="dr-grid">
       <div class="dr-card">
         <div class="dr-card-header sure">Sure Hands</div>
-        <div id="dr-sure-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch"></div>
+        <div id="dr-sure-wrap" style="overflow-x:auto"></div>
       </div>
       <div class="dr-card">
         <div class="dr-card-header butter">Butterfingers</div>
-        <div id="dr-butter-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch"></div>
+        <div id="dr-butter-wrap" style="overflow-x:auto"></div>
       </div>
     </div>
   </div>
@@ -337,7 +337,8 @@ function render() {
   document.getElementById("dr-butter-wrap").innerHTML = renderTable(state.data.butterfingers || [], "butter");
 }
 
-function exportPNG() {
+function exportPNG(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Exporting...'; }
   const el = document.getElementById("main-content");
   loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(canvas => {
     const ctx = canvas.getContext("2d");
@@ -347,7 +348,7 @@ function exportPNG() {
     link.download = "razzle-drops.png";
     link.href = canvas.toDataURL();
     link.click();
-  });
+  }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
 }
 
 // Analytics

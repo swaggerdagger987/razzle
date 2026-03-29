@@ -378,7 +378,7 @@
   </div>
 
   <div class="breakouts-controls">
-    <div class="breakouts-pos-tabs" id="pos-tabs" role="tablist">
+    <div class="breakouts-pos-tabs" id="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="breakouts-pos-tab active" data-pos="" role="tab" aria-selected="true">All</button>
       <button class="breakouts-pos-tab" data-pos="QB" role="tab" aria-selected="false">QB</button>
       <button class="breakouts-pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
@@ -664,8 +664,9 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
     var target = document.getElementById('main-content');
-    if (!target) return;
+    if (!target) { btn.disabled = false; btn.textContent = 'Export PNG'; return; }
     var _ec = getExportColors(); loadHtml2Canvas().then(function(h2c) { return h2c(target, { backgroundColor: _ec.bg, scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = '24px Caveat, cursive';
@@ -676,7 +677,7 @@
       a.download = 'razzle-breakouts.png';
       a.href = canvas.toDataURL('image/png');
       a.click();
-    });
+    }).finally(function() { btn.disabled = false; btn.textContent = 'Export PNG'; });
   });
 
   // Analytics

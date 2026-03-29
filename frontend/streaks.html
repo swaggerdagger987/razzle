@@ -256,7 +256,7 @@
       <option value="4" selected>Last 4 games</option>
       <option value="5">Last 5 games</option>
     </select>
-    <div class="pos-tabs">
+    <div class="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="pos-tab active" data-pos="">ALL</button>
       <button class="pos-tab" data-pos="QB">QB</button>
       <button class="pos-tab" data-pos="RB">RB</button>
@@ -266,7 +266,7 @@
     <button class="str-export" id="strExport">Export PNG</button>
   </div>
 
-  <div id="strContent" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div id="strContent" style="overflow-x:auto">
     <div class="str-loading">pulling film...</div>
   </div>
 </main>

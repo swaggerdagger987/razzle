@@ -119,19 +119,19 @@
 
   <div class="tdr-controls">
     <select id="tdr-season" aria-label="Season selector"></select>
-    <div class="pos-tabs">
+    <div class="pos-tabs" role="tablist" aria-label="Position filter">
       <button class="pos-tab active" data-pos="">ALL</button>
       <button class="pos-tab" data-pos="QB">QB</button>
       <button class="pos-tab" data-pos="RB">RB</button>
       <button class="pos-tab" data-pos="WR">WR</button>
       <button class="pos-tab" data-pos="TE">TE</button>
     </div>
-    <button class="tdr-export" onclick="exportPNG()">Export PNG</button>
+    <button class="tdr-export" onclick="exportPNG(this)">Export PNG</button>
   </div>
 
   <div class="tdr-rates" id="tdr-rates"></div>
   <div id="tdr-loading" class="tdr-loading">pulling film...</div>
-  <div class="tdr-sections" id="tdr-sections" role="status" aria-live="polite" style="display:none;overflow-x:auto;-webkit-overflow-scrolling:touch"></div>
+  <div class="tdr-sections" id="tdr-sections" role="status" aria-live="polite" style="display:none;overflow-x:auto"></div>
 </main>
 
 <!-- FOOTER -->
@@ -325,7 +325,8 @@ function buildCard(title, cls, players, isPositive) {
   return html;
 }
 
-function exportPNG() {
+function exportPNG(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Exporting...'; }
   const el = document.getElementById("main-content");
   loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(canvas => {
     const ctx = canvas.getContext("2d");
@@ -335,7 +336,7 @@ function exportPNG() {
     link.download = "razzle-td-regression.png";
     link.href = canvas.toDataURL();
     link.click();
-  });
+  }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
 }
 
 // Analytics
