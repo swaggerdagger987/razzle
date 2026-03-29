@@ -120,6 +120,11 @@ def initialize_subscriptions_table():
             conn.execute("ALTER TABLE subscriptions ADD COLUMN is_early_adopter INTEGER DEFAULT 0")
         except Exception:
             logger.warning("is_early_adopter column already exists or migration failed", exc_info=True)
+        # Add payment_failed_at column for grace period enforcement
+        try:
+            conn.execute("ALTER TABLE subscriptions ADD COLUMN payment_failed_at TIMESTAMP")
+        except Exception:
+            logger.warning("payment_failed_at column already exists or migration failed", exc_info=True)
         # Early adopter reservation table for atomic slot checking
         conn.execute("""
             CREATE TABLE IF NOT EXISTS ea_reservations (
@@ -621,11 +626,13 @@ def _handle_payment_failed(invoice):
                 logger.info(f"User {row['id']} has lifetime plan — skipping payment failure")
                 return
             conn.execute("""
-                UPDATE subscriptions SET status = 'payment_failed', updated_at = CURRENT_TIMESTAMP
+                UPDATE subscriptions SET status = 'payment_failed',
+                    payment_failed_at = COALESCE(payment_failed_at, CURRENT_TIMESTAMP),
+                    updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
             """, (row["id"],))
             conn.commit()
-            logger.warning(f"Payment failed for user {row['id']} — marked payment_failed (plan unchanged, awaiting Stripe retry)")
+            logger.warning(f"Payment failed for user {row['id']} — marked payment_failed, grace period started")
 
 
 def _handle_invoice_paid(invoice):
@@ -658,7 +665,8 @@ def _handle_invoice_paid(invoice):
                     plan_tier = "pro"
                 conn.execute("UPDATE users SET plan = ? WHERE id = ?", (plan_tier, row["id"]))
                 conn.execute("""
-                    UPDATE subscriptions SET plan = ?, status = 'active', updated_at = CURRENT_TIMESTAMP
+                    UPDATE subscriptions SET plan = ?, status = 'active',
+                        payment_failed_at = NULL, updated_at = CURRENT_TIMESTAMP
                     WHERE user_id = ?
                 """, (plan_tier, row["id"]))
                 conn.commit()
@@ -666,9 +674,10 @@ def _handle_invoice_paid(invoice):
             except stripe.error.StripeError:
                 logger.exception(f"Failed to retrieve subscription {subscription_id} for invoice.paid")
         else:
-            # User already on correct plan — just confirm active status
+            # User already on correct plan — just confirm active status and clear any payment failure
             conn.execute("""
-                UPDATE subscriptions SET status = 'active', updated_at = CURRENT_TIMESTAMP
+                UPDATE subscriptions SET status = 'active',
+                    payment_failed_at = NULL, updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
             """, (row["id"],))
             conn.commit()
@@ -868,4 +877,27 @@ def reconcile_subscriptions():
             logger.error(f"Reconciliation: Stripe API error for user {row['id']}: {e}")
             errors += 1
 
-    logger.info(f"Subscription reconciliation complete: {fixed} fixed, {errors} errors, {len(rows) + len(free_rows)} checked")
+    # Enforce grace period: downgrade users whose payment failed > 3 days ago
+    with auth_module.get_users_db() as conn:
+        grace_rows = conn.execute(
+            "SELECT u.id, u.email, u.plan FROM users u JOIN subscriptions s ON u.id = s.user_id "
+            "WHERE s.status = 'payment_failed' AND s.payment_failed_at IS NOT NULL "
+            "AND s.payment_failed_at < datetime('now', '-3 days') "
+            "AND u.plan IN ('pro', 'elite')"
+        ).fetchall()
+    for row in grace_rows:
+        with auth_module.get_users_db() as conn:
+            conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
+            conn.execute(
+                "UPDATE subscriptions SET plan = 'free', status = 'payment_failed_expired', "
+                "updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+                (row["id"],),
+            )
+            conn.commit()
+        logger.warning(
+            f"Reconciliation: user {row['id']} ({row['email']}) downgraded — "
+            f"payment failed > 3 days ago, was plan={row['plan']}"
+        )
+        fixed += 1
+
+    logger.info(f"Subscription reconciliation complete: {fixed} fixed, {errors} errors, {len(rows) + len(free_rows) + len(grace_rows)} checked")
