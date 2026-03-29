@@ -25,7 +25,7 @@ var _p2Data = null;
   // Replace empty state with loading indicator
   document.getElementById("comparePage").innerHTML =
     '<h1 class="sr-only">Player Comparison — Razzle</h1>' +
-    '<div class="compare-loading"><div class="compare-loading-text">pulling film...</div></div>';
+    '<div class="compare-loading"><div class="compare-loading-text">comparing the tape...</div></div>';
   await loadComparison(ids[0], ids[1]);
 })();
 
