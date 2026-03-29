@@ -9,24 +9,25 @@ status: OPEN
 
 # Trade Values page formula not adjustable — fixed weights (50/30/20)
 
-## Root Cause
+## Root Cause (CONFIRMED 2026-03-29 — code investigation)
 
-The trade value computation uses a fixed formula: production 50% + age 30% + positional scarcity 20%. Users cannot adjust these weights to match their league's priorities (e.g., a dynasty league might weight age at 50%).
+**Frontend**: `frontend/tradevalues.html:424` — displays: "composite value: 50% production + 30% age curve + 20% positional scarcity"
+**Frontend**: `frontend/tradevalues.html:441-443` — static methodology chips with no input controls (no sliders, no inputs)
+**Backend formula**: `backend/live_data/core.py:859` — hardcoded: `raw = prod * 0.50 + age_v * 0.30 + scar * 0.20`
+**API endpoint**: `backend/server.py:2800-2810` — `GET /api/trade-value-chart` accepts only `season`, `position`, `limit` — no weight parameters
 
 ## Fix
 
-Add weight sliders to `frontend/tradevalues.html`:
-- Production weight (0-100%)
-- Age weight (0-100%)
-- Scarcity weight (0-100%)
-- Auto-normalize to 100% total
-
-Recompute values client-side on slider change, or pass weights to API.
+1. `server.py:2800` — Add optional `prod_w`, `age_w`, `scar_w` float params (default 0.50/0.30/0.20)
+2. `core.py:859` — Accept weight params in `compute_trade_value()`
+3. `tradevalues.html:441-443` — Replace static chips with range sliders, auto-normalize to 100%
+4. Recompute on slider change via API call with custom weights
 
 ## Files
 
-- `frontend/tradevalues.html` — add sliders UI
-- Backend trade value endpoint — accept weight params (optional)
+- `frontend/tradevalues.html:424,441-443` — UI (static chips → sliders)
+- `backend/live_data/core.py:859` — formula (hardcoded → parameterized)
+- `backend/server.py:2800-2810` — endpoint (add weight params)
 
 ## Acceptance Criteria
 
