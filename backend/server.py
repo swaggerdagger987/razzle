@@ -2733,11 +2733,12 @@ def positional_scarcity(season: int = 0):
 
 
 @app.get("/api/breakout-candidates")
-def breakout_candidates(season: int = 0, position: str = "", limit: int = 50, week: int = 0):
+def breakout_candidates(season: int = 0, position: str = "", limit: int = 50, week: int = 0, scoring: str = "ppr"):
     """Return players ranked by breakout potential (opportunity-production gap)."""
     s = season if season > 0 else None
     pos = position.upper() if position else None
-    return live_data.fetch_breakout_candidates(season=s, position=pos, limit=max(1, min(limit, 100)), week=week if week > 0 else None)
+    sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+    return live_data.fetch_breakout_candidates(season=s, position=pos, limit=max(1, min(limit, 100)), week=week if week > 0 else None, scoring=sc)
 
 
 @app.get("/api/buy-sell-candidates")
@@ -2892,13 +2893,14 @@ def consistency_rankings(season: int = 0, position: str = "", limit: int = 30, w
 
 
 @app.get("/api/strength-of-schedule")
-def strength_of_schedule(season: int = 0, position: str = "", limit: int = 30):
+def strength_of_schedule(season: int = 0, position: str = "", limit: int = 30, scoring: str = "ppr"):
     """Return strength of schedule analysis: suppressed (hard SOS) + inflated (easy SOS)."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_strength_of_schedule(season=s, position=pos, limit=lim)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_strength_of_schedule(season=s, position=pos, limit=lim, scoring=sc)
     except Exception as e:
         logger.exception("strength_of_schedule error")
         return JSONResponse({"error": "Failed to fetch strength of schedule data"}, status_code=500)

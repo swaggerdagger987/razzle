@@ -95,6 +95,11 @@
       <button class="sos-pos-tab" data-pos="WR" aria-label="Wide Receivers">WR</button>
       <button class="sos-pos-tab" data-pos="TE" aria-label="Tight Ends">TE</button>
     </div>
+    <div class="sos-scoring-tabs" id="scoring-tabs">
+      <button class="sos-scoring-tab active" data-scoring="ppr">PPR</button>
+      <button class="sos-scoring-tab" data-scoring="half_ppr">Half</button>
+      <button class="sos-scoring-tab" data-scoring="std">Std</button>
+    </div>
     <select class="sos-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
 
@@ -199,11 +204,13 @@
   }
 
   var currentPosition = '';
+  var currentScoring = 'ppr';
   var currentData = null;
 
   // Restore URL state
-  var urlState = restorePageState({pos: '', season: ''});
+  var urlState = restorePageState({pos: '', season: '', scoring: 'ppr'});
   if (urlState.pos) currentPosition = urlState.pos;
+  if (urlState.scoring && ['ppr','half_ppr','std'].indexOf(urlState.scoring) !== -1) currentScoring = urlState.scoring;
 
   // Sync UI from URL state
   if (currentPosition) {
@@ -211,9 +218,12 @@
       t.classList.toggle('active', (t.getAttribute('data-pos') || '') === currentPosition);
     });
   }
+  document.querySelectorAll('.sos-scoring-tab').forEach(function(t) {
+    t.classList.toggle('active', t.getAttribute('data-scoring') === currentScoring);
+  });
 
   function _saveState() {
-    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value });
+    savePageState({ pos: currentPosition, season: document.getElementById('season-select').value, scoring: currentScoring });
   }
 
   // Sort state per section
@@ -424,6 +434,7 @@
     var url = '/api/strength-of-schedule?limit=30';
     if (season) url += '&season=' + season;
     if (currentPosition) url += '&position=' + currentPosition;
+    if (currentScoring !== 'ppr') url += '&scoring=' + currentScoring;
 
     fetch(url).then(function(resp) {
       if (!resp.ok) throw new Error('API error ' + resp.status);
@@ -453,6 +464,17 @@
     document.querySelectorAll('.sos-pos-tab').forEach(function(t) { t.classList.remove('active'); });
     tab.classList.add('active');
     currentPosition = tab.getAttribute('data-pos') || '';
+    loadData();
+    _saveState();
+  });
+
+  // Scoring format tab clicks
+  document.getElementById('scoring-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.sos-scoring-tab');
+    if (!tab) return;
+    document.querySelectorAll('.sos-scoring-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentScoring = tab.getAttribute('data-scoring') || 'ppr';
     loadData();
     _saveState();
   });

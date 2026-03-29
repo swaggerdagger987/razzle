@@ -603,7 +603,7 @@ _BREAKOUT_ANNOTATIONS = [
 ]
 
 
-def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
+def fetch_breakout_candidates(season=None, position=None, limit=50, week=None, scoring="ppr"):
     """Return players ranked by breakout potential (opportunity-production gap)."""
     def _query():
         nonlocal season
@@ -636,7 +636,8 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                     SUM(s.targets) as targets,
                     SUM(s.carries) as carries,
                     SUM(s.attempts) as attempts,
-                    SUM(s.receiving_air_yards) as air_yards
+                    SUM(s.receiving_air_yards) as air_yards,
+                    SUM(s.receptions) as receptions
                 FROM players p
                 JOIN player_week_stats s
                     ON s.player_id = p.player_id AND s.season = ?
@@ -663,10 +664,14 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                 }
 
             # Build player list with raw stats
+            adj = _scoring_factor(scoring)
             players = []
             for r in rows:
                 games = r[7] or 1
-                ppg = round((r[6] or 0) / games, 2)
+                total_ppr = r[6] or 0
+                receptions = r[13] or 0
+                total_pts = total_ppr + adj * receptions
+                ppg = round(total_pts / games, 2)
                 snap_pct = round(r[8] or 0, 1)
                 targets = r[9] or 0
                 carries = r[10] or 0
@@ -777,7 +782,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                 "total": len(candidates),
             }
 
-    return _cached(f"breakout_candidates:{season}:{position}:{limit}:{week}", _query)
+    return _cached(f"breakout_candidates:{season}:{position}:{limit}:{week}:{scoring}", _query)
 
 
 # ---------------------------------------------------------------------------
