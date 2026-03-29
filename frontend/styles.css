@@ -15,6 +15,7 @@
 }
 
 :root {
+  color-scheme: light;
   --bg: #ede0cf;
   --bg-warm: #e5d5c3;
   --bg-card: #f7efe5;
@@ -75,6 +76,7 @@
 
 /* ===== DARK MODE — Espresso flip ===== */
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg: #2d1f14;
   --bg-warm: #3b2821;
   --bg-card: #4a3728;
@@ -82,7 +84,7 @@
 
   --ink: #ede0cf;
   --ink-medium: #c4b5a5;
-  --ink-light: #a89888;
+  --ink-light: #8a7565;
   --ink-faint: #7a6555;
   --shadow-text: rgba(237,224,207,0.15);
   --shadow-drop: rgba(237,224,207,0.15);

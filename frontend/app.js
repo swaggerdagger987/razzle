@@ -104,7 +104,7 @@ function getCanvasTheme() {
     bgCard: s.getPropertyValue('--bg-card').trim() || (isDark ? "#4a3728" : "#f7efe5"),
     ink: ink,
     inkMedium: s.getPropertyValue('--ink-medium').trim() || (isDark ? "#c4b5a5" : "#5c4a3d"),
-    inkLight: s.getPropertyValue('--ink-light').trim() || (isDark ? "#a89888" : "#6d5c4e"),
+    inkLight: s.getPropertyValue('--ink-light').trim() || (isDark ? "#8a7565" : "#6d5c4e"),
     inkFaint: s.getPropertyValue('--ink-faint').trim() || (isDark ? "#5c4a3d" : "#c4b5a5"),
     white: isDark ? ink : "#fff",
     gridLine: ink + "1f",
