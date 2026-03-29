@@ -138,3 +138,76 @@ Cross-referenced all 450 DQ designer-ticket files against existing S-tickets:
 | **Total DQ entries accounted for** | **450/450** | |
 
 All 67 remaining DQ entries were mapped to existing tickets whose scope descriptions cover the finding. No new tickets needed. Entries appended to triage-results.tsv as COVERED with ticket references.
+
+## DEEP-AUDIT-TICKETS.md + STAT-AUDIT-REPORT.md Verification (2026-03-29 Invocation 32)
+
+Cross-referenced both audit reports (from main repo) against all existing tickets:
+
+### DEEP-AUDIT-TICKETS.md (33 findings)
+
+| Deep Audit ID | Mapped Ticket | Status |
+|---|---|---|
+| DA-S0-001 | S0-005 (standalone redirect) | OPEN |
+| DA-S0-002 | S0-006 (no signup CTA mobile) | OPEN |
+| DA-S0-003 | S0-007 (Bijan Robinson 2023) | OPEN |
+| DA-S1-001 | S1-015 (dark mode ink-light) | OPEN |
+| DA-S1-002 | S1-016 (lab sidebar overwhelm) | OPEN |
+| DA-S1-003 | S1-017 (player profile loading) | OPEN |
+| DA-S1-004 | SKIP — false positive (empty state exists in compare.js:24-32) | SKIP |
+| DA-S1-005 | S1-018 (team page blank default) | OPEN |
+| DA-S1-006 | S1-019 (pricing yearly billing) | OPEN |
+| DA-S1-007 | S1-020 (scoring format selector) | OPEN |
+| DA-S1-008 | S0-003 (client-side tier bypass) | DUPLICATE |
+| DA-S1-009 | S1-021 (Nacua drop rate) | OPEN |
+| DA-S1-010 | S0-008 (nav brand names) | DUPLICATE |
+| DA-S1-011 | SKIP — false positive (toggle in mobile nav, app.js:188-202) | SKIP |
+| DA-S1-012 | S2-100 (BYOK guide + model FAQ) | DUPLICATE |
+| DA-S2-001 | S2-023 (hero 150 columns claim) | OPEN |
+| DA-S2-002 | S2-024 (loading text overuse) | OPEN |
+| DA-S2-003 | S2-025 (footer links mobile) | OPEN |
+| DA-S2-004 | S2-026 (canvas hardcoded colors) | OPEN |
+| DA-S2-005 | S2-027 (lab toolbar dense) | OPEN |
+| DA-S2-006 | SKIP — not a bug (season selector correct) | SKIP |
+| DA-S2-007 | S2-028 (RPS ignores production) | OPEN |
+| DA-S2-008 | S2-029 (about page identity) | OPEN |
+| DA-S2-009 | S2-030 (auth modal 375px) | OPEN |
+| DA-S2-010 | S2-031 (no offline handling) | OPEN |
+| DA-S2-011 | S2-032 (cmd palette mobile) | OPEN |
+| DA-S2-012 | S2-033 (export locked no preview) | OPEN |
+| DA-S2-013 | S2-034 (formula store behind auth) | OPEN |
+| DA-S2-014 | S2-035 (cheatsheet print CSS) | OPEN |
+| DA-S2-015 | S2-036 (situation room a11y) | OPEN |
+| DA-S2-016 | S2-037 (meta descriptions) | OPEN |
+| DA-S2-017 | S2-038 (records limited 2020) | OPEN |
+| DA-S2-018 | S2-039 (no PNG favicon) | OPEN |
+
+**Result**: 27 mapped to OPEN tickets, 3 DUPLICATE of existing tickets, 3 SKIP (false positives/not bugs). **0 new tickets needed.**
+
+### STAT-AUDIT-REPORT.md (9 mismatches + 364 missing rows)
+
+| Finding | Mapped Ticket | Status |
+|---|---|---|
+| Bijan Robinson 2023 rushing (-487 yds) | S0-007 | OPEN |
+| Fotis Kokosioulis 2022 CFB rec_tds (+4) | S3-036 | OPEN |
+| David Johnson 2015 rushing (-581 yds) | NOFIX — verifier name collision | NOFIX |
+| David Johnson 2019 carries (-1) | S2-040 (implicit) | COVERED |
+| Daniel Jones 2019 PPR (+2) | NOFIX — nflverse 2pt conv handling | NOFIX |
+| Ryan Tannehill 2022 passing_tds (+1) | S2-040 | COVERED |
+| 4 weekly first_downs (Darnold/Cousins/Edelman/Walker) | S2-040 | COVERED |
+| 364 missing fringe player-weeks | S3-112 | OPEN |
+
+**Result**: 4 mapped to OPEN tickets, 3 COVERED by S2-040, 2 NOFIX (false positives). **0 new tickets needed.**
+
+### Ticket Count Summary (Final — Invocation 32)
+
+| Severity | Count | Status |
+|---|---|---|
+| S0 | 8 | All OPEN |
+| S1 | 45 | All OPEN |
+| S2 | 132 | All OPEN |
+| S3 | 116 | All OPEN |
+| CEO | 18 | All OPEN |
+| QA | 1 | All OPEN |
+| **Total** | **320** | |
+
+TSV entries: 478 (76 deep-audit + stat-audit entries verified this invocation)
