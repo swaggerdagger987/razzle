@@ -341,7 +341,7 @@
 .targets-table td, .weekly-table td, .yoy-table td, .bd-table td,
 .matchups-table td, .sw-table td {
   padding: 8px;
-  border-bottom: 2px dashed var(--ink-faint);
+  border-bottom: 2px dashed var(--border-dashed);
   vertical-align: middle;
 }
 

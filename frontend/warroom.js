@@ -3299,7 +3299,7 @@ function renderBriefingCard(agentId, content, isError) {
   var agentEntry = agentResults.get(agentId);
   if (agentEntry && agentEntry.freeModel) {
     var modelShort = (agentEntry.freeModel || 'unknown').split('/').pop().split(':')[0];
-    freeFooter = '<div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);padding:8px 0 0;border-top:2px dashed var(--ink-faint);margin-top:8px;">powered by ' + escapeHtml(modelShort) + ' \u2014 <a href="/pricing.html" style="color:var(--orange);">upgrade to Pro</a> for premium models</div>';
+    freeFooter = '<div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);padding:8px 0 0;border-top:2px dashed var(--border-dashed);margin-top:8px;">powered by ' + escapeHtml(modelShort) + ' \u2014 <a href="/pricing.html" style="color:var(--orange);">upgrade to Pro</a> for premium models</div>';
   }
 
   // Contextual upsell for free-mode (no league context)
@@ -3711,7 +3711,7 @@ function _renderMemoryEntries(panel, memory, isElite) {
     var syncIcon = m.synced ? '<span title="Synced to cloud" style="font-size:11px; color:var(--pos-qb); margin-left:4px;">&#9729;</span>' : '';
     var leagueTag = m.leagueName ? '<span style="font-family:var(--font-mono); font-size:11px; color:var(--orange); margin-left:4px;">[' + escapeHtml(m.leagueName) + ']</span>' : '';
 
-    html += '<div style="padding:8px 0; border-bottom:2px dashed var(--ink-faint);">';
+    html += '<div style="padding:8px 0; border-bottom:2px dashed var(--border-dashed);">';
     html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + ago + syncIcon + leagueTag + '</div>';
     html += '<div style="font-family:var(--font-mono); font-size:12px; margin:2px 0;">' + escapeHtml(m.scenario.slice(0, 80)) + (m.scenario.length > 80 ? '...' : '') + '</div>';
     html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + agentSummary + '</div>';
@@ -3837,7 +3837,7 @@ function renderBriefingContent(container, briefing) {
   // Agent highlights
   var highlights = safeParse(briefing.agent_highlights);
   if (highlights.length) {
-    html += '<div style="border-top:2px dashed var(--ink-faint); padding-top:8px; margin-top:8px;">';
+    html += '<div style="border-top:2px dashed var(--border-dashed); padding-top:8px; margin-top:8px;">';
     html += '<div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;">Agent Highlights</div>';
     highlights.forEach(function(h) {
       html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin:3px 0;">';
@@ -3972,7 +3972,7 @@ function toggleBriefingHistory() {
     var html = '';
     data.briefings.forEach(function(b) {
       var leagueTag = b.league_name ? ' [' + escapeHtml(b.league_name) + ']' : '';
-      html += '<div style="padding:6px 0; border-bottom:2px dashed var(--ink-faint); cursor:pointer;" data-briefing-id="' + (parseInt(b.id) || 0) + '">';
+      html += '<div style="padding:6px 0; border-bottom:2px dashed var(--border-dashed); cursor:pointer;" data-briefing-id="' + (parseInt(b.id) || 0) + '">';
       html += '<div style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(b.week_label) + leagueTag + '</div>';
       html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
       html += '</div>';

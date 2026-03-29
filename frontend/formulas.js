@@ -293,7 +293,7 @@ function _showCloudSyncHint(isPaid) {
     badge.textContent = "cloud-synced";
   } else {
     badge.style.color = "var(--ink-light)";
-    badge.style.border = "2px dashed var(--ink-faint)";
+    badge.style.border = "2px dashed var(--border-dashed)";
     badge.innerHTML = '<a href="/pricing.html" style="color:var(--ink-light);text-decoration:underline;">upgrade to sync formulas across devices</a>';
     badge.style.cursor = "pointer";
   }

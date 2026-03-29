@@ -408,7 +408,7 @@ function _showWatchlistSyncHint(isPaid) {
     badge.textContent = "synced";
   } else {
     badge.style.color = "var(--ink-light)";
-    badge.style.border = "2px dashed var(--ink-faint)";
+    badge.style.border = "2px dashed var(--border-dashed)";
     badge.textContent = "local only";
   }
   btn.appendChild(badge);
@@ -1932,7 +1932,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pidJS}');" onmouseenter="onPlayerNameEnter('${pidJS}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--ink-faint);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
+    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pidJS}');" onmouseenter="onPlayerNameEnter('${pidJS}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--border-dashed);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
     html += buildTagChip(pid);
     html += `<span class="tag-icon" role="button" tabindex="0" aria-label="Tag player" onclick="event.stopPropagation(); showTagPicker('${pidJS}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();showTagPicker('${pidJS}',this)}" title="Tag player">&#9679;</span>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
@@ -4779,7 +4779,7 @@ function _showViewsSyncHint(isPaid) {
     badge.textContent = "cloud-synced";
   } else {
     badge.style.color = "var(--ink-light)";
-    badge.style.border = "2px dashed var(--ink-faint)";
+    badge.style.border = "2px dashed var(--border-dashed)";
     badge.innerHTML = '<a href="/pricing.html" style="color:var(--ink-light);text-decoration:underline;">upgrade to sync views across devices</a>';
     badge.style.cursor = "pointer";
   }
@@ -9029,7 +9029,7 @@ function renderClassAnalytics(data, container) {
         </div>
 
         <!-- Top prospect -->
-        <div style="border-top:2px dashed var(--ink-faint); padding-top:8px;">
+        <div style="border-top:2px dashed var(--border-dashed); padding-top:8px;">
           <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:2px;">Top Prospect</div>
           <div style="font-family:var(--font-mono); font-size:14px; font-weight:700;">${topName}</div>
           <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium);">RPS: ${topRPS}</div>
@@ -10457,7 +10457,7 @@ function renderWatchlistPanel() {
   ["QB", "RB", "WR", "TE", "OTHER"].forEach(function(pos) {
     if (groups[pos].length === 0) return;
     html += '<div style="margin-bottom:14px;">';
-    html += '<div style="font-family:var(--font-mono); font-size:14px; color:' + posColors[pos] + '; margin-bottom:6px; border-bottom:2px dashed var(--ink-faint); padding-bottom:4px;">' + pos + ' (' + groups[pos].length + ')</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:14px; color:' + posColors[pos] + '; margin-bottom:6px; border-bottom:2px dashed var(--border-dashed); padding-bottom:4px;">' + pos + ' (' + groups[pos].length + ')</div>';
 
     groups[pos].forEach(function(p) {
       html += '<div style="display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:var(--radius-sm); margin-bottom:3px; background:var(--bg);">';
@@ -10535,7 +10535,7 @@ function renderTierBoard() {
 
     html += '<div style="margin-bottom:14px; border:2px solid var(--ink); border-radius:var(--radius-sm); overflow:hidden; background:var(--bg);">';
     // Tier header
-    html += '<div style="display:flex; align-items:center; gap:10px; padding:8px 14px; background:var(--bg-warm); border-bottom:2px dashed var(--ink-faint);">';
+    html += '<div style="display:flex; align-items:center; gap:10px; padding:8px 14px; background:var(--bg-warm); border-bottom:2px dashed var(--border-dashed);">';
     html += '<span style="display:inline-block; font-family:var(--font-mono); font-size:13px; color:var(--text-on-accent); background:' + color + '; border:2px solid var(--ink); border-radius:8px; padding:2px 12px; transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + label + '</span>';
     html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + players.length + ' player' + (players.length !== 1 ? 's' : '') + '</span>';
     html += '</div>';
@@ -11912,7 +11912,7 @@ function renderMyRosterPanel() {
     if (groups[pos].length === 0) return;
     var pc = posColors[pos] || "var(--ink-light)";
     html += '<div style="margin-bottom:10px;">';
-    html += '<div style="font-family:var(--font-mono); font-size:13px; color:' + pc + '; margin-bottom:4px; border-bottom:2px dashed var(--ink-faint); padding-bottom:3px;">' + pos + ' (' + groups[pos].length + ')</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:13px; color:' + pc + '; margin-bottom:4px; border-bottom:2px dashed var(--border-dashed); padding-bottom:3px;">' + pos + ' (' + groups[pos].length + ')</div>';
     groups[pos].forEach(function(p) {
       html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; border-radius:var(--radius-sm); margin-bottom:2px; background:var(--bg);">';
       html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:11px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
@@ -12504,7 +12504,7 @@ function renderPlayerComps(data, container) {
 
     // Top matching stats
     if (comp.matching_stats && comp.matching_stats.length > 0) {
-      html += `<div style="border-top:2px dashed var(--ink-faint); padding-top:8px;">`;
+      html += `<div style="border-top:2px dashed var(--border-dashed); padding-top:8px;">`;
       for (const ms of comp.matching_stats) {
         html += `<div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; padding:2px 0;">`;
         html += `<span style="color:var(--ink-light);">${escapeHtml(String(ms.label))}</span>`;

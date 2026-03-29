@@ -577,14 +577,16 @@ def _enrich_with_dynasty_value(items):
 
 
 def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False, week=0):
-    """Fetch play-by-play derived stats from player_season_pbp table."""
+    """Fetch play-by-play derived stats from player_season_pbp table.
+
+    PBP data is season-level only. For per-week queries we still include it
+    (useful context) but tag each item with _pbp_context="season" so the
+    frontend can annotate column headers accordingly.
+    """
     if not items:
         return items
 
-    # PBP data is season-level only (no week column) — skip for per-week queries
-    # to avoid showing season totals alongside single-week core stats
-    if week and int(week) > 0:
-        return items
+    is_week_query = week and int(week) > 0
 
     player_ids = [item["player_id"] for item in items if item.get("player_id")]
     if not player_ids:
@@ -668,6 +670,8 @@ def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False, week=0):
                 item[col] = round(val, 3) if isinstance(val, float) else val
             else:
                 item[col] = None
+        if is_week_query:
+            item["_pbp_context"] = "season"
 
     return items
 

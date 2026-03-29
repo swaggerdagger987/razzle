@@ -548,7 +548,7 @@ function renderFormulaCard(formula, userReviews) {
   let actionsHtml = "";
   if (paid) {
     actionsHtml = `
-      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint);">
+      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--border-dashed);">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
           <div style="display:flex; align-items:center; gap:4px;">
             <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">rate:</span>
@@ -576,7 +576,7 @@ function renderFormulaCard(formula, userReviews) {
       </div>`;
   } else {
     actionsHtml = `
-      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint); text-align:center;">
+      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--border-dashed); text-align:center;">
         <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-bottom:6px;">
           import, rate, and review with Pro
         </div>

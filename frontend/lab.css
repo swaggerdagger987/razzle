@@ -87,7 +87,7 @@
     top: 0;
     z-index: 2;
     background: var(--bg-card);
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -151,7 +151,7 @@
   /* ===== RECENT PANELS ===== */
   .sidebar-recent {
     padding: 6px 10px 8px;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     display: none;
   }
   .sidebar-recent.has-items {
@@ -199,7 +199,7 @@
   }
   .quick-start-dismiss {
     background: transparent;
-    border: 2px dashed var(--ink-faint);
+    border: 2px dashed var(--border-dashed);
     box-shadow: none;
     font-family: var(--font-mono);
     font-size: 11px;
@@ -251,7 +251,7 @@
   }
   .sidebar-favorites {
     padding: 6px 10px 8px;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     display: none;
   }
   .sidebar-favorites.has-items {
@@ -303,7 +303,7 @@
     top: 0;
     background: var(--bg-card);
     z-index: 1;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     cursor: pointer;
     user-select: none;
   }
@@ -430,7 +430,7 @@
   .lab-sidebar-pro-divider {
     margin-top: 8px;
     padding-top: 8px;
-    border-top: 2px dashed var(--ink-faint);
+    border-top: 2px dashed var(--border-dashed);
   }
 
   .lab-sidebar-toggle {
@@ -486,7 +486,7 @@
 
   .lab-panel-header {
     padding: 16px 20px 10px;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
   }
   .lab-panel-header .breadcrumb {
     font-family: var(--font-mono);
@@ -545,7 +545,7 @@
     margin-top: 6px;
     background: var(--bg-warm);
     border-radius: var(--radius-sm);
-    border: 2px dashed var(--ink-faint);
+    border: 2px dashed var(--border-dashed);
     line-height: 1.4;
   }
   .btn-info-toggle {
@@ -648,7 +648,7 @@
     }
     .lab-sidebar.open {
       transform: translateX(0);
-      border-right: 2px dashed var(--ink-faint);
+      border-right: 2px dashed var(--border-dashed);
       box-shadow: none;
     }
     .lab-main {
@@ -763,7 +763,7 @@
     padding: 6px 16px;
   }
   .tools-dropdown-section + .tools-dropdown-section {
-    border-top: 2px dashed var(--ink-faint);
+    border-top: 2px dashed var(--border-dashed);
   }
   .tools-dropdown-label {
     font-family: var(--font-mono);
@@ -816,7 +816,7 @@
     gap: 8px;
     padding: 8px 20px;
     background: var(--bg-card);
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     flex-wrap: wrap;
   }
 
@@ -919,7 +919,7 @@
     font-family: var(--font-mono);
     font-size: 11px;
     padding: 3px 10px;
-    border: 2px dashed var(--ink-faint);
+    border: 2px dashed var(--border-dashed);
     border-radius: 20px;
     background: transparent;
     color: var(--ink-light);
@@ -1055,7 +1055,7 @@
     letter-spacing: 1px;
     color: var(--ink-light);
     margin-bottom: 6px;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     padding-bottom: 4px;
   }
 
@@ -1178,7 +1178,7 @@
   .colstats-title {
     font-family: var(--font-mono); font-size: 14px; font-weight: 700;
     color: var(--orange); margin-bottom: 8px;
-    border-bottom: 2px dashed var(--ink-faint); padding-bottom: 6px;
+    border-bottom: 2px dashed var(--border-dashed); padding-bottom: 6px;
   }
   .colstats-grid {
     display: grid; grid-template-columns: auto 1fr; gap: 2px 12px;
@@ -1186,7 +1186,7 @@
   }
   .colstats-label { color: var(--ink-light); font-size: 11px; }
   .colstats-val { text-align: right; font-weight: 600; color: var(--ink); }
-  .colstats-hist-section { border-top: 2px dashed var(--ink-faint); padding-top: 8px; }
+  .colstats-hist-section { border-top: 2px dashed var(--border-dashed); padding-top: 8px; }
   .colstats-hist-title {
     font-family: var(--font-hand); font-size: 14px; color: var(--ink-light); margin-bottom: 4px;
   }
@@ -1281,7 +1281,7 @@
   .screener-table td {
     padding: 7px 14px;
     text-align: right;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     white-space: nowrap;
     font-family: var(--font-mono);
     font-size: 13px;
@@ -1552,7 +1552,7 @@
   }
   #pinnedBody tr td {
     background: var(--bg-card) !important;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
   }
   #pinnedBody tr td.col-player {
     background: var(--bg-card) !important;
@@ -1675,7 +1675,7 @@
     text-transform: uppercase;
   }
   .hover-card-sparkline {
-    border-top: 2px dashed var(--ink-faint);
+    border-top: 2px dashed var(--border-dashed);
     padding-top: 6px;
     text-align: center;
   }
@@ -2047,7 +2047,7 @@
     letter-spacing: 1px;
     color: var(--ink-light);
     margin-bottom: 8px;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     padding-bottom: 4px;
   }
 
@@ -2076,7 +2076,7 @@
   .profile-season-table td {
     padding: 5px 10px;
     text-align: right;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     white-space: nowrap;
   }
 
@@ -2165,7 +2165,7 @@
     align-items: center;
     gap: 10px;
     padding: 6px 8px;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
   }
 
   .prospect-metric-row:last-child { border-bottom: none; }
@@ -2340,7 +2340,7 @@
     flex-direction: column;
     align-items: center;
     padding: 8px 14px;
-    border: 2px dashed var(--ink-faint);
+    border: 2px dashed var(--border-dashed);
     border-radius: var(--radius-sm);
     min-width: 80px;
   }
@@ -3013,7 +3013,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     transition: background 0.1s;
   }
   .trade-autocomplete-item:hover {
@@ -3119,7 +3119,7 @@
   .trade-verdict-area {
     margin-top: 20px;
     padding-top: 16px;
-    border-top: 2px dashed var(--ink-faint);
+    border-top: 2px dashed var(--border-dashed);
     text-align: center;
   }
   .trade-pick-row {
@@ -3190,7 +3190,7 @@
   }
   .trade-pick-chart-wrap {
     margin-top: 16px;
-    border-top: 2px dashed var(--ink-faint);
+    border-top: 2px dashed var(--border-dashed);
     padding-top: 16px;
   }
 
