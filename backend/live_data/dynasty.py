@@ -592,7 +592,7 @@ def _fetch_trade_finder_uncached(player_id, season=None):
         weekly_data = defaultdict(list)
         opp_data = defaultdict(lambda: {"total_ppr": 0, "opps": 0})
         for wr in weekly_rows:
-            wpid, wppg, wtgt, wcar, watt, wpos = wr[0], wr[1] or 0, wr[2] or 0, wr[3] or 0, wr[4] or 0, wr[5] or ""
+            wpid, wppg, wtgt, wcar, watt, wpos = wr[0], round(wr[1] or 0, 1), wr[2] or 0, wr[3] or 0, wr[4] or 0, wr[5] or ""
             weekly_data[wpid].append(wppg)
             opp_data[wpid]["total_ppr"] += wppg
             opp_data[wpid]["opps"] += (watt + wcar) if wpos == "QB" else (wtgt + wcar)

@@ -1095,7 +1095,7 @@ def fetch_season_recap(season=None):
             """, (season,))
             for r in cursor.fetchall():
                 if r[0] in player_weeks:
-                    player_weeks[r[0]]["scores"].append(r[1] or 0)
+                    player_weeks[r[0]]["scores"].append(round(r[1] or 0, 1))
 
             consistent = []
             volatile = []
