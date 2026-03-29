@@ -4,8 +4,11 @@ severity: S0
 category: ux
 title: 64 standalone panel pages redirect to Lab — breaks shared URLs, SEO, bookmarks
 source: deep-audit
-status: open
+status: fixed
+fixed_by: d43bb97f
 ---
+
+> **STATUS: FIXED** — Commit `d43bb97f` removed `window.location.replace` redirects from 63 standalone pages. All redirects were at **line 5** in `<head>`: `<script>window.location.replace("/lab.html?panel=...");</script>`. Actual count was 63 files (ticket said 64).
 
 ## Problem
 

@@ -13,11 +13,36 @@ The Lab sidebar lists 108 panel items across 10 categories. A new user sees a ma
 
 The North Star says "the Screener must be genuinely best-in-class as a free tool" — but free panels are buried in a list of 108.
 
-## Root Cause
+## Root Cause (UPDATED 2026-03-29 — code investigation)
 
-**Panel definitions** — `frontend/lab.html:3199-3288`: 10 category sections with 108 total `lab-sidebar-item` elements.
+**Panel definitions** — `frontend/lab.html:3212-3304`: 12 category sections with **68 total** `lab-sidebar-item` elements (not 108 as originally reported).
 
-**Start Here card** — `frontend/lab.html:4602-4613`: Exists but hidden by default, auto-shows only for new users with fewer than 5 panel visits, auto-dismisses after 5 visits.
+**Categories** (12 total):
+- Forever Free header: `lab.html:3212`
+- Free panels (10 items): `lab.html:3216`
+- Pro header: `lab.html:3228`
+- Rankings & Values (9): `lab.html:3230`
+- Performance (10): `lab.html:3241`
+- Game Analysis (8): `lab.html:3253`
+- Trends & Projections (5): `lab.html:3263`
+- College (3): `lab.html:3272`
+- Player Tools (9): `lab.html:3277`
+- League Tools (5): `lab.html:3288`
+- Records & History (4): `lab.html:3295`
+- Teams (3): `lab.html:3301`
+
+**Progressive disclosure ALREADY EXISTS** (partial):
+- **Start Here card**: `lab.html:3195-3204` — 5 recommended panels with hints, auto-shows for first 5 visits
+- **Start Here logic**: `lab.html:4625-4647` — `_trackStartHere()` tracks visits, auto-dismisses
+- **Category collapse**: `lab.html:4876-4947` — Pro categories auto-collapse on first visit (`lab.html:4904-4910`), Free stays expanded
+- **Chevron toggles**: `lab.html:4895-4900` — dynamic `▾` chevrons, saved to localStorage
+- **First visit detection**: `lab.html:4888` — checks `Object.keys(saved).length === 0 && !localStorage.getItem('razzle_lab_visited')`
+
+**What's still missing**:
+- No "Staff Picks" or "Most Popular" badges
+- No role-based view (all users see same layout after onboarding)
+- No analytics-driven reordering
+- Start Here only surfaces 5 panels; no guidance beyond initial discovery
 
 ## Fix Options
 

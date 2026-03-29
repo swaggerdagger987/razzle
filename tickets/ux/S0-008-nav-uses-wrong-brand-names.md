@@ -6,23 +6,25 @@
 **Found**: 2026-03-28
 **Status**: OPEN
 
-## Root Cause
+## Root Cause (UPDATED 2026-03-29 — code investigation)
 
-`frontend/app.js:162-164` — The nav builder uses abbreviated names instead of the full brand names. These are brand identity, not descriptions.
+`frontend/app.js:164-166` — The nav builder defines link labels:
 
 ```javascript
-// app.js:162-164
-{ href: "/lab.html", label: "Screener" },          // WRONG — should be "Fourth Down Lab"
-{ href: "/league-intel.html", label: "Bureau" },    // WRONG — should be "Bureau of Intelligence"
-{ href: "/agents.html", label: "Situation Room" },  // CORRECT
+// app.js:164-166 (current state)
+{ href: "/lab.html", label: "Fourth Down Lab" },           // NOW CORRECT
+{ href: "/league-intel.html", label: "Bureau of Intelligence" }, // NOW CORRECT
+{ href: "/agents.html", label: "Situation Room" },         // CORRECT
 ```
 
-Additional wrong references:
-- `frontend/404.html:141` — `<a href="/lab.html">Screener</a>`
-- `frontend/404.html:142` — `<a href="/league-intel.html">Bureau</a>`
-- `frontend/404.html:143` — `<a href="/agents.html">AI Agents</a>` (should be "Situation Room")
-- `frontend/about.html:258` — refers to "The Lab" (should be "Fourth Down Lab")
-- `frontend/lab.html` `<title>` tag — "Screener — Razzle" (should be "Fourth Down Lab — Razzle")
+**Remaining mismatches** (nav text vs page H1):
+- **lab.html** — Nav says "Fourth Down Lab" (app.js:164), but page H1 (`lab.html:3180`) says `<h1 class="sr-only">Razzle Screener — Fantasy Football Research Lab</h1>` and sidebar text (`lab.html:3198, 3213`) says "The Screener"
+- **agents.html** — Nav says "Situation Room" (app.js:166), but page H1 (`agents.html:1618`) says `<h1>The <span>Situation Room</span></h1>` (includes "The")
+- **404.html:141-143** — Fallback nav links may still use old labels
+
+Additional references that may use old names:
+- `frontend/about.html:258` — may still reference "The Lab"
+- `frontend/lab.html` `<title>` tag — check if updated
 
 ## Fix
 
