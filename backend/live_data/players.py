@@ -1355,7 +1355,7 @@ def _fetch_player_strengths_uncached(player_id, season=None, top_n=4):
 def fetch_player_strengths(player_id, season=None, top_n=4):
     return _cached(f"fetch_player_strengths:{player_id}:{season}:{top_n}", lambda: _fetch_player_strengths_uncached(player_id=player_id, season=season, top_n=top_n))
 
-def _fetch_points_breakdown_uncached(player_id, season=None):
+def _fetch_points_breakdown_uncached(player_id, season=None, scoring="ppr"):
     """Return breakdown of fantasy point sources for a player."""
     if not player_id:
         return {"error": "player_id is required"}
@@ -1421,7 +1421,9 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
         games = stats[9] or 1
         turnovers = stats[10] or 0
 
-        # PPR scoring components
+        # Scoring format multiplier for receptions
+        rec_mult = {"ppr": 1.0, "half_ppr": 0.5, "std": 0.0}.get(scoring, 1.0)
+        rec_label = {"ppr": "Receptions (PPR)", "half_ppr": "Receptions (Half)", "std": "Receptions"}.get(scoring, "Receptions (PPR)")
         components = [
             {"label": "Passing Yards", "points": round(pass_yd * 0.04, 1), "raw": pass_yd, "color": "#5b7fff"},
             {"label": "Passing TDs", "points": round(pass_td * 4, 1), "raw": pass_td, "color": "#3a5abf"},
@@ -1429,7 +1431,7 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
             {"label": "Rushing TDs", "points": round(rush_td * 6, 1), "raw": rush_td, "color": "#1a9a8d"},
             {"label": "Receiving Yards", "points": round(rec_yd * 0.1, 1), "raw": rec_yd, "color": "#d97757"},
             {"label": "Receiving TDs", "points": round(rec_td * 6, 1), "raw": rec_td, "color": "#b85a3a"},
-            {"label": "Receptions (PPR)", "points": round(rec * 1.0, 1), "raw": rec, "color": "#8b5cf6"},
+            {"label": rec_label, "points": round(rec * rec_mult, 1), "raw": rec, "color": "#8b5cf6"},
         ]
 
         # Only include non-zero components
@@ -1443,20 +1445,24 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
         # Sort by points descending
         breakdown.sort(key=lambda x: x["points"], reverse=True)
 
+        # Recalculate total from components to match the selected scoring format
+        scored_total = round(positive_total, 1)
         return {
             "player": player_info,
             "season": season,
             "available_seasons": available_seasons,
             "breakdown": breakdown,
-            "total_points": round(total_ppr, 1),
-            "ppg": round(total_ppr / games, 1),
+            "total_points": scored_total,
+            "ppg": round(scored_total / games, 1),
             "games": games,
+            "scoring": scoring,
         }
 
 
 
-def fetch_points_breakdown(player_id, season=None):
-    return _cached(f"fetch_points_breakdown:{player_id}:{season}", lambda: _fetch_points_breakdown_uncached(player_id=player_id, season=season))
+def fetch_points_breakdown(player_id, season=None, scoring="ppr"):
+    sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+    return _cached(f"fetch_points_breakdown:{player_id}:{season}:{sc}", lambda: _fetch_points_breakdown_uncached(player_id=player_id, season=season, scoring=sc))
 
 def _fetch_game_log_uncached(player_id, season=None):
     """Return week-by-week box score stats for a player in a given season."""

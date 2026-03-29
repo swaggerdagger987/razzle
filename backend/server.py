@@ -3148,13 +3148,13 @@ def weekly_leaders(season: int = 0, week: int = 0, position: str = ""):
 
 
 @app.get("/api/points-breakdown")
-def points_breakdown(player_id: str = "", season: int = 0):
+def points_breakdown(player_id: str = "", season: int = 0, scoring: str = "ppr"):
     """Return fantasy points breakdown by scoring component."""
     if not player_id:
         return JSONResponse({"error": "player_id is required"}, status_code=400)
     try:
         s = season if season > 0 else None
-        return live_data.fetch_points_breakdown(player_id=player_id, season=s)
+        return live_data.fetch_points_breakdown(player_id=player_id, season=s, scoring=scoring)
     except Exception as e:
         logger.exception("points-breakdown error")
         return JSONResponse({"error": "Failed to fetch points breakdown"}, status_code=500)
