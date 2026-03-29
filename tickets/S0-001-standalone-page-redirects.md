@@ -3,7 +3,7 @@ id: S0-001
 severity: S0
 category: ux-flow
 title: "Standalone panel pages redirect away when visited directly"
-status: open
+status: closed-verified
 audit: DEEP-AUDIT-TICKETS.md
 ---
 
@@ -41,6 +41,6 @@ All other 72 pages loaded correctly.
 
 ## Acceptance Criteria
 
-- [ ] Visiting razzle.lol/workload.html directly loads the workload monitor (not a redirect)
-- [ ] Visiting razzle.lol/regression.html directly loads the regression page (not a redirect)
-- [ ] No HTML file in frontend/ contains `window.self===window.top` or `location.replace` redirect patterns
+- [x] Visiting razzle.lol/workload.html directly loads the workload monitor (not a redirect) — verified: no redirect code exists
+- [x] Visiting razzle.lol/regression.html directly loads the regression page (not a redirect) — verified: no redirect code exists
+- [x] No HTML file in frontend/ contains `window.self===window.top` or `location.replace` redirect patterns — grep confirms 0 matches
