@@ -37,26 +37,42 @@ Check `PROGRESS.md` to determine which phase you're in. Follow the roadmap phase
 ```
 razzle/
 ├── frontend/          # HTML, JS, CSS — no framework, browser-runnable
-│   ├── index.html     # Landing page (home)
-│   ├── lab.html       # The Lab (screener)
-│   ├── league-intel.html
-│   ├── agents.html    # Situation Room (later)
-│   ├── styles.css     # Single stylesheet, follows DESIGN.md
+│   ├── index.html     # Landing page
+│   ├── lab.html       # Fourth Down Lab (screener)
+│   ├── league-intel.html  # Bureau of Intelligence
+│   ├── agents.html    # Situation Room
+│   ├── styles.css     # Global stylesheet (follows DESIGN.md)
 │   ├── lab.js         # Screener logic
-│   └── app.js         # Shared logic
+│   ├── app.js         # Shared logic
+│   └── (60+ standalone panel pages)
 ├── backend/
 │   ├── server.py      # FastAPI app — thin endpoints
-│   └── live_data.py   # Data queries, all DB reads
-├── adapters/
-│   ├── nflverse_adapter.py  # NFL stats → SQLite
-│   └── college_adapter.py   # NCAA stats → SQLite (Phase 1)
+│   ├── auth.py        # JWT auth + registration
+│   ├── billing.py     # Stripe subscription management
+│   ├── db.py          # Database connection
+│   ├── logging_config.py
+│   └── live_data/     # Data query modules (10 files)
+├── adapters/          # Data source adapters (nflverse, college, cfbfastr)
 ├── data/
-│   └── terminal.db    # SQLite — single source of truth
-├── scripts/           # One-off scripts, data imports
+│   └── terminal.db    # SQLite — single source of truth (gitignored)
+├── scripts/
+│   ├── build_dist.py  # Minifier (called by Render build)
+│   ├── reddit_scraper.py   # Reddit data for twitter pipeline
+│   └── marketing_research.py  # Marketing analysis
+├── tests/             # pytest test suite
+├── functional-qa/     # QA tooling (smoke.py, browser.js, baselines/)
+├── twitter/           # Twitter content pipeline
+│   ├── scheduler.py   # Auto-poster
+│   ├── screenshot.py  # Lab screenshot capture
+│   ├── autopull_metrics.py  # Engagement data
+│   └── queue/         # drafts/ → approved/ → posted/
+├── tickets/           # Active ticket system (backend/, security/, ux/)
+├── agent-personas/    # 6 Situation Room agent personality files
 ├── docs/
-│   ├── NORTH_STAR.md  # Product vision — the endgame. Read first.
+│   ├── NORTH_STAR.md  # Product vision — read first
 │   ├── ROADMAP.md     # Phased development plan
-│   └── DESIGN.md      # Theme and design guide
+│   ├── DESIGN.md      # Theme and design guide
+│   └── plans/         # Feature design docs
 ├── CLAUDE.md          # This file
 ├── PROGRESS.md        # Completed work tracker
 └── render.yaml        # Render deployment config
@@ -174,15 +190,26 @@ The old FDL project at `C:\Users\mcgui\Documents\FDL` has working implementation
 
 Use these as reference for proven patterns, but rewrite everything clean for the razzle repo. Every line should be intentional.
 
-## Razzle Loop (Autonomous Agent Workflow)
+## Orchestration — Agent Loops
 
-The Razzle Loop is an autonomous multi-agent workflow defined in `~/.claude/agents/razzle-loop.md`. It runs a recursive PLAN → DESIGN → BUILD → TEST → FIX loop with zero human stops.
+Razzle runs via multi-agent loops in isolated git worktrees. Each agent has a prompt file (repo root), an agent definition (~/.claude/agents/), and runs in its own worktree.
 
-- **Task tracker**: `LOOP-TASKS.md` (root of repo) — tracks current task, attempts, pass/fail
-- **Activation**: Say "activate razzle loop" or "start the loop"
-- **Agents used**: Sprint Prioritizer, UI Designer, Whimsy Injector, Frontend Developer, Evidence Collector, Reality Checker
-- **Loop logic**: Each task gets max 3 attempts. PASS → commit + next task. FAIL → fix loop. All tasks PASS → phase gate → push.
-- **Full autonomy**: The loop reads north star, roadmap, design guide, and progress tracker. It makes its own decisions. It does not stop to ask.
+| Loop | Prompt | Agent | Worktree | Branch |
+|------|--------|-------|----------|--------|
+| Ship | ship-prompt.txt | razzle-ship-loop.md | razzle-ship/ | ship/launch-fixes |
+| QA | functional-prompt.txt | razzle-functional-loop.md | razzle-qa/ | qa/findings |
+| CEO | ceo-prompt.txt | razzle-ceo.md | razzle-ceo/ | ceo/strategy |
+| Twitter Creator | twitter-creator-prompt.txt | razzle-twitter-creator.md | (main repo) | twitter/content |
+| Twitter Reviewer | twitter-reviewer-prompt.txt | razzle-twitter-reviewer.md | (main repo) | twitter/content |
+| Twitter Analyst | twitter-analyst-prompt.txt | razzle-twitter-analyst.md | (main repo) | twitter/content |
+
+**Run scripts:**
+- `run-dual-loop.ps1` — Standard (QA + Ship). Starts backend, baselines, launches both.
+- `run-trio-loop.ps1` — Extended (QA + Ship + CEO). Adds strategic tickets.
+- `run-twitter-loop.ps1` — Full twitter pipeline (Creator → Reviewer → Scheduler → Analyst).
+- `run-content-loop.ps1` — Simplified twitter (scrape → screenshot → create → review → post).
+
+**Flow:** QA finds bugs → writes to tickets/ → Ship reads tickets/ → fixes → pushes ship/launch-fixes → human merges to master.
 
 ## gstack (Garry Tan's Engineering Skills)
 
