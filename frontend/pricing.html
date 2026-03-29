@@ -120,6 +120,7 @@
   }
   .plan-features li:last-child { border-bottom: none; }
   .plan-features .check { color: var(--green); font-weight: 700; flex-shrink: 0; }
+  .plan-features .check.elite-check { color: var(--orange); }
   .plan-features .highlight { color: var(--orange); font-weight: 700; }
 
   .plan-cta { width: 100%; }
@@ -423,13 +424,13 @@
       <div class="plan-interval" id="eliteInterval">that's <span class="yearly-price">$12.50/mo</span> — save 37%<br><span style="font-size:11px;color:var(--ink-light);">billed annually at $149.99</span></div>
 
       <ul class="plan-features">
-        <li><span class="check">&#10003;</span> <span class="highlight">Everything in Pro, plus:</span></li>
-        <li><span class="check">&#10003;</span> <span class="highlight">Unlimited AI queries — nothing to set up</span></li>
-        <li><span class="check">&#10003;</span> <span class="highlight">No API key needed — we handle it</span></li>
-        <li><span class="check">&#10003;</span> <span class="highlight">Agent memory</span> (multi-season, per-league)</li>
-        <li><span class="check">&#10003;</span> <span class="highlight">Weekly Razzle briefings</span></li>
-        <li><span class="check">&#10003;</span> Priority data refresh</li>
-        <li><span class="check">&#10003;</span> Full historical data (2015+)</li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">Everything in Pro, plus:</span></li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">Unlimited AI queries — nothing to set up</span></li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">No API key needed — we handle it</span></li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">Agent memory</span> (multi-season, per-league)</li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">Weekly Razzle briefings</span></li>
+        <li><span class="check elite-check">&#9733;</span> Priority data refresh</li>
+        <li><span class="check elite-check">&#9733;</span> Full historical data (2015+)</li>
         <li><span class="check">&#10003;</span> 7-day Pro trial included &mdash; upgrade to Elite anytime</li>
       </ul>
 
@@ -442,6 +443,15 @@
   <div style="text-align:center; margin-top:16px; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">
     <svg style="width:14px; height:14px; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     Secured by Stripe. Cancel anytime.
+  </div>
+
+  <!-- Social proof -->
+  <div style="text-align:center; margin:24px 0 8px; display:flex; flex-wrap:wrap; justify-content:center; gap:16px; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">
+    <span>10 seasons of nflverse data</span>
+    <span style="color:var(--ink-faint);">|</span>
+    <span>used by dynasty and redraft players on r/DynastyFF</span>
+    <span style="color:var(--ink-faint);">|</span>
+    <span>built by one person who watches too much film</span>
   </div>
 
   <div style="text-align:center; margin:16px 0 8px;">
