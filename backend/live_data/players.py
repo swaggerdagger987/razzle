@@ -238,10 +238,11 @@ def fetch_players(
             _enrich_with_pbp_stats(conn, items, season=_season, career_mode=_career_mode)
 
             # Re-sort in Python for derived/rate metrics
+            # None → bottom of results regardless of sort direction (S1-043)
             if _python_sort:
                 reverse = _sort_dir.lower() == "desc"
-                _null_sentinel = float('-inf') if reverse else float('inf')
-                items.sort(key=lambda x: x.get(_sort_key) if x.get(_sort_key) is not None else _null_sentinel, reverse=reverse)
+                _sentinel = float('-inf') if reverse else float('inf')
+                items.sort(key=lambda x: x.get(_sort_key) if x.get(_sort_key) is not None else _sentinel, reverse=reverse)
                 items = items[offset:offset + limit]
 
             return {"count": total, "season": "career" if _career_mode else _season, "items": items}
