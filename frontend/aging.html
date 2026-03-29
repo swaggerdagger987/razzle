@@ -551,6 +551,8 @@
 
   // --- Tooltip + click handling ---
   function setupCanvasInteraction(canvas, tooltipEl, pos) {
+    if (canvas._listenersAttached) return;
+    canvas._listenersAttached = true;
     canvas.addEventListener('mousemove', function(e) {
       var rect = canvas.getBoundingClientRect();
       var mx = e.clientX - rect.left;

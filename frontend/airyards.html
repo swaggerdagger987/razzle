@@ -468,10 +468,14 @@
     html += buildTable(data.buy_low, 'buy_low');
     html += buildTable(data.sell_high, 'sell_high');
     body.innerHTML = html;
+  }
 
-    // Attach sort listeners
-    body.querySelectorAll('th[data-sort]').forEach(function(th) {
-      th.addEventListener('click', function() {
+  // Event delegation on stable #air-body container (avoids listener stacking on re-render)
+  (function() {
+    var body = document.getElementById('air-body');
+    body.addEventListener('click', function(e) {
+      var th = e.target.closest('th[data-sort]');
+      if (th) {
         var col = th.getAttribute('data-sort');
         var sec = th.getAttribute('data-section');
         if (sortState[sec].col === col) {
@@ -481,17 +485,15 @@
           sortState[sec].dir = -1;
         }
         render(currentData);
-      });
-    });
-
-    // Attach row click
-    body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
-      tr.addEventListener('click', function() {
+        return;
+      }
+      var tr = e.target.closest('tr[data-pid]');
+      if (tr) {
         var pid = tr.getAttribute('data-pid');
         if (pid) window.location.href = '/player/' + encodeURIComponent(pid);
-      });
+      }
     });
-  }
+  })();
 
   function loadData() {
     var body = document.getElementById('air-body');

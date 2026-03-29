@@ -623,6 +623,18 @@
 
     var seasonSel = el.querySelector('#lp-tv-season');
 
+    // Event delegation on stable #lp-tv-body (avoids listener stacking on re-render)
+    el.querySelector('#lp-tv-body').addEventListener('click', function(e) {
+      var row = e.target.closest('.tv-row[data-pid]');
+      if (row) {
+        var pid = row.getAttribute('data-pid');
+        if (pid) {
+          if (typeof openPlayerPopup === 'function') openPlayerPopup(pid);
+          else window.location.href = '/player/' + encodeURIComponent(pid);
+        }
+      }
+    });
+
     // Set slider initial values from URL params
     el.querySelector('#lp-tv-w-prod').value = weights.production;
     el.querySelector('#lp-tv-w-age').value = weights.age;
@@ -725,13 +737,6 @@
       });
       html += '</div>';
       body.innerHTML = html;
-
-      body.querySelectorAll('.tv-row[data-pid]').forEach(function(row) {
-        row.addEventListener('click', function() {
-          var pid = row.getAttribute('data-pid');
-          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
-        });
-      });
     }
 
     function loadData() {
@@ -887,6 +892,27 @@
 
     var seasonSel = el.querySelector('#lp-vorp-season');
 
+    // Event delegation on stable #lp-vorp-body (avoids listener stacking on re-render)
+    el.querySelector('#lp-vorp-body').addEventListener('click', function(e) {
+      var th = e.target.closest('th[data-sort]');
+      if (th) {
+        var col = th.getAttribute('data-sort');
+        var sec = th.getAttribute('data-section');
+        if (sortState[sec].col === col) sortState[sec].dir *= -1;
+        else { sortState[sec].col = col; sortState[sec].dir = -1; }
+        renderVorp(currentData);
+        return;
+      }
+      var tr = e.target.closest('tr[data-pid]');
+      if (tr) {
+        var pid = tr.getAttribute('data-pid');
+        if (pid) {
+          if (typeof openPlayerPopup === 'function') openPlayerPopup(pid);
+          else window.location.href = '/player/' + encodeURIComponent(pid);
+        }
+      }
+    });
+
     function vorpTier(v) {
       if (v >= 6) return 'elite';
       if (v >= 3) return 'starter';
@@ -994,22 +1020,6 @@
       }
 
       body.innerHTML = buildTable(winners, 'league_winners') + buildTable(replacements, 'replacement_level');
-
-      body.querySelectorAll('th[data-sort]').forEach(function(th) {
-        th.addEventListener('click', function() {
-          var col = th.getAttribute('data-sort');
-          var sec = th.getAttribute('data-section');
-          if (sortState[sec].col === col) sortState[sec].dir *= -1;
-          else { sortState[sec].col = col; sortState[sec].dir = -1; }
-          renderVorp(currentData);
-        });
-      });
-      body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
-        tr.addEventListener('click', function() {
-          var pid = tr.getAttribute('data-pid');
-          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
-        });
-      });
     }
 
     function loadData() {
