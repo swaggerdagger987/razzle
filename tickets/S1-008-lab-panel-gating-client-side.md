@@ -3,7 +3,7 @@ id: S1-008
 severity: S1
 category: security
 title: "Lab panel data gating is client-side only — Pro analytical data accessible via public API"
-status: open
+status: closed-accepted-risk
 audit: DEEP-AUDIT-TICKETS.md
 ---
 
@@ -48,6 +48,9 @@ Revenue leak: any user who opens DevTools can access all 60+ Pro panels' data wi
 
 ## Acceptance Criteria
 
-- [ ] Decision made on gating strategy (accept risk / server-side gate / hybrid)
-- [ ] If server-side: Pro-locked panel endpoints return 403 for free users
-- [ ] If hybrid: Rate limiting differentiates free vs Pro API access
+- [x] Decision made: **Accept risk** (Option 1). Data is free, the UI is the product. The Lab
+  experience (70+ panels, visual polish, keyboard shortcuts, export) is the value prop — not raw
+  API data. Matches North Star philosophy. Server-side gating would require 30+ endpoint changes
+  and break the "free research lab" identity. Revisit post-launch if API abuse becomes measurable.
+- [ ] ~~If server-side: Pro-locked panel endpoints return 403 for free users~~ (not implementing)
+- [ ] ~~If hybrid: Rate limiting differentiates free vs Pro API access~~ (not implementing)

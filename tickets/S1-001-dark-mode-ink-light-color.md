@@ -3,7 +3,7 @@ id: S1-001
 severity: S1
 category: design
 title: "Dark mode --ink-light diverges from DESIGN.md spec"
-status: open
+status: closed-verified
 audit: DEEP-AUDIT-TICKETS.md
 ---
 
@@ -35,5 +35,5 @@ Labels, metadata, timestamps across all 75 pages in dark mode have slightly wron
 
 ## Acceptance Criteria
 
-- [ ] `--ink-light` in `[data-theme="dark"]` matches DESIGN.md value `#8a7565`
-- [ ] Verify contrast ratio is still accessible (WCAG AA) against dark background
+- [x] `--ink-light` in `[data-theme="dark"]` matches DESIGN.md value `#8a7565` — already correct at styles.css:109
+- [x] Verify contrast ratio is still accessible (WCAG AA) against dark background

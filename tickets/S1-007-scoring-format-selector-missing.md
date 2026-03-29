@@ -3,7 +3,7 @@ id: S1-007
 severity: S1
 category: football-accuracy
 title: "No scoring format selector on 3 standalone analytical pages"
-status: open
+status: deferred-post-launch
 audit: DEEP-AUDIT-TICKETS.md
 ---
 

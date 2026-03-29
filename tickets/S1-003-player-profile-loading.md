@@ -3,7 +3,7 @@ id: S1-003
 severity: S1
 category: ui-bug
 title: "Player profile page may show perpetual loading state"
-status: needs-verification
+status: closed-verified
 audit: DEEP-AUDIT-TICKETS.md
 ---
 
