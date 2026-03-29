@@ -11,22 +11,39 @@ status: OPEN
 
 ## Root Cause
 
-The tier assignment thresholds in the backend are too generous for S-tier. The current trade value threshold at `backend/live_data/core.py:818` defines elite PPR at 18.0 PPG. The tier break at the S-tier level (likely trade_value >= 80) captures too many players because the production component (50% weight) distributes values broadly.
+The tier assignment thresholds are too generous for S-tier. The exact definition is at **`backend/live_data/dynasty.py:1314-1321`**:
 
-With 84 players in S-tier, the label loses meaning. In real dynasty leagues, "S-tier" means untouchable — that's 10-15 players, not 84.
+```python
+_TIER_BREAKS = [
+    (80, "S", "Elite — untouchable dynasty cornerstones"),
+    (65, "A", "Blue Chip — premium assets with staying power"),
+    (50, "B", "Solid — reliable starters with upside"),
+    (35, "C", "Flex — startable but replaceable"),
+    (20, "D", "Depth — roster filler with some value"),
+    (0, "F", "Cut Bait — minimal dynasty value"),
+]
+```
+
+The S-tier threshold of **80** captures 84 players because the trade value composite (production 50% + age 30% + scarcity 20%) distributes broadly. With 84 in S-tier, the "untouchable" label is meaningless.
+
+**Tier assignment logic** — `backend/live_data/dynasty.py:1380`:
+```python
+for threshold, key, _ in _TIER_BREAKS:
+```
+Iterates thresholds in descending order, assigning first match.
 
 ## Fix
 
-Raise the S-tier threshold from its current value (likely 80) to approximately 90-92, which should limit S-tier to the top 10-15 dynasty assets. The existing tier breaks (`tiers.html` or backend tier assignment):
+Raise S-tier threshold from 80 to ~92 at `dynasty.py:1315`:
 
-Current likely thresholds: S(80+) / A(65+) / B(50+) / C(35+) / D(20+) / F(<20)
-Proposed: S(92+) / A(75+) / B(55+) / C(35+) / D(20+) / F(<20)
+Current: `(80, "S", "Elite — untouchable dynasty cornerstones")`
+Proposed: `(92, "S", "Elite — untouchable dynasty cornerstones")`
 
-Check the exact threshold in the backend tier assignment function and adjust.
+Also adjust A(75), B(55) to rebalance distribution.
 
 ## Files to Change
 
-- `backend/live_data/core.py` or `backend/live_data/dynasty.py` — tier threshold constants
+- `backend/live_data/dynasty.py:1314-1321` — `_TIER_BREAKS` constant
 
 ## Accept When
 
