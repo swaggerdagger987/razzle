@@ -1019,7 +1019,7 @@ const state = {
   totalCount: 0,
   seasons: [],
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
-  heatColors: false, // percentile heat coloring toggle
+  heatColors: (function() { try { var v = localStorage.getItem("razzle_heat_colors"); return v === null ? true : v === "1"; } catch(e) { return true; } })(), // ON by default for screenshot-ready views
   percentileMode: (function() { try { return localStorage.getItem("razzle_percentile_mode") === "1"; } catch(e) { return false; } })(), // show percentile values instead of raw
   dataBars: (function() { try { return localStorage.getItem("razzle_data_bars") === "1"; } catch(e) { return false; } })(), // inline data bars toggle
   leaderBadges: (function() { try { return localStorage.getItem("razzle_leader_badges") === "1"; } catch(e) { return false; } })(), // stat leader dot indicators
@@ -4183,7 +4183,7 @@ function loadStateFromURL() {
     state.heatColors = params.get("heat") === "1";
   } else {
     // Fall back to localStorage preference
-    state.heatColors = (function() { try { return localStorage.getItem("razzle_heat_colors") === "1"; } catch(e) { return false; } })();
+    state.heatColors = (function() { try { var v = localStorage.getItem("razzle_heat_colors"); return v === null ? true : v === "1"; } catch(e) { return true; } })();
   }
   if (params.has("pctl")) {
     state.percentileMode = params.get("pctl") === "1";
