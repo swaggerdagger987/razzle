@@ -4111,6 +4111,35 @@
 [data-theme="dark"] .glo-totals { background: var(--orange-hover); }
 [data-theme="dark"] .mh-table tbody tr:hover td { filter: brightness(1.15); }
 
+/* ===== TOUCH DEVICE HOVER GUARD ===== */
+/* Prevent sticky hover states (transform/shadow lifts) on touch devices */
+@media (hover: none) {
+  .rankings-card:hover,
+  .breakout-card:hover,
+  .buysell-card:hover,
+  .scarcity-summary-card:hover,
+  .scarcity-card:hover,
+  .tl-player-chip:hover,
+  .aw2-winner:hover,
+  .aw2-runner-row:hover,
+  .mh-detail-player:hover,
+  .wh-player-inner:hover {
+    transform: none !important;
+    box-shadow: 3px 3px 0 var(--ink) !important;
+  }
+  .wh-table td:hover {
+    transform: none !important;
+  }
+  .lp-pos-tab:hover:not(.active),
+  .lp-view-btn:hover:not(.active),
+  .rankings-filter-btn:hover,
+  .wkl-week-btn:hover:not(:disabled),
+  .cs-fmt-tab:hover {
+    background: inherit !important;
+    color: inherit !important;
+  }
+}
+
 /* ===== MOBILE TABLE SCROLL — DES-023 ===== */
 @media (max-width: 768px) {
   .tl-tier,
@@ -4118,6 +4147,6 @@
   .vorp-table,
   .pa-card {
     overflow-x: auto;
-    
+
   }
 }
