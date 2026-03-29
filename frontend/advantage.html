@@ -97,11 +97,11 @@
   <div class="pa-controls">
     <select id="paSeason" aria-label="Season"></select>
     <div class="pos-tabs" role="tablist" aria-label="Position filter">
-      <button class="pos-tab active" data-pos="">ALL</button>
-      <button class="pos-tab" data-pos="QB">QB</button>
-      <button class="pos-tab" data-pos="RB">RB</button>
-      <button class="pos-tab" data-pos="WR">WR</button>
-      <button class="pos-tab" data-pos="TE">TE</button>
+      <button class="pos-tab active" role="tab" aria-selected="true" data-pos="">ALL</button>
+      <button class="pos-tab" role="tab" aria-selected="false" data-pos="QB">QB</button>
+      <button class="pos-tab" role="tab" aria-selected="false" data-pos="RB">RB</button>
+      <button class="pos-tab" role="tab" aria-selected="false" data-pos="WR">WR</button>
+      <button class="pos-tab" role="tab" aria-selected="false" data-pos="TE">TE</button>
     </div>
     <button class="pa-export" id="paExport">Export PNG</button>
   </div>
@@ -310,8 +310,8 @@
 
   document.querySelectorAll('.pos-tab').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
+      document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected', 'true');
       currentPosition = btn.getAttribute('data-pos') || '';
       load();
     });
