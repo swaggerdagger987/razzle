@@ -1788,8 +1788,8 @@ function updateSetupGuide() {
   var hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
   var elite = isEliteUser();
 
-  // Don't show for Elite users (they don't need BYOK setup)
-  if (elite) { guide.style.display = 'none'; return; }
+  // Don't show for Pro or Elite users (they have server-side AI included)
+  if (elite || isProUser()) { guide.style.display = 'none'; return; }
 
   guide.style.display = 'block';
 
