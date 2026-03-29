@@ -389,7 +389,7 @@
   <div class="tv-header">
     <h1>Dynasty Trade Value Chart</h1>
     <div class="tv-subtitle">every player's dynasty worth at a glance</div>
-    <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:8px;">composite value: 50% production + 30% age curve + 20% positional scarcity</div>
+    <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:8px;">adjust the weights below to match your league's priorities</div>
     <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:4px;">the number your leaguemates wish they had</div>
   </div>
 
@@ -405,10 +405,32 @@
     <input class="tv-search" type="text" id="player-search" placeholder="search player..." aria-label="Search players">
   </div>
 
-  <div class="tv-methodology">
-    <div class="tv-method-chip"><span class="method-label">Production:</span> 50%</div>
-    <div class="tv-method-chip"><span class="method-label">Age Curve:</span> 30%</div>
-    <div class="tv-method-chip"><span class="method-label">Pos Scarcity:</span> 20%</div>
+  <div class="tv-weight-sliders" id="weight-sliders">
+    <div class="tv-slider-group">
+      <div class="tv-slider-label">Production</div>
+      <div class="tv-slider-row">
+        <input type="range" id="w-prod" min="0" max="100" value="50" aria-label="Production weight">
+        <span class="tv-slider-val" id="w-prod-val">50%</span>
+      </div>
+    </div>
+    <div class="tv-slider-group">
+      <div class="tv-slider-label">Age Curve</div>
+      <div class="tv-slider-row">
+        <input type="range" id="w-age" min="0" max="100" value="30" aria-label="Age weight">
+        <span class="tv-slider-val" id="w-age-val">30%</span>
+      </div>
+    </div>
+    <div class="tv-slider-group">
+      <div class="tv-slider-label">Pos Scarcity</div>
+      <div class="tv-slider-row">
+        <input type="range" id="w-scar" min="0" max="100" value="20" aria-label="Scarcity weight">
+        <span class="tv-slider-val" id="w-scar-val">20%</span>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+      <div class="tv-weight-total">Total: <span class="total-num" id="w-total">100%</span></div>
+      <button class="tv-weight-reset" id="w-reset" title="Reset to default 50/30/20">Reset</button>
+    </div>
   </div>
 
   <div class="tv-actions">
@@ -512,6 +534,7 @@
   }
 
   var currentPosition = '';
+  var rawApiData = null;
   var currentData = null;
   var searchQuery = '';
 
@@ -652,7 +675,8 @@
         });
         seasonSel.value = data.season;
       }
-      render(data);
+      rawApiData = data;
+      render(recomputeValues(data));
     }).catch(function() {
       body.innerHTML = '<div class="tv-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
@@ -727,6 +751,80 @@
     opt.selected = true;
     sel.appendChild(opt);
   }
+
+  // Weight sliders
+  var wProd = document.getElementById('w-prod');
+  var wAge = document.getElementById('w-age');
+  var wScar = document.getElementById('w-scar');
+  var wProdVal = document.getElementById('w-prod-val');
+  var wAgeVal = document.getElementById('w-age-val');
+  var wScarVal = document.getElementById('w-scar-val');
+  var wTotal = document.getElementById('w-total');
+  var wReset = document.getElementById('w-reset');
+
+  function getWeights() {
+    var p = parseInt(wProd.value) || 0;
+    var a = parseInt(wAge.value) || 0;
+    var s = parseInt(wScar.value) || 0;
+    return { prod: p, age: a, scar: s, total: p + a + s };
+  }
+
+  function updateWeightDisplay() {
+    var w = getWeights();
+    wProdVal.textContent = w.prod + '%';
+    wAgeVal.textContent = w.age + '%';
+    wScarVal.textContent = w.scar + '%';
+    wTotal.textContent = w.total + '%';
+    wTotal.style.color = w.total === 100 ? 'var(--green)' : 'var(--red)';
+  }
+
+  function recomputeValues(data) {
+    if (!data || !data.players) return data;
+    var w = getWeights();
+    var sum = w.total || 1;
+    var wp = w.prod / sum;
+    var wa = w.age / sum;
+    var ws = w.scar / sum;
+    var players = data.players.map(function(p) {
+      var raw = (p.production_score || 0) * wp + (p.age_score || 0) * wa + (p.scarcity_score || 0) * ws;
+      // Soft ceiling matching backend
+      var tv;
+      if (raw <= 90) {
+        tv = Math.max(0, raw);
+      } else {
+        var excess = raw - 90;
+        tv = 90 + 10 * (1 - Math.exp(-excess / 50));
+      }
+      var copy = {};
+      for (var k in p) { if (p.hasOwnProperty(k)) copy[k] = p[k]; }
+      copy.trade_value = Math.round(tv * 10) / 10;
+      return copy;
+    });
+    // Re-sort and re-tier
+    players.sort(function(a, b) { return b.trade_value - a.trade_value; });
+    players.forEach(function(p, i) {
+      p.rank = i + 1;
+      var v = p.trade_value;
+      p.tier = v >= 80 ? 1 : v >= 65 ? 2 : v >= 50 ? 3 : v >= 35 ? 4 : v >= 25 ? 5 : v >= 15 ? 6 : v >= 5 ? 7 : 8;
+      p.tier_label = TIER_LABELS[p.tier] || 'Tier ' + p.tier;
+    });
+    return { season: data.season, available_seasons: data.available_seasons, players: players, total: players.length };
+  }
+
+  function onWeightChange() {
+    updateWeightDisplay();
+    if (rawApiData) render(recomputeValues(rawApiData));
+  }
+
+  wProd.addEventListener('input', onWeightChange);
+  wAge.addEventListener('input', onWeightChange);
+  wScar.addEventListener('input', onWeightChange);
+  wReset.addEventListener('click', function() {
+    wProd.value = 50; wAge.value = 30; wScar.value = 20;
+    onWeightChange();
+  });
+
+  updateWeightDisplay();
 
   // Initial load
   loadData();
