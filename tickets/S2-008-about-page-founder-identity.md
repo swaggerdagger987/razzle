@@ -5,6 +5,7 @@ category: ux-flow
 title: "About page lacks founder identity and social links"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: ceo/20260321-140010-028-about-page-founder-story.md
 ---
 
 # S2-008: About page lacks founder identity
