@@ -326,7 +326,7 @@
 </head>
 <body>
 <noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#2d1f14;"><h2>Razzle needs JavaScript</h2><p>Enable JavaScript to use the fantasy football research lab.</p></div></noscript>
-<a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#comparePage" class="skip-link">Skip to main content</a>
 
 <!-- NAV -->
 <nav class="topnav" aria-label="Main navigation">
@@ -347,9 +347,13 @@
   </div>
 </nav>
 
-<main class="compare-page" id="main-content">  <h1 class="sr-only">Player Comparison — Razzle</h1>
-  <div class="compare-loading">
-    <div class="compare-loading-text">pulling film...</div>
+<main class="compare-page" id="comparePage">  <h1 class="sr-only">Player Comparison — Razzle</h1>
+  <noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;">Enable JavaScript to compare players.</div></noscript>
+  <div class="compare-loading" style="max-width:480px;margin:60px auto;text-align:center;">
+    <div style="font-size:48px;margin-bottom:12px;">&#x1F42F;</div>
+    <div style="font-family:var(--font-display);font-size:20px;margin-bottom:8px;">Pick two players first, boss.</div>
+    <div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);margin-bottom:20px;">Select two players in the Lab and click Compare, or paste a compare URL.</div>
+    <a href="/lab.html" class="btn-chunky" style="display:inline-block;text-decoration:none;">Back to the Lab</a>
   </div>
 </main>
 

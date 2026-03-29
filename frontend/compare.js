@@ -21,16 +21,11 @@ var _p2Data = null;
 
 (async function init() {
   var ids = getIdsFromURL();
-  if (!ids || ids.length < 2) {
-    document.getElementById("comparePage").innerHTML =
-      '<div class="compare-loading" style="max-width:480px;margin:60px auto;text-align:center;">' +
-      '<div style="font-size:48px;margin-bottom:12px;">🐯</div>' +
-      '<div style="font-family:var(--font-display);font-size:20px;margin-bottom:8px;">Pick two players first, boss.</div>' +
-      '<div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);margin-bottom:20px;">Select two players in the Lab and click Compare, or paste a compare URL.</div>' +
-      '<a href="/lab.html" class="btn-chunky" style="display:inline-block;text-decoration:none;">Back to the Lab</a>' +
-      '</div>';
-    return;
-  }
+  if (!ids || ids.length < 2) return; // HTML already shows empty state
+  // Replace empty state with loading indicator
+  document.getElementById("comparePage").innerHTML =
+    '<h1 class="sr-only">Player Comparison — Razzle</h1>' +
+    '<div class="compare-loading"><div class="compare-loading-text">pulling film...</div></div>';
   await loadComparison(ids[0], ids[1]);
 })();
 
