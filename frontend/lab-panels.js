@@ -919,7 +919,7 @@
 
       var html = '<div class="vorp-section">';
       html += '<div class="vorp-section-header ' + hdrCls + '">' + title;
-      html += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ') — ' + subtitle + '</span></div>';
+      html += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ') — ' + subtitle + '</span></div>';
       html += '<table class="vorp-table" data-section="' + section + '"><caption class="sr-only">Value over replacement player — ' + escapeHtml(title) + '</caption><thead><tr>';
 
       var cols = [
@@ -1847,7 +1847,7 @@
 
       var h = '<div class="stk-section"><div class="stk-section-header ' + section + '">';
       h += '<span class="stk-section-icon ' + section + '">' + icon + '</span> ' + title;
-      h += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
+      h += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
       h += '<table class="stk-table" data-section="' + section + '"><caption class="sr-only">Dynasty stock watch — ' + escapeHtml(title) + '</caption><thead><tr>';
       COLS.forEach(function(c) {
         var cls = [];
@@ -2341,7 +2341,7 @@
 
       var h = '<div class="eff-section"><div class="eff-section-header ' + headerClass + '">';
       h += '<span class="eff-section-icon ' + headerClass + '">' + (isEff ? '&#x1F3AF;' : '&#x1F4AA;') + '</span> ';
-      h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
+      h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
       h += '<table class="eff-table" data-section="' + section + '"><caption class="sr-only">Fantasy efficiency rankings — ' + escapeHtml(title) + '</caption><thead><tr>';
       cols.forEach(function(c) {
         var cls = [];
@@ -2556,7 +2556,7 @@
 
       var h = '<div class="con-section"><div class="con-section-header ' + headerClass + '">';
       h += '<span class="con-section-icon ' + headerClass + '">' + (isSolid ? '&#x1F3AF;' : '&#x1F3B2;') + '</span> ';
-      h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
+      h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
       h += '<table class="con-table" data-section="' + section + '"><caption class="sr-only">Fantasy scoring consistency — ' + escapeHtml(title) + '</caption><thead><tr>';
       cols.forEach(function(c) {
         var cls = [];
@@ -3911,7 +3911,7 @@
       var sorted = sortPlayers(players, st.col, st.dir);
 
       var html = '<div class="rz-section">';
-      html += '<div class="rz-section-header ' + headerClass + '"><span class="section-icon">' + icon + '</span> ' + title + ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);font-weight:400">(' + players.length + ') — ' + subtitle + '</span></div>';
+      html += '<div class="rz-section-header ' + headerClass + '"><span class="section-icon">' + icon + '</span> ' + title + ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);font-weight:500">(' + players.length + ') — ' + subtitle + '</span></div>';
       html += '<table class="rz-table" data-section="' + section + '"><caption class="sr-only">Red zone and goal-line usage — ' + escapeHtml(title) + '</caption>';
       html += buildHeader(section);
       html += '<tbody>';
@@ -7865,7 +7865,7 @@
       var title = isAlpha ? 'Alpha Dogs' : 'Dominator Rating Leaders';
       var st = sortState[section];
       var sorted = sortPlayers(players, st.col, st.dir);
-      var html = '<div class="opp2-section"><div class="opp2-section-header ' + (isAlpha ? 'alpha' : 'dominator') + '">' + icon + ' ' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
+      var html = '<div class="opp2-section"><div class="opp2-section-header ' + (isAlpha ? 'alpha' : 'dominator') + '">' + icon + ' ' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
       html += '<table class="opp2-table" data-section="' + section + '"><caption class="sr-only">Opportunity share — ' + escapeHtml(title) + '</caption>' + buildHeader(section) + '<tbody>';
       sorted.forEach(function(p) { html += buildRow(p, section); });
       html += '</tbody></table></div>';
@@ -8814,7 +8814,7 @@
       var title = isSuppressed ? '&#x1F6E1; Schedule Suppressed' : '&#x1F36D; Schedule Inflated';
       var st = sortState[section];
       var sorted = sortPlayers(players, st.col, st.dir);
-      var html = '<div class="sos2-section"><div class="sos2-section-header ' + (isSuppressed ? 'suppressed' : 'inflated') + '">' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
+      var html = '<div class="sos2-section"><div class="sos2-section-header ' + (isSuppressed ? 'suppressed' : 'inflated') + '">' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
       html += '<table class="sos2-table" data-section="' + section + '"><caption class="sr-only">Strength of schedule — ' + (isSuppressed ? 'schedule suppressed' : 'schedule inflated') + '</caption>' + buildHeader(section) + '<tbody>';
       sorted.forEach(function(p) { html += buildRow(p, section); });
       html += '</tbody></table></div>';
