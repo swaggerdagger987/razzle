@@ -5,6 +5,7 @@ category: performance
 title: "Offline/slow-network handling partially implemented — no service worker"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+duplicate-of: frontend/S2-031
 ---
 
 # S2-010: No offline/slow-network handling

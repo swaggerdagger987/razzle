@@ -5,6 +5,7 @@ category: design
 title: "Dark mode --ink-light diverges from DESIGN.md spec"
 status: open
 audit: DEEP-AUDIT-TICKETS.md
+duplicate-of: design/S1-015
 ---
 
 # S1-001: Dark mode --ink-light color diverges from DESIGN.md

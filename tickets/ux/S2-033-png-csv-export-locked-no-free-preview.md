@@ -5,6 +5,7 @@ category: ux
 title: CSV export Pro-locked with no preview — free users see greyed button with no value demonstration
 source: deep-audit
 status: open
+duplicate-of: S2-012
 ---
 
 ## Problem

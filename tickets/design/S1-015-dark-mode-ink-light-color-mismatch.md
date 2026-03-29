@@ -5,6 +5,7 @@ category: design
 title: Dark mode --ink-light uses #a89888, DESIGN.md specifies #8a7565
 source: deep-audit
 status: open
+duplicate-of: S1-001
 ---
 
 ## Problem
