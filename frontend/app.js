@@ -1496,11 +1496,11 @@ async function startCheckout(interval) {
         window.location.href = data.checkout_url;
         return; // Don't reset — navigating away
       } else {
-        _showToast(data.error || "checkout got stuffed at the line. give it another shot.", "error");
+        _showToast(data.error || "checkout got stuffed at the line. give it another shot or email swaggerdagger987@gmail.com", "error");
       }
     }
   } catch (e) {
-    _showToast("network fumble. try again.", "error");
+    _showToast("network fumble. try again or email swaggerdagger987@gmail.com", "error");
   }
   // Restore button state only if we didn't redirect (redirect = page unloads)
   _checkoutInProgress = false;
