@@ -518,14 +518,14 @@
   });
 
   // ---- PNG Export ----
-  document.getElementById("rankingsExportBtn").addEventListener("click", async function() {
-    var el = document.getElementById("main-content");
-    doExport();
+  document.getElementById("rankingsExportBtn").addEventListener("click", function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
+    doExport(btn);
   });
 
-  function doExport() {
+  function doExport(btn) {
     var el = document.getElementById("main-content");
-    if (!el) return;
+    if (!el) { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } return; }
     loadHtml2Canvas().then(function(h2c) { return h2c(el, {
       backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf',
       scale: 2,
@@ -543,7 +543,7 @@
       link.download = "razzle-dynasty-rankings.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
-    });
+    }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
   }
 
   // ---- Restore URL state ----

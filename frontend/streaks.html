@@ -497,6 +497,7 @@
 
   /* ---- PNG export ---- */
   document.getElementById('strExport').addEventListener('click', function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
     var root = document.getElementById('main-content');
     loadHtml2Canvas().then(function(h2c) { return h2c(root, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -507,7 +508,7 @@
       link.download = 'razzle-streaks.png';
       link.href = canvas.toDataURL();
       link.click();
-    });
+    }).finally(function() { btn.disabled = false; btn.textContent = 'Export PNG'; });
   });
 
   /* ---- Analytics ---- */

@@ -444,7 +444,7 @@
       </div>
       <div class="rb-actions">
         <button onclick="clearRoster()">Clear Roster</button>
-        <button onclick="exportPng()">Export PNG</button>
+        <button onclick="exportPng(this)">Export PNG</button>
         <button onclick="copyShareUrl()">Copy Share URL</button>
       </div>
     </div>
@@ -819,7 +819,8 @@
     renderEmpty();
   };
 
-  window.exportPng = function() {
+  window.exportPng = function(btn) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Exporting...'; }
     var el = document.getElementById('main-content');
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
@@ -830,7 +831,7 @@
       link.download = 'razzle-roster-grade.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
-    });
+    }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
   };
 
   window.copyShareUrl = function() {

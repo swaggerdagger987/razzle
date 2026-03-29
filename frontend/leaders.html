@@ -582,12 +582,13 @@
 
   // ---- PNG export ----
   document.getElementById("leadersExportBtn").addEventListener("click", function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
     var page = document.getElementById("main-content");
-    if (!page) return;
-    doExport(page);
+    if (!page) { btn.disabled = false; btn.textContent = 'Export PNG'; return; }
+    doExport(page, btn);
   });
 
-  function doExport(el) {
+  function doExport(el, btn) {
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true }); }).then(function(canvas) {
       // Add watermark
       var ctx = canvas.getContext("2d");
@@ -600,7 +601,7 @@
       link.download = "razzle-stat-leaders.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
-    });
+    }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
   }
 
   // ---- Restore URL state ----

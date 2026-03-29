@@ -745,12 +745,13 @@
 
   // ---- PNG export ----
   document.getElementById("teamExportBtn").addEventListener("click", function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
     var page = document.getElementById("main-content");
-    if (!page) return;
-    doExport(page);
+    if (!page) { btn.disabled = false; btn.textContent = 'Export PNG'; return; }
+    doExport(page, btn);
   });
 
-  function doExport(el) {
+  function doExport(el, btn) {
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true }); }).then(function(canvas) {
       var ctx = canvas.getContext("2d");
       ctx.font = "bold 18px 'Space Mono', monospace";
@@ -762,7 +763,7 @@
       link.download = "razzle-team-roster.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
-    });
+    }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
   }
 
   // ---- Initial load ----

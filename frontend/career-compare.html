@@ -330,7 +330,7 @@
   <div class="cc-slots" id="cc-slots"></div>
 
   <div class="cc-actions" id="cc-actions" style="display:none;">
-    <button class="btn btn-primary" onclick="exportComparePng()" aria-label="Export as PNG">Export PNG</button>
+    <button class="btn btn-primary" onclick="exportComparePng(this)" aria-label="Export as PNG">Export PNG</button>
   </div>
 
   <div id="cc-result"></div>
@@ -880,9 +880,10 @@
   }
 
   // PNG export
-  window.exportComparePng = function() {
+  window.exportComparePng = function(btn) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Exporting...'; }
     var el = document.getElementById('main-content');
-    if (!el) return;
+    if (!el) { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } return; }
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = 'bold 20px "Space Mono", monospace';
@@ -893,7 +894,7 @@
       link.download = 'razzle-career-compare.png';
       link.href = canvas.toDataURL();
       link.click();
-    });
+    }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
   };
 
   // Close dropdowns on outside click

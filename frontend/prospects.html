@@ -727,12 +727,13 @@
 
   // ---- PNG Export ----
   document.getElementById("prospectsExportBtn").addEventListener("click", function() {
-    doExport();
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
+    doExport(btn);
   });
 
-  function doExport() {
+  function doExport(btn) {
     var el = document.getElementById("main-content");
-    if (!el) return;
+    if (!el) { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } return; }
     loadHtml2Canvas().then(function(h2c) { return h2c(el, {
       backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf',
       scale: 2,
@@ -748,7 +749,7 @@
       link.download = "razzle-rookie-big-board.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
-    });
+    }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
   }
 
   // ---- Initial load ----

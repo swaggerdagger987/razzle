@@ -754,8 +754,9 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
     var el = document.getElementById('main-content');
-    if (!el) return;
+    if (!el) { btn.disabled = false; btn.textContent = 'Export PNG'; return; }
     var _ec = getExportColors(); loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: _ec.bg, scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = '24px Caveat, cursive';
@@ -766,7 +767,7 @@
       link.download = 'razzle-report-card.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
-    });
+    }).finally(function() { btn.disabled = false; btn.textContent = 'Export PNG'; });
   });
 
   // Analytics

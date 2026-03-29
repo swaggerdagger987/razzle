@@ -555,7 +555,7 @@
 
     // Actions
     html += '<div class="pct-actions">';
-    html += '<button class="btn btn-primary" onclick="exportPctPng()" aria-label="Export as PNG">Export PNG</button>';
+    html += '<button class="btn btn-primary" onclick="exportPctPng(this)" aria-label="Export as PNG">Export PNG</button>';
     html += '</div>';
 
     // Percentile bars
@@ -591,9 +591,10 @@
   }
 
   // PNG export
-  window.exportPctPng = function() {
+  window.exportPctPng = function(btn) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Exporting...'; }
     var el = document.getElementById('main-content');
-    if (!el) return;
+    if (!el) { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } return; }
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = 'bold 20px "Space Mono", monospace';
@@ -604,7 +605,7 @@
       link.download = 'razzle-percentiles.png';
       link.href = canvas.toDataURL();
       link.click();
-    });
+    }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
   };
 
   // Analytics
