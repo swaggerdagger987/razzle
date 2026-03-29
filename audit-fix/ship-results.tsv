@@ -1,0 +1,10 @@
+timestamp	invocation	ticket_file	severity	category	status	files_changed	lines_changed	smoke_result	revert_reason	time_estimate	root_cause_accurate	notes
+2026-03-28T00:00	triage-1	S2-101-trade-values-te-overvaluation-compression.md	S2	football-accuracy	OPEN	0	0	-	-	15m	-	TE scarcity multiplier 0.90 too high
+2026-03-28T00:00	triage-1	S2-102-stacks-low-ppg-receivers-dominate.md	S2	football-accuracy	OPEN	0	0	-	-	10m	-	No min PPG filter on receiver
+2026-03-28T00:00	triage-1	S2-103-snap-efficiency-no-min-snap-threshold.md	S2	football-accuracy	OPEN	0	0	-	-	10m	-	No snaps/game filter
+2026-03-28T00:00	triage-1	S2-104-dual-threat-index-excludes-qbs.md	S2	football-accuracy	OPEN	0	0	-	-	20m	-	DTI uses rush+rec not pass+rush
+2026-03-28T00:00	triage-1	S2-105-consistency-cov-zero-single-season-dominance.md	S2	football-accuracy	OPEN	0	0	-	-	10m	-	Min games=6 too low, CoV=0 artifact
+2026-03-28T00:00	triage-1	S2-106-waivers-no-ownership-data-false-targets.md	S2	missing-feature	OPEN	0	0	-	-	30m	-	No ownership data, label fix or Sleeper integration
+2026-03-28T00:00	triage-1	S3-094-png-watermark-font-inconsistency.md	S3	design	OPEN	0	0	-	-	15m	-	Caveat vs Space Mono across 15+ pages
+2026-03-28T01:00	triage-2	S2-125-warroom-raf-loop-never-stops-on-nav.md	S2	performance	OPEN	0	0	-	-	15m	-	rAF loop leaks CPU when canvas removed from DOM
+2026-03-28T01:00	triage-2	S3-115-shared-screener-url-no-tier-indicator.md	S3	ux-flow	OPEN	0	0	-	-	20m	-	Shared URLs show different data for different tiers
