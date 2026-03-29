@@ -393,12 +393,37 @@ def _warm_cache():
     logger.info(f"Cache warmed: {warmed}/{len(warm_targets)} endpoints")
 
 
+def _populate_dynasty_snapshots():
+    """Populate dynasty value snapshots for all historical seasons that haven't been snapshotted yet."""
+    try:
+        with get_db() as conn:
+            live_data.init_dynasty_snapshots_table()
+            existing = {r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM dynasty_value_snapshots"
+            ).fetchall()}
+            available = [r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season"
+            ).fetchall()]
+        new_seasons = [s for s in available if s not in existing]
+        if not new_seasons:
+            return
+        total = 0
+        for season in new_seasons:
+            count = live_data.snapshot_dynasty_values(season)
+            total += count
+            logger.info("Dynasty snapshots: season %d — %d players", season, count)
+        logger.info("Dynasty snapshots complete: %d seasons, %d total players", len(new_seasons), total)
+    except Exception:
+        logger.exception("Dynasty snapshot population failed (non-fatal)")
+
+
 def _background_bootstrap():
     """Run heavy data bootstrap in a background thread so the server starts fast."""
     _bootstrap_status["running"] = True
     try:
         bootstrap_database()
         _ensure_season_stats_table()
+        _populate_dynasty_snapshots()
         _bootstrap_status["done"] = True
         logger.info("Background bootstrap complete")
         _warm_cache()
