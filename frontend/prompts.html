@@ -79,8 +79,8 @@
     max-height: 120px; overflow: hidden; position: relative;
   }
   .prompt-text:not(.expanded)::after {
-    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 32px;
-    background: var(--bg); opacity: 0.85; pointer-events: none;
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--bg) 90%); pointer-events: none;
   }
   .prompt-text.expanded { max-height: none; }
   .prompt-text.expanded::after { display: none; }
@@ -353,8 +353,10 @@ function prefillPrompt(idx) {
   // Show toast before navigation
   var toast = document.createElement('div');
   toast.textContent = 'Prompt loaded — taking you to the Situation Room...';
-  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:8px;font-family:var(--font-mono);font-size:13px;z-index:9999;box-shadow:4px 4px 0 var(--orange);';
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:8px;font-family:var(--font-mono);font-size:13px;z-index:var(--z-toast);box-shadow:4px 4px 0 var(--orange);opacity:0;transition:opacity 0.3s;';
   document.body.appendChild(toast);
+  requestAnimationFrame(function() { toast.style.opacity = '1'; });
+  setTimeout(function() { toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 300); }, 2000);
 }
 
 }
