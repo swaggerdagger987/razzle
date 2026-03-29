@@ -3,7 +3,7 @@ id: S1-009
 severity: S1
 category: football-accuracy
 title: "Drop rate uses non-standard PBP definition — needs methodology disclosure"
-status: open
+status: closed
 audit: DEEP-AUDIT-TICKETS.md
 ---
 
@@ -46,6 +46,6 @@ Dynasty managers using the drops page to evaluate receivers may get a misleading
 
 ## Acceptance Criteria
 
-- [ ] Drops page includes methodology note explaining the heuristic
-- [ ] Drop definition documented in a tooltip or info icon on the page
-- [ ] Consider tightening the heuristic or using nflverse's drop flag if available
+- [x] Drops page includes methodology note explaining the heuristic — expandable panel added
+- [x] Drop definition documented in a tooltip or info icon on the page — both title tooltip and click-to-expand note
+- [ ] Consider tightening the heuristic or using nflverse's drop flag if available — deferred, nflverse PBP doesn't have a drop flag

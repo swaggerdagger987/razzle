@@ -121,7 +121,10 @@
 <main class="dr-page" id="main-content">  <div class="dr-header">
     <h1>Drop Rate</h1>
     <div class="dr-subtitle">sure hands vs butterfingers</div>
-    <div class="dr-methodology" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-light);margin-top:4px;" title="A 'drop' = incomplete, non-intercepted pass on throws under 15 air yards. Drop Rate = drops / all targets (not just short targets). This is a proxy metric from nflverse PBP data, not an official NFL stat. Drop rate + catch rate won't sum to 100% because deep incompletions aren't counted as drops.">drops = short-throw incompletions (&lt;15 air yards) · drop rate = drops / all targets · <span style="cursor:help;text-decoration:underline dotted">methodology (?)</span></div>
+    <div class="dr-methodology" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-light);margin-top:4px;" title="A 'drop' = incomplete, non-intercepted pass on throws under 15 air yards. Drop Rate = drops / all targets (not just short targets). This is a proxy metric from nflverse PBP data, not an official NFL stat. Drop rate + catch rate won't sum to 100% because deep incompletions aren't counted as drops.">drops = short-throw incompletions (&lt;15 air yards) · drop rate = drops / all targets · <span style="cursor:help;text-decoration:underline dotted" onclick="document.getElementById('dr-method-note').style.display=document.getElementById('dr-method-note').style.display==='none'?'block':'none'">methodology (?)</span></div>
+    <div id="dr-method-note" style="display:none;font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-light);background:var(--bg-card);border:2px solid var(--ink-faint);padding:8px 12px;margin-top:6px;border-radius:4px;line-height:1.5;">
+      <strong>Not an official stat.</strong> Razzle defines a "drop" as any incomplete, non-intercepted pass with &lt;15 air yards. This includes throwaway balls, PBUs, and batted passes — not just catchable drops. PFF and NFL use subjective "catchable ball" criteria which we can't replicate from play-by-play data. Use as a directional signal, not gospel.
+    </div>
   </div>
 
   <div class="dr-controls">
