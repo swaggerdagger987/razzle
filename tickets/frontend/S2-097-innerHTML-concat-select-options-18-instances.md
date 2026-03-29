@@ -9,11 +9,30 @@ status: OPEN
 
 # innerHTML += for select options causes DOM thrashing — 18 instances in lab-panels.js
 
-## Root Cause
+## Root Cause (UPDATED 2026-03-29 — includes standalone page instances)
 
+### lab-panels.js (18 instances — DOM thrashing)
 `frontend/lab-panels.js` at 18 locations builds select option lists using `innerHTML +=` in a loop:
 
 Lines: 6946, 7037, 7167, 7424, 7425, 7436, 7670, 7899, 7972, 8070, 8241, 8835, 8913, 9116, 9124, 9268, 9276, 9396
+
+### Standalone pages (12 instances — XSS risk)
+Separate from lab-panels.js, 12 instances in standalone HTML files use innerHTML concat for `<option>` elements:
+
+| File | Line | Escaped? |
+|------|------|----------|
+| `gamelog.html` | 496 | NO — season value from API unescaped |
+| `league-intel.html` | 4695 | partial — index unescaped, text uses `escapeHtml()` |
+| `league-intel.html` | 4702 | partial — index unescaped, text uses `escapeHtml()` |
+| `league-intel.html` | 5492 | YES — uses `escapeAttr()` + `escapeHtml()` |
+| `league-intel.html` | 5502 | YES — uses `escapeAttr()` + `escapeHtml()` |
+| `league-intel.html` | 7488 | static string (safe) |
+| `league-intel.html` | 7504 | YES — uses `escapeAttr()` + `escapeHtml()` |
+| `league-intel.html` | 7514 | static string (safe) |
+| `league-intel.html` | 7516 | YES — uses `escapeAttr()` + `escapeHtml()` |
+| `league-intel.html` | 7521 | static string (safe) |
+| `league-intel.html` | 7523 | YES — uses `escapeAttr()` + `escapeHtml()` |
+| `prospects.html` | 521 | static string (safe) |
 
 Pattern:
 ```javascript

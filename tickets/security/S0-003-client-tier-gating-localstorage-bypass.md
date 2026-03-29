@@ -38,20 +38,47 @@ This unlocks ALL client-gated features:
 
 The existing `require_plan()` server-side check only covers API endpoints. Features gated purely in JS have zero server enforcement.
 
+## Endpoint Audit (UPDATED 2026-03-29)
+
+### Endpoints WITH server-side plan enforcement (PROTECTED):
+| Endpoint | Location | Gate |
+|----------|----------|------|
+| GET `/api/user/views` | server.py:1622-1627 | `require_plan("pro")` |
+| POST `/api/user/views/sync` | server.py:1630-1639 | `require_plan("pro")` |
+| GET `/api/user/watchlist` | server.py:1646-1651 | `require_plan("pro")` |
+| POST `/api/user/watchlist/sync` | server.py:1654-1663 | `require_plan("pro")` |
+| POST `/api/formulas/publish` | server.py:2052-2064 | `require_plan("pro")` |
+
+### Endpoints WITHOUT server-side plan enforcement (UNPROTECTED):
+| Endpoint | Location | Issue |
+|----------|----------|-------|
+| POST `/api/screener/query` | server.py:1695-1709 | No tier check — season params not validated |
+| POST `/api/screener/sparklines` | server.py:1712-1720 | No tier check |
+| GET `/api/players/compare` | server.py:1773-1776 | Free limited to 2 slots client-side only |
+
+### Duplicate client-side gating (also vulnerable):
+- `frontend/warroom.js:2005-2010` — `isProUser()` reads same localStorage
+- `frontend/warroom.js:2013-2018` — `isEliteUser()` reads same localStorage
+- `frontend/lab.js:42` — CSV export gating via `isPaidUser()`
+- `frontend/lab.js:4505` — Cloud sync gating via `isPaidUser()`
+- `frontend/app.js:1740` — Ad hiding via `isPaidUser()`
+
 ## Fix
 
 Add server-side enforcement for ALL plan-gated features. The client-side checks are fine for UI (hiding buttons, showing upgrade prompts), but the server must be the source of truth:
 
-1. **Formula count**: `/api/user/formulas` POST — already enforces free=3 (server.py:1411-1433). Verify Pro has a limit too (currently unlimited).
-2. **CSV export**: If CSV is generated client-side from existing API data, server can't gate it. Consider generating CSV server-side behind `require_plan()`.
-3. **Compare slots**: Compare page fetches player data — add plan check to limit concurrent player requests.
-4. **Season restrictions**: `/api/screener/query` should validate season parameter against plan.
+1. **Screener query**: `server.py:1695-1709` — add `require_plan()` check for season restrictions
+2. **Compare slots**: `server.py:1773-1776` — add plan check to limit concurrent player IDs
+3. **CSV export**: Generated client-side from existing API data — consider server-side CSV behind `require_plan()`
+4. **Formula count**: `server.py:1411-1433` — already enforces free=3 (verify Pro unlimited is intentional)
 
 For client-side, add a periodic `checkAuth()` call that re-validates the plan from `/api/auth/me` and overwrites localStorage if tampered.
 
 ## Files to Change
 
-- `backend/server.py` — add plan checks to CSV export, compare, season-restricted endpoints
+- `backend/server.py:1695-1709` — add plan check to screener query
+- `backend/server.py:1712-1720` — add plan check to sparklines
+- `backend/server.py:1773-1776` — add plan check to compare endpoint
 - `frontend/app.js:315-360` — add periodic server re-validation of plan (e.g., every 5 minutes)
 
 ## Accept When

@@ -21,18 +21,33 @@ status: OPEN
 
 5. **Column stats popover has no keyboard focus management** (DQ-494) — No ARIA role, no focus trap, no Escape handler specific to the popover.
 
+## Root Cause (CONFIRMED 2026-03-29 — code investigation)
+
+### Column Picker — no Escape, no focus trap, no arrow nav
+- **Open/close**: `lab.js:3513-3524` — `openColumnPicker()` / `closeColumnPicker()`
+- **Auto-focus**: `lab.js:3516` — search input focused with 50ms delay
+- **Dialog role**: `lab.html:3548` — has `role="dialog" aria-modal="true"` but no JS enforcement
+- **ESCAPE GAP**: `lab.js:10564-10572` — `isAnyOverlayOpen()` checks filter-modal, colStatsPopover, tagPicker, noteEditor, contextMenu, hoverCard — but **NOT columnPickerOverlay**
+- **FOCUS TRAP**: Missing — no keydown handler on overlay, Tab escapes to background
+- **ARROW KEYS**: Missing — no keyboard navigation for checkbox list
+
+### Column Stats Popover — no ARIA, no keyboard
+- No `role="dialog"` or focus management on the popover element
+- Escape key not handled (not in `isAnyOverlayOpen()` either)
+
 ## Fix
 
-1. Add column picker to `isAnyOverlayOpen()` check in Escape handler
-2. Close existing popover before opening a new one (guard in `_openColStats`)
-3. Use a named function for scroll listener and `removeEventListener` before `addEventListener`
-4. Clear `_hoverTimer` on table re-render (`clearTimeout` in `renderTableBody`)
-5. Add `role="dialog"` and Escape handler to column stats popover
+1. `lab.js:10564-10572` — Add `columnPickerOverlay` to `isAnyOverlayOpen()` checks
+2. `lab.js:3513-3524` — Add keydown handler for focus trap (Tab), Escape close
+3. Add `role="dialog"` and Escape handler to column stats popover
+4. Clear `_hoverTimer` in `renderTableBody` to prevent stale DOM access
 
 ## Files
 
-- `frontend/lab.js` — column picker Escape, hover card timer, popover management
-- `frontend/lab.html` — column stats popover
+- `frontend/lab.js:3513-3524` — column picker open/close
+- `frontend/lab.js:10564-10572` — `isAnyOverlayOpen()` missing column picker
+- `frontend/lab.js:10596-10632` — global Escape handler
+- `frontend/lab.html:3548-3558` — column picker overlay HTML
 
 ## Acceptance Criteria
 

@@ -9,27 +9,40 @@ status: OPEN
 
 # Hover cards, column resize, and context menu are mouse-only — no touch support
 
-## Root Cause
+## Root Cause (CONFIRMED 2026-03-29 — code investigation)
 
-Three Lab features are inaccessible on mobile/touch devices:
+Three Lab features are exclusively mouse-dependent with zero touch/pointer event fallbacks:
 
-1. **DQ-301**: Player hover cards use `mouseenter`/`mouseleave` events. Touch users have no way to see hover card content.
+### 1. Hover Cards (mouseenter/mouseleave only)
+- `frontend/lab.js:1864` — inline `onmouseenter="onPlayerNameEnter(...)"` and `onmouseleave="onPlayerNameLeave()"`
+- `frontend/lab.js:2288-2293` — `onPlayerNameEnter()`: 300ms delay then `showHoverCard()`
+- `frontend/lab.js:2295-2299` — `onPlayerNameLeave()`: 150ms delay then `hideHoverCard()`
+- No `touchstart`/`touchend`/`focusin`/`focusout` equivalents exist
 
-2. **DQ-302**: Column resize uses mouse drag events only. Touch users cannot resize columns.
+### 2. Column Resize (mousedown/mousemove/mouseup only)
+- `frontend/lab.js:1649` — `addEventListener("mousedown", _onColResizeStart)`
+- `frontend/lab.js:1701` — `_onColResizeStart(e)`: attaches mousemove/mouseup to document
+- `frontend/lab.js:1710-1711` — mousemove and mouseup listeners added
+- `frontend/lab.js:1716` — `_onColResizeMove(e)`: updates column width
+- `frontend/lab.js:1730-1734` — `_onColResizeEnd()`: removes listeners
+- No `touchstart`/`touchmove`/`touchend` or `pointerdown`/`pointermove`/`pointerup` equivalents
 
-3. **DQ-303**: Context menu uses `contextmenu` event (right-click). Touch users have no long-press alternative.
+### 3. Context Menu (right-click only)
+- `frontend/lab.js:2539` — global `contextmenu` listener (hides menu on outside click)
+- `frontend/lab.js:2591` — table `contextmenu` listener (shows column header context menu)
+- No long-press detection for touch devices
 
 ## Fix
 
-1. Hover cards: Add `focusin`/`focusout` as alternative triggers, or show on tap (dismiss on second tap)
-2. Column resize: Add touch event handlers (touchstart/touchmove/touchend)
-3. Context menu: Add long-press detection (500ms touch-hold)
+1. Hover cards: Add tap-to-show on touch devices (detect `ontouchstart` in window), dismiss on second tap or outside tap
+2. Column resize: Mirror mouse handlers with `touchstart`/`touchmove`/`touchend` at lab.js:1649/1701/1716/1730
+3. Context menu: Add long-press (500ms `touchstart` → `setTimeout`) at lab.js:2591
 
 ## Files
 
-- `frontend/lab.js` — hover card event handlers (~line 2249)
-- `frontend/lab.js` — column resize handlers
-- `frontend/lab.js` — context menu handler
+- `frontend/lab.js:1864,2288-2299` — hover card mouse handlers
+- `frontend/lab.js:1649,1701-1734` — column resize mouse handlers
+- `frontend/lab.js:2539,2591` — context menu handlers
 
 ## Acceptance Criteria
 
