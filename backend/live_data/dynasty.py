@@ -453,6 +453,21 @@ def _fetch_trade_value_chart_uncached(season=None, position=None, limit=150):
             })
 
         results.sort(key=lambda x: x["trade_value"], reverse=True)
+
+        # GP filter: players with fewer than 10 games cannot rank in the top 50.
+        # Split into qualified (GP >= 10) and limited-sample, then interleave so
+        # limited-sample players start at rank 51 at the earliest.
+        qualified = [p for p in results if p["games"] >= 10]
+        limited = [p for p in results if p["games"] < 10]
+        if len(qualified) >= 50:
+            # Enough qualified players — limited-sample players slot in after top 50
+            merged = qualified[:50]
+            rest = qualified[50:] + limited
+            rest.sort(key=lambda x: x["trade_value"], reverse=True)
+            merged.extend(rest)
+            results = merged
+        # else: not enough qualified players, keep original sort
+
         results = results[:limit]
 
         for i, p in enumerate(results):

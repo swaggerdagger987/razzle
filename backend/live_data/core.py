@@ -901,10 +901,11 @@ _AGE_PEAKS = {"QB": 28, "RB": 24, "WR": 26, "TE": 27}
 _AGE_DECAY = {"QB": 0.04, "RB": 0.10, "WR": 0.06, "TE": 0.05}
 
 # PPR PPG thresholds for elite (100th percentile) by position
-_ELITE_PPG = {"QB": 22.0, "RB": 18.0, "WR": 18.0, "TE": 14.0}
+_ELITE_PPG = {"QB": 22.0, "RB": 18.0, "WR": 18.0, "TE": 16.0}
 
 # Positional scarcity multipliers (higher = scarcer = more valuable)
-_SCARCITY = {"QB": 0.85, "RB": 1.15, "WR": 1.0, "TE": 0.72}
+# TE reduced from 0.72 to 0.55 to prevent TE overvaluation in top 25
+_SCARCITY = {"QB": 0.85, "RB": 1.15, "WR": 1.0, "TE": 0.55}
 
 
 def _age_value(age, position):
@@ -943,13 +944,13 @@ def compute_trade_value(ppg, age, position):
     scar = _scarcity_value(position)
     # Weighted composite: production 50%, age 30%, scarcity 20%
     raw = prod * 0.50 + age_v * 0.30 + scar * 0.20
-    # Soft ceiling: below 90 is linear, above 90 uses log compression
-    # so elite players get meaningful spread instead of clustering at 100
-    # Denominator 50 gives wider spread in elite tier (vs 30 which clustered top-25 in 90-96)
-    if raw <= 90.0:
+    # Soft ceiling: below 85 is linear, above 85 uses log compression
+    # 15-point ceiling range (85-100) with D=50 gives meaningful spread
+    # so elite players are clearly differentiated from merely good ones
+    if raw <= 85.0:
         return round(max(0.0, raw), 1)
-    excess = raw - 90.0
-    value = 90.0 + 10.0 * (1.0 - math.exp(-excess / 50.0))
+    excess = raw - 85.0
+    value = 85.0 + 15.0 * (1.0 - math.exp(-excess / 50.0))
     return round(value, 1)
 
 
