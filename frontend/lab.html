@@ -72,9 +72,9 @@
     <!-- First-visit onboarding card (hidden after dismiss) -->
     <div class="sidebar-onboard" id="sidebarOnboard" style="display:none;padding:8px 10px;margin:0 8px 8px;background:var(--orange-light,#fff3eb);border:2px solid var(--orange);border-radius:6px;font-family:var(--font-mono);font-size:11px;line-height:1.5;">
       <div style="font-weight:700;margin-bottom:4px;">New here? Start with these:</div>
-      <div style="margin-bottom:2px;"><a href="#" onclick="event.preventDefault();switchPanel('screener')" style="color:var(--orange);text-decoration:underline;">The Screener</a> — filter any stat</div>
-      <div style="margin-bottom:2px;"><a href="#" onclick="event.preventDefault();switchPanel('weekly')" style="color:var(--orange);text-decoration:underline;">Weekly Heatmap</a> — spot trends fast</div>
-      <div style="margin-bottom:2px;"><a href="#" onclick="event.preventDefault();switchPanel('leaders')" style="color:var(--orange);text-decoration:underline;">Stat Leaders</a> — who's on top</div>
+      <div style="margin-bottom:2px;"><a href="#" data-panel="screener" style="color:var(--orange);text-decoration:underline;">The Screener</a> — filter any stat</div>
+      <div style="margin-bottom:2px;"><a href="#" data-panel="weekly" style="color:var(--orange);text-decoration:underline;">Weekly Heatmap</a> — spot trends fast</div>
+      <div style="margin-bottom:2px;"><a href="#" data-panel="leaders" style="color:var(--orange);text-decoration:underline;">Stat Leaders</a> — who's on top</div>
       <div style="margin-top:4px;"><a href="#" onclick="event.preventDefault();document.getElementById('sidebarOnboard').style.display='none';try{localStorage.setItem('razzle_lab_visited','1')}catch(e){}" style="color:var(--ink-light);font-size:10px;">dismiss</a></div>
     </div>
 
@@ -1407,7 +1407,7 @@
           var methodText = PANEL_METHODS[panelName] || PANEL_METHOD_DEFAULT;
           var methodId = 'method-' + panelName;
           header.innerHTML = '<span class="breadcrumb">' +
-                             '<a href="#" onclick="switchPanel(\'screener\');return false;" style="color:var(--orange);text-decoration:none;">Screener</a>' +
+                             '<a href="#" data-panel="screener" style="color:var(--orange);text-decoration:none;">Screener</a>' +
                              ' &gt; ' +
                              '<span style="color:var(--ink-light);">' + escapeHtml(cat) + '</span>' +
                              ' &gt; ' +
@@ -1688,13 +1688,25 @@
     var sidebar = document.getElementById('labSidebar');
     if (!sidebar) return;
     sidebar.addEventListener('click', function(e) {
-      var item = e.target.closest('.lab-sidebar-item[data-panel]');
+      var item = e.target.closest('[data-panel]');
       if (!item) return;
       e.preventDefault();
       switchPanel(item.dataset.panel);
       if (item.classList.contains('start-here-item') && typeof _trackStartHere === 'function') {
         _trackStartHere();
       }
+    });
+  })();
+
+  // ─── Breadcrumb panel click delegation (S2-084) ──────────────
+  (function() {
+    var main = document.getElementById('labMain');
+    if (!main) return;
+    main.addEventListener('click', function(e) {
+      var item = e.target.closest('.breadcrumb [data-panel]');
+      if (!item) return;
+      e.preventDefault();
+      switchPanel(item.dataset.panel);
     });
   })();
 
@@ -1796,7 +1808,7 @@
     wrapper.classList.add('has-items');
     container.innerHTML = display.map(function(p) {
       var label = PANEL_LABELS[p] || p;
-      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeJS(p) + '\')">' + escapeHtml(label) + '</a>';
+      return '<a class="sidebar-recent-chip" data-panel="' + escapeAttr(p) + '">' + escapeHtml(label) + '</a>';
     }).join('');
   }
 
@@ -1850,7 +1862,7 @@
     wrapper.classList.add('has-items');
     container.innerHTML = favs.map(function(p) {
       var label = PANEL_LABELS[p] || p;
-      return '<a class="sidebar-recent-chip" onclick="switchPanel(\'' + escapeJS(p) + '\')">' + escapeHtml(label) + '</a>';
+      return '<a class="sidebar-recent-chip" data-panel="' + escapeAttr(p) + '">' + escapeHtml(label) + '</a>';
     }).join('');
   }
 

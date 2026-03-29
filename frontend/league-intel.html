@@ -1929,7 +1929,7 @@
     .waiver-card { padding: 10px; }
     .build-profile-card { padding: 10px; }
     .self-scout { padding: 10px; }
-    .bureau-cta a { font-size: 11px; padding: 4px 8px; }
+    .bureau-cta a { font-size: 11px; padding: 4px 8px; min-height: 44px; display: inline-flex; align-items: center; }
     .activity-nudge { font-size: 11px; }
     .bureau-hero-odds { font-size: 40px; }
     .bureau-odds-grid { grid-template-columns: 1fr; }
@@ -1945,10 +1945,14 @@
     .bureau-tabs::-webkit-scrollbar { display: none; }
     .bureau-tab {
       flex-shrink: 0;
-      min-height: 36px;
+      min-height: 44px;
       min-width: 0;
     }
     .bureau-tab .tab-dot { width: 6px; height: 6px; }
+    .roster-pos { margin: 2px; }
+    .pressure-bar-tag { margin: 2px; }
+    .h2h-edge { margin: 2px; }
+    .sos-team-chip { margin: 2px; }
   }
 
   /* ===== DEMO BUREAU: Sticky tab bar + sections ===== */
@@ -2502,7 +2506,7 @@
       margin: 0 -12px;
       padding: 0 12px;
     }
-    .demo-bureau-tab { font-size: 11px; padding: 10px 12px; }
+    .demo-bureau-tab { font-size: 11px; padding: 10px 12px; min-height: 44px; display: flex; align-items: center; }
     .demo-mc-grid { grid-template-columns: repeat(2, 1fr); }
     .demo-rivals-grid { grid-template-columns: 1fr; }
     .demo-pos-grades { grid-template-columns: repeat(2, 1fr); }
@@ -2519,11 +2523,12 @@
       margin: 0 -8px;
       padding: 0 8px;
     }
-    .demo-bureau-tab { font-size: 11px; padding: 8px 8px; }
+    .demo-bureau-tab { font-size: 11px; padding: 8px 8px; min-height: 44px; display: flex; align-items: center; }
     .demo-mc-grid { grid-template-columns: 1fr; }
     .demo-pos-grades { grid-template-columns: repeat(2, 1fr); }
     .demo-schedule-weeks { gap: 2px; }
     .demo-schedule-week { width: 22px; height: 18px; font-size: 11px; }
+    .demo-component-chip { margin: 2px; }
   }
 
   /* ===== DARK MODE ===== */
