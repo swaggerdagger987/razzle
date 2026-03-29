@@ -323,6 +323,44 @@
     display: none;
   }
 
+  /* Guided mode (S1-016): hide Pro sections for new users */
+  .sidebar-guided .lab-sidebar-pro-divider,
+  .sidebar-guided .lab-sidebar-category:not(.sidebar-cat-forever-free):not(.sidebar-cat-free-panels):not(.sidebar-cat-pro-parent),
+  .sidebar-guided .lab-sidebar-item.pro-locked {
+    display: none !important;
+  }
+
+  /* "Browse all panels" link */
+  .sidebar-browse-all {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    text-decoration: underline;
+    padding: 8px 16px 12px;
+    cursor: pointer;
+  }
+  .sidebar-browse-all:hover {
+    color: var(--orange);
+  }
+
+  /* Staff Picks badge */
+  .lab-sidebar-item.staff-pick::after {
+    content: 'PICK';
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: var(--orange);
+    color: var(--bg-sand);
+    padding: 1px 4px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    transform: rotate(-2deg);
+    display: inline-block;
+  }
+
   .lab-sidebar-item {
     font-family: var(--font-mono);
     font-size: 12px;

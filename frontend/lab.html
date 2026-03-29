@@ -1660,6 +1660,20 @@
     } catch(e) {}
   };
 
+  // ─── "Browse all panels" link (S1-016) ────────────────────────
+  (function() {
+    var link = document.getElementById('sidebarBrowseAll');
+    if (!link) return;
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      _exitGuidedMode();
+      // Also dismiss Start Here card
+      var el = document.getElementById('sidebarStartHere');
+      if (el) el.style.display = 'none';
+      try { localStorage.setItem('razzle_start_here_dismissed', '1'); } catch(e2) {}
+    });
+  })();
+
   // ─── Sidebar panel click delegation (S2-084) ─────────────────
   (function() {
     var sidebar = document.getElementById('labSidebar');
