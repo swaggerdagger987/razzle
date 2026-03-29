@@ -29,10 +29,18 @@ knowing the <15 air yards threshold.
   Drop rate = drops / ALL targets (not just short targets), which inflates the
   denominator relative to the numerator.
 
-- `frontend/drops.html` — No tooltip, methodology note, or info icon explaining:
-  - What constitutes a "drop" vs general incompletion
-  - The <15 air yards threshold
+- `frontend/drops.html:97-98` — A methodology tooltip EXISTS but is hover-only:
+  ```html
+  <div class="dr-methodology" title="nflverse play-by-play data attributes drops to the intended target on any incomplete pass where the receiver had an opportunity to catch. This is broader than manually charted drops (e.g. PFF) which only count catchable balls that hit the receiver's hands.">
+    drop data via nflverse PBP — includes all targetable incompletions (?)
+  </div>
+  ```
+  However, the tooltip does NOT mention:
+  - The <15 air yards threshold (the key filtering criterion)
   - Why drop rate + catch rate don't sum to 100%
+  - That this is a custom heuristic, not an official nflverse field
+
+**NOTE**: This ticket shares ID S1-021 with `tickets/backend/S1-021-puka-nacua-drop-rate-data-quality.md`. They cover different aspects (UI vs data quality) of the same issue.
 
 ## Expected
 

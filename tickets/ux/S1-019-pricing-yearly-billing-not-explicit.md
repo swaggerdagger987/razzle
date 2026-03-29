@@ -4,8 +4,11 @@ severity: S1
 category: ux
 title: Pricing page yearly billing lacks explicit "billed annually" label
 source: deep-audit
-status: open
+status: superseded
+superseded_by: S1-019 (pricing-no-annual-billing-upfront-note)
 ---
+
+> **SUPERSEDED** by `tickets/ux/S1-019-pricing-no-annual-billing-upfront-note.md` — same issue, that ticket has more file:line detail (pricing.html:277-278, :301-302, :578, :539-540).
 
 ## Problem
 

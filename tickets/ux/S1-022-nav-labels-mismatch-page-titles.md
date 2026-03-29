@@ -1,3 +1,13 @@
+# S1-022: SUPERSEDED by S0-008
+
+**Status**: superseded
+**Superseded by**: `tickets/ux/S0-008-nav-uses-wrong-brand-names.md`
+**Reason**: S0-008 covers the same nav label/brand name inconsistency at higher severity with confirmed file:line root causes (app.js:164-166, lab.html:3180, agents.html:1618).
+
+---
+
+*Original content below for reference:*
+
 # S1-022: Nav labels mismatch page titles
 
 **Severity**: S1 (Major)
