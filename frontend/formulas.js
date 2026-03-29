@@ -95,6 +95,9 @@ function saveFormula() {
   renderSavedFormulas();
   saveStateToURL();
 
+  // Celebration toast
+  if (typeof _showToast === "function") _showToast("formula locked in \u2014 " + name);
+
   // Clear form
   document.getElementById("formulaName").value = "";
   document.getElementById("formulaComponents").innerHTML = "";
