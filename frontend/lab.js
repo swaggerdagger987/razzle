@@ -2070,6 +2070,10 @@ function renderVisibleRows() {
     html += '<tr style="height:' + topHeight + 'px;"><td colspan="' + colCount + '"></td></tr>';
   }
   for (let i = startRow; i < endRow; i++) {
+    if (_vscrollRows[i] === undefined && _vscrollRenderCtx && state.items[i]) {
+      var c = _vscrollRenderCtx;
+      _vscrollRows[i] = buildRowHTML(state.items[i], c.cols, c.heatOn, c.pctData, i, c.barsOn, c.pctMode, c.leaderRanks, c.colDefMap);
+    }
     html += _vscrollRows[i] || '';
   }
   if (bottomHeight > 0) {
