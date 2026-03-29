@@ -121,7 +121,7 @@
 <main class="dr-page" id="main-content">  <div class="dr-header">
     <h1>Drop Rate</h1>
     <div class="dr-subtitle">sure hands vs butterfingers</div>
-    <div class="dr-methodology" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-light);margin-top:4px;" title="nflverse play-by-play data attributes drops to the intended target on any incomplete pass where the receiver had an opportunity to catch. This is broader than manually charted drops (e.g. PFF) which only count catchable balls that hit the receiver's hands.">drop data via nflverse PBP — includes all targetable incompletions <span style="cursor:help;text-decoration:underline dotted">(?)</span></div>
+    <div class="dr-methodology" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--ink-light);margin-top:4px;" title="A 'drop' = incomplete, non-intercepted pass on throws under 15 air yards. Drop Rate = drops / all targets (not just short targets). This is a proxy metric from nflverse PBP data, not an official NFL stat. Drop rate + catch rate won't sum to 100% because deep incompletions aren't counted as drops.">drops = short-throw incompletions (&lt;15 air yards) · drop rate = drops / all targets · <span style="cursor:help;text-decoration:underline dotted">methodology (?)</span></div>
   </div>
 
   <div class="dr-controls">
@@ -306,7 +306,7 @@ function renderTable(players, type) {
   const barCls = type === "sure" ? "dr-bar-good" : "dr-bar-bad";
   const isGood = type === "sure";
 
-  let html = '<table class="dr-table"><caption class="sr-only">Player drop rate and catch efficiency rankings</caption><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">Drop%</th><th scope="col">Drops</th><th scope="col">Tgt</th><th scope="col">Catch%</th><th scope="col">YAC/R</th><th scope="col"></th></tr></thead><tbody>';
+  let html = '<table class="dr-table"><caption class="sr-only">Player drop rate and catch efficiency rankings</caption><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col" title="Drops / total targets. Drops only count incomplete passes under 15 air yards.">Drop%</th><th scope="col" title="Incomplete, non-intercepted passes on throws under 15 air yards">Drops</th><th scope="col" title="Total targets (all throws, including deep)">Tgt</th><th scope="col">Catch%</th><th scope="col">YAC/R</th><th scope="col"></th></tr></thead><tbody>';
 
   players.forEach((p, i) => {
     const posColor = POS_COLORS[p.position] || "#8a7565";
