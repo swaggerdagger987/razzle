@@ -1626,7 +1626,7 @@ body {
     left: 0;
     right: 0;
     height: 40px;
-    background: linear-gradient(transparent, var(--bg));
+    background: var(--bg); opacity: 0.85;
     pointer-events: none;
   }
 }
