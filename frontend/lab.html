@@ -1311,7 +1311,7 @@
     var method = PANEL_METHODS[panelName] || '';
     var tierInfo = typeof getUserTierInfo === 'function' ? getUserTierInfo() : {};
     var trialLine = tierInfo.isTrial
-      ? "You're on Pro (" + tierInfo.daysLeft + "d left). Subscribe to keep access."
+      ? "You're on Pro (" + (tierInfo.daysLeft >= 1 ? tierInfo.daysLeft + "d" : (tierInfo.hoursLeft > 0 ? tierInfo.hoursLeft + "h" : "<1h")) + " left). Subscribe to keep access."
       : tierInfo.isExpiredTrial
         ? "Your trial ended. Subscribe to unlock Pro panels."
         : "7-day Pro trial on sign-up. Cancel anytime.";

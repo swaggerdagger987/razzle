@@ -114,7 +114,7 @@ def _fetch_featured_uncached():
                   AND p.fantasy_relevant = 1
                   {breakout_age_filter}
                 GROUP BY p.player_id
-                HAVING games >= 8 AND total_targets >= 50
+                HAVING games >= 8 AND (CAST(total_targets AS FLOAT) / games) >= 4.0
                 ORDER BY (CAST(total_targets AS FLOAT) / games) DESC
                 LIMIT 5
             """, (season,)).fetchall()

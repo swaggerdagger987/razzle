@@ -835,7 +835,9 @@
         if (trialActiveBanner) trialActiveBanner.style.display = 'block';
         if (trialCountdown) {
           var days = user.trial_days_remaining || 0;
-          trialCountdown.textContent = days + ' day' + (days !== 1 ? 's' : '') + ' remaining on your free trial';
+          var hours = user.trial_hours_remaining || 0;
+          var timeLabel = days >= 1 ? days + ' day' + (days !== 1 ? 's' : '') : (hours > 0 ? hours + ' hour' + (hours !== 1 ? 's' : '') : 'less than 1 hour');
+          trialCountdown.textContent = timeLabel + ' remaining on your free trial';
         }
         // Update buttons — user already has trial access
         if (proCta) proCta.textContent = 'Subscribe to Pro';

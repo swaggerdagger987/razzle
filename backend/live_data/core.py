@@ -13,6 +13,63 @@ from datetime import datetime as _datetime
 
 logger = logging.getLogger("razzle.live_data.core")
 
+# ---------------------------------------------------------------------------
+# Concurrency guard for expensive Python-sort screener queries (S1-045)
+# ---------------------------------------------------------------------------
+# Limits how many concurrent derived-sort requests can run enrichment + sort
+# across all threads in a single worker process. Prevents OOM on Render's
+# 512MB standard plan when multiple users sort by derived columns at once.
+_DERIVED_SORT_MAX_CONCURRENT = 2
+_derived_sort_semaphore = threading.Semaphore(_DERIVED_SORT_MAX_CONCURRENT)
+
+# ---------------------------------------------------------------------------
+# Enriched-result cache for derived-sort queries (S1-045)
+# ---------------------------------------------------------------------------
+# When users sort by derived metrics (yards_per_carry, catch_rate, etc.),
+# the server must fetch ALL matching rows, enrich them (7 enrichment passes
+# including 4 DB queries), then sort and paginate in Python.
+#
+# This cache stores the fully-enriched item list keyed by the filter parameters
+# (excluding sort_key, sort_dir, limit, offset). When the same user changes
+# sort columns or pages through results, the enriched data is reused and only
+# the sort/slice step runs. Entries are larger than normal cache (~1-2MB each
+# for 1000 enriched rows), so the max size and TTL are kept tight.
+_enriched_cache = {}
+_enriched_cache_lock = threading.Lock()
+_ENRICHED_CACHE_TTL = 120  # 2 minutes — short to limit memory pressure
+_ENRICHED_CACHE_MAX = 20   # max 20 cached enriched result sets
+
+
+def _enriched_cache_get(key):
+    """Return (items_copy, total) from enriched cache, or None if miss/expired."""
+    with _enriched_cache_lock:
+        entry = _enriched_cache.get(key)
+    if entry and _time.time() - entry["t"] < _ENRICHED_CACHE_TTL:
+        entry["a"] = _time.time()
+        # Return a shallow copy of items so callers can sort in place without
+        # corrupting the cached list order for other concurrent requests
+        return list(entry["items"]), entry["total"]
+    return None
+
+
+def _enriched_cache_set(key, items, total):
+    """Cache enriched items list. Evicts oldest if over limit."""
+    with _enriched_cache_lock:
+        if len(_enriched_cache) >= _ENRICHED_CACHE_MAX:
+            # Evict expired first, then LRU
+            now = _time.time()
+            expired = [k for k, v in list(_enriched_cache.items())
+                       if now - v["t"] >= _ENRICHED_CACHE_TTL]
+            for k in expired:
+                _enriched_cache.pop(k, None)
+            if len(_enriched_cache) >= _ENRICHED_CACHE_MAX:
+                oldest_key = min(_enriched_cache, key=lambda k: _enriched_cache[k].get("a", 0))
+                _enriched_cache.pop(oldest_key, None)
+        _enriched_cache[key] = {
+            "items": items, "total": total,
+            "t": _time.time(), "a": _time.time(),
+        }
+
 
 def _current_nfl_season():
     """Return the current NFL season year (rolls over in August)."""
@@ -110,6 +167,8 @@ def cache_clear():
     with _cache_meta_lock:
         _cache.clear()
         _cache_locks.clear()
+    with _enriched_cache_lock:
+        _enriched_cache.clear()
     logger.info("Data cache cleared")
 
 
@@ -448,9 +507,9 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
             if prev["ppg"] < 8:
                 continue
             pct_change = ((curr["ppg"] - prev["ppg"]) / prev["ppg"]) * 100
-                if pct_change > best_pct:
-                    best_pct = pct_change
-                    best_season = seasons_list[i]["season"]
+            if pct_change > best_pct:
+                best_pct = pct_change
+                best_season = seasons_list[i]["season"]
         breakouts[pid] = {"pct": round(best_pct, 1), "season": best_season}
 
     for item in items:

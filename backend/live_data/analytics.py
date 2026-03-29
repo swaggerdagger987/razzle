@@ -649,7 +649,7 @@ def fetch_breakout_candidates(season=None, position=None, limit=50, week=None):
                   {pos_filter}
                 GROUP BY p.player_id
                 HAVING games >= 6
-                ORDER BY total_ppr DESC
+                ORDER BY (total_ppr / games) DESC
                 LIMIT 500
             """
             rows = conn.execute(query, params).fetchall()

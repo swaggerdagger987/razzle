@@ -146,11 +146,17 @@ async function rateFormula(formulaId, rating) {
   renderFormulaStore();
 
   try {
+    var authHeaders = typeof getAuthHeaders === "function" ? getAuthHeaders() : {};
     const resp = await fetch(`/api/formulas/${formulaId}/rate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json" }, authHeaders),
       body: JSON.stringify({ rating })
     });
+    if (resp.status === 401 || resp.status === 403) {
+      showStoreToast("upgrade to Pro to rate formulas");
+      if (typeof openAuthModal === "function") openAuthModal();
+      return;
+    }
     if (!resp.ok) {
       showStoreToast("fumbled the rating... try again.");
       return;
@@ -175,11 +181,13 @@ async function submitReview(formulaId) {
   const rating = storeState.userRatings[formulaId] || 5;
 
   try {
+    var authHeaders = typeof getAuthHeaders === "function" ? getAuthHeaders() : {};
     const resp = await fetch(`/api/formulas/${formulaId}/rate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json" }, authHeaders),
       body: JSON.stringify({ rating, review: text })
     });
+    if (resp.status === 401 || resp.status === 403) { showStoreToast("upgrade to Pro to rate formulas"); return; }
     if (!resp.ok) { showStoreToast("fumbled the review... try again."); return; }
     const data = await resp.json();
     if (data.status === "ok") {

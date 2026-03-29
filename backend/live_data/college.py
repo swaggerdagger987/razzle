@@ -385,7 +385,7 @@ def _fetch_college_breakouts_uncached(season=None, position=None, limit=50):
               AND c.position IN ('QB','RB','WR','TE','ATH')
               AND c.games >= 4
               {pos_sql}
-            ORDER BY c.total_yards DESC
+            ORDER BY (CAST(c.total_yards AS FLOAT) / c.games) DESC
             LIMIT 500
         """
         rows = conn.execute(query, [season] + pos_params).fetchall()

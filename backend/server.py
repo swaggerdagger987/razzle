@@ -152,14 +152,25 @@ def _cleanup_rate_limits():
 
 _EMAIL_LOGIN_LIMIT = 5    # max failed attempts per email
 _EMAIL_LOGIN_WINDOW = 300  # per 5 minutes
+_EMAIL_RESET_LIMIT = 3    # max password reset requests per email per window
+_EMAIL_RESET_WINDOW = 900  # per 15 minutes
 
 
 def _check_rate_limit(ip: str) -> bool:
     return _check_rate("auth", ip, _RATE_LIMIT, _RATE_WINDOW)
 
 
+def _normalize_email(email: str) -> str:
+    """Defensive email normalization for rate-limit keys."""
+    return email.strip().lower()
+
+
 def _check_email_login_rate(email: str) -> bool:
-    """Check if email is locked out from login attempts. Read-only check."""
+    """Check if email is locked out from login attempts.
+    Returns True if allowed, False if locked out.
+    Fails CLOSED on DB errors — blocks login during DB issues to prevent
+    brute force bypass when the rate-limit table is unavailable."""
+    email = _normalize_email(email)
     now = _time.time()
     cutoff = now - _EMAIL_LOGIN_WINDOW
     try:
@@ -169,19 +180,44 @@ def _check_email_login_rate(email: str) -> bool:
                 "SELECT COUNT(*) FROM rate_limits WHERE bucket = ? AND key = ?", ("email_login", email)
             ).fetchone()[0]
             conn.commit()
-            return count < _EMAIL_LOGIN_LIMIT
+            if count >= _EMAIL_LOGIN_LIMIT:
+                logger.warning("Login lockout triggered for email=%s (attempts=%d)", email, count)
+                return False
+            return True
     except Exception:
-        return True
+        logger.exception("Email login rate check failed — blocking request (fail-closed)")
+        return False
 
 
 def _record_email_login_fail(email: str):
     """Record a failed login attempt for an email."""
+    email = _normalize_email(email)
     try:
         with auth_module.get_users_db() as conn:
             conn.execute("INSERT INTO rate_limits (bucket, key, ts) VALUES (?, ?, ?)", ("email_login", email, _time.time()))
             conn.commit()
     except Exception:
-        pass
+        logger.exception("Failed to record login failure for email=%s", email)
+
+
+def _clear_email_login_fails(email: str):
+    """Clear failed login attempts after a successful login.
+    Prevents a user with 4 prior failures from being locked out on
+    their next single mistake."""
+    email = _normalize_email(email)
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("DELETE FROM rate_limits WHERE bucket = ? AND key = ?", ("email_login", email))
+            conn.commit()
+    except Exception:
+        logger.debug("Failed to clear login attempts for email=%s", email, exc_info=True)
+
+
+def _check_email_reset_rate(email: str) -> bool:
+    """Per-email rate limit for password reset requests.
+    Prevents email bombing a target address."""
+    email = _normalize_email(email)
+    return _check_rate("email_reset", email, _EMAIL_RESET_LIMIT, _EMAIL_RESET_WINDOW)
 
 
 def _check_sensitive_rate(ip: str) -> bool:
@@ -980,6 +1016,10 @@ async def auth_login(request: Request):
         if email:
             _record_email_login_fail(email)
         return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    # Successful login — clear prior failed attempts so the user isn't one
+    # mistake away from lockout after recovering from earlier typos
+    if email:
+        _clear_email_login_fails(email)
     live_data.log_event("login")
     return result
 
@@ -1059,7 +1099,13 @@ async def auth_forgot_password(request: Request):
     if not _check_rate_limit(ip):
         return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
     body = await request.json()
-    email = body.get("email", "").strip()
+    email = body.get("email", "").strip().lower()
+    # Per-email rate limit: prevent email bombing a target address
+    if email and not _check_email_reset_rate(email):
+        # Return success-like response to avoid leaking whether the email exists,
+        # but silently drop the request
+        logger.warning("Password reset rate limit hit for email=%s", email)
+        return {"message": "If that email is registered, you'll receive a reset link."}
     result = auth_module.forgot_password(email)
     return result
 
@@ -2191,9 +2237,9 @@ def get_formula_detail(formula_id: int):
 
 @app.post("/api/formulas/{formula_id}/rate")
 async def rate_formula(formula_id: int, request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     body = await request.json()
     return live_data.rate_formula(
         formula_id=formula_id,

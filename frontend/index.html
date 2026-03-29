@@ -1082,7 +1082,7 @@ fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"applicat
 // Update pricing CTA based on user state (tier-aware)
 function _updateHomeCTAs() {
   try {
-    var t = typeof getUserTierInfo === 'function' ? getUserTierInfo() : { plan: 'none', loggedIn: false, isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0 };
+    var t = typeof getUserTierInfo === 'function' ? getUserTierInfo() : { plan: 'none', loggedIn: false, isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0, hoursLeft: 0 };
     var pro = document.getElementById('homeProCta');
     var elite = document.getElementById('homeEliteCta');
     var trialNote = document.querySelector('[data-cta-trial-note]');
@@ -1100,7 +1100,7 @@ function _updateHomeCTAs() {
     // Update trial note text
     if (trialNote) {
       if (t.isTrial) {
-        trialNote.textContent = "You're on Pro (" + t.daysLeft + " day" + (t.daysLeft !== 1 ? "s" : "") + " left). Subscribe to keep your access.";
+        trialNote.textContent = "You're on Pro (" + (t.daysLeft >= 1 ? t.daysLeft + " day" + (t.daysLeft !== 1 ? "s" : "") : (t.hoursLeft > 0 ? t.hoursLeft + " hour" + (t.hoursLeft !== 1 ? "s" : "") : "less than 1 hour")) + " left). Subscribe to keep your access.";
       } else if (t.isExpiredTrial) {
         trialNote.textContent = "Your trial ended. Subscribe to keep Pro access.";
       } else if (t.isPaid) {
