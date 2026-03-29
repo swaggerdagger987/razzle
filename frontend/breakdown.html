@@ -400,17 +400,6 @@
   var acTimer = null;
 
   /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { player: p.get('player') || '', season: p.get('season') || '' };
-  }
-  function writeURL(pid, season) {
-    var p = new URLSearchParams();
-    if (pid) p.set('player', pid);
-    if (season) p.set('season', season);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
 
   /* ---- Autocomplete ---- */
   var searchInput = document.getElementById('bdSearch');
@@ -494,7 +483,7 @@
     if (!currentPlayerId) return;
     var sel = document.getElementById('bdSeason');
     var season = sel.value || '';
-    writeURL(currentPlayerId, season);
+    savePageState({ player: currentPlayerId, season: season });
 
     document.getElementById('bdControls').style.display = 'flex';
     document.getElementById('bdActions').style.display = 'flex';
@@ -680,7 +669,7 @@
   }
 
   /* ---- Init ---- */
-  var urlState = readURL();
+  var urlState = restorePageState({ player: '', season: '' });
   if (urlState.season) {
     var sel = document.getElementById('bdSeason');
     var o = document.createElement('option');

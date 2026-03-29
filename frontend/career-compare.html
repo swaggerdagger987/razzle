@@ -438,14 +438,14 @@
   var actionsEl = document.getElementById('cc-actions');
 
   // URL state
-  var params = new URLSearchParams(window.location.search);
+  var _urlState = restorePageState({ p1: '', p2: '', p3: '' });
 
   function init() {
     renderSlots();
     // Load from URL
     var urlPlayers = [];
     for (var i = 1; i <= MAX_PLAYERS; i++) {
-      var pid = params.get('p' + i);
+      var pid = _urlState['p' + i];
       if (pid) urlPlayers.push(pid);
     }
     if (urlPlayers.length > 0) {
@@ -618,14 +618,15 @@
   }
 
   function updateUrl() {
-    var url = new URL(window.location);
-    for (var i = 1; i <= MAX_PLAYERS; i++) {
-      url.searchParams.delete('p' + i);
-    }
+    var params = {};
     for (var j = 0; j < players.length; j++) {
-      url.searchParams.set('p' + (j + 1), players[j].id);
+      params['p' + (j + 1)] = players[j].id;
     }
-    window.history.replaceState({}, '', url);
+    // Clear unused slots
+    for (var i = players.length + 1; i <= MAX_PLAYERS; i++) {
+      params['p' + i] = '';
+    }
+    savePageState(params);
   }
 
   function renderComparison() {

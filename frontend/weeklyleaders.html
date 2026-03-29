@@ -416,22 +416,6 @@
   var sortState = { col: 'fantasy_points', dir: -1 };
 
   /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return {
-      season: p.get('season') || '',
-      week: p.get('week') || '',
-      pos: p.get('pos') || ''
-    };
-  }
-  function writeURL(season, week, pos) {
-    var p = new URLSearchParams();
-    if (season) p.set('season', season);
-    if (week) p.set('week', week);
-    if (pos) p.set('pos', pos);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
 
   /* ---- Fetch ---- */
   function load() {
@@ -439,7 +423,7 @@
     var season = sel.value || '';
     var pos = currentPosition;
     var week = currentWeek || '';
-    writeURL(season, week, pos);
+    savePageState({ season: season, week: week, pos: pos });
 
     document.getElementById('wlContent').innerHTML = '<div class="wl-loading">' + razzleLoading() + '</div>';
 
@@ -649,7 +633,7 @@
   }
 
   /* ---- Init ---- */
-  var urlState = readURL();
+  var urlState = restorePageState({ pos: '', season: '', week: '' });
   if (urlState.pos) {
     currentPosition = urlState.pos;
     document.querySelectorAll('.wl-pos-tab').forEach(function(t) {

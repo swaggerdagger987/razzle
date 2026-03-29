@@ -371,17 +371,10 @@
   var acIdx = -1;
 
   /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { players: p.get('players') || '', season: p.get('season') || '' };
-  }
   function writeURL() {
-    var p = new URLSearchParams();
-    if (selectedPlayers.length) p.set('players', selectedPlayers.map(function(s) { return s.id; }).join(','));
+    var playerIds = selectedPlayers.length ? selectedPlayers.map(function(s) { return s.id; }).join(',') : '';
     var sel = document.getElementById('ctSeason');
-    if (sel.value) p.set('season', sel.value);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+    savePageState({ players: playerIds, season: sel.value || '' });
   }
 
   /* ---- Selected players chips ---- */
@@ -645,7 +638,7 @@
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
-  var init = readURL();
+  var init = restorePageState({ players: '', season: '' });
   if (init.season) {
     var sel = document.getElementById('ctSeason');
     var opt = document.createElement('option');

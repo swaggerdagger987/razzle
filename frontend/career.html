@@ -516,8 +516,8 @@
   var dropdownItems = [];
 
   // URL state
-  var params = new URLSearchParams(window.location.search);
-  var initialPlayer = params.get('player');
+  var urlState = restorePageState({ player: '' });
+  var initialPlayer = urlState.player;
 
   // Search autocomplete
   searchInput.addEventListener('input', function() {
@@ -600,9 +600,7 @@
   function selectPlayer(p) {
     hideDropdown();
     searchInput.value = p.full_name;
-    var url = new URL(window.location);
-    url.searchParams.set('player', p.player_id);
-    window.history.replaceState({}, '', url);
+    savePageState({ player: p.player_id });
     loadCareer(p.player_id);
   }
 

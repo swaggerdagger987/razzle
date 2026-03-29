@@ -238,10 +238,10 @@ function initSeasons() {
     opt.value = y; opt.textContent = y;
     sel.appendChild(opt);
   }
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("season")) sel.value = params.get("season");
-  if (params.get("position")) {
-    state.position = params.get("position").toUpperCase();
+  const _urlState = restorePageState({ season: '', position: '' });
+  if (_urlState.season) sel.value = _urlState.season;
+  if (_urlState.position) {
+    state.position = _urlState.position.toUpperCase();
     document.querySelectorAll(".pos-tab").forEach(t => {
       t.classList.toggle("active", t.dataset.pos === state.position);
     });
@@ -251,11 +251,7 @@ function initSeasons() {
 }
 
 function updateURL() {
-  const params = new URLSearchParams();
-  if (state.season) params.set("season", state.season);
-  if (state.position) params.set("position", state.position);
-  const qs = params.toString();
-  history.replaceState(null, "", qs ? "?" + qs : window.location.pathname);
+  savePageState({ season: state.season ? String(state.season) : '', position: state.position });
 }
 
 document.querySelectorAll(".pos-tab").forEach(tab => {

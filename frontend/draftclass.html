@@ -265,9 +265,9 @@
   var sortAsc = false;
 
   // URL state
-  var params = new URLSearchParams(window.location.search);
-  if (params.get('year')) state.year = parseInt(params.get('year'), 10) || state.year;
-  if (params.get('pos')) state.position = params.get('pos');
+  var _urlState = restorePageState({ year: '', pos: '' });
+  if (_urlState.year) state.year = parseInt(_urlState.year, 10) || state.year;
+  if (_urlState.pos) state.position = _urlState.pos;
 
   // Position tabs
   var posTabs = document.querySelectorAll('.dc-pos-tab');
@@ -295,12 +295,7 @@
   });
 
   function updateUrl() {
-    var url = new URL(window.location);
-    if (state.year) url.searchParams.set('year', state.year);
-    else url.searchParams.delete('year');
-    if (state.position) url.searchParams.set('pos', state.position);
-    else url.searchParams.delete('pos');
-    window.history.replaceState({}, '', url);
+    savePageState({ year: state.year ? String(state.year) : '', pos: state.position });
   }
 
   function loadData() {

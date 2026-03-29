@@ -408,24 +408,13 @@
   var currentPosition = '';
 
   /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { season: p.get('season') || '', pos: p.get('pos') || '' };
-  }
-  function writeURL(season, pos) {
-    var p = new URLSearchParams();
-    if (season) p.set('season', season);
-    if (pos) p.set('pos', pos);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
 
   /* ---- Fetch ---- */
   function load() {
     var selSeason = document.getElementById('fbSeason');
     var season = selSeason.value || '';
     var pos = currentPosition;
-    writeURL(season, pos);
+    savePageState({ season: season, pos: pos });
 
     var url = '/api/fpts-breakdown?';
     if (season) url += 'season=' + encodeURIComponent(season) + '&';
@@ -547,7 +536,7 @@
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
-  var init = readURL();
+  var init = restorePageState({ pos: '', season: '' });
   if (init.pos) {
     currentPosition = init.pos;
     document.querySelectorAll('.pos-tab').forEach(function(b) {

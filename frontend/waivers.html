@@ -367,18 +367,6 @@
   var currentData = null;
 
   /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { season: p.get('season') || '', pos: p.get('pos') || '', window: p.get('window') || '' };
-  }
-  function writeURL(season, pos, win) {
-    var p = new URLSearchParams();
-    if (season) p.set('season', season);
-    if (pos) p.set('pos', pos);
-    if (win && win !== '4') p.set('window', win);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
 
   /* ---- Fetch ---- */
   function load() {
@@ -387,7 +375,7 @@
     var season = selSeason.value || '';
     var win = selWindow.value || '4';
     var pos = currentPosition;
-    writeURL(season, pos, win);
+    savePageState({ season: season, pos: pos, window: (win && win !== '4') ? win : '' });
 
     var url = '/api/waivers?window=' + encodeURIComponent(win);
     if (season) url += '&season=' + encodeURIComponent(season);
@@ -513,7 +501,7 @@
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
-  var init = readURL();
+  var init = restorePageState({ pos: '', season: '', window: '' });
   if (init.pos) {
     currentPosition = init.pos;
     document.querySelectorAll('.pos-tab').forEach(function(b) {

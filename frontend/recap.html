@@ -370,21 +370,11 @@
   };
 
   /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { season: p.get('season') || '' };
-  }
-  function writeURL(season) {
-    var p = new URLSearchParams();
-    if (season) p.set('season', season);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
 
   function load() {
     var sel = document.getElementById('rcSeason');
     var season = sel.value || '';
-    writeURL(season);
+    savePageState({ season: season });
 
     var url = '/api/season-recap?';
     if (season) url += 'season=' + encodeURIComponent(season);
@@ -556,7 +546,7 @@
     body: JSON.stringify({ page: '/recap.html', referrer: document.referrer || '' })
   }).catch(function() {});
 
-  var init = readURL();
+  var init = restorePageState({ season: '' });
   if (init.season) {
     var sel = document.getElementById('rcSeason');
     var opt = document.createElement('option');

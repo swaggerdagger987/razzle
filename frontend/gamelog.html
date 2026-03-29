@@ -396,17 +396,6 @@
   var acIdx = -1;
 
   /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { player: p.get('player') || '', season: p.get('season') || '' };
-  }
-  function writeURL(pid, season) {
-    var p = new URLSearchParams();
-    if (pid) p.set('player', pid);
-    if (season) p.set('season', season);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
 
   /* ---- Autocomplete ---- */
   var searchInput = document.getElementById('glSearch');
@@ -478,7 +467,7 @@
     var url = '/api/game-log?player_id=' + encodeURIComponent(pid);
     if (season) url += '&season=' + encodeURIComponent(season);
 
-    writeURL(pid, season || '');
+    savePageState({ player: pid, season: season || '' });
     document.getElementById('glContent').innerHTML = '<div class="gl-loading">' + razzleLoading() + '</div>';
 
     fetch(url).then(function(r) {
@@ -649,7 +638,7 @@
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
-  var init = readURL();
+  var init = restorePageState({ player: '', season: '' });
   if (init.player) {
     currentPlayerId = init.player;
     loadGameLog(init.player, init.season || undefined);

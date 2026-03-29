@@ -307,22 +307,12 @@
   var POSITIONS = ['QB', 'RB', 'WR', 'TE'];
 
   /* ---- URL state ---- */
-  function readURL() {
-    var p = new URLSearchParams(window.location.search);
-    return { season: p.get('season') || '' };
-  }
-  function writeURL(season) {
-    var p = new URLSearchParams();
-    if (season) p.set('season', season);
-    var qs = p.toString();
-    history.replaceState(null, '', qs ? '?' + qs : location.pathname);
-  }
 
   /* ---- Fetch ---- */
   function load() {
     var selSeason = document.getElementById('mvSeason');
     var season = selSeason.value || '';
-    writeURL(season);
+    savePageState({ season: season });
 
     var url = '/api/weekly-mvp';
     if (season) url += '?season=' + encodeURIComponent(season);
@@ -426,7 +416,7 @@
   }).catch(function() {});
 
   /* ---- Init from URL ---- */
-  var init = readURL();
+  var init = restorePageState({ season: '' });
   if (init.season) {
     var sel = document.getElementById('mvSeason');
     var opt = document.createElement('option');

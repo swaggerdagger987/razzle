@@ -424,9 +424,9 @@
   var searchTimer = null;
   var currentPlayerId = null;
 
-  var params = new URLSearchParams(window.location.search);
-  var initialPlayer = params.get('player');
-  var initialSeason = params.get('season') ? parseInt(params.get('season'), 10) : 0;
+  var _urlState = restorePageState({ player: '', season: '' });
+  var initialPlayer = _urlState.player;
+  var initialSeason = _urlState.season ? parseInt(_urlState.season, 10) : 0;
 
   // Search autocomplete
   searchInput.addEventListener('input', function() {
@@ -460,9 +460,7 @@
               searchInput.setAttribute('aria-expanded', 'false');
               searchInput.value = name;
               currentPlayerId = pid;
-              var url = new URL(window.location);
-              url.searchParams.set('player', pid);
-              window.history.replaceState({}, '', url);
+              savePageState({ player: pid, season: seasonSelect.value || '' });
               loadPercentiles(pid);
             });
           }
@@ -484,9 +482,7 @@
 
   seasonSelect.addEventListener('change', function() {
     if (currentPlayerId) {
-      var url = new URL(window.location);
-      url.searchParams.set('season', seasonSelect.value);
-      window.history.replaceState({}, '', url);
+      savePageState({ player: currentPlayerId, season: seasonSelect.value });
       loadPercentiles(currentPlayerId, parseInt(seasonSelect.value, 10));
     }
   });
