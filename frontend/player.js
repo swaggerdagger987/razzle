@@ -180,10 +180,12 @@ function renderPlayerPage(data, container) {
 
   container.innerHTML = html;
 
-  // Draw charts after DOM
+  // Draw charts after DOM — wrapped in try/catch since rAF runs outside loadPlayer's try/catch
   requestAnimationFrame(() => {
-    drawRadar(seasons, career, pos);
-    if (seasons && seasons.length > 1) drawArc(seasons, pos);
+    try {
+      if (seasons && seasons.length > 0) drawRadar(seasons, career, pos);
+      if (seasons && seasons.length > 1) drawArc(seasons, pos);
+    } catch (e) { /* canvas rendering failed — page content still usable */ }
   });
 }
 
