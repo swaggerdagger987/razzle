@@ -5,6 +5,7 @@ category: data-accuracy
 title: "Minor season aggregate discrepancies — Tannehill passing_tds +1, Jones PPR +2"
 status: open
 audit: STAT-AUDIT-REPORT.md
+decomposed-to: self (atomic — resolved by STAT-S2-001 re-import including 2019 2022)
 ---
 
 # STAT-S3-001: Minor season aggregate discrepancies

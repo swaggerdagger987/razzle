@@ -5,6 +5,7 @@ category: ux-flow
 title: "Pricing page monthly vs yearly billing clarification"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (pricing.html:277-278 has "billed annually" clarification)
 ---
 
 # S1-006: Pricing page monthly vs yearly math may confuse users

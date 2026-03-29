@@ -5,6 +5,7 @@ category: design
 title: "Canvas position colors use CSS variables with fallbacks"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (aging.html:413-417 uses CSS vars with hex fallbacks)
 ---
 
 # S2-004: Position colors in canvas contexts

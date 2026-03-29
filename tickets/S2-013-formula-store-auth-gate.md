@@ -5,6 +5,7 @@ category: ux-flow
 title: "Formula store browseable without auth, interactions require login"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (formula-store.js:23-53 browseable without auth, interactions gated)
 ---
 
 # S2-013: Formula builder store requires account but no clear prompt

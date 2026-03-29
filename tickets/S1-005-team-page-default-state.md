@@ -5,6 +5,7 @@ category: ux-flow
 title: "Team page default state when no team specified"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (team.html:754-758 showTeamPicker() with 32-team grid)
 ---
 
 # S1-005: Team page needs a default state when no team is specified

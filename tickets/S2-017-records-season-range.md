@@ -5,6 +5,7 @@ category: football-accuracy
 title: "Records page includes 2015-present (not limited to 2020)"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (records.html:116 subtitle reads "2015-present")
 ---
 
 # S2-017: Records page limited to 2020-present

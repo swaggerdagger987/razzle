@@ -5,6 +5,7 @@ category: data-accuracy
 title: "364 missing low-volume player-weeks — expected nflverse filtering, not a bug"
 status: wontfix
 audit: STAT-AUDIT-REPORT.md
+decomposed-to: WONTFIX (nflverse upstream filtering, zero fantasy impact)
 ---
 
 # STAT-S3-002: 364 missing low-volume player-weeks — expected behavior

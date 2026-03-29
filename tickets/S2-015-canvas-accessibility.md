@@ -5,6 +5,7 @@ category: ui-bug
 title: "Situation Room pixel canvas has ARIA labels"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (agents.html:1635 canvas has role=img + aria-label + tabindex=0)
 ---
 
 # S2-015: Situation Room pixel canvas accessibility

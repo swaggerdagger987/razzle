@@ -5,6 +5,7 @@ category: ux-flow
 title: "Footer link density"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (styles.css:1437-1454 mobile collapse with CSS truncation)
 ---
 
 # S2-003: Footer link architecture may be overwhelming

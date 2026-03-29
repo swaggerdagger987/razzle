@@ -6,6 +6,7 @@ title: "Offline/slow-network handling partially implemented — no service worke
 status: open
 audit: DEEP-AUDIT-TICKETS.md
 duplicate-of: frontend/S2-031
+decomposed-to: frontend/S2-031-no-offline-timeout-handling.md
 ---
 
 # S2-010: No offline/slow-network handling

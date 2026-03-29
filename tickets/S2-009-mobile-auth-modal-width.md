@@ -5,6 +5,7 @@ category: mobile
 title: "Auth modal responsive width uses max-width: 92vw"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (styles.css:667-668 max-width:92vw prevents clipping)
 ---
 
 # S2-009: Mobile auth modal width may clip on narrow screens

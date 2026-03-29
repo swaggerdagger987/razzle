@@ -5,6 +5,7 @@ category: mobile
 title: "Dark mode toggle accessibility on mobile"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (app.js:194-208 theme toggle in mobile hamburger panel)
 ---
 
 # S1-011: No visible dark mode toggle on mobile

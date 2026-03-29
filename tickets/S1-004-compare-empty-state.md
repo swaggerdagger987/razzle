@@ -5,6 +5,7 @@ category: ui-bug
 title: "Compare page empty state when no URL params"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (compare.js:22-33 shows proper empty state)
 ---
 
 # S1-004: Compare page perpetual loading state

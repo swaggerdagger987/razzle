@@ -5,6 +5,7 @@ category: football-accuracy
 title: "Season selector defaults correctly"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (lab-panels.js:9 _latestSeason logic correct)
 ---
 
 # S2-006: Season selector defaults to correct season

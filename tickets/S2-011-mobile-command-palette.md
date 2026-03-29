@@ -5,6 +5,7 @@ category: mobile
 title: "Command palette discoverable on mobile via search button"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (app.js:184 search button in mobile hamburger menu)
 ---
 
 # S2-011: Command palette (Ctrl+K) not discoverable on mobile

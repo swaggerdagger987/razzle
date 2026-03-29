@@ -5,6 +5,7 @@ category: data-accuracy
 title: "CFB TD attribution edge case — adapter can over-count rec_tds"
 status: open
 audit: STAT-AUDIT-REPORT.md
+decomposed-to: self (atomic — cfbfastr_adapter.py:247-250 add play_type check)
 ---
 
 # STAT-S2-002: CFB TD attribution edge case — adapter can over-count rec_tds

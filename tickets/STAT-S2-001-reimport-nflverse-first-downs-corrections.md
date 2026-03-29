@@ -5,6 +5,7 @@ category: data-accuracy
 title: "Re-import seasons 2018, 2019, 2023 for nflverse first_downs corrections"
 status: open
 audit: STAT-AUDIT-REPORT.md
+decomposed-to: self (atomic — run adapter --seasons 2018 2019 2023)
 ---
 
 # STAT-S2-001: Re-import seasons 2018, 2019, 2023 for nflverse first_downs corrections

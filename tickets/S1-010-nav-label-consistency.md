@@ -5,6 +5,7 @@ category: ux-flow
 title: "Navigation labels now consistent but audit flagged original inconsistency"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (index.html:642-648 and app.js:162-168 use full product names)
 ---
 
 # S1-010: Navigation labels inconsistent between pages

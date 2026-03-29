@@ -5,6 +5,7 @@ category: data-accuracy
 title: "Deploy stat audit fixes to production DB on Render"
 status: open
 audit: STAT-AUDIT-REPORT.md
+decomposed-to: self (atomic — operational DB upload to Render)
 ---
 
 # STAT-S1-001: Deploy stat audit fixes to production DB on Render

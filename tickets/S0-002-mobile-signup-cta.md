@@ -5,6 +5,7 @@ category: ux-flow
 title: "No visible sign-up CTA above the fold on mobile"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (mobile-signup-cta button already in index.html:657-665)
 ---
 
 # S0-002: No visible sign-up CTA above the fold on mobile

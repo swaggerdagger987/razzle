@@ -5,6 +5,7 @@ category: football-accuracy
 title: "Hero section stat column claim"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (index.html:660 correctly says "100+" not "150+")
 ---
 
 # S2-001: Hero section "150+ stat columns" claim may be inflated

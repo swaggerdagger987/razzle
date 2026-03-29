@@ -5,6 +5,7 @@ category: design
 title: "Meta descriptions are unique and page-specific"
 status: resolved-at-investigation
 audit: DEEP-AUDIT-TICKETS.md
+decomposed-to: RESOLVED (all pages have unique keyword-rich meta descriptions)
 ---
 
 # S2-016: Some standalone pages have similar meta descriptions
