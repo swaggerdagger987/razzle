@@ -33,7 +33,7 @@ select:focus-visible,
 
   --ink: #2d1f14;
   --ink-medium: #5c4a3d;
-  --ink-light: #6d5c4e;
+  --ink-light: #8a7565;
   --ink-faint: #c4b5a5;
   --shadow-text: rgba(45,31,20,0.2);
   --shadow-drop: rgba(45,31,20,0.15);
@@ -106,7 +106,7 @@ select:focus-visible,
 
   --ink: #ede0cf;
   --ink-medium: #c4b5a5;
-  --ink-light: #b0a292;
+  --ink-light: #8a7565;
   --ink-faint: #7a6555;
   --shadow-text: rgba(237,224,207,0.15);
   --shadow-drop: rgba(237,224,207,0.15);
