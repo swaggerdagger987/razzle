@@ -151,7 +151,7 @@ Write-Host "Trio loop running. Ship reads from ALL ticket directories." -Foregro
 Write-Host "  QA  -> tickets/qa/     (functional bugs)" -ForegroundColor Yellow
 Write-Host "  CEO -> tickets/ceo/    (strategic design)" -ForegroundColor DarkYellow
 Write-Host "  You -> tickets/manual/ (backlog features)" -ForegroundColor White
-Write-Host "  Ship reads: tickets/qa/ + tickets/ceo/ + tickets/manual/ + TICKETS.md" -ForegroundColor Green
+Write-Host "  Ship reads: tickets/qa/ + tickets/ceo/ + tickets/manual/" -ForegroundColor Green
 Write-Host ""
 Write-Host "  Press Ctrl+C to stop." -ForegroundColor DarkGray
 Write-Host ""
