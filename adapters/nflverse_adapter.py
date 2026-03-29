@@ -465,7 +465,9 @@ def find_player_stats_asset(season):
     return best
 
 
-# Column name mapping: new nflverse format → old format names used by our adapter
+# Column name mapping: new nflverse format (stats_player_week) → old format (player_stats)
+# Verified 2025-03-29: these are the ONLY 4 renamed columns between formats.
+# All other CORE_STATS columns (rushing_yards, carries, targets, etc.) have identical names.
 NEW_FORMAT_COLUMN_MAP = {
     "passing_interceptions": "interceptions",
     "sacks_suffered": "sacks",
@@ -616,6 +618,14 @@ def process_season(conn, season):
     if fmt == "new":
         rows = [normalize_csv_row(r, fmt) for r in rows]
     print(f"  Got {len(rows)} rows from CSV.")
+
+    # Validate CSV headers against CORE_STATS — warn if any expected column is missing
+    if rows:
+        csv_headers = set(rows[0].keys())
+        missing_core = [k for k in CORE_STATS.keys() if k not in csv_headers and k != "fantasy_points_half_ppr"]
+        if missing_core:
+            print(f"  [WARNING] CSV missing {len(missing_core)} CORE_STATS columns: {missing_core}")
+            print(f"  [WARNING] These stats will be NULL in the database. Check NEW_FORMAT_COLUMN_MAP.")
 
     gsis_map, name_map, _ = build_player_lookup(conn)
 
