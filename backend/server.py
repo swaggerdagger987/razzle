@@ -1830,6 +1830,16 @@ async def screener_query(request: Request):
     if not _check_screener_rate(client_ip):
         return JSONResponse({"error": "Rate limited. Try again shortly."}, status_code=429)
     body = await request.json()
+    # Server-side filter limit: free users get max 3 filters
+    filters = body.get("filters", [])
+    if isinstance(filters, list) and len(filters) > 3:
+        user = require_auth(request)
+        user_plan = (user.get("plan", "free") if user else "free")
+        if _PLAN_HIERARCHY.get(user_plan, 0) < 1:
+            return JSONResponse(
+                {"error": "Free plan limited to 3 filters. Upgrade to Pro for unlimited."},
+                status_code=403,
+            )
     # Response-level cache for screener POST (most expensive endpoint)
     cache_key = "screener_post:" + _json.dumps(body, sort_keys=True, default=str)
     cached = _resp_cache_get(cache_key)

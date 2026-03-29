@@ -164,8 +164,8 @@ function _injectHamburgerMenu() {
   var links = [
     { href: "/", label: "Home" },
     { href: "/lab.html", label: "The Lab" },
-    { href: "/league-intel.html", label: "Your League" },
-    { href: "/agents.html", label: "AI Agents" },
+    { href: "/league-intel.html", label: "Bureau of Intelligence" },
+    { href: "/agents.html", label: "Situation Room" },
     { href: "/pricing.html", label: "Pricing" }
   ];
 
@@ -1330,6 +1330,24 @@ async function checkAuth() {
     }
   }
 }
+
+// Periodic plan re-validation: overwrites localStorage with server truth every 5 min.
+// Prevents localStorage tampering from persisting (S0-003).
+(function _startPlanRevalidation() {
+  var REVALIDATE_MS = 5 * 60 * 1000;
+  setInterval(function () {
+    var token = localStorage.getItem("razzle_token");
+    if (!token) return;
+    fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/auth/me", {
+      headers: { "Authorization": "Bearer " + token }
+    }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (data && data.user) {
+          try { localStorage.setItem("razzle_user", JSON.stringify(data.user)); } catch (_) {}
+        }
+      }).catch(function () {});
+  }, REVALIDATE_MS);
+})();
 
 function updateAuthUI(user) {
   var item = document.getElementById("navAuthItem");
