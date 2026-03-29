@@ -839,6 +839,44 @@ button.nav-search-hint {
   box-shadow: 2px 2px 0 var(--ink);
 }
 
+.btn-outline {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: box-shadow 0.12s, transform 0.12s, background 0.12s;
+}
+.btn-outline:hover {
+  background: var(--bg-card);
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: translate(-2px, -2px);
+}
+.btn-outline:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.btn-outline:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+[data-theme="dark"] .btn-outline {
+  border-color: var(--ink-light);
+}
+[data-theme="dark"] .btn-outline:hover {
+  box-shadow: 4px 4px 0 var(--ink-light);
+}
+
+/* Undo/redo toolbar buttons */
+.undo-redo-btn {
+  font-size: 14px;
+  padding: 5px 8px;
+}
+
 /* Disabled button state */
 button:disabled,
 .btn-chunky:disabled,
@@ -942,6 +980,32 @@ a.btn-pro-upgrade:focus-visible {
 @keyframes skeleton-pulse {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 1; }
+}
+
+/* ── Standalone page skeleton loading ── */
+.skeleton-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 20px;
+}
+.skeleton-card {
+  height: 180px;
+  border-radius: var(--radius);
+  border: 3px solid var(--ink-faint);
+  background: var(--bg-warm);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+.skeleton-card:nth-child(even) { animation-delay: 0.3s; }
+.skeleton-bar {
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-warm);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  max-width: 600px;
+  margin: 0 auto 16px;
 }
 
 /* ===== SEARCH HIGHLIGHT ===== */
@@ -1859,4 +1923,27 @@ button:disabled, .btn-chunky:disabled {
 /* Text links: underline on hover for affordance */
 .footer-link:hover, a.nav-dropdown-item:hover {
   text-decoration: underline;
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .topnav, footer, .site-footer, .watermark, .nav-auth {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .card, .panel, .card-hover, [class*="card"] {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+  main, .container, .page-wrap, .lab-wrap {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .btn-chunky, .btn-primary, .btn-outline {
+    box-shadow: none !important;
+  }
 }

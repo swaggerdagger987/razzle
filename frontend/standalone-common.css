@@ -691,3 +691,30 @@
     font-size: 12px;
   }
 }
+
+/* ── Skeleton Loading Placeholders (S3-060) ───────────────────────── */
+.loading-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 0;
+}
+.skeleton-card {
+  background: var(--bg-card);
+  border: 3px solid var(--ink-faint);
+  border-radius: var(--radius-sm, 8px);
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+.skeleton-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, var(--bg-warm, #e5d5c3) 50%, transparent 100%);
+  animation: skeleton-shimmer 1.5s infinite;
+}
+@keyframes skeleton-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
