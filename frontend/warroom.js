@@ -3281,7 +3281,7 @@ function renderBriefingCard(agentId, content, isError) {
   var collapsed = !isRazzle ? ' collapsed' : '';
   var toggleText = !isRazzle ? (collapsed ? '[expand]' : '[collapse]') : '';
 
-  // Pro/Trial badge or generic hint
+  // Pro/Trial badge or general-mode hint
   var contextPill = '';
   if (isLeagueContextMode()) {
     var _tu = null;
@@ -3291,7 +3291,7 @@ function renderBriefingCard(agentId, content, isError) {
       ? '<span class="briefing-pro-pill" style="background:var(--orange);">Trial</span>'
       : '<span class="briefing-pro-pill">Pro</span>';
   } else if (hasLeagueData() && !isProUser()) {
-    contextPill = '<span class="briefing-generic-hint">generic analysis \u2014 upgrade for league-specific intel</span>';
+    contextPill = '<span class="briefing-generic-hint">general analysis — upgrade to Pro for league-specific intel</span>';
   }
 
   // Free model footer + contextual upsell

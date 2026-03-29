@@ -648,6 +648,12 @@ button.nav-search-hint {
   50% { opacity: 0.7; }
 }
 
+.nav-plan-expired {
+  color: var(--ink-light);
+  border-color: var(--ink-light);
+  background: transparent;
+}
+
 .nav-plan-elite {
   color: var(--text-on-accent);
   border-color: var(--purple);

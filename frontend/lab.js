@@ -12457,7 +12457,7 @@ async function loadPlayerComps(playerId) {
 function renderPlayerComps(data, container) {
   const { player, comps, stat_keys, stat_labels, target_stats, season } = data;
   if (!comps || comps.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">no similar players found on the tape</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">no similar players found — not enough games for comparison (minimum 4 required)</div>`;
     return;
   }
 

@@ -1395,6 +1395,8 @@ function updateAuthUI(user) {
       var hoursLeft = user.trial_hours_remaining || 0;
       var trialLabel = daysLeft > 0 ? daysLeft + 'd' : (hoursLeft > 0 ? hoursLeft + 'h' : '<1h');
       badge = '<span class="nav-plan-badge nav-plan-trial">Trial ' + trialLabel + '</span>';
+    } else if (user.plan_source === "trial" && !user.trial_active) {
+      badge = '<span class="nav-plan-badge nav-plan-expired">Trial Ended</span>';
     } else if (user.plan === "pro" || user.plan === "pro_lifetime") {
       badge = '<span class="nav-plan-badge nav-plan-pro">Pro' + (user.plan === "pro_lifetime" ? ' ∞' : '') + '</span>';
     } else {
