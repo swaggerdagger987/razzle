@@ -1326,7 +1326,11 @@ function _showTrialExpiredModal() {
 
 async function checkAuth() {
   var token = localStorage.getItem("razzle_token");
-  if (!token) { updateAuthUI(null); return; }
+  if (!token) {
+    try { localStorage.removeItem("razzle_user"); } catch (_) {}
+    updateAuthUI(null);
+    return;
+  }
   try {
     var resp = await fetch(API_BASE + "/api/auth/me", {
       headers: { "Authorization": "Bearer " + token }
