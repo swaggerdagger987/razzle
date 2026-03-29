@@ -769,6 +769,58 @@
   </div>
 </section>
 
+<!-- 2.5. EMAIL CAPTURE (CEO-025) -->
+<section class="lp-section" style="max-width:560px; text-align:center;">
+  <div style="font-family:var(--font-display); font-size:20px; color:var(--ink); margin-bottom:8px;">Get weekly stat drops from Razzle</div>
+  <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-bottom:12px;">Breakout picks, trade value movers, and usage risers. Every Tuesday.</div>
+  <form id="emailCaptureForm" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;" onsubmit="return false;">
+    <input type="email" id="emailCaptureInput" placeholder="your@email.com" required autocomplete="email" style="flex:1; min-width:200px; max-width:300px; padding:10px 14px; border:3px solid var(--ink); border-radius:8px; font-family:var(--font-mono); font-size:13px; background:var(--bg-card);">
+    <button type="submit" id="emailCaptureBtn" class="btn-chunky btn-primary" style="font-size:13px; padding:10px 20px; white-space:nowrap;">Subscribe</button>
+  </form>
+  <div id="emailCaptureMsg" style="font-family:var(--font-hand); font-size:14px; margin-top:8px; display:none;"></div>
+</section>
+<script>
+(function() {
+  var form = document.getElementById('emailCaptureForm');
+  var input = document.getElementById('emailCaptureInput');
+  var btn = document.getElementById('emailCaptureBtn');
+  var msg = document.getElementById('emailCaptureMsg');
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = input.value.trim();
+    if (!email) return;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    var base = typeof API_BASE !== 'undefined' ? API_BASE : '';
+    fetch(base + '/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data.error) {
+        msg.textContent = data.error;
+        msg.style.color = 'var(--red)';
+      } else {
+        msg.textContent = "You're in. First drop arrives next Tuesday.";
+        msg.style.color = 'var(--green)';
+        input.value = '';
+        input.disabled = true;
+      }
+      msg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    }).catch(function() {
+      msg.textContent = 'Something went wrong. Try again.';
+      msg.style.color = 'var(--red)';
+      msg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    });
+  });
+})();
+</script>
+
 <!-- 3. FEATURE SHOWCASE -->
 <section id="features" class="lp-section" style="max-width:860px;">
   <h2>What you get. <span>Right now. Free.</span></h2>

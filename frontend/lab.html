@@ -429,6 +429,15 @@
       the screener is forever free
     </span>
   </div>
+  <!-- Inline email capture (CEO-025) -->
+  <div id="labEmailCapture" style="text-align:center; padding:12px 16px; border-top:2px dashed var(--ink-faint); margin-top:8px; display:none;">
+    <form style="display:inline-flex; gap:6px; align-items:center; flex-wrap:wrap; justify-content:center;" onsubmit="return false;" id="labEmailForm">
+      <span style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light);">Weekly insights &rarr;</span>
+      <input type="email" id="labEmailInput" placeholder="your@email.com" required autocomplete="email" style="padding:6px 10px; border:2px solid var(--ink); border-radius:6px; font-family:var(--font-mono); font-size:11px; background:var(--bg-card); width:180px;">
+      <button type="submit" class="btn-chunky btn-primary" style="font-size:11px; padding:6px 14px;">Go</button>
+    </form>
+    <div id="labEmailMsg" style="font-family:var(--font-hand); font-size:13px; margin-top:4px; display:none;"></div>
+  </div>
 </div>
 
 <!-- FILTER MODAL -->
@@ -2188,6 +2197,43 @@
       if (window.innerWidth <= 768) {
         _closeLabSidebar();
       }
+    });
+  });
+})();
+
+// ─── Lab email capture (CEO-025) ─────────────────────────────
+(function() {
+  var wrap = document.getElementById('labEmailCapture');
+  if (!wrap) return;
+  // Only show for non-logged-in users
+  try { if (localStorage.getItem('razzle_user')) return; } catch(e) {}
+  try { if (localStorage.getItem('razzle_email_subscribed')) return; } catch(e) {}
+  wrap.style.display = 'block';
+  var form = document.getElementById('labEmailForm');
+  var input = document.getElementById('labEmailInput');
+  var msg = document.getElementById('labEmailMsg');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = input.value.trim();
+    if (!email) return;
+    var base = typeof API_BASE !== 'undefined' ? API_BASE : '';
+    fetch(base + '/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      msg.style.display = 'block';
+      if (data.error) { msg.textContent = data.error; msg.style.color = 'var(--red)'; }
+      else {
+        msg.textContent = "You're in. First drop next Tuesday.";
+        msg.style.color = 'var(--green)';
+        input.value = '';
+        try { localStorage.setItem('razzle_email_subscribed', '1'); } catch(e) {}
+      }
+    }).catch(function() {
+      msg.style.display = 'block';
+      msg.textContent = 'Something went wrong.';
+      msg.style.color = 'var(--red)';
     });
   });
 })();
