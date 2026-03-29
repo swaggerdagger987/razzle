@@ -250,7 +250,7 @@ h1, h2, h3 {
   border-color: var(--ink);
   background: var(--bg-card);
   box-shadow: 2px 2px 0 var(--ink);
-  transform: translate(-1px, -1px);
+  transform: translate(-2px, -2px);
 }
 
 .nav-links a.active {
@@ -994,7 +994,7 @@ a.btn-pro-upgrade:focus-visible {
   background: var(--bg-card);
 }
 
-.chip:hover { box-shadow: 2px 2px 0 var(--ink); transform: translate(-1px, -1px); }
+.chip:hover { box-shadow: 2px 2px 0 var(--ink); transform: translate(-2px, -2px); }
 .chip.active { color: var(--text-on-accent); }
 .chip.active[data-pos="QB"] { background: var(--pos-qb); }
 .chip.active[data-pos="RB"] { background: var(--pos-rb); }
@@ -1281,7 +1281,7 @@ a.btn-pro-upgrade:focus-visible {
 
 .theme-toggle:hover {
   box-shadow: 4px 4px 0 var(--ink);
-  transform: translate(-1px, -1px);
+  transform: translate(-2px, -2px);
 }
 
 .theme-toggle:focus-visible {
