@@ -368,3 +368,45 @@ timestamp	invocation	finding_ref	severity	confidence	category	ticket_file	root_c
 2026-03-28T12:00:00	27	DQ-478	COVERED	MEDIUM	design	tickets/design/S2-010-bare-monospace-canvas-fonts.md	n/a	n/a	Warroom monospace within S2-010 scope	n/a	0	COVERED	Cross-ref: covered by broader ticket scope
 2026-03-28T12:00:00	27	DQ-483	COVERED	LOW	frontend	tickets/frontend/S3-016-pos-colors-defined-3-times.md	n/a	n/a	Compare POS_COLORS within S3-016 scope	n/a	0	COVERED	Cross-ref: covered by broader ticket scope
 2026-03-28T12:00:00	27	DQ-496	COVERED	MEDIUM	mobile	tickets/mobile/S2-011-19-pages-missing-480px-breakpoint.md	n/a	n/a	Newer pages 480px within S2-011 scope	n/a	0	COVERED	Cross-ref: covered by broader ticket scope
+2026-03-28T21:00:00	28	DEEP-S0-001	COVERED	HIGH	ux	tickets/ux/S0-005-standalone-pages-redirect-break-shared-urls.md	n/a	n/a	Standalone pages redirect -- S0-005	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S0-002	COVERED	HIGH	ux	tickets/ux/S0-006-no-signup-cta-above-fold-mobile.md	n/a	n/a	No signup CTA mobile -- S0-006	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S0-003	COVERED	HIGH	backend	tickets/backend/S0-007-bijan-robinson-2023-rushing-data-truncated.md	n/a	n/a	Bijan Robinson -- S0-007+S1-033	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-001	COVERED	MEDIUM	design	tickets/design/S1-015-dark-mode-ink-light-color-mismatch.md	n/a	n/a	ink-light -- S1-015	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-002	COVERED	MEDIUM	ux	tickets/ux/S1-016-lab-sidebar-108-panels-no-progressive-disclosure.md	n/a	n/a	Sidebar -- S1-016	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-003	COVERED	MEDIUM	frontend	tickets/frontend/S1-017-player-profile-page-may-fail-silently.md	n/a	n/a	Player profile -- S1-017	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-004	COVERED	MEDIUM	ux	tickets/ux/S3-075-empty-states-content-gaps-batch.md	n/a	n/a	Compare page -- S3-075	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-005	COVERED	MEDIUM	ux	tickets/ux/S1-018-team-page-blank-default-state.md	n/a	n/a	Team page -- S1-018	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-006	COVERED	MEDIUM	ux	tickets/ux/S1-019-pricing-yearly-billing-not-explicit.md	n/a	n/a	Pricing billing -- S1-019	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-007	COVERED	MEDIUM	frontend	tickets/frontend/S1-020-standalone-pages-missing-scoring-format-selector.md	n/a	n/a	Scoring format -- S1-020	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-008	COVERED	HIGH	security	tickets/security/S0-003-client-tier-gating-localstorage-bypass.md	n/a	n/a	Client bypass -- S0-003	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-009	COVERED	MEDIUM	backend	tickets/backend/S1-021-puka-nacua-drop-rate-data-quality.md	n/a	n/a	Nacua drops -- S1-021	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-010	COVERED	MEDIUM	ux	tickets/ux/S0-008-nav-uses-wrong-brand-names.md	n/a	n/a	Nav labels -- S0-008	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S1-011	FIXED	LOW	mobile	n/a	frontend/app.js	188-201	Dark mode toggle in mobile panel	app.js	0	FIXED	False positive
+2026-03-28T21:00:00	28	DEEP-S1-012	COVERED	LOW	ux	tickets/ux/S2-100-byok-setup-guide-add-model-recommendation-faq.md	n/a	n/a	BYOK -- S2-100	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-001	COVERED	LOW	ux	tickets/ux/S2-023-hero-150-stat-columns-claim-inflated.md	n/a	n/a	150 columns -- S2-023	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-002	COVERED	LOW	design	tickets/design/S2-024-loading-text-overuses-pulling-film.md	n/a	n/a	Loading text -- S2-024	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-003	COVERED	LOW	ux	tickets/ux/S2-025-footer-links-overwhelming-on-mobile.md	n/a	n/a	Footer links -- S2-025	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-004	COVERED	LOW	design	tickets/design/S2-026-canvas-charts-hardcoded-position-hex-colors.md	n/a	n/a	Position colors -- S2-026	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-005	COVERED	LOW	ux	tickets/ux/S2-027-lab-toolbar-visually-dense.md	n/a	n/a	Toolbar -- S2-027	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-006	NOFIX	LOW	n/a	n/a	n/a	n/a	Season selector correct	n/a	0	NOFIX	Not a bug
+2026-03-28T21:00:00	28	DEEP-S2-007	COVERED	LOW	backend	tickets/backend/S2-028-prospects-rps-ignores-production.md	n/a	n/a	RPS -- S2-028	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-008	COVERED	LOW	ux	tickets/ux/S2-029-about-page-lacks-founder-identity.md	n/a	n/a	About page -- S2-029	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-009	COVERED	LOW	mobile	tickets/mobile/S2-030-auth-modal-clips-375px-screens.md	n/a	n/a	Auth modal -- S2-030	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-010	COVERED	LOW	frontend	tickets/frontend/S2-031-no-offline-timeout-handling.md	n/a	n/a	Offline -- S2-031	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-011	COVERED	LOW	mobile	tickets/mobile/S2-032-command-palette-not-discoverable-on-mobile.md	n/a	n/a	Cmd palette -- S2-032	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-012	COVERED	LOW	ux	tickets/ux/S2-033-png-csv-export-locked-no-free-preview.md	n/a	n/a	Export -- S2-033	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-013	COVERED	LOW	ux	tickets/ux/S2-034-formula-store-hidden-behind-auth.md	n/a	n/a	Formula store -- S2-034	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-014	COVERED	LOW	frontend	tickets/frontend/S2-035-cheatsheet-print-css-untested.md	n/a	n/a	Print CSS -- S2-035	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-015	COVERED	LOW	a11y	tickets/a11y/S2-036-situation-room-canvas-no-aria-labels.md	n/a	n/a	Canvas a11y -- S2-036	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-016	COVERED	LOW	frontend	tickets/frontend/S2-037-meta-descriptions-too-similar-across-pages.md	n/a	n/a	Meta desc -- S2-037	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-017	COVERED	LOW	backend	tickets/backend/S2-038-records-page-limited-to-2020-present.md	n/a	n/a	Records limited -- S2-038	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	DEEP-S2-018	COVERED	LOW	frontend	tickets/frontend/S2-039-no-png-favicon-fallback.md	n/a	n/a	PNG favicon -- S2-039	n/a	0	COVERED	Deep audit
+2026-03-28T21:00:00	28	STAT-weekly-fd	COVERED	LOW	backend	tickets/backend/S2-040-reimport-seasons-2018-2019-2022-2023-nflverse-corrections.md	n/a	n/a	First-downs -- S2-040	n/a	0	COVERED	Stat audit
+2026-03-28T21:00:00	28	STAT-tannehill	COVERED	LOW	backend	tickets/backend/S2-040-reimport-seasons-2018-2019-2022-2023-nflverse-corrections.md	n/a	n/a	Tannehill +1 -- S2-040	n/a	0	COVERED	Stat audit
+2026-03-28T21:00:00	28	STAT-djohnson	NOFIX	LOW	n/a	n/a	n/a	n/a	Verifier name collision	n/a	0	NOFIX	Not a bug
+2026-03-28T21:00:00	28	STAT-djones	NOFIX	LOW	n/a	n/a	n/a	n/a	2-pt conv in nflverse PPR	n/a	0	NOFIX	Not a bug
+2026-03-28T21:00:00	28	STAT-cfb	COVERED	LOW	backend	tickets/backend/S3-036-cfb-td-attribution-edge-case.md	n/a	n/a	CFB rec_tds -- S3-036	n/a	0	COVERED	Stat audit
+2026-03-28T21:00:00	28	STAT-halfppr	FIXED	LOW	n/a	adapters/nflverse_adapter.py	537-542	half_ppr in adapter	n/a	0	FIXED	Code verified
+2026-03-28T21:00:00	28	STAT-phase29	FIXED	LOW	n/a	adapters/nflverse_adapter.py	n/a	2024 re-import	n/a	0	FIXED	Fixed during audit
+2026-03-28T21:00:00	28	STAT-missing-364	S3	LOW	backend	tickets/backend/S3-112-364-missing-fringe-player-weeks-zero-production.md	adapters/nflverse_adapter.py	419-433	364 missing weeks	n/a	1	OPEN	New S3-112
+2026-03-28T21:00:00	28	DEEP-mobile-sticky	S3	LOW	mobile	tickets/mobile/S3-113-standalone-tables-no-sticky-column-mobile.md	frontend	n/a	49 pages no sticky col	n/a	1	OPEN	New S3-113
