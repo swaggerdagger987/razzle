@@ -6810,7 +6810,7 @@
             var labelR = (outerR + innerR) / 2;
             var lx = cx + Math.cos(midAngle) * labelR;
             var ly = cy + Math.sin(midAngle) * labelR;
-            ctx.fillStyle = (typeof getCanvasTheme === 'function' ? getCanvasTheme().white : '#fff');
+            ctx.fillStyle = (typeof getCanvasTheme === 'function' ? getCanvasTheme().white : '#f7efe5');
             ctx.font = 'bold 11px "Space Mono", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
