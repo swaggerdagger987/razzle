@@ -9,15 +9,25 @@ status: OPEN
 
 # 28 console.log/error statements in production JS files
 
-## Root Cause
+## Root Cause (UPDATED 2026-03-29 — code investigation)
 
-28 `console.log`, `console.error`, or `console.warn` statements remain in production JavaScript files:
+**Investigation found only 5 `console.log` statements**, all in `frontend/app.js` and all intentional:
 
-- `frontend/lab.js` — 12 statements (error logging on fetch failures)
-- `frontend/app.js` — 5 statements (ASCII tiger art easter egg + error handling)
-- `frontend/formula-store.js` — 5 statements
-- `frontend/charts.js` — 4 statements
-- `frontend/formulas.js` — 2 statements
+- `app.js:1780` — Branded ASCII tiger art (orange `%c` styled)
+- `app.js:1781` — "razzle.lol — the fantasy football research lab" (styled)
+- `app.js:1784` — Developer utility docs: `razzle.tiger()`, `razzle.stats()`, `razzle.version`
+- `app.js:1785` — Tiger ASCII art (same as 1780, for `razzle.tiger()`)
+- `app.js:1786` — Page stats: pathname, scripts count, stylesheets count
+
+**These are an intentional brand easter egg** — part of the `window.razzle` developer utility object. Dynasty managers who open DevTools see the tiger.
+
+The original count of 28 included `console.error` and `console.warn` statements in other files — those are appropriate error handling, not debug logging.
+
+**Previous counts for reference** (these are `console.error`/`console.warn`, which should be kept):
+- `frontend/lab.js` — error logging on fetch failures
+- `frontend/formula-store.js` — API error logging
+- `frontend/charts.js` — canvas error logging
+- `frontend/formulas.js` — formula parse error logging
 
 ## Impact
 
