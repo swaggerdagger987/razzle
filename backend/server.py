@@ -900,15 +900,15 @@ def _reconcile_payment_status(user: dict) -> dict:
     try:
         with auth_module.get_users_db() as conn:
             sub = conn.execute(
-                "SELECT status, updated_at FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
+                "SELECT status, payment_failed_at FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
                 (user["id"],),
             ).fetchone()
             if not sub or sub["status"] != "payment_failed":
                 return user
-            updated_at = sub["updated_at"]
-            if not updated_at:
+            failed_at = sub["payment_failed_at"]
+            if not failed_at:
                 return user
-            failed_dt = _datetime.datetime.fromisoformat(str(updated_at).replace("Z", "+00:00"))
+            failed_dt = _datetime.datetime.fromisoformat(str(failed_at).replace("Z", "+00:00"))
             if failed_dt.tzinfo is None:
                 failed_dt = failed_dt.replace(tzinfo=_datetime.timezone.utc)
             now = _datetime.datetime.now(_datetime.timezone.utc)
