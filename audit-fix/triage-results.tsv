@@ -410,3 +410,16 @@ timestamp	invocation	finding_ref	severity	confidence	category	ticket_file	root_c
 2026-03-28T21:00:00	28	STAT-phase29	FIXED	LOW	n/a	adapters/nflverse_adapter.py	n/a	2024 re-import	n/a	0	FIXED	Fixed during audit
 2026-03-28T21:00:00	28	STAT-missing-364	S3	LOW	backend	tickets/backend/S3-112-364-missing-fringe-player-weeks-zero-production.md	adapters/nflverse_adapter.py	419-433	364 missing weeks	n/a	1	OPEN	New S3-112
 2026-03-28T21:00:00	28	DEEP-mobile-sticky	S3	LOW	mobile	tickets/mobile/S3-113-standalone-tables-no-sticky-column-mobile.md	frontend	n/a	49 pages no sticky col	n/a	1	OPEN	New S3-113
+2026-03-28T23:00:01	29	EDGE-33	S3	HIGH	performance	tickets/backend/S3-114-cache-locks-dict-grows-unbounded.md	backend/live_data/core.py	35,56	_cache_locks creates Lock per key, cleanup only on eviction (500 threshold)	core.py,analytics.py,college.py	1	OPEN	New: memory leak proportional to unique filter combos
+2026-03-28T23:00:02	29	EDGE-4	STALE	-	-	-	-	-	Welcome modal /agents link already fixed to /agents.html	app.js	0	STALE	Verified: app.js:1402 uses /agents.html
+2026-03-28T23:00:03	29	EDGE-5	STALE	-	-	-	-	-	Sign In button already uses openAuthModal() function	pricing.html,index.html,app.js	0	STALE	Verified: no #auth-modal references remain
+2026-03-28T23:00:04	29	EDGE-15	STALE	-	-	-	-	-	Rate limiters already use _get_client_ip() with X-Forwarded-For	server.py	0	STALE	Verified: server.py:70-78 correct
+2026-03-28T23:00:05	29	EDGE-16	STALE	-	-	-	-	-	warroom getAuthToken already reads razzle_token correctly	warroom.js	0	STALE	Verified: warroom.js:1596-1600 correct
+2026-03-28T23:00:06	29	EDGE-18	STALE	-	-	-	-	-	/api/analytics/summary already protected with admin secret	server.py	0	STALE	Verified: server.py:2792-2797 has x-admin-secret check
+2026-03-28T23:00:07	29	EDGE-19	STALE	-	-	-	-	-	LIKE injection already fixed with ESCAPE clause in all 4 endpoints	prospects.py,storage.py,college.py	0	STALE	Verified: all use replace+ESCAPE pattern
+2026-03-28T23:00:08	29	EDGE-26	STALE	-	-	-	-	-	warroom rAF loop has isConnected check + beforeunload cleanup	warroom.js	0	STALE	Verified: line 1276 checks cvs.isConnected
+2026-03-28T23:00:09	29	EDGE-35	COVERED	-	-	-	tickets/frontend/S2-119-app-js-render-blocking-no-defer-72-pages.md	-	-	html2canvas is lazy-loaded; real issue is app.js no defer (S2-119)	lab.js,app.js	0	COVERED	html2canvas lazy OK, app.js render-blocking covered by S2-119
+2026-03-28T23:00:10	29	A11Y-10	COVERED	-	-	-	tickets/a11y/S3-008-dialogs-no-aria-labelledby.md	-	-	Lab dialog focus trap covered in S3-008 scope (aria-labelledby + focus trap)	S3-008	0	COVERED	S3-008 scope includes both; aria-labelledby done, trap pending
+2026-03-28T23:00:11	29	DES-TICKET-6	STALE	-	-	-	-	-	player.js overlay rgba(0,0,0) already fixed to warm espresso	player.js	0	STALE	Verified: line 722 uses rgba(45,31,20,0.5)
+2026-03-28T23:00:12	29	EDGE-lifetime	STALE	-	-	-	-	-	pro_lifetime/elite_lifetime QUERY_LIMITS already includes both plans	auth.py	0	STALE	Verified: auth.py:701 has pro_lifetime:20, elite_lifetime:999999
+2026-03-28T23:00:13	29	UI-AUD-6-CSS	STALE	-	-	-	-	-	Tailwind #16a34a/#dc2626 already removed from lab-panels.css (0 matches)	lab-panels.css	0	STALE	Verified: grep returns 0 matches
