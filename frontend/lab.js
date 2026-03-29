@@ -2372,6 +2372,7 @@ function hideHoverCard() {
 }
 
 function onPlayerNameEnter(playerId, el) {
+  if (!matchMedia('(hover: hover)').matches) return;
   clearTimeout(_hoverTimer);
   _hoverTimer = setTimeout(function() {
     showHoverCard(playerId, el);

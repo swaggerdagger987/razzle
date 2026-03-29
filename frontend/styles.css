@@ -2022,6 +2022,16 @@ input[type="number"] {
   tr:hover .notes-cell .note-pencil {
     opacity: 1;
   }
+  .pro-locked:hover::after,
+  .elite-locked:hover::after {
+    opacity: 0 !important;
+  }
+  .theme-toggle:hover {
+    transform: none !important;
+  }
+  .nav-search-hint:hover {
+    background: inherit !important;
+  }
 }
 
 /* ===== DISABLED & LOCKED STATES ===== */
