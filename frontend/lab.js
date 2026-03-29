@@ -3807,6 +3807,8 @@ function showColumnStatsPopover(colKey, anchorEl) {
   var pop = document.createElement("div");
   pop.id = "colStatsPopover";
   pop.className = "colstats-popover";
+  pop.setAttribute("role", "dialog");
+  pop.setAttribute("aria-label", "Column statistics for " + col.label);
   var posCtx = state.position !== "ALL" ? state.position : "All Positions";
   pop.innerHTML = '<div class="colstats-title">' + escapeHtml(col.label) + ' <span style="font-size:11px; color:var(--ink-light); font-weight:400;">(' + escapeHtml(posCtx) + ')</span></div>' +
     '<div class="colstats-grid">' +
