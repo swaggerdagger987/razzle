@@ -384,7 +384,7 @@
     var el = document.getElementById('main-content');
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
-      ctx.font = "bold 24px 'Space Mono', monospace";
+      ctx.font = "600 24px Caveat, cursive";
       ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.15)' : 'rgba(45,31,20,0.12)';
       ctx.fillText('razzle.lol', canvas.width - 160, canvas.height - 20);
       var link = document.createElement('a');

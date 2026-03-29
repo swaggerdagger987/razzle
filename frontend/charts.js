@@ -822,7 +822,7 @@ function drawHeatmap() {
   ctx.fillText("positional percentile", legendX + legendW + 10, legendY + legendH + 2);
 
   // Watermark
-  ctx.font = 'bold 12px "Space Mono", monospace';
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.2)" : "rgba(45,31,20,0.2)";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 12, H - 8);

@@ -8913,7 +8913,7 @@ function exportBigBoardImage() {
   }
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -9343,7 +9343,7 @@ function exportClassAnalyticsImage() {
   y += cardRows * (cardH + 12) + 10;
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -9752,7 +9752,7 @@ function exportTradeValuesPNG() {
   }
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -10088,7 +10088,7 @@ function exportAgingCurvesPNG() {
 
   // Watermark
   var t = getCanvasTheme();
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -10384,7 +10384,7 @@ function exportHeatMapPNG() {
   var t = getCanvasTheme();
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -11575,7 +11575,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fillText(quip, W / 2, 565);
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "right";
@@ -13388,7 +13388,7 @@ function exportBoomBustImage() {
   // Watermark
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.4;
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", 780, 690);
   ctx.globalAlpha = 1;
