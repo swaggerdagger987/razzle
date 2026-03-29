@@ -13,7 +13,19 @@ The site uses `favicon.svg` as the favicon. While modern browsers support SVG fa
 
 ## Root Cause
 
-All HTML files reference only `favicon.svg`. No `<link rel="icon" type="image/png">` fallback exists.
+All 75 HTML files reference only `favicon.svg` at **line 23** (or line 22 for `404.html`):
+```html
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+```
+
+Examples:
+- `frontend/about.html:23`
+- `frontend/advantage.html:23`
+- `frontend/agents.html:23`
+- `frontend/aging.html:23`
+- `frontend/404.html:22` (uses absolute path `/favicon.svg`)
+
+No `<link rel="icon" type="image/png">` fallback exists in any file. No `favicon.png` file exists in the `frontend/` directory.
 
 ## Fix
 

@@ -13,7 +13,15 @@ The Lab toolbar includes: search box, result count, add filter button, filter ch
 
 ## Root Cause
 
-`frontend/lab.html` — toolbar section. Multiple independently-useful controls compete for horizontal space.
+**`frontend/lab.html:3335-3433`** — `<div class="toolbar" id="mainToolbar">` contains all controls:
+- Position chips (QB/RB/WR/TE/ALL): lines 3337-3343
+- Search box: line 3347
+- Season/Week/Preset selects: lines 3351-3357
+- Columns/Formulas/Filter buttons: lines 3361-3365
+- Undo/Redo buttons: lines 3370-3371
+- Tools dropdown (VIEW, EXPORT, DISPLAY, ANALYSIS sections): lines 3373-3432
+
+All controls compete for horizontal space in a single toolbar row at desktop widths.
 
 ## Fix
 

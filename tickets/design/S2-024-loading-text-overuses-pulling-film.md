@@ -13,7 +13,20 @@ DESIGN.md says loading states should have personality, but most pages use the sa
 
 ## Root Cause
 
-The loading text is set per-page in each HTML file's initial state, and in JS fetch callbacks. Most were copied from a template without customizing the loading message.
+**Hardcoded in HTML**: Each standalone page has "pulling film..." as the initial loading text in its HTML body. Examples:
+- `frontend/advantage.html:107`
+- `frontend/archetypes.html:292`
+- `frontend/auction.html:355`
+- `frontend/cheatsheet.html:267`
+- `frontend/compare.html:347`
+- `frontend/drops.html:111`
+- `frontend/dashboard.html:358`
+- `frontend/draftclass.html:307`
+- `frontend/dualthreat.html:108`
+- `frontend/fptsbreakdown.html:280`
+(40+ more files follow the same pattern)
+
+**Randomizer exists but fires late**: `frontend/app.js:499-525` defines a `RAZZLE_LOADING` array with 15 loading text variants and a DOMContentLoaded handler that replaces all "pulling film..." text with a random entry. However, users see "pulling film..." in the initial paint before JS replaces it.
 
 ## Fix
 

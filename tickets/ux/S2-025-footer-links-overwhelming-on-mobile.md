@@ -13,7 +13,15 @@ The index.html footer contains dozens of links organized into categories (Dynast
 
 ## Root Cause
 
-`frontend/index.html` — footer section contains all tool/page links for SEO crawl purposes.
+**`frontend/index.html:882-946`** — `<footer class="site-footer">` contains **40 `<a>` links** across 5 categories:
+- Razzle section (lines 887-893): 7 links
+- Dynasty Analytics (lines 898-905): 8 links
+- Weekly Stats (lines 910-917): 8 links
+- Analytics Features (lines 922-929): 8 links
+- Tools section (lines 934-940): 7 links
+- Attribution links (lines 944-945): 2 links
+
+No CSS breakpoint collapses or hides any footer content at 480px or 390px.
 
 ## Fix
 

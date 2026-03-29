@@ -15,7 +15,17 @@ Dynasty power users who count columns and find 85 may feel misled.
 
 ## Root Cause
 
-`frontend/index.html` — hero section (grep for "150+"). The claim is in marketing copy.
+**`frontend/index.html:660`** — hero sub-text:
+```html
+<div class="hero-sub">100+ stat columns across NFL, college &amp; prospects. Custom formulas. Shareable views. No account required.</div>
+```
+
+**Note**: The current claim is **"100+"**, not "150+" as the deep audit reported. The "100+" claim appears in three places:
+- `frontend/index.html:660` — hero sub-text
+- `frontend/index.html:9` — meta description
+- `frontend/index.html:18,21` — OG/Twitter meta descriptions
+
+The claim counts columns across all three modes (NFL + college + prospects) combined. A single mode (NFL) has ~85 columns.
 
 ## Fix
 
