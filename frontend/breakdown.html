@@ -379,7 +379,7 @@
   </div>
 
   <div class="bd-actions" id="bdActions" style="display:none;">
-    <button class="btn btn-outline" id="bdExport" title="Export as PNG">Export PNG</button>
+    <button class="btn-chunky" id="bdExport" title="Export as PNG">Export PNG</button>
   </div>
 
   <div id="bdContent" role="status" aria-live="polite">
@@ -597,7 +597,7 @@
       render(data);
     }).catch(function() {
       document.getElementById('bdContent').innerHTML =
-        '<div class="bd-error">' + razzleError() + '<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
+        '<div class="bd-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

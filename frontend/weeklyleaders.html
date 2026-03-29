@@ -311,7 +311,7 @@
   </div>
 
   <div class="wl-actions">
-    <button class="btn btn-outline" id="wlExport" title="Export as PNG">Export PNG</button>
+    <button class="btn-chunky" id="wlExport" title="Export as PNG">Export PNG</button>
   </div>
 
   <div id="wlContent" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
@@ -459,7 +459,7 @@
       render(data);
     }).catch(function() {
       document.getElementById('wlContent').innerHTML =
-        '<div class="wl-error">' + razzleError() + '<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
+        '<div class="wl-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 

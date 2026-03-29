@@ -442,7 +442,7 @@
   </div>
 
   <div class="sw-actions" id="swActions" style="display:none;">
-    <button class="btn btn-outline" id="swExport" title="Export as PNG">Export PNG</button>
+    <button class="btn-chunky" id="swExport" title="Export as PNG">Export PNG</button>
   </div>
 
   <div id="swContent">
@@ -686,7 +686,7 @@
       render(data);
     }).catch(function() {
       document.getElementById('swContent').innerHTML =
-        '<div class="sw-error">' + razzleError() + '<br><button class="btn btn-outline" onclick="location.reload()">retry</button></div>';
+        '<div class="sw-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
     });
   }
 
