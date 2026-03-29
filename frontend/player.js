@@ -1,6 +1,6 @@
 /* Razzle — Standalone Player Profile Page */
 
-const POS_COLORS = (typeof getPosColors === "function") ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+const POS_COLORS = getPosColors();
 const POS_CSS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
 
 let _profileData = null;
@@ -70,7 +70,7 @@ function renderPlayerPage(data, container) {
   const { player, seasons, career, combine } = data;
   const pos = (player.position || "").toUpperCase();
   const posColor = POS_CSS[pos] || "var(--ink)";
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
 
   // Detect breakout (use PPG, require both seasons substantial to avoid injury-recovery false positives)
   let breakoutInfo = null;
@@ -339,7 +339,7 @@ function drawRadar(seasons, career, pos) {
   const R = Math.min(W, H) / 2 - 40;
   var t = getCanvasTheme();
 
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
 
   // Get the most recent season for radar
   const latest = seasons && seasons.length > 0 ? seasons[seasons.length - 1] : career;
@@ -470,7 +470,7 @@ function drawArc(seasons, pos) {
   const plotH = H - pad.top - pad.bottom;
   var t = getCanvasTheme();
 
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
 
   ctx.clearRect(0, 0, W, H);
 
@@ -563,7 +563,7 @@ async function exportPlayerPNG() {
   const p = _profileData.player;
   const career = _profileData.career || {};
   const pos = (p.position || "").toUpperCase();
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
 
   var t = getCanvasTheme();
 
@@ -656,7 +656,7 @@ async function exportPlayerPNG() {
 
 function drawRadarOnCanvas(ctx, cx, cy, R, seasons, career, pos) {
   var t = getCanvasTheme();
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
   const latest = seasons && seasons.length > 0 ? seasons[seasons.length - 1] : career;
   if (!latest) return;
 
