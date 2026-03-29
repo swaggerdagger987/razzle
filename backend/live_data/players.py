@@ -241,8 +241,12 @@ def fetch_players(
             # None → bottom of results regardless of sort direction (S1-043)
             if _python_sort:
                 reverse = _sort_dir.lower() == "desc"
-                _sentinel = float('-inf') if reverse else float('inf')
-                items.sort(key=lambda x: x.get(_sort_key) if x.get(_sort_key) is not None else _sentinel, reverse=reverse)
+                def _sort_val(x, _k=_sort_key, _rev=reverse):
+                    v = x.get(_k)
+                    if v is None:
+                        return (0, 0.0) if _rev else (1, 0.0)
+                    return (1, v) if _rev else (0, v)
+                items.sort(key=_sort_val, reverse=reverse)
                 items = items[offset:offset + limit]
 
             return {"count": total, "season": "career" if _career_mode else _season, "items": items}
@@ -535,10 +539,15 @@ def _fetch_screener_uncached(body):
             total = len(items)
 
         # Re-sort in Python if sorting by a derived/rate metric
+        # None → bottom of results regardless of sort direction (S1-043)
         if python_sort:
             reverse = sort_dir.lower() == "desc"
-            _null_sentinel = float('-inf') if reverse else float('inf')
-            items.sort(key=lambda x: x.get(sort_key) if x.get(sort_key) is not None else _null_sentinel, reverse=reverse)
+            def _sort_val(x, _k=sort_key, _rev=reverse):
+                v = x.get(_k)
+                if v is None:
+                    return (0, 0.0) if _rev else (1, 0.0)
+                return (1, v) if _rev else (0, v)
+            items.sort(key=_sort_val, reverse=reverse)
 
         # Apply pagination after post-filtering and Python re-sort
         if python_sort or post_filters:

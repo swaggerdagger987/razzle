@@ -1165,7 +1165,7 @@ function _syncUndoRedoButtons() {
     const [nflOpts, prospectOpts, collegeOpts] = await Promise.all([
       apiFetch("/api/filter-options").catch(function(err) {
         if (typeof _showToast === "function") _showToast(razzleError(), "error");
-        return { seasons: [], teams: [], positions: [] };
+        return { seasons: [], teams: [], positions: [], _failed: true };
       }),
       apiFetch("/api/prospect-options").catch(() => ({ years: [], schools: [], positions: [] })),
       apiFetch("/api/college/filter-options").catch(() => ({ seasons: [], teams: [], conferences: [], positions: [] })),
@@ -1184,8 +1184,10 @@ function _syncUndoRedoButtons() {
     state.collegeSeasons = collegeOpts.seasons || [_nflYear];
     if (!state.collegeSeason) state.collegeSeason = state.collegeSeasons[0] || _nflYear;
 
-    populateSeasonSelect();
-    populateWeekSelect();
+    if (!nflOpts._failed) {
+      populateSeasonSelect();
+      populateWeekSelect();
+    }
     populateFilterStatSelect();
     populateTeamFilter();
   } catch (e) {
@@ -10712,6 +10714,8 @@ function isAnyOverlayOpen() {
   if (document.getElementById("screenerContextMenu")) return true;
   if (_hoverCardVisible) return true;
   if (document.querySelector('.column-picker-overlay')) return true;
+  var authModal = document.getElementById("authModal");
+  if (authModal && authModal.style.display !== "none") return true;
   return false;
 }
 
@@ -10790,11 +10794,6 @@ document.addEventListener("keydown", function(e) {
 
   // Don't fire shortcuts when any modal/overlay is open (except Escape handled above)
   if (isAnyOverlayOpen()) return;
-  if (document.querySelector('.column-picker-overlay')) return;
-  if (document.querySelector('#shortcutRef[style*="flex"]')) return;
-  if (document.querySelector('#savedViewsModal')) return;
-  if (document.querySelector('#shareModal')) return;
-  if (document.querySelector('.auth-modal-overlay[style*="flex"]')) return;
 
   // / or Ctrl+K: focus search
   if (e.key === "/" || (e.key === "k" && (e.ctrlKey || e.metaKey))) {
