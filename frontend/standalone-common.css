@@ -718,3 +718,36 @@
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+
+/* ── Mobile: Sticky first column for table scroll ─────────────────── */
+@media (max-width: 768px) {
+  .vorp-table td:first-child, .stk-table td:first-child,
+  .con-table td:first-child, .rz-table td:first-child,
+  .eff-table td:first-child, .opp-table td:first-child,
+  .sos-table td:first-child, .rc-table td:first-child,
+  .targets-table td:first-child, .weekly-table td:first-child,
+  .yoy-table td:first-child, .bd-table td:first-child,
+  .matchups-table td:first-child, .sw-table td:first-child,
+  .vorp-table th:first-child, .stk-table th:first-child,
+  .con-table th:first-child, .rz-table th:first-child,
+  .eff-table th:first-child, .opp-table th:first-child,
+  .sos-table th:first-child, .rc-table th:first-child,
+  .targets-table th:first-child, .weekly-table th:first-child,
+  .yoy-table th:first-child, .bd-table th:first-child,
+  .matchups-table th:first-child, .sw-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--bg-card);
+  }
+  .vorp-table th:first-child, .stk-table th:first-child,
+  .con-table th:first-child, .rz-table th:first-child,
+  .eff-table th:first-child, .opp-table th:first-child,
+  .sos-table th:first-child, .rc-table th:first-child,
+  .targets-table th:first-child, .weekly-table th:first-child,
+  .yoy-table th:first-child, .bd-table th:first-child,
+  .matchups-table th:first-child, .sw-table th:first-child {
+    z-index: 3;
+    background: var(--bg-warm);
+  }
+}
