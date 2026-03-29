@@ -79,14 +79,21 @@
       <div class="sidebar-recent-chips" id="sidebarFavChips"></div>
     </div>
 
-    <!-- START HERE — for first-time visitors -->
+    <!-- QUICK-START PATHS — for first-time visitors (CEO-021) -->
     <div class="sidebar-start-here" id="sidebarStartHere" style="display:none;">
-      <div style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--orange); padding:0 12px 4px; letter-spacing:0.5px; text-transform:uppercase;">START HERE</div>
-      <a href="#" class="lab-sidebar-item start-here-item" data-panel="screener">The Screener<span class="start-here-hint">the research lab</span></a>
-      <a href="#" class="lab-sidebar-item start-here-item" data-panel="rankings">Dynasty Rankings<span class="start-here-hint">know what your roster is worth</span></a>
-      <a href="#" class="lab-sidebar-item start-here-item" data-panel="tradevalues">Trade Values<span class="start-here-hint">every player's trade stock</span></a>
-      <a href="#" class="lab-sidebar-item start-here-item" data-panel="breakouts">Breakout Finder<span class="start-here-hint">find your next sleeper</span></a>
-      <a href="#" class="lab-sidebar-item start-here-item" data-panel="career-compare">Compare<span class="start-here-hint">head-to-head matchups</span></a>
+      <!-- Phase 1: Path chooser (shown when no user type set) -->
+      <div id="quickStartChooser">
+        <div style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--orange); padding:0 12px 4px; letter-spacing:0.5px; text-transform:uppercase;">WHAT DO YOU PLAY?</div>
+        <button type="button" class="quick-start-btn" data-path="dynasty">Dynasty<span class="start-here-hint">rankings, trade values, aging curves</span></button>
+        <button type="button" class="quick-start-btn" data-path="redraft">Redraft<span class="start-here-hint">matchups, waivers, weekly heatmap</span></button>
+        <button type="button" class="quick-start-btn" data-path="prospects">Prospect Scouting<span class="start-here-hint">big board, draft class, percentiles</span></button>
+        <button type="button" class="quick-start-btn quick-start-dismiss" data-path="all">Show me everything</button>
+      </div>
+      <!-- Phase 2: Curated panel list (shown after choosing a path) -->
+      <div id="quickStartPanels" style="display:none;">
+        <div style="font-family:var(--font-mono); font-size:11px; font-weight:700; color:var(--orange); padding:0 12px 4px; letter-spacing:0.5px; text-transform:uppercase;">YOUR PATH <a href="#" id="quickStartSwitch" style="font-weight:400; color:var(--ink-light); text-decoration:underline; margin-left:6px; font-size:10px;">switch</a></div>
+        <div id="quickStartPanelList"></div>
+      </div>
       <div style="border-bottom:2px dashed var(--ink-faint); margin:8px 12px;"></div>
     </div>
 
@@ -1508,17 +1515,108 @@
     }
   } catch(e) {}
 
-  // ─── Start Here section for new users ──────────────────────────
-  (function _initStartHere() {
+  // ─── Quick-Start Paths for new users (CEO-021) ────────────────
+  var _quickStartPaths = {
+    dynasty:   { panel: 'rankings', items: [
+      { panel: 'rankings',    label: 'Dynasty Rankings',  hint: 'know what your roster is worth' },
+      { panel: 'tradevalues', label: 'Trade Values',      hint: 'every player\'s trade stock' },
+      { panel: 'breakouts',   label: 'Breakout Finder',   hint: 'find your next sleeper' },
+      { panel: 'aging',       label: 'Aging Curves',      hint: 'peak age by position' },
+      { panel: 'buysell',     label: 'Buy / Sell',        hint: 'efficiency vs rank mismatch' }
+    ]},
+    redraft:   { panel: 'weekly', items: [
+      { panel: 'weekly',      label: 'Weekly Heatmap',    hint: 'week-by-week scoring grid' },
+      { panel: 'matchups',    label: 'Matchups',          hint: 'defense PPG allowed' },
+      { panel: 'consistency', label: 'Consistency',       hint: 'floor/ceiling grades' },
+      { panel: 'cheatsheet',  label: 'Cheat Sheet',       hint: 'draft day rankings' },
+      { panel: 'waivers',     label: 'Rising Players',    hint: 'waiver wire targets' }
+    ]},
+    prospects: { panel: 'prospects', items: [
+      { panel: 'prospects',   label: 'Big Board',         hint: 'prospect tier rankings' },
+      { panel: 'draftclass',  label: 'Draft Class',       hint: 'class analytics' },
+      { panel: 'percentiles', label: 'Percentiles',       hint: 'college stat percentiles' },
+      { panel: 'screener',    label: 'The Screener',      hint: 'switch to college mode' },
+      { panel: 'drafttracker',label: 'Draft Tracker',     hint: 'how each class performed' }
+    ]}
+  };
+
+  (function _initQuickStart() {
     try {
-      var visits = parseInt(localStorage.getItem('razzle_panel_visits') || '0', 10);
+      var userType = localStorage.getItem('razzle_user_type');
       var dismissed = localStorage.getItem('razzle_start_here_dismissed');
       var el = document.getElementById('sidebarStartHere');
-      if (!el) return;
-      if (visits < 5 && !dismissed) {
-        el.style.display = 'block';
+      if (!el || dismissed) return;
+
+      el.style.display = 'block';
+
+      if (userType && _quickStartPaths[userType]) {
+        _showQuickStartPanels(userType);
       }
+      // else: chooser is already visible by default
     } catch(e) {}
+  })();
+
+  function _showQuickStartPanels(pathKey) {
+    var chooser = document.getElementById('quickStartChooser');
+    var panelsWrap = document.getElementById('quickStartPanels');
+    var panelList = document.getElementById('quickStartPanelList');
+    if (!chooser || !panelsWrap || !panelList) return;
+
+    var path = _quickStartPaths[pathKey];
+    if (!path) return;
+
+    chooser.style.display = 'none';
+    panelsWrap.style.display = 'block';
+    panelList.innerHTML = '';
+    path.items.forEach(function(item) {
+      var a = document.createElement('a');
+      a.href = '#';
+      a.className = 'lab-sidebar-item start-here-item';
+      a.dataset.panel = item.panel;
+      a.innerHTML = item.label + '<span class="start-here-hint">' + item.hint + '</span>';
+      panelList.appendChild(a);
+    });
+  }
+
+  // Quick-start chooser button clicks
+  (function() {
+    var chooser = document.getElementById('quickStartChooser');
+    if (!chooser) return;
+    chooser.addEventListener('click', function(e) {
+      var btn = e.target.closest('.quick-start-btn');
+      if (!btn) return;
+      var pathKey = btn.dataset.path;
+      try { localStorage.setItem('razzle_user_type', pathKey); } catch(e) {}
+
+      if (pathKey === 'all') {
+        // Dismiss entirely
+        var el = document.getElementById('sidebarStartHere');
+        if (el) el.style.display = 'none';
+        try { localStorage.setItem('razzle_start_here_dismissed', '1'); } catch(e) {}
+        return;
+      }
+
+      _showQuickStartPanels(pathKey);
+      // Open the path's default panel
+      var path = _quickStartPaths[pathKey];
+      if (path && typeof switchPanel === 'function') {
+        switchPanel(path.panel);
+      }
+    });
+  })();
+
+  // "switch" link — go back to chooser
+  (function() {
+    var link = document.getElementById('quickStartSwitch');
+    if (!link) return;
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var chooser = document.getElementById('quickStartChooser');
+      var panelsWrap = document.getElementById('quickStartPanels');
+      if (chooser) chooser.style.display = 'block';
+      if (panelsWrap) panelsWrap.style.display = 'none';
+      try { localStorage.removeItem('razzle_user_type'); } catch(e) {}
+    });
   })();
 
   window._trackStartHere = function() {
@@ -1526,7 +1624,7 @@
       var visits = parseInt(localStorage.getItem('razzle_panel_visits') || '0', 10);
       visits++;
       localStorage.setItem('razzle_panel_visits', String(visits));
-      if (visits >= 5) {
+      if (visits >= 8) {
         var el = document.getElementById('sidebarStartHere');
         if (el) el.style.display = 'none';
       }

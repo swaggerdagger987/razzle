@@ -169,6 +169,52 @@
     padding-top: 6px !important;
     padding-bottom: 6px !important;
   }
+  .quick-start-btn {
+    display: block;
+    width: calc(100% - 24px);
+    margin: 4px 12px;
+    padding: 8px 12px;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 3px 3px 0 var(--ink);
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .quick-start-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--ink);
+    border-color: var(--orange);
+  }
+  .quick-start-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .quick-start-btn .start-here-hint {
+    margin-top: 2px;
+  }
+  .quick-start-dismiss {
+    background: transparent;
+    border: 2px dashed var(--ink-faint);
+    box-shadow: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    text-align: center;
+    padding: 6px 12px;
+  }
+  .quick-start-dismiss:hover {
+    border-color: var(--ink-light);
+    box-shadow: none;
+    transform: none;
+  }
+  .quick-start-dismiss:active {
+    box-shadow: none;
+  }
   .sidebar-recent-label {
     font-family: var(--font-mono);
     font-size: 11px;
