@@ -3455,11 +3455,13 @@ async function connectSleeper() {
     showLeagues(username);
   } catch (e) {
     if (e.name === "AbortError") {
-      errorEl.textContent = "sleeper's servers are napping. try again in a minute.";
+      errorEl.textContent = "connection timed out — sleeper's servers might be slow. try again in a minute.";
     } else if (e.message === "User not found") {
       errorEl.textContent = "couldn't find that username on Sleeper. double-check the spelling.";
+    } else if (e instanceof TypeError) {
+      errorEl.textContent = "network error — check your internet connection and try again.";
     } else {
-      errorEl.textContent = "sleeper's servers are napping. try again in a minute.";
+      errorEl.textContent = "something went wrong connecting to Sleeper. try again in a minute.";
     }
     usernameInput.setAttribute("aria-invalid", "true");
     btn.disabled = false;
@@ -6611,7 +6613,7 @@ async function loadTradeNetwork(leagueId, userId, rosters, allPlayers, userMap) 
     html += '<div class="trade-network-section">';
     html += '<h4>trade frequency matrix</h4>';
     html += '<div style="overflow-x:auto;">';
-    html += '<table class="trade-matrix"><caption class="sr-only">Trade frequency matrix between league managers</caption><thead><tr><th></th>';
+    html += '<table class="trade-matrix"><caption class="sr-only">Trade frequency matrix between league managers</caption><thead><tr><th scope="col"><span class="sr-only">Manager</span></th>';
     // Shorten names for matrix headers
     for (var hi = 0; hi < ownerIds.length; hi++) {
       var shortName = (ownerNames[ownerIds[hi]] || "?").substring(0, 8);
