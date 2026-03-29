@@ -435,9 +435,15 @@ def resolve_player_id(row, gsis_map, name_map):
 
 
 def backfill_player(conn, row, gsis_map, name_map):
-    """Create a player record from nflverse CSV data. Returns player_id."""
+    """Create a player record from nflverse CSV data. Returns player_id or None."""
     gsis = row.get("player_id", "").strip()
-    player_id = gsis if gsis else f"nfl_{normalize_name(row.get('player_display_name', ''))}"
+    display_name = row.get("player_display_name", "").strip() or row.get("player_name", "").strip()
+    if not gsis and not display_name:
+        return None
+    normalized = normalize_name(display_name)
+    if not gsis and not normalized:
+        return None
+    player_id = gsis if gsis else f"nfl_{normalized}"
 
     name = row.get("player_display_name") or row.get("player_name") or ""
     parts = name.split(None, 1)
@@ -531,6 +537,8 @@ def process_season(conn, season):
         pid = resolve_player_id(row, gsis_map, name_map)
         if not pid:
             pid = backfill_player(conn, row, gsis_map, name_map)
+        if not pid:
+            continue
 
         team = (row.get("recent_team") or "").strip().upper()
         opp = (row.get("opponent_team") or "").strip().upper()
