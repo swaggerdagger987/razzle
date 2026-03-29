@@ -31,12 +31,22 @@ Multiple backend endpoints lack error handling, returning raw Python tracebacks 
 2. Frontend: Replace empty `.catch(() => {})` with `.catch(err => showToast("Sync failed: " + err.message))` or similar
 3. Frontend: Add error handling to pagination fetch calls
 
-## Files
+## Files (representative examples)
 
-- `backend/live_data/college.py` — 37 functions
-- `backend/live_data/dynasty.py`, `players.py`, `analytics.py` — 20+ functions
-- `frontend/lab.js` — pagination error handling
-- `frontend/app.js`, `frontend/lab.js`, `frontend/warroom.js` — sync `.catch()` blocks
+**Empty `.catch(() => {})` blocks** (silent data loss):
+- `frontend/app.js:1480` — `.catch(function() {});` (cloud sync)
+- `frontend/advantage.html:328` — `.catch(function() {});` (export)
+- `frontend/aging.html:810` — `.catch(function() {});` (export)
+- `frontend/archetypes.html:504` — `.catch(function() {});` (export)
+- `frontend/career.html:961,975` — `.catch(function() {});` (two calls)
+- 50+ more instances across all standalone pages
+
+**Backend error handling gaps**:
+- `backend/live_data/college.py` — 37 query functions, no try/except for sqlite3 errors
+- `backend/live_data/dynasty.py`, `players.py`, `analytics.py` — 20+ functions without error handling
+
+**Pagination**:
+- `frontend/lab.js` — `prevPage`/`nextPage` fetch without `.catch()`
 
 ## Acceptance Criteria
 
