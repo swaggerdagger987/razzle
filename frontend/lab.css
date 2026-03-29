@@ -1147,6 +1147,16 @@
   .leader-silver { color: var(--ink-light); }
   .leader-bronze { color: var(--orange); }
 
+  /* ─── Agent icon on column headers (S1-022) ─── */
+  .col-agent-icon {
+    vertical-align: middle;
+    margin-left: 2px;
+    opacity: 0.5;
+  }
+  th:hover .col-agent-icon {
+    opacity: 0.9;
+  }
+
   /* ─── Column filter indicator dots ─── */
   .col-filter-dot {
     font-size: 11px;

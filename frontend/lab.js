@@ -1630,6 +1630,10 @@ function renderTableHead() {
     }
     const tip = ` title="${escapeAttr(tipText)}"`;
     let extra = "";
+    // Agent icon for columns with agent ownership (S1-022)
+    if (colAgent) {
+      extra += ` <img src="${escapeAttr(colAgent.icon)}" alt="${escapeAttr(colAgent.name)}" width="16" height="16" class="col-agent-icon" loading="lazy" onerror="this.style.display='none'">`;
+    }
     if (key === "dynasty_value") {
       extra = ` <span class="dvs-info" role="button" tabindex="0" aria-label="DVS methodology info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:11px; opacity:0.6;">&#9432;</span>`;
     }
