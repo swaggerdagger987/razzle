@@ -30,113 +30,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .buysell-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .buysell-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .buysell-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .buysell-header .buysell-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .buysell-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .buysell-season-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Position filter tabs */
-  .buysell-pos-tabs {
-    display: flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .buysell-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 2px solid var(--ink);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .buysell-pos-tab:last-child { border-right: none; }
-  .buysell-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .buysell-pos-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Scoring format toggle */
-  .buysell-scoring-tabs {
-    display: flex;
-    border: 2px solid var(--accent);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .buysell-scoring-tab {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 5px 10px;
-    background: var(--bg-card);
-    color: var(--accent);
-    border: none;
-    border-right: 2px solid var(--accent);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .buysell-scoring-tab:last-child { border-right: none; }
-  .buysell-scoring-tab.active {
-    background: var(--accent);
-    color: #fff;
-  }
-  .buysell-scoring-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Actions */
-  .buysell-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Two-column layout */
   .buysell-columns {
@@ -234,16 +129,6 @@
     text-align: center;
   }
 
-  .buysell-headshot {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--bg-warm);
-  }
-
   .buysell-info {
     flex: 1;
     min-width: 0;
@@ -263,23 +148,7 @@
     gap: 6px;
     margin-top: 2px;
   }
-  .buysell-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 8px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .buysell-pos-badge.qb { background: var(--pos-qb); }
-  .buysell-pos-badge.rb { background: var(--pos-rb); }
-  .buysell-pos-badge.wr { background: var(--pos-wr); }
-  .buysell-pos-badge.te { background: var(--pos-te); }
-  .buysell-team {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--ink-medium);
-  }
+
   .buysell-age-badge {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -362,16 +231,6 @@
   .buysell-mismatch-fill.buy { background: var(--green); opacity: 0.7; }
   .buysell-mismatch-fill.sell { background: var(--red); opacity: 0.7; }
 
-  /* Annotation */
-  .buysell-annotation {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-light);
-    padding: 4px 0;
-    border-top: 2px dashed var(--ink-faint);
-    margin-bottom: 6px;
-  }
-
   /* Efficiency stats */
   .buysell-stats {
     display: flex;
@@ -396,35 +255,15 @@
     text-transform: uppercase;
   }
 
-  /* Loading */
-  .buysell-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-
-  /* Empty state */
-  .buysell-empty {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 40px 20px;
-  }
-
-  /* Responsive */
   @media (max-width: 768px) {
     .buysell-columns {
       grid-template-columns: 1fr;
       gap: 20px;
     }
-    .buysell-header h1 { font-size: 24px; }
+    
   }
   @media (max-width: 480px) {
-    .buysell-page { padding: 16px 12px 40px; }
-    .buysell-header h1 { font-size: 20px; }
+
     .buysell-card-body { padding: 10px; }
     .buysell-stats { gap: 4px; }
     .buysell-column-note { display: none; }

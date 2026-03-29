@@ -30,38 +30,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .leaders-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .leaders-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .leaders-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .leaders-header .leaders-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .leaders-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
 
   /* Position filter tabs */
   .leaders-filters {
@@ -90,26 +60,6 @@
   .leaders-filter-btn.active.pos-rb { background: var(--pos-rb); border-color: var(--pos-rb); }
   .leaders-filter-btn.active.pos-wr { background: var(--pos-wr); border-color: var(--pos-wr); }
   .leaders-filter-btn.active.pos-te { background: var(--pos-te); border-color: var(--pos-te); }
-
-  /* Season selector */
-  .leaders-season-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Actions */
-  .leaders-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Category card grid */
   .leaders-grid {
@@ -229,43 +179,6 @@
     color: var(--ink);
   }
 
-  /* Player info */
-  .leaders-player-info {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .leaders-player-name {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .leaders-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-    flex-shrink: 0;
-  }
-  .leaders-pos-badge.qb { background: var(--pos-qb); }
-  .leaders-pos-badge.rb { background: var(--pos-rb); }
-  .leaders-pos-badge.wr { background: var(--pos-wr); }
-  .leaders-pos-badge.te { background: var(--pos-te); }
-  .leaders-team {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-light);
-    flex-shrink: 0;
-  }
-
   /* Stat value */
   .leaders-stat-value {
     font-family: var(--font-mono);
@@ -277,34 +190,15 @@
     min-width: 50px;
   }
 
-  /* Loading */
-  .leaders-loading {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Empty */
-  .leaders-empty {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Responsive */
   @media (max-width: 768px) {
     .leaders-grid { grid-template-columns: 1fr; }
-    .leaders-header h1 { font-size: 24px; }
+    
     .leaders-filter-btn { padding: 6px 12px; font-size: 12px; }
-    .leaders-controls { gap: 10px; }
+    
   }
   @media (max-width: 480px) {
     .leaders-row { padding: 5px 10px; gap: 6px; }
-    .leaders-player-name { font-size: 12px; }
+    
     .leaders-stat-value { font-size: 12px; min-width: 40px; }
     .leaders-rank { min-width: 24px; height: 24px; font-size: 12px; }
   }

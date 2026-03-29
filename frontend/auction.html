@@ -30,37 +30,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .av-page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-  .av-header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .av-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .av-header .av-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
 
   /* Controls */
-  .av-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
+  
   .av-controls label {
     font-family: var(--font-mono);
     font-size: 12px;
@@ -88,30 +62,8 @@
   }
 
   /* Position filter tabs */
-  .av-pos-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-  .av-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 5px 14px;
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-    box-shadow: 4px 4px 0 var(--ink);
-    transition: transform 0.1s;
-  }
+
   .av-pos-tab:hover { transform: translateY(-1px); }
-  .av-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
 
   /* Position summary cards */
   .av-summary {
@@ -154,43 +106,11 @@
     overflow-x: auto;
     
   }
-  .av-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--font-mono);
-    font-size: 13px;
-  }
-  .av-table th {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 8px 10px;
-    border-bottom: 3px solid var(--ink);
-    text-align: left;
-    cursor: pointer;
-    white-space: nowrap;
-    user-select: none;
-  }
-  .av-table th:hover { color: var(--orange); }
-  .av-table td {
-    padding: 7px 10px;
-    border-bottom: 2px dashed var(--ink-faint);
-    white-space: nowrap;
-  }
+
   .av-table tr:hover { background: var(--orange-hover); }
 
   /* Position badges */
-  .av-pos-badge {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-    min-width: 28px;
-    text-align: center;
-  }
+  
   .av-pos-badge.QB { background: var(--pos-qb); }
   .av-pos-badge.RB { background: var(--pos-rb); }
   .av-pos-badge.WR { background: var(--pos-wr); }
@@ -271,32 +191,13 @@
   }
   .av-export-btn:hover { background: var(--orange); color: var(--text-on-accent); }
 
-  /* Loading */
-  .av-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-  .av-error {
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 14px;
-    color: var(--red);
-    padding: 40px 20px;
-  }
-
-  /* Watermark — uses shared .watermark from styles.css */
-
   @media (max-width: 768px) {
     .av-summary { grid-template-columns: repeat(2, 1fr); }
-    .av-header h1 { font-size: 24px; }
-    .av-controls { gap: 8px; }
+
   }
   @media (max-width: 480px) {
     .av-summary { grid-template-columns: 1fr; }
-    .av-page { padding: 16px 10px 40px; }
+    
   }
 </style>
 </head>

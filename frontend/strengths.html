@@ -30,28 +30,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .sw-page {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .sw-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .sw-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .sw-header .sw-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
 
   /* Search */
   .sw-search-wrap {
@@ -125,34 +105,6 @@
     margin-left: auto;
   }
 
-  /* Controls */
-  .sw-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .sw-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 3px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Actions */
-  .sw-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
-
   /* Player header card */
   .sw-player-card {
     display: flex;
@@ -165,35 +117,14 @@
     box-shadow: 4px 4px 0 var(--ink);
     margin-bottom: 24px;
   }
-  .sw-player-name {
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--ink);
-  }
+  
   .sw-player-detail {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-top: 4px;
   }
-  .sw-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .sw-pos-badge.qb { background: var(--pos-qb); }
-  .sw-pos-badge.rb { background: var(--pos-rb); }
-  .sw-pos-badge.wr { background: var(--pos-wr); }
-  .sw-pos-badge.te { background: var(--pos-te); }
-  .sw-team-label {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--ink-medium);
-  }
+
   .sw-overall {
     margin-left: auto;
     text-align: center;
@@ -289,16 +220,6 @@
     min-width: 50px;
     text-align: right;
   }
-  .sw-grade-badge {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    padding: 2px 10px;
-    border-radius: var(--radius-sm);
-    border: 2px solid;
-    min-width: 32px;
-    text-align: center;
-  }
 
   /* All percentiles bar chart */
   .sw-all-section {
@@ -374,29 +295,14 @@
   .bar-poor { background: var(--red); }
 
   /* Loading / Empty / Error */
-  .sw-loading, .sw-empty {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-  .sw-error {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--red);
-  }
+  .sw-loading, 
 
-  /* Responsive */
   @media (max-width: 768px) {
-    .sw-page { padding: 16px 10px 40px; }
-    .sw-header h1 { font-size: 24px; }
+
     .sw-columns { grid-template-columns: 1fr; }
     .sw-player-card { flex-direction: column; text-align: center; }
     .sw-overall { margin-left: 0; margin-top: 12px; }
-    .sw-player-name { font-size: 20px; }
+    
     .sw-stat-bar-wrap { display: none; }
   }
   @media (max-width: 480px) {

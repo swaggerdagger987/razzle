@@ -30,27 +30,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .ar-page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-  .ar-header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .ar-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .ar-header .ar-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
+
   .ar-meta {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -59,14 +41,7 @@
   }
 
   /* Controls */
-  .ar-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
+  
   .ar-controls select {
     font-family: var(--font-mono);
     font-size: 13px;
@@ -90,27 +65,8 @@
   .ar-export-btn:hover { background: var(--orange); color: var(--text-on-accent); }
 
   /* Position tabs */
-  .ar-pos-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .ar-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 5px 14px;
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-    box-shadow: 4px 4px 0 var(--ink);
-    transition: transform 0.1s;
-  }
+
   .ar-pos-tab:hover { transform: translateY(-1px); }
-  .ar-pos-tab.active { background: var(--ink); color: var(--bg-card); }
 
   /* Archetype cards */
   .ar-archetype {
@@ -183,20 +139,7 @@
     box-shadow: 2px 3px 0 var(--ink-faint);
     border-color: var(--ink);
   }
-  .ar-player-name {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 600;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .ar-player-meta {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-light);
-  }
+
   .ar-player-ppg {
     font-family: var(--font-mono);
     font-size: 14px;
@@ -223,31 +166,13 @@
   .ar-pos-sm.WR { background: var(--pos-wr); }
   .ar-pos-sm.TE { background: var(--pos-te); }
 
-  /* Loading */
-  .ar-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-  .ar-error {
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 14px;
-    color: var(--red);
-    padding: 40px 20px;
-  }
-
-  /* Watermark — uses shared .watermark from styles.css */
-
   @media (max-width: 768px) {
     .ar-players { grid-template-columns: 1fr 1fr; }
-    .ar-header h1 { font-size: 24px; }
+    
   }
   @media (max-width: 480px) {
     .ar-players { grid-template-columns: 1fr; }
-    .ar-page { padding: 16px 10px 40px; }
+    
   }
 </style>
 </head>

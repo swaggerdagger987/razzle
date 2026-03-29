@@ -30,28 +30,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .bd-page {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .bd-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .bd-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .bd-header .bd-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
 
   /* Search */
   .bd-search-wrap {
@@ -112,32 +92,6 @@
   .bd-ac-pos.te { background: var(--pos-te); }
   .bd-ac-team { font-size: 11px; color: var(--ink-medium); margin-left: auto; }
 
-  /* Controls */
-  .bd-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .bd-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 3px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-  .bd-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
-
   /* Player card */
   .bd-player-card {
     display: flex;
@@ -150,35 +104,14 @@
     box-shadow: 4px 4px 0 var(--ink);
     margin-bottom: 24px;
   }
-  .bd-player-name {
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--ink);
-  }
+  
   .bd-player-detail {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-top: 4px;
   }
-  .bd-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .bd-pos-badge.qb { background: var(--pos-qb); }
-  .bd-pos-badge.rb { background: var(--pos-rb); }
-  .bd-pos-badge.wr { background: var(--pos-wr); }
-  .bd-pos-badge.te { background: var(--pos-te); }
-  .bd-team-label {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--ink-medium);
-  }
+
   .bd-totals {
     margin-left: auto;
     text-align: right;
@@ -309,31 +242,16 @@
   }
 
   /* Loading / Empty / Error */
-  .bd-loading, .bd-empty {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-  .bd-error {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--red);
-  }
+  .bd-loading, 
 
-  /* Responsive */
   @media (max-width: 768px) {
-    .bd-page { padding: 16px 10px 40px; }
-    .bd-header h1 { font-size: 24px; }
+
     .bd-player-card { flex-direction: column; text-align: center; }
     .bd-totals { margin-left: 0; margin-top: 8px; text-align: center; }
     .bd-chart-wrap { flex-direction: column; gap: 20px; }
     .bd-canvas-wrap { width: 240px; height: 240px; }
     .bd-canvas-wrap canvas { width: 240px; height: 240px; }
-    .bd-player-name { font-size: 20px; }
+    
   }
   @media (max-width: 480px) {
     .bd-canvas-wrap { width: 100%; max-width: 200px; height: auto; aspect-ratio: 1; }

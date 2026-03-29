@@ -1,0 +1,693 @@
+/* ========================================================================
+   standalone-common.css — S3-066
+   Shared CSS extracted from 50+ standalone page inline <style> blocks.
+   Each page links this file and keeps ONLY page-specific styles inline.
+   No HTML class names or JS were changed — rules use the existing prefixes.
+   ======================================================================== */
+
+/* ── Page Container (1200px standard) ──────────────────────────────── */
+.vorp-page, .stk-page, .con-page, .rz-page, .eff-page, .opp-page,
+.sos-page, .rc-page, .aw-page, .buysell-page, .breakouts-page,
+.usage-page, .air-page, .targets-page, .weekly-page, .yoy-page,
+.tv-page, .tl-page, .av-page, .ar-page, .db-page, .bd-page,
+.matchups-page, .scarcity-page, .leaders-page, .rankings-page,
+.aging-page, .dc-page, .sw-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+
+/* ── Page Header ───────────────────────────────────────────────────── */
+.vorp-header, .stk-header, .con-header, .rz-header, .eff-header,
+.opp-header, .sos-header, .rc-header, .aw-header, .buysell-header,
+.breakouts-header, .usage-header, .air-header, .targets-header,
+.weekly-header, .yoy-header, .tv-header, .tl-header, .av-header,
+.ar-header, .db-header, .bd-header, .matchups-header, .scarcity-header,
+.leaders-header, .rankings-header, .aging-header, .dc-header, .sw-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.vorp-header h1, .stk-header h1, .con-header h1, .rz-header h1,
+.eff-header h1, .opp-header h1, .sos-header h1, .rc-header h1,
+.aw-header h1, .buysell-header h1, .breakouts-header h1,
+.usage-header h1, .air-header h1, .targets-header h1, .weekly-header h1,
+.yoy-header h1, .tv-header h1, .tl-header h1, .av-header h1,
+.ar-header h1, .db-header h1, .bd-header h1, .matchups-header h1,
+.scarcity-header h1, .leaders-header h1, .rankings-header h1,
+.aging-header h1, .dc-header h1, .sw-header h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+
+.vorp-subtitle, .stk-subtitle, .con-subtitle, .rz-subtitle,
+.eff-subtitle, .opp-subtitle, .sos-subtitle, .rc-subtitle,
+.aw-subtitle, .buysell-subtitle, .breakouts-subtitle, .usage-subtitle,
+.air-subtitle, .targets-subtitle, .weekly-subtitle, .yoy-subtitle,
+.tv-subtitle, .tl-subtitle, .av-subtitle, .ar-subtitle, .db-subtitle,
+.bd-subtitle, .matchups-subtitle, .scarcity-subtitle, .leaders-subtitle,
+.rankings-subtitle, .aging-subtitle, .dc-subtitle, .sw-subtitle {
+  font-family: var(--font-hand);
+  font-size: 20px;
+  color: var(--ink-light);
+}
+
+/* ── Controls Row ──────────────────────────────────────────────────── */
+.vorp-controls, .stk-controls, .con-controls, .rz-controls,
+.eff-controls, .opp-controls, .sos-controls, .rc-controls,
+.aw-controls, .buysell-controls, .breakouts-controls, .usage-controls,
+.air-controls, .targets-controls, .weekly-controls, .yoy-controls,
+.tv-controls, .tl-controls, .av-controls, .ar-controls, .db-controls,
+.bd-controls, .matchups-controls, .scarcity-controls, .leaders-controls,
+.rankings-controls, .aging-controls, .dc-controls, .sw-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+/* ── Select Dropdowns ──────────────────────────────────────────────── */
+.vorp-select, .stk-select, .con-select, .rz-select, .eff-select,
+.opp-select, .sos-select, .rc-select, .aw-select,
+.buysell-season-select, .breakouts-season-select, .usage-select,
+.air-select, .targets-select, .weekly-select, .yoy-select,
+.tv-select, .tl-select, .av-select, .ar-select, .db-select,
+.bd-select, .matchups-select, .scarcity-select, .leaders-select,
+.rankings-select, .aging-select, .dc-select, .sw-select {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 7px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* ── Position Filter Tabs ──────────────────────────────────────────── */
+.vorp-pos-tabs, .stk-pos-tabs, .con-pos-tabs, .rz-pos-tabs,
+.eff-pos-tabs, .opp-pos-tabs, .sos-pos-tabs, .rc-pos-tabs,
+.aw-pos-tabs, .buysell-pos-tabs, .breakouts-pos-tabs, .usage-pos-tabs,
+.air-pos-tabs, .targets-pos-tabs, .weekly-pos-tabs, .yoy-pos-tabs,
+.tv-pos-tabs, .tl-pos-tabs, .av-pos-tabs, .ar-pos-tabs, .db-pos-tabs,
+.bd-pos-tabs, .matchups-pos-tabs, .scarcity-pos-tabs,
+.leaders-pos-tabs, .rankings-pos-tabs, .aging-pos-tabs, .dc-pos-tabs,
+.sw-pos-tabs {
+  display: flex;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.vorp-pos-tab, .stk-pos-tab, .con-pos-tab, .rz-pos-tab,
+.eff-pos-tab, .opp-pos-tab, .sos-pos-tab, .rc-pos-tab,
+.aw-pos-tab, .buysell-pos-tab, .breakouts-pos-tab, .usage-pos-tab,
+.air-pos-tab, .targets-pos-tab, .weekly-pos-tab, .yoy-pos-tab,
+.tv-pos-tab, .tl-pos-tab, .av-pos-tab, .ar-pos-tab, .db-pos-tab,
+.bd-pos-tab, .matchups-pos-tab, .scarcity-pos-tab,
+.leaders-pos-tab, .rankings-pos-tab, .aging-pos-tab, .dc-pos-tab,
+.sw-pos-tab {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  background: var(--bg-card);
+  color: var(--ink);
+  border: none;
+  border-right: 2px solid var(--ink);
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s;
+}
+
+.vorp-pos-tab:last-child, .stk-pos-tab:last-child, .con-pos-tab:last-child,
+.rz-pos-tab:last-child, .eff-pos-tab:last-child, .opp-pos-tab:last-child,
+.sos-pos-tab:last-child, .rc-pos-tab:last-child, .aw-pos-tab:last-child,
+.buysell-pos-tab:last-child, .breakouts-pos-tab:last-child,
+.usage-pos-tab:last-child, .air-pos-tab:last-child,
+.targets-pos-tab:last-child, .weekly-pos-tab:last-child,
+.yoy-pos-tab:last-child, .tv-pos-tab:last-child, .tl-pos-tab:last-child,
+.av-pos-tab:last-child, .ar-pos-tab:last-child, .db-pos-tab:last-child,
+.bd-pos-tab:last-child, .matchups-pos-tab:last-child,
+.scarcity-pos-tab:last-child, .leaders-pos-tab:last-child,
+.rankings-pos-tab:last-child, .aging-pos-tab:last-child,
+.dc-pos-tab:last-child, .sw-pos-tab:last-child {
+  border-right: none;
+}
+
+.vorp-pos-tab.active, .stk-pos-tab.active, .con-pos-tab.active,
+.rz-pos-tab.active, .eff-pos-tab.active, .opp-pos-tab.active,
+.sos-pos-tab.active, .rc-pos-tab.active, .aw-pos-tab.active,
+.buysell-pos-tab.active, .breakouts-pos-tab.active,
+.usage-pos-tab.active, .air-pos-tab.active, .targets-pos-tab.active,
+.weekly-pos-tab.active, .yoy-pos-tab.active, .tv-pos-tab.active,
+.tl-pos-tab.active, .av-pos-tab.active, .ar-pos-tab.active,
+.db-pos-tab.active, .bd-pos-tab.active, .matchups-pos-tab.active,
+.scarcity-pos-tab.active, .leaders-pos-tab.active,
+.rankings-pos-tab.active, .aging-pos-tab.active, .dc-pos-tab.active,
+.sw-pos-tab.active {
+  background: var(--ink);
+  color: var(--bg-card);
+}
+
+.vorp-pos-tab:hover:not(.active), .stk-pos-tab:hover:not(.active),
+.con-pos-tab:hover:not(.active), .rz-pos-tab:hover:not(.active),
+.eff-pos-tab:hover:not(.active), .opp-pos-tab:hover:not(.active),
+.sos-pos-tab:hover:not(.active), .rc-pos-tab:hover:not(.active),
+.aw-pos-tab:hover:not(.active), .buysell-pos-tab:hover:not(.active),
+.breakouts-pos-tab:hover:not(.active), .usage-pos-tab:hover:not(.active),
+.air-pos-tab:hover:not(.active), .targets-pos-tab:hover:not(.active),
+.weekly-pos-tab:hover:not(.active), .yoy-pos-tab:hover:not(.active),
+.tv-pos-tab:hover:not(.active), .tl-pos-tab:hover:not(.active),
+.av-pos-tab:hover:not(.active), .ar-pos-tab:hover:not(.active),
+.db-pos-tab:hover:not(.active), .bd-pos-tab:hover:not(.active),
+.matchups-pos-tab:hover:not(.active), .scarcity-pos-tab:hover:not(.active),
+.leaders-pos-tab:hover:not(.active), .rankings-pos-tab:hover:not(.active),
+.aging-pos-tab:hover:not(.active), .dc-pos-tab:hover:not(.active),
+.sw-pos-tab:hover:not(.active) {
+  background: var(--bg-warm);
+}
+
+/* ── Scoring Format Toggle ─────────────────────────────────────────── */
+.vorp-scoring-tabs, .stk-scoring-tabs, .con-scoring-tabs,
+.eff-scoring-tabs, .rc-scoring-tabs, .buysell-scoring-tabs {
+  display: flex;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.vorp-scoring-tab, .stk-scoring-tab, .con-scoring-tab,
+.eff-scoring-tab, .rc-scoring-tab, .buysell-scoring-tab {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 10px;
+  background: var(--bg-card);
+  color: var(--accent);
+  border: none;
+  border-right: 2px solid var(--accent);
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s;
+}
+
+.vorp-scoring-tab:last-child, .stk-scoring-tab:last-child,
+.con-scoring-tab:last-child, .eff-scoring-tab:last-child,
+.rc-scoring-tab:last-child, .buysell-scoring-tab:last-child {
+  border-right: none;
+}
+
+.vorp-scoring-tab.active, .stk-scoring-tab.active,
+.con-scoring-tab.active, .eff-scoring-tab.active,
+.rc-scoring-tab.active, .buysell-scoring-tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.vorp-scoring-tab:hover:not(.active), .stk-scoring-tab:hover:not(.active),
+.con-scoring-tab:hover:not(.active), .eff-scoring-tab:hover:not(.active),
+.rc-scoring-tab:hover:not(.active), .buysell-scoring-tab:hover:not(.active) {
+  background: var(--bg-warm);
+}
+
+/* ── Actions Row ───────────────────────────────────────────────────── */
+.vorp-actions, .stk-actions, .con-actions, .rz-actions, .eff-actions,
+.opp-actions, .sos-actions, .rc-actions, .aw-actions, .buysell-actions,
+.breakouts-actions, .usage-actions, .air-actions, .targets-actions,
+.weekly-actions, .yoy-actions, .tv-actions, .tl-actions, .av-actions,
+.ar-actions, .db-actions, .bd-actions, .matchups-actions,
+.scarcity-actions, .leaders-actions, .rankings-actions, .aging-actions,
+.dc-actions, .sw-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+/* ── Section ───────────────────────────────────────────────────────── */
+.vorp-section, .stk-section, .con-section, .rz-section, .eff-section,
+.opp-section, .sos-section, .rc-section, .buysell-section,
+.targets-section, .weekly-section, .yoy-section, .bd-section,
+.matchups-section, .sw-section {
+  margin-bottom: 32px;
+}
+
+/* ── Section Header (card-style) ───────────────────────────────────── */
+.vorp-section-header, .stk-section-header, .con-section-header,
+.rz-section-header, .eff-section-header, .opp-section-header,
+.sos-section-header, .rc-section-header, .targets-section-header,
+.weekly-section-header, .yoy-section-header, .bd-section-header,
+.matchups-section-header, .sw-section-header {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-sm);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+/* ── Section Icon (shared across pages) ────────────────────────────── */
+.section-icon {
+  font-size: 20px;
+  margin-right: 4px;
+}
+
+/* ── Data Table ────────────────────────────────────────────────────── */
+.vorp-table, .stk-table, .con-table, .rz-table, .eff-table,
+.opp-table, .sos-table, .rc-table, .targets-table, .weekly-table,
+.yoy-table, .bd-table, .matchups-table, .sw-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--bg-card);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.vorp-table th, .stk-table th, .con-table th, .rz-table th,
+.eff-table th, .opp-table th, .sos-table th, .rc-table th,
+.targets-table th, .weekly-table th, .yoy-table th, .bd-table th,
+.matchups-table th, .sw-table th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 8px;
+  background: var(--bg-warm);
+  color: var(--ink);
+  border-bottom: 3px solid var(--ink);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.vorp-table th.center, .vorp-table td.center,
+.stk-table th.center, .stk-table td.center,
+.con-table th.center, .con-table td.center,
+.rz-table th.center, .rz-table td.center,
+.eff-table th.center, .eff-table td.center,
+.opp-table th.center, .opp-table td.center,
+.sos-table th.center, .sos-table td.center,
+.rc-table th.center, .rc-table td.center,
+.targets-table th.center, .targets-table td.center,
+.weekly-table th.center, .weekly-table td.center,
+.yoy-table th.center, .yoy-table td.center,
+.bd-table th.center, .bd-table td.center,
+.matchups-table th.center, .matchups-table td.center,
+.sw-table th.center, .sw-table td.center {
+  text-align: center;
+}
+
+.vorp-table th.sorted, .stk-table th.sorted, .con-table th.sorted,
+.rz-table th.sorted, .eff-table th.sorted, .opp-table th.sorted,
+.sos-table th.sorted, .rc-table th.sorted, .targets-table th.sorted,
+.weekly-table th.sorted, .yoy-table th.sorted, .bd-table th.sorted,
+.matchups-table th.sorted, .sw-table th.sorted {
+  color: var(--orange);
+}
+
+.vorp-table th .sort-arrow, .stk-table th .sort-arrow,
+.con-table th .sort-arrow, .rz-table th .sort-arrow,
+.eff-table th .sort-arrow, .opp-table th .sort-arrow,
+.sos-table th .sort-arrow, .rc-table th .sort-arrow,
+.targets-table th .sort-arrow, .weekly-table th .sort-arrow,
+.yoy-table th .sort-arrow, .bd-table th .sort-arrow,
+.matchups-table th .sort-arrow, .sw-table th .sort-arrow {
+  font-size: 11px;
+  margin-left: 2px;
+}
+
+.vorp-table th:hover, .stk-table th:hover, .con-table th:hover,
+.rz-table th:hover, .eff-table th:hover, .opp-table th:hover,
+.sos-table th:hover, .rc-table th:hover, .targets-table th:hover,
+.weekly-table th:hover, .yoy-table th:hover, .bd-table th:hover,
+.matchups-table th:hover, .sw-table th:hover {
+  background: var(--bg);
+}
+
+.vorp-table td, .stk-table td, .con-table td, .rz-table td,
+.eff-table td, .opp-table td, .sos-table td, .rc-table td,
+.targets-table td, .weekly-table td, .yoy-table td, .bd-table td,
+.matchups-table td, .sw-table td {
+  padding: 8px;
+  border-bottom: 2px dashed var(--ink-faint);
+  vertical-align: middle;
+}
+
+.vorp-table tbody tr, .stk-table tbody tr, .con-table tbody tr,
+.rz-table tbody tr, .eff-table tbody tr, .opp-table tbody tr,
+.sos-table tbody tr, .rc-table tbody tr, .targets-table tbody tr,
+.weekly-table tbody tr, .yoy-table tbody tr, .bd-table tbody tr,
+.matchups-table tbody tr, .sw-table tbody tr {
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.vorp-table tbody tr:hover, .stk-table tbody tr:hover,
+.con-table tbody tr:hover, .rz-table tbody tr:hover,
+.eff-table tbody tr:hover, .opp-table tbody tr:hover,
+.sos-table tbody tr:hover, .rc-table tbody tr:hover,
+.targets-table tbody tr:hover, .weekly-table tbody tr:hover,
+.yoy-table tbody tr:hover, .bd-table tbody tr:hover,
+.matchups-table tbody tr:hover, .sw-table tbody tr:hover {
+  background: var(--bg-warm);
+}
+
+/* ── Player Cell ───────────────────────────────────────────────────── */
+.vorp-player-cell, .stk-player-cell, .con-player-cell, .rz-player-cell,
+.eff-player-cell, .opp-player-cell, .sos-player-cell, .rc-player-cell,
+.targets-player-cell, .yoy-player-cell, .bd-player-cell, .sw-player-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 160px;
+}
+
+.vorp-headshot, .stk-headshot, .con-headshot, .rz-headshot,
+.eff-headshot, .opp-headshot, .sos-headshot, .rc-headshot,
+.targets-headshot, .yoy-headshot, .bd-headshot, .sw-headshot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg-warm);
+}
+
+.vorp-player-info, .stk-player-info, .con-player-info, .rz-player-info,
+.eff-player-info, .opp-player-info, .sos-player-info, .rc-player-info,
+.targets-player-info, .yoy-player-info, .bd-player-info,
+.sw-player-info {
+  min-width: 0;
+}
+
+.vorp-player-name, .stk-player-name, .con-player-name, .rz-player-name,
+.eff-player-name, .opp-player-name, .sos-player-name, .rc-player-name,
+.targets-player-name, .yoy-player-name, .bd-player-name,
+.sw-player-name {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vorp-player-meta, .stk-player-meta, .con-player-meta, .rz-player-meta,
+.eff-player-meta, .opp-player-meta, .sos-player-meta, .rc-player-meta,
+.targets-player-meta, .yoy-player-meta, .bd-player-meta,
+.sw-player-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 1px;
+}
+
+/* ── Position Badge ────────────────────────────────────────────────── */
+.vorp-pos-badge, .stk-pos-badge, .con-pos-badge, .rz-pos-badge,
+.eff-pos-badge, .opp-pos-badge, .sos-pos-badge, .rc-pos-badge,
+.aw-pos-badge, .buysell-pos-badge, .breakouts-pos-badge,
+.targets-pos-badge, .yoy-pos-badge, .bd-pos-badge, .sw-pos-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--text-on-accent);
+}
+
+.vorp-pos-badge.qb, .stk-pos-badge.qb, .con-pos-badge.qb,
+.rz-pos-badge.qb, .eff-pos-badge.qb, .opp-pos-badge.qb,
+.sos-pos-badge.qb, .rc-pos-badge.qb, .aw-pos-badge.qb,
+.buysell-pos-badge.qb, .breakouts-pos-badge.qb, .targets-pos-badge.qb,
+.yoy-pos-badge.qb, .bd-pos-badge.qb, .sw-pos-badge.qb {
+  background: var(--pos-qb);
+}
+
+.vorp-pos-badge.rb, .stk-pos-badge.rb, .con-pos-badge.rb,
+.rz-pos-badge.rb, .eff-pos-badge.rb, .opp-pos-badge.rb,
+.sos-pos-badge.rb, .rc-pos-badge.rb, .aw-pos-badge.rb,
+.buysell-pos-badge.rb, .breakouts-pos-badge.rb, .targets-pos-badge.rb,
+.yoy-pos-badge.rb, .bd-pos-badge.rb, .sw-pos-badge.rb {
+  background: var(--pos-rb);
+}
+
+.vorp-pos-badge.wr, .stk-pos-badge.wr, .con-pos-badge.wr,
+.rz-pos-badge.wr, .eff-pos-badge.wr, .opp-pos-badge.wr,
+.sos-pos-badge.wr, .rc-pos-badge.wr, .aw-pos-badge.wr,
+.buysell-pos-badge.wr, .breakouts-pos-badge.wr, .targets-pos-badge.wr,
+.yoy-pos-badge.wr, .bd-pos-badge.wr, .sw-pos-badge.wr {
+  background: var(--pos-wr);
+}
+
+.vorp-pos-badge.te, .stk-pos-badge.te, .con-pos-badge.te,
+.rz-pos-badge.te, .eff-pos-badge.te, .opp-pos-badge.te,
+.sos-pos-badge.te, .rc-pos-badge.te, .aw-pos-badge.te,
+.buysell-pos-badge.te, .breakouts-pos-badge.te, .targets-pos-badge.te,
+.yoy-pos-badge.te, .bd-pos-badge.te, .sw-pos-badge.te {
+  background: var(--pos-te);
+}
+
+/* ── Team Label ────────────────────────────────────────────────────── */
+.vorp-team-label, .stk-team-label, .con-team-label, .rz-team-label,
+.eff-team-label, .opp-team-label, .sos-team-label, .rc-team-label,
+.aw-team-label, .buysell-team, .breakouts-team, .targets-team-label,
+.yoy-team-label, .bd-team-label, .sw-team-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-medium);
+}
+
+/* ── Grade Badge (A+/A/B/C/D/F) ───────────────────────────────────── */
+.con-grade-badge, .eff-grade-badge, .sos-grade-badge, .rc-grade-badge,
+.stk-grade-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  border: 2px solid;
+}
+
+.con-grade-badge.grade-aplus, .eff-grade-badge.grade-aplus,
+.sos-grade-badge.grade-aplus, .rc-grade-badge.grade-aplus,
+.stk-grade-badge.grade-aplus,
+.con-grade-badge.grade-a, .eff-grade-badge.grade-a,
+.sos-grade-badge.grade-a, .rc-grade-badge.grade-a,
+.stk-grade-badge.grade-a {
+  background: var(--green-light); color: var(--green); border-color: var(--green);
+}
+
+.con-grade-badge.grade-b, .eff-grade-badge.grade-b,
+.sos-grade-badge.grade-b, .rc-grade-badge.grade-b,
+.stk-grade-badge.grade-b {
+  background: var(--blue-light); color: var(--blue); border-color: var(--blue);
+}
+
+.con-grade-badge.grade-c, .eff-grade-badge.grade-c,
+.sos-grade-badge.grade-c, .rc-grade-badge.grade-c,
+.stk-grade-badge.grade-c {
+  background: var(--yellow-light); color: var(--ink-medium); border-color: var(--yellow);
+}
+
+.con-grade-badge.grade-d, .eff-grade-badge.grade-d,
+.sos-grade-badge.grade-d, .rc-grade-badge.grade-d,
+.stk-grade-badge.grade-d {
+  background: var(--orange-light); color: var(--orange); border-color: var(--orange);
+}
+
+.con-grade-badge.grade-f, .eff-grade-badge.grade-f,
+.sos-grade-badge.grade-f, .rc-grade-badge.grade-f,
+.stk-grade-badge.grade-f {
+  background: var(--red-light); color: var(--red); border-color: var(--red);
+}
+
+/* ── 5-tier Score Badge (elite/good/avg/below/poor) ────────────────── */
+.stk-score-badge, .opp-share-badge, .opp-dom-badge, .rc-gpa-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  border: 2px solid;
+  min-width: 32px;
+  text-align: center;
+}
+
+.stk-score-badge.elite, .opp-share-badge.elite, .opp-dom-badge.elite,
+.rc-gpa-badge.elite {
+  background: var(--green-light); color: var(--green); border-color: var(--green);
+}
+
+.stk-score-badge.good, .opp-share-badge.good, .opp-dom-badge.good,
+.rc-gpa-badge.good {
+  background: var(--blue-light); color: var(--blue); border-color: var(--blue);
+}
+
+.stk-score-badge.avg, .opp-share-badge.avg, .opp-dom-badge.avg,
+.rc-gpa-badge.avg {
+  background: var(--yellow-light); color: var(--ink-medium); border-color: var(--yellow);
+}
+
+.stk-score-badge.below, .opp-share-badge.below, .opp-dom-badge.below,
+.rc-gpa-badge.below {
+  background: var(--orange-light); color: var(--orange); border-color: var(--orange);
+}
+
+.stk-score-badge.poor, .opp-share-badge.poor, .opp-dom-badge.poor,
+.rc-gpa-badge.poor {
+  background: var(--red-light); color: var(--red); border-color: var(--red);
+}
+
+/* ── Annotation ────────────────────────────────────────────────────── */
+.vorp-annotation, .stk-annotation, .con-annotation, .rz-annotation,
+.eff-annotation, .opp-annotation, .sos-annotation, .rc-annotation,
+.targets-annotation, .yoy-annotation, .bd-annotation, .sw-annotation {
+  font-family: var(--font-hand);
+  font-size: 14px;
+  color: var(--ink-light);
+  white-space: nowrap;
+}
+
+/* ── Loading State ─────────────────────────────────────────────────── */
+.vorp-loading, .stk-loading, .con-loading, .rz-loading, .eff-loading,
+.opp-loading, .sos-loading, .rc-loading, .aw-loading, .buysell-loading,
+.breakouts-loading, .usage-loading, .air-loading, .targets-loading,
+.weekly-loading, .yoy-loading, .tv-loading, .tl-loading, .av-loading,
+.ar-loading, .db-loading, .bd-loading, .matchups-loading,
+.scarcity-loading, .leaders-loading, .rankings-loading, .aging-loading,
+.dc-loading, .sw-loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: var(--font-hand);
+  font-size: 20px;
+  color: var(--ink-light);
+}
+
+/* ── Empty State ───────────────────────────────────────────────────── */
+.vorp-empty, .stk-empty, .con-empty, .rz-empty, .eff-empty,
+.opp-empty, .sos-empty, .rc-empty, .aw-empty, .buysell-empty,
+.breakouts-empty, .usage-empty, .air-empty, .targets-empty,
+.weekly-empty, .yoy-empty, .tv-empty, .tl-empty, .av-empty,
+.ar-empty, .db-empty, .bd-empty, .matchups-empty, .scarcity-empty,
+.leaders-empty, .rankings-empty, .aging-empty, .dc-empty, .sw-empty {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: var(--font-hand);
+  font-size: 20px;
+  color: var(--ink-light);
+}
+
+/* ── Error State ───────────────────────────────────────────────────── */
+.vorp-error, .stk-error, .con-error, .rz-error, .eff-error,
+.opp-error, .sos-error, .rc-error, .aw-error, .buysell-error,
+.breakouts-error, .usage-error, .air-error, .targets-error,
+.weekly-error, .yoy-error, .tv-error, .tl-error, .av-error,
+.ar-error, .db-error, .bd-error, .matchups-error, .scarcity-error,
+.leaders-error, .rankings-error, .aging-error, .dc-error, .sw-error {
+  text-align: center;
+  padding: 40px 20px;
+  font-family: var(--font-hand);
+  font-size: 20px;
+  color: var(--red);
+}
+
+.vorp-error button, .stk-error button, .con-error button,
+.rz-error button, .eff-error button, .opp-error button,
+.sos-error button, .rc-error button, .aw-error button,
+.buysell-error button, .breakouts-error button, .usage-error button,
+.air-error button, .targets-error button, .weekly-error button,
+.yoy-error button, .bd-error button, .sw-error button {
+  margin-top: 12px;
+}
+
+/* ── Responsive: 768px ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .vorp-page, .stk-page, .con-page, .rz-page, .eff-page, .opp-page,
+  .sos-page, .rc-page, .aw-page, .buysell-page, .breakouts-page,
+  .targets-page, .weekly-page, .yoy-page, .tv-page, .tl-page,
+  .av-page, .ar-page, .db-page, .bd-page, .matchups-page,
+  .scarcity-page, .leaders-page, .rankings-page, .aging-page,
+  .dc-page, .sw-page {
+    padding: 16px 10px 40px;
+  }
+
+  .vorp-header h1, .stk-header h1, .con-header h1, .rz-header h1,
+  .eff-header h1, .opp-header h1, .sos-header h1, .rc-header h1,
+  .aw-header h1, .buysell-header h1, .breakouts-header h1,
+  .targets-header h1, .weekly-header h1, .yoy-header h1,
+  .tv-header h1, .tl-header h1, .av-header h1, .ar-header h1,
+  .db-header h1, .bd-header h1, .matchups-header h1,
+  .scarcity-header h1, .leaders-header h1, .rankings-header h1,
+  .aging-header h1, .dc-header h1, .sw-header h1 {
+    font-size: 24px;
+  }
+
+  .vorp-table, .stk-table, .con-table, .rz-table, .eff-table,
+  .opp-table, .sos-table, .rc-table, .targets-table, .weekly-table,
+  .yoy-table, .bd-table, .matchups-table, .sw-table {
+    font-size: 12px;
+  }
+
+  .vorp-player-cell, .stk-player-cell, .con-player-cell,
+  .rz-player-cell, .eff-player-cell, .opp-player-cell,
+  .sos-player-cell, .rc-player-cell, .targets-player-cell,
+  .yoy-player-cell, .bd-player-cell, .sw-player-cell {
+    min-width: 120px;
+  }
+
+  .vorp-headshot, .stk-headshot, .con-headshot, .rz-headshot,
+  .eff-headshot, .opp-headshot, .sos-headshot, .rc-headshot,
+  .targets-headshot, .yoy-headshot, .bd-headshot, .sw-headshot {
+    width: 28px;
+    height: 28px;
+  }
+
+  .vorp-player-name, .stk-player-name, .con-player-name,
+  .rz-player-name, .eff-player-name, .opp-player-name,
+  .sos-player-name, .rc-player-name, .targets-player-name,
+  .yoy-player-name, .bd-player-name, .sw-player-name {
+    font-size: 12px;
+  }
+}
+
+/* ── Responsive: 480px ─────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .vorp-controls, .stk-controls, .con-controls, .rz-controls,
+  .eff-controls, .opp-controls, .sos-controls, .rc-controls,
+  .aw-controls, .buysell-controls, .breakouts-controls,
+  .targets-controls, .weekly-controls, .yoy-controls, .tv-controls,
+  .tl-controls, .av-controls, .ar-controls, .db-controls,
+  .bd-controls, .matchups-controls, .scarcity-controls,
+  .leaders-controls, .rankings-controls, .aging-controls,
+  .dc-controls, .sw-controls {
+    gap: 8px;
+  }
+
+  .vorp-pos-tab, .stk-pos-tab, .con-pos-tab, .rz-pos-tab,
+  .eff-pos-tab, .opp-pos-tab, .sos-pos-tab, .rc-pos-tab,
+  .aw-pos-tab, .buysell-pos-tab, .breakouts-pos-tab,
+  .targets-pos-tab, .weekly-pos-tab, .yoy-pos-tab, .tv-pos-tab,
+  .tl-pos-tab, .av-pos-tab, .ar-pos-tab, .db-pos-tab,
+  .bd-pos-tab, .matchups-pos-tab, .scarcity-pos-tab,
+  .leaders-pos-tab, .rankings-pos-tab, .aging-pos-tab,
+  .dc-pos-tab, .sw-pos-tab {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}

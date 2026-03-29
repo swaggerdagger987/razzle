@@ -30,107 +30,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .vorp-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .vorp-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .vorp-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .vorp-header .vorp-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .vorp-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .vorp-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Position filter tabs */
-  .vorp-pos-tabs {
-    display: flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .vorp-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 2px solid var(--ink);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .vorp-pos-tab:last-child { border-right: none; }
-  .vorp-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .vorp-pos-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Scoring format toggle */
-  .vorp-scoring-tabs {
-    display: flex;
-    border: 2px solid var(--accent);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .vorp-scoring-tab {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    padding: 5px 10px;
-    background: var(--bg-card);
-    color: var(--accent);
-    border: none;
-    border-right: 2px solid var(--accent);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .vorp-scoring-tab:last-child { border-right: none; }
-  .vorp-scoring-tab.active {
-    background: var(--accent);
-    color: #fff;
-  }
-  .vorp-scoring-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Replacement thresholds info */
+  /* Page-specific: VORP thresholds */
   .vorp-thresholds {
     display: flex;
     justify-content: center;
@@ -153,129 +55,13 @@
     margin-right: 4px;
   }
 
-  /* Actions */
-  .vorp-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
-
-  /* Section headers */
-  .vorp-section { margin-bottom: 32px; }
-  .vorp-section-header {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 12px;
-    padding: 10px 14px;
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-sm);
-    box-shadow: 4px 4px 0 var(--ink);
-  }
+  /* Page-specific: section header colors */
   .vorp-section-header.winners { background: var(--green-light); }
   .vorp-section-header.replacement { background: var(--red-light); }
-  .section-icon { font-size: 20px; margin-right: 4px; }
   .section-icon.winners { color: var(--green); }
   .section-icon.replacement { color: var(--red); }
 
-  /* Table styles */
-  .vorp-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-  .vorp-table th {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 10px 8px;
-    background: var(--bg-warm);
-    color: var(--ink);
-    border-bottom: 3px solid var(--ink);
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-  }
-  .vorp-table th.center,
-  .vorp-table td.center { text-align: center; }
-  .vorp-table th.sorted { color: var(--orange); }
-  .vorp-table th .sort-arrow { font-size: 11px; margin-left: 2px; }
-  .vorp-table th:hover { background: var(--bg); }
-  .vorp-table td {
-    padding: 8px;
-    border-bottom: 2px dashed var(--ink-faint);
-    vertical-align: middle;
-  }
-  .vorp-table tbody tr {
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .vorp-table tbody tr:hover {
-    background: var(--bg-warm);
-  }
-
-  /* Player cell */
-  .vorp-player-cell {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 160px;
-  }
-  .vorp-headshot {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--bg-warm);
-  }
-  .vorp-player-info { min-width: 0; }
-  .vorp-player-name {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .vorp-player-meta {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 1px;
-  }
-  .vorp-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .vorp-pos-badge.qb { background: var(--pos-qb); }
-  .vorp-pos-badge.rb { background: var(--pos-rb); }
-  .vorp-pos-badge.wr { background: var(--pos-wr); }
-  .vorp-pos-badge.te { background: var(--pos-te); }
-  .vorp-team-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-medium);
-  }
-
-  /* VORP value badge */
+  /* Page-specific: VORP value badge */
   .vorp-badge {
     display: inline-block;
     font-family: var(--font-mono);
@@ -291,37 +77,7 @@
   .vorp-badge.fringe { background: var(--orange-light); color: var(--orange); border-color: var(--orange); }
   .vorp-badge.replacement { background: var(--red-light); color: var(--red); border-color: var(--red); }
 
-  /* Annotation */
-  .vorp-annotation {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-light);
-    white-space: nowrap;
-  }
-
-  /* Loading */
-  .vorp-loading {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    .vorp-page { padding: 16px 10px 40px; }
-    .vorp-header h1 { font-size: 24px; }
-    .vorp-table { font-size: 12px; }
-    .hide-mobile { display: none !important; }
-    .vorp-player-cell { min-width: 120px; }
-    .vorp-headshot { width: 28px; height: 28px; }
-    .vorp-player-name { font-size: 12px; }
-  }
-  @media (max-width: 480px) {
-    .vorp-controls { gap: 8px; }
-    .vorp-pos-tab { padding: 5px 10px; font-size: 12px; }
-  }
+  
 </style>
 </head>
 <body>

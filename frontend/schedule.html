@@ -30,216 +30,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .sos-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .sos-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .sos-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .sos-header .sos-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .sos-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .sos-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Position filter tabs */
-  .sos-pos-tabs {
-    display: flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .sos-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 2px solid var(--ink);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .sos-pos-tab:last-child { border-right: none; }
-  .sos-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .sos-pos-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Actions */
-  .sos-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Section headers */
-  .sos-section { margin-bottom: 32px; }
-  .sos-section-header {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 12px;
-    padding: 10px 14px;
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-sm);
-    box-shadow: 4px 4px 0 var(--ink);
-  }
+
   .sos-section-header.suppressed { background: var(--green-light); }
   .sos-section-header.inflated { background: var(--red-light); }
-  .section-icon { font-size: 20px; margin-right: 4px; }
+  
   .section-icon.suppressed { color: var(--green); }
   .section-icon.inflated { color: var(--red); }
-
-  /* Table styles */
-  .sos-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-  .sos-table th {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 10px 8px;
-    background: var(--bg-warm);
-    color: var(--ink);
-    border-bottom: 3px solid var(--ink);
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-  }
-  .sos-table th.center,
-  .sos-table td.center { text-align: center; }
-  .sos-table th.sorted { color: var(--orange); }
-  .sos-table th .sort-arrow { font-size: 11px; margin-left: 2px; }
-  .sos-table th:hover { background: var(--bg); }
-  .sos-table td {
-    padding: 8px;
-    border-bottom: 2px dashed var(--ink-faint);
-    vertical-align: middle;
-  }
-  .sos-table tbody tr {
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .sos-table tbody tr:hover {
-    background: var(--bg-warm);
-  }
-
-  /* Player cell */
-  .sos-player-cell {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 160px;
-  }
-  .sos-headshot {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--bg-warm);
-  }
-  .sos-player-info { min-width: 0; }
-  .sos-player-name {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .sos-player-meta {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 1px;
-  }
-  .sos-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .sos-pos-badge.qb { background: var(--pos-qb); }
-  .sos-pos-badge.rb { background: var(--pos-rb); }
-  .sos-pos-badge.wr { background: var(--pos-wr); }
-  .sos-pos-badge.te { background: var(--pos-te); }
-  .sos-team-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-medium);
-  }
-
-  /* SOS grade badge */
-  .sos-grade-badge {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 2px 10px;
-    border-radius: var(--radius-sm);
-    border: 2px solid;
-  }
-  .sos-grade-badge.grade-aplus { background: var(--green-light); color: var(--green); border-color: var(--green); }
-  .sos-grade-badge.grade-a { background: var(--green-light); color: var(--green); border-color: var(--green); }
-  .sos-grade-badge.grade-b { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
-  .sos-grade-badge.grade-c { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--yellow); }
-  .sos-grade-badge.grade-d { background: var(--orange-light); color: var(--orange); border-color: var(--orange); }
-  .sos-grade-badge.grade-f { background: var(--red-light); color: var(--red); border-color: var(--red); }
 
   /* Delta badge */
   .sos-delta {
@@ -254,47 +54,9 @@
   .sos-delta.hard { background: var(--green-light); color: var(--green); border-color: var(--green); }
   .sos-delta.easy { background: var(--red-light); color: var(--red); border-color: var(--red); }
 
-  /* Annotation */
-  .sos-annotation {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-light);
-    white-space: nowrap;
-  }
-
   /* Loading / Empty / Error */
-  .sos-loading, .sos-empty {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-  .sos-error {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--red);
-  }
-  .sos-error button {
-    margin-top: 12px;
-  }
+  .sos-loading, 
 
-  /* Responsive */
-  @media (max-width: 768px) {
-    .sos-page { padding: 16px 10px 40px; }
-    .sos-header h1 { font-size: 24px; }
-    .sos-table { font-size: 12px; }
-    .hide-mobile { display: none !important; }
-    .sos-player-cell { min-width: 120px; }
-    .sos-headshot { width: 28px; height: 28px; }
-    .sos-player-name { font-size: 12px; }
-  }
-  @media (max-width: 480px) {
-    .sos-controls { gap: 8px; }
-    .sos-pos-tab { padding: 5px 10px; font-size: 12px; }
-  }
 </style>
 </head>
 <body>

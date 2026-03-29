@@ -30,78 +30,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .weekly-page {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .weekly-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .weekly-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .weekly-header .weekly-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
 
   /* Controls */
-  .weekly-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
 
-  .weekly-pos-tabs {
-    display: flex;
-    gap: 6px;
-  }
-  .weekly-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-    transition: background-color 0.15s, transform 0.15s, box-shadow 0.15s;
-  }
   .weekly-pos-tab:hover {
     transform: translate(-2px, -2px);
     box-shadow: 4px 4px 0 var(--ink);
-  }
-  .weekly-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-
-  .weekly-season-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 6px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  .weekly-actions {
-    text-align: center;
-    margin-bottom: 20px;
   }
 
   /* Heatmap table */
@@ -249,15 +185,6 @@
     height: 16px;
   }
 
-  /* Loading */
-  .weekly-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-
   /* Bye week cell */
   .bye-cell {
     color: var(--ink-light);
@@ -265,16 +192,14 @@
     font-style: italic;
   }
 
-  /* Responsive */
   @media (max-width: 768px) {
-    .weekly-header h1 { font-size: 24px; }
-    .weekly-pos-tab { padding: 5px 10px; font-size: 12px; }
+
     .heatmap-table td { font-size: 11px; padding: 4px 3px; min-width: 36px; }
     .heatmap-table td.player-cell { min-width: 130px; font-size: 12px; }
     .heatmap-table th { font-size: 11px; padding: 6px 3px; }
   }
   @media (max-width: 480px) {
-    .weekly-page { padding: 16px 10px 40px; }
+    
     .heatmap-table td.player-cell { min-width: 110px; font-size: 11px; }
     .player-rank { display: none; }
   }

@@ -30,28 +30,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .rankings-page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
 
-  .rankings-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .rankings-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .rankings-header .rankings-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
   .rankings-header .rankings-season {
     font-family: var(--font-mono);
     font-size: 12px;
@@ -88,14 +69,6 @@
   .rankings-filter-btn.active.pos-rb { background: var(--pos-rb); border-color: var(--pos-rb); }
   .rankings-filter-btn.active.pos-wr { background: var(--pos-wr); border-color: var(--pos-wr); }
   .rankings-filter-btn.active.pos-te { background: var(--pos-te); border-color: var(--pos-te); }
-
-  /* Actions row */
-  .rankings-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Tier section */
   .rankings-tier {
@@ -217,23 +190,7 @@
     gap: 6px;
     margin-top: 2px;
   }
-  .rankings-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .rankings-pos-badge.qb { background: var(--pos-qb); }
-  .rankings-pos-badge.rb { background: var(--pos-rb); }
-  .rankings-pos-badge.wr { background: var(--pos-wr); }
-  .rankings-pos-badge.te { background: var(--pos-te); }
-  .rankings-team {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-light);
-  }
+
   .rankings-age {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -262,28 +219,9 @@
     color: var(--ink-light);
   }
 
-  /* Loading state */
-  .rankings-loading {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Empty state */
-  .rankings-empty {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Responsive */
   @media (max-width: 768px) {
     .rankings-grid { grid-template-columns: 1fr; }
-    .rankings-header h1 { font-size: 24px; }
+    
     .rankings-filter-btn { padding: 6px 12px; font-size: 12px; }
   }
   @media (max-width: 480px) {

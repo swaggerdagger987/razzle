@@ -30,199 +30,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .rz-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .rz-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .rz-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .rz-header .rz-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .rz-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .rz-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Position filter tabs */
-  .rz-pos-tabs {
-    display: flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .rz-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 2px solid var(--ink);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .rz-pos-tab:last-child { border-right: none; }
-  .rz-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .rz-pos-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Actions */
-  .rz-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Section headers */
-  .rz-section { margin-bottom: 32px; }
-  .rz-section-header {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 12px;
-    padding: 10px 14px;
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-sm);
-    box-shadow: 4px 4px 0 var(--ink);
-  }
+
   .rz-section-header.dominators { background: var(--green-light); }
   .rz-section-header.td-dependent { background: var(--orange-light); }
-  .section-icon { font-size: 20px; margin-right: 4px; }
+  
   .section-icon.dominators { color: var(--green); }
   .section-icon.td-dependent { color: var(--orange); }
-
-  /* Table styles */
-  .rz-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-  .rz-table th {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 10px 8px;
-    background: var(--bg-warm);
-    color: var(--ink);
-    border-bottom: 3px solid var(--ink);
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-  }
-  .rz-table th.center,
-  .rz-table td.center { text-align: center; }
-  .rz-table th.sorted { color: var(--orange); }
-  .rz-table th .sort-arrow { font-size: 11px; margin-left: 2px; }
-  .rz-table th:hover { background: var(--bg); }
-  .rz-table td {
-    padding: 8px;
-    border-bottom: 2px dashed var(--ink-faint);
-    vertical-align: middle;
-  }
-  .rz-table tbody tr {
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .rz-table tbody tr:hover {
-    background: var(--bg-warm);
-  }
-
-  /* Player cell */
-  .rz-player-cell {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 160px;
-  }
-  .rz-headshot {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--bg-warm);
-  }
-  .rz-player-info { min-width: 0; }
-  .rz-player-name {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .rz-player-meta {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 1px;
-  }
-  .rz-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .rz-pos-badge.qb { background: var(--pos-qb); }
-  .rz-pos-badge.rb { background: var(--pos-rb); }
-  .rz-pos-badge.wr { background: var(--pos-wr); }
-  .rz-pos-badge.te { background: var(--pos-te); }
-  .rz-team-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-medium);
-  }
 
   /* GL TD Rate badge */
   .rz-rate-badge {
@@ -252,47 +69,9 @@
   .rz-tdpct-badge.moderate { background: var(--orange-light); color: var(--orange); border-color: var(--orange); }
   .rz-tdpct-badge.light { background: var(--green-light); color: var(--green); border-color: var(--green); }
 
-  /* Annotation */
-  .rz-annotation {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-light);
-    white-space: nowrap;
-  }
-
   /* Loading / Empty / Error */
-  .rz-loading, .rz-empty {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-  .rz-error {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--red);
-  }
-  .rz-error button {
-    margin-top: 12px;
-  }
+  .rz-loading, 
 
-  /* Responsive */
-  @media (max-width: 768px) {
-    .rz-page { padding: 16px 10px 40px; }
-    .rz-header h1 { font-size: 24px; }
-    .rz-table { font-size: 12px; }
-    .hide-mobile { display: none !important; }
-    .rz-player-cell { min-width: 120px; }
-    .rz-headshot { width: 28px; height: 28px; }
-    .rz-player-name { font-size: 12px; }
-  }
-  @media (max-width: 480px) {
-    .rz-controls { gap: 8px; }
-    .rz-pos-tab { padding: 5px 10px; font-size: 12px; }
-  }
 </style>
 </head>
 <body>

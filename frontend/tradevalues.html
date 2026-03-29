@@ -30,49 +30,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .tv-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .tv-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .tv-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .tv-header .tv-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
 
   /* Controls */
-  .tv-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .tv-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
 
   .tv-search {
     font-family: var(--font-mono);
@@ -85,42 +46,6 @@
     width: 200px;
   }
   .tv-search::placeholder { color: var(--ink-medium); }
-
-  /* Position filter tabs */
-  .tv-pos-tabs {
-    display: flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .tv-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 2px solid var(--ink);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .tv-pos-tab:last-child { border-right: none; }
-  .tv-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .tv-pos-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Actions */
-  .tv-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Methodology chips */
   .tv-methodology {
@@ -231,53 +156,6 @@
   .tv-rank.top2 { color: var(--ink-light); font-size: 14px; }
   .tv-rank.top3 { color: var(--orange); font-size: 14px; }
 
-  .tv-headshot {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--bg-warm);
-  }
-
-  .tv-player-info {
-    min-width: 0;
-    width: 140px;
-    flex-shrink: 0;
-  }
-  .tv-player-name {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .tv-player-meta {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 1px;
-  }
-  .tv-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .tv-pos-badge.qb { background: var(--pos-qb); }
-  .tv-pos-badge.rb { background: var(--pos-rb); }
-  .tv-pos-badge.wr { background: var(--pos-wr); }
-  .tv-pos-badge.te { background: var(--pos-te); }
-  .tv-team-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-medium);
-  }
   .tv-age {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -364,36 +242,16 @@
   .tv-row[title] { position: relative; }
 
   /* Loading / Empty / Error */
-  .tv-loading, .tv-empty {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-  .tv-error {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--red);
-  }
-  .tv-error button { margin-top: 12px; }
+  .tv-loading, 
 
-  /* Responsive */
   @media (max-width: 768px) {
-    .tv-page { padding: 16px 10px 40px; }
-    .tv-header h1 { font-size: 24px; }
-    .tv-player-info { width: 100px; }
-    .tv-player-name { font-size: 12px; }
-    .tv-headshot { width: 28px; height: 28px; }
+
     .tv-stats { display: none; }
     .tv-rank { width: 24px; font-size: 12px; }
     .tv-search { width: 140px; }
   }
   @media (max-width: 480px) {
-    .tv-controls { gap: 8px; }
-    .tv-pos-tab { padding: 5px 10px; font-size: 12px; }
+
     .tv-methodology { display: none; }
     .tv-tier-badge { display: none; }
   }

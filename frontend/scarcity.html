@@ -30,57 +30,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .scarcity-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .scarcity-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .scarcity-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .scarcity-header .scarcity-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .scarcity-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .scarcity-season-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Actions */
-  .scarcity-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Summary card row */
   .scarcity-summary {
@@ -272,16 +223,6 @@
     white-space: nowrap;
   }
 
-  /* Loading */
-  .scarcity-loading {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 24px;
-    color: var(--ink-light);
-  }
-
-  /* Responsive */
   @media (max-width: 768px) {
     .scarcity-summary { grid-template-columns: repeat(2, 1fr); }
     .scarcity-grid { grid-template-columns: 1fr; }
@@ -289,7 +230,7 @@
   }
   @media (max-width: 480px) {
     .scarcity-summary { grid-template-columns: 1fr 1fr; gap: 8px; }
-    .scarcity-header h1 { font-size: 24px; }
+    
     .scarcity-bar-name { min-width: 55px; max-width: 55px; }
   }
 </style>

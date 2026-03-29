@@ -30,197 +30,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .yoy-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .yoy-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .yoy-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .yoy-header .yoy-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .yoy-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .yoy-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Position filter tabs */
-  .yoy-pos-tabs {
-    display: flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .yoy-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 2px solid var(--ink);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .yoy-pos-tab:last-child { border-right: none; }
-  .yoy-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .yoy-pos-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Actions */
-  .yoy-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Section headers */
-  .yoy-section-header {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--ink);
-    margin: 0 0 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  
   .yoy-section-header .section-arrow {
     font-size: 20px;
   }
   .yoy-section-header .section-arrow.up { color: var(--green); }
   .yoy-section-header .section-arrow.down { color: var(--red); }
 
-  .yoy-section {
-    margin-bottom: 36px;
-  }
-
   /* Player table */
-  .yoy-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-  .yoy-table th {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--ink-medium);
-    background: var(--bg-warm);
-    padding: 8px 10px;
-    text-align: left;
-    border-bottom: 3px solid var(--ink);
-  }
+
   .yoy-table th.center { text-align: center; }
   .yoy-table th.right { text-align: right; }
-  .yoy-table td {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--ink);
-    padding: 8px 10px;
-    border-bottom: 2px dashed var(--ink-faint);
-    vertical-align: middle;
-  }
-  .yoy-table tr:last-child td { border-bottom: none; }
-  .yoy-table tr {
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .yoy-table tbody tr:hover {
-    background: var(--bg-warm);
-  }
-
-  /* Player cell */
-  .yoy-player-cell {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .yoy-headshot {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--bg-warm);
-  }
-  .yoy-player-info {
-    min-width: 0;
-  }
-  .yoy-player-name {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .yoy-player-meta {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 1px;
-  }
-  .yoy-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .yoy-pos-badge.qb { background: var(--pos-qb); }
-  .yoy-pos-badge.rb { background: var(--pos-rb); }
-  .yoy-pos-badge.wr { background: var(--pos-wr); }
-  .yoy-pos-badge.te { background: var(--pos-te); }
-  .yoy-team-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-medium);
-  }
 
   /* Stat cells */
   .yoy-stat-prev {
@@ -265,25 +89,6 @@
   .yoy-mini-delta.down { color: var(--red); }
   .yoy-mini-delta.flat { color: var(--ink-light); }
 
-  /* Annotation */
-  .yoy-annotation {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-light);
-    font-style: italic;
-  }
-
-  /* Loading */
-  .yoy-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-
-  /* Empty state and error — use shared .panel-empty / .panel-error from styles.css */
-
   /* Season pair label */
   .yoy-pair-label {
     font-family: var(--font-mono);
@@ -293,16 +98,11 @@
     margin-bottom: 8px;
   }
 
-  /* Responsive */
   @media (max-width: 768px) {
-    .yoy-header h1 { font-size: 24px; }
     .yoy-table th, .yoy-table td { padding: 6px 6px; font-size: 12px; }
-    .yoy-headshot { width: 28px; height: 28px; }
-    .yoy-player-name { font-size: 12px; }
   }
   @media (max-width: 480px) {
     .yoy-page { padding: 16px 12px 40px; }
-    .yoy-header h1 { font-size: 20px; }
     .yoy-table th.hide-mobile, .yoy-table td.hide-mobile { display: none; }
     .yoy-mini-deltas { gap: 4px; }
     .yoy-mini-delta { font-size: 11px; }

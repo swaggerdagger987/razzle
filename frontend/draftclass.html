@@ -30,70 +30,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .dc-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .dc-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .dc-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .dc-header .dc-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls */
-  .dc-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .dc-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 3px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  .dc-pos-tabs {
-    display: flex;
-    border: 3px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .dc-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 3px solid var(--ink);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .dc-pos-tab:last-child { border-right: none; }
-  .dc-pos-tab.active { background: var(--ink); color: var(--bg-card); }
-  .dc-pos-tab:hover:not(.active) { background: var(--bg-warm); }
 
   /* Summary chips */
   .dc-summary {
@@ -129,14 +67,6 @@
   .dc-chip-value.green { color: var(--green); }
   .dc-chip-value.red { color: var(--red); }
 
-  /* Actions */
-  .dc-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
-
   /* Round ROI chart */
   .dc-chart-wrap {
     background: var(--bg-card);
@@ -159,75 +89,16 @@
     display: block;
   }
 
-  /* Section headers */
-  .dc-section-header {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 12px;
-    padding: 10px 14px;
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-sm);
-    box-shadow: 4px 4px 0 var(--ink);
-    background: var(--bg-warm);
-  }
-
   /* Table */
   .dc-table-wrap {
     overflow-x: auto;
     margin-bottom: 24px;
   }
-  .dc-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-  .dc-table th {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 10px 8px;
-    background: var(--bg-warm);
-    color: var(--ink);
-    border-bottom: 3px solid var(--ink);
-    white-space: nowrap;
-    cursor: pointer;
-    user-select: none;
-  }
-  .dc-table th.sorted { color: var(--orange); }
-  .dc-table th .sort-arrow { font-size: 11px; margin-left: 2px; }
-  .dc-table th:hover { background: var(--bg); }
-  .dc-table td {
-    padding: 8px;
-    border-bottom: 2px dashed var(--ink-faint);
-    text-align: center;
-    vertical-align: middle;
-  }
+
   .dc-table td:nth-child(2) { text-align: left; }
-  .dc-table tbody tr {
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .dc-table tbody tr:hover { background: var(--bg-warm); }
 
   /* Badges */
-  .dc-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
+  
   .dc-pos-badge.QB { background: var(--pos-qb); }
   .dc-pos-badge.RB { background: var(--pos-rb); }
   .dc-pos-badge.WR { background: var(--pos-wr); }
@@ -247,23 +118,12 @@
   .dc-verdict.bust { background: var(--red); }
   .dc-verdict.no_data { background: var(--ink-faint); color: var(--ink-light); }
 
-  /* Loading */
-  .dc-loading {
-    text-align: center;
-    padding: 60px 20px;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Responsive */
   @media (max-width: 768px) {
-    .dc-header h1 { font-size: 24px; }
+    
     .dc-chip { min-width: 80px; }
   }
   @media (max-width: 480px) {
-    .dc-page { padding: 16px 12px 40px; }
-    .dc-header h1 { font-size: 20px; }
+
     .dc-chip { padding: 8px 10px; }
     .dc-chip-value { font-size: 18px; }
   }

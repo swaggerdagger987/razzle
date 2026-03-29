@@ -30,85 +30,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .breakouts-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .breakouts-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .breakouts-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .breakouts-header .breakouts-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .breakouts-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .breakouts-season-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Position filter tabs */
-  .breakouts-pos-tabs {
-    display: flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .breakouts-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 2px solid var(--ink);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .breakouts-pos-tab:last-child { border-right: none; }
-  .breakouts-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .breakouts-pos-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Actions */
-  .breakouts-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Card grid */
   .breakouts-grid {
@@ -317,33 +240,14 @@
     text-transform: uppercase;
   }
 
-  /* Loading */
-  .breakouts-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-
-  /* Error state */
-  .breakouts-error {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--ink-medium);
-    border-left: 4px solid var(--red);
-  }
-
-  /* Responsive */
   @media (max-width: 768px) {
     .breakouts-grid {
       grid-template-columns: 1fr;
     }
-    .breakouts-header h1 { font-size: 24px; }
+    
   }
   @media (max-width: 480px) {
-    .breakouts-page { padding: 16px 12px 40px; }
-    .breakouts-header h1 { font-size: 20px; }
+
     .breakout-card-body { padding: 10px; }
     .breakout-stats { gap: 6px; }
   }

@@ -30,27 +30,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .db-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-  .db-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .db-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .db-header .db-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
+
   .db-meta {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -111,22 +93,7 @@
   }
 
   /* Section cards */
-  .db-section {
-    background: var(--bg-card);
-    border: 3px solid var(--ink);
-    border-radius: var(--radius);
-    box-shadow: 4px 4px 0 var(--ink);
-    overflow: hidden;
-  }
-  .db-section-header {
-    font-family: var(--font-display);
-    font-size: 16px;
-    padding: 10px 16px;
-    border-bottom: 2px solid var(--ink);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+
   .db-section-header .db-icon {
     font-size: 18px;
   }
@@ -289,35 +256,17 @@
   }
   .db-export-btn:hover { background: var(--orange); color: var(--text-on-accent); }
 
-  /* Loading */
-  .db-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-  .db-error {
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 14px;
-    color: var(--red);
-    padding: 40px 20px;
-  }
-
-  /* Watermark — uses shared .watermark from styles.css */
-
   @media (max-width: 768px) {
     .db-grid { grid-template-columns: 1fr; }
     .db-trends { grid-template-columns: repeat(2, 1fr); }
     .db-top5-card { min-width: 110px; }
-    .db-header h1 { font-size: 24px; }
+    
   }
   @media (max-width: 480px) {
     .db-trends { grid-template-columns: 1fr; }
     .db-top5 { flex-wrap: nowrap; overflow-x: auto;  justify-content: flex-start; padding-bottom: 8px; }
     .db-top5-card { min-width: 140px; flex-shrink: 0; }
-    .db-page { padding: 16px 10px 40px; }
+    
   }
 </style>
 </head>

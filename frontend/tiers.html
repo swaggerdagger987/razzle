@@ -30,27 +30,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .tl-page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-  .tl-header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .tl-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .tl-header .tl-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
+
   .tl-meta {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -59,14 +41,7 @@
   }
 
   /* Controls */
-  .tl-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
+  
   .tl-controls select {
     font-family: var(--font-mono);
     font-size: 13px;
@@ -90,30 +65,8 @@
   .tl-export-btn:hover { background: var(--orange); color: var(--text-on-accent); }
 
   /* Position tabs */
-  .tl-pos-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .tl-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 5px 14px;
-    border: 2px solid var(--ink);
-    border-radius: 20px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-    box-shadow: 2px 2px 0 var(--ink);
-    transition: transform 0.1s;
-  }
+
   .tl-pos-tab:hover { transform: translateY(-1px); }
-  .tl-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
 
   /* Tier rows */
   .tl-tier {
@@ -233,24 +186,6 @@
     line-height: 1.2;
   }
 
-  /* Loading */
-  .tl-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 18px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-  .tl-error {
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 14px;
-    color: var(--red);
-    padding: 40px 20px;
-  }
-
-  /* Watermark — uses shared .watermark from styles.css */
-
   @media (max-width: 768px) {
     .tl-tier { flex-direction: column; }
     .tl-tier-label {
@@ -264,10 +199,10 @@
     }
     .tl-tier-letter { font-size: 24px; }
     .tl-tier-desc { max-width: none; }
-    .tl-header h1 { font-size: 24px; }
+    
   }
   @media (max-width: 480px) {
-    .tl-page { padding: 16px 10px 40px; }
+    
     .tl-player-chip { font-size: 11px; }
   }
 </style>

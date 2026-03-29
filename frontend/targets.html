@@ -30,38 +30,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .targets-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .targets-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .targets-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .targets-header .targets-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
 
   /* Controls */
-  .targets-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
 
   .targets-season-select, .targets-team-select {
     font-family: var(--font-mono);
@@ -97,11 +69,6 @@
   .targets-mode-tab.active {
     background: var(--ink);
     color: var(--bg-card);
-  }
-
-  .targets-actions {
-    text-align: center;
-    margin-bottom: 20px;
   }
 
   /* Team card */
@@ -249,15 +216,6 @@
     padding: 0 16px 10px;
   }
 
-  /* Loading */
-  .targets-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-
   /* Legend */
   .targets-legend {
     display: flex;
@@ -281,14 +239,13 @@
     border: 2px solid var(--ink);
   }
 
-  /* Responsive */
   @media (max-width: 768px) {
-    .targets-header h1 { font-size: 24px; }
+    
     .team-card-header { flex-direction: column; align-items: flex-start; gap: 4px; }
     .player-row-stat { min-width: 40px; font-size: 11px; }
   }
   @media (max-width: 480px) {
-    .targets-page { padding: 16px 10px 40px; }
+    
     .dist-bar { height: 26px; }
     .dist-segment { font-size: 11px; }
   }

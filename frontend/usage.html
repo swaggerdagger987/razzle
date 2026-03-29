@@ -30,108 +30,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .usage-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
 
-  .usage-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .usage-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .usage-header .usage-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .usage-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .usage-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Position filter tabs */
-  .usage-pos-tabs {
-    display: flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .usage-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 2px solid var(--ink);
-    cursor: pointer;
-    transition: background-color 0.12s, color 0.12s;
-  }
-  .usage-pos-tab:last-child { border-right: none; }
-  .usage-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .usage-pos-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Actions */
-  .usage-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
-
-  /* Section headers */
-  .usage-section-header {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--ink);
-    margin: 0 0 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .usage-section-header .section-arrow {
-    font-size: 20px;
-  }
-  .usage-section-header .section-arrow.up { color: var(--green); }
-  .usage-section-header .section-arrow.down { color: var(--red); }
-
-  .usage-section {
-    margin-bottom: 36px;
-  }
-
-  /* Player table */
+  /* Page-specific: table (different th padding/font from standard) */
   .usage-table {
     width: 100%;
     border-collapse: collapse;
@@ -162,66 +64,28 @@
     vertical-align: middle;
   }
   .usage-table tr:last-child td { border-bottom: none; }
-  .usage-table tr {
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .usage-table tbody tr:hover {
-    background: var(--bg-warm);
-  }
+  .usage-table tr { cursor: pointer; transition: background 0.1s; }
+  .usage-table tbody tr:hover { background: var(--bg-warm); }
 
-  /* Player cell */
-  .usage-player-cell {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  /* Page-specific: player cell (larger headshot) */
+  .usage-player-cell { display: flex; align-items: center; gap: 8px; }
   .usage-headshot {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    object-fit: cover;
-    flex-shrink: 0;
-    background: var(--bg-warm);
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--ink); object-fit: cover; flex-shrink: 0; background: var(--bg-warm);
   }
-  .usage-player-info {
-    min-width: 0;
-  }
+  .usage-player-info { min-width: 0; }
   .usage-player-name {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--ink);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .usage-player-meta {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 1px;
-  }
-  .usage-pos-badge {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: var(--radius-sm);
-    color: var(--text-on-accent);
-  }
-  .usage-pos-badge.qb { background: var(--pos-qb); }
-  .usage-pos-badge.rb { background: var(--pos-rb); }
-  .usage-pos-badge.wr { background: var(--pos-wr); }
-  .usage-pos-badge.te { background: var(--pos-te); }
-  .usage-team-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-medium);
-  }
+  .usage-player-meta { display: flex; align-items: center; gap: 4px; margin-top: 1px; }
 
-  /* Delta cell */
+  /* Page-specific: section arrow colors */
+  .usage-section-header .section-arrow { font-size: 20px; }
+  .usage-section-header .section-arrow.up { color: var(--green); }
+  .usage-section-header .section-arrow.down { color: var(--red); }
+
+  /* Page-specific: delta cell */
   .usage-delta {
     font-family: var(--font-mono);
     font-size: 14px;
@@ -233,62 +97,19 @@
   .usage-delta.up { color: var(--green); }
   .usage-delta.down { color: var(--red); }
 
-  /* Sparkline cell */
+  /* Page-specific: sparkline cell */
   .usage-sparkline {
     width: 160px;
     height: 30px;
     flex-shrink: 0;
   }
 
-  /* Annotation */
-  .usage-annotation {
-    font-family: var(--font-hand);
-    font-size: 14px;
-    color: var(--ink-light);
-    font-style: italic;
-  }
-
-  /* Loading */
-  .usage-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-
-  /* Empty state */
-  .usage-empty {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-
-  /* Error with retry */
-  .usage-error {
-    text-align: center;
-    padding: 60px 20px;
-  }
-  .usage-error-msg {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--red);
-    margin-bottom: 12px;
-  }
-
-  /* Responsive */
   @media (max-width: 768px) {
-    .usage-header h1 { font-size: 24px; }
     .usage-sparkline { width: 100px; }
     .usage-table th, .usage-table td { padding: 6px 6px; font-size: 12px; }
-    .usage-headshot { width: 28px; height: 28px; }
-    .usage-player-name { font-size: 12px; }
   }
   @media (max-width: 480px) {
     .usage-page { padding: 16px 12px 40px; }
-    .usage-header h1 { font-size: 20px; }
     .usage-sparkline { width: 70px; height: 24px; }
     .usage-table th.hide-mobile, .usage-table td.hide-mobile { display: none; }
   }
