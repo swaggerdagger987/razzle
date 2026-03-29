@@ -9,15 +9,25 @@ status: OPEN
 
 # Standalone pages lack URL state, data freshness, and consistent patterns
 
-## Problems
+## Problems (UPDATED 2026-03-29 — URL state investigation)
 
-1. **37 standalone pages have no navigation path** (DQ-155) — These pages are only reachable via the Lab sidebar. They have no links from the home page, footer, or tools hub. Users can't discover them organically.
+1. **37 standalone pages have no navigation path** (DQ-155) — Only reachable via Lab sidebar, not from home, footer, or tools hub.
 
-2. **65+ standalone pages show no data freshness timestamp** (DQ-359) — Lab screener shows "Updated Xs ago" but standalone panels show no indication of when data was last refreshed. Users can't tell if they're looking at stale data.
+2. **65+ standalone pages show no data freshness timestamp** (DQ-359) — Lab screener shows "Updated Xs ago" but standalone panels have no freshness indicator.
 
-3. **69+ standalone pages have no URL state serialization** (DQ-363) — Filter state (season, position, team) is lost when the URL is shared or bookmarked. The Lab screener has URL state; standalone pages don't.
+3. **URL state: PARTIALLY RESOLVED** — Investigation confirms 8 high-value pages DO have URL state via `savePageState()`/`restorePageState()` from `app.js:2039-2055`:
+   - `weekly.html:601,608,634` — preserves `pos`, `season`
+   - `matchups.html:740,748,783` — preserves `pos`, `season`
+   - `rankings.html:502,536` — preserves `pos`
+   - `tiers.html:401,413,424` — preserves `pos`, `season`
+   - `tradevalues.html:694,700,740` — preserves `pos`, `season`
+   - `efficiency.html:411,422` — preserves `pos`, `season`
+   - `consistency.html:411,422` — preserves `pos`, `season`
+   - `stocks.html:429,440` — preserves `pos`, `season`
 
-4. **Season selector initialization varies across pages** (DQ-370) — Some pages use `seasonOptions()` (dynamic), some hardcode years, some default to current year. Fragmented initialization pattern.
+   **Remaining pages WITHOUT URL state** need investigation (the 60+ other standalone pages).
+
+4. **Season selector initialization varies across pages** (DQ-370) — Some use `seasonOptions()`, some hardcode years.
 
 ## Fix
 
