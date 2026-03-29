@@ -211,3 +211,28 @@ Cross-referenced both audit reports (from main repo) against all existing ticket
 | **Total** | **320** | |
 
 TSV entries: 478 (76 deep-audit + stat-audit entries verified this invocation)
+
+### Invocation 33 — Code-level verification (2026-03-29)
+
+1. **S3-036 enhanced** — Added file:line root cause detail for CFB TD attribution edge case. The bug is at `adapters/cfbfastr_adapter.py:250`: condition `if td_id and comp_id` doesn't verify the TD was scored by the receiver. Over-counts rec_tds when `touchdown_player_id` is set for a different player on the same play.
+
+2. **S3-117 NEW** — Situation Room pixel canvas renders at ~342x251px on mobile (agents barely visible). From deep audit Phase 6 mobile concerns table. Root cause at `agents.html:257-273` and `warroom.js:8-12` — 960x704 canvas scales down uniformly with no mobile-specific UX.
+
+3. **3 false positives re-verified**:
+   - DA-S1-004 (compare.html): Confirmed empty state at compare.js:24-32 ("Pick two players first, boss")
+   - DA-S1-011 (dark mode mobile): Confirmed toggle at app.js:188-202 (injected into mobile nav panel)
+   - DA-S2-006 (season selector): Confirmed correct behavior
+
+4. **3 skipped S3 numbers** (037, 048, 051): Numbering gaps — never assigned, not missing findings.
+
+### Ticket Count Summary (Final — Invocation 33)
+
+| Severity | Count | Status |
+|---|---|---|
+| S0 | 8 | All OPEN |
+| S1 | 45 | All OPEN |
+| S2 | 132 | All OPEN |
+| S3 | 117 | All OPEN |
+| CEO | 18 | All OPEN |
+| QA | 1 | All OPEN |
+| **Total** | **321** | |
