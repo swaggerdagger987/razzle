@@ -4125,7 +4125,7 @@
   .mh-detail-player:hover,
   .wh-player-inner:hover {
     transform: none !important;
-    box-shadow: 3px 3px 0 var(--ink) !important;
+    box-shadow: 4px 4px 0 var(--ink) !important;
   }
   .wh-table td:hover {
     transform: none !important;

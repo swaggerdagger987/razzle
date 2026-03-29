@@ -1988,7 +1988,7 @@ input[type="number"] {
   }
   .chip:hover {
     transform: none !important;
-    box-shadow: 3px 3px 0 var(--ink) !important;
+    box-shadow: 4px 4px 0 var(--ink) !important;
   }
   .footer-link:hover {
     transform: none !important;

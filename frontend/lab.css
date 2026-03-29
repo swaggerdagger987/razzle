@@ -177,7 +177,7 @@
     background: var(--bg-card);
     border: 2px solid var(--ink);
     border-radius: 8px;
-    box-shadow: 3px 3px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     font-family: var(--font-display);
     font-size: 14px;
     color: var(--ink);
