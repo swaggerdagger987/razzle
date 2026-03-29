@@ -45,7 +45,6 @@ async function fetchStoreFormulas() {
       ratingCount: Number(f.rating_count) || 0
     }));
   } catch (e) {
-    console.error("Formula store fetch failed:", e);
     storeState.formulas = [];
   }
   storeState.loading = false;
@@ -147,11 +146,17 @@ async function rateFormula(formulaId, rating) {
   renderFormulaStore();
 
   try {
+    var authHeaders = typeof getAuthHeaders === "function" ? getAuthHeaders() : {};
     const resp = await fetch(`/api/formulas/${formulaId}/rate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json" }, authHeaders),
       body: JSON.stringify({ rating })
     });
+    if (resp.status === 401 || resp.status === 403) {
+      showStoreToast("upgrade to Pro to rate formulas");
+      if (typeof openAuthModal === "function") openAuthModal();
+      return;
+    }
     if (!resp.ok) {
       showStoreToast("fumbled the rating... try again.");
       return;
@@ -162,7 +167,6 @@ async function rateFormula(formulaId, rating) {
       await fetchStoreFormulas();
     }
   } catch (e) {
-    console.error("Rate formula failed:", e);
   } finally {
     _ratingInProgress[formulaId] = false;
   }
@@ -177,11 +181,13 @@ async function submitReview(formulaId) {
   const rating = storeState.userRatings[formulaId] || 5;
 
   try {
+    var authHeaders = typeof getAuthHeaders === "function" ? getAuthHeaders() : {};
     const resp = await fetch(`/api/formulas/${formulaId}/rate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: Object.assign({ "Content-Type": "application/json" }, authHeaders),
       body: JSON.stringify({ rating, review: text })
     });
+    if (resp.status === 401 || resp.status === 403) { showStoreToast("upgrade to Pro to rate formulas"); return; }
     if (!resp.ok) { showStoreToast("fumbled the review... try again."); return; }
     const data = await resp.json();
     if (data.status === "ok") {
@@ -193,7 +199,6 @@ async function submitReview(formulaId) {
       await fetchStoreFormulas();
     }
   } catch (e) {
-    console.error("Submit review failed:", e);
   }
 }
 
@@ -256,7 +261,6 @@ async function installFormula(formulaId) {
     showStoreToast("formula imported.");
     renderFormulaStore();
   } catch (e) {
-    console.error("Install formula failed:", e);
     showStoreToast("fumbled the import. try again.");
   }
 }
@@ -441,7 +445,6 @@ async function submitPublish() {
       showStoreToast(data.message || "couldn't publish. Razzle's on it.");
     }
   } catch (e) {
-    console.error("Publish failed:", e);
     showStoreToast("couldn't publish. Razzle's on it.");
   } finally {
     if (publishBtn) { publishBtn.disabled = false; publishBtn.textContent = 'Publish'; }
@@ -481,11 +484,11 @@ function renderFormulaStore() {
   let cardsHtml = "";
   if (storeState.loading) {
     cardsHtml = `<div style="text-align:center; padding:40px; grid-column:1/-1;">
-      <p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling formulas...</p>
+      <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">pulling formulas...</p>
     </div>`;
   } else if (!formulas.length) {
     cardsHtml = `<div style="text-align:center; padding:40px; grid-column:1/-1;">
-      <p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no formulas match your filters</p>
+      <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">no formulas match your filters</p>
     </div>`;
   } else {
     cardsHtml = formulas.map(f => renderFormulaCard(f, userReviews)).join("");
@@ -530,7 +533,7 @@ function renderFormulaCard(formula, userReviews) {
   const validPositions = ["QB", "RB", "WR", "TE"];
   const posTags = (formula.positions || []).filter(p => validPositions.includes(p)).map(p => {
     const colors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
-    return `<span style="font-family:var(--font-mono); font-size:9px; font-weight:700; padding:1px 6px; border-radius:8px; border:2px solid var(--ink); background:${colors[p]}; color:var(--text-on-accent); text-transform:uppercase;">${escapeHtml(p)}</span>`;
+    return `<span style="font-family:var(--font-mono); font-size:11px; font-weight:700; padding:1px 6px; border-radius:8px; border:2px solid var(--ink); background:${colors[p]}; color:var(--text-on-accent); text-transform:uppercase;">${escapeHtml(p)}</span>`;
   }).join(" ");
 
   // Free user: description is partially blurred, actions are gated
@@ -545,10 +548,10 @@ function renderFormulaCard(formula, userReviews) {
   let actionsHtml = "";
   if (paid) {
     actionsHtml = `
-      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint);">
+      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--border-dashed);">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
           <div style="display:flex; align-items:center; gap:4px;">
-            <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">rate:</span>
+            <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">rate:</span>
             ${renderClickableStars(formula.id, userRating, 16)}
           </div>
           ${isInstalled
@@ -562,7 +565,7 @@ function renderFormulaCard(formula, userReviews) {
               style="flex:1; font-size:11px; padding:4px 8px;"
               id="review_${parseInt(formula.id) || 0}"
               onkeydown="if(event.key==='Enter') submitReview(${parseInt(formula.id) || 0})">
-            <button class="btn-chunky" style="font-size:10px; padding:3px 8px;" onclick="submitReview(${parseInt(formula.id) || 0})">Post</button>
+            <button class="btn-chunky" style="font-size:11px; padding:3px 8px;" onclick="submitReview(${parseInt(formula.id) || 0})">Post</button>
           </div>
         ` : ""}
         ${existingUserReview ? `
@@ -573,7 +576,7 @@ function renderFormulaCard(formula, userReviews) {
       </div>`;
   } else {
     actionsHtml = `
-      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--ink-faint); text-align:center;">
+      <div style="margin-top:10px; padding-top:10px; border-top:2px dashed var(--border-dashed); text-align:center;">
         <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-bottom:6px;">
           import, rate, and review with Pro
         </div>
@@ -588,7 +591,7 @@ function renderFormulaCard(formula, userReviews) {
       <div class="store-card-header">
         <div style="flex:1; min-width:0;">
           <div style="font-family:var(--font-display); font-size:16px; line-height:1.2; margin-bottom:4px;">${escapeHtml(formula.name)}</div>
-          <div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">by ${escapeHtml(formula.creator)}</div>
+          <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">by ${escapeHtml(formula.creator)}</div>
         </div>
         <div style="display:flex; gap:3px; flex-shrink:0;">${posTags}</div>
       </div>
@@ -596,7 +599,7 @@ function renderFormulaCard(formula, userReviews) {
       <div class="store-card-footer">
         <div style="display:flex; align-items:center; gap:6px;">
           ${renderStars(formula.avgRating || 0)}
-          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${(formula.avgRating || 0).toFixed(1)} (${formula.ratingCount || 0})</span>
+          <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">${(formula.avgRating || 0).toFixed(1)} (${formula.ratingCount || 0})</span>
         </div>
       </div>
       ${actionsHtml}

@@ -98,23 +98,33 @@ def initialize_subscriptions_table():
         try:
             conn.execute("ALTER TABLE users ADD COLUMN stripe_customer_id TEXT")
         except Exception:
-            logger.debug("stripe_customer_id column already exists or migration failed", exc_info=True)
+            logger.warning("stripe_customer_id column already exists or migration failed", exc_info=True)
         # Add trial_used column to subscriptions if not exists
         try:
             conn.execute("ALTER TABLE subscriptions ADD COLUMN trial_used INTEGER DEFAULT 0")
         except Exception:
-            logger.debug("trial_used column already exists or migration failed", exc_info=True)
+            logger.warning("trial_used column already exists or migration failed", exc_info=True)
         # Add trial_end column to subscriptions if not exists
         try:
             conn.execute("ALTER TABLE subscriptions ADD COLUMN trial_end TIMESTAMP")
         except Exception:
-            logger.debug("trial_end column already exists or migration failed", exc_info=True)
+            logger.warning("trial_end column already exists or migration failed", exc_info=True)
         conn.commit()
         # Add plan_type column for lifetime tracking
         try:
             conn.execute("ALTER TABLE subscriptions ADD COLUMN plan_type TEXT DEFAULT 'subscription'")
         except Exception:
-            logger.debug("plan_type column already exists or migration failed", exc_info=True)
+            logger.warning("plan_type column already exists or migration failed", exc_info=True)
+        # Add is_early_adopter flag for accurate EA slot counting
+        try:
+            conn.execute("ALTER TABLE subscriptions ADD COLUMN is_early_adopter INTEGER DEFAULT 0")
+        except Exception:
+            logger.warning("is_early_adopter column already exists or migration failed", exc_info=True)
+        # Add payment_failed_at column for grace period enforcement
+        try:
+            conn.execute("ALTER TABLE subscriptions ADD COLUMN payment_failed_at TIMESTAMP")
+        except Exception:
+            logger.warning("payment_failed_at column already exists or migration failed", exc_info=True)
         # Early adopter reservation table for atomic slot checking
         conn.execute("""
             CREATE TABLE IF NOT EXISTS ea_reservations (
@@ -135,9 +145,9 @@ def _reserve_ea_slot(user_id: int, tier: str, limit: int, plan_filter: str) -> d
     with auth_module.get_users_db() as conn:
         # Clean up expired reservations first
         conn.execute("DELETE FROM ea_reservations WHERE expires_at < CURRENT_TIMESTAMP")
-        # Atomic check: count confirmed users + active reservations
+        # Atomic check: count confirmed EA subscribers + active reservations
         confirmed = conn.execute(
-            f"SELECT COUNT(*) FROM users WHERE plan IN {plan_filter}"
+            f"SELECT COUNT(*) FROM subscriptions WHERE plan IN {plan_filter} AND is_early_adopter = 1 AND status IN ('active', 'trialing')"
         ).fetchone()[0]
         reserved = conn.execute(
             "SELECT COUNT(*) FROM ea_reservations WHERE tier = ? AND expires_at > CURRENT_TIMESTAMP",
@@ -177,10 +187,19 @@ def get_subscriber_counts() -> dict:
         lifetime_count = conn.execute(
             "SELECT COUNT(*) FROM users WHERE plan IN ('pro_lifetime', 'elite_lifetime')"
         ).fetchone()[0]
+        # Count only EA subscribers for slot cap checking
+        ea_pro_count = conn.execute(
+            "SELECT COUNT(*) FROM subscriptions WHERE plan IN ('pro', 'pro_lifetime') AND is_early_adopter = 1 AND status IN ('active', 'trialing')"
+        ).fetchone()[0]
+        ea_elite_count = conn.execute(
+            "SELECT COUNT(*) FROM subscriptions WHERE plan IN ('elite', 'elite_lifetime') AND is_early_adopter = 1 AND status IN ('active', 'trialing')"
+        ).fetchone()[0]
         return {
             "pro_total": pro_count,
             "elite_total": elite_count,
             "lifetime_total": lifetime_count,
+            "ea_pro_count": ea_pro_count,
+            "ea_elite_count": ea_elite_count,
         }
 
 
@@ -192,17 +211,17 @@ def get_early_adopter_status() -> dict:
             "enabled": EA_ENABLED,
             "pro": {
                 "limit": EA_PRO_LIMIT,
-                "used": counts["pro_total"],
-                "remaining": max(0, EA_PRO_LIMIT - counts["pro_total"]),
-                "available": EA_ENABLED and counts["pro_total"] < EA_PRO_LIMIT,
+                "used": counts["ea_pro_count"],
+                "remaining": max(0, EA_PRO_LIMIT - counts["ea_pro_count"]),
+                "available": EA_ENABLED and counts["ea_pro_count"] < EA_PRO_LIMIT,
                 "price": "$59.99/yr",
                 "savings": "25% off",
             },
             "elite": {
                 "limit": EA_ELITE_LIMIT,
-                "used": counts["elite_total"],
-                "remaining": max(0, EA_ELITE_LIMIT - counts["elite_total"]),
-                "available": EA_ENABLED and counts["elite_total"] < EA_ELITE_LIMIT,
+                "used": counts["ea_elite_count"],
+                "remaining": max(0, EA_ELITE_LIMIT - counts["ea_elite_count"]),
+                "available": EA_ENABLED and counts["ea_elite_count"] < EA_ELITE_LIMIT,
                 "price": "$99.99/yr",
                 "savings": "33% off",
             },
@@ -356,11 +375,11 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
                 "mode": "payment",
                 "success_url": SUCCESS_URL,
                 "cancel_url": CANCEL_URL,
-                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier},
+                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier, "is_early_adopter": "1" if is_early_adopter else "0"},
             }
         else:
             # Subscription mode (regular, early adopter)
-            sub_data = {"metadata": {"plan_tier": plan_tier}}
+            sub_data = {"metadata": {"plan_tier": plan_tier, "is_early_adopter": "1" if is_early_adopter else "0"}}
             if trial_days:
                 sub_data["trial_period_days"] = trial_days
 
@@ -371,7 +390,7 @@ def create_checkout_session(user: dict, interval: str = "year", promo_code: str 
                 "mode": "subscription",
                 "success_url": SUCCESS_URL,
                 "cancel_url": CANCEL_URL,
-                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier},
+                "metadata": {"user_id": str(user["id"]), "plan_tier": plan_tier, "is_early_adopter": "1" if is_early_adopter else "0"},
                 "subscription_data": sub_data,
             }
 
@@ -455,6 +474,7 @@ def _handle_checkout_completed(session):
     metadata = session.get("metadata", {})
     user_id = metadata.get("user_id")
     plan_tier = metadata.get("plan_tier", "pro")  # default to pro for legacy
+    ea_flag = 1 if metadata.get("is_early_adopter") == "1" else 0
 
     # Validate plan tier
     if plan_tier not in ("pro", "elite", "pro_lifetime", "elite_lifetime"):
@@ -487,7 +507,7 @@ def _handle_checkout_completed(session):
                 trial_end = datetime.fromtimestamp(sub_obj["trial_end"], tz=timezone.utc).isoformat()
                 is_trial = sub_obj.get("status") == "trialing"
         except Exception:
-            logger.debug("Could not retrieve subscription trial info", exc_info=True)
+            logger.warning("Could not retrieve subscription trial info", exc_info=True)
 
     with auth_module.get_users_db() as conn:
         # Update user plan
@@ -506,14 +526,14 @@ def _handle_checkout_completed(session):
                 UPDATE subscriptions SET
                     stripe_customer_id = ?, stripe_subscription_id = ?,
                     plan = ?, status = ?, trial_used = MAX(trial_used, ?), trial_end = ?,
-                    plan_type = ?, updated_at = CURRENT_TIMESTAMP
+                    plan_type = ?, is_early_adopter = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
-            """, (customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type, _uid))
+            """, (customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type, ea_flag, _uid))
         else:
             conn.execute("""
-                INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end, plan_type)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type))
+                INSERT INTO subscriptions (user_id, stripe_customer_id, stripe_subscription_id, plan, status, trial_used, trial_end, plan_type, is_early_adopter)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (_uid, customer_id, subscription_id, plan_tier, status, trial_used_val, trial_end, p_type, ea_flag))
 
         conn.commit()
     # Clear any early adopter reservation now that checkout is confirmed
@@ -606,11 +626,13 @@ def _handle_payment_failed(invoice):
                 logger.info(f"User {row['id']} has lifetime plan — skipping payment failure")
                 return
             conn.execute("""
-                UPDATE subscriptions SET status = 'payment_failed', updated_at = CURRENT_TIMESTAMP
+                UPDATE subscriptions SET status = 'payment_failed',
+                    payment_failed_at = COALESCE(payment_failed_at, CURRENT_TIMESTAMP),
+                    updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
             """, (row["id"],))
             conn.commit()
-            logger.warning(f"Payment failed for user {row['id']} — marked payment_failed (plan unchanged, awaiting Stripe retry)")
+            logger.warning(f"Payment failed for user {row['id']} — marked payment_failed, grace period started")
 
 
 def _handle_invoice_paid(invoice):
@@ -643,7 +665,8 @@ def _handle_invoice_paid(invoice):
                     plan_tier = "pro"
                 conn.execute("UPDATE users SET plan = ? WHERE id = ?", (plan_tier, row["id"]))
                 conn.execute("""
-                    UPDATE subscriptions SET plan = ?, status = 'active', updated_at = CURRENT_TIMESTAMP
+                    UPDATE subscriptions SET plan = ?, status = 'active',
+                        payment_failed_at = NULL, updated_at = CURRENT_TIMESTAMP
                     WHERE user_id = ?
                 """, (plan_tier, row["id"]))
                 conn.commit()
@@ -651,9 +674,10 @@ def _handle_invoice_paid(invoice):
             except stripe.error.StripeError:
                 logger.exception(f"Failed to retrieve subscription {subscription_id} for invoice.paid")
         else:
-            # User already on correct plan — just confirm active status
+            # User already on correct plan — just confirm active status and clear any payment failure
             conn.execute("""
-                UPDATE subscriptions SET status = 'active', updated_at = CURRENT_TIMESTAMP
+                UPDATE subscriptions SET status = 'active',
+                    payment_failed_at = NULL, updated_at = CURRENT_TIMESTAMP
                 WHERE user_id = ?
             """, (row["id"],))
             conn.commit()
@@ -753,8 +777,9 @@ def get_billing_status(user: dict) -> dict:
             result["trial_end"] = trial_end_str
             try:
                 trial_end_dt = datetime.fromisoformat(trial_end_str.replace("Z", "+00:00"))
-                days_left = (trial_end_dt - datetime.now(timezone.utc)).days
-                result["trial_days_remaining"] = max(0, days_left)
+                delta = trial_end_dt - datetime.now(timezone.utc)
+                result["trial_days_remaining"] = max(0, delta.days)
+                result["trial_hours_remaining"] = max(0, int(delta.total_seconds() // 3600))
             except (ValueError, TypeError):
                 pass
 
@@ -852,4 +877,27 @@ def reconcile_subscriptions():
             logger.error(f"Reconciliation: Stripe API error for user {row['id']}: {e}")
             errors += 1
 
-    logger.info(f"Subscription reconciliation complete: {fixed} fixed, {errors} errors, {len(rows) + len(free_rows)} checked")
+    # Enforce grace period: downgrade users whose payment failed > 3 days ago
+    with auth_module.get_users_db() as conn:
+        grace_rows = conn.execute(
+            "SELECT u.id, u.email, u.plan FROM users u JOIN subscriptions s ON u.id = s.user_id "
+            "WHERE s.status = 'payment_failed' AND s.payment_failed_at IS NOT NULL "
+            "AND s.payment_failed_at < datetime('now', '-3 days') "
+            "AND u.plan IN ('pro', 'elite')"
+        ).fetchall()
+    for row in grace_rows:
+        with auth_module.get_users_db() as conn:
+            conn.execute("UPDATE users SET plan = 'free' WHERE id = ?", (row["id"],))
+            conn.execute(
+                "UPDATE subscriptions SET plan = 'free', status = 'payment_failed_expired', "
+                "updated_at = CURRENT_TIMESTAMP WHERE user_id = ?",
+                (row["id"],),
+            )
+            conn.commit()
+        logger.warning(
+            f"Reconciliation: user {row['id']} ({row['email']}) downgraded — "
+            f"payment failed > 3 days ago, was plan={row['plan']}"
+        )
+        fixed += 1
+
+    logger.info(f"Subscription reconciliation complete: {fixed} fixed, {errors} errors, {len(rows) + len(free_rows) + len(grace_rows)} checked")

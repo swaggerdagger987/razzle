@@ -79,7 +79,7 @@ const C = {
   chairBack:   '#2d1f14',
   bannerBg:    '#d97757', // Razzle terracotta
   bannerText:  '#2d1f14',
-  nameTag:     'rgba(0,0,0,0.7)',
+  nameTag:     'rgba(26,17,10,0.7)',
   nameText:    '#f7efe5',
   bubbleBg:    '#f7efe5',
   bubbleBorder:'#2d1f14',
@@ -137,23 +137,45 @@ const AGENT_SPRITES = {
 };
 const ANIM_TYPES = ['walk', 'idle', 'attack', 'jump'];
 
-Object.entries(AGENT_SPRITES).forEach(([agentKey, prefix]) => {
-  spriteSheets[agentKey] = {};
-  ANIM_TYPES.forEach(anim => {
-    const img = new Image();
-    img.onload = () => { spritesLoaded++; };
-    img.src = `assets/characters/${prefix}-${anim}.png`;
-    spriteSheets[agentKey][anim] = img;
-  });
-});
+// Deferred sprite loading — only starts when canvas enters viewport
+let _spritesInitiated = false;
+function loadSprites() {
+  if (_spritesInitiated) return;
+  _spritesInitiated = true;
 
-// Also load old sprites as fallback for bio cards
-const CHAR_NAMES = ['char_0','char_1','char_2','char_3','char_4','char_5'];
-CHAR_NAMES.forEach(name => {
-  const img = new Image();
-  img.src = `assets/characters/${name}.png`;
-  spriteImgs[name] = img;
-});
+  Object.entries(AGENT_SPRITES).forEach(([agentKey, prefix]) => {
+    spriteSheets[agentKey] = {};
+    ANIM_TYPES.forEach(anim => {
+      const img = new Image();
+      img.onload = () => { spritesLoaded++; };
+      img.src = `assets/characters/${prefix}-${anim}.png`;
+      spriteSheets[agentKey][anim] = img;
+    });
+  });
+
+  // Also load old sprites as fallback for bio cards
+  const CHAR_NAMES = ['char_0','char_1','char_2','char_3','char_4','char_5'];
+  CHAR_NAMES.forEach(name => {
+    const img = new Image();
+    img.src = `assets/characters/${name}.png`;
+    spriteImgs[name] = img;
+  });
+}
+
+// Use IntersectionObserver to lazy-load sprites when canvas is near viewport
+const _canvasEl = document.getElementById('warRoomCanvas');
+if (_canvasEl && 'IntersectionObserver' in window) {
+  const _spriteObserver = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      loadSprites();
+      _spriteObserver.disconnect();
+    }
+  }, { rootMargin: '200px' });
+  _spriteObserver.observe(_canvasEl);
+} else {
+  // Fallback: load immediately if no IntersectionObserver or no canvas
+  loadSprites();
+}
 
 // ── COLLISION MAP ──────────────────────────────────────────────────────
 // 0 = blocked, 1 = walkable
@@ -296,8 +318,8 @@ function drawFloor() {
           const variant = ((c + r * 3) % 3);
           const col = variant === 0 ? C.floorWood1 : variant === 1 ? C.floorWood2 : C.floorWood3;
           px(tx, ty, TILE, TILE, col);
-          px(tx, ty, TILE, 1, 'rgba(0,0,0,0.08)');
-          if ((c + r) % 4 === 0) px(tx + TILE - 1, ty, 1, TILE, 'rgba(0,0,0,0.06)');
+          px(tx, ty, TILE, 1, 'rgba(26,17,10,0.08)');
+          if ((c + r) % 4 === 0) px(tx + TILE - 1, ty, 1, TILE, 'rgba(26,17,10,0.06)');
         }
       }
     } else if (z.type === ZONE_TURF) {
@@ -354,7 +376,7 @@ function drawDraftBoard(f) {
   const w = f.w * TILE, h = f.h * TILE;
   drawPixelRect(x + 2, y + 2, w - 4, h - 4, C.boardBg, C.boardFrame);
   ctx.fillStyle = '#d97757';
-  ctx.font = 'bold 10px "Space Mono", monospace';
+  ctx.font = 'bold 11px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.fillText('DRAFT BOARD', x + w / 2, y + 14);
   const cardW = 22, cardH = 8, gap = 3;
@@ -432,7 +454,7 @@ function drawPixelFootball(x, y) {
 function drawWarTable(f) {
   const x = f.x * TILE, y = f.y * TILE;
   const w = f.w * TILE, h = f.h * TILE;
-  px(x + 4, y + 4, w - 4, h - 4, 'rgba(0,0,0,0.2)');
+  px(x + 4, y + 4, w - 4, h - 4, 'rgba(26,17,10,0.2)');
   drawPixelRect(x, y + 4, w, h - 8, C.tableTop, C.tableDark);
   drawPixelRect(x + 6, y + 8, w - 12, h - 16, null, 'rgba(100,70,30,0.3)');
   // Center emblem — Razzle tiger
@@ -445,7 +467,7 @@ function drawWarTable(f) {
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.fillStyle = '#2d1f14';
-  ctx.font = 'bold 9px "Space Mono", monospace';
+  ctx.font = 'bold 11px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('RAZZLE', cx, cy);
@@ -548,7 +570,7 @@ function drawBanner(f) {
   ctx.font = 'bold 12px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.fillText('RAZZLE', x + w / 2, y + 22);
-  ctx.font = 'bold 9px "Space Mono", monospace';
+  ctx.font = 'bold 11px "Space Mono", monospace';
   ctx.fillText('SIT ROOM', x + w / 2, y + 36);
   ctx.textAlign = 'left';
 }
@@ -931,7 +953,7 @@ class Agent {
 
       // Shadow
       ctx.globalAlpha = 0.25;
-      ctx.fillStyle = '#000';
+      ctx.fillStyle = '#1a110a';
       ctx.beginPath();
       ctx.ellipse(this.x, this.y + 10, 10, 4, 0, 0, Math.PI * 2);
       ctx.fill();
@@ -984,7 +1006,7 @@ class Agent {
 
       // Shadow
       ctx.globalAlpha = 0.25;
-      ctx.fillStyle = '#000';
+      ctx.fillStyle = '#1a110a';
       ctx.beginPath();
       ctx.ellipse(this.x, this.y + 10, 10, 4, 0, 0, Math.PI * 2);
       ctx.fill();
@@ -1075,7 +1097,7 @@ class Agent {
       case 'eureka':
         drawPixelFootball(x + 7, y + 4);
         ctx.fillStyle = '#d97757';
-        ctx.font = 'bold 10px "Space Mono", monospace';
+        ctx.font = 'bold 11px "Space Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText('!', x + bubW - 6, y + 14);
         ctx.textAlign = 'left';
@@ -1111,8 +1133,56 @@ function selectAgent(idx) {
     agents.forEach(a => { a.selected = false; a.controlled = false; });
     selectedAgent = agents[idx];
     selectedAgent.selected = true;
+    updateMobileAgentCards();
   }
 }
+
+// ── MOBILE AGENT SELECT CARDS ─────────────────────────────────────────
+(function initMobileAgentCards() {
+  const host = document.getElementById('mobileAgentSelect');
+  if (!host) return;
+  AGENT_DEFS.forEach(def => {
+    const card = document.createElement('button');
+    card.className = 'mobile-agent-card' + (def.id === 0 ? ' active' : '');
+    card.dataset.agentId = def.id;
+    card.innerHTML =
+      '<span class="mobile-agent-dot" style="background:' + def.color + '"></span>' +
+      '<span>' + def.name + '</span>' +
+      '<span class="mobile-agent-role">' + def.role + '</span>';
+    card.addEventListener('click', function() {
+      selectAgent(def.id);
+      centerCamOn(agents[def.id].x, agents[def.id].y);
+    });
+    host.appendChild(card);
+  });
+})();
+
+function updateMobileAgentCards() {
+  const host = document.getElementById('mobileAgentSelect');
+  if (!host) return;
+  host.querySelectorAll('.mobile-agent-card').forEach(card => {
+    card.classList.toggle('active', parseInt(card.dataset.agentId) === selectedAgent.id);
+  });
+}
+
+// ── FULLSCREEN TOGGLE ─────────────────────────────────────────────────
+(function initFullscreenToggle() {
+  const btn = document.getElementById('canvasFullscreenBtn');
+  const container = document.getElementById('canvasContainer');
+  if (!btn || !container) return;
+  btn.addEventListener('click', function() {
+    container.classList.toggle('is-fullscreen');
+    btn.textContent = container.classList.contains('is-fullscreen') ? 'Exit' : 'Fullscreen';
+    resizeCanvas();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && container.classList.contains('is-fullscreen')) {
+      container.classList.remove('is-fullscreen');
+      btn.textContent = 'Fullscreen';
+      resizeCanvas();
+    }
+  });
+})();
 
 function handleInput(dt) {
   const a = selectedAgent;
@@ -1237,11 +1307,11 @@ function drawHUD() {
     const a = agents[i];
     const cy = hudY + i * (chipH + chipGap);
     const label = `${i + 1} ${a.name}`;
-    ctx.font = 'bold 9px "Space Mono", monospace';
+    ctx.font = 'bold 11px "Space Mono", monospace';
     const tw = ctx.measureText(label).width + 12;
 
     ctx.globalAlpha = a.selected ? 0.9 : 0.55;
-    drawPixelRect(hudX, cy, tw, chipH, a.selected ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.5)');
+    drawPixelRect(hudX, cy, tw, chipH, a.selected ? 'rgba(26,17,10,0.8)' : 'rgba(26,17,10,0.5)');
     if (a.selected) {
       ctx.strokeStyle = a.color;
       ctx.lineWidth = 1;
@@ -1253,7 +1323,7 @@ function drawHUD() {
     else if (a.state === STATE.WORK_DESK || a.state === STATE.ANALYZE_BOARD) dotColor = '#3388cc';
     else if (a.state === STATE.THINK) dotColor = '#ccaa33';
     else if (a.state === STATE.DISCUSS) dotColor = '#cc6633';
-    else if (a.state === STATE.CELEBRATE) dotColor = '#cc3333';
+    else if (a.state === STATE.CELEBRATE) dotColor = '#ffc857';
     else if (a.state === STATE.COFFEE) dotColor = '#8B6914';
     px(hudX + 3, cy + chipH / 2 - 2, 4, 4, dotColor);
 
@@ -1272,8 +1342,12 @@ let lastTime = now();
 let _rafId = null;
 
 function gameLoop() {
-  // Stop loop if canvas was removed from DOM
-  if (!cvs || !cvs.isConnected) { _rafId = null; return; }
+  // Stop loop + intervals if canvas was removed from DOM (in-page navigation)
+  if (!cvs || !cvs.isConnected) {
+    _rafId = null;
+    if (_rosterInterval) { clearInterval(_rosterInterval); _rosterInterval = null; }
+    return;
+  }
   const t = now();
   const dt = Math.min(t - lastTime, 50);
   lastTime = t;
@@ -1331,7 +1405,7 @@ const STATE_COLORS = {
   [STATE.ANALYZE_BOARD]: '#3388cc',
   [STATE.DISCUSS]: '#cc6633',
   [STATE.THINK]: '#ccaa33',
-  [STATE.CELEBRATE]: '#cc3333',
+  [STATE.CELEBRATE]: '#ffc857',
   [STATE.COFFEE]: '#8B6914',
 };
 
@@ -1350,6 +1424,8 @@ function buildRoster() {
     miniCvs.width = 32;
     miniCvs.height = 32;
     miniCvs.className = 'roster-avatar';
+    miniCvs.setAttribute('role', 'img');
+    miniCvs.setAttribute('aria-label', a.name + ' agent avatar');
     const miniCtx = miniCvs.getContext('2d');
     // Try new idle sprite first
     const sheets = spriteSheets[a.spriteKey];
@@ -1462,7 +1538,7 @@ const DEFAULT_BASE_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 function loadAgentConfig() {
   try {
-    const raw = localStorage.getItem(AGENT_CONFIG_KEY);
+    const raw = sessionStorage.getItem(AGENT_CONFIG_KEY);
     if (!raw) return {};
     const parsed = JSON.parse(raw);
     return (parsed && typeof parsed === 'object') ? parsed : {};
@@ -1470,7 +1546,7 @@ function loadAgentConfig() {
 }
 
 function saveAgentConfig(cfg) {
-  try { localStorage.setItem(AGENT_CONFIG_KEY, JSON.stringify(cfg)); } catch (_) {}
+  try { sessionStorage.setItem(AGENT_CONFIG_KEY, JSON.stringify(cfg)); } catch (_) {}
 }
 
 function getAgentSettings(agentId) {
@@ -1565,17 +1641,29 @@ function setupConfigPanel() {
     showStatus('base URL updated');
   });
 
-  // Per-agent key save on blur
+  // Per-agent key save on blur + validate
   agentKeysHost.querySelectorAll('.config-agent-row').forEach(row => {
     const id = row.dataset.agentId;
     const input = row.querySelector('.config-agent-key');
-    input.addEventListener('change', () => {
+    input.addEventListener('change', async () => {
+      const key = input.value.trim();
       const cfg = loadAgentConfig();
       const existing = cfg[String(id)] || {};
-      cfg[String(id)] = { ...existing, apiKey: input.value.trim() };
+      cfg[String(id)] = { ...existing, apiKey: key };
       saveAgentConfig(cfg);
-      showStatus(AGENT_DEFS[id].name + ' key saved');
       if (typeof updateApiKeyNotice === 'function') updateApiKeyNotice();
+      if (!key) { showStatus(AGENT_DEFS[id].name + ' key cleared'); input.style.borderColor = ''; return; }
+      // Validate key with a lightweight test call
+      showStatus('validating key...');
+      try {
+        const baseUrl = loadAgentConfig().baseUrl || 'https://openrouter.ai/api/v1';
+        const resp = await fetch(baseUrl + '/models', { headers: { 'Authorization': 'Bearer ' + key }, signal: AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined });
+        if (resp.ok) { showStatus(AGENT_DEFS[id].name + ' key valid'); input.style.borderColor = 'var(--green)'; }
+        else { showStatus(AGENT_DEFS[id].name + ' key invalid (HTTP ' + resp.status + ')'); input.style.borderColor = 'var(--red)'; }
+      } catch (e) {
+        showStatus(AGENT_DEFS[id].name + ' key saved (validation skipped)');
+        input.style.borderColor = '';
+      }
     });
   });
 }
@@ -1649,7 +1737,7 @@ const SCENARIO_EXAMPLES = [
   "My opponent has Josh Allen and Stefon Diggs stack this week",
   "Breakout WR candidates on the waiver wire for dynasty stash",
   "Is it worth rostering a backup QB in a 12-team league?",
-  "Evaluating 2025 rookie draft class — who's the 1.01?",
+  "Evaluating " + new Date().getFullYear() + " rookie draft class — who's the 1.01?",
 ];
 
 function setupScenarioPanel() {
@@ -1752,8 +1840,8 @@ function updateSetupGuide() {
   var hasKey = AGENT_DEFS.some(function(_, i) { return getAgentSettings(i).apiKey; });
   var elite = isEliteUser();
 
-  // Don't show for Elite users (they don't need BYOK setup)
-  if (elite) { guide.style.display = 'none'; return; }
+  // Don't show for Pro or Elite users (they have server-side AI included)
+  if (elite || isProUser()) { guide.style.display = 'none'; return; }
 
   guide.style.display = 'block';
 
@@ -2748,7 +2836,7 @@ function syncQuotaFromServer() {
           _setLocalQueryCount(data.used);
           updateQueryLimitBadge();
         }
-      }).catch(function() {});
+      }).catch(function(err) { console.warn("sync failed:", err.message || err); });
   } catch (e) {}
 }
 
@@ -3110,7 +3198,7 @@ setupScenarioPanel();
       '<div class="warroom-bio-body">' +
         '<div class="warroom-bio-avatar" style="background-image:url(\'assets/characters/' + a.sprite + '.png\'); background-position:0 0; background-size:448px 192px;"></div>' +
         '<div class="warroom-bio-name" style="color:' + a.color + '">' + a.emoji + ' ' + escapeHtml(a.name) + '</div>' +
-        '<div class="warroom-bio-role">' + a.role + (a.isLeader ? ' <span style="font-family:var(--font-mono); font-size:9px; background:var(--orange); color:var(--text-on-accent); padding:1px 6px; border-radius:4px;">LEADER</span>' : '') + '</div>' +
+        '<div class="warroom-bio-role">' + a.role + (a.isLeader ? ' <span style="font-family:var(--font-mono); font-size:11px; background:var(--orange); color:var(--text-on-accent); padding:1px 6px; border-radius:8px;">LEADER</span>' : '') + '</div>' +
         '<div class="warroom-bio-quote">"' + a.quote + '"</div>' +
         '<div class="warroom-bio-tags">' + tagsHtml + '</div>' +
         '<button class="warroom-bio-ask" data-agent-name="' + escapeAttr(a.name) + '" style="color:' + a.color + '">Ask ' + escapeHtml(a.name) + '</button>' +
@@ -3193,7 +3281,7 @@ function renderBriefingCard(agentId, content, isError) {
   var collapsed = !isRazzle ? ' collapsed' : '';
   var toggleText = !isRazzle ? (collapsed ? '[expand]' : '[collapse]') : '';
 
-  // Pro/Trial badge or generic hint
+  // Pro/Trial badge or general-mode hint
   var contextPill = '';
   if (isLeagueContextMode()) {
     var _tu = null;
@@ -3203,7 +3291,7 @@ function renderBriefingCard(agentId, content, isError) {
       ? '<span class="briefing-pro-pill" style="background:var(--orange);">Trial</span>'
       : '<span class="briefing-pro-pill">Pro</span>';
   } else if (hasLeagueData() && !isProUser()) {
-    contextPill = '<span class="briefing-generic-hint">generic analysis \u2014 upgrade for league-specific intel</span>';
+    contextPill = '<span class="briefing-generic-hint">general analysis — upgrade to Pro for league-specific intel</span>';
   }
 
   // Free model footer + contextual upsell
@@ -3211,7 +3299,7 @@ function renderBriefingCard(agentId, content, isError) {
   var agentEntry = agentResults.get(agentId);
   if (agentEntry && agentEntry.freeModel) {
     var modelShort = (agentEntry.freeModel || 'unknown').split('/').pop().split(':')[0];
-    freeFooter = '<div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);padding:8px 0 0;border-top:2px dashed var(--ink-faint);margin-top:8px;">powered by ' + escapeHtml(modelShort) + ' \u2014 <a href="/pricing.html" style="color:var(--orange);">upgrade to Pro</a> for premium models</div>';
+    freeFooter = '<div style="font-family:var(--font-hand);font-size:12px;color:var(--ink-light);padding:8px 0 0;border-top:2px dashed var(--border-dashed);margin-top:8px;">powered by ' + escapeHtml(modelShort) + ' \u2014 <a href="/pricing.html" style="color:var(--orange);">upgrade to Pro</a> for premium models</div>';
   }
 
   // Contextual upsell for free-mode (no league context)
@@ -3612,7 +3700,7 @@ function _renderMemoryEntries(panel, memory, isElite) {
   }
 
   var headerBadge = isElite
-    ? '<div style="font-family:var(--font-mono); font-size:9px; color:var(--pos-qb); text-align:center; margin-bottom:6px; padding:2px 8px; border:2px solid var(--pos-qb); border-radius:4px; display:inline-block;">cloud-synced</div>'
+    ? '<div style="font-family:var(--font-mono); font-size:11px; color:var(--pos-qb); text-align:center; margin-bottom:6px; padding:2px 8px; border:2px solid var(--pos-qb); border-radius:8px; display:inline-block;">cloud-synced</div>'
     : '';
 
   var html = headerBadge ? '<div style="text-align:center;">' + headerBadge + '</div>' : '';
@@ -3620,18 +3708,18 @@ function _renderMemoryEntries(panel, memory, isElite) {
   memory.forEach(function(m) {
     var ago = formatTimeAgo(m.ts);
     var agentSummary = m.agents.map(function(a) { return escapeHtml(a.name); }).join(', ');
-    var syncIcon = m.synced ? '<span title="Synced to cloud" style="font-size:10px; color:var(--pos-qb); margin-left:4px;">&#9729;</span>' : '';
-    var leagueTag = m.leagueName ? '<span style="font-family:var(--font-mono); font-size:9px; color:var(--orange); margin-left:4px;">[' + escapeHtml(m.leagueName) + ']</span>' : '';
+    var syncIcon = m.synced ? '<span title="Synced to cloud" style="font-size:11px; color:var(--pos-qb); margin-left:4px;">&#9729;</span>' : '';
+    var leagueTag = m.leagueName ? '<span style="font-family:var(--font-mono); font-size:11px; color:var(--orange); margin-left:4px;">[' + escapeHtml(m.leagueName) + ']</span>' : '';
 
-    html += '<div style="padding:8px 0; border-bottom:2px dashed var(--ink-faint);">';
-    html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + ago + syncIcon + leagueTag + '</div>';
+    html += '<div style="padding:8px 0; border-bottom:2px dashed var(--border-dashed);">';
+    html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + ago + syncIcon + leagueTag + '</div>';
     html += '<div style="font-family:var(--font-mono); font-size:12px; margin:2px 0;">' + escapeHtml(m.scenario.slice(0, 80)) + (m.scenario.length > 80 ? '...' : '') + '</div>';
-    html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + agentSummary + '</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + agentSummary + '</div>';
     html += '</div>';
   });
 
   html += '<div style="text-align:center; margin-top:8px;">';
-  html += '<button class="btn-chunky" style="font-size:10px; padding:3px 10px;" onclick="clearWarRoomMemory()">clear memory</button>';
+  html += '<button class="btn-chunky" style="font-size:11px; padding:3px 10px;" onclick="clearWarRoomMemory()">clear memory</button>';
   if (!isElite) {
     html += '<div style="font-family:var(--font-hand); font-size:11px; color:var(--ink-light); margin-top:6px;">' + memory.length + '/' + MEMORY_MAX_LOCAL + ' local entries</div>';
   } else {
@@ -3651,7 +3739,7 @@ function clearWarRoomMemory() {
       fetch(
         (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/user/memory',
         { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } }
-      ).catch(function() {});
+      ).catch(function(err) { console.warn("sync failed:", err.message || err); });
     }
     _serverMemoryCache = null;
   }
@@ -3749,7 +3837,7 @@ function renderBriefingContent(container, briefing) {
   // Agent highlights
   var highlights = safeParse(briefing.agent_highlights);
   if (highlights.length) {
-    html += '<div style="border-top:2px dashed var(--ink-faint); padding-top:8px; margin-top:8px;">';
+    html += '<div style="border-top:2px dashed var(--border-dashed); padding-top:8px; margin-top:8px;">';
     html += '<div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:4px;">Agent Highlights</div>';
     highlights.forEach(function(h) {
       html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); margin:3px 0;">';
@@ -3884,9 +3972,9 @@ function toggleBriefingHistory() {
     var html = '';
     data.briefings.forEach(function(b) {
       var leagueTag = b.league_name ? ' [' + escapeHtml(b.league_name) + ']' : '';
-      html += '<div style="padding:6px 0; border-bottom:2px dashed var(--ink-faint); cursor:pointer;" data-briefing-id="' + (parseInt(b.id) || 0) + '">';
+      html += '<div style="padding:6px 0; border-bottom:2px dashed var(--border-dashed); cursor:pointer;" data-briefing-id="' + (parseInt(b.id) || 0) + '">';
       html += '<div style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(b.week_label) + leagueTag + '</div>';
-      html += '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
+      html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(b.summary.slice(0, 80)) + '...</div>';
       html += '</div>';
     });
     panel.innerHTML = html;
@@ -4061,7 +4149,7 @@ function showFirstRunDemo() {
   html += '<div class="demo-briefing-cta">' +
     '<p>imagine this analysis with <strong>your roster</strong>, <strong>your opponents</strong>, and <strong>your league\u2019s scoring</strong>.</p>' +
     '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:13px;" id="demoBriefingCta">Sign Up Free</a>' +
-    '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); display:block; margin-top:6px;" id="demoBriefingHint">7-day Pro trial on sign-up</span>' +
+    '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); display:block; margin-top:6px;" id="demoBriefingHint">7-day Pro trial on sign-up</span>' +
   '</div>';
 
   host.innerHTML = html;
@@ -4073,7 +4161,7 @@ function showFirstRunDemo() {
     var t = getUserTierInfo();
     if (t.isTrial) {
       demoCta.textContent = 'Subscribe to keep Pro';
-      demoHint.textContent = t.daysLeft + ' day' + (t.daysLeft !== 1 ? 's' : '') + ' left on your trial';
+      demoHint.textContent = (t.daysLeft >= 1 ? t.daysLeft + ' day' + (t.daysLeft !== 1 ? 's' : '') : (t.hoursLeft > 0 ? t.hoursLeft + ' hour' + (t.hoursLeft !== 1 ? 's' : '') : 'less than 1 hour')) + ' left on your trial';
     } else if (t.isExpiredTrial) {
       demoCta.textContent = 'Subscribe to Pro';
       demoHint.textContent = 'your trial ended — subscribe to keep access';

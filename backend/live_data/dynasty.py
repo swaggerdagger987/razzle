@@ -453,6 +453,21 @@ def _fetch_trade_value_chart_uncached(season=None, position=None, limit=150):
             })
 
         results.sort(key=lambda x: x["trade_value"], reverse=True)
+
+        # GP filter: players with fewer than 10 games cannot rank in the top 50.
+        # Split into qualified (GP >= 10) and limited-sample, then interleave so
+        # limited-sample players start at rank 51 at the earliest.
+        qualified = [p for p in results if p["games"] >= 10]
+        limited = [p for p in results if p["games"] < 10]
+        if len(qualified) >= 50:
+            # Enough qualified players — limited-sample players slot in after top 50
+            merged = qualified[:50]
+            rest = qualified[50:] + limited
+            rest.sort(key=lambda x: x["trade_value"], reverse=True)
+            merged.extend(rest)
+            results = merged
+        # else: not enough qualified players, keep original sort
+
         results = results[:limit]
 
         for i, p in enumerate(results):
@@ -592,7 +607,7 @@ def _fetch_trade_finder_uncached(player_id, season=None):
         weekly_data = defaultdict(list)
         opp_data = defaultdict(lambda: {"total_ppr": 0, "opps": 0})
         for wr in weekly_rows:
-            wpid, wppg, wtgt, wcar, watt, wpos = wr[0], wr[1] or 0, wr[2] or 0, wr[3] or 0, wr[4] or 0, wr[5] or ""
+            wpid, wppg, wtgt, wcar, watt, wpos = wr[0], round(wr[1] or 0, 1), wr[2] or 0, wr[3] or 0, wr[4] or 0, wr[5] or ""
             weekly_data[wpid].append(wppg)
             opp_data[wpid]["total_ppr"] += wppg
             opp_data[wpid]["opps"] += (watt + wcar) if wpos == "QB" else (wtgt + wcar)
@@ -1312,13 +1327,43 @@ def _fetch_dynasty_dashboard_uncached(season=None):
 # ---------------------------------------------------------------------------
 
 _TIER_BREAKS = [
-    (80, "S", "Elite — untouchable dynasty cornerstones"),
-    (65, "A", "Blue Chip — premium assets with staying power"),
-    (50, "B", "Solid — reliable starters with upside"),
+    (92, "S", "Elite — untouchable dynasty cornerstones"),
+    (75, "A", "Blue Chip — premium assets with staying power"),
+    (55, "B", "Solid — reliable starters with upside"),
     (35, "C", "Flex — startable but replaceable"),
     (20, "D", "Depth — roster filler with some value"),
     (0, "F", "Cut Bait — minimal dynasty value"),
 ]
+
+# Percentile thresholds for dynamic tier breaks (top % cutoff for each tier)
+_TIER_PERCENTILES = [
+    (97, "S", "Elite — untouchable dynasty cornerstones"),
+    (85, "A", "Blue Chip — premium assets with staying power"),
+    (60, "B", "Solid — reliable starters with upside"),
+    (35, "C", "Flex — startable but replaceable"),
+    (15, "D", "Depth — roster filler with some value"),
+    (0, "F", "Cut Bait — minimal dynasty value"),
+]
+
+
+def _dynamic_tier_breaks(trade_values):
+    """Compute tier break thresholds from the actual distribution of trade values.
+
+    Uses percentiles so every season gets a reasonable spread across tiers,
+    even when historical seasons had lower absolute scoring.
+    Falls back to static _TIER_BREAKS if fewer than 10 players.
+    """
+    if len(trade_values) < 10:
+        return _TIER_BREAKS
+    sorted_tv = sorted(trade_values)
+    n = len(sorted_tv)
+    breaks = []
+    for pct, key, label in _TIER_PERCENTILES:
+        idx = int(n * pct / 100)
+        idx = min(idx, n - 1)
+        threshold = sorted_tv[idx] if pct > 0 else 0
+        breaks.append((round(threshold, 1), key, label))
+    return breaks
 
 
 def fetch_dynasty_dashboard(season=None):
@@ -1362,27 +1407,19 @@ def _fetch_tier_list_uncached(season=None, position=None):
         """
         rows = conn.execute(query, params).fetchall()
 
-        tiers = {t[1]: {"tier": t[1], "label": t[2], "min_tv": t[0], "players": []} for t in _TIER_BREAKS}
-        tier_order = [t[1] for t in _TIER_BREAKS]
-
         # Adjust age for historical seasons: DB stores current age, so subtract years elapsed
         current_year = _current_nfl_season()
         age_offset = current_year - season if season and season < current_year else 0
 
+        # First pass: compute all trade values for dynamic tier breaks
+        players = []
         for r in rows:
             pos = r[2] or "WR"
             games = r[7] or 1
             ppg = round((r[6] or 0) / games, 2)
             age = (r[4] or 25) - age_offset
             tv = compute_trade_value(ppg, age, pos)
-
-            tier_key = "F"
-            for threshold, key, _ in _TIER_BREAKS:
-                if tv >= threshold:
-                    tier_key = key
-                    break
-
-            tiers[tier_key]["players"].append({
+            players.append({
                 "player_id": r[0],
                 "full_name": r[1] or "Unknown",
                 "position": pos,
@@ -1393,10 +1430,26 @@ def _fetch_tier_list_uncached(season=None, position=None):
                 "trade_value": tv,
             })
 
+        # Dynamic tier breaks based on this season's distribution
+        all_tvs = [p["trade_value"] for p in players]
+        breaks = _dynamic_tier_breaks(all_tvs)
+
+        tiers = {t[1]: {"tier": t[1], "label": t[2], "min_tv": t[0], "players": []} for t in breaks}
+        tier_order = [t[1] for t in breaks]
+
+        # Second pass: assign players to tiers
+        for p in players:
+            tier_key = "F"
+            for threshold, key, _ in breaks:
+                if p["trade_value"] >= threshold:
+                    tier_key = key
+                    break
+            tiers[tier_key]["players"].append(p)
+
         for t in tier_order:
             tiers[t]["players"].sort(key=lambda x: x["trade_value"], reverse=True)
-            for i, p in enumerate(tiers[t]["players"]):
-                p["tier_rank"] = i + 1
+            for i, pl in enumerate(tiers[t]["players"]):
+                pl["tier_rank"] = i + 1
 
         result_tiers = [tiers[t] for t in tier_order]
         total = sum(len(t["players"]) for t in result_tiers)

@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#ede0cf">
-<title>Razzle — Fantasy Football Research Lab</title>
+<title>Razzle — Free Fantasy Football Research Lab</title>
 <meta property="og:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
 <meta property="og:description" content="Free fantasy football research lab. 100+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta property="og:site_name" content="razzle.lol">
@@ -14,6 +15,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@razzle_lol">
 <meta name="twitter:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
 <meta name="twitter:description" content="Free fantasy football research lab. 100+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
@@ -21,9 +23,12 @@
 <meta name="description" content="Razzle is a free fantasy football research lab. 100+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <link rel="canonical" href="https://razzle.lol/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
 <script type="application/ld+json">
 {
@@ -114,12 +119,12 @@
     border-radius: 12px;
     cursor: pointer;
     text-decoration: none;
-    transition: all 0.15s;
+    transition: box-shadow 0.15s, transform 0.15s;
     box-shadow: 4px 4px 0 var(--ink);
   }
 
   .btn-hero:hover {
-    box-shadow: 4px 4px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     transform: translate(-2px, -2px);
   }
 
@@ -189,7 +194,7 @@
     gap: 12px;
     align-items: center;
     padding: 8px 16px;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     max-width: 600px;
     margin: 0 auto;
   }
@@ -206,7 +211,7 @@
 
   .fake-pos {
     font-family: var(--font-mono);
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--text-on-accent);
     padding: 2px 6px;
@@ -253,7 +258,7 @@
 
   .lp-section h2 {
     font-family: var(--font-display);
-    font-size: 26px;
+    font-size: 24px;
     margin-bottom: 8px;
     line-height: 1.2;
   }
@@ -294,7 +299,7 @@
     padding: 20px;
     font-family: var(--font-mono);
     font-size: 13px;
-    color: var(--ink-medium);
+    color: #c4b5a5;
   }
 
   .demo-card .agent-name {
@@ -308,7 +313,7 @@
   }
 
   .demo-card .urgency {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     padding: 2px 8px;
     border-radius: var(--radius-sm);
@@ -336,10 +341,15 @@
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--ink);
     padding: 20px;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .feature-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
   }
 
   .feature-card-icon {
-    font-size: 28px;
+    font-size: 24px;
     margin-bottom: 8px;
   }
 
@@ -368,7 +378,7 @@
     border-radius: 20px;
     box-shadow: 4px 4px 0 var(--ink);
     text-decoration: none;
-    transition: all 0.15s;
+    transition: background-color 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s;
   }
   .smart-chip:nth-child(odd) { transform: rotate(-1deg); }
   .smart-chip:nth-child(even) { transform: rotate(1deg); }
@@ -390,7 +400,7 @@
     color: var(--ink-light);
     cursor: pointer;
     flex: 1;
-    transition: all 0.15s;
+    transition: background-color 0.15s, color 0.15s;
   }
   .mini-tab.active { background: var(--orange); color: var(--text-on-accent); }
   .mini-tab:hover:not(.active) { background: var(--bg-warm); }
@@ -407,7 +417,7 @@
     font-size: 12px;
   }
   .mini-table th {
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: var(--ink-light);
@@ -422,7 +432,7 @@
 
   .mini-table td {
     padding: 5px 8px;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     text-align: center;
   }
   .mini-table tr { cursor: pointer; transition: background 0.1s; }
@@ -435,10 +445,15 @@
     border-radius: var(--radius-sm);
     box-shadow: 4px 4px 0 var(--ink);
     padding: 16px;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .social-card:hover {
+    box-shadow: 6px 6px 0 var(--ink);
+    transform: translate(-2px, -2px);
   }
   .social-card-context {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -459,7 +474,7 @@
   }
 
   .mini-pos {
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--text-on-accent);
     padding: 1px 5px;
@@ -477,7 +492,7 @@
 
   .pricing-section h2 {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: 32px;
     margin-bottom: 8px;
   }
 
@@ -535,7 +550,7 @@
     padding: 3px 14px;
     border-radius: 20px;
     border: 2px solid var(--ink);
-    box-shadow: 2px 2px 0 var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
     white-space: nowrap;
   }
 
@@ -599,13 +614,13 @@
   @media (max-width: 768px) {
     .hero { padding: 48px 16px 32px; }
     .hero-mascot { font-size: 56px; }
-    .hero h1 { font-size: 28px; }
+    .hero h1 { font-size: 32px; }
     .hero-sub { font-size: 20px; }
     .btn-hero { font-size: 14px; padding: 10px 22px; }
 
     .screener-visual { padding: 0 16px 32px; }
     .lp-section { padding: 32px 16px; }
-    .lp-section h2 { font-size: 22px; }
+    .lp-section h2 { font-size: 20px; }
 
     .pricing-section { padding: 32px 16px; }
     .pricing-cols { flex-direction: column; align-items: center; }
@@ -625,12 +640,30 @@
     .hero h1 { font-size: 20px; }
     .hero-sub { font-size: 16px; }
     .pricing-name { font-size: 18px; }
-    .pricing-price { font-size: 22px; }
+    .pricing-price { font-size: 20px; }
     .pricing-card { padding: 20px 12px; }
+  }
+
+  /* Dark mode overrides */
+  [data-theme="dark"] .pricing-badge {
+    color: #fff;
+  }
+  [data-theme="dark"] .pricing-badge--free {
+    color: #fff;
+  }
+  [data-theme="dark"] .pricing-badge--elite {
+    color: #fff;
+  }
+  [data-theme="dark"] .pricing-card {
+    background: var(--bg-card);
+  }
+  [data-theme="dark"] .pricing-list {
+    color: var(--ink-medium);
   }
 </style>
 </head>
 <body>
+<noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#2d1f14;"><h2>Razzle needs JavaScript</h2><p>Enable JavaScript to use the fantasy football research lab.</p></div></noscript>
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- NAV -->
@@ -641,53 +674,87 @@
   </a>
   <ul class="nav-links">
     <li><a href="/" class="active">Home</a></li>
-    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li class="nav-dropdown">
+      <a href="/lab.html" class="nav-dropdown-trigger">Fourth Down Lab <span class="nav-caret">&#x25BE;</span></a>
+      <div class="nav-mega-menu">
+        <div class="mega-col">
+          <div class="mega-label">Quick Access</div>
+          <a href="/lab.html?panel=screener">Screener</a>
+          <a href="/lab.html?panel=dashboard">Dashboard</a>
+          <a href="/lab.html?panel=rankings">Dynasty Rankings</a>
+          <a href="/lab.html?panel=tradevalues">Trade Values</a>
+        </div>
+        <div class="mega-col">
+          <div class="mega-label">Dynasty</div>
+          <a href="/lab.html?panel=tiers">Tiers</a>
+          <a href="/lab.html?panel=aging">Aging Curves</a>
+          <a href="/lab.html?panel=buysell">Buy / Sell</a>
+          <a href="/lab.html?panel=vorp">VORP</a>
+        </div>
+        <div class="mega-col">
+          <div class="mega-label">Weekly</div>
+          <a href="/lab.html?panel=weekly">Heatmap</a>
+          <a href="/lab.html?panel=matchups">Matchups</a>
+          <a href="/lab.html?panel=stocks">Stock Watch</a>
+          <a href="/lab.html?panel=waivers">Rising Players</a>
+        </div>
+        <div class="mega-col">
+          <div class="mega-label">Analytics</div>
+          <a href="/lab.html?panel=efficiency">Efficiency</a>
+          <a href="/lab.html?panel=breakouts">Breakouts</a>
+          <a href="/lab.html?panel=airyards">Air Yards</a>
+          <a href="/lab.html?panel=redzone">Red Zone</a>
+        </div>
+        <div class="mega-footer"><a href="/lab.html">All 68 tools &rarr;</a></div>
+      </div>
+    </li>
     <li><a href="/league-intel.html" title="Connect your Sleeper league">Bureau of Intelligence</a></li>
-    <li><a href="/agents.html" title="AI agents for your league">Situation Room</a></li>
+    <li><a href="/agents.html" title="AI-powered league analysis">Situation Room</a></li>
     <li><a href="/pricing.html">Pricing</a></li>
   </ul>
   <div class="nav-auth" id="nav-auth">
-    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <button type="button" class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
     <button type="button" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal();">Sign In</button>
   </div>
 </nav>
 
 <main id="main-content">
 <!-- 1. HERO -->
-<div class="hero">
-  <div class="hero-mascot">🐯</div>
+<section class="hero">
+  <div class="hero-mascot" role="img" aria-label="Razzle tiger mascot">🐯</div>
   <h1>The fantasy football research lab. <span>Forever free.</span></h1>
   <div class="hero-sub">100+ stat columns across NFL, college &amp; prospects. Custom formulas. Shareable views. No account required.</div>
   <div class="hero-cta">
     <a href="/lab.html" class="btn-hero btn-hero-primary">Open the Screener</a>
     <a href="#features" class="btn-hero btn-hero-secondary desktop-only-cta">See what's inside</a>
-    <button class="btn-hero btn-hero-secondary mobile-signup-cta" onclick="if(typeof openAuthModal==='function')openAuthModal('register');">Sign Up Free</button>
+    <button type="button" class="btn-hero btn-hero-secondary mobile-signup-cta" onclick="if(typeof openAuthModal==='function')openAuthModal('register');">Sign Up Free</button>
   </div>
-  <div style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light); margin-top:8px;">no signup needed — just open it</div>
-</div>
+  <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:8px;">no signup needed — just open it</div>
+</section>
 
 <!-- 2. LIVE MINI-SCREENER -->
-<div class="screener-visual">
+<section class="screener-visual">
   <div class="screener-visual-card">
     <!-- Position filter tabs -->
-    <div class="mini-screener-tabs" style="display:flex; gap:0; border-bottom:3px solid var(--ink);">
-      <button class="mini-tab active" data-pos="" onclick="_miniFilter('')">ALL</button>
-      <button class="mini-tab" data-pos="QB" onclick="_miniFilter('QB')">QB</button>
-      <button class="mini-tab" data-pos="RB" onclick="_miniFilter('RB')">RB</button>
-      <button class="mini-tab" data-pos="WR" onclick="_miniFilter('WR')">WR</button>
-      <button class="mini-tab" data-pos="TE" onclick="_miniFilter('TE')">TE</button>
+    <div class="mini-screener-tabs" role="tablist" aria-label="Position filter" style="display:flex; gap:0; border-bottom:3px solid var(--ink);">
+      <button type="button" class="mini-tab active" role="tab" aria-selected="true" data-pos="" onclick="_miniFilter('')">ALL</button>
+      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="QB" onclick="_miniFilter('QB')">QB</button>
+      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="RB" onclick="_miniFilter('RB')">RB</button>
+      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="WR" onclick="_miniFilter('WR')">WR</button>
+      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="TE" onclick="_miniFilter('TE')">TE</button>
     </div>
     <!-- Live data table -->
     <div id="miniScreenerBody" class="mini-screener-body" aria-label="Live screener preview">
       <table class="mini-table">
+        <caption class="sr-only">Top fantasy football players by position</caption>
         <thead>
           <tr>
             <th style="width:30px;">#</th>
             <th style="width:36px;">POS</th>
             <th style="text-align:left;">Player</th>
-            <th class="mini-sortable" data-sort="fantasy_points_ppr" onclick="_miniSort('fantasy_points_ppr')">Total</th>
-            <th class="mini-sortable" data-sort="games" onclick="_miniSort('games')">GP</th>
-            <th class="mini-sortable" data-sort="age" onclick="_miniSort('age')">Age</th>
+            <th class="mini-sortable" data-sort="fantasy_points_ppr" aria-sort="descending" onclick="_miniSort('fantasy_points_ppr')">Total</th>
+            <th class="mini-sortable" data-sort="games" aria-sort="none" onclick="_miniSort('games')">GP</th>
+            <th class="mini-sortable" data-sort="age" aria-sort="none" onclick="_miniSort('age')">Age</th>
           </tr>
         </thead>
         <tbody id="miniScreenerRows">
@@ -700,10 +767,62 @@
       <a href="/lab.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 24px;">Open the full Screener</a>
     </div>
   </div>
-</div>
+</section>
+
+<!-- 2.5. EMAIL CAPTURE (CEO-025) -->
+<section class="lp-section" style="max-width:560px; text-align:center;">
+  <div style="font-family:var(--font-display); font-size:20px; color:var(--ink); margin-bottom:8px;">Get weekly stat drops from Razzle</div>
+  <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-bottom:12px;">Breakout picks, trade value movers, and usage risers. Every Tuesday.</div>
+  <form id="emailCaptureForm" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;" onsubmit="return false;">
+    <input type="email" id="emailCaptureInput" placeholder="your@email.com" required autocomplete="email" style="flex:1; min-width:200px; max-width:300px; padding:10px 14px; border:3px solid var(--ink); border-radius:8px; font-family:var(--font-mono); font-size:13px; background:var(--bg-card);">
+    <button type="submit" id="emailCaptureBtn" class="btn-chunky btn-primary" style="font-size:13px; padding:10px 20px; white-space:nowrap;">Subscribe</button>
+  </form>
+  <div id="emailCaptureMsg" style="font-family:var(--font-hand); font-size:14px; margin-top:8px; display:none;"></div>
+</section>
+<script>
+(function() {
+  var form = document.getElementById('emailCaptureForm');
+  var input = document.getElementById('emailCaptureInput');
+  var btn = document.getElementById('emailCaptureBtn');
+  var msg = document.getElementById('emailCaptureMsg');
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = input.value.trim();
+    if (!email) return;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    var base = typeof API_BASE !== 'undefined' ? API_BASE : '';
+    fetch(base + '/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email })
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data.error) {
+        msg.textContent = data.error;
+        msg.style.color = 'var(--red)';
+      } else {
+        msg.textContent = "You're in. First drop arrives next Tuesday.";
+        msg.style.color = 'var(--green)';
+        input.value = '';
+        input.disabled = true;
+      }
+      msg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    }).catch(function() {
+      msg.textContent = 'Something went wrong. Try again.';
+      msg.style.color = 'var(--red)';
+      msg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Subscribe';
+    });
+  });
+})();
+</script>
 
 <!-- 3. FEATURE SHOWCASE -->
-<div id="features" class="lp-section" style="max-width:860px;">
+<section id="features" class="lp-section" style="max-width:860px;">
   <h2>What you get. <span>Right now. Free.</span></h2>
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-top:24px; text-align:left;">
     <div class="feature-card">
@@ -727,12 +846,12 @@
       <div class="feature-card-desc">Every filter, sort, and column saved in the URL. Send the exact view.</div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- Smart filter chips — discovery filters -->
-<div class="lp-section" style="max-width:860px;">
+<section class="lp-section" style="max-width:860px;">
   <h2>One-click <span>discovery filters.</span></h2>
-  <p>These update live as the season plays out.</p>
+  <p>These update as new data comes in each week.</p>
   <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:16px;">
     <a href="/lab.html?sf=breakout" class="smart-chip" title="Players getting volume but not yet producing — the opportunity-to-output gap">Breakout Candidates</a>
     <a href="/lab.html?sf=buylow" class="smart-chip" title="Undervalued players whose efficiency outpaces their dynasty rank">Buy Low Targets</a>
@@ -740,10 +859,10 @@
     <a href="/lab.html?sf=sleepers" class="smart-chip" title="Young players with rising snap share and opportunity metrics">Sleepers</a>
     <a href="/lab.html?sf=rookies" class="smart-chip" title="First-year players — filter by draft capital, snap counts, and production">Rookies</a>
   </div>
-</div>
+</section>
 
 <!-- Social proof -->
-<div class="lp-section" style="max-width:860px;">
+<section class="lp-section" style="max-width:860px;">
   <h2>Built for the managers who live on <span>r/DynastyFF.</span></h2>
   <p>The tool your leaguemates don't know about yet.</p>
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:20px; text-align:left;">
@@ -760,34 +879,34 @@
       <div class="social-card-text">Same open data the serious analysts use. Updated weekly. No guesswork, no vibes — just the numbers.</div>
     </div>
   </div>
-  <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:16px;">the tool your leaguemates don't know about yet.</p>
-</div>
+  <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:16px;">same data the pros use. zero price tag.</p>
+</section>
 
 <div class="lp-divider"></div>
 
 <!-- 4. BUREAU — connect your league -->
-<div class="lp-section">
+<section class="lp-section">
   <h2>Now connect your league. <span>See what your rivals can't.</span></h2>
-  <p>ChatGPT doesn't know your league. Razzle does. Championship odds. Roster depth. Panic patterns. Trade targets. One Sleeper username. Ten seconds.</p>
+  <p>Championship odds. Roster depth. Panic patterns. Trade targets. One Sleeper username. Ten seconds. Your league, fully scouted.</p>
   <a href="/league-intel.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 28px;">Connect your league</a>
-</div>
+</section>
 
 <div class="lp-divider"></div>
 
 <!-- 5. SITUATION ROOM — unredacted example briefings -->
-<div class="lp-section">
+<section class="lp-section">
   <h2>Six AI agents that <span>already know your league.</span></h2>
   <p>Personalized briefings. Trade strategies. Championship probability. All contextualized to your roster and your rivals.</p>
 
   <div style="background:var(--bg-ink); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:16px; margin-bottom:16px; text-align:center;">
     <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Situation Room — Live Preview</div>
     <div style="display:flex; gap:16px; justify-content:center; align-items:center; flex-wrap:wrap;">
-      <span style="font-size:28px;">🐯</span>
-      <span style="font-size:28px;">🦊</span>
-      <span style="font-size:28px;">🐬</span>
-      <span style="font-size:28px;">🦅</span>
-      <span style="font-size:28px;">🐙</span>
-      <span style="font-size:28px;">🐘</span>
+      <span style="font-size:24px;">🐯</span>
+      <span style="font-size:24px;">🦊</span>
+      <span style="font-size:24px;">🐬</span>
+      <span style="font-size:24px;">🦅</span>
+      <span style="font-size:24px;">🐙</span>
+      <span style="font-size:24px;">🐘</span>
     </div>
     <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:8px; margin-bottom:0;">your analysts are already working</p>
   </div>
@@ -808,12 +927,12 @@
   <div style="margin-top:16px;">
     <a href="/agents.html" class="btn-hero btn-hero-secondary" style="font-size:14px; padding:10px 28px;">Meet the agents</a>
   </div>
-</div>
+</section>
 
 <div class="lp-divider"></div>
 
 <!-- 6. PRICING (last — after all value is shown) -->
-<div class="pricing-section">
+<section class="pricing-section" id="pricing">
   <h2>The Screener is <span>forever free.</span></h2>
   <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-medium); margin-bottom:4px;">No account. No catch. No trial that expires. Pro and Elite add the intelligence layer.</p>
 
@@ -837,22 +956,21 @@
 
     <!-- PRO -->
     <div class="pricing-card pricing-card--highlight">
-      <div class="popular-badge" style="font-family:var(--font-hand); font-size:14px; color:var(--text-on-accent); background:var(--orange); border:2px solid var(--ink); border-radius:var(--radius-lg); padding:3px 12px; display:inline-block; transform:rotate(-2deg); margin-bottom:8px; box-shadow:2px 2px 0 var(--ink);">most popular</div>
+      <div class="popular-badge" style="font-family:var(--font-hand); font-size:14px; color:var(--text-on-accent); background:var(--orange); border:2px solid var(--ink); border-radius:var(--radius-lg); padding:3px 12px; display:inline-block; transform:rotate(-2deg); margin-bottom:8px; box-shadow:4px 4px 0 var(--ink);">most popular</div>
       <div class="pricing-badge">the film room upgrade</div>
       <div class="pricing-name">Pro</div>
       <div class="pricing-price">$79.99<span>/year</span></div>
       <div class="pricing-note">or $9.99/month</div>
       <ul class="pricing-list">
         <li>Everything free, plus:</li>
-        <li class="highlight">6 AI agents, 20 queries/day — free API key (~$1-3/mo)</li>
-        <li>Full Bureau deep-dive</li>
-        <li>Manager profiles + trade finder</li>
-        <li>Championship probability</li>
+        <li class="highlight">6 AI agents, 20 queries/day included</li>
+        <li>League-contextualized agents</li>
         <li>Unlimited formulas + cloud sync</li>
         <li>CSV export + compare up to 4</li>
-        <li class="highlight">7-day free trial</li>
+        <li>Roster grading + trade finder</li>
+        <li class="highlight">7-day free trial — no credit card</li>
       </ul>
-      <button id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','pro_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Get Pro</button>
+      <button type="button" id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','pro_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Get Pro</button>
     </div>
 
     <!-- ELITE -->
@@ -868,91 +986,103 @@
         <li class="highlight">Agent memory (multi-season)</li>
         <li class="highlight">Weekly Razzle briefings</li>
         <li>Priority data refresh</li>
+        <li>Full historical data (2015+)</li>
+        <li class="highlight">7-day Pro trial included — upgrade anytime</li>
       </ul>
-      <button id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','elite_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
+      <button type="button" id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','elite_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
     </div>
   </div>
 
   <p data-cta-trial-note style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">7-day Pro trial on sign-up. No credit card required.</p>
   <p style="margin-top:8px;"><a href="/pricing.html" style="font-family:var(--font-mono); font-size:12px; color:var(--orange);">See full feature comparison &rarr;</a></p>
-</div>
+</section>
 
 </main>
 <!-- FOOTER -->
 <footer class="site-footer">
-  <div class="site-footer-grid">
+  <nav aria-label="Footer" class="site-footer-grid">
 
     <div>
       <div class="site-footer-heading">Razzle</div>
-      <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
-      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
-      <a href="/prompts.html" class="footer-link">Prompts</a>
-      <a href="/pricing.html" class="footer-link">Pricing</a>
-      <a href="/about.html" class="footer-link">About</a>
+      <ul>
+        <li><a href="/" class="footer-link">Home</a></li>
+        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
+        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
+        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
+        <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
+        <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
+        <li><a href="/about.html" class="footer-link">About</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Dynasty</div>
-      <a href="/lab.html?panel=rankings" class="footer-link">Rankings</a>
-      <a href="/lab.html?panel=tradevalues" class="footer-link">Trade Values</a>
-      <a href="/lab.html?panel=tradefinder" class="footer-link">Trade Finder</a>
-      <a href="/lab.html?panel=tiers" class="footer-link">Tiers</a>
-      <a href="/lab.html?panel=vorp" class="footer-link">VORP</a>
-      <a href="/lab.html?panel=aging" class="footer-link">Aging Curves</a>
-      <a href="/lab.html?panel=buysell" class="footer-link">Buy/Sell</a>
-      <a href="/lab.html?panel=archetypes" class="footer-link">Archetypes</a>
+      <ul>
+        <li><a href="/lab.html?panel=rankings" class="footer-link">Rankings</a></li>
+        <li><a href="/lab.html?panel=tradevalues" class="footer-link">Trade Values</a></li>
+        <li><a href="/lab.html?panel=tradefinder" class="footer-link">Trade Finder</a></li>
+        <li><a href="/lab.html?panel=tiers" class="footer-link">Tiers</a></li>
+        <li><a href="/lab.html?panel=vorp" class="footer-link">VORP</a></li>
+        <li><a href="/lab.html?panel=aging" class="footer-link">Aging Curves</a></li>
+        <li><a href="/lab.html?panel=buysell" class="footer-link">Buy/Sell</a></li>
+        <li><a href="/lab.html?panel=archetypes" class="footer-link">Archetypes</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Weekly</div>
-      <a href="/lab.html?panel=weekly" class="footer-link">Weekly Stats</a>
-      <a href="/lab.html?panel=weeklyleaders" class="footer-link">Week Leaders</a>
-      <a href="/lab.html?panel=weeklymvp" class="footer-link">Weekly MVP</a>
-      <a href="/lab.html?panel=matchups" class="footer-link">Matchups</a>
-      <a href="/lab.html?panel=waivers" class="footer-link">Waivers</a>
-      <a href="/lab.html?panel=schedule" class="footer-link">Schedule</a>
-      <a href="/lab.html?panel=stocks" class="footer-link">Stocks</a>
-      <a href="/lab.html?panel=playoffs" class="footer-link">Playoffs</a>
+      <ul>
+        <li><a href="/lab.html?panel=weekly" class="footer-link">Weekly Stats</a></li>
+        <li><a href="/lab.html?panel=weeklyleaders" class="footer-link">Week Leaders</a></li>
+        <li><a href="/lab.html?panel=weeklymvp" class="footer-link">Weekly MVP</a></li>
+        <li><a href="/lab.html?panel=matchups" class="footer-link">Matchups</a></li>
+        <li><a href="/lab.html?panel=waivers" class="footer-link">Rising Players</a></li>
+        <li><a href="/lab.html?panel=schedule" class="footer-link">Schedule</a></li>
+        <li><a href="/lab.html?panel=stocks" class="footer-link">Stocks</a></li>
+        <li><a href="/lab.html?panel=playoffs" class="footer-link">Playoffs</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Analytics</div>
-      <a href="/lab.html?panel=targets" class="footer-link">Targets</a>
-      <a href="/lab.html?panel=usage" class="footer-link">Usage</a>
-      <a href="/lab.html?panel=efficiency" class="footer-link">Efficiency</a>
-      <a href="/lab.html?panel=airyards" class="footer-link">Air Yards</a>
-      <a href="/lab.html?panel=redzone" class="footer-link">Red Zone</a>
-      <a href="/lab.html?panel=consistency" class="footer-link">Consistency</a>
-      <a href="/lab.html?panel=breakouts" class="footer-link">Breakouts</a>
-      <a href="/lab.html?panel=opportunity" class="footer-link">Opportunity</a>
+      <ul>
+        <li><a href="/lab.html?panel=targets" class="footer-link">Targets</a></li>
+        <li><a href="/lab.html?panel=usage" class="footer-link">Usage</a></li>
+        <li><a href="/lab.html?panel=efficiency" class="footer-link">Efficiency</a></li>
+        <li><a href="/lab.html?panel=airyards" class="footer-link">Air Yards</a></li>
+        <li><a href="/lab.html?panel=redzone" class="footer-link">Red Zone</a></li>
+        <li><a href="/lab.html?panel=consistency" class="footer-link">Consistency</a></li>
+        <li><a href="/lab.html?panel=breakouts" class="footer-link">Breakouts</a></li>
+        <li><a href="/lab.html?panel=opportunity" class="footer-link">Opportunity</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Tools</div>
-      <a href="/lab.html?panel=explorer" class="footer-link">Stat Explorer</a>
-      <a href="/compare.html" class="footer-link">Compare</a>
-      <a href="/lab.html?panel=rosterbuilder" class="footer-link">Roster Builder</a>
-      <a href="/lab.html?panel=cheatsheet" class="footer-link">Cheat Sheet</a>
-      <a href="/lab.html?panel=auction" class="footer-link">Auction Values</a>
-      <a href="/lab.html?panel=dashboard" class="footer-link">Dashboard</a>
-      <a href="/lab.html?panel=prospects" class="footer-link">Prospects</a>
+      <ul>
+        <li><a href="/lab.html?panel=explorer" class="footer-link">Stat Explorer</a></li>
+        <li><a href="/compare.html" class="footer-link">Compare</a></li>
+        <li><a href="/lab.html?panel=rosterbuilder" class="footer-link">Roster Builder</a></li>
+        <li><a href="/lab.html?panel=cheatsheet" class="footer-link">Cheat Sheet</a></li>
+        <li><a href="/lab.html?panel=auction" class="footer-link">Auction Values</a></li>
+        <li><a href="/lab.html?panel=dashboard" class="footer-link">Dashboard</a></li>
+        <li><a href="/lab.html?panel=prospects" class="footer-link">Prospects</a></li>
+      </ul>
     </div>
 
-  </div>
+  </nav>
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
-  <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
+  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
 </footer>
 
-<script src="app.js"></script>
+<script src="app.js" defer></script>
 <script>
-fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
+(typeof apiFetch!=='undefined'?apiFetch:fetch)("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});
 
 // Update pricing CTA based on user state (tier-aware)
 function _updateHomeCTAs() {
   try {
-    var t = typeof getUserTierInfo === 'function' ? getUserTierInfo() : { plan: 'none', loggedIn: false, isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0 };
+    var t = typeof getUserTierInfo === 'function' ? getUserTierInfo() : { plan: 'none', loggedIn: false, isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0, hoursLeft: 0 };
     var pro = document.getElementById('homeProCta');
     var elite = document.getElementById('homeEliteCta');
     var trialNote = document.querySelector('[data-cta-trial-note]');
@@ -970,7 +1100,7 @@ function _updateHomeCTAs() {
     // Update trial note text
     if (trialNote) {
       if (t.isTrial) {
-        trialNote.textContent = "You're on Pro (" + t.daysLeft + " day" + (t.daysLeft !== 1 ? "s" : "") + " left). Subscribe to keep your access.";
+        trialNote.textContent = "You're on Pro (" + (t.daysLeft >= 1 ? t.daysLeft + " day" + (t.daysLeft !== 1 ? "s" : "") : (t.hoursLeft > 0 ? t.hoursLeft + " hour" + (t.hoursLeft !== 1 ? "s" : "") : "less than 1 hour")) + " left). Subscribe to keep your access.";
       } else if (t.isExpiredTrial) {
         trialNote.textContent = "Your trial ended. Subscribe to keep Pro access.";
       } else if (t.isPaid) {
@@ -1024,7 +1154,9 @@ function _renderMiniRows() {
   tbody.innerHTML = html;
   // Update sort headers
   document.querySelectorAll('.mini-sortable').forEach(function(th) {
-    th.classList.toggle('sort-active', th.getAttribute('data-sort') === _miniSortKey);
+    var isActive = th.getAttribute('data-sort') === _miniSortKey;
+    th.classList.toggle('sort-active', isActive);
+    th.setAttribute('aria-sort', isActive ? (_miniSortDir === 'desc' ? 'descending' : 'ascending') : 'none');
   });
 }
 
@@ -1041,7 +1173,9 @@ _miniSort = function(key) {
 window._miniFilter = function(pos) {
   _miniPos = pos;
   document.querySelectorAll('.mini-tab').forEach(function(t) {
-    t.classList.toggle('active', t.getAttribute('data-pos') === pos);
+    var isActive = t.getAttribute('data-pos') === pos;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', String(isActive));
   });
   _renderMiniRows();
 };
@@ -1050,8 +1184,9 @@ window._miniFilter = function(pos) {
 function _fetchMiniScreener() {
   var tbody = document.getElementById('miniScreenerRows');
   if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:32px; font-family:var(--font-hand); color:var(--ink-light);">pulling film...</td></tr>';
-  fetch('/api/players?limit=60&sort=fantasy_points_ppr&order=desc&min_games=8')
-    .then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+  var ctrl = new AbortController();
+  var timeoutId = setTimeout(function() { ctrl.abort(); }, 10000);
+  apiFetch('/api/players?limit=60&sort=fantasy_points_ppr&order=desc&min_games=8', { signal: ctrl.signal })
     .then(function(data) {
       _miniData = (data.items || data.players || []).map(function(p) {
         return {
@@ -1067,8 +1202,9 @@ function _fetchMiniScreener() {
     })
     .catch(function() {
       var tb = document.getElementById('miniScreenerRows');
-      if (tb) tb.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; font-family:var(--font-hand); color:var(--ink-light);">couldn\'t reach the film room. <a href="#" onclick="_fetchMiniScreener(); return false;" style="color:var(--orange); text-decoration:underline;">try again</a> or <a href="/lab.html" style="color:var(--orange);">open the screener</a> directly.</td></tr>';
-    });
+      if (tb) tb.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; font-family:var(--font-hand); color:var(--ink-light);">couldn\'t reach the film room. <button type="button" onclick="_fetchMiniScreener();" style="background:none;border:none;padding:0;cursor:pointer;color:var(--orange); text-decoration:underline;font:inherit;">try again</button> or <a href="/lab.html" style="color:var(--orange);">open the screener</a> directly.</td></tr>';
+    })
+    .finally(function() { clearTimeout(timeoutId); });
 }
 _fetchMiniScreener();
 </script>

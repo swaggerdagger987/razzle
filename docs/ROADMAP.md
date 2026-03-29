@@ -33,20 +33,20 @@ The core product is built. 162 build phases + 8 ship phases + autonomous loop fi
 
 ## The Phases
 
-### PHASE 1: TWITTER LAUNCH (March 16-22)
+### PHASE 1: TWITTER LAUNCH (March 16-22, extended — [HUMAN] tasks pending)
 
 **Goal:** Announce Razzle on Twitter. Establish "context is the product" narrative. Drive first traffic to razzle.lol.
 
 The site doesn't need to be perfect — it needs to be functional enough that a curious Twitter visitor can open the Screener, be impressed, and follow the account.
 
-| # | Task | Done When |
-|---|------|-----------|
-| 1-1 | Deploy to production | razzle.lol loads. Health check passes. HTTPS works. Every page renders. |
-| 1-2 | Stripe test transaction | Register → trial → upgrade → real charge → webhook fires → Pro unlocks. Money in your Stripe account. |
-| 1-3 | Mobile spot check | Open razzle.lol on a real phone. Home → Screener → one panel → Bureau. No broken layouts. |
-| 1-4 | Twitter account ready | @razzle_lol (or chosen handle) has bio, profile image (tiger), pinned tweet ready. |
-| 1-5 | Launch thread posted | "ChatGPT doesn't know your league. Razzle does." thread with Screener screenshots. Link to razzle.lol. |
-| 1-6 | 20 Screener screenshots ready | Pre-made screenshots of the most compelling Lab views — scatter plots, heat maps, dynasty rankings, breakout finder. Ammunition for daily tweets. |
+| # | Task | Type | Done When |
+|---|------|------|-----------|
+| 1-1 | Deploy to production | [AUTO] | razzle.lol loads. Health check passes. HTTPS works. Every page renders. |
+| 1-2 | Stripe test transaction | [HYBRID] | Register → trial → upgrade → real charge → webhook fires → Pro unlocks. Auto runs test; human verifies real charge. |
+| 1-3 | Mobile spot check | [AUTO] | Open razzle.lol on a real phone. Home → Screener → one panel → Bureau. No broken layouts. |
+| 1-4 | Twitter account ready | [HUMAN] | @razzle_lol has bio, profile image (tiger), pinned tweet ready. Account creation requires human. |
+| 1-5 | Launch thread posted | [HYBRID] | "The free fantasy football research lab" thread with Screener screenshots. Auto drafts; human reviews and posts. |
+| 1-6 | 20 Screener screenshots ready | [HYBRID] | Pre-made screenshots of the most compelling Lab views. Auto generates from Lab; human curates best 20. |
 
 **Exit criterion:** razzle.lol is live, Stripe works, Twitter account is active with launch thread posted.
 
@@ -58,16 +58,16 @@ The site doesn't need to be perfect — it needs to be functional enough that a 
 
 The autonomous loop builds these from TICKETS.md while you focus on Twitter presence.
 
-| # | Feature | What it does |
-|---|---------|-------------|
-| 2-1 | Self-Scout (default view) | Connected user sees their own team analyzed first — depth, build profile, power rank, "how opponents see you" |
-| 2-2 | Roster Depth Analysis | Starter quality vs bench depth by position, vulnerability flags, depth scores (0-100) |
-| 2-3 | Build Profiles | Roster construction archetypes — Hero RB, Zero RB, Stars & Scrubs, Youth Movement, Win Now, Balanced |
-| 2-4 | League Power Rankings | Composite rankings beyond W-L — roster strength, depth, activity, schedule difficulty |
-| 2-5 | Trade Network | Who trades with whom, trade balance, position tendencies, "most likely trade partner" |
-| 2-6 | Waiver Tendencies | FAAB burn rate, pickup hit rate, position bias, waiver hawk scores |
-| 2-7 | Head-to-Head | Full rivalry comparison — record, roster edges, trade history, simulated matchup |
-| 2-8 | Strength of Schedule | Remaining matchup difficulty, easy/hard stretches, playoff path preview |
+| # | Feature | Type | What it does |
+|---|---------|------|-------------|
+| 2-1 | Self-Scout (default view) | [AUTO] | Connected user sees their own team analyzed first — depth, build profile, power rank, "how opponents see you" |
+| 2-2 | Roster Depth Analysis | [AUTO] | Starter quality vs bench depth by position, vulnerability flags, depth scores (0-100) |
+| 2-3 | Build Profiles | [AUTO] | Roster construction archetypes — Hero RB, Zero RB, Stars & Scrubs, Youth Movement, Win Now, Balanced |
+| 2-4 | League Power Rankings | [AUTO] | Composite rankings beyond W-L — roster strength, depth, activity, schedule difficulty |
+| 2-5 | Trade Network | [AUTO] | Who trades with whom, trade balance, position tendencies, "most likely trade partner" |
+| 2-6 | Waiver Tendencies | [AUTO] | FAAB burn rate, pickup hit rate, position bias, waiver hawk scores |
+| 2-7 | Head-to-Head | [AUTO] | Full rivalry comparison — record, roster edges, trade history, simulated matchup |
+| 2-8 | Strength of Schedule | [AUTO] | Remaining matchup difficulty, easy/hard stretches, playoff path preview |
 
 **Parallel work during this phase:**
 - Lab panel-by-panel quality audit (batches A-D, E-P, R-Z)
@@ -85,25 +85,25 @@ The autonomous loop builds these from TICKETS.md while you focus on Twitter pres
 
 #### 3A: Reddit Account + Credibility (April 16-30)
 
-| # | Task | Done When |
-|---|------|-----------|
-| 3-1 | Build posting history | 2+ months of genuine participation on r/DynastyFF and r/fantasyfootball. Helpful comments, analysis, trade advice. No product mentions. | Active, credible account with 30+ days age |
-| 3-2 | Seed analysis posts (4-6) | Use Screener screenshots to post genuine analysis. "2026 rookie big board using combine + college data." Watermark does the marketing. | 4-6 posts with visible watermark |
-| 3-3 | Friends & family beta | Send razzle.lol to 10+ people who play fantasy. Watch them use it. Fix what they hit. | 10+ real humans have used it and given feedback |
+| # | Task | Type | Done When |
+|---|------|------|-----------|
+| 3-1 | Build posting history | [HUMAN] | 2+ months of genuine participation on r/DynastyFF and r/fantasyfootball. Helpful comments, analysis, trade advice. No product mentions. |
+| 3-2 | Seed analysis posts (4-6) | [HYBRID] | Use Screener screenshots to post genuine analysis. Auto generates screenshots; human writes posts and engages. |
+| 3-3 | Friends & family beta | [HUMAN] | Send razzle.lol to 10+ people who play fantasy. Watch them use it. Fix what they hit. |
 
 #### 3B: !razzle Reddit Bot (May 1-15)
 
 The bot makes Razzle's data available inside Reddit threads. Someone types a command, the bot responds with real data from the Razzle API, every response links back to razzle.lol. The bot IS the distribution channel.
 
-| # | Task | Done When |
-|---|------|-----------|
-| 3-4 | Build Reddit bot (PRAW + Razzle API) | ~200 lines Python. Bot listens for mentions via PRAW, queries the existing /api/players endpoint, formats response as Reddit markdown table. | Bot responds to !razzle commands locally |
-| 3-5 | !razzle [player] command | `!razzle Bijan Robinson` returns a markdown table: PPR PPG, target share, snap %, age, rush yards, TDs. Footer: "Full profile at razzle.lol/player?id=XXX" | Bot returns accurate player data with site link |
-| 3-6 | !razzle compare [A] vs [B] command | `!razzle compare Breece Hall vs Bijan Robinson` returns side-by-side markdown table. Two API calls, formatted for Reddit. | Clean comparison table renders in Reddit comments |
-| 3-7 | !razzle prospect [name] command | `!razzle prospect Cam Ward` pulls from college_players and prospects tables. Combine data, college stats, draft projection. | Prospect data renders correctly |
-| 3-8 | !razzle breakouts command | `!razzle breakouts` returns top 5 breakout candidates from /api/breakouts endpoint. | List of breakout candidates with key stats |
-| 3-9 | Deploy bot | Run as persistent process on Render (second worker) or a cheap VPS. Message r/DynastyFF mods for approval. | Bot is live and responding in approved subreddits |
-| 3-10 | Monitor and iterate | Track: how often is the bot summoned, which commands are used most, what players are queried, click-through rate on razzle.lol links. | 1 week of usage data collected |
+| # | Task | Type | Done When |
+|---|------|------|-----------|
+| 3-4 | Build Reddit bot (PRAW + Razzle API) | [AUTO] | ~200 lines Python. Bot listens for mentions via PRAW, queries the existing /api/players endpoint, formats response as Reddit markdown table. |
+| 3-5 | !razzle [player] command | [AUTO] | `!razzle Bijan Robinson` returns a markdown table: PPR PPG, target share, snap %, age, rush yards, TDs. Footer links to razzle.lol. |
+| 3-6 | !razzle compare [A] vs [B] command | [AUTO] | `!razzle compare Breece Hall vs Bijan Robinson` returns side-by-side markdown table. |
+| 3-7 | !razzle prospect [name] command | [AUTO] | `!razzle prospect Cam Ward` pulls from college_players and prospects tables. |
+| 3-8 | !razzle breakouts command | [AUTO] | `!razzle breakouts` returns top 5 breakout candidates from /api/breakouts endpoint. |
+| 3-9 | Deploy bot | [HYBRID] | Run as persistent process on Render. Human messages r/DynastyFF mods for approval. |
+| 3-10 | Monitor and iterate | [HYBRID] | Auto tracks usage metrics; human analyzes and decides iterations. |
 
 **Virality math**: If the bot gets summoned 50 times/day and each response is seen by 100 people, that's 5,000 daily impressions with a razzle.lol link. At 1% click-through = 50 site visits/day from a bot that costs nothing to run.
 
@@ -111,13 +111,13 @@ The bot makes Razzle's data available inside Reddit threads. Someone types a com
 
 This is the second moat. Sleeper gives Razzle your roster. Reddit gives Razzle your INTENT. Together, the agents know what you own AND what you're thinking about.
 
-| # | Task | Done When |
-|---|------|-----------|
-| 3-11 | Reddit OAuth integration | User connects Reddit account via OAuth on razzle.lol. PRAW handles auth flow. Store Reddit username linked to Razzle account. | User can connect/disconnect Reddit from account settings |
-| 3-12 | Multi-account support (burners) | Users can connect MULTIPLE Reddit accounts. UI copy: "Add as many accounts as you want. We know the burner exists. Your main. Your 'asking for a friend' account. The one you use when you don't want your leaguemate to see you posting about selling his favorite player. All accounts feed your agents. More context = better analysis. We don't judge. We just read the tape." No usernames displayed publicly, just "3 Reddit accounts connected." | User can connect 2+ accounts, all merge into one intent profile |
-| 3-13 | Comment history analysis | Pull public comment history from ALL connected accounts across fantasy subs. Claude (Sonnet) parses for: players discussed, league format, positions of interest, trade questions, tools complained about. Burner posts are often more honest = richer data. | Merged intent profile from all connected accounts |
-| 3-14 | Reddit Pulse (Atlas) — Elite feature | Atlas continuously ingests community Reddit data and builds consensus per player: bullish/bearish trending, discussion volume, sentiment shifts over time. Every agent gets a "Reddit thinks" layer. Elite briefings include: "Reddit consensus says X. Historical data says Y. The gap is your edge." Atlas cross-references community sentiment against his 2015-2025 database to find where Reddit is wrong. | Elite Situation Room briefings include Reddit Pulse section |
-| 3-15 | Full agent Reddit integration | ALL agents use Reddit data in their domain. Hawkeye: "Reddit is hyping Player X but snap count is flat — narrative, not signal." Bones: "Your leaguemate posted about needing an RB on r/DynastyFF last Tuesday — that's your buyer." Dolphin: "Reddit thinks this injury is minor. Recurrence rate says 40%." Octo: "Reddit values him as WR15. My model says WR8. That's a 7-spot inefficiency." Razzle synthesizes: "Here's what your league thinks, what Reddit thinks, what the data says, and where all three disagree." | All 6 agents reference Reddit data in their responses |
+| # | Task | Type | Done When |
+|---|------|------|-----------|
+| 3-11 | Reddit OAuth integration | [AUTO] | User connects Reddit account via OAuth on razzle.lol. PRAW handles auth flow. Store Reddit username linked to Razzle account. |
+| 3-12 | Multi-account support (burners) | [AUTO] | Users can connect MULTIPLE Reddit accounts. UI copy: "Add as many accounts as you want. We know the burner exists. Your main. Your 'asking for a friend' account. The one you use when you don't want your leaguemate to see you posting about selling his favorite player. All accounts feed your agents. More context = better analysis. We don't judge. We just read the tape." No usernames displayed publicly, just "3 Reddit accounts connected." | User can connect 2+ accounts, all merge into one intent profile |
+| 3-13 | Comment history analysis | [AUTO] | Pull public comment history from ALL connected accounts across fantasy subs. Claude (Sonnet) parses for: players discussed, league format, positions of interest, trade questions, tools complained about. Burner posts are often more honest = richer data. |
+| 3-14 | Reddit Pulse (Atlas) — Elite feature | [AUTO] | Atlas continuously ingests community Reddit data and builds consensus per player: bullish/bearish trending, discussion volume, sentiment shifts over time. Every agent gets a "Reddit thinks" layer. |
+| 3-15 | Full agent Reddit integration | [AUTO] | ALL agents use Reddit data in their domain. Hawkeye: "Reddit is hyping Player X but snap count is flat — narrative, not signal." Bones: "Your leaguemate posted about needing an RB on r/DynastyFF last Tuesday — that's your buyer." Dolphin: "Reddit thinks this injury is minor. Recurrence rate says 40%." Octo: "Reddit values him as WR15. My model says WR8. That's a 7-spot inefficiency." Razzle synthesizes: "Here's what your league thinks, what Reddit thinks, what the data says, and where all three disagree." | All 6 agents reference Reddit data in their responses |
 | 3-16 | Bot-to-site bridge | When a user summons !razzle AND has connected accounts, bot gives personalized context: "Based on your league, this player would be your RB2 and you're thin at the position." Friends see personalized responses, ask "how did it know that?", connect their own accounts. | Personalized bot responses for connected users |
 
 **Why this is nuclear**: No other fantasy tool reads your Reddit activity. Nobody else knows you've been agonizing over a trade for two weeks across two accounts. The agents don't just analyze your roster — they analyze your MINDSET. The burner account support says "we're dynasty managers too, we get it." That's the level of trust and personalization that makes someone say "this is worth $100/year."
@@ -136,8 +136,8 @@ Reddit data flows in (scraper + user comment histories)
 
 | # | Task | Done When |
 |---|------|-----------|
-| 3-16 | "I built a thing" post | When posting history is established AND the bot is live. "I built a free fantasy football screener — and a Reddit bot that pulls the data into your threads." Include bot demo + Lab screenshots. | Post published with positive engagement |
-| 3-17 | Formula Store seeding | Create 5+ formulas. Share in relevant threads. | Store has real content |
+| 3-16 | "I built a thing" post | [HUMAN] | When posting history is established AND the bot is live. Post published with positive engagement. |
+| 3-17 | Formula Store seeding | [HYBRID] | Auto creates formulas; human shares in relevant threads. |
 
 **Exit criterion:** !razzle bot is live and being used in r/DynastyFF. Reddit account connection is functional. Users are getting personalized agent responses. Multiple organic "what bot is that?" questions in threads. The bot IS the growth channel.
 
@@ -147,14 +147,14 @@ Reddit data flows in (scraper + user comment histories)
 
 **Goal:** Convert awareness into registrations. Dynasty startup drafts and rookie drafts are happening. This is peak engagement for the primary audience.
 
-| # | Task | Done When |
-|---|------|-----------|
-| 4-1 | Draft content blitz | Lab screenshots during rookie drafts and startup drafts — prospect profiles, dynasty values, draft grades. Real-time content. | Razzle is the tool people reference during drafts |
-| 4-2 | Situation Room showcase | "ChatGPT vs Razzle with league context" comparison thread on Twitter + Reddit. Side-by-side screenshots. The money content. | Comparison posted with strong engagement |
-| 4-3 | Bureau showcase | Post league odds screenshots, self-scout results, depth analysis. "I just connected my league and found out I'm one injury from crisis at RB." | Bureau screenshots shared organically |
-| 4-4 | Community formula posts | Highlight community formulas from the store. "This dynasty breakout formula predicted 3 of last year's top 10 risers." | Formula Store has community engagement |
-| 4-5 | Email capture | Waitlist or registration flow capturing emails before the NFL season starts. Target: 5,000 registered users by Week 1. | Email list growing |
-| 4-6 | Weekly email briefing | For registered users — 3-4 stat insights from the Lab + Situation Room teaser. Drives Pro trial starts. | Automated weekly emails sending |
+| # | Task | Type | Done When |
+|---|------|------|-----------|
+| 4-1 | Draft content blitz | [HYBRID] | Auto generates Lab screenshots; human curates and posts during drafts. |
+| 4-2 | Situation Room showcase | [HUMAN] | Comparison thread on Twitter + Reddit with side-by-side screenshots. Human writes and posts. |
+| 4-3 | Bureau showcase | [HYBRID] | Auto generates Bureau screenshots; human writes posts and engages. |
+| 4-4 | Community formula posts | [HYBRID] | Auto creates seed formulas; human shares in relevant threads. |
+| 4-5 | Email capture | [AUTO] | Waitlist or registration flow capturing emails before NFL season. |
+| 4-6 | Weekly email briefing | [AUTO] | Automated weekly emails with stat insights + Situation Room teaser. |
 
 **Exit criterion:** 500+ registered users. 50+ Sleeper connections. Formula Store has community content. Email list building. First paid conversions happening.
 
@@ -164,14 +164,14 @@ Reddit data flows in (scraper + user comment histories)
 
 **Goal:** Convert registered users to paid. This is where the 1,000 paid user target gets hit.
 
-| # | Task | Done When |
-|---|------|-----------|
-| 5-1 | In-season content machine | Weekly Screener screenshots, Bureau odds updates, Situation Room briefing highlights. The product generates shareable content every week. | Consistent weekly content output |
-| 5-2 | Group chat virality | League odds screenshots, self-scout results, and trade analysis designed to be shared in league group chats. One manager using Razzle makes the whole league curious. | Users sharing Razzle in group chats organically |
-| 5-3 | Weekly Razzle briefings | Automated weekly intel drops for paid users. The habit loop. Users open Razzle every Tuesday because Razzle has something for them. | Briefings driving retention |
-| 5-4 | Trade deadline content | "The managers most likely to panic-sell in your league" — Bureau pressure maps at peak trade season. Highest conversion moment of the year. | Trade deadline content drives upgrade spike |
-| 5-5 | Conversion funnel optimization | Track: Screener visit → registration → Sleeper connection → trial start → paid conversion. Optimize the weakest step. | Funnel conversion rates improving weekly |
-| 5-6 | Playoff/championship push | "What the Quant agent says about your championship odds." High-stakes moments drive fence-sitters to convert. | Championship content drives final conversion push |
+| # | Task | Type | Done When |
+|---|------|------|-----------|
+| 5-1 | In-season content machine | [HYBRID] | Auto generates weekly screenshots; human curates and posts. |
+| 5-2 | Group chat virality | [HUMAN] | Design shareable League odds screenshots. Human drives organic sharing. |
+| 5-3 | Weekly Razzle briefings | [AUTO] | Automated weekly intel drops for paid users. |
+| 5-4 | Trade deadline content | [HYBRID] | Auto generates Bureau pressure maps; human writes posts and engages. |
+| 5-5 | Conversion funnel optimization | [HYBRID] | Auto tracks funnel metrics; human analyzes and optimizes. |
+| 5-6 | Playoff/championship push | [HYBRID] | Auto generates championship odds content; human writes and posts. |
 
 **Exit criterion:** 1,000 paid users. The business is profitable at ~$100k/yr.
 

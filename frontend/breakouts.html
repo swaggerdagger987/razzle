@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#ede0cf">
 <title>Breakout Candidates — Razzle</title>
 <meta property="og:title" content="Breakout Candidates — Razzle">
@@ -13,102 +14,29 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@razzle_lol">
 <meta name="twitter:title" content="Breakout Candidates — Razzle">
 <meta name="twitter:description" content="Players getting the opportunity but not yet the production. The gap between volume and output is where breakouts hide.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
 <meta name="twitter:image:alt" content="Razzle — Free Fantasy Football Research Lab">
 <meta name="description" content="Fantasy breakout candidate finder on razzle.lol. Players whose opportunity volume outpaces their production — the gap where breakouts hide.">
-<link rel="canonical" href="https://razzle.lol/breakouts.html">
-<meta property="og:url" content="https://razzle.lol/breakouts.html">
+<link rel="canonical" href="https://razzle.lol/lab.html?panel=breakouts">
+<meta property="og:url" content="https://razzle.lol/lab.html?panel=breakouts">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .breakouts-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .breakouts-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .breakouts-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .breakouts-header .breakouts-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
-
-  /* Controls row */
-  .breakouts-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-
-  .breakouts-season-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    padding: 7px 12px;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--bg-card);
-    color: var(--ink);
-    cursor: pointer;
-  }
-
-  /* Position filter tabs */
-  .breakouts-pos-tabs {
-    display: flex;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .breakouts-pos-tab {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    background: var(--bg-card);
-    color: var(--ink);
-    border: none;
-    border-right: 2px solid var(--ink);
-    cursor: pointer;
-    transition: all 0.12s;
-  }
-  .breakouts-pos-tab:last-child { border-right: none; }
-  .breakouts-pos-tab.active {
-    background: var(--ink);
-    color: var(--bg-card);
-  }
-  .breakouts-pos-tab:hover:not(.active) {
-    background: var(--bg-warm);
-  }
-
-  /* Actions */
-  .breakouts-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
 
   /* Card grid */
   .breakouts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
     gap: 16px;
     overflow-x: auto;
   }
@@ -119,7 +47,7 @@
     border-radius: 12px;
     box-shadow: 4px 4px 0 var(--ink);
     overflow: hidden;
-    transition: all 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s;
     cursor: pointer;
   }
   .breakout-card:hover {
@@ -219,13 +147,13 @@
   }
   .breakout-rbs-score {
     font-family: var(--font-mono);
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     color: var(--orange);
   }
   .breakout-rbs-label {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 11px;
     color: var(--ink-light);
     text-transform: uppercase;
   }
@@ -275,8 +203,8 @@
     gap: 6px;
     margin-bottom: 8px;
     padding: 4px 0;
-    border-top: 2px dashed var(--ink-faint);
-    border-bottom: 2px dashed var(--ink-faint);
+    border-top: 2px dashed var(--border-dashed);
+    border-bottom: 2px dashed var(--border-dashed);
   }
   .breakout-gap-arrow {
     font-size: 16px;
@@ -307,44 +235,26 @@
   }
   .breakout-stat-key {
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 11px;
     color: var(--ink-light);
     text-transform: uppercase;
   }
 
-  /* Loading */
-  .breakouts-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 22px;
-    color: var(--ink-light);
-    padding: 60px 20px;
-  }
-
-  /* Error state */
-  .breakouts-error {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--ink-medium);
-    border-left: 4px solid var(--red);
-  }
-
-  /* Responsive */
   @media (max-width: 768px) {
     .breakouts-grid {
       grid-template-columns: 1fr;
     }
-    .breakouts-header h1 { font-size: 26px; }
+    
   }
   @media (max-width: 480px) {
-    .breakouts-page { padding: 16px 12px 40px; }
-    .breakouts-header h1 { font-size: 22px; }
+
     .breakout-card-body { padding: 10px; }
     .breakout-stats { gap: 6px; }
   }
 </style>
 </head>
 <body>
+<noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#2d1f14;"><h2>Razzle needs JavaScript</h2><p>Enable JavaScript to use the fantasy football research lab.</p></div></noscript>
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
@@ -365,20 +275,24 @@
   </div>
 </nav>
 
-<span id="main-content"></span>
-<main class="breakouts-page" id="breakouts-content">
+<main class="breakouts-page" id="main-content">
   <div class="breakouts-header">
     <h1>Breakout Candidates</h1>
     <div class="breakouts-subtitle">opportunity outpacing production — volume-based, not efficiency</div>
   </div>
 
   <div class="breakouts-controls">
-    <div class="breakouts-pos-tabs" id="pos-tabs">
-      <button class="breakouts-pos-tab active" data-pos="">All</button>
-      <button class="breakouts-pos-tab" data-pos="QB">QB</button>
-      <button class="breakouts-pos-tab" data-pos="RB">RB</button>
-      <button class="breakouts-pos-tab" data-pos="WR">WR</button>
-      <button class="breakouts-pos-tab" data-pos="TE">TE</button>
+    <div class="breakouts-pos-tabs" id="pos-tabs" role="tablist" aria-label="Position filter">
+      <button class="breakouts-pos-tab active" data-pos="" role="tab" aria-selected="true">All</button>
+      <button class="breakouts-pos-tab" data-pos="QB" role="tab" aria-selected="false">QB</button>
+      <button class="breakouts-pos-tab" data-pos="RB" role="tab" aria-selected="false">RB</button>
+      <button class="breakouts-pos-tab" data-pos="WR" role="tab" aria-selected="false">WR</button>
+      <button class="breakouts-pos-tab" data-pos="TE" role="tab" aria-selected="false">TE</button>
+    </div>
+    <div class="breakouts-scoring-tabs" id="scoring-tabs">
+      <button class="breakouts-scoring-tab active" data-scoring="ppr">PPR</button>
+      <button class="breakouts-scoring-tab" data-scoring="half_ppr">Half</button>
+      <button class="breakouts-scoring-tab" data-scoring="std">Std</button>
     </div>
     <select class="breakouts-season-select" id="season-select" title="Season" aria-label="Season"></select>
   </div>
@@ -388,7 +302,12 @@
   </div>
 
   <div id="breakouts-body" role="status" aria-live="polite">
-    <div class="breakouts-loading" id="breakouts-loading">scouting the film...</div>
+    <div class="breakouts-loading" id="breakouts-loading">scouting the film...
+      <div class="loading-skeleton">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card" style="height:150px"></div>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -397,72 +316,82 @@
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <div class="site-footer-grid">
+  <nav aria-label="Footer" class="site-footer-grid">
 
     <div>
       <div class="site-footer-heading">Razzle</div>
-      <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
-      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
-      <a href="/prompts.html" class="footer-link">Prompts</a>
-      <a href="/pricing.html" class="footer-link">Pricing</a>
-      <a href="/about.html" class="footer-link">About</a>
+      <ul>
+        <li><a href="/" class="footer-link">Home</a></li>
+        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
+        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
+        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
+        <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
+        <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
+        <li><a href="/about.html" class="footer-link">About</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Dynasty</div>
-      <a href="/rankings.html" class="footer-link">Rankings</a>
-      <a href="/tradevalues.html" class="footer-link">Trade Values</a>
-      <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
-      <a href="/tiers.html" class="footer-link">Tiers</a>
-      <a href="/vorp.html" class="footer-link">VORP</a>
-      <a href="/aging.html" class="footer-link">Aging Curves</a>
-      <a href="/buysell.html" class="footer-link">Buy/Sell</a>
-      <a href="/archetypes.html" class="footer-link">Archetypes</a>
+      <ul>
+        <li><a href="/rankings.html" class="footer-link">Rankings</a></li>
+        <li><a href="/tradevalues.html" class="footer-link">Trade Values</a></li>
+        <li><a href="/tradefinder.html" class="footer-link">Trade Finder</a></li>
+        <li><a href="/tiers.html" class="footer-link">Tiers</a></li>
+        <li><a href="/vorp.html" class="footer-link">VORP</a></li>
+        <li><a href="/aging.html" class="footer-link">Aging Curves</a></li>
+        <li><a href="/buysell.html" class="footer-link">Buy/Sell</a></li>
+        <li><a href="/archetypes.html" class="footer-link">Archetypes</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Weekly</div>
-      <a href="/weekly.html" class="footer-link">Weekly Stats</a>
-      <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
-      <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
-      <a href="/matchups.html" class="footer-link">Matchups</a>
-      <a href="/waivers.html" class="footer-link">Waivers</a>
-      <a href="/schedule.html" class="footer-link">Schedule</a>
-      <a href="/stocks.html" class="footer-link">Stocks</a>
-      <a href="/playoffs.html" class="footer-link">Playoffs</a>
+      <ul>
+        <li><a href="/weekly.html" class="footer-link">Weekly Stats</a></li>
+        <li><a href="/weeklyleaders.html" class="footer-link">Week Leaders</a></li>
+        <li><a href="/weeklymvp.html" class="footer-link">Weekly MVP</a></li>
+        <li><a href="/matchups.html" class="footer-link">Matchups</a></li>
+        <li><a href="/waivers.html" class="footer-link">Rising Players</a></li>
+        <li><a href="/schedule.html" class="footer-link">Schedule</a></li>
+        <li><a href="/stocks.html" class="footer-link">Stocks</a></li>
+        <li><a href="/playoffs.html" class="footer-link">Playoffs</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Analytics</div>
-      <a href="/targets.html" class="footer-link">Targets</a>
-      <a href="/usage.html" class="footer-link">Usage</a>
-      <a href="/efficiency.html" class="footer-link">Efficiency</a>
-      <a href="/airyards.html" class="footer-link">Air Yards</a>
-      <a href="/redzone.html" class="footer-link">Red Zone</a>
-      <a href="/consistency.html" class="footer-link">Consistency</a>
-      <a href="/breakouts.html" class="footer-link">Breakouts</a>
-      <a href="/opportunity.html" class="footer-link">Opportunity</a>
+      <ul>
+        <li><a href="/targets.html" class="footer-link">Targets</a></li>
+        <li><a href="/usage.html" class="footer-link">Usage</a></li>
+        <li><a href="/efficiency.html" class="footer-link">Efficiency</a></li>
+        <li><a href="/airyards.html" class="footer-link">Air Yards</a></li>
+        <li><a href="/redzone.html" class="footer-link">Red Zone</a></li>
+        <li><a href="/consistency.html" class="footer-link">Consistency</a></li>
+        <li><a href="/breakouts.html" class="footer-link">Breakouts</a></li>
+        <li><a href="/opportunity.html" class="footer-link">Opportunity</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Tools</div>
-      <a href="/explorer.html" class="footer-link">Stat Explorer</a>
-      <a href="/compare.html" class="footer-link">Compare</a>
-      <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>
-      <a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a>
-      <a href="/auction.html" class="footer-link">Auction Values</a>
-      <a href="/dashboard.html" class="footer-link">Dashboard</a>
-      <a href="/prospects.html" class="footer-link">Prospects</a>
+      <ul>
+        <li><a href="/explorer.html" class="footer-link">Stat Explorer</a></li>
+        <li><a href="/compare.html" class="footer-link">Compare</a></li>
+        <li><a href="/rosterbuilder.html" class="footer-link">Roster Builder</a></li>
+        <li><a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a></li>
+        <li><a href="/auction.html" class="footer-link">Auction Values</a></li>
+        <li><a href="/dashboard.html" class="footer-link">Dashboard</a></li>
+        <li><a href="/prospects.html" class="footer-link">Prospects</a></li>
+      </ul>
     </div>
 
-  </div>
+  </nav>
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
-  <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
+  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
 </footer>
 
-<script src="app.js"></script>
+<script src="app.js" defer></script>
 <script>
 (function() {
   'use strict';
@@ -475,13 +404,10 @@
     TE: _cs.getPropertyValue('--pos-te').trim() || '#8b5cf6'
   };
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   var currentData = null;
   var currentPosition = '';
+  var currentScoring = 'ppr';
 
   function ageClass(age) {
     if (!age) return 'prime';
@@ -520,6 +446,7 @@
     var url = '/api/breakout-candidates?limit=50';
     if (season) url += '&season=' + season;
     if (position) url += '&position=' + position;
+    if (currentScoring !== 'ppr') url += '&scoring=' + currentScoring;
 
     try {
       var resp = await fetch(url);
@@ -572,7 +499,7 @@
       html += '<div class="breakout-card-row1">';
       html += '<div class="breakout-rank">' + escapeHtml(String(p.rank)) + '</div>';
       if (p.headshot_url) {
-        html += '<img class="breakout-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        html += '<img class="breakout-headshot" src="' + escapeHtml(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       }
       html += '<div class="breakout-info">';
       html += '<div class="breakout-name">' + escapeHtml(p.name) + '</div>';
@@ -640,24 +567,37 @@
       tab.classList.add('active');
       currentPosition = tab.getAttribute('data-pos') || '';
       var season = document.getElementById('season-select').value;
-      savePageState({ pos: currentPosition, season: season });
+      savePageState({ pos: currentPosition, season: season, scoring: currentScoring });
       loadData(season, currentPosition);
     });
   });
 
+  // Scoring format tab clicks
+  document.getElementById('scoring-tabs').addEventListener('click', function(e) {
+    var tab = e.target.closest('.breakouts-scoring-tab');
+    if (!tab) return;
+    document.querySelectorAll('.breakouts-scoring-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentScoring = tab.getAttribute('data-scoring') || 'ppr';
+    var season = document.getElementById('season-select').value;
+    savePageState({ pos: currentPosition, season: season, scoring: currentScoring });
+    loadData(season, currentPosition);
+  });
+
   // Season change handler
   document.getElementById('season-select').addEventListener('change', function() {
-    savePageState({ pos: currentPosition, season: this.value });
+    savePageState({ pos: currentPosition, season: this.value, scoring: currentScoring });
     loadData(this.value, currentPosition);
   });
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
-    var target = document.getElementById('breakouts-content');
-    if (!target) return;
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
+    var target = document.getElementById('main-content');
+    if (!target) { btn.disabled = false; btn.textContent = 'Export PNG'; return; }
     var _ec = getExportColors(); loadHtml2Canvas().then(function(h2c) { return h2c(target, { backgroundColor: _ec.bg, scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
-      ctx.font = '28px Caveat, cursive';
+      ctx.font = '24px Caveat, cursive';
       ctx.fillStyle = getExportColors().watermark;
       ctx.textAlign = 'right';
       ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
@@ -665,7 +605,7 @@
       a.download = 'razzle-breakouts.png';
       a.href = canvas.toDataURL('image/png');
       a.click();
-    });
+    }).finally(function() { btn.disabled = false; btn.textContent = 'Export PNG'; });
   });
 
   // Analytics
@@ -681,11 +621,17 @@
   if (typeof window.initQuickSearch === 'function') window.initQuickSearch();
 
   // Restore URL state
-  var urlState = restorePageState({ pos: '', season: '' });
+  var urlState = restorePageState({ pos: '', season: '', scoring: 'ppr' });
   if (urlState.pos) {
     currentPosition = urlState.pos;
     document.querySelectorAll('.breakouts-pos-tab').forEach(function(t) {
       t.classList.toggle('active', (t.getAttribute('data-pos') || '') === urlState.pos);
+    });
+  }
+  if (urlState.scoring && ['ppr','half_ppr','std'].indexOf(urlState.scoring) !== -1) {
+    currentScoring = urlState.scoring;
+    document.querySelectorAll('.breakouts-scoring-tab').forEach(function(t) {
+      t.classList.toggle('active', t.getAttribute('data-scoring') === currentScoring);
     });
   }
   if (urlState.season) {

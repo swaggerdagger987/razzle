@@ -82,6 +82,9 @@ function _injectThemeToggle() {
     toggleTheme();
     var nowDark = document.documentElement.getAttribute("data-theme") === "dark";
     btn.innerHTML = nowDark ? "\u2600 <span style='font-size:11px;font-family:var(--font-mono);margin-left:4px;'>Light</span>" : "\u263D <span style='font-size:11px;font-family:var(--font-mono);margin-left:4px;'>Dark</span>";
+    // Sync mobile toggle
+    var mobileToggle = document.querySelector(".mobile-nav-theme");
+    if (mobileToggle) mobileToggle.textContent = nowDark ? "\u2600 Light Mode" : "\u263D Dark Mode";
   });
   nav.appendChild(btn);
 }
@@ -96,17 +99,19 @@ if (document.readyState === "loading") {
 function getCanvasTheme() {
   var isDark = document.documentElement.getAttribute("data-theme") === "dark";
   var s = getComputedStyle(document.documentElement);
+  var bg = s.getPropertyValue('--bg').trim() || (isDark ? "#2d1f14" : "#ede0cf");
+  var ink = s.getPropertyValue('--ink').trim() || (isDark ? "#ede0cf" : "#2d1f14");
   return {
-    bg: isDark ? "#2d1f14" : "#ede0cf",
-    bgWarm: isDark ? "#3b2821" : "#e5d5c3",
-    bgCard: isDark ? "#4a3728" : "#f7efe5",
-    ink: isDark ? "#ede0cf" : "#2d1f14",
-    inkMedium: isDark ? "#c4b5a5" : "#5c4a3d",
-    inkLight: isDark ? "#a89888" : "#6d5c4e",
-    inkFaint: isDark ? "#5c4a3d" : "#c4b5a5",
-    white: isDark ? "#ede0cf" : "#fff",
-    gridLine: isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)",
-    subtitleAlpha: isDark ? "rgba(237,224,207,0.5)" : "rgba(45,31,20,0.5)",
+    bg: bg,
+    bgWarm: s.getPropertyValue('--bg-warm').trim() || (isDark ? "#3b2821" : "#e5d5c3"),
+    bgCard: s.getPropertyValue('--bg-card').trim() || (isDark ? "#4a3728" : "#f7efe5"),
+    ink: ink,
+    inkMedium: s.getPropertyValue('--ink-medium').trim() || (isDark ? "#c4b5a5" : "#5c4a3d"),
+    inkLight: s.getPropertyValue('--ink-light').trim() || (isDark ? "#8a7565" : "#6d5c4e"),
+    inkFaint: s.getPropertyValue('--ink-faint').trim() || (isDark ? "#5c4a3d" : "#c4b5a5"),
+    white: isDark ? ink : "#fff",
+    gridLine: ink + "1f",
+    subtitleAlpha: ink + "80",
     orange: s.getPropertyValue('--orange').trim() || "#d97757",
     green: s.getPropertyValue('--green').trim() || "#2ec4b6",
     blue: s.getPropertyValue('--blue').trim() || "#5b7fff",
@@ -119,10 +124,10 @@ function getCanvasTheme() {
 
 /* ===== Export Colors (shared across all pages) ===== */
 function getExportColors() {
-  var isDark = document.documentElement.dataset.theme === 'dark';
+  var t = getCanvasTheme();
   return {
-    bg: isDark ? '#2d1f14' : '#ede0cf',
-    watermark: isDark ? 'rgba(237,224,207,0.3)' : 'rgba(45,31,20,0.3)'
+    bg: t.bg,
+    watermark: t.subtitleAlpha
   };
 }
 
@@ -170,18 +175,19 @@ function _injectHamburgerMenu() {
   var panelHTML = '<div class="mobile-nav-header">' +
     '<div class="logo-mark" style="width:32px;height:32px;font-size:18px;">\uD83D\uDC2F</div>' +
     '<div class="logo-text">Razzle<span class="accent">.lol</span></div>' +
-    '<button class="mobile-nav-close" aria-label="Close navigation menu">\u2715</button>' +
+    '<button type="button" class="mobile-nav-close" aria-label="Close navigation menu">\u2715</button>' +
   '</div>' +
   '<div class="mobile-nav-links">';
 
   for (var i = 0; i < links.length; i++) {
     var cls = isActive(links[i].href) ? ' mobile-nav-active' : '';
-    panelHTML += '<a href="' + links[i].href + '" class="mobile-nav-link' + cls + '">' + links[i].label + '</a>';
+    var aria = isActive(links[i].href) ? ' aria-current="page"' : '';
+    panelHTML += '<a href="' + links[i].href + '" class="mobile-nav-link' + cls + '"' + aria + '>' + links[i].label + '</a>';
   }
 
   panelHTML += '</div>' +
   '<div style="padding:8px 16px 0;">' +
-    '<button class="btn-chunky btn-sm" style="width:100%;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="if(typeof openCmdPalette===\'function\'){openCmdPalette();document.querySelector(\'.mobile-nav-overlay\').click();}" aria-label="Open search">' +
+    '<button type="button" class="btn-chunky btn-sm" style="width:100%;min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;" onclick="if(typeof openCmdPalette===\'function\'){openCmdPalette();document.querySelector(\'.mobile-nav-overlay\').click();}" aria-label="Open search">' +
     '\uD83D\uDD0D Search players &amp; tools</button>' +
   '</div>' +
   '<div class="mobile-nav-footer">' +
@@ -309,7 +315,11 @@ if (document.readyState === "loading") {
 /* ===== Nav Dropdown Close Handler (module-level to avoid listener leaks) ===== */
 var _dropdownCloseHandler = function(e) {
     var dd = document.querySelector(".nav-user-dropdown");
-    if (dd && !dd.contains(e.target)) dd.classList.remove("open");
+    if (dd && !dd.contains(e.target)) {
+      dd.classList.remove("open");
+      var trigger = dd.querySelector(".nav-user-trigger");
+      if (trigger) trigger.setAttribute("aria-expanded", "false");
+    }
 };
 
 /* ===== Tier Gating Helpers ===== */
@@ -435,19 +445,20 @@ if (document.readyState === "loading") {
 
 /**
  * Get user tier info for CTA personalization.
- * Returns { plan, isTrial, isPaid, isElite, isExpiredTrial, daysLeft }
+ * Returns { plan, isTrial, isPaid, isElite, isExpiredTrial, daysLeft, hoursLeft }
  */
 function getUserTierInfo() {
   var u = null;
   try { u = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
-  if (!u) return { plan: "none", isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0, loggedIn: false };
+  if (!u) return { plan: "none", isTrial: false, isPaid: false, isElite: false, isExpiredTrial: false, daysLeft: 0, hoursLeft: 0, loggedIn: false };
   var plan = u.plan || "free";
   var isTrial = !!(u.trial_active && u.plan_source === "trial");
   var isPaid = plan === "pro" || plan === "elite" || plan === "pro_lifetime" || plan === "elite_lifetime";
   var isElite = plan === "elite" || plan === "elite_lifetime";
   var isExpiredTrial = !!(u.plan_source === "trial" && !u.trial_active);
   var daysLeft = u.trial_days_remaining || 0;
-  return { plan: plan, isTrial: isTrial, isPaid: isPaid, isElite: isElite, isExpiredTrial: isExpiredTrial, daysLeft: daysLeft, loggedIn: true };
+  var hoursLeft = u.trial_hours_remaining || 0;
+  return { plan: plan, isTrial: isTrial, isPaid: isPaid, isElite: isElite, isExpiredTrial: isExpiredTrial, daysLeft: daysLeft, hoursLeft: hoursLeft, loggedIn: true };
 }
 
 /**
@@ -514,12 +525,33 @@ var RAZZLE_LOADING = [
   "analyzing target shares..."
 ];
 
-// Randomize hardcoded "pulling film..." loading text across all pages
+// Contextual loading text per page, with random fallback
+var PAGE_LOADING = {
+  trade: "reviewing the tape room...", tradefinder: "scanning trade targets...",
+  tradevalues: "calculating trade values...", matchups: "scouting the defense...",
+  aging: "pulling the career film...", efficiency: "crunching per-snap data...",
+  weekly: "rewinding the game tape...", awards: "counting the votes...",
+  rankings: "ranking the dynasty board...", tiers: "sorting the tier list...",
+  stocks: "checking the stock ticker...", buysell: "spotting buy-low targets...",
+  auction: "calculating auction dollars...", vorp: "computing replacement value...",
+  schedule: "scouting the schedule...", targets: "charting target trees...",
+  airyards: "measuring air yards...", redzone: "studying goal-line film...",
+  consistency: "checking the variance...", scarcity: "measuring positional scarcity...",
+  breakouts: "scouting the next breakout...", prospects: "grading the draft class...",
+  cheatsheet: "printing the cheat sheet...", drops: "reviewing the catch tape...",
+  garbagetime: "filtering garbage time...", dualthreat: "measuring dual-threat ability...",
+  tdregression: "calculating expected TDs...", advantage: "computing positional edge...",
+  pace: "projecting season pace...", stacks: "building stack combos...",
+  records: "searching the record books...", streaks: "tracking hot streaks...",
+  workload: "counting snap loads...", handcuffs: "mapping the handcuff chart..."
+};
 document.addEventListener("DOMContentLoaded", function() {
+  var page = (location.pathname.split("/").pop() || "").replace(".html", "").toLowerCase();
+  var contextual = PAGE_LOADING[page];
   var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (walker.nextNode()) {
     if (walker.currentNode.textContent.trim() === "pulling film...") {
-      walker.currentNode.textContent = RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)];
+      walker.currentNode.textContent = contextual || RAZZLE_LOADING[Math.floor(Math.random() * RAZZLE_LOADING.length)];
     }
   }
 });
@@ -562,9 +594,9 @@ function loadHtml2Canvas() {
 
 /* ===== Styled error HTML helper ===== */
 function razzleErrorHTML(retryFn) {
-  return '<div style="text-align:center;padding:40px;font-family:var(--font-hand);font-size:22px;color:var(--red);">' +
+  return '<div style="text-align:center;padding:40px;font-family:var(--font-hand);font-size:20px;color:var(--red);">' +
     razzleError() +
-    (retryFn ? ' <button class="btn-chunky" onclick="' + retryFn + '" style="margin-left:12px">retry</button>' : '') +
+    (retryFn ? ' <button type="button" class="btn-chunky" onclick="' + retryFn + '" style="margin-left:12px">retry</button>' : '') +
   '</div>';
 }
 
@@ -578,6 +610,7 @@ var _wmImgCache = {};
 (function() {
   for (var i = 0; i < _wmAgentIcons.length; i++) {
     var img = new Image();
+    img.onerror = (function(src) { return function() { delete _wmImgCache[src]; }; })(_wmAgentIcons[i]);
     img.src = _wmAgentIcons[i];
     _wmImgCache[_wmAgentIcons[i]] = img;
   }
@@ -597,7 +630,7 @@ function drawRazzleWatermark(ctx, canvas, opts) {
   }
   ctx.fillStyle = wmAlpha;
   ctx.textAlign = "right";
-  ctx.font = "600 28px Caveat, cursive";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillText("razzle.lol", canvas.width - 20, canvas.height - 30);
   if (opts.url) {
     var u = opts.url.replace(/^https?:\/\//, "");
@@ -696,7 +729,9 @@ async function apiFetch(path, options = {}) {
   }
   const resp = await fetch(url, options);
   if (resp.status === 401) {
-    try { localStorage.removeItem("razzle_token"); localStorage.removeItem("razzle_user"); } catch (e) {}
+    // Don't clear state — let user re-auth and resume
+    try { localStorage.removeItem("razzle_token"); } catch (e) {}
+    if (typeof _showToast === "function") _showToast("session expired — sign in to continue", "warning", 8000);
     if (typeof openAuthModal === "function") openAuthModal();
     throw new Error("session expired. sign in again.");
   }
@@ -744,7 +779,7 @@ function playerHeadshot(player, pos) {
   var bgColor = POS_COLOR_MAP[pos] || "var(--ink-light)";
   if (url) {
     var altText = escapeAttr((player.full_name || player.player_name || "") + " headshot");
-    return '<img class="player-headshot" src="' + escapeAttr(url) + '" alt="' + altText + '" width="' + size + '" height="' + size + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
+    return '<img class="player-headshot" src="' + escapeAttr(url) + '" alt="' + altText + '" width="' + size + '" height="' + size + '" loading="lazy" onerror="this.onerror=null;this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">' +
            '<span class="player-headshot-fallback" style="display:none;background:' + bgColor + ';">' + escapeHtml(initials) + '</span>';
   }
   return '<span class="player-headshot-fallback" style="background:' + bgColor + ';">' + escapeHtml(initials) + '</span>';
@@ -894,14 +929,14 @@ function _showWelcomeModal(user) {
 
   var features = isElite
     ? [
-        "All 60+ analytical panels",
+        "All 70+ analytical panels",
         "Full Bureau deep-dive + league intelligence",
         "Situation Room with AI key included",
         "Unlimited formulas + cloud sync",
         "CSV export on every table",
       ]
     : [
-        "All 60+ analytical panels",
+        "All 70+ analytical panels",
         "Full Bureau deep-dive + league intelligence",
         "Situation Room (bring your own AI key)",
         "Unlimited formulas + cloud sync",
@@ -920,7 +955,7 @@ function _showWelcomeModal(user) {
   overlay.innerHTML =
     '<div style="background:var(--bg);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);max-width:480px;width:100%;padding:32px;text-align:center;position:relative;">' +
       '<div style="font-size:48px;margin-bottom:8px;">🐯</div>' +
-      '<h2 style="font-family:var(--font-display);font-size:28px;color:var(--ink);margin:0 0 4px;">welcome to the film room.</h2>' +
+      '<h2 style="font-family:var(--font-display);font-size:24px;color:var(--ink);margin:0 0 4px;">welcome to the film room.</h2>' +
       '<p style="font-family:var(--font-hand);font-size:18px;color:var(--ink-light);margin:0 0 16px;">you just made the tiger very happy</p>' +
       '<div style="display:inline-block;background:var(--orange);color:var(--text-on-accent);font-family:var(--font-mono);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;border:2px solid var(--ink);margin-bottom:20px;">' +
         escapeHtml(planLabel) + ' — ' + escapeHtml(price) +
@@ -930,23 +965,25 @@ function _showWelcomeModal(user) {
       '</ul>' +
       '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">' +
         '<a href="/league-intel.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--orange);color:var(--text-on-accent);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Open the Bureau</a>' +
-        '<a href="/lab.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--bg-warm);color:var(--ink);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Back to the Screener</a>' +
+        '<a href="/lab.html" style="font-family:var(--font-mono);font-size:13px;font-weight:700;padding:10px 20px;background:var(--bg-warm);color:var(--ink);border:2px solid var(--ink);border-radius:8px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;cursor:pointer;">Back to The Lab</a>' +
       '</div>' +
-      '<button onclick="this.closest(\'div\').parentElement.remove();" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);">&times;</button>' +
+      '<button type="button" onclick="this.closest(\'div\').parentElement.remove();" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);">&times;</button>' +
     '</div>';
 
   document.body.appendChild(overlay);
 
-  // CSS confetti burst
-  var style = document.createElement("style");
-  style.textContent = "@keyframes welcome-confetti{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(-200px) rotate(720deg);}}";
-  document.head.appendChild(style);
-  var colors = ["var(--orange)", "var(--pos-qb)", "var(--pos-rb)", "var(--pos-te)", "var(--green)"];
-  for (var ci = 0; ci < 20; ci++) {
-    var dot = document.createElement("div");
-    dot.style.cssText = "position:fixed;width:" + (6 + Math.random() * 8) + "px;height:" + (6 + Math.random() * 8) + "px;background:" + colors[ci % colors.length] + ";border-radius:" + (Math.random() > 0.5 ? "50%" : "2px") + ";left:" + (10 + Math.random() * 80) + "%;top:" + (40 + Math.random() * 30) + "%;z-index:10001;pointer-events:none;animation:welcome-confetti " + (0.8 + Math.random() * 1.2) + "s ease-out forwards;animation-delay:" + (Math.random() * 0.3) + "s;";
-    document.body.appendChild(dot);
-    setTimeout((function(d) { return function() { d.remove(); }; })(dot), 2500);
+  // CSS confetti burst (skip if user prefers reduced motion)
+  if (!prefersReducedMotion) {
+    var style = document.createElement("style");
+    style.textContent = "@keyframes welcome-confetti{0%{opacity:1;transform:translateY(0) rotate(0deg);}100%{opacity:0;transform:translateY(-200px) rotate(720deg);}}";
+    document.head.appendChild(style);
+    var colors = ["var(--orange)", "var(--pos-qb)", "var(--pos-rb)", "var(--pos-te)", "var(--green)"];
+    for (var ci = 0; ci < 20; ci++) {
+      var dot = document.createElement("div");
+      dot.style.cssText = "position:fixed;width:" + (6 + Math.random() * 8) + "px;height:" + (6 + Math.random() * 8) + "px;background:" + colors[ci % colors.length] + ";border-radius:" + (Math.random() > 0.5 ? "50%" : "2px") + ";left:" + (10 + Math.random() * 80) + "%;top:" + (40 + Math.random() * 30) + "%;z-index:10001;pointer-events:none;animation:welcome-confetti " + (0.8 + Math.random() * 1.2) + "s ease-out forwards;animation-delay:" + (Math.random() * 0.3) + "s;";
+      document.body.appendChild(dot);
+      setTimeout((function(d) { return function() { d.remove(); }; })(dot), 2500);
+    }
   }
 }
 
@@ -961,18 +998,18 @@ function _injectAuthModal() {
   modal.style.display = "none";
   modal.innerHTML =
     '<div class="auth-modal">' +
-      '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close sign-in dialog">&times;</button>' +
+      '<button type="button" class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close sign-in dialog">&times;</button>' +
       '<h2 id="auth-modal-title" class="sr-only">Sign In or Register</h2>' +
       '<div class="auth-tabs">' +
-        '<button class="auth-tab active" data-tab="login" onclick="switchAuthTab(\'login\')">Sign In</button>' +
-        '<button class="auth-tab" data-tab="register" onclick="switchAuthTab(\'register\')">Register</button>' +
+        '<button type="button" class="auth-tab active" data-tab="login" onclick="switchAuthTab(\'login\')">Sign In</button>' +
+        '<button type="button" class="auth-tab" data-tab="register" onclick="switchAuthTab(\'register\')">Register</button>' +
       '</div>' +
       '<form id="authLoginForm" class="auth-form" onsubmit="handleLogin(event)">' +
         '<input type="email" id="authLoginEmail" placeholder="Email" required autocomplete="email" aria-label="Email address" aria-describedby="authLoginError">' +
         '<input type="password" id="authLoginPassword" placeholder="Password" required autocomplete="current-password" aria-label="Password" aria-describedby="authLoginError">' +
         '<div id="authLoginError" class="auth-error" role="alert"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Sign In</button>' +
-        '<div style="text-align:center;margin-top:8px;"><a href="#" onclick="showForgotPassword(); return false;" style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Forgot password?</a></div>' +
+        '<div style="text-align:center;margin-top:8px;"><button type="button" onclick="showForgotPassword();" style="background:none;border:none;padding:0;cursor:pointer;font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Forgot password?</button></div>' +
       '</form>' +
       '<form id="authRegisterForm" class="auth-form" style="display:none" onsubmit="handleRegister(event)">' +
         '<input type="email" id="authRegisterEmail" placeholder="Email" required autocomplete="email" aria-label="Email address" aria-describedby="authRegisterError">' +
@@ -980,6 +1017,7 @@ function _injectAuthModal() {
         '<input type="password" id="authRegisterConfirm" placeholder="Confirm password" required minlength="8" autocomplete="new-password" aria-label="Confirm password" aria-describedby="authRegisterError">' +
         '<div id="authRegisterError" class="auth-error" role="alert"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Create Account</button>' +
+        '<div style="text-align:center;margin-top:6px;font-family:var(--font-hand);font-size:13px;color:var(--ink-light);">includes 7-day Pro trial — no credit card</div>' +
       '</form>' +
     '</div>';
   modal.addEventListener("click", function(e) {
@@ -1002,7 +1040,7 @@ function _injectNavAuthButton() {
       existingBtn.id = "navSignIn";
       span.appendChild(existingBtn);
     } else {
-      span.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn" class="btn-chunky btn-sm">Sign In</a>';
+      span.innerHTML = '<button type="button" onclick="openAuthModal();" id="navSignIn" class="btn-chunky btn-sm">Sign In</button>';
     }
     authContainer.appendChild(span);
     return;
@@ -1012,7 +1050,7 @@ function _injectNavAuthButton() {
   if (!nav) return;
   var li = document.createElement("li");
   li.id = "navAuthItem";
-  li.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn">Sign In</a>';
+  li.innerHTML = '<button type="button" onclick="openAuthModal();" id="navSignIn" class="btn-chunky btn-sm">Sign In</button>';
   nav.appendChild(li);
 }
 
@@ -1128,11 +1166,26 @@ async function handleRegister(e) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password })
     });
-    if (!resp.ok) { try { var d = await resp.json(); errEl.textContent = d.error || d.detail || "couldn't get you signed up. try again."; } catch(_) { errEl.textContent = "couldn't get you signed up. try again."; } document.getElementById("authRegisterEmail").setAttribute("aria-invalid","true"); return; }
+    if (!resp.ok) {
+      try { var d = await resp.json(); var errMsg = d.error || d.detail || "couldn't get you signed up. try again."; } catch(_) { var errMsg = "couldn't get you signed up. try again."; }
+      if (resp.status === 409) {
+        errEl.innerHTML = errMsg + ' <button type="button" onclick="switchAuthTab(\'login\')" style="background:none;border:none;color:var(--orange);cursor:pointer;text-decoration:underline;font:inherit;padding:0;">Sign in instead?</button>';
+      } else {
+        errEl.textContent = errMsg;
+      }
+      document.getElementById("authRegisterEmail").setAttribute("aria-invalid","true"); return;
+    }
     var data = await resp.json();
     localStorage.setItem("razzle_token", data.token);
     localStorage.setItem("razzle_user", JSON.stringify(data.user));
-    if (!data.user.sleeper_username) { showSleeperPrompt(); } else { closeAuthModal(); }
+    if (data.needs_verification) {
+      // Show verification message instead of Sleeper prompt
+      _showVerificationMessage(email);
+    } else if (!data.user.sleeper_username) {
+      showSleeperPrompt();
+    } else {
+      closeAuthModal();
+    }
     updateAuthUI(data.user);
     migrateLocalFormulas();
     _resumePendingCheckout();
@@ -1144,21 +1197,55 @@ async function handleRegister(e) {
   }
 }
 
+function _showVerificationMessage(email) {
+  var modal = document.getElementById("authModal");
+  if (!modal) return;
+  var inner = modal.querySelector(".auth-modal");
+  if (!inner) return;
+  inner.innerHTML =
+    '<button type="button" class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
+    '<h2 style="font-family:var(--font-display);font-size:20px;text-align:center;margin-bottom:12px;">Check Your Email</h2>' +
+    '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">' +
+      'We sent a verification link to <strong>' + (typeof escapeHtml === 'function' ? escapeHtml(email) : email) + '</strong>. ' +
+      'Click it to verify your account and unlock your 7-day Pro trial.' +
+    '</p>' +
+    '<p style="font-family:var(--font-mono);font-size:12px;text-align:center;color:var(--ink-light);margin-top:16px;">' +
+      'Didn\'t get it? <button type="button" onclick="_resendVerification(\'' + email.replace(/'/g, "\\'") + '\');" style="background:none;border:none;padding:0;cursor:pointer;color:var(--accent);font:inherit;">Resend</button>' +
+    '</p>' +
+    '<div id="verifyResendMsg" style="font-family:var(--font-mono);font-size:12px;text-align:center;color:var(--ink-light);min-height:18px;margin-top:8px;"></div>';
+}
+
+async function _resendVerification(email) {
+  var msgEl = document.getElementById("verifyResendMsg");
+  if (msgEl) msgEl.textContent = "sending...";
+  try {
+    var resp = await fetch(API_BASE + "/api/auth/resend-verification", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email })
+    });
+    var data = await resp.json();
+    if (msgEl) msgEl.textContent = data.message || "Sent!";
+  } catch (err) {
+    if (msgEl) msgEl.textContent = "Failed to resend. Try again.";
+  }
+}
+
 function showForgotPassword() {
   var modal = document.getElementById("authModal");
   if (!modal) return;
   var inner = modal.querySelector(".auth-modal");
   if (!inner) return;
   inner.innerHTML =
-    '<button class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
-    '<h2 style="font-family:var(--font-display);font-size:22px;text-align:center;margin-bottom:16px;">Reset Password</h2>' +
+    '<button type="button" class="auth-modal-close" onclick="closeAuthModal()" aria-label="Close">&times;</button>' +
+    '<h2 style="font-family:var(--font-display);font-size:20px;text-align:center;margin-bottom:16px;">Reset Password</h2>' +
     '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">Enter your email and we\'ll send you a reset link.</p>' +
     '<form id="authForgotForm" class="auth-form" onsubmit="handleForgotPassword(event)">' +
       '<input type="email" id="authForgotEmail" placeholder="Email" required autocomplete="email" aria-label="Email address">' +
       '<div id="authForgotMsg" class="auth-error" role="status"></div>' +
       '<button type="submit" class="btn-chunky btn-primary auth-submit">Send Reset Link</button>' +
     '</form>' +
-    '<div style="text-align:center;margin-top:12px;"><a href="#" onclick="showLoginFromReset(); return false;" style="font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Back to sign in</a></div>';
+    '<div style="text-align:center;margin-top:12px;"><button type="button" onclick="showLoginFromReset();" style="background:none;border:none;padding:0;cursor:pointer;font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">Back to sign in</button></div>';
   var emailInput = document.getElementById("authForgotEmail");
   if (emailInput) setTimeout(function() { emailInput.focus(); }, 50);
 }
@@ -1216,6 +1303,8 @@ function signOut() {
   Object.keys(localStorage).forEach(function(k) {
     if (k.startsWith("razzle_")) localStorage.removeItem(k);
   });
+  // Clear session storage (API keys, etc.)
+  try { sessionStorage.removeItem("razzle_agent_config"); } catch(_) {}
   updateAuthUI(null);
 }
 
@@ -1227,17 +1316,21 @@ function _showTrialExpiredModal() {
   overlay.innerHTML =
     '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:var(--radius);box-shadow:4px 4px 0 var(--ink);padding:32px;max-width:420px;width:90%;text-align:center;">' +
       '<div style="font-size:40px;margin-bottom:12px;">🐯</div>' +
-      '<h2 style="font-family:var(--font-display);font-size:22px;margin:0 0 8px;">your pro trial ended</h2>' +
+      '<h2 style="font-family:var(--font-display);font-size:20px;margin:0 0 8px;">your pro trial ended</h2>' +
       '<p style="font-family:var(--font-hand);font-size:16px;color:var(--ink-medium);margin:0 0 20px;">you explored the full film room for 7 days. keep the edge with Pro.</p>' +
       '<a href="/pricing.html" class="btn-chunky btn-primary" style="display:inline-block;margin-bottom:12px;font-size:14px;padding:10px 24px;">see Pro plans</a><br>' +
-      '<button onclick="this.closest(\'#trialExpiredModal\').remove()" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);font-size:12px;padding:8px;">maybe later</button>' +
+      '<button type="button" onclick="this.closest(\'#trialExpiredModal\').remove()" style="background:none;border:none;color:var(--ink-light);cursor:pointer;font-family:var(--font-mono);font-size:12px;padding:8px;">maybe later</button>' +
     '</div>';
   document.body.appendChild(overlay);
 }
 
 async function checkAuth() {
   var token = localStorage.getItem("razzle_token");
-  if (!token) { updateAuthUI(null); return; }
+  if (!token) {
+    try { localStorage.removeItem("razzle_user"); } catch (_) {}
+    updateAuthUI(null);
+    return;
+  }
   try {
     var resp = await fetch(API_BASE + "/api/auth/me", {
       headers: { "Authorization": "Bearer " + token }
@@ -1267,6 +1360,24 @@ async function checkAuth() {
   }
 }
 
+// Periodic plan re-validation: overwrites localStorage with server truth every 5 min.
+// Prevents localStorage tampering from persisting (S0-003).
+(function _startPlanRevalidation() {
+  var REVALIDATE_MS = 5 * 60 * 1000;
+  setInterval(function () {
+    var token = localStorage.getItem("razzle_token");
+    if (!token) return;
+    fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/auth/me", {
+      headers: { "Authorization": "Bearer " + token }
+    }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (data && data.user) {
+          try { localStorage.setItem("razzle_user", JSON.stringify(data.user)); } catch (_) {}
+        }
+      }).catch(function () {});
+  }, REVALIDATE_MS);
+})();
+
 function updateAuthUI(user) {
   var item = document.getElementById("navAuthItem");
   if (!item) return;
@@ -1281,7 +1392,11 @@ function updateAuthUI(user) {
       badge = '<span class="nav-plan-badge nav-plan-elite">Elite' + (user.plan === "elite_lifetime" ? ' ∞' : '') + '</span>';
     } else if (isTrial) {
       var daysLeft = user.trial_days_remaining || 0;
-      badge = '<span class="nav-plan-badge nav-plan-trial">Trial ' + daysLeft + 'd</span>';
+      var hoursLeft = user.trial_hours_remaining || 0;
+      var trialLabel = daysLeft > 0 ? daysLeft + 'd' : (hoursLeft > 0 ? hoursLeft + 'h' : '<1h');
+      badge = '<span class="nav-plan-badge nav-plan-trial">Trial ' + trialLabel + '</span>';
+    } else if (user.plan_source === "trial" && !user.trial_active) {
+      badge = '<span class="nav-plan-badge nav-plan-expired">Trial Ended</span>';
     } else if (user.plan === "pro" || user.plan === "pro_lifetime") {
       badge = '<span class="nav-plan-badge nav-plan-pro">Pro' + (user.plan === "pro_lifetime" ? ' ∞' : '') + '</span>';
     } else {
@@ -1291,13 +1406,16 @@ function updateAuthUI(user) {
     // Dropdown menu items
     var dropdownItems = '';
     if (isTrial) {
-      dropdownItems += '<div class="nav-dropdown-item" style="font-size:10px; color:var(--orange); cursor:default;">Pro trial: ' + (user.trial_days_remaining || 0) + ' days remaining</div>';
+      var _trialDays = user.trial_days_remaining || 0;
+      var _trialHours = user.trial_hours_remaining || 0;
+      var _trialText = _trialDays > 0 ? _trialDays + ' day' + (_trialDays !== 1 ? 's' : '') : (_trialHours > 0 ? _trialHours + ' hour' + (_trialHours !== 1 ? 's' : '') : 'less than 1 hour');
+      dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--orange); cursor:default;">Pro trial: ' + _trialText + ' remaining</div>';
     }
     if (user.sleeper_username) {
-      dropdownItems += '<div class="nav-dropdown-item" style="font-size:10px; color:var(--ink-light); cursor:default;">sleeper: ' + escapeHtml(user.sleeper_username) + '</div>';
+      dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--ink-light); cursor:default;">sleeper: ' + escapeHtml(user.sleeper_username) + '</div>';
     }
     if (isPaid && !isTrial) {
-      dropdownItems += '<a href="#" onclick="openManageSubscription(); return false;" class="nav-dropdown-item">Manage Subscription</a>';
+      dropdownItems += '<button type="button" onclick="openManageSubscription();" class="nav-dropdown-item">Manage Subscription</button>';
     } else if (isTrial) {
       dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Keep Pro — Subscribe</a>';
     } else if (user.plan_source === "trial" && !user.trial_active) {
@@ -1306,16 +1424,16 @@ function updateAuthUI(user) {
       dropdownItems += '<a href="/pricing.html" class="nav-dropdown-item" style="color:var(--orange);">Subscribe to Pro</a>';
     }
     dropdownItems += '<div class="nav-dropdown-divider"></div>';
-    dropdownItems += '<a href="#" onclick="signOut(); return false;" class="nav-dropdown-item nav-dropdown-signout">Sign Out</a>';
+    dropdownItems += '<button type="button" onclick="signOut();" class="nav-dropdown-item nav-dropdown-signout">Sign Out</button>';
 
     item.innerHTML =
       '<div class="nav-user-dropdown">' +
-        '<button class="nav-user-trigger" onclick="this.parentElement.classList.toggle(\'open\')">' +
+        '<button type="button" class="nav-user-trigger" aria-label="User menu" aria-expanded="false" aria-haspopup="true" onclick="var el=this.parentElement;el.classList.toggle(\'open\');this.setAttribute(\'aria-expanded\',el.classList.contains(\'open\'))">' +
           badge +
           '<span class="nav-user-name">' + displayName + '</span>' +
           '<span class="nav-user-caret">&#9662;</span>' +
         '</button>' +
-        '<div class="nav-dropdown-menu">' +
+        '<div class="nav-dropdown-menu" role="menu">' +
           '<div class="nav-dropdown-header">' + escapeHtml(user.email) + '</div>' +
           dropdownItems +
         '</div>' +
@@ -1326,14 +1444,20 @@ function updateAuthUI(user) {
       sessionStorage.setItem("razzle_trial_warn", "1");
       setTimeout(function() {
         var days = user.trial_days_remaining || 0;
-        var msg = days === 0
-          ? "your Pro trial expires today. subscribe to keep your access."
-          : "your Pro trial expires in " + days + " day" + (days !== 1 ? "s" : "") + ". subscribe to keep your access.";
+        var hours = user.trial_hours_remaining || 0;
+        var msg;
+        if (days === 0 && hours <= 0) {
+          msg = "your Pro trial expires today. subscribe to keep your access.";
+        } else if (days === 0) {
+          msg = "your Pro trial expires in " + hours + " hour" + (hours !== 1 ? "s" : "") + ". subscribe to keep your access.";
+        } else {
+          msg = "your Pro trial expires in " + days + " day" + (days !== 1 ? "s" : "") + ". subscribe to keep your access.";
+        }
         _showToast(msg, "warning", 10000);
       }, 3000);
     }
   } else {
-    item.innerHTML = '<a href="#" onclick="openAuthModal(); return false;" id="navSignIn" class="btn-chunky btn-sm">Sign In</a>';
+    item.innerHTML = '<button type="button" onclick="openAuthModal();" id="navSignIn" class="btn-chunky btn-sm">Sign In</button>';
   }
   // Notify lock icons and tier-gated UI to re-evaluate
   window.dispatchEvent(new CustomEvent("razzle-plan-changed", { detail: user }));
@@ -1392,25 +1516,25 @@ async function startCheckout(interval) {
       body: JSON.stringify(body)
     });
     if (!resp.ok) {
-      _showToast("checkout hit a wall. try again or ping support.", "error");
-      return;
-    }
-    var data = await resp.json();
-    if (data.checkout_url) {
-      window.location.href = data.checkout_url;
-      return; // Don't reset — navigating away
+      _showToast("checkout hit a wall. try again or email swaggerdagger987@gmail.com", "error", 10000);
     } else {
-      _showToast(data.error || "checkout got stuffed at the line. give it another shot.", "error");
+      var data = await resp.json();
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+        return; // Don't reset — navigating away
+      } else {
+        _showToast(data.error || "checkout got stuffed at the line. give it another shot or email swaggerdagger987@gmail.com", "error");
+      }
     }
   } catch (e) {
-    _showToast("network fumble. try again.", "error");
-  } finally {
-    _checkoutInProgress = false;
-    if (btn && origText) {
-      btn.textContent = origText;
-      btn.disabled = false;
-      btn.style.opacity = "";
-    }
+    _showToast("network fumble. try again or email swaggerdagger987@gmail.com", "error");
+  }
+  // Restore button state only if we didn't redirect (redirect = page unloads)
+  _checkoutInProgress = false;
+  if (btn && origText) {
+    btn.textContent = origText;
+    btn.disabled = false;
+    btn.style.opacity = "";
   }
 }
 
@@ -1466,7 +1590,7 @@ async function openManageSubscription() {
     if (data.portal_url) {
       window.location.href = data.portal_url;
     } else {
-      if (typeof _showToast === "function") _showToast("subscription management isn't available right now.", "error"); else _showToast("subscription management isn't available right now.", "error");
+      if (typeof _showToast === "function") _showToast("contact swaggerdagger987@gmail.com to manage your subscription", "warning", 10000);
     }
   } catch (e) {
     if (typeof _showToast === "function") _showToast("connection fumbled. try again.", "error"); else _showToast("connection fumbled. try again.", "error");
@@ -1483,19 +1607,21 @@ function showSleeperPrompt() {
   var user = null;
   try { user = JSON.parse(localStorage.getItem("razzle_user") || "null"); } catch(e) {}
   var isTrial = user && user.trial_active && user.plan_source === "trial";
-  var trialDays = (user && user.trial_days_remaining) || 7;
+  var trialDays = (user && user.trial_days_remaining) || 0;
+  var trialHours = (user && user.trial_hours_remaining) || 0;
+  var trialLabel = trialDays >= 1 ? trialDays + ' day' + (trialDays !== 1 ? 's' : '') : (trialHours > 0 ? trialHours + ' hour' + (trialHours !== 1 ? 's' : '') : 'less than 1 hour');
 
   var trialBanner = "";
   if (isTrial) {
     trialBanner =
       '<div style="background:var(--orange); color:var(--text-on-accent); padding:10px 16px; border-radius:8px; border:2px solid var(--ink); margin-bottom:16px; text-align:center;">' +
         '<div style="font-family:var(--font-mono); font-size:14px;">Pro Trial Active</div>' +
-        '<div style="font-family:var(--font-hand); font-size:14px; margin-top:2px;">' + trialDays + ' days of Pro access — no credit card needed</div>' +
+        '<div style="font-family:var(--font-hand); font-size:14px; margin-top:2px;">' + trialLabel + ' of Pro access — no credit card needed</div>' +
       '</div>';
   }
 
   inner.innerHTML =
-    '<button class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
+    '<button type="button" class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
     trialBanner +
     '<div style="text-align:center; margin-bottom:16px;">' +
       '<div style="font-size:40px;">&#x1F42F;</div>' +
@@ -1506,10 +1632,10 @@ function showSleeperPrompt() {
     '</div>' +
     '<form onsubmit="handleSleeperLink(event)" style="display:flex; flex-direction:column; gap:10px;">' +
       '<input type="text" id="sleeperLinkInput" placeholder="Sleeper username" style="font-family:var(--font-mono); font-size:14px; padding:10px 14px; border:2px solid var(--ink); border-radius:8px; background:var(--bg-card);">' +
-      '<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); padding:4px 0;">this will permanently link your Sleeper account to your Razzle account</div>' +
+      '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); padding:4px 0;">this will permanently link your Sleeper account to your Razzle account</div>' +
       '<div id="sleeperLinkError" style="font-family:var(--font-mono); font-size:12px; color:var(--red); min-height:16px;"></div>' +
       '<button type="submit" class="btn-chunky btn-primary auth-submit">Connect</button>' +
-      '<a href="#" onclick="showWelcomeState(); return false;" style="text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</a>' +
+      '<button type="button" onclick="showWelcomeState();" style="background:none;border:none;padding:0;cursor:pointer;text-align:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-light);">skip for now</button>' +
     '</form>';
 }
 
@@ -1525,7 +1651,7 @@ function showWelcomeState() {
   var hasSleeper = user && user.sleeper_username;
 
   inner.innerHTML =
-    '<button class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
+    '<button type="button" class="auth-modal-close" onclick="closeAuthModal()">&times;</button>' +
     '<div style="text-align:center; padding:8px 0;">' +
       '<div style="font-size:48px;">&#x1F42F;</div>' +
       '<h3 style="font-family:var(--font-display); font-size:20px; margin-top:8px;">Welcome to Razzle</h3>' +
@@ -1538,7 +1664,7 @@ function showWelcomeState() {
           (hasSleeper ? 'Enter the Situation Room' : 'Tour the Situation Room') +
         '</a>' +
         '<a href="/lab.html" class="btn-chunky" style="text-decoration:none; text-align:center; font-size:13px; background:var(--bg-card);" onclick="closeAuthModal();">' +
-          'Explore the Screener' +
+          'Explore The Lab' +
         '</a>' +
       '</div>' +
       (!hasSleeper
@@ -1629,7 +1755,7 @@ var CMD_PANELS = [
   {n:"The Screener",p:"screener"},{n:"Dynasty Rankings",p:"rankings"},{n:"Tiers",p:"tiers"},
   {n:"Trade Values",p:"tradevalues"},{n:"VORP",p:"vorp"},{n:"Positional Advantage",p:"advantage"},
   {n:"Auction Values",p:"auction"},{n:"Cheat Sheet",p:"cheatsheet"},{n:"Breakouts",p:"breakouts"},
-  {n:"Buy / Sell",p:"buysell"},{n:"Stock Watch",p:"stocks"},{n:"Waivers",p:"waivers"},
+  {n:"Buy / Sell",p:"buysell"},{n:"Stock Watch",p:"stocks"},{n:"Rising Players",p:"waivers"},
   {n:"Scarcity",p:"scarcity"},{n:"Handcuffs",p:"handcuffs"},{n:"Efficiency",p:"efficiency"},
   {n:"Consistency",p:"consistency"},{n:"Snap Efficiency",p:"snapefficiency"},
   {n:"Workload Monitor",p:"workload"},{n:"Dual-Threat",p:"dualthreat"},
@@ -1945,9 +2071,28 @@ function renderRecentlyViewed() {
   renderCmdResults(recent, "Recently Viewed");
 }
 
+// Platform-aware shortcut label (Cmd on Mac, Ctrl elsewhere)
+var _isMac = navigator.platform ? navigator.platform.includes('Mac') : (navigator.userAgent ? navigator.userAgent.includes('Mac') : false);
+var _shortcutLabel = _isMac ? '\u2318K' : 'Ctrl+K';
+
+function _patchSearchHints() {
+  // Patch nav bar search hint button
+  var navBtn = document.querySelector('.nav-search-hint');
+  if (navBtn) {
+    navBtn.setAttribute('aria-label', 'Open quick search (' + _shortcutLabel + ')');
+    navBtn.innerHTML = '<kbd>' + _shortcutLabel + '</kbd> Search';
+  }
+  // Patch command palette input placeholder
+  var cmdInput = document.getElementById('cmdInput');
+  if (cmdInput) {
+    cmdInput.placeholder = 'Search players or panels... (' + _shortcutLabel + ')';
+  }
+}
+
 // Init palette on DOM ready
 function _initPalette() {
   initCommandPalette();
+  _patchSearchHints();
 }
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", _initPalette);
@@ -2060,6 +2205,7 @@ window.addEventListener("razzle-plan-changed", function(e) {
   });
 
   function _triggerKonami() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     // Confetti burst
     for (var i = 0; i < 50; i++) {
       var c = document.createElement("div");
@@ -2139,7 +2285,7 @@ function openPlayerPopup(playerId) {
     overlay.style.cssText = "position:fixed;inset:0;background:" + popupBg + ";z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;";
     overlay.innerHTML =
       '<div style="background:var(--bg-card);border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);max-width:600px;width:100%;max-height:80vh;overflow-y:auto;padding:24px;position:relative;">' +
-        '<button onclick="closePlayerPopup()" style="position:absolute;top:8px;right:12px;font-size:24px;background:none;border:none;cursor:pointer;color:var(--ink);font-family:var(--font-display);">&times;</button>' +
+        '<button type="button" onclick="closePlayerPopup()" style="position:absolute;top:8px;right:12px;font-size:24px;background:none;border:none;cursor:pointer;color:var(--ink);font-family:var(--font-display);">&times;</button>' +
         '<div id="razzlePlayerPopupContent"></div>' +
       '</div>';
     overlay.addEventListener("click", function(e) {
@@ -2164,10 +2310,10 @@ function openPlayerPopup(playerId) {
     // Header
     html += '<div style="display:flex;align-items:center;gap:12px;border-left:6px solid ' + posColor + ';padding-left:12px;margin-bottom:16px;">';
     if (p.headshot_url) {
-      html += '<img src="' + escapeAttr(p.headshot_url) + '" alt="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--ink);object-fit:cover;" onerror="this.style.display=\'none\'">';
+      html += '<img src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--ink);object-fit:cover;" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
     }
     html += '<div>';
-    html += '<div style="font-family:var(--font-display);font-size:22px;">' + escapeHtml(p.full_name) + '</div>';
+    html += '<div style="font-family:var(--font-display);font-size:20px;">' + escapeHtml(p.full_name) + '</div>';
     html += '<div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-medium);">' + escapeHtml(pos) + ' · ' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + escapeHtml(String(p.age)) : '') + '</div>';
     html += '</div></div>';
     // Key stats
@@ -2185,7 +2331,7 @@ function openPlayerPopup(playerId) {
         if (val != null && val !== 0) {
           html += '<div style="background:var(--bg-warm);border:2px solid var(--ink-faint);border-radius:8px;padding:8px;text-align:center;">';
           html += '<div style="font-family:var(--font-mono);font-size:16px;font-weight:700;">' + formatStat(val, 0) + '</div>';
-          html += '<div style="font-family:var(--font-mono);font-size:9px;color:var(--ink-light);text-transform:uppercase;">' + keys[i].l + '</div>';
+          html += '<div style="font-family:var(--font-mono);font-size:11px;color:var(--ink-light);text-transform:uppercase;">' + keys[i].l + '</div>';
           html += '</div>';
         }
       }

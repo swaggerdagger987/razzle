@@ -5,6 +5,7 @@ Extracted from _monolith.py in Phase 27 Task 3.
 
 import json
 import logging
+import math
 import re
 import statistics
 
@@ -22,6 +23,8 @@ from .core import (
     _enrich_with_dynasty_value,
     _enrich_with_pbp_stats, _enrich_with_team_shares,
     _COMP_STATS, _COMP_STAT_LABELS, _build_stat_vector, _cosine_similarity,
+    _derived_sort_semaphore,
+    _enriched_cache_get, _enriched_cache_set,
 )
 
 
@@ -201,8 +204,9 @@ def fetch_players(
             total = conn.execute(count_query, params).fetchone()[0]
 
             # Over-fetch when Python re-sort needed (derived stats require all rows)
+            # Capped at 800 to limit memory per request (S1-045)
             if _python_sort:
-                sql_limit = min(total, 5000)
+                sql_limit = min(total, 800)
                 sql_offset = 0
             else:
                 sql_limit = limit
@@ -224,23 +228,60 @@ def fetch_players(
             """
             params.extend([sql_limit, sql_offset])
 
-            rows = conn.execute(query, params).fetchall()
-
-            items = [dict(r) for r in rows]
-            _enrich_with_derived_stats(items)
-            _enrich_with_rate_metrics(conn, items, season=_season, career_mode=_career_mode)
-            _enrich_with_epa_per_play(items)
-            _enrich_with_breakout(conn, items, season=_season, career_mode=_career_mode)
-            _enrich_with_dynasty_value(items)
-            _enrich_with_team_shares(conn, items, season=_season, career_mode=_career_mode)
-            _enrich_with_pbp_stats(conn, items, season=_season, career_mode=_career_mode)
-
-            # Re-sort in Python for derived/rate metrics
+            # --- S1-045: Enriched-result cache + concurrency guard ---
             if _python_sort:
+                _enriched_ck = (
+                    f"players_enriched:{_season}:{_career_mode}"
+                    f":{search}:{','.join(sorted(pos_list)) if pos_list else ''}"
+                    f":{team}"
+                )
+                cached_enriched = _enriched_cache_get(_enriched_ck)
+                if cached_enriched is not None:
+                    items, total = cached_enriched
+                else:
+                    acquired = _derived_sort_semaphore.acquire(timeout=10)
+                    if not acquired:
+                        logger.warning("Derived-sort semaphore timeout in fetch_players — fallback PPR sort")
+                        rows = conn.execute(query, params).fetchall()
+                        items = [dict(r) for r in rows]
+                        _enrich_with_derived_stats(items)
+                        items = items[offset:offset + limit]
+                        return {"count": total, "season": "career" if _career_mode else _season, "items": items}
+                    try:
+                        rows = conn.execute(query, params).fetchall()
+                        items = [dict(r) for r in rows]
+                        _enrich_with_derived_stats(items)
+                        _enrich_with_rate_metrics(conn, items, season=_season, career_mode=_career_mode)
+                        _enrich_with_epa_per_play(items)
+                        _enrich_with_breakout(conn, items, season=_season, career_mode=_career_mode)
+                        _enrich_with_dynasty_value(items)
+                        _enrich_with_team_shares(conn, items, season=_season, career_mode=_career_mode)
+                        _enrich_with_pbp_stats(conn, items, season=_season, career_mode=_career_mode)
+                        _enriched_cache_set(_enriched_ck, items, total)
+                    finally:
+                        _derived_sort_semaphore.release()
+
+                # Re-sort in Python for derived/rate metrics
+                # None → bottom of results regardless of sort direction (S1-043)
                 reverse = _sort_dir.lower() == "desc"
-                _null_sentinel = float('-inf') if reverse else float('inf')
-                items.sort(key=lambda x: x.get(_sort_key) if x.get(_sort_key) is not None else _null_sentinel, reverse=reverse)
+                def _sort_val(x, _k=_sort_key, _rev=reverse):
+                    v = x.get(_k)
+                    if v is None:
+                        return (0, 0.0) if _rev else (1, 0.0)
+                    return (1, v) if _rev else (0, v)
+                items.sort(key=_sort_val, reverse=reverse)
                 items = items[offset:offset + limit]
+            else:
+                # SQL-sortable path: standard flow, no concurrency guard needed
+                rows = conn.execute(query, params).fetchall()
+                items = [dict(r) for r in rows]
+                _enrich_with_derived_stats(items)
+                _enrich_with_rate_metrics(conn, items, season=_season, career_mode=_career_mode)
+                _enrich_with_epa_per_play(items)
+                _enrich_with_breakout(conn, items, season=_season, career_mode=_career_mode)
+                _enrich_with_dynasty_value(items)
+                _enrich_with_team_shares(conn, items, season=_season, career_mode=_career_mode)
+                _enrich_with_pbp_stats(conn, items, season=_season, career_mode=_career_mode)
 
             return {"count": total, "season": "career" if _career_mode else _season, "items": items}
     return _cached(f"fetch_players:{search}:{position}:{positions}:{team}:{sort_key}:{sort_dir}:{limit}:{offset}:{season}", _query)
@@ -259,7 +300,7 @@ def _fetch_screener_uncached(body):
         sort_key = body.get("sort_key", "fantasy_points_ppr")
         sort_dir = body.get("sort_direction", "desc")
         limit = max(1, min(_safe_int(body.get("limit", 200), 200), 1000))
-        offset = max(0, _safe_int(body.get("offset", 0)))
+        offset = max(0, min(_safe_int(body.get("offset", 0)), 100000))
         filters = body.get("filters", [])[:50]
         relevance = body.get("relevance", "fantasy")
 
@@ -410,6 +451,9 @@ def _fetch_screener_uncached(body):
                 fval = float(val)
             except (ValueError, TypeError):
                 continue
+            if math.isinf(fval) or math.isnan(fval):
+                continue
+            fval = max(-1e9, min(fval, 1e9))
             sql_expr = FILTER_COLUMN_MAP.get(key)
             if sql_expr:
                 having.append(f"{sql_expr} {op} ?")
@@ -485,57 +529,115 @@ def _fetch_screener_uncached(body):
             LIMIT ? OFFSET ?
         """
         # When sorting by derived/rate metric or applying post-filters, fetch all matching
-        # rows so Python sort/filter operates on complete dataset before pagination
+        # rows so Python sort/filter operates on complete dataset before pagination.
+        # Capped at 800 to limit memory per request (S1-045).
         if python_sort or post_filters:
-            sql_limit = min(total, 5000)
+            sql_limit = min(total, 800)
             sql_offset = 0
         else:
             sql_limit = limit
             sql_offset = offset
         params.extend([sql_limit, sql_offset])
 
-        rows = conn.execute(query, params).fetchall()
-
-        items = [dict(r) for r in rows]
-        _enrich_with_derived_stats(items)
-        _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode, week=week)
-        _enrich_with_epa_per_play(items)
-        _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
-        _enrich_with_dynasty_value(items)
-        _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode, week=week)
-        _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode, week=week)
-
-        # Apply post-query filters for derived stats
-        if post_filters:
-            def _passes(item, pf):
-                v = item.get(pf["key"])
-                if v is None:
-                    return False
-                try:
-                    v = float(v)
-                except (TypeError, ValueError):
-                    return False
-                op = pf["op"]
-                tv = pf["value"]
-                if op == ">": return v > tv
-                if op == ">=": return v >= tv
-                if op == "<": return v < tv
-                if op == "<=": return v <= tv
-                if op == "=": return v == tv
-                if op == "!=": return v != tv
-                return True
-            items = [it for it in items if all(_passes(it, pf) for pf in post_filters)]
-            total = len(items)
-
-        # Re-sort in Python if sorting by a derived/rate metric
-        if python_sort:
-            reverse = sort_dir.lower() == "desc"
-            _null_sentinel = float('-inf') if reverse else float('inf')
-            items.sort(key=lambda x: x.get(sort_key) if x.get(sort_key) is not None else _null_sentinel, reverse=reverse)
-
-        # Apply pagination after post-filtering and Python re-sort
+        # --- S1-045: Enriched-result cache + concurrency guard ---
+        # For python-sort queries, the expensive part is enrichment (7 passes,
+        # 4 hitting the DB). Cache the enriched dataset keyed by filter params
+        # so re-sorts and pagination changes reuse the same enriched data.
         if python_sort or post_filters:
+            # Build cache key from everything that affects which rows are
+            # returned and how they're enriched (excludes sort/page params)
+            _pf_key = json.dumps(post_filters, sort_keys=True) if post_filters else ""
+            _enriched_ck = (
+                f"screener_enriched:{season}:{career_mode}:{week}"
+                f":{search}:{','.join(sorted(pos_list))}"
+                f":{team}:{','.join(sorted(body.get('teams', [])))}"
+                f":{having_clause}:{_pf_key}:{min_gp}"
+            )
+            cached_enriched = _enriched_cache_get(_enriched_ck)
+            if cached_enriched is not None:
+                items, total = cached_enriched
+                logger.debug("Enriched cache HIT for screener (%d items)", len(items))
+            else:
+                # Acquire semaphore to limit concurrent enrichment operations.
+                # If all slots are taken, this blocks until one finishes rather
+                # than running unbounded concurrent enrichments that OOM the process.
+                acquired = _derived_sort_semaphore.acquire(timeout=10)
+                if not acquired:
+                    logger.warning("Derived-sort semaphore timeout — returning fallback PPR sort")
+                    # Fallback: return SQL-sorted results without enrichment
+                    # rather than blocking forever or OOMing
+                    rows = conn.execute(query, params).fetchall()
+                    items = [dict(r) for r in rows]
+                    _enrich_with_derived_stats(items)
+                    items = items[offset:offset + limit]
+                    result = {"count": total, "season": "career" if career_mode else season, "items": items}
+                    if week > 0:
+                        result["week"] = week
+                    return result
+                try:
+                    rows = conn.execute(query, params).fetchall()
+                    items = [dict(r) for r in rows]
+                    _enrich_with_derived_stats(items)
+                    _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode, week=week)
+                    _enrich_with_epa_per_play(items)
+                    _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
+                    _enrich_with_dynasty_value(items)
+                    _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode, week=week)
+                    _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode, week=week)
+
+                    # Apply post-query filters for derived stats
+                    if post_filters:
+                        def _passes(item, pf):
+                            v = item.get(pf["key"])
+                            if v is None:
+                                return False
+                            try:
+                                v = float(v)
+                            except (TypeError, ValueError):
+                                return False
+                            op = pf["op"]
+                            tv = pf["value"]
+                            if op == ">": return v > tv
+                            if op == ">=": return v >= tv
+                            if op == "<": return v < tv
+                            if op == "<=": return v <= tv
+                            if op == "=": return v == tv
+                            if op == "!=": return v != tv
+                            return True
+                        items = [it for it in items if all(_passes(it, pf) for pf in post_filters)]
+                        total = len(items)
+
+                    # Cache the enriched + filtered items for reuse by
+                    # subsequent sort/page requests with same filter params
+                    _enriched_cache_set(_enriched_ck, items, total)
+                    logger.debug("Enriched cache SET for screener (%d items)", len(items))
+                finally:
+                    _derived_sort_semaphore.release()
+
+            # Re-sort in Python if sorting by a derived/rate metric
+            # None → bottom of results regardless of sort direction (S1-043)
+            if python_sort:
+                reverse = sort_dir.lower() == "desc"
+                def _sort_val(x, _k=sort_key, _rev=reverse):
+                    v = x.get(_k)
+                    if v is None:
+                        return (0, 0.0) if _rev else (1, 0.0)
+                    return (1, v) if _rev else (0, v)
+                items.sort(key=_sort_val, reverse=reverse)
+
+            # Apply pagination after post-filtering and Python re-sort
             items = items[offset:offset + limit]
+        else:
+            # SQL-sortable path: no enriched cache needed, standard flow
+            rows = conn.execute(query, params).fetchall()
+            items = [dict(r) for r in rows]
+            _enrich_with_derived_stats(items)
+            _enrich_with_rate_metrics(conn, items, season=season, career_mode=career_mode, week=week)
+            _enrich_with_epa_per_play(items)
+            _enrich_with_breakout(conn, items, season=season, career_mode=career_mode)
+            _enrich_with_dynasty_value(items)
+            _enrich_with_team_shares(conn, items, season=season, career_mode=career_mode, week=week)
+            _enrich_with_pbp_stats(conn, items, season=season, career_mode=career_mode, week=week)
 
         result = {"count": total, "season": "career" if career_mode else season, "items": items}
         if week > 0:
@@ -1351,7 +1453,7 @@ def _fetch_player_strengths_uncached(player_id, season=None, top_n=4):
 def fetch_player_strengths(player_id, season=None, top_n=4):
     return _cached(f"fetch_player_strengths:{player_id}:{season}:{top_n}", lambda: _fetch_player_strengths_uncached(player_id=player_id, season=season, top_n=top_n))
 
-def _fetch_points_breakdown_uncached(player_id, season=None):
+def _fetch_points_breakdown_uncached(player_id, season=None, scoring="ppr"):
     """Return breakdown of fantasy point sources for a player."""
     if not player_id:
         return {"error": "player_id is required"}
@@ -1417,7 +1519,9 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
         games = stats[9] or 1
         turnovers = stats[10] or 0
 
-        # PPR scoring components
+        # Scoring format multiplier for receptions
+        rec_mult = {"ppr": 1.0, "half_ppr": 0.5, "std": 0.0}.get(scoring, 1.0)
+        rec_label = {"ppr": "Receptions (PPR)", "half_ppr": "Receptions (Half)", "std": "Receptions"}.get(scoring, "Receptions (PPR)")
         components = [
             {"label": "Passing Yards", "points": round(pass_yd * 0.04, 1), "raw": pass_yd, "color": "#5b7fff"},
             {"label": "Passing TDs", "points": round(pass_td * 4, 1), "raw": pass_td, "color": "#3a5abf"},
@@ -1425,7 +1529,7 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
             {"label": "Rushing TDs", "points": round(rush_td * 6, 1), "raw": rush_td, "color": "#1a9a8d"},
             {"label": "Receiving Yards", "points": round(rec_yd * 0.1, 1), "raw": rec_yd, "color": "#d97757"},
             {"label": "Receiving TDs", "points": round(rec_td * 6, 1), "raw": rec_td, "color": "#b85a3a"},
-            {"label": "Receptions (PPR)", "points": round(rec * 1.0, 1), "raw": rec, "color": "#8b5cf6"},
+            {"label": rec_label, "points": round(rec * rec_mult, 1), "raw": rec, "color": "#8b5cf6"},
         ]
 
         # Only include non-zero components
@@ -1439,20 +1543,24 @@ def _fetch_points_breakdown_uncached(player_id, season=None):
         # Sort by points descending
         breakdown.sort(key=lambda x: x["points"], reverse=True)
 
+        # Recalculate total from components to match the selected scoring format
+        scored_total = round(positive_total, 1)
         return {
             "player": player_info,
             "season": season,
             "available_seasons": available_seasons,
             "breakdown": breakdown,
-            "total_points": round(total_ppr, 1),
-            "ppg": round(total_ppr / games, 1),
+            "total_points": scored_total,
+            "ppg": round(scored_total / games, 1),
             "games": games,
+            "scoring": scoring,
         }
 
 
 
-def fetch_points_breakdown(player_id, season=None):
-    return _cached(f"fetch_points_breakdown:{player_id}:{season}", lambda: _fetch_points_breakdown_uncached(player_id=player_id, season=season))
+def fetch_points_breakdown(player_id, season=None, scoring="ppr"):
+    sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+    return _cached(f"fetch_points_breakdown:{player_id}:{season}:{sc}", lambda: _fetch_points_breakdown_uncached(player_id=player_id, season=season, scoring=sc))
 
 def _fetch_game_log_uncached(player_id, season=None):
     """Return week-by-week box score stats for a player in a given season."""

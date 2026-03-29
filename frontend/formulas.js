@@ -32,11 +32,11 @@ function addFormulaComponent() {
   row.className = "filter-modal-row";
   row.dataset.idx = idx;
   row.innerHTML = `
-    <select class="select-chunky formula-stat" style="flex:2">${statOptions}</select>
+    <select class="select-chunky formula-stat" style="flex:2" aria-label="Stat for formula component">${statOptions}</select>
     <span style="font-family:var(--font-mono); font-size:12px;">×</span>
     <input type="number" class="input-chunky formula-weight" value="100" style="flex:1; width:60px;" placeholder="weight %">
     <span style="font-family:var(--font-mono); font-size:12px;">%</span>
-    <span style="cursor:pointer; color:var(--red); font-weight:700; font-size:16px;" onclick="this.parentElement.remove()">×</span>
+    <button type="button" style="cursor:pointer; color:var(--red); font-weight:700; font-size:16px; background:none; border:none; padding:0; line-height:1;" onclick="this.parentElement.remove()">×</button>
   `;
   container.appendChild(row);
 }
@@ -95,6 +95,9 @@ function saveFormula() {
   renderSavedFormulas();
   saveStateToURL();
 
+  // Celebration toast
+  if (typeof _showToast === "function") _showToast("formula locked in \u2014 " + name);
+
   // Clear form
   document.getElementById("formulaName").value = "";
   document.getElementById("formulaComponents").innerHTML = "";
@@ -141,12 +144,12 @@ function renderSavedFormulas() {
       var _esc = typeof escapeHtml === "function" ? escapeHtml : function(s) { return s; };
       var _escAttr = typeof escapeAttr === "function" ? escapeAttr : function(s) { return s.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };
       const publishBtn = isPublished
-        ? `<span style="font-family:var(--font-mono); font-size:9px; color:var(--green); font-weight:700; padding:2px 6px; border:2px solid var(--green); border-radius:4px;">Published</span>`
-        : `<button class="btn-chunky" style="font-size:9px; padding:2px 8px;" data-publish-formula="${_escAttr(f.name)}">Publish</button>`;
+        ? `<span style="font-family:var(--font-mono); font-size:11px; color:var(--green); font-weight:700; padding:2px 6px; border:2px solid var(--green); border-radius:8px;">Published</span>`
+        : `<button class="btn-chunky" style="font-size:11px; padding:2px 8px;" data-publish-formula="${_escAttr(f.name)}">Publish</button>`;
       return `<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 0; border-bottom:2px solid var(--ink-faint); gap:6px;">
         <div style="flex:1; min-width:0;">
           <strong style="font-family:var(--font-mono); font-size:13px;">${_esc(f.name)}</strong>
-          <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${_esc(desc)}</span>
+          <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:8px;">${_esc(desc)}</span>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
           ${publishBtn}
@@ -268,7 +271,7 @@ function _pushAllFormulasToServer(token, base) {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
     body: JSON.stringify({ formulas: payload })
-  }).then(function(r) { if (!r.ok) console.warn("Formula import failed:", r.status); }).catch(function(e) { console.warn("Formula import error:", e.message); });
+  }).catch(function() {});
 }
 
 function _showCloudSyncHint(isPaid) {
@@ -282,7 +285,7 @@ function _showCloudSyncHint(isPaid) {
 
   var badge = document.createElement("div");
   badge.id = "cloudSyncBadge";
-  badge.style.cssText = "font-family:var(--font-mono); font-size:9px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:4px;";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:11px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:8px;";
 
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
@@ -290,7 +293,7 @@ function _showCloudSyncHint(isPaid) {
     badge.textContent = "cloud-synced";
   } else {
     badge.style.color = "var(--ink-light)";
-    badge.style.border = "2px dashed var(--ink-faint)";
+    badge.style.border = "2px dashed var(--border-dashed)";
     badge.innerHTML = '<a href="/pricing.html" style="color:var(--ink-light);text-decoration:underline;">upgrade to sync formulas across devices</a>';
     badge.style.cursor = "pointer";
   }
@@ -323,7 +326,7 @@ function _deleteFormulaFromServer(name) {
       fetch((typeof API_BASE !== "undefined" ? API_BASE : "") + "/api/user/formulas/" + encodeURIComponent(match.id), {
         method: "DELETE",
         headers: { "Authorization": "Bearer " + token }
-      }).then(function(r) { if (!r.ok) console.warn("Formula delete failed:", r.status); }).catch(function() {});
+      }).catch(function() {});
     }
   }).catch(function() {});
 }

@@ -25,7 +25,7 @@
     return n.toFixed(dec === undefined ? 1 : dec);
   }
 
-  var POS_COLORS = (typeof getPosColors === "function") ? getPosColors() : { QB: '#5b7fff', RB: '#2ec4b6', WR: '#d97757', TE: '#8b5cf6' };
+  var POS_COLORS = getPosColors();
   var POS_CSS = { QB: 'var(--pos-qb)', RB: 'var(--pos-rb)', WR: 'var(--pos-wr)', TE: 'var(--pos-te)' };
 
   // ─── Clickable player name helper ─────────────────────────────
@@ -118,7 +118,7 @@
           '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
           '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-rankings-season"></select>' +
+          '<select class="lp-select" id="lp-rankings-season" aria-label="Season"></select>' +
           '<input class="lp-search" type="text" id="lp-rankings-search" placeholder="search player...">' +
           '<div class="lp-view-toggle" id="lp-rankings-view">' +
             '<button class="lp-view-btn active" data-view="rankings">Rankings</button>' +
@@ -211,8 +211,8 @@
       }
 
       html += '<div class="dh-wrap">';
-      html += '<table class="dh-table"><thead><tr>';
-      html += '<th>Player</th>';
+      html += '<table class="dh-table"><caption class="sr-only">Dynasty value history by player and season</caption><thead><tr>';
+      html += '<th scope="col">Player</th>';
       seasons.forEach(function(s) { html += '<th class="center">' + escapeHtml(String(s)) + '</th>'; });
       html += '<th class="center">Trend</th>';
       html += '</tr></thead><tbody>';
@@ -221,7 +221,7 @@
         var posLc = (p.position || '').toLowerCase();
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><div class="dh-player-cell">';
-        if (p.headshot_url) html += '<img class="dh-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        if (p.headshot_url) html += '<img class="dh-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
         html += '<div><div class="dh-name">' + pLink(p.full_name, p.player_id) + '</div>';
         html += '<span class="rankings-pos-badge ' + posLc + '">' + escapeHtml(p.position) + '</span>';
         html += ' <span class="dh-team">' + escapeHtml(p.team) + '</span></div></div></td>';
@@ -268,11 +268,11 @@
         exportBtn.addEventListener('click', function() {
           var wrap = content.querySelector('.dh-wrap');
           if (wrap && typeof html2canvas !== 'undefined') {
-            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            html2canvas(wrap, { backgroundColor: isDark ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true, logging: false }).then(function(canvas) {
+            var _dhTheme = getCanvasTheme();
+            html2canvas(wrap, { backgroundColor: _dhTheme.bg, scale: 2, useCORS: true, logging: false }).then(function(canvas) {
               var ctx = canvas.getContext('2d');
-              ctx.font = '600 28px Caveat, cursive';
-              ctx.fillStyle = isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
+              ctx.font = '600 24px Caveat, cursive';
+              ctx.fillStyle = _dhTheme.subtitleAlpha || (_dhTheme.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)');
               ctx.textAlign = 'right';
               ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 16);
               var link = document.createElement('a');
@@ -327,7 +327,7 @@
             results.forEach(function(p) {
               var row = document.createElement('div');
               row.innerHTML = '<span class="rankings-pos-badge ' + (p.position || '').toLowerCase() + '">' + escapeHtml(p.position || '') + '</span> ' +
-                escapeHtml(p.full_name || '') + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team || '') + '</span>';
+                escapeHtml(p.full_name || '') + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team || '') + '</span>';
               row.addEventListener('click', function() {
                 if (compareIds.indexOf(p.player_id) === -1 && compareIds.length < 5) {
                   compareIds.push(p.player_id);
@@ -377,7 +377,7 @@
           if (p.age) html += '<span class="rankings-age ' + ageCls + '">Age ' + escapeHtml(String(p.age)) + '</span>';
           html += '</div></div>';
           html += '<div class="rankings-scores">';
-          html += '<div class="rankings-value">' + fmt(p.dynasty_value) + ' <span style="font-size:10px;font-weight:400;color:var(--ink-light)">DVS</span></div>';
+          html += '<div class="rankings-value">' + fmt(p.dynasty_value) + ' <span style="font-size:11px;font-weight:400;color:var(--ink-light)">DVS</span></div>';
           html += '<div class="rankings-ppg">' + fmt(p.ppg) + ' ppg</div>';
           html += '</div></div>';
           rank++;
@@ -458,7 +458,7 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-tl-season"></select>' +
+          '<select class="lp-select" id="lp-tl-season" aria-label="Season"></select>' +
           '<input class="lp-search" type="text" id="lp-tl-search" placeholder="search player...">' +
         '</div>' +
         '<div id="lp-tl-tiers"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
@@ -600,7 +600,7 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-tv-season"></select>' +
+          '<select class="lp-select" id="lp-tv-season" aria-label="Season"></select>' +
           '<input class="lp-search" type="text" id="lp-tv-search" placeholder="search player...">' +
         '</div>' +
         '<div class="tv-methodology" id="lp-tv-weights">' +
@@ -622,6 +622,18 @@
       '</div>';
 
     var seasonSel = el.querySelector('#lp-tv-season');
+
+    // Event delegation on stable #lp-tv-body (avoids listener stacking on re-render)
+    el.querySelector('#lp-tv-body').addEventListener('click', function(e) {
+      var row = e.target.closest('.tv-row[data-pid]');
+      if (row) {
+        var pid = row.getAttribute('data-pid');
+        if (pid) {
+          if (typeof openPlayerPopup === 'function') openPlayerPopup(pid);
+          else window.location.href = '/player/' + encodeURIComponent(pid);
+        }
+      }
+    });
 
     // Set slider initial values from URL params
     el.querySelector('#lp-tv-w-prod').value = weights.production;
@@ -648,7 +660,7 @@
       var html = '<div class="tv-row" data-pid="' + escapeAttr(p.player_id) + '">';
       html += '<div class="tv-rank' + rankClass + '">' + escapeHtml(String(p.rank)) + '</div>';
       if (p.headshot_url) {
-        html += '<img class="tv-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        html += '<img class="tv-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       } else {
         html += '<div class="tv-headshot"></div>';
       }
@@ -725,13 +737,6 @@
       });
       html += '</div>';
       body.innerHTML = html;
-
-      body.querySelectorAll('.tv-row[data-pid]').forEach(function(row) {
-        row.addEventListener('click', function() {
-          var pid = row.getAttribute('data-pid');
-          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
-        });
-      });
     }
 
     function loadData() {
@@ -878,14 +883,35 @@
             '<button class="lp-pos-tab" data-pos="WR">WR</button>' +
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-vorp-season"></select>' +
+          '<select class="lp-select" id="lp-vorp-season" aria-label="Season"></select>' +
           '<input class="lp-search" type="text" id="lp-vorp-search" placeholder="search player...">' +
         '</div>' +
         '<div class="vorp-thresholds" id="lp-vorp-thresholds"></div>' +
-        '<div id="lp-vorp-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">calculating replacement value...</div></div>' +
+        '<div id="lp-vorp-body" style="overflow-x:auto"><div class="lp-loading">calculating replacement value...</div></div>' +
       '</div>';
 
     var seasonSel = el.querySelector('#lp-vorp-season');
+
+    // Event delegation on stable #lp-vorp-body (avoids listener stacking on re-render)
+    el.querySelector('#lp-vorp-body').addEventListener('click', function(e) {
+      var th = e.target.closest('th[data-sort]');
+      if (th) {
+        var col = th.getAttribute('data-sort');
+        var sec = th.getAttribute('data-section');
+        if (sortState[sec].col === col) sortState[sec].dir *= -1;
+        else { sortState[sec].col = col; sortState[sec].dir = -1; }
+        renderVorp(currentData);
+        return;
+      }
+      var tr = e.target.closest('tr[data-pid]');
+      if (tr) {
+        var pid = tr.getAttribute('data-pid');
+        if (pid) {
+          if (typeof openPlayerPopup === 'function') openPlayerPopup(pid);
+          else window.location.href = '/player/' + encodeURIComponent(pid);
+        }
+      }
+    });
 
     function vorpTier(v) {
       if (v >= 6) return 'elite';
@@ -919,8 +945,8 @@
 
       var html = '<div class="vorp-section">';
       html += '<div class="vorp-section-header ' + hdrCls + '">' + title;
-      html += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ') — ' + subtitle + '</span></div>';
-      html += '<table class="vorp-table" data-section="' + section + '"><thead><tr>';
+      html += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ') — ' + subtitle + '</span></div>';
+      html += '<table class="vorp-table" data-section="' + section + '"><caption class="sr-only">Value over replacement player — ' + escapeHtml(title) + '</caption><thead><tr>';
 
       var cols = [
         { key: 'full_name', label: 'Player' },
@@ -946,7 +972,7 @@
         var sign = p.vorp > 0 ? '+' : '';
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><div class="vorp-player-cell">';
-        if (p.headshot_url) html += '<img class="vorp-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        if (p.headshot_url) html += '<img class="vorp-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
         html += '<div class="vorp-player-info"><div class="vorp-player-name">' + pLink(p.full_name, p.player_id) + '</div>';
         html += '<div class="vorp-player-meta"><span class="vorp-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="vorp-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
@@ -994,22 +1020,6 @@
       }
 
       body.innerHTML = buildTable(winners, 'league_winners') + buildTable(replacements, 'replacement_level');
-
-      body.querySelectorAll('th[data-sort]').forEach(function(th) {
-        th.addEventListener('click', function() {
-          var col = th.getAttribute('data-sort');
-          var sec = th.getAttribute('data-section');
-          if (sortState[sec].col === col) sortState[sec].dir *= -1;
-          else { sortState[sec].col = col; sortState[sec].dir = -1; }
-          renderVorp(currentData);
-        });
-      });
-      body.querySelectorAll('tr[data-pid]').forEach(function(tr) {
-        tr.addEventListener('click', function() {
-          var pid = tr.getAttribute('data-pid');
-          if (pid) if (typeof openPlayerPopup === 'function') openPlayerPopup(pid); else window.location.href = '/player/' + encodeURIComponent(pid);
-        });
-      });
     }
 
     function loadData() {
@@ -1067,7 +1077,7 @@
         '<div class="lp-header"><h2>Positional Advantage</h2>' +
         '<div class="lp-subtitle">biggest scoring edge over the positional average</div></div>' +
         '<div class="lp-controls">' +
-          '<select class="lp-select" id="lp-pa-season"></select>' +
+          '<select class="lp-select" id="lp-pa-season" aria-label="Season"></select>' +
           '<div class="lp-pos-tabs" id="lp-pa-pos">' +
             '<button class="lp-pos-tab active" data-pos="">ALL</button>' +
             '<button class="lp-pos-tab" data-pos="QB">QB</button>' +
@@ -1132,8 +1142,8 @@
       }
       var html = '<div class="pa-card">';
       html += '<div class="pa-card-header">Positional Advantage (' + data.count + ' players)</div>';
-      html += '<table class="pa-table"><thead><tr>';
-      html += '<th>#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Pos Avg</th><th>Edge</th><th>% Above</th><th></th><th>GP</th>';
+      html += '<table class="pa-table"><caption class="sr-only">Positional advantage rankings</caption><thead><tr>';
+      html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>PPG</th><th>Pos Avg</th><th>Edge</th><th>% Above</th><th></th><th>GP</th>';
       html += '</tr></thead><tbody>';
 
       var maxAdv = Math.max.apply(null, players.map(function(p) { return Math.abs(p.advantage || 0); }).concat([1]));
@@ -1147,7 +1157,7 @@
 
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td class="pa-rank">' + (i + 1) + '</td>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="pa-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td style="font-weight:700">' + fmt(p.ppg) + '</td>';
         html += '<td>' + fmt(p.pos_avg) + '</td>';
@@ -1282,7 +1292,7 @@
 
       if (!players.length) { tableEl.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
-      var html = '<table class="av-table"><thead><tr>';
+      var html = '<table class="av-table"><caption class="sr-only">Auction values by player</caption><thead><tr>';
       var cols = [
         { key: 'rank', label: '#' }, { key: 'full_name', label: 'Player' },
         { key: 'position', label: 'Pos' }, { key: 'team', label: 'Team' },
@@ -1340,7 +1350,7 @@
             '<button class="cs-fmt-tab" data-fmt="half">Half-PPR</button>' +
             '<button class="cs-fmt-tab" data-fmt="std">Standard</button>' +
           '</div>' +
-          '<select class="lp-select" id="lp-cs-season"></select>' +
+          '<select class="lp-select" id="lp-cs-season" aria-label="Season"></select>' +
         '</div>' +
         '<div class="lp-loading" id="lp-cs-loading">' + razzleLoading() + '</div>' +
         '<div class="cs-grid" id="lp-cs-grid" style="display:none"></div>' +
@@ -1445,7 +1455,7 @@
       '<select class="lp-select" id="bo-season" aria-label="Season"></select>' +
       weekSelectHTML('bo-week') +
       '</div>' +
-      '<div id="bo-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">scouting the film...</div></div>' +
+      '<div id="bo-body" style="overflow-x:auto"><div class="lp-loading">scouting the film...</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -1512,12 +1522,12 @@
           html += '<div class="breakout-card-top ' + pos + '"></div><div class="breakout-card-body">';
           html += '<div class="breakout-card-row1">';
           html += '<div class="breakout-rank">' + escapeHtml(String(p.rank)) + '</div>';
-          if (p.headshot_url) html += '<img class="breakout-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          if (p.headshot_url) html += '<img class="breakout-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           html += '<div class="breakout-info"><div class="breakout-name">' + pLink(p.name, p.player_id) + '</div>';
           html += '<div class="breakout-meta"><span class="breakout-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           if (isCollege && p.conference) {
             html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
-            html += '<span class="breakout-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+            html += '<span class="breakout-team" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           } else {
             html += '<span class="breakout-team">' + escapeHtml(p.team) + '</span>';
           }
@@ -1588,7 +1598,7 @@
       '</div>' +
       '<select class="lp-select" id="bs-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="bs-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">studying the market...</div></div>' +
+      '<div id="bs-body" style="overflow-x:auto"><div class="lp-loading">studying the market...</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -1644,7 +1654,7 @@
       h += '<div class="buysell-card-top ' + pos + '"></div><div class="buysell-card-body">';
       h += '<div class="buysell-card-row1">';
       h += '<div class="buysell-rank">' + escapeHtml(String(p.rank)) + '</div>';
-      if (p.headshot_url) h += '<img class="buysell-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+      if (p.headshot_url) h += '<img class="buysell-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       h += '<div class="buysell-info"><div class="buysell-name">' + pLink(p.name, p.player_id) + '</div>';
       h += '<div class="buysell-meta"><span class="buysell-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
       h += '<span class="buysell-team">' + escapeHtml(p.team) + '</span>';
@@ -1740,7 +1750,7 @@
       '</div>' +
       '<select class="lp-select" id="stk-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="stk-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">crunching the composite...</div></div>' +
+      '<div id="stk-body" style="overflow-x:auto"><div class="lp-loading">crunching the composite...</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -1794,11 +1804,11 @@
         if (c.hide) cls.push('hide-mobile');
         if (c.key === 'name') {
           h += '<td><div class="stk-player-cell">';
-          if (p.headshot_url) h += '<img class="stk-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          if (p.headshot_url) h += '<img class="stk-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           h += '<div class="stk-player-info"><div class="stk-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="stk-player-meta"><span class="stk-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="stk-team-label">' + escapeHtml(p.team) + '</span>';
-          if (isCollege && p.conference) h += '<span class="stk-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) h += '<span class="stk-team-label" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           h += '</div></div></div></td>';
         } else if (c.key === 'stock_score') {
           h += '<td class="' + cls.join(' ') + '"><span class="stk-score-badge ' + scoreClass(p.stock_score || 0) + '">' + escapeHtml(String(p.stock_score || 0)) + '</span></td>';
@@ -1847,8 +1857,8 @@
 
       var h = '<div class="stk-section"><div class="stk-section-header ' + section + '">';
       h += '<span class="stk-section-icon ' + section + '">' + icon + '</span> ' + title;
-      h += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      h += '<table class="stk-table" data-section="' + section + '"><thead><tr>';
+      h += ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
+      h += '<table class="stk-table" data-section="' + section + '"><caption class="sr-only">Dynasty stock watch — ' + escapeHtml(title) + '</caption><thead><tr>';
       COLS.forEach(function(c) {
         var cls = [];
         if (c.key !== 'name') cls.push('center');
@@ -1928,10 +1938,10 @@
 
   // ===== WAIVERS =====
   defs.push({ name: 'waivers', render: function(el) {
-    if (showNflOnlyMsg(el, 'waivers', 'Waiver Wire Targets', 'surging lately but low on the season')) return;
+    if (showNflOnlyMsg(el, 'waivers', 'Rising Players', 'surging lately — trending up over recent weeks')) return;
     el.innerHTML = '<div class="lp-page">' +
-      '<div class="lp-header"><h2>Waiver Wire Targets</h2>' +
-      '<div class="lp-subtitle">surging lately but low on the season — probably still on your wire</div></div>' +
+      '<div class="lp-header"><h2>Rising Players</h2>' +
+      '<div class="lp-subtitle">surging lately — trending up over recent weeks</div></div>' +
       '<div class="lp-controls">' +
       '<select class="lp-select" id="ww-season" aria-label="Season"></select>' +
       '<select class="lp-select" id="ww-window" aria-label="Window">' +
@@ -1947,7 +1957,7 @@
       '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
       '</div>' +
       '</div>' +
-      '<div id="ww-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="ww-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -1977,14 +1987,14 @@
           seasonsPopulated = true;
         }
         var targets = data.targets || [];
-        var html = '<div class="ww-card"><div class="ww-card-header">Waiver Wire Targets (' + escapeHtml(String(data.count || 0)) + ')</div>';
+        var html = '<div class="ww-card"><div class="ww-card-header">Rising Players (' + escapeHtml(String(data.count || 0)) + ')</div>';
         if (!targets.length) {
           html += '<div class="panel-empty">' + razzleEmpty() + '</div></div>';
           body.innerHTML = html;
           return;
         }
-        html += '<table class="ww-table"><thead><tr>';
-        html += '<th>#</th><th>Player</th><th>Pos</th><th>GP</th><th>Szn PPG</th><th>Recent PPG</th><th>Surge</th><th>Last ' + escapeHtml(String(data.window || currentWin)) + '</th>';
+        html += '<table class="ww-table"><caption class="sr-only">Rising players ranked by recent scoring surge</caption><thead><tr>';
+        html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>GP</th><th>Szn PPG</th><th>Recent PPG</th><th>Surge</th><th>Last ' + escapeHtml(String(data.window || currentWin)) + '</th>';
         html += '</tr></thead><tbody>';
         for (var i = 0; i < targets.length; i++) {
           var p = targets[i];
@@ -1992,7 +2002,7 @@
           var sign = p.delta > 0 ? '+' : '';
           html += '<tr>';
           html += '<td class="ww-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
           html += '<td><span class="ww-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td>' + escapeHtml(String(p.games)) + '</td>';
           html += '<td>' + fmt(p.season_avg) + '</td>';
@@ -2037,7 +2047,7 @@
       '<div class="lp-controls">' +
       '<select class="lp-select" id="sc-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="sc-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">running the numbers...</div></div>' +
+      '<div id="sc-body" style="overflow-x:auto"><div class="lp-loading">running the numbers...</div></div>' +
       '</div>';
 
     var seasonsPopulated = false;
@@ -2109,7 +2119,7 @@
             var scTeamLabel = isCollege && p.conference ? p.team + ' · ' + p.conference : p.team;
             html += '<div class="scarcity-bar-row" data-pid="' + escapeAttr(p.player_id) + '" title="' + escapeAttr(p.name + ' (' + scTeamLabel + ') — ' + p.ppg + ' PPG') + '">';
             html += '<div class="scarcity-bar-rank">' + escapeHtml(String(p.rank)) + '</div>';
-            html += '<div class="scarcity-bar-name">' + escapeHtml(p.name) + (isCollege ? '<span style="font-size:10px;color:var(--ink-light);margin-left:4px">' + escapeHtml(p.team || '') + '</span>' : '') + '</div>';
+            html += '<div class="scarcity-bar-name">' + escapeHtml(p.name) + (isCollege ? '<span style="font-size:11px;color:var(--ink-light);margin-left:4px">' + escapeHtml(p.team || '') + '</span>' : '') + '</div>';
             html += '<div class="scarcity-bar-track"><div class="scarcity-bar-fill ' + pl + '" style="width:' + pct.toFixed(1) + '%"></div></div>';
             html += '<div class="scarcity-bar-ppg">' + escapeHtml(String(p.ppg)) + '</div></div>';
           });
@@ -2148,7 +2158,7 @@
       '<div class="lp-controls">' +
       '<select class="lp-select" id="hc-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="hc-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="hc-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var seasonsPopulated = false;
@@ -2180,8 +2190,8 @@
         }
 
         var html = '<div class="hc-card"><div class="hc-card-header">Handcuff Rankings (' + escapeHtml(String(data.count)) + ' teams)</div>';
-        html += '<table class="hc-table"><thead><tr>';
-        html += '<th>#</th><th>Team</th><th>Handcuff</th><th>HC PPG</th><th>HC Car/G</th><th>HC YPC</th><th>Value</th><th>Starter</th><th>Str PPG</th><th>Str Car/G</th><th>Team Rush/G</th>';
+        html += '<table class="hc-table"><caption class="sr-only">Handcuff rankings by backup value and starter risk</caption><thead><tr>';
+        html += '<th scope="col">#</th><th>Team</th><th>Handcuff</th><th>HC PPG</th><th>HC Car/G</th><th>HC YPC</th><th>Value</th><th>Starter</th><th>Str PPG</th><th>Str Car/G</th><th>Team Rush/G</th>';
         html += '</tr></thead><tbody>';
 
         for (var i = 0; i < hcs.length; i++) {
@@ -2233,7 +2243,7 @@
       '<select class="lp-select" id="eff-season" aria-label="Season"></select>' +
       weekSelectHTML('eff-week') +
       '</div>' +
-      '<div id="eff-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">running the numbers...</div></div>' +
+      '<div id="eff-body" style="overflow-x:auto"><div class="lp-loading">running the numbers...</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2293,11 +2303,11 @@
         if (c.key === 'name') {
           var isCollegeEff = typeof state !== 'undefined' && state.universe === 'college';
           h += '<td><div class="eff-player-cell">';
-          if (p.headshot_url) h += '<img class="eff-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          if (p.headshot_url) h += '<img class="eff-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           h += '<div class="eff-player-info"><div class="eff-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="eff-player-meta"><span class="eff-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="eff-team-label">' + escapeHtml(p.team) + '</span>';
-          if (isCollegeEff && p.conference) h += '<span class="eff-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollegeEff && p.conference) h += '<span class="eff-team-label" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           h += '</div></div></div></td>';
         } else if (c.key === 'grade') {
           var g = p.grade || 'C';
@@ -2341,8 +2351,8 @@
 
       var h = '<div class="eff-section"><div class="eff-section-header ' + headerClass + '">';
       h += '<span class="eff-section-icon ' + headerClass + '">' + (isEff ? '&#x1F3AF;' : '&#x1F4AA;') + '</span> ';
-      h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      h += '<table class="eff-table" data-section="' + section + '"><thead><tr>';
+      h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
+      h += '<table class="eff-table" data-section="' + section + '"><caption class="sr-only">Fantasy efficiency rankings — ' + escapeHtml(title) + '</caption><thead><tr>';
       cols.forEach(function(c) {
         var cls = [];
         if (c.key !== 'name') cls.push('center');
@@ -2450,7 +2460,7 @@
       '<select class="lp-select" id="con-season" aria-label="Season"></select>' +
       weekSelectHTML('con-week') +
       '</div>' +
-      '<div id="con-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">checking the tape...</div></div>' +
+      '<div id="con-body" style="overflow-x:auto"><div class="lp-loading">checking the tape...</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2508,11 +2518,11 @@
         if (c.key === 'name') {
           var isCollegeCon = typeof state !== 'undefined' && state.universe === 'college';
           h += '<td><div class="con-player-cell">';
-          if (p.headshot_url) h += '<img class="con-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          if (p.headshot_url) h += '<img class="con-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           h += '<div class="con-player-info"><div class="con-player-name">' + pLink(p.name, p.player_id) + '</div>';
           h += '<div class="con-player-meta"><span class="con-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           h += '<span class="con-team-label">' + escapeHtml(p.team) + '</span>';
-          if (isCollegeCon && p.conference) h += '<span class="con-team-label" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollegeCon && p.conference) h += '<span class="con-team-label" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           h += '</div></div></div></td>';
         } else if (c.key === 'grade') {
           var g = p.grade || 'C';
@@ -2556,8 +2566,8 @@
 
       var h = '<div class="con-section"><div class="con-section-header ' + headerClass + '">';
       h += '<span class="con-section-icon ' + headerClass + '">' + (isSolid ? '&#x1F3AF;' : '&#x1F3B2;') + '</span> ';
-      h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      h += '<table class="con-table" data-section="' + section + '"><thead><tr>';
+      h += title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
+      h += '<table class="con-table" data-section="' + section + '"><caption class="sr-only">Fantasy scoring consistency — ' + escapeHtml(title) + '</caption><thead><tr>';
       cols.forEach(function(c) {
         var cls = [];
         if (c.key !== 'name') cls.push('center');
@@ -2663,7 +2673,7 @@
       '</div>' +
       '<select class="lp-select" id="se-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="se-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="se-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2717,17 +2727,17 @@
         var headerTitle = isCollege ? 'Points Per Touch Rankings' : 'Points Per Snap Rankings';
         var maxPPS = Math.max.apply(null, players.map(function(p) { return p.pts_per_snap || 0; }).concat([1]));
         var html = '<div class="se-card"><div class="se-card-header">' + headerTitle + '</div>';
-        html += '<table class="se-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
+        html += '<table class="se-table"><caption class="sr-only">Snap efficiency rankings by fantasy points per snap</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>' + ptsLabel + '</th><th>PPG</th><th>' + volLabel + '</th><th>' + totLabel + '</th><th>GP</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
           var cls = effClass(p.pts_per_snap);
           var barPct = maxPPS > 0 ? p.pts_per_snap / maxPPS * 100 : 0;
           var teamLabel = escapeHtml(p.team);
-          if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) teamLabel += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="se-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + teamLabel + '</span></td>';
           html += '<td><span class="se-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="se-eff-badge ' + cls + '">' + fmt(p.pts_per_snap, 3) + '</span></td>';
           html += '<td>' + fmt(p.ppg) + '</td>';
@@ -2772,7 +2782,7 @@
       '</div>' +
       '<select class="lp-select" id="wl-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="wl-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="wl-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2815,20 +2825,20 @@
         var maxWL = Math.max.apply(null, players.map(function(p) { return p.workload || 0; }).concat([1]));
         var showSnaps = !isCollege;
         var html = '<div class="wl-card"><div class="wl-card-header">Workload Rankings</div>';
-        html += '<table class="wl-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th>';
-        if (showSnaps) html += '<th>Snp/G</th><th>Snp%</th>';
-        html += '<th>Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
+        html += '<table class="wl-table"><caption class="sr-only">Player workload monitor with touches and snap counts</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Load</th><th>Tch/G</th>';
+        if (showSnaps) html += '<th scope="col">Snp/G</th><th>Snp%</th>';
+        html += '<th scope="col">Car/G</th><th>Tgt/G</th><th>Flags</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
           var cls = scoreClass(p.workload);
           var barPct = maxWL > 0 ? p.workload / maxWL * 100 : 0;
           var flagsHtml = (p.flags || []).map(function(f) { return '<span class="wl-flag">' + escapeHtml(f) + '</span>'; }).join('');
           var teamLabel = escapeHtml(p.team);
-          if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) teamLabel += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="wl-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + teamLabel + '</span></td>';
           html += '<td><span class="wl-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="wl-score-badge ' + cls + '">' + escapeHtml(String(p.workload)) + '</span></td>';
           html += '<td>' + fmt(p.touches_pg) + '</td>';
@@ -2878,7 +2888,7 @@
       '</div>' +
       '<select class="lp-select" id="dt-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="dt-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="dt-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -2920,16 +2930,16 @@
         if (!players.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var html = '<div class="dt-card"><div class="dt-card-header">Dual-Threat Rankings</div>';
-        html += '<table class="dt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
+        html += '<table class="dt-table"><caption class="sr-only">Dual-threat index rankings</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>DTI</th><th>Rush/G</th><th>Rec/G</th><th>Tot/G</th><th>Car/G</th><th>Rec/G</th><th>Split</th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
           var cls = dtiClass(p.dti);
           var teamLabel = escapeHtml(p.team);
-          if (isCollege && p.conference) teamLabel += ' <span style="font-size:9px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) teamLabel += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '<tr>';
           html += '<td class="dt-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + teamLabel + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + teamLabel + '</span></td>';
           html += '<td><span class="dt-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="dt-dti-badge ' + cls + '">' + escapeHtml(String(p.dti)) + '</span></td>';
           html += '<td>' + fmt(p.rush_yd_pg) + '</td>';
@@ -2973,7 +2983,7 @@
       '<select class="lp-select" id="tp-season" aria-label="Season"></select>' +
       weekSelectHTML('tp-week') +
       '</div>' +
-      '<div id="tp-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="tp-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -3016,14 +3026,14 @@
         if (!players.length) { body.innerHTML = '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>'; return; }
 
         var html = '<div class="tp-card"><div class="tp-card-header">Target Quality Rankings</div>';
-        html += '<table class="tp-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
+        html += '<table class="tp-table"><caption class="sr-only">Target premium rankings by target quality composite</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Premium</th><th>Tgt/G</th><th>aDOT</th><th>Catch%</th><th>YAC/R</th><th>Y/Tgt</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < players.length; i++) {
           var p = players[i];
-          var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
           var cls = premiumClass(p.premium);
           html += '<tr>';
           html += '<td class="tp-rank">' + (i + 1) + '</td>';
-          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+          html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team) + '</span></td>';
           html += '<td><span class="tp-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
           html += '<td><span class="tp-premium-badge ' + cls + '">' + escapeHtml(String(p.premium)) + '</span></td>';
           html += '<td>' + fmt(p.targets_pg) + '</td>';
@@ -3070,7 +3080,7 @@
       '<select class="lp-select" id="dr-season" aria-label="Season"></select>' +
       weekSelectHTML('dr-week') +
       '</div>' +
-      '<div id="dr-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="dr-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -3093,15 +3103,15 @@
       var barCls = type === 'sure' ? 'dr-bar-good' : 'dr-bar-bad';
       var isGood = type === 'sure';
 
-      var html = '<table class="dr-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Drop%</th><th>Drops</th><th>Tgt</th><th>Catch%</th><th>YAC/R</th><th></th></tr></thead><tbody>';
+      var html = '<table class="dr-table"><caption class="sr-only">Player drop rate and catch efficiency rankings</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>Drop%</th><th>Drops</th><th>Tgt</th><th>Catch%</th><th>YAC/R</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+        var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
         var barPct = maxDrops > 0 ? p.drops / maxDrops * 100 : 0;
         var cls = rateClass(p.drop_rate, isGood);
         html += '<tr>';
         html += '<td class="dr-rank">' + (i + 1) + '</td>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="dr-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td><span class="dr-rate-badge ' + cls + '">' + fmt(p.drop_rate) + '%</span></td>';
         html += '<td>' + escapeHtml(String(p.drops)) + '</td>';
@@ -3184,7 +3194,7 @@
       '</div>' +
       '<select class="lp-select" id="gt-season" aria-label="Season"></select>' +
       '</div>' +
-      '<div id="gt-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+      '<div id="gt-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     var curPos = '';
@@ -3202,17 +3212,17 @@
       }
       var maxVal = Math.max.apply(null, players.map(function(p) { return (isPadders ? p.garbage_time_pct : p.ppg) || 0; }).concat([1]));
       var html = '<div class="gt-card"><div class="gt-card-header ' + cls + '">' + escapeHtml(title) + '</div>';
-      html += '<table class="gt-table"><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
+      html += '<table class="gt-table"><caption class="sr-only">Garbage time fantasy production — ' + escapeHtml(title) + '</caption><thead><tr><th>#</th><th>Player</th><th>Pos</th><th>GT%</th><th>PPG</th><th>Avg Diff</th><th></th></tr></thead><tbody>';
       for (var i = 0; i < players.length; i++) {
         var p = players[i];
-        var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+        var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
         var pCls = pctClass(p.garbage_time_pct);
         var barVal = isPadders ? p.garbage_time_pct : p.ppg;
         var barPct = maxVal > 0 ? barVal / maxVal * 100 : 0;
         var barCls = isPadders ? 'red' : 'green';
         html += '<tr>';
         html += '<td class="gt-rank">' + (i + 1) + '</td>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="gt-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td><span class="gt-pct-badge ' + pCls + '">' + fmt(p.garbage_time_pct) + '%</span></td>';
         html += '<td>' + fmt(p.ppg) + '</td>';
@@ -3323,7 +3333,7 @@
           '</div>' +
           '<select class="lp-select" id="wh-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="wh-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="wh-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadWH() {
@@ -3376,12 +3386,12 @@
       });
 
       var arrow = sortDir === -1 ? ' \u25BC' : ' \u25B2';
-      var html = '<div class="wh-container"><table class="wh-table"><thead><tr>';
+      var html = '<div class="wh-container"><table class="wh-table"><caption class="sr-only">Weekly scoring heatmap by player and week</caption><thead><tr>';
       html += '<th class="wh-player-col" data-sort="total">Player' + (sortCol === 'total' ? arrow : '') + '</th>';
       weeks.forEach(function(w) {
         html += '<th data-sort="' + w + '">W' + w + (sortCol === w ? arrow : '') + '</th>';
       });
-      html += '<th>GP</th>';
+      html += '<th scope="col">GP</th>';
       html += '<th data-sort="ppg">PPG' + (sortCol === 'ppg' ? arrow : '') + '</th>';
       html += '</tr></thead><tbody>';
 
@@ -3488,7 +3498,7 @@
           '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:var(--red-light);"></div> Tough</div>' +
           '<div class="mh-legend-item"><div class="mh-legend-swatch" style="background:var(--red);"></div> Hard</div>' +
         '</div>' +
-        '<div id="mh-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="mh-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
         '<div id="mh-detail" class="mh-detail"></div>' +
       '</div>';
 
@@ -3582,7 +3592,7 @@
       }
 
       var totalTeams = teams.length;
-      var html = '<div class="mh-table-wrap"><table class="mh-table"><thead><tr>';
+      var html = '<div class="mh-table-wrap"><table class="mh-table"><caption class="sr-only">Matchup heatmap showing average fantasy points allowed by defense</caption><thead><tr>';
       html += '<th class="mh-team-col' + (sortCol === 'team' ? ' sorted' : '') + '" data-sort="team">Team <span class="mh-sort-arrow">' + (sortCol === 'team' ? (sortAsc ? '\u25B2' : '\u25BC') : '\u25B2') + '</span></th>';
 
       positions.forEach(function(pos) {
@@ -3649,7 +3659,7 @@
         html += '<div class="mh-detail-players">';
         players.forEach(function(p) {
           var posColor = POS_CSS[p.position] || 'var(--ink-light)';
-          var img = p.headshot_url ? '<img src="' + escapeAttr(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">' : '';
+          var img = p.headshot_url ? '<img src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">' : '';
           html += '<div class="mh-detail-player" data-pid="' + escapeAttr(p.player_id) + '">';
           html += img;
           html += '<div><div class="mh-detail-name">' + escapeHtml(p.name) + '</div>';
@@ -3702,7 +3712,7 @@
         '<div class="lp-controls">' +
           '<select class="lp-select" id="sk-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="sk-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="sk-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function corrClass(c) {
@@ -3746,8 +3756,8 @@
 
       var html = '<div class="sk-card">';
       html += '<div class="sk-card-header">Best QB + WR/TE Stacks (' + escapeHtml(String(data.count)) + ' pairs)</div>';
-      html += '<table class="sk-table"><thead><tr>';
-      html += '<th>#</th><th>Team</th><th>QB</th><th>Receiver</th><th>Pos</th><th>Corr</th><th></th><th>QB PPG</th><th>Rec PPG</th><th>Combo</th><th class="hide-mobile">GP</th>';
+      html += '<table class="sk-table"><caption class="sr-only">Best QB and receiver stack combinations</caption><thead><tr>';
+      html += '<th scope="col">#</th><th>Team</th><th>QB</th><th>Receiver</th><th>Pos</th><th>Corr</th><th></th><th>QB PPG</th><th>Rec PPG</th><th>Combo</th><th class="hide-mobile">GP</th>';
       html += '</tr></thead><tbody>';
 
       for (var i = 0; i < stacks.length; i++) {
@@ -3827,7 +3837,7 @@
           '<select class="lp-select" id="rz-season" aria-label="Season"></select>' +
           weekSelectHTML('rz-week') +
         '</div>' +
-        '<div id="rz-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">scouting the goal line...</div></div>' +
+        '<div id="rz-body" style="overflow-x:auto"><div class="lp-loading">scouting the goal line...</div></div>' +
       '</div>';
 
     function getCols(section) { return section === 'dominators' ? DOM_COLUMNS : TDD_COLUMNS; }
@@ -3844,7 +3854,7 @@
 
         if (col.key === 'name') {
           html += '<td><div class="rz-player-cell">';
-          if (p.headshot_url) html += '<img class="rz-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          if (p.headshot_url) html += '<img class="rz-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           html += '<div class="rz-player-info"><div class="rz-player-name">' + pLink(p.name, p.player_id) + '</div>';
           html += '<div class="rz-player-meta"><span class="rz-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="rz-team-label">' + escapeHtml(p.team) + '</span></div></div></div></td>';
@@ -3911,8 +3921,8 @@
       var sorted = sortPlayers(players, st.col, st.dir);
 
       var html = '<div class="rz-section">';
-      html += '<div class="rz-section-header ' + headerClass + '"><span class="section-icon">' + icon + '</span> ' + title + ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);font-weight:400">(' + players.length + ') — ' + subtitle + '</span></div>';
-      html += '<table class="rz-table" data-section="' + section + '">';
+      html += '<div class="rz-section-header ' + headerClass + '"><span class="section-icon">' + icon + '</span> ' + title + ' <span style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);font-weight:500">(' + players.length + ') — ' + subtitle + '</span></div>';
+      html += '<table class="rz-table" data-section="' + section + '"><caption class="sr-only">Red zone and goal-line usage — ' + escapeHtml(title) + '</caption>';
       html += buildHeader(section);
       html += '<tbody>';
       sorted.forEach(function(p) { html += buildRow(p, section); });
@@ -4021,7 +4031,7 @@
             '<option value="5">5 weeks</option>' +
           '</select>' +
         '</div>' +
-        '<div id="str-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="str-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadSTR() {
@@ -4059,8 +4069,8 @@
 
     function renderTable(players, type) {
       var winLabel = currentData ? currentData.window : 4;
-      var html = '<table class="str-table"><thead><tr>';
-      html += '<th>Player</th><th>Pos</th><th>Szn Avg</th><th>Recent</th><th>Delta</th><th>Last ' + escapeHtml(String(winLabel)) + '</th>';
+      var html = '<table class="str-table"><caption class="sr-only">Scoring streaks and trends by player</caption><thead><tr>';
+      html += '<th scope="col">Player</th><th>Pos</th><th>Szn Avg</th><th>Recent</th><th>Delta</th><th>Last ' + escapeHtml(String(winLabel)) + '</th>';
       html += '</tr></thead><tbody>';
 
       for (var i = 0; i < players.length; i++) {
@@ -4070,7 +4080,7 @@
         var sign = p.delta > 0 ? '+' : '';
 
         html += '<tr>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="str-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td>' + fmt(p.season_avg) + '</td>';
         html += '<td>' + fmt(p.recent_avg) + '</td>';
@@ -4130,7 +4140,7 @@
           '<div class="lp-header"><h2>Weekly Leaders</h2>' +
           '<div class="lp-subtitle">who went off this week</div></div>' +
           '<div style="text-align:center;padding:60px 20px;">' +
-            '<div style="font-family:var(--font-hand);font-size:22px;color:var(--ink-light);transform:rotate(-1deg);max-width:400px;margin:0 auto;">' +
+            '<div style="font-family:var(--font-hand);font-size:20px;color:var(--ink-light);transform:rotate(-1deg);max-width:400px;margin:0 auto;">' +
               'college stats are season-level only — weekly game data isn\'t available for college players. check <b>Stat Leaders</b> for season totals.' +
             '</div>' +
           '</div>' +
@@ -4164,7 +4174,7 @@
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
         '</div>' +
-        '<div id="wkl-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="wkl-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function updateWeekUI() {
@@ -4236,7 +4246,7 @@
         { key: 'tgt', label: 'Tgt', cls: 'center hide-mobile' }
       ];
 
-      var html = '<table class="wkl-table"><thead><tr>';
+      var html = '<table class="wkl-table"><caption class="sr-only">Weekly fantasy scoring leaders</caption><thead><tr>';
       cols.forEach(function(col) {
         var arrow = '';
         var scls = '';
@@ -4325,7 +4335,7 @@
         '<div class="lp-controls">' +
           '<select class="lp-select" id="mv-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="mv-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="mv-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadMV() {
@@ -4362,8 +4372,8 @@
 
       var html = '<div class="mv-card">';
       html += '<div class="mv-card-header">Weekly MVP Grid — ' + escapeHtml(String(data.season)) + ' (' + escapeHtml(String(data.total_weeks)) + ' weeks)</div>';
-      html += '<table class="mv-grid"><thead><tr><th>Week</th>';
-      POSITIONS.forEach(function(pos) { html += '<th>' + pos + '</th>'; });
+      html += '<table class="mv-grid"><caption class="sr-only">Weekly MVP grid showing top scorer by position each week</caption><thead><tr><th>Week</th>';
+      POSITIONS.forEach(function(pos) { html += '<th scope="col">' + pos + '</th>'; });
       html += '</tr></thead><tbody>';
 
       weeks.forEach(function(wk) {
@@ -4416,7 +4426,7 @@
           '</div>' +
           '<select class="lp-select" id="po-season" aria-label="Season"></select>' +
         '</div>' +
-        '<div id="po-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="po-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function gradeClass(grade) {
@@ -4458,17 +4468,17 @@
 
       var html = '<div class="po-card">';
       html += '<div class="po-card-header">Playoff Matchup Rankings — Wk 14-17 (' + escapeHtml(String(data.count || 0)) + ' players)</div>';
-      html += '<table class="po-table"><thead><tr>';
-      html += '<th>#</th><th>Player</th><th>Pos</th><th>PO PPG</th><th>SOS</th>';
+      html += '<table class="po-table"><caption class="sr-only">Playoff matchup rankings for weeks 14 through 17</caption><thead><tr>';
+      html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>PO PPG</th><th>SOS</th>';
       var weekNums = [14, 15, 16, 17];
-      weekNums.forEach(function(w) { html += '<th>Wk ' + w + '</th>'; });
+      weekNums.forEach(function(w) { html += '<th scope="col">Wk ' + w + '</th>'; });
       html += '</tr></thead><tbody>';
 
       players.forEach(function(p, i) {
         var posColor = POS_COLORS[p.position] || '#8a7565';
         html += '<tr>';
         html += '<td class="po-rank">' + (i + 1) + '</td>';
-        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + pLink(p.name, p.player_id) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="po-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td style="font-weight:700">' + fmt(p.playoff_ppg) + '</td>';
         html += '<td><span class="po-grade ' + gradeClass(p.sos_grade) + '">' + escapeHtml(p.sos_grade) + '</span></td>';
@@ -4482,7 +4492,7 @@
             html += '<td><div class="po-matchup">';
             html += '<span class="po-grade ' + gradeClass(wk.grade) + '">' + escapeHtml(wk.grade) + '</span>';
             html += ' <span class="po-opp">vs ' + escapeHtml(wk.opponent) + '</span>';
-            html += ' <span style="font-size:10px;font-weight:700">' + fmt(wk.fpts) + '</span>';
+            html += ' <span style="font-size:11px;font-weight:700">' + fmt(wk.fpts) + '</span>';
             html += '</div></td>';
           } else {
             html += '<td style="color:var(--ink-light)">--</td>';
@@ -4533,7 +4543,7 @@
           '</select>' +
           weekSelectHTML('ut-week')) +
         '</div>' +
-        '<div id="ut-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="ut-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadUT() {
@@ -4571,7 +4581,8 @@
       var min = Math.min.apply(null, scores.concat([0]));
       var max = Math.max.apply(null, scores.concat([1]));
       var range = max - min || 1;
-      var color = isRiser ? '#2ec4b6' : '#e63946';
+      var _ut = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {green:'#2ec4b6',red:'#e63946'};
+      var color = isRiser ? _ut.green : _ut.red;
       ctx.strokeStyle = color;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
@@ -4621,11 +4632,11 @@
 
     function buildUTTable(players, isRiser) {
       var isCollege = typeof state !== 'undefined' && state.universe === 'college';
-      var html = '<div class="ut-table-wrap"><table class="ut-table"><thead><tr>';
+      var html = '<div class="ut-table-wrap"><table class="ut-table"><caption class="sr-only">Usage trend ' + (isRiser ? 'risers' : 'fallers') + '</caption><thead><tr>';
       if (isCollege) {
-        html += '<th>#</th><th>Player</th><th>YPG</th><th>Delta</th><th>%</th>';
+        html += '<th scope="col">#</th><th>Player</th><th>YPG</th><th>Delta</th><th>%</th>';
       } else {
-        html += '<th>#</th><th>Player</th><th>PPG</th><th>Delta</th><th>Trend</th>';
+        html += '<th scope="col">#</th><th>Player</th><th>PPG</th><th>Delta</th><th>Trend</th>';
       }
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
@@ -4636,11 +4647,11 @@
         html += '<tr>';
         html += '<td class="ut-rank">' + (i + 1) + '</td>';
         html += '<td class="ut-player-cell">';
-        if (!isCollege && p.headshot_url) html += '<img class="ut-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy">';
+        if (!isCollege && p.headshot_url) html += '<img class="ut-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy">';
         html += '<span class="ut-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="ut-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ut-team">' + escapeHtml(p.team || '') + '</span>';
-        if (isCollege && p.conference) html += '<span class="ut-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+        if (isCollege && p.conference) html += '<span class="ut-team" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
         html += '</td>';
         if (isCollege) {
           html += '<td class="ut-num">' + fmt(p.curr_ypg) + '</td>';
@@ -4716,7 +4727,7 @@
             '<option value="snap_pct">Snap%</option>' +
           '</select>') +
         '</div>' +
-        '<div id="yy-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="yy-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadYY() {
@@ -4765,11 +4776,11 @@
     }
 
     function buildYYTable(players, isRiser, label, isCollege) {
-      var html = '<div class="yy-table-wrap"><table class="yy-table"><thead><tr>';
+      var html = '<div class="yy-table-wrap"><table class="yy-table"><caption class="sr-only">Year-over-year stat comparison — ' + escapeHtml(label) + '</caption><thead><tr>';
       if (isCollege) {
-        html += '<th>#</th><th>Player</th><th>Prev YPG</th><th>Curr YPG</th><th>Delta</th><th class="hide-mobile">TD/G</th>';
+        html += '<th scope="col">#</th><th>Player</th><th>Prev YPG</th><th>Curr YPG</th><th>Delta</th><th class="hide-mobile">TD/G</th>';
       } else {
-        html += '<th>#</th><th>Player</th><th>' + escapeHtml(curS1) + '</th><th>' + escapeHtml(curS2) + '</th><th>Delta</th><th class="hide-mobile">Other Metrics</th>';
+        html += '<th scope="col">#</th><th>Player</th><th>' + escapeHtml(curS1) + '</th><th>' + escapeHtml(curS2) + '</th><th>Delta</th><th class="hide-mobile">Other Metrics</th>';
       }
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
@@ -4780,11 +4791,11 @@
         html += '<tr>';
         html += '<td class="yy-rank">' + (i + 1) + '</td>';
         html += '<td class="yy-player-cell">';
-        if (!isCollege && p.headshot_url) html += '<img class="yy-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy">';
+        if (!isCollege && p.headshot_url) html += '<img class="yy-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy">';
         html += '<span class="yy-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="yy-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="yy-team">' + escapeHtml(p.team || '') + '</span>';
-        if (isCollege && p.conference) html += '<span class="yy-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+        if (isCollege && p.conference) html += '<span class="yy-team" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
         html += '</td>';
         if (isCollege) {
           html += '<td class="yy-num">' + fmt(p.prev_ypg) + '</td>';
@@ -4850,7 +4861,7 @@
             '<button class="lp-pos-tab" data-pos="TE">TE</button>' +
           '</div>' +
         '</div>' +
-        '<div id="ag-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="ag-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadAG() {
@@ -4959,14 +4970,14 @@
       if (peak.age) {
         var peakX = xPos(peak.age);
         ctx.setLineDash([4, 4]);
-        ctx.strokeStyle = '#d97757';
+        ctx.strokeStyle = t.orange;
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(peakX, pad.top);
         ctx.lineTo(peakX, pad.top + ch);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = '#d97757';
+        ctx.fillStyle = t.orange;
         ctx.font = '11px Space Mono, monospace';
         ctx.textAlign = 'center';
         ctx.fillText('Peak: ' + peak.age, peakX, pad.top - 4);
@@ -4975,7 +4986,7 @@
       // X axis labels
       var agChartCollege = typeof state !== 'undefined' && state.universe === 'college';
       ctx.fillStyle = t.inkMedium;
-      ctx.font = '10px Space Mono, monospace';
+      ctx.font = '11px Space Mono, monospace';
       ctx.textAlign = 'center';
       var ageStep = agChartCollege ? 1 : 2;
       for (var a = minAge; a <= maxAge; a += ageStep) {
@@ -5030,7 +5041,7 @@
           '</div>' +
           '<select class="lp-select" id="pt-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="pt-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="pt-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadPT() {
@@ -5117,7 +5128,7 @@
           '</div>' +
           '<select class="lp-select" id="spc-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="spc-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="spc-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadSPC() {
@@ -5145,8 +5156,8 @@
       var eliteMilestones = ['5000 pass yd', '40 pass TD', '1500 rush yd', '1500 rec yd',
         '5000 Pass Yd', '40 Pass TD', '1500 Rush Yd', '1500 Rec Yd'];
       var html = '<div class="spc-card"><h3 class="spc-title">Milestone Watch</h3>';
-      html += '<div class="spc-table-wrap"><table class="spc-table"><thead><tr>';
-      html += '<th>#</th><th>Player</th><th>Pos</th><th>GP</th><th>PPG</th><th>Milestones</th>';
+      html += '<div class="spc-table-wrap"><table class="spc-table"><caption class="sr-only">Season pace tracker with projected milestones</caption><thead><tr>';
+      html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>GP</th><th>PPG</th><th>Milestones</th>';
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
         var posColor = POS_COLORS[p.position] || '#8a7565';
@@ -5205,7 +5216,7 @@
           '</div>' +
           '<select class="lp-select" id="tdr-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="tdr-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="tdr-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadTDR() {
@@ -5266,8 +5277,8 @@
     }
 
     function buildTDRTable(players, isBuy, maxDiff) {
-      var html = '<div class="tdr-table-wrap"><table class="tdr-table"><thead><tr>';
-      html += '<th>#</th><th>Player</th><th>Pos</th><th>TD</th><th>xTD</th><th>Diff</th><th class="hide-mobile">TD%</th><th class="hide-mobile">Opp</th><th>Bar</th>';
+      var html = '<div class="tdr-table-wrap"><table class="tdr-table"><caption class="sr-only">Touchdown regression — ' + (isBuy ? 'buy candidates' : 'sell candidates') + '</caption><thead><tr>';
+      html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>TD</th><th>xTD</th><th>Diff</th><th class="hide-mobile">TD%</th><th class="hide-mobile">Opp</th><th>Bar</th>';
       html += '</tr></thead><tbody>';
       players.forEach(function(p, i) {
         var posColor = POS_COLORS[p.position] || '#8a7565';
@@ -5339,7 +5350,7 @@
           '</div>' +
           '<select class="lp-select" id="ay-season">' + seasonOptions() + '</select>' +
         '</div>' +
-        '<div id="ay-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
+        '<div id="ay-body" style="overflow-x:auto"><div class="lp-loading">' + razzleLoading() + '</div></div>' +
       '</div>';
 
     function loadAY() {
@@ -5413,7 +5424,7 @@
 
     function buildAYTable(players, section) {
       var ss = sortState[section];
-      var html = '<div class="ay-table-wrap"><table class="ay-table"><thead><tr>';
+      var html = '<div class="ay-table-wrap"><table class="ay-table"><caption class="sr-only">Air yards analysis — ' + escapeHtml(section === 'buy' ? 'buy low targets' : 'sell high targets') + '</caption><thead><tr>';
       colDefs.forEach(function(c) {
         var mobileClass = c.mobile_hide ? ' hide-mobile' : '';
         var sortArrow = '';
@@ -5434,7 +5445,7 @@
         html += '<tr>';
         // player cell
         html += '<td class="ay-player-cell">';
-        if (p.headshot_url) html += '<img class="ay-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy">';
+        if (p.headshot_url) html += '<img class="ay-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy">';
         html += '<span class="ay-name">' + pLink(p.name, p.player_id) + '</span>';
         html += '<span class="ay-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span>';
         html += '<span class="ay-team">' + escapeHtml(p.team || '') + '</span>';
@@ -5513,14 +5524,17 @@
       list.style.display = 'none';
       onSelect({ player_id: id, full_name: name, position: pos, team: team });
     });
-    document.addEventListener('click', function(e) {
-      if (!wrap.contains(e.target)) { list.style.display = 'none'; }
-    });
+    if (!wrap._docClickBound) {
+      wrap._docClickBound = true;
+      document.addEventListener('click', function(e) {
+        if (!wrap.contains(e.target)) { list.style.display = 'none'; }
+      });
+    }
   }
 
   function searchWrapHTML(prefix, placeholder) {
     return '<div class="' + prefix + 'search-wrap lp-search-wrap">' +
-      '<input type="text" class="' + prefix + 'search-input lp-search" placeholder="' + (placeholder || 'search player...') + '">' +
+      '<input type="text" class="' + prefix + 'search-input lp-search" placeholder="' + (placeholder || 'search player...') + '" aria-label="Search players">' +
       '<div class="' + prefix + 'search-list lp-search-list"></div>' +
     '</div>';
   }
@@ -5651,11 +5665,11 @@
       }
 
       // Season table
-      html += '<div class="cst-table-wrap"><table class="cst-table"><thead><tr>';
-      html += '<th>Season</th><th>GP</th><th>PPG</th><th>Total</th>';
-      if (pos === 'QB') { html += '<th>Pass Yd</th><th>Pass TD</th><th>INT</th><th>Rush Yd</th><th>Rush TD</th>'; }
-      else if (pos === 'RB') { html += '<th>Rush Yd</th><th>Rush TD</th><th>Car</th><th>Rec</th><th>Rec Yd</th><th>Rec TD</th>'; }
-      else { html += '<th>Rec</th><th>Rec Yd</th><th>Rec TD</th><th>Tgt</th><th>Rush Yd</th><th>Rush TD</th>'; }
+      html += '<div class="cst-table-wrap"><table class="cst-table"><caption class="sr-only">Season-by-season career statistics</caption><thead><tr>';
+      html += '<th scope="col">Season</th><th>GP</th><th>PPG</th><th>Total</th>';
+      if (pos === 'QB') { html += '<th scope="col">Pass Yd</th><th>Pass TD</th><th>INT</th><th>Rush Yd</th><th>Rush TD</th>'; }
+      else if (pos === 'RB') { html += '<th scope="col">Rush Yd</th><th>Rush TD</th><th>Car</th><th>Rec</th><th>Rec Yd</th><th>Rec TD</th>'; }
+      else { html += '<th scope="col">Rec</th><th>Rec Yd</th><th>Rec TD</th><th>Tgt</th><th>Rush Yd</th><th>Rush TD</th>'; }
       html += '</tr></thead><tbody>';
       var totals = { gp: 0, pts: 0, pass_yd: 0, pass_td: 0, int: 0, rush_yd: 0, rush_td: 0, car: 0, rec: 0, rec_yd: 0, rec_td: 0, tgt: 0 };
       seasons.forEach(function(s) {
@@ -5698,7 +5712,7 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // Area fill
@@ -5727,10 +5741,10 @@
           var y = pad.t + ch - (v / maxPPG) * ch;
           ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = posColor; ctx.fill();
           ctx.strokeStyle = t.white; ctx.lineWidth = 2; ctx.stroke();
-          ctx.fillStyle = t.ink; ctx.font = 'bold 10px "Space Mono", monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = t.ink; ctx.font = 'bold 11px "Space Mono", monospace'; ctx.textAlign = 'center';
           ctx.fillText(fmt(v), x, y - 10);
           // Season label
-          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace';
+          ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace';
           ctx.fillText(String(seasons[i].season || ''), x, pad.t + ch + 16);
         });
         // Y-axis label
@@ -5803,7 +5817,7 @@
       var html = '<div class="ccp-chart-card"><canvas id="ccp-canvas" width="700" height="280" role="img" aria-label="Career comparison trend line chart"></canvas></div>';
 
       // Summary comparison table
-      html += '<div class="ccp-table-wrap"><table class="ccp-table"><thead><tr><th>Metric</th>';
+      html += '<div class="ccp-table-wrap"><table class="ccp-table"><caption class="sr-only">Career summary comparison between players</caption><thead><tr><th>Metric</th>';
       loaded.forEach(function(p, i) {
         html += '<th style="color:' + slotColors[i] + '">' + escapeHtml(p.full_name) + '</th>';
       });
@@ -5832,7 +5846,7 @@
       loaded.forEach(function(p) { (p.data.seasons || []).forEach(function(s) { allYears[s.season] = true; }); });
       var years = Object.keys(allYears).sort();
       if (years.length) {
-        html += '<div class="ccp-table-wrap"><table class="ccp-table"><thead><tr><th>Season</th>';
+        html += '<div class="ccp-table-wrap"><table class="ccp-table"><caption class="sr-only">Season-by-season PPG comparison between players</caption><thead><tr><th>Season</th>';
         loaded.forEach(function(p, i) { html += '<th style="color:' + slotColors[i] + '">' + escapeHtml(p.full_name) + '</th>'; });
         html += '</tr></thead><tbody>';
         years.forEach(function(yr) {
@@ -5887,13 +5901,13 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(pad.l + cw, gy); ctx.stroke();
-          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'right';
+          ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace'; ctx.textAlign = 'right';
           ctx.fillText(fmt(maxPPG * g / 4), pad.l - 5, gy + 3);
         }
         // X labels
         xYears.forEach(function(yr, i) {
           var x = pad.l + (xYears.length > 1 ? i / (xYears.length - 1) : 0.5) * cw;
-          ctx.fillStyle = t.inkLight; ctx.font = '10px "Space Mono", monospace'; ctx.textAlign = 'center';
+          ctx.fillStyle = t.inkLight; ctx.font = '11px "Space Mono", monospace'; ctx.textAlign = 'center';
           ctx.fillText(yr, x, pad.t + ch + 16);
         });
 
@@ -6034,7 +6048,7 @@
         bests[c.key] = best;
       });
 
-      var html = '<div class="cmt-table-wrap"><table class="cmt-table"><thead><tr>';
+      var html = '<div class="cmt-table-wrap"><table class="cmt-table"><caption class="sr-only">Player comparison statistics table</caption><thead><tr>';
       cols.forEach(function(c) {
         var arrow = '';
         if (c.sortable && sortCol === c.key) arrow = sortAsc ? ' &#9650;' : ' &#9660;';
@@ -6047,7 +6061,7 @@
           if (c.key === 'name') {
             var posColor = POS_COLORS[p.position] || '#8a7565';
             html += '<td class="cmt-player-cell">';
-            if (p.headshot_url) html += '<img class="cmt-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+            if (p.headshot_url) html += '<img class="cmt-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
             html += '<span>' + escapeHtml(p.full_name || p.name || '') + '</span>';
             html += '<span class="cmt-pos" style="background:' + posColor + '">' + escapeHtml(p.position || '') + '</span>';
             html += '</td>';
@@ -6281,7 +6295,7 @@
       var sorted = sortPlayers(players, sortState);
       var isHonor = section === 'honor';
       var html = '<div class="rpc-section"><div class="rpc-section-title ' + (isHonor ? 'rpc-honor-title' : 'rpc-needs-title') + '">' + title + '</div>';
-      html += '<div class="rpc-table-wrap"><table class="rpc-table"><thead><tr>';
+      html += '<div class="rpc-table-wrap"><table class="rpc-table"><caption class="sr-only">Player report card grades — ' + escapeHtml(title) + '</caption><thead><tr>';
       var thCols = [
         { key: 'name', label: 'Player', sort: false },
         { key: 'gpa_pct', label: 'GPA', sort: true },
@@ -6307,7 +6321,7 @@
         html += '<tr>';
         // Player cell
         html += '<td class="rpc-player-cell">';
-        if (p.headshot_url) html += '<img class="rpc-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        if (p.headshot_url) html += '<img class="rpc-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
         html += '<span class="rpc-name">' + escapeHtml(p.full_name || p.name || '') + '</span>';
         html += '<span class="rpc-pos" style="background:' + posColor + '">' + escapeHtml(p.position || '') + '</span>';
         html += '<span class="rpc-team">' + escapeHtml(p.team || '') + '</span>';
@@ -6356,7 +6370,8 @@
   defs.push({ name: 'fptsbreakdown', render: function(el) {
     var curPos = '';
     var curSeason = _latestSeason;
-    var compColors = { pass_yd: POS_COLORS.QB, rush_yd: POS_COLORS.RB, rec_yd: POS_COLORS.WR, rec: POS_COLORS.TE, td: '#e63946' };
+    var _fbTheme = typeof getCanvasTheme === 'function' ? getCanvasTheme() : {red:'#e63946'};
+    var compColors = { pass_yd: POS_COLORS.QB, rush_yd: POS_COLORS.RB, rec_yd: POS_COLORS.WR, rec: POS_COLORS.TE, td: _fbTheme.red };
     var compLabels = { pass_yd: 'Pass Yd', rush_yd: 'Rush Yd', rec_yd: 'Rec Yd', rec: 'Receptions', td: 'Touchdowns' };
 
     el.innerHTML =
@@ -6538,7 +6553,7 @@
       }
       colDefs.push({ key: 'fantasy_points', label: 'FPTS' });
 
-      html += '<div class="glo-table-wrap"><table class="glo-table"><thead><tr>';
+      html += '<div class="glo-table-wrap"><table class="glo-table"><caption class="sr-only">Player game log with weekly statistics</caption><thead><tr>';
       colDefs.forEach(function(c) {
         var arrow = '';
         if (sortCol === c.key) arrow = sortAsc ? ' &#9650;' : ' &#9660;';
@@ -6702,7 +6717,8 @@
     });
     el.querySelector('#pbd-season').addEventListener('change', function() { curSeason = parseInt(this.value) || _latestSeason; });
 
-    var compColors = ['#5b7fff', '#2ec4b6', '#d97757', '#8b5cf6', '#e63946', '#ffc857', '#2ec4b6', '#d97757'];
+    var _pbdTheme = getCanvasTheme();
+    var compColors = [_pbdTheme.blue, _pbdTheme.green, _pbdTheme.orange, _pbdTheme.purple, _pbdTheme.red, _pbdTheme.yellow, _pbdTheme.green, _pbdTheme.orange];
 
     function loadBreakdown(pid, playerInfo) {
       var content = el.querySelector('#pbd-content');
@@ -6804,7 +6820,7 @@
             var labelR = (outerR + innerR) / 2;
             var lx = cx + Math.cos(midAngle) * labelR;
             var ly = cy + Math.sin(midAngle) * labelR;
-            ctx.fillStyle = (typeof getCanvasTheme === 'function' ? getCanvasTheme().white : '#fff');
+            ctx.fillStyle = (typeof getCanvasTheme === 'function' ? getCanvasTheme().white : '#f7efe5');
             ctx.font = 'bold 11px "Space Mono", monospace';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -6860,14 +6876,14 @@
       html += '</div></div>';
       html += '<div class="aw2-winner" data-pid="' + escapeAttr(w.player_id) + '">';
       if (!isCollege && w.headshot_url) {
-        html += '<img class="aw2-winner-headshot" src="' + escapeAttr(w.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        html += '<img class="aw2-winner-headshot" src="' + escapeAttr(w.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       }
       html += '<div class="aw2-winner-info">';
       html += '<div class="aw2-winner-name">' + escapeHtml(w.name) + '</div>';
       html += '<div class="aw2-winner-meta">';
       html += '<span class="aw2-pos-badge ' + pos + '">' + escapeHtml(w.position) + '</span>';
       html += '<span>' + escapeHtml(w.team) + '</span>';
-      if (isCollege && w.conference) html += '<span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(w.conference) + '</span>';
+      if (isCollege && w.conference) html += '<span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(w.conference) + '</span>';
       html += '<span>' + escapeHtml(String(w.ppg)) + ' PPG</span>';
       html += '</div>';
       if (!isCollege) {
@@ -6899,11 +6915,11 @@
           html += '<div class="aw2-runner-row" data-pid="' + escapeAttr(r.player_id) + '">';
           html += '<span class="aw2-runner-rank">' + (i + 2) + '</span>';
           if (!isCollege && r.headshot_url) {
-            html += '<img class="aw2-runner-headshot" src="' + escapeAttr(r.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+            html += '<img class="aw2-runner-headshot" src="' + escapeAttr(r.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           }
           html += '<span class="aw2-runner-pos ' + rPos + '">' + escapeHtml(r.position) + '</span>';
           html += '<span class="aw2-runner-name">' + escapeHtml(r.name) + '</span>';
-          if (isCollege && r.team) html += '<span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(r.team) + '</span>';
+          if (isCollege && r.team) html += '<span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(r.team) + '</span>';
           html += '<span class="aw2-runner-stat">' + escapeHtml(isCollege ? String(r.ppg != null ? r.ppg : '') + ' PPG' : (r.key_stat || '')) + '</span>';
           html += '</div>';
         });
@@ -6942,9 +6958,11 @@
         if (data.available_seasons && data.available_seasons.length) {
           var sel = el.querySelector('.aw2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         renderAwards(data, isCollege);
       }).catch(function() {
@@ -7033,9 +7051,11 @@
         if (d.available_seasons) {
           var sel = el.querySelector('.db2-season');
           sel.innerHTML = '';
+          var _opts = '';
           d.available_seasons.forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === d.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === d.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         el.querySelector('.db2-meta').textContent = d.season + ' season \u00b7 ' + d.total_players + ' players tracked';
 
@@ -7163,9 +7183,11 @@
         if (d.available_classes) {
           var sel = el.querySelector('.dc2-year');
           sel.innerHTML = '';
+          var _opts = '';
           for (var i = 0; i < d.available_classes.length; i++) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(d.available_classes[i])) + '"' + (d.available_classes[i] === d.draft_year ? ' selected' : '') + '>' + escapeHtml(String(d.available_classes[i])) + ' Class</option>';
+            _opts += '<option value="' + escapeHtml(String(d.available_classes[i])) + '"' + (d.available_classes[i] === d.draft_year ? ' selected' : '') + '>' + escapeHtml(String(d.available_classes[i])) + ' Class</option>';
           }
+          sel.innerHTML = _opts;
         }
         state.year = d.draft_year;
         renderData(d);
@@ -7193,7 +7215,7 @@
         html += '<canvas class="dc2-canvas" role="img" aria-label="Average PPG by draft round bar chart"></canvas></div>';
       }
 
-      html += '<div class="dc2-table-wrap"><table class="dc2-table"><thead><tr>';
+      html += '<div class="dc2-table-wrap"><table class="dc2-table"><caption class="sr-only">Draft class fantasy producers by pick and production</caption><thead><tr>';
       var cols = [
         { key: 'pick', label: 'Pick' }, { key: 'name', label: 'Player' }, { key: 'position', label: 'Pos' },
         { key: 'draft_team', label: 'Drafted' }, { key: 'current_team', label: 'Team' },
@@ -7276,7 +7298,7 @@
         var barH = (r.avg_ppg / maxPpg) * (h - 50);
         var x = left + i * (barW + 8);
         var y = h - 30 - barH;
-        ctx.fillStyle = '#d97757';
+        ctx.fillStyle = t.orange;
         ctx.fillRect(x, y, barW, barH);
         ctx.strokeStyle = t.ink;
         ctx.lineWidth = 2;
@@ -7419,11 +7441,15 @@
           if (newKeys.length !== mkeys.length || newKeys[0] !== mkeys[0]) {
             xSel.innerHTML = '';
             ySel.innerHTML = '';
+            var _xOpts = '';
+            var _yOpts = '';
             for (var ki = 0; ki < newKeys.length; ki++) {
               var nk = newKeys[ki];
-              xSel.innerHTML += '<option value="' + nk + '"' + (nk === curX ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
-              ySel.innerHTML += '<option value="' + nk + '"' + (nk === curY ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
+              _xOpts += '<option value="' + nk + '"' + (nk === curX ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
+              _yOpts += '<option value="' + nk + '"' + (nk === curY ? ' selected' : '') + '>' + escapeHtml(activeLabels[nk]) + '</option>';
             }
+            xSel.innerHTML = _xOpts;
+            ySel.innerHTML = _yOpts;
             METRIC_LABELS = activeLabels;
             mkeys = newKeys;
           }
@@ -7432,9 +7458,11 @@
           var sSel = el.querySelector('.exp-season');
           var curSeason = sSel.value;
           sSel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sSel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (String(s) === curSeason ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (String(s) === curSeason ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sSel.innerHTML = _opts;
         }
         drawChart(data);
       }).catch(function() {
@@ -7529,7 +7557,7 @@
         var slope = (n * sumXY - sumX * sumY) / denom;
         var intercept = (sumY - slope * sumX) / n;
         if (isFinite(slope) && isFinite(intercept)) {
-          ctx.strokeStyle = 'rgba(217, 119, 87, 0.4)';
+          ctx.strokeStyle = t.orange + '66';
           ctx.lineWidth = 2;
           ctx.setLineDash([6, 4]);
           ctx.beginPath();
@@ -7598,7 +7626,7 @@
 
       chartCanvas.addEventListener('click', function() {
         if (hoveredPlayer && hoveredPlayer.player_id) {
-          window.open('/player/' + encodeURIComponent(hoveredPlayer.player_id), '_blank');
+          window.open('/player/' + encodeURIComponent(hoveredPlayer.player_id), '_blank', 'noopener');
         }
       });
     }
@@ -7666,9 +7694,11 @@
         if (seasonList.length) {
           var sel = el.querySelector('.ld2-season');
           sel.innerHTML = '';
+          var _opts = '';
           for (var i = 0; i < seasonList.length; i++) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(seasonList[i])) + '"' + (seasonList[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(seasonList[i])) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(seasonList[i])) + '"' + (seasonList[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(seasonList[i])) + '</option>';
           }
+          sel.innerHTML = _opts;
         }
         renderCategories(data.categories || [], isCollege);
       }).catch(function() {
@@ -7704,7 +7734,7 @@
           html += '<span class="ld2-player-name">' + escapeHtml(playerName) + '</span>';
           html += '<span class="ld2-pos-badge ' + posLower + '">' + escapeHtml(p.position) + '</span>';
           html += '<span class="ld2-team">' + escapeHtml(p.team) + '</span>';
-          if (isCollege && p.conference) html += '<span class="ld2-team" style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+          if (isCollege && p.conference) html += '<span class="ld2-team" style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
           html += '</div>';
           html += '<span class="ld2-stat-value">' + escapeHtml(p.stat_display) + '</span>';
           html += '</li>';
@@ -7803,7 +7833,7 @@
       cols.forEach(function(col) {
         if (col.key === 'name') {
           html += '<td><div class="opp2-player-cell">';
-          if (p.headshot_url) html += '<img class="opp2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          if (p.headshot_url) html += '<img class="opp2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           html += '<div><div class="opp2-player-name">' + escapeHtml(p.name) + '</div>';
           html += '<div class="opp2-player-meta"><span class="opp2-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span> ' + escapeHtml(p.team) + '</div></div></div></td>';
         } else if (col.key === 'opp_share') {
@@ -7845,8 +7875,8 @@
       var title = isAlpha ? 'Alpha Dogs' : 'Dominator Rating Leaders';
       var st = sortState[section];
       var sorted = sortPlayers(players, st.col, st.dir);
-      var html = '<div class="opp2-section"><div class="opp2-section-header ' + (isAlpha ? 'alpha' : 'dominator') + '">' + icon + ' ' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      html += '<table class="opp2-table" data-section="' + section + '">' + buildHeader(section) + '<tbody>';
+      var html = '<div class="opp2-section"><div class="opp2-section-header ' + (isAlpha ? 'alpha' : 'dominator') + '">' + icon + ' ' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
+      html += '<table class="opp2-table" data-section="' + section + '"><caption class="sr-only">Opportunity share — ' + escapeHtml(title) + '</caption>' + buildHeader(section) + '<tbody>';
       sorted.forEach(function(p) { html += buildRow(p, section); });
       html += '</tbody></table></div>';
       return html;
@@ -7895,9 +7925,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.opp2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
           populateWeekSelect(el, 'opp2-week', sel.value, load);
         }
         render(data);
@@ -7968,9 +8000,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.pct2-season');
           sel.innerHTML = '';
+          var _opts = '';
           for (var i = 0; i < data.available_seasons.length; i++) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(data.available_seasons[i])) + '"' + (data.available_seasons[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(data.available_seasons[i])) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(data.available_seasons[i])) + '"' + (data.available_seasons[i] === data.season ? ' selected' : '') + '>' + escapeHtml(String(data.available_seasons[i])) + '</option>';
           }
+          sel.innerHTML = _opts;
         }
         renderPercentiles(data);
       }).catch(function() {
@@ -8066,9 +8100,11 @@
         if (!years.length) return;
         var sel = el.querySelector('.bb-year');
         sel.innerHTML = '';
+        var _opts = '';
         for (var i = 0; i < years.length; i++) {
-          sel.innerHTML += '<option value="' + escapeHtml(String(years[i])) + '">' + escapeHtml(String(years[i])) + ' Draft Class</option>';
+          _opts += '<option value="' + escapeHtml(String(years[i])) + '">' + escapeHtml(String(years[i])) + ' Draft Class</option>';
         }
+        sel.innerHTML = _opts;
         state.draftYear = years[0];
         loadProspects();
       }).catch(function() {
@@ -8237,9 +8273,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.rc2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         render(data, isCollege);
       }).catch(function() {
@@ -8269,7 +8307,7 @@
         html += '<div class="rc2-pos-card"><div class="rc2-pos-label" style="background:' + pc + '">' + pos + '1</div>';
         if (ldr) {
           html += '<div class="rc2-pos-name">' + escapeHtml(ldr.name) + '</div>';
-          if (isCollege && ldr.team) html += '<div style="font-size:10px;color:var(--ink-light)">' + escapeHtml(ldr.team) + '</div>';
+          if (isCollege && ldr.team) html += '<div style="font-size:11px;color:var(--ink-light)">' + escapeHtml(ldr.team) + '</div>';
           html += '<div class="rc2-pos-stat">' + ldr.total_fpts + ' pts / ' + ldr.ppg + ' PPG</div>';
         } else { html += '<div class="rc2-pos-stat">&mdash;</div>'; }
         html += '</div>';
@@ -8289,13 +8327,13 @@
       if (isCollege) {
         html += '<div class="rc2-section"><div class="rc2-section-header">Top Yardage Producers</div>';
         html += renderList(data.top_yards || [], function(p) {
-          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.total_yards + ' yds</span> ' + p.ppg + ' PPG</span>';
+          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.total_yards + ' yds</span> ' + p.ppg + ' PPG</span>';
         });
         html += '</div>';
 
         html += '<div class="rc2-section"><div class="rc2-section-header">TD Leaders</div>';
         html += renderList(data.top_tds || [], function(p) {
-          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.tds + ' TDs</span></span>';
+          return '<span>' + escapeHtml(p.name) + posChip(p.position) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></span><span><span class="rc2-badge gold">' + p.tds + ' TDs</span></span>';
         });
         html += '</div>';
       }
@@ -8303,14 +8341,14 @@
       html += '<div class="rc2-section"><div class="rc2-section-header">Biggest Breakouts</div>';
       html += renderList(data.breakouts || [], function(p) {
         var delta = isCollege ? p.delta_ppg : p.delta;
-        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge green">+' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
+        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge green">+' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
       });
       html += '</div>';
 
       html += '<div class="rc2-section"><div class="rc2-section-header">Biggest ' + (isCollege ? 'Declines' : 'Busts') + '</div>';
       html += renderList(data.busts || [], function(p) {
         var delta = isCollege ? p.delta_ppg : p.delta;
-        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge red">' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
+        return '<span>' + escapeHtml(p.name) + posChip(p.position) + (isCollege && p.team ? ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>' : '') + '</span><span><span class="rc2-badge red">' + fmt(delta) + ' PPG</span> ' + p.prev_ppg + ' &rarr; ' + p.ppg + '</span>';
       });
       html += '</div>';
 
@@ -8385,8 +8423,8 @@
 
     function playerCell(p, isCollege) {
       var html = escapeHtml(p.name) + posChip(p.position);
-      if (isCollege && p.team) html += ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>';
-      if (isCollege && p.conference) html += ' <span style="font-size:10px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
+      if (isCollege && p.team) html += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span>';
+      if (isCollege && p.conference) html += ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.conference) + '</span>';
       return html;
     }
 
@@ -8395,7 +8433,7 @@
 
       if (!isCollege) {
         html += '<div class="rec-section"><div class="rec-section-header">Single-Game Records</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Single-game fantasy scoring records</caption><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>Wk</th><th>PPR</th></tr></thead><tbody>';
         (data.single_game || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
@@ -8406,7 +8444,7 @@
       }
 
       html += '<div class="rec-section"><div class="rec-section-header">' + (isCollege ? 'Best Single Seasons (Fantasy Pts)' : 'Single-Season Records') + '</div>';
-      html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+      html += '<table class="rec-table"><caption class="sr-only">Single-season fantasy scoring records</caption><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
       (data.single_season || []).forEach(function(p, i) {
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
         html += '<td>' + playerCell(p, isCollege) + '</td>';
@@ -8417,7 +8455,7 @@
 
       if (isCollege) {
         html += '<div class="rec-section"><div class="rec-section-header">Best Single Seasons (Total Yards)</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Best single seasons by total yards</caption><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
         (data.season_yards || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
@@ -8427,7 +8465,7 @@
         html += '</tbody></table></div>';
 
         html += '<div class="rec-section"><div class="rec-section-header">Best Single Seasons (TDs)</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>TDs</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Best single seasons by touchdowns</caption><thead><tr><th>#</th><th>Player</th><th>Szn</th><th>G</th><th>TDs</th></tr></thead><tbody>';
         (data.season_tds || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
@@ -8437,7 +8475,7 @@
         html += '</tbody></table></div>';
 
         html += '<div class="rec-section"><div class="rec-section-header">Career Fantasy Points Leaders</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Career fantasy points leaders</caption><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
         (data.career_fpts || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
@@ -8447,7 +8485,7 @@
         html += '</tbody></table></div>';
 
         html += '<div class="rec-section"><div class="rec-section-header">Career Yards Leaders</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Career yards leaders</caption><thead><tr><th>#</th><th>Player</th><th>Szns</th><th>G</th><th>Yards</th><th>YPG</th></tr></thead><tbody>';
         (data.career_yards || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + playerCell(p, true) + '</td>';
@@ -8457,7 +8495,7 @@
         html += '</tbody></table></div>';
       } else {
         html += '<div class="rec-section"><div class="rec-section-header">Career PPG Leaders</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Career fantasy points per game leaders</caption><thead><tr><th>#</th><th>Player</th><th>G</th><th>PPG</th><th>Total</th></tr></thead><tbody>';
         (data.career_ppg || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
@@ -8466,7 +8504,7 @@
         html += '</tbody></table></div>';
 
         html += '<div class="rec-section"><div class="rec-section-header">Most Career Points</div>';
-        html += '<table class="rec-table"><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
+        html += '<table class="rec-table"><caption class="sr-only">Most career total fantasy points</caption><thead><tr><th>#</th><th>Player</th><th>G</th><th>Total</th><th>PPG</th></tr></thead><tbody>';
         (data.career_total || []).forEach(function(p, i) {
           html += '<tr data-pid="' + escapeAttr(p.player_id) + '"><td><span class="rec-rank ' + rankClass(i) + '">' + (i + 1) + '</span></td>';
           html += '<td>' + escapeHtml(p.name) + posChip(p.position) + '</td>';
@@ -8675,9 +8713,12 @@
       el.querySelector('.rbld-search').value = '';
     });
 
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.rbld-search-area')) el.querySelector('.rbld-autocomplete').style.display = 'none';
-    });
+    if (!el._docClickBound) {
+      el._docClickBound = true;
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.rbld-search-area')) el.querySelector('.rbld-autocomplete').style.display = 'none';
+      });
+    }
 
     el.querySelector('.rbld-clear-btn').addEventListener('click', function() {
       rosterIds = []; gradeData = null; renderEmpty();
@@ -8741,7 +8782,7 @@
       cols.forEach(function(col) {
         if (col.key === 'name') {
           html += '<td><div class="sos2-player-cell">';
-          if (p.headshot_url) html += '<img class="sos2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+          if (p.headshot_url) html += '<img class="sos2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
           html += '<div><div class="sos2-player-name">' + escapeHtml(p.name) + '</div>';
           html += '<div class="sos2-player-meta"><span class="sos2-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span> ' + escapeHtml(p.team) + '</div></div></div></td>';
         } else if (col.key === 'grade') {
@@ -8783,8 +8824,8 @@
       var title = isSuppressed ? '&#x1F6E1; Schedule Suppressed' : '&#x1F36D; Schedule Inflated';
       var st = sortState[section];
       var sorted = sortPlayers(players, st.col, st.dir);
-      var html = '<div class="sos2-section"><div class="sos2-section-header ' + (isSuppressed ? 'suppressed' : 'inflated') + '">' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:400">(' + players.length + ' players)</span></div>';
-      html += '<table class="sos2-table" data-section="' + section + '">' + buildHeader(section) + '<tbody>';
+      var html = '<div class="sos2-section"><div class="sos2-section-header ' + (isSuppressed ? 'suppressed' : 'inflated') + '">' + title + ' <span style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);font-weight:500">(' + players.length + ' players)</span></div>';
+      html += '<table class="sos2-table" data-section="' + section + '"><caption class="sr-only">Strength of schedule — ' + (isSuppressed ? 'schedule suppressed' : 'schedule inflated') + '</caption>' + buildHeader(section) + '<tbody>';
       sorted.forEach(function(p) { html += buildRow(p, section); });
       html += '</tbody></table></div>';
       return html;
@@ -8831,9 +8872,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.sos2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         render(data);
       }).catch(function() {
@@ -8871,10 +8914,10 @@
 
     function buildTable(players) {
       if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
-      var html = '<table class="sc2-table"><thead><tr>';
-      html += '<th>Pos</th><th>Player</th><th>Team</th>';
-      html += '<th>PPR PPG</th><th>Half PPG</th><th>Std PPG</th>';
-      html += '<th>PPR Rank</th><th>Std Rank</th><th>Shift</th>';
+      var html = '<table class="sc2-table"><caption class="sr-only">Scoring format comparison showing PPR, half-PPR, and standard rankings</caption><thead><tr>';
+      html += '<th scope="col">Pos</th><th>Player</th><th>Team</th>';
+      html += '<th scope="col">PPR PPG</th><th>Half PPG</th><th>Std PPG</th>';
+      html += '<th scope="col">PPR Rank</th><th>Std Rank</th><th>Shift</th>';
       html += '</tr></thead><tbody>';
       players.forEach(function(p) {
         var shiftClass = p.rank_diff > 0 ? 'up' : (p.rank_diff < 0 ? 'down' : 'neutral');
@@ -8882,7 +8925,7 @@
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><span class="sc2-pos-badge ' + escapeHtml(p.position) + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td>';
-        if (p.headshot_url) html += '<img class="sc2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="" onerror="this.style.display=\'none\'" loading="lazy">';
+        if (p.headshot_url) html += '<img class="sc2-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'" loading="lazy">';
         html += escapeHtml(p.full_name) + '</td>';
         html += '<td>' + escapeHtml(p.team) + '</td>';
         html += '<td>' + fmt(p.ppg_ppr) + '</td><td>' + fmt(p.ppg_half) + '</td><td>' + fmt(p.ppg_std) + '</td>';
@@ -8909,9 +8952,11 @@
         if (data.available_seasons) {
           var sel = el.querySelector('.sc2-season');
           sel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
         }
         state.season = data.season;
         render(data);
@@ -9002,18 +9047,18 @@
       var maxSR = 0;
       players.forEach(function(p) { if (p.success_rate > maxSR) maxSR = p.success_rate; });
 
-      var html = '<table class="sr2-table"><thead><tr>';
-      html += '<th>#</th><th>Player</th><th>Pos</th><th>SR%</th><th>Type</th><th>Vol</th><th>PPG</th><th>YPC</th><th></th>';
+      var html = '<table class="sr2-table"><caption class="sr-only">Rushing success rate rankings</caption><thead><tr>';
+      html += '<th scope="col">#</th><th>Player</th><th>Pos</th><th>SR%</th><th>Type</th><th>Vol</th><th>PPG</th><th>YPC</th><th></th>';
       html += '</tr></thead><tbody>';
 
       players.forEach(function(p, i) {
-        var posColor = POS_COLORS[p.position] || (typeof getCanvasTheme === 'function' ? getCanvasTheme().ink : '#2d1f14');
+        var posColor = POS_COLORS[p.position] || getCanvasTheme().ink;
         var cls = rateClass(p.success_rate);
         var barPct = maxSR > 0 ? p.success_rate / maxSR * 100 : 0;
         var ypc = p.ypc != null ? escapeHtml(String(p.ypc)) : '-';
         html += '<tr>';
         html += '<td class="sr2-rank">' + (i + 1) + '</td>';
-        html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:10px">' + escapeHtml(p.team) + '</span></td>';
+        html += '<td>' + escapeHtml(p.name) + ' <span style="color:var(--ink-light);font-size:11px">' + escapeHtml(p.team) + '</span></td>';
         html += '<td><span class="sr2-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td><span class="sr2-rate-badge ' + cls + '">' + fmt(p.success_rate) + '%</span></td>';
         html += '<td><span class="sr2-type-chip">' + escapeHtml(p.sr_type) + '</span></td>';
@@ -9112,17 +9157,21 @@
     function populateSeasons(seasons, current) {
       var sel = el.querySelector('.td2-season');
       if (sel.options.length > 0) return;
+      var _opts = '';
       (seasons || []).forEach(function(s) {
-        sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === current ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+        _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === current ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
       });
+      sel.innerHTML = _opts;
     }
 
     function populateTeams(teams) {
       var sel = el.querySelector('.td2-team');
       if (sel.options.length > 1) return;
+      var _opts = '';
       (teams || []).forEach(function(t) {
-        sel.innerHTML += '<option value="' + escapeAttr(t.team) + '">' + escapeHtml(t.team) + '</option>';
+        _opts += '<option value="' + escapeAttr(t.team) + '">' + escapeHtml(t.team) + '</option>';
       });
+      sel.innerHTML += _opts;
     }
 
     function renderDistribution(data) {
@@ -9151,7 +9200,7 @@
           var share = activeMode === 'targets' ? p.target_share : p.carry_share;
           if (!share || share < 2) return;
           otherPct -= share;
-          var posColor = POS_COLORS[p.position] || '#d97757';
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().orange;
           var lightColor = getPosLight()[p.position] || '#f7e4d8';
           var lastName = (p.name || '').split(' ').pop() || p.name || '';
           html += '<div class="td2-dist-seg" style="width:' + share + '%;background:' + lightColor + ';border-right:2px solid ' + posColor + '" title="' + escapeAttr(p.name) + ': ' + share + '%">';
@@ -9173,7 +9222,7 @@
           var share = activeMode === 'targets' ? p.target_share : p.carry_share;
           var count = activeMode === 'targets' ? p.targets : p.carries;
           if (count === 0) return;
-          var posColor = POS_COLORS[p.position] || '#d97757';
+          var posColor = POS_COLORS[p.position] || getCanvasTheme().orange;
           html += '<div class="td2-player-row" data-pid="' + escapeAttr(p.player_id) + '">';
           html += '<div class="td2-player-pos" style="background:' + posColor + '">' + escapeHtml(p.position) + '</div>';
           html += '<div class="td2-player-name">' + escapeHtml(p.name) + '</div>';
@@ -9264,17 +9313,21 @@
           var sel = el.querySelector('.tm-team');
           if (sel.options.length <= 1) {
             sel.innerHTML = '';
+            var _opts = '';
             data.available_teams.forEach(function(t) {
-              sel.innerHTML += '<option value="' + escapeAttr(t.abbr) + '"' + (t.abbr === data.team ? ' selected' : '') + '>' + escapeHtml(t.name) + '</option>';
+              _opts += '<option value="' + escapeAttr(t.abbr) + '"' + (t.abbr === data.team ? ' selected' : '') + '>' + escapeHtml(t.name) + '</option>';
             });
+            sel.innerHTML = _opts;
           } else { sel.value = data.team; }
         }
         if (data.available_seasons) {
           var sSel = el.querySelector('.tm-season');
           sSel.innerHTML = '';
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sSel.innerHTML += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '"' + (s === data.season ? ' selected' : '') + '>' + escapeHtml(String(s)) + '</option>';
           });
+          sSel.innerHTML = _opts;
         }
         renderGroups(data.groups || {});
       }).catch(function() {
@@ -9392,9 +9445,11 @@
         }
         if (!seasonLoaded && data.available_seasons) {
           var sel = el.querySelector('.tf2-season');
+          var _opts = '';
           (data.available_seasons || []).forEach(function(s) {
-            sel.innerHTML += '<option value="' + escapeHtml(String(s)) + '">' + escapeHtml(String(s)) + '</option>';
+            _opts += '<option value="' + escapeHtml(String(s)) + '">' + escapeHtml(String(s)) + '</option>';
           });
+          sel.innerHTML = _opts;
           sel.value = data.season;
           seasonLoaded = true;
         }
@@ -9416,14 +9471,14 @@
         var msg = razzleEmpty();
         return '<div class="panel-empty">' + msg + '</div>';
       }
-      var html = '<table class="tf2-table"><thead><tr>';
-      html += '<th>Player</th><th>Pos</th><th>Team</th><th>Value</th><th>Diff</th><th>Stock</th><th class="hide-mobile">PPG</th><th class="hide-mobile">Tier</th>';
+      var html = '<table class="tf2-table"><caption class="sr-only">Trade finder results showing equal value targets</caption><thead><tr>';
+      html += '<th scope="col">Player</th><th>Pos</th><th>Team</th><th>Value</th><th>Diff</th><th>Stock</th><th class="hide-mobile">PPG</th><th class="hide-mobile">Tier</th>';
       html += '</tr></thead><tbody>';
       targets.forEach(function(p) {
         var pos = (p.position || 'RB').toLowerCase();
         html += '<tr data-pid="' + escapeAttr(p.player_id) + '">';
         html += '<td><div class="tf2-player-cell">';
-        if (p.headshot_url) html += '<img class="tf2-row-img" src="' + escapeAttr(p.headshot_url) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+        if (p.headshot_url) html += '<img class="tf2-row-img" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
         html += '<span>' + escapeHtml(p.full_name) + '</span></div></td>';
         html += '<td><span class="tf2-pos-badge ' + pos + '">' + escapeHtml(p.position) + '</span></td>';
         html += '<td>' + escapeHtml(p.team) + '</td>';
@@ -9445,7 +9500,7 @@
 
       var pos = (sel.position || 'RB').toLowerCase();
       var html = '<div class="tf2-selected-card">';
-      if (sel.headshot_url) html += '<img class="tf2-sel-headshot" src="' + escapeAttr(sel.headshot_url) + '" alt="" onerror="this.style.display=\'none\'">';
+      if (sel.headshot_url) html += '<img class="tf2-sel-headshot" src="' + escapeAttr(sel.headshot_url) + '" alt="Player headshot" onerror="this.onerror=null;this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>\'">';
       html += '<div class="tf2-sel-info"><div class="tf2-sel-name">' + escapeHtml(sel.full_name) + '</div>';
       html += '<div class="tf2-sel-meta"><span class="tf2-pos-badge ' + pos + '">' + escapeHtml(sel.position) + '</span>';
       html += '<span>' + escapeHtml(sel.team) + '</span>';
@@ -9515,12 +9570,13 @@
   // ═══════════════════════════════════════════════════════════════
   defs.push({ name: 'drafttracker', render: function(el) {
     var panelState = { year: 0, position: '', data: null };
+    var _dtTheme = getCanvasTheme();
     var CLASSIFICATION_COLORS = {
-      stud: '#2ec4b6',
-      hit: '#5b7fff',
-      average: '#d97757',
-      bust: '#e63946',
-      too_early: '#8a7565'
+      stud: _dtTheme.green,
+      hit: _dtTheme.blue,
+      average: _dtTheme.orange,
+      bust: _dtTheme.red,
+      too_early: _dtTheme.inkLight
     };
     var CLASSIFICATION_LABELS = {
       stud: 'Stud',
@@ -9586,8 +9642,8 @@
         var barColor = hitPct >= 50 ? 'var(--green)' : hitPct >= 30 ? 'var(--orange)' : 'var(--red)';
         html += '<div style="background:var(--bg-card); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:8px 12px; min-width:100px; text-align:center;">' +
           '<div style="font-family:var(--font-mono); font-size:14px; color:var(--ink);">Round ' + rd.round + '</div>' +
-          '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:4px;">' +
-            '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:4px;"></div>' +
+          '<div style="margin:4px 0; height:6px; background:var(--ink-faint); border-radius:8px;">' +
+            '<div style="height:100%; width:' + hitPct + '%; background:' + barColor + '; border-radius:8px;"></div>' +
           '</div>' +
           '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' +
             rd.hits + '/' + rd.total + ' hits (' + hitPct + '%)' +
@@ -9631,19 +9687,19 @@
       }
 
       var html = '<div style="overflow-x:auto;">' +
-        '<table class="screener-table" style="width:100%; font-size:12px;">' +
+        '<table class="screener-table" style="width:100%; font-size:12px;"><caption class="sr-only">Prospect big board rankings</caption>' +
         '<thead><tr>' +
           '<th style="text-align:left;">Player</th>' +
-          '<th>Pos</th>' +
-          '<th>Rd</th>' +
-          '<th>Pick</th>' +
-          '<th>Team</th>' +
-          '<th>College</th>' +
-          '<th>Games</th>' +
-          '<th>PPG</th>' +
-          '<th>Career FPTS</th>' +
-          '<th>Career AV</th>' +
-          '<th>Verdict</th>' +
+          '<th scope="col">Pos</th>' +
+          '<th scope="col">Rd</th>' +
+          '<th scope="col">Pick</th>' +
+          '<th scope="col">Team</th>' +
+          '<th scope="col">College</th>' +
+          '<th scope="col">Games</th>' +
+          '<th scope="col">PPG</th>' +
+          '<th scope="col">Career FPTS</th>' +
+          '<th scope="col">Career AV</th>' +
+          '<th scope="col">Verdict</th>' +
         '</tr></thead><tbody>';
 
       players.forEach(function(p) {
@@ -9653,7 +9709,7 @@
 
         html += '<tr>' +
           '<td style="text-align:left; font-weight:600;">' + escapeHtml(p.player_name) + '</td>' +
-          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:4px; font-size:10px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
+          '<td><span style="background:' + posColor + '; color:var(--text-on-accent); padding:1px 6px; border-radius:8px; font-size:11px; font-weight:700;">' + escapeHtml(p.position) + '</span></td>' +
           '<td>' + p.round + '</td>' +
           '<td>' + p.pick + '</td>' +
           '<td style="font-family:var(--font-mono); font-size:11px;">' + escapeHtml(p.draft_team || '') + '</td>' +
@@ -9662,7 +9718,7 @@
           '<td style="font-weight:700;">' + fmt(p.career_ppg) + '</td>' +
           '<td>' + fmt(p.career_fpts, 0) + '</td>' +
           '<td>' + fmt(p.career_av, 0) + '</td>' +
-          '<td><span style="background:' + verdictColor + '; color:var(--text-on-accent); padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
+          '<td><span style="background:' + verdictColor + '; color:var(--text-on-accent); padding:2px 8px; border-radius:8px; font-size:11px; font-weight:700; border:2px solid var(--ink-faint);">' + verdictLabel + '</span></td>' +
         '</tr>';
       });
 
@@ -9769,7 +9825,7 @@
       html += '<div class="corr-predictors">';
       predictors.forEach(function(p) {
         var pct = Math.round(Math.abs(p.r) * 100);
-        var color = p.r > 0 ? '#2ec4b6' : '#e63946';
+        var color = p.r > 0 ? t.green : t.red;
         html += '<div class="corr-pred-row">' +
           '<span class="corr-pred-label">' + escapeHtml(p.label) + '</span>' +
           '<div class="corr-pred-bar-bg">' +
@@ -9911,13 +9967,13 @@
         for (var g = 0; g <= 4; g++) {
           var gy = pad.t + ch - (g / 4) * ch;
           sctx.beginPath(); sctx.moveTo(pad.l, gy); sctx.lineTo(pad.l + cw, gy); sctx.stroke();
-          sctx.fillStyle = t.inkLight; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'right';
+          sctx.fillStyle = t.inkLight; sctx.font = '11px "Space Mono", monospace'; sctx.textAlign = 'right';
           sctx.fillText(fmt(yMin + (g / 4) * yRange), pad.l - 5, gy + 3);
         }
         for (var g = 0; g <= 4; g++) {
           var gx = pad.l + (g / 4) * cw;
           sctx.beginPath(); sctx.moveTo(gx, pad.t); sctx.lineTo(gx, pad.t + ch); sctx.stroke();
-          sctx.fillStyle = t.inkLight; sctx.font = '10px "Space Mono", monospace'; sctx.textAlign = 'center';
+          sctx.fillStyle = t.inkLight; sctx.font = '11px "Space Mono", monospace'; sctx.textAlign = 'center';
           sctx.fillText(fmt(xMin + (g / 4) * xRange), gx, pad.t + ch + 16);
         }
 
@@ -9963,7 +10019,7 @@
             sctx.beginPath();
             sctx.moveTo(px1, py1);
             sctx.lineTo(px2, py2);
-            sctx.strokeStyle = '#d97757';
+            sctx.strokeStyle = t.orange;
             sctx.lineWidth = 2;
             sctx.setLineDash([6, 4]);
             sctx.stroke();
@@ -10090,7 +10146,7 @@
 
       // League average line
       var avgX = padLeft + (data.league_average / maxVal) * barAreaW;
-      ctx.strokeStyle = '#d97757';
+      ctx.strokeStyle = th.orange;
       ctx.lineWidth = 1.5;
       ctx.setLineDash([4, 3]);
       ctx.beginPath();
@@ -10125,7 +10181,7 @@
             ctx.fillStyle = seg.color;
             ctx.fillRect(x, y, segW, barH);
             // Subtle right border between segments
-            ctx.fillStyle = th.isDark ? 'rgba(45,31,20,0.4)' : 'rgba(247,239,229,0.4)';
+            ctx.fillStyle = th.isDark ? (th.bg + '66') : (th.bgCard + '66');
             ctx.fillRect(x + segW - 1, y, 1, barH);
           }
           x += segW;
@@ -10133,7 +10189,7 @@
 
         // Total value label
         ctx.fillStyle = th.ink;
-        ctx.font = '10px "Space Mono", monospace';
+        ctx.font = '11px "Space Mono", monospace';
         ctx.textAlign = 'left';
         ctx.fillText(fmt(t.total_value, 0), x + 4, y + barH / 2 + 4);
 
@@ -10148,7 +10204,7 @@
       // Legend
       var legendX = padLeft;
       var legendY = padTop - 14;
-      ctx.font = '9px "Space Mono", monospace';
+      ctx.font = '11px "Space Mono", monospace';
       ctx.textAlign = 'left';
       ['QB', 'RB', 'WR', 'TE'].forEach(function(pos) {
         ctx.fillStyle = POS_COLS[pos];
@@ -10193,8 +10249,8 @@
 
       // Top players
       if (t.top_players && t.top_players.length) {
-        html += '<div style="font-family:var(--font-hand);font-size:15px;color:var(--ink-light);margin-bottom:6px;">top dynasty assets</div>';
-        html += '<table style="width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:12px;">';
+        html += '<div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-light);margin-bottom:6px;">top dynasty assets</div>';
+        html += '<table style="width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:12px;"><caption class="sr-only">Top dynasty assets for selected team</caption>';
         html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
         html += '<th style="text-align:left;padding:4px 6px;">Player</th>';
         html += '<th style="text-align:center;padding:4px 6px;">Pos</th>';
@@ -10263,7 +10319,7 @@
       '<select class="lp-select" id="gs-season" aria-label="Season"></select>' +
       weekSelectHTML('gs-week') +
       '</div>' +
-      '<div id="gs-body" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div class="lp-loading">reviewing the film...</div></div>' +
+      '<div id="gs-body" style="overflow-x:auto"><div class="lp-loading">reviewing the film...</div></div>' +
       '</div>';
 
     function diffBadge(val) {
@@ -10282,8 +10338,8 @@
 
     function renderTable(players, isPositive) {
       if (!players || !players.length) return '<div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div>';
-      var h = '<table class="gs-table"><thead><tr>';
-      h += '<th>#</th><th>Player</th><th>Team</th><th>GP</th>';
+      var h = '<table class="gs-table"><caption class="sr-only">Game script fantasy performance rankings</caption><thead><tr>';
+      h += '<th scope="col">#</th><th>Player</th><th>Team</th><th>GP</th>';
       h += '<th title="Fantasy Points Per Game (PPR)">PPG</th><th title="Average Score Differential — positive means team was winning">Avg Diff</th><th title="Garbage Time % — % of stats scored in garbage time">GT%</th></tr></thead><tbody>';
       players.forEach(function(p, i) {
         var posColor = POS_COLS[p.position] || '#8a7565';
@@ -10413,9 +10469,9 @@
               var h = Math.round(w.pct / 12 * 140);
               var isHigh = w.pct >= 8;
               return '<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;">' +
-                '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">' + w.pct + '%</div>' +
-                '<div style="width:100%; height:' + h + 'px; background:' + (isHigh ? 'var(--orange)' : 'var(--ink-faint)') + '; border-radius:4px 4px 0 0; border:2px solid var(--ink); min-width:16px;"></div>' +
-                '<div style="font-family:var(--font-mono); font-size:8px; color:var(--ink-light); white-space:nowrap;">' + w.label + '</div>' +
+                '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + w.pct + '%</div>' +
+                '<div style="width:100%; height:' + h + 'px; background:' + (isHigh ? 'var(--orange)' : 'var(--ink-faint)') + '; border-radius:8px 8px 0 0; border:2px solid var(--ink); min-width:16px;"></div>' +
+                '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); white-space:nowrap;">' + w.label + '</div>' +
               '</div>';
             }).join('') +
           '</div>' +

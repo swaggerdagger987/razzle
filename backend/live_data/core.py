@@ -13,6 +13,63 @@ from datetime import datetime as _datetime
 
 logger = logging.getLogger("razzle.live_data.core")
 
+# ---------------------------------------------------------------------------
+# Concurrency guard for expensive Python-sort screener queries (S1-045)
+# ---------------------------------------------------------------------------
+# Limits how many concurrent derived-sort requests can run enrichment + sort
+# across all threads in a single worker process. Prevents OOM on Render's
+# 512MB standard plan when multiple users sort by derived columns at once.
+_DERIVED_SORT_MAX_CONCURRENT = 2
+_derived_sort_semaphore = threading.Semaphore(_DERIVED_SORT_MAX_CONCURRENT)
+
+# ---------------------------------------------------------------------------
+# Enriched-result cache for derived-sort queries (S1-045)
+# ---------------------------------------------------------------------------
+# When users sort by derived metrics (yards_per_carry, catch_rate, etc.),
+# the server must fetch ALL matching rows, enrich them (7 enrichment passes
+# including 4 DB queries), then sort and paginate in Python.
+#
+# This cache stores the fully-enriched item list keyed by the filter parameters
+# (excluding sort_key, sort_dir, limit, offset). When the same user changes
+# sort columns or pages through results, the enriched data is reused and only
+# the sort/slice step runs. Entries are larger than normal cache (~1-2MB each
+# for 1000 enriched rows), so the max size and TTL are kept tight.
+_enriched_cache = {}
+_enriched_cache_lock = threading.Lock()
+_ENRICHED_CACHE_TTL = 120  # 2 minutes — short to limit memory pressure
+_ENRICHED_CACHE_MAX = 20   # max 20 cached enriched result sets
+
+
+def _enriched_cache_get(key):
+    """Return (items_copy, total) from enriched cache, or None if miss/expired."""
+    with _enriched_cache_lock:
+        entry = _enriched_cache.get(key)
+    if entry and _time.time() - entry["t"] < _ENRICHED_CACHE_TTL:
+        entry["a"] = _time.time()
+        # Return a shallow copy of items so callers can sort in place without
+        # corrupting the cached list order for other concurrent requests
+        return list(entry["items"]), entry["total"]
+    return None
+
+
+def _enriched_cache_set(key, items, total):
+    """Cache enriched items list. Evicts oldest if over limit."""
+    with _enriched_cache_lock:
+        if len(_enriched_cache) >= _ENRICHED_CACHE_MAX:
+            # Evict expired first, then LRU
+            now = _time.time()
+            expired = [k for k, v in list(_enriched_cache.items())
+                       if now - v["t"] >= _ENRICHED_CACHE_TTL]
+            for k in expired:
+                _enriched_cache.pop(k, None)
+            if len(_enriched_cache) >= _ENRICHED_CACHE_MAX:
+                oldest_key = min(_enriched_cache, key=lambda k: _enriched_cache[k].get("a", 0))
+                _enriched_cache.pop(oldest_key, None)
+        _enriched_cache[key] = {
+            "items": items, "total": total,
+            "t": _time.time(), "a": _time.time(),
+        }
+
 
 def _current_nfl_season():
     """Return the current NFL season year (rolls over in August)."""
@@ -74,6 +131,13 @@ def _cached(key, fn, ttl=None):
         # Evict stale entries first, then LRU if still over limit
         if len(_cache) >= _CACHE_MAX_SIZE:
             _cache_evict(now)
+        # Periodic lock cleanup: prune orphan locks every 100 calls
+        _cached._call_count = getattr(_cached, "_call_count", 0) + 1
+        if _cached._call_count % 100 == 0:
+            with _cache_meta_lock:
+                stale = [k for k in list(_cache_locks.keys()) if k not in _cache]
+                for k in stale:
+                    _cache_locks.pop(k, None)
         result = fn()
         _cache[key] = {"t": now, "v": result, "a": now, "ttl": ttl}
         return result
@@ -103,6 +167,8 @@ def cache_clear():
     with _cache_meta_lock:
         _cache.clear()
         _cache_locks.clear()
+    with _enriched_cache_lock:
+        _enriched_cache.clear()
     logger.info("Data cache cleared")
 
 
@@ -408,22 +474,24 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
 
     placeholders = ",".join("?" * len(player_ids))
 
-    # Get per-season PPR totals for all returned players
+    # Get per-season PPG (per-game average) for all returned players
     rows = conn.execute(f"""
-        SELECT player_id, season, ROUND(SUM(fantasy_points_ppr), 1) as ppr
+        SELECT player_id, season,
+            ROUND(SUM(fantasy_points_ppr) * 1.0 / COUNT(*), 1) as ppg,
+            COUNT(*) as gp
         FROM player_week_stats
         WHERE player_id IN ({placeholders}) AND season_type = 'regular'
         GROUP BY player_id, season
         ORDER BY player_id, season
     """, player_ids).fetchall()
 
-    # Compute max YoY breakout % per player
+    # Compute max YoY breakout % per player using PPG
     seasons_by_player = {}
     for r in rows:
         pid = r[0]
         if pid not in seasons_by_player:
             seasons_by_player[pid] = []
-        seasons_by_player[pid].append({"season": r[1], "ppr": r[2] or 0})
+        seasons_by_player[pid].append({"season": r[1], "ppg": r[2] or 0, "gp": r[3] or 0})
 
     breakouts = {}
     for pid, seasons_list in seasons_by_player.items():
@@ -431,13 +499,17 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
         best_pct = 0
         best_season = None
         for i in range(1, len(seasons_list)):
-            prev_ppr = seasons_list[i - 1]["ppr"]
-            curr_ppr = seasons_list[i]["ppr"]
-            if prev_ppr > 20:  # minimum threshold to avoid noise
-                pct_change = ((curr_ppr - prev_ppr) / prev_ppr) * 100
-                if pct_change > best_pct:
-                    best_pct = pct_change
-                    best_season = seasons_list[i]["season"]
+            prev = seasons_list[i - 1]
+            curr = seasons_list[i]
+            # Require 10+ games in both seasons and PPG >= 8 to avoid noise
+            if prev["gp"] < 10 or curr["gp"] < 10:
+                continue
+            if prev["ppg"] < 8:
+                continue
+            pct_change = ((curr["ppg"] - prev["ppg"]) / prev["ppg"]) * 100
+            if pct_change > best_pct:
+                best_pct = pct_change
+                best_season = seasons_list[i]["season"]
         breakouts[pid] = {"pct": round(best_pct, 1), "season": best_season}
 
     for item in items:
@@ -505,14 +577,16 @@ def _enrich_with_dynasty_value(items):
 
 
 def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False, week=0):
-    """Fetch play-by-play derived stats from player_season_pbp table."""
+    """Fetch play-by-play derived stats from player_season_pbp table.
+
+    PBP data is season-level only. For per-week queries we still include it
+    (useful context) but tag each item with _pbp_context="season" so the
+    frontend can annotate column headers accordingly.
+    """
     if not items:
         return items
 
-    # PBP data is season-level only (no week column) — skip for per-week queries
-    # to avoid showing season totals alongside single-week core stats
-    if week and int(week) > 0:
-        return items
+    is_week_query = week and int(week) > 0
 
     player_ids = [item["player_id"] for item in items if item.get("player_id")]
     if not player_ids:
@@ -596,6 +670,8 @@ def _enrich_with_pbp_stats(conn, items, season=None, career_mode=False, week=0):
                 item[col] = round(val, 3) if isinstance(val, float) else val
             else:
                 item[col] = None
+        if is_week_query:
+            item["_pbp_context"] = "season"
 
     return items
 
@@ -825,10 +901,11 @@ _AGE_PEAKS = {"QB": 28, "RB": 24, "WR": 26, "TE": 27}
 _AGE_DECAY = {"QB": 0.04, "RB": 0.10, "WR": 0.06, "TE": 0.05}
 
 # PPR PPG thresholds for elite (100th percentile) by position
-_ELITE_PPG = {"QB": 22.0, "RB": 18.0, "WR": 18.0, "TE": 14.0}
+_ELITE_PPG = {"QB": 22.0, "RB": 18.0, "WR": 18.0, "TE": 16.0}
 
 # Positional scarcity multipliers (higher = scarcer = more valuable)
-_SCARCITY = {"QB": 0.85, "RB": 1.15, "WR": 1.0, "TE": 0.90}
+# TE reduced from 0.72 to 0.55 to prevent TE overvaluation in top 25
+_SCARCITY = {"QB": 0.85, "RB": 1.15, "WR": 1.0, "TE": 0.55}
 
 
 def _age_value(age, position):
@@ -867,13 +944,13 @@ def compute_trade_value(ppg, age, position):
     scar = _scarcity_value(position)
     # Weighted composite: production 50%, age 30%, scarcity 20%
     raw = prod * 0.50 + age_v * 0.30 + scar * 0.20
-    # Soft ceiling: below 90 is linear, above 90 uses log compression
-    # so elite players get meaningful spread instead of clustering at 100
-    # Denominator 50 gives wider spread in elite tier (vs 30 which clustered top-25 in 90-96)
-    if raw <= 90.0:
+    # Soft ceiling: below 85 is linear, above 85 uses log compression
+    # 15-point ceiling range (85-100) with D=50 gives meaningful spread
+    # so elite players are clearly differentiated from merely good ones
+    if raw <= 85.0:
         return round(max(0.0, raw), 1)
-    excess = raw - 90.0
-    value = 90.0 + 10.0 * (1.0 - math.exp(-excess / 50.0))
+    excess = raw - 85.0
+    value = 85.0 + 15.0 * (1.0 - math.exp(-excess / 50.0))
     return round(value, 1)
 
 

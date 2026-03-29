@@ -43,7 +43,7 @@ function _hexAlpha(hex, alpha) {
 function exportPanelCSV(panelName) {
   // Pro+ gating
   if (typeof isPaidUser === "function" && !isPaidUser()) {
-    _showToast('CSV export is a Pro feature', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
+    _showToast('export this data as CSV \u2014 Pro feature', 'warning', null, {href: '/pricing.html', text: 'upgrade now'});
     return;
   }
   var panel = document.getElementById('panel-' + panelName);
@@ -140,10 +140,10 @@ function screenshotPanel(panelName) {
     if (typeof drawRazzleWatermark === 'function') {
       drawRazzleWatermark(ctx, canvas, { url: window.location.href, isDark: _t.isDark });
     } else {
-      var wmAlpha = _t.isDark ? 'rgba(237, 224, 207, 0.25)' : 'rgba(45, 31, 20, 0.25)';
+      var wmAlpha = _t.subtitleAlpha;
       ctx.fillStyle = wmAlpha;
       ctx.textAlign = 'right';
-      ctx.font = '600 28px Caveat, cursive';
+      ctx.font = '600 24px Caveat, cursive';
       ctx.fillText('razzle.lol', canvas.width - 20, canvas.height - 30);
     }
     // Download
@@ -401,14 +401,14 @@ function _showWatchlistSyncHint(isPaid) {
   if (existing) existing.remove();
   var badge = document.createElement("span");
   badge.id = "watchlistCloudBadge";
-  badge.style.cssText = "font-family:var(--font-mono); font-size:8px; margin-left:6px; padding:1px 5px; border-radius:var(--radius-sm); vertical-align:middle;";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:11px; margin-left:6px; padding:1px 5px; border-radius:var(--radius-sm); vertical-align:middle;";
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
     badge.style.border = "2px solid var(--pos-qb)";
     badge.textContent = "synced";
   } else {
     badge.style.color = "var(--ink-light)";
-    badge.style.border = "2px dashed var(--ink-faint)";
+    badge.style.border = "2px dashed var(--border-dashed)";
     badge.textContent = "local only";
   }
   btn.appendChild(badge);
@@ -492,12 +492,12 @@ function showTagPicker(playerId, anchorEl) {
     picker.className = "tag-picker";
     picker.setAttribute("role", "dialog");
     picker.setAttribute("aria-modal", "true");
-    picker.setAttribute("aria-label", "Player tags");
+    picker.setAttribute("aria-labelledby", "dlgTitleTagPicker");
     document.body.appendChild(picker);
   }
 
   const currentTag = getPlayerTag(playerId);
-  let html = '<div class="tag-picker-title">Tag Player</div>';
+  let html = '<div class="tag-picker-title" id="dlgTitleTagPicker">Tag Player</div>';
   for (const [key, opt] of Object.entries(TAG_OPTIONS)) {
     const isActive = currentTag === key;
     html += `<button class="tag-picker-option${isActive ? " active" : ""}" `
@@ -611,17 +611,17 @@ function showNoteEditor(playerId, anchorEl) {
     editor.className = "note-editor-popup";
     editor.setAttribute("role", "dialog");
     editor.setAttribute("aria-modal", "true");
-    editor.setAttribute("aria-label", "Player notes");
+    editor.setAttribute("aria-labelledby", "dlgTitleNoteEditor");
     document.body.appendChild(editor);
   }
 
-  editor.innerHTML = `<div class="note-editor-title">${escapeHtml(name)}</div>`
+  editor.innerHTML = `<div class="note-editor-title" id="dlgTitleNoteEditor">${escapeHtml(name)}</div>`
     + `<textarea class="note-editor-input" id="noteEditorInput" maxlength="140" placeholder="Add a note... (140 chars)">${escapeHtml(existing)}</textarea>`
     + `<div class="note-editor-footer">`
     + `<span class="note-editor-count" id="noteCharCount">${existing.length}/140</span>`
     + `<div style="display:flex; gap:6px;">`
-    + `<button class="btn-chunky note-editor-clear" onclick="clearPlayerNote('${escapeJS(playerId)}')" style="font-size:10px; padding:3px 8px; ${existing ? '' : 'display:none;'}">Clear</button>`
-    + `<button class="btn-primary note-editor-save" onclick="saveNoteFromEditor()" style="font-size:10px; padding:3px 10px;">Save</button>`
+    + `<button class="btn-chunky note-editor-clear" onclick="clearPlayerNote('${escapeJS(playerId)}')" style="font-size:11px; padding:3px 8px; ${existing ? '' : 'display:none;'}">Clear</button>`
+    + `<button class="btn-primary note-editor-save" onclick="saveNoteFromEditor()" style="font-size:11px; padding:3px 10px;">Save</button>`
     + `</div></div>`;
 
   // Position near anchor
@@ -1019,7 +1019,7 @@ const state = {
   totalCount: 0,
   seasons: [],
   selectedPlayers: [], // for compare/charts [{player_id, full_name, position, team}]
-  heatColors: false, // percentile heat coloring toggle
+  heatColors: (function() { try { var v = localStorage.getItem("razzle_heat_colors"); return v === null ? true : v === "1"; } catch(e) { return true; } })(), // ON by default for screenshot-ready views
   percentileMode: (function() { try { return localStorage.getItem("razzle_percentile_mode") === "1"; } catch(e) { return false; } })(), // show percentile values instead of raw
   dataBars: (function() { try { return localStorage.getItem("razzle_data_bars") === "1"; } catch(e) { return false; } })(), // inline data bars toggle
   leaderBadges: (function() { try { return localStorage.getItem("razzle_leader_badges") === "1"; } catch(e) { return false; } })(), // stat leader dot indicators
@@ -1164,12 +1164,8 @@ function _syncUndoRedoButtons() {
   try {
     const [nflOpts, prospectOpts, collegeOpts] = await Promise.all([
       apiFetch("/api/filter-options").catch(function(err) {
-        console.error("Failed to load NFL filter options:", err);
-        var labContent = document.getElementById("labContent") || document.querySelector(".lab-main");
-        if (labContent) {
-          labContent.innerHTML = '<div style="text-align:center;padding:40px;font-family:var(--font-mono);color:var(--orange);font-size:15px;border:3px solid var(--ink);background:var(--bg-card);border-radius:8px;margin:24px;">' + razzleError() + '</div>';
-        }
-        return { seasons: [], teams: [], positions: [] };
+        if (typeof _showToast === "function") _showToast(razzleError(), "error");
+        return { seasons: [], teams: [], positions: [], _failed: true };
       }),
       apiFetch("/api/prospect-options").catch(() => ({ years: [], schools: [], positions: [] })),
       apiFetch("/api/college/filter-options").catch(() => ({ seasons: [], teams: [], conferences: [], positions: [] })),
@@ -1188,12 +1184,13 @@ function _syncUndoRedoButtons() {
     state.collegeSeasons = collegeOpts.seasons || [_nflYear];
     if (!state.collegeSeason) state.collegeSeason = state.collegeSeasons[0] || _nflYear;
 
-    populateSeasonSelect();
-    populateWeekSelect();
+    if (!nflOpts._failed) {
+      populateSeasonSelect();
+      populateWeekSelect();
+    }
     populateFilterStatSelect();
     populateTeamFilter();
   } catch (e) {
-    console.error("Failed to load filter options:", e);
     state.season = _nflYear;
   }
 
@@ -1439,7 +1436,7 @@ async function fetchAndRenderProspects(signal, myId) {
     if (myId !== _fetchId) return; // stale response
 
     tbody.innerHTML = "";
-    state.items = data.items || [];
+    state.items = (data.items || []).map(function(p) { return Object.assign({}, p); });
     state.totalCount = data.count || 0;
     state.draftYear = data.draft_year || state.draftYear;
 
@@ -1486,7 +1483,7 @@ async function fetchAndRenderCollege(signal, myId) {
     if (myId !== _fetchId) return; // stale response
 
     tbody.innerHTML = "";
-    state.items = data.items || [];
+    state.items = (data.items || []).map(function(p) { return Object.assign({}, p); });
     state.totalCount = data.count || 0;
     state.collegeSeason = data.season || state.collegeSeason;
 
@@ -1596,7 +1593,7 @@ function renderTableHead() {
   if (state.universe === "nfl") {
     const pinCount = state.pinnedPlayers.length;
     const pinTitle = pinCount > 0 ? `${pinCount} pinned — click to clear` : "Pin players to top";
-    html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}><span class="pin-icon${pinCount ? ' pin-active' : ''}"></span>${pinCount ? '<span style="font-size:9px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
+    html += `<th scope="col" class="col-pin" style="width:28px; text-align:center; padding:8px 2px; cursor:${pinCount ? 'pointer' : 'default'}; font-size:12px;" title="${pinTitle}"${pinCount ? ' onclick="clearAllPins()"' : ''}><span class="pin-icon${pinCount ? ' pin-active' : ''}"></span>${pinCount ? '<span style="font-size:11px; color:var(--orange); font-weight:700;"> ' + pinCount + '</span>' : ''}</th>`;
   }
   html += '<th scope="col" class="col-rank" title="Overall rank by current sort">#</th>';
   const playerAriaSort = (state.sortKey === "full_name" || state.sortKey === "player_name") ? (state.sortDir === "asc" ? "ascending" : "descending") : (state.sortKey2 === "full_name" || state.sortKey2 === "player_name") ? (state.sortDir2 === "asc" ? "ascending" : "descending") : "none";
@@ -1604,7 +1601,7 @@ function renderTableHead() {
   if (state.sortKey === "full_name" || state.sortKey === "player_name") {
     html += state.sortDir === "asc" ? " &#9650;" : " &#9660;";
   } else if (state.sortKey2 === "full_name" || state.sortKey2 === "player_name") {
-    html += ' <span style="opacity:0.4; font-size:10px;">' + (state.sortDir2 === "asc" ? "&#9650;" : "&#9660;") + "2</span>";
+    html += ' <span style="opacity:0.4; font-size:11px;">' + (state.sortDir2 === "asc" ? "&#9650;" : "&#9660;") + "2</span>";
   }
   html += "</th>";
 
@@ -1633,8 +1630,12 @@ function renderTableHead() {
     }
     const tip = ` title="${escapeAttr(tipText)}"`;
     let extra = "";
+    // Agent icon for columns with agent ownership (S1-022)
+    if (colAgent) {
+      extra += ` <img src="${escapeAttr(colAgent.icon)}" alt="${escapeAttr(colAgent.name)}" width="16" height="16" class="col-agent-icon" loading="lazy" onerror="this.style.display='none'">`;
+    }
     if (key === "dynasty_value") {
-      extra = ` <span class="dvs-info" role="button" tabindex="0" aria-label="DVS methodology info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:10px; opacity:0.6;">&#9432;</span>`;
+      extra = ` <span class="dvs-info" role="button" tabindex="0" aria-label="DVS methodology info" onclick="event.stopPropagation(); toggleDVSInfo()" title="Click for DVS methodology" style="cursor:help; font-size:11px; opacity:0.6;">&#9432;</span>`;
     }
     // Filter indicator dot
     var filterInfo = _getColumnFilterInfo(key);
@@ -1672,9 +1673,11 @@ function _initColResizeHandles() {
     h.removeEventListener("mousedown", _onColResizeStart);
     h.removeEventListener("dblclick", _onColResizeReset);
     h.removeEventListener("keydown", _onColResizeKeydown);
+    h.removeEventListener("touchstart", _onColResizeTouchStart);
     h.addEventListener("mousedown", _onColResizeStart);
     h.addEventListener("dblclick", _onColResizeReset);
     h.addEventListener("keydown", _onColResizeKeydown);
+    h.addEventListener("touchstart", _onColResizeTouchStart, { passive: false });
     h.setAttribute("role", "separator");
     h.setAttribute("tabindex", "0");
     h.setAttribute("aria-orientation", "vertical");
@@ -1759,6 +1762,48 @@ function _onColResizeEnd() {
   document.removeEventListener("mousemove", _onColResizeMove);
   document.removeEventListener("mouseup", _onColResizeEnd);
   document.body.style.cursor = "";
+  document.body.style.userSelect = "";
+  try { localStorage.setItem("razzle_col_widths", JSON.stringify(state.columnWidths)); } catch(e) {}
+}
+
+// Touch equivalents for column resize
+function _onColResizeTouchStart(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  var touch = e.touches[0];
+  var key = e.target.dataset.col;
+  var th = e.target.parentElement;
+  _colResize.active = true;
+  _colResize.key = key;
+  _colResize.startX = touch.clientX;
+  _colResize.startW = th.offsetWidth;
+  document.addEventListener("touchmove", _onColResizeTouchMove, { passive: false });
+  document.addEventListener("touchend", _onColResizeTouchEnd);
+  document.addEventListener("touchcancel", _onColResizeTouchEnd);
+  document.body.style.userSelect = "none";
+}
+
+function _onColResizeTouchMove(e) {
+  if (!_colResize.active) return;
+  e.preventDefault();
+  var touch = e.touches[0];
+  var delta = touch.clientX - _colResize.startX;
+  var newW = Math.max(40, _colResize.startW + delta);
+  state.columnWidths[_colResize.key] = newW;
+  var ths = document.querySelectorAll('th[data-col="' + _colResize.key + '"]');
+  for (var i = 0; i < ths.length; i++) {
+    ths[i].style.width = newW + "px";
+    ths[i].style.minWidth = newW + "px";
+    ths[i].style.maxWidth = newW + "px";
+  }
+}
+
+function _onColResizeTouchEnd() {
+  if (!_colResize.active) return;
+  _colResize.active = false;
+  document.removeEventListener("touchmove", _onColResizeTouchMove);
+  document.removeEventListener("touchend", _onColResizeTouchEnd);
+  document.removeEventListener("touchcancel", _onColResizeTouchEnd);
   document.body.style.userSelect = "";
   try { localStorage.setItem("razzle_col_widths", JSON.stringify(state.columnWidths)); } catch(e) {}
 }
@@ -1857,7 +1902,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
   // Rank column (with expand arrow for NFL — skip on pinned rows where rowIdx is null)
   const rank = (rowIdx != null) ? (state.offset + rowIdx + 1) : "";
   if (state.universe === "nfl" && player.player_id && rowIdx != null) {
-    html += `<td class="col-rank" role="button" tabindex="0" aria-expanded="false" aria-label="Expand weekly stats" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeJS(player.player_id)}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();toggleRowExpand('${escapeJS(player.player_id)}',this)}" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:8px; margin-right:2px;">&#9654;</span>${rank}</td>`;
+    html += `<td class="col-rank" role="button" tabindex="0" aria-expanded="false" aria-label="Expand weekly stats" style="cursor:pointer;" onclick="event.stopPropagation(); toggleRowExpand('${escapeJS(player.player_id)}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();toggleRowExpand('${escapeJS(player.player_id)}',this)}" title="Click to expand weekly stats"><span class="row-expand-arrow" style="font-size:11px; margin-right:2px;">&#9654;</span>${rank}</td>`;
   } else {
     html += `<td class="col-rank">${rank}</td>`;
   }
@@ -1869,7 +1914,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
     html += `<a href="#" onclick="openCollegeProfile('${cid}'); return false;" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--pos-qb);">${_highlightSearch(escapeHtml(player.player_name))}</a>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
-    if (player.conference) html += `<span class="school-label" style="font-size:10px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
+    if (player.conference) html += `<span class="school-label" style="font-size:11px; color:var(--ink-light);">${escapeHtml(player.conference)}</span>`;
     html += `</div></td>`;
   } else if (isProspectView()) {
     const pn = escapeAttr(player.player_name || "");
@@ -1887,7 +1932,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
     html += `<td class="col-player"><div class="player-name-cell">`;
     html += playerHeadshot(player, pos);
     html += `<span class="pos-badge ${posClass(pos)}">${escapeHtml(pos)}</span>`;
-    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pidJS}');" onmouseenter="onPlayerNameEnter('${pidJS}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--ink-faint);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
+    html += `<a href="/player/${encodeURIComponent(pid)}" onclick="event.preventDefault(); openPlayerProfile('${pidJS}');" onmouseenter="onPlayerNameEnter('${pidJS}', this)" onmouseleave="onPlayerNameLeave()" style="color:var(--ink); text-decoration:none; border-bottom:2px dashed var(--border-dashed);">${_highlightSearch(escapeHtml(player.full_name))}</a>`;
     html += buildTagChip(pid);
     html += `<span class="tag-icon" role="button" tabindex="0" aria-label="Tag player" onclick="event.stopPropagation(); showTagPicker('${pidJS}', this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();showTagPicker('${pidJS}',this)}" title="Tag player">&#9679;</span>`;
     html += `<span class="team-label">${escapeHtml(player.team)}</span>`;
@@ -1973,7 +2018,7 @@ function buildRowHTML(player, cols, heatOn, pctData, rowIdx, barsOn, pctMode, le
       const pctColor = pv >= 90 ? "var(--green)" : pv >= 75 ? "var(--pos-qb)" : pv <= 10 ? "var(--red)" : pv <= 25 ? "var(--ink-light)" : "";
       const pctFw = pv >= 75 || pv <= 25 ? "font-weight:700;" : "";
       const pctSty = (pctColor || pctFw) ? ` style="${pctColor ? "color:" + pctColor + ";" : ""}${pctFw}"` : "";
-      html += `<td${scAttr}${hStyle}><span class="pctl-val"${pctSty} title="${formatStat(val, col.decimals != null ? col.decimals : 1)}">${pv}<sup style="font-size:8px; opacity:0.6;">%</sup></span></td>`;
+      html += `<td${scAttr}${hStyle}><span class="pctl-val"${pctSty} title="${formatStat(val, col.decimals != null ? col.decimals : 1)}">${pv}<sup style="font-size:11px; opacity:0.6;">%</sup></span></td>`;
     } else if (key === "dynasty_value" && typeof val === "number") {
       const dvsColor = val >= 85 ? "var(--green)" : val >= 70 ? "var(--pos-qb)" : val >= 55 ? "var(--orange)" : "var(--ink-light)";
       const dvsTier = val >= 85 ? "Elite" : val >= 70 ? "Star" : val >= 55 ? "Starter" : "";
@@ -2029,6 +2074,10 @@ function renderVisibleRows() {
     html += '<tr style="height:' + topHeight + 'px;"><td colspan="' + colCount + '"></td></tr>';
   }
   for (let i = startRow; i < endRow; i++) {
+    if (_vscrollRows[i] === undefined && _vscrollRenderCtx && state.items[i]) {
+      var c = _vscrollRenderCtx;
+      _vscrollRows[i] = buildRowHTML(state.items[i], c.cols, c.heatOn, c.pctData, i, c.barsOn, c.pctMode, c.leaderRanks, c.colDefMap);
+    }
     html += _vscrollRows[i] || '';
   }
   if (bottomHeight > 0) {
@@ -2062,6 +2111,8 @@ function renderTableBody() {
   if (typeof hideTagPicker === 'function') hideTagPicker();
   if (typeof hideNoteEditor === 'function') hideNoteEditor();
   if (typeof dismissColumnStatsPopover === 'function') dismissColumnStatsPopover();
+  if (typeof hideHoverCard === 'function') hideHoverCard();
+  if (typeof _hoverTimer !== 'undefined') clearTimeout(_hoverTimer);
   var ctxMenu = document.querySelector('.ctx-menu');
   if (ctxMenu) ctxMenu.style.display = 'none';
   if (_expandAbort) { _expandAbort.abort(); _expandAbort = null; }
@@ -2135,6 +2186,7 @@ function renderTableBody() {
 // ─── Sparkline loading (async, non-blocking) ──────────────────
 let _sparklineCache = {};  // pid -> [pts...]
 let _sparklineAbort = null;
+let _sparklineGen = 0;
 
 function loadScreenerSparklines() {
   // Collect player IDs from current items
@@ -2147,6 +2199,7 @@ function loadScreenerSparklines() {
   // Cancel previous in-flight request
   if (_sparklineAbort) _sparklineAbort.abort();
   _sparklineAbort = new AbortController();
+  const gen = ++_sparklineGen;
 
   // Check which IDs are already cached for this season
   const season = state.season || 0;
@@ -2170,6 +2223,7 @@ function loadScreenerSparklines() {
   })
     .then(r => r.ok ? r.json() : Promise.reject(new Error("sparkline fetch failed")))
     .then(data => {
+      if (gen !== _sparklineGen) return; // stale response, ignore
       const sp = data.sparklines || {};
       for (const pid in sp) _sparklineCache[pid] = sp[pid];
       injectSparklines();
@@ -2187,7 +2241,7 @@ function injectSparklines() {
     const pid = cell.getAttribute("data-sparkline-pid");
     const pts = _sparklineCache[pid];
     if (!pts || !pts.length) {
-      cell.innerHTML = '<span style="color:var(--ink-light); font-size:10px;">—</span>';
+      cell.innerHTML = '<span style="color:var(--ink-light); font-size:11px;">—</span>';
       continue;
     }
     cell.innerHTML = buildSparklineSVG(pts);
@@ -2244,12 +2298,12 @@ function showHoverCard(playerId, anchorEl) {
   // Build card HTML
   let html = '<div class="hover-card-header">';
   if (player.headshot_url) {
-    html += `<img class="hover-card-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || '')}" onerror="this.style.display='none';">`;
+    html += `<img class="hover-card-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || '')}" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>';">`;
   }
   html += '<div>';
   html += `<div class="hover-card-name">${escapeHtml(player.full_name || "")}${buildTagChip(playerId)}</div>`;
   html += `<div class="hover-card-meta">`;
-  html += `<span class="pos-badge ${posClass(pos)}" style="font-size:9px; padding:1px 5px;">${escapeHtml(pos)}</span> `;
+  html += `<span class="pos-badge ${posClass(pos)}" style="font-size:11px; padding:1px 5px;">${escapeHtml(pos)}</span> `;
   html += `${escapeHtml(player.team || "FA")}`;
   if (player.age) html += ` · ${Math.floor(player.age)}y`;
   if (player.games) html += ` · ${player.games}gp`;
@@ -2318,6 +2372,7 @@ function hideHoverCard() {
 }
 
 function onPlayerNameEnter(playerId, el) {
+  if (!matchMedia('(hover: hover)').matches) return;
   clearTimeout(_hoverTimer);
   _hoverTimer = setTimeout(function() {
     showHoverCard(playerId, el);
@@ -2331,6 +2386,30 @@ function onPlayerNameLeave() {
     if (_hoverCardVisible) hideHoverCard();
   }, 150);
 }
+
+// Touch support for hover cards: tap player name to show, tap elsewhere to dismiss
+(function() {
+  document.addEventListener("touchstart", function(e) {
+    var link = e.target.closest(".col-player a[onmouseenter]");
+    if (link) {
+      // Tapped on a player name link — show hover card
+      var enterAttr = link.getAttribute("onmouseenter") || "";
+      var m = enterAttr.match(/onPlayerNameEnter\('([^']+)'/);
+      if (m) {
+        e.preventDefault();
+        var playerId = m[1];
+        if (_hoverCardVisible) hideHoverCard();
+        showHoverCard(playerId, link);
+        return;
+      }
+    }
+    // Tapped on the hover card itself — keep it open
+    var card = document.getElementById("playerHoverCard");
+    if (card && card.contains(e.target)) return;
+    // Tapped elsewhere — dismiss hover card
+    if (_hoverCardVisible) hideHoverCard();
+  }, { passive: false });
+})();
 
 function renderProspectTable() {
   renderTableHead();
@@ -2457,19 +2536,19 @@ async function toggleRowExpand(playerId, tdEl) {
       return;
     }
     // Build mini table
-    var html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:11px;">';
+    var html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:11px;"><caption class="sr-only">Weekly stat breakdown for selected player</caption>';
     html += '<tr style="border-bottom:2px solid var(--ink-faint);">';
-    html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Wk</th>';
-    html += '<th style="padding:3px 6px; text-align:left; font-size:10px; color:var(--ink-light);">Opp</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">FPts</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Pass</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">PTD</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Rush</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">RTD</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Rec</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">RecYd</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">RcTD</th>';
-    html += '<th style="padding:3px 6px; text-align:right; font-size:10px; color:var(--ink-light);">Tgt</th>';
+    html += '<th style="padding:3px 6px; text-align:left; font-size:11px; color:var(--ink-light);">Wk</th>';
+    html += '<th style="padding:3px 6px; text-align:left; font-size:11px; color:var(--ink-light);">Opp</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">FPts</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">Pass</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">PTD</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">Rush</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">RTD</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">Rec</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">RecYd</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">RcTD</th>';
+    html += '<th style="padding:3px 6px; text-align:right; font-size:11px; color:var(--ink-light);">Tgt</th>';
     html += '</tr>';
     for (var w of weeks) {
       var fpts = parseFloat(w.fantasy_points_ppr || w.fantasy_points || 0).toFixed(1);
@@ -2492,7 +2571,6 @@ async function toggleRowExpand(playerId, tdEl) {
     html += '</table>';
     expandTr.querySelector(".expand-content").innerHTML = html;
   } catch (err) {
-    console.error("Weekly expand error:", err);
     if (_expandedRows[playerId]) {
       var ec = expandTr.querySelector(".expand-content");
       ec.innerHTML = escapeHtml(razzleError()) + ' <button class="btn-chunky" style="margin-left:8px;font-size:11px;padding:2px 10px;">retry</button>';
@@ -2756,6 +2834,45 @@ function _ctxMenuAction(action) {
     var firstItem = menu.querySelector('.ctx-item');
     if (firstItem) firstItem.focus();
   });
+
+  // Long-press touch support for context menu (500ms hold)
+  var _longPressTimer = null;
+  var _longPressFired = false;
+
+  table.addEventListener("touchstart", function(e) {
+    var tr = e.target.closest("tbody tr");
+    var th = e.target.closest("thead th");
+    if (!tr && !th) return;
+    _longPressFired = false;
+    var touch = e.touches[0];
+    var tx = touch.clientX, ty = touch.clientY;
+    _longPressTimer = setTimeout(function() {
+      _longPressFired = true;
+      // Synthesize a contextmenu event at the touch coordinates
+      var synth = new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: tx,
+        clientY: ty
+      });
+      (tr || th).dispatchEvent(synth);
+    }, 500);
+  }, { passive: true });
+
+  table.addEventListener("touchmove", function() {
+    if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; }
+  }, { passive: true });
+
+  table.addEventListener("touchend", function(e) {
+    if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; }
+    // If long press already fired, prevent the tap from also triggering
+    if (_longPressFired) { e.preventDefault(); _longPressFired = false; }
+  }, { passive: false });
+
+  table.addEventListener("touchcancel", function() {
+    if (_longPressTimer) { clearTimeout(_longPressTimer); _longPressTimer = null; }
+    _longPressFired = false;
+  }, { passive: true });
 })();
 
 // ─── Universe toggle ─────────────────────────────────────────────
@@ -3069,6 +3186,7 @@ let _seasonDebounce = null;
 
 function populateSeasonSelect() {
   const sel = document.getElementById("seasonSelect");
+  if (!sel) return;
   const allowed = typeof getAllowedSeasons === "function"
     ? getAllowedSeasons(state.seasons)
     : state.seasons;
@@ -3194,12 +3312,16 @@ function renderPagination() {
 
 function prevPage() {
   state.offset = Math.max(0, state.offset - state.limit);
-  fetchAndRender().then(function() { requestAnimationFrame(_scrollTableTop); });
+  fetchAndRender()
+    .then(function() { requestAnimationFrame(_scrollTableTop); })
+    .catch(function() { if (typeof _showToast === "function") _showToast(razzleError(), "error"); });
 }
 
 function nextPage() {
   state.offset += state.limit;
-  fetchAndRender().then(function() { requestAnimationFrame(_scrollTableTop); });
+  fetchAndRender()
+    .then(function() { requestAnimationFrame(_scrollTableTop); })
+    .catch(function() { if (typeof _showToast === "function") _showToast(razzleError(), "error"); });
 }
 
 function _scrollTableTop() {
@@ -3253,7 +3375,7 @@ function updateResultCount() {
     for (var j = 0; j < posOrder.length; j++) {
       var pp = posOrder[j];
       if (posCounts[pp]) {
-        badges.push('<span role="button" tabindex="0" aria-label="Filter to ' + pp + '" style="font-size:10px; font-weight:700; color:' + posColors[pp] + '; cursor:pointer; border-bottom:2px dashed ' + posColors[pp] + ';" onclick="togglePosition(\'' + pp + '\')" title="Filter to ' + pp + '">' + pp + ':' + posCounts[pp] + '</span>');
+        badges.push('<span role="button" tabindex="0" aria-label="Filter to ' + pp + '" style="font-size:11px; font-weight:700; color:' + posColors[pp] + '; cursor:pointer; border-bottom:2px dashed ' + posColors[pp] + ';" onclick="togglePosition(\'' + pp + '\')" title="Filter to ' + pp + '">' + pp + ':' + posCounts[pp] + '</span>');
       }
     }
     if (badges.length) parts.push(badges.join(" "));
@@ -3263,9 +3385,9 @@ function updateResultCount() {
   if (_lastFetchTime) {
     var ago = Math.round((Date.now() - _lastFetchTime) / 1000);
     var agoText = ago < 5 ? "just now" : ago < 60 ? ago + "s ago" : Math.floor(ago / 60) + "m ago";
-    var agoStyle = 'color:var(--ink-light); font-size:10px;';
-    if (ago > 3600) { agoStyle = 'color:var(--red, #e63946); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
-    else if (ago > 1800) { agoStyle = 'color:var(--orange, #d97757); font-weight:600; font-size:10px;'; agoText += ' — data may be stale'; }
+    var agoStyle = 'color:var(--ink-light); font-size:11px;';
+    if (ago > 3600) { agoStyle = 'color:var(--red, #e63946); font-weight:600; font-size:11px;'; agoText += ' — data may be stale'; }
+    else if (ago > 1800) { agoStyle = 'color:var(--orange, #d97757); font-weight:600; font-size:11px;'; agoText += ' — data may be stale'; }
     parts.push('<span style="' + agoStyle + '" title="Data fetched at ' + escapeAttr(new Date(_lastFetchTime).toLocaleTimeString()) + '">⏱ ' + agoText + '</span>');
   }
 
@@ -3686,8 +3808,10 @@ function showColumnStatsPopover(colKey, anchorEl) {
   var pop = document.createElement("div");
   pop.id = "colStatsPopover";
   pop.className = "colstats-popover";
+  pop.setAttribute("role", "dialog");
+  pop.setAttribute("aria-label", "Column statistics for " + col.label);
   var posCtx = state.position !== "ALL" ? state.position : "All Positions";
-  pop.innerHTML = '<div class="colstats-title">' + escapeHtml(col.label) + ' <span style="font-size:10px; color:var(--ink-light); font-weight:400;">(' + escapeHtml(posCtx) + ')</span></div>' +
+  pop.innerHTML = '<div class="colstats-title">' + escapeHtml(col.label) + ' <span style="font-size:11px; color:var(--ink-light); font-weight:400;">(' + escapeHtml(posCtx) + ')</span></div>' +
     '<div class="colstats-grid">' +
     '<span class="colstats-label">Min</span><span class="colstats-val">' + fmt(min) + '</span>' +
     '<span class="colstats-label">Max</span><span class="colstats-val">' + fmt(max) + '</span>' +
@@ -3720,7 +3844,6 @@ function showColumnStatsPopover(colKey, anchorEl) {
     if (wrap) wrap.addEventListener("scroll", _colStatsScrollDismiss, { passive: true });
   }, 0);
   } catch (err) {
-    console.error("Column stats error:", err);
     dismissColumnStatsPopover();
     var errPop = document.createElement("div");
     errPop.id = "colStatsPopover";
@@ -4073,7 +4196,7 @@ function loadStateFromURL() {
     state.heatColors = params.get("heat") === "1";
   } else {
     // Fall back to localStorage preference
-    state.heatColors = (function() { try { return localStorage.getItem("razzle_heat_colors") === "1"; } catch(e) { return false; } })();
+    state.heatColors = (function() { try { var v = localStorage.getItem("razzle_heat_colors"); return v === null ? true : v === "1"; } catch(e) { return true; } })();
   }
   if (params.has("pctl")) {
     state.percentileMode = params.get("pctl") === "1";
@@ -4134,6 +4257,16 @@ function loadStateFromURL() {
     if (params.has("week")) state.week = parseInt(params.get("week")) || 0;
     if (params.has("rel")) state.relevance = params.get("rel");
     if (params.has("cols")) state.visibleColumns = params.get("cols").split(",").filter(function(k) { return COLUMNS[k]; });
+  }
+
+  // Shared URL tier-locked column toast (S2-021)
+  if (params.has("cols") && typeof _getTierLockClass === "function" && typeof isPaidUser === "function" && !isPaidUser()) {
+    var lockedCols = state.visibleColumns.filter(function(k) { return _getTierLockClass(k); });
+    if (lockedCols.length > 0 && typeof _showToast === "function") {
+      setTimeout(function() {
+        _showToast(lockedCols.length + " column" + (lockedCols.length > 1 ? "s" : "") + " in this shared view require Pro \u2014 upgrade to see full data");
+      }, 1500);
+    }
   }
 
   // Sync UI
@@ -4639,7 +4772,7 @@ function _showViewsSyncHint(isPaid) {
 
   var badge = document.createElement("div");
   badge.id = "viewsSyncBadge";
-  badge.style.cssText = "font-family:var(--font-mono); font-size:9px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:var(--radius-sm);";
+  badge.style.cssText = "font-family:var(--font-mono); font-size:11px; margin-bottom:6px; display:inline-block; padding:2px 8px; border-radius:var(--radius-sm);";
 
   if (isPaid) {
     badge.style.color = "var(--pos-qb)";
@@ -4647,7 +4780,7 @@ function _showViewsSyncHint(isPaid) {
     badge.textContent = "cloud-synced";
   } else {
     badge.style.color = "var(--ink-light)";
-    badge.style.border = "2px dashed var(--ink-faint)";
+    badge.style.border = "2px dashed var(--border-dashed)";
     badge.innerHTML = '<a href="/pricing.html" style="color:var(--ink-light);text-decoration:underline;">upgrade to sync views across devices</a>';
     badge.style.cursor = "pointer";
   }
@@ -4666,24 +4799,24 @@ function renderSavedViewsList() {
   const universeBadge = (u) => {
     const colors = { nfl: "var(--orange)", prospects: "var(--blue)", college: "var(--blue)" };
     const labels = { nfl: "NFL", prospects: "PROSP", college: "CFB" };
-    return `<span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[u] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[u] || "var(--ink)"}; text-transform:uppercase;">${labels[u] || u}</span>`;
+    return `<span style="font-family:var(--font-mono); font-size:11px; font-weight:700; padding:2px 6px; border:2px solid ${colors[u] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[u] || "var(--ink)"}; text-transform:uppercase;">${labels[u] || u}</span>`;
   };
 
   const posBadge = (pos) => {
     if (!pos || pos === "ALL") return "";
     const colors = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
-    return ` <span style="font-family:var(--font-mono); font-size:10px; font-weight:700; padding:2px 6px; border:2px solid ${colors[pos] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[pos] || "var(--ink)"};">${pos}</span>`;
+    return ` <span style="font-family:var(--font-mono); font-size:11px; font-weight:700; padding:2px 6px; border:2px solid ${colors[pos] || "var(--ink)"}; border-radius:var(--radius-sm); color:${colors[pos] || "var(--ink)"};">${pos}</span>`;
   };
 
   container.innerHTML = views.map(v => {
     const date = new Date(v.createdAt);
     const dateStr = isNaN(date.getTime()) ? "" : date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-    const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
+    const filterCount = (v.filters && v.filters.length) ? ` <span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">${v.filters.length} filter${v.filters.length > 1 ? "s" : ""}</span>` : "";
 
-    return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+    return `<div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border:2px solid var(--ink); border-radius:8px; margin-bottom:8px; background:var(--bg); cursor:pointer; transition:transform 0.1s, box-shadow 0.1s;" onmouseenter="if(matchMedia('(hover:hover)').matches){this.style.transform='translate(-2px,-2px)';this.style.boxShadow='4px 4px 0 var(--ink)'}" onmouseleave="this.style.transform='';this.style.boxShadow=''">
       <div style="flex:1; min-width:0;" role="button" tabindex="0" aria-label="Load view: ${escapeAttr(v.name)}" onclick="loadSavedView('${escapeJS(v.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();loadSavedView('${escapeJS(v.id)}')}">
         <div style="font-family:var(--font-mono); font-size:14px; font-weight:600; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(v.name)}</div>
-        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">${dateStr}</span></div>
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">${universeBadge(v.universe)}${posBadge(v.position)}${filterCount}<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">${dateStr}</span></div>
       </div>
       <button onclick="event.stopPropagation(); deleteSavedView('${escapeJS(v.id)}', this)" style="background:none; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:4px 8px; cursor:pointer; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);" title="Delete view">✕</button>
     </div>`;
@@ -5048,7 +5181,7 @@ function renderQuickCompare(container) {
   var posColors = _POS_COLORS_CSS;
 
   var html = '<span style="font-weight:700; color:' + (posColors[posA] || "var(--ink)") + '; font-size:11px;">' + nameA + '</span>';
-  html += ' <span style="color:var(--ink-light); font-size:10px;">vs</span> ';
+  html += ' <span style="color:var(--ink-light); font-size:11px;">vs</span> ';
   html += '<span style="font-weight:700; color:' + (posColors[posB] || "var(--ink)") + '; font-size:11px;">' + nameB + '</span>';
   html += ' <span style="color:var(--ink-light);">|</span> ';
 
@@ -5062,9 +5195,9 @@ function renderQuickCompare(container) {
     var winner = va > vb ? "a" : vb > va ? "b" : "";
     var colorA = winner === "a" ? "font-weight:700; color:var(--green);" : "";
     var colorB = winner === "b" ? "font-weight:700; color:var(--green);" : "";
-    html += '<span style="font-size:10px; color:var(--ink-light); margin:0 2px;">' + s.label + '</span>';
+    html += '<span style="font-size:11px; color:var(--ink-light); margin:0 2px;">' + s.label + '</span>';
     html += '<span style="font-size:11px; ' + colorA + '">' + va.toFixed(s.dec) + '</span>';
-    html += '<span style="color:var(--ink-light); font-size:9px;">/</span>';
+    html += '<span style="color:var(--ink-light); font-size:11px;">/</span>';
     html += '<span style="font-size:11px; ' + colorB + '">' + vb.toFixed(s.dec) + '</span> ';
   }
 
@@ -5206,7 +5339,7 @@ function renderScoringWeights(weights) {
     const val = weights ? (weights[s.key] !== undefined ? weights[s.key] : 0) : s.default;
     return `<div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
       <label style="flex:1; font-family:var(--font-mono); font-size:12px;">${s.label}</label>
-      <input type="number" step="0.01" data-stat="${s.key}" value="${val}"
+      <input type="number" step="0.01" data-stat="${s.key}" value="${val}" inputmode="numeric" aria-label="${s.label} weight"
         style="width:70px; font-family:var(--font-mono); font-size:12px; padding:4px 6px;
                border:2px solid var(--ink); border-radius:var(--radius-sm); background:var(--bg); color:var(--ink); text-align:right;">
     </div>`;
@@ -5586,9 +5719,9 @@ function computeLeaderRanks() {
 }
 
 function getLeaderDot(rank) {
-  if (rank === 1) return '<span class="leader-dot leader-gold" title="1st">&#9679;</span>';
-  if (rank === 2) return '<span class="leader-dot leader-silver" title="2nd">&#9679;</span>';
-  if (rank === 3) return '<span class="leader-dot leader-bronze" title="3rd">&#9679;</span>';
+  if (rank === 1) return '<span class="leader-dot leader-gold" aria-label="1st place" title="1st">&#9733;</span>';
+  if (rank === 2) return '<span class="leader-dot leader-silver" aria-label="2nd place" title="2nd">&#9670;</span>';
+  if (rank === 3) return '<span class="leader-dot leader-bronze" aria-label="3rd place" title="3rd">&#9679;</span>';
   return "";
 }
 
@@ -5903,11 +6036,11 @@ function exportImage() {
   // Sort column header highlight
   if (sortColIdx >= 0) {
     const sx = padX + rankColW + playerColW + sortColIdx * colW;
-    ctx.fillStyle = "rgba(217, 119, 87, 0.15)";
+    ctx.fillStyle = _hexAlpha(t.orange, 0.15);
     ctx.fillRect(sx, hdrY, colW, headerH);
   }
 
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("#", padX + rankColW / 2, hdrY + headerH / 2 + 4);
@@ -5941,7 +6074,7 @@ function exportImage() {
     // Sort column highlight on data rows
     if (sortColIdx >= 0) {
       const sx = padX + rankColW + playerColW + sortColIdx * colW;
-      ctx.fillStyle = "rgba(217, 119, 87, 0.06)";
+      ctx.fillStyle = _hexAlpha(t.orange, 0.06);
       ctx.fillRect(sx, y, colW, rowH);
     }
 
@@ -5954,21 +6087,21 @@ function exportImage() {
     ctx.stroke();
 
     // Rank number
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillStyle = t.inkLight;
     ctx.textAlign = "center";
     ctx.fillText(String(state.offset + r + 1), padX + rankColW / 2, y + 18);
 
     // Position badge
     const pos = (player.position || "").toUpperCase();
-    const badgeColor = posColors[pos] || "#8a7565";
+    const badgeColor = posColors[pos] || t.inkLight;
     ctx.fillStyle = badgeColor;
     const badgeX = padX + rankColW + 6;
     ctx.fillRect(badgeX, y + 6, 26, 16);
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
     ctx.strokeRect(badgeX, y + 6, 26, 16);
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillStyle = t.white;
     ctx.textAlign = "center";
     ctx.fillText(pos, badgeX + 13, y + 18);
@@ -5984,7 +6117,7 @@ function exportImage() {
     ctx.fillText(displayName, badgeX + 32, y + 18);
 
     // Team
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillStyle = t.inkLight;
     ctx.fillText(player.team || "", padX + rankColW + playerColW - 30, y + 18);
 
@@ -6298,9 +6431,7 @@ async function generateRankingsExport() {
 
     renderRankingsPNG(players.slice(0, count), posLabel, sortLabel);
     closeRankingsExport();
-  } catch (err) {
-    console.error("Rankings export failed:", err);
-  }
+  } catch (err) { /* silent */ }
 }
 
 function renderRankingsPNG(players, posLabel, sortLabel) {
@@ -6351,7 +6482,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
 
     // Alternating bg
     if (i % 2 === 0) {
-      ctx.fillStyle = "rgba(229,213,195,0.3)";
+      ctx.fillStyle = _hexAlpha(t.bgWarm, 0.3);
       ctx.fillRect(padX + 1.5, y, listW - 3, rowH);
     }
 
@@ -6388,7 +6519,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
     ctx.lineWidth = 1.5;
     ctx.strokeRect(posBadgeX, y + 8, 30, 20);
     ctx.fillStyle = t.white;
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, posBadgeX + 15, y + 22);
 
@@ -6437,7 +6568,7 @@ function renderRankingsPNG(players, posLabel, sortLabel) {
 
   // Watermark
   ctx.font = "16px 'Caveat', cursive";
-  ctx.fillStyle = "rgba(217, 119, 87, 0.5)";
+  ctx.fillStyle = _hexAlpha(t.orange, 0.5);
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 20, H - 16);
 
@@ -6457,7 +6588,7 @@ async function openPlayerProfile(playerId) {
   const overlay = document.getElementById("profileOverlay");
   const content = document.getElementById("profileContent");
   overlay.classList.add("open");
-  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">' + razzleLoading() + '</div>';
+  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">' + razzleLoading() + '</div>';
 
   try {
     const data = await apiFetch(`/api/players/${encodeURIComponent(playerId)}/profile`);
@@ -6477,21 +6608,21 @@ async function openCollegeProfile(playerId) {
   const overlay = document.getElementById("profileOverlay");
   const content = document.getElementById("profileContent");
   overlay.classList.add("open");
-  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the college tape...</div>`;
+  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">scouting the college tape...</div>`;
 
   try {
     const data = await apiFetch(`/api/college/player-profile/${encodeURIComponent(playerId)}`);
     renderCollegeProfile(data, content);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the college data fetch... try again in a sec.</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the college data fetch... try again in a sec.</div>`;
   }
 }
 
 function renderCollegeProfile(data, container) {
-  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>'; return; }
+  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">player not found on the film</div>'; return; }
   const { player, seasons, career, combine, draft } = data;
   if (!player || !player.player_name) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">player not found on the film</div>`;
     return;
   }
 
@@ -6507,7 +6638,7 @@ function renderCollegeProfile(data, container) {
   html += `<div>`;
   html += `<div class="profile-name">${escapeHtml(player.player_name)}</div>`;
   html += `<div class="profile-meta">${escapeHtml(player.team || "")} · ${escapeHtml(player.conference || "")} · ${player.seasons_played || 0} season${(player.seasons_played || 0) !== 1 ? "s" : ""}</div>`;
-  html += `<span style="display:inline-block; background:var(--pos-qb); color:var(--text-on-accent); font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-2deg);">COLLEGE</span>`;
+  html += `<span style="display:inline-block; background:var(--pos-qb); color:var(--text-on-accent); font-family:var(--font-mono); font-size:11px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-2deg);">COLLEGE</span>`;
   html += `</div>`;
   html += `</div>`;
 
@@ -6526,7 +6657,7 @@ function renderCollegeProfile(data, container) {
   if (seasons && seasons.length > 0) {
     const seasonCols = getCollegeSeasonColumns(pos);
     html += `<div class="profile-section-title">College Season Log</div>`;
-    html += `<table class="profile-season-table"><thead><tr>`;
+    html += `<table class="profile-season-table"><caption class="sr-only">College season-by-season statistics</caption><thead><tr>`;
     html += `<th>Year</th><th>Team</th>`;
     for (const c of seasonCols) html += `<th>${c.label}</th>`;
     html += `</tr></thead><tbody>`;
@@ -6683,10 +6814,10 @@ function getCollegeSeasonColumns(pos) {
 }
 
 function renderProfile(data, container) {
-  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>'; return; }
+  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">player not found on the film</div>'; return; }
   const { player, seasons, career, combine } = data;
   if (!player || !player.full_name) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">player not found on the film</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">player not found on the film</div>`;
     return;
   }
 
@@ -6717,7 +6848,7 @@ function renderProfile(data, container) {
   // Header
   html += `<div class="profile-header" style="border-top:4px solid ${posColor};">`;
   if (player.headshot_url) {
-    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || 'Player')} headshot" onerror="this.style.display='none';">`;
+    html += `<img class="profile-headshot" src="${escapeAttr(player.headshot_url)}" alt="${escapeAttr(player.full_name || 'Player')} headshot" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>';">`;
   }
   html += `<span class="profile-pos-badge" style="background:${posColor};">${pos}</span>`;
   html += `<div>`;
@@ -6729,7 +6860,7 @@ function renderProfile(data, container) {
   html += `<div class="profile-meta">${teamDisplay} · Age ${displayAge} · ${escapeHtml(player.college || "")} · ${seasonCount} ${seasonLabel}</div>`;
   if (combine && combine.draft_round) {
     const draftPick = combine.draft_overall || combine.draft_pick;
-    html += `<span style="display:inline-block; background:var(--ink); color:var(--bg); font-family:var(--font-mono); font-size:10px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
+    html += `<span style="display:inline-block; background:var(--ink); color:var(--bg); font-family:var(--font-mono); font-size:11px; padding:2px 8px; border:2px solid var(--ink); border-radius:var(--radius-sm); transform:rotate(-1deg); margin-right:6px;">Rd ${combine.draft_round}${draftPick ? " #" + draftPick : ""}${combine.draft_year ? " '" + String(combine.draft_year).slice(2) : ""}</span>`;
   }
   if (breakoutInfo) {
     html += `<span class="breakout-badge">BREAKOUT +${breakoutInfo.pct}% (${breakoutInfo.season})</span>`;
@@ -6760,7 +6891,7 @@ function renderProfile(data, container) {
   if (seasons && seasons.length > 0) {
     const seasonCols = getSeasonColumns(pos);
     html += `<div class="profile-section-title">Season Log</div>`;
-    html += `<table class="profile-season-table"><thead><tr>`;
+    html += `<table class="profile-season-table"><caption class="sr-only">NFL season-by-season statistics</caption><thead><tr>`;
     html += `<th>Year</th>`;
     for (const c of seasonCols) html += `<th>${c.label}</th>`;
     html += `</tr></thead><tbody>`;
@@ -6900,7 +7031,7 @@ function loadDynastySparkline(playerId, container) {
       sparkHtml += '</div></div>';
       el.innerHTML = sparkHtml;
     })
-    .catch(err => { if (err.name !== 'AbortError') console.warn('dynasty sparkline:', err.message); });
+    .catch(function() {});
 }
 
 function getHeadlineStats(pos, career) {
@@ -6997,7 +7128,7 @@ function drawProfileArc(seasons, pos) {
   const plotH = H - pad.top - pad.bottom;
 
   var posHex = _getPosColorsHex();
-  const lineColor = posHex[pos] || "#d97757";
+  const lineColor = posHex[pos] || getCanvasTheme().orange;
 
   var t = getCanvasTheme();
   ctx.clearRect(0, 0, W, H);
@@ -7102,7 +7233,7 @@ function drawProfileArc(seasons, pos) {
   ctx.translate(14, pad.top + plotH / 2);
   ctx.rotate(-Math.PI / 2);
   ctx.fillStyle = t.inkLight;
-  ctx.font = "10px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("PPR Points", 0, 0);
   ctx.restore();
@@ -7181,7 +7312,7 @@ function exportProfileImage() {
   // Name + meta
   ctx.textAlign = "left";
   ctx.fillStyle = t.ink;
-  ctx.font = "28px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillText(name, padX + 64, padY + 28);
   ctx.fillStyle = t.inkLight;
   ctx.font = "12px 'Space Mono', monospace";
@@ -7205,11 +7336,11 @@ function exportProfileImage() {
       ctx.stroke();
     }
     ctx.fillStyle = t.ink;
-    ctx.font = "22px 'Luckiest Guy', cursive";
+    ctx.font = "20px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].val, x + sbW / 2, sbY + 32);
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillText(stats[i].label.toUpperCase(), x + sbW / 2, sbY + 52);
   }
 
@@ -7225,7 +7356,7 @@ function exportProfileImage() {
     ctx.strokeRect(padX, tY, W - padX * 2, tableHeaderH);
 
     ctx.fillStyle = t.ink;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     for (let i = 0; i < headers.length; i++) {
       ctx.textAlign = i === 0 ? "left" : "right";
       const x = i === 0 ? padX + 8 : padX + (i + 1) * colW - 8;
@@ -7284,7 +7415,7 @@ async function openProspectProfile(name, position, draftYear) {
   const overlay = document.getElementById("profileOverlay");
   const content = document.getElementById("profileContent");
   overlay.classList.add("open");
-  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the prospect...</div>`;
+  content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">scouting the prospect...</div>`;
 
   try {
     const params = new URLSearchParams({ name, position, draft_year: draftYear });
@@ -7294,16 +7425,16 @@ async function openProspectProfile(name, position, draftYear) {
     ]);
     renderProspectProfile(data, content, compsData);
   } catch (err) {
-    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect data... try again in a sec.</div>`;
+    content.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the prospect data... try again in a sec.</div>`;
   }
 }
 
 function renderProspectProfile(data, container, compsData) {
-  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>'; return; }
+  if (!data) { container.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">prospect not found on the board</div>'; return; }
   const { prospect } = data;
   const percentiles = data.percentiles || {};
   if (!prospect || !prospect.player_name) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">prospect not found on the board</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">prospect not found on the board</div>`;
     return;
   }
 
@@ -7410,13 +7541,13 @@ function renderProspectProfile(data, container, compsData) {
       const domColor = college.dominator_rating >= 30 ? "var(--green)" : college.dominator_rating >= 20 ? "var(--green)" : "var(--yellow)";
       html += `<div style="display:flex; align-items:center; gap:8px; margin:8px 0 12px 0;">`;
       html += `<span class="tier-badge" style="background:${domColor}; transform:rotate(-2deg); font-size:11px;">${college.dominator_rating.toFixed(1)}% DOM</span>`;
-      html += `<span style="font-family:var(--font-hand); font-size:15px; color:var(--ink-light);">peak dominator rating (team rec share)</span>`;
+      html += `<span style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light);">peak dominator rating (team rec share)</span>`;
       html += `</div>`;
     }
 
     // Season log table
     html += `<div class="profile-season-table-wrap">`;
-    html += `<table class="profile-season-table">`;
+    html += `<table class="profile-season-table"><caption class="sr-only">Prospect college season log</caption>`;
     html += `<thead><tr>`;
     html += `<th>Year</th><th>Team</th><th>G</th>`;
     // Show columns based on position
@@ -7625,7 +7756,7 @@ function renderProspectProfile(data, container, compsData) {
       html += `<div class="prospect-proj-confidence">`;
       html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">Comp confidence:</span> `;
       html += `<span style="font-family:var(--font-mono); font-size:14px; font-weight:700; color:${confColor};">${Math.round(compProjection.confidence)}%</span>`;
-      html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">(${compProjection.compCount} comps with NFL data)</span>`;
+      html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:8px;">(${compProjection.compCount} comps with NFL data)</span>`;
       html += `</div>`;
     }
   }
@@ -7675,7 +7806,7 @@ function drawCollegeArc(college, pos) {
   ctx.fillText(`college ${statLabel.toLowerCase()} by season`, W / 2, 18);
 
   // Y-axis gridlines
-  ctx.font = "10px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "right";
   const gridSteps = 4;
@@ -7705,7 +7836,7 @@ function drawCollegeArc(college, pos) {
   ctx.lineTo(pad.left + (values.length - 1) * stepX, pad.top + plotH);
   ctx.lineTo(pad.left, pad.top + plotH);
   ctx.closePath();
-  ctx.fillStyle = "rgba(91,127,255,0.15)";
+  ctx.fillStyle = _hexAlpha(t.blue, 0.15);
   ctx.fill();
 
   // Line
@@ -7792,7 +7923,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
       else ctx.lineTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = ring === 50 ? (t.isDark ? "rgba(237,224,207,0.2)" : "rgba(45,31,20,0.2)") : (t.isDark ? "rgba(237,224,207,0.08)" : "rgba(45,31,20,0.08)");
+    ctx.strokeStyle = ring === 50 ? _hexAlpha(t.ink, 0.2) : _hexAlpha(t.ink, 0.08);
     ctx.lineWidth = ring === 50 ? 1.5 : 1;
     ctx.stroke();
   }
@@ -7803,7 +7934,7 @@ function drawProspectSpider(prospect, percentiles, metrics) {
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-    ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.1)" : "rgba(45,31,20,0.1)";
+    ctx.strokeStyle = _hexAlpha(t.ink, 0.1);
     ctx.lineWidth = 1;
     ctx.stroke();
   }
@@ -8015,7 +8146,7 @@ function exportProspectImage() {
       ctx.fillStyle = t.ink;
       ctx.textAlign = "left";
       ctx.fillText(cVal, bx, y + 90);
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(cLbl, bx + 30, y + 90);
     });
@@ -8111,12 +8242,12 @@ function exportProspectImage() {
       ctx.font = "bold 14px 'Space Mono', monospace";
       ctx.fillStyle = t.ink;
       ctx.fillText(compName, padX + 62, y + 20);
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(compMeta, padX + 62, y + 34);
 
       // Stats on right
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkMedium;
       ctx.textAlign = "right";
       ctx.fillText(compStats, W - padX - 8, y + 27);
@@ -8151,7 +8282,7 @@ function exportProspectImage() {
       ctx.fillStyle = t.ink;
       ctx.textAlign = "center";
       ctx.fillText(val, bx + boxW / 2, y + 22);
-      ctx.font = "9px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(lbl, bx + boxW / 2, y + 40);
     });
@@ -8200,7 +8331,7 @@ function closeTierView(e) {
 async function loadTierData(position) {
   currentTierPosition = position;
   const contentEl = document.getElementById("tierContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">grading the ${escapeHtml(position)} prospects...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">grading the ${escapeHtml(position)} prospects...</div>`;
 
   // Highlight active button
   document.querySelectorAll(".tier-pos-btn").forEach(btn => {
@@ -8211,7 +8342,7 @@ async function loadTierData(position) {
     const data = await apiFetch(`/api/prospect-tiers?position=${position}&draft_year=${state.draftYear || state.season}`);
     renderTierView(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the tier data... try again in a sec.</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the tier data... try again in a sec.</div>`;
   }
 }
 
@@ -8235,7 +8366,7 @@ function renderTierView(data, container) {
 
     html += `<div class="tier-group">`;
     html += `<div class="tier-badge" style="background:${td.color};">${td.label}</div>`;
-    html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
+    html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
     html += `<div class="tier-grid">`;
 
     for (const p of prospects) {
@@ -8270,7 +8401,7 @@ function renderTierView(data, container) {
   }
 
   if (!hasAnyProspects) {
-    html += `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no ${escapeHtml(data.position)} prospects found for ${escapeHtml(String(data.draft_year))}</div>`;
+    html += `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">no ${escapeHtml(data.position)} prospects found for ${escapeHtml(String(data.draft_year))}</div>`;
   }
 
   container.innerHTML = html;
@@ -8380,12 +8511,12 @@ function exportTierImage() {
       ctx.fillText(name.substring(0, 22), cx + 8, cy + 18);
 
       // Meta
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText(meta.substring(0, 35), cx + 8, cy + 32);
 
       // Metrics
-      ctx.font = "9px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkMedium;
       ctx.fillText(metrics.substring(0, 45), cx + 8, cy + 48);
 
@@ -8444,7 +8575,7 @@ function closeBigBoard(e) {
 async function loadBigBoard(position) {
   currentBBPosition = position;
   const contentEl = document.getElementById("bbContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">scouting the ${position === "ALL" ? "" : escapeHtml(position) + " "}board...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">scouting the ${position === "ALL" ? "" : escapeHtml(position) + " "}board...</div>`;
 
   document.querySelectorAll(".bb-pos-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.pos === position);
@@ -8456,7 +8587,7 @@ async function loadBigBoard(position) {
     currentBBData = data;
     renderBigBoard(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the big board... try again in a sec.</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the big board... try again in a sec.</div>`;
   }
 }
 
@@ -8555,7 +8686,7 @@ function getRPSTierDef(rps) {
 function renderBigBoard(data, container) {
   const prospects = data.prospects || [];
   if (prospects.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no prospects found for ${escapeHtml(String(data.draft_year))} ${escapeHtml(data.position)}</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">no prospects found for ${escapeHtml(String(data.draft_year))} ${escapeHtml(data.position)}</div>`;
     return;
   }
 
@@ -8583,7 +8714,7 @@ function renderBigBoard(data, container) {
 
     html += `<div class="bb-tier-group">`;
     html += `<div class="tier-badge" style="background:${td.color}; transform:rotate(-2deg);">${td.label}</div>`;
-    html += `<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
+    html += `<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:8px;">${td.desc}</span>`;
     html += `<div class="bb-tier-list">`;
 
     for (const p of tierProspects) {
@@ -8670,7 +8801,7 @@ function exportBigBoardImage() {
   let y = padY;
 
   // Title
-  ctx.font = "26px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText(`Razzle Big Board — ${currentBBData.position} ${currentBBData.draft_year}`, W / 2, y + 26);
@@ -8712,7 +8843,7 @@ function exportBigBoardImage() {
     // Prospect rows
     for (const p of tierProspects) {
       const rowY = y;
-      const posColor = posColors[p.position] || "#d97757";
+      const posColor = posColors[p.position] || t.orange;
 
       // Row bg
       ctx.fillStyle = p.rank % 2 === 0 ? t.bgCard : t.bgWarm;
@@ -8734,7 +8865,7 @@ function exportBigBoardImage() {
       ctx.fillText(p.player_name.substring(0, 22), padX + 44, rowY + 18);
 
       // Meta
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       const draftInfo = p.draft_round && p.draft_pick ? `Rd ${p.draft_round} #${p.draft_pick}` : "UDFA";
       ctx.fillText(`${p.school || ""} · ${draftInfo}`, padX + 44, rowY + 34);
@@ -8745,7 +8876,7 @@ function exportBigBoardImage() {
       ctx.beginPath();
       ctx.roundRect(chipX, rowY + 10, 30, 20, 10);
       ctx.fill();
-      ctx.font = "bold 10px 'Space Mono', monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.fillStyle = t.white;
       ctx.textAlign = "center";
       ctx.fillText(p.position, chipX + 15, rowY + 24);
@@ -8769,7 +8900,7 @@ function exportBigBoardImage() {
       ctx.fillText((p.rps || 0).toFixed(1), barX + barW + 8, rowY + 27);
 
       // Key metrics
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkMedium;
       ctx.textAlign = "right";
       let metricStr = "";
@@ -8783,7 +8914,7 @@ function exportBigBoardImage() {
   }
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -8822,7 +8953,7 @@ function closeClassAnalytics(e) {
 async function loadClassAnalytics(position) {
   currentCAPosition = position;
   const contentEl = document.getElementById("caContent");
-  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">analyzing ${position === "ALL" ? "all" : escapeHtml(position)} draft classes...</div>`;
+  contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">analyzing ${position === "ALL" ? "all" : escapeHtml(position)} draft classes...</div>`;
 
   document.querySelectorAll(".ca-pos-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.pos === position);
@@ -8834,14 +8965,14 @@ async function loadClassAnalytics(position) {
     currentCAData = { ...data, filterPosition: position };
     renderClassAnalytics(data, contentEl);
   } catch (err) {
-    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the analytics... try again in a sec.</div>`;
+    contentEl.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the analytics... try again in a sec.</div>`;
   }
 }
 
 function renderClassAnalytics(data, container) {
   const classes = data.classes || [];
   if (classes.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">no draft class data found</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">no draft class data found</div>`;
     return;
   }
 
@@ -8888,18 +9019,18 @@ function renderClassAnalytics(data, container) {
           <div style="display:flex; height:20px; border:2px solid var(--ink); border-radius:var(--radius-sm); overflow:hidden;">
             ${cls.count > 0 ? ['elite','premium','solid','flier'].map(tier => {
               const pct = (cls.tiers[tier] / cls.count * 100);
-              return pct > 0 ? `<div style="width:${pct}%; background:${tierColors[tier]}; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:10px; color:var(--text-on-accent); font-weight:700;">${cls.tiers[tier]}</div>` : '';
+              return pct > 0 ? `<div style="width:${pct}%; background:${tierColors[tier]}; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:11px; color:var(--text-on-accent); font-weight:700;">${cls.tiers[tier]}</div>` : '';
             }).join('') : '<div style="width:100%; background:var(--ink-faint);"></div>'}
           </div>
           <div style="display:flex; gap:8px; margin-top:4px; flex-wrap:wrap;">
             ${['elite','premium','solid','flier'].map(tier =>
-              `<span style="font-family:var(--font-mono); font-size:10px; color:${tierColors[tier]}; font-weight:700;">${tier.charAt(0).toUpperCase() + tier.slice(1)}: ${cls.tiers[tier]}</span>`
+              `<span style="font-family:var(--font-mono); font-size:11px; color:${tierColors[tier]}; font-weight:700;">${tier.charAt(0).toUpperCase() + tier.slice(1)}: ${cls.tiers[tier]}</span>`
             ).join('')}
           </div>
         </div>
 
         <!-- Top prospect -->
-        <div style="border-top:2px dashed var(--ink-faint); padding-top:8px;">
+        <div style="border-top:2px dashed var(--border-dashed); padding-top:8px;">
           <div style="font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--ink-light); margin-bottom:2px;">Top Prospect</div>
           <div style="font-family:var(--font-mono); font-size:14px; font-weight:700;">${topName}</div>
           <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium);">RPS: ${topRPS}</div>
@@ -8973,7 +9104,7 @@ function drawClassAnalyticsChart(classes, maxRPS) {
     const y = PAD_T + chartH - barH;
 
     // Bar fill
-    const color = gradeColors[cls.grade] || "#8a7565";
+    const color = gradeColors[cls.grade] || t.inkLight;
     ctx.fillStyle = color;
     ctx.fillRect(x, y, barW, barH);
 
@@ -9093,7 +9224,7 @@ function exportClassAnalyticsImage() {
     const bH = (cls.avg_rps / scaleMax) * (chartH - 60);
     const by = y + chartH - 40 - bH;
 
-    const color = gradeColors[cls.grade] || "#8a7565";
+    const color = gradeColors[cls.grade] || t.inkLight;
     ctx.fillStyle = color;
     ctx.fillRect(x, by, barW, bH);
     ctx.strokeStyle = t.ink;
@@ -9114,7 +9245,7 @@ function exportClassAnalyticsImage() {
     ctx.lineWidth = 1;
     ctx.strokeRect(x + barW / 2 - gw / 2, by - 24, gw, gh);
     ctx.fillStyle = t.white;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText(cls.grade, x + barW / 2, by - 12);
 
     // Year
@@ -9151,7 +9282,7 @@ function exportClassAnalyticsImage() {
     ctx.strokeRect(cx, cy, cardW, cardH);
 
     // Grade badge
-    const color = gradeColors[cls.grade] || "#8a7565";
+    const color = gradeColors[cls.grade] || t.inkLight;
     ctx.fillStyle = color;
     const gbx = cx + cardW - 30, gby = cy + 6;
     ctx.fillRect(gbx, gby, 24, 20);
@@ -9181,7 +9312,7 @@ function exportClassAnalyticsImage() {
 
     // Top prospect
     if (cls.top_prospect) {
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillStyle = t.inkLight;
       ctx.fillText("Top:", cx + 10, cy + 82);
       ctx.fillStyle = t.ink;
@@ -9213,7 +9344,7 @@ function exportClassAnalyticsImage() {
   y += cardRows * (cardH + 12) + 10;
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -9260,7 +9391,7 @@ function renderTVPositionBtns() {
 
 async function loadTradeValues() {
   const content = document.getElementById("tvContent");
-  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">pulling trade film...</div>';
+  content.innerHTML = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">pulling trade film...</div>';
 
   try {
     const params = new URLSearchParams({
@@ -9287,7 +9418,6 @@ async function loadTradeValues() {
     setupTradeCalcSearch();
   } catch (err) {
     content.innerHTML = razzleErrorHTML();
-    console.error("Trade values load failed:", err);
   }
 }
 
@@ -9329,7 +9459,7 @@ function renderTradeValueChart() {
       // Name + position
       html += '<div style="display:flex; align-items:center; gap:6px;">';
       html += '<span style="font-family:var(--font-mono); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(p.full_name) + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm); border:2px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:11px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm); border:2px solid var(--ink);">' + escapeHtml(p.position) + '</span>';
       html += '</div>';
       // Team + Age
       html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + (p.age ? ' · Age ' + Math.round(p.age) : '') + '</div>';
@@ -9346,7 +9476,7 @@ function renderTradeValueChart() {
   }
 
   if (!html) {
-    html = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">' + razzleEmpty() + '</div>';
+    html = '<div style="text-align:center; padding:40px; font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">' + razzleEmpty() + '</div>';
   }
 
   content.innerHTML = html;
@@ -9377,7 +9507,7 @@ function setupTradeSearchInput(side) {
       autoDiv.innerHTML = matches.map(p => {
         const pc = posColors[p.position] || getCanvasTheme().ink;
         return '<div class="tv-auto-row" data-side="' + side + '" data-pid="' + escapeAttr(p.player_id || p.full_name) + '" style="padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; border-bottom:2px solid var(--ink-faint);">'
-          + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
+          + '<span style="font-family:var(--font-mono); font-size:11px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 5px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name) + '</span>'
           + '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); margin-left:auto;">' + p._tv + '</span>'
           + '</div>';
@@ -9437,7 +9567,7 @@ function renderTradeSide(side) {
   container.innerHTML = arr.map((p, i) => {
     const pc = posColors[p.position] || getCanvasTheme().ink;
     return '<div style="display:flex; align-items:center; gap:6px; padding:5px 8px; background:var(--bg-card); border:2px solid var(--ink); border-radius:var(--radius-sm); border-left:4px solid ' + pc + ';">'
-      + '<span style="font-family:var(--font-mono); font-size:9px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 4px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
+      + '<span style="font-family:var(--font-mono); font-size:11px; font-weight:bold; color:var(--text-on-accent); background:' + pc + '; padding:1px 4px; border-radius:var(--radius-sm);">' + escapeHtml(p.position) + '</span>'
       + '<span style="font-family:var(--font-mono); font-size:12px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + escapeHtml(p.full_name) + '</span>'
       + '<span style="font-family:var(--font-mono); font-size:12px; font-weight:bold;">' + p._tv + '</span>'
       + '<button onclick="removeFromTradeSide(\'' + side + '\', ' + i + ')" style="background:none; border:none; cursor:pointer; font-size:14px; color:var(--ink-light); padding:0 2px;">×</button>'
@@ -9551,7 +9681,7 @@ function exportTradeValuesPNG() {
     ctx.lineWidth = 1.5;
     ctx.stroke();
     ctx.fillStyle = t.white;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(g.tier.badge, 0, 4);
     ctx.restore();
@@ -9572,7 +9702,7 @@ function exportTradeValuesPNG() {
 
       // Alternating bg
       if (i % 2 === 0) {
-        ctx.fillStyle = "rgba(229,213,195,0.25)";
+        ctx.fillStyle = _hexAlpha(t.bgWarm, 0.25);
         ctx.fillRect(padX, ry, W - padX * 2, rowH);
       }
 
@@ -9595,7 +9725,7 @@ function exportTradeValuesPNG() {
 
       // Team + age
       ctx.fillStyle = t.inkLight;
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.fillText((p.team || "FA") + (p.age ? "  Age " + Math.round(p.age) : ""), padX + 300, ry + 18);
 
       // Trade value bar
@@ -9603,7 +9733,7 @@ function exportTradeValuesPNG() {
       const barW = 240;
       const barH = 10;
       const barY = ry + 9;
-      ctx.fillStyle = "rgba(229,213,195,0.5)";
+      ctx.fillStyle = _hexAlpha(t.bgWarm, 0.5);
       ctx.fillRect(barX, barY, barW, barH);
       ctx.strokeStyle = t.inkFaint;
       ctx.lineWidth = 0.5;
@@ -9623,7 +9753,7 @@ function exportTradeValuesPNG() {
   }
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -9644,12 +9774,7 @@ const _acState = {
   enabledPlayers: {},  // name -> boolean
 };
 
-const _acPosColors = {
-  QB: "#5b7fff",
-  RB: "#2ec4b6",
-  WR: "#d97757",
-  TE: "#8b5cf6",
-};
+var _acPosColors = _getPosColorsHex();
 
 function openAgingCurves() {
   document.getElementById("agingCurvesOverlay").classList.add("open");
@@ -9684,7 +9809,7 @@ async function loadAgingCurves() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "22px 'Caveat', cursive";
+  ctx.font = "20px 'Caveat', cursive";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("pulling aging film...", canvas.width / 2, canvas.height / 2);
@@ -9705,11 +9830,10 @@ async function loadAgingCurves() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = t.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "22px 'Caveat', cursive";
-    ctx.fillStyle = "#d97757";
+    ctx.font = "20px 'Caveat', cursive";
+    ctx.fillStyle = t.orange;
     ctx.textAlign = "center";
     ctx.fillText("fumbled the aging data...", canvas.width / 2, canvas.height / 2);
-    console.error("Aging curves load failed:", err);
   }
 }
 
@@ -9844,7 +9968,7 @@ function renderAgingCurveChart(targetCanvas) {
 
     // Label at last point
     const last = pts[pts.length - 1];
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillStyle = color;
     ctx.textAlign = "left";
     ctx.fillText((p.name || '').split(" ").pop(), xScale(last.age) + 6, yScale(last.ppg) + 3);
@@ -9854,7 +9978,7 @@ function renderAgingCurveChart(targetCanvas) {
   }
 
   // Draw baseline curve (thick, on top)
-  const posColor = _acPosColors[_acState.position] || "#d97757";
+  const posColor = _acPosColors[_acState.position] || getCanvasTheme().orange;
   ctx.strokeStyle = posColor;
   ctx.lineWidth = 3.5;
   ctx.globalAlpha = 0.9;
@@ -9925,7 +10049,7 @@ function renderACLegend() {
       + 'display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:20px;'
       + 'border:' + border + '; background:' + (enabled ? color + '15' : 'transparent') + ';'
       + 'cursor:pointer; opacity:' + opacity + '; font-family:var(--font-mono); font-size:11px;'
-      + 'transition:all 0.15s;">'
+      + 'transition:opacity 0.15s, border-color 0.15s;">'
       + '<span style="width:10px; height:10px; border-radius:50%; background:' + color + '; display:inline-block;"></span>'
       + escapeHtml(p.name) + ' <span style="color:var(--ink-light);">' + p.career_ppg + '</span>'
       + '</button>';
@@ -9965,7 +10089,7 @@ function exportAgingCurvesPNG() {
 
   // Watermark
   var t = getCanvasTheme();
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -10051,7 +10175,7 @@ function heatColor(pct) {
 function textColorForBg(pct) {
   // Dark text on light cells — read from CSS vars so dark mode flips correctly
   const styles = getComputedStyle(document.documentElement);
-  if (pct == null) return styles.getPropertyValue('--ink-light').trim() || "#8a7565";
+  if (pct == null) return styles.getPropertyValue('--ink-light').trim() || getCanvasTheme().inkLight;
   return styles.getPropertyValue('--ink').trim() || getCanvasTheme().ink;
 }
 
@@ -10062,7 +10186,7 @@ async function loadHeatMap() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "22px 'Caveat', cursive";
+  ctx.font = "20px 'Caveat', cursive";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("pulling positional film...", canvas.width / 2, canvas.height / 2);
@@ -10077,11 +10201,10 @@ async function loadHeatMap() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = th.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "22px 'Caveat', cursive";
-    ctx.fillStyle = "#d97757";
+    ctx.font = "20px 'Caveat', cursive";
+    ctx.fillStyle = th.orange;
     ctx.textAlign = "center";
     ctx.fillText("fumbled the heat map data...", canvas.width / 2, canvas.height / 2);
-    console.error("Heat map load failed:", err);
   }
 }
 
@@ -10119,7 +10242,7 @@ function renderHeatMapChart(targetCanvas) {
   ctx.fillRect(0, 0, totalW, totalH);
 
   // Title
-  ctx.font = "22px 'Luckiest Guy', cursive";
+  ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText(_hmState.position + " Heat Map", padL, 30);
@@ -10170,14 +10293,14 @@ function renderHeatMapChart(targetCanvas) {
   ctx.fillText("PLAYER", padL + 8, titleH + headerH - 8);
 
   // Rows
-  const posColor = _hmPosColors[_hmState.position] || "#d97757";
+  const posColor = _hmPosColors[_hmState.position] || t.orange;
   for (let r = 0; r < numPlayers; r++) {
     const player = players[r];
     const rowY = titleH + headerH + r * cellH;
 
     // Alternating row bg
     if (r % 2 === 0) {
-      ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.03)" : "rgba(45,31,20,0.03)";
+      ctx.fillStyle = _hexAlpha(t.ink, 0.03);
       ctx.fillRect(padL, rowY, chartW, cellH);
     }
 
@@ -10189,7 +10312,7 @@ function renderHeatMapChart(targetCanvas) {
     ctx.fillText(displayName, padL + 8, rowY + 18);
 
     // Team badge
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillStyle = posColor;
     const nameW = ctx.measureText(displayName).width;
     ctx.fillText(player.team, padL + 12 + nameW + 4, rowY + 18);
@@ -10206,7 +10329,7 @@ function renderHeatMapChart(targetCanvas) {
       ctx.fillRect(cellX + 1, rowY + 1, cellW - 2, cellH - 2);
 
       // Cell border
-      ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.12)" : "rgba(45,31,20,0.12)";
+      ctx.strokeStyle = _hexAlpha(t.ink, 0.12);
       ctx.lineWidth = 1;
       ctx.strokeRect(cellX, rowY, cellW, cellH);
 
@@ -10231,7 +10354,7 @@ function renderHeatMapChart(targetCanvas) {
     }
 
     // Row separator
-    ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.08)" : "rgba(45,31,20,0.08)";
+    ctx.strokeStyle = _hexAlpha(t.ink, 0.08);
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padL, rowY + cellH);
@@ -10262,7 +10385,7 @@ function exportHeatMapPNG() {
   var t = getCanvasTheme();
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "center";
@@ -10285,7 +10408,7 @@ function openWatchlistPanel() {
     overlay.className = "filter-modal-overlay";
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
-    overlay.setAttribute("aria-label", "Watchlist");
+    overlay.setAttribute("aria-labelledby", "dlgTitleWatchlist");
     overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
     document.body.appendChild(overlay);
   }
@@ -10307,7 +10430,7 @@ function renderWatchlistPanel() {
 
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:600px; max-width:95vw; max-height:85vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">';
-  html += '<h3 style="font-family:var(--font-display); font-size:22px; margin:0;">Watchlist <span style="color:var(--orange);">(' + list.length + ')</span></h3>';
+  html += '<h3 id="dlgTitleWatchlist" style="font-family:var(--font-display); font-size:20px; margin:0;">Watchlist <span style="color:var(--orange);">(' + list.length + ')</span></h3>';
   html += '<div style="display:flex; gap:6px;">';
   if (list.length > 0) {
     html += '<button class="btn-primary" onclick="openTierBoard()">Tier Board</button>';
@@ -10316,7 +10439,7 @@ function renderWatchlistPanel() {
   html += '</div></div>';
 
   if (list.length === 0) {
-    html += '<p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light); text-align:center; padding:40px 0;">' + razzleEmpty() + '</p>';
+    html += '<p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light); text-align:center; padding:40px 0;">' + razzleEmpty() + '</p>';
     html += '<p style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light); text-align:center;">click the &#9734; star next to any player in the table</p>';
     html += '</div>';
     overlay.innerHTML = html;
@@ -10335,11 +10458,11 @@ function renderWatchlistPanel() {
   ["QB", "RB", "WR", "TE", "OTHER"].forEach(function(pos) {
     if (groups[pos].length === 0) return;
     html += '<div style="margin-bottom:14px;">';
-    html += '<div style="font-family:var(--font-mono); font-size:14px; color:' + posColors[pos] + '; margin-bottom:6px; border-bottom:2px dashed var(--ink-faint); padding-bottom:4px;">' + pos + ' (' + groups[pos].length + ')</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:14px; color:' + posColors[pos] + '; margin-bottom:6px; border-bottom:2px dashed var(--border-dashed); padding-bottom:4px;">' + pos + ' (' + groups[pos].length + ')</div>';
 
     groups[pos].forEach(function(p) {
       html += '<div style="display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:var(--radius-sm); margin-bottom:3px; background:var(--bg);">';
-      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:10px; padding:1px 6px;">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:11px; padding:1px 6px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:13px; flex:1;">' + escapeHtml(p.name) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
       html += '<select class="select-chunky" style="font-size:11px; padding:2px 6px; width:90px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderWatchlistPanel();">';
@@ -10347,7 +10470,7 @@ function renderWatchlistPanel() {
         html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + tierNames[t] + '</option>';
       }
       html += '</select>';
-      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromWatchlist(\'' + escapeJS(p.player_id) + '\'); renderWatchlistPanel(); renderTable();" title="Remove">&#10005;</button>';
+      html += '<button class="btn-chunky" style="font-size:11px; padding:2px 6px; color:var(--red);" onclick="removeFromWatchlist(\'' + escapeJS(p.player_id) + '\'); renderWatchlistPanel(); renderTable();" title="Remove">&#10005;</button>';
       html += '</div>';
     });
     html += '</div>';
@@ -10374,7 +10497,7 @@ function openTierBoard() {
     overlay.className = "filter-modal-overlay";
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
-    overlay.setAttribute("aria-label", "Tier Board");
+    overlay.setAttribute("aria-labelledby", "dlgTitleTierBoard");
     overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
     document.body.appendChild(overlay);
   }
@@ -10396,7 +10519,7 @@ function renderTierBoard() {
 
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:800px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">';
-  html += '<h3 style="font-family:var(--font-display); font-size:22px; margin:0;">Tier Board</h3>';
+  html += '<h3 id="dlgTitleTierBoard" style="font-family:var(--font-display); font-size:20px; margin:0;">Tier Board</h3>';
   html += '<div style="display:flex; gap:6px;">';
   html += '<button class="btn-primary" onclick="exportTierBoardPNG()">Export PNG</button>';
   html += '<button class="btn-chunky" onclick="openWatchlistPanel(); closeTierBoard();">Back</button>';
@@ -10413,7 +10536,7 @@ function renderTierBoard() {
 
     html += '<div style="margin-bottom:14px; border:2px solid var(--ink); border-radius:var(--radius-sm); overflow:hidden; background:var(--bg);">';
     // Tier header
-    html += '<div style="display:flex; align-items:center; gap:10px; padding:8px 14px; background:var(--bg-warm); border-bottom:2px dashed var(--ink-faint);">';
+    html += '<div style="display:flex; align-items:center; gap:10px; padding:8px 14px; background:var(--bg-warm); border-bottom:2px dashed var(--border-dashed);">';
     html += '<span style="display:inline-block; font-family:var(--font-mono); font-size:13px; color:var(--text-on-accent); background:' + color + '; border:2px solid var(--ink); border-radius:8px; padding:2px 12px; transform:rotate(-2deg); box-shadow:2px 2px 0 var(--ink);">' + label + '</span>';
     html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + players.length + ' player' + (players.length !== 1 ? 's' : '') + '</span>';
     html += '</div>';
@@ -10427,10 +10550,10 @@ function renderTierBoard() {
       var pc = posColors[p.position] || "var(--ink-light)";
       html += '<div style="display:inline-flex; align-items:center; gap:5px; padding:4px 10px 4px 0; border:2px solid var(--ink); border-radius:8px; background:var(--bg-card); box-shadow:2px 2px 0 var(--ink); font-size:12px;">';
       html += '<div style="width:5px; align-self:stretch; background:' + pc + '; border-radius:8px 0 0 8px;"></div>';
-      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:11px; padding:1px 5px; margin-left:4px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.name) + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<select class="select-chunky" style="font-size:10px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderTierBoard();">';
+      html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
+      html += '<select class="select-chunky" style="font-size:11px; padding:1px 4px; width:72px; border-width:2px;" onchange="setWatchlistTier(\'' + escapeJS(p.player_id) + '\', this.value); renderTierBoard();">';
       for (var t = 0; t <= 5; t++) {
         html += '<option value="' + t + '"' + (p.tier === t ? ' selected' : '') + '>' + TIER_LABELS[t] + '</option>';
       }
@@ -10449,7 +10572,8 @@ function renderTierBoard() {
 function exportTierBoardPNG() {
   var list = getWatchlist();
   var tierOrder = [1, 2, 3, 4, 5, 0];
-  var tierColorHex = ["#c4b5a5", "#2ec4b6", "#5b7fff", "#d97757", "#8b5cf6", "#e63946"];
+  var _tc = getCanvasTheme();
+  var tierColorHex = [_tc.inkFaint, _tc.green, _tc.blue, _tc.orange, _tc.purple, _tc.red];
   var posColorHex = _getPosColorsHex();
 
   var W = 800;
@@ -10538,7 +10662,7 @@ function exportTierBoardPNG() {
       var row = Math.floor(i / 4);
       var px = cx + col * (cardW + CARD_GAP);
       var py = cy + row * (CARD_H + CARD_GAP);
-      var pc = posColorHex[p.position] || "#8a7565";
+      var pc = posColorHex[p.position] || _tc.inkLight;
 
       // Card bg
       ctx.fillStyle = t.bgCard;
@@ -10561,7 +10685,7 @@ function exportTierBoardPNG() {
       ctx.roundRect(px + 10, py + 6, 24, 16, 4);
       ctx.fill();
       ctx.fillStyle = t.white;
-      ctx.font = "bold 9px 'Space Mono', monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText(p.position, px + 22, py + 18);
       ctx.textAlign = "left";
@@ -10579,7 +10703,7 @@ function exportTierBoardPNG() {
 
       // Team
       ctx.fillStyle = t.inkLight;
-      ctx.font = "10px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.textAlign = "right";
       ctx.fillText(p.team, px + cardW - 6, py + 18);
       ctx.textAlign = "left";
@@ -10610,6 +10734,9 @@ function isAnyOverlayOpen() {
   if (_noteEditorVisible) return true;
   if (document.getElementById("screenerContextMenu")) return true;
   if (_hoverCardVisible) return true;
+  if (document.querySelector('.column-picker-overlay')) return true;
+  var authModal = document.getElementById("authModal");
+  if (authModal && authModal.style.display !== "none") return true;
   return false;
 }
 
@@ -10620,6 +10747,8 @@ function closeAllOverlays() {
   hideNoteEditor();
   hideContextMenu();
   hideHoverCard();
+  var colPicker = document.querySelector('.column-picker-overlay');
+  if (colPicker) colPicker.remove();
   // Dismiss keyboard shortcut / onboarding toast
   var onboarding = document.querySelector(".razzle-onboarding-toast");
   if (onboarding) onboarding.remove();
@@ -10686,11 +10815,6 @@ document.addEventListener("keydown", function(e) {
 
   // Don't fire shortcuts when any modal/overlay is open (except Escape handled above)
   if (isAnyOverlayOpen()) return;
-  if (document.querySelector('.column-picker-overlay')) return;
-  if (document.querySelector('#shortcutRef[style*="flex"]')) return;
-  if (document.querySelector('#savedViewsModal')) return;
-  if (document.querySelector('#shareModal')) return;
-  if (document.querySelector('.auth-modal-overlay[style*="flex"]')) return;
 
   // / or Ctrl+K: focus search
   if (e.key === "/" || (e.key === "k" && (e.ctrlKey || e.metaKey))) {
@@ -10883,15 +11007,15 @@ function toggleShortcutRef() {
   overlay.className = "filter-modal-overlay open";
   overlay.setAttribute("role", "dialog");
   overlay.setAttribute("aria-modal", "true");
-  overlay.setAttribute("aria-label", "Keyboard Shortcuts");
+  overlay.setAttribute("aria-labelledby", "dlgTitleShortcuts");
   overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
   overlay.innerHTML = `
     <div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); max-width:420px; width:90%; padding:24px; margin:auto; margin-top:120px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h3 style="font-family:var(--font-display); font-size:18px; margin:0;">Keyboard Shortcuts</h3>
+        <h3 id="dlgTitleShortcuts" style="font-family:var(--font-display); font-size:18px; margin:0;">Keyboard Shortcuts</h3>
         <button class="btn-chunky" onclick="document.getElementById('shortcutRefOverlay').classList.remove('open')" style="font-size:11px; padding:4px 10px;">Close</button>
       </div>
-      <table style="width:100%; font-family:var(--font-mono); font-size:12px; border-collapse:collapse;">
+      <table style="width:100%; font-family:var(--font-mono); font-size:12px; border-collapse:collapse;"><caption class="sr-only">Keyboard shortcuts reference</caption>
         <tbody>
           ${shortcutRow("/", "Focus search")}
           ${shortcutRow("Esc", "Close overlay / blur input")}
@@ -11008,7 +11132,6 @@ function _taSetupSearch(side) {
         }).join("");
         autoDiv.style.display = "";
       } catch (err) {
-        console.error("Trade search failed:", err);
         autoDiv.style.display = "none";
       }
     }, 200);
@@ -11044,7 +11167,6 @@ async function _taAddPlayer(side, playerId) {
         _taState.valueCache[playerId] = playerData;
       }
     } catch (err) {
-      console.error("Trade value fetch failed:", err);
     }
   }
   if (!playerData) return;
@@ -11077,7 +11199,7 @@ function _taRenderSide(side) {
 
   container.innerHTML = arr.map((p, i) => {
     if (p._type === "pick") {
-      const rdColor = _PICK_ROUND_COLORS[p.round] || "#8a7565";
+      const rdColor = _PICK_ROUND_COLORS[p.round] || getCanvasTheme().inkLight;
       return '<div class="trade-pick-card" style="border-left:4px solid ' + rdColor + ';">'
         + '<span class="pick-round-badge" style="background:' + rdColor + ';">RD' + p.round + '</span>'
         + '<span class="pick-label">' + escapeHtml(p.pick_label) + '</span>'
@@ -11118,7 +11240,7 @@ function _taUpdateVerdict() {
 
   // Build segmented bars from player/pick values
   function _barSegment(p) {
-    const pc = p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || "#8a7565") : (posColors[p.position] || "#8a7565");
+    const pc = p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || getCanvasTheme().inkLight) : (posColors[p.position] || getCanvasTheme().inkLight);
     const label = p._type === "pick" ? p.pick_label : p.full_name;
     const w = maxVal > 0 ? ((p.trade_value || 0) / maxVal * 100) : 0;
     return '<div style="width:' + w + '%; height:100%; background:' + pc + '; display:inline-block;" title="' + escapeAttr(label) + ': ' + p.trade_value + '"></div>';
@@ -11220,7 +11342,7 @@ function exportTradeAnalyzerPNG() {
   ctx.strokeRect(4, 4, W - 8, H - 8);
 
   // Title
-  ctx.font = "28px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "center";
   ctx.fillText("Razzle Trade Analyzer", W / 2, 44);
@@ -11276,12 +11398,12 @@ function exportTradeAnalyzerPNG() {
     for (let i = 0; i < Math.min(players.length, 7); i++) {
       const p = players[i];
       const isPick = p._type === "pick";
-      const pc = isPick ? (_PICK_ROUND_COLORS[p.round] || "#8a7565") : (posColors[p.position] || "#8a7565");
+      const pc = isPick ? (_PICK_ROUND_COLORS[p.round] || t.inkLight) : (posColors[p.position] || t.inkLight);
       const cy = cardY + i * (cardH + 4);
 
       // Row bg
       if (i % 2 === 0) {
-        ctx.fillStyle = "rgba(247,239,229,0.8)";
+        ctx.fillStyle = _hexAlpha(t.bgCard, 0.8);
         ctx.fillRect(x + 12, cy, sideW - 24, cardH);
       }
 
@@ -11294,7 +11416,7 @@ function exportTradeAnalyzerPNG() {
       ctx.lineWidth = 1.5;
       ctx.stroke();
       ctx.fillStyle = t.white;
-      ctx.font = "bold 10px 'Space Mono', monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText(isPick ? ("RD" + p.round) : p.position, x + 36, cy + 25);
 
@@ -11330,13 +11452,13 @@ function exportTradeAnalyzerPNG() {
   const _taStyles = getComputedStyle(document.documentElement);
   const _taRedLight = _taStyles.getPropertyValue('--red-light').trim() || "#f2d5d8";
   const _taGreenLight = _taStyles.getPropertyValue('--green-light').trim() || "#d9efec";
-  drawSide(giveX, "I GIVE", _taRedLight, "#e63946", _taState.give);
-  drawSide(getX, "I GET", _taGreenLight, "#2ec4b6", _taState.get);
+  drawSide(giveX, "I GIVE", _taRedLight, t.red, _taState.give);
+  drawSide(getX, "I GET", _taGreenLight, t.green, _taState.get);
 
   // VS divider
   ctx.save();
   ctx.fillStyle = t.ink;
-  ctx.font = "22px 'Luckiest Guy', cursive";
+  ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, topY + 200);
   ctx.restore();
@@ -11356,7 +11478,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fill();
   ctx.stroke();
   function _pngBarColor(p) {
-    return p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || "#8a7565") : (posColors[p.position] || "#8a7565");
+    return p._type === "pick" ? (_PICK_ROUND_COLORS[p.round] || t.inkLight) : (posColors[p.position] || t.inkLight);
   }
   let bx = giveX;
   for (const p of _taState.give) {
@@ -11454,7 +11576,7 @@ function exportTradeAnalyzerPNG() {
   ctx.fillText(quip, W / 2, 565);
 
   // Watermark
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.3;
   ctx.textAlign = "right";
@@ -11469,7 +11591,7 @@ function exportTradeAnalyzerPNG() {
 
 // ─── Draft Pick Support ──────────────────────────────────────────────
 
-const _PICK_ROUND_COLORS = { 1: "#d97757", 2: "#5b7fff", 3: "#2ec4b6", 4: "#8b5cf6" };
+var _PICK_ROUND_COLORS = (function() { var t = getCanvasTheme(); return { 1: t.orange, 2: t.blue, 3: t.green, 4: t.purple }; })();
 let _taPickCache = null; // cached pick values from API
 
 async function _taFetchPickValues(year) {
@@ -11477,7 +11599,6 @@ async function _taFetchPickValues(year) {
     const resp = await apiFetch("/api/trade/pick-values?year=" + year);
     return resp.picks || [];
   } catch (err) {
-    console.error("Pick values fetch failed:", err);
     return [];
   }
 }
@@ -11547,7 +11668,7 @@ function _taDrawPickChart() {
   const maxVal = allPicks[0].trade_value || 1;
 
   // Grid lines
-  ctx.strokeStyle = t.isDark ? "rgba(237,224,207,0.1)" : "rgba(45,31,20,0.1)";
+  ctx.strokeStyle = _hexAlpha(t.ink, 0.1);
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
     const y = pad.top + (plotH * i / 4);
@@ -11556,7 +11677,7 @@ function _taDrawPickChart() {
     ctx.lineTo(W - pad.right, y);
     ctx.stroke();
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(Math.round(maxVal * (1 - i / 4)), pad.left - 6, y + 4);
   }
@@ -11585,7 +11706,7 @@ function _taDrawPickChart() {
     const pk = allPicks[i];
     const x = pad.left + (i / (allPicks.length - 1)) * plotW;
     const y = pad.top + plotH * (1 - pk.trade_value / maxVal);
-    const rdColor = _PICK_ROUND_COLORS[pk.round] || "#8a7565";
+    const rdColor = _PICK_ROUND_COLORS[pk.round] || t.inkLight;
     const isSelected = selectedPicks.some(s => s.overall === pk.overall);
 
     ctx.fillStyle = rdColor;
@@ -11598,14 +11719,14 @@ function _taDrawPickChart() {
       ctx.stroke();
       // Label
       ctx.fillStyle = t.ink;
-      ctx.font = "bold 10px 'Space Mono', monospace";
+      ctx.font = "bold 11px 'Space Mono', monospace";
       ctx.textAlign = "center";
       ctx.fillText((pk.pick_label || "").split(" ")[1] || "", x, y - 10);
     }
   }
 
   // Round labels at bottom
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let rd = 1; rd <= 4; rd++) {
     const startIdx = (rd - 1) * 12;
@@ -11676,7 +11797,7 @@ function openMyRoster() {
     overlay.className = "filter-modal-overlay";
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
-    overlay.setAttribute("aria-label", "My Roster");
+    overlay.setAttribute("aria-labelledby", "dlgTitleMyRoster");
     overlay.onclick = function(e) { if (e.target === overlay) overlay.classList.remove("open"); };
     document.body.appendChild(overlay);
   }
@@ -11712,9 +11833,9 @@ async function rosterSearchPlayers(query) {
       if (inRoster) return;
       var pos = p.position || "??";
       html += '<div class="roster-search-row" style="display:flex; align-items:center; gap:6px; padding:4px 8px; cursor:pointer; border-radius:var(--radius-sm); margin-bottom:2px; background:var(--bg);" data-pid="' + escapeAttr(pid) + '" data-name="' + escapeAttr(p.full_name || p.name || "") + '" data-pos="' + escapeAttr(pos) + '" data-team="' + escapeAttr(p.team || "FA") + '" data-query="' + escapeAttr(query) + '">';
-      html += '<span class="pos-badge pos-' + pos.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(pos) + '</span>';
+      html += '<span class="pos-badge pos-' + pos.toLowerCase() + '" style="font-size:11px; padding:1px 5px;">' + escapeHtml(pos) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px;">' + escapeHtml(p.full_name || p.name || "") + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + '</span>';
+      html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team || "FA") + '</span>';
       html += '<span style="font-family:var(--font-hand); font-size:12px; color:var(--green); margin-left:auto;">+ add</span>';
       html += '</div>';
     });
@@ -11760,7 +11881,7 @@ function renderMyRosterPanel() {
   var html = '<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:24px; width:700px; max-width:95vw; max-height:90vh; overflow-y:auto;" onclick="event.stopPropagation()">';
   // Header
   html += '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">';
-  html += '<h3 style="font-family:var(--font-display); font-size:22px; margin:0;">My Roster <span style="color:var(--green);">(' + list.length + ')</span></h3>';
+  html += '<h3 id="dlgTitleMyRoster" style="font-family:var(--font-display); font-size:20px; margin:0;">My Roster <span style="color:var(--green);">(' + list.length + ')</span></h3>';
   html += '<div style="display:flex; gap:6px;">';
   if (list.length > 0) {
     html += '<button class="btn-primary" onclick="calculateRosterValue()">Calculate Value</button>';
@@ -11792,13 +11913,13 @@ function renderMyRosterPanel() {
     if (groups[pos].length === 0) return;
     var pc = posColors[pos] || "var(--ink-light)";
     html += '<div style="margin-bottom:10px;">';
-    html += '<div style="font-family:var(--font-mono); font-size:13px; color:' + pc + '; margin-bottom:4px; border-bottom:2px dashed var(--ink-faint); padding-bottom:3px;">' + pos + ' (' + groups[pos].length + ')</div>';
+    html += '<div style="font-family:var(--font-mono); font-size:13px; color:' + pc + '; margin-bottom:4px; border-bottom:2px dashed var(--border-dashed); padding-bottom:3px;">' + pos + ' (' + groups[pos].length + ')</div>';
     groups[pos].forEach(function(p) {
       html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; border-radius:var(--radius-sm); margin-bottom:2px; background:var(--bg);">';
-      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
+      html += '<span class="pos-badge pos-' + p.position.toLowerCase() + '" style="font-size:11px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
       html += '<span style="font-family:var(--font-mono); font-size:12px; flex:1;">' + escapeHtml(p.name) + '</span>';
-      html += '<span style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
-      html += '<button class="btn-chunky" style="font-size:10px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeJS(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
+      html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
+      html += '<button class="btn-chunky" style="font-size:11px; padding:2px 6px; color:var(--red);" onclick="removeFromRoster(\'' + escapeJS(p.player_id) + '\'); renderMyRosterPanel();" title="Remove">&#10005;</button>';
       html += '</div>';
     });
     html += '</div>';
@@ -11818,14 +11939,14 @@ function renderMyRosterPanel() {
 
 // ─── Roster Report Rendering ──────────────────────────────────────────
 
-var _GRADE_COLORS = {
-  "A+": "#2ec4b6", "A": "#2ec4b6", "A-": "#2ec4b6",
-  "B+": "#5b7fff", "B": "#5b7fff", "B-": "#5b7fff",
-  "C+": "#d97757", "C": "#d97757", "C-": "#d97757",
-  "D+": "#e63946", "D": "#e63946", "D-": "#e63946",
-  "F": "#e63946"
-};
-var _STATUS_COLORS = { "competing": "#2ec4b6", "retooling": "#d97757", "rebuilding": "#e63946" };
+var _GRADE_COLORS = (function() { var t = getCanvasTheme(); return {
+  "A+": t.green, "A": t.green, "A-": t.green,
+  "B+": t.blue, "B": t.blue, "B-": t.blue,
+  "C+": t.orange, "C": t.orange, "C-": t.orange,
+  "D+": t.red, "D": t.red, "D-": t.red,
+  "F": t.red
+}; })();
+var _STATUS_COLORS = (function() { var t = getCanvasTheme(); return { "competing": t.green, "retooling": t.orange, "rebuilding": t.red }; })();
 var _POS_HEX = _getPosColorsHex();
 
 function renderRosterReport() {
@@ -11833,8 +11954,8 @@ function renderRosterReport() {
   if (!area || !_rosterReport) return;
 
   var r = _rosterReport;
-  var gc = _GRADE_COLORS[r.grade] || "#d97757";
-  var sc = _STATUS_COLORS[r.competing_status] || "#d97757";
+  var gc = _GRADE_COLORS[r.grade] || getCanvasTheme().orange;
+  var sc = _STATUS_COLORS[r.competing_status] || getCanvasTheme().orange;
 
   var html = '<div style="margin-top:16px; border-top:3px solid var(--ink); padding-top:16px;">';
 
@@ -11843,7 +11964,7 @@ function renderRosterReport() {
   // Grade badge with explainer
   html += '<div style="text-align:center;">';
   html += '<div title="Overall roster strength based on total trade value" style="background:' + gc + '; color:var(--text-on-accent); font-family:var(--font-display); font-size:32px; padding:8px 16px; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg); min-width:60px; text-align:center; cursor:help;">' + escapeHtml(r.grade) + '</div>';
-  html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Roster Grade</div>';
+  html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Roster Grade</div>';
   html += '</div>';
   // Stats
   html += '<div style="flex:1;">';
@@ -11853,7 +11974,7 @@ function renderRosterReport() {
   // Status badge with explainer
   html += '<div style="text-align:center;">';
   html += '<div title="Based on total value + average age: high value + young = competing, low value or old = rebuilding" style="background:' + sc + '; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; padding:6px 14px; border:2px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); transform:rotate(3deg); text-transform:uppercase; cursor:help;">' + escapeHtml(r.competing_status) + '</div>';
-  html += '<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Window</div>';
+  html += '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Window</div>';
   html += '</div>';
   html += '</div>';
 
@@ -11879,12 +12000,12 @@ function renderRosterReport() {
     var bg = i % 2 === 0 ? "var(--bg)" : "var(--bg-card)";
     html += '<div style="display:flex; align-items:center; gap:6px; padding:4px 8px; background:' + bg + '; font-size:12px;">';
     html += '<span style="font-family:var(--font-mono); color:var(--ink-light); width:20px;">' + (i + 1) + '</span>';
-    html += '<span class="pos-badge pos-' + (p.position || "wr").toLowerCase() + '" style="font-size:9px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
+    html += '<span class="pos-badge pos-' + (p.position || "wr").toLowerCase() + '" style="font-size:11px; padding:1px 5px;">' + escapeHtml(p.position) + '</span>';
     html += '<span style="font-family:var(--font-display); flex:1;">' + escapeHtml(p.full_name) + '</span>';
     html += '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + escapeHtml(p.team) + '</span>';
     // Value bar
     var pct = Math.min(100, p.trade_value);
-    var pc = _POS_HEX[p.position] || "#d97757";
+    var pc = _POS_HEX[p.position] || getCanvasTheme().orange;
     html += '<div style="width:80px; height:14px; background:var(--ink-faint); border-radius:var(--radius-sm); overflow:hidden; border:2px solid var(--ink);">';
     html += '<div style="width:' + pct + '%; height:100%; background:' + pc + ';"></div>';
     html += '</div>';
@@ -11938,7 +12059,7 @@ function drawRosterPieChart() {
     ctx.moveTo(cx, cy);
     ctx.arc(cx, cy, radius, startAngle, endAngle);
     ctx.closePath();
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
+    ctx.fillStyle = _POS_HEX[sl.pos] || t.inkLight;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
@@ -11949,7 +12070,7 @@ function drawRosterPieChart() {
   // Legend
   var ly = 20;
   slices.forEach(function(sl) {
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
+    ctx.fillStyle = _POS_HEX[sl.pos] || t.inkLight;
     ctx.fillRect(W - 65, ly, 12, 12);
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
@@ -11995,7 +12116,7 @@ function drawRosterAgeChart() {
     var gx = xPos(a);
     ctx.beginPath(); ctx.moveTo(gx, pad.top); ctx.lineTo(gx, H - pad.bottom); ctx.stroke();
     ctx.fillStyle = t.ink;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(a, gx, H - pad.bottom + 14);
   }
@@ -12003,14 +12124,14 @@ function drawRosterAgeChart() {
     var gy = yPos(v);
     ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(W - pad.right, gy); ctx.stroke();
     ctx.fillStyle = t.ink;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText(v, pad.left - 4, gy + 3);
   }
 
   // Axis labels
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   ctx.fillText("AGE", pad.left + plotW / 2, H - 2);
   ctx.save();
@@ -12027,7 +12148,7 @@ function drawRosterAgeChart() {
     var y = yPos(val);
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, Math.PI * 2);
-    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fillStyle = _POS_HEX[p.position] || t.orange;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
@@ -12036,7 +12157,7 @@ function drawRosterAgeChart() {
     // Name label for top players
     if (val >= 40 || players.length <= 10) {
       ctx.fillStyle = t.ink;
-      ctx.font = "9px 'Space Mono', monospace";
+      ctx.font = "11px 'Space Mono', monospace";
       ctx.textAlign = "center";
       var lastName = (p.full_name || "").split(" ").slice(-1)[0];
       ctx.fillText(lastName, x, y - 8);
@@ -12077,7 +12198,7 @@ function exportRosterTeamCard() {
 
   // Header
   ctx.fillStyle = t.ink;
-  ctx.font = "28px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("MY DYNASTY ROSTER", W / 2, 44);
   ctx.font = "16px 'Caveat', cursive";
@@ -12087,7 +12208,7 @@ function exportRosterTeamCard() {
   var y = HEADER_H;
 
   // Grade badge
-  var gc = _GRADE_COLORS[r.grade] || "#d97757";
+  var gc = _GRADE_COLORS[r.grade] || t.orange;
   ctx.fillStyle = gc;
   _roundRect(ctx, 30, y + 5, 70, 55, 10);
   ctx.fill();
@@ -12102,7 +12223,7 @@ function exportRosterTeamCard() {
 
   // Total value
   ctx.fillStyle = t.ink;
-  ctx.font = "26px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(r.total_value + " pts", 120, y + 30);
   ctx.font = "14px 'Space Mono', monospace";
@@ -12110,7 +12231,7 @@ function exportRosterTeamCard() {
   ctx.fillText("total dynasty value  |  avg age: " + r.average_age, 120, y + 50);
 
   // Status badge
-  var sc = _STATUS_COLORS[r.competing_status] || "#d97757";
+  var sc = _STATUS_COLORS[r.competing_status] || t.orange;
   var statusText = (r.competing_status || "").toUpperCase();
   ctx.fillStyle = sc;
   var sw = ctx.measureText(statusText).width + 24;
@@ -12146,7 +12267,7 @@ function exportRosterTeamCard() {
     ctx.moveTo(pieCx, pieCy);
     ctx.arc(pieCx, pieCy, pieR, startAngle, endAngle);
     ctx.closePath();
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
+    ctx.fillStyle = _POS_HEX[sl.pos] || t.inkLight;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
@@ -12158,7 +12279,7 @@ function exportRosterTeamCard() {
   var ly = y + 20;
   ctx.textAlign = "left";
   slices.forEach(function(sl) {
-    ctx.fillStyle = _POS_HEX[sl.pos] || "#8a7565";
+    ctx.fillStyle = _POS_HEX[sl.pos] || t.inkLight;
     ctx.fillRect(210, ly, 14, 14);
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
@@ -12195,10 +12316,10 @@ function exportRosterTeamCard() {
   ctx.lineWidth = 1;
   for (var a = Math.ceil(sMinAge); a <= sMaxAge; a += 2) {
     ctx.beginPath(); ctx.moveTo(sxPos(a), scatterY + sPad.top); ctx.lineTo(sxPos(a), scatterY + scatterH - sPad.bottom); ctx.stroke();
-    ctx.fillStyle = t.inkMedium; ctx.font = "9px 'Space Mono', monospace"; ctx.textAlign = "center";
+    ctx.fillStyle = t.inkMedium; ctx.font = "11px 'Space Mono', monospace"; ctx.textAlign = "center";
     ctx.fillText(a, sxPos(a), scatterY + scatterH - sPad.bottom + 12);
   }
-  ctx.fillStyle = t.ink; ctx.font = "bold 9px 'Space Mono', monospace"; ctx.textAlign = "center";
+  ctx.fillStyle = t.ink; ctx.font = "bold 11px 'Space Mono', monospace"; ctx.textAlign = "center";
   ctx.fillText("AGE", scatterX + sPad.left + sPlotW / 2, scatterY + scatterH - 2);
 
   // Dots
@@ -12207,7 +12328,7 @@ function exportRosterTeamCard() {
     var ay = syPos(p.trade_value || 0);
     ctx.beginPath();
     ctx.arc(ax, ay, 4, 0, Math.PI * 2);
-    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fillStyle = _POS_HEX[p.position] || t.orange;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1;
@@ -12215,7 +12336,7 @@ function exportRosterTeamCard() {
   });
 
   // Title
-  ctx.fillStyle = t.ink; ctx.font = "bold 10px 'Space Mono', monospace"; ctx.textAlign = "left";
+  ctx.fillStyle = t.ink; ctx.font = "bold 11px 'Space Mono', monospace"; ctx.textAlign = "left";
   ctx.fillText("AGE vs VALUE", scatterX + sPad.left, scatterY + 14);
 
   y += CHART_AREA_H;
@@ -12234,16 +12355,16 @@ function exportRosterTeamCard() {
 
     // Rank
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText((i + 1) + ".", 50, rowY + 16);
 
     // Pos badge
-    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fillStyle = _POS_HEX[p.position] || t.orange;
     _roundRect(ctx, 56, rowY + 4, 26, 16, 4);
     ctx.fill();
     ctx.fillStyle = t.white;
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(p.position, 69, rowY + 15);
 
@@ -12255,7 +12376,7 @@ function exportRosterTeamCard() {
 
     // Team
     ctx.fillStyle = t.inkLight;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "left";
     var nameW = ctx.measureText(p.full_name || "").width;
     ctx.fillText(p.team || "", 94 + nameW, rowY + 16);
@@ -12266,7 +12387,7 @@ function exportRosterTeamCard() {
     _roundRect(ctx, barX, rowY + 6, barW, barH, 3);
     ctx.fill();
     var pct = Math.min(100, p.trade_value) / 100;
-    ctx.fillStyle = _POS_HEX[p.position] || "#d97757";
+    ctx.fillStyle = _POS_HEX[p.position] || t.orange;
     _roundRect(ctx, barX, rowY + 6, barW * pct, barH, 3);
     ctx.fill();
 
@@ -12336,7 +12457,7 @@ async function loadPlayerComps(playerId) {
 function renderPlayerComps(data, container) {
   const { player, comps, stat_keys, stat_labels, target_stats, season } = data;
   if (!comps || comps.length === 0) {
-    container.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">no similar players found on the tape</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:30px; font-family:var(--font-hand); font-size:18px; color:var(--ink-light);">no similar players found — not enough games for comparison (minimum 4 required)</div>`;
     return;
   }
 
@@ -12349,7 +12470,7 @@ function renderPlayerComps(data, container) {
   // Section header
   html += `<div class="profile-section-title" style="display:flex; align-items:center; justify-content:space-between;">`;
   html += `<span>Player Comps — ${season} Season</span>`;
-  html += `<button class="btn-chunky" onclick="exportCompsImage()" style="font-size:10px; padding:4px 10px;">Export Comps PNG</button>`;
+  html += `<button class="btn-chunky" onclick="exportCompsImage()" style="font-size:11px; padding:4px 10px;">Export Comps PNG</button>`;
   html += `</div>`;
 
   // Annotation
@@ -12365,7 +12486,7 @@ function renderPlayerComps(data, container) {
     // Headshot + name
     html += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">`;
     if (comp.headshot_url) {
-      html += `<img src="${escapeAttr(comp.headshot_url)}" alt="" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
+      html += `<img src="${escapeAttr(comp.headshot_url)}" alt="Player headshot" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); object-fit:cover;" onerror="this.onerror=null;this.style.display='none'; this.nextElementSibling.style.display='flex'">`;
       html += `<span style="display:none; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
     } else {
       html += `<span style="display:flex; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:${posColor}; color:var(--text-on-accent); font-family:var(--font-mono); font-size:14px; align-items:center; justify-content:center;">${escapeHtml((comp.full_name || "").split(" ").map(n => n[0]).join(""))}</span>`;
@@ -12378,13 +12499,13 @@ function renderPlayerComps(data, container) {
 
     // Similarity score
     html += `<div style="text-align:center; margin:8px 0;">`;
-    html += `<span style="font-family:var(--font-display); font-size:28px; font-weight:700; color:${simColor};">${comp.similarity}%</span>`;
-    html += `<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-light); text-transform:uppercase;">match</div>`;
+    html += `<span style="font-family:var(--font-display); font-size:24px; font-weight:700; color:${simColor};">${comp.similarity}%</span>`;
+    html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); text-transform:uppercase;">match</div>`;
     html += `</div>`;
 
     // Top matching stats
     if (comp.matching_stats && comp.matching_stats.length > 0) {
-      html += `<div style="border-top:2px dashed var(--ink-faint); padding-top:8px;">`;
+      html += `<div style="border-top:2px dashed var(--border-dashed); padding-top:8px;">`;
       for (const ms of comp.matching_stats) {
         html += `<div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; padding:2px 0;">`;
         html += `<span style="color:var(--ink-light);">${escapeHtml(String(ms.label))}</span>`;
@@ -12410,7 +12531,7 @@ function renderPlayerComps(data, container) {
 
   // Stat comparison table
   html += `<div class="profile-section-title" style="font-size:14px; margin-top:16px;">Full Stat Comparison</div>`;
-  html += `<table class="profile-season-table"><thead><tr>`;
+  html += `<table class="profile-season-table"><caption class="sr-only">Player comp finder full stat comparison</caption><thead><tr>`;
   html += `<th style="text-align:left;">Stat</th>`;
   html += `<th>${escapeHtml(player.full_name)}</th>`;
   for (const c of comps.slice(0, 3)) {
@@ -12450,7 +12571,7 @@ function drawCompRadar(data) {
   const topComp = comps[0];
   const pos = (player.position || "").toUpperCase();
   var posColorMap = _getPosColorsHex();
-  const posColor = posColorMap[pos] || "#d97757";
+  const posColor = posColorMap[pos] || t.orange;
 
   const W = canvas.width;
   const H = canvas.height;
@@ -12666,13 +12787,13 @@ function exportCompsImage() {
     ctx.fillText(`${c.team || "FA"} · ${c.games || 0}G · ${c.ppg || 0} PPG`, padX + 52, cardY + 46);
 
     // Similarity score
-    const simColor = c.similarity >= 95 ? "#2ec4b6" : c.similarity >= 90 ? "#d97757" : (getComputedStyle(document.documentElement).getPropertyValue('--ink-medium').trim() || "#5c4a3d");
+    const simColor = c.similarity >= 95 ? t.green : c.similarity >= 90 ? t.orange : t.inkMedium;
     ctx.fillStyle = simColor;
-    ctx.font = "28px 'Luckiest Guy', cursive";
+    ctx.font = "24px 'Luckiest Guy', cursive";
     ctx.textAlign = "right";
     ctx.fillText(`${c.similarity}%`, W - padX - 16, cardY + 35);
     ctx.fillStyle = t.inkLight;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText("MATCH", W - padX - 16, cardY + 50);
 
     // Top matching stats
@@ -12799,7 +12920,7 @@ function renderBoomBust(data, container) {
   // Section header
   html += `<div class="profile-section-title" style="display:flex; align-items:center; justify-content:space-between;">`;
   html += `<span>Boom/Bust Profile — ${season} Season</span>`;
-  html += `<button class="btn-chunky" onclick="exportBoomBustImage()" style="font-size:10px; padding:4px 10px;">Export Boom/Bust PNG</button>`;
+  html += `<button class="btn-chunky" onclick="exportBoomBustImage()" style="font-size:11px; padding:4px 10px;">Export Boom/Bust PNG</button>`;
   html += `</div>`;
 
   // Annotation
@@ -12813,7 +12934,7 @@ function renderBoomBust(data, container) {
   html += `<div style="background:${gradeColor}; color:var(--text-on-accent); font-family:var(--font-display); font-size:36px; font-weight:700; width:72px; height:72px; display:flex; align-items:center; justify-content:center; border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); transform:rotate(-3deg);">`;
   html += grade;
   html += `</div>`;
-  html += `<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Consistency</div>`;
+  html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); text-transform:uppercase; margin-top:4px;">Consistency</div>`;
   html += `</div>`;
 
   // Stat cards
@@ -12833,8 +12954,8 @@ function renderBoomBust(data, container) {
                       st.label === "Bust%" ? "var(--red)" : posColor;
     html += `<div style="background:var(--bg-card); border:3px solid var(--ink); border-radius:8px; box-shadow:4px 4px 0 var(--ink); padding:8px; text-align:center;">`;
     html += `<div style="font-family:var(--font-display); font-size:20px; font-weight:700; color:${cardColor};">${st.value}</div>`;
-    html += `<div style="font-family:var(--font-mono); font-size:10px; color:var(--ink-medium); text-transform:uppercase;">${st.label}</div>`;
-    html += `<div style="font-family:var(--font-mono); font-size:9px; color:var(--ink-light);">${st.sub}</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-medium); text-transform:uppercase;">${st.label}</div>`;
+    html += `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">${st.sub}</div>`;
     html += `</div>`;
   }
   html += `</div>`;
@@ -12879,7 +13000,7 @@ function drawBoomBustHistogram(data) {
   const scores = (weekly_scores || []).map(w => w.score);
   const pos = (player.position || "").toUpperCase();
   var posHex = _getPosColorsHex();
-  const posColor = posHex[pos] || "#d97757";
+  const posColor = posHex[pos] || t.orange;
 
   // Build histogram buckets (5-point buckets)
   const maxScore = Math.max(...scores, (boom_threshold || 20) + 5);
@@ -12922,9 +13043,9 @@ function drawBoomBustHistogram(data) {
 
     // Color: green for boom, red for bust, position color for middle
     if (bucketMid >= boom_threshold) {
-      ctx.fillStyle = "#2ec4b6";
+      ctx.fillStyle = t.green;
     } else if ((i + 1) * bucketSize <= bust_threshold) {
-      ctx.fillStyle = "#e63946";
+      ctx.fillStyle = t.red;
     } else {
       ctx.fillStyle = posColor;
     }
@@ -12936,7 +13057,7 @@ function drawBoomBustHistogram(data) {
 
     // X-axis label
     ctx.fillStyle = t.inkMedium;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(`${i * bucketSize}`, x + barW / 2, pad.top + cH + 16);
   }
@@ -12960,7 +13081,7 @@ function drawBoomBustHistogram(data) {
   // Boom threshold line
   const boomX = pad.left + (boom_threshold / bucketSize) * (cW / numBuckets);
   if (boomX < W - pad.right) {
-    ctx.strokeStyle = "#2ec4b6";
+    ctx.strokeStyle = t.green;
     ctx.lineWidth = 2;
     ctx.setLineDash([6, 4]);
     ctx.beginPath();
@@ -12968,7 +13089,7 @@ function drawBoomBustHistogram(data) {
     ctx.lineTo(boomX, pad.top + cH);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = "#2ec4b6";
+    ctx.fillStyle = t.green;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "left";
     ctx.fillText("BOOM", boomX + 4, pad.top + 14);
@@ -12977,7 +13098,7 @@ function drawBoomBustHistogram(data) {
   // Bust threshold line
   const bustX = pad.left + (bust_threshold / bucketSize) * (cW / numBuckets);
   if (bustX > pad.left) {
-    ctx.strokeStyle = "#e63946";
+    ctx.strokeStyle = t.red;
     ctx.lineWidth = 2;
     ctx.setLineDash([6, 4]);
     ctx.beginPath();
@@ -12985,7 +13106,7 @@ function drawBoomBustHistogram(data) {
     ctx.lineTo(bustX, pad.top + cH);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = "#e63946";
+    ctx.fillStyle = t.red;
     ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.textAlign = "right";
     ctx.fillText("BUST", bustX - 4, pad.top + 14);
@@ -13012,7 +13133,7 @@ function drawBoomBustRangeBar(data) {
   const median_ppg = data.median_ppg || 0;
   const pos = (player.position || "").toUpperCase();
   var posHex = _getPosColorsHex();
-  const posColor = posHex[pos] || "#d97757";
+  const posColor = posHex[pos] || t.orange;
 
   const maxVal = Math.max(ceiling_ppg * 1.2, 35);
   const pad = { left: 40, right: 40 };
@@ -13036,17 +13157,17 @@ function drawBoomBustRangeBar(data) {
   ctx.fillRect(medX - 2, barY - 4, 4, barH + 8);
 
   // Labels
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
-  ctx.fillStyle = "#e63946";
+  ctx.fillStyle = t.red;
   ctx.fillText(floor_ppg.toFixed(1), floorX, barY - 4);
   ctx.fillStyle = posColor;
   ctx.fillText(median_ppg.toFixed(1), medX, H - 2);
-  ctx.fillStyle = "#2ec4b6";
+  ctx.fillStyle = t.green;
   ctx.fillText(ceiling_ppg.toFixed(1), ceilX, barY - 4);
 
   // Tiny labels
-  ctx.font = "9px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkLight;
   ctx.textAlign = "center";
   ctx.fillText("FLOOR", floorX, H - 2);
@@ -13066,20 +13187,20 @@ function exportBoomBustImage() {
   const boom_rate = data.boom_rate || 0;
   const bust_rate = data.bust_rate || 0;
 
+  var t = getCanvasTheme();
   const pos = (player.position || "").toUpperCase();
   var posHex = _getPosColorsHex();
-  const posColor = posHex[pos] || "#d97757";
+  const posColor = posHex[pos] || t.orange;
   const safeGrade = grade || "C";
-  const gradeColor = safeGrade.startsWith("A") ? "#2ec4b6" :
-                     safeGrade.startsWith("B") ? "#5b7fff" :
-                     safeGrade.startsWith("C") ? "#d97757" :
-                     safeGrade.startsWith("D") ? "#ffc857" : "#e63946";
+  const gradeColor = safeGrade.startsWith("A") ? t.green :
+                     safeGrade.startsWith("B") ? t.blue :
+                     safeGrade.startsWith("C") ? t.orange :
+                     safeGrade.startsWith("D") ? t.yellow : t.red;
 
   const canvas = document.createElement("canvas");
   canvas.width = 800;
   canvas.height = 700;
   const ctx = canvas.getContext("2d");
-  var t = getCanvasTheme();
 
   // Background
   ctx.fillStyle = t.bg;
@@ -13089,7 +13210,7 @@ function exportBoomBustImage() {
   ctx.fillStyle = t.ink;
   ctx.fillRect(0, 0, 800, 56);
   ctx.fillStyle = t.bgCard;
-  ctx.font = "22px 'Luckiest Guy', cursive";
+  ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   ctx.fillText(`BOOM/BUST PROFILE — ${player.full_name}`, 20, 36);
 
@@ -13127,10 +13248,10 @@ function exportBoomBustImage() {
   // Stat cards row
   const cardStats = [
     { label: "MEDIAN", value: median_ppg.toFixed(1), color: posColor },
-    { label: "FLOOR", value: floor_ppg.toFixed(1), color: "#e63946" },
-    { label: "CEILING", value: ceiling_ppg.toFixed(1), color: "#2ec4b6" },
-    { label: "BOOM%", value: boom_rate.toFixed(0) + "%", color: "#2ec4b6" },
-    { label: "BUST%", value: bust_rate.toFixed(0) + "%", color: "#e63946" },
+    { label: "FLOOR", value: floor_ppg.toFixed(1), color: t.red },
+    { label: "CEILING", value: ceiling_ppg.toFixed(1), color: t.green },
+    { label: "BOOM%", value: boom_rate.toFixed(0) + "%", color: t.green },
+    { label: "BUST%", value: bust_rate.toFixed(0) + "%", color: t.red },
     { label: "RANK", value: `#${position_rank || "—"}`, color: posColor },
   ];
   const cardW = 105, cardH = 60, startX = 20, startY = 100;
@@ -13144,11 +13265,11 @@ function exportBoomBustImage() {
     ctx.lineWidth = 2;
     ctx.stroke();
     ctx.fillStyle = cardStats[i].color;
-    ctx.font = "22px 'Luckiest Guy', cursive";
+    ctx.font = "20px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(cardStats[i].value, x + cardW / 2, startY + 28);
     ctx.fillStyle = t.inkMedium;
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText(cardStats[i].label, x + cardW / 2, startY + 50);
   }
 
@@ -13190,21 +13311,21 @@ function exportBoomBustImage() {
     const bH = (buckets[i] / maxCount) * hH;
     const y = hPad.top + hH - bH;
     const mid = (i + 0.5) * bucketSize;
-    ctx.fillStyle = mid >= boom_threshold ? "#2ec4b6" :
-                    (i + 1) * bucketSize <= bust_threshold ? "#e63946" : posColor;
+    ctx.fillStyle = mid >= boom_threshold ? t.green :
+                    (i + 1) * bucketSize <= bust_threshold ? t.red : posColor;
     ctx.fillRect(x, y, barW, bH);
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
     ctx.strokeRect(x, y, barW, bH);
     ctx.fillStyle = t.inkMedium;
-    ctx.font = "10px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.textAlign = "center";
     ctx.fillText(`${i * bucketSize}`, x + barW / 2, hPad.top + hH + 16);
   }
 
   // Threshold lines
   const boomX = hPad.left + (boom_threshold / bucketSize) * (hW / numBuckets);
-  ctx.strokeStyle = "#2ec4b6";
+  ctx.strokeStyle = t.green;
   ctx.lineWidth = 2;
   ctx.setLineDash([6, 4]);
   ctx.beginPath();
@@ -13212,13 +13333,13 @@ function exportBoomBustImage() {
   ctx.lineTo(boomX, hPad.top + hH);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = "#2ec4b6";
+  ctx.fillStyle = t.green;
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("BOOM", boomX + 4, hPad.top + 14);
 
   const bustX = hPad.left + (bust_threshold / bucketSize) * (hW / numBuckets);
-  ctx.strokeStyle = "#e63946";
+  ctx.strokeStyle = t.red;
   ctx.lineWidth = 2;
   ctx.setLineDash([6, 4]);
   ctx.beginPath();
@@ -13226,7 +13347,7 @@ function exportBoomBustImage() {
   ctx.lineTo(bustX, hPad.top + hH);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = "#e63946";
+  ctx.fillStyle = t.red;
   ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "right";
   ctx.fillText("BUST", bustX - 4, hPad.top + 14);
@@ -13256,19 +13377,19 @@ function exportBoomBustImage() {
   ctx.fillStyle = posColor;
   ctx.fillRect(mdX - 2, rbY - 4, 4, 26);
 
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "center";
-  ctx.fillStyle = "#e63946";
+  ctx.fillStyle = t.red;
   ctx.fillText(`${floor_ppg.toFixed(1)} FLOOR`, flX, rbY - 6);
   ctx.fillStyle = posColor;
   ctx.fillText(`${median_ppg.toFixed(1)} MED`, mdX, rbY + 36);
-  ctx.fillStyle = "#2ec4b6";
+  ctx.fillStyle = t.green;
   ctx.fillText(`${ceiling_ppg.toFixed(1)} CEIL`, ceX, rbY - 6);
 
   // Watermark
   ctx.fillStyle = t.ink;
   ctx.globalAlpha = 0.4;
-  ctx.font = "bold 14px 'Space Mono', monospace";
+  ctx.font = "600 24px Caveat, cursive";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", 780, 690);
   ctx.globalAlpha = 1;
@@ -13286,7 +13407,7 @@ function exportBoomBustImage() {
   const toolbar = document.querySelector(".toolbar");
   if (!toolbar) return;
   const hint = document.createElement("div");
-  hint.style.cssText = "font-family:var(--font-mono); font-size:10px; color:var(--ink-light); padding:2px 0; white-space:nowrap;";
-  hint.innerHTML = `<kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:10px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">?</kbd> shortcuts`;
+  hint.style.cssText = "font-family:var(--font-mono); font-size:11px; color:var(--ink-light); padding:2px 0; white-space:nowrap;";
+  hint.innerHTML = `<kbd style="font-size:11px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">/</kbd> search &nbsp; <kbd style="font-size:11px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">1-5</kbd> position &nbsp; <kbd style="font-size:11px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">N</kbd> notes &nbsp; <kbd style="font-size:11px; border:2px solid var(--ink-faint); border-radius:var(--radius-sm); padding:0 3px;">?</kbd> shortcuts`;
   toolbar.appendChild(hint);
 })();

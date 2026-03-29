@@ -37,6 +37,7 @@ services:
       # RAZZLE_LLM_API_KEY     - OpenRouter API key for Elite AI-included mode (optional)
       # RAZZLE_LLM_BASE_URL    - LLM provider base URL (optional, defaults to OpenRouter)
       # RAZZLE_LLM_MODEL       - LLM model ID (optional, defaults to anthropic/claude-3.5-haiku)
+      # SENTRY_DSN              - Sentry error monitoring DSN (optional)
       #
       # Optional promotional pricing:
       # EA_ENABLED              - Enable early adopter pricing ("true" to enable)

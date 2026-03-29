@@ -1,6 +1,9 @@
 /* Razzle — Charts (Canvas API, no dependencies) */
 
-const CHART_COLORS = ["#d97757", "#5b7fff", "#2ec4b6", "#8b5cf6", "#e63946"];
+function _chartColors() {
+  var t = getCanvasTheme();
+  return [t.orange, t.blue, t.green, t.purple, t.red];
+}
 let currentChartTab = "radar";
 
 // ─── Chart panel ─────────────────────────────────────────────────
@@ -148,6 +151,7 @@ function drawRadar() {
   const cx = W / 2, cy = H / 2;
   const R = Math.min(cx, cy) - 60;
   var t = getCanvasTheme();
+  var chartColors = _chartColors();
 
   ctx.clearRect(0, 0, W, H);
 
@@ -221,7 +225,7 @@ function drawRadar() {
 
   // Draw player polygons
   players.forEach((player, pIdx) => {
-    const color = CHART_COLORS[pIdx];
+    const color = chartColors[pIdx];
     ctx.beginPath();
     for (let i = 0; i <= n; i++) {
       const si = i % n;
@@ -260,7 +264,7 @@ function drawRadar() {
 
   // Legend
   players.forEach((player, pIdx) => {
-    ctx.fillStyle = CHART_COLORS[pIdx];
+    ctx.fillStyle = chartColors[pIdx];
     ctx.fillRect(20, 20 + pIdx * 24, 14, 14);
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
@@ -338,7 +342,7 @@ function drawScatter() {
   ctx.restore();
 
   // Dots
-  const posColors = typeof getPosColors === 'function' ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColors = getPosColors();
   for (const p of data) {
     const x = toX(p[xKey]);
     const y = toY(p[yKey]);
@@ -376,7 +380,7 @@ function drawScatter() {
     ctx.beginPath();
     ctx.moveTo(toX(xMin), toY(slope * xMin + intercept));
     ctx.lineTo(toX(xMax), toY(slope * xMax + intercept));
-    ctx.strokeStyle = "#d97757";
+    ctx.strokeStyle = t.orange;
     ctx.lineWidth = 2;
     ctx.setLineDash([6, 4]);
     ctx.stroke();
@@ -384,7 +388,7 @@ function drawScatter() {
 
     // R² label
     ctx.font = "bold 11px 'Space Mono', monospace";
-    ctx.fillStyle = "#d97757";
+    ctx.fillStyle = t.orange;
     ctx.textAlign = "right";
     ctx.fillText(`R\u00b2 = ${r2.toFixed(3)}`, W - pad.right - 5, pad.top + 16);
     } // end denom !== 0
@@ -394,7 +398,7 @@ function drawScatter() {
   const labeled = state.selectedPlayers.length > 0
     ? data.filter(p => state.selectedPlayers.some(s => s.player_id === p.player_id))
     : data.slice(0, 8);
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillStyle = t.ink;
   for (const p of labeled) {
@@ -447,10 +451,10 @@ async function drawWeeklyTrend() {
   } catch (e) {
     ctx.clearRect(0, 0, W, H);
     ctx.font = "24px 'Caveat', cursive";
-    ctx.fillStyle = "#e63946";
+    ctx.fillStyle = t.red;
     ctx.textAlign = "center";
     ctx.fillText(razzleError(), W / 2, H / 2);
-    console.error(e);
+    
   }
 }
 
@@ -488,10 +492,10 @@ async function drawSeasonTrend() {
   } catch (e) {
     ctx.clearRect(0, 0, W, H);
     ctx.font = "24px 'Caveat', cursive";
-    ctx.fillStyle = "#e63946";
+    ctx.fillStyle = t.red;
     ctx.textAlign = "center";
     ctx.fillText(razzleError(), W / 2, H / 2);
-    console.error(e);
+    
   }
 }
 
@@ -530,7 +534,7 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
 
   // Line
   ctx.beginPath();
-  ctx.strokeStyle = "#d97757";
+  ctx.strokeStyle = t.orange;
   ctx.lineWidth = 3;
   for (let i = 0; i < vals.length; i++) {
     const x = toX(i);
@@ -550,7 +554,7 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
   ctx.fill();
 
   // Dots and labels
-  ctx.font = "10px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.textAlign = "center";
   for (let i = 0; i < vals.length; i++) {
     const x = toX(i);
@@ -558,7 +562,7 @@ function _drawTrendLine(ctx, W, H, pad, vals, labels, playerName, statKey, subti
 
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, 2 * Math.PI);
-    ctx.fillStyle = "#d97757";
+    ctx.fillStyle = t.orange;
     ctx.fill();
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 2;
@@ -669,8 +673,8 @@ function drawHeatmap() {
   ctx.fillRect(0, 0, W, H);
 
   // Position colors
-  const posColors = typeof getPosColors === 'function' ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
-  const posColor = posColors[pos] || "#d97757";
+  const posColors = getPosColors();
+  const posColor = posColors[pos] || t.orange;
 
   // Title
   ctx.font = "18px 'Luckiest Guy', cursive";
@@ -731,7 +735,7 @@ function drawHeatmap() {
     ctx.fillText(shortName, padL + 4, y + cellH / 2 + 4);
 
     // Team badge
-    ctx.font = "bold 9px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillStyle = t.inkLight;
     ctx.fillText(player.team || "", padL + nameColW - 30, y + cellH / 2 + 3);
 
@@ -803,7 +807,7 @@ function drawHeatmap() {
   ctx.lineWidth = 2;
   ctx.strokeRect(legendX, legendY, legendW, legendH);
 
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.fillStyle = t.ink;
   ctx.textAlign = "left";
   ctx.fillText("0%", legendX, legendY + legendH + 12);
@@ -818,7 +822,7 @@ function drawHeatmap() {
   ctx.fillText("positional percentile", legendX + legendW + 10, legendY + legendH + 2);
 
   // Watermark
-  ctx.font = 'bold 12px "Space Mono", monospace';
+  ctx.font = "600 24px Caveat, cursive";
   ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.2)" : "rgba(45,31,20,0.2)";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 12, H - 8);
@@ -854,8 +858,8 @@ async function openCompare() {
       drawProspectCompareSpider(data.prospects);
     } catch (e) {
       document.getElementById("compareContent").innerHTML =
-        '<p style="font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the prospect comparison...</p>';
-      console.error(e);
+        '<p style="font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the prospect comparison...</p>';
+      
     }
   } else {
     const ids = state.selectedPlayers.map(p => p.player_id).join(",");
@@ -865,8 +869,8 @@ async function openCompare() {
       drawCompareRadar(data.players);
     } catch (e) {
       document.getElementById("compareContent").innerHTML =
-        '<p style="font-family:var(--font-hand); font-size:22px; color:var(--red);">fumbled the comparison...</p>';
-      console.error(e);
+        '<p style="font-family:var(--font-hand); font-size:20px; color:var(--red);">fumbled the comparison...</p>';
+      
     }
   }
 }
@@ -880,7 +884,7 @@ function renderCompareTable(players) {
   const compareStats = ["fantasy_points_ppr", "ppg", "games", "passing_yards", "rushing_yards",
     "receiving_yards", "receptions", "targets", "touchdowns", "turnovers"];
 
-  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;">';
+  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;"><caption class="sr-only">Player comparison statistics</caption>';
 
   // Header
   html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-mono); font-size:11px; text-transform:uppercase;">Stat</th>';
@@ -888,7 +892,7 @@ function renderCompareTable(players) {
     const posColor = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" }[p.position] || "var(--ink)";
     html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
       <span style="font-family:var(--font-mono); font-size:13px;">${escapeHtml(p.full_name)}</span>
-      <span style="display:inline-block; background:${posColor}; color:var(--text-on-accent); padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${escapeHtml(p.position)}</span>
+      <span style="display:inline-block; background:${posColor}; color:var(--text-on-accent); padding:1px 5px; border-radius:8px; border:2px solid var(--ink); font-size:11px; margin-left:4px;">${escapeHtml(p.position)}</span>
     </th>`;
   }
   html += '</tr>';
@@ -929,6 +933,7 @@ function drawCompareRadar(players) {
   const cx = W / 2, cy = H / 2;
   const R = Math.min(cx, cy) - 50;
   var t = getCanvasTheme();
+  var chartColors = _chartColors();
 
   ctx.clearRect(0, 0, W, H);
 
@@ -977,7 +982,7 @@ function drawCompareRadar(players) {
 
   // Player polygons
   players.forEach((player, pIdx) => {
-    const color = CHART_COLORS[pIdx % CHART_COLORS.length];
+    const color = chartColors[pIdx % chartColors.length];
     ctx.beginPath();
     for (let i = 0; i <= n; i++) {
       const si = i % n;
@@ -999,7 +1004,7 @@ function drawCompareRadar(players) {
   // Legend
   ctx.textAlign = "left";
   players.forEach((player, pIdx) => {
-    ctx.fillStyle = CHART_COLORS[pIdx % CHART_COLORS.length];
+    ctx.fillStyle = chartColors[pIdx % chartColors.length];
     ctx.fillRect(10, 10 + pIdx * 22, 12, 12);
     ctx.strokeStyle = t.ink;
     ctx.lineWidth = 1.5;
@@ -1018,7 +1023,7 @@ function exportNFLCompareImage() {
   if (!players || players.length < 2) return;
 
   const radarCanvas = document.getElementById("compareRadar");
-  const posColors = typeof getPosColors === 'function' ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+  const posColors = getPosColors();
   const padX = 30, padY = 30;
   const W = 800;
 
@@ -1108,7 +1113,7 @@ function exportNFLCompareImage() {
     // DVS badge
     const dvs = computeClientDVS(p.ppg, p.age, p.position);
     if (dvs != null) {
-      const dvsColor = dvs >= 85 ? "#2ec4b6" : dvs >= 70 ? "#5b7fff" : dvs >= 55 ? "#d97757" : t.inkLight;
+      const dvsColor = dvs >= 85 ? t.green : dvs >= 70 ? t.blue : dvs >= 55 ? t.orange : t.inkLight;
       const dvsLabel = dvs >= 85 ? "ELITE" : dvs >= 70 ? "STAR" : dvs >= 55 ? "STARTER" : "";
       const dvsW = 80, dvsH = 24;
       const dvsX = cx + playerCardW - dvsW - 10;
@@ -1125,7 +1130,7 @@ function exportNFLCompareImage() {
 
       // Tier label
       if (dvsLabel) {
-        ctx.font = "bold 9px 'Space Mono', monospace";
+        ctx.font = "bold 11px 'Space Mono', monospace";
         ctx.fillText(dvsLabel, cx + 10 + 18, cardY + 68);
       }
     }
@@ -1152,12 +1157,12 @@ function exportNFLCompareImage() {
   ctx.stroke();
 
   ctx.fillStyle = t.ink;
-  ctx.font = "bold 10px 'Space Mono', monospace";
+  ctx.font = "bold 11px 'Space Mono', monospace";
   ctx.textAlign = "left";
   ctx.fillText("STAT", padX + 8, tY + 18);
   players.forEach((p, i) => {
     ctx.textAlign = "right";
-    ctx.font = "bold 10px 'Space Mono', monospace";
+    ctx.font = "bold 11px 'Space Mono', monospace";
     ctx.fillText((p.full_name || "").split(" ").pop() || "?", padX + (i + 2) * colW - 8, tY + 18);
   });
 
@@ -1193,7 +1198,7 @@ function exportNFLCompareImage() {
     players.forEach((p, i) => {
       const val = p[statKey] || 0;
       const isBest = val === maxVal && maxVal > 0;
-      ctx.fillStyle = isBest ? "#2ec4b6" : t.ink;
+      ctx.fillStyle = isBest ? t.green : t.ink;
       ctx.font = isBest ? "bold 12px 'Space Mono', monospace" : "12px 'Space Mono', monospace";
       ctx.textAlign = "right";
       const dec = col.decimals != null ? col.decimals : (statKey === "ppg" ? 1 : 0);
@@ -1227,12 +1232,16 @@ function exportNFLCompareImage() {
 
 // ─── Prospect Comparison ─────────────────────────────────────────
 
-const PROSPECT_COMPARE_COLORS = ["#5b7fff", "#d97757", "#2ec4b6", "#8b5cf6", "#e63946"];
+function _prospectCompareColors() {
+  var t = getCanvasTheme();
+  return [t.blue, t.orange, t.green, t.purple, t.red];
+}
 
 function renderProspectCompareTable(prospects) {
+  var _pcc = _prospectCompareColors();
   if (!prospects || prospects.length < 2) {
     document.getElementById("compareContent").innerHTML =
-      '<p style="font-family:var(--font-hand); font-size:22px; color:var(--ink-light);">need at least 2 prospects with combine data</p>';
+      '<p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-light);">need at least 2 prospects with combine data</p>';
     return;
   }
 
@@ -1248,15 +1257,15 @@ function renderProspectCompareTable(prospects) {
   // Lower is better for time metrics
   const lowerBetter = { forty: true, cone: true, shuttle: true };
 
-  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;">';
+  let html = '<table style="width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px; margin-top:16px;"><caption class="sr-only">Prospect combine and athletic comparison</caption>';
 
   // Header
   html += '<tr><th style="text-align:left; padding:8px; border-bottom:3px solid var(--ink); font-family:var(--font-mono); font-size:11px; text-transform:uppercase;">Metric</th>';
   prospects.forEach((p, i) => {
-    const color = PROSPECT_COMPARE_COLORS[i % PROSPECT_COMPARE_COLORS.length];
+    const color = _pcc[i % _pcc.length];
     html += `<th style="text-align:right; padding:8px; border-bottom:3px solid var(--ink);">
       <span style="font-family:var(--font-mono); font-size:13px;">${p.prospect.player_name}</span>
-      <span style="display:inline-block; background:${color}; color:var(--text-on-accent); padding:1px 5px; border-radius:4px; border:2px solid var(--ink); font-size:9px; margin-left:4px;">${p.prospect.position}</span>
+      <span style="display:inline-block; background:${color}; color:var(--text-on-accent); padding:1px 5px; border-radius:8px; border:2px solid var(--ink); font-size:11px; margin-left:4px;">${p.prospect.position}</span>
     </th>`;
   });
   html += '</tr>';
@@ -1302,7 +1311,7 @@ function renderProspectCompareTable(prospects) {
       const pctLabel = pct != null ? `${Math.round(pct)}th` : "";
       const style = isBest ? "font-weight:700; color:var(--green);" : "";
       html += `<td style="text-align:right; padding:6px 8px; border-bottom:2px solid var(--ink-faint); ${style}">${display}`;
-      if (pctLabel) html += ` <span style="color:${pctColor}; font-size:10px; font-weight:700;">${pctLabel}</span>`;
+      if (pctLabel) html += ` <span style="color:${pctColor}; font-size:11px; font-weight:700;">${pctLabel}</span>`;
       html += `</td>`;
     });
     html += '</tr>';
@@ -1335,6 +1344,7 @@ function drawProspectCompareSpider(prospects) {
   const cx = W / 2, cy = H / 2;
   const R = Math.min(cx, cy) - 55;
   var t = getCanvasTheme();
+  var _pcc = _prospectCompareColors();
 
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = t.bg;
@@ -1391,7 +1401,7 @@ function drawProspectCompareSpider(prospects) {
 
   // Draw each prospect's polygon
   prospects.forEach((pData, pIdx) => {
-    const color = PROSPECT_COMPARE_COLORS[pIdx % PROSPECT_COMPARE_COLORS.length];
+    const color = _pcc[pIdx % _pcc.length];
     ctx.beginPath();
     for (let i = 0; i <= n; i++) {
       const idx = i % n;
@@ -1442,7 +1452,7 @@ function drawProspectCompareSpider(prospects) {
   // Legend
   ctx.textAlign = "left";
   prospects.forEach((pData, pIdx) => {
-    const color = PROSPECT_COMPARE_COLORS[pIdx % PROSPECT_COMPARE_COLORS.length];
+    const color = _pcc[pIdx % _pcc.length];
     ctx.fillStyle = color;
     ctx.fillRect(10, 10 + pIdx * 22, 12, 12);
     ctx.strokeStyle = t.ink;

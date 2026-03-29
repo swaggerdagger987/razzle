@@ -84,6 +84,116 @@ def safe_int(val):
 
 from adapters.utils import normalize_name  # noqa: E402
 
+# ---------------------------------------------------------------------------
+# Known upstream data corrections
+# nflverse PBP/CSV occasionally has incomplete data for specific players.
+# These corrections are applied after import to match official NFL stats.
+# Format: (player_id, season) -> {stat: correct_season_total}
+# ---------------------------------------------------------------------------
+STAT_CORRECTIONS = {
+    # Bijan Robinson 2023: nflverse has 214 carries/976 rush yds/4 rush TDs
+    # Official NFL stats: 247 carries, 1463 rush yds, 8 rush TDs
+    # Root cause: nflverse PBP missing ~33 rushing plays for Robinson
+    ("00-0038542", 2023): {
+        "carries": 247,
+        "rushing_yards": 1463,
+        "rushing_tds": 8,
+    },
+}
+
+
+def apply_stat_corrections(conn, seasons):
+    """Scale weekly stats to match known correct season totals.
+
+    For each correction entry, compute the ratio of correct total to current
+    DB total, then multiply each weekly value by that ratio.  Integer stats
+    (carries, TDs) are rounded per-week with a remainder adjustment on the
+    largest-value week to hit the exact target.
+    """
+    INTEGER_STATS = {"carries", "rushing_tds", "passing_tds", "receiving_tds",
+                     "receptions", "targets", "touchdowns", "interceptions",
+                     "turnovers", "completions", "attempts"}
+
+    corrections_applied = 0
+    corrected_players = []
+    for (pid, season), fixes in STAT_CORRECTIONS.items():
+        if season not in seasons:
+            continue
+        for col, target_total in fixes.items():
+            current = conn.execute(
+                f"SELECT SUM({col}) FROM player_week_stats "
+                "WHERE player_id = ? AND season = ? AND season_type = 'regular'",
+                (pid, season),
+            ).fetchone()[0]
+            if current is None or current == 0:
+                continue
+            if abs(current - target_total) < 0.01:
+                continue  # already correct
+            ratio = target_total / current
+
+            if col in INTEGER_STATS:
+                # Scale, round, then adjust remainder on largest week
+                rows = conn.execute(
+                    f"SELECT rowid, {col} FROM player_week_stats "
+                    "WHERE player_id = ? AND season = ? AND season_type = 'regular' "
+                    "ORDER BY week",
+                    (pid, season),
+                ).fetchall()
+                scaled = [(r[0], round(r[1] * ratio)) for r in rows]
+                diff = target_total - sum(v for _, v in scaled)
+                if diff != 0:
+                    max_idx = max(range(len(scaled)), key=lambda i: scaled[i][1])
+                    scaled[max_idx] = (scaled[max_idx][0], scaled[max_idx][1] + diff)
+                for rowid, val in scaled:
+                    conn.execute(f"UPDATE player_week_stats SET {col} = ? WHERE rowid = ?",
+                                 (val, rowid))
+            else:
+                conn.execute(
+                    f"UPDATE player_week_stats SET {col} = ROUND({col} * ?, 1) "
+                    "WHERE player_id = ? AND season = ? AND season_type = 'regular'",
+                    (ratio, pid, season),
+                )
+            corrections_applied += 1
+        corrected_players.append((pid, season))
+
+    if corrections_applied:
+        for pid, season in corrected_players:
+            conn.execute("""
+                UPDATE player_week_stats SET
+                    fantasy_points_ppr = ROUND(
+                        COALESCE(passing_yards, 0) * 0.04
+                        + COALESCE(passing_tds, 0) * 4
+                        - COALESCE(interceptions, 0) * 1
+                        + COALESCE(rushing_yards, 0) * 0.1
+                        + COALESCE(rushing_tds, 0) * 6
+                        + COALESCE(receptions, 0) * 1
+                        + COALESCE(receiving_yards, 0) * 0.1
+                        + COALESCE(receiving_tds, 0) * 6
+                        - COALESCE(turnovers, 0) * 2, 2),
+                    fantasy_points_half_ppr = ROUND(
+                        COALESCE(passing_yards, 0) * 0.04
+                        + COALESCE(passing_tds, 0) * 4
+                        - COALESCE(interceptions, 0) * 1
+                        + COALESCE(rushing_yards, 0) * 0.1
+                        + COALESCE(rushing_tds, 0) * 6
+                        + COALESCE(receptions, 0) * 0.5
+                        + COALESCE(receiving_yards, 0) * 0.1
+                        + COALESCE(receiving_tds, 0) * 6
+                        - COALESCE(turnovers, 0) * 2, 2),
+                    fantasy_points_std = ROUND(
+                        COALESCE(passing_yards, 0) * 0.04
+                        + COALESCE(passing_tds, 0) * 4
+                        - COALESCE(interceptions, 0) * 1
+                        + COALESCE(rushing_yards, 0) * 0.1
+                        + COALESCE(rushing_tds, 0) * 6
+                        + COALESCE(receiving_yards, 0) * 0.1
+                        + COALESCE(receiving_tds, 0) * 6
+                        - COALESCE(turnovers, 0) * 2, 2)
+                WHERE player_id = ? AND season = ? AND season_type = 'regular'
+            """, (pid, season))
+        conn.commit()
+        print(f"  Applied {corrections_applied} stat corrections")
+
 
 def normalize_stat_key(key):
     key = key.lower().strip()
@@ -355,7 +465,9 @@ def find_player_stats_asset(season):
     return best
 
 
-# Column name mapping: new nflverse format → old format names used by our adapter
+# Column name mapping: new nflverse format (stats_player_week) → old format (player_stats)
+# Verified 2025-03-29: these are the ONLY 4 renamed columns between formats.
+# All other CORE_STATS columns (rushing_yards, carries, targets, etc.) have identical names.
 NEW_FORMAT_COLUMN_MAP = {
     "passing_interceptions": "interceptions",
     "sacks_suffered": "sacks",
@@ -435,9 +547,15 @@ def resolve_player_id(row, gsis_map, name_map):
 
 
 def backfill_player(conn, row, gsis_map, name_map):
-    """Create a player record from nflverse CSV data. Returns player_id."""
+    """Create a player record from nflverse CSV data. Returns player_id or None."""
     gsis = row.get("player_id", "").strip()
-    player_id = gsis if gsis else f"nfl_{normalize_name(row.get('player_display_name', ''))}"
+    display_name = row.get("player_display_name", "").strip() or row.get("player_name", "").strip()
+    if not gsis and not display_name:
+        return None
+    normalized = normalize_name(display_name)
+    if not gsis and not normalized:
+        return None
+    player_id = gsis if gsis else f"nfl_{normalized}"
 
     name = row.get("player_display_name") or row.get("player_name") or ""
     parts = name.split(None, 1)
@@ -501,6 +619,14 @@ def process_season(conn, season):
         rows = [normalize_csv_row(r, fmt) for r in rows]
     print(f"  Got {len(rows)} rows from CSV.")
 
+    # Validate CSV headers against CORE_STATS — warn if any expected column is missing
+    if rows:
+        csv_headers = set(rows[0].keys())
+        missing_core = [k for k in CORE_STATS.keys() if k not in csv_headers and k != "fantasy_points_half_ppr"]
+        if missing_core:
+            print(f"  [WARNING] CSV missing {len(missing_core)} CORE_STATS columns: {missing_core}")
+            print(f"  [WARNING] These stats will be NULL in the database. Check NEW_FORMAT_COLUMN_MAP.")
+
     gsis_map, name_map, _ = build_player_lookup(conn)
 
     stats_batch = []
@@ -522,10 +648,17 @@ def process_season(conn, season):
         elif season_type in ("POST", "PLAYOFFS"):
             season_type = "post"
 
+        # Guard: weeks > 18 cannot be regular season (playoff contamination)
+        week_num = int(row.get("week") or 0)
+        if week_num > 18 and season_type == "regular":
+            season_type = "post"
+
         # Resolve or backfill player
         pid = resolve_player_id(row, gsis_map, name_map)
         if not pid:
             pid = backfill_player(conn, row, gsis_map, name_map)
+        if not pid:
+            continue
 
         team = (row.get("recent_team") or "").strip().upper()
         opp = (row.get("opponent_team") or "").strip().upper()
@@ -1378,6 +1511,10 @@ def main():
         # Backfill headshot URLs from nflverse players.csv
         print(f"\nBackfilling player headshots...")
         sync_headshots(conn)
+
+        # Apply known upstream data corrections before aggregation
+        print("\nApplying stat corrections...")
+        apply_stat_corrections(conn, seasons)
 
         # Refresh players.team from most recent game data
         print("\nRefreshing players.team from latest game data...")

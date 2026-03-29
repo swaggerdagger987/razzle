@@ -9,7 +9,7 @@ function _getPosColors() {
     TE: s.getPropertyValue('--pos-te').trim() || "#8b5cf6"
   };
 }
-var POS_COLORS = (typeof getPosColors === "function") ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+var POS_COLORS = getPosColors();
 var POS_CSS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
 
 var _p1Data = null;
@@ -21,16 +21,11 @@ var _p2Data = null;
 
 (async function init() {
   var ids = getIdsFromURL();
-  if (!ids || ids.length < 2) {
-    document.getElementById("comparePage").innerHTML =
-      '<div class="compare-loading" style="max-width:480px;margin:60px auto;text-align:center;">' +
-      '<div style="font-size:48px;margin-bottom:12px;">🐯</div>' +
-      '<div style="font-family:var(--font-display);font-size:22px;margin-bottom:8px;">Pick two players first, boss.</div>' +
-      '<div style="font-family:var(--font-hand);font-size:16px;color:var(--ink-light);margin-bottom:20px;">Select two players in the Lab and click Compare, or paste a compare URL.</div>' +
-      '<a href="/lab.html" class="btn-chunky" style="display:inline-block;text-decoration:none;">Back to the Lab</a>' +
-      '</div>';
-    return;
-  }
+  if (!ids || ids.length < 2) return; // HTML already shows empty state
+  // Replace empty state with loading indicator
+  document.getElementById("comparePage").innerHTML =
+    '<h1 class="sr-only">Player Comparison — Razzle</h1>' +
+    '<div class="compare-loading"><div class="compare-loading-text">comparing the tape...</div></div>';
   await loadComparison(ids[0], ids[1]);
 })();
 
@@ -83,8 +78,9 @@ function renderComparison(container) {
   var c1 = _p1Data.career || {}, c2 = _p2Data.career || {};
   var pos1 = (p1.position || "").toUpperCase();
   var pos2 = (p2.position || "").toUpperCase();
-  var color1 = POS_COLORS[pos1] || "#d97757";
-  var color2 = POS_COLORS[pos2] || "#8b5cf6";
+  var _ct = getCanvasTheme();
+  var color1 = POS_COLORS[pos1] || _ct.orange;
+  var color2 = POS_COLORS[pos2] || _ct.purple;
   // If same position, use position color + slightly different shade
   if (pos1 === pos2) {
     color2 = adjustColor(color1, -30);
@@ -115,7 +111,7 @@ function renderComparison(container) {
   // Radar overlay
   html += '<div class="compare-section compare-chart-wrap">';
   html += '<div class="compare-section-title">Stat Shape Overlay</div>';
-  html += '<canvas id="compareRadar" width="400" height="360"></canvas>';
+  html += '<canvas id="compareRadar" width="400" height="360" role="img" aria-label="Player comparison radar chart"></canvas>';
   html += '<div class="compare-legend">';
   html += '<span><span class="compare-legend-dot" style="background:' + color1 + ';"></span>' + esc(p1.full_name) + '</span>';
   html += '<span><span class="compare-legend-dot" style="background:' + color2 + ';"></span>' + esc(p2.full_name) + '</span>';
@@ -128,7 +124,7 @@ function renderComparison(container) {
   if (s1.length > 1 || s2.length > 1) {
     html += '<div class="compare-section compare-chart-wrap">';
     html += '<div class="compare-section-title">Career Arc</div>';
-    html += '<canvas id="compareArc" width="400" height="360"></canvas>';
+    html += '<canvas id="compareArc" width="400" height="360" role="img" aria-label="Career arc comparison chart"></canvas>';
     html += '<div class="compare-legend">';
     html += '<span><span class="compare-legend-dot" style="background:' + color1 + ';"></span>' + esc(p1.full_name) + '</span>';
     html += '<span><span class="compare-legend-dot" style="background:' + color2 + ';"></span>' + esc(p2.full_name) + '</span>';
@@ -221,8 +217,8 @@ function renderStatDiffTable(p1, p2, c1, c2, pos1, pos2, color1, color2) {
   var rows = getCompareStats(pos);
   var g1 = c1.games || 1, g2 = c2.games || 1;
 
-  var html = '<div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">';
-  html += '<table class="compare-stat-table">';
+  var html = '<div style="overflow-x:auto; ">';
+  html += '<table class="compare-stat-table"><caption class="sr-only">Head-to-head player stat comparison</caption>';
   html += '<thead><tr>';
   html += '<th>Stat</th>';
   html += '<th>' + esc(p1.full_name) + '</th>';
@@ -580,8 +576,8 @@ function exportComparePNG() {
   var pos1 = (p1.position || "").toUpperCase();
   var pos2 = (p2.position || "").toUpperCase();
   var _pc = _getPosColors();
-  var color1 = _pc[pos1] || "#d97757";
-  var color2 = _pc[pos2] || "#8b5cf6";
+  var color1 = _pc[pos1] || t.orange;
+  var color2 = _pc[pos2] || t.purple;
   if (pos1 === pos2) color2 = adjustColor(color1, -30);
 
   var t = getCanvasTheme();
@@ -610,7 +606,7 @@ function exportComparePNG() {
   ctx.arc(W / 2, 80, 28, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
-  ctx.fillStyle = _pc.WR || "#d97757";
+  ctx.fillStyle = _pc.WR || t.orange;
   ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText("VS", W / 2, 87);
@@ -638,7 +634,7 @@ function exportComparePNG() {
 
     // Alternating row bg
     if (i % 2 === 0) {
-      ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.06)" : "rgba(247,239,229,0.5)";
+      ctx.fillStyle = t.isDark ? (t.ink + '0f') : (t.bgCard + '80');
       ctx.fillRect(50, y - 2, W - 100, rowH);
     }
 
@@ -671,13 +667,13 @@ function exportComparePNG() {
   drawRadarOnExport(ctx, radarCx, radarCy, radarR, color1, color2, pos);
 
   // Watermark
-  ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.3)" : "rgba(45,31,20,0.3)";
+  ctx.fillStyle = t.subtitleAlpha;
   ctx.font = "18px 'Luckiest Guy', cursive";
   ctx.textAlign = "right";
   ctx.fillText("razzle.lol", W - 50, H - 30);
 
   // Handwritten annotation
-  ctx.fillStyle = t.isDark ? "rgba(237,224,207,0.25)" : "rgba(45,31,20,0.25)";
+  ctx.fillStyle = t.subtitleAlpha;
   ctx.font = "16px 'Caveat', cursive";
   ctx.textAlign = "left";
   ctx.fillText("who would you rather have?", 50, H - 30);
@@ -715,13 +711,13 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
   roundRect(ctx, x + 14, y + 18, 50, 36, 6);
   ctx.stroke();
   ctx.fillStyle = t.white;
-  ctx.font = "22px 'Luckiest Guy', cursive";
+  ctx.font = "20px 'Luckiest Guy', cursive";
   ctx.textAlign = "center";
   ctx.fillText(pos, x + 39, y + 44);
 
   // Name
   ctx.fillStyle = t.ink;
-  ctx.font = "26px 'Luckiest Guy', cursive";
+  ctx.font = "24px 'Luckiest Guy', cursive";
   ctx.textAlign = "left";
   var displayName = player.full_name || "";
   // Truncate if too long
@@ -771,7 +767,7 @@ function drawExportPlayerCard(ctx, x, y, w, h, player, career, pos, color) {
     ctx.fillText(stats[i].value, bx + boxW / 2, by + 26);
 
     ctx.fillStyle = t.inkLight;
-    ctx.font = "9px 'Space Mono', monospace";
+    ctx.font = "11px 'Space Mono', monospace";
     ctx.fillText(stats[i].label, bx + boxW / 2, by + 42);
   }
 }
@@ -802,7 +798,7 @@ function drawRadarOnExport(ctx, cx, cy, R, color1, color2, pos) {
   }
 
   // Labels
-  ctx.font = "9px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   for (var i = 0; i < n; i++) {
@@ -866,9 +862,9 @@ function adjustColor(hex, amount) {
 function copyCompareURL() {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(window.location.href).then(function() {
-      showToast("link copied.");
+      _showToast("link copied.");
     }).catch(function() {
-      showToast("fumbled the copy — try again");
+      _showToast("fumbled the copy — try again");
     });
   } else {
     try {
@@ -880,29 +876,11 @@ function copyCompareURL() {
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      showToast("link copied.");
+      _showToast("link copied.");
     } catch(e) {
-      showToast("fumbled the copy — try again");
+      _showToast("fumbled the copy — try again");
     }
   }
-}
-
-function showToast(msg) {
-  var toast = document.getElementById("compareToast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "compareToast";
-    toast.style.cssText =
-      "position:fixed; bottom:24px; left:50%; transform:translateX(-50%);" +
-      "background:var(--ink); color:var(--bg); padding:10px 24px;" +
-      "border-radius:8px; font-family:var(--font-mono); font-size:14px;" +
-      "z-index:10000; box-shadow:4px 4px 0 var(--ink);" +
-      "transition:opacity 0.3s; pointer-events:none;";
-    document.body.appendChild(toast);
-  }
-  toast.textContent = msg;
-  toast.style.opacity = "1";
-  setTimeout(function() { toast.style.opacity = "0"; }, 2500);
 }
 
 function esc(str) {

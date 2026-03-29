@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#ede0cf">
 <title>Target Distribution — Razzle</title>
 <meta property="og:title" content="Target Distribution — Razzle">
@@ -13,50 +14,26 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@razzle_lol">
 <meta name="twitter:title" content="Target Distribution — Razzle">
 <meta name="twitter:description" content="Who gets the ball on every team? Stacked bars showing target and carry distribution across all 32 offenses.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
 <meta name="twitter:image:alt" content="Razzle — Free Fantasy Football Research Lab">
 <meta name="description" content="Target and carry distribution on razzle.lol. Stacked bar charts showing who commands the touches on every NFL team.">
-<link rel="canonical" href="https://razzle.lol/targets.html">
-<meta property="og:url" content="https://razzle.lol/targets.html">
+<link rel="canonical" href="https://razzle.lol/lab.html?panel=targets">
+<meta property="og:url" content="https://razzle.lol/lab.html?panel=targets">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="standalone-common.css">
 <style>
-  .targets-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
-
-  .targets-header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .targets-header h1 {
-    font-family: var(--font-display);
-    font-size: 32px;
-    color: var(--ink);
-    margin: 0 0 4px;
-  }
-  .targets-header .targets-subtitle {
-    font-family: var(--font-hand);
-    font-size: 20px;
-    color: var(--ink-light);
-  }
 
   /* Controls */
-  .targets-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
 
   .targets-season-select, .targets-team-select {
     font-family: var(--font-mono);
@@ -83,7 +60,7 @@
     background: var(--bg-card);
     color: var(--ink);
     cursor: pointer;
-    transition: all 0.15s;
+    transition: background-color 0.15s, transform 0.15s, box-shadow 0.15s;
   }
   .targets-mode-tab:hover {
     transform: translate(-2px, -2px);
@@ -92,11 +69,6 @@
   .targets-mode-tab.active {
     background: var(--ink);
     color: var(--bg-card);
-  }
-
-  .targets-actions {
-    text-align: center;
-    margin-bottom: 20px;
   }
 
   /* Team card */
@@ -115,7 +87,7 @@
     justify-content: space-between;
     padding: 12px 16px;
     background: var(--bg-warm);
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
   }
   .team-card-name {
     font-family: var(--font-display);
@@ -159,7 +131,7 @@
     align-items: center;
     justify-content: center;
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--ink);
     cursor: pointer;
@@ -187,7 +159,7 @@
     align-items: center;
     gap: 8px;
     padding: 5px 0;
-    border-bottom: 2px dashed var(--ink-faint);
+    border-bottom: 2px dashed var(--border-dashed);
     cursor: pointer;
     transition: background 0.1s;
   }
@@ -239,18 +211,9 @@
   /* Annotation */
   .team-annotation {
     font-family: var(--font-hand);
-    font-size: 15px;
+    font-size: 14px;
     color: var(--ink-light);
     padding: 0 16px 10px;
-  }
-
-  /* Loading */
-  .targets-loading {
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 22px;
-    color: var(--ink-light);
-    padding: 60px 20px;
   }
 
   /* Legend */
@@ -276,20 +239,20 @@
     border: 2px solid var(--ink);
   }
 
-  /* Responsive */
   @media (max-width: 768px) {
-    .targets-header h1 { font-size: 24px; }
+    
     .team-card-header { flex-direction: column; align-items: flex-start; gap: 4px; }
-    .player-row-stat { min-width: 40px; font-size: 10px; }
+    .player-row-stat { min-width: 40px; font-size: 11px; }
   }
   @media (max-width: 480px) {
-    .targets-page { padding: 16px 10px 40px; }
+    
     .dist-bar { height: 26px; }
-    .dist-segment { font-size: 9px; }
+    .dist-segment { font-size: 11px; }
   }
 </style>
 </head>
 <body>
+<noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#2d1f14;"><h2>Razzle needs JavaScript</h2><p>Enable JavaScript to use the fantasy football research lab.</p></div></noscript>
 <a href="#main-content" class="skip-link">Skip to main content</a>
 <nav class="topnav" aria-label="Main navigation">
   <a href="/" class="logo">
@@ -309,8 +272,7 @@
   </div>
 </nav>
 
-<span id="main-content"></span>
-<main class="targets-page" id="targets-content">
+<main class="targets-page" id="main-content">
   <div class="targets-header">
     <h1>Target Distribution</h1>
     <div class="targets-subtitle">who gets the ball? follow the volume.</div>
@@ -339,7 +301,12 @@
   </div>
 
   <div id="targets-body" role="status" aria-live="polite">
-    <div class="targets-loading" id="targets-loading">studying the film...</div>
+    <div class="targets-loading" id="targets-loading">studying the film...
+      <div class="loading-skeleton">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card" style="height:150px"></div>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -348,72 +315,82 @@
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <div class="site-footer-grid">
+  <nav aria-label="Footer" class="site-footer-grid">
 
     <div>
       <div class="site-footer-heading">Razzle</div>
-      <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
-      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
-      <a href="/prompts.html" class="footer-link">Prompts</a>
-      <a href="/pricing.html" class="footer-link">Pricing</a>
-      <a href="/about.html" class="footer-link">About</a>
+      <ul>
+        <li><a href="/" class="footer-link">Home</a></li>
+        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
+        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
+        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
+        <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
+        <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
+        <li><a href="/about.html" class="footer-link">About</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Dynasty</div>
-      <a href="/rankings.html" class="footer-link">Rankings</a>
-      <a href="/tradevalues.html" class="footer-link">Trade Values</a>
-      <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
-      <a href="/tiers.html" class="footer-link">Tiers</a>
-      <a href="/vorp.html" class="footer-link">VORP</a>
-      <a href="/aging.html" class="footer-link">Aging Curves</a>
-      <a href="/buysell.html" class="footer-link">Buy/Sell</a>
-      <a href="/archetypes.html" class="footer-link">Archetypes</a>
+      <ul>
+        <li><a href="/rankings.html" class="footer-link">Rankings</a></li>
+        <li><a href="/tradevalues.html" class="footer-link">Trade Values</a></li>
+        <li><a href="/tradefinder.html" class="footer-link">Trade Finder</a></li>
+        <li><a href="/tiers.html" class="footer-link">Tiers</a></li>
+        <li><a href="/vorp.html" class="footer-link">VORP</a></li>
+        <li><a href="/aging.html" class="footer-link">Aging Curves</a></li>
+        <li><a href="/buysell.html" class="footer-link">Buy/Sell</a></li>
+        <li><a href="/archetypes.html" class="footer-link">Archetypes</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Weekly</div>
-      <a href="/weekly.html" class="footer-link">Weekly Stats</a>
-      <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
-      <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
-      <a href="/matchups.html" class="footer-link">Matchups</a>
-      <a href="/waivers.html" class="footer-link">Waivers</a>
-      <a href="/schedule.html" class="footer-link">Schedule</a>
-      <a href="/stocks.html" class="footer-link">Stocks</a>
-      <a href="/playoffs.html" class="footer-link">Playoffs</a>
+      <ul>
+        <li><a href="/weekly.html" class="footer-link">Weekly Stats</a></li>
+        <li><a href="/weeklyleaders.html" class="footer-link">Week Leaders</a></li>
+        <li><a href="/weeklymvp.html" class="footer-link">Weekly MVP</a></li>
+        <li><a href="/matchups.html" class="footer-link">Matchups</a></li>
+        <li><a href="/waivers.html" class="footer-link">Rising Players</a></li>
+        <li><a href="/schedule.html" class="footer-link">Schedule</a></li>
+        <li><a href="/stocks.html" class="footer-link">Stocks</a></li>
+        <li><a href="/playoffs.html" class="footer-link">Playoffs</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Analytics</div>
-      <a href="/targets.html" class="footer-link">Targets</a>
-      <a href="/usage.html" class="footer-link">Usage</a>
-      <a href="/efficiency.html" class="footer-link">Efficiency</a>
-      <a href="/airyards.html" class="footer-link">Air Yards</a>
-      <a href="/redzone.html" class="footer-link">Red Zone</a>
-      <a href="/consistency.html" class="footer-link">Consistency</a>
-      <a href="/breakouts.html" class="footer-link">Breakouts</a>
-      <a href="/opportunity.html" class="footer-link">Opportunity</a>
+      <ul>
+        <li><a href="/targets.html" class="footer-link">Targets</a></li>
+        <li><a href="/usage.html" class="footer-link">Usage</a></li>
+        <li><a href="/efficiency.html" class="footer-link">Efficiency</a></li>
+        <li><a href="/airyards.html" class="footer-link">Air Yards</a></li>
+        <li><a href="/redzone.html" class="footer-link">Red Zone</a></li>
+        <li><a href="/consistency.html" class="footer-link">Consistency</a></li>
+        <li><a href="/breakouts.html" class="footer-link">Breakouts</a></li>
+        <li><a href="/opportunity.html" class="footer-link">Opportunity</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Tools</div>
-      <a href="/explorer.html" class="footer-link">Stat Explorer</a>
-      <a href="/compare.html" class="footer-link">Compare</a>
-      <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>
-      <a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a>
-      <a href="/auction.html" class="footer-link">Auction Values</a>
-      <a href="/dashboard.html" class="footer-link">Dashboard</a>
-      <a href="/prospects.html" class="footer-link">Prospects</a>
+      <ul>
+        <li><a href="/explorer.html" class="footer-link">Stat Explorer</a></li>
+        <li><a href="/compare.html" class="footer-link">Compare</a></li>
+        <li><a href="/rosterbuilder.html" class="footer-link">Roster Builder</a></li>
+        <li><a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a></li>
+        <li><a href="/auction.html" class="footer-link">Auction Values</a></li>
+        <li><a href="/dashboard.html" class="footer-link">Dashboard</a></li>
+        <li><a href="/prospects.html" class="footer-link">Prospects</a></li>
+      </ul>
     </div>
 
-  </div>
+  </nav>
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
-  <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
+  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
 </footer>
 
-<script src="app.js"></script>
+<script src="app.js" defer></script>
 <script>
 (function() {
   'use strict';
@@ -427,10 +404,6 @@
   };
   var POS_LIGHT = { QB: 'var(--blue-light)', RB: 'var(--green-light)', WR: 'var(--orange-light)', TE: 'var(--purple-light)' };
 
-  function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
 
   var currentData = null;
   var activeMode = 'targets';
@@ -615,7 +588,8 @@
 
   // Export PNG
   document.getElementById('export-btn').addEventListener('click', function() {
-    var el = document.getElementById('targets-content');
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
+    var el = document.getElementById('main-content');
     loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
       var ctx = canvas.getContext('2d');
       ctx.font = '24px Caveat, cursive';
@@ -627,7 +601,7 @@
       link.download = 'razzle-target-distribution.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
-    });
+    }).finally(function() { btn.disabled = false; btn.textContent = 'Export PNG'; });
   });
 
   // Analytics

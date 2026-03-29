@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#ede0cf">
 <title>Razzle Pricing — The Screener Is Free Forever</title>
 <meta property="og:title" content="Pricing — Razzle">
@@ -14,6 +15,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@razzle_lol">
 <meta name="twitter:title" content="Pricing — Razzle">
 <meta name="twitter:description" content="The Screener is forever free. Pro adds league intelligence. Elite gets six AI agents who know your league inside out.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
@@ -21,9 +23,12 @@
 <meta name="description" content="Razzle pricing. The Screener is forever free. Pro unlocks league intelligence. Elite gives you six AI agents with full league context, cloud sync, and historical data.">
 <link rel="canonical" href="https://razzle.lol/pricing.html">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
 <style>
   .pricing-page { max-width: 1100px; margin: 0 auto; padding: 48px 24px 80px; }
@@ -61,7 +66,7 @@
     .pricing-page { padding: 24px 12px; }
     .plan-card { padding: 20px 14px; }
     .plan-name { font-size: 20px; }
-    .plan-price { font-size: 28px; }
+    .plan-price { font-size: 24px; }
     .plan-cta .btn-primary, .plan-cta .btn-chunky { font-size: 13px; padding: 10px 0; }
     .promo-row { flex-direction: column; }
     .promo-row input { width: 100%; }
@@ -74,7 +79,7 @@
     .plan-card { padding: 16px 10px; }
     .plan-name { font-size: 18px; }
     .plan-price { font-size: 24px; }
-    .feature-matrix { font-size: 10px; }
+    .feature-matrix { font-size: 11px; }
     .feature-matrix th { padding: 6px 3px; }
   }
 
@@ -110,16 +115,17 @@
   .plan-features { list-style: none; padding: 0; margin: 0 0 24px; }
   .plan-features li {
     font-family: var(--font-mono); font-size: 12px; color: var(--ink-medium, #5c4a3d);
-    padding: 6px 0; border-bottom: 2px dashed var(--ink-faint);
+    padding: 6px 0; border-bottom: 2px dashed var(--border-dashed);
     display: flex; align-items: flex-start; gap: 8px;
   }
   .plan-features li:last-child { border-bottom: none; }
   .plan-features .check { color: var(--green); font-weight: 700; flex-shrink: 0; }
+  .plan-features .check.elite-check { color: var(--orange); }
   .plan-features .highlight { color: var(--orange); font-weight: 700; }
 
   .plan-cta { width: 100%; }
-  .plan-cta .btn-primary { width: 100%; font-size: 15px; padding: 12px 0; }
-  .plan-cta .btn-chunky { width: 100%; font-size: 15px; padding: 12px 0; }
+  .plan-cta .btn-primary { width: 100%; font-size: 14px; padding: 12px 0; }
+  .plan-cta .btn-chunky { width: 100%; font-size: 14px; padding: 12px 0; }
 
   /* Promo code */
   .promo-section { text-align: center; margin-bottom: 40px; }
@@ -130,18 +136,18 @@
 
   /* Feature matrix */
   .matrix-section { margin-top: 48px; }
-  .matrix-section h2 { font-family: var(--font-display); font-size: 22px; text-align: center; margin: 0 0 20px; }
+  .matrix-section h2 { font-family: var(--font-display); font-size: 20px; text-align: center; margin: 0 0 20px; }
   .feature-matrix { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
   .feature-matrix th { font-family: var(--font-mono); font-size: 13px; padding: 10px 8px;
     border-bottom: 3px solid var(--ink); text-align: center; }
   .feature-matrix th:first-child { text-align: left; }
-  .feature-matrix td { padding: 8px; border-bottom: 2px dashed var(--ink-faint); text-align: center; }
+  .feature-matrix td { padding: 8px; border-bottom: 2px dashed var(--border-dashed); text-align: center; }
   .feature-matrix td:first-child { text-align: left; color: var(--ink-medium, #5c4a3d); }
   .feature-matrix .yes { color: var(--green); font-weight: 700; }
   .feature-matrix .no { color: var(--ink-light); }
   .feature-matrix .limit { color: var(--orange); font-weight: 600; }
   .feature-matrix .group-row td { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
-    letter-spacing: 1px; color: var(--ink-light); padding-top: 16px; border-bottom: 2px solid var(--ink-faint); }
+    letter-spacing: 1px; color: var(--ink-light); padding-top: 16px; border-bottom: 3px solid var(--ink); }
 
   /* Manage link */
   .manage-section { text-align: center; margin-top: 24px; font-family: var(--font-mono); font-size: 12px; }
@@ -166,12 +172,15 @@
   .btn-elite:hover { box-shadow: 4px 4px 0 var(--purple); }
 
   /* Dark mode overrides */
+  [data-theme="dark"] .btn-elite { color: var(--bg); }
   [data-theme="dark"] .plan-card { background: var(--bg-card); }
   [data-theme="dark"] .plan-features li { color: var(--ink-medium); }
   [data-theme="dark"] .free-celebration { background: var(--bg-card) !important; }
   [data-theme="dark"] .free-chip { background: var(--bg-warm); color: var(--ink); }
-  [data-theme="dark"] .feature-matrix td { color: var(--ink-medium); }
-  [data-theme="dark"] .feature-matrix td:first-child { color: var(--ink-medium); }
+  [data-theme="dark"] .feature-matrix td { color: var(--ink); }
+  [data-theme="dark"] .feature-matrix td:first-child { color: var(--ink); }
+  [data-theme="dark"] .feature-matrix .no { color: var(--ink-medium); }
+  [data-theme="dark"] .feature-matrix .group-row td { color: var(--ink); font-weight: 700; }
   [data-theme="dark"] .feature-matrix th { color: var(--ink); }
   [data-theme="dark"] .subscribed-banner { background: var(--bg-card); }
   [data-theme="dark"] .promo-row input { background: var(--bg-card); color: var(--ink); }
@@ -179,11 +188,124 @@
   [data-theme="dark"] .interval-toggle label.active { color: var(--ink); }
   [data-theme="dark"] .save-badge { color: var(--bg); }
   [data-theme="dark"] .plan-badge { color: var(--bg); }
-  [data-theme="dark"] #trialBanner { background: var(--orange-light) !important; }
-  [data-theme="dark"] #trialActiveBanner { background: var(--orange-light) !important; }
+  [data-theme="dark"] #trialBanner { background: var(--orange-light) !important; color: var(--ink); }
+  [data-theme="dark"] #trialBanner div { color: var(--ink) !important; }
+  [data-theme="dark"] #trialActiveBanner { background: var(--orange-light) !important; color: var(--ink); }
+  [data-theme="dark"] #trialActiveBanner div { color: var(--ink) !important; }
+  [data-theme="dark"] .free-celebration div { color: var(--ink); }
+  [data-theme="dark"] .promo-section { color: var(--ink); }
+
+  /* Trial banner mobile compaction */
+  @media (max-width: 480px) {
+    #trialBanner,
+    #trialActiveBanner {
+      padding: 10px 12px !important;
+      margin-bottom: 16px !important;
+    }
+    #trialBanner div:first-child,
+    #trialActiveBanner #trialBannerTitle {
+      font-size: 16px !important;
+    }
+    #trialBanner div:nth-child(2),
+    #trialActiveBanner #trialCountdown {
+      font-size: 11px !important;
+    }
+    #trialBanner .btn-primary,
+    #trialActiveBanner .btn-primary {
+      padding: 8px 16px !important;
+      font-size: 12px !important;
+      margin-top: 8px !important;
+    }
+    .subscribed-banner {
+      padding: 10px 12px;
+      margin-bottom: 16px;
+    }
+    .subscribed-banner p { font-size: 14px; }
+  }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What's the difference between Pro and Elite?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Same analytical tools. Elite adds server-side AI agents (no API key needed, unlimited queries) and priority support. Pro: you bring your own API key from OpenRouter (60 seconds, costs $1-3/month in usage). Think of Pro as the DIY option and Elite as the easy button."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a free trial?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Every new account gets 7 days of full Pro access automatically. No credit card required. Just sign up and you're in. After 7 days, you can subscribe to keep Pro or continue using the Screener for free."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I cancel anytime?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Cancel from your account at any time. You keep access through the end of your billing period. No cancellation fees, no hassle."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a Sleeper account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The Screener works without Sleeper. But connecting Sleeper unlocks league-contextualized AI — agents analyze YOUR roster, YOUR rivals, YOUR league's scoring settings. That's where the real value is."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens when my trial ends?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You keep the Screener and all your saved work — formulas, views, watchlist. Nothing is lost. The Pro panels and Situation Room lock until you subscribe. Pick it back up any time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which API keys work with Pro?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "OpenRouter (recommended — gives access to GPT-4o, Claude, Gemini, and more), OpenAI, or Anthropic. Set your key in the Situation Room settings. Your key is encrypted and never logged."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What formats do the agents support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "All of them. Redraft, dynasty, keeper, best ball, superflex, 2QB, IDP. The agents detect your league format from Sleeper settings and adapt their analysis automatically. A redraft question gets a different answer than a dynasty question."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the Screener really free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. 100+ stat columns, 70+ analytical panels, custom formulas, radar charts, scatter plots, prospect screener, shareable URLs, image export. All forever free. No account required. The Screener is the product — Pro and Elite unlock the intelligence on top."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my API key safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your key is stored in your browser only — we never see it. Browser extensions on the page could technically read it, so we recommend creating a dedicated key with a monthly spending cap on OpenRouter. That way you're covered even in the worst case."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
+<noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#2d1f14;"><h2>Razzle needs JavaScript</h2><p>Enable JavaScript to use the fantasy football research lab.</p></div></noscript>
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav class="topnav" aria-label="Main navigation">
@@ -243,7 +365,7 @@
 
   <!-- What everyone gets -->
   <div class="free-celebration" style="background:var(--bg-card); border:3px solid var(--green); border-radius:12px; box-shadow:4px 4px 0 var(--green); padding:32px 28px; margin-bottom:32px; text-align:center;">
-    <div style="font-family:var(--font-display); font-size:22px; margin-bottom:4px;">What everyone gets. <span style="color:var(--green);">Forever.</span></div>
+    <div style="font-family:var(--font-display); font-size:20px; margin-bottom:4px;">What everyone gets. <span style="color:var(--green);">Forever.</span></div>
     <div style="font-family:var(--font-hand); font-size:18px; color:var(--ink-light); margin-bottom:20px;">no account, no card, no catch</div>
     <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; max-width:600px; margin:0 auto;">
       <span class="free-chip">Screener (100+ columns)</span>
@@ -271,15 +393,15 @@
   <div class="plans-grid" style="grid-template-columns:1fr 1fr;">
 
     <!-- PRO -->
-    <div class="plan-card">
+    <div class="plan-card" role="region" aria-labelledby="plan-pro">
       <div class="plan-badge">the film room upgrade</div>
-      <div class="plan-name">Pro</div>
+      <h3 class="plan-name" id="plan-pro">Pro</h3>
       <div class="plan-price" id="proPrice">$79.99<span>/yr</span></div>
       <div class="plan-interval" id="proInterval">that's <span class="yearly-price">$6.67/mo</span> — save 33%<br><span style="font-size:11px;color:var(--ink-light);">billed annually at $79.99</span></div>
 
       <ul class="plan-features">
         <li><span class="check">&#10003;</span> <span class="highlight">Everything free, plus:</span></li>
-        <li><span class="check">&#10003;</span> 20 AI queries/day (API key required)</li>
+        <li><span class="check">&#10003;</span> 20 AI queries/day included (no API key needed)</li>
         <li><span class="check">&#10003;</span> League-contextualized agents</li>
         <li><span class="check">&#10003;</span> Unlimited custom formulas</li>
         <li><span class="check">&#10003;</span> Cloud sync (formulas, watchlist, views)</li>
@@ -295,20 +417,20 @@
     </div>
 
     <!-- ELITE -->
-    <div class="plan-card elite">
+    <div class="plan-card elite" role="region" aria-labelledby="plan-elite">
       <div class="plan-badge">full war machine</div>
-      <div class="plan-name">Elite</div>
+      <h3 class="plan-name" id="plan-elite">Elite</h3>
       <div class="plan-price" id="elitePrice">$149.99<span>/yr</span></div>
       <div class="plan-interval" id="eliteInterval">that's <span class="yearly-price">$12.50/mo</span> — save 37%<br><span style="font-size:11px;color:var(--ink-light);">billed annually at $149.99</span></div>
 
       <ul class="plan-features">
-        <li><span class="check">&#10003;</span> <span class="highlight">Everything in Pro, plus:</span></li>
-        <li><span class="check">&#10003;</span> <span class="highlight">Unlimited AI queries — nothing to set up</span></li>
-        <li><span class="check">&#10003;</span> <span class="highlight">No API key needed — we handle it</span></li>
-        <li><span class="check">&#10003;</span> <span class="highlight">Agent memory</span> (multi-season, per-league)</li>
-        <li><span class="check">&#10003;</span> <span class="highlight">Weekly Razzle briefings</span></li>
-        <li><span class="check">&#10003;</span> Priority data refresh</li>
-        <li><span class="check">&#10003;</span> Full historical data (2015+)</li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">Everything in Pro, plus:</span></li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">Unlimited AI queries — nothing to set up</span></li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">No API key needed — we handle it</span></li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">Agent memory</span> (multi-season, per-league)</li>
+        <li><span class="check elite-check">&#9733;</span> <span class="highlight">Weekly Razzle briefings</span></li>
+        <li><span class="check elite-check">&#9733;</span> Priority data refresh</li>
+        <li><span class="check elite-check">&#9733;</span> Full historical data (2015+)</li>
         <li><span class="check">&#10003;</span> 7-day Pro trial included &mdash; upgrade to Elite anytime</li>
       </ul>
 
@@ -323,15 +445,24 @@
     Secured by Stripe. Cancel anytime.
   </div>
 
+  <!-- Social proof -->
+  <div style="text-align:center; margin:24px 0 8px; display:flex; flex-wrap:wrap; justify-content:center; gap:16px; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">
+    <span>10 seasons of nflverse data</span>
+    <span style="color:var(--ink-faint);">|</span>
+    <span>used by dynasty and redraft players on r/DynastyFF</span>
+    <span style="color:var(--ink-faint);">|</span>
+    <span>built by one person who watches too much film</span>
+  </div>
+
   <div style="text-align:center; margin:16px 0 8px;">
-    <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light); background:var(--bg-card); display:inline-block; padding:8px 20px; border:2px dashed var(--ink-faint); border-radius:8px;">Pro gives you the full film room. Elite removes all limits and runs the AI for you — no API key needed.</div>
+    <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-light); background:var(--bg-card); display:inline-block; padding:8px 20px; border:2px dashed var(--border-dashed); border-radius:8px;">Pro gives you the full film room. Elite adds agent memory, weekly briefings, and runs the AI for you — no API key needed.</div>
   </div>
 
   <!-- Promo code -->
   <div class="promo-section">
     <div class="promo-row">
       <input type="text" id="promoCodeInput" placeholder="promo code" autocomplete="off" spellcheck="false"
-        aria-describedby="promoCodeFeedback" oninput="clearPromoFeedback()" onkeydown="if(event.key==='Enter') validatePromoCode()">
+        aria-label="Promo code" aria-describedby="promoCodeFeedback" oninput="clearPromoFeedback()" onkeydown="if(event.key==='Enter') validatePromoCode()">
       <button class="btn-chunky" style="font-size:12px; padding:8px 14px;" onclick="validatePromoCode()">Apply</button>
     </div>
     <div class="promo-feedback" id="promoCodeFeedback" role="alert"></div>
@@ -340,8 +471,9 @@
   <!-- Feature comparison matrix -->
   <div class="matrix-section">
     <h2>The full breakdown</h2>
-    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <div style="overflow-x:auto;">
     <table class="feature-matrix">
+      <caption class="sr-only">Feature comparison between Free and Pro plans</caption>
       <thead>
         <tr>
           <th style="width:50%;">Feature</th>
@@ -396,56 +528,81 @@
     <h2>Questions we keep getting</h2>
     <div style="max-width:680px; margin:0 auto;">
 
-      <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What's the difference between Pro and Elite?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Same features. The only difference is who provides the AI. Pro: you create a free API key from OpenRouter (60 seconds, costs $1-3/month in usage). Elite: we handle everything — no key, no setup, unlimited queries. Think of Pro as the DIY option and Elite as the easy button.</div>
-      </div>
+      <details class="faq-item" style="border-bottom:2px dashed var(--border-dashed); padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">What's the difference between Pro and Elite? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">Same analytical tools. Elite adds server-side AI agents (no API key needed, unlimited queries) and priority support. Pro: you bring your own API key from OpenRouter (60 seconds, costs $1-3/month in usage). Think of Pro as the DIY option and Elite as the easy button.</div>
+      </details>
 
-      <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is there a free trial?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. Every new account gets 7 days of full Pro access automatically. No credit card required. Just sign up and you're in. After 7 days, you can subscribe to keep Pro or continue using the Screener for free.</div>
-      </div>
+      <details class="faq-item" style="border-bottom:2px dashed var(--border-dashed); padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">Is there a free trial? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">Yes. Every new account gets 7 days of full Pro access automatically. No credit card required. Just sign up and you're in. After 7 days, you can subscribe to keep Pro or continue using the Screener for free.</div>
+      </details>
 
-      <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Can I cancel anytime?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. Cancel from your account at any time. You keep access through the end of your billing period. No cancellation fees, no hassle.</div>
-      </div>
+      <details class="faq-item" style="border-bottom:2px dashed var(--border-dashed); padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">Can I cancel anytime? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">Yes. Cancel from your account at any time. You keep access through the end of your billing period. No cancellation fees, no hassle.</div>
+      </details>
 
-      <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Do I need a Sleeper account?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">No. The Screener works without Sleeper. But connecting Sleeper unlocks league-contextualized AI — agents analyze YOUR roster, YOUR rivals, YOUR league's scoring settings. That's where the real value is.</div>
-      </div>
+      <details class="faq-item" style="border-bottom:2px dashed var(--border-dashed); padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">Do I need a Sleeper account? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">No. The Screener works without Sleeper. But connecting Sleeper unlocks league-contextualized AI — agents analyze YOUR roster, YOUR rivals, YOUR league's scoring settings. That's where the real value is.</div>
+      </details>
 
-      <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What happens when my trial ends?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">You keep the Screener and all your saved work — formulas, views, watchlist. Nothing is lost. The Pro panels and Situation Room lock until you subscribe. Pick it back up any time.</div>
-      </div>
+      <details class="faq-item" style="border-bottom:2px dashed var(--border-dashed); padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">What happens when my trial ends? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">You keep the Screener and all your saved work — formulas, views, watchlist. Nothing is lost. The Pro panels and Situation Room lock until you subscribe. Pick it back up any time.</div>
+      </details>
 
-      <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Which API keys work with Pro?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">OpenRouter (recommended — gives access to GPT-4o, Claude, Gemini, and more), OpenAI, or Anthropic. Set your key in the Situation Room settings. Your key is encrypted and never logged.</div>
-      </div>
+      <details class="faq-item" style="border-bottom:2px dashed var(--border-dashed); padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">Which API keys work with Pro? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">OpenRouter (recommended — gives access to GPT-4o, Claude, Gemini, and more), OpenAI, or Anthropic. Set your key in the Situation Room settings. Your key is encrypted and never logged.</div>
+      </details>
 
-      <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">What formats do the agents support?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">All of them. Redraft, dynasty, keeper, best ball, superflex, 2QB, IDP. The agents detect your league format from Sleeper settings and adapt their analysis automatically. A redraft question gets a different answer than a dynasty question.</div>
-      </div>
+      <details class="faq-item" style="border-bottom:2px dashed var(--border-dashed); padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">What formats do the agents support? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">All of them. Redraft, dynasty, keeper, best ball, superflex, 2QB, IDP. The agents detect your league format from Sleeper settings and adapt their analysis automatically. A redraft question gets a different answer than a dynasty question.</div>
+      </details>
 
-      <div style="border-bottom:2px dashed var(--ink-faint); padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is the Screener really free?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Yes. 100+ stat columns, 70+ analytical panels, custom formulas, radar charts, scatter plots, prospect screener, shareable URLs, image export. All forever free. No account required. The Screener is the product — Pro and Elite unlock the intelligence on top.</div>
-      </div>
+      <details class="faq-item" style="border-bottom:2px dashed var(--border-dashed); padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">Do you offer refunds? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">If you're not happy within the first 14 days, email swaggerdagger987@gmail.com and we'll sort it out. No questions asked.</div>
+      </details>
 
-      <div style="padding:16px 0;">
-        <div style="font-family:var(--font-mono); font-size:14px; color:var(--ink); margin-bottom:6px;">Is my API key safe?</div>
-        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7;">Your key is stored in your browser only &mdash; we never see it. Browser extensions on the page could technically read it, so we recommend creating a dedicated key with a monthly spending cap on OpenRouter. That way you're covered even in the worst case.</div>
-      </div>
+      <details class="faq-item" style="border-bottom:2px dashed var(--border-dashed); padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">Is the Screener really free? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">Yes. 100+ stat columns, 70+ analytical panels, custom formulas, radar charts, scatter plots, prospect screener, shareable URLs, image export. All forever free. No account required. The Screener is the product — Pro and Elite unlock the intelligence on top.</div>
+      </details>
+
+      <details class="faq-item" style="padding:12px 0;">
+        <summary style="font-family:var(--font-mono); font-size:14px; color:var(--ink); cursor:pointer; padding:4px 0; list-style:none;">
+          <span style="display:flex; align-items:center; justify-content:space-between; gap:8px;">Is my API key safe? <span class="faq-chevron" style="font-size:12px; transition:transform 0.2s; flex-shrink:0;">&#9660;</span></span>
+        </summary>
+        <div style="font-family:var(--font-mono); font-size:12px; color:var(--ink-medium); line-height:1.7; padding-top:8px;">Your key is stored in your browser only &mdash; we never see it. Browser extensions on the page could technically read it, so we recommend creating a dedicated key with a monthly spending cap on OpenRouter. That way you're covered even in the worst case.</div>
+      </details>
 
     </div>
   </div>
 
   <!-- Early Adopter / Lifetime Deals (rendered dynamically) -->
-  <div id="promotionsSection" style="display:none; margin-top:32px; padding:20px 0; border-top:2px dashed var(--ink-faint);">
+  <div id="promotionsSection" style="display:none; margin-top:32px; padding:20px 0; border-top:2px dashed var(--border-dashed);">
     <h2 style="font-family:var(--font-display); font-size:20px; text-align:center; margin:0 0 16px;">Launch Specials</h2>
     <div id="promotionsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap:16px; max-width:680px; margin:0 auto;"></div>
   </div>
@@ -465,72 +622,82 @@
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <div class="site-footer-grid">
+  <nav aria-label="Footer" class="site-footer-grid">
 
     <div>
       <div class="site-footer-heading">Razzle</div>
-      <a href="/" class="footer-link">Home</a>
-      <a href="/lab.html" class="footer-link">Fourth Down Lab</a>
-      <a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a>
-      <a href="/agents.html" class="footer-link">Situation Room</a>
-      <a href="/prompts.html" class="footer-link">Prompts</a>
-      <a href="/pricing.html" class="footer-link">Pricing</a>
-      <a href="/about.html" class="footer-link">About</a>
+      <ul>
+        <li><a href="/" class="footer-link">Home</a></li>
+        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
+        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
+        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
+        <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
+        <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
+        <li><a href="/about.html" class="footer-link">About</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Dynasty</div>
-      <a href="/rankings.html" class="footer-link">Rankings</a>
-      <a href="/tradevalues.html" class="footer-link">Trade Values</a>
-      <a href="/tradefinder.html" class="footer-link">Trade Finder</a>
-      <a href="/tiers.html" class="footer-link">Tiers</a>
-      <a href="/vorp.html" class="footer-link">VORP</a>
-      <a href="/aging.html" class="footer-link">Aging Curves</a>
-      <a href="/buysell.html" class="footer-link">Buy/Sell</a>
-      <a href="/archetypes.html" class="footer-link">Archetypes</a>
+      <ul>
+        <li><a href="/rankings.html" class="footer-link">Rankings</a></li>
+        <li><a href="/tradevalues.html" class="footer-link">Trade Values</a></li>
+        <li><a href="/tradefinder.html" class="footer-link">Trade Finder</a></li>
+        <li><a href="/tiers.html" class="footer-link">Tiers</a></li>
+        <li><a href="/vorp.html" class="footer-link">VORP</a></li>
+        <li><a href="/aging.html" class="footer-link">Aging Curves</a></li>
+        <li><a href="/buysell.html" class="footer-link">Buy/Sell</a></li>
+        <li><a href="/archetypes.html" class="footer-link">Archetypes</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Weekly</div>
-      <a href="/weekly.html" class="footer-link">Weekly Stats</a>
-      <a href="/weeklyleaders.html" class="footer-link">Week Leaders</a>
-      <a href="/weeklymvp.html" class="footer-link">Weekly MVP</a>
-      <a href="/matchups.html" class="footer-link">Matchups</a>
-      <a href="/waivers.html" class="footer-link">Waivers</a>
-      <a href="/schedule.html" class="footer-link">Schedule</a>
-      <a href="/stocks.html" class="footer-link">Stocks</a>
-      <a href="/playoffs.html" class="footer-link">Playoffs</a>
+      <ul>
+        <li><a href="/weekly.html" class="footer-link">Weekly Stats</a></li>
+        <li><a href="/weeklyleaders.html" class="footer-link">Week Leaders</a></li>
+        <li><a href="/weeklymvp.html" class="footer-link">Weekly MVP</a></li>
+        <li><a href="/matchups.html" class="footer-link">Matchups</a></li>
+        <li><a href="/waivers.html" class="footer-link">Rising Players</a></li>
+        <li><a href="/schedule.html" class="footer-link">Schedule</a></li>
+        <li><a href="/stocks.html" class="footer-link">Stocks</a></li>
+        <li><a href="/playoffs.html" class="footer-link">Playoffs</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Analytics</div>
-      <a href="/targets.html" class="footer-link">Targets</a>
-      <a href="/usage.html" class="footer-link">Usage</a>
-      <a href="/efficiency.html" class="footer-link">Efficiency</a>
-      <a href="/airyards.html" class="footer-link">Air Yards</a>
-      <a href="/redzone.html" class="footer-link">Red Zone</a>
-      <a href="/consistency.html" class="footer-link">Consistency</a>
-      <a href="/breakouts.html" class="footer-link">Breakouts</a>
-      <a href="/opportunity.html" class="footer-link">Opportunity</a>
+      <ul>
+        <li><a href="/targets.html" class="footer-link">Targets</a></li>
+        <li><a href="/usage.html" class="footer-link">Usage</a></li>
+        <li><a href="/efficiency.html" class="footer-link">Efficiency</a></li>
+        <li><a href="/airyards.html" class="footer-link">Air Yards</a></li>
+        <li><a href="/redzone.html" class="footer-link">Red Zone</a></li>
+        <li><a href="/consistency.html" class="footer-link">Consistency</a></li>
+        <li><a href="/breakouts.html" class="footer-link">Breakouts</a></li>
+        <li><a href="/opportunity.html" class="footer-link">Opportunity</a></li>
+      </ul>
     </div>
 
     <div>
       <div class="site-footer-heading">Tools</div>
-      <a href="/explorer.html" class="footer-link">Stat Explorer</a>
-      <a href="/compare.html" class="footer-link">Compare</a>
-      <a href="/rosterbuilder.html" class="footer-link">Roster Builder</a>
-      <a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a>
-      <a href="/auction.html" class="footer-link">Auction Values</a>
-      <a href="/dashboard.html" class="footer-link">Dashboard</a>
-      <a href="/prospects.html" class="footer-link">Prospects</a>
+      <ul>
+        <li><a href="/explorer.html" class="footer-link">Stat Explorer</a></li>
+        <li><a href="/compare.html" class="footer-link">Compare</a></li>
+        <li><a href="/rosterbuilder.html" class="footer-link">Roster Builder</a></li>
+        <li><a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a></li>
+        <li><a href="/auction.html" class="footer-link">Auction Values</a></li>
+        <li><a href="/dashboard.html" class="footer-link">Dashboard</a></li>
+        <li><a href="/prospects.html" class="footer-link">Prospects</a></li>
+      </ul>
     </div>
 
-  </div>
+  </nav>
   <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
-  <p style="text-align:center; margin-top:6px;">made for Reddit | <a href="/about.html" style="color:var(--ink-light);">attribution &amp; privacy</a></p>
+  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
 </footer>
 
-<script src="app.js"></script>
+<script src="app.js" defer></script>
 <script>
   // Pricing page logic
   var _pricingInterval = 'year'; // Default to yearly per pricing strategy
@@ -678,7 +845,9 @@
         if (trialActiveBanner) trialActiveBanner.style.display = 'block';
         if (trialCountdown) {
           var days = user.trial_days_remaining || 0;
-          trialCountdown.textContent = days + ' day' + (days !== 1 ? 's' : '') + ' remaining on your free trial';
+          var hours = user.trial_hours_remaining || 0;
+          var timeLabel = days >= 1 ? days + ' day' + (days !== 1 ? 's' : '') : (hours > 0 ? hours + ' hour' + (hours !== 1 ? 's' : '') : 'less than 1 hour');
+          trialCountdown.textContent = timeLabel + ' remaining on your free trial';
         }
         // Update buttons — user already has trial access
         if (proCta) proCta.textContent = 'Subscribe to Pro';
@@ -738,7 +907,7 @@
           cards.push(
             '<div style="background:var(--bg-card); border:3px solid var(--orange); border-radius:var(--radius); box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
               '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Early Adopter Pro</div>' +
-              '<div style="font-family:var(--font-display); font-size:28px; color:var(--orange);">' + esc(ea.pro.price) + '</div>' +
+              '<div style="font-family:var(--font-display); font-size:24px; color:var(--orange);">' + esc(ea.pro.price) + '</div>' +
               '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + esc(ea.pro.savings) + ' — ' + esc(String(ea.pro.remaining)) + ' of ' + esc(String(ea.pro.limit)) + ' spots left</div>' +
               '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'ea_pro\')">Claim Early Adopter</button>' +
             '</div>'
@@ -748,7 +917,7 @@
           cards.push(
             '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:var(--radius); box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
               '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Early Adopter Elite</div>' +
-              '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple);">' + esc(ea.elite.price) + '</div>' +
+              '<div style="font-family:var(--font-display); font-size:24px; color:var(--purple);">' + esc(ea.elite.price) + '</div>' +
               '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">' + esc(ea.elite.savings) + ' — ' + esc(String(ea.elite.remaining)) + ' of ' + esc(String(ea.elite.limit)) + ' spots left</div>' +
               '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'ea_elite\')">Claim Early Adopter</button>' +
             '</div>'
@@ -762,7 +931,7 @@
         cards.push(
           '<div style="background:var(--bg-card); border:3px solid var(--green); border-radius:var(--radius); box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Lifetime Pro</div>' +
-            '<div style="font-family:var(--font-display); font-size:28px; color:var(--green);">' + esc(lt.pro_price) + '</div>' +
+            '<div style="font-family:var(--font-display); font-size:24px; color:var(--green);">' + esc(lt.pro_price) + '</div>' +
             '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +
             '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_pro\')">Go Lifetime</button>' +
           '</div>'
@@ -770,7 +939,7 @@
         cards.push(
           '<div style="background:var(--bg-card); border:3px solid var(--purple); border-radius:var(--radius); box-shadow:4px 4px 0 var(--ink); padding:16px 20px; text-align:center;">' +
             '<div style="font-family:var(--font-mono); font-size:14px; margin-bottom:4px;">Lifetime Elite</div>' +
-            '<div style="font-family:var(--font-display); font-size:28px; color:var(--purple);">' + esc(lt.elite_price) + '</div>' +
+            '<div style="font-family:var(--font-display); font-size:24px; color:var(--purple);">' + esc(lt.elite_price) + '</div>' +
             '<div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">one-time — ' + esc(String(lt.remaining)) + ' of ' + esc(String(lt.limit)) + ' lifetime spots left</div>' +
             '<button class="btn-primary" style="margin-top:12px; width:100%;" onclick="handleCheckout(\'lifetime_elite\')">Go Lifetime</button>' +
           '</div>'

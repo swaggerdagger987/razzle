@@ -33,6 +33,16 @@ from . import billing as billing_module
 from .db import get_db
 from .logging_config import setup_logging
 
+# Sentry error monitoring — initializes only when SENTRY_DSN env var is set
+_sentry_dsn = os.environ.get("SENTRY_DSN")
+if _sentry_dsn:
+    import sentry_sdk
+    sentry_sdk.init(
+        dsn=_sentry_dsn,
+        environment=os.environ.get("ENVIRONMENT", "development"),
+        traces_sample_rate=0.1,
+    )
+
 logger = logging.getLogger("razzle.server")
 
 # ---------------------------------------------------------------------------
@@ -142,14 +152,25 @@ def _cleanup_rate_limits():
 
 _EMAIL_LOGIN_LIMIT = 5    # max failed attempts per email
 _EMAIL_LOGIN_WINDOW = 300  # per 5 minutes
+_EMAIL_RESET_LIMIT = 3    # max password reset requests per email per window
+_EMAIL_RESET_WINDOW = 900  # per 15 minutes
 
 
 def _check_rate_limit(ip: str) -> bool:
     return _check_rate("auth", ip, _RATE_LIMIT, _RATE_WINDOW)
 
 
+def _normalize_email(email: str) -> str:
+    """Defensive email normalization for rate-limit keys."""
+    return email.strip().lower()
+
+
 def _check_email_login_rate(email: str) -> bool:
-    """Check if email is locked out from login attempts. Read-only check."""
+    """Check if email is locked out from login attempts.
+    Returns True if allowed, False if locked out.
+    Fails CLOSED on DB errors — blocks login during DB issues to prevent
+    brute force bypass when the rate-limit table is unavailable."""
+    email = _normalize_email(email)
     now = _time.time()
     cutoff = now - _EMAIL_LOGIN_WINDOW
     try:
@@ -159,19 +180,44 @@ def _check_email_login_rate(email: str) -> bool:
                 "SELECT COUNT(*) FROM rate_limits WHERE bucket = ? AND key = ?", ("email_login", email)
             ).fetchone()[0]
             conn.commit()
-            return count < _EMAIL_LOGIN_LIMIT
+            if count >= _EMAIL_LOGIN_LIMIT:
+                logger.warning("Login lockout triggered for email=%s (attempts=%d)", email, count)
+                return False
+            return True
     except Exception:
-        return True
+        logger.exception("Email login rate check failed — blocking request (fail-closed)")
+        return False
 
 
 def _record_email_login_fail(email: str):
     """Record a failed login attempt for an email."""
+    email = _normalize_email(email)
     try:
         with auth_module.get_users_db() as conn:
             conn.execute("INSERT INTO rate_limits (bucket, key, ts) VALUES (?, ?, ?)", ("email_login", email, _time.time()))
             conn.commit()
     except Exception:
-        pass
+        logger.exception("Failed to record login failure for email=%s", email)
+
+
+def _clear_email_login_fails(email: str):
+    """Clear failed login attempts after a successful login.
+    Prevents a user with 4 prior failures from being locked out on
+    their next single mistake."""
+    email = _normalize_email(email)
+    try:
+        with auth_module.get_users_db() as conn:
+            conn.execute("DELETE FROM rate_limits WHERE bucket = ? AND key = ?", ("email_login", email))
+            conn.commit()
+    except Exception:
+        logger.debug("Failed to clear login attempts for email=%s", email, exc_info=True)
+
+
+def _check_email_reset_rate(email: str) -> bool:
+    """Per-email rate limit for password reset requests.
+    Prevents email bombing a target address."""
+    email = _normalize_email(email)
+    return _check_rate("email_reset", email, _EMAIL_RESET_LIMIT, _EMAIL_RESET_WINDOW)
 
 
 def _check_sensitive_rate(ip: str) -> bool:
@@ -354,7 +400,6 @@ def _warm_cache():
     _s = live_data._current_nfl_season()
     warm_targets = [
         ("filter_options", lambda: live_data.get_filter_options()),
-        ("featured", lambda: live_data.fetch_featured()),
         ("dynasty_dashboard", lambda: live_data.fetch_dynasty_dashboard()),
         ("dynasty_rankings", lambda: live_data.fetch_dynasty_rankings()),
         ("trade_value_chart", lambda: live_data.fetch_trade_value_chart()),
@@ -383,12 +428,37 @@ def _warm_cache():
     logger.info(f"Cache warmed: {warmed}/{len(warm_targets)} endpoints")
 
 
+def _populate_dynasty_snapshots():
+    """Populate dynasty value snapshots for all historical seasons that haven't been snapshotted yet."""
+    try:
+        with get_db() as conn:
+            live_data.init_dynasty_snapshots_table()
+            existing = {r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM dynasty_value_snapshots"
+            ).fetchall()}
+            available = [r[0] for r in conn.execute(
+                "SELECT DISTINCT season FROM player_week_stats ORDER BY season"
+            ).fetchall()]
+        new_seasons = [s for s in available if s not in existing]
+        if not new_seasons:
+            return
+        total = 0
+        for season in new_seasons:
+            count = live_data.snapshot_dynasty_values(season)
+            total += count
+            logger.info("Dynasty snapshots: season %d — %d players", season, count)
+        logger.info("Dynasty snapshots complete: %d seasons, %d total players", len(new_seasons), total)
+    except Exception:
+        logger.exception("Dynasty snapshot population failed (non-fatal)")
+
+
 def _background_bootstrap():
     """Run heavy data bootstrap in a background thread so the server starts fast."""
     _bootstrap_status["running"] = True
     try:
         bootstrap_database()
         _ensure_season_stats_table()
+        _populate_dynasty_snapshots()
         _bootstrap_status["done"] = True
         logger.info("Background bootstrap complete")
         _warm_cache()
@@ -451,6 +521,7 @@ async def lifespan(app):
         live_data.init_waitlist_table()
         live_data.init_formula_store_tables()
         live_data._init_analytics_table()
+        live_data.init_dynasty_snapshots_table()
     except Exception as e:
         logger.error("Startup DB init failed (server will start degraded): %s", e, exc_info=True)
     # Heavy data sync in background thread (may take minutes on cold start)
@@ -502,7 +573,7 @@ _req_logger = logging.getLogger("razzle.requests")
 
 # Paths that should be cached at response level (GET only, public data)
 _RESP_CACHEABLE_PREFIXES = (
-    "/api/players", "/api/filter-options", "/api/featured",
+    "/api/players", "/api/filter-options",
     "/api/dynasty-dashboard", "/api/dynasty-rankings", "/api/trade-value-chart",
     "/api/stat-leaders", "/api/breakout-candidates", "/api/matchup-heatmap",
     "/api/aging-curves", "/api/weekly-heatmap", "/api/efficiency-rankings",
@@ -687,7 +758,7 @@ _NO_CACHE_PREFIXES = (
 _STABLE_CACHE_PATHS = (
     "/api/aging-curves", "/api/college/aging-curves", "/api/college/records",
     "/api/draft-class", "/api/prospect-scores", "/api/prospect-tiers",
-    "/api/prospect-comps", "/api/athletic-radar", "/api/trade/pick-values",
+    "/api/prospect-comps", "/api/trade/pick-values",
     "/api/records", "/api/career-stats", "/api/college/season-recap",
     "/api/college/season-awards", "/api/season-recap", "/api/season-awards",
 )
@@ -828,12 +899,6 @@ def health(request: Request):
     )
 
 
-@app.get("/api/featured")
-def featured():
-    data = live_data.fetch_featured()
-    return JSONResponse(content=data, headers={"Cache-Control": "public, max-age=300"})
-
-
 # ---------------------------------------------------------------------------
 # Auth endpoints
 # ---------------------------------------------------------------------------
@@ -870,15 +935,15 @@ def _reconcile_payment_status(user: dict) -> dict:
     try:
         with auth_module.get_users_db() as conn:
             sub = conn.execute(
-                "SELECT status, updated_at FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
+                "SELECT status, payment_failed_at FROM subscriptions WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
                 (user["id"],),
             ).fetchone()
             if not sub or sub["status"] != "payment_failed":
                 return user
-            updated_at = sub["updated_at"]
-            if not updated_at:
+            failed_at = sub["payment_failed_at"]
+            if not failed_at:
                 return user
-            failed_dt = _datetime.datetime.fromisoformat(str(updated_at).replace("Z", "+00:00"))
+            failed_dt = _datetime.datetime.fromisoformat(str(failed_at).replace("Z", "+00:00"))
             if failed_dt.tzinfo is None:
                 failed_dt = failed_dt.replace(tzinfo=_datetime.timezone.utc)
             now = _datetime.datetime.now(_datetime.timezone.utc)
@@ -950,6 +1015,10 @@ async def auth_login(request: Request):
         if email:
             _record_email_login_fail(email)
         return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    # Successful login — clear prior failed attempts so the user isn't one
+    # mistake away from lockout after recovering from earlier typos
+    if email:
+        _clear_email_login_fails(email)
     live_data.log_event("login")
     return result
 
@@ -1001,6 +1070,27 @@ async def auth_link_sleeper(request: Request):
     return result
 
 
+@app.get("/api/auth/verify-email")
+async def auth_verify_email(token: str = ""):
+    """Verify email address via token from email link."""
+    result = auth_module.verify_email(token)
+    if "error" in result:
+        return JSONResponse({"error": result["error"]}, status_code=result.get("status", 400))
+    return result
+
+
+@app.post("/api/auth/resend-verification")
+async def auth_resend_verification(request: Request):
+    """Resend email verification link."""
+    ip = _get_client_ip(request)
+    if not _check_rate_limit(ip):
+        return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
+    body = await request.json()
+    email = body.get("email", "").strip()
+    result = auth_module.resend_verification(email)
+    return result
+
+
 @app.post("/api/auth/forgot-password")
 async def auth_forgot_password(request: Request):
     """Send password reset email."""
@@ -1008,7 +1098,13 @@ async def auth_forgot_password(request: Request):
     if not _check_rate_limit(ip):
         return JSONResponse({"error": "Too many attempts. Try again in a minute."}, status_code=429, headers={"Retry-After": "60"})
     body = await request.json()
-    email = body.get("email", "").strip()
+    email = body.get("email", "").strip().lower()
+    # Per-email rate limit: prevent email bombing a target address
+    if email and not _check_email_reset_rate(email):
+        # Return success-like response to avoid leaking whether the email exists,
+        # but silently drop the request
+        logger.warning("Password reset rate limit hit for email=%s", email)
+        return {"message": "If that email is registered, you'll receive a reset link."}
     result = auth_module.forgot_password(email)
     return result
 
@@ -1164,7 +1260,8 @@ async def track_query(request: Request):
 # Server-side LLM key for Elite users (never exposed to frontend)
 _LLM_API_KEY = os.environ.get("RAZZLE_LLM_API_KEY", "")  # OpenRouter API key
 _LLM_BASE_URL = os.environ.get("RAZZLE_LLM_BASE_URL", "https://openrouter.ai/api/v1/chat/completions")
-_LLM_MODEL = os.environ.get("RAZZLE_LLM_MODEL", "anthropic/claude-3.5-haiku")  # cost-efficient default
+_LLM_MODEL = os.environ.get("RAZZLE_LLM_MODEL", "anthropic/claude-3.5-haiku")  # Pro tier default
+_LLM_ELITE_MODEL = os.environ.get("RAZZLE_LLM_ELITE_MODEL", _LLM_MODEL)  # Elite tier (configurable upgrade)
 _LLM_FREE_MODEL = os.environ.get("RAZZLE_LLM_FREE_MODEL", "meta-llama/llama-3.1-8b-instruct:free")
 _LLM_TIMEOUT = 25  # seconds
 _LLM_MAX_TOKENS = 2000
@@ -1247,7 +1344,7 @@ async def llm_chat(request: Request):
     except (TypeError, ValueError):
         _mt = _LLM_MAX_TOKENS
     llm_body = {
-        "model": _LLM_MODEL,
+        "model": _LLM_ELITE_MODEL,
         "messages": sanitized_messages,
         "temperature": _temp,
         "max_tokens": _mt,
@@ -1366,9 +1463,15 @@ async def llm_chat_free(request: Request):
         _mt = max(1, min(_mt, _LLM_FREE_MAX_TOKENS))
     except (TypeError, ValueError):
         _mt = _LLM_FREE_MAX_TOKENS
-    # Select model based on user tier: Pro/Elite get premium, free gets free model
+    # Select model based on user tier: Elite gets best, Pro gets premium, free gets free
+    is_elite = plan in ("elite", "elite_lifetime")
     is_paid = plan in ("pro", "elite", "pro_lifetime", "elite_lifetime")
-    selected_model = _LLM_MODEL if is_paid else _LLM_FREE_MODEL
+    if is_elite:
+        selected_model = _LLM_ELITE_MODEL
+    elif is_paid:
+        selected_model = _LLM_MODEL
+    else:
+        selected_model = _LLM_FREE_MODEL
     selected_max_tokens = _LLM_MAX_TOKENS if is_paid else _LLM_FREE_MAX_TOKENS
     _mt = max(1, min(_mt, selected_max_tokens))
 
@@ -1503,33 +1606,20 @@ async def delete_api_key(provider: str, request: Request):
 
 @app.get("/api/user/formulas")
 async def get_user_formulas(request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     return auth_module.get_user_formulas(user["id"])
 
 
 @app.post("/api/user/formulas")
 async def save_user_formula(request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     body = await request.json()
     name = body.get("name", "")
     weights = body.get("weights", "")
-
-    # Server-side formula count enforcement for free users
-    plan = user.get("plan", "free")
-    if plan == "free":
-        existing = auth_module.get_user_formulas(user["id"])
-        formula_names = [f["name"] for f in existing.get("formulas", [])]
-        # Allow update of existing formula, but cap new creations at 3
-        if name not in formula_names and len(formula_names) >= 3:
-            return JSONResponse(
-                {"error": "Free plan limited to 3 formulas. Upgrade to Pro for unlimited."},
-                status_code=403,
-            )
-
     result = auth_module.save_user_formula(user["id"], name, weights)
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result["status"])
@@ -1538,9 +1628,9 @@ async def save_user_formula(request: Request):
 
 @app.delete("/api/user/formulas/{formula_id}")
 async def delete_user_formula(formula_id: int, request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     result = auth_module.delete_user_formula(user["id"], formula_id)
     if "error" in result:
         return JSONResponse({"error": result["error"]}, status_code=result["status"])
@@ -1549,23 +1639,9 @@ async def delete_user_formula(formula_id: int, request: Request):
 
 @app.post("/api/user/formulas/import")
 async def import_user_formulas(request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
-    plan = user.get("plan", "free")
-    if plan == "free":
-        existing = auth_module.get_user_formulas(user["id"])
-        current_count = len(existing.get("formulas", []))
-        if current_count >= 3:
-            return JSONResponse(
-                {"error": "Free plan limited to 3 formulas. Upgrade to Pro for unlimited."},
-                status_code=403,
-            )
-        # Cap import to stay within 3-formula limit
-        body = await request.json()
-        formulas = body.get("formulas", [])
-        remaining_slots = 3 - current_count
-        return auth_module.import_formulas(user["id"], formulas[:remaining_slots])
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     body = await request.json()
     return auth_module.import_formulas(user["id"], body.get("formulas", []))
 
@@ -1799,6 +1875,16 @@ async def screener_query(request: Request):
     if not _check_screener_rate(client_ip):
         return JSONResponse({"error": "Rate limited. Try again shortly."}, status_code=429)
     body = await request.json()
+    # Server-side filter limit: free users get max 3 filters
+    filters = body.get("filters", [])
+    if isinstance(filters, list) and len(filters) > 3:
+        user = require_auth(request)
+        user_plan = (user.get("plan", "free") if user else "free")
+        if _PLAN_HIERARCHY.get(user_plan, 0) < 1:
+            return JSONResponse(
+                {"error": "Free plan limited to 3 filters. Upgrade to Pro for unlimited."},
+                status_code=403,
+            )
     # Response-level cache for screener POST (most expensive endpoint)
     cache_key = "screener_post:" + _json.dumps(body, sort_keys=True, default=str)
     cached = _resp_cache_get(cache_key)
@@ -1872,8 +1958,19 @@ def player_boom_bust(player_id: str, season: int = 0):
 
 
 @app.get("/api/players/compare")
-def players_compare(ids: str = "", season: str = "0"):
+def players_compare(request: Request, ids: str = "", season: str = "0"):
     player_ids = [p.strip() for p in ids.split(",") if p.strip()][:20]
+    # Server-side compare slot enforcement: free=2, pro/elite=4
+    if len(player_ids) > 2:
+        user = require_auth(request)
+        user_plan = (user.get("plan", "free") if user else "free")
+        user_level = _PLAN_HIERARCHY.get(user_plan, 0)
+        max_slots = 4 if user_level >= 1 else 2
+        if len(player_ids) > max_slots:
+            return JSONResponse(
+                {"error": f"Free plan limited to {max_slots} compare slots. Upgrade to Pro for more."},
+                status_code=403,
+            )
     return live_data.fetch_players_compare(player_ids, season=season)
 
 
@@ -1942,14 +2039,6 @@ def draft_class_tracker(draft_year: int = 0, position: str = ""):
         draft_year=draft_year or None,
         position=position or None,
     )
-
-
-@app.get("/api/athletic-radar")
-def athletic_radar(position: str = "", draft_year: int = 0):
-    pos = position.strip().upper() if position else ""
-    if pos and pos not in ("QB", "RB", "WR", "TE", "OL", "DL", "LB", "CB", "S", "EDGE"):
-        pos = ""
-    return live_data.fetch_athletic_radar(position=pos, draft_year=draft_year)
 
 
 @app.get("/api/prospect-options")
@@ -2022,20 +2111,6 @@ def college_leaders(season: int = None, position: str = "", limit: int = 10):
 @app.get("/api/college/trends")
 def college_trends(season: int = None, position: str = "", limit: int = 30):
     return live_data.fetch_college_trends(
-        season=season, position=position or None, limit=max(1, min(limit, 200)),
-    )
-
-
-@app.get("/api/college/rankings")
-def college_rankings(season: int = None, position: str = "", limit: int = 50):
-    return live_data.fetch_college_rankings(
-        season=season, position=position or None, limit=max(1, min(limit, 200)),
-    )
-
-
-@app.get("/api/college/streaks")
-def college_streaks(season: int = None, position: str = "", limit: int = 25):
-    return live_data.fetch_college_streaks(
         season=season, position=position or None, limit=max(1, min(limit, 200)),
     )
 
@@ -2172,9 +2247,9 @@ def get_formula_detail(formula_id: int):
 
 @app.post("/api/formulas/{formula_id}/rate")
 async def rate_formula(formula_id: int, request: Request):
-    user = require_auth(request)
-    if not user:
-        return JSONResponse({"error": "Authentication required"}, status_code=401)
+    user, err = require_plan(request, "pro")
+    if err:
+        return err
     body = await request.json()
     return live_data.rate_formula(
         formula_id=formula_id,
@@ -2468,7 +2543,6 @@ def sitemap_xml():
         ("/career-compare.html", "0.8", "weekly"),
         ("/draftclass.html", "0.8", "weekly"),
         ("/percentiles.html", "0.8", "weekly"),
-        ("/regression.html", "0.8", "weekly"),
         ("/strengths.html", "0.8", "weekly"),
         ("/breakdown.html", "0.8", "weekly"),
         ("/weeklyleaders.html", "0.8", "weekly"),
@@ -2659,11 +2733,12 @@ def positional_scarcity(season: int = 0):
 
 
 @app.get("/api/breakout-candidates")
-def breakout_candidates(season: int = 0, position: str = "", limit: int = 50, week: int = 0):
+def breakout_candidates(season: int = 0, position: str = "", limit: int = 50, week: int = 0, scoring: str = "ppr"):
     """Return players ranked by breakout potential (opportunity-production gap)."""
     s = season if season > 0 else None
     pos = position.upper() if position else None
-    return live_data.fetch_breakout_candidates(season=s, position=pos, limit=max(1, min(limit, 100)), week=week if week > 0 else None)
+    sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+    return live_data.fetch_breakout_candidates(season=s, position=pos, limit=max(1, min(limit, 100)), week=week if week > 0 else None, scoring=sc)
 
 
 @app.get("/api/buy-sell-candidates")
@@ -2818,13 +2893,14 @@ def consistency_rankings(season: int = 0, position: str = "", limit: int = 30, w
 
 
 @app.get("/api/strength-of-schedule")
-def strength_of_schedule(season: int = 0, position: str = "", limit: int = 30):
+def strength_of_schedule(season: int = 0, position: str = "", limit: int = 30, scoring: str = "ppr"):
     """Return strength of schedule analysis: suppressed (hard SOS) + inflated (easy SOS)."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_strength_of_schedule(season=s, position=pos, limit=lim)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_strength_of_schedule(season=s, position=pos, limit=lim, scoring=sc)
     except Exception as e:
         logger.exception("strength_of_schedule error")
         return JSONResponse({"error": "Failed to fetch strength of schedule data"}, status_code=500)
@@ -2845,13 +2921,14 @@ def stock_watch(season: int = 0, position: str = "", limit: int = 30, scoring: s
 
 
 @app.get("/api/opportunity-share")
-def opportunity_share(season: int = 0, position: str = "", limit: int = 30, week: int = 0):
+def opportunity_share(season: int = 0, position: str = "", limit: int = 30, week: int = 0, scoring: str = "ppr"):
     """Return opportunity share leaders and dominator rating leaders."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
         lim = max(1, min(limit, 50))
-        return live_data.fetch_opportunity_share(season=s, position=pos, limit=lim, week=week if week > 0 else None)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_opportunity_share(season=s, position=pos, limit=lim, week=week if week > 0 else None, scoring=sc)
     except Exception as e:
         logger.exception("opportunity_share error")
         return JSONResponse({"error": "Failed to fetch opportunity share data"}, status_code=500)
@@ -2872,12 +2949,13 @@ def report_cards(season: int = 0, position: str = "", limit: int = 25, week: int
 
 
 @app.get("/api/season-awards")
-def season_awards(season: int = 0, position: str = ""):
+def season_awards(season: int = 0, position: str = "", scoring: str = "ppr"):
     """Return fantasy season superlatives / awards."""
     try:
         s = season if season > 0 else None
         pos = position.upper() if position else None
-        return live_data.fetch_season_awards(season=s, position=pos)
+        sc = scoring if scoring in ("ppr", "half_ppr", "std") else "ppr"
+        return live_data.fetch_season_awards(season=s, position=pos, scoring=sc)
     except Exception as e:
         logger.exception("season_awards error")
         return JSONResponse({"error": "Failed to fetch season awards data"}, status_code=500)
@@ -3130,13 +3208,13 @@ def weekly_leaders(season: int = 0, week: int = 0, position: str = ""):
 
 
 @app.get("/api/points-breakdown")
-def points_breakdown(player_id: str = "", season: int = 0):
+def points_breakdown(player_id: str = "", season: int = 0, scoring: str = "ppr"):
     """Return fantasy points breakdown by scoring component."""
     if not player_id:
         return JSONResponse({"error": "player_id is required"}, status_code=400)
     try:
         s = season if season > 0 else None
-        return live_data.fetch_points_breakdown(player_id=player_id, season=s)
+        return live_data.fetch_points_breakdown(player_id=player_id, season=s, scoring=scoring)
     except Exception as e:
         logger.exception("points-breakdown error")
         return JSONResponse({"error": "Failed to fetch points breakdown"}, status_code=500)
@@ -3397,7 +3475,7 @@ def waivers(season: int = None, position: str = None, window: int = 4):
         return live_data.fetch_waivers(season=season, position=pos, window=max(1, min(window, 18)))
     except Exception as e:
         logger.exception("waivers error")
-        return JSONResponse({"error": "Failed to fetch waiver targets"}, status_code=500)
+        return JSONResponse({"error": "Failed to fetch rising players"}, status_code=500)
 
 
 @app.get("/api/tools-hub")

@@ -2,7 +2,7 @@
 
 ## What Is This
 
-Razzle is a fantasy football analytics platform at razzle.lol. A free fantasy football research lab with a playful comic-strip aesthetic. Bengal tiger mascot named Razzle. Powered by nflverse + college stats. Monetized later through league-contextualized AI agents at $240/yr.
+Razzle is a fantasy football analytics platform at razzle.lol. A free fantasy football research lab with a playful comic-strip aesthetic. Bengal tiger mascot named Razzle. Powered by nflverse + college stats. Monetized through Pro ($9.99/mo, $79.99/yr) and Elite ($19.99/mo, $149.99/yr) tiers.
 
 ## Required Reading
 

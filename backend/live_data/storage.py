@@ -49,6 +49,92 @@ def _validate_no_html(**fields: str) -> dict | None:
 
 
 # ---------------------------------------------------------------------------
+# Dynasty Value Snapshots
+# ---------------------------------------------------------------------------
+
+
+def init_dynasty_snapshots_table():
+    with get_db() as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS dynasty_value_snapshots (
+                player_id TEXT NOT NULL,
+                season INTEGER NOT NULL,
+                trade_value REAL NOT NULL,
+                production_score REAL,
+                age_score REAL,
+                scarcity_score REAL,
+                PRIMARY KEY (player_id, season)
+            )
+        """)
+        conn.execute("""
+            CREATE INDEX IF NOT EXISTS idx_dvs_season
+            ON dynasty_value_snapshots(season)
+        """)
+        conn.commit()
+
+
+def snapshot_dynasty_values(season: int) -> int:
+    """Compute and store end-of-season dynasty values for all players in a given season.
+    Returns the number of players snapshotted."""
+    from .core import compute_trade_value, _production_value, _age_value, _scarcity_value, _current_nfl_season
+
+    with get_db() as conn:
+        init_dynasty_snapshots_table()
+        current_year = _current_nfl_season()
+        age_offset = current_year - season if season < current_year else 0
+
+        rows = conn.execute("""
+            SELECT p.player_id, p.position, p.age,
+                   ROUND(SUM(s.fantasy_points_ppr), 1) as total_ppr,
+                   COUNT(DISTINCT s.week) as games
+            FROM players p
+            JOIN player_week_stats s
+                ON s.player_id = p.player_id AND s.season = ?
+                AND s.season_type = 'regular'
+            WHERE p.position IN ('QB','RB','WR','TE')
+              AND p.fantasy_relevant = 1
+            GROUP BY p.player_id
+            HAVING games >= 4 AND (total_ppr / games) >= 2.0
+        """, (season,)).fetchall()
+
+        count = 0
+        for r in rows:
+            pid, pos, age, total_ppr, games = r
+            pos = pos or "WR"
+            age = (age or 25) - age_offset
+            ppg = round(total_ppr / games, 2) if games > 0 else 0.0
+            tv = compute_trade_value(ppg, age, pos)
+            prod = round(_production_value(ppg, pos), 1)
+            age_s = round(_age_value(age, pos), 1)
+            scar = round(_scarcity_value(pos), 1)
+            conn.execute("""
+                INSERT OR REPLACE INTO dynasty_value_snapshots
+                (player_id, season, trade_value, production_score, age_score, scarcity_score)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (pid, season, tv, prod, age_s, scar))
+            count += 1
+        conn.commit()
+        return count
+
+
+def get_dynasty_history(player_id: str) -> list:
+    """Return historical dynasty values for a player across all snapshotted seasons."""
+    with get_db() as conn:
+        init_dynasty_snapshots_table()
+        rows = conn.execute("""
+            SELECT season, trade_value, production_score, age_score, scarcity_score
+            FROM dynasty_value_snapshots
+            WHERE player_id = ?
+            ORDER BY season
+        """, (player_id,)).fetchall()
+        return [
+            {"season": r[0], "trade_value": r[1], "production_score": r[2],
+             "age_score": r[3], "scarcity_score": r[4]}
+            for r in rows
+        ]
+
+
+# ---------------------------------------------------------------------------
 # Waitlist
 # ---------------------------------------------------------------------------
 
@@ -337,6 +423,9 @@ def rate_formula(formula_id: int, rating: int, review: str = "", user_id: int = 
         return {"status": "error", "message": "rating must be 1-5"}
     if rating < 1 or rating > 5:
         return {"status": "error", "message": "rating must be 1-5"}
+
+    if review and len(review) > 500:
+        return {"status": "error", "message": "Review text too long (max 500 chars)"}
 
     # Reject review text containing HTML tags
     html_err = _validate_no_html(review=review)

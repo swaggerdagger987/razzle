@@ -3,8 +3,9 @@
 Covers: auth flow, query quota, formula CRUD, watchlist CRUD, agent memory CRUD.
 These test the complete user lifecycle rather than individual endpoints.
 
-Note: New registered users get a 7-day Pro trial, so Pro-gated endpoints work
-but Elite-gated endpoints (memory, briefings) return 403.
+Note: New registered users must verify email to start Pro trial.
+The test_register step auto-verifies via the DB so Pro-gated endpoints work.
+Elite-gated endpoints (memory, briefings) return 403.
 """
 
 import uuid
@@ -38,6 +39,20 @@ class TestAuthFlow:
         assert "user" in data
         assert data["user"]["email"] == _TEST_EMAIL
         _token = data["token"]
+        # Auto-verify email and start trial so Pro-gated tests pass
+        from backend.auth import get_users_db
+        from datetime import datetime, timezone, timedelta
+        with get_users_db() as conn:
+            now = datetime.now(timezone.utc)
+            conn.execute(
+                "UPDATE users SET email_verified = 1, trial_start = ?, trial_end = ?, trial_used = 1 WHERE email = ?",
+                (now.isoformat(), (now + timedelta(days=7)).isoformat(), _TEST_EMAIL),
+            )
+            conn.commit()
+        # Refresh token with pro plan via login
+        resp2 = client.post("/api/auth/login", json={"email": _TEST_EMAIL, "password": _TEST_PASSWORD})
+        assert resp2.status_code == 200
+        _token = resp2.json()["token"]
 
     def test_me(self, client):
         resp = client.get("/api/auth/me", headers=_auth_header())

@@ -1,6 +1,6 @@
 /* Razzle — Standalone Player Profile Page */
 
-const POS_COLORS = (typeof getPosColors === "function") ? getPosColors() : { QB: "#5b7fff", RB: "#2ec4b6", WR: "#d97757", TE: "#8b5cf6" };
+const POS_COLORS = getPosColors();
 const POS_CSS = { QB: "var(--pos-qb)", RB: "var(--pos-rb)", WR: "var(--pos-wr)", TE: "var(--pos-te)" };
 
 let _profileData = null;
@@ -70,7 +70,7 @@ function renderPlayerPage(data, container) {
   const { player, seasons, career, combine } = data;
   const pos = (player.position || "").toUpperCase();
   const posColor = POS_CSS[pos] || "var(--ink)";
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
 
   // Detect breakout (use PPG, require both seasons substantial to avoid injury-recovery false positives)
   let breakoutInfo = null;
@@ -107,7 +107,7 @@ function renderPlayerPage(data, container) {
   html += `<div class="player-hero pos-stripe-${pos.toLowerCase()}">`;
   html += `<div class="player-hero-top">`;
   if (player.headshot_url) {
-    html += `<img class="player-hero-headshot" src="${esc(player.headshot_url)}" alt="" onerror="this.style.display='none';">`;
+    html += `<img class="player-hero-headshot" src="${esc(player.headshot_url)}" alt="Player headshot" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23d97757%22/><text x=%2220%22 y=%2225%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22>?</text></svg>';">`;
   }
   html += `<div class="player-pos-badge" style="background:${posColor};">${pos}</div>`;
   html += `<div style="flex:1; min-width:0;">`;
@@ -149,13 +149,13 @@ function renderPlayerPage(data, container) {
   // Radar chart
   html += `<div class="player-section player-chart-wrap">`;
   html += `<div class="player-section-title">Stat Shape</div>`;
-  html += `<canvas id="playerRadar" width="360" height="320"></canvas>`;
+  html += `<canvas id="playerRadar" width="360" height="320" role="img" aria-label="Player stat shape radar chart"></canvas>`;
   html += `</div>`;
   // Career arc
   if (seasons && seasons.length > 1) {
     html += `<div class="player-section player-chart-wrap">`;
     html += `<div class="player-section-title">Career Arc</div>`;
-    html += `<canvas id="playerArc" width="400" height="320"></canvas>`;
+    html += `<canvas id="playerArc" width="400" height="320" role="img" aria-label="Career arc trend line chart"></canvas>`;
     html += `</div>`;
   }
   html += `</div>`;
@@ -164,7 +164,7 @@ function renderPlayerPage(data, container) {
   if (seasons && seasons.length > 0) {
     html += `<div class="player-section">`;
     html += `<div class="player-section-title">Season Log</div>`;
-    html += `<div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">`;
+    html += `<div style="overflow-x:auto; ">`;
     html += renderSeasonTable(pos, seasons, career);
     html += `</div>`;
     html += `</div>`;
@@ -180,10 +180,12 @@ function renderPlayerPage(data, container) {
 
   container.innerHTML = html;
 
-  // Draw charts after DOM
+  // Draw charts after DOM — wrapped in try/catch since rAF runs outside loadPlayer's try/catch
   requestAnimationFrame(() => {
-    drawRadar(seasons, career, pos);
-    if (seasons && seasons.length > 1) drawArc(seasons, pos);
+    try {
+      if (seasons && seasons.length > 0) drawRadar(seasons, career, pos);
+      if (seasons && seasons.length > 1) drawArc(seasons, pos);
+    } catch (e) { /* canvas rendering failed — page content still usable */ }
   });
 }
 
@@ -228,7 +230,7 @@ function getHeadlineStats(pos, career) {
 
 function renderSeasonTable(pos, seasons, career) {
   const cols = getSeasonCols(pos);
-  let html = `<table class="player-season-table"><thead><tr><th>Year</th>`;
+  let html = `<table class="player-season-table"><caption class="sr-only">Season-by-season player statistics</caption><thead><tr><th>Year</th>`;
   for (const c of cols) html += `<th>${c.label}</th>`;
   html += `</tr></thead><tbody>`;
 
@@ -337,7 +339,7 @@ function drawRadar(seasons, career, pos) {
   const R = Math.min(W, H) / 2 - 40;
   var t = getCanvasTheme();
 
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
 
   // Get the most recent season for radar
   const latest = seasons && seasons.length > 0 ? seasons[seasons.length - 1] : career;
@@ -468,7 +470,7 @@ function drawArc(seasons, pos) {
   const plotH = H - pad.top - pad.bottom;
   var t = getCanvasTheme();
 
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
 
   ctx.clearRect(0, 0, W, H);
 
@@ -561,7 +563,7 @@ async function exportPlayerPNG() {
   const p = _profileData.player;
   const career = _profileData.career || {};
   const pos = (p.position || "").toUpperCase();
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
 
   var t = getCanvasTheme();
 
@@ -626,7 +628,7 @@ async function exportPlayerPNG() {
     ctx.stroke();
 
     ctx.fillStyle = t.ink;
-    ctx.font = "28px 'Luckiest Guy', cursive";
+    ctx.font = "24px 'Luckiest Guy', cursive";
     ctx.textAlign = "center";
     ctx.fillText(stats[i].value, x + boxW / 2, y + 38);
 
@@ -654,7 +656,7 @@ async function exportPlayerPNG() {
 
 function drawRadarOnCanvas(ctx, cx, cy, R, seasons, career, pos) {
   var t = getCanvasTheme();
-  const posHex = POS_COLORS[pos] || "#d97757";
+  const posHex = POS_COLORS[pos] || getCanvasTheme().orange;
   const latest = seasons && seasons.length > 0 ? seasons[seasons.length - 1] : career;
   if (!latest) return;
 
@@ -677,7 +679,7 @@ function drawRadarOnCanvas(ctx, cx, cy, R, seasons, career, pos) {
   }
 
   // Labels
-  ctx.font = "10px 'Space Mono', monospace";
+  ctx.font = "11px 'Space Mono', monospace";
   ctx.fillStyle = t.inkMedium;
   ctx.textAlign = "center";
   for (let i = 0; i < n; i++) {
@@ -754,7 +756,7 @@ function openCompareSearch() {
               '<span style="font-weight:700;">' + esc(p.full_name) + '</span> <span style="color:var(--ink-light);">' + esc(p.position || "") + ' ' + esc(p.team || "") + '</span></div>';
           }).join("");
           // Event delegation handled below (avoids listener leak per search)
-        }).catch(function() {});
+        }).catch(function(err) { console.warn("sync failed:", err.message || err); });
     }, 250);
   });
 
@@ -780,9 +782,9 @@ function openCompareSearch() {
 function copyPlayerURL() {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(window.location.href).then(() => {
-      showToast("link copied.");
+      _showToast("link copied.");
     }).catch(() => {
-      showToast("fumbled the copy — try again");
+      _showToast("fumbled the copy — try again");
     });
   } else {
     try {
@@ -794,30 +796,11 @@ function copyPlayerURL() {
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      showToast("link copied.");
+      _showToast("link copied.");
     } catch(e) {
-      showToast("fumbled the copy — try again");
+      _showToast("fumbled the copy — try again");
     }
   }
-}
-
-function showToast(msg) {
-  let toast = document.getElementById("playerToast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "playerToast";
-    toast.style.cssText = `
-      position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-      background:var(--ink); color:var(--bg); padding:10px 24px;
-      border-radius:8px; font-family:var(--font-mono); font-size:14px;
-      z-index:10000; box-shadow:4px 4px 0 var(--ink);
-      transition:opacity 0.3s; pointer-events:none;
-    `;
-    document.body.appendChild(toast);
-  }
-  toast.textContent = msg;
-  toast.style.opacity = "1";
-  setTimeout(() => { toast.style.opacity = "0"; }, 2500);
 }
 
 function esc(str) {

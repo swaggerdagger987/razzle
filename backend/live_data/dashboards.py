@@ -302,10 +302,10 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None, 
                 pts = (r[5] or 0) + adj * (r[7] or 0)
                 player_weeks[pid].append(pts)
 
-            # Compute stats for players with >= 6 games
+            # Compute stats for players with >= 10 games
             players = []
             for pid, weeks in player_weeks.items():
-                if len(weeks) < 6:
+                if len(weeks) < 10:
                     continue
 
                 info = player_info[pid]
@@ -349,8 +349,8 @@ def fetch_consistency_rankings(season=None, position=None, limit=30, week=None, 
                 percentile = rank / total * 100
                 p["grade"] = _grade_from_percentile(percentile)
 
-            # Rock Solid: lowest CoV (most consistent)
-            rock_solid = sorted(players, key=lambda x: x["cov"])[:limit]
+            # Rock Solid: lowest CoV (most consistent), tiebreak by more games
+            rock_solid = sorted(players, key=lambda x: (x["cov"], -x["games"]))[:limit]
             for i, p in enumerate(rock_solid):
                 p["annotation"] = _ROCK_SOLID_ANNOTATIONS[i % len(_ROCK_SOLID_ANNOTATIONS)]
 
@@ -400,7 +400,7 @@ _SOS_INFLATED_ANNOTATIONS = [
 ]
 
 
-def fetch_strength_of_schedule(season=None, position=None, limit=30):
+def fetch_strength_of_schedule(season=None, position=None, limit=30, scoring="ppr"):
     """Compute per-player strength of schedule using opponent PPG-allowed-by-position.
 
     For each player, look at every opponent they faced, compute the avg PPG that
@@ -417,10 +417,12 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             _season = season if season else (available_seasons[0] if available_seasons else _current_nfl_season())
 
             # Step 1: Build defense PPG-allowed-by-position grid for this season
+            adj = _scoring_factor(scoring)
             def_rows = conn.execute("""
                 SELECT s.opponent_team, p.position,
                        ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
-                       COUNT(DISTINCT s.week) as games
+                       COUNT(DISTINCT s.week) as games,
+                       COALESCE(SUM(s.receptions), 0) as total_rec
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -433,12 +435,13 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             # defense_ppg[team][position] = avg PPG allowed
             defense_ppg = {}
             for r in def_rows:
-                team, pos, total, games = r[0], r[1], r[2], r[3]
+                team, pos, total, games, total_rec = r[0], r[1], r[2], r[3], r[4]
                 if games <= 0:
                     continue
                 if team not in defense_ppg:
                     defense_ppg[team] = {}
-                defense_ppg[team][pos] = round(total / games, 2)
+                total_pts = total + adj * total_rec
+                defense_ppg[team][pos] = round(total_pts / games, 2)
 
             # League average PPG allowed per position
             league_avg = {}
@@ -456,7 +459,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             player_rows = conn.execute(f"""
                 SELECT s.player_id, p.full_name, p.position, p.headshot_url,
                        s.opponent_team, s.fantasy_points_ppr, s.week,
-                       s.team
+                       s.team, COALESCE(s.receptions, 0) as rec
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -486,7 +489,8 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
             for r in player_rows:
                 pid = r[0]
                 name, pos, headshot, opp = r[1], r[2], r[3], r[4]
-                pts, week, team = r[5] or 0, r[6], r[7] or ""
+                pts_ppr, week, team, rec = r[5] or 0, r[6], r[7] or "", r[8] or 0
+                pts = pts_ppr + adj * rec
 
                 if pid not in player_info:
                     player_info[pid] = {
@@ -570,7 +574,7 @@ def fetch_strength_of_schedule(season=None, position=None, limit=30):
                 "schedule_inflated": inflated,
             }
 
-    return _cached(f"strength_of_schedule:{season}:{position}:{limit}", _query)
+    return _cached(f"strength_of_schedule:{season}:{position}:{limit}:{scoring}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -863,7 +867,7 @@ _DOMINATOR_ANNOTATIONS = [
 ]
 
 
-def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
+def fetch_opportunity_share(season=None, position=None, limit=30, week=None, scoring="ppr"):
     """Return opportunity share leaders (alpha dogs) and dominator rating leaders.
 
     Opportunity Share = (player targets + carries) / (team targets + carries) * 100
@@ -892,6 +896,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                 params.append(_week)
 
             # Gather per-player season totals
+            adj = _scoring_factor(scoring)
             rows = conn.execute(f"""
                 SELECT s.player_id, p.full_name, p.position, p.team,
                        p.headshot_url, p.age,
@@ -903,7 +908,8 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                        COALESCE(SUM(s.rushing_tds), 0) as total_rush_tds,
                        ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_pts,
                        COUNT(DISTINCT s.week) as games,
-                       COALESCE(SUM(s.attempts), 0) as total_attempts
+                       COALESCE(SUM(s.attempts), 0) as total_attempts,
+                       COALESCE(SUM(s.receptions), 0) as total_receptions
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -965,8 +971,10 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                 rec_tds = r[9]
                 rush_yards = r[10]
                 rush_tds = r[11]
-                total_pts = r[12]
+                total_pts_ppr = r[12]
                 games = r[13]
+                receptions = r[15]
+                total_pts = round(total_pts_ppr + adj * receptions, 1)
 
                 players.append({
                     "player_id": r[0],
@@ -1045,7 +1053,7 @@ def fetch_opportunity_share(season=None, position=None, limit=30, week=None):
                 "dominators": dominators,
             }
 
-    return _cached(f"opportunity_share:{season}:{position}:{limit}:{week}", _query)
+    return _cached(f"opportunity_share:{season}:{position}:{limit}:{week}:{scoring}", _query)
 
 
 # ---------------------------------------------------------------------------
@@ -1377,7 +1385,7 @@ _AWARD_ANNOTATIONS = {
 }
 
 
-def fetch_season_awards(season=None, position=None):
+def fetch_season_awards(season=None, position=None, scoring="ppr"):
     """Fantasy Season Superlatives — data-driven awards across all metric systems.
 
     Awards: MVP (highest GPA), Most Efficient (PPO), Iron Man (lowest CoV),
@@ -1403,6 +1411,7 @@ def fetch_season_awards(season=None, position=None):
                 params.append(position.upper())
 
             # Gather weekly data per player
+            adj = _scoring_factor(scoring)
             rows = conn.execute(f"""
                 SELECT s.player_id, p.full_name, p.position, p.team,
                        p.headshot_url, p.age,
@@ -1410,6 +1419,7 @@ def fetch_season_awards(season=None, position=None):
                        s.attempts,
                        s.receiving_yards, s.receiving_tds,
                        s.rushing_yards,
+                       COALESCE(s.receptions, 0),
                        s.opponent_team, s.week
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
@@ -1433,7 +1443,8 @@ def fetch_season_awards(season=None, position=None):
             def_rows = conn.execute("""
                 SELECT s.opponent_team, p.position,
                        ROUND(COALESCE(SUM(s.fantasy_points_ppr), 0), 1) as total_ppr,
-                       COUNT(DISTINCT s.week) as games
+                       COUNT(DISTINCT s.week) as games,
+                       COALESCE(SUM(s.receptions), 0) as total_rec
                 FROM player_week_stats s
                 JOIN players p ON p.player_id = s.player_id
                 WHERE s.season = ?
@@ -1445,12 +1456,13 @@ def fetch_season_awards(season=None, position=None):
 
             defense_ppg = {}
             for r in def_rows:
-                team, pos, total, games = r[0], r[1], r[2], r[3]
+                team, pos, total, games, total_rec = r[0], r[1], r[2], r[3], r[4]
                 if games <= 0:
                     continue
                 if team not in defense_ppg:
                     defense_ppg[team] = {}
-                defense_ppg[team][pos] = round(total / games, 2)
+                total_pts = total + adj * total_rec
+                defense_ppg[team][pos] = round(total_pts / games, 2)
 
             league_avg = {}
             for pos in ("QB", "RB", "WR", "TE"):
@@ -1525,15 +1537,17 @@ def fetch_season_awards(season=None, position=None):
                         "age": r[5],
                     }
 
-                pts = r[6] or 0
+                pts_ppr = r[6] or 0
                 targets = r[7] or 0
                 carries = r[8] or 0
                 attempts = r[9] or 0
                 rec_yards = r[10] or 0
                 rec_tds = r[11] or 0
                 rush_yards = r[12] or 0
-                opp = r[13] or ""
+                receptions = r[13] or 0
+                opp = r[14] or ""
                 pos = r[2] or "RB"
+                pts = pts_ppr + adj * receptions
 
                 player_weeks[pid].append(pts)
                 d = player_opps[pid]
@@ -1806,7 +1820,7 @@ def fetch_season_awards(season=None, position=None):
                 "awards": awards,
             }
 
-    return _cached(f"season_awards:{season}:{position}", _query)
+    return _cached(f"season_awards:{season}:{position}:{scoring}", _query)
 
 
 # ---------------------------------------------------------------------------
