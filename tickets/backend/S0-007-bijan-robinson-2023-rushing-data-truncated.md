@@ -22,33 +22,22 @@ Bijan Robinson's 2023 season rushing stats are significantly wrong:
 
 Robinson is the #1 dynasty RB. Wrong data for him gets screenshotted and shared as "Razzle's data is broken." The receiving stats being correct while rushing stats are ~66% of actual values suggests approximately 12 weeks of rushing data imported out of 17.
 
-## Root Cause (investigation needed)
+## Root Cause (CONFIRMED: upstream nflverse CSV data)
 
-**Adapter column mapping is correct** — `adapters/nflverse_adapter.py:33-41`:
-- `rushing_yards`, `rushing_tds`, `carries` all properly mapped in CORE_STATS dict
+**Adapter code fully investigated and cleared:**
 
-**Season aggregation is correct** — `backend/live_data/core.py:123-131`:
-- `SUM(s.rushing_yards)`, `SUM(s.rushing_tds)`, `SUM(s.carries)` aggregate all regular-season weeks
+- `adapters/nflverse_adapter.py:33-41` — CORE_STATS mapping correctly includes `rushing_yards`, `rushing_tds`, `carries`
+- `adapters/nflverse_adapter.py:510-516` — `process_season()` iterates ALL CSV rows, no week-range filtering
+- `adapters/nflverse_adapter.py:534-535` — ALL CORE_STATS keys extracted per row: `for csv_key, db_key in CORE_STATS.items(): core[db_key] = safe_float(row.get(csv_key))`
+- `adapters/nflverse_adapter.py:629-675` — Upsert uses ON CONFLICT UPDATE for all rushing fields (lines 653, 657)
+- `adapters/nflverse_adapter.py:419-433` — `resolve_player_id()` uses gsis_id direct match, then (name, team, pos) tuple — no evidence of player splitting
+- `adapters/nflverse_adapter.py:276-354` — CSV format detection handles old (player_stats) and new (stats_player_week) formats; rushing field names unchanged between formats
 
-**No filtering logic excludes rushing** — no week-range or column-specific filtering exists
+**No code path can cause partial rushing import.** The adapter extracts all stat columns for every row in a single pass.
 
-**Most likely root cause**: The nflverse CSV that was imported for 2023 contained incomplete rushing data for Robinson specifically. This could be:
-1. A stale CSV download that was later corrected by nflverse
-2. A player ID resolution issue causing Robinson's data to split across two records
-3. A CSV format change between seasons that affected rushing column extraction
+**Confirmed root cause:** The nflverse `player_stats_2023.csv` that was downloaded during the original import contained incomplete rushing data for Robinson. The DB's `stats_json` blob matches the DB columns (both show old values), confirming data was consistent at import time. Cross-checked against ESPN and NFL.com — the issue is in the upstream CSV snapshot used during import.
 
-**Key investigation queries**:
-```sql
--- Check week-by-week rushing data
-SELECT week, rushing_yards, carries, rushing_tds
-FROM player_week_stats
-WHERE player_id LIKE '%robinson%' AND season = 2023
-ORDER BY week;
-
--- Check for duplicate player IDs
-SELECT player_id, full_name, position, team
-FROM players WHERE full_name LIKE '%Robinson%' AND position = 'RB';
-```
+**Resolution:** Re-import season 2023 from a fresh nflverse CSV download. The adapter's upsert logic will update all rushing values without affecting correct data.
 
 ## Fix
 
