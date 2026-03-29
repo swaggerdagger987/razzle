@@ -1,3 +1,13 @@
+# S2-025: SUPERSEDED by S2-024
+
+**Status**: superseded
+**Superseded by**: `tickets/design/S2-024-loading-text-overuses-pulling-film.md`
+**Reason**: Duplicate finding. S2-024 has more detail (40+ file examples, randomizer context in app.js).
+
+---
+
+*Original content below for reference:*
+
 # S2-025: Loading text "pulling film..." overused across 42 files
 
 **Severity**: S2 (Minor)

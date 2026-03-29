@@ -1,3 +1,13 @@
+# S2-026: SUPERSEDED by S2-025
+
+**Status**: superseded
+**Superseded by**: `tickets/ux/S2-025-footer-links-overwhelming-on-mobile.md`
+**Reason**: Duplicate finding. S2-025 has line numbers in index.html and CSS context.
+
+---
+
+*Original content below for reference:*
+
 # S2-026: Footer has 38 links with no mobile collapse
 
 **Severity**: S2 (Minor)

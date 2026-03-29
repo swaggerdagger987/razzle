@@ -1,3 +1,13 @@
+# S2-024: SUPERSEDED by S2-023
+
+**Status**: superseded
+**Superseded by**: `tickets/ux/S2-023-hero-150-stat-columns-claim-inflated.md`
+**Reason**: Duplicate finding. S2-023 has corrected info — actual hero text says "100+", not "150+".
+
+---
+
+*Original content below for reference:*
+
 # S2-024: Hero section claims "150+" stat columns but Lab has 87
 
 **Severity**: S2 (Minor)

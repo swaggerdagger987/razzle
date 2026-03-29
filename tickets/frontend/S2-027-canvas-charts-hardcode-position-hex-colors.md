@@ -1,3 +1,13 @@
+# S2-027: SUPERSEDED by S2-026
+
+**Status**: superseded
+**Superseded by**: `tickets/design/S2-026-canvas-charts-hardcoded-position-hex-colors.md`
+**Reason**: Duplicate finding. S2-026 has comprehensive list of 12+ hardcoded instances across charts.js, lab-panels.js, and lab.js.
+
+---
+
+*Original content below for reference:*
+
 # S2-027: Canvas charts hardcode position hex colors in 3 files
 
 **Severity**: S2 (Minor)

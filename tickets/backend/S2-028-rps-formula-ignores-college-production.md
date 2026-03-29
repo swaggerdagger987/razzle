@@ -1,3 +1,13 @@
+# S2-028: SUPERSEDED by S2-028 (prospects-rps)
+
+**Status**: superseded
+**Superseded by**: `tickets/backend/S2-028-prospects-rps-ignores-production.md`
+**Reason**: Duplicate finding with same ID. The other ticket has corrected weights (40/35/25, not 60/30/10).
+
+---
+
+*Original content below for reference:*
+
 # S2-028: Prospects RPS formula ignores college production
 
 **Severity**: S2 (Minor)
