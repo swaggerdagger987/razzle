@@ -415,22 +415,24 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
 
     placeholders = ",".join("?" * len(player_ids))
 
-    # Get per-season PPR totals for all returned players
+    # Get per-season PPG (per-game average) for all returned players
     rows = conn.execute(f"""
-        SELECT player_id, season, ROUND(SUM(fantasy_points_ppr), 1) as ppr
+        SELECT player_id, season,
+            ROUND(SUM(fantasy_points_ppr) * 1.0 / COUNT(*), 1) as ppg,
+            COUNT(*) as gp
         FROM player_week_stats
         WHERE player_id IN ({placeholders}) AND season_type = 'regular'
         GROUP BY player_id, season
         ORDER BY player_id, season
     """, player_ids).fetchall()
 
-    # Compute max YoY breakout % per player
+    # Compute max YoY breakout % per player using PPG
     seasons_by_player = {}
     for r in rows:
         pid = r[0]
         if pid not in seasons_by_player:
             seasons_by_player[pid] = []
-        seasons_by_player[pid].append({"season": r[1], "ppr": r[2] or 0})
+        seasons_by_player[pid].append({"season": r[1], "ppg": r[2] or 0, "gp": r[3] or 0})
 
     breakouts = {}
     for pid, seasons_list in seasons_by_player.items():
@@ -438,10 +440,14 @@ def _enrich_with_breakout(conn, items, season=None, career_mode=False):
         best_pct = 0
         best_season = None
         for i in range(1, len(seasons_list)):
-            prev_ppr = seasons_list[i - 1]["ppr"]
-            curr_ppr = seasons_list[i]["ppr"]
-            if prev_ppr > 20:  # minimum threshold to avoid noise
-                pct_change = ((curr_ppr - prev_ppr) / prev_ppr) * 100
+            prev = seasons_list[i - 1]
+            curr = seasons_list[i]
+            # Require 10+ games in both seasons and PPG >= 8 to avoid noise
+            if prev["gp"] < 10 or curr["gp"] < 10:
+                continue
+            if prev["ppg"] < 8:
+                continue
+            pct_change = ((curr["ppg"] - prev["ppg"]) / prev["ppg"]) * 100
                 if pct_change > best_pct:
                     best_pct = pct_change
                     best_season = seasons_list[i]["season"]
