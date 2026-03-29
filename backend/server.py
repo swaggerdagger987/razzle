@@ -461,6 +461,7 @@ async def lifespan(app):
         live_data.init_waitlist_table()
         live_data.init_formula_store_tables()
         live_data._init_analytics_table()
+        live_data.init_dynasty_snapshots_table()
     except Exception as e:
         logger.error("Startup DB init failed (server will start degraded): %s", e, exc_info=True)
     # Heavy data sync in background thread (may take minutes on cold start)
