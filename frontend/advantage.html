@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ede0cf">
+<title>Positional Advantage — Razzle</title>
+<meta property="og:title" content="Positional Advantage — Razzle">
+<meta property="og:description" content="How many PPG does each player score above their positional average? Positional advantage shows who actually gives your roster an edge.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@razzle_lol">
+<meta name="twitter:title" content="Positional Advantage — Razzle">
+<meta name="twitter:description" content="How many PPG does each player score above their positional average? See who actually gives your roster an edge.">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
+<meta name="twitter:image:alt" content="Razzle — Free Fantasy Football Research Lab">
+<meta name="description" content="Positional advantage on razzle.lol. See which players provide the biggest PPG edge over the average at their position.">
+<link rel="canonical" href="https://razzle.lol/lab.html?panel=advantage">
+<meta property="og:url" content="https://razzle.lol/lab.html?panel=advantage">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .pa-page { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+  .pa-header { text-align: center; margin-bottom: 24px; }
+  .pa-header h1 { font-family: var(--font-display); font-size: 32px; color: var(--ink); margin: 0 0 4px; }
+  .pa-header .pa-subtitle { font-family: var(--font-hand); font-size: 20px; color: var(--ink-light); }
+  .pa-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .pa-controls select { font-family: var(--font-mono); font-size: 13px; padding: 6px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
+  .pa-controls .pos-tabs { display: flex; gap: 4px; }
+  .pa-controls .pos-tab { font-family: var(--font-mono); font-size: 12px; padding: 5px 12px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .pa-controls .pos-tab.active { background: var(--ink); color: var(--bg); }
+  .pa-export { font-family: var(--font-mono); font-size: 12px; padding: 5px 14px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); cursor: pointer; font-weight: 700; }
+  .pa-export:hover { background: var(--ink); color: var(--bg); }
+  .pa-loading { text-align: center; font-family: var(--font-hand); font-size: 18px; color: var(--ink-light); padding: 60px 0; }
+
+  .pa-avgs { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .pa-avg-chip { font-family: var(--font-mono); font-size: 11px; padding: 3px 10px; border: 2px solid var(--ink); border-radius: var(--radius-sm); background: var(--bg-card); }
+  .pa-avg-chip span { font-weight: 700; }
+
+  .pa-card { background: var(--bg-card); border: 3px solid var(--ink); border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--ink); overflow: hidden; }
+  .pa-card-header { font-family: var(--font-display); font-size: 18px; padding: 10px 16px; background: var(--ink); color: var(--bg); }
+  .pa-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 12px; }
+  .pa-table th { background: var(--bg); padding: 6px 8px; text-align: right; font-size: 11px; font-weight: 700; border-bottom: 2px solid var(--ink-faint); white-space: nowrap; }
+  .pa-table th:first-child, .pa-table th:nth-child(2), .pa-table th:nth-child(3) { text-align: left; }
+  .pa-table td { padding: 6px 8px; text-align: right; border-bottom: 2px dashed var(--border-dashed); }
+  .pa-table td:first-child, .pa-table td:nth-child(2), .pa-table td:nth-child(3) { text-align: left; }
+  .pa-table tbody tr:hover { background: var(--orange-hover); }
+  .pa-rank { font-weight: 700; color: var(--ink-light); font-size: 11px; }
+  .pa-pos-badge { font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: var(--radius-sm); color: var(--text-on-accent); }
+  .pa-adv-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-sm); border: 2px solid; }
+  .pa-adv-pos { background: var(--semantic-green-light); color: var(--semantic-green); border-color: var(--semantic-green); }
+  .pa-adv-neg { background: var(--semantic-red-light); color: var(--semantic-red); border-color: var(--semantic-red); }
+  .pa-bar { display: inline-block; height: 10px; border-radius: var(--radius-sm); vertical-align: middle; margin-left: 4px; }
+  /* .pa-empty removed — uses .panel-empty from styles.css */
+  @media (max-width: 768px) { .pa-table { font-size: 11px; } }
+</style>
+</head>
+<body>
+<noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#2d1f14;"><h2>Razzle needs JavaScript</h2><p>Enable JavaScript to use the fantasy football research lab.</p></div></noscript>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav class="topnav" aria-label="Main navigation">
+  <a href="/" class="logo">
+    <div class="logo-mark">🐯</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/pricing.html">Pricing</a></li>
+  </ul>
+  <div class="nav-auth" id="nav-auth">
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
+  </div>
+</nav>
+
+<main class="pa-page" id="main-content">
+  <div class="pa-header">
+    <h1>Positional Advantage</h1>
+    <div class="pa-subtitle">biggest scoring edge over the positional average</div>
+  </div>
+
+  <div class="pa-controls">
+    <select id="paSeason" aria-label="Season"></select>
+    <div class="pos-tabs" role="tablist" aria-label="Position filter">
+      <button class="pos-tab active" role="tab" aria-selected="true" data-pos="">ALL</button>
+      <button class="pos-tab" role="tab" aria-selected="false" data-pos="QB">QB</button>
+      <button class="pos-tab" role="tab" aria-selected="false" data-pos="RB">RB</button>
+      <button class="pos-tab" role="tab" aria-selected="false" data-pos="WR">WR</button>
+      <button class="pos-tab" role="tab" aria-selected="false" data-pos="TE">TE</button>
+    </div>
+    <button class="pa-export" id="paExport">Export PNG</button>
+  </div>
+
+  <div id="paAvgs"></div>
+
+  <div id="paContent" role="status" aria-live="polite" style="overflow-x:auto">
+    <div class="pa-loading">measuring positional edges...
+      <div class="skeleton-cards"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <nav aria-label="Footer" class="site-footer-grid">
+
+    <div>
+      <div class="site-footer-heading">Razzle</div>
+      <ul>
+        <li><a href="/" class="footer-link">Home</a></li>
+        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
+        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
+        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
+        <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
+        <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
+        <li><a href="/about.html" class="footer-link">About</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="site-footer-heading">Dynasty</div>
+      <ul>
+        <li><a href="/rankings.html" class="footer-link">Rankings</a></li>
+        <li><a href="/tradevalues.html" class="footer-link">Trade Values</a></li>
+        <li><a href="/tradefinder.html" class="footer-link">Trade Finder</a></li>
+        <li><a href="/tiers.html" class="footer-link">Tiers</a></li>
+        <li><a href="/vorp.html" class="footer-link">VORP</a></li>
+        <li><a href="/aging.html" class="footer-link">Aging Curves</a></li>
+        <li><a href="/buysell.html" class="footer-link">Buy/Sell</a></li>
+        <li><a href="/archetypes.html" class="footer-link">Archetypes</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="site-footer-heading">Weekly</div>
+      <ul>
+        <li><a href="/weekly.html" class="footer-link">Weekly Stats</a></li>
+        <li><a href="/weeklyleaders.html" class="footer-link">Week Leaders</a></li>
+        <li><a href="/weeklymvp.html" class="footer-link">Weekly MVP</a></li>
+        <li><a href="/matchups.html" class="footer-link">Matchups</a></li>
+        <li><a href="/waivers.html" class="footer-link">Rising Players</a></li>
+        <li><a href="/schedule.html" class="footer-link">Schedule</a></li>
+        <li><a href="/stocks.html" class="footer-link">Stocks</a></li>
+        <li><a href="/playoffs.html" class="footer-link">Playoffs</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="site-footer-heading">Analytics</div>
+      <ul>
+        <li><a href="/targets.html" class="footer-link">Targets</a></li>
+        <li><a href="/usage.html" class="footer-link">Usage</a></li>
+        <li><a href="/efficiency.html" class="footer-link">Efficiency</a></li>
+        <li><a href="/airyards.html" class="footer-link">Air Yards</a></li>
+        <li><a href="/redzone.html" class="footer-link">Red Zone</a></li>
+        <li><a href="/consistency.html" class="footer-link">Consistency</a></li>
+        <li><a href="/breakouts.html" class="footer-link">Breakouts</a></li>
+        <li><a href="/opportunity.html" class="footer-link">Opportunity</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="site-footer-heading">Tools</div>
+      <ul>
+        <li><a href="/explorer.html" class="footer-link">Stat Explorer</a></li>
+        <li><a href="/compare.html" class="footer-link">Compare</a></li>
+        <li><a href="/rosterbuilder.html" class="footer-link">Roster Builder</a></li>
+        <li><a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a></li>
+        <li><a href="/auction.html" class="footer-link">Auction Values</a></li>
+        <li><a href="/dashboard.html" class="footer-link">Dashboard</a></li>
+        <li><a href="/prospects.html" class="footer-link">Prospects</a></li>
+      </ul>
+    </div>
+
+  </nav>
+  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
+  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
+</footer>
+
+<script src="app.js" defer></script>
+<script>
+(function() {
+  'use strict';
+
+
+  function fmt(v, dec) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(dec === undefined ? 1 : dec);
+  }
+
+  var POS_COLORS = getPosColors();
+  var currentPosition = '';
+
+  function readURL() {
+    return restorePageState({ season: '', pos: '' });
+  }
+  function writeURL(season, pos) {
+    savePageState({ season: season, pos: pos });
+  }
+
+  function load() {
+    var selSeason = document.getElementById('paSeason');
+    var season = selSeason.value || '';
+    var pos = currentPosition;
+    writeURL(season, pos);
+
+    var url = '/api/positional-advantage?';
+    if (season) url += 'season=' + encodeURIComponent(season) + '&';
+    if (pos) url += 'position=' + encodeURIComponent(pos) + '&';
+
+    document.getElementById('paContent').innerHTML = '<div class="pa-loading">' + razzleLoading() + '</div>';
+    document.getElementById('paAvgs').innerHTML = '';
+
+    fetch(url).then(function(r) {
+      if (!r.ok) throw new Error('API error');
+      return r.json();
+    }).then(function(data) {
+      populateSeasons(data.season);
+      renderAvgs(data.pos_averages);
+      render(data);
+    }).catch(function() {
+      document.getElementById('paContent').innerHTML = '<div class="panel-error">' + razzleError() + '<br><button class="btn-chunky" onclick="location.reload()">retry</button></div>';
+    });
+  }
+
+  function populateSeasons(current) {
+    var sel = document.getElementById('paSeason');
+    if (sel.options.length <= 1) {
+      sel.innerHTML = '';
+      var now = new Date();
+      var latestSeason = now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
+      for (var y = latestSeason; y >= 2015; y--) {
+        var opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        if (y === current) opt.selected = true;
+        sel.appendChild(opt);
+      }
+    }
+  }
+
+  function renderAvgs(avgs) {
+    if (!avgs) return;
+    var html = '<div class="pa-avgs">';
+    var positions = ['QB', 'RB', 'WR', 'TE'];
+    for (var i = 0; i < positions.length; i++) {
+      var pos = positions[i];
+      var color = POS_COLORS[pos] || _cs.getPropertyValue('--ink-light').trim() || '#8a7565';
+      html += '<div class="pa-avg-chip"><span style="color:' + color + '">' + escapeHtml(pos) + '</span> avg: ' + escapeHtml(String(fmt(avgs[pos]))) + ' PPG</div>';
+    }
+    html += '</div>';
+    document.getElementById('paAvgs').innerHTML = html;
+  }
+
+  function render(data) {
+    var players = data.players || [];
+
+    if (!players.length) {
+      document.getElementById('paContent').innerHTML = '<div class="pa-card"><div class="pa-card-header">Positional Advantage</div><div class="panel-empty">' + razzleEmpty() + '<span class="hint">try a different position or season</span></div></div>';
+      return;
+    }
+
+    var html = '<div class="pa-card">';
+    html += '<div class="pa-card-header">Positional Advantage (' + escapeHtml(String(data.count)) + ' players)</div>';
+    html += '<table class="pa-table"><caption class="sr-only">Positional advantage rankings by fantasy points above position average</caption><thead><tr>';
+    html += '<th scope="col">#</th><th scope="col">Player</th><th scope="col">Pos</th><th scope="col">PPG</th><th scope="col">Pos Avg</th><th scope="col">Edge</th><th scope="col">% Above</th><th scope="col"></th><th scope="col">GP</th>';
+    html += '</tr></thead><tbody>';
+
+    var maxAdv = Math.max.apply(null, players.map(function(p) { return Math.abs(p.advantage); }).concat([1]));
+
+    for (var i = 0; i < players.length; i++) {
+      var p = players[i];
+      var posColor = POS_COLORS[p.position] || _cs.getPropertyValue('--ink-light').trim() || '#8a7565';
+      var sign = p.advantage > 0 ? '+' : '';
+      var badgeClass = p.advantage >= 0 ? 'pa-adv-pos' : 'pa-adv-neg';
+      var barWidth = Math.max(2, Math.round(Math.abs(p.advantage) / maxAdv * 80));
+      var barColor = p.advantage >= 0 ? (_cs.getPropertyValue('--green').trim() || '#2ec4b6') : (_cs.getPropertyValue('--orange').trim() || '#d97757');
+
+      html += '<tr>';
+      html += '<td class="pa-rank">' + (i + 1) + '</td>';
+      html += '<td>' + escapeHtml(p.name) + ' <span style="font-size:11px;color:var(--ink-light)">' + escapeHtml(p.team) + '</span></td>';
+      html += '<td><span class="pa-pos-badge" style="background:' + posColor + '">' + escapeHtml(p.position) + '</span></td>';
+      html += '<td style="font-weight:700">' + escapeHtml(String(fmt(p.ppg))) + '</td>';
+      html += '<td>' + escapeHtml(String(fmt(p.pos_avg))) + '</td>';
+      html += '<td><span class="pa-adv-badge ' + badgeClass + '">' + sign + escapeHtml(String(fmt(p.advantage))) + '</span></td>';
+      html += '<td>' + sign + escapeHtml(String(fmt(p.pct_above, 0))) + '%</td>';
+      html += '<td><div class="pa-bar" style="width:' + barWidth + 'px;background:' + barColor + '"></div></td>';
+      html += '<td>' + escapeHtml(String(p.games)) + '</td>';
+      html += '</tr>';
+    }
+
+    html += '</tbody></table></div>';
+    document.getElementById('paContent').innerHTML = html;
+  }
+
+  document.querySelectorAll('.pos-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.pos-tab').forEach(function(b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected', 'true');
+      currentPosition = btn.getAttribute('data-pos') || '';
+      load();
+    });
+  });
+
+  document.getElementById('paSeason').addEventListener('change', load);
+
+  document.getElementById('paExport').addEventListener('click', function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
+    var root = document.getElementById('main-content');
+    loadHtml2Canvas().then(function(h2c) { return h2c(root, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2 }); }).then(function(canvas) {
+      var ctx = canvas.getContext('2d');
+      ctx.font = "600 24px Caveat, cursive";
+      ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.15)' : 'rgba(45,31,20,0.12)';
+      ctx.fillText('razzle.lol', canvas.width - 130, canvas.height - 16);
+      var link = document.createElement('a');
+      link.download = 'razzle-advantage.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }).finally(function() { btn.disabled = false; btn.textContent = 'Export PNG'; });
+  });
+
+  fetch('/api/analytics/pageview', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: '/advantage.html', referrer: document.referrer || '' })
+  }).catch(function() {});
+
+  var init = readURL();
+  if (init.pos) {
+    currentPosition = init.pos;
+    document.querySelectorAll('.pos-tab').forEach(function(b) {
+      b.classList.toggle('active', (b.getAttribute('data-pos') || '') === init.pos);
+    });
+  }
+  if (init.season) {
+    var sel = document.getElementById('paSeason');
+    var opt = document.createElement('option');
+    opt.value = init.season;
+    opt.textContent = init.season;
+    opt.selected = true;
+    sel.appendChild(opt);
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>

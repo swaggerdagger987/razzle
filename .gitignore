@@ -39,22 +39,6 @@ users.db
 .pytest_cache/
 =*
 
-# QA artifacts (regenerable)
-functional-qa/tmp_*.json
-functional-qa/screenshots/
-
-# Data caches (regenerable)
-data/reddit/
-data/.fuse_hidden*
-
-# Twitter runtime
-twitter/.scheduler*
-
-# Legacy (deleted, prevent re-creation)
-designer-tickets/
-designer-screenshots/
-designer-state.json
-
 # Claude
 .claude/
 data/terminal.db-shm

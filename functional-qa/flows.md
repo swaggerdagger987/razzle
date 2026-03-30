@@ -1,0 +1,141 @@
+# Razzle Functional QA — Flow Checklist
+
+> Each flow is one "experiment." The agent audits flows in order, marks them DONE, and moves on.
+> The human can reorder, add, or remove flows at any time. The agent respects the list.
+
+## Status Key
+- `PENDING` — not yet audited
+- `IN_PROGRESS` — agent is currently auditing
+- `DONE` — audited, results logged to results.tsv
+- `SKIP` — intentionally skipped (with reason)
+
+---
+
+## Group 1: Core Screener (the money features — test these like your league depends on it)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 1 | Landing -> Lab | CTA click, initial data load, screener populates with real player data | RE-AUDIT SESSION 74 — PASS. 0 JS errors, 475 cells, 0 NaN/Infinity/undefined/null. Ship Loop sweeps verified: formatStat NaN guard, note editor XSS (escapeHtml on title), resize listener cleanup, parseInt fallbacks in app.js cmd palette. Multi-filter RB+PPR>=250 returns MCF(416.6)/Bijan(370.8)/Gibbs(366.9)/Taylor(362.3)/Achane(322.8). Fantasy point formulas verified: PPR-STD=receptions, HPPR=(PPR+STD)/2. 59/59 tests pass. |
+| 2 | Screener: Position filter | Filter QB/RB/WR/TE individually. Count matches. Remove filter. Table resets? | RE-AUDIT SESSION 48 — FUNC-047 FIXED on prod. Goff=DET, Barkley=PHI, McCaffrey=SF all correct. POST screener teams=["DET"] returns 5 DET players (Gibbs, Montgomery). Adapter 406e6a3 adds per-row team UPDATE + bulk refresh from latest game data. Position filter continues to pass. |
+| 3 | Screener: Multi-filter | Chain 3 filters (pos + team + min stat). Results are the correct intersection? | RE-AUDIT SESSION 48 — FUNC-047 fixed. Team filter now returns correct players on prod. Multi-filter with team should be reliable post-deploy. |
+| 4 | Screener: Sort | Sort every stat column. #1 player is actually the leader? Reverse sort works? | RE-AUDIT SESSION 64 — FUNC-042 FIXED. GET /api/players sort=target_share now correctly returns target_share order (JSN 0.368 > Wilson 0.354 > Chase 0.321 > StBrown 0.317 > Jefferson 0.307). POST screener also sorts correctly. Both endpoints verified. |
+| 5 | Screener: Search | Search "Mahomes", "McCaffrey", "Amon-Ra". Results correct? Clear resets? | RE-AUDIT SESSION 24 — PROD PASS. Ship Loop fix deployed: re.sub(r"[^a-z0-9]", "") strips apostrophes/hyphens/periods before search_name LIKE. Prod: quick_search("Ja'Marr")=Chase, quick_search("Amon-Ra")=St.Brown, quick_search("D'Andre")=Swift. All 3 endpoints (quick_search, fetch_players, screener_query) strip correctly. |
+| 6 | Screener: Season switch | Switch 2025 -> 2024 -> 2023. Data actually changes? Stat values match that season? | RE-AUDIT SESSION 75 — PASS. Ship Loop parseInt fallback (|| _nflYear) verified in lab.js:2934. API: 2024=1997 players, 2025=2019 players. Different data confirmed. CMC 2025 PPR=416.6, Lamar 2024 PPR=430.4. No regressions. |
+| 7 | Screener: Week filter | Select Week 1. Stats are single-week, not season totals? Switch back to All Weeks. | RE-AUDIT SESSION 34 — CODE FIX VERIFIED. core.py:497-500 returns early when week>0 (skips PBP enrichment). FUNC-031: PBP table has 0 rows locally so leak is moot. Core stats (passing_yards, rushing_yards) filter correctly by week. Fix awaits deploy (FUNC-030). |
+| 8 | Screener: Universe toggle | NFL -> College -> Prospects -> NFL. Correct data loads? Wrong-universe panels hide? | RE-AUDIT SESSION 73 — PASS. NFL=610, College=4148, Prospects=319. All universes load with 0 JS errors, 0 NaN cells. College: "Total Yds ↓ · 2025 · QB:25". Prospects: "Pick ↑ · 2026 Draft · QB:4 RB:1 WR:5 TE:1". |
+| 9 | Screener: Column picker | Add/remove columns. Presets load correct column sets? Custom columns persist? | RE-AUDIT SESSION 60 — PASS. 87 columns, 8 presets (PPR/Passing/Rushing/Receiving/Dynasty/Dynasty Rankings/Efficiency/Advanced), presetSelect dropdown visible and working, column picker modal opens with grouped checkboxes. Ship Phases A-G did not regress column picker. 0 JS errors. |
+| 10 | Screener: Pin player | Pin a row. Survives sort? Survives filter? Unpin works? Multiple pins? | RE-AUDIT SESSION 66 — PASS. escapeJS hex escape hardening verified (app.js: \\x27/\\x22/\\x3c/\\x3e/\\x26 instead of \\'/\\"). 42 call sites across 4 files (app.js, lab.html, lab.js, league-intel.html). Lab 0 JS errors, 25 pin cells rendered, 25 rank cells. Player IDs alphanumeric — hex escaping is no-op for normal data but protects against injection. |
+| 11 | Screener: Pagination | Next/prev pages. Data advances? Page count correct? Sort persists across pages? | RE-AUDIT SESSION 60 — PASS. Page 1 "1-25 of 610", page 2 "26-50 of 610" with rank #26 first. Prev returns to page 1 exactly. Sort (PPR desc) persists across pages. Position breakdowns change per page (QB:11/RB:8/WR:5/TE:1 → QB:8/RB:8/WR:9). 0 JS errors. |
+| 12 | Screener: URL state | Apply filters + sort + columns + season + week. Share URL. State restores exactly? | DONE — PASS. Code+UI verified. 24 call sites, all state serialized. |
+
+## Group 2: Player Deep Dives (where trade decisions happen)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 13 | Player profile: NFL | Click a player name. Profile loads? Stats match screener row? Season selector works? | RE-AUDIT SESSION 72 — PASS. Ship Loop app.js escapeHtml(String(p.age)) fix verified. Age is float (30.5) from API. Mahomes profile loads with stats, radar chart, career arc. 0 JS errors. |
+| 14 | Player profile: Career stats | Career numbers add up across seasons? Per-game averages calculated correctly? | RE-AUDIT SESSION 47 — FUNC-046 FIXED. Ship Loop e0c4a3c added round(..., 1) to career sum in players.py:743. McCaffrey fantasy_points_std now 1889.3 (was 1889.2999999999997). Chase fantasy_points_ppr now 1526.3 (was 1526.3000000000002). Allen 2825.9 clean. 0 IEEE 754 artifacts in 3 tested profiles. |
+| 15 | Player profile: Game log | Individual game stats shown? Sum of game log = season total? Week numbers correct? | DONE — SESSION 12 VERIFIED. FUNC-012 DEPLOYED. Prod: Lamar 2024 game log=17 weeks (1-18 only), 17 GP. |
+| 16 | Player comparison | Compare 2 players. Stats aligned? Same season? Difference calculations correct? | RE-AUDIT SESSION 76 — FUNC-069 FIXED (ffc88e0). player.js:750 now reads `data.items || data.players || []`. API /api/players returns {items:[...]}. Compare search in profile modal functional. Event delegation listener leak fix also verified. |
+| 17 | Player charts | Radar/scatter/trend for a player. Data matches profile? Axes labeled correctly? | RE-AUDIT SESSION 73 — PASS. Ship Loop charts.js escapeAttr fix verified. formatStat NaN guard now protects chart stat displays. 0 JS errors on Lab. |
+
+## Group 3: Dynasty & Trade Tools (the stuff people pay for)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 18 | Dynasty Rankings | Rankings load? Sortable? Position filter? Do rankings reflect age + production reality? | RE-AUDIT SESSION 72 — PASS. Ship Loop escapeHtml(String(p.age)) in 7 panels verified. Rankings: 200 cards, Tier 1 Elite correct. Trade Values: 150 cards. Breakouts: 50 cards. All 0 JS errors. |
+| 19 | Trade Values | Values load? Positional adjustment? Do elite young WRs > aging vets? Sensible tiers? | RE-AUDIT SESSION 67 — PASS. Ship Loop falsy-zero fix verified: games field uses `!= null` check (tradevalues.html:590). Page renders 100+ player cards, 0 JS errors. Top-30 TE compression and overvaluation remain known P2s from S55. |
+| 20 | Trade Finder | Suggest trades? Values make sense? Not suggesting obviously lopsided deals? | RE-AUDIT SESSION 67 — PASS. Ship Loop falsy-zero fix verified: games field uses `!= null` check (tradefinder.html:809). Pro-gated, code correct. Previous API verification (S60) still valid. |
+| 21 | Tiers | Tiers load? Players grouped sensibly? Tier breaks at reasonable spots? | RE-AUDIT SESSION 54 — PASS. Ship Loop null guard (tier.players || []) verified. 6 tiers, 390 player chips, 0 JS errors. P2 S-tier still bloated (84 players). |
+| 22 | Aging Curves | Chart renders? Shows realistic age-based decline? Peak age correct per position? | RE-AUDIT SESSION 70 — PASS. Ship Loop sweep (Mar 21) canvas dark mode fixes verified: lab.js aging curve uses data.players || [] guard (line 9535) and maxPPG filter+fallback (line 9534). aging.html 0 JS errors. No regressions. |
+| 23 | Career Compare | Multi-player career overlay? Same scale? Correct seasons aligned? | RE-AUDIT SESSION 75 — PASS. Ship Loop NaN fallbacks verified (parseInt data-rm || 0, parseInt data-slot || 0). Defensive only — slot values always 0/1/2. Line 529 uses Array.isArray(data) ? data : (data.players || []) for quick-search — safe (returns array). 0 JS errors. 5 broken NFL headshot images (CDN, not ours). |
+
+## Group 4: In-Season Tools (weekly grind features)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 24 | Cheat Sheet | Loads? Sortable? Position ranks correct? Matches screener sort order? | RE-AUDIT SESSION 20 — PASS. FUNC-016 FIXED in code: inline onclick replaced with data-pid + addEventListener pattern (matching matchups.html fix). Pending deploy. |
+| 25 | Weekly Heatmap | Loads? Week selector works? Colors match stat intensity? | RE-AUDIT SESSION 13 — PASS. 2025 data: weeks 1-18 only (FUNC-012 holding). Allen 16GP, Stafford 17GP. |
+| 26 | Weekly Leaders | Loads? Leaders match that week's actual stat leaders? Category switch works? | RE-AUDIT SESSION 67 — PASS. Ship Loop falsy-zero fix verified: 9 stat fields (pass_yd/td, rush_yd/td, rec, rec_yd/td, tgt, fantasy_points) all use `!= null` check in both standalone (weeklyleaders.html:535-547) and Lab panel (lab-panels.js:4249-4260). QBs return rec=0/tgt=0 from API — now displays "0" not "-". Pro-gated standalone, code-verified. |
+| 27 | Matchups | Loads? Correct matchups for selected week? Opponent data shown? | RE-AUDIT SESSION 17 — PASS. Post Session 18 XSS fix (data-pid + addEventListener replaces inline onclick). 32 teams in API. Pro-locked panel correctly gated. Font-display fix applied to table headers. 0 JS errors. |
+| 28 | Stacks | QB-WR/TE stacks shown? Correlation data makes sense? | RE-AUDIT SESSION 59 — PASS. min_games=8 working locally (Mahomes+Rice r=0.859, 8 games). Pearson correlation math verified in tools.py:2069-2076. Prod still old code (min_games=5, Flacco+Whiteheart). Panel Pro-gated, 0 JS errors, 27 rows rendered. P2: low-value stacks dominate top (Jones+AlieCox 1.4 PPG receiver at #3). |
+| 29 | Breakouts | Candidates shown with data? Breakout criteria visible and reasonable? | RE-AUDIT SESSION 75 — PASS. Ship Loop parseFloat NaN fallbacks verified (|| 0 on opportunity_pct and production_pct bar widths in breakouts.html:593,597). 0 JS errors, 23 table rows rendered. No regressions. |
+| 30 | Waivers | Waiver targets shown? FAAB values if applicable? Sorted by priority? | DONE — PASS (30 targets, delta math correct, 4-week window). P2: no ownership data, so "waivers" are just trending-up players (Bryce Young #1 = rostered everywhere). No FAAB values. |
+| 31 | Streaks | Hot/cold streaks identified? Based on recent weeks, not season aggregate? | RE-AUDIT SESSION 59 — PASS. 25 hot + 25 cold streaks, local=prod. Lawrence hot (+10.6 PPG, recent=30.5 vs season=19.9). Flacco cold (-8.5 PPG). 0 null scores. 0 JS errors, 27 rows. No regressions from import/ROUND sweeps. |
+
+## Group 5: Advanced Analytics Panels (the nerd stuff — has to be right)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 32 | Target Share / Air Yards | Values are percentages that sum correctly per team? WOPR calculated right? | RE-AUDIT SESSION 49 — FUNC-050 FIXED. Ship Loop d697403 corrected: `air_yard_pct`→`air_yards_share` (with *100 display, line 5431), `games_played`→`games` (lines 5310, 5436). Code verified. Panel Pro-gated so browser verification deferred. API returns correct data (air_yards_share=0.249 for Thornton). WOPR/RACR/aDOT fields unchanged and correct. |
+| 33 | Snap Efficiency | Snap % shown? Fantasy points per snap derived correctly? | RE-AUDIT SESSION 60 — PASS. 50 players, 0 nulls, 0 outliers. Nacua pts/snap=0.52 (23.6 PPG / 45.4 snaps/g = 0.52 verified). 25 rows rendered in panel, 0 JS errors. P2 persists: no min snap threshold (Mitchell 7.8 snaps/g at #1 with 0.73 pts/snap, inflated by low volume). |
+| 34 | Red Zone | RZ targets/carries shown? RZ stats don't include non-RZ plays? | RE-AUDIT SESSION 59 — PASS. Prod: 30 dominators (Henry 27 GL carries, 10 GL TDs; Taylor 24/9; McCaffrey 20/12). td_dependent math verified: Heyward 65.7% (3TD×6pts / 27.4 total). Local: 0 dominators (PBP empty, known). Code clean: get_db(), ROUND(), null guards. No regressions from sweeps. |
+| 35 | Opportunity Share | Opportunity = targets + carries? Per-team shares sum to ~100%? | RE-AUDIT SESSION 70 — PASS. Ship Loop QB PPO fix verified: QBs now use pass_attempts+carries (dashboards.py:988, dynasty.py:598, college.py:559). Allen total_opps=572 (460att+112car), Maye=595 (492att+103car). All correct. 0 JS errors on panel. |
+| 36 | Efficiency metrics | YPC, YPR, YPT calculated correctly from raw stats? Not showing NaN/Infinity for 0 attempts? | RE-AUDIT SESSION 68 — FUNC-066 FIXED. Ship Loop f3726b5 unified _efficiency_grade in core.py to canonical 8-tier (A+/A/B+/B/C+/C/D/F) matching dashboards.py. College imports from core (no duplicate). Cross-endpoint verified: MCF eff=B+ in both efficiency-rankings and report-cards. Buy-sell uses _efficiency_grade (A+/D). Consistency, stock-watch, college all 8-tier. 0 invalid grades across 9 checked endpoints. |
+| 37 | Regression candidates | TD regression logic sound? Flagging high-TD players with low expected TDs? | RE-AUDIT SESSION 66 — PASS. Ship Loop regression.html overflow-x fix verified (line 138). Prod data: 50 positive + 50 negative regression candidates. Stafford 46 actual vs 29.5 expected (+16.5 diff) #1 negative regression. Ward 17 vs 27.3 expected (-10.3) #1 positive. Algorithm uses league-avg TD rate × opportunities. 0 JS errors, 23 table rows. |
+| 38 | Garbage Time | Identified correctly? Based on game script, not arbitrary cutoff? | RE-AUDIT SESSION 59 — PASS. Code verified: ppg>=5 stat padders, ppg>=8 clean producers (lines 1733-1736). Local: 0 results (PBP empty, known). Prod: 40+40 but old code (no ppg filter, known deployment gap — Mullens ppg=-0.0 showing). No regressions from import hoisting sweeps. |
+| 39 | Gamescript | Game script data per player? Shows performance in various score differentials? | RE-AUDIT SESSION 37 — PASS. API returns positive_script (avg_diff>0) + negative_script (avg_diff<0). Lamar 25.3 PPG (positive, avg_diff=1.4). Classifies by team avg score differential, not per-player splits. Data correct. GT% present. |
+| 40 | Dual Threat | QB rushing + passing combined? RB receiving + rushing? Correct dual-threat metrics? | RE-AUDIT SESSION 67 — PASS. Ship Loop CSS+export fix verified: hover bg=var(--bg-warm), DTI mid-badge uses clean CSS vars (no fallbacks), export bg uses dataset.theme dark check. Code correct. DTI math unchanged from S60. P2: QBs absent (DTI=rush+rec, not pass+rush). |
+| 41 | Consistency | Week-to-week consistency calculated? Boom/bust rates make sense? | RE-AUDIT SESSION 62 — PASS. Ship Loop boom/bust null guards verified: floor_ppg, ceiling_ppg, median_ppg, boom_rate, bust_rate all `|| 0` in drawBoomBustRangeBar and exportBoomBustImage (lab.js). Defensive only — API returns non-null for tested players. Code safe: `|| 0` on float doesn't trigger on 0.0. P2 pre-existing: single-season players (CoV=0.0) dominate Rock Solid. |
+| 42 | Workload | Snap counts + touches trending? Workload share within team correct? | RE-AUDIT SESSION 59 — PASS. Prod: McCaffrey #1 (workload=106, snap_pct=83.1), Taylor #2 (97), Robinson #3 (95). Local: stale teams (McCaffrey=CAR, Barkley=NYG) and null snaps — FUNC-058 adapter fix not applied to local DB. 0 JS errors, 27 rows. No regressions from dashboards.py sweeps. |
+| 43 | VORP | Value over replacement calculated? Replacement level defined per position? Sensible? | RE-AUDIT SESSION 67 — PASS. Ship Loop falsy-zero fix verified: pos_rank uses `!= null` check (vorp.html:495). Pro-gated, code correct. No players in current data have pos_rank=0 or null. |
+| 44 | Scoring breakdown | Fantasy point sources broken down correctly? Passing + rushing + receiving = total? | RE-AUDIT SESSION 59 — PASS. McCaffrey hand-verified: STD=1202×0.1+10×6+924×0.1+7×6=314.6✓, PPR=314.6+102=416.6✓, HPPR=(416.6+314.6)/2=365.6✓, PPG=416.6/17=24.5✓, YPC=1202/311=3.9✓. QB PPR=STD (0 recs). 10 WRs + 5 QBs checked, 0 formula errors. ROUND sweep did not break calculations. |
+
+## Group 6: Draft & Prospects (draft season critical path)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 45 | Big Board | Prospects ranked? Positional filter? Athletic data shown? | RE-AUDIT SESSION 67 — PASS. Ship Loop falsy-zero fix verified: prospect rank uses `!= null` check (lab-panels.js:8132). prospects.html renders 319 cards, ranks showing #1 #2 correctly. 0 JS errors. |
+| 46 | Draft Class | Aggregate class metrics? Per-position breakdown? | RE-AUDIT SESSION 62 — PASS. Ship Loop avg_rps null guard verified: `(cls.avg_rps || 0).toFixed(1)` in 3 places (lab.js chart rendering + export). draftclass.html 5 canvases, 0 JS errors. Guard is defensive only. |
+| 47 | Prospect profiles | Click a prospect. Combine data correct? College stats shown? | SKIP — /api/prospect-profiles returns 404. No dedicated endpoint. Prospect data available via /api/prospect-scores (Big Board, flow 45). |
+| 48 | Mock Draft Board | Board loads? Picks assignable? Trade pick functionality? | SKIP — /api/mock-draft returns 404. Not implemented. |
+| 49 | Prospect Radar | Athletic measurables visualized? Percentiles correct? Comparison works? | SKIP — /api/prospect-radar returns 404. Not implemented. |
+
+## Group 7: Tools & Export (the utility belt)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 50 | Custom Scoring | Change scoring weights. Screener recalculates? Values change appropriately? | SKIP — /api/custom-scoring returns 404. Not implemented as API endpoint. May be frontend-only. UI blocked by FUNC-001. |
+| 51 | Saved Views | Save a view. Reload page. Load the view. Exact state restored? | RE-AUDIT SESSION 24 — CODE PASS. Session 24 fix: 7 additional fields now persisted in save/load cycle: week, teams, minGP, tierBreaks, groupHeaders, summaryBar, tagFilter. Save (lab.js:4144-4150) and load (lab.js:4202-4208) both handle all fields with undefined guards. Max 20 enforced. Cloud sync for Pro. Delete with confirm. |
+| 52 | Formula Builder | Create a formula. Calculates? Appears as column? Math correct? | RE-AUDIT SESSION 73 — PASS. Ship Loop formulas.js XSS fix verified: _esc(desc) on formula description. Both name and description now escaped with _esc fallback. Formulas button present, 0 JS errors. |
+| 53 | Formula Store | Browse formulas. Install one. It works? Shows in column picker? | RE-AUDIT SESSION 43 — PASS. Ship Loop c613fc6 XSS fix verified: search input value="" now uses escapeAttr (escapes ") instead of escapeHtml. 10 seed formulas, no special chars in names. No regressions from fix. |
+| 54 | Export PNG | Exports an image? Contains visible data? Watermark present? | RE-AUDIT SESSION 67 — PASS. Ship Loop dark mode export + watermark font sweep verified. All 60+ html2canvas calls use `dataset.theme==='dark'?'#2d1f14':'#ede0cf'` — no remaining getComputedStyle patterns. 0 remaining sans-serif watermark fonts (4 files fixed to bold 28px Space Mono). Pre-existing P2: watermark font inconsistency (Caveat vs Space Mono) across different pages. |
+| 55 | Export CSV | Downloads a CSV? Columns match what's on screen? Data correct? | DONE — PASS. Pro-gated with upgrade toast+link. Includes branding header, Player/POS/Team + all visible columns, csvEscape for special chars, BOM prefix for Excel compat. Descriptive filename (position-season-date). URL.revokeObjectURL cleanup. Toast with row count. Also available in Share modal. 0 JS errors. |
+| 56 | Share URL | Copy URL. Open fresh. Exact same view restored? | DONE — Code+UI PASS (flow 12). FUNC-001 fixed, URL state verified. |
+
+## Group 8: Navigation & Platform (the shell around the data)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 57 | Sidebar navigation | Every sidebar item loads its panel? No dead links? Category headers correct? | RE-AUDIT SESSION 71 — PASS. 73 sidebar items rendered. Free panels at top, Pro panels with locks. 0 JS errors. No regressions from Ship Loop parseInt sweep. |
+| 58 | Command palette (Ctrl+K) | Opens? Finds panels by name? Finds players? Selection navigates correctly? | DONE — PASS. Opens via nav button, search input focused, "Search players... (Ctrl+K)" placeholder. Browser-verified on prod. |
+| 59 | Dark mode | Every element switches? Data readable in dark? Charts visible? No white flashes? | RE-AUDIT SESSION 27 — PASS. Ship Loop Session 25-26 dark mode fixes verified: heat colors (isDark branch, higher opacity), 29 panel hover tints (0.18 opacity), modal overlays (rgba(0,0,0,...)). Lab and landing page screenshots clean. Espresso palette, readable text, no white flashes. |
+| 60 | Auth flow | Sign in modal opens? Closes cleanly? Error states for bad input? | RE-AUDIT SESSION 58 — PASS. Ship Loop app.js: localStorage operations in apiFetch 401 handler and checkAuth wrapped in try-catch (lines 516, 970, 975). Defensive for quota-exceeded/blocked-storage edge cases. Normal auth flow unaffected. formulas.js: catch handler now logs error message (was silent). 0 JS errors on Lab load. |
+| 61 | Pricing page | All plans shown? CTAs work? Correct prices? Checkout starts? | RE-AUDIT SESSION 75 — PASS. Ship Loop billing.py webhook guard verified: event.get("type") + event.get("data",{}).get("object") with early return on malformed Stripe payload. Safe defensive coding. No regressions. |
+| 62 | Dashboard / Stat Leaders | Summary stats populated? Leaders match screener data? Category switching works? | RE-AUDIT SESSION 74 — PASS. FUNC-067 confirmed fixed. 10 awards all named, 0 null PPG runners. Report cards: 8-tier grade scale working (MCF gpa_pct=82/B+, Nacua 82/B+). season-recap: total_players=1314 (NameError fix verified). Stock watch: p.name key matches frontend. 0 JS errors. |
+
+## Group 9: Bureau & Situation Room (the paid tier)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 63 | Bureau: League Intel | Sleeper connect flow? Roster loads? Insights generated from real league data? | RE-AUDIT SESSION 76 — PASS (P2 filed). Phase C Bureau hardening verified: AbortController timeouts on all Sleeper fetches (10s user, 15s leagues/rosters, 8s crawl, 20s transactions), lazy-load tab switching, trade finder with 403 fallback, bridge CTAs with escapeJsString. FUNC-070 filed: 2 dead conditional error messages (loadLeagues + toggleLeague catch blocks have identical AbortError/default branches). 0 JS errors. |
+| 64 | Situation Room | Canvas loads? Agents rendered? Interaction works? | RE-AUDIT SESSION 76 — PASS. Phase C bridge CTAs verified: prefillScenario saves to localStorage, warroom.js reads on init, clears after use. 5 bridge paths (manager profiles, pressure map, trade finder, trades, waivers) all wired correctly. 0 JS errors, 63 links, 63 buttons. |
+
+## Group 10: Edge Cases (the stuff that separates demos from products)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 65 | Empty states | No data, no leagues, new user. Every panel handles gracefully? | RE-AUDIT SESSION 30 — PASS. CEO review: empty states and error messages rewritten with Razzle personality. RAZZLE_ERRORS: "fumbled the data fetch", "film room went dark", "something went sideways". RAZZLE_EMPTY: "clean pocket, no receivers open", "the scouting report came back blank". RAZZLE_LOADING: 15 variants ("pulling film...", "analyzing target shares..."). razzleError()/razzleEmpty()/razzleLoading() randomize selection. |
+| 66 | Zero vs null | Players with 0 stats vs players with no data. Displayed differently? | DONE — PASS. Negative rushing yards displayed correctly (-10.0). API returns numeric 0 vs null cleanly. |
+| 67 | Apostrophes & special chars | Amon-Ra St. Brown, D'Andre Swift, Ja'Marr Chase. Search/display handles? | RE-AUDIT SESSION 24 — PROD PASS. Ship Loop fix: quick_search_players now strips non-alphanumeric chars (re.sub(r"[^a-z0-9]", "")) before matching search_name column. Prod verified: Ja'Marr→Chase, Amon-Ra→St.Brown, D'Andre→Swift. All search endpoints (quick_search, fetch_players, screener_query) consistent. |
+| 68 | Rapid interactions | Spam filter changes, double-click buttons, fast panel switching. Stable? | DONE — PASS. Rapid search swaps (mahomes→clear→allen→clear→chase) with 300ms intervals — final query returns correct 3 results. No race conditions. |
+| 69 | Stale state | Apply filters, leave tab 10 min, come back. Still works? No expired tokens? | RE-AUDIT SESSION 40 — PASS. P2 FIXED: Frontend query cache now has 5-min TTL (_QUERY_CACHE_TTL=300000 in lab.js:1205). _queryCacheGet() checks staleness and evicts expired entries. Backend cache 2-5min. JWT 7-day. AbortController race prevention. No remaining stale state issues. Fix not deployed to prod. |
+| 70 | Cross-panel state | Set season in screener, switch to trade values panel. Same season? Or reset? | DONE — PASS. Rankings→TradeValues→Screener navigation returns correctly with 25 rows, 610 players. No state loss. |
+
+## Group 11: New Features (Ship Loop additions post-build)
+
+| # | Flow | What to Test | Status |
+|---|------|-------------|--------|
+| 71 | FAAB Strategy panel | Loads? Data correct? Math adds up? Design compliant? | DONE SESSION 36 — PASS. Hardcoded data (no API), weekly spend sums to 100%, position spend sums to 100%. XSS-escaped, 2px borders, proper CSS vars. Pro-locked. Not deployed to prod (FUNC-036). |
+| 72 | Agent Presence Layer | Peek fires? Watermark renders? Nudges show for Elite? Config correct? | RE-AUDIT SESSION 38 — PASS. FUNC-038 fixed (border 2px, line 159). FUNC-039 fixed (keyframes IIFE injection, lines 117-123, dedup guard). XSS hardening added (escapeHtml fallback, safeColor regex, javascript: check). agent-config.js panel names corrected: all 67 panels match lab.html sidebar IDs. PANEL_TO_AGENT reverse lookup correct. Razzle fallback for unassigned panels. SVGs still 404 on prod (deployment gap). |
+| 73 | Weekly Briefing | Generates? Saves to backend? History loads? Elite-gated? | DONE SESSION 36 — PASS. generateWeeklyBriefing() fills scenario → runs agents → saves via /api/briefings/save (Elite-gated). loadLatestBriefing() fetches + renders. History: last 5 briefings, click to load. All XSS-escaped (escapeHtml, safeParse). Error states with personality text. Backend: 4 endpoints, all require_plan("elite"). Not deployed to prod (FUNC-036). |
+| 74 | Prompts page | Loads? 15 prompts? Filters work? Copy works? Prefill to SitRoom works? | RE-AUDIT SESSION 38 — PASS. FUNC-037 fixed: Pricing link added to prompts.html topnav (line 106). Prompts footer link added to agents.html + index.html. P2: 70 other footer pages still missing Prompts footer link (cosmetic inconsistency, not funnel break). 404 on prod (deployment gap). |

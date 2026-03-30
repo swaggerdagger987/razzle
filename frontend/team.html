@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base href="/">
+<meta charset="UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ede0cf">
+<title>Team Roster — Razzle</title>
+<meta property="og:title" content="Team Roster — Razzle">
+<meta property="og:description" content="Full NFL team roster breakdown. Position groups, age badges, stats, and dynasty-relevant depth for all 32 teams.">
+<meta property="og:site_name" content="razzle.lol">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://razzle.lol/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@razzle_lol">
+<meta name="twitter:title" content="Team Roster — Razzle">
+<meta name="twitter:description" content="Full NFL team roster breakdown. Position groups, age badges, stats, and dynasty-relevant depth for all 32 teams.">
+<meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
+<meta name="twitter:image:alt" content="Razzle — Free Fantasy Football Research Lab">
+<meta name="description" content="NFL team roster breakdown on razzle.lol. Position groups, age badges, player stats, and dynasty-relevant depth charts for all 32 teams.">
+<link rel="canonical" href="https://razzle.lol/lab.html?panel=team">
+<meta property="og:url" content="https://razzle.lol/lab.html?panel=team">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  .team-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .team-header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .team-header h1 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .team-header .team-subtitle {
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+  }
+
+  /* Controls row */
+  .team-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .team-select, .team-season-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 12px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  /* Actions */
+  .team-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* Position group cards */
+  .team-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 16px;
+  }
+
+  .team-group-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--ink);
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .team-group-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .team-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 2px dashed var(--border-dashed);
+  }
+  .team-group-header.pos-qb { background: var(--blue-light); }
+  .team-group-header.pos-rb { background: var(--green-light); }
+  .team-group-header.pos-wr { background: var(--orange-light); }
+  .team-group-header.pos-te { background: var(--purple-light); }
+
+  .team-group-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .team-group-annotation {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+  }
+  .team-group-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    padding: 2px 8px;
+    border: 2px solid var(--ink-faint);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Player rows */
+  .team-roster-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .team-player-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-bottom: 2px dashed var(--border-dashed);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .team-player-row:last-child { border-bottom: none; }
+  .team-player-row:hover { background: var(--bg-warm); }
+
+  /* Rank number */
+  .team-player-rank {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-light);
+    min-width: 20px;
+    text-align: center;
+  }
+
+  /* Headshot */
+  .team-player-row .player-headshot,
+  .team-player-row .player-headshot-fallback {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    object-fit: cover;
+    border: 2px solid var(--ink);
+  }
+  .team-player-row .player-headshot-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-warm);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-medium);
+  }
+
+  /* Player info */
+  .team-player-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .team-player-name {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Age badge */
+  .team-age-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+    border: 2px solid;
+    white-space: nowrap;
+  }
+  .team-age-badge.young { background: var(--green-light); color: var(--green); border-color: var(--green); }
+  .team-age-badge.prime { background: var(--yellow-light); color: var(--ink-medium); border-color: var(--ink-medium); }
+  .team-age-badge.aging { background: var(--red-light); color: var(--red); border-color: var(--red); }
+
+  /* Stats block */
+  .team-player-stats {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .team-stat {
+    text-align: right;
+    min-width: 50px;
+  }
+  .team-stat-value {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    display: block;
+  }
+  .team-stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    display: block;
+  }
+
+  /* PPG highlight */
+  .team-stat.ppg .team-stat-value {
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* Empty / loading */
+  .team-loading, .team-empty {
+    text-align: center;
+    font-family: var(--font-hand);
+    font-size: 20px;
+    color: var(--ink-light);
+    padding: 60px 20px;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .team-groups {
+      grid-template-columns: 1fr;
+    }
+    .team-player-stats {
+      gap: 6px;
+    }
+    .team-stat {
+      min-width: 40px;
+    }
+    .team-stat-value { font-size: 12px; }
+    .team-stat-label { font-size: 11px; }
+  }
+  @media (max-width: 480px) {
+    .team-header h1 { font-size: 24px; }
+    .team-player-row { padding: 6px 10px; gap: 6px; }
+    .team-player-row .player-headshot,
+    .team-player-row .player-headshot-fallback { width: 28px; height: 28px; }
+    .team-player-stats { gap: 4px; }
+    .team-picker-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+
+  /* Team picker grid */
+  .team-picker { margin-bottom: 32px; }
+  .team-picker-division { margin-bottom: 20px; }
+  .team-picker-division-label {
+    font-family: var(--font-hand);
+    font-size: 16px;
+    color: var(--ink-light);
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  .team-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .team-picker-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    box-shadow: 4px 4px 0 var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.1s, box-shadow 0.1s;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .team-picker-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .team-picker-abbr {
+    font-family: var(--font-display);
+    font-size: 18px;
+    min-width: 40px;
+  }
+  .team-picker-name {
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+  @media (max-width: 768px) {
+    .team-picker-grid { grid-template-columns: repeat(3, 1fr); }
+    .team-picker-name { display: none; }
+  }
+</style>
+</head>
+<body>
+<noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#2d1f14;"><h2>Razzle needs JavaScript</h2><p>Enable JavaScript to use the fantasy football research lab.</p></div></noscript>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav class="topnav" aria-label="Main navigation">
+  <a href="/" class="logo">
+    <div class="logo-mark">🐯</div>
+    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/lab.html">Fourth Down Lab</a></li>
+    <li><a href="/league-intel.html">Bureau of Intelligence</a></li>
+    <li><a href="/agents.html">Situation Room</a></li>
+    <li><a href="/pricing.html">Pricing</a></li>
+  </ul>
+  <div class="nav-auth" id="nav-auth">
+    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
+    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
+  </div>
+</nav>
+
+<main class="team-page" id="main-content">  <div class="team-header">
+    <h1 id="teamTitle">Team Roster</h1>
+    <div class="team-subtitle" id="teamSubtitle">scouting the depth chart</div>
+  </div>
+
+  <div class="team-controls">
+    <select class="team-select" id="teamSelect" aria-label="Team filter">
+      <option value="">pulling film...</option>
+    </select>
+    <select class="team-season-select" id="teamSeason" aria-label="Season">
+      <option value="">pulling film...</option>
+    </select>
+  </div>
+
+  <div class="team-actions">
+    <button class="btn-chunky" id="teamExportBtn" title="Export as PNG">Export PNG</button>
+  </div>
+
+  <div id="teamPicker" class="team-picker" style="display:none;"></div>
+
+  <div id="teamContent">
+    <div class="team-loading">assembling the depth chart...</div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <nav aria-label="Footer" class="site-footer-grid">
+
+    <div>
+      <div class="site-footer-heading">Razzle</div>
+      <ul>
+        <li><a href="/" class="footer-link">Home</a></li>
+        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
+        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
+        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
+        <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
+        <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
+        <li><a href="/about.html" class="footer-link">About</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="site-footer-heading">Dynasty</div>
+      <ul>
+        <li><a href="/rankings.html" class="footer-link">Rankings</a></li>
+        <li><a href="/tradevalues.html" class="footer-link">Trade Values</a></li>
+        <li><a href="/tradefinder.html" class="footer-link">Trade Finder</a></li>
+        <li><a href="/tiers.html" class="footer-link">Tiers</a></li>
+        <li><a href="/vorp.html" class="footer-link">VORP</a></li>
+        <li><a href="/aging.html" class="footer-link">Aging Curves</a></li>
+        <li><a href="/buysell.html" class="footer-link">Buy/Sell</a></li>
+        <li><a href="/archetypes.html" class="footer-link">Archetypes</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="site-footer-heading">Weekly</div>
+      <ul>
+        <li><a href="/weekly.html" class="footer-link">Weekly Stats</a></li>
+        <li><a href="/weeklyleaders.html" class="footer-link">Week Leaders</a></li>
+        <li><a href="/weeklymvp.html" class="footer-link">Weekly MVP</a></li>
+        <li><a href="/matchups.html" class="footer-link">Matchups</a></li>
+        <li><a href="/waivers.html" class="footer-link">Rising Players</a></li>
+        <li><a href="/schedule.html" class="footer-link">Schedule</a></li>
+        <li><a href="/stocks.html" class="footer-link">Stocks</a></li>
+        <li><a href="/playoffs.html" class="footer-link">Playoffs</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="site-footer-heading">Analytics</div>
+      <ul>
+        <li><a href="/targets.html" class="footer-link">Targets</a></li>
+        <li><a href="/usage.html" class="footer-link">Usage</a></li>
+        <li><a href="/efficiency.html" class="footer-link">Efficiency</a></li>
+        <li><a href="/airyards.html" class="footer-link">Air Yards</a></li>
+        <li><a href="/redzone.html" class="footer-link">Red Zone</a></li>
+        <li><a href="/consistency.html" class="footer-link">Consistency</a></li>
+        <li><a href="/breakouts.html" class="footer-link">Breakouts</a></li>
+        <li><a href="/opportunity.html" class="footer-link">Opportunity</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="site-footer-heading">Tools</div>
+      <ul>
+        <li><a href="/explorer.html" class="footer-link">Stat Explorer</a></li>
+        <li><a href="/compare.html" class="footer-link">Compare</a></li>
+        <li><a href="/rosterbuilder.html" class="footer-link">Roster Builder</a></li>
+        <li><a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a></li>
+        <li><a href="/auction.html" class="footer-link">Auction Values</a></li>
+        <li><a href="/dashboard.html" class="footer-link">Dashboard</a></li>
+        <li><a href="/prospects.html" class="footer-link">Prospects</a></li>
+      </ul>
+    </div>
+
+  </nav>
+  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
+  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
+</footer>
+
+<script src="/app.js"></script>
+<script>
+(function() {
+  var state = { team: "", season: 0, data: null, loading: false };
+
+  var content = document.getElementById("teamContent");
+  var teamSelect = document.getElementById("teamSelect");
+  var seasonSelect = document.getElementById("teamSeason");
+  var titleEl = document.getElementById("teamTitle");
+  var subtitleEl = document.getElementById("teamSubtitle");
+
+  var GROUP_LABELS = { QB: "Quarterbacks", RB: "Running Backs", WR: "Wide Receivers", TE: "Tight Ends" };
+  var GROUP_ANNOTATIONS = { QB: "the signal callers", RB: "ground game crew", WR: "pass catchers", TE: "the big targets" };
+  var GROUP_ORDER = ["QB", "RB", "WR", "TE"];
+
+  // NFL divisions for team picker
+  var NFL_DIVISIONS = [
+    { label: "AFC East", teams: [
+      { abbr: "BUF", name: "Bills" }, { abbr: "MIA", name: "Dolphins" },
+      { abbr: "NE", name: "Patriots" }, { abbr: "NYJ", name: "Jets" }
+    ]},
+    { label: "AFC North", teams: [
+      { abbr: "BAL", name: "Ravens" }, { abbr: "CIN", name: "Bengals" },
+      { abbr: "CLE", name: "Browns" }, { abbr: "PIT", name: "Steelers" }
+    ]},
+    { label: "AFC South", teams: [
+      { abbr: "HOU", name: "Texans" }, { abbr: "IND", name: "Colts" },
+      { abbr: "JAX", name: "Jaguars" }, { abbr: "TEN", name: "Titans" }
+    ]},
+    { label: "AFC West", teams: [
+      { abbr: "DEN", name: "Broncos" }, { abbr: "KC", name: "Chiefs" },
+      { abbr: "LV", name: "Raiders" }, { abbr: "LAC", name: "Chargers" }
+    ]},
+    { label: "NFC East", teams: [
+      { abbr: "DAL", name: "Cowboys" }, { abbr: "NYG", name: "Giants" },
+      { abbr: "PHI", name: "Eagles" }, { abbr: "WAS", name: "Commanders" }
+    ]},
+    { label: "NFC North", teams: [
+      { abbr: "CHI", name: "Bears" }, { abbr: "DET", name: "Lions" },
+      { abbr: "GB", name: "Packers" }, { abbr: "MIN", name: "Vikings" }
+    ]},
+    { label: "NFC South", teams: [
+      { abbr: "ATL", name: "Falcons" }, { abbr: "CAR", name: "Panthers" },
+      { abbr: "NO", name: "Saints" }, { abbr: "TB", name: "Buccaneers" }
+    ]},
+    { label: "NFC West", teams: [
+      { abbr: "ARI", name: "Cardinals" }, { abbr: "LAR", name: "Rams" },
+      { abbr: "SF", name: "49ers" }, { abbr: "SEA", name: "Seahawks" }
+    ]}
+  ];
+
+  var pickerEl = document.getElementById("teamPicker");
+
+  function showTeamPicker() {
+    var html = "";
+    for (var d = 0; d < NFL_DIVISIONS.length; d++) {
+      var div = NFL_DIVISIONS[d];
+      html += '<div class="team-picker-division">';
+      html += '<div class="team-picker-division-label">' + div.label + '</div>';
+      html += '<div class="team-picker-grid">';
+      for (var t = 0; t < div.teams.length; t++) {
+        var tm = div.teams[t];
+        html += '<a class="team-picker-card" href="/team/' + tm.abbr + '">';
+        html += '<span class="team-picker-abbr">' + tm.abbr + '</span>';
+        html += '<span class="team-picker-name">' + tm.name + '</span>';
+        html += '</a>';
+      }
+      html += '</div></div>';
+    }
+    pickerEl.innerHTML = html;
+    pickerEl.style.display = "";
+    content.innerHTML = "";
+  }
+
+  // Get team from URL path /team/{abbr}
+  var pathMatch = window.location.pathname.match(/\/team\/([A-Za-z]+)/);
+  if (pathMatch) {
+    state.team = pathMatch[1].toUpperCase();
+  }
+
+  // Position-specific stats to display
+  function getStatsForPosition(pos) {
+    if (pos === "QB") return [
+      { key: "ppg", label: "PPG" },
+      { key: "passing_yards", label: "Pass Yds" },
+      { key: "passing_tds", label: "Pass TD" },
+      { key: "rushing_yards", label: "Rush Yds" },
+      { key: "games", label: "GP" }
+    ];
+    if (pos === "RB") return [
+      { key: "ppg", label: "PPG" },
+      { key: "rushing_yards", label: "Rush Yds" },
+      { key: "rushing_tds", label: "Rush TD" },
+      { key: "receptions", label: "Rec" },
+      { key: "games", label: "GP" }
+    ];
+    if (pos === "WR") return [
+      { key: "ppg", label: "PPG" },
+      { key: "receiving_yards", label: "Rec Yds" },
+      { key: "receiving_tds", label: "Rec TD" },
+      { key: "receptions", label: "Rec" },
+      { key: "games", label: "GP" }
+    ];
+    if (pos === "TE") return [
+      { key: "ppg", label: "PPG" },
+      { key: "receiving_yards", label: "Rec Yds" },
+      { key: "receiving_tds", label: "Rec TD" },
+      { key: "receptions", label: "Rec" },
+      { key: "games", label: "GP" }
+    ];
+    return [{ key: "ppg", label: "PPG" }, { key: "games", label: "GP" }];
+  }
+
+  function formatStat(value) {
+    if (value === null || value === undefined) return "-";
+    if (typeof value === "number") {
+      return value % 1 === 0 ? String(value) : value.toFixed(1);
+    }
+    return String(value);
+  }
+
+  // ---- Fetch team roster ----
+  async function loadTeam() {
+    pickerEl.style.display = "none";
+    state.loading = true;
+    content.innerHTML = '<div class="team-loading">' + razzleLoading() + '</div>';
+
+    try {
+      var url = "/api/team-roster";
+      var params = [];
+      if (state.team) params.push("team=" + encodeURIComponent(state.team));
+      if (state.season) params.push("season=" + state.season);
+      if (params.length) url += "?" + params.join("&");
+
+      var data = await apiFetch(url);
+      state.data = data;
+      state.team = data.team || state.team;
+      state.loading = false;
+
+      // Update title
+      titleEl.textContent = (data.team_full_name || data.team) + " Roster";
+      subtitleEl.textContent = "scouting the depth chart";
+
+      // Update URL without reload
+      if (data.team) {
+        var newPath = "/team/" + data.team;
+        if (window.location.pathname !== newPath) {
+          history.replaceState(null, "", newPath);
+        }
+      }
+
+      // Populate team dropdown on first load
+      if (data.available_teams && teamSelect.options.length <= 1) {
+        teamSelect.innerHTML = "";
+        for (var i = 0; i < data.available_teams.length; i++) {
+          var t = data.available_teams[i];
+          var opt = document.createElement("option");
+          opt.value = t.abbr;
+          opt.textContent = t.name;
+          if (t.abbr === data.team) opt.selected = true;
+          teamSelect.appendChild(opt);
+        }
+      } else {
+        teamSelect.value = data.team;
+      }
+
+      // Populate season dropdown on first load
+      if (data.available_seasons && seasonSelect.options.length <= 1) {
+        seasonSelect.innerHTML = "";
+        for (var i = 0; i < data.available_seasons.length; i++) {
+          var s = data.available_seasons[i];
+          var opt = document.createElement("option");
+          opt.value = s;
+          opt.textContent = s + " season";
+          if (s === data.season) opt.selected = true;
+          seasonSelect.appendChild(opt);
+        }
+      }
+
+      renderGroups(data.groups || {});
+    } catch (err) {
+      state.loading = false;
+      content.innerHTML = '<div class="team-empty">' + razzleError() + '</div>';
+    }
+  }
+
+  // ---- Render position groups ----
+  function renderGroups(groups) {
+    var totalPlayers = 0;
+    for (var k in groups) totalPlayers += (groups[k] || []).length;
+    if (!totalPlayers) {
+      content.innerHTML = '<div class="team-empty">no fantasy-relevant players found</div>';
+      return;
+    }
+
+    var html = '<div class="team-groups">';
+
+    for (var g = 0; g < GROUP_ORDER.length; g++) {
+      var pos = GROUP_ORDER[g];
+      var players = groups[pos] || [];
+      if (!players.length) continue;
+
+      var posLower = pos.toLowerCase();
+      var stats = getStatsForPosition(pos);
+
+      html += '<div class="team-group-card">';
+      html += '<div class="team-group-header pos-' + posLower + '">';
+      html += '<div>';
+      html += '<span class="team-group-title">' + escapeHtml(GROUP_LABELS[pos] || pos) + '</span>';
+      html += ' <span class="team-group-annotation">' + escapeHtml(GROUP_ANNOTATIONS[pos] || "") + '</span>';
+      html += '</div>';
+      html += '<span class="team-group-count">' + players.length + '</span>';
+      html += '</div>';
+
+      html += '<ul class="team-roster-list">';
+
+      for (var i = 0; i < players.length; i++) {
+        var p = players[i];
+
+        // Headshot
+        var imgHtml;
+        if (p.headshot_url) {
+          imgHtml = '<img class="player-headshot" src="' + escapeAttr(p.headshot_url) + '" alt="Player headshot" loading="lazy" onerror="this.onerror=null;this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+          imgHtml += '<span class="player-headshot-fallback" style="display:none">' + escapeHtml((p.full_name || "?").substring(0, 2).toUpperCase()) + '</span>';
+        } else {
+          imgHtml = '<span class="player-headshot-fallback">' + escapeHtml((p.full_name || "?").substring(0, 2).toUpperCase()) + '</span>';
+        }
+
+        // Age badge
+        var ageBadge = "";
+        if (p.age) {
+          var ageClass = p.age <= 25 ? "young" : p.age <= 28 ? "prime" : "aging";
+          ageBadge = '<span class="team-age-badge ' + ageClass + '">' + p.age + '</span>';
+        }
+
+        html += '<li class="team-player-row" data-pid="' + escapeAttr(p.player_id) + '">';
+        html += '<span class="team-player-rank">' + (i + 1) + '</span>';
+        html += imgHtml;
+        html += '<div class="team-player-info">';
+        html += '<span class="team-player-name">' + escapeHtml(p.full_name) + '</span>';
+        html += ageBadge;
+        html += '</div>';
+
+        html += '<div class="team-player-stats">';
+        for (var s = 0; s < stats.length; s++) {
+          var st = stats[s];
+          var val = p[st.key];
+          var ppgClass = st.key === "ppg" ? " ppg" : "";
+          html += '<div class="team-stat' + ppgClass + '">';
+          html += '<span class="team-stat-value">' + formatStat(val) + '</span>';
+          html += '<span class="team-stat-label">' + escapeHtml(st.label) + '</span>';
+          html += '</div>';
+        }
+        html += '</div>';
+
+        html += '</li>';
+      }
+
+      html += '</ul>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+    content.innerHTML = html;
+
+    // Click to open player profile
+    content.querySelectorAll(".team-player-row[data-pid]").forEach(function(row) {
+      row.addEventListener("click", function() {
+        var pid = this.getAttribute("data-pid");
+        if (pid) window.location.href = "/player/" + encodeURIComponent(pid);
+      });
+    });
+  }
+
+  // ---- Team selector ----
+  teamSelect.addEventListener("change", function() {
+    state.team = this.value;
+    loadTeam();
+  });
+
+  // ---- Season selector ----
+  seasonSelect.addEventListener("change", function() {
+    state.season = parseInt(this.value, 10) || 0;
+    loadTeam();
+  });
+
+  // ---- PNG export ----
+  document.getElementById("teamExportBtn").addEventListener("click", function() {
+    var btn = this; btn.disabled = true; btn.textContent = 'Exporting...';
+    var page = document.getElementById("main-content");
+    if (!page) { btn.disabled = false; btn.textContent = 'Export PNG'; return; }
+    doExport(page, btn);
+  });
+
+  function doExport(el, btn) {
+    loadHtml2Canvas().then(function(h2c) { return h2c(el, { backgroundColor: document.documentElement.dataset.theme === 'dark' ? '#2d1f14' : '#ede0cf', scale: 2, useCORS: true }); }).then(function(canvas) {
+      var ctx = canvas.getContext("2d");
+      ctx.font = "600 24px Caveat, cursive";
+      ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? 'rgba(237,224,207,0.25)' : 'rgba(45,31,20,0.25)';
+      ctx.textAlign = "right";
+      ctx.fillText("razzle.lol", canvas.width - 24, canvas.height - 18);
+
+      var link = document.createElement("a");
+      link.download = "razzle-team-roster.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }).finally(function() { if (btn) { btn.disabled = false; btn.textContent = 'Export PNG'; } });
+  }
+
+  // ---- Initial load ----
+  if (!state.team) {
+    showTeamPicker();
+  } else {
+    loadTeam();
+  }
+})();
+</script>
+<script>fetch("/api/analytics/pageview",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({page:location.pathname})}).catch(function(){});</script>
+</body>
+</html>

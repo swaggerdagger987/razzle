@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Bureau of Intelligence - Wireframe</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui; background: #f5f0e8; color: #2d1f14; padding: 20px; }
+
+  .nav { display: flex; gap: 16px; padding: 12px 20px; background: #ede0cf; border: 2px solid #2d1f14; border-radius: 8px; margin-bottom: 20px; align-items: center; }
+  .nav-logo { font-weight: 900; font-size: 18px; color: #d97757; }
+  .nav a { text-decoration: none; color: #5c4a3d; font-size: 14px; }
+  .nav .active { background: #d97757; color: white; padding: 4px 12px; border-radius: 4px; }
+
+  /* Hero: Championship Odds */
+  .odds-hero { text-align: center; padding: 40px 20px; background: #f7efe5; border: 3px solid #2d1f14; border-radius: 12px; box-shadow: 4px 4px 0 #2d1f14; margin-bottom: 24px; }
+  .odds-hero h1 { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: #8a7565; margin-bottom: 8px; }
+  .odds-number { font-size: 72px; font-weight: 900; color: #d97757; }
+  .odds-label { font-size: 16px; color: #5c4a3d; margin-top: 4px; }
+  .odds-rank { font-size: 13px; color: #8a7565; margin-top: 8px; font-style: italic; }
+  .odds-agent { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; font-size: 12px; color: #8a7565; }
+  .odds-agent .avatar { width: 24px; height: 24px; border-radius: 50%; background: #e87422; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 3px solid #2d1f14; }
+  .tab { padding: 10px 20px; font-size: 13px; font-weight: 700; cursor: pointer; border: 2px solid transparent; border-bottom: none; border-radius: 8px 8px 0 0; color: #8a7565; position: relative; bottom: -3px; }
+  .tab.active { background: #f7efe5; border-color: #2d1f14; color: #2d1f14; }
+  .tab .lock { font-size: 10px; opacity: 0.5; margin-left: 4px; }
+  .tab .agent-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+
+  /* League Odds Grid (Overview tab) */
+  .odds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .odds-card { background: #f7efe5; border: 2px solid #2d1f14; border-radius: 8px; padding: 16px; box-shadow: 3px 3px 0 #c4b5a5; }
+  .odds-card-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .odds-card-pct { font-size: 28px; font-weight: 900; }
+  .odds-card-rank { font-size: 11px; color: #8a7565; }
+  .odds-card.you { border-color: #d97757; border-width: 3px; box-shadow: 4px 4px 0 #d97757; }
+
+  /* Self-Scout (Hawkeye tab) */
+  .scout-section { margin-bottom: 20px; }
+  .agent-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 8px 12px; background: #ede0cf; border-radius: 6px; border-left: 4px solid; }
+  .agent-header .avatar { width: 32px; height: 32px; border-radius: 50%; }
+  .agent-header .name { font-weight: 700; font-size: 14px; }
+  .agent-header .role { font-size: 11px; color: #8a7565; }
+  .agent-quote { font-style: italic; font-size: 13px; color: #5c4a3d; padding: 8px 12px; margin-bottom: 16px; border-left: 3px dashed #c4b5a5; }
+
+  .depth-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .depth-card { background: #f7efe5; border: 2px solid #2d1f14; border-radius: 8px; padding: 12px; text-align: center; }
+  .depth-pos { font-weight: 900; font-size: 16px; margin-bottom: 4px; }
+  .depth-grade { font-size: 24px; font-weight: 700; }
+  .depth-detail { font-size: 11px; color: #8a7565; margin-top: 4px; }
+  .depth-card.strong { border-color: #2ec4b6; }
+  .depth-card.weak { border-color: #e63946; }
+
+  /* Rival Cards (Bones tab) */
+  .rival-card { background: #f7efe5; border: 2px solid #2d1f14; border-radius: 8px; padding: 16px; margin-bottom: 12px; box-shadow: 3px 3px 0 #c4b5a5; }
+  .rival-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .rival-name { font-weight: 700; font-size: 16px; }
+  .rival-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+  .rival-tag.panic { background: #e63946; color: white; }
+  .rival-tag.steady { background: #2ec4b6; color: white; }
+  .rival-tag.hoarder { background: #8b5cf6; color: white; }
+  .rival-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+  .rival-stat { text-align: center; }
+  .rival-stat-val { font-weight: 700; font-size: 18px; }
+  .rival-stat-label { font-size: 10px; color: #8a7565; text-transform: uppercase; }
+
+  /* Pro Lock overlay */
+  .pro-lock { position: relative; }
+  .pro-lock::after { content: 'PRO'; position: absolute; top: 8px; right: 8px; background: #d97757; color: white; font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; }
+
+  .section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #8a7565; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav">
+  <span class="nav-logo">Razzle.lol</span>
+  <a href="#">Home</a>
+  <a href="#">Screener</a>
+  <a class="active" href="#">Bureau</a>
+  <a href="#">Situation Room</a>
+  <a href="#">Pricing</a>
+</div>
+
+<!-- Championship Odds Hero -->
+<div class="odds-hero">
+  <h1>Your Championship Probability</h1>
+  <div class="odds-number">12.4%</div>
+  <div class="odds-label">McGuire's Dynasty League (12-team, PPR)</div>
+  <div class="odds-rank">Ranked #3 of 12 managers</div>
+  <div class="odds-agent">
+    <div class="avatar" style="background: #e87422;"></div>
+    octo ran 10,000 simulations. the math doesn't lie.
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active">
+    <span class="agent-dot" style="background: #e87422;"></span>
+    Overview
+  </div>
+  <div class="tab">
+    <span class="agent-dot" style="background: #2ec4b6;"></span>
+    Self-Scout
+  </div>
+  <div class="tab pro-lock">
+    <span class="agent-dot" style="background: #8b5cf6;"></span>
+    Rivals <span class="lock">PRO</span>
+  </div>
+  <div class="tab pro-lock">
+    <span class="agent-dot" style="background: #8b5cf6;"></span>
+    Trades <span class="lock">PRO</span>
+  </div>
+  <div class="tab pro-lock">
+    <span class="agent-dot" style="background: #d44040;"></span>
+    History <span class="lock">PRO</span>
+  </div>
+</div>
+
+<!-- OVERVIEW TAB (showing) -->
+<div class="section-title">League Championship Odds (all managers)</div>
+
+<div class="odds-grid">
+  <div class="odds-card you">
+    <div class="odds-card-name">You (swaggerdagger)</div>
+    <div class="odds-card-pct" style="color: #d97757;">12.4%</div>
+    <div class="odds-card-rank">#3 overall | 6-3 record</div>
+  </div>
+  <div class="odds-card">
+    <div class="odds-card-name">DynastyDave</div>
+    <div class="odds-card-pct">18.7%</div>
+    <div class="odds-card-rank">#1 overall | 8-1 record</div>
+  </div>
+  <div class="odds-card">
+    <div class="odds-card-name">TradeMaster_Mike</div>
+    <div class="odds-card-pct">15.2%</div>
+    <div class="odds-card-rank">#2 overall | 7-2 record</div>
+  </div>
+  <div class="odds-card">
+    <div class="odds-card-name">PickHoarder</div>
+    <div class="odds-card-pct">9.1%</div>
+    <div class="odds-card-rank">#4 overall | 5-4 record</div>
+  </div>
+  <div class="odds-card">
+    <div class="odds-card-name">TankSZN_2026</div>
+    <div class="odds-card-pct">2.3%</div>
+    <div class="odds-card-rank">#10 overall | 2-7 record</div>
+  </div>
+  <div class="odds-card">
+    <div class="odds-card-name">WaiverHawk</div>
+    <div class="odds-card-pct">7.8%</div>
+    <div class="odds-card-rank">#5 overall | 5-4 record</div>
+  </div>
+</div>
+
+<!-- Agent summary -->
+<div class="agent-header" style="border-color: #d97757;">
+  <div class="avatar" style="background: #d97757;"></div>
+  <div>
+    <div class="name">Razzle</div>
+    <div class="role">Chief of Staff</div>
+  </div>
+</div>
+<div class="agent-quote">
+  "you're third. not bad, not safe. DynastyDave has the best roster but a brutal playoff schedule. your path is through the consolation bracket unless you upgrade at WR. bones has a trade play for you."
+</div>
+
+<hr style="border: 1px dashed #c4b5a5; margin: 24px 0;">
+
+<!-- SELF-SCOUT PREVIEW -->
+<div class="section-title">Self-Scout Preview (full analysis in Self-Scout tab)</div>
+
+<div class="agent-header" style="border-color: #2ec4b6;">
+  <div class="avatar" style="background: #2ec4b6;"></div>
+  <div>
+    <div class="name">Hawkeye</div>
+    <div class="role">Scout</div>
+  </div>
+</div>
+
+<div class="depth-grid">
+  <div class="depth-card strong">
+    <div class="depth-pos" style="color: #5b7fff;">QB</div>
+    <div class="depth-grade">A</div>
+    <div class="depth-detail">Josh Allen (top 3)</div>
+  </div>
+  <div class="depth-card strong">
+    <div class="depth-pos" style="color: #2ec4b6;">RB</div>
+    <div class="depth-grade">A-</div>
+    <div class="depth-detail">Bijan + depth</div>
+  </div>
+  <div class="depth-card weak">
+    <div class="depth-pos" style="color: #d97757;">WR</div>
+    <div class="depth-grade">C+</div>
+    <div class="depth-detail">aging core, no WR1</div>
+  </div>
+  <div class="depth-card">
+    <div class="depth-pos" style="color: #8b5cf6;">TE</div>
+    <div class="depth-grade">B</div>
+    <div class="depth-detail">Bowers (ascending)</div>
+  </div>
+</div>
+
+<hr style="border: 1px dashed #c4b5a5; margin: 24px 0;">
+
+<!-- RIVALS PREVIEW (locked) -->
+<div class="section-title">Rival Intel Preview</div>
+
+<div class="rival-card" style="opacity: 0.6; filter: blur(1px);">
+  <div class="rival-header">
+    <div class="rival-name">DynastyDave</div>
+    <div class="rival-tag panic">PANIC SELLER</div>
+  </div>
+  <div class="rival-stats">
+    <div class="rival-stat">
+      <div class="rival-stat-val">14</div>
+      <div class="rival-stat-label">trades/yr</div>
+    </div>
+    <div class="rival-stat">
+      <div class="rival-stat-val">RB</div>
+      <div class="rival-stat-label">overpays for</div>
+    </div>
+    <div class="rival-stat">
+      <div class="rival-stat-val">73%</div>
+      <div class="rival-stat-label">sell after loss</div>
+    </div>
+  </div>
+</div>
+<div style="text-align: center; padding: 12px; background: #d97757; color: white; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: -8px;">
+  Unlock Rival Intel - Go Pro ($9.99/mo)
+</div>
+
+</body>
+</html>
