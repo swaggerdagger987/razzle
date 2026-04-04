@@ -430,30 +430,36 @@ const WALK_FRAMES = [0, 1, 2, 1];
 const IDLE_FRAME = 0;
 const ANIM_SPEED = 150; // ms per walk frame
 
-// ── PALETTE (dark Situation Room) ────────────────────────────────────
+// ── PALETTE (dark Situation Room — FDL war room style) ───────────────
 const C = {
-  wallDark:    '#121a2e',
-  wallMid:     '#1b2845',
-  wallLight:   '#243358',
-  wallAccent:  '#2e4070',
+  wallDark:    '#1a1a2e',
+  wallMid:     '#1e1e38',
+  wallLight:   '#252545',
+  wallAccent:  '#2e2e55',
   floorWood1:  '#8b6d3c',
   floorWood2:  '#9c7a42',
   floorWood3:  '#7a5e32',
+  floorWood4:  '#6e5530',
+  floorWood5:  '#a88548',
   turf1:       '#1e5c28',
   turf2:       '#267832',
   turf3:       '#1a4c22',
   turfLine:    '#c4b5a5',
-  deskTop:     '#5c3a1a',
-  deskFront:   '#4a2e14',
-  deskLeg:     '#3c2410',
+  feltGreen:   '#1b6b2a',
+  feltLight:   '#228833',
+  feltBorder:  '#0f4018',
+  deskTop:     '#4a2e14',
+  deskFront:   '#3c2410',
+  deskLeg:     '#2d1a0c',
   monitor:     '#0a1a0a',
   monitorGlow: '#22cc55',
   screenBg:    '#0c200c',
-  tableDark:   '#3c2410',
-  tableTop:    '#5a3818',
-  tvFrame:     '#2d1f14',
-  tvScreen:    '#0a1e3a',
-  tvGlow:      '#3388cc',
+  tableDark:   '#0f4018',
+  tableTop:    '#1b6b2a',
+  tableBorder: '#0a3012',
+  tvFrame:     '#2a2a3e',
+  tvScreen:    '#0a1e2a',
+  tvGlow:      '#33ccaa',
   boardBg:     '#1a110a',
   boardFrame:  '#3d2e22',
   shelfWood:   '#6a4a28',
@@ -477,11 +483,31 @@ const C = {
   chairSeat:   '#3d2e22',
   chairBack:   '#2d1f14',
   bannerBg:    '#d97757',
-  bannerText:  '#2d1f14',
+  bannerText:  '#1a1a2e',
   nameTag:     'rgba(0,0,0,0.7)',
   nameText:    '#f7efe5',
   bubbleBg:    '#f7efe5',
   bubbleBorder:'#2d1f14',
+  ceilingLight:'#ffd866',
+  ceilingLightGlow:'rgba(255,216,102,0.15)',
+  cable:       '#2a2a3a',
+  cableDark:   '#1e1e2e',
+  serverGray:  '#3a3a4a',
+  serverDark:  '#2a2a3a',
+  serverLight: '#4a4a5a',
+  ledGreen:    '#33ff55',
+  ledRed:      '#ff3333',
+  ledBlue:     '#3388ff',
+  ledYellow:   '#ffcc33',
+  filingCab:   '#4a4a5a',
+  filingHandle:'#8a8a9a',
+  chartBg:     '#1a1a2e',
+  chartGreen:  '#33cc55',
+  chartRed:    '#cc3333',
+  stickyYellow:'#fff176',
+  stickyPink:  '#f48fb1',
+  stickyBlue:  '#81d4fa',
+  ventGrill:   '#3a3a4a',
 };
 
 // ── CANVAS SETUP ───────────────────────────────────────────────────────
@@ -581,91 +607,126 @@ function isWalkable(tileX, tileY) {
 }
 
 // ── ROOM LAYOUT ────────────────────────────────────────────────────────
-const ZONE_WOOD = 0, ZONE_TURF = 1;
+const ZONE_WOOD = 0, ZONE_FELT = 1;
 const zones = [
   { type: ZONE_WOOD, x: 1, y: 2, w: 28, h: 19 },
-  { type: ZONE_TURF, x: 10, y: 8, w: 10, h: 6 },
+  { type: ZONE_FELT, x: 9, y: 8, w: 12, h: 7 },
 ];
 
 const furniture = [];
 
+// --- CEILING DETAILS (cables & lights) ---
+furniture.push({ type: 'ceilingLights' });
+furniture.push({ type: 'ceilingCables' });
+
 // --- NORTH WALL ---
-furniture.push({ type: 'draftBoard', x: 4, y: 1, w: 8, h: 2 });
-blockRect(4, 1, 8, 1);
+// Draft Board (left portion of north wall) — large with colored player cards
+furniture.push({ type: 'draftBoard', x: 2, y: 0, w: 9, h: 2 });
+blockRect(2, 0, 9, 2);
 
-furniture.push({ type: 'tv', x: 14, y: 1, w: 2, h: 2 });
-furniture.push({ type: 'tv', x: 17, y: 1, w: 2, h: 2 });
-blockRect(14, 1, 2, 1);
-blockRect(17, 1, 2, 1);
+// Two wall-mounted monitors/TVs showing data
+furniture.push({ type: 'tv', x: 12, y: 0, w: 3, h: 2 });
+furniture.push({ type: 'tv', x: 16, y: 0, w: 3, h: 2 });
+blockRect(12, 0, 3, 2);
+blockRect(16, 0, 3, 2);
 
-furniture.push({ type: 'clock', x: 21, y: 1 });
+// Clock on the wall
+furniture.push({ type: 'clock', x: 20, y: 0 });
 
-furniture.push({ type: 'banner', x: 24, y: 1, w: 4, h: 2 });
+// "RAZZLE SIT ROOM" banner on right side of north wall
+furniture.push({ type: 'banner', x: 22, y: 0, w: 6, h: 2 });
 
-furniture.push({ type: 'trophyCase', x: 1, y: 1, w: 2, h: 2 });
-blockRect(1, 1, 2, 1);
+// --- LEFT WALL (WEST) — Analyst desks facing wall ---
+furniture.push({ type: 'desk', x: 1, y: 4, facing: 'left' });
+blockRect(1, 4, 3, 2);
 
-// --- ANALYST DESKS (top row) ---
-furniture.push({ type: 'desk', x: 2, y: 4, facing: 'down' });
-blockRect(2, 4, 3, 2);
+furniture.push({ type: 'plant', x: 1, y: 6 });
+blockTile(1, 6);
 
-furniture.push({ type: 'desk', x: 7, y: 4, facing: 'down' });
-blockRect(7, 4, 3, 2);
+furniture.push({ type: 'desk', x: 1, y: 7, facing: 'left' });
+blockRect(1, 7, 3, 2);
 
-furniture.push({ type: 'desk', x: 21, y: 4, facing: 'down' });
-blockRect(21, 4, 3, 2);
+furniture.push({ type: 'plant', x: 1, y: 9 });
+blockTile(1, 9);
 
-furniture.push({ type: 'desk', x: 26, y: 4, facing: 'down' });
-blockRect(26, 4, 3, 2);
+furniture.push({ type: 'desk', x: 1, y: 10, facing: 'left' });
+blockRect(1, 10, 3, 2);
 
-// --- CENTRAL WAR TABLE (on turf) ---
-furniture.push({ type: 'warTable', x: 11, y: 9, w: 8, h: 4 });
-blockRect(11, 9, 8, 4);
-
-// --- BOTTOM ROW DESKS ---
-furniture.push({ type: 'desk', x: 2, y: 15, facing: 'up' });
-blockRect(2, 15, 3, 2);
-
-furniture.push({ type: 'desk', x: 7, y: 15, facing: 'up' });
-blockRect(7, 15, 3, 2);
-
-// --- SIDE FEATURES ---
-furniture.push({ type: 'coffee', x: 26, y: 9 });
-blockRect(26, 9, 2, 2);
-
-furniture.push({ type: 'bookshelf', x: 27, y: 13, h: 3 });
-blockRect(28, 13, 1, 3);
-
-furniture.push({ type: 'whiteboard', x: 14, y: 17, w: 5, h: 2 });
-blockRect(14, 18, 5, 1);
-
-furniture.push({ type: 'plant', x: 1, y: 8 });
-furniture.push({ type: 'plant', x: 1, y: 14 });
-furniture.push({ type: 'plant', x: 28, y: 4 });
-furniture.push({ type: 'plant', x: 28, y: 17 });
-blockTile(1, 8);
-blockTile(1, 14);
-blockTile(28, 4);
-blockTile(28, 17);
-
-furniture.push({ type: 'helmet', x: 22, y: 1 });
-furniture.push({ type: 'helmet', x: 23, y: 1 });
-
-furniture.push({ type: 'phone', x: 2, y: 18 });
-blockTile(2, 18);
-
-furniture.push({ type: 'cabinet', x: 11, y: 16, h: 2 });
-blockRect(11, 16, 1, 2);
+// --- CENTRAL WAR TABLE (on green felt) ---
+furniture.push({ type: 'warTable', x: 10, y: 9, w: 10, h: 5 });
+blockRect(10, 9, 10, 5);
 
 // Chairs around war table
-furniture.push({ type: 'chair', x: 10, y: 10, facing: 'right' });
-furniture.push({ type: 'chair', x: 10, y: 11, facing: 'right' });
-furniture.push({ type: 'chair', x: 19, y: 10, facing: 'left' });
-furniture.push({ type: 'chair', x: 19, y: 11, facing: 'left' });
-furniture.push({ type: 'chair', x: 13, y: 8, facing: 'down' });
-furniture.push({ type: 'chair', x: 16, y: 8, facing: 'down' });
-furniture.push({ type: 'chair', x: 13, y: 13, facing: 'up' });
-furniture.push({ type: 'chair', x: 16, y: 13, facing: 'up' });
+furniture.push({ type: 'chair', x: 9, y: 10, facing: 'right' });
+furniture.push({ type: 'chair', x: 9, y: 12, facing: 'right' });
+furniture.push({ type: 'chair', x: 20, y: 10, facing: 'left' });
+furniture.push({ type: 'chair', x: 20, y: 12, facing: 'left' });
+furniture.push({ type: 'chair', x: 12, y: 8, facing: 'down' });
+furniture.push({ type: 'chair', x: 15, y: 8, facing: 'down' });
+furniture.push({ type: 'chair', x: 17, y: 8, facing: 'down' });
+furniture.push({ type: 'chair', x: 12, y: 14, facing: 'up' });
+furniture.push({ type: 'chair', x: 15, y: 14, facing: 'up' });
+furniture.push({ type: 'chair', x: 17, y: 14, facing: 'up' });
+
+// --- RIGHT WALL (EAST) — Server racks & analysis ---
+// Server racks (tall gray cabinets with LEDs)
+furniture.push({ type: 'serverRack', x: 27, y: 3, h: 3 });
+blockRect(27, 3, 2, 3);
+
+furniture.push({ type: 'serverRack', x: 27, y: 7, h: 3 });
+blockRect(27, 7, 2, 3);
+
+// Ventilation grills on east wall
+furniture.push({ type: 'ventGrill', x: 29, y: 4, h: 2 });
+furniture.push({ type: 'ventGrill', x: 29, y: 8, h: 2 });
+
+// Wall-mounted stock chart
+furniture.push({ type: 'stockChart', x: 24, y: 3, w: 3, h: 2 });
+blockRect(24, 3, 3, 1);
+
+// One desk with monitor on right side
+furniture.push({ type: 'desk', x: 24, y: 6, facing: 'right' });
+blockRect(24, 6, 3, 2);
+
+// Analysis board / war room chart
+furniture.push({ type: 'analysisBoard', x: 25, y: 10, w: 3, h: 3 });
+blockRect(25, 10, 3, 2);
+
+// --- SOUTH WALL (BOTTOM) ---
+// Whiteboard / clipboard
+furniture.push({ type: 'whiteboard', x: 8, y: 18, w: 5, h: 2 });
+blockRect(8, 19, 5, 1);
+
+// Filing cabinets
+furniture.push({ type: 'filingCabinet', x: 14, y: 19, h: 2 });
+blockRect(14, 19, 1, 2);
+furniture.push({ type: 'filingCabinet', x: 15, y: 19, h: 2 });
+blockRect(15, 19, 1, 2);
+furniture.push({ type: 'filingCabinet', x: 16, y: 19, h: 2 });
+blockRect(16, 19, 1, 2);
+
+// Coffee station (south wall right side)
+furniture.push({ type: 'coffeeStation', x: 22, y: 18 });
+blockRect(22, 18, 3, 2);
+
+// Sticky notes on south wall
+furniture.push({ type: 'stickyNotes', x: 18, y: 19 });
+
+// --- EXTRA DETAILS ---
+// Plants
+furniture.push({ type: 'plant', x: 1, y: 17 });
+blockTile(1, 17);
+furniture.push({ type: 'plant', x: 28, y: 17 });
+blockTile(28, 17);
+furniture.push({ type: 'plant', x: 5, y: 3 });
+blockTile(5, 3);
+
+// Desks at top (near north wall, for approaching draft board)
+furniture.push({ type: 'desk', x: 5, y: 5, facing: 'down' });
+blockRect(5, 5, 3, 2);
+
+furniture.push({ type: 'desk', x: 18, y: 5, facing: 'down' });
+blockRect(18, 5, 3, 2);
 
 // ── DRAWING HELPERS ────────────────────────────────────────────────────
 const now = () => performance.now();
@@ -682,64 +743,93 @@ function drawPixelRect(x, y, w, h, fill, border) {
 
 // ── FLOOR RENDERING ────────────────────────────────────────────────────
 function drawFloor() {
+  // Fill entire canvas with dark navy
   px(0, 0, WORLD_W, WORLD_H, C.wallDark);
 
   for (const z of zones) {
     if (z.type === ZONE_WOOD) {
+      // Warm wood plank floor with multiple brown tones
+      const woodColors = [C.floorWood1, C.floorWood2, C.floorWood3, C.floorWood4, C.floorWood5];
       for (let r = z.y; r < z.y + z.h; r++) {
         for (let c = z.x; c < z.x + z.w; c++) {
           const tx = c * TILE, ty = r * TILE;
-          const variant = ((c + r * 3) % 3);
-          const col = variant === 0 ? C.floorWood1 : variant === 1 ? C.floorWood2 : C.floorWood3;
+          // Plank variation using a pseudo-random pattern
+          const variant = ((c * 7 + r * 13) % 5);
+          const col = woodColors[variant];
           px(tx, ty, TILE, TILE, col);
-          px(tx, ty, TILE, 1, 'rgba(0,0,0,0.08)');
-          if ((c + r) % 4 === 0) px(tx + TILE - 1, ty, 1, TILE, 'rgba(0,0,0,0.06)');
+          // Plank gap line (horizontal grain)
+          px(tx, ty, TILE, 1, 'rgba(0,0,0,0.12)');
+          // Occasional vertical plank seam
+          if ((c + r * 3) % 5 === 0) px(tx + TILE - 1, ty, 1, TILE, 'rgba(0,0,0,0.08)');
+          // Subtle wood grain highlight
+          if ((c * 3 + r * 7) % 11 === 0) {
+            px(tx + 4, ty + 8, TILE - 8, 1, 'rgba(255,255,255,0.04)');
+            px(tx + 6, ty + 16, TILE - 12, 1, 'rgba(255,255,255,0.03)');
+          }
         }
       }
-    } else if (z.type === ZONE_TURF) {
+    } else if (z.type === ZONE_FELT) {
+      // Green felt area for the war table zone
       for (let r = z.y; r < z.y + z.h; r++) {
         for (let c = z.x; c < z.x + z.w; c++) {
           const tx = c * TILE, ty = r * TILE;
           const variant = (c + r) % 2;
-          px(tx, ty, TILE, TILE, variant ? C.turf1 : C.turf2);
+          px(tx, ty, TILE, TILE, variant ? C.feltGreen : C.feltLight);
         }
       }
-      const turfX = z.x * TILE, turfY = z.y * TILE;
-      const turfW = z.w * TILE, turfH = z.h * TILE;
-      ctx.strokeStyle = C.turfLine;
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.3;
-      const cx = turfX + turfW / 2;
-      ctx.beginPath(); ctx.moveTo(cx, turfY + 4); ctx.lineTo(cx, turfY + turfH - 4); ctx.stroke();
-      for (let i = 1; i < 4; i++) {
-        const lx = turfX + (turfW * i / 4);
-        ctx.beginPath(); ctx.moveTo(lx, turfY + turfH * 0.3); ctx.lineTo(lx, turfY + turfH * 0.7); ctx.stroke();
+      // Subtle yard lines on the felt
+      const feltX = z.x * TILE, feltY = z.y * TILE;
+      const feltW = z.w * TILE, feltH = z.h * TILE;
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = 1;
+      // Center line
+      const cx = feltX + feltW / 2;
+      ctx.beginPath(); ctx.moveTo(cx, feltY + 4); ctx.lineTo(cx, feltY + feltH - 4); ctx.stroke();
+      // Yard marks
+      for (let i = 1; i < 5; i++) {
+        const lx = feltX + (feltW * i / 5);
+        ctx.beginPath();
+        ctx.moveTo(lx, feltY + feltH * 0.2);
+        ctx.lineTo(lx, feltY + feltH * 0.8);
+        ctx.stroke();
       }
-      ctx.strokeRect(turfX + 2, turfY + 2, turfW - 4, turfH - 4);
-      ctx.globalAlpha = 1;
+      // Border
+      ctx.strokeStyle = C.feltBorder;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(feltX + 2, feltY + 2, feltW - 4, feltH - 4);
     }
   }
 
-  // Wall trim
-  for (let c = 0; c < COLS; c++) {
-    px(c * TILE, 2 * TILE - 4, TILE, 4, C.wallAccent);
-  }
-  // Wall surface
+  // North wall surface (2 tile rows)
   for (let r = 0; r < 2; r++) {
     for (let c = 0; c < COLS; c++) {
       const tx = c * TILE, ty = r * TILE;
       px(tx, ty, TILE, TILE, C.wallMid);
-      if ((c + r) % 3 === 0) px(tx + 4, ty + 4, TILE - 8, TILE - 8, C.wallLight);
+      // Subtle panel texture
+      if ((c + r) % 4 === 0) px(tx + 2, ty + 2, TILE - 4, TILE - 4, C.wallLight);
     }
   }
-  // Bottom wall
+  // Wall trim at bottom of north wall
+  for (let c = 0; c < COLS; c++) {
+    px(c * TILE, 2 * TILE - 4, TILE, 4, C.wallAccent);
+  }
+
+  // South wall (bottom row)
   for (let c = 0; c < COLS; c++) {
     px(c * TILE, (ROWS - 1) * TILE, TILE, TILE, C.wallMid);
+    // Baseboard trim
+    px(c * TILE, (ROWS - 1) * TILE, TILE, 3, C.wallAccent);
   }
-  // Side walls
+
+  // Side walls (left and right columns)
   for (let r = 0; r < ROWS; r++) {
     px(0, r * TILE, TILE, TILE, C.wallMid);
     px((COLS - 1) * TILE, r * TILE, TILE, TILE, C.wallMid);
+    // Subtle vertical trim on side walls
+    if (r >= 2 && r < ROWS - 1) {
+      px(TILE - 3, r * TILE, 3, TILE, C.wallAccent);
+      px((COLS - 1) * TILE, r * TILE, 3, TILE, C.wallAccent);
+    }
   }
 }
 
@@ -748,28 +838,40 @@ function drawFloor() {
 function drawDraftBoard(f) {
   const x = f.x * TILE, y = f.y * TILE;
   const w = f.w * TILE, h = f.h * TILE;
+  // Board background and frame
   drawPixelRect(x + 2, y + 2, w - 4, h - 4, C.boardBg, C.boardFrame);
+  // Inner panel
+  drawPixelRect(x + 4, y + 4, w - 8, h - 8, '#0f0a06');
+  // Title
   ctx.fillStyle = '#d97757';
   ctx.font = 'bold 10px "Space Mono", monospace';
   ctx.textAlign = 'center';
   ctx.fillText('DRAFT BOARD', x + w / 2, y + 14);
-  const cardW = 22, cardH = 8, gap = 3;
-  const startX = x + 8, startY = y + 20;
-  const colors = ['#d97757','#5b7fff','#2ec4b6','#8b5cf6','#e87422','#d44040','#ffc857','#33aaaa'];
+  // Grid of colored player cards (position colors: reds, oranges, yellows, greens, blues, purples)
+  const cardW = 18, cardH = 6, gap = 2;
+  const startX = x + 8, startY = y + 18;
+  const posColors = [
+    '#d44040','#d44040','#d97757','#d97757','#e87422',  // reds/oranges (RBs)
+    '#ffc857','#ffc857','#2ec4b6','#2ec4b6','#5b7fff',  // yellows/greens/blues (WRs/QBs)
+    '#5b7fff','#8b5cf6','#8b5cf6','#33aaaa','#d44040',  // blues/purples (TEs)
+    '#d97757',
+  ];
   const t = now();
-  for (let row = 0; row < 4; row++) {
-    for (let col = 0; col < 9; col++) {
+  const maxCols = Math.floor((w - 16) / (cardW + gap));
+  for (let row = 0; row < 5; row++) {
+    for (let col = 0; col < maxCols; col++) {
       const cx = startX + col * (cardW + gap);
       const cy = startY + row * (cardH + gap);
-      const ci = (row * 9 + col) % colors.length;
+      if (cy + cardH > y + h - 4) continue;
+      const ci = (row * maxCols + col) % posColors.length;
       const flipPhase = Math.sin(t / 2000 + row * 3 + col * 7);
       const scaleX = flipPhase > 0.92 ? Math.abs(Math.cos(t / 200 + col)) : 1;
       if (scaleX > 0.1) {
         const adjW = cardW * scaleX;
         const adjX = cx + (cardW - adjW) / 2;
-        px(adjX, cy, adjW, cardH, colors[ci]);
+        px(adjX, cy, adjW, cardH, posColors[ci]);
         if (scaleX > 0.5) {
-          px(adjX + 2, cy + 2, adjW * 0.6, 2, 'rgba(255,255,255,0.4)');
+          px(adjX + 1, cy + 1, adjW * 0.5, 2, 'rgba(255,255,255,0.35)');
         }
       }
     }
@@ -780,40 +882,81 @@ function drawDraftBoard(f) {
 function drawTV(f) {
   const x = f.x * TILE, y = f.y * TILE;
   const w = f.w * TILE, h = f.h * TILE;
-  drawPixelRect(x + 3, y + 4, w - 6, h - 10, C.tvFrame);
-  const sx = x + 6, sy = y + 7, sw = w - 12, sh = h - 18;
+  // Frame
+  drawPixelRect(x + 2, y + 3, w - 4, h - 8, C.tvFrame);
+  // Screen bezel
+  const sx = x + 5, sy = y + 6, sw = w - 10, sh = h - 14;
   px(sx, sy, sw, sh, C.tvScreen);
+  // Screen glow effect (green/cyan data visualization)
   const t = now();
-  for (let i = 0; i < 8; i++) {
-    const bx = sx + ((t / 50 + i * 13) % sw);
-    const by = sy + ((Math.sin(t / 800 + i) + 1) * sh / 2.5) + 2;
-    px(bx % (sx + sw), by, 4, 3, i % 2 === 0 ? C.tvGlow : '#55aaee');
+  // Data bars
+  for (let i = 0; i < 6; i++) {
+    const barH = 2 + Math.abs(Math.sin(t / 600 + i * 1.2)) * (sh * 0.5);
+    const bx = sx + 3 + i * Math.floor((sw - 6) / 6);
+    px(bx, sy + sh - 2 - barH, 4, barH, i % 2 === 0 ? C.tvGlow : '#22aaaa');
   }
-  const scanY = sy + ((t / 30) % sh);
-  px(sx, scanY, sw, 1, 'rgba(100,180,255,0.15)');
-  px(x + w / 2 - 3, y + h - 6, 6, 4, C.tvFrame);
+  // Scan line
+  const scanY = sy + ((t / 25) % sh);
+  px(sx, scanY, sw, 1, 'rgba(51,204,170,0.2)');
+  // Screen edge glow
+  ctx.globalAlpha = 0.15;
+  px(sx - 1, sy - 1, sw + 2, sh + 2, C.tvGlow);
+  ctx.globalAlpha = 1;
+  // Mount bracket
+  px(x + w / 2 - 4, y + h - 5, 8, 4, C.tvFrame);
 }
 
 function drawDesk(f) {
   const x = f.x * TILE, y = f.y * TILE;
-  const w = 3 * TILE, h = 2 * TILE;
-  drawPixelRect(x + 2, y + 6, w - 4, h - 16, C.deskTop);
-  drawPixelRect(x + 2, y + h - 10, w - 4, 10, C.deskFront);
-  px(x + 4, y + h - 4, 4, 4, C.deskLeg);
-  px(x + w - 8, y + h - 4, 4, 4, C.deskLeg);
-  const mx = x + w / 2 - 10, my = y + 2;
-  drawPixelRect(mx, my, 20, 14, C.monitor);
   const t = now();
-  px(mx + 2, my + 2, 16, 10, C.screenBg);
   const cursorOn = Math.floor(t / 500) % 2;
-  for (let line = 0; line < 3; line++) {
-    const lw = 6 + ((line * 7 + Math.floor(t / 3000)) % 8);
-    px(mx + 3, my + 3 + line * 3, lw, 2, C.monitorGlow);
+
+  if (f.facing === 'left' || f.facing === 'right') {
+    // Vertical desk (3 wide x 2 tall, monitor on the wall side)
+    const w = 3 * TILE, h = 2 * TILE;
+    // Desk surface
+    drawPixelRect(x + 2, y + 6, w - 4, h - 16, C.deskTop);
+    drawPixelRect(x + 2, y + h - 10, w - 4, 10, C.deskFront);
+    px(x + 4, y + h - 4, 4, 4, C.deskLeg);
+    px(x + w - 8, y + h - 4, 4, 4, C.deskLeg);
+    // Monitor (positioned toward the wall side)
+    const mx = f.facing === 'left' ? x + 4 : x + w - 24;
+    const my = y + 2;
+    drawPixelRect(mx, my, 20, 14, C.monitor);
+    px(mx + 2, my + 2, 16, 10, C.screenBg);
+    for (let line = 0; line < 3; line++) {
+      const lw = 6 + ((line * 7 + Math.floor(t / 3000)) % 8);
+      px(mx + 3, my + 3 + line * 3, lw, 2, C.monitorGlow);
+    }
+    if (cursorOn) px(mx + 14, my + 9, 2, 2, C.monitorGlow);
+    px(mx + 8, my + 14, 4, 3, '#1a1a2e');
+    // Keyboard
+    px(x + w / 2 - 6, y + 20, 12, 4, '#1a1a2e');
+    px(x + w / 2 - 5, y + 21, 10, 2, '#3a3a4a');
+  } else {
+    // Standard horizontal desk (facing up or down)
+    const w = 3 * TILE, h = 2 * TILE;
+    drawPixelRect(x + 2, y + 6, w - 4, h - 16, C.deskTop);
+    drawPixelRect(x + 2, y + h - 10, w - 4, 10, C.deskFront);
+    px(x + 4, y + h - 4, 4, 4, C.deskLeg);
+    px(x + w - 8, y + h - 4, 4, 4, C.deskLeg);
+    const mx = x + w / 2 - 10, my = y + 2;
+    drawPixelRect(mx, my, 20, 14, C.monitor);
+    px(mx + 2, my + 2, 16, 10, C.screenBg);
+    for (let line = 0; line < 3; line++) {
+      const lw = 6 + ((line * 7 + Math.floor(t / 3000)) % 8);
+      px(mx + 3, my + 3 + line * 3, lw, 2, C.monitorGlow);
+    }
+    if (cursorOn) px(mx + 14, my + 9, 2, 2, C.monitorGlow);
+    px(mx + 8, my + 14, 4, 3, '#1a1a2e');
+    px(x + w / 2 - 8, y + 20, 16, 4, '#1a1a2e');
+    px(x + w / 2 - 7, y + 21, 14, 2, '#3a3a4a');
   }
-  if (cursorOn) px(mx + 14, my + 9, 2, 2, C.monitorGlow);
-  px(mx + 8, my + 14, 4, 3, '#2d1f14');
-  px(x + w / 2 - 8, y + 20, 16, 4, '#2d1f14');
-  px(x + w / 2 - 7, y + 21, 14, 2, '#5c4a3d');
+  // Papers/sticky notes on desk
+  if ((f.x + f.y) % 3 === 0) {
+    px(x + 6, y + 22, 8, 6, C.stickyYellow);
+    px(x + 7, y + 23, 5, 1, 'rgba(0,0,0,0.15)');
+  }
 }
 
 function drawPixelFootball(x, y) {
@@ -828,31 +971,71 @@ function drawPixelFootball(x, y) {
 function drawWarTable(f) {
   const x = f.x * TILE, y = f.y * TILE;
   const w = f.w * TILE, h = f.h * TILE;
-  px(x + 4, y + 4, w - 4, h - 4, 'rgba(0,0,0,0.2)');
-  drawPixelRect(x, y + 4, w, h - 8, C.tableTop, C.tableDark);
-  drawPixelRect(x + 6, y + 8, w - 12, h - 16, null, 'rgba(100,70,30,0.3)');
-  // Center emblem
+  // Drop shadow
+  px(x + 5, y + 5, w - 2, h - 2, 'rgba(0,0,0,0.25)');
+  // Table outer border (dark green)
+  drawPixelRect(x, y + 4, w, h - 8, C.tableBorder);
+  // Table felt surface (lighter green)
+  drawPixelRect(x + 6, y + 8, w - 12, h - 16, C.tableTop);
+  // Inner felt
+  drawPixelRect(x + 10, y + 12, w - 20, h - 24, C.feltLight);
+  // Subtle grid / yard line marks on felt
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  for (let i = 1; i < 4; i++) {
+    const lx = x + 10 + (w - 20) * i / 4;
+    ctx.beginPath(); ctx.moveTo(lx, y + 14); ctx.lineTo(lx, y + h - 14); ctx.stroke();
+  }
+  // Center line
   const cx = x + w / 2, cy = y + h / 2;
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(cx, y + 12); ctx.lineTo(cx, y + h - 12); ctx.stroke();
+
+  // Big screen/monitor ON the table — dark teal/green oval with "RAZZLE" text
+  const screenW = 100, screenH = 50;
+  const sx = cx - screenW / 2, sy = cy - screenH / 2;
+  // Oval screen background
+  ctx.save();
   ctx.beginPath();
-  ctx.arc(cx, cy, 18, 0, Math.PI * 2);
-  ctx.fillStyle = '#d97757';
+  ctx.ellipse(cx, cy, screenW / 2, screenH / 2, 0, 0, Math.PI * 2);
+  ctx.fillStyle = '#0a2a1a';
   ctx.fill();
-  ctx.strokeStyle = '#ffc857';
+  ctx.strokeStyle = '#1a5a3a';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  // Inner glow ring
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, screenW / 2 - 4, screenH / 2 - 4, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(51,204,170,0.2)';
   ctx.lineWidth = 2;
   ctx.stroke();
-  ctx.fillStyle = '#2d1f14';
-  ctx.font = 'bold 9px "Space Mono", monospace';
+  ctx.restore();
+
+  // "RAZZLE" in large golden/orange text
+  ctx.fillStyle = '#d4aa40';
+  ctx.font = 'bold 16px "Luckiest Guy", cursive';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('RAZZLE', cx, cy);
+  ctx.fillText('RAZZLE', cx, cy - 2);
+  // Subtle glow effect
+  ctx.globalAlpha = 0.3;
+  ctx.fillStyle = '#ffc857';
+  ctx.fillText('RAZZLE', cx, cy - 2);
+  ctx.globalAlpha = 1;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
-  // Papers
-  px(x + 14, y + 12, 12, 8, '#e8e0cc');
-  px(x + 15, y + 13, 8, 1, '#5c4a3d');
-  px(x + 15, y + 15, 6, 1, '#5c4a3d');
-  px(x + w - 30, y + h - 22, 10, 7, '#ddd8c8');
-  drawPixelFootball(x + w - 45, y + 14);
+
+  // Papers scattered on the table
+  px(x + 14, y + 14, 14, 10, '#e8e0cc');
+  px(x + 15, y + 15, 10, 1, '#5c4a3d');
+  px(x + 15, y + 17, 8, 1, '#5c4a3d');
+  px(x + 15, y + 19, 6, 1, '#5c4a3d');
+  px(x + w - 28, y + h - 24, 12, 9, '#ddd8c8');
+  px(x + w - 27, y + h - 23, 8, 1, '#5c4a3d');
+  px(x + w - 27, y + h - 21, 6, 1, '#5c4a3d');
+  drawPixelFootball(x + w - 40, y + 16);
+  drawPixelFootball(x + 18, y + h - 20);
 }
 
 function drawCoffee(f) {
@@ -933,19 +1116,27 @@ function drawClock(f) {
 function drawBanner(f) {
   const x = f.x * TILE, y = f.y * TILE;
   const w = f.w * TILE, h = f.h * TILE;
-  drawPixelRect(x + 2, y + 4, w - 4, h - 8, C.bannerBg, '#ffc857');
+  // Banner background with gold border
+  drawPixelRect(x + 2, y + 4, w - 4, h - 6, C.bannerBg, '#ffc857');
+  // Pennant bottom
   ctx.fillStyle = C.bannerBg;
   ctx.beginPath();
-  ctx.moveTo(x + 2, y + h - 4);
-  ctx.lineTo(x + w / 2, y + h + 4);
-  ctx.lineTo(x + w - 2, y + h - 4);
+  ctx.moveTo(x + 2, y + h - 2);
+  ctx.lineTo(x + w / 2, y + h + 6);
+  ctx.lineTo(x + w - 2, y + h - 2);
   ctx.fill();
-  ctx.fillStyle = C.bannerText;
-  ctx.font = 'bold 12px "Space Mono", monospace';
+  // Text
+  ctx.fillStyle = '#ffc857';
+  ctx.font = 'bold 14px "Luckiest Guy", cursive';
   ctx.textAlign = 'center';
   ctx.fillText('RAZZLE', x + w / 2, y + 22);
-  ctx.font = 'bold 9px "Space Mono", monospace';
+  ctx.fillStyle = C.bannerText;
+  ctx.font = 'bold 10px "Space Mono", monospace';
   ctx.fillText('SIT ROOM', x + w / 2, y + 36);
+  // Small decorative stars
+  ctx.fillStyle = '#ffc857';
+  px(x + 8, y + 12, 3, 3, '#ffc857');
+  px(x + w - 11, y + 12, 3, 3, '#ffc857');
   ctx.textAlign = 'left';
 }
 
@@ -1048,25 +1239,302 @@ function drawCabinet(f) {
   }
 }
 
+// ── NEW FURNITURE DRAWING FUNCTIONS ────────────────────────────────────
+
+function drawCeilingLights() {
+  // Small yellow/warm white circles along the top wall (ceiling area)
+  const lightPositions = [3, 7, 11, 15, 19, 23, 27];
+  const t = now();
+  for (const lx of lightPositions) {
+    const x = lx * TILE + TILE / 2;
+    const y = 2 * TILE - 8;
+    // Glow
+    ctx.globalAlpha = 0.12 + Math.sin(t / 2000 + lx) * 0.03;
+    ctx.beginPath();
+    ctx.arc(x, y + 4, 18, 0, Math.PI * 2);
+    ctx.fillStyle = C.ceilingLightGlow;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    // Light fixture
+    px(x - 3, y - 2, 6, 3, '#5a5a6a');
+    ctx.beginPath();
+    ctx.arc(x, y + 4, 5, 0, Math.PI * 2);
+    ctx.fillStyle = C.ceilingLight;
+    ctx.fill();
+    // Bright center
+    ctx.beginPath();
+    ctx.arc(x, y + 4, 2, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff8e0';
+    ctx.fill();
+  }
+}
+
+function drawCeilingCables() {
+  // Dark cables/pipes running along the ceiling area
+  const cableY = 2 * TILE - 12;
+  ctx.strokeStyle = C.cable;
+  ctx.lineWidth = 2;
+  // Main cable run
+  ctx.beginPath();
+  ctx.moveTo(TILE, cableY);
+  ctx.lineTo((COLS - 1) * TILE, cableY);
+  ctx.stroke();
+  // Secondary cable
+  ctx.strokeStyle = C.cableDark;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(TILE, cableY + 4);
+  ctx.lineTo((COLS - 1) * TILE, cableY + 4);
+  ctx.stroke();
+  // Vertical drops
+  ctx.strokeStyle = C.cable;
+  ctx.lineWidth = 1;
+  const drops = [5, 13, 18, 25];
+  for (const d of drops) {
+    const dx = d * TILE + TILE / 2;
+    ctx.beginPath();
+    ctx.moveTo(dx, cableY);
+    ctx.lineTo(dx, cableY + 10);
+    ctx.stroke();
+  }
+}
+
+function drawServerRack(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = 2 * TILE, h = (f.h || 3) * TILE;
+  // Rack body
+  drawPixelRect(x + 2, y + 2, w - 4, h - 4, C.serverDark, C.serverGray);
+  // Inner panel
+  drawPixelRect(x + 5, y + 5, w - 10, h - 10, C.serverGray);
+  // Rack unit lines (horizontal dividers)
+  const unitH = Math.floor((h - 12) / 4);
+  for (let i = 1; i < 4; i++) {
+    const ly = y + 6 + i * unitH;
+    px(x + 5, ly, w - 10, 1, C.serverDark);
+  }
+  // Ventilation slots
+  for (let i = 0; i < 3; i++) {
+    const sy = y + 8 + i * unitH;
+    for (let s = 0; s < 4; s++) {
+      px(x + 8 + s * 10, sy + 4, 7, 1, C.serverDark);
+      px(x + 8 + s * 10, sy + 7, 7, 1, C.serverDark);
+    }
+  }
+  // Blinking LEDs
+  const t = now();
+  const ledY = [y + 10, y + 10 + unitH, y + 10 + unitH * 2, y + 10 + unitH * 3 - 4];
+  const ledColors = [C.ledGreen, C.ledRed, C.ledBlue, C.ledYellow];
+  for (let i = 0; i < ledY.length; i++) {
+    const blink = Math.sin(t / (300 + i * 100) + i * 2) > 0;
+    if (blink) {
+      px(x + w - 10, ledY[i], 3, 3, ledColors[i % ledColors.length]);
+      // LED glow
+      ctx.globalAlpha = 0.3;
+      px(x + w - 11, ledY[i] - 1, 5, 5, ledColors[i % ledColors.length]);
+      ctx.globalAlpha = 1;
+    }
+    // Power indicator (always on)
+    px(x + w - 16, ledY[i] + 1, 2, 2, C.ledGreen);
+  }
+}
+
+function drawVentGrill(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const h = (f.h || 2) * TILE;
+  // Grill background
+  drawPixelRect(x + 4, y + 4, TILE - 8, h - 8, C.wallLight);
+  // Horizontal slats
+  for (let i = 0; i < Math.floor((h - 12) / 5); i++) {
+    px(x + 6, y + 7 + i * 5, TILE - 12, 2, C.ventGrill);
+  }
+}
+
+function drawStockChart(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = f.w * TILE, h = f.h * TILE;
+  // Chart frame
+  drawPixelRect(x + 2, y + 2, w - 4, h - 4, C.chartBg, C.serverGray);
+  // Inner chart area
+  const cx = x + 6, cy = y + 8, cw = w - 12, ch = h - 16;
+  drawPixelRect(cx, cy, cw, ch, '#0a0a1e');
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 1;
+  for (let i = 1; i < 4; i++) {
+    const gy = cy + ch * i / 4;
+    ctx.beginPath(); ctx.moveTo(cx, gy); ctx.lineTo(cx + cw, gy); ctx.stroke();
+  }
+  // Green line (uptrend)
+  const t = now();
+  ctx.strokeStyle = C.chartGreen;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let i = 0; i < 12; i++) {
+    const px2 = cx + 3 + i * (cw - 6) / 11;
+    const py2 = cy + ch * 0.7 - Math.sin(i * 0.5 + t / 3000) * ch * 0.3 - i * 1.5;
+    if (i === 0) ctx.moveTo(px2, py2); else ctx.lineTo(px2, py2);
+  }
+  ctx.stroke();
+  // Red line (downtrend)
+  ctx.strokeStyle = C.chartRed;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let i = 0; i < 12; i++) {
+    const px2 = cx + 3 + i * (cw - 6) / 11;
+    const py2 = cy + ch * 0.3 + Math.cos(i * 0.7 + t / 2500) * ch * 0.2 + i * 0.8;
+    if (i === 0) ctx.moveTo(px2, py2); else ctx.lineTo(px2, py2);
+  }
+  ctx.stroke();
+  // Title
+  ctx.fillStyle = '#8a8a9a';
+  ctx.font = 'bold 7px "Space Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('ANALYTICS', x + w / 2, y + 7);
+  ctx.textAlign = 'left';
+}
+
+function drawAnalysisBoard(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = f.w * TILE, h = f.h * TILE;
+  // Board frame
+  drawPixelRect(x + 2, y + 2, w - 4, h - 4, '#1a1a28', C.serverGray);
+  // Inner area
+  drawPixelRect(x + 5, y + 5, w - 10, h - 10, '#0f0f1e');
+  // Title
+  ctx.fillStyle = '#d97757';
+  ctx.font = 'bold 8px "Space Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('WAR ROOM', x + w / 2, y + 14);
+  // Tier badges (colored circles)
+  const tiers = ['#d44040', '#d97757', '#ffc857', '#2ec4b6', '#5b7fff'];
+  for (let i = 0; i < tiers.length; i++) {
+    const ty = y + 20 + i * 12;
+    if (ty + 8 > y + h - 6) break;
+    ctx.beginPath();
+    ctx.arc(x + 14, ty + 4, 4, 0, Math.PI * 2);
+    ctx.fillStyle = tiers[i];
+    ctx.fill();
+    // Label line
+    px(x + 22, ty + 3, 30 + (i * 7) % 20, 2, 'rgba(255,255,255,0.15)');
+    px(x + 22, ty + 7, 20 + (i * 11) % 15, 1, 'rgba(255,255,255,0.08)');
+  }
+  // Connecting lines between tiers
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < tiers.length - 1; i++) {
+    const y1 = y + 20 + i * 12 + 8;
+    const y2 = y + 20 + (i + 1) * 12;
+    if (y2 > y + h - 6) break;
+    ctx.beginPath();
+    ctx.moveTo(x + 14, y1);
+    ctx.lineTo(x + 14, y2);
+    ctx.stroke();
+  }
+  ctx.textAlign = 'left';
+}
+
+function drawFilingCabinet(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const h = (f.h || 2) * TILE;
+  const w = TILE;
+  // Cabinet body
+  drawPixelRect(x + 3, y + 2, w - 6, h - 4, C.filingCab, C.serverDark);
+  // Drawers
+  const drawerH = Math.floor((h - 8) / 3);
+  for (let i = 0; i < 3; i++) {
+    const dy = y + 4 + i * drawerH;
+    drawPixelRect(x + 5, dy + 1, w - 10, drawerH - 3, C.serverLight);
+    // Handle
+    px(x + w / 2 - 3, dy + drawerH / 2 - 1, 6, 2, C.filingHandle);
+  }
+}
+
+function drawCoffeeStation(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = 3 * TILE;
+  // Counter/table
+  drawPixelRect(x + 2, y + 6, w - 4, 24, C.deskTop);
+  drawPixelRect(x + 2, y + 26, w - 4, 12, C.deskFront);
+  px(x + 4, y + 34, 4, 4, C.deskLeg);
+  px(x + w - 8, y + 34, 4, 4, C.deskLeg);
+  // Coffee machine
+  drawPixelRect(x + 6, y + 2, 22, 20, C.coffeeMach, C.coffeeAccent);
+  px(x + 8, y + 4, 18, 8, '#1a3a1a');
+  px(x + 9, y + 5, 4, 2, '#33cc33');
+  // Cup
+  px(x + 14, y + 16, 8, 6, '#e8e0cc');
+  px(x + 13, y + 16, 10, 1, '#d0c8b0');
+  // Steam animation
+  const t = now();
+  const steamPhase = Math.floor(t / 300) % 4;
+  ctx.globalAlpha = 0.4;
+  px(x + 16 + (steamPhase % 2), y + 12 - steamPhase, 2, 2, '#c4b5a5');
+  px(x + 18 - (steamPhase % 2), y + 10 - steamPhase, 2, 2, '#c4b5a5');
+  ctx.globalAlpha = 1;
+  // Second cup (on counter)
+  px(x + w - 18, y + 12, 6, 5, '#e8e0cc');
+  // Donut/snack
+  px(x + w - 10, y + 12, 5, 4, '#d97757');
+  px(x + w - 9, y + 13, 2, 2, '#ffc857');
+  // "COFFEE" label
+  ctx.fillStyle = '#8a7565';
+  ctx.font = 'bold 6px "Space Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('COFFEE', x + w / 2, y + 42);
+  ctx.textAlign = 'left';
+}
+
+function drawStickyNotes(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const colors = [C.stickyYellow, C.stickyPink, C.stickyBlue, C.stickyYellow];
+  for (let i = 0; i < 4; i++) {
+    const nx = x + (i % 2) * 14 + 2;
+    const ny = y + Math.floor(i / 2) * 14 + 2;
+    // Slight rotation effect via offset
+    px(nx + (i % 2), ny, 12, 12, colors[i]);
+    // Text lines
+    px(nx + 2, ny + 3, 7, 1, 'rgba(0,0,0,0.2)');
+    px(nx + 2, ny + 5, 5, 1, 'rgba(0,0,0,0.15)');
+    px(nx + 2, ny + 7, 6, 1, 'rgba(0,0,0,0.15)');
+  }
+}
+
 function drawFurniture() {
-  const sorted = [...furniture].sort((a, b) => a.y - b.y);
+  // First draw ceiling-level elements
+  for (const f of furniture) {
+    if (f.type === 'ceilingCables') drawCeilingCables();
+    if (f.type === 'ceilingLights') drawCeilingLights();
+    if (f.type === 'ventGrill') drawVentGrill(f);
+  }
+
+  // Then draw furniture sorted by Y position
+  const sorted = [...furniture].filter(f =>
+    f.type !== 'ceilingLights' && f.type !== 'ceilingCables' && f.type !== 'ventGrill'
+  ).sort((a, b) => (a.y || 0) - (b.y || 0));
+
   for (const f of sorted) {
     switch (f.type) {
-      case 'draftBoard':  drawDraftBoard(f); break;
-      case 'tv':          drawTV(f); break;
-      case 'desk':        drawDesk(f); break;
-      case 'warTable':    drawWarTable(f); break;
-      case 'coffee':      drawCoffee(f); break;
-      case 'bookshelf':   drawBookshelf(f); break;
-      case 'plant':       drawPlant(f); break;
-      case 'clock':       drawClock(f); break;
-      case 'banner':      drawBanner(f); break;
-      case 'trophyCase':  drawTrophyCase(f); break;
-      case 'helmet':      drawHelmet(f); break;
-      case 'whiteboard':  drawWhiteboard(f); break;
-      case 'chair':       drawChair(f); break;
-      case 'phone':       drawPhone(f); break;
-      case 'cabinet':     drawCabinet(f); break;
+      case 'draftBoard':     drawDraftBoard(f); break;
+      case 'tv':             drawTV(f); break;
+      case 'desk':           drawDesk(f); break;
+      case 'warTable':       drawWarTable(f); break;
+      case 'coffee':         drawCoffee(f); break;
+      case 'bookshelf':      drawBookshelf(f); break;
+      case 'plant':          drawPlant(f); break;
+      case 'clock':          drawClock(f); break;
+      case 'banner':         drawBanner(f); break;
+      case 'trophyCase':     drawTrophyCase(f); break;
+      case 'helmet':         drawHelmet(f); break;
+      case 'whiteboard':     drawWhiteboard(f); break;
+      case 'chair':          drawChair(f); break;
+      case 'phone':          drawPhone(f); break;
+      case 'cabinet':        drawCabinet(f); break;
+      case 'serverRack':     drawServerRack(f); break;
+      case 'stockChart':     drawStockChart(f); break;
+      case 'analysisBoard':  drawAnalysisBoard(f); break;
+      case 'filingCabinet':  drawFilingCabinet(f); break;
+      case 'coffeeStation':  drawCoffeeStation(f); break;
+      case 'stickyNotes':    drawStickyNotes(f); break;
     }
   }
 }
@@ -1113,17 +1581,17 @@ function drawParticles() {
 // ── AGENT DEFINITIONS ──────────────────────────────────────────────────
 const AGENT_DEFS = [
   { id: 0, name: 'Razzle',      role: 'Chief of Staff',   sprite: 'char_0', spriteKey: 'razzle',    color: '#d97757',
-    homeX: 14, homeY: 8, stations: [{x:14,y:8},{x:15,y:10},{x:6,y:3},{x:20,y:10}] },
+    homeX: 14, homeY: 8, stations: [{x:14,y:8},{x:15,y:11},{x:7,y:3},{x:20,y:11}] },
   { id: 1, name: 'Dr. Dolphin', role: 'Medical Analyst',  sprite: 'char_1', spriteKey: 'medical',   color: '#5b7fff',
-    homeX: 3, homeY: 7, stations: [{x:3,y:7},{x:15,y:13},{x:26,y:10},{x:12,y:10}] },
+    homeX: 4, homeY: 5, stations: [{x:4,y:5},{x:13,y:14},{x:22,y:17},{x:12,y:11}] },
   { id: 2, name: 'Hawkeye',     role: 'Scout',            sprite: 'char_2', spriteKey: 'scout',     color: '#2ec4b6',
-    homeX: 8, homeY: 7, stations: [{x:8,y:7},{x:15,y:3},{x:18,y:10},{x:10,y:8}] },
+    homeX: 4, homeY: 8, stations: [{x:4,y:8},{x:8,y:3},{x:17,y:11},{x:23,y:8}] },
   { id: 3, name: 'Bones',       role: 'Diplomat',         sprite: 'char_3', spriteKey: 'diplomat',   color: '#8b5cf6',
-    homeX: 22, homeY: 7, stations: [{x:22,y:7},{x:3,y:18},{x:16,y:13},{x:10,y:11}] },
+    homeX: 21, homeY: 6, stations: [{x:21,y:6},{x:10,y:17},{x:15,y:14},{x:9,y:11}] },
   { id: 4, name: 'Octo',        role: 'Quant',            sprite: 'char_4', spriteKey: 'quant',     color: '#e87422',
-    homeX: 3, homeY: 14, stations: [{x:3,y:14},{x:16,y:8},{x:26,y:10},{x:19,y:10}] },
+    homeX: 4, homeY: 11, stations: [{x:4,y:11},{x:16,y:8},{x:26,y:5},{x:20,y:12}] },
   { id: 5, name: 'Atlas',       role: 'Historian',        sprite: 'char_5', spriteKey: 'historian',  color: '#d44040',
-    homeX: 8, homeY: 14, stations: [{x:8,y:14},{x:27,y:14},{x:12,y:11},{x:20,y:18}] },
+    homeX: 7, homeY: 16, stations: [{x:7,y:16},{x:26,y:12},{x:12,y:12},{x:18,y:17}] },
 ];
 
 // ── AGENT CLASS ────────────────────────────────────────────────────────
@@ -1613,8 +2081,15 @@ cvs.addEventListener('touchend', () => {
 
 // ── AMBIENT EFFECTS ────────────────────────────────────────────────────
 function ambientEffects() {
+  // Steam from coffee station (south wall)
   if (Math.random() < 0.02) {
-    spawnParticle(26 * TILE + 16, 9 * TILE + 18, 'steam');
+    spawnParticle(23 * TILE + 16, 18 * TILE + 8, 'steam');
+  }
+  // Occasional dust mote in room
+  if (Math.random() < 0.005) {
+    const rx = (2 + Math.random() * 26) * TILE;
+    const ry = (3 + Math.random() * 16) * TILE;
+    spawnParticle(rx, ry, 'dust');
   }
 }
 
