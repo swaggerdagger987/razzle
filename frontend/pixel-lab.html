@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ede0cf">
+<title>Pixel Agent Lab — Razzle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ede0cf;
+    --bg-warm: #f7efe5;
+    --bg-card: #f7efe5;
+    --bg-ink: #1a110a;
+    --ink: #2d1f14;
+    --ink-medium: #5c4a3d;
+    --ink-light: #8a7565;
+    --ink-faint: #c4b5a5;
+    --orange: #d97757;
+    --orange-light: #f2c4a8;
+    --yellow: #ffc857;
+    --green: #2ec4b6;
+    --blue: #5b7fff;
+    --purple: #8b5cf6;
+    --red: #d44040;
+    --shadow-drop: rgba(45,31,20,0.15);
+    --font-display: 'Luckiest Guy', cursive;
+    --font-mono: 'Space Mono', monospace;
+    --font-hand: 'Caveat', cursive;
+    --radius-sm: 6px;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg-ink);
+    color: #ede0cf;
+    font-family: var(--font-mono);
+  }
+
+  /* ===== LAYOUT ===== */
+  .lab-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ===== HEADER BAR ===== */
+  .lab-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: #2d1f14;
+    border-bottom: 3px solid #5c4a3d;
+    flex-shrink: 0;
+    min-height: 48px;
+  }
+
+  .lab-header-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    color: var(--orange);
+  }
+
+  .lab-header-subtitle {
+    font-family: var(--font-hand);
+    font-size: 15px;
+    color: #8a7565;
+    margin-left: 12px;
+  }
+
+  .lab-header-controls {
+    font-size: 11px;
+    color: #8a7565;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ===== MAIN AREA ===== */
+  .lab-main {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ===== CANVAS AREA ===== */
+  .canvas-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    position: relative;
+    min-width: 0;
+  }
+
+  .canvas-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--yellow);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .canvas-container {
+    border: 3px solid #5c4a3d;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 #2d1f14;
+    background: #2d1f14;
+    position: relative;
+    aspect-ratio: 30 / 22;
+    max-width: 100%;
+    max-height: calc(100vh - 140px);
+  }
+
+  .canvas-container canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    image-rendering: pixelated;
+  }
+
+  .canvas-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .canvas-placeholder-icon {
+    font-size: 48px;
+    filter: drop-shadow(2px 2px 0 rgba(45,31,20,0.3));
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  .canvas-placeholder-text {
+    font-family: var(--font-hand);
+    font-size: 22px;
+    color: #8a7565;
+  }
+
+  .canvas-placeholder-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #c4b5a5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .canvas-hints {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #8a7565;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* ===== ROSTER SIDEBAR ===== */
+  .roster-sidebar {
+    width: 220px;
+    background: #2d1f14;
+    border-left: 3px solid #5c4a3d;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .roster-header {
+    font-family: var(--font-display);
+    font-size: 16px;
+    letter-spacing: -0.5px;
+    padding: 12px 14px;
+    background: #3b2821;
+    border-bottom: 2px solid #5c4a3d;
+    color: var(--orange);
+    text-align: center;
+  }
+
+  .roster-list {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .roster-agent {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-bottom: 2px dashed #3b2821;
+    transition: background 0.1s;
+  }
+
+  .roster-agent:last-child { border-bottom: none; }
+  .roster-agent:hover { background: #3b2821; }
+  .roster-agent.selected { background: #5c3325; }
+
+  .roster-avatar {
+    width: 32px;
+    height: 32px;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+    border-radius: 4px;
+  }
+
+  .roster-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .roster-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .roster-role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #8a7565;
+  }
+
+  .roster-status {
+    font-family: var(--font-hand);
+    font-size: 12px;
+    color: #c4b5a5;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .roster-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .roster-key-hint {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: #5c4a3d;
+    background: #1a110a;
+    border-radius: 3px;
+    padding: 1px 4px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* ===== SELECTED AGENT INFO BAR ===== */
+  .selected-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: #3b2821;
+    border-top: 2px solid #5c4a3d;
+    flex-shrink: 0;
+    min-height: 42px;
+  }
+
+  .selected-info-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+
+  .selected-info-role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #8a7565;
+  }
+
+  .selected-info-activity {
+    font-family: var(--font-hand);
+    font-size: 14px;
+    margin-left: auto;
+  }
+
+  .selected-info-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+  }
+
+  /* ===== STATUS BAR ===== */
+  .status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 16px;
+    background: rgba(26, 17, 10, 0.85);
+    border-top: 2px solid #5c4a3d;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: #8a7565;
+    flex-shrink: 0;
+  }
+
+  .status-dot-live {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2ec4b6;
+    display: inline-block;
+    margin-right: 6px;
+    animation: blink-live 2s ease-in-out infinite;
+  }
+
+  @keyframes blink-live {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .roster-sidebar { display: none; }
+    .lab-header-subtitle { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lab-wrapper">
+  <!-- Header -->
+  <div class="lab-header">
+    <div style="display:flex;align-items:baseline;">
+      <span class="lab-header-title">Pixel Agent Lab</span>
+      <span class="lab-header-subtitle">isolated development sandbox</span>
+    </div>
+    <div class="lab-header-controls">Arrow / WASD: move &middot; 1-6: select</div>
+  </div>
+
+  <!-- Main area: canvas + sidebar -->
+  <div class="lab-main">
+    <!-- Canvas area -->
+    <div class="canvas-area">
+      <div class="canvas-label">Situation Room &mdash; Live Feed</div>
+      <div class="canvas-container" id="canvasContainer">
+        <canvas id="warRoomCanvas" width="960" height="704" tabindex="0"></canvas>
+        <div class="canvas-placeholder" id="canvasPlaceholder">
+          <div class="canvas-placeholder-icon">&#x1F42F;</div>
+          <div class="canvas-placeholder-text">agents are setting up the Situation Room...</div>
+          <div class="canvas-placeholder-sub">pulling film...</div>
+        </div>
+      </div>
+      <div class="canvas-hints">Click agent to select &middot; Drag to pan &middot; Keys 1-6 switch agents</div>
+    </div>
+
+    <!-- Roster sidebar -->
+    <div class="roster-sidebar">
+      <div class="roster-header">Agent Roster</div>
+      <div class="roster-list" id="rosterList"></div>
+    </div>
+  </div>
+
+  <!-- Selected agent info bar -->
+  <div class="selected-info" id="selectedInfo">
+    <span class="selected-info-name" id="selName" style="color:#d97757;">Razzle</span>
+    <span class="selected-info-role" id="selRole">Chief of Staff</span>
+    <span class="selected-info-activity" id="selActivity">
+      <span class="selected-info-dot" id="selDot" style="background:#5c4a3d;"></span>
+      <span id="selState">idle</span>
+    </span>
+  </div>
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span><span class="status-dot-live"></span>6 agents online</span>
+    <span>pixel-lab.html &middot; standalone</span>
+  </div>
+</div>
+
+<script>
+/* ======================================================================
+   RAZZLE PIXEL AGENT LAB — STANDALONE ENGINE
+   Extracted from warroom.js for isolated development.
+   Canvas: 30x22 tile grid, 32px tiles, dark mode palette.
+   ====================================================================== */
+
+// ── CONSTANTS ──────────────────────────────────────────────────────────
+const TILE = 32;
+const COLS = 30;
+const ROWS = 22;
+const WORLD_W = COLS * TILE;
+const WORLD_H = ROWS * TILE;
+
+// New sprite sheets: 2x2 grid per animation type
+const NEW_SPRITE_FRAMES = 4;
+const NEW_SPRITE_COLS = 2;
+const SP_DRAW_W = 32;
+const SP_DRAW_H = 48;
+
+// Legacy sprite sheet dimensions (for old char_*.png fallback)
+const FR_W = 16, FR_H = 24, FR_COLS = 7, FR_ROWS = 4;
+const SP_SCALE = 2; // draw at 32x48
+
+const DIR = { DOWN: 0, LEFT: 1, RIGHT: 2, UP: 3 };
+const STATE = { IDLE: 0, WALK: 1, WORK_DESK: 2, ANALYZE_BOARD: 3, DISCUSS: 4, THINK: 5, CELEBRATE: 6, COFFEE: 7 };
+
+const WALK_FRAMES = [0, 1, 2, 1];
+const IDLE_FRAME = 0;
+const ANIM_SPEED = 150; // ms per walk frame
+
+// ── PALETTE (dark Situation Room) ────────────────────────────────────
+const C = {
+  wallDark:    '#121a2e',
+  wallMid:     '#1b2845',
+  wallLight:   '#243358',
+  wallAccent:  '#2e4070',
+  floorWood1:  '#8b6d3c',
+  floorWood2:  '#9c7a42',
+  floorWood3:  '#7a5e32',
+  turf1:       '#1e5c28',
+  turf2:       '#267832',
+  turf3:       '#1a4c22',
+  turfLine:    '#c4b5a5',
+  deskTop:     '#5c3a1a',
+  deskFront:   '#4a2e14',
+  deskLeg:     '#3c2410',
+  monitor:     '#0a1a0a',
+  monitorGlow: '#22cc55',
+  screenBg:    '#0c200c',
+  tableDark:   '#3c2410',
+  tableTop:    '#5a3818',
+  tvFrame:     '#2d1f14',
+  tvScreen:    '#0a1e3a',
+  tvGlow:      '#3388cc',
+  boardBg:     '#1a110a',
+  boardFrame:  '#3d2e22',
+  shelfWood:   '#6a4a28',
+  shelfBook1:  '#cc3030',
+  shelfBook2:  '#3060cc',
+  shelfBook3:  '#30aa50',
+  plantPot:    '#8a5a30',
+  plantLeaf:   '#2a8c3a',
+  coffeeMach:  '#3d2e22',
+  coffeeAccent:'#8a7565',
+  trophy:      '#d4aa40',
+  trophyBase:  '#5c4a3d',
+  clockFace:   '#e8e0cc',
+  clockFrame:  '#3d2e22',
+  helmetBase:  '#1a2844',
+  helmetStripe:'#d97757',
+  phone:       '#2d1f14',
+  phoneRed:    '#cc2222',
+  whiteboard:  '#e8e4d8',
+  wbFrame:     '#c4b5a5',
+  chairSeat:   '#3d2e22',
+  chairBack:   '#2d1f14',
+  bannerBg:    '#d97757',
+  bannerText:  '#2d1f14',
+  nameTag:     'rgba(0,0,0,0.7)',
+  nameText:    '#f7efe5',
+  bubbleBg:    '#f7efe5',
+  bubbleBorder:'#2d1f14',
+};
+
+// ── CANVAS SETUP ───────────────────────────────────────────────────────
+const cvs = document.getElementById('warRoomCanvas');
+const ctx = cvs.getContext('2d');
+
+function resizeCanvas() {
+  const container = document.getElementById('canvasContainer');
+  if (!container || !cvs) return;
+  cvs.width = WORLD_W;
+  cvs.height = WORLD_H;
+}
+resizeCanvas();
+
+// ── CAMERA ─────────────────────────────────────────────────────────────
+const cam = { x: 0, y: 0, targetX: 0, targetY: 0 };
+
+function updateCam() {
+  cam.x += (cam.targetX - cam.x) * 0.08;
+  cam.y += (cam.targetY - cam.y) * 0.08;
+}
+
+function centerCamOn(wx, wy) {
+  cam.targetX = wx - cvs.width / 2;
+  cam.targetY = wy - cvs.height / 2;
+}
+
+function clampCam() {
+  const maxX = Math.max(0, WORLD_W - cvs.width);
+  const maxY = Math.max(0, WORLD_H - cvs.height);
+  cam.targetX = Math.max(0, Math.min(maxX, cam.targetX));
+  cam.targetY = Math.max(0, Math.min(maxY, cam.targetY));
+  cam.x = Math.max(0, Math.min(maxX, cam.x));
+  cam.y = Math.max(0, Math.min(maxY, cam.y));
+}
+
+// ── SPRITE LOADING ─────────────────────────────────────────────────────
+const spriteImgs = {};
+const spriteSheets = {};
+let spritesLoaded = 0;
+const TOTAL_SPRITES_NEEDED = 24; // 6 agents x 4 sheets each
+
+const AGENT_SPRITES = {
+  razzle:    'razzle',
+  medical:   'drdolphin',
+  scout:     'scout',
+  diplomat:  'diplomat',
+  quant:     'quant',
+  historian: 'historian',
+};
+const ANIM_TYPES = ['walk', 'idle', 'attack', 'jump'];
+
+Object.entries(AGENT_SPRITES).forEach(([agentKey, prefix]) => {
+  spriteSheets[agentKey] = {};
+  ANIM_TYPES.forEach(anim => {
+    const img = new Image();
+    img.onload = () => { spritesLoaded++; };
+    img.src = `assets/characters/${prefix}-${anim}.png`;
+    spriteSheets[agentKey][anim] = img;
+  });
+});
+
+// Also load old sprites as fallback
+const CHAR_NAMES = ['char_0','char_1','char_2','char_3','char_4','char_5'];
+CHAR_NAMES.forEach(name => {
+  const img = new Image();
+  img.src = `assets/characters/${name}.png`;
+  spriteImgs[name] = img;
+});
+
+// ── COLLISION MAP ──────────────────────────────────────────────────────
+const collisionMap = [];
+for (let r = 0; r < ROWS; r++) {
+  collisionMap[r] = [];
+  for (let c = 0; c < COLS; c++) {
+    if (r <= 1 || r >= ROWS - 1 || c <= 0 || c >= COLS - 1) {
+      collisionMap[r][c] = 0;
+    } else {
+      collisionMap[r][c] = 1;
+    }
+  }
+}
+
+function blockTile(c, r) {
+  if (r >= 0 && r < ROWS && c >= 0 && c < COLS) collisionMap[r][c] = 0;
+}
+
+function blockRect(cx, cy, w, h) {
+  for (let r = cy; r < cy + h; r++)
+    for (let c = cx; c < cx + w; c++)
+      blockTile(c, r);
+}
+
+function isWalkable(tileX, tileY) {
+  if (tileX < 0 || tileX >= COLS || tileY < 0 || tileY >= ROWS) return false;
+  return collisionMap[tileY][tileX] === 1;
+}
+
+// ── ROOM LAYOUT ────────────────────────────────────────────────────────
+const ZONE_WOOD = 0, ZONE_TURF = 1;
+const zones = [
+  { type: ZONE_WOOD, x: 1, y: 2, w: 28, h: 19 },
+  { type: ZONE_TURF, x: 10, y: 8, w: 10, h: 6 },
+];
+
+const furniture = [];
+
+// --- NORTH WALL ---
+furniture.push({ type: 'draftBoard', x: 4, y: 1, w: 8, h: 2 });
+blockRect(4, 1, 8, 1);
+
+furniture.push({ type: 'tv', x: 14, y: 1, w: 2, h: 2 });
+furniture.push({ type: 'tv', x: 17, y: 1, w: 2, h: 2 });
+blockRect(14, 1, 2, 1);
+blockRect(17, 1, 2, 1);
+
+furniture.push({ type: 'clock', x: 21, y: 1 });
+
+furniture.push({ type: 'banner', x: 24, y: 1, w: 4, h: 2 });
+
+furniture.push({ type: 'trophyCase', x: 1, y: 1, w: 2, h: 2 });
+blockRect(1, 1, 2, 1);
+
+// --- ANALYST DESKS (top row) ---
+furniture.push({ type: 'desk', x: 2, y: 4, facing: 'down' });
+blockRect(2, 4, 3, 2);
+
+furniture.push({ type: 'desk', x: 7, y: 4, facing: 'down' });
+blockRect(7, 4, 3, 2);
+
+furniture.push({ type: 'desk', x: 21, y: 4, facing: 'down' });
+blockRect(21, 4, 3, 2);
+
+furniture.push({ type: 'desk', x: 26, y: 4, facing: 'down' });
+blockRect(26, 4, 3, 2);
+
+// --- CENTRAL WAR TABLE (on turf) ---
+furniture.push({ type: 'warTable', x: 11, y: 9, w: 8, h: 4 });
+blockRect(11, 9, 8, 4);
+
+// --- BOTTOM ROW DESKS ---
+furniture.push({ type: 'desk', x: 2, y: 15, facing: 'up' });
+blockRect(2, 15, 3, 2);
+
+furniture.push({ type: 'desk', x: 7, y: 15, facing: 'up' });
+blockRect(7, 15, 3, 2);
+
+// --- SIDE FEATURES ---
+furniture.push({ type: 'coffee', x: 26, y: 9 });
+blockRect(26, 9, 2, 2);
+
+furniture.push({ type: 'bookshelf', x: 27, y: 13, h: 3 });
+blockRect(28, 13, 1, 3);
+
+furniture.push({ type: 'whiteboard', x: 14, y: 17, w: 5, h: 2 });
+blockRect(14, 18, 5, 1);
+
+furniture.push({ type: 'plant', x: 1, y: 8 });
+furniture.push({ type: 'plant', x: 1, y: 14 });
+furniture.push({ type: 'plant', x: 28, y: 4 });
+furniture.push({ type: 'plant', x: 28, y: 17 });
+blockTile(1, 8);
+blockTile(1, 14);
+blockTile(28, 4);
+blockTile(28, 17);
+
+furniture.push({ type: 'helmet', x: 22, y: 1 });
+furniture.push({ type: 'helmet', x: 23, y: 1 });
+
+furniture.push({ type: 'phone', x: 2, y: 18 });
+blockTile(2, 18);
+
+furniture.push({ type: 'cabinet', x: 11, y: 16, h: 2 });
+blockRect(11, 16, 1, 2);
+
+// Chairs around war table
+furniture.push({ type: 'chair', x: 10, y: 10, facing: 'right' });
+furniture.push({ type: 'chair', x: 10, y: 11, facing: 'right' });
+furniture.push({ type: 'chair', x: 19, y: 10, facing: 'left' });
+furniture.push({ type: 'chair', x: 19, y: 11, facing: 'left' });
+furniture.push({ type: 'chair', x: 13, y: 8, facing: 'down' });
+furniture.push({ type: 'chair', x: 16, y: 8, facing: 'down' });
+furniture.push({ type: 'chair', x: 13, y: 13, facing: 'up' });
+furniture.push({ type: 'chair', x: 16, y: 13, facing: 'up' });
+
+// ── DRAWING HELPERS ────────────────────────────────────────────────────
+const now = () => performance.now();
+
+function px(x, y, w, h, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(Math.floor(x), Math.floor(y), w, h);
+}
+
+function drawPixelRect(x, y, w, h, fill, border) {
+  if (fill) { ctx.fillStyle = fill; ctx.fillRect(x, y, w, h); }
+  if (border) { ctx.strokeStyle = border; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1); }
+}
+
+// ── FLOOR RENDERING ────────────────────────────────────────────────────
+function drawFloor() {
+  px(0, 0, WORLD_W, WORLD_H, C.wallDark);
+
+  for (const z of zones) {
+    if (z.type === ZONE_WOOD) {
+      for (let r = z.y; r < z.y + z.h; r++) {
+        for (let c = z.x; c < z.x + z.w; c++) {
+          const tx = c * TILE, ty = r * TILE;
+          const variant = ((c + r * 3) % 3);
+          const col = variant === 0 ? C.floorWood1 : variant === 1 ? C.floorWood2 : C.floorWood3;
+          px(tx, ty, TILE, TILE, col);
+          px(tx, ty, TILE, 1, 'rgba(0,0,0,0.08)');
+          if ((c + r) % 4 === 0) px(tx + TILE - 1, ty, 1, TILE, 'rgba(0,0,0,0.06)');
+        }
+      }
+    } else if (z.type === ZONE_TURF) {
+      for (let r = z.y; r < z.y + z.h; r++) {
+        for (let c = z.x; c < z.x + z.w; c++) {
+          const tx = c * TILE, ty = r * TILE;
+          const variant = (c + r) % 2;
+          px(tx, ty, TILE, TILE, variant ? C.turf1 : C.turf2);
+        }
+      }
+      const turfX = z.x * TILE, turfY = z.y * TILE;
+      const turfW = z.w * TILE, turfH = z.h * TILE;
+      ctx.strokeStyle = C.turfLine;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.3;
+      const cx = turfX + turfW / 2;
+      ctx.beginPath(); ctx.moveTo(cx, turfY + 4); ctx.lineTo(cx, turfY + turfH - 4); ctx.stroke();
+      for (let i = 1; i < 4; i++) {
+        const lx = turfX + (turfW * i / 4);
+        ctx.beginPath(); ctx.moveTo(lx, turfY + turfH * 0.3); ctx.lineTo(lx, turfY + turfH * 0.7); ctx.stroke();
+      }
+      ctx.strokeRect(turfX + 2, turfY + 2, turfW - 4, turfH - 4);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // Wall trim
+  for (let c = 0; c < COLS; c++) {
+    px(c * TILE, 2 * TILE - 4, TILE, 4, C.wallAccent);
+  }
+  // Wall surface
+  for (let r = 0; r < 2; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const tx = c * TILE, ty = r * TILE;
+      px(tx, ty, TILE, TILE, C.wallMid);
+      if ((c + r) % 3 === 0) px(tx + 4, ty + 4, TILE - 8, TILE - 8, C.wallLight);
+    }
+  }
+  // Bottom wall
+  for (let c = 0; c < COLS; c++) {
+    px(c * TILE, (ROWS - 1) * TILE, TILE, TILE, C.wallMid);
+  }
+  // Side walls
+  for (let r = 0; r < ROWS; r++) {
+    px(0, r * TILE, TILE, TILE, C.wallMid);
+    px((COLS - 1) * TILE, r * TILE, TILE, TILE, C.wallMid);
+  }
+}
+
+// ── FURNITURE RENDERING ────────────────────────────────────────────────
+
+function drawDraftBoard(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = f.w * TILE, h = f.h * TILE;
+  drawPixelRect(x + 2, y + 2, w - 4, h - 4, C.boardBg, C.boardFrame);
+  ctx.fillStyle = '#d97757';
+  ctx.font = 'bold 10px "Space Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('DRAFT BOARD', x + w / 2, y + 14);
+  const cardW = 22, cardH = 8, gap = 3;
+  const startX = x + 8, startY = y + 20;
+  const colors = ['#d97757','#5b7fff','#2ec4b6','#8b5cf6','#e87422','#d44040','#ffc857','#33aaaa'];
+  const t = now();
+  for (let row = 0; row < 4; row++) {
+    for (let col = 0; col < 9; col++) {
+      const cx = startX + col * (cardW + gap);
+      const cy = startY + row * (cardH + gap);
+      const ci = (row * 9 + col) % colors.length;
+      const flipPhase = Math.sin(t / 2000 + row * 3 + col * 7);
+      const scaleX = flipPhase > 0.92 ? Math.abs(Math.cos(t / 200 + col)) : 1;
+      if (scaleX > 0.1) {
+        const adjW = cardW * scaleX;
+        const adjX = cx + (cardW - adjW) / 2;
+        px(adjX, cy, adjW, cardH, colors[ci]);
+        if (scaleX > 0.5) {
+          px(adjX + 2, cy + 2, adjW * 0.6, 2, 'rgba(255,255,255,0.4)');
+        }
+      }
+    }
+  }
+  ctx.textAlign = 'left';
+}
+
+function drawTV(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = f.w * TILE, h = f.h * TILE;
+  drawPixelRect(x + 3, y + 4, w - 6, h - 10, C.tvFrame);
+  const sx = x + 6, sy = y + 7, sw = w - 12, sh = h - 18;
+  px(sx, sy, sw, sh, C.tvScreen);
+  const t = now();
+  for (let i = 0; i < 8; i++) {
+    const bx = sx + ((t / 50 + i * 13) % sw);
+    const by = sy + ((Math.sin(t / 800 + i) + 1) * sh / 2.5) + 2;
+    px(bx % (sx + sw), by, 4, 3, i % 2 === 0 ? C.tvGlow : '#55aaee');
+  }
+  const scanY = sy + ((t / 30) % sh);
+  px(sx, scanY, sw, 1, 'rgba(100,180,255,0.15)');
+  px(x + w / 2 - 3, y + h - 6, 6, 4, C.tvFrame);
+}
+
+function drawDesk(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = 3 * TILE, h = 2 * TILE;
+  drawPixelRect(x + 2, y + 6, w - 4, h - 16, C.deskTop);
+  drawPixelRect(x + 2, y + h - 10, w - 4, 10, C.deskFront);
+  px(x + 4, y + h - 4, 4, 4, C.deskLeg);
+  px(x + w - 8, y + h - 4, 4, 4, C.deskLeg);
+  const mx = x + w / 2 - 10, my = y + 2;
+  drawPixelRect(mx, my, 20, 14, C.monitor);
+  const t = now();
+  px(mx + 2, my + 2, 16, 10, C.screenBg);
+  const cursorOn = Math.floor(t / 500) % 2;
+  for (let line = 0; line < 3; line++) {
+    const lw = 6 + ((line * 7 + Math.floor(t / 3000)) % 8);
+    px(mx + 3, my + 3 + line * 3, lw, 2, C.monitorGlow);
+  }
+  if (cursorOn) px(mx + 14, my + 9, 2, 2, C.monitorGlow);
+  px(mx + 8, my + 14, 4, 3, '#2d1f14');
+  px(x + w / 2 - 8, y + 20, 16, 4, '#2d1f14');
+  px(x + w / 2 - 7, y + 21, 14, 2, '#5c4a3d');
+}
+
+function drawPixelFootball(x, y) {
+  ctx.fillStyle = '#8B4513';
+  ctx.fillRect(x, y + 1, 8, 4);
+  ctx.fillRect(x + 1, y, 6, 6);
+  ctx.fillStyle = '#f7efe5';
+  ctx.fillRect(x + 3, y + 1, 1, 4);
+  ctx.fillRect(x + 2, y + 2, 3, 1);
+}
+
+function drawWarTable(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = f.w * TILE, h = f.h * TILE;
+  px(x + 4, y + 4, w - 4, h - 4, 'rgba(0,0,0,0.2)');
+  drawPixelRect(x, y + 4, w, h - 8, C.tableTop, C.tableDark);
+  drawPixelRect(x + 6, y + 8, w - 12, h - 16, null, 'rgba(100,70,30,0.3)');
+  // Center emblem
+  const cx = x + w / 2, cy = y + h / 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+  ctx.fillStyle = '#d97757';
+  ctx.fill();
+  ctx.strokeStyle = '#ffc857';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = '#2d1f14';
+  ctx.font = 'bold 9px "Space Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('RAZZLE', cx, cy);
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  // Papers
+  px(x + 14, y + 12, 12, 8, '#e8e0cc');
+  px(x + 15, y + 13, 8, 1, '#5c4a3d');
+  px(x + 15, y + 15, 6, 1, '#5c4a3d');
+  px(x + w - 30, y + h - 22, 10, 7, '#ddd8c8');
+  drawPixelFootball(x + w - 45, y + 14);
+}
+
+function drawCoffee(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  drawPixelRect(x + 4, y + 4, 24, 28, C.coffeeMach, C.coffeeAccent);
+  px(x + 8, y + 8, 16, 8, '#1a3a1a');
+  px(x + 9, y + 9, 4, 2, '#33cc33');
+  px(x + 10, y + 20, 12, 8, '#2d1f14');
+  px(x + 13, y + 22, 6, 5, '#e8e0cc');
+  px(x + 12, y + 22, 8, 1, '#d0c8b0');
+  const t = now();
+  const steamPhase = Math.floor(t / 300) % 4;
+  ctx.globalAlpha = 0.4;
+  px(x + 14 + (steamPhase % 2), y + 18 - steamPhase, 2, 2, '#c4b5a5');
+  px(x + 16 - (steamPhase % 2), y + 16 - steamPhase, 2, 2, '#c4b5a5');
+  ctx.globalAlpha = 1;
+  px(x + 30, y + 26, 6, 5, '#e8e0cc');
+  const steam2 = Math.floor(t / 400) % 3;
+  ctx.globalAlpha = 0.3;
+  px(x + 31 + steam2 % 2, y + 22 - steam2, 2, 2, '#c4b5a5');
+  ctx.globalAlpha = 1;
+}
+
+function drawBookshelf(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const h = (f.h || 3) * TILE;
+  drawPixelRect(x + 2, y, TILE - 4, h, C.shelfWood);
+  const bookColors = [C.shelfBook1, C.shelfBook2, C.shelfBook3, '#d97757', '#8b5cf6', '#2ec4b6'];
+  for (let shelf = 0; shelf < 3; shelf++) {
+    const sy = y + 4 + shelf * (TILE - 2);
+    px(x + 2, sy + TILE - 10, TILE - 4, 2, '#553a1a');
+    for (let b = 0; b < 4; b++) {
+      const bh = 8 + (b % 3) * 2;
+      px(x + 4 + b * 6, sy + TILE - 10 - bh, 5, bh, bookColors[(shelf * 4 + b) % bookColors.length]);
+    }
+  }
+}
+
+function drawPlant(f) {
+  const x = f.x * TILE + 8, y = f.y * TILE + 8;
+  px(x + 2, y + 14, 12, 8, C.plantPot);
+  px(x + 4, y + 12, 8, 4, C.plantPot);
+  const t = now();
+  const sway = Math.sin(t / 1200) * 2;
+  ctx.fillStyle = C.plantLeaf;
+  ctx.fillRect(x + 6 + sway, y, 4, 14);
+  ctx.fillRect(x + 2 + sway * 0.5, y + 4, 6, 4);
+  ctx.fillRect(x + 8 - sway * 0.5, y + 2, 6, 4);
+  ctx.fillRect(x + 4 + sway * 0.7, y - 2, 4, 6);
+}
+
+function drawClock(f) {
+  const x = f.x * TILE + TILE / 2, y = f.y * TILE + TILE / 2 + 4;
+  const r = 12;
+  ctx.beginPath(); ctx.arc(x, y, r + 2, 0, Math.PI * 2);
+  ctx.fillStyle = C.clockFrame; ctx.fill();
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = C.clockFace; ctx.fill();
+  const t = now();
+  const sec = (t / 1000) % 60;
+  const min = (t / 60000) % 60;
+  ctx.strokeStyle = '#2d1f14';
+  ctx.lineWidth = 2;
+  const mAngle = (min / 60) * Math.PI * 2 - Math.PI / 2;
+  ctx.beginPath(); ctx.moveTo(x, y);
+  ctx.lineTo(x + Math.cos(mAngle) * 8, y + Math.sin(mAngle) * 8);
+  ctx.stroke();
+  ctx.strokeStyle = '#d97757';
+  ctx.lineWidth = 1;
+  const sAngle = (sec / 60) * Math.PI * 2 - Math.PI / 2;
+  ctx.beginPath(); ctx.moveTo(x, y);
+  ctx.lineTo(x + Math.cos(sAngle) * 9, y + Math.sin(sAngle) * 9);
+  ctx.stroke();
+  ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2);
+  ctx.fillStyle = '#2d1f14'; ctx.fill();
+}
+
+function drawBanner(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = f.w * TILE, h = f.h * TILE;
+  drawPixelRect(x + 2, y + 4, w - 4, h - 8, C.bannerBg, '#ffc857');
+  ctx.fillStyle = C.bannerBg;
+  ctx.beginPath();
+  ctx.moveTo(x + 2, y + h - 4);
+  ctx.lineTo(x + w / 2, y + h + 4);
+  ctx.lineTo(x + w - 2, y + h - 4);
+  ctx.fill();
+  ctx.fillStyle = C.bannerText;
+  ctx.font = 'bold 12px "Space Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('RAZZLE', x + w / 2, y + 22);
+  ctx.font = 'bold 9px "Space Mono", monospace';
+  ctx.fillText('SIT ROOM', x + w / 2, y + 36);
+  ctx.textAlign = 'left';
+}
+
+function drawTrophyCase(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = f.w * TILE, h = f.h * TILE;
+  drawPixelRect(x + 2, y + 2, w - 4, h - 4, '#2a2018', C.shelfWood);
+  px(x + 4, y + 4, w - 8, h - 8, 'rgba(200,220,255,0.15)');
+  const tx = x + 10, ty = y + 12;
+  px(tx + 2, ty, 4, 8, C.trophy);
+  px(tx, ty + 8, 8, 3, C.trophyBase);
+  px(tx - 1, ty - 2, 10, 3, C.trophy);
+  const tx2 = x + 36, ty2 = y + 14;
+  px(tx2 + 2, ty2, 3, 6, C.trophy);
+  px(tx2, ty2 + 6, 7, 2, C.trophyBase);
+  const t = now();
+  const sparkle = Math.floor(t / 400) % 6;
+  if (sparkle < 2) {
+    ctx.globalAlpha = 0.7;
+    px(tx + sparkle * 3, ty - 1, 2, 2, '#f7efe5');
+    ctx.globalAlpha = 1;
+  }
+}
+
+function drawHelmet(f) {
+  const x = f.x * TILE + 6, y = f.y * TILE + 8;
+  ctx.fillStyle = C.helmetBase;
+  ctx.beginPath();
+  ctx.arc(x + 8, y + 8, 9, Math.PI, 0);
+  ctx.fillRect(x - 1, y + 8, 18, 6);
+  ctx.fill();
+  ctx.fillStyle = C.helmetStripe;
+  ctx.fillRect(x + 6, y - 1, 4, 16);
+  ctx.fillStyle = '#8a7565';
+  ctx.fillRect(x + 14, y + 6, 4, 2);
+  ctx.fillRect(x + 14, y + 10, 4, 2);
+}
+
+function drawWhiteboard(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const w = f.w * TILE, h = f.h * TILE;
+  drawPixelRect(x + 2, y + 2, w - 4, h - 4, C.wbFrame);
+  drawPixelRect(x + 5, y + 5, w - 10, h - 10, C.whiteboard);
+  ctx.strokeStyle = '#d97757';
+  ctx.lineWidth = 2;
+  const bx = x + 10, by = y + 10;
+  for (let i = 0; i < 5; i++) {
+    ctx.beginPath();
+    ctx.arc(bx + 20 + i * 14, by + 20, 4, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  ctx.strokeStyle = '#5b7fff';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(bx + 20, by + 16); ctx.lineTo(bx + 10, by + 4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(bx + 48, by + 16); ctx.lineTo(bx + 70, by + 6); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(bx + 76, by + 16); ctx.lineTo(bx + 76, by + 8); ctx.lineTo(bx + 90, by + 4); ctx.stroke();
+  ctx.strokeStyle = '#d97757';
+  ctx.lineWidth = 1.5;
+  const defs = [[30, 6], [55, 8], [80, 10], [15, 30], [60, 32]];
+  for (const [dx, dy] of defs) {
+    ctx.beginPath(); ctx.moveTo(bx + dx - 3, by + dy - 3); ctx.lineTo(bx + dx + 3, by + dy + 3); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(bx + dx + 3, by + dy - 3); ctx.lineTo(bx + dx - 3, by + dy + 3); ctx.stroke();
+  }
+  px(x + w / 2 - 20, y + h - 6, 40, 4, '#c4b5a5');
+  px(x + w / 2 - 15, y + h - 8, 6, 4, '#d97757');
+  px(x + w / 2 - 5, y + h - 8, 6, 4, '#5b7fff');
+  px(x + w / 2 + 5, y + h - 8, 6, 4, '#2d1f14');
+}
+
+function drawChair(f) {
+  const x = f.x * TILE + 8, y = f.y * TILE + 8;
+  px(x + 2, y + 4, 12, 10, C.chairSeat);
+  if (f.facing === 'down') px(x + 2, y, 12, 6, C.chairBack);
+  else if (f.facing === 'up') px(x + 2, y + 10, 12, 6, C.chairBack);
+  else if (f.facing === 'left') px(x, y + 2, 6, 12, C.chairBack);
+  else px(x + 10, y + 2, 6, 12, C.chairBack);
+}
+
+function drawPhone(f) {
+  const x = f.x * TILE + 4, y = f.y * TILE + 4;
+  px(x + 2, y + 8, 20, 14, C.phone);
+  px(x + 4, y + 4, 16, 6, '#2d1f14');
+  px(x + 3, y + 2, 6, 6, '#2d1f14');
+  px(x + 13, y + 2, 6, 6, '#2d1f14');
+  px(x + 5, y + 1, 12, 3, '#2d1f14');
+  const t = now();
+  const blink = Math.floor(t / 800) % 2;
+  px(x + 10, y + 14, 4, 3, blink ? C.phoneRed : '#881111');
+  px(x + 22, y + 14, 4, 2, '#2d1f14');
+}
+
+function drawCabinet(f) {
+  const x = f.x * TILE, y = f.y * TILE;
+  const h = (f.h || 1) * TILE;
+  drawPixelRect(x + 4, y + 2, TILE - 8, h - 4, '#5c4a3d', '#3d2e22');
+  for (let i = 0; i < Math.floor(h / TILE); i++) {
+    const dy = y + 4 + i * TILE;
+    px(x + 6, dy + 10, TILE - 12, 1, '#2d1f14');
+    px(x + TILE / 2 - 2, dy + 8, 4, 2, '#8a7565');
+  }
+}
+
+function drawFurniture() {
+  const sorted = [...furniture].sort((a, b) => a.y - b.y);
+  for (const f of sorted) {
+    switch (f.type) {
+      case 'draftBoard':  drawDraftBoard(f); break;
+      case 'tv':          drawTV(f); break;
+      case 'desk':        drawDesk(f); break;
+      case 'warTable':    drawWarTable(f); break;
+      case 'coffee':      drawCoffee(f); break;
+      case 'bookshelf':   drawBookshelf(f); break;
+      case 'plant':       drawPlant(f); break;
+      case 'clock':       drawClock(f); break;
+      case 'banner':      drawBanner(f); break;
+      case 'trophyCase':  drawTrophyCase(f); break;
+      case 'helmet':      drawHelmet(f); break;
+      case 'whiteboard':  drawWhiteboard(f); break;
+      case 'chair':       drawChair(f); break;
+      case 'phone':       drawPhone(f); break;
+      case 'cabinet':     drawCabinet(f); break;
+    }
+  }
+}
+
+// ── PARTICLE SYSTEM ────────────────────────────────────────────────────
+const particles = [];
+
+function spawnParticle(x, y, type) {
+  if (particles.length >= 200) return;
+  particles.push({
+    x, y,
+    vx: (Math.random() - 0.5) * 2,
+    vy: -Math.random() * 2 - 1,
+    life: 1,
+    decay: 0.015 + Math.random() * 0.01,
+    type,
+    size: 2 + Math.random() * 2,
+    color: type === 'confetti'
+      ? ['#d97757','#5b7fff','#2ec4b6','#ffc857','#8b5cf6'][Math.floor(Math.random()*5)]
+      : type === 'dust' ? '#a09070' : '#c4b5a5',
+  });
+}
+
+function updateParticles() {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.type === 'confetti') p.vy += 0.05;
+    else if (p.type === 'steam') p.vy -= 0.01;
+    p.life -= p.decay;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+}
+
+function drawParticles() {
+  for (const p of particles) {
+    ctx.globalAlpha = p.life;
+    px(p.x, p.y, p.size, p.size, p.color);
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ── AGENT DEFINITIONS ──────────────────────────────────────────────────
+const AGENT_DEFS = [
+  { id: 0, name: 'Razzle',      role: 'Chief of Staff',   sprite: 'char_0', spriteKey: 'razzle',    color: '#d97757',
+    homeX: 14, homeY: 8, stations: [{x:14,y:8},{x:15,y:10},{x:6,y:3},{x:20,y:10}] },
+  { id: 1, name: 'Dr. Dolphin', role: 'Medical Analyst',  sprite: 'char_1', spriteKey: 'medical',   color: '#5b7fff',
+    homeX: 3, homeY: 7, stations: [{x:3,y:7},{x:15,y:13},{x:26,y:10},{x:12,y:10}] },
+  { id: 2, name: 'Hawkeye',     role: 'Scout',            sprite: 'char_2', spriteKey: 'scout',     color: '#2ec4b6',
+    homeX: 8, homeY: 7, stations: [{x:8,y:7},{x:15,y:3},{x:18,y:10},{x:10,y:8}] },
+  { id: 3, name: 'Bones',       role: 'Diplomat',         sprite: 'char_3', spriteKey: 'diplomat',   color: '#8b5cf6',
+    homeX: 22, homeY: 7, stations: [{x:22,y:7},{x:3,y:18},{x:16,y:13},{x:10,y:11}] },
+  { id: 4, name: 'Octo',        role: 'Quant',            sprite: 'char_4', spriteKey: 'quant',     color: '#e87422',
+    homeX: 3, homeY: 14, stations: [{x:3,y:14},{x:16,y:8},{x:26,y:10},{x:19,y:10}] },
+  { id: 5, name: 'Atlas',       role: 'Historian',        sprite: 'char_5', spriteKey: 'historian',  color: '#d44040',
+    homeX: 8, homeY: 14, stations: [{x:8,y:14},{x:27,y:14},{x:12,y:11},{x:20,y:18}] },
+];
+
+// ── AGENT CLASS ────────────────────────────────────────────────────────
+class Agent {
+  constructor(def) {
+    Object.assign(this, def);
+    this.x = def.homeX * TILE + TILE / 2;
+    this.y = def.homeY * TILE + TILE / 2;
+    this.dir = DIR.DOWN;
+    this.state = STATE.IDLE;
+    this.frame = 0;
+    this.animTimer = 0;
+    this.stateTimer = 0;
+    this.targetX = this.x;
+    this.targetY = this.y;
+    this.speed = 1.2 + Math.random() * 0.4;
+    this.selected = false;
+    this.controlled = false;
+    this.workBubble = '';
+    this.bubbleTimer = 0;
+    this.stationIndex = 0;
+    this.idleDuration = 2000 + Math.random() * 3000;
+    this.workDuration = 4000 + Math.random() * 4000;
+    this.celebrateTimer = 0;
+    this.bobOffset = Math.random() * Math.PI * 2;
+  }
+
+  get tileX() { return Math.floor(this.x / TILE); }
+  get tileY() { return Math.floor(this.y / TILE); }
+
+  setTarget(tx, ty) {
+    const ttx = tx * TILE + TILE / 2;
+    const tty = ty * TILE + TILE / 2;
+    if (isWalkable(tx, ty)) {
+      this.targetX = ttx;
+      this.targetY = tty;
+      this.state = STATE.WALK;
+    }
+  }
+
+  moveToward(tx, ty, dt) {
+    const dx = tx - this.x;
+    const dy = ty - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 2) {
+      this.x = tx;
+      this.y = ty;
+      return true;
+    }
+    const step = this.speed * dt * 0.06;
+    const mx = (dx / dist) * Math.min(step, dist);
+    const my = (dy / dist) * Math.min(step, dist);
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      this.dir = dx > 0 ? DIR.RIGHT : DIR.LEFT;
+    } else {
+      this.dir = dy > 0 ? DIR.DOWN : DIR.UP;
+    }
+
+    const nx = this.x + mx;
+    const ny = this.y + my;
+    if (isWalkable(Math.floor(nx / TILE), Math.floor(ny / TILE))) {
+      this.x = nx;
+      this.y = ny;
+    } else {
+      if (isWalkable(Math.floor((this.x + mx) / TILE), this.tileY)) {
+        this.x += mx;
+      } else if (isWalkable(this.tileX, Math.floor((this.y + my) / TILE))) {
+        this.y += my;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  updateAnimation(dt) {
+    this.animTimer += dt;
+    if (this.state === STATE.WALK) {
+      if (this.animTimer >= ANIM_SPEED) {
+        this.animTimer = 0;
+        this.frame = (this.frame + 1) % WALK_FRAMES.length;
+      }
+    } else {
+      this.frame = 0;
+      this.animTimer = 0;
+    }
+  }
+
+  updateAI(dt) {
+    if (this.controlled) return;
+    this.stateTimer += dt;
+
+    switch (this.state) {
+      case STATE.IDLE:
+        if (this.stateTimer > this.idleDuration) {
+          this.stateTimer = 0;
+          this.stationIndex = (this.stationIndex + 1) % this.stations.length;
+          const station = this.stations[this.stationIndex];
+          this.setTarget(station.x, station.y);
+        }
+        break;
+
+      case STATE.WALK: {
+        const arrived = this.moveToward(this.targetX, this.targetY, dt);
+        if (arrived) {
+          if (this.stationIndex === 0) {
+            this.state = STATE.WORK_DESK;
+            this.workBubble = 'typing';
+          } else if (this.stationIndex === 1) {
+            this.state = STATE.THINK;
+            this.workBubble = 'think';
+          } else if (this.stationIndex === 2) {
+            this.state = STATE.COFFEE;
+            this.workBubble = 'coffee';
+          } else {
+            this.state = STATE.DISCUSS;
+            this.workBubble = 'discuss';
+          }
+          this.stateTimer = 0;
+          this.workDuration = 3000 + Math.random() * 5000;
+          this.bubbleTimer = 0;
+
+          if (Math.random() < 0.08) {
+            this.state = STATE.CELEBRATE;
+            this.celebrateTimer = 0;
+            this.workBubble = 'eureka';
+          }
+        }
+        break;
+      }
+
+      case STATE.WORK_DESK:
+      case STATE.ANALYZE_BOARD:
+      case STATE.THINK:
+      case STATE.DISCUSS:
+      case STATE.COFFEE:
+        this.bubbleTimer += dt;
+        if (this.stateTimer > this.workDuration) {
+          this.state = STATE.IDLE;
+          this.stateTimer = 0;
+          this.workBubble = '';
+          this.idleDuration = 1500 + Math.random() * 2000;
+        }
+        break;
+
+      case STATE.CELEBRATE:
+        this.celebrateTimer += dt;
+        if (this.celebrateTimer > 1800) {
+          this.state = STATE.IDLE;
+          this.stateTimer = 0;
+          this.workBubble = '';
+        } else {
+          if (Math.random() < 0.3) {
+            spawnParticle(this.x - 4 + Math.random() * 8, this.y - 20, 'confetti');
+          }
+        }
+        break;
+    }
+
+    if (this.state === STATE.WALK && Math.random() < 0.05) {
+      spawnParticle(this.x, this.y + 10, 'dust');
+    }
+  }
+
+  draw() {
+    // Determine which animation sheet to use based on state
+    let animType = 'idle';
+    if (this.state === STATE.WALK) animType = 'walk';
+    else if (this.state === STATE.CELEBRATE) animType = 'attack';
+    else animType = 'idle';
+
+    // Try new sprite sheets first, fall back to old
+    const sheets = spriteSheets[this.spriteKey];
+    const newImg = sheets && sheets[animType];
+    const useNewSprites = newImg && newImg.complete && newImg.naturalWidth > 0;
+
+    let drawX, drawY;
+
+    if (useNewSprites) {
+      // New 2x2 sprite sheets
+      const frameIdx = this.state === STATE.WALK ? WALK_FRAMES[this.frame] : (this.frame % NEW_SPRITE_FRAMES);
+      const col = frameIdx % NEW_SPRITE_COLS;
+      const row = Math.floor(frameIdx / NEW_SPRITE_COLS);
+      const frameW = newImg.naturalWidth / NEW_SPRITE_COLS;
+      const frameH = newImg.naturalHeight / NEW_SPRITE_COLS;
+      const sx = col * frameW;
+      const sy = row * frameH;
+
+      drawX = Math.floor(this.x - SP_DRAW_W / 2);
+      drawY = Math.floor(this.y - SP_DRAW_H + 8);
+
+      if (this.state === STATE.CELEBRATE) {
+        const bounce = Math.abs(Math.sin(this.celebrateTimer / 150 * Math.PI)) * 12;
+        drawY -= bounce;
+      }
+      if (this.state !== STATE.WALK && this.state !== STATE.CELEBRATE) {
+        const bob = Math.sin(now() / 800 + this.bobOffset) * 1.5;
+        drawY += bob;
+      }
+
+      // Shadow
+      ctx.globalAlpha = 0.25;
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.ellipse(this.x, this.y + 10, 10, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Selection highlight
+      if (this.selected) {
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y + 10, 14, 6, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Draw with horizontal flip for left-facing direction
+      const facingLeft = this.dir === DIR.LEFT;
+      ctx.save();
+      if (facingLeft) {
+        ctx.translate(drawX + SP_DRAW_W, drawY);
+        ctx.scale(-1, 1);
+        ctx.drawImage(newImg, sx, sy, frameW, frameH, 0, 0, SP_DRAW_W, SP_DRAW_H);
+      } else {
+        ctx.drawImage(newImg, sx, sy, frameW, frameH, drawX, drawY, SP_DRAW_W, SP_DRAW_H);
+      }
+      ctx.restore();
+
+    } else {
+      // Fallback: old 7x4 sprite sheets
+      const img = spriteImgs[this.sprite];
+      if (!img || !img.complete) return;
+
+      const frameCol = this.state === STATE.WALK ? WALK_FRAMES[this.frame] : IDLE_FRAME;
+      const frameRow = this.dir;
+      const sx = frameCol * FR_W;
+      const sy = frameRow * FR_H;
+
+      drawX = Math.floor(this.x - (FR_W * SP_SCALE) / 2);
+      drawY = Math.floor(this.y - (FR_H * SP_SCALE) + 8);
+
+      if (this.state === STATE.CELEBRATE) {
+        const bounce = Math.abs(Math.sin(this.celebrateTimer / 150 * Math.PI)) * 12;
+        drawY -= bounce;
+      }
+      if (this.state !== STATE.WALK && this.state !== STATE.CELEBRATE) {
+        const bob = Math.sin(now() / 800 + this.bobOffset) * 1.5;
+        drawY += bob;
+      }
+
+      // Shadow
+      ctx.globalAlpha = 0.25;
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.ellipse(this.x, this.y + 10, 10, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Selection highlight
+      if (this.selected) {
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y + 10, 14, 6, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      ctx.drawImage(img, sx, sy, FR_W, FR_H, drawX, drawY, FR_W * SP_SCALE, FR_H * SP_SCALE);
+    }
+
+    // Name tag
+    ctx.font = 'bold 8px "Space Mono", monospace';
+    ctx.textAlign = 'center';
+    const nameW = ctx.measureText(this.name).width + 8;
+    const nameX = this.x - nameW / 2;
+    const nameY = drawY - 10;
+    drawPixelRect(nameX, nameY, nameW, 11, C.nameTag);
+    ctx.fillStyle = this.color;
+    ctx.fillText(this.name, this.x, nameY + 9);
+    ctx.textAlign = 'left';
+
+    // Activity bubble
+    if (this.workBubble && this.state !== STATE.WALK && this.state !== STATE.IDLE) {
+      this.drawBubble(drawX + FR_W * SP_SCALE / 2, drawY - 12);
+    }
+  }
+
+  drawBubble(bx, by) {
+    const t = now();
+    const bubW = 28, bubH = 20;
+    const x = bx - bubW / 2, y = by - bubH;
+
+    drawPixelRect(x, y, bubW, bubH, C.bubbleBg, C.bubbleBorder);
+    px(bx - 2, y + bubH, 2, 3, C.bubbleBg);
+    px(bx, y + bubH, 1, 2, C.bubbleBorder);
+
+    const phase = Math.floor(t / 400) % 4;
+
+    switch (this.workBubble) {
+      case 'typing':
+        for (let i = 0; i < 3; i++) {
+          const dotOn = (phase + i) % 4 !== 3;
+          if (dotOn) px(x + 6 + i * 6, y + 8, 4, 4, '#2d1f14');
+          else px(x + 6 + i * 6, y + 9, 4, 3, '#8a7565');
+        }
+        break;
+      case 'think': {
+        ctx.fillStyle = phase % 2 === 0 ? '#ffc857' : '#c9a040';
+        ctx.beginPath();
+        ctx.arc(x + bubW / 2, y + 8, 5, 0, Math.PI * 2);
+        ctx.fill();
+        px(x + bubW / 2 - 1, y + 13, 3, 3, '#8a7565');
+        if (phase < 2) {
+          ctx.globalAlpha = 0.5;
+          for (let a = 0; a < 4; a++) {
+            const angle = (a / 4) * Math.PI * 2 + t / 600;
+            px(x + bubW / 2 + Math.cos(angle) * 7, y + 8 + Math.sin(angle) * 7, 2, 2, '#ffc857');
+          }
+          ctx.globalAlpha = 1;
+        }
+        break;
+      }
+      case 'discuss':
+        for (let i = 0; i < 3; i++) {
+          const lw = 8 + ((phase + i) % 3) * 4;
+          px(x + 4, y + 4 + i * 5, Math.min(lw, bubW - 8), 2, '#5c4a3d');
+        }
+        break;
+      case 'coffee': {
+        px(x + 8, y + 6, 10, 8, '#8B6914');
+        px(x + 9, y + 7, 8, 6, '#4a2e14');
+        const s = phase;
+        ctx.globalAlpha = 0.5;
+        px(x + 10 + (s % 2), y + 2 + s, 2, 2, '#c4b5a5');
+        px(x + 14 - (s % 2), y + 3 + (s + 1) % 3, 2, 2, '#c4b5a5');
+        ctx.globalAlpha = 1;
+        break;
+      }
+      case 'eureka':
+        drawPixelFootball(x + 7, y + 4);
+        ctx.fillStyle = '#d97757';
+        ctx.font = 'bold 10px "Space Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('!', x + bubW - 6, y + 14);
+        ctx.textAlign = 'left';
+        break;
+    }
+  }
+}
+
+// ── INSTANTIATE AGENTS ─────────────────────────────────────────────────
+const agents = AGENT_DEFS.map(def => new Agent(def));
+let selectedAgent = agents[0];
+selectedAgent.selected = true;
+
+// ── INPUT HANDLING ─────────────────────────────────────────────────────
+const keys = {};
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT' || e.target.isContentEditable) return;
+  keys[e.key] = true;
+  if (e.key >= '1' && e.key <= '6') {
+    selectAgent(parseInt(e.key) - 1);
+  }
+});
+
+document.addEventListener('keyup', e => {
+  keys[e.key] = false;
+});
+
+function selectAgent(idx) {
+  if (idx >= 0 && idx < agents.length) {
+    agents.forEach(a => { a.selected = false; a.controlled = false; });
+    selectedAgent = agents[idx];
+    selectedAgent.selected = true;
+    updateRosterSelection();
+    updateSelectedInfoBar();
+  }
+}
+
+function handleInput(dt) {
+  const a = selectedAgent;
+  let dx = 0, dy = 0;
+
+  if (keys['ArrowLeft']  || keys['a'] || keys['A']) dx -= 1;
+  if (keys['ArrowRight'] || keys['d'] || keys['D']) dx += 1;
+  if (keys['ArrowUp']    || keys['w'] || keys['W']) dy -= 1;
+  if (keys['ArrowDown']  || keys['s'] || keys['S']) dy += 1;
+
+  if (dx !== 0 || dy !== 0) {
+    a.controlled = true;
+    a.state = STATE.WALK;
+    a.workBubble = '';
+
+    if (Math.abs(dx) >= Math.abs(dy)) {
+      a.dir = dx > 0 ? DIR.RIGHT : DIR.LEFT;
+    } else {
+      a.dir = dy > 0 ? DIR.DOWN : DIR.UP;
+    }
+
+    const step = a.speed * dt * 0.06;
+    const nx = a.x + dx * step;
+    const ny = a.y + dy * step;
+
+    if (dx !== 0 && isWalkable(Math.floor(nx / TILE), a.tileY)) {
+      a.x = nx;
+    }
+    if (dy !== 0 && isWalkable(a.tileX, Math.floor(ny / TILE))) {
+      a.y = ny;
+    }
+
+    if (Math.random() < 0.06) spawnParticle(a.x, a.y + 10, 'dust');
+  } else if (a.controlled) {
+    a.controlled = false;
+    a.state = STATE.IDLE;
+    a.stateTimer = 0;
+  }
+}
+
+// Mouse/touch for panning and agent selection
+let dragging = false, dragStartX = 0, dragStartY = 0, dragCamX = 0, dragCamY = 0;
+let mouseDownTime = 0;
+
+cvs.addEventListener('mousedown', e => {
+  dragging = true;
+  dragStartX = e.clientX;
+  dragStartY = e.clientY;
+  dragCamX = cam.targetX;
+  dragCamY = cam.targetY;
+  mouseDownTime = now();
+});
+
+cvs.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const scaleX = cvs.clientWidth ? cvs.width / cvs.clientWidth : 1;
+  const scaleY = cvs.clientHeight ? cvs.height / cvs.clientHeight : 1;
+  cam.targetX = dragCamX - (e.clientX - dragStartX) * scaleX;
+  cam.targetY = dragCamY - (e.clientY - dragStartY) * scaleY;
+});
+
+cvs.addEventListener('mouseup', e => {
+  const wasDrag = Math.abs(e.clientX - dragStartX) > 5 || Math.abs(e.clientY - dragStartY) > 5;
+  dragging = false;
+  if (!wasDrag && now() - mouseDownTime < 300) {
+    const rect = cvs.getBoundingClientRect();
+    const scaleX = rect.width ? cvs.width / rect.width : 1;
+    const scaleY = rect.height ? cvs.height / rect.height : 1;
+    const wx = (e.clientX - rect.left) * scaleX + cam.x;
+    const wy = (e.clientY - rect.top) * scaleY + cam.y;
+    let closest = null, closestDist = 40;
+    for (const a of agents) {
+      const d = Math.sqrt((a.x - wx) ** 2 + (a.y - wy) ** 2);
+      if (d < closestDist) { closest = a; closestDist = d; }
+    }
+    if (closest) selectAgent(closest.id);
+  }
+});
+
+// Touch support
+cvs.addEventListener('touchstart', e => {
+  const t = e.touches[0];
+  dragging = true;
+  dragStartX = t.clientX;
+  dragStartY = t.clientY;
+  dragCamX = cam.targetX;
+  dragCamY = cam.targetY;
+  mouseDownTime = now();
+}, { passive: true });
+
+cvs.addEventListener('touchmove', e => {
+  if (!dragging) return;
+  const t = e.touches[0];
+  const scaleX = cvs.clientWidth ? cvs.width / cvs.clientWidth : 1;
+  const scaleY = cvs.clientHeight ? cvs.height / cvs.clientHeight : 1;
+  cam.targetX = dragCamX - (t.clientX - dragStartX) * scaleX;
+  cam.targetY = dragCamY - (t.clientY - dragStartY) * scaleY;
+}, { passive: true });
+
+cvs.addEventListener('touchend', () => {
+  dragging = false;
+}, { passive: true });
+
+// ── AMBIENT EFFECTS ────────────────────────────────────────────────────
+function ambientEffects() {
+  if (Math.random() < 0.02) {
+    spawnParticle(26 * TILE + 16, 9 * TILE + 18, 'steam');
+  }
+}
+
+// ── HUD OVERLAY (on-canvas) ────────────────────────────────────────────
+function drawHUD() {
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+  const hudX = 8, hudY = 8;
+  const chipH = 18, chipGap = 4;
+
+  for (let i = 0; i < agents.length; i++) {
+    const a = agents[i];
+    const cy = hudY + i * (chipH + chipGap);
+    const label = `${i + 1} ${a.name}`;
+    ctx.font = 'bold 9px "Space Mono", monospace';
+    const tw = ctx.measureText(label).width + 12;
+
+    ctx.globalAlpha = a.selected ? 0.9 : 0.55;
+    drawPixelRect(hudX, cy, tw, chipH, a.selected ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.5)');
+    if (a.selected) {
+      ctx.strokeStyle = a.color;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(hudX + 0.5, cy + 0.5, tw - 1, chipH - 1);
+    }
+
+    let dotColor = '#5c4a3d';
+    if (a.state === STATE.WALK) dotColor = '#33cc55';
+    else if (a.state === STATE.WORK_DESK || a.state === STATE.ANALYZE_BOARD) dotColor = '#3388cc';
+    else if (a.state === STATE.THINK) dotColor = '#ccaa33';
+    else if (a.state === STATE.DISCUSS) dotColor = '#cc6633';
+    else if (a.state === STATE.CELEBRATE) dotColor = '#cc3333';
+    else if (a.state === STATE.COFFEE) dotColor = '#8B6914';
+    px(hudX + 3, cy + chipH / 2 - 2, 4, 4, dotColor);
+
+    ctx.fillStyle = a.selected ? a.color : '#c4b5a5';
+    ctx.globalAlpha = 1;
+    ctx.fillText(label, hudX + 10, cy + 13);
+  }
+
+  ctx.restore();
+}
+
+// ── STATE LABELS ──────────────────────────────────────────────────────
+const STATE_LABELS = {
+  [STATE.IDLE]: 'idle',
+  [STATE.WALK]: 'walking',
+  [STATE.WORK_DESK]: 'at desk',
+  [STATE.ANALYZE_BOARD]: 'analyzing',
+  [STATE.DISCUSS]: 'discussing',
+  [STATE.THINK]: 'thinking',
+  [STATE.CELEBRATE]: 'eureka!',
+  [STATE.COFFEE]: 'coffee break',
+};
+
+const STATE_COLORS = {
+  [STATE.IDLE]: '#5c4a3d',
+  [STATE.WALK]: '#33cc55',
+  [STATE.WORK_DESK]: '#3388cc',
+  [STATE.ANALYZE_BOARD]: '#3388cc',
+  [STATE.DISCUSS]: '#cc6633',
+  [STATE.THINK]: '#ccaa33',
+  [STATE.CELEBRATE]: '#cc3333',
+  [STATE.COFFEE]: '#8B6914',
+};
+
+// ── ROSTER SIDEBAR (DOM) ──────────────────────────────────────────────
+function buildRoster() {
+  const list = document.getElementById('rosterList');
+  if (!list) return;
+  list.innerHTML = '';
+
+  for (const a of agents) {
+    const row = document.createElement('div');
+    row.className = 'roster-agent' + (a.selected ? ' selected' : '');
+    row.dataset.agentId = a.id;
+
+    // Draw mini sprite avatar onto a tiny canvas
+    const miniCvs = document.createElement('canvas');
+    miniCvs.width = 32;
+    miniCvs.height = 32;
+    miniCvs.className = 'roster-avatar';
+    const miniCtx = miniCvs.getContext('2d');
+    // Try new idle sprite first
+    const sheets = spriteSheets[a.spriteKey];
+    const idleImg = sheets && sheets.idle;
+    if (idleImg && idleImg.complete && idleImg.naturalWidth > 0) {
+      const fw = idleImg.naturalWidth / 2;
+      const fh = idleImg.naturalHeight / 2;
+      miniCtx.drawImage(idleImg, 0, 0, fw, fh, 0, 0, 32, 32);
+    } else {
+      const img = spriteImgs[a.sprite];
+      if (img && img.complete) {
+        miniCtx.drawImage(img, 0, 0, FR_W, FR_H, 0, 0, 32, 32);
+      }
+    }
+
+    const info = document.createElement('div');
+    info.className = 'roster-info';
+    info.innerHTML = `
+      <div class="roster-name" style="color:${a.color}">${a.name}</div>
+      <div class="roster-role">${a.role}</div>
+      <div class="roster-status">
+        <span class="roster-dot" style="background:${STATE_COLORS[a.state] || '#5c4a3d'}"></span>
+        <span class="roster-status-text">${STATE_LABELS[a.state] || 'idle'}</span>
+      </div>
+    `;
+
+    const hint = document.createElement('span');
+    hint.className = 'roster-key-hint';
+    hint.textContent = String(a.id + 1);
+
+    row.appendChild(miniCvs);
+    row.appendChild(info);
+    row.appendChild(hint);
+    row.addEventListener('click', () => {
+      selectAgent(a.id);
+    });
+    list.appendChild(row);
+  }
+}
+
+function updateRosterSelection() {
+  const rows = document.querySelectorAll('.roster-agent');
+  rows.forEach(row => {
+    const id = parseInt(row.dataset.agentId);
+    if (agents[id]) row.classList.toggle('selected', agents[id].selected);
+  });
+}
+
+function updateRosterStatus() {
+  const rows = document.querySelectorAll('.roster-agent');
+  rows.forEach(row => {
+    const id = parseInt(row.dataset.agentId);
+    const a = agents[id]; if (!a) return;
+    const dot = row.querySelector('.roster-dot');
+    const text = row.querySelector('.roster-status-text');
+    if (dot) dot.style.background = STATE_COLORS[a.state] || '#5c4a3d';
+    if (text) text.textContent = STATE_LABELS[a.state] || 'idle';
+  });
+}
+
+// ── SELECTED AGENT INFO BAR ──────────────────────────────────────────
+function updateSelectedInfoBar() {
+  const nameEl = document.getElementById('selName');
+  const roleEl = document.getElementById('selRole');
+  const stateEl = document.getElementById('selState');
+  const dotEl = document.getElementById('selDot');
+  if (!nameEl) return;
+
+  const a = selectedAgent;
+  nameEl.textContent = a.name;
+  nameEl.style.color = a.color;
+  roleEl.textContent = a.role;
+  stateEl.textContent = STATE_LABELS[a.state] || 'idle';
+  dotEl.style.background = STATE_COLORS[a.state] || '#5c4a3d';
+}
+
+// ── GAME LOOP ──────────────────────────────────────────────────────────
+let lastTime = now();
+let _rafId = null;
+
+function gameLoop() {
+  if (!cvs || !cvs.isConnected) { _rafId = null; return; }
+  const t = now();
+  const dt = Math.min(t - lastTime, 50);
+  lastTime = t;
+
+  handleInput(dt);
+  for (const a of agents) {
+    a.updateAI(dt);
+    a.updateAnimation(dt);
+  }
+  updateParticles();
+  ambientEffects();
+
+  if (!dragging) {
+    centerCamOn(selectedAgent.x, selectedAgent.y);
+  }
+  updateCam();
+  clampCam();
+
+  ctx.clearRect(0, 0, cvs.width, cvs.height);
+  ctx.save();
+  ctx.translate(-Math.floor(cam.x), -Math.floor(cam.y));
+
+  drawFloor();
+  drawFurniture();
+
+  const sortedAgents = [...agents].sort((a, b) => a.y - b.y);
+  for (const a of sortedAgents) {
+    a.draw();
+  }
+
+  drawParticles();
+  ctx.restore();
+
+  drawHUD();
+
+  _rafId = requestAnimationFrame(gameLoop);
+}
+
+// Update roster status every second
+let _rosterInterval = setInterval(() => {
+  updateRosterStatus();
+  updateSelectedInfoBar();
+}, 1000);
+
+// Pause game loop and intervals when page is hidden
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    if (_rafId) { cancelAnimationFrame(_rafId); _rafId = null; }
+    if (_rosterInterval) { clearInterval(_rosterInterval); _rosterInterval = null; }
+  } else {
+    lastTime = now();
+    if (!_rafId) _rafId = requestAnimationFrame(gameLoop);
+    if (!_rosterInterval) {
+      _rosterInterval = setInterval(() => {
+        updateRosterStatus();
+        updateSelectedInfoBar();
+      }, 1000);
+    }
+  }
+});
+
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+  if (_rafId) { cancelAnimationFrame(_rafId); _rafId = null; }
+  if (_rosterInterval) { clearInterval(_rosterInterval); _rosterInterval = null; }
+});
+
+// ── START ──────────────────────────────────────────────────────────────
+function waitAndStart() {
+  if (spritesLoaded >= TOTAL_SPRITES_NEEDED) {
+    // Hide placeholder
+    const placeholder = document.getElementById('canvasPlaceholder');
+    if (placeholder) placeholder.style.display = 'none';
+
+    cam.x = cam.targetX = selectedAgent.x - cvs.width / 2;
+    cam.y = cam.targetY = selectedAgent.y - cvs.height / 2;
+    clampCam();
+
+    // Build sidebar roster now that sprites are loaded
+    buildRoster();
+    updateSelectedInfoBar();
+
+    gameLoop();
+  } else {
+    // Loading screen on canvas
+    ctx.fillStyle = '#2d1f14';
+    ctx.fillRect(0, 0, cvs.width, cvs.height);
+    ctx.fillStyle = '#d97757';
+    ctx.font = 'bold 14px "Space Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('pulling film...', cvs.width / 2, cvs.height / 2);
+    const dots = '.'.repeat(Math.floor(now() / 500) % 4);
+    ctx.fillText(dots, cvs.width / 2, cvs.height / 2 + 20);
+    ctx.textAlign = 'left';
+    _rafId = requestAnimationFrame(waitAndStart);
+  }
+}
+waitAndStart();
+</script>
+</body>
+</html>
