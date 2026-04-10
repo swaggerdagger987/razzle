@@ -1080,6 +1080,116 @@ function drawAllFloors() {
 // -- FURNITURE --
 // ====================================================================
 
+// -- SHARED OFFICE FURNITURE HELPERS --
+// Standard pieces that appear in every room, drawn consistently.
+
+function drawOfficeDesk(x, y, w, hasMonitor, monitorContent, accent) {
+  // x, y in pixels. w in tiles. Draws desk surface, monitor, lamp, mug, papers.
+  const dw = w * T, dh = 1.5 * T;
+  // Desk surface
+  drawPixelRect(x, y, dw, dh, '#5c4a3d');
+  drawPixelRect(x + 2, y + 2, dw - 4, dh - 4, '#4a3a2a');
+  // Legs
+  px(x + 4, y + dh, 4, 6, '#3a2a1a');
+  px(x + dw - 8, y + dh, 4, 6, '#3a2a1a');
+  if (hasMonitor) {
+    // Monitor
+    const mw = T * 1.4, mh = T;
+    const mx = x + 12, my = y - mh + 4;
+    drawPixelRect(mx, my, mw, mh, '#1a1a2e');
+    px(mx + 3, my + 3, mw - 6, mh - 6, '#0a1a2a');
+    // Monitor stand
+    px(mx + mw/2 - 3, my + mh, 6, 4, '#1a1a2e');
+    px(mx + mw/2 - 8, my + mh + 4, 16, 3, '#1a1a2e');
+    // Screen content (caller provides a function or we draw default lines)
+    if (monitorContent) monitorContent(mx + 3, my + 3, mw - 6, mh - 6);
+  }
+  // Papers on desk
+  px(x + dw - 40, y + 6, 26, 18, '#e8e0cc');
+  px(x + dw - 38, y + 10, 18, 2, '#c4b5a5');
+  px(x + dw - 38, y + 14, 14, 2, '#c4b5a5');
+  // Coffee mug
+  const mugC = accent || '#8a7565';
+  px(x + dw - 56, y + 8, 10, 12, mugC);
+  px(x + dw - 46, y + 10, 4, 8, mugC);
+}
+
+function drawOfficeLamp(x, y) {
+  // Desk lamp at pixel coords. Pole + shade + glow.
+  px(x + 4, y + 2, 4, 16, '#b8963e');
+  px(x, y - 2, 12, 6, '#d4aa40');
+  px(x + 2, y + 18, 8, 3, '#b8963e');
+}
+
+function drawLampGlow(x, y, t) {
+  ctx.globalAlpha = 0.06 + Math.sin(t / 3000) * 0.02;
+  ctx.beginPath();
+  ctx.arc(x + 6, y + 2, 28, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffd866';
+  ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+function drawBookshelf(x, y, h, bookColors) {
+  // x, y in pixels. h in tiles (2 or 3). 1 tile wide.
+  const bh = h * T;
+  drawPixelRect(x, y, T, bh, '#6a4a28');
+  const shelves = h;
+  for (let s = 0; s < shelves; s++) {
+    const sy = y + 4 + s * (T - 2);
+    // Shelf plank
+    px(x, sy + T - 12, T, 2, '#553a1a');
+    // Books
+    for (let b = 0; b < 4; b++) {
+      const bkh = 10 + (b % 3) * 3;
+      px(x + 2 + b * 7, sy + T - 12 - bkh, 5, bkh, bookColors[(s * 4 + b) % bookColors.length]);
+    }
+  }
+}
+
+function drawFilingCabinet(x, y) {
+  // 1 tile wide, 1 tile tall filing cabinet at pixel coords.
+  drawPixelRect(x, y, T, T, '#4a4a5a', '#3a3a4a');
+  for (let d = 0; d < 2; d++) {
+    drawPixelRect(x + 4, y + 4 + d * 14, T - 8, 12, '#5a5a6a');
+    px(x + T/2 - 4, y + 8 + d * 14, 8, 3, '#8a8a9a');
+  }
+}
+
+function drawPlant(x, y) {
+  // Small potted plant at pixel coords.
+  // Pot
+  px(x + 4, y + 14, 14, 10, '#6a4a28');
+  px(x + 2, y + 12, 18, 4, '#6a4a28');
+  // Leaves (green circles)
+  ctx.fillStyle = '#2a8a3a';
+  ctx.beginPath(); ctx.arc(x + 11, y + 6, 7, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#3aaa4a';
+  ctx.beginPath(); ctx.arc(x + 7, y + 3, 5, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x + 15, y + 4, 5, 0, Math.PI * 2); ctx.fill();
+  // Stem
+  px(x + 10, y + 8, 2, 8, '#2a6a2a');
+}
+
+function drawWastebasket(x, y) {
+  // Small wastebasket at pixel coords.
+  px(x + 2, y, 14, 18, '#4a4a5a');
+  px(x, y, 18, 3, '#5a5a6a');
+  // Crumpled paper inside
+  px(x + 5, y + 4, 8, 6, '#d4ccc4');
+}
+
+function drawRug(x, y, w, h, color) {
+  // Rug at pixel coords, w/h in pixels.
+  px(x, y, w, h, color);
+  drawPixelRect(x, y, w, h, null, 'rgba(0,0,0,0.15)');
+  // Subtle fringe on short edges
+  for (let i = 0; i < w; i += 6) {
+    px(x + i, y - 1, 3, 1, color);
+    px(x + i, y + h, 3, 1, color);
+  }
+}
+
 // -- SITUATION ROOM FURNITURE --
 // SR is now at y:13, h:22 (walkable area y:15 to y:34)
 
@@ -1285,651 +1395,418 @@ function drawSituationRoomFurniture() {
 blockRect(21, 23, 10, 7); // war table (room.x+20, room.y+10)
 
 // -- RAZZLE'S OFFICE FURNITURE --
-// Razzle's office: x:18, y:0, w:16, h:13
+// Razzle's office: x:18, y:0, w:16, h:13 — The boss. Nicer desk, spacious.
 
 function drawRazzleOfficeFurniture() {
   const room = ROOMS.razzle;
   if (!isRoomVisible(room)) return;
   const t = now();
+  const rx = room.x * T, ry = room.y * T;
 
-  // 1. Ops board (north wall — clean kanban)
-  const boardX = (room.x + 2) * T, boardY = room.y * T + 4;
-  const boardW = 12 * T, boardH = 2 * T - 8;
-  drawPixelRect(boardX, boardY, boardW, boardH, '#1a110a', '#d97757');
-  // Column headers
-  const cols = [{l:'NOW',c:'#d44040'},{l:'NEXT',c:'#ffc857'},{l:'LATER',c:'#22cc55'}];
-  const colW = Math.floor(boardW / 3);
-  for (let i = 0; i < 3; i++) {
-    const cx = boardX + i * colW;
-    // Divider line
-    if (i > 0) { px(cx, boardY + 4, 1, boardH - 8, '#3a2a1a'); }
-    ctx.fillStyle = cols[i].c;
-    ctx.font = 'bold 8px "Space Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText(cols[i].l, cx + colW/2, boardY + 12);
-    // Task cards (clean rectangles)
-    for (let r = 0; r < 2; r++) {
-      px(cx + 8, boardY + 16 + r * 14, colW - 16, 10, cols[i].c);
-      px(cx + 10, boardY + 18 + r * 14, colW * 0.4, 2, 'rgba(0,0,0,0.2)');
-    }
-  }
+  // Wall: Whiteboard with strategy scribbles (north wall)
+  const wbX = (room.x + 3) * T, wbY = ry + 6;
+  const wbW = 10 * T, wbH = 2 * T - 10;
+  drawPixelRect(wbX, wbY, wbW, wbH, '#e8e8e8', '#8a8a9a');
+  ctx.strokeStyle = '#d44040'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(wbX + 20, wbY + 14); ctx.lineTo(wbX + 80, wbY + 20); ctx.lineTo(wbX + 140, wbY + 12); ctx.stroke();
+  ctx.strokeStyle = '#5b7fff';
+  ctx.beginPath(); ctx.moveTo(wbX + 50, wbY + 28); ctx.lineTo(wbX + 120, wbY + 34); ctx.stroke();
+  ctx.strokeStyle = '#22cc55';
+  ctx.beginPath(); ctx.moveTo(wbX + 160, wbY + 10); ctx.lineTo(wbX + 240, wbY + 18); ctx.lineTo(wbX + 280, wbY + 10); ctx.stroke();
 
-  // 2. Executive desk with lamp + nameplate (center)
+  // Desk: Executive, center, wide (5 tiles). Monitor + lamp + nameplate.
   const dkX = (room.x + 5) * T, dkY = (room.y + 5) * T;
-  const dkW = 6 * T, dkH = 2 * T;
-  // Desk surface
-  drawPixelRect(dkX, dkY, dkW, dkH, '#4a2e14');
-  drawPixelRect(dkX + 2, dkY + 2, dkW - 4, dkH - 4, '#5c3a1a');
-  // Brass lamp (left side)
-  px(dkX + 10, dkY - 8, 6, 10, '#b8963e');
-  px(dkX + 4, dkY - 12, 18, 6, '#d4aa40');
-  ctx.globalAlpha = 0.06 + Math.sin(t / 3000) * 0.02;
-  ctx.beginPath();
-  ctx.arc(dkX + 13, dkY - 4, 35, 0, Math.PI * 2);
-  ctx.fillStyle = '#ffd866';
-  ctx.fill();
-  ctx.globalAlpha = 1;
-  // Brass nameplate (center of desk)
-  px(dkX + dkW/2 - 24, dkY + 10, 48, 16, '#b8963e');
-  px(dkX + dkW/2 - 22, dkY + 12, 44, 12, '#d4aa40');
-  ctx.fillStyle = '#1a110a';
-  ctx.font = 'bold 9px "Space Mono", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('RAZZLE', dkX + dkW/2, dkY + 22);
-  // Papers on desk (right side)
-  px(dkX + dkW - 40, dkY + 6, 30, 20, '#e8e0cc');
-  px(dkX + dkW - 38, dkY + 10, 20, 2, '#5c4a3d');
-  px(dkX + dkW - 38, dkY + 14, 16, 2, '#5c4a3d');
+  drawOfficeDesk(dkX, dkY, 5, true, function(sx, sy, sw, sh) {
+    // Monitor shows a dashboard
+    for (let i = 0; i < 4; i++) {
+      const bh = 4 + Math.abs(Math.sin(t / 800 + i)) * (sh * 0.5);
+      px(sx + 4 + i * 10, sy + sh - bh, 7, bh, i % 2 === 0 ? '#d97757' : '#ffc857');
+    }
+  }, '#d97757');
+  // Lamp on desk
+  drawOfficeLamp(dkX + 5 * T - 30, dkY - 6);
+  drawLampGlow(dkX + 5 * T - 30, dkY - 6, t);
+  // 10% quirk: Brass nameplate
+  px(dkX + 2 * T, dkY + 6, 44, 14, '#b8963e');
+  px(dkX + 2 * T + 2, dkY + 8, 40, 10, '#d4aa40');
+  ctx.fillStyle = '#1a110a'; ctx.font = 'bold 8px "Space Mono", monospace'; ctx.textAlign = 'center';
+  ctx.fillText('RAZZLE', dkX + 2 * T + 22, dkY + 16);
 
-  // 3. Tiger-stripe rug (floor, centered under desk)
+  // Bookshelf (right wall)
+  drawBookshelf((room.x + room.w - 2) * T, (room.y + 3) * T, 3, ['#cc3030','#3060cc','#d97757','#30aa50','#ffc857','#5b7fff','#8b5cf6']);
+
+  // Filing cabinet (behind desk, right)
+  drawFilingCabinet((room.x + room.w - 2) * T, (room.y + room.h - 2) * T);
+
+  // Tiger-stripe rug (floor — the subtle personality touch)
   const rugX = (room.x + 5) * T, rugY = (room.y + 8) * T;
-  const rugW = 6 * T, rugH = 2 * T;
+  const rugW = 5 * T, rugH = 2 * T;
   for (let sy = 0; sy < rugH; sy += 6) {
-    const stripe = Math.floor(sy / 6) % 2;
-    px(rugX, rugY + sy, rugW, 6, stripe ? '#d97757' : '#3a1a0a');
+    px(rugX, rugY + sy, rugW, 6, Math.floor(sy / 6) % 2 ? '#d97757' : '#3a1a0a');
   }
   drawPixelRect(rugX - 1, rugY - 1, rugW + 2, rugH + 2, null, '#5a2a14');
 
-  // 4. Framed poster — "TRUST THE PROCESS" (right wall)
-  const pX = (room.x + room.w - 4) * T, pY = room.y * T + 8;
-  const pW = 3 * T, pH = 2 * T;
-  drawPixelRect(pX, pY, pW, pH, '#3d2e22', '#b8963e');
-  drawPixelRect(pX + 4, pY + 4, pW - 8, pH - 8, '#f7efe5');
-  ctx.fillStyle = '#d97757';
-  ctx.font = 'bold 8px "Luckiest Guy", cursive';
-  ctx.textAlign = 'center';
-  ctx.fillText('TRUST THE', pX + pW/2, pY + pH/2 - 4);
-  ctx.fillText('PROCESS', pX + pW/2, pY + pH/2 + 10);
+  // Plant (left corner)
+  drawPlant((room.x + 2) * T, (room.y + 9) * T);
 
   ctx.textAlign = 'left';
 }
-
-// Razzle room furniture blockRects (room at x:18, y:0)
-blockRect(23, 5, 6, 2); // desk
-blockRect(20, 0, 12, 2); // board (wall)
+blockRect(23, 5, 5, 2); // desk
+blockRect(32, 3, 1, 9); // bookshelf
 
 // -- SCOUT ROOM FURNITURE --
-// Scout room: x:2, y:0, w:15, h:13
+// Scout room: x:2, y:0, w:15, h:13 — Organized field analyst.
 
 function drawScoutRoomFurniture() {
   const room = ROOMS.scout;
   if (!isRoomVisible(room)) return;
   const t = now();
 
-  // 1. Film study screen (north wall — single wide monitor)
-  const scrX = (room.x + 3) * T, scrY = room.y * T + 4;
-  const scrW = 9 * T, scrH = 2 * T - 8;
-  drawPixelRect(scrX, scrY, scrW, scrH, '#1a2a2e', '#2ec4b6');
-  px(scrX + 4, scrY + 4, scrW - 8, scrH - 8, '#0a1e2a');
-  // Route-tree lines (animated player tracking)
-  ctx.strokeStyle = '#2ec4b6';
-  ctx.lineWidth = 2;
-  for (let i = 0; i < 3; i++) {
-    ctx.beginPath();
-    const lx = scrX + 20 + i * 80;
-    ctx.moveTo(lx, scrY + scrH - 8);
-    ctx.lineTo(lx + Math.sin(t / 1200 + i) * 20, scrY + 12);
-    ctx.lineTo(lx + 30 + Math.cos(t / 1500 + i) * 15, scrY + 8);
-    ctx.stroke();
-    // Player dot at end
-    ctx.beginPath();
-    ctx.arc(lx + 30 + Math.cos(t / 1500 + i) * 15, scrY + 8, 3, 0, Math.PI * 2);
-    ctx.fillStyle = i === 0 ? '#d44040' : i === 1 ? '#2ec4b6' : '#ffc857';
-    ctx.fill();
+  // Wall: Corkboard with position-colored index cards (north wall)
+  const cbX = (room.x + 3) * T, cbY = room.y * T + 6;
+  const cbW = 9 * T, cbH = 2 * T - 10;
+  drawPixelRect(cbX, cbY, cbW, cbH, '#8a6a3a', '#6a4a28');
+  const cardClrs = ['#5b7fff','#2ec4b6','#d97757','#8b5cf6','#d44040','#ffc857','#22cc55','#5b7fff'];
+  for (let i = 0; i < 8; i++) {
+    const cx = cbX + 10 + (i % 4) * 64;
+    const cy = cbY + 6 + Math.floor(i / 4) * 20;
+    px(cx, cy, 50, 14, cardClrs[i]);
+    px(cx + 2, cy + 2, 30, 2, 'rgba(255,255,255,0.3)');
+    px(cx + 24, cy - 2, 4, 4, '#d44040'); // push pin
   }
 
-  // 2. Scouting desk with binoculars (left wall)
+  // Desk: Left wall. Monitor + notepad + mug.
   const dkX = (room.x + 2) * T, dkY = (room.y + 5) * T;
-  drawPixelRect(dkX, dkY, 3 * T, 2 * T, '#5c4a3d');
-  drawPixelRect(dkX + 2, dkY + 2, 3 * T - 4, 2 * T - 4, '#4a3a2a');
-  // Binoculars on desk
-  px(dkX + 12, dkY + 8, 10, 14, '#2a2a3e');
-  px(dkX + 26, dkY + 8, 10, 14, '#2a2a3e');
-  px(dkX + 20, dkY + 12, 8, 6, '#3a3a4a');
-  // Notepad
-  px(dkX + 44, dkY + 8, 24, 18, '#e8e0cc');
-  px(dkX + 46, dkY + 12, 16, 2, '#5c4a3d');
-  px(dkX + 46, dkY + 16, 12, 2, '#5c4a3d');
-  px(dkX + 46, dkY + 20, 18, 2, '#5c4a3d');
-  // Pencil
-  px(dkX + 72, dkY + 10, 3, 16, '#ffc857');
-  px(dkX + 72, dkY + 26, 3, 3, '#1a1a1a');
-
-  // 3. Radar display (center floor — the signature item)
-  const radarX = (room.x + 7) * T + T/2, radarY = (room.y + 8) * T + T/2;
-  const radarR = 1.8 * T;
-  ctx.beginPath();
-  ctx.arc(radarX, radarY, radarR, 0, Math.PI * 2);
-  ctx.fillStyle = '#0a1a0a';
-  ctx.fill();
-  ctx.strokeStyle = '#1a3a1a';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  ctx.strokeStyle = 'rgba(46,196,182,0.15)';
-  ctx.lineWidth = 1;
-  for (let i = 1; i <= 3; i++) {
+  drawOfficeDesk(dkX, dkY, 4, true, function(sx, sy, sw, sh) {
+    // Monitor shows waveform lines
+    ctx.strokeStyle = '#2ec4b6'; ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.arc(radarX, radarY, radarR * i / 3, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-  ctx.beginPath();
-  ctx.moveTo(radarX - radarR, radarY); ctx.lineTo(radarX + radarR, radarY);
-  ctx.moveTo(radarX, radarY - radarR); ctx.lineTo(radarX, radarY + radarR);
-  ctx.stroke();
-  const sweepAngle = (t / 2000) % (Math.PI * 2);
-  ctx.save();
-  ctx.beginPath();
-  ctx.moveTo(radarX, radarY);
-  ctx.arc(radarX, radarY, radarR - 2, sweepAngle, sweepAngle + 0.5);
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(46,196,182,0.25)';
-  ctx.fill();
-  ctx.restore();
-  // Blips trailing the sweep
-  for (let i = 0; i < 4; i++) {
-    const ba = sweepAngle - 0.3 - i * 0.6;
-    const br = radarR * (0.25 + i * 0.18);
-    ctx.globalAlpha = 0.8 - i * 0.2;
-    ctx.beginPath();
-    ctx.arc(radarX + Math.cos(ba) * br, radarY + Math.sin(ba) * br, 2, 0, Math.PI * 2);
-    ctx.fillStyle = '#2ec4b6';
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-
-  // 4. Player hot board (right wall — clean 3×3 grid)
-  const brdX = (room.x + room.w - 4) * T, brdY = (room.y + 3) * T;
-  drawPixelRect(brdX, brdY, 3 * T, 5 * T, '#1a2a2e', '#3a4a5a');
-  const positions = ['QB','RB','WR','TE','RB','WR','QB','WR','RB'];
-  const posClr = {QB:'#5b7fff',RB:'#2ec4b6',WR:'#d97757',TE:'#8b5cf6'};
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 3; col++) {
-      const ci = row * 3 + col;
-      const pos = positions[ci];
-      const cx = brdX + 6 + col * 30, cy = brdY + 6 + row * 48;
-      px(cx, cy, 26, 38, posClr[pos]);
-      px(cx + 2, cy + 2, 22, 20, 'rgba(0,0,0,0.2)');
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 8px "Space Mono", monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(pos, cx + 13, cy + 32);
-      // Easter egg: one card has a gold star (the "sleeper pick")
-      if (ci === 4) {
-        px(cx + 18, cy + 4, 6, 6, '#d4aa40');
-      }
+    for (let i = 0; i < 15; i++) {
+      const lx = sx + 2 + i * (sw / 15);
+      const ly = sy + sh / 2 + Math.sin(i * 0.5 + t / 600) * (sh * 0.3);
+      if (i === 0) ctx.moveTo(lx, ly); else ctx.lineTo(lx, ly);
     }
-  }
+    ctx.stroke();
+  }, '#2ec4b6');
+  // Lamp
+  drawOfficeLamp(dkX + 4 * T - 24, dkY - 6);
+  drawLampGlow(dkX + 4 * T - 24, dkY - 6, t);
+  // 10% quirk: Binoculars on desk
+  px(dkX + 64, dkY + 6, 10, 14, '#2a2a3e');
+  px(dkX + 78, dkY + 6, 10, 14, '#2a2a3e');
+  px(dkX + 72, dkY + 10, 8, 6, '#3a3a4a');
+
+  // Bookshelf (right wall)
+  drawBookshelf((room.x + room.w - 2) * T, (room.y + 3) * T, 3, ['#2ec4b6','#3060cc','#d97757','#ffc857','#30aa50','#cc3030','#8b5cf6']);
+
+  // Filing cabinet (right wall, below bookshelf)
+  drawFilingCabinet((room.x + room.w - 2) * T, (room.y + room.h - 2) * T);
+
+  // Rug (teal accent)
+  drawRug((room.x + 5) * T, (room.y + 8) * T, 4 * T, 2 * T, 'rgba(46,196,182,0.15)');
+
+  // Plant (bottom-left corner)
+  drawPlant((room.x + 2) * T, (room.y + 9) * T);
+
+  // Wastebasket (near desk)
+  drawWastebasket((room.x + 2) * T + 4, (room.y + 8) * T);
 
   ctx.textAlign = 'left';
 }
-
-// Scout room blockRects (room at x:2, y:0)
-blockRect(4, 5, 3, 2); // scouting desk
-blockRect(13, 3, 3, 5); // player board
+blockRect(4, 5, 4, 2); // desk
+blockRect(15, 3, 1, 9); // bookshelf
 
 // -- MEDICAL ROOM FURNITURE --
-// Medical room: x:35, y:0, w:15, h:13
+// Medical room: x:35, y:0, w:15, h:13 — Clean, clinical. White/blue.
 
 function drawMedicalRoomFurniture() {
   const room = ROOMS.medical;
   if (!isRoomVisible(room)) return;
   const t = now();
 
-  // 1. X-ray lightbox (north wall left)
-  const xrX = (room.x + 2) * T, xrY = room.y * T + 4;
-  const xrW = 5 * T, xrH = 2 * T - 8;
-  drawPixelRect(xrX, xrY, xrW, xrH, '#c8dce8', '#5b7fff');
-  drawPixelRect(xrX + 4, xrY + 4, xrW - 8, xrH - 8, '#dae8f0');
+  // Wall: Anatomy chart (north wall — the medical whiteboard)
+  const acX = (room.x + 3) * T, acY = room.y * T + 6;
+  const acW = 5 * T, acH = 2 * T - 10;
+  drawPixelRect(acX, acY, acW, acH, '#e8e8e8', '#5b7fff');
   // Body outline
-  const bcx = xrX + xrW / 2, bcy = xrY + xrH / 2;
-  ctx.strokeStyle = 'rgba(40,60,80,0.5)';
-  ctx.lineWidth = 2;
+  const bcx = acX + acW / 2, bcy = acY + acH / 2;
+  ctx.strokeStyle = 'rgba(40,60,100,0.5)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(bcx, bcy - 14, 6, 0, Math.PI * 2); ctx.stroke();
   ctx.beginPath();
-  ctx.arc(bcx, bcy - 16, 6, 0, Math.PI * 2); ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(bcx, bcy - 10); ctx.lineTo(bcx, bcy + 6);
+  ctx.moveTo(bcx, bcy - 8); ctx.lineTo(bcx, bcy + 6);
   ctx.moveTo(bcx - 10, bcy - 2); ctx.lineTo(bcx + 10, bcy - 2);
-  ctx.moveTo(bcx, bcy + 6); ctx.lineTo(bcx - 8, bcy + 18);
-  ctx.moveTo(bcx, bcy + 6); ctx.lineTo(bcx + 8, bcy + 18);
+  ctx.moveTo(bcx, bcy + 6); ctx.lineTo(bcx - 7, bcy + 18);
+  ctx.moveTo(bcx, bcy + 6); ctx.lineTo(bcx + 7, bcy + 18);
   ctx.stroke();
-  // Red knee hotspot (pulsing)
-  const pulse = 0.4 + Math.sin(t / 600) * 0.2;
-  ctx.globalAlpha = pulse;
-  ctx.beginPath(); ctx.arc(bcx + 7, bcy + 14, 4, 0, Math.PI * 2);
-  ctx.fillStyle = '#d44040'; ctx.fill();
-  ctx.globalAlpha = 1;
 
-  // 2. Pulse monitor (north wall right)
-  const pmX = (room.x + 8) * T, pmY = room.y * T + 4;
-  const pmW = 5 * T, pmH = 2 * T - 8;
-  drawPixelRect(pmX, pmY, pmW, pmH, '#1a2535', '#5b7fff');
-  px(pmX + 4, pmY + 4, pmW - 8, pmH - 8, '#0a1a1a');
-  ctx.strokeStyle = '#00cc66';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  for (let i = 0; i < 50; i++) {
-    const lx = pmX + 6 + i * ((pmW - 12) / 50);
-    const ly = pmY + pmH / 2 + Math.sin((i + t / 80) * 0.3) * (pmH * 0.25);
-    if (i === 0) ctx.moveTo(lx, ly); else ctx.lineTo(lx, ly);
-  }
-  ctx.stroke();
-  const bpm = 72 + Math.floor(Math.sin(t / 5000) * 5);
-  ctx.fillStyle = '#00cc66';
-  ctx.font = 'bold 12px "Space Mono", monospace';
-  ctx.textAlign = 'right';
-  ctx.fillText(bpm + ' BPM', pmX + pmW - 8, pmY + 14);
-
-  // 3. Aquarium tank (center — the signature piece)
-  const tkX = (room.x + 4) * T, tkY = (room.y + 4) * T;
-  const tkW = 4 * T, tkH = 4 * T;
-  drawPixelRect(tkX, tkY, tkW, tkH, '#0055aa', '#3a7aaa');
-  drawPixelRect(tkX + 4, tkY + 4, tkW - 8, tkH - 8, '#003d77');
-  // Bubbles
-  for (let i = 0; i < 5; i++) {
-    const bx = tkX + 12 + (i * 18) % (tkW - 24);
-    const by = tkY + tkH - 10 - ((t / 600 + i * 40) % (tkH - 20));
-    const bs = 2 + (i % 3);
-    ctx.globalAlpha = 0.4 + Math.sin(t / 500 + i) * 0.2;
-    ctx.beginPath(); ctx.arc(bx, by, bs, 0, Math.PI * 2);
-    ctx.fillStyle = '#66ccff'; ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-  // Fish swimming
-  for (let fi = 0; fi < 2; fi++) {
-    const fishX = tkX + 10 + ((t / 500 + fi * 50) % (tkW - 24));
-    const fishY = tkY + tkH * 0.3 + fi * tkH * 0.3 + Math.sin(t / 700 + fi * 3) * 8;
-    ctx.fillStyle = fi === 0 ? '#ff8844' : '#44aaff';
+  // Desk: Right side. Monitor with heartbeat + clipboard.
+  const dkX = (room.x + 8) * T, dkY = (room.y + 5) * T;
+  drawOfficeDesk(dkX, dkY, 4, true, function(sx, sy, sw, sh) {
+    // Heartbeat line
+    ctx.strokeStyle = '#00cc66'; ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(fishX + 8, fishY);
-    ctx.lineTo(fishX, fishY - 4);
-    ctx.lineTo(fishX, fishY + 4);
-    ctx.closePath(); ctx.fill();
-    px(fishX + 8, fishY - 3, 5, 6, ctx.fillStyle);
-  }
-  // Label
-  ctx.fillStyle = '#5b7fff';
-  ctx.font = 'bold 8px "Space Mono", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('ICE BATH', tkX + tkW / 2, tkY + tkH + 10);
+    for (let i = 0; i < 20; i++) {
+      const lx = sx + 2 + i * (sw / 20);
+      const ly = sy + sh / 2 + Math.sin((i + t / 80) * 0.4) * (sh * 0.3);
+      if (i === 0) ctx.moveTo(lx, ly); else ctx.lineTo(lx, ly);
+    }
+    ctx.stroke();
+    const bpm = 72 + Math.floor(Math.sin(t / 5000) * 5);
+    ctx.fillStyle = '#00cc66'; ctx.font = 'bold 9px "Space Mono", monospace';
+    ctx.textAlign = 'right'; ctx.fillText(bpm + '', sx + sw - 2, sy + 10); ctx.textAlign = 'left';
+  }, '#5b7fff');
+  // Lamp
+  drawOfficeLamp(dkX + 4 * T - 24, dkY - 6);
+  drawLampGlow(dkX + 4 * T - 24, dkY - 6, t);
 
-  // 4. Examination desk with status board (right side)
-  const dkX = (room.x + 9) * T, dkY = (room.y + 5) * T;
-  drawPixelRect(dkX, dkY, 4 * T, 2 * T, '#e8e0d8', '#8a7565');
-  drawPixelRect(dkX + 4, dkY + 4, 4 * T - 8, 2 * T - 8, '#d4ccc4');
-  // Status tags on desk
-  const tags = [{l:'Q',c:'#ffc857'},{l:'D',c:'#d97757'},{l:'O',c:'#d44040'},{l:'IR',c:'#cc2222'}];
-  for (let i = 0; i < tags.length; i++) {
-    px(dkX + 10 + i * 28, dkY + 8, 22, 14, tags[i].c);
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 9px "Space Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText(tags[i].l, dkX + 21 + i * 28, dkY + 19);
+  // Bookshelf (left wall)
+  drawBookshelf((room.x + 1) * T, (room.y + 3) * T, 3, ['#5b7fff','#3a7aaa','#e8e0d8','#5b7fff','#d4ccc4','#3a7aaa','#e8e0d8']);
+
+  // Filing cabinet (next to desk)
+  drawFilingCabinet((room.x + room.w - 2) * T, (room.y + 5) * T);
+
+  // 10% quirk: Small fish tank on the bookshelf ledge
+  const ftX = (room.x + 1) * T, ftY = (room.y + 8) * T;
+  drawPixelRect(ftX, ftY, 2 * T, 1.5 * T, '#0055aa', '#3a7aaa');
+  px(ftX + 3, ftY + 3, 2 * T - 6, 1.5 * T - 6, '#003d77');
+  for (let i = 0; i < 3; i++) {
+    const bx = ftX + 8 + (i * 15) % (2 * T - 16);
+    const by = ftY + 1.5 * T - 8 - ((t / 700 + i * 30) % (1.5 * T - 14));
+    ctx.globalAlpha = 0.4; ctx.beginPath(); ctx.arc(bx, by, 2, 0, Math.PI * 2);
+    ctx.fillStyle = '#66ccff'; ctx.fill(); ctx.globalAlpha = 1;
   }
-  // Clipboard
-  px(dkX + 10, dkY + 26, 20, 26, '#e8e0cc');
-  px(dkX + 14, dkY + 22, 12, 6, '#8a7565');
-  px(dkX + 12, dkY + 30, 14, 2, '#5c4a3d');
-  px(dkX + 12, dkY + 34, 10, 2, '#5c4a3d');
-  px(dkX + 12, dkY + 38, 12, 2, '#5c4a3d');
+  // One little fish
+  const fishX = ftX + 6 + ((t / 500) % (2 * T - 16));
+  const fishY = ftY + 1.5 * T / 2 + Math.sin(t / 600) * 6;
+  ctx.fillStyle = '#ff8844'; ctx.beginPath();
+  ctx.moveTo(fishX + 6, fishY); ctx.lineTo(fishX, fishY - 3); ctx.lineTo(fishX, fishY + 3);
+  ctx.closePath(); ctx.fill();
+
+  // Plant (bottom right)
+  drawPlant((room.x + room.w - 3) * T, (room.y + 9) * T);
+
+  // Wastebasket
+  drawWastebasket((room.x + 8) * T, (room.y + 8) * T + 16);
 
   ctx.textAlign = 'left';
 }
-
-// Medical room blockRects (room at x:35, y:0)
-blockRect(39, 4, 4, 4); // aquarium tank
-blockRect(44, 5, 4, 2); // exam desk
+blockRect(36, 3, 1, 9); // bookshelf
+blockRect(43, 5, 4, 2); // desk
+blockRect(36, 8, 2, 2); // fish tank
 
 // -- DIPLOMAT ROOM FURNITURE --
-// Diplomat room: x:2, y:35, w:15, h:13
+// Diplomat room: x:2, y:35, w:15, h:13 — Polished, formal.
 
 function drawDiplomatRoomFurniture() {
   const room = ROOMS.diplomat;
   if (!isRoomVisible(room)) return;
   const t = now();
 
-  // 1. Red-string conspiracy board (north wall — the iconic piece)
-  const rbX = (room.x + 2) * T, rbY = room.y * T + 4;
-  const rbW = 10 * T, rbH = 2 * T - 8;
-  drawPixelRect(rbX, rbY, rbW, rbH, '#1a1018', '#8b5cf6');
-  // Photos (clean grid)
-  const photos = [
-    {x:12,y:6},{x:60,y:8},{x:110,y:6},{x:160,y:8},{x:210,y:6},
-    {x:36,y:28},{x:135,y:30},{x:185,y:28},
-  ];
+  // Wall: Corkboard with photos + a few red strings (north wall — subtle conspiracy)
+  const rbX = (room.x + 3) * T, rbY = room.y * T + 6;
+  const rbW = 9 * T, rbH = 2 * T - 10;
+  drawPixelRect(rbX, rbY, rbW, rbH, '#8a6a3a', '#6a4a28');
+  const photos = [{x:14,y:6},{x:70,y:8},{x:130,y:6},{x:190,y:8},{x:250,y:6}];
   for (const p of photos) {
-    px(rbX + p.x, rbY + p.y, 20, 14, '#3a3040');
-    px(rbX + p.x + 2, rbY + p.y + 2, 16, 10, '#5a4a5a');
-    px(rbX + p.x + 9, rbY + p.y - 2, 4, 4, '#d44040'); // pin
+    px(rbX + p.x, rbY + p.y, 24, 16, '#3a3040');
+    px(rbX + p.x + 2, rbY + p.y + 2, 20, 12, '#5a4a5a');
+    px(rbX + p.x + 11, rbY + p.y - 2, 4, 4, '#d44040');
   }
-  // Red strings connecting photos
-  ctx.strokeStyle = '#cc3030';
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = '#cc3030'; ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(rbX + 22, rbY + 13); ctx.lineTo(rbX + 70, rbY + 15);
-  ctx.lineTo(rbX + 120, rbY + 13); ctx.lineTo(rbX + 170, rbY + 15);
-  ctx.lineTo(rbX + 220, rbY + 13);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(rbX + 70, rbY + 15); ctx.lineTo(rbX + 46, rbY + 35);
-  ctx.lineTo(rbX + 145, rbY + 37); ctx.lineTo(rbX + 170, rbY + 15);
+  ctx.moveTo(rbX + 26, rbY + 14); ctx.lineTo(rbX + 82, rbY + 16);
+  ctx.lineTo(rbX + 142, rbY + 14); ctx.lineTo(rbX + 202, rbY + 16);
   ctx.stroke();
 
-  // 2. Negotiation table (center)
-  const ntX = (room.x + 4) * T, ntY = (room.y + 5) * T;
-  const ntW = 6 * T, ntH = 3 * T;
-  drawPixelRect(ntX, ntY, ntW, ntH, '#2a1a10');
-  drawPixelRect(ntX + 4, ntY + 4, ntW - 8, ntH - 8, '#3a2418');
-  // Two chairs implied (side notches)
-  px(ntX - 8, ntY + ntH/2 - 8, 8, 16, '#2a1a10');
-  px(ntX + ntW, ntY + ntH/2 - 8, 8, 16, '#2a1a10');
-  // Papers on table
-  px(ntX + 16, ntY + 12, 28, 20, '#e8e0cc');
-  px(ntX + 18, ntY + 16, 20, 2, '#5c4a3d');
-  px(ntX + 18, ntY + 20, 14, 2, '#5c4a3d');
-  px(ntX + ntW - 44, ntY + 12, 28, 20, '#e8e0cc');
-  px(ntX + ntW - 42, ntY + 16, 18, 2, '#5c4a3d');
-  px(ntX + ntW - 42, ntY + 20, 22, 2, '#5c4a3d');
+  // Desk: Center-left. Monitor + neat folders.
+  const dkX = (room.x + 3) * T, dkY = (room.y + 5) * T;
+  drawOfficeDesk(dkX, dkY, 4, true, function(sx, sy, sw, sh) {
+    // Spreadsheet-like grid
+    ctx.strokeStyle = 'rgba(139,92,246,0.4)'; ctx.lineWidth = 1;
+    for (let i = 1; i < 4; i++) {
+      ctx.beginPath(); ctx.moveTo(sx, sy + i * (sh / 4)); ctx.lineTo(sx + sw, sy + i * (sh / 4)); ctx.stroke();
+    }
+    for (let i = 1; i < 3; i++) {
+      ctx.beginPath(); ctx.moveTo(sx + i * (sw / 3), sy); ctx.lineTo(sx + i * (sw / 3), sy + sh); ctx.stroke();
+    }
+  }, '#8b5cf6');
+  drawOfficeLamp(dkX + 4 * T - 24, dkY - 6);
+  drawLampGlow(dkX + 4 * T - 24, dkY - 6, t);
 
-  // 3. Chessboard (right side — mid-game)
-  const cbX = (room.x + 11) * T, cbY = (room.y + 4) * T;
-  const cbS = 2.5 * T;
-  drawPixelRect(cbX, cbY, cbS, cbS, '#2a1a10', '#4a3020');
-  const sq = Math.floor((cbS - 8) / 8);
-  for (let cr = 0; cr < 8; cr++) {
-    for (let cc = 0; cc < 8; cc++) {
-      px(cbX + 4 + cc * sq, cbY + 4 + cr * sq, sq - 1, sq - 1,
-         (cr + cc) % 2 === 0 ? '#e8e0cc' : '#3a2418');
+  // Bookshelf (right wall)
+  drawBookshelf((room.x + room.w - 2) * T, (room.y + 3) * T, 3, ['#8b5cf6','#5a4a5a','#3060cc','#d97757','#cc3030','#8b5cf6','#ffc857']);
+
+  // Filing cabinet (south wall)
+  drawFilingCabinet((room.x + 4) * T, (room.y + room.h - 2) * T);
+
+  // Purple rug (formal feel)
+  drawRug((room.x + 4) * T, (room.y + 8) * T, 5 * T, 2 * T, 'rgba(139,92,246,0.12)');
+
+  // 10% quirk: Small chess set on a side table
+  const csX = (room.x + 10) * T, csY = (room.y + 6) * T;
+  drawPixelRect(csX, csY, 2 * T, 2 * T, '#5c4a3d', '#4a3a2a');
+  // Chessboard (tiny)
+  const sq = 7;
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      px(csX + 4 + c * sq, csY + 4 + r * sq, sq - 1, sq - 1,
+         (r + c) % 2 === 0 ? '#e8e0cc' : '#3a2418');
     }
   }
-  // A few pieces (mid-game position)
-  px(cbX + 4 + 2 * sq, cbY + 4 + 1 * sq, sq - 2, sq - 2, '#1a1018');
-  px(cbX + 4 + 5 * sq, cbY + 4 + 3 * sq, sq - 2, sq - 2, '#e8e0cc');
-  px(cbX + 4 + 4 * sq, cbY + 4 + 5 * sq, sq - 2, sq - 2, '#1a1018');
-  px(cbX + 4 + 6 * sq, cbY + 4 + 6 * sq, sq - 2, sq - 2, '#e8e0cc');
-  // Easter egg: one piece is purple (fox's piece)
-  px(cbX + 4 + 3 * sq, cbY + 4 + 4 * sq, sq - 2, sq - 2, '#8b5cf6');
-
-  // 4. FAAB bid board (right wall)
-  const fbX = (room.x + room.w - 4) * T, fbY = (room.y + 7) * T;
-  drawPixelRect(fbX, fbY, 3 * T, 4 * T, '#1a1018', '#8b5cf6');
-  ctx.fillStyle = '#8b5cf6';
-  ctx.font = 'bold 9px "Space Mono", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('FAAB BIDS', fbX + 1.5 * T, fbY + 14);
-  const bids = [{w:70,a:'$100'},{w:52,a:'$75'},{w:38,a:'$50'},{w:24,a:'$25'},{w:12,a:'$10'}];
-  for (let i = 0; i < bids.length; i++) {
-    const by = fbY + 22 + i * 18;
-    px(fbX + 8, by, bids[i].w, 12, '#8b5cf6');
-    ctx.fillStyle = '#c4b5a5';
-    ctx.font = '7px "Space Mono", monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText(bids[i].a, fbX + bids[i].w + 12, by + 10);
-  }
+  // A few pieces
+  px(csX + 4 + 2 * sq, csY + 4 + 1 * sq, sq - 2, sq - 2, '#1a1018');
+  px(csX + 4 + 5 * sq, csY + 4 + 4 * sq, sq - 2, sq - 2, '#e8e0cc');
+  px(csX + 4 + 3 * sq, csY + 4 + 6 * sq, sq - 2, sq - 2, '#1a1018');
 
   ctx.textAlign = 'left';
 }
-
-// Diplomat room blockRects (room at x:2, y:35)
-blockRect(6, 40, 6, 3); // negotiation table
-blockRect(13, 39, 3, 3); // chessboard
+blockRect(5, 40, 4, 2); // desk
+blockRect(15, 38, 1, 9); // bookshelf
+blockRect(12, 41, 2, 2); // chess table
 
 // -- QUANT ROOM FURNITURE --
-// Quant room: x:18, y:35, w:16, h:13
+// Quant room: x:18, y:35, w:16, h:13 — Techy, slightly messy. More screens.
 
 function drawQuantRoomFurniture() {
   const room = ROOMS.quant;
   if (!isRoomVisible(room)) return;
   const t = now();
 
-  // 1. Three monitors (north wall — same size, evenly spaced)
-  for (let mi = 0; mi < 3; mi++) {
-    const mx = (room.x + 2 + mi * 4) * T, my = (room.y + 3) * T;
-    const mw = 3.5 * T, mh = 2 * T;
-    drawPixelRect(mx, my, mw, mh, '#0a0f0a', '#182018');
-    px(mx + 4, my + 4, mw - 8, mh - 8, '#050a05');
+  // Wall: Whiteboard with hand-drawn graph (north wall)
+  const wbX = (room.x + 3) * T, wbY = room.y * T + 6;
+  const wbW = 10 * T, wbH = 2 * T - 10;
+  drawPixelRect(wbX, wbY, wbW, wbH, '#e8e8e8', '#8a8a9a');
+  // Axes
+  ctx.strokeStyle = '#1a1a2e'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(wbX + 20, wbY + wbH - 8); ctx.lineTo(wbX + 20, wbY + 8);
+  ctx.moveTo(wbX + 20, wbY + wbH - 8); ctx.lineTo(wbX + wbW - 20, wbY + wbH - 8);
+  ctx.stroke();
+  // Hand-drawn curve
+  ctx.strokeStyle = '#e87422'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let i = 0; i < 12; i++) {
+    const lx = wbX + 24 + i * ((wbW - 48) / 12);
+    const ly = wbY + wbH - 12 - Math.pow(i / 12, 0.6) * (wbH - 24);
+    if (i === 0) ctx.moveTo(lx, ly); else ctx.lineTo(lx, ly);
+  }
+  ctx.stroke();
+
+  // Desk: Wide, with DUAL monitors (the 10% quirk — more screens than anyone)
+  const dkX = (room.x + 4) * T, dkY = (room.y + 5) * T;
+  drawOfficeDesk(dkX, dkY, 6, false, null, '#e87422');
+  // Dual monitors (manually drawn since drawOfficeDesk only does one)
+  for (let mi = 0; mi < 2; mi++) {
+    const mw = T * 1.3, mh = T;
+    const mx = dkX + 10 + mi * (mw + 8), my = dkY - mh + 4;
+    drawPixelRect(mx, my, mw, mh, '#1a1a2e');
+    px(mx + 3, my + 3, mw - 6, mh - 6, '#0a1a2a');
+    px(mx + mw/2 - 3, my + mh, 6, 3, '#1a1a2e');
+    px(mx + mw/2 - 6, my + mh + 3, 12, 2, '#1a1a2e');
     if (mi === 0) {
-      // Line chart
-      ctx.strokeStyle = '#22cc55';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      for (let i = 0; i < 15; i++) {
-        const lx = mx + 8 + i * ((mw - 16) / 15);
+      // Left: line chart
+      ctx.strokeStyle = '#22cc55'; ctx.lineWidth = 1.5; ctx.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const lx = mx + 5 + i * ((mw - 10) / 10);
         const ly = my + mh / 2 + Math.sin(i * 0.5 + t / 600) * (mh * 0.25);
         if (i === 0) ctx.moveTo(lx, ly); else ctx.lineTo(lx, ly);
       }
       ctx.stroke();
-    } else if (mi === 1) {
-      // Bar chart
-      for (let i = 0; i < 6; i++) {
-        const bh = 6 + Math.abs(Math.sin(t / 800 + i * 0.8)) * (mh * 0.4);
-        px(mx + 8 + i * 14, my + mh - 6 - bh, 10, bh, i % 2 === 0 ? '#22cc55' : '#ff8800');
-      }
     } else {
-      // Scrolling data — easter egg: briefly shows "404" every ~10 seconds
-      const show404 = Math.floor(t / 10000) % 2 === 0 && (t % 10000) < 800;
-      if (show404) {
-        ctx.fillStyle = '#ff4444';
-        ctx.font = 'bold 14px "Space Mono", monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText('404', mx + mw / 2, my + mh / 2 + 4);
-        ctx.textAlign = 'left';
-      } else {
-        ctx.fillStyle = '#22cc55';
-        ctx.font = '7px "Space Mono", monospace';
-        for (let row = 0; row < 5; row++) {
-          const val = (Math.floor(t / 100 + row * 37) % 999).toString().padStart(3, '0');
-          ctx.fillText(val, mx + 8, my + 12 + row * 10);
-        }
+      // Right: scrolling numbers
+      ctx.fillStyle = '#22cc55'; ctx.font = '6px "Space Mono", monospace';
+      for (let row = 0; row < 3; row++) {
+        const val = (Math.floor(t / 100 + row * 37) % 999).toString().padStart(3, '0');
+        ctx.fillText(val, mx + 5, my + 10 + row * 8);
       }
     }
   }
+  drawOfficeLamp(dkX + 6 * T - 28, dkY - 6);
+  drawLampGlow(dkX + 6 * T - 28, dkY - 6, t);
 
-  // 2. Championship odds (center-left — big clean display)
-  const coX = (room.x + 2) * T, coY = (room.y + 6) * T;
-  const coW = 6 * T, coH = 2.5 * T;
-  drawPixelRect(coX, coY, coW, coH, '#0a0f0a', '#22cc55');
-  ctx.fillStyle = '#22cc55';
-  ctx.font = 'bold 10px "Space Mono", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('CHAMPIONSHIP ODDS', coX + coW / 2, coY + 14);
-  const odds = (23.4 + Math.sin(t / 10000) * 2).toFixed(1);
-  ctx.fillStyle = '#00ff66';
-  ctx.font = 'bold 24px "Space Mono", monospace';
-  ctx.fillText(odds + '%', coX + coW / 2, coY + coH - 12);
+  // Bookshelf (left wall)
+  drawBookshelf((room.x + 1) * T, (room.y + 3) * T, 3, ['#e87422','#22cc55','#3060cc','#ff8800','#2ec4b6','#d97757','#ffc857']);
 
-  // 3. Simulation ticker (center-right)
-  const stX = (room.x + 9) * T, stY = (room.y + 6) * T;
-  const stW = 5 * T, stH = 2.5 * T;
-  drawPixelRect(stX, stY, stW, stH, '#0a0f0a', '#ff8800');
-  ctx.fillStyle = '#ff8800';
-  ctx.font = 'bold 8px "Space Mono", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText('SIMULATIONS', stX + stW / 2, stY + 14);
-  const simCount = Math.floor(t / 10) % 1000000;
-  ctx.fillStyle = '#22cc55';
-  ctx.font = 'bold 14px "Space Mono", monospace';
-  ctx.fillText(simCount.toLocaleString(), stX + stW / 2, stY + 36);
-  const runDots = '.'.repeat(Math.floor(t / 300) % 4);
-  ctx.font = 'bold 10px "Space Mono", monospace';
-  ctx.fillText('RUN' + runDots, stX + stW / 2, stY + stH - 8);
+  // Filing cabinet (under desk right)
+  drawFilingCabinet((room.x + room.w - 2) * T, (room.y + room.h - 2) * T);
 
-  // 4. Probability wheel (bottom center)
-  const pwX = (room.x + 7) * T + T / 2, pwY = (room.y + 10) * T;
-  const pwR = 1.8 * T;
-  const segments = [
-    { frac: 0.35, color: '#22cc55', label: 'WIN' },
-    { frac: 0.25, color: '#ff8800', label: 'LOSE' },
-    { frac: 0.20, color: '#5b7fff', label: 'PUSH' },
-    { frac: 0.12, color: '#d44040', label: 'BUST' },
-    { frac: 0.08, color: '#8b5cf6', label: '??' },
-  ];
-  let sa = (t / 5000) % (Math.PI * 2);
-  for (const seg of segments) {
-    const ea = sa + seg.frac * Math.PI * 2;
-    ctx.beginPath(); ctx.moveTo(pwX, pwY);
-    ctx.arc(pwX, pwY, pwR, sa, ea);
-    ctx.closePath(); ctx.fillStyle = seg.color; ctx.fill();
-    // Label
-    const ma = sa + seg.frac * Math.PI;
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 7px "Space Mono", monospace';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(seg.label, pwX + Math.cos(ma) * pwR * 0.6, pwY + Math.sin(ma) * pwR * 0.6);
-    sa = ea;
-  }
-  ctx.textBaseline = 'alphabetic';
-  ctx.beginPath(); ctx.arc(pwX, pwY, 5, 0, Math.PI * 2);
-  ctx.fillStyle = '#0a0f0a'; ctx.fill();
+  // Plant (right corner)
+  drawPlant((room.x + room.w - 3) * T, (room.y + 9) * T);
+
+  // Wastebasket (near desk — slightly overflowing for messy feel)
+  const wbkX = (room.x + 4) * T + 4, wbkY = (room.y + 8) * T;
+  drawWastebasket(wbkX, wbkY);
+  // Extra crumpled paper next to it (messy)
+  px(wbkX - 6, wbkY + 12, 6, 5, '#d4ccc4');
+  px(wbkX + 20, wbkY + 8, 5, 4, '#e8e0cc');
 
   ctx.textAlign = 'left';
 }
-
-// Quant room blockRects (room at x:18, y:35)
-blockRect(20, 38, 12, 2); // monitors
-blockRect(20, 41, 6, 2); // odds display
+blockRect(22, 40, 6, 2); // desk
+blockRect(19, 38, 1, 9); // bookshelf
 
 // -- HISTORIAN ROOM FURNITURE --
-// Historian room: x:35, y:35, w:15, h:13
+// Historian room: x:35, y:35, w:15, h:13 — Cozy, warm, academic. Books everywhere.
 
 function drawHistorianRoomFurniture() {
   const room = ROOMS.historian;
   if (!isRoomVisible(room)) return;
   const t = now();
 
-  // 1. Bookshelves (left wall — full height, iconic)
-  for (let si = 0; si < 3; si++) {
-    const bsX = (room.x + 1) * T;
-    const bsY = (room.y + 3 + si * 3) * T;
-    drawPixelRect(bsX, bsY, T, 3 * T, '#6a4a28');
-    const bkClrs = ['#cc3030','#3060cc','#30aa50','#d97757','#8b5cf6','#2ec4b6','#ffc857'];
-    for (let shelf = 0; shelf < 3; shelf++) {
-      const sy = bsY + 4 + shelf * (T - 2);
-      px(bsX, sy + T - 10, T, 2, '#553a1a');
-      for (let b = 0; b < 4; b++) {
-        const bh = 10 + (b % 3) * 3;
-        px(bsX + 2 + b * 7, sy + T - 10 - bh, 5, bh, bkClrs[(si * 4 + shelf + b) % bkClrs.length]);
-      }
-    }
-  }
-
-  // 2. Bookshelves (right wall)
-  for (let si = 0; si < 3; si++) {
-    const bsX = (room.x + room.w - 2) * T;
-    const bsY = (room.y + 3 + si * 3) * T;
-    drawPixelRect(bsX, bsY, T, 3 * T, '#6a4a28');
-    const bkClrs = ['#d44040','#5b7fff','#ffc857','#8b5cf6','#cc3030','#2ec4b6','#30aa50'];
-    for (let shelf = 0; shelf < 3; shelf++) {
-      const sy = bsY + 4 + shelf * (T - 2);
-      px(bsX, sy + T - 10, T, 2, '#553a1a');
-      for (let b = 0; b < 4; b++) {
-        const bh = 10 + ((b + 1) % 3) * 3;
-        px(bsX + 2 + b * 7, sy + T - 10 - bh, 5, bh, bkClrs[(si * 4 + shelf + b) % bkClrs.length]);
-      }
-    }
-  }
-
-  // 3. Timeline (north wall — clean horizontal with year markers)
+  // Wall: Timeline pinboard (north wall — simple horizontal line with year markers)
   const tlX = (room.x + 3) * T, tlY = room.y * T + 6;
   const tlW = 9 * T, tlH = 2 * T - 10;
-  drawPixelRect(tlX, tlY, tlW, tlH, '#2a1a0a', '#d44040');
-  const lineY = tlY + tlH / 2 + 2;
-  ctx.strokeStyle = '#d4c4a0';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(tlX + 10, lineY); ctx.lineTo(tlX + tlW - 10, lineY);
-  ctx.stroke();
+  drawPixelRect(tlX, tlY, tlW, tlH, '#8a6a3a', '#6a4a28');
+  const lineY = tlY + tlH / 2;
+  ctx.strokeStyle = '#d4c4a0'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(tlX + 10, lineY); ctx.lineTo(tlX + tlW - 10, lineY); ctx.stroke();
   const years = ["'20","'21","'22","'23","'24","'25"];
-  const yrClrs = ['#d44040','#ffc857','#22cc55','#5b7fff','#d97757','#8b5cf6'];
   for (let i = 0; i < years.length; i++) {
     const ex = tlX + 20 + i * ((tlW - 40) / 5);
-    px(ex - 3, lineY - 8, 6, 16, yrClrs[i]);
-    ctx.fillStyle = '#d4c4a0';
-    ctx.font = 'bold 7px "Space Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText(years[i], ex, tlY + 10);
+    px(ex - 2, lineY - 6, 4, 12, '#d44040');
+    ctx.fillStyle = '#d4c4a0'; ctx.font = 'bold 6px "Space Mono", monospace'; ctx.textAlign = 'center';
+    ctx.fillText(years[i], ex, tlY + 8);
   }
 
-  // 4. Study table with lamp and open book (center)
-  const tbX = (room.x + 4) * T, tbY = (room.y + 6) * T;
-  const tbW = 6 * T, tbH = 2 * T;
-  drawPixelRect(tbX, tbY, tbW, tbH, '#6a4a28', '#4a3020');
-  drawPixelRect(tbX + 4, tbY + 4, tbW - 8, tbH - 8, '#5c4a3d');
-  // Open book
-  px(tbX + 16, tbY + 8, 3 * T, T + 4, '#f7efe5');
-  px(tbX + 16 + 1.5 * T, tbY + 8, 2, T + 4, '#5c4a3d'); // spine
-  for (let i = 0; i < 4; i++) {
-    px(tbX + 20, tbY + 14 + i * 7, T, 2, '#c4b5a5');
-    px(tbX + 22 + 1.5 * T, tbY + 14 + i * 7, T, 2, '#c4b5a5');
-  }
-  // Desk lamp (right side of table)
-  const lmpX = tbX + tbW - 24;
-  px(lmpX + 4, tbY - 6, 6, 10, '#5c4a3d');
-  px(lmpX, tbY - 10, 16, 6, '#d4aa40');
-  ctx.globalAlpha = 0.08 + Math.sin(t / 2000) * 0.03;
-  ctx.beginPath();
-  ctx.arc(lmpX + 7, tbY - 4, 35, 0, Math.PI * 2);
-  ctx.fillStyle = '#ffd866'; ctx.fill();
-  ctx.globalAlpha = 1;
+  // Desk: Center. Monitor + lamp + open book + tea cup.
+  const dkX = (room.x + 5) * T, dkY = (room.y + 6) * T;
+  drawOfficeDesk(dkX, dkY, 4, true, function(sx, sy, sw, sh) {
+    // Document/text display
+    ctx.fillStyle = '#d4c4a0'; ctx.font = '6px "Space Mono", monospace';
+    for (let i = 0; i < 4; i++) {
+      const lw = 8 + ((i * 7 + Math.floor(t / 5000)) % 14);
+      px(sx + 3, sy + 4 + i * 7, lw, 2, '#d4c4a0');
+    }
+  }, '#d44040');
+  drawOfficeLamp(dkX + 4 * T - 24, dkY - 6);
+  // Bigger glow for the historian's cozy lamp
+  ctx.globalAlpha = 0.1 + Math.sin(t / 2000) * 0.03;
+  ctx.beginPath(); ctx.arc(dkX + 4 * T - 18, dkY - 4, 40, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffd866'; ctx.fill(); ctx.globalAlpha = 1;
 
-  // 5. Trophy case (upper center)
-  const tcX = (room.x + 6) * T, tcY = (room.y + 3) * T;
-  const tcW = 3 * T, tcH = 2 * T;
-  drawPixelRect(tcX, tcY, tcW, tcH, '#2a2018', '#6a4a28');
-  px(tcX + 4, tcY + 4, tcW - 8, tcH - 8, 'rgba(200,220,255,0.12)');
-  // Trophy
-  const trX = tcX + tcW / 2, trY = tcY + tcH / 2;
-  px(trX - 6, trY - 10, 12, 14, '#d4aa40');
-  px(trX - 8, trY - 12, 16, 4, '#d4aa40');
-  px(trX - 8, trY + 4, 16, 4, '#5c4a3d');
-  // Sparkle
-  if (Math.floor(t / 500) % 4 === 0) {
-    ctx.globalAlpha = 0.8;
-    px(trX + 4, trY - 12, 3, 3, '#fff');
-    ctx.globalAlpha = 1;
-  }
+  // 10% quirk: Bookshelves on BOTH walls (way more books than anyone else)
+  const bkClrsL = ['#cc3030','#3060cc','#30aa50','#d97757','#8b5cf6','#2ec4b6','#ffc857'];
+  const bkClrsR = ['#d44040','#5b7fff','#ffc857','#8b5cf6','#cc3030','#2ec4b6','#30aa50'];
+  drawBookshelf((room.x + 1) * T, (room.y + 3) * T, 3, bkClrsL);
+  drawBookshelf((room.x + room.w - 2) * T, (room.y + 3) * T, 3, bkClrsR);
 
-  // 6. Filing cabinets (south wall)
+  // Filing cabinets (south wall, 3 labeled by year)
   for (let fi = 0; fi < 3; fi++) {
     const fcX = (room.x + 4 + fi * 3) * T;
     const fcY = (room.y + room.h - 2) * T;
-    drawPixelRect(fcX, fcY, T, T, '#4a4a5a', '#3a3a4a');
-    for (let d = 0; d < 2; d++) {
-      drawPixelRect(fcX + 3, fcY + 3 + d * 14, T - 6, 12, '#5a5a6a');
-      px(fcX + T / 2 - 4, fcY + 7 + d * 14, 8, 3, '#8a8a9a');
-    }
-    ctx.fillStyle = '#d4c4a0';
-    ctx.font = 'bold 7px "Space Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText("'" + (23 + fi), fcX + T / 2, fcY - 4);
+    drawFilingCabinet(fcX, fcY);
+    ctx.fillStyle = '#d4c4a0'; ctx.font = 'bold 6px "Space Mono", monospace'; ctx.textAlign = 'center';
+    ctx.fillText("'" + (23 + fi), fcX + T / 2, fcY - 3);
   }
+
+  // Warm rug (red/brown)
+  drawRug((room.x + 4) * T, (room.y + 9) * T, 5 * T, 1.5 * T, 'rgba(212,64,64,0.12)');
 
   ctx.textAlign = 'left';
 }
-
-// Historian room blockRects (room at x:35, y:35)
 blockRect(36, 38, 1, 9); // left bookshelves
 blockRect(48, 38, 1, 9); // right bookshelves
-blockRect(39, 41, 6, 2); // study table
+blockRect(40, 41, 4, 2); // desk
 
 // -- MASTER FURNITURE DRAW --
 
