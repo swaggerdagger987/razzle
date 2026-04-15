@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#ede0cf">
 <title>Razzle — Free Fantasy Football Research Lab</title>
 <meta property="og:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
-<meta property="og:description" content="Free fantasy football research lab. 100+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
+<meta property="og:description" content="68 free analytical tools for fantasy football. NFL, college, and prospect data from nflverse. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta property="og:site_name" content="razzle.lol">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://razzle.lol/">
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@razzle_lol">
 <meta name="twitter:title" content="Razzle — Free Fantasy Football Research Lab | NFL + College Data">
-<meta name="twitter:description" content="Free fantasy football research lab. 100+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
+<meta name="twitter:description" content="68 free analytical tools for fantasy football. NFL, college, and prospect data from nflverse. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
 <meta name="twitter:image" content="https://razzle.lol/assets/og-image.png">
 <meta name="twitter:image:alt" content="Razzle — Free Fantasy Football Research Lab">
 <meta name="description" content="Razzle is a free fantasy football research lab. 100+ stat columns across NFL, college, and prospects. Custom formulas, AI agents with full league context. The tool your leaguemates don't know about yet.">
@@ -30,6 +30,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="bg-deco.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -644,6 +645,22 @@
     .pricing-card { padding: 20px 12px; }
   }
 
+  /* Room cards — hover lift */
+  .room-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    border-color: var(--orange) !important;
+  }
+
+  /* Trophy shelf grid — stack on mobile */
+  @media (max-width: 768px) {
+    .trophy-shelf-grid {
+      grid-template-columns: 1fr !important;
+      gap: 16px !important;
+      padding: 24px 16px !important;
+    }
+  }
+
   /* Dark mode overrides */
   [data-theme="dark"] .pricing-badge {
     color: #fff;
@@ -660,11 +677,330 @@
   [data-theme="dark"] .pricing-list {
     color: var(--ink-medium);
   }
+
+  /* ===== SUNDAY MORNING SCENE — Full Background ===== */
+
+  /* Scene container — sits between body bg and content */
+  .bg-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    isolation: isolate;
+    user-select: none;
+    opacity: 0.50;
+  }
+
+  [data-theme="dark"] .bg-scene {
+    opacity: 0.22;
+  }
+
+  .bg-scene svg {
+    overflow: visible;
+  }
+
+  /* Scene objects — absolute within fixed container */
+  .bg-scene__obj {
+    position: absolute;
+    will-change: transform;
+    transition: opacity 0.5s;
+  }
+
+  /* Content floats above the scene */
+  .topnav { position: relative; z-index: 100; }
+  main { position: relative; z-index: 1; }
+  .site-footer { position: relative; z-index: 1; }
+
+  /* Content sections are paper sheets on the desk */
+  .hero,
+  .screener-visual,
+  .lp-section,
+  .pricing-section {
+    position: relative;
+    background: rgba(237, 224, 207, 0.82);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  [data-theme="dark"] .hero,
+  [data-theme="dark"] .screener-visual,
+  [data-theme="dark"] .lp-section,
+  [data-theme="dark"] .pricing-section {
+    background: rgba(45, 31, 20, 0.82);
+  }
+
+  /* The dividers become gaps where the desk shows through */
+  .lp-divider {
+    background: transparent;
+    height: 48px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Coffee ring stain */
+  .bg-scene__ring {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+
+  [data-theme="dark"] .bg-scene__ring { opacity: 0.3; }
+
+  /* Paw print */
+  .bg-scene__paw {
+    position: absolute;
+    opacity: 0.7;
+  }
+
+  [data-theme="dark"] .bg-scene__paw { opacity: 0.35; }
+
+  /* ===== SCENE ANIMATIONS ===== */
+  @keyframes scene-steam {
+    0% { transform: translateY(0) scaleX(1); opacity: 0; }
+    15% { opacity: 0.9; }
+    100% { transform: translateY(-50px) scaleX(1.6); opacity: 0; }
+  }
+
+  @keyframes scene-rock {
+    0%, 100% { transform: rotate(var(--r, 0deg)) translate(0, 0); }
+    33% { transform: rotate(var(--r, 0deg)) translate(4px, -6px); }
+    66% { transform: rotate(var(--r, 0deg)) translate(-3px, -4px); }
+  }
+
+  @keyframes scene-sway {
+    0%, 100% { transform: rotate(var(--r, 0deg)); }
+    50% { transform: rotate(calc(var(--r, 0deg) + 2deg)); }
+  }
+
+  @keyframes scene-drift {
+    0%, 100% { transform: rotate(var(--r, 0deg)) translateX(0); }
+    50% { transform: rotate(var(--r, 0deg)) translateX(10px); }
+  }
+
+  @keyframes scene-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.85; }
+  }
+
+  .bg-scene__steam {
+    position: absolute;
+    border-radius: 50%;
+    animation: scene-steam 4.5s ease-in-out infinite;
+    opacity: 0;
+  }
+
+  .bg-scene__obj--rock { animation: scene-rock 29s ease-in-out infinite; }
+  .bg-scene__obj--sway { animation: scene-sway 23s ease-in-out infinite; }
+  .bg-scene__obj--drift { animation: scene-drift 31s ease-in-out infinite; }
+  .bg-scene__paw--pulse { animation: scene-pulse 7s ease-in-out infinite; }
+
+  /* Stagger — already mid-animation on arrival */
+  .bg-scene__obj:nth-child(1) { animation-delay: -5s; }
+  .bg-scene__obj:nth-child(2) { animation-delay: -14s; }
+  .bg-scene__obj:nth-child(3) { animation-delay: -9s; }
+  .bg-scene__obj:nth-child(4) { animation-delay: -21s; }
+  .bg-scene__obj:nth-child(5) { animation-delay: -3s; }
+  .bg-scene__obj:nth-child(6) { animation-delay: -17s; }
+  .bg-scene__obj:nth-child(7) { animation-delay: -11s; }
+  .bg-scene__obj:nth-child(8) { animation-delay: -7s; }
+
+  /* ===== REDUCED MOTION ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .bg-scene__obj,
+    .bg-scene__steam,
+    .bg-scene__paw--pulse {
+      animation: none !important;
+      transform: rotate(var(--r, 0deg));
+    }
+    .bg-scene__steam { display: none; }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    /* Hide entire scene on mobile */
+    .bg-scene { display: none; }
+
+    /* Content cards go fully opaque for readability */
+    .hero,
+    .screener-visual,
+    .lp-section,
+    .pricing-section {
+      background: rgba(237, 224, 207, 0.95);
+    }
+    [data-theme="dark"] .hero,
+    [data-theme="dark"] .screener-visual,
+    [data-theme="dark"] .lp-section,
+    [data-theme="dark"] .pricing-section {
+      background: rgba(45, 31, 20, 0.95);
+    }
+  }
+
+  @media (max-width: 1024px) and (min-width: 769px) {
+    .bg-scene__obj--tablet-hide { display: none; }
+    .bg-scene { opacity: 0.35; }
+  }
 </style>
 </head>
 <body>
+
+<!-- Background decorations — Sunday morning vibes -->
+<div class="bg-deco" aria-hidden="true">
+  <!-- Main objects -->
+  <div class="bg-deco__el bg-deco__coffee">&#x2615;</div>
+  <div class="bg-deco__el bg-deco__newspaper">&#x1F4F0;</div>
+  <div class="bg-deco__el bg-deco__pencil">&#x270F;&#xFE0F;</div>
+  <div class="bg-deco__el bg-deco__football">&#x1F3C8;</div>
+  <div class="bg-deco__el bg-deco__clipboard">&#x1F4CB;</div>
+
+  <!-- Terracotta star accents -->
+  <div class="bg-deco__el bg-deco__star bg-deco__star--1">&#x2726;</div>
+  <div class="bg-deco__el bg-deco__star bg-deco__star--2">&#x2726;</div>
+  <div class="bg-deco__el bg-deco__star bg-deco__star--3">&#x2726;</div>
+  <div class="bg-deco__el bg-deco__star bg-deco__star--4">&#x2726;</div>
+
+  <!-- Comic halftone dots -->
+  <div class="bg-deco__el bg-deco__dot bg-deco__dot--1"></div>
+  <div class="bg-deco__el bg-deco__dot bg-deco__dot--2"></div>
+  <div class="bg-deco__el bg-deco__dot bg-deco__dot--3"></div>
+  <div class="bg-deco__el bg-deco__dot bg-deco__dot--4"></div>
+  <div class="bg-deco__el bg-deco__dot bg-deco__dot--5"></div>
+
+  <!-- Comic panel fragments -->
+  <div class="bg-deco__el bg-deco__panel-line bg-deco__panel-line--1"></div>
+  <div class="bg-deco__el bg-deco__panel-line bg-deco__panel-line--2"></div>
+
+  <!-- Speech bubble fragment -->
+  <div class="bg-deco__el bg-deco__bubble"></div>
+
+  <!-- X mark -->
+  <div class="bg-deco__el bg-deco__xmark"></div>
+</div>
+
 <noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#2d1f14;"><h2>Razzle needs JavaScript</h2><p>Enable JavaScript to use the fantasy football research lab.</p></div></noscript>
 <a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ===== SUNDAY MORNING SCENE — Full Background ===== -->
+<div class="bg-scene" aria-hidden="true">
+
+  <!-- 1. NEWSPAPER — white paper, black ink, comic strip style -->
+  <div class="bg-scene__obj bg-scene__obj--sway" style="top:6%;left:50%;margin-left:-230px;--r:5deg;">
+    <svg width="460" height="360" viewBox="0 0 460 360">
+      <rect x="10" y="10" width="444" height="344" rx="4" fill="#1a1a1a" stroke="none"/>
+      <rect x="4" y="4" width="444" height="344" rx="4" fill="#FFFEF8" stroke="#111" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="16" y="14" width="420" height="8" rx="2" fill="#111" stroke="none"/>
+      <rect x="24" y="32" width="300" height="22" rx="3" fill="#0a0a0a" stroke="none"/>
+      <rect x="24" y="60" width="220" height="14" rx="2" fill="#333" stroke="none"/>
+      <rect x="16" y="82" width="420" height="5" rx="1" fill="#111" stroke="none"/>
+      <rect x="160" y="96" width="3" height="240" fill="#ccc" stroke="none"/>
+      <rect x="310" y="96" width="3" height="240" fill="#ccc" stroke="none"/>
+      <rect x="22" y="102" width="128" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="22" y="116" width="120" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="22" y="130" width="126" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="22" y="144" width="110" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="22" y="158" width="124" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="22" y="172" width="118" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="172" y="102" width="128" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="172" y="116" width="118" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="172" y="130" width="130" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="172" y="144" width="112" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="322" y="152" width="118" height="110" rx="4" fill="#f0ede5" stroke="#222" stroke-width="3"/>
+      <rect x="330" y="160" width="70" height="10" rx="2" fill="#111" stroke="none"/>
+      <rect x="330" y="178" width="100" height="3" fill="#888" stroke="none"/>
+      <rect x="330" y="190" width="100" height="3" fill="#888" stroke="none"/>
+      <rect x="330" y="202" width="100" height="3" fill="#888" stroke="none"/>
+      <ellipse cx="90" cy="165" rx="62" ry="38" fill="none" stroke="#E53935" stroke-width="4.5" stroke-linecap="round"/>
+      <rect x="4" y="176" width="444" height="2" fill="#ddd8cc" stroke="none"/>
+    </svg>
+  </div>
+
+  <!-- 2. COFFEE MUG — top-down with saucer and steam -->
+  <div class="bg-scene__obj bg-scene__obj--rock" style="top:4%;right:5%;--r:-8deg;">
+    <svg width="200" height="200" viewBox="0 0 200 200">
+      <ellipse cx="94" cy="108" rx="82" ry="78" fill="#1a1a1a" stroke="none" opacity="0.25"/>
+      <ellipse cx="90" cy="104" rx="82" ry="78" fill="#e8e0d4" stroke="#222" stroke-width="4.5"/>
+      <ellipse cx="90" cy="100" rx="58" ry="56" fill="#FFFDF5" stroke="#111" stroke-width="5"/>
+      <ellipse cx="90" cy="100" rx="50" ry="48" fill="#2B1400" stroke="#3a2010" stroke-width="2"/>
+      <path d="M55 90 Q65 74 90 82 Q118 92 100 108 Q86 118 68 108 Q52 100 58 92" fill="#E8854A" stroke="none" opacity="0.85"/>
+      <circle cx="68" cy="82" r="8" fill="#fff" stroke="none" opacity="0.5"/>
+      <path d="M148 72 Q182 72 182 100 Q182 128 148 128" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M148 80 Q172 80 172 100 Q172 120 148 120" fill="#FFFDF5" stroke="none"/>
+    </svg>
+    <div class="bg-scene__steam" style="left:60px;top:-14px;animation-delay:-0.3s;width:10px;height:10px;background:rgba(255,255,255,0.85);"></div>
+    <div class="bg-scene__steam" style="left:80px;top:-20px;animation-delay:-1.8s;width:12px;height:12px;background:rgba(255,255,255,0.75);"></div>
+    <div class="bg-scene__steam" style="left:100px;top:-10px;animation-delay:-3.2s;width:9px;height:9px;background:rgba(255,255,255,0.8);"></div>
+  </div>
+
+  <!-- 3. CLIPBOARD — brown board, position color labels -->
+  <div class="bg-scene__obj bg-scene__obj--sway bg-scene__obj--tablet-hide" style="top:28%;left:2%;--r:-7deg;">
+    <svg width="200" height="280" viewBox="0 0 200 280">
+      <rect x="10" y="22" width="184" height="252" rx="8" fill="#1a1a1a" stroke="none"/>
+      <rect x="4" y="16" width="184" height="252" rx="8" fill="#8B6914" stroke="#111" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="16" y="42" width="160" height="216" rx="3" fill="#FFFEF8" stroke="#111" stroke-width="3"/>
+      <rect x="54" y="4" width="84" height="32" rx="6" fill="#C0C0C0" stroke="#111" stroke-width="4.5"/>
+      <rect x="26" y="82" width="32" height="14" rx="4" fill="#5B7FFF" stroke="#111" stroke-width="2"/>
+      <rect x="66" y="86" width="90" height="6" rx="2" fill="#555" stroke="none"/>
+      <rect x="26" y="104" width="32" height="14" rx="4" fill="#2EC4B6" stroke="#111" stroke-width="2"/>
+      <rect x="66" y="108" width="82" height="6" rx="2" fill="#555" stroke="none"/>
+      <rect x="26" y="148" width="32" height="14" rx="4" fill="#D97757" stroke="#111" stroke-width="2"/>
+      <rect x="66" y="152" width="88" height="6" rx="2" fill="#555" stroke="none"/>
+      <rect x="26" y="192" width="32" height="14" rx="4" fill="#8B5CF6" stroke="#111" stroke-width="2"/>
+      <rect x="66" y="196" width="72" height="6" rx="2" fill="#555" stroke="none"/>
+      <line x1="60" y1="221" x2="158" y2="221" stroke="#E53935" stroke-width="3.5" stroke-linecap="round"/>
+      <rect x="66" y="236" width="78" height="6" rx="2" fill="#2EC4B6" stroke="none"/>
+    </svg>
+  </div>
+
+  <!-- 4. YELLOW PENCIL -->
+  <div class="bg-scene__obj bg-scene__obj--drift" style="bottom:20%;left:12%;--r:28deg;">
+    <svg width="340" height="44" viewBox="0 0 340 44">
+      <rect x="32" y="11" width="260" height="26" rx="3" fill="#1a1a1a" stroke="none"/>
+      <rect x="28" y="6" width="260" height="26" rx="3" fill="#FFD600" stroke="#111" stroke-width="4.5" stroke-linejoin="round"/>
+      <polygon points="0,19 28,6 28,32" fill="#FFD600" stroke="#111" stroke-width="4.5" stroke-linejoin="round"/>
+      <polygon points="8,19 28,10 28,28" fill="#DEBB72" stroke="none"/>
+      <polygon points="0,19 10,15 10,23" fill="#333" stroke="none"/>
+      <rect x="288" y="6" width="22" height="26" rx="2" fill="#C0C0C0" stroke="#111" stroke-width="4"/>
+      <rect x="310" y="8" width="24" height="22" rx="6" fill="#E75480" stroke="#111" stroke-width="4"/>
+    </svg>
+  </div>
+
+  <!-- 5. TORN STAT SCRAP -->
+  <div class="bg-scene__obj bg-scene__obj--rock bg-scene__obj--tablet-hide" style="top:48%;right:3%;--r:-5deg;">
+    <svg width="200" height="150" viewBox="0 0 200 150">
+      <path d="M6 4 L190 4 L190 132 L174 126 L158 134 L142 127 L126 136 L110 128 L94 134 L78 126 L62 132 L46 124 L30 130 L14 124 L6 128 Z" fill="#FFFEF8" stroke="#111" stroke-width="4.5" stroke-linejoin="round"/>
+      <rect x="16" y="16" width="66" height="12" rx="3" fill="#111" stroke="none"/>
+      <line x1="16" y1="36" x2="178" y2="36" stroke="#111" stroke-width="2.5"/>
+      <rect x="16" y="44" width="160" height="5" rx="1" fill="#555" stroke="none"/>
+      <rect x="16" y="56" width="148" height="5" rx="1" fill="#666" stroke="none"/>
+      <rect x="16" y="68" width="156" height="5" rx="1" fill="#555" stroke="none"/>
+      <rect x="16" y="80" width="140" height="5" rx="1" fill="#666" stroke="none"/>
+      <rect x="84" y="52" width="70" height="14" rx="3" fill="#4AE54A" stroke="none" opacity="0.55"/>
+      <circle cx="148" cy="58" r="18" fill="none" stroke="#E53935" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- 6. TIGER PAW PRINTS -->
+  <svg class="bg-scene__paw bg-scene__paw--pulse" style="bottom:10%;left:36%;" width="70" height="75" viewBox="0 0 70 75">
+    <ellipse cx="35" cy="50" rx="17" ry="19" fill="#E8854A" stroke="#111" stroke-width="3.5"/>
+    <ellipse cx="16" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="35" cy="16" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="54" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+  </svg>
+  <svg class="bg-scene__paw" style="bottom:19%;left:28%;opacity:0.5;" width="55" height="60" viewBox="0 0 70 75">
+    <ellipse cx="35" cy="50" rx="17" ry="19" fill="#E8854A" stroke="#111" stroke-width="3.5"/>
+    <ellipse cx="16" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="35" cy="16" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="54" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+  </svg>
+  <svg class="bg-scene__paw" style="bottom:27%;left:21%;opacity:0.25;" width="40" height="44" viewBox="0 0 70 75">
+    <ellipse cx="35" cy="50" rx="17" ry="19" fill="#E8854A" stroke="#111" stroke-width="3.5"/>
+    <ellipse cx="16" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="35" cy="16" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="54" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+  </svg>
+
+</div>
+<!-- ===== END SUNDAY MORNING SCENE ===== -->
 
 <!-- NAV -->
 <nav class="topnav" aria-label="Main navigation">
@@ -719,360 +1055,145 @@
 </nav>
 
 <main id="main-content">
-<!-- 1. HERO -->
-<section class="hero">
+
+<!-- HERO -->
+<section class="hero" style="padding:80px 24px 40px;">
   <div class="hero-mascot" role="img" aria-label="Razzle tiger mascot">🐯</div>
-  <h1>The fantasy football research lab. <span>Forever free.</span></h1>
-  <div class="hero-sub">100+ stat columns across NFL, college &amp; prospects. Custom formulas. Shareable views. No account required.</div>
+  <h1>Your leaguemates use rankings. <span>You're going to use the war machine.</span></h1>
+  <div class="hero-sub" style="margin-bottom:24px;">A full analytics operation for your league.</div>
   <div class="hero-cta">
-    <a href="/lab.html" class="btn-hero btn-hero-primary">Open the Screener</a>
-    <a href="#features" class="btn-hero btn-hero-secondary desktop-only-cta">See what's inside</a>
-    <button type="button" class="btn-hero btn-hero-secondary mobile-signup-cta" onclick="if(typeof openAuthModal==='function')openAuthModal('register');">Sign Up Free</button>
-  </div>
-  <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:8px;">no signup needed — just open it</div>
-</section>
-
-<!-- 2. LIVE MINI-SCREENER -->
-<section class="screener-visual">
-  <div class="screener-visual-card">
-    <!-- Position filter tabs -->
-    <div class="mini-screener-tabs" role="tablist" aria-label="Position filter" style="display:flex; gap:0; border-bottom:3px solid var(--ink);">
-      <button type="button" class="mini-tab active" role="tab" aria-selected="true" data-pos="" onclick="_miniFilter('')">ALL</button>
-      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="QB" onclick="_miniFilter('QB')">QB</button>
-      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="RB" onclick="_miniFilter('RB')">RB</button>
-      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="WR" onclick="_miniFilter('WR')">WR</button>
-      <button type="button" class="mini-tab" role="tab" aria-selected="false" data-pos="TE" onclick="_miniFilter('TE')">TE</button>
-    </div>
-    <!-- Live data table -->
-    <div id="miniScreenerBody" class="mini-screener-body" aria-label="Live screener preview">
-      <table class="mini-table">
-        <caption class="sr-only">Top fantasy football players by position</caption>
-        <thead>
-          <tr>
-            <th style="width:30px;">#</th>
-            <th style="width:36px;">POS</th>
-            <th style="text-align:left;">Player</th>
-            <th class="mini-sortable" data-sort="fantasy_points_ppr" aria-sort="descending" onclick="_miniSort('fantasy_points_ppr')">Total</th>
-            <th class="mini-sortable" data-sort="games" aria-sort="none" onclick="_miniSort('games')">GP</th>
-            <th class="mini-sortable" data-sort="age" aria-sort="none" onclick="_miniSort('age')">Age</th>
-          </tr>
-        </thead>
-        <tbody id="miniScreenerRows">
-          <tr><td colspan="6" style="text-align:center; padding:32px; font-family:var(--font-hand); color:var(--ink-light);">pulling film...</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="screener-visual-footer">
-      <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin:0;">live data from razzle.lol</p>
-      <a href="/lab.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 24px;">Open the full Screener</a>
-    </div>
+    <a href="/lab.html" class="btn-hero btn-hero-primary">Open the Lab</a>
   </div>
 </section>
 
-<!-- 2.5. EMAIL CAPTURE (CEO-025) -->
-<section class="lp-section" style="max-width:560px; text-align:center;">
-  <div style="font-family:var(--font-display); font-size:20px; color:var(--ink); margin-bottom:8px;">Get weekly stat drops from Razzle</div>
-  <div style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-bottom:12px;">Breakout picks, trade value movers, and usage risers. Every Tuesday.</div>
-  <form id="emailCaptureForm" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;" onsubmit="return false;">
-    <input type="email" id="emailCaptureInput" placeholder="your@email.com" required autocomplete="email" style="flex:1; min-width:200px; max-width:300px; padding:10px 14px; border:3px solid var(--ink); border-radius:8px; font-family:var(--font-mono); font-size:13px; background:var(--bg-card);">
-    <button type="submit" id="emailCaptureBtn" class="btn-chunky btn-primary" style="font-size:13px; padding:10px 20px; white-space:nowrap;">Subscribe</button>
-  </form>
-  <div id="emailCaptureMsg" style="font-family:var(--font-hand); font-size:14px; margin-top:8px; display:none;"></div>
-</section>
-<script>
-(function() {
-  var form = document.getElementById('emailCaptureForm');
-  var input = document.getElementById('emailCaptureInput');
-  var btn = document.getElementById('emailCaptureBtn');
-  var msg = document.getElementById('emailCaptureMsg');
-  if (!form) return;
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var email = input.value.trim();
-    if (!email) return;
-    btn.disabled = true;
-    btn.textContent = 'Sending...';
-    var base = typeof API_BASE !== 'undefined' ? API_BASE : '';
-    fetch(base + '/api/waitlist', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email })
-    }).then(function(r) { return r.json(); }).then(function(data) {
-      if (data.error) {
-        msg.textContent = data.error;
-        msg.style.color = 'var(--red)';
-      } else {
-        msg.textContent = "You're in. First drop arrives next Tuesday.";
-        msg.style.color = 'var(--green)';
-        input.value = '';
-        input.disabled = true;
-      }
-      msg.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Subscribe';
-    }).catch(function() {
-      msg.textContent = 'Something went wrong. Try again.';
-      msg.style.color = 'var(--red)';
-      msg.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Subscribe';
-    });
-  });
-})();
-</script>
+<!-- THE TROPHY SHELF — three rooms displayed like championship hardware -->
+<section style="max-width:1040px; margin:0 auto; padding:0 24px 32px; position:relative;">
 
-<!-- 3. FEATURE SHOWCASE -->
-<section id="features" class="lp-section" style="max-width:860px;">
-  <h2>What you get. <span>Right now. Free.</span></h2>
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-top:24px; text-align:left;">
-    <div class="feature-card">
-      <div class="feature-card-icon">📊</div>
-      <div class="feature-card-title">100+ Stat Columns</div>
-      <div class="feature-card-desc">NFL, college, and prospect data. 10 seasons deep. Every metric that matters.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-card-icon">🧮</div>
-      <div class="feature-card-title">Custom Formulas</div>
-      <div class="feature-card-desc">Build your own metrics. Combine any stats. Share with the community.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-card-icon">📸</div>
-      <div class="feature-card-title">PNG Export</div>
-      <div class="feature-card-desc">Screenshot-ready views with your filters baked in. Share anywhere.</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-card-icon">🔗</div>
-      <div class="feature-card-title">Shareable URLs</div>
-      <div class="feature-card-desc">Every filter, sort, and column saved in the URL. Send the exact view.</div>
-    </div>
+  <!-- Shelf label -->
+  <div style="text-align:center; margin-bottom:24px;">
+    <div style="font-family:var(--font-display); font-size:28px; color:var(--ink); letter-spacing:-0.5px;">The War Machine</div>
+    <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-top:4px;">three rooms. one operation.</div>
   </div>
-</section>
 
-<!-- Smart filter chips — discovery filters -->
-<section class="lp-section" style="max-width:860px;">
-  <h2>One-click <span>discovery filters.</span></h2>
-  <p>These update as new data comes in each week.</p>
-  <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:16px;">
-    <a href="/lab.html?sf=breakout" class="smart-chip" title="Players getting volume but not yet producing — the opportunity-to-output gap">Breakout Candidates</a>
-    <a href="/lab.html?sf=buylow" class="smart-chip" title="Undervalued players whose efficiency outpaces their dynasty rank">Buy Low Targets</a>
-    <a href="/lab.html?sf=workhorses" class="smart-chip" title="High-touch players dominating their team's carries and targets">Workhorses</a>
-    <a href="/lab.html?sf=sleepers" class="smart-chip" title="Young players with rising snap share and opportunity metrics">Sleepers</a>
-    <a href="/lab.html?sf=rookies" class="smart-chip" title="First-year players — filter by draft capital, snap counts, and production">Rookies</a>
-  </div>
-</section>
+  <!-- The shelf — dark background, three trophies side by side -->
+  <div class="trophy-shelf-grid" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; position:relative;">
 
-<!-- Social proof -->
-<section class="lp-section" style="max-width:860px;">
-  <h2>Built for the managers who live on <span>r/DynastyFF.</span></h2>
-  <p>The tool your leaguemates don't know about yet.</p>
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:20px; text-align:left;">
-    <div class="social-card">
-      <div class="social-card-context">The Screener</div>
-      <div class="social-card-text">100+ stat columns. Custom formulas. Every filter you've ever wished for. Forever free.</div>
-    </div>
-    <div class="social-card">
-      <div class="social-card-context">Share to Win</div>
-      <div class="social-card-text">One-click PNG export with watermark. Screenshot it. Post it. Let your league ask where you found this.</div>
-    </div>
-    <div class="social-card">
-      <div class="social-card-context">Powered by nflverse</div>
-      <div class="social-card-text">Same open data the serious analysts use. Updated weekly. No guesswork, no vibes — just the numbers.</div>
-    </div>
+
+    <!-- ROOM 1: THE LAB — trophy on a shelf -->
+    <a href="/lab.html" class="room-card" style="text-decoration:none; color:#ede0cf; display:flex; flex-direction:column; align-items:center; text-align:center; padding:20px 16px 20px; background:transparent; transition:transform 0.15s; position:relative;">
+      <!-- The trophy shape — beaker/flask silhouette -->
+      <svg width="100" height="140" viewBox="0 0 100 140" style="margin-bottom:12px;">
+        <!-- base -->
+        <rect x="20" y="120" width="60" height="14" rx="4" fill="#2EC4B6" stroke="#111" stroke-width="3.5"/>
+        <!-- pillar -->
+        <rect x="38" y="90" width="24" height="34" rx="2" fill="#2EC4B6" stroke="#111" stroke-width="3"/>
+        <!-- flask body -->
+        <path d="M18 30 Q18 90 50 90 Q82 90 82 30" fill="#2EC4B6" stroke="#111" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M26 34 Q26 82 50 82 Q74 82 74 34" fill="#3DD4C6" stroke="none" opacity="0.5"/>
+        <!-- flask rim -->
+        <ellipse cx="50" cy="30" rx="34" ry="10" fill="#2EC4B6" stroke="#111" stroke-width="4"/>
+        <ellipse cx="50" cy="30" rx="26" ry="7" fill="#4AE8DA" stroke="none"/>
+        <!-- bubbles inside -->
+        <circle cx="38" cy="60" r="5" fill="#fff" stroke="none" opacity="0.4"/>
+        <circle cx="55" cy="50" r="3" fill="#fff" stroke="none" opacity="0.3"/>
+        <circle cx="62" cy="68" r="4" fill="#fff" stroke="none" opacity="0.35"/>
+        <!-- star on base -->
+        <polygon points="50,124 53,128 57,128 54,131 55,135 50,132 45,135 46,131 43,128 47,128" fill="#fff" stroke="none" opacity="0.6"/>
+      </svg>
+      <div style="font-family:var(--font-display); font-size:24px; margin-bottom:6px; color:#ede0cf; letter-spacing:-0.5px;">Fourth Down Lab</div>
+      <div style="font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--green); margin-bottom:8px;">The Screener is forever free</div>
+      <div style="font-family:var(--font-mono); font-size:12px; color:#8a7565; line-height:1.6; flex:1;">100+ stat columns. Custom formulas. 68 tools.</div>
+      <div style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--green); margin-top:14px;">Open the Lab &rarr;</div>
+    </a>
+
+    <!-- ROOM 2: BUREAU — magnifying glass trophy -->
+    <a href="/league-intel.html" class="room-card" style="text-decoration:none; color:#ede0cf; display:flex; flex-direction:column; align-items:center; text-align:center; padding:20px 16px 20px; background:transparent; transition:transform 0.15s; position:relative;">
+      <svg width="120" height="140" viewBox="0 0 120 140" style="margin-bottom:12px;">
+        <!-- base -->
+        <rect x="24" y="120" width="72" height="14" rx="4" fill="#5B7FFF" stroke="#111" stroke-width="3.5"/>
+        <!-- handle -->
+        <rect x="50" y="88" width="14" height="36" rx="4" fill="#5B7FFF" stroke="#111" stroke-width="3" transform="rotate(30,57,106)"/>
+        <!-- glass outer -->
+        <circle cx="52" cy="52" r="40" fill="#5B7FFF" stroke="#111" stroke-width="4"/>
+        <circle cx="52" cy="52" r="32" fill="#3356CC" stroke="none" opacity="0.4"/>
+        <!-- glass inner — the lens -->
+        <circle cx="52" cy="52" r="28" fill="#1a2040" stroke="#4A6FEF" stroke-width="2.5"/>
+        <!-- eye/crosshair inside -->
+        <circle cx="52" cy="52" r="8" fill="none" stroke="#5B7FFF" stroke-width="2" opacity="0.6"/>
+        <line x1="52" y1="38" x2="52" y2="66" stroke="#5B7FFF" stroke-width="1.5" opacity="0.3"/>
+        <line x1="38" y1="52" x2="66" y2="52" stroke="#5B7FFF" stroke-width="1.5" opacity="0.3"/>
+        <!-- glint -->
+        <circle cx="40" cy="40" r="6" fill="#fff" stroke="none" opacity="0.35"/>
+        <!-- nameplate -->
+        <rect x="34" y="124" width="52" height="6" rx="2" fill="#4A6FEF" stroke="none" opacity="0.5"/>
+      </svg>
+      <div style="font-family:var(--font-display); font-size:24px; margin-bottom:6px; color:#ede0cf; letter-spacing:-0.5px;">Bureau of Intelligence</div>
+      <div style="font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--blue); margin-bottom:8px;">Connect your Sleeper league</div>
+      <div style="font-family:var(--font-mono); font-size:12px; color:#8a7565; line-height:1.6; flex:1;">Championship odds. Roster grades. Trade targets.</div>
+      <div style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--blue); margin-top:14px;">Scout your league &rarr;</div>
+    </a>
+
+    <!-- ROOM 3: SITUATION ROOM — championship trophy, the crown jewel -->
+    <a href="/agents.html" class="room-card" style="text-decoration:none; color:#ede0cf; display:flex; flex-direction:column; align-items:center; text-align:center; padding:20px 16px 20px; background:transparent; transition:transform 0.15s; position:relative;">
+      <!-- pro sticker -->
+      <div style="position:absolute;top:4px;right:4px;font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#fff;background:var(--orange);padding:3px 10px;border-radius:20px;border:2px solid var(--ink);box-shadow:3px 3px 0 var(--ink);transform:rotate(5deg);">Pro</div>
+      <svg width="120" height="140" viewBox="0 0 120 140" style="margin-bottom:12px;">
+        <!-- base -->
+        <rect x="20" y="120" width="80" height="14" rx="4" fill="#D97757" stroke="#111" stroke-width="3.5"/>
+        <!-- nameplate -->
+        <rect x="32" y="124" width="56" height="6" rx="2" fill="#E8A060" stroke="none" opacity="0.5"/>
+        <!-- pillar -->
+        <rect x="46" y="92" width="28" height="32" rx="3" fill="#D97757" stroke="#111" stroke-width="3"/>
+        <!-- cup body -->
+        <path d="M14 30 Q14 92 60 92 Q106 92 106 30" fill="#D97757" stroke="#111" stroke-width="4.5" stroke-linejoin="round"/>
+        <path d="M22 34 Q22 84 60 84 Q98 84 98 34" fill="#E8854A" stroke="none" opacity="0.5"/>
+        <!-- cup rim -->
+        <ellipse cx="60" cy="30" rx="48" ry="14" fill="#D97757" stroke="#111" stroke-width="4.5"/>
+        <ellipse cx="60" cy="30" rx="38" ry="10" fill="#F0A060" stroke="none"/>
+        <!-- handles -->
+        <path d="M14 38 Q-6 38 -6 58 Q-6 78 14 78" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+        <path d="M14 44 Q2 44 2 58 Q2 72 14 72" fill="#D97757" stroke="none"/>
+        <path d="M106 38 Q126 38 126 58 Q126 78 106 78" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+        <path d="M106 44 Q118 44 118 58 Q118 72 106 72" fill="#D97757" stroke="none"/>
+        <!-- tiger face on cup -->
+        <circle cx="60" cy="58" r="14" fill="#E8854A" stroke="#111" stroke-width="2.5"/>
+        <circle cx="54" cy="54" r="3" fill="#111" stroke="none"/>
+        <circle cx="66" cy="54" r="3" fill="#111" stroke="none"/>
+        <path d="M55 62 Q60 66 65 62" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+        <!-- star on cup -->
+        <polygon points="60,18 63,24 70,24 65,28 67,35 60,31 53,35 55,28 50,24 57,24" fill="#FFD600" stroke="#111" stroke-width="1.5"/>
+      </svg>
+      <div style="font-family:var(--font-display); font-size:24px; margin-bottom:6px; color:#ede0cf; letter-spacing:-0.5px;">Situation Room</div>
+      <div style="font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--orange); margin-bottom:8px;">6 AI agents for your league</div>
+      <div style="font-family:var(--font-mono); font-size:12px; color:#8a7565; line-height:1.6; flex:1;">Personalized briefings. Trade strategies. The intelligence layer.</div>
+      <div style="font-family:var(--font-mono); font-size:12px; font-weight:700; color:var(--orange); margin-top:14px;">Enter the Room &rarr;</div>
+    </a>
+
   </div>
-  <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:16px;">same data the pros use. zero price tag.</p>
+
+
 </section>
 
-<div class="lp-divider"></div>
-
-<!-- 4. BUREAU — connect your league -->
-<section class="lp-section">
-  <h2>Now connect your league. <span>See what your rivals can't.</span></h2>
-  <p>Championship odds. Roster depth. Panic patterns. Trade targets. One Sleeper username. Ten seconds. Your league, fully scouted.</p>
-  <a href="/league-intel.html" class="btn-hero btn-hero-primary" style="font-size:14px; padding:10px 28px;">Connect your league</a>
-</section>
-
-<div class="lp-divider"></div>
-
-<!-- 5. SITUATION ROOM — unredacted example briefings -->
-<section class="lp-section">
-  <h2>Six AI agents that <span>already know your league.</span></h2>
-  <p>Personalized briefings. Trade strategies. Championship probability. All contextualized to your roster and your rivals.</p>
-
-  <div style="background:var(--bg-ink); border:3px solid var(--ink); border-radius:12px; box-shadow:4px 4px 0 var(--ink); padding:16px; margin-bottom:16px; text-align:center;">
-    <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Situation Room — Live Preview</div>
-    <div style="display:flex; gap:16px; justify-content:center; align-items:center; flex-wrap:wrap;">
-      <span style="font-size:24px;">🐯</span>
-      <span style="font-size:24px;">🦊</span>
-      <span style="font-size:24px;">🐬</span>
-      <span style="font-size:24px;">🦅</span>
-      <span style="font-size:24px;">🐙</span>
-      <span style="font-size:24px;">🐘</span>
-    </div>
-    <p style="font-family:var(--font-hand); font-size:14px; color:var(--ink-light); margin-top:8px; margin-bottom:0;">your analysts are already working</p>
-  </div>
-
-  <div style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; text-align:center;">Demo — connect your Sleeper league + Pro to get briefings like this</div>
-  <div class="briefing-example">
-    <div class="demo-card">
-      <div class="agent-name">🐯 Razzle <span class="urgency urgency-urgent">urgent</span></div>
-      Team "Dynasty or Bust" just dropped Keenan Allen to waivers. Based on "Taco Tuesday"'s FAAB patterns (they bid 40%+ on WR2s three times this season), they'll bid $47. You should bid $52 to guarantee the pickup. This changes your championship odds from 6.2% to 11.8%.
-    </div>
-    <div class="demo-card">
-      <div class="agent-name">🦊 Bones <span class="urgency urgency-opportunity">opportunity</span></div>
-      "RedZoneKing_99" panic-sold two WRs after their Week 8 loss. They're desperate for receiver depth. Offer Diontae Johnson now while they're nervous — they accepted a worse deal for a WR3 last month. Package with your 2026 2nd for their De'Von Achane. Your expected surplus: +22%.
-    </div>
-  </div>
-  <p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-top:16px;">this is what your agents see when they know your league</p>
-
-  <div style="margin-top:16px;">
-    <a href="/agents.html" class="btn-hero btn-hero-secondary" style="font-size:14px; padding:10px 28px;">Meet the agents</a>
-  </div>
-</section>
-
-<div class="lp-divider"></div>
-
-<!-- 6. PRICING (last — after all value is shown) -->
-<section class="pricing-section" id="pricing">
-  <h2>The Screener is <span>forever free.</span></h2>
-  <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-medium); margin-bottom:4px;">No account. No catch. No trial that expires. Pro and Elite add the intelligence layer.</p>
-
-  <div class="pricing-cols">
-    <!-- FREE -->
-    <div class="pricing-card pricing-card--free">
-      <div class="pricing-badge pricing-badge--free">forever free</div>
-      <div class="pricing-name">Free</div>
-      <div class="pricing-price">$0</div>
-      <div class="pricing-note">no card, no catch</div>
-      <ul class="pricing-list">
-        <li>Full Screener (NFL + College + Prospects)</li>
-        <li>100+ stat columns across NFL, college, and prospects</li>
-        <li>Custom formulas</li>
-        <li>Charts, heat maps, PNG export</li>
-        <li>Shareable URLs</li>
-        <li>Sleeper league connection</li>
-      </ul>
-      <a href="/lab.html" class="btn-chunky" style="font-size:13px; width:100%; display:block; text-align:center; text-decoration:none;">Open the Screener</a>
-    </div>
-
-    <!-- PRO -->
-    <div class="pricing-card pricing-card--highlight">
-      <div class="popular-badge" style="font-family:var(--font-hand); font-size:14px; color:var(--text-on-accent); background:var(--orange); border:2px solid var(--ink); border-radius:var(--radius-lg); padding:3px 12px; display:inline-block; transform:rotate(-2deg); margin-bottom:8px; box-shadow:4px 4px 0 var(--ink);">most popular</div>
-      <div class="pricing-badge">the film room upgrade</div>
-      <div class="pricing-name">Pro</div>
-      <div class="pricing-price">$79.99<span>/year</span></div>
-      <div class="pricing-note">or $9.99/month</div>
-      <ul class="pricing-list">
-        <li>Everything free, plus:</li>
-        <li class="highlight">6 AI agents, 20 queries/day included</li>
-        <li>League-contextualized agents</li>
-        <li>Unlimited formulas + cloud sync</li>
-        <li>CSV export + compare up to 4</li>
-        <li>Roster grading + trade finder</li>
-        <li class="highlight">7-day free trial — no credit card</li>
-      </ul>
-      <button type="button" id="homeProCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%;" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','pro_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('pro_year')}else{window.location='/pricing.html'}">Get Pro</button>
-    </div>
-
-    <!-- ELITE -->
-    <div class="pricing-card pricing-card--elite">
-      <div class="pricing-badge pricing-badge--elite">full war machine</div>
-      <div class="pricing-name">Elite</div>
-      <div class="pricing-price" style="color:var(--purple);">$149.99<span>/year</span></div>
-      <div class="pricing-note">or $19.99/month</div>
-      <ul class="pricing-list">
-        <li>Everything in Pro, plus:</li>
-        <li class="highlight">No API key needed — we pay for it</li>
-        <li class="highlight">Unlimited AI queries</li>
-        <li class="highlight">Agent memory (multi-season)</li>
-        <li class="highlight">Weekly Razzle briefings</li>
-        <li>Priority data refresh</li>
-        <li>Full historical data (2015+)</li>
-        <li class="highlight">7-day Pro trial included — upgrade anytime</li>
-      </ul>
-      <button type="button" id="homeEliteCta" class="btn-chunky btn-primary" style="font-size:13px; width:100%; background:var(--purple); border-color:var(--ink);" onclick="var u=null;try{u=JSON.parse(localStorage.getItem('razzle_user'))}catch(e){}if(!u){try{sessionStorage.setItem('razzle_pending_checkout','elite_year')}catch(x){}if(typeof openAuthModal==='function')openAuthModal();else window.location='/pricing.html'}else if(typeof startCheckout==='function'){startCheckout('elite_year')}else{window.location='/pricing.html'}">Get Elite</button>
-    </div>
-  </div>
-
-  <p data-cta-trial-note style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">7-day Pro trial on sign-up. No credit card required.</p>
-  <p style="margin-top:8px;"><a href="/pricing.html" style="font-family:var(--font-mono); font-size:12px; color:var(--orange);">See full feature comparison &rarr;</a></p>
+<!-- CLOSING CTA -->
+<section class="lp-section" style="padding:20px 24px 48px;">
+  <p style="font-family:var(--font-hand); font-size:20px; color:var(--ink-medium); margin-bottom:16px;">the tool your leaguemates don't know about yet</p>
+  <a href="/pricing.html" style="font-family:var(--font-mono); font-size:13px; color:var(--orange); font-weight:700;">See all plans &rarr;</a>
 </section>
 
 </main>
+
 <!-- FOOTER -->
-<footer class="site-footer">
-  <nav aria-label="Footer" class="site-footer-grid">
-
-    <div>
-      <div class="site-footer-heading">Razzle</div>
-      <ul>
-        <li><a href="/" class="footer-link">Home</a></li>
-        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
-        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
-        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
-        <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
-        <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
-        <li><a href="/about.html" class="footer-link">About</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="site-footer-heading">Dynasty</div>
-      <ul>
-        <li><a href="/lab.html?panel=rankings" class="footer-link">Rankings</a></li>
-        <li><a href="/lab.html?panel=tradevalues" class="footer-link">Trade Values</a></li>
-        <li><a href="/lab.html?panel=tradefinder" class="footer-link">Trade Finder</a></li>
-        <li><a href="/lab.html?panel=tiers" class="footer-link">Tiers</a></li>
-        <li><a href="/lab.html?panel=vorp" class="footer-link">VORP</a></li>
-        <li><a href="/lab.html?panel=aging" class="footer-link">Aging Curves</a></li>
-        <li><a href="/lab.html?panel=buysell" class="footer-link">Buy/Sell</a></li>
-        <li><a href="/lab.html?panel=archetypes" class="footer-link">Archetypes</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="site-footer-heading">Weekly</div>
-      <ul>
-        <li><a href="/lab.html?panel=weekly" class="footer-link">Weekly Stats</a></li>
-        <li><a href="/lab.html?panel=weeklyleaders" class="footer-link">Week Leaders</a></li>
-        <li><a href="/lab.html?panel=weeklymvp" class="footer-link">Weekly MVP</a></li>
-        <li><a href="/lab.html?panel=matchups" class="footer-link">Matchups</a></li>
-        <li><a href="/lab.html?panel=waivers" class="footer-link">Rising Players</a></li>
-        <li><a href="/lab.html?panel=schedule" class="footer-link">Schedule</a></li>
-        <li><a href="/lab.html?panel=stocks" class="footer-link">Stocks</a></li>
-        <li><a href="/lab.html?panel=playoffs" class="footer-link">Playoffs</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="site-footer-heading">Analytics</div>
-      <ul>
-        <li><a href="/lab.html?panel=targets" class="footer-link">Targets</a></li>
-        <li><a href="/lab.html?panel=usage" class="footer-link">Usage</a></li>
-        <li><a href="/lab.html?panel=efficiency" class="footer-link">Efficiency</a></li>
-        <li><a href="/lab.html?panel=airyards" class="footer-link">Air Yards</a></li>
-        <li><a href="/lab.html?panel=redzone" class="footer-link">Red Zone</a></li>
-        <li><a href="/lab.html?panel=consistency" class="footer-link">Consistency</a></li>
-        <li><a href="/lab.html?panel=breakouts" class="footer-link">Breakouts</a></li>
-        <li><a href="/lab.html?panel=opportunity" class="footer-link">Opportunity</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="site-footer-heading">Tools</div>
-      <ul>
-        <li><a href="/lab.html?panel=explorer" class="footer-link">Stat Explorer</a></li>
-        <li><a href="/compare.html" class="footer-link">Compare</a></li>
-        <li><a href="/lab.html?panel=rosterbuilder" class="footer-link">Roster Builder</a></li>
-        <li><a href="/lab.html?panel=cheatsheet" class="footer-link">Cheat Sheet</a></li>
-        <li><a href="/lab.html?panel=auction" class="footer-link">Auction Values</a></li>
-        <li><a href="/lab.html?panel=dashboard" class="footer-link">Dashboard</a></li>
-        <li><a href="/lab.html?panel=prospects" class="footer-link">Prospects</a></li>
-      </ul>
-    </div>
-
-  </nav>
-  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
-  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
+<footer class="site-footer" style="padding:24px;">
+  <div style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap; font-family:var(--font-mono); font-size:12px;">
+    <a href="/lab.html" class="footer-link">Lab</a>
+    <a href="/league-intel.html" class="footer-link">Bureau</a>
+    <a href="/agents.html" class="footer-link">Situation Room</a>
+    <a href="/pricing.html" class="footer-link">Pricing</a>
+    <a href="/about.html" class="footer-link">About</a>
+  </div>
+  <p style="text-align:center; margin-top:12px; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">
+    <a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> &middot; built by one person for the community
+  </p>
 </footer>
 
 <script src="app.js" defer></script>
