@@ -684,7 +684,7 @@
   .bg-scene {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
     overflow: hidden;
     isolation: isolate;
@@ -708,9 +708,9 @@
   }
 
   /* Content floats above the scene */
-  .topnav { position: relative; z-index: 100; }
-  main { position: relative; z-index: 1; }
-  .site-footer { position: relative; z-index: 1; }
+  /* Let the scene show through — move bg color to html, body stays transparent */
+  html { background: var(--bg); }
+  body { background: transparent !important; }
 
   /* Content sections are paper sheets on the desk */
   .hero,
