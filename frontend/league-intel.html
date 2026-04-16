@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=scene-20260416">
 <style>
   .intel-container {
     max-width: 900px;
@@ -2749,27 +2749,121 @@
   [data-theme="dark"] .demo-roster-player { color: var(--ink); }
 </style>
 </head>
-<body>
+<body class="has-bg-scene">
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<!-- NAV -->
-<nav class="topnav" aria-label="Main navigation">
-  <a href="/" class="logo">
-    <div class="logo-mark">🐯</div>
-    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/lab.html">Fourth Down Lab</a></li>
-    <li><a href="/league-intel.html" class="active">Bureau of Intelligence</a></li>
-    <li><a href="/agents.html">Situation Room</a></li>
-    <li><a href="/pricing.html">Pricing</a></li>
-  </ul>
-  <div class="nav-auth" id="nav-auth">
-    <button class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
-    <a href="#" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal(); return false;">Sign In</a>
+
+<!-- ===== SUNDAY MORNING SCENE — Full Background ===== -->
+<div class="bg-scene" aria-hidden="true">
+  <div class="bg-scene__obj bg-scene__obj--sway" style="top:6%;left:50%;margin-left:-230px;--r:5deg;">
+    <svg width="460" height="360" viewBox="0 0 460 360">
+      <rect x="10" y="10" width="444" height="344" rx="4" fill="#1a1a1a" stroke="none"/>
+      <rect x="4" y="4" width="444" height="344" rx="4" fill="#FFFEF8" stroke="#111" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="16" y="14" width="420" height="8" rx="2" fill="#111" stroke="none"/>
+      <rect x="24" y="32" width="300" height="22" rx="3" fill="#0a0a0a" stroke="none"/>
+      <rect x="24" y="60" width="220" height="14" rx="2" fill="#333" stroke="none"/>
+      <rect x="16" y="82" width="420" height="5" rx="1" fill="#111" stroke="none"/>
+      <rect x="160" y="96" width="3" height="240" fill="#ccc" stroke="none"/>
+      <rect x="310" y="96" width="3" height="240" fill="#ccc" stroke="none"/>
+      <rect x="22" y="102" width="128" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="22" y="116" width="120" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="22" y="130" width="126" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="22" y="144" width="110" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="22" y="158" width="124" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="22" y="172" width="118" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="172" y="102" width="128" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="172" y="116" width="118" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="172" y="130" width="130" height="7" rx="2" fill="#333" stroke="none"/>
+      <rect x="172" y="144" width="112" height="7" rx="2" fill="#444" stroke="none"/>
+      <rect x="322" y="152" width="118" height="110" rx="4" fill="#f0ede5" stroke="#222" stroke-width="3"/>
+      <rect x="330" y="160" width="70" height="10" rx="2" fill="#111" stroke="none"/>
+      <rect x="330" y="178" width="100" height="3" fill="#888" stroke="none"/>
+      <rect x="330" y="190" width="100" height="3" fill="#888" stroke="none"/>
+      <rect x="330" y="202" width="100" height="3" fill="#888" stroke="none"/>
+      <ellipse cx="90" cy="165" rx="62" ry="38" fill="none" stroke="#E53935" stroke-width="4.5" stroke-linecap="round"/>
+      <rect x="4" y="176" width="444" height="2" fill="#ddd8cc" stroke="none"/>
+    </svg>
   </div>
-</nav>
+  <div class="bg-scene__obj bg-scene__obj--rock" style="top:4%;right:5%;--r:-8deg;">
+    <svg width="200" height="200" viewBox="0 0 200 200">
+      <ellipse cx="94" cy="108" rx="82" ry="78" fill="#1a1a1a" stroke="none" opacity="0.25"/>
+      <ellipse cx="90" cy="104" rx="82" ry="78" fill="#e8e0d4" stroke="#222" stroke-width="4.5"/>
+      <ellipse cx="90" cy="100" rx="58" ry="56" fill="#FFFDF5" stroke="#111" stroke-width="5"/>
+      <ellipse cx="90" cy="100" rx="50" ry="48" fill="#2B1400" stroke="#3a2010" stroke-width="2"/>
+      <path d="M55 90 Q65 74 90 82 Q118 92 100 108 Q86 118 68 108 Q52 100 58 92" fill="#E8854A" stroke="none" opacity="0.85"/>
+      <circle cx="68" cy="82" r="8" fill="#fff" stroke="none" opacity="0.5"/>
+      <path d="M148 72 Q182 72 182 100 Q182 128 148 128" fill="none" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M148 80 Q172 80 172 100 Q172 120 148 120" fill="#FFFDF5" stroke="none"/>
+    </svg>
+    <div class="bg-scene__steam" style="left:60px;top:-14px;animation-delay:-0.3s;width:10px;height:10px;background:rgba(255,255,255,0.85);"></div>
+    <div class="bg-scene__steam" style="left:80px;top:-20px;animation-delay:-1.8s;width:12px;height:12px;background:rgba(255,255,255,0.75);"></div>
+    <div class="bg-scene__steam" style="left:100px;top:-10px;animation-delay:-3.2s;width:9px;height:9px;background:rgba(255,255,255,0.8);"></div>
+  </div>
+  <div class="bg-scene__obj bg-scene__obj--sway bg-scene__obj--tablet-hide" style="top:28%;left:2%;--r:-7deg;">
+    <svg width="200" height="280" viewBox="0 0 200 280">
+      <rect x="10" y="22" width="184" height="252" rx="8" fill="#1a1a1a" stroke="none"/>
+      <rect x="4" y="16" width="184" height="252" rx="8" fill="#8B6914" stroke="#111" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="16" y="42" width="160" height="216" rx="3" fill="#FFFEF8" stroke="#111" stroke-width="3"/>
+      <rect x="54" y="4" width="84" height="32" rx="6" fill="#C0C0C0" stroke="#111" stroke-width="4.5"/>
+      <rect x="26" y="82" width="32" height="14" rx="4" fill="#5B7FFF" stroke="#111" stroke-width="2"/>
+      <rect x="66" y="86" width="90" height="6" rx="2" fill="#555" stroke="none"/>
+      <rect x="26" y="104" width="32" height="14" rx="4" fill="#2EC4B6" stroke="#111" stroke-width="2"/>
+      <rect x="66" y="108" width="82" height="6" rx="2" fill="#555" stroke="none"/>
+      <rect x="26" y="148" width="32" height="14" rx="4" fill="#D97757" stroke="#111" stroke-width="2"/>
+      <rect x="66" y="152" width="88" height="6" rx="2" fill="#555" stroke="none"/>
+      <rect x="26" y="192" width="32" height="14" rx="4" fill="#8B5CF6" stroke="#111" stroke-width="2"/>
+      <rect x="66" y="196" width="72" height="6" rx="2" fill="#555" stroke="none"/>
+      <line x1="60" y1="221" x2="158" y2="221" stroke="#E53935" stroke-width="3.5" stroke-linecap="round"/>
+      <rect x="66" y="236" width="78" height="6" rx="2" fill="#2EC4B6" stroke="none"/>
+    </svg>
+  </div>
+  <div class="bg-scene__obj bg-scene__obj--drift" style="bottom:20%;left:12%;--r:28deg;">
+    <svg width="340" height="44" viewBox="0 0 340 44">
+      <rect x="32" y="11" width="260" height="26" rx="3" fill="#1a1a1a" stroke="none"/>
+      <rect x="28" y="6" width="260" height="26" rx="3" fill="#FFD600" stroke="#111" stroke-width="4.5" stroke-linejoin="round"/>
+      <polygon points="0,19 28,6 28,32" fill="#FFD600" stroke="#111" stroke-width="4.5" stroke-linejoin="round"/>
+      <polygon points="8,19 28,10 28,28" fill="#DEBB72" stroke="none"/>
+      <polygon points="0,19 10,15 10,23" fill="#333" stroke="none"/>
+      <rect x="288" y="6" width="22" height="26" rx="2" fill="#C0C0C0" stroke="#111" stroke-width="4"/>
+      <rect x="310" y="8" width="24" height="22" rx="6" fill="#E75480" stroke="#111" stroke-width="4"/>
+    </svg>
+  </div>
+  <div class="bg-scene__obj bg-scene__obj--rock bg-scene__obj--tablet-hide" style="top:48%;right:3%;--r:-5deg;">
+    <svg width="200" height="150" viewBox="0 0 200 150">
+      <path d="M6 4 L190 4 L190 132 L174 126 L158 134 L142 127 L126 136 L110 128 L94 134 L78 126 L62 132 L46 124 L30 130 L14 124 L6 128 Z" fill="#FFFEF8" stroke="#111" stroke-width="4.5" stroke-linejoin="round"/>
+      <rect x="16" y="16" width="66" height="12" rx="3" fill="#111" stroke="none"/>
+      <line x1="16" y1="36" x2="178" y2="36" stroke="#111" stroke-width="2.5"/>
+      <rect x="16" y="44" width="160" height="5" rx="1" fill="#555" stroke="none"/>
+      <rect x="16" y="56" width="148" height="5" rx="1" fill="#666" stroke="none"/>
+      <rect x="16" y="68" width="156" height="5" rx="1" fill="#555" stroke="none"/>
+      <rect x="16" y="80" width="140" height="5" rx="1" fill="#666" stroke="none"/>
+      <rect x="84" y="52" width="70" height="14" rx="3" fill="#4AE54A" stroke="none" opacity="0.55"/>
+      <circle cx="148" cy="58" r="18" fill="none" stroke="#E53935" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <svg class="bg-scene__paw bg-scene__paw--pulse" style="bottom:10%;left:36%;" width="70" height="75" viewBox="0 0 70 75">
+    <ellipse cx="35" cy="50" rx="17" ry="19" fill="#E8854A" stroke="#111" stroke-width="3.5"/>
+    <ellipse cx="16" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="35" cy="16" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="54" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+  </svg>
+  <svg class="bg-scene__paw" style="bottom:19%;left:28%;opacity:0.5;" width="55" height="60" viewBox="0 0 70 75">
+    <ellipse cx="35" cy="50" rx="17" ry="19" fill="#E8854A" stroke="#111" stroke-width="3.5"/>
+    <ellipse cx="16" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="35" cy="16" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="54" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+  </svg>
+  <svg class="bg-scene__paw" style="bottom:27%;left:21%;opacity:0.25;" width="40" height="44" viewBox="0 0 70 75">
+    <ellipse cx="35" cy="50" rx="17" ry="19" fill="#E8854A" stroke="#111" stroke-width="3.5"/>
+    <ellipse cx="16" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="35" cy="16" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+    <ellipse cx="54" cy="26" rx="9" ry="11" fill="#E8854A" stroke="#111" stroke-width="3"/>
+  </svg>
+</div>
+<!-- ===== END SUNDAY MORNING SCENE ===== -->
+
+<!-- NAV -->
+<div id="site-header" data-page="league-intel"></div>
 
 <main class="intel-container" id="main-content">
   <noscript>
@@ -2849,81 +2943,7 @@
 </main>
 
 <!-- FOOTER -->
-<footer class="site-footer">
-  <nav aria-label="Footer" class="site-footer-grid">
-
-    <div>
-      <div class="site-footer-heading">Razzle</div>
-      <ul>
-        <li><a href="/" class="footer-link">Home</a></li>
-        <li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>
-        <li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>
-        <li><a href="/agents.html" class="footer-link">Situation Room</a></li>
-        <li><a href="/prompts.html" class="footer-link">Prompts</a></li>
-        <li><a href="/pricing.html" class="footer-link">Pricing</a></li>
-        <li><a href="/about.html" class="footer-link">About</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="site-footer-heading">Dynasty</div>
-      <ul>
-        <li><a href="/rankings.html" class="footer-link">Rankings</a></li>
-        <li><a href="/tradevalues.html" class="footer-link">Trade Values</a></li>
-        <li><a href="/tradefinder.html" class="footer-link">Trade Finder</a></li>
-        <li><a href="/tiers.html" class="footer-link">Tiers</a></li>
-        <li><a href="/vorp.html" class="footer-link">VORP</a></li>
-        <li><a href="/aging.html" class="footer-link">Aging Curves</a></li>
-        <li><a href="/buysell.html" class="footer-link">Buy/Sell</a></li>
-        <li><a href="/archetypes.html" class="footer-link">Archetypes</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="site-footer-heading">Weekly</div>
-      <ul>
-        <li><a href="/weekly.html" class="footer-link">Weekly Stats</a></li>
-        <li><a href="/weeklyleaders.html" class="footer-link">Week Leaders</a></li>
-        <li><a href="/weeklymvp.html" class="footer-link">Weekly MVP</a></li>
-        <li><a href="/matchups.html" class="footer-link">Matchups</a></li>
-        <li><a href="/waivers.html" class="footer-link">Rising Players</a></li>
-        <li><a href="/schedule.html" class="footer-link">Schedule</a></li>
-        <li><a href="/stocks.html" class="footer-link">Stocks</a></li>
-        <li><a href="/playoffs.html" class="footer-link">Playoffs</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="site-footer-heading">Analytics</div>
-      <ul>
-        <li><a href="/targets.html" class="footer-link">Targets</a></li>
-        <li><a href="/usage.html" class="footer-link">Usage</a></li>
-        <li><a href="/efficiency.html" class="footer-link">Efficiency</a></li>
-        <li><a href="/airyards.html" class="footer-link">Air Yards</a></li>
-        <li><a href="/redzone.html" class="footer-link">Red Zone</a></li>
-        <li><a href="/consistency.html" class="footer-link">Consistency</a></li>
-        <li><a href="/breakouts.html" class="footer-link">Breakouts</a></li>
-        <li><a href="/opportunity.html" class="footer-link">Opportunity</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="site-footer-heading">Tools</div>
-      <ul>
-        <li><a href="/explorer.html" class="footer-link">Stat Explorer</a></li>
-        <li><a href="/compare.html" class="footer-link">Compare</a></li>
-        <li><a href="/rosterbuilder.html" class="footer-link">Roster Builder</a></li>
-        <li><a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a></li>
-        <li><a href="/auction.html" class="footer-link">Auction Values</a></li>
-        <li><a href="/dashboard.html" class="footer-link">Dashboard</a></li>
-        <li><a href="/prospects.html" class="footer-link">Prospects</a></li>
-      </ul>
-    </div>
-
-  </nav>
-  <p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>
-  <p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>
-</footer>
+<div id="site-footer"></div>
 
 <script src="app.js" defer></script>
 <script src="agent-config.js"></script>

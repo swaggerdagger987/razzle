@@ -29,8 +29,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="bg-deco.css">
+<link rel="stylesheet" href="styles.css?v=scene-20260416">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -677,205 +676,10 @@
   [data-theme="dark"] .pricing-list {
     color: var(--ink-medium);
   }
-
-  /* ===== SUNDAY MORNING SCENE — Full Background ===== */
-
-  /* Scene container — sits between body bg and content */
-  .bg-scene {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    overflow: hidden;
-    isolation: isolate;
-    user-select: none;
-    opacity: 0.50;
-  }
-
-  [data-theme="dark"] .bg-scene {
-    opacity: 0.22;
-  }
-
-  .bg-scene svg {
-    overflow: visible;
-  }
-
-  /* Scene objects — absolute within fixed container */
-  .bg-scene__obj {
-    position: absolute;
-    will-change: transform;
-    transition: opacity 0.5s;
-  }
-
-  /* Content floats above the scene */
-  /* Let the scene show through — move bg color to html, body stays transparent */
-  html { background: var(--bg); }
-  body { background: transparent !important; }
-
-  /* Content sections are paper sheets on the desk */
-  .hero,
-  .screener-visual,
-  .lp-section,
-  .pricing-section {
-    position: relative;
-    background: rgba(237, 224, 207, 0.82);
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  [data-theme="dark"] .hero,
-  [data-theme="dark"] .screener-visual,
-  [data-theme="dark"] .lp-section,
-  [data-theme="dark"] .pricing-section {
-    background: rgba(45, 31, 20, 0.82);
-  }
-
-  /* The dividers become gaps where the desk shows through */
-  .lp-divider {
-    background: transparent;
-    height: 48px;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* Coffee ring stain */
-  .bg-scene__ring {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.6;
-  }
-
-  [data-theme="dark"] .bg-scene__ring { opacity: 0.3; }
-
-  /* Paw print */
-  .bg-scene__paw {
-    position: absolute;
-    opacity: 0.7;
-  }
-
-  [data-theme="dark"] .bg-scene__paw { opacity: 0.35; }
-
-  /* ===== SCENE ANIMATIONS ===== */
-  @keyframes scene-steam {
-    0% { transform: translateY(0) scaleX(1); opacity: 0; }
-    15% { opacity: 0.9; }
-    100% { transform: translateY(-50px) scaleX(1.6); opacity: 0; }
-  }
-
-  @keyframes scene-rock {
-    0%, 100% { transform: rotate(var(--r, 0deg)) translate(0, 0); }
-    33% { transform: rotate(var(--r, 0deg)) translate(4px, -6px); }
-    66% { transform: rotate(var(--r, 0deg)) translate(-3px, -4px); }
-  }
-
-  @keyframes scene-sway {
-    0%, 100% { transform: rotate(var(--r, 0deg)); }
-    50% { transform: rotate(calc(var(--r, 0deg) + 2deg)); }
-  }
-
-  @keyframes scene-drift {
-    0%, 100% { transform: rotate(var(--r, 0deg)) translateX(0); }
-    50% { transform: rotate(var(--r, 0deg)) translateX(10px); }
-  }
-
-  @keyframes scene-pulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 0.85; }
-  }
-
-  .bg-scene__steam {
-    position: absolute;
-    border-radius: 50%;
-    animation: scene-steam 4.5s ease-in-out infinite;
-    opacity: 0;
-  }
-
-  .bg-scene__obj--rock { animation: scene-rock 29s ease-in-out infinite; }
-  .bg-scene__obj--sway { animation: scene-sway 23s ease-in-out infinite; }
-  .bg-scene__obj--drift { animation: scene-drift 31s ease-in-out infinite; }
-  .bg-scene__paw--pulse { animation: scene-pulse 7s ease-in-out infinite; }
-
-  /* Stagger — already mid-animation on arrival */
-  .bg-scene__obj:nth-child(1) { animation-delay: -5s; }
-  .bg-scene__obj:nth-child(2) { animation-delay: -14s; }
-  .bg-scene__obj:nth-child(3) { animation-delay: -9s; }
-  .bg-scene__obj:nth-child(4) { animation-delay: -21s; }
-  .bg-scene__obj:nth-child(5) { animation-delay: -3s; }
-  .bg-scene__obj:nth-child(6) { animation-delay: -17s; }
-  .bg-scene__obj:nth-child(7) { animation-delay: -11s; }
-  .bg-scene__obj:nth-child(8) { animation-delay: -7s; }
-
-  /* ===== REDUCED MOTION ===== */
-  @media (prefers-reduced-motion: reduce) {
-    .bg-scene__obj,
-    .bg-scene__steam,
-    .bg-scene__paw--pulse {
-      animation: none !important;
-      transform: rotate(var(--r, 0deg));
-    }
-    .bg-scene__steam { display: none; }
-  }
-
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 768px) {
-    /* Hide entire scene on mobile */
-    .bg-scene { display: none; }
-
-    /* Content cards go fully opaque for readability */
-    .hero,
-    .screener-visual,
-    .lp-section,
-    .pricing-section {
-      background: rgba(237, 224, 207, 0.95);
-    }
-    [data-theme="dark"] .hero,
-    [data-theme="dark"] .screener-visual,
-    [data-theme="dark"] .lp-section,
-    [data-theme="dark"] .pricing-section {
-      background: rgba(45, 31, 20, 0.95);
-    }
-  }
-
-  @media (max-width: 1024px) and (min-width: 769px) {
-    .bg-scene__obj--tablet-hide { display: none; }
-    .bg-scene { opacity: 0.35; }
-  }
 </style>
 </head>
-<body>
+<body class="has-bg-scene">
 
-<!-- Background decorations — Sunday morning vibes -->
-<div class="bg-deco" aria-hidden="true">
-  <!-- Main objects -->
-  <div class="bg-deco__el bg-deco__coffee">&#x2615;</div>
-  <div class="bg-deco__el bg-deco__newspaper">&#x1F4F0;</div>
-  <div class="bg-deco__el bg-deco__pencil">&#x270F;&#xFE0F;</div>
-  <div class="bg-deco__el bg-deco__football">&#x1F3C8;</div>
-  <div class="bg-deco__el bg-deco__clipboard">&#x1F4CB;</div>
-
-  <!-- Terracotta star accents -->
-  <div class="bg-deco__el bg-deco__star bg-deco__star--1">&#x2726;</div>
-  <div class="bg-deco__el bg-deco__star bg-deco__star--2">&#x2726;</div>
-  <div class="bg-deco__el bg-deco__star bg-deco__star--3">&#x2726;</div>
-  <div class="bg-deco__el bg-deco__star bg-deco__star--4">&#x2726;</div>
-
-  <!-- Comic halftone dots -->
-  <div class="bg-deco__el bg-deco__dot bg-deco__dot--1"></div>
-  <div class="bg-deco__el bg-deco__dot bg-deco__dot--2"></div>
-  <div class="bg-deco__el bg-deco__dot bg-deco__dot--3"></div>
-  <div class="bg-deco__el bg-deco__dot bg-deco__dot--4"></div>
-  <div class="bg-deco__el bg-deco__dot bg-deco__dot--5"></div>
-
-  <!-- Comic panel fragments -->
-  <div class="bg-deco__el bg-deco__panel-line bg-deco__panel-line--1"></div>
-  <div class="bg-deco__el bg-deco__panel-line bg-deco__panel-line--2"></div>
-
-  <!-- Speech bubble fragment -->
-  <div class="bg-deco__el bg-deco__bubble"></div>
-
-  <!-- X mark -->
-  <div class="bg-deco__el bg-deco__xmark"></div>
-</div>
 
 <noscript><div style="text-align:center;padding:40px;font-family:Space Mono,monospace;color:#2d1f14;"><h2>Razzle needs JavaScript</h2><p>Enable JavaScript to use the fantasy football research lab.</p></div></noscript>
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -1003,56 +807,7 @@
 <!-- ===== END SUNDAY MORNING SCENE ===== -->
 
 <!-- NAV -->
-<nav class="topnav" aria-label="Main navigation">
-  <a href="/" class="logo">
-    <div class="logo-mark">🐯</div>
-    <div class="logo-text">Razzle<span class="accent">.lol</span></div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="/" class="active">Home</a></li>
-    <li class="nav-dropdown">
-      <a href="/lab.html" class="nav-dropdown-trigger">Fourth Down Lab <span class="nav-caret">&#x25BE;</span></a>
-      <div class="nav-mega-menu">
-        <div class="mega-col">
-          <div class="mega-label">Quick Access</div>
-          <a href="/lab.html?panel=screener">Screener</a>
-          <a href="/lab.html?panel=dashboard">Dashboard</a>
-          <a href="/lab.html?panel=rankings">Dynasty Rankings</a>
-          <a href="/lab.html?panel=tradevalues">Trade Values</a>
-        </div>
-        <div class="mega-col">
-          <div class="mega-label">Dynasty</div>
-          <a href="/lab.html?panel=tiers">Tiers</a>
-          <a href="/lab.html?panel=aging">Aging Curves</a>
-          <a href="/lab.html?panel=buysell">Buy / Sell</a>
-          <a href="/lab.html?panel=vorp">VORP</a>
-        </div>
-        <div class="mega-col">
-          <div class="mega-label">Weekly</div>
-          <a href="/lab.html?panel=weekly">Heatmap</a>
-          <a href="/lab.html?panel=matchups">Matchups</a>
-          <a href="/lab.html?panel=stocks">Stock Watch</a>
-          <a href="/lab.html?panel=waivers">Rising Players</a>
-        </div>
-        <div class="mega-col">
-          <div class="mega-label">Analytics</div>
-          <a href="/lab.html?panel=efficiency">Efficiency</a>
-          <a href="/lab.html?panel=breakouts">Breakouts</a>
-          <a href="/lab.html?panel=airyards">Air Yards</a>
-          <a href="/lab.html?panel=redzone">Red Zone</a>
-        </div>
-        <div class="mega-footer"><a href="/lab.html">All 68 tools &rarr;</a></div>
-      </div>
-    </li>
-    <li><a href="/league-intel.html" title="Connect your Sleeper league">Bureau of Intelligence</a></li>
-    <li><a href="/agents.html" title="AI-powered league analysis">Situation Room</a></li>
-    <li><a href="/pricing.html">Pricing</a></li>
-  </ul>
-  <div class="nav-auth" id="nav-auth">
-    <button type="button" class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" onclick="if(typeof openCmdPalette==='function') openCmdPalette();" title="Quick search"><kbd>Ctrl+K</kbd> Search</button>
-    <button type="button" class="btn-chunky btn-sm" onclick="if(typeof openAuthModal==='function') openAuthModal();">Sign In</button>
-  </div>
-</nav>
+<div id="site-header" data-page="home"></div>
 
 <main id="main-content">
 
@@ -1183,18 +938,7 @@
 </main>
 
 <!-- FOOTER -->
-<footer class="site-footer" style="padding:24px;">
-  <div style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap; font-family:var(--font-mono); font-size:12px;">
-    <a href="/lab.html" class="footer-link">Lab</a>
-    <a href="/league-intel.html" class="footer-link">Bureau</a>
-    <a href="/agents.html" class="footer-link">Situation Room</a>
-    <a href="/pricing.html" class="footer-link">Pricing</a>
-    <a href="/about.html" class="footer-link">About</a>
-  </div>
-  <p style="text-align:center; margin-top:12px; font-family:var(--font-mono); font-size:11px; color:var(--ink-light);">
-    <a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a> &middot; built by one person for the community
-  </p>
-</footer>
+<div id="site-footer"></div>
 
 <script src="app.js" defer></script>
 <script>

@@ -24,6 +24,267 @@
 /* ===== Reduced Motion Preference ===== */
 var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* ===== Shared Site Chrome (nav + footer, injected via placeholders) ===== */
+
+var PAGE_TITLES = {
+  home: null,
+  lab: "Fourth Down Lab",
+  "league-intel": "Bureau of Intelligence",
+  agents: "Situation Room",
+  pricing: "Pricing",
+  about: "About",
+  prompts: "Prompts",
+  "verify-email": "Verify Email",
+  "reset-password": "Reset Password",
+  "404": "Not Found",
+  advantage: "Advantage",
+  aging: "Aging Curves",
+  airyards: "Air Yards",
+  archetypes: "Archetypes",
+  auction: "Auction Values",
+  awards: "Awards",
+  breakdown: "Breakdown",
+  breakouts: "Breakouts",
+  buysell: "Buy / Sell",
+  "career-compare": "Career Compare",
+  career: "Career",
+  cheatsheet: "Cheat Sheet",
+  compare: "Compare",
+  comptable: "Comp Table",
+  consistency: "Consistency",
+  dashboard: "Dynasty Dashboard",
+  draftclass: "Draft Class",
+  drops: "Drops",
+  dualthreat: "Dual Threat",
+  efficiency: "Efficiency",
+  explorer: "Stat Explorer",
+  fptsbreakdown: "Fantasy Points Breakdown",
+  gamelog: "Game Log",
+  gamescript: "Game Script",
+  garbagetime: "Garbage Time",
+  handcuffs: "Handcuffs",
+  leaders: "Stat Leaders",
+  matchups: "Matchups",
+  opportunity: "Opportunity",
+  pace: "Pace",
+  percentiles: "Percentiles",
+  player: "Player",
+  playoffs: "Playoffs",
+  prospects: "Prospects",
+  rankings: "Dynasty Rankings",
+  recap: "Season Recap",
+  records: "Records",
+  redzone: "Red Zone",
+  reportcard: "Report Card",
+  rosterbuilder: "Roster Builder",
+  scarcity: "Scarcity",
+  schedule: "Schedule",
+  scoring: "Scoring",
+  seasonpace: "Season Pace",
+  snapefficiency: "Snap Efficiency",
+  stacks: "Stacks",
+  stocks: "Stock Watch",
+  streaks: "Streaks",
+  strengths: "Strengths",
+  successrate: "Success Rate",
+  targetpremium: "Target Premium",
+  targets: "Targets",
+  tdregression: "TD Regression",
+  team: "Team",
+  tiers: "Tiers",
+  tools: "Tools",
+  tradefinder: "Trade Finder",
+  tradevalues: "Trade Values",
+  usage: "Usage",
+  vorp: "VORP",
+  waivers: "Rising Players",
+  weekly: "Weekly Heatmap",
+  weeklyleaders: "Week Leaders",
+  weeklymvp: "Weekly MVP",
+  workload: "Workload",
+  yoy: "Year-over-Year"
+};
+
+// Sub-tool pages map to their section so the correct top-nav link stays highlighted.
+var NAV_SECTION = (function () {
+  var labTools = [
+    "lab","advantage","aging","airyards","archetypes","auction","awards","breakdown","breakouts",
+    "buysell","career-compare","career","cheatsheet","compare","comptable","consistency","dashboard",
+    "draftclass","drops","dualthreat","efficiency","explorer","fptsbreakdown","gamelog","gamescript",
+    "garbagetime","handcuffs","leaders","matchups","opportunity","pace","percentiles","player",
+    "playoffs","prospects","rankings","recap","records","redzone","reportcard","rosterbuilder",
+    "scarcity","schedule","scoring","seasonpace","snapefficiency","stacks","stocks","streaks",
+    "strengths","successrate","targetpremium","targets","tdregression","team","tiers","tools",
+    "tradefinder","tradevalues","usage","vorp","waivers","weekly","weeklyleaders","weeklymvp",
+    "workload","yoy"
+  ];
+  var map = {};
+  for (var i = 0; i < labTools.length; i++) map[labTools[i]] = "lab";
+  map.home = "home";
+  map["league-intel"] = "league-intel";
+  map.agents = "agents";
+  map.pricing = "pricing";
+  map.about = "about";
+  map.prompts = "prompts";
+  return map;
+})();
+
+function _escapeHTML(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function renderSiteHeader() {
+  var host = document.getElementById("site-header");
+  if (!host) return;
+  var key = host.getAttribute("data-page") || "home";
+  var section = NAV_SECTION[key] || key;
+  var title = PAGE_TITLES.hasOwnProperty(key) ? PAGE_TITLES[key] : null;
+
+  var logoHTML;
+  if (key === "home" || title == null) {
+    logoHTML = 'Razzle<span class="accent">.lol</span>';
+  } else {
+    var sp = title.lastIndexOf(" ");
+    logoHTML = (sp === -1)
+      ? '<span class="accent">' + _escapeHTML(title) + '</span>'
+      : _escapeHTML(title.slice(0, sp)) + ' <span class="accent">' + _escapeHTML(title.slice(sp + 1)) + '</span>';
+  }
+
+  function linkTag(href, label, k, extra) {
+    var active = (k === section) ? ' class="active"' : '';
+    var attrs = extra || '';
+    return '<a href="' + href + '"' + active + attrs + '>' + label + '</a>';
+  }
+
+  var linksHTML =
+    '<li>' + linkTag('/', 'Home', 'home') + '</li>' +
+    '<li>' + linkTag('/lab.html', 'Fourth Down Lab', 'lab') + '</li>' +
+    '<li>' + linkTag('/league-intel.html', 'Bureau of Intelligence', 'league-intel', ' title="Connect your Sleeper league"') + '</li>' +
+    '<li>' + linkTag('/agents.html', 'Situation Room', 'agents', ' title="AI-powered league analysis"') + '</li>' +
+    '<li>' + linkTag('/pricing.html', 'Pricing', 'pricing') + '</li>';
+
+  var nav = document.createElement('nav');
+  nav.className = 'topnav';
+  nav.setAttribute('aria-label', 'Main navigation');
+
+  // Preserve any pre-existing children in the placeholder (e.g. lab.html's .lab-menu-toggle).
+  while (host.firstChild) nav.appendChild(host.firstChild);
+
+  var logo = document.createElement('a');
+  logo.href = '/';
+  logo.className = 'logo';
+  logo.innerHTML =
+    '<div class="logo-mark">\uD83D\uDC2F</div>' +
+    '<div class="logo-text">' + logoHTML + '</div>';
+  nav.appendChild(logo);
+
+  var ul = document.createElement('ul');
+  ul.className = 'nav-links';
+  ul.innerHTML = linksHTML;
+  nav.appendChild(ul);
+
+  var auth = document.createElement('div');
+  auth.className = 'nav-auth';
+  auth.id = 'nav-auth';
+  auth.innerHTML =
+    '<button type="button" class="nav-search-hint" aria-label="Open quick search (Ctrl+K)" ' +
+    'onclick="if(typeof openCmdPalette===\'function\') openCmdPalette();" title="Quick search">' +
+    '<kbd>Ctrl+K</kbd> Search</button>' +
+    '<button type="button" class="btn-chunky btn-sm" ' +
+    'onclick="if(typeof openAuthModal===\'function\') openAuthModal();">Sign In</button>';
+  nav.appendChild(auth);
+
+  host.parentNode.replaceChild(nav, host);
+}
+
+function renderSiteFooter() {
+  var host = document.getElementById('site-footer');
+  if (!host) return;
+  host.outerHTML =
+    '<footer class="site-footer">' +
+      '<nav aria-label="Footer" class="site-footer-grid">' +
+        '<div>' +
+          '<div class="site-footer-heading">Razzle</div>' +
+          '<ul>' +
+            '<li><a href="/" class="footer-link">Home</a></li>' +
+            '<li><a href="/lab.html" class="footer-link">Fourth Down Lab</a></li>' +
+            '<li><a href="/league-intel.html" class="footer-link">Bureau of Intelligence</a></li>' +
+            '<li><a href="/agents.html" class="footer-link">Situation Room</a></li>' +
+            '<li><a href="/prompts.html" class="footer-link">Prompts</a></li>' +
+            '<li><a href="/pricing.html" class="footer-link">Pricing</a></li>' +
+            '<li><a href="/about.html" class="footer-link">About</a></li>' +
+          '</ul>' +
+        '</div>' +
+        '<div>' +
+          '<div class="site-footer-heading">Dynasty</div>' +
+          '<ul>' +
+            '<li><a href="/rankings.html" class="footer-link">Rankings</a></li>' +
+            '<li><a href="/tradevalues.html" class="footer-link">Trade Values</a></li>' +
+            '<li><a href="/tradefinder.html" class="footer-link">Trade Finder</a></li>' +
+            '<li><a href="/tiers.html" class="footer-link">Tiers</a></li>' +
+            '<li><a href="/vorp.html" class="footer-link">VORP</a></li>' +
+            '<li><a href="/aging.html" class="footer-link">Aging Curves</a></li>' +
+            '<li><a href="/buysell.html" class="footer-link">Buy/Sell</a></li>' +
+            '<li><a href="/archetypes.html" class="footer-link">Archetypes</a></li>' +
+          '</ul>' +
+        '</div>' +
+        '<div>' +
+          '<div class="site-footer-heading">Weekly</div>' +
+          '<ul>' +
+            '<li><a href="/weekly.html" class="footer-link">Weekly Stats</a></li>' +
+            '<li><a href="/weeklyleaders.html" class="footer-link">Week Leaders</a></li>' +
+            '<li><a href="/weeklymvp.html" class="footer-link">Weekly MVP</a></li>' +
+            '<li><a href="/matchups.html" class="footer-link">Matchups</a></li>' +
+            '<li><a href="/waivers.html" class="footer-link">Rising Players</a></li>' +
+            '<li><a href="/schedule.html" class="footer-link">Schedule</a></li>' +
+            '<li><a href="/stocks.html" class="footer-link">Stocks</a></li>' +
+            '<li><a href="/playoffs.html" class="footer-link">Playoffs</a></li>' +
+          '</ul>' +
+        '</div>' +
+        '<div>' +
+          '<div class="site-footer-heading">Analytics</div>' +
+          '<ul>' +
+            '<li><a href="/targets.html" class="footer-link">Targets</a></li>' +
+            '<li><a href="/usage.html" class="footer-link">Usage</a></li>' +
+            '<li><a href="/efficiency.html" class="footer-link">Efficiency</a></li>' +
+            '<li><a href="/airyards.html" class="footer-link">Air Yards</a></li>' +
+            '<li><a href="/redzone.html" class="footer-link">Red Zone</a></li>' +
+            '<li><a href="/consistency.html" class="footer-link">Consistency</a></li>' +
+            '<li><a href="/breakouts.html" class="footer-link">Breakouts</a></li>' +
+            '<li><a href="/opportunity.html" class="footer-link">Opportunity</a></li>' +
+          '</ul>' +
+        '</div>' +
+        '<div>' +
+          '<div class="site-footer-heading">Tools</div>' +
+          '<ul>' +
+            '<li><a href="/explorer.html" class="footer-link">Stat Explorer</a></li>' +
+            '<li><a href="/compare.html" class="footer-link">Compare</a></li>' +
+            '<li><a href="/rosterbuilder.html" class="footer-link">Roster Builder</a></li>' +
+            '<li><a href="/cheatsheet.html" class="footer-link">Cheat Sheet</a></li>' +
+            '<li><a href="/auction.html" class="footer-link">Auction Values</a></li>' +
+            '<li><a href="/dashboard.html" class="footer-link">Dashboard</a></li>' +
+            '<li><a href="/prospects.html" class="footer-link">Prospects</a></li>' +
+          '</ul>' +
+        '</div>' +
+      '</nav>' +
+      '<p style="text-align:center;"><a href="/" style="color:var(--orange); text-decoration:none;">razzle.lol</a></p>' +
+      '<p style="text-align:center; margin-top:6px;">built by one person for the community | <a href="/about.html" style="color:var(--ink-light);">the story</a></p>' +
+    '</footer>';
+}
+
+
+function _bootSiteChrome() {
+  renderSiteHeader();
+  renderSiteFooter();
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", _bootSiteChrome);
+} else {
+  _bootSiteChrome();
+}
+
 /* ===== Theme Toggle (Espresso Dark Mode) ===== */
 (function initTheme() {
   try {

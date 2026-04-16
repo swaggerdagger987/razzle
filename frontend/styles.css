@@ -233,6 +233,10 @@ h1, h2, h3 {
   font-weight: normal;
   font-size: 20px;
   letter-spacing: -0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 30ch;
 }
 
 .logo-text .accent { color: var(--orange); }
@@ -2074,4 +2078,156 @@ button:disabled, .btn-chunky:disabled {
   .btn-chunky, .btn-primary, .btn-outline {
     box-shadow: none !important;
   }
+}
+
+/* ===== SUNDAY MORNING SCENE — Shared Decorative Background =====
+   Scene element rules (.bg-scene, .bg-scene__obj, .bg-scene__paw, .bg-scene__steam)
+   target those classes directly — they only exist on home, league-intel, pricing.
+   Paper-sheet wrapper rules (.hero, .intel-container, etc.) keep the .has-bg-scene
+   prefix because those class names are also used on non-scene pages (about, prompts). */
+
+html:has(body.has-bg-scene) { background: var(--bg); }
+body.has-bg-scene { background: transparent !important; }
+
+.bg-scene {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  isolation: isolate;
+  user-select: none;
+  opacity: 0.50;
+}
+[data-theme="dark"] .bg-scene { opacity: 0.22; }
+.bg-scene svg { overflow: visible; }
+
+.bg-scene__obj {
+  position: absolute;
+  will-change: transform;
+  transition: opacity 0.5s;
+}
+
+.bg-scene__paw {
+  position: absolute;
+  opacity: 0.7;
+}
+[data-theme="dark"] .bg-scene__paw { opacity: 0.35; }
+
+/* Paper-sheet backgrounds — scoped by body class because .hero etc. exist on non-scene pages */
+.has-bg-scene .hero,
+.has-bg-scene .screener-visual,
+.has-bg-scene .lp-section,
+.has-bg-scene .pricing-section,
+.has-bg-scene .intel-container,
+.has-bg-scene .pricing-hero,
+.has-bg-scene .promo-section,
+.has-bg-scene .matrix-section,
+.has-bg-scene .manage-section {
+  position: relative;
+  background: rgba(237, 224, 207, 0.82);
+}
+[data-theme="dark"] .has-bg-scene .hero,
+[data-theme="dark"] .has-bg-scene .screener-visual,
+[data-theme="dark"] .has-bg-scene .lp-section,
+[data-theme="dark"] .has-bg-scene .pricing-section,
+[data-theme="dark"] .has-bg-scene .intel-container,
+[data-theme="dark"] .has-bg-scene .pricing-hero,
+[data-theme="dark"] .has-bg-scene .promo-section,
+[data-theme="dark"] .has-bg-scene .matrix-section,
+[data-theme="dark"] .has-bg-scene .manage-section {
+  background: rgba(45, 31, 20, 0.82);
+}
+
+.has-bg-scene .lp-divider {
+  background: transparent;
+  height: 48px;
+  width: 100%;
+  max-width: 100%;
+}
+
+@keyframes scene-steam {
+  0% { transform: translateY(0) scaleX(1); opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { transform: translateY(-50px) scaleX(1.6); opacity: 0; }
+}
+@keyframes scene-rock {
+  0%, 100% { transform: rotate(var(--r, 0deg)) translate(0, 0); }
+  33% { transform: rotate(var(--r, 0deg)) translate(4px, -6px); }
+  66% { transform: rotate(var(--r, 0deg)) translate(-3px, -4px); }
+}
+@keyframes scene-sway {
+  0%, 100% { transform: rotate(var(--r, 0deg)); }
+  50% { transform: rotate(calc(var(--r, 0deg) + 2deg)); }
+}
+@keyframes scene-drift {
+  0%, 100% { transform: rotate(var(--r, 0deg)) translateX(0); }
+  50% { transform: rotate(var(--r, 0deg)) translateX(10px); }
+}
+@keyframes scene-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.85; }
+}
+
+.bg-scene__steam {
+  position: absolute;
+  border-radius: 50%;
+  animation: scene-steam 4.5s ease-in-out infinite;
+  opacity: 0;
+}
+
+.bg-scene__obj--rock  { animation: scene-rock  29s ease-in-out infinite; }
+.bg-scene__obj--sway  { animation: scene-sway  23s ease-in-out infinite; }
+.bg-scene__obj--drift { animation: scene-drift 31s ease-in-out infinite; }
+.bg-scene__paw--pulse { animation: scene-pulse  7s ease-in-out infinite; }
+
+.bg-scene__obj:nth-child(1) { animation-delay: -5s; }
+.bg-scene__obj:nth-child(2) { animation-delay: -14s; }
+.bg-scene__obj:nth-child(3) { animation-delay: -9s; }
+.bg-scene__obj:nth-child(4) { animation-delay: -21s; }
+.bg-scene__obj:nth-child(5) { animation-delay: -3s; }
+.bg-scene__obj:nth-child(6) { animation-delay: -17s; }
+.bg-scene__obj:nth-child(7) { animation-delay: -11s; }
+.bg-scene__obj:nth-child(8) { animation-delay: -7s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-scene__obj,
+  .bg-scene__steam,
+  .bg-scene__paw--pulse {
+    animation: none !important;
+    transform: rotate(var(--r, 0deg));
+  }
+  .bg-scene__steam { display: none; }
+}
+
+@media (max-width: 768px) {
+  .bg-scene { display: none; }
+  .has-bg-scene .hero,
+  .has-bg-scene .screener-visual,
+  .has-bg-scene .lp-section,
+  .has-bg-scene .pricing-section,
+  .has-bg-scene .intel-container,
+  .has-bg-scene .pricing-hero,
+  .has-bg-scene .promo-section,
+  .has-bg-scene .matrix-section,
+  .has-bg-scene .manage-section {
+    background: rgba(237, 224, 207, 0.95);
+  }
+  [data-theme="dark"] .has-bg-scene .hero,
+  [data-theme="dark"] .has-bg-scene .screener-visual,
+  [data-theme="dark"] .has-bg-scene .lp-section,
+  [data-theme="dark"] .has-bg-scene .pricing-section,
+  [data-theme="dark"] .has-bg-scene .intel-container,
+  [data-theme="dark"] .has-bg-scene .pricing-hero,
+  [data-theme="dark"] .has-bg-scene .promo-section,
+  [data-theme="dark"] .has-bg-scene .matrix-section,
+  [data-theme="dark"] .has-bg-scene .manage-section {
+    background: rgba(45, 31, 20, 0.95);
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .bg-scene__obj--tablet-hide { display: none; }
+  .bg-scene { opacity: 0.35; }
+  [data-theme="dark"] .bg-scene { opacity: 0.35; }
 }

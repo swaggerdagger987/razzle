@@ -29,6 +29,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap"></noscript>
+<link rel="stylesheet" href="styles.css">
 <style>
   /* ===== RESET & BASE ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -384,14 +385,7 @@
 <body>
 
 <div class="lab-wrapper">
-  <!-- Header -->
-  <div class="lab-header">
-    <div style="display:flex;align-items:baseline;">
-      <span class="lab-header-title">Situation Room</span>
-      <span class="lab-header-subtitle">intelligence bunker — razzle.lol</span>
-    </div>
-    <div class="lab-header-controls">Arrow / WASD: move &middot; 1-6: select</div>
-  </div>
+  <div id="site-header" data-page="agents"></div>
 
   <!-- Main area: canvas + sidebar -->
   <div class="lab-main">
@@ -3345,5 +3339,6 @@ function waitAndStart() {
 }
 waitAndStart();
 </script>
+<script src="app.js" defer></script>
 </body>
 </html>
