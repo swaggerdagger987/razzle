@@ -1560,6 +1560,8 @@ _PERSONAS_ROOT = Path(__file__).resolve().parent.parent / "agent-personas"
 # Personas are static once loaded; cache to avoid disk hit per request.
 _persona_cache: dict = {}
 
+from backend import agent_facts  # noqa: E402  (grouped with agent code)
+
 
 def _load_persona(agent_id: str) -> str | None:
     """Return the persona system prompt for an agent, or None if not found."""
@@ -1626,8 +1628,9 @@ async def agents_ask(request: Request):
                 status_code=429,
             )
 
-    # Build messages: persona as system, bounded history, then new message.
-    # Strip any client-supplied system messages in history (injection guard).
+    # Build messages: persona + facts snapshot + (optional) user context, then
+    # bounded history, then the new user message. System messages supplied by
+    # the client are stripped (prompt-injection guard).
     safe_history = []
     for m in history[-12:]:  # keep at most last 12 turns
         role = m.get("role", "")
@@ -1635,7 +1638,31 @@ async def agents_ask(request: Request):
         if role in ("user", "assistant") and content:
             safe_history.append({"role": role, "content": content})
 
-    messages = [{"role": "system", "content": persona}] + safe_history + [
+    # Facts snapshot: Historian gets the full dump, others get a compact excerpt.
+    # Any failure in fact-building degrades silently — we still want to answer.
+    system_blocks = [persona]
+    try:
+        snap = agent_facts.build_snapshot()
+        facts_md = agent_facts.format_for_prompt(snap, compact=(agent_id != "historian"))
+        if facts_md:
+            system_blocks.append(facts_md)
+    except Exception:
+        logger.exception("agent_facts snapshot failed for %s", agent_id)
+
+    # Per-user Sleeper context, only if the user is authenticated + linked.
+    try:
+        req_user = require_auth(request)
+        sleeper_username = (req_user or {}).get("sleeper_username") if req_user else None
+        if sleeper_username:
+            uctx = agent_facts.user_sleeper_context(sleeper_username)
+            uctx_md = agent_facts.format_user_context(uctx)
+            if uctx_md:
+                system_blocks.append(uctx_md)
+    except Exception:
+        logger.exception("user_sleeper_context failed for %s", agent_id)
+
+    system_prompt = "\n\n".join(system_blocks)
+    messages = [{"role": "system", "content": system_prompt}] + safe_history + [
         {"role": "user", "content": message}
     ]
 
@@ -1697,6 +1724,25 @@ async def agents_ask(request: Request):
     except Exception as e:
         logger.error(f"Agent {agent_id} exception: {type(e).__name__}: {e}")
         return JSONResponse({"error": "Something went wrong. Try again."}, status_code=500)
+
+
+@app.get("/api/agents/facts")
+async def agents_facts(request: Request):
+    """Return the current Historian facts snapshot + (if logged in) user context.
+
+    Useful for debugging and for the frontend to show a 'what Historian knows'
+    panel. Cached upstream (TTL 15-30 min depending on source).
+    """
+    snap = agent_facts.build_snapshot()
+    payload: dict = {"snapshot": snap}
+    try:
+        req_user = require_auth(request)
+        sleeper_username = (req_user or {}).get("sleeper_username") if req_user else None
+        if sleeper_username:
+            payload["user_context"] = agent_facts.user_sleeper_context(sleeper_username)
+    except Exception:
+        pass
+    return JSONResponse(payload)
 
 
 # ---------------------------------------------------------------------------

@@ -53,7 +53,7 @@ JWT_EXPIRY_DAYS = 7
 
 EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
 
-# No-credit-card trial — new users get 7 days of Pro access on registration
+# No-credit-card trial — new users get 7 days of Elite access on registration
 TRIAL_DURATION_DAYS = 7
 
 # Common passwords (top ~200 most used) — reject these outright
@@ -333,9 +333,9 @@ def _user_dict(row) -> dict:
     # Preserve raw DB plan before trial elevation (used by billing checkout check)
     d["raw_plan"] = d["plan"]
 
-    # Effective plan: if trial is active and user has no paid plan, they get Pro
+    # Effective plan: if trial is active and user has no paid plan, they get Elite
     if trial_active and d["plan"] == "free":
-        d["plan"] = "pro"
+        d["plan"] = "elite"
         d["plan_source"] = "trial"
     else:
         d["plan_source"] = "subscription" if d["plan"] != "free" else "free"
@@ -405,7 +405,7 @@ def register(email: str, password: str) -> dict:
                 subject="Verify your Razzle account",
                 html=(
                     f"<p>Welcome to Razzle!</p>"
-                    f"<p>Click below to verify your email and unlock your 7-day Pro trial:</p>"
+                    f"<p>Click below to verify your email and unlock your 7-day Elite trial:</p>"
                     f'<p><a href="{verify_url}" style="background:#d97757;color:#fff;padding:10px 20px;'
                     f'border-radius:6px;text-decoration:none;font-weight:bold;">Verify Email</a></p>'
                     f"<p>If you didn't create this account, just ignore this email.</p>"
@@ -506,7 +506,7 @@ def link_sleeper(user_id: int, sleeper_username: str) -> dict:
 # ── Email Verification ─────────────────────────────────────────────
 
 def verify_email(token: str) -> dict:
-    """Verify email address and start the Pro trial."""
+    """Verify email address and start the Elite trial."""
     if not token or len(token) < 20:
         return {"error": "Invalid verification link.", "status": 400}
 
@@ -537,7 +537,7 @@ def verify_email(token: str) -> dict:
         conn.commit()
         logger.info(f"Email verified for user {row['id']} ({row['email']}), trial started")
 
-    return {"message": "Email verified! Your 7-day Pro trial has started. Sign in to get started."}
+    return {"message": "Email verified! Your 7-day Elite trial has started. Sign in to get started."}
 
 
 def resend_verification(email: str) -> dict:

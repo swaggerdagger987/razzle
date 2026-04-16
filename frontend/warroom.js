@@ -1984,7 +1984,7 @@ function renderContextBadges() {
         btn.textContent = 'Sign Up Free';
         btn.href = '#';
         btn.onclick = function(e) { e.preventDefault(); if (typeof openAuthModal === 'function') openAuthModal(); };
-        hint.textContent = '7-day Pro trial on sign-up — no credit card required';
+        hint.textContent = '7-day Elite trial on sign-up — no credit card required';
       } else if (user.plan_source === 'trial' && !user.trial_active) {
         // Expired trial
         btn.textContent = 'Subscribe to Pro';
@@ -4149,7 +4149,7 @@ function showFirstRunDemo() {
   html += '<div class="demo-briefing-cta">' +
     '<p>imagine this analysis with <strong>your roster</strong>, <strong>your opponents</strong>, and <strong>your league\u2019s scoring</strong>.</p>' +
     '<a href="/pricing.html" class="btn-chunky btn-primary" style="font-size:13px;" id="demoBriefingCta">Sign Up Free</a>' +
-    '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); display:block; margin-top:6px;" id="demoBriefingHint">7-day Pro trial on sign-up</span>' +
+    '<span style="font-family:var(--font-mono); font-size:11px; color:var(--ink-light); display:block; margin-top:6px;" id="demoBriefingHint">7-day Elite trial on sign-up</span>' +
   '</div>';
 
   host.innerHTML = html;

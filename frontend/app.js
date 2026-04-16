@@ -1278,7 +1278,7 @@ function _injectAuthModal() {
         '<input type="password" id="authRegisterConfirm" placeholder="Confirm password" required minlength="8" autocomplete="new-password" aria-label="Confirm password" aria-describedby="authRegisterError">' +
         '<div id="authRegisterError" class="auth-error" role="alert"></div>' +
         '<button type="submit" class="btn-chunky btn-primary auth-submit">Create Account</button>' +
-        '<div style="text-align:center;margin-top:6px;font-family:var(--font-hand);font-size:13px;color:var(--ink-light);">includes 7-day Pro trial — no credit card</div>' +
+        '<div style="text-align:center;margin-top:6px;font-family:var(--font-hand);font-size:13px;color:var(--ink-light);">includes 7-day Elite trial — no credit card</div>' +
       '</form>' +
     '</div>';
   modal.addEventListener("click", function(e) {
@@ -1468,7 +1468,7 @@ function _showVerificationMessage(email) {
     '<h2 style="font-family:var(--font-display);font-size:20px;text-align:center;margin-bottom:12px;">Check Your Email</h2>' +
     '<p style="font-family:var(--font-mono);font-size:13px;text-align:center;color:var(--ink-light);margin-bottom:16px;">' +
       'We sent a verification link to <strong>' + (typeof escapeHtml === 'function' ? escapeHtml(email) : email) + '</strong>. ' +
-      'Click it to verify your account and unlock your 7-day Pro trial.' +
+      'Click it to verify your account and unlock your 7-day Elite trial.' +
     '</p>' +
     '<p style="font-family:var(--font-mono);font-size:12px;text-align:center;color:var(--ink-light);margin-top:16px;">' +
       'Didn\'t get it? <button type="button" onclick="_resendVerification(\'' + email.replace(/'/g, "\\'") + '\');" style="background:none;border:none;padding:0;cursor:pointer;color:var(--accent);font:inherit;">Resend</button>' +
@@ -1670,7 +1670,7 @@ function updateAuthUI(user) {
       var _trialDays = user.trial_days_remaining || 0;
       var _trialHours = user.trial_hours_remaining || 0;
       var _trialText = _trialDays > 0 ? _trialDays + ' day' + (_trialDays !== 1 ? 's' : '') : (_trialHours > 0 ? _trialHours + ' hour' + (_trialHours !== 1 ? 's' : '') : 'less than 1 hour');
-      dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--orange); cursor:default;">Pro trial: ' + _trialText + ' remaining</div>';
+      dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--orange); cursor:default;">Elite trial: ' + _trialText + ' remaining</div>';
     }
     if (user.sleeper_username) {
       dropdownItems += '<div class="nav-dropdown-item" style="font-size:11px; color:var(--ink-light); cursor:default;">sleeper: ' + escapeHtml(user.sleeper_username) + '</div>';
@@ -1708,11 +1708,11 @@ function updateAuthUI(user) {
         var hours = user.trial_hours_remaining || 0;
         var msg;
         if (days === 0 && hours <= 0) {
-          msg = "your Pro trial expires today. subscribe to keep your access.";
+          msg = "your Elite trial expires today. subscribe to keep your access.";
         } else if (days === 0) {
-          msg = "your Pro trial expires in " + hours + " hour" + (hours !== 1 ? "s" : "") + ". subscribe to keep your access.";
+          msg = "your Elite trial expires in " + hours + " hour" + (hours !== 1 ? "s" : "") + ". subscribe to keep your access.";
         } else {
-          msg = "your Pro trial expires in " + days + " day" + (days !== 1 ? "s" : "") + ". subscribe to keep your access.";
+          msg = "your Elite trial expires in " + days + " day" + (days !== 1 ? "s" : "") + ". subscribe to keep your access.";
         }
         _showToast(msg, "warning", 10000);
       }, 3000);
@@ -1876,8 +1876,8 @@ function showSleeperPrompt() {
   if (isTrial) {
     trialBanner =
       '<div style="background:var(--orange); color:var(--text-on-accent); padding:10px 16px; border-radius:8px; border:2px solid var(--ink); margin-bottom:16px; text-align:center;">' +
-        '<div style="font-family:var(--font-mono); font-size:14px;">Pro Trial Active</div>' +
-        '<div style="font-family:var(--font-hand); font-size:14px; margin-top:2px;">' + trialLabel + ' of Pro access — no credit card needed</div>' +
+        '<div style="font-family:var(--font-mono); font-size:14px;">Elite Trial Active</div>' +
+        '<div style="font-family:var(--font-hand); font-size:14px; margin-top:2px;">' + trialLabel + ' of Elite access — no credit card needed</div>' +
       '</div>';
   }
 
@@ -1917,7 +1917,7 @@ function showWelcomeState() {
       '<div style="font-size:48px;">&#x1F42F;</div>' +
       '<h3 style="font-family:var(--font-display); font-size:20px; margin-top:8px;">Welcome to Razzle</h3>' +
       (isTrial
-        ? '<p style="font-family:var(--font-hand); font-size:16px; color:var(--orange); margin-top:4px;">your 7-day Pro trial is running</p>'
+        ? '<p style="font-family:var(--font-hand); font-size:16px; color:var(--orange); margin-top:4px;">your 7-day Elite trial is running</p>'
         : '<p style="font-family:var(--font-hand); font-size:16px; color:var(--ink-medium); margin-top:4px;">you\'re all set</p>'
       ) +
       '<div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">' +

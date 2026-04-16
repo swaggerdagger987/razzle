@@ -3,7 +3,7 @@
 Covers: auth flow, query quota, formula CRUD, watchlist CRUD, agent memory CRUD.
 These test the complete user lifecycle rather than individual endpoints.
 
-Note: New registered users must verify email to start Pro trial.
+Note: New registered users must verify email to start Elite trial.
 The test_register step auto-verifies via the DB so Pro-gated endpoints work.
 Elite-gated endpoints (memory, briefings) return 403.
 """
@@ -39,7 +39,7 @@ class TestAuthFlow:
         assert "user" in data
         assert data["user"]["email"] == _TEST_EMAIL
         _token = data["token"]
-        # Auto-verify email and start trial so Pro-gated tests pass
+        # Auto-verify email and start trial so Elite-gated tests pass
         from backend.auth import get_users_db
         from datetime import datetime, timezone, timedelta
         with get_users_db() as conn:
@@ -171,7 +171,7 @@ class TestFormulaCRUD:
 
 
 class TestWatchlistCRUD:
-    """Sync > Get watchlist lifecycle. Requires Pro+ (trial user has Pro)."""
+    """Sync > Get watchlist lifecycle. Requires Pro+ (trial user has Elite)."""
 
     def test_sync_watchlist(self, client):
         resp = client.post("/api/user/watchlist/sync", headers=_auth_header(), json={
@@ -194,7 +194,7 @@ class TestLeagueTradeFinder:
     """League-specific trade finder requires Pro+ tier."""
 
     def test_league_trade_finder_works_for_pro(self, client):
-        """Pro trial users can access the league trade finder."""
+        """Trial users (Elite) can access the league trade finder."""
         resp = client.post("/api/league-trade-finder", headers=_auth_header(), json={
             "players": [
                 {"name": "Patrick Mahomes", "position": "QB", "team": "KC"},
@@ -222,20 +222,20 @@ class TestLeagueTradeFinder:
 
 
 class TestAgentMemoryGating:
-    """Agent memory requires Elite tier. Trial user (Pro) should be rejected."""
+    """Agent memory requires Elite tier. Trial users now get Elite → should pass."""
 
-    def test_memory_requires_elite(self, client):
-        """Pro trial users cannot access Elite-only memory endpoints."""
+    def test_memory_allowed_for_trial(self, client):
+        """Trial users (Elite tier) can read memory endpoints."""
         resp = client.get("/api/user/memory", headers=_auth_header())
-        # Trial users get Pro, not Elite — memory is Elite-only
-        assert resp.status_code == 403
+        assert resp.status_code == 200
 
-    def test_memory_save_requires_elite(self, client):
+    def test_memory_save_allowed_for_trial(self, client):
         resp = client.post("/api/user/memory", headers=_auth_header(), json={
             "scenario": "Test scenario",
             "findings": "Test findings",
         })
-        assert resp.status_code == 403
+        # 200 create or 409 duplicate — either is acceptable for "not blocked by plan"
+        assert resp.status_code in (200, 201, 409)
 
 
 class TestSecurityBoundaries:

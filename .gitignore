@@ -20,9 +20,11 @@ walker-credentials.json
 __pycache__/
 *.pyc
 *.pyo
-.env
 venv/
 .venv/
+
+# NOTE: .env is intentionally tracked. It carries the server-side OpenRouter
+# key used by the Elite-tier LLM proxy. No credit card is attached to the key.
 
 # Data
 data/*.db

@@ -437,9 +437,9 @@
 
   <!-- Trial active banner (visible to users currently on trial) -->
   <div id="trialActiveBanner" style="display:none; background:var(--orange-light, #f7e4d8); border:3px solid var(--orange); border-radius:var(--radius); box-shadow:4px 4px 0 var(--ink); padding:16px 24px; margin-bottom:24px; text-align:center;">
-    <div id="trialBannerTitle" style="font-family:var(--font-display); font-size:18px; color:var(--ink); margin-bottom:4px;">Your Pro Trial is Active</div>
+    <div id="trialBannerTitle" style="font-family:var(--font-display); font-size:18px; color:var(--ink); margin-bottom:4px;">Your Elite Trial is Active</div>
     <div id="trialCountdown" style="font-family:var(--font-mono); font-size:13px; color:var(--ink-medium);"></div>
-    <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-top:4px;">subscribe now to keep your Pro access when the trial ends</div>
+    <div style="font-family:var(--font-hand); font-size:16px; color:var(--ink-light); margin-top:4px;">subscribe now to keep your Elite access when the trial ends</div>
   </div>
 
   <div class="pricing-hero">
@@ -525,7 +525,7 @@
         <li><span class="check elite-check">&#9733;</span> <span class="highlight">Weekly Razzle briefings</span></li>
         <li><span class="check elite-check">&#9733;</span> Priority data refresh</li>
         <li><span class="check elite-check">&#9733;</span> Full historical data (2015+)</li>
-        <li><span class="check">&#10003;</span> 7-day Pro trial included &mdash; upgrade to Elite anytime</li>
+        <li><span class="check">&#10003;</span> 7-day free Elite trial on sign-up</li>
       </ul>
 
       <div class="plan-cta">
@@ -900,8 +900,8 @@
           if (trialActiveBanner) {
             trialActiveBanner.style.display = 'block';
             var bannerTitle = document.getElementById('trialBannerTitle');
-            if (bannerTitle) bannerTitle.textContent = 'Your Pro Trial Has Ended';
-            if (trialCountdown) trialCountdown.textContent = 'subscribe to keep Pro access';
+            if (bannerTitle) bannerTitle.textContent = 'Your Elite Trial Has Ended';
+            if (trialCountdown) trialCountdown.textContent = 'subscribe to keep Elite access';
           }
         } else {
           if (proCta) proCta.textContent = 'Subscribe to Pro';
