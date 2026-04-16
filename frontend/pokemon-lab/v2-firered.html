@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v2 FireRed — Situation Room Pokemon Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* v2 FireRed — saturated reds + stats-first: HP bars, Lv badges, grass mat */
+  body.pl-v2 { background: #8ac468; }
+  .pl-v2 .pl-battle-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 18% 78%, rgba(88,165,72,0.55) 0%, rgba(88,165,72,0) 40%),
+      radial-gradient(ellipse at 82% 22%, rgba(210,110,90,0.38) 0%, rgba(210,110,90,0) 40%),
+      linear-gradient(180deg, rgba(244,221,180,0.15) 0%, rgba(88,165,72,0.22) 100%);
+  }
+  .pl-v2 .pl-dialog {
+    background: #f7efe5;
+    color: #1a110a;
+    border-color: #d44040;
+    box-shadow:
+      inset 0 0 0 3px #f7efe5,
+      inset 0 0 0 6px #d44040,
+      8px 8px 0 rgba(0,0,0,0.4);
+  }
+  .pl-v2 .pl-speaker { color: #d44040; }
+  .pl-v2 .pl-caret { background: #d44040; }
+
+  .pl-v2 .pl-action-menu {
+    background: #d44040;
+    border-color: #f7efe5;
+    box-shadow:
+      inset 0 0 0 3px #d44040,
+      inset 0 0 0 6px #f7efe5,
+      8px 8px 0 rgba(0,0,0,0.4);
+  }
+  .pl-v2 .pl-action-btn {
+    background: #f7efe5;
+    color: #d44040;
+    border-color: #1a110a;
+  }
+  .pl-v2 .pl-action-btn:hover { background: #ffd86b; color: #1a110a; }
+</style>
+</head>
+<body class="pl-v2">
+
+<iframe src="../agents.html" class="pl-world-frame" title="walkaround world"></iframe>
+<div class="pl-world-dim"></div>
+<div class="pl-battle-bg"></div>
+
+<div class="pl-version-badge">v2 · FIRERED</div>
+<button type="button" class="pl-peek-btn" data-pl-peek>peek world</button>
+
+<div class="pl-overlay">
+  <div class="pl-stage">
+    <!-- Opponent HUD (top-right) -->
+    <div class="pl-nameplate opponent-plate">
+      <span class="pl-np-lv" data-pl-opponent-lv>Lv99</span>
+      <div class="pl-np-name" data-pl-speaker>RAZZLE</div>
+      <div class="pl-hpbar"><span style="width:92%"></span></div>
+      <div class="pl-np-sub">HP 184 / 200 · focus ready</div>
+    </div>
+    <!-- Trainer HUD (bottom-left) -->
+    <div class="pl-nameplate trainer-plate">
+      <span class="pl-np-lv">Lv42</span>
+      <div class="pl-np-name">YOU — MANAGER</div>
+      <div class="pl-hpbar"><span style="width:64%"></span></div>
+      <div class="pl-np-sub">cap 65% · trade slots 2/3 · streak W2</div>
+    </div>
+
+    <div class="pl-sprite trainer bob">🧑‍🚀</div>
+    <div class="pl-sprite opponent bob" data-pl-opponent-sprite>🐯</div>
+  </div>
+
+  <div class="pl-dialog-row">
+    <div class="pl-dialog">
+      <div class="pl-speaker" data-pl-speaker>RAZZLE — Chief of Staff</div>
+      <div class="pl-text" data-pl-text>…</div>
+      <span class="pl-caret" data-pl-caret></span>
+      <form class="pl-ask-input" data-pl-ask-form style="display:none">
+        <input type="text" placeholder="tell the agent what you need" maxlength="140" />
+        <button type="submit">SEND</button>
+      </form>
+      <div class="pl-hint">▼ action menu selects an intent · space advances</div>
+    </div>
+
+    <div class="pl-action-menu">
+      <button type="button" class="pl-action-btn" data-pl-action="ask">FIGHT <br><span style="font-size:8px">(ask)</span></button>
+      <button type="button" class="pl-action-btn" data-pl-action="tools">BAG <br><span style="font-size:8px">(tools)</span></button>
+      <button type="button" class="pl-action-btn" data-pl-action="roster">PKMN <br><span style="font-size:8px">(switch)</span></button>
+      <button type="button" class="pl-action-btn" data-pl-action="leave">RUN <br><span style="font-size:8px">(exit)</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="pl-roster">
+  <button data-pl-agent-btn="razzle" class="active">RAZZLE</button>
+  <button data-pl-agent-btn="hawkeye">HAWKEYE</button>
+  <button data-pl-agent-btn="octo">OCTO</button>
+  <button data-pl-agent-btn="dolphin">DR.D</button>
+  <button data-pl-agent-btn="bones">BONES</button>
+  <button data-pl-agent-btn="atlas">ATLAS</button>
+</div>
+
+<script src="engine.js"></script>
+<script src="notes.js"></script>
+<script>
+  PokeBattle.init({ versionId: 'v2-firered', agent: 'razzle' });
+  PokeNotes.init('v2-firered');
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokemon Lab — Situation Room Versions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="pl-index-wrap">
+  <h1>SITUATION ROOM · POKEMON LAB</h1>
+  <div class="pl-sub">
+    Five prototypes. Same walkaround world underneath, different Pokemon-style overlays on top.<br>
+    Click any card to enter the battle. Use the <b>✎ notes</b> button on each page to drop sticky notes
+    right on the parts you like. When you're done reviewing, come back and <b>export all notes</b> as markdown.
+  </div>
+
+  <div class="pl-index-cards">
+    <a class="pl-index-card" href="v1-emerald.html">
+      <h2>v1 · EMERALD</h2>
+      <p>Canon Game Boy Advance. Navy dialog, action menu (ASK / TOOLS / ROSTER / LEAVE), typewriter text. Closest to stock Pokemon Emerald.</p>
+      <span class="pl-count" data-pl-count="v1-emerald">0 notes</span>
+    </a>
+    <a class="pl-index-card" href="v2-firered.html">
+      <h2>v2 · FIRERED</h2>
+      <p>Battle-stats first. HP bars + Lv badges on both trainer and agent. FIGHT/BAG/PKMN/RUN action grid. Grass-mat palette.</p>
+      <span class="pl-count" data-pl-count="v2-firered">0 notes</span>
+    </a>
+    <a class="pl-index-card" href="v3-crystal.html">
+      <h2>v3 · CRYSTAL</h2>
+      <p>Conversation-first. Monochrome-leaning, wide full-width dialog box, no action menu clutter. Space to advance, click to skip typing.</p>
+      <span class="pl-count" data-pl-count="v3-crystal">0 notes</span>
+    </a>
+    <a class="pl-index-card" href="v4-stadium.html">
+      <h2>v4 · STADIUM</h2>
+      <p>Cinematic. Larger sprites with platform shadows, translucent dialog, HUD name strips floating under each fighter. Most dramatic.</p>
+      <span class="pl-count" data-pl-count="v4-stadium">0 notes</span>
+    </a>
+    <a class="pl-index-card" href="v5-hybrid.html">
+      <h2>v5 · HYBRID</h2>
+      <p>Modern chat inside GBA chrome. Scrollback history, quick-reply chips, mobile-first sizing. The shipping candidate if "functional wins."</p>
+      <span class="pl-count" data-pl-count="v5-hybrid">0 notes</span>
+    </a>
+  </div>
+
+  <div class="pl-index-actions">
+    <button type="button" id="pl-export-btn">↓ EXPORT ALL NOTES (.md)</button>
+    <button type="button" id="pl-preview-btn" class="secondary">👁 PREVIEW MARKDOWN</button>
+    <button type="button" id="pl-clear-btn" class="secondary">⟲ CLEAR ALL NOTES</button>
+    <a href="../agents.html" class="secondary">← back to live situation room</a>
+  </div>
+
+  <pre id="pl-preview"
+       style="display:none; background:#0b0820; border:3px solid #f7efe5; color:#f7efe5;
+              padding:16px; margin-top:24px; font-size:11px; line-height:1.6; max-width:900px;
+              width:100%; max-height:50vh; overflow:auto; white-space:pre-wrap; font-family:'Space Mono',monospace;"></pre>
+</div>
+
+<script src="notes.js"></script>
+<script>
+  // Render note counts per version
+  function refreshCounts() {
+    var counts = PokeNotes.countAll();
+    Object.keys(counts.per).forEach(function(v) {
+      var el = document.querySelector('[data-pl-count="' + v + '"]');
+      if (el) el.textContent = counts.per[v] + ' note' + (counts.per[v] === 1 ? '' : 's');
+    });
+  }
+  refreshCounts();
+
+  document.getElementById('pl-export-btn').addEventListener('click', function() {
+    PokeNotes.exportDownload();
+  });
+
+  document.getElementById('pl-preview-btn').addEventListener('click', function() {
+    var pre = document.getElementById('pl-preview');
+    var md = PokeNotes.exportMarkdown();
+    if (pre.style.display === 'none') {
+      pre.textContent = md;
+      pre.style.display = 'block';
+      this.textContent = '✕ HIDE PREVIEW';
+    } else {
+      pre.style.display = 'none';
+      this.textContent = '👁 PREVIEW MARKDOWN';
+    }
+  });
+
+  document.getElementById('pl-clear-btn').addEventListener('click', function() {
+    var counts = PokeNotes.countAll();
+    if (!counts.total) { alert('No notes to clear.'); return; }
+    if (!confirm('Clear ALL ' + counts.total + ' notes across all 5 versions? This cannot be undone.')) return;
+    localStorage.removeItem('razzle_pokemon_lab_notes');
+    refreshCounts();
+    document.getElementById('pl-preview').style.display = 'none';
+    document.getElementById('pl-preview-btn').textContent = '👁 PREVIEW MARKDOWN';
+  });
+</script>
+</body>
+</html>

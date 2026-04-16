@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v4 Stadium — Situation Room Pokemon Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* v4 Stadium — cinematic: larger sprites, platform shadows, slim translucent dialog */
+  body.pl-v4 { background: #1b1033; }
+  .pl-v4 .pl-battle-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 20% 75%, rgba(255,200,87,0.22) 0%, rgba(255,200,87,0) 40%),
+      radial-gradient(circle at 80% 25%, rgba(217,119,87,0.28) 0%, rgba(217,119,87,0) 45%),
+      linear-gradient(180deg, rgba(45,31,90,0.5) 0%, rgba(11,8,32,0.75) 100%);
+  }
+  .pl-v4 .pl-sprite {
+    width: 180px; height: 180px; font-size: 150px;
+  }
+  .pl-v4 .pl-sprite.trainer { left: 6%; bottom: 30%; }
+  .pl-v4 .pl-sprite.opponent { right: 6%; top: 18%; }
+
+  /* HUD name strip floats under each sprite */
+  .pl-v4 .pl-hud-strip {
+    position: absolute;
+    background: rgba(11,8,32,0.82);
+    border: 2px solid #ffc857;
+    color: #ffc857;
+    padding: 6px 12px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+  .pl-v4 .pl-hud-strip.trainer-strip { left: 8%; bottom: 16%; }
+  .pl-v4 .pl-hud-strip.opponent-strip { right: 8%; top: 10%; }
+
+  .pl-v4 .pl-dialog {
+    margin: 0 48px 28px;
+    padding: 18px 26px;
+    font-size: 13px;
+  }
+  .pl-v4 .pl-speaker { color: #ffc857; }
+
+  .pl-v4 .pl-mini-actions {
+    pointer-events: auto;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  .pl-v4 .pl-mini-actions button {
+    background: rgba(11,8,32,0.65);
+    color: #ffc857;
+    border: 2px solid #ffc857;
+    padding: 5px 10px;
+    font-family: inherit;
+    font-size: 9px;
+  }
+  .pl-v4 .pl-mini-actions button:hover { background: #ffc857; color: #0b0820; }
+
+  @media (max-width: 720px) {
+    .pl-v4 .pl-sprite { width: 110px; height: 110px; font-size: 90px; }
+    .pl-v4 .pl-hud-strip { font-size: 9px; padding: 4px 8px; }
+    .pl-v4 .pl-dialog { margin: 0 10px 10px; }
+  }
+</style>
+</head>
+<body class="pl-v4">
+
+<iframe src="../agents.html" class="pl-world-frame" title="walkaround world"></iframe>
+<div class="pl-world-dim" style="background: rgba(11,8,32,0.55);"></div>
+<div class="pl-battle-bg"></div>
+
+<div class="pl-version-badge">v4 · STADIUM</div>
+<button type="button" class="pl-peek-btn" data-pl-peek>peek world</button>
+
+<div class="pl-overlay">
+  <div class="pl-stage">
+    <div class="pl-platform trainer-pf"></div>
+    <div class="pl-platform opponent-pf"></div>
+    <div class="pl-sprite trainer bob">🧑‍🚀</div>
+    <div class="pl-sprite opponent bob" data-pl-opponent-sprite>🐯</div>
+
+    <div class="pl-hud-strip trainer-strip">YOU · LV42 · MANAGER</div>
+    <div class="pl-hud-strip opponent-strip"><span data-pl-speaker>RAZZLE</span> · <span data-pl-opponent-lv>Lv99</span></div>
+  </div>
+
+  <div class="pl-dialog">
+    <div class="pl-speaker" data-pl-speaker>RAZZLE — Chief of Staff</div>
+    <div class="pl-text" data-pl-text>…</div>
+    <span class="pl-caret" data-pl-caret></span>
+    <form class="pl-ask-input" data-pl-ask-form style="display:none">
+      <input type="text" placeholder="press the ask button, type, enter" maxlength="140" />
+      <button type="submit">SEND</button>
+    </form>
+    <div class="pl-mini-actions">
+      <button type="button" data-pl-action="ask">ASK</button>
+      <button type="button" data-pl-action="tools">TOOLS</button>
+      <button type="button" data-pl-action="roster">SWITCH AGENT</button>
+      <button type="button" data-pl-action="next">NEXT LINE</button>
+      <button type="button" data-pl-action="leave">LEAVE</button>
+    </div>
+  </div>
+</div>
+
+<div class="pl-roster">
+  <button data-pl-agent-btn="razzle" class="active">RAZZLE</button>
+  <button data-pl-agent-btn="hawkeye">HAWKEYE</button>
+  <button data-pl-agent-btn="octo">OCTO</button>
+  <button data-pl-agent-btn="dolphin">DR.D</button>
+  <button data-pl-agent-btn="bones">BONES</button>
+  <button data-pl-agent-btn="atlas">ATLAS</button>
+</div>
+
+<script src="engine.js"></script>
+<script src="notes.js"></script>
+<script>
+  PokeBattle.init({ versionId: 'v4-stadium', agent: 'razzle' });
+  PokeNotes.init('v4-stadium');
+</script>
+</body>
+</html>

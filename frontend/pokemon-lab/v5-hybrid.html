@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v5 Hybrid — Situation Room Pokemon Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* v5 Hybrid — modern chat inside GBA chrome. Scrollback + quick-reply chips. Mobile-first. */
+  body.pl-v5 { background: #0b0820; }
+  .pl-v5 .pl-battle-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(217,119,87,0.18) 0%, rgba(11,8,32,0.72) 100%);
+  }
+  .pl-v5 .pl-stage {
+    align-items: center;
+    padding: 32px 20px 4px;
+    min-height: 44vh;
+  }
+  .pl-v5 .pl-sprite.trainer { left: 10%; bottom: 25%; width: 110px; height: 110px; font-size: 88px; }
+  .pl-v5 .pl-sprite.opponent { right: 10%; top: 20%; width: 110px; height: 110px; font-size: 88px; }
+
+  .pl-v5 .pl-dialog {
+    min-height: 90px;
+    font-size: 12px;
+    padding: 14px 18px;
+    margin: 0 16px 8px;
+  }
+  .pl-v5 .pl-speaker { color: #ffc857; }
+
+  @media (max-width: 720px) {
+    .pl-v5 .pl-stage { padding: 18px 10px 0; min-height: 28vh; }
+    .pl-v5 .pl-sprite.trainer { left: 4%; bottom: 8%; width: 72px; height: 72px; font-size: 56px; }
+    .pl-v5 .pl-sprite.opponent { right: 4%; top: 4%; width: 72px; height: 72px; font-size: 56px; }
+    .pl-v5 .pl-dialog { margin: 0 8px 8px; min-height: 70px; }
+  }
+</style>
+</head>
+<body class="pl-v5">
+
+<iframe src="../agents.html" class="pl-world-frame" title="walkaround world"></iframe>
+<div class="pl-world-dim"></div>
+<div class="pl-battle-bg"></div>
+
+<div class="pl-version-badge">v5 · HYBRID</div>
+<button type="button" class="pl-peek-btn" data-pl-peek>peek world</button>
+
+<div class="pl-overlay">
+  <div class="pl-stage">
+    <div class="pl-sprite trainer bob">🧑‍🚀</div>
+    <div class="pl-sprite opponent bob" data-pl-opponent-sprite>🐯</div>
+  </div>
+
+  <!-- Scrollback chat (modern) sits above the Pokemon dialog box (retro) -->
+  <div class="pl-v5-chat" data-pl-chat>
+    <div class="pl-v5-msg">
+      <span class="who">SYSTEM</span>
+      <span class="body">You're in the Situation Room. Tap a chip to ask, switch agents in the bottom roster, or type your own question.</span>
+    </div>
+  </div>
+
+  <div class="pl-dialog">
+    <div class="pl-speaker" data-pl-speaker>RAZZLE — Chief of Staff</div>
+    <div class="pl-text" data-pl-text>…</div>
+    <span class="pl-caret" data-pl-caret></span>
+    <form class="pl-ask-input" data-pl-ask-form>
+      <input type="text" placeholder="type to any agent…" maxlength="200" />
+      <button type="submit">SEND</button>
+    </form>
+
+    <div class="pl-v5-chips">
+      <button type="button" data-pl-preset="Who should I start at flex this week?">start/sit flex?</button>
+      <button type="button" data-pl-preset="Rank my trade targets by ROS value.">rank trade targets</button>
+      <button type="button" data-pl-preset="What's my championship probability?">championship odds</button>
+      <button type="button" data-pl-preset="Any injuries I should know about on my roster?">injury check</button>
+      <button type="button" data-pl-preset="Should I stream defense this week?">stream DST?</button>
+    </div>
+  </div>
+</div>
+
+<div class="pl-roster">
+  <button data-pl-agent-btn="razzle" class="active">RAZZLE</button>
+  <button data-pl-agent-btn="hawkeye">HAWKEYE</button>
+  <button data-pl-agent-btn="octo">OCTO</button>
+  <button data-pl-agent-btn="dolphin">DR.D</button>
+  <button data-pl-agent-btn="bones">BONES</button>
+  <button data-pl-agent-btn="atlas">ATLAS</button>
+</div>
+
+<script src="engine.js"></script>
+<script src="notes.js"></script>
+<script>
+  PokeBattle.init({ versionId: 'v5-hybrid', agent: 'razzle' });
+  PokeNotes.init('v5-hybrid');
+</script>
+</body>
+</html>

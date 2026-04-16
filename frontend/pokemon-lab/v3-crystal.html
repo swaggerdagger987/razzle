@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v3 Crystal — Situation Room Pokemon Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* v3 Crystal — minimalist monochrome conversation-first */
+  body.pl-v3 { background: #1a1a1a; }
+  .pl-v3 .pl-battle-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(245,245,250,0.05) 0%, rgba(0,0,0,0.35) 100%);
+  }
+  .pl-v3 .pl-stage { align-items: center; padding: 30px 24px 8px; }
+  .pl-v3 .pl-sprite.trainer { left: 18%; bottom: 42%; }
+  .pl-v3 .pl-sprite.opponent { right: 18%; top: 24%; }
+  .pl-v3 .pl-dialog {
+    background: #f7efe5;
+    color: #0b0820;
+    border: 4px solid #0b0820;
+    box-shadow: 0 0 0 3px #f7efe5, 8px 8px 0 rgba(0,0,0,0.55);
+    font-size: 15px;
+    min-height: 120px;
+  }
+  .pl-v3 .pl-speaker { color: #5c4a3d; letter-spacing: 2px; }
+  .pl-v3 .pl-hint { color: #8a7565; }
+  .pl-v3 .pl-sprite { filter: grayscale(0.6) drop-shadow(0 6px 0 rgba(0,0,0,0.35)); }
+</style>
+</head>
+<body class="pl-v3">
+
+<iframe src="../agents.html" class="pl-world-frame" title="walkaround world"></iframe>
+<div class="pl-world-dim" style="background: rgba(0,0,0,0.5);"></div>
+<div class="pl-battle-bg"></div>
+
+<div class="pl-version-badge">v3 · CRYSTAL</div>
+<button type="button" class="pl-peek-btn" data-pl-peek>peek world</button>
+
+<div class="pl-overlay">
+  <div class="pl-stage">
+    <div class="pl-sprite trainer bob">🧑‍🚀</div>
+    <div class="pl-sprite opponent bob" data-pl-opponent-sprite>🐯</div>
+  </div>
+
+  <div class="pl-dialog">
+    <div class="pl-speaker" data-pl-speaker>RAZZLE — Chief of Staff</div>
+    <div class="pl-text" data-pl-text>…</div>
+    <span class="pl-caret" data-pl-caret></span>
+    <form class="pl-ask-input" data-pl-ask-form style="display:none">
+      <input type="text" placeholder="what do you want to know?" maxlength="140" />
+      <button type="submit">ASK</button>
+    </form>
+    <div class="pl-hint" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span>SPACE · next line &nbsp;·&nbsp; CLICK · skip typing</span>
+      <span>
+        <button type="button" class="pl-action-btn" data-pl-action="ask" style="padding:4px 8px;font-size:9px;">ASK</button>
+        <button type="button" class="pl-action-btn" data-pl-action="roster" style="padding:4px 8px;font-size:9px;">NEXT AGENT</button>
+        <button type="button" class="pl-action-btn" data-pl-action="leave" style="padding:4px 8px;font-size:9px;">LEAVE</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="pl-roster">
+  <button data-pl-agent-btn="razzle" class="active">RAZZLE</button>
+  <button data-pl-agent-btn="hawkeye">HAWKEYE</button>
+  <button data-pl-agent-btn="octo">OCTO</button>
+  <button data-pl-agent-btn="dolphin">DR.D</button>
+  <button data-pl-agent-btn="bones">BONES</button>
+  <button data-pl-agent-btn="atlas">ATLAS</button>
+</div>
+
+<script src="engine.js"></script>
+<script src="notes.js"></script>
+<script>
+  PokeBattle.init({ versionId: 'v3-crystal', agent: 'razzle' });
+  PokeNotes.init('v3-crystal');
+</script>
+</body>
+</html>

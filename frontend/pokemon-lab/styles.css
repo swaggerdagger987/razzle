@@ -1,0 +1,585 @@
+/* ====================================================================
+   Pokemon Lab — shared styles for v1..v5 + sticky notes system
+   Loaded by every version page + index.html.
+   ==================================================================== */
+
+/* ---- RESET + FONTS ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+@font-face {
+  font-family: 'Press Start';
+  src: local('Press Start 2P');
+  font-display: swap;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background: #0b0820;
+  color: #f7efe5;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  overflow-x: hidden;
+}
+
+a { color: inherit; }
+button { font-family: inherit; cursor: pointer; }
+
+/* ====================================================================
+   THE WORLD LAYER — iframe of /agents.html beneath every version
+   ==================================================================== */
+.pl-world-frame {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  border: 0;
+  z-index: 1;
+}
+
+.pl-world-dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 3, 15, 0.35);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* A "peek" toggle dims or hides the overlay so the user can see the walkaround */
+.pl-peek-btn {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 60;
+  background: #d97757;
+  color: #0b0820;
+  border: 3px solid #0b0820;
+  box-shadow: 4px 4px 0 #0b0820;
+  padding: 8px 14px;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+.pl-peek-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #0b0820; }
+
+body.pl-peeking .pl-overlay { opacity: 0.2; pointer-events: none; }
+body.pl-peeking .pl-world-dim { background: transparent; }
+
+/* ====================================================================
+   THE OVERLAY CANVAS — where Pokemon UI is laid out per version
+   ==================================================================== */
+.pl-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none; /* individual panels re-enable events */
+  transition: opacity 0.18s ease;
+}
+
+.pl-stage {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 48px 40px 12px;
+  pointer-events: none;
+}
+
+/* ====================================================================
+   SPRITES — emoji-based trainer + opponent (functional, not pixel art)
+   ==================================================================== */
+.pl-sprite {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 110px;
+  line-height: 1;
+  filter: drop-shadow(0 6px 0 rgba(0,0,0,0.35));
+  user-select: none;
+}
+.pl-sprite.trainer { left: 8%; bottom: 38%; transform: scaleX(-1); } /* back of trainer */
+.pl-sprite.opponent { right: 8%; top: 18%; }
+
+.pl-sprite.bob { animation: pl-bob 1.6s ease-in-out infinite; }
+@keyframes pl-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ====================================================================
+   HP BAR / NAMEPLATE — used by v2 + v4
+   ==================================================================== */
+.pl-nameplate {
+  background: #f7efe5;
+  color: #0b0820;
+  border: 4px solid #0b0820;
+  box-shadow: 4px 4px 0 #0b0820;
+  padding: 10px 14px 12px;
+  width: 260px;
+  font-size: 10px;
+}
+.pl-nameplate.trainer-plate { position: absolute; left: 4%; bottom: 10%; }
+.pl-nameplate.opponent-plate { position: absolute; right: 4%; top: 6%; }
+.pl-nameplate .pl-np-name { font-size: 12px; margin-bottom: 6px; letter-spacing: 1px; }
+.pl-nameplate .pl-np-lv { float: right; font-size: 9px; background: #ffc857; padding: 2px 6px; border: 2px solid #0b0820; }
+.pl-hpbar {
+  height: 10px;
+  background: #2d1f14;
+  border: 2px solid #0b0820;
+  margin-top: 8px;
+  position: relative;
+}
+.pl-hpbar > span {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #2ec4b6, #5b7fff);
+  width: 85%;
+}
+.pl-nameplate .pl-np-sub { font-size: 8px; margin-top: 6px; color: #5c4a3d; }
+
+/* ====================================================================
+   DIALOG BOX — base
+   ==================================================================== */
+.pl-dialog {
+  pointer-events: auto;
+  background: #0b0820;
+  color: #f7efe5;
+  border: 6px solid #f7efe5;
+  box-shadow: inset 0 0 0 3px #0b0820, 0 0 0 3px #0b0820, 8px 8px 0 rgba(0,0,0,0.35);
+  padding: 22px 28px;
+  margin: 0 24px 24px;
+  min-height: 160px;
+  font-size: 14px;
+  line-height: 1.55;
+  letter-spacing: 0.5px;
+}
+.pl-dialog .pl-speaker {
+  color: #ffc857;
+  font-size: 10px;
+  margin-bottom: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.pl-dialog .pl-text {
+  min-height: 70px;
+}
+.pl-dialog .pl-caret {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #ffc857;
+  margin-left: 6px;
+  animation: pl-blink 0.7s steps(2) infinite;
+  vertical-align: middle;
+}
+@keyframes pl-blink { 50% { opacity: 0; } }
+
+.pl-dialog .pl-hint {
+  margin-top: 10px;
+  font-size: 9px;
+  color: #c4b5a5;
+  letter-spacing: 1.2px;
+  text-align: right;
+}
+
+/* ====================================================================
+   ACTION MENU — 2×2 grid used by v1 + v2
+   ==================================================================== */
+.pl-action-menu {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
+  background: #0b0820;
+  border: 6px solid #f7efe5;
+  box-shadow: inset 0 0 0 3px #0b0820, 0 0 0 3px #0b0820, 8px 8px 0 rgba(0,0,0,0.35);
+  padding: 14px;
+  width: 260px;
+  margin-right: 24px;
+}
+.pl-action-btn {
+  background: #f7efe5;
+  color: #0b0820;
+  border: 3px solid #0b0820;
+  padding: 10px 12px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-family: inherit;
+  transition: transform 0.08s;
+}
+.pl-action-btn:hover { background: #ffc857; }
+.pl-action-btn:active { transform: translate(2px, 2px); }
+
+.pl-dialog-row {
+  display: flex;
+  align-items: stretch;
+  padding: 0 0 24px;
+  pointer-events: none;
+}
+.pl-dialog-row > .pl-dialog { flex: 1; }
+
+/* ====================================================================
+   ASK INPUT (modal form shown when ASK action clicked)
+   ==================================================================== */
+.pl-ask-input {
+  pointer-events: auto;
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+.pl-ask-input input {
+  flex: 1;
+  background: #1a110a;
+  border: 3px solid #f7efe5;
+  color: #f7efe5;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 12px;
+}
+.pl-ask-input button {
+  background: #d97757;
+  color: #0b0820;
+  border: 3px solid #f7efe5;
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 11px;
+}
+
+/* ====================================================================
+   ROSTER CHIPS — version switcher on all pages
+   ==================================================================== */
+.pl-roster {
+  pointer-events: auto;
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  gap: 6px;
+  z-index: 30;
+}
+.pl-roster button {
+  background: rgba(11, 8, 32, 0.85);
+  color: #f7efe5;
+  border: 2px solid #f7efe5;
+  padding: 6px 10px;
+  font-size: 10px;
+  font-family: inherit;
+}
+.pl-roster button.active { background: #ffc857; color: #0b0820; }
+
+/* ====================================================================
+   HEADER BADGE (version label, top-center)
+   ==================================================================== */
+.pl-version-badge {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0b0820;
+  color: #ffc857;
+  border: 3px solid #f7efe5;
+  padding: 6px 14px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* ====================================================================
+   STICKY NOTES SYSTEM (used by notes.js)
+   ==================================================================== */
+.pl-notes-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+}
+.pl-notes-layer .pl-sticky-note { pointer-events: auto; }
+
+.pl-sticky-note {
+  position: absolute;
+  width: 220px;
+  min-height: 140px;
+  background: #fff8a3;
+  color: #2d1f14;
+  border: 2px solid #2d1f14;
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+  font-family: 'Caveat', 'Space Mono', monospace;
+  padding: 8px 10px 28px;
+  transform: rotate(-1.5deg);
+  display: flex;
+  flex-direction: column;
+}
+.pl-sticky-note:nth-child(3n) { background: #cdeac0; transform: rotate(1deg); }
+.pl-sticky-note:nth-child(5n) { background: #f7b2ad; transform: rotate(-2deg); }
+
+.pl-sticky-grip {
+  font-size: 12px;
+  color: #2d1f14;
+  cursor: grab;
+  padding: 2px;
+  line-height: 1;
+  letter-spacing: -4px;
+  margin-bottom: 4px;
+  user-select: none;
+}
+.pl-sticky-grip:active { cursor: grabbing; }
+
+.pl-sticky-text {
+  flex: 1;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  font-family: 'Caveat', 'Space Mono', monospace;
+  font-size: 18px;
+  line-height: 1.2;
+  color: inherit;
+  resize: none;
+  outline: none;
+  padding: 2px 0;
+}
+
+.pl-sticky-actions {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: #5c4a3d;
+}
+
+.pl-sticky-del {
+  background: transparent;
+  border: 1px solid #2d1f14;
+  color: #2d1f14;
+  width: 20px;
+  height: 20px;
+  line-height: 1;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 0;
+}
+.pl-sticky-del:hover { background: #d44040; color: #fff; }
+
+/* ---- NOTES TOOLBAR + MODE ---- */
+.pl-notes-toolbar {
+  position: fixed;
+  top: 12px;
+  right: 140px;
+  display: flex;
+  gap: 6px;
+  z-index: 1001;
+}
+.pl-notes-toolbar button,
+.pl-notes-toolbar a {
+  background: #f7efe5;
+  color: #0b0820;
+  border: 3px solid #0b0820;
+  box-shadow: 3px 3px 0 #0b0820;
+  padding: 6px 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  text-decoration: none;
+  display: inline-block;
+}
+.pl-notes-toggle[aria-pressed="true"] {
+  background: #ffc857;
+}
+
+body.pl-notes-active { cursor: crosshair; }
+body.pl-notes-active .pl-overlay,
+body.pl-notes-active .pl-world-frame { cursor: crosshair; }
+
+/* When dropping notes, swallow clicks into the document so PokeNotes fires
+   anywhere on screen. Without this, the iframe absorbs clicks over the
+   walkaround area and notes never land there. */
+body.pl-notes-active .pl-world-frame { pointer-events: none; }
+body.pl-notes-active .pl-overlay {
+  pointer-events: auto;
+  background: rgba(0,0,0,0.001); /* transparent but captures */
+}
+
+/* ====================================================================
+   INDEX PAGE
+   ==================================================================== */
+.pl-index-wrap {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0b0820 0%, #2d1f5a 100%);
+  color: #f7efe5;
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pl-index-wrap h1 {
+  font-size: 22px;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.pl-index-wrap .pl-sub {
+  font-size: 11px;
+  color: #c4b5a5;
+  letter-spacing: 1.5px;
+  margin-bottom: 28px;
+  text-align: center;
+  max-width: 560px;
+  line-height: 1.8;
+}
+.pl-index-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  max-width: 1080px;
+  width: 100%;
+  margin-bottom: 28px;
+}
+.pl-index-card {
+  background: #0b0820;
+  color: #f7efe5;
+  border: 4px solid #f7efe5;
+  box-shadow: 6px 6px 0 #d97757;
+  padding: 18px;
+  text-decoration: none;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pl-index-card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 #d97757; }
+.pl-index-card h2 { font-size: 14px; color: #ffc857; letter-spacing: 1.5px; }
+.pl-index-card p { font-size: 10px; line-height: 1.7; color: #c4b5a5; }
+.pl-index-card .pl-count { font-size: 10px; color: #ffc857; }
+
+.pl-index-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+}
+.pl-index-actions button,
+.pl-index-actions a {
+  background: #d97757;
+  color: #0b0820;
+  border: 3px solid #f7efe5;
+  box-shadow: 4px 4px 0 #f7efe5;
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 11px;
+  text-decoration: none;
+}
+.pl-index-actions .secondary {
+  background: transparent;
+  color: #f7efe5;
+}
+
+/* ====================================================================
+   V3 (Crystal) — minimalist wide dialog
+   ==================================================================== */
+.pl-v3 .pl-dialog {
+  background: #f7efe5;
+  color: #0b0820;
+  border-color: #0b0820;
+  box-shadow: inset 0 0 0 3px #f7efe5, 0 0 0 3px #0b0820, 8px 8px 0 rgba(0,0,0,0.35);
+  max-width: 900px;
+  margin: 0 auto 24px;
+  padding: 32px 40px;
+}
+.pl-v3 .pl-dialog .pl-speaker { color: #d97757; }
+.pl-v3 .pl-dialog .pl-caret { background: #0b0820; }
+.pl-v3 .pl-stage { padding: 24px 24px 8px; }
+
+/* ====================================================================
+   V4 (Stadium) — cinematic perspective + platforms
+   ==================================================================== */
+.pl-v4 .pl-stage { perspective: 800px; }
+.pl-v4 .pl-platform {
+  position: absolute;
+  bottom: -10px;
+  width: 180px;
+  height: 30px;
+  background: radial-gradient(ellipse at center, rgba(217,119,87,0.55) 0%, rgba(11,8,32,0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.pl-v4 .pl-platform.trainer-pf { left: 6%; bottom: 22%; }
+.pl-v4 .pl-platform.opponent-pf { right: 6%; top: 22%; }
+.pl-v4 .pl-sprite { filter: drop-shadow(0 10px 12px rgba(0,0,0,0.6)); }
+.pl-v4 .pl-dialog {
+  background: rgba(11, 8, 32, 0.72);
+  border-color: #ffc857;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  min-height: 110px;
+}
+
+/* ====================================================================
+   V5 (Hybrid) — chat scrollback above dialog
+   ==================================================================== */
+.pl-v5-chat {
+  pointer-events: auto;
+  background: rgba(11, 8, 32, 0.88);
+  border: 4px solid #f7efe5;
+  margin: 0 24px 10px;
+  padding: 12px 14px;
+  max-height: 34vh;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.pl-v5-chat .pl-v5-msg { margin-bottom: 8px; }
+.pl-v5-chat .pl-v5-msg .who { color: #ffc857; font-size: 9px; letter-spacing: 1.5px; display: block; margin-bottom: 2px; }
+.pl-v5-chat .pl-v5-msg.you .who { color: #2ec4b6; }
+.pl-v5-chat .pl-v5-msg .body { color: #f7efe5; }
+
+.pl-v5-chips {
+  pointer-events: auto;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.pl-v5-chips button {
+  background: #1a110a;
+  color: #ffc857;
+  border: 2px solid #ffc857;
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 10px;
+}
+.pl-v5-chips button:hover { background: #ffc857; color: #0b0820; }
+
+/* ====================================================================
+   MOBILE BREAKPOINTS
+   ==================================================================== */
+@media (max-width: 720px) {
+  .pl-sprite { width: 90px; height: 90px; font-size: 72px; }
+  .pl-sprite.trainer { left: 4%; bottom: 40%; }
+  .pl-sprite.opponent { right: 4%; top: 12%; }
+  .pl-dialog {
+    margin: 0 8px 8px;
+    padding: 14px 16px;
+    font-size: 12px;
+    min-height: 120px;
+  }
+  .pl-action-menu { width: 100%; margin: 0 8px 8px; }
+  .pl-dialog-row { flex-direction: column; }
+  .pl-nameplate { width: 200px; font-size: 9px; }
+  .pl-notes-toolbar { right: 8px; top: 8px; }
+  .pl-peek-btn { top: 44px; right: 8px; }
+  .pl-version-badge { top: 44px; font-size: 9px; }
+  .pl-roster button { padding: 4px 6px; font-size: 9px; }
+  .pl-sticky-note { width: 180px; }
+  .pl-v3 .pl-dialog { padding: 18px 20px; }
+  .pl-v5-chat { max-height: 28vh; font-size: 11px; }
+}
