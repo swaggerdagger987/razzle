@@ -381,175 +381,175 @@
     .selected-info { padding: 6px 12px; min-height: 36px; }
   }
 
-  /* ===== AGENT CHAT DOCK ===== */
-  /* Anchored to the left edge of the roster sidebar so it never overlaps the agent list.
-     Default-collapsed to a thin header strip so all 6 agents stay visible; click to expand. */
-  .agent-chat-dock {
+  /* ===== IN-GAME DIALOG (Crystal style) =====
+     Anchored INSIDE the canvas frame so it reads as part of the game,
+     not a floating overlay. Agents keep walking behind it. Click "×" to
+     minimize and uncover the full scene. */
+  .rz-dialog {
     position: absolute;
-    right: 236px; /* sidebar (220) + border (3) + 13px gap */
-    bottom: 54px;
-    width: 300px;
-    max-width: calc(100vw - 260px);
-    background: #3b2821;
-    border: 2px solid #5c4a3d;
-    border-radius: 6px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.45);
-    z-index: 30;
-    display: flex;
-    flex-direction: column;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    background: #f7efe5;
+    color: #2d1f14;
+    border: 4px solid #1a110a;
+    box-shadow: 0 0 0 2px #f7efe5, 0 0 0 5px #1a110a, 8px 8px 0 rgba(0,0,0,0.5);
+    padding: 14px 18px 12px;
     font-family: var(--font-mono);
-    color: #ede0cf;
-    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.55;
+    z-index: 15;
+    transition: transform 0.22s ease, opacity 0.22s ease;
   }
-  .agent-chat-dock[data-open="false"] .agent-chat-log,
-  .agent-chat-dock[data-open="false"] .agent-chat-form { display: none; }
-  .agent-chat-dock[data-open="false"] .agent-chat-header { cursor: pointer; }
-  .agent-chat-dock[data-open="false"] .agent-chat-header:hover { background: #3a2319; }
-
-  .agent-chat-header {
+  .rz-dialog[data-open="false"] {
+    transform: translateY(calc(100% + 16px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  .rz-dialog-speaker {
     display: flex;
     align-items: center;
-    padding: 6px 10px;
-    gap: 8px;
-    border-bottom: 2px solid #5c4a3d;
-    background: #2a1c16;
-    user-select: none;
-  }
-  .agent-chat-dock[data-open="false"] .agent-chat-header { border-bottom: none; }
-  .agent-chat-title {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.15;
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-  }
-  #agentChatName {
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
     font-family: var(--font-display);
-    font-size: 13px;
-    letter-spacing: 0.4px;
+    font-size: 15px;
+    letter-spacing: 0.6px;
     color: #d97757;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
-  .agent-chat-sub {
-    font-size: 8px;
+  .rz-dialog-speaker .rz-dialog-role {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
     color: #8a7565;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    font-weight: normal;
   }
-  .agent-chat-toggle {
+  .rz-dialog-close {
+    background: transparent;
+    border: 2px solid #1a110a;
+    color: #1a110a;
     width: 22px;
     height: 22px;
-    border: 1px solid #5c4a3d;
-    border-radius: 3px;
-    background: #1a110a;
-    color: #ede0cf;
-    font-size: 12px;
+    padding: 0;
     line-height: 1;
+    font-family: inherit;
+    font-size: 14px;
     cursor: pointer;
-    font-family: var(--font-mono);
     flex-shrink: 0;
   }
-  .agent-chat-toggle:hover { border-color: #d97757; color: #d97757; }
+  .rz-dialog-close:hover { background: #d44040; color: #fff; border-color: #1a110a; }
 
-  .agent-chat-log {
-    height: 160px;
+  .rz-dialog-text {
+    min-height: 44px;
+    max-height: 28vh;
     overflow-y: auto;
-    padding: 8px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    font-size: 11px;
-    line-height: 1.4;
-    scrollbar-width: thin;
-    scrollbar-color: #5c4a3d #2a1c16;
+    cursor: pointer; /* click-to-skip-typing */
   }
-  .agent-chat-log::-webkit-scrollbar { width: 6px; }
-  .agent-chat-log::-webkit-scrollbar-track { background: #2a1c16; }
-  .agent-chat-log::-webkit-scrollbar-thumb { background: #5c4a3d; border-radius: 3px; }
+  .rz-dialog-caret {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #1a110a;
+    margin-left: 6px;
+    animation: rz-blink 0.7s steps(2) infinite;
+    vertical-align: middle;
+    visibility: hidden;
+  }
+  @keyframes rz-blink { 50% { opacity: 0; } }
 
-  .agent-chat-msg {
-    padding: 5px 7px;
-    border-radius: 4px;
-    max-width: 90%;
-    word-wrap: break-word;
-  }
-  .agent-chat-msg--user {
-    align-self: flex-end;
-    background: rgba(91,127,255,0.13);
-    border-left: 2px solid #5b7fff;
-  }
-  .agent-chat-msg--agent {
-    align-self: flex-start;
-    background: rgba(217,119,87,0.13);
-    border-left: 2px solid #d97757;
-  }
-  .agent-chat-msg--system {
-    align-self: center;
-    text-align: center;
-    color: #8a7565;
-    font-size: 10px;
-    font-style: italic;
-    background: transparent;
-    padding: 2px 4px;
-  }
-  .agent-chat-msg-author {
-    display: block;
-    font-size: 8px;
-    color: #8a7565;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-  }
-
-  .agent-chat-form {
+  .rz-dialog-form {
     display: flex;
-    gap: 6px;
-    padding: 6px 8px;
-    border-top: 2px solid #5c4a3d;
-    background: #2a1c16;
+    gap: 8px;
+    margin-top: 10px;
   }
-  #agentChatInput {
+  .rz-dialog-form input {
     flex: 1;
     min-width: 0;
-    padding: 5px 8px;
-    background: #1a110a;
-    border: 1px solid #5c4a3d;
-    border-radius: 3px;
-    color: #ede0cf;
+    padding: 8px 10px;
+    background: #ede0cf;
+    border: 2px solid #1a110a;
+    color: #1a110a;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     outline: none;
   }
-  #agentChatInput::placeholder { color: #6b5a4d; }
-  #agentChatInput:focus { border-color: #d97757; }
-  #agentChatInput:disabled { opacity: 0.6; }
-  .agent-chat-send {
-    width: 30px;
-    border: 1px solid #5c4a3d;
-    border-radius: 3px;
+  .rz-dialog-form input::placeholder { color: #8a7565; }
+  .rz-dialog-form input:focus { background: #fff8e5; }
+  .rz-dialog-form button {
+    padding: 0 14px;
     background: #d97757;
     color: #1a110a;
-    font-size: 11px;
-    cursor: pointer;
+    border: 2px solid #1a110a;
     font-family: var(--font-mono);
-    font-weight: bold;
-    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
   }
-  .agent-chat-send:hover { background: #f2c4a8; }
-  .agent-chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+  .rz-dialog-form button:hover { background: #ffc857; }
+  .rz-dialog-form button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Mobile (sidebar hidden): dock spans the bottom */
+  .rz-dialog-hint {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    font-size: 9px;
+    letter-spacing: 1.2px;
+    color: #8a7565;
+    text-transform: uppercase;
+  }
+  .rz-dialog-hint .rz-dialog-quick {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .rz-dialog-hint .rz-dialog-quick button {
+    background: transparent;
+    border: 1.5px solid #5c4a3d;
+    color: #5c4a3d;
+    padding: 3px 8px;
+    font-family: inherit;
+    font-size: 9px;
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+  .rz-dialog-hint .rz-dialog-quick button:hover { background: #d97757; color: #1a110a; border-color: #1a110a; }
+
+  /* Re-opener: small tab when the dialog is minimized */
+  .rz-dialog-reopen {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 14;
+    background: #1a110a;
+    color: #d97757;
+    border: 2px solid #d97757;
+    padding: 6px 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: none;
+  }
+  .rz-dialog[data-open="false"] ~ .rz-dialog-reopen { display: block; }
+  .rz-dialog-reopen:hover { background: #d97757; color: #1a110a; }
+
   @media (max-width: 640px) {
-    .agent-chat-dock {
-      right: 12px;
-      bottom: 70px;
-      width: calc(100vw - 24px);
-      max-width: none;
+    .rz-dialog {
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      padding: 10px 12px 10px;
+      font-size: 12px;
     }
-    .agent-chat-log { height: 130px; }
+    .rz-dialog-speaker { font-size: 13px; }
+    .rz-dialog-speaker .rz-dialog-role { display: none; }
+    .rz-dialog-text { max-height: 22vh; }
+    .rz-dialog-hint { font-size: 8px; }
   }
 </style>
 </head>
@@ -570,6 +570,29 @@
           <div class="canvas-placeholder-text">agents are setting up the Situation Room...</div>
           <div class="canvas-placeholder-sub">pulling film...</div>
         </div>
+
+        <!-- In-game Pokemon-style dialog (Crystal look) -->
+        <div id="rzDialog" class="rz-dialog" data-open="false">
+          <div class="rz-dialog-speaker">
+            <span><span id="rzDialogName">Situation Room</span> <span class="rz-dialog-role" id="rzDialogRole">click an agent to start</span></span>
+            <button type="button" class="rz-dialog-close" id="rzDialogClose" aria-label="Close dialog">&times;</button>
+          </div>
+          <div class="rz-dialog-text" id="rzDialogText" title="click to skip typing">…</div>
+          <span class="rz-dialog-caret" id="rzDialogCaret"></span>
+          <form class="rz-dialog-form" id="rzDialogForm" autocomplete="off">
+            <input type="text" id="rzDialogInput" placeholder="type to the agent…" maxlength="200" aria-label="Message to agent" />
+            <button type="submit" aria-label="Send">SEND</button>
+          </form>
+          <div class="rz-dialog-hint">
+            <span>space · next line &nbsp;·&nbsp; click text · skip typing</span>
+            <span class="rz-dialog-quick">
+              <button type="button" data-rz-preset="Who should I start at flex this week?">start/sit?</button>
+              <button type="button" data-rz-preset="What's my championship probability?">championship?</button>
+              <button type="button" data-rz-preset="Any injuries on my roster?">injuries?</button>
+            </span>
+          </div>
+        </div>
+        <button type="button" id="rzDialogReopen" class="rz-dialog-reopen" aria-label="Open dialog">▲ talk to selected agent</button>
       </div>
       <div class="canvas-hints">Click agent to select &middot; Drag to pan &middot; Keys 1-6 switch agents</div>
     </div>
@@ -594,22 +617,6 @@
   <!-- Room view control -->
   <div style="position:absolute;bottom:52px;right:12px;display:flex;flex-direction:column;gap:4px;z-index:20;">
     <button onclick="showRoomView()" style="padding:4px 8px;border:2px solid #5c4a3d;border-radius:4px;background:rgba(26,17,10,0.8);color:#ede0cf;font-size:9px;cursor:pointer;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Room View</button>
-  </div>
-
-  <!-- Agent chat dock -->
-  <div id="agentChatDock" class="agent-chat-dock" data-open="false">
-    <div class="agent-chat-header" id="agentChatHeader">
-      <div class="agent-chat-title">
-        <span id="agentChatName">Situation Room</span>
-        <span class="agent-chat-sub" id="agentChatSub">Click to open chat</span>
-      </div>
-      <button type="button" class="agent-chat-toggle" id="agentChatToggle" aria-label="Toggle chat" aria-expanded="false">+</button>
-    </div>
-    <div class="agent-chat-log" id="agentChatLog" aria-live="polite"></div>
-    <form class="agent-chat-form" id="agentChatForm" autocomplete="off">
-      <input type="text" id="agentChatInput" placeholder="Ask the Situation Room&hellip;" aria-label="Message to agent" maxlength="500"/>
-      <button type="submit" class="agent-chat-send" aria-label="Send message">&#9654;</button>
-    </form>
   </div>
 
   <!-- Status bar -->
@@ -3526,97 +3533,142 @@ function waitAndStart() {
 }
 waitAndStart();
 
-// ===== AGENT CHAT DOCK =====
+// ===== IN-GAME DIALOG (Crystal style) =====
+// Anchored inside the canvas frame. Speaker name + typewriter text + ASK input.
+// Hooks: opens when an agent is selected (selectedAgent changes via click/keys 1-6).
 (function() {
-  const dock = document.getElementById('agentChatDock');
-  const header = document.getElementById('agentChatHeader');
-  const form = document.getElementById('agentChatForm');
-  const input = document.getElementById('agentChatInput');
-  const log = document.getElementById('agentChatLog');
-  const toggle = document.getElementById('agentChatToggle');
-  const nameEl = document.getElementById('agentChatName');
-  const subEl = document.getElementById('agentChatSub');
-  if (!dock || !header || !form || !input || !log || !toggle || !nameEl || !subEl) return;
+  const dialog   = document.getElementById('rzDialog');
+  const nameEl   = document.getElementById('rzDialogName');
+  const roleEl   = document.getElementById('rzDialogRole');
+  const textEl   = document.getElementById('rzDialogText');
+  const caretEl  = document.getElementById('rzDialogCaret');
+  const form     = document.getElementById('rzDialogForm');
+  const input    = document.getElementById('rzDialogInput');
+  const closeBtn = document.getElementById('rzDialogClose');
+  const reopen   = document.getElementById('rzDialogReopen');
+  if (!dialog || !nameEl || !textEl || !form || !input || !closeBtn || !reopen) return;
 
-  let seeded = false;
+  // Per-agent flavor lines. Stubbed until the LLM backend is wired.
+  const AGENT_QUIPS = {
+    'Razzle':     ["Let's go over the scoreboard. Starters are healthy, bench thin at RB.",
+                   "I pulled Week 8 snap counts — three of your guys are trending boom-bust.",
+                   "Plan's ready. Hawkeye scouted, Octo modeled, I'll summarize. Ask me."],
+    'Hawkeye':    ["Target share up 12% on your WR2 after the bye. Route tree expanded.",
+                   "Tape says he's getting open; the QB isn't finding him. Progression issue.",
+                   "Opposing CB1 just went to IR. Matchup tilts your way this week."],
+    'Octo':       ["Championship probability: 34.2%. Trading RB3 for a WR2 → 41.8%. Do it.",
+                   "Monte Carlo: 5,000 sims, median 9-5, top-decile 11-3. Hold the line.",
+                   "Stacking your QB with either WR is +EV. Don't split them."],
+    'Dr. Dolphin':["High ankle sprain on your TE. Recovery ≥3 weeks. Do NOT start him.",
+                   "Hamstring — limited Wednesday, full Thursday. Start with confidence.",
+                   "Beat writers > official report. He looked spry in walkthroughs."],
+    'Bones':      ["Your league-mate is tilted after Monday. Offer the trade — emotion is a tailwind.",
+                   "I read the DM — he wants your WR2 but won't admit it. Ask for his RB2.",
+                   "Commish vetoes 60% of rookie trades. Structure around that."],
+    'Atlas':      ["14 prior seasons, teams with your record at W8 won the title 22% of the time.",
+                   "This QB vs this defense: top-8 finish on 78% of historical splits.",
+                   "League history: champion holds a top-3 pick 3 years running. Plan accordingly."]
+  };
+  const quipIdx = {};
 
   function currentAgent() {
     try { return (typeof selectedAgent !== 'undefined' && selectedAgent) ? selectedAgent : null; }
     catch (e) { return null; }
   }
+  function agentName() { const a = currentAgent(); return a ? a.name : 'Razzle'; }
+  function agentColor() { const a = currentAgent(); return (a && a.color) || '#d97757'; }
+  function agentRole() { const a = currentAgent(); return (a && a.role) || 'Chief of Staff'; }
 
-  function isOpen() { return dock.getAttribute('data-open') === 'true'; }
-
-  function syncHeader() {
-    const a = currentAgent();
-    if (!a) return;
-    nameEl.textContent = 'Ask ' + a.name;
-    nameEl.style.color = a.color || '#d97757';
-    input.placeholder = 'Ask ' + a.name + ' a question\u2026';
-    subEl.textContent = isOpen() ? a.role || 'Ask a question' : 'Click to open chat';
-  }
-
-  function appendMsg(kind, author, text) {
-    const row = document.createElement('div');
-    row.className = 'agent-chat-msg agent-chat-msg--' + kind;
-    if (author && kind !== 'system') {
-      const who = document.createElement('span');
-      who.className = 'agent-chat-msg-author';
-      who.textContent = author;
-      row.appendChild(who);
-    }
-    const body = document.createElement('span');
-    body.textContent = text;
-    row.appendChild(body);
-    log.appendChild(row);
-    log.scrollTop = log.scrollHeight;
-  }
+  function isOpen() { return dialog.getAttribute('data-open') === 'true'; }
 
   function setOpen(open) {
-    dock.setAttribute('data-open', open ? 'true' : 'false');
-    toggle.textContent = open ? '\u2212' : '+';
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    if (open && !seeded) {
-      appendMsg('system', '', 'Pick an agent, type a question. AI backend not yet wired \u2014 responses are placeholders for now.');
-      seeded = true;
-    }
-    syncHeader();
-    if (open) setTimeout(function() { input.focus(); }, 0);
+    dialog.setAttribute('data-open', open ? 'true' : 'false');
+    if (open) { syncSpeaker(); setTimeout(function() { input.focus({ preventScroll: true }); }, 200); }
   }
 
-  // Click the toggle OR the whole header (when collapsed) to expand.
-  toggle.addEventListener('click', function(e) {
-    e.stopPropagation();
-    setOpen(!isOpen());
-  });
-  header.addEventListener('click', function() {
-    if (!isOpen()) setOpen(true);
+  function syncSpeaker() {
+    nameEl.textContent = agentName();
+    nameEl.style.color = agentColor();
+    roleEl.textContent = agentRole();
+    input.placeholder = 'ask ' + agentName() + '…';
+  }
+
+  // Typewriter
+  let twTimer = null;
+  let twFullText = '';
+  function typewrite(text) {
+    twFullText = text;
+    if (twTimer) { clearInterval(twTimer); twTimer = null; }
+    textEl.textContent = '';
+    caretEl.style.visibility = 'hidden';
+    let i = 0;
+    twTimer = setInterval(function() {
+      textEl.textContent += text.charAt(i);
+      i++;
+      if (i >= text.length) {
+        clearInterval(twTimer); twTimer = null;
+        caretEl.style.visibility = 'visible';
+      }
+    }, 16);
+  }
+  textEl.addEventListener('click', function() {
+    if (twTimer) { clearInterval(twTimer); twTimer = null; textEl.textContent = twFullText; caretEl.style.visibility = 'visible'; }
   });
 
+  function nextQuip() {
+    const name = agentName();
+    const pool = AGENT_QUIPS[name] || AGENT_QUIPS['Razzle'];
+    const i = quipIdx[name] || 0;
+    quipIdx[name] = (i + 1) % pool.length;
+    typewrite(pool[i]);
+  }
+
+  // Close / re-open
+  closeBtn.addEventListener('click', function(e) { e.stopPropagation(); setOpen(false); });
+  reopen.addEventListener('click', function(e) { e.stopPropagation(); setOpen(true); nextQuip(); });
+
+  // Submit
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-    const text = input.value.trim();
-    if (!text) return;
-    const a = currentAgent() || { name: 'Razzle', color: '#d97757' };
-    appendMsg('user', 'You', text);
+    const q = input.value.trim();
+    if (!q) return;
     input.value = '';
-    input.disabled = true;
-    // TODO: wire to LLM backend (OpenRouter via user API key, or backend proxy).
-    setTimeout(function() {
-      appendMsg('agent', a.name,
-        '[AI backend not yet connected. Next step: wire this handler so ' + a.name + ' can respond.]');
-      input.disabled = false;
-      input.focus();
-    }, 300);
+    const reply = agentName() + ' is routing "' + q + '"… (AI backend not wired — placeholder reply)';
+    typewrite(reply);
   });
 
-  // Re-title whenever the selected-info bar updates (covers click, keyboard 1-6, etc.)
+  // Preset quick-reply chips
+  dialog.querySelectorAll('[data-rz-preset]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      input.value = btn.getAttribute('data-rz-preset');
+      form.dispatchEvent(new Event('submit'));
+    });
+  });
+
+  // Space advances to the next agent line when dialog is open and input isn't focused
+  document.addEventListener('keydown', function(e) {
+    if (!isOpen()) return;
+    if (e.key === ' ' && document.activeElement !== input) {
+      e.preventDefault();
+      nextQuip();
+    } else if (e.key === 'Escape' && isOpen()) {
+      setOpen(false);
+    }
+  });
+
+  // Auto-open & speak when selectedAgent changes (selName bar text is the trigger)
   const selNameEl = document.getElementById('selName');
   if (selNameEl && typeof MutationObserver !== 'undefined') {
-    new MutationObserver(syncHeader).observe(selNameEl, { childList: true, characterData: true, subtree: true });
+    new MutationObserver(function() {
+      const a = currentAgent();
+      if (!a) return;
+      // Only auto-open once the user has actually selected an agent, not on boot
+      if (selNameEl.textContent && selNameEl.textContent !== 'Situation Room') {
+        setOpen(true);
+        nextQuip();
+      }
+    }).observe(selNameEl, { childList: true, characterData: true, subtree: true });
   }
-
-  syncHeader();
 })();
 </script>
 <script src="app.js" defer></script>
