@@ -27,6 +27,21 @@ import uuid as _uuid
 import uvicorn
 
 from collections import defaultdict
+
+# Minimal .env loader for local dev (no python-dotenv dep).
+# Values already in os.environ win; .env only fills gaps.
+_env_file = Path(__file__).resolve().parent.parent / ".env"
+if _env_file.exists():
+    for _line in _env_file.read_text().splitlines():
+        _line = _line.strip()
+        if not _line or _line.startswith("#") or "=" not in _line:
+            continue
+        _k, _, _v = _line.partition("=")
+        _k = _k.strip()
+        _v = _v.strip().strip('"').strip("'")
+        if _k and _k not in os.environ:
+            os.environ[_k] = _v
+
 from . import live_data
 from . import auth as auth_module
 from . import billing as billing_module
@@ -1524,6 +1539,164 @@ async def llm_chat_free(request: Request):
             {"error": "Something went wrong. Try again."},
             status_code=500,
         )
+
+
+# ---------------------------------------------------------------------------
+# Situation Room agents — persona-backed LLM dialog
+# ---------------------------------------------------------------------------
+
+# Whitelist: maps frontend agent slug (spriteKey in agents.html) to persona file.
+# Any agent_id not in this map is rejected — no arbitrary file reads.
+_AGENT_PERSONAS = {
+    "razzle": "razzle.md",
+    "scout": "scout.md",
+    "medical": "medical.md",
+    "diplomat": "diplomat.md",
+    "quant": "quant.md",
+    "historian": "historian.md",
+}
+_PERSONAS_ROOT = Path(__file__).resolve().parent.parent / "agent-personas"
+
+# Personas are static once loaded; cache to avoid disk hit per request.
+_persona_cache: dict = {}
+
+
+def _load_persona(agent_id: str) -> str | None:
+    """Return the persona system prompt for an agent, or None if not found."""
+    fname = _AGENT_PERSONAS.get(agent_id)
+    if not fname:
+        return None
+    if agent_id in _persona_cache:
+        return _persona_cache[agent_id]
+    path = _PERSONAS_ROOT / fname
+    if not path.exists():
+        return None
+    text = path.read_text(encoding="utf-8")
+    _persona_cache[agent_id] = text
+    return text
+
+
+@app.post("/api/agents/ask")
+async def agents_ask(request: Request):
+    """Ask a Situation Room agent a question.
+
+    Body: { agent_id: str, message: str, history?: [{role, content}, ...] }
+
+    Auth: in development, unauthenticated requests are allowed (uses the
+    server's RAZZLE_LLM_API_KEY). In production, Elite tier is required.
+    """
+    if not _LLM_API_KEY:
+        return JSONResponse(
+            {"error": "Agents aren't configured on this server (missing RAZZLE_LLM_API_KEY)."},
+            status_code=503,
+        )
+
+    # Parse body
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse({"error": "Invalid request body"}, status_code=400)
+
+    agent_id = str(body.get("agent_id", "")).strip().lower()
+    message = str(body.get("message", "")).strip()
+    history = body.get("history", []) or []
+
+    if agent_id not in _AGENT_PERSONAS:
+        return JSONResponse({"error": f"Unknown agent '{agent_id}'."}, status_code=400)
+    if not message:
+        return JSONResponse({"error": "Empty message."}, status_code=400)
+    if len(message) > 2000:
+        return JSONResponse({"error": "Message too long. Keep it under 2,000 characters."}, status_code=400)
+
+    persona = _load_persona(agent_id)
+    if not persona:
+        return JSONResponse({"error": "Persona not found."}, status_code=500)
+
+    # Auth gate: dev env bypasses, prod requires Elite
+    is_dev = os.environ.get("ENVIRONMENT", "development").lower() in ("development", "dev", "local")
+    user_id_for_rate_limit = "anon"
+    if not is_dev:
+        user, err = require_plan(request, "elite")
+        if err:
+            return err
+        user_id_for_rate_limit = str(user["id"])
+        if not _check_llm_rate(user["id"]):
+            return JSONResponse(
+                {"error": "Daily agent query limit reached. Try again tomorrow."},
+                status_code=429,
+            )
+
+    # Build messages: persona as system, bounded history, then new message.
+    # Strip any client-supplied system messages in history (injection guard).
+    safe_history = []
+    for m in history[-12:]:  # keep at most last 12 turns
+        role = m.get("role", "")
+        content = str(m.get("content", ""))[:2000]
+        if role in ("user", "assistant") and content:
+            safe_history.append({"role": role, "content": content})
+
+    messages = [{"role": "system", "content": persona}] + safe_history + [
+        {"role": "user", "content": message}
+    ]
+
+    llm_body = {
+        "model": _LLM_ELITE_MODEL,
+        "messages": messages,
+        "temperature": 0.5,
+        "max_tokens": 800,
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=_LLM_TIMEOUT) as client:
+            resp = await client.post(
+                _LLM_BASE_URL,
+                json=llm_body,
+                headers={
+                    "Authorization": f"Bearer {_LLM_API_KEY}",
+                    "Content-Type": "application/json",
+                    "HTTP-Referer": "https://razzle.lol",
+                    "X-Title": f"Razzle Situation Room / {agent_id}",
+                },
+            )
+        if resp.status_code != 200:
+            logger.error(f"Agent {agent_id} proxy error: {resp.status_code} {resp.text[:300]}")
+            # In dev, surface the provider error so the user knows what's wrong
+            # (e.g. "insufficient credits"). In prod, keep it generic to avoid
+            # leaking infra details.
+            if is_dev:
+                detail = resp.text[:400]
+                try:
+                    _j = resp.json()
+                    detail = ((_j.get("error") or {}).get("message")) or _j.get("error") or detail
+                except Exception:
+                    pass
+                return JSONResponse(
+                    {"error": f"Upstream LLM error ({resp.status_code}): {detail}"},
+                    status_code=502,
+                )
+            return JSONResponse(
+                {"error": "Agent is temporarily unavailable. Try again in a moment."},
+                status_code=502,
+            )
+        data = resp.json()
+        choice = (data.get("choices") or [{}])[0]
+        reply = (choice.get("message") or {}).get("content", "").strip()
+        if not reply:
+            return JSONResponse({"error": "Agent returned an empty response."}, status_code=502)
+        live_data.log_event("agent_query", f"situation_room:{agent_id}")
+        return JSONResponse({
+            "agent_id": agent_id,
+            "reply": reply,
+            "model": data.get("model", _LLM_ELITE_MODEL),
+        })
+    except httpx.TimeoutException:
+        return JSONResponse(
+            {"error": "Agent took too long to respond. Try a shorter question."},
+            status_code=504,
+        )
+    except Exception as e:
+        logger.error(f"Agent {agent_id} exception: {type(e).__name__}: {e}")
+        return JSONResponse({"error": "Something went wrong. Try again."}, status_code=500)
 
 
 # ---------------------------------------------------------------------------

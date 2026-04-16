@@ -3629,14 +3629,45 @@ waitAndStart();
   closeBtn.addEventListener('click', function(e) { e.stopPropagation(); setOpen(false); });
   reopen.addEventListener('click', function(e) { e.stopPropagation(); setOpen(true); nextQuip(); });
 
+  // Per-agent conversation history so each agent remembers what you've asked.
+  const historyByAgent = {};
+
+  async function askAgent(question) {
+    const a = currentAgent();
+    const agentId = (a && a.spriteKey) ? a.spriteKey : 'razzle';
+    const history = historyByAgent[agentId] || [];
+    typewrite('…thinking');
+    input.disabled = true;
+    try {
+      const resp = await fetch('/api/agents/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agent_id: agentId, message: question, history: history })
+      });
+      const data = await resp.json();
+      if (!resp.ok) {
+        typewrite('⚠ ' + (data.error || ('request failed: ' + resp.status)));
+        return;
+      }
+      const reply = data.reply || '(empty reply)';
+      history.push({ role: 'user', content: question });
+      history.push({ role: 'assistant', content: reply });
+      historyByAgent[agentId] = history.slice(-12);
+      typewrite(reply);
+    } catch (err) {
+      typewrite('⚠ network error: ' + err.message + ' (is the backend running? try: uvicorn backend.server:app --port 8000)');
+    } finally {
+      input.disabled = false;
+    }
+  }
+
   // Submit
   form.addEventListener('submit', function(e) {
     e.preventDefault();
     const q = input.value.trim();
     if (!q) return;
     input.value = '';
-    const reply = agentName() + ' is routing "' + q + '"… (AI backend not wired — placeholder reply)';
-    typewrite(reply);
+    askAgent(q);
   });
 
   // Preset quick-reply chips
