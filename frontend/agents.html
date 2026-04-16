@@ -3548,26 +3548,28 @@ waitAndStart();
   const reopen   = document.getElementById('rzDialogReopen');
   if (!dialog || !nameEl || !textEl || !form || !input || !closeBtn || !reopen) return;
 
-  // Per-agent flavor lines. Stubbed until the LLM backend is wired.
+  // Per-agent flavor lines, keyed by the live agent names in the roster
+  // (Razzle / Dr. Dolphin / Hawkeye / The Fox / The Octopus / Atlas).
+  // Stubbed until the LLM backend is wired.
   const AGENT_QUIPS = {
-    'Razzle':     ["Let's go over the scoreboard. Starters are healthy, bench thin at RB.",
-                   "I pulled Week 8 snap counts — three of your guys are trending boom-bust.",
-                   "Plan's ready. Hawkeye scouted, Octo modeled, I'll summarize. Ask me."],
-    'Hawkeye':    ["Target share up 12% on your WR2 after the bye. Route tree expanded.",
-                   "Tape says he's getting open; the QB isn't finding him. Progression issue.",
-                   "Opposing CB1 just went to IR. Matchup tilts your way this week."],
-    'Octo':       ["Championship probability: 34.2%. Trading RB3 for a WR2 → 41.8%. Do it.",
-                   "Monte Carlo: 5,000 sims, median 9-5, top-decile 11-3. Hold the line.",
-                   "Stacking your QB with either WR is +EV. Don't split them."],
-    'Dr. Dolphin':["High ankle sprain on your TE. Recovery ≥3 weeks. Do NOT start him.",
-                   "Hamstring — limited Wednesday, full Thursday. Start with confidence.",
-                   "Beat writers > official report. He looked spry in walkthroughs."],
-    'Bones':      ["Your league-mate is tilted after Monday. Offer the trade — emotion is a tailwind.",
-                   "I read the DM — he wants your WR2 but won't admit it. Ask for his RB2.",
-                   "Commish vetoes 60% of rookie trades. Structure around that."],
-    'Atlas':      ["14 prior seasons, teams with your record at W8 won the title 22% of the time.",
-                   "This QB vs this defense: top-8 finish on 78% of historical splits.",
-                   "League history: champion holds a top-3 pick 3 years running. Plan accordingly."]
+    'Razzle':      ["Let's go over the scoreboard. Starters are healthy, bench thin at RB.",
+                    "I pulled Week 8 snap counts — three of your guys are trending boom-bust.",
+                    "Plan's ready. Scout's got the tape, Octopus has the model. Ask me anything."],
+    'Hawkeye':     ["Target share up 12% on your WR2 after the bye. Route tree expanded.",
+                    "Tape says he's getting open; the QB isn't finding him. Progression issue.",
+                    "Opposing CB1 just went to IR. Matchup tilts your way this week."],
+    'The Octopus': ["Championship probability: 34.2%. Trading RB3 for a WR2 → 41.8%. Do it.",
+                    "Monte Carlo: 5,000 sims, median 9-5, top-decile 11-3. Hold the line.",
+                    "Stacking your QB with either WR is +EV. Don't split them."],
+    'Dr. Dolphin': ["High ankle sprain on your TE. Recovery ≥3 weeks. Do NOT start him.",
+                    "Hamstring — limited Wednesday, full Thursday. Start with confidence.",
+                    "Beat writers > official report. He looked spry in walkthroughs."],
+    'The Fox':     ["Your league-mate is tilted after Monday. Offer the trade — emotion is a tailwind.",
+                    "I read the DM — he wants your WR2 but won't admit it. Ask for his RB2.",
+                    "Commish vetoes 60% of rookie trades. Structure around that."],
+    'Atlas':       ["14 prior seasons, teams with your record at W8 won the title 22% of the time.",
+                    "This QB vs this defense: top-8 finish on 78% of historical splits.",
+                    "League history: champion holds a top-3 pick 3 years running. Plan accordingly."]
   };
   const quipIdx = {};
 
@@ -3656,18 +3658,25 @@ waitAndStart();
     }
   });
 
-  // Auto-open & speak when selectedAgent changes (selName bar text is the trigger)
+  // Auto-open & speak when selectedAgent CHANGES.
+  // Guard: updateSelectedInfoBar() reassigns selName.textContent on a 1s
+  // interval even when the value is identical, which fires MutationObserver
+  // every tick. We only react when the resolved agent name actually changes.
+  let lastAgentName = null;
+  function maybeReactToAgentChange() {
+    const a = currentAgent();
+    if (!a) return;
+    if (a.name === lastAgentName) return; // same agent, do nothing
+    lastAgentName = a.name;
+    // Don't auto-open on the initial boot value (Situation Room placeholder)
+    if (selNameEl.textContent === 'Situation Room') return;
+    setOpen(true);
+    nextQuip();
+  }
   const selNameEl = document.getElementById('selName');
   if (selNameEl && typeof MutationObserver !== 'undefined') {
-    new MutationObserver(function() {
-      const a = currentAgent();
-      if (!a) return;
-      // Only auto-open once the user has actually selected an agent, not on boot
-      if (selNameEl.textContent && selNameEl.textContent !== 'Situation Room') {
-        setOpen(true);
-        nextQuip();
-      }
-    }).observe(selNameEl, { childList: true, characterData: true, subtree: true });
+    new MutationObserver(maybeReactToAgentChange)
+      .observe(selNameEl, { childList: true, characterData: true, subtree: true });
   }
 })();
 </script>
