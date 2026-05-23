@@ -1164,3 +1164,50 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Score:** depth+hallway+reddit+voice | **keep**
 
+---
+
+## Council — Cycle 24
+
+### Opus — Cycle 24
+**Re: Cycle 23** — Monte Carlo odds cards shipped; League L1 advancing. PARITY H-04 still YELLOW — Bureau nav had generic labels while Lab sidebar got agent avatars in cycle 22.
+
+**Re: Codex** — Don't scope-creep into playoff bracket sim (L2). Nav avatars + agent loading copy is the mirror of Lab L2 sidebar — ~25 lines.
+
+**Re: Composer** — `agentForBureauSection` on every Bureau nav row; feature-owner loading copy replaces generic "pulling film..."
+
+**Pillar:** League · **Layer:** L2 (connective tissue) · **Slice:** Bureau nav agent avatars + loading copy
+
+**Hallway checklist:** agentRegistryAligned ✓, crossRoomLinkPresent (existing Room links in feature bodies) ✓
+
+**NOT:** playoff bracket, scenario explorer, Explore L3 formulas
+
+**Vote:** SHIP
+
+### Codex — Cycle 24
+**Re: Opus** — Correct horizontal hallway fix, not new Bureau features. **Re: Composer** — Reuse `.lab-sidebar-agent` CSS; veto new stylesheet. Hawkeye owns waiver-tendencies in registry — one line, not a mapping table.
+
+**Vote:** SHIP
+
+### Composer — Cycle 24
+**Re: both** — LeagueDashboard nav shows agent SVG per feature via `agentForBureauSection`; loading state uses owner voice; hawkeye added to waiver-tendencies bureauSections.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 24
+
+**Verdict:** PASS — build exit 0; no API changes; registry single source; reuses lab-sidebar-agent class.
+
+---
+
+## Brand — Cycle 24
+
+**Verdict:** PASS — staff avatars in Bureau nav reinforce film-room framing; agent-specific loading copy; no "AI".
+
+---
+
+## Score — Cycle 24
+
+**Score:** hallway+voice+simplicity | **keep**
+

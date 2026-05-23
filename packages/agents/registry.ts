@@ -59,7 +59,7 @@ export const AGENTS: AgentDefinition[] = [
     emptyCopy: "Nothing worth your time right now.",
     surfaces: ["lab", "bureau", "room", "player-sheet"],
     labPanels: ["weekly", "breakouts", "prospects", "waiver-wire", "usage-trends"],
-    bureauSections: ["self-scout", "roster-depth"],
+    bureauSections: ["self-scout", "roster-depth", "waiver-tendencies"],
   },
   {
     id: "bones",

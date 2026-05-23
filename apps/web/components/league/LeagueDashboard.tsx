@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Route } from "next";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AGENT_BY_ID, agentForBureauSection, loadingCopyForAgent } from "@razzle/agents";
 import { BUREAU_ENDPOINTS, BUREAU_FEATURES, type BureauFeatureSlug } from "@/lib/bureau-features";
 import { getSleeperUser } from "@/lib/sleeper";
 import { BureauFeatureBody } from "./BureauFeatureBody";
@@ -54,6 +55,8 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
       .catch((e: Error) => setErr(e.message));
   }, [leagueId, feature]);
 
+  const featureOwner = agentForBureauSection(feature) ?? AGENT_BY_ID.razzle;
+
   return (
     <div className="league-dashboard mx-auto grid max-w-7xl gap-6 px-6 py-8 md:grid-cols-[220px_1fr]">
       <nav className="chunky h-fit bg-bg-card p-4">
@@ -66,12 +69,21 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
               f.slug === "self-scout"
                 ? pathname === `/league/${leagueId}` || pathname?.endsWith("/self-scout")
                 : pathname?.endsWith(`/${f.slug}`);
+            const owner = agentForBureauSection(f.slug) ?? AGENT_BY_ID.razzle;
             return (
               <li key={f.slug}>
                 <Link
                   href={href as Route}
-                  className={`block rounded px-2 py-1 text-sm ${active ? "bg-orange text-white" : "hover:bg-orange-light"}`}
+                  className={`flex items-center gap-2 rounded px-2 py-1 text-sm ${active ? "bg-orange text-white" : "hover:bg-orange-light"}`}
+                  title={`${owner.name} · ${owner.role}`}
                 >
+                  <img
+                    src={`/agents/${owner.avatar}.svg`}
+                    alt=""
+                    className="lab-sidebar-agent"
+                    width={18}
+                    height={18}
+                  />
                   {f.label}
                   {"default" in f && f.default && <span className="ml-1 text-[10px] text-ink-light">★</span>}
                 </Link>
@@ -85,7 +97,9 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
         {feature === "head-to-head" && <HeadToHeadPlaceholder />}
         {feature !== "head-to-head" && err && <p className="text-red">something fumbled: {err}</p>}
         {feature !== "head-to-head" && !err && !data ? (
-          <p className="text-ink-medium">pulling film...</p>
+          <p className="text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+            {loadingCopyForAgent(featureOwner.id)}
+          </p>
         ) : null}
         {feature !== "head-to-head" && data ? (
           <BureauFeatureBody feature={feature} data={data as Record<string, unknown>} />
