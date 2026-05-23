@@ -1,6 +1,5 @@
 "use client";
 
-import { AGENT_BY_ID } from "@razzle/agents";
 import type { PanelDefinition } from "@razzle/panels";
 import { PositionPill } from "@razzle/ui";
 import { toRoom } from "@razzle/hallway";
@@ -10,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -47,7 +47,7 @@ interface Props {
 export function BreakoutsRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("");
-  const hawkeye = AGENT_BY_ID.hawkeye;
+  const agent = panelAgent(panel.slug);
 
   const q = useQuery({
     queryKey: ["panel", panel.slug, position],
@@ -70,11 +70,7 @@ export function BreakoutsRenderer({ panel }: Props) {
   const top = candidates[0] ?? null;
 
   if (q.isPending) {
-    return (
-      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
-        {hawkeye.loadingCopy}
-      </p>
-    );
+    return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
@@ -104,13 +100,7 @@ export function BreakoutsRenderer({ panel }: Props) {
 
   return (
     <div className="breakouts-panel">
-      <header className="panel-agent-header mb-4 flex items-start gap-3">
-        <img src={`/agents/${hawkeye.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
-        <div>
-          <p className="text-sm font-bold">{hawkeye.name}</p>
-          <p className="text-ink-medium text-xs">{hawkeye.role} · opportunity vs production gap</p>
-        </div>
-      </header>
+      <PanelAgentHeader agent={agent} subtitle="opportunity vs production gap" />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (
@@ -134,7 +124,7 @@ export function BreakoutsRenderer({ panel }: Props) {
       )}
 
       {!candidates.length ? (
-        <p className="text-ink-medium p-6">{hawkeye.emptyCopy}</p>
+        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
       ) : (
         <div className="panel-cards">
           {candidates.slice(0, 40).map((p) => {

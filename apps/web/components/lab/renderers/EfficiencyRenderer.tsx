@@ -1,6 +1,5 @@
 "use client";
 
-import { AGENT_BY_ID } from "@razzle/agents";
 import type { PanelDefinition } from "@razzle/panels";
 import { PositionPill } from "@razzle/ui";
 import { toRoom } from "@razzle/hallway";
@@ -10,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -110,7 +110,7 @@ interface Props {
 export function EfficiencyRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("RB");
-  const octo = AGENT_BY_ID.octo;
+  const agent = panelAgent(panel.slug);
 
   const q = useQuery({
     queryKey: ["panel", panel.slug, position],
@@ -141,11 +141,7 @@ export function EfficiencyRenderer({ panel }: Props) {
     });
 
   if (q.isPending) {
-    return (
-      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
-        {octo.loadingCopy}
-      </p>
-    );
+    return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
@@ -178,13 +174,7 @@ export function EfficiencyRenderer({ panel }: Props) {
 
   return (
     <div className="efficiency-panel">
-      <header className="panel-agent-header mb-4 flex items-start gap-3">
-        <img src={`/agents/${octo.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
-        <div>
-          <p className="text-sm font-bold">{octo.name}</p>
-          <p className="text-ink-medium text-xs">{octo.role} · points per opportunity</p>
-        </div>
-      </header>
+      <PanelAgentHeader agent={agent} subtitle="points per opportunity" />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (
@@ -208,7 +198,7 @@ export function EfficiencyRenderer({ panel }: Props) {
       )}
 
       {!efficient.length && !volume.length ? (
-        <p className="text-ink-medium p-6">{octo.emptyCopy}</p>
+        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
       ) : (
         <>
           <PlayerTable title="Most efficient" players={efficient} onOpen={open} />

@@ -98,6 +98,12 @@ Log row to docs/v2/results.tsv (tab-separated):
 
 **Invalid:** logging `keep` with `commit=none`. Codex VETO if working tree dirty after Phase 5.
 
+**SURVIVAL (non-negotiable):** If Phase 5 commit fails or you run out of context before committing:
+- Run `git status` — if dirty, commit NOW before ending your turn
+- Fix pre-commit hook errors and retry — do not leave work uncommitted
+- The shell will run recovery agents + emergency auto-commit, but YOU must commit first
+- Losing uncommitted work is worse than an imperfect commit message
+
 Add evidence: docs/v2/evidence/YYYY-MM-DD-<pillar>-<layer>.md (include commit hash in file)
 
 Update LOOP-STATE.md (`last_commit:` field). Update FEATURES.md only if slice touched those rows.

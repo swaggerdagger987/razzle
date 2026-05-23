@@ -1,6 +1,5 @@
 "use client";
 
-import { AGENT_BY_ID } from "@razzle/agents";
 import type { PanelDefinition } from "@razzle/panels";
 import { PositionPill } from "@razzle/ui";
 import { toRoom } from "@razzle/hallway";
@@ -10,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -109,7 +109,7 @@ interface Props {
 export function BuySellRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("");
-  const bones = AGENT_BY_ID.bones;
+  const agent = panelAgent(panel.slug);
 
   const q = useQuery({
     queryKey: ["panel", panel.slug, position],
@@ -141,11 +141,7 @@ export function BuySellRenderer({ panel }: Props) {
     });
 
   if (q.isPending) {
-    return (
-      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
-        {bones.loadingCopy}
-      </p>
-    );
+    return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
@@ -170,13 +166,7 @@ export function BuySellRenderer({ panel }: Props) {
 
   return (
     <div className="buy-sell-panel">
-      <header className="panel-agent-header mb-4 flex items-start gap-3">
-        <img src={`/agents/${bones.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
-        <div>
-          <p className="text-sm font-bold">{bones.name}</p>
-          <p className="text-ink-medium text-xs">{bones.role} · efficiency vs dynasty rank mismatch</p>
-        </div>
-      </header>
+      <PanelAgentHeader agent={agent} subtitle="efficiency vs dynasty rank mismatch" />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (
@@ -200,7 +190,7 @@ export function BuySellRenderer({ panel }: Props) {
       )}
 
       {!buyLow.length && !sellHigh.length ? (
-        <p className="text-ink-medium p-6">{bones.emptyCopy}</p>
+        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
       ) : (
         <div className="grid gap-6 lg:grid-cols-2">
           <section>

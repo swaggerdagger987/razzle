@@ -1,6 +1,5 @@
 "use client";
 
-import { AGENT_BY_ID } from "@razzle/agents";
 import type { PanelDefinition } from "@razzle/panels";
 import { PositionPill } from "@razzle/ui";
 import { toRoom } from "@razzle/hallway";
@@ -9,6 +8,7 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
 
@@ -45,7 +45,7 @@ interface Props {
 export function WeeklyHeatmapRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("WR");
-  const hawkeye = AGENT_BY_ID.hawkeye;
+  const agent = panelAgent(panel.slug);
 
   const q = useQuery({
     queryKey: ["panel", panel.slug, position],
@@ -72,11 +72,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
   }, [players]);
 
   if (q.isPending) {
-    return (
-      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
-        {hawkeye.loadingCopy}
-      </p>
-    );
+    return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
@@ -85,13 +81,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
 
   return (
     <div className="weekly-heatmap">
-      <header className="panel-agent-header mb-4 flex items-start gap-3">
-        <img src={`/agents/${hawkeye.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
-        <div>
-          <p className="text-sm font-bold">{hawkeye.name}</p>
-          <p className="text-ink-medium text-xs">{hawkeye.role} · weekly scoring heatmap</p>
-        </div>
-      </header>
+      <PanelAgentHeader agent={agent} subtitle="weekly scoring heatmap" />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (
@@ -115,7 +105,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
       )}
 
       {!players.length ? (
-        <p className="text-ink-medium p-6">{hawkeye.emptyCopy}</p>
+        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
       ) : (
         <div className="heatmap-grid chunky bg-bg-card overflow-x-auto p-4">
           <table className="screener-table min-w-full">

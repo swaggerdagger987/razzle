@@ -1,6 +1,5 @@
 "use client";
 
-import { AGENT_BY_ID } from "@razzle/agents";
 import type { PanelDefinition } from "@razzle/panels";
 import { PositionPill } from "@razzle/ui";
 import { toExplore, toRoom } from "@razzle/hallway";
@@ -11,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 interface WeekRow {
@@ -120,7 +120,7 @@ export function GamelogRenderer({ panel }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { openPlayer } = usePlayerSheet();
-  const atlas = AGENT_BY_ID.atlas;
+  const agent = panelAgent(panel.slug);
 
   const playerId = searchParams.get("id") ?? "";
   const playerName = searchParams.get("name") ?? "";
@@ -204,13 +204,7 @@ export function GamelogRenderer({ panel }: Props) {
   if (!playerId) {
     return (
       <div className="gamelog-panel">
-        <header className="panel-agent-header mb-4 flex items-start gap-3">
-          <img src={`/agents/${atlas.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
-          <div>
-            <p className="text-sm font-bold">{atlas.name}</p>
-            <p className="text-ink-medium text-xs">{atlas.role} · the full season tape</p>
-          </div>
-        </header>
+        <PanelAgentHeader agent={agent} subtitle="the full season tape" />
         <p className="text-ink-medium mb-4 text-sm" style={{ fontFamily: "var(--font-hand)", fontSize: "1.1rem" }}>
           search a player — or open from Explore / Player Sheet
         </p>
@@ -252,11 +246,7 @@ export function GamelogRenderer({ panel }: Props) {
   }
 
   if (q.isPending) {
-    return (
-      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
-        {atlas.loadingCopy}
-      </p>
-    );
+    return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
@@ -295,13 +285,7 @@ export function GamelogRenderer({ panel }: Props) {
 
   return (
     <div className="gamelog-panel">
-      <header className="panel-agent-header mb-4 flex items-start gap-3">
-        <img src={`/agents/${atlas.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
-        <div>
-          <p className="text-sm font-bold">{atlas.name}</p>
-          <p className="text-ink-medium text-xs">{atlas.role} · week-by-week box scores</p>
-        </div>
-      </header>
+      <PanelAgentHeader agent={agent} subtitle="week-by-week box scores" />
 
       <div className="bg-bg-card chunky mb-4 flex flex-wrap items-center justify-between gap-4 p-4">
         <div className="flex flex-wrap items-center gap-2">
@@ -364,7 +348,7 @@ export function GamelogRenderer({ panel }: Props) {
       )}
 
       {!weeks.length ? (
-        <p className="text-ink-medium p-6">{atlas.emptyCopy}</p>
+        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
       ) : (
         <div className="table-wrap chunky bg-bg-card overflow-x-auto">
           <table className="screener-table">

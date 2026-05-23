@@ -1,6 +1,5 @@
 "use client";
 
-import { AGENT_BY_ID } from "@razzle/agents";
 import type { PanelDefinition } from "@razzle/panels";
 import { PositionPill } from "@razzle/ui";
 import { toRoom } from "@razzle/hallway";
@@ -9,6 +8,7 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 interface DashboardPlayer {
   player_id: string;
@@ -99,7 +99,7 @@ interface Props {
 
 export function DynastyDashboardRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
-  const razzle = AGENT_BY_ID.razzle;
+  const agent = panelAgent(panel.slug);
   const [season, setSeason] = useState<number | "">("");
 
   const q = useQuery({
@@ -129,11 +129,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
   };
 
   if (q.isPending) {
-    return (
-      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
-        {razzle.loadingCopy}
-      </p>
-    );
+    return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
@@ -145,13 +141,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
 
   return (
     <div className="dynasty-dashboard">
-      <header className="panel-agent-header mb-4 flex items-start gap-3">
-        <img src={`/agents/${razzle.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
-        <div>
-          <p className="text-sm font-bold">{razzle.name}</p>
-          <p className="text-ink-medium text-xs">{razzle.role} · dynasty pulse check</p>
-        </div>
-      </header>
+      <PanelAgentHeader agent={agent} subtitle="dynasty pulse check" />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
         {seasons.length > 1 && (
@@ -233,7 +223,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
             ↗ Rising stocks
           </h3>
           {(data.risers?.length ?? 0) === 0 ? (
-            <p className="text-ink-medium text-sm">{razzle.emptyCopy}</p>
+            <p className="text-ink-medium text-sm">{agent.emptyCopy}</p>
           ) : (
             data.risers!.map((p, i) => (
               <PlayerRow
@@ -253,7 +243,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
             ↘ Falling stocks
           </h3>
           {(data.fallers?.length ?? 0) === 0 ? (
-            <p className="text-ink-medium text-sm">{razzle.emptyCopy}</p>
+            <p className="text-ink-medium text-sm">{agent.emptyCopy}</p>
           ) : (
             data.fallers!.map((p, i) => (
               <PlayerRow
@@ -273,7 +263,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
             Value picks
           </h3>
           {(data.value_picks?.length ?? 0) === 0 ? (
-            <p className="text-ink-medium text-sm">{razzle.emptyCopy}</p>
+            <p className="text-ink-medium text-sm">{agent.emptyCopy}</p>
           ) : (
             data.value_picks!.map((p, i) => (
               <PlayerRow

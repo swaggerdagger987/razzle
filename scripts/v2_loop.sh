@@ -24,6 +24,8 @@ CYCLES=1
 MODEL_CEO="${RAZZLE_MODEL_CEO:-claude-opus-4-7-thinking-xhigh}"
 MODEL_CTO="${RAZZLE_MODEL_CTO:-gpt-5.3-codex}"
 MODEL_BUILDER="${RAZZLE_MODEL_BUILDER:-composer-2.5-fast}"
+RECOVERY_LOG="$ROOT/docs/v2/recovery.log"
+RECOVERY_MODELS=("$MODEL_CTO" "$MODEL_CEO" "$MODEL_BUILDER")
 
 usage() {
   cat <<EOF
@@ -136,38 +138,100 @@ update_cycle_state() {
   sed -i '' "s/^cycle:.*/cycle: $cycle/" "$STATE" 2>/dev/null || sed -i "s/^cycle:.*/cycle: $cycle/" "$STATE"
 }
 
+log_recovery() {
+  local msg="$1"
+  mkdir -p "$(dirname "$RECOVERY_LOG")"
+  echo "$(date -Iseconds) $msg" >> "$RECOVERY_LOG"
+}
+
 tree_is_clean() {
   [[ -z $(git status --porcelain 2>/dev/null) ]]
 }
 
-recover_dirty_tree() {
+strip_ephemeral_artifacts() {
+  rm -f apps/web/tsconfig.tsbuildinfo 2>/dev/null || true
+}
+
+unstage_forbidden_paths() {
+  git reset HEAD -- .env .env.local .env.production 2>/dev/null || true
+  git reset HEAD -- apps/web/tsconfig.tsbuildinfo 2>/dev/null || true
+  git reset HEAD -- apps/web/.next 2>/dev/null || true
+}
+
+emergency_shell_commit() {
   local cycle="$1"
   echo ""
-  echo "COMMIT GATE — working tree dirty. Running recovery agent (cycle ${cycle:-unknown})..."
+  echo "========== SURVIVAL — shell emergency commit (cycle ${cycle:-unknown}) =========="
+  log_recovery "shell emergency commit start cycle=${cycle:-unknown}"
+  strip_ephemeral_artifacts
+
+  if tree_is_clean; then
+    log_recovery "shell emergency commit skipped — tree already clean"
+    return 0
+  fi
+
+  git add -A
+  unstage_forbidden_paths
+
+  if git diff --cached --quiet 2>/dev/null; then
+    strip_ephemeral_artifacts
+    if tree_is_clean; then
+      log_recovery "shell emergency commit — only ephemeral artifacts removed"
+      return 0
+    fi
+    log_recovery "shell emergency commit failed — nothing stageable"
+    return 1
+  fi
+
+  local msg="recovery: auto-commit uncommitted loop work (cycle ${cycle:-unknown})"
+  if git commit -m "$msg"; then
+    strip_ephemeral_artifacts
+    if tree_is_clean; then
+      log_recovery "shell emergency commit OK: $msg"
+      echo "SURVIVAL OK — shell auto-committed remaining work."
+      return 0
+    fi
+  fi
+
+  log_recovery "shell emergency commit failed — tree still dirty"
   git status -sb
+  return 1
+}
+
+recover_dirty_tree() {
+  local cycle="$1"
+  local model="$2"
+  echo ""
+  echo "COMMIT GATE — working tree dirty. Recovery agent (cycle ${cycle:-unknown}, $model)..."
+  git status -sb
+  log_recovery "agent recovery start cycle=${cycle:-unknown} model=$model"
 
   local prompt
-  prompt="Recovery pass — a prior cycle left uncommitted work. Do NOT start a new feature slice.
+  prompt="SURVIVAL RECOVERY — uncommitted work MUST land in git before the loop continues. Do NOT start a new feature slice. Do NOT ask the user. Do NOT stop until git status is clean.
 
 Read docs/v2/PROGRAM.md git commit gate.
 
-1. Run: git status && git diff --stat
-2. Commit legitimate slice work with a short slice-scoped message (no emojis).
-3. Revert accidental edits (e.g. LOOP-STATE cycle regression vs results.tsv).
-4. Do NOT commit build artifacts: tsconfig.tsbuildinfo, .next/, node_modules, .env
-5. If only docs/state drift: commit as 'docs: cycle cleanup — <what>'
-6. Verify: git status --porcelain must be empty
-7. Update LOOP-STATE.md last_commit if you committed code
+1. git status && git diff --stat
+2. Commit ALL legitimate work — code, docs, evidence, COUNCIL.md, results.tsv, LOOP-STATE.md
+3. Revert only clearly accidental edits (e.g. LOOP-STATE cycle number regressing vs results.tsv)
+4. NEVER commit: .env, credentials, tsconfig.tsbuildinfo, .next/, node_modules
+5. If pre-commit hook fails: fix the error and commit again — keep trying
+6. If only docs/state drift: commit as 'docs: cycle cleanup — <what>'
+7. Verify: git status --porcelain MUST be empty
+8. Update LOOP-STATE.md last_commit with git rev-parse --short HEAD
 
-Do NOT ask the user. Do NOT stop. Fix the tree."
+Survival rule: losing uncommitted work is worse than an imperfect commit message. Commit first, fix in next cycle if needed."
 
-  run_cursor_agent "Recovery — dirty tree cleanup" "$MODEL_CTO" "$prompt"
+  run_cursor_agent "Recovery — dirty tree cleanup" "$model" "$prompt"
 
+  strip_ephemeral_artifacts
   if tree_is_clean; then
+    log_recovery "agent recovery OK cycle=${cycle:-unknown} model=$model"
     echo "Recovery OK — tree clean."
     return 0
   fi
 
+  log_recovery "agent recovery incomplete cycle=${cycle:-unknown} model=$model"
   echo "Recovery incomplete — tree still dirty."
   git status -sb
   return 1
@@ -177,23 +241,37 @@ ensure_clean_tree() {
   local cycle="${1:-}"
   tree_is_clean && return 0
 
-  local attempt
-  for attempt in 1 2 3; do
-    echo ""
-    echo "=== Commit gate recovery attempt $attempt/3 ==="
-    recover_dirty_tree "$cycle" && return 0
-  done
-
   echo ""
-  echo "COMMIT GATE — recovery exhausted after 3 attempts."
-  echo "Fix manually, then restart. See docs/v2/PROGRAM.md"
-  exit 1
+  echo "=== SURVIVAL MODE — dirty tree detected; will not exit until clean ==="
+  log_recovery "ensure_clean_tree enter cycle=${cycle:-unknown}"
+
+  local round=0
+  while ! tree_is_clean; do
+    round=$((round + 1))
+    local model="${RECOVERY_MODELS[$(( (round - 1) % ${#RECOVERY_MODELS[@]} ))]}"
+
+    echo ""
+    echo "=== Commit gate survival round $round (model: $model) ==="
+    recover_dirty_tree "$cycle" "$model" || true
+
+    if tree_is_clean; then
+      return 0
+    fi
+
+    # After every agent pass, try shell emergency commit (artifacts may be the only blocker)
+    emergency_shell_commit "$cycle" || true
+    if tree_is_clean; then
+      return 0
+    fi
+
+    echo "Tree still dirty — survival retry round $((round + 1)) (no exit, zero sleep)..."
+  done
 }
 
 run_chain_forever() {
   local use_steps="${1:-false}"
-  echo "=== CHAIN MODE — zero sleep, compound intelligence, never auto-stops ==="
-  echo "Skill: docs/v2/PROGRAM.md | Log: docs/v2/results.tsv | Stop: Ctrl+C only"
+  echo "=== CHAIN MODE — zero sleep, survival commits, never auto-stops ==="
+  echo "Skill: docs/v2/PROGRAM.md | Log: docs/v2/results.tsv | Recovery: docs/v2/recovery.log | Stop: Ctrl+C only"
   trap 'echo ""; echo "Loop stopped."; exit 0' INT TERM
 
   while true; do
@@ -243,7 +321,9 @@ case "$MODE" in
     CYCLE=$(grep '^cycle:' "$STATE" | awk '{print $2}')
     CYCLE=$((CYCLE + 1))
     for ((i=1; i<=CYCLES; i++)); do
+      ensure_clean_tree
       run_steps_cycle "$CYCLE"
+      ensure_clean_tree "$CYCLE"
       update_cycle_state "$CYCLE"
       CYCLE=$((CYCLE + 1))
     done
@@ -255,7 +335,9 @@ case "$MODE" in
       CYCLE=$(grep '^cycle:' "$STATE" | awk '{print $2}')
       CYCLE=$((CYCLE + 1))
       for ((i=1; i<=CYCLES; i++)); do
+        ensure_clean_tree
         run_single_cycle "$CYCLE"
+        ensure_clean_tree "$CYCLE"
         update_cycle_state "$CYCLE"
         CYCLE=$((CYCLE + 1))
       done

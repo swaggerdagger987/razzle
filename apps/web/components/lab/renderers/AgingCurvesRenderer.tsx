@@ -1,6 +1,5 @@
 "use client";
 
-import { AGENT_BY_ID } from "@razzle/agents";
 import type { PanelDefinition } from "@razzle/panels";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
@@ -9,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
@@ -164,7 +164,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("RB");
   const [season, setSeason] = useState<number | "">("");
-  const octo = AGENT_BY_ID.octo;
+  const agent = panelAgent(panel.slug);
 
   const q = useQuery({
     queryKey: ["panel", panel.slug, position, season],
@@ -197,11 +197,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
     });
 
   if (q.isPending) {
-    return (
-      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
-        {octo.loadingCopy}
-      </p>
-    );
+    return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
@@ -234,13 +230,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
 
   return (
     <div className="aging-curves-panel">
-      <header className="panel-agent-header mb-4 flex items-start gap-3">
-        <img src={`/agents/${octo.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
-        <div>
-          <p className="text-sm font-bold">{octo.name}</p>
-          <p className="text-ink-medium text-xs">{octo.role} · when positions peak and fade</p>
-        </div>
-      </header>
+      <PanelAgentHeader agent={agent} subtitle="when positions peak and fade" />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
@@ -280,7 +270,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
       )}
 
       {!posData?.curve?.length ? (
-        <p className="text-ink-medium p-6">{octo.emptyCopy}</p>
+        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
       ) : (
         <>
           <AgingChart

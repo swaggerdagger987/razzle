@@ -1,6 +1,5 @@
 "use client";
 
-import { AGENT_BY_ID } from "@razzle/agents";
 import type { PanelDefinition } from "@razzle/panels";
 import { PositionPill } from "@razzle/ui";
 import { toRoom } from "@razzle/hallway";
@@ -8,6 +7,7 @@ import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -36,7 +36,7 @@ interface Props {
 
 export function ProspectsRenderer({ panel }: Props) {
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("");
-  const hawkeye = AGENT_BY_ID.hawkeye;
+  const agent = panelAgent(panel.slug);
 
   const q = useQuery({
     queryKey: ["panel", panel.slug, position],
@@ -52,11 +52,7 @@ export function ProspectsRenderer({ panel }: Props) {
   const top = prospects[0] ?? null;
 
   if (q.isPending) {
-    return (
-      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
-        {hawkeye.loadingCopy}
-      </p>
-    );
+    return <PanelAgentLoading agent={agent} />;
   }
 
   if (q.isError) {
@@ -65,13 +61,7 @@ export function ProspectsRenderer({ panel }: Props) {
 
   return (
     <div className="prospects-panel">
-      <header className="panel-agent-header mb-4 flex items-start gap-3">
-        <img src={`/agents/${hawkeye.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
-        <div>
-          <p className="text-sm font-bold">{hawkeye.name}</p>
-          <p className="text-ink-medium text-xs">{hawkeye.role} · rookie big board</p>
-        </div>
-      </header>
+      <PanelAgentHeader agent={agent} subtitle="rookie big board" />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (
@@ -95,7 +85,7 @@ export function ProspectsRenderer({ panel }: Props) {
       )}
 
       {!prospects.length ? (
-        <p className="text-ink-medium p-6">{hawkeye.emptyCopy}</p>
+        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
       ) : (
         <div className="tier-stack">
           {prospects.slice(0, 50).map((p) => (

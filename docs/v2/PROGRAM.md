@@ -93,9 +93,18 @@ Each cycle gets a score. **Keep** changes only if score improves or ties with si
 
 Fix hook/lint errors and commit again. Do **not** start the next cycle with uncommitted work. Do **not** log keep.
 
-### Shell enforcement
+### Shell enforcement (survival instincts)
 
-`./scripts/v2_loop.sh --continuous` runs a **recovery agent** (Codex) if the tree is dirty at cycle start or after a cycle completes — commit legitimate work, revert bad drift, verify clean. Only exits after 3 failed recovery attempts.
+The loop **never exits** on a dirty tree. Only Ctrl+C stops it.
+
+When `git status --porcelain` is non-empty at cycle start or after a cycle:
+
+1. **Agent recovery** — rotate Codex → Opus → Composer with a SURVIVAL prompt until clean
+2. **Shell emergency commit** — after each failed agent pass, bash auto-commits remaining work (excludes `.env`, `tsconfig.tsbuildinfo`, `.next/`)
+3. **Infinite retry** — zero sleep between rounds; no “give up after N attempts”
+4. **Recovery log** — `docs/v2/recovery.log` records every survival action
+
+Survival rule: **losing uncommitted work is worse than an imperfect commit.** Commit first; fix in the next cycle if needed.
 
 ---
 

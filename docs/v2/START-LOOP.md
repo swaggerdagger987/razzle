@@ -31,7 +31,7 @@ cd "/Users/sohammehta/Desktop/05 - Code Projects/Legacy Razzle/razzle"
 
 This runs **cycle → cycle → cycle** with **zero sleep**. Only stops on Ctrl+C.
 
-**Commit gate:** If the working tree is dirty, the shell runs a **recovery agent** (up to 3 attempts) to commit or revert — then continues. Only stops if recovery fails.
+**Commit gate:** If the working tree is dirty, the shell enters **survival mode** — infinite agent recovery (Codex → Opus → Composer) + emergency auto-commit. Never exits until clean. Log: `docs/v2/recovery.log`.
 
 **Important:** A single `cursor-agent` session cannot be trusted to self-loop — it will print "PRODUCT COMPLETE" and exit. The **shell wrapper** is what keeps it continuous.
 
