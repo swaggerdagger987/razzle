@@ -1,98 +1,66 @@
-<p align="center">
-  <img src="https://razzle.lol/assets/razzle-logo.png" alt="Razzle" width="120" />
-</p>
+# Razzle — Free Fantasy Football Research Lab
 
-<h1 align="center">Razzle</h1>
+A fantasy football research lab at [razzle.lol](https://razzle.lol), disguised as a Sunday comic strip. Bengal-tiger mascot, chunky borders, dynasty intelligence with teeth.
 
-<p align="center">
-  A fantasy football research lab disguised as a Sunday comic strip.
-  <br />
-  <a href="https://razzle.lol"><strong>razzle.lol</strong></a>
-</p>
+> **Status:** Razzle V2 is in active development on the `razzle-v2-redesign` branch. The V1 code is staged in `legacy/` during the strangler-fig migration. See `docs/v2/PLAN.md` for the rebuild plan and `docs/DECISIONS.md` for locked-in architecture calls.
 
----
+## Quickstart
 
-## What is this
+```bash
+# API
+cd apps/api
+pip install -r requirements-dev.txt
+uvicorn main:app --reload --port 8000
 
-Razzle is a free fantasy football analytics platform — 100+ stat columns, 60+ analytical panels, custom formulas, prospect tools, and dynasty rankings. It looks like a comic strip. It hits like a research lab.
+# Web (separate terminal)
+cd apps/web
+npm install
+npm run dev
+```
 
-Built for the Reddit power user who screenshots their research at 2am.
+Open [http://localhost:3000](http://localhost:3000). The Next.js dev server proxies `/api/*` to `http://localhost:8000` (override with `NEXT_PUBLIC_API_ORIGIN`).
 
-## The Lab
-
-The core product. A full-featured data screener covering NFL, college, and prospects.
-
-**Screener** — 100+ sortable, filterable stat columns across passing, rushing, receiving, efficiency, advanced metrics, and dynasty valuations. Heatmap coloring, custom column presets, shareable URLs.
-
-**60+ Analytical Panels** — Trade values, VORP, dynasty rankings, tier lists, breakout candidates, aging curves, consistency rankings, target premium, matchup heatmaps, gamescript analysis, red zone usage, stacks, streaks, and more.
-
-**Custom Formulas** — Build your own weighted stat formulas. Save them. Share them in the Formula Store.
-
-**Visualizations** — Radar charts, scatter plots, trend lines, heatmaps. Compare up to 4 players side-by-side.
-
-**Prospect Tools** — Draft class analytics, athletic tiers, big board, prospect profiles with combine data and NFL comps.
-
-**Dynasty Tools** — Trade analyzer, trade values, watchlist with drag-and-drop tier board, roster grading via Sleeper integration.
-
-## Stack
-
-| Layer | Tech |
-|-------|------|
-| Frontend | Vanilla HTML/JS/CSS — no framework, 9k+ lines |
-| Backend | Python FastAPI — 133 endpoints, 2k+ lines |
-| Database | SQLite — single file, ~500MB, 2M+ stat rows |
-| Data | nflverse (NFL), cfbfastR (college), Sleeper API (leagues) |
-| Hosting | Render |
-| Domain | razzle.lol |
-
-## Design
-
-Comic-strip aesthetic with razor-sharp data underneath.
-
-- **Background**: Anthropic sand `#ede0cf`
-- **Accent**: Tiger terracotta `#d97757`
-- **Ink**: Espresso brown `#2d1f14`
-- **Fonts**: Luckiest Guy (display), Space Mono (data), Caveat (handwritten)
-- **Borders**: 3px solid, 4px 4px 0 offset box-shadows
-- **Position colors**: QB `#5b7fff` · RB `#2ec4b6` · WR `#d97757` · TE `#8b5cf6`
-- **Mascot**: Razzle — a Bengal tiger. Chief of Staff energy. Gigachad Garfield.
-
-## Project Structure
+## Repo shape
 
 ```
 razzle/
-├── frontend/          # HTML, JS, CSS — browser-runnable
-├── backend/           # FastAPI server + data queries
-├── adapters/          # Data source adapters (nflverse, cfbfastR)
-├── data/              # SQLite database (terminal.db)
-├── scripts/           # One-off data scripts
-├── tests/             # API smoke tests
-├── docs/              # North star, roadmap, design guide
-└── render.yaml        # Deploy config
+  apps/
+    api/             Python + FastAPI, one router per domain
+      routers/       screener, dynasty, analytics, bureau, agents, auth, billing
+      services/      data + business logic
+      adapters/      nflverse, cfbfastR, sleeper
+      models/        Pydantic request/response shapes
+      migrations/    Alembic
+    web/             Next.js 15 + TypeScript + Tailwind v4
+      app/           file-based routes (incl. /lab/[panel] for every Lab panel)
+      components/    React primitives
+      lib/           API client, hooks
+  packages/
+    ui/              design tokens + shared primitives (used by apps/web)
+    types/           shared Zod schemas + TS types (mirrors apps/api/models)
+  data/              terminal.db, users.db (gitignored; production lives on /data)
+  docs/              NORTH_STAR, ROADMAP, DESIGN, DECISIONS — read these first
+  agent-personas/    Markdown system prompts for the six Situation Room agents
+  infra/             Dockerfile, fly.toml, render.yaml
+  legacy/            V1 frontend/backend, removed at the end of Phase 7
 ```
 
-## Run Locally
+## Tech stack
 
-```bash
-pip install -r requirements.txt
-python -m uvicorn backend.server:app --reload --port 8000
-```
+- **Frontend:** Next.js 15 App Router, TypeScript, Tailwind v4, TanStack Query/Table/Virtual, Zod, nuqs for URL state.
+- **Backend:** Python 3.12, FastAPI with `APIRouter` per domain, Pydantic v2, slowapi.
+- **Database:** SQLite + Alembic. `terminal.db` (stats, ~500MB) + `users.db` (auth/billing, small).
+- **Data sources:** nflverse, cfbfastR, Sleeper API, ESPN injury feeds.
+- **Auth:** JWT + bcrypt (kept from V1; managed-provider swap is Decisions-doc Phase 3.5).
+- **Billing:** Stripe Customer Portal + webhooks. Free + Pro yearly on launch.
+- **LLM:** OpenRouter (Elite key included default; BYOK as advanced toggle).
+- **Hosting:** Fly.io API + Next.js (separate). Cloudflare in front for CDN + rate limiting.
+- **Observability:** Sentry (errors) + PostHog (product analytics).
 
-Open `http://localhost:8000/lab.html`
+## Reading order
 
-## Data
-
-All stats sourced from [nflverse](https://github.com/nflverse) (NFL) and [cfbfastR/sportsdataverse](https://github.com/sportsdataverse) (college). Both MIT licensed.
-
-- **NFL**: 2015-2024 seasons, weekly + season stats, play-by-play derived metrics
-- **College**: Season aggregates, conference data, prospect profiles
-- **Combine**: Athletic measurables, draft picks, historical classes
-- **Derived metrics**: DVS, VORP, trade values, breakout detection, archetypes — our IP
-
-## License
-
-Private repository. All rights reserved.
-
----
-
-<sub>Data provided by nflverse and sportsdataverse.</sub>
+1. `docs/NORTH_STAR.md` — the endgame.
+2. `docs/ROADMAP.md` — the phased plan.
+3. `docs/DESIGN.md` — visual language and voice.
+4. `docs/DECISIONS.md` — V2 architectural calls.
+5. `PRESERVE.md` — what survives from V1.

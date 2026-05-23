@@ -1,0 +1,39 @@
+# Razzle V2 — Render fallback config.
+#
+# DECISIONS.md picks Fly.io as the V2 host. This file lets us stay on Render
+# during the strangler-fig migration. Same Docker image; swap the host at the
+# DNS layer.
+
+services:
+  - type: web
+    name: razzle-v2-api
+    runtime: docker
+    plan: starter
+    dockerfilePath: infra/Dockerfile.api
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: razzle-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: RAZZLE_BASE_URL
+        value: https://razzle.lol
+      - key: JWT_SECRET
+        sync: false
+      - key: ENCRYPTION_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PRICE_PRO_YEARLY
+        sync: false
+      - key: RAZZLE_LLM_API_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: POSTHOG_PROJECT_API_KEY
+        sync: false

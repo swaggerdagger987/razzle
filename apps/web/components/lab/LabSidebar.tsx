@@ -1,0 +1,157 @@
+"use client";
+
+import {
+  PANELS,
+  panelsByCategory,
+  searchPanels,
+  type PanelCategory,
+  type PanelDefinition,
+} from "@razzle/panels";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+
+const CATEGORY_LABELS: Record<PanelCategory, string> = {
+  rankings: "Rankings",
+  discovery: "Discovery",
+  performance: "Performance",
+  matchup: "Matchup",
+  trends: "Trends",
+  prospects: "Prospects",
+  profile: "Profile",
+  tools: "Tools",
+  team: "Team",
+  records: "Records",
+  college: "College",
+};
+
+const STAFF_PICKS = new Set(["weekly", "rankings", "breakouts", "consistency", "tradevalues", "vorp"]);
+
+interface Props {
+  activeSlug?: string;
+  collapsed?: boolean;
+  onToggle?: () => void;
+}
+
+export function LabSidebar({ activeSlug, collapsed = false, onToggle }: Props) {
+  const [query, setQuery] = useState("");
+  const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set());
+
+  const panels = useMemo(() => (query ? searchPanels(query) : PANELS), [query]);
+
+  const grouped = useMemo(() => {
+    const map = new Map<PanelCategory, PanelDefinition[]>();
+    for (const panel of panels) {
+      const arr = map.get(panel.category) ?? [];
+      arr.push(panel);
+      map.set(panel.category, arr);
+    }
+    return map;
+  }, [panels]);
+
+  function toggleCategory(cat: string) {
+    setCollapsedCats((prev) => {
+      const next = new Set(prev);
+      if (next.has(cat)) next.delete(cat);
+      else next.add(cat);
+      return next;
+    });
+  }
+
+  return (
+    <aside className={`lab-sidebar${collapsed ? " collapsed" : ""}`} aria-label="Lab panels">
+      <div className="sidebar-search-wrap">
+        <input
+          className="sidebar-search"
+          placeholder="search panels..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          aria-label="Search panels"
+        />
+      </div>
+
+      <div className="lab-sidebar-inner">
+        {!query && (
+          <div className="lab-sidebar-category">
+            <span className="cat-text">Staff Picks</span>
+          </div>
+        )}
+        {!query &&
+          PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
+            <SidebarItem key={`staff-${panel.slug}`} panel={panel} activeSlug={activeSlug} badge="★" />
+          ))}
+
+        {Array.from(grouped.entries()).map(([category, items]) => (
+          <div key={category}>
+            <button
+              type="button"
+              className="lab-sidebar-category"
+              onClick={() => toggleCategory(category)}
+            >
+              <span className="cat-text">{CATEGORY_LABELS[category]}</span>
+              <span aria-hidden>{collapsedCats.has(category) ? "▸" : "▾"}</span>
+            </button>
+            {!collapsedCats.has(category) &&
+              items.map((panel) => (
+                <SidebarItem key={panel.slug} panel={panel} activeSlug={activeSlug} />
+              ))}
+          </div>
+        ))}
+      </div>
+
+      {onToggle && (
+        <button type="button" className="lab-sidebar-toggle" onClick={onToggle} aria-label="Toggle sidebar">
+          {collapsed ? "»" : "«"}
+        </button>
+      )}
+    </aside>
+  );
+}
+
+function SidebarItem({
+  panel,
+  activeSlug,
+  badge,
+}: {
+  panel: PanelDefinition;
+  activeSlug?: string;
+  badge?: string;
+}) {
+  const active = activeSlug === panel.slug;
+  return (
+    <Link
+      href={`/lab/${panel.slug}`}
+      className={`lab-sidebar-item${active ? " active" : ""}`}
+      data-icon={panel.icon}
+      title={panel.blurb}
+    >
+      {panel.title}
+      {panel.tier === "pro" && <span className="lab-pro-lock"> 🔒</span>}
+      {badge && <span className="lab-staff-pick"> {badge}</span>}
+    </Link>
+  );
+}
+
+export function LabPanelGrid() {
+  const grouped = panelsByCategory();
+  return (
+    <div className="lab-panel-grid">
+            {Array.from(new Set(PANELS.map((p) => p.category))).map((cat) => (
+        <section key={cat} className="lab-grid-section">
+          <h2 className="lab-grid-heading">{CATEGORY_LABELS[cat]}</h2>
+          <div className="lab-grid-cards">
+            {panelsByCategory(cat).map((panel) => (
+              <Link key={panel.slug} href={`/lab/${panel.slug}`} className="lab-grid-card chunky bg-bg-card">
+                <span className="lab-grid-icon" aria-hidden>
+                  {panel.icon}
+                </span>
+                <h3 style={{ fontFamily: "var(--font-display)" }}>{panel.title}</h3>
+                <p className="text-ink-medium text-xs">{panel.blurb}</p>
+                {panel.tier === "pro" && <span className="lab-pro-badge">PRO</span>}
+              </Link>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}

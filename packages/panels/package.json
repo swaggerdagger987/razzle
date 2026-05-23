@@ -1,0 +1,22 @@
+{
+  "name": "@razzle/panels",
+  "version": "2.0.0-alpha.1",
+  "private": true,
+  "description": "Canonical catalog of 100 Razzle Lab panels — slugs, tiers, categories, and API bindings.",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "files": [
+    "index.ts",
+    "catalog.ts",
+    "catalog.json",
+    "handlers.ts",
+    "types.ts"
+  ],
+  "exports": {
+    ".": "./index.ts",
+    "./catalog": "./catalog.ts",
+    "./catalog.json": "./catalog.json",
+    "./handlers": "./handlers.ts",
+    "./types": "./types.ts"
+  }
+}

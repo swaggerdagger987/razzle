@@ -1,48 +1,49 @@
-# OS
-.DS_Store
-Thumbs.db
-Desktop.ini
+# Razzle V2 — root .gitignore
 
-# Credentials (never commit)
-walker-credentials.json
+# Data — SQLite lives on the persistent disk, never in git
+data/*.db
+data/*.db-shm
+data/*.db-wal
+data/terminal*.db
+data/users*.db
 
-# SQLite WAL files (NEVER commit — causes corruption when git touches them)
-*.db-shm
-*.db-wal
-
-# Editor
-.vscode/
-.idea/
-*.swp
-*.swo
+# Secrets
+.env
+.env.local
+.env.*.local
+!.env.example
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
-venv/
 .venv/
-
-# NOTE: .env is intentionally tracked. It carries the server-side OpenRouter
-# key used by the Elite-tier LLM proxy. No credit card is attached to the key.
-
-# Data
-data/*.db
-data/*.sqlite
-
-# Node (if ever needed)
-node_modules/
-
-# Build artifacts
-frontend/dist/
-
-# Junk
-users.db
+.venv-*/
+venv/
 .pytest_cache/
-=*
+.ruff_cache/
+.mypy_cache/
 
-# Claude
-.claude/
-data/terminal.db-shm
-data/terminal.db-wal
-.gstack/
+# Node / Next
+node_modules/
+.next/
+.turbo/
+out/
+dist/
+.cache/
+
+# Editor + OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Coverage + test outputs
+coverage/
+.nyc_output/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+npm-debug.log*

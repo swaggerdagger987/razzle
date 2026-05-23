@@ -1,0 +1,20 @@
+import { LabPanelGrid } from "@/components/lab/LabSidebar";
+
+export const metadata = {
+  title: "The Lab — 100 Panels",
+  description: "Every dynasty stat view in one sidebar. Rankings, heatmaps, breakouts, and more.",
+};
+
+export default function LabIndexPage() {
+  return (
+    <section className="lab-index mx-auto max-w-6xl px-6 py-8">
+      <header className="mb-8">
+        <h1 className="text-4xl" style={{ fontFamily: "var(--font-display)" }}>
+          The Lab
+        </h1>
+        <p className="text-ink-medium">100 standalone panels. Pick one — or start with Explore for the full screener.</p>
+      </header>
+      <LabPanelGrid />
+    </section>
+  );
+}

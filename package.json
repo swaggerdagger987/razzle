@@ -1,5 +1,23 @@
 {
-  "dependencies": {
-    "playwright": "^1.58.2"
+  "name": "razzle",
+  "version": "2.0.0-alpha.1",
+  "private": true,
+  "description": "Razzle V2 — fantasy football research lab disguised as a Sunday comic strip.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "dev:api": "cd apps/api && uvicorn main:app --reload --port 8000 --app-dir .",
+    "build": "npm run build --workspace=apps/web",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:api": "cd apps/api && pytest tests -q"
+  },
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
   }
 }

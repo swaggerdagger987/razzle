@@ -1,0 +1,30 @@
+# Razzle V2 API container.
+
+FROM python:3.12-slim AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+WORKDIR /app
+
+# System deps for sqlite + httpx + cryptography
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential libffi-dev libssl-dev sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install deps first for caching
+COPY apps/api/requirements.txt ./apps/api/requirements.txt
+RUN pip install -r apps/api/requirements.txt
+
+# App
+COPY apps/api ./apps/api
+COPY agent-personas ./agent-personas
+# Legacy services that V2 still imports during the strangler-fig phase
+COPY legacy ./legacy
+
+ENV PYTHONPATH=/app
+EXPOSE 8000
+
+CMD ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

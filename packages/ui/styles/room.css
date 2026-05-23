@@ -1,0 +1,287 @@
+/* Situation Room — always-dark pixel canvas shell (from legacy/frontend/agents.html) */
+
+.room-shell,
+[data-room="true"] {
+  --room-bg: var(--bg-ink);
+  --room-surface: #2d1f14;
+  --room-surface-warm: #3b2821;
+  --room-border: #5c4a3d;
+  --room-text: #ede0cf;
+  --room-text-muted: #8a7565;
+  --room-text-faint: #c4b5a5;
+
+  color-scheme: dark;
+  background: var(--room-bg);
+  color: var(--room-text);
+}
+
+.room-shell html,
+.room-shell body,
+[data-room="true"] html,
+[data-room="true"] body {
+  background: var(--room-bg);
+  color: var(--room-text);
+}
+
+/* Layout */
+.room-wrapper,
+.lab-wrapper.room-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  background: var(--room-bg);
+  overflow: hidden;
+}
+
+.room-header,
+.lab-header.room-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: var(--room-surface);
+  border-bottom: 3px solid var(--room-border);
+  flex-shrink: 0;
+  min-height: 48px;
+}
+
+.room-header-title,
+.lab-header-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: -0.5px;
+  color: var(--orange);
+}
+
+.room-header-subtitle,
+.lab-header-subtitle {
+  font-family: var(--font-hand);
+  font-size: 15px;
+  color: var(--room-text-muted);
+  margin-left: 12px;
+}
+
+.room-main,
+.lab-main.room-main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  margin-right: 0;
+}
+
+/* Canvas */
+.canvas-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  position: relative;
+  min-width: 0;
+  background: var(--room-bg);
+}
+
+.canvas-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--yellow);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.canvas-container {
+  border: 3px solid var(--room-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-chunky);
+  background: #0a0a12;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.canvas-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.canvas-placeholder-text {
+  font-family: var(--font-hand);
+  font-size: 22px;
+  color: var(--room-text-muted);
+}
+
+.canvas-placeholder-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--room-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Roster sidebar */
+.roster-sidebar {
+  width: 220px;
+  background: var(--room-surface);
+  border-left: 3px solid var(--room-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.roster-header {
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: -0.5px;
+  padding: 12px 14px;
+  background: var(--room-surface-warm);
+  border-bottom: 2px solid var(--room-border);
+  color: var(--orange);
+  text-align: center;
+}
+
+.roster-agent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 2px dashed var(--room-surface-warm);
+  transition: background 0.1s;
+}
+
+.roster-agent:hover {
+  background: var(--room-surface-warm);
+}
+
+.roster-agent.selected {
+  background: #5c3325;
+}
+
+.roster-name {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--room-text);
+}
+
+.roster-role {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--room-text-muted);
+}
+
+/* Status bar */
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 16px;
+  background: rgba(26, 17, 10, 0.85);
+  border-top: 2px solid var(--room-border);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--room-text-muted);
+  flex-shrink: 0;
+}
+
+.status-dot-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  display: inline-block;
+  margin-right: 6px;
+  animation: blink-live 2s ease-in-out infinite;
+}
+
+@keyframes blink-live {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* In-game dialog (Crystal style) */
+.rz-dialog {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  background: var(--bg-card);
+  color: var(--ink);
+  border: 4px solid var(--bg-ink);
+  box-shadow:
+    0 0 0 2px var(--bg-card),
+    0 0 0 5px var(--bg-ink),
+    8px 8px 0 rgba(0, 0, 0, 0.5);
+  padding: 14px 18px 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.55;
+  z-index: 15;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+.rz-dialog-speaker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 0.6px;
+  color: var(--orange);
+}
+
+.rz-dialog-text {
+  min-height: 44px;
+  max-height: 28vh;
+  overflow-y: auto;
+}
+
+/* Dark ink sections on marketing pages */
+.bg-ink-section {
+  background: var(--bg-ink);
+  color: #ede0cf;
+}
+
+.bg-ink-section a {
+  color: #ede0cf;
+}
+
+@media (max-width: 768px) {
+  .roster-sidebar {
+    display: none;
+  }
+
+  .room-header-subtitle,
+  .lab-header-subtitle {
+    display: none;
+  }
+
+  .canvas-area {
+    padding: 4px;
+  }
+
+  .canvas-container {
+    border-width: 2px;
+    border-radius: var(--radius-sm);
+  }
+}

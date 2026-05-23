@@ -1,0 +1,1657 @@
+[
+  {
+    "slug": "screener",
+    "legacyId": "screener",
+    "title": "The Screener",
+    "blurb": "Filter any stat. Build any view. Your dynasty lab starts here.",
+    "icon": "◉",
+    "tier": "free",
+    "category": "discovery",
+    "renderType": "screener",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query"
+    }
+  },
+  {
+    "slug": "weekly",
+    "legacyId": "weekly",
+    "title": "Weekly Heatmap",
+    "blurb": "Spot hot and cold streaks before your league mates do.",
+    "icon": "▦",
+    "tier": "free",
+    "category": "trends",
+    "renderType": "heatmap",
+    "api": {
+      "handler": "fetch_weekly_heatmap",
+      "method": "GET",
+      "path": "/api/weekly-heatmap",
+      "params": {
+        "limit": 40
+      }
+    }
+  },
+  {
+    "slug": "prospects",
+    "legacyId": "prospects",
+    "title": "Big Board",
+    "blurb": "Rookie rankings with real combine and college context.",
+    "icon": "☆",
+    "tier": "free",
+    "category": "prospects",
+    "renderType": "tier",
+    "api": {
+      "handler": "fetch_prospect_scores",
+      "method": "GET",
+      "path": "/api/prospect-scores"
+    }
+  },
+  {
+    "slug": "dashboard",
+    "legacyId": "dashboard",
+    "title": "Dashboard",
+    "blurb": "Dynasty pulse check: risers, fallers, and value picks.",
+    "icon": "▣",
+    "tier": "free",
+    "category": "tools",
+    "renderType": "dashboard",
+    "api": {
+      "handler": "fetch_dynasty_dashboard",
+      "method": "GET",
+      "path": "/api/dynasty-dashboard"
+    }
+  },
+  {
+    "slug": "leaders",
+    "legacyId": "leaders",
+    "title": "Stat Leaders",
+    "blurb": "Who's on top this season — sort by any stat.",
+    "icon": "👑",
+    "tier": "free",
+    "category": "rankings",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_stat_leaders",
+      "method": "GET",
+      "path": "/api/stat-leaders",
+      "params": {
+        "limit": 10
+      }
+    }
+  },
+  {
+    "slug": "rankings",
+    "legacyId": "rankings",
+    "title": "Dynasty Rankings",
+    "blurb": "Trade-value tiers for win-now and rebuild alike.",
+    "icon": "♠",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "tier",
+    "api": {
+      "handler": "fetch_dynasty_rankings",
+      "method": "GET",
+      "path": "/api/dynasty-rankings",
+      "params": {
+        "limit": 200
+      }
+    }
+  },
+  {
+    "slug": "tiers",
+    "legacyId": "tiers",
+    "title": "Tiers",
+    "blurb": "S/A/B/C/D/F buckets so trades stop feeling random.",
+    "icon": "▲",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "tier",
+    "api": {
+      "handler": "fetch_tier_list",
+      "method": "GET",
+      "path": "/api/tier-list"
+    }
+  },
+  {
+    "slug": "tradevalues",
+    "legacyId": "tradevalues",
+    "title": "Trade Values",
+    "blurb": "Chart dynasty value curves and find market inefficiencies.",
+    "icon": "↔",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "line-chart",
+    "api": {
+      "handler": "fetch_trade_value_chart",
+      "method": "GET",
+      "path": "/api/trade-value-chart",
+      "params": {
+        "limit": 150
+      }
+    }
+  },
+  {
+    "slug": "cheatsheet",
+    "legacyId": "cheatsheet",
+    "title": "Cheat Sheet",
+    "blurb": "Draft-day cheat sheet grouped by position.",
+    "icon": "☑",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_cheat_sheet",
+      "method": "GET",
+      "path": "/api/cheat-sheet",
+      "params": {
+        "format": "ppr"
+      }
+    }
+  },
+  {
+    "slug": "breakouts",
+    "legacyId": "breakouts",
+    "title": "Breakouts",
+    "blurb": "Next-wave producers before the waiver wire notices.",
+    "icon": "★",
+    "tier": "pro",
+    "category": "discovery",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_breakout_candidates",
+      "method": "GET",
+      "path": "/api/breakout-candidates",
+      "params": {
+        "limit": 50
+      }
+    }
+  },
+  {
+    "slug": "vorp",
+    "legacyId": "vorp",
+    "title": "VORP",
+    "blurb": "Value over replacement — who actually moves the needle?",
+    "icon": "↑",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_vorp",
+      "method": "GET",
+      "path": "/api/vorp",
+      "params": {
+        "limit": 30
+      }
+    }
+  },
+  {
+    "slug": "advantage",
+    "legacyId": "advantage",
+    "title": "Positional Advantage",
+    "blurb": "Scoring edge over positional average.",
+    "icon": "◆",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "bar-chart",
+    "api": {
+      "handler": "fetch_positional_advantage",
+      "method": "GET",
+      "path": "/api/positional-advantage"
+    }
+  },
+  {
+    "slug": "auction",
+    "legacyId": "auction",
+    "title": "Auction Values",
+    "blurb": "Convert dynasty value into auction dollars.",
+    "icon": "$",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_auction_values",
+      "method": "GET",
+      "path": "/api/auction-values",
+      "params": {
+        "budget": 200,
+        "roster_size": 15
+      }
+    }
+  },
+  {
+    "slug": "buysell",
+    "legacyId": "buysell",
+    "title": "Buy / Sell",
+    "blurb": "Market movers — who to acquire and who to flip.",
+    "icon": "⇅",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_buy_sell_candidates",
+      "method": "GET",
+      "path": "/api/buy-sell-candidates",
+      "params": {
+        "limit": 15
+      }
+    }
+  },
+  {
+    "slug": "stocks",
+    "legacyId": "stocks",
+    "title": "Stock Watch",
+    "blurb": "Rising and falling dynasty assets at a glance.",
+    "icon": "↗",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_stock_watch",
+      "method": "GET",
+      "path": "/api/stock-watch",
+      "params": {
+        "limit": 30
+      }
+    }
+  },
+  {
+    "slug": "waivers",
+    "legacyId": "waivers",
+    "title": "Rising Players",
+    "blurb": "Waiver-wire risers ranked by recent production.",
+    "icon": "⊕",
+    "tier": "pro",
+    "category": "discovery",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_waivers",
+      "method": "GET",
+      "path": "/api/waivers"
+    }
+  },
+  {
+    "slug": "faab",
+    "legacyId": "faab",
+    "title": "FAAB Strategy",
+    "blurb": "Waiver budget pacing — when to burn and when to hold.",
+    "icon": "💰",
+    "tier": "pro",
+    "category": "tools",
+    "renderType": "bar-chart",
+    "api": {
+      "handler": "fetch_waivers",
+      "method": "GET",
+      "path": "/api/waivers"
+    }
+  },
+  {
+    "slug": "scarcity",
+    "legacyId": "scarcity",
+    "title": "Scarcity",
+    "blurb": "Positional drop-off cliffs that win championships.",
+    "icon": "◯",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "bar-chart",
+    "api": {
+      "handler": "fetch_positional_scarcity",
+      "method": "GET",
+      "path": "/api/positional-scarcity"
+    }
+  },
+  {
+    "slug": "handcuffs",
+    "legacyId": "handcuffs",
+    "title": "Handcuffs",
+    "blurb": "RB handcuff pairs and stash priority.",
+    "icon": "⛓",
+    "tier": "pro",
+    "category": "team",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_handcuffs",
+      "method": "GET",
+      "path": "/api/handcuffs"
+    }
+  },
+  {
+    "slug": "efficiency",
+    "legacyId": "efficiency",
+    "title": "Efficiency",
+    "blurb": "Fantasy points per touch — who maximizes opportunity.",
+    "icon": "⚡",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_efficiency_rankings",
+      "method": "GET",
+      "path": "/api/efficiency-rankings",
+      "params": {
+        "limit": 30
+      }
+    }
+  },
+  {
+    "slug": "consistency",
+    "legacyId": "consistency",
+    "title": "Consistency",
+    "blurb": "Weekly floor and ceiling — boom-bust made visible.",
+    "icon": "≡",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "scatter",
+    "api": {
+      "handler": "fetch_consistency_rankings",
+      "method": "GET",
+      "path": "/api/consistency-rankings",
+      "params": {
+        "limit": 30
+      }
+    }
+  },
+  {
+    "slug": "snapefficiency",
+    "legacyId": "snapefficiency",
+    "title": "Snap Efficiency",
+    "blurb": "Fantasy points per snap — true usage efficiency.",
+    "icon": "⏱",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_snap_efficiency",
+      "method": "GET",
+      "path": "/api/snap-efficiency"
+    }
+  },
+  {
+    "slug": "workload",
+    "legacyId": "workload",
+    "title": "Workload Monitor",
+    "blurb": "Snap and touch trends — who's earning the role.",
+    "icon": "⚙",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "line-chart",
+    "api": {
+      "handler": "fetch_workload_monitor",
+      "method": "GET",
+      "path": "/api/workload-monitor"
+    }
+  },
+  {
+    "slug": "dualthreat",
+    "legacyId": "dualthreat",
+    "title": "Dual-Threat",
+    "blurb": "Rush + receiving versatility index.",
+    "icon": "⇋",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "scatter",
+    "api": {
+      "handler": "fetch_dual_threat",
+      "method": "GET",
+      "path": "/api/dual-threat"
+    }
+  },
+  {
+    "slug": "targetpremium",
+    "legacyId": "targetpremium",
+    "title": "Target Premium",
+    "blurb": "Target quality: YPT, catch rate, YAC, and aDOT.",
+    "icon": "◎",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_target_premium",
+      "method": "GET",
+      "path": "/api/target-premium"
+    }
+  },
+  {
+    "slug": "drops",
+    "legacyId": "drops",
+    "title": "Drop Rate",
+    "blurb": "Pass drops per target — separation vs butter fingers.",
+    "icon": "↓",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_drop_rate",
+      "method": "GET",
+      "path": "/api/drop-rate"
+    }
+  },
+  {
+    "slug": "garbagetime",
+    "legacyId": "garbagetime",
+    "title": "Garbage Time",
+    "blurb": "Stat padders vs clean producers in real game scripts.",
+    "icon": "♻",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "compare",
+    "api": {
+      "handler": "fetch_garbage_time",
+      "method": "GET",
+      "path": "/api/garbage-time"
+    }
+  },
+  {
+    "slug": "successrate",
+    "legacyId": "successrate",
+    "title": "Success Rate",
+    "blurb": "Positive play rate — EPA-based success.",
+    "icon": "✓",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_success_rate",
+      "method": "GET",
+      "path": "/api/success-rate"
+    }
+  },
+  {
+    "slug": "correlations",
+    "legacyId": "correlations",
+    "title": "Correlations",
+    "blurb": "Which stats actually predict fantasy PPG?",
+    "icon": "∴",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "scatter",
+    "api": {
+      "handler": "fetch_stat_correlations",
+      "method": "GET",
+      "path": "/api/stat-correlations"
+    }
+  },
+  {
+    "slug": "matchups",
+    "legacyId": "matchups",
+    "title": "Matchups",
+    "blurb": "Weekly matchup heatmap by position and team.",
+    "icon": "⚔",
+    "tier": "pro",
+    "category": "matchup",
+    "renderType": "heatmap",
+    "api": {
+      "handler": "fetch_matchup_heatmap",
+      "method": "GET",
+      "path": "/api/matchup-heatmap"
+    }
+  },
+  {
+    "slug": "stacks",
+    "legacyId": "stacks",
+    "title": "Stacks",
+    "blurb": "QB + pass-catcher correlation stacks.",
+    "icon": "▤",
+    "tier": "pro",
+    "category": "matchup",
+    "renderType": "network",
+    "api": {
+      "handler": "fetch_stacks",
+      "method": "GET",
+      "path": "/api/stacks"
+    }
+  },
+  {
+    "slug": "redzone",
+    "legacyId": "redzone",
+    "title": "Red Zone",
+    "blurb": "Red-zone touches and TD equity.",
+    "icon": "■",
+    "tier": "pro",
+    "category": "matchup",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_redzone_usage",
+      "method": "GET",
+      "path": "/api/redzone-usage",
+      "params": {
+        "limit": 30
+      }
+    }
+  },
+  {
+    "slug": "streaks",
+    "legacyId": "streaks",
+    "title": "Streaks",
+    "blurb": "Hot and cold streaks by scoring window.",
+    "icon": "🔥",
+    "tier": "pro",
+    "category": "matchup",
+    "renderType": "timeline",
+    "api": {
+      "handler": "fetch_streaks",
+      "method": "GET",
+      "path": "/api/streaks"
+    }
+  },
+  {
+    "slug": "weeklyleaders",
+    "legacyId": "weeklyleaders",
+    "title": "Weekly Leaders",
+    "blurb": "Week-by-week positional leaders.",
+    "icon": "♛",
+    "tier": "pro",
+    "category": "matchup",
+    "renderType": "grid",
+    "api": {
+      "handler": "fetch_weekly_leaders",
+      "method": "GET",
+      "path": "/api/weekly-leaders"
+    }
+  },
+  {
+    "slug": "weeklymvp",
+    "legacyId": "weeklymvp",
+    "title": "Weekly MVP Grid",
+    "blurb": "MVP-caliber performances in a weekly grid.",
+    "icon": "♕",
+    "tier": "pro",
+    "category": "matchup",
+    "renderType": "grid",
+    "api": {
+      "handler": "fetch_weekly_mvp",
+      "method": "GET",
+      "path": "/api/weekly-mvp"
+    }
+  },
+  {
+    "slug": "playoffs",
+    "legacyId": "playoffs",
+    "title": "Playoffs",
+    "blurb": "Playoff schedule strength and matchup planning.",
+    "icon": "🏆",
+    "tier": "pro",
+    "category": "matchup",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_playoff_schedule",
+      "method": "GET",
+      "path": "/api/playoff-schedule"
+    }
+  },
+  {
+    "slug": "gamescript",
+    "legacyId": "gamescript",
+    "title": "Game Script",
+    "blurb": "Production in winning vs losing scripts.",
+    "icon": "🎬",
+    "tier": "pro",
+    "category": "matchup",
+    "renderType": "compare",
+    "api": {
+      "handler": "fetch_game_script",
+      "method": "GET",
+      "path": "/api/game-script",
+      "params": {
+        "limit": 25
+      }
+    }
+  },
+  {
+    "slug": "usage",
+    "legacyId": "usage",
+    "title": "Usage Trends",
+    "blurb": "Snap and touch trajectories over recent weeks.",
+    "icon": "⤵",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "line-chart",
+    "api": {
+      "handler": "fetch_usage_trends",
+      "method": "GET",
+      "path": "/api/usage-trends"
+    }
+  },
+  {
+    "slug": "yoy",
+    "legacyId": "yoy",
+    "title": "Year-over-Year",
+    "blurb": "Compare any stat across two seasons.",
+    "icon": "⇄",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "compare",
+    "api": {
+      "handler": "fetch_year_over_year",
+      "method": "GET",
+      "path": "/api/year-over-year"
+    }
+  },
+  {
+    "slug": "aging",
+    "legacyId": "aging",
+    "title": "Aging Curves",
+    "blurb": "When positions peak — plan your window.",
+    "icon": "⌛",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "line-chart",
+    "api": {
+      "handler": "fetch_aging_curves",
+      "method": "GET",
+      "path": "/api/aging-curves"
+    }
+  },
+  {
+    "slug": "pace",
+    "legacyId": "pace",
+    "title": "Player Pace",
+    "blurb": "Projected season totals from current weekly pace.",
+    "icon": "⏳",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "bar-chart",
+    "api": {
+      "handler": "fetch_pace_tracker",
+      "method": "GET",
+      "path": "/api/pace-tracker"
+    }
+  },
+  {
+    "slug": "seasonpace",
+    "legacyId": "seasonpace",
+    "title": "Season Pace",
+    "blurb": "Milestone watch: 1,000-yard and 10-TD pace.",
+    "icon": "⏭",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_season_pace",
+      "method": "GET",
+      "path": "/api/season-pace"
+    }
+  },
+  {
+    "slug": "tdregression",
+    "legacyId": "tdregression",
+    "title": "TD Regression",
+    "blurb": "Expected vs actual touchdowns — luck or skill?",
+    "icon": "≈",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "scatter",
+    "api": {
+      "handler": "fetch_td_regression",
+      "method": "GET",
+      "path": "/api/td-regression"
+    }
+  },
+  {
+    "slug": "airyards",
+    "legacyId": "airyards",
+    "title": "Air Yards",
+    "blurb": "Target depth and air-yard share leaders.",
+    "icon": "✈",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_air_yards",
+      "method": "GET",
+      "path": "/api/air-yards",
+      "params": {
+        "limit": 25
+      }
+    }
+  },
+  {
+    "slug": "draftclass",
+    "legacyId": "draftclass",
+    "title": "Draft Class Analytics",
+    "blurb": "Combine metrics vs fantasy production by class.",
+    "icon": "📋",
+    "tier": "pro",
+    "category": "college",
+    "renderType": "scatter",
+    "api": {
+      "handler": "fetch_draft_class",
+      "method": "GET",
+      "path": "/api/draft-class"
+    }
+  },
+  {
+    "slug": "percentiles",
+    "legacyId": "percentiles",
+    "title": "Percentiles",
+    "blurb": "Where a player ranks vs peers on every stat.",
+    "icon": "%",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "bar-chart",
+    "api": {
+      "handler": "fetch_player_percentiles",
+      "method": "GET",
+      "path": "/api/player-percentiles"
+    }
+  },
+  {
+    "slug": "drafttracker",
+    "legacyId": "drafttracker",
+    "title": "Draft Class Tracker",
+    "blurb": "How each draft class performed in fantasy.",
+    "icon": "📅",
+    "tier": "pro",
+    "category": "college",
+    "renderType": "timeline",
+    "api": {
+      "handler": "fetch_draft_class_tracker",
+      "method": "GET",
+      "path": "/api/draft-class-tracker"
+    }
+  },
+  {
+    "slug": "career",
+    "legacyId": "career",
+    "title": "Career Stats",
+    "blurb": "Full career arc for any player.",
+    "icon": "📄",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "timeline",
+    "api": {
+      "handler": "fetch_career_stats",
+      "method": "GET",
+      "path": "/api/career-stats"
+    }
+  },
+  {
+    "slug": "career-compare",
+    "legacyId": "career-compare",
+    "title": "Career Compare",
+    "blurb": "Overlay up to three career arcs side by side.",
+    "icon": "⬌",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "compare",
+    "api": {
+      "handler": "fetch_career_stats",
+      "method": "GET",
+      "path": "/api/career-stats"
+    }
+  },
+  {
+    "slug": "comptable",
+    "legacyId": "comptable",
+    "title": "Compare Table",
+    "blurb": "Head-to-head stat table for multiple players.",
+    "icon": "≣",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "compare",
+    "api": {
+      "handler": "fetch_compare_table",
+      "method": "GET",
+      "path": "/api/compare-table"
+    }
+  },
+  {
+    "slug": "strengths",
+    "legacyId": "strengths",
+    "title": "Strengths",
+    "blurb": "Statistical strengths vs positional peers.",
+    "icon": "💪",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "bar-chart",
+    "api": {
+      "handler": "fetch_player_strengths",
+      "method": "GET",
+      "path": "/api/player-strengths"
+    }
+  },
+  {
+    "slug": "reportcard",
+    "legacyId": "reportcard",
+    "title": "Report Card",
+    "blurb": "Letter grades across key fantasy categories.",
+    "icon": "📝",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_report_cards",
+      "method": "GET",
+      "path": "/api/report-cards",
+      "params": {
+        "limit": 25
+      }
+    }
+  },
+  {
+    "slug": "fptsbreakdown",
+    "legacyId": "fptsbreakdown",
+    "title": "Points Breakdown",
+    "blurb": "Fantasy points by scoring category.",
+    "icon": "∑",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "bar-chart",
+    "api": {
+      "handler": "fetch_fpts_breakdown",
+      "method": "GET",
+      "path": "/api/fpts-breakdown"
+    }
+  },
+  {
+    "slug": "gamelog",
+    "legacyId": "gamelog",
+    "title": "Game Log",
+    "blurb": "Week-by-week game log for any player.",
+    "icon": "📓",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_game_log",
+      "method": "GET",
+      "path": "/api/game-log"
+    }
+  },
+  {
+    "slug": "archetypes",
+    "legacyId": "archetypes",
+    "title": "Archetypes",
+    "blurb": "Statistical player archetypes — alpha WR, pass-catching RB, etc.",
+    "icon": "✦",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_player_archetypes",
+      "method": "GET",
+      "path": "/api/player-archetypes"
+    }
+  },
+  {
+    "slug": "breakdown",
+    "legacyId": "breakdown",
+    "title": "Scoring Breakdown",
+    "blurb": "Donut view of where fantasy points come from.",
+    "icon": "◩",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "donut",
+    "api": {
+      "handler": "fetch_points_breakdown",
+      "method": "GET",
+      "path": "/api/points-breakdown"
+    }
+  },
+  {
+    "slug": "rosterbuilder",
+    "legacyId": "rosterbuilder",
+    "title": "Roster Builder",
+    "blurb": "Build a hypothetical roster and grade dynasty value.",
+    "icon": "📋",
+    "tier": "pro",
+    "category": "tools",
+    "renderType": "dashboard",
+    "api": {
+      "handler": "fetch_roster_grade",
+      "method": "POST",
+      "path": "/api/roster-grade"
+    }
+  },
+  {
+    "slug": "tradefinder",
+    "legacyId": "tradefinder",
+    "title": "Trade Finder",
+    "blurb": "Fair trades for any player on your roster.",
+    "icon": "⇆",
+    "tier": "pro",
+    "category": "tools",
+    "renderType": "network",
+    "api": {
+      "handler": "fetch_trade_finder",
+      "method": "GET",
+      "path": "/api/trade-finder"
+    }
+  },
+  {
+    "slug": "scoring",
+    "legacyId": "scoring",
+    "title": "Scoring Comparison",
+    "blurb": "Rankings shift across PPR, half, and standard.",
+    "icon": "№",
+    "tier": "pro",
+    "category": "tools",
+    "renderType": "compare",
+    "api": {
+      "handler": "fetch_scoring_comparison",
+      "method": "GET",
+      "path": "/api/scoring-comparison"
+    }
+  },
+  {
+    "slug": "schedule",
+    "legacyId": "schedule",
+    "title": "Schedule / SOS",
+    "blurb": "Strength of schedule for rest-of-season planning.",
+    "icon": "📅",
+    "tier": "pro",
+    "category": "matchup",
+    "renderType": "heatmap",
+    "api": {
+      "handler": "fetch_strength_of_schedule",
+      "method": "GET",
+      "path": "/api/strength-of-schedule",
+      "params": {
+        "limit": 30
+      }
+    }
+  },
+  {
+    "slug": "opportunity",
+    "legacyId": "opportunity",
+    "title": "Opportunity Share",
+    "blurb": "Touches and targets as a share of team volume.",
+    "icon": "◎",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_opportunity_share",
+      "method": "GET",
+      "path": "/api/opportunity-share",
+      "params": {
+        "limit": 30
+      }
+    }
+  },
+  {
+    "slug": "records",
+    "legacyId": "records",
+    "title": "Records",
+    "blurb": "Single-season and career fantasy records.",
+    "icon": "📖",
+    "tier": "pro",
+    "category": "records",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_records",
+      "method": "GET",
+      "path": "/api/records"
+    }
+  },
+  {
+    "slug": "recap",
+    "legacyId": "recap",
+    "title": "Season Recap",
+    "blurb": "Season-in-review highlights and superlatives.",
+    "icon": "📰",
+    "tier": "pro",
+    "category": "records",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_season_recap",
+      "method": "GET",
+      "path": "/api/season-recap"
+    }
+  },
+  {
+    "slug": "awards",
+    "legacyId": "awards",
+    "title": "Awards",
+    "blurb": "Season awards — MVP, breakout, bust, and more.",
+    "icon": "🏅",
+    "tier": "pro",
+    "category": "records",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_season_awards",
+      "method": "GET",
+      "path": "/api/season-awards"
+    }
+  },
+  {
+    "slug": "explorer",
+    "legacyId": "explorer",
+    "title": "Explorer",
+    "blurb": "Scatter any two stats — find outliers yourself.",
+    "icon": "🧭",
+    "tier": "pro",
+    "category": "discovery",
+    "renderType": "scatter",
+    "api": {
+      "handler": "fetch_stat_explorer",
+      "method": "GET",
+      "path": "/api/stat-explorer"
+    }
+  },
+  {
+    "slug": "targets",
+    "legacyId": "targets",
+    "title": "Target Distribution",
+    "blurb": "Team target share pie — who the QB trusts.",
+    "icon": "◎",
+    "tier": "pro",
+    "category": "team",
+    "renderType": "donut",
+    "api": {
+      "handler": "fetch_target_distribution",
+      "method": "GET",
+      "path": "/api/target-distribution"
+    }
+  },
+  {
+    "slug": "team",
+    "legacyId": "team",
+    "title": "Team Rosters",
+    "blurb": "Full NFL team rosters with fantasy context.",
+    "icon": "👥",
+    "tier": "pro",
+    "category": "team",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_team_roster",
+      "method": "GET",
+      "path": "/api/team-roster"
+    }
+  },
+  {
+    "slug": "powerrankings",
+    "legacyId": "powerrankings",
+    "title": "Power Rankings",
+    "blurb": "Which NFL teams hoard the most dynasty value?",
+    "icon": "🏆",
+    "tier": "pro",
+    "category": "team",
+    "renderType": "tier",
+    "api": {
+      "handler": "fetch_dynasty_power_rankings",
+      "method": "GET",
+      "path": "/api/dynasty-power-rankings"
+    }
+  },
+  {
+    "slug": "target-share",
+    "legacyId": "target-share",
+    "title": "Target Share",
+    "blurb": "Who's eating the target pie on every offense.",
+    "icon": "🎯",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "target_share",
+        "sort_direction": "desc"
+      }
+    }
+  },
+  {
+    "slug": "snap-counts",
+    "legacyId": "snap-counts",
+    "title": "Snap Counts",
+    "blurb": "Snap volume tells the real usage story.",
+    "icon": "📊",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "snap_pct",
+        "sort_direction": "desc"
+      }
+    }
+  },
+  {
+    "slug": "boom-bust",
+    "legacyId": "boom-bust",
+    "title": "Boom / Bust",
+    "blurb": "Ceiling vs floor volatility — know your risk.",
+    "icon": "💥",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "scatter",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "boom_rate",
+        "sort_direction": "desc",
+        "filters": [
+          {
+            "key": "games",
+            "op": "gte",
+            "value": 4
+          }
+        ]
+      }
+    }
+  },
+  {
+    "slug": "clutch-factor",
+    "legacyId": "clutch-factor",
+    "title": "Clutch Factor",
+    "blurb": "Who shows up in close games and high-leverage spots.",
+    "icon": "🎖",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "fantasy_points_ppr",
+        "sort_direction": "desc",
+        "relevance": "fantasy"
+      }
+    }
+  },
+  {
+    "slug": "route-participation",
+    "legacyId": "route-participation",
+    "title": "Route Participation",
+    "blurb": "Routes run = real opportunity in modern offenses.",
+    "icon": "🛤",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "routes",
+        "sort_direction": "desc"
+      }
+    }
+  },
+  {
+    "slug": "carry-share",
+    "legacyId": "carry-share",
+    "title": "Carry Share",
+    "blurb": "Backfield workload split — committee or bell cow?",
+    "icon": "🏃",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "bar-chart",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "carry_share",
+        "sort_direction": "desc"
+      }
+    }
+  },
+  {
+    "slug": "reception-share",
+    "legacyId": "reception-share",
+    "title": "Reception Share",
+    "blurb": "PPR security blankets ranked by catch volume.",
+    "icon": "🤲",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "receptions",
+        "sort_direction": "desc"
+      }
+    }
+  },
+  {
+    "slug": "adot-leaders",
+    "legacyId": "adot-leaders",
+    "title": "aDOT Leaders",
+    "blurb": "Average depth of target — deep-ball magnet board.",
+    "icon": "📡",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "adot",
+        "sort_direction": "desc"
+      }
+    }
+  },
+  {
+    "slug": "yac-monsters",
+    "legacyId": "yac-monsters",
+    "title": "YAC Monsters",
+    "blurb": "Yards after catch beasts who create on their own.",
+    "icon": "🚀",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "yards_after_catch",
+        "sort_direction": "desc"
+      }
+    }
+  },
+  {
+    "slug": "deep-threats",
+    "legacyId": "deep-threats",
+    "title": "Deep Threats",
+    "blurb": "Vertical threats ranked by air yards and aDOT.",
+    "icon": "🌊",
+    "tier": "pro",
+    "category": "discovery",
+    "renderType": "screener",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "receiving_air_yards",
+        "sort_direction": "desc",
+        "filters": [
+          {
+            "key": "adot",
+            "op": "gte",
+            "value": 12
+          }
+        ]
+      }
+    }
+  },
+  {
+    "slug": "slot-receivers",
+    "legacyId": "slot-receivers",
+    "title": "Slot Receivers",
+    "blurb": "Short-area specialists and PPR machines.",
+    "icon": "📍",
+    "tier": "pro",
+    "category": "discovery",
+    "renderType": "screener",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "receptions",
+        "sort_direction": "desc",
+        "positions": [
+          "WR"
+        ]
+      }
+    }
+  },
+  {
+    "slug": "rb-receptions",
+    "legacyId": "rb-receptions",
+    "title": "RB Receptions",
+    "blurb": "Pass-catching backs — PPR cheat codes.",
+    "icon": "📬",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "receptions",
+        "sort_direction": "desc",
+        "positions": [
+          "RB"
+        ]
+      }
+    }
+  },
+  {
+    "slug": "qb-rushing",
+    "legacyId": "qb-rushing",
+    "title": "QB Rushing",
+    "blurb": "Rushing upside at quarterback — the cheat code stat.",
+    "icon": "🏈",
+    "tier": "pro",
+    "category": "performance",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "rushing_yards",
+        "sort_direction": "desc",
+        "positions": [
+          "QB"
+        ]
+      }
+    }
+  },
+  {
+    "slug": "te-usage",
+    "legacyId": "te-usage",
+    "title": "TE Usage",
+    "blurb": "Tight end target concentration by team.",
+    "icon": "🔗",
+    "tier": "pro",
+    "category": "team",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "targets",
+        "sort_direction": "desc",
+        "positions": [
+          "TE"
+        ]
+      }
+    }
+  },
+  {
+    "slug": "dynasty-comps",
+    "legacyId": "dynasty-comps",
+    "title": "Dynasty Comps",
+    "blurb": "Find statistical comps for any dynasty asset.",
+    "icon": "👯",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "compare",
+    "api": {
+      "handler": "fetch_player_comps",
+      "method": "GET",
+      "path": "/api/players/{player_id}/comps"
+    }
+  },
+  {
+    "slug": "player-compare",
+    "legacyId": "player-compare",
+    "title": "Player Compare",
+    "blurb": "Side-by-side stat showdown for multiple players.",
+    "icon": "⚖",
+    "tier": "pro",
+    "category": "profile",
+    "renderType": "compare",
+    "api": {
+      "handler": "fetch_players_compare",
+      "method": "GET",
+      "path": "/api/players/compare"
+    }
+  },
+  {
+    "slug": "pick-values",
+    "legacyId": "pick-values",
+    "title": "Pick Values",
+    "blurb": "Draft capital priced in dynasty trade value.",
+    "icon": "🎟",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_pick_values",
+      "method": "GET",
+      "path": "/api/trade/pick-values"
+    }
+  },
+  {
+    "slug": "trade-values",
+    "legacyId": "trade-values",
+    "title": "Trade Values Table",
+    "blurb": "Raw dynasty trade values — sort and filter.",
+    "icon": "💎",
+    "tier": "pro",
+    "category": "rankings",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_trade_values",
+      "method": "GET",
+      "path": "/api/trade/values"
+    }
+  },
+  {
+    "slug": "roster-value",
+    "legacyId": "roster-value",
+    "title": "Roster Value",
+    "blurb": "Total dynasty value for any player list.",
+    "icon": "💼",
+    "tier": "pro",
+    "category": "tools",
+    "renderType": "dashboard",
+    "api": {
+      "handler": "fetch_roster_value",
+      "method": "POST",
+      "path": "/api/roster-value"
+    }
+  },
+  {
+    "slug": "league-trade-values",
+    "legacyId": "league-trade-values",
+    "title": "League Trade Values",
+    "blurb": "League-specific trade values from Sleeper rosters.",
+    "icon": "🏟",
+    "tier": "pro",
+    "category": "tools",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_league_trade_values",
+      "method": "POST",
+      "path": "/api/league-trade-finder"
+    }
+  },
+  {
+    "slug": "roster-depth",
+    "legacyId": "roster-depth",
+    "title": "Roster Depth Lookup",
+    "blurb": "Name-to-depth-chart lookup for any player.",
+    "icon": "🔍",
+    "tier": "pro",
+    "category": "team",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_roster_depth_lookup",
+      "method": "POST",
+      "path": "/api/roster-depth-lookup"
+    }
+  },
+  {
+    "slug": "dynasty-history",
+    "legacyId": "dynasty-history",
+    "title": "Dynasty History",
+    "blurb": "Trade-value arcs over time — buy-low timing.",
+    "icon": "📈",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "line-chart",
+    "api": {
+      "handler": "fetch_dynasty_history",
+      "method": "GET",
+      "path": "/api/dynasty-history",
+      "params": {
+        "limit": 20
+      }
+    }
+  },
+  {
+    "slug": "prospect-tiers",
+    "legacyId": "prospect-tiers",
+    "title": "Prospect Tiers",
+    "blurb": "Rookie tier groupings for draft and trade season.",
+    "icon": "🪜",
+    "tier": "pro",
+    "category": "prospects",
+    "renderType": "tier",
+    "api": {
+      "handler": "fetch_prospect_tiers",
+      "method": "GET",
+      "path": "/api/prospect-tiers"
+    }
+  },
+  {
+    "slug": "draft-class-analytics",
+    "legacyId": "draft-class-analytics",
+    "title": "Draft Class Analytics",
+    "blurb": "Deep analytics on combine vs NFL production.",
+    "icon": "🧪",
+    "tier": "pro",
+    "category": "college",
+    "renderType": "scatter",
+    "api": {
+      "handler": "fetch_draft_class_analytics",
+      "method": "GET",
+      "path": "/api/draft-class-analytics"
+    }
+  },
+  {
+    "slug": "athletic-radar",
+    "legacyId": "athletic-radar",
+    "title": "Athletic Radar",
+    "blurb": "Combine athleticism spider charts by position.",
+    "icon": "🕸",
+    "tier": "pro",
+    "category": "prospects",
+    "renderType": "grid",
+    "api": {
+      "handler": "fetch_athletic_radar",
+      "method": "GET",
+      "path": "/api/prospect-scores"
+    }
+  },
+  {
+    "slug": "college-breakouts",
+    "legacyId": "college-breakouts",
+    "title": "College Breakouts",
+    "blurb": "NCAA breakout candidates before the NFL buzz.",
+    "icon": "🎓",
+    "tier": "pro",
+    "category": "college",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_college_breakouts",
+      "method": "GET",
+      "path": "/api/college/breakouts",
+      "params": {
+        "limit": 50
+      }
+    }
+  },
+  {
+    "slug": "college-leaders",
+    "legacyId": "college-leaders",
+    "title": "College Leaders",
+    "blurb": "NCAA stat leaders across conferences.",
+    "icon": "🏫",
+    "tier": "pro",
+    "category": "college",
+    "renderType": "table",
+    "api": {
+      "handler": "fetch_college_leaders",
+      "method": "GET",
+      "path": "/api/college/leaders",
+      "params": {
+        "limit": 10
+      }
+    }
+  },
+  {
+    "slug": "college-screener",
+    "legacyId": "college-screener",
+    "title": "College Screener",
+    "blurb": "Filter college stats like the NFL screener.",
+    "icon": "🔬",
+    "tier": "pro",
+    "category": "college",
+    "renderType": "screener",
+    "api": {
+      "handler": "fetch_college_players",
+      "method": "GET",
+      "path": "/api/college/players"
+    }
+  },
+  {
+    "slug": "heatmap",
+    "legacyId": "heatmap",
+    "title": "Stat Heatmap",
+    "blurb": "Position heatmap across any stat column.",
+    "icon": "🌡",
+    "tier": "pro",
+    "category": "trends",
+    "renderType": "heatmap",
+    "api": {
+      "handler": "fetch_heatmap",
+      "method": "GET",
+      "path": "/api/heatmap"
+    }
+  },
+  {
+    "slug": "monte-carlo",
+    "legacyId": "monte-carlo",
+    "title": "Monte Carlo",
+    "blurb": "Simulate season outcomes — playoff odds and ranges.",
+    "icon": "🎲",
+    "tier": "pro",
+    "category": "tools",
+    "renderType": "odds",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/monte-carlo/projections"
+    }
+  },
+  {
+    "slug": "buy-low",
+    "legacyId": "buy-low",
+    "title": "Buy Low",
+    "blurb": "Underperformers due for positive regression.",
+    "icon": "📉",
+    "tier": "pro",
+    "category": "discovery",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_screener",
+      "method": "POST",
+      "path": "/api/screener/query",
+      "params": {
+        "sort_key": "fantasy_points_ppr",
+        "sort_direction": "asc"
+      }
+    }
+  },
+  {
+    "slug": "sell-high",
+    "legacyId": "sell-high",
+    "title": "Sell High",
+    "blurb": "Overperformers ripe for a dynasty flip.",
+    "icon": "📈",
+    "tier": "pro",
+    "category": "discovery",
+    "renderType": "cards",
+    "api": {
+      "handler": "fetch_buy_sell_candidates",
+      "method": "GET",
+      "path": "/api/buy-sell-candidates",
+      "params": {
+        "side": "sell",
+        "limit": 15
+      }
+    }
+  }
+]
