@@ -8,7 +8,7 @@ next_slice: Lab L3 dynasty-rankings formula bar OR Explore L5 agent margin notes
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
 last_keep_cycle: 37
-last_commit: 2508e7a0
+last_commit: 6ff31209
 lab_l3_breakouts_formula: complete
 lab_l3_efficiency_formula: complete
 explore_l4_formula_store: complete
