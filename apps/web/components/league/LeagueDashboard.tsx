@@ -102,7 +102,7 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
           </p>
         ) : null}
         {feature !== "head-to-head" && data ? (
-          <BureauFeatureBody feature={feature} data={data as Record<string, unknown>} />
+          <BureauFeatureBody feature={feature} data={data as Record<string, unknown>} leagueId={leagueId} />
         ) : null}
       </main>
     </div>

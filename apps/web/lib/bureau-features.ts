@@ -4,6 +4,7 @@ export const BUREAU_FEATURES = [
   { slug: "build-profiles", label: "Build Profiles" },
   { slug: "power-rankings", label: "Power Rankings" },
   { slug: "trade-network", label: "Trade Network" },
+  { slug: "manager-profiles", label: "Manager Profiles" },
   { slug: "waiver-tendencies", label: "Waiver Tendencies" },
   { slug: "head-to-head", label: "Head-to-Head" },
   { slug: "strength-of-schedule", label: "Schedule" },
@@ -21,6 +22,11 @@ export const BUREAU_ENDPOINTS: Record<
   "build-profiles": { path: "/api/bureau/build-profiles", needsUser: false, title: "Build Profiles" },
   "power-rankings": { path: "/api/bureau/power-rankings", needsUser: false, title: "Power Rankings" },
   "trade-network": { path: "/api/bureau/trade-network", needsUser: false, title: "Trade Network" },
+  "manager-profiles": {
+    path: "/api/bureau/manager-profiles",
+    needsUser: false,
+    title: "Manager Profiles",
+  },
   "waiver-tendencies": { path: "/api/bureau/waiver-tendencies", needsUser: false, title: "Waiver Tendencies" },
   "strength-of-schedule": {
     path: "/api/bureau/strength-of-schedule",

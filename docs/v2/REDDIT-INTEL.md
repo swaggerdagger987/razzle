@@ -179,3 +179,13 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Slice:** Explore L4 formula store — static Razzle Labs catalog, position filter, one-click import to localStorage, sort by composite, Octo Room ask.
 - **Council cycle:** 34
 - **Bot-fact potential:** `!razzle confirm <player> PPR Workhorse rank` — future intel layer
+
+## 2026-05-23 — Cycle 43
+
+### r/DynastyFF — leaguemate psychology / panic seller screenshots (pattern; live fetch 403)
+- **Pattern:** Trade advice threads name **specific managers** — "Dave panic-sells after back-to-back losses", "Kevin never trades" — more than generic rankings. Group chats screenshot manager dossiers when negotiating deals.
+- **Competitor framing:** Footballguys "Know Your Leaguemates" articles (2018–2024) — manual observation, zero automation. leaguemate.fyi does history not psychology.
+- **Razzle gap:** Bureau had build profiles (roster archetype) and waiver tendencies but no manager behavioral tags with exploit windows.
+- **Slice:** League L3 `manager-profiles` — Bones header, PANIC SELLER/HOARDER/AGGRESSIVE cards, exploit-window copy, Room ask on hero manager.
+- **Council cycle:** 43
+- **Bot-fact potential:** `!razzle confirm <manager> panic score` — future intel layer

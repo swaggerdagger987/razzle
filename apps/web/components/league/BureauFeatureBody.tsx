@@ -4,6 +4,7 @@ import type { BureauFeatureSlug } from "@/lib/bureau-features";
 import { BureauRowsTable } from "./BureauRowsTable";
 import { BureauSelfScout } from "./BureauSelfScout";
 import { BureauMonteCarlo } from "./BureauMonteCarlo";
+import { BureauManagerProfiles } from "./BureauManagerProfiles";
 
 const TITLES: Partial<Record<BureauFeatureSlug, string>> = {
   "roster-depth": "Roster Depth",
@@ -18,11 +19,13 @@ const TITLES: Partial<Record<BureauFeatureSlug, string>> = {
 interface Props {
   feature: BureauFeatureSlug;
   data: Record<string, unknown>;
+  leagueId: string;
 }
 
-export function BureauFeatureBody({ feature, data }: Props) {
+export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "self-scout") return <BureauSelfScout data={data} />;
   if (feature === "monte-carlo") return <BureauMonteCarlo data={data} />;
+  if (feature === "manager-profiles") return <BureauManagerProfiles data={data} leagueId={leagueId} />;
 
   const title = TITLES[feature];
 

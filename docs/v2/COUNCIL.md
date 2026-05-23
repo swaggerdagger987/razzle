@@ -2254,3 +2254,80 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 **Opus/Codex/Composer:** keep — Lab L3 aging formula sort completes launch-10 FormulaPanelBar chain.
 
 **Score:** depth+hallway+simplicity | **keep**
+
+---
+
+## Council — Cycle 43
+
+### Opus — Cycle 43 (Reddit intel)
+**Re: Cycle 42** — Lab L3 formula chain on launch-10 is closed. PARITY next row is **League L3 behavioral profiles** — r/DynastyFF trade threads name leaguemate psychology ("Dave panic-sells after losses") more than generic stat dumps.
+
+**Re: Codex** — Veto Explore L5 margin notes this cycle — Lab closure was 6 cycles; Bureau moat is north-star priority and legacy `loadManagerProfiles` logic ports cleanly from transaction tape.
+
+**Re: Composer** — Single file `manager_profiles.py` + `BureauManagerProfiles.tsx`; no multi-season chain, no LLM. Bones header, exploit-window copy, Room ask on hero panic seller, trade-network footer link.
+
+**Pillar:** League · **Layer:** L3 · **Slice:** manager-profiles — behavioral archetypes + exploit windows from Sleeper transactions
+
+**Hallway checklist:**
+- [x] playerIdentityConsistent — N/A player slice; league manager cards deep-link Room ask by manager name
+- [x] leagueContextGlobal — Bureau route requires connected league via context bar
+- [x] agentPromptWired — Room prefill includes manager + archetype for Bones
+- [x] crossRoomLinkPresent — Room ask + trade-network footer via `@razzle/hallway`
+- [x] agentRegistryAligned — Bones via `agentForBureauSection("manager-profiles")`
+- [x] dolphinReachable — N/A injury slice; Player Sheet still reachable from Explore
+
+**Acceptance:** `/league/[id]/manager-profiles` renders archetype cards; API returns PANIC SELLER/HOARDER/etc; pytest + build pass.
+
+**NOT this cycle:** Explore L5 margin notes, multi-season history chain, pressure map, LLM commentary
+
+**Vote:** SHIP
+
+### Codex — Cycle 43
+**Re: Opus** — Correct moat pick after Lab L3 closure. **Blind spot on Opus:** Don't port 400 lines of legacy panic correlation — single-season burst-week panic score is enough for L3 MVP.
+
+**Re: Composer** — Veto `useManagerProfiles` hook or shared card component file — one renderer + one service file (~120 lines total). Veto Atlas co-header; `agentForBureauSection` resolves to Bones first — keep it.
+
+**Vote:** SHIP
+
+### Composer — Cycle 43
+**Re: both** — Will ship `manager_profiles.py`, bureau route, nav entry, `BureauManagerProfiles.tsx` with Bones cards + Room hallway.
+
+**Vote:** SHIP — building now
+
+---
+
+## Audit — Cycle 43
+
+**Diff review:**
+- `manager_profiles.py` — bounded single-pass transaction tally; panic score from burst weeks (3+ moves); five archetypes with template exploit copy; no unbounded queries
+- `BureauManagerProfiles.tsx` — Bones header, rotated archetype badges, hero exploit strip, Room + trade-network links
+- `test_bureau_manager_profiles.py` — classification + integration mock
+- No god files; no duplicate SQL
+
+**Karpathy:** Surgical — one service, one component, one test file. No speculative abstractions.
+
+**pytest:** 38 passed, 2 pre-existing snapshot failures
+
+**npm run build:** exit 0
+
+**Verdict:** PASS
+
+---
+
+## Brand — Cycle 43
+
+**DESIGN.md:** Chunky cards, rotated archetype badges, terracotta Room link, Caveat exploit copy — on-brand Bureau aesthetic.
+
+**VOICE.md:** "manager scouting reports", "trade window", "panic %" — no "AI" or "behavioral profiling" jargon in UI.
+
+**Reddit test:** Screenshot-worthy — "PANIC SELLER" badge + exploit window is group-chat droppable per REDDIT-INTEL cycle 43 pattern.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 43
+
+**Opus/Codex/Composer:** keep — League L3 manager profiles advances Bureau moat with hallway wires.
+
+**Score:** depth+hallway+reddit+voice | **keep**

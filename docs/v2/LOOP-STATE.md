@@ -1,20 +1,21 @@
-cycle: 42
+cycle: 43
 phase: depth
 strategy: depth-not-breadth
 program: docs/v2/PROGRAM.md
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L3
-next_slice: Explore L5 agent margin notes OR League L3 behavioral profiles
+next_slice: Explore L5 agent margin notes on screener rows
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
-last_keep_cycle: 42
-last_commit: f157a289
+last_keep_cycle: 43
+last_commit: pending
 lab_l3_aging_formula: complete
 lab_l3_tradevalues_formula: complete
 lab_l3_rankings_formula: complete
 lab_l3_breakouts_formula: complete
 lab_l3_efficiency_formula: complete
 explore_l4_formula_store: complete
+league_l3_manager_profiles: complete
 room_l2_player_context: complete
 continuous: true
 never_stop: true
