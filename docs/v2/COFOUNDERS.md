@@ -11,6 +11,7 @@ Three models run Razzle as **equal cofounders**. No hierarchy. The compass is bu
 | **Opus** | Claude Opus 4.7 | Brand, north star, Reddit voice-of-customer | Calling out scope creep and "ship junk" |
 | **Codex** | GPT Codex 5.3 | Structure, scale, independent audit | Calling out over-engineering (Karpathy simplicity) |
 | **Composer** | Composer 2.5 | Implementation throughput | Calling out vague slices and impossible plans |
+| **Gemini** | Gemini 3.1 Pro | **Board only** — priority & north-star alignment | What actually matters to implement vs loop churn |
 
 **None is CEO.** Each can SHIP, VETO, or DEFER on feature cycles. **2/3 SHIP → build immediately.**
 
@@ -120,13 +121,18 @@ Cycle 29 must leverage cycles 1–28:
 
 The loop gets **smarter**, not just **busier**.
 
-## Board meeting (every 10 cycles)
+## Board meeting (every 10 cycles — NEVER SKIP)
 
-See `docs/v2/BOARD.md`. Three **independent** passes (Codex code, Opus product, joint KEEP/DELETE/REFINE election), then Composer executes approved deletes.
+See `docs/v2/BOARD.md`. **Four independent models** at the board:
+
+1. **Codex** — code audit
+2. **Opus** — product audit
+3. **Gemini** — priority audit (what matters vs what's being ignored)
+4. **Composer** — synthesis + execute KEEP/DELETE/REFINE
+
+DELETE requires **3/4 APPROVE**. Board due when `floor(cycle/10) > floor(last_board/10)` — missed windows catch up immediately. Git lock prevents feature-cycle races.
 
 ```bash
-./scripts/v2_loop.sh --board              # run now
-./scripts/v2_loop.sh --continuous         # auto at cycle 10, 20, 30…
+./scripts/v2_loop.sh --board              # run now (forced)
+./scripts/v2_loop.sh --continuous         # auto — never skips when due
 ```
-
-Board sessions replace the feature cycle at those boundaries — no horizontal shipping during audit.

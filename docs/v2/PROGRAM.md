@@ -106,9 +106,9 @@ When `git status --porcelain` is non-empty at cycle start or after a cycle:
 
 Survival rule: **losing uncommitted work is worse than an imperfect commit.** Commit first; fix in the next cycle if needed.
 
-### Board meeting (every 10 cycles)
+### Board meeting (every 10 cycles — NEVER SKIP)
 
-Three-model **KEEP · DELETE · REFINE** passover — see `docs/v2/BOARD.md`. Replaces feature cycle at multiples of 10. Manual: `./scripts/v2_loop.sh --board`. Cofounders optimize for **finished-product joy**, not debate theater.
+Four-model **KEEP · DELETE · REFINE** passover — Codex, Opus, **Gemini 3.1 Pro** (priority), Composer. See `docs/v2/BOARD.md`. Due when decade window passed since `last_board_cycle` — catch up immediately, no skip. Manual: `./scripts/v2_loop.sh --board`. DELETE requires 3/4 APPROVE.
 
 ---
 

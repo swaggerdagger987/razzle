@@ -33,7 +33,7 @@ This runs **cycle → cycle → cycle** with **zero sleep**. Only stops on Ctrl+
 
 **Commit gate:** If the working tree is dirty, the shell enters **survival mode** — infinite agent recovery + emergency auto-commit. Log: `docs/v2/recovery.log`.
 
-**Board meeting:** Every 10 cycles (or `./scripts/v2_loop.sh --board`) — three real models audit code, elect KEEP/DELETE/REFINE. See `docs/v2/BOARD.md`.
+**Board meeting:** Every 10 cycles, **never skipped** — 4 models (Codex, Opus, **Gemini 3.1 Pro**, Composer). `./scripts/v2_loop.sh --board` to run now. Catches up missed windows automatically.
 
 **Important:** A single `cursor-agent` session cannot be trusted to self-loop — it will print "PRODUCT COMPLETE" and exit. The **shell wrapper** is what keeps it continuous.
 
