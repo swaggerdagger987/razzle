@@ -2,7 +2,8 @@
 # Razzle V2 — Cofounder Loop (Cursor credits, NOT Claude CLI)
 #
 # Usage:
-#   ./scripts/v2_loop.sh --continuous     # NEVER STOPS — chains cycles, zero sleep (default for grind)
+#   ./scripts/v2_loop.sh --board           # board meeting now (3-model audit + KEEP/DELETE/REFINE)
+#   ./scripts/v2_loop.sh --continuous     # NEVER STOPS — board every 10 cycles
 #   ./scripts/v2_loop.sh                  # 1 cycle
 #   ./scripts/v2_loop.sh 25               # 25 cycles then exit
 #   ./scripts/v2_loop.sh --steps 25       # 3-model split, 25 cycles
@@ -16,8 +17,10 @@ cd "$ROOT"
 
 PROMPT_FILE="$ROOT/loop-prompt-v2.txt"
 CONTINUOUS_PROMPT="$ROOT/loop-prompt-continuous.txt"
+BOARD_PROMPT="$ROOT/loop-prompt-board.txt"
 FEATURES="$ROOT/docs/v2/FEATURES.md"
 STATE="$ROOT/docs/v2/LOOP-STATE.md"
+BOARD_INTERVAL="${RAZZLE_BOARD_INTERVAL:-10}"
 MODE="single"
 CYCLES=1
 
@@ -29,7 +32,8 @@ RECOVERY_MODELS=("$MODEL_CTO" "$MODEL_CEO" "$MODEL_BUILDER")
 
 usage() {
   cat <<EOF
-Usage: ./scripts/v2_loop.sh --continuous   # NEVER STOPS — shell chains cycles, zero sleep
+Usage: ./scripts/v2_loop.sh --continuous   # NEVER STOPS — board every ${BOARD_INTERVAL} cycles
+       ./scripts/v2_loop.sh --board         # board meeting now (3-model KEEP/DELETE/REFINE)
        ./scripts/v2_loop.sh [cycles]
        ./scripts/v2_loop.sh --steps [cycles]
        ./scripts/v2_loop.sh --steps-continuous
@@ -56,7 +60,10 @@ if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   exit 0
 fi
 
-if [[ "${1:-}" == "--continuous" ]]; then
+if [[ "${1:-}" == "--board" ]]; then
+  MODE="board"
+  shift
+elif [[ "${1:-}" == "--continuous" ]]; then
   MODE="continuous"
   shift
 elif [[ "${1:-}" == "--steps" ]]; then
@@ -136,6 +143,86 @@ run_steps_cycle() {
 update_cycle_state() {
   local cycle="$1"
   sed -i '' "s/^cycle:.*/cycle: $cycle/" "$STATE" 2>/dev/null || sed -i "s/^cycle:.*/cycle: $cycle/" "$STATE"
+}
+
+last_board_cycle() {
+  if grep -q '^last_board_cycle:' "$STATE" 2>/dev/null; then
+    grep '^last_board_cycle:' "$STATE" | awk '{print $2}'
+  else
+    echo "0"
+  fi
+}
+
+update_last_board_cycle() {
+  local cycle="$1"
+  if grep -q '^last_board_cycle:' "$STATE" 2>/dev/null; then
+    sed -i '' "s/^last_board_cycle:.*/last_board_cycle: $cycle/" "$STATE" 2>/dev/null || \
+      sed -i "s/^last_board_cycle:.*/last_board_cycle: $cycle/" "$STATE"
+  else
+    echo "last_board_cycle: $cycle" >> "$STATE"
+  fi
+}
+
+should_run_board() {
+  local cycle="$1"
+  local last
+  last=$(last_board_cycle)
+  if (( cycle <= last )); then
+    return 1
+  fi
+  if (( cycle % BOARD_INTERVAL == 0 )); then
+    return 0
+  fi
+  return 1
+}
+
+run_board_meeting() {
+  local after_cycle="$1"
+  local last_board
+  last_board=$(last_board_cycle)
+  local board_base
+  board_base="$(cat "$BOARD_PROMPT")
+
+Board session after cycle $after_cycle. Last board was after cycle $last_board.
+
+Before writing, run:
+  git log --oneline -40
+  git diff --stat HEAD~40..HEAD 2>/dev/null || git diff --stat
+  pytest apps/api/tests -q
+  npm run build
+
+Reward criterion: joy of a truly finished product — not performative agreement or disagreement. You want Razzle yourself."
+
+  echo ""
+  echo "################################################################"
+  echo "## BOARD MEETING — after cycle $after_cycle (3-model passover) ##"
+  echo "################################################################"
+
+  run_cursor_agent "CODEX — Board code audit" "$MODEL_CTO" "$board_base
+
+Role: CODEX (cofounder). Append ## Board — Codex Code Audit (after cycle $after_cycle) to docs/v2/COUNCIL.md.
+
+Full code passover: legacy shims, stubs labeled GREEN, copy-paste debt, dead code, god files, test failures, docs vs reality. Tag each area FINISHED | HALF-DONE | DELETE-CANDIDATE | REFINE-CANDIDATE with file paths and evidence. Do NOT vote yet. Be honest — HALF-DONE hurts users."
+
+  run_cursor_agent "OPUS — Board product audit" "$MODEL_CEO" "$board_base
+
+Role: OPUS (cofounder). Read Codex board audit in COUNCIL.md. Append ## Board — Opus Product Audit (after cycle $after_cycle).
+
+What would you ship to r/DynastyFF today vs hide? Which surfaces feel finished vs embarrassing? Read VOICE.md and DESIGN.md. HALF-DONE is worse than deleted. Do NOT vote yet."
+
+  run_cursor_agent "COMPOSER — Board synthesis draft" "$MODEL_BUILDER" "$board_base
+
+Role: COMPOSER (cofounder). Read both board audits. Append ## Board Meeting — After Cycle $after_cycle with KEEP, DELETE, REFINE tables per docs/v2/BOARD.md. Leave vote columns empty for now. Propose max 3 REFINE priorities. Do NOT execute deletes yet."
+
+  run_cursor_agent "OPUS — Board ratify" "$MODEL_CEO" "Read docs/v2/BOARD.md and ## Board Meeting — After Cycle $after_cycle in COUNCIL.md. Append ### Board Vote — Opus. For each DELETE and REFINE row vote APPROVE | AMEND | REJECT with one-line reason. Criterion: finished-product joy — would you use this Sunday morning? 2/3 APPROVE required for DELETE."
+
+  run_cursor_agent "CODEX — Board ratify" "$MODEL_CTO" "Read board meeting + Opus vote in COUNCIL.md. Append ### Board Vote — Codex. Same format. Independent — do not rubber-stamp Opus. Simplicity wins: deleting bad code is a board victory."
+
+  run_cursor_agent "COMPOSER — Board execute + commit" "$MODEL_BUILDER" "Read all board sections and both votes in COUNCIL.md. Tally 2/3 on each DELETE and REFINE row. Append ### Board Verdict with executed DELETEs and queued REFINEs. Execute ALL approved DELETEs and REFINE quick wins (<30 min). Run pytest + npm run build. git commit -m 'board: after cycle $after_cycle — <summary>'. Update LOOP-STATE.md last_board_cycle:$after_cycle and next_slice from top REFINE. Append results.tsv row (cycle=$after_cycle, slice=board, status=keep). Verify git status clean."
+
+  update_last_board_cycle "$after_cycle"
+  echo ""
+  echo "=== Board meeting complete (after cycle $after_cycle) ==="
 }
 
 log_recovery() {
@@ -290,6 +377,13 @@ run_chain_forever() {
     echo ""
     echo ">>>>>>>>>> Cycle $cycle — $(date) <<<<<<<<<<"
 
+    if should_run_board "$cycle"; then
+      run_board_meeting "$cycle"
+      ensure_clean_tree "board-$cycle"
+      update_cycle_state "$cycle"
+      continue
+    fi
+
     if [[ "$use_steps" == "true" ]]; then
       run_steps_cycle "$cycle"
     else
@@ -309,6 +403,12 @@ echo "Models: CEO=$MODEL_CEO  CTO=$MODEL_CTO  Builder=$MODEL_BUILDER"
 echo "=================================================="
 
 case "$MODE" in
+  board)
+    ensure_clean_tree
+    BOARD_CYCLE=$(grep '^cycle:' "$STATE" | awk '{print $2}')
+    run_board_meeting "$BOARD_CYCLE"
+    ensure_clean_tree "board-$BOARD_CYCLE"
+    ;;
   continuous)
     # Shell chains cycles with zero sleep. Single agent sessions exit early —
     # the shell is the autoresearch loop that never stops.

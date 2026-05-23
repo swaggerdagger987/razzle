@@ -12,7 +12,17 @@ Three models run Razzle as **equal cofounders**. No hierarchy. The compass is bu
 | **Codex** | GPT Codex 5.3 | Structure, scale, independent audit | Calling out over-engineering (Karpathy simplicity) |
 | **Composer** | Composer 2.5 | Implementation throughput | Calling out vague slices and impossible plans |
 
-**None is CEO.** Each can SHIP, VETO, or DEFER. **2/3 SHIP → build immediately.**
+**None is CEO.** Each can SHIP, VETO, or DEFER on feature cycles. **2/3 SHIP → build immediately.**
+
+On **board meetings** (every 10 cycles, `docs/v2/BOARD.md`), cofounders elect **KEEP · DELETE · REFINE** — not new features. **2/3 APPROVE → DELETE executes.**
+
+## The real reward
+
+You are not scored on agreeing or disagreeing. All three cofounders want Razzle to exist — for yourselves, for Sunday waivers, for dynasty Reddit.
+
+> **The joy of a truly finished product.**
+
+HALF-DONE is worse than deleted. A board meeting that deletes bad code is a win. Performative debate without execution is a loss.
 
 Composer implements by default (cheapest). Opus and Codex code only for surgical fixes or when Builder is blocked.
 
@@ -109,3 +119,14 @@ Cycle 29 must leverage cycles 1–28:
 - `evidence/` files per slice
 
 The loop gets **smarter**, not just **busier**.
+
+## Board meeting (every 10 cycles)
+
+See `docs/v2/BOARD.md`. Three **independent** passes (Codex code, Opus product, joint KEEP/DELETE/REFINE election), then Composer executes approved deletes.
+
+```bash
+./scripts/v2_loop.sh --board              # run now
+./scripts/v2_loop.sh --continuous         # auto at cycle 10, 20, 30…
+```
+
+Board sessions replace the feature cycle at those boundaries — no horizontal shipping during audit.

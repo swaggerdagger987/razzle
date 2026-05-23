@@ -106,6 +106,10 @@ When `git status --porcelain` is non-empty at cycle start or after a cycle:
 
 Survival rule: **losing uncommitted work is worse than an imperfect commit.** Commit first; fix in the next cycle if needed.
 
+### Board meeting (every 10 cycles)
+
+Three-model **KEEP · DELETE · REFINE** passover — see `docs/v2/BOARD.md`. Replaces feature cycle at multiples of 10. Manual: `./scripts/v2_loop.sh --board`. Cofounders optimize for **finished-product joy**, not debate theater.
+
 ---
 
 ## Karpathy coding rules (every build + audit)

@@ -31,7 +31,9 @@ cd "/Users/sohammehta/Desktop/05 - Code Projects/Legacy Razzle/razzle"
 
 This runs **cycle → cycle → cycle** with **zero sleep**. Only stops on Ctrl+C.
 
-**Commit gate:** If the working tree is dirty, the shell enters **survival mode** — infinite agent recovery (Codex → Opus → Composer) + emergency auto-commit. Never exits until clean. Log: `docs/v2/recovery.log`.
+**Commit gate:** If the working tree is dirty, the shell enters **survival mode** — infinite agent recovery + emergency auto-commit. Log: `docs/v2/recovery.log`.
+
+**Board meeting:** Every 10 cycles (or `./scripts/v2_loop.sh --board`) — three real models audit code, elect KEEP/DELETE/REFINE. See `docs/v2/BOARD.md`.
 
 **Important:** A single `cursor-agent` session cannot be trusted to self-loop — it will print "PRODUCT COMPLETE" and exit. The **shell wrapper** is what keeps it continuous.
 
