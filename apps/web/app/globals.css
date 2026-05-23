@@ -339,6 +339,25 @@ body {
   color: var(--orange);
 }
 
+.explore-feed-margin {
+  margin-top: 0.35rem;
+}
+
+.explore-margin-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  color: var(--ink-medium);
+  text-decoration: none;
+  border-left: 2px dashed var(--ink-light);
+  padding-left: 0.4rem;
+}
+
+.explore-margin-note:hover {
+  color: var(--orange);
+}
+
 .pos-chip {
   border: 2px solid var(--ink);
   border-radius: 999px;

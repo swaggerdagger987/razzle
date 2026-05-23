@@ -11,6 +11,7 @@ import type { PlayerRow } from "@/lib/api";
 import type { ExploreUniverse } from "@/lib/explore-params";
 import { formulaColumnKey, type SavedFormula } from "@/lib/formulas";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { ExploreMarginNote } from "./ExploreMarginNote";
 
 const columnHelper = createColumnHelper<PlayerRow>();
 
@@ -59,6 +60,15 @@ export function ExploreTable({
       header: "Player",
       cell: (info) => info.getValue(),
     }),
+    ...(universe === "nfl"
+      ? [
+          columnHelper.display({
+            id: "staff_note",
+            header: "Staff",
+            cell: ({ row }) => <ExploreMarginNote row={row.original} universe={universe} />,
+          }),
+        ]
+      : []),
     columnHelper.accessor("position", {
       header: "Pos",
       cell: (info) => <PositionPill position={info.getValue()} />,

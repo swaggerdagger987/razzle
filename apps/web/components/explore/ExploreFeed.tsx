@@ -3,6 +3,7 @@
 import { PositionPill } from "@razzle/ui";
 import type { PlayerRow } from "@/lib/api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { ExploreMarginNote } from "./ExploreMarginNote";
 
 function slugify(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -48,6 +49,11 @@ export function ExploreFeed({ rows, universe = "nfl" }: Props) {
               {Number(row[primaryStatKey] ?? row.fantasy_points_ppr ?? 0).toLocaleString()} {primaryLabel}
             </span>
           </div>
+          {universe === "nfl" && (
+            <div className="explore-feed-margin">
+              <ExploreMarginNote row={row} universe={universe} />
+            </div>
+          )}
         </button>
       ))}
     </div>
