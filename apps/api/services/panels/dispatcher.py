@@ -25,6 +25,7 @@ RESERVED_PATHS = frozenset(
 )
 
 _BODY_HANDLERS = frozenset({"fetch_screener"})
+_INT_PARAMS = frozenset({"limit", "season", "week", "min_gp", "budget", "roster_size", "years"})
 
 
 class PanelError(Exception):
@@ -38,6 +39,15 @@ def _resolve_handler(name: str):
     return fn
 
 
+def _try_int(val: Any) -> int | None:
+    if val is None or val == "":
+        return None
+    try:
+        return int(val)
+    except (TypeError, ValueError):
+        return None
+
+
 def _coerce_params(fn, params: dict[str, Any]) -> dict[str, Any]:
     sig = inspect.signature(fn)
     coerced: dict[str, Any] = {}
@@ -47,12 +57,11 @@ def _coerce_params(fn, params: dict[str, Any]) -> dict[str, Any]:
         val = params[key]
         ann = str(param.annotation).lower()
         if val is not None and val != "":
-            if "int" in ann:
-                try:
-                    coerced[key] = int(val)
+            if key in _INT_PARAMS or "int" in ann:
+                as_int = _try_int(val)
+                if as_int is not None:
+                    coerced[key] = as_int
                     continue
-                except (TypeError, ValueError):
-                    pass
             if "float" in ann:
                 try:
                     coerced[key] = float(val)
@@ -71,6 +80,24 @@ def dispatch_handler(handler_name: str, params: dict[str, Any]) -> Any:
     return fn(**filtered)
 
 
+def safe_dispatch_handler(handler_name: str, params: dict[str, Any]) -> Any:
+    """Run handler; return empty shape on failure so panels never 500."""
+    try:
+        return dispatch_handler(handler_name, params)
+    except PanelError:
+        raise
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("panel handler %s failed: %s", handler_name, exc)
+        return {
+            "rows": [],
+            "items": [],
+            "error": str(exc),
+            "handler": handler_name,
+        }
+
+
 def run_panel(slug: str, overrides: dict[str, Any] | None = None) -> Any:
     try:
         panel = get_panel(slug)
@@ -80,7 +107,7 @@ def run_panel(slug: str, overrides: dict[str, Any] | None = None) -> Any:
     params = dict(api.get("params") or {})
     if overrides:
         params.update({k: v for k, v in overrides.items() if v is not None})
-    return dispatch_handler(api["handler"], params)
+    return safe_dispatch_handler(api["handler"], params)
 
 
 async def _legacy_endpoint(request: Request, panel: dict[str, Any]) -> Any:
@@ -97,7 +124,7 @@ async def _legacy_endpoint(request: Request, panel: dict[str, Any]) -> Any:
         for key, val in request.query_params.multi_items():
             if key != "slug":
                 params[key] = val
-    return dispatch_handler(api["handler"], params)
+    return safe_dispatch_handler(api["handler"], params)
 
 
 def register_catalog_routes(router: APIRouter) -> None:

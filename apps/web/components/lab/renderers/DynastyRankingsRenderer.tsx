@@ -1,0 +1,233 @@
+"use client";
+
+import { AGENT_BY_ID } from "@razzle/agents";
+import type { PanelDefinition } from "@razzle/panels";
+import { PositionPill } from "@razzle/ui";
+import { toRoom } from "@razzle/hallway";
+import Link from "next/link";
+import type { Route } from "next";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import { isUpgradeRequiredError } from "@/lib/panel-api";
+import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { ProUpgradeGate } from "../ProUpgradeGate";
+
+const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
+
+interface PlayerRow {
+  player_id: string;
+  full_name: string;
+  position: string;
+  team: string;
+  age?: number | null;
+  ppg?: number;
+  dynasty_value?: number;
+  tier_label?: string;
+}
+
+interface TierBlock {
+  tier: number;
+  label: string;
+  players: PlayerRow[];
+}
+
+interface RankingsData {
+  players?: PlayerRow[];
+  tiers?: TierBlock[];
+  total?: number;
+  season?: number;
+}
+
+function slugify(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+interface Props {
+  panel: PanelDefinition;
+}
+
+export function DynastyRankingsRenderer({ panel }: Props) {
+  const { openPlayer } = usePlayerSheet();
+  const [position, setPosition] = useState<(typeof POSITIONS)[number]>("");
+  const octo = AGENT_BY_ID.octo;
+
+  const q = useQuery({
+    queryKey: ["panel", panel.slug, position],
+    queryFn: async () => {
+      const qs = position ? `?position=${position}` : "";
+      const res = await fetch(`/api/panels/${panel.slug}${qs}`);
+      if (res.status === 402) {
+        const body = await res.json().catch(() => ({}));
+        const detail = (body as { detail?: Record<string, string> }).detail ?? {};
+        throw Object.assign(new Error(detail.message ?? "Pro plan required"), {
+          upgrade: detail,
+        });
+      }
+      if (!res.ok) throw new Error(`API ${res.status}`);
+      return res.json() as Promise<RankingsData>;
+    },
+  });
+
+  const topPlayer = useMemo(() => {
+    const data = q.data;
+    if (!data?.players?.length) return null;
+    return data.players[0]!;
+  }, [q.data]);
+
+  if (q.isPending) {
+    return (
+      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
+        {octo.loadingCopy}
+      </p>
+    );
+  }
+
+  if (q.isError) {
+    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
+    if (err.upgrade) {
+      return (
+        <ProUpgradeGate
+          panelTitle={panel.title}
+          required={err.upgrade.required ?? "pro"}
+          current={err.upgrade.current ?? "free"}
+          message={err.upgrade.message}
+        />
+      );
+    }
+    if (isUpgradeRequiredError(err)) {
+      return (
+        <ProUpgradeGate
+          panelTitle={panel.title}
+          required={err.required}
+          current={err.current}
+          message={err.message}
+        />
+      );
+    }
+    return <p className="p-6 text-red">something fumbled: {err.message}</p>;
+  }
+
+  const data = q.data!;
+  const tiers = data.tiers ?? [];
+
+  return (
+    <div className="dynasty-rankings">
+      <header className="panel-agent-header mb-4 flex items-start gap-3">
+        <img src={`/agents/${octo.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
+        <div>
+          <p className="text-sm font-bold">{octo.name}</p>
+          <p className="text-ink-medium text-xs">{octo.role} · dynasty value tiers</p>
+        </div>
+      </header>
+
+      <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
+        {POSITIONS.map((pos) => (
+          <button
+            key={pos || "ALL"}
+            type="button"
+            role="tab"
+            aria-selected={position === pos}
+            className={`btn-chunky text-sm${position === pos ? " bg-orange text-white" : ""}`}
+            onClick={() => setPosition(pos)}
+          >
+            {pos || "All"}
+          </button>
+        ))}
+      </div>
+
+      {data.season && (
+        <p className="text-ink-medium mb-4 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
+          {data.total ?? 0} players · {data.season} season · PPR dynasty value
+        </p>
+      )}
+
+      {!tiers.length ? (
+        <p className="text-ink-medium p-6">{octo.emptyCopy}</p>
+      ) : (
+        <div className="tier-stack">
+          {tiers.map((tier) => (
+            <section key={tier.tier} className="tier-block chunky bg-bg-card p-4">
+              <h3 className="tier-label" style={{ fontFamily: "var(--font-display)" }}>
+                {tier.label}
+              </h3>
+              <ul className="tier-players">
+                {tier.players.map((p) => {
+                  const age = p.age != null ? Number(p.age) : null;
+                  const durabilityFlag = age != null && age >= 28;
+                  return (
+                    <li key={p.player_id} className="flex flex-wrap items-center gap-2 py-1">
+                      <button
+                        type="button"
+                        className="font-bold underline-offset-2 hover:underline"
+                        onClick={() =>
+                          openPlayer({
+                            playerId: p.player_id,
+                            slug: slugify(p.full_name),
+                            name: p.full_name,
+                            position: p.position,
+                            team: p.team,
+                          })
+                        }
+                      >
+                        {p.full_name}
+                      </button>
+                      <PositionPill position={p.position as "QB" | "RB" | "WR" | "TE"} />
+                      <span className="text-ink-medium text-xs">{p.team}</span>
+                      {age != null && (
+                        <span className="text-ink-medium text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+                          {age.toFixed(1)}y
+                        </span>
+                      )}
+                      <span className="text-orange text-xs font-bold" style={{ fontFamily: "var(--font-mono)" }}>
+                        {p.dynasty_value != null ? p.dynasty_value.toFixed(1) : "—"}
+                      </span>
+                      {durabilityFlag && (
+                        <Link
+                          href={
+                            toRoom({
+                              agentId: "dolphin",
+                              panelSlug: "rankings",
+                              question: `${p.full_name}: durability and injury risk for dynasty?`,
+                            }) as Route
+                          }
+                          className="text-xs text-purple underline"
+                          title="Ask Dr. Dolphin about durability"
+                        >
+                          durability →
+                        </Link>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))}
+        </div>
+      )}
+
+      {topPlayer && (
+        <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
+          <Link
+            href={
+              toRoom({
+                agentId: "octo",
+                panelSlug: "rankings",
+                question: `Where does ${topPlayer.full_name} rank in dynasty value vs ${topPlayer.position} peers?`,
+              }) as Route
+            }
+            className="text-sm text-orange underline"
+          >
+            Ask Octo about {topPlayer.full_name} →
+          </Link>
+          <a
+            href={`/og/rankings?download=1`}
+            className="text-sm text-ink-medium underline"
+            download="razzle-dynasty-rankings.png"
+          >
+            export card
+          </a>
+        </footer>
+      )}
+    </div>
+  );
+}

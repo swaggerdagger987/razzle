@@ -8,12 +8,17 @@ function slugify(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
+import type { ExploreUniverse } from "@/lib/explore-params";
+
 interface Props {
   rows: PlayerRow[];
+  universe?: ExploreUniverse;
 }
 
-export function ExploreFeed({ rows }: Props) {
+export function ExploreFeed({ rows, universe = "nfl" }: Props) {
   const { openPlayer } = usePlayerSheet();
+  const primaryStatKey = universe === "college" ? "total_yards" : "fantasy_points_ppr";
+  const primaryLabel = universe === "college" ? "YDS" : "FPTS";
 
   return (
     <div className="explore-feed md:hidden">
@@ -39,7 +44,9 @@ export function ExploreFeed({ rows }: Props) {
           <div className="explore-feed-stats">
             <span>{row.team}</span>
             <span>{row.games} GP</span>
-            <span className="explore-feed-fpts">{Number(row.fantasy_points_ppr).toFixed(1)} FPTS</span>
+            <span className="explore-feed-fpts">
+              {Number(row[primaryStatKey] ?? row.fantasy_points_ppr ?? 0).toLocaleString()} {primaryLabel}
+            </span>
           </div>
         </button>
       ))}

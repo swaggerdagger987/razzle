@@ -3,13 +3,42 @@ import { z } from "zod";
 
 const GenericSchema = z.record(z.string(), z.unknown());
 
+const UpgradeDetailSchema = z.object({
+  error: z.string().optional(),
+  required: z.string().optional(),
+  current: z.string().optional(),
+  message: z.string().optional(),
+});
+
+export class UpgradeRequiredError extends Error {
+  readonly required: string;
+  readonly current: string;
+
+  constructor(detail: { message?: string; required?: string; current?: string }) {
+    super(detail.message ?? "Pro plan required");
+    this.name = "UpgradeRequiredError";
+    this.required = detail.required ?? "pro";
+    this.current = detail.current ?? "free";
+  }
+}
+
+export function isUpgradeRequiredError(err: unknown): err is UpgradeRequiredError {
+  return err instanceof UpgradeRequiredError;
+}
+
 export async function fetchPanelData(panel: PanelDefinition): Promise<unknown> {
   // Slug route applies tier gating + catalog defaults
   const res = await fetch(`/api/panels/${panel.slug}`);
   if (res.status === 402) {
     const body = await res.json().catch(() => ({}));
-    const detail = (body as { detail?: { message?: string } }).detail;
-    throw new Error(detail?.message ?? "Pro plan required — use DEV toolbar to set elite");
+    const detailRaw = (body as { detail?: unknown }).detail;
+    const parsed = UpgradeDetailSchema.safeParse(detailRaw);
+    const detail = parsed.success ? parsed.data : {};
+    throw new UpgradeRequiredError({
+      message: detail.message ?? "Pro plan required — upgrade or use DEV toolbar",
+      required: detail.required,
+      current: detail.current,
+    });
   }
   if (!res.ok) throw new Error(`API ${res.status} on ${panel.slug}`);
   return res.json();

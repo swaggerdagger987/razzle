@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master, razzle-v2-redesign]
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r apps/api/requirements-dev.txt
+      - name: Lint
+        run: ruff check apps/api
+      - name: Test
+        env:
+          JWT_SECRET: ci-secret
+          ENVIRONMENT: development
+        run: pytest apps/api/tests -q
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm install --workspaces=false  # workspace deps install with the app
+      - run: npm install --workspace=apps/web
+      - run: npm run typecheck --workspace=apps/web
+      - run: npm run lint --workspace=apps/web

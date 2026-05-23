@@ -16,6 +16,7 @@ from .waiver_tendencies import waiver_tendencies
 from .head_to_head import head_to_head
 from .strength_of_schedule import strength_of_schedule
 from .monte_carlo import monte_carlo_projections
+from .player_status import player_league_status
 
 __all__ = [
     "self_scout",
@@ -27,4 +28,5 @@ __all__ = [
     "head_to_head",
     "strength_of_schedule",
     "monte_carlo_projections",
+    "player_league_status",
 ]

@@ -38,6 +38,7 @@ class ScreenerQuery(BaseModel):
     filters: list[ScreenerFilter] = Field(default_factory=list)
     relevance: Literal["all", "fantasy"] = "fantasy"
     min_gp: int = Field(0, ge=0, le=17)
+    universe: Universe = "nfl"
 
 
 class PlayerRow(BaseModel):
@@ -47,7 +48,7 @@ class PlayerRow(BaseModel):
     full_name: str
     position: Position
     team: str
-    age: int | None = None
+    age: float | None = None
     games: int = 0
     fantasy_points_ppr: float = 0.0
 

@@ -117,9 +117,16 @@
 }
 
 .canvas-placeholder-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-hand);
   font-size: 22px;
   color: var(--room-text-muted);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .canvas-placeholder-sub {
@@ -266,9 +273,101 @@
   color: #ede0cf;
 }
 
+/* Briefing panel (v5-hybrid — canvas + chat) */
+.briefing-panel {
+  width: min(420px, 42vw);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: var(--room-surface);
+  border-left: 3px solid var(--room-border);
+  flex-shrink: 0;
+  min-height: 0;
+}
+
+.briefing-panel-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--yellow);
+}
+
+.briefing-empty {
+  font-family: var(--font-hand);
+  font-size: 18px;
+  color: var(--room-text-muted);
+  padding: 8px 4px;
+}
+
+.briefing-input-row {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: var(--room-surface-warm);
+  border-color: var(--room-border);
+}
+
+.briefing-input {
+  flex: 1;
+  background: var(--room-bg);
+  color: var(--room-text);
+  border: 2px solid var(--room-border);
+  padding: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.briefing-send {
+  background: var(--orange);
+  color: var(--text-on-accent);
+  border-color: var(--room-border);
+  font-family: var(--font-display);
+  font-size: 14px;
+  padding: 6px 14px;
+}
+
+.quick-reply-chip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 6px 8px;
+  background: var(--room-surface-warm);
+  border: 2px solid var(--room-border);
+  color: var(--room-text-faint);
+  cursor: pointer;
+}
+
+.quick-reply-chip:hover {
+  background: #5c3325;
+  color: var(--room-text);
+}
+
+[data-room="true"] .agent-roster .chunky {
+  background: var(--room-surface-warm);
+  border-color: var(--room-border);
+  color: var(--room-text);
+}
+
+[data-room="true"] .agent-roster .chunky.bg-orange {
+  background: var(--orange);
+  color: var(--text-on-accent);
+}
+
 @media (max-width: 768px) {
   .roster-sidebar {
     display: none;
+  }
+
+  .room-main {
+    flex-direction: column;
+  }
+
+  .briefing-panel {
+    width: 100%;
+    border-left: none;
+    border-top: 3px solid var(--room-border);
+    max-height: 45vh;
   }
 
   .room-header-subtitle,

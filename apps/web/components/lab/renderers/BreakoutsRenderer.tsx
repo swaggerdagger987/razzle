@@ -1,0 +1,226 @@
+"use client";
+
+import { AGENT_BY_ID } from "@razzle/agents";
+import type { PanelDefinition } from "@razzle/panels";
+import { PositionPill } from "@razzle/ui";
+import { toRoom } from "@razzle/hallway";
+import Link from "next/link";
+import type { Route } from "next";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { isUpgradeRequiredError } from "@/lib/panel-api";
+import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { ProUpgradeGate } from "../ProUpgradeGate";
+
+const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
+
+interface Candidate {
+  player_id: string;
+  name: string;
+  position: string;
+  team: string;
+  age?: number | null;
+  ppg?: number;
+  snap_pct?: number;
+  target_share?: number;
+  opportunity_pct?: number;
+  production_pct?: number;
+  rbs_score?: number;
+  rank?: number;
+  annotation?: string;
+}
+
+interface BreakoutsData {
+  candidates?: Candidate[];
+  total?: number;
+  season?: number;
+}
+
+function slugify(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+interface Props {
+  panel: PanelDefinition;
+}
+
+export function BreakoutsRenderer({ panel }: Props) {
+  const { openPlayer } = usePlayerSheet();
+  const [position, setPosition] = useState<(typeof POSITIONS)[number]>("");
+  const hawkeye = AGENT_BY_ID.hawkeye;
+
+  const q = useQuery({
+    queryKey: ["panel", panel.slug, position],
+    queryFn: async () => {
+      const qs = position ? `?position=${position}` : "";
+      const res = await fetch(`/api/panels/${panel.slug}${qs}`);
+      if (res.status === 402) {
+        const body = await res.json().catch(() => ({}));
+        const detail = (body as { detail?: Record<string, string> }).detail ?? {};
+        throw Object.assign(new Error(detail.message ?? "Pro plan required"), {
+          upgrade: detail,
+        });
+      }
+      if (!res.ok) throw new Error(`API ${res.status}`);
+      return res.json() as Promise<BreakoutsData>;
+    },
+  });
+
+  const candidates = q.data?.candidates ?? [];
+  const top = candidates[0] ?? null;
+
+  if (q.isPending) {
+    return (
+      <p className="text-ink-medium p-6" style={{ fontFamily: "var(--font-hand)" }}>
+        {hawkeye.loadingCopy}
+      </p>
+    );
+  }
+
+  if (q.isError) {
+    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
+    if (err.upgrade) {
+      return (
+        <ProUpgradeGate
+          panelTitle={panel.title}
+          required={err.upgrade.required ?? "pro"}
+          current={err.upgrade.current ?? "free"}
+          message={err.upgrade.message}
+        />
+      );
+    }
+    if (isUpgradeRequiredError(err)) {
+      return (
+        <ProUpgradeGate
+          panelTitle={panel.title}
+          required={err.required}
+          current={err.current}
+          message={err.message}
+        />
+      );
+    }
+    return <p className="p-6 text-red">something fumbled: {err.message}</p>;
+  }
+
+  return (
+    <div className="breakouts-panel">
+      <header className="panel-agent-header mb-4 flex items-start gap-3">
+        <img src={`/agents/${hawkeye.avatar}.svg`} alt="" width={40} height={40} className="rounded-full" />
+        <div>
+          <p className="text-sm font-bold">{hawkeye.name}</p>
+          <p className="text-ink-medium text-xs">{hawkeye.role} · opportunity vs production gap</p>
+        </div>
+      </header>
+
+      <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
+        {POSITIONS.map((pos) => (
+          <button
+            key={pos || "ALL"}
+            type="button"
+            role="tab"
+            aria-selected={position === pos}
+            className={`btn-chunky text-sm${position === pos ? " bg-orange text-white" : ""}`}
+            onClick={() => setPosition(pos)}
+          >
+            {pos || "All"}
+          </button>
+        ))}
+      </div>
+
+      {q.data?.season && (
+        <p className="text-ink-medium mb-4 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
+          {q.data.total ?? 0} candidates · {q.data.season} · ages ≤27 · gap = opportunity − production
+        </p>
+      )}
+
+      {!candidates.length ? (
+        <p className="text-ink-medium p-6">{hawkeye.emptyCopy}</p>
+      ) : (
+        <div className="panel-cards">
+          {candidates.slice(0, 40).map((p) => {
+            const gap = (p.opportunity_pct ?? 0) - (p.production_pct ?? 0);
+            return (
+              <article key={p.player_id} className="panel-card chunky bg-bg-card p-4">
+                <div className="mb-2 flex flex-wrap items-center gap-2">
+                  <span className="text-ink-medium text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+                    #{p.rank ?? "—"}
+                  </span>
+                  <button
+                    type="button"
+                    className="text-left text-lg font-bold underline-offset-2 hover:underline"
+                    style={{ fontFamily: "var(--font-display)" }}
+                    onClick={() =>
+                      openPlayer({
+                        playerId: p.player_id,
+                        slug: slugify(p.name),
+                        name: p.name,
+                        position: p.position,
+                        team: p.team,
+                      })
+                    }
+                  >
+                    {p.name}
+                  </button>
+                  <PositionPill position={p.position as "QB" | "RB" | "WR" | "TE"} />
+                  <span className="text-ink-medium text-xs">{p.team}</span>
+                  {p.age != null && (
+                    <span className="text-ink-medium text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+                      {Number(p.age).toFixed(1)}y
+                    </span>
+                  )}
+                </div>
+                <p className="text-orange mb-2 text-sm font-bold" style={{ fontFamily: "var(--font-hand)" }}>
+                  {p.annotation ?? "on the radar"}
+                </p>
+                <dl className="panel-card-stats grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
+                  <div>
+                    <dt className="text-ink-medium text-xs">RBS score</dt>
+                    <dd className="font-bold" style={{ fontFamily: "var(--font-mono)" }}>
+                      {p.rbs_score != null ? p.rbs_score.toFixed(1) : "—"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-ink-medium text-xs">PPG</dt>
+                    <dd style={{ fontFamily: "var(--font-mono)" }}>{p.ppg != null ? p.ppg.toFixed(2) : "—"}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-ink-medium text-xs">Opp / Prod</dt>
+                    <dd style={{ fontFamily: "var(--font-mono)" }}>
+                      {p.opportunity_pct ?? "—"} / {p.production_pct ?? "—"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-ink-medium text-xs">Gap</dt>
+                    <dd className="text-teal font-bold" style={{ fontFamily: "var(--font-mono)" }}>
+                      +{gap}
+                    </dd>
+                  </div>
+                </dl>
+              </article>
+            );
+          })}
+        </div>
+      )}
+
+      {top && (
+        <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
+          <Link
+            href={
+              toRoom({
+                agentId: "hawkeye",
+                panelSlug: "breakouts",
+                question: `Is ${top.name} a real breakout candidate? Opportunity vs production says RBS ${top.rbs_score?.toFixed(1) ?? "?"}.`,
+              }) as Route
+            }
+            className="text-sm text-orange underline"
+          >
+            Ask Hawkeye about {top.name} →
+          </Link>
+          <a href="/og/breakouts?download=1" className="text-sm text-ink-medium underline" download="razzle-breakouts.png">
+            export card
+          </a>
+        </footer>
+      )}
+    </div>
+  );
+}

@@ -12,3 +12,7 @@ class LeagueRef(BaseModel):
 
 class H2HRef(LeagueRef):
     opponent_user_id: str
+
+
+class PlayerLeagueRef(LeagueRef):
+    player_id: str

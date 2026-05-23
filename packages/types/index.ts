@@ -32,8 +32,10 @@ export const ScreenerQuerySchema = z.object({
   filters: z.array(ScreenerFilterSchema).default([]),
   relevance: z.enum(["all", "fantasy"]).default("fantasy"),
   min_gp: z.number().int().min(0).max(17).default(0),
+  universe: z.enum(["nfl", "college", "prospects"]).default("nfl"),
 });
-export type ScreenerQuery = z.infer<typeof ScreenerQuerySchema>;
+export type ScreenerQuery = z.input<typeof ScreenerQuerySchema>;
+export type ScreenerQueryOutput = z.output<typeof ScreenerQuerySchema>;
 
 export const PlayerRowSchema = z
   .object({
@@ -41,7 +43,7 @@ export const PlayerRowSchema = z
     full_name: z.string(),
     position: PositionSchema,
     team: z.string(),
-    age: z.number().int().nullable().optional(),
+    age: z.number().nullable().optional(),
     games: z.number().int().default(0),
     fantasy_points_ppr: z.number().default(0),
   })

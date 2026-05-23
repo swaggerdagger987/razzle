@@ -19,6 +19,7 @@ async def ask(req: AskRequest) -> AskResponse:
         league_format=req.format,
         user_id=req.user_id,
         player_id=req.player_id,
+        referrer_panel=req.referrer_panel,
     )
     return AskResponse(**result)
 

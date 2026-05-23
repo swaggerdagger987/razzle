@@ -1,9 +1,10 @@
-"""Screener service — wraps legacy fetch_screener."""
+"""Screener service — NFL via legacy fetch_screener, college via fetch_college_players."""
 
 from __future__ import annotations
 
 from ...legacy_bridge import live_data
 from ...models.screener import ScreenerQuery
+from .college import run_college_screener
 
 
 class ScreenerError(Exception):
@@ -11,9 +12,13 @@ class ScreenerError(Exception):
 
 
 def run_screener(query: ScreenerQuery) -> dict:
-    body = query.model_dump()
     try:
-        return live_data().fetch_screener(body)
+        if query.universe == "college":
+            return run_college_screener(query, live_data())
+        body = query.model_dump(exclude={"universe"})
+        result = live_data().fetch_screener(body)
+        result["universe"] = "nfl"
+        return result
     except Exception as e:  # noqa: BLE001
         raise ScreenerError(str(e)) from e
 

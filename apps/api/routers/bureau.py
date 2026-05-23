@@ -6,7 +6,7 @@ from typing import Literal
 
 from fastapi import APIRouter
 
-from ..models.bureau import H2HRef, LeagueRef
+from ..models.bureau import H2HRef, LeagueRef, PlayerLeagueRef
 from ..services import bureau
 
 router = APIRouter(prefix="/api/bureau", tags=["bureau"])
@@ -59,3 +59,12 @@ def strength_of_schedule(ref: LeagueRef) -> dict:
 @router.post("/monte-carlo")
 def monte_carlo(ref: LeagueRef, scoring: Literal["ppr", "half_ppr", "std"] = "half_ppr") -> dict:
     return bureau.monte_carlo_projections(league_id=ref.league_id, scoring=scoring)
+
+
+@router.post("/player-status")
+def player_status(ref: PlayerLeagueRef) -> dict:
+    return bureau.player_league_status(
+        league_id=ref.league_id,
+        user_id=ref.user_id,
+        player_id=ref.player_id,
+    )

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#5b7fff">
+  <!-- Dolphin: curved body + fin + eye -->
+  <path d="M3,12 Q5,6 10,7 Q15,6 17,10 Q18,13 15,14 Q12,16 8,15 Q4,15 3,12Z"/>
+  <path d="M9,5 Q10,2 12,4 Q11,6 10,7Z"/>
+  <circle cx="7" cy="10.5" r="1" fill="#fff"/>
+  <circle cx="7" cy="10.5" r="0.5" fill="#2d1f14"/>
+  <path d="M15,12 Q17,11 18,13" fill="none" stroke="#5b7fff" stroke-width="1.5"/>
+</svg>

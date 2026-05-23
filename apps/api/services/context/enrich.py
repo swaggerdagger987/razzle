@@ -34,6 +34,17 @@ def _sleeper_master() -> dict[str, Any]:
         return _sleeper_cache[1] if _sleeper_cache else {}
 
 
+def gsis_to_sleeper(player_id: str) -> str | None:
+    """Resolve nflverse gsis_id (or sleeper id) to Sleeper player id."""
+    if player_id.isdigit() and len(player_id) >= 4:
+        return player_id
+    master = _sleeper_master()
+    for sid, sp in master.items():
+        if str(sp.get("gsis_id") or "") == player_id:
+            return str(sid)
+    return None
+
+
 def lookup_players(sleeper_ids: list[str]) -> dict[str, dict[str, Any]]:
     """Map sleeper_id -> {name, position, team, age, gsis_id, terminal?}."""
     master = _sleeper_master()

@@ -54,6 +54,12 @@ def create_portal_session(user_id: int) -> str:
 
 def handle_webhook(payload: bytes, signature: str) -> None:
     settings = get_settings()
+    if not settings.stripe_secret_key or not settings.stripe_webhook_secret:
+        logger.info(
+            "Stripe webhook received (billing not configured — log only, %d bytes)",
+            len(payload),
+        )
+        return
     s = _stripe()
     try:
         event = s.Webhook.construct_event(

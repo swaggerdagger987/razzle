@@ -16,6 +16,7 @@ class AskRequest(BaseModel):
     user_id: str | None = None
     player_id: str | None = None
     format: Literal["redraft", "dynasty", "keeper", "best_ball", "superflex"] = "dynasty"
+    referrer_panel: str | None = None
 
 
 class AskResponse(BaseModel):

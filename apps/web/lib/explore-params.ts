@@ -13,4 +13,11 @@ export const exploreParsers = {
   season: parseAsInteger.withDefault(0),
   team: parseAsArrayOf(parseAsString).withDefault([]),
   limit: parseAsInteger.withDefault(50),
+  universe: parseAsStringLiteral(["nfl", "college"] as const).withDefault("nfl"),
 };
+
+export type ExploreUniverse = "nfl" | "college";
+
+export function defaultSortForUniverse(universe: ExploreUniverse): string {
+  return universe === "college" ? "total_yards" : "fantasy_points_ppr";
+}
