@@ -1,4 +1,5 @@
 cycle: 48
+last_board_cycle: 43
 phase: hallway
 strategy: depth-not-breadth
 program: docs/v2/PROGRAM.md
