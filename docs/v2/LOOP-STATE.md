@@ -1,15 +1,16 @@
-cycle: 41
+cycle: 42
 phase: depth
 strategy: depth-not-breadth
 program: docs/v2/PROGRAM.md
 focus_pillar: Lab
 focus_layer: L3
-next_slice: Lab L3 aging formula bar OR Explore L5 agent margin notes
+next_slice: Explore L5 agent margin notes OR League L3 behavioral profiles
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
 last_keep_cycle: 41
-last_commit: 523d12b5
+last_commit: d1626c0f
 lab_l3_buysell_formula: complete
+lab_l3_aging_formula: in_progress
 lab_l3_tradevalues_formula: complete
 lab_l3_rankings_formula: complete
 lab_l3_breakouts_formula: complete

@@ -6,8 +6,15 @@ import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import type { SavedFormula } from "@/lib/formulas";
+import {
+  fetchPlayerStatsForFormula,
+  sortPlayersByFormula,
+  type WithFormulaScore,
+} from "@/lib/panel-formula-sort";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -25,7 +32,7 @@ interface CurvePoint {
   sample_size?: number;
 }
 
-interface AgingPlayer {
+interface AgingPlayer extends WithFormulaScore {
   player_id: string;
   name: string;
   team: string;
@@ -164,6 +171,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("RB");
   const [season, setSeason] = useState<number | "">("");
+  const [formula, setFormula] = useState<SavedFormula | null>(null);
   const agent = panelAgent(panel.slug);
 
   const q = useQuery({
@@ -184,8 +192,27 @@ export function AgingCurvesRenderer({ panel }: Props) {
 
   const posData = q.data?.positions?.[position];
   const peakAge = posData?.peak_age ?? null;
-  const pastPeak = posData?.players?.filter((p) => peakAge != null && p.age > peakAge).slice(0, 5) ?? [];
-  const top = posData?.players?.[0] ?? null;
+  const rawPlayers = posData?.players ?? [];
+  const playerIds = useMemo(() => rawPlayers.map((p) => p.player_id), [rawPlayers]);
+
+  const statsQ = useQuery({
+    queryKey: ["panel-formula-stats", panel.slug, q.data?.season, playerIds, formula?.name],
+    queryFn: () => fetchPlayerStatsForFormula(playerIds, q.data?.season ?? 0),
+    enabled: Boolean(formula && playerIds.length),
+  });
+
+  const chartPlayers = useMemo(() => {
+    if (!formula || !statsQ.data) return rawPlayers;
+    return sortPlayersByFormula(rawPlayers, statsQ.data, formula);
+  }, [formula, rawPlayers, statsQ.data]);
+
+  const pastPeak = useMemo(() => {
+    const filtered = rawPlayers.filter((p) => peakAge != null && p.age > peakAge);
+    if (!formula || !statsQ.data) return filtered.slice(0, 5);
+    return [...sortPlayersByFormula(filtered, statsQ.data, formula)].reverse().slice(0, 5);
+  }, [formula, rawPlayers, statsQ.data, peakAge]);
+
+  const top = chartPlayers[0] ?? null;
 
   const open = (p: AgingPlayer) =>
     openPlayer({
@@ -232,6 +259,14 @@ export function AgingCurvesRenderer({ panel }: Props) {
     <div className="aging-curves-panel">
       <PanelAgentHeader agent={agent} slug={panel.slug} />
 
+      <FormulaPanelBar selected={formula} onSelect={setFormula} panelSlug={panel.slug} />
+
+      {formula && statsQ.isFetching && (
+        <p className="text-ink-medium mb-2 text-xs" style={{ fontFamily: "var(--font-hand)" }}>
+          pulling composite scores…
+        </p>
+      )}
+
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
           {POSITIONS.map((pos) => (
@@ -265,7 +300,8 @@ export function AgingCurvesRenderer({ panel }: Props) {
 
       {activeSeason && (
         <p className="text-ink-medium mb-4 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {activeSeason} season · baseline curve + current player dots
+          {activeSeason} season ·{" "}
+          {formula ? `${formula.name} composite dots + past-peak sort` : "baseline curve + current player dots"}
         </p>
       )}
 
@@ -275,7 +311,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
         <>
           <AgingChart
             curve={posData.curve}
-            players={posData.players ?? []}
+            players={chartPlayers}
             peakAge={peakAge}
             color={POS_COLORS[position]}
             onPlayerClick={open}
@@ -296,6 +332,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
                       <th>Player</th>
                       <th className="text-right">Age</th>
                       <th className="text-right">PPG</th>
+                      {formula && <th className="text-right">{formula.name}</th>}
                     </tr>
                   </thead>
                   <tbody>
@@ -317,6 +354,11 @@ export function AgingCurvesRenderer({ panel }: Props) {
                         <td className="text-right" style={{ fontFamily: "var(--font-mono)" }}>
                           {p.ppg}
                         </td>
+                        {formula && (
+                          <td className="text-orange text-right font-bold" style={{ fontFamily: "var(--font-mono)" }}>
+                            {p.formula_score != null ? p.formula_score.toFixed(1) : "—"}
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -334,7 +376,9 @@ export function AgingCurvesRenderer({ panel }: Props) {
               toRoom({
                 agentId: "octo",
                 panelSlug: "aging",
-                question: `${position}s peak around age ${peakAge}. ${top.name} is ${top.age} at ${top.ppg} PPG — sell window or hold?`,
+                question: formula
+                  ? `${position}s peak around age ${peakAge}. ${top.name} leads ${formula.name} (${top.formula_score?.toFixed(1) ?? "?"}) at age ${top.age} — sell window or hold?`
+                  : `${position}s peak around age ${peakAge}. ${top.name} is ${top.age} at ${top.ppg} PPG — sell window or hold?`,
               }) as Route
             }
             className="text-sm text-orange underline"
