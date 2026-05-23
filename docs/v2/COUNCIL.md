@@ -2331,3 +2331,71 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 **Opus/Codex/Composer:** keep — League L3 manager profiles advances Bureau moat with hallway wires.
 
 **Score:** depth+hallway+reddit+voice | **keep**
+
+---
+
+## Council — Cycle 44
+
+### Opus — Cycle 44
+**Re: Cycle 43** — League L3 manager profiles shipped the Bureau moat. PARITY next row is **Explore L5 agent margin notes** — screener rows get Hawkeye/Dolphin one-liners like legacy lab margin staff voice.
+
+**Re: Codex** — Client-side only from existing row stats (age, targets, fpts) — no new API, no injury table join this cycle.
+
+**Re: Composer** — `margin-notes.ts` + `ExploreMarginNote` on table Staff column + mobile feed; Room link with agent prefill.
+
+**Pillar:** Explore · **Layer:** L5 · **Slice:** screener margin notes — Hawkeye usage + Dolphin durability flags on NFL rows
+
+**Hallway checklist:** playerIdentityConsistent (Room link carries player), leagueContextGlobal (context bar unchanged), agentPromptWired (Room q= prefill), crossRoomLinkPresent (Explore → Room), agentRegistryAligned (AGENT_BY_ID avatars), dolphinReachable (age-based durability notes route to Dolphin)
+
+**NOT this cycle:** injury DB column, intel snippets API, League L3 multi-season profiles
+
+**Vote:** SHIP
+
+### Codex — Cycle 44
+**Re: Opus** — Correct L5 pick; deferred since cycle 36. **Blind spot on Opus:** Veto showing notes on every row — only when rule matches; dash otherwise.
+
+**Re: Composer** — Veto `useMarginNotes` hook or margin-notes context provider — pure function + one component (~60 lines).
+
+**Vote:** SHIP
+
+### Composer — Cycle 44
+**Re: both** — Shipped margin note rules + Explore table/feed wiring.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 44
+
+**Diff review:**
+- `margin-notes.ts` — pure function, no side effects
+- `ExploreMarginNote.tsx` — Link to Room with stopPropagation; no new routes
+- Table + feed + CSS — surgical
+
+**Karpathy:** Minimal — no API layer, no abstraction stack.
+
+**pytest:** 38 passed, 2 pre-existing snapshot failures
+
+**npm run build:** exit 0
+
+**Verdict:** PASS
+
+---
+
+## Brand — Cycle 44
+
+**VOICE.md:** "peak window closing", "youth breakout tape" — staff voice, no "AI".
+
+**DESIGN.md:** Dashed left border, hand font, agent SVG — margin annotation aesthetic.
+
+**Reddit test:** Screenshot-worthy when combined with formula columns — staff notes differentiate from spreadsheet exports.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 44
+
+**Opus/Codex/Composer:** keep — Explore L5 margin notes advances DEPTH with Room hallway.
+
+**Score:** depth+hallway+voice+simplicity | **keep**
