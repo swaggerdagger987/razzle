@@ -21,6 +21,7 @@ from .context import build_context_block
 from .llm import chat
 from .personas import LAUNCH_AGENTS, load as load_persona
 from .registry import ROUTE_DESCRIPTIONS, suggest_specialists
+from .triggers import detect_followups
 
 logger = logging.getLogger("razzle.agents.orchestrator")
 
@@ -65,6 +66,18 @@ async def orchestrate(
         else:
             outputs.append({"agent": agent_id, **out})
 
+    # 2b. Cross-agent triggers — e.g. Dolphin injury → Hawkeye replacement scan.
+    cross_triggers: list[dict[str, str]] = []
+    followups = detect_followups(outputs, set(chosen))
+    for fu in followups[:1]:
+        try:
+            out = await _call_specialist(fu["agent"], fu["question"], context_block)
+            outputs.append({"agent": fu["agent"], **out, "triggered": True})
+            chosen.append(fu["agent"])
+            cross_triggers.append({"agent": fu["agent"], "label": fu["label"]})
+        except Exception as e:  # noqa: BLE001
+            logger.warning("follow-up %s failed: %s", fu["agent"], e)
+
     # 3. Synthesis — Razzle reads the specialist outputs and produces one briefing.
     briefing, urgency, cost = await _synthesize(question, context_block, outputs, league_format)
 
@@ -72,6 +85,7 @@ async def orchestrate(
         "briefing": briefing,
         "urgency": urgency,
         "specialists_used": chosen,
+        "cross_triggers": cross_triggers,
         "cost_usd": cost,
     }
 

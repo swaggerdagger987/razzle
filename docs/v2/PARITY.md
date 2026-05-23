@@ -13,7 +13,7 @@ Status: `RED` | `YELLOW` | `GREEN`
 | **Explore** | L3–L5 | L2 college + prospect bridge polish | GREEN |
 | **Lab** | L3 | **L4 — next launch-10 panel deep pass or formula extraction** | GREEN |
 | **League** | L4 | **L5 — scenario explorer or H2H opponent picker** | GREEN |
-| **Room** | L3 | **L4 — cross-agent triggers (Dolphin → Hawkeye follow-up)** | GREEN |
+| **Room** | L4 | **L5 — proactive nudges on Lab/Bureau (Elite)** | GREEN |
 
 ## Launch 10 — Lab L1 (do these deep, ignore the other 90)
 

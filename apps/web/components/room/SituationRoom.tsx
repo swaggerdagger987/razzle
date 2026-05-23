@@ -23,6 +23,7 @@ export interface ChatTurn {
   briefing: string;
   urgency: Urgency;
   specialists: string[];
+  crossTriggers?: { agent: string; label: string }[];
   cost?: number;
   pending?: boolean;
   error?: string;
@@ -99,6 +100,7 @@ export function SituationRoom() {
                 briefing: j.briefing,
                 urgency: j.urgency ?? "ROUTINE",
                 specialists: j.specialists_used ?? [],
+                crossTriggers: j.cross_triggers ?? [],
                 cost: j.cost_usd,
               }
             : row,

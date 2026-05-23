@@ -7,6 +7,7 @@ interface Props {
   briefing: string;
   urgency: Urgency;
   specialists: string[];
+  crossTriggers?: { agent: string; label: string }[];
   pending?: boolean;
   error?: string;
   cost?: number;
@@ -24,6 +25,7 @@ export function BriefingCard({
   briefing,
   urgency,
   specialists,
+  crossTriggers,
   pending,
   error,
   cost,
@@ -41,6 +43,11 @@ export function BriefingCard({
       {pending && <p className="text-ink-medium">pulling film...</p>}
       {error && <p className="text-red">{error}</p>}
       {!pending && !error && briefing && <div className="briefing-body">{briefing}</div>}
+      {!pending && crossTriggers && crossTriggers.length > 0 && (
+        <p className="briefing-cross-trigger text-ink-medium mt-2 text-sm">
+          {crossTriggers.map((t) => `${t.agent}: ${t.label}`).join(" · ")}
+        </p>
+      )}
     </article>
   );
 }

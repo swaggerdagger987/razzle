@@ -19,8 +19,14 @@ class AskRequest(BaseModel):
     referrer_panel: str | None = None
 
 
+class CrossTrigger(BaseModel):
+    agent: AgentId
+    label: str
+
+
 class AskResponse(BaseModel):
     briefing: str
     urgency: Literal["URGENT", "MONITOR", "OPPORTUNITY", "ROUTINE"]
     specialists_used: list[AgentId]
+    cross_triggers: list[CrossTrigger] = Field(default_factory=list)
     cost_usd: float | None = None
