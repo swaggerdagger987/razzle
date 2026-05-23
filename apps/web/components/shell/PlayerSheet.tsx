@@ -78,6 +78,10 @@ export function PlayerSheet() {
       .finally(() => setRosterLoading(false));
   }, [open, player?.playerId]);
 
+  useEffect(() => {
+    if (isCollege) setAskAgent("hawkeye");
+  }, [isCollege, player?.playerId]);
+
   if (!open || !player) return null;
 
   async function askAboutPlayer(e: React.FormEvent) {
@@ -271,7 +275,11 @@ export function PlayerSheet() {
                     setAskAgent(suggestAgentForQuestion(e.target.value, true));
                   }
                 }}
-                placeholder={`Ask ${AGENT_BY_ID[askAgent]?.name ?? "Razzle"} about ${player.name}...`}
+                placeholder={
+                  isCollege
+                    ? `Scout ${player.name}'s draft profile and dynasty outlook...`
+                    : `Ask ${AGENT_BY_ID[askAgent]?.name ?? "Razzle"} about ${player.name}...`
+                }
                 className="chunky w-full bg-bg p-3 text-sm"
                 rows={3}
               />

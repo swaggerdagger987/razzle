@@ -60,7 +60,7 @@ export function ExploreTable({
       header: "Player",
       cell: (info) => info.getValue(),
     }),
-    ...(universe === "nfl"
+    ...(universe === "nfl" || universe === "college"
       ? [
           columnHelper.display({
             id: "staff_note",

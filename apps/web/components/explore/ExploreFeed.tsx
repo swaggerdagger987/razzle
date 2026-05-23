@@ -49,11 +49,11 @@ export function ExploreFeed({ rows, universe = "nfl" }: Props) {
               {Number(row[primaryStatKey] ?? row.fantasy_points_ppr ?? 0).toLocaleString()} {primaryLabel}
             </span>
           </div>
-          {universe === "nfl" && (
+          {universe === "nfl" || universe === "college" ? (
             <div className="explore-feed-margin">
               <ExploreMarginNote row={row} universe={universe} />
             </div>
-          )}
+          ) : null}
         </button>
       ))}
     </div>
