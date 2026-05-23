@@ -9,7 +9,7 @@ next_slice: League L5 scenario explorer (monte carlo what-if)
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
 last_keep_cycle: 51
-last_commit: 39f10f1c
+last_commit: 4d342ac8
 league_l5_head_to_head: complete
 league_l4_trade_finder: complete
 h07_player_intel_room_links: complete

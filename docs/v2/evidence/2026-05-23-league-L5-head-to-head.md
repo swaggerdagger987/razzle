@@ -1,7 +1,7 @@
 # Evidence — League L5 Head-to-Head
 
 **Cycle:** 51  
-**Commit:** 39f10f1  
+**Commit:** 4d342ac  
 **Slice:** League L5 — Head-to-Head opponent picker + Atlas rivalry renderer
 
 ## Acceptance
