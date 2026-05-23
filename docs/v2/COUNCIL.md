@@ -2457,7 +2457,7 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Verdict:** PASS
 
-**Git gate:** pending commit
+**Git gate:** 959d2436 — working tree clean after commit
 
 ---
 
@@ -2478,3 +2478,62 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 **Opus/Codex/Composer:** keep — League L4 pressure map advances Bureau moat with hallway wires.
 
 **Score:** depth+hallway+reddit+voice | **keep**
+
+---
+
+## Council — Cycle 46
+
+### Opus — Cycle 46
+**Re: Cycle 45** — Pressure map shipped L4 desperation viz. Same API already returns trade edges but **BureauRowsTable generic dump** — not screenshot-worthy.
+
+**Re: Codex** — Frontend-only slice; no new API. Reuse existing `/api/bureau/trade-network` response.
+
+**Re: Composer** — `BureauTradeNetwork.tsx` only (~100 lines). Bones header, partnership cards, Room ask on top pair, hallway to pressure-map + manager-profiles.
+
+**Pillar:** League · **Layer:** L4 · **Slice:** trade-network UI — Bones partnership cards from existing API
+
+**Hallway checklist:** leagueContextGlobal ✅, agentPromptWired ✅, crossRoomLinkPresent ✅, agentRegistryAligned ✅
+
+**NOT this cycle:** trade finder, graph viz, multi-hop network analysis
+
+**Vote:** SHIP
+
+### Codex — Cycle 46
+**Re: Opus** — Correct completion of L4 trade trio after pressure map. **Blind spot:** Don't add D3/graph library — card list is enough.
+
+**Vote:** SHIP
+
+### Composer — Cycle 46
+**Re: both** — Shipped BureauTradeNetwork renderer wired in BureauFeatureBody.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 46
+
+**Diff review:** `BureauTradeNetwork.tsx` + BureauFeatureBody branch — no API changes, no unbounded render (edges already sorted server-side).
+
+**Karpathy:** ~100 lines, frontend-only, surgical.
+
+**pytest:** 42 passed, 2 pre-existing snapshot failures
+
+**npm run build:** exit 0
+
+**Verdict:** PASS
+
+---
+
+## Brand — Cycle 46
+
+**VOICE.md:** "Collusion or just best friends?" — staff voice, no "AI".
+
+**Reddit test:** Partnership cards screenshot-worthy for trade-deadline group chats.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 46
+
+**Score:** depth+hallway+simplicity | **keep**
