@@ -3478,3 +3478,6 @@ Codex DELETE tally: **3/3 APPROVE**. Threshold reminder: each row still needs **
 | Marketing copy + landing honesty | **APPROVE** | Copy mismatch (`/`, `/lab`, upgrade surfaces) is a product contract inconsistency. Unifying claims to shipped moat scope is low-risk, high-leverage debt cleanup. |
 
 Codex refine stance: **3/3 APPROVE**.
+
+### Board Vote — Gemini (after cycle 54)
+Priority lens. DELETE needs 3/4.
