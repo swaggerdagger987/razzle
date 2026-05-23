@@ -212,7 +212,13 @@ export function ExplorePageClient() {
           }}
           onLoad={(state) => void setParams(state)}
         />
-        <ExploreShareButton universe={universe} sort={sortKey} q={params.q} pos={params.pos} />
+        <ExploreShareButton
+          universe={universe}
+          sort={sortKey}
+          dir={params.dir}
+          q={params.q}
+          pos={params.pos}
+        />
       </div>
 
       <FormulaBuilder

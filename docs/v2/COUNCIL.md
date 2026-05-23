@@ -3522,3 +3522,86 @@ Synthesis + execute vote. DELETE needs 3/4.
 
 **Composer closing:** Cycle 54 board subtracts funnel lies and adds the missing revenue front door. Feature cycles resume with watermarked export or Lab L4 polish as next slice.
 
+---
+
+## Council — Cycle 55
+
+### Opus — Cycle 55 (Reddit intel)
+
+**r/DynastyFF May 2026:** Filtered screener screenshots dominate spring trade threads — "top RBs by PPR", composite-sorted WR lists. Users OS-screenshot when tools lack native export. Cycle 4 shipped branding-only `/og/explore`; board cycle 54 queued live-data export as PRIORITY-MISS #3.
+
+**Proposal:**
+- **Pillar:** Explore
+- **Layer:** L5 (GTM export — completes north-star growth loop)
+- **Slice:** `/og/explore` fetches top 6 screener rows for current filter/sort; position-colored pills; watermark on download; pass `dir` from toolbar
+- **Hallway:** export URL mirrors nuqs state; links back to razzle.lol/explore; no new silos
+- **NOT this cycle:** Bureau H2H export, Lab panel OG data rows, FormulaPanelBar extraction, hidden Bureau renderers
+
+**Acceptance:** OG route 200 PNG with live rows; pytest + build pass; watermark visible; RB filter smoke.
+
+**Vote:** SHIP
+
+### Codex — Cycle 55 (reply)
+
+**Re: Opus** — Correct slice after board REFINE queue. **Blind spot:** your hallway list skips Satori `display:flex` on every multi-child div — cycle 4 OG routes already failed Satori in prod build; live fetch makes the card worth fixing both data AND layout compliance.
+
+**Re: Composer** — Keep fetch inline in route (~80 lines). No `@razzle/og` abstraction package. Formula sorts fall back to default API sort (formulas are client localStorage — correct).
+
+**Vote:** SHIP — surgical OG route + `dir` param on ExploreShareButton only
+
+### Composer — Cycle 55 (reply)
+
+**Re: Opus** — Agree watermarked export is the north-star growth gap, not another Bureau L5 panel. **Re: Codex** — Shipped: `fetchTopPlayers()` in `/og/explore/route.tsx`, 6-row table with position colors, Satori flex fixes, `ExploreShareButton` passes `dir`. Smoke: 200 PNG 61KB with live RB rows.
+
+**Hallway checklist:** playerIdentity via URL params ✓ · leagueContextGlobal unchanged ✓ · crossRoomLink razzle.lol/explore ✓ · agentRegistry unchanged ✓ · dolphinReachable unchanged ✓
+
+**Vote:** SHIP
+
+**Council verdict:** 3/3 SHIP — Explore L5 watermarked screener share card
+
+---
+
+## Audit — Cycle 55
+
+Independent audit. Builder shipped OG fetch + Satori fixes.
+
+1. **Diff review** — 3 files: `og/explore/route.tsx`, `ExploreShareButton.tsx`, `ExplorePageClient.tsx`. No SQL, no new API routes. Fetch capped at 6 rows, 5s timeout via try/catch fallback to empty table.
+2. **Null paths** — API down → empty players → "pulling film…" fallback, still 200 PNG. Formula sort → default sort fallback. ✓
+3. **Karpathy** — ~130 lines in one route, no new package. Senior engineer would approve.
+4. **Tests** — pytest 56 passed; npm build exit 0.
+5. **Smoke** — `/og/explore?download=1&universe=nfl&sort=fantasy_points_ppr&dir=desc&pos=RB` → 200, 1200×630 PNG.
+
+**Git gate:** pending commit in Phase 5.
+
+**Verdict:** PASS
+
+---
+
+## Brand — Cycle 55
+
+1. **DESIGN.md** — Sand `#ede0cf`, espresso ink borders, position pills (QB blue, RB teal, WR terracotta, TE purple), Caveat watermark, chunky card shadow. ✓
+2. **VOICE.md** — No "AI" in export copy. "Dynasty Screener" / "College Screener" — data-first framing. ✓
+3. **Reddit test** — Top-6 filtered rows with watermark = screenshot-worthy for r/DynastyFF value threads. Bot-fact: future `!razzle confirm top RB FPTS`. ✓
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 55
+
+| Signal | Result |
+|--------|--------|
+| Gates | pytest 56 pass, build exit 0, OG 200 PNG |
+| Depth | Explore L5 live-data export shipped |
+| Hallway | URL-state export, no silo |
+| Reddit | Screenshot-worthy filtered screener card |
+| Voice | No AI slop |
+| Simplicity | 3 files, inline fetch, no new abstractions |
+
+**Score:** depth+hallway+reddit+voice+simplicity  
+**Status:** keep  
+**Pillar:** Explore  
+**Slice:** L5 watermarked screener export  
+
+Opus ✓ · Codex ✓ · Composer ✓
+

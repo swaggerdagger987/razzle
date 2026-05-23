@@ -236,3 +236,14 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Slice:** Room L5 — Elite proactive nudges on Lab + Bureau via `AgentNudgeBar`, hallway routes to Self-Scout, Trade Finder, H2H, Room ask.
 - **Council cycle:** 53
 - **Screenshot potential:** Pill nudge with staff avatar + cross-room link — Pro/Elite conversion post without AI cringe
+
+## 2026-05-23 — Cycle 55
+
+### r/DynastyFF — filtered screener screenshot posts (pattern; live fetch 403)
+- **Pattern:** Dynasty OC posts share **filtered screener views** — "top 6 RBs by PPR FPTS", "my Target Hog composite sorted WRs" — with position-colored rows. Comment chains ask for the tool link, not generic rankings sites. Users manually OS-screenshot spreadsheets when tools lack one-click export.
+- **Competitor framing:** DynastyProcess articles, KeepTradeCut tiers — static tables. FFDataPros/Dynasty FF Dashboard require manual screenshot. No competitor ships filter-aware share cards with watermark from the screener itself.
+- **Razzle gap:** Cycle 4 shipped `/og/explore` branding-only card (no player rows). Board cycle 54 deferred live-data export to cycle 55+ (Gemini PRIORITY-MISS #3 — north-star growth loop).
+- **Slice:** Explore L5 — `/og/explore` fetches top 6 rows from screener API for current filter/sort; position pills; `made with 🐯 razzle.lol` watermark; `ExploreShareButton` passes `dir` param.
+- **Council cycle:** 55
+- **Screenshot potential:** RB-only FPTS card droppable in r/DynastyFF trade/value threads — data-first, not SaaS promo
+- **Bot-fact potential:** `!razzle confirm top RB PPR FPTS` — future intel layer

@@ -10,7 +10,7 @@ Status: `RED` | `YELLOW` | `GREEN`
 
 | Pillar | Layer now | Next vertical slice | Status |
 |--------|-----------|---------------------|--------|
-| **Explore** | L5 | Lab L4 pro-gate polish or watermarked export | GREEN |
+| **Explore** | L5 | Bureau H2H export or Lab panel OG data rows | GREEN |
 | **Lab** | L4 | **L4 — pro-gate polish or formula extraction** | GREEN |
 | **League** | L5 | **L5 — hidden Bureau renderers or watermarked export** | GREEN |
 | **Room** | L5 | **Explore L2 college polish or GTM export slice** | GREEN |

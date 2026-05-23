@@ -5,16 +5,18 @@ import { useCallback, useState } from "react";
 interface Props {
   universe: string;
   sort: string;
+  dir: string;
   q: string;
   pos: string[];
 }
 
-export function ExploreShareButton({ universe, sort, q, pos }: Props) {
+export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
   const [copied, setCopied] = useState(false);
 
   const ogParams = new URLSearchParams({
     universe,
     sort,
+    dir,
     download: "1",
   });
   if (q) ogParams.set("q", q);
