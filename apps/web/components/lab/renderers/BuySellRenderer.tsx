@@ -190,6 +190,7 @@ export function BuySellRenderer({ panel }: Props) {
     if (err.upgrade) {
       return (
         <ProUpgradeGate
+          panelSlug={panel.slug}
           panelTitle={panel.title}
           required={err.upgrade.required ?? "pro"}
           current={err.upgrade.current ?? "free"}
@@ -199,7 +200,7 @@ export function BuySellRenderer({ panel }: Props) {
     }
     if (isUpgradeRequiredError(err)) {
       return (
-        <ProUpgradeGate panelTitle={panel.title} required={err.required} current={err.current} message={err.message} />
+        <ProUpgradeGate panelSlug={panel.slug} panelTitle={panel.title} required={err.required} current={err.current} message={err.message} />
       );
     }
     return <p className="p-6 text-red">something fumbled: {err.message}</p>;

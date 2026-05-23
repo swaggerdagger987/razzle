@@ -539,8 +539,45 @@ body.college-mode .universe-toggle.active {
 
 /* ===== PRO UPGRADE GATE ===== */
 .pro-upgrade-gate {
-  max-width: 480px;
+  max-width: 560px;
   margin: 2rem auto;
+}
+
+.pro-upgrade-preview-wrap {
+  position: relative;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.pro-upgrade-preview {
+  filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.85;
+}
+
+.pro-upgrade-preview-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 2px dashed var(--border-dashed);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.pro-upgrade-preview-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-hand);
+  font-size: 14px;
+  color: var(--ink-medium);
+  background: rgba(247, 239, 229, 0.55);
+  margin: 0;
 }
 
 .pro-upgrade-badge {

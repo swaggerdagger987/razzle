@@ -87,6 +87,7 @@ export function PanelRenderer({ panel }: Props) {
     if (isUpgradeRequiredError(err)) {
       return (
         <ProUpgradeGate
+          panelSlug={panel.slug}
           panelTitle={panel.title}
           required={err.required}
           current={err.current}

@@ -102,6 +102,7 @@ export function BreakoutsRenderer({ panel }: Props) {
     if (err.upgrade) {
       return (
         <ProUpgradeGate
+          panelSlug={panel.slug}
           panelTitle={panel.title}
           required={err.upgrade.required ?? "pro"}
           current={err.upgrade.current ?? "free"}
@@ -112,6 +113,7 @@ export function BreakoutsRenderer({ panel }: Props) {
     if (isUpgradeRequiredError(err)) {
       return (
         <ProUpgradeGate
+          panelSlug={panel.slug}
           panelTitle={panel.title}
           required={err.required}
           current={err.current}

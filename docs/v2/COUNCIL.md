@@ -3222,3 +3222,53 @@ All four DELETE rows are net-negative code and net-negative trust. Approve delet
 
 **Acknowledged:** Opus ✓ Codex ✓ Composer ✓
 
+---
+
+## Board — Codex Code Audit (after cycle 54)
+
+Full passover run before writing:
+- `git log --oneline -40`
+- `git diff --stat HEAD~40..HEAD 2>/dev/null || git diff --stat`
+- `./.venv-v2/bin/pytest apps/api/tests -q` → **56 passed**
+- `npm run build` → **pass**
+
+### Areas + tags
+
+- **FINISHED** — Acceptance automation gate is green right now (no failing API tests; build green).  
+  Evidence: `apps/api/tests/`, root `npm run build` output.
+
+- **FINISHED** — Room now runs true six-agent pixel parity; no 3-agent remap shim remains in Room UI path.  
+  Evidence: `packages/pixel-room/src/constants.ts`, `apps/web/components/room/SituationRoom.tsx`.
+
+- **FINISHED** — Bureau feature body no longer leaks generic "coming soon" fallback copy; visible tabs map to bespoke bodies.  
+  Evidence: `apps/web/components/league/BureauFeatureBody.tsx`, `apps/web/components/league/LeagueDashboard.tsx`.
+
+- **HALF-DONE** — Legacy bridge remains on critical runtime paths (panels, screener, auth, billing, facts), so V2 is still partially shimmed to legacy backend modules.  
+  Evidence: `apps/api/legacy_bridge.py`, `apps/api/services/panels/dispatcher.py`, `apps/api/services/screener/service.py`, `apps/api/services/auth.py`, `apps/api/services/billing.py`, `apps/api/main.py`.
+
+- **HALF-DONE** — Bureau still exposes unfinished feature slugs as routable URLs; nav hides them, but direct routes land on a "not live yet" path.  
+  Evidence: `apps/web/lib/bureau-features.ts`, `apps/web/app/league/[id]/[feature]/page.tsx`, `apps/web/components/league/LeagueDashboard.tsx`.
+
+- **HALF-DONE** — Plan tiering still carries explicit TODO debt in core gating logic.  
+  Evidence: `apps/api/services/tier.py` (`TODO: JWT user plan from users.db when auth is wired`).
+
+- **HALF-DONE** — Board bookkeeping is overdue in loop state (`last_board_cycle` still 43 during cycle 54 board session).  
+  Evidence: `docs/v2/LOOP-STATE.md`.
+
+- **REFINE-CANDIDATE** — Docs vs runtime drift now cuts both directions (stale stubs and stale TODOs).  
+  Evidence: `docs/v2/ACCEPTANCE.md` (Gate 3 still says H2H stub), `docs/v2/AGENTS.md` (room canvas marked partial/6 sprites TODO), while `apps/web/components/league/BureauHeadToHead.tsx` and `packages/pixel-room/src/constants.ts` are shipped.
+
+- **REFINE-CANDIDATE** — Pro-upgrade/error handling remains copy-pasted across multiple launch-10 renderers; extracting one shared hook would reduce bug surface.  
+  Evidence: `apps/web/components/lab/renderers/BreakoutsRenderer.tsx`, `EfficiencyRenderer.tsx`, `DynastyRankingsRenderer.tsx`, `TradeValuesRenderer.tsx`, `BuySellRenderer.tsx`, `AgingCurvesRenderer.tsx`.
+
+- **REFINE-CANDIDATE** — Two operational god files are now at risk size: board thread and loop shell driver.  
+  Evidence: `docs/v2/COUNCIL.md` (~3.2k lines), `scripts/v2_loop.sh` (~553 lines).
+
+- **DELETE-CANDIDATE** — Remove legacy panel route surface when parity port is complete; right now both modern and legacy router stacks are mounted.  
+  Evidence: `apps/api/main.py` (`app.include_router(panels.legacy_router)`), `apps/api/routers/panels.py`, `apps/api/services/panels/dispatcher.py`.
+
+- **DELETE-CANDIDATE** — Remove hidden Bureau slugs from direct-route validation until each has a real renderer (or ship them); current route-level exposure is dead-surface debt.  
+  Evidence: `apps/web/app/league/[id]/[feature]/page.tsx`, `apps/web/lib/bureau-features.ts`.
+
+No vote in this entry by request (audit only).
+
