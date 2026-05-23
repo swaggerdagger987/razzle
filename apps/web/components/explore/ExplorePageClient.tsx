@@ -22,6 +22,7 @@ import { ExploreFeed } from "./ExploreFeed";
 import { ExploreShareButton } from "./ExploreShareButton";
 import { ExploreTable } from "./ExploreTable";
 import { FormulaBuilder } from "./FormulaBuilder";
+import { FormulaStore } from "./FormulaStore";
 import { SavedViewsManager } from "./SavedViewsManager";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
@@ -30,6 +31,7 @@ export function ExplorePageClient() {
   const [params, setParams] = useQueryStates(exploreParsers);
   const [formulas, setFormulas] = useState<SavedFormula[]>([]);
   const [formulaOpen, setFormulaOpen] = useState(false);
+  const [storeOpen, setStoreOpen] = useState(false);
   const universe = params.universe as ExploreUniverse;
   const apiSortKey =
     universe === "college" && params.sort === "fantasy_points_ppr"
@@ -103,11 +105,10 @@ export function ExplorePageClient() {
     });
   }
 
-  function onFormulaSaved(next: SavedFormula[]) {
+  function onFormulaSaved(next: SavedFormula[], sortKey?: string) {
     setFormulas(next);
-    if (next.length > 0) {
-      void setParams({ sort: formulaColumnKey(next[next.length - 1]!.name), dir: "desc" });
-    }
+    const key = sortKey ?? (next.length > 0 ? formulaColumnKey(next[next.length - 1]!.name) : null);
+    if (key) void setParams({ sort: key, dir: "desc" });
   }
 
   const statLabel = universe === "college" ? "college players" : "players";
@@ -191,6 +192,13 @@ export function ExplorePageClient() {
         >
           + formula
         </button>
+        <button
+          type="button"
+          className="btn-chunky text-sm"
+          onClick={() => setStoreOpen(true)}
+        >
+          formula store
+        </button>
         <SavedViewsManager
           current={{
             q: params.q,
@@ -210,7 +218,13 @@ export function ExplorePageClient() {
       <FormulaBuilder
         open={formulaOpen}
         onClose={() => setFormulaOpen(false)}
-        onSaved={onFormulaSaved}
+        onSaved={(next) => onFormulaSaved(next)}
+      />
+
+      <FormulaStore
+        open={storeOpen}
+        onClose={() => setStoreOpen(false)}
+        onInstalled={onFormulaSaved}
       />
 
       {query.isPending && <LoadingState className="p-8" />}

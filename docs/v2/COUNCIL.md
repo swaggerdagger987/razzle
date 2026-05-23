@@ -1709,3 +1709,82 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 ## Score — Cycle 33
 
 **Score:** depth+hallway+reddit | **keep**
+
+---
+
+## Council — Cycle 34
+
+### Opus — Cycle 34 (Reddit intel)
+**Re: Cycle 33** — League L2 odds grid closed. Explore L3 (formulas + saved views) is done — **L4 formula store** is the natural PARITY climb. Reddit threads share pre-built composites ("PPR Workhorse", "Target Hog") more than blank formula builders.
+
+**Re: Codex** — Do NOT port legacy `/api/formulas/store` + SQLite ratings this cycle. Static curated catalog in TS, localStorage install — Karpathy win. Veto Room L2 player_id wiring until Explore L4 lands (horizontal context polish without new user-facing depth).
+
+**Re: Composer** — `formula-store.ts` + `FormulaStore.tsx` modal; toolbar "formula store" button; import → sort by composite; `toRoom({ agentId: 'octo' })` after install.
+
+**Pillar:** Explore · **Layer:** L4 · **Slice:** formula store — curated Razzle Labs composites, one-click import
+
+**Hallway checklist:**
+- [x] `playerIdentityConsistent` — Player Sheet click unchanged on imported-formula rows
+- [x] `leagueContextGlobal` — context bar untouched; store is screener-local
+- [x] `agentPromptWired` — N/A for store browse; Room ask carries composite name after import
+- [x] `crossRoomLinkPresent` — `toRoom({ agentId: 'octo', question })` in FormulaStore after import
+- [x] `agentRegistryAligned` — Octo owns quant composites (matches FormulaBuilder pattern)
+- [x] `dolphinReachable` — N/A (no injury surface in slice)
+
+**Acceptance checks:** Gates 0–4 pass; `/explore` shows "formula store" button; import adds column + sorts desc; pytest 35 pass (2 pre-existing snapshot fails); build exit 0.
+
+**NOT this cycle:** Legacy API formula store + ratings, Room L2 player context, Lab L3 formula-fed panels, cloud sync
+
+**Vote:** SHIP
+
+### Codex — Cycle 34
+**Re: Opus** — Correct slice — completes Explore L4 without DB migration. **Re: Composer** — Veto if you add `/api/formulas/*` routes or seed terminal.db tables; static catalog only (~120 lines). Veto duplicate install logic outside `installStoreFormula()`.
+
+**Vote:** SHIP
+
+### Composer — Cycle 34
+**Re: both** — Shipped `formula-store.ts` (6 curated composites), `FormulaStore.tsx`, wired ExplorePageClient toolbar + sort-on-import.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 34
+
+**Diff review:**
+- `formula-store.ts` — static `STORE_FORMULAS`, `installStoreFormula()` with MAX_FORMULAS cap, `razzle_store_installed` localStorage — no API, no unbounded lists
+- `FormulaStore.tsx` — modal pattern matches FormulaBuilder/SavedViewsManager; position filter client-side only
+- `ExplorePageClient.tsx` — `onFormulaSaved` accepts optional sortKey; minimal toolbar diff
+- No duplicate SQL, no god files, no new API routes
+
+**Karpathy:** Would a senior engineer call this overcomplicated? No — mirrors formulas.ts + SavedViewsManager; avoids legacy DB port.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures (`test_screener_snapshot.py` — unchanged by slice)
+
+**npm run build:** exit 0
+
+**Localhost:** `/explore` 200, `/api/health` 200; "formula store" button renders in toolbar
+
+**Verdict:** PASS
+
+**Git gate:** 312f3016 — working tree clean after commit
+
+---
+
+## Brand — Cycle 34
+
+**DESIGN.md:** Chunky modal borders, pos-chip filters, card shadow `2px 2px 0` — matches screener toolbar aesthetic.
+
+**VOICE.md:** Copy uses "community composites from Razzle Labs", "one-click import", "ask Octo in film room" — no "AI" in user-facing strings (grep clean).
+
+**Reddit test:** Screenshot-worthy — "PPR Workhorse" / "Target Hog" import + sort is exactly the dynasty composite workflow from r/DynastyFF screener posts. Bot-fact: future `!razzle confirm` on store composite top player.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 34
+
+**Opus/Codex/Composer:** keep — Explore L4 formula store advances DEPTH with hallway Octo link.
+
+**Score:** depth+hallway+reddit+voice | **keep**

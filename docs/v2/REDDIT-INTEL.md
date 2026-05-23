@@ -139,3 +139,13 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Slice:** League L2 Bureau Monte Carlo — `League odds board` dense grid below hero cards, dual mini-bars per manager.
 - **Council cycle:** 33
 - **Bot-fact potential:** `!razzle confirm <league> odds board` — future intel layer
+
+## 2026-05-23 — Cycle 34
+
+### r/DynastyFF — community composite / formula store workflow (pattern; live fetch 403)
+- **Pattern:** Dynasty screener posts share **named composites** ("PPR Workhorse", "Target Hog", "Bellcow Index") — users want one-click import, not building weights from scratch. Excel/dashboard tools (Dynasty FF Dashboard, DFT-style trade calcs) aggregate community formulas; Reddit OC screenshots show sorted composite columns with position filters.
+- **Competitor framing:** DynastyProcess articles, KeepTradeCut tiers, FantasyPros custom scoring — pre-built weighted models get shared when debating breakout vs volume plays.
+- **Razzle gap:** Cycle 30 shipped custom formula builder (L3); no curated store for community composites.
+- **Slice:** Explore L4 formula store — static Razzle Labs catalog, position filter, one-click import to localStorage, sort by composite, Octo Room ask.
+- **Council cycle:** 34
+- **Bot-fact potential:** `!razzle confirm <player> PPR Workhorse rank` — future intel layer
