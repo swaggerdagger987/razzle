@@ -98,6 +98,9 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
         <Link href={`/league/${leagueId}/pressure-map` as Route} className="text-orange underline">
           pressure map →
         </Link>
+        <Link href={`/league/${leagueId}/trade-finder` as Route} className="text-orange underline">
+          trade finder →
+        </Link>
       </footer>
     </div>
   );

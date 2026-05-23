@@ -7,6 +7,7 @@ import { BureauMonteCarlo } from "./BureauMonteCarlo";
 import { BureauManagerProfiles } from "./BureauManagerProfiles";
 import { BureauPressureMap } from "./BureauPressureMap";
 import { BureauTradeNetwork } from "./BureauTradeNetwork";
+import { BureauTradeFinder } from "./BureauTradeFinder";
 
 const TITLES: Partial<Record<BureauFeatureSlug, string>> = {
   "roster-depth": "Roster Depth",
@@ -30,6 +31,7 @@ export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "manager-profiles") return <BureauManagerProfiles data={data} leagueId={leagueId} />;
   if (feature === "pressure-map") return <BureauPressureMap data={data} leagueId={leagueId} />;
   if (feature === "trade-network") return <BureauTradeNetwork data={data} leagueId={leagueId} />;
+  if (feature === "trade-finder") return <BureauTradeFinder data={data} leagueId={leagueId} />;
 
   const title = TITLES[feature];
 

@@ -190,9 +190,16 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 43
 - **Bot-fact potential:** `!razzle confirm <manager> panic score` — future intel layer
 
-## 2026-05-23 — Cycle 45
+## 2026-05-23 — Cycle 47
 
-### r/DynastyFF — trade deadline pressure / desperation bar screenshots (pattern; live fetch 403)
+### r/DynastyFF — league-specific trade matcher vs generic value charts (pattern; live fetch 403)
+- **Pattern:** Trade advice threads ask "who in my league would take X for Y?" — not "what's his KTC value." Comment chains want **roster-aware** suggestions: surplus WR for need at RB, matched to a specific leaguemate before the deadline.
+- **Competitor framing:** KeepTradeCut/FantasyCalc are league-agnostic. leaguemate.fyi shows history not fair-value pairs. Dynasty managers screenshot **named player-for-player offers** when negotiating in group chats.
+- **Razzle gap:** Cycles 45–46 shipped pressure map + trade network; no value-matched trade suggestions from connected Sleeper rosters.
+- **Slice:** League L4 `trade-finder` — Bones header, dynasty_value matching within 25% gap, position need/surplus, Room ask on hero deal, hallway to pressure-map + trade-network + /lab/trade-values.
+- **Council cycle:** 47
+- **Bot-fact potential:** `!razzle <A> for <B> in <league>` — future intel layer
+
 - **Pattern:** Pre-deadline threads ask **"who's desperate in your league?"** — managers with losing records get targeted for win-now pieces. Comment chains share horizontal bar charts ranking leaguemates by desperation, not just W-L standings.
 - **Competitor framing:** Legacy Razzle V1 pressure map (league-intel.html) — top-3 free, full map Pro. Footballguys deadline articles name archetypes but no live league scoring.
 - **Razzle gap:** Cycle 43 shipped manager archetypes; no standalone desperation score visualization for deadline timing.

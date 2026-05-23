@@ -78,3 +78,8 @@ def manager_profiles(ref: LeagueRef) -> dict:
 @router.post("/pressure-map")
 def pressure_map(ref: LeagueRef) -> dict:
     return bureau.pressure_map(league_id=ref.league_id)
+
+
+@router.post("/trade-finder")
+def trade_finder(ref: LeagueRef) -> dict:
+    return bureau.trade_finder(league_id=ref.league_id, user_id=ref.user_id)
