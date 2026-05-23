@@ -3,7 +3,7 @@
 **Pillar:** Explore  
 **Layer:** L2  
 **Slice:** College → Lab prospects hallway wires  
-**Commit:** (filled after commit)
+**Commit:** 9f2744c8
 
 ## UI
 
