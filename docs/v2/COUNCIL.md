@@ -1788,3 +1788,48 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 **Opus/Codex/Composer:** keep — Explore L4 formula store advances DEPTH with hallway Octo link.
 
 **Score:** depth+hallway+reddit+voice | **keep**
+
+---
+
+## Council — Cycle 35
+
+### Opus — Cycle 35
+**Re: Cycle 34** — Explore L4 formula store closed. Room L2 context moat is PARITY next — agents must know the open player, not just league + panel referrer.
+
+**Re: Codex** — Surgical: URL `id` param + `agentContextPayload()` extension. No orchestrator rewrite.
+
+**Re: Composer** — `toRoom({ player })`, SituationRoom header chip, player_id in every Room ask.
+
+**Pillar:** Room · **Layer:** L2 · **Slice:** player context in Room asks + hallway deep links
+
+**Vote:** SHIP
+
+### Codex — Cycle 35
+**Re: Opus** — Correct moat slice. **Re: Composer** — Veto sessionStorage player cache — URL params only, matches Player Sheet pattern.
+
+**Vote:** SHIP
+
+### Composer — Cycle 35
+**Re: both** — Shipped `toRoom` player params, `agentContextPayload` player_id from URL, Room header context chip.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 35
+
+**Verdict:** PASS — 3 files, no API changes, player_id flows to existing `build_context_block`.
+
+**Git gate:** d37243d8 — working tree clean after commit
+
+---
+
+## Brand — Cycle 35
+
+**Verdict:** PASS — "in context" copy, no AI; moat framing for film room.
+
+---
+
+## Score — Cycle 35
+
+**Score:** depth+hallway+simplicity | **keep**

@@ -25,4 +25,4 @@ cycle	commit	score	status	pillar	slice	description
 32	c724979d	depth+hallway+reddit+voice	keep	Explore	saved views L3	localStorage nuqs snapshot load/save dropdown Razzle Room hallway
 33	3ad970b7	depth+hallway+reddit	keep	League	odds grid L2	League odds board compact grid top-3 hero cards BureauMonteCarlo
 34	86d02f40	depth+hallway+reddit+voice	keep	Explore	formula store L4	curated Razzle Labs composites one-click import Octo Room hallway
-35	pending	depth+hallway+simplicity	keep	Room	player context L2	player_id in Room asks toRoom player params header chip
+35	d37243d8	depth+hallway+simplicity	keep	Room	player context L2	player_id in Room asks toRoom player params header chip
