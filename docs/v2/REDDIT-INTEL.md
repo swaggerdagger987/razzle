@@ -129,3 +129,13 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - League-specific context vs generic rankings
 - Screenshot-worthy share cards
 - Mobile dynasty managers on Reddit app
+
+## 2026-05-23 — Cycle 33
+
+### r/DynastyFF — full league odds board screenshots (pattern; live fetch 403)
+- **Pattern:** Trade-deadline threads share **full-league odds boards** — every manager's title + playoff % on one screen, not just the top 3 sticker cards. Comment chains ask "where does 7th place land?" — compact grids beat hero cards alone.
+- **Competitor framing:** Sleeper playoff bracket, FantasyPros power rankings grid — dense manager grids get shared when debating sell windows across the whole league.
+- **Razzle gap:** Cycle 27 shipped dual-metric sticker cards for top managers; no compact grid showing all rosters at once.
+- **Slice:** League L2 Bureau Monte Carlo — `League odds board` dense grid below hero cards, dual mini-bars per manager.
+- **Council cycle:** 33
+- **Bot-fact potential:** `!razzle confirm <league> odds board` — future intel layer

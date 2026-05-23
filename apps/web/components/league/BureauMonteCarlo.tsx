@@ -70,7 +70,7 @@ export function BureauMonteCarlo({ data }: Props) {
 
       {odds.length > 0 && (
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {odds.map((o, i) => (
+          {odds.slice(0, 3).map((o, i) => (
             <div
               key={o.roster_id}
               className="chunky bg-bg-card p-4"
@@ -134,6 +134,55 @@ export function BureauMonteCarlo({ data }: Props) {
         <p className="text-ink-medium p-4" style={{ fontFamily: "var(--font-hand)" }}>
           {octo.emptyCopy}
         </p>
+      )}
+
+      {odds.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-xl" style={{ fontFamily: "var(--font-display)" }}>
+            League odds board
+          </h2>
+          <div
+            className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            aria-label="All managers championship and playoff odds"
+          >
+            {odds.map((o, i) => (
+              <div key={`grid-${o.roster_id}`} className="chunky bg-bg-card p-3">
+                <div className="mb-1 flex items-center justify-between gap-2">
+                  <p className="truncate text-sm font-bold" style={{ fontFamily: "var(--font-display)" }}>
+                    {o.manager}
+                  </p>
+                  <span className="text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                    #{i + 1}
+                  </span>
+                </div>
+                <div className="flex gap-3 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
+                  <span className="text-orange">{o.championship_pct}% title</span>
+                  <span style={{ color: "var(--pos-rb)" }}>{o.playoff_pct ?? 0}% playoffs</span>
+                </div>
+                <div className="mt-1 flex flex-col gap-0.5" role="presentation">
+                  <div className="h-1.5 border border-ink bg-bg">
+                    <div
+                      className="h-full"
+                      style={{
+                        width: `${Math.min(100, o.championship_pct * 2)}%`,
+                        background: barColor(o.championship_pct),
+                      }}
+                    />
+                  </div>
+                  <div className="h-1.5 border border-ink bg-bg">
+                    <div
+                      className="h-full"
+                      style={{
+                        width: `${Math.min(100, o.playoff_pct ?? 0)}%`,
+                        background: "var(--pos-rb)",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       {top && (
