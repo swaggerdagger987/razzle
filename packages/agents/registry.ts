@@ -130,3 +130,7 @@ export function agentsForSurface(surface: AgentSurface): AgentDefinition[] {
 export function agentForPanel(slug: string): AgentDefinition | undefined {
   return AGENTS.find((a) => a.labPanels?.includes(slug));
 }
+
+export function agentForBureauSection(slug: string): AgentDefinition | undefined {
+  return AGENTS.find((a) => a.bureauSections?.includes(slug));
+}

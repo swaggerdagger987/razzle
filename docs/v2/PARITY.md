@@ -12,7 +12,7 @@ Status: `RED` | `YELLOW` | `GREEN`
 |--------|-----------|---------------------|--------|
 | **Explore** | L0–L1 | L2 college + prospect bridge polish; L3 formulas | YELLOW |
 | **Lab** | L1 | **L2 — agent-owned headers + loading copy on launch-10** | YELLOW |
-| **League** | L0 | **L1 — Self-Scout + Monte Carlo real, not stubs** | RED |
+| **League** | L0–L1 | **L1 — Self-Scout + Monte Carlo odds cards** | YELLOW |
 | **Room** | L0–L1 | L2 full context moat; L3 six pixel sprites | YELLOW |
 
 ## Launch 10 — Lab L1 (do these deep, ignore the other 90)

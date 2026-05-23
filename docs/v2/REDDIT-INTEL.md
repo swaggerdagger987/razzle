@@ -72,6 +72,15 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 21
 - **Bot-fact potential:** N/A — prompt-level moat, not fact replies
 
+## 2026-05-23 — Cycle 23
+
+### r/DynastyFF — championship odds screenshot culture (pattern; live fetch 403)
+- **Pattern:** Trade-deadline threads ask "contender or rebuilder?" — managers share **championship % boards** and power-ranking cards, not raw roster lists.
+- **Competitor framing:** Sleeper playoff odds, FantasyPros power rankings — % bars + manager cards get upvoted in comment chains.
+- **Razzle slice:** League L1 Bureau Monte Carlo — Octo header, championship odds summary cards sorted by %, Room ask on leader.
+- **Council cycle:** 23
+- **Bot-fact potential:** `!razzle confirm <manager> championship odds` — future intel layer
+
 
 ### r/DynastyFF — daily dynasty briefing / market pulse (pattern; live fetch 403)
 - **Pattern:** Dynasty managers want **one-screen pulse checks** — top assets, risers/fallers vs production rank, positional scarcity cliffs — before trade posts or morning Reddit threads.

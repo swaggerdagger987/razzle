@@ -2,6 +2,7 @@ export {
   AGENTS,
   AGENT_BY_ID,
   AGENT_IDS,
+  agentForBureauSection,
   agentForPanel,
   agentsForSurface,
   loadingCopyForAgent,

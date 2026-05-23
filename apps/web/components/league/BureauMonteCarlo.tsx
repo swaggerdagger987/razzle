@@ -1,0 +1,141 @@
+"use client";
+
+import { AGENT_BY_ID } from "@razzle/agents";
+import { toRoom } from "@razzle/hallway";
+import Link from "next/link";
+import type { Route } from "next";
+import { BureauRowsTable } from "./BureauRowsTable";
+
+interface Props {
+  data: Record<string, unknown>;
+}
+
+type OddsRow = {
+  roster_id: number;
+  manager: string;
+  championship_pct: number;
+  roster_power: number;
+};
+
+function barColor(pct: number): string {
+  if (pct >= 25) return "var(--green)";
+  if (pct >= 10) return "var(--orange)";
+  return "var(--red)";
+}
+
+export function BureauMonteCarlo({ data }: Props) {
+  const octo = AGENT_BY_ID.octo;
+  const odds = (data.odds as OddsRow[]) ?? [];
+  const sims = Number(data.simulations ?? 2000);
+  const withStats = Number(data.players_with_stats ?? 0);
+  const top = odds[0] ?? null;
+
+  const rows = (data.projections as Array<Record<string, unknown>>)
+    ?.filter((p) => Number(p.mean) > 0)
+    .sort((a, b) => Number(b.mean) - Number(a.mean))
+    .slice(0, 50)
+    .map((p) => ({
+      player: p.name ?? p.player_id,
+      pos: p.position ?? "—",
+      mean: p.mean,
+      floor: p.floor,
+      ceiling: p.ceiling,
+      stddev: p.stddev,
+      manager: p.manager,
+    }));
+
+  return (
+    <div className="flex flex-col gap-6">
+      <header className="chunky bg-bg-card p-6">
+        <div className="mb-4 flex items-center gap-3">
+          <img src={`/agents/${octo.avatar}.svg`} alt="" className="h-10 w-10" />
+          <div>
+            <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+              {octo.name} · {octo.role}
+            </p>
+            <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+              championship odds from {sims.toLocaleString()} roster sims
+            </p>
+          </div>
+        </div>
+        <h1 className="text-3xl" style={{ fontFamily: "var(--font-display)" }}>
+          Monte Carlo
+        </h1>
+        <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
+          {String(data.season ?? "")} season · {withStats} players with weekly tape
+        </p>
+      </header>
+
+      {odds.length > 0 && (
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {odds.map((o, i) => (
+            <div
+              key={o.roster_id}
+              className="chunky bg-bg-card p-4"
+              style={{ transform: i % 2 === 0 ? "rotate(-0.5deg)" : "rotate(0.5deg)" }}
+            >
+              <div className="mb-2 flex items-start justify-between gap-2">
+                <p className="font-bold" style={{ fontFamily: "var(--font-display)" }}>
+                  {o.manager}
+                </p>
+                <span className="text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                  #{i + 1}
+                </span>
+              </div>
+              <p className="text-3xl text-orange" style={{ fontFamily: "var(--font-display)" }}>
+                {o.championship_pct}%
+              </p>
+              <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                championship
+              </p>
+              <div
+                className="mt-2 h-3 border-2 border-ink bg-bg"
+                role="presentation"
+              >
+                <div
+                  className="h-full"
+                  style={{
+                    width: `${Math.min(100, o.championship_pct * 2)}%`,
+                    background: barColor(o.championship_pct),
+                  }}
+                />
+              </div>
+              <p className="text-ink-medium mt-2 text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+                roster power {o.roster_power}
+              </p>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {odds.length === 0 && (
+        <p className="text-ink-medium p-4" style={{ fontFamily: "var(--font-hand)" }}>
+          {octo.emptyCopy}
+        </p>
+      )}
+
+      {top && (
+        <Link
+          href={
+            toRoom({
+              agentId: "octo",
+              question: `${top.manager} leads at ${top.championship_pct}% championship odds — what moves the needle?`,
+            }) as Route
+          }
+          className="btn-chunky w-fit text-sm"
+        >
+          ask {octo.name} in film room →
+        </Link>
+      )}
+
+      {rows && rows.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-xl" style={{ fontFamily: "var(--font-display)" }}>
+            Player distributions
+          </h2>
+          <BureauRowsTable rows={rows} emptyMessage="no weekly stats yet — sync terminal.db" />
+        </section>
+      )}
+    </div>
+  );
+}

@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import random
 import statistics
+from collections import Counter
 from datetime import datetime
 from typing import Any
 
@@ -70,6 +72,38 @@ def _weekly_stats_by_gsis(gsis_ids: list[str], scoring: str, season: int) -> dic
     return out
 
 
+def _sample_score(mean: float, stddev: float, floor: float, ceiling: float) -> float:
+    if mean <= 0:
+        return 0.0
+    if stddev <= 0:
+        return mean
+    z = random.gauss(0, 1)
+    return max(floor, min(ceiling, mean + z * stddev))
+
+
+def _championship_odds(
+    by_roster: dict[int, list[dict[str, float]]],
+    sims: int = 2000,
+) -> dict[int, float]:
+    """Sample roster totals; highest total wins each sim. Returns championship % per roster_id."""
+    if not by_roster:
+        return {}
+    roster_ids = list(by_roster.keys())
+    wins: Counter[int] = Counter()
+    for _ in range(sims):
+        totals = {
+            rid: sum(
+                _sample_score(p["mean"], p["stddev"], p["floor"], p["ceiling"])
+                for p in players
+                if p["mean"] > 0
+            )
+            for rid, players in by_roster.items()
+        }
+        winner = max(roster_ids, key=lambda rid: totals.get(rid, 0))
+        wins[winner] += 1
+    return {rid: round(wins[rid] / sims * 100, 1) for rid in roster_ids}
+
+
 def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
     ctx = get_or_refresh(league_id)
     if not ctx:
@@ -91,10 +125,14 @@ def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
     weekly = _weekly_stats_by_gsis(list(gsis_by_sleeper.values()), scoring, season)
 
     projections: list[dict[str, Any]] = []
+    by_roster: dict[int, list[dict[str, float]]] = {}
+    manager_names: dict[int, str] = {}
     with_stats = 0
     for roster in ctx.rosters:
         owner = ctx.user_for_roster(roster.roster_id)
         team = (owner.team_name if owner else None) or (owner.display_name if owner else f"Team {roster.roster_id}")
+        manager_names[roster.roster_id] = team
+        by_roster.setdefault(roster.roster_id, [])
         for pid in roster.players:
             sid = str(pid)
             info = lookup.get(sid) or {}
@@ -103,6 +141,7 @@ def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
             dist = _distribution(weeks)
             if dist["games"] > 0:
                 with_stats += 1
+            by_roster[roster.roster_id].append(dist)
             projections.append(
                 {
                     "player_id": sid,
@@ -115,10 +154,30 @@ def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
                 }
             )
 
+    champ_pct = _championship_odds(by_roster)
+    odds = sorted(
+        [
+            {
+                "roster_id": rid,
+                "manager": manager_names.get(rid, f"Team {rid}"),
+                "championship_pct": champ_pct.get(rid, 0.0),
+                "roster_power": round(
+                    sum(p["mean"] for p in by_roster.get(rid, []) if p["mean"] > 0),
+                    1,
+                ),
+            }
+            for rid in by_roster
+        ],
+        key=lambda o: o["championship_pct"],
+        reverse=True,
+    )
+
     return {
         "league_id": league_id,
         "scoring": scoring,
         "season": season,
         "projections": projections,
         "players_with_stats": with_stats,
+        "odds": odds,
+        "simulations": 2000,
     }
