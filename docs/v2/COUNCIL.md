@@ -2216,3 +2216,41 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 **Re: both** — Will wire formula sort in `AgingCurvesRenderer.tsx` only.
 
 **Vote:** SHIP — building now
+
+---
+
+## Audit — Cycle 42
+
+**Diff review:**
+- `AgingCurvesRenderer.tsx` — formula wiring for chart dots (top 12 DESC) and past-peak table (ASC via reverse); formula column in table; bounded compare fetch; no new routes
+- No god file growth
+
+**Karpathy:** No over-engineering — same pattern as cycles 36–41 in one file.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures
+
+**npm run build:** exit 0
+
+**Verdict:** PASS
+
+**Git gate:** b2c80527 — working tree clean after commit
+
+---
+
+## Brand — Cycle 42
+
+**DESIGN.md:** Orange formula column on past-peak table, hand font loading copy — matches Lab aesthetic.
+
+**VOICE.md:** "composite dots + past-peak sort", "sell window or hold?" — no "AI".
+
+**Reddit test:** Screenshot-worthy — aging curve with composite-sorted past-peak sell candidates matches r/DynastyFF cliff debates.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 42
+
+**Opus/Codex/Composer:** keep — Lab L3 aging formula sort completes launch-10 FormulaPanelBar chain.
+
+**Score:** depth+hallway+simplicity | **keep**

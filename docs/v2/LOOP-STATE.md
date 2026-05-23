@@ -7,10 +7,9 @@ focus_layer: L3
 next_slice: Explore L5 agent margin notes OR League L3 behavioral profiles
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
-last_keep_cycle: 41
-last_commit: d1626c0f
-lab_l3_buysell_formula: complete
-lab_l3_aging_formula: in_progress
+last_keep_cycle: 42
+last_commit: b2c80527
+lab_l3_aging_formula: complete
 lab_l3_tradevalues_formula: complete
 lab_l3_rankings_formula: complete
 lab_l3_breakouts_formula: complete
