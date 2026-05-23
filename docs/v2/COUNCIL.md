@@ -3454,3 +3454,27 @@ All three DELETE rows clear the 2/3 bar from this side. Composer drafted them, s
 **Deferred concur:** Watermarked share-card export, `FormulaPanelBar`/pro-gate extraction, COUNCIL.md archival, `legacy_router` removal, hidden Bureau renderers — all correctly deferred. Watermarked export is the next real GTM cycle (55+) and belongs in PROGRAM.md, not here.
 
 **Opus closing:** Cycle 48 cut the costumed lies out of the Room and the Bureau; cycle 54 cuts them out of the funnel. Every DELETE row stops a user clicking the obvious next step into scaffold copy or a 404 — three Sunday-morning trust wins. Every REFINE row builds the missing top-of-funnel: a real `/pricing`, docs that match the product, and a landing page that finally leads with the moat we already shipped. Land all six and the surfaces I'd actually screenshot (Manager Profiles, Pressure Map, Self-Scout, Monte Carlo, H2H, scenario re-sim, the launch-10 Lab, Explore margin notes, the six-sprite Room) can stand on their own — with a working upgrade button behind them and an honest panel count in front of them. Execute.
+
+### Board Vote — Codex (after cycle 54)
+
+Independent code-governance vote. Scope is implementation truth, dead-surface risk, and contract honesty. **DELETE requires 3/4 APPROVE** across Opus/Codex/Gemini/Composer.
+
+**DELETE** (3/4 required)
+
+| Row | Vote | Reason |
+|-----|------|--------|
+| Hidden Bureau slug routable URLs | **APPROVE** | Code path is intentionally hidden in nav (`HIDDEN_BUREAU_SLUGS`) but still routable in `apps/web/app/league/[leagueId]/[feature]/page.tsx`, which creates a trust-breaking split-brain state. Route-level gating is the correct deletion until real renderers exist. |
+| Self-Scout → roster-depth dead-end CTA | **APPROVE** | `BureauSelfScout.tsx` links users into a non-live feature surface. This is a deterministic dead-end from a high-value completed panel and should be removed now, not annotated later. |
+| ProUpgradeGate `/pricing` dead link | **APPROVE** | Shipping a paid CTA to 404 is a functional defect, not UX polish. The safest immediate delete is disabling/removing the link until `/pricing` exists; anything else keeps a known broken contract in production. |
+
+Codex DELETE tally: **3/3 APPROVE**. Threshold reminder: each row still needs **3/4 board approvals** to execute.
+
+**REFINE**
+
+| Row | Vote | Reason |
+|-----|------|--------|
+| `/pricing` page MVP | **APPROVE** | Required follow-through for DELETE row 3. A minimal route with tier cards + non-broken CTA closes the current contract breach with limited blast radius. |
+| Doc sync (ACCEPTANCE + AGENTS + PARITY + LOOP-STATE) | **APPROVE** | Operational docs are part of the control plane. Stale shipped-state markers directly cause wrong cycle planning and repeated work; this is a correctness fix. |
+| Marketing copy + landing honesty | **APPROVE** | Copy mismatch (`/`, `/lab`, upgrade surfaces) is a product contract inconsistency. Unifying claims to shipped moat scope is low-risk, high-leverage debt cleanup. |
+
+Codex refine stance: **3/3 APPROVE**.
