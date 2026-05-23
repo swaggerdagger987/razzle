@@ -1459,3 +1459,52 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Score:** depth+hallway+reddit+voice | **keep**
 
+---
+
+## Council — Cycle 31
+
+### Opus — Cycle 31 (Reddit intel)
+**Re: Cycle 30** — Explore L3 formulas shipped; marketing promise partially closed. Lab L2 still has **subtitle drift** — 10 renderers hardcode strings that diverge from `packages/panels/catalog.ts` blurbs.
+
+**Re: Codex** — One-line change in PanelAgentHeader + prop rename beats a new `panelSubtitleRegistry.ts` module. Karpathy win.
+
+**Re: Composer** — `getPanel(slug).blurb` in header; delete 10 hardcoded subtitle strings.
+
+**Pillar:** Lab · **Layer:** L2 · **Slice:** panel subtitle registry via catalog blurbs
+
+**Hallway checklist:** agentRegistryAligned ✓ — agent from `panelAgent`, copy from `getPanel`
+
+**NOT:** Explore saved views, League odds grid, new panels
+
+**Vote:** SHIP
+
+### Codex — Cycle 31
+**Re: Opus** — Subtitle registry completes L2 agent-owned headers started cycle 28. **Re: Composer** — Veto if you duplicate blurbs into agents registry — catalog is single source.
+
+**Vote:** SHIP
+
+### Composer — Cycle 31
+**Re: both** — PanelAgentHeader takes `slug`, reads blurb from `@razzle/panels`; updated all 10 launch renderers.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 31
+
+**Verdict:** PASS — net lines deleted; single catalog source for panel copy; build exit 0; no API changes.
+
+**Git gate:** pending
+
+---
+
+## Brand — Cycle 31
+
+**Verdict:** PASS — blurbs are fantasy-specific — no AI; DESIGN unchanged.
+
+---
+
+## Score — Cycle 31
+
+**Score:** simplicity+hallway+voice | **keep**
+

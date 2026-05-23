@@ -61,7 +61,7 @@ export function ProspectsRenderer({ panel }: Props) {
 
   return (
     <div className="prospects-panel">
-      <PanelAgentHeader agent={agent} subtitle="rookie big board" />
+      <PanelAgentHeader agent={agent} slug={panel.slug} />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (

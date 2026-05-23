@@ -108,7 +108,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
 
   return (
     <div className="dynasty-rankings">
-      <PanelAgentHeader agent={agent} subtitle="dynasty value tiers" />
+      <PanelAgentHeader agent={agent} slug={panel.slug} />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (

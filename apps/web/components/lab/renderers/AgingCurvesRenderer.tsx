@@ -230,7 +230,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
 
   return (
     <div className="aging-curves-panel">
-      <PanelAgentHeader agent={agent} subtitle="when positions peak and fade" />
+      <PanelAgentHeader agent={agent} slug={panel.slug} />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">

@@ -106,7 +106,7 @@ export function TradeValuesRenderer({ panel }: Props) {
 
   return (
     <div className="trade-values">
-      <PanelAgentHeader agent={agent} subtitle="trade value chart" />
+      <PanelAgentHeader agent={agent} slug={panel.slug} />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (

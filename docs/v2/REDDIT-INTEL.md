@@ -98,6 +98,15 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 27
 - **Bot-fact potential:** `!razzle confirm <manager> playoff odds` — future intel layer
 
+## 2026-05-23 — Cycle 31
+
+### r/DynastyFF — staff voice on tool screenshots (pattern; live fetch 403)
+- **Pattern:** Screenshot posts that name the **analyst persona** ("my scout flagged breakouts") outperform generic dashboard dumps. Users trust tools that feel like a film room, not a spreadsheet export.
+- **Razzle gap:** Launch-10 panels had hardcoded one-line subtitles diverging from catalog blurbs — registry drift when copy updates.
+- **Slice:** Lab L2 panel subtitle registry — `PanelAgentHeader` reads `getPanel(slug).blurb` from `@razzle/panels` catalog.
+- **Council cycle:** 31
+- **Bot-fact potential:** N/A — voice consistency, not fact replies
+
 
 ### r/DynastyFF — daily dynasty briefing / market pulse (pattern; live fetch 403)
 - **Pattern:** Dynasty managers want **one-screen pulse checks** — top assets, risers/fallers vs production rank, positional scarcity cliffs — before trade posts or morning Reddit threads.

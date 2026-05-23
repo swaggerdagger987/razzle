@@ -100,7 +100,7 @@ export function BreakoutsRenderer({ panel }: Props) {
 
   return (
     <div className="breakouts-panel">
-      <PanelAgentHeader agent={agent} subtitle="opportunity vs production gap" />
+      <PanelAgentHeader agent={agent} slug={panel.slug} />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (

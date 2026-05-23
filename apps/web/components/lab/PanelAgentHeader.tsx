@@ -1,13 +1,15 @@
 "use client";
 
 import { AGENT_BY_ID, agentForPanel, type AgentDefinition } from "@razzle/agents";
+import { getPanel } from "@razzle/panels";
 
 interface HeaderProps {
   agent: AgentDefinition;
-  subtitle: string;
+  slug: string;
 }
 
-export function PanelAgentHeader({ agent, subtitle }: HeaderProps) {
+export function PanelAgentHeader({ agent, slug }: HeaderProps) {
+  const subtitle = getPanel(slug)?.blurb ?? agent.role;
   return (
     <header className="panel-agent-header mb-4 flex items-start gap-3">
       <img

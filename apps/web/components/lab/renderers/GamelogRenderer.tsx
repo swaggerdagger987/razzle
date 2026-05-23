@@ -204,7 +204,7 @@ export function GamelogRenderer({ panel }: Props) {
   if (!playerId) {
     return (
       <div className="gamelog-panel">
-        <PanelAgentHeader agent={agent} subtitle="the full season tape" />
+        <PanelAgentHeader agent={agent} slug={panel.slug} />
         <p className="text-ink-medium mb-4 text-sm" style={{ fontFamily: "var(--font-hand)", fontSize: "1.1rem" }}>
           search a player — or open from Explore / Player Sheet
         </p>
@@ -285,7 +285,7 @@ export function GamelogRenderer({ panel }: Props) {
 
   return (
     <div className="gamelog-panel">
-      <PanelAgentHeader agent={agent} subtitle="week-by-week box scores" />
+      <PanelAgentHeader agent={agent} slug={panel.slug} />
 
       <div className="bg-bg-card chunky mb-4 flex flex-wrap items-center justify-between gap-4 p-4">
         <div className="flex flex-wrap items-center gap-2">

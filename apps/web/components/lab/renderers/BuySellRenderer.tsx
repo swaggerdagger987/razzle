@@ -166,7 +166,7 @@ export function BuySellRenderer({ panel }: Props) {
 
   return (
     <div className="buy-sell-panel">
-      <PanelAgentHeader agent={agent} subtitle="efficiency vs dynasty rank mismatch" />
+      <PanelAgentHeader agent={agent} slug={panel.slug} />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (

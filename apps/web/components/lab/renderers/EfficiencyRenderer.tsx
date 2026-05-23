@@ -174,7 +174,7 @@ export function EfficiencyRenderer({ panel }: Props) {
 
   return (
     <div className="efficiency-panel">
-      <PanelAgentHeader agent={agent} subtitle="points per opportunity" />
+      <PanelAgentHeader agent={agent} slug={panel.slug} />
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (

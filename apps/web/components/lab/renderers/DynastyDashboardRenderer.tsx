@@ -141,7 +141,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
 
   return (
     <div className="dynasty-dashboard">
-      <PanelAgentHeader agent={agent} subtitle="dynasty pulse check" />
+      <PanelAgentHeader agent={agent} slug={panel.slug} />
 
       <div className="mb-4 flex flex-wrap items-center gap-3">
         {seasons.length > 1 && (
