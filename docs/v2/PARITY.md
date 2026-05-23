@@ -10,7 +10,7 @@ Status: `RED` | `YELLOW` | `GREEN`
 
 | Pillar | Layer now | Next vertical slice | Status |
 |--------|-----------|---------------------|--------|
-| **Explore** | L3–L5 | L2 college + prospect bridge polish | GREEN |
+| **Explore** | L3–L5 | Lab L4 pro-gate polish or combine bridge | GREEN |
 | **Lab** | L3 | **L4 — next launch-10 panel deep pass or formula extraction** | GREEN |
 | **League** | L4 | **L5 — scenario explorer or H2H opponent picker** | GREEN |
 | **Room** | L5 | **Explore L2 college polish or Lab L4 pro-gate depth** | GREEN |
