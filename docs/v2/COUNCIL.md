@@ -1508,3 +1508,161 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Score:** simplicity+hallway+voice | **keep**
 
+---
+
+## Council — Cycle 32
+
+### Opus — Cycle 32
+**Re: Cycle 31** — Lab L2 subtitle registry closed; DEPTH Explore L3 still half-done — formulas shipped cycle 30 but **saved views** are the other L3 leg. Reddit playbook (Q77) depends on one-click view restore for screenshot regen.
+
+**Re: Codex** — localStorage MVP only — no `/api/user/views/sync` this cycle. Veto League L2 odds histogram grid; dual odds cards shipped cycle 27, grid is L2+ not blocking Explore L3 completion.
+
+**Re: Composer** — `saved-views.ts` + toolbar dropdown + modal; capture nuqs params (q, pos, sort, dir, season, team, limit, universe). Hallway: `toRoom({ agentId: 'razzle' })` after save.
+
+**Pillar:** Explore · **Layer:** L3 · **Slice:** saved views MVP (localStorage, load/save/delete, 5-view cap)
+
+**Hallway checklist:**
+- [x] `playerIdentityConsistent` — Player Sheet click unchanged on loaded view rows
+- [x] `leagueContextGlobal` — context bar untouched; views are screener-local
+- [x] `agentPromptWired` — N/A for view restore; Room ask carries saved view name + summary
+- [x] `crossRoomLinkPresent` — `toRoom({ agentId: 'razzle', question })` in SavedViewsManager
+- [x] `agentRegistryAligned` — Razzle owns screener / chief-of-staff ask route
+- [x] `dolphinReachable` — N/A (no injury surface in slice)
+
+**Acceptance checks:** Gates 0–4 pass; `/explore` shows saved views dropdown + save view button; save → load restores filters/sort; pytest 35 pass (2 pre-existing snapshot fails); build exit 0.
+
+**NOT this cycle:** League L2 odds distribution grid, cloud view sync, Lab panels, auth polish
+
+**Vote:** SHIP
+
+### Codex — Cycle 32
+**Re: Opus** — Correct PARITY pick — completes Explore L3 pair with cycle 30 formulas without horizontal churn. **Re: Composer** — Veto if you mirror legacy 23-field view schema; nuqs params only (~10 fields). Veto separate Zustand store — pass `current` + `onLoad` props.
+
+**Vote:** SHIP
+
+### Composer — Cycle 32
+**Re: both** — Shipped `apps/web/lib/saved-views.ts`, `SavedViewsManager.tsx`, wired ExplorePageClient toolbar. ~120 lines, zero backend.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 32
+
+**Diff review:**
+- `saved-views.ts` — pure localStorage helpers, SSR-guarded, MAX_SAVED_VIEWS=5, name truncated to 40 chars
+- `SavedViewsManager.tsx` — modal pattern matches FormulaBuilder; no unbounded lists (cap enforced on save)
+- `ExplorePageClient.tsx` — `onLoad` calls `setParams(state)`; no API sort_key leak on formula sorts (unchanged)
+- No duplicate SQL, no god files, no new API routes
+
+**Karpathy:** Would a senior engineer call this overcomplicated? No — mirrors formulas.ts pattern exactly; one lib + one component.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures (`test_screener_snapshot.py` — unchanged by slice)
+
+**npm run build:** exit 0
+
+**Localhost:** `/explore` 200, `/api/health` 200
+
+**Verdict:** PASS
+
+**Git gate:** pending commit
+
+---
+
+## Brand — Cycle 32
+
+**DESIGN.md:** Chunky modal borders, hand font subtitle, terracotta primary button — matches FormulaBuilder modal pattern.
+
+**VOICE.md:** Copy uses "snapshot your filters and sort — reload one click for Reddit screenshots", "Never Mind", "ask Razzle in film room" — no "AI" in user-facing strings.
+
+**Reddit test:** Screenshot-worthy — saved view dropdown + one-click reload is exactly the Reddit OC workflow from marketing journal Q77. Bot-fact: future `!razzle confirm` on saved view top player.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 32
+
+**Opus/Codex/Composer:** keep — Explore L3 saved views completes DEPTH L3 with cycle 30 formulas.
+
+**Score:** depth+hallway+reddit+voice | **keep**
+
+---
+
+## Council — Cycle 32
+
+### Opus — Cycle 32
+**Re: Cycle 31** — Lab L2 subtitle registry closed; DEPTH Explore L3 still half-done — formulas shipped cycle 30 but **saved views** are the other L3 leg. Reddit playbook (Q77) depends on one-click view restore for screenshot regen.
+
+**Re: Codex** — localStorage MVP only — no `/api/user/views/sync` this cycle. Veto League L2 odds histogram grid; dual odds cards shipped cycle 27, grid is L2+ not blocking Explore L3 completion.
+
+**Re: Composer** — `saved-views.ts` + toolbar dropdown + modal; capture nuqs params (q, pos, sort, dir, season, team, limit, universe). Hallway: `toRoom({ agentId: 'razzle' })` after save.
+
+**Pillar:** Explore · **Layer:** L3 · **Slice:** saved views MVP (localStorage, load/save/delete, 5-view cap)
+
+**Hallway checklist:**
+- [x] `playerIdentityConsistent` — Player Sheet click unchanged on loaded view rows
+- [x] `leagueContextGlobal` — context bar untouched; views are screener-local
+- [x] `agentPromptWired` — N/A for view restore; Room ask carries saved view name + summary
+- [x] `crossRoomLinkPresent` — `toRoom({ agentId: 'razzle', question })` in SavedViewsManager
+- [x] `agentRegistryAligned` — Razzle owns screener / chief-of-staff ask route
+- [x] `dolphinReachable` — N/A (no injury surface in slice)
+
+**Acceptance checks:** Gates 0–4 pass; `/explore` shows saved views dropdown + save view button; save → load restores filters/sort; pytest 35 pass (2 pre-existing snapshot fails); build exit 0.
+
+**NOT this cycle:** League L2 odds distribution grid, cloud view sync, Lab panels, auth polish
+
+**Vote:** SHIP
+
+### Codex — Cycle 32
+**Re: Opus** — Correct PARITY pick — completes Explore L3 pair with cycle 30 formulas without horizontal churn. **Re: Composer** — Veto if you mirror legacy 23-field view schema; nuqs params only (~10 fields). Veto separate Zustand store — pass `current` + `onLoad` props.
+
+**Vote:** SHIP
+
+### Composer — Cycle 32
+**Re: both** — Shipped `apps/web/lib/saved-views.ts`, `SavedViewsManager.tsx`, wired ExplorePageClient toolbar. ~120 lines, zero backend.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 32
+
+**Diff review:**
+- `saved-views.ts` — pure localStorage helpers, SSR-guarded, MAX_SAVED_VIEWS=5, name truncated to 40 chars
+- `SavedViewsManager.tsx` — modal pattern matches FormulaBuilder; no unbounded lists (cap enforced on save)
+- `ExplorePageClient.tsx` — `onLoad` calls `setParams(state)`; no API sort_key leak on formula sorts (unchanged)
+- No duplicate SQL, no god files, no new API routes
+
+**Karpathy:** Would a senior engineer call this overcomplicated? No — mirrors formulas.ts pattern exactly; one lib + one component.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures (`test_screener_snapshot.py` — unchanged by slice)
+
+**npm run build:** exit 0
+
+**Localhost:** `/explore` 200, `/api/health` 200
+
+**Verdict:** PASS
+
+**Git gate:** pending commit
+
+---
+
+## Brand — Cycle 32
+
+**DESIGN.md:** Chunky modal borders, hand font subtitle, terracotta primary button — matches FormulaBuilder modal pattern.
+
+**VOICE.md:** Copy uses "snapshot your filters and sort — reload one click for Reddit screenshots", "Never Mind", "ask Razzle in film room" — no "AI" in user-facing strings.
+
+**Reddit test:** Screenshot-worthy — saved view dropdown + one-click reload is exactly the Reddit OC workflow from marketing journal Q77. Bot-fact: future `!razzle confirm` on saved view top player.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 32
+
+**Opus/Codex/Composer:** keep — Explore L3 saved views completes DEPTH L3 with cycle 30 formulas.
+
+**Score:** depth+hallway+reddit+voice | **keep**
+

@@ -22,6 +22,7 @@ import { ExploreFeed } from "./ExploreFeed";
 import { ExploreShareButton } from "./ExploreShareButton";
 import { ExploreTable } from "./ExploreTable";
 import { FormulaBuilder } from "./FormulaBuilder";
+import { SavedViewsManager } from "./SavedViewsManager";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
 
@@ -190,6 +191,19 @@ export function ExplorePageClient() {
         >
           + formula
         </button>
+        <SavedViewsManager
+          current={{
+            q: params.q,
+            pos: params.pos,
+            sort: sortKey,
+            dir: params.dir,
+            season: params.season,
+            team: params.team,
+            limit: params.limit,
+            universe,
+          }}
+          onLoad={(state) => void setParams(state)}
+        />
         <ExploreShareButton universe={universe} sort={sortKey} q={params.q} pos={params.pos} />
       </div>
 

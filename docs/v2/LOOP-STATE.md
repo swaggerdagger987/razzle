@@ -1,16 +1,17 @@
-cycle: 31
+cycle: 32
 phase: depth
 strategy: depth-not-breadth
 program: docs/v2/PROGRAM.md
-focus_pillar: Lab
-focus_layer: L2
-next_slice: Explore L3 saved views OR League L2 odds distribution grid OR Lab L2 bureau loading copy
+focus_pillar: Explore
+focus_layer: L3
+next_slice: League L2 odds distribution grid OR Explore L4 formula store OR Lab L3 formula-fed panels
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
-last_keep_cycle: 31
-last_commit: cb5a6758
+last_keep_cycle: 32
+last_commit: 5c5ab18b
 lab_l2_panel_subtitles: complete
 explore_l3_formula_builder: complete
+explore_l3_saved_views: complete
 explore_l2_college_bridge: complete
 league_l2_playoff_odds: complete
 lab_l2_panel_agent_header: complete
