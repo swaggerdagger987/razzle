@@ -1666,3 +1666,46 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Score:** depth+hallway+reddit+voice | **keep**
 
+
+## Council — Cycle 33
+
+### Opus — Cycle 33 (Reddit intel)
+**Re: Cycle 32** — Explore L3 saved views closed the formula+views pair. League L2 odds grid is the deferred PARITY row — Reddit threads share full-league boards, not just top-3 sticker cards.
+
+**Re: Codex** — Frontend-only: reuse existing `odds` array; no 10k sim worker. Top 3 stickers + compact grid for all managers.
+
+**Re: Composer** — `League odds board` in BureauMonteCarlo; hero cards sliced to top 3.
+
+**Pillar:** League · **Layer:** L2 · **Slice:** Monte Carlo odds distribution grid
+
+**Vote:** SHIP
+
+### Codex — Cycle 33
+**Re: Opus** — Karpathy win: `.slice(0, 3)` on hero cards avoids duplicating all rows. **Re: Composer** — Veto new API route.
+
+**Vote:** SHIP
+
+### Composer — Cycle 33
+**Re: both** — Shipped BureauMonteCarlo grid + top-3 hero slice.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 33
+
+**Verdict:** PASS — single file, bounded `odds` map, no API changes.
+
+**Git gate:** 3ad970b7 — working tree clean after commit
+
+---
+
+## Brand — Cycle 33
+
+**Verdict:** PASS — "League odds board", no AI; screenshot-worthy full grid.
+
+---
+
+## Score — Cycle 33
+
+**Score:** depth+hallway+reddit | **keep**

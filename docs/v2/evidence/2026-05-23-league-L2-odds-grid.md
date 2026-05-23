@@ -1,7 +1,7 @@
 # Evidence — League L2 Odds Grid
 
 **Cycle:** 33  
-**Commit:** 8abf89c0  
+**Commit:** 3ad970b7  
 **Pillar:** League · **Layer:** L2
 
 ## Slice
