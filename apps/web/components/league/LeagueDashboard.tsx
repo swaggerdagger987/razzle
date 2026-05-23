@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { AGENT_BY_ID, agentForBureauSection, loadingCopyForAgent } from "@razzle/agents";
 import { BUREAU_ENDPOINTS, BUREAU_FEATURES, HIDDEN_BUREAU_SLUGS, VISIBLE_BUREAU_FEATURES, type BureauFeatureSlug } from "@/lib/bureau-features";
 import { getSleeperUser } from "@/lib/sleeper";
+import { AgentNudgeBar } from "@/components/shell/AgentNudgeBar";
 import { BureauFeatureBody } from "./BureauFeatureBody";
 
 export { BUREAU_FEATURES, VISIBLE_BUREAU_FEATURES, type BureauFeatureSlug };
@@ -99,6 +100,7 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
       </nav>
 
       <main>
+        <AgentNudgeBar source="bureau" />
         {HIDDEN_BUREAU_SLUGS.has(feature) && (
           <p className="text-ink-medium">this bureau tab isn&apos;t live yet — pick one from the nav.</p>
         )}

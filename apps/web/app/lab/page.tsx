@@ -1,4 +1,5 @@
 import { LabPanelGrid } from "@/components/lab/LabSidebar";
+import { AgentNudgeBar } from "@/components/shell/AgentNudgeBar";
 
 export const metadata = {
   title: "The Lab — 10 Deep Panels",
@@ -16,6 +17,7 @@ export default function LabIndexPage() {
           10 deep panels with staff-owned headers. Pick one — or start with Explore for the full screener.
         </p>
       </header>
+      <AgentNudgeBar source="lab" />
       <LabPanelGrid />
     </section>
   );

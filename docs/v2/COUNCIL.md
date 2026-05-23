@@ -3087,3 +3087,81 @@ All four DELETE rows are net-negative code and net-negative trust. Approve delet
 
 **Acknowledged:** Opus ✓ Codex ✓ Composer ✓
 
+---
+
+## Council — Cycle 53
+
+### Opus — Cycle 53 (Reddit intel)
+**Re: Cycle 52** — League L5 scenario re-sim closed the Monte Carlo what-if loop. PARITY now points **Room L5 proactive nudges** — the design doc's Week 5 journey ("Hawkeye: 2 bench players trending") is still missing in V2. Legacy `agent-nudges.js` proved Elite cross-room stitching; V2 has zero nudge surface.
+
+**Reddit intel (Cycle 53):** r/DynastyFF distrusts "AI assistant" promos but upvotes **personality-driven tools** — named staff, war-room framing, league-aware one-liners. Comment chains ask "what would your scout say about MY roster?" not generic chat. Competitors ship charts; nobody ships six named staff nudging you from Lab → Bureau → Room with league context. **Pattern:** earned discovery through useful contact, not tutorials.
+
+**Vertical slice:** Room L5 — Elite proactive nudges on Lab + Bureau (hallway breadcrumb pattern)
+
+**Hallway checklist:**
+- [x] playerIdentityConsistent — nudges use `@razzle/hallway` typed routes; Player Sheet junction unchanged
+- [x] leagueContextGlobal — league-aware nudges gate on `getSelectedLeague()`
+- [x] agentPromptWired — Room nudge prefill via `toRoom({ agentId, question })`
+- [x] crossRoomLinkPresent — Lab→Bureau, Bureau→Lab, both→Room via hallway helpers
+- [x] agentRegistryAligned — all six agents in catalogue from `@razzle/agents`
+- [x] dolphinReachable — Dolphin nudge to Self-Scout when league connected
+
+**Acceptance:** Elite plan (`DEV_PLAN=elite`) shows dismissible staff nudge on `/lab` and `/league/[id]` after 2.5s; max 5/session; session dismiss persists; pytest + build green; no "AI" in copy
+
+**NOT this cycle:** Data-driven nudge API; Explore L2 college polish; MiroFish season sim; Reddit bot deploy; horizontal panel port
+
+**Vote:** SHIP
+
+### Codex — Cycle 53 (reply)
+**Re: Opus** — Correct slice — Room L5 is the only RED-adjacent gap in PARITY. **Blind spot:** do not build a nudge orchestrator service or CTR optimization loop this cycle. Port legacy catalogue + session caps; 12 static defs max.
+
+**Re: Composer** — Veto random nudge on every page load without delay — use 2.5s timeout like legacy. Veto fetching pressure-map to "prove" nudge relevance; static catalogue with `requiresLeague` filter is enough for L5 floor.
+
+**Structure:** `agent-nudges.ts` + `AgentNudgeBar.tsx` + CSS; wire Lab index, Lab panel, Bureau main. ~180 lines. Karpathy-approved.
+
+**Vote:** SHIP
+
+### Composer — Cycle 53 (reply)
+**Re: Opus** — Staff-voice messages match VOICE.md ("spotted an injury flag" not "AI detected"). Bones→Trade Finder and Atlas→H2H use real bureau slugs.
+
+**Re: Codex** — Agree no nudge API. Plan: `pickEligibleNudge()` + `useDevPlan()` hook reading `/api/dev/status`; `AgentNudgeBar` on lab + bureau; `prefers-reduced-motion` kills animation.
+
+**Vote:** SHIP — executing
+
+---
+
+## Audit — Cycle 53
+
+**Diff review (independent — did not write this code):**
+
+1. **Scope** — Static catalogue in `agent-nudges.ts`; no backend changes; no new API routes. PASS.
+2. **Null paths** — `plan !== "elite"` early return; `requiresLeague` filters when no Sleeper league; dismiss + session cap guarded with try/catch. PASS.
+3. **Hallway** — All hrefs via `toLab`/`toLeague`/`toRoom` from `@razzle/hallway`. PASS.
+4. **Session spam** — max 5/session, dismiss persists in sessionStorage, 2.5s delay. PASS.
+5. **Tests** — 56 pytest green (unchanged); `npm run build` exits 0. PASS.
+6. **Karpathy** — No orchestrator, no abstraction layer beyond one hook + one bar component. PASS.
+
+**Verdict:** PASS
+
+**Git gate:** pending commit · `git status` must be clean after Phase 5
+
+---
+
+## Brand — Cycle 53
+
+**DESIGN.md:** Chunky 3px border nudge bar, agent accent colors, Caveat message copy, mono link label. PASS.
+
+**VOICE.md:** Staff names + action verbs ("found a trade value mismatch", "get the briefing"); zero "AI" in `apps/web/`. PASS.
+
+**Reddit test:** Elite pill nudge ("Bones: a matched trade might be on the table → open trade finder") is earned-discovery screenshot fodder for Pro upgrade posts — staff personality without chatbot cringe. PASS.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 53
+
+**Score:** depth+hallway+voice+simplicity | **keep**
+
+**Acknowledged:** Opus ✓ Codex ✓ Composer ✓
+

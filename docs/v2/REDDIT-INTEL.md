@@ -226,3 +226,13 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 51
 - **Screenshot potential:** You vs rival dual cards + position depth bars — group-chat droppable before playoffs
 - **Bot-fact potential:** `!razzle h2h <you> vs <rival>` — future intel layer
+
+## 2026-05-23 — Cycle 53
+
+### r/DynastyFF — earned staff discovery vs AI wrapper rejection (pattern; live fetch 403)
+- **Pattern:** Dynasty managers downvote "AI assistant" promos but upvote **personality-driven tools** — named analysts, war-room framing, league-aware one-liners. Comment chains ask "what would your scout say about MY roster?" not "what does the model think?"
+- **Competitor gap:** KeepTradeCut/FantasyCalc are charts. ChatGPT wrappers get mod scrutiny. No competitor ships six named staff nudging Lab → Bureau → Room with typed hallway links.
+- **Razzle gap:** Legacy V1 `agent-nudges.js` (Elite, max 5/session) never ported to V2 Next.js stack. Design doc Week 5 journey ("Hawkeye: 2 bench players trending") blocked.
+- **Slice:** Room L5 — Elite proactive nudges on Lab + Bureau via `AgentNudgeBar`, hallway routes to Self-Scout, Trade Finder, H2H, Room ask.
+- **Council cycle:** 53
+- **Screenshot potential:** Pill nudge with staff avatar + cross-room link — Pro/Elite conversion post without AI cringe

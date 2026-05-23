@@ -47,3 +47,5 @@ htmlcov/
 # Logs
 *.log
 npm-debug.log*
+docs/v2/.board-lock
+docs/v2/recovery.log

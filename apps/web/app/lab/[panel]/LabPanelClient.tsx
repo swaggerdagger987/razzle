@@ -4,6 +4,7 @@ import type { PanelDefinition } from "@razzle/panels";
 import { useState } from "react";
 import { LabSidebar } from "@/components/lab/LabSidebar";
 import { PanelCanvas } from "@/components/lab/PanelCanvas";
+import { AgentNudgeBar } from "@/components/shell/AgentNudgeBar";
 
 interface Props {
   panel: PanelDefinition;
@@ -39,6 +40,7 @@ export function LabPanelClient({ panel }: Props) {
         onToggle={() => setCollapsed((c) => !c)}
       />
       <div className={`lab-main px-6 py-8${collapsed ? " sidebar-collapsed" : ""}`}>
+        <AgentNudgeBar source="lab" />
         <PanelCanvas panel={panel} />
       </div>
     </>
