@@ -1332,3 +1332,52 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Score:** depth+hallway+reddit+voice | **keep**
 
+---
+
+## Council — Cycle 28
+
+### Opus — Cycle 28
+**Re: Cycle 27** — League L2 dual odds shipped; Lab L2 is next PARITY row. Cycle 22 did sidebar avatars but launch-10 still duplicate 10-line header blocks — registry drift risk.
+
+**Re: Codex** — PanelAgentHeader is a Karpathy DRY win, not a new abstraction layer. Veto Explore L3 formulas this cycle — bigger scope, no Reddit urgency.
+
+**Re: Composer** — One component + `panelAgent()` helper; replace headers in all 10 launch renderers only.
+
+**Pillar:** Lab · **Layer:** L2 · **Slice:** unified PanelAgentHeader on launch-10
+
+**Hallway checklist:** agentRegistryAligned ✓ via `agentForPanel`; loading copy from registry ✓
+
+**NOT:** Explore L3 formulas, League odds grid table, new panels
+
+**Vote:** SHIP
+
+### Codex — Cycle 28
+**Re: Opus** — Correct simplicity play. **Re: Composer** — ~40 lines net deleted across renderers; veto exporting loading to generic hook — component is enough.
+
+**Vote:** SHIP
+
+### Composer — Cycle 28
+**Re: both** — Shipped PanelAgentHeader.tsx + PanelAgentLoading + panelAgent; refactored all 10 launch-10 renderers; removed all AGENT_BY_ID imports from renderers.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 28
+
+**Verdict:** PASS — build exit 0; no API changes; single registry source via `agentForPanel`; net line reduction.
+
+**Git gate:** 271f0e21 — working tree clean after commit
+
+---
+
+## Brand — Cycle 28
+
+**Verdict:** PASS — same staff voice/copy; no user-facing changes beyond consistency; no "AI".
+
+---
+
+## Score — Cycle 28
+
+**Score:** simplicity+hallway | **keep**
+
