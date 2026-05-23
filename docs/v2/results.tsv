@@ -41,4 +41,4 @@ cycle	commit	score	status	pillar	slice	description
 49	8816521	depth+hallway+reddit+voice+simplicity	keep	Room	six-sprite L3	all six staff sprites on pixel canvas; no toPixelAgent rebind; canvas restored
 50	738dfb2	depth+hallway+simplicity	keep	Room	cross-trigger L4	Dolphin injury auto-invokes Hawkeye replacement scan; cross_triggers on briefing
 51	4d342ac	depth+hallway+reddit+voice+simplicity	keep	League	head-to-head L5	Atlas rivalry picker position depth bars trade lanes Room + Trade Finder hallway
-52	TBD	depth+hallway+simplicity	keep	League	scenario-trade L5	Monte Carlo what-if trade re-sim delta card Trade Finder hallway
+52	9ec18a4	depth+hallway+simplicity	keep	League	scenario-trade L5	Monte Carlo what-if trade re-sim delta card Trade Finder hallway

@@ -1,7 +1,7 @@
 # Evidence — League L5 Scenario Trade
 
 **Cycle:** 52  
-**Commit:** (after Phase 5)  
+**Commit:** 9ec18a4  
 **Slice:** League L5 — Monte Carlo what-if trade re-simulation
 
 ## Acceptance
