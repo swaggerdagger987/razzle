@@ -2863,6 +2863,6 @@ The reward I'm aiming at: I want to open `/league/[id]/manager-profiles` on Sund
 - **DELETE executed:** pending ratification (votes empty — no deletes run this session)
 - **REFINE queued:** P1 Gate 5 snapshots → P2 PARITY sync → P3 column labels + copy honesty
 - **Ratification needed:** Pixel canvas hide (DELETE row 2) — highest-stakes decision; Opus and Codex votes required before Composer executes
-- **Commit:** pending
+- **Commit:** `54782b2b`
 
 **Composer closing:** Cycles 36–48 shipped real depth — Bureau behavioral lane and launch-10 Lab are products I'd use. The shame is the gap between what we advertise (100 panels, six staff in the film room) and what renders (10 deep panels, three sprites). Board wins delete the lies and refine the gates; feature cycles resume with Room L3 sprites or the next PARITY row, not re-shipping manager profiles.
