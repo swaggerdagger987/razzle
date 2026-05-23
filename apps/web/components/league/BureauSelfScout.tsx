@@ -1,7 +1,7 @@
 "use client";
 
 import { AGENT_BY_ID } from "@razzle/agents";
-import { toLeague, toRoom } from "@razzle/hallway";
+import { toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
@@ -158,12 +158,6 @@ export function BureauSelfScout({ data }: Props) {
         </div>
         {leagueId && (
           <div className="mt-4 flex flex-wrap gap-3">
-            <Link
-              href={toLeague(leagueId, "roster-depth") as Route}
-              className="btn-chunky text-sm"
-            >
-              full roster depth →
-            </Link>
             <Link
               href={
                 toRoom({

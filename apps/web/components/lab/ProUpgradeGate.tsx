@@ -60,9 +60,9 @@ export function ProUpgradeGate({
           </p>
         )}
         <div className="pro-upgrade-actions mt-6 flex flex-wrap items-center justify-center gap-3">
-          <a href="/pricing" className="chunky chunky-hover bg-orange px-6 py-3 text-white">
+          <Link href="/pricing" className="chunky chunky-hover bg-orange px-6 py-3 text-white">
             See Pro plans
-          </a>
+          </Link>
           <Link
             href={toRoom({ agentId: agent.id, question: roomQuestion, panelSlug }) as Route}
             className="chunky chunky-hover bg-bg-card px-4 py-3 text-sm"
@@ -72,9 +72,9 @@ export function ProUpgradeGate({
         </div>
         <p className="mt-3 text-xs text-ink-light">dev? flip plan in the toolbar ↑</p>
         <ul className="pro-upgrade-perks mt-6 text-left text-sm text-ink-medium">
-          <li>100 Lab panels — trade values, breakouts, aging curves</li>
-          <li>Bureau deep cuts — waiver tendencies, monte carlo</li>
-          <li>Situation Room — your league, already in context</li>
+          <li>10 launch Lab panels — trade values, breakouts, aging curves</li>
+          <li>7 Bureau behavioral tabs — H2H, pressure map, trade finder</li>
+          <li>Situation Room — six pixel staff, your league in context</li>
         </ul>
       </div>
     </div>

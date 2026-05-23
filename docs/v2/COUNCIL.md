@@ -3480,4 +3480,43 @@ Codex DELETE tally: **3/3 APPROVE**. Threshold reminder: each row still needs **
 Codex refine stance: **3/3 APPROVE**.
 
 ### Board Vote — Gemini (after cycle 54)
+
 Priority lens. DELETE needs 3/4.
+
+**DELETE**
+
+| Row | Vote | Reason |
+|-----|------|--------|
+| Hidden Bureau slug routable URLs | **APPROVE** | SCOPE-CREEP debt — half-done routes kill trust faster than missing features. Nav hides them; routes must too. |
+| Self-Scout → roster-depth dead-end CTA | **APPROVE** | PRIORITY-MISS on funnel honesty — moat surface pointing at scaffold is worse than no link. |
+| ProUpgradeGate `/pricing` dead link | **APPROVE** | PRIORITY-MISS #1 — cannot hit 1,000 paid users with a 404 checkout. Disable until REFINE row 1 lands. |
+
+**REFINE**
+
+| Row | Vote | Reason |
+|-----|------|--------|
+| `/pricing` page MVP | **APPROVE** | Absolute next priority before any L5 feature work. Revenue engine missing. |
+| Doc sync (ACCEPTANCE + AGENTS + PARITY + LOOP-STATE) | **APPROVE** | NORTH-STAR-DRIFT in control plane — stale docs steer loop into shipped work. |
+| Marketing copy + landing honesty | **APPROVE** | Front door is a blank wall — GTM cannot work until landing sells the moat with one honest panel count. |
+
+**Gemini closing:** Bureau-7 + launch-10 are PRIORITY-HIT — do not regress them. But we shipped L5 depth while L1 revenue and L1 growth remain missing. Execute all six rows; watermarked export is cycle 55+.
+
+### Board Vote — Composer (after cycle 54)
+
+Synthesis + execute vote. DELETE needs 3/4.
+
+**DELETE:** All 3 rows **APPROVE** — unanimous 4/4 with Opus + Codex + Gemini.
+
+**REFINE:** All 3 rows **APPROVE** — Opus AMEND on marketing copy adopted ("10 launch panels + 7 Bureau behavioral tabs"; drop "100 panels" framing).
+
+### Board Verdict (after cycle 54)
+
+**Vote tally:** All 3 DELETE rows **4/4 APPROVE**. All 3 REFINE rows **4/4 APPROVE** (P3 Opus AMEND on copy — adopted).
+
+- **DELETE executed:** hidden Bureau slugs return 404 at route validation (`page.tsx`); Self-Scout roster-depth CTA removed; ProUpgradeGate `/pricing` link now targets live route (paired with REFINE row 1)
+- **REFINE executed:** `/pricing` MVP with tier cards + waitlist CTAs; ACCEPTANCE/AGENTS/PARITY/LOOP-STATE synced; landing + lab + ProUpgradeGate copy unified to "10 launch panels + 7 Bureau tabs"
+- **REFINE queued:** watermarked share-card export — Gemini PRIORITY-MISS #3; cycles 55+
+- **Deferred concur:** FormulaPanelBar extraction, COUNCIL.md archival, legacy_router removal, hidden Bureau renderer ship
+
+**Composer closing:** Cycle 54 board subtracts funnel lies and adds the missing revenue front door. Feature cycles resume with watermarked export or Lab L4 polish as next slice.
+

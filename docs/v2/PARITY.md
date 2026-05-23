@@ -10,10 +10,10 @@ Status: `RED` | `YELLOW` | `GREEN`
 
 | Pillar | Layer now | Next vertical slice | Status |
 |--------|-----------|---------------------|--------|
-| **Explore** | L3–L5 | Lab L4 pro-gate polish or combine bridge | GREEN |
-| **Lab** | L3 | **L4 — next launch-10 panel deep pass or formula extraction** | GREEN |
-| **League** | L4 | **L5 — scenario explorer or H2H opponent picker** | GREEN |
-| **Room** | L5 | **Explore L2 college polish or Lab L4 pro-gate depth** | GREEN |
+| **Explore** | L5 | Lab L4 pro-gate polish or watermarked export | GREEN |
+| **Lab** | L4 | **L4 — pro-gate polish or formula extraction** | GREEN |
+| **League** | L5 | **L5 — hidden Bureau renderers or watermarked export** | GREEN |
+| **Room** | L5 | **Explore L2 college polish or GTM export slice** | GREEN |
 
 ## Launch 10 — Lab L1 (do these deep, ignore the other 90)
 

@@ -38,7 +38,7 @@ curl localhost:8000/api/health            # status ok
 | Connect | Sleeper username → league list → pick league |
 | Self-Scout | `/league/[id]` shows depth, build profile, power rank |
 | Context | Context bar shows `@user · league name` after connect |
-| Features | 7/8 bureau tabs return data (H2H picker OK as stub) |
+| Features | 7/7 Bureau behavioral tabs return data (H2H shipped cycle 51) |
 
 ## Gate 4 — Situation Room (pixel + agents)
 

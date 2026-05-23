@@ -31,10 +31,10 @@ Agents are how the hallway **speaks** — staff with domain expertise, not "AI a
 | Surface | File(s) | Uses registry? |
 |---------|---------|----------------|
 | Room roster | `apps/web/components/room/AgentRoster.tsx` | ✅ |
-| Room canvas | `packages/pixel-room/` | partial (6 sprites TODO) |
+| Room canvas | `packages/pixel-room/` | ✅ six sprites shipped (cycle 49) |
 | Player Sheet Ask | `apps/web/components/shell/PlayerSheet.tsx` | ✅ agent picker |
 | Lab sidebar | `apps/web/components/lab/LabSidebar.tsx` | TODO — group by agent |
-| Bureau tabs | `apps/web/components/league/*` | TODO — section headers |
+| Bureau tabs | `apps/web/components/league/*` | ✅ section headers on Bureau-7 |
 | Explore loading | `ExplorePageClient.tsx` | TODO — Razzle default OK |
 | API orchestrator | `apps/api/services/agents/orchestrator.py` | ✅ all 6 routable |
 | API registry mirror | `apps/api/services/agents/registry.py` | ✅ |
