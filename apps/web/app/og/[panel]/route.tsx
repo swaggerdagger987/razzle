@@ -34,8 +34,8 @@ export async function GET(
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 28 }}>
-          <div style={{ fontSize: 72 }}>🐯</div>
-          <div style={{ fontSize: 52, fontWeight: 700 }}>
+          <div style={{ fontSize: 72, display: "flex" }}>🐯</div>
+          <div style={{ display: "flex", fontSize: 52, fontWeight: 700 }}>
             Razzle<span style={{ color: "#d97757" }}>.lol</span>
           </div>
         </div>
@@ -76,7 +76,7 @@ export async function GET(
           </div>
         )}
 
-        <div style={{ flex: 1 }} />
+        <div style={{ flex: 1, display: "flex" }} />
 
         <div
           style={{
@@ -87,12 +87,12 @@ export async function GET(
             color: "#5c4a3d",
           }}
         >
-          <div>razzle.lol/lab/{slug}</div>
-          {isDownload && (
-            <div style={{ fontFamily: "Caveat", fontSize: 40, color: "#d97757" }}>
+          <div style={{ display: "flex" }}>razzle.lol/lab/{slug}</div>
+          {isDownload ? (
+            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 40, color: "#d97757" }}>
               made with 🐯 razzle.lol
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     ),

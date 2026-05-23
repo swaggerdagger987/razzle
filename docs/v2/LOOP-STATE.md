@@ -1,15 +1,9 @@
-cycle: 55
+cycle: 56
 last_board_cycle: 54
-phase: depth
-strategy: depth-not-breadth
-program: docs/v2/PROGRAM.md
-focus_pillar: Explore
+focus_pillar: Lab
 focus_layer: L5
-next_slice: Bureau H2H export or Lab panel OG data rows
-hallway: docs/v2/HALLWAY.md
-results_log: docs/v2/results.tsv
-last_keep_cycle: 55
-last_commit: 5c19ee1a
+next_slice: Bureau H2H export or Lab panel OG live data rows
+last_keep_cycle: 56
+last_commit: pending
 explore_l5_watermarked_export: complete
-continuous: true
-never_stop: true
+lab_l5_og_export_fix: complete
