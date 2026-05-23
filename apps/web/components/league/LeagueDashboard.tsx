@@ -5,11 +5,11 @@ import type { Route } from "next";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AGENT_BY_ID, agentForBureauSection, loadingCopyForAgent } from "@razzle/agents";
-import { BUREAU_ENDPOINTS, BUREAU_FEATURES, type BureauFeatureSlug } from "@/lib/bureau-features";
+import { BUREAU_ENDPOINTS, BUREAU_FEATURES, HIDDEN_BUREAU_SLUGS, VISIBLE_BUREAU_FEATURES, type BureauFeatureSlug } from "@/lib/bureau-features";
 import { getSleeperUser } from "@/lib/sleeper";
 import { BureauFeatureBody } from "./BureauFeatureBody";
 
-export { BUREAU_FEATURES, type BureauFeatureSlug };
+export { BUREAU_FEATURES, VISIBLE_BUREAU_FEATURES, type BureauFeatureSlug };
 
 interface Props {
   leagueId: string;
@@ -22,7 +22,7 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
   const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => {
-    if (feature === "head-to-head") return;
+    if (HIDDEN_BUREAU_SLUGS.has(feature)) return;
 
     const config = BUREAU_ENDPOINTS[feature];
     if (!config) {
@@ -62,7 +62,7 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
       <nav className="chunky h-fit bg-bg-card p-4">
         <h2 className="mb-3 text-xs uppercase text-ink-light">Bureau</h2>
         <ul className="flex flex-col gap-1">
-          {BUREAU_FEATURES.map((f) => {
+          {VISIBLE_BUREAU_FEATURES.map((f) => {
             const href =
               f.slug === "self-scout" ? `/league/${leagueId}` : `/league/${leagueId}/${f.slug}`;
             const active =
@@ -94,30 +94,19 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
       </nav>
 
       <main>
-        {feature === "head-to-head" && <HeadToHeadPlaceholder />}
-        {feature !== "head-to-head" && err && <p className="text-red">something fumbled: {err}</p>}
-        {feature !== "head-to-head" && !err && !data ? (
+        {HIDDEN_BUREAU_SLUGS.has(feature) && (
+          <p className="text-ink-medium">this bureau tab isn&apos;t live yet — pick one from the nav.</p>
+        )}
+        {!HIDDEN_BUREAU_SLUGS.has(feature) && err && <p className="text-red">something fumbled: {err}</p>}
+        {!HIDDEN_BUREAU_SLUGS.has(feature) && !err && !data ? (
           <p className="text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
             {loadingCopyForAgent(featureOwner.id)}
           </p>
         ) : null}
-        {feature !== "head-to-head" && data ? (
+        {!HIDDEN_BUREAU_SLUGS.has(feature) && data ? (
           <BureauFeatureBody feature={feature} data={data as Record<string, unknown>} leagueId={leagueId} />
         ) : null}
       </main>
-    </div>
-  );
-}
-
-function HeadToHeadPlaceholder() {
-  return (
-    <div className="chunky bg-bg-card p-8 text-center">
-      <h1 className="text-3xl" style={{ fontFamily: "var(--font-display)" }}>
-        Head-to-Head
-      </h1>
-      <p className="mt-2 text-ink-medium">
-        Pick an opponent from your league to compare. (Opponent picker — Phase 5.5.)
-      </p>
     </div>
   );
 }

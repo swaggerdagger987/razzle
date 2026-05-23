@@ -1,4 +1,5 @@
 import { extractItems } from "@/lib/panel-api";
+import { formatColumnLabel } from "@/lib/column-labels";
 
 interface Props {
   data: unknown;
@@ -16,7 +17,7 @@ export function TableRenderer({ data }: Props) {
         <thead className="thead-shadow">
           <tr>
             {cols.map((c) => (
-              <th key={c}>{c.replace(/_/g, " ")}</th>
+              <th key={c}>{formatColumnLabel(c)}</th>
             ))}
           </tr>
         </thead>

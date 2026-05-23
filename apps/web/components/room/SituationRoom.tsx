@@ -1,8 +1,7 @@
 "use client";
 
-import { PixelRoom, type AgentId as PixelAgentId } from "@razzle/pixel-room";
 import { AGENT_IDS, type AgentId } from "@razzle/agents";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Urgency } from "@razzle/types";
 import { FUNNEL, track } from "@/lib/analytics";
 import { agentContextPayload, setHallwayReferrer } from "@/lib/agent-context";
@@ -32,23 +31,11 @@ function toAgentId(id: string): AgentId {
   return (AGENT_IDS as readonly string[]).includes(id) ? (id as AgentId) : "razzle";
 }
 
-/** Canvas only renders 3 sprites today — map all six roster picks safely */
-function toPixelAgent(id: AgentId): PixelAgentId {
-  if (id === "octo" || id === "bones") return id;
-  return "razzle";
-}
-
 export function SituationRoom() {
   const [activeAgent, setActiveAgent] = useState("razzle");
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [input, setInput] = useState("");
   const [contextPlayer, setContextPlayer] = useState<string | null>(null);
-
-  const selectedAgent = useMemo(() => toPixelAgent(toAgentId(activeAgent)), [activeAgent]);
-  const workingAgent = useMemo(() => {
-    if (turns.some((t) => t.pending)) return toPixelAgent(toAgentId(activeAgent));
-    return null;
-  }, [turns, activeAgent]);
 
   const onSelectAgent = useCallback((id: AgentId) => {
     setActiveAgent(id);
@@ -126,25 +113,19 @@ export function SituationRoom() {
         <div className="flex items-baseline gap-2">
           <span className="room-header-title">Situation Room</span>
           <span className="room-header-subtitle">
-            full staff on the floor
+            ask the staff — pixel canvas returns when all six sprites ship
             {contextPlayer ? ` · ${contextPlayer} in context` : ""}
           </span>
         </div>
-        <AgentRoster active={activeAgent} onSelect={setActiveAgent} />
+        <AgentRoster active={activeAgent} onSelect={onSelectAgent} />
       </header>
 
-      <div className="room-main">
-        <PixelRoom
-          selectedAgent={selectedAgent}
-          workingAgent={workingAgent}
-          onSelectAgent={(id) => onSelectAgent(id === "octo" || id === "bones" ? id : "razzle")}
-        />
-
+      <div className="room-main room-main-chat-only">
         <aside className="briefing-panel">
           <p className="briefing-panel-label">briefing feed</p>
           <div className="room-scrollback flex flex-1 flex-col gap-3 overflow-y-auto">
             {turns.length === 0 && (
-              <p className="briefing-empty">ask a question — the staff walks the floor while they think</p>
+              <p className="briefing-empty">ask a question — the staff briefs you here while they think</p>
             )}
             {turns.map((turn) => (
               <BriefingCard key={turn.id} {...turn} />

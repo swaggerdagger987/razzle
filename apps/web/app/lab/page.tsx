@@ -1,8 +1,8 @@
 import { LabPanelGrid } from "@/components/lab/LabSidebar";
 
 export const metadata = {
-  title: "The Lab — 100 Panels",
-  description: "Every dynasty stat view in one sidebar. Rankings, heatmaps, breakouts, and more.",
+  title: "The Lab — 10 Deep Panels",
+  description: "Dynasty rankings, breakouts, aging curves, and more — each with staff-owned analysis.",
 };
 
 export default function LabIndexPage() {
@@ -12,7 +12,9 @@ export default function LabIndexPage() {
         <h1 className="text-4xl" style={{ fontFamily: "var(--font-display)" }}>
           The Lab
         </h1>
-        <p className="text-ink-medium">100 standalone panels. Pick one — or start with Explore for the full screener.</p>
+        <p className="text-ink-medium">
+          10 deep panels with staff-owned headers. Pick one — or start with Explore for the full screener.
+        </p>
       </header>
       <LabPanelGrid />
     </section>

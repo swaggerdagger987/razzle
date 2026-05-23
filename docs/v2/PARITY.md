@@ -6,14 +6,14 @@ Council picks **one vertical slice per cycle** (one pillar + one layer). No hori
 
 Status: `RED` | `YELLOW` | `GREEN`
 
-## Current vertical position (~10% of V1, ~2% of ceiling)
+## Current vertical position (~15% of V1, ~5% of ceiling)
 
 | Pillar | Layer now | Next vertical slice | Status |
 |--------|-----------|---------------------|--------|
-| **Explore** | L0–L1 | L2 college + prospect bridge polish; L3 formulas | YELLOW |
-| **Lab** | L1 | **L2 — agent-owned headers + loading copy on launch-10** | YELLOW |
-| **League** | L0–L1 | **L1 — Self-Scout + Monte Carlo odds cards** | YELLOW |
-| **Room** | L0–L1 | L2 full context moat; L3 six pixel sprites | YELLOW |
+| **Explore** | L3–L5 | L2 college + prospect bridge polish | GREEN |
+| **Lab** | L3 | **L4 — next launch-10 panel deep pass or formula extraction** | GREEN |
+| **League** | L4 | **L5 — scenario explorer or H2H opponent picker** | GREEN |
+| **Room** | L1 chat | **L3 — six pixel sprites (canvas hidden until real)** | YELLOW |
 
 ## Launch 10 — Lab L1 (do these deep, ignore the other 90)
 
@@ -32,7 +32,7 @@ One panel per cycle until each is screenshot-worthy:
 | 9 | `buy-sell` | Bones | `fetch_buy_sell_candidates` | GREEN |
 | 10 | `dashboard` | Razzle | `fetch_dynasty_dashboard` | GREEN |
 
-Done = table/chart renders, agent header, loading copy, OG card, no 500, curl evidence.
+Done = table/chart renders, agent header, loading copy, OG card, no 500, curl evidence. L3 formula re-sort shipped on all 10 (cycles 36–42).
 
 ## Connective tissue — the hallway (non-negotiable)
 
@@ -40,15 +40,13 @@ Every vertical slice passes `docs/v2/HALLWAY.md` checklist. Code: `@razzle/hallw
 
 | ID | Hallway requirement | Status |
 |----|---------------------|--------|
-| H-01 | Context bar + league on all 4 routes | YELLOW |
-| H-02 | Player Sheet junction (stats/panels/league/ask) wired with typed links | YELLOW |
-| H-03 | `build_context_block` + `agentContextPayload` share league + player | YELLOW |
-| H-04 | Six agents same ids everywhere (`@razzle/agents`) | YELLOW |
-| H-05 | Dolphin reachable from injury surfaces | YELLOW |
-| H-06 | Room callbacks reference Lab/Bureau/Intel facts (prompt-level) | YELLOW |
-| H-07 | Intel snippets on Player Sheet + in agent prompts | YELLOW |
-
-## Connective tissue — agents (voice of the hallway)
+| H-01 | Context bar + league on all 4 routes | GREEN |
+| H-02 | Player Sheet junction (stats/panels/league/ask) wired with typed links | GREEN |
+| H-03 | `build_context_block` + `agentContextPayload` share league + player | GREEN |
+| H-04 | Six agents same ids everywhere (`@razzle/agents`) | GREEN |
+| H-05 | Dolphin reachable from injury surfaces | GREEN |
+| H-06 | Room callbacks reference Lab/Bureau/Intel facts (prompt-level) | GREEN |
+| H-07 | Intel snippets on Player Sheet + in agent prompts | GREEN |
 
 ## Explicitly deprioritized (horizontal — do not pick)
 

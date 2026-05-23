@@ -1,5 +1,7 @@
 "use client";
 
+import { formatColumnLabel } from "@/lib/column-labels";
+
 interface Props {
   rows: Array<Record<string, unknown>>;
   title?: string;
@@ -23,7 +25,7 @@ export function BureauRowsTable({ rows, title, emptyMessage }: Props) {
           <thead className="thead-shadow">
             <tr>
               {cols.map((c) => (
-                <th key={c}>{c.replace(/_/g, " ")}</th>
+                <th key={c}>{formatColumnLabel(c)}</th>
               ))}
             </tr>
           </thead>

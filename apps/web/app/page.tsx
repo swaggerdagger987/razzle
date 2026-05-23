@@ -11,8 +11,8 @@ export default function Home() {
         know about yet.
       </h1>
       <p className="mb-8 text-lg text-ink-medium">
-        100 panels. Custom formulas. Dynasty intelligence. A film room that already knows your league.
-        The Screener is forever free.
+        10 deep Lab panels. 6 Bureau behavioral tabs. Custom formulas. Dynasty intelligence. A film room that
+        already knows your league. The Screener is forever free.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-4">
         <Link
@@ -27,7 +27,7 @@ export default function Home() {
           className="chunky chunky-hover bg-bg-card px-8 py-4"
           style={{ fontFamily: "var(--font-display)" }}
         >
-          Browse 100 Panels
+          Browse The Lab
         </Link>
       </div>
       <p className="mt-10 text-2xl text-ink-light" style={{ fontFamily: "var(--font-hand)" }}>

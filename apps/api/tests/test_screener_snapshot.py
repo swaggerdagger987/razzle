@@ -48,6 +48,6 @@ def test_top_qbs_match_snapshot(app_client, snapshot):
 def test_dynasty_top_30_match_snapshot(app_client, snapshot):
     r = app_client.get("/api/dynasty-rankings?limit=30")
     assert r.status_code == 200
-    items = r.json()["items"][:30]
+    items = r.json()["players"][:30]
     summary = [(p.get("full_name"), p.get("position"), round(float(p.get("dynasty_value", 0)), 1)) for p in items]
     assert summary == snapshot

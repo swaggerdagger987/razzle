@@ -9,9 +9,9 @@ Cofounders debate **features**, not abstract tickets. Status: `RED` | `YELLOW` |
 | F-01 | Explore NFL screener | GREEN | Loads, sorts, filters, Player Sheet |
 | F-02 | Explore **college** screener | GREEN | Universe toggle NFL/College; college rows from `cfb_player_season_stats` |
 | F-03 | Explore prospects/combine | GREEN | Link to `/lab/prospects` from Explore NFL view |
-| F-04 | Lab 100 panels | GREEN | ≥20 panels real data; rest don't 500 |
-| F-05 | Bureau + Sleeper | GREEN | Connect, Self-Scout, 7/8 tabs |
-| F-06 | **Pixel Situation Room** | GREEN | Canvas agents walk/work, click select, camera follow, briefing panel |
+| F-04 | Lab launch-10 panels | GREEN | 10 bespoke renderers + agent headers; generic table panels don't 500 |
+| F-05 | Bureau + Sleeper | GREEN | Connect; 6 bespoke Bureau tabs (Self-Scout, Monte Carlo, Manager Profiles, Pressure Map, Trade Network, Trade Finder) |
+| F-06 | **Pixel Situation Room** | YELLOW | Chat + briefing live; canvas hidden until 6 sprites ship |
 | F-07 | Player Sheet (4 tabs) | GREEN | Stats + Ask live; League shows connected Sleeper context |
 | F-08 | Agent context moat | GREEN | League + player in prompts |
 | F-09 | Pro tier UX | GREEN | 402 gates + dev toggle |

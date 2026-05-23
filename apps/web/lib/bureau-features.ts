@@ -1,3 +1,13 @@
+/** Scaffolded tabs hidden until bespoke renderers ship (board cycle 43). */
+export const HIDDEN_BUREAU_SLUGS = new Set([
+  "roster-depth",
+  "build-profiles",
+  "power-rankings",
+  "waiver-tendencies",
+  "head-to-head",
+  "strength-of-schedule",
+]);
+
 export const BUREAU_FEATURES = [
   { slug: "self-scout", label: "Self-Scout", default: true },
   { slug: "roster-depth", label: "Roster Depth" },
@@ -12,6 +22,8 @@ export const BUREAU_FEATURES = [
   { slug: "strength-of-schedule", label: "Schedule" },
   { slug: "monte-carlo", label: "Monte Carlo" },
 ] as const;
+
+export const VISIBLE_BUREAU_FEATURES = BUREAU_FEATURES.filter((f) => !HIDDEN_BUREAU_SLUGS.has(f.slug));
 
 export type BureauFeatureSlug = (typeof BUREAU_FEATURES)[number]["slug"];
 

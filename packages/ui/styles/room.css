@@ -71,6 +71,14 @@
   margin-right: 0;
 }
 
+.room-main-chat-only .briefing-panel {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  border-left: none;
+  flex: 1;
+}
+
 /* Canvas */
 .canvas-area {
   flex: 1;

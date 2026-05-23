@@ -1,0 +1,179 @@
+# serializer version: 1
+# name: test_dynasty_top_30_match_snapshot
+  list([
+    tuple(
+      'Puka Nacua',
+      'WR',
+      91.9,
+    ),
+    tuple(
+      'Bijan Robinson',
+      'RB',
+      91.5,
+    ),
+    tuple(
+      'Jahmyr Gibbs',
+      'RB',
+      91.4,
+    ),
+    tuple(
+      'Jaxon Smith-Njigba',
+      'WR',
+      90.9,
+    ),
+    tuple(
+      "De'Von Achane",
+      'RB',
+      90.5,
+    ),
+    tuple(
+      "Ja'Marr Chase",
+      'WR',
+      89.8,
+    ),
+    tuple(
+      'Amon-Ra St. Brown',
+      'WR',
+      89.4,
+    ),
+    tuple(
+      'Rashee Rice',
+      'WR',
+      89.3,
+    ),
+    tuple(
+      'Trey McBride',
+      'TE',
+      88.7,
+    ),
+    tuple(
+      'George Pickens',
+      'WR',
+      88.5,
+    ),
+    tuple(
+      'Drake London',
+      'WR',
+      88.3,
+    ),
+    tuple(
+      'Cam Skattebo',
+      'RB',
+      88.2,
+    ),
+    tuple(
+      'Drake Maye',
+      'QB',
+      88.1,
+    ),
+    tuple(
+      'Chris Olave',
+      'WR',
+      88.1,
+    ),
+    tuple(
+      'Omarion Hampton',
+      'RB',
+      87.8,
+    ),
+    tuple(
+      'Josh Allen',
+      'QB',
+      87.6,
+    ),
+    tuple(
+      'Ashton Jeanty',
+      'RB',
+      87.5,
+    ),
+    tuple(
+      'Trevor Lawrence',
+      'QB',
+      87.2,
+    ),
+    tuple(
+      'Brock Purdy',
+      'QB',
+      87.2,
+    ),
+    tuple(
+      'Jonathan Taylor',
+      'RB',
+      87.0,
+    ),
+    tuple(
+      'Christian McCaffrey',
+      'RB',
+      86.9,
+    ),
+    tuple(
+      'Caleb Williams',
+      'QB',
+      86.9,
+    ),
+    tuple(
+      'Bucky Irving',
+      'RB',
+      86.9,
+    ),
+    tuple(
+      'Malik Nabers',
+      'WR',
+      86.9,
+    ),
+    tuple(
+      'CeeDee Lamb',
+      'WR',
+      86.6,
+    ),
+    tuple(
+      'Jalen Hurts',
+      'QB',
+      86.4,
+    ),
+    tuple(
+      'Zay Flowers',
+      'WR',
+      86.4,
+    ),
+    tuple(
+      'Nico Collins',
+      'WR',
+      86.3,
+    ),
+    tuple(
+      'Garrett Wilson',
+      'WR',
+      86.3,
+    ),
+    tuple(
+      'Jaxson Dart',
+      'QB',
+      86.2,
+    ),
+  ])
+# ---
+# name: test_top_qbs_match_snapshot
+  list([
+    tuple(
+      'Josh Allen',
+      364.6,
+    ),
+    tuple(
+      'Drake Maye',
+      352.0,
+    ),
+    tuple(
+      'Matthew Stafford',
+      350.4,
+    ),
+    tuple(
+      'Trevor Lawrence',
+      338.2,
+    ),
+    tuple(
+      'Caleb Williams',
+      318.2,
+    ),
+  ])
+# ---
