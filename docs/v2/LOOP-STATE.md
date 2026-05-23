@@ -9,7 +9,7 @@ next_slice: Explore L2 college polish or Lab L4 pro-gate polish
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
 last_keep_cycle: 53
-last_commit: ef1b0a5
+last_commit: 615ceb79
 league_l5_head_to_head: complete
 league_l5_scenario_trade: complete
 league_l4_trade_finder: complete
