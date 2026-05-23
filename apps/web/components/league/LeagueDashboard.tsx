@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { Route } from "next";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AGENT_BY_ID, agentForBureauSection, loadingCopyForAgent } from "@razzle/agents";
 import { BUREAU_ENDPOINTS, BUREAU_FEATURES, HIDDEN_BUREAU_SLUGS, VISIBLE_BUREAU_FEATURES, type BureauFeatureSlug } from "@/lib/bureau-features";
@@ -18,6 +18,7 @@ interface Props {
 
 export function LeagueDashboard({ leagueId, feature }: Props) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [data, setData] = useState<unknown>(null);
   const [err, setErr] = useState<string | null>(null);
 
@@ -39,6 +40,10 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
       }
       body.user_id = user.user_id;
     }
+    if (feature === "head-to-head") {
+      const opponent = searchParams.get("opponent");
+      if (opponent) body.opponent_user_id = opponent;
+    }
 
     setData(null);
     setErr(null);
@@ -53,7 +58,7 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
         else setData(j);
       })
       .catch((e: Error) => setErr(e.message));
-  }, [leagueId, feature]);
+  }, [leagueId, feature, searchParams]);
 
   const featureOwner = agentForBureauSection(feature) ?? AGENT_BY_ID.razzle;
 

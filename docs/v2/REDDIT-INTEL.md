@@ -215,3 +215,14 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Razzle slice:** Room L3 — restore pixel canvas with all six sprites (board DELETE hid costumed 3-agent rebind). Click Dolphin → Dolphin walks. Pending ask → WORK state on selected agent.
 - **Council cycle:** 49
 - **Screenshot potential:** `/room` pixel floor with six staff + briefing card — brand differentiation post for r/DynastyFF
+
+## 2026-05-23 — Cycle 51
+
+### r/DynastyFF — leaguemate rivalry / H2H dossier screenshots (pattern; live fetch 403)
+- **Pattern:** Dynasty group chats and trade threads name **specific rivals** — "I'm 2-0 vs Dave all-time", "Kevin hoards RBs, I need WR depth." Comment chains want side-by-side roster compare, not league-agnostic value charts. Pre-playoff threads ask "who do I want in the bracket?"
+- **Competitor framing:** Legacy V1 H2H tab (league-intel.html) had manager picker + position bars + trade-fit lanes. KeepTradeCut/FantasyCalc have zero league context. leaguemate.fyi shows transaction history not live depth matchup.
+- **Razzle gap:** API `head_to_head` existed since V2 scaffold but tab hidden in `HIDDEN_BUREAU_SLUGS`; ACCEPTANCE Gate 3 listed H2H as stub.
+- **Slice:** League L5 — Head-to-Head opponent picker + Atlas rivalry renderer, hallway to Trade Finder + Room ask.
+- **Council cycle:** 51
+- **Screenshot potential:** You vs rival dual cards + position depth bars — group-chat droppable before playoffs
+- **Bot-fact potential:** `!razzle h2h <you> vs <rival>` — future intel layer

@@ -7,6 +7,7 @@ import { BureauManagerProfiles } from "./BureauManagerProfiles";
 import { BureauPressureMap } from "./BureauPressureMap";
 import { BureauTradeNetwork } from "./BureauTradeNetwork";
 import { BureauTradeFinder } from "./BureauTradeFinder";
+import { BureauHeadToHead } from "./BureauHeadToHead";
 
 interface Props {
   feature: BureauFeatureSlug;
@@ -21,6 +22,7 @@ export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "pressure-map") return <BureauPressureMap data={data} leagueId={leagueId} />;
   if (feature === "trade-network") return <BureauTradeNetwork data={data} leagueId={leagueId} />;
   if (feature === "trade-finder") return <BureauTradeFinder data={data} leagueId={leagueId} />;
+  if (feature === "head-to-head") return <BureauHeadToHead data={data} leagueId={leagueId} />;
 
   return null;
 }

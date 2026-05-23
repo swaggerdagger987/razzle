@@ -11,7 +11,7 @@ class LeagueRef(BaseModel):
 
 
 class H2HRef(LeagueRef):
-    opponent_user_id: str
+    opponent_user_id: str | None = None
 
 
 class PlayerLeagueRef(LeagueRef):

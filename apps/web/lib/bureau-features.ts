@@ -4,7 +4,6 @@ export const HIDDEN_BUREAU_SLUGS = new Set([
   "build-profiles",
   "power-rankings",
   "waiver-tendencies",
-  "head-to-head",
   "strength-of-schedule",
 ]);
 
@@ -52,6 +51,7 @@ export const BUREAU_ENDPOINTS: Record<
     title: "Trade Finder",
   },
   "waiver-tendencies": { path: "/api/bureau/waiver-tendencies", needsUser: false, title: "Waiver Tendencies" },
+  "head-to-head": { path: "/api/bureau/head-to-head", needsUser: true, title: "Head-to-Head" },
   "strength-of-schedule": {
     path: "/api/bureau/strength-of-schedule",
     needsUser: true,
