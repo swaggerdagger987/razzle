@@ -1211,3 +1211,47 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Score:** hallway+voice+simplicity | **keep**
 
+---
+
+## Council — Cycle 25
+
+### Opus — Cycle 25 (Reddit intel)
+**r/DynastyFF — college-to-prospects workflow (pattern; live fetch 403)**
+- **Pattern:** Rookie-draft season threads cross-reference **college production** with **prospect rankings** — users want one workflow, not two tabs.
+- **Razzle gap:** NFL universe had prospects link; college mode dead-ended at screener with no Lab bridge.
+- **Slice:** Explore L2 — college → Lab prospects hallway (universe bar link + Player Sheet panels nudge)
+
+**Re: Codex** — No new API; URL `?universe=college` drives Player Sheet nudge. Veto college-specific API endpoint.
+
+**Re: Composer** — Hawkeye loading copy in college mode; prospects in Player Sheet panel list.
+
+**Vote:** SHIP
+
+### Codex — Cycle 25
+**Re: Opus** — Correct PARITY YELLOW item. **Re: Composer** — `useSearchParams` for universe is fine; keep player! guard implicit via open state.
+
+**Vote:** SHIP
+
+### Composer — Cycle 25
+**Re: both** — Shipped college big board link, Hawkeye loading copy, Player Sheet college→prospects nudge, prospects in panel list.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 25
+
+**Verdict:** PASS — build exit 0; hallway cross-room links only; no API changes.
+
+---
+
+## Brand — Cycle 25
+
+**Verdict:** PASS — Hawkeye voice; no "AI"; college workflow copy on-brand.
+
+---
+
+## Score — Cycle 25
+
+**Score:** depth+hallway+reddit+voice | **keep**
+

@@ -3,6 +3,7 @@
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   AGENTS,
@@ -26,6 +27,9 @@ const TABS: Array<{ id: PlayerSheetTab; label: string }> = [
 
 export function PlayerSheet() {
   const { open, player, tab, closePlayer, setTab } = usePlayerSheet();
+  const searchParams = useSearchParams();
+  const isCollege = searchParams.get("universe") === "college";
+  const hawkeye = AGENT_BY_ID.hawkeye;
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<string | null>(null);
   const [asking, setAsking] = useState(false);
@@ -144,7 +148,20 @@ export function PlayerSheet() {
 
           {tab === "panels" && (
             <ul className="player-sheet-panel-list">
+              {isCollege && (
+                <li className="mb-3 border-b border-ink pb-3">
+                  <Link
+                    href={toLab("prospects", { player: player! }) as Route}
+                    className="text-sm text-orange underline"
+                    onClick={closePlayer}
+                    style={{ fontFamily: "var(--font-hand)" }}
+                  >
+                    {hawkeye.name}: college → big board →
+                  </Link>
+                </li>
+              )}
               {[
+                { slug: "prospects", label: "Prospect Big Board" },
                 { slug: "dashboard", label: "Dynasty Dashboard" },
                 { slug: "rankings", label: "Dynasty Rankings" },
                 { slug: "tradevalues", label: "Trade Values" },

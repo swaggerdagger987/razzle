@@ -1,6 +1,7 @@
 "use client";
 
 import { LoadingState } from "@razzle/ui";
+import { loadingCopyForAgent } from "@razzle/agents";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
@@ -95,9 +96,17 @@ export function ExplorePageClient() {
           </button>
         </div>
         <span className="universe-bar-label">
-          {universe === "college" ? "college stats — the screener is forever free" : "NFL universe"}
-          {universe === "nfl" && (
+          {universe === "college" ? (
             <>
+              college stats — the screener is forever free
+              {" · "}
+              <Link href="/lab/prospects" className="underline hover:text-orange">
+                big board →
+              </Link>
+            </>
+          ) : (
+            <>
+              NFL universe
               {" · "}
               <Link href="/lab/prospects" className="underline hover:text-orange">
                 prospects →
@@ -136,7 +145,7 @@ export function ExplorePageClient() {
               <strong>{query.data.count}</strong> {statLabel}
             </>
           ) : (
-            "pulling film..."
+            universe === "college" ? loadingCopyForAgent("hawkeye") : "pulling film..."
           )}
         </span>
         <ExploreShareButton universe={universe} sort={sortKey} q={params.q} pos={params.pos} />

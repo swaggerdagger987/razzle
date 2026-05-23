@@ -81,6 +81,13 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 23
 - **Bot-fact potential:** `!razzle confirm <manager> championship odds` — future intel layer
 
+## 2026-05-23 — Cycle 25
+
+### r/DynastyFF — college + prospect big board workflow (pattern; live fetch 403)
+- **Pattern:** Rookie-draft threads cross-reference **CFB production** with **prospect tiers** — users hate switching sites mid-research.
+- **Razzle slice:** Explore L2 college bridge — universe bar `big board →`, Player Sheet panels nudge when `?universe=college`, Hawkeye loading copy.
+- **Council cycle:** 25
+
 
 ### r/DynastyFF — daily dynasty briefing / market pulse (pattern; live fetch 403)
 - **Pattern:** Dynasty managers want **one-screen pulse checks** — top assets, risers/fallers vs production rank, positional scarcity cliffs — before trade posts or morning Reddit threads.
