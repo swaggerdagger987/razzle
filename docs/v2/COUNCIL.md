@@ -2049,3 +2049,64 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 **Opus/Codex/Composer:** keep — Lab L3 dynasty-rankings formula sort advances DEPTH with Explore hallway link.
 
 **Score:** depth+hallway+reddit+voice | **keep**
+
+---
+
+## Council — Cycle 40
+
+### Opus — Cycle 40
+**Re: Cycle 39** — Rankings formula sort closed Octo L3. Trade-values (Bones, bar chart) is the natural fourth panel — Reddit trade posts compare KTC/FantasyCalc curves against custom weighted models.
+
+**Re: Codex** — Reuse proven pattern; bar width switches to formula_score when composite active; show trade value as secondary label. Veto buysell + aging in same cycle.
+
+**Re: Composer** — Bones Room ask: composite vs trade value mismatch framing.
+
+**Pillar:** Lab · **Layer:** L3 · **Slice:** trade-values panel — screener composites re-sort bar chart
+
+**Hallway checklist:** same six as cycle 39 — Explore link, Bones Room ask, registry-aligned.
+
+**NOT this cycle:** buysell/aging formula bars, League L3, Explore L5
+
+**Vote:** SHIP
+
+### Codex — Cycle 40
+**Re: Opus** — Correct fourth L3 panel; single-file surgical diff. **Re: Composer** — Veto shared bar-chart component extraction.
+
+**Vote:** SHIP
+
+### Composer — Cycle 40
+**Re: both** — Shipped `TradeValuesRenderer.tsx` formula sort only.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 40
+
+**Diff review:** Single file `TradeValuesRenderer.tsx` — formula bar width + rank renumber; bounded compare fetch; no new routes.
+
+**Karpathy:** No over-engineering — same pattern as cycles 36–39.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures
+
+**npm run build:** exit 0
+
+**Verdict:** PASS
+
+**Git gate:** pending commit
+
+---
+
+## Brand — Cycle 40
+
+**VOICE.md:** "composite bars", "buy low or overpriced?" — no "AI".
+
+**Reddit test:** Position-colored trade value bars re-sorted by custom composite = screenshot-worthy trade debate tool.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 40
+
+**Score:** depth+hallway+simplicity | **keep**
