@@ -1,7 +1,7 @@
 # League L4 — Trade deadline pressure map
 
 **Cycle:** 45  
-**Commit:** (recorded after commit)  
+**Commit:** 959d2436  
 **Pillar:** League · **Layer:** L4
 
 ## Slice
