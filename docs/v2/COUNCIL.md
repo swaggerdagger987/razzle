@@ -2431,13 +2431,10 @@ Full passover run before writing:
   Evidence: `apps/web/components/league/BureauFeatureBody.tsx` fallback copy: `pulling film — data shape coming soon.`
 
 - **REFINE-CANDIDATE** — Docs are materially drifted vs current code/repo state (board source of truth mismatch).  
-  Evidence: `docs/v2/PARITY.md` still marks all pillars `YELLOW` and old next slices despite cycle 44 work; `docs/v2/results.tsv` ends at cycle 44 while code now includes L4 league surfaces.
+  Evidence: `docs/v2/PARITY.md` still marks all pillars `YELLOW` and old next slices while `docs/v2/results.tsv` has progressed through cycle 46.
 
-- **REFINE-CANDIDATE** — Council thread has duplicate cycle block and chronology noise; board readability is degraded.  
+- **DELETE-CANDIDATE** — Council thread has duplicate cycle block and chronology noise; delete the duplicate block and keep one canonical copy.  
   Evidence: `docs/v2/COUNCIL.md` includes duplicated `## Council — Cycle 32` sequence twice.
-
-- **DELETE-CANDIDATE** — Orphan evidence artifacts reference commits/cycles not present in current log thread and results ledger.  
-  Evidence: `docs/v2/evidence/2026-05-23-league-L4-pressure-map.md` (cycle 45, commit `959d2436`) and `docs/v2/evidence/2026-05-23-league-L4-trade-network.md` (cycle 46, commit `d55b0ad2`) are not represented in `docs/v2/results.tsv` or council cycle headers.
 
 - **REFINE-CANDIDATE** — Formula-sort implementation is intentionally copy-pasted across 6 renderers; now at threshold where extraction would reduce bug surface.  
   Evidence: repeated formula sort/enrichment flow in `apps/web/components/lab/renderers/EfficiencyRenderer.tsx`, `BreakoutsRenderer.tsx`, `DynastyRankingsRenderer.tsx`, `TradeValuesRenderer.tsx`, `BuySellRenderer.tsx`, `AgingCurvesRenderer.tsx`.
