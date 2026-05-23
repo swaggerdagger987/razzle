@@ -1,7 +1,7 @@
 # Evidence — Lab L3 trade-values formula sort
 
 **Cycle:** 40  
-**Commit:** (filled after commit)  
+**Commit:** 2eca993d  
 **Pillar:** Lab · **Layer:** L3
 
 ## Slice
