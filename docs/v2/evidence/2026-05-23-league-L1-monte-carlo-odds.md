@@ -3,7 +3,7 @@
 **Pillar:** League  
 **Layer:** L1  
 **Slice:** Bureau Monte Carlo championship odds summary cards  
-**Commit:** (filled after commit)
+**Commit:** c4530595
 
 ## API shape
 
