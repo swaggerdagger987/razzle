@@ -1,15 +1,15 @@
-cycle: 34
+cycle: 35
 phase: depth
 strategy: depth-not-breadth
 program: docs/v2/PROGRAM.md
-focus_pillar: Explore
-focus_layer: L4
-next_slice: Lab L3 formula-fed panels OR Room L2 context moat OR Explore L5 agent margin notes
+focus_pillar: Room
+focus_layer: L2
+next_slice: Lab L3 formula-fed panels OR Explore L5 agent margin notes OR League L3 behavioral profiles
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
-last_keep_cycle: 34
-last_commit: 86d02f40
+last_keep_cycle: 35
+last_commit: pending
 explore_l4_formula_store: complete
-league_l2_odds_grid: complete
+room_l2_player_context: complete
 continuous: true
 never_stop: true

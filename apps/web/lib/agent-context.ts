@@ -14,18 +14,24 @@ export function getHallwayReferrer(): string | undefined {
   return sessionStorage.getItem(HALLWAY_FROM_KEY) ?? undefined;
 }
 
-/** Sleeper + league ids for agent context injection. */
+/** Sleeper + league + player ids for agent context injection. */
 export function agentContextPayload(): {
   league_id?: string;
   user_id?: string;
   referrer_panel?: string;
+  player_id?: string;
 } {
   const user = getSleeperUser();
   const league = getSelectedLeague();
   const referrer = getHallwayReferrer();
+  let playerId: string | undefined;
+  if (typeof window !== "undefined") {
+    playerId = new URLSearchParams(window.location.search).get("id") ?? undefined;
+  }
   return {
     league_id: league?.league_id,
     user_id: user?.user_id,
     ...(referrer ? { referrer_panel: referrer } : {}),
+    ...(playerId ? { player_id: playerId } : {}),
   };
 }

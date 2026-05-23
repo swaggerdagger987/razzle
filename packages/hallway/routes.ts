@@ -76,13 +76,20 @@ export function toLeague(leagueId?: string, feature?: string): string {
   return `/league/${leagueId}`;
 }
 
-/** Situation Room — optional agent + question prefill. */
-export function toRoom(ctx?: Pick<HallwayContext, "agentId" | "question" | "panelSlug">): string {
-  if (!ctx?.agentId && !ctx?.question && !ctx?.panelSlug) return "/room";
+/** Situation Room — optional agent + question + player prefill. */
+export function toRoom(
+  ctx?: Pick<HallwayContext, "agentId" | "question" | "panelSlug" | "player">,
+): string {
+  if (!ctx?.agentId && !ctx?.question && !ctx?.panelSlug && !ctx?.player) return "/room";
   const q = new URLSearchParams();
   if (ctx.agentId) q.set("agent", ctx.agentId);
   if (ctx.question) q.set("q", ctx.question);
   if (ctx.panelSlug) q.set("from", ctx.panelSlug);
+  if (ctx.player) {
+    q.set("id", ctx.player.playerId);
+    q.set("name", ctx.player.name);
+    if (ctx.player.position) q.set("pos", ctx.player.position);
+  }
   return `/room?${q.toString()}`;
 }
 
@@ -110,7 +117,11 @@ export function hallwayLinksFromPlayer(player: PlayerRef, leagueId?: string): Ha
       from: "explore",
       to: "room",
       label: "Ask in Situation Room",
-      href: toRoom({ agentId: "dolphin", question: `${player.name} injury and outlook?` }),
+      href: toRoom({
+        agentId: "dolphin",
+        question: `${player.name} injury and outlook?`,
+        player,
+      }),
       agentId: "dolphin",
     },
   ];

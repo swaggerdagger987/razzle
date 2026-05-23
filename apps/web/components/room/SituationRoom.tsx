@@ -42,6 +42,7 @@ export function SituationRoom() {
   const [activeAgent, setActiveAgent] = useState("razzle");
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [input, setInput] = useState("");
+  const [contextPlayer, setContextPlayer] = useState<string | null>(null);
 
   const selectedAgent = useMemo(() => toPixelAgent(toAgentId(activeAgent)), [activeAgent]);
   const workingAgent = useMemo(() => {
@@ -63,11 +64,13 @@ export function SituationRoom() {
     const agent = params.get("agent");
     const q = params.get("q");
     const from = params.get("from");
+    const playerName = params.get("name");
     if (agent && (AGENT_IDS as readonly string[]).includes(agent)) {
       setActiveAgent(agent);
     }
     if (q) setInput(q);
     if (from) setHallwayReferrer(from);
+    setContextPlayer(playerName);
   }, []);
 
   async function ask(question: string) {
@@ -122,7 +125,10 @@ export function SituationRoom() {
       <header className="room-header">
         <div className="flex items-baseline gap-2">
           <span className="room-header-title">Situation Room</span>
-          <span className="room-header-subtitle">full staff on the floor</span>
+          <span className="room-header-subtitle">
+            full staff on the floor
+            {contextPlayer ? ` · ${contextPlayer} in context` : ""}
+          </span>
         </div>
         <AgentRoster active={activeAgent} onSelect={setActiveAgent} />
       </header>
