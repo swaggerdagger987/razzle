@@ -1,7 +1,7 @@
 # League L3 — Manager Profiles (behavioral archetypes)
 
 **Cycle:** 43  
-**Commit:** (filled after commit)  
+**Commit:** d54950a5  
 **Pillar:** League · **Layer:** L3
 
 ## Slice
