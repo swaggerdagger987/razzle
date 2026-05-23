@@ -7,8 +7,9 @@ focus_layer: L3
 next_slice: Lab L3 aging formula bar OR Explore L5 agent margin notes
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
-last_keep_cycle: 40
-last_commit: befb65f4
+last_keep_cycle: 41
+last_commit: 523d12b5
+lab_l3_buysell_formula: complete
 lab_l3_tradevalues_formula: complete
 lab_l3_rankings_formula: complete
 lab_l3_breakouts_formula: complete

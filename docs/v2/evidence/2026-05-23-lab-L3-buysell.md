@@ -1,7 +1,7 @@
 # Lab L3 — buy-sell formula sort
 
 **Cycle:** 41  
-**Commit:** (pending)  
+**Commit:** 523d12b5  
 **Pillar:** Lab · **Layer:** L3
 
 ## Slice
