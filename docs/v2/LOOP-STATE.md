@@ -1,4 +1,4 @@
-cycle: 44
+cycle: 43
 phase: depth
 strategy: depth-not-breadth
 program: docs/v2/PROGRAM.md
