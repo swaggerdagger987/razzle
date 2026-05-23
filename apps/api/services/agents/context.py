@@ -24,6 +24,7 @@ _PANEL_LABELS = {
     "efficiency": "Efficiency Rankings",
     "aging": "Aging Curves",
     "buysell": "Buy / Sell",
+    "player-intel": "Player Intel",
 }
 
 

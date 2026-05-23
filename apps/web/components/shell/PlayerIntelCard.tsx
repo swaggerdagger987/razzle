@@ -1,7 +1,10 @@
 "use client";
 
 import { AGENT_BY_ID, type AgentId } from "@razzle/agents";
+import { toRoom } from "@razzle/hallway";
 import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import type { Route } from "next";
 
 interface Snippet {
   category: string;
@@ -13,9 +16,11 @@ interface Snippet {
 
 interface Props {
   playerId: string;
+  playerName?: string;
+  position?: string;
 }
 
-export function PlayerIntelCard({ playerId }: Props) {
+export function PlayerIntelCard({ playerId, playerName, position }: Props) {
   const query = useQuery({
     queryKey: ["intel", playerId],
     queryFn: async () => {
@@ -49,6 +54,24 @@ export function PlayerIntelCard({ playerId }: Props) {
               </span>
               <span className="text-ink-medium text-xs uppercase">{s.category}</span>
               <p className="mt-1">{s.text}</p>
+              <Link
+                href={
+                  toRoom({
+                    agentId: s.agent_id,
+                    question: `${playerName ?? "This player"}: ${s.text} — what should I do with this?`,
+                    panelSlug: "player-intel",
+                    player: {
+                      playerId,
+                      name: playerName ?? playerId,
+                      slug: (playerName ?? playerId).toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+                      position,
+                    },
+                  }) as Route
+                }
+                className="mt-2 inline-block text-xs text-orange underline"
+              >
+                ask {agent?.name ?? "staff"} →
+              </Link>
             </li>
           );
         })}

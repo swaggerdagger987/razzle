@@ -116,7 +116,11 @@ export function PlayerStatsTab({ playerId }: { playerId: string }) {
           </table>
         </div>
       )}
-      <PlayerIntelCard playerId={playerId} />
+      <PlayerIntelCard
+        playerId={playerId}
+        playerName={player.full_name}
+        position={player.position}
+      />
     </div>
   );
 }
