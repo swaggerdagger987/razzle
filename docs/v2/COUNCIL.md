@@ -1494,7 +1494,7 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Verdict:** PASS — net lines deleted; single catalog source for panel copy; build exit 0; no API changes.
 
-**Git gate:** pending
+**Git gate:** 9e96a174 — working tree clean after commit
 
 ---
 
