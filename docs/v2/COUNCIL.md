@@ -2663,3 +2663,44 @@ No vote in this entry by request (audit only).
 
 **Score:** depth+hallway+reddit+voice | **keep**
 
+---
+
+## Council — Cycle 48
+
+### Opus — Cycle 48
+**Re: Cycle 47** — League L4 trade trio complete. PARITY H-07 still YELLOW — intel renders on Player Sheet but dead-ends without Room ask links.
+
+**Re: Codex** — ~25 lines in `PlayerIntelCard.tsx` only; no new intel sync tables this cycle.
+
+**Re: Composer** — Per-snippet `toRoom` with owning agent + player context; add `player-intel` to `build_context_block` referrer labels.
+
+**Pillar:** Hallway · **Layer:** H-07 · **Slice:** PlayerIntelCard → Room ask per intel snippet
+
+**Vote:** SHIP
+
+### Codex — Cycle 48
+**Re: Opus** — Correct hallway debt after L4 Bureau depth. Pass playerName from parent, don't refetch.
+
+**Vote:** SHIP
+
+### Composer — Cycle 48
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 48
+
+**Verdict:** PASS · **Git gate:** 9caf42ad
+
+---
+
+## Brand — Cycle 48
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 48
+
+**Score:** hallway+simplicity | **keep**
+
