@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # Razzle V2 — Cofounder Loop (Cursor credits, NOT Claude CLI)
 #
+# ONE INSTANCE ONLY — run board + feature cycles in a single terminal:
+#   ./scripts/v2_loop.sh --continuous
+#
 # Usage:
-#   ./scripts/v2_loop.sh --board           # board meeting now (3-model audit + KEEP/DELETE/REFINE)
-#   ./scripts/v2_loop.sh --continuous     # NEVER STOPS — board every 10 cycles
+#   ./scripts/v2_loop.sh --continuous     # NEVER STOPS — board every 10 cycles (recommended)
+#   ./scripts/v2_loop.sh --board          # board only (do NOT run while --continuous is up)
 #   ./scripts/v2_loop.sh                  # 1 cycle
 #   ./scripts/v2_loop.sh 25               # 25 cycles then exit
 #   ./scripts/v2_loop.sh --steps 25       # 3-model split, 25 cycles
-#
-# Uses `cursor-agent` (Cursor subscription credits). See docs/v2/START-LOOP.md
-# Skill file: docs/v2/PROGRAM.md (autoresearch metric + keep/discard log)
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -30,26 +30,24 @@ MODEL_BUILDER="${RAZZLE_MODEL_BUILDER:-composer-2.5-fast}"
 MODEL_GEMINI="${RAZZLE_MODEL_GEMINI:-gemini-3.1-pro}"
 RECOVERY_LOG="$ROOT/docs/v2/recovery.log"
 BOARD_LOCK="$ROOT/docs/v2/.board-lock"
+LOOP_LOCKDIR="$ROOT/docs/v2/.loop.lock.d"
 RECOVERY_MODELS=("$MODEL_CTO" "$MODEL_CEO" "$MODEL_BUILDER" "$MODEL_GEMINI")
+
+# Appended to EVERY board agent prompt — agents must never stall the board
+BOARD_NEVER_STOP="
+BOARD RULES (non-negotiable):
+- NEVER ask the user for direction. NEVER say you are blocked waiting for human input.
+- If git status is dirty after your work: git add -A, unstage .env/.next/tsbuildinfo, git commit, verify clean.
+- Unrelated file changes from a parallel loop are NOT your problem — commit ALL legitimate work anyway.
+- Do your assigned section only, then stop. The shell handles tree hygiene between steps."
 
 usage() {
   cat <<EOF
-Usage: ./scripts/v2_loop.sh --continuous   # NEVER STOPS — board every ${BOARD_INTERVAL} cycles
-       ./scripts/v2_loop.sh --board         # board NOW — 4-model, never skipped when due
+Usage: ./scripts/v2_loop.sh --continuous   # ONE terminal — features + board every ${BOARD_INTERVAL} cycles
+       ./scripts/v2_loop.sh --board         # board only (stop --continuous first)
        ./scripts/v2_loop.sh [cycles]
-       ./scripts/v2_loop.sh --steps [cycles]
-       ./scripts/v2_loop.sh --steps-continuous
 
-Billing: Cursor credits via cursor-agent (NOT claude CLI).
-Skill:   docs/v2/PROGRAM.md
-
-  --continuous  Shell chains cycle → cycle until Ctrl+C. Does NOT stop at FEATURES GREEN.
-                Do NOT trust a single agent session to self-loop.
-
-Cursor IDE — paste once in Agent chat:
-  Execute loop-prompt-continuous.txt — continuous cofounder loop per docs/v2/PROGRAM.md
-
-See docs/v2/START-LOOP.md
+Do NOT run --continuous and --board in separate terminals — git races kill the board.
 EOF
 }
 
@@ -84,6 +82,33 @@ if [[ ! -f "$PROMPT_FILE" ]]; then
   exit 1
 fi
 
+# ── Single-instance lock (prevents board vs continuous git races) ─────────────
+
+release_loop_lock() {
+  rm -rf "$LOOP_LOCKDIR"
+}
+
+acquire_loop_lock() {
+  if [[ -d "$LOOP_LOCKDIR" ]]; then
+    local oldpid
+    oldpid=$(cat "$LOOP_LOCKDIR/pid" 2>/dev/null || echo "")
+    if [[ -n "$oldpid" ]] && kill -0 "$oldpid" 2>/dev/null; then
+      echo ""
+      echo "ERROR: Another v2_loop.sh is already running (pid $oldpid)."
+      echo "Do NOT start --board in a second terminal while --continuous runs."
+      echo "Board meetings run automatically inside --continuous every ${BOARD_INTERVAL} cycles."
+      exit 1
+    fi
+    echo "Removing stale loop lock (pid $oldpid dead)"
+    rm -rf "$LOOP_LOCKDIR"
+  fi
+  mkdir "$LOOP_LOCKDIR"
+  echo $$ > "$LOOP_LOCKDIR/pid"
+  trap 'release_loop_lock' EXIT
+}
+
+acquire_loop_lock
+
 run_cursor_agent() {
   local title="$1"
   local model="$2"
@@ -104,7 +129,6 @@ run_cursor_agent() {
 
 run_continuous_session() {
   echo "=== CONTINUOUS MODE — prefer shell chain (--continuous). Single sessions exit early. ==="
-  echo "Skill: docs/v2/PROGRAM.md | Stop with Ctrl+C"
   if [[ ! -f "$CONTINUOUS_PROMPT" ]]; then
     echo "Missing $CONTINUOUS_PROMPT" >&2
     exit 1
@@ -165,38 +189,34 @@ update_last_board_cycle() {
   fi
 }
 
-acquire_board_lock() {
-  while [[ -f "$BOARD_LOCK" ]]; do
-    echo "Board lock held — waiting for board meeting to finish..."
-    sleep 5
-  done
-  echo "$$ $(date -Iseconds)" > "$BOARD_LOCK"
-}
-
 release_board_lock() {
   rm -f "$BOARD_LOCK"
 }
 
-wait_for_board_lock() {
-  while [[ -f "$BOARD_LOCK" ]]; do
-    echo "Board meeting in progress — feature cycle paused..."
-    sleep 5
-  done
+acquire_board_lock() {
+  echo "board $$ $(date -Iseconds)" > "$BOARD_LOCK"
 }
 
-board_verdict_exists() {
+board_section_exists() {
+  local heading="$1"
+  grep -qF "$heading" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null
+}
+
+board_verdict_complete() {
   local after_cycle="$1"
-  grep -q "### Board Verdict" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null && \
-    grep -q "After Cycle $after_cycle" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null
+  board_section_exists "### Board Verdict (after cycle $after_cycle)"
 }
 
-# Never skip: due when a full BOARD_INTERVAL window passed OR we crossed a decade boundary
 should_run_board() {
   local cycle="$1"
   local last
   last=$(last_board_cycle)
-  if (( cycle <= last )); then
+  if board_verdict_complete "$cycle"; then
     return 1
+  fi
+  if (( cycle <= last )); then
+    # last_board recorded but verdict missing — board was interrupted, re-run
+    return 0
   fi
   if (( (cycle - last) >= BOARD_INTERVAL )); then
     return 0
@@ -207,25 +227,28 @@ should_run_board() {
   return 1
 }
 
-board_is_overdue_now() {
-  local cycle
-  cycle=$(grep '^cycle:' "$STATE" | awk '{print $2}')
-  should_run_board "$cycle"
+run_board_agent() {
+  local title="$1"
+  local model="$2"
+  local prompt="$3"
+  local after_cycle="$4"
+  ensure_clean_tree "board-pre-$after_cycle"
+  run_cursor_agent "$title" "$model" "$prompt${BOARD_NEVER_STOP}"
+  ensure_clean_tree "board-post-$after_cycle"
 }
 
 run_board_meeting() {
   local after_cycle="$1"
-  local force="${2:-false}"
   local last_board
   last_board=$(last_board_cycle)
 
-  if [[ "$force" != "true" ]] && (( after_cycle <= last_board )) && board_verdict_exists "$after_cycle"; then
-    echo "Board already complete for cycle $after_cycle — skipping."
+  if board_verdict_complete "$after_cycle"; then
+    echo "Board already complete for cycle $after_cycle."
+    update_last_board_cycle "$after_cycle"
     return 0
   fi
 
   acquire_board_lock
-  trap 'release_board_lock' EXIT
 
   local board_base
   board_base="$(cat "$BOARD_PROMPT")
@@ -236,82 +259,80 @@ Before writing, run:
   git log --oneline -40
   git diff --stat HEAD~40..HEAD 2>/dev/null || git diff --stat
   ./.venv-v2/bin/pytest apps/api/tests -q
-  npm run build
-
-Reward criterion: joy of a truly finished product — not performative agreement. You want Razzle yourself. Gemini: what actually matters to implement vs what the loop is ignoring."
+  npm run build"
 
   echo ""
   echo "####################################################################"
-  echo "## BOARD MEETING — after cycle $after_cycle (4-model — NEVER SKIP) ##"
+  echo "## BOARD MEETING — after cycle $after_cycle (4-model — MANDATORY)  ##"
   echo "####################################################################"
 
-  if ! grep -q "## Board — Codex Code Audit (after cycle $after_cycle)" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null; then
-    run_cursor_agent "CODEX — Board code audit" "$MODEL_CTO" "$board_base
+  if ! board_section_exists "## Board — Codex Code Audit (after cycle $after_cycle)"; then
+    run_board_agent "CODEX — Board code audit" "$MODEL_CTO" "$board_base
 
-Role: CODEX (cofounder). Append ## Board — Codex Code Audit (after cycle $after_cycle) to docs/v2/COUNCIL.md.
-
-Full code passover: legacy shims, stubs labeled GREEN, copy-paste debt, dead code, god files, test failures, docs vs reality. Tag FINISHED | HALF-DONE | DELETE-CANDIDATE | REFINE-CANDIDATE with paths. Do NOT vote yet."
+Role: CODEX. Append ## Board — Codex Code Audit (after cycle $after_cycle) to docs/v2/COUNCIL.md.
+Tag FINISHED | HALF-DONE | DELETE-CANDIDATE | REFINE-CANDIDATE with paths. No vote yet." "$after_cycle"
   else
-    echo "Skipping Codex audit — already present for cycle $after_cycle"
+    echo "✓ Codex audit present"
   fi
 
-  if ! grep -q "## Board — Opus Product Audit (after cycle $after_cycle)" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null; then
-    run_cursor_agent "OPUS — Board product audit" "$MODEL_CEO" "$board_base
+  if ! board_section_exists "## Board — Opus Product Audit (after cycle $after_cycle)"; then
+    run_board_agent "OPUS — Board product audit" "$MODEL_CEO" "$board_base
 
-Role: OPUS (cofounder). Read Codex audit in COUNCIL.md. Append ## Board — Opus Product Audit (after cycle $after_cycle).
-
-What would you ship to r/DynastyFF today vs hide? VOICE.md + DESIGN.md. HALF-DONE is worse than deleted. Do NOT vote yet."
+Role: OPUS. Read Codex audit. Append ## Board — Opus Product Audit (after cycle $after_cycle). Ship vs hide. No vote yet." "$after_cycle"
   else
-    echo "Skipping Opus audit — already present for cycle $after_cycle"
+    echo "✓ Opus audit present"
   fi
 
-  if ! grep -q "## Board — Gemini Priority Audit (after cycle $after_cycle)" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null; then
-    run_cursor_agent "GEMINI — Board priority audit" "$MODEL_GEMINI" "$board_base
+  if ! board_section_exists "## Board — Gemini Priority Audit (after cycle $after_cycle)"; then
+    run_board_agent "GEMINI — Board priority audit" "$MODEL_GEMINI" "$board_base
 
-Role: GEMINI (cofounder, independent). Read Codex + Opus board audits in COUNCIL.md. Append ## Board — Gemini Priority Audit (after cycle $after_cycle).
-
-You are the fourth board member. Ask what ACTUALLY matters to implement vs what the loop is churning on. Read NORTH_STAR.md, PARITY.md, results.tsv, REDDIT-INTEL.md. Tag each gap: PRIORITY-HIT | PRIORITY-MISS | SCOPE-CREEP | NORTH-STAR-DRIFT. Name the top 3 things users need that we are NOT building. Challenge both Opus and Codex if they miss the forest. Do NOT vote yet."
+Role: GEMINI (independent). Read Codex + Opus audits. Append ## Board — Gemini Priority Audit (after cycle $after_cycle).
+Tag PRIORITY-HIT | PRIORITY-MISS | SCOPE-CREEP | NORTH-STAR-DRIFT. Top 3 things users need that we are NOT building. No vote yet." "$after_cycle"
   else
-    echo "Skipping Gemini audit — already present for cycle $after_cycle"
+    echo "✓ Gemini audit present"
   fi
 
-  if ! grep -q "## Board Meeting — After Cycle $after_cycle" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null; then
-    run_cursor_agent "COMPOSER — Board synthesis draft" "$MODEL_BUILDER" "$board_base
+  if ! board_section_exists "## Board Meeting — After Cycle $after_cycle"; then
+    run_board_agent "COMPOSER — Board synthesis" "$MODEL_BUILDER" "$board_base
 
-Role: COMPOSER (cofounder). Read Codex, Opus, AND Gemini audits. Append ## Board Meeting — After Cycle $after_cycle with KEEP, DELETE, REFINE tables per docs/v2/BOARD.md. Vote columns: Opus | Codex | Gemini | Composer. Max 3 REFINE rows. Do NOT execute deletes yet."
+Role: COMPOSER. Read all three audits. Append ## Board Meeting — After Cycle $after_cycle with KEEP/DELETE/REFINE tables. Vote columns empty. Max 3 REFINE. No execution yet." "$after_cycle"
   else
-    echo "Skipping synthesis — already present for cycle $after_cycle"
+    echo "✓ Synthesis present"
   fi
 
-  if ! grep -q "### Board Vote — Opus" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null || \
-     ! grep -A2 "### Board Vote — Opus" "$ROOT/docs/v2/COUNCIL.md" | tail -1 | grep -q "After Cycle $after_cycle"; then
-    run_cursor_agent "OPUS — Board ratify" "$MODEL_CEO" "Read docs/v2/BOARD.md and ## Board Meeting — After Cycle $after_cycle in COUNCIL.md. Append ### Board Vote — Opus (after cycle $after_cycle). For each DELETE and REFINE row vote APPROVE | AMEND | REJECT. Criterion: finished-product joy. DELETE needs 3/4 APPROVE."
+  if ! board_section_exists "### Board Vote — Opus (after cycle $after_cycle)"; then
+    run_board_agent "OPUS — Board ratify" "$MODEL_CEO" "Read ## Board Meeting — After Cycle $after_cycle. Append ### Board Vote — Opus (after cycle $after_cycle). APPROVE|AMEND|REJECT each row. DELETE needs 3/4." "$after_cycle"
+  else
+    echo "✓ Opus vote present"
   fi
 
-  if ! grep -q "### Board Vote — Codex" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null; then
-    run_cursor_agent "CODEX — Board ratify" "$MODEL_CTO" "Read board meeting + Opus vote in COUNCIL.md. Append ### Board Vote — Codex (after cycle $after_cycle). Independent — do not rubber-stamp. DELETE needs 3/4 APPROVE."
+  if ! board_section_exists "### Board Vote — Codex (after cycle $after_cycle)"; then
+    run_board_agent "CODEX — Board ratify" "$MODEL_CTO" "Read board meeting + Opus vote. Append ### Board Vote — Codex (after cycle $after_cycle). Independent. DELETE needs 3/4." "$after_cycle"
+  else
+    echo "✓ Codex vote present"
   fi
 
-  if ! grep -q "### Board Vote — Gemini" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null; then
-    run_cursor_agent "GEMINI — Board ratify" "$MODEL_GEMINI" "Read board meeting + Opus + Codex votes in COUNCIL.md. Append ### Board Vote — Gemini (after cycle $after_cycle). Independent priority lens — reject DELETEs that remove user value; reject REFINEs that ignore north star. DELETE needs 3/4 APPROVE."
+  if ! board_section_exists "### Board Vote — Gemini (after cycle $after_cycle)"; then
+    run_board_agent "GEMINI — Board ratify" "$MODEL_GEMINI" "Read board meeting + votes. Append ### Board Vote — Gemini (after cycle $after_cycle). Priority lens. DELETE needs 3/4." "$after_cycle"
+  else
+    echo "✓ Gemini vote present"
   fi
 
-  run_cursor_agent "COMPOSER — Board execute + commit" "$MODEL_BUILDER" "Read ALL board sections and Opus/Codex/Gemini votes in COUNCIL.md. Tally 3/4 on each DELETE and REFINE. Append ### Board Verdict (after cycle $after_cycle). Execute ALL approved DELETEs and REFINE quick wins (<30 min). Run pytest + npm run build. git commit -m 'board: after cycle $after_cycle — <summary>'. Update LOOP-STATE.md last_board_cycle:$after_cycle and next_slice from Gemini top PRIORITY-MISS. Append results.tsv row. Verify git status clean."
+  local attempt=0
+  while ! board_verdict_complete "$after_cycle"; do
+    attempt=$((attempt + 1))
+    echo ""
+    echo "=== Board execute attempt $attempt ==="
+    run_board_agent "COMPOSER — Board execute + commit" "$MODEL_BUILDER" "Read ALL board sections for cycle $after_cycle. Tally 3/4 on DELETE/REFINE. Append ### Board Verdict (after cycle $after_cycle). Execute approved DELETEs + quick REFINEs. pytest + npm run build. git commit -m 'board: after cycle $after_cycle — <summary>'. Set LOOP-STATE last_board_cycle:$after_cycle. Log results.tsv. Tree MUST be clean." "$after_cycle"
+    if (( attempt >= 5 )); then
+      echo "Board execute failed after 5 attempts — shell emergency commit"
+      emergency_shell_commit "board-$after_cycle" || true
+      break
+    fi
+  done
 
   update_last_board_cycle "$after_cycle"
   release_board_lock
-  trap - EXIT
-
-  if ! grep -q "### Board Verdict" "$ROOT/docs/v2/COUNCIL.md" 2>/dev/null; then
-    echo "WARNING: Board verdict missing — retrying execute step (once)..."
-    acquire_board_lock
-    trap 'release_board_lock' EXIT
-    run_cursor_agent "COMPOSER — Board execute retry" "$MODEL_BUILDER" "Board execute incomplete for cycle $after_cycle. Read COUNCIL.md board sections. Append ### Board Verdict. Execute approved DELETEs/REFINEs. pytest + build. git commit. Update last_board_cycle:$after_cycle. Clean tree."
-    update_last_board_cycle "$after_cycle"
-    release_board_lock
-    trap - EXIT
-  fi
-
   echo ""
   echo "=== Board meeting complete (after cycle $after_cycle) ==="
 }
@@ -342,77 +363,33 @@ emergency_shell_commit() {
   echo "========== SURVIVAL — shell emergency commit (cycle ${cycle:-unknown}) =========="
   log_recovery "shell emergency commit start cycle=${cycle:-unknown}"
   strip_ephemeral_artifacts
-
-  if tree_is_clean; then
-    log_recovery "shell emergency commit skipped — tree already clean"
-    return 0
-  fi
+  tree_is_clean && return 0
 
   git add -A
   unstage_forbidden_paths
 
   if git diff --cached --quiet 2>/dev/null; then
     strip_ephemeral_artifacts
-    if tree_is_clean; then
-      log_recovery "shell emergency commit — only ephemeral artifacts removed"
-      return 0
-    fi
-    log_recovery "shell emergency commit failed — nothing stageable"
+    tree_is_clean && return 0
     return 1
   fi
 
   local msg="recovery: auto-commit uncommitted loop work (cycle ${cycle:-unknown})"
-  if git commit -m "$msg"; then
-    strip_ephemeral_artifacts
-    if tree_is_clean; then
-      log_recovery "shell emergency commit OK: $msg"
-      echo "SURVIVAL OK — shell auto-committed remaining work."
-      return 0
-    fi
-  fi
-
-  log_recovery "shell emergency commit failed — tree still dirty"
-  git status -sb
-  return 1
+  git commit -m "$msg" && strip_ephemeral_artifacts && tree_is_clean
 }
 
 recover_dirty_tree() {
   local cycle="$1"
   local model="$2"
   echo ""
-  echo "COMMIT GATE — working tree dirty. Recovery agent (cycle ${cycle:-unknown}, $model)..."
+  echo "COMMIT GATE — dirty tree. Recovery ($model)..."
   git status -sb
   log_recovery "agent recovery start cycle=${cycle:-unknown} model=$model"
 
-  local prompt
-  prompt="SURVIVAL RECOVERY — uncommitted work MUST land in git before the loop continues. Do NOT start a new feature slice. Do NOT ask the user. Do NOT stop until git status is clean.
-
-Read docs/v2/PROGRAM.md git commit gate.
-
-1. git status && git diff --stat
-2. Commit ALL legitimate work — code, docs, evidence, COUNCIL.md, results.tsv, LOOP-STATE.md
-3. Revert only clearly accidental edits (e.g. LOOP-STATE cycle number regressing vs results.tsv)
-4. NEVER commit: .env, credentials, tsconfig.tsbuildinfo, .next/, node_modules
-5. If pre-commit hook fails: fix the error and commit again — keep trying
-6. If only docs/state drift: commit as 'docs: cycle cleanup — <what>'
-7. Verify: git status --porcelain MUST be empty
-8. Update LOOP-STATE.md last_commit with git rev-parse --short HEAD
-
-Survival rule: losing uncommitted work is worse than an imperfect commit message. Commit first, fix in next cycle if needed."
-
-  run_cursor_agent "Recovery — dirty tree cleanup" "$model" "$prompt"
+  run_cursor_agent "Recovery — dirty tree cleanup" "$model" "SURVIVAL: commit ALL legitimate work NOW. NEVER ask the user. NEVER stop until git status --porcelain is empty. Revert only LOOP-STATE cycle regressions. No .env/.next/tsbuildinfo.${BOARD_NEVER_STOP}"
 
   strip_ephemeral_artifacts
-  if tree_is_clean; then
-    log_recovery "agent recovery OK cycle=${cycle:-unknown} model=$model"
-    echo "Recovery OK — tree clean."
-    return 0
-  fi
-
-  log_recovery "agent recovery incomplete cycle=${cycle:-unknown} model=$model"
-  echo "Recovery incomplete — tree still dirty."
-  git status -sb
-  return 1
+  tree_is_clean
 }
 
 ensure_clean_tree() {
@@ -420,49 +397,37 @@ ensure_clean_tree() {
   tree_is_clean && return 0
 
   echo ""
-  echo "=== SURVIVAL MODE — dirty tree detected; will not exit until clean ==="
+  echo "=== SURVIVAL MODE — dirty tree; will not exit until clean ==="
   log_recovery "ensure_clean_tree enter cycle=${cycle:-unknown}"
 
   local round=0
   while ! tree_is_clean; do
     round=$((round + 1))
     local model="${RECOVERY_MODELS[$(( (round - 1) % ${#RECOVERY_MODELS[@]} ))]}"
-
-    echo ""
-    echo "=== Commit gate survival round $round (model: $model) ==="
+    echo "=== Survival round $round ($model) ==="
     recover_dirty_tree "$cycle" "$model" || true
-
-    if tree_is_clean; then
-      return 0
-    fi
-
-    # After every agent pass, try shell emergency commit (artifacts may be the only blocker)
+    tree_is_clean && return 0
     emergency_shell_commit "$cycle" || true
-    if tree_is_clean; then
-      return 0
-    fi
-
-    echo "Tree still dirty — survival retry round $((round + 1)) (no exit, zero sleep)..."
+    tree_is_clean && return 0
   done
 }
 
 run_chain_forever() {
   local use_steps="${1:-false}"
-  echo "=== CHAIN MODE — zero sleep, survival commits, never auto-stops ==="
-  echo "Skill: docs/v2/PROGRAM.md | Log: docs/v2/results.tsv | Recovery: docs/v2/recovery.log | Stop: Ctrl+C only"
-  trap 'echo ""; echo "Loop stopped."; exit 0' INT TERM
+  echo "=== CHAIN MODE — features + mandatory board every ${BOARD_INTERVAL} cycles ==="
+  echo "Stop: Ctrl+C only"
+  trap 'release_board_lock; echo ""; echo "Loop stopped."; exit 0' INT TERM
 
   while true; do
-    wait_for_board_lock
     ensure_clean_tree
 
     local cycle
     cycle=$(grep '^cycle:' "$STATE" | awk '{print $2}')
 
-    # Never skip overdue board — run before incrementing cycle number
+    # Board BEFORE feature work whenever due (never skip)
     if should_run_board "$cycle"; then
       echo ""
-      echo "=== BOARD DUE (cycle $cycle, last board $(last_board_cycle)) — mandatory ==="
+      echo "=== BOARD DUE at cycle $cycle (last completed board: $(last_board_cycle)) ==="
       run_board_meeting "$cycle"
       ensure_clean_tree "board-$cycle"
       continue
@@ -471,8 +436,6 @@ run_chain_forever() {
     cycle=$((cycle + 1))
 
     if all_features_green; then
-      echo ""
-      echo "=== Milestone: FEATURES.md all GREEN — continuing DEPTH climb (PARITY.md) ==="
       sed -i '' "s/^phase:.*/phase: depth/" "$STATE" 2>/dev/null || sed -i "s/^phase:.*/phase: depth/" "$STATE"
     fi
 
@@ -480,8 +443,6 @@ run_chain_forever() {
     echo ">>>>>>>>>> Cycle $cycle — $(date) <<<<<<<<<<"
 
     if should_run_board "$cycle"; then
-      echo ""
-      echo "=== BOARD DUE at cycle $cycle — mandatory (replaces feature cycle) ==="
       run_board_meeting "$cycle"
       ensure_clean_tree "board-$cycle"
       update_cycle_state "$cycle"
@@ -496,31 +457,28 @@ run_chain_forever() {
 
     ensure_clean_tree "$cycle"
     update_cycle_state "$cycle"
-    # No sleep — immediately start next cycle
   done
 }
 
-echo "=== Razzle V2 Cofounder Loop (Cursor credits) ==="
+echo "=== Razzle V2 Cofounder Loop ==="
 echo "Repo:   $ROOT"
 echo "Mode:   $MODE"
-echo "Models: CEO=$MODEL_CEO  CTO=$MODEL_CTO  Builder=$MODEL_BUILDER  Gemini=$MODEL_GEMINI"
+echo "Models: Opus=$MODEL_CEO  Codex=$MODEL_CTO  Composer=$MODEL_BUILDER  Gemini=$MODEL_GEMINI"
 echo "=================================================="
 
 case "$MODE" in
   board)
     ensure_clean_tree
     BOARD_CYCLE=$(grep '^cycle:' "$STATE" | awk '{print $2}')
-    echo "=== FORCED BOARD MEETING (4-model) at cycle $BOARD_CYCLE ==="
-    run_board_meeting "$BOARD_CYCLE" "true"
+    run_board_meeting "$BOARD_CYCLE"
     ensure_clean_tree "board-$BOARD_CYCLE"
     ;;
-  continuous)
-    # Shell chains cycles with zero sleep. Single agent sessions exit early —
-    # the shell is the autoresearch loop that never stops.
-    run_chain_forever false
-    ;;
-  steps-continuous)
-    run_chain_forever true
+  continuous|steps-continuous)
+    if [[ "$MODE" == "steps-continuous" ]]; then
+      run_chain_forever true
+    else
+      run_chain_forever false
+    fi
     ;;
   steps)
     CYCLE=$(grep '^cycle:' "$STATE" | awk '{print $2}')
@@ -546,8 +504,6 @@ case "$MODE" in
         update_cycle_state "$CYCLE"
         CYCLE=$((CYCLE + 1))
       done
-      echo ""
-      echo "Done. Check docs/v2/COUNCIL.md, FEATURES.md, git log"
     fi
     ;;
 esac

@@ -39,11 +39,12 @@ HALF-DONE is worse than deleted. Vote for what makes the product **feel done**, 
 
 | Rule | Enforcement |
 |------|-------------|
-| Due every 10 cycles | `floor(cycle/10) > floor(last_board/10)` OR `cycle - last_board >= 10` |
-| Missed window | Catch up immediately on next loop iteration — no waiting for round decade |
-| Manual | `./scripts/v2_loop.sh --board` always runs full board |
-| Git race | `.board-lock` — feature loop waits while board executes |
-| Incomplete board | Shell retries until `### Board Verdict` + `last_board_cycle` updated |
+| Due every 10 cycles | `cycle - last_board >= 10` OR decade boundary crossed |
+| Interrupted board | Re-runs if `### Board Verdict (after cycle N)` missing |
+| **One terminal** | `.loop.lock.d` — second `v2_loop.sh` exits immediately |
+| Git hygiene | Shell auto-commits before/after **every** board agent step |
+| Agents | NEVER ask user — commit dirty tree and continue |
+| Incomplete | Execute step retries up to 5×, then shell emergency commit |
 
 ---
 
@@ -90,11 +91,11 @@ DELETE vote columns: Opus | Codex | Gemini | Composer
 
 | Trigger | When |
 |---------|------|
-| Auto | Never skip — due when decade window passed since `last_board_cycle` |
-| Manual | `./scripts/v2_loop.sh --board` |
+| Auto | `./scripts/v2_loop.sh --continuous` — board runs **before** feature cycles when due |
+| Manual | `./scripts/v2_loop.sh --board` only when `--continuous` is **not** running |
 | Interval | `RAZZLE_BOARD_INTERVAL=10` (default) |
 
-Updates `LOOP-STATE.md`: `last_board_cycle: N`
+**Do not run two terminals.** Board is built into `--continuous`.
 
 ---
 
