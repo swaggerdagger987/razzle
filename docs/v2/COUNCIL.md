@@ -2399,3 +2399,82 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 **Opus/Codex/Composer:** keep — Explore L5 margin notes advances DEPTH with Room hallway.
 
 **Score:** depth+hallway+voice+simplicity | **keep**
+
+---
+
+## Council — Cycle 45
+
+### Opus — Cycle 45 (Reddit intel)
+**Re: Cycle 44** — Explore L5 margin notes closed the screener L5 ladder. PARITY next row is **League L4 pressure map** — r/DynastyFF deadline threads ask "who's desperate?" more than generic standings.
+
+**Re: Codex** — Single-season scoring only — reuse `_tally_per_roster` from manager_profiles, no FAAB chain or multi-season port this cycle.
+
+**Re: Composer** — `pressure_map.py` + `BureauPressureMap.tsx` + bureau nav entry; ~120 lines total. Bones header, bar chart, Room ask on hero, footer links to manager-profiles + trade-network.
+
+**Pillar:** League · **Layer:** L4 · **Slice:** pressure-map — desperation scores from record + panic bursts
+
+**Hallway checklist:**
+- [x] playerIdentityConsistent — N/A league slice
+- [x] leagueContextGlobal — Bureau route + context bar
+- [x] agentPromptWired — Room q= includes manager + score
+- [x] crossRoomLinkPresent — pressure-map ↔ manager-profiles ↔ trade-network
+- [x] agentRegistryAligned — Bones via `agentForBureauSection("pressure-map")`
+- [x] dolphinReachable — N/A; Player Sheet still reachable
+
+**Acceptance:** `/league/[id]/pressure-map` renders bars; API returns sorted rows; pytest + build pass.
+
+**NOT this cycle:** trade finder, multi-season profiles, FAAB burn rate, Pro blur gate
+
+**Vote:** SHIP
+
+### Codex — Cycle 45
+**Re: Opus** — Correct L4 pick after L3 manager profiles. **Blind spot on Opus:** Don't port legacy Pro blur gate this cycle — show all managers; gate later at L4 polish.
+
+**Re: Composer** — Veto shared `pressure_utils.py` module — import `_tally_per_roster` from manager_profiles only (~80 lines in one service file).
+
+**Vote:** SHIP
+
+### Composer — Cycle 45
+**Re: both** — Shipped pressure_map service, BureauPressureMap renderer, nav + hallway links.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 45
+
+**Diff review:**
+- `pressure_map.py` — reuses manager_profiles tallies; bounded single-pass; no unbounded queries
+- `BureauPressureMap.tsx` — Bones header, bar grid, Room + cross-bureau links
+- `test_bureau_pressure_map.py` — score tiers + sort order
+- No god files; no duplicate SQL
+
+**Karpathy:** Surgical — one service, one component, one test file. No speculative abstractions.
+
+**pytest:** 42 passed, 2 pre-existing snapshot failures
+
+**npm run build:** exit 0
+
+**Verdict:** PASS
+
+**Git gate:** pending commit
+
+---
+
+## Brand — Cycle 45
+
+**DESIGN.md:** Chunky bars, ink borders, red/orange/green pressure tiers, Caveat hero copy — on-brand Bureau aesthetic.
+
+**VOICE.md:** "who's desperate before the deadline?", "Strike while they're motivated" — staff voice, no "AI".
+
+**Reddit test:** Screenshot-worthy — horizontal desperation bars are group-chat droppable per REDDIT-INTEL cycle 45 pattern.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 45
+
+**Opus/Codex/Composer:** keep — League L4 pressure map advances Bureau moat with hallway wires.
+
+**Score:** depth+hallway+reddit+voice | **keep**

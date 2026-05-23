@@ -5,6 +5,7 @@ import { BureauRowsTable } from "./BureauRowsTable";
 import { BureauSelfScout } from "./BureauSelfScout";
 import { BureauMonteCarlo } from "./BureauMonteCarlo";
 import { BureauManagerProfiles } from "./BureauManagerProfiles";
+import { BureauPressureMap } from "./BureauPressureMap";
 
 const TITLES: Partial<Record<BureauFeatureSlug, string>> = {
   "roster-depth": "Roster Depth",
@@ -26,6 +27,7 @@ export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "self-scout") return <BureauSelfScout data={data} />;
   if (feature === "monte-carlo") return <BureauMonteCarlo data={data} />;
   if (feature === "manager-profiles") return <BureauManagerProfiles data={data} leagueId={leagueId} />;
+  if (feature === "pressure-map") return <BureauPressureMap data={data} leagueId={leagueId} />;
 
   const title = TITLES[feature];
 

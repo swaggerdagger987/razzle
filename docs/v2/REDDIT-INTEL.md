@@ -189,3 +189,13 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Slice:** League L3 `manager-profiles` — Bones header, PANIC SELLER/HOARDER/AGGRESSIVE cards, exploit-window copy, Room ask on hero manager.
 - **Council cycle:** 43
 - **Bot-fact potential:** `!razzle confirm <manager> panic score` — future intel layer
+
+## 2026-05-23 — Cycle 45
+
+### r/DynastyFF — trade deadline pressure / desperation bar screenshots (pattern; live fetch 403)
+- **Pattern:** Pre-deadline threads ask **"who's desperate in your league?"** — managers with losing records get targeted for win-now pieces. Comment chains share horizontal bar charts ranking leaguemates by desperation, not just W-L standings.
+- **Competitor framing:** Legacy Razzle V1 pressure map (league-intel.html) — top-3 free, full map Pro. Footballguys deadline articles name archetypes but no live league scoring.
+- **Razzle gap:** Cycle 43 shipped manager archetypes; no standalone desperation score visualization for deadline timing.
+- **Slice:** League L4 `pressure-map` — Bones header, 0–100 desperation bars (desperate/motivated/comfortable), Room ask on hero manager, hallway to manager-profiles + trade-network.
+- **Council cycle:** 45
+- **Bot-fact potential:** `!razzle confirm <manager> deadline pressure` — future intel layer

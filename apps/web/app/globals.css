@@ -358,6 +358,42 @@ body {
   color: var(--orange);
 }
 
+.pressure-bar-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 1fr auto auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pressure-bar-track {
+  height: 14px;
+  border: 2px solid var(--ink);
+  background: var(--bg-warm);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.pressure-bar-fill {
+  height: 100%;
+  min-width: 2px;
+}
+
+.pressure-bar-score {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  min-width: 2rem;
+  text-align: right;
+}
+
+.pressure-bar-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 2px solid;
+  padding: 0.15rem 0.35rem;
+}
+
 .pos-chip {
   border: 2px solid var(--ink);
   border-radius: 999px;

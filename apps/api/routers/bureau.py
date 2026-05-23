@@ -73,3 +73,8 @@ def player_status(ref: PlayerLeagueRef) -> dict:
 @router.post("/manager-profiles")
 def manager_profiles(ref: LeagueRef) -> dict:
     return bureau.manager_profiles(league_id=ref.league_id)
+
+
+@router.post("/pressure-map")
+def pressure_map(ref: LeagueRef) -> dict:
+    return bureau.pressure_map(league_id=ref.league_id)

@@ -18,6 +18,7 @@ from .strength_of_schedule import strength_of_schedule
 from .monte_carlo import monte_carlo_projections
 from .player_status import player_league_status
 from .manager_profiles import manager_profiles
+from .pressure_map import pressure_map
 
 __all__ = [
     "self_scout",
@@ -31,4 +32,5 @@ __all__ = [
     "monte_carlo_projections",
     "player_league_status",
     "manager_profiles",
+    "pressure_map",
 ]

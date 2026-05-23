@@ -5,6 +5,7 @@ export const BUREAU_FEATURES = [
   { slug: "power-rankings", label: "Power Rankings" },
   { slug: "trade-network", label: "Trade Network" },
   { slug: "manager-profiles", label: "Manager Profiles" },
+  { slug: "pressure-map", label: "Pressure Map" },
   { slug: "waiver-tendencies", label: "Waiver Tendencies" },
   { slug: "head-to-head", label: "Head-to-Head" },
   { slug: "strength-of-schedule", label: "Schedule" },
@@ -26,6 +27,11 @@ export const BUREAU_ENDPOINTS: Record<
     path: "/api/bureau/manager-profiles",
     needsUser: false,
     title: "Manager Profiles",
+  },
+  "pressure-map": {
+    path: "/api/bureau/pressure-map",
+    needsUser: false,
+    title: "Pressure Map",
   },
   "waiver-tendencies": { path: "/api/bureau/waiver-tendencies", needsUser: false, title: "Waiver Tendencies" },
   "strength-of-schedule": {

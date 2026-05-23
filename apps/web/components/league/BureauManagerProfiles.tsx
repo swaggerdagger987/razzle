@@ -117,7 +117,10 @@ export function BureauManagerProfiles({ data, leagueId }: Props) {
         ))}
       </section>
 
-      <footer className="text-sm">
+      <footer className="flex flex-wrap gap-4 text-sm">
+        <Link href={`/league/${leagueId}/pressure-map` as Route} className="text-orange underline">
+          deadline pressure map →
+        </Link>
         <Link href={`/league/${leagueId}/trade-network` as Route} className="text-orange underline">
           see who trades with whom →
         </Link>
