@@ -1,7 +1,7 @@
 # Explore L5 — Agent margin notes on screener rows
 
 **Cycle:** 44  
-**Commit:** (filled after commit)  
+**Commit:** e82bbdc7  
 **Pillar:** Explore · **Layer:** L5
 
 ## Slice
