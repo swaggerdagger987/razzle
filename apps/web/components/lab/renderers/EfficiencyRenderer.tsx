@@ -6,15 +6,22 @@ import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
+import type { SavedFormula } from "@/lib/formulas";
+import {
+  fetchPlayerStatsForFormula,
+  sortPlayersByFormula,
+  type WithFormulaScore,
+} from "@/lib/panel-formula-sort";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
-interface EfficiencyPlayer {
+interface EfficiencyPlayer extends WithFormulaScore {
   player_id: string;
   name: string;
   position: string;
@@ -43,10 +50,12 @@ function PlayerTable({
   title,
   players,
   onOpen,
+  formulaName,
 }: {
   title: string;
   players: EfficiencyPlayer[];
   onOpen: (p: EfficiencyPlayer) => void;
+  formulaName?: string;
 }) {
   if (!players.length) return null;
   return (
@@ -62,6 +71,11 @@ function PlayerTable({
               <th className="text-right">PPG</th>
               <th className="text-right">PPO</th>
               <th className="text-right">Y/T</th>
+              {formulaName && (
+                <th className="text-right" title={formulaName}>
+                  {formulaName}
+                </th>
+              )}
               <th className="text-right">Grade</th>
             </tr>
           </thead>
@@ -93,6 +107,11 @@ function PlayerTable({
                 <td className="text-right" style={{ fontFamily: "var(--font-mono)" }}>
                   {p.yards_per_touch?.toFixed(2) ?? "—"}
                 </td>
+                {formulaName && (
+                  <td className="text-right text-orange font-bold" style={{ fontFamily: "var(--font-mono)" }}>
+                    {p.formula_score != null ? p.formula_score.toFixed(1) : "—"}
+                  </td>
+                )}
                 <td className="text-right font-bold">{p.grade ?? "—"}</td>
               </tr>
             ))}
@@ -110,6 +129,7 @@ interface Props {
 export function EfficiencyRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("RB");
+  const [formula, setFormula] = useState<SavedFormula | null>(null);
   const agent = panelAgent(panel.slug);
 
   const q = useQuery({
@@ -129,7 +149,30 @@ export function EfficiencyRenderer({ panel }: Props) {
     },
   });
 
-  const top = q.data?.most_efficient?.[0] ?? q.data?.volume_kings?.[0] ?? null;
+  const rawEfficient = q.data?.most_efficient ?? [];
+  const rawVolume = q.data?.volume_kings ?? [];
+  const playerIds = useMemo(
+    () => [...new Set([...rawEfficient, ...rawVolume].map((p) => p.player_id))],
+    [rawEfficient, rawVolume],
+  );
+
+  const statsQ = useQuery({
+    queryKey: ["panel-formula-stats", panel.slug, q.data?.season, playerIds, formula?.name],
+    queryFn: () => fetchPlayerStatsForFormula(playerIds, q.data?.season ?? 0),
+    enabled: Boolean(formula && playerIds.length),
+  });
+
+  const efficient = useMemo(() => {
+    if (!formula || !statsQ.data) return rawEfficient;
+    return sortPlayersByFormula(rawEfficient, statsQ.data, formula);
+  }, [formula, rawEfficient, statsQ.data]);
+
+  const volume = useMemo(() => {
+    if (!formula || !statsQ.data) return rawVolume;
+    return sortPlayersByFormula(rawVolume, statsQ.data, formula);
+  }, [formula, rawVolume, statsQ.data]);
+
+  const top = efficient[0] ?? volume[0] ?? null;
 
   const open = (p: EfficiencyPlayer) =>
     openPlayer({
@@ -169,12 +212,17 @@ export function EfficiencyRenderer({ panel }: Props) {
     return <p className="p-6 text-red">something fumbled: {err.message}</p>;
   }
 
-  const efficient = q.data?.most_efficient ?? [];
-  const volume = q.data?.volume_kings ?? [];
-
   return (
     <div className="efficiency-panel">
       <PanelAgentHeader agent={agent} slug={panel.slug} />
+
+      <FormulaPanelBar selected={formula} onSelect={setFormula} panelSlug={panel.slug} />
+
+      {formula && statsQ.isFetching && (
+        <p className="text-ink-medium mb-2 text-xs" style={{ fontFamily: "var(--font-hand)" }}>
+          pulling composite scores…
+        </p>
+      )}
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (
@@ -201,8 +249,18 @@ export function EfficiencyRenderer({ panel }: Props) {
         <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
       ) : (
         <>
-          <PlayerTable title="Most efficient" players={efficient} onOpen={open} />
-          <PlayerTable title="Volume kings" players={volume} onOpen={open} />
+          <PlayerTable
+            title={formula ? `Most efficient · sorted by ${formula.name}` : "Most efficient"}
+            players={efficient}
+            onOpen={open}
+            formulaName={formula?.name}
+          />
+          <PlayerTable
+            title={formula ? `Volume kings · sorted by ${formula.name}` : "Volume kings"}
+            players={volume}
+            onOpen={open}
+            formulaName={formula?.name}
+          />
         </>
       )}
 
@@ -213,7 +271,9 @@ export function EfficiencyRenderer({ panel }: Props) {
               toRoom({
                 agentId: "octo",
                 panelSlug: "efficiency",
-                question: `${top.name} grades ${top.grade ?? "?"} on efficiency — ${top.ppo?.toFixed(2) ?? "?"} PPO. Worth rostering for efficiency or just volume?`,
+                question: formula
+                  ? `${top.name} leads ${formula.name} (${top.formula_score?.toFixed(1) ?? "?"}) but grades ${top.grade ?? "?"} on efficiency — volume play or true efficiency edge?`
+                  : `${top.name} grades ${top.grade ?? "?"} on efficiency — ${top.ppo?.toFixed(2) ?? "?"} PPO. Worth rostering for efficiency or just volume?`,
               }) as Route
             }
             className="text-sm text-orange underline"

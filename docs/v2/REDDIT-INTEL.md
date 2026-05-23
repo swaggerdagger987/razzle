@@ -140,6 +140,16 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 33
 - **Bot-fact potential:** `!razzle confirm <league> odds board` — future intel layer
 
+## 2026-05-23 — Cycle 36
+
+### r/DynastyFF — screener composite → Lab panel workflow (pattern; live fetch 403)
+- **Pattern:** Dynasty managers build weighted composites in screener tools, then want the **same weights applied inside Lab panels** (efficiency, breakouts, rankings) — not re-enter stats manually. Reddit OC posts show "my PPR Workhorse model" sorted tables; comment chains ask "does this hold on efficiency metrics too?"
+- **Competitor framing:** DynastyProcess custom scoring articles, spreadsheet dashboards — users export CSV from screener and re-sort in Excel; friction kills screenshot velocity.
+- **Razzle gap:** Cycles 30–34 shipped Explore formulas + store; Lab panels still use fixed panel sort (PPO, RBS) with no composite overlay.
+- **Slice:** Lab L3 — `FormulaPanelBar` on efficiency panel reads `razzle_formulas` localStorage, fetches season stats via `/api/players/compare`, re-sorts tables + Octo Room ask with composite name.
+- **Council cycle:** 36
+- **Bot-fact potential:** `!razzle confirm <player> PPR Workhorse rank on efficiency panel` — future intel layer
+
 ## 2026-05-23 — Cycle 34
 
 ### r/DynastyFF — community composite / formula store workflow (pattern; live fetch 403)

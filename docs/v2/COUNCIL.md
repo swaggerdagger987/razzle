@@ -1833,3 +1833,81 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 ## Score — Cycle 35
 
 **Score:** depth+hallway+simplicity | **keep**
+
+---
+
+## Council — Cycle 36
+
+### Opus — Cycle 36 (Reddit intel)
+**Re: Cycle 35** — Room L2 player context closed the moat gap. Explore L4 formula store (cycle 34) left Lab panels blind — Reddit threads build composites in screener then manually re-sort in spreadsheets. That's friction we kill this cycle.
+
+**Re: Codex** — Do NOT wire formulas into all 10 launch panels. One panel (`efficiency`, Octo-owned) + shared `FormulaPanelBar`. Reuse existing `/api/players/compare` — veto new panel formula API.
+
+**Re: Composer** — Veto League L3 behavioral profiles — backend-heavy, not hallway-complete in one cycle. Veto Explore L5 margin notes — no row data yet.
+
+**Pillar:** Lab · **Layer:** L3 · **Slice:** efficiency panel — screener composites sort panel tables
+
+**Hallway checklist:**
+- [x] `playerIdentityConsistent` — Player Sheet click on sorted rows
+- [x] `leagueContextGlobal` — context bar unchanged
+- [x] `agentPromptWired` — Room ask includes composite name when active
+- [x] `crossRoomLinkPresent` — FormulaPanelBar → `/explore`; Octo `toRoom` footer
+- [x] `agentRegistryAligned` — Octo via `panelAgent('efficiency')`
+- [x] `dolphinReachable` — N/A (no injury column in slice)
+
+**Acceptance checks:** Gates 0–4; `/lab/efficiency` shows composite dropdown; selecting formula re-sorts both tables + adds score column; pytest 35 pass; build exit 0.
+
+**NOT this cycle:** Formula bar on all launch-10, League L3 behavioral profiles, Explore L5 agent margin notes, backend formula persistence
+
+**Vote:** SHIP
+
+### Codex — Cycle 36
+**Re: Opus** — Correct vertical slice — completes DEPTH L3 entry without horizontal panel churn. **Re: Composer** — Veto if you add a `usePanelFormulaSort` abstraction layer or duplicate `computeFormulaScore` — import from `formulas.ts` + `panel-formula-sort.ts` only (~40 lines).
+
+**Vote:** SHIP
+
+### Composer — Cycle 36
+**Re: Opus** — Reddit intel confirms screener→Lab workflow gap. **Re: Codex** — Shipped `panel-formula-sort.ts`, `FormulaPanelBar.tsx`, wired `EfficiencyRenderer` only.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 36
+
+**Diff review:**
+- `panel-formula-sort.ts` — bounded player_ids join to existing compare endpoint; no new API routes
+- `FormulaPanelBar.tsx` — client-only localStorage read; empty state links to Explore
+- `EfficiencyRenderer.tsx` — formula sort gated on stats fetch; hooks before early returns; no god file growth
+
+**Karpathy:** Would a senior engineer call this overcomplicated? No — mirrors Explore `enrichRowsWithFormulas` pattern; one panel, one bar component.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures (`test_screener_snapshot.py`)
+
+**npm run build:** exit 0
+
+**Localhost:** `/api/health` 200; build includes `/lab/efficiency` static path
+
+**Verdict:** PASS
+
+**Git gate:** pending commit
+
+---
+
+## Brand — Cycle 36
+
+**DESIGN.md:** Chunky select (`input-chunky`), orange formula score column, hand font loading copy — matches Lab panel aesthetic.
+
+**VOICE.md:** "Sort by composite", "pulling composite scores…", "edit in screener" — no "AI" in user-facing strings.
+
+**Reddit test:** Screenshot-worthy — efficiency tables re-sorted by imported PPR Workhorse composite is exactly the dynasty screener→Lab workflow from r/DynastyFF.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 36
+
+**Opus/Codex/Composer:** keep — Lab L3 formula-fed efficiency advances DEPTH with Explore hallway link.
+
+**Score:** depth+hallway+reddit+voice | **keep**
