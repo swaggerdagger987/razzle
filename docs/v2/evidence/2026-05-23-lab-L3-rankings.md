@@ -1,7 +1,7 @@
 # Evidence — Lab L3 dynasty-rankings formula sort
 
 **Cycle:** 39  
-**Commit:** (filled after commit)  
+**Commit:** 107536ce  
 **Pillar:** Lab · **Layer:** L3
 
 ## Slice
