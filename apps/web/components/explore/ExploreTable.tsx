@@ -9,6 +9,7 @@ import {
 import { PositionPill } from "@razzle/ui";
 import type { PlayerRow } from "@/lib/api";
 import type { ExploreUniverse } from "@/lib/explore-params";
+import { formulaColumnKey, type SavedFormula } from "@/lib/formulas";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 
 const columnHelper = createColumnHelper<PlayerRow>();
@@ -23,9 +24,17 @@ interface Props {
   sortDir: "asc" | "desc";
   onSort: (key: string) => void;
   universe?: ExploreUniverse;
+  formulas?: SavedFormula[];
 }
 
-export function ExploreTable({ rows, sortKey, sortDir, onSort, universe = "nfl" }: Props) {
+export function ExploreTable({
+  rows,
+  sortKey,
+  sortDir,
+  onSort,
+  universe = "nfl",
+  formulas = [],
+}: Props) {
   const { openPlayer } = usePlayerSheet();
   const primaryKey = universe === "college" ? "total_yards" : "fantasy_points_ppr";
   const primaryHeader = universe === "college" ? "Yards" : "FPTS";
@@ -84,9 +93,25 @@ export function ExploreTable({ rows, sortKey, sortDir, onSort, universe = "nfl" 
         },
       }),
     ),
+    ...formulas.map((formula) => {
+      const colKey = formulaColumnKey(formula.name);
+      return columnHelper.display({
+        id: colKey,
+        header: formula.name,
+        cell: ({ row }) => {
+          const val = row.original[colKey];
+          return typeof val === "number" ? val.toFixed(1) : "—";
+        },
+      });
+    }),
   ];
 
-  const sortableKeys = ["full_name", primaryKey, ...extraKeys];
+  const sortableKeys = [
+    "full_name",
+    primaryKey,
+    ...extraKeys,
+    ...formulas.map((f) => formulaColumnKey(f.name)),
+  ];
 
   const table = useReactTable({
     data: rows,

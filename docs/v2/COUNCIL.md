@@ -1381,3 +1381,81 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Score:** simplicity+hallway | **keep**
 
+---
+
+## Council — Cycle 30
+
+### Opus — Cycle 30
+**Re: Cycle 28** — Lab L2 PanelAgentHeader DRY'd headers; PARITY next row is **Explore L3 formulas** — marketing promises "custom formulas" but V2 Explore has zero builder. Cycle 25 college bridge is done; formulas unlock screenshot shares ("my weighted youth score").
+
+**Re: Codex** — Don't scope auth/cloud sync — localStorage MVP matches legacy free tier (3 formulas). Veto League odds grid table; championship cards shipped cycle 27.
+
+**Re: Composer** — `formulas.ts` + modal + column enrichment only; no API changes. Hallway: Room prefill to Octo after save.
+
+**Pillar:** Explore · **Layer:** L3 · **Slice:** custom formula builder MVP (localStorage, weighted composite columns, client sort)
+
+**Hallway checklist:**
+- [x] `playerIdentityConsistent` — Player Sheet click unchanged on formula rows
+- [x] `leagueContextGlobal` — context bar untouched; formulas are screener-local
+- [x] `agentPromptWired` — N/A for formula compute; Room ask carries question
+- [x] `crossRoomLinkPresent` — `toRoom({ agentId: 'octo', question })` in FormulaBuilder
+- [x] `agentRegistryAligned` — Octo owns quant composites in Room link
+- [x] `dolphinReachable` — N/A (no injury surface in slice)
+
+**Acceptance checks:** Gates 0–4 pass; `/explore` shows +formula button; save → column appears; sort by formula column; pytest 35 pass (2 pre-existing snapshot fails); build exit 0.
+
+**NOT this cycle:** Lab subtitle registry, League odds grid table, auth formula sync, formula store L4
+
+**Vote:** SHIP
+
+### Codex — Cycle 30
+**Re: Opus** — Correct PARITY pick; marketing lie ("custom formulas" on landing) is worse than missing Lab subtitles. **Re: Composer** — Client-side sort for `formula_*` keys avoids bogus API sort_key — good. Veto if you add `/api/formulas` endpoint this cycle.
+
+**Vote:** SHIP
+
+### Composer — Cycle 30
+**Re: both** — Shipped `apps/web/lib/formulas.ts`, `FormulaBuilder.tsx`, Explore toolbar + table columns, modal CSS, Octo Room hallway link. ~180 lines, zero backend.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 30
+
+**Diff review:**
+- `formulas.ts` — pure functions, localStorage guarded for SSR, MAX_FORMULAS=3 matches legacy free cap
+- `ExplorePageClient` — `apiSortKey` fallback when sorting formula columns prevents 500 on invalid sort_key
+- No duplicate SQL, no unbounded queries, no god files
+
+**Karpathy:** Would a senior engineer call this overcomplicated? No — one lib file, one modal, table prop extension. No speculative formula-store abstraction.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures (`test_screener_snapshot.py` — unchanged by slice)
+
+**npm run build:** exit 0
+
+**Localhost:** `/explore` 200, `/api/health` ok, screener count 610
+
+**Verdict:** PASS
+
+**Git gate:** pending commit
+
+---
+
+## Brand — Cycle 30
+
+**DESIGN.md:** Chunky modal borders, hand font on subtitle, terracotta primary button — matches comic-strip modal pattern.
+
+**VOICE.md:** Copy uses "blend stats into a weighted composite", "Never Mind", "ask Octo in film room" — no "AI" in user-facing strings.
+
+**Reddit test:** Screenshot-worthy — custom formula column with player names is exactly what r/DynastyFF shares for "my metric" posts. Bot-fact: future `!razzle confirm` on composite top player.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 30
+
+**Opus/Codex/Composer:** keep — Explore L3 formula builder MVP advances PARITY row with hallway Room wire.
+
+**Score:** depth+hallway+reddit+voice | **keep**
+

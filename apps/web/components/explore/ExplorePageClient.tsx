@@ -5,34 +5,50 @@ import { loadingCopyForAgent } from "@razzle/agents";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { runScreener } from "@/lib/api";
 import {
   defaultSortForUniverse,
   exploreParsers,
   type ExploreUniverse,
 } from "@/lib/explore-params";
+import {
+  enrichRowsWithFormulas,
+  formulaColumnKey,
+  loadFormulas,
+  type SavedFormula,
+} from "@/lib/formulas";
 import { ExploreFeed } from "./ExploreFeed";
 import { ExploreShareButton } from "./ExploreShareButton";
 import { ExploreTable } from "./ExploreTable";
+import { FormulaBuilder } from "./FormulaBuilder";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
 
 export function ExplorePageClient() {
   const [params, setParams] = useQueryStates(exploreParsers);
+  const [formulas, setFormulas] = useState<SavedFormula[]>([]);
+  const [formulaOpen, setFormulaOpen] = useState(false);
   const universe = params.universe as ExploreUniverse;
-  const sortKey =
+  const apiSortKey =
     universe === "college" && params.sort === "fantasy_points_ppr"
       ? "total_yards"
-      : params.sort;
+      : params.sort.startsWith("formula_")
+        ? defaultSortForUniverse(universe)
+        : params.sort;
+  const sortKey = params.sort;
 
   useEffect(() => {
     document.body.classList.toggle("college-mode", universe === "college");
     return () => document.body.classList.remove("college-mode");
   }, [universe]);
 
+  useEffect(() => {
+    setFormulas(loadFormulas());
+  }, []);
+
   const query = useQuery({
-    queryKey: ["screener", params, sortKey],
+    queryKey: ["screener", params, apiSortKey],
     queryFn: () =>
       runScreener({
         search: params.q,
@@ -41,7 +57,7 @@ export function ExplorePageClient() {
         ),
         teams: params.team,
         season: params.season || 0,
-        sort_key: sortKey,
+        sort_key: apiSortKey,
         sort_direction: params.dir,
         limit: params.limit,
         offset: 0,
@@ -52,6 +68,18 @@ export function ExplorePageClient() {
         universe,
       }),
   });
+
+  const displayRows = useMemo(() => {
+    if (!query.data?.items) return [];
+    let rows = enrichRowsWithFormulas(query.data.items, formulas);
+    if (sortKey.startsWith("formula_")) {
+      const dir = params.dir === "asc" ? 1 : -1;
+      rows = [...rows].sort(
+        (a, b) => dir * (Number(a[sortKey] ?? 0) - Number(b[sortKey] ?? 0)),
+      );
+    }
+    return rows;
+  }, [query.data?.items, formulas, sortKey, params.dir]);
 
   function togglePosition(pos: string) {
     const next = params.pos.includes(pos) ? params.pos.filter((p) => p !== pos) : [...params.pos, pos];
@@ -72,6 +100,13 @@ export function ExplorePageClient() {
       sort: key,
       dir: params.sort === key && params.dir === "desc" ? "asc" : "desc",
     });
+  }
+
+  function onFormulaSaved(next: SavedFormula[]) {
+    setFormulas(next);
+    if (next.length > 0) {
+      void setParams({ sort: formulaColumnKey(next[next.length - 1]!.name), dir: "desc" });
+    }
   }
 
   const statLabel = universe === "college" ? "college players" : "players";
@@ -148,8 +183,21 @@ export function ExplorePageClient() {
             universe === "college" ? loadingCopyForAgent("hawkeye") : "pulling film..."
           )}
         </span>
+        <button
+          type="button"
+          className="btn-chunky text-sm"
+          onClick={() => setFormulaOpen(true)}
+        >
+          + formula
+        </button>
         <ExploreShareButton universe={universe} sort={sortKey} q={params.q} pos={params.pos} />
       </div>
+
+      <FormulaBuilder
+        open={formulaOpen}
+        onClose={() => setFormulaOpen(false)}
+        onSaved={onFormulaSaved}
+      />
 
       {query.isPending && <LoadingState className="p-8" />}
       {query.isError && (
@@ -158,13 +206,14 @@ export function ExplorePageClient() {
       {query.isSuccess && (
         <>
           <ExploreTable
-            rows={query.data.items}
+            rows={displayRows}
             sortKey={sortKey}
             sortDir={params.dir}
             onSort={onSort}
             universe={universe}
+            formulas={formulas}
           />
-          <ExploreFeed rows={query.data.items} universe={universe} />
+          <ExploreFeed rows={displayRows} universe={universe} />
         </>
       )}
     </div>
