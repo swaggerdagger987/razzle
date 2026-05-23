@@ -3571,7 +3571,7 @@ Independent audit. Builder shipped OG fetch + Satori fixes.
 4. **Tests** — pytest 56 passed; npm build exit 0.
 5. **Smoke** — `/og/explore?download=1&universe=nfl&sort=fantasy_points_ppr&dir=desc&pos=RB` → 200, 1200×630 PNG.
 
-**Git gate:** pending commit in Phase 5.
+**Git gate:** commit `5c19ee1a`, working tree clean after hash log commit.
 
 **Verdict:** PASS
 
