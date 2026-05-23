@@ -11,20 +11,29 @@ export const SPRITE_GRID = 2;
 export const WALK_FRAMES = [0, 1, 2, 3] as const;
 export const ANIM_MS = 150;
 
-export type AgentId = "razzle" | "octo" | "bones";
+/** Aligned with @razzle/agents — all six staff walk the floor */
+export type AgentId = "razzle" | "dolphin" | "hawkeye" | "bones" | "octo" | "atlas";
 export type AgentAnim = "idle" | "walk";
 export type AgentStateKind = "idle" | "walk" | "work";
 
+export const AGENT_IDS: AgentId[] = ["razzle", "dolphin", "hawkeye", "bones", "octo", "atlas"];
+
 export const AGENT_SPRITE_PREFIX: Record<AgentId, string> = {
   razzle: "razzle",
-  octo: "quant",
-  bones: "historian",
+  dolphin: "dolphin",
+  hawkeye: "hawkeye",
+  bones: "bones",
+  octo: "octo",
+  atlas: "atlas",
 };
 
 export const AGENT_LABELS: Record<AgentId, string> = {
   razzle: "Razzle",
-  octo: "Octo",
+  dolphin: "Dr. Dolphin",
+  hawkeye: "Hawkeye",
   bones: "Bones",
+  octo: "Octo",
+  atlas: "Atlas",
 };
 
 export const PALETTE = {
@@ -46,7 +55,10 @@ export const TABLE_RECT = { x: 9, y: 5, w: 6, h: 4 };
 
 /** Desk tiles agents walk to when working */
 export const WORK_TILES: Record<AgentId, { x: number; y: number }> = {
-  razzle: { x: 8, y: 10 },
-  octo: { x: 14, y: 6 },
+  razzle: { x: 3, y: 10 },
+  dolphin: { x: 6, y: 10 },
+  hawkeye: { x: 18, y: 8 },
   bones: { x: 11, y: 12 },
+  octo: { x: 14, y: 6 },
+  atlas: { x: 20, y: 11 },
 };

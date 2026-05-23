@@ -4,7 +4,14 @@ import { AGENT_SPRITE_PREFIX } from "./constants";
 export type SpriteSheets = Record<AgentId, Partial<Record<AgentAnim, HTMLImageElement>>>;
 
 export async function loadSpriteSheets(assetBase: string): Promise<SpriteSheets> {
-  const sheets: SpriteSheets = { razzle: {}, octo: {}, bones: {} };
+  const sheets: SpriteSheets = {
+    razzle: {},
+    dolphin: {},
+    hawkeye: {},
+    bones: {},
+    octo: {},
+    atlas: {},
+  };
   const loads: Promise<void>[] = [];
 
   for (const id of Object.keys(AGENT_SPRITE_PREFIX) as AgentId[]) {

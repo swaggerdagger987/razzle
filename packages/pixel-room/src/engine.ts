@@ -86,9 +86,12 @@ function createAgent(id: AgentId, tileX: number, tileY: number): RoomAgent {
 
 export function createDefaultAgents(): RoomAgent[] {
   return [
-    createAgent("razzle", 5, 9),
-    createAgent("octo", 16, 8),
-    createAgent("bones", 12, 11),
+    createAgent("razzle", 4, 9),
+    createAgent("dolphin", 7, 10),
+    createAgent("hawkeye", 17, 8),
+    createAgent("bones", 10, 11),
+    createAgent("octo", 15, 7),
+    createAgent("atlas", 19, 10),
   ];
 }
 

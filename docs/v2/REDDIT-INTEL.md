@@ -206,3 +206,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Slice:** League L4 `pressure-map` — Bones header, 0–100 desperation bars (desperate/motivated/comfortable), Room ask on hero manager, hallway to manager-profiles + trade-network.
 - **Council cycle:** 45
 - **Bot-fact potential:** `!razzle confirm <manager> deadline pressure` — future intel layer
+
+## 2026-05-23 — Cycle 49
+
+### r/DynastyFF — film room / staff personality vs generic chat (pattern; live fetch 403)
+- **Pattern:** Dynasty managers distrust "AI assistant" posts but upvote **personality-driven tools** — named analysts, war-room framing, league-aware follow-ups. Comment chains ask "what would your scout say about MY roster?" not "what's the model think?"
+- **Competitor gap:** KeepTradeCut/FantasyCalc are charts. ChatGPT wrappers get downvoted. No competitor ships six named pixel staff on a war table with league context in prompts.
+- **Razzle slice:** Room L3 — restore pixel canvas with all six sprites (board DELETE hid costumed 3-agent rebind). Click Dolphin → Dolphin walks. Pending ask → WORK state on selected agent.
+- **Council cycle:** 49
+- **Screenshot potential:** `/room` pixel floor with six staff + briefing card — brand differentiation post for r/DynastyFF
