@@ -150,6 +150,16 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 36
 - **Bot-fact potential:** `!razzle confirm <player> PPR Workhorse rank on efficiency panel` — future intel layer
 
+## 2026-05-23 — Cycle 39
+
+### r/DynastyFF — dynasty rankings vs custom composite (pattern; live fetch 403)
+- **Pattern:** Trade-value tier posts ("Tier 2 WRs") get challenged in comments — "my model ranks him Tier 1" with weighted PPR/target-share composites. Managers screenshot **side-by-side dynasty value vs custom model** when debating sell windows.
+- **Competitor framing:** KeepTradeCut tiers, FantasyCalc, DynastyProcess custom scoring — users export screener weights then manually re-rank in spreadsheets; friction kills screenshot velocity.
+- **Razzle gap:** Cycles 36–37 wired `FormulaPanelBar` on efficiency + breakouts; dynasty rankings (Octo-owned, highest-traffic pro panel) still fixed to API tiers only.
+- **Slice:** Lab L3 — `FormulaPanelBar` on rankings panel, composite re-sort flat list + formula score column, Octo Room ask with composite name.
+- **Council cycle:** 39
+- **Bot-fact potential:** `!razzle confirm <player> PPR Workhorse rank vs dynasty tier` — future intel layer
+
 ## 2026-05-23 — Cycle 34
 
 ### r/DynastyFF — community composite / formula store workflow (pattern; live fetch 403)

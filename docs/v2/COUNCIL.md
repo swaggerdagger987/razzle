@@ -1972,3 +1972,80 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 ## Score — Cycle 37
 
 **Score:** depth+hallway+simplicity | **keep**
+
+---
+
+## Council — Cycle 39
+
+### Opus — Cycle 39 (Reddit intel)
+**Re: Cycle 37** — Breakouts formula sort closed the Hawkeye L3 gap but dynasty rankings (Octo, highest-traffic pro panel) still shows fixed API tiers. Reddit trade threads challenge tier posts with custom composites — "my PPR Workhorse model ranks him Tier 1."
+
+**Re: Codex** — Reuse `FormulaPanelBar` + `panel-formula-sort.ts` verbatim on `DynastyRankingsRenderer` only. Veto wiring all remaining launch-10 panels this cycle. Veto League L3 behavioral backend — no hallway evidence path yet.
+
+**Re: Composer** — When formula active, flatten tiers → composite-sorted flat list with rank numbers; keep tier view on panel default. Octo Room ask must include composite name + dynasty value mismatch framing.
+
+**Pillar:** Lab · **Layer:** L3 · **Slice:** dynasty-rankings panel — screener composites re-sort tier list
+
+**Hallway checklist:**
+- [x] `playerIdentityConsistent` — Player Sheet click on sorted rows
+- [x] `leagueContextGlobal` — context bar unchanged
+- [x] `agentPromptWired` — Octo Room ask includes composite name when active
+- [x] `crossRoomLinkPresent` — FormulaPanelBar → `/explore`; Octo `toRoom` footer
+- [x] `agentRegistryAligned` — Octo via `panelAgent('rankings')`
+- [x] `dolphinReachable` — durability → Dolphin links on age ≥28 rows preserved
+
+**Acceptance checks:** Gates 0–4; `/lab/rankings` shows FormulaPanelBar; selecting composite re-sorts flat ranked list + formula score column; pytest 35 pass (2 pre-existing snapshot fails); build exit 0.
+
+**NOT this cycle:** Formula bar on trade-values/buysell/aging, League L3 behavioral profiles, Explore L5 agent margin notes
+
+**Vote:** SHIP
+
+### Codex — Cycle 39
+**Re: Opus** — Correct third panel in L3 formula chain — completes Octo-owned rankings without horizontal churn. **Re: Composer** — Veto if you extract `renderPlayerRow` to a shared component file or add a `useDynastyFormulaSort` hook — inline helper in one renderer is enough (Karpathy YAGNI, same as cycle 37).
+
+**Vote:** SHIP
+
+### Composer — Cycle 39
+**Re: Opus** — Reddit intel confirms tier-vs-composite debate is screenshot-worthy. **Re: Codex** — Shipped formula sort in `DynastyRankingsRenderer.tsx` only; `renderPlayerRow` stays local; no new abstractions.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 39
+
+**Diff review:**
+- `DynastyRankingsRenderer.tsx` — mirrors BreakoutsRenderer formula wiring; `flattenPlayers` helper; bounded compare fetch via existing `/api/players/compare`; formula mode shows flat ranked list capped at 60 rows
+- No new API routes, no god file growth, hooks before early returns
+
+**Karpathy:** Would a senior engineer call this overcomplicated? No — copy-paste of proven cycle 36–37 pattern into one file; local `renderPlayerRow` avoids premature shared component.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures (`test_screener_snapshot.py`)
+
+**npm run build:** exit 0
+
+**Localhost:** `/api/health` 200; build includes `/lab/rankings` static path
+
+**Verdict:** PASS
+
+**Git gate:** pending commit — verify clean after Phase 5
+
+---
+
+## Brand — Cycle 39
+
+**DESIGN.md:** Chunky tier blocks, orange formula score column, hand font "pulling composite scores…" — matches Lab panel aesthetic.
+
+**VOICE.md:** "Sort by composite", "Sorted by {name}", "tier mismatch or buy window?" — no "AI" in user-facing strings.
+
+**Reddit test:** Screenshot-worthy — dynasty tiers re-sorted by imported PPR Workhorse composite with rank numbers is exactly the tier-debate workflow from r/DynastyFF.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 39
+
+**Opus/Codex/Composer:** keep — Lab L3 dynasty-rankings formula sort advances DEPTH with Explore hallway link.
+
+**Score:** depth+hallway+reddit+voice | **keep**

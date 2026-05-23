@@ -7,14 +7,21 @@ import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import type { SavedFormula } from "@/lib/formulas";
+import {
+  fetchPlayerStatsForFormula,
+  sortPlayersByFormula,
+  type WithFormulaScore,
+} from "@/lib/panel-formula-sort";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
-interface PlayerRow {
+interface PlayerRow extends WithFormulaScore {
   player_id: string;
   full_name: string;
   position: string;
@@ -46,9 +53,15 @@ interface Props {
   panel: PanelDefinition;
 }
 
+function flattenPlayers(data: RankingsData): PlayerRow[] {
+  if (data.players?.length) return data.players;
+  return (data.tiers ?? []).flatMap((t) => t.players);
+}
+
 export function DynastyRankingsRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("");
+  const [formula, setFormula] = useState<SavedFormula | null>(null);
   const agent = panelAgent(panel.slug);
 
   const q = useQuery({
@@ -68,11 +81,21 @@ export function DynastyRankingsRenderer({ panel }: Props) {
     },
   });
 
-  const topPlayer = useMemo(() => {
-    const data = q.data;
-    if (!data?.players?.length) return null;
-    return data.players[0]!;
-  }, [q.data]);
+  const rawPlayers = useMemo(() => (q.data ? flattenPlayers(q.data) : []), [q.data]);
+  const playerIds = useMemo(() => rawPlayers.map((p) => p.player_id), [rawPlayers]);
+
+  const statsQ = useQuery({
+    queryKey: ["panel-formula-stats", panel.slug, q.data?.season, playerIds, formula?.name],
+    queryFn: () => fetchPlayerStatsForFormula(playerIds, q.data?.season ?? 0),
+    enabled: Boolean(formula && playerIds.length),
+  });
+
+  const sortedPlayers = useMemo(() => {
+    if (!formula || !statsQ.data) return rawPlayers;
+    return sortPlayersByFormula(rawPlayers, statsQ.data, formula);
+  }, [formula, rawPlayers, statsQ.data]);
+
+  const topPlayer = sortedPlayers[0] ?? null;
 
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
@@ -106,9 +129,78 @@ export function DynastyRankingsRenderer({ panel }: Props) {
   const data = q.data!;
   const tiers = data.tiers ?? [];
 
+  const renderPlayerRow = (p: PlayerRow, rank?: number) => {
+    const age = p.age != null ? Number(p.age) : null;
+    const durabilityFlag = age != null && age >= 28;
+    return (
+      <li key={p.player_id} className="flex flex-wrap items-center gap-2 py-1">
+        {rank != null && (
+          <span className="text-ink-medium text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+            #{rank}
+          </span>
+        )}
+        <button
+          type="button"
+          className="font-bold underline-offset-2 hover:underline"
+          onClick={() =>
+            openPlayer({
+              playerId: p.player_id,
+              slug: slugify(p.full_name),
+              name: p.full_name,
+              position: p.position,
+              team: p.team,
+            })
+          }
+        >
+          {p.full_name}
+        </button>
+        <PositionPill position={p.position as "QB" | "RB" | "WR" | "TE"} />
+        <span className="text-ink-medium text-xs">{p.team}</span>
+        {age != null && (
+          <span className="text-ink-medium text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+            {age.toFixed(1)}y
+          </span>
+        )}
+        {formula && (
+          <span className="text-orange text-xs font-bold" style={{ fontFamily: "var(--font-mono)" }}>
+            {p.formula_score != null ? p.formula_score.toFixed(1) : "—"}
+          </span>
+        )}
+        {!formula && (
+          <span className="text-orange text-xs font-bold" style={{ fontFamily: "var(--font-mono)" }}>
+            {p.dynasty_value != null ? p.dynasty_value.toFixed(1) : "—"}
+          </span>
+        )}
+        {durabilityFlag && (
+          <Link
+            href={
+              toRoom({
+                agentId: "dolphin",
+                panelSlug: "rankings",
+                question: `${p.full_name}: durability and injury risk for dynasty?`,
+              }) as Route
+            }
+            className="text-xs text-purple underline"
+            title="Ask Dr. Dolphin about durability"
+          >
+            durability →
+          </Link>
+        )}
+      </li>
+    );
+  };
+
   return (
     <div className="dynasty-rankings">
       <PanelAgentHeader agent={agent} slug={panel.slug} />
+
+      <FormulaPanelBar selected={formula} onSelect={setFormula} panelSlug={panel.slug} />
+
+      {formula && statsQ.isFetching && (
+        <p className="text-ink-medium mb-2 text-xs" style={{ fontFamily: "var(--font-hand)" }}>
+          pulling composite scores…
+        </p>
+      )}
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (
@@ -127,11 +219,25 @@ export function DynastyRankingsRenderer({ panel }: Props) {
 
       {data.season && (
         <p className="text-ink-medium mb-4 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {data.total ?? 0} players · {data.season} season · PPR dynasty value
+          {data.total ?? 0} players · {data.season} season ·{" "}
+          {formula ? `${formula.name} composite` : "PPR dynasty value"}
         </p>
       )}
 
-      {!tiers.length ? (
+      {formula ? (
+        !sortedPlayers.length ? (
+          <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        ) : (
+          <section className="tier-block chunky bg-bg-card p-4">
+            <h3 className="tier-label" style={{ fontFamily: "var(--font-display)" }}>
+              Sorted by {formula.name}
+            </h3>
+            <ul className="tier-players">
+              {sortedPlayers.slice(0, 60).map((p, i) => renderPlayerRow(p, i + 1))}
+            </ul>
+          </section>
+        )
+      ) : !tiers.length ? (
         <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
       ) : (
         <div className="tier-stack">
@@ -140,56 +246,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
               <h3 className="tier-label" style={{ fontFamily: "var(--font-display)" }}>
                 {tier.label}
               </h3>
-              <ul className="tier-players">
-                {tier.players.map((p) => {
-                  const age = p.age != null ? Number(p.age) : null;
-                  const durabilityFlag = age != null && age >= 28;
-                  return (
-                    <li key={p.player_id} className="flex flex-wrap items-center gap-2 py-1">
-                      <button
-                        type="button"
-                        className="font-bold underline-offset-2 hover:underline"
-                        onClick={() =>
-                          openPlayer({
-                            playerId: p.player_id,
-                            slug: slugify(p.full_name),
-                            name: p.full_name,
-                            position: p.position,
-                            team: p.team,
-                          })
-                        }
-                      >
-                        {p.full_name}
-                      </button>
-                      <PositionPill position={p.position as "QB" | "RB" | "WR" | "TE"} />
-                      <span className="text-ink-medium text-xs">{p.team}</span>
-                      {age != null && (
-                        <span className="text-ink-medium text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-                          {age.toFixed(1)}y
-                        </span>
-                      )}
-                      <span className="text-orange text-xs font-bold" style={{ fontFamily: "var(--font-mono)" }}>
-                        {p.dynasty_value != null ? p.dynasty_value.toFixed(1) : "—"}
-                      </span>
-                      {durabilityFlag && (
-                        <Link
-                          href={
-                            toRoom({
-                              agentId: "dolphin",
-                              panelSlug: "rankings",
-                              question: `${p.full_name}: durability and injury risk for dynasty?`,
-                            }) as Route
-                          }
-                          className="text-xs text-purple underline"
-                          title="Ask Dr. Dolphin about durability"
-                        >
-                          durability →
-                        </Link>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
+              <ul className="tier-players">{tier.players.map((p) => renderPlayerRow(p))}</ul>
             </section>
           ))}
         </div>
@@ -202,7 +259,9 @@ export function DynastyRankingsRenderer({ panel }: Props) {
               toRoom({
                 agentId: "octo",
                 panelSlug: "rankings",
-                question: `Where does ${topPlayer.full_name} rank in dynasty value vs ${topPlayer.position} peers?`,
+                question: formula
+                  ? `${topPlayer.full_name} leads ${formula.name} (${topPlayer.formula_score?.toFixed(1) ?? "?"}) but dynasty value is ${topPlayer.dynasty_value?.toFixed(1) ?? "?"} — tier mismatch or buy window?`
+                  : `Where does ${topPlayer.full_name} rank in dynasty value vs ${topPlayer.position} peers?`,
               }) as Route
             }
             className="text-sm text-orange underline"
