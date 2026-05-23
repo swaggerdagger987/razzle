@@ -1767,7 +1767,7 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Verdict:** PASS
 
-**Git gate:** 312f3016 — working tree clean after commit
+**Git gate:** 86d02f40 — working tree clean after commit
 
 ---
 
