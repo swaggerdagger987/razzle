@@ -1,7 +1,7 @@
 # Evidence — Explore L2 college margin notes
 
 **Cycle:** 54  
-**Commit:** pending  
+**Commit:** 5a2dedb (code: 800309f)  
 **Pillar:** Explore  
 **Layer:** L2
 
