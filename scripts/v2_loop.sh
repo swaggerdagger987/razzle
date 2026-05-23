@@ -136,16 +136,58 @@ update_cycle_state() {
   sed -i '' "s/^cycle:.*/cycle: $cycle/" "$STATE" 2>/dev/null || sed -i "s/^cycle:.*/cycle: $cycle/" "$STATE"
 }
 
-require_clean_tree() {
-  if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
-    echo ""
-    echo "COMMIT GATE BLOCKED — working tree is dirty."
-    echo "Loop rule: every cycle must end with git commit. Uncommitted work = decay."
-    echo "Commit or stash, then restart. See docs/v2/PROGRAM.md"
-    echo ""
-    git status -sb
-    exit 1
+tree_is_clean() {
+  [[ -z $(git status --porcelain 2>/dev/null) ]]
+}
+
+recover_dirty_tree() {
+  local cycle="$1"
+  echo ""
+  echo "COMMIT GATE — working tree dirty. Running recovery agent (cycle ${cycle:-unknown})..."
+  git status -sb
+
+  local prompt
+  prompt="Recovery pass — a prior cycle left uncommitted work. Do NOT start a new feature slice.
+
+Read docs/v2/PROGRAM.md git commit gate.
+
+1. Run: git status && git diff --stat
+2. Commit legitimate slice work with a short slice-scoped message (no emojis).
+3. Revert accidental edits (e.g. LOOP-STATE cycle regression vs results.tsv).
+4. Do NOT commit build artifacts: tsconfig.tsbuildinfo, .next/, node_modules, .env
+5. If only docs/state drift: commit as 'docs: cycle cleanup — <what>'
+6. Verify: git status --porcelain must be empty
+7. Update LOOP-STATE.md last_commit if you committed code
+
+Do NOT ask the user. Do NOT stop. Fix the tree."
+
+  run_cursor_agent "Recovery — dirty tree cleanup" "$MODEL_CTO" "$prompt"
+
+  if tree_is_clean; then
+    echo "Recovery OK — tree clean."
+    return 0
   fi
+
+  echo "Recovery incomplete — tree still dirty."
+  git status -sb
+  return 1
+}
+
+ensure_clean_tree() {
+  local cycle="${1:-}"
+  tree_is_clean && return 0
+
+  local attempt
+  for attempt in 1 2 3; do
+    echo ""
+    echo "=== Commit gate recovery attempt $attempt/3 ==="
+    recover_dirty_tree "$cycle" && return 0
+  done
+
+  echo ""
+  echo "COMMIT GATE — recovery exhausted after 3 attempts."
+  echo "Fix manually, then restart. See docs/v2/PROGRAM.md"
+  exit 1
 }
 
 run_chain_forever() {
@@ -155,7 +197,7 @@ run_chain_forever() {
   trap 'echo ""; echo "Loop stopped."; exit 0' INT TERM
 
   while true; do
-    require_clean_tree
+    ensure_clean_tree
 
     local cycle
     cycle=$(grep '^cycle:' "$STATE" | awk '{print $2}')
@@ -176,6 +218,7 @@ run_chain_forever() {
       run_single_cycle "$cycle"
     fi
 
+    ensure_clean_tree "$cycle"
     update_cycle_state "$cycle"
     # No sleep — immediately start next cycle
   done

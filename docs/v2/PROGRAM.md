@@ -95,7 +95,7 @@ Fix hook/lint errors and commit again. Do **not** start the next cycle with unco
 
 ### Shell enforcement
 
-`./scripts/v2_loop.sh --continuous` **blocks** the next cycle if the working tree is dirty. Commit or stash first.
+`./scripts/v2_loop.sh --continuous` runs a **recovery agent** (Codex) if the tree is dirty at cycle start or after a cycle completes — commit legitimate work, revert bad drift, verify clean. Only exits after 3 failed recovery attempts.
 
 ---
 

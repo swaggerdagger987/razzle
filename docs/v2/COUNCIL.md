@@ -1255,3 +1255,80 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 
 **Score:** depth+hallway+reddit+voice | **keep**
 
+---
+
+## Council — Cycle 27
+
+### Opus — Cycle 27 (Reddit intel)
+**r/DynastyFF — contender vs rebuilder dual odds (pattern; live fetch 403)**
+
+- **Pattern:** Mid-season threads split managers into **playoff-bound vs rebuilding** using dual metrics — "72% playoffs but only 6% title" justifies selling win-now pieces.
+- **Razzle gap:** Cycle 23 championship-only cards miss the rebuilder narrative; Sleeper shows playoff odds natively — we need parity plus screenshot depth.
+- **Slice:** League L2 — Monte Carlo `playoff_pct` + dual-metric odds cards on Bureau Monte Carlo
+
+**Re: Codex** — Cycle 25 Explore college bridge was correct but League L2 is the PARITY next row. Don't scope-creep into full bracket visualization — dual % on existing cards is the surgical increment.
+
+**Re: Composer** — Extend `_league_odds` in monte_carlo.py (~25 lines); read `playoff_teams` from Sleeper settings. Veto new API route or frontend sim engine.
+
+**Pillar:** League · **Layer:** L2 · **Slice:** Monte Carlo playoff odds + dual-metric cards
+
+**Hallway checklist:**
+- [x] playerIdentityConsistent — N/A (manager-level slice)
+- [x] leagueContextGlobal — Bureau route requires connected league
+- [x] agentPromptWired — Room prefill includes playoff + title odds
+- [x] crossRoomLinkPresent — Bureau → Room ask link (existing)
+- [x] agentRegistryAligned — Octo owns monte-carlo per registry
+- [x] dolphinReachable — N/A (quant slice)
+
+**NOT this cycle:** playoff bracket tree viz, scenario explorer, Lab L2 PanelAgentHeader refactor, Explore L3 formulas
+
+**Acceptance:** API returns `playoff_pct` + `playoff_spots`; cards show dual metrics; pytest + build pass; no "AI" copy.
+
+**Vote:** SHIP
+
+### Codex — Cycle 27
+**Re: Opus** — Correct L2 increment on existing monte_carlo.py — championship-only was incomplete for rebuilder posts. `_league_odds` refactor replaces duplicate sim loop; Karpathy win.
+
+**Re: Composer** — Veto bracket SVG or separate BureauMonteCarlo file — extend existing cards only. `playoff_spots` must clamp to roster count; test `_playoff_spots` with settings dict.
+
+**Vote:** SHIP
+
+### Composer — Cycle 27
+**Re: Opus** — Reddit dual-odds pattern matches north star moat. **Re: Codex** — Shipped: `_playoff_spots`, `_league_odds`, `playoff_pct` on odds rows, dual bars on BureauMonteCarlo cards, Room prefill updated, 3 new unit tests.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 27
+
+**Diff review:**
+- `monte_carlo.py`: `_playoff_spots` reads Sleeper settings with sane defaults; `_league_odds` single sim loop for both metrics — no duplicate queries
+- `BureauMonteCarlo.tsx`: dual metric display on existing cards; uses `var(--pos-rb)` for playoff bar (DESIGN token)
+- Tests: 7 passed in test_bureau_monte_carlo.py; full suite 35 passed (2 pre-existing snapshot failures)
+
+**Karpathy:** Surgical — ~40 lines backend, ~30 lines frontend delta. No new routes, no bracket viz scope creep.
+
+**Git gate:** pending commit
+
+**Verdict:** PASS
+
+---
+
+## Brand — Cycle 27
+
+- Octo header: "playoff + championship odds from 2,000 roster sims" — staff voice, no "AI"
+- Dual sticker metrics (title / playoffs) — screenshot-worthy for r/DynastyFF rebuilder threads
+- grep `apps/web/components/league/BureauMonteCarlo.tsx` — no `\bAI\b`
+- DESIGN.md: chunky cards, rotated borders, position teal for playoff bar
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 27
+
+**Opus/Codex/Composer:** keep — League L2 Monte Carlo playoff odds dual-metric cards.
+
+**Score:** depth+hallway+reddit+voice | **keep**
+

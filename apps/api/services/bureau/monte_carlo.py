@@ -81,15 +81,30 @@ def _sample_score(mean: float, stddev: float, floor: float, ceiling: float) -> f
     return max(floor, min(ceiling, mean + z * stddev))
 
 
-def _championship_odds(
+def _playoff_spots(total_rosters: int, settings: dict[str, Any]) -> int:
+    raw = settings.get("playoff_teams") or settings.get("playoff_team_total")
+    if raw is not None:
+        try:
+            spots = int(raw)
+            if spots >= 2:
+                return min(spots, max(2, total_rosters))
+        except (TypeError, ValueError):
+            pass
+    return max(4, total_rosters // 2) if total_rosters >= 8 else max(2, total_rosters - 1)
+
+
+def _league_odds(
     by_roster: dict[int, list[dict[str, float]]],
+    playoff_spots: int,
     sims: int = 2000,
-) -> dict[int, float]:
-    """Sample roster totals; highest total wins each sim. Returns championship % per roster_id."""
+) -> tuple[dict[int, float], dict[int, float]]:
+    """Sample roster totals; return championship % and playoff % per roster_id."""
     if not by_roster:
-        return {}
+        return {}, {}
     roster_ids = list(by_roster.keys())
-    wins: Counter[int] = Counter()
+    spots = min(max(2, playoff_spots), len(roster_ids))
+    champ_wins: Counter[int] = Counter()
+    playoff_wins: Counter[int] = Counter()
     for _ in range(sims):
         totals = {
             rid: sum(
@@ -99,9 +114,21 @@ def _championship_odds(
             )
             for rid, players in by_roster.items()
         }
-        winner = max(roster_ids, key=lambda rid: totals.get(rid, 0))
-        wins[winner] += 1
-    return {rid: round(wins[rid] / sims * 100, 1) for rid in roster_ids}
+        ranked = sorted(roster_ids, key=lambda rid: totals.get(rid, 0), reverse=True)
+        champ_wins[ranked[0]] += 1
+        for rid in ranked[:spots]:
+            playoff_wins[rid] += 1
+    champ = {rid: round(champ_wins[rid] / sims * 100, 1) for rid in roster_ids}
+    playoff = {rid: round(playoff_wins[rid] / sims * 100, 1) for rid in roster_ids}
+    return champ, playoff
+
+
+def _championship_odds(
+    by_roster: dict[int, list[dict[str, float]]],
+    sims: int = 2000,
+) -> dict[int, float]:
+    champ, _ = _league_odds(by_roster, playoff_spots=max(2, len(by_roster) // 2), sims=sims)
+    return champ
 
 
 def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
@@ -154,13 +181,15 @@ def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
                 }
             )
 
-    champ_pct = _championship_odds(by_roster)
+    playoff_spots = _playoff_spots(ctx.total_rosters, ctx.settings)
+    champ_pct, playoff_pct = _league_odds(by_roster, playoff_spots)
     odds = sorted(
         [
             {
                 "roster_id": rid,
                 "manager": manager_names.get(rid, f"Team {rid}"),
                 "championship_pct": champ_pct.get(rid, 0.0),
+                "playoff_pct": playoff_pct.get(rid, 0.0),
                 "roster_power": round(
                     sum(p["mean"] for p in by_roster.get(rid, []) if p["mean"] > 0),
                     1,
@@ -179,5 +208,6 @@ def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
         "projections": projections,
         "players_with_stats": with_stats,
         "odds": odds,
+        "playoff_spots": playoff_spots,
         "simulations": 2000,
     }

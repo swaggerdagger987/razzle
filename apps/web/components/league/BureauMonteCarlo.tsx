@@ -14,6 +14,7 @@ type OddsRow = {
   roster_id: number;
   manager: string;
   championship_pct: number;
+  playoff_pct: number;
   roster_power: number;
 };
 
@@ -27,6 +28,7 @@ export function BureauMonteCarlo({ data }: Props) {
   const octo = AGENT_BY_ID.octo;
   const odds = (data.odds as OddsRow[]) ?? [];
   const sims = Number(data.simulations ?? 2000);
+  const playoffSpots = Number(data.playoff_spots ?? 6);
   const withStats = Number(data.players_with_stats ?? 0);
   const top = odds[0] ?? null;
 
@@ -54,7 +56,7 @@ export function BureauMonteCarlo({ data }: Props) {
               {octo.name} · {octo.role}
             </p>
             <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              championship odds from {sims.toLocaleString()} roster sims
+              playoff + championship odds from {sims.toLocaleString()} roster sims
             </p>
           </div>
         </div>
@@ -62,7 +64,7 @@ export function BureauMonteCarlo({ data }: Props) {
           Monte Carlo
         </h1>
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {String(data.season ?? "")} season · {withStats} players with weekly tape
+          {String(data.season ?? "")} season · top {playoffSpots} make playoffs · {withStats} players with weekly tape
         </p>
       </header>
 
@@ -82,23 +84,43 @@ export function BureauMonteCarlo({ data }: Props) {
                   #{i + 1}
                 </span>
               </div>
-              <p className="text-3xl text-orange" style={{ fontFamily: "var(--font-display)" }}>
-                {o.championship_pct}%
-              </p>
-              <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-                championship
-              </p>
-              <div
-                className="mt-2 h-3 border-2 border-ink bg-bg"
-                role="presentation"
-              >
-                <div
-                  className="h-full"
-                  style={{
-                    width: `${Math.min(100, o.championship_pct * 2)}%`,
-                    background: barColor(o.championship_pct),
-                  }}
-                />
+              <div className="flex items-end gap-4">
+                <div>
+                  <p className="text-3xl text-orange" style={{ fontFamily: "var(--font-display)" }}>
+                    {o.championship_pct}%
+                  </p>
+                  <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                    title
+                  </p>
+                </div>
+                <div>
+                  <p className="text-2xl" style={{ fontFamily: "var(--font-display)", color: "var(--pos-rb)" }}>
+                    {o.playoff_pct ?? 0}%
+                  </p>
+                  <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                    playoffs
+                  </p>
+                </div>
+              </div>
+              <div className="mt-2 flex flex-col gap-1" role="presentation">
+                <div className="h-2 border-2 border-ink bg-bg">
+                  <div
+                    className="h-full"
+                    style={{
+                      width: `${Math.min(100, o.championship_pct * 2)}%`,
+                      background: barColor(o.championship_pct),
+                    }}
+                  />
+                </div>
+                <div className="h-2 border-2 border-ink bg-bg">
+                  <div
+                    className="h-full"
+                    style={{
+                      width: `${Math.min(100, o.playoff_pct ?? 0)}%`,
+                      background: "var(--pos-rb)",
+                    }}
+                  />
+                </div>
               </div>
               <p className="text-ink-medium mt-2 text-xs" style={{ fontFamily: "var(--font-mono)" }}>
                 roster power {o.roster_power}
@@ -119,7 +141,7 @@ export function BureauMonteCarlo({ data }: Props) {
           href={
             toRoom({
               agentId: "octo",
-              question: `${top.manager} leads at ${top.championship_pct}% championship odds — what moves the needle?`,
+              question: `${top.manager} leads at ${top.championship_pct}% title / ${top.playoff_pct ?? 0}% playoff odds — what moves the needle?`,
             }) as Route
           }
           className="btn-chunky w-fit text-sm"

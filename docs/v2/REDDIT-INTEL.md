@@ -88,6 +88,16 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Razzle slice:** Explore L2 college bridge — universe bar `big board →`, Player Sheet panels nudge when `?universe=college`, Hawkeye loading copy.
 - **Council cycle:** 25
 
+## 2026-05-23 — Cycle 27
+
+### r/DynastyFF — contender vs rebuilder dual odds (pattern; live fetch 403)
+- **Pattern:** Trade-deadline and mid-season threads ask "am I making playoffs or rebuilding?" — managers share **playoff % AND title %** side-by-side, not championship alone. Sleeper native shows playoff odds; dynasty managers want both metrics on one screenshot card.
+- **Competitor framing:** Sleeper playoff bracket view, FantasyPros power rankings — dual-metric sticker cards (playoffs + title) get shared when debating sell windows.
+- **Razzle gap:** Cycle 23 shipped championship-only odds cards; rebuilder posts need "68% playoffs / 4% title" framing to justify selling vets.
+- **Slice:** League L2 Bureau Monte Carlo — `playoff_pct` alongside `championship_pct`, dual bars on odds cards, `playoff_spots` from Sleeper settings.
+- **Council cycle:** 27
+- **Bot-fact potential:** `!razzle confirm <manager> playoff odds` — future intel layer
+
 
 ### r/DynastyFF — daily dynasty briefing / market pulse (pattern; live fetch 403)
 - **Pattern:** Dynasty managers want **one-screen pulse checks** — top assets, risers/fallers vs production rank, positional scarcity cliffs — before trade posts or morning Reddit threads.
