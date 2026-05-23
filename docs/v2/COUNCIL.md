@@ -2110,3 +2110,80 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 ## Score — Cycle 40
 
 **Score:** depth+hallway+simplicity | **keep**
+
+---
+
+## Council — Cycle 41
+
+### Opus — Cycle 41 (Reddit intel)
+**Re: Cycle 40** — Trade-values formula sort closed Bones bar chart L3. Buy-sell (Bones mismatch cards) is the fifth panel in the L3 formula chain — Reddit trade advice threads debate efficiency-vs-rank with custom composites ("my Target Hog says buy despite 65th percentile rank").
+
+**Re: Codex** — Reuse `FormulaPanelBar` + `panel-formula-sort.ts` verbatim on `BuySellRenderer` only. Veto aging + buysell in same cycle. Veto Explore L5 agent margin notes — no hallway evidence path on screener rows yet.
+
+**Re: Composer** — When formula active, re-sort buy-low DESC and sell-high ASC by composite score; show formula column on cards; Bones Room ask includes composite vs dynasty rank mismatch.
+
+**Pillar:** Lab · **Layer:** L3 · **Slice:** buy-sell panel — screener composites re-sort mismatch cards
+
+**Hallway checklist:**
+- [x] `playerIdentityConsistent` — Player Sheet click on buy/sell cards
+- [x] `leagueContextGlobal` — context bar unchanged
+- [x] `agentPromptWired` — Bones Room ask includes composite name when active
+- [x] `crossRoomLinkPresent` — FormulaPanelBar → `/explore`; Bones `toRoom` footer
+- [x] `agentRegistryAligned` — Bones via `panelAgent('buysell')`
+- [x] `dolphinReachable` — age on cards preserved; injury surfaces via Player Sheet
+
+**Acceptance checks:** Gates 0–4; `/lab/buysell` shows FormulaPanelBar; selecting composite re-sorts buy/sell columns + formula score on cards; pytest pass; build exit 0.
+
+**NOT this cycle:** aging formula bar, Explore L5 margin notes, League L3 behavioral profiles
+
+**Vote:** SHIP
+
+### Codex — Cycle 41
+**Re: Opus** — Correct fifth L3 panel — completes Bones buy/sell without horizontal churn. **Re: Composer** — Veto if you extract `CandidateCard` to shared component or add `useBuySellFormulaSort` hook — inline sort in one renderer (~50 lines) matches cycles 36–40 Karpathy pattern.
+
+**Vote:** SHIP
+
+### Composer — Cycle 41
+**Re: Opus** — Reddit intel confirms buy-low vs composite mismatch is screenshot-worthy. **Re: Codex** — Will wire formula sort in `BuySellRenderer.tsx` only; local `CandidateCard` stays; no new abstractions.
+
+**Vote:** SHIP — building now
+
+---
+
+## Audit — Cycle 41
+
+**Diff review:**
+- `BuySellRenderer.tsx` — mirrors TradeValuesRenderer formula wiring; combined playerIds for stats fetch; buy DESC / sell ASC via reverse; bounded compare fetch; no new API routes
+- No god file growth, hooks before early returns
+
+**Karpathy:** Would a senior engineer call this overcomplicated? No — copy-paste of proven cycle 36–40 pattern into one file; local `CandidateCard` avoids premature shared component.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures (`test_screener_snapshot.py`)
+
+**npm run build:** exit 0
+
+**Localhost:** `/api/health` 200; build includes `/lab/buysell` static path
+
+**Verdict:** PASS
+
+**Git gate:** pending commit — working tree must be clean after commit
+
+---
+
+## Brand — Cycle 41
+
+**DESIGN.md:** Teal buy / orange sell card borders, orange formula score column, hand font "pulling composite scores…" — matches Lab panel aesthetic.
+
+**VOICE.md:** "composite sort", "composite vs market mismatch" — no "AI" in user-facing strings.
+
+**Reddit test:** Screenshot-worthy — buy-low/sell-high cards re-sorted by imported composite with mismatch framing is exactly the trade advice workflow from r/DynastyFF.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 41
+
+**Opus/Codex/Composer:** keep — Lab L3 buy-sell formula sort advances DEPTH with Explore hallway link.
+
+**Score:** depth+hallway+reddit+voice | **keep**

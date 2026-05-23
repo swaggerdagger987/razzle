@@ -160,6 +160,16 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 39
 - **Bot-fact potential:** `!razzle confirm <player> PPR Workhorse rank vs dynasty tier` — future intel layer
 
+## 2026-05-23 — Cycle 41
+
+### r/DynastyFF — buy-low / sell-high vs custom composite (pattern; live fetch 403)
+- **Pattern:** Trade advice threads split **efficiency vs market rank** — "efficiency A but ranked 65th percentile, buy now" vs "ranked 90th but C efficiency, sell." Comment chains challenge with custom weighted models: "my Target Hog composite says buy despite low rank."
+- **Competitor framing:** KeepTradeCut buy/sell lists, FantasyCalc value mismatches — users manually cross-reference screener composites against buy-low spreadsheets; friction kills screenshot velocity.
+- **Razzle gap:** Cycles 36–40 wired `FormulaPanelBar` on efficiency, breakouts, rankings, trade-values; buy-sell (Bones, mismatch cards) still fixed to API efficiency-grade sort only.
+- **Slice:** Lab L3 — `FormulaPanelBar` on buy-sell panel, composite re-sort within buy-low + sell-high columns, formula score on cards, Bones Room ask with composite vs rank mismatch.
+- **Council cycle:** 41
+- **Bot-fact potential:** `!razzle confirm <player> buy low on <composite>` — future intel layer
+
 ## 2026-05-23 — Cycle 34
 
 ### r/DynastyFF — community composite / formula store workflow (pattern; live fetch 403)

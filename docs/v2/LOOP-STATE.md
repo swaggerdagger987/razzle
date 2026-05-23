@@ -1,10 +1,10 @@
-cycle: 40
+cycle: 41
 phase: depth
 strategy: depth-not-breadth
 program: docs/v2/PROGRAM.md
 focus_pillar: Lab
 focus_layer: L3
-next_slice: Lab L3 buysell OR aging formula bar OR Explore L5 agent margin notes
+next_slice: Lab L3 aging formula bar OR Explore L5 agent margin notes
 hallway: docs/v2/HALLWAY.md
 results_log: docs/v2/results.tsv
 last_keep_cycle: 40
