@@ -3,7 +3,7 @@
 **Pillar:** League  
 **Layer:** L2 (connective tissue)  
 **Slice:** Bureau nav agent avatars + feature-owner loading copy  
-**Commit:** (filled after commit)
+**Commit:** 8a224532
 
 ## Changes
 
