@@ -85,6 +85,14 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           >
             ask Bones about this deal →
           </Link>
+          <Link
+            href={
+              `/league/${leagueId}/monte-carlo?give=${hero.give.player_id}&get=${hero.get.player_id}&partner=${hero.partner_roster_id}` as Route
+            }
+            className="ml-4 inline-block text-sm text-ink-medium underline"
+          >
+            re-sim odds →
+          </Link>
         </section>
       )}
 

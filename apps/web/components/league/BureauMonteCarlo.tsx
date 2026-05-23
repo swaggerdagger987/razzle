@@ -3,11 +3,15 @@
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type { Route } from "next";
+import { useEffect, useState } from "react";
+import { getSleeperUser } from "@/lib/sleeper";
 import { BureauRowsTable } from "./BureauRowsTable";
 
 interface Props {
   data: Record<string, unknown>;
+  leagueId: string;
 }
 
 type OddsRow = {
@@ -24,8 +28,40 @@ function barColor(pct: number): string {
   return "var(--red)";
 }
 
-export function BureauMonteCarlo({ data }: Props) {
+export function BureauMonteCarlo({ data, leagueId }: Props) {
   const octo = AGENT_BY_ID.octo;
+  const searchParams = useSearchParams();
+  const [scenario, setScenario] = useState<Record<string, unknown> | null>(null);
+  const giveId = searchParams.get("give");
+  const getId = searchParams.get("get");
+  const partnerRoster = searchParams.get("partner");
+
+  useEffect(() => {
+    if (!giveId || !getId || !partnerRoster) {
+      setScenario(null);
+      return;
+    }
+    const user = getSleeperUser();
+    if (!user?.user_id) return;
+
+    fetch("/api/bureau/scenario-trade", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        league_id: leagueId,
+        user_id: user.user_id,
+        give_player_id: giveId,
+        get_player_id: getId,
+        partner_roster_id: Number(partnerRoster),
+      }),
+    })
+      .then((r) => r.json())
+      .then((j) => {
+        if (!j.error) setScenario(j);
+      })
+      .catch(() => setScenario(null));
+  }, [leagueId, giveId, getId, partnerRoster]);
+
   const odds = (data.odds as OddsRow[]) ?? [];
   const sims = Number(data.simulations ?? 2000);
   const playoffSpots = Number(data.playoff_spots ?? 6);
@@ -67,6 +103,49 @@ export function BureauMonteCarlo({ data }: Props) {
           {String(data.season ?? "")} season · top {playoffSpots} make playoffs · {withStats} players with weekly tape
         </p>
       </header>
+
+      {scenario && !scenario.error && (
+        <section className="chunky bg-bg-card border-orange border-3 p-4">
+          <p className="text-xs uppercase text-orange" style={{ fontFamily: "var(--font-mono)" }}>
+            what-if trade
+          </p>
+          <p className="mt-1 text-sm" style={{ fontFamily: "var(--font-hand)" }}>
+            Send {String(scenario.give_name)} to {String(scenario.partner_team)} for {String(scenario.get_name)}.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-6" style={{ fontFamily: "var(--font-mono)" }}>
+            <div>
+              <p className="text-2xl text-orange" style={{ fontFamily: "var(--font-display)" }}>
+                {(scenario.delta as { championship_pct: number }).championship_pct >= 0 ? "+" : ""}
+                {(scenario.delta as { championship_pct: number }).championship_pct}%
+              </p>
+              <p className="text-xs text-ink-light">title odds shift</p>
+            </div>
+            <div>
+              <p className="text-2xl" style={{ fontFamily: "var(--font-display)", color: "var(--pos-rb)" }}>
+                {(scenario.delta as { playoff_pct: number }).playoff_pct >= 0 ? "+" : ""}
+                {(scenario.delta as { playoff_pct: number }).playoff_pct}%
+              </p>
+              <p className="text-xs text-ink-light">playoff odds shift</p>
+            </div>
+            <div className="text-sm text-ink-medium">
+              {(scenario.baseline as { championship_pct: number }).championship_pct}% →{" "}
+              {(scenario.scenario as { championship_pct: number }).championship_pct}% title
+            </div>
+          </div>
+          <Link
+            href={
+              toRoom({
+                agentId: "octo",
+                question: `If I trade ${scenario.give_name} for ${scenario.get_name}, title odds move ${(scenario.delta as { championship_pct: number }).championship_pct}% — worth it?`,
+                panelSlug: "monte-carlo",
+              }) as Route
+            }
+            className="mt-3 inline-block text-sm text-orange underline"
+          >
+            ask Octo about this trade →
+          </Link>
+        </section>
+      )}
 
       {odds.length > 0 && (
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

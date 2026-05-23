@@ -131,11 +131,11 @@ def _championship_odds(
     return champ
 
 
-def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
-    ctx = get_or_refresh(league_id)
-    if not ctx:
-        return {"error": "league not found"}
-
+def _build_by_roster(
+    ctx,
+    scoring: str,
+) -> tuple[dict[int, list[dict[str, Any]]], dict[int, str], int, int, list[dict[str, Any]]]:
+    """Projections grouped by roster_id (each player entry includes player_id)."""
     sleeper_ids: list[str] = []
     for roster in ctx.rosters:
         sleeper_ids.extend(str(pid) for pid in roster.players)
@@ -152,7 +152,7 @@ def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
     weekly = _weekly_stats_by_gsis(list(gsis_by_sleeper.values()), scoring, season)
 
     projections: list[dict[str, Any]] = []
-    by_roster: dict[int, list[dict[str, float]]] = {}
+    by_roster: dict[int, list[dict[str, Any]]] = {}
     manager_names: dict[int, str] = {}
     with_stats = 0
     for roster in ctx.rosters:
@@ -168,7 +168,13 @@ def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
             dist = _distribution(weeks)
             if dist["games"] > 0:
                 with_stats += 1
-            by_roster[roster.roster_id].append(dist)
+            entry = {
+                "player_id": sid,
+                "name": info.get("name") or sid,
+                "position": info.get("position"),
+                **dist,
+            }
+            by_roster[roster.roster_id].append(entry)
             projections.append(
                 {
                     "player_id": sid,
@@ -182,7 +188,23 @@ def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
             )
 
     playoff_spots = _playoff_spots(ctx.total_rosters, ctx.settings)
-    champ_pct, playoff_pct = _league_odds(by_roster, playoff_spots)
+    return by_roster, manager_names, playoff_spots, with_stats, projections
+
+
+def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
+    ctx = get_or_refresh(league_id)
+    if not ctx:
+        return {"error": "league not found"}
+
+    by_roster, manager_names, playoff_spots, with_stats, projections = _build_by_roster(ctx, scoring)
+    sim_dist = {
+        rid: [
+            {"mean": p["mean"], "stddev": p["stddev"], "floor": p["floor"], "ceiling": p["ceiling"]}
+            for p in players
+        ]
+        for rid, players in by_roster.items()
+    }
+    champ_pct, playoff_pct = _league_odds(sim_dist, playoff_spots)
     odds = sorted(
         [
             {
@@ -204,7 +226,7 @@ def monte_carlo_projections(league_id: str, scoring: str) -> dict[str, Any]:
     return {
         "league_id": league_id,
         "scoring": scoring,
-        "season": season,
+        "season": _current_season(),
         "projections": projections,
         "players_with_stats": with_stats,
         "odds": odds,

@@ -20,6 +20,7 @@ from .player_status import player_league_status
 from .manager_profiles import manager_profiles
 from .pressure_map import pressure_map
 from .trade_finder import trade_finder
+from .scenario_trade import scenario_trade
 
 __all__ = [
     "self_scout",
@@ -35,4 +36,5 @@ __all__ = [
     "manager_profiles",
     "pressure_map",
     "trade_finder",
+    "scenario_trade",
 ]

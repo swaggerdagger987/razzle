@@ -6,7 +6,7 @@ from typing import Literal
 
 from fastapi import APIRouter
 
-from ..models.bureau import H2HRef, LeagueRef, PlayerLeagueRef
+from ..models.bureau import H2HRef, LeagueRef, PlayerLeagueRef, ScenarioTradeRef
 from ..services import bureau
 
 router = APIRouter(prefix="/api/bureau", tags=["bureau"])
@@ -83,3 +83,15 @@ def pressure_map(ref: LeagueRef) -> dict:
 @router.post("/trade-finder")
 def trade_finder(ref: LeagueRef) -> dict:
     return bureau.trade_finder(league_id=ref.league_id, user_id=ref.user_id)
+
+
+@router.post("/scenario-trade")
+def scenario_trade(ref: ScenarioTradeRef) -> dict:
+    return bureau.scenario_trade(
+        league_id=ref.league_id,
+        user_id=ref.user_id,
+        give_player_id=ref.give_player_id,
+        get_player_id=ref.get_player_id,
+        partner_roster_id=ref.partner_roster_id,
+        scoring=ref.scoring,
+    )

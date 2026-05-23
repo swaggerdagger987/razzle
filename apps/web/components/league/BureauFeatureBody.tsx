@@ -17,7 +17,7 @@ interface Props {
 
 export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "self-scout") return <BureauSelfScout data={data} />;
-  if (feature === "monte-carlo") return <BureauMonteCarlo data={data} />;
+  if (feature === "monte-carlo") return <BureauMonteCarlo data={data} leagueId={leagueId} />;
   if (feature === "manager-profiles") return <BureauManagerProfiles data={data} leagueId={leagueId} />;
   if (feature === "pressure-map") return <BureauPressureMap data={data} leagueId={leagueId} />;
   if (feature === "trade-network") return <BureauTradeNetwork data={data} leagueId={leagueId} />;
