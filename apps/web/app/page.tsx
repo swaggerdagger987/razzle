@@ -11,7 +11,7 @@ export default function Home() {
         know about yet.
       </h1>
       <p className="mb-8 text-lg text-ink-medium">
-        100 panels. Custom formulas. Dynasty intelligence. AI agents that already know your league.
+        100 panels. Custom formulas. Dynasty intelligence. A film room that already knows your league.
         The Screener is forever free.
       </p>
       <div className="flex flex-wrap items-center justify-center gap-4">

@@ -112,6 +112,17 @@ def main() -> int:
         print("College")
         _run(cfb)
 
+    print("Intel (contracts + team tendencies + contract news)")
+    sys.path.insert(0, str(REPO))
+    from apps.api.services.intel.sync import sync_intel
+
+    stats = sync_intel(DB)
+    print(
+        f"  contracts={stats['contracts']:,}  "
+        f"team_tendencies={stats['team_tendencies']}  "
+        f"contract_news={stats['contract_news']}"
+    )
+
     status()
     return 0
 

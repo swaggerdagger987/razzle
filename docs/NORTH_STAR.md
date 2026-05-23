@@ -11,11 +11,12 @@ Razzle is a fantasy football research lab disguised as a Sunday comic strip. Pla
 **The core insight**: The problem with AI for fantasy football isn't that the models are dumb. It's that they start with zero context. Every time you paste your roster into ChatGPT, explain your scoring settings, and describe your leaguemates — you're doing the work the platform should do. Razzle is the context layer.
 
 **Brand line**: "The Screener is forever free. The intelligence is what you pay for."
+**Marketing**: Obsessed with fantasy football — not AI. Users get a research lab and film room that already knows their league. Never lead with "AI" (see `docs/v2/VOICE.md`).
 **Mission**: "Testing weekly what's stronger — our bad luck or the numbers. Come join us."
 
 **Brand identity**: Bengal tiger named Razzle runs the show. Film room junkie energy — earnest, slightly obsessive about precision, dry wit in the margins. Think Luffy: goofy on the outside, strongest person in the room.
 
-**Business model**: Lifestyle business. Target 1,000 paid users = ~$100k/yr profit. No VC. Grown organically through Twitter and Reddit. One-person operation with Claude Code as force multiplier.
+**Business model**: Lifestyle business. Target enough paid users from **Reddit only** to justify reinvesting — then scale. No VC. **Primary channel: Reddit** (screenshots + future !razzle fact bot). Everything else deferred (`docs/v2/REDDIT.md`).
 
 ---
 

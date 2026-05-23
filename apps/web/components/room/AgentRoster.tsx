@@ -1,20 +1,16 @@
 "use client";
 
-const ROSTER = [
-  { id: "razzle", emoji: "🐯", label: "Razzle", role: "Chief of Staff" },
-  { id: "octo", emoji: "🐙", label: "Octo", role: "Quant" },
-  { id: "bones", emoji: "🦴", label: "Bones", role: "Historian" },
-] as const;
+import { AGENTS, type AgentId } from "@razzle/agents";
 
 interface Props {
   active: string;
-  onSelect: (id: string) => void;
+  onSelect: (id: AgentId) => void;
 }
 
 export function AgentRoster({ active, onSelect }: Props) {
   return (
-    <div className="agent-roster flex items-center gap-2">
-      {ROSTER.map((a) => (
+    <div className="agent-roster flex flex-wrap items-center gap-2">
+      {AGENTS.map((a) => (
         <button
           key={a.id}
           type="button"
@@ -26,7 +22,7 @@ export function AgentRoster({ active, onSelect }: Props) {
           aria-pressed={active === a.id}
         >
           <span aria-hidden>{a.emoji}</span>
-          <span className="text-[10px] uppercase">{a.label}</span>
+          <span className="text-[10px] uppercase">{a.name.split(" ").pop()}</span>
         </button>
       ))}
     </div>

@@ -8,30 +8,10 @@ import {
 } from "@tanstack/react-table";
 import { PositionPill } from "@razzle/ui";
 import type { PlayerRow } from "@/lib/api";
+import type { ExploreUniverse } from "@/lib/explore-params";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 
 const columnHelper = createColumnHelper<PlayerRow>();
-
-const BASE_COLUMNS = [
-  columnHelper.accessor("full_name", {
-    header: "Player",
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor("position", {
-    header: "Pos",
-    cell: (info) => <PositionPill position={info.getValue()} />,
-  }),
-  columnHelper.accessor("team", { header: "Team" }),
-  columnHelper.accessor("age", {
-    header: "Age",
-    cell: (info) => info.getValue() ?? "—",
-  }),
-  columnHelper.accessor("games", { header: "GP" }),
-  columnHelper.accessor("fantasy_points_ppr", {
-    header: "FPTS",
-    cell: (info) => Number(info.getValue()).toFixed(1),
-  }),
-];
 
 function slugify(name: string) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -42,19 +22,57 @@ interface Props {
   sortKey: string;
   sortDir: "asc" | "desc";
   onSort: (key: string) => void;
+  universe?: ExploreUniverse;
 }
 
-export function ExploreTable({ rows, sortKey, sortDir, onSort }: Props) {
+export function ExploreTable({ rows, sortKey, sortDir, onSort, universe = "nfl" }: Props) {
   const { openPlayer } = usePlayerSheet();
+  const primaryKey = universe === "college" ? "total_yards" : "fantasy_points_ppr";
+  const primaryHeader = universe === "college" ? "Yards" : "FPTS";
+
+  const hiddenKeys = new Set([
+    "player_id",
+    "full_name",
+    "position",
+    "team",
+    "age",
+    "games",
+    "fantasy_points_ppr",
+    "total_yards",
+  ]);
 
   const extraKeys = rows.length
-    ? Object.keys(rows[0]!).filter(
-        (k) => !["player_id", "full_name", "position", "team", "age", "games", "fantasy_points_ppr"].includes(k),
-      ).slice(0, 4)
+    ? Object.keys(rows[0]!).filter((k) => !hiddenKeys.has(k)).slice(0, 4)
     : [];
 
   const columns = [
-    ...BASE_COLUMNS,
+    columnHelper.accessor("full_name", {
+      header: "Player",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("position", {
+      header: "Pos",
+      cell: (info) => <PositionPill position={info.getValue()} />,
+    }),
+    columnHelper.accessor("team", { header: universe === "college" ? "School" : "Team" }),
+    ...(universe === "nfl"
+      ? [
+          columnHelper.accessor("age", {
+            header: "Age",
+            cell: (info) => info.getValue() ?? "—",
+          }),
+        ]
+      : []),
+    columnHelper.accessor("games", { header: "GP" }),
+    columnHelper.accessor(primaryKey as "fantasy_points_ppr", {
+      id: primaryKey,
+      header: primaryHeader,
+      cell: (info) => {
+        const val = info.getValue();
+        if (universe === "college") return Number(val ?? 0).toLocaleString();
+        return Number(val ?? 0).toFixed(1);
+      },
+    }),
     ...extraKeys.map((key) =>
       columnHelper.display({
         id: key,
@@ -68,6 +86,8 @@ export function ExploreTable({ rows, sortKey, sortDir, onSort }: Props) {
     ),
   ];
 
+  const sortableKeys = ["full_name", primaryKey, ...extraKeys];
+
   const table = useReactTable({
     data: rows,
     columns,
@@ -75,18 +95,18 @@ export function ExploreTable({ rows, sortKey, sortDir, onSort }: Props) {
   });
 
   return (
-    <div className="table-wrap chunky bg-bg-card hidden md:block">
+    <div className="table-wrap explore-table-desktop chunky bg-bg-card hidden md:block">
       <table className="screener-table">
         <thead className="thead-shadow">
           {table.getHeaderGroups().map((hg) => (
             <tr key={hg.id}>
               {hg.headers.map((header) => {
                 const key = header.column.id;
-                const sortable = ["full_name", "fantasy_points_ppr", ...extraKeys].includes(key);
+                const sortable = sortableKeys.includes(key);
                 return (
                   <th
                     key={header.id}
-                    onClick={() => sortable && onSort(key === "full_name" ? "full_name" : key)}
+                    onClick={() => sortable && onSort(key)}
                     className={sortable ? "sortable" : undefined}
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}

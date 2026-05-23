@@ -1,10 +1,10 @@
-import { RoomChat } from "@/components/room/RoomChat";
+import { SituationRoom } from "@/components/room/SituationRoom";
 
 export const metadata = {
   title: "Situation Room — Razzle",
-  description: "Three agents on duty. Razzle, Octo, and Bones answer your dynasty questions.",
+  description: "The film room. Razzle and the staff already know your league — ask for the verdict.",
 };
 
 export default function RoomPage() {
-  return <RoomChat />;
+  return <SituationRoom />;
 }

@@ -2,8 +2,18 @@
 
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
-import { useState } from "react";
+import type { Route } from "next";
+import { useEffect, useState } from "react";
+import {
+  AGENTS,
+  AGENT_BY_ID,
+  loadingCopyForAgent,
+  suggestAgentForQuestion,
+  type AgentId,
+} from "@razzle/agents";
+import { toLab, toRoom } from "@razzle/hallway";
 import { agentContextPayload } from "@/lib/agent-context";
+import { getSelectedLeague, getSleeperUser } from "@/lib/sleeper";
 import { usePlayerSheet, type PlayerSheetTab } from "@/lib/player-sheet-context";
 import { PlayerStatsTab } from "./PlayerStatsTab";
 
@@ -19,6 +29,50 @@ export function PlayerSheet() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<string | null>(null);
   const [asking, setAsking] = useState(false);
+  const [askAgent, setAskAgent] = useState<AgentId>("dolphin");
+  const [leagueName, setLeagueName] = useState<string | null>(null);
+  const [leagueId, setLeagueId] = useState<string | null>(null);
+  const [sleeperUser, setSleeperUser] = useState<string | null>(null);
+  const [rosterStatus, setRosterStatus] = useState<string | null>(null);
+  const [rosterLoading, setRosterLoading] = useState(false);
+
+  useEffect(() => {
+    const league = getSelectedLeague();
+    const user = getSleeperUser();
+    setLeagueName(league?.name ?? null);
+    setLeagueId(league?.league_id ?? null);
+    setSleeperUser(user?.username ?? null);
+    setRosterStatus(null);
+
+    if (!open || !player || !league?.league_id || !user?.user_id) return;
+
+    setRosterLoading(true);
+    fetch("/api/bureau/player-status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        league_id: league.league_id,
+        user_id: user.user_id,
+        player_id: player.playerId,
+      }),
+    })
+      .then((r) => r.json())
+      .then((j) => {
+        if (j.error) {
+          setRosterStatus(null);
+          return;
+        }
+        if (j.status === "yours") {
+          setRosterStatus(j.starter ? "On your roster (starter)" : "On your roster (bench)");
+        } else if (j.status === "owned") {
+          setRosterStatus(`Owned by ${j.team_name}`);
+        } else if (j.status === "fa") {
+          setRosterStatus("Free agent in your league");
+        }
+      })
+      .catch(() => setRosterStatus(null))
+      .finally(() => setRosterLoading(false));
+  }, [open, player?.playerId]);
 
   if (!open || !player) return null;
 
@@ -33,6 +87,7 @@ export function PlayerSheet() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           question: `${player.name}: ${question.trim()}`,
+          specialists: askAgent === "razzle" ? [] : [askAgent],
           format: "dynasty",
           player_id: player.playerId,
           ...agentContextPayload(),
@@ -89,34 +144,117 @@ export function PlayerSheet() {
 
           {tab === "panels" && (
             <ul className="player-sheet-panel-list">
-              {["gamelog", "percentiles", "career", "breakdown"].map((slug) => (
+              {[
+                { slug: "dashboard", label: "Dynasty Dashboard" },
+                { slug: "rankings", label: "Dynasty Rankings" },
+                { slug: "tradevalues", label: "Trade Values" },
+                { slug: "buysell", label: "Buy / Sell" },
+                { slug: "gamelog", label: "Game Log" },
+                { slug: "breakouts", label: "Breakouts" },
+                { slug: "weekly", label: "Weekly Heatmap" },
+                { slug: "aging", label: "Aging Curves" },
+              ].map(({ slug, label }) => (
                 <li key={slug}>
-                  <Link href={`/lab/${slug}`} className="lab-sidebar-item" onClick={closePlayer}>
-                    {slug.replace(/-/g, " ")}
+                  <Link
+                    href={
+                      toLab(slug, {
+                        player: {
+                          playerId: player.playerId,
+                          slug: player.slug,
+                          name: player.name,
+                          position: player.position,
+                          team: player.team,
+                        },
+                      }) as Route
+                    }
+                    className="lab-sidebar-item"
+                    onClick={closePlayer}
+                  >
+                    {label}
                   </Link>
                 </li>
               ))}
+              <li className="mt-4 border-t border-ink pt-3">
+                <Link
+                  href={
+                    toRoom({
+                      agentId: "octo",
+                      question: `${player.name}: dynasty value and tier?`,
+                    }) as Route
+                  }
+                  className="text-sm text-orange underline"
+                  onClick={closePlayer}
+                >
+                  Ask Octo in Situation Room →
+                </Link>
+              </li>
             </ul>
           )}
 
           {tab === "league" && (
             <div className="player-sheet-section">
-              <p className="text-ink-medium text-sm">
-                Connect Sleeper in the Context Bar to see league-specific trade value, roster fit, and
-                opponent context for {player.name}.
-              </p>
-              <Link href="/league" className="chunky chunky-hover mt-4 inline-block bg-orange px-4 py-2 text-white">
-                Connect League
-              </Link>
+              {leagueName ? (
+                <>
+                  <p className="text-sm">
+                    <strong>{player.name}</strong> in{" "}
+                    <span style={{ fontFamily: "var(--font-mono)" }}>{leagueName}</span>
+                    {sleeperUser && <> · @{sleeperUser}</>}
+                  </p>
+                  {rosterLoading && <p className="text-ink-medium mt-2 text-sm">pulling film...</p>}
+                  {!rosterLoading && rosterStatus && (
+                    <p className="mt-2 text-sm text-orange" style={{ fontFamily: "var(--font-hand)" }}>
+                      {rosterStatus}
+                    </p>
+                  )}
+                  <p className="text-ink-medium mt-2 text-sm">
+                    Roster fit and trade context use your connected league — same context the film room sees.
+                  </p>
+                  <Link
+                    href={leagueId ? `/league/${leagueId}` : "/league"}
+                    className="chunky chunky-hover mt-4 inline-block bg-orange px-4 py-2 text-white"
+                    onClick={closePlayer}
+                  >
+                    Open Bureau
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <p className="text-ink-medium text-sm">
+                    Connect Sleeper in the Context Bar to see league-specific trade value, roster fit, and
+                    opponent context for {player.name}.
+                  </p>
+                  <Link href="/league" className="chunky chunky-hover mt-4 inline-block bg-orange px-4 py-2 text-white">
+                    Connect League
+                  </Link>
+                </>
+              )}
             </div>
           )}
 
           {tab === "ask" && (
             <form onSubmit={askAboutPlayer} className="player-sheet-ask">
+              <div className="mb-3 flex flex-wrap gap-2">
+                {AGENTS.map((a) => (
+                  <button
+                    key={a.id}
+                    type="button"
+                    onClick={() => setAskAgent(a.id)}
+                    className={`chunky px-2 py-1 text-xs ${askAgent === a.id ? "bg-orange text-white" : "bg-bg-card"}`}
+                    aria-pressed={askAgent === a.id}
+                  >
+                    {a.emoji} {a.name}
+                  </button>
+                ))}
+              </div>
               <textarea
                 value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                placeholder={`Ask Razzle about ${player.name}...`}
+                onChange={(e) => {
+                  setQuestion(e.target.value);
+                  if (e.target.value.trim()) {
+                    setAskAgent(suggestAgentForQuestion(e.target.value, true));
+                  }
+                }}
+                placeholder={`Ask ${AGENT_BY_ID[askAgent]?.name ?? "Razzle"} about ${player.name}...`}
                 className="chunky w-full bg-bg p-3 text-sm"
                 rows={3}
               />
@@ -126,7 +264,7 @@ export function PlayerSheet() {
                 className="chunky chunky-hover bg-orange px-4 py-2 text-white disabled:opacity-50"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                {asking ? "pulling film..." : "Ask Razzle"}
+                {asking ? loadingCopyForAgent(askAgent) : `Ask ${AGENT_BY_ID[askAgent]?.name ?? "Razzle"}`}
               </button>
               {answer && <p className="player-sheet-answer">{answer}</p>}
             </form>

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@razzle/ui", "@razzle/types", "@razzle/panels"],
+  transpilePackages: ["@razzle/ui", "@razzle/types", "@razzle/panels", "@razzle/agents", "@razzle/hallway"],
   async redirects() {
     return [
       { source: "/bureau", destination: "/league", permanent: true },

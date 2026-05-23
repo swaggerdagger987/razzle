@@ -141,3 +141,6 @@ These are not blocking V2 ship, but should be answered before the first paid use
 | Date | Decision | Author | Notes |
 |---|---|---|---|
 | 2026-05-23 | All defaults above | V2 architecture review | Phase 3 kickoff |
+| 2026-05-23 | **Reddit-only GTM** — Twitter, Discord, SEO, paid ads deferred until Reddit MRR justifies expansion | Product | `docs/v2/REDDIT.md`. Future !razzle bot: fact confirm + intel snippets, not AI marketing. |
+| 2026-05-23 | **Autoresearch loop** — PROGRAM.md + results.tsv keep/discard; three equal cofounders; Karpathy coding discipline; never stop | Product | Inspired by [karpathy/autoresearch](https://github.com/karpathy/autoresearch). Shell chains cycles; no PRODUCT COMPLETE exit. |
+| 2026-05-23 | **Commit every cycle** — no keep without git hash; shell blocks dirty tree | Product | Uncommitted code = decay. Codex VETO if `git status` dirty after cycle. |

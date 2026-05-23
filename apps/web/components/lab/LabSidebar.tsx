@@ -1,5 +1,6 @@
 "use client";
 
+import { agentForPanel } from "@razzle/agents";
 import {
   PANELS,
   panelsByCategory,
@@ -24,15 +25,29 @@ const CATEGORY_LABELS: Record<PanelCategory, string> = {
   college: "College",
 };
 
-const STAFF_PICKS = new Set(["weekly", "rankings", "breakouts", "consistency", "tradevalues", "vorp"]);
+/** Launch-10 panels — agent-owned in sidebar Staff Picks */
+const STAFF_PICKS = new Set([
+  "weekly",
+  "prospects",
+  "rankings",
+  "tradevalues",
+  "breakouts",
+  "gamelog",
+  "efficiency",
+  "aging",
+  "buysell",
+  "dashboard",
+]);
 
 interface Props {
   activeSlug?: string;
   collapsed?: boolean;
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
   onToggle?: () => void;
 }
 
-export function LabSidebar({ activeSlug, collapsed = false, onToggle }: Props) {
+export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, onCloseMobile, onToggle }: Props) {
   const [query, setQuery] = useState("");
   const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set());
 
@@ -58,7 +73,10 @@ export function LabSidebar({ activeSlug, collapsed = false, onToggle }: Props) {
   }
 
   return (
-    <aside className={`lab-sidebar${collapsed ? " collapsed" : ""}`} aria-label="Lab panels">
+    <aside
+      className={`lab-sidebar${collapsed ? " collapsed" : ""}${mobileOpen ? " mobile-open" : ""}`}
+      aria-label="Lab panels"
+    >
       <div className="sidebar-search-wrap">
         <input
           className="sidebar-search"
@@ -77,7 +95,13 @@ export function LabSidebar({ activeSlug, collapsed = false, onToggle }: Props) {
         )}
         {!query &&
           PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
-            <SidebarItem key={`staff-${panel.slug}`} panel={panel} activeSlug={activeSlug} badge="★" />
+            <SidebarItem
+              key={`staff-${panel.slug}`}
+              panel={panel}
+              activeSlug={activeSlug}
+              badge="★"
+              onNavigate={onCloseMobile}
+            />
           ))}
 
         {Array.from(grouped.entries()).map(([category, items]) => (
@@ -92,7 +116,12 @@ export function LabSidebar({ activeSlug, collapsed = false, onToggle }: Props) {
             </button>
             {!collapsedCats.has(category) &&
               items.map((panel) => (
-                <SidebarItem key={panel.slug} panel={panel} activeSlug={activeSlug} />
+                <SidebarItem
+                  key={panel.slug}
+                  panel={panel}
+                  activeSlug={activeSlug}
+                  onNavigate={onCloseMobile}
+                />
               ))}
           </div>
         ))}
@@ -111,19 +140,32 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
+  onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
+  onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
+  const owner = agentForPanel(panel.slug);
   return (
     <Link
       href={`/lab/${panel.slug}`}
       className={`lab-sidebar-item${active ? " active" : ""}`}
       data-icon={panel.icon}
-      title={panel.blurb}
+      title={owner ? `${owner.name} · ${panel.blurb}` : panel.blurb}
+      onClick={onNavigate}
     >
+      {owner && (
+        <img
+          src={`/agents/${owner.avatar}.svg`}
+          alt=""
+          className="lab-sidebar-agent"
+          width={18}
+          height={18}
+        />
+      )}
       {panel.title}
       {panel.tier === "pro" && <span className="lab-pro-lock"> 🔒</span>}
       {badge && <span className="lab-staff-pick"> {badge}</span>}

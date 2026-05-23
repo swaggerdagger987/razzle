@@ -20,6 +20,7 @@ from typing import Any
 from .context import build_context_block
 from .llm import chat
 from .personas import LAUNCH_AGENTS, load as load_persona
+from .registry import ROUTE_DESCRIPTIONS, suggest_specialists
 
 logger = logging.getLogger("razzle.agents.orchestrator")
 
@@ -35,16 +36,21 @@ async def orchestrate(
     *,
     user_id: str | None = None,
     player_id: str | None = None,
+    referrer_panel: str | None = None,
 ) -> dict[str, Any]:
     context_block = build_context_block(
-        league_id, league_format, player_id=player_id, user_id=user_id
+        league_id,
+        league_format,
+        player_id=player_id,
+        user_id=user_id,
+        referrer_panel=referrer_panel,
     )
 
     # 1. Routing — Razzle picks specialists if the user didn't force any.
     chosen = list(specialists) if specialists else await _route(question, context_block)
     chosen = [c for c in chosen if c in LAUNCH_AGENTS and c != "razzle"][:2]
     if not chosen:
-        chosen = ["octo"]  # Phase 6 default — Octo handles "general fantasy question."
+        chosen = suggest_specialists(question)[:2]
 
     # 2. Parallel specialist calls.
     specialist_outputs = await asyncio.gather(
@@ -71,16 +77,21 @@ async def orchestrate(
 
 
 async def _route(question: str, context_block: str) -> list[str]:
+    keyword_pick = suggest_specialists(question)
+    if keyword_pick != ["octo"]:
+        return keyword_pick
+
     razzle = load_persona("razzle")
+    options = ", ".join(f"{k} ({v})" for k, v in ROUTE_DESCRIPTIONS.items())
     prompt = (
         f"{context_block}\n\n"
         f"## GM question\n{question}\n\n"
         "## Task\n"
         "You are routing this question to specialists. Choose 1 or 2 from this list, "
-        "based on which would add the most value. Reply with ONLY a comma-separated "
-        "list of IDs from: octo (quant/value), bones (trades/leverage). "
-        "Reply with just the IDs, no other text. "
-        "If the question doesn't need a specialist, reply: octo"
+        f"based on which would add the most value. Reply with ONLY a comma-separated "
+        f"list of IDs from: {options}. "
+        "Injury or health questions MUST include dolphin. "
+        "Reply with just the IDs, no other text."
     )
     res = await chat(razzle, prompt, temperature=0.1, max_tokens=40)
     text = (res.get("text") or "").strip().lower()

@@ -1,0 +1,117 @@
+You are running ONE Razzle V2 cofounder cycle. **Do not stop after this cycle.**
+
+Read first (in order):
+- docs/v2/PROGRAM.md          ← autoresearch skill: metric, keep/discard, NEVER STOP
+- docs/v2/CONTINUOUS.md
+- docs/v2/DEPTH.md
+- docs/v2/PARITY.md
+- docs/v2/HALLWAY.md
+- docs/v2/VOICE.md
+- docs/v2/REDDIT.md
+- docs/NORTH_STAR.md
+- docs/DESIGN.md
+- docs/v2/COFOUNDERS.md
+- docs/v2/LOOP.md
+- docs/v2/results.tsv         ← prior experiments — do not repeat discards
+- docs/v2/COUNCIL.md          ← full thread — compound intelligence lives here
+- docs/v2/LOOP-STATE.md
+- docs/v2/ACCEPTANCE.md
+- docs/v2/REDDIT-INTEL.md
+- docs/v2/SECRETS.md
+
+Coding discipline (every line you write): https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md
+- Think before coding · Simplicity first · Surgical changes · Verify before moving on
+
+Increment cycle in LOOP-STATE.md.
+
+---
+
+## Phase 1 — Council (three EQUALS, one thread)
+
+Append to docs/v2/COUNCIL.md. Each voice **must reply to the other two by name** and **call out** a blind spot or rationalization.
+
+1. **Opus** — Odd cycles: 15 min live Reddit research → append REDDIT-INTEL.md. Propose **ONE vertical slice** from PARITY.md (pillar + DEPTH layer + hallway wires). Not FEATURES.md horizontal churn. Vote SHIP/VETO/DEFER.
+2. **Codex** — Challenge Opus on structure, scale, over-engineering (Karpathy simplicity). Challenge Composer's plan if scope is bloated. Vote.
+3. **Composer** — Challenge both if slice is too wide or too shallow. Concrete implementation plan. Vote.
+
+**2/3 SHIP → Phase 2 in same session.** VETO on north-star, gates, or simplicity blocks until resolved in-thread.
+
+Declare in council:
+- Pillar / Layer / Slice
+- Hallway checklist (six items from HALLWAY.md)
+- Acceptance checks for this cycle
+- NOT this cycle (horizontal work)
+
+---
+
+## Phase 2 — Build (Composer)
+
+Implement the SHIPped slice only. Karpathy rules: minimum code, no speculative abstractions, surgical diffs.
+
+From repo root:
+  pytest apps/api/tests -q
+  npm run build
+
+Localhost smoke on affected routes (ACCEPTANCE Gates 0–4).
+
+---
+
+## Phase 3 — Audit (Codex, independent)
+
+Append "## Audit — Cycle N". You did NOT write this code.
+
+- Diff review — bugs, null paths, 500s, god files, duplicate SQL, unbounded queries
+- Karpathy: would a senior engineer call this overcomplicated?
+- Verdict PASS or FAIL with numbered fixes
+
+---
+
+## Phase 4 — Brand (Opus, independent)
+
+Append "## Brand — Cycle N".
+
+- DESIGN.md + VOICE.md (no "AI" in user-facing copy)
+- Reddit test: screenshot-worthy or bot-fact-worthy?
+- Verdict PASS or FAIL
+
+---
+
+## Phase 5 — Score + log + COMMIT (all three acknowledge)
+
+Append "## Score — Cycle N" with keep | discard | crash.
+
+**COMMIT GATE (non-negotiable):** Uncommitted work = decay. Every cycle ends in git.
+
+```bash
+git add -A
+git status   # confirm no secrets staged
+git commit -m "Lab L1: <slice> — <one-line why>"
+git rev-parse --short HEAD
+```
+
+Log row to docs/v2/results.tsv (tab-separated):
+  cycle, commit (7-char hash — REQUIRED for keep), score, status, pillar, slice, description
+
+- **keep** — gates pass, slice advanced, **commit hash recorded**, `git status` clean
+- **discard** — revert diff, **commit the revert**, log hash, continue
+- **crash** — fix or revert, **commit failure state or revert**, log, continue
+
+**Invalid:** logging `keep` with `commit=none`. Codex VETO if working tree dirty after Phase 5.
+
+Add evidence: docs/v2/evidence/YYYY-MM-DD-<pillar>-<layer>.md (include commit hash in file)
+
+Update LOOP-STATE.md (`last_commit:` field). Update FEATURES.md only if slice touched those rows.
+
+---
+
+## After PASS — chain immediately
+
+**Do NOT end your turn. Do NOT ask the user to continue. Do NOT print PRODUCT COMPLETE.**
+
+Start the next cycle from LOOP-STATE.md. Zero idle time.
+
+When FEATURES.md is all GREEN → keep climbing DEPTH layers in PARITY.md.
+
+**Every cycle MUST end with git commit.** See PROGRAM.md git commit gate. Next cycle cannot start with dirty working tree.
+
+Legacy Razzle/razzle repo only. Never block on Stripe/LLM/Reddit keys.

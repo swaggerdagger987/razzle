@@ -7,9 +7,24 @@ from typing import Any
 
 from ..context.store import get_or_refresh
 from ...legacy_bridge import live_data
+from ..bureau.player_status import roster_status_line
+from ..intel.snippets import intel_lines_for_prompt
 from .facts import facts as build_facts
 
 logger = logging.getLogger("razzle.agents.context")
+
+_PANEL_LABELS = {
+    "dashboard": "Dynasty Dashboard",
+    "weekly": "Weekly Heatmap",
+    "rankings": "Dynasty Rankings",
+    "tradevalues": "Trade Values",
+    "breakouts": "Breakouts",
+    "prospects": "Prospects",
+    "gamelog": "Game Log",
+    "efficiency": "Efficiency Rankings",
+    "aging": "Aging Curves",
+    "buysell": "Buy / Sell",
+}
 
 
 def build_context_block(
@@ -18,10 +33,17 @@ def build_context_block(
     *,
     player_id: str | None = None,
     user_id: str | None = None,
+    referrer_panel: str | None = None,
 ) -> str:
     """Markdown context block injected into every agent prompt."""
     f = build_facts(league_id=league_id)
     lines = ["## Context for this query", f"- Format: {league_format}"]
+
+    if referrer_panel:
+        label = _PANEL_LABELS.get(referrer_panel, referrer_panel.replace("-", " ").title())
+        lines.append(
+            f"- Hallway: user opened Situation Room from Lab **{label}** — reference that surface if relevant."
+        )
 
     if league_id:
         lines.append(f"- Sleeper league: {league_id}")
@@ -33,6 +55,14 @@ def build_context_block(
         player_block = _player_context(player_id)
         if player_block:
             lines.append(player_block)
+        if league_id and user_id:
+            roster_line = roster_status_line(league_id, user_id, player_id)
+            if roster_line:
+                lines.append(roster_line)
+        intel_lines = intel_lines_for_prompt(player_id, None)
+        if intel_lines:
+            lines.append("- Intel snippets:")
+            lines.extend(intel_lines)
 
     if f.get("injuries"):
         lines.append("- Active injuries (top 10):")

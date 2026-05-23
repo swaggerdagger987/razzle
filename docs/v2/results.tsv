@@ -1,0 +1,17 @@
+cycle	commit	score	status	pillar	slice	description
+# commit=none on keep rows before 2026-05-23 is INVALID under commit gate — backlog must be committed once
+8	none	depth+hallway+reddit+voice	keep	Lab	rankings L1	DynastyRankingsRenderer Octo header position filter Player Sheet hallway Dolphin durability links
+9	none	depth+hallway+reddit	keep	Lab	tradevalues L1	TradeValuesRenderer Bones header position-colored bars Room trade prefill
+10	none	depth+hallway+reddit+voice	keep	Lab	breakouts L1	BreakoutsRenderer Hawkeye RBS cards opportunity-production gap Room prefill
+11	none	depth+hallway+reddit+voice	keep	Lab	weekly L1	WeeklyHeatmapRenderer Hawkeye free-tier week grid Player Sheet link Room peak-week ask
+12	none	depth+hallway+reddit+voice	keep	Lab	prospects L1	ProspectsRenderer Hawkeye RPS combine big board college screener link
+13	none	depth+hallway+reddit+voice	keep	Lab	gamelog L1	GamelogRenderer Atlas position columns season selector Player Sheet Room peak-week ask
+14	none	depth+hallway+reddit+voice	keep	Lab	efficiency L1	EfficiencyRenderer Octo PPO dual tables most_efficient volume_kings Room ask
+15	none	depth+hallway+reddit+voice	keep	Lab	aging L1	AgingCurvesRenderer Octo SVG curve peak-age past-peak table Player Sheet Room sell-window ask
+16	none	depth+hallway+reddit+voice	keep	Lab	buysell L1	BuySellRenderer Bones buy-low sell-high cards mismatch scores Player Sheet Room dual prefill
+17	none	depth+hallway+reddit+voice	keep	Lab	dashboard L1	DynastyDashboardRenderer Razzle top5 risers fallers scarcity Player Sheet Room from=dashboard
+18	none	hallway+simplicity	keep	Hallway	H-06 Room callbacks	toRoom panelSlug sessionStorage referrer_panel build_context_block SituationRoom URL bootstrap
+19	none	depth+simplicity	keep	League	monte-carlo L1	Real weekly mean/floor/ceiling from terminal.db Bureau table not zero stubs
+20	none	depth+hallway+reddit+voice	keep	League	self-scout L1	Hawkeye position grade cards A-F Player Sheet Dolphin thin-depth Room ask roster-depth link
+21	none	hallway+simplicity	keep	Hallway	H-06 launch-10	panelSlug on all 9 launch-10 Lab renderers toRoom links agent prompt referrer
+22	none	depth+voice	keep	Lab	L2 sidebar	agentForPanel avatars on launch-10 Staff Picks LabSidebar registry-aligned

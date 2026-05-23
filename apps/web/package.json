@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@razzle/panels": "*",
+    "@razzle/agents": "*",
+    "@razzle/hallway": "*",
+    "@razzle/pixel-room": "*",
     "@razzle/types": "*",
     "@razzle/ui": "*",
     "@tanstack/react-query": "^5.50.0",

@@ -2,6 +2,7 @@
 
 import { LoadingState, PositionPill } from "@razzle/ui";
 import { useQuery } from "@tanstack/react-query";
+import { PlayerIntelCard } from "./PlayerIntelCard";
 
 interface PlayerProfile {
   player: {
@@ -115,6 +116,7 @@ export function PlayerStatsTab({ playerId }: { playerId: string }) {
           </table>
         </div>
       )}
+      <PlayerIntelCard playerId={playerId} />
     </div>
   );
 }

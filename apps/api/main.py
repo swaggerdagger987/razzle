@@ -23,6 +23,7 @@ from .routers import (
     dev,
     explore,
     health,
+    intel,
     panels,
     players,
 )
@@ -94,6 +95,7 @@ app.include_router(panels.legacy_router)
 app.include_router(players.router)
 app.include_router(context.router)
 app.include_router(bureau.router)
+app.include_router(intel.router)
 app.include_router(agents.router)
 app.include_router(auth.router)
 app.include_router(billing.router)

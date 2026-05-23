@@ -1,18 +1,16 @@
-"""!razzle Reddit bot — the highest-leverage idea in ROADMAP.md.
+"""!razzle Reddit bot — primary distribution for razzle.lol (deploy later).
+
+See docs/v2/REDDIT.md for GTM strategy. Reddit-only channel until MRR justifies expansion.
+
+Planned triggers (v2):
+  !razzle confirm <claim>     → fact-check against terminal.db + intel snippets
+  !razzle <player name>       → top intel snippets (usage, contract, coaching)
+  !razzle <A> for <B>         → trade verdict + link to /lab/trade-values
 
 Watches r/DynastyFF, r/fantasyfootball, r/Fantasy_Football, r/redzonefantasy.
-Triggers on:
-  - A comment containing "!razzle <player A> for <player B>" → posts a
-    trade verdict with a link back to razzle.lol/lab/trade-values
-  - A submission with a screenshot caption mentioning Razzle → upvotes/comments
-    with a related panel link
-  - DM commands from any user → routes through the agent orchestrator and
-    replies with a one-paragraph briefing
+Helpful first — never spam, never market AI. One reply / user / hour.
 
-Designed to operate on a single Reddit account, polite (1 reply / user / hour),
-and to fail silently if the API is rate-limited.
-
-Run as a separate process:
+Run as a separate process (when credentials + mod approval ready):
     python -m apps.api.bots.reddit_bot
 
 Environment: see apps/api/.env.example for REDDIT_* vars.

@@ -1,20 +1,37 @@
 "use client";
 
 import { LoadingState } from "@razzle/ui";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
+import { useEffect } from "react";
 import { runScreener } from "@/lib/api";
-import { exploreParsers } from "@/lib/explore-params";
+import {
+  defaultSortForUniverse,
+  exploreParsers,
+  type ExploreUniverse,
+} from "@/lib/explore-params";
 import { ExploreFeed } from "./ExploreFeed";
+import { ExploreShareButton } from "./ExploreShareButton";
 import { ExploreTable } from "./ExploreTable";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
 
 export function ExplorePageClient() {
   const [params, setParams] = useQueryStates(exploreParsers);
+  const universe = params.universe as ExploreUniverse;
+  const sortKey =
+    universe === "college" && params.sort === "fantasy_points_ppr"
+      ? "total_yards"
+      : params.sort;
+
+  useEffect(() => {
+    document.body.classList.toggle("college-mode", universe === "college");
+    return () => document.body.classList.remove("college-mode");
+  }, [universe]);
 
   const query = useQuery({
-    queryKey: ["screener", params],
+    queryKey: ["screener", params, sortKey],
     queryFn: () =>
       runScreener({
         search: params.q,
@@ -23,7 +40,7 @@ export function ExplorePageClient() {
         ),
         teams: params.team,
         season: params.season || 0,
-        sort_key: params.sort,
+        sort_key: sortKey,
         sort_direction: params.dir,
         limit: params.limit,
         offset: 0,
@@ -31,12 +48,22 @@ export function ExplorePageClient() {
         filters: [],
         relevance: "fantasy",
         min_gp: 0,
+        universe,
       }),
   });
 
   function togglePosition(pos: string) {
     const next = params.pos.includes(pos) ? params.pos.filter((p) => p !== pos) : [...params.pos, pos];
     void setParams({ pos: next });
+  }
+
+  function setUniverse(next: ExploreUniverse) {
+    if (next === universe) return;
+    void setParams({
+      universe: next,
+      sort: defaultSortForUniverse(next),
+      dir: "desc",
+    });
   }
 
   function onSort(key: string) {
@@ -46,14 +73,46 @@ export function ExplorePageClient() {
     });
   }
 
+  const statLabel = universe === "college" ? "college players" : "players";
+
   return (
     <div className="lab-container">
+      <div className="universe-bar">
+        <div className="universe-bar-inner">
+          <button
+            type="button"
+            className={`btn-chunky universe-toggle${universe === "nfl" ? " active" : ""}`}
+            onClick={() => setUniverse("nfl")}
+          >
+            NFL
+          </button>
+          <button
+            type="button"
+            className={`btn-chunky universe-toggle${universe === "college" ? " active" : ""}`}
+            onClick={() => setUniverse("college")}
+          >
+            College
+          </button>
+        </div>
+        <span className="universe-bar-label">
+          {universe === "college" ? "college stats — the screener is forever free" : "NFL universe"}
+          {universe === "nfl" && (
+            <>
+              {" · "}
+              <Link href="/lab/prospects" className="underline hover:text-orange">
+                prospects →
+              </Link>
+            </>
+          )}
+        </span>
+      </div>
+
       <div className="toolbar">
         <div className="toolbar-section">
           <input
             value={params.q}
             onChange={(e) => void setParams({ q: e.target.value })}
-            placeholder="search players..."
+            placeholder={universe === "college" ? "search college players..." : "search players..."}
             className="chunky bg-bg px-3 py-2 text-sm"
             aria-label="Search players"
           />
@@ -74,12 +133,13 @@ export function ExplorePageClient() {
         <span className="result-count">
           {query.isSuccess ? (
             <>
-              <strong>{query.data.count}</strong> players
+              <strong>{query.data.count}</strong> {statLabel}
             </>
           ) : (
             "pulling film..."
           )}
         </span>
+        <ExploreShareButton universe={universe} sort={sortKey} q={params.q} pos={params.pos} />
       </div>
 
       {query.isPending && <LoadingState className="p-8" />}
@@ -90,11 +150,12 @@ export function ExplorePageClient() {
         <>
           <ExploreTable
             rows={query.data.items}
-            sortKey={params.sort}
+            sortKey={sortKey}
             sortDir={params.dir}
             onSort={onSort}
+            universe={universe}
           />
-          <ExploreFeed rows={query.data.items} />
+          <ExploreFeed rows={query.data.items} universe={universe} />
         </>
       )}
     </div>
