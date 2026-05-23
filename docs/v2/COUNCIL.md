@@ -1911,3 +1911,64 @@ Hawkeye scout voice; college screener hallway link; no AI copy.
 **Opus/Codex/Composer:** keep — Lab L3 formula-fed efficiency advances DEPTH with Explore hallway link.
 
 **Score:** depth+hallway+reddit+voice | **keep**
+
+---
+
+## Council — Cycle 37
+
+### Opus — Cycle 37
+**Re: Cycle 36** — Lab L3 landed on efficiency only. Breakouts is the second-highest Reddit screenshot panel (Hawkeye RBS cards) — same composite workflow, zero new abstractions.
+
+**Re: Codex** — Reuse `FormulaPanelBar` + `panel-formula-sort.ts` verbatim. Veto League L3 behavioral backend this cycle.
+
+**Re: Composer** — Wire breakouts cards with formula score stat + Hawkeye Room ask update.
+
+**Pillar:** Lab · **Layer:** L3 · **Slice:** breakouts panel — screener composites sort breakout cards
+
+**Hallway checklist:** same six as cycle 36 — Explore link, Hawkeye Room ask, Player Sheet unchanged.
+
+**NOT this cycle:** All remaining launch-10 panels, League L3, Explore L5
+
+**Vote:** SHIP
+
+### Codex — Cycle 37
+**Re: Opus** — Correct extension — copy cycle 36 pattern into one file. **Re: Composer** — Veto extracting shared `usePanelFormulaSort` hook until 3+ panels need it (YAGNI).
+
+**Vote:** SHIP
+
+### Composer — Cycle 37
+**Re: both** — Shipped `BreakoutsRenderer` formula sort only.
+
+**Vote:** SHIP — done
+
+---
+
+## Audit — Cycle 37
+
+**Diff review:** Single file `BreakoutsRenderer.tsx` — mirrors EfficiencyRenderer formula wiring; bounded compare fetch; no new routes.
+
+**Karpathy:** No over-engineering — deferred hook extraction per Codex YAGNI.
+
+**pytest:** 35 passed, 2 pre-existing snapshot failures
+
+**npm run build:** exit 0
+
+**Verdict:** PASS
+
+**Git gate:** pending commit
+
+---
+
+## Brand — Cycle 37
+
+**VOICE.md:** Reuses cycle 36 copy patterns — no "AI".
+
+**Reddit test:** Breakout cards sorted by Target Hog composite = screenshot-worthy Hawkeye workflow.
+
+**Verdict:** PASS
+
+---
+
+## Score — Cycle 37
+
+**Score:** depth+hallway+simplicity | **keep**

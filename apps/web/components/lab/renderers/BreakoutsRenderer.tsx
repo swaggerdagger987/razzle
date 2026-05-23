@@ -6,15 +6,22 @@ import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
+import type { SavedFormula } from "@/lib/formulas";
+import {
+  fetchPlayerStatsForFormula,
+  sortPlayersByFormula,
+  type WithFormulaScore,
+} from "@/lib/panel-formula-sort";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
-interface Candidate {
+interface Candidate extends WithFormulaScore {
   player_id: string;
   name: string;
   position: string;
@@ -47,6 +54,7 @@ interface Props {
 export function BreakoutsRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("");
+  const [formula, setFormula] = useState<SavedFormula | null>(null);
   const agent = panelAgent(panel.slug);
 
   const q = useQuery({
@@ -66,7 +74,23 @@ export function BreakoutsRenderer({ panel }: Props) {
     },
   });
 
-  const candidates = q.data?.candidates ?? [];
+  const rawCandidates = q.data?.candidates ?? [];
+  const playerIds = useMemo(
+    () => rawCandidates.map((p) => p.player_id),
+    [rawCandidates],
+  );
+
+  const statsQ = useQuery({
+    queryKey: ["panel-formula-stats", panel.slug, q.data?.season, playerIds, formula?.name],
+    queryFn: () => fetchPlayerStatsForFormula(playerIds, q.data?.season ?? 0),
+    enabled: Boolean(formula && playerIds.length),
+  });
+
+  const candidates = useMemo(() => {
+    if (!formula || !statsQ.data) return rawCandidates;
+    return sortPlayersByFormula(rawCandidates, statsQ.data, formula);
+  }, [formula, rawCandidates, statsQ.data]);
+
   const top = candidates[0] ?? null;
 
   if (q.isPending) {
@@ -101,6 +125,14 @@ export function BreakoutsRenderer({ panel }: Props) {
   return (
     <div className="breakouts-panel">
       <PanelAgentHeader agent={agent} slug={panel.slug} />
+
+      <FormulaPanelBar selected={formula} onSelect={setFormula} panelSlug={panel.slug} />
+
+      {formula && statsQ.isFetching && (
+        <p className="text-ink-medium mb-2 text-xs" style={{ fontFamily: "var(--font-hand)" }}>
+          pulling composite scores…
+        </p>
+      )}
 
       <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Filter by position">
         {POSITIONS.map((pos) => (
@@ -163,6 +195,14 @@ export function BreakoutsRenderer({ panel }: Props) {
                   {p.annotation ?? "on the radar"}
                 </p>
                 <dl className="panel-card-stats grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
+                  {formula && (
+                    <div>
+                      <dt className="text-ink-medium text-xs">{formula.name}</dt>
+                      <dd className="text-orange font-bold" style={{ fontFamily: "var(--font-mono)" }}>
+                        {p.formula_score != null ? p.formula_score.toFixed(1) : "—"}
+                      </dd>
+                    </div>
+                  )}
                   <div>
                     <dt className="text-ink-medium text-xs">RBS score</dt>
                     <dd className="font-bold" style={{ fontFamily: "var(--font-mono)" }}>
@@ -199,7 +239,9 @@ export function BreakoutsRenderer({ panel }: Props) {
               toRoom({
                 agentId: "hawkeye",
                 panelSlug: "breakouts",
-                question: `Is ${top.name} a real breakout candidate? Opportunity vs production says RBS ${top.rbs_score?.toFixed(1) ?? "?"}.`,
+                question: formula
+                  ? `${top.name} leads ${formula.name} (${top.formula_score?.toFixed(1) ?? "?"}) on breakouts — RBS ${top.rbs_score?.toFixed(1) ?? "?"} still valid?`
+                  : `Is ${top.name} a real breakout candidate? Opportunity vs production says RBS ${top.rbs_score?.toFixed(1) ?? "?"}.`,
               }) as Route
             }
             className="text-sm text-orange underline"
