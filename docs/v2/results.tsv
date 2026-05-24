@@ -52,3 +52,4 @@ cycle	commit	score	status	pillar	slice	description
 59	25e937db	gates+voice+simplicity	keep	Lab	A-004 Pro gate UI	Shared 402-aware panel fetch helper covers bespoke launch panels with ProUpgradeGate recovery
 60	c0283a7c	hallway+simplicity	keep	League	A-005 durable context	Sleeper user, league list, and selected league persist in localStorage with session fallback
 61	976f99e3	hallway+voice+simplicity	keep	League	A-006 missing Sleeper state	Bureau Self-Scout shows connect-required card and clears stale data without Sleeper user
+62	24ffce07	hallway+voice+simplicity	keep	Player Sheet	B-001 roster fit stub	League tab converts player-status into roster fit copy and Situation Room handoff
