@@ -13,7 +13,7 @@ Status: `PENDING` | `IN_PROGRESS` | `PASS` | `FAIL` | `BLOCKED`
 | ID | Status | Title | North star tie | Owner hint |
 |----|--------|-------|----------------|------------|
 | A-001 | PASS | Screener age float validation | Screener free growth engine | API |
-| A-002 | PENDING | Explore error states + empty DB message | Trust the user | Web |
+| A-002 | PASS | Explore error states + empty DB message | Trust the user | Web |
 | A-003 | PENDING | Wire `/api/explore/*` alias if frontend expects it | Stable API | API |
 | A-004 | PENDING | Panel renderer: handle 402 pro gate in UI | Pro conversion | Web |
 | A-005 | PENDING | League connect: persist league across routes | Context moat | Web |
