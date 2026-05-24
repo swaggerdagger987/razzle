@@ -80,14 +80,17 @@ Each cycle gets a score. **Keep** changes only if score improves or ties with si
 
 **Uncommitted code is decay.** If the machine dies, the loop dies with it. Every cycle **must** land in git before the next cycle starts.
 
+**Unpushed code is also decay.** Local-only commits die if the laptop dies. Every cycle **must** land on GitHub before the next cycle starts.
+
 ### Rules
 
 1. **Every cycle ends with `git commit`** — code, docs, evidence, COUNCIL.md, results.tsv, LOOP-STATE.md. No exceptions.
-2. **`keep` requires a real commit hash** in `results.tsv` (7 chars). **`none` is invalid** for keep — downgrade to crash and fix.
-3. **Codex audit must verify:** `git status --porcelain` is empty (or only `.env` / secrets gitignored) after commit.
-4. **`discard` / `crash`** — still commit: either the revert (`revert: cycle N …`) or a docs-only commit logging the failure. Repo must never sit dirty across cycles.
-5. **Commit message:** short, slice-scoped, no emojis. Example: `Lab L1: aging curves renderer + hallway wires`
-6. **Do not commit secrets** — `.env`, credentials. Warn in COUNCIL if accidentally staged.
+2. **Every cycle ends with `git push`** — shell pushes current branch to `origin` after commit (override: `RAZZLE_PUSH_REMOTE`, `RAZZLE_PUSH_BRANCH`). Push failure logs to `recovery.log` and retries next gate; loop keeps running.
+3. **`keep` requires a real commit hash** in `results.tsv` (7 chars). **`none` is invalid** for keep — downgrade to crash and fix.
+4. **Codex audit must verify:** `git status --porcelain` is empty (or only `.env` / secrets gitignored) after commit.
+5. **`discard` / `crash`** — still commit: either the revert (`revert: cycle N …`) or a docs-only commit logging the failure. Repo must never sit dirty across cycles.
+6. **Commit message:** short, slice-scoped, no emojis. Example: `Lab L1: aging curves renderer + hallway wires`
+7. **Do not commit secrets** — `.env`, credentials. Warn in COUNCIL if accidentally staged.
 
 ### If commit fails
 

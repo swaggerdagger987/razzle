@@ -11,7 +11,7 @@ Then: CONTINUOUS.md, DEPTH.md, HALLWAY.md, VOICE.md, REDDIT.md, results.tsv, COU
 
 **Karpathy coding:** https://github.com/multica-ai/andrej-karpathy-skills/blob/main/CLAUDE.md — simplicity first, surgical changes, verify goals.
 
-**Commit gate (survival):** Every cycle ends with `git commit`. Uncommitted code = decay. `keep` requires hash in results.tsv. If you cannot finish the slice, still commit what exists. The shell will never exit on dirty tree — it rotates recovery agents and auto-commits as last resort. See PROGRAM.md.
+**Commit gate (survival):** Every cycle ends with `git commit` then `git push origin <branch>`. Uncommitted or unpushed code = decay. `keep` requires hash in results.tsv. If you cannot finish the slice, still commit what exists. The shell will never exit on dirty tree — it rotates recovery agents and auto-commits as last resort. See PROGRAM.md.
 
 Read and follow loop-prompt-v2.txt for each cycle. After every cycle PASS:
 

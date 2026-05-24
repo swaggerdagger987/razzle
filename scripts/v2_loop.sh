@@ -32,12 +32,15 @@ RECOVERY_LOG="$ROOT/docs/v2/recovery.log"
 BOARD_LOCK="$ROOT/docs/v2/.board-lock"
 LOOP_LOCKDIR="$ROOT/docs/v2/.loop.lock.d"
 RECOVERY_MODELS=("$MODEL_CTO" "$MODEL_CEO" "$MODEL_BUILDER" "$MODEL_GEMINI")
+PUSH_REMOTE="${RAZZLE_PUSH_REMOTE:-origin}"
+PUSH_BRANCH="${RAZZLE_PUSH_BRANCH:-}"
+PUSH_RETRIES="${RAZZLE_PUSH_RETRIES:-3}"
 
 # Appended to EVERY board agent prompt — agents must never stall the board
 BOARD_NEVER_STOP="
 BOARD RULES (non-negotiable):
 - NEVER ask the user for direction. NEVER say you are blocked waiting for human input.
-- If git status is dirty after your work: git add -A, unstage .env/.next/tsbuildinfo, git commit, verify clean.
+- If git status is dirty after your work: git add -A, unstage .env/.next/tsbuildinfo, git commit, git push, verify clean.
 - Unrelated file changes from a parallel loop are NOT your problem — commit ALL legitimate work anyway.
 - Do your assigned section only, then stop. The shell handles tree hygiene between steps."
 
@@ -333,6 +336,7 @@ Role: COMPOSER. Read all three audits. Append ## Board Meeting — After Cycle $
 
   update_last_board_cycle "$after_cycle"
   release_board_lock
+  push_to_github "board-$after_cycle"
   echo ""
   echo "=== Board meeting complete (after cycle $after_cycle) ==="
 }
@@ -341,6 +345,54 @@ log_recovery() {
   local msg="$1"
   mkdir -p "$(dirname "$RECOVERY_LOG")"
   echo "$(date -Iseconds) $msg" >> "$RECOVERY_LOG"
+}
+
+current_push_branch() {
+  if [[ -n "$PUSH_BRANCH" ]]; then
+    echo "$PUSH_BRANCH"
+  else
+    git branch --show-current 2>/dev/null || true
+  fi
+}
+
+push_to_github() {
+  local context="${1:-loop}"
+  local branch
+  branch=$(current_push_branch)
+  if [[ -z "$branch" ]]; then
+    echo "WARN: no git branch — skip push ($context)" >&2
+    return 0
+  fi
+
+  local ahead=0
+  if git rev-parse "@{upstream}" >/dev/null 2>&1; then
+    ahead=$(git rev-list --count "@{upstream}..HEAD" 2>/dev/null || echo "0")
+  else
+    ahead=$(git rev-list --count HEAD 2>/dev/null || echo "1")
+  fi
+
+  if (( ahead == 0 )); then
+    echo "GitHub up to date ($PUSH_REMOTE/$branch)"
+    return 0
+  fi
+
+  echo ""
+  echo "========== PUSH — $ahead commit(s) → $PUSH_REMOTE/$branch ($context) =========="
+  local attempt=0
+  while (( attempt < PUSH_RETRIES )); do
+    attempt=$((attempt + 1))
+    if git push -u "$PUSH_REMOTE" "$branch" 2>&1; then
+      log_recovery "push ok context=$context branch=$branch ahead=$ahead attempt=$attempt"
+      echo "Pushed to $PUSH_REMOTE/$branch"
+      return 0
+    fi
+    echo "Push attempt $attempt/$PUSH_RETRIES failed — retrying in 5s..." >&2
+    sleep 5
+  done
+
+  log_recovery "push FAILED context=$context branch=$branch ahead=$ahead"
+  echo "WARN: push failed after $PUSH_RETRIES attempts — work is committed locally; will retry next gate" >&2
+  return 0
 }
 
 tree_is_clean() {
@@ -457,6 +509,7 @@ run_chain_forever() {
 
     ensure_clean_tree "$cycle"
     update_cycle_state "$cycle"
+    push_to_github "cycle-$cycle"
   done
 }
 
@@ -472,6 +525,7 @@ case "$MODE" in
     BOARD_CYCLE=$(grep '^cycle:' "$STATE" | awk '{print $2}')
     run_board_meeting "$BOARD_CYCLE"
     ensure_clean_tree "board-$BOARD_CYCLE"
+    push_to_github "board-$BOARD_CYCLE"
     ;;
   continuous|steps-continuous)
     if [[ "$MODE" == "steps-continuous" ]]; then
@@ -488,6 +542,7 @@ case "$MODE" in
       run_steps_cycle "$CYCLE"
       ensure_clean_tree "$CYCLE"
       update_cycle_state "$CYCLE"
+      push_to_github "steps-cycle-$CYCLE"
       CYCLE=$((CYCLE + 1))
     done
     ;;
@@ -502,6 +557,7 @@ case "$MODE" in
         run_single_cycle "$CYCLE"
         ensure_clean_tree "$CYCLE"
         update_cycle_state "$CYCLE"
+        push_to_github "cycle-$CYCLE"
         CYCLE=$((CYCLE + 1))
       done
     fi

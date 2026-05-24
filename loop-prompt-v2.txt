@@ -86,6 +86,7 @@ Append "## Score — Cycle N" with keep | discard | crash.
 git add -A
 git status   # confirm no secrets staged
 git commit -m "Lab L1: <slice> — <one-line why>"
+git push origin "$(git branch --show-current)"
 git rev-parse --short HEAD
 ```
 
@@ -118,6 +119,6 @@ Start the next cycle from LOOP-STATE.md. Zero idle time.
 
 When FEATURES.md is all GREEN → keep climbing DEPTH layers in PARITY.md.
 
-**Every cycle MUST end with git commit.** See PROGRAM.md git commit gate. Next cycle cannot start with dirty working tree.
+**Every cycle MUST end with git commit and git push.** See PROGRAM.md git commit gate. Next cycle cannot start with dirty working tree or unpushed commits.
 
 Legacy Razzle/razzle repo only. Never block on Stripe/LLM/Reddit keys.
