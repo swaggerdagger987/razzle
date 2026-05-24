@@ -49,3 +49,4 @@ cycle	commit	score	status	pillar	slice	description
 56	409a4ca0	gates+simplicity	keep	Lab	L5 OG export fix	Satori display:flex on /og/[panel] unblocks launch-10 export cards
 57	a836a30c	gates+voice+simplicity	keep	Explore	A-002 empty/error states	Branded screener error retry, empty database copy, and clear-filters recovery
 58	eae23376	gates+simplicity	keep	Explore	A-003 API aliases	/api/explore/query and /api/explore/filter-options reuse existing screener contracts
+59	25e937db	gates+voice+simplicity	keep	Lab	A-004 Pro gate UI	Shared 402-aware panel fetch helper covers bespoke launch panels with ProUpgradeGate recovery
