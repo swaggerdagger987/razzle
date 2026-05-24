@@ -53,3 +53,4 @@ cycle	commit	score	status	pillar	slice	description
 60	c0283a7c	hallway+simplicity	keep	League	A-005 durable context	Sleeper user, league list, and selected league persist in localStorage with session fallback
 61	976f99e3	hallway+voice+simplicity	keep	League	A-006 missing Sleeper state	Bureau Self-Scout shows connect-required card and clears stale data without Sleeper user
 62	24ffce07	hallway+voice+simplicity	keep	Player Sheet	B-001 roster fit stub	League tab converts player-status into roster fit copy and Situation Room handoff
+63	65247cd1	gates+simplicity	keep	Lab	B-002 launch-10 contracts	API tests pin launch-10 handler/renderType contracts and Pro-plan slug route resolution

@@ -24,7 +24,7 @@ Status: `PENDING` | `IN_PROGRESS` | `PASS` | `FAIL` | `BLOCKED`
 | ID | Status | Title | North star tie | Owner hint |
 |----|--------|-------|----------------|------------|
 | B-001 | PASS | Player Sheet: league tab with roster fit stub | Context layer | Web |
-| B-002 | PENDING | Top 10 panels: verify handler + renderer match | Lab Pro value | Full-stack |
+| B-002 | PASS | Top 10 panels: verify handler + renderer match | Lab Pro value | Full-stack |
 | B-003 | PENDING | Explore: column picker + 5 core stat columns | Screener power | Web |
 | B-004 | PENDING | OG share card for explore state | Reddit screenshots | Web |
 | B-005 | PENDING | Head-to-head opponent picker | Bureau moat | Full-stack |
