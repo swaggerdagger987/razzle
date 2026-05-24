@@ -25,6 +25,25 @@ const TABS: Array<{ id: PlayerSheetTab; label: string }> = [
   { id: "ask", label: "Ask" },
 ];
 
+function rosterFitCopy(status: string | null, playerName: string, position?: string) {
+  if (!status) {
+    return "Roster fit pending — Razzle needs this player mapped to Sleeper before it can call the leverage.";
+  }
+  if (status.includes("starter")) {
+    return `${playerName} is already in your starting plan. Treat the next move as injury insurance or tier-up math, not panic shopping.`;
+  }
+  if (status.includes("bench")) {
+    return `${playerName} is bench depth for you. Check whether the ${position ?? "position"} room is insulation or a trade chip.`;
+  }
+  if (status.startsWith("Owned by")) {
+    return `${playerName} is a trade target, not a waiver click. Bring Bones the opponent context before you send anything.`;
+  }
+  if (status.startsWith("Free agent")) {
+    return `${playerName} is available in this league. This is waiver-watch territory — compare role, injuries, and schedule before spending.`;
+  }
+  return `${playerName} has partial league context. Use the Bureau before making a roster move.`;
+}
+
 export function PlayerSheet() {
   const { open, player, tab, closePlayer, setTab } = usePlayerSheet();
   const searchParams = useSearchParams();
@@ -230,6 +249,31 @@ export function PlayerSheet() {
                   <p className="text-ink-medium mt-2 text-sm">
                     Roster fit and trade context use your connected league — same context the film room sees.
                   </p>
+                  <div className="chunky mt-3 bg-bg p-3">
+                    <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                      roster fit stub
+                    </p>
+                    <p className="mt-1 text-sm">{rosterFitCopy(rosterStatus, player.name, player.position)}</p>
+                    <Link
+                      href={
+                        toRoom({
+                          agentId: rosterStatus?.startsWith("Owned by") ? "bones" : "razzle",
+                          question: `${player.name}: ${rosterFitCopy(rosterStatus, player.name, player.position)}`,
+                          player: {
+                            playerId: player.playerId,
+                            slug: player.slug,
+                            name: player.name,
+                            position: player.position,
+                            team: player.team,
+                          },
+                        }) as Route
+                      }
+                      className="mt-2 inline-block text-xs text-orange underline"
+                      onClick={closePlayer}
+                    >
+                      ask the staff about roster fit →
+                    </Link>
+                  </div>
                   <Link
                     href={leagueId ? `/league/${leagueId}` : "/league"}
                     className="chunky chunky-hover mt-4 inline-block bg-orange px-4 py-2 text-white"

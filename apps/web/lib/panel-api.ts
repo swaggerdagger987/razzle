@@ -26,9 +26,18 @@ export function isUpgradeRequiredError(err: unknown): err is UpgradeRequiredErro
   return err instanceof UpgradeRequiredError;
 }
 
-export async function fetchPanelData(panel: PanelDefinition): Promise<unknown> {
-  // Slug route applies tier gating + catalog defaults
-  const res = await fetch(`/api/panels/${panel.slug}`);
+function panelUrl(panel: PanelDefinition, query: string | URLSearchParams = "") {
+  const suffix = typeof query === "string" ? query : query.toString();
+  if (!suffix) return `/api/panels/${panel.slug}`;
+  return `/api/panels/${panel.slug}${suffix.startsWith("?") ? suffix : `?${suffix}`}`;
+}
+
+export async function fetchPanelJson<T = unknown>(
+  panel: PanelDefinition,
+  query: string | URLSearchParams = "",
+): Promise<T> {
+  // Slug route applies tier gating + catalog defaults.
+  const res = await fetch(panelUrl(panel, query));
   if (res.status === 402) {
     const body = await res.json().catch(() => ({}));
     const detailRaw = (body as { detail?: unknown }).detail;
@@ -41,7 +50,11 @@ export async function fetchPanelData(panel: PanelDefinition): Promise<unknown> {
     });
   }
   if (!res.ok) throw new Error(`API ${res.status} on ${panel.slug}`);
-  return res.json();
+  return res.json() as Promise<T>;
+}
+
+export async function fetchPanelData(panel: PanelDefinition): Promise<unknown> {
+  return fetchPanelJson(panel);
 }
 
 export function extractItems(data: unknown): Array<Record<string, unknown>> {

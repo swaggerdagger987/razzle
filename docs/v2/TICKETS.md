@@ -13,18 +13,18 @@ Status: `PENDING` | `IN_PROGRESS` | `PASS` | `FAIL` | `BLOCKED`
 | ID | Status | Title | North star tie | Owner hint |
 |----|--------|-------|----------------|------------|
 | A-001 | PASS | Screener age float validation | Screener free growth engine | API |
-| A-002 | PENDING | Explore error states + empty DB message | Trust the user | Web |
-| A-003 | PENDING | Wire `/api/explore/*` alias if frontend expects it | Stable API | API |
-| A-004 | PENDING | Panel renderer: handle 402 pro gate in UI | Pro conversion | Web |
-| A-005 | PENDING | League connect: persist league across routes | Context moat | Web |
-| A-006 | PENDING | Bureau self-scout: show error when no Sleeper user | Personalization | Web |
+| A-002 | PASS | Explore error states + empty DB message | Trust the user | Web |
+| A-003 | PASS | Wire `/api/explore/*` alias if frontend expects it | Stable API | API |
+| A-004 | PASS | Panel renderer: handle 402 pro gate in UI | Pro conversion | Web |
+| A-005 | PASS | League connect: persist league across routes | Context moat | Web |
+| A-006 | PASS | Bureau self-scout: show error when no Sleeper user | Personalization | Web |
 
 ## Phase B — Depth (screenshot-worthy)
 
 | ID | Status | Title | North star tie | Owner hint |
 |----|--------|-------|----------------|------------|
-| B-001 | PENDING | Player Sheet: league tab with roster fit stub | Context layer | Web |
-| B-002 | PENDING | Top 10 panels: verify handler + renderer match | Lab Pro value | Full-stack |
+| B-001 | PASS | Player Sheet: league tab with roster fit stub | Context layer | Web |
+| B-002 | PASS | Top 10 panels: verify handler + renderer match | Lab Pro value | Full-stack |
 | B-003 | PENDING | Explore: column picker + 5 core stat columns | Screener power | Web |
 | B-004 | PENDING | OG share card for explore state | Reddit screenshots | Web |
 | B-005 | PENDING | Head-to-head opponent picker | Bureau moat | Full-stack |

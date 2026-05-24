@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryStates } from "nuqs";
 import { useEffect, useMemo, useState } from "react";
-import { runScreener } from "@/lib/api";
+import { ApiError, runScreener } from "@/lib/api";
 import {
   defaultSortForUniverse,
   exploreParsers,
@@ -26,6 +26,20 @@ import { FormulaStore } from "./FormulaStore";
 import { SavedViewsManager } from "./SavedViewsManager";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
+
+function exploreErrorCopy(error: unknown) {
+  if (error instanceof ApiError) {
+    if (error.status >= 500) {
+      return "The API fumbled the handoff. If this is local, the database may be empty or mid-sync.";
+    }
+    if (error.status === 404) {
+      return "The screener endpoint is missing. Check the API route before trusting this board.";
+    }
+    return `The API called this one back: ${error.message}`;
+  }
+
+  return error instanceof Error ? error.message : "The screener did not answer. Try the snap again.";
+}
 
 export function ExplorePageClient() {
   const [params, setParams] = useQueryStates(exploreParsers);
@@ -112,6 +126,11 @@ export function ExplorePageClient() {
   }
 
   const statLabel = universe === "college" ? "college players" : "players";
+  const hasActiveFilters = Boolean(params.q || params.pos.length || params.team.length);
+  const emptyTitle = hasActiveFilters ? "No players match this board." : "No film in the database yet.";
+  const emptyBody = hasActiveFilters
+    ? "Widen the filters or clear the search. The good stuff is probably one click away."
+    : "Run the data sync, then come back when the film room has tape.";
 
   return (
     <div className="lab-container">
@@ -235,9 +254,32 @@ export function ExplorePageClient() {
 
       {query.isPending && <LoadingState className="p-8" />}
       {query.isError && (
-        <p className="p-6 text-red">something fumbled: {(query.error as Error).message}</p>
+        <div className="explore-state-card chunky bg-bg-card" role="alert">
+          <span className="explore-state-kicker">Screener status</span>
+          <h2>Something fumbled.</h2>
+          <p>{exploreErrorCopy(query.error)}</p>
+          <button type="button" className="btn-chunky text-sm" onClick={() => void query.refetch()}>
+            retry snap
+          </button>
+        </div>
       )}
-      {query.isSuccess && (
+      {query.isSuccess && displayRows.length === 0 && (
+        <div className="explore-state-card chunky bg-bg-card">
+          <span className="explore-state-kicker">{universe === "college" ? "College board" : "NFL board"}</span>
+          <h2>{emptyTitle}</h2>
+          <p>{emptyBody}</p>
+          {hasActiveFilters ? (
+            <button
+              type="button"
+              className="btn-chunky text-sm"
+              onClick={() => void setParams({ q: "", pos: [], team: [] })}
+            >
+              clear filters
+            </button>
+          ) : null}
+        </div>
+      )}
+      {query.isSuccess && displayRows.length > 0 && (
         <>
           <ExploreTable
             rows={displayRows}

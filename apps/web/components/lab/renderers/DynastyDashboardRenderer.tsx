@@ -7,8 +7,10 @@ import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { fetchPanelJson, isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
+import { ProUpgradeGate } from "../ProUpgradeGate";
 
 interface DashboardPlayer {
   player_id: string;
@@ -106,9 +108,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
     queryKey: ["panel", panel.slug, season],
     queryFn: async () => {
       const qs = season ? `?season=${season}` : "";
-      const res = await fetch(`/api/panels/${panel.slug}${qs}`);
-      if (!res.ok) throw new Error(`API ${res.status}`);
-      return res.json() as Promise<DashboardData>;
+      return fetchPanelJson<DashboardData>(panel, qs);
     },
   });
 
@@ -133,6 +133,18 @@ export function DynastyDashboardRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
+    const err = q.error;
+    if (isUpgradeRequiredError(err)) {
+      return (
+        <ProUpgradeGate
+          panelSlug={panel.slug}
+          panelTitle={panel.title}
+          required={err.required}
+          current={err.current}
+          message={err.message}
+        />
+      );
+    }
     return <p className="p-6 text-red">something fumbled: {(q.error as Error).message}</p>;
   }
 

@@ -358,6 +358,31 @@ body {
   color: var(--orange);
 }
 
+.explore-state-card {
+  margin: 1rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.explore-state-card h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.explore-state-card p {
+  max-width: 46rem;
+  color: var(--ink-medium);
+  font-size: 0.9rem;
+}
+
+.explore-state-kicker {
+  font-family: var(--font-hand);
+  color: var(--orange);
+  font-size: 1.25rem;
+}
+
 .pressure-bar-row {
   display: grid;
   grid-template-columns: minmax(120px, 1fr) 1fr auto auto;

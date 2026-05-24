@@ -16,45 +16,79 @@ const USER_KEY = "razzle.sleeper.user";
 const LEAGUES_KEY = "razzle.sleeper.leagues";
 const LEAGUE_KEY = "razzle.sleeper.league";
 
-export function getSleeperUser(): SleeperUser | null {
-  if (typeof window === "undefined") return null;
+function readStoredJson<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+  let raw: string | null = null;
   try {
-    return JSON.parse(sessionStorage.getItem(USER_KEY) || "null");
+    raw = window.localStorage.getItem(key);
   } catch {
-    return null;
+    raw = null;
   }
+  try {
+    raw ??= window.sessionStorage.getItem(key);
+  } catch {
+    raw = null;
+  }
+  try {
+    return raw ? (JSON.parse(raw) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeStoredJson(key: string, value: unknown) {
+  if (typeof window === "undefined") return;
+  const raw = JSON.stringify(value);
+  try {
+    window.localStorage.setItem(key, raw);
+  } catch {
+    // Fall back to current-tab storage below.
+  }
+  try {
+    window.sessionStorage.setItem(key, raw);
+  } catch {
+    // Storage can be disabled; callers still keep in-memory state for the route.
+  }
+}
+
+function removeStoredJson(key: string) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // Best effort; session storage clear below still removes current-tab context.
+  }
+  try {
+    window.sessionStorage.removeItem(key);
+  } catch {
+    // Storage can be disabled.
+  }
+}
+
+export function getSleeperUser(): SleeperUser | null {
+  return readStoredJson<SleeperUser | null>(USER_KEY, null);
 }
 
 export function getSleeperLeagues(): SleeperLeague[] {
-  if (typeof window === "undefined") return [];
-  try {
-    return JSON.parse(sessionStorage.getItem(LEAGUES_KEY) || "[]");
-  } catch {
-    return [];
-  }
+  return readStoredJson<SleeperLeague[]>(LEAGUES_KEY, []);
 }
 
 export function getSelectedLeague(): SleeperLeague | null {
-  if (typeof window === "undefined") return null;
-  try {
-    return JSON.parse(sessionStorage.getItem(LEAGUE_KEY) || "null");
-  } catch {
-    return null;
-  }
+  return readStoredJson<SleeperLeague | null>(LEAGUE_KEY, null);
 }
 
 export function setSleeperSession(user: SleeperUser, leagues: SleeperLeague[], league?: SleeperLeague) {
-  sessionStorage.setItem(USER_KEY, JSON.stringify(user));
-  sessionStorage.setItem(LEAGUES_KEY, JSON.stringify(leagues));
-  if (league) sessionStorage.setItem(LEAGUE_KEY, JSON.stringify(league));
+  writeStoredJson(USER_KEY, user);
+  writeStoredJson(LEAGUES_KEY, leagues);
+  if (league) writeStoredJson(LEAGUE_KEY, league);
 }
 
 export function setSelectedLeague(league: SleeperLeague) {
-  sessionStorage.setItem(LEAGUE_KEY, JSON.stringify(league));
+  writeStoredJson(LEAGUE_KEY, league);
 }
 
 export function clearSleeperSession() {
-  sessionStorage.removeItem(USER_KEY);
-  sessionStorage.removeItem(LEAGUES_KEY);
-  sessionStorage.removeItem(LEAGUE_KEY);
+  removeStoredJson(USER_KEY);
+  removeStoredJson(LEAGUES_KEY);
+  removeStoredJson(LEAGUE_KEY);
 }
