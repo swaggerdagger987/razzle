@@ -185,8 +185,15 @@ order when working as a company role:
 2. `docs/company/OPERATING_SYSTEM.md` — principles, ethos, reconciliation
 3. `docs/company/MEETINGS.md` — daily standup format + commit gate
 4. `docs/company/AUTOMATION.md` — standard company loop + prompt template
-5. `docs/company/roles/<role>.md` — role you are acting as
-6. `docs/company/memory/<role>.md` — what this role learned in prior runs
+5. `docs/company/SLACK.md` — operator cheat sheet for Slack-triggered runs
+6. `docs/company/automations/` — Cursor Automation prompt specs (good-morning, good-evening, tick)
+7. `docs/company/roles/<role>.md` — role you are acting as
+8. `docs/company/memory/<role>.md` — what this role learned in prior runs
+
+**Cursor Cloud Agents read `AGENTS.md` at repo root first.** That file points
+back into `docs/company/` and disambiguates which Automation spec to follow
+based on the Slack trigger. Local Claude work in this IDE reads CLAUDE.md;
+cloud-triggered runs read AGENTS.md. The two files complement each other.
 
 **State / backlog / acceptance** stay in `docs/v2/`:
 

@@ -20,6 +20,8 @@ into `OPERATING_SYSTEM.md`.
 5. `SCORECARDS.md` — How roles are evaluated (3-line daily, full grid monthly)
 6. `HIRING_AND_FIRING.md` — How roles are created, rewritten, merged, or retired
 7. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
+8. `SLACK.md` — Operator cheat sheet: how to start and stop the workday from Slack
+9. `automations/README.md` — Cursor Automation specs (good-morning, good-evening, tick)
 
 Then read the role file for the role being invoked, plus that role's memory file.
 
@@ -61,9 +63,18 @@ docs/company/
   SCORECARDS.md              evaluation framework
   HIRING_AND_FIRING.md       role lifecycle
   AUTOMATION.md              loop, model routing, never-automate rules
+  SLACK.md                   operator cheat sheet (phone-friendly)
   roles/                     per-role contracts
   memory/                    per-role append-only learning logs
   standups/                  daily build standup outputs (YYYY-MM-DD.md)
+  automations/               Cursor Automation specs (versioned prompts)
+    README.md                index + dashboard setup
+    good-morning.md          "good morning team" — single cycle
+    good-evening.md          "good evening team" — closing log
+    tick.md                  loop tick — DEFERRED until gates met
+  state/                     machine-readable workday state
+    README.md                schema + read/write protocol
+    workday.json             {status, started_at, closed_at, cycle_count_today}
 ```
 
 ---
@@ -90,12 +101,18 @@ The company exists to serve the product, not the other way around.
 
 ## Current Operating Mode
 
-**Stage 0 — Manual role invocation.** Run roles by reading their contracts and
-dispatching subagents with the right model. Output committed to
-`docs/company/standups/` and per-role memory files.
+**Stage 0 — Manual role invocation, Slack-triggered.** Run roles by:
 
-Stage advancement gates are documented in `AUTOMATION.md`. `scripts/company_loop.sh`
-is **not** built yet — see AUTOMATION.md "First Script To Build Later" for
-pre-script gates.
+- Sending `good morning team` in `#razzle-team` Slack — the Morning Standup
+  Cursor Automation runs one full Standard Company Loop cycle and opens a PR.
+- Sending `good evening team` in `#razzle-team` Slack — the Closing Log
+  Automation writes the day's reflection.
+
+One cycle per `good morning team` trigger. The loop tick automation
+(`automations/tick.md`) is **DEFERRED** until Stage 0 → 1 unlock conditions
+in `AUTOMATION.md` are met (5 clean standups in a row).
+
+If you want to run a role manually outside Slack, use the `Prompt Template`
+in `AUTOMATION.md` against the role file and memory file directly.
 
 Do not automate unclear judgment. Automate stable handoffs.

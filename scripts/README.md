@@ -5,12 +5,15 @@
 - **`dev_stack.sh`** — kill stale dev servers, boot API + Next.js for local dev
 - **`sync_data.py`** — pull nflverse stats into `data/terminal.db`
 
-## Not yet built
+## Superseded by Cursor Automations
 
-- `company_loop.sh` — automated Company OS loop runner. **Blocked on
-  pre-script gates** in `docs/company/AUTOMATION.md` "First Script To Build
-  Later." Until those gates clear, the Company OS runs manually per
-  `docs/company/OPERATING_SYSTEM.md` Stage 0.
+- `company_loop.sh` — was planned as the Company OS runner. **Replaced** by
+  Slack-triggered Cursor Automations (`docs/company/automations/`). The
+  Founder sends `good morning team` / `good evening team` in Slack; a Cursor
+  Cloud Agent runs one cycle of the Standard Company Loop and opens a PR.
+  Operator cheat sheet: `docs/company/SLACK.md`. A shell-script fallback may
+  still be useful for offline / no-Slack runs, but it is no longer the
+  primary runner and is not currently tracked as work-to-do.
 
 ## Retired
 

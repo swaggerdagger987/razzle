@@ -25,6 +25,17 @@ markdown handoffs are preferred when the work allows.
 **Format:** Async. The output is a markdown file committed at
 `docs/company/standups/YYYY-MM-DD.md`. There is no live meeting.
 
+**Trigger:** The Founder sends `good morning team` in `#razzle-team` Slack.
+The Morning Standup Cursor Automation (`docs/company/automations/good-morning.md`)
+fires, plays all six roles, writes the standup file, and opens a PR. The
+Founder can also run this manually by following the AUTOMATION.md Prompt
+Template in a fresh agent.
+
+**Closing:** The Founder sends `good evening team` in the same channel. The
+Closing Log Cursor Automation (`docs/company/automations/good-evening.md`)
+appends a `## Closing` section to the standup, updates per-role memory, and
+sets `docs/company/state/workday.json` to `closed`.
+
 **Purpose:** Pick exactly one vertical slice, vote three-equals, and define the handoff.
 
 **Voices:** Chief of Staff (router), Product Strategist, Engineering Architect, Builder.

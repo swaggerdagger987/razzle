@@ -227,24 +227,45 @@ These actions never become automatic, even at Stage 3:
 
 ---
 
-## First Script To Build Later
+## First Automation: Slack-driven good-morning / good-evening
 
-When ready, add:
+The runner is **not** a shell script. It is **Cursor Automations** wired to a
+dedicated Slack channel. The Founder operates the team from their phone:
 
-```bash
-scripts/company_loop.sh --daily          # run one cycle of the standard loop
-scripts/company_loop.sh --reality-brief  # run Outside Reality Briefing
-scripts/company_loop.sh --founder-board  # run a triggered Founder Board
-scripts/company_loop.sh --role-review    # run a triggered Hiring/Firing Review
-```
+| Trigger (Slack) | Effect | Spec |
+|-----------------|--------|------|
+| `good morning team` | Open the workday, run **one** Standard Company Loop cycle, open a PR, post Slack summary | `docs/company/automations/good-morning.md` |
+| `good evening team` | Close the workday, write the day's reflection + per-role memory updates, open a PR, post Slack goodnight | `docs/company/automations/good-evening.md` |
+| (loop tick — DEFERRED) | While workday is open, run additional cycles on a schedule until the cap is hit or the Founder closes the day | `docs/company/automations/tick.md` |
 
-**Pre-script gates** (do not build until all are met):
+State is shared via `docs/company/state/workday.json` (`status: open | closed`,
+cycle counter, last trigger). The morning automation opens, the evening
+automation closes, the tick (when enabled) runs cycles in between.
 
-1. Stage 0 → 1 unlock conditions met (5 standups with >=70% Founder acceptance).
-2. Memory files exist for all 6 roles and contain real entries from manual runs.
-3. Three manual standups produced standup files Founder used without rewriting.
+The operator-facing cheat sheet is `docs/company/SLACK.md`.
+
+### Pre-loop gates (do not enable `tick.md` until all are met)
+
+1. Stage 0 → 1 unlock conditions met (5 morning-standup runs in a row produced
+   PRs the Founder merged without rewriting, ≥70% acceptance).
+2. Memory files contain real entries from those 5 manual-trigger runs.
+3. Reality Checker has caught at least 2 issues that mattered.
 4. The prior cofounder loop has been retired into
-   `graveyard/v2-cofounder-loop/` with `RETIRED.md` pointing to `docs/company/`.
+   `graveyard/v2-cofounder-loop/` with `RETIRED.md` pointing to `docs/company/`
+   (already done as of 2026-05-27).
 
-The script is a thin shell over the manual loop. It does not invent new agents,
-new meetings, or new memory schemas. It runs the same prompts a human would.
+Until then: morning + evening only. One cycle a day. The Founder sends both
+messages. The loop is a switch we flip after the prompt has earned trust.
+
+### Why Cursor Automations and not a shell script
+
+- Slack-triggerable from a phone (the original use case).
+- Cloud VM with checkout, dev tools, and PR creation built in.
+- Per-run cost visibility at `cursor.com/dashboard/usage`.
+- GitHub auth piggybacks on the Founder's identity (PRs land as the right
+  human).
+- Secrets live once in the Cloud Agent dashboard, not in env files.
+
+A shell script may still be useful later for offline runs (no Slack, no Cursor
+account) — but that's a fallback, not the primary runner. The primary runner
+is the Slack-triggered Automation.
