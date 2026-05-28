@@ -13,10 +13,10 @@ If you find yourself reaching for something not listed here and it does not appe
 | `docs/NORTH_STAR.md` | The endgame. Every V2 decision filters through this. |
 | `docs/DESIGN.md` | Color, typography, voice, visual language. The brand IS the moat. |
 | `docs/ROADMAP.md` | Phased execution plan; V2 fulfills Phase 2 directly. |
-| `docs/PROGRESS_ARCHIVE.md` | Historical record of build phases. |
-| `docs/BRAND_VOICE_REVIEW.md` | Voice calibration. |
-| `docs/CAMPAIGN_PLAN.md` | GTM context. |
-| `docs/bureau-design.md`, `docs/launch-design.md` | Surface-specific design notes. |
+| `graveyard/top-level/PROGRESS_ARCHIVE.md` | Historical record of build phases (graveyard). |
+| `graveyard/top-level/BRAND_VOICE_REVIEW.md` | Voice calibration (graveyard). |
+| `graveyard/top-level/CAMPAIGN_PLAN.md` | GTM context (graveyard, pre-launch). |
+| `graveyard/designs/bureau-design.md`, `graveyard/designs/launch-design.md` | Surface-specific design notes (graveyard). |
 | `agent-personas/*.md` | Six AI agent system-prompt scaffolding. Wired into `apps/api/services/agents/`. |
 
 ## Data layer (lift and shift)

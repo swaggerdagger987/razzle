@@ -99,4 +99,4 @@ Each cycle declares in COUNCIL.md:
 - Vertical ladders: `docs/v2/DEPTH.md`
 - Backlog: `docs/v2/PARITY.md`
 - Agent registry: `docs/v2/AGENTS.md`
-- Loop: `docs/v2/CONTINUOUS.md`
+- Loop: `docs/company/AUTOMATION.md`

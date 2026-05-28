@@ -8,9 +8,14 @@ Razzle is a fantasy football analytics platform at razzle.lol. A free fantasy fo
 
 Before writing ANY code, read these files in this order:
 1. `docs/NORTH_STAR.md` — **The endgame.** This is what Razzle becomes. Every decision you make should move toward this document. When you hit a fork in the road, the north star resolves it.
-2. `docs/ROADMAP.md` — The phased execution plan with exit criteria. Follow it exactly.
-3. `docs/DESIGN.md` — Theme, colors, typography, visual language. All UI must match.
-4. `PROGRESS.md` — What's been completed. **Start from where this file left off.**
+2. `docs/DESIGN.md` — Theme, colors, typography, visual language. All UI must match.
+3. `docs/DECISIONS.md` — Locked V2 architecture calls. Do not reverse without a dated entry here.
+4. `docs/v2/STATUS.md` — **Live operational status.** Current cycle, focus, blockers. Start here for where work left off.
+5. `docs/v2/PARITY.md` — Vertical backlog — one slice per cycle.
+6. `docs/v2/ACCEPTANCE.md` — Localhost finish-line gates.
+
+Full docs index: `docs/README.md`. Legacy quarry rules: `legacy/README.md`.
+Company automation roles: `docs/company/README.md`.
 
 ## Product Decision-Making
 
@@ -23,52 +28,49 @@ You are not just a code executor. You are a product builder. When you encounter 
    - Does this move toward the three-layer architecture?
    - Is this the simplest version that works?
    - Would a Reddit power user care?
-3. Make the call. Document your reasoning in `PROGRESS.md` under Decisions Log.
-4. If a decision is truly ambiguous and high-stakes (would be expensive to reverse), note it as a blocker instead of guessing.
+3. Make the call. Document irreversible choices in `docs/DECISIONS.md` with a dated entry. Log slice progress in `docs/v2/COUNCIL.md` or update `docs/v2/STATUS.md` when milestones shift.
+4. If a decision is truly ambiguous and high-stakes (would be expensive to reverse), note it as a blocker in `docs/v2/STATUS.md` instead of guessing.
 
-You should be opinionated. The north star gives you the values. The roadmap gives you the sequence. The design guide gives you the aesthetics. Between these three documents, most decisions are answerable without human input.
+You should be opinionated. The north star gives you the values. PARITY gives you the next slice. The design guide gives you the aesthetics. Between these documents, most decisions are answerable without human input.
 
-## Current Phase
+When acting as a company role (Chief of Staff, Product Strategist, Engineering Architect, Builder, Data Researcher, or Reality Checker), read `docs/company/OPERATING_SYSTEM.md` and the relevant file in `docs/company/roles/` before proceeding.
 
-Check `PROGRESS.md` to determine which phase you're in. Follow the roadmap phase-by-phase. **Do not skip phases. Do not start the next phase until the current phase's exit criterion is met.**
+## Current Work
+
+Check `docs/v2/STATUS.md` and `docs/v2/LOOP-STATE.md` for the active cycle and focus. Pick **one vertical slice** from `docs/v2/PARITY.md` per loop iteration. Do not horizontal-port legacy HTML pages.
 
 ## Project Structure
 
 ```
 razzle/
-├── frontend/          # HTML, JS, CSS — no framework, browser-runnable
-│   ├── index.html     # Landing page (home)
-│   ├── lab.html       # The Lab (screener)
-│   ├── league-intel.html
-│   ├── agents.html    # Situation Room (later)
-│   ├── styles.css     # Single stylesheet, follows DESIGN.md
-│   ├── lab.js         # Screener logic
-│   └── app.js         # Shared logic
-├── backend/
-│   ├── server.py      # FastAPI app — thin endpoints
-│   └── live_data.py   # Data queries, all DB reads
-├── adapters/
-│   ├── nflverse_adapter.py  # NFL stats → SQLite
-│   └── college_adapter.py   # NCAA stats → SQLite (Phase 1)
-├── data/
-│   └── terminal.db    # SQLite — single source of truth
-├── scripts/           # One-off scripts, data imports
-├── docs/
-│   ├── NORTH_STAR.md  # Product vision — the endgame. Read first.
-│   ├── ROADMAP.md     # Phased development plan
-│   └── DESIGN.md      # Theme and design guide
-├── CLAUDE.md          # This file
-├── PROGRESS.md        # Completed work tracker
-└── render.yaml        # Render deployment config
+├── apps/
+│   ├── api/             # FastAPI — routers/, services/, adapters/, migrations/
+│   │   └── legacy_bridge.py   # ONLY entry to legacy/ quarry
+│   └── web/             # Next.js 15 — app/, components/, lib/
+├── packages/
+│   ├── ui/              # Design tokens + shared primitives
+│   ├── types/           # Shared Zod schemas + TS types
+│   ├── panels/          # Canonical panel catalog (@razzle/panels)
+│   ├── agents/          # Agent registry
+│   └── hallway/         # Connective tissue helpers
+├── data/                # terminal.db, users.db (gitignored)
+├── docs/                # Product + V2 ops docs — see docs/README.md
+├── agent-personas/      # Six LLM system prompts
+├── infra/               # Dockerfile, fly.toml, render.yaml
+├── legacy/              # V1 quarry — read-only via legacy_bridge
+├── scripts/             # Data sync (dev_stack.sh, sync_data.py)
+├── graveyard/           # Retired systems pending deletion — do not read
+└── CLAUDE.md            # This file
 ```
 
 ## Tech Stack
 
-- **Frontend**: Vanilla HTML/JS/CSS. No React, no framework. Browser-runnable from local server.
-- **Backend**: Python FastAPI. Thin endpoints in server.py, data logic in live_data.py.
-- **Database**: SQLite (terminal.db). Sufficient for target scale (10k users).
-- **Data sources**: nflverse (NFL stats via GitHub CSV releases), Sleeper API (leagues/rosters).
-- **Hosting**: Render (static site + web service). Domain: razzle.lol via Namecheap.
+- **Frontend**: Next.js 15 App Router, TypeScript, Tailwind v4, TanStack Query/Table/Virtual, Zod, nuqs.
+- **Backend**: Python 3.12, FastAPI with `APIRouter` per domain, Pydantic v2, slowapi, Alembic.
+- **Database**: SQLite (`terminal.db` stats + `users.db` auth/billing). Sufficient for target scale (10k users).
+- **Data sources**: nflverse, cfbfastR, Sleeper API, ESPN injury feeds.
+- **Auth/Billing**: JWT + bcrypt + Stripe (via legacy bridge until ported; see DECISIONS.md).
+- **Hosting**: Fly.io API + Next.js. Cloudflare CDN. Domain: razzle.lol.
 
 ## Design Rules (Summary — full guide in docs/DESIGN.md)
 
@@ -94,20 +96,18 @@ razzle/
 ## API Design
 
 - All endpoints under `/api/`
-- Return JSON
-- Keep endpoints stable once shipped:
-  - `GET /api/health`
-  - `GET /api/players` — search/filter/paginate
-  - `POST /api/screener/query` — complex multi-filter screener
-  - `GET /api/filter-options` — autocomplete for search/position/team
+- Return JSON; validate with Pydantic v2 models in `apps/api/models/`
+- One `APIRouter` per domain: screener, dynasty, analytics, bureau, agents, auth, billing
+- Keep endpoints stable once shipped; generate TS types from OpenAPI for the web client
+- Legacy data access only through `apps/api/legacy_bridge.py` — never import `legacy/` directly
 
 ## Frontend Rules
 
-- Single `state` object as source of truth
-- Pure render functions where possible
-- Explicit loading/error states for every async flow
-- URL state: serialize screener state (filters, sort, columns) to URL params
-- localStorage for user formulas and saved views (no auth yet)
+- URL is source of truth for screener state (nuqs)
+- TanStack Query for server state; explicit loading/error/empty states for every async flow
+- Design tokens from `packages/ui/tokens.css` — match DESIGN.md
+- Panel catalog from `@razzle/panels` (canonical); avoid duplicating metadata in `apps/web/lib/panels/registry.ts`
+- Loading copy: "pulling film..." not "Loading..."
 
 ## Git
 
@@ -124,32 +124,34 @@ razzle/
 When running autonomously (no user input):
 
 ### Execution
-1. Read `docs/NORTH_STAR.md`, then `PROGRESS.md`. Understand the vision, then find where you left off.
-2. Follow the roadmap phase-by-phase. Do not skip.
-3. Make your own decisions on implementation details — the north star, roadmap, and design guide have the constraints.
-4. Update `PROGRESS.md` after completing each task.
-5. Commit after each completed task.
-6. If genuinely blocked (API down, missing critical info), document the blocker in PROGRESS.md and move to the next unblocked task.
-7. Deploy to Render after completing each phase.
-8. Reference the old FDL codebase at `C:\Users\mcgui\Documents\FDL` for proven patterns (especially live_data.py and nflverse sync logic) — but rewrite, don't copy.
+1. Read `docs/NORTH_STAR.md`, then `docs/v2/STATUS.md` and `docs/v2/LOOP-STATE.md`. Understand the vision, then find where you left off.
+2. Pick one vertical slice from `docs/v2/PARITY.md`. Do not horizontal-expand.
+3. Make your own decisions on implementation details — north star, DECISIONS, and design guide constrain you.
+4. Update `docs/v2/LOOP-STATE.md`, `docs/v2/STATUS.md`, and evidence in `docs/v2/evidence/` after completing a slice.
+5. Commit after each completed slice when the loop or user expects it.
+6. If genuinely blocked, document in `docs/v2/STATUS.md` and pick the next unblocked slice.
+7. Reference `legacy/` only via `legacy_bridge.py` or as quarry for porting patterns.
+8. Reference the old FDL codebase at `C:\Users\mcgui\Documents\FDL` for proven patterns — but rewrite, don't copy.
 
 ### Product Thinking (Brainstormer Mode)
-Between phases or when encountering non-trivial design/architecture decisions:
+When encountering non-trivial design/architecture decisions:
 1. Re-read `docs/NORTH_STAR.md` to recalibrate.
 2. Consider 2-3 approaches with trade-offs before choosing.
 3. Pick the approach that best serves the north star's priorities (Lab quality → Reddit screenshots → conversion funnel).
-4. Log the decision and reasoning in `PROGRESS.md` Decisions Log.
+4. Log irreversible decisions in `docs/DECISIONS.md` with a dated entry.
 5. Bias toward shipping. A working ugly version beats a planned perfect version.
-6. If a decision would significantly change the north star's architecture (new pages, different monetization, different data sources), document it as a proposed change in PROGRESS.md rather than implementing it unilaterally.
+6. If a decision would significantly change the north star's architecture, document as a proposed change in COUNCIL.md rather than implementing unilaterally.
 
 ### Quality Checks
-At the end of each phase, before moving to the next:
-1. Re-read the phase's exit criterion from `docs/ROADMAP.md`. Is it actually met?
-2. Re-read `docs/DESIGN.md`. Does the UI match? Chunky borders, right colors, right fonts?
-3. Screenshot test: would a Reddit power user from r/DynastyFF screenshot this? If no, that's your priority before moving on.
-4. Does the code follow the project structure? No files outside the defined folders.
+Before marking a slice done:
+1. Re-read gate criteria in `docs/v2/ACCEPTANCE.md`. Attach evidence.
+2. Re-read `docs/DESIGN.md`. Chunky borders, right colors, right fonts?
+3. Screenshot test: would a Reddit power user from r/DynastyFF screenshot this?
+4. `pytest apps/api/tests -q` and `npm run build` pass.
 
 ## Reference Codebase
+
+**V1 quarry (this repo):** `legacy/` — read-only. See `legacy/README.md` and `PRESERVE.md`. Port patterns into `apps/api/services/`, do not extend legacy files.
 
 The old FDL project at `C:\Users\mcgui\Documents\FDL` has working implementations of:
 - nflverse data sync (`live_data.py` — sync_nflverse_player_stats function)
@@ -174,15 +176,38 @@ The old FDL project at `C:\Users\mcgui\Documents\FDL` has working implementation
 
 Use these as reference for proven patterns, but rewrite everything clean for the razzle repo. Every line should be intentional.
 
-## Razzle Loop (Autonomous Agent Workflow)
+## Razzle Company OS
 
-The Razzle Loop is an autonomous multi-agent workflow defined in `~/.claude/agents/razzle-loop.md`. It runs a recursive PLAN → DESIGN → BUILD → TEST → FIX loop with zero human stops.
+Razzle runs as an AI-native company defined in `docs/company/`. Read in this
+order when working as a company role:
 
-- **Task tracker**: `LOOP-TASKS.md` (root of repo) — tracks current task, attempts, pass/fail
-- **Activation**: Say "activate razzle loop" or "start the loop"
-- **Agents used**: Sprint Prioritizer, UI Designer, Whimsy Injector, Frontend Developer, Evidence Collector, Reality Checker
-- **Loop logic**: Each task gets max 3 attempts. PASS → commit + next task. FAIL → fix loop. All tasks PASS → phase gate → push.
-- **Full autonomy**: The loop reads north star, roadmap, design guide, and progress tracker. It makes its own decisions. It does not stop to ask.
+1. `docs/company/STAGE.md` — current stage (deep build, no users)
+2. `docs/company/OPERATING_SYSTEM.md` — principles, ethos, reconciliation
+3. `docs/company/MEETINGS.md` — daily standup format + commit gate
+4. `docs/company/AUTOMATION.md` — standard company loop + prompt template
+5. `docs/company/roles/<role>.md` — role you are acting as
+6. `docs/company/memory/<role>.md` — what this role learned in prior runs
+
+**State / backlog / acceptance** stay in `docs/v2/`:
+
+- `docs/v2/LOOP-STATE.md` — cycle counter, focus pillar/layer
+- `docs/v2/STATUS.md` — live summary
+- `docs/v2/PARITY.md` — vertical backlog (one slice per cycle)
+- `docs/v2/DEPTH.md` — depth strategy
+- `docs/v2/ACCEPTANCE.md` — localhost finish-line gates
+- `docs/v2/COUNCIL.md` + `docs/v2/results.tsv` — ongoing logs
+
+**Two AI systems — do not confuse:**
+
+- `docs/company/roles/` = AI staff that **builds** Razzle
+- `agent-personas/` = AI staff that ships **inside** Razzle to users (Razzle,
+  Dolphin, Hawkeye, Fox, Octopus, Elephant), wired through `packages/agents/`
+  and `apps/api/services/agents/`
+
+The prior cofounder loop (`scripts/v2_loop.sh`, `loop-prompt-*.txt`,
+`docs/v2/PROGRAM.md`, `COFOUNDERS.md`, `BOARD.md`, `LOOP.md`, `START-LOOP.md`,
+`CONTINUOUS.md`, `PLAN.md`) lives in `graveyard/v2-cofounder-loop/` pending
+deletion. Do not run it.
 
 ## gstack (Garry Tan's Engineering Skills)
 

@@ -1,3 +1,10 @@
+DEPRECATED. The Razzle operating system has moved to docs/company/.
+The continuous-mode loop is superseded by the manual-first Company OS loop documented in
+docs/company/OPERATING_SYSTEM.md (Ethos) and docs/company/AUTOMATION.md (Standard Company Loop + Prompt Template).
+This file is kept as historical record. Do not invoke this prompt for new cycles.
+
+---
+
 You are the Razzle cofounder loop in **CONTINUOUS MODE**. You do not stop between cycles. Start-stops are decay.
 
 Read docs/v2/PROGRAM.md first — this is the autoresearch skill (metric, keep/discard, compound intelligence).

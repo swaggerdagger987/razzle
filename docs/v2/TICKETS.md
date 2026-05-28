@@ -1,8 +1,8 @@
 # V2 Ticket Backlog — Reference (not the loop driver)
 
-**Active loop:** `docs/v2/COUNCIL.md` — cofounders debate and SHIP features from `FEATURES.md`.
+> **Banner:** Active backlog is `PARITY.md`. Slice intake happens in the Daily Build Standup (`docs/company/MEETINGS.md`). Tickets here are reference rows mapped to the north star — not the build queue.
 
-This file is a **reference backlog** mapped to north star. Council picks 1–3 items per cycle; Composer may bundle related rows.
+This file is a **reference backlog**. The Product Strategist may pull rows here when scoping a slice, but every shipped slice must cite a `PARITY.md` row, `DEPTH.md` layer, or `ACCEPTANCE.md` check (per `docs/company/roles/product-strategist.md`).
 
 Status: `PENDING` | `IN_PROGRESS` | `PASS` | `FAIL` | `BLOCKED`
 

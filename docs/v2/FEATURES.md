@@ -1,8 +1,8 @@
 # Feature Milestones — Not the finish line
 
-Cofounders debate **features**, not abstract tickets. Status: `RED` | `YELLOW` | `GREEN`
+> **Banner:** GREEN = the milestone shipped. **Real depth lives in `PARITY.md`.** Current build is ~15% of V1 depth; do not read this table as "done."
 
-**GREEN here does not mean done.** The loop never stops — see `docs/v2/CONTINUOUS.md` and `docs/v2/PARITY.md` for the real backlog (~10% of V1 shipped).
+Status: `RED` | `YELLOW` | `GREEN`. The build chain (Strategist / Architect / Builder per `docs/company/MEETINGS.md`) picks one slice per cycle from `PARITY.md` rows or `DEPTH.md` layer climbs — not from this table.
 
 | ID | Feature | Status | Done when |
 |----|---------|--------|-----------|

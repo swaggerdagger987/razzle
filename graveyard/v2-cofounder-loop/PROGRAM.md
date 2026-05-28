@@ -1,3 +1,11 @@
+> **DEPRECATED.** The Razzle operating system has moved to `docs/company/`.
+> The autoresearch loop, three-equals voting, Karpathy rules, commit gate, and
+> compound-intelligence ethos are now canonical in
+> `docs/company/OPERATING_SYSTEM.md` (Ethos section) and
+> `docs/company/AUTOMATION.md` (Standard Company Loop). Cycle outputs continue to
+> log to `docs/v2/results.tsv` and `docs/v2/COUNCIL.md`. This file is kept as
+> historical record. Do not write new ethos here.
+
 # program.md — Razzle Autoresearch Loop
 
 **Human-edited skill file.** Agents read this every cycle. Like [karpathy/autoresearch](https://github.com/karpathy/autoresearch) `program.md`, this is how the autonomous org knows what to optimize and what never to touch.

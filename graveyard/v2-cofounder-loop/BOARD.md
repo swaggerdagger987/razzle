@@ -1,3 +1,8 @@
+> **DEPRECATED.** The board meeting is superseded by the trigger-based Founder
+> Board in `docs/company/MEETINGS.md`. The KEEP / DELETE / REFINE election format
+> is preserved there. This file is kept as historical record. Do not run new
+> board meetings from this file.
+
 # Board Meeting — Cofounder Product Review
 
 Every **10 cycles**, the loop **must** hold a board meeting — no exceptions, no skips, no "we'll catch up later." A full passover of codebase and product. Four independent audits, then joint election: **KEEP · DELETE · REFINE**.

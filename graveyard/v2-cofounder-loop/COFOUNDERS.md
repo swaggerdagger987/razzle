@@ -1,3 +1,10 @@
+> **DEPRECATED.** The cofounder model is superseded by the role-based Company OS
+> in `docs/company/`. Three-equals voting (Strategist / Architect / Builder, 2/3
+> SHIP) and the audit cadence are now defined in
+> `docs/company/OPERATING_SYSTEM.md` (Ethos: three equals on the build chain) and
+> `docs/company/MEETINGS.md` (Daily Build Standup, Build Review). This file is
+> kept as historical record. Do not write new cofounder rules here.
+
 # The Cofounders — Three Equals
 
 Three models run Razzle as **equal cofounders**. No hierarchy. The compass is built (`NORTH_STAR.md`, `DESIGN.md`, `PROGRAM.md`) — **intelligence compounds with time**.
