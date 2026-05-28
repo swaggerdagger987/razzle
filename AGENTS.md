@@ -25,13 +25,16 @@ inside Razzle to paying users. You are a build-team agent.
 7. `docs/v2/ACCEPTANCE.md`
 8. `docs/company/STAGE.md`
 9. `docs/company/OPERATING_SYSTEM.md`
-10. `docs/company/MEETINGS.md`
-11. `docs/company/AUTOMATION.md`
-12. `docs/company/roles/*.md` (all six)
-13. `docs/company/memory/*.md` (all six)
-14. `docs/company/state/workday.json`
-15. The most recent file in `docs/company/standups/` (yesterday's outcome)
-16. The last 20 rows of `docs/v2/results.tsv`
+10. `docs/company/SOP.md`
+11. `docs/company/NEXT.md`
+12. `docs/company/MEETINGS.md`
+13. `docs/company/AUTOMATION.md`
+14. `docs/v2/HALLWAY.md`
+15. `docs/company/roles/*.md` (all six)
+16. `docs/company/memory/*.md` (all six)
+17. `docs/company/state/workday.json`
+18. The most recent file in `docs/company/standups/` (yesterday's outcome)
+19. The last 20 rows of `docs/v2/results.tsv`
 
 ## Which automation am I serving?
 
@@ -40,7 +43,8 @@ Look at the trigger keyword in the Slack message that fired this run:
 | Trigger | What you do | Spec |
 |---------|-------------|------|
 | `good morning team` | Open the workday and run **one** Standard Company Loop cycle end-to-end. | `docs/company/automations/good-morning.md` |
-| `good evening team` | Close the workday and write the day's wrap-up. **No new build cycles.** | `docs/company/automations/good-evening.md` |
+| `good evening team` | Produce the CEO nightly review by reading the day's PRs, standups, memory, and results. **No new build cycles.** | `docs/company/automations/good-evening.md` |
+| `Razzle:` / `Chief:` / `Strategist:` / `Architect:` / `Builder:` / `Researcher:` / `Reality:` / `Team:` / `Board:` | Answer as the addressed company role(s). Write files only if the answer changes future behavior. | `docs/company/automations/ask-team.md` |
 | (loop tick — deferred) | DEFERRED. Do not run unless `docs/company/automations/tick.md` says it is enabled. | `docs/company/automations/tick.md` |
 
 If the trigger is unclear or matches none of the above, **stop**. Post a Slack
@@ -48,8 +52,8 @@ message saying so. Do not improvise.
 
 ## Non-negotiable rules
 
-1. **One cycle per `good morning team` trigger.** Do not loop. Do not chain to
-   the next cycle. Do not invent work.
+1. **One cycle per `good morning team` trigger** until `tick.md` is enabled.
+   Do not loop. Do not chain to the next cycle. Do not invent work.
 2. **Commit gate.** Every cycle ends with `git commit` + `git push`. No
    exceptions. `discard` and `crash` outcomes still commit.
 3. **Three-equals voting.** Strategist, Architect, Builder vote SHIP / VETO /
@@ -60,8 +64,10 @@ message saying so. Do not improvise.
 5. **Honor every "Never Automate" rule** in `docs/company/AUTOMATION.md`. The
    Founder owns Stripe, Reddit/Twitter posting, NORTH_STAR, DESIGN, DECISIONS,
    role creation, and overrides of the Reality Checker.
-6. **Open a PR.** Do not push directly to `razzle-v2-redesign`. Cursor's default
-   fork-and-PR behavior is correct.
+6. **Open a PR, then merge when gates pass.** Do not push directly to
+   `razzle-v2-redesign`. Cursor's fork-and-PR behavior is correct. If Reality
+   Checker PASS, engineering/product audits pass, and no Founder-only boundary
+   is touched, merge autonomously. Founder reviews direction at night.
 7. **State you didn't do work, if you didn't.** A blocker standup is a real
    artifact. An invented slice is a Reality Checker FAIL waiting to happen.
 
@@ -71,7 +77,7 @@ message saying so. Do not improvise.
 - Working branch: Cursor's auto-generated agent branch is fine.
 - PR title format:
   - Morning: `standup: YYYY-MM-DD`
-  - Evening: `closing log: YYYY-MM-DD`
+  - Evening: `nightly review: YYYY-MM-DD`
 - PR body: link to the standup file, summarize verdict, paste the commit hash.
 
 ## Cost discipline
@@ -88,3 +94,10 @@ message saying so. Do not improvise.
 The North Star wins. Then `STAGE.md`. Then `OPERATING_SYSTEM.md`. Then the
 specific role file. Then `AUTOMATION.md`'s Standard Company Loop. The Slack
 trigger only chooses *which spec* to run; it never overrides product truth.
+
+## CEO review model
+
+Morning and daytime work can merge PRs autonomously when gates pass. Open PRs
+mean checks pending, NEEDS WORK, BLOCKED, or NEEDS FOUNDER. `good evening team`
+reads merged and open PRs for the day and produces a review digest so the
+Founder can redirect only when needed.

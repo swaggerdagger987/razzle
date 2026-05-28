@@ -9,8 +9,10 @@ the morning trigger. Bookmark the channel.
 
 - Channel: `#razzle-team` (or whatever you named it during automation setup)
 - Start the workday: `good morning team`
-- End the workday: `good evening team`
-- That's it. The automation does the rest.
+- Ask a role: `Strategist: ...`, `Architect: ...`, `Builder: ...`,
+  `Researcher: ...`, `Reality: ...`, `Team: ...`
+- End the workday / get CEO review: `good evening team`
+- Your job: review the nightly digest and override only when direction feels wrong.
 
 ---
 
@@ -27,9 +29,9 @@ the morning trigger. Bookmark the channel.
    - Build the slice (or write a `KILL` / blocker note if no good slice exists)
    - Reality Checker verifies with execution evidence
    - Memory + scorecard updates
-   - `git commit` + `git push` + open a PR titled `standup: YYYY-MM-DD`
-5. The agent posts a Slack summary with the verdict, slice name, commit SHA,
-   and a "View PR" link.
+   - `git commit` + `git push` + open/merge a PR titled `standup: YYYY-MM-DD`
+5. The agent posts a team roll call in Slack with the verdict, role-by-role
+   readout, evidence, and a "View PR" link.
 
 End-to-end runtime: usually 8-20 minutes depending on slice complexity.
 
@@ -38,22 +40,57 @@ done.
 
 ---
 
+## Talking to roles during the day
+
+Use role prefixes in the same Slack channel:
+
+| You type | Who answers |
+|----------|-------------|
+| `Razzle:` or `Chief:` | Chief of Staff |
+| `Strategist:` | Product Strategist |
+| `Architect:` | Engineering Architect |
+| `Builder:` | Builder |
+| `Researcher:` | Data Researcher |
+| `Reality:` | Reality Checker |
+| `Team:` | All six roles, short readout |
+| `Board:` | Lightweight KEEP / DELETE / REFINE review |
+
+Examples:
+
+```text
+Strategist: Are we building the right next slice for Lab depth?
+```
+
+```text
+Reality: Is the latest standup PR actually safe to merge?
+```
+
+```text
+Team: Are we over-indexing on process instead of shipping?
+```
+
+Role questions are conversational. They should not start build cycles unless
+you explicitly say so. If an answer changes future behavior, the agent should
+write memory or open a small PR.
+
+---
+
 ## What happens when you say "good evening team"
 
 1. Same Slack channel, same trigger pattern.
 2. The agent reads `AGENTS.md`, then `docs/company/automations/good-evening.md`.
 3. The agent **does not start a new build cycle**. It only:
-   - Reads today's standup
-   - Writes a `## Closing` section under it (cycles ran, slices shipped, what's
-     queued for tomorrow, per-role one-liner)
+   - Reads today's open and merged Company OS PRs
+   - Reads standup files, evidence, memory, and results from those PRs
+   - Writes a CEO Nightly Review file
    - Updates each role's memory file with end-of-day reflection
    - Sets `docs/company/state/workday.json` to `closed`
-   - `git commit` + `git push` + open a PR titled `closing log: YYYY-MM-DD`
+   - `git commit` + `git push` + open a PR titled `nightly review: YYYY-MM-DD`
 4. The agent posts a goodnight summary to Slack.
 
-If you forget to say "good evening team," the workday stays open in
-`workday.json`. No harm done — tomorrow's "good morning team" notices and
-fixes it.
+You do **not** need to merge the morning PR before evening. Evening review reads
+open PRs. Your nighttime job is to review the digest, then merge, reject, or ask
+questions.
 
 ---
 
@@ -63,9 +100,10 @@ fixes it.
 2. Type `good morning team`.
 3. Wait. (Open the gym. Make coffee. Read.)
 4. You'll get a Slack notification: **"View PR in GitHub"**.
-5. Skim the PR diff and the standup file. If it looks right, merge. If not,
-   leave a comment in the PR — tomorrow's cycle reads recent PRs.
+5. During the day, ask roles questions if needed: `Reality: ...`, `Builder: ...`.
 6. End of day: `good evening team` in the same channel.
+7. Read the nightly digest. Override only if you disagree with direction or a
+   PR is tagged NEEDS FOUNDER.
 
 That's the whole interface.
 
@@ -76,12 +114,19 @@ That's the whole interface.
 | You type | What happens |
 |----------|--------------|
 | `good morning team` | Start the workday, run one cycle |
-| `good evening team` | Close the workday, write closing log |
+| `good evening team` | Write CEO nightly review over today's merged/open PRs |
+| `Strategist: ...` | Product Strategist answers |
+| `Architect: ...` | Engineering Architect answers |
+| `Builder: ...` | Builder answers |
+| `Researcher: ...` | Data Researcher answers |
+| `Reality: ...` | Reality Checker answers |
+| `Team: ...` | All six roles answer briefly |
+| `Board: ...` | KEEP / DELETE / REFINE review |
 | `@Cursor in razzle list my agents` | See what's currently running |
 | `@Cursor list my agents` | Same, when the channel is already pinned to razzle |
 | Plain message in an agent's thread | Adds a follow-up instruction to that running agent (only the agent's owner can do this) |
 
-You should rarely need anything except the two trigger phrases.
+You should mostly use the two trigger phrases plus role prefixes.
 
 ---
 
@@ -89,9 +134,8 @@ You should rarely need anything except the two trigger phrases.
 
 - Do not paste credentials, API keys, or env vars into Slack. Set them once at
   `cursor.com/dashboard/cloud-agents` → Secrets tab.
-- Do not say `good morning team` more than once a day. Each trigger spawns a
-  full cycle and a real Opus/Sonnet bill. The team has one cycle in it per day
-  until Stage 0 → 1 unlocks.
+- Do not say `good morning team` more than once a day. Morning opens the
+  workday; scheduled ticks keep working after that.
 - Do not ask the agent to push directly to `main` or to skip the PR step. The
   PR is the review gate.
 
@@ -102,32 +146,44 @@ You should rarely need anything except the two trigger phrases.
 | Symptom | First check |
 |---------|-------------|
 | No Slack response after 25 minutes | `cursor.com/dashboard/cloud-agents` — is the agent still running, errored, or never started? |
-| PR was opened but the standup file is empty / weird | Read the standup. The agent may have correctly written a blocker note. That is a real outcome. |
+| PR was opened but the standup file is empty / weird | Ask `Reality: Review today's standup PR. Is this a blocker or hallucination?` |
 | Two agents running at once | Cancel one. Concurrent cycles confuse memory writes. |
-| The cycle blew the cost budget | Check the spend dashboard. Lower the model in the Automation config (Opus 4.7 → Sonnet 4.6) and re-trigger tomorrow. |
+| The cycle got expensive | Check the spend dashboard. Founder controls Cursor cost directly; the repo does not enforce a cap. |
 | The agent hallucinated a feature | Reject the PR. Add a memory entry to `docs/company/memory/reality-checker.md` describing the hallucination so tomorrow catches it. |
 
 ---
 
-## When to flip to looping mode
+## Looping mode
 
-The agent runs **one cycle per "good morning"** until all four are true:
+The tick automation is now part of the setup. It keeps cycling between
+`good morning team` and `good evening team` while `workday.json` is open.
 
-1. 5 cycles in a row produced PRs you merged with no rewrites.
-2. Each role's memory file has at least 3 substantive entries.
-3. Reality Checker has caught at least 2 issues that mattered.
-4. You actually want more than one cycle per day.
+The team stops itself only for evidence-based reasons: repeated NEEDS WORK,
+missing access, Founder-only decisions, product drift, or Founder Board.
 
-Then enable the third Automation documented in
-`docs/company/automations/tick.md` and the agent will keep cycling between
-`good morning team` and `good evening team`.
+---
 
-Until then, single-cycle is the contract.
+## CEO night-review contract
+
+At night, you should receive one digest answering:
+
+1. What shipped?
+2. Which PRs merged autonomously?
+3. Which PRs are still open and why?
+4. What did Reality Checker block?
+5. What should the team try tomorrow?
+
+If the digest does not answer those five, ask:
+
+```text
+Chief: Rewrite tonight's review as a CEO action list. I only want merge /
+reject / ask decisions.
+```
 
 ---
 
 ## Setup checklist (one time, in browser)
 
 If you haven't built the Automations yet, see
-`docs/company/automations/README.md` for the dashboard config. Two
-Automations now, a third one later.
+`docs/company/automations/README.md` for the dashboard config. Four
+Automations now: `good morning`, `ask team`, `tick`, and `good evening`.

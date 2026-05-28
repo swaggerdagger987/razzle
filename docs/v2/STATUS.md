@@ -3,7 +3,9 @@
 **Last updated:** 2026-05-27 (repo organization cleanup)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
-This is the **live status summary**. For post-implementation phase history and scaffolded pickup list, see **`PLAN.md`**.
+This is the **live status summary**. For operating procedure, read
+`docs/company/SOP.md` and `docs/company/AUTOMATION.md`. Retired phase history
+lives in `graveyard/v2-cofounder-loop/PLAN.md`.
 
 ---
 
@@ -60,7 +62,7 @@ Launch 10 lab panels: all GREEN at L1 with L3 formula re-sort.
 These are intentional; each is a bounded file marked in code:
 
 - `apps/api/services/*` proxying `legacy/backend/live_data/` via `legacy_bridge.py`
-- Bureau helpers using heuristics where V2-native joins are not written yet (see PLAN.md Phase X.5 list)
+- Bureau helpers using heuristics where V2-native joins are not written yet
 - `apps/web/lib/panels/registry.ts` may duplicate `@razzle/panels` catalog (consolidation planned)
 
 **Do not delete `legacy/` until bridge imports reach zero.** Checklist: `legacy/README.md`.
@@ -85,10 +87,10 @@ curl localhost:8000/api/health
 
 | If you are... | Read |
 |---------------|------|
-| Picking up loop work | PARITY.md, FEATURES.md, LOOP-STATE.md, PROGRAM.md |
+| Picking up loop work | PARITY.md, DEPTH.md, FEATURES.md, LOOP-STATE.md, `docs/company/SOP.md`, `docs/company/AUTOMATION.md` |
 | Making architecture calls | DECISIONS.md (write dated entry before reversing) |
 | Checking product intent | NORTH_STAR.md, DESIGN.md |
-| Understanding what was built | PLAN.md (historical companion to this file) |
+| Understanding what was built | `docs/v2/results.tsv`, `docs/v2/evidence/`, and retired history in `graveyard/v2-cofounder-loop/PLAN.md` |
 | Repo hygiene | docs/plans/2026-05-27-repo-organization-cleanup.md |
 
 ---

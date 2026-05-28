@@ -234,28 +234,33 @@ dedicated Slack channel. The Founder operates the team from their phone:
 
 | Trigger (Slack) | Effect | Spec |
 |-----------------|--------|------|
-| `good morning team` | Open the workday, run **one** Standard Company Loop cycle, open a PR, post Slack summary | `docs/company/automations/good-morning.md` |
-| `good evening team` | Close the workday, write the day's reflection + per-role memory updates, open a PR, post Slack goodnight | `docs/company/automations/good-evening.md` |
-| (loop tick — DEFERRED) | While workday is open, run additional cycles on a schedule until the cap is hit or the Founder closes the day | `docs/company/automations/tick.md` |
+| `good morning team` | Open the workday, run the first Standard Company Loop cycle, merge if gates pass, post Slack summary | `docs/company/automations/good-morning.md` |
+| `Razzle:` / `Strategist:` / `Architect:` / `Builder:` / `Researcher:` / `Reality:` / `Team:` / `Board:` | Talk to a specific role or the whole team; write files only when the answer changes future behavior | `docs/company/automations/ask-team.md` |
+| `good evening team` | Produce CEO nightly review over today's open/merged PRs, write reflection + per-role memory updates, open/merge a review PR, post Slack goodnight | `docs/company/automations/good-evening.md` |
+| loop tick | While workday is open, run additional cycles on a schedule until the Founder closes the day or a quality blocker appears | `docs/company/automations/tick.md` |
 
 State is shared via `docs/company/state/workday.json` (`status: open | closed`,
-cycle counter, last trigger). The morning automation opens, the evening
-automation closes, the tick (when enabled) runs cycles in between.
+cycle counter, last trigger), but open PRs are the daytime source of truth.
+Because the Founder reviews at night, passing work may merge autonomously during
+the day. Open PRs represent blockers, checks pending, or direction questions.
 
-The operator-facing cheat sheet is `docs/company/SLACK.md`.
+The operator-facing cheat sheet is `docs/company/SLACK.md`. The full SOP is
+`docs/company/SOP.md`.
 
-### Pre-loop gates (do not enable `tick.md` until all are met)
+### Autonomy posture
 
-1. Stage 0 → 1 unlock conditions met (5 morning-standup runs in a row produced
-   PRs the Founder merged without rewriting, ≥70% acceptance).
-2. Memory files contain real entries from those 5 manual-trigger runs.
-3. Reality Checker has caught at least 2 issues that mattered.
-4. The prior cofounder loop has been retired into
-   `graveyard/v2-cofounder-loop/` with `RETIRED.md` pointing to `docs/company/`
-   (already done as of 2026-05-27).
+The Founder has chosen autonomy by default. The loop does not wait for a
+nightly merge if gates pass. The team should prove or disprove the autonomy
+thesis with artifacts:
 
-Until then: morning + evening only. One cycle a day. The Founder sends both
-messages. The loop is a switch we flip after the prompt has earned trust.
+- multiple role lenses
+- model-market-fit routing where the platform allows it
+- adversarial review
+- Karpathy-style autoresearch memory
+- strict evidence gates
+- nightly CEO review
+
+Stop or escalate only when evidence says the loop is drifting.
 
 ### Why Cursor Automations and not a shell script
 
@@ -269,3 +274,20 @@ messages. The loop is a switch we flip after the prompt has earned trust.
 A shell script may still be useful later for offline runs (no Slack, no Cursor
 account) — but that's a fallback, not the primary runner. The primary runner
 is the Slack-triggered Automation.
+
+### What the old loop still teaches this one
+
+The retired cofounder loop was useful because it understood Razzle's product
+physics:
+
+- Explore, Lab, League/Bureau, and Situation Room are the four rooms.
+- Player Sheet is the junction, not another silo.
+- Every slice must deepen a room **and** wire the hallway.
+- Half-done is worse than deleted.
+- Independent audits beat self-approval.
+- KEEP / DELETE / REFINE matters more than "we shipped something."
+- Results compound only when they are written down.
+
+Those rules now live in `docs/company/SOP.md`, `docs/v2/DEPTH.md`,
+`docs/v2/HALLWAY.md`, and the automation prompts. The old shell runner is still
+retired; the ethos is not.

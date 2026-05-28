@@ -38,8 +38,10 @@ advances, this document updates first, then role files, then automation.
 - Building memory (per-role memory files).
 - Sharpening role contracts via three-run evidence-of-impact trials.
 - **Slack-triggered single-cycle runs** via the morning + evening Cursor
-  Automations (`docs/company/automations/`). One cycle per `good morning team`
-  trigger. See `docs/company/SLACK.md`.
+  Automations (`docs/company/automations/`). `good morning team` opens the
+  workday, scheduled ticks continue the loop, role-addressed Slack questions
+  run during the day, and `good evening team` creates the CEO nightly review.
+  Passing PRs can merge autonomously. See `docs/company/SLACK.md`.
 
 ### What is out of scope right now
 
@@ -47,8 +49,8 @@ advances, this document updates first, then role files, then automation.
 - Launch copy, landing-page experiments, marketing site polish.
 - Pricing experiments, Stripe go-live, paid trials.
 - New roles beyond the current six.
-- The loop-tick automation (`docs/company/automations/tick.md`) — explicitly
-  DEFERRED until the Stage 0 → 1 gates are met.
+- Founder-only changes: NORTH_STAR, DESIGN, DECISIONS, role creation, Stripe /
+  pricing decisions, and public posting under the Founder's identity.
 - `scripts/company_loop.sh` — superseded by Cursor Automations. See
   `docs/company/AUTOMATION.md`.
 - Automated stage advancement.

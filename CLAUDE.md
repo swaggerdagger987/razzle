@@ -185,10 +185,12 @@ order when working as a company role:
 2. `docs/company/OPERATING_SYSTEM.md` — principles, ethos, reconciliation
 3. `docs/company/MEETINGS.md` — daily standup format + commit gate
 4. `docs/company/AUTOMATION.md` — standard company loop + prompt template
-5. `docs/company/SLACK.md` — operator cheat sheet for Slack-triggered runs
-6. `docs/company/automations/` — Cursor Automation prompt specs (good-morning, good-evening, tick)
-7. `docs/company/roles/<role>.md` — role you are acting as
-8. `docs/company/memory/<role>.md` — what this role learned in prior runs
+5. `docs/company/SOP.md` — CEO-mode operating procedure and preserved loop ethos
+6. `docs/company/NEXT.md` — current lead slice and backup candidate
+7. `docs/company/SLACK.md` — operator cheat sheet for Slack-triggered runs
+8. `docs/company/automations/` — Cursor Automation prompt specs (good-morning, ask-team, good-evening, tick)
+9. `docs/company/roles/<role>.md` — role you are acting as
+10. `docs/company/memory/<role>.md` — what this role learned in prior runs
 
 **Cursor Cloud Agents read `AGENTS.md` at repo root first.** That file points
 back into `docs/company/` and disambiguates which Automation spec to follow

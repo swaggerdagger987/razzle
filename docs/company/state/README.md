@@ -4,7 +4,8 @@ Small, machine-readable state files the Automations share. **Not** the
 canonical state of the product — that lives in `docs/v2/STATUS.md` and
 `docs/v2/results.tsv`.
 
-These files are the **operating semaphore** for the Slack-driven workday.
+These files are an **operating semaphore** for the Slack-driven workday. Merged
+PRs are the durable source of truth; open PRs are exceptions or checks pending.
 
 ---
 
@@ -12,7 +13,7 @@ These files are the **operating semaphore** for the Slack-driven workday.
 
 | File | Purpose | Owner |
 |------|---------|-------|
-| `workday.json` | Is the team currently working? When did the workday start? How many cycles ran? | Morning + Evening + (later) Tick automations |
+| `workday.json` | Is the team currently working? When did the workday start? How many cycles ran? | Morning + Nightly Review + (later) Tick automations |
 
 ---
 
@@ -33,12 +34,15 @@ Schema (illustrative):
 
 ### Read/write protocol
 
-- Morning Standup ("good morning team") **always writes** the file:
+- Morning Standup ("good morning team") writes the file and merges it when gates pass:
   `status=open`, `started_at=now`, `closed_at=null`, `cycle_count_today=0`.
-- Closing Log ("good evening team") **always writes** the file:
+- CEO Nightly Review ("good evening team") writes the file and merges it when gates pass:
   `status=closed`, `closed_at=now`. Other fields preserved.
-- Loop Tick (deferred) **reads** the file. If `status=closed`, exits silently.
+- Loop Tick **reads** the file. If `status=closed`, exits silently.
   If `status=open`, runs one cycle and increments `cycle_count_today`.
+
+Do not rely only on `workday.json` to know what happened today. The evening
+automation must inspect today's open and merged PRs.
 
 ### Concurrency
 
@@ -67,6 +71,6 @@ git-friendly.
 - Not a memory file. Per-role memory is `docs/company/memory/<role>.md`.
 - Not a results log. Cycle outcomes go in `docs/v2/results.tsv`.
 
-This file exists for one reason: so that "good morning team" and "good
-evening team" can hand the workday to each other across separate Cursor
-Cloud Agent VMs.
+This file exists for one reason: so that "good morning team", loop ticks, and
+"good evening team" have a small shared shape. The PR list and results ledger
+remain the living history.

@@ -20,8 +20,9 @@ prompt change, and the prompts are diffable in PRs.
 | Name | Trigger | Status | Spec |
 |------|---------|--------|------|
 | Morning Standup | Slack message `good morning team` in `#razzle-team` | **Build now** | `good-morning.md` |
-| Closing Log | Slack message `good evening team` in `#razzle-team` | **Build now** | `good-evening.md` |
-| Loop Tick | Hourly cron during open workday | DEFERRED — do not enable until Stage 0 → 1 gates met | `tick.md` |
+| Ask The Team | Slack messages beginning with `Razzle:`, `Strategist:`, `Architect:`, `Builder:`, `Researcher:`, `Reality:`, `Team:`, or `Board:` | **Build now** | `ask-team.md` |
+| CEO Nightly Review | Slack message `good evening team` in `#razzle-team` | **Build now** | `good-evening.md` |
+| Loop Tick | Scheduled run while workday is open | **Build now** — autonomy default | `tick.md` |
 
 ---
 
@@ -29,9 +30,15 @@ prompt change, and the prompts are diffable in PRs.
 
 The Automations share a single state file: `docs/company/state/workday.json`.
 
-- `Morning Standup` opens the workday (writes `status: open`).
-- `Closing Log` closes the workday (writes `status: closed`).
-- `Loop Tick` (when enabled) reads the file and skips work if `closed`.
+- `Morning Standup` writes open-state into its branch, creates/merges a PR if
+  gates pass, and starts the workday.
+- `CEO Nightly Review` reads today's open and merged PRs, writes the digest, and
+  closes the workday on its own PR branch.
+- `Loop Tick` reads the file and skips work if `closed`; if `open`, it runs
+  another cycle and merges if gates pass.
+
+Because PRs are the review gate, do not assume base-branch `workday.json` is
+perfectly current during the day. Open PRs are the daytime source of truth.
 
 See `docs/company/state/README.md`.
 
@@ -39,18 +46,16 @@ See `docs/company/state/README.md`.
 
 ## Why this design
 
-1. **Slack-driven, not cron-driven, until the prompt is trusted.** The Founder
-   sends two messages a day. No background work fires unless triggered.
-2. **One cycle per trigger, until the gates are met.** Per
-   `docs/company/AUTOMATION.md` Stage 0 → 1 unlocks, the loop turns on after
-   5 clean standups. The loop tick automation is documented and ready to
-   enable, but disabled by default.
+1. **Slack starts and stops the workday.** The Founder sends `good morning team`
+   and `good evening team`. Scheduled ticks can work in between.
+2. **Autonomy by default.** The team can merge its own PRs when review gates
+   pass. Founder review is nightly and exception-based.
 3. **Prompts in the repo, configs in the dashboard.** Prompts evolve via PRs.
    Triggers, repo pins, and model choices live in Cursor where the credentials
    are.
-4. **Two automations that do real work, not five that route to each other.**
-   Morning runs the cycle. Evening writes the closing log. The loop is added
-   only after evidence justifies it.
+4. **Small number of automations that do real work, not a maze.** Morning opens
+   the day. Tick keeps building. Ask The Team handles role conversation.
+   Evening writes the CEO review.
 
 ---
 
@@ -60,19 +65,34 @@ For each Automation:
 
 1. Go to `cursor.com/automations` → New Automation.
 2. **Trigger:**
-   - Morning + Evening: Slack → New message in channel → `#razzle-team` →
-     keyword filter `good morning team` (or `good evening team`).
-   - Tick: Schedule → every 1 hour, only between 9am-9pm in your TZ. (Skip
-     this whole automation for now.)
+   - Morning: Slack -> New message in channel -> `#razzle-team` ->
+     keyword filter `good morning team`.
+   - Evening: Slack -> New message in channel -> `#razzle-team` ->
+     keyword filter `good evening team`.
+   - Ask The Team: Slack -> New message in channel -> `#razzle-team` ->
+     keyword / regex filter
+     `^(Razzle|Chief|Strategist|Architect|Builder|Researcher|Reality|Team|Board):`.
+     If regex is unavailable, create one automation per prefix.
+   - Tick: Schedule -> every 60-90 minutes during the hours you want the team
+     working. It exits when `workday.json` is closed.
 3. **Repository:** `swaggerdagger987/razzle`.
 4. **Base branch:** `razzle-v2-redesign`.
-5. **Model:** `claude-opus-4-7-thinking-xhigh` (or `gpt-5.5-medium` if you want
-   to test cheaper). Both are Max-Mode-capable.
-6. **Tools enabled:** Open Pull Request, Send to Slack, Memories.
+5. **Model:**
+   - Morning: `claude-opus-4-7-thinking-xhigh` (or `gpt-5.5-medium` if you want
+     to test cheaper). Both are Max-Mode-capable.
+   - Evening: `claude-4.6-sonnet-medium-thinking` is enough unless the review
+     needs a Founder Board.
+   - Ask The Team: `claude-4.6-sonnet-medium-thinking`; manually escalate with
+     Opus for `Board:` questions if needed.
+6. **Tools enabled:** Open Pull Request, Send to Slack, Memories. GitHub/PR
+   merge ability should be available so the team can merge PRs that pass gates.
+   For Ask The Team, Open Pull Request is only used when the answer writes files.
 7. **Permission scope:** Private (bills to you, runs as your GitHub identity).
 8. **Prompt body:** copy-paste from the matching `.md` file in this folder.
-9. **Test:** trigger the keyword from your laptop first, watch the dashboard
-   logs, inspect the PR. Once green, you're done.
+9. **Test order:** trigger `Team: Are we ready to run a morning cycle?` first
+   (no PR expected unless it writes memory), then `good morning team`, then one
+   tick run, then `good evening team`. Watch the first day closely, then let it
+   run.
 
 ---
 

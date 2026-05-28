@@ -13,6 +13,8 @@ markdown handoffs are preferred when the work allows.
 | Meeting | Cadence | Owner | Output |
 |---------|---------|-------|--------|
 | Daily Build Standup | Every build day (async) | Chief of Staff | One vertical slice, three-equals vote, handoff |
+| Role Check-in | On-demand from Slack | Addressed role | Phone-readable answer, memory/PR only if durable |
+| CEO Nightly Review | Every workday evening | Chief of Staff + Reality Checker | Merged/open PR digest, exception list, tomorrow candidate |
 | Outside Reality Briefing | Weekly until launch is real | Data Researcher | Feature gaps, user language, build-queue inputs |
 | Build Review | After every shipped slice | Reality Checker | PASS / NEEDS WORK / BLOCKED with execution evidence |
 | Founder Board | Trigger-based (see triggers below) | Chief of Staff | Priority changes, role scorecards, KEEP/DELETE/REFINE election |
@@ -27,14 +29,14 @@ markdown handoffs are preferred when the work allows.
 
 **Trigger:** The Founder sends `good morning team` in `#razzle-team` Slack.
 The Morning Standup Cursor Automation (`docs/company/automations/good-morning.md`)
-fires, plays all six roles, writes the standup file, and opens a PR. The
-Founder can also run this manually by following the AUTOMATION.md Prompt
-Template in a fresh agent.
+fires, plays all six roles, writes the standup file, opens a PR, and merges it
+if review gates pass. The Founder can also run this manually by following the
+AUTOMATION.md Prompt Template in a fresh agent.
 
 **Closing:** The Founder sends `good evening team` in the same channel. The
-Closing Log Cursor Automation (`docs/company/automations/good-evening.md`)
-appends a `## Closing` section to the standup, updates per-role memory, and
-sets `docs/company/state/workday.json` to `closed`.
+CEO Nightly Review Cursor Automation (`docs/company/automations/good-evening.md`)
+reads today's open and merged PRs, writes a CEO Nightly Review, updates per-role
+memory, and sets `docs/company/state/workday.json` to `closed`.
 
 **Purpose:** Pick exactly one vertical slice, vote three-equals, and define the handoff.
 
@@ -86,6 +88,72 @@ sets `docs/company/state/workday.json` to `closed`.
 ```
 
 A `KILL` slice produces a standup file too — the company learns from rejected ideas.
+
+---
+
+## Role Check-in
+
+**Purpose:** Let the Founder talk to a specific team member from Slack without
+opening Cursor.
+
+**Trigger:** Prefix a Slack message in `#razzle-team`:
+
+| Prefix | Role |
+|--------|------|
+| `Razzle:` or `Chief:` | Chief of Staff |
+| `Strategist:` | Product Strategist |
+| `Architect:` | Engineering Architect |
+| `Builder:` | Builder |
+| `Researcher:` | Data Researcher |
+| `Reality:` | Reality Checker |
+| `Team:` | All six roles |
+| `Board:` | Founder Board-style KEEP / DELETE / REFINE readout |
+
+**Output:** Slack answer first. Markdown memory or PR only if the answer changes
+future behavior.
+
+**Rule:** Role Check-ins do not start build cycles. `good morning team` starts
+build cycles.
+
+---
+
+## CEO Nightly Review
+
+**Purpose:** Give the Founder one night-time review surface so they can act like
+CEO, not daytime builder.
+
+**Trigger:** `good evening team` in Slack.
+
+**Inputs:**
+
+- Today's merged PRs targeting `razzle-v2-redesign`
+- Today's open PRs targeting `razzle-v2-redesign`
+- Today's merged PRs targeting `razzle-v2-redesign`
+- Standup files in those PRs
+- `docs/v2/results.tsv`
+- Role memory files
+- Reality Checker verdicts and evidence
+
+**Output:** `docs/company/standups/YYYY-MM-DD-review.md`
+
+```markdown
+# CEO Nightly Review — YYYY-MM-DD
+
+- Cycles run today:
+- PRs merged autonomously:
+- PRs needing Founder decision:
+- PRs to reject / close:
+- Slices shipped:
+- Slices blocked:
+- Reality Checker blocks:
+- Tomorrow's lead candidate:
+
+### CEO Action List
+- [ ] Merge / reject / comment:
+```
+
+The evening review never starts a new build. It exists to compress the day into
+Founder decisions.
 
 ---
 

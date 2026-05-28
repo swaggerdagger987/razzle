@@ -47,11 +47,13 @@ Also read **`../PRESERVE.md`** when touching legacy quarry code.
 | `company/AUTOMATION.md` | Standard company loop, model routing, never-automate rules |
 | `company/SCORECARDS.md` | 3-line daily / full-grid monthly evaluation |
 | `company/HIRING_AND_FIRING.md` | Role lifecycle |
+| `company/SOP.md` | CEO-mode operating procedure and old-loop ethos preserved |
+| `company/NEXT.md` | Current lead slice + backup candidate for first Slack cycles |
 | `company/SLACK.md` | Operator cheat sheet for Slack-triggered runs (phone-friendly) |
 | `company/roles/<role>.md` | Per-role contracts |
 | `company/memory/<role>.md` | Per-role learning logs |
 | `company/standups/YYYY-MM-DD.md` | Daily build standup outputs |
-| `company/automations/<name>.md` | Cursor Automation prompt specs (good-morning, good-evening, tick) |
+| `company/automations/<name>.md` | Cursor Automation prompt specs (good-morning, ask-team, good-evening, tick) |
 | `company/state/workday.json` | Workday semaphore (open/closed) shared across automations |
 
 Cursor Cloud Agents read `../AGENTS.md` (root) on boot, which routes them into `company/automations/`.

@@ -19,9 +19,11 @@ into `OPERATING_SYSTEM.md`.
 4. `MEETINGS.md` — Meeting cadence, three-equals voting, commit gate
 5. `SCORECARDS.md` — How roles are evaluated (3-line daily, full grid monthly)
 6. `HIRING_AND_FIRING.md` — How roles are created, rewritten, merged, or retired
-7. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
-8. `SLACK.md` — Operator cheat sheet: how to start and stop the workday from Slack
-9. `automations/README.md` — Cursor Automation specs (good-morning, good-evening, tick)
+7. `SOP.md` — CEO-mode operating procedure and old-loop ethos preserved
+8. `NEXT.md` — First slice candidates so the team has something concrete to bite
+9. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
+10. `SLACK.md` — Operator cheat sheet: how to start, question, and stop the team from Slack
+11. `automations/README.md` — Cursor Automation specs (good-morning, ask-team, good-evening, tick)
 
 Then read the role file for the role being invoked, plus that role's memory file.
 
@@ -62,6 +64,8 @@ docs/company/
   MEETINGS.md                meeting cadence + outputs
   SCORECARDS.md              evaluation framework
   HIRING_AND_FIRING.md       role lifecycle
+  SOP.md                     CEO-mode operating procedure
+  NEXT.md                    current lead slice + backup candidate
   AUTOMATION.md              loop, model routing, never-automate rules
   SLACK.md                   operator cheat sheet (phone-friendly)
   roles/                     per-role contracts
@@ -70,8 +74,9 @@ docs/company/
   automations/               Cursor Automation specs (versioned prompts)
     README.md                index + dashboard setup
     good-morning.md          "good morning team" — single cycle
-    good-evening.md          "good evening team" — closing log
-    tick.md                  loop tick — DEFERRED until gates met
+    ask-team.md              role-addressed Slack replies
+    good-evening.md          "good evening team" — CEO nightly review
+    tick.md                  active scheduled loop while workday is open
   state/                     machine-readable workday state
     README.md                schema + read/write protocol
     workday.json             {status, started_at, closed_at, cycle_count_today}
@@ -101,16 +106,21 @@ The company exists to serve the product, not the other way around.
 
 ## Current Operating Mode
 
-**Stage 0 — Manual role invocation, Slack-triggered.** Run roles by:
+**Stage 0 — Autonomous Slack workday.** Run roles by:
 
 - Sending `good morning team` in `#razzle-team` Slack — the Morning Standup
-  Cursor Automation runs one full Standard Company Loop cycle and opens a PR.
-- Sending `good evening team` in `#razzle-team` Slack — the Closing Log
-  Automation writes the day's reflection.
+  Cursor Automation runs the first Standard Company Loop cycle, opens a PR, and
+  merges it if gates pass.
+- Scheduled loop ticks continue building while the workday is open.
+- Asking role-prefixed questions (`Strategist:`, `Architect:`, `Reality:`,
+  `Team:`, etc.) in Slack — the Ask The Team Automation answers from repo
+  memory and writes files only when the answer changes future behavior.
+- Sending `good evening team` in `#razzle-team` Slack — the CEO Nightly Review
+  Automation reviews the day's open/merged PRs and writes the action digest.
 
-One cycle per `good morning team` trigger. The loop tick automation
-(`automations/tick.md`) is **DEFERRED** until Stage 0 → 1 unlock conditions
-in `AUTOMATION.md` are met (5 clean standups in a row).
+Autonomy is the default. Passing PRs can merge without waiting for Founder
+review. Founder review happens at night and handles exceptions, direction, and
+overrides.
 
 If you want to run a role manually outside Slack, use the `Prompt Template`
 in `AUTOMATION.md` against the role file and memory file directly.

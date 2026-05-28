@@ -1,74 +1,70 @@
-# Automation: Loop Tick — DEFERRED
+# Automation: Loop Tick — ACTIVE WHEN CONFIGURED
 
-> **Status: DEFERRED. Do not enable until Stage 0 → 1 unlock conditions in
-> `docs/company/AUTOMATION.md` are met (5 standups in a row produced PRs the
-> Founder used unchanged, ≥70% acceptance).**
->
-> This file exists so that flipping to looping mode is a 5-minute config
-> change, not a redesign.
+> **Status: ACTIVE WHEN CONFIGURED.** The Founder has chosen autonomy by
+> default. Configure this Automation after the morning/evening/ask-team
+> automations. The loop should keep working between `good morning team` and
+> `good evening team` until the team closes the day or hits a quality blocker.
 
 ---
 
-## What this Automation will do (when enabled)
+## What this Automation does
 
 - Fire on a schedule (every 1-2 hours during the workday).
 - Read `docs/company/state/workday.json`.
 - If `status: closed`, exit silently. Post nothing. Run nothing.
-- If `status: open`, check `cycle_count_today`. If it exceeds the day's cap
-  (default 6), exit silently.
+- If `status: open`, run one Standard Company Loop cycle.
 - Otherwise: run one Standard Company Loop cycle (the same prompt body as
   `good-morning.md`, except it does NOT re-open the workday).
-- Increment `cycle_count_today`. Commit. Push. Open a PR. Post Slack summary.
+- Increment `cycle_count_today`. Commit. Push. Open a PR. Merge if all review
+  gates pass. Post Slack summary.
 
 ---
 
-## Why it's deferred
+## Why there is no cap
 
-Per `docs/company/STAGE.md` and `docs/company/AUTOMATION.md` Stage 0 → 1
-unlock conditions, the company's pre-script gates explicitly require:
+The Founder is intentionally testing whether a documented, adversarial,
+autoresearch-driven team can build Razzle autonomously. Do not stop because an
+arbitrary cycle count was reached. Stop only for evidence-based reasons:
 
-1. 5 standups in a row produced PRs the Founder used unchanged (≥70%
-   acceptance).
-2. Memory files contain real entries from manual runs.
-3. Three manual standups produced standup files Founder used without
-   rewriting.
-
-A continuous loop running with Opus 4.7 against an unverified prompt is a
-high-cost, high-rewrite-rate failure mode. We test the prompt one cycle a day
-until it earns trust. Then we flip the switch.
+- Reality Checker issues NEEDS WORK or BLOCKED twice on the same slice.
+- Chief of Staff sees product drift, low-impact churn, or unclear priority.
+- A Founder Board is due (every 10 cycles) or triggered.
+- Required secrets/access are missing.
+- Tests/build are failing in a way the current cycle cannot safely resolve.
 
 ---
 
-## Dashboard config (do not enter yet)
+## Dashboard config
 
 | Field | Value |
 |-------|-------|
-| Trigger | Schedule → every 1 hour, between 9am and 9pm in your TZ |
+| Trigger | Schedule -> every 60-90 minutes while you want the team working |
 | Repository | `swaggerdagger987/razzle` |
 | Base branch | `razzle-v2-redesign` |
 | Model | `claude-opus-4-7-thinking-xhigh` or `gpt-5.5-medium` |
 | Tools | Open Pull Request, Send to Slack, Memories |
 | Scope | Private |
-| Spend limit | **Set a per-run cap** (e.g., $1.00) — without this, a runaway prompt costs real money |
+| Spend limit | Founder-controlled in Cursor subscription. No repo-level cap. |
 
 ---
 
-## Prompt body (do not copy yet)
+## Prompt body
 
-> When you do enable this, replace the references in the morning prompt's
+> Replace the references in the morning prompt's
 > "WORKDAY OPEN" step with the loop-tick versions below. Everything else is
 > identical.
 
 ```text
-You are the Razzle Company OS, running on a loop tick. The Founder did not
-manually trigger this run — the workday is open and the cycle cap has not
-been hit, so you proceed.
+You are the Razzle Company OS, running on a loop tick. The Founder has chosen
+autonomy by default. If the workday is open and no quality blocker is present,
+run one Standard Company Loop cycle.
 
 WORKDAY GATE — check before any work:
 1. Read docs/company/state/workday.json.
 2. If status != "open": exit silently. Post nothing. Do not edit anything.
-3. If cycle_count_today >= 6 (or whatever cap is set in workday.json):
-   exit silently.
+3. Check whether a Founder Board is due: every 10 cycles or any Chief of Staff
+   / Reality Checker trigger. If due, run the Board procedure before picking
+   another feature slice.
 4. Otherwise: continue. The workday stays open. Increment
    cycle_count_today as part of Step 9 below (not Step 1).
 
@@ -85,32 +81,28 @@ ADDITIONAL CONSTRAINTS (loop-mode only):
 - If you cannot pick a clear next slice (no fresh PARITY row, no DEPTH
   ladder rung, no ACCEPTANCE gap): exit silently. Do not invent work. The
   morning trigger will surface this.
-- Daily slice cap: 6 cycles per workday by default. Configurable via
-  workday.json's "cycle_cap" field if added in the future.
+- No daily slice cap. Continue until `good evening team` closes the day or an
+  evidence-based blocker is hit.
+- If all gates pass, open and merge the PR autonomously. If gates fail, leave
+  the PR open with NEEDS WORK and explain in Slack.
 ```
 
 ---
 
-## When you actually enable this
+## When to watch closely
 
-1. Confirm the four conditions in `docs/company/SLACK.md` "When to flip to
-   looping mode."
-2. Set a hard spend limit at `cursor.com/dashboard/usage` first.
-3. Create the Automation in the dashboard with the schedule trigger.
-4. Watch the first three loop ticks live. Do not walk away.
-5. After the first looping day finishes cleanly, add a Founder Board note to
-   `docs/company/standups/YYYY-MM-DD.md` documenting the transition.
-6. Update this file's banner from DEFERRED to ACTIVE.
-7. Add a memory entry to `docs/company/memory/chief-of-staff.md`.
+Watch the first day closely. The point is to see whether the autonomy thesis is
+right or wrong. Do not pre-emptively add process unless evidence says the loop
+needs it.
 
 ---
 
 ## When you would disable this again
 
-- Cost overruns ≥ 2x your budget for 2 consecutive days.
 - Reality Checker FAIL rate > 50% over a week.
 - Three loop-stalled cycles in 5 days.
 - A Founder Board decides the loop is producing low-impact work.
+- The Founder sees a direction they disagree with and calls it out.
 
 Disabling is just toggling the Automation off in the dashboard. The state
 file and prompt files stay in place for the next attempt.
