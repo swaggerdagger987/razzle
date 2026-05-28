@@ -200,6 +200,13 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 47
 - **Bot-fact potential:** `!razzle <A> for <B> in <league>` — future intel layer
 
+## 2026-05-28 — Cycle 57
+
+### Standing signal validation (no new scrape)
+- **Screenshot export loop:** Cycles 55-56 shipped live-data Explore OG cards and fixed Satori display. Lab OG cards (this cycle) close the loop — panel screenshots with real data rows, position pills, and staff badges are the growth artifact.
+- **Staff voice on cards:** Cycle 31 signal validated — screenshots naming the analyst persona outperform generic dashboard dumps. Agent badge on OG cards (Octo, Bones, Hawkeye) is the right move.
+- **No contradictory signal found.** Standing gaps remain: mobile dynasty managers, trade value narrative, league-specific context.
+
 - **Pattern:** Pre-deadline threads ask **"who's desperate in your league?"** — managers with losing records get targeted for win-now pieces. Comment chains share horizontal bar charts ranking leaguemates by desperation, not just W-L standings.
 - **Competitor framing:** Legacy Razzle V1 pressure map (league-intel.html) — top-3 free, full map Pro. Footballguys deadline articles name archetypes but no live league scoring.
 - **Razzle gap:** Cycle 43 shipped manager archetypes; no standalone desperation score visualization for deadline timing.

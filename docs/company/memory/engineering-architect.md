@@ -15,4 +15,4 @@ which migrations were painful, which test patterns caught bugs.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-28 | OG route rewrite: single-file touch using existing catalog + registry, generic row extraction for 6+ response shapes | apps/web/app/og/[panel]/route.tsx only | ACCEPTANCE Gate 2 + Gate 5 | keep | keep | — | Build passes, 52/52 relevant tests pass. Follow-up: production tier bypass for OG routes, OG-specific snapshot test.

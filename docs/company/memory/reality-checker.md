@@ -16,4 +16,4 @@ explicit checks in the verification routine.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-28 | Lab L5 OG live data rows claim | test (npm run build + pytest) | Lab L5 DEPTH verified | PASS | No browser evidence possible in CI — code path inspection + build + test substitutes | keep | — | First cycle: establish that build + test + code inspection is minimum evidence bar when no running server is available. Follow-up: add OG snapshot test for stronger future verification.
