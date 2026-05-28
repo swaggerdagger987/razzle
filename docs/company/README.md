@@ -20,10 +20,11 @@ into `OPERATING_SYSTEM.md`.
 5. `SCORECARDS.md` — How roles are evaluated (3-line daily, full grid monthly)
 6. `HIRING_AND_FIRING.md` — How roles are created, rewritten, merged, or retired
 7. `SOP.md` — CEO-mode operating procedure and old-loop ethos preserved
-8. `NEXT.md` — First slice candidates so the team has something concrete to bite
-9. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
-10. `SLACK.md` — Operator cheat sheet: how to start, question, and stop the team from Slack
-11. `automations/README.md` — Cursor Automation specs (good-morning, ask-team, good-evening, tick)
+8. `GUARDRAILS.md` — Branch protection, run lock, prompt-sync, and founder-only boundaries
+9. `NEXT.md` — First slice candidates so the team has something concrete to bite
+10. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
+11. `SLACK.md` — Operator cheat sheet: how to start, question, and stop the team from Slack
+12. `automations/README.md` — Cursor Automation specs (good-morning, ask-team, good-evening, tick)
 
 Then read the role file for the role being invoked, plus that role's memory file.
 
@@ -65,6 +66,7 @@ docs/company/
   SCORECARDS.md              evaluation framework
   HIRING_AND_FIRING.md       role lifecycle
   SOP.md                     CEO-mode operating procedure
+  GUARDRAILS.md              branch protection + run lock + prompt sync
   NEXT.md                    current lead slice + backup candidate
   AUTOMATION.md              loop, model routing, never-automate rules
   SLACK.md                   operator cheat sheet (phone-friendly)
@@ -73,6 +75,7 @@ docs/company/
   standups/                  daily build standup outputs (YYYY-MM-DD.md)
   automations/               Cursor Automation specs (versioned prompts)
     README.md                index + dashboard setup
+    VERSION.md               repo prompt version marker
     good-morning.md          "good morning team" — single cycle
     ask-team.md              role-addressed Slack replies
     good-evening.md          "good evening team" — CEO nightly review

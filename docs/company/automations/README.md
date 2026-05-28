@@ -15,6 +15,24 @@ prompt change, and the prompts are diffable in PRs.
 
 ---
 
+## Prompt Versioning
+
+Version marker: `docs/company/automations/VERSION.md`
+
+Each automation prompt body should begin with:
+
+`PROMPT_VERSION: 2026-05-28.v2`
+
+Nightly review should report:
+
+- repo prompt version
+- dashboard prompt version (operator-provided)
+- sync status: in-sync / drift
+
+If drift exists, fix dashboard prompts before the next morning run.
+
+---
+
 ## Automations
 
 | Name | Trigger | Status | Spec |
@@ -41,6 +59,20 @@ Because PRs are the review gate, do not assume base-branch `workday.json` is
 perfectly current during the day. Open PRs are the daytime source of truth.
 
 See `docs/company/state/README.md`.
+
+---
+
+## Safety Controls (must exist outside prompts)
+
+Read and enforce `docs/company/GUARDRAILS.md`:
+
+1. Branch protection on `razzle-v2-redesign` with required checks.
+2. Repo-wide run lock (open issue titled `company-os-lock`).
+3. Prompt sync discipline (repo vs dashboard).
+4. Domain drift guard (football depth + hallway evidence).
+
+Prompts can request these controls, but they must be configured in GitHub and
+Cursor dashboard to be real.
 
 ---
 

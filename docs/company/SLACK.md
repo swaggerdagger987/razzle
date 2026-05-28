@@ -187,3 +187,6 @@ reject / ask decisions.
 If you haven't built the Automations yet, see
 `docs/company/automations/README.md` for the dashboard config. Four
 Automations now: `good morning`, `ask team`, `tick`, and `good evening`.
+
+Before turning autonomous merge on, configure `docs/company/GUARDRAILS.md`
+in GitHub/Cursor dashboard (branch protection + run lock + prompt sync).

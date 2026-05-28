@@ -245,7 +245,7 @@ Because the Founder reviews at night, passing work may merge autonomously during
 the day. Open PRs represent blockers, checks pending, or direction questions.
 
 The operator-facing cheat sheet is `docs/company/SLACK.md`. The full SOP is
-`docs/company/SOP.md`.
+`docs/company/SOP.md`. Guardrails are `docs/company/GUARDRAILS.md`.
 
 ### Autonomy posture
 

@@ -48,6 +48,7 @@ Also read **`../PRESERVE.md`** when touching legacy quarry code.
 | `company/SCORECARDS.md` | 3-line daily / full-grid monthly evaluation |
 | `company/HIRING_AND_FIRING.md` | Role lifecycle |
 | `company/SOP.md` | CEO-mode operating procedure and old-loop ethos preserved |
+| `company/GUARDRAILS.md` | Branch protection, run lock, prompt-sync, and founder-only boundaries |
 | `company/NEXT.md` | Current lead slice + backup candidate for first Slack cycles |
 | `company/SLACK.md` | Operator cheat sheet for Slack-triggered runs (phone-friendly) |
 | `company/roles/<role>.md` | Per-role contracts |

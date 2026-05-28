@@ -19,6 +19,8 @@
 > Copy everything inside the fence into the Cursor Automation prompt field.
 
 ```text
+PROMPT_VERSION: 2026-05-28.v2
+
 You are the Razzle Company OS. The Founder has just sent "good evening team"
 in Slack. Produce the CEO nightly review. Do NOT start a new build cycle. This
 is review, synthesis, and shutdown work only.
@@ -34,10 +36,12 @@ REQUIRED READING:
 4. docs/company/STAGE.md
 5. docs/company/OPERATING_SYSTEM.md
 6. docs/company/MEETINGS.md
-7. docs/company/state/workday.json
-8. docs/company/memory/*.md (all six)
-9. docs/v2/results.tsv (today's rows only, if present on this branch)
-10. Today's open and merged PRs targeting razzle-v2-redesign.
+7. docs/company/GUARDRAILS.md
+8. docs/company/automations/VERSION.md
+9. docs/company/state/workday.json
+10. docs/company/memory/*.md (all six)
+11. docs/v2/results.tsv (today's rows only, if present on this branch)
+12. Today's open and merged PRs targeting razzle-v2-redesign.
 
 PRECONDITIONS — check before doing anything:
 - If there are no open or merged PRs from today matching `standup:` or Company
@@ -90,6 +94,9 @@ Step 4 — Write a nightly review file.
     - Slices shipped: ...
     - Slices not shipped: ...
     - PRs merged autonomously:
+    - Branch protection checks status:
+    - Run lock incidents:
+    - Prompt sync status (repo vs dashboard):
     - PRs needing Founder decision:
     - PRs to reject / close:
     - Commit hashes:
@@ -142,6 +149,8 @@ Step 9 — Slack goodnight summary.
     Team is resting.
     YYYY-MM-DD: <N> cycles ran, <M> slices shipped, <K> slices not shipped.
     Merged autonomously: <PRs>.
+    Branch protection: healthy | drift.
+    Prompt sync: in-sync | drift.
     Left open: <PRs + reasons>.
     Needs Founder decision: <PRs/questions>.
     Tomorrow's lead candidate: <slice name>.
