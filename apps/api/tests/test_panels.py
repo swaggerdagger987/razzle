@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import pytest
 
-
 FREE_PANELS = ["weekly", "prospects", "dashboard", "leaders", "screener"]
 
 

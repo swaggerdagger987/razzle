@@ -11,7 +11,7 @@ Stripe retries failed webhooks for 3 days, which covers every real outage.
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Header, Request
+from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from pydantic import BaseModel
 
 from ..services import auth as auth_service

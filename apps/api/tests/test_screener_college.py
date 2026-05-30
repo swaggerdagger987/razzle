@@ -2,6 +2,16 @@
 
 from __future__ import annotations
 
+import pytest
+
+
+def _has_terminal_db() -> bool:
+    from apps.api.config import get_settings
+    return get_settings().terminal_db_path.exists()
+
+
+pytestmark = pytest.mark.skipif(not _has_terminal_db(), reason="terminal.db not present")
+
 
 def test_college_screener_returns_universe(app_client):
     r = app_client.post(

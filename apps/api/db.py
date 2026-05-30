@@ -13,13 +13,14 @@ tool. Postgres becomes interesting at ~10x scale.
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import sqlite3
 import threading
 from collections import deque
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterator
 
 from .config import get_settings
 
@@ -53,18 +54,18 @@ def get_db() -> Iterator[sqlite3.Connection]:
     try:
         yield conn
     finally:
+        pooled = False
         with _pool_lock:
             if len(_pool) < POOL_SIZE:
                 try:
                     conn.rollback()
                     _pool.append(conn)
-                    return
+                    pooled = True
                 except sqlite3.Error:
                     pass
-        try:
-            conn.close()
-        except sqlite3.Error:
-            pass
+        if not pooled:
+            with contextlib.suppress(sqlite3.Error):
+                conn.close()
 
 
 @contextmanager

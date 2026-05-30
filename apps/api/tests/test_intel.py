@@ -13,8 +13,8 @@ DB = REPO / "data" / "terminal.db"
 
 @pytest.mark.skipif(not DB.exists(), reason="terminal.db missing")
 def test_intel_sync_and_snippets():
-    from apps.api.services.intel.sync import sync_intel
     from apps.api.services.intel.snippets import intel_for_player
+    from apps.api.services.intel.sync import sync_intel
 
     stats = sync_intel(DB)
     assert stats["contracts"] > 1000

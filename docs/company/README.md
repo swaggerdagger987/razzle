@@ -21,10 +21,11 @@ into `OPERATING_SYSTEM.md`.
 6. `HIRING_AND_FIRING.md` — How roles are created, rewritten, merged, or retired
 7. `SOP.md` — CEO-mode operating procedure and old-loop ethos preserved
 8. `GUARDRAILS.md` — Branch protection, run lock, prompt-sync, and founder-only boundaries
-9. `NEXT.md` — First slice candidates so the team has something concrete to bite
-10. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
-11. `SLACK.md` — Operator cheat sheet: how to start, question, and stop the team from Slack
-12. `automations/README.md` — Cursor Automation specs (good-morning, ask-team, good-evening, tick)
+9. **`HARNESS.md`** — **One-time factory setup** (GitHub, CI, Cursor Automations, Slack)
+10. `NEXT.md` — First slice candidates so the team has something concrete to bite
+11. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
+12. `SLACK.md` — Operator cheat sheet: how to start, question, and stop the team from Slack
+13. `automations/README.md` — Cursor Automation specs (good-morning, ask-team, good-evening, tick)
 
 Then read the role file for the role being invoked, plus that role's memory file.
 

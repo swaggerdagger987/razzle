@@ -20,12 +20,16 @@ Minimum settings:
 
 Recommended required checks:
 
-- `pytest apps/api/tests -q`
-- `npm run build`
+- `api` (pytest + ruff in the api job)
+- `web` (typecheck + lint)
+- `web-build` (`npm run build`)
 
-Name checks exactly as your CI workflow reports them.
+Name checks exactly as your CI workflow reports them in GitHub branch protection.
 
 Autonomous merge is allowed only through PRs that pass these checks.
+
+If `gh pr merge` returns 403 on Automation VMs, use GitHub auto-merge or add
+the Cursor GitHub App to the bypass list while keeping required checks.
 
 ---
 
@@ -44,6 +48,9 @@ Lock mechanism:
 
 If lock cannot be acquired (API/auth issues), the run should post a blocker and
 exit instead of risking concurrent writes.
+
+If publish fails after local commit (`BLOCKED: GITHUB_PUBLISH`), do not treat
+the cycle as shipped. Follow `docs/company/HARNESS.md` § Publish blocked.
 
 ---
 

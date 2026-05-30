@@ -7,20 +7,20 @@ The eight Bureau features are the "context as a moat" play. ChatGPT
 has the LLM; ChatGPT does NOT have your specific league state.
 """
 
-from .self_scout import self_scout
-from .roster_depth import roster_depth
 from .build_profiles import build_profiles
-from .power_rankings import power_rankings
-from .trade_network import trade_network
-from .waiver_tendencies import waiver_tendencies
 from .head_to_head import head_to_head
-from .strength_of_schedule import strength_of_schedule
+from .manager_profiles import manager_profiles
 from .monte_carlo import monte_carlo_projections
 from .player_status import player_league_status
-from .manager_profiles import manager_profiles
+from .power_rankings import power_rankings
 from .pressure_map import pressure_map
-from .trade_finder import trade_finder
+from .roster_depth import roster_depth
 from .scenario_trade import scenario_trade
+from .self_scout import self_scout
+from .strength_of_schedule import strength_of_schedule
+from .trade_finder import trade_finder
+from .trade_network import trade_network
+from .waiver_tendencies import waiver_tendencies
 
 __all__ = [
     "self_scout",

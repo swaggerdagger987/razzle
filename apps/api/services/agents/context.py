@@ -3,11 +3,10 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
 
-from ..context.store import get_or_refresh
 from ...legacy_bridge import live_data
 from ..bureau.player_status import roster_status_line
+from ..context.store import get_or_refresh
 from ..intel.snippets import intel_lines_for_prompt
 from .facts import facts as build_facts
 
