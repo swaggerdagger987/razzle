@@ -13,7 +13,8 @@ PRs are the durable source of truth; open PRs are exceptions or checks pending.
 
 | File | Purpose | Owner |
 |------|---------|-------|
-| `workday.json` | Is the team currently working? When did the workday start? How many cycles ran? | Morning + Nightly Review + (later) Tick automations |
+| `workday.json` | Is the team currently working? When did the workday start? How many cycles ran? | Morning + Nightly Review |
+| `current-slice.json` | Planner → Builder handoff: big problem, today's atom, allowed paths, acceptance commands | Morning (Phase PLAN) |
 
 ---
 

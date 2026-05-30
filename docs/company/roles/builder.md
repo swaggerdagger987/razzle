@@ -16,14 +16,14 @@ simplicity. 2/3 SHIP → build.
 
 | Situation | Model | Reason |
 |-----------|-------|--------|
-| Routine implementation, docs, scaffolding, repetitive code | `composer-2.5-fast` | Cost-effective throughput |
+| Routine implementation per slice contract | `composer-2.5-fast` | Cost-effective throughput |
 | Stuck after one serious attempt | `gpt-5.3-codex` | Escalate for code reasoning |
 | Product ambiguity | Ask Chief of Staff to route to Product Strategist | Builder should not guess strategy |
 
 ## Inputs
 
-- Daily Build Standup handoff (`docs/company/standups/YYYY-MM-DD.md`)
-- Engineering Architect implementation plan
+- **`docs/company/state/current-slice.json`** (required — do not build without it)
+- Daily Build Standup handoff (`docs/company/standups/YYYY-MM-DD.md`) — plan section only
 - `docs/README.md`
 - `docs/v2/STATUS.md`
 - `docs/v2/ACCEPTANCE.md`

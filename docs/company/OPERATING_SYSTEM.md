@@ -19,7 +19,8 @@ Razzle is in **deep build** stage:
 - **Product:** ~15% of V1 depth, ~5% of ceiling per `docs/v2/PARITY.md`. Pillars at L4-L5.
 - **Launch:** Not yet. Twitter and Reddit launches are deferred.
 - **Users:** None. No paid users. No public free users yet.
-- **Constraint:** Quality and velocity of slice production. Not distribution. Not revenue. Not cost.
+- **Constraint:** Quality and velocity of slice production at sustainable token cost.
+  Not distribution. Not revenue. One atomic slice per morning trigger.
 
 The Company OS is build-coded by design. Distribution roles (Brand Guardian, Growth
 Operator, Launch Captain, Customer Voice) are explicitly deferred until launch readiness
@@ -60,10 +61,11 @@ If a role underperforms, rewrite the system before blaming the model.
 ### 3. Expensive judgment, cheap throughput
 
 Use the best model when the decision could change product direction, architecture,
-pricing, positioning, or user trust. Use cheaper throughput models for repetitive
-implementation, formatting, scaffolding, and cleanup.
+pricing, positioning, or user trust. Use **Composer-class** models for bounded
+implementation that follows a written slice contract.
 
-Cost matters, but bad decisions are more expensive than good models.
+**Cost is a first-class constraint.** See `docs/company/MODEL-ECONOMICS.md`.
+Bad decisions are expensive; so is re-reading the whole repo every cycle on Opus.
 
 ### 4. Autoresearch is on-the-job experience
 

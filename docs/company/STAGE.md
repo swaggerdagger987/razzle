@@ -15,8 +15,8 @@ advances, this document updates first, then role files, then automation.
 | Product | ~15% of V1 depth, ~5% of ceiling per `docs/v2/PARITY.md`. Pillars at L4-L5. |
 | Launch | Not yet. Twitter and Reddit launches are deferred. |
 | Users | None. No paid users. No public free users. |
-| Constraint | Quality and velocity of slice production. |
-| Cost | Founder-controlled. No automated cap. |
+| Constraint | Quality and velocity of **one atomic slice per morning**. Sustainable token spend. |
+| Cost | Target ≤80k input per morning cycle. Planner ≤25k, Builder ≤40k, Verify ≤15k. |
 | Bottleneck | Build queue throughput and verified completion. |
 
 ### What this implies

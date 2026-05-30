@@ -10,6 +10,8 @@ PR, and posts back.
 
 **Cycle completion law:** `docs/company/FACTORY-DOD.md` — PR merged, preview verified.
 
+**Model / token law:** `docs/company/MODEL-ECONOMICS.md` — plan vs build tiers.
+
 ---
 
 ## What the harness is
@@ -142,7 +144,8 @@ Copy prompt bodies from repo files. Start each with `PROMPT_VERSION` line.
 
 | Automation | Trigger | Prompt file | Model (starting point) |
 |------------|---------|-------------|----------------------|
-| **Morning Standup** | Slack keyword `good morning team` | `good-morning.md` | Opus 4.7 thinking |
+| **Morning Standup** | Slack keyword `good morning team` | `good-morning.md` | Opus thinking (plan) + Composer behavior (build) |
+| **Team Build** (optional) | Slack keyword `team build` | `team-build.md` (future) | **Composer 2.5 Fast** — reads `current-slice.json` only |
 | **Ask The Team** | Prefix `Strategist:` etc. | `ask-team.md` | Sonnet 4.6 thinking |
 | **CEO Nightly** | Slack keyword `good evening team` | `good-evening.md` | Sonnet 4.6 thinking |
 | **Loop Tick** | Schedule every 60–90 min | `tick.md` + morning body | Opus or GPT-5.5 medium |

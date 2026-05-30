@@ -91,12 +91,12 @@ message saying so. Do not improvise.
 
 ## Cost discipline
 
-- Read in full only what the per-automation spec lists. Do not crawl the repo.
-- One cycle's full read budget should be < 80K input tokens. If you blow past
-  that, the run is mis-scoped — stop, write a blocker, and exit.
-- Do not start dev servers or run heavy migrations unless the slice you're
-  building requires it. Localhost evidence can be a rendered HTML snapshot or
-  a working curl response.
+Read **`docs/company/MODEL-ECONOMICS.md`**. Tiered reads only — never crawl the repo.
+
+- One morning ≈ one atom ≈ ≤80k input tokens total.
+- Phase PLAN (Opus thinking): big problem + epic + `current-slice.json`. No code.
+- Phase BUILD (Composer behavior): contract + allowed files only.
+- If you blow past budget, stop and write a blocker standup.
 
 ## When in doubt
 
