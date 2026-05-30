@@ -38,7 +38,6 @@ def test_detect_followups_empty_when_all_responders_called():
 
 def test_orchestrate_returns_shape_without_key(app_client, monkeypatch):
     """With no LLM key set, the orchestrator returns a structured no-op."""
-    import os
     monkeypatch.delenv("RAZZLE_LLM_API_KEY", raising=False)
     # Clear cached settings so the env change takes effect
     from apps.api.config import get_settings
@@ -57,7 +56,7 @@ def test_orchestrate_returns_shape_without_key(app_client, monkeypatch):
 
 
 def test_personas_load():
-    from apps.api.services.agents.personas import load, LAUNCH_AGENTS
+    from apps.api.services.agents.personas import LAUNCH_AGENTS, load
 
     for agent_id in LAUNCH_AGENTS:
         text = load(agent_id)

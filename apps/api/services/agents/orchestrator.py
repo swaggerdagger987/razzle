@@ -19,7 +19,8 @@ from typing import Any
 
 from .context import build_context_block
 from .llm import chat
-from .personas import LAUNCH_AGENTS, load as load_persona
+from .personas import LAUNCH_AGENTS
+from .personas import load as load_persona
 from .registry import ROUTE_DESCRIPTIONS, suggest_specialists
 from .triggers import detect_followups
 
@@ -59,7 +60,7 @@ async def orchestrate(
         return_exceptions=True,
     )
     outputs = []
-    for agent_id, out in zip(chosen, specialist_outputs):
+    for agent_id, out in zip(chosen, specialist_outputs, strict=True):
         if isinstance(out, Exception):
             logger.warning("specialist %s failed: %s", agent_id, out)
             outputs.append({"agent": agent_id, "text": "", "error": str(out)})

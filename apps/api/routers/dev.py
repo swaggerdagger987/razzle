@@ -9,7 +9,7 @@ from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel
 
 from ..config import get_settings
-from ..services.tier import Plan, get_dev_plan_override, resolve_plan, set_dev_plan
+from ..services.tier import get_dev_plan_override, resolve_plan, set_dev_plan
 
 router = APIRouter(prefix="/api/dev", tags=["dev"])
 

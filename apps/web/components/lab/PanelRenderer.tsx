@@ -31,51 +31,7 @@ interface Props {
   panel: PanelDefinition;
 }
 
-export function PanelRenderer({ panel }: Props) {
-  if (panel.renderType === "screener") {
-    return <ScreenerRedirect panel={panel} />;
-  }
-
-  if (panel.slug === "rankings") {
-    return <DynastyRankingsRenderer panel={panel} />;
-  }
-
-  if (panel.slug === "tradevalues") {
-    return <TradeValuesRenderer panel={panel} />;
-  }
-
-  if (panel.slug === "breakouts") {
-    return <BreakoutsRenderer panel={panel} />;
-  }
-
-  if (panel.slug === "weekly") {
-    return <WeeklyHeatmapRenderer panel={panel} />;
-  }
-
-  if (panel.slug === "prospects") {
-    return <ProspectsRenderer panel={panel} />;
-  }
-
-  if (panel.slug === "gamelog") {
-    return <GamelogRenderer panel={panel} />;
-  }
-
-  if (panel.slug === "efficiency") {
-    return <EfficiencyRenderer panel={panel} />;
-  }
-
-  if (panel.slug === "aging") {
-    return <AgingCurvesRenderer panel={panel} />;
-  }
-
-  if (panel.slug === "buysell") {
-    return <BuySellRenderer panel={panel} />;
-  }
-
-  if (panel.slug === "dashboard") {
-    return <DynastyDashboardRenderer panel={panel} />;
-  }
-
+function GenericPanelRenderer({ panel }: Props) {
   const q = useQuery({
     queryKey: ["panel", panel.slug, panel.api],
     queryFn: () => fetchPanelData(panel),
@@ -140,4 +96,52 @@ export function PanelRenderer({ panel }: Props) {
     default:
       return <TableRenderer data={record} />;
   }
+}
+
+export function PanelRenderer({ panel }: Props) {
+  if (panel.renderType === "screener") {
+    return <ScreenerRedirect panel={panel} />;
+  }
+
+  if (panel.slug === "rankings") {
+    return <DynastyRankingsRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "tradevalues") {
+    return <TradeValuesRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "breakouts") {
+    return <BreakoutsRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "weekly") {
+    return <WeeklyHeatmapRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "prospects") {
+    return <ProspectsRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "gamelog") {
+    return <GamelogRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "efficiency") {
+    return <EfficiencyRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "aging") {
+    return <AgingCurvesRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "buysell") {
+    return <BuySellRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "dashboard") {
+    return <DynastyDashboardRenderer panel={panel} />;
+  }
+
+  return <GenericPanelRenderer panel={panel} />;
 }
