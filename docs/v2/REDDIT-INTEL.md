@@ -247,3 +247,9 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 55
 - **Screenshot potential:** RB-only FPTS card droppable in r/DynastyFF trade/value threads — data-first, not SaaS promo
 - **Bot-fact potential:** `!razzle confirm top RB PPR FPTS` — future intel layer
+
+### 2026-05-30 — light scan (cycle 58, Data Researcher)
+- **Signal (mental model, no live fetch):** r/DynastyFF and r/fantasyfootballadvice users repeatedly frame their questions by *role* — "who's my trade guy", "who do I trust on injuries", "is this a buy-low". The mental model is a staff of specialists, not a menu of features. This is the same instinct the Situation Room agents exploit.
+- **Build input:** A Lab that browses **by analyst** (Bones for trade tools, Hawkeye for usage/breakouts, Dr. Dolphin for durability, Octo for projections, Atlas for history) matches that mental model better than a flat category list. It also reinforces the six-staff identity across rooms (hallway H-04) without any "AI" framing.
+- **Confidence:** medium (pattern from prior intel + product instinct; no new thread URL this scan).
+- **Council cycle:** 58 → fed the Lab L2 "By Staff" sidebar slice.

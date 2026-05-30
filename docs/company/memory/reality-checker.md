@@ -17,3 +17,5 @@ explicit checks in the verification routine.
 ## Entries
 
 2026-05-30 | Lab L5 OG live data rows | test (npm run build + pytest + tsc) | Lab L5 DEPTH claim verified | PASS | no terminal.db on CI VM means data-path is untested end-to-end; fallback path (empty data → icon + loading copy) verified; production needs NEXT_PUBLIC_API_ORIGIN env var | keep | future: add OG snapshot test with fixture data
+
+2026-05-30 (c58) | Lab L2 By Staff grouping | test (tsc + next build + eslint + panel-ownership count) | Lab L2 agent-owned headers verified; all six desks non-empty | PASS | keep | visual screenshot deferred (no dev server this cycle); execution evidence is build/tsc/eslint + ownership count

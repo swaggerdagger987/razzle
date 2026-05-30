@@ -1,6 +1,6 @@
 "use client";
 
-import { agentForPanel } from "@razzle/agents";
+import { AGENTS, agentForPanel, type AgentDefinition } from "@razzle/agents";
 import {
   PANELS,
   panelsByCategory,
@@ -47,8 +47,19 @@ interface Props {
   onToggle?: () => void;
 }
 
+type GroupMode = "category" | "staff";
+
+/** Catch-all desk for panels no specialist owns yet — Razzle runs the floor. */
+const GENERAL_DESK = {
+  id: "general",
+  name: "Razzle",
+  role: "Chief of Staff · the floor",
+  avatar: "razzle",
+} as const;
+
 export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, onCloseMobile, onToggle }: Props) {
   const [query, setQuery] = useState("");
+  const [groupMode, setGroupMode] = useState<GroupMode>("category");
   const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set());
 
   const panels = useMemo(() => (query ? searchPanels(query) : PANELS), [query]);
@@ -61,6 +72,34 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
       map.set(panel.category, arr);
     }
     return map;
+  }, [panels]);
+
+  /** Each analyst's desk = the panels that staffer owns in the registry.
+   *  Panels no specialist owns fall to Razzle's general desk, kept last. */
+  const staffDesks = useMemo(() => {
+    const byAgent = new Map<string, PanelDefinition[]>();
+    const general: PanelDefinition[] = [];
+    for (const panel of panels) {
+      const owner = agentForPanel(panel.slug);
+      if (owner) {
+        const arr = byAgent.get(owner.id) ?? [];
+        arr.push(panel);
+        byAgent.set(owner.id, arr);
+      } else {
+        general.push(panel);
+      }
+    }
+    const desks: { desk: { id: string; name: string; role: string; avatar: string }; items: PanelDefinition[] }[] = [];
+    for (const agent of AGENTS as AgentDefinition[]) {
+      const items = byAgent.get(agent.id);
+      if (items && items.length > 0) {
+        desks.push({ desk: { id: agent.id, name: agent.name, role: agent.role, avatar: agent.avatar }, items });
+      }
+    }
+    if (general.length > 0) {
+      desks.push({ desk: GENERAL_DESK, items: general });
+    }
+    return desks;
   }, [panels]);
 
   function toggleCategory(cat: string) {
@@ -87,44 +126,104 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
         />
       </div>
 
-      <div className="lab-sidebar-inner">
-        {!query && (
-          <div className="lab-sidebar-category">
-            <span className="cat-text">Staff Picks</span>
-          </div>
-        )}
-        {!query &&
-          PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
-            <SidebarItem
-              key={`staff-${panel.slug}`}
-              panel={panel}
-              activeSlug={activeSlug}
-              badge="★"
-              onNavigate={onCloseMobile}
-            />
-          ))}
+      {!collapsed && (
+        <div className="lab-sidebar-groupmode" role="group" aria-label="Group panels by">
+          <button
+            type="button"
+            className={`lab-groupmode-btn${groupMode === "category" ? " active" : ""}`}
+            aria-pressed={groupMode === "category"}
+            onClick={() => setGroupMode("category")}
+          >
+            By Category
+          </button>
+          <button
+            type="button"
+            className={`lab-groupmode-btn${groupMode === "staff" ? " active" : ""}`}
+            aria-pressed={groupMode === "staff"}
+            onClick={() => setGroupMode("staff")}
+          >
+            By Staff
+          </button>
+        </div>
+      )}
 
-        {Array.from(grouped.entries()).map(([category, items]) => (
-          <div key={category}>
-            <button
-              type="button"
-              className="lab-sidebar-category"
-              onClick={() => toggleCategory(category)}
-            >
-              <span className="cat-text">{CATEGORY_LABELS[category]}</span>
-              <span aria-hidden>{collapsedCats.has(category) ? "▸" : "▾"}</span>
-            </button>
-            {!collapsedCats.has(category) &&
-              items.map((panel) => (
+      <div className="lab-sidebar-inner">
+        {groupMode === "staff" && !query ? (
+          staffDesks.map(({ desk, items }) => (
+            <div key={desk.id}>
+              <button
+                type="button"
+                className="lab-sidebar-category lab-sidebar-deskhead"
+                onClick={() => toggleCategory(`desk-${desk.id}`)}
+              >
+                <span className="lab-deskhead-id">
+                  <img
+                    src={`/agents/${desk.avatar}.svg`}
+                    alt=""
+                    className="lab-sidebar-agent"
+                    width={20}
+                    height={20}
+                  />
+                  <span className="cat-text">
+                    {desk.name}
+                    <span className="lab-desk-role">{desk.role}</span>
+                  </span>
+                </span>
+                <span aria-hidden>{collapsedCats.has(`desk-${desk.id}`) ? "▸" : "▾"}</span>
+              </button>
+              {!collapsedCats.has(`desk-${desk.id}`) &&
+                items.map((panel) => (
+                  <SidebarItem
+                    key={`${desk.id}-${panel.slug}`}
+                    panel={panel}
+                    activeSlug={activeSlug}
+                    onNavigate={onCloseMobile}
+                  />
+                ))}
+            </div>
+          ))
+        ) : (
+          <>
+            {groupMode === "category" && !query && (
+              <div className="lab-sidebar-category">
+                <span className="cat-text">Staff Picks</span>
+              </div>
+            )}
+            {groupMode === "category" &&
+              !query &&
+              PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
                 <SidebarItem
-                  key={panel.slug}
+                  key={`staff-${panel.slug}`}
                   panel={panel}
                   activeSlug={activeSlug}
+                  badge="★"
                   onNavigate={onCloseMobile}
                 />
               ))}
-          </div>
-        ))}
+
+            {Array.from(grouped.entries()).map(([category, items]) => (
+              <div key={category}>
+                <button
+                  type="button"
+                  className="lab-sidebar-category"
+                  onClick={() => toggleCategory(category)}
+                >
+                  <span className="cat-text">{CATEGORY_LABELS[category]}</span>
+                  <span aria-hidden>{collapsedCats.has(category) ? "▸" : "▾"}</span>
+                </button>
+                {!collapsedCats.has(category) &&
+                  items.map((panel) => (
+                    <SidebarItem
+                      key={panel.slug}
+                      panel={panel}
+                      activeSlug={activeSlug}
+                      onNavigate={onCloseMobile}
+                    />
+                  ))}
+              </div>
+            ))}
+          </>
+        )}
       </div>
 
       {onToggle && (
