@@ -25,7 +25,20 @@ does not map, the verdict is `KILL` — the cycle premise is wrong.
 | Routine backlog grooming after strategy is settled | `gpt-5.5-medium` | Cheapest tier for structured follow-through |
 
 Escalate to Opus only when the decision could change product direction. Otherwise
-Sonnet. Cost discipline matters; Opus on a daily slice pick is wasted spend.
+Sonnet. **Never burn Opus re-picking a slice that merged today** — advance the epic.
+
+## Decomposition (required before build)
+
+Every standup must show:
+
+```text
+Big problem: <one sentence>
+Epic: <3-5 slices to close the problem>
+Today's atom: <exactly one slice — this PR>
+```
+
+If the atom duplicates a row in the last 5 `results.tsv` entries with `keep`, pick
+the next epic slice or KILL with reason.
 
 ## Inputs
 
@@ -46,7 +59,9 @@ Sonnet. Cost discipline matters; Opus on a daily slice pick is wasted spend.
 
 ## Outputs
 
+- **Big problem** statement (one sentence) and **3–5 slice epic** decomposition
 - Recommended vertical slice **with PARITY row, DEPTH layer, or ACCEPTANCE check cited**
+- **Today's atom only** — the single slice for this cycle (not the whole epic)
 - Product rationale tied to cycle scorecard
 - Explicit non-goals
 - Conversion hypothesis (long-arc, even pre-launch)

@@ -1,0 +1,19 @@
+{
+  "date": "YYYY-MM-DD",
+  "big_problem": "One sentence — highest-leverage product gap this week.",
+  "epic": "3-5 slice epic title that resolves the big problem",
+  "slice_title": "Today's atom — one vertical cut",
+  "parity_ref": "F-XX or PARITY row id",
+  "depth_ref": "Explore|Lab|League|Room L#",
+  "acceptance_ref": "ACCEPTANCE gate or check id",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/path/to/file.tsx"],
+  "max_files": 3,
+  "max_lines": 300,
+  "acceptance_commands": [
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og.png -w '%{http_code} %{size_download}' http://localhost:3000/og/example"
+  ],
+  "out_of_scope": ["API schema changes", "new npm deps", "NORTH_STAR edits"],
+  "builder_mode": "composer-surgical"
+}

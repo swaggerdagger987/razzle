@@ -35,6 +35,7 @@ or Karpathy simplicity blocks until resolved in-thread.
 
 ## Outputs
 
+- **`docs/company/state/current-slice.json`** — slice contract for Builder (required before code)
 - Implementation boundary
 - File ownership map
 - Risk list

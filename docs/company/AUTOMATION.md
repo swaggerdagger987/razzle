@@ -116,16 +116,23 @@ Constraints:
 
 ## Model Routing
 
+See **`docs/company/MODEL-ECONOMICS.md`** for tier budgets, phase boundaries, and
+sustainability rules.
+
 | Task | Default | Escalate when |
 |------|---------|---------------|
 | Coordination (Chief of Staff) | `gpt-5.5-medium` | Founder Board, role conflict |
-| Product strategy (routine slice pick) | `claude-4.6-sonnet-medium-thinking` | Scope kill, pricing, channel, ambiguous tradeoffs |
-| Product strategy (high-stakes) | `claude-opus-4-7-thinking-xhigh` | Already escalated |
-| Architecture | `gpt-5.3-codex` | Product tradeoff dominates → Opus |
-| Implementation | `composer-2.5-fast` | Failed once or touches critical code → Codex |
-| Research synthesis | `claude-4.6-sonnet-medium-thinking` | Launch narrative or pricing implication → Opus |
-| Research bulk extraction | `composer-2.5-fast` | Pattern is fuzzy → Sonnet |
-| Review | `gpt-5.3-codex` | Brand/voice claim → Opus |
+| **Big problem + epic decomposition** | `claude-opus-4-7-thinking-xhigh` | Never downgrade — this is the high-leverage call |
+| Routine slice pick (next atom in known epic) | `claude-4.6-sonnet-medium-thinking` | Ambiguous PARITY tie → Opus |
+| Architecture / slice contract | `gpt-5.3-codex` | Product tradeoff dominates → Opus |
+| **Implementation (follows current-slice.json)** | **`composer-2.5-fast`** | Failed once or touches critical code → Codex |
+| Research synthesis | `claude-4.6-sonnet-medium-thinking` | Launch narrative → Opus |
+| Research bulk extraction | `composer-2.5-fast` | Pattern fuzzy → Sonnet |
+| Review / FACTORY-DOD | `gpt-5.3-codex` | Brand/voice claim → Opus |
+
+**Sustainable morning:** Planner finds big problem → writes atom contract → Composer
+executes. One Opus run that re-reads everything and codes like Opus is **not**
+sustainable.
 
 Escalation is not failure. It is model-market fit.
 
