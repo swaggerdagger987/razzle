@@ -58,6 +58,20 @@ JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests -q   # all pass or ski
 npm run build                                                  # exits 0
 ```
 
+## Gate 6 — Share / OG export cards
+
+When a cycle ships or touches `/og/*` or export buttons:
+
+| Check | Pass criteria |
+|-------|---------------|
+| Route | `curl -o /tmp/x.png -w "%{http_code}" localhost:3000/og/<path>` → 200 |
+| Not empty | PNG download ≥ 40KB for live-data routes (rankings, explore, panels) |
+| Not fake | Head-to-head / league OG must show sample or live rows — not loading copy alone |
+| On base | Merged to `razzle-v2-redesign` — preview deploys from base |
+| Evidence | `docs/v2/evidence/YYYY-MM-DD-<slug>.md` with curl output |
+
+See `docs/company/FACTORY-DOD.md` Gate C.
+
 ## Evidence format
 
 Each loop iteration attaches to `docs/v2/evidence/YYYY-MM-DD-HHMM-<ticket>.md`:

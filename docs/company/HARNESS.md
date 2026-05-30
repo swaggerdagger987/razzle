@@ -8,6 +8,8 @@ PR, and posts back.
 
 **Operator cheat sheet:** `docs/company/SLACK.md`
 
+**Cycle completion law:** `docs/company/FACTORY-DOD.md` — PR merged, preview verified.
+
 ---
 
 ## What the harness is
