@@ -16,4 +16,4 @@ anecdotes (>=3 independent threads = signal).
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | REDDIT-INTEL standing gap | screenshot-worthy share cards | "Screenshot posts that name the analyst persona outperform generic dashboard dumps" | DEPTH Lab L5 / PARITY Lab | keep | keep | — | no fresh scrape; existing signal directly maps to Lab OG export slice

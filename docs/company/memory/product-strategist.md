@@ -15,4 +15,4 @@ new evidence.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | Lab L5 OG export with live data rows advances T5+T6 screenshot gravity | Lab L5 | DEPTH Lab L5 / PARITY Lab row | keep | keep | — | npm run build pass, pattern matches /og/explore cycle 55

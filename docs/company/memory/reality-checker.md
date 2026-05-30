@@ -16,4 +16,4 @@ explicit checks in the verification routine.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | Lab L5 OG panel data rows | test (npm run build + pytest) | DEPTH Lab L5 | PASS | pre-existing test failure (no terminal.db) is not regression | keep | — | Full rendered OG evidence requires production data; build gates sufficient for L5 claim
