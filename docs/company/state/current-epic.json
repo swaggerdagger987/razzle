@@ -25,12 +25,12 @@
       "parity_ref": "HALLWAY H-02",
       "depth_ref": "Lab L5",
       "status": "done",
-      "merge_commit": "PENDING_HASH"
+      "merge_commit": "d6fc232"
     }
   ],
   "completed_atom_ids": ["atom-1", "atom-2", "atom-3"],
   "next_atom_id": null,
   "epic_status": "complete",
   "last_updated": "2026-05-30T23:55:00Z",
-  "last_merge_commit": "PENDING_HASH"
+  "last_merge_commit": "d6fc232"
 }
