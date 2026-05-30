@@ -15,4 +15,4 @@ new evidence.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | Lab export cards earn Reddit screenshots like Explore did | Lab L5 OG live data | DEPTH Lab L5 + PARITY Lab row | SHIP 3/3 | keep | Evidence: cycle 55 Explore OG → extend to all 100 panels

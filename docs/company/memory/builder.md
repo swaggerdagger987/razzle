@@ -15,4 +15,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | Lab L5 OG live data | generic extractRows + agent ownership + position pills | PENDING_HASH | keep | Evidence: /og/weekly 200 PNG 30KB, /og/rankings 200, build+tests green

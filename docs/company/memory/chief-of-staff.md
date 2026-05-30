@@ -14,4 +14,4 @@ A good entry changes future behavior. A bad entry is a diary.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | NEXT.md lead candidate resolves slice ambiguity instantly | keep | Lab L5 OG shipped 3/3 SHIP, one file touch | Evidence: standup written, all gates pass

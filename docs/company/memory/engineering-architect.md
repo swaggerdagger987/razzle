@@ -15,4 +15,4 @@ which migrations were painful, which test patterns caught bugs.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | Generic extractRows() over switch-per-panel keeps code surgical | apps/web/app/og/[panel]/route.tsx only | Gate 5 npm build + Gate 2 Lab render | keep | Evidence: 8 response shapes, single-file, build green

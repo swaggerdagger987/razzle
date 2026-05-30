@@ -16,4 +16,4 @@ explicit checks in the verification routine.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | Lab L5 OG live data cards | curl (4 slugs + watermark + 404) | Lab L5 DEPTH | PASS | no-data fallback | keep | Evidence: 200 PNG responses with correct sizes, npm build + pytest green
