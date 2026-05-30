@@ -16,4 +16,4 @@ explicit checks in the verification routine.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | Lab L5 OG live data rows claim | test (`npm run build` + pytest) | Lab L5 | PASS | No production data test (no terminal.db in CI) — acceptable for offseason; Satori compliance verified by build success | keep | Pre-existing test_nfl_screener_default_universe failure is not a regression (no terminal.db) | `npm run build` exits 0, pytest 52 passed 1 pre-existing fail

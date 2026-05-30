@@ -15,4 +15,4 @@ new evidence.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | Lab OG cards with live data rows make panels screenshot-droppable | Lab L5 OG live data | DEPTH Lab L5 / T5+T6 | SHIP 3/3, build green | keep | OG export is the Reddit distribution unit — screenshot gravity directly | `npm run build` green

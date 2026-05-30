@@ -16,4 +16,4 @@ anecdotes (>=3 independent threads = signal).
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | no web scraping | Screenshot export + staff voice remain dominant Reddit build inputs (standing signals from cycles 31, 55) | mapped to Lab L5 OG | keep | These signals have driven 3 consecutive export-focused cycles (55→56→57); next briefing should look for new patterns beyond export | standing REDDIT-INTEL.md entries

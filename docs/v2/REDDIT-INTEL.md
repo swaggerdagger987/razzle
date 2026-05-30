@@ -247,3 +247,10 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 55
 - **Screenshot potential:** RB-only FPTS card droppable in r/DynastyFF trade/value threads — data-first, not SaaS promo
 - **Bot-fact potential:** `!razzle confirm top RB PPR FPTS` — future intel layer
+
+## 2026-05-30 — Cycle 57
+
+### Standing signals (no new web scraping — offseason, standing patterns inform this slice)
+- **Screenshot export as distribution unit** — OC posts share filtered views; the Lab OG card is the mechanism that makes panel data group-chat droppable. Continuation of cycle 55–56 export depth.
+- **Staff voice on tool screenshots** — Agent emoji + name on export cards advances screenshot recognition. Same pattern as cycle 31.
+- **Formula composite → Lab panel workflow** — Standing signal (cycles 36–42): OG export with real data closes Explore formula → Lab panel → artifact loop.

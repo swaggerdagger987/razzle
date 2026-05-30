@@ -15,4 +15,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
-(none yet — first run will append here)
+2026-05-30 | Lab L5 OG live data rows | Generic extraction: try players→candidates→items→rows→data→rankings→values→leaders→results then tiers.players then top-level array. Agent owner from `agentForPanel()`. Position pills reuse POS_COLOR map from Explore OG | PENDING_HASH | keep | Reuse `/og/explore` pattern proven in cycle 55; 150 lines handles all 100 panels | `npm run build` green, pytest 52 passed
