@@ -247,3 +247,10 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 55
 - **Screenshot potential:** RB-only FPTS card droppable in r/DynastyFF trade/value threads — data-first, not SaaS promo
 - **Bot-fact potential:** `!razzle confirm top RB PPR FPTS` — future intel layer
+
+## 2026-05-30 — Cycle 58
+
+### r/DynastyFF — rivalry screenshots travel further than charts (light scan, no new web fetch)
+- **Signal (carries cycle 51 + 55):** The H2H rivalry dossier (cycle 51) is the most group-chat-native Bureau surface — "you vs Dave" dual cards beg to be screenshotted before playoffs. Cycle 55 (Explore) and cycle 57 (Lab) proved one-click export cards are the distribution unit. League surfaces had no export path yet — the gap is the share card, not the data.
+- **Build input:** Add `/og/head-to-head` export card so the rivalry matchup leaves the app as a watermarked Razzle image, not an OS screenshot of a web table. Atlas badge keeps the staff identity on the artifact.
+- **No new web scraping:** Signal is a direct continuation of standing gap "Screenshot-worthy share cards" + "League-specific context vs generic rankings." It informs slice selection without fresh fetch.

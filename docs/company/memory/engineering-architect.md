@@ -16,3 +16,4 @@ which migrations were painful, which test patterns caught bugs.
 ## Entries
 
 2026-05-30 | Generic extractRows() with 7 response shapes handles all 100 panels without per-panel switch | apps/web/app/og/[panel]/route.tsx | ACCEPTANCE Gate 2 (Lab renderers) | keep | Satori constraints: display:flex everywhere, no grid; agentForPanel() from @razzle/agents avoids metadata duplication; parameterized API paths ({player_id}) correctly skipped
+2026-05-30 | New /og/head-to-head edge route reuses POST /api/bureau/head-to-head with zero API/model change | apps/web/app/og/head-to-head/route.tsx | League L5 export + ACCEPTANCE Gate 5 | keep | mirrors /og/explore + /og/[panel]; Satori display:flex only; AGENT_BY_ID.atlas avoids metadata dup; export link gated on you.user_id; live-league data path unverifiable without Sleeper fixture

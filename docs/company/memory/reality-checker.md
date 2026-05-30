@@ -17,3 +17,4 @@ explicit checks in the verification routine.
 ## Entries
 
 2026-05-30 | Lab L5 OG live data rows | test (npm run build + pytest + tsc) | Lab L5 DEPTH claim verified | PASS | no terminal.db on CI VM means data-path is untested end-to-end; fallback path (empty data → icon + loading copy) verified; production needs NEXT_PUBLIC_API_ORIGIN env var | keep | future: add OG snapshot test with fixture data
+2026-05-30 | League L5 H2H OG export | test (tsc --noEmit + npm run build) | League L5 export claim verified — /og/head-to-head registered as dynamic edge route | PASS | live-league data path unverifiable (no Sleeper fixture + no terminal.db); null-data fallback to Atlas loading copy verified by build; same constraint as cycles 55/57 | keep | future: fixture-league CI render check for all OG routes
