@@ -68,10 +68,10 @@ message saying so. Do not improvise.
 5. **Honor every "Never Automate" rule** in `docs/company/AUTOMATION.md`. The
    Founder owns Stripe, Reddit/Twitter posting, NORTH_STAR, DESIGN, DECISIONS,
    role creation, and overrides of the Reality Checker.
-6. **Open a PR, then merge when gates pass.** Do not push directly to
-   `razzle-v2-redesign`. Required CI job names: `api`, `web`, `web-build`.
-   Merge via `gh pr merge` when authenticated; otherwise queue `--auto` or
-   leave open with PR URL. Founder reviews direction at night.
+6. **Open a PR, then merge when gates pass.** Use **ManagePullRequest** first
+   (create + merge). Do not treat `gh` 403 on admin APIs as a merge blocker.
+   Required CI: `api`, `web`, `web-build`. Slack must include PR URL and
+   `Merge: merged` when merge succeeds.
 7. **State you didn't do work, if you didn't.** A blocker standup is a real
    artifact. An invented slice is a Reality Checker FAIL waiting to happen.
 8. **Preserve Razzle voice.** Be football-native, playful, sharp, and direct.
