@@ -20,10 +20,11 @@ Minimum settings:
 
 Recommended required checks:
 
-- `pytest apps/api/tests -q`
-- `npm run build`
+- `api` (pytest + ruff in the api job)
+- `web` (typecheck + lint)
+- `web-build` (`npm run build`)
 
-Name checks exactly as your CI workflow reports them.
+Name checks exactly as your CI workflow reports them in GitHub branch protection.
 
 Autonomous merge is allowed only through PRs that pass these checks.
 

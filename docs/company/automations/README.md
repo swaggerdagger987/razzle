@@ -72,7 +72,7 @@ Read and enforce `docs/company/GUARDRAILS.md`:
 4. Domain drift guard (football depth + hallway evidence).
 
 Prompts can request these controls, but they must be configured in GitHub and
-Cursor dashboard to be real.
+Cursor dashboard to be real. Step-by-step: **`docs/company/HARNESS.md`**.
 
 ---
 

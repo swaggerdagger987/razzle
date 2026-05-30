@@ -35,3 +35,16 @@ jobs:
       - run: npm install --workspace=apps/web
       - run: npm run typecheck --workspace=apps/web
       - run: npm run lint --workspace=apps/web
+
+  web-build:
+    name: web-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm install --workspaces=false
+      - run: npm install --workspace=apps/web
+      - run: npm run build --workspace=apps/web

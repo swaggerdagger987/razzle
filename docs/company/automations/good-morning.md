@@ -140,6 +140,8 @@ Step 6 — Standup file write.
       votes, verdict, handoff)
     - Build Review section per docs/company/MEETINGS.md format (evidence,
       verdict, commit hash, git status)
+    - Trust score line: which of T1–T7 from docs/NORTH_STAR.md § How we score
+      work passed this cycle (e.g. "Trust: T1,T3,T5"). Note any VETO near-miss.
     - Outside Reality Briefing summary (the 1-3 signals from Step 1)
     - Team Roll Call section with one phone-readable line from each role:
       Chief, Strategist, Architect, Builder, Researcher, Reality
@@ -149,9 +151,9 @@ Step 7 — Memory + results.
   - Append one line to each of the six docs/company/memory/<role>.md files.
     Format: YYYY-MM-DD | hypothesis | outcome | keep / discard / revisit |
     evidence
-  - Prepare a docs/v2/results.tsv row with commit=PENDING_HASH. You will
-    replace it with the first content commit's real 7-character hash in the
-    metadata commit below.
+  - Prepare a docs/v2/results.tsv row with commit=PENDING_HASH. In description
+    include trust=T1,T3,... and slice name. You will replace PENDING_HASH with
+    the first content commit's real 7-character hash in the metadata commit below.
 
 Step 8 — Commit gate (NON-NEGOTIABLE).
   Even if the verdict was KILL, VETO, or NEEDS WORK: commit and push. The
@@ -196,7 +198,7 @@ Step 10 — Slack summary.
     Architect: <one-line safe path / risk>
     Builder: <one-line what changed or why blocked>
     Researcher: <one-line outside signal>
-    Reality: <PASS / NEEDS WORK / BLOCKED + evidence>
+    Reality: <PASS / NEEDS WORK / BLOCKED + evidence + Trust T1–T7>
     PR: <url>. Content commit <7-char hash>. Merge: merged | open NEEDS WORK |
     open checks pending.
     Founder tonight: review only if you disagree with direction or a blocker is

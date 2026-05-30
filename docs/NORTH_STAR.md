@@ -310,6 +310,7 @@ If a PR makes Razzle feel like a fintech dashboard, **T6 fails** even if tests p
 |-----|------|
 | `DESIGN.md` | Colors, type, voice, visual law |
 | `DECISIONS.md` | Locked architecture |
+| `company/HARNESS.md` | **Factory setup** — GitHub, CI, Slack, Automations |
 | `v2/DEPTH.md` | L0–L5 per pillar |
 | `v2/HALLWAY.md` | Wiring checklist |
 | `v2/PARITY.md` | Next slice queue |
