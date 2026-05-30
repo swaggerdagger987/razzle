@@ -1,6 +1,6 @@
 "use client";
 
-import { agentForPanel } from "@razzle/agents";
+import { AGENTS, agentForPanel, type AgentDefinition } from "@razzle/agents";
 import {
   PANELS,
   panelsByCategory,
@@ -10,6 +10,11 @@ import {
 } from "@razzle/panels";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+
+type GroupMode = "category" | "staff";
+
+/** Lab analysts in roster order — the desks panels are grouped under. */
+const LAB_STAFF: AgentDefinition[] = AGENTS.filter((a) => a.surfaces.includes("lab"));
 
 const CATEGORY_LABELS: Record<PanelCategory, string> = {
   rankings: "Rankings",
@@ -49,6 +54,7 @@ interface Props {
 
 export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, onCloseMobile, onToggle }: Props) {
   const [query, setQuery] = useState("");
+  const [groupMode, setGroupMode] = useState<GroupMode>("category");
   const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set());
 
   const panels = useMemo(() => (query ? searchPanels(query) : PANELS), [query]);
@@ -61,6 +67,26 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
       map.set(panel.category, arr);
     }
     return map;
+  }, [panels]);
+
+  /** Panels grouped by the analyst who owns them, in roster order. */
+  const byStaff = useMemo(() => {
+    const owned = new Map<string, PanelDefinition[]>();
+    const unassigned: PanelDefinition[] = [];
+    for (const panel of panels) {
+      const owner = agentForPanel(panel.slug);
+      if (owner) {
+        const arr = owned.get(owner.id) ?? [];
+        arr.push(panel);
+        owned.set(owner.id, arr);
+      } else {
+        unassigned.push(panel);
+      }
+    }
+    const desks = LAB_STAFF.map((agent) => ({ agent, items: owned.get(agent.id) ?? [] })).filter(
+      (desk) => desk.items.length > 0,
+    );
+    return { desks, unassigned };
   }, [panels]);
 
   function toggleCategory(cat: string) {
@@ -87,44 +113,121 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
         />
       </div>
 
-      <div className="lab-sidebar-inner">
-        {!query && (
-          <div className="lab-sidebar-category">
-            <span className="cat-text">Staff Picks</span>
-          </div>
-        )}
-        {!query &&
-          PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
-            <SidebarItem
-              key={`staff-${panel.slug}`}
-              panel={panel}
-              activeSlug={activeSlug}
-              badge="★"
-              onNavigate={onCloseMobile}
-            />
-          ))}
+      <div className="lab-groupmode" role="group" aria-label="Group panels by">
+        <button
+          type="button"
+          className={`lab-groupmode-btn${groupMode === "category" ? " active" : ""}`}
+          onClick={() => setGroupMode("category")}
+          aria-pressed={groupMode === "category"}
+        >
+          Category
+        </button>
+        <button
+          type="button"
+          className={`lab-groupmode-btn${groupMode === "staff" ? " active" : ""}`}
+          onClick={() => setGroupMode("staff")}
+          aria-pressed={groupMode === "staff"}
+        >
+          Staff
+        </button>
+      </div>
 
-        {Array.from(grouped.entries()).map(([category, items]) => (
-          <div key={category}>
-            <button
-              type="button"
-              className="lab-sidebar-category"
-              onClick={() => toggleCategory(category)}
-            >
-              <span className="cat-text">{CATEGORY_LABELS[category]}</span>
-              <span aria-hidden>{collapsedCats.has(category) ? "▸" : "▾"}</span>
-            </button>
-            {!collapsedCats.has(category) &&
-              items.map((panel) => (
+      <div className="lab-sidebar-inner">
+        {groupMode === "category" ? (
+          <>
+            {!query && (
+              <div className="lab-sidebar-category">
+                <span className="cat-text">Staff Picks</span>
+              </div>
+            )}
+            {!query &&
+              PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
                 <SidebarItem
-                  key={panel.slug}
+                  key={`staff-${panel.slug}`}
                   panel={panel}
                   activeSlug={activeSlug}
+                  badge="★"
                   onNavigate={onCloseMobile}
                 />
               ))}
-          </div>
-        ))}
+
+            {Array.from(grouped.entries()).map(([category, items]) => (
+              <div key={category}>
+                <button
+                  type="button"
+                  className="lab-sidebar-category"
+                  onClick={() => toggleCategory(category)}
+                >
+                  <span className="cat-text">{CATEGORY_LABELS[category]}</span>
+                  <span aria-hidden>{collapsedCats.has(category) ? "▸" : "▾"}</span>
+                </button>
+                {!collapsedCats.has(category) &&
+                  items.map((panel) => (
+                    <SidebarItem
+                      key={panel.slug}
+                      panel={panel}
+                      activeSlug={activeSlug}
+                      onNavigate={onCloseMobile}
+                    />
+                  ))}
+              </div>
+            ))}
+          </>
+        ) : (
+          <>
+            {byStaff.desks.map(({ agent, items }) => (
+              <div key={agent.id}>
+                <button
+                  type="button"
+                  className="lab-sidebar-category lab-staff-desk"
+                  onClick={() => toggleCategory(`staff-${agent.id}`)}
+                >
+                  <img
+                    src={`/agents/${agent.avatar}.svg`}
+                    alt=""
+                    className="lab-sidebar-agent"
+                    width={18}
+                    height={18}
+                  />
+                  <span className="cat-text">{agent.name}</span>
+                  <span className="lab-staff-role">{agent.role}</span>
+                  <span aria-hidden>{collapsedCats.has(`staff-${agent.id}`) ? "▸" : "▾"}</span>
+                </button>
+                {!collapsedCats.has(`staff-${agent.id}`) &&
+                  items.map((panel) => (
+                    <SidebarItem
+                      key={`${agent.id}-${panel.slug}`}
+                      panel={panel}
+                      activeSlug={activeSlug}
+                      hideAgentAvatar
+                      onNavigate={onCloseMobile}
+                    />
+                  ))}
+              </div>
+            ))}
+            {byStaff.unassigned.length > 0 && (
+              <div>
+                <button
+                  type="button"
+                  className="lab-sidebar-category"
+                  onClick={() => toggleCategory("staff-unassigned")}
+                >
+                  <span className="cat-text">More Panels</span>
+                  <span aria-hidden>{collapsedCats.has("staff-unassigned") ? "▸" : "▾"}</span>
+                </button>
+                {!collapsedCats.has("staff-unassigned") &&
+                  byStaff.unassigned.map((panel) => (
+                    <SidebarItem
+                      key={`more-${panel.slug}`}
+                      panel={panel}
+                      activeSlug={activeSlug}
+                      onNavigate={onCloseMobile}
+                    />
+                  ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       {onToggle && (
@@ -140,11 +243,13 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
+  hideAgentAvatar = false,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
+  hideAgentAvatar?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
@@ -157,7 +262,7 @@ function SidebarItem({
       title={owner ? `${owner.name} · ${panel.blurb}` : panel.blurb}
       onClick={onNavigate}
     >
-      {owner && (
+      {owner && !hideAgentAvatar && (
         <img
           src={`/agents/${owner.avatar}.svg`}
           alt=""

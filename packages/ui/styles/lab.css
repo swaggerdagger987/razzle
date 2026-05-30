@@ -94,6 +94,69 @@
   color: var(--ink-light);
 }
 
+.lab-groupmode {
+  display: flex;
+  gap: 4px;
+  padding: 6px 10px 8px;
+  border-bottom: 2px dashed var(--border-dashed);
+  background: var(--bg-card);
+}
+
+.lab-groupmode-btn {
+  flex: 1;
+  padding: 5px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-light);
+  background: var(--bg);
+  border: 2px solid var(--ink-faint);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s, border-color 0.12s;
+}
+
+.lab-groupmode-btn:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.lab-groupmode-btn.active {
+  background: var(--orange);
+  color: var(--bg-card);
+  border-color: var(--ink);
+}
+
+.lab-groupmode-btn:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
+.lab-staff-desk {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lab-staff-desk .cat-text {
+  color: var(--ink);
+}
+
+.lab-staff-role {
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink-light);
+  margin-left: auto;
+}
+
+.lab-sidebar.collapsed .lab-groupmode {
+  display: none;
+}
+
 .lab-sidebar-category {
   font-family: var(--font-mono);
   font-size: 11px;
