@@ -88,6 +88,23 @@ The goal:
 This stage is the operating target. If the team proves the autonomy thesis
 wrong, the SOP should record why and narrow the automation instead of pretending.
 
+### Stage D — Lights-out BUILD (target)
+
+See `docs/company/FACTORY-VISION.md`.
+
+- Workday may stay **open indefinitely** (24/7 ticks) until Founder sends
+  `good evening team` or a stall rule fires.
+- Nightly CEO review is **optional** for BUILD to continue — use the brake when
+  costs spike, product needs human touch, or models drift off guardrails.
+- Slack: [SLACK-FORMATS.md](./SLACK-FORMATS.md) T1 (10–15 words) per routine ship;
+  full roll call in standup/PR only.
+- Epic queue: `docs/company/state/current-epic.json` advances atom-by-atom.
+- Founder intervenes via `good evening team`, `Board:`, or role prefixes — not
+  merge or preview hygiene between atoms.
+
+Permanent human walls unchanged: GTM posting, pricing, NORTH_STAR/DESIGN/DECISIONS
+edits ([AUTOMATION.md](./AUTOMATION.md) Never Automate).
+
 ---
 
 ## Role Conversation From Slack

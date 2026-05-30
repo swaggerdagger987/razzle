@@ -159,9 +159,9 @@ PR merge when checks pass — configure auto-merge or bot bypass (§3c).
 **Test order:**
 
 1. `Team: Are we ready to run a morning cycle?` (no PR expected)
-2. `good morning team` (expect standup PR + Slack roll call)
-3. One manual tick (only after morning PR merged or workday open on branch)
-4. `good evening team` (digest, close workday)
+2. `good morning team` (expect standup PR + **T1 Slack line** 10–15 words)
+3. Enable tick ~60min (workday open → further atoms)
+4. `good evening team` (T3 brake digest, close workday)
 
 ---
 
@@ -180,10 +180,11 @@ Slack → Cursor Automation → Cloud VM (/workspace)
   → Score Trust pillars T1–T7 in standup
   → commit → push → PR standup: YYYY-MM-DD
   → merge if api + web + web-build green
-  → Slack summary with PR link
+  → T1 Slack line (10–15 words — see SLACK-FORMATS.md)
 ```
 
-**Your phone job:** read Slack at night. Override only if direction is wrong.
+**Your phone job:** skim T1 ship lines. Brake with `good evening team` when needed.
+Override via `Board:` or role prefix only on exceptions.
 
 ---
 
@@ -205,7 +206,7 @@ Every cycle must log **which Trust pillars moved**:
 
 - `docs/company/standups/YYYY-MM-DD.md` — `Trust score: T1,T3,T5` line
 - `docs/v2/results.tsv` — in `description` column: `trust=T1,T3,T5; slice=...`
-- Slack roll call — Reality line cites evidence + pillars
+- Slack — **T1 line only** (user outcome); trust pillars in standup/results, not channel
 
 **Instant VETO** (do not merge): see `NORTH_STAR.md` § Instant VETO.
 
@@ -265,7 +266,7 @@ Agents should always report CONTENT_HASH even when publish fails so you can reco
 
 - [ ] Branch protection + 3 CI checks green on a test PR
 - [ ] Four Cursor Automations live with repo prompts pasted
-- [ ] First `good morning team` produced standup PR + Slack + memory append
+- [ ] First `good morning team` produced standup PR + T1 Slack + memory append
 - [ ] `results.tsv` row includes `trust=T…` in description
 - [ ] You reviewed one nightly digest without rewriting >30% of output
 

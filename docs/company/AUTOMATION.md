@@ -130,9 +130,9 @@ sustainability rules.
 | Research bulk extraction | `composer-2.5-fast` | Pattern fuzzy → Sonnet |
 | Review / FACTORY-DOD | `gpt-5.3-codex` | Brand/voice claim → Opus |
 
-**Sustainable morning:** Planner finds big problem → writes atom contract → Composer
-executes. One Opus run that re-reads everything and codes like Opus is **not**
-sustainable.
+**Sustainable factory:** Planner writes epic + atom contract (`current-epic.json`,
+`current-slice.json`) → Composer executes. Many atoms per open workday via ticks.
+Slack T1 only (10–15 words). One Opus re-read-everything run is not sustainable.
 
 Escalation is not failure. It is model-market fit.
 

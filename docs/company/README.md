@@ -22,10 +22,12 @@ into `OPERATING_SYSTEM.md`.
 7. `SOP.md` — CEO-mode operating procedure and old-loop ethos preserved
 8. `GUARDRAILS.md` — Branch protection, run lock, prompt-sync, and founder-only boundaries
 9. **`HARNESS.md`** — **One-time factory setup** (GitHub, CI, Cursor Automations, Slack)
-10. `NEXT.md` — First slice candidates so the team has something concrete to bite
-11. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
-12. `SLACK.md` — Operator cheat sheet: how to start, question, and stop the team from Slack
-13. `automations/README.md` — Cursor Automation specs (good-morning, ask-team, good-evening, tick)
+10. **`FACTORY-VISION.md`** — 24/7 factory, Stage D lights-out BUILD, North Star compounding
+11. **`SLACK-FORMATS.md`** — CEO notification tiers (10–15 word ship lines)
+12. `NEXT.md` — First slice candidates so the team has something concrete to bite
+13. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
+14. `SLACK.md` — Operator cheat sheet: how to start, brake, and question the team
+15. `automations/README.md` — Cursor Automation specs (good-morning, ask-team, good-evening, tick)
 
 Then read the role file for the role being invoked, plus that role's memory file.
 
@@ -84,6 +86,12 @@ docs/company/
   state/                     machine-readable workday state
     README.md                schema + read/write protocol
     workday.json             {status, started_at, closed_at, cycle_count_today}
+    current-epic.json        epic + atom queue for 24/7 loop
+    current-epic.schema.json
+    current-slice.json       per-cycle Builder contract
+    current-slice.schema.json
+  SLACK-FORMATS.md           CEO Slack notification law
+  FACTORY-VISION.md          24/7 factory narrative + Stage D
 ```
 
 ---
@@ -110,21 +118,15 @@ The company exists to serve the product, not the other way around.
 
 ## Current Operating Mode
 
-**Stage 0 — Autonomous Slack workday.** Run roles by:
+**Stage D — Lights-out BUILD.** See `FACTORY-VISION.md`. Run roles by:
 
-- Sending `good morning team` in `#razzle-team` Slack — the Morning Standup
-  Cursor Automation runs the first Standard Company Loop cycle, opens a PR, and
-  merges it if gates pass.
-- Scheduled loop ticks continue building while the workday is open.
-- Asking role-prefixed questions (`Strategist:`, `Architect:`, `Reality:`,
-  `Team:`, etc.) in Slack — the Ask The Team Automation answers from repo
-  memory and writes files only when the answer changes future behavior.
-- Sending `good evening team` in `#razzle-team` Slack — the CEO Nightly Review
-  Automation reviews the day's open/merged PRs and writes the action digest.
+- Sending `good morning team` — opens factory, cycle 1, T1 Slack line.
+- **Loop ticks (~60 min)** — further atoms while workday open; T1 per merge.
+- `good evening team` — **brake** factory; T3 digest; optional for BUILD to continue overnight.
+- Role prefixes for Q&A (≤40 words per SLACK-FORMATS.md).
 
-Autonomy is the default. Passing PRs can merge without waiting for Founder
-review. Founder review happens at night and handles exceptions, direction, and
-overrides.
+Autonomy is the default. Passing PRs merge without Founder review between atoms.
+Founder brakes when cost, taste, or guardrails require human touch.
 
 If you want to run a role manually outside Slack, use the `Prompt Template`
 in `AUTOMATION.md` against the role file and memory file directly.

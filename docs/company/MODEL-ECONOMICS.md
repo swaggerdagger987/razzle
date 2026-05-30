@@ -17,19 +17,23 @@ Reality ** verifies** with curl, not essays.
 | **Executor** | Builder | Implement the contract only | **Composer-class** (fast, surgical) | ≤ 40k input |
 | **Verifier** | Reality | Execute checks, FACTORY-DOD | Codex / medium | ≤ 15k input |
 
-**Total per morning cycle: ≤ 80k input.** If you exceed, stop and write a
-blocker — the run is over-scoped.
+**Total per cycle: ≤ 80k input.** Many cycles per open workday (ticks); Founder
+brakes with `good evening team` when cost or guardrails require it.
 
 Cursor Automations often run **one model per trigger**. Simulate tiers inside
-one run by **strict phase boundaries** (below). When the platform allows split
-automations, prefer:
+one run by **strict phase boundaries** (below).
 
 | Trigger | Model | Does |
 |---------|-------|------|
-| `good morning team` | Opus thinking | Plan only → writes `current-slice.json`, no code |
-| `team build` | Composer 2.5 Fast | Read contract → code → merge |
+| `good morning team` | Opus thinking (plan) + Composer behavior (build) | Open factory + cycle 1 |
+| **Loop tick** (routine) | Sonnet behavior (plan) + Composer (build) | Next atom from `current-epic.json` |
+| **Loop tick** (new epic) | Opus thinking | New big problem + epic |
+| `team build` (future) | **Composer 2.5 Fast** | Read contract → code → merge |
+| Ask Team (routine) | Sonnet thinking | Q&A |
+| Ask Team (`Board:`) | Opus | Founder-level |
+| Evening review | Sonnet thinking | Brake digest |
 
-Until then, one morning run must **honor phases** as if the model changed.
+Until split automations exist, honor phases as if the model changed each tick.
 
 ---
 
@@ -67,7 +71,8 @@ Until then, one morning run must **honor phases** as if the model changed.
 
 1. `docs/company/MODEL-ECONOMICS.md` (this file)
 2. `docs/company/state/workday.json`
-3. `docs/company/NEXT.md`
+3. `docs/company/state/current-epic.json`
+4. `docs/company/NEXT.md`
 4. `docs/v2/STATUS.md` (skim)
 5. `docs/v2/LOOP-STATE.md`
 6. Last standup **verdict + slice title only** (do not re-read full history)
@@ -111,7 +116,8 @@ No product audits longer than 10 bullets. No re-reading the diff for "vibes."
 |---------|-------------------|-----|
 | Re-read 30+ docs every cycle | Opus tax on static content | Tiered read lists |
 | Same slice shipped twice same day | Re-fire without checking base | Check `results.tsv` + merge-base |
-| 50+ cycles/day | Tick spam or duplicate triggers | One slice per morning; disable extra triggers |
+| 50+ cycles/day without epic state | Opus re-plan every tick | `current-epic.json` + Sonnet routine pick |
+| Disabled ticks with open workday | Factory stops after one atom | Enable tick ~60min; see FACTORY-VISION.md |
 | Reality PASS on build only | Rework + Founder debug | FACTORY-DOD Gate C |
 | Builder picks slice | Strategist skipped | KILL — contract must exist first |
 | 800-line OG route in one atom | Epic not decomposed | Split epic in contract |
@@ -124,11 +130,19 @@ Chief of Staff / evening review logs:
 
 - `plan_tokens_est`: low / ok / over
 - `big_problem_clear`: y/n
-- `atom_sh shipped`: y/n
+- `atoms_shipped`: count today
 - `duplicate_slice`: y/n
 - `merge_on_base`: y/n
+- `guardrail_incidents`: y/n
 
 Founder tunes model choices in the dashboard when `over` repeats.
+
+---
+
+## Slack (CEO format)
+
+Routine merges: **T1** — 10–15 words ([SLACK-FORMATS.md](./SLACK-FORMATS.md)).
+Roll call and evidence live in standup/PR only — not Slack.
 
 ---
 
@@ -143,5 +157,6 @@ Founder tunes model choices in the dashboard when `over` repeats.
 | Ask Team (`Board:`) | Opus | Founder-level |
 | Evening review | Sonnet thinking | Read diffs, digest |
 
-**Sustainability target:** One `good morning team` ≈ one merged PR ≈ one atom.
-Founder touches direction at night, not merge or preview debug.
+**Sustainability target:** Many merged atoms per open workday (ticks ~60min).
+Founder brakes with `good evening team` — not required between atoms. Slack T1
+only on routine ships; full detail in repo.
