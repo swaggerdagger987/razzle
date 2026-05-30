@@ -78,16 +78,16 @@ Cursor dashboard to be real. Step-by-step: **`docs/company/HARNESS.md`**.
 
 ## Why this design
 
-1. **Slack starts and stops the workday.** The Founder sends `good morning team`
-   and `good evening team`. Scheduled ticks can work in between.
-2. **Autonomy by default.** The team can merge its own PRs when review gates
-   pass. Founder review is nightly and exception-based.
-3. **Prompts in the repo, configs in the dashboard.** Prompts evolve via PRs.
-   Triggers, repo pins, and model choices live in Cursor where the credentials
-   are.
-4. **Small number of automations that do real work, not a maze.** Morning opens
-   the day. Tick keeps building. Ask The Team handles role conversation.
-   Evening writes the CEO review.
+1. **Slack opens and brakes the factory.** `good morning team` opens; `good evening
+   team` closes. Ticks run 24/7 while open (~60 min).
+2. **Autonomy by default.** Merge when gates pass. Founder gets T1 lines (10–15 words),
+   not roll calls. See `SLACK-FORMATS.md`.
+3. **Epic queue on disk.** `current-epic.json` advances atoms; ticks don't re-debate.
+4. **Prompts in the repo, configs in the dashboard.** Prompts evolve via PRs.
+   Triggers, repo pins, and model choices live in Cursor where the credentials are.
+5. **Small number of automations that do real work, not a maze.** Morning opens
+   the factory. Tick keeps building. Ask The Team handles role conversation.
+   Evening brakes and writes the CEO review.
 
 ---
 
@@ -105,8 +105,7 @@ For each Automation:
      keyword / regex filter
      `^(Razzle|Chief|Strategist|Architect|Builder|Researcher|Reality|Team|Board):`.
      If regex is unavailable, create one automation per prefix.
-   - Tick: Schedule -> every 60-90 minutes during the hours you want the team
-     working. It exits when `workday.json` is closed.
+   - Tick: Schedule -> every ~60 minutes. Silent exit when `workday.json` is closed.
 3. **Repository:** `swaggerdagger987/razzle`.
 4. **Base branch:** `razzle-v2-redesign`.
 5. **Model:**

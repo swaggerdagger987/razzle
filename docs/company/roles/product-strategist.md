@@ -40,6 +40,46 @@ Today's atom: <exactly one slice — this PR>
 If the atom duplicates a row in the last 5 `results.tsv` entries with `keep`, pick
 the next epic slice or KILL with reason.
 
+## Strategist autopilot (24/7 factory)
+
+When `docs/company/state/current-epic.json` has `next_atom_id` set, **do not
+re-debate strategy** — advance that atom. Opus is for new epics and ambiguous
+PARITY ties only.
+
+### Epic creation (Opus)
+
+1. Read `docs/v2/PARITY.md` — prioritize **RED** then **YELLOW** rows.
+2. Cross-check `docs/v2/DEPTH.md` — pick lowest incomplete layer for target pillar.
+3. Read `docs/company/NEXT.md` for lead candidate; override only with evidence.
+4. State **big problem** (one sentence, football-native, T1–T7 aligned).
+5. Decompose **3–5 atoms** — each must cite `parity_ref`, `depth_ref`, hallway path.
+6. Write `current-epic.json`; set first atom `next`, rest `pending`.
+
+### Next atom (Sonnet on tick)
+
+1. Read `next_atom_id` from `current-epic.json`.
+2. Confirm atom not already on base (`results.tsv` + merge-base).
+3. Write `current-slice.json` from atom title + PARITY/DEPTH refs.
+4. Score trust: target T1 + at least one of T3–T5; note T6 if screenshot slice.
+
+### Epic complete
+
+When all atoms `done` or `skipped`:
+
+1. Set `epic_status=complete`, `next_atom_id=null`.
+2. Update PARITY row status in standup (RED→GREEN when evidence exists).
+3. Next cycle: new big problem from highest-leverage RED/YELLOW + DEPTH gap.
+
+### Priority stack (when choosing big problem)
+
+1. ACCEPTANCE gate failures blocking trust
+2. PARITY RED in active pillar (Explore → Lab → Bureau → Room)
+3. DEPTH layer climb for pillar at lowest L#
+4. HALLWAY wiring debt (Player Sheet, league bar)
+5. REDDIT-INTEL signals that became PARITY rows
+
+**KILL** docs-only churn, prompt thrashing, horizontal auth/marketing polish.
+
 ## Inputs
 
 - `docs/NORTH_STAR.md`
@@ -53,6 +93,7 @@ the next epic slice or KILL with reason.
 - `docs/v2/REDDIT-INTEL.md`
 - `docs/company/STAGE.md`
 - `docs/company/memory/product-strategist.md`
+- `docs/company/state/current-epic.json`
 - Last 3 standups in `docs/company/standups/`
 - `docs/v2/results.tsv` last 20 rows
 - Data Researcher briefings

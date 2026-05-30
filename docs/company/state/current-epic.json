@@ -1,0 +1,35 @@
+{
+  "big_problem": "Lab share cards must show real data, not loading shells — screenshot-worthy Bureau/Lab OG.",
+  "epic_title": "Lab L5 depth — live OG and export cards",
+  "atoms": [
+    {
+      "id": "atom-1",
+      "title": "Bureau H2H OG route with demo fallback",
+      "parity_ref": "F-Lab-OG",
+      "depth_ref": "Lab L5",
+      "status": "done",
+      "merge_commit": "2e11270"
+    },
+    {
+      "id": "atom-2",
+      "title": "Next Lab OG route — rankings or explore export live rows",
+      "parity_ref": "F-Lab-OG",
+      "depth_ref": "Lab L5",
+      "status": "next",
+      "merge_commit": null
+    },
+    {
+      "id": "atom-3",
+      "title": "Hallway link from Player Sheet to Lab export",
+      "parity_ref": "HALLWAY",
+      "depth_ref": "Lab L5",
+      "status": "pending",
+      "merge_commit": null
+    }
+  ],
+  "completed_atom_ids": ["atom-1"],
+  "next_atom_id": "atom-2",
+  "epic_status": "active",
+  "last_updated": "2026-05-30T22:30:00Z",
+  "last_merge_commit": "2e11270"
+}

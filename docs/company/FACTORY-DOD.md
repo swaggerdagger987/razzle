@@ -87,16 +87,27 @@ verdict. Mirror `docs/v2/evidence/2026-05-23-explore-L5.md`.
 
 ---
 
-## Gate D — Slack honesty
+## Gate D — Slack honesty + CEO format
 
-The roll call must match git state:
+Read `docs/company/SLACK-FORMATS.md`. Slack must match git state **and** use the
+correct notification tier:
 
-| Claim | Required truth |
-|-------|----------------|
-| `Merge: merged` | Gate B passed |
-| `Reality: PASS` | Gates C satisfied when UI/OG changed |
-| `Content commit abc1234` | Real hash; on base if merged |
-| "Build + tests pass" | Commands run this cycle, output in standup or evidence |
+| Git / standup truth | Slack tier | Required format |
+|---------------------|------------|-----------------|
+| Merged on base, Reality PASS | **T1 Ship** | One line, **10–15 words**, user-visible outcome |
+| NEEDS WORK / open PR | **T2 Attention** | One line, ≤25 words, root cause |
+| BLOCKED publish / guardrail | **T2 Attention** | One line, ≤25 words |
+| Evening brake | **T3 Brake** | ≤5 lines, digest only |
+
+**Record in standup/PR (not Slack):** PR URL, content hash, merge state, Team Roll
+Call, trust T1–T7, evidence summary.
+
+| Gate D FAIL | Why |
+|-------------|-----|
+| Six-role roll call in Slack | Process noise — use standup only |
+| T1 over 15 words on routine merge | CEO format violation |
+| "Merged" implied in Slack when Gate B failed | False PASS |
+| Reality PASS in standup but Gates C failed | False PASS |
 
 **False PASS** (build green but preview broken, branch not merged) is a Reality
 Checker hard fail and Chief of Staff memory incident.
