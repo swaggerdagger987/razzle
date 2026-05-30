@@ -94,8 +94,10 @@ message saying so. Do not improvise.
 
 ## When in doubt
 
-The North Star wins. Then `STAGE.md`. Then `OPERATING_SYSTEM.md`. Then the
-specific role file. Then `AUTOMATION.md`'s Standard Company Loop. The Slack
+The North Star wins — especially **`docs/NORTH_STAR.md` § How we score work**
+(T1–T7 Trust pillars + VETO rules). Log which pillars a slice advanced in
+standups and `results.tsv`. Then `STAGE.md`. Then `OPERATING_SYSTEM.md`. Then
+the specific role file. Then `AUTOMATION.md`'s Standard Company Loop. The Slack
 trigger only chooses *which spec* to run; it never overrides product truth.
 
 ## CEO review model

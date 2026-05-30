@@ -8,7 +8,7 @@ Start here before writing code or picking up loop work.
 
 Read in this order:
 
-1. **`NORTH_STAR.md`** — Product endgame.
+1. **`NORTH_STAR.md`** — Product endgame + **Trust Score (T1–T7)** for every agent cycle.
 2. **`DESIGN.md`** — Colors, typography, voice, visual language.
 3. **`DECISIONS.md`** — Locked V2 architecture calls.
 4. **`v2/STATUS.md`** — Live operational status — current cycle, focus, blockers.

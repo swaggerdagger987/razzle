@@ -1,282 +1,327 @@
-# Razzle — North Star Product Vision
+# Razzle — North Star
 
-This is the endgame. Every decision should move toward this document. When in doubt — come back here.
+**This is the center of gravity.** When agents, cofounders, or humans disagree, this document wins.
 
----
-
-## Vision
-
-Razzle is a fantasy football research lab disguised as a Sunday comic strip. Playful surface, deadly serious analysis underneath. The platform never tries to look impressive — it just IS impressive once you use it.
-
-**The core insight**: The problem with AI for fantasy football isn't that the models are dumb. It's that they start with zero context. Every time you paste your roster into ChatGPT, explain your scoring settings, and describe your leaguemates — you're doing the work the platform should do. Razzle is the context layer.
-
-**Brand line**: "The Screener is forever free. The intelligence is what you pay for."
-**Marketing**: Obsessed with fantasy football — not AI. Users get a research lab and film room that already knows their league. Never lead with "AI" (see `docs/v2/VOICE.md`).
-**Mission**: "Testing weekly what's stronger — our bad luck or the numbers. Come join us."
-
-**Brand identity**: Bengal tiger named Razzle runs the show. Film room junkie energy — earnest, slightly obsessive about precision, dry wit in the margins. Think Luffy: goofy on the outside, strongest person in the room.
-
-**Business model**: Lifestyle business. Target enough paid users from **Reddit only** to justify reinvesting — then scale. No VC. **Primary channel: Reddit** (screenshots + future !razzle fact bot). Everything else deferred (`docs/v2/REDDIT.md`).
+Every slice, standup, and PR gets scored against **§ How we score work** below. Not vibes. Not "shipped something." Trust, league truth, and the film-room loop.
 
 ---
 
-## The Product Hierarchy
+## The one number
 
-### 1. The Screener (Forever Free)
+**1,000 paid users.**
 
-The front door. A full-featured player research screener with 100+ stat columns, custom formulas, shareable views, and watermarked image export. No account required. No catch. No trial. Forever free.
-
-**This is the growth engine.** Every screenshot is a billboard. Every shareable URL is a funnel entry. Every watermarked image posted on Reddit or sent to a group chat is free marketing. The Screener must be genuinely best-in-class as a free tool. Dynasty managers must feel like they discovered a secret weapon.
-
-- Every stat is a filterable, sortable column
-- Advanced threshold filtering across any metric combination
-- NFL/College toggle for prospect research
-- Custom formula builder — users create weighted composite scores
-- Formula store — community marketplace for scoring models
-- One-click image export with `razzle.lol` watermark
-- URL state serialization — share the exact view you're looking at
-
-### 2. The Lab Panels (Pro)
-
-70+ analytical panels behind the Screener. This is where the depth lives. Dynasty rankings, trade values, breakout finder, aging curves, efficiency metrics, weekly heatmaps, prospect big board, career stats, game logs, and dozens more.
-
-Free users see these in the sidebar with lock icons. Pro/Elite users get full access. The panels are what turn a curious visitor into a paying user — they can see the panel names and know what's possible, but they need to upgrade to access them.
-
-### 3. The Bureau of Intelligence (Free summary + Pro deep-dive)
-
-The conversion engine. Connect a Sleeper username and see your actual league data analyzed through every lens a serious manager would want.
-
-**Free (visible to all connected users):**
-- League odds summary cards — Monte Carlo championship/playoff probabilities per manager (10,000 simulations)
-- Basic roster overview and standings
-
-**Pro (deep-dive):**
-- **Self-Scout** (default view) — your own team analyzed first. Depth analysis, build profile, power ranking, vulnerability flags, "how opponents see you" summary
-- **Roster Depth Analysis** — starter quality vs bench depth by position, vulnerability flags, depth scores (0-100)
-- **Build Profiles** — roster construction archetypes (Hero RB, Zero RB, Stars & Scrubs, Youth Movement, Win Now, Balanced)
-- **Trade Network** — who trades with whom, trade balance, position tendencies, "most likely trade partner" recommendations
-- **Waiver Tendencies** — FAAB burn rate, pickup hit rate, position bias, waiver hawk scores (0-100)
-- **Manager Profiles** — multi-season behavioral analysis. Who panics, who hoards, who overpays in FAAB
-- **Pressure Map** — desperation scores, trade deadline pressure, buy/sell windows
-- **Power Rankings** — composite rankings beyond W-L (roster strength + depth + activity + schedule difficulty)
-- **Head-to-Head** — full rivalry comparison between any two managers (record, roster edges, trade history, simulated matchup)
-- **Strength of Schedule** — remaining matchup difficulty, easy/hard stretches, playoff path preview
-- **Monte Carlo Deep-Dive** — distribution charts, odds history, scenario explorer (trade/waiver/injury what-if analysis with instant re-simulation)
-- **Trade Finder** — value matching, position need/surplus detection, trade partner recommendations
-
-**Coming soon: ESPN and Yahoo league support.**
-
-The Bureau is the actual moat. Anyone can build a stat screener. Nobody else has league-specific behavioral profiling, Monte Carlo simulations with scenario modeling, and self-scouting feeding into AI agents — all from one Sleeper connection.
-
-### 4. The Situation Room (Pro)
-
-Six AI agents that already know your league. No copy-pasting rosters into ChatGPT. No explaining your scoring settings. No feeding screenshots. The agents see everything — your roster, your rivals' rosters, three seasons of transaction history, behavioral profiles, and every stat in the NFL. You just ask the question.
-
-**The Agents:**
-- **Razzle** (Bengal Tiger) — Chief of Staff. Orchestrates all agents, delivers prioritized briefings, triages into URGENT / MONITOR / OPPORTUNITY. The face of the product. Razzle doesn't hedge — "no ifs, buts, or maybes. Absolutes." Other tools say "consider starting." Razzle says "start him." Every verdict is delivered with conviction.
-- **Dr. Dolphin** (Medical) — Injury intelligence. Recovery timelines, return-to-play modeling, performance impact projections. Flags buy-low and sell-high windows around injuries.
-- **Hawkeye** (Scout) — Usage trends, snap counts, breakout detection, waiver targets. The film room analyst who catches things the box score misses.
-- **The Fox** (Diplomat) — Trade negotiation and competitive intelligence. Models opponent psychology, calculates acceptance probability, gives leverage angles. Knows what your rivals need before they do.
-- **The Octopus** (Quant) — Valuations, projections, expected value, championship probability. Leads with the number and the conclusion.
-- **The Elephant** (Historian) — League memory and pattern recognition. Knows your league's past trades, your blind spots, the last time this exact scenario played out.
-
-Agents cross-reference each other. A single briefing might have The Fox's read on an opponent, The Quant's valuation, and Hawkeye's usage flags — synthesized by Razzle into a single actionable recommendation.
-
-**Pro** = BYOK (bring your own API key — OpenRouter, Anthropic, OpenAI).
-**Elite** = API key included. Same features. The only difference is who provides the AI key.
+Everything else is a leading indicator until we're live. During BUILD, agents chase the **Trust Score** (T1–T7). When we're in DISTRIBUTION, this number is the only score that matters.
 
 ---
 
-## Pricing
+## The thesis (read this out loud)
 
-| Tier | Monthly | Yearly | What you get |
-|------|---------|--------|-------------|
-| **Forever Free** | $0 | $0 | The Screener, Bureau summary odds cards, Sleeper connection |
-| **Pro** | $9.99 | $79.99 | All Lab panels, full Bureau deep-dive, Situation Room (BYOK) |
-| **Elite** | $19.99 | $149.99 | Everything in Pro + AI API key included (no BYOK needed) |
+Razzle is a **fantasy football film room** disguised as a Sunday comic strip.
 
-Pro and Elite have **identical feature access**. The only difference is BYOK vs included API key. 7-day free trial grants Pro access, no credit card required.
+Warm sand, chunky borders, a Bengal tiger who doesn't hedge — and underneath, the kind of analysis that makes your leaguemate ask *"where did you get that?"*
 
-One Sleeper username per Razzle account — prevents trial abuse.
+We are not building another dark-mode spreadsheet with a chatbot stapled on. We're building the place obsessed fans go after Sunday night — when **90% of the week's scoring is done** and you need to know **what happened, why, and what to do next week.**
 
----
+> *"Drake London saw 10 targets — three standard deviations above his baseline. That's why you lost."*
 
-## Target Audience
-
-### Primary: Dynasty Power Users
-
-Dynasty managers who already use 3-5 tools (KeepTradeCut, FantasyPros, Sleeper built-in rankings, spreadsheets). They live on r/DynastyFF, fantasy Twitter, and dynasty podcast communities. They've tried asking ChatGPT for fantasy advice and been disappointed by generic answers. Age 22-40, tech-comfortable, spending $0-80/year on fantasy tools currently.
-
-**Pain points:**
-- "I asked ChatGPT about my roster and it didn't even know my scoring settings"
-- "I have 6 browser tabs open just to evaluate one trade"
-- "I know my leaguemate panics after losses but I can't prove it with data"
-- "Every AI tool gives me the same generic advice I could get from a podcast recap"
-
-**Why dynasty first:** They're year-round users (trades happen in the offseason, rookie drafts in May, startups June-August). They care about depth, age curves, and multi-season analysis. They spend more on tools. And they're the most vocal evangelists on Reddit.
-
-### Secondary: Serious Redraft Players
-
-Broader audience, lower sophistication, larger volume. Reached after dynasty users create social proof. The Screener serves them equally well. The Bureau hooks them when they connect their league.
+That's Razzle. Not "consider monitoring your WR room."
 
 ---
 
-## Distribution
+## What we're actually selling
 
-### Phase 1: Twitter (March-April 2026)
+**Trust.**
 
-Twitter first. Fantasy Twitter overlaps with tech Twitter — they eat up threads that blend analytical depth with fantasy football takes.
+Razzle wins when you trust it **more than anything else** for fantasy decisions — start/sit, trade, waiver, draft pick, dynasty hold/sell.
 
-- Data-backed threads using Screener screenshots
-- "ChatGPT vs Razzle with league context" comparison thread
-- Build relationships with mid-tier fantasy accounts (5k-50k followers)
-- Establish "context is the product" as Razzle's owned narrative
+Not trust because we said so. Trust because:
 
-### Phase 2: Reddit (April-August 2026)
+- The numbers are **yours** (your scoring, your league, your picks).
+- The staff **already know your league** before you ask.
+- The product **looks like a toy** and performs like a briefing room.
 
-Reddit second, after Twitter creates social proof and posting history.
+**Brand line:** *The Screener is forever free. The intelligence is what you pay for.*
 
-- Genuine community participation on r/DynastyFF for 2-3 months before any product posts
-- Analysis posts using Screener data (the tool speaks through the analysis)
-- "I built a thing" post when credibility is established
-- Screener screenshots in comment threads settle debates with data
-
-### Phase 3: In-Season (September-January 2027)
-
-The product generates shareable content every week during the season.
-
-- Weekly Lab screenshots, Situation Room briefing highlights
-- Users share league odds and self-scout results in group chats
-- Word of mouth within leagues — one manager using Razzle makes the whole league curious
-
-### Growth Flywheel
-
-Screener screenshots → Reddit/Twitter posts → watermark drives visits → free Screener hooks them → Sleeper connection personalizes it → Bureau self-scout creates "I need this" moment → trial → conversion → they tell their league → their leaguemates visit → repeat.
+"Intelligence" = depth of understanding. Not a model badge. See `docs/v2/VOICE.md` — we sell obsession with football, not AI.
 
 ---
 
-## The Moat
+## The four rooms (one operation, four doors)
 
-The moat is NOT the AI models (anyone can use Claude/GPT). The moat is NOT the stat data (nflverse is public). The moat is NOT Reddit presence (anyone can post).
+Think less "four tabs" and more **one intelligence agency** with different floors. Same theme, same lens: **find out what happened → plan for next week.**
 
-**The moat is the context layer:**
-
-1. **Sleeper integration → behavioral profiling → AI context injection.** This pipeline takes months to build. Every competitor would need to replicate the Sleeper connection, the multi-season transaction parsing, the behavioral profile engine, AND the agent architecture. Most fantasy companies are built on completely different stacks that can't bolt this on.
-
-2. **Data density.** 70+ analytical panels, custom formulas, formula store, Monte Carlo simulations, 8+ Bureau intelligence features. The surface area is enormous. A competitor doesn't copy one feature — they'd need to replicate the entire product.
-
-3. **Community adoption.** If r/DynastyFF adopts Razzle as "their" tool, that tribal loyalty is nearly impossible to steal. Fantasy managers don't switch tools mid-season.
-
-4. **Agent memory compounds.** More seasons of league data = richer behavioral profiles = better agent answers = higher switching cost. Year 2 is better than year 1. Year 3 is better than year 2.
-
----
-
-## Economics
-
-### Revenue
-
-| Scenario | Paid users | Blended revenue | Annual |
-|----------|-----------|----------------|--------|
-| Year 1 target | 1,000 | ~$100/user | ~$100k |
-| Stretch | 3,000 | ~$100/user | ~$300k |
-| Mature | 10,000 | ~$100/user | ~$1M |
-
-### Costs
-
-| Item | Monthly cost |
-|------|-------------|
-| Hosting (Render/Railway) | $25-50 |
-| Domain | ~$1 |
-| Elite user AI costs (~30% of paid users × $3-5/user) | $100-500 at 1,000 users |
-| Claude Code subscription | ~$200 |
-| **Total** | **~$350-750/month** |
-
-**Margin: 90%+ once running.** BYOK users cost nothing to serve. Elite users cost $3-5/month in API calls. Everything else is margin.
-
-### Breakeven
-
-~50 paid users at $100/yr covers all operating costs. Everything above that is profit.
-
-### Seasonality
-
-Dynasty (primary audience) is year-round: offseason trades, rookie drafts (May), startup drafts (June-August), regular season (September-January). Revenue is less seasonal than pure redraft. Expect ~60% of revenue September-January, ~40% February-August.
-
----
-
-## Technical Architecture
-
-### Stack
-- **Frontend**: Vanilla HTML/JS/CSS. No framework. Browser-runnable.
-- **Backend**: Python FastAPI. Thin endpoints, data logic in live_data modules.
-- **Database**: SQLite (terminal.db). Sufficient for target scale.
-- **Data**: Adapter pattern. Each source has its own adapter normalizing to common schema.
-- **Hosting**: Render (current), Railway (planned migration).
-- **Auth**: JWT, Stripe billing, one Sleeper username per account.
-
-### Data Flow
 ```
-Sleeper API → rosters, transactions, league settings (client-side)
-         ↓
-terminal.db → 100+ stat columns, weekly/season/career (server-side)
-         ↓
-Bureau analysis → depth, profiles, trade network, Monte Carlo (client-side)
-         ↓
-Situation Room → all context injected into agent prompts (server-side for Elite, client-side for BYOK)
+     Explore          Lab              Bureau           Situation Room
+   (the files)    (the invention      (the resources      (the briefing)
+                   floor)              desk)
+        │              │                  │                    │
+        └──────────────┴──────────────────┴────────────────────┘
+                                    │
+                          Player Sheet (the hub)
 ```
 
-### Monte Carlo Engine
-Backend computes player projection distributions (mean, stddev, floor, ceiling per player per scoring format). Frontend runs 10,000 simulations in-browser using Box-Muller normal sampling. Scenario explorer (trade/waiver/injury what-if) re-simulates instantly without API calls.
+### Explore — the files
+
+NFL + college player stats. The front door. Free enough to fall in love with.
+
+**Holy moment:** You build **your** value formula — the stats *you* overweight — and the table finally matches how your brain ranks players. Not someone else's composite from a podcast.
+
+Browse NFL and college. Filter. Sort. Share a URL. Export a card with our colors and a watermark in the bottom-right. Over time, fans recognize Razzle from the screenshot alone. The image should be **helpful first**; the brand follows from repetition.
+
+*Explore is where obsession starts.*
+
+### Lab — the invention floor
+
+This is the CIA room where someone is always prototyping the next chart. Once data is labeled and formatted, dashboards should be **easy to spin up** — live, visual, arguable.
+
+**Holy moment:** You're in the group chat. Someone claims Player X is washed. You pull up a Lab dashboard — your pivot table from hell, but pretty — and the argument ends with a screenshot.
+
+Lab is not "70 panel names in a sidebar." Lab is **research artillery**: an insane pivot-table creator for NFL player dashboards. Power users live here. The exact free/premium line inside Lab is **Founder TBD** — ship depth and screenshot-worthiness until that's locked. See `docs/v2/DEPTH.md` (Lab L0–L5).
+
+*Lab is where arguments get won.*
+
+### Bureau of Intelligence — the resource desk
+
+Imagine Mossad and the CIA decided your fantasy team was the only asset that mattered. Playoff odds. Relative value **in your league** — dynasty, keeper, or redraft, with **your** rules, not a generic trade calculator that treats every league like redraft PPR.
+
+**Holy moment:** Real playoff probabilities — then deeper cuts: who owns the most injury-prone roster, average age of every team's superstars, who you're actually competing with for that WR2 spot.
+
+Generic advice is everywhere. **League-relative truth** is the moat.
+
+Free: connect Sleeper, see enough to feel the hook (summary odds, roster context). Pro: the full briefing. See `docs/v2/DEPTH.md` (League L0–L5).
+
+*Bureau is where "better than my leaguemate's take" becomes measurable.*
+
+### Situation Room — the briefing
+
+The President walks in: **"What the hell is going on?"**
+
+Six staff on the floor. Razzle delivers the verdict. Everyone else had a turn already.
+
+**Holy moment:** A trade just happened — in your league or the NFL. You drop the screenshot. *How does this change the balance of power?* Or it's Monday morning and you need the autopsy: why you won, why you lost, what to do before waivers.
+
+Especially **after Sunday night.** Obsessed fans don't want a recap podcast. They want **their** league, **their** players, **their** anomaly — with staff who point you through it.
+
+The Room is a **film room**, not a chat product. Same six characters everywhere (`packages/agents/`): Razzle, Dr. Dolphin, Hawkeye, Bones, Octo, Atlas. Internal code may say `agents`; users see **staff**.
+
+*Room is where the week gets interpreted.*
 
 ---
 
-## Agent Architecture
+## Player Sheet — infrastructure (not a fifth room)
 
-### How Agents Work
-- Agent personas are system prompts with structured output requirements
-- **Free mode**: 5 queries/day, generic player data, no league context
-- **Pro/Elite mode**: Full league context injected — roster, rivals, transactions, behavioral profiles, scoring settings
-- Context enrichment: Bureau data (depth analysis, pressure scores, trade history) feeds directly into agent prompts
+The Player Sheet is the **hub**. Not a nice modal — the main way people explore.
 
-### Agent Orchestration
-1. User asks a question or triggers a briefing
-2. Razzle parses intent → routes to relevant specialist(s)
-3. Specialists return structured responses
-4. Razzle synthesizes, resolves conflicts, assigns urgency tiers (URGENT / MONITOR / OPPORTUNITY)
-5. Cross-agent triggers fire automatically (injury → handcuff check, low odds → rebuild trade suggestion)
+You land on Saquon. You switch to CMC. Instant. Clean.
 
-### Memory Engine
-- On Sleeper connection, recursively pulls league history via `previous_league_id`
-- Builds per-manager behavioral profiles across seasons
-- More seasons = richer profiles = higher switching cost = better agent answers
+From one sheet you should see:
 
----
+- Who in **your league** owns this player
+- What **Hawkeye** (usage) and **Dolphin** (health) say
+- Paths into Lab panels and Bureau context
+- A line into the Situation Room ("ask the staff")
 
-## Format Coverage
+**North Star commitments (directional — build in slices):**
 
-The data is universal. Formulas let users customize. Agents adapt based on league settings.
+- **Intelligent trade ideation** — e.g. "I want WR + TE for this hero RB" — because trades die from **ideation friction** and **fear of looking dumb**, not lack of stats
+- **Value watches** — aggressive alerts when a player's market moves
+- **Creative trade paths** — linked to real roster needs, not static "Player A > Player B"
 
-- **Dynasty**: Multi-season data, league history, dynasty values, aging curves, player arcs
-- **Redraft**: Weekly stat windows, waiver recs, injury reads, game-day briefings
-- **Keeper**: Keeper cost vs. projected return, breakout keepers at late-round cost
-- **Best Ball**: Boom/bust filters, floor vs ceiling plots, upside-weighted formulas
-- **DFS (future)**: Ownership projections, correlation stacking
-- **IDP (future)**: Defensive stats as filterable columns
+If a feature doesn't make the Player Sheet more useful, it's probably a silo. See `docs/v2/HALLWAY.md` for wiring rules.
 
 ---
 
-## Decision Framework
+## Free vs paid (honest version)
 
-When making any decision, ask in this order:
+**Free = obsession hook**
 
-1. **Does this help us get to 1,000 paid users?** If it doesn't move that number, it's not a priority.
-2. **Does this help the Screener get screenshotted?** Every screenshot is a billboard. Every watermark is marketing.
-3. **Does this make the Bureau indispensable?** The Bureau is the conversion engine. If a manager sees their league data analyzed and doesn't feel the urge to upgrade, the Bureau isn't good enough yet.
-4. **Does this follow the design guide?** Warm sand, chunky borders, comic-strip energy. The contrast between playful UI and serious analysis IS the brand.
-5. **Is this the simplest version that works?** Ship it. Polish it later. A working ugly version beats a planned perfect version.
-6. **Would a dynasty manager on r/DynastyFF care?** If no, it can wait.
+- Browse NFL + college player stats
+- A **few** Lab panels (enough to taste the invention floor)
+- A **few** custom scoring experiments (enough to feel "this is *my* formula")
+- Bureau **summary** when Sleeper is connected — enough to want the deep dive
+
+**Paid = trust for league decisions**
+
+- Full Lab power (dashboard factory, depth panels)
+- Bureau deep-dive (relative value, behavior, scenarios)
+- Situation Room with full league context on the floor
+
+We are not tricking anyone. Free should be **generous enough that fans fall in love with the idea** — then pay when their **league** is on the line.
+
+Pricing details live in `docs/DECISIONS.md` and the product surface; this doc cares about **philosophy**, not Stripe SKUs.
 
 ---
 
-## The Single Metric
+## The staff (Situation Room)
 
-**1,000 paid users.** That's it. Everything else is noise.
+| Who | Job | When they show up |
+|-----|-----|-------------------|
+| **Razzle** 🐯 | Chief of Staff. Verdict. No hedging. | Everywhere |
+| **Dr. Dolphin** 🐬 | Medical. Injuries. Durability. | **Everywhere** there's player health |
+| **Hawkeye** 🎯 | Scout. Usage. Breakouts. Tape. | Usage / breakout surfaces |
+| **Bones** 🦴 | Diplomat. Trades. Leverage. | Trade / manager psychology |
+| **Octo** 🐙 | Quant. Odds. Projections. EV. | Numbers that end arguments |
+| **Atlas** 📚 | Historian. Career. League memory. | History / manager patterns |
+
+Razzle says **"start him."** Other tools say "consider starting." We're not other tools.
+
+Orchestration: question → Razzle routes 1–2 specialists → synthesis with urgency (URGENT / MONITOR / OPPORTUNITY / ROUTINE). Details in `docs/v2/AGENTS.md` and `agent-personas/`.
+
+---
+
+## The moat (ranked honestly)
+
+1. **League-relative decision quality** — Sleeper → behavior → prompts. Your league, your rules, your picks.
+2. **Compounding context** — more seasons → richer profiles → harder to leave.
+3. **Data density done right** — formulas, dashboards, Bureau sims — in service of trust, not feature count.
+4. **Community recognition** — r/DynastyFF adopts the screener screenshots; switching mid-season hurts.
+
+The moat is **not** "we use Claude." Anyone can rent a model. We're the **context layer** with a personality.
+
+---
+
+## How we score work (LLM center of gravity)
+
+**Every cycle, PR, and design review gets scored here.** Log the score in `docs/v2/results.tsv` (add notes in the `description` column) and standups.
+
+### Trust pillars (T1–T7)
+
+| ID | Pillar | Pass question | Fail smell |
+|----|--------|---------------|------------|
+| **T1** | **Decision trust** | Would a serious manager act on this for a real decision? | Generic ranking noise |
+| **T2** | **League-relative** | Is it customized to *this* league's rules, rosters, picks? | Static trade calc / redraft brain |
+| **T3** | **Player Sheet** | Does the hub get better — land, switch, own, ask, link? | Dead-end page |
+| **T4** | **Film-room loop** | Does it help *what happened → why → what's next* (esp. post-Sunday)? | Feature with no weekly story |
+| **T5** | **Lab invention** | Does labeled data become a visual, shareable dashboard or formula view? | JSON dump / unstyled table |
+| **T6** | **Screenshot gravity** | Helpful in a group chat; Razzle colors + watermark recognizable? | Generic SaaS gray |
+| **T7** | **Free-tier obsession** | Does free deepen love without giving away paid trust? | Paywall rage / empty free tier |
+
+**Minimum to ship a slice:** T1 + at least one of T3–T5, plus Reality Checker execution evidence (`docs/v2/ACCEPTANCE.md`).
+
+### Instant VETO (do not merge)
+
+- User-facing copy leads with **"AI"** (see `VOICE.md`)
+- Generic fantasy advice that ignores league context when context exists
+- Silo shipped with **zero** Player Sheet or cross-room path
+- Horizontal sprawl (new auth polish, marketing site) with no Trust pillar advanced
+- Violates `docs/DESIGN.md` (gradients, thin borders, cold fintech vibes)
+- Touches Founder-only boundaries in `docs/company/AUTOMATION.md`
+
+### Depth + hallway (execution layer)
+
+Vertical depth without wiring is a **silo**. Every ship passes:
+
+- **Pillar + layer** cited from `docs/v2/PARITY.md` and `docs/v2/DEPTH.md`
+- **Hallway checklist** from `docs/v2/HALLWAY.md` (Player Sheet, league bar, Dolphin on injury, etc.)
+
+Legacy Razzle (V1, `legacy/`) is a **pitstop**, not the ceiling. Port what works; then go deeper than we ever did.
+
+---
+
+## Decision framework (in order)
+
+When anything forks, ask:
+
+1. **Does this increase trust for a real decision?** (T1)
+2. **Is it true for *their* league, not fantasy in general?** (T2)
+3. **Does it strengthen the Player Sheet hub?** (T3)
+4. **Does it help the post-Sunday film-room loop?** (T4)
+5. **Would a dynasty manager screenshot this for the *data*?** (T6)
+6. **Does it match the design guide?** Sand, chunky borders, comic energy, warm not cold — `docs/DESIGN.md`
+7. **Is this the simplest complete version?** Karpathy rules. Ship, then deepen.
+8. **Does it move us toward 1,000 paid users** — directly or via a Trust pillar?
+
+If 1–4 are no and it's not infrastructure, **KILL** the slice.
+
+---
+
+## Who we're for
+
+**Primary:** Dynasty power users on r/DynastyFF — year-round, tool-heavy, allergic to generic ChatGPT takes.
+
+**Secondary:** Serious redraft players who discover us through screenshots and Bureau hooks.
+
+Pain we own:
+
+- *"ChatGPT doesn't know my scoring settings."*
+- *"Six tabs open for one trade."*
+- *"I know Dave panics after losses — I can't prove it."*
+- *"Sunday night and I still don't know why I lost."*
+
+---
+
+## Distribution (Founder-led)
+
+**Reddit only** for GTM until stage advances. See `docs/v2/REDDIT.md`.
+
+Agents research and feed the build queue (`docs/v2/REDDIT-INTEL.md`). **Posting under the Founder's identity is Founder-only.**
+
+The flywheel: helpful screenshot → group chat / Reddit → watermark → free Explore → Sleeper connect → Bureau hook → paid trust.
+
+---
+
+## Vision vs shipped (don't lie to yourselves)
+
+This North Star describes **where we're going**. Operational truth:
+
+| Doc | What's actually built |
+|-----|------------------------|
+| `docs/v2/STATUS.md` | Live focus, cycle, blockers |
+| `docs/v2/PARITY.md` | Backlog rows and RED/YELLOW/GREEN |
+| `docs/v2/FEATURES.md` | Milestone flags |
+| `docs/v2/results.tsv` | Cycle ledger |
+
+If docs conflict, fix the conflict in the next standup. **Inventing shipped features is a Reality Checker FAIL.**
+
+Known directionally-not-done (still North Star): intelligent trade builder, full formula store, ESPN/Yahoo, every Lab panel at L5, zero `legacy_bridge` imports. Track in PARITY; don't pretend here.
+
+---
+
+## Technical truth (pointer)
+
+Stack, hosting, auth, billing: **`docs/DECISIONS.md`**. Agents don't re-debate Next.js vs vanilla HTML here.
+
+Data flow in one line: **Sleeper + nflverse → terminal.db → Bureau/Room context → staff prompts.**
+
+---
+
+## Economics (short)
+
+Lifestyle business. ~90% margin at scale. BYOK users cost little to serve. Breakeven is modest; **1,000 paid users** is the real goal. Seasonality details in prior planning docs — not scoring-critical.
+
+---
+
+## Playfulness is not optional
+
+Anthropic figured out that **warm, human, slightly quirky** beats **enterprise serious** for tools people live in daily. We're the same bet for fantasy:
+
+- Loading copy: *"pulling film..."* not *"Loading..."*
+- Tiger mascot who's smug because the numbers back it up
+- Sunday comics surface, briefing-room substance
+- Dry wit in the margins; never cringe, never corporate
+
+If a PR makes Razzle feel like a fintech dashboard, **T6 fails** even if tests pass.
+
+---
+
+## Related docs (read after this)
+
+| Doc | Role |
+|-----|------|
+| `DESIGN.md` | Colors, type, voice, visual law |
+| `DECISIONS.md` | Locked architecture |
+| `v2/DEPTH.md` | L0–L5 per pillar |
+| `v2/HALLWAY.md` | Wiring checklist |
+| `v2/PARITY.md` | Next slice queue |
+| `v2/ACCEPTANCE.md` | Localhost gates |
+| `v2/VOICE.md` | No "AI" marketing |
+| `company/STAGE.md` | BUILD vs launch stages |
+| `company/OPERATING_SYSTEM.md` | How build agents run |
+
+---
+
+## The line
+
+We're testing weekly what's stronger — **our bad luck or the numbers.**
+
+Come join us. Bring your league. Razzle already pulled the film.
