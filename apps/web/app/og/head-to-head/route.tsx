@@ -22,6 +22,21 @@ interface H2HData {
   trade_fit?: { you_could_offer?: string[]; you_could_target?: string[] };
 }
 
+/** Sample rivalry for OG preview when league params/API unavailable (FACTORY-DOD Gate C). */
+const DEMO_H2H: Required<Pick<H2HData, "you" | "them" | "position_compare" | "trade_fit">> = {
+  you: { team: "Your Squad", record: "8-5", ppg: 118.4 },
+  them: { team: "Rival FC", record: "7-6", ppg: 112.1 },
+  position_compare: [
+    { position: "RB", your_count: 4, their_count: 2 },
+    { position: "WR", your_count: 5, their_count: 6 },
+    { position: "TE", your_count: 2, their_count: 1 },
+  ],
+  trade_fit: {
+    you_could_offer: ["RB"],
+    you_could_target: ["WR"],
+  },
+};
+
 async function fetchH2H(params: {
   league: string;
   user: string;
@@ -61,13 +76,15 @@ export async function GET(req: Request) {
   const opponent = url.searchParams.get("opponent") ?? "";
 
   const atlas = AGENT_BY_ID.atlas;
-  const data = await fetchH2H({ league, user, opponent });
+  const live = await fetchH2H({ league, user, opponent });
+  const isDemo = !live?.you || !live?.them;
+  const data = isDemo ? DEMO_H2H : live;
 
-  const you = data?.you;
-  const them = data?.them;
-  const positionCompare = data?.position_compare ?? [];
-  const offer = (data?.trade_fit?.you_could_offer ?? []).join(", ") || "—";
-  const want = (data?.trade_fit?.you_could_target ?? []).join(", ") || "—";
+  const you = data.you;
+  const them = data.them;
+  const positionCompare = data.position_compare ?? [];
+  const offer = (data.trade_fit?.you_could_offer ?? []).join(", ") || "—";
+  const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
 
   return new ImageResponse(
@@ -116,6 +133,7 @@ export async function GET(req: Request) {
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
           rivalry dossier — your roster vs one leaguemate
+          {isDemo ? " · sample preview" : ""}
         </div>
 
         {hasData ? (
@@ -204,21 +222,7 @@ export async function GET(req: Request) {
               You offer depth at {offer} · target their surplus at {want}
             </div>
           </div>
-        ) : (
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              gap: 12,
-            }}
-          >
-            <div style={{ fontSize: 64, display: "flex" }}>{atlas.emoji}</div>
-            <div style={{ fontSize: 24, color: "#5c4a3d", display: "flex" }}>{atlas.loadingCopy}</div>
-          </div>
-        )}
+        ) : null}
 
         {/* Footer */}
         <div
