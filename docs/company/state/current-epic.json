@@ -1,0 +1,29 @@
+{
+  "epic_status": "active",
+  "epic_title": "Lab feels like a staffed research lab — agent ownership is visible end-to-end",
+  "big_problem": "The Lab's six analysts own panels in the registry, but the in-product navigation still groups panels only by abstract category — the staff identity that earns Reddit screenshots is invisible in the sidebar.",
+  "started_date": "2026-05-30",
+  "parity_ref": "Lab L2 — 20 panels with agent-owned headers; hallway H-04",
+  "depth_ref": "Lab L2",
+  "atoms": [
+    {
+      "id": "A1",
+      "title": "Lab sidebar 'By Staff' grouping view — panels grouped by agent owner",
+      "status": "done",
+      "merge_commit": "e51bd96"
+    },
+    {
+      "id": "A2",
+      "title": "Lab index grid 'By Staff' sections mirror sidebar grouping",
+      "status": "todo",
+      "merge_commit": ""
+    },
+    {
+      "id": "A3",
+      "title": "Per-agent Lab landing copy (staff desk intro line per agent group)",
+      "status": "todo",
+      "merge_commit": ""
+    }
+  ],
+  "next_atom_id": "A2"
+}

@@ -1,0 +1,27 @@
+{
+  "date": "2026-05-30",
+  "big_problem": "Lab staff own panels in the registry but the sidebar only groups by abstract category, hiding the named-analyst identity that earns Reddit screenshots.",
+  "epic": "Lab feels like a staffed research lab — agent ownership is visible end-to-end",
+  "slice_title": "Lab sidebar 'By Staff' grouping view — group panels by their agent owner",
+  "parity_ref": "Lab L2 — agent-owned headers; hallway H-04",
+  "depth_ref": "Lab L2",
+  "acceptance_ref": "ACCEPTANCE Gate 2 (Lab panels render real ownership, not generic catalog)",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/components/lab/LabSidebar.tsx",
+    "packages/ui/styles/lab.css"
+  ],
+  "max_files": 2,
+  "max_lines": 220,
+  "acceptance_commands": [
+    "npx tsc --noEmit -p apps/web",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [
+    "API schema changes",
+    "new npm deps",
+    "agent registry metadata changes",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical"
+}

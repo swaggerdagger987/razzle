@@ -33,7 +33,7 @@ Agents are how the hallway **speaks** — staff with domain expertise, not "AI a
 | Room roster | `apps/web/components/room/AgentRoster.tsx` | ✅ |
 | Room canvas | `packages/pixel-room/` | ✅ six sprites shipped (cycle 49) |
 | Player Sheet Ask | `apps/web/components/shell/PlayerSheet.tsx` | ✅ agent picker |
-| Lab sidebar | `apps/web/components/lab/LabSidebar.tsx` | TODO — group by agent |
+| Lab sidebar | `apps/web/components/lab/LabSidebar.tsx` | ✅ per-item avatar + "By Staff" grouping (cycle 58) |
 | Bureau tabs | `apps/web/components/league/*` | ✅ section headers on Bureau-7 |
 | Explore loading | `ExplorePageClient.tsx` | TODO — Razzle default OK |
 | API orchestrator | `apps/api/services/agents/orchestrator.py` | ✅ all 6 routable |
