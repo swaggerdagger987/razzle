@@ -15,21 +15,22 @@
       "title": "Next Lab OG route — rankings or explore export live rows",
       "parity_ref": "F-Lab-OG",
       "depth_ref": "Lab L5",
-      "status": "next",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "2e11270",
+      "note": "Covered by the generic /og/[panel] route (cycle 57) which serves rankings + all 100 panels, and /og/explore (cycle 55). No new route needed; marked done per dedup rule."
     },
     {
       "id": "atom-3",
       "title": "Hallway link from Player Sheet to Lab export",
-      "parity_ref": "HALLWAY",
+      "parity_ref": "HALLWAY H-02",
       "depth_ref": "Lab L5",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "PENDING_HASH"
     }
   ],
-  "completed_atom_ids": ["atom-1"],
-  "next_atom_id": "atom-2",
-  "epic_status": "active",
-  "last_updated": "2026-05-30T22:30:00Z",
-  "last_merge_commit": "2e11270"
+  "completed_atom_ids": ["atom-1", "atom-2", "atom-3"],
+  "next_atom_id": null,
+  "epic_status": "complete",
+  "last_updated": "2026-05-30T23:55:00Z",
+  "last_merge_commit": "PENDING_HASH"
 }

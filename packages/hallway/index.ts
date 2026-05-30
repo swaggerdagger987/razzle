@@ -8,6 +8,7 @@ export {
   playerSheetTab,
   toExplore,
   toLab,
+  toLabExport,
   toLeague,
   toRoom,
   type HallwayContext,

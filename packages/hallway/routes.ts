@@ -69,6 +69,22 @@ export function toLab(panelSlug: string, ctx?: Pick<HallwayContext, "player">): 
   return `${base}?${q.toString()}`;
 }
 
+/**
+ * Lab OG export/share card for a panel. Returns the `/og/<slug>` image route
+ * with the download flag set and an optional player caption (`q`), so the card
+ * that travels to group chats and Reddit carries player context. The hallway
+ * exit from Player Sheet → Lab export.
+ */
+export function toLabExport(
+  panelSlug: string,
+  ctx?: Pick<HallwayContext, "player"> & { question?: string },
+): string {
+  const q = new URLSearchParams({ download: "1" });
+  const caption = ctx?.question ?? ctx?.player?.name;
+  if (caption) q.set("q", caption);
+  return `/og/${panelSlug}?${q.toString()}`;
+}
+
 /** Bureau / league intelligence. */
 export function toLeague(leagueId?: string, feature?: string): string {
   if (!leagueId) return "/league";

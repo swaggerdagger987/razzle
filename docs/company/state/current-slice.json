@@ -1,0 +1,32 @@
+{
+  "date": "2026-05-30",
+  "big_problem": "Lab share cards must show real data, not loading shells — screenshot-worthy Bureau/Lab OG.",
+  "epic": "Lab L5 depth — live OG and export cards",
+  "slice_title": "Hallway link from Player Sheet to Lab export card",
+  "parity_ref": "HALLWAY H-02 (Player Sheet junction) + F-Lab-OG",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "Gate 6 (Share / OG export cards) + Gate 2 (Lab)",
+  "trust_pillars": ["T3", "T6"],
+  "allowed_paths": [
+    "packages/hallway/routes.ts",
+    "packages/hallway/index.ts",
+    "apps/web/components/shell/PlayerSheet.tsx",
+    "apps/web/app/og/[panel]/route.tsx"
+  ],
+  "max_files": 4,
+  "max_lines": 120,
+  "scope_note": "OG [panel] route added to allowed_paths: render evidence revealed a Satori 'display:flex' crash on the caption (q) block, which every Player-Sheet export card triggers. Fix is one line and directly required by this slice — Reality Checker caught it via curl, not diff.",
+  "acceptance_commands": [
+    "npx tsc --noEmit",
+    "npm run build",
+    "curl -s -o /tmp/og.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dashboard?download=1&q=Drake%20London'"
+  ],
+  "out_of_scope": [
+    "API schema changes",
+    "new npm deps",
+    "redesign OG card layout",
+    "new panels",
+    "pricing/auth/billing"
+  ],
+  "builder_mode": "composer-surgical"
+}

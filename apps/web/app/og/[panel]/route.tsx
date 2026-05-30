@@ -212,6 +212,7 @@ export async function GET(
         {query && (
           <div
             style={{
+              display: "flex",
               fontFamily: "Caveat",
               fontSize: 28,
               color: "#d97757",
@@ -225,7 +226,7 @@ export async function GET(
               marginBottom: 12,
             }}
           >
-            &ldquo;{query}&rdquo;
+            {`\u201C${query}\u201D`}
           </div>
         )}
 

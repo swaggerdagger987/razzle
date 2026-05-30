@@ -247,3 +247,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 55
 - **Screenshot potential:** RB-only FPTS card droppable in r/DynastyFF trade/value threads — data-first, not SaaS promo
 - **Bot-fact potential:** `!razzle confirm top RB PPR FPTS` — future intel layer
+
+## 2026-05-30 — Cycle 58
+
+### Hub → share path is the un-wired half of screenshot culture
+- **Signal (carried, no new scrape):** Cycles 31/55 established staff-voiced, watermarked data screenshots as the dominant r/DynastyFF OC format. We shipped the cards (Explore, Lab panels, H2H) but the **Player Sheet** — where managers actually study a player — had no one-click route to a card.
+- **Free-tier export feeds the flywheel:** default export uses the free `dashboard` panel, so non-paying users can still post a branded, captioned card (helpful screenshot → Reddit → watermark → free Explore → Sleeper connect).
+- **Slice:** HALLWAY H-02 / Lab L5 — `toLabExport()` helper + Player Sheet → Lab export link (player name as caption). Closes the Lab L5 OG epic.
+- **Council cycle:** 58
+- **Screenshot potential:** "Drake London" captioned Razzle card pulled straight from the hub, droppable in a player-debate thread — data-first, no AI cringe.

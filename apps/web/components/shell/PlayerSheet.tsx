@@ -12,7 +12,7 @@ import {
   suggestAgentForQuestion,
   type AgentId,
 } from "@razzle/agents";
-import { toLab, toRoom } from "@razzle/hallway";
+import { toLab, toLabExport, toRoom } from "@razzle/hallway";
 import { agentContextPayload } from "@/lib/agent-context";
 import { getSelectedLeague, getSleeperUser } from "@/lib/sleeper";
 import { usePlayerSheet, type PlayerSheetTab } from "@/lib/player-sheet-context";
@@ -195,7 +195,23 @@ export function PlayerSheet() {
                   </Link>
                 </li>
               ))}
-              <li className="mt-4 border-t border-ink pt-3">
+              <li className="mt-4 flex flex-col gap-2 border-t border-ink pt-3">
+                <a
+                  href={toLabExport("dashboard", {
+                    player: {
+                      playerId: player.playerId,
+                      slug: player.slug,
+                      name: player.name,
+                      position: player.position,
+                      team: player.team,
+                    },
+                  })}
+                  download={`razzle-${player.slug || "card"}.png`}
+                  className="text-sm text-orange underline"
+                  style={{ fontFamily: "var(--font-hand)" }}
+                >
+                  Export a Razzle share card →
+                </a>
                 <Link
                   href={
                     toRoom({

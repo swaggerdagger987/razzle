@@ -16,3 +16,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 ## Entries
 
 2026-05-30 | Lab L5 OG — rewrite /og/[panel]/route.tsx with live data fetch, agent badge, position pills | 2e11270 | keep | Single file ~250 lines; follows Explore OG pattern from cycle 55; 13 stat candidate keys; graceful fallback to icon+loadingCopy when API returns empty
+2026-05-30 | A hallway link to a 500ing target is worthless — fix the directly-required blocker even if outside the original file scope, with a scope note | PENDING_HASH | keep | Added /og/[panel] to allowed_paths; fixed caption Satori crash; ~25 net lines for the wire itself

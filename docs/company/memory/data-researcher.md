@@ -17,3 +17,4 @@ anecdotes (>=3 independent threads = signal).
 ## Entries
 
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"
+2026-05-30 | Carried intel beats fresh scraping when the standing gap is already named; the un-wired half of screenshot culture was the hub->share path | PENDING_HASH | keep | No new scrape; cited cycles 31/55; free-tier export note added to REDDIT-INTEL
