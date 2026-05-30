@@ -19,6 +19,21 @@ interface OgRow {
   statLabel: string;
 }
 
+/**
+ * Sample player rows for OG preview when live panel data is unavailable
+ * (preview deploys / CI without terminal.db, or parameterized panels whose
+ * api.path needs a player_id). Mirrors the head-to-head demo fallback so a Lab
+ * share card never renders as a loading-copy-only shell — FACTORY-DOD Gate C3.
+ */
+const DEMO_ROWS: OgRow[] = [
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 403.2, statLabel: "FPTS" },
+  { name: "Saquon Barkley", position: "RB", team: "PHI", stat: 358.7, statLabel: "FPTS" },
+  { name: "Josh Allen", position: "QB", team: "BUF", stat: 389.5, statLabel: "FPTS" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 341.1, statLabel: "FPTS" },
+  { name: "Brock Bowers", position: "TE", team: "LV", stat: 284.6, statLabel: "FPTS" },
+  { name: "Justin Jefferson", position: "WR", team: "MIN", stat: 311.7, statLabel: "FPTS" },
+];
+
 const STAT_CANDIDATE_KEYS = [
   "fantasy_points_ppr",
   "dynasty_value",
@@ -151,7 +166,10 @@ export async function GET(
     : [];
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
-  const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const isDemo = !hasRows;
+  const displayRows = hasRows ? rows : DEMO_ROWS;
+  const colHeader = displayRows[0]?.statLabel ?? "";
+  const subtitle = isDemo ? `${panel.blurb} · sample preview` : panel.blurb;
 
   return new ImageResponse(
     (
@@ -197,7 +215,7 @@ export async function GET(
         <div
           style={{
             fontFamily: "Luckiest Guy",
-            fontSize: hasRows ? 48 : 72,
+            fontSize: 48,
             lineHeight: 1.1,
             marginBottom: 6,
             maxWidth: 1000,
@@ -206,7 +224,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {panel.blurb}
+          {subtitle}
         </div>
 
         {query && (
@@ -229,9 +247,8 @@ export async function GET(
           </div>
         )}
 
-        {/* Data rows */}
-        {hasRows ? (
-          <div
+        {/* Data rows (live, or sample preview when data is unavailable) */}
+        <div
             style={{
               display: "flex",
               flexDirection: "column",
@@ -263,7 +280,7 @@ export async function GET(
                 </div>
               )}
             </div>
-            {rows.filter((r) => r.name).map((r, i) => (
+            {displayRows.filter((r) => r.name).map((r, i) => (
               <div
                 key={`${r.name}-${i}`}
                 style={{ display: "flex", alignItems: "center", fontSize: 18 }}
@@ -297,23 +314,6 @@ export async function GET(
               </div>
             ))}
           </div>
-        ) : (
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              gap: 12,
-            }}
-          >
-            <div style={{ fontSize: 64, display: "flex" }}>{panel.icon}</div>
-            <div style={{ fontSize: 24, color: "#5c4a3d", display: "flex" }}>
-              {agent?.loadingCopy ?? "pulling film..."}
-            </div>
-          </div>
-        )}
 
         {/* Footer */}
         <div

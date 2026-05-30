@@ -247,3 +247,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 55
 - **Screenshot potential:** RB-only FPTS card droppable in r/DynastyFF trade/value threads — data-first, not SaaS promo
 - **Bot-fact potential:** `!razzle confirm top RB PPR FPTS` — future intel layer
+
+## 2026-05-30 — Cycle 58
+
+### Share link = the product surface on Reddit (correctness signal, no live fetch)
+- **Pattern:** Dynasty managers click tool **share links / screenshots** in comment threads — the live `/og/*` URL is the first impression, not the app shell. Established cycles 53–55.
+- **Razzle gap:** Cycle 57 shipped live-data Lab OG cards, but the empty-data path (preview deploys + CI have no `terminal.db`) renders a loading-copy-only shell ("pulling film…"). The live link a Reddit user clicks shows a blank card.
+- **Slice:** Lab L5 — `/og/[panel]` static demo fallback (sample player rows + "· sample preview"), mirroring PR #12's H2H demo card. Bonus: fixed PR #12's H2H render crash (Satori multi-child).
+- **Council cycle:** 58
+- **Screenshot potential:** Every Lab panel share card renders a tier list on the live URL — Octo dynasty tiers, Hawkeye breakouts — droppable in r/DynastyFF threads with watermark.

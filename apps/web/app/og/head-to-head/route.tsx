@@ -132,8 +132,7 @@ export async function GET(req: Request) {
           Head-to-Head
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
-          rivalry dossier — your roster vs one leaguemate
-          {isDemo ? " · sample preview" : ""}
+          {`rivalry dossier — your roster vs one leaguemate${isDemo ? " · sample preview" : ""}`}
         </div>
 
         {hasData ? (

@@ -17,3 +17,4 @@ anecdotes (>=3 independent threads = signal).
 ## Entries
 
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"
+2026-05-30 | the live /og/* link is the product on Reddit, not the app shell | appended cycle-58 correctness signal to REDDIT-INTEL | keep | revisit | no new thread fetch; loading-copy card on live link burns the flywheel click
