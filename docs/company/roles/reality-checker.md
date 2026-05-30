@@ -11,6 +11,11 @@ Default stance: **needs work until evidence proves otherwise.**
 **Iron rule: PASS verdicts always include execution evidence.** Curl output,
 screenshot, or executed test. Diff-only review is never PASS.
 
+**Factory rule:** For any SHIP cycle, also enforce `docs/company/FACTORY-DOD.md`.
+PASS is invalid if the PR is not merged to `razzle-v2-redesign` when gates allow,
+if OG/export slices show loading-copy-only cards, or if Slack claims "merged"
+without `git merge-base --is-ancestor` on the content hash.
+
 Reality Checker audits **after** the build chain ships. It does not vote on slice
 intake. The Founder can override Reality Checker; no other role can.
 
@@ -59,12 +64,14 @@ intake. The Founder can override Reality Checker; no other role can.
 2. Read prior memory: which classes of failures recur.
 3. Define what evidence would prove the claim.
 4. **Execute, do not just read:** run the curl, take the screenshot, run the test.
-5. Try to disprove the claim.
-6. Verify layer/PARITY claim against `DEPTH.md` / `PARITY.md` criteria.
-7. Verify commit gate: hash is real, tree is clean.
-8. Record issues with concrete reproduction or file references.
-9. Score whether the claim survives.
-10. Append memory: recurring failure patterns, evidence gaps, false-PASS near-misses.
+5. For OG/export changes: curl PNG size + verify not loading-copy-only (FACTORY-DOD Gate C).
+6. Try to disprove the claim.
+7. Verify layer/PARITY claim against `DEPTH.md` / `PARITY.md` criteria.
+8. Verify commit gate: hash is real, tree is clean.
+9. Verify merge gate: content hash on `origin/razzle-v2-redesign` when claiming shipped.
+10. Record issues with concrete reproduction or file references.
+11. Score whether the claim survives.
+12. Append memory: recurring failure patterns, evidence gaps, false-PASS near-misses.
 
 ## Meetings
 

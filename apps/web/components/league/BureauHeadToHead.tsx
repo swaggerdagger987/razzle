@@ -170,6 +170,18 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
             >
               open Trade Finder →
             </Link>
+            {you?.user_id && (
+              <a
+                href={`/og/head-to-head?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
+                  you.user_id,
+                )}${opponentId ? `&opponent=${encodeURIComponent(opponentId)}` : ""}&download=1`}
+                download="razzle-head-to-head.png"
+                className="btn-chunky active mt-3 inline-block text-xs"
+                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+              >
+                export card
+              </a>
+            )}
           </section>
         </>
       )}

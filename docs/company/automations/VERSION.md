@@ -1,6 +1,6 @@
 # Automation Prompt Version
 
-Current version: `2026-05-30.v2`
+Current version: `2026-05-30.v3`
 
 This version string should be copied into the top of each prompt body in the
 Cursor dashboard automation config.
