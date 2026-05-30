@@ -55,8 +55,11 @@ message saying so. Do not improvise.
 1. **Morning is one cycle; tick continues the day.** `good morning team` runs
    the first cycle. Scheduled tick runs may continue while the workday is open.
    Do not invent work.
-2. **Commit gate.** Every cycle ends with `git commit` + `git push`. No
-   exceptions. `discard` and `crash` outcomes still commit.
+2. **Commit + publish gate.** Every cycle ends with local commits, then
+   **publish to GitHub**. Try `git push` first; if auth fails, use Cursor's
+   **Open Pull Request** / **ManagePullRequest** tool (GitHub App auth). If
+   both fail, post `BLOCKED: GITHUB_PUBLISH` to Slack — never claim shipped.
+   `discard` and `crash` outcomes still commit locally.
 3. **Three-equals voting.** Strategist, Architect, Builder vote SHIP / VETO /
    DEFER / KILL. 2/3 SHIP wins. Single VETO on North Star, ACCEPTANCE, or
    Karpathy simplicity blocks.
@@ -66,9 +69,9 @@ message saying so. Do not improvise.
    Founder owns Stripe, Reddit/Twitter posting, NORTH_STAR, DESIGN, DECISIONS,
    role creation, and overrides of the Reality Checker.
 6. **Open a PR, then merge when gates pass.** Do not push directly to
-   `razzle-v2-redesign`. Cursor's fork-and-PR behavior is correct. If Reality
-   Checker PASS, engineering/product audits pass, and no Founder-only boundary
-   is touched, merge autonomously. Founder reviews direction at night.
+   `razzle-v2-redesign`. Required CI job names: `api`, `web`, `web-build`.
+   Merge via `gh pr merge` when authenticated; otherwise queue `--auto` or
+   leave open with PR URL. Founder reviews direction at night.
 7. **State you didn't do work, if you didn't.** A blocker standup is a real
    artifact. An invented slice is a Reality Checker FAIL waiting to happen.
 8. **Preserve Razzle voice.** Be football-native, playful, sharp, and direct.

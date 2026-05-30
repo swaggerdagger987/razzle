@@ -28,6 +28,9 @@ Name checks exactly as your CI workflow reports them in GitHub branch protection
 
 Autonomous merge is allowed only through PRs that pass these checks.
 
+If `gh pr merge` returns 403 on Automation VMs, use GitHub auto-merge or add
+the Cursor GitHub App to the bypass list while keeping required checks.
+
 ---
 
 ## 2) Run Lock (required)
@@ -45,6 +48,9 @@ Lock mechanism:
 
 If lock cannot be acquired (API/auth issues), the run should post a blocker and
 exit instead of risking concurrent writes.
+
+If publish fails after local commit (`BLOCKED: GITHUB_PUBLISH`), do not treat
+the cycle as shipped. Follow `docs/company/HARNESS.md` § Publish blocked.
 
 ---
 

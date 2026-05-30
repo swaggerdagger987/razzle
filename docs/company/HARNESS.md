@@ -55,7 +55,36 @@ After merging harness CI updates, open a test PR and confirm these three appear.
 ### 3. Cursor GitHub App
 
 - Install Cursor GitHub integration on `swaggerdagger987/razzle`
-- Grant access to `razzle-v2-redesign` and allow PRs from agent branches
+- Grant **read + write** (contents, pull requests) on the repo
+- Allow PRs from agent branches targeting `razzle-v2-redesign`
+
+### 3b. Automation scope (critical for push)
+
+| Scope | Push auth | When to use |
+|-------|-----------|-------------|
+| **Team Owned** | Org Cursor GitHub App | **Recommended** for morning/tick — matches Slack factory |
+| Private | User token on VM | Often **no push** on fresh Automation VMs |
+
+In Cursor → Automations → each automation → confirm **Open Pull Request** is
+enabled. Agents must use it when `git push` fails.
+
+### 3c. Merge without Founder click (pick one)
+
+**Option A — Auto-merge (simplest):**
+
+1. GitHub repo → Settings → General → Allow auto-merge
+2. Branch protection: allow auto-merge when `api`, `web`, `web-build` pass
+3. Agents run `gh pr merge --auto --merge` when gh works; otherwise PR stays
+   open until checks green + auto-merge fires
+
+**Option B — Cursor bot bypass:**
+
+1. Settings → Branches → `razzle-v2-redesign` → bypass list
+2. Add the **Cursor GitHub App** or `cursor[bot]` if your org uses that identity
+3. Still require the three CI checks
+
+Without A or B, agents will open PRs but Slack will show `open NEEDS FOUNDER
+merge rule` — that is expected, not a bug.
 
 ### 4. Run lock (convention)
 
@@ -116,7 +145,11 @@ Copy prompt bodies from repo files. Start each with `PROMPT_VERSION` line.
 | **CEO Nightly** | Slack keyword `good evening team` | `good-evening.md` | Sonnet 4.6 thinking |
 | **Loop Tick** | Schedule every 60–90 min | `tick.md` + morning body | Opus or GPT-5.5 medium |
 
-**Tools to enable:** Open Pull Request, Send to Slack, Memories. PR merge when checks pass.
+**Tools to enable:** Open Pull Request (required), Send to Slack, Memories.
+
+**Scope:** Team Owned for morning + tick (see §3b above).
+
+PR merge when checks pass — configure auto-merge or bot bypass (§3c).
 
 **Test order:**
 
@@ -189,12 +222,26 @@ When you change a prompt:
 
 | Symptom | Fix |
 |---------|-----|
-| Agent can't merge | Branch protection check names ≠ CI jobs |
-| Tick does nothing | `workday.json` still `closed` on base branch — merge morning PR first |
+| Agent can't merge | Branch protection check names ≠ CI jobs (`api`, `web`, `web-build`) |
+| **Local commit, no push** | Automation VM lacks git creds → enable **Team Owned** + Open PR tool; see § Publish blocked |
+| **gh read-only / 403 merge** | Enable auto-merge (§3c) or add Cursor app to bypass with checks required |
+| Tick does nothing | `workday.json` still `closed` on base — merge morning PR first |
 | Empty Explore / no players | Run `sync_data.py --quick` in VM or add to env setup |
 | Two cycles collide | `company-os-lock` issue left open — close manually |
 | Prompt drift | Compare dashboard to repo; VERSION.md |
 | Generic SaaS output | Reality FAIL on T6 — cite DESIGN.md |
+
+### Publish blocked
+
+If Slack shows `BLOCKED: GITHUB_PUBLISH`:
+
+1. Cursor Dashboard → Integrations → GitHub → confirm app on `swaggerdagger987/razzle`
+2. Automations → Morning + Tick → **Team Owned** scope (not Private)
+3. Tools → **Open Pull Request** enabled
+4. Re-run trigger or wait for next tick
+5. Cherry-pick local commit from agent branch if it never pushed (check branch on GitHub)
+
+Agents should always report CONTENT_HASH even when publish fails so you can recover.
 
 ---
 
