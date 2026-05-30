@@ -48,4 +48,4 @@ cycle	commit	score	status	pillar	slice	description
 55	5c19ee1	depth+hallway+reddit+voice+simplicity	keep	Explore	L5 watermarked export	/og/explore live top-6 screener rows position pills watermark ExploreShareButton dir param
 56	409a4ca0	gates+simplicity	keep	Lab	L5 OG export fix	Satori display:flex on /og/[panel] unblocks launch-10 export cards
 57	2e11270	depth+hallway+reddit+voice+simplicity	keep	Lab	L5 OG live data	/og/[panel] fetches live rows, agent badge, position pills, watermark, graceful fallback
-58	PENDING_HASH	depth+hallway+reddit+voice+simplicity	keep	League	L5 H2H export	trust=T1,T2,T5,T6 /og/head-to-head OG card: you/them records+ppg, position depth bars, trade lanes, Atlas badge, watermark; export-card link in BureauHeadToHead gated on you.user_id; reuses bureau H2H API
+58	9ea2e16	depth+hallway+reddit+voice+simplicity	keep	League	L5 H2H export	trust=T1,T2,T5,T6 /og/head-to-head OG card: you/them records+ppg, position depth bars, trade lanes, Atlas badge, watermark; export-card link in BureauHeadToHead gated on you.user_id; reuses bureau H2H API
