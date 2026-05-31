@@ -4,14 +4,17 @@ import { useCallback, useState } from "react";
 import Link from "next/link";
 import type { Route } from "next";
 import { toRoom } from "@razzle/hallway";
-import { encodeH2hSnapshot, type H2hSnapshotPayload } from "./BureauOgExportLink";
+import {
+  encodeBureauH2HOgSnapshot,
+  type BureauH2HOgSnapshot,
+} from "@/lib/bureau-h2h-og-snapshot";
 
 interface Props {
   leagueId: string;
   userId: string;
   opponentId?: string;
   /** Encodes in-panel rivalry so OG card matches Bureau view. */
-  snapshot?: H2hSnapshotPayload;
+  snapshot?: BureauH2HOgSnapshot;
 }
 
 /** Copyable rivalry URL + OG export — mirrors ExploreShareButton for Bureau H2H. */
@@ -29,7 +32,7 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
   });
   if (opponentId) ogParams.set("opponent", opponentId);
   // Export card encodes in-panel rivalry; direct OG URLs with league/user try live API first.
-  const snap = snapshot ? encodeH2hSnapshot(snapshot) : undefined;
+  const snap = snapshot ? encodeBureauH2HOgSnapshot(snapshot) : undefined;
   if (snap) ogParams.set("snapshot", snap);
 
   const offer = (snapshot?.trade_fit?.you_could_offer ?? []).join(", ") || "—";

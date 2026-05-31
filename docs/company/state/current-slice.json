@@ -1,28 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-top5-fallback",
-  "big_problem": "Lab dashboard export still points at dynasty-comps OG when generic dashboard renderers load pulse data.",
-  "epic": "Lab L5 — Dashboard OG cards match in-panel movers",
-  "slice_title": "OG snapshot falls back to top5 when no risers/fallers",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/dashboard PNG ≥40KB with snapshot or live top5",
+  "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head — ShareBar and OG route use mismatched snapshot codecs.",
+  "epic": "League L5 — Bureau H2H snapshot codec matches OG decode",
+  "slice_title": "H2H ShareBar uses encodeBureauH2HOgSnapshot (y/m/pc compact)",
+  "atom_id": "bureau-h2h-sharebar-canonical-codec",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG head-to-head PNG ≥40KB with snapshot param from canonical encoder",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx",
-    "apps/web/app/og/[panel]/route.tsx"
+    "apps/web/components/league/BureauH2HShareBar.tsx"
   ],
-  "max_files": 2,
-  "max_lines": 60,
+  "max_files": 1,
+  "max_lines": 30,
   "acceptance_commands": [
-    "JWT_SECRET=test pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
-    "npm run start --workspace=apps/web & sleep 8 && curl -s -o /tmp/og-dash-top5.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1' && file /tmp/og-dash-top5.png && kill %1 2>/dev/null || true"
+    "JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests -q"
   ],
   "out_of_scope": [
-    "New shared package helpers",
-    "Dynasty-comps OG",
-    "NORTH_STAR / DESIGN edits"
+    "Lab OG renderers",
+    "BureauOgExportLink deletion",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical"
 }

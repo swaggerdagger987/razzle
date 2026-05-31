@@ -1,5 +1,9 @@
 # Memory — Engineering Architect
 
+2026-05-31 | tradevalues snapshot contract | 5ed39e14 | 1-file ≤25 lines; rank+formula statLabel pattern matches buysell
+
+2026-05-31 | buysell snapshot contract | 98ae0ef2 | 1-file ≤35 lines; reuse encodeOgSnapshot; no route touch
+
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
 
 Format per entry:
@@ -15,8 +19,8 @@ which migrations were painful, which test patterns caught bugs.
 
 ## Entries
 
-2026-05-31 | DashboardRenderer dashboard slug | lab-dashboard-og-slug-snapshot | 1 file 72 lines | SHIP | keep | snapshotFromDashboard risers/fallers
-2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | use client + useMemo; 1 file mirrors DynastyCompsRenderer
+2026-05-31 | WeeklyHeatmap hot-week snapshot | 1 file ≤45 lines | SHIP | keep | max-week map sort mirrors panel hotPlayer logic
+
 2026-05-31 | BureauPressureMap copy link | 1 file ≤35 lines | SHIP | keep | mirrors ManagerProfiles clipboard row
 2026-05-30 | Generic extractRows() with 7 response shapes handles all 100 panels without per-panel switch | apps/web/app/og/[panel]/route.tsx | ACCEPTANCE Gate 2 (Lab renderers) | keep | Satori constraints: display:flex everywhere, no grid; agentForPanel() from @razzle/agents avoids metadata duplication; parameterized API paths ({player_id}) correctly skipped
 2026-05-31 | demoRowsForPanel() + isDemo mirrors H2H; blurb must be single JSX text child for Satori | apps/web/app/og/[panel]/route.tsx | FACTORY-DOD Gate C | keep | Two adjacent text children in blurb div caused Satori pipe failure — template string fix
@@ -37,6 +41,3 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
-2026-05-31 | BureauWaiverTendencies | da33eafd | keep | 3 files ≤175 lines; mirrors BuildProfiles; no API change
-2026-05-31 | TradeValues+Prospects snapshot | 70af534a | keep | 2 files ≤40 lines; Breakouts ogSnapshotRows pattern
-2026-05-31 | DynastyDashboard top5 snapshot | lab-dashboard-og-top5-fallback | 2 files ≤60 lines | SHIP | keep | extractRows movers-first matches DashboardRenderer
