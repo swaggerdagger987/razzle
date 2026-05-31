@@ -2,9 +2,9 @@ cycle: 95
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: bureau-h2h-export-or-next-parity
+next_slice: lab-og-position-tradevalues-prospects
 last_keep_cycle: 95
-last_commit: da33eafd
-lab_l5_og_snapshot_row_fidelity_epic: in_progress
+last_commit: 795bf08b
+lab_l5_og_snapshot_row_fidelity_epic: complete
+lab_l5_og_position_filter_epic: active
 league_l5_unhide_bureau_tabs_epic: complete
-league_l5_strength_of_schedule_tab: complete
