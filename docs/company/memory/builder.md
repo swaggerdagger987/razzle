@@ -1,3 +1,4 @@
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | EXPORTED · panel rivalry rows.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | TOLAB_DEFAULT_POSITION efficiency RB.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | weekly WR watermarkPosition on OG route.
 2026-05-31 | explore-og-margin-note-lead | f6e0985f3 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
@@ -10,7 +11,6 @@
 2026-05-31 | lab-og-watermark-display-name | 338709883 | SHIP | playerName on export + watermark display name; pytest 6.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | encodeOgSnapshot pid + decode snapshotPlayerId in OG route.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | SHIP | toRoom bones on Trade Finder OG + ShareBar.
-2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
 2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | SHIP | prospects+tradevalues SNAPSHOT_FROM_PANEL_SLUGS; 5 pytest guards.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS for gamelog + dynasty-comps.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | bureau-trade-finder-og-snapshot encode on ShareBar.
@@ -23,8 +23,6 @@
 2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | ac0280a20 | curl gamelog OG 59323B; empty weeks footer export.
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | toLab on panel OG band; position query when filtered.
-2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | ac0280a20 | curl gamelog OG 59323B; empty weeks footer export.
-2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | NFL share URLs drop universe=nfl; college keeps param.
 2026-05-31 | lab-l4-pro-gate-error-dynasty-comps | a3f07d1e5 | SHIP | DynastyCompsRenderer ProGateFromPanelError; pytest 9.
@@ -49,7 +47,6 @@
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
 
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | keep | extractGamelogWeekRows; Wk N + fpts sort; curl 56390B.
 
