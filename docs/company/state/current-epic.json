@@ -1,42 +1,48 @@
 {
   "epic_status": "active",
-  "big_problem": "Five Bureau tabs stay hidden because they lack bespoke renderers — league moat features users cannot reach.",
-  "epic_title": "League L5 — ship hidden Bureau renderers",
+  "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product (PARITY League L5).",
+  "epic_title": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-roster-depth-renderer",
-      "title": "BureauRosterDepth renderer + unhide roster-depth tab",
+      "id": "league-power-rankings-tab",
+      "title": "Unhide Power Rankings tab with Octo renderer + hallway",
+      "status": "done",
+      "merge_commit": "20c7940a"
+    },
+    {
+      "id": "league-power-rankings-og",
+      "title": "OG share card at /og/power-rankings with demo fallback",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "league-roster-depth-tab",
+      "title": "Unhide Roster Depth tab with Dolphin renderer",
       "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "bureau-power-rankings-renderer",
-      "title": "BureauPowerRankings renderer + unhide power-rankings tab",
+      "id": "league-build-profiles-tab",
+      "title": "Unhide Build Profiles tab with Atlas renderer",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "bureau-build-profiles-renderer",
-      "title": "BureauBuildProfiles renderer + unhide build-profiles tab",
+      "id": "league-waiver-tendencies-tab",
+      "title": "Unhide Waiver Tendencies tab with Hawkeye renderer",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "bureau-waiver-tendencies-renderer",
-      "title": "BureauWaiverTendencies renderer + unhide waiver-tendencies tab",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "bureau-schedule-renderer",
-      "title": "BureauStrengthOfSchedule renderer + unhide strength-of-schedule tab",
+      "id": "league-schedule-tab",
+      "title": "Unhide Schedule tab with strength-of-schedule renderer",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-roster-depth-renderer",
-  "created_at": "2026-05-31T04:37:27Z",
-  "updated_at": "2026-05-31T04:45:36Z"
+  "next_atom_id": "league-roster-depth-tab",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T04:50:00Z"
 }

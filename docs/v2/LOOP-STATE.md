@@ -1,11 +1,13 @@
-cycle: 75
+cycle: 78
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-power-rankings-renderer (epic atom 2/5)
-last_keep_cycle: 75
-last_commit: eb505005
-league_l5_hidden_bureau_epic: in_progress
+next_slice: league-power-rankings-og (epic atom 2/6)
+last_keep_cycle: 78
+last_commit: pending
+league_l5_unhide_bureau_epic: in_progress
+league_l5_roster_depth_tab: shipping
+league_l5_power_rankings_tab: complete
 lab_l5_og_snapshot_launch10: complete
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -23,3 +25,10 @@ lab_l5_og_export_player_scoped: complete
 lab_l5_og_dynasty_comps_panel_export: complete
 lab_l5_og_snapshot_rows: complete
 lab_l5_og_export_rankings_breakouts: complete
+lab_l5_og_export_prospects_weekly_tradevalues: complete
+lab_l5_og_live_extractors: complete
+lab_l5_og_live_rows_epic: complete
+lab_l5_og_snapshot_efficiency_aging: complete
+lab_l5_og_live_data_label: complete
+league_l5_bureau_h2h_copy_link: complete
+league_l5_bureau_self_scout_copy_link: complete

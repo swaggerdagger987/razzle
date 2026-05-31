@@ -68,4 +68,5 @@ cycle	commit	score	status	pillar	slice	description
 75	7066f4ab	depth+voice+simplicity	keep	Lab	L5 OG live data label	trust=T1,T5,T6; live data blurb when liveHasRows; curl rankings 59509B
 76	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
 77	99f8a2aa	depth+hallway+voice+simplicity	keep	League	L5 Bureau H2H share bar	trust=T2,T5,T6; copy rivalry link + export; curl h2h OG 59305B
-78	6dbe1ca1	depth+hallway+simplicity	keep	League	L5 Bureau roster depth renderer	trust=T2,T5,T6; BureauRosterDepth unhide roster-depth; build+pytest PASS
+78	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
+79	da33eafd	depth+hallway+simplicity	keep	League	L5 Bureau roster depth renderer	trust=T2,T5,T6; BureauRosterDepth unhide roster-depth; build+pytest PASS
