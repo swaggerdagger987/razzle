@@ -1,5 +1,9 @@
-2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | breakouts WR in TOLAB_DEFAULT_POSITION.
+2026-05-31 | lab-sidebar-staff-registry | a281e5943 | SHIP | Expanded labPanels; pytest launch-10 + 55+ coverage guard.
 2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | EXPORTED · panel rivalry rows.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | TOLAB_DEFAULT_POSITION efficiency RB.
+2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | weekly WR watermarkPosition on OG route.
+2026-05-31 | explore-og-margin-note-lead | f6e0985f3 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
 2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | Gate C pytest + 76270B snapshot OG.

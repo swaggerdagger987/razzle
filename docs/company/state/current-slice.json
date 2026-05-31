@@ -1,29 +1,34 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-percentiles-tolab",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity",
-  "slice_title": "Percentiles OG toLab default player hallway",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "big_problem": "Lab sidebar lists 100 panels by category — users think in staff desks (Hawkeye tape, Octo quant) per AGENTS.md wiring checklist.",
+  "epic": "Lab L2 — sidebar groups panels by analyst desk",
+  "slice_title": "Expand labPanels registry so staff view has fewer Razzle catch-alls",
+  "atom_id": "lab-sidebar-staff-registry",
+  "parity_ref": "H-04 — Six agents same ids everywhere",
+  "depth_ref": "Lab L2",
+  "acceptance_ref": "AGENTS.md Lab sidebar wiring",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "packages/agents/registry.ts",
+    "apps/api/tests/test_lab_panel_agent_registry.py"
   ],
-  "max_files": 1,
-  "max_lines": 20,
+  "max_files": 2,
+  "max_lines": 120,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/pct-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/percentiles?download=1&force_demo=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_panel_agent_registry.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["percentiles live extract (done)", "NORTH_STAR/DESIGN edits"],
+  "out_of_scope": ["LabSidebar UI changes", "OG routes", "NORTH_STAR edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+    "verdict": "SHIP"
+  },
+  "content_commit": "a281e5943",
+  "reality": "PASS",
+  "merge": "pending",
+  "pr_url": "https://github.com/swaggerdagger987/razzle/pull/1327",
+  "pr_number": 1327
 }

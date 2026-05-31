@@ -30,29 +30,16 @@
       "merge_commit": "62e147bb8"
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:20:00Z",
-  "updated_at": "2026-05-31T12:15:00Z",
+  "next_atom_id": "lab-panel-share-bar-weekly-gamelog",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T15:12:00Z",
   "completed_epics": [
-    {
-      "id": "lab-l5-og-hallway-position-defaults",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-breakouts-position",
-      "merge_commit": "1ebb9dc73"
-    },
-    {
-      "id": "explore-l5-og-margin-notes",
-      "status": "partial",
-      "last_atom": "explore-og-margin-note-rows",
-      "merge_commit": "c1a0bcaad"
-    },
-    {
-      "id": "league-l5-bureau-h2h-gtm",
-      "status": "complete",
-      "last_atom": "bureau-h2h-og-gate-c-snapshot",
-      "merge_commit": "4907c8327"
-    },
-    "league-h2h-gtm-export-2026-05-31",
-    "lab-l5-pro-profile-og-live-parity"
+    "league-trade-finder-gtm-export-2026-05-31",
+    "lab-formula-sorted-og-live-parity-2026-05-31",
+    "league-og-bureau-watermark-2026-05-31",
+    "lab-l5-og-export-live-panel-rows",
+    "lab-l5-og-hallway-deep-links",
+    "lab-l5-og-hallway-position-defaults",
+    "lab-l2-sidebar-staff-desks"
   ]
 }
