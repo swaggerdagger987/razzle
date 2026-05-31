@@ -26,19 +26,19 @@
   "next_atom_id": "lab-efficiency-empty-export",
   "epic_status": "active",
   "created_at": "2026-05-31T10:05:27Z",
-  "updated_at": "2026-05-31T10:10:00Z",
+  "updated_at": "2026-05-31T10:20:00Z",
   "completed_epics": [
+    {
+      "id": "room-l5-briefing-gtm-export",
+      "status": "active",
+      "last_atom": "room-briefing-og-card",
+      "merge_commit": "75dc2d65a"
+    },
     {
       "id": "lab-l5-launch10-og-panel-native-trust-labels",
       "status": "complete",
       "last_atom": "lab-og-launch10-buysell-dashboard-labels",
       "merge_commit": "adbf6c7"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "complete",
-      "last_atom": "lab-l4-pro-gate-error-surface",
-      "merge_commit": "5721ee33"
     },
     {
       "id": "explore-l5-og-query-epic",

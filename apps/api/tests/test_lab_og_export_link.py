@@ -18,6 +18,16 @@ def test_player_scoped_slugs_default_player_id_in_export_url():
     assert '"gamelog"' in source and '"dynasty-comps"' in source
 
 
+def test_gamelog_empty_state_passes_snapshot_to_export_link():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/GamelogRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "sampleGamelogQ" in renderer
+    assert "sampleOgSnapshotRows" in renderer
+    assert "snapshotRows={sampleOgSnapshotRows.length ? sampleOgSnapshotRows : undefined}" in renderer
+
+
 def test_default_lab_og_player_matches_og_route():
     route = (
         Path(__file__).resolve().parents[3]
