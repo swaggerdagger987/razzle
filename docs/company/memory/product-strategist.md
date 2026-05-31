@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-gamelog-live-week-extract | da33eafd | Gamelog OG weeks[] closes NEXT live-rows gap atom 2/3.
+2026-05-31 | lab-og-gamelog-live-week-extract | 49d72272 | Gamelog OG weeks[] closes NEXT live-rows gap atom 2/3.
 
 2026-05-31 | Cycle 116 bureau H2H pytest | 5e75875e | CI guardrail ShareBar↔OG.
 
