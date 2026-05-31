@@ -49,6 +49,15 @@ const OG_PRO_PREVIEW_HEADER = "X-Razzle-Plan";
 /** Ja'Marr Chase — nflverse gsis_id for OG previews when no player_id in URL. */
 const DEFAULT_OG_PLAYER_ID = "00-0036900";
 
+/** Showcase player for gamelog OG — watermark toLab must match Lab ?id= deep link. */
+const DEFAULT_OG_PLAYER = {
+  playerId: DEFAULT_OG_PLAYER_ID,
+  slug: "ja-marr-chase",
+  name: "Ja'Marr Chase",
+  position: "WR",
+  team: "CIN",
+} as const;
+
 /** Lab panels that require player_id on the API (path or query). */
 const PLAYER_SCOPED_SLUGS = new Set([
   "dynasty-comps",
@@ -734,20 +743,24 @@ function labOgWatermarkLink(
   slug: string,
   opts: { positionFilter: string; playerId: string; playerScoped: boolean },
 ): string {
+  const preserveDefaultGamelog = slug === "gamelog";
   const usePlayer =
-    opts.playerScoped && opts.playerId && opts.playerId !== DEFAULT_OG_PLAYER_ID;
-  let path = toLab(
-    slug,
-    usePlayer
-      ? {
-          player: {
-            playerId: opts.playerId,
-            slug: opts.playerId,
-            name: "player",
-          },
-        }
-      : undefined,
-  );
+    opts.playerScoped &&
+    opts.playerId &&
+    (preserveDefaultGamelog || opts.playerId !== DEFAULT_OG_PLAYER_ID);
+  const playerCtx = usePlayer
+    ? {
+        player:
+          preserveDefaultGamelog && opts.playerId === DEFAULT_OG_PLAYER_ID
+            ? { ...DEFAULT_OG_PLAYER }
+            : {
+                playerId: opts.playerId,
+                slug: opts.playerId,
+                name: "player",
+              },
+      }
+    : undefined;
+  let path = toLab(slug, playerCtx);
   if (opts.positionFilter) {
     const sep = path.includes("?") ? "&" : "?";
     path = `${path}${sep}position=${encodeURIComponent(opts.positionFilter)}`;

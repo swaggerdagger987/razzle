@@ -1,7 +1,33 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-trade-finder-og-watermark-live",
-  "slice_title": "Trade Finder OG — LIVE/SAMPLE stickers + terracotta watermark band",
-  "status": "shipped",
-  "content_commit": "db6537faf"
+  "big_problem": "Lab OG cards are screenshot dead-ends — dynasty Twitter can't click back into the panel with the same filters they exported.",
+  "epic": "Lab L5 — OG hallway deep links (atom 2/3)",
+  "slice_title": "Gamelog OG — toLab preserves default player_id deep link",
+  "atom_id": "lab-og-tolab-gamelog-default",
+  "parity_ref": "Explore L5 — Lab panel OG data rows / hallway",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — gamelog OG PNG ≥40KB; watermark includes id= for default player",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_tolab_gamelog_default.py"
+  ],
+  "max_files": 2,
+  "max_lines": 55,
+  "acceptance_commands": [
+    "python3 -m pytest apps/api/tests/test_lab_og_tolab_gamelog_default.py apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [
+    "snapshot OG atom",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "dynasty-comps default link behavior change"
+  ],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }
