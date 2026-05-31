@@ -1,31 +1,30 @@
 {
-  "big_problem": "Lab export cards still ship demo rows on panels where the table already has live data — screenshots don't match what the user sees.",
-  "epic_title": "Lab L5 — OG export cards mirror in-panel rows",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "epic_status": "active",
+  "big_problem": "Lab OG cards still miss Octo panel row shapes — nested API keys fall back to sample preview instead of live rows.",
+  "epic_title": "Lab L5 — OG cards mirror Octo panel API rows",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-prospects-tradevalues-snapshot",
-      "title": "Prospects + tradevalues export snapshot rows",
-      "status": "done",
-      "merge_commit": "69e4c732"
+      "id": "lab-og-buysell-dashboard-live",
+      "title": "Buy/sell + dashboard OG live row extractors",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-dashboard-comps-snapshot",
-      "title": "Dashboard dynasty-comps snapshot rows",
-      "status": "done",
-      "merge_commit": "0c5112c5"
+      "id": "lab-og-prospects-rps-live",
+      "title": "Prospects OG live rows from prospects[] + rps",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-live-blurb-consistency",
-      "title": "OG blurb suffix when snapshot present (launch-10)",
-      "status": "done",
-      "merge_commit": "83d4c770"
+      "id": "lab-og-efficiency-aging-nested",
+      "title": "Efficiency most_efficient + aging positions.players extractors",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T16:00:00Z",
-  "last_cycle_commit": "69e4c732"
+  "next_atom_id": "lab-og-buysell-dashboard-live",
+  "created_at": "2026-05-31T06:30:00Z",
+  "updated_at": "2026-05-31T06:30:00Z"
 }
