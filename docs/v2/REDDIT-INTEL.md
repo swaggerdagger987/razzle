@@ -279,6 +279,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 1. **Manager archetype labels are trade-DM shorthand** — PANIC SELLER / HOARDER badges travel faster than transaction counts in group chats.
 2. **Bureau OG series compounds** — Pressure Map + Manager Profiles give two screenshot hooks before trade-network atom.
 
+## 2026-05-31 — Cycle 68 (workday cycle 1 atom 2/2)
+
+1. **Weekly heatmap + prospects are waiver-wire screenshot bait** — Hawkeye panels need the same `LabOgExportLink` footers as rankings so export URLs stay consistent in dynasty threads.
+2. **Launch-10 OG consolidation epic complete** — all five hand-rolled anchors replaced; next Lab L5 work is live data rows per NEXT.md.
+
 ## 2026-05-31 — Cycle 67 (workday initiation cycle 1)
 
 1. **Ranking/trade/breakout OG cards are thread currency** — consolidating `LabOgExportLink` on the three highest-shared Lab panels keeps export URLs consistent before player-scoped params land on list views.

@@ -15,6 +15,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
+2026-05-31 | Lab L5 LabOgExportLink weekly/prospects | 2 renderers footer swap | da33eafd | keep | curl weekly 63819B prospects 58084B; launch-10 epic complete
 2026-05-31 | Lab L5 LabOgExportLink rankings/tradevalues/breakouts | import + footer swap in 3 renderers | 8a8ec279 | keep | Mechanical replace of raw `<a>` tags; curl all ≥59KB | atom 2: weekly/prospects
 
 2026-05-30 | Lab L5 OG — rewrite /og/[panel]/route.tsx with live data fetch, agent badge, position pills | 2e11270 | keep | Single file ~250 lines; follows Explore OG pattern from cycle 55; 13 stat candidate keys; graceful fallback to icon+loadingCopy when API returns empty

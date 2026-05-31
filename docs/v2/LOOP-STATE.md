@@ -1,9 +1,9 @@
-cycle: 67
+cycle: 68
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-link-weekly-prospects (atom 2/2)
-last_keep_cycle: 67
+next_slice: Bureau H2H export or Lab panel OG live data rows (NEXT.md)
+last_keep_cycle: 68
 last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -18,5 +18,6 @@ lab_l5_og_export_link_epic: complete
 lab_l5_og_export_gamelog_efficiency_aging: complete
 lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
-lab_l5_og_link_consolidation_epic: in_progress
+lab_l5_og_link_consolidation_epic: complete
 lab_l5_og_link_rankings_trade_breakouts: complete
+lab_l5_og_link_weekly_prospects: complete
