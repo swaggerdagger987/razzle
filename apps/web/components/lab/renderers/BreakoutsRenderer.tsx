@@ -21,6 +21,16 @@ import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
+/** Sample RBS board when the API returns no candidates — OG export still screenshots. */
+const BREAKOUTS_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 82.4, statLabel: "RBS" },
+  { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 79.1, statLabel: "RBS" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 77.8, statLabel: "RBS" },
+  { name: "Brock Bowers", position: "TE", team: "LV", stat: 74.2, statLabel: "RBS" },
+  { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 71.5, statLabel: "RBS" },
+  { name: "Ladd McConkey", position: "WR", team: "LAC", stat: 69.3, statLabel: "RBS" },
+];
+
 interface Candidate extends WithFormulaScore {
   player_id: string;
   name: string;
@@ -157,7 +167,18 @@ export function BreakoutsRenderer({ panel }: Props) {
       )}
 
       {!candidates.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="breakouts"
+              downloadName="razzle-breakouts.png"
+              position={position || undefined}
+              snapshotRows={BREAKOUTS_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="panel-cards">
           {candidates.slice(0, 40).map((p) => {
