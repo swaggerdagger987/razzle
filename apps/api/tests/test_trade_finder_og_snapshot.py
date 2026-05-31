@@ -20,7 +20,8 @@ def test_trade_finder_og_route_reads_snapshot_param():
     text = route.read_text(encoding="utf-8")
     assert 'searchParams.get("snapshot")' in text
     assert "decodeBureauTradeFinderOgSnapshot" in text
-    assert "EXPORTED · panel trade rows" in text
+    assert "FROM BUREAU · your trade rows" in text
+    assert "#5b7fff" in text
 
 
 def test_trade_finder_share_bar_sets_snapshot():
