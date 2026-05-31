@@ -36,3 +36,6 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauTradeNetworkShareBar | bb475fc3 | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | bb475fc3 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
+2026-05-31 | BureauWaiverTendencies | da33eafd | keep | 3 files ≤175 lines; mirrors BuildProfiles; no API change
+2026-05-31 | TradeValues+Prospects snapshot | 70af534a | keep | 2 files ≤40 lines; Breakouts ogSnapshotRows pattern
+2026-05-31 | /og/strength-of-schedule | bb475fc3 | keep | 3 files; demo fallback; mirrors power-rankings OG

@@ -36,3 +36,5 @@ new evidence.
 2026-05-31 | Trade Network share atom 2/4 | bb475fc3 | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Build Profiles unhide atom 1/3 | bb475fc3 | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
+2026-05-31 | Lab OG snapshot atom 1/3 | 70af534a | SHIP | keep | export card matches filtered bar chart for Reddit screenshots
+2026-05-31 | League SOS OG atom 2/3 | bb475fc3 | SHIP | keep | Octo slate card travels off-platform
