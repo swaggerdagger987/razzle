@@ -1,26 +1,26 @@
 {
   "date": "2026-05-31",
   "big_problem": "Launch-10 Lab panels dead-end on empty API boards — managers cannot export screenshot-worthy OG cards when filters return zero rows.",
-  "epic": "Lab L5 — Launch-10 empty OG sample exports (atom 2/3)",
-  "slice_title": "Prospects empty board OG sample export card",
-  "atom_id": "lab-prospects-empty-export",
+  "epic": "Lab L5 — Launch-10 empty OG sample exports (atom 3/3)",
+  "slice_title": "Dashboard empty roster OG sample export card",
+  "atom_id": "lab-dashboard-empty-export",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — prospects snapshot PNG ≥40KB",
+  "acceptance_ref": "FACTORY-DOD Gate C — dashboard snapshot PNG ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
+    "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx",
     "apps/api/tests/test_lab_og_export_link.py"
   ],
   "max_files": 2,
-  "max_lines": 60,
+  "max_lines": 70,
   "acceptance_commands": [
     "python3 -m pytest apps/api/tests/test_lab_og_export_link.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
     "OG route.tsx changes",
-    "dashboard empty export",
+    "DashboardRenderer.tsx legacy path",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
@@ -29,8 +29,5 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
-  },
-  "content_commit": "8e2ca7f29",
-  "reality": "PASS",
-  "merge": "pending"
+  }
 }

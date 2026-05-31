@@ -82,6 +82,17 @@ def test_aging_empty_curve_exports_sample_card():
     assert "!posData?.curve?.length" in renderer
 
 
+def test_dashboard_empty_roster_exports_sample_card():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "DASHBOARD_SAMPLE_OG_ROWS" in renderer
+    assert 'label="export sample card"' in renderer
+    assert "snapshotRows={DASHBOARD_SAMPLE_OG_ROWS}" in renderer
+    assert "isEmptyBoard" in renderer
+
+
 def test_rankings_empty_filter_exports_sample_card():
     renderer = (
         Path(__file__).resolve().parents[3]
