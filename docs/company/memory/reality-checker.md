@@ -1,5 +1,6 @@
 # Memory — Reality Checker
 
+- **2026-05-31:** PASS rankings OG — curl 59509B; demo fallback OK when terminal.db empty.
 - **2026-05-31:** PASS aging OG live extract — curl 44952B; snapshot tests ERROR without terminal.db is not a slice regression.
 
 Append-only log of recurring failure patterns, evidence gaps, false-PASS

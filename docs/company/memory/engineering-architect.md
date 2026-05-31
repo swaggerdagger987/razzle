@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+- **2026-05-31:** Dynasty rankings OG — prefer flat `players[]`, unwrap nested `data`, pro header on fetch fallback.
 - **2026-05-31:** OG `extractRows` must handle nested `positions.{POS}.players` (aging-curves); default RB for curl Gate C.
 
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.

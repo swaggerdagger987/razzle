@@ -2,6 +2,7 @@
 
 Append-only log of coordination patterns, what worked, what didn't.
 
+- **2026-05-31:** Cycle 94 — rankings OG players-first extract shipped; next efficiency atom.
 - **2026-05-31:** Factory open cycle 1 — Lab L5 epic after League Bureau unhide complete; nested API shapes need OG extractRows fixes per panel.
 
 Format per entry:
