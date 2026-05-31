@@ -2,6 +2,7 @@
   "date": "2026-05-31",
   "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product (PARITY League L5).",
   "epic": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
+  "atom_id": "league-power-rankings-og",
   "slice_title": "OG share card at /og/power-rankings with demo fallback",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
@@ -23,5 +24,11 @@
     "API schema changes",
     "NORTH_STAR edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }
