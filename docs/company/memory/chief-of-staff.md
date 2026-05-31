@@ -1,5 +1,8 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 124 Self-Scout snapshot | c2de8dad | keep | workday open; League L5 epic atom 1/3 merged PR915.
+
+2026-05-31 | Factory cycle 118 perks copy | f56fdbd8 | keep | workday open cycle 1; L4 epic complete atom 3/3.
 2026-05-31 | Factory cycle 121 explore OG query | 7dbd4b11 | workday cycle 1; lock #813; live-fetch epic atom 2/3.
 2026-05-31 | Factory cycle 121 pro gate panel pitches | da33eafd | L4 epic atom 2/3; factory open.
 
