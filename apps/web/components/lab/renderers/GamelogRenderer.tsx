@@ -10,7 +10,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import {
+  DEFAULT_LAB_OG_PLAYER_ID,
+  LabOgExportLink,
+  type OgSnapshotRow,
+} from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
