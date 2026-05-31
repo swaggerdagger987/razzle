@@ -1,5 +1,6 @@
 {
   "date": "2026-05-31",
+<<<<<<< HEAD
   "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export.",
   "epic": "Lab L5 — GTM panel share bar parity (3/4)",
   "slice_title": "Weekly + Gamelog — player-scoped LabPanelShareBar",
@@ -25,10 +26,36 @@
     "new npm deps",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
+=======
+  "atom_id": "lab-og-percentiles-tolab",
+  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
+  "epic": "Lab L5 — pro profile OG live parity",
+  "slice_title": "Percentiles OG toLab default player hallway",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/api/tests/test_lab_og_tolab_watermark.py"
+  ],
+  "max_files": 1,
+  "max_lines": 20,
+  "acceptance_commands": [
+    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/pct-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/percentiles?download=1&force_demo=1'"
+  ],
+  "out_of_scope": ["percentiles live extract (done)", "NORTH_STAR/DESIGN edits"],
+>>>>>>> origin/razzle-v2-redesign
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
+<<<<<<< HEAD
     "builder": "SHIP"
+=======
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+>>>>>>> origin/razzle-v2-redesign
   }
 }
