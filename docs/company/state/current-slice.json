@@ -1,25 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
-  "epic": "Lab L5 — Launch-10 OG panel-native LIVE labels",
-  "slice_title": "gamelog/efficiency OG LIVE sticker + blurb parity",
-  "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with LIVE sticker text",
-  "trust_pillars": ["T5", "T6"],
+  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
+  "epic": "Lab L4 — shared pro-gate error surface",
+  "slice_title": "ProGateFromPanelError — tradevalues + efficiency",
+  "parity_ref": "Lab L4 — pro-gate polish",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "test_panel_pro_gate_surface.py",
+  "trust_pillars": ["T2", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx"
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
+    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
+    "apps/api/tests/test_panel_pro_gate_surface.py"
   ],
-  "max_files": 1,
-  "max_lines": 20,
+  "max_files": 3,
+  "max_lines": 80,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/gamelog-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'",
-    "curl -s -o /tmp/efficiency-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py -q"
   ],
   "out_of_scope": [
-    "aging/buysell panels",
-    "new API routes",
+    "remaining launch-10 renderers",
+    "OG routes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",

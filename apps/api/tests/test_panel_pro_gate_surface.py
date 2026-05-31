@@ -48,12 +48,21 @@ def test_bureau7_perk_labels_match_parity_slugs():
         assert f'"{slug}"' in bureau
 
 
-def test_pro_gate_from_panel_error_wired_in_breakouts():
+def _assert_pro_gate_renderer(slug: str) -> None:
     renderer = (
-        _repo_root() / "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
+        _repo_root() / f"apps/web/components/lab/renderers/{slug}Renderer.tsx"
     ).read_text(encoding="utf-8")
     assert "ProGateFromPanelError" in renderer
     assert "ProUpgradeGate" not in renderer
+
+
+def test_pro_gate_from_panel_error_wired_in_breakouts():
+    _assert_pro_gate_renderer("Breakouts")
+
+
+def test_pro_gate_from_panel_error_wired_in_tradevalues_and_efficiency():
+    _assert_pro_gate_renderer("TradeValues")
+    _assert_pro_gate_renderer("Efficiency")
     surface = (
         _repo_root() / "apps/web/components/lab/ProGateFromPanelError.tsx"
     ).read_text(encoding="utf-8")
