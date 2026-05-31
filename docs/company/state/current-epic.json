@@ -8,8 +8,8 @@
     {
       "id": "lab-og-tolab-strengths-default",
       "title": "Strengths OG watermark — toLab includes default player_id",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7a1f4ea21"
     },
     {
       "id": "lab-og-tolab-snapshot-weekly-player",
@@ -24,14 +24,19 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-tolab-strengths-default",
+  "next_atom_id": "lab-og-tolab-snapshot-weekly-player",
   "created_at": "2026-05-31T11:30:00Z",
-  "updated_at": "2026-05-31T11:30:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "epic_title": "Lab L5 — OG hallway deep links",
       "completed_at": "2026-05-31T11:25:00Z",
       "final_merge_commit": "1a12d9c0b"
+    },
+    {
+      "epic_title": "Lab L5 — OG hallway position defaults",
+      "completed_at": "2026-05-31T11:32:00Z",
+      "final_merge_commit": "9be64d109"
     }
   ]
 }

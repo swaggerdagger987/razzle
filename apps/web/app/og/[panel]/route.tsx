@@ -88,6 +88,9 @@ const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set([
   "strengths",
 ]);
 
+/** Panels that default API position when URL omits position — mirror in OG watermark (T6). */
+const TOLAB_DEFAULT_POSITION: Record<string, string> = { weekly: "WR" };
+
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
   "prospects",
@@ -956,7 +959,7 @@ export async function GET(
     apiParams.position = positionFilter;
   } else if (slug === "weekly" && apiParams.position == null) {
     // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
-    apiParams.position = "WR";
+    apiParams.position = TOLAB_DEFAULT_POSITION.weekly;
   }
   const snapshotDecoded = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] as OgRow[] };
   const snapshotRows = snapshotDecoded.rows;
@@ -989,8 +992,10 @@ export async function GET(
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const watermarkPosition =
+    positionFilter || TOLAB_DEFAULT_POSITION[slug] || "";
   const labLink = labOgWatermarkLink(slug, {
-    positionFilter,
+    positionFilter: watermarkPosition,
     playerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
     snapshotPlayerId: snapshotExportPlayerId,

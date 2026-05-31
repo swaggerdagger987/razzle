@@ -29,5 +29,7 @@
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP"
-  }
+  },
+  "status": "shipped",
+  "content_commit": "7a1f4ea21"
 }

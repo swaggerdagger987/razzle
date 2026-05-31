@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
 2026-05-31 | lab-og-tolab-strengths-default | 7a1f4ea21 | PASS | Deduped snapshot-player on base; no web scrape.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 

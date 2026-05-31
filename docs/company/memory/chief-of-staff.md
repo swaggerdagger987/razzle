@@ -1,4 +1,5 @@
-2026-05-31 | lab-og-tolab-strengths-default | 7a1f4ea21 | SHIP | Good morning cycle 1; strengths TOLAB on base; lock #1366.
+2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
+2026-05-31 | lab-og-tolab-strengths-default | 7a1f4ea21 | SHIP | Good morning cycle 1; strengths TOLAB on base; PR #1393.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Workday cycle 1; demo trust epic complete.
