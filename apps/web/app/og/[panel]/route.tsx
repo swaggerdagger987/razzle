@@ -512,9 +512,7 @@ async function fetchLiveOgRows(
   }
   url.searchParams.set("limit", "6");
   try {
-    const res = await fetch(url.toString(), {
-      headers: { [OG_PRO_PREVIEW_HEADER]: "pro" },
-    });
+    const res = await fetch(url.toString(), { headers: OG_FETCH_HEADERS });
     if (!res.ok) return [];
     const pos = params?.position != null ? String(params.position) : "";
     return extractRows(await res.json(), slug, pos);
@@ -522,6 +520,10 @@ async function fetchLiveOgRows(
     return [];
   }
 }
+
+const OG_FETCH_HEADERS: Record<string, string> = {
+  [OG_PRO_PREVIEW_HEADER]: "pro",
+};
 
 async function fetchPanelData(
   req: Request,
@@ -537,7 +539,7 @@ async function fetchPanelData(
     if (method === "POST") {
       res = await fetch(`${apiOrigin}${apiPath}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...OG_FETCH_HEADERS },
         body: JSON.stringify({ limit: 6, ...(params ?? {}) }),
       });
     } else {
@@ -548,7 +550,7 @@ async function fetchPanelData(
         }
       }
       url.searchParams.set("limit", "6");
-      res = await fetch(url.toString());
+      res = await fetch(url.toString(), { headers: OG_FETCH_HEADERS });
     }
     if (!res.ok) return [];
     const data = await res.json();
@@ -557,6 +559,29 @@ async function fetchPanelData(
   } catch {
     return [];
   }
+}
+
+/** Launch-10 OG without snapshot — panel API first, then /api/panels slug (demo only if both empty). */
+async function fetchOgLiveRows(
+  req: Request,
+  slug: string,
+  apiPath: string,
+  method: string,
+  apiParams: Record<string, unknown>,
+): Promise<OgRow[]> {
+  const named = (rows: OgRow[]) => rows.filter((r) => r.name.trim().length > 0);
+
+  if (LAUNCH_10_OG_SLUGS.has(slug)) {
+    const fromPanelApi = named(
+      await fetchPanelData(req, slug, apiPath, method, apiParams),
+    );
+    if (fromPanelApi.length > 0) return fromPanelApi;
+    return fetchLiveOgRows(req, slug, apiParams);
+  }
+
+  const fromPanels = named(await fetchLiveOgRows(req, slug, apiParams));
+  if (fromPanels.length > 0) return fromPanels;
+  return fetchPanelData(req, slug, apiPath, method, apiParams);
 }
 
 function formatStat(n: number, label?: string): string {
@@ -612,10 +637,13 @@ export async function GET(
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
   if (apiPath && !snapshotHasRows) {
-    liveRows = await fetchLiveOgRows(req, slug, apiParams);
-    if (liveRows.length === 0) {
-      liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
-    }
+    liveRows = await fetchOgLiveRows(
+      req,
+      slug,
+      apiPath,
+      panel.api.method,
+      apiParams,
+    );
   }
   const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
   const liveHasRows = namedLiveRows.length > 0;

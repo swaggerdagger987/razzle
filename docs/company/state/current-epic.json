@@ -20,7 +20,7 @@
     {
       "id": "lab-og-launch10-snapshot-default",
       "title": "Launch-10 panels — prefer live API before demo fallback",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],

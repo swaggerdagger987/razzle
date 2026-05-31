@@ -2,22 +2,23 @@
   "date": "2026-05-31",
   "big_problem": "Lab gamelog OG share cards fall back to demo rows when export skips snapshot — Reddit screenshots miss the player's real hottest weeks by PPR.",
   "epic": "Lab L5 — gamelog OG live week rows",
-  "slice_title": "Prospects OG — items[] path when prospects array empty",
+  "slice_title": "Launch-10 panels — prefer live API before demo fallback",
   "parity_ref": "PARITY Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with live rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 40,
+  "max_lines": 50,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q",
-    "curl -s -o /tmp/prospects-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/prospects?download=1'",
-    "file /tmp/prospects-og.png"
+    "curl -s -o /tmp/rankings-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1'",
+    "curl -s -o /tmp/weekly-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?download=1'",
+    "file /tmp/rankings-og.png /tmp/weekly-og.png"
   ],
   "out_of_scope": [
-    "ProspectsRenderer changes",
+    "LabOgExportLink changes",
     "new npm deps",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
