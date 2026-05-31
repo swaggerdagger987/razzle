@@ -1,3 +1,5 @@
+2026-05-31 | lab-prospects-empty-export | — | PASS | No new Reddit intel; empty prospects export unblocks college board screenshots.
+2026-05-31 | lab-breakouts-empty-export | — | PASS | No new Reddit intel; breakout screenshot angle unchanged.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.

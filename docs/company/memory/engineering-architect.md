@@ -1,4 +1,4 @@
-2026-05-31 | lab-prospects-empty-export | f6e0985f3 | SHIP | ProspectsRenderer + pytest; ≤45 lines.
+2026-05-31 | lab-prospects-empty-export | 8e2ca7f29 | SHIP | ProspectsRenderer + pytest; ≤45 lines.
 2026-05-31 | lab-breakouts-empty-export | 8b6f3117b | SHIP | BreakoutsRenderer + pytest; ≤40 lines.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.

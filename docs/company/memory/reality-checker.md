@@ -1,4 +1,4 @@
-2026-05-31 | lab-prospects-empty-export | f6e0985f3 | PASS | curl prospects 63453B; pytest 9; web build exit 0.
+2026-05-31 | lab-prospects-empty-export | 8e2ca7f29 | PASS | curl prospects 63453B; pytest 9; web build exit 0.
 2026-05-31 | lab-breakouts-empty-export | 8b6f3117b | PASS | curl breakouts 66253B; pytest 8; web build exit 0.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
