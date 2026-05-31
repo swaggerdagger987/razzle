@@ -92,4 +92,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 137	a3f07d1e5	depth+voice+simplicity	keep	Lab	L4 ProGate DynastyComps closes epic	trust=T2,T6; last Lab renderer; pytest 9; L4 epic complete
 138	c7b50c707	depth+voice+simplicity	keep	Explore	L5 NFL explore OG omits default universe param	trust=T5,T6; ExploreShareButton; pytest 5; curl NFL OG 65431B; universe epic 3/3 complete
 138	b3a10109e	depth+voice+simplicity	keep	League	L5 H2H picker preserves user= on rivalry links	trust=T5,T6; pytest 2; H2H epic complete
-139	f6e0985f3	depth+voice+simplicity	keep	Room	L5 briefing OG watermark + Room hallway deep link	trust=T5,T6; pytest 3; curl 89235B; Room GTM epic 3/3 complete
+140	ac0280a20	depth+voice+simplicity	keep	Lab	Gamelog export when weeks empty	trust=T5,T6; empty-week LabOgExportLink; curl 59323B; empty OG epic 1/3 done
+141	f6e0985f3	depth+voice+simplicity	keep	Room	L5 briefing OG watermark + Room hallway deep link	trust=T5,T6; pytest 4; curl 89235B; Room GTM epic 3/3 complete

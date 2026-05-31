@@ -381,7 +381,18 @@ export function GamelogRenderer({ panel }: Props) {
       )}
 
       {!weeks.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="gamelog"
+              downloadName="razzle-gamelog.png"
+              playerId={(data?.player_id ?? playerId) || DEFAULT_LAB_OG_PLAYER_ID}
+              position={displayPos || undefined}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="table-wrap chunky bg-bg-card overflow-x-auto">
           <table className="screener-table">
