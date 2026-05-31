@@ -4,7 +4,7 @@ focus_pillar: Explore
 focus_layer: L5
 next_slice: explore-og-college-band-copy
 last_keep_cycle: 94
-last_commit: da33eafd
+last_commit: 6c3b0954
 explore_l5_watermark_band_epic: active
 explore_l5_og_watermark_band: complete
 explore_l5_og_preview_watermark: complete

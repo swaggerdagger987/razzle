@@ -14,8 +14,8 @@
     {
       "id": "explore-og-preview-watermark",
       "title": "Explore toolbar preview URL includes watermark band on embed",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "6c3b0954"
     },
     {
       "id": "explore-og-college-band-copy",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-preview-watermark",
+  "next_atom_id": "explore-og-college-band-copy",
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T18:30:00Z"
 }
