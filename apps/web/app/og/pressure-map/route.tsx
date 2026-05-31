@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague, toRoom } from "@razzle/hallway";
 
 export const runtime = "edge";
 
@@ -58,6 +59,10 @@ function teamLabel(name: string): string {
   return name.length > 16 ? `${name.slice(0, 14)}…` : name;
 }
 
+function bonesPressureMapRoomQuestion(team: string, score: number): string {
+  return `${team} has pressure score ${score} — what trade angle works before the deadline?`;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -70,6 +75,15 @@ export async function GET(req: Request) {
   const season = isDemo ? DEMO_META.season : live!.season;
   const heroTeam = isDemo ? DEMO_META.hero_manager : live!.hero_manager;
   const heroScore = isDemo ? DEMO_META.hero_score : live!.hero_score;
+  const leagueDeepLink = league ? toLeague(league, "pressure-map") : "/league/pressure-map";
+  const bonesRoomPath =
+    heroTeam && heroScore != null
+      ? toRoom({
+          agentId: "bones",
+          question: bonesPressureMapRoomQuestion(heroTeam, heroScore),
+          panelSlug: "pressure-map",
+        })
+      : "/room?agent=bones&from=pressure-map";
 
   return new ImageResponse(
     (
@@ -184,22 +198,31 @@ export async function GET(req: Request) {
           })}
         </div>
 
+        {heroTeam && heroScore != null ? (
+          <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
+            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${teamLabel(heroTeam)}`}
+          </div>
+        ) : null}
+
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/pressure-map`}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),

@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 153 — Explore OG lead-row margin note)
+**Last updated:** 2026-05-31 (factory cycle 154 — League Pressure Map OG Bones Room hallway)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 153 |
+| Cycle | 154 |
 | Last board | 54 |
-| Focus pillar | Explore |
+| Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | explore-og-margin-note-rows (epic atom 2/4) |
-| Last commit | `0fc4932b7` |
+| Next slice | league-pressure-map-og-watermark-band |
+| Last commit | `f591f4a6c` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

@@ -1,36 +1,31 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
-  "epic": "Explore L5 — OG screener agent margin notes (atom 1/4)",
-  "slice_title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
-  "atom_id": "explore-og-margin-note-lead",
-  "parity_ref": "Explore L5 — agent margin notes",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB with margin note on #1 row",
+  "big_problem": "Pressure Map OG export cards dead-end at league URL — no Bones Room hallway on share cards.",
+  "epic": "League L5 — Pressure Map OG Bones Room hallway",
+  "slice_title": "Pressure Map OG card links to Bones Room ask",
+  "atom_id": "league-pressure-map-og-room-hallway",
+  "parity_ref": "Bureau Pressure Map share / OG export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "HALLWAY crossRoomLinkPresent + FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/web/lib/margin-notes.ts",
-    "apps/api/tests/test_explore_og_margin_note_lead.py"
+    "apps/web/app/og/pressure-map/route.tsx",
+    "apps/api/tests/test_pressure_map_og_room_hallway.py"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_explore_og_margin_note_lead.py -q --noconftest",
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_pressure_map_og_room_hallway.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": [
-    "Margin notes on rows 2–6",
-    "New API endpoints",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
-  "content_commit": "0fc4932b7",
-  "reality": "PASS",
+  "out_of_scope": ["Share bar changes", "New Bureau tabs", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "status": "shipped",
+  "content_commit": "f591f4a6c"
 }
