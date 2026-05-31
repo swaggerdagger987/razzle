@@ -27,7 +27,7 @@
       "id": "lab-og-launch10-live-label",
       "title": "Launch-10 OG cards drop sample label when live rows render",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "69e48863"
     }
   ],
   "next_atom_id": null,
