@@ -102,18 +102,28 @@ def test_generic_pro_gate_slugs_have_custom_teasers():
     assert not missing, f"generic pro gate slugs missing teaser: {missing}"
 
 
+def test_panel_pitch_sharpens_rankings_tradevalues_breakouts():
+    """Atom lab-pro-gate-panel-pitches — pitches must name panel-specific moat keywords."""
+    source = _teaser_source()
+    pitch_checks = {
+        "rankings": ("trade-value", "rank movers"),
+        "tradevalues": ("buy/sell", "trade deadline"),
+        "breakouts": ("RBS", "waiver wire"),
+    }
+    for slug, needles in pitch_checks.items():
+        key = f'{slug}: "'
+        start = source.find(key)
+        assert start != -1, f"missing pitch for {slug}"
+        line = source[start : source.find("\n", start)]
+        for needle in needles:
+            assert needle in line, f"{slug} pitch missing {needle!r}: {line}"
+
+
 def test_pro_upgrade_perks_list_launch10_and_bureau7_names():
     teaser = _teaser_source()
-    gate = (
-        Path(__file__).resolve().parents[3]
-        / "apps/web/components/lab/ProUpgradeGate.tsx"
-    ).read_text(encoding="utf-8")
-    bureau = (
-        Path(__file__).resolve().parents[3] / "apps/web/lib/bureau-features.ts"
-    ).read_text(encoding="utf-8")
-    catalog = (
-        Path(__file__).resolve().parents[3] / "packages/panels/catalog.ts"
-    ).read_text(encoding="utf-8")
+    gate = (ROOT / "apps/web/components/lab/ProUpgradeGate.tsx").read_text(encoding="utf-8")
+    bureau = (ROOT / "apps/web/lib/bureau-features.ts").read_text(encoding="utf-8")
+    catalog = (ROOT / "packages/panels/catalog.ts").read_text(encoding="utf-8")
 
     assert "proUpgradePerkLines" in teaser
     assert "BUREAU_7_FEATURE_SLUGS" in teaser
