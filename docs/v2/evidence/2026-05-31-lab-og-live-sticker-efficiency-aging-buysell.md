@@ -22,4 +22,6 @@ curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}\n' 'http://loca
 
 All PNG ≥40KB. Sticker labels: PPO board / peak curves / market movers.
 
+**Re-verify (post-rebase 2026-05-31):** efficiency 200 65762B; aging 200 65088B; buysell 200 65247B; web build exit 0.
+
 **Verdict:** PASS
