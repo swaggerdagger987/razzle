@@ -23,5 +23,8 @@
     "college Hawkeye copy change",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "content_commit": "6afecf078",
+  "reality": "PASS",
+  "merge": "pending"
 }
