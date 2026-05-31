@@ -16,3 +16,4 @@ new evidence.
 ## Entries
 
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
+2026-05-31 | Lab OG demo rows close cycle 57 CI/preview gap without inventing new scope | lab-og-demo-rows atom | SHIP | keep | Lab L5 epic atom 1/3; labeled sample preview protects trust vs fake-live claims
