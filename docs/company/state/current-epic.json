@@ -8,8 +8,8 @@
     {
       "id": "league-build-profiles-share-og",
       "title": "Build Profiles copy link + OG export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "246052ec"
     },
     {
       "id": "league-roster-depth-share-og",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-build-profiles-share-og",
+  "next_atom_id": "league-roster-depth-share-og",
   "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T06:00:00Z"
+  "updated_at": "2026-05-31T06:05:00Z"
 }

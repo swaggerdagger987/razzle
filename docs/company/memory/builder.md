@@ -13,7 +13,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
-2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
+2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 246052ec | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 
 ---
 
@@ -37,14 +37,14 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live panel rows | 2cb898b6 | keep | fetchLiveOgRows panels slug + candidates extract; curl rankings 59509B breakouts 60649B
 2026-05-31 | Bureau Monte Carlo copy link | 433d8002 | keep | copyMonteCarloLink mirrors Self-Scout; curl monte-carlo OG 53350B
-2026-05-31 | Bureau Monte Carlo copy link morning | da33eafd | keep | copyMonteCarloLink row; H2H dedup ShareBar on base; curl monte-carlo 53350B
+2026-05-31 | Bureau Monte Carlo copy link morning | 246052ec | keep | copyMonteCarloLink row; H2H dedup ShareBar on base; curl monte-carlo 53350B
 2026-05-31 | Lab OG launch10 live label | 6e98f4a2 | keep | panelBlurbSuffix + LAUNCH_10_OG_SLUGS; namedLiveRows; curl rankings 59509B
 2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
 2026-05-31 | Bureau power-rankings OG | e62721a6 | keep | /og/power-rankings route + export link; curl 68555B
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
+2026-05-31 | Cycle 86 Trade Network copy link | 246052ec | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | 2ee04975 | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
 2026-05-31 | Prospects RPS+position export | 17a40c65 | keep | statLabel RPS; position on LabOgExportLink
 2026-05-31 | Efficiency position prop | b2d304e7 | keep | position on LabOgExportLink; 1 file
-2026-05-31 | league-build-profiles-share-og | da33eafd | keep | ShareBar + OG route; curl 72409B; pytest 51
+2026-05-31 | league-build-profiles-share-og | 246052ec | keep | ShareBar + OG route; curl 72409B; pytest 51

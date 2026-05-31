@@ -39,4 +39,4 @@ explicit checks in the verification routine.
 2026-05-31 | Build Profiles tab | 2ee04975 | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
 2026-05-31 | prospects RPS snap Gate C | 17a40c65 | PASS | curl prospects snap ≥40KB; sl=RPS in payload | keep | evidence/2026-05-31-lab-prospects-og-rps-position.md
 2026-05-31 | Efficiency OG position Gate C | b2d304e7 | PASS | curl RB 45113B WR snap 44195B PNG 1200x630 | keep | evidence/2026-05-31-lab-efficiency-og-position-filter.md
-2026-05-31 | Build Profiles share Gate C | da33eafd | PASS | curl build-profiles demo 72409B PNG 1200x630 | keep | evidence/2026-05-31-league-build-profiles-share-og.md
+2026-05-31 | Build Profiles share Gate C | 246052ec | PASS | curl build-profiles demo 72409B PNG 1200x630 | keep | evidence/2026-05-31-league-build-profiles-share-og.md

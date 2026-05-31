@@ -41,4 +41,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 Build Profiles tab | 2ee04975 | keep | League unhide epic atom 1/3 on base
 2026-05-31 | Factory cycle 1 prospects OG RPS+position | 17a40c65 | keep | filtered-panel epic atom 1/3; PR #408
 2026-05-31 | Factory cycle 1 efficiency OG filter | b2d304e7 | keep | filtered-panel epic atom 2/3; PR #408 merged
-2026-05-31 | Factory open cycle 1 Build Profiles share OG | da33eafd | keep | League share-export epic atom 1/3; factory reopen
+2026-05-31 | Factory open cycle 1 Build Profiles share OG | 246052ec | keep | League share-export epic atom 1/3; factory reopen
