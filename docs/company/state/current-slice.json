@@ -1,26 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-snapshot",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "slice_title": "DashboardRenderer encodes top-6 comp match rows in dynasty-comps OG snapshot",
+  "big_problem": "Launch-10 Lab OG cards still fall back to sample rows when live panel APIs return nested shapes the OG extractor cannot read.",
+  "epic": "Lab L5 — Live OG rows for launch-10 panels without snapshot param",
+  "slice_title": "Aging OG extracts live players from positions map",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with live rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
+    "apps/web/app/og/[panel]/route.tsx",
+    "docs/v2/evidence/2026-05-31-lab-aging-og-live-extract.md"
   ],
-  "max_files": 1,
-  "max_lines": 40,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
+    "curl -s -o /tmp/aging-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/aging?download=1&position=RB'"
   ],
   "out_of_scope": [
-    "OG route changes",
-    "DynastyCompsRenderer (already has snapshot)",
-    "NORTH_STAR / DESIGN edits"
+    "New panels",
+    "Redesign OG layout",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "Bureau tabs"
   ],
   "builder_mode": "composer-surgical"
 }

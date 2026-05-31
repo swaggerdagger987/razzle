@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+- **2026-05-31:** PASS aging OG live extract — curl 44952B; snapshot tests ERROR without terminal.db is not a slice regression.
+
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 

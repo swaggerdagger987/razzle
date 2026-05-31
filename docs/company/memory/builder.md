@@ -1,5 +1,7 @@
 # Memory — Builder
 
+- **2026-05-31:** `apps/web/app/og/[panel]/route.tsx` — positions map flatten + aging default RB; curl 44KB PASS.
+
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:

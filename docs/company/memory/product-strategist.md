@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+- **2026-05-31:** Lab L5 live OG epic atom 1 — aging positions map; next rankings live blurb without sample suffix.
+
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
 
 Format per entry:
