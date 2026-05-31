@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
   "epic_title": "Lab L5 — OG live panel rows visible on Launch-10 cards",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
@@ -20,14 +20,20 @@
     {
       "id": "lab-og-live-demo-fallback-copy",
       "title": "Sample preview copy — sharper contrast vs live sticker",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "c892dd56"
     }
   ],
-  "next_atom_id": "lab-og-live-demo-fallback-copy",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:05:00Z",
-  "updated_at": "2026-05-31T08:05:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-og-live-rows-visible",
+      "status": "complete",
+      "last_atom": "lab-og-live-demo-fallback-copy",
+      "merge_commit": "c892dd56"
+    },
     {
       "id": "lab-l5-og-watermark-band",
       "status": "complete",

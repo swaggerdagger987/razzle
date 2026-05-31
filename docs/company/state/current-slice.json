@@ -1,24 +1,24 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-live-sticker-prospects-weekly",
+  "atom_id": "lab-og-live-demo-fallback-copy",
   "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
   "epic": "Lab L5 — OG live panel rows visible on Launch-10 cards",
-  "slice_title": "Prospects + Weekly OG — LIVE sticker when /api/panels returns live rows",
+  "slice_title": "Launch-10 OG — SAMPLE sticker contrasts teal LIVE on demo fallback",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 55,
+  "max_lines": 45,
   "acceptance_commands": [
     "npm run build --workspace=apps/web 2>&1 | tail -8",
     "JWT_SECRET=test-secret python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/prospects?position=WR&download=1'",
-    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1'",
-    "file /tmp/og-prospects.png /tmp/og-weekly.png | head -2"
+    "curl -s -o /tmp/og-rankings-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?position=WR&download=1'",
+    "curl -s -o /tmp/og-buysell-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?position=WR&download=1'",
+    "file /tmp/og-rankings-demo.png /tmp/og-buysell-demo.png | head -2"
   ],
-  "out_of_scope": ["New panels", "billing", "demo copy atom"],
+  "out_of_scope": ["New panels", "billing", "prospects/weekly panel API paths"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

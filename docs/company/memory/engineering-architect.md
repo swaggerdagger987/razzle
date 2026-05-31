@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-live-demo-fallback-copy | c892dd56 | demoStickerLabel + showDemoSticker; blurb dedupe on Launch-10.
+
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 4cd32a84 | liveViaPanelApi flag; PANEL_API_LIVE_STICKER_SLUGS.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | 1-file panel route; LIVE sticker gated on showingLiveData.
