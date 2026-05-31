@@ -72,4 +72,4 @@ cycle	commit	score	status	pillar	slice	description
 78	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
 81	e62721a6	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings OG card	trust=T5,T6; /og/power-rankings demo rows; curl 68555B PNG; export link on tab
 82	5b6d3dc3	depth+hallway+voice+simplicity	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5,T6; Dolphin A-F grid; roster-depth out of HIDDEN; build+pytest PASS
-83	1e68f179	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles out of HIDDEN; build+pytest PASS
+83	b281ac56	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles out of HIDDEN; build+pytest PASS; PR #316
