@@ -73,4 +73,4 @@ cycle	commit	score	status	pillar	slice	description
 83	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
 84	04c19959	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic atom 1
 85	90bf2dd5	depth+hallway+voice+simplicity	keep	League	L5 Power Rankings OG + share row	trust=T2,T5,T6; /og/power-rankings curl 59807B; BureauPowerRankingsShareBar
-86	da33eafd	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; BureauTradeNetworkShareBar; curl trade-network OG 68090B; share epic atom 4/5
+86	775933a4	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; BureauTradeNetworkShareBar; curl trade-network OG 68090B; share epic atom 4/5
