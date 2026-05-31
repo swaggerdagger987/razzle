@@ -28,3 +28,4 @@ new evidence.
 2026-05-31 | Lab OG live row parity epic atom 1 | 2cb898b6 | SHIP | keep | NEXT.md lead; panels slug + candidates on OG
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | build-profiles tab | 76545ad6 | keep | League L5 atom 1
+2026-05-31 | power-rankings tab | da33eafd | keep | League L5 atom 2; luck index for trade-thread credibility

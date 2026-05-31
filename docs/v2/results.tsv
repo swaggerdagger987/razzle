@@ -65,3 +65,4 @@ cycle	commit	score	status	pillar	slice	description
 73	1578f75e	depth+voice+simplicity	keep	Lab	L5 OG rankings position filter	trust=T5,T6; LabOgExportLink.position; curl WR 50210B
 74	ac046c85	depth+voice+simplicity	keep	Lab	L5 OG API origin rewrite	trust=T5,T6; request-origin /api fetch; curl rankings 61061B dashboard 60034B
 75	76545ad6	depth+hallway+voice	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5; Atlas renderer; build-profiles out of HIDDEN; build+pytest PASS
+76	da33eafd	depth+hallway+voice	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; luck index board; build+pytest PASS
