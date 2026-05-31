@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-position-tradevalues-prospects
 last_keep_cycle: 96
-last_commit: 207c6b96
+last_commit: f97c57fe
 lab_l5_og_position_epic: active
 lab_l5_og_fidelity_weekly_ppg: complete
