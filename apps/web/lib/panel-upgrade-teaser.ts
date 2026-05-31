@@ -71,6 +71,21 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Bijan Robinson", position: "RB", detail: "Comp: Jonathan Taylor · 91%" },
     { name: "Marvin Harrison Jr.", position: "WR", detail: "Comp: Mike Evans · 88%" },
   ],
+  weekly: [
+    { name: "Jayden Higgins", position: "WR", detail: "Wk 14 · 28.4 pts · spike week" },
+    { name: "Cam Skattebo", position: "RB", detail: "Wk 13 · 24.1 pts · role climb" },
+    { name: "Brock Bowers", position: "TE", detail: "Wk 12 · 19.8 pts · target share ↑" },
+  ],
+  prospects: [
+    { name: "Travis Hunter", position: "WR", detail: "RPS 94 · draft stock climbing" },
+    { name: "Cam Ward", position: "QB", detail: "RPS 91 · rushing upside" },
+    { name: "Ashton Jeanty", position: "RB", detail: "RPS 89 · workload profile" },
+  ],
+  dashboard: [
+    { name: "Ladd McConkey", position: "WR", detail: "Rank chg +12 · buy window" },
+    { name: "Malik Nabers", position: "WR", detail: "Rank chg +9 · rising asset" },
+    { name: "Davante Adams", position: "WR", detail: "Rank chg -8 · sell signal" },
+  ],
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
@@ -86,6 +101,9 @@ const PITCH_BY_SLUG: Record<string, string> = {
   stocks: "rising and falling dynasty assets before your league reacts",
   waivers: "waiver-wire risers ranked by recent production and role",
   "dynasty-comps": "statistical comps for any dynasty asset you're pricing",
+  weekly: "weekly heatmap spikes — who actually popped, not season-long noise",
+  prospects: "college prospect big board with RPS scores before your league drafts",
+  dashboard: "dynasty dashboard movers — risers, fallers, and rank deltas in one view",
 };
 
 export function teaserRowsForPanel(slug: string): TeaserRow[] {
