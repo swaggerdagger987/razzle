@@ -1,26 +1,32 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG share cards lack the terracotta watermark band Explore exports have — Reddit screenshots don't carry razzle.lol brand gravity.",
-  "epic_title": "Lab L5 — OG watermark band on Launch-10 cards",
-  "parity_ref": "Explore L5 — OG watermark band",
+  "epic_status": "active",
+  "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
+  "epic_title": "Lab L5 — OG live panel rows visible on Launch-10 cards",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-watermark-band-panel-route",
-      "title": "Launch-10 panel OG route — always-on terracotta watermark band",
-      "status": "done",
-      "merge_commit": "010241ea"
+      "id": "lab-og-live-sticker-launch10",
+      "title": "Launch-10 OG — LIVE sticker + blurb when nflverse rows render",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-watermark-band-head-to-head",
-      "title": "Bureau H2H OG — match terracotta band styling",
-      "status": "done",
-      "merge_commit": "44d05684"
+      "id": "lab-og-live-sticker-prospects-weekly",
+      "title": "Prospects + Weekly OG — verify live sticker with panel API",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-live-demo-fallback-copy",
+      "title": "Sample preview copy — sharper contrast vs live sticker",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T08:20:00Z",
-  "updated_at": "2026-05-31T09:00:00Z",
+  "next_atom_id": "lab-og-live-sticker-launch10",
+  "created_at": "2026-05-31T08:05:00Z",
+  "updated_at": "2026-05-31T08:05:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-band",
@@ -33,18 +39,6 @@
       "status": "complete",
       "last_atom": "lab-og-buysell-dashboard-live-sort",
       "merge_commit": "7afc0b03"
-    },
-    {
-      "id": "league-l5-bureau-depth-og",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-og-share",
-      "merge_commit": "7f652a98"
-    },
-    {
-      "id": "lab-l5-og-position-filter",
-      "status": "complete",
-      "last_atom": "lab-og-position-gamelog",
-      "merge_commit": "228c4b59"
     }
   ]
 }
