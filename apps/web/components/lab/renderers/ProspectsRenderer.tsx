@@ -10,6 +10,14 @@ import { useMemo, useState } from "react";
 import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
+/** Sample big-board rows when API returns zero prospects — matches OG /og/prospects demo. */
+const PROSPECTS_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Travis Hunter", position: "WR", team: "JAX", stat: 94, statLabel: "RPS" },
+  { name: "Cam Ward", position: "QB", team: "TEN", stat: 91, statLabel: "RPS" },
+  { name: "Ashton Jeanty", position: "RB", team: "LV", stat: 89, statLabel: "RPS" },
+  { name: "Tyler Warren", position: "TE", team: "IND", stat: 86, statLabel: "RPS" },
+];
+
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
 interface Prospect {
@@ -99,7 +107,18 @@ export function ProspectsRenderer({ panel }: Props) {
       )}
 
       {!prospects.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="prospects"
+              downloadName="razzle-prospects.png"
+              position={position || undefined}
+              snapshotRows={PROSPECTS_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="tier-stack">
           {prospects.slice(0, 50).map((p) => (
