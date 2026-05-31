@@ -1,6 +1,6 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-panel-share-bar-breakouts-buysell",
+  "atom_id": "lab-panel-share-bar-weekly-gamelog",
   "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
   "epic": "Lab L5 — GTM panel share bar parity",
   "slice_title": "Breakouts + Buy/Sell — LabPanelShareBar with formula snapshot rows",
