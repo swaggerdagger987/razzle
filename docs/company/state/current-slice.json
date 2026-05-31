@@ -1,5 +1,6 @@
 {
   "date": "2026-05-31",
+  "atom_id": "lab-og-export-player-scoped",
   "big_problem": "Launch-10 Lab panels need in-product OG export links so every screenshot-worthy panel travels like Explore and Bureau cards (DEPTH Lab L5).",
   "epic": "Lab L5 — launch-10 OG export link parity",
   "slice_title": "Player-scoped OG export links on dynasty-comps and gamelog",

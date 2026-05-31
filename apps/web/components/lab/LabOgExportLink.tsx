@@ -8,7 +8,7 @@ export function LabOgExportLink({
   slug: string;
   downloadName?: string;
   label?: string;
-  /** When set, OG route fetches that player's card (matches /og/[panel] player_id param). */
+  /** When set, OG route uses this player for player-scoped panels (e.g. gamelog, dynasty-comps). */
   playerId?: string;
 }) {
   const file = downloadName ?? `razzle-${slug}.png`;
