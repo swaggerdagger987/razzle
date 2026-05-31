@@ -2,7 +2,8 @@ cycle: 137
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
-next_slice: pick from PARITY/NEXT — Lab L5 or Bureau
+next_slice: room-briefing-watermark
 last_keep_cycle: 137
-last_commit: da33eafd
+last_commit: c7b50c707
 explore_l5_universe_export_epic: complete
+room_l5_briefing_gtm_epic: active

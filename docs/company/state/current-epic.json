@@ -1,31 +1,31 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart.",
-  "epic_title": "Explore L5 — universe-aware share exports",
-  "parity_ref": "Explore L5",
-  "depth_ref": "Explore L5",
+  "epic_status": "active",
+  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
+  "epic_title": "Room L5 — briefing GTM export",
+  "parity_ref": "Room L5 — GTM export slice",
+  "depth_ref": "Room L5",
   "atoms": [
     {
-      "id": "explore-og-universe-query",
-      "title": "Explore OG URLs carry universe; college download filename",
+      "id": "room-briefing-copy-export",
+      "title": "Briefing card — copy formatted text for Slack/Reddit",
       "status": "done",
-      "merge_commit": "b098d64c"
+      "merge_commit": "612d9638"
     },
     {
-      "id": "explore-og-college-gate-c",
-      "title": "College explore OG PNG ≥40KB with fixture params",
+      "id": "room-briefing-og-card",
+      "title": "Briefing OG — /og/briefing snapshot route",
       "status": "done",
-      "merge_commit": "4c3109e5"
+      "merge_commit": "75dc2d65a"
     },
     {
-      "id": "explore-og-nfl-universe-default",
-      "title": "NFL explore OG omits redundant universe when default",
-      "status": "done",
-      "merge_commit": "c7b50c707"
+      "id": "room-briefing-watermark",
+      "title": "Briefing OG — terracotta watermark + Room hallway link",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T10:05:00Z",
+  "next_atom_id": "room-briefing-watermark",
+  "created_at": "2026-05-31T09:00:00Z",
   "updated_at": "2026-05-31T10:20:00Z",
   "completed_epics": [
     {
@@ -39,6 +39,12 @@
       "status": "complete",
       "last_atom": "bureau-h2h-pick-opponent-preserve-user",
       "merge_commit": "c7ad88bd3"
+    },
+    {
+      "id": "explore-l5-universe-aware-share-exports",
+      "status": "complete",
+      "last_atom": "explore-og-nfl-universe-default",
+      "merge_commit": "c7b50c707"
     }
   ]
 }
