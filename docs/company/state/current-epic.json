@@ -1,8 +1,8 @@
 {
   "epic_status": "complete",
-  "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head — ShareBar and OG route use mismatched snapshot codecs.",
-  "epic_title": "League L5 — Bureau H2H snapshot codec matches OG decode",
-  "parity_ref": "Explore L5 — Bureau H2H export",
+  "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head \u2014 ShareBar and OG route use mismatched snapshot codecs.",
+  "epic_title": "League L5 \u2014 Bureau H2H snapshot codec matches OG decode",
+  "parity_ref": "Explore L5 \u2014 Bureau H2H export",
   "depth_ref": "League L5",
   "atoms": [
     {
@@ -21,11 +21,11 @@
       "id": "bureau-h2h-snapshot-roundtrip-test",
       "title": "API test proves ShareBar snapshot round-trips to OG PNG",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "0131dbc3"
     }
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T07:00:00Z",
   "updated_at": "2026-05-31T06:45:00Z",
-  "last_cycle_commit": "da33eafd"
+  "last_cycle_commit": "0131dbc3"
 }
