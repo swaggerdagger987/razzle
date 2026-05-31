@@ -1,5 +1,5 @@
 cycle	hash	pillars	verdict	pillar	slice	notes
-131	84876dd1b	depth+voice+simplicity	keep	Lab	L4 ProGate gamelog rankings buysell	trust=T2,T6; 3 renderers; pytest 9; epic atom 3 partial; PR #1044 rebased
+131	8a7dd02c4	depth+voice+simplicity	keep	Lab	L4 ProGate gamelog rankings buysell	trust=T2,T6; 3 renderers; pytest 9; epic atom 3 partial; PR #1044 rebased
 1	none	depth+voice+simplicity	keep	Explore	L1 screener URL state	nuqs filters in URL; shareable screener links
 2	none	depth+voice+simplicity	keep	Explore	L1 Player Sheet shell	PlayerSheet drawer; click row opens sheet
 3	none	depth+voice+simplicity	keep	Lab	L1 panel registry	@razzle/panels catalog; Lab index grid
