@@ -228,6 +228,7 @@ When you change a prompt:
 | Symptom | Fix |
 |---------|-----|
 | Agent can't merge | Branch protection check names ≠ CI jobs (`api`, `web`, `web-build`) |
+| **gh pr create 403** | Expected on Slack Automations — use `standup-pr-autopen` workflow + poll `scripts/company-os-wait-for-pr.sh` |
 | **Local commit, no push** | Automation VM lacks git creds → enable **Team Owned** + Open PR tool; see § Publish blocked |
 | **gh read-only / 403 merge** | Enable auto-merge (§3c) or add Cursor app to bypass with checks required |
 | Tick does nothing | `workday.json` still `closed` on base — merge morning PR first |
@@ -240,11 +241,13 @@ When you change a prompt:
 
 If Slack shows `BLOCKED: GITHUB_PUBLISH`:
 
-1. Cursor Dashboard → Integrations → GitHub → confirm app on `swaggerdagger987/razzle`
-2. Automations → Morning + Tick → **Team Owned** scope (not Private)
-3. Tools → **Open Pull Request** enabled
-4. Re-run trigger or wait for next tick
-5. Cherry-pick local commit from agent branch if it never pushed (check branch on GitHub)
+1. Confirm `.github/workflows/standup-pr-autopen.yml` is on `razzle-v2-redesign`
+   (opens PR automatically on standup push — VM cannot `gh pr create`).
+2. Cursor Dashboard → Integrations → GitHub → confirm app on `swaggerdagger987/razzle`
+3. Automations → Morning + Tick → **Team Owned** scope (not Private)
+4. Tools → **Open Pull Request** enabled (fallback if workflow slow)
+5. Re-run trigger or `workflow_dispatch` with branch name for stuck runs
+6. Cherry-pick local commit from agent branch if it never pushed (check branch on GitHub)
 
 Agents should always report CONTENT_HASH even when publish fails so you can recover.
 
