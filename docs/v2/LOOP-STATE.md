@@ -4,7 +4,7 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-build-profiles-tab
 last_keep_cycle: 86
-last_commit: pending
+last_commit: 309f8a8b
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -36,4 +36,4 @@ league_l5_bureau_pressure_map_copy_link: complete
 league_l5_power_rankings_og: complete
 league_l5_bureau_share_row_epic: active
 league_l5_roster_depth_tab: complete
-league_l5_build_profiles_tab: in_progress
+league_l5_build_profiles_tab: complete

@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | bureau-trade-network-copy-link |
-| Last commit | `da33eafd` |
+| Last commit | `309f8a8b` |
 
 Recent completions (cycle 86): Build Profiles Bureau tab unhidden with Atlas archetype board; base synced; behavioral share epic continues.
 

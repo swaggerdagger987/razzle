@@ -32,4 +32,4 @@ explicit checks in the verification routine.
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
 2026-05-31 | Power Rankings OG Gate C | 46aeb445 | PASS | curl power-rankings 66584B PNG | keep | evidence/2026-05-31-power-rankings-og.md
 2026-05-31 | Roster Depth tab | 2d11a65f | PASS | build+pytest executed | keep | evidence/2026-05-31-league-roster-depth-tab.md
-2026-05-31 | Build Profiles tab | 19445fa1 | PASS | build+pytest executed | keep | evidence/2026-05-31-league-build-profiles-tab.md
+2026-05-31 | Build Profiles tab | 309f8a8b | PASS | build+pytest executed post-merge | keep | evidence/2026-05-31-league-build-profiles-tab.md
