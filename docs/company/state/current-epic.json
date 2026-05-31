@@ -1,29 +1,31 @@
 {
   "epic_status": "active",
-  "big_problem": "Bureau share cards still fall back to demo rows when edge OG cannot reach live league APIs.",
-  "epic_title": "League L5 — Bureau OG snapshots match in-product boards",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "League L5",
+  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
+  "epic_title": "Lab L5 — OG export matches in-panel position filters",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "league-power-rankings-og-snapshot",
-      "title": "Power Rankings export encodes top-5 board rows in snapshot param",
+      "id": "lab-og-position-efficiency-aging",
+      "title": "Efficiency + aging export passes position filter to OG",
       "status": "done",
-      "merge_commit": "26a22f69"
+      "merge_commit": "f358349d"
     },
     {
-      "id": "league-monte-carlo-og-snapshot",
-      "title": "Monte Carlo export encodes playoff odds grid snapshot",
-      "status": "pending",
-      "merge_commit": null
+      "id": "lab-og-position-tradevalues-prospects",
+      "title": "Trade values + prospects export passes position filter",
+      "status": "done",
+      "merge_commit": "57f9ea63"
     },
     {
-      "id": "league-trade-network-og-snapshot",
-      "title": "Trade Network export encodes partner lanes snapshot",
+      "id": "lab-og-position-buysell",
+      "title": "Buy/sell export passes position filter to OG",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-monte-carlo-og-snapshot",
-  "updated_at": "2026-05-31T06:45:00Z"
+  "next_atom_id": "lab-og-position-buysell",
+  "created_at": "2026-05-31T06:10:00Z",
+  "updated_at": "2026-05-31T06:40:00Z",
+  "last_cycle_commit": "57f9ea63"
 }
