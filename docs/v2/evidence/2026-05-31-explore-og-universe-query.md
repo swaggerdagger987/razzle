@@ -1,32 +1,30 @@
 # Evidence — explore-og-universe-query
 
 **Date:** 2026-05-31  
-**Atom:** Explore OG export params — universe + college sort in toolbar URLs  
-**Trust:** T5, T6
+**Atom:** `explore-og-universe-query`  
+**Verdict:** PASS
 
-## Contract
-
-- `buildExploreOgExportParams` always sets `universe` (nfl | college).
-- College UI sort `fantasy_points_ppr` maps to `total_yards` in OG query (matches `/og/explore` fetch).
-- `ExploreShareButton` uses shared helper for preview + export links.
-
-## Tests
+## Commands
 
 ```bash
-python3 -m pytest apps/api/tests/test_explore_og_export_params.py -q --noconftest
-# 4 passed
-npm run build --workspace=apps/web
-# exit 0
+npm run build --workspace=apps/web   # exit 0
+JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q   # 58 passed, 5 skipped
+curl -s -o /tmp/og-college.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&season=2024'
+curl -s -o /tmp/og-nfl.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc'
+file /tmp/og-college.png /tmp/og-nfl.png
 ```
 
-## Gate C — OG curl
+## Results
 
-```bash
-curl -s -o /tmp/og-college.png -w "%{http_code} %{size_download}\n" \
-  "http://127.0.0.1:3001/og/explore?download=1&universe=college&sort=total_yards&dir=desc"
-# 200 37393 — PNG 1200×630
-```
+| Check | Result |
+|-------|--------|
+| Web build | exit 0 |
+| College OG + season | `200 41427` PNG 1200×630 |
+| NFL OG | `200 38060` PNG 1200×630 |
+| Band link | includes `universe`, `sort`, `dir`, optional `season`/`team` |
 
-## Verdict
+## Change
 
-PASS — college export URL carries universe; PNG ≥40KB with live layout.
+`ExploreShareButton` forwards `season` and `team` into preview/export URLs; `/og/explore` reads them for screener query parity and watermark band deep link.
