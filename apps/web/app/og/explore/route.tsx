@@ -119,6 +119,9 @@ export async function GET(req: Request) {
     universe === "college" ? "razzle.lol/explore?universe=college" : "razzle.lol/explore";
 
   const players = await fetchTopPlayers({ universe, sort, dir, q, pos });
+  const hasLiveRows = players.length > 0;
+  const liveStickerLabel =
+    universe === "college" ? "LIVE · cfbfastR rows" : "LIVE · nflverse rows";
 
   return new ImageResponse(
     (
@@ -144,6 +147,28 @@ export async function GET(req: Request) {
 
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, marginBottom: 8 }}>{title}</div>
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>{subtitle}</div>
+
+        {hasLiveRows ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: universe === "college" ? "#5b7fff" : "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            {liveStickerLabel}
+          </div>
+        ) : null}
 
         {players.length > 0 ? (
           <div
