@@ -8,8 +8,8 @@
     {
       "id": "lab-l4-pro-gate-voice",
       "title": "ProUpgradeGate copy feels like upgrade not error",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "8b4934f7"
     },
     {
       "id": "lab-sidebar-agent-groups",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-voice",
+  "next_atom_id": "lab-sidebar-agent-groups",
   "created_at": "2026-05-31T05:45:00Z",
   "updated_at": "2026-05-31T05:45:00Z"
 }
