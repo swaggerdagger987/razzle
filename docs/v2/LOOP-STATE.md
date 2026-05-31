@@ -2,7 +2,7 @@ cycle: 79
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-h2h-og-snapshot-decode
+next_slice: Lab L5 OG live rows (NEXT.md lead) or next PARITY RED row
 last_keep_cycle: 79
 last_commit: 6c8da85f
 explore_l5_watermarked_export: complete

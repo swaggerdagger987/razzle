@@ -8,6 +8,8 @@ Format per entry:
 YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 ```
 
+2026-05-31 | morning cycle 1 H2H decode closes epic | SHIP pending merge | KEEP two-commit publish | — | Lab OG lead next | standups/2026-05-31.md cycle 80
+
 A good entry changes future behavior. A bad entry is a diary.
 
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
