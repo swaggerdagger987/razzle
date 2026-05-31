@@ -59,3 +59,4 @@ cycle	commit	score	status	pillar	slice	description
 66	45a5e79b	depth+voice+simplicity	keep	Lab	L5 OG export links gamelog efficiency aging	trust=T5,T6; LabOgExportLink footers; curl gamelog 58408B efficiency 59068B aging 57934B
 67	497d1df5	depth+voice+simplicity	keep	Lab	L5 OG export links buy-sell dashboard	trust=T5,T6; LabOgExportLink footers; curl buysell 58072B dashboard 60034B
 68	ffccedf4	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped links	trust=T5,T6; LabOgExportLink player_id param; curl gamelog+comps scoped 58-66KB
+69	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG snapshot rows from panel	trust=T5,T6; snapshot query on LabOgExportLink; curl dashboard snapshot 45249B PNG
