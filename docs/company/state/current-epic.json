@@ -1,20 +1,32 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG snapshot exports deep-link as generic \"player\" — Reddit shares lose recognizable hallway context.",
-  "epic_title": "Lab L5 — OG export display names in watermark",
-  "parity_ref": "Lab panel OG data rows",
+  "big_problem": "Lab OG snapshot exports still lose hot-row player context — weekly heatmap shares watermark to generic /lab/weekly without Player Sheet hallway.",
+  "epic_title": "Lab L5 — snapshot OG toLab player hallway",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
+  "epic_status": "active",
   "atoms": [
     {
-      "id": "lab-og-watermark-display-name",
-      "title": "Gamelog export passes player name into OG watermark toLab",
-      "status": "done",
-      "merge_commit": "338709883"
+      "id": "lab-og-tolab-snapshot-weekly-player",
+      "title": "Weekly heatmap export passes hot-row player_id into OG URL",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-tolab-snapshot-rankings-top-row",
+      "title": "Rankings export passes top-row player_id into OG URL",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-tolab-strengths-default",
+      "title": "Strengths OG watermark — toLab includes default player_id",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:35:00Z",
-  "updated_at": "2026-05-31T11:45:00Z",
+  "next_atom_id": "lab-og-tolab-snapshot-weekly-player",
+  "created_at": "2026-05-31T11:37:00Z",
+  "updated_at": "2026-05-31T11:37:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-display-names",

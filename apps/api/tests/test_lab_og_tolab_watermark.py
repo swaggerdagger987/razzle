@@ -66,3 +66,10 @@ def test_weekly_og_watermark_includes_default_wr_position():
     assert 'weekly: "WR"' in source
     assert "watermarkPosition" in source
     assert "positionFilter: watermarkPosition" in source
+
+
+def test_weekly_heatmap_export_passes_hot_row_player_id():
+    renderer = (
+        ROOT / "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "playerId={hotPlayer.p.player_id}" in renderer

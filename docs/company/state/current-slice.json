@@ -1,8 +1,34 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-watermark-display-name",
-  "slice_title": "Gamelog export passes player name into OG watermark toLab",
-  "content_commit": "338709883",
-  "reality": "PASS",
-  "merge": "pending"
+  "atom_id": "lab-og-tolab-snapshot-weekly-player",
+  "big_problem": "Lab OG snapshot exports still lose hot-row player context — weekly heatmap shares watermark to generic /lab/weekly without Player Sheet hallway.",
+  "epic": "Lab L5 — snapshot OG toLab player hallway",
+  "slice_title": "Weekly heatmap export passes hot-row player_id into OG URL",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot pid in watermark",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
+    "apps/api/tests/test_lab_og_tolab_watermark.py"
+  ],
+  "max_files": 2,
+  "max_lines": 20,
+  "acceptance_commands": [
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/weekly?download=1&position=WR&player_id=00-0036900'"
+  ],
+  "out_of_scope": [
+    "Rankings/strengths renderer wiring",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "Bureau H2H export"
+  ],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP"
+  },
+  "status": "in_progress"
 }
