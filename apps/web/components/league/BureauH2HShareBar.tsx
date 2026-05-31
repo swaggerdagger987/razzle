@@ -21,9 +21,9 @@ interface Props {
 export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const rivalryPath = `/league/${leagueId}/head-to-head${
-    opponentId ? `?opponent=${encodeURIComponent(opponentId)}` : ""
-  }`;
+  const rivalryQuery = new URLSearchParams({ user: userId });
+  if (opponentId) rivalryQuery.set("opponent", opponentId);
+  const rivalryPath = `/league/${leagueId}/head-to-head?${rivalryQuery.toString()}`;
 
   const ogParams = new URLSearchParams({
     league: leagueId,

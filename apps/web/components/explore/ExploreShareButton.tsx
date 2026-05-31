@@ -24,6 +24,9 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
   const ogParams = new URLSearchParams(previewParams);
   ogParams.set("download", "1");
 
+  const exportFileName =
+    universe === "college" ? "razzle-college-screener.png" : "razzle-explore.png";
+
   const explorePath = `/explore?${previewParams.toString()}`;
 
   const copyLink = useCallback(async () => {
@@ -53,7 +56,7 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
       </a>
       <a
         href={`/og/explore?${ogParams.toString()}`}
-        download="razzle-explore.png"
+        download={exportFileName}
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
       >

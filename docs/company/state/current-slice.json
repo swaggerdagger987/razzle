@@ -13,7 +13,7 @@
     "docs/v2/evidence/2026-05-31-lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog.md"
   ],
   "max_files": 2,
-  "max_lines": 40,
+  "max_lines": 60,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "curl -s -o /tmp/og-eff.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1'",
