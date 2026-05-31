@@ -56,6 +56,46 @@ const PLAYER_SCOPED_SLUGS = new Set([
   "archetypes",
 ]);
 
+/** Launch-10 Lab panels — live OG cards use panel blurb only (no sample/live suffix). */
+const LAUNCH_10_OG_SLUGS = new Set([
+  "weekly",
+  "prospects",
+  "dashboard",
+  "rankings",
+  "tradevalues",
+  "breakouts",
+  "gamelog",
+  "efficiency",
+  "aging",
+  "buysell",
+]);
+
+function panelBlurbSuffix(
+  slug: string,
+  positionFilter: string,
+  isSnapshot: boolean,
+  showingDemoRows: boolean,
+  showingLiveData: boolean,
+): string {
+  const pos = positionFilter ? ` · ${positionFilter} only` : "";
+  if (slug === "dynasty-comps" && showingDemoRows) {
+    return `${pos} · comps for Ja'Marr Chase · sample preview`;
+  }
+  if (isSnapshot) {
+    return `${pos} · from your panel`;
+  }
+  if (showingDemoRows) {
+    return `${pos} · sample preview`;
+  }
+  if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
+    return pos;
+  }
+  if (showingLiveData) {
+    return `${pos} · live data`;
+  }
+  return pos;
+}
+
 function resolvePanelApiPath(path: string, playerId: string): string {
   return path.replace(/\{player_id\}/g, encodeURIComponent(playerId));
 }
@@ -339,20 +379,6 @@ function formatStat(n: number, label?: string): string {
   return `${sign}${n.toFixed(1)}`;
 }
 
-/** Blurb suffix — honest data source for screenshot trust (Lab L5). */
-function ogSourceSuffix(
-  slug: string,
-  opts: { isSnapshot: boolean; isDemo: boolean; liveHasRows: boolean },
-): string {
-  if (slug === "dynasty-comps" && opts.isDemo) {
-    return " · comps for Ja'Marr Chase · sample preview";
-  }
-  if (opts.isSnapshot) return " · from your panel";
-  if (opts.liveHasRows) return " · live tape";
-  if (opts.isDemo) return " · sample preview";
-  return "";
-}
-
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ panel: string }> },
@@ -400,15 +426,21 @@ export async function GET(
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
     }
   }
-  const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
+  const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
+  const liveHasRows = namedLiveRows.length > 0;
   const isSnapshot = snapshotHasRows;
-  const isDemo = !isSnapshot && !liveHasRows;
-  let rows = isSnapshot ? snapshotRows : liveHasRows ? liveRows : demoRowsForPanel(slug);
+  let rows = isSnapshot
+    ? snapshotRows.slice(0, 6)
+    : liveHasRows
+      ? namedLiveRows.slice(0, 6)
+      : demoRowsForPanel(slug);
   if (!isSnapshot && positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
   }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
+  const showingLiveData = !isSnapshot && liveHasRows && hasRows;
+  const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
 
   return new ImageResponse(
@@ -464,7 +496,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${positionFilter ? ` · ${positionFilter} only` : ""}${ogSourceSuffix(slug, { isSnapshot, isDemo, liveHasRows })}`}
+          {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData)}`}
         </div>
 
         {query && (

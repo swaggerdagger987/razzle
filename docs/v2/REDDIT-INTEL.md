@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab launch-10 OG (cycle 77)
+- **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
+- **Trust:** T1 honest labeling; sample suffix only on demo fallback.
+
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
 - **Screenshot hook:** Atlas rivalry card with you/them records + position depth bars.
@@ -297,6 +301,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 
 1. **Breakout cards must show names users recognize** — `candidates` extraction on OG `/og/breakouts` aligns share cards with Hawkeye's in-panel list when API data exists.
 2. **Same API path as Lab** — `/api/panels/{slug}` prevents OG drift from tier/breakout response shapes.
+
+## 2026-05-31 — Cycle 77 (workday cycle 1)
+
+1. **Manager archetype cards travel with copy+export** — PANIC SELLER / exploit-window screenshots need the same share row as Self-Scout and H2H.
+2. **Bureau behavioral epic continues** — Pressure Map and Trade Network are next atoms in share-parity epic.
 
 ## 2026-05-31 — Cycle 59
 
