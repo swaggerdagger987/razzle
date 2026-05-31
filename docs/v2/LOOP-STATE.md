@@ -24,5 +24,7 @@ lab_l5_og_export_rankings_breakouts: complete
 lab_l5_og_export_prospects_weekly_tradevalues: complete
 lab_l5_og_live_extractors: complete
 lab_l5_og_live_rows_epic: complete
+lab_l5_og_snapshot_efficiency_aging: complete
+lab_l5_og_live_data_label: complete
 league_l5_power_rankings_tab: complete
 league_l5_unhide_bureau_epic: active
