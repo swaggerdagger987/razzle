@@ -49,6 +49,9 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 85	b2f5a296	depth+voice+simplicity	keep	Lab	L5 OG snapshot weekly breakouts	trust=T5,T6; snapshotRows on weekly+breakouts; curl weekly snap 64762B breakouts 60649B
 78	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
 81	e62721a6	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings OG card	trust=T5,T6; /og/power-rankings demo rows; curl 68555B PNG; export link on tab
+82	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
+84	04c19959	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic atom 1
+85	1616484c	depth+voice+simplicity	keep	League	L5 Bureau Trade Network share bar	trust=T5,T6; BureauTradeNetworkShareBar copy network link+export; curl trade-network OG 68090B; behavioral share epic complete
 86	e701e3bb	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; copy link + export; curl trade-network OG 68090B; behavioral share epic atom 3
 82	5b6d3dc3	depth+hallway+voice+simplicity	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5,T6; Dolphin A-F grid; roster-depth out of HIDDEN; build+pytest PASS
 83	b281ac56	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles out of HIDDEN; PR #316
