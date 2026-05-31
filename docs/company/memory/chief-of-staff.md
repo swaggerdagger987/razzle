@@ -1,30 +1,12 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 125 OG LIVE labels | dec54078 | Workday open; panel-native LIVE epic 1/3; lock #842.
+2026-05-31 | Factory cycle 125 OG LIVE labels | dec54078 | Workday open; panel-native LIVE epic 1/3; merge base sync.
+2026-05-31 | Factory cycle 126 pro gate perks | 0c46d46f | L4 epic complete on base.
+2026-05-31 | Factory cycle 121 pro gate panel pitches | 0b59daee | L4 epic atom 2/3 on base.
 2026-05-31 | Factory cycle 120 live fetch merge | 3f0411ec | workday cycle 1; live-fetch epic atom 1/3.
 2026-05-31 | Factory cycle 119 launch10 live default | e2a3ce8a | gamelog OG epic 3/3 complete.
 2026-05-31 | Factory cycle 118 prospects items | e00217d1 | Lab L5 epic atom 2/3; lock #728.
 2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | L2 sidebar epic atom 1/2 on base.
-
-2026-05-31 | Factory cycle 116 LIVE OG sticker | 4e905360 | Dedup H2H on base #666; live-rows epic 1/3.
-
-2026-05-31 | Factory cycle 115 H2H OG watermark band | 44d05684 | Watermark epic 2/2 complete; curl H2H 67846B.
-
-2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
-
-2026-05-31 | Factory cycle 113 Lab OG watermark band | 010241ea | Dedup live-sort cb59494b on base; watermark epic atom 1/2.
-
-2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab L5 live-sort epic complete; PR #643/#635 merged; ppo/ppg on base.
-
-2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab live-sort epic atom 2/3; deduped rankings atom on base.
-
-2026-05-31 | Factory cycle 109 gamelog position OG | 228c4b59 | Lab L5 position epic gamelog atom; workday cycle 1.
-
-2026-05-31 | Factory cycle 96 H2H codec | da33eafd | Workday open; League L5 codec epic atom 1/3 SHIP.
-
-2026-05-31 | Lab L5 OG epic complete | 5ed39e14 | Four atoms merged in one workday branch; next PARITY lead is Bureau H2H export.
-
-2026-05-31 | Factory open cycle 94 buysell OG | 98ae0ef2 | keep | workday open atom 3/4 Lab L5 epic
 
 Append-only log of coordination patterns, what worked, what didn't.
 
