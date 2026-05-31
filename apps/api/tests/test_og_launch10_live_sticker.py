@@ -8,6 +8,8 @@ ROOT = Path(__file__).resolve().parents[3]
 ROUTE_TS = ROOT / "apps/web/app/og/[panel]/route.tsx"
 
 EXPECTED = {
+    "weekly": "LIVE · PPG heatmap",
+    "prospects": "LIVE · RPS board",
     "rankings": "LIVE · dynasty values",
     "gamelog": "LIVE · Wk tape",
     "efficiency": "LIVE · PPO board",
@@ -27,6 +29,8 @@ def test_launch10_live_sticker_labels_in_route():
 
 def test_launch10_live_blurb_suffix_in_route():
     source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "live PPG heatmap" in source
+    assert "live RPS board" in source
     assert "live dynasty values" in source
     assert "live Wk tape" in source
     assert "live PPO board" in source

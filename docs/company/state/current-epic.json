@@ -1,15 +1,31 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab OG cards still look generic when comps export.",
-  "epic_title": "Lab L5 — OG export live panel rows",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Bureau Trade Finder screenshots look like a draft — no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
+  "epic_title": "League L5 — Bureau Trade Finder GTM export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
-    {"id": "lab-og-dynasty-comps-live-sticker", "title": "Dynasty Comps OG LIVE sticker", "status": "done", "merge_commit": "2e1dfea15"},
-    {"id": "lab-og-gamelog-from-panel-sticker", "title": "Gamelog FROM PANEL sticker", "status": "pending", "merge_commit": null}
+    {
+      "id": "league-trade-finder-og-watermark-live",
+      "title": "Trade Finder OG — LIVE/SAMPLE stickers + terracotta watermark band",
+      "status": "done",
+      "merge_commit": "db6537faf"
+    },
+    {
+      "id": "league-trade-finder-og-snapshot",
+      "title": "Trade Finder OG — snapshot param for in-panel export rows",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "league-trade-finder-room-hallway",
+      "title": "Trade Finder OG — Bones Room ask link on hero deal",
+      "status": "pending",
+      "merge_commit": null
+    }
   ],
-  "next_atom_id": "lab-og-gamelog-from-panel-sticker",
-  "created_at": "2026-05-31T11:00:00Z",
-  "updated_at": "2026-05-31T11:15:00Z",
+  "next_atom_id": "league-trade-finder-og-snapshot",
+  "epic_status": "active",
+  "created_at": "2026-05-31T10:35:00Z",
+  "updated_at": "2026-05-31T10:58:00Z",
   "completed_epics": []
 }
