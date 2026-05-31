@@ -25,11 +25,12 @@
     "NORTH_STAR/DESIGN/DECISIONS edits",
     "new npm deps"
   ],
+  "out_of_scope": ["ProUpgradeGate.tsx", "pricing", "OG routes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }

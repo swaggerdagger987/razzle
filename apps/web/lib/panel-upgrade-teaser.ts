@@ -146,8 +146,8 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
 
 const PITCH_BY_SLUG: Record<string, string> = {
   rankings: "full dynasty tiers and trade-value curves — not just the free screener",
-  tradevalues: "value curves and market inefficiencies your league mates can't see",
-  breakouts: "next-wave producers before the waiver wire notices",
+  tradevalues: "trade-value curves and deal inefficiencies — price trades before you send the offer",
+  breakouts: "RBS breakout scores and usage spikes before the waiver wire notices",
   efficiency: "points-per-opportunity ranks that separate luck from role",
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",
@@ -156,7 +156,7 @@ const PITCH_BY_SLUG: Record<string, string> = {
   vorp: "value-over-replacement ranks that show who actually moves the needle",
   stocks: "rising and falling dynasty assets before your league reacts",
   waivers: "waiver-wire risers ranked by recent production and role",
-  "dynasty-comps": "statistical comps for any dynasty asset you're pricing",
+  "dynasty-comps": "statistical comp cards with match % — price any dynasty asset like a desk",
   weekly: "weekly heatmap streaks before your league mates spot the run",
   prospects: "rookie big board with combine and college context",
   dashboard: "dynasty pulse — risers, fallers, and value picks in one view",
@@ -175,3 +175,10 @@ export function upgradePitchForPanel(slug: string, agentName: string): string {
   if (pitch) return `${agentName}: unlock ${pitch}.`;
   return `${agentName}: this panel is Pro — the screener stays free, the intel doesn't.`;
 }
+
+/** Pro checkout perks — names match Launch-10 Staff Picks + visible Bureau tabs (Lab L4). */
+export const PRO_UPGRADE_PERKS = [
+  "10 launch Lab panels — weekly, big board, dynasty ranks, trade values, breakouts, game log, efficiency, aging, buy/sell, dashboard",
+  "12 Bureau tabs — self-scout, roster depth, H2H, pressure map, trade finder, Monte Carlo, and more",
+  "Situation Room — six pixel staff, your league in context",
+] as const;
