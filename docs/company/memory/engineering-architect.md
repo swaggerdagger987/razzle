@@ -1,3 +1,4 @@
+2026-05-31 | league-trade-finder-og-snapshot | a04185f68 | 3 files; base64url snapshot encode/decode.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 

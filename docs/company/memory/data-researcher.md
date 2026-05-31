@@ -1,3 +1,4 @@
+2026-05-31 | league-trade-finder-og-snapshot | a04185f68 | No new intel; League OG snapshot slice.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 

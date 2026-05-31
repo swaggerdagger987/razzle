@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toLeague } from "@razzle/hallway";
+import { decodeBureauTradeFinderOgSnapshot } from "@/lib/bureau-trade-finder-og-snapshot";
 
 export const runtime = "edge";
 
@@ -97,15 +98,27 @@ export async function GET(req: Request) {
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const snapshot = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
 
   const bones = AGENT_BY_ID.bones;
-  const live = await fetchTradeFinder(req, league, user);
-  const isLive = Boolean(live?.matches?.length);
+  const fromSnapshot = snapshot?.matches?.length ? snapshot : null;
+  const live = fromSnapshot ? null : await fetchTradeFinder(req, league, user);
+  const fromPanel = Boolean(fromSnapshot?.matches?.length);
+  const isLive = fromPanel || Boolean(live?.matches?.length);
   const isDemo = !isLive;
-  const matches = isDemo ? DEMO_MATCHES : live!.matches!.slice(0, 3);
-  const hero = isDemo ? DEMO_MATCHES[0] : (live!.hero_match ?? matches[0]);
-  const needs = isDemo ? DEMO_META.needs : (live!.needs ?? []);
-  const surplus = isDemo ? DEMO_META.surplus : (live!.surplus ?? []);
+  const matches = fromSnapshot
+    ? fromSnapshot.matches.slice(0, 3)
+    : isDemo
+      ? DEMO_MATCHES
+      : live!.matches!.slice(0, 3);
+  const hero = fromSnapshot
+    ? fromSnapshot.matches[fromSnapshot.hero_index ?? 0] ?? fromSnapshot.matches[0]
+    : isDemo
+      ? DEMO_MATCHES[0]
+      : (live!.hero_match ?? matches[0]);
+  const needs = fromSnapshot?.needs ?? (isDemo ? DEMO_META.needs : (live!.needs ?? []));
+  const surplus = fromSnapshot?.surplus ?? (isDemo ? DEMO_META.surplus : (live!.surplus ?? []));
   const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
 
   return new ImageResponse(
@@ -152,7 +165,9 @@ export async function GET(req: Request) {
           Trade Finder
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {`value-matched league trades${isDemo ? " · sample preview" : ""}`}
+          {`value-matched league trades${
+            fromPanel ? " · from your board" : isDemo ? " · sample preview" : ""
+          }`}
           {needs.length ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length ? ` · surplus ${surplus.join(", ")}` : ""}
         </div>

@@ -98,7 +98,18 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           {(() => {
             const user = getSleeperUser();
             if (!user?.user_id) return null;
-            return <BureauTradeFinderShareBar leagueId={leagueId} userId={user.user_id} />;
+            return (
+              <BureauTradeFinderShareBar
+                leagueId={leagueId}
+                userId={user.user_id}
+                snapshot={{
+                  matches,
+                  hero_index: hero ? Math.max(0, matches.indexOf(hero)) : 0,
+                  needs,
+                  surplus,
+                }}
+              />
+            );
           })()}
         </section>
       )}
