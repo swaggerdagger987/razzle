@@ -14,8 +14,8 @@
     {
       "id": "league-trade-finder-og-watermark-user",
       "title": "Trade Finder OG watermark includes user query",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "9d563e8bc"
     },
     {
       "id": "league-monte-carlo-og-toleague-watermark",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-trade-finder-og-watermark-user",
+  "next_atom_id": "league-monte-carlo-og-toleague-watermark",
   "created_at": "2026-05-31T11:25:00Z",
-  "updated_at": "2026-05-31T11:36:00Z",
+  "updated_at": "2026-05-31T12:35:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-launch10-og-demo-trust-labels",
