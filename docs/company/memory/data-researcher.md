@@ -32,3 +32,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Power Rankings OG | 46aeb445 | keep | diff/luck cards travel to league group chats
 2026-05-31 | Roster Depth tab | 2d11a65f | keep | position grade screenshots for trade threads
 2026-05-31 | Build Profiles tab | 19445fa1 | keep | archetype labels for dynasty trade-thread screenshots
+2026-05-31 | Trade Network copy link | da33eafd | keep | partnership graph URLs travel in league group chats

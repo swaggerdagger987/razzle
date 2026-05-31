@@ -34,6 +34,6 @@ league_l5_bureau_monte_carlo_share: complete
 league_l5_bureau_manager_profiles_copy_link: complete
 league_l5_bureau_pressure_map_copy_link: complete
 league_l5_power_rankings_og: complete
-league_l5_bureau_share_row_epic: active
+league_l5_bureau_share_row_epic: complete
 league_l5_roster_depth_tab: complete
 league_l5_build_profiles_tab: complete

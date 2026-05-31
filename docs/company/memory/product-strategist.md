@@ -32,3 +32,4 @@ new evidence.
 2026-05-31 | Power Rankings OG atom 2 | 46aeb445 | SHIP | keep | unhide epic; Octo power board shareable
 2026-05-31 | Roster Depth tab atom 3 | 2d11a65f | SHIP | keep | Dolphin depth grades in Bureau nav
 2026-05-31 | Build Profiles atom 4 | 19445fa1 | SHIP | keep | Atlas archetype board; unhide epic complete
+2026-05-31 | Trade Network copy link atom 6 | da33eafd | SHIP | keep | Bureau behavioral share parity epic complete

@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (cycle 86 — Build Profiles Bureau tab)  
+**Last updated:** 2026-05-31 (cycle 87 — Trade Network copy link)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 86 |
+| Cycle | 87 |
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | bureau-trade-network-copy-link |
-| Last commit | `309f8a8b` |
+| Next slice | PARITY — next League L5 unhidden tab or Lab OG live rows |
+| Last commit | `da33eafd` |
 
-Recent completions (cycle 86): Build Profiles Bureau tab unhidden with Atlas archetype board; base synced; behavioral share epic continues.
+Recent completions (cycle 87): Trade Network copy link + export row; Bureau behavioral share parity epic complete (6/6 atoms).
 
 ---
 
