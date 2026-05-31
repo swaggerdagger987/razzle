@@ -179,20 +179,22 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
         </div>
       )}
 
-      {hotPlayer && (
+      {(hotPlayer || ogSnapshotRows.length > 0) && (
         <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
-          <Link
-            href={
-              toRoom({
-                agentId: "hawkeye",
-                panelSlug: "weekly",
-                question: `${hotPlayer.p.name} dropped ${hotPlayer.pts.toFixed(1)} in week ${hotPlayer.week} — startable rest of season?`,
-              }) as Route
-            }
-            className="text-sm text-orange underline"
-          >
-            Ask Hawkeye about {hotPlayer.p.name} →
-          </Link>
+          {hotPlayer ? (
+            <Link
+              href={
+                toRoom({
+                  agentId: "hawkeye",
+                  panelSlug: "weekly",
+                  question: `${hotPlayer.p.name} dropped ${hotPlayer.pts.toFixed(1)} in week ${hotPlayer.week} — startable rest of season?`,
+                }) as Route
+              }
+              className="text-sm text-orange underline"
+            >
+              Ask Hawkeye about {hotPlayer.p.name} →
+            </Link>
+          ) : null}
           <LabOgExportLink
             slug="weekly"
             downloadName="razzle-weekly-heatmap.png"
