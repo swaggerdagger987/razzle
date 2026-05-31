@@ -50,3 +50,4 @@ npm-debug.log*
 docs/v2/.board-lock
 docs/v2/.loop.lock.d
 docs/v2/recovery.log
+apps/web/tsconfig.tsbuildinfo

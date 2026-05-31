@@ -1,4 +1,4 @@
-"""Explore OG — top-3 staff margin notes on screener export (Explore L5)."""
+"""Explore OG — staff margin notes on top-3 screener rows (Explore L5 atom 2/4)."""
 
 from __future__ import annotations
 
@@ -8,21 +8,30 @@ ROOT = Path(__file__).resolve().parents[3]
 EXPLORE_OG = ROOT / "apps/web/app/og/explore/route.tsx"
 
 
-def test_explore_og_top_three_margin_notes():
+def test_explore_og_top_three_margin_notes_constant():
     source = EXPLORE_OG.read_text(encoding="utf-8")
-    assert "OG_MARGIN_NOTE_ROW_COUNT = 3" in source
-    assert "topMarginNotes" in source
-    assert "i < OG_MARGIN_NOTE_ROW_COUNT && topMarginNotes[i]" in source
+    assert "TOP_MARGIN_NOTE_ROWS = 3" in source
+    assert "i < TOP_MARGIN_NOTE_ROWS" in source
 
 
-def test_explore_og_demo_rows_two_and_three_have_margin_fields():
+def test_explore_og_per_row_margin_note_in_map():
     source = EXPLORE_OG.read_text(encoding="utf-8")
+    assert "rowMarginNote" in source
+    assert "marginNoteForOgExploreRow(p, universe)" in source
+    assert "rowAgent.emoji" in source
+    assert "leadMarginNote" not in source
+
+
+def test_explore_og_demo_top_three_have_margin_fields():
+    source = EXPLORE_OG.read_text(encoding="utf-8")
+    assert "Jayden Daniels" in source
+    assert "Ja'Marr Chase" in source
     assert "targets: 128" in source
-    assert "fantasy_points_ppr: 298.1" in source
-    assert "age: 30" in source
+    assert "Bijan Robinson" in source
+    assert "age: 21" in source
 
 
-def test_explore_og_still_uses_margin_helper():
+def test_explore_og_demo_college_top_rows_have_stats():
     source = EXPLORE_OG.read_text(encoding="utf-8")
-    assert "marginNoteForOgExploreRow" in source
-    assert "AGENT_BY_ID[topMarginNotes[i]!.agentId].emoji" in source
+    assert "passing_yards: 4312" in source
+    assert "rushing_yards: 1924" in source

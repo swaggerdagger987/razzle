@@ -1,4 +1,6 @@
 2026-05-31 | explore-og-margin-note-sticker | 496a27188 | SHIP | Factory cycle 1; margin epic 3/4; NO_LOCK_GUARDRAIL gh rate limit.
+2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | 792e9f77d | SHIP | efficiency/aging formula_score OG; PR #1318.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4 merged on base.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | Factory cycle 1; H2H GTM epic 1/3; PR #1350.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Factory cycle 1; dedup snapshot on base.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
