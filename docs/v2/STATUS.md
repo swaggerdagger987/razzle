@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (Bureau H2H OG snapshot decode — epic complete)  
+**Last updated:** 2026-05-31 (Lab OG snapshot weekly/prospects/tradevalues — atom 1/3)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -19,10 +19,10 @@ From `LOOP-STATE.md`:
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | Lab L5 OG live data rows (NEXT.md lead) |
-| Last commit | pending cycle 80 |
+| Next slice | Lab L5 OG snapshot breakouts (epic atom 2) |
+| Last commit | pending cycle 81 |
 
-Recent completions (cycle 80): Bureau H2H OG snapshot decode; H2H export parity epic complete.
+Recent completions (cycle 81): weekly/prospects/tradevalues OG snapshotRows; Lab snapshot epic atom 1/3.
 
 ---
 

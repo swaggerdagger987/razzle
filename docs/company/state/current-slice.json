@@ -27,5 +27,7 @@
     "Breakouts panel",
     "NORTH_STAR / DESIGN edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "verdict": "SHIP",
+  "content_commit": "da33eafd"
 }

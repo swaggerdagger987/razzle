@@ -20,8 +20,8 @@
     {
       "id": "lab-og-snapshot-gamelog-restore",
       "title": "Gamelog + dynasty-comps snapshot rows (sync with base if regressed)",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0c5112c5"
     }
   ],
   "next_atom_id": "lab-og-snapshot-weekly-prospects-tradevalues",
