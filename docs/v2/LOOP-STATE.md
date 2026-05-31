@@ -1,9 +1,10 @@
 cycle: 94
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: lab-og-snapshot-dashboard
+next_slice: explore-og-live-rows-fallback
 last_keep_cycle: 94
-last_commit: a755f51f
-lab_l5_og_fidelity_epic: active
-lab_l5_tradevalues_formula_statlabel: complete
+last_commit: da33eafd
+explore_l5_watermark_epic: active
+explore_l5_watermark_band: in_progress
+factory_workday_open: 2026-05-31
