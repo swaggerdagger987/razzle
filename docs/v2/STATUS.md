@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | league-pressure-map-og-watermark-band |
-| Last commit | `f591f4a6c` |
+| Last commit | `bcf5cfaf4` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
