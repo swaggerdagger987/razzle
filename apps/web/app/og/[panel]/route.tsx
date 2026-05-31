@@ -429,7 +429,6 @@ export async function GET(
   const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
   const liveHasRows = namedLiveRows.length > 0;
   const isSnapshot = snapshotHasRows;
-  const isDemo = !isSnapshot && !liveHasRows;
   let rows = isSnapshot
     ? snapshotRows.slice(0, 6)
     : liveHasRows
