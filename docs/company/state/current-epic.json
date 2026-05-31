@@ -1,56 +1,38 @@
 {
+  "big_problem": "Lab OG cards for dashboard and efficiency still rank by legacy stats when formula_score is on the API row — exports disagree with the in-product board.",
+  "epic_title": "Lab L5 — Launch-10 OG formula_score parity (rest)",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "epic_status": "active",
-  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
-  "epic_title": "Explore L5 — OG screener agent margin notes",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
-  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "explore-og-margin-note-lead",
-      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
-      "status": "done",
-      "merge_commit": "0fc4932b7"
-    },
-    {
-      "id": "explore-og-margin-note-rows",
-      "title": "Margin notes on top-3 OG screener rows",
+      "id": "lab-og-dashboard-efficiency-formula-live",
+      "title": "Dashboard + Efficiency OG prefer formula_score on live rows",
       "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "explore-og-margin-note-sticker",
-      "title": "LIVE staff sticker when OG rows carry margin notes",
+      "id": "lab-og-prospects-weekly-formula-live",
+      "title": "Prospects + Weekly OG prefer formula_score when present",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "explore-og-margin-note-college",
-      "title": "College universe margin notes on OG export",
+      "id": "lab-og-aging-tradevalues-formula-live",
+      "title": "Aging + Trade Values OG formula_score pytest guards",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-margin-note-rows",
-  "created_at": "2026-05-31T11:22:30Z",
-  "updated_at": "2026-05-31T18:00:00Z",
+  "next_atom_id": "lab-og-dashboard-efficiency-formula-live",
+  "created_at": "2026-05-31T20:30:00Z",
+  "updated_at": "2026-05-31T20:30:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-watermark-display-names",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-display-name",
-      "merge_commit": "338709883"
-    },
-    {
-      "id": "lab-l5-launch10-og-demo-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-demo-blurbs",
-      "merge_commit": "3705fdce8"
-    },
-    {
-      "id": "lab-l5-og-hallway-deep-links",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-snapshot-player",
-      "merge_commit": "1a12d9c0b"
+      "id": "explore-l5-og-margin-notes",
+      "status": "active",
+      "last_atom": "explore-og-margin-note-rows",
+      "merge_commit": "c1a0bcaad"
     }
   ]
 }

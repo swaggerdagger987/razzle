@@ -1,35 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
-  "epic": "Explore L5 — OG screener agent margin notes (atom 2/4)",
-  "slice_title": "Margin notes on top-3 OG screener rows",
-  "atom_id": "explore-og-margin-note-rows",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB with margin notes on ranks 1–3",
+  "atom_id": "lab-og-dashboard-efficiency-formula-live",
+  "big_problem": "Lab OG cards for dashboard and efficiency still rank by legacy stats when formula_score is on the API row — exports disagree with the in-product board.",
+  "epic": "Lab L5 — Launch-10 OG formula_score parity (rest) (atom 1/3)",
+  "slice_title": "Dashboard + Efficiency OG prefer formula_score on live rows",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with live/demo rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_margin_note_rows.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_og_launch10_formula_live.py"
   ],
   "max_files": 2,
-  "max_lines": 80,
+  "max_lines": 60,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
+    "JWT_SECRET=test PATH=/home/ubuntu/.local/bin:$PATH python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "LIVE staff sticker atom",
-    "College-only atom",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
+    "Weekly heatmap week extractor rewrite",
+    "NORTH_STAR edits",
+    "New panels"
   ],
-  "content_commit": "c1a0bcaad",
-  "reality": "PASS",
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  }
+  "builder_mode": "composer-surgical"
 }
