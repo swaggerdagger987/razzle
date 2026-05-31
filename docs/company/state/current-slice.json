@@ -24,6 +24,8 @@
     "SAMPLE sticker copy changes"
   ],
   "builder_mode": "composer-surgical",
+  "content_commit": "76443615b",
+  "reality": "PASS",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
