@@ -37,7 +37,7 @@ new evidence.
 2026-05-31 | Trade Network share atom 2/4 | 246052ec | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Build Profiles unhide atom 1/3 | 2ee04975 | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
+2026-05-31 | Lab OG snapshot atom 1/3 | 70af534a | SHIP | keep | export card matches filtered bar chart for Reddit screenshots
 2026-05-31 | Prospects RPS+position export | 17a40c65 | SHIP | keep | filtered-panel epic 1/3
 2026-05-31 | Efficiency OG position filter | b2d304e7 | SHIP | keep | filtered-panel epic 2/3; PPO cards match RB/WR tabs
-2026-05-31 | Build Profiles share OG atom 1/3 | 246052ec | SHIP | keep | Atlas archetype card for Reddit trade threads
-2026-05-31 | Roster Depth share OG atom 2/3 | 1b769554 | SHIP | keep | Hawkeye depth grades card for dynasty roster screenshots
+2026-05-31 | Build Profiles share OG merged | da33eafd | SHIP | keep | Atlas archetype card ships on base for Reddit trade threads

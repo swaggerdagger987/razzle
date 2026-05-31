@@ -37,7 +37,9 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauTradeNetworkShareBar | 246052ec | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | 2ee04975 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
+2026-05-31 | BureauWaiverTendencies | da33eafd | keep | 3 files ≤175 lines; mirrors BuildProfiles; no API change
+2026-05-31 | TradeValues+Prospects snapshot | 70af534a | keep | 2 files ≤40 lines; Breakouts ogSnapshotRows pattern
 2026-05-31 | Prospects RPS+position export | 17a40c65 | keep | statLabel RPS; position on LabOgExportLink
 2026-05-31 | Efficiency position on LabOgExportLink | b2d304e7 | keep | 1-line; OG route already filters by position param
-2026-05-31 | /og/build-profiles | 246052ec | keep | ShareBar + OG route; mirrors power-rankings; 3 files ≤280 lines
-2026-05-31 | /og/roster-depth | 1b769554 | keep | league+user params; depthGrade in OG; 3 files ≤300 lines
+2026-05-31 | /og/build-profiles | da33eafd | keep | ShareBar + OG route merged to base; curl 72409B
+2026-05-31 | /og/roster-depth | 1b769554 | keep | league+user params; depthGrade in OG; pending base merge

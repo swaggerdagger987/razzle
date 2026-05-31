@@ -39,7 +39,8 @@ explicit checks in the verification routine.
 2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
 2026-05-31 | Trade Network share Gate C | 1616484c | PASS | curl trade-network 68090B PNG | keep | evidence/2026-05-31-bureau-trade-network-share-bar.md
 2026-05-31 | Build Profiles tab | 2ee04975 | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
+2026-05-31 | Lab OG snapshot Gate C | 70af534a | PASS | curl prospects snap 45583B tradevalues 62488B | keep | evidence/2026-05-31-lab-og-snapshot-tradevalues-prospects.md
 2026-05-31 | prospects RPS snap Gate C | 17a40c65 | PASS | curl prospects snap ≥40KB; sl=RPS in payload | keep | evidence/2026-05-31-lab-prospects-og-rps-position.md
 2026-05-31 | Efficiency OG position Gate C | b2d304e7 | PASS | curl RB 45113B WR snap 44195B PNG 1200x630 | keep | evidence/2026-05-31-lab-efficiency-og-position-filter.md
-2026-05-31 | Build Profiles share Gate C | 246052ec | PASS | curl build-profiles demo 72409B PNG 1200x630 | keep | evidence/2026-05-31-league-build-profiles-share-og.md
+2026-05-31 | Build Profiles share Gate C | da33eafd | PASS | curl build-profiles demo 72409B PNG 1200x630 merged | keep | evidence/2026-05-31-league-build-profiles-share-og.md
 2026-05-31 | Roster Depth share Gate C | 1b769554 | PASS | curl roster-depth demo 54072B PNG 1200x630 | keep | evidence/2026-05-31-league-roster-depth-share-og.md
