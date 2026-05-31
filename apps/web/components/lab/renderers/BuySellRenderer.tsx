@@ -16,7 +16,8 @@ import {
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -325,11 +326,12 @@ export function BuySellRenderer({ panel }: Props) {
               Ask Bones about {topSell.name} (sell) →
             </Link>
           )}
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="buysell"
             downloadName="razzle-buy-sell.png"
             position={position || undefined}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy buy/sell link"
           />
         </footer>
       )}
