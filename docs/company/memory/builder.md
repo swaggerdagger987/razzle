@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-gamelog-from-panel-sticker | f6e0985f3 | SHIP | fromPanelStickerLabel gamelog Wk tape.
+2026-05-31 | lab-og-gamelog-from-panel-sticker | 32878b623 | SHIP | fromPanelStickerLabel gamelog Wk tape.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | extractDynastyCompsRows + pytest contract.
 
 2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing OG watermark uses razzle.lol${roomPath}; pytest 4.
