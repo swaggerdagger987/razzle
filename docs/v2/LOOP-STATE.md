@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: pick from PARITY/NEXT — Bureau H2H export or Lab panel OG live rows
 last_keep_cycle: 150
-last_commit: f6e0985f3
+last_commit: 63f4dd313
 lab_l5_empty_og_export_epic: complete
 lab_l5_og_hallway_deep_links_epic: complete
