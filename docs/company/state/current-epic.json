@@ -1,42 +1,30 @@
 {
   "epic_status": "complete",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau behavioral share parity",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "big_problem": "Bureau Head-to-Head export cards must show the same rivalry matchup users see in-product — not generic demo squads when the panel has live league context (DEPTH League L5).",
+  "epic_title": "League L5 — Bureau H2H export matches in-product rivalry",
+  "parity_ref": "Explore L5 — Bureau H2H export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-manager-profiles-copy-link",
-      "title": "Manager Profiles copy link beside export card",
+      "id": "bureau-h2h-snapshot-export",
+      "title": "BureauOgExportLink + H2H OG snapshot decode from in-panel rivalry data",
       "status": "done",
-      "merge_commit": "04c19959"
+      "merge_commit": "3d498394"
     },
     {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy link beside export card",
+      "id": "bureau-h2h-live-api-fallback",
+      "title": "H2H OG prefers live API when league params present; snapshot when exported from Bureau",
       "status": "done",
-      "merge_commit": "c4ce09b7"
+      "merge_commit": "59a54b72"
     },
     {
-      "id": "league-power-rankings-og",
-      "title": "Power Rankings OG + copy board link",
+      "id": "bureau-h2h-room-hallway",
+      "title": "H2H export footer preserves Atlas room deep-link with opponent team name",
       "status": "done",
-      "merge_commit": "90bf2dd5"
-    },
-    {
-      "id": "bureau-trade-network-share-bar",
-      "title": "Trade Network ShareBar copy link + export",
-      "status": "done",
-      "merge_commit": "1616484c"
-    },
-    {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
-      "status": "done",
-      "merge_commit": "30454811"
+      "merge_commit": "389cab8e"
     }
   ],
   "next_atom_id": null,
-  "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T05:20:00Z"
+  "created_at": "2026-05-31T04:31:20Z",
+  "updated_at": "2026-05-31T12:30:00Z"
 }
