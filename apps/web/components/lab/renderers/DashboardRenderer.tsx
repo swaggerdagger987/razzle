@@ -1,17 +1,37 @@
-import { LabOgExportLink } from "../LabOgExportLink";
+"use client";
+
+import { useMemo } from "react";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 
 interface Props {
   data: unknown;
 }
 
+interface CompRow {
+  full_name?: string;
+  position?: string;
+  team?: string;
+  similarity?: number;
+}
+
 export function DashboardRenderer({ data }: Props) {
   const obj = (data ?? {}) as Record<string, unknown>;
-  const comps = Array.isArray(obj.comps) ? obj.comps : [];
+  const comps = Array.isArray(obj.comps) ? (obj.comps as CompRow[]) : [];
   const hasComps = comps.length > 0;
   const scopedPlayerId = typeof obj.player_id === "string" ? obj.player_id : undefined;
   const sections = ["risers", "fallers", "highlights", "summary", "cards", "items"]
     .map((k) => ({ key: k, value: obj[k] }))
     .filter((s) => s.value != null);
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    return comps.slice(0, 6).map((c) => ({
+      name: c.full_name ?? "—",
+      position: c.position ?? "",
+      team: c.team ?? "",
+      stat: Math.round((c.similarity ?? 0) * 100),
+      statLabel: "Match %",
+    }));
+  }, [comps]);
 
   if (!sections.length && !hasComps) {
     return (
@@ -36,6 +56,7 @@ export function DashboardRenderer({ data }: Props) {
             slug="dynasty-comps"
             downloadName="razzle-dynasty-comps.png"
             playerId={scopedPlayerId}
+            snapshotRows={ogSnapshotRows}
           />
         </footer>
       )}
