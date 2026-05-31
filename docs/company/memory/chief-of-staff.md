@@ -1,3 +1,4 @@
+2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Factory cycle 2; buy/sell formula OG parity.
