@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-og-tolab-gamelog-default | PLACEHOLDER | No new Reddit intel; hallway slice only.
+2026-05-31 | lab-og-tolab-gamelog-default | 8ffbb131a | No new Reddit intel; hallway slice only.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | — | PASS | No Reddit intel change this atom.
 
 2026-05-31 | room-briefing-watermark | f6e0985f3 | No new intel; Room export slice only.

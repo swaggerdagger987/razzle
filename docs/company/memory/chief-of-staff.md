@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | lab-og-tolab-gamelog-default | PLACEHOLDER | SHIP | Factory cycle 1; hallway gamelog atom; lock #1206.
+2026-05-31 | lab-og-tolab-gamelog-default | 8ffbb131a | SHIP | Factory cycle 1; hallway gamelog atom; lock #1206.
 2026-05-31 | cycle 142 formula OG live | ceadf0402 | SHIP | Factory open; Lab breakouts/rankings formula_score parity.
 2026-05-31 | lab-efficiency-empty-export | 5283c3eb4 | SHIP | PR #1170 merged; Lab empty OG epic atom 2/3.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | Factory cycle 1; Lab L5 hallway epic atom 1/3.
