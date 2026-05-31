@@ -46,6 +46,31 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Josh Allen", position: "QB", detail: "Wk 11 · 28.1 pts" },
     { name: "Josh Allen", position: "QB", detail: "Wk 10 · 41.2 pts" },
   ],
+  tiers: [
+    { name: "CeeDee Lamb", position: "WR", detail: "Tier S · win-now anchor" },
+    { name: "Bijan Robinson", position: "RB", detail: "Tier S · youth + volume" },
+    { name: "Brock Bowers", position: "TE", detail: "Tier A · positional scarcity" },
+  ],
+  vorp: [
+    { name: "Christian McCaffrey", position: "RB", detail: "VORP +4.2 · RB1 gap" },
+    { name: "Tyreek Hill", position: "WR", detail: "VORP +3.1 · spike weeks" },
+    { name: "Travis Kelce", position: "TE", detail: "VORP +2.8 · TE cliff" },
+  ],
+  stocks: [
+    { name: "Garrett Wilson", position: "WR", detail: "Rising · +12 rank wk" },
+    { name: "Deebo Samuel", position: "WR", detail: "Falling · sell window" },
+    { name: "James Cook", position: "RB", detail: "Rising · market lag" },
+  ],
+  waivers: [
+    { name: "Jayden Higgins", position: "WR", detail: "FAAB 18% · snap climb" },
+    { name: "Cam Skattebo", position: "RB", detail: "FAAB 12% · role emerging" },
+    { name: "Elic Ayomanor", position: "WR", detail: "FAAB 9% · targets ↑" },
+  ],
+  "dynasty-comps": [
+    { name: "Ja'Marr Chase", position: "WR", detail: "Comp: CeeDee Lamb · 94% match" },
+    { name: "Bijan Robinson", position: "RB", detail: "Comp: Jonathan Taylor · 91%" },
+    { name: "Marvin Harrison Jr.", position: "WR", detail: "Comp: Mike Evans · 88%" },
+  ],
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
@@ -56,6 +81,11 @@ const PITCH_BY_SLUG: Record<string, string> = {
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",
   gamelog: "week-by-week game logs with peak-week context for trades",
+  tiers: "S/A/B/C tiers so trades stop feeling random",
+  vorp: "value-over-replacement ranks that show who actually moves the needle",
+  stocks: "rising and falling dynasty assets before your league reacts",
+  waivers: "waiver-wire risers ranked by recent production and role",
+  "dynasty-comps": "statistical comps for any dynasty asset you're pricing",
 };
 
 export function teaserRowsForPanel(slug: string): TeaserRow[] {

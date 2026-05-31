@@ -18,9 +18,10 @@
       "merge_commit": "44d05684"
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T08:20:00Z",
-  "updated_at": "2026-05-31T09:00:00Z",
+  "next_atom_id": "lab-pro-gate-hallway-teasers",
+  "epic_status": "active",
+  "created_at": "2026-05-31T09:15:00Z",
+  "updated_at": "2026-05-31T09:15:00Z",
   "completed_epics": [
     {
       "id": "league-l5-bureau-h2h-codec",
@@ -35,6 +36,12 @@
       "merge_commit": "44d05684"
     },
     {
+      "id": "lab-l5-launch10-og-live-extract",
+      "status": "active",
+      "last_atom": "lab-og-weekly-prospects-breakouts-live-extract",
+      "merge_commit": "8d8b2635"
+    },
+    {
       "id": "lab-l5-og-live-sort-keys",
       "status": "complete",
       "last_atom": "lab-og-buysell-dashboard-live-sort",
@@ -45,12 +52,6 @@
       "status": "complete",
       "last_atom": "league-strength-of-schedule-og-share",
       "merge_commit": "7f652a98"
-    },
-    {
-      "id": "lab-l5-og-position-filter",
-      "status": "complete",
-      "last_atom": "lab-og-position-gamelog",
-      "merge_commit": "228c4b59"
     }
   ]
 }
