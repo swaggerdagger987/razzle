@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 131 — League L5 Self-Scout OG snapshot export)
+**Last updated:** 2026-05-31 (factory cycle 130 — Explore OG formula sort label)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 131 |
+| Cycle | 130 |
 | Last board | 54 |
-| Focus pillar | League |
+| Focus pillar | Explore |
 | Focus layer | L5 |
-| Next slice | bureau-manager-profiles-sharebar-snapshot |
-| Last commit | `709660c` |
+| Next slice | pick from PARITY/NEXT — Bureau H2H or Lab L5 |
+| Last commit | `710ec33e` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

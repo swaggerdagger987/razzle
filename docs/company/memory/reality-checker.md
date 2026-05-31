@@ -1,8 +1,7 @@
 # Memory — Reality Checker
 
-2026-05-31 | bureau-h2h-pick-opponent-preserve-user | 4fd093f1d | PASS build + pytest 2; Gate C N/A (no OG change).
-2026-05-31 | bureau-self-scout-sharebar-snapshot Gate C | 4fd093f1d | PASS curl demo 66997B snap 67600B; pytest 2.
-2026-05-31 | gamelog OG player default Gate C | 4fd093f1d | PASS curl gamelog 60634B with/without player_id; build + pytest 58.
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | 4fd093f1d | PASS build + pytest 2.
+2026-05-31 | lab-og-sample-labels Gate C | 54443bc8 | PASS | build exit 0; curl 66806/66253/67267 B; PNG verified.
 
 2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
@@ -11,6 +10,10 @@
 2026-05-31 | launch10 snapshot-default Gate C | e2a3ce8a | PASS curl rankings 62355B weekly 66512B; build + pytest 55.
 2026-05-31 | Cycle 118 | e00217d1 | PASS curl prospects 60688B + build + pytest 55.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | curl rankings 62355B PASS | Gate C.
+
+2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | pytest 12; web build ok; Gate C N/A.
+
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | curl gamelog 56390B PASS | Wk N rows; extractGamelogWeekRows on live weeks[].
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 4d84af9a | curl H2H 67846B PASS | Gate C terracotta band on export.
 
@@ -52,14 +55,14 @@ explicit checks in the verification routine.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live panel rows Gate C | 2cb898b6 | PASS | curl rankings 59509B breakouts 60649B | keep | docs/v2/evidence/2026-05-31-lab-og-live-extractors.md
 2026-05-31 | Bureau Monte Carlo copy link Gate C | 433d8002 | PASS | curl monte-carlo OG 53350B | keep | docs/v2/evidence/2026-05-31-bureau-monte-carlo-copy-link.md
-2026-05-31 | Bureau Monte Carlo copy link Gate C | 4fd093f1d | PASS | curl monte-carlo OG 53350B | keep | docs/v2/evidence/2026-05-31-bureau-monte-carlo-copy-link.md
+2026-05-31 | Bureau Monte Carlo copy link Gate C | da33eafd | PASS | curl monte-carlo OG 53350B | keep | docs/v2/evidence/2026-05-31-bureau-monte-carlo-copy-link.md
 2026-05-31 | Lab launch10 OG label Gate C | 6e98f4a2 | PASS | curl rankings 59509B breakouts 60649B | keep | docs/v2/evidence/2026-05-31-lab-og-launch10-live-label.md
 2026-05-31 | Bureau H2H OG Gate C | 044ee1e8 | PASS | curl h2h 59305B PNG | keep | docs/v2/evidence/2026-05-31-bureau-h2h-share-bar.md
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
 2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
 2026-05-31 | Trade Network share Gate C | 1616484c | PASS | curl trade-network 68090B PNG | keep | evidence/2026-05-31-bureau-trade-network-share-bar.md
-2026-05-31 | Cycle 86 Trade Network copy link | 4fd093f1d | keep | Bureau behavioral share atom 3
-2026-05-31 | Build Profiles tab | 4fd093f1d | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
+2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
+2026-05-31 | Build Profiles tab | da33eafd | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
 2026-05-31 | Build Profiles OG Gate C | 77d4f765 | PASS | curl build-profiles 73228B PNG | keep | evidence/2026-05-31-league-build-profiles-og-share.md
 2026-05-31 | Waiver Tendencies OG Gate C | 6dcb0f72 | PASS | curl waiver-tendencies 73121B PNG | keep | evidence/2026-05-31-league-waiver-tendencies-og-share.md
 2026-05-31 | Lab OG snapshot Gate C | 70af534a | PASS | curl prospects snap 45583B tradevalues 62488B | keep | evidence/2026-05-31-lab-og-snapshot-tradevalues-prospects.md

@@ -1,12 +1,19 @@
 # Memory — Engineering Architect
 
-2026-05-31 | bureau-h2h-pick-opponent-preserve-user | 4fd093f1d | 3-file slice; URL user in fetch + picker; pytest source guards.
-2026-05-31 | LabOgExportLink scoped default | 1 file | PLAYER_SCOPED_LAB_OG_SLUGS mirrors route PLAYER_SCOPED_SLUGS.
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | 4fd093f1d | 3-file slice; URL user in fetch + picker.
+2026-05-31 | lab-og-sample-labels | 54443bc8 | 1 file route.tsx; launch10DemoStickerLabel + blurbs ≤30 lines.
+
+2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
+2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
 2026-05-31 | fetchOgLiveRows launch-10 | e2a3ce8a | panel API + pro header before panels slug; demo last.
 2026-05-31 | Cycle 118 | e00217d1 | prospectSources loop in route.tsx.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | 1-file panel route; LIVE sticker gated on showingLiveData.
+
+2026-05-31 | launch10 teaser audit | b0405d43 | keep | 2 files; LAUNCH_10_* exports + pytest guard.
+
+2026-05-31 | gamelog weeks extract | 40c80f0e | 1-file ~35 lines; player-scoped weeks[] not players[]; no PANEL_OG_STAT_KEY.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | 1-file H2H OG; band copied from panel route; atlas link above band.
 
@@ -48,11 +55,11 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
 2026-05-31 | BureauMonteCarlo clipboard | 433d8002 | keep | useCallback + copied state mirrors Self-Scout; no OG route change
-2026-05-31 | Bureau Monte Carlo clipboard | 4fd093f1d | keep | merge sync base Lab epic; OG Razzle spans; dedup H2H ShareBar
+2026-05-31 | Bureau Monte Carlo clipboard | da33eafd | keep | merge sync base Lab epic; OG Razzle spans; dedup H2H ShareBar
 2026-05-31 | panelBlurbSuffix launch-10 | 6e98f4a2 | keep | 1 file; LAUNCH_10_OG_SLUGS mirrors LabSidebar STAFF_PICKS
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | BureauTradeNetworkShareBar | 4fd093f1d | keep | mirrors MC share bar; league OG param unchanged
+2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
-2026-05-31 | BureauBuildProfiles | 4fd093f1d | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
+2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY + tradevalues formula_score order
