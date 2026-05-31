@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 2026-05-31 | lab-panel-share-bar-breakouts-buysell | e7a171ef4 | SHIP | BreakoutsRenderer + BuySellRenderer share bar footers.
 2026-05-31 | lab-panel-share-bar-rankings | 691bd5e1b | SHIP | LabPanelShareBar + DynastyRankingsRenderer footer.
 2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | SHIP | efficiencyStatKeys + agingStatKeys on OG route.
@@ -6,7 +5,6 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Builder
 
-=======
 2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
 2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
@@ -23,7 +21,6 @@
 2026-05-31 | lab-og-from-panel-gate-c-rest | a76b2e4e0 | SHIP | prospects+tradevalues SNAPSHOT_FROM_PANEL_SLUGS; 5 pytest guards.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS for gamelog + dynasty-comps.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | bureau-trade-finder-og-snapshot encode on ShareBar.
->>>>>>> origin/razzle-v2-redesign
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | extractBuySellRows + formula_score priority on OG route.
 
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | breakoutsStatKeys + rankingsStatKeys in OG route.

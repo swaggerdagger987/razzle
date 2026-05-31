@@ -17,11 +17,7 @@ import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
-<<<<<<< HEAD
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
-=======
 import type { OgSnapshotRow } from "../LabOgExportLink";
->>>>>>> origin/razzle-v2-redesign
 import { LabPanelShareBar } from "../LabPanelShareBar";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -242,11 +238,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
               downloadName="razzle-dynasty-rankings.png"
               position={position || undefined}
               snapshotRows={RANKINGS_SAMPLE_OG_ROWS}
-<<<<<<< HEAD
               copyLabel="copy sample card"
-=======
-              copyLabel="copy rankings link"
->>>>>>> origin/razzle-v2-redesign
             />
           </footer>
         </div>
