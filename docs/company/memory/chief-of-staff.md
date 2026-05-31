@@ -1,10 +1,14 @@
 # Memory — Chief of Staff
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 2026-05-31 | Factory cycle 124 Explore OG LIVE/SAMPLE | c6ac2c47 | Explore L5 epic atom 1/3; workday cycle 2.
 
 2026-05-31 | Factory cycle 121 pro gate panel pitches | 0b59daee | L4 epic atom 2/3; factory open.
 =======
+=======
+2026-05-31 | Factory cycle 121 explore OG query | 7dbd4b11 | workday cycle 1; lock #813; live-fetch epic atom 2/3.
+>>>>>>> origin/razzle-v2-redesign
 2026-05-31 | Factory cycle 121 pro gate panel pitches | da33eafd | L4 epic atom 2/3; factory open.
 >>>>>>> origin/razzle-v2-redesign
 
