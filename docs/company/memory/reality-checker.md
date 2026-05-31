@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-l4-percentiles-pro-teaser | da33eafd | TestClient 402 percentiles PASS | Gate 2 pro upgrade not blank.
+
 2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | curl efficiency 45113B aging 44952B PASS | post-merge base sync; Gate C both routes.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | curl efficiency 45113B aging 44952B PASS | Gate C ≥40KB PNG both routes.

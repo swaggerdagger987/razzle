@@ -1,24 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG share cards lack the terracotta watermark band Explore exports have — Reddit screenshots don't carry razzle.lol brand gravity.",
-  "epic": "Lab L5 — OG watermark band on Launch-10 cards",
-  "slice_title": "Bureau H2H OG — match terracotta band styling",
-  "atom_id": "lab-og-watermark-band-head-to-head",
-  "parity_ref": "Explore L5 — OG watermark band",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "ACCEPTANCE Gate 6 — OG cards screenshot-worthy",
+  "big_problem": "Pro Lab panels still feel like a paywall error — free users need domain-specific blur previews that sell the intel, not generic lock screens.",
+  "epic": "Lab L4 — profile pro-gate teasers",
+  "slice_title": "Percentiles panel — Atlas voice + percentile blur preview rows",
+  "atom_id": "lab-l4-percentiles-pro-teaser",
+  "parity_ref": "Lab L4 — pro gates feel like upgrade",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "ACCEPTANCE Gate 2 — pro panel shows upgrade message (402)",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/app/og/head-to-head/route.tsx"],
-  "max_files": 1,
-  "max_lines": 40,
+  "allowed_paths": [
+    "apps/web/lib/panel-upgrade-teaser.ts",
+    "packages/agents/registry.ts"
+  ],
+  "max_files": 2,
+  "max_lines": 50,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/h2h-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/head-to-head?download=1'"
+    "curl -s -o /dev/null -w '%{http_code}' 'http://127.0.0.1:8000/api/panels/percentiles'"
   ],
   "out_of_scope": [
-    "panel OG route changes",
-    "new panels",
+    "percentiles API handler port",
+    "new renderers",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
@@ -27,7 +30,5 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "merge_commit": "1be90766",
-  "status": "shipped"
+  }
 }

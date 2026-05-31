@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 115 — Bureau H2H OG terracotta watermark band)  
+**Last updated:** 2026-05-31 (factory cycle 116 — Lab L4 percentiles pro-teaser)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 115 |
+| Cycle | 116 |
 | Last board | 54 |
 | Focus pillar | Lab |
-| Focus layer | L5 |
-| Next slice | lab-l4-percentiles-pro-teaser (Lab L4 pro-gate epic) |
-| Last commit | `1be90766` |
+| Focus layer | L4 |
+| Next slice | lab-l4-strengths-pro-teaser (Lab L4 profile pro-gate epic atom 2/3) |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

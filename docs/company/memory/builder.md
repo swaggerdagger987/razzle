@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-l4-percentiles-pro-teaser | da33eafd | keep | percentiles pctl blur rows; Atlas owns profile panels.
+
 2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | keep | ppo+most_efficient; aging ppg+positions unwrap; merged base buysell/dashboard keys.
 
 2026-05-31 | lab-og-buysell-dashboard-live-sort | cb59494b | keep | dynasty_value/rank_diff; buy_low/sell_high extract; curl ≥44KB.
