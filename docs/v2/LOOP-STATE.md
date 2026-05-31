@@ -6,4 +6,4 @@ next_slice: lab-og-efficiency-aging-live-sort
 last_keep_cycle: 100
 last_commit: 7f78b631
 lab_l5_og_live_sort_epic: active
-lab_l5_og_rankings_tradevalues_live_sort: in_progress
+lab_l5_og_rankings_tradevalues_live_sort: done
