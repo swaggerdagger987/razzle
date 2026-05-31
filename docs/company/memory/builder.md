@@ -1,13 +1,10 @@
 # Memory — Builder
 
-<<<<<<< HEAD
 2026-05-31 | lab-og-buysell-aging-sort | buy_low/sell_high extractRows; buysell+aging DIRECT_STAT_SORT; renderer PPG/mismatch sort | 4a62c72e | SHIP | KEEP before rankings atom | evidence/2026-05-31-lab-og-buysell-aging-sort.md
 
 2026-05-31 | lab-og-tradevalues-efficiency-sort | trade value + PPO renderer sort; OG DIRECT_STAT_SORT_SLUGS | e0819084 | SHIP | KEEP pattern for buysell/aging atoms | evidence/2026-05-31-lab-og-tradevalues-efficiency-sort.md
-=======
 2026-05-31 | league-power-rankings-og-snapshot | 26a22f69 | keep | compact encode/decode lib + ShareBar rows prop
 
->>>>>>> origin/razzle-v2-redesign
 2026-05-31 | H2H canonical codec | da33eafd | BureauH2HShareBar uses encodeBureauH2HOgSnapshot; OG route decodeBureauH2HOgSnapshot.
 
 2026-05-31 | Trade values OG rank labels | 5ed39e14 | TradeValuesRenderer ogSnapshotRows uses `rank · Value` or `rank · formula.name` on top 6 sorted rows.
@@ -31,11 +28,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
-<<<<<<< HEAD
 2026-05-31 | lab-og-breakouts-score-ranked | BreakoutsRenderer score sort + OG route slug sort | b9e2d2bf | PASS | keep prospects pattern | curl 61718B
-=======
 2026-05-31 | league-waiver-tendencies-og-share | Hawkeye OG + share bar; pickHero hoarder-first | 6dcb0f72 | SHIP | KEEP FAAB bar from faab_spent | — | — | evidence 2026-05-31-league-waiver-tendencies-og-share.md
->>>>>>> origin/razzle-v2-redesign
 
 ---
 
@@ -65,13 +59,10 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
-<<<<<<< HEAD
 - 2026-05-31 cycle 92: SOS BureauStrengthOfSchedule — mirror waiver/build 3-file pattern.
 - 2026-05-31 cycle 93: HIDDEN_BUREAU_SLUGS empty; BureauStrengthOfSchedule Octo bars; 0b9dfe7e.
 2026-05-31 | league-strength-of-schedule-tab | da33eafd | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
-=======
 2026-05-31 | league-roster-depth-og-share | 688cea64 | keep | /og/roster-depth Hawkeye grades; curl 57282B; BureauRosterDepthShareBar
 2026-05-31 | league-build-profiles-og-share | 77d4f765 | keep | /og/build-profiles Atlas archetypes; curl 73228B; BureauBuildProfilesShareBar
 2026-05-31 | league-waiver-tendencies-og-share | 6dcb0f72 | SHIP | /og/waiver-tendencies 73121B; BureauWaiverTendenciesShareBar
 2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
->>>>>>> origin/razzle-v2-redesign
