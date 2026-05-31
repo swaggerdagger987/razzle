@@ -1,6 +1,7 @@
 # Memory — Data Researcher
 
 2026-05-31 | lab-og-rankings-live-rank-labels | 0d011e7df | No new intel; Lab OG rank label slice.
+2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | No new Reddit intel; empty-state export unblocks tape screenshots.
 2026-05-31 | lab-og-sample-labels | 54443bc8 | No new intel; OG trust-label slice only.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
