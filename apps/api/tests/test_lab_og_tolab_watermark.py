@@ -74,9 +74,13 @@ def test_efficiency_og_watermark_includes_default_rb_position():
     assert "TOLAB_DEFAULT_POSITION[slug]" in source
 
 
-def test_percentiles_og_watermark_includes_default_player_tolab():
+def test_percentiles_og_tolab_default_player_and_wr_position():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert '"percentiles"' in source
+    assert 'percentiles: "WR"' in source
+    assert "TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS" in source
+    assert "includeDefaultPlayer" in source
+    assert "watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
     idx = source.index("TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS")
     block = source[idx : idx + 200]
     assert '"percentiles"' in block

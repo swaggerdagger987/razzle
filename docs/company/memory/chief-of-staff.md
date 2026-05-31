@@ -1,5 +1,8 @@
+2026-05-31 | lab-og-percentiles-tolab | 40a9cb7b9 | SHIP | Factory cycle 1; pro profile OG epic 4/4 complete; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | Factory open cycle 1; position-default epic 3/3; NO_LOCK_GUARDRAIL.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | Factory cycle 1; H2H GTM epic complete; dedup pytest on base.
+2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | 792e9f77d | SHIP | efficiency/aging formula_score OG; PR #1318.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4; lock #1415.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 
