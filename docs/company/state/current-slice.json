@@ -1,59 +1,33 @@
 {
   "date": "2026-05-31",
-<<<<<<< HEAD
-  "atom_id": "lab-og-gamelog-player-default",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
-  "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Gamelog OG — default player_id in Lab export URL when query omitted",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
+  "epic": "Lab L5 — Launch-10 OG panel-native LIVE labels",
+  "slice_title": "aging/buysell OG LIVE sticker + blurb parity",
+  "atom_id": "lab-og-live-sticker-aging-buysell",
+  "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/gamelog PNG ≥40KB without player_id query",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/lab/LabOgExportLink.tsx"
-  ],
-  "max_files": 1,
-  "max_lines": 40,
-  "acceptance_commands": [
-    "npm run build --workspace=apps/web 2>&1 | tail -5",
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/gamelog-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'",
-    "curl -s -o /tmp/gamelog-og-id.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'"
-  ],
-  "out_of_scope": ["Explore OG route", "NORTH_STAR/DESIGN edits", "new npm deps"],
-=======
-  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
-  "epic": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
-  "slice_title": "Rankings + tradevalues + breakouts — SAMPLE panel-native stickers",
-  "atom_id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/aging and /og/buysell PNG ≥40KB with panel-native LIVE sticker",
   "trust_pillars": ["T1", "T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 30,
+  "max_lines": 12,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1'",
-    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/breakouts?download=1'",
-    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/tradevalues?download=1'"
+    "JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q",
+    "curl -s -o /tmp/aging-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/aging?download=1&force_demo=1'",
+    "curl -s -o /tmp/buysell-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1&force_demo=1'"
   ],
-  "out_of_scope": ["gamelog/efficiency/aging atoms", "NORTH_STAR/DESIGN/DECISIONS"],
->>>>>>> origin/razzle-v2-redesign
+  "out_of_scope": [
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "new npm deps",
+    "new OG panels"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-<<<<<<< HEAD
-    "verdict": "SHIP 3/3"
-  }
-=======
     "verdict": "SHIP"
   },
-  "content_commit": "54443bc8",
-  "reality": "PASS",
-  "merge": "pending"
->>>>>>> origin/razzle-v2-redesign
+  "status": "shipped"
 }
