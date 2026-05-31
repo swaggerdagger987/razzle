@@ -1,29 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG share cards must render the same live panel rows users see in-product — not legacy API paths or demo-only shells when terminal.db has tape (DEPTH Lab L5).",
+  "atom_id": "lab-og-export-link-prospects-weekly-tradevalues",
+  "big_problem": "Lab OG share cards must render the same live panel rows users see in-product (DEPTH Lab L5).",
   "epic": "Lab L5 — OG cards match in-product live panel rows",
-  "atom_id": "lab-og-export-link-rankings-breakouts",
-  "slice_title": "LabOgExportLink on dynasty-rankings and breakouts renderers",
-  "parity_ref": "PARITY Lab L5 — OG card per panel matches in-product export",
+  "slice_title": "LabOgExportLink on prospects, weekly, tradevalues renderers",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/rankings and /og/breakouts PNG ≥40KB",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx",
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
+    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
   ],
-  "max_files": 2,
-  "max_lines": 30,
+  "max_files": 3,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/rankings?download=1'",
-    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/breakouts?download=1'"
+    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/tradevalues?download=1'",
+    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/weekly?download=1'",
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1'"
   ],
-  "out_of_scope": [
-    "prospects/weekly/tradevalues renderers (atom 3)",
-    "OG route changes",
-    "NORTH_STAR / DESIGN edits"
-  ],
+  "out_of_scope": ["OG route changes", "NORTH_STAR / DESIGN edits"],
   "builder_mode": "composer-surgical"
 }
