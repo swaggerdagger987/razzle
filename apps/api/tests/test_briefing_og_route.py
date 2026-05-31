@@ -20,6 +20,8 @@ def test_briefing_og_route_exists():
     assert "Always-on terracotta watermark" in text
     assert "razzle.lol${roomPath}" in text
     assert "#d97757" in text
+    assert "LIVE · your briefing" in text
+    assert "SAMPLE · trade readout" in text
 
 
 def test_briefing_card_export_link():
