@@ -1,3 +1,4 @@
+2026-05-31 | league-trade-finder-og-snapshot | f6e0985f3 | PASS | curl 57910B snapshot OG; pytest 4; web build exit 0.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker
 
