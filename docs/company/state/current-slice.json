@@ -1,29 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG gamelog exports fail before a player is picked — empty state had no sample card for Reddit screenshots.",
-  "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Gamelog OG — default player_id when export omits query",
-  "atom_id": "lab-og-gamelog-player-default",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "atom_id": "explore-og-college-export-filename",
+  "big_problem": "Explore college screener exports still save as NFL filenames on disk.",
+  "epic": "Explore L5 — universe-aware share exports",
+  "slice_title": "College explore export uses razzle-college-screener.png",
+  "parity_ref": "Explore L5",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "pytest contract",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/lab/renderers/GamelogRenderer.tsx"],
-  "max_files": 1,
-  "max_lines": 40,
-  "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'"
+  "allowed_paths": [
+    "apps/web/components/explore/ExploreShareButton.tsx",
+    "apps/api/tests/test_explore_share_og_universe.py"
   ],
-  "out_of_scope": ["og route changes", "NORTH_STAR/DESIGN/DECISIONS"],
+  "max_files": 2,
+  "max_lines": 30,
+  "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_share_og_universe.py -q",
+    "npm run build --workspace=apps/web 2>&1 | tail -8"
+  ],
+  "out_of_scope": ["OG route", "NORTH_STAR/DESIGN"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
-  },
-  "content_commit": "e37cd230",
-  "reality": "PASS",
-  "merge": "pending"
+    "verdict": "SHIP 3/3"
+  }
 }
