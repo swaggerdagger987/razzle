@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-27 (repo organization cleanup)  
+**Last updated:** 2026-05-31 (cycle 95 — Lab OG position on efficiency/aging)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read

@@ -10,25 +10,16 @@ interface Props {
   leagueId: string;
 }
 
-function slateColor(yourPpg: number, oppAvg: number): string {
-  const gap = yourPpg - oppAvg;
-  if (gap >= 8) return "var(--green)";
-  if (gap >= 0) return "var(--orange)";
-  if (gap >= -8) return "var(--teal)";
-  return "var(--red)";
-}
-
 export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
   const octo = AGENT_BY_ID.octo;
-  const err = typeof data.error === "string" ? data.error : null;
-  const yourRank = data.your_rank as number | undefined;
-  const yourPpg = Number(data.your_ppg ?? 0);
-  const oppAvg = Number(data.opponent_avg_ppg ?? 0);
+  const yourRank = data.your_rank != null ? Number(data.your_rank) : null;
+  const yourPpg = data.your_ppg != null ? Number(data.your_ppg) : null;
+  const oppAvg = data.opponent_avg_ppg != null ? Number(data.opponent_avg_ppg) : null;
   const verdict = String(data.verdict ?? "");
-  const gap = yourPpg - oppAvg;
-  const color = slateColor(yourPpg, oppAvg);
-  const youBar = Math.min(100, Math.max(12, 50 + gap * 2));
-  const oppBar = Math.min(100, Math.max(12, 50 - gap * 2));
+  const delta =
+    yourPpg != null && oppAvg != null && !Number.isNaN(yourPpg) && !Number.isNaN(oppAvg)
+      ? Math.round((yourPpg - oppAvg) * 10) / 10
+      : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -40,7 +31,7 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
               {octo.name} · {octo.role}
             </p>
             <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              rest-of-season opponent power — not vibes, league PPG tape
+              remaining slate strength from live power rankings — not vibes
             </p>
           </div>
         </div>
@@ -48,84 +39,78 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
           Strength of Schedule
         </h1>
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          your scoring vs average opponent PPG in this league
+          league {String(data.league_id ?? leagueId)}
         </p>
       </header>
 
-      {err ? (
-        <section className="chunky bg-bg-card p-4">
-          <p className="text-red text-sm">something fumbled: {err}</p>
-        </section>
-      ) : (
-        <>
-          <section className="chunky bg-bg-card p-4">
-            <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-              slate verdict
-            </p>
-            <p className="mt-2 text-lg" style={{ fontFamily: "var(--font-display)", color }}>
-              {verdict || "pulling the schedule tape…"}
-            </p>
-            {yourRank != null && (
-              <p className="text-ink-medium mt-2 text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-                you rank #{yourRank} on power · {yourPpg} PPG vs {oppAvg} avg opponent
-              </p>
-            )}
-            <Link
-              href={
-                toRoom({
-                  agentId: "octo",
-                  question: `How should I plan trades given this SOS verdict: ${verdict}?`,
-                  panelSlug: "schedule",
-                }) as Route
-              }
-              className="mt-3 inline-block text-sm text-orange underline"
-            >
-              ask {octo.name} about the slate →
-            </Link>
-          </section>
+      <section className="grid gap-4 sm:grid-cols-3">
+        <div className="chunky bg-bg-card p-4" style={{ transform: "rotate(-0.5deg)" }}>
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            your rank
+          </p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--pos-qb)" }}>
+            {yourRank != null ? `#${yourRank}` : "—"}
+          </p>
+        </div>
+        <div className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            your PPG
+          </p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
+            {yourPpg != null ? yourPpg.toFixed(1) : "—"}
+          </p>
+        </div>
+        <div className="chunky bg-bg-card p-4" style={{ transform: "rotate(0.5deg)" }}>
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            avg opponent PPG
+          </p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--orange)" }}>
+            {oppAvg != null ? oppAvg.toFixed(1) : "—"}
+          </p>
+        </div>
+      </section>
 
-          <section className="chunky bg-bg-card p-4">
-            <p className="mb-4 text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-              you vs league average opponent
-            </p>
-            <div className="flex flex-col gap-4">
-              <div>
-                <div className="mb-1 flex justify-between text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-                  <span>your PPG</span>
-                  <span>{yourPpg}</span>
-                </div>
-                <div className="chunky bg-bg h-4 overflow-hidden">
-                  <div className="h-full" style={{ width: `${youBar}%`, background: color }} />
-                </div>
-              </div>
-              <div>
-                <div className="mb-1 flex justify-between text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-                  <span>avg opponent PPG</span>
-                  <span>{oppAvg}</span>
-                </div>
-                <div className="chunky bg-bg h-4 overflow-hidden">
-                  <div
-                    className="h-full bg-ink-light"
-                    style={{ width: `${oppBar}%`, opacity: 0.85 }}
-                  />
-                </div>
-              </div>
-              <p className="text-ink-medium text-xs" style={{ fontFamily: "var(--font-hand)" }}>
-                {gap >= 0
-                  ? `+${gap.toFixed(1)} PPG cushion — you outscore the typical opponent you'd face.`
-                  : `${gap.toFixed(1)} PPG deficit — schedule plays above your scoring pace.`}
-              </p>
-            </div>
-          </section>
-        </>
+      {delta != null && (
+        <section className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            pace edge vs field
+          </p>
+          <p className="mt-1 text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
+            {delta >= 0 ? "+" : ""}
+            {delta} PPG vs average opponent
+          </p>
+        </section>
       )}
 
-      <footer className="flex flex-wrap items-center gap-4 text-sm">
+      {verdict && (
+        <section className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            Octo read
+          </p>
+          <p className="mt-2 text-lg text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+            {verdict}
+          </p>
+          <Link
+            href={
+              toRoom({
+                agentId: "octo",
+                question: `My strength of schedule says: ${verdict} — how should I attack the next three weeks?`,
+                panelSlug: "strength-of-schedule",
+              }) as Route
+            }
+            className="mt-3 inline-block text-sm text-orange underline"
+          >
+            ask Octo about your slate →
+          </Link>
+        </section>
+      )}
+
+      <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/power-rankings` as Route} className="text-orange underline">
-          power rankings →
+          full power rankings →
         </Link>
         <Link href={`/league/${leagueId}/monte-carlo` as Route} className="text-orange underline">
-          monte carlo →
+          playoff odds sim →
         </Link>
       </footer>
     </div>

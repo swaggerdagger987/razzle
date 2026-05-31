@@ -13,6 +13,7 @@ import { BureauBuildProfiles } from "./BureauBuildProfiles";
 import { BureauWaiverTendencies } from "./BureauWaiverTendencies";
 import { BureauStrengthOfSchedule } from "./BureauStrengthOfSchedule";
 import { BureauPowerRankings } from "./BureauPowerRankings";
+import { BureauStrengthOfSchedule } from "./BureauStrengthOfSchedule";
 
 interface Props {
   feature: BureauFeatureSlug;
