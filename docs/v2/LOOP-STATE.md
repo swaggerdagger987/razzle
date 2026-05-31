@@ -1,11 +1,8 @@
-cycle: 120
+cycle: 127
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: lab-og-gamelog-player-default
-last_keep_cycle: 120
-last_commit: 3f0411ec
-lab_l5_og_live_fetch_epic: active
-lab_l5_og_watermark_epic: complete
-lab_l5_og_live_sort_epic: complete
-bureau_h2h_codec_epic: complete
+next_slice: league-h2h-og-snapshot-sticker
+last_keep_cycle: 127
+last_commit: e7373eac
+league_l5_h2h_og_parity_epic: active
