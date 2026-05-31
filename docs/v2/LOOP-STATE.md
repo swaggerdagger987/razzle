@@ -1,9 +1,9 @@
-cycle: 94
+cycle: 96
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-trade-values-ranked
-last_keep_cycle: 94
-last_commit: 13e196bf
+next_slice: lab-og-position-tradevalues-prospects
+last_keep_cycle: 96
+last_commit: da33eafd
 lab_l5_og_snapshot_fidelity_epic: complete
-lab_l5_og_launch10_completion_epic: active
+lab_l5_og_position_filter_epic: active

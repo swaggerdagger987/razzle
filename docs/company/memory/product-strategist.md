@@ -37,5 +37,6 @@ new evidence.
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | Trade Network share atom 2/4 | 13e196bf | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
-2026-05-31 | Build Profiles unhide atom 1/3 | 13e196bf | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
-2026-05-31 | Breakouts OG RBS-ranked close fidelity epic | 13e196bf | SHIP | keep | Next epic: trade-values + rankings explicit sort
+2026-05-31 | Build Profiles unhide atom 1/3 | da33eafd | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
+2026-05-31 | Lab OG snapshot atom 1/3 | 70af534a | SHIP | keep | export card matches filtered bar chart for Reddit screenshots
+2026-05-31 | Breakouts OG RBS-ranked close fidelity epic | da33eafd | SHIP | keep | Position-filter epic active on base; fidelity epic complete
