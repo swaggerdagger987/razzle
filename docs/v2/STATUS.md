@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 156 |
+| Cycle | 158 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | PARITY next RED/YELLOW row |
-| Last commit | `338709883` |
+| Next slice | lab-og-tolab-strengths-default |
+| Last commit | `892d34580` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
