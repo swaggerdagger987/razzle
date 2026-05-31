@@ -3,7 +3,7 @@
   "atom_id": "explore-og-universe-query",
   "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
   "epic": "Explore L5 — universe-aware share exports",
-  "slice_title": "Explore OG export URL carries college universe",
+  "slice_title": "Explore OG college export filename + pytest guard",
   "parity_ref": "Explore L5 — share card matches screener universe",
   "depth_ref": "Explore L5",
   "acceptance_ref": "FACTORY-DOD Gate C — college explore OG contract",
