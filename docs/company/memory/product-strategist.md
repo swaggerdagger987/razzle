@@ -27,4 +27,4 @@ new evidence.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | NEXT.md live-row mirror epic opened
-2026-05-31 | Lab OG export link epic complete atom 3/3 | da33eafd | SHIP | keep | launch-10 OG footers unified via LabOgExportLink
+2026-05-31 | Lab OG export link epic complete atom 3/3 | 8b5acdbe | SHIP | keep | launch-10 OG footers unified via LabOgExportLink
