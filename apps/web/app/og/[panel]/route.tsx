@@ -74,6 +74,9 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   dashboard: "rank_diff",
 };
 
+/** Heatmap + big board — prefer catalog API path before generic /api/panels slug. */
+const PANEL_API_FIRST_SLUGS = new Set(["weekly", "prospects"]);
+
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
   "prospects",
@@ -111,6 +114,12 @@ function panelBlurbSuffix(
     return `${pos} · live data`;
   }
   return pos;
+}
+
+function liveStickerLabel(slug: string): string {
+  if (slug === "weekly") return "LIVE · heatmap rows";
+  if (slug === "prospects") return "LIVE · prospect board";
+  return "LIVE · nflverse rows";
 }
 
 function resolvePanelApiPath(path: string, playerId: string): string {
@@ -606,9 +615,16 @@ export async function GET(
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
   if (apiPath && !snapshotHasRows) {
-    liveRows = await fetchLiveOgRows(req, slug, apiParams);
-    if (liveRows.length === 0) {
+    if (PANEL_API_FIRST_SLUGS.has(slug)) {
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
+      if (liveRows.length === 0) {
+        liveRows = await fetchLiveOgRows(req, slug, apiParams);
+      }
+    } else {
+      liveRows = await fetchLiveOgRows(req, slug, apiParams);
+      if (liveRows.length === 0) {
+        liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
+      }
     }
   }
   const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
@@ -701,7 +717,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            LIVE · nflverse rows
+            {liveStickerLabel(slug)}
           </div>
         ) : null}
 
