@@ -22,14 +22,11 @@ import { LabPanelShareBar } from "../LabPanelShareBar";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
-/** Sample RBS board when the API returns no candidates — OG export still screenshots. */
+/** Sample rows for OG when position filter returns zero breakout candidates (T5/T6). */
 const BREAKOUTS_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
-  { name: "Rome Odunze", position: "WR", team: "CHI", stat: 92, statLabel: "RBS" },
-  { name: "Ladd McConkey", position: "WR", team: "LAC", stat: 88, statLabel: "RBS" },
-  { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 85, statLabel: "RBS" },
-  { name: "Malik Nabers", position: "WR", team: "NYG", stat: 81, statLabel: "RBS" },
-  { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 78, statLabel: "RBS" },
-  { name: "Xavier Worthy", position: "WR", team: "KC", stat: 74, statLabel: "RBS" },
+  { name: "Bucky Irving", position: "RB", team: "TB", stat: 82.4, statLabel: "RBS" },
+  { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 78.1, statLabel: "RBS" },
+  { name: "Malachi Corley", position: "WR", team: "NYJ", stat: 74.6, statLabel: "RBS" },
 ];
 
 interface Candidate extends WithFormulaScore {

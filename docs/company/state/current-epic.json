@@ -1,5 +1,6 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   "epic_status": "active",
   "big_problem": "Lab panel exports hide behind a single underline link \u2014 GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
   "epic_title": "Lab L5 \u2014 GTM panel share bar parity",
@@ -55,27 +56,69 @@
   "next_atom_id": null,
   "created_at": "2026-05-31T11:20:00Z",
   "updated_at": "2026-05-31T12:15:00Z",
+=======
+  "epic_status": "active",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic_title": "Explore L5 — OG screener agent margin notes",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
+  "atoms": [
+    {
+      "id": "explore-og-margin-note-lead",
+      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
+      "status": "done",
+      "merge_commit": "0fc4932b7"
+    },
+    {
+      "id": "explore-og-margin-note-rows",
+      "title": "Margin notes on top-3 OG screener rows",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-margin-note-sticker",
+      "title": "LIVE staff sticker when OG rows carry margin notes",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-margin-note-college",
+      "title": "College universe margin notes on OG export",
+      "status": "pending",
+      "merge_commit": null
+    }
+  ],
+  "next_atom_id": "explore-og-margin-note-sticker",
+  "created_at": "2026-05-31T11:22:30Z",
+  "updated_at": "2026-05-31T11:40:00Z",
+>>>>>>> origin/razzle-v2-redesign
   "completed_epics": [
     {
-      "id": "lab-l5-og-hallway-position-defaults",
+      "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
-      "last_atom": "lab-og-tolab-breakouts-position",
-      "merge_commit": "1ebb9dc73"
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
     },
     {
-      "id": "explore-l5-og-margin-notes",
-      "status": "partial",
-      "last_atom": "explore-og-margin-note-rows",
-      "merge_commit": "c1a0bcaad"
+      "id": "lab-l5-launch10-og-demo-trust-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-demo-blurbs",
+      "merge_commit": "3705fdce8"
     },
     {
-      "id": "league-l5-bureau-h2h-gtm",
+      "id": "lab-l5-og-hallway-deep-links",
       "status": "complete",
+<<<<<<< HEAD
       "last_atom": "bureau-h2h-og-gate-c-snapshot",
       "merge_commit": "4907c8327"
     },
     "league-h2h-gtm-export-2026-05-31",
     "lab-l5-pro-profile-og-live-parity"
+>>>>>>> origin/razzle-v2-redesign
+=======
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
+    }
 >>>>>>> origin/razzle-v2-redesign
   ]
 }
