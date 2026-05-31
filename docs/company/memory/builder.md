@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | launch10DemoStickerLabel rankings/tv/breakouts | ebc4b722 | curl 66–67KB×3; route.tsx only.
+
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
 

@@ -12,6 +12,8 @@
 
 ```
 rankings 200 66806
+breakouts 200 66253
+tradevalues 200 67267
 ```
 
-PNG ≥40KB. LIVE labels already on base (cycle 125); this commit adds `launch10DemoStickerLabel` for demo paths.
+PNG ≥40KB each. LIVE labels on base (cycle 125); this atom adds `launch10DemoStickerLabel` + demo blurbs for rankings, breakouts, tradevalues.
