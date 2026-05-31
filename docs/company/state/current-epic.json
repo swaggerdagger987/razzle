@@ -1,19 +1,38 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG watermarks must mirror in-card scope (position defaults) so exports click back correctly.",
-  "epic_title": "Lab L5 — OG hallway position defaults",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Bureau rivalry cards lack preview-before-export — managers can't eyeball the OG card before downloading like Explore and Room Briefing.",
+  "epic_title": "League L5 — Bureau H2H GTM preview export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-tolab-weekly-position",
-      "title": "weekly OG watermark includes default WR position in toLab",
-      "status": "done",
-      "merge_commit": "9be64d109"
+      "id": "bureau-h2h-preview-card",
+      "title": "H2H share bar preview card link before export",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "bureau-h2h-copy-og-preview-link",
+      "title": "H2H copy link targets OG preview URL for GTM embeds",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "bureau-mc-preview-card",
+      "title": "Monte Carlo share bar preview card parity",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:26:34Z",
-  "updated_at": "2026-05-31T11:32:00Z",
-  "completed_epics": []
+  "next_atom_id": "bureau-h2h-preview-card",
+  "created_at": "2026-05-31T11:34:00Z",
+  "updated_at": "2026-05-31T11:34:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "0b769601f"
+    }
+  ]
 }
