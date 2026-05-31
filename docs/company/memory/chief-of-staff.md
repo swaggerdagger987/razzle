@@ -1,3 +1,4 @@
+2026-05-31 | lab-dashboard-formula-og-live | f6e0985f3 | SHIP | Factory workday cycle 1; rebased onto base; PR #1518 merge path.
 2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | 792e9f77d | SHIP | efficiency/aging formula_score OG; PR #1318.
 2026-05-31 | lab-dashboard-formula-og-live | 7aff18134 | SHIP | Factory open cycle 1; formula OG epic complete; dedup #1414.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4; lock #1415.
