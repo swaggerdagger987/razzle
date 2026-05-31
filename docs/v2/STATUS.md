@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (cycle 88 — Weekly OG snapshot rows)  
+**Last updated:** 2026-05-31 (cycle 89 — Prospects OG snapshot rows)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -19,10 +19,10 @@ From `LOOP-STATE.md`:
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | PARITY — Lab OG snapshot rows (prospects, breakouts, tradevalues) |
+| Next slice | PARITY — Lab OG snapshot rows (breakouts, tradevalues) |
 | Last commit | `4a6ef16b` |
 
-Recent completions (cycle 88): Weekly heatmap OG snapshot rows; Lab L5 OG snapshot epic atom 1/4 in progress.
+Recent completions (cycle 89): Prospects OG snapshot rows; Lab L5 OG snapshot epic atom 2/4 in progress.
 
 ---
 

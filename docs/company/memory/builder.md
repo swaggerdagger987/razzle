@@ -11,6 +11,8 @@ YYYY-MM-DD | slice | approach | commit hash | outcome | keep | discard | revisit
 Read this file before implementing. Reuse working patterns; avoid repeating known
 failure modes. Karpathy: simplicity first, surgical changes.
 
+2026-05-31 | lab-prospects-og-snapshot | top-6 RPS ogSnapshotRows on ProspectsRenderer | da33eafd | SHIP | KEEP school-as-team for college OG | — | breakouts/tradevalues | evidence 2026-05-31-lab-prospects-og-snapshot.md
+
 2026-05-31 | lab-weekly-og-snapshot | peak-week FPTS ogSnapshotRows on WeeklyHeatmapRenderer | 4a6ef16b | SHIP | KEEP snapshot+position on LabOgExportLink | — | prospects/breakouts/tradevalues | evidence 2026-05-31-lab-weekly-og-snapshot.md
 
 ---
