@@ -14,7 +14,7 @@
     {
       "id": "lab-og-buysell-formula-live",
       "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
