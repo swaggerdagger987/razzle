@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | league-h2h-og-live-sample-stickers | 0503c754 | H2H OG teal LIVE + terracotta SAMPLE stickers.
+2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
 
 2026-05-31 | lab-pro-gate-loading-copy | 7236be3e | PanelAgentLoading wired into ProUpgradeGate.
