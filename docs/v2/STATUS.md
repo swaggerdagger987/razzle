@@ -1,6 +1,7 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 129 — Lab L4 ProGateFromPanelError breakouts)
+**Last updated:** 2026-05-31 (factory cycle 130 — Lab L5 gamelog OG player_id default on export)
+**Previous:** 2026-05-31 (factory cycle 129 — Lab L4 ProGateFromPanelError breakouts)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
