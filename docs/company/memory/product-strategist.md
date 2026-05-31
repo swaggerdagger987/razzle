@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-sticker | f6e0985f3 | SHIP | Explore margin epic 3/4; LIVE staff sticker when live rows have notes.
+2026-05-31 | explore-og-margin-note-sticker | 3d4d44c | SHIP | Explore margin epic 3/4; LIVE staff sticker when live rows have notes.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Explore margin epic 2/4; OG top-3 matches screener staff column.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
 2026-05-31 | lab-og-tolab-aging-position | d56e382 | SHIP | Aging RB default in OG watermark (T6).
