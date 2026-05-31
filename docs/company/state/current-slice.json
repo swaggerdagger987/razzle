@@ -28,7 +28,7 @@
     "verdict": "SHIP 3/3"
   },
   "status": "in_progress",
-  "content_commit": null,
-  "reality": "pending",
+  "content_commit": "1bc1f1e2b,
+  "reality": "PASS",
   "merge": "pending"
 }
