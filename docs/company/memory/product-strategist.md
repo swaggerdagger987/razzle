@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | Resume active epic next_atom_id; no re-debate mid-epic | SHIP | keep | — | — | buysell atom 3/3 completes position filters
+
 2026-05-31 | Dedup prospects when atom title names two panels | SHIP | keep | — | — | only tradevalues needed code
 
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.

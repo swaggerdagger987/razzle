@@ -20,7 +20,7 @@
     {
       "id": "lab-og-position-buysell",
       "title": "Buy/sell export passes position filter to OG",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],

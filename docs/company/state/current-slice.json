@@ -1,25 +1,25 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-position-tradevalues-prospects",
+  "atom_id": "lab-og-position-buysell",
   "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
   "epic": "Lab L5 — OG export matches in-panel position filters",
-  "slice_title": "Trade values export passes position filter to OG (prospects already wired)",
+  "slice_title": "Buy/sell export passes position filter to OG",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with position-scoped rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx"
+    "apps/web/components/lab/renderers/BuySellRenderer.tsx"
   ],
   "max_files": 1,
   "max_lines": 5,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-tradevalues-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/tradevalues?download=1&position=WR&snapshot=W3sibiI6IkphJ01hcnIgQ2hhc2UiLCJwIjoiV1IiLCJ0IjoiQ0lOIiwicyI6OTUsInNsIjoiVmFsdWUifV0='"
+    "curl -s -o /tmp/og-buysell-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1&position=WR'"
   ],
   "out_of_scope": [
-    "ProspectsRenderer (position already on export link)",
     "OG route changes",
+    "Other Lab renderers",
     "NORTH_STAR / DESIGN edits"
   ],
   "builder_mode": "composer-surgical"
