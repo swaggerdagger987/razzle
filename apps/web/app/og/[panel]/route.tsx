@@ -87,6 +87,12 @@ const LAUNCH_10_OG_SLUGS = new Set([
   "buysell",
 ]);
 
+/** Panel-specific LIVE sticker copy when nflverse/API rows render (Launch-10). */
+const LAUNCH_10_LIVE_STICKER: Record<string, string> = {
+  weekly: "LIVE · spike weeks",
+  prospects: "LIVE · RPS board",
+};
+
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -698,7 +704,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            LIVE · nflverse rows
+            {LAUNCH_10_LIVE_STICKER[slug] ?? "LIVE · nflverse rows"}
           </div>
         ) : null}
 
