@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: pick from PARITY/NEXT — Bureau H2H or next Lab depth
 last_keep_cycle: 71
-last_commit: da33eafd
+last_commit: 6737e6ae
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
