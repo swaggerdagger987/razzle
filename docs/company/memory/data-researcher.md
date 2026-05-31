@@ -1,5 +1,5 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | PASS | FROM PANEL shares need pid in payload for hallway.
+2026-05-31 | lab-og-tolab-snapshot-player | bbd515f7e | PASS | FROM PANEL shares need pid in payload for hallway.
 # Memory — Data Researcher
 
 2026-05-31 | lab-og-tolab-gamelog-default | — | PASS | No new Reddit intel; hallway slice only.
@@ -7,7 +7,7 @@
 
 2026-05-31 | lab-og-dynasty-comps-live-sticker | — | PASS | No Reddit intel change this atom.
 
-2026-05-31 | room-briefing-watermark | f6e0985f3 | No new intel; Room export slice only.
+2026-05-31 | room-briefing-watermark | bbd515f7e | No new intel; Room export slice only.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | No new Reddit intel; empty-state export unblocks tape screenshots.
 
 2026-05-31 | room-briefing-watermark | cycle 139 | No new intel; Room hallway export parity with Explore.
@@ -70,13 +70,13 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | Bureau share rows | 433d8002 | keep | Monte Carlo export row now matches Explore copy+export pattern
-2026-05-31 | Monte Carlo share row | f6e0985f3 | keep | Bureau group-chat export parity; H2H already on base
+2026-05-31 | Monte Carlo share row | bbd515f7e | keep | Bureau group-chat export parity; H2H already on base
 2026-05-31 | Lab OG launch10 label | 6e98f4a2 | keep | live cards without sample tag when API rows present
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Pressure Map share | 864e1d14 | keep | deadline desperation URLs for trade-DM hooks
-2026-05-31 | Trade Network share | f6e0985f3 | keep | collusion/partnership cards sized for Reddit screenshot gravity
+2026-05-31 | Trade Network share | bbd515f7e | keep | collusion/partnership cards sized for Reddit screenshot gravity
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
-2026-05-31 | Cycle 86 Trade Network copy link | f6e0985f3 | keep | Bureau behavioral share atom 3
+2026-05-31 | Cycle 86 Trade Network copy link | bbd515f7e | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | Lab OG live sort | 7f78b631 | skip | no new Reddit intel this cycle
