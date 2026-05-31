@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | H2H OG LIVE badge | da33eafd | Single-file head-to-head route; mirrors [panel] LIVE Caveat block.
+
 2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | SAMPLE badge mirrors LIVE block; force_demo skips fetch.
 
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | ogPositionFilter + PANEL_API_OG_LIMIT; ≤40 lines route.tsx.

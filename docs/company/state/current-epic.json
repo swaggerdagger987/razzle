@@ -1,32 +1,32 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
-  "epic_title": "Lab L5 — OG live panel rows visible on Launch-10 cards",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Bureau H2H OG cards don't signal live Sleeper rivalry vs sample preview — Reddit can't tell real league exports from demo.",
+  "epic_title": "League L5 — Bureau H2H OG live vs sample stickers",
+  "parity_ref": "Explore L5 — Bureau H2H export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-live-sticker-launch10",
-      "title": "Launch-10 OG — LIVE sticker + blurb when nflverse rows render",
-      "status": "done",
-      "merge_commit": "4e905360"
+      "id": "bureau-h2h-og-live-sticker",
+      "title": "H2H OG — teal LIVE sticker when league API returns you/them",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-live-sticker-prospects-weekly",
-      "title": "Prospects + Weekly OG — verify live sticker with panel API",
-      "status": "done",
-      "merge_commit": "15109115"
+      "id": "bureau-h2h-og-sample-sticker",
+      "title": "H2H OG — terracotta SAMPLE sticker on demo rivalry path",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-live-demo-fallback-copy",
-      "title": "Sample preview copy — sharper contrast vs live sticker",
-      "status": "done",
-      "merge_commit": "45d4a448"
+      "id": "bureau-h2h-og-force-demo-qa",
+      "title": "H2H OG — force_demo QA param for Gate C SAMPLE curl",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T08:05:00Z",
-  "updated_at": "2026-05-31T12:30:00Z",
+  "next_atom_id": "bureau-h2h-og-live-sticker",
+  "created_at": "2026-05-31T08:20:00Z",
+  "updated_at": "2026-05-31T08:20:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-rows-launch10",
