@@ -1,6 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-breakouts-score-ranked",
-  "slice_title": "Breakouts OG export ranks top-6 by breakout score",
+  "atom_id": "lab-og-weekly-ppg-ranked",
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
+  "epic": "Lab L5 — OG snapshot row fidelity",
+  "slice_title": "Weekly OG export ranks top-6 by PPG for active position tab",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with ranked rows",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/[panel]/route.tsx"
+  ],
+  "max_files": 1,
+  "max_lines": 80,
+  "acceptance_commands": [
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-weekly-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1'"
+  ],
+  "out_of_scope": [
+    "Breakouts atom",
+    "Bureau tabs",
+    "NORTH_STAR / DESIGN edits"
+  ],
   "builder_mode": "composer-surgical"
 }

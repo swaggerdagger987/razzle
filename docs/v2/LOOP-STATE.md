@@ -2,8 +2,7 @@ cycle: 97
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: bureau-h2h-og-route-lib-decode
-last_keep_cycle: 97
+next_slice: lab-og-breakouts-score-ranked
+last_keep_cycle: 99
 last_commit: e55e982f
-lab_l5_dashboard_og_export_epic: complete
-bureau_h2h_codec_epic: active
+lab_l5_og_fidelity_weekly_ppg: complete
