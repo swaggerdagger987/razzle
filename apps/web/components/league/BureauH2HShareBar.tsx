@@ -1,15 +1,21 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import {
+  encodeBureauH2HOgSnapshot,
+  type BureauH2HOgSnapshot,
+} from "@/lib/bureau-h2h-og-snapshot";
 
 interface Props {
   leagueId: string;
   userId: string;
   opponentId?: string;
+  /** In-product rivalry rows — OG export matches what the user sees. */
+  ogSnapshot?: BureauH2HOgSnapshot;
 }
 
 /** Copyable rivalry URL + OG export — mirrors ExploreShareButton for Bureau H2H. */
-export function BureauH2HShareBar({ leagueId, userId, opponentId }: Props) {
+export function BureauH2HShareBar({ leagueId, userId, opponentId, ogSnapshot }: Props) {
   const [copied, setCopied] = useState(false);
 
   const rivalryPath = `/league/${leagueId}/head-to-head${
@@ -22,6 +28,8 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId }: Props) {
     download: "1",
   });
   if (opponentId) ogParams.set("opponent", opponentId);
+  const snapshot = ogSnapshot ? encodeBureauH2HOgSnapshot(ogSnapshot) : undefined;
+  if (snapshot) ogParams.set("snapshot", snapshot);
 
   const copyLink = useCallback(async () => {
     const url =
