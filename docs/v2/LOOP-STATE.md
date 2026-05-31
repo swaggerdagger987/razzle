@@ -2,12 +2,10 @@ cycle: 134
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-launch10-gamelog-efficiency-aging-labels
+next_slice: explore-og-universe-query
 last_keep_cycle: 134
 last_commit: fa71ce6ff
 lab_l5_og_trust_sticker_epic: complete
-lab_l5_og_panel_native_labels_epic: active
+explore_l5_universe_export_epic: active
 lab_l4_pro_gate_error_epic: complete
 lab_l5_og_live_fetch_epic: complete
-lab_l2_sidebar_agent_epic: complete
-bureau_h2h_codec_epic: complete

@@ -1,44 +1,50 @@
 {
   "epic_status": "active",
-  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
-  "epic_title": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Explore college screener shares look like NFL exports \u2014 Reddit can't tell dynasty vs college OG cards apart without opening the file.",
+  "epic_title": "Explore L5 \u2014 universe-aware share exports",
+  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
-      "title": "Rankings + tradevalues + breakouts — SAMPLE panel-native stickers",
-      "status": "done",
-      "merge_commit": "54443bc8"
+      "id": "explore-og-universe-query",
+      "title": "Explore OG export/preview URLs carry universe; college download filename",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
-      "title": "Gamelog + efficiency + aging — panel-native LIVE/SAMPLE stickers",
+      "id": "explore-og-college-gate-c",
+      "title": "College explore OG PNG \u226540KB with fixture params",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-launch10-buysell-dashboard-labels",
-      "title": "Buy-sell + dashboard — panel-native LIVE/SAMPLE stickers",
+      "id": "explore-og-nfl-universe-default",
+      "title": "NFL explore OG omits redundant universe when default",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-launch10-gamelog-efficiency-aging-labels",
-  "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T09:55:00Z",
+  "next_atom_id": "explore-og-universe-query",
+  "created_at": "2026-05-31T08:44:01Z",
+  "updated_at": "2026-05-31T09:30:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-og-live-fetch-merge",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "4bc3913e"
+    },
+    {
+      "id": "lab-l5-og-live-fetch-sticker",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-hallway-teasers",
+      "merge_commit": "675044ea"
+    },
     {
       "id": "lab-l5-og-trust-sticker",
       "status": "complete",
       "last_atom": "lab-og-from-panel-sticker-gamelog",
       "merge_commit": "fa71ce6ff"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "complete",
-      "last_atom": "lab-l4-pro-gate-error-remaining",
-      "merge_commit": "f8ab89f25"
     }
   ]
 }
