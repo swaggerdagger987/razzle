@@ -13,7 +13,7 @@
     {
       "id": "lab-og-from-panel-sticker-evidence",
       "title": "pytest + Gate C curl for rankings/weekly snapshot stickers",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
