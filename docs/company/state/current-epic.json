@@ -9,7 +9,7 @@
       "id": "lab-og-prospects-rps-ranked",
       "title": "Prospects OG export ranks top-6 by RPS with position filter",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "c0358ff3"
     },
     {
       "id": "lab-og-weekly-ppg-ranked",
@@ -27,5 +27,5 @@
   "next_atom_id": "lab-og-weekly-ppg-ranked",
   "created_at": "2026-05-31T05:30:00Z",
   "updated_at": "2026-05-31T05:45:00Z",
-  "last_cycle_commit": null
+  "last_cycle_commit": "c0358ff3"
 }
