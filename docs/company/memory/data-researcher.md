@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | explore-og-universe-query | da33eafd | No new REDDIT-INTEL; college screener export angle unchanged.
+2026-05-31 | explore-og-universe-query | 2ed574a3 | No new REDDIT-INTEL; college screener export angle unchanged.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.
 2026-05-31 | launch10 no-snapshot | e2a3ce8a | Direct /og links need live API path without panel snapshot param.
