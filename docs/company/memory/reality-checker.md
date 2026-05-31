@@ -27,4 +27,4 @@ explicit checks in the verification routine.
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live panel rows Gate C | 2cb898b6 | PASS | curl rankings 59509B breakouts 60649B | keep | docs/v2/evidence/2026-05-31-lab-og-live-extractors.md
-2026-05-31 | Bureau Monte Carlo copy link Gate C | da33eafd | PASS | curl monte-carlo OG 53350B | keep | docs/v2/evidence/2026-05-31-bureau-monte-carlo-copy-link.md
+2026-05-31 | Bureau Monte Carlo copy link Gate C | 433d8002 | PASS | curl monte-carlo OG 53350B | keep | docs/v2/evidence/2026-05-31-bureau-monte-carlo-copy-link.md

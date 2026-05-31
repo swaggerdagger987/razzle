@@ -20,12 +20,12 @@
     {
       "id": "bureau-monte-carlo-copy-link",
       "title": "Monte Carlo copy link beside export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "433d8002"
     }
   ],
-  "next_atom_id": "bureau-monte-carlo-copy-link",
+  "next_atom_id": "bureau-h2h-copy-link",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z",
-  "last_cycle_commit": null
+  "updated_at": "2026-05-31T04:41:00Z",
+  "last_cycle_commit": "433d8002"
 }

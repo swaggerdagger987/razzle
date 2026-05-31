@@ -26,4 +26,4 @@ new evidence.
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live row parity epic atom 1 | 2cb898b6 | SHIP | keep | NEXT.md lead; panels slug + candidates on OG
-2026-05-31 | Bureau Monte Carlo share row | da33eafd | SHIP | keep | League L5 atom 3/3; group-chat parity before H2H
+2026-05-31 | Bureau Monte Carlo share row | 433d8002 | SHIP | keep | League L5 atom 3/3; group-chat parity before H2H
