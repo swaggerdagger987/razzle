@@ -1,32 +1,38 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab sidebar still lists Staff Picks as a flat catalog — agents own panels in headers but not in navigation, so the hallway band is invisible until you open a panel.",
-  "epic_title": "Lab L2 — sidebar groups launch-10 by agent owner",
-  "parity_ref": "docs/v2/AGENTS.md — LabSidebar group by agent",
-  "depth_ref": "Lab L2",
+  "big_problem": "Launch-10 OG shares still read generic on Reddit thumbnails — only prospects/weekly have panel-native LIVE/SAMPLE copy.",
+  "epic_title": "Lab L5 — Launch-10 OG panel-native LIVE/SAMPLE stickers",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-sidebar-staff-picks-by-agent",
-      "title": "Staff Picks grouped under agent owner headers in LabSidebar",
-      "status": "in_progress",
+      "id": "lab-og-live-sticker-launch10-staff-picks",
+      "title": "Rankings + tradevalues + breakouts OG — panel-native LIVE/SAMPLE stickers",
+      "status": "done",
       "merge_commit": null
     },
     {
-      "id": "lab-sidebar-search-agent-labels",
-      "title": "Search results show agent owner in sidebar item title",
+      "id": "lab-og-live-sticker-launch10-gamelog-efficiency",
+      "title": "Gamelog + efficiency + aging OG — panel-native LIVE/SAMPLE stickers",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-live-sticker-launch10-buysell-dashboard",
+      "title": "Buy-sell + dashboard OG — panel-native LIVE/SAMPLE stickers",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-sidebar-staff-picks-by-agent",
-  "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:30:00Z",
+  "next_atom_id": "lab-og-live-sticker-launch10-gamelog-efficiency",
+  "created_at": "2026-05-31T09:00:00Z",
+  "updated_at": "2026-05-31T09:00:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-launch10-og-live-extract",
+      "id": "lab-l2-sidebar-by-agent",
       "status": "complete",
-      "last_atom": "lab-og-dynasty-comps-pro-teaser",
-      "merge_commit": "26a590c9"
+      "last_atom": "lab-sidebar-staff-picks-by-agent",
+      "merge_commit": "4e8b0e8e"
     }
   ]
 }

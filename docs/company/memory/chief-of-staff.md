@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | lab-og-live-sticker-launch10-staff-picks | da33eafd | keep | Factory open; L5 sticker epic atom 1/3; PR #809.
+
 2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
 
 2026-05-31 | Factory cycle 119 SAMPLE vs LIVE OG | 9cd6a5cf | Live-rows epic 3/3 complete; force_demo for Gate C.
