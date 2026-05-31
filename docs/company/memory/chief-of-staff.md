@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 133 explore OG demo | da33eafd | Rebased on 1a901aebf; PR #1047; workday cycle 4.
+2026-05-31 | Factory cycle 133 explore OG demo | 1a4a6ea03 | Rebased on 1a901aebf; PR #1047; workday cycle 4.
 
 
 2026-05-31 | Factory cycle 132 FROM PANEL snapshot evidence | 164159413 | workday cycle 2; NO_LOCK_GUARDRAIL; trust-sticker epic 2/3.
