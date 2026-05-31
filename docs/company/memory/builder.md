@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-sidebar-search-agent-labels | da33eafd | keep | showAgentInTitle when query set.
+2026-05-31 | lab-sidebar-search-agent-labels | 0ddf7f6b | keep | showAgentInTitle when query set.
 
 2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
 

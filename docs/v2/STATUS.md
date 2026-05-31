@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L2 |
 | Next slice | lab-pro-gate-perks-copy |
-| Last commit | `da33eafd` |
+| Last commit | `0ddf7f6b` |
 
 ---
 

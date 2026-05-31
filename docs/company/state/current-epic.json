@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab sidebar still lists Staff Picks as a flat catalog — agents own panels in headers but not in navigation, so the hallway band is invisible until you open a panel.",
   "epic_title": "Lab L2 — sidebar groups launch-10 by agent owner",
   "parity_ref": "docs/v2/AGENTS.md — LabSidebar group by agent",
@@ -14,14 +14,20 @@
     {
       "id": "lab-sidebar-search-agent-labels",
       "title": "Search results show agent owner in sidebar item title",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0ddf7f6b"
     }
   ],
-  "next_atom_id": "lab-sidebar-search-agent-labels",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:32:00Z",
+  "updated_at": "2026-05-31T08:35:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l2-sidebar-agent-epic",
+      "status": "complete",
+      "last_atom": "lab-sidebar-search-agent-labels",
+      "merge_commit": "0ddf7f6b"
+    },
     {
       "id": "lab-l5-launch10-og-live-extract",
       "status": "complete",
