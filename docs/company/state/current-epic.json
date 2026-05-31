@@ -15,7 +15,7 @@
       "id": "lab-panel-share-bar-breakouts-buysell",
       "title": "Breakouts + Buy/Sell — share bar with formula snapshot rows",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "6aa7a73de"
     },
     {
       "id": "lab-panel-share-bar-weekly-gamelog",
