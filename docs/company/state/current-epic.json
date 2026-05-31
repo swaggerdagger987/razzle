@@ -14,10 +14,10 @@
     {
       "id": "league-l5-trade-finder-og",
       "title": "Trade Finder OG share card",
-      "status": "pending",
+      "status": "done",
       "parity_ref": "League L5",
       "depth_ref": "League L5",
-      "merge_commit": null
+      "merge_commit": "2e0aa724"
     },
     {
       "id": "league-l5-pressure-og",
@@ -28,6 +28,6 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-l5-trade-finder-og",
+  "next_atom_id": "league-l5-pressure-og",
   "started_at": "2026-05-31T01:36:42Z"
 }

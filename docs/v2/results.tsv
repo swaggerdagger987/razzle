@@ -50,3 +50,4 @@ cycle	commit	score	status	pillar	slice	description
 57	2e11270	depth+hallway+reddit+voice+simplicity	keep	Lab	L5 OG live data	/og/[panel] fetches live rows, agent badge, position pills, watermark, graceful fallback
 58	0019814f	depth+simplicity+voice	keep	Lab	L5 OG demo rows	trust=T5,T6; /og/[panel] static demo rows when API empty, sample preview label, Gate C PNG ~59KB
 59	da33eafd	depth+hallway+reddit+voice+simplicity	keep	League	L5 MC OG export	/og/monte-carlo top-3 title/playoff bars demo fallback Bureau export button trust=T5,T6
+60	2e0aa724	depth+hallway+reddit+voice+simplicity	keep	League	L5 Trade Finder OG export	/og/trade-finder hero match value-gap rows demo fallback Bureau export button trust=T5,T6

@@ -263,3 +263,10 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Pattern:** Managers share "who wins my league" sim cards before playoffs; comment threads want the tool name when odds look league-specific.
 - **Razzle move:** Monte Carlo OG card mirrors in-product top-3 title/playoff bars + Octo badge; export from Bureau tab.
 - **Council cycle:** 59
+
+## 2026-05-31 — Cycle 60
+
+### r/DynastyFF — fair-trade screenshot posts (pattern)
+- **Pattern:** Trade deadline threads ask "is this fair?" with player names + value context; generic trade-value charts get ignored.
+- **Razzle move:** Trade Finder OG shows hero match with gap % + partner team; Bones badge; export from Bureau tab.
+- **Council cycle:** 60
