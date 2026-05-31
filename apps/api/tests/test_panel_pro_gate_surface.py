@@ -58,3 +58,12 @@ def test_pro_gate_from_panel_error_wired_in_breakouts():
         _repo_root() / "apps/web/components/lab/ProGateFromPanelError.tsx"
     ).read_text(encoding="utf-8")
     assert re.search(r"export function ProGateFromPanelError", surface)
+
+
+def test_pro_gate_from_panel_error_wired_in_rankings_and_buysell():
+    for slug in ("DynastyRankingsRenderer", "BuySellRenderer"):
+        renderer = (
+            _repo_root() / f"apps/web/components/lab/renderers/{slug}.tsx"
+        ).read_text(encoding="utf-8")
+        assert "ProGateFromPanelError" in renderer
+        assert "ProUpgradeGate" not in renderer

@@ -1,110 +1,38 @@
 {
-<<<<<<< HEAD
-  "epic_status": "complete",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
-  "epic_title": "Lab L5 — OG live fetch + sticker parity",
-=======
   "epic_status": "active",
-  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
-  "epic_title": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
->>>>>>> origin/razzle-v2-redesign
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
+  "epic_title": "Lab L4 — shared pro-gate error surface",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
   "atoms": [
     {
-<<<<<<< HEAD
-      "id": "lab-og-launch10-live-fetch-merge",
-      "title": "Merge base LIVE sticker + fetchOgLiveRows for Launch-10 without snapshot",
+      "id": "lab-l4-pro-gate-error-surface",
+      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
       "status": "done",
-      "merge_commit": "3f0411ec"
+      "merge_commit": "5721ee33"
     },
     {
-      "id": "explore-og-universe-query",
-      "title": "Explore OG — pass universe/college in export URL",
-      "status": "done",
-      "merge_commit": "d3c6c873"
+      "id": "lab-l4-pro-gate-error-tradevalues",
+      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-gamelog-player-default",
-      "title": "Gamelog OG — default player_id when export omits query",
-      "status": "done",
-      "merge_commit": "96a69ddf"
-    }
-  ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T08:25:32Z",
-  "updated_at": "2026-05-31T09:15:00Z",
-  "completed_epics": [
-    {
-      "id": "lab-l5-og-live-fetch-sticker",
-      "status": "complete",
-      "last_atom": "lab-og-gamelog-player-default",
-      "merge_commit": "96a69ddf"
-    },
-    {
-      "id": "lab-l5-og-gamelog-live-week-rows",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-snapshot-default",
-      "merge_commit": "e2a3ce8a"
-    },
-    {
-      "id": "lab-l5-launch10-og-live-sticker",
-      "status": "complete",
-      "last_atom": "lab-og-live-sticker-prospects-weekly",
-      "merge_commit": "5bb77346"
-    },
-    {
-      "id": "lab-l5-og-watermark-band",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-band-panel-route",
-      "merge_commit": "742028c0"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
-    },
-    {
-      "id": "league-l5-h2h-og-watermark",
-      "status": "complete",
-      "last_atom": "league-h2h-og-watermark-band",
-      "merge_commit": "945e4656"
-=======
-      "id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
-      "title": "Rankings + tradevalues + breakouts — SAMPLE panel-native stickers (LIVE on base)",
+      "id": "lab-l4-pro-gate-error-remaining",
+      "title": "ProGateFromPanelError on rankings + buysell launch-10",
       "status": "in_progress",
       "merge_commit": null
-    },
-    {
-      "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
-      "title": "Gamelog + efficiency + aging — panel-native LIVE/SAMPLE stickers",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "lab-og-launch10-buysell-dashboard-labels",
-      "title": "Buy-sell + dashboard — panel-native LIVE/SAMPLE stickers",
-      "status": "pending",
-      "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
-  "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T09:09:46Z",
+  "next_atom_id": "lab-l4-pro-gate-error-remaining",
+  "created_at": "2026-05-31T09:25:00Z",
+  "updated_at": "2026-05-31T09:30:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-live-labels-rankings-tv-breakouts",
+      "id": "lab-l5-og-live-fetch-merge",
       "status": "complete",
-      "last_atom": "cycle-125-merge",
-      "merge_commit": "5dcbbc01"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "complete",
-      "last_atom": "lab-l4-pro-gate-error-surface",
-      "merge_commit": "5721ee33"
->>>>>>> origin/razzle-v2-redesign
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "4bc3913e"
     }
   ]
 }
