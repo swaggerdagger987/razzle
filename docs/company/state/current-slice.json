@@ -1,12 +1,12 @@
 {
   "date": "2026-05-31",
   "atom_id": "explore-og-universe-query",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
-  "epic": "Lab L5 — OG live fetch + sticker parity",
+  "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
+  "epic": "Explore L5 — universe-aware share exports",
   "slice_title": "Explore OG export URL carries college universe",
   "parity_ref": "Explore L5 — share card matches screener universe",
   "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG PNG ≥40KB",
+  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG contract",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/components/explore/ExploreShareButton.tsx",

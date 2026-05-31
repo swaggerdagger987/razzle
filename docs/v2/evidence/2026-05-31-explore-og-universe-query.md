@@ -1,23 +1,21 @@
-# Evidence — explore-og-universe-query (2026-05-31)
+# Evidence — Explore OG universe export URL (2026-05-31)
 
 **Atom:** `explore-og-universe-query`  
-**Epic:** Lab L5 — OG live fetch + sticker parity (atom 2/4)
+**Files:** `ExploreShareButton.tsx`, `test_explore_share_og_universe.py`
 
-## Change
+## Acceptance
 
-- `ExploreShareButton` — `previewParams` / `ogParams` include `universe`; college exports download as `razzle-college-screener.png`.
-- `test_explore_share_og_universe.py` — regression guard on toolbar OG URL contract.
+| Check | Result |
+|-------|--------|
+| `pytest apps/api/tests/test_explore_share_og_universe.py -q` | 2 passed |
+| `npm run build --workspace=apps/web` | exit 0 |
 
-## Commands
+## Contract
 
-```bash
-python3 -m pytest apps/api/tests/test_explore_share_og_universe.py -q
-# 2 passed
-
-npm run build --workspace=apps/web
-# exit 0
-```
+- Preview + export links include `universe`, `sort`, `dir` query params
+- College universe uses download filename `razzle-college-screener.png`
+- NFL/default uses `razzle-explore.png`
 
 ## Verdict
 
-**PASS** — Gate C N/A (no `/og/[panel]` change). Explore college export URL already carried `universe`; filename polish + pytest lock the contract.
+**PASS** — Explore share toolbar passes universe into OG URLs for Reddit college vs NFL screenshots.
