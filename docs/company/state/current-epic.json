@@ -15,7 +15,7 @@
       "id": "lab-og-position-rankings",
       "title": "Pass position filter from dynasty rankings to OG export URL",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "1578f75e"
     },
     {
       "id": "lab-og-dynasty-comps-lab",
