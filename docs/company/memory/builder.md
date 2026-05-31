@@ -2,6 +2,8 @@
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
+2026-05-31 | lab-og-efficiency-live-extract | f6e0985f3 | SHIP | extractEfficiencyRows Eff/Vol lanes.
+
 # Memory — Builder
 
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | encodeOgSnapshot pid + decode snapshotPlayerId in OG route.
