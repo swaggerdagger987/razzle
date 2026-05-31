@@ -1,26 +1,33 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-dynasty-comps-pro-teaser",
-  "big_problem": "Launch-10 Lab OG cards for player-scoped panels still mis-rank live API rows — dynasty-comps exports should show Pro-gate teaser comps, not generic blur rows.",
-  "epic": "Lab L5 — launch-10 OG live extract matches renderers",
-  "slice_title": "Dynasty comps Pro gate panel-specific teaser rows",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T2", "T6"],
-  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
+  "epic": "Lab L4 — Pro gates feel like upgrade, not error",
+  "slice_title": "Launch-10 pro panel teasers audit — fill weekly/prospects/dashboard slug gaps",
+  "atom_id": "lab-pro-gate-launch10-teasers",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "ACCEPTANCE Gate 2 — Pro gate shows upgrade message, not blank",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/lib/panel-upgrade-teaser.ts"],
   "max_files": 1,
-  "max_lines": 35,
+  "max_lines": 45,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web 2>&1 | tail -3",
-    "curl -s -o /tmp/og-comps.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dynasty-comps?player_id=00-0036900&download=1'"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "node -e \"const m=require('fs').readFileSync('apps/web/lib/panel-upgrade-teaser.ts','utf8');['weekly','prospects','dashboard'].forEach(s=>{if(!m.includes(s+':'))throw new Error('missing '+s)});console.log('OK launch-10 teasers')\""
   ],
-  "out_of_scope": ["ProUpgradeGate component", "pricing", "API changes"],
+  "out_of_scope": [
+    "ProUpgradeGate.tsx changes",
+    "new panels",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+    "verdict": "SHIP"
+  },
+  "merge_commit": "a49abe94",
+  "status": "shipped"
 }

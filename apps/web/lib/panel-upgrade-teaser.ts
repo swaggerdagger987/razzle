@@ -46,6 +46,21 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Josh Allen", position: "QB", detail: "Wk 11 · 28.1 pts" },
     { name: "Josh Allen", position: "QB", detail: "Wk 10 · 41.2 pts" },
   ],
+  weekly: [
+    { name: "Ja'Marr Chase", position: "WR", detail: "Wk 12 · 28.4 PPG" },
+    { name: "Bijan Robinson", position: "RB", detail: "Wk 12 · 24.1 PPG" },
+    { name: "Brock Bowers", position: "TE", detail: "Wk 12 · 18.6 PPG" },
+  ],
+  prospects: [
+    { name: "Travis Hunter", position: "WR", detail: "RPS 94 · WR1 ceiling" },
+    { name: "Cam Ward", position: "QB", detail: "RPS 91 · day-one traits" },
+    { name: "Ashton Jeanty", position: "RB", detail: "RPS 89 · volume back" },
+  ],
+  dashboard: [
+    { name: "Garrett Wilson", position: "WR", detail: "Riser · +14 rank" },
+    { name: "Deebo Samuel", position: "WR", detail: "Faller · −11 rank" },
+    { name: "James Cook", position: "RB", detail: "Buy window · value lag" },
+  ],
   tiers: [
     { name: "CeeDee Lamb", position: "WR", detail: "Tier S · win-now anchor" },
     { name: "Bijan Robinson", position: "RB", detail: "Tier S · youth + volume" },
@@ -81,6 +96,9 @@ const PITCH_BY_SLUG: Record<string, string> = {
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",
   gamelog: "week-by-week game logs with peak-week context for trades",
+  weekly: "weekly heatmap streaks before your league mates spot the trend",
+  prospects: "rookie big board with combine and college context baked in",
+  dashboard: "dynasty pulse — risers, fallers, and value picks in one view",
   tiers: "S/A/B/C tiers so trades stop feeling random",
   vorp: "value-over-replacement ranks that show who actually moves the needle",
   stocks: "rising and falling dynasty assets before your league reacts",
