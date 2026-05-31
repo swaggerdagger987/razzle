@@ -14,7 +14,7 @@
     {
       "id": "lab-og-panel-specific-demos",
       "title": "Per-panel demo stat labels tuned to launch-10 shapes",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -26,5 +26,5 @@
   ],
   "next_atom_id": "lab-og-panel-specific-demos",
   "created_at": "2026-05-31T01:31:00Z",
-  "updated_at": "2026-05-31T02:00:00Z"
+  "updated_at": "2026-05-31T12:00:00Z"
 }

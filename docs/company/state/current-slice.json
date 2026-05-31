@@ -2,24 +2,25 @@
   "date": "2026-05-31",
   "big_problem": "Lab export cards must screenshot with real row layout even when the API has no live data (FACTORY-DOD Gate C).",
   "epic": "Lab L5 — OG cards are always screenshot-ready",
-  "slice_title": "Lab L5 — OG panel static demo rows when live API empty",
+  "slice_title": "Per-panel demo stat labels tuned to launch-10 shapes",
   "parity_ref": "Lab L4–L5 OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — PNG shows player rows, not loading-copy-only",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — launch-10 demo stat columns",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 120,
+  "max_lines": 400,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "pytest apps/api/tests -q",
-    "npx tsc --noEmit -p apps/web"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/weekly?download=1'",
+    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/tradevalues?download=1'",
+    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/gamelog?download=1'"
   ],
   "out_of_scope": [
-    "New panels",
-    "API schema changes",
-    "Per-player parameterized routes",
-    "NORTH_STAR or DESIGN edits"
+    "Parameterized player_id OG routes",
+    "New panels or API schema changes",
+    "NORTH_STAR / DESIGN edits"
   ],
   "builder_mode": "composer-surgical"
 }

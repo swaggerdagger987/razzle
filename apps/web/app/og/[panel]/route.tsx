@@ -46,6 +46,22 @@ const DEFAULT_DEMO_ROWS: OgRow[] = [
 ];
 
 const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
+  weekly: [
+    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 24.6, statLabel: "FPTS" },
+    { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 22.1, statLabel: "FPTS" },
+    { name: "Brock Bowers", position: "TE", team: "LV", stat: 18.4, statLabel: "FPTS" },
+    { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 26.8, statLabel: "FPTS" },
+    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 14.2, statLabel: "FPTS" },
+    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 19.7, statLabel: "FPTS" },
+  ],
+  prospects: [
+    { name: "Travis Hunter", position: "WR", team: "JAX", stat: 94, statLabel: "Score" },
+    { name: "Cam Ward", position: "QB", team: "TEN", stat: 91, statLabel: "Score" },
+    { name: "Ashton Jeanty", position: "RB", team: "LV", stat: 89, statLabel: "Score" },
+    { name: "Tyler Warren", position: "TE", team: "IND", stat: 86, statLabel: "Score" },
+    { name: "Tre Harris", position: "WR", team: "LAC", stat: 83, statLabel: "Score" },
+    { name: "Emeka Egbuka", position: "WR", team: "TB", stat: 80, statLabel: "Score" },
+  ],
   rankings: [
     { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 1, statLabel: "Rank" },
     { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 2, statLabel: "Rank" },
@@ -53,6 +69,14 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 4, statLabel: "Rank" },
     { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 5, statLabel: "Rank" },
     { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 6, statLabel: "Rank" },
+  ],
+  tradevalues: [
+    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 10200, statLabel: "Value" },
+    { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 9800, statLabel: "Value" },
+    { name: "Brock Bowers", position: "TE", team: "LV", stat: 7600, statLabel: "Value" },
+    { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 8900, statLabel: "Value" },
+    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 6200, statLabel: "Value" },
+    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 5800, statLabel: "Value" },
   ],
   breakouts: [
     { name: "Rome Odunze", position: "WR", team: "CHI", stat: 92, statLabel: "Score" },
@@ -62,6 +86,14 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 78, statLabel: "Score" },
     { name: "Xavier Worthy", position: "WR", team: "KC", stat: 74, statLabel: "Score" },
   ],
+  gamelog: [
+    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 28.4, statLabel: "FPTS" },
+    { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 19.2, statLabel: "FPTS" },
+    { name: "Brock Bowers", position: "TE", team: "LV", stat: 14.6, statLabel: "FPTS" },
+    { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 31.1, statLabel: "FPTS" },
+    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 11.8, statLabel: "FPTS" },
+    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 22.5, statLabel: "FPTS" },
+  ],
   efficiency: [
     { name: "Christian McCaffrey", position: "RB", team: "SF", stat: 0.42, statLabel: "Efficiency" },
     { name: "Tyreek Hill", position: "WR", team: "MIA", stat: 0.39, statLabel: "Efficiency" },
@@ -70,6 +102,14 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Saquon Barkley", position: "RB", team: "PHI", stat: 0.34, statLabel: "Efficiency" },
     { name: "CeeDee Lamb", position: "WR", team: "DAL", stat: 0.33, statLabel: "Efficiency" },
   ],
+  aging: [
+    { name: "Christian McCaffrey", position: "RB", team: "SF", stat: 28, statLabel: "Peak Age" },
+    { name: "Tyreek Hill", position: "WR", team: "MIA", stat: 30, statLabel: "Peak Age" },
+    { name: "Travis Kelce", position: "TE", team: "KC", stat: 31, statLabel: "Peak Age" },
+    { name: "Patrick Mahomes", position: "QB", team: "KC", stat: 32, statLabel: "Peak Age" },
+    { name: "Saquon Barkley", position: "RB", team: "PHI", stat: 27, statLabel: "Peak Age" },
+    { name: "CeeDee Lamb", position: "WR", team: "DAL", stat: 26, statLabel: "Peak Age" },
+  ],
   buysell: [
     { name: "Davante Adams", position: "WR", team: "NYJ", stat: 184.2, statLabel: "Value" },
     { name: "Joe Mixon", position: "RB", team: "HOU", stat: 162.5, statLabel: "Value" },
@@ -77,6 +117,14 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Kirk Cousins", position: "QB", team: "ATL", stat: 121.4, statLabel: "Value" },
     { name: "Stefon Diggs", position: "WR", team: "HOU", stat: 118.9, statLabel: "Value" },
     { name: "Aaron Jones", position: "RB", team: "MIN", stat: 112.3, statLabel: "Value" },
+  ],
+  dashboard: [
+    { name: "Ladd McConkey", position: "WR", team: "LAC", stat: 12.4, statLabel: "Chg" },
+    { name: "Malik Nabers", position: "WR", team: "NYG", stat: 9.8, statLabel: "Chg" },
+    { name: "Davante Adams", position: "WR", team: "NYJ", stat: -8.2, statLabel: "Chg" },
+    { name: "Joe Mixon", position: "RB", team: "HOU", stat: -6.1, statLabel: "Chg" },
+    { name: "Xavier Worthy", position: "WR", team: "KC", stat: 7.5, statLabel: "Chg" },
+    { name: "Stefon Diggs", position: "WR", team: "HOU", stat: -5.4, statLabel: "Chg" },
   ],
 };
 
