@@ -2,14 +2,14 @@
   "date": "2026-05-31",
   "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product.",
   "epic": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
-  "atom_id": "league-roster-depth-tab",
-  "slice_title": "Unhide Roster Depth tab with Dolphin renderer + hallway",
+  "atom_id": "league-build-profiles-tab",
+  "slice_title": "Unhide Build Profiles tab with Atlas renderer + hallway",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "acceptance_ref": "ACCEPTANCE Bureau-7 bespoke renderer; no OG gate this atom",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauRosterDepth.tsx",
+    "apps/web/components/league/BureauBuildProfiles.tsx",
     "apps/web/lib/bureau-features.ts",
     "apps/web/components/league/BureauFeatureBody.tsx"
   ],
@@ -20,8 +20,8 @@
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
   ],
   "out_of_scope": [
-    "OG share card for roster-depth",
-    "Unhide build-profiles or waiver-tendencies",
+    "OG share card for build-profiles",
+    "Unhide waiver-tendencies or strength-of-schedule",
     "API schema changes",
     "NORTH_STAR / DESIGN edits"
   ],

@@ -29,3 +29,4 @@ new evidence.
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | League roster-depth tab atom 3 | 9afe6a01 | SHIP | keep | closes Self-Scout hallway lie; Dolphin renderer
+2026-05-31 | League build-profiles tab atom 4 | da33eafd | SHIP | keep | completes Bureau unhide epic; Atlas archetype grid

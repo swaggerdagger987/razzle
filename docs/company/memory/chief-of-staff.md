@@ -28,3 +28,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 1 Bureau H2H export | 044ee1e8 | keep | workday open; League L5 epic atom 1/3; copy link + export bar
 2026-05-31 | Factory cycle 1 Bureau MC share | 3392bc29 | keep | deduped lab-og-live-label; Bureau share epic 3/3
 2026-05-31 | Factory cycle 81 roster-depth | 9afe6a01 | keep | workday reopen; League epic atom 3/4 SHIP
+2026-05-31 | Factory cycle 82 build-profiles | da33eafd | keep | workday cycle 1; League epic atom 4/4 completes unhide epic

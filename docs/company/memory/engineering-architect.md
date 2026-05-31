@@ -29,3 +29,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | BureauRosterDepth | 9afe6a01 | keep | mirror Power Rankings unhide; reuse Self-Scout depth helpers inline
+2026-05-31 | BureauBuildProfiles | da33eafd | keep | mirror Manager Profiles card grid; API rows already shaped
