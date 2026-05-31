@@ -20,7 +20,7 @@
       "id": "lab-og-live-sticker-breakouts-dashboard",
       "title": "OG curl evidence for breakouts + dashboard LIVE stickers",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "96d43d1b"
     }
   ],
   "next_atom_id": null,
@@ -32,7 +32,7 @@
       "id": "lab-l5-og-live-sticker",
       "status": "complete",
       "last_atom": "lab-og-live-sticker-breakouts-dashboard",
-      "merge_commit": "da33eafd"
+      "merge_commit": "96d43d1b"
     },
     {
       "id": "lab-l4-pro-gate-convert",
