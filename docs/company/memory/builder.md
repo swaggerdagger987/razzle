@@ -1,4 +1,7 @@
 # Memory — Builder
+
+2026-05-31 | lab-og-gamelog-player-default | c34a1a6f | keep | PLAYER_SCOPED_OG_SLUGS centralizes default player_id; curl 60634B; epic complete.
+
 2026-05-31 | lab-og-gamelog-player-default | 72647966 | keep | LabOgExportLink effectivePlayerId for player-scoped slugs; curl 60634B.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
