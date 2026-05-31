@@ -101,6 +101,11 @@ function launch10LiveStickerLabel(slug: string): string {
   return "LIVE · nflverse rows";
 }
 
+/** Terracotta SAMPLE sticker — pairs with teal LIVE so Reddit can tell demo vs nflverse. */
+function launch10SampleStickerLabel(): string {
+  return "SAMPLE · not live data";
+}
+
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -602,6 +607,7 @@ export async function GET(
   const query = url.searchParams.get("q") ?? "";
   const positionFilter = url.searchParams.get("position") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const forceDemoPreview = url.searchParams.get("preview") === "demo";
   const playerId =
     url.searchParams.get("player_id") ??
     url.searchParams.get("id") ??
@@ -647,7 +653,7 @@ export async function GET(
   const isSnapshot = snapshotHasRows;
   let rows = isSnapshot
     ? snapshotRows.slice(0, 6)
-    : liveHasRows
+    : liveHasRows && !forceDemoPreview
       ? rankOgRowsForPanel(slug, namedLiveRows, positionFilter)
       : rankOgRowsForPanel(slug, demoRowsForPanel(slug), positionFilter);
   if (isSnapshot && positionFilter) {
@@ -655,7 +661,7 @@ export async function GET(
   }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
-  const showingLiveData = !isSnapshot && liveHasRows && hasRows;
+  const showingLiveData = !isSnapshot && !forceDemoPreview && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
 
@@ -733,6 +739,27 @@ export async function GET(
             }}
           >
             {launch10LiveStickerLabel(slug)}
+          </div>
+        ) : null}
+
+        {showingDemoRows && LAUNCH_10_OG_SLUGS.has(slug) ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            {launch10SampleStickerLabel()}
           </div>
         ) : null}
 

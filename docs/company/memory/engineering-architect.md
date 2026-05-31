@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-live-demo-fallback-copy | route.tsx | SAMPLE sticker + preview=demo; ≤45 lines.
+
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly WR default in OG apiParams only.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | 1-file panel route; LIVE sticker gated on showingLiveData.

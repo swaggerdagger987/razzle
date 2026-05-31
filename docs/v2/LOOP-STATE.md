@@ -1,11 +1,11 @@
-cycle: 119
+cycle: 120
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-live-demo-fallback-copy
-last_keep_cycle: 119
-last_commit: 5bb77346
-lab_l5_og_live_rows_epic: active
+next_slice: PARITY next Lab L5 row after OG live-rows epic
+last_keep_cycle: 120
+last_commit: da33eafd
+lab_l5_og_live_rows_epic: complete
 lab_l5_og_watermark_epic: complete
 lab_l5_og_live_sort_epic: complete
 lab_l5_og_position_epic: complete

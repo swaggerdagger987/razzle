@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-live-demo-fallback-copy | pending | terracotta SAMPLE sticker + preview=demo QA on Launch-10 OG.
+
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly OG defaults position=WR for panel API live rows.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
