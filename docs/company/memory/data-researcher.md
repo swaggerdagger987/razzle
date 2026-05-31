@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | explore OG SAMPLE sticker | da33eafd | No new intel; UI-only atom.
+2026-05-31 | explore OG SAMPLE sticker | edb27535 | No new intel; UI-only atom.
 2026-05-31 | explore OG universe demo | 478eee02 | No new intel; mirrors Bureau/Lab Gate C pattern.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 

@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | explore OG SAMPLE sticker | da33eafd | isDemo conditional; 1 file explore/route.tsx.
+2026-05-31 | explore OG SAMPLE sticker | edb27535 | isDemo conditional; 1 file explore/route.tsx.
 2026-05-31 | explore OG demo fallback | 478eee02 | explore/route.tsx only; force_demo + DEMO arrays.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 

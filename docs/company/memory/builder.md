@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | explore OG SAMPLE sticker | da33eafd | terracotta Caveat badge; curl 59KB/63KB.
+2026-05-31 | explore OG SAMPLE sticker | edb27535 | terracotta Caveat badge; curl 59KB/63KB.
 2026-05-31 | explore OG universe demo rows | 478eee02 | DEMO_NFL/COLLEGE + force_demo; curl 60KB/62KB.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 
