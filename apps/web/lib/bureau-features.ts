@@ -2,7 +2,6 @@
 export const HIDDEN_BUREAU_SLUGS = new Set([
   "roster-depth",
   "build-profiles",
-  "power-rankings",
   "waiver-tendencies",
   "strength-of-schedule",
 ]);
