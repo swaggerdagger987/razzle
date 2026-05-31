@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | explore-og-nfl-universe-default | da33eafd | SHIP | NFL share URLs drop universe=nfl; college keeps param.
+2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | NFL share URLs drop universe=nfl; college keeps param.
 
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | launch10DemoStickerLabel 3 slugs; curl triple PASS.
 

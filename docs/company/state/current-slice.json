@@ -7,7 +7,10 @@
   "parity_ref": "Explore L5",
   "depth_ref": "Explore L5",
   "acceptance_ref": "FACTORY-DOD Gate C2",
-  "trust_pillars": ["T5", "T6"],
+  "trust_pillars": [
+    "T5",
+    "T6"
+  ],
   "allowed_paths": [
     "apps/web/components/explore/ExploreShareButton.tsx",
     "apps/api/tests/test_explore_share_og_universe.py"
@@ -19,7 +22,11 @@
     "npm run build --workspace=apps/web",
     "curl -s -o /tmp/og-nfl.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?sort=fantasy_points_ppr&dir=desc&download=1&force_demo=1'"
   ],
-  "out_of_scope": ["OG route rewrite", "college demo rows", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": [
+    "OG route rewrite",
+    "college demo rows",
+    "NORTH_STAR/DESIGN/DECISIONS"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -27,5 +34,6 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "in_progress"
+  "status": "shipped",
+  "content_commit": "c7b50c707"
 }
