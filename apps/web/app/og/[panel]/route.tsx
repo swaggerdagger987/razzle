@@ -76,13 +76,14 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   dashboard: "rank_diff",
   "dynasty-comps": "similarity",
   strengths: "percentile",
+  percentiles: "percentile",
 };
 
 /** Pro player-scoped Lab panels (not Launch-10) — LIVE trust sticker when API returns rows. */
-const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"]);
+const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths", "percentiles"]);
 
 /** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
-const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
+const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps", "percentiles"]);
 
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
@@ -128,6 +129,7 @@ function launch10LiveBlurbSuffix(slug: string): string {
 function playerScopedLiveStickerLabel(slug: string): string {
   if (slug === "dynasty-comps") return "LIVE · comp matches";
   if (slug === "strengths") return "LIVE · top strengths";
+  if (slug === "percentiles") return "LIVE · peer percentiles";
   if (slug === "gamelog") return "LIVE · Wk tape";
   return "LIVE · panel rows";
 }
@@ -191,6 +193,9 @@ function panelBlurbSuffix(
   if (slug === "strengths" && showingDemoRows) {
     return `${pos} · sample strength grades`;
   }
+  if (slug === "percentiles" && showingDemoRows) {
+    return `${pos} · sample percentile bars`;
+  }
   if (isSnapshot) {
     return `${pos} · from your panel`;
   }
@@ -208,6 +213,9 @@ function panelBlurbSuffix(
   }
   if (showingLiveData && slug === "strengths") {
     return `${pos} · live positional strengths`;
+  }
+  if (showingLiveData && slug === "percentiles") {
+    return `${pos} · live peer percentiles`;
   }
   if (showingLiveData) {
     return `${pos} · live data`;
@@ -309,6 +317,14 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Joe Mixon", position: "RB", team: "HOU", stat: -6.1, statLabel: "Chg" },
     { name: "Xavier Worthy", position: "WR", team: "KC", stat: 7.5, statLabel: "Chg" },
     { name: "Stefon Diggs", position: "WR", team: "HOU", stat: -5.4, statLabel: "Chg" },
+  ],
+  percentiles: [
+    { name: "PPG", position: "WR", team: "CIN", stat: 96, statLabel: "24.6" },
+    { name: "Rec/G", position: "WR", team: "CIN", stat: 94, statLabel: "7.2" },
+    { name: "Rec Yd/G", position: "WR", team: "CIN", stat: 91, statLabel: "88.4" },
+    { name: "Tgt/G", position: "WR", team: "CIN", stat: 88, statLabel: "10.1" },
+    { name: "Rec TD/G", position: "WR", team: "CIN", stat: 85, statLabel: "0.6" },
+    { name: "Catch%", position: "WR", team: "CIN", stat: 82, statLabel: "71%" },
   ],
   strengths: [
     { name: "Target Share", position: "WR", team: "CIN", stat: 94, statLabel: "A+" },
@@ -450,6 +466,26 @@ function extractProspectsRows(
     rows = rows.filter((r) => r.position === positionFilter);
   }
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
+}
+
+/** Percentiles OG — top peer metrics (matches fetch_player_percentiles payload). */
+function extractPercentilesRows(
+  percentiles: Record<string, unknown>[],
+  player?: Record<string, unknown>,
+): OgRow[] {
+  const position = String(player?.position ?? "");
+  const team = String(player?.team ?? "");
+  return percentiles
+    .map((p) => ({
+      name: String(p.label ?? p.key ?? ""),
+      position,
+      team,
+      stat: Number(p.percentile ?? 0),
+      statLabel: p.value != null ? String(p.value) : "Pct",
+    }))
+    .filter((r) => r.name.trim().length > 0 && r.stat > 0)
+    .sort((a, b) => b.stat - a.stat)
+    .slice(0, 6);
 }
 
 /** Strengths OG — top percentile metrics (matches legacy player-strengths payload). */
@@ -626,6 +662,18 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
       player,
     );
     if (strengthRows.length > 0) return strengthRows;
+  }
+
+  if (slug === "percentiles" && Array.isArray(obj.percentiles) && obj.percentiles.length > 0) {
+    const player =
+      obj.player && typeof obj.player === "object"
+        ? (obj.player as Record<string, unknown>)
+        : undefined;
+    const percentileRows = extractPercentilesRows(
+      obj.percentiles as Record<string, unknown>[],
+      player,
+    );
+    if (percentileRows.length > 0) return percentileRows;
   }
 
   let candidates: Record<string, unknown>[] = [];

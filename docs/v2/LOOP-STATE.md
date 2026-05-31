@@ -1,8 +1,8 @@
-cycle: 149
+cycle: 150
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: Bureau H2H export or Lab panel OG live data rows
-last_keep_cycle: 149
-last_commit: aa5cc4b0d
-lab_l5_og_hallway_epic: complete
+next_slice: lab-og-career-live-extract
+last_keep_cycle: 150
+last_commit: f6e0985f3
+lab_l5_pro_profile_og_epic: active (atom 1/4)
