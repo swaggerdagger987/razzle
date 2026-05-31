@@ -1,7 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-power-rankings-tab",
-  "slice_title": "Unhide Power Rankings Bureau tab with Octo quant renderer",
-  "verdict": "SHIP",
-  "content_commit": "20c7940a"
+  "atom_id": "bureau-h2h-opponent-subtitle",
+  "big_problem": "Bureau H2H export cards can show generic demo rivalry when the API is cold, so the downloaded PNG does not match the opponent and depth bars the user picked in-product (League L5 export parity).",
+  "epic": "League L5 — Bureau H2H export matches in-product rivalry",
+  "slice_title": "OG H2H subtitle names live opponent when API fetch succeeds",
+  "parity_ref": "Explore L5 — Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — live H2H OG blurb includes opponent team name",
+  "trust_pillars": ["T1", "T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/head-to-head/route.tsx"
+  ],
+  "max_files": 1,
+  "max_lines": 40,
+  "acceptance_commands": [
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/h2h-live.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/head-to-head?download=1&league=TEST&user=u1&opponent=u2'"
+  ],
+  "out_of_scope": [
+    "Self-Scout snapshot (atom 3)",
+    "bureau-h2h-snapshot.ts changes",
+    "API route changes"
+  ],
+  "builder_mode": "composer-surgical"
 }

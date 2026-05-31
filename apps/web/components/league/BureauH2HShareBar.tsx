@@ -6,10 +6,12 @@ interface Props {
   leagueId: string;
   userId: string;
   opponentId?: string;
+  /** Encoded in-product H2H rows for OG when API is cold */
+  snapshot?: string;
 }
 
 /** Copyable rivalry URL + OG export — mirrors ExploreShareButton for Bureau H2H. */
-export function BureauH2HShareBar({ leagueId, userId, opponentId }: Props) {
+export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Props) {
   const [copied, setCopied] = useState(false);
 
   const rivalryPath = `/league/${leagueId}/head-to-head${
@@ -22,6 +24,7 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId }: Props) {
     download: "1",
   });
   if (opponentId) ogParams.set("opponent", opponentId);
+  if (snapshot) ogParams.set("snapshot", snapshot);
 
   const copyLink = useCallback(async () => {
     const url =
