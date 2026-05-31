@@ -8,6 +8,8 @@ export type ExploreOgExportInput = {
   dir: string;
   q: string;
   pos: string[];
+  season?: number;
+  team?: string[];
   download?: boolean;
 };
 
@@ -31,6 +33,8 @@ export function buildExploreOgExportParams(input: ExploreOgExportInput): URLSear
   });
   if (input.q) params.set("q", input.q);
   if (input.pos.length) params.set("pos", input.pos.join(","));
+  if (input.season && input.season > 0) params.set("season", String(input.season));
+  if (input.team?.length) params.set("team", input.team.join(","));
   if (input.download) params.set("download", "1");
   return params;
 }
