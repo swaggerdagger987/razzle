@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-trade-network-og-snapshot
 last_keep_cycle: 98
-last_commit: da33eafd
+last_commit: 72fb6e4c
 league_l5_bureau_og_epic: active
 league_l5_bureau_og_atom: monte-carlo
