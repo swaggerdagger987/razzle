@@ -12,6 +12,8 @@ YYYY-MM-DD | claim under review | evidence type (curl/screenshot/test) | layer/P
 Read this file before reviewing a claim. Recurring failure classes deserve
 explicit checks in the verification routine.
 
+2026-05-31 | waiver-tendencies OG | curl 73121B demo league | PASS | KEEP Gate C on Bureau OG pattern | — | — | evidence 2026-05-31-league-waiver-tendencies-og-share.md
+
 ---
 
 ## Entries
