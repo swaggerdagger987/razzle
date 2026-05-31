@@ -38,3 +38,21 @@ def test_buysell_live_extract_prefers_formula_score_and_lanes():
     assert block.index('"formula_score"') < block.index('"mismatch_score"')
     assert 'toRow(r, "Buy")' in source
     assert 'toRow(r, "Sell")' in source
+
+
+def test_efficiency_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "efficiencyStatKeys" in source
+    idx = source.index("efficiencyStatKeys")
+    block = source[idx : idx + 320]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"ppo"')
+
+
+def test_aging_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "agingStatKeys" in source
+    idx = source.index("agingStatKeys")
+    block = source[idx : idx + 300]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"ppg"')

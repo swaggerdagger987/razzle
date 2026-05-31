@@ -1,27 +1,28 @@
 {
   "date": "2026-05-31",
   "big_problem": "Lab OG cards still flatten dynasty dashboard into one stat column — exports do not match the Value/Chg rows users see in-panel, so Reddit screenshots look generic.",
-  "epic": "Lab L5 — OG live panel rows parity (atom 1/3)",
-  "slice_title": "Dashboard OG — live extract mirrors top5 Value + riser Chg rows",
-  "atom_id": "lab-og-dashboard-live-extract",
+  "epic": "Lab L5 — OG live panel rows parity (atom 2/3)",
+  "slice_title": "Efficiency + Aging OG — formula_score priority on live fetch",
+  "atom_id": "lab-og-efficiency-aging-formula-live",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_dashboard_live_extract.py"
+    "apps/api/tests/test_og_launch10_formula_live.py"
   ],
   "max_files": 2,
-  "max_lines": 120,
+  "max_lines": 80,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_dashboard_live_extract.py apps/api/tests/test_og_launch10_formula_live.py -q --noconftest",
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dashboard?download=1'"
+    "curl -s -o /tmp/og-efficiency.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1'",
+    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/aging?download=1'"
   ],
   "out_of_scope": [
-    "efficiency/aging formula atoms",
-    "API schema changes",
+    "weekly/prospects atom",
+    "dashboard extract changes",
     "NORTH_STAR/DESIGN/DECISIONS"
   ],
   "builder_mode": "composer-surgical",
@@ -31,6 +32,6 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "1c39d0bd7"
+  "status": "in_progress",
+  "content_commit": null
 }

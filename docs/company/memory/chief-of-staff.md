@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-efficiency-aging-formula-live | f6e0985f3 | SHIP | Factory open; Lab L5 OG epic 2/3; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-og-dashboard-live-extract | 1c39d0bd7 | SHIP | Factory open cycle 1; Lab L5 OG epic 1/3; NO_LOCK_GUARDRAIL.
 2026-05-31 | league-trade-finder-room-hallway | fa3dfeea9 | SHIP | Factory open cycle 1; NO_LOCK_GUARDRAIL; GTM epic complete.
 # Memory — Chief of Staff
