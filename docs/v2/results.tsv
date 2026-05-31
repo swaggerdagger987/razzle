@@ -62,3 +62,4 @@ cycle	commit	score	status	pillar	slice	description
 69	2cb898b6	depth+voice+simplicity	keep	Lab	L5 OG live panel rows	trust=T5,T6; panels slug fetch + candidates extract; curl rankings 59509B breakouts 60649B
 71	33808392	depth+voice+simplicity	keep	Lab	L5 OG snapshot efficiency aging	trust=T5,T6; snapshotRows on efficiency+aging LabOgExportLink; curl buysell snapshot 58072B PNG
 72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
+73	7066f4ab	depth+voice+simplicity	keep	Lab	L5 OG live data label	trust=T1,T5,T6; live data blurb when liveHasRows; curl rankings 59509B
