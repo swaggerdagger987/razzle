@@ -1,37 +1,36 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-l4-pro-gate-error-dynasty-comps",
-  "big_problem": "Lab Pro gates still drift — DynastyComps is the last renderer with duplicated 402 ProUpgradeGate branches.",
-  "epic": "Lab L4 — shared pro-gate error surface (close-out)",
-  "slice_title": "DynastyComps ProGateFromPanelError — final L4 renderer",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "Lab L4 pro gates feel like upgrade not error",
-  "trust_pillars": [
-    "T2",
-    "T6"
-  ],
+  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
+  "epic": "Lab L5 — OG export on empty panel states",
+  "slice_title": "Gamelog — export card when player loaded but weeks empty",
+  "atom_id": "lab-gamelog-empty-weeks-export",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with visible rows",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DynastyCompsRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
+    "apps/web/components/lab/renderers/GamelogRenderer.tsx"
   ],
-  "max_files": 2,
+  "max_files": 1,
   "max_lines": 40,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web 2>&1 | tail -5",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py -q"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test pytest apps/api/tests -q",
+    "curl -s -o /tmp/gamelog-og-empty.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'",
+    "file /tmp/gamelog-og-empty.png"
   ],
   "out_of_scope": [
-    "billing",
-    "new panels",
-    "OG routes"
+    "Other Lab panels this cycle",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   },
-  "status": "shipped"
+  "content_commit": "202981c8f",
+  "reality": "PASS",
+  "merge": "pending"
 }

@@ -1,10 +1,11 @@
 cycle: 137
 last_board_cycle: 54
 focus_pillar: Lab
-focus_layer: L4
-next_slice: explore-og-nfl-universe-default
+focus_layer: L5
+next_slice: lab-gamelog-empty-weeks-export (PR 1117 pending merge)
 last_keep_cycle: 137
-last_commit: a3f07d1e5
-lab_l4_pro_gate_error_epic: complete
-explore_l5_universe_export_epic: active
-room_l5_briefing_gtm_export_epic: active
+last_commit: 202981c8f
+explore_l5_og_query_epic: complete
+lab_l5_empty_og_epic: active
+lab_l4_pro_gate_epic: complete
+room_l5_briefing_gtm_epic: complete
