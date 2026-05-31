@@ -14,13 +14,13 @@
     {
       "id": "lab-weekly-hot-week-snapshot",
       "title": "Weekly heatmap export snapshot includes hottest week rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "9d353d84"
     },
     {
       "id": "lab-buysell-combined-snapshot",
       "title": "Buy/sell export snapshot merges buy and sell lanes",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -32,5 +32,5 @@
   ],
   "next_atom_id": "lab-buysell-combined-snapshot",
   "created_at": "2026-05-31T05:48:00Z",
-  "updated_at": "2026-05-31T12:15:00Z"
+  "updated_at": "2026-05-31T06:02:45Z"
 }

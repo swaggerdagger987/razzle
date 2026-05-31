@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab buy/sell export (cycle 94)
+- **Angle:** Buy-low vs sell-high on one share card — Bones lane labels match the two-column panel Reddit traders screenshot.
+- **Trust:** T5/T6 — top 3 per lane in snapshot; formula name on label when composite sort active.
+
 ### 2026-05-31 — Lab dashboard export (cycle 92)
 - **Angle:** Dynasty pulse export shows top5 trade values on the card — matches the hero grid users screenshot, not only rank movers.
 - **Trust:** T5/T6 — snapshot encodes what was on screen; demo fallback unchanged when API empty.

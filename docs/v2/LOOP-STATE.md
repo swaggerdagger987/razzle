@@ -1,9 +1,9 @@
-cycle: 93
+cycle: 94
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-buysell-combined-snapshot
-last_keep_cycle: 93
-last_commit: 9d353d84
+next_slice: lab-tradevalues-formula-snapshot
+last_keep_cycle: 94
+last_commit: da33eafd
 lab_l5_og_mirror_rows_epic: active
-lab_l5_weekly_hot_week_snapshot: in_progress
+lab_l5_buysell_combined_snapshot: done

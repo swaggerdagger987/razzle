@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | buysell OG Gate C | da33eafd | curl demo 58072B snap 57884B; PASS
+
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 
