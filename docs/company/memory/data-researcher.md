@@ -1,3 +1,4 @@
+2026-05-31 | league-monte-carlo-og-watermark | — | PASS | No new intel; Bureau GTM slice only.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 

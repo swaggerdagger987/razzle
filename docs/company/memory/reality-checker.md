@@ -1,3 +1,4 @@
+2026-05-31 | league-monte-carlo-og-watermark | f6e0985f3 | PASS | pytest 1; curl 58431B; web build exit 0.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker
 

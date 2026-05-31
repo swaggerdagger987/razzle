@@ -1,34 +1,30 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic": "Lab L5 — OG hallway deep links",
-  "slice_title": "Snapshot exports preserve player in watermark",
-  "atom_id": "lab-og-tolab-snapshot-player",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Bureau Monte Carlo screenshots don't route viewers back into the sim — OG footer lacks the terracotta hallway band.",
+  "epic": "League L5 — Bureau Monte Carlo GTM export",
+  "slice_title": "Monte Carlo OG terracotta watermark + toLeague band",
+  "atom_id": "league-monte-carlo-og-watermark",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/LabOgExportLink.tsx",
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/app/og/monte-carlo/route.tsx",
+    "apps/api/tests/test_monte_carlo_og_watermark.py"
   ],
-  "max_files": 3,
-  "max_lines": 80,
+  "max_files": 2,
+  "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_monte_carlo_og_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/gamelog?download=1&snapshot=eyJyIjpbeyJuIjoiV2sgMSIsInAiOiJXUiIsInQiOiJDRU4iLCJzIjoxOC41LCJzbCI6IlBQUiJ9XSwicCI6IjAwLTAwMzY5MDAifQ'"
+    "curl -s -o /tmp/og-mc.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/monte-carlo?download=1'"
   ],
-  "out_of_scope": ["Bureau snapshots", "New panels", "NORTH_STAR edits"],
+  "out_of_scope": ["Snapshot encode changes", "ShareBar", "NORTH_STAR edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "content_commit": "05357b3a1",
-  "reality": "PASS",
-  "merge": "pending"
+  }
 }
