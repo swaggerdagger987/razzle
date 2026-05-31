@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | lab-og-rankings-dashboard-sort (OG direct-link epic atom 3/3) |
-| Last commit | `da33eafd` |
+| Last commit | `4a62c72e` |
 
 Recent completions (cycle 96): Lab OG buysell + aging direct-link stat sort; cycle 95 tradevalues/efficiency on branch pending merge.
 

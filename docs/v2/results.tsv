@@ -61,4 +61,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 93	0b9dfe7e	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS tab unhidden	trust=T2,T5,T6; Octo slate lens; HIDDEN_BUREAU_SLUGS empty; build PASS; bureau unhide complete
 94	b9e2d2bf	depth+voice+simplicity	keep	Lab	L5 Breakouts OG RBS-ranked snapshot	trust=T5,T6; sort top-6 RBS; curl breakouts 61718B; weekly dedup on base; fidelity epic 3/3 complete
 95	e0819084	depth+voice+simplicity	keep	Lab	L5 OG tradevalues+efficiency direct sort	trust=T5,T6; DIRECT_STAT_SORT_SLUGS; curl tradevalues 51115B efficiency 45113B; direct-sort epic 1/3
-96	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG buysell+aging direct sort	trust=T5,T6; DIRECT_STAT_SORT buysell aging; curl 44258B/44952B; epic atom 2/3
+96	4a62c72e	depth+voice+simplicity	keep	Lab	L5 OG buysell+aging direct sort	trust=T5,T6; DIRECT_STAT_SORT buysell aging; curl 44258B/44952B; epic atom 2/3
