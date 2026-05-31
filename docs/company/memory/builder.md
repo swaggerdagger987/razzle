@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-rows | f6e0985f3 | SHIP | topMarginNotes on explore OG rows 1–3.
+2026-05-31 | explore-og-margin-note-rows | f3ab5c966 | SHIP | topMarginNotes on explore OG rows 1–3.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 

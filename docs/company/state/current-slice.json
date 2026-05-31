@@ -26,6 +26,8 @@
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
+  "content_commit": "f3ab5c966",
+  "reality": "PASS",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
