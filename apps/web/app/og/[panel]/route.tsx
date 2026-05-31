@@ -30,6 +30,7 @@ const STAT_CANDIDATE_KEYS = [
   "rbs_score",
   "breakout_score",
   "similarity",
+  "rank_diff",
   "composite_score",
   "efficiency_score",
   "total_yards",
@@ -72,24 +73,24 @@ const LAUNCH_10_OG_SLUGS = new Set([
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
-  isDemo: boolean,
   isSnapshot: boolean,
-  liveHasRows: boolean,
+  showingDemoRows: boolean,
+  showingLiveData: boolean,
 ): string {
   const pos = positionFilter ? ` · ${positionFilter} only` : "";
-  if (slug === "dynasty-comps" && isDemo) {
+  if (slug === "dynasty-comps" && showingDemoRows) {
     return `${pos} · comps for Ja'Marr Chase · sample preview`;
   }
   if (isSnapshot) {
     return `${pos} · from your panel`;
   }
-  if (isDemo) {
+  if (showingDemoRows) {
     return `${pos} · sample preview`;
   }
-  if (liveHasRows && LAUNCH_10_OG_SLUGS.has(slug)) {
+  if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
     return pos;
   }
-  if (liveHasRows) {
+  if (showingLiveData) {
     return `${pos} · live data`;
   }
   return pos;
@@ -260,6 +261,10 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
+  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
+    const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
+    const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
+    candidates = [...top5, ...risers];
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
@@ -277,6 +282,7 @@ function extractRows(data: unknown): OgRow[] {
       if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
       if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
       if (k === "similarity") statLabel = "Match %";
+      if (k === "rank_diff") statLabel = "Chg";
       break;
     }
   }
@@ -434,6 +440,8 @@ export async function GET(
   }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
+  const showingLiveData = !isSnapshot && liveHasRows && hasRows;
+  const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
 
   return new ImageResponse(
@@ -489,7 +497,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isDemo, isSnapshot, liveHasRows)}`}
+          {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData)}`}
         </div>
 
         {query && (
