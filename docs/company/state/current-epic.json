@@ -1,43 +1,31 @@
 {
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau behavioral share parity",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "big_problem": "Lab export cards still ship demo rows on panels where the table already has live data — screenshots don't match what the user sees.",
+  "epic_title": "Lab L5 — OG export cards mirror in-panel rows",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-manager-profiles-copy-link",
-      "title": "Manager Profiles copy link beside export card",
+      "id": "lab-og-prospects-tradevalues-snapshot",
+      "title": "Prospects + tradevalues export snapshot rows",
       "status": "done",
-      "merge_commit": "04c19959"
+      "merge_commit": "69e4c732"
     },
     {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy link beside export card",
+      "id": "lab-og-dashboard-comps-snapshot",
+      "title": "Dashboard dynasty-comps snapshot rows",
       "status": "done",
-      "merge_commit": "c4ce09b7"
+      "merge_commit": "0c5112c5"
     },
     {
-      "id": "league-power-rankings-og",
-      "title": "Power Rankings OG + copy board link",
+      "id": "lab-og-live-blurb-consistency",
+      "title": "OG blurb suffix when snapshot present (launch-10)",
       "status": "done",
-      "merge_commit": "90bf2dd5"
-    },
-    {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
-      "status": "done",
-      "merge_commit": "e701e3bb"
-    },
-    {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
-      "status": "done",
-      "merge_commit": "30454811"
+      "merge_commit": "83d4c770"
     }
   ],
   "next_atom_id": null,
   "epic_status": "complete",
-  "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T13:20:00Z",
-  "last_cycle_commit": "e701e3bb"
+  "created_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T16:00:00Z",
+  "last_cycle_commit": "69e4c732"
 }
