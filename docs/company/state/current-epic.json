@@ -1,50 +1,31 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
-  "epic_title": "Lab L5 — formula-sorted OG live parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Lab OG export cards still read generic on demo fallback — five Launch-10 panels lack panel-specific SAMPLE copy when live API is empty.",
+  "epic_title": "Lab L5 — Launch-10 OG demo trust labels",
+  "parity_ref": "Explore L5 / Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-breakouts-rankings-formula-live",
-      "title": "Breakouts + rankings OG live extract prefers formula_score",
-      "status": "done",
-      "merge_commit": "ceadf0402"
+      "id": "lab-og-launch10-demo-blurbs",
+      "title": "Panel-specific demo blurb + SAMPLE stickers for gamelog, efficiency, aging, buysell, dashboard",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-weekly-prospects-live-sticker-guard",
-      "title": "Weekly + prospects LIVE sticker pytest guard",
-      "status": "done",
-      "merge_commit": "d03cb653b"
-    },
-    {
-      "id": "lab-og-buysell-formula-live",
-      "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
+      "id": "lab-og-efficiency-live-rows",
+      "title": "Efficiency OG prefers most_efficient API rows before demo fallback",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-from-panel-gate-c-rest",
-      "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
+      "id": "lab-og-aging-position-default",
+      "title": "Aging OG default position tab matches in-product renderer (RB)",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-buysell-formula-live",
-  "created_at": "2026-05-31T10:36:02Z",
-  "updated_at": "2026-05-31T12:15:00Z",
-  "completed_epics": [
-    {
-      "id": "room-l5-briefing-gtm-export",
-      "status": "complete",
-      "last_atom": "room-briefing-watermark",
-      "merge_commit": "f6e0985f3"
-    },
-    {
-      "id": "lab-l5-og-empty-panel-states",
-      "status": "active",
-      "last_atom": "lab-gamelog-empty-weeks-export",
-      "merge_commit": "ac0280a20"
-    }
-  ]
+  "next_atom_id": "lab-og-launch10-demo-blurbs",
+  "created_at": "2026-05-31T10:55:00Z",
+  "updated_at": "2026-05-31T10:55:00Z",
+  "completed_epics": []
 }
