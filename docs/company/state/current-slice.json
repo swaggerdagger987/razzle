@@ -1,35 +1,9 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
-  "epic": "Room L5 — briefing GTM export",
   "atom_id": "room-briefing-watermark",
   "slice_title": "Briefing OG — terracotta watermark + Room hallway deep link",
-  "parity_ref": "Room L5 — GTM export slice",
-  "depth_ref": "Room L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/app/og/briefing/route.tsx",
-    "apps/api/tests/test_briefing_og_route.py"
-  ],
-  "max_files": 2,
-  "max_lines": 40,
-  "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_briefing_og_route.py -q --noconftest"
-  ],
-  "out_of_scope": [
-    "BriefingCard UI changes",
-    "new npm deps",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
-  "content_commit": "f6e0985f3",
+  "content_commit": "e1eb68fe8",
   "reality": "PASS",
-  "merge": "pending"
+  "merge": "merged",
+  "notes": "Dedup — implementation on base; cycle records factory open + epic complete"
 }
