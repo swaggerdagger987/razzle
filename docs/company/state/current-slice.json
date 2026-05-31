@@ -1,31 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice.",
+  "atom_id": "lab-pro-gate-panel-pitches",
+  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
   "epic": "Lab L4 — pro gates feel like upgrade, not error",
-  "slice_title": "Pro gate — agent loading line on upgrade card",
-  "atom_id": "lab-pro-gate-loading-copy",
+  "slice_title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
   "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
   "depth_ref": "Lab L4",
-  "acceptance_ref": "DEPTH Lab L4 — Pro gates feel like upgrade, not error",
+  "acceptance_ref": "ACCEPTANCE — Lab pro gates",
   "trust_pillars": ["T2", "T6"],
-  "allowed_paths": ["apps/web/components/lab/ProUpgradeGate.tsx"],
+  "allowed_paths": ["apps/web/lib/panel-upgrade-teaser.ts"],
   "max_files": 1,
-  "max_lines": 25,
+  "max_lines": 15,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q"
+    "npm run build --workspace=apps/web 2>&1 | tail -3",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q 2>&1 | tail -3"
   ],
-  "out_of_scope": [
-    "OG routes",
-    "panel-upgrade-teaser.ts",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "new npm deps"
-  ],
+  "out_of_scope": ["ProUpgradeGate.tsx", "pricing", "OG routes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
