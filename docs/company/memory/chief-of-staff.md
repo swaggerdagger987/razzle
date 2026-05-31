@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | SHIP | Workday cycle 1; formula OG epic complete 4/4.
+2026-05-31 | lab-og-from-panel-gate-c-rest | 0915bf11a | SHIP | Workday cycle 1; formula OG epic complete 4/4.
 2026-05-31 | lab-og-buysell-formula-live | 901120b3d | SHIP | Workday cycle 2; formula epic atom 3/4.
 2026-05-31 | lab-og-launch10-demo-blurbs | f3c1c9466 | SHIP | Workday cycle 1; Lab L5 demo trust epic atom 1/3.
 2026-05-31 | cycle 142 formula OG live | ceadf0402 | SHIP | Factory open; Lab breakouts/rankings formula_score parity.

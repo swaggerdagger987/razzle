@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | 2 test files; Gate C fixture codec.
+2026-05-31 | lab-og-from-panel-gate-c-rest | 0915bf11a | 2 test files; Gate C fixture codec.
 2026-05-31 | lab-og-buysell-formula-live | 901120b3d | 2 files; buysellStatKeys + lane extract.
 2026-05-31 | lab-og-launch10-demo-blurbs | f3c1c9466 | 2 files; demo blurb parity with LIVE stickers.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | PLAYER_SCOPED_LIVE_STICKER_SLUGS excludes Launch-10 gamelog.

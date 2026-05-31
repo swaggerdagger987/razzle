@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | see NEXT.md — Bureau H2H or Lab empty-panel |
-| Last commit | `f6e0985f3` |
+| Last commit | `0915bf11a` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
