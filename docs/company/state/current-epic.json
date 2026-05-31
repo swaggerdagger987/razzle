@@ -7,8 +7,8 @@
     {
       "id": "lab-index-agent-desks",
       "title": "Lab index Staff Picks grid grouped by agent desk",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "922b830a"
     },
     {
       "id": "lab-sidebar-agent-sections",
@@ -23,9 +23,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-index-agent-desks",
+  "next_atom_id": "lab-sidebar-agent-sections",
   "epic_status": "active",
   "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T09:10:00Z",
+  "updated_at": "2026-05-31T09:15:00Z",
   "completed_epics": []
 }
