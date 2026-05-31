@@ -1,13 +1,8 @@
-cycle: 125
+cycle: 130
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Room
 focus_layer: L5
-next_slice: lab-og-live-sticker-gamelog-efficiency
-last_keep_cycle: 125
-last_commit: ad24a219
-lab_l5_og_panel_native_live_epic: active
-lab_l5_og_live_fetch_epic: active
-lab_l2_sidebar_agent_epic: complete
-lab_l5_og_watermark_epic: complete
-lab_l5_og_live_sort_epic: complete
-bureau_h2h_codec_epic: complete
+next_slice: Lab L5 panel-native OG atom 2 or Bureau H2H export
+last_keep_cycle: 130
+last_commit: b91394b3
+room_l5_briefing_og_epic: complete
