@@ -1,7 +1,21 @@
 # Memory — Builder
 
-2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
-2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
+2026-05-31 | explore-og-universe-query | e2d4e429 | DEMO_NFL/DEMO_COLLEGE + force_demo; curl 60KB+.
+
+2026-05-31 | bureau-h2h-og-force-demo-qa | b4d91213 | force_demo skips H2H fetch; curl 77736B with league params.
+
+2026-05-31 | bureau-h2h-og-sample-sticker | 7b9639d9 | terracotta SAMPLE on H2H demo path; curl 75595B.
+
+2026-05-31 | bureau-h2h-og-live-sticker | 08e1824c | curl head-to-head 67846B; build+pytest green.
+
+2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | terracotta SAMPLE sticker + force_demo QA; curl ≥63KB.
+
+2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | ogPositionFilter weekly WR; panel limit 25; curl weekly+prospects ≥55KB.
+
+2026-05-31 | launch10 live-fetch merge | 3f0411ec | merged base sticker + fetchOgLiveRows + prospects items.
+2026-05-31 | launch10 snapshot-default | e2a3ce8a | fetchOgLiveRows; OG_FETCH_HEADERS; curl rankings 62355B weekly 66512B.
+2026-05-31 | Cycle 118 prospects OG items | e00217d1 | items[] RPS extract when prospects empty; curl 60688B.
+2026-05-31 | lab-sidebar-search-agent-labels | e75ec714 | keep | showOwnerInTitle prefixes search hits with agent name.
 
 2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
 

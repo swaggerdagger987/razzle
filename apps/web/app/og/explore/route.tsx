@@ -16,6 +16,24 @@ interface OgPlayer {
   stat: number;
 }
 
+const DEMO_NFL: OgPlayer[] = [
+  { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 312.4 },
+  { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 298.1 },
+  { full_name: "CeeDee Lamb", position: "WR", team: "DAL", stat: 287.6 },
+  { full_name: "Justin Jefferson", position: "WR", team: "MIN", stat: 276.2 },
+  { full_name: "Amon-Ra St. Brown", position: "WR", team: "DET", stat: 264.8 },
+  { full_name: "Travis Kelce", position: "TE", team: "KC", stat: 241.5 },
+];
+
+const DEMO_COLLEGE: OgPlayer[] = [
+  { full_name: "Travis Hunter", position: "WR", team: "COLO", stat: 1248 },
+  { full_name: "Quinn Ewers", position: "QB", team: "TEX", stat: 3186 },
+  { full_name: "Marvin Harrison Jr.", position: "WR", team: "OSU", stat: 1182 },
+  { full_name: "Malachi Coleman", position: "WR", team: "NEB", stat: 1094 },
+  { full_name: "Bo Nix", position: "QB", team: "ORE", stat: 3054 },
+  { full_name: "Malachi Corley", position: "WR", team: "WKU", stat: 1056 },
+];
+
 async function fetchTopPlayers(params: {
   universe: string;
   sort: string;
@@ -89,7 +107,13 @@ function effectiveSortKey(universe: string, sort: string): string {
   return sort;
 }
 
-function buildSubtitle(universe: string, sort: string, pos: string, q: string): string {
+function buildSubtitle(
+  universe: string,
+  sort: string,
+  pos: string,
+  q: string,
+  isDemo: boolean,
+): string {
   const sortKey = effectiveSortKey(universe, sort);
   const parts: string[] = [];
   if (pos) parts.push(`${pos} only`);
@@ -99,10 +123,18 @@ function buildSubtitle(universe: string, sort: string, pos: string, q: string): 
     parts.push(statLabel(universe, sortKey));
   }
   if (q) parts.push(`"${q}"`);
-  if (parts.length) return parts.join(" · ");
-  return universe === "college"
-    ? "college stats · filter any stat · build any view"
-    : "filter any stat · build any view";
+  let base =
+    parts.length > 0
+      ? parts.join(" · ")
+      : universe === "college"
+        ? "college stats · filter any stat · build any view"
+        : "filter any stat · build any view";
+  if (isDemo) base += " · sample preview";
+  return base;
+}
+
+function demoPlayers(universe: string): OgPlayer[] {
+  return universe === "college" ? DEMO_COLLEGE : DEMO_NFL;
 }
 
 export async function GET(req: Request) {
@@ -113,6 +145,7 @@ export async function GET(req: Request) {
   const dir = url.searchParams.get("dir") ?? "desc";
   const q = url.searchParams.get("q") ?? "";
   const pos = url.searchParams.get("pos") ?? "";
+  const forceDemo = url.searchParams.get("force_demo") === "1";
   const season = Number(url.searchParams.get("season") ?? "0") || 0;
   const teams = (url.searchParams.get("team") ?? "")
     .split(",")
@@ -120,8 +153,6 @@ export async function GET(req: Request) {
     .filter(Boolean);
 
   const title = universe === "college" ? "College Screener" : "Dynasty Screener";
-  const subtitle = buildSubtitle(universe, sort, pos, q);
-  const colHeader = statLabel(universe, effectiveSortKey(universe, sort));
   const bandParams = new URLSearchParams({ universe, sort, dir });
   if (q) bandParams.set("q", q);
   if (pos) bandParams.set("pos", pos);
@@ -129,7 +160,13 @@ export async function GET(req: Request) {
   if (teams.length) bandParams.set("team", teams.join(","));
   const exploreLink = `razzle.lol/explore?${bandParams.toString()}`;
 
-  const players = await fetchTopPlayers({ universe, sort, dir, q, pos, season, teams });
+  const live = forceDemo
+    ? []
+    : await fetchTopPlayers({ universe, sort, dir, q, pos, season, teams });
+  const isDemo = forceDemo || live.length === 0;
+  const players = isDemo ? demoPlayers(universe) : live;
+  const subtitle = buildSubtitle(universe, sort, pos, q, isDemo);
+  const colHeader = statLabel(universe, effectiveSortKey(universe, sort));
 
   return new ImageResponse(
     (
@@ -156,8 +193,7 @@ export async function GET(req: Request) {
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, marginBottom: 8 }}>{title}</div>
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>{subtitle}</div>
 
-        {players.length > 0 ? (
-          <div
+        <div
             style={{
               display: "flex",
               flexDirection: "column",
@@ -215,9 +251,6 @@ export async function GET(req: Request) {
               </div>
             ))}
           </div>
-        ) : (
-          <div style={{ flex: 1, fontSize: 24, color: "#5c4a3d" }}>pulling film…</div>
-        )}
 
         {/* Always-on watermark band — visible on preview + download (T6 screenshot gravity) */}
         <div

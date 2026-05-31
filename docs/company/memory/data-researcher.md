@@ -1,5 +1,16 @@
 # Memory — Data Researcher
 
+2026-05-31 | cycle 123 | No new intel; Explore OG demo rows for cold API screenshots.
+
+2026-05-31 | cycle 122 | No new intel; force_demo completes H2H OG Gate C tooling.
+
+2026-05-31 | cycle 121 | No new intel; SAMPLE sticker completes demo/live pair on H2H OG.
+
+2026-05-31 | cycle 120 | No new Reddit intel; Bureau H2H export trust signal slice.
+
+2026-05-31 | lab-og-live-demo-fallback-copy | cycle 119 | Reddit trust needs obvious SAMPLE vs LIVE on OG cards.
+
+2026-05-31 | lab-og-live-sticker-prospects-weekly | cycle 118 | Free Launch-10 panels share same /api/panels path as Lab.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 

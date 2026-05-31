@@ -1,5 +1,16 @@
 # Memory — Product Strategist
 
+2026-05-31 | Explore OG universe demo | e2d4e429 | Explore L5 screener export; atom 1/4 explore-og epic.
+
+2026-05-31 | H2H force_demo QA | b4d91213 | Gate C curl with league params; h2h-stickers epic complete.
+
+2026-05-31 | H2H OG SAMPLE sticker | 7b9639d9 | T1: demo vs live obvious; atom 2/3 h2h-stickers epic.
+
+2026-05-31 | League H2H OG LIVE sticker | 08e1824c | After Lab live-rows epic; NEXT backup Bureau H2H export now lead.
+
+2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | SHIP | T1 sample vs live at a glance closes live-rows epic.
+
+2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | SHIP | Weekly WR default unlocks panel API rows for LIVE badge.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 

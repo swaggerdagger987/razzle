@@ -1,5 +1,16 @@
 # Memory — Reality Checker
 
+2026-05-31 | Explore OG demo PASS | e2d4e429 | curl nfl 60059B college 62556B; build exit 0.
+
+2026-05-31 | H2H force_demo PASS | b4d91213 | curl force_demo 77736B; pytest 3 passed.
+
+2026-05-31 | H2H SAMPLE sticker PASS | 7b9639d9 | curl 75595B demo PNG; SAMPLE on isDemo only.
+
+2026-05-31 | H2H LIVE sticker PASS | 08e1824c | curl 67846B PNG; pytest 3 passed; LIVE only when isLive.
+
+2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | curl force_demo 66345B weekly 63522B PASS | Gate C.
+
+2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | curl weekly 55816B prospects 60688B PASS | Gate C.
 2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 

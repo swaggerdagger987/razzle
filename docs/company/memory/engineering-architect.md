@@ -1,5 +1,16 @@
 # Memory — Engineering Architect
 
+2026-05-31 | explore-og-universe-query | e2d4e429 | 1 file contract; panel duplicate forceDemo removed for build.
+
+2026-05-31 | H2H force_demo | b4d91213 | Mirrors [panel] forceDemo skip-fetch; ≤20 lines.
+
+2026-05-31 | H2H OG SAMPLE badge | 7b9639d9 | isDemo terracotta block; symmetric to LIVE teal.
+
+2026-05-31 | H2H OG LIVE badge | 08e1824c | Single-file head-to-head route; mirrors [panel] LIVE Caveat block.
+
+2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | SAMPLE badge mirrors LIVE block; force_demo skips fetch.
+
+2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | ogPositionFilter + PANEL_API_OG_LIMIT; ≤40 lines route.tsx.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
