@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Explore |
 | Focus layer | L5 |
 | Next slice | bureau-h2h-export-og |
-| Last commit | pending |
+| Last commit | `8ecd2c0b` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

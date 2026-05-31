@@ -9,7 +9,7 @@
       "id": "explore-og-universe-query",
       "title": "Explore OG — pass universe, season, team in export URL",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "8ecd2c0b"
     },
     {
       "id": "lab-og-gamelog-player-default",
@@ -32,7 +32,7 @@
       "id": "lab-l5-og-live-fetch-sticker",
       "status": "complete",
       "last_atom": "explore-og-universe-query",
-      "merge_commit": null
+      "merge_commit": "8ecd2c0b"
     },
     {
       "id": "lab-l4-pro-gate-epic",
