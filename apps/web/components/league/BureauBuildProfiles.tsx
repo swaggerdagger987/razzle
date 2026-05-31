@@ -21,16 +21,24 @@ type BuildRow = {
 const ARCHETYPE_COLORS: Record<string, string> = {
   "Hero RB": "var(--pos-rb)",
   "Zero RB": "var(--pos-wr)",
-  "Stars & Scrubs": "var(--orange)",
-  "Win Now": "var(--pos-qb)",
-  "Youth Movement": "var(--pos-te)",
+  "Stars & Scrubs": "var(--pos-te)",
+  "Win Now": "var(--orange)",
+  "Youth Movement": "var(--pos-qb)",
   Balanced: "var(--ink-medium)",
 };
 
 export function BureauBuildProfiles({ data, leagueId }: Props) {
   const atlas = AGENT_BY_ID.atlas;
   const rows = (data.rows as BuildRow[]) ?? [];
-  const hero = rows[0] ?? null;
+  const leagueLabel = String(data.league_id ?? leagueId);
+  const winNow = rows.filter((r) => r.archetype === "Win Now");
+  const zeroRb = rows.filter((r) => r.archetype === "Zero RB");
+  const hero = winNow[0] ?? zeroRb[0] ?? rows[0] ?? null;
+
+  const archetypeCounts = rows.reduce<Record<string, number>>((acc, row) => {
+    acc[row.archetype] = (acc[row.archetype] ?? 0) + 1;
+    return acc;
+  }, {});
 
   return (
     <div className="flex flex-col gap-6">
@@ -42,7 +50,7 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
               {atlas.name} · {atlas.role}
             </p>
             <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              how every roster is constructed — archetype tape for the whole league
+              roster construction tape — who built win-now vs rebuild vs zero RB
             </p>
           </div>
         </div>
@@ -50,76 +58,110 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
           Build Profiles
         </h1>
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {rows.length} teams classified
+          {rows.length} teams · league {leagueLabel}
         </p>
       </header>
+
+      {Object.keys(archetypeCounts).length > 0 && (
+        <section className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            league shape
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {Object.entries(archetypeCounts)
+              .sort((a, b) => b[1] - a[1])
+              .map(([name, count]) => (
+                <span
+                  key={name}
+                  className="text-xs font-bold uppercase"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: ARCHETYPE_COLORS[name] ?? "var(--ink)",
+                    border: "2px solid var(--ink)",
+                    padding: "0.15rem 0.4rem",
+                    background: "var(--bg)",
+                    transform: "rotate(-1deg)",
+                  }}
+                >
+                  {name} ×{count}
+                </span>
+              ))}
+          </div>
+        </section>
+      )}
 
       {hero && (
         <section className="chunky bg-bg-card p-4">
           <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-            league snapshot
+            trade lens
           </p>
-          <p className="mt-1 text-sm" style={{ fontFamily: "var(--font-hand)" }}>
-            {hero.team} leads the board as {hero.archetype} — {hero.reasoning}
+          <p className="mt-1 font-bold" style={{ fontFamily: "var(--font-display)" }}>
+            {hero.team} · {hero.archetype}
+          </p>
+          <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+            {hero.reasoning}
           </p>
           <Link
             href={
               toRoom({
                 agentId: "atlas",
-                question: `Classify trade targets: ${hero.team} is ${hero.archetype}. Who else matches that build?`,
+                question: `${hero.team} runs a ${hero.archetype} build — who should I trade with?`,
                 panelSlug: "build-profiles",
               }) as Route
             }
             className="mt-3 inline-block text-sm text-orange underline"
           >
-            ask Atlas about league builds →
+            ask Atlas about {hero.team} →
           </Link>
         </section>
       )}
 
-      {rows.length === 0 ? (
-        <p className="text-ink-medium text-sm" style={{ fontFamily: "var(--font-hand)" }}>
-          no roster data yet — sync your league and pull film again.
-        </p>
-      ) : (
-        <section className="grid gap-4 sm:grid-cols-2">
-          {rows.map((row, i) => {
-            const color = ARCHETYPE_COLORS[row.archetype] ?? "var(--orange)";
-            return (
-              <div
-                key={row.roster_id}
-                className="chunky bg-bg-card p-4"
-                style={{ transform: i % 2 === 0 ? "rotate(-0.3deg)" : "rotate(0.3deg)" }}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <p className="font-bold" style={{ fontFamily: "var(--font-display)" }}>
-                    {row.team}
-                  </p>
-                  <span className="text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-                    {row.record}
-                  </span>
-                </div>
-                <p
-                  className="mt-2 text-sm font-bold uppercase"
-                  style={{ fontFamily: "var(--font-mono)", color }}
-                >
-                  {row.archetype}
+      <section className="grid gap-4 sm:grid-cols-2">
+        {rows.map((row, i) => (
+          <div
+            key={row.roster_id}
+            className="chunky bg-bg-card p-4"
+            style={{ transform: i % 2 === 0 ? "rotate(-0.35deg)" : "rotate(0.35deg)" }}
+          >
+            <div className="mb-2 flex items-start justify-between gap-2">
+              <div>
+                <p className="font-bold" style={{ fontFamily: "var(--font-display)" }}>
+                  {row.team}
                 </p>
-                <p className="mt-2 text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-                  {row.reasoning}
+                <p className="text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                  {row.record}
                 </p>
               </div>
-            );
-          })}
-        </section>
-      )}
+              <span
+                className="text-[10px] font-bold uppercase"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  color: ARCHETYPE_COLORS[row.archetype] ?? "var(--ink)",
+                  transform: "rotate(-2deg)",
+                  border: "2px solid var(--ink)",
+                  padding: "0.15rem 0.4rem",
+                  background: "var(--bg)",
+                }}
+              >
+                {row.archetype}
+              </span>
+            </div>
+            <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+              {row.reasoning}
+            </p>
+          </div>
+        ))}
+      </section>
 
-      <footer className="flex flex-wrap items-center gap-4 text-sm">
+      <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/roster-depth` as Route} className="text-orange underline">
-          roster depth →
+          position depth grades →
         </Link>
-        <Link href={`/league/${leagueId}/power-rankings` as Route} className="text-orange underline">
-          power rankings →
+        <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
+          manager behavior profiles →
+        </Link>
+        <Link href={`/league/${leagueId}/trade-finder` as Route} className="text-orange underline">
+          find a trade partner →
         </Link>
       </footer>
     </div>

@@ -1,23 +1,23 @@
-# Evidence — League L5 Build Profiles tab
+# Evidence — Bureau Build Profiles tab unhidden
 
 **Date:** 2026-05-31  
-**Atom:** `league-build-profiles-tab`
+**Atom:** `league-build-profiles-tab`  
+**Slice:** Build Profiles tab unhidden with Atlas roster archetype renderer
 
-## Acceptance
+## Changes
 
-- `build-profiles` removed from `HIDDEN_BUREAU_SLUGS`
-- `BureauBuildProfiles.tsx` renders archetype grid with Atlas header
-- `BureauFeatureBody` routes `build-profiles` feature
+- `BureauBuildProfiles.tsx` — Atlas header, league archetype counts, per-team build cards (Hero RB, Zero RB, Win Now, etc.), hallway to Roster Depth / Manager Profiles / Trade Finder / Room
+- `BureauFeatureBody.tsx` — wire `build-profiles` slug
+- `bureau-features.ts` — remove `build-profiles` from `HIDDEN_BUREAU_SLUGS`
 
 ## Commands
 
 ```bash
-npm run build --workspace=apps/web  # exit 0
-JWT_SECRET=test python3 -m pytest apps/api/tests -q \
-  --ignore=apps/api/tests/test_screener_snapshot.py \
-  --ignore=apps/api/tests/test_intel.py  # 52 passed, 1 env failure (college universe)
+npm run build --workspace=apps/web   # exit 0
+JWT_SECRET=test python3 -m pytest apps/api/tests -q   # 51 passed, 5 skipped
+node hidden-slug check   # build-profiles not in HIDDEN_BUREAU_SLUGS Set
 ```
 
 ## Verdict
 
-**PASS** — Build Profiles live in Bureau nav with screenshot-ready archetype cards.
+**PASS** — Build Profiles visible in Bureau nav; bespoke renderer (no OG this atom).

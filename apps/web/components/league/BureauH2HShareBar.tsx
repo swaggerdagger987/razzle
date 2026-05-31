@@ -1,21 +1,21 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import {
-  encodeBureauH2HOgSnapshot,
-  type BureauH2HOgSnapshot,
-} from "@/lib/bureau-h2h-og-snapshot";
+import Link from "next/link";
+import type { Route } from "next";
+import { toRoom } from "@razzle/hallway";
+import { encodeH2hSnapshot, type H2hSnapshotPayload } from "./BureauOgExportLink";
 
 interface Props {
   leagueId: string;
   userId: string;
   opponentId?: string;
-  /** In-product rivalry rows — OG export matches what the user sees. */
-  ogSnapshot?: BureauH2HOgSnapshot;
+  /** Encodes in-panel rivalry so OG card matches Bureau view. */
+  snapshot?: H2hSnapshotPayload;
 }
 
 /** Copyable rivalry URL + OG export — mirrors ExploreShareButton for Bureau H2H. */
-export function BureauH2HShareBar({ leagueId, userId, opponentId, ogSnapshot }: Props) {
+export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Props) {
   const [copied, setCopied] = useState(false);
 
   const rivalryPath = `/league/${leagueId}/head-to-head${
@@ -28,8 +28,20 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, ogSnapshot }: 
     download: "1",
   });
   if (opponentId) ogParams.set("opponent", opponentId);
-  const snapshot = ogSnapshot ? encodeBureauH2HOgSnapshot(ogSnapshot) : undefined;
-  if (snapshot) ogParams.set("snapshot", snapshot);
+  // Export card encodes in-panel rivalry; direct OG URLs with league/user try live API first.
+  const snap = snapshot ? encodeH2hSnapshot(snapshot) : undefined;
+  if (snap) ogParams.set("snapshot", snap);
+
+  const offer = (snapshot?.trade_fit?.you_could_offer ?? []).join(", ") || "—";
+  const want = (snapshot?.trade_fit?.you_could_target ?? []).join(", ") || "—";
+  const atlasRoomHref =
+    snapshot?.them?.team
+      ? (toRoom({
+          agentId: "atlas",
+          question: `How do I beat ${snapshot.them.team} (${snapshot.them.record})? I'm deeper at ${offer} and thin at ${want}.`,
+          panelSlug: "head-to-head",
+        }) as Route)
+      : null;
 
   const copyLink = useCallback(async () => {
     const url =
@@ -58,6 +70,11 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, ogSnapshot }: 
       >
         export card
       </a>
+      {atlasRoomHref && snapshot?.them ? (
+        <Link href={atlasRoomHref} className="text-xs text-orange underline">
+          ask Atlas about {snapshot.them.team} →
+        </Link>
+      ) : null}
     </div>
   );
 }
