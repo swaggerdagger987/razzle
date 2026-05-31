@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | Lab L4 pro gate voice | 15eb7a5e | Export moment = upgrade path; heatmap stays free; atom 2 prospects badge next.
+
 2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
 
 2026-05-31 | lab-tradevalues-formula-snapshot | 5ed39e14 | SHIP | Lab L5 OG mirror epic complete; Bureau H2H is next lead

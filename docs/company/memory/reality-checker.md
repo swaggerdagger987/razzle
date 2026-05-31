@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | Lab L4 weekly gate | 15eb7a5e | web build exit 0; pytest test_pro_panel_returns_402_on_free_plan 1 passed.
+
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 
