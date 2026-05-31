@@ -6,8 +6,8 @@ import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
 import { useParams } from "next/navigation";
-import { useCallback, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { BureauSelfScoutShareBar } from "./BureauSelfScoutShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -47,18 +47,6 @@ export function BureauSelfScout({ data }: Props) {
   const { openPlayer } = usePlayerSheet();
   const params = useParams();
   const leagueId = String(params?.id ?? (data.league as Record<string, unknown>)?.id ?? "");
-  const [copied, setCopied] = useState(false);
-
-  const copyScoutLink = useCallback(async () => {
-    if (typeof window === "undefined") return;
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  }, []);
   const hawkeye = AGENT_BY_ID.hawkeye;
   const dolphin = AGENT_BY_ID.dolphin;
 
@@ -170,19 +158,9 @@ export function BureauSelfScout({ data }: Props) {
             );
           })}
         </div>
-        {leagueId && userId && (
+        {leagueId && userId ? (
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <button type="button" className="btn-chunky text-xs" onClick={() => void copyScoutLink()}>
-              {copied ? "copied!" : "copy link"}
-            </button>
-            <a
-              href={`/og/self-scout?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(userId)}&download=1`}
-              download="razzle-self-scout.png"
-              className="btn-chunky active text-xs"
-              style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-            >
-              export card
-            </a>
+            <BureauSelfScoutShareBar leagueId={leagueId} userId={userId} />
             <Link
               href={
                 toRoom({
@@ -195,7 +173,7 @@ export function BureauSelfScout({ data }: Props) {
               ask {hawkeye.name} in film room →
             </Link>
           </div>
-        )}
+        ) : null}
       </section>
 
       {build && (

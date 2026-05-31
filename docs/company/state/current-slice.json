@@ -1,38 +1,30 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
-  "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Explore OG — pass universe, season, team in export URL",
-  "atom_id": "explore-og-universe-query",
-  "parity_ref": "PARITY Explore L5 — shareable URL + watermarked export",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — college OG PNG ≥40KB with query params",
+  "atom_id": "bureau-self-scout-sharebar",
+  "big_problem": "Bureau tabs share rows are inconsistent — Self-Scout still inlines copy/export while other tabs use ShareBar components.",
+  "epic": "League L5 — Bureau share bar parity on flagship tabs",
+  "slice_title": "Self-Scout — BureauSelfScoutShareBar copy link + OG export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "ACCEPTANCE Gate 3 — Bureau features",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/explore/ExploreShareButton.tsx",
-    "apps/web/components/explore/ExplorePageClient.tsx",
-    "apps/web/app/og/explore/route.tsx"
+    "apps/web/components/league/BureauSelfScoutShareBar.tsx",
+    "apps/web/components/league/BureauSelfScout.tsx"
   ],
-  "max_files": 3,
+  "max_files": 2,
   "max_lines": 80,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-college.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&season=2024'",
-    "curl -s -o /tmp/og-nfl.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc'",
-    "file /tmp/og-college.png /tmp/og-nfl.png"
+    "npm run build --workspace=apps/web 2>&1 | tail -8",
+    "curl -s -o /tmp/og-self-scout.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/self-scout?download=1'",
+    "file /tmp/og-self-scout.png | head -1"
   ],
-  "out_of_scope": [
-    "Lab OG routes",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "new npm deps",
-    "prospects universe"
-  ],
+  "out_of_scope": ["API changes", "new Bureau tabs", "OG route edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
