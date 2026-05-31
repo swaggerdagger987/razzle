@@ -1,5 +1,6 @@
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
+2026-05-31 | lab-og-tolab-aging-position | d56e382 | 3 files; aging: RB in TOLAB_DEFAULT_POSITION.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.

@@ -1,5 +1,7 @@
+2026-05-31 | explore-og-margin-note-sticker | 3d4d44c | SHIP | Explore margin epic 3/4; LIVE staff sticker when live rows have notes.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Explore margin epic 2/4; OG top-3 matches screener staff column.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
+2026-05-31 | lab-og-tolab-aging-position | d56e382 | SHIP | Aging RB default in OG watermark (T6).
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Snapshot pid wrapper; hallway epic complete (T6).
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Demo OG panel-branded.

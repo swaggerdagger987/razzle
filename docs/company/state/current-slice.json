@@ -1,36 +1,32 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-career-compare-live",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity (atom 3/4)",
-  "slice_title": "Career compare OG multi-player overlay rows",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 3/4)",
+  "slice_title": "LIVE staff sticker when Explore OG rows carry margin notes",
+  "atom_id": "explore-og-margin-note-sticker",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_career_compare_live.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_margin_note_sticker.py",
+    "docs/v2/evidence/2026-05-31-explore-og-margin-note-sticker.md"
   ],
-  "max_files": 2,
-  "max_lines": 180,
+  "max_files": 3,
+  "max_lines": 80,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_career_compare_live.py -q --noconftest",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_sticker.py apps/api/tests/test_explore_og_margin_note_rows.py apps/api/tests/test_explore_og_margin_note_lead.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": [
-    "percentiles toLab atom",
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps"
-  ],
+  "out_of_scope": ["College OG margin notes", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   },
-  "content_commit": "9d19930cf",
-  "reality": "PASS",
-  "status": "done"
+  "status": "shipped",
+  "content_commit": "3d4d44c"
 }
