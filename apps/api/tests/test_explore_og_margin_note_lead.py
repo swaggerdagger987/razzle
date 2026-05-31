@@ -34,3 +34,22 @@ def test_explore_og_fetch_passes_margin_fields():
     assert "player_id:" in source
     assert "targets:" in source
     assert "passing_yards:" in source
+    assert "total_yards:" in source
+    assert "rushing_yards:" in source
+
+
+def test_explore_og_demo_college_top_rows_have_margin_fields():
+    source = EXPLORE_OG.read_text(encoding="utf-8")
+    assert "Cam Ward" in source
+    assert "passing_yards: 4312" in source
+    assert "Travis Hunter" in source
+    assert "total_yards: 1420" in source
+    assert "Ashton Jeanty" in source
+    assert "rushing_yards: 1924" in source
+    assert "campus stats preview" in source
+
+
+def test_margin_notes_college_target_hog_copy():
+    source = MARGIN_NOTES.read_text(encoding="utf-8")
+    assert "target hog on campus" in source
+    assert "marginNoteForCollegeRow" in source
