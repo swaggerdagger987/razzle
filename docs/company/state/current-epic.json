@@ -1,32 +1,32 @@
 {
-  "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
-  "epic_title": "Lab L5 — OG live panel rows visible on Launch-10 cards",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
+  "epic_title": "Lab L4 — Pro gates feel like upgrade, not error",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
   "atoms": [
     {
-      "id": "lab-og-live-sticker-launch10",
-      "title": "Launch-10 OG — LIVE sticker + blurb when nflverse rows render",
+      "id": "lab-pro-gate-hallway-teasers",
+      "title": "Pro gate hallway screener link + teasers for comps/tiers/vorp/stocks",
       "status": "done",
-      "merge_commit": "4e905360"
+      "merge_commit": "675044ea"
     },
     {
-      "id": "lab-og-live-sticker-prospects-weekly",
-      "title": "Prospects + Weekly OG — verify live sticker with panel API",
+      "id": "lab-pro-gate-launch10-teasers",
+      "title": "Launch-10 pro panel teasers audit — fill any slug gaps in generic renderer",
       "status": "done",
-      "merge_commit": "5bb77346"
+      "merge_commit": "b0405d43"
     },
     {
-      "id": "lab-og-live-demo-fallback-copy",
-      "title": "Sample preview copy — sharper contrast vs live sticker",
-      "status": "done",
-      "merge_commit": "9cd6a5cf"
+      "id": "lab-pro-gate-perks-copy",
+      "title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:05:00Z",
-  "updated_at": "2026-05-31T12:20:00Z",
+  "next_atom_id": "lab-pro-gate-perks-copy",
+  "epic_status": "active",
+  "created_at": "2026-05-31T09:15:00Z",
+  "updated_at": "2026-05-31T14:30:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-rows-launch10",
@@ -45,6 +45,12 @@
       "status": "complete",
       "last_atom": "lab-og-buysell-dashboard-live-sort",
       "merge_commit": "7afc0b03"
+    },
+    {
+      "id": "lab-l5-launch10-og-live-extract",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-weeks-fpts-sort",
+      "merge_commit": "40c80f0e"
     }
   ]
 }
