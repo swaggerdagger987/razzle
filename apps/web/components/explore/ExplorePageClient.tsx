@@ -214,7 +214,7 @@ export function ExplorePageClient() {
         />
         <ExploreShareButton
           universe={universe}
-          sort={sortKey}
+          sort={apiSortKey}
           dir={params.dir}
           q={params.q}
           pos={params.pos}
