@@ -1,18 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-college-gate-c",
-  "slice_title": "College explore OG Gate C pytest + campus SAMPLE copy",
-  "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_college_gate_c.py"
-  ],
+  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
+  "epic": "Lab L5 — OG export on empty panel states",
+  "slice_title": "Gamelog — export card when player loaded but weeks empty",
+  "atom_id": "lab-gamelog-empty-weeks-export",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/components/lab/renderers/GamelogRenderer.tsx"],
+  "max_files": 1,
+  "max_lines": 40,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_explore_og_college_gate_c.py -q --noconftest"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/gamelog-og-empty.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'"
   ],
+  "out_of_scope": ["Other Lab panels", "NORTH_STAR/DESIGN/DECISIONS"],
+  "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   }
 }
