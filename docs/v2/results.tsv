@@ -63,4 +63,5 @@ cycle	commit	score	status	pillar	slice	description
 71	33808392	depth+voice+simplicity	keep	Lab	L5 OG snapshot efficiency aging	trust=T5,T6; snapshotRows on efficiency+aging LabOgExportLink; curl buysell snapshot 58072B PNG
 72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
 73	7066f4ab	depth+voice+simplicity	keep	Lab	L5 OG live data label	trust=T1,T5,T6; live data blurb when liveHasRows; curl rankings 59509B
-74	3d498394	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot export	trust=T5,T6; BureauOgExportLink snapshot; curl H2H 59305B demo 54444B snap
+74	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
+75	3d498394	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot export	trust=T5,T6; BureauOgExportLink snapshot; curl H2H 59305B demo 54444B snap
