@@ -70,4 +70,4 @@ cycle	commit	score	status	pillar	slice	description
 77	99f8a2aa	depth+hallway+voice+simplicity	keep	League	L5 Bureau H2H share bar	trust=T2,T5,T6; copy rivalry link + export; curl h2h OG 59305B
 78	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
 79	30454811	depth+hallway+voice+simplicity	keep	League	L5 Bureau Monte Carlo share bar	trust=T2,T5,T6; BureauMonteCarloShareBar copy sim + export; curl monte-carlo OG 53767B
-80	da33eafd	depth+hallway+simplicity	keep	League	L5 Bureau roster depth renderer	trust=T2,T5,T6; BureauRosterDepth unhide roster-depth; build+pytest PASS
+80	929fccf1	depth+hallway+simplicity	keep	League	L5 Bureau roster depth renderer	trust=T2,T5,T6; BureauRosterDepth unhide roster-depth; build+pytest PASS
