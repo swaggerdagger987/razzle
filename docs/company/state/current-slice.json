@@ -1,18 +1,29 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-college-gate-c",
-  "slice_title": "College explore OG Gate C pytest + campus SAMPLE copy",
+  "big_problem": "Room briefing OG ships without regression guards — watermark band and Room hallway link need Gate C pytest like Explore/Lab exports.",
+  "epic": "Room L5 — briefing GTM export (close-out)",
+  "slice_title": "Briefing OG watermark + hallway Gate C pytest",
+  "atom_id": "room-briefing-watermark",
+  "parity_ref": "Room L5 — GTM export slice",
+  "depth_ref": "Room L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — briefing OG PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_college_gate_c.py"
+    "apps/api/tests/test_briefing_og_route.py",
+    "docs/v2/evidence/2026-05-31-room-briefing-watermark-gate-c.md"
   ],
+  "max_files": 2,
+  "max_lines": 40,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_explore_og_college_gate_c.py -q --noconftest"
+    "python3 -m pytest apps/api/tests/test_briefing_og_route.py -q",
+    "curl -s -o /tmp/og-briefing.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/briefing?download=1'"
   ],
+  "out_of_scope": ["route.tsx changes", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   }
 }
