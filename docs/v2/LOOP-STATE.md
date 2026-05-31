@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-live-sticker-bones-atlas
 last_keep_cycle: 128
-last_commit: da33eafd
+last_commit: eea72bef
 lab_l5_og_agent_sticker_epic: active
 lab_l4_pro_gate_epic: complete
