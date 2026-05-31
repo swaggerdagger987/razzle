@@ -115,15 +115,39 @@ export function DynastyDashboardRenderer({ panel }: Props) {
 
   const topRiser = q.data?.risers?.[0];
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const top5 = q.data?.top5 ?? [];
     const movers = [...(q.data?.risers ?? []), ...(q.data?.fallers ?? [])];
-    return movers.slice(0, 6).map((p) => ({
-      name: p.full_name,
-      position: p.position,
-      team: p.team,
-      stat: p.rank_diff ?? 0,
-      statLabel: "Chg",
-    }));
-  }, [q.data?.risers, q.data?.fallers]);
+    const valuePicks = q.data?.value_picks ?? [];
+    const seen = new Set<string>();
+    const rows: OgSnapshotRow[] = [];
+
+    const push = (p: DashboardPlayer, stat: number, statLabel: string) => {
+      if (!p.full_name || seen.has(p.player_id)) return;
+      seen.add(p.player_id);
+      rows.push({
+        name: p.full_name,
+        position: p.position,
+        team: p.team,
+        stat,
+        statLabel,
+      });
+    };
+
+    for (const p of top5) {
+      push(p, p.trade_value ?? 0, "Value");
+      if (rows.length >= 6) break;
+    }
+    for (const p of movers) {
+      push(p, p.rank_diff ?? 0, "Chg");
+      if (rows.length >= 6) break;
+    }
+    for (const p of valuePicks) {
+      push(p, p.trade_value ?? 0, "Value");
+      if (rows.length >= 6) break;
+    }
+
+    return rows.slice(0, 6);
+  }, [q.data?.top5, q.data?.risers, q.data?.fallers, q.data?.value_picks]);
   const maxDropoff = useMemo(() => {
     const rows = q.data?.position_scarcity ?? {};
     return Math.max(0, ...Object.values(rows).map((s) => s.dropoff ?? 0));
