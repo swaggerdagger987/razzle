@@ -30,3 +30,4 @@ new evidence.
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | Bureau Trade Network copy atom 4 | da33eafd | SHIP | keep | Bones tab share parity with pressure map
+2026-05-31 | cycle 87 breakouts OG snapshot | Lab L5 atom 1/5 | da33eafd | SHIP | keep | snapshotRows pattern | — | weekly/prospects next

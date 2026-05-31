@@ -1,43 +1,43 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau behavioral share parity",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Lab export cards must show the same breakout board the user sees — not generic demo names.",
+  "epic_title": "Lab L5 — OG snapshot parity on launch-10 panels",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-manager-profiles-copy-link",
-      "title": "Manager Profiles copy link beside export card",
-      "status": "done",
-      "merge_commit": "04c19959"
+      "id": "lab-og-snapshot-breakouts",
+      "title": "Breakouts OG snapshot from in-panel RBS leaders",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy link beside export card",
-      "status": "done",
-      "merge_commit": "c4ce09b7"
+      "id": "lab-og-snapshot-weekly",
+      "title": "Weekly heatmap OG snapshot from visible weeks",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "league-power-rankings-og",
-      "title": "Power Rankings OG + copy board link",
-      "status": "done",
-      "merge_commit": "90bf2dd5"
+      "id": "lab-og-snapshot-prospects",
+      "title": "Prospects OG snapshot from ranked board",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
-      "status": "done",
-      "merge_commit": "a9db965d"
+      "id": "lab-og-snapshot-tradevalues",
+      "title": "Trade values OG snapshot from tier table",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
-      "status": "done",
-      "merge_commit": "30454811"
+      "id": "lab-og-snapshot-dashboard",
+      "title": "Dynasty dashboard OG snapshot from top5/risers",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T05:15:00Z",
-  "last_cycle_commit": "a9db965d"
+  "next_atom_id": "lab-og-snapshot-breakouts",
+  "created_at": "2026-05-31T05:11:00Z",
+  "updated_at": "2026-05-31T05:11:00Z",
+  "last_cycle_commit": null
 }

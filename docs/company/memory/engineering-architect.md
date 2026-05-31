@@ -30,3 +30,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | BureauTradeNetwork copy row | da33eafd | keep | 1-file clipboard pattern; no new OG route
+2026-05-31 | cycle 87 breakouts OG snapshot | Lab L5 atom 1/5 | da33eafd | SHIP | keep | snapshotRows pattern | — | weekly/prospects next
