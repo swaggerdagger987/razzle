@@ -15,7 +15,7 @@
       "id": "lab-og-gamelog-player-default",
       "title": "Gamelog OG — default player_id when export omits query",
       "status": "done",
-      "merge_commit": "ef908a99"
+      "merge_commit": "8c677bc8"
     },
     {
       "id": "lab-og-launch10-live-fetch-merge",
