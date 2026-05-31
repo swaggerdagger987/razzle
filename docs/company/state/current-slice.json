@@ -1,29 +1,32 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
-  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-efficiency-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "big_problem": "Monte Carlo what-if trades show title/playoff deltas in Bureau but exported OG cards only ship the static odds board — trade screenshots lose the impact story.",
+  "epic": "League L5 — Monte Carlo scenario GTM on OG export (atom 1/3)",
+  "slice_title": "Monte Carlo OG — what-if trade delta on snapshot export card",
+  "atom_id": "league-mc-og-scenario-delta",
+  "parity_ref": "League L5 — Scenario explorer / what-if outputs that travel",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/lib/bureau-monte-carlo-og-snapshot.ts",
+    "apps/web/app/og/monte-carlo/route.tsx",
+    "apps/api/tests/test_monte_carlo_scenario_og.py"
   ],
-  "max_files": 2,
-  "max_lines": 25,
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_monte_carlo_scenario_og.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
+  "out_of_scope": ["ShareBar encode (atom 2)"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+    "verdict": "SHIP"
+  },
+  "status": "shipped",
+  "content_commit": "057f7f95c"
 }
