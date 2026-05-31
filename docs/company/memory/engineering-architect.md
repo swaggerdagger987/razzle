@@ -88,3 +88,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | 088cebc07 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY + tradevalues formula_score order
+2026-05-31 | lab-og-percentiles-tolab | f6e0985f3 | keep | 2 files; percentiles WR in TOLAB_DEFAULT_POSITION mirrors breakouts
