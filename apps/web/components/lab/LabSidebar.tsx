@@ -8,7 +8,9 @@ import {
   type PanelCategory,
   type PanelDefinition,
 } from "@razzle/panels";
+import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
+import type { Route } from "next";
 import { useMemo, useState } from "react";
 
 const CATEGORY_LABELS: Record<PanelCategory, string> = {
@@ -112,7 +114,7 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
             <div key={`staff-${agent.id}`}>
               <div
                 className="lab-sidebar-category"
-                style={{ display: "flex", alignItems: "center", gap: 8, cursor: "default" }}
+                style={{ display: "flex", alignItems: "flex-start", gap: 8, cursor: "default" }}
               >
                 <img
                   src={`/agents/${agent.avatar}.svg`}
@@ -121,7 +123,28 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
                   width={20}
                   height={20}
                 />
-                <span className="cat-text">{agent.name}</span>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
+                  <span className="cat-text">{agent.name}</span>
+                  <Link
+                    href={
+                      toRoom({
+                        agentId: agent.id,
+                        question: `${agent.name}, what's your read on my dynasty board?`,
+                        panelSlug: "lab-sidebar",
+                      }) as Route
+                    }
+                    className="text-orange"
+                    style={{
+                      fontSize: 10,
+                      lineHeight: 1.2,
+                      fontFamily: "var(--font-hand)",
+                      textDecoration: "none",
+                    }}
+                    onClick={onCloseMobile}
+                  >
+                    ask {agent.name} →
+                  </Link>
+                </div>
               </div>
               {staffPanels.map((panel) => (
                 <SidebarItem
@@ -151,7 +174,6 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
                   key={panel.slug}
                   panel={panel}
                   activeSlug={activeSlug}
-                  showOwnerInTitle={Boolean(query)}
                   onNavigate={onCloseMobile}
                 />
               ))}
@@ -172,20 +194,15 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
-  showOwnerInTitle = false,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
-  /** When searching, prefix visible title with agent owner (hallway H-04). */
-  showOwnerInTitle?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
   const owner = agentForPanel(panel.slug);
-  const label =
-    showOwnerInTitle && owner ? `${owner.name} · ${panel.title}` : panel.title;
   return (
     <Link
       href={`/lab/${panel.slug}`}
@@ -203,7 +220,7 @@ function SidebarItem({
           height={18}
         />
       )}
-      {label}
+      {panel.title}
       {panel.tier === "pro" && <span className="lab-pro-lock"> 🔒</span>}
       {badge && <span className="lab-staff-pick"> {badge}</span>}
     </Link>
