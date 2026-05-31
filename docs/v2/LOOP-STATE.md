@@ -1,9 +1,9 @@
-cycle: 89
+cycle: 90
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
-next_slice: lab-l5-og-live-rows
-last_keep_cycle: 89
+next_slice: league-waiver-tendencies-tab
+last_keep_cycle: 90
 last_commit: 9ad5757b
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -40,3 +40,6 @@ lab_l5_og_breakouts_snapshot: complete
 lab_l5_og_tradevalues_snapshot: complete
 lab_l4_pro_gate_voice: complete
 league_l5_bureau_behavioral_share_epic: complete
+league_l5_unhide_bureau_tabs_epic: active
+league_l5_build_profiles_tab: complete
+explore_l5_injury_row_chip: complete
