@@ -8,8 +8,8 @@
     {
       "id": "lab-og-from-panel-gate-c-rest",
       "title": "FROM PANEL pytest — all Launch-10 slugs",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "69f900ad3"
     },
     {
       "id": "lab-og-from-panel-gate-c-curl",
