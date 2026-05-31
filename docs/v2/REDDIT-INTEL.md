@@ -339,3 +339,8 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 
 - **Pattern:** Dynasty Twitter shares graded strength callouts (A+/B tiers) more than raw percentile tables.
 - **Razzle slice:** Lab L5 atom 2 — `/og/strengths` LIVE · top strengths sticker + graded demo rows.
+
+## 2026-05-31 — Trade Finder export hallway
+
+- **Pattern:** r/DynastyFF trade posts get "who wins?" replies — export cards need a one-tap path to ask the diplomat, not just a league URL.
+- **Razzle slice:** League L5 atom 3 — Trade Finder OG prints Bones Room deep link on hero deal above watermark.
