@@ -1,25 +1,23 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-gamelog-player-default",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
-  "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Gamelog OG — default player_id in Lab export URL when query omitted",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/gamelog PNG ≥40KB without player_id query",
-  "trust_pillars": ["T5", "T6"],
+  "atom_id": "lab-sidebar-search-agent-hint",
+  "big_problem": "Lab search hides agent ownership — power users can't tell Hawkeye from Octo panels when filtering 70+ tools.",
+  "epic": "Lab L2 — search + grid agent voice",
+  "slice_title": "Lab sidebar search results show agent name on filtered panels",
+  "parity_ref": "Lab L2 — 20 panels with agent-owned headers",
+  "depth_ref": "Lab L2",
+  "acceptance_ref": "AGENTS.md Lab sidebar agent ownership",
+  "trust_pillars": ["T2", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/LabOgExportLink.tsx"
+    "apps/web/components/lab/LabSidebar.tsx"
   ],
   "max_files": 1,
-  "max_lines": 40,
+  "max_lines": 35,
   "acceptance_commands": [
     "npm run build --workspace=apps/web 2>&1 | tail -5",
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/gamelog-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'",
-    "curl -s -o /tmp/gamelog-og-id.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'"
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests -q"
   ],
-  "out_of_scope": ["Explore OG route", "NORTH_STAR/DESIGN edits", "new npm deps"],
+  "out_of_scope": ["OG routes", "NORTH_STAR/DESIGN edits", "new npm deps"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

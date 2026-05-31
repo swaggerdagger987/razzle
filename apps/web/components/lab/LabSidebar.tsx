@@ -151,6 +151,7 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
                   key={panel.slug}
                   panel={panel}
                   activeSlug={activeSlug}
+                  showAgentName={Boolean(query.trim())}
                   onNavigate={onCloseMobile}
                 />
               ))}
@@ -171,11 +172,14 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
+  showAgentName,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
+  /** When filtering panels, surface agent voice so search matches Staff Picks grouping. */
+  showAgentName?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
@@ -197,7 +201,12 @@ function SidebarItem({
           height={18}
         />
       )}
-      {panel.title}
+      <span className="lab-sidebar-item-label">
+        {panel.title}
+        {showAgentName && owner && (
+          <span className="lab-sidebar-agent-name text-ink-light"> · {owner.name}</span>
+        )}
+      </span>
       {panel.tier === "pro" && <span className="lab-pro-lock"> 🔒</span>}
       {badge && <span className="lab-staff-pick"> {badge}</span>}
     </Link>
