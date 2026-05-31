@@ -57,8 +57,8 @@ export function ProspectsRenderer({ panel }: Props) {
       name: p.player_name,
       position: p.position,
       team: p.school,
-      stat: p.rps ?? p.rank ?? 0,
-      statLabel: "Score",
+      stat: p.rps ?? 0,
+      statLabel: "RPS",
     }));
   }, [prospects]);
 
@@ -158,6 +158,7 @@ export function ProspectsRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="prospects"
             downloadName="razzle-prospects.png"
+            position={position || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
