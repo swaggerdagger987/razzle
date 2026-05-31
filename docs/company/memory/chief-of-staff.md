@@ -37,3 +37,5 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 1 Trade Network share | 1616484c | keep | workday open; behavioral share epic complete; PR #278
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | unhide epic atom 2/4; curl 59807B
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
+2026-05-31 | Cycle 87 Lab OG mirror epic | da33eafd | keep | factory open; Bureau epic complete; NEXT lead atom
+2026-05-31 | Cycle 88 workday publish | da33eafd | keep | PR #335; dedup dashboard/comps+blurb on base; prospects+tradevalues SHIP
