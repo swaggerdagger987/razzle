@@ -30,3 +30,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Lab OG snapshot buysell/efficiency/aging | snapshotRows useMemo | 33808392 | keep | 3 renderers | — | — | evidence/2026-05-31-lab-og-snapshot-launch10-panels.md
 2026-05-31 | Lab OG snapshot gamelog/comps | workday cycle 1 atom 5/6 | 75c88d30 | keep | factory open 2026-05-31
 2026-05-31 | Lab OG live-label | epic atom 6/6 complete | e31a59f1 | keep | workday cycle 1
+2026-05-31 | League hidden Bureau epic | roster-depth atom 1/5 | da33eafd | keep | workday cycle 2; new epic after Lab OG complete

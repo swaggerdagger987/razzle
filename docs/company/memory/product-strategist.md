@@ -30,3 +30,4 @@ new evidence.
 2026-05-31 | Lab OG snapshot buysell/efficiency/aging | snapshotRows useMemo | 33808392 | keep | 3 renderers | — | — | evidence/2026-05-31-lab-og-snapshot-launch10-panels.md
 2026-05-31 | Lab OG snapshot gamelog/comps | player-scoped OG parity | 75c88d30 | keep | week tape + comp list on card
 2026-05-31 | Lab OG live-label | honest source tags on export | e31a59f1 | keep | T5/T6 screenshot trust
+2026-05-31 | League hidden Bureau epic | roster-depth unhide | da33eafd | keep | PARITY League L5; moat tabs visible one atom at a time

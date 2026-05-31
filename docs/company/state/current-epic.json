@@ -1,48 +1,42 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG export cards must show the same player rows the user sees in-panel — not generic demo fallbacks when live data is already on screen (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — OG cards mirror in-product rows",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Five Bureau tabs stay hidden because they lack bespoke renderers — league moat features users cannot reach.",
+  "epic_title": "League L5 — ship hidden Bureau renderers",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-panels-api-live",
-      "title": "OG fetch via /api/panels/{slug} with dashboard/breakout extractors + live tape label",
-      "status": "done",
-      "merge_commit": "997c5e5f"
+      "id": "bureau-roster-depth-renderer",
+      "title": "BureauRosterDepth renderer + unhide roster-depth tab",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-export-link-rankings-breakouts",
-      "title": "LabOgExportLink on dynasty-rankings and breakouts renderers",
-      "status": "done",
-      "merge_commit": "32d682ab"
+      "id": "bureau-power-rankings-renderer",
+      "title": "BureauPowerRankings renderer + unhide power-rankings tab",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-snapshot-rows",
-      "title": "Pass in-panel top-6 snapshot to OG via LabOgExportLink; OG prefers snapshot over demo",
-      "status": "done",
-      "merge_commit": "916ba843"
+      "id": "bureau-build-profiles-renderer",
+      "title": "BureauBuildProfiles renderer + unhide build-profiles tab",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-snapshot-launch10",
-      "title": "Wire snapshot rows on buysell, efficiency, aging LabOgExportLink panels",
-      "status": "done",
-      "merge_commit": "33808392"
+      "id": "bureau-waiver-tendencies-renderer",
+      "title": "BureauWaiverTendencies renderer + unhide waiver-tendencies tab",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-snapshot-gamelog-comps",
-      "title": "Snapshot rows on gamelog weeks and dynasty-comps comp list",
-      "status": "done",
-      "merge_commit": "75c88d30"
-    },
-    {
-      "id": "lab-og-live-label",
-      "title": "Subtitle distinguishes live API vs in-panel snapshot vs sample preview",
-      "status": "done",
-      "merge_commit": "e31a59f1"
+      "id": "bureau-schedule-renderer",
+      "title": "BureauStrengthOfSchedule renderer + unhide strength-of-schedule tab",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T02:13:03Z",
-  "updated_at": "2026-05-31T04:36:30Z"
+  "next_atom_id": "bureau-roster-depth-renderer",
+  "created_at": "2026-05-31T04:37:27Z",
+  "updated_at": "2026-05-31T04:37:27Z"
 }

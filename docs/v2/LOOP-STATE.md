@@ -1,10 +1,11 @@
-cycle: 73
+cycle: 74
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: (epic complete — pick from PARITY/NEXT)
-last_keep_cycle: 73
-last_commit: e31a59f1
+next_slice: bureau-power-rankings-renderer (epic atom 2/5)
+last_keep_cycle: 74
+last_commit: da33eafd
+league_l5_hidden_bureau_epic: in_progress
 lab_l5_og_snapshot_launch10: complete
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete

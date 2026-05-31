@@ -15,6 +15,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Cycle 74 (Bureau roster depth tab)
+
+1. **Hidden tabs were a trust leak** — users who found Bureau via Self-Scout could not see depth chart as its own lane; unhide + bespoke renderer restores moat narrative.
+2. **Full player lists beat grade-only cards** for trade DM screenshots — roster-depth complements Self-Scout summary.
+
 ## 2026-05-31 — Cycle 71 (OG snapshot launch-10 panels)
 
 1. **Formula panels need snapshot too** — buy/sell mismatch and PPO tables are screenshot targets; dashboard-only snapshot was not enough.
