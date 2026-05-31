@@ -355,12 +355,18 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     if (weeklyRows.length > 0) return weeklyRows;
   }
 
-  if (slug === "prospects" && Array.isArray(obj.prospects)) {
-    const prospectRows = extractProspectsRows(
-      obj.prospects as Record<string, unknown>[],
-      positionFilter,
-    );
-    if (prospectRows.length > 0) return prospectRows;
+  if (slug === "prospects") {
+    const prospectSources: Record<string, unknown>[][] = [];
+    if (Array.isArray(obj.prospects) && obj.prospects.length > 0) {
+      prospectSources.push(obj.prospects as Record<string, unknown>[]);
+    }
+    if (Array.isArray(obj.items) && obj.items.length > 0) {
+      prospectSources.push(obj.items as Record<string, unknown>[]);
+    }
+    for (const source of prospectSources) {
+      const prospectRows = extractProspectsRows(source, positionFilter);
+      if (prospectRows.length > 0) return prospectRows;
+    }
   }
 
   if (slug === "gamelog" && Array.isArray(obj.weeks)) {
