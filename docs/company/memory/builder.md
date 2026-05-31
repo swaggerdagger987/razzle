@@ -1,11 +1,12 @@
 # Memory — Builder
 
-2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | pending | keep | test_bureau_self_scout_og_snapshot_codec.py; 4 pytest.
+2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | 7bc24c3a | keep | test_bureau_self_scout_og_snapshot_codec.py; 4 pytest.
 
 2026-05-31 | bureau-self-scout-sharebar-extract | 0bbfc1bb | keep | BureauSelfScoutShareBar mirrors H2H; snapshot on export href.
 
 2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | keep | encodeBureauSelfScoutOgSnapshot on export href; OG decode path.
 
+2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.

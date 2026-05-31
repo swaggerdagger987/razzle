@@ -2,7 +2,7 @@ cycle: 129
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-self-scout-snapshot-roundtrip-test
+next_slice: lab-og-live-sticker-gamelog-efficiency
 last_keep_cycle: 129
 last_commit: 7bc24c3a
 lab_l5_og_live_rows_epic: complete
