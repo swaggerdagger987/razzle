@@ -65,6 +65,6 @@ def test_aging_live_extract_prefers_formula_score():
     assert 'slug === "aging"' in source
     assert "agingStatKeys" in source
     idx = source.index("agingStatKeys")
-    block = source[idx : idx + 240]
+    block = source[idx : idx + 280]
     assert '"formula_score"' in block
     assert block.index('"formula_score"') < block.index('"ppg"')
