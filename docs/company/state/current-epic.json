@@ -19,12 +19,12 @@
     {
       "id": "lab-og-from-panel-sticker-gamelog",
       "title": "FROM PANEL sticker on player-scoped gamelog snapshot export",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "fa71ce6ff"
     }
   ],
-  "next_atom_id": "lab-og-from-panel-sticker-gamelog",
-  "epic_status": "active",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T09:20:00Z",
   "updated_at": "2026-05-31T09:25:00Z",
   "completed_epics": [
