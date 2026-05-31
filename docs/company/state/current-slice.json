@@ -1,5 +1,6 @@
 {
   "date": "2026-05-31",
+<<<<<<< HEAD
   "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
   "epic": "Room L5 — briefing GTM export",
   "slice_title": "Briefing OG terracotta watermark + Room deep link",
@@ -29,4 +30,30 @@
   },
   "status": "shipped",
   "content_commit": "2b9c85dbd"
+=======
+  "big_problem": "Lab OG cards are screenshot dead-ends — dynasty Twitter can't click back into the panel with the same filters they exported.",
+  "epic": "Lab L5 — OG hallway deep links (atom 1/3)",
+  "slice_title": "lab-og-tolab-watermark — Launch-10 OG band uses typed toLab() path",
+  "parity_ref": "PARITY Explore L5 — Lab panel OG data rows + hallway",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with live rows",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_tolab_watermark.py"
+  ],
+  "max_files": 2,
+  "max_lines": 120,
+  "acceptance_commands": [
+    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [
+    "New npm deps",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "Explore or Bureau OG routes",
+    "Snapshot query round-trip"
+  ],
+  "builder_mode": "composer-surgical"
+>>>>>>> origin/razzle-v2-redesign
 }
