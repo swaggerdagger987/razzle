@@ -218,6 +218,8 @@ export function ExplorePageClient() {
           dir={params.dir}
           q={params.q}
           pos={params.pos}
+          season={params.season}
+          team={params.team}
         />
       </div>
 
