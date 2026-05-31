@@ -1,9 +1,9 @@
 {
+  "epic_status": "active",
   "big_problem": "Bureau Trade Finder screenshots look like a draft — no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
   "epic_title": "League L5 — Bureau Trade Finder GTM export",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "epic_status": "active",
   "atoms": [
     {
       "id": "league-trade-finder-og-watermark-live",
@@ -14,7 +14,7 @@
     {
       "id": "league-trade-finder-og-snapshot",
       "title": "Trade Finder OG — snapshot param for in-panel export rows",
-      "status": "in_progress",
+      "status": "pending",
       "merge_commit": null
     },
     {
@@ -26,6 +26,13 @@
   ],
   "next_atom_id": "league-trade-finder-og-snapshot",
   "created_at": "2026-05-31T10:35:00Z",
-  "updated_at": "2026-05-31T11:00:20Z",
-  "completed_epics": []
+  "updated_at": "2026-05-31T14:00:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-formula-og-live",
+      "status": "complete",
+      "last_atom": "lab-og-from-panel-gate-c-rest",
+      "merge_commit": "bab13fe0a"
+    }
+  ]
 }
