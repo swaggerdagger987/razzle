@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-demo-college | f6e0985f3 | SHIP | college demo pytest guards; curl 71510B.
+2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | college demo pytest guards; curl 71510B.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | EXPORTED · panel rivalry rows.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | TOLAB_DEFAULT_POSITION efficiency RB.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | weekly WR watermarkPosition on OG route.
