@@ -23,4 +23,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Manager Profiles OG + export | da33eafd | keep | /og/manager-profiles 4 archetype rows; BureauManagerProfiles export; curl 76684B
 2026-05-31 | Trade Network OG + export | 2bd28752 | keep | /og/trade-network 4 partnership lanes; BureauTradeNetwork export; curl 67677B
 2026-05-31 | Self-Scout OG + export | e732f973 | keep | /og/self-scout 4 position grades; BureauSelfScout export; curl 66997B
-2026-05-31 | Lab OG export links atom 1 | da33eafd | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
+2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
