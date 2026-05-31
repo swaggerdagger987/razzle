@@ -1,29 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
-  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-efficiency-position",
+  "big_problem": "Lab OG watermarks omit default position filters — rankings exports click back to an unscoped dynasty board.",
+  "epic": "Lab L5 — OG hallway position defaults (atom 3/3)",
+  "slice_title": "lab-og-tolab-rankings-position",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with WR in toLab watermark",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/[panel]/route.tsx",
     "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
   "max_files": 2,
-  "max_lines": 25,
+  "max_lines": 15,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "out_of_scope": [
+    "New OG routes",
+    "Hallway package changes",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical"
 }
