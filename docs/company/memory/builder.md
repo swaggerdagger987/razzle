@@ -8,6 +8,8 @@ Format per entry:
 YYYY-MM-DD | slice | approach | commit hash | outcome | keep | discard | revisit | evidence
 ```
 
+2026-05-31 | lab-og-buysell-dashboard-live | buy_low/sell_high + dashboard fallers in extractRows | 0f0d9aaf | SHIP | KEEP nested-key branches before generic data[] | — | curl 58–60KB | evidence 2026-05-31-lab-og-buysell-dashboard-live.md
+
 Read this file before implementing. Reuse working patterns; avoid repeating known
 failure modes. Karpathy: simplicity first, surgical changes.
 

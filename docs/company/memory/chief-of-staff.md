@@ -16,7 +16,7 @@ A good entry changes future behavior. A bad entry is a diary.
 
 ## Entries
 
-2026-05-31 | Factory cycle 1 Lab OG buy/sell dashboard | da33eafd | keep | workday open; Lab L5 epic atom 2/3; PR #315 rebased on base
+2026-05-31 | Factory cycle 1 Lab OG buy/sell dashboard | 0f0d9aaf | keep | workday open; Lab L5 epic atom 2/3; PR #315 rebased on base
 2026-05-31 | Factory cycle 2 Pressure Map copy link | da33eafd | keep | workday open; behavioral share epic 2/4 SHIP
 2026-05-30 | NEXT.md eliminates slice selection ambiguity for morning standups | SHIP 3/3 on Lab L5 OG live data rows | keep | NEXT.md lead candidate matched PARITY/DEPTH/ACCEPTANCE; single-file touch kept scope tight
 2026-05-31 | Factory cycle 1 — epic.json + FACTORY-DOD Gate C for Lab OG | SHIP 3/3 demo rows atom | keep | Workday opened; curl PNG ~59KB proves Gate C; standup-pr-autopen on branch from PR #18

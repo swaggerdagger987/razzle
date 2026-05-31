@@ -11,7 +11,7 @@ YYYY-MM-DD | hypothesis | slice | PARITY/DEPTH/ACCEPTANCE cited | outcome | keep
 Read this file before proposing a new slice. Do not repeat discarded ideas without
 new evidence.
 
-2026-05-31 | Lab L5 OG live rows epic atom 2 | lab-og-buysell-dashboard-live | NEXT Lab L5 / PARITY Explore L5 | SHIP | KEEP epic on clean base after Bureau parallel | — | standup cycle 90
+2026-05-31 | Lab L5 OG live rows epic atom 2 | lab-og-buysell-dashboard-live | NEXT Lab L5 / PARITY Explore L5 | SHIP 0f0d9aaf | KEEP epic on clean base after Bureau parallel | — | standup cycle 90
 
 ---
 
