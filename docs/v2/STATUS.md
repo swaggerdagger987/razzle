@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 95 |
+| Cycle | 94 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | Lab OG position on tradevalues/prospects (epic atom 2/3) |
-| Last commit | pending cycle 95 merge |
+| Next slice | Lab efficiency OG live extract (epic atom 3/3) |
+| Last commit | `59c05e93` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

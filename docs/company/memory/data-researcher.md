@@ -1,6 +1,7 @@
 # Memory — Data Researcher
 
-2026-05-31 | trade values formula OG | cycle 95 | DynastyFF threads rank custom formulas before sharing trade boards
+- **2026-05-31:** No new intel — rankings OG slice; dynasty API shape documented in legacy dynasty.py.
+- **2026-05-31:** No new Reddit intel — aging OG slice used existing nflverse terminal path.
 
 Append-only log of recurring user pain patterns, language signals, and feature-gap
 candidates that became (or didn't become) PARITY rows.
@@ -18,6 +19,7 @@ anecdotes (>=3 independent threads = signal).
 
 ## Entries
 
+2026-05-31 | SOS tab | no new intel | keep | Bureau nav completeness unblocks league screenshots
 2026-05-31 | Dashboard comps OG snapshot | c9151786 | keep | roster builder comps export matches in-panel match %
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"
 2026-05-31 | light scan | loading-only OG reads as broken tool in screenshot culture | demo rows + sample preview label | keep | cycle 58 REDDIT-INTEL entry

@@ -1,12 +1,7 @@
 # Memory — Builder
 
-2026-05-31 | league-power-rankings-og-snapshot | 26a22f69 | keep | compact encode/decode lib + ShareBar rows prop
-
-2026-05-31 | H2H canonical codec | da33eafd | BureauH2HShareBar uses encodeBureauH2HOgSnapshot; OG route decodeBureauH2HOgSnapshot.
-
-2026-05-31 | Trade values OG rank labels | 5ed39e14 | TradeValuesRenderer ogSnapshotRows uses `rank · Value` or `rank · formula.name` on top 6 sorted rows.
-
-2026-05-31 | Buy/Sell OG lane labels | 98ae0ef2 | BuySellRenderer splits buyRows/sellRows with Buy/Sell statLabel before encodeOgSnapshot.
+- **2026-05-31:** `apps/web/app/og/[panel]/route.tsx` — rankings `players[]` before `tiers[]`, nested `data` unwrap; curl 59KB PASS.
+- **2026-05-31:** `apps/web/app/og/[panel]/route.tsx` — positions map flatten + aging default RB; curl 44KB PASS.
 
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
@@ -21,10 +16,9 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
-2026-05-31 | weekly-hot-week-og | ogSnapshotRows max week pts + Wk label | da33eafd | SHIP | KEEP hottest-week not PPG | — | — | evidence/2026-05-31-lab-weekly-hot-week-snapshot.md
-
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
+2026-05-31 | league-strength-of-schedule-tab | BureauStrengthOfSchedule Octo + empty HIDDEN | da33eafd | SHIP | KEEP dual PPG bars | — | — | evidence/2026-05-31-league-strength-of-schedule-tab.md
 
 ---
 
