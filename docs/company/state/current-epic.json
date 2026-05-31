@@ -1,45 +1,39 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
-  "epic_title": "Lab L5 — OG export matches in-panel position filters",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head — ShareBar and OG route use mismatched snapshot codecs.",
+  "epic_title": "League L5 — Bureau H2H snapshot codec matches OG decode",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-position-efficiency-aging",
-      "title": "Efficiency + aging export passes position filter to OG",
+      "id": "bureau-h2h-sharebar-canonical-codec",
+      "title": "H2H ShareBar uses encodeBureauH2HOgSnapshot (y/m/pc compact)",
       "status": "done",
-      "merge_commit": "f358349d"
+      "merge_commit": "7ec8f82a"
     },
     {
-      "id": "lab-og-position-tradevalues-prospects",
-      "title": "Trade values + prospects export passes position filter",
+      "id": "bureau-h2h-og-route-lib-decode",
+      "title": "OG head-to-head route uses shared lib decode only",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-position-buysell",
-      "title": "Buy/sell export passes position filter to OG",
+      "id": "bureau-h2h-snapshot-roundtrip-test",
+      "title": "API test or script proves ShareBar snapshot round-trips to OG PNG",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-prospects",
-  "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:30:00Z",
-  "last_cycle_commit": "5b5016e3",
+  "next_atom_id": "bureau-h2h-og-route-lib-decode",
+  "created_at": "2026-05-31T07:00:00Z",
+  "updated_at": "2026-05-31T06:35:00Z",
+  "last_cycle_commit": "da33eafd",
   "completed_epics": [
     {
       "id": "lab-l5-og-snapshot-fidelity",
       "status": "complete",
       "last_atom": "lab-og-breakouts-score-ranked",
-      "merge_commit": "5b5016e3"
-    },
-    {
-      "id": "league-l5-unhide-bureau-tabs",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-tab",
-      "merge_commit": "eb542d51"
+      "merge_commit": null
     }
   ]
 }
