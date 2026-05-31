@@ -1,17 +1,56 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
   "epic_title": "Lab L5 — OG hallway deep links",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
-    {"id": "lab-og-tolab-watermark", "title": "Launch-10 toLab watermark band", "status": "done", "merge_commit": "b80512bb4"},
-    {"id": "lab-og-tolab-gamelog-default", "title": "Gamelog/dynasty-comps default player in toLab", "status": "done", "merge_commit": "c311a15a8"},
-    {"id": "lab-og-tolab-snapshot-player", "title": "Snapshot exports preserve player in watermark", "status": "done", "merge_commit": "99e370587"}
+    {
+      "id": "lab-og-tolab-watermark",
+      "title": "Launch-10 toLab watermark band",
+      "status": "done",
+      "merge_commit": "b80512bb4"
+    },
+    {
+      "id": "lab-og-tolab-gamelog-default",
+      "title": "Gamelog/dynasty-comps default player in toLab",
+      "status": "done",
+      "merge_commit": "c311a15a8"
+    },
+    {
+      "id": "lab-og-tolab-snapshot-player",
+      "title": "Snapshot exports preserve player in watermark",
+      "status": "done",
+      "merge_commit": "f6e0985f3"
+    }
   ],
   "next_atom_id": null,
-  "epic_status": "complete",
   "created_at": "2026-05-31T11:00:00Z",
-  "updated_at": "2026-05-31T11:30:00Z",
-  "completed_epics": ["lab-l5-og-export-live-panel-rows"]
+  "updated_at": "2026-05-31T14:30:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-empty-board-og-sample-cards",
+      "status": "complete",
+      "last_atom": "lab-weekly-empty-export",
+      "merge_commit": "088cebc07"
+    },
+    {
+      "id": "lab-l5-formula-og-live-parity",
+      "status": "complete",
+      "last_atom": "lab-og-from-panel-gate-c-rest",
+      "merge_commit": "0b6730166"
+    },
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "f6e0985f3"
+    },
+    {
+      "id": "league-l5-trade-finder-gtm",
+      "status": "complete",
+      "last_atom": "bureau-trade-finder-copy-link",
+      "merge_commit": "a6930ca13"
+    }
+  ]
 }

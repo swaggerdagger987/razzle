@@ -1,7 +1,7 @@
 {
   "date": "2026-05-31",
   "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic": "Lab L5 — OG hallway deep links",
+  "epic": "Lab L5 — OG hallway deep links (atom 3/3)",
   "slice_title": "Snapshot exports preserve player in OG toLab watermark",
   "atom_id": "lab-og-tolab-snapshot-player",
   "parity_ref": "Lab panel OG data rows",
@@ -24,6 +24,6 @@
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
