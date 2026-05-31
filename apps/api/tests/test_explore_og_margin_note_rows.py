@@ -10,9 +10,9 @@ EXPLORE_OG = ROOT / "apps/web/app/og/explore/route.tsx"
 
 def test_explore_og_top_three_margin_notes():
     source = EXPLORE_OG.read_text(encoding="utf-8")
-    assert "OG_MARGIN_NOTE_ROW_COUNT = 3" in source
+    assert "TOP_MARGIN_NOTE_ROWS = 3" in source
     assert "topMarginNotes" in source
-    assert "i < OG_MARGIN_NOTE_ROW_COUNT && topMarginNotes[i]" in source
+    assert "i < TOP_MARGIN_NOTE_ROWS && topMarginNotes[i]" in source
 
 
 def test_explore_og_demo_rows_two_and_three_have_margin_fields():

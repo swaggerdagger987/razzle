@@ -12,7 +12,7 @@ MARGIN_NOTES = ROOT / "apps/web/lib/margin-notes.ts"
 def test_explore_og_imports_margin_note_helper():
     source = EXPLORE_OG.read_text(encoding="utf-8")
     assert "marginNoteForOgExploreRow" in source
-    assert "OG_MARGIN_NOTE_ROW_COUNT" in source
+    assert "TOP_MARGIN_NOTE_ROWS" in source
     assert "topMarginNotes" in source
     assert "AGENT_BY_ID[topMarginNotes[i]!.agentId].emoji" in source
 

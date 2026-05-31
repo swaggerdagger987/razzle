@@ -16,7 +16,7 @@ interface OgPlayer extends OgExploreMarginRow {
 }
 
 /** Sample screener rows when API/terminal.db unavailable (FACTORY-DOD Gate C). */
-const OG_MARGIN_NOTE_ROW_COUNT = 3;
+const TOP_MARGIN_NOTE_ROWS = 3;
 
 const DEMO_NFL_ROWS: OgPlayer[] = [
   {
@@ -249,8 +249,10 @@ export async function GET(req: Request) {
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
   const topMarginNotes = players
-    .slice(0, OG_MARGIN_NOTE_ROW_COUNT)
+    .slice(0, TOP_MARGIN_NOTE_ROWS)
     .map((p) => marginNoteForOgExploreRow(p, universe));
+  const hasStaffMarginNotes = topMarginNotes.some((note) => note != null);
+  const showLiveStaffSticker = !isDemo && hasStaffMarginNotes;
 
   return new ImageResponse(
     (
@@ -291,6 +293,23 @@ export async function GET(req: Request) {
               }}
             >
               FORMULA SORT
+            </div>
+          ) : null}
+          {showLiveStaffSticker ? (
+            <div
+              style={{
+                display: "flex",
+                fontSize: 16,
+                fontWeight: 700,
+                background: "#2ec4b6",
+                color: "#f7efe5",
+                padding: "4px 12px",
+                border: "3px solid #2d1f14",
+                borderRadius: 6,
+                boxShadow: "3px 3px 0 #2d1f14",
+              }}
+            >
+              LIVE · staff margins
             </div>
           ) : null}
           {isDemo ? (
@@ -366,7 +385,7 @@ export async function GET(req: Request) {
                   <div style={{ display: "flex" }}>
                     {p.full_name.length > 22 ? `${p.full_name.slice(0, 20)}…` : p.full_name}
                   </div>
-                  {i < OG_MARGIN_NOTE_ROW_COUNT && topMarginNotes[i] ? (
+                  {i < TOP_MARGIN_NOTE_ROWS && topMarginNotes[i] ? (
                     <div
                       style={{
                         display: "flex",
