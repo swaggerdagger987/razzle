@@ -100,12 +100,18 @@ export function DynastyRankingsRenderer({ panel }: Props) {
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     const players = formula ? sortedPlayers : rawPlayers;
-    return players.slice(0, 6).map((p, i) => ({
+    const top = [...players]
+      .sort((a, b) => {
+        if (formula) return (b.formula_score ?? 0) - (a.formula_score ?? 0);
+        return (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0);
+      })
+      .slice(0, 6);
+    return top.map((p, i) => ({
       name: p.full_name,
       position: p.position,
       team: p.team,
-      stat: formula ? (p.formula_score ?? 0) : (p.dynasty_value ?? i + 1),
-      statLabel: formula ? "Score" : "Value",
+      stat: formula ? (p.formula_score ?? 0) : i + 1,
+      statLabel: formula ? "Score" : "Rank",
     }));
   }, [formula, sortedPlayers, rawPlayers]);
 
