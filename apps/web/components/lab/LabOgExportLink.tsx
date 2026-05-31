@@ -1,3 +1,6 @@
+/** Ja'Marr Chase gsis_id — matches DEFAULT_OG_PLAYER_ID in /og/[panel]/route.tsx */
+export const DEFAULT_LAB_OG_PLAYER_ID = "00-0036900";
+
 /** In-panel link to download the Lab OG share card (matches Bureau export pattern). */
 
 export interface OgSnapshotRow {
