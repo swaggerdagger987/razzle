@@ -1,8 +1,10 @@
-cycle: 136
+cycle: 137
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: Lab
 focus_layer: L5
-next_slice: explore-og-nfl-universe-default
-last_keep_cycle: 136
-last_commit: 839ac5cb
-explore_l5_universe_export_epic: active
+next_slice: lab-efficiency-empty-export (epic atom 2/3)
+last_keep_cycle: 137
+last_commit: 202981c8f
+explore_l5_og_query_epic: complete
+lab_l5_empty_og_epic: active
+lab_l4_pro_gate_epic: complete
