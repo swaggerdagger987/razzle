@@ -1,32 +1,32 @@
 {
   "epic_status": "active",
-  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
-  "epic_title": "Room L5 — briefing GTM export",
-  "parity_ref": "Room L5 — GTM export slice",
-  "depth_ref": "Room L5",
+  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
+  "epic_title": "Lab L5 — OG export on empty panel states",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "room-briefing-copy-export",
-      "title": "Briefing card — copy formatted text for Slack/Reddit",
-      "status": "done",
-      "merge_commit": "612d9638"
+      "id": "lab-gamelog-empty-weeks-export",
+      "title": "Gamelog — export card when player loaded but weeks empty",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "room-briefing-og-card",
-      "title": "Briefing OG — /og/briefing snapshot route",
-      "status": "done",
-      "merge_commit": "75dc2d65a"
+      "id": "lab-efficiency-empty-export",
+      "title": "Efficiency — export sample card on empty position board",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "room-briefing-watermark",
-      "title": "Briefing OG — terracotta watermark + Room hallway link",
+      "id": "lab-rankings-empty-export",
+      "title": "Rankings — export sample card when filter returns zero rows",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "room-briefing-watermark",
-  "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T10:20:00Z",
+  "next_atom_id": "lab-gamelog-empty-weeks-export",
+  "created_at": "2026-05-31T10:05:27Z",
+  "updated_at": "2026-05-31T10:35:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-launch10-og-panel-native-trust-labels",
@@ -38,7 +38,7 @@
       "id": "league-l5-bureau-h2h-deep-links",
       "status": "complete",
       "last_atom": "bureau-h2h-pick-opponent-preserve-user",
-      "merge_commit": "c7ad88bd3"
+      "merge_commit": "b3a10109e"
     },
     {
       "id": "lab-l4-pro-gate-error-surface",
@@ -51,6 +51,12 @@
       "status": "complete",
       "last_atom": "explore-og-nfl-universe-default",
       "merge_commit": "c7b50c707"
+    },
+    {
+      "id": "room-l5-briefing-gtm-export",
+      "status": "complete",
+      "last_atom": "room-briefing-og-card",
+      "merge_commit": "75dc2d65a"
     }
   ]
 }
