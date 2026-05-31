@@ -25,7 +25,5 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Factory open cycle 1 Lab live OG rows | 2cb898b6 | keep | workday open; epic atom 1/3 SHIP; PR standup 2026-05-31
-2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
-2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | new epic; workday cycle 1
-2026-05-31 | Factory open cycle 1 prospects-weekly-tradevalues | 8b5acdbe | keep | workday open; Lab live-rows epic complete; curl 58–63KB
-2026-05-31 | Workday reopen cycle 1 power-rankings OG | e62721a6 | keep | League epic atom 2/4; curl 68555B; next roster-depth
+2026-05-31 | Factory cycle 1 Bureau H2H export | 044ee1e8 | keep | workday open; League L5 epic atom 1/3; copy link + export bar
+2026-05-31 | Workday cycle 2 power-rankings OG | e62721a6 | keep | parallel morning run; curl 68555B; PR 174
