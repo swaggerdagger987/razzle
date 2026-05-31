@@ -84,6 +84,7 @@ def test_pro_gate_from_panel_error_wired_in_tradevalues_and_efficiency():
         "apps/web/components/lab/renderers/GamelogRenderer.tsx",
         "apps/web/components/lab/renderers/BuySellRenderer.tsx",
         "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx",
+        "apps/web/components/lab/renderers/DynastyCompsRenderer.tsx",
     ],
 )
 def test_pro_gate_from_panel_error_wired_in_remaining_launch10(path: str):

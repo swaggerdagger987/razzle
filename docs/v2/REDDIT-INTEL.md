@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab dynasty comps pro gate (factory cycle 1)
+- **Angle:** Comps panel 402 uses the same upgrade teaser as breakouts/rankings — no one-off paywall chrome on the last launch-10 renderer.
+- **Trust:** T2/T6 — shared `ProGateFromPanelError`; pytest guards all gated renderers.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
