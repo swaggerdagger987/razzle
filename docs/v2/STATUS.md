@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 118 — Prospects+Weekly OG LIVE panel labels)  
+**Last updated:** 2026-05-31 (factory cycle 124 — Explore OG universe in share URLs)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,11 +15,11 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 118 |
+| Cycle | 124 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | Explore |
 | Focus layer | L5 |
-| Next slice | lab-og-live-demo-fallback-copy |
+| Next slice | lab-og-gamelog-player-default |
 | Last commit | `da33eafd` |
 
 ---
