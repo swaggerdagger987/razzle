@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
   "epic_title": "Lab L5 — GTM panel share bar parity",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
@@ -8,14 +8,15 @@
     {
       "id": "lab-gtm-share-bar-complete",
       "title": "Launch-10 LabPanelShareBar — copy/preview/export on all Staff Picks panels",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "35fe55044"
     }
   ],
-  "next_atom_id": "lab-gtm-share-bar-complete",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:06:13Z",
-  "updated_at": "2026-05-31T12:06:13Z",
+  "updated_at": "2026-05-31T12:25:00Z",
   "completed_epics": [
-    "lab-l5-pro-profile-og-live-parity"
+    "lab-l5-pro-profile-og-live-parity",
+    "lab-l5-gtm-share-bar-parity"
   ]
 }
