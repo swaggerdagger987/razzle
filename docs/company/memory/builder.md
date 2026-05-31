@@ -2,6 +2,8 @@
 
 2026-05-31 | FROM PANEL evidence | 164159413 | test_og_from_panel_sticker 2 tests; curl 56682B/58270B.
 
+2026-05-31 | lab-og-live-sticker-gamelog-efficiency | da33eafd | SHIP | gamelog LIVE Wk tape vocabulary (2 lines).
+
 2026-05-31 | FROM PANEL OG sticker | 7d49e4f0c | route.tsx + pytest; snapshot curl ≥40KB.
 
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
