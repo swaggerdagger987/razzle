@@ -1,8 +1,12 @@
-cycle: 156
+cycle: 155
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: PARITY next RED/YELLOW row
-last_keep_cycle: 156
-last_commit: 338709883
-lab_l5_og_watermark_display_name_epic: complete
+next_slice: explore-og-margin-note-college
+last_keep_cycle: 155
+last_commit: 034b28d3e
+explore_l5_og_margin_epic: active
+lab_l5_empty_og_epic: complete
+lab_l5_og_hallway_epic: complete
+lab_l5_og_weekly_tolab_position: complete
+league_l5_trade_finder_gtm_epic: complete

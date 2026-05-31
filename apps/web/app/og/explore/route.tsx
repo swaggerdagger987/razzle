@@ -25,8 +25,27 @@ const DEMO_NFL_ROWS: OgPlayer[] = [
     age: 22,
     fantasy_points_ppr: 312.4,
   },
+<<<<<<< HEAD
+  {
+    full_name: "Ja'Marr Chase",
+    position: "WR",
+    team: "CIN",
+    stat: 298.1,
+    targets: 128,
+    fantasy_points_ppr: 298.1,
+  },
+  {
+    full_name: "Bijan Robinson",
+    position: "RB",
+    team: "ATL",
+    stat: 285.6,
+    age: 22,
+    fantasy_points_ppr: 285.6,
+  },
+=======
   { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 298.1, targets: 128 },
   { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 285.6 },
+>>>>>>> origin/razzle-v2-redesign
   { full_name: "Brock Bowers", position: "TE", team: "LV", stat: 241.2 },
   { full_name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 228.4 },
   { full_name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 215.8 },
@@ -239,9 +258,12 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
-  const leadMarginNote =
-    players.length > 0 ? marginNoteForOgExploreRow(players[0]!, universe) : null;
-  const leadAgent = leadMarginNote ? AGENT_BY_ID[leadMarginNote.agentId] : null;
+  const MARGIN_NOTE_ROW_LIMIT = 3;
+  const marginNotesByIndex = players
+    .slice(0, MARGIN_NOTE_ROW_LIMIT)
+    .map((row) => marginNoteForOgExploreRow(row, universe));
+  const hasMarginNotes = marginNotesByIndex.some((note) => note != null);
+  const showStaffLiveSticker = hasMarginNotes && !isDemo;
 
   return new ImageResponse(
     (
@@ -282,6 +304,25 @@ export async function GET(req: Request) {
               }}
             >
               FORMULA SORT
+            </div>
+          ) : null}
+          {showStaffLiveSticker ? (
+            <div
+              style={{
+                fontFamily: "Caveat",
+                fontSize: 28,
+                fontWeight: 700,
+                color: "#f7efe5",
+                background: "#2ec4b6",
+                padding: "4px 14px",
+                display: "flex",
+                border: "3px solid #2d1f14",
+                borderRadius: 8,
+                boxShadow: "3px 3px 0 #2d1f14",
+                transform: "rotate(-2deg)",
+              }}
+            >
+              LIVE · staff notes
             </div>
           ) : null}
           {isDemo ? (
@@ -357,6 +398,29 @@ export async function GET(req: Request) {
                   <div style={{ display: "flex" }}>
                     {p.full_name.length > 22 ? `${p.full_name.slice(0, 20)}…` : p.full_name}
                   </div>
+<<<<<<< HEAD
+                  {(() => {
+                    const note = i < MARGIN_NOTE_ROW_LIMIT ? marginNotesByIndex[i] : null;
+                    const agent = note ? AGENT_BY_ID[note.agentId] : null;
+                    if (!note || !agent) return null;
+                    return (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 6,
+                          fontFamily: "Caveat",
+                          fontSize: 22,
+                          color: "#5c4a3d",
+                          marginTop: 2,
+                        }}
+                      >
+                        <span style={{ display: "flex" }}>{agent.emoji}</span>
+                        <span style={{ display: "flex" }}>{note.text}</span>
+                      </div>
+                    );
+                  })()}
+=======
                   {i === 0 && leadMarginNote && leadAgent ? (
                     <div
                       style={{
@@ -373,6 +437,7 @@ export async function GET(req: Request) {
                       <span style={{ display: "flex" }}>{leadMarginNote.text}</span>
                     </div>
                   ) : null}
+>>>>>>> origin/razzle-v2-redesign
                 </div>
                 <div style={{ width: 56, display: "flex" }}>
                   <span

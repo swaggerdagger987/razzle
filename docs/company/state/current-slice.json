@@ -1,8 +1,29 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-watermark-display-name",
-  "slice_title": "Gamelog export passes player name into OG watermark toLab",
-  "content_commit": "338709883",
-  "reality": "PASS",
-  "merge": "pending"
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic": "Explore L5 — OG screener agent margin notes",
+  "slice_title": "LIVE staff sticker when OG rows carry margin notes",
+  "atom_id": "explore-og-margin-note-sticker",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_margin_note_sticker.py"
+  ],
+  "max_files": 2,
+  "max_lines": 80,
+  "acceptance_commands": [
+    "pytest apps/api/tests/test_explore_og_margin_note_sticker.py -q",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": ["college-only margin rules", "new npm deps"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  }
 }
