@@ -24,5 +24,11 @@
     "pricing page",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  }
 }

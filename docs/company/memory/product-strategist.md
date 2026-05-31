@@ -2,9 +2,13 @@
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
+2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
+2026-05-31 | lab-og-launch10-snapshot-default | e2a3ce8a | SHIP | closes gamelog OG epic; live rows when no snapshot.
+
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | SHIP | keep | all Staff Picks domain blur; T2/T6.
 
-2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | SHIP | Peak-week OG rows match Game Log export — screenshot parity for trades.
+2026-05-31 | Cycle 118 prospects items | e00217d1 | items[] when prospects empty.
+2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | SHIP | NEXT.md live-rows epic atom 1/3.
 
 2026-05-31 | H2H OG watermark | 44d05684 | League rivalry exports now match Lab/Explore screenshot brand — epic closed.
 
