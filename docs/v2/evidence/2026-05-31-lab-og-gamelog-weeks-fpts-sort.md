@@ -12,7 +12,7 @@ JWT_SECRET=test python3 -m pytest apps/api/tests -q  # 51 passed, 5 skipped
 
 curl -s -o /tmp/og-gamelog-live.png -w '%{http_code} %{size_download}\n' \
   'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'
-# → 200 61129
+# → 200 55055 (post-extractGamelogWeekRows)
 
 file /tmp/og-gamelog-live.png  # PNG 1200x630
 ```

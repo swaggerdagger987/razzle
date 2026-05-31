@@ -169,12 +169,12 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Xavier Worthy", position: "WR", team: "KC", stat: 74, statLabel: "RBS" },
   ],
   gamelog: [
-    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 28.4, statLabel: "FPTS" },
-    { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 19.2, statLabel: "FPTS" },
-    { name: "Brock Bowers", position: "TE", team: "LV", stat: 14.6, statLabel: "FPTS" },
-    { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 31.1, statLabel: "FPTS" },
-    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 11.8, statLabel: "FPTS" },
-    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 22.5, statLabel: "FPTS" },
+    { name: "Wk 17", position: "WR", team: "CIN", stat: 28.4, statLabel: "PPR" },
+    { name: "Wk 12", position: "WR", team: "CIN", stat: 26.1, statLabel: "PPR" },
+    { name: "Wk 9", position: "WR", team: "CIN", stat: 24.8, statLabel: "PPR" },
+    { name: "Wk 5", position: "WR", team: "CIN", stat: 22.5, statLabel: "PPR" },
+    { name: "Wk 3", position: "WR", team: "CIN", stat: 19.2, statLabel: "PPR" },
+    { name: "Wk 1", position: "WR", team: "CIN", stat: 14.6, statLabel: "PPR" },
   ],
   efficiency: [
     { name: "Christian McCaffrey", position: "RB", team: "SF", stat: 0.42, statLabel: "Efficiency" },
@@ -286,6 +286,25 @@ function extractWeeklyHeatmapRows(
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
 }
 
+/** Gamelog OG — peak weeks by FPTS (matches GamelogRenderer ogSnapshotRows). */
+function extractGamelogWeekRows(data: Record<string, unknown>): OgRow[] {
+  const weeks = data.weeks as Array<{ week?: number; fpts?: number }> | undefined;
+  if (!Array.isArray(weeks) || weeks.length === 0) return [];
+  const pos = String(data.position ?? "");
+  const team = String(data.team ?? "");
+  return [...weeks]
+    .filter((w) => w != null && Number(w.fpts ?? 0) > 0)
+    .sort((a, b) => Number(b.fpts ?? 0) - Number(a.fpts ?? 0))
+    .slice(0, 6)
+    .map((w) => ({
+      name: `Wk ${w.week ?? "?"}`,
+      position: pos,
+      team,
+      stat: Number(w.fpts ?? 0),
+      statLabel: "PPR",
+    }));
+}
+
 /** Prospects big board — RPS sort (matches ProspectsRenderer). */
 function extractProspectsRows(
   prospects: Record<string, unknown>[],
@@ -341,6 +360,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
       positionFilter,
     );
     if (prospectRows.length > 0) return prospectRows;
+  }
+
+  if (slug === "gamelog" && Array.isArray(obj.weeks)) {
+    const gamelogRows = extractGamelogWeekRows(obj);
+    if (gamelogRows.length > 0) return gamelogRows;
   }
 
   let candidates: Record<string, unknown>[] = [];
