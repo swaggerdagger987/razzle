@@ -30,3 +30,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | base64url snapshot + request-origin API fallback
 2026-05-31 | LabOgExportLink prospects weekly tradevalues | 8b5acdbe | keep | 3 files; replace raw og anchors
 2026-05-31 | power-rankings OG | e62721a6 | keep | 2 files; pressure-map pattern; POST power-rankings
+2026-05-31 | roster-depth tab | 059108d4 | keep | 3 files; Self-Scout depth grid pattern; Dolphin header
