@@ -4,7 +4,7 @@ focus_pillar: League
 focus_layer: L5
 next_slice: bureau-mc-og-live-sample-sticker
 last_keep_cycle: 131
-last_commit: da33eafd
+last_commit: 2681462c
 lab_l5_og_live_fetch_epic: complete
 league_l5_h2h_trust_stickers_epic: active
 lab_l2_sidebar_agent_epic: complete
