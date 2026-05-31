@@ -28,3 +28,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | OG live label honesty | 6737e6ae | keep | sample preview only on demo fallback — T1 trust
+2026-05-31 | Bureau H2H copy link | da33eafd | keep | group-chat deep link + watermarked export row
