@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauPowerRankingsShareBar } from "./BureauPowerRankingsShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -121,7 +122,17 @@ export function BureauPowerRankings({ data, leagueId }: Props) {
         )}
       </section>
 
+      <BureauPowerRankingsShareBar leagueId={leagueId} />
+
       <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <a
+          href={`/og/power-rankings?league=${encodeURIComponent(leagueId)}&download=1`}
+          download="razzle-power-rankings.png"
+          className="btn-chunky active text-xs"
+          style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+        >
+          export card
+        </a>
         <Link href={`/league/${leagueId}/monte-carlo` as Route} className="text-orange underline">
           monte carlo →
         </Link>

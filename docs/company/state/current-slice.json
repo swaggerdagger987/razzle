@@ -1,8 +1,8 @@
 {
   "date": "2026-05-31",
-  "atom_id": "bureau-trade-network-share-bar",
-  "big_problem": "Bureau-7 surfaces need copyable league URLs plus OG export on every tab — trade-deadline screenshots travel in group chats (DEPTH League L5).",
-  "epic": "League L5 — Bureau share row parity (copy link + export)",
+  "atom_id": "bureau-trade-network-copy-link",
+  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic": "League L5 — Bureau behavioral share parity",
   "slice_title": "Trade Network copy link + export share row",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
@@ -21,5 +21,7 @@
     "curl -s -o /tmp/og-trade-network.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/trade-network?league=test&download=1'"
   ],
   "out_of_scope": ["OG route changes", "new Bureau tabs", "NORTH_STAR/DESIGN/DECISIONS edits"],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "verdict": "SHIP",
+  "content_commit": "1616484c"
 }

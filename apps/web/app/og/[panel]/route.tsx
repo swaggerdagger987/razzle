@@ -395,6 +395,8 @@ export async function GET(
   }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
+  const showingLiveData = !isSnapshot && liveHasRows && hasRows;
+  const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
 
   return new ImageResponse(
@@ -451,13 +453,13 @@ export async function GET(
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
           {`${panel.blurb}${positionFilter ? ` · ${positionFilter} only` : ""}${
-            slug === "dynasty-comps" && isDemo
+            slug === "dynasty-comps" && showingDemoRows
               ? " · comps for Ja'Marr Chase · sample preview"
               : isSnapshot
                 ? " · from your panel"
-                : isDemo
+                : showingDemoRows
                   ? " · sample preview"
-                  : liveHasRows
+                  : showingLiveData
                     ? " · live data"
                     : ""
           }`}
