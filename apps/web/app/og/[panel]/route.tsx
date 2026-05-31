@@ -129,11 +129,7 @@ function launch10LiveStickerLabel(slug: string): string {
     case "breakouts":
       return "LIVE · breakout board";
     case "gamelog":
-<<<<<<< HEAD
-      return "LIVE · week tape";
-=======
       return "LIVE · Wk tape";
->>>>>>> origin/razzle-v2-redesign
     case "efficiency":
       return "LIVE · PPO board";
     case "aging":
