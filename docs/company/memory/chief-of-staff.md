@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | cycle 129 lab index agent desks | PLACEHOLDER | L2 catalog epic 1/3 on PR #848.
+
 2026-05-31 | Factory cycle 121 explore OG query | 7dbd4b11 | workday cycle 1; lock #813; live-fetch epic atom 2/3.
 2026-05-31 | Factory cycle 121 pro gate panel pitches | da33eafd | L4 epic atom 2/3; factory open.
 
