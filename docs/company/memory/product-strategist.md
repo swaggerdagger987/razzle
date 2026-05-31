@@ -1,6 +1,6 @@
-2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
 
+2026-05-31 | league-trade-finder-room-hallway | f6e0985f3 | SHIP | Trade Finder GTM epic closes; OG Bones hallway on hero.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Buy/sell OG matches formula-sorted panel lanes.
 
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3; deferred empty-OG atom 2.
