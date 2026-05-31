@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 157 — Lab breakouts/efficiency FROM PANEL OG guards)
+**Last updated:** 2026-05-31 (factory cycle 157 — Lab breakouts/efficiency FROM PANEL; PR #1515 merge pending)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
