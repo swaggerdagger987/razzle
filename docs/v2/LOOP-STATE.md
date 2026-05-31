@@ -30,4 +30,5 @@ league_l5_bureau_monte_carlo_share_bar: complete
 league_l5_bureau_share_row_epic: in_progress
 league_l5_bureau_manager_profiles_copy_link: complete
 league_l5_bureau_pressure_map_copy_link: complete
-league_l5_bureau_trade_network_share_bar: in_progress
+league_l5_bureau_trade_network_share_bar: complete
+league_l5_bureau_share_row_epic: complete
