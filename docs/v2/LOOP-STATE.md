@@ -1,8 +1,10 @@
-cycle: 143
+cycle: 145
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-buysell-formula-live
-last_keep_cycle: 143
-last_commit: da33eafd
+next_slice: lab-og-from-panel-gate-c-rest
+last_keep_cycle: 145
+last_commit: fb4483341
+room_l5_briefing_gtm_epic: complete
 lab_l5_formula_og_live_parity_epic: active
+league_l5_trade_finder_gtm_epic: active
