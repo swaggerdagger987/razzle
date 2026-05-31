@@ -70,16 +70,24 @@ function buildExplorePageLink(params: {
   return qs ? `razzle.lol/explore?${qs}` : "razzle.lol/explore";
 }
 
-async function fetchTopPlayers(params: {
-  universe: string;
-  sort: string;
-  dir: string;
-  q: string;
-  pos: string;
-  season: number;
-  teams: string[];
-}): Promise<OgPlayer[]> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchTopPlayers(
+  req: Request,
+  params: {
+    universe: string;
+    sort: string;
+    dir: string;
+    q: string;
+    pos: string;
+    season: number;
+    teams: string[];
+  },
+): Promise<OgPlayer[]> {
+  const apiOrigin = resolveApiOrigin(req);
   let sortKey = params.sort;
   if (params.universe === "college" && sortKey === "fantasy_points_ppr") {
     sortKey = "total_yards";
@@ -214,7 +222,7 @@ export async function GET(req: Request) {
 
   const livePlayers = forceDemo
     ? []
-    : await fetchTopPlayers({ universe, sort: apiSort, dir, q, pos, season, teams });
+    : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
 
