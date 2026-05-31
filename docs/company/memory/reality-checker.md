@@ -1,4 +1,4 @@
-2026-05-31 | explore-in-product-margin-parity | f6e0985f3 | PASS | pytest 14; web build; no OG route change.
+2026-05-31 | explore-in-product-margin-parity | d0f126be5 | PASS | pytest 14; web build; no OG route change.
 2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | PASS | pytest 9; curl college OG 71510B.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | pytest 6; curl h2h 76270B.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | pytest 7; curl efficiency 65774B.

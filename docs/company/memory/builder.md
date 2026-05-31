@@ -1,4 +1,4 @@
-2026-05-31 | explore-in-product-margin-parity | f6e0985f3 | SHIP | ExploreMarginNote → marginNoteForOgExploreRow; pytest 14.
+2026-05-31 | explore-in-product-margin-parity | d0f126be5 | SHIP | ExploreMarginNote → marginNoteForOgExploreRow; pytest 14.
 2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | college demo pytest guards; curl 71510B.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | EXPORTED · panel rivalry rows.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | TOLAB_DEFAULT_POSITION efficiency RB.
