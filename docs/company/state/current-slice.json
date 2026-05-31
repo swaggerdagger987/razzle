@@ -29,7 +29,7 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "content_commit": null,
-  "reality": null,
-  "merge": null
+  "content_commit": "8e7297c8",
+  "reality": "PASS",
+  "merge": "pending"
 }

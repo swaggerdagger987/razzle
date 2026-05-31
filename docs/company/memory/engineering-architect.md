@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-gamelog-player-default | da33eafd | keep | 1-file slice GamelogRenderer footer LabOgExportLink.
+2026-05-31 | lab-og-gamelog-player-default | 8e7297c8 | keep | 1-file slice GamelogRenderer footer LabOgExportLink.
 
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 

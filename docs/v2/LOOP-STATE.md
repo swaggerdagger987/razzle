@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: room-briefing-copy-export
 last_keep_cycle: 128
-last_commit: da33eafd
+last_commit: 8e7297c8
 lab_l5_og_gamelog_epic: complete
 room_l5_briefing_gtm_epic: active

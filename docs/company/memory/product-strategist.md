@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-gamelog-player-default | da33eafd | SHIP | keep | empty-state OG before player pick; next Room briefing GTM.
+2026-05-31 | lab-og-gamelog-player-default | 8e7297c8 | SHIP | keep | empty-state OG before player pick; next Room briefing GTM.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
