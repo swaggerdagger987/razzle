@@ -35,10 +35,10 @@
   "updated_at": "2026-05-31T08:33:00Z",
   "completed_epics": [
     {
-      "id": "lab-l4-pro-gate-upgrade",
+      "id": "lab-l4-pro-gate-polish",
       "status": "complete",
-      "last_atom": "lab-pro-gate-hallway-teasers",
-      "merge_commit": "675044ea"
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "73fdbf9c"
     },
     {
       "id": "bureau-h2h-og-live-vs-sample-stickers",
