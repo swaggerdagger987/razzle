@@ -1,30 +1,30 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
-  "epic_title": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards for Trade Values and Big Board still fall back to generic demo rows — Reddit screenshots don't match the table the user filtered.",
+  "epic_title": "Lab L5 — OG export mirrors in-panel rows on Launch-10 panels",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "league-build-profiles-tab",
-      "title": "Build Profiles tab unhidden with Atlas roster archetype renderer",
-      "status": "done",
-      "merge_commit": "2ee04975"
+      "id": "lab-og-snapshot-tradevalues-prospects",
+      "title": "Wire snapshotRows on Trade Values + Prospects export links",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "league-waiver-tendencies-tab",
-      "title": "Waiver Tendencies tab unhidden with transaction pattern renderer",
-      "status": "done",
-      "merge_commit": "beb9d60f"
+      "id": "lab-og-snapshot-dashboard",
+      "title": "Dynasty Dashboard export passes visible riser/faller snapshot rows",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "league-strength-of-schedule-tab",
-      "title": "Schedule tab unhidden with SOS matchup renderer",
-      "status": "done",
-      "merge_commit": "4e8df727"
+      "id": "bureau-h2h-export",
+      "title": "Bureau H2H tab share bar + OG snapshot export row",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T12:05:00Z",
-  "updated_at": "2026-05-31T05:36:00Z"
+  "next_atom_id": "lab-og-snapshot-tradevalues-prospects",
+  "created_at": "2026-05-31T06:00:00Z",
+  "updated_at": "2026-05-31T06:00:00Z"
 }

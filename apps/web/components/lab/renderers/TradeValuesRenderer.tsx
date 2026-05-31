@@ -16,7 +16,7 @@ import {
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -99,6 +99,20 @@ export function TradeValuesRenderer({ panel }: Props) {
   }, [formula, players]);
 
   const topPlayer = players[0] ?? null;
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const statLabel = formula?.name ?? "Value";
+    return players.slice(0, 6).map((p) => ({
+      name: p.full_name,
+      position: p.position,
+      team: p.team,
+      stat:
+        formula && p.formula_score != null
+          ? p.formula_score
+          : (p.trade_value ?? 0),
+      statLabel,
+    }));
+  }, [players, formula]);
 
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
@@ -233,7 +247,11 @@ export function TradeValuesRenderer({ panel }: Props) {
           >
             Ask Bones about {topPlayer.full_name} →
           </Link>
-          <LabOgExportLink slug="tradevalues" downloadName="razzle-trade-values.png" />
+          <LabOgExportLink
+            slug="tradevalues"
+            downloadName="razzle-trade-values.png"
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>
