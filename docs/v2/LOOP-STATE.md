@@ -1,9 +1,9 @@
-cycle: 72
+cycle: 73
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-self-scout-copy-link or next PARITY row
-last_keep_cycle: 72
+next_slice: bureau-monte-carlo-copy-link or next PARITY row
+last_keep_cycle: 73
 last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -23,3 +23,4 @@ lab_l5_og_live_extractors: complete
 lab_l5_og_live_row_epic: complete
 lab_l5_og_launch10_live_label: complete
 league_l5_bureau_h2h_copy_link: complete
+league_l5_bureau_self_scout_copy_link: complete
