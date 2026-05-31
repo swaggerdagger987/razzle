@@ -96,6 +96,12 @@ function liveStickerLabel(slug: string): string {
   return "LIVE · nflverse rows";
 }
 
+function demoStickerLabel(slug: string): string {
+  if (slug === "prospects") return "SAMPLE · demo board";
+  if (slug === "weekly") return "SAMPLE · demo heatmap";
+  return "SAMPLE · demo rows";
+}
+
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -111,6 +117,9 @@ function panelBlurbSuffix(
     return `${pos} · from your panel`;
   }
   if (showingDemoRows) {
+    if (LAUNCH_10_OG_SLUGS.has(slug)) {
+      return pos;
+    }
     return `${pos} · sample preview`;
   }
   if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
@@ -642,6 +651,7 @@ export async function GET(
     showingLiveData &&
     LAUNCH_10_OG_SLUGS.has(slug) &&
     (!PANEL_API_LIVE_STICKER_SLUGS.has(slug) || liveViaPanelApi);
+  const showDemoSticker = showingDemoRows && LAUNCH_10_OG_SLUGS.has(slug);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
 
   return new ImageResponse(
@@ -718,6 +728,27 @@ export async function GET(
             }}
           >
             {liveStickerLabel(slug)}
+          </div>
+        ) : null}
+
+        {showDemoSticker ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            {demoStickerLabel(slug)}
           </div>
         ) : null}
 
