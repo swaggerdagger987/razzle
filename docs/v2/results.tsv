@@ -57,4 +57,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 88	2ee04975	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles unhidden; build PASS pytest 51; epic atom 1/3
 90	c9151786	depth+voice+simplicity	keep	Lab	L5 Dashboard comps OG snapshot rows	trust=T5,T6; DashboardRenderer snapshotRows; curl dynasty-comps 65961B; dedup prospects+tradevalues on base
 91	a2536dcc	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5; Hawkeye renderer; waiver-tendencies nav visible; web build PASS; epic atom 2/3
-92	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG prospects RPS snapshot	trust=T5,T6; RPS sort+position on ProspectsRenderer; curl snap 45050B demo 58084B
+92	00687cbe	depth+voice+simplicity	keep	Lab	L5 OG prospects RPS snapshot	trust=T5,T6; RPS sort+position on ProspectsRenderer; curl snap 45050B demo 58084B
