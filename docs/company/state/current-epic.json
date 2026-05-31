@@ -1,7 +1,7 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic_title": "Lab L5 \u2014 pro profile OG live parity",
+  "epic_title": "Lab L5 — pro profile OG live parity",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
@@ -26,8 +26,8 @@
     {
       "id": "lab-og-percentiles-tolab",
       "title": "Percentiles OG toLab default player hallway",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "62e147bb8"
     }
   ],
   "next_atom_id": "lab-panel-share-bar-weekly-gamelog",
