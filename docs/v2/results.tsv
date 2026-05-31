@@ -117,4 +117,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 156	338709883	depth+voice+simplicity	keep	Lab	L5 gamelog OG watermark uses player display name	trust=T5,T6; pytest 7; curl gamelog 62741B; display-name epic complete
 154	8327741	depth+voice+simplicity	keep	Lab	L5 efficiency OG toLab includes RB position	trust=T5,T6; pytest 7; curl 65774B; position defaults epic 2/3
 157	026e7de6b	depth+voice+simplicity	keep	Lab	L2 sidebar Category Staff toggle groups by agent	trust=T5,T6; web build exit 0; H-04 staff epic 1/2
-158	f6e0985f3	depth+hallway+voice+simplicity	keep	Lab	L2 sidebar staff registry fewer Razzle catch-alls	trust=T5,T6; pytest 2; web build; staff epic 2/2 complete
+158	d9fb0cce2	depth+hallway+voice+simplicity	keep	Lab	L2 sidebar staff registry fewer Razzle catch-alls	trust=T5,T6; pytest 2; web build; staff epic 2/2 complete
