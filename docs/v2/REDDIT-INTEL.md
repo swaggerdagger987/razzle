@@ -19,6 +19,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Cycle 83 (Bureau build profiles tab)
+
+1. **Archetype grids travel in league chats** — Hero RB / Zero RB labels are meme-ready for trade negotiation screenshots.
+2. **Atlas construction lens complements Bones behavior profiles** — two Bureau tabs, two trade angles.
+
 ## 2026-05-31 — Cycle 76 (Bureau roster depth tab)
 
 1. **Hidden tabs were a trust leak** — users who found Bureau via Self-Scout could not see depth chart as its own lane; unhide + bespoke renderer restores moat narrative.
