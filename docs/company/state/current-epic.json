@@ -42,9 +42,9 @@
     },
     {
       "id": "explore-l5-og-margin-notes",
-      "status": "partial",
-      "last_atom": "explore-og-margin-note-rows",
-      "merge_commit": "c1a0bcaad"
+      "status": "complete",
+      "last_atom": "explore-og-margin-note-sticker",
+      "merge_commit": "ae45a4814"
     },
     {
       "id": "league-l5-bureau-h2h-gtm",
