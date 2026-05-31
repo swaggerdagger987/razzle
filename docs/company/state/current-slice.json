@@ -1,23 +1,21 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-gamelog-live-week-extract",
-  "big_problem": "Lab OG share cards still fall back to generic player lists when the game-log API returns week tape — exports don't match the in-panel Wk N rows Reddit screenshots.",
+  "atom_id": "lab-og-dynasty-comps-live-extract",
+  "big_problem": "Dynasty comps OG cards use generic extractRows — live comps[] should rank by match % like the panel.",
   "epic": "Lab L5 — Launch-10 OG live panel row extractors",
-  "slice_title": "Gamelog OG — game-log API weeks[] as Wk N PPR rows without snapshot",
+  "slice_title": "Dynasty comps OG — live comps[] similarity rows",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 45,
+  "max_lines": 35,
   "acceptance_commands": [
     "npm run build --workspace=apps/web 2>&1 | tail -8",
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/gamelog-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?player_id=00-0036900&download=1'",
-    "file /tmp/gamelog-og.png | head -1"
+    "curl -s -o /tmp/comps-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dynasty-comps?player_id=00-0036900&download=1'"
   ],
-  "out_of_scope": ["LabOgExportLink changes", "new panels", "API schema changes"],
+  "out_of_scope": ["gamelog rebuild", "new panels"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
