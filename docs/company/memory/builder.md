@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | ExploreShareButton previewParams | 6c3b0954 | keep | preview card omits download=1; export still uses download
+
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:
@@ -13,6 +15,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | explore-og-watermark-band | explore/route.tsx terracotta band | 3e96ab7f | SHIP | keep | 1-file OG band | — | evidence/2026-05-31-explore-og-watermark-band.md
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
 
