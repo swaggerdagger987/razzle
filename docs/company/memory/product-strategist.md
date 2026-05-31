@@ -18,4 +18,4 @@ new evidence.
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
 2026-05-31 | Lab OG demo rows closes Gate C when API empty | 0019814f | keep | Lab epic atom 1 done on base
 2026-05-31 | Bureau MC OG advances League L5 watermarked export | da33eafd | keep | Playoff odds cards are Reddit currency; Octo-owned sims travel
-2026-05-31 | Lab OG epic complete | PENDING_HASH | keep | launch-10 labels + default player_id close screenshot loop
+2026-05-31 | Lab OG epic complete | ddc28666 | keep | launch-10 labels + default player_id close screenshot loop
