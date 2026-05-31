@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 159 — Lab staff registry maps launch-10 to specialist desks)
+**Last updated:** 2026-05-31 (factory cycle 160 — Lab staff registry maps launch-10 to specialist desks)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
