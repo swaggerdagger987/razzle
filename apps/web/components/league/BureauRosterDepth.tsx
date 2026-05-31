@@ -175,7 +175,14 @@ export function BureauRosterDepth({ data, leagueId }: Props) {
         >
           open Self-Scout →
         </Link>
-        {userId ? <BureauRosterDepthShareBar leagueId={leagueId} userId={userId} /> : null}
+        {userId ? (
+          <BureauRosterDepthShareBar
+            leagueId={leagueId}
+            userId={userId}
+            depth={depth}
+            totalPlayers={totalPlayers}
+          />
+        ) : null}
       </section>
     </div>
   );

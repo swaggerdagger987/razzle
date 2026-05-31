@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { decodeBureauRosterDepthOgSnapshot } from "@/lib/bureau-roster-depth-og-snapshot";
 
 export const runtime = "edge";
 
@@ -83,12 +84,23 @@ export async function GET(req: Request) {
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const snapshot = snapshotParam ? decodeBureauRosterDepthOgSnapshot(snapshotParam) : null;
+  const fromPanel = Boolean(snapshot?.rows?.length);
 
   const hawkeye = AGENT_BY_ID.hawkeye;
-  const live = await fetchRosterDepth(league, user);
-  const isDemo = !live?.depth;
-  const rows = isDemo ? DEMO_ROWS : rowsFromDepth(live!.depth!);
-  const totalPlayers = isDemo ? 15 : Number(live?.total_players ?? 0);
+  const live = fromPanel ? null : await fetchRosterDepth(league, user);
+  const isDemo = !fromPanel && !live?.depth;
+  const rows = fromPanel
+    ? snapshot!.rows
+    : isDemo
+      ? DEMO_ROWS
+      : rowsFromDepth(live!.depth!);
+  const totalPlayers = fromPanel
+    ? snapshot!.totalPlayers
+    : isDemo
+      ? 15
+      : Number(live?.total_players ?? 0);
   let weakest: PosRow = rows[0] ?? DEMO_ROWS[0]!;
   for (const row of rows) {
     if (row.count < weakest.count) weakest = row;
@@ -138,7 +150,9 @@ export async function GET(req: Request) {
           Roster Depth
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 14 }}>
-          {`position grades · ${totalPlayers} rostered${isDemo ? " · sample preview" : ""}`}
+          {`position grades · ${totalPlayers} rostered${
+            fromPanel ? " · from your depth chart" : isDemo ? " · sample preview" : ""
+          }`}
         </div>
 
         {weakest ? (
