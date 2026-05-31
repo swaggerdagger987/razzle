@@ -434,17 +434,13 @@ function extractDynastyCompsRows(comps: Record<string, unknown>[]): OgRow[] {
 
 /** Buy/sell OG — buy_low + sell_high lanes; formula_score before mismatch (matches BuySellRenderer). */
 function extractBuysellRows(data: Record<string, unknown>): OgRow[] {
+  const buysellFallbackKeys = ["efficiency_pct", "dynasty_rank_pct"] as const;
   const statKeys: string[] = [
     "formula_score",
     "mismatch_score",
-    "efficiency_pct",
-    "dynasty_rank_pct",
+    ...buysellFallbackKeys,
     ...STAT_CANDIDATE_KEYS.filter(
-      (k) =>
-        k !== "formula_score" &&
-        k !== "mismatch_score" &&
-        k !== "efficiency_pct" &&
-        k !== "dynasty_rank_pct",
+      (k) => k !== "formula_score" && k !== "mismatch_score",
     ),
   ];
 
