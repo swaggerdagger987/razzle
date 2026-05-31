@@ -1,5 +1,5 @@
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | anchor+rows snapshot codec; 3 files ≤90 lines.
+2026-05-31 | lab-og-tolab-snapshot-player | 36183b934 | SHIP | anchor+rows snapshot codec; 3 files ≤90 lines.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 
