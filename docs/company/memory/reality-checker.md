@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | Lab pro-gate voice | da33eafd | PASS | keep | UI slice: build + pytest + pricing 200; no OG gate required
+2026-05-31 | Lab pro-gate voice | 8f0201f7 | PASS | keep | UI slice: build + pytest + pricing 200; no OG gate required
 
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.

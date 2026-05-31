@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 86 | da33eafd | SHIP | keep | Workday open; atom 2/3 lab-l4-pro-gate-voice merged pending publish
+2026-05-31 | Factory cycle 86 | 8f0201f7 | SHIP | keep | Workday open; atom 2/3 lab-l4-pro-gate-voice merged pending publish
 
 Append-only log of coordination patterns, what worked, what didn't.
 

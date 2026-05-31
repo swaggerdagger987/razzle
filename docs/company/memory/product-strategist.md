@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | Lab L4 pro-gate voice | da33eafd | SHIP | keep | F-09 invitation copy; epic atom 2/3 before Explore injury chip
+2026-05-31 | Lab L4 pro-gate voice | 8f0201f7 | SHIP | keep | F-09 invitation copy; epic atom 2/3 before Explore injury chip
 
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
 

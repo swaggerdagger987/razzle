@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | friendlyUpgradeNote helper | da33eafd | SHIP | keep | Tier messages live in panel-upgrade-teaser.ts beside teaser rows
+2026-05-31 | friendlyUpgradeNote helper | 8f0201f7 | SHIP | keep | Tier messages live in panel-upgrade-teaser.ts beside teaser rows
 
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
 
