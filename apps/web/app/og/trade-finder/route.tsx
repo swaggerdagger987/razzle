@@ -76,13 +76,8 @@ function playerLabel(name: string): string {
   return name.length > 16 ? `${name.slice(0, 14)}…` : name;
 }
 
-function bonesTradeFinderRoomQuestion(
-  partnerTeam: string,
-  giveName: string,
-  getName: string,
-  gapPct: number,
-): string {
-  return `Should I offer ${giveName} for ${getName} from ${partnerTeam}? Value gap is ${gapPct}%.`;
+function bonesTradeFinderRoomQuestion(hero: BureauTradeFinderOgMatch): string {
+  return `Should I offer ${hero.give.name} for ${hero.get.name} from ${hero.partner_team}? Value gap is ${hero.gap_pct}%.`;
 }
 
 export async function GET(req: Request) {
@@ -109,17 +104,17 @@ export async function GET(req: Request) {
   const needs = panelData.needs ?? [];
   const surplus = panelData.surplus ?? [];
   const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
-  const hasHero = Boolean(hero);
-  const bonesRoomPath = hasHero
+  const bonesRoomPath = hero
     ? toRoom({
         agentId: "bones",
-        question: bonesTradeFinderRoomQuestion(
-          hero!.partner_team,
-          hero!.give.name,
-          hero!.get.name,
-          hero!.gap_pct,
-        ),
+        question: bonesTradeFinderRoomQuestion(hero),
         panelSlug: "trade-finder",
+        player: {
+          playerId: hero.give.player_id,
+          name: hero.give.name,
+          slug: hero.give.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          position: hero.give.position,
+        },
       })
     : "/room?agent=bones&from=trade-finder";
 
@@ -309,9 +304,9 @@ export async function GET(req: Request) {
           ))}
         </div>
 
-        {hasHero ? (
+        {hero ? (
           <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
-            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${hero!.partner_team}`}
+            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${playerLabel(hero.partner_team)}`}
           </div>
         ) : null}
 

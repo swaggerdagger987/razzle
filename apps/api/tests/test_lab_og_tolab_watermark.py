@@ -23,7 +23,11 @@ def test_lab_og_watermark_helper_preserves_position_and_player():
     assert "{labLink}" in source
 
 
-def test_default_og_player_not_forced_into_tolab():
+def test_default_og_player_tolab_rules():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert "DEFAULT_OG_PLAYER_ID" in source
-    assert "opts.playerId !== DEFAULT_OG_PLAYER_ID" in source
+    assert "TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS" in source
+    assert '"gamelog"' in source
+    assert '"dynasty-comps"' in source
+    assert "includeDefaultPlayer" in source
+    assert "opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source

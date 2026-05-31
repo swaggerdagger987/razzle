@@ -81,6 +81,9 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
 /** Pro player-scoped Lab panels (not Launch-10) — LIVE trust sticker when API returns rows. */
 const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"]);
 
+/** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
+const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
+
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
   "prospects",
@@ -162,6 +165,11 @@ function launch10DemoBlurbSuffix(slug: string): string {
   if (slug === "rankings") return " · demo dynasty ranks";
   if (slug === "breakouts") return " · demo RBS board";
   if (slug === "tradevalues") return " · demo value curve";
+  if (slug === "gamelog") return " · demo Wk tape";
+  if (slug === "efficiency") return " · demo PPO board";
+  if (slug === "aging") return " · demo aging curve";
+  if (slug === "buysell") return " · demo buy/sell board";
+  if (slug === "dashboard") return " · demo roster grades";
   return " · demo nflverse rows";
 }
 
@@ -171,6 +179,11 @@ function launch10DemoStickerLabel(slug: string): string {
   if (slug === "rankings") return "SAMPLE · dynasty ranks";
   if (slug === "breakouts") return "SAMPLE · RBS board";
   if (slug === "tradevalues") return "SAMPLE · value curve";
+  if (slug === "gamelog") return "SAMPLE · Wk tape";
+  if (slug === "efficiency") return "SAMPLE · PPO board";
+  if (slug === "aging") return "SAMPLE · aging curve";
+  if (slug === "buysell") return "SAMPLE · buy/sell board";
+  if (slug === "dashboard") return "SAMPLE · roster grades";
   return "SAMPLE · demo rows";
 }
 
@@ -939,8 +952,11 @@ function labOgWatermarkLink(
   slug: string,
   opts: { positionFilter: string; playerId: string; playerScoped: boolean },
 ): string {
+  const includeDefaultPlayer = TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS.has(slug);
   const usePlayer =
-    opts.playerScoped && opts.playerId && opts.playerId !== DEFAULT_OG_PLAYER_ID;
+    opts.playerScoped &&
+    opts.playerId &&
+    (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
   let path = toLab(
     slug,
     usePlayer
