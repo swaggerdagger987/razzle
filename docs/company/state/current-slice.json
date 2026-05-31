@@ -1,12 +1,15 @@
 {
   "date": "2026-05-31",
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  },
+  "big_problem": "Bureau Trade Finder export cards ignore in-panel deal rows — Reddit screenshots show generic demo trades instead of the Bones board the manager just evaluated.",
+  "epic": "League L5 — Bureau Trade Finder GTM export (atom 2/3)",
+  "slice_title": "Trade Finder OG — snapshot param for in-panel export rows",
+  "atom_id": "league-trade-finder-og-snapshot",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "trust_pillars": ["T5", "T6"],
   "status": "shipped",
->>>>>>> origin/razzle-v2-redesign
+  "content_commit": "db81b4f97",
+  "reality": "PASS",
+  "merge": "merged"
 }
