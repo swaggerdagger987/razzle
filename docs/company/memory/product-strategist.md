@@ -29,4 +29,4 @@ new evidence.
 2026-05-31 | Bureau H2H snapshot export atom 1 | 3d498394 | SHIP | keep | PARITY Explore L5 Bureau H2H; T5 T6
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
-2026-05-31 | Bureau H2H live API atom 2 | da33eafd | SHIP | keep | live OG when params; snapshot on export
+2026-05-31 | Bureau H2H live API atom 2 | 59a54b72 | SHIP | keep | live OG when params; snapshot on export
