@@ -11,4 +11,4 @@
 121	0b59daee	depth+voice+simplicity	keep	Lab	L4 Pro gate sharpened pitches on 3 panels	trust=T2,T6; tradevalues/breakouts/dynasty-comps PITCH_BY_SLUG; teaser pytest 3 passed; L4 epic atom 2/3
 126	0c46d46f	depth+voice+simplicity	keep	Lab	L4 Pro gate perks Launch-10 Bureau names	trust=T2,T6; PRO_UPGRADE_PERKS; pytest 4; build ok; L4 epic atom 3/3 complete
 HEAD
-123	dcdf7ed6	depth+voice+simplicity	keep	Lab	L5 prospects-weekly OG dedup evidence	trust=T5,T6; fetchOgLiveRows on base; curl weekly 66512B prospects 60688B; factory cycle 122
+127	f56fdbd8	depth+voice+simplicity	keep	Lab	L4 Pro gate perks PARITY catalog titles + Bureau-7	trust=T2,T6; launch10PerkLabels; bureau7PerkLabels; pytest 6; L4 epic atom 3/3 complete
