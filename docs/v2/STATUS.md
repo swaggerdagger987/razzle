@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 146 — League Trade Finder OG snapshot export)
+**Last updated:** 2026-05-31 (factory cycle 146 — Trade Finder snapshot dedup on base)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
