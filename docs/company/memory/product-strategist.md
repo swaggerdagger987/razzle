@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-sidebar-search-agent-labels | da33eafd | SHIP | Hallway discoverability in search; next lab-pro-gate-perks-copy.
+2026-05-31 | lab-sidebar-search-agent-labels | 0ddf7f6b | SHIP | Hallway discoverability in search; next lab-pro-gate-perks-copy.
 
 2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | SHIP | SAMPLE terracotta vs LIVE teal closes live-rows epic.
 
