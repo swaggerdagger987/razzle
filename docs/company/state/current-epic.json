@@ -1,4 +1,5 @@
 {
+  "epic_status": "complete",
   "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
   "epic_title": "League L5 — Bureau behavioral share parity",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -12,15 +13,9 @@
     },
     {
       "id": "league-power-rankings-og",
-      "title": "OG share card at /og/power-rankings with demo fallback",
-      "status": "in_progress",
-      "merge_commit": null
-    },
-    {
-      "id": "league-power-rankings-og",
       "title": "Power Rankings OG + copy board link",
       "status": "done",
-      "merge_commit": "90bf2dd5"
+      "merge_commit": "e62721a6"
     },
     {
       "id": "bureau-trade-network-copy-link",
@@ -29,15 +24,14 @@
       "merge_commit": "e701e3bb"
     },
     {
-      "id": "league-build-profiles-tab",
-      "title": "Unhide Build Profiles tab with Atlas renderer",
-      "status": "pending",
-      "merge_commit": null
+      "id": "bureau-monte-carlo-copy-link",
+      "title": "Monte Carlo copy link beside export card",
+      "status": "done",
+      "merge_commit": "30454811"
     }
   ],
   "next_atom_id": null,
-  "epic_status": "complete",
   "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T13:20:00Z",
-  "last_cycle_commit": "e701e3bb"
+  "updated_at": "2026-05-31T20:30:00Z",
+  "last_cycle_commit": "e62721a6"
 }
