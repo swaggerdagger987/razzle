@@ -1,8 +1,8 @@
-cycle: 146
+cycle: 144
 last_board_cycle: 54
-focus_pillar: Room
+focus_pillar: Lab
 focus_layer: L5
-next_slice: pick from PARITY/NEXT
-last_keep_cycle: 146
-last_commit: 252e421fa
-room_briefing_gtm_share_row: complete
+next_slice: lab-og-tolab-snapshot-player
+last_keep_cycle: 144
+last_commit: c311a15a8
+lab_l5_og_hallway_epic: active
