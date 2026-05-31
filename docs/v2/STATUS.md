@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 150 — Lab efficiency/aging OG formula_score live)
+**Last updated:** 2026-05-31 (factory cycle 151 — Lab weekly/prospects OG formula_score live)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 150 |
+| Cycle | 151 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-og-weekly-prospects-formula-live |
-| Last commit | `a17391fad` |
+| Next slice | PARITY pick — Lab L5 OG live rows epic complete |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

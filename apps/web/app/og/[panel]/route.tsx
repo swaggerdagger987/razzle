@@ -760,6 +760,16 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "ppg",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
   ];
+  const weeklyStatKeys: string[] = [
+    "formula_score",
+    "ppg",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
+  ];
+  const prospectsStatKeys: string[] = [
+    "formula_score",
+    "rps",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "rps"),
+  ];
   const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const statKeys =
     slug === "tradevalues"
@@ -772,11 +782,15 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
             ? efficiencyStatKeys
             : slug === "aging"
               ? agingStatKeys
-              : slug === "buysell"
-                ? buysellStatKeys
-                : preferredKey
-                  ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
-                  : [...STAT_CANDIDATE_KEYS];
+              : slug === "weekly"
+                ? weeklyStatKeys
+                : slug === "prospects"
+                  ? prospectsStatKeys
+                  : slug === "buysell"
+                    ? buysellStatKeys
+                    : preferredKey
+                      ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+                      : [...STAT_CANDIDATE_KEYS];
 
   let statKey = "";
   let statLabel = "";

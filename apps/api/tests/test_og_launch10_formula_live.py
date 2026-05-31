@@ -56,3 +56,21 @@ def test_aging_live_extract_prefers_formula_score():
     block = source[idx : idx + 300]
     assert '"formula_score"' in block
     assert block.index('"formula_score"') < block.index('"ppg"')
+
+
+def test_weekly_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "weeklyStatKeys" in source
+    idx = source.index("weeklyStatKeys")
+    block = source[idx : idx + 300]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"ppg"')
+
+
+def test_prospects_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "prospectsStatKeys" in source
+    idx = source.index("prospectsStatKeys")
+    block = source[idx : idx + 300]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"rps"')
