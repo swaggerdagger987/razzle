@@ -27,9 +27,11 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
   const exportFileName =
     universe === "college" ? "razzle-college-screener.png" : "razzle-explore.png";
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const explorePath = `/explore?${previewParams.toString()}`;
 
   const copyLink = useCallback(async () => {
+    const shareUrl =
+      typeof window !== "undefined" ? `${window.location.origin}${explorePath}` : explorePath;
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
@@ -37,7 +39,7 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
     } catch {
       setCopied(false);
     }
-  }, [shareUrl]);
+  }, [explorePath]);
 
   return (
     <div className="explore-share flex shrink-0 items-center gap-2">
