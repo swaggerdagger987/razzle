@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG signals LIVE comp matches for Reddit trust.
+
 2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 
