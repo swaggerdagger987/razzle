@@ -65,8 +65,8 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   breakouts: "breakout_score",
   rankings: "dynasty_value",
   tradevalues: "trade_value",
-  efficiency: "ppo",
-  aging: "age",
+  efficiency: "efficiency_score",
+  aging: "peak_age",
   buysell: "dynasty_value",
   dashboard: "rank_diff",
 };
@@ -259,6 +259,8 @@ function statLabelForKey(k: string): string {
   if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
   if (k === "similarity") statLabel = "Match %";
   if (k === "rank_diff") statLabel = "Chg";
+  if (k === "efficiency_score") statLabel = "Efficiency";
+  if (k === "peak_age") statLabel = "Peak Age";
   return statLabel;
 }
 

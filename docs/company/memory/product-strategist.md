@@ -1,8 +1,5 @@
 # Memory — Product Strategist
 
-2026-05-31 | Lab OG efficiency/aging live sort | ccb58697 | keep | PPO + age match Octo efficiency and aging OG snapshots.
-
-2026-05-31 | Lab OG live sort rankings/tradevalues | 7f78b631 | keep | T5/T6 — OG rows must sort like in-panel Lab tables.
 
 2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
 

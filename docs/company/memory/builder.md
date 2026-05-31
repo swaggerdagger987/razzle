@@ -1,8 +1,5 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | keep | ppo/age stat keys; most_efficient + positions extractors; curl ≥44KB.
-
-2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | route.tsx stat key map; curl WR PNG ≥50KB.
 
 2026-05-31 | league-strength-of-schedule-og-share | ShareBar + OG route | 7f652a98 | SHIP | keep | | | 3 files
 2026-05-31 | league-power-rankings-og-snapshot | 26a22f69 | keep | compact encode/decode lib + ShareBar rows prop
