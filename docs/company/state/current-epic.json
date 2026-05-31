@@ -8,13 +8,13 @@
     {
       "id": "lab-og-rankings-tradevalues-live-sort",
       "title": "Rankings + Trade Values OG rank by dynasty_value / trade_value on live fetch",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7f78b631"
     },
     {
       "id": "lab-og-efficiency-aging-live-sort",
       "title": "Efficiency + Aging OG rank by efficiency_score / peak_age on live fetch",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-rankings-tradevalues-live-sort",
+  "next_atom_id": "lab-og-efficiency-aging-live-sort",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T07:35:00Z",
+  "updated_at": "2026-05-31T07:40:00Z",
   "completed_epics": [
     {
       "id": "league-l5-bureau-depth-og",

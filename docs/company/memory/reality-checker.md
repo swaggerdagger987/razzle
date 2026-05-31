@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-og-efficiency-aging-live-sort | curl eff 59068B aging 57916B | PASS | Gate C live-sort atom 2/3
+
 2026-05-31 | lab-og-position-gamelog | curl gamelog WR 48035B PASS | player_id+position on OG URL
 
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
