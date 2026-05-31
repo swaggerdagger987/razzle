@@ -6,10 +6,10 @@
     {
       "id": "league-l5-mc-og",
       "title": "Monte Carlo OG card + Bureau export button",
-      "status": "in_progress",
+      "status": "done",
       "parity_ref": "League L5 watermarked export",
       "depth_ref": "League L5",
-      "merge_commit": null
+      "merge_commit": "453682ad"
     },
     {
       "id": "league-l5-trade-finder-og",
@@ -28,6 +28,6 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-l5-mc-og",
+  "next_atom_id": "league-l5-trade-finder-og",
   "started_at": "2026-05-31T01:36:42Z"
 }
