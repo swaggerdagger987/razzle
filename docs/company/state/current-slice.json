@@ -18,5 +18,10 @@
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q --tb=no -q 2>/dev/null | tail -1"
   ],
   "out_of_scope": ["OG route changes", "new panels", "NORTH_STAR / DESIGN"],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP"
+  }
 }

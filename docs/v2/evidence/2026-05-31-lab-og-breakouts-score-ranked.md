@@ -17,7 +17,7 @@ curl -s -o /tmp/og-breakouts.png -w "HTTP %{http_code} size %{size_download}\n" 
 file /tmp/og-breakouts.png
 ```
 
-**Result:** HTTP 200, size 60642 bytes, PNG 1200×630.
+**Result:** HTTP 200, size 60649 bytes, PNG 1200×630.
 
 ## Verdict
 
