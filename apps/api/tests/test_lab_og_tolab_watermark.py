@@ -54,3 +54,9 @@ def test_weekly_og_watermark_includes_default_wr_position():
     assert 'weekly: "WR"' in source
     assert "watermarkPosition" in source
     assert "positionFilter: watermarkPosition" in source
+
+
+def test_efficiency_og_watermark_includes_default_rb_position():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'efficiency: "RB"' in source
+    assert "TOLAB_DEFAULT_POSITION[slug]" in source
