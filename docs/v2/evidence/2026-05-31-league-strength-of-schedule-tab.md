@@ -1,25 +1,26 @@
-# Evidence — League L5 Schedule tab (atom 3/3)
+# Evidence — Bureau Strength of Schedule tab unhidden
 
 **Date:** 2026-05-31  
 **Atom:** `league-strength-of-schedule-tab`  
-**Verdict:** PASS (no OG this cycle)
+**Slice:** Schedule tab unhidden with SOS matchup renderer
+
+## Dedup
+
+- `league-waiver-tendencies-tab` already merged on `razzle-v2-redesign` at `a2536dcc` — skipped rebuild.
+
+## Changes
+
+- `BureauStrengthOfSchedule.tsx` — Octo header, rank/PPG/opponent-avg stat cards, pace edge, verdict + Room link
+- `BureauFeatureBody.tsx` — wire `strength-of-schedule`
+- `bureau-features.ts` — `HIDDEN_BUREAU_SLUGS` empty (all Bureau tabs visible)
 
 ## Commands
 
 ```bash
-JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests -q
-# 51 passed, 5 skipped
-
-npm run build --workspace=apps/web
-# exit 0
+npm run build --workspace=apps/web   # exit 0
+JWT_SECRET=test python3 -m pytest apps/api/tests -q   # 52 passed; 4 failed (terminal.db snapshot/intel — env)
 ```
 
-## Product
+## Verdict
 
-- `HIDDEN_BUREAU_SLUGS` empty — Schedule tab visible in Bureau nav
-- `BureauStrengthOfSchedule` — Octo verdict + PPG vs league-average opponent bars + power context link
-- Wired in `BureauFeatureBody` for `strength-of-schedule`
-
-## Notes
-
-- Bureau SOS API returns per-user `your_rank`, `your_ppg`, `opponent_avg_ppg`, `verdict` (no OG route this cycle)
+**PASS** — Schedule tab visible; Bureau hidden-slug set empty; epic 3/3 complete.
