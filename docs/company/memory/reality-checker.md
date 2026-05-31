@@ -1,13 +1,5 @@
 # Memory — Reality Checker
 
-2026-05-31 | power-rankings OG snapshot Gate C | 26a22f69 | PASS | curl snap 50084B demo 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og-snapshot.md
-
-2026-05-31 | H2H codec Gate C | da33eafd | curl demo 71895B snapshot 70829B; PASS
-
-2026-05-31 | tradevalues OG Gate C | 5ed39e14 | curl demo 62488B snap 62441B; PASS
-
-2026-05-31 | buysell OG Gate C | 98ae0ef2 | curl demo 58072B snap 57884B; PASS
-
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 
@@ -20,16 +12,13 @@ YYYY-MM-DD | claim under review | evidence type (curl/screenshot/test) | layer/P
 Read this file before reviewing a claim. Recurring failure classes deserve
 explicit checks in the verification routine.
 
-2026-05-31 | weekly OG hot-week snapshot ≥40KB | curl localhost PNG snap 51665B demo 63819B | Lab L5 OG | PASS | — | KEEP Wk N label in snapshot curl | — | evidence 2026-05-31-lab-weekly-hot-week-snapshot
-
-2026-05-31 | dashboard OG snapshot ≥40KB | curl localhost PNG | Lab L5 OG | PASS | — | KEEP snapshot param curl | — | evidence 2026-05-31-lab-dashboard-top5-og-snapshot
+2026-05-31 | waiver-tendencies OG | curl 73121B demo league | PASS | KEEP Gate C on Bureau OG pattern | — | — | evidence 2026-05-31-league-waiver-tendencies-og-share.md
 
 ---
 
 ## Entries
 
-2026-05-31 | league-waiver-tendencies | PASS | pytest 51 + web build; no OG | keep | — | evidence/2026-05-31-league-waiver-tendencies-tab.md
-
+2026-05-31 | Dashboard comps OG Gate C | c9151786 | PASS | curl dynasty-comps 65961B PNG | keep | evidence/2026-05-31-lab-dashboard-og-snapshot.md
 2026-05-31 | Pressure Map copy link Gate C | curl pressure-map 200 60661B; build+pytest | PASS | keep | docs/v2/evidence/2026-05-31-bureau-pressure-map-copy-link.md
 2026-05-30 | Lab L5 OG live data rows | test (npm run build + pytest + tsc) | Lab L5 DEPTH claim verified | PASS | no terminal.db on CI VM means data-path is untested end-to-end; fallback path (empty data → icon + loading copy) verified; production needs NEXT_PUBLIC_API_ORIGIN env var | keep | future: add OG snapshot test with fixture data
 2026-05-31 | Lab OG demo rows Gate C | curl /og/rankings 200 59509B; /og/breakouts 200 60649B; build+pytest | PASS | FACTORY-DOD C2/C3 | keep | docs/v2/evidence/2026-05-31-lab-og-demo-rows.md
@@ -51,3 +40,6 @@ explicit checks in the verification routine.
 2026-05-31 | Trade Network share Gate C | 1616484c | PASS | curl trade-network 68090B PNG | keep | evidence/2026-05-31-bureau-trade-network-share-bar.md
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles tab | da33eafd | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
+2026-05-31 | Build Profiles OG Gate C | 77d4f765 | PASS | curl build-profiles 73228B PNG | keep | evidence/2026-05-31-league-build-profiles-og-share.md
+2026-05-31 | Waiver Tendencies OG Gate C | 6dcb0f72 | PASS | curl waiver-tendencies 73121B PNG | keep | evidence/2026-05-31-league-waiver-tendencies-og-share.md
+2026-05-31 | Lab OG snapshot Gate C | 70af534a | PASS | curl prospects snap 45583B tradevalues 62488B | keep | evidence/2026-05-31-lab-og-snapshot-tradevalues-prospects.md

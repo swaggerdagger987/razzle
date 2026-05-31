@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauBuildProfilesShareBar } from "./BureauBuildProfilesShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -152,6 +153,8 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
           </div>
         ))}
       </section>
+
+      <BureauBuildProfilesShareBar leagueId={leagueId} />
 
       <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/roster-depth` as Route} className="text-orange underline">
