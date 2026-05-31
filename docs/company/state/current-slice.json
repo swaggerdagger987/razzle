@@ -16,5 +16,7 @@
     "curl -s -o /tmp/og-manager-profiles.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/manager-profiles?league=test&download=1'"
   ],
   "out_of_scope": ["OG route edits", "new Bureau tabs", "auth/billing", "shared share-bar refactor"],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "verdict": "SHIP",
+  "content_commit": "04c19959"
 }

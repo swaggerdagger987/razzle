@@ -26,12 +26,12 @@
     {
       "id": "bureau-monte-carlo-copy-link",
       "title": "Monte Carlo copy link beside export card",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "30454811"
     }
   ],
   "next_atom_id": "bureau-pressure-map-copy-link",
   "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T04:44:00Z",
+  "updated_at": "2026-05-31T04:50:00Z",
   "last_cycle_commit": "04c19959"
 }

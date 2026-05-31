@@ -30,6 +30,7 @@ const STAT_CANDIDATE_KEYS = [
   "rbs_score",
   "breakout_score",
   "similarity",
+  "rank_diff",
   "composite_score",
   "efficiency_score",
   "total_yards",
@@ -187,9 +188,8 @@ function decodeOgSnapshot(param: string): OgRow[] {
   }
 }
 
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
 function resolveApiOrigin(req: Request): string {
-  const env = process.env.NEXT_PUBLIC_API_ORIGIN?.replace(/\/$/, "");
-  if (env) return env;
   return new URL(req.url).origin;
 }
 
@@ -221,6 +221,10 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
+  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
+    const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
+    const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
+    candidates = [...top5, ...risers];
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
@@ -238,6 +242,7 @@ function extractRows(data: unknown): OgRow[] {
       if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
       if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
       if (k === "similarity") statLabel = "Match %";
+      if (k === "rank_diff") statLabel = "Chg";
       break;
     }
   }
@@ -342,6 +347,7 @@ export async function GET(
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const query = url.searchParams.get("q") ?? "";
+  const positionFilter = url.searchParams.get("position") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
   const playerId =
     url.searchParams.get("player_id") ??
@@ -367,6 +373,9 @@ export async function GET(
   if (PLAYER_SCOPED_SLUGS.has(slug)) {
     apiParams.player_id = playerId;
   }
+  if (positionFilter) {
+    apiParams.position = positionFilter;
+  }
   const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
@@ -380,7 +389,10 @@ export async function GET(
   const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
   const isSnapshot = snapshotHasRows;
   const isDemo = !isSnapshot && !liveHasRows;
-  const rows = isSnapshot ? snapshotRows : liveHasRows ? liveRows : demoRowsForPanel(slug);
+  let rows = isSnapshot ? snapshotRows : liveHasRows ? liveRows : demoRowsForPanel(slug);
+  if (!isSnapshot && positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+  }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
@@ -438,7 +450,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${
+          {`${panel.blurb}${positionFilter ? ` · ${positionFilter} only` : ""}${
             slug === "dynasty-comps" && isDemo
               ? " · comps for Ja'Marr Chase · sample preview"
               : isSnapshot
