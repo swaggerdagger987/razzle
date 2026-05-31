@@ -1,57 +1,18 @@
 {
-  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
-  "epic_title": "League L5 — Bureau OG terracotta watermark parity",
-  "parity_ref": "League L5 — hidden Bureau renderers / watermarked export",
-  "depth_ref": "League L5",
-  "atoms": [
-    {
-      "id": "league-og-monte-carlo-watermark",
-      "title": "Monte Carlo OG terracotta watermark + LIVE/SAMPLE stickers",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "league-og-self-scout-watermark",
-      "title": "Self-Scout OG terracotta watermark band",
-      "status": "done",
-      "merge_commit": "a76b2e4e0"
-    },
-    {
-      "id": "league-og-pressure-map-watermark",
-      "title": "Pressure Map OG terracotta watermark band",
-      "status": "done",
-      "merge_commit": "7b942533a"
-    },
-    {
-      "id": "league-og-power-rankings-watermark",
-      "title": "Power Rankings OG terracotta watermark band",
-      "status": "in_progress",
-      "merge_commit": null
-    }
-  ],
-  "next_atom_id": "league-og-monte-carlo-watermark",
   "epic_status": "active",
-  "created_at": "2026-05-31T11:45:03Z",
-  "updated_at": "2026-05-31T15:00:00Z",
-  "completed_epics": [
-    {
-      "id": "lab-l5-og-hallway-position-defaults",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-breakouts-position",
-      "merge_commit": "1ebb9dc73"
-    },
-    {
-      "id": "explore-l5-og-margin-notes",
-      "status": "partial",
-      "last_atom": "explore-og-margin-note-rows",
-      "merge_commit": "c1a0bcaad"
-    },
-    {
-      "id": "league-l5-bureau-h2h-gtm",
-      "status": "complete",
-      "last_atom": "bureau-h2h-og-gate-c-snapshot",
-      "merge_commit": "4907c8327"
-    },
-    "league-h2h-gtm-export-2026-05-31"
-  ]
+  "big_problem": "Lab OG exports dead-end on empty boards — Reddit can't screenshot a breakout tape when the filter returns zero rows.",
+  "epic_title": "Lab L5 — launch-10 empty OG sample exports (remaining)",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
+  "atoms": [
+    {"id": "lab-breakouts-empty-export", "title": "Breakouts board exports sample RBS rows when filter is empty", "status": "done", "merge_commit": "85f805c3a"},
+    {"id": "lab-prospects-empty-export", "title": "Prospects board exports sample RPS rows when class is empty", "status": "pending", "merge_commit": null},
+    {"id": "lab-buysell-empty-export", "title": "Buy/sell board exports sample mismatch rows when both sides empty", "status": "pending", "merge_commit": null},
+    {"id": "lab-tradevalues-empty-export", "title": "Trade values board exports sample curve when filter empty", "status": "pending", "merge_commit": null},
+    {"id": "lab-dashboard-empty-export", "title": "Dashboard exports sample roster grades when board empty", "status": "pending", "merge_commit": null}
+  ],
+  "next_atom_id": "lab-prospects-empty-export",
+  "created_at": "2026-05-31T12:15:00Z",
+  "updated_at": "2026-05-31T21:15:00Z",
+  "completed_epics": [{"epic_title": "Explore L5 — OG screener agent margin notes", "completed_at": "2026-05-31T11:42:00Z"}]
 }
