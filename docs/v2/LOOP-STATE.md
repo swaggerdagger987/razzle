@@ -1,9 +1,9 @@
-cycle: 75
+cycle: 77
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
 next_slice: PARITY — league-power-rankings-og or bureau-monte-carlo-copy-link
-last_keep_cycle: 75
+last_keep_cycle: 77
 last_commit: 20c7940a
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
