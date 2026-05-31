@@ -31,4 +31,4 @@ new evidence.
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | Bureau Trade Network copy atom 4 | da33eafd | SHIP | keep | Bones tab share parity with pressure map
 2026-05-31 | cycle 87 breakouts OG snapshot | Lab L5 atom 1/5 | 2230b18e | SHIP | keep | snapshotRows pattern | — | weekly/prospects next
-2026-05-31 | cycle 88 weekly OG snapshot | Lab L5 atom 2/5 | da33eafd | SHIP | keep | snapshotRows on WeeklyHeatmapRenderer | — | prospects/tradevalues next
+2026-05-31 | cycle 88 weekly OG snapshot | Lab L5 atom 2/5 | 4f0eb89f | SHIP | keep | snapshotRows on WeeklyHeatmapRenderer | — | prospects/tradevalues next
