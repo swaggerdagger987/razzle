@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Explore |
 | Focus layer | L5 |
 | Next slice | lab-og-gamelog-player-default |
-| Last commit | `da33eafd` |
+| Last commit | `bd495098` |
 
 ---
 
