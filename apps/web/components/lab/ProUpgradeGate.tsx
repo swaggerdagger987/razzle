@@ -13,7 +13,14 @@ import {
 import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink } from "./LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "./PanelAgentHeader";
 
-const PLAYER_SCOPED_OG_SLUGS = new Set(["gamelog", "dynasty-comps"]);
+const DEFAULT_OG_PLAYER_NAME = "Ja'Marr Chase";
+
+const PLAYER_SCOPED_OG_SLUGS = new Set([
+  "gamelog",
+  "dynasty-comps",
+  "percentiles",
+  "career",
+]);
 
 interface Props {
   panelSlug: string;
@@ -95,6 +102,12 @@ export function ProUpgradeGate({
             downloadName={`razzle-${panelSlug}-sample.png`}
             label="export sample card →"
             playerId={ogPlayerId}
+            playerName={
+              panelSlug === "percentiles" || panelSlug === "career"
+                ? DEFAULT_OG_PLAYER_NAME
+                : undefined
+            }
+            position={panelSlug === "percentiles" ? "WR" : undefined}
             snapshotRows={ogSnapshot}
           />
         </p>
