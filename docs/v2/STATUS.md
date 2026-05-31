@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | PARITY next Lab L5 row |
-| Last commit | `da33eafd` |
+| Last commit | `59f124d4` |
 
 ---
 
