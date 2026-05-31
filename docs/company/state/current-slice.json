@@ -1,24 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-export-link-prospects-weekly-tradevalues",
-  "big_problem": "Lab OG share cards must render the same live panel rows users see in-product (DEPTH Lab L5).",
-  "epic": "Lab L5 — OG cards match in-product live panel rows",
-  "slice_title": "LabOgExportLink on prospects, weekly, tradevalues renderers",
+  "atom_id": "lab-og-position-rankings",
+  "big_problem": "Lab OG share cards must match in-product filters and rows — WR-only dynasty screenshots should not export the full board (DEPTH Lab L5).",
+  "epic": "Lab L5 — OG live panel row parity",
+  "slice_title": "Dynasty rankings position filter on LabOgExportLink + OG route",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
-    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
-    "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
+    "apps/web/components/lab/LabOgExportLink.tsx",
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx"
   ],
   "max_files": 3,
   "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "npm run typecheck --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-rankings-wr.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/rankings?download=1&position=WR'"
   ],
-  "out_of_scope": ["OG route changes"],
+  "out_of_scope": ["NORTH_STAR / DESIGN edits", "new panels"],
   "builder_mode": "composer-surgical"
 }
