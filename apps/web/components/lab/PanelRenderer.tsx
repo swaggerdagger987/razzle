@@ -25,6 +25,7 @@ import { AgingCurvesRenderer } from "./renderers/AgingCurvesRenderer";
 import { BuySellRenderer } from "./renderers/BuySellRenderer";
 import { DynastyDashboardRenderer } from "./renderers/DynastyDashboardRenderer";
 import { DynastyCompsRenderer } from "./renderers/DynastyCompsRenderer";
+import { PercentilesRenderer } from "./renderers/PercentilesRenderer";
 import { TierRenderer } from "./renderers/TierRenderer";
 import { ProUpgradeGate } from "./ProUpgradeGate";
 
@@ -130,6 +131,10 @@ export function PanelRenderer({ panel }: Props) {
 
   if (panel.slug === "dynasty-comps") {
     return <DynastyCompsRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "percentiles") {
+    return <PercentilesRenderer panel={panel} />;
   }
 
   if (panel.slug === "efficiency") {
