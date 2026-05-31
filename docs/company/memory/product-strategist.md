@@ -1,50 +1,29 @@
 # Memory — Product Strategist
-
 2026-05-31 | lab-og-gamelog-player-default | 72647966 | SHIP | keep | export URLs screenshot-ready without manual player_id; T5/T6.
-
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
 2026-05-31 | lab-og-launch10-snapshot-default | e2a3ce8a | SHIP | closes gamelog OG epic; live rows when no snapshot.
-
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | SHIP | keep | all Staff Picks domain blur; T2/T6.
-
 2026-05-31 | Cycle 118 prospects items | e00217d1 | items[] when prospects empty.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | SHIP | NEXT.md live-rows epic atom 1/3.
-
 2026-05-31 | H2H OG watermark | 44d05684 | League rivalry exports now match Lab/Explore screenshot brand — epic closed.
-
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | SHIP | Lab L5 live-sort epic closed; ppo beats efficiency_score for in-panel parity.
-
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | SHIP | ppo/ppg align Octo efficiency + aging Lab tables for OG screenshots.
-
 2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
-
 2026-05-31 | lab-tradevalues-formula-snapshot | 5ed39e14 | SHIP | Lab L5 OG mirror epic complete; Bureau H2H is next lead
-
 2026-05-31 | lab-buysell-combined-snapshot | 98ae0ef2 | SHIP | Bones two-lane OG beats generic Grade label for Reddit
-
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
-
 Format per entry:
-
 ```
 YYYY-MM-DD | hypothesis | slice | PARITY/DEPTH/ACCEPTANCE cited | outcome | keep | discard | revisit | evidence
-```
-
 Read this file before proposing a new slice. Do not repeat discarded ideas without
 new evidence.
-
 2026-05-31 | weekly hot-week OG | lab-weekly-hot-week-snapshot | PARITY Explore L5, DEPTH Lab L5 | SHIP | KEEP spike-week stat over PPG | — | buysell atom next | standup cycle 93
-
 2026-05-31 | Lab OG mirror rows epic | lab-dashboard-top5-og-snapshot | PARITY Explore L5, DEPTH Lab L5, NEXT.md | SHIP | KEEP top5-before-movers snapshot order | — | weekly hot-week atom | standup cycle 92
-
 ---
-
 ## Entries
-
 2026-05-31 | waiver tendencies unhide | SHIP | Hawkeye wire archetypes screenshot bait | keep | — | standup cycle 90
-
 2026-05-31 | Bureau behavioral share atom 2 | pressure-map copy link | SHIP | keep | Explore-parity travel on deadline pressure tab
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
 2026-05-31 | Lab OG demo rows close cycle 57 CI/preview gap without inventing new scope | lab-og-demo-rows atom | SHIP | keep | Lab L5 epic atom 1/3; labeled sample preview protects trust vs fake-live claims
