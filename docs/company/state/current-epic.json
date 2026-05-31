@@ -14,8 +14,8 @@
     {
       "id": "lab-og-position-tradevalues",
       "title": "Trade values export passes position filter to OG",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "eeb1aad0"
     },
     {
       "id": "lab-og-position-buysell",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues",
+  "next_atom_id": "lab-og-position-buysell",
   "created_at": "2026-05-31T12:30:00Z",
   "updated_at": "2026-05-31T13:00:00Z"
 }
