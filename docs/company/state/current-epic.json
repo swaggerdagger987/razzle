@@ -21,7 +21,7 @@
       "id": "league-strength-of-schedule-tab",
       "title": "Schedule tab unhidden with SOS matchup renderer",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "2e764eed"
     }
   ],
   "next_atom_id": null,
