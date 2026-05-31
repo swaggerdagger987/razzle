@@ -62,3 +62,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 93	eb542d51	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule tab unhidden	trust=T2,T5,T6; Octo SOS renderer; HIDDEN_BUREAU_SLUGS empty; bureau unhide epic complete; factory cycle 1
 94	a755f51f	depth+voice+simplicity	keep	Lab	L5 Trade Values OG formula stat label	trust=T5,T6; formula?.name on snapshot export; dedup prospects on base c0358ff3; PR 433
 95	f358349d	depth+voice+simplicity	keep	Lab	L5 OG position efficiency aging export	trust=T5,T6; LabOgExportLink position param; curl eff 45113B aging 44093B; epic atom 1/3
+96	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG position tradevalues efficiency export	trust=T5,T6; position on LabOgExportLink; curl tv RB 42142B eff WR 48610B; epic atom 2/3; factory cycle 1
