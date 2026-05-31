@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | explore OG ship cycle 129 | da33eafd | keep | dedup ef908a99 + 3f0411ec on base; no rebuild.
+2026-05-31 | explore OG ship cycle 129 | 27ae252f | keep | dedup ef908a99 + 3f0411ec on base; no rebuild.
 
 2026-05-31 | explore OG season team | feec2e19 | keep | 3 files ≤45 lines; screener body parity.
 

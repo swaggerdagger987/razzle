@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | explore-og-universe-query ship | da33eafd | keep | re-verify Gate C; PR 910; content feec2e19.
+2026-05-31 | explore-og-universe-query ship | 27ae252f | keep | re-verify Gate C; PR 910; content feec2e19.
 
 2026-05-31 | explore-og-universe-query | feec2e19 | keep | 3-file ExploreShareButton + OG route season/team parity.
 
