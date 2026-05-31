@@ -1,44 +1,32 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
-  "epic_title": "Lab L5 — OG live panel rows visible on Launch-10 cards",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Situation Room briefings die in the scrollback — dynasty Twitter cannot screenshot a staff verdict without a shareable export card.",
+  "epic_title": "Room L5 — briefing OG cards travel to Reddit",
+  "parity_ref": "Room L5 — GTM export slice",
+  "depth_ref": "Room L5",
   "atoms": [
     {
-      "id": "lab-og-live-sticker-launch10",
-      "title": "Launch-10 OG — LIVE sticker + blurb when nflverse rows render",
-      "status": "done",
-      "merge_commit": "4e905360"
-    },
-    {
-      "id": "lab-og-live-sticker-prospects-weekly",
-      "title": "Prospects + Weekly OG — verify live sticker with panel API",
-      "status": "pending",
+      "id": "room-og-briefing-export",
+      "title": "Briefing OG route + snapshot codec + export card on completed briefings",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "lab-og-live-demo-fallback-copy",
-      "title": "Sample preview copy — sharper contrast vs live sticker",
+      "id": "room-og-briefing-pytest",
+      "title": "Briefing snapshot encode/decode roundtrip pytest",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-prospects-weekly",
-  "created_at": "2026-05-31T08:05:00Z",
-  "updated_at": "2026-05-31T08:05:00Z",
+  "next_atom_id": "room-og-briefing-export",
+  "created_at": "2026-05-31T08:30:00Z",
+  "updated_at": "2026-05-31T08:30:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-watermark-band",
+      "id": "lab-l5-og-prospects-rank-labels",
       "status": "complete",
-      "last_atom": "lab-og-watermark-band-head-to-head",
-      "merge_commit": "44d05684"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
+      "last_atom": "lab-og-prospects-live-tiers",
+      "merge_commit": "5474d112"
     }
   ]
 }
