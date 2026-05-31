@@ -40,3 +40,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauWaiverTendencies | da33eafd | keep | 3 files ≤175 lines; mirrors BuildProfiles; no API change
 2026-05-31 | TradeValues+Prospects snapshot | 70af534a | keep | 2 files ≤40 lines; Breakouts ogSnapshotRows pattern
 2026-05-31 | lab-og-position-tradevalues-prospects | da33eafd | SHIP | keep | TradeValues position on OG export; epic atom 2/3
+2026-05-31 | lab-og-position-tradevalues-prospects | 2d7c436c | SHIP | keep | TradeValues position on OG export; epic atom 2/3

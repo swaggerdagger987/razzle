@@ -40,3 +40,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | lab-og-position-tradevalues-prospects | da33eafd | SHIP | keep | TradeValues position on OG export; epic atom 2/3
+2026-05-31 | lab-og-position-tradevalues-prospects | 2d7c436c | SHIP | keep | TradeValues position on OG export; epic atom 2/3

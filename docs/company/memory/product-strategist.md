@@ -41,3 +41,4 @@ new evidence.
 2026-05-31 | Lab OG snapshot atom 1/3 | 70af534a | SHIP | keep | export card matches filtered bar chart for Reddit screenshots
 2026-05-31 | Breakouts OG RBS-ranked | 795bf08b | SHIP | keep | fidelity epic 3/3 — export shows Hawkeye leaders not table order
 2026-05-31 | lab-og-position-tradevalues-prospects | da33eafd | SHIP | keep | TradeValues position on OG export; epic atom 2/3
+2026-05-31 | lab-og-position-tradevalues-prospects | 2d7c436c | SHIP | keep | TradeValues position on OG export; epic atom 2/3
