@@ -1,32 +1,33 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
-  "epic": "Lab L5 — formula-sorted OG live parity",
-  "slice_title": "Breakouts + rankings OG live extract prefers formula_score",
-  "atom_id": "lab-og-breakouts-rankings-formula-live",
+  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
+  "epic": "Lab L5 — OG export on empty panel states",
+  "atom_id": "lab-rankings-empty-export",
+  "slice_title": "Rankings — export sample card when filter returns zero rows",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with visible rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_launch10_formula_live.py"
+    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx"
   ],
-  "max_files": 2,
+  "max_files": 1,
   "max_lines": 40,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py apps/api/tests/test_og_launch10_live_sticker.py -q",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?download=1'"
+    "python3 -m pytest apps/api/tests/test_og_launch10_live_sticker.py -q --noconftest",
+    "curl -s -o /tmp/rankings-og-empty.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1&position=ZZ'",
+    "file /tmp/rankings-og-empty.png"
   ],
-  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS", "new npm deps", "Bureau H2H"],
+  "out_of_scope": [
+    "Formula-sorted OG epic atoms",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
-  },
-  "status": "shipped",
-  "content_commit": "ceadf0402"
+    "verdict": "SHIP 3/3"
+  }
 }

@@ -36,9 +36,9 @@
     },
     {
       "id": "lab-l5-og-empty-panel-states",
-      "status": "active",
-      "last_atom": "lab-gamelog-empty-weeks-export",
-      "merge_commit": "ac0280a20"
+      "status": "complete",
+      "last_atom": "lab-rankings-empty-export",
+      "merge_commit": null
     }
   ]
 }

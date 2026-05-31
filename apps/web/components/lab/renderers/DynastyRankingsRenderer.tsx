@@ -219,7 +219,17 @@ export function DynastyRankingsRenderer({ panel }: Props) {
 
       {formula ? (
         !sortedPlayers.length ? (
-          <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+          <div className="p-6">
+            <p className="text-ink-medium">{agent.emptyCopy}</p>
+            <footer className="mt-4 flex flex-wrap items-center gap-4">
+              <LabOgExportLink
+                slug="rankings"
+                downloadName="razzle-dynasty-rankings.png"
+                position={position || undefined}
+                label="export sample card"
+              />
+            </footer>
+          </div>
         ) : (
           <section className="tier-block chunky bg-bg-card p-4">
             <h3 className="tier-label" style={{ fontFamily: "var(--font-display)" }}>
@@ -231,7 +241,17 @@ export function DynastyRankingsRenderer({ panel }: Props) {
           </section>
         )
       ) : !tiers.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="rankings"
+              downloadName="razzle-dynasty-rankings.png"
+              position={position || undefined}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="tier-stack">
           {tiers.map((tier) => (
