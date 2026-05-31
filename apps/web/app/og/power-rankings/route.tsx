@@ -11,29 +11,30 @@ type PowerRow = {
   ppg: number;
   opp_ppg: number;
   differential: number;
+  expected_wins: number;
   luck: number;
 };
 
 type PowerData = {
+  league_id?: string;
   rows?: PowerRow[];
   error?: string;
 };
 
 const DEMO_ROWS: PowerRow[] = [
-  { rank: 1, roster_id: 1, team: "Dynasty Dukes", record: "9-4", ppg: 124.2, opp_ppg: 108.1, differential: 16.1, luck: 1.2 },
-  { rank: 2, roster_id: 2, team: "Win-Now LLC", record: "8-5", ppg: 118.4, opp_ppg: 112.0, differential: 6.4, luck: -0.5 },
-  { rank: 3, roster_id: 3, team: "Rebuild FC", record: "5-8", ppg: 111.9, opp_ppg: 115.2, differential: -3.3, luck: 0.8 },
-  { rank: 4, roster_id: 4, team: "Comfort Crew", record: "7-6", ppg: 109.5, opp_ppg: 110.8, differential: -1.3, luck: -1.1 },
+  { rank: 1, roster_id: 1, team: "Dynasty Dukes", record: "9-4", ppg: 124.2, opp_ppg: 108.5, differential: 15.7, expected_wins: 8.2, luck: 0.8 },
+  { rank: 2, roster_id: 2, team: "Win-Now LLC", record: "8-5", ppg: 118.9, opp_ppg: 112.1, differential: 6.8, expected_wins: 7.4, luck: 0.6 },
+  { rank: 3, roster_id: 3, team: "Rebuild FC", record: "5-8", ppg: 111.4, opp_ppg: 119.8, differential: -8.4, expected_wins: 5.1, luck: -0.1 },
+  { rank: 4, roster_id: 4, team: "Comfort Crew", record: "7-6", ppg: 115.0, opp_ppg: 114.2, differential: 0.8, expected_wins: 6.9, luck: 0.1 },
+  { rank: 5, roster_id: 5, team: "Late Surge", record: "6-7", ppg: 109.3, opp_ppg: 116.7, differential: -7.4, expected_wins: 5.8, luck: 0.2 },
 ];
+
+const DEMO_LEADER = DEMO_ROWS[0];
 
 function diffColor(diff: number): string {
   if (diff >= 8) return "#2ec4b6";
   if (diff >= 0) return "#d97757";
   return "#e63946";
-}
-
-function barWidth(diff: number): string {
-  return `${Math.min(100, Math.max(12, 50 + diff * 3))}%`;
 }
 
 async function fetchPowerRankings(leagueId: string): Promise<PowerData | null> {
@@ -68,7 +69,7 @@ export async function GET(req: Request) {
   const live = await fetchPowerRankings(league);
   const isDemo = !live?.rows?.length;
   const rows = (isDemo ? DEMO_ROWS : live!.rows!).slice(0, 5);
-  const leader = rows[0];
+  const leader = isDemo ? DEMO_LEADER : rows[0];
 
   return new ImageResponse(
     (
@@ -114,30 +115,20 @@ export async function GET(req: Request) {
           Power Rankings
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 14 }}>
-          {`beyond W-L — differential & luck index${isDemo ? " · sample preview" : ""}`}
+          {`points differential · pythagorean luck${isDemo ? " · sample preview" : ""}`}
         </div>
 
         {leader ? (
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              background: "#f7efe5",
-              border: "3px solid #2d1f14",
-              borderRadius: 8,
-              padding: "10px 16px",
+              fontFamily: "Caveat",
+              fontSize: 30,
+              color: "#d97757",
               marginBottom: 12,
-              boxShadow: "4px 4px 0 #2d1f14",
             }}
           >
-            <div style={{ display: "flex", fontSize: 14, color: "#8a7565" }}>#1 by differential</div>
-            <div style={{ display: "flex", fontFamily: "Luckiest Guy", fontSize: 28 }}>
-              {teamLabel(leader.team)} ({leader.record})
-            </div>
-            <div style={{ display: "flex", fontSize: 18, color: "#5c4a3d" }}>
-              {leader.ppg} PPG vs {leader.opp_ppg} allowed · luck {leader.luck > 0 ? "+" : ""}
-              {leader.luck}
-            </div>
+            {`#${leader.rank} ${leader.team} — ${leader.differential > 0 ? "+" : ""}${leader.differential} diff · luck ${leader.luck > 0 ? "+" : ""}${leader.luck}`}
           </div>
         ) : null}
 
@@ -150,42 +141,50 @@ export async function GET(req: Request) {
             background: "#f7efe5",
             border: "3px solid #2d1f14",
             borderRadius: 8,
-            padding: "12px 16px",
+            padding: "14px 18px",
             boxShadow: "4px 4px 0 #2d1f14",
           }}
         >
-          <div style={{ display: "flex", fontSize: 14, color: "#8a7565" }}>league power board</div>
           {rows.map((row) => {
             const color = diffColor(row.differential);
+            const barWidth = Math.min(100, Math.max(12, 50 + row.differential * 3));
             return (
-              <div key={row.roster_id} style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 17 }}>
-                <div style={{ display: "flex", width: 200, flexDirection: "column" }}>
-                  <span style={{ display: "flex", fontWeight: 700 }}>
+              <div key={row.roster_id} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ display: "flex", width: 150, flexDirection: "column" }}>
+                  <div style={{ display: "flex", fontSize: 18, fontWeight: 700 }}>
                     #{row.rank} {teamLabel(row.team)}
-                  </span>
-                  <span style={{ display: "flex", fontSize: 14, color: "#8a7565" }}>
+                  </div>
+                  <div style={{ display: "flex", fontSize: 14, color: "#8a7565" }}>
                     {row.record} · {row.ppg} PPG
-                  </span>
+                  </div>
                 </div>
                 <div
                   style={{
                     display: "flex",
                     flex: 1,
-                    height: 16,
+                    height: 18,
                     background: "#e5d6c4",
                     borderRadius: 4,
                     overflow: "hidden",
                   }}
                 >
-                  <div style={{ display: "flex", width: barWidth(row.differential), background: color }} />
+                  <div style={{ display: "flex", width: `${barWidth}%`, background: color }} />
                 </div>
-                <div style={{ display: "flex", width: 72, justifyContent: "flex-end", color, fontWeight: 700 }}>
+                <div style={{ display: "flex", width: 52, fontSize: 18, fontWeight: 700, color }}>
                   {row.differential > 0 ? "+" : ""}
                   {row.differential}
                 </div>
-                <div style={{ display: "flex", width: 64, fontSize: 14, color: "#8a7565" }}>
-                  luck {row.luck > 0 ? "+" : ""}
-                  {row.luck}
+                <div
+                  style={{
+                    display: "flex",
+                    fontSize: 14,
+                    color,
+                    border: `2px solid ${color}`,
+                    padding: "2px 8px",
+                    borderRadius: 6,
+                  }}
+                >
+                  {`luck ${row.luck > 0 ? "+" : ""}${row.luck}`}
                 </div>
               </div>
             );
@@ -202,9 +201,7 @@ export async function GET(req: Request) {
             marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>
-            razzle.lol/league{league ? `/${league}` : ""}/power-rankings
-          </div>
+          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/power-rankings`}</div>
           {isDownload ? (
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
               made with 🐯 razzle.lol

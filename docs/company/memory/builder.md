@@ -33,3 +33,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Power Rankings OG | da33eafd | keep | /og/power-rankings DEMO_ROWS + Bureau export link; curl 66050B
 2026-05-31 | Bureau Roster Depth tab | 5b6d3dc3 | keep | BureauRosterDepth Dolphin grid; HIDDEN removed roster-depth
 2026-05-31 | Bureau Roster Depth tab | da33eafd | keep | BureauRosterDepth Dolphin grid; HIDDEN removed roster-depth
+2026-05-31 | Bureau Build Profiles tab | 1e68f179 | keep | BureauBuildProfiles Atlas archetype cards; HIDDEN removed build-profiles

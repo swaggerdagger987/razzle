@@ -31,5 +31,7 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
-  }
+  },
+  "verdict": "SHIP",
+  "content_commit": "1e68f179"
 }

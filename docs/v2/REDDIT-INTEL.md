@@ -301,6 +301,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 1. **Breakout cards must show names users recognize** — `candidates` extraction on OG `/og/breakouts` aligns share cards with Hawkeye's in-panel list when API data exists.
 2. **Same API path as Lab** — `/api/panels/{slug}` prevents OG drift from tier/breakout response shapes.
 
+## 2026-05-31 — Cycle 77 (workday cycle 1)
+
+1. **Manager archetype cards travel with copy+export** — PANIC SELLER / exploit-window screenshots need the same share row as Self-Scout and H2H.
+2. **Bureau behavioral epic continues** — Pressure Map and Trade Network are next atoms in share-parity epic.
+
 ## 2026-05-31 — Cycle 59
 
 ### r/DynastyFF — panel-specific stat labels on share cards (pattern)

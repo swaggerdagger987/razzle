@@ -64,9 +64,12 @@ cycle	commit	score	status	pillar	slice	description
 72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
 73	1578f75e	depth+voice+simplicity	keep	Lab	L5 OG rankings position filter	trust=T5,T6; LabOgExportLink.position; curl WR 50210B
 74	ac046c85	depth+voice+simplicity	keep	Lab	L5 OG API origin rewrite	trust=T5,T6; request-origin /api fetch; curl rankings 61061B dashboard 60034B
+75	d5d44123	depth+voice+simplicity	keep	Lab	L5 OG dashboard top5 risers extractors	trust=T5,T6; extractRows top5+risers rank_diff; curl dashboard 60034B; live-row epic complete
+76	3c1237df	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B; export-link epic complete
 77	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
 78	30454811	depth+hallway+voice+simplicity	keep	League	L5 Bureau Monte Carlo share bar	trust=T2,T5,T6; BureauMonteCarloShareBar copy sim + export; curl monte-carlo OG 53767B
-79	3c1237df	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B; export-link epic complete
-80	da33eafd	depth+voice+simplicity	keep	League	L5 OG power rankings share card	trust=T2,T5,T6; /og/power-rankings demo rows; curl 66050B PNG
-81	5b6d3dc3	depth+hallway+voice+simplicity	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5,T6; Dolphin A-F grid; roster-depth out of HIDDEN; build+pytest PASS
-82	1e68f179	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles out of HIDDEN; build+pytest PASS
+80	6c8da85f	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot export	trust=T1,T5,T6; encode you/them/position bars in snapshot param; curl h2h OG 59305B; epic atom 2/3
+78	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
+81	e62721a6	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings OG card	trust=T5,T6; /og/power-rankings demo rows; curl 68555B PNG; export link on tab
+82	5b6d3dc3	depth+hallway+voice+simplicity	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5,T6; Dolphin A-F grid; roster-depth out of HIDDEN; build+pytest PASS
+83	1e68f179	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles out of HIDDEN; build+pytest PASS
