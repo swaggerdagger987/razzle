@@ -8,8 +8,8 @@
     {
       "id": "league-manager-profiles-og-watermark",
       "title": "Manager Profiles OG terracotta watermark + ShareBar",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "4854dd6e3"
     },
     {
       "id": "league-bureau-og-live-stickers",
