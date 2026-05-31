@@ -1,8 +1,10 @@
-cycle: 96
+cycle: 98
 last_board_cycle: 54
-focus_pillar: League
-focus_layer: L5
-next_slice: league-strength-of-schedule-og-share
-last_keep_cycle: 96
-last_commit: 3f584f61
-league_l5_bureau_depth_og_epic: active
+focus_pillar: Lab
+focus_layer: L4
+next_slice: lab-pro-prospects-badge
+last_keep_cycle: 98
+last_commit: 15eb7a5e
+lab_l4_pro_gate_epic: active
+lab_l4_pro_gate_atom: weekly-paywall-copy-done
+league_l5_bureau_og_snapshot_epic: active

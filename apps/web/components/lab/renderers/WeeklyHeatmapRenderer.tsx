@@ -7,9 +7,12 @@ import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { isUpgradeRequiredError } from "@/lib/panel-api";
+import { useDevPlan } from "@/lib/use-dev-plan";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
+import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
 
@@ -46,12 +49,21 @@ interface Props {
 export function WeeklyHeatmapRenderer({ panel }: Props) {
   const { openPlayer } = usePlayerSheet();
   const [position, setPosition] = useState<(typeof POSITIONS)[number]>("WR");
+  const [exportGateOpen, setExportGateOpen] = useState(false);
+  const plan = useDevPlan();
   const agent = panelAgent(panel.slug);
 
   const q = useQuery({
     queryKey: ["panel", panel.slug, position],
     queryFn: async () => {
       const res = await fetch(`/api/panels/${panel.slug}?position=${position}&limit=25`);
+      if (res.status === 402) {
+        const body = await res.json().catch(() => ({}));
+        const detail = (body as { detail?: Record<string, string> }).detail ?? {};
+        throw Object.assign(new Error(detail.message ?? "Pro plan required"), {
+          upgrade: detail,
+        });
+      }
       if (!res.ok) throw new Error(`API ${res.status}`);
       return res.json() as Promise<HeatmapData>;
     },
@@ -102,7 +114,42 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
-    return <p className="p-6 text-red">something fumbled: {(q.error as Error).message}</p>;
+    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
+    if (err.upgrade) {
+      return (
+        <ProUpgradeGate
+          panelSlug={panel.slug}
+          panelTitle={panel.title}
+          required={err.upgrade.required ?? "pro"}
+          current={err.upgrade.current ?? "free"}
+          message={err.upgrade.message}
+        />
+      );
+    }
+    if (isUpgradeRequiredError(err)) {
+      return (
+        <ProUpgradeGate
+          panelSlug={panel.slug}
+          panelTitle={panel.title}
+          required={err.required}
+          current={err.current}
+          message={err.message}
+        />
+      );
+    }
+    return <p className="p-6 text-red">something fumbled: {err.message}</p>;
+  }
+
+  if (exportGateOpen && plan === "free") {
+    return (
+      <ProUpgradeGate
+        panelSlug={panel.slug}
+        panelTitle={panel.title}
+        required="pro"
+        current="free"
+        message="Share cards with your streak leaders — Pro unlocks export."
+      />
+    );
   }
 
   return (
@@ -205,12 +252,22 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {hotPlayer.p.name} →
           </Link>
-          <LabOgExportLink
-            slug="weekly"
-            downloadName="razzle-weekly-heatmap.png"
-            position={position}
-            snapshotRows={ogSnapshotRows}
-          />
+          {plan === "free" ? (
+            <button
+              type="button"
+              className="text-sm text-ink-medium underline"
+              onClick={() => setExportGateOpen(true)}
+            >
+              export card (Pro)
+            </button>
+          ) : (
+            <LabOgExportLink
+              slug="weekly"
+              downloadName="razzle-weekly-heatmap.png"
+              position={position}
+              snapshotRows={ogSnapshotRows}
+            />
+          )}
         </footer>
       )}
     </div>

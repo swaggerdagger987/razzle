@@ -1,36 +1,31 @@
 {
   "epic_status": "active",
-  "big_problem": "Four newly unhidden Bureau depth tabs have no group-chat export cards while rival tabs ship OG share rows.",
-  "epic_title": "League L5 — Bureau depth tab OG export cards",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "big_problem": "Lab Pro gates should read like an upgrade path, not a dead-end error — dynasty researchers bounce when paywalls feel like bugs.",
+  "epic_title": "Lab L4 — Pro gate upgrade voice",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
   "atoms": [
     {
-      "id": "league-roster-depth-og-share",
-      "title": "Roster Depth tab copy link + OG grade card",
+      "id": "lab-pro-weekly-paywall-copy",
+      "title": "Weekly panel pro gate uses Hawkeye upgrade copy + hallway CTA",
       "status": "done",
-      "merge_commit": "688cea64"
+      "merge_commit": "15eb7a5e"
     },
     {
-      "id": "league-build-profiles-og-share",
-      "title": "Build Profiles tab OG archetype card",
-      "status": "done",
-      "merge_commit": "77d4f765"
+      "id": "lab-pro-prospects-badge",
+      "title": "Prospects locked state shows tier badge + Bones trade context",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "league-waiver-tendencies-og-share",
-      "title": "Waiver Tendencies tab OG FAAB card",
-      "status": "done",
-      "merge_commit": "6dcb0f72"
-    },
-    {
-      "id": "league-strength-of-schedule-og-share",
-      "title": "Schedule tab OG power verdict card",
+      "id": "lab-pro-formula-bar-cta",
+      "title": "Formula bar links locked panels to Pro upgrade explainer",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-strength-of-schedule-og-share",
-  "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T06:35:00Z"
+  "next_atom_id": "lab-pro-prospects-badge",
+  "created_at": "2026-05-31T06:22:04Z",
+  "updated_at": "2026-05-31T06:55:00Z",
+  "last_cycle_commit": "15eb7a5e"
 }

@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | Lab L4 pro gate voice | 15eb7a5e | Export moment = upgrade path; heatmap stays free; atom 2 prospects badge next.
+
 2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
 
 2026-05-31 | lab-tradevalues-formula-snapshot | 5ed39e14 | SHIP | Lab L5 OG mirror epic complete; Bureau H2H is next lead
@@ -48,3 +50,4 @@ new evidence.
 2026-05-31 | Trade Network share atom 2/4 | da33eafd | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Build Profiles unhide atom 1/3 | da33eafd | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
+- **2026-05-31 cycle 96:** Lab L4 weekly export ProUpgradeGate + Hawkeye teaser rows.
