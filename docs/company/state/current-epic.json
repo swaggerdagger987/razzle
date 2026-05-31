@@ -1,30 +1,30 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG share cards must render the same live panel rows users see in-product — not legacy API paths or demo-only shells when terminal.db has tape (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — OG cards match in-product live panel rows",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "big_problem": "Lab OG share cards must render the same player rows as in-product panels when the API returns data — not generic demo shells (DEPTH Lab L5).",
+  "epic_title": "Lab L5 — OG live panel row parity",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-panels-api-live",
-      "title": "OG fetch via /api/panels/{slug} with dashboard/breakout extractors + live tape label",
+      "id": "lab-og-live-extractors",
+      "title": "OG route extracts candidates/tiers via panels API with pro preview header",
       "status": "done",
-      "merge_commit": "997c5e5f"
+      "merge_commit": "a443f218"
     },
     {
-      "id": "lab-og-export-link-rankings-breakouts",
-      "title": "LabOgExportLink on dynasty-rankings and breakouts renderers",
+      "id": "lab-og-dynasty-comps-lab",
+      "title": "Dynasty-comps Lab renderer + scoped export footer",
       "status": "done",
-      "merge_commit": "32d682ab"
+      "merge_commit": "6070c774"
     },
     {
-      "id": "lab-og-export-link-prospects-weekly-tradevalues",
-      "title": "LabOgExportLink on prospects, weekly, tradevalues renderers",
+      "id": "lab-og-launch10-live-label",
+      "title": "Launch-10 OG cards drop sample label when live rows render",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-export-link-rankings-breakouts",
-  "created_at": "2026-05-31T04:15:00Z",
-  "updated_at": "2026-05-31T04:25:00Z"
+  "next_atom_id": "lab-og-launch10-live-label",
+  "created_at": "2026-05-31T05:00:00Z",
+  "updated_at": "2026-05-31T04:35:00Z"
 }

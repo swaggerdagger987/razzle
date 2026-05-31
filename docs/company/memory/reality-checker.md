@@ -28,3 +28,4 @@ explicit checks in the verification routine.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG snapshot rows Gate C | curl dashboard snapshot 45249B | PASS | keep | docs/v2/evidence/2026-05-31-lab-og-snapshot-rows.md
+2026-05-31 | Lab OG live panel rows | da33eafd | keep | fetchLiveOgRows + snapshot-aware fallback

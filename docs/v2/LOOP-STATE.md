@@ -1,10 +1,10 @@
-cycle: 71
+cycle: 69
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-export-link-prospects-weekly-tradevalues (epic atom 3/3)
-last_keep_cycle: 71
-last_commit: 4b9d0464
+next_slice: lab-og-launch10-live-label (epic atom 3/3)
+last_keep_cycle: 69
+last_commit: a443f218
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -19,6 +19,5 @@ lab_l5_og_export_gamelog_efficiency_aging: complete
 lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
 lab_l5_og_dynasty_comps_panel_export: complete
-lab_l5_og_snapshot_rows: complete
-lab_l5_og_export_rankings_breakouts: in_progress
-lab_l5_og_live_rows_epic: in_progress
+lab_l5_og_live_extractors: complete
+lab_l5_og_live_row_epic: in_progress
