@@ -1,3 +1,4 @@
+2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
 
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
