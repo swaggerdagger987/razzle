@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-dynasty-rankings-ranked
 last_keep_cycle: 98
-last_commit: da33eafd
+last_commit: ae856f8a
 lab_l5_og_metric_ranked_epic: active
 lab_l5_og_metric_ranked_atom: efficiency-ppo
