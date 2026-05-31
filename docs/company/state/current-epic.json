@@ -1,48 +1,36 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau behavioral share parity",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards must match what users see in-panel — not generic demo rows when the heatmap already loaded real weeks.",
+  "epic_title": "Lab L5 — OG snapshot rows on launch panels",
+  "parity_ref": "Explore L5 / Lab L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-manager-profiles-copy-link",
-      "title": "Manager Profiles copy link beside export card",
-      "status": "done",
-      "merge_commit": "04c19959"
+      "id": "lab-weekly-og-snapshot",
+      "title": "Weekly heatmap OG snapshot rows from loaded players",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy link beside export card",
-      "status": "done",
-      "merge_commit": "c4ce09b7"
+      "id": "lab-prospects-og-snapshot",
+      "title": "Prospects OG snapshot rows from ranked cards",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "league-power-rankings-og",
-      "title": "Power Rankings OG + copy board link",
-      "status": "done",
-      "merge_commit": "90bf2dd5"
+      "id": "lab-breakouts-og-snapshot",
+      "title": "Breakouts OG snapshot rows from formula leaders",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
-      "status": "done",
-      "merge_commit": "30454811"
-    },
-    {
-      "id": "league-build-profiles-tab",
-      "title": "Unhide Build Profiles tab with Atlas renderer",
-      "status": "done",
-      "merge_commit": "309f8a8b"
-    },
-    {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
-      "status": "done",
-      "merge_commit": "2c74e05c"
+      "id": "lab-tradevalues-og-snapshot",
+      "title": "Trade values OG snapshot rows from chart leaders",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T06:15:00Z"
+  "next_atom_id": "lab-weekly-og-snapshot",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z"
 }

@@ -8,7 +8,7 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
@@ -70,6 +70,26 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
       }
     }
     return best;
+  }, [players]);
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    return [...players]
+      .map((p) => {
+        const weekScores = Object.values(p.weeks ?? {}).filter(
+          (v): v is number => v != null,
+        );
+        const peakWeek = weekScores.length ? Math.max(...weekScores) : 0;
+        const stat = peakWeek > 0 ? peakWeek : (p.ppg ?? 0);
+        return {
+          name: p.name,
+          position: p.position,
+          team: p.team,
+          stat,
+          statLabel: "FPTS",
+        };
+      })
+      .sort((a, b) => b.stat - a.stat)
+      .slice(0, 6);
   }, [players]);
 
   if (q.isPending) {
@@ -180,7 +200,12 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {hotPlayer.p.name} →
           </Link>
-          <LabOgExportLink slug="weekly" downloadName="razzle-weekly-heatmap.png" />
+          <LabOgExportLink
+            slug="weekly"
+            downloadName="razzle-weekly-heatmap.png"
+            position={position}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>
