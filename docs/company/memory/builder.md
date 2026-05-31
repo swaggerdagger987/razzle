@@ -4,7 +4,7 @@
 2026-05-31 | lab-og-buysell-dashboard-live-sort | cb59494b | keep | dynasty_value/rank_diff; buy_low/sell_high extract; curl ≥44KB.
 
 
-2026-05-31 | lab-og-efficiency-aging-live-sort | route.tsx PANEL_OG_STAT_KEY | 2bba7622 | SHIP | keep | efficiency_score peak_age labels
+2026-05-31 | lab-og-efficiency-aging-live-sort | OG route ppo/ppg + aging positions unwrap | aefbf6ef | SHIP | keep | 1 file | curl 45KB×2
 
 2026-05-31 | lab-og-position-gamelog | GamelogRenderer position on LabOgExportLink | 228c4b59 | SHIP | keep | 1 file | curl 48035B
 

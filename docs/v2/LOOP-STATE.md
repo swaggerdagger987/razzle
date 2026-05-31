@@ -1,9 +1,9 @@
-cycle: 105
+cycle: 106
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-gamelog-weeks-fpts-sort
-last_keep_cycle: 105
-last_commit: 8d8b2635
+next_slice: lab-og-dynasty-comps-pro-teaser
+last_keep_cycle: 106
+last_commit: da33eafd
 lab_l5_og_live_extract_epic: active
-lab_og_weekly_prospects_breakouts_live_extract: in_progress
+lab_og_gamelog_weeks_fpts_sort: in_progress
