@@ -54,4 +54,4 @@ cycle	commit	score	status	pillar	slice	description
 61	ddc28666	depth+simplicity+voice	keep	Lab	L5 OG launch10+param defaults	trust=T5,T6; launch-10 demo stat labels; DEFAULT_OG_PLAYER_ID; curl dynasty-comps 65961B
 62	0d39635e	depth+hallway+voice+simplicity	keep	League	L5 OG pressure map	trust=T2,T5,T6; /og/pressure-map demo bars + export button; curl 60104B PNG
 63	c3470f64	depth+hallway+voice+simplicity	keep	League	L5 OG manager profiles	trust=T2,T5,T6; /og/manager-profiles archetype rows demo; curl 76684B PNG
-64	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 OG trade network	trust=T2,T5,T6; /og/trade-network partner lanes demo; curl 67677B PNG
+64	2bd28752	depth+hallway+voice+simplicity	keep	League	L5 OG trade network	trust=T2,T5,T6; /og/trade-network partner lanes demo; curl 67677B PNG

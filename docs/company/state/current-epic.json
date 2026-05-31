@@ -20,8 +20,8 @@
     {
       "id": "league-og-trade-network",
       "title": "Trade Network OG export card with partner lanes",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "2bd28752"
     },
     {
       "id": "league-og-self-scout",
@@ -30,7 +30,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-og-trade-network",
+  "next_atom_id": "league-og-self-scout",
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T02:12:00Z"
+  "updated_at": "2026-05-31T02:10:00Z"
 }
