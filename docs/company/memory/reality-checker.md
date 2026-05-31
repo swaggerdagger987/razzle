@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | lab-og-breakouts-rankings-formula-live | da33eafd | PASS | pytest 2; curl breakouts 66253B rankings 66806B.
+2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | PASS | pytest 2; curl breakouts 66253B rankings 66806B.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | PASS | curl 200 59323B PNG; web build + pytest green.
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | PASS | pytest 5; curl NFL OG 65431B without universe param.
 2026-05-31 | lab-l4-pro-gate-dynasty-comps | a3f07d1e5 | PASS | pytest 9; web build exit 0; no OG slice.

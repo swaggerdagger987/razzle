@@ -9,7 +9,7 @@
       "id": "lab-og-breakouts-rankings-formula-live",
       "title": "Breakouts + rankings OG live extract prefers formula_score",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "ceadf0402"
     },
     {
       "id": "lab-og-buysell-formula-live",

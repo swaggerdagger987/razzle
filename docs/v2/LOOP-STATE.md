@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-buysell-formula-live (formula OG epic atom 2/3)
 last_keep_cycle: 141
-last_commit: da33eafd
+last_commit: ceadf0402
 explore_l5_og_query_epic: complete
 lab_l5_formula_og_live_epic: active
 lab_l5_empty_og_epic: deferred
