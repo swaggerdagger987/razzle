@@ -1,28 +1,18 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-launch10-buysell-dashboard-labels",
-  "big_problem": "Launch-10 OG cards still read generic on Reddit — dashboard/buysell LIVE stickers missing.",
-  "epic": "Lab L5 — Launch-10 OG panel-native trust labels (atom 3/3)",
-  "slice_title": "dashboard/buysell LIVE stickers on Launch-10 OG",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Explore college OG Gate C lacked pytest guard — demo fallback shipped in #1058 but unverified in CI.",
+  "epic": "Explore L5 — universe-aware share exports",
+  "slice_title": "College explore OG Gate C pytest + fixture params",
+  "parity_ref": "Explore L5",
+  "depth_ref": "Explore L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T1", "T5", "T6"],
-  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/api/tests/test_explore_share_og_universe.py"],
   "max_files": 1,
-  "max_lines": 12,
+  "max_lines": 40,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web 2>&1 | tail -5",
-    "curl -s -o /tmp/og-dashboard-live.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dashboard?download=1'",
-    "curl -s -o /tmp/og-buysell-live.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_share_og_universe.py -q --noconftest"
   ],
-  "out_of_scope": ["billing", "new panels"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
-  "status": "shipped"
+  "out_of_scope": ["route.tsx changes — demo rows already on base"],
+  "builder_mode": "composer-surgical"
 }
