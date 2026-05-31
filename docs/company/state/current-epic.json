@@ -8,8 +8,8 @@
     {
       "id": "league-build-profiles-tab",
       "title": "Build Profiles tab with Atlas renderer + nav visible",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "c23f4bd9"
     },
     {
       "id": "league-waiver-tendencies-tab",
@@ -24,8 +24,8 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-build-profiles-tab",
+  "next_atom_id": "league-waiver-tendencies-tab",
   "created_at": "2026-05-31T05:30:00Z",
   "updated_at": "2026-05-31T13:00:00Z",
-  "last_cycle_commit": null
+  "last_cycle_commit": "c23f4bd9"
 }

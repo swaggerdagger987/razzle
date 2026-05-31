@@ -4,10 +4,9 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-waiver-tendencies-tab
 last_keep_cycle: 89
-last_commit: da33eafd
-league_l5_bureau_build_profiles_tab: in_progress
+last_commit: c23f4bd9
+league_l5_bureau_build_profiles_tab: complete
 league_l5_bureau_hidden_tabs_epic: in_progress
-c23f4bd9 (standup: 2026-05-31 — PASS Bureau Build Profiles tab)
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
