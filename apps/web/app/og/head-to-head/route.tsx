@@ -247,18 +247,12 @@ export async function GET(req: Request) {
           </div>
         ) : null}
 
-        {hasData ? (
-          <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
-            {`razzle.lol${atlasRoomPath} · ask ${atlas.name} about ${teamLabel(themSummary.team)}`}
-          </div>
-        ) : null}
-
         {/* Always-on watermark band — matches Explore + Lab panel OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: "column",
+            gap: 6,
             marginTop: 16,
             padding: "10px 18px",
             background: "#d97757",
@@ -269,12 +263,19 @@ export async function GET(req: Request) {
             fontSize: 20,
           }}
         >
-          <div style={{ display: "flex", fontWeight: 700 }}>
-            razzle.lol/league{league ? `/${league}` : ""}/head-to-head
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: "flex", fontWeight: 700 }}>
+              razzle.lol/league{league ? `/${league}` : ""}/head-to-head
+            </div>
+            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+              {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+            </div>
           </div>
-          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
-            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
-          </div>
+          {hasData ? (
+            <div style={{ display: "flex", fontSize: 17, opacity: 0.95 }}>
+              {`razzle.lol${atlasRoomPath} · ask ${atlas.name} about ${teamLabel(themSummary.team)}`}
+            </div>
+          ) : null}
         </div>
       </div>
     ),
