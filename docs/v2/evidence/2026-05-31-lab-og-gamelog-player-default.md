@@ -11,6 +11,8 @@
 
 ## Gate C — OG PNG curl
 
+Re-verified 2026-05-31T08:50Z on `cursor/workday-cycle-initiation-9ffc`.
+
 | Route | HTTP | Bytes | Verdict |
 |-------|------|-------|---------|
 | `/og/gamelog?download=1&player_id=00-0036900` | 200 | 60634 | PASS |
