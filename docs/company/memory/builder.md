@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-rankings-dashboard-sort | dynasty_value + |rank_diff| renderer sort; rankings/dashboard DIRECT_STAT_SORT; extractRows fallers | da33eafd | SHIP | KEEP OG sort epic closed | evidence/2026-05-31-lab-og-rankings-dashboard-sort.md
+2026-05-31 | lab-og-rankings-dashboard-sort | dynasty_value + |rank_diff| renderer sort; rankings/dashboard DIRECT_STAT_SORT; extractRows fallers | 6c8704cb | SHIP | KEEP OG sort epic closed | evidence/2026-05-31-lab-og-rankings-dashboard-sort.md
 
 2026-05-31 | lab-og-buysell-aging-sort | buy_low/sell_high extractRows; buysell+aging DIRECT_STAT_SORT; renderer PPG/mismatch sort | da33eafd | SHIP | KEEP before rankings atom | evidence/2026-05-31-lab-og-buysell-aging-sort.md
 

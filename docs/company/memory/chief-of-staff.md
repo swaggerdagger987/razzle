@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | lab-og-rankings-dashboard-sort | Factory cycle 1 closed OG direct-sort epic 3/3 | da33eafd | SHIP | NEXT: PARITY bureau-h2h or next RED slice
+2026-05-31 | lab-og-rankings-dashboard-sort | Factory cycle 1 closed OG direct-sort epic 3/3 | 6c8704cb | SHIP | NEXT: PARITY bureau-h2h or next RED slice
 
 
 2026-05-31 | Factory cycle 96 buysell/aging OG sort | da33eafd | keep | workday open; direct-sort epic atom 2/3

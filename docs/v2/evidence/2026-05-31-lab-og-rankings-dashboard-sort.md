@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-31  
 **Atom:** Rankings + dashboard OG direct links sort top-6 by dynasty value / rank change  
-**Content commit:** (filled post-commit)
+**Content commit:** 6c8704cb
 
 ## Gate C — OG PNG
 

@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | lab-og-rankings-dashboard-sort | curl rankings 50251B dashboard 60052B; build+pytest PASS | da33eafd | PASS | KEEP Gate C byte floor | evidence/2026-05-31-lab-og-rankings-dashboard-sort.md
+2026-05-31 | lab-og-rankings-dashboard-sort | curl rankings 50251B dashboard 60052B; build+pytest PASS | 6c8704cb | PASS | KEEP Gate C byte floor | evidence/2026-05-31-lab-og-rankings-dashboard-sort.md
 
 
 2026-05-31 | Lab OG buysell/aging Gate C | da33eafd | PASS | curl buysell 44258B aging 44952B PNG | keep | evidence/2026-05-31-lab-og-buysell-aging-sort.md

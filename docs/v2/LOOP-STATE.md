@@ -4,5 +4,5 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: bureau-h2h-export-or-next-parity
 last_keep_cycle: 97
-last_commit: da33eafd
+last_commit: 6c8704cb
 lab_l5_og_direct_sort_epic: complete
