@@ -66,9 +66,9 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   breakouts: "breakout_score",
   rankings: "dynasty_value",
   tradevalues: "trade_value",
-  efficiency: "ppo",
-  aging: "ppg",
-  buysell: "dynasty_value",
+  efficiency: "efficiency_score",
+  aging: "peak_age",
+  buysell: "value",
   dashboard: "rank_diff",
 };
 

@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
+
 2026-05-31 | Factory cycle 113 Lab OG watermark band | 010241ea | Dedup live-sort cb59494b on base; watermark epic atom 1/2.
 
 2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab L5 live-sort epic complete; PR #643/#635 merged; ppo/ppg on base.

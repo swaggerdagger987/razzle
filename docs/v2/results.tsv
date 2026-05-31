@@ -65,3 +65,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 111	2bba7622	depth+voice+simplicity	keep	Lab	L5 Efficiency+Aging OG live sort keys	trust=T5,T6; efficiency_score+peak_age; curl eff 59068B aging 57916B; epic atom 2/3
 104	cb59494b	depth+voice+simplicity	keep	Lab	L5 Buy/Sell+Dashboard OG live sort keys	trust=T5,T6; dynasty_value+rank_diff; buy_low/sell_high extract; curl buysell 44258B dashboard 57657B; epic atom 3/3 complete
 113	010241ea	depth+voice+simplicity	keep	Lab	L5 Lab OG terracotta watermark band	trust=T5,T6; explore parity band on panel route; curl rankings 62355B buysell 60820B; watermark epic atom 1/2
+114	7afc0b03	depth+voice+simplicity	keep	Lab	L5 OG live sort keys restore	trust=T5,T6; value+efficiency_score+peak_age; curl buysell 58072B eff 59068B aging 57916B; live-sort epic complete
