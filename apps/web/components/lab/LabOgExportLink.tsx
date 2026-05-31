@@ -1,6 +1,19 @@
 /** Ja'Marr Chase gsis_id — matches DEFAULT_OG_PLAYER_ID in /og/[panel]/route.tsx */
 export const DEFAULT_LAB_OG_PLAYER_ID = "00-0036900";
 
+/** Panels whose OG cards need a player_id in the export URL (mirrors /og/[panel]/route.tsx). */
+const PLAYER_SCOPED_PANELS = new Set([
+  "dynasty-comps",
+  "gamelog",
+  "percentiles",
+  "career",
+  "career-compare",
+  "strengths",
+  "breakdown",
+  "fptsbreakdown",
+  "archetypes",
+]);
+
 /** In-panel link to download the Lab OG share card (matches Bureau export pattern). */
 
 export interface OgSnapshotRow {
@@ -49,7 +62,9 @@ export function LabOgExportLink({
 }) {
   const file = downloadName ?? `razzle-${slug}.png`;
   const params = new URLSearchParams({ download: "1" });
-  if (playerId) params.set("player_id", playerId);
+  const scopedPlayerId =
+    playerId ?? (PLAYER_SCOPED_PANELS.has(slug) ? DEFAULT_LAB_OG_PLAYER_ID : undefined);
+  if (scopedPlayerId) params.set("player_id", scopedPlayerId);
   if (position) params.set("position", position);
   const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows) : undefined;
   if (snapshot) params.set("snapshot", snapshot);
