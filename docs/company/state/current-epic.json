@@ -21,7 +21,7 @@
       "id": "lab-og-from-panel-gate-c-rest",
       "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
       "status": "done",
-      "merge_commit": "PLACEHOLDER"
+      "merge_commit": "034f1cdb3"
     }
   ],
   "next_atom_id": null,
@@ -32,7 +32,7 @@
       "id": "lab-l5-formula-og-live-epic",
       "status": "complete",
       "last_atom": "lab-og-from-panel-gate-c-rest",
-      "merge_commit": "PLACEHOLDER"
+      "merge_commit": "034f1cdb3"
     }
   ],
   "resume_epic_after_merge": {
