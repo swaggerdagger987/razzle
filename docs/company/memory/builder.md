@@ -1,7 +1,8 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-live-demo-fallback-copy | c892dd56 | showDemoSticker terracotta SAMPLE on Launch-10 demo rows.
+2026-05-31 | lab-og-live-demo-fallback-copy | c892dd56 | showDemoSticker + demoStickerLabel slug copy; force_demo from base.
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 4cd32a84 | liveViaPanelApi + slug sticker copy in og/[panel]/route.tsx.
+2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | staffByAgent agent headers in LabSidebar.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 

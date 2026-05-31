@@ -2,8 +2,7 @@
 
 2026-05-31 | Factory cycle 119 SAMPLE demo sticker | c892dd56 | live-rows epic 3/3 complete; PR #780; NO_LOCK_GUARDRAIL.
 2026-05-31 | Factory cycle 118 prospects/weekly LIVE sticker | 4cd32a84 | live-rows epic atom 2/3; lock #735.
-
-2026-05-31 | Factory cycle 117 prospects #rank OG | ab6ae8d7 | L5 live-fetch epic closes.
+2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | L2 sidebar epic atom 1/2.
 
 2026-05-31 | Factory cycle 116 LIVE OG sticker | 4e905360 | Dedup H2H on base #666; live-rows epic 1/3.
 

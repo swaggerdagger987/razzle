@@ -589,6 +589,7 @@ export async function GET(
   const { panel: slug } = await params;
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
+  const forceDemo = url.searchParams.get("force_demo") === "1";
   const query = url.searchParams.get("q") ?? "";
   const positionFilter = url.searchParams.get("position") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
@@ -624,7 +625,7 @@ export async function GET(
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
   let liveViaPanelApi = false;
-  if (apiPath && !snapshotHasRows) {
+  if (apiPath && !snapshotHasRows && !forceDemo) {
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
     if (liveRows.length > 0) {
       liveViaPanelApi = true;
