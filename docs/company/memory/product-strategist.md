@@ -15,7 +15,7 @@ new evidence.
 
 ## Entries
 
-2026-05-31 | Bureau behavioral share atom 2 | pressure-map copy link | SHIP | keep | Explore-parity travel on deadline pressure tab
+2026-05-31 | league-build-profiles-tab | League L5 Bureau epic atom 4/4 | SHIP | keep | Win-now vs rebuild board completes hidden-tab epic; T2+T5+T6
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
 2026-05-31 | Lab OG demo rows close cycle 57 CI/preview gap without inventing new scope | lab-og-demo-rows atom | SHIP | keep | Lab L5 epic atom 1/3; labeled sample preview protects trust vs fake-live claims
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
@@ -24,6 +24,8 @@ new evidence.
 2026-05-31 | League L5 Bureau OG atom 2 | manager-profiles archetypes | SHIP | keep | PANIC SELLER badges for trade-DM screenshots
 2026-05-31 | League L5 Bureau OG atom 3 | trade-network partner lanes | SHIP | keep | collusion-thread partnership screenshots
 2026-05-31 | League L5 Bureau OG epic complete | self-scout depth grades OG | SHIP | keep | flagship Bureau screenshot; A–F grid for trade threads
+2026-05-31 | league-power-rankings-og atom 2/4 | SHIP | keep | Octo differential board off-platform; next roster-depth unhide fixes Self-Scout hallway lie
+2026-05-31 | league-roster-depth-tab atom 3/4 | SHIP | keep | Dolphin depth grid live; Self-Scout CTA restore follow-up
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live row parity epic atom 1 | 2cb898b6 | SHIP | keep | NEXT.md lead; panels slug + candidates on OG

@@ -2,9 +2,13 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
-### 2026-05-31 — Lab launch-10 OG (cycle 77)
-- **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
-- **Trust:** T1 honest labeling; sample suffix only on demo fallback.
+### 2026-05-31 — Roster Depth tab (cycle 81)
+- **Angle:** Injury-risk depth grades with named players beat generic "roster analysis" posts.
+- **Screenshot hook:** Dolphin A–F grid with dynasty values + thin-spot Room ask.
+
+### 2026-05-31 — Power Rankings OG (cycle 80)
+- **Angle:** Pythagorean luck + differential boards travel better than W-L tables in dynasty league chats.
+- **Screenshot hook:** Octo power board with demo teams + luck tags on `/og/power-rankings`.
 
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
@@ -22,11 +26,6 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Feature ID:** F-XX
 - **Council cycle:**
 ```
-
-## 2026-05-31 — Cycle 76 (Bureau roster depth tab)
-
-1. **Hidden tabs were a trust leak** — users who found Bureau via Self-Scout could not see depth chart as its own lane; unhide + bespoke renderer restores moat narrative.
-2. **Full player lists beat grade-only cards** for trade DM screenshots — roster-depth complements Self-Scout summary.
 
 ## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
 
