@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: lab-og-live-rows
 last_keep_cycle: 92
-last_commit: da33eafd
+last_commit: eb542d51
 league_l5_unhide_bureau_tabs_epic: complete
 league_l5_strength_of_schedule_tab: complete
