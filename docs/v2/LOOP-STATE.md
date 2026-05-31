@@ -1,9 +1,9 @@
-cycle: 82
+cycle: 86
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
 next_slice: bureau-trade-network-copy-link
-last_keep_cycle: 82
+last_keep_cycle: 86
 last_commit: 69e48863
 explore_l5_watermarked_export: complete
 lab_l5_og_export_link_epic: complete
@@ -16,6 +16,7 @@ lab_l5_og_live_row_epic: complete
 lab_l5_og_snapshot_efficiency_aging: complete
 lab_l5_og_rankings_snapshot: complete
 lab_l5_og_live_data_label: complete
+lab_l5_og_snapshot_weekly_breakouts: complete
 league_l5_power_rankings_tab: complete
 league_l5_power_rankings_og: complete
 league_l5_bureau_h2h_copy_link: complete

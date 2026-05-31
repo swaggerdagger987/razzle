@@ -81,7 +81,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
         position: p.position,
         team: p.team,
         stat: p.ppg ?? 0,
-        statLabel: "FPTS",
+        statLabel: "PPG",
       }));
   }, [players]);
 
@@ -196,6 +196,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="weekly"
             downloadName="razzle-weekly-heatmap.png"
+            position={position}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
