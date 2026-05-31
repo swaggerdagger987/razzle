@@ -34,7 +34,8 @@ def test_weekly_empty_board_exports_sample_card():
         / "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx"
     ).read_text(encoding="utf-8")
     assert "WEEKLY_SAMPLE_OG_ROWS" in renderer
-    assert 'label="export sample card"' in renderer
+    assert "LabPanelShareBar" in renderer
+    assert 'copyLabel="copy weekly link"' in renderer
     assert "snapshotRows={WEEKLY_SAMPLE_OG_ROWS}" in renderer
     assert "!players.length" in renderer
 
