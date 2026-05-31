@@ -20,6 +20,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
+2026-05-31 | lab-og-breakouts-score-ranked | 795bf08b | keep | BreakoutsRenderer RBS sort + OG route rank; curl breakouts WR 61718B
 2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
 2026-05-31 | Bureau Manager Profiles copy link | 04c19959 | keep | copyProfilesLink row; curl manager-profiles 77194B
@@ -45,3 +46,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
 2026-05-31 | league-strength-of-schedule-tab | da33eafd | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
+2026-05-31 | lab-og-breakouts-score-ranked | 795bf08b | keep | BreakoutsRenderer ogSnapshotRows sort + OG route rank; curl 61718B

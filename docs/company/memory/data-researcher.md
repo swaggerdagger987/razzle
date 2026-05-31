@@ -16,6 +16,7 @@ anecdotes (>=3 independent threads = signal).
 
 ## Entries
 
+2026-05-31 | breakouts OG ranked | 795bf08b | keep | RBS score ordering aligns Hawkeye breakout card narrative
 2026-05-31 | Dashboard comps OG snapshot | c9151786 | keep | roster builder comps export matches in-panel match %
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"
 2026-05-31 | light scan | loading-only OG reads as broken tool in screenshot culture | demo rows + sample preview label | keep | cycle 58 REDDIT-INTEL entry
@@ -38,3 +39,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
+2026-05-31 | Breakouts OG leaders | 795bf08b | keep | Hawkeye breakout board screenshots need score-sorted top-6 not table order
