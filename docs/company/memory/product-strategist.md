@@ -29,3 +29,4 @@ new evidence.
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | bureau-h2h-og-snapshot-decode | bbbd1b3c | keep | League L5 H2H export parity epic closed; NEXT Lab OG live rows
+2026-05-31 | Lab Hawkeye OG snapshot epic atom 1 | lab-og-weekly-prospects-snapshot | SHIP | keep | NEXT.md lead; weekly+prospects snapshotRows; curl 48814B/58084B

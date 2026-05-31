@@ -14,6 +14,8 @@ A good entry changes future behavior. A bad entry is a diary.
 
 2026-05-31 | good morning publish | H2H OG snapshot decode merged atom 3/3 | bbbd1b3c | SHIP | KEEP two-commit metadata before push | — | — | standup 2026-05-31 cycle 80
 
+2026-05-31 | factory cycle 1 Lab epic | Hawkeye weekly+prospects snapshotRows | da33eafd | SHIP | KEEP NEXT.md lead after League H2H epic complete | — | — | standup cycle 81
+
 ---
 
 ## Entries
