@@ -2,11 +2,11 @@
   "date": "2026-05-31",
   "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
   "epic": "Lab L5 — Launch-10 OG panel-native LIVE labels",
-  "slice_title": "gamelog/efficiency OG LIVE sticker + blurb parity",
-  "atom_id": "lab-og-live-sticker-gamelog-efficiency",
+  "slice_title": "aging/buysell OG LIVE sticker + blurb parity",
+  "atom_id": "lab-og-live-sticker-aging-buysell",
   "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/gamelog and /og/efficiency PNG ≥40KB with panel-native LIVE sticker",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/aging and /og/buysell PNG ≥40KB with panel-native LIVE sticker",
   "trust_pillars": ["T1", "T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
@@ -14,13 +14,13 @@
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q",
-    "curl -s -o /tmp/gamelog-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&force_demo=1'",
-    "curl -s -o /tmp/efficiency-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1&force_demo=1'"
+    "curl -s -o /tmp/aging-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/aging?download=1&force_demo=1'",
+    "curl -s -o /tmp/buysell-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1&force_demo=1'"
   ],
   "out_of_scope": [
-    "aging/buysell panels (next atom)",
     "NORTH_STAR/DESIGN/DECISIONS edits",
-    "new npm deps"
+    "new npm deps",
+    "new OG panels"
   ],
   "builder_mode": "composer-surgical",
   "votes": {
