@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Bureau L5 share rows must let managers copy a league-scoped URL and export an OG card — same travel pattern as Explore and Self-Scout (DEPTH League L5).",
   "epic_title": "League L5 — Bureau share row export travels",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -26,11 +26,11 @@
     {
       "id": "bureau-pressure-map-copy-link",
       "title": "Pressure Map copy deadline chart link beside export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "2c3cd3a2"
     }
   ],
-  "next_atom_id": "bureau-pressure-map-copy-link",
+  "next_atom_id": null,
   "created_at": "2026-05-31T04:49:44Z",
-  "updated_at": "2026-05-31T04:50:00Z"
+  "updated_at": "2026-05-31T04:55:00Z"
 }
