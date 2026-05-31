@@ -4,7 +4,7 @@ focus_pillar: League
 focus_layer: L5
 next_slice: bureau-og-export-or-explore-l5
 last_keep_cycle: 92
-last_commit: PLACEHOLDER
+last_commit: 7b7cdc53
 league_l5_bureau_build_profiles_unhide: complete
 league_l5_bureau_waiver_tendencies_unhide: complete
 league_l5_bureau_strength_of_schedule_unhide: complete

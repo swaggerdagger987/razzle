@@ -19,14 +19,14 @@
     {
       "id": "league-strength-of-schedule-tab",
       "title": "Schedule tab unhidden with Octo renderer",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7b7cdc53"
     }
   ],
-  "next_atom_id": "league-strength-of-schedule-tab",
-  "epic_status": "active",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T06:45:00Z",
-  "last_cycle_commit": null,
-  "next_epic_hint": "Bureau OG exports or PARITY Explore L5"
+  "updated_at": "2026-05-31T06:50:00Z",
+  "last_cycle_commit": "7b7cdc53",
+  "next_epic_hint": "Bureau OG exports or Explore L5 per PARITY"
 }
