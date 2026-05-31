@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | Lab OG position on buy/sell (epic atom 3/3) |
-| Last commit | da33eafd (pending merge) |
+| Last commit | e20743e9 (pending merge) |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
