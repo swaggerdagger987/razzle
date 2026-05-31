@@ -9,7 +9,7 @@
       "id": "bureau-h2h-snapshot",
       "title": "Encode in-product H2H rows into OG snapshot param",
       "status": "done",
-      "merge_commit": "f482f8b2"
+      "merge_commit": "85d20cee"
     },
     {
       "id": "bureau-h2h-opponent-subtitle",

@@ -67,4 +67,4 @@ cycle	commit	score	status	pillar	slice	description
 75	ac046c85	depth+voice+simplicity	keep	Lab	L5 OG API origin rewrite	trust=T5,T6; request-origin /api fetch; curl rankings 61061B dashboard 60034B
 76	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
 77	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
-78	f482f8b2	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot export	trust=T5,T6; encodeH2hSnapshot; curl demo 59305B snap 56120B; epic 1/3
+78	85d20cee	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot export	trust=T5,T6; encodeH2hSnapshot; curl demo 59305B snap 56120B; epic 1/3
