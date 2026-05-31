@@ -1,30 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
-  "epic": "League L5 — Bureau OG terracotta watermark parity (atom 3/4)",
-  "slice_title": "Pressure Map OG terracotta watermark band",
-  "atom_id": "league-og-pressure-map-watermark",
-  "parity_ref": "League L5 — watermarked export",
+  "big_problem": "Bureau OG export watermarks dead-end without rivalry context — screenshots cannot click back into the right league matchup.",
+  "epic": "League L5 — Bureau OG hallway deep links (atom 2/3)",
+  "slice_title": "Trade Finder OG watermark includes user query",
+  "atom_id": "league-trade-finder-og-watermark-user",
+  "parity_ref": "Explore L5 — Bureau H2H export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/pressure-map/route.tsx",
-    "apps/api/tests/test_pressure_map_og_watermark.py"
+    "apps/web/app/og/trade-finder/route.tsx",
+    "apps/api/tests/test_league_trade_finder_og_toleague_watermark.py"
   ],
   "max_files": 2,
-  "max_lines": 130,
+  "max_lines": 40,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_pressure_map_og_watermark.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_league_trade_finder_og_toleague_watermark.py apps/api/tests/test_trade_finder_og_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["Other Bureau OG routes"],
+  "out_of_scope": ["Monte Carlo", "H2H route"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "status": "planned"
+  }
 }
