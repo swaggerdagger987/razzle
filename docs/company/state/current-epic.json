@@ -8,8 +8,8 @@
     {
       "id": "bureau-power-rankings-og",
       "title": "Power Rankings OG route + copy/export share row",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "131ee281"
     },
     {
       "id": "bureau-trade-finder-share",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-power-rankings-og",
+  "next_atom_id": "bureau-trade-finder-share",
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T12:00:00Z"
 }

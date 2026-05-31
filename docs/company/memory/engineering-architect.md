@@ -29,4 +29,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | BureauPressureMap copy | 2c3cd3a2 | keep | inline copyChartLink; no new component file
-2026-05-31 | og/power-rankings | da33eafd | keep | mirrors pressure-map fetch + demo rows; league-only params
+2026-05-31 | og/power-rankings | 131ee281 | keep | mirrors pressure-map fetch + demo rows; league-only params
