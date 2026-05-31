@@ -1,4 +1,5 @@
-2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
+2026-05-31 | lab-og-dashboard-live-gate-c | cf76b86ee | PASS | pytest 4; curl dashboard 66547B PNG Gate C.
+2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | PASS | pytest 7 executed; pytest-only atom.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 

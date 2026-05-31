@@ -1,4 +1,5 @@
-2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Explore margin epic 2/4; OG top-3 matches screener staff column.
+2026-05-31 | lab-og-dashboard-live-gate-c | cf76b86ee | SHIP | Gate C curl locks dashboard OG; live-rows epic 3/3 complete.
+2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | SHIP | Launch-10 trust registry prevents sticker drift; epic atom 2/3.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Snapshot pid wrapper; hallway epic complete (T6).
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.
