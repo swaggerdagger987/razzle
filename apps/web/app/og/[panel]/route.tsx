@@ -259,6 +259,13 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.data as Record<string, unknown>[];
   } else if (Array.isArray(obj.rankings)) {
     candidates = obj.rankings as Record<string, unknown>[];
+  } else if (obj.positions && typeof obj.positions === "object" && !Array.isArray(obj.positions)) {
+    const posMap = obj.positions as Record<string, { players?: Record<string, unknown>[] }>;
+    const posKeys = Object.keys(posMap);
+    const block = posKeys.length === 1 ? posMap[posKeys[0]!] : posMap.RB ?? posMap.WR ?? posMap[posKeys[0]!];
+    if (block && Array.isArray(block.players)) {
+      candidates = block.players;
+    }
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
   } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
@@ -421,6 +428,9 @@ export async function GET(
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
   if (apiPath && !snapshotHasRows) {
+    if (slug === "aging" && !positionFilter) {
+      apiParams.position = "RB";
+    }
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
     if (liveRows.length === 0) {
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
