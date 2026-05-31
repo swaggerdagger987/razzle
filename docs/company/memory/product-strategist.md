@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | explore-og-universe-query | da33eafd | SHIP | Explore L5 cold API → screenshotable demo rows; epic 1/4.
+2026-05-31 | explore-og-universe-query | 478eee02 | SHIP | Explore L5 cold API → screenshotable demo rows; epic 1/4.
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
 2026-05-31 | lab-og-launch10-snapshot-default | e2a3ce8a | SHIP | closes gamelog OG epic; live rows when no snapshot.
 
