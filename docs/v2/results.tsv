@@ -111,3 +111,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 152	3705fdce8	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG demo blurbs	trust=T5,T6; SAMPLE 5 panels; curl gamelog demo 58533B; pytest 4; demo trust epic complete
 153	0fc4932b7	depth+voice+simplicity	keep	Explore	L5 Explore OG lead-row margin note	trust=T5,T6; pytest 4; curl explore 65482B; margin epic 1/4
 156	338709883	depth+voice+simplicity	keep	Lab	L5 gamelog OG watermark uses player display name	trust=T5,T6; pytest 7; curl gamelog 62741B; display-name epic complete
+157	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 FROM PANEL pytest all Launch-10 slugs	trust=T5,T6; pytest 6; gate-c epic 1/3
