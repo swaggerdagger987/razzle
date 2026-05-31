@@ -175,4 +175,4 @@ def test_trade_finder_og_route_reads_snapshot_codec():
     text = path.read_text(encoding="utf-8")
     assert "decodeBureauTradeFinderOgSnapshot" in text
     assert 'url.searchParams.get("snapshot")' in text
-    assert "LIVE · exported trade rows" in text
+    assert "EXPORTED · panel trade rows" in text
