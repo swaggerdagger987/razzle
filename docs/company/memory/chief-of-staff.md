@@ -10,23 +10,17 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
-<<<<<<< HEAD
 2026-05-31 | workday cycle 2 | Lab OG epic atom 2/4 prospects snapshot | 66168c6e | SHIP | KEEP one atom per PR | — | breakouts next | standup cycle 89
 
 2026-05-31 | good morning factory | Lab L5 OG snapshot epic atom 1/4 weekly | 4a6ef16b | SHIP | KEEP one panel per atom | — | prospects next | standup cycle 88
 
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | 4a6ef16b | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 
-=======
->>>>>>> origin/razzle-v2-redesign
 ---
 
 ## Entries
 
-<<<<<<< HEAD
 2026-05-31 | Factory cycle 2 Pressure Map copy link | 4a6ef16b | keep | workday open; behavioral share epic 2/4 SHIP
-=======
->>>>>>> origin/razzle-v2-redesign
 2026-05-30 | NEXT.md eliminates slice selection ambiguity for morning standups | SHIP 3/3 on Lab L5 OG live data rows | keep | NEXT.md lead candidate matched PARITY/DEPTH/ACCEPTANCE; single-file touch kept scope tight
 2026-05-31 | Factory cycle 1 — epic.json + FACTORY-DOD Gate C for Lab OG | SHIP 3/3 demo rows atom | keep | Workday opened; curl PNG ~59KB proves Gate C; standup-pr-autopen on branch from PR #18
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
@@ -39,17 +33,9 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Bureau H2H epic atom 3 hallway | 389cab8e | keep | workday cycle 1; Atlas room on export footer; curl 71895B; epic complete
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Factory open cycle 1 Lab live OG rows | 2cb898b6 | keep | workday open; epic atom 1/3 SHIP; PR standup 2026-05-31
-<<<<<<< HEAD
 2026-05-31 | Factory cycle 1 Bureau H2H export | 044ee1e8 | keep | workday open; League L5 epic atom 1/3; copy link + export bar
 2026-05-31 | Factory cycle 1 Bureau MC share | 3392bc29 | keep | deduped lab-og-live-label; Bureau share epic 3/3
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | behavioral share epic; curl 59807B
 2026-05-31 | Roster Depth tab | 2d11a65f | keep | Factory cycle 1; Dolphin bureau tab unhidden
 2026-05-31 | Build Profiles tab | 309f8a8b | keep | Factory cycle 1; Atlas bureau tab SHIP merged
 2026-05-31 | Trade Network copy link | 2c74e05c | keep | Factory cycle 1; Bureau share epic 6/6 complete
-=======
-2026-05-31 | Factory cycle 1 Bureau H2H snapshot | 3d498394 | keep | League L5 epic atom 1/3; workday open good morning
-2026-05-31 | Factory cycle 1 Bureau H2H export | 044ee1e8 | keep | workday open; League L5 epic atom 1/3; copy link + export bar
-2026-05-31 | Factory cycle 1 Bureau MC share | 3392bc29 | keep | deduped lab-og-live-label; Bureau share epic 3/3
-2026-05-31 | Factory cycle 1 Bureau H2H snapshot | 3d498394 | keep | League L5 epic atom 1/3
-2026-05-31 | Factory cycle 1 Bureau H2H live API | 59a54b72 | keep | workday open; epic atom 2/3
->>>>>>> origin/razzle-v2-redesign

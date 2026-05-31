@@ -27,17 +27,9 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
-<<<<<<< HEAD
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Power Rankings OG | 46aeb445 | keep | diff/luck cards travel to league group chats
 2026-05-31 | Roster Depth tab | 2d11a65f | keep | position grade screenshots for trade threads
 2026-05-31 | Build Profiles tab | 19445fa1 | keep | archetype labels for dynasty trade-thread screenshots
 2026-05-31 | Trade Network copy link | 2c74e05c | keep | partnership graph URLs travel in league group chats
-=======
-2026-05-31 | league H2H export fidelity | 3d498394 | keep | rivalry cards must match Bureau panel for chat shares
-2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
-2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
-2026-05-31 | H2H export Atlas CTA | 389cab8e | keep | opponent-named Room link on shared rivalry PNGs
-2026-05-31 | Bureau H2H live shares | 59a54b72 | keep | param URLs can refresh live rivalry when API up
->>>>>>> origin/razzle-v2-redesign

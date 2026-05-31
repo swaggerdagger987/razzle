@@ -15,11 +15,8 @@ new evidence.
 
 ## Entries
 
-<<<<<<< HEAD
 2026-05-31 | Lab prospects OG snapshot | atom 2/4 | SHIP | keep | college ranks travel on export card — Reddit scout screenshots
 2026-05-31 | Bureau behavioral share atom 2 | pressure-map copy link | SHIP | keep | Explore-parity travel on deadline pressure tab
-=======
->>>>>>> origin/razzle-v2-redesign
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
 2026-05-31 | Lab OG demo rows close cycle 57 CI/preview gap without inventing new scope | lab-og-demo-rows atom | SHIP | keep | Lab L5 epic atom 1/3; labeled sample preview protects trust vs fake-live claims
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
@@ -32,16 +29,9 @@ new evidence.
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live row parity epic atom 1 | 2cb898b6 | SHIP | keep | NEXT.md lead; panels slug + candidates on OG
-<<<<<<< HEAD
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | Power Rankings OG atom 2 | 46aeb445 | SHIP | keep | unhide epic; Octo power board shareable
 2026-05-31 | Roster Depth tab atom 3 | 2d11a65f | SHIP | keep | Dolphin depth grades in Bureau nav
 2026-05-31 | Build Profiles atom 4 | 19445fa1 | SHIP | keep | Atlas archetype board; unhide epic complete
 2026-05-31 | Trade Network copy link atom 6 | 2c74e05c | SHIP | keep | Bureau behavioral share parity epic complete
-=======
-2026-05-31 | Bureau H2H snapshot export atom 1 | 3d498394 | SHIP | keep | PARITY Explore L5 Bureau H2H; T5 T6
-2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
-2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
-2026-05-31 | Bureau H2H live API atom 2 | 59a54b72 | SHIP | keep | live OG when params; snapshot on export
->>>>>>> origin/razzle-v2-redesign

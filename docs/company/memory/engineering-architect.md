@@ -15,11 +15,8 @@ which migrations were painful, which test patterns caught bugs.
 
 ## Entries
 
-<<<<<<< HEAD
 2026-05-31 | ProspectsRenderer snapshot | 1 file ≤45 lines | SHIP | keep | RPS sort + school as team field
 2026-05-31 | BureauPressureMap copy link | 1 file ≤35 lines | SHIP | keep | mirrors ManagerProfiles clipboard row
-=======
->>>>>>> origin/razzle-v2-redesign
 2026-05-30 | Generic extractRows() with 7 response shapes handles all 100 panels without per-panel switch | apps/web/app/og/[panel]/route.tsx | ACCEPTANCE Gate 2 (Lab renderers) | keep | Satori constraints: display:flex everywhere, no grid; agentForPanel() from @razzle/agents avoids metadata duplication; parameterized API paths ({player_id}) correctly skipped
 2026-05-31 | demoRowsForPanel() + isDemo mirrors H2H; blurb must be single JSX text child for Satori | apps/web/app/og/[panel]/route.tsx | FACTORY-DOD Gate C | keep | Two adjacent text children in blurb div caused Satori pipe failure — template string fix
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
@@ -31,18 +28,9 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
-<<<<<<< HEAD
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | power-rankings OG route | 46aeb445 | keep | mirrors pressure-map; diff bars + luck tags
 2026-05-31 | BureauRosterDepth | 2d11a65f | keep | Self-Scout depth grade pattern; 3-file contract
 2026-05-31 | BureauBuildProfiles | 19445fa1 | keep | build-profiles API rows; Atlas hallway; 3-file contract
 2026-05-31 | BureauTradeNetworkShareBar | 2c74e05c | keep | mirrors PowerRankingsShareBar; 2-file contract ≤80 lines
-=======
-2026-05-31 | BureauOgExportLink snapshot codec | 3d498394 | keep | mirrors Lab encodeOgSnapshot; Satori single-child subtitle
-2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
-2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | encodeH2hSnapshot on ShareBar | 3d498394 | keep | BureauOgExportLink codec; OG from your panel label
-2026-05-31 | H2H OG Atlas hallway | 389cab8e | keep | toRoom on edge OG footer; ShareBar link; no new deps
-2026-05-31 | resolveApiOrigin H2H OG | 59a54b72 | keep | snapshot → live → demo; mirrors Lab panel OG
->>>>>>> origin/razzle-v2-redesign
