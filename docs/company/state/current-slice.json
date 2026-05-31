@@ -15,7 +15,7 @@
   "max_files": 2,
   "max_lines": 40,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py::test_dashboard_live_extract_prefers_formula_score -q",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py::test_dashboard_live_extract_prefers_formula_score -q --noconftest",
     "npm run build --workspace=apps/web",
     "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1'"
   ],
