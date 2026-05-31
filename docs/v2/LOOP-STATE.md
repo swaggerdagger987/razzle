@@ -4,7 +4,7 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-og-monte-carlo-watermark
 last_keep_cycle: 161
-last_commit: 70715221a
+last_commit: 12ba50588
 bureau_og_watermark_epic: active
 lab_l5_position_default_epic: complete
 lab_l5_pro_profile_og_epic: complete
