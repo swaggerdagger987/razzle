@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { decodeBureauTradeFinderOgSnapshot } from "@/lib/bureau-trade-finder-og-snapshot";
 
 export const runtime = "edge";
 
@@ -87,14 +88,21 @@ export async function GET(req: Request) {
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot");
+  const fromPanel = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
 
   const bones = AGENT_BY_ID.bones;
-  const live = await fetchTradeFinder(league, user);
-  const isDemo = !live?.matches?.length;
-  const matches = isDemo ? DEMO_MATCHES : live!.matches!.slice(0, 3);
-  const hero = isDemo ? DEMO_MATCHES[0] : (live!.hero_match ?? matches[0]);
-  const needs = isDemo ? DEMO_META.needs : (live!.needs ?? []);
-  const surplus = isDemo ? DEMO_META.surplus : (live!.surplus ?? []);
+  const live = fromPanel ? null : await fetchTradeFinder(league, user);
+  const isDemo = !fromPanel?.matches?.length && !live?.matches?.length;
+  const matches = fromPanel?.matches?.length
+    ? fromPanel.matches.slice(0, 3)
+    : isDemo
+      ? DEMO_MATCHES
+      : live!.matches!.slice(0, 3);
+  const hero = fromPanel?.hero_match ?? (isDemo ? DEMO_MATCHES[0] : (live!.hero_match ?? matches[0]));
+  const needs = fromPanel?.needs ?? (isDemo ? DEMO_META.needs : (live!.needs ?? []));
+  const surplus = fromPanel?.surplus ?? (isDemo ? DEMO_META.surplus : (live!.surplus ?? []));
+  const fromSnapshot = Boolean(fromPanel?.matches?.length);
 
   return new ImageResponse(
     (
@@ -140,7 +148,7 @@ export async function GET(req: Request) {
           Trade Finder
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {`value-matched league trades${isDemo ? " · sample preview" : ""}`}
+          {`value-matched league trades${fromSnapshot ? " · from your panel" : isDemo ? " · sample preview" : ""}`}
           {needs.length ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length ? ` · surplus ${surplus.join(", ")}` : ""}
         </div>
