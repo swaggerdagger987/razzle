@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | explore-og-demo-fallback-rows | da33eafd | keep | DEMO_NFL/COLLEGE + force_demo; curl 64789B.
+2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | keep | DEMO_NFL/COLLEGE + force_demo; curl 64789B.
 
 2026-05-31 | explore-og-universe-query | a7fdf9b3 | keep | season/team in ShareButton + OG fetch; buildExplorePageLink.
 

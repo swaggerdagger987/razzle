@@ -4,6 +4,6 @@ focus_pillar: Explore
 focus_layer: L5
 next_slice: explore-og-formula-sort-label
 last_keep_cycle: 129
-last_commit: da33eafd
+last_commit: 2d0d3bde
 explore_l5_og_query_epic: active
 lab_l4_pro_gate_epic: complete

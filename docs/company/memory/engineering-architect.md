@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | explore-og-demo-fallback-rows | da33eafd | keep | 1 file; force_demo query; SAMPLE sticker.
+2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | keep | 1 file; force_demo query; SAMPLE sticker.
 
 2026-05-31 | explore-og-universe-query | a7fdf9b3 | keep | 3 files; apiSort in share; OG fetch teams/season.
 
