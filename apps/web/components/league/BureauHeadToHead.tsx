@@ -35,7 +35,6 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
   const opponentId = String(data.opponent_user_id ?? searchParams.get("opponent") ?? "");
   const you = data.you as TeamSummary;
   const them = data.them as TeamSummary;
-  const rivalryUserId = searchParams.get("user") ?? you?.user_id ?? "";
   const positionCompare = (data.position_compare as PosCompare[]) ?? [];
   const tradeFit = (data.trade_fit as { you_could_offer: string[]; you_could_target: string[] }) ?? {
     you_could_offer: [],
@@ -44,7 +43,8 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
 
   function pickOpponent(nextId: string) {
     const params = new URLSearchParams(searchParams.toString());
-    if (rivalryUserId) params.set("user", rivalryUserId);
+    const rivalryUser = searchParams.get("user") ?? String(you?.user_id ?? "");
+    if (rivalryUser) params.set("user", rivalryUser);
     if (nextId) params.set("opponent", nextId);
     else params.delete("opponent");
     router.push(`/league/${leagueId}/head-to-head?${params.toString()}` as Route);

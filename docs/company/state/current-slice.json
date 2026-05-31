@@ -1,7 +1,1 @@
-{
-  "date": "2026-05-31",
-  "atom_id": "bureau-h2h-pick-opponent-preserve-user",
-  "slice_title": "Opponent picker preserves user= in URL when rivalry link shared",
-  "status": "shipped",
-  "content_commit": "4fd093f1d"
-}
+{"date":"2026-05-31","atom_id":"bureau-h2h-pick-opponent-preserve-user","status":"shipped","content_commit":"4fd093f1d"}

@@ -86,4 +86,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 131	54443bc8	depth+voice+simplicity	keep	Lab	L5 SAMPLE OG labels rankings tradevalues breakouts	trust=T1,T5,T6; launch10DemoStickerLabel; curl 66806B 66253B 67267B; panel-labels epic 1/3 done
 132	adbf6c7	depth+voice+simplicity	keep	Lab	L5 dashboard/buysell OG LIVE stickers	trust=T1,T5,T6; rank movers buy/sell board; curl 63775B 61908B; panel-labels epic 3/3
 133	d0add0455	depth+voice+simplicity	keep	Lab	L4 ProGate rankings + buysell	trust=T2,T6; shared 402 gate; pytest 13; L4 epic atom 3/3
-136	4fd093f1d	depth+voice+simplicity	keep	League	L5 Bureau H2H opponent picker preserves user URL	trust=T5,T6; rivalryUserId on pickOpponent; pytest 2; H2H epic atom 3/3 complete
+136	839ac5cb	depth+voice+simplicity	keep	Explore	L5 college OG Gate C pytest guard	trust=T5,T6; curl college 67491B; pytest 4; universe epic atom 2/3
+136	4fd093f1d	depth+voice+simplicity	keep	League	L5 Bureau H2H rivalry URL pytest guard	trust=T5,T6; test_bureau_h2h_rivalry_url; dedup picker on base; H2H epic complete
