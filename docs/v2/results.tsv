@@ -1,5 +1,4 @@
 cycle	commit	score	status	pillar	slice	description
-# commit=none on keep rows before 2026-05-23 is INVALID under commit gate — backlog must be committed once
 1	none	depth+voice+simplicity	keep	Explore	L1 screener URL state	nuqs filters in URL; shareable screener links
 2	none	depth+voice+simplicity	keep	Explore	L1 Player Sheet shell	PlayerSheet drawer; click row opens sheet
 3	none	depth+voice+simplicity	keep	Lab	L1 panel registry	@razzle/panels catalog; Lab index grid
@@ -87,3 +86,6 @@ cycle	commit	score	status	pillar	slice	description
 79	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
 80	2cd7c3ad	depth+hallway+voice+simplicity	keep	League	L5 Bureau power rankings OG + export row	trust=T2,T5,T6; /og/power-rankings demo rows; curl 54939B; BureauPowerRankingsShareBar
 80	6c8da85f	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot export	trust=T1,T5,T6; encode you/them/position bars in snapshot param; curl h2h OG 59305B; epic atom 2/3
+82	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
+83	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
+84	04c19959	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic atom 1
