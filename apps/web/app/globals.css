@@ -358,6 +358,35 @@ body {
   color: var(--orange);
 }
 
+.explore-staff-cell {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.explore-injury-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--purple);
+  text-decoration: none;
+  border: 2px solid var(--ink);
+  background: var(--bg-card);
+  padding: 0.1rem 0.35rem;
+  box-shadow: 2px 2px 0 var(--ink);
+  transform: rotate(-2deg);
+}
+
+.explore-injury-chip:hover {
+  color: var(--orange);
+}
+
 .pressure-bar-row {
   display: grid;
   grid-template-columns: minmax(120px, 1fr) 1fr auto auto;

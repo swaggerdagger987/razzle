@@ -1,8 +1,22 @@
-# Evidence — Bureau H2H OG snapshot decode
+# Evidence — Bureau H2H OG snapshot decode (2026-05-31)
 
-**Atom:** `bureau-h2h-og-snapshot-decode`  
-**Commit:** b0808083
+**Slice:** `bureau-h2h-og-snapshot-decode` — OG route prefers exported snapshot over API refetch  
+**Atom:** 3/3 — League L5 Bureau H2H export parity epic
 
-- `decodeBureauH2HOgSnapshot` added to `apps/web/lib/bureau-h2h-og-snapshot.ts`
-- `/og/head-to-head` uses snapshot before live Bureau fetch
-- `npm run build --workspace=apps/web` — PASS
+## Acceptance
+
+| Check | Result |
+|-------|--------|
+| `npm run build --workspace=apps/web` | PASS |
+| `JWT_SECRET=test python3 -m pytest apps/api/tests -q` | 51 passed, 5 skipped |
+| Baseline OG (demo fallback) | `200 59305` bytes PNG |
+| Snapshot OG (exported matchup) | `200 51310` bytes PNG |
+
+## Routes
+
+- `GET /og/head-to-head?download=1` — demo when no league/API
+- `GET /og/head-to-head?download=1&snapshot=<base64url>` — skips API; subtitle `exported matchup`
+
+## Verdict
+
+**PASS** — FACTORY-DOD Gate C satisfied (PNG ≥40KB); T1 honest labels (sample vs exported vs live).

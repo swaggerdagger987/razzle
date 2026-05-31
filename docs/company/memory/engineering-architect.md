@@ -1,5 +1,8 @@
 # Memory — Engineering Architect
 
+2026-05-31 | ExploreInjuryChip contract | 9ad5757b | SHIP | keep | 3 files; chip composes into ExploreMarginNote Staff column
+2026-05-31 | friendlyUpgradeNote helper | 8f0201f7 | SHIP | keep | Tier messages live in panel-upgrade-teaser.ts beside teaser rows
+
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
 
 Format per entry:
@@ -33,6 +36,6 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | panelBlurbSuffix launch-10 | 6e98f4a2 | keep | 1 file; LAUNCH_10_OG_SLUGS mirrors LabSidebar STAFF_PICKS
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
+2026-05-31 | BureauTradeNetworkShareBar | 1616484c | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
-2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
+2026-05-31 | friendlyUpgradeNote | 8f0201f7 | keep | tier messages in panel-upgrade-teaser.ts

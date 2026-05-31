@@ -592,6 +592,13 @@ body.college-mode .universe-toggle.active {
   transform: rotate(-2deg);
 }
 
+.pro-upgrade-tier-note {
+  font-family: var(--font-mono);
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .pro-upgrade-perks {
   list-style: none;
   padding: 0;

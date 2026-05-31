@@ -1,5 +1,8 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 87 | 9ad5757b | SHIP | keep | Workday open; epic atom 3/3 explore injury chip; PR #345
+2026-05-31 | Factory cycle 86 | 8f0201f7 | SHIP | keep | Workday open; atom 2/3 lab-l4-pro-gate-voice merged pending publish
+
 Append-only log of coordination patterns, what worked, what didn't.
 
 Format per entry:
@@ -38,5 +41,5 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | unhide epic atom 2/4; curl 68555B
 2026-05-31 | Factory cycle 1 Trade Network share | 1616484c | keep | workday open; behavioral share epic complete; PR #278
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | unhide epic atom 2/4; curl 59807B
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
-2026-05-31 | Factory open cycle 1 Build Profiles tab | da33eafd | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
+2026-05-31 | Cycle 86 Trade Network copy link | e701e3bb | keep | Bureau behavioral share atom 3
+2026-05-31 | Factory cycle 88 Lab pro-gate voice | 8f0201f7 | keep | workday cycle 1; F-09 invitation copy

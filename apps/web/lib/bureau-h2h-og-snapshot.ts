@@ -13,6 +13,13 @@ export interface BureauH2HOgSnapshot {
   trade_fit?: { you_could_offer: string[]; you_could_target: string[] };
 }
 
+export type H2HData = {
+  you?: { team: string; record: string; ppg: number };
+  them?: { team: string; record: string; ppg: number };
+  position_compare?: BureauH2HPositionBar[];
+  trade_fit?: { you_could_offer?: string[]; you_could_target?: string[] };
+};
+
 type CompactH2H = {
   y: { t: string; r: string; p: number };
   m: { t: string; r: string; p: number };
@@ -60,6 +67,7 @@ export function encodeBureauH2HOgSnapshot(snap: BureauH2HOgSnapshot): string | u
   return undefined;
 }
 
+/** Decode `snapshot` query param from Bureau H2H export — mirrors Lab OG snapshot decode. */
 export function decodeBureauH2HOgSnapshot(param: string): BureauH2HOgSnapshot | null {
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");

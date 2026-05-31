@@ -1,5 +1,8 @@
 # Memory — Builder
 
+2026-05-31 | Explore injury chip | 9ad5757b | SHIP | keep | ExploreInjuryChip + Staff column; injury_status/games_missed → Dolphin Room link
+2026-05-31 | Lab ProUpgradeGate voice | 8f0201f7 | SHIP | keep | friendlyUpgradeNote in panel-upgrade-teaser; badge Pro unlock not PRO uppercase
+
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:
@@ -42,5 +45,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
 2026-05-31 | Bureau power-rankings OG | e62721a6 | keep | /og/power-rankings route + export link; curl 68555B
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
-2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
+2026-05-31 | Cycle 86 Trade Network copy link | e701e3bb | keep | Bureau behavioral share atom 3
