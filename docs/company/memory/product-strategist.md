@@ -28,3 +28,4 @@ new evidence.
 2026-05-31 | Lab OG live row parity epic atom 1 | 2cb898b6 | SHIP | keep | NEXT.md lead; panels slug + candidates on OG
 2026-05-31 | Bureau Monte Carlo share row | 433d8002 | SHIP | keep | League L5 atom 3/3; group-chat parity before H2H
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
+2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row

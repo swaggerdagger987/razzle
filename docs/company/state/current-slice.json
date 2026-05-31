@@ -2,13 +2,13 @@
   "date": "2026-05-31",
   "big_problem": "Bureau rivalry screens must travel in group chats like Explore — copy link plus export on the same row.",
   "epic": "League L5 — Bureau share row parity",
-  "slice_title": "Monte Carlo copy link beside export card",
+  "slice_title": "Monte Carlo copy link beside export card (dedup: on base as ShareBar)",
   "parity_ref": "Explore L5 — Bureau share row parity",
   "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C — /og/monte-carlo PNG ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauMonteCarlo.tsx"
+    "apps/web/components/league/BureauMonteCarloShareBar.tsx"
   ],
   "max_files": 1,
   "max_lines": 35,
@@ -18,8 +18,7 @@
     "curl -s -o /tmp/og-monte-carlo.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/monte-carlo?download=1'"
   ],
   "out_of_scope": [
-    "Head-to-Head tab",
-    "NORTH_STAR / DESIGN edits"
+    "Duplicate inline copy in BureauMonteCarlo.tsx — base uses ShareBar"
   ],
   "builder_mode": "composer-surgical"
 }
