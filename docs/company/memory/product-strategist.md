@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-sidebar-search-agent-hint | da33eafd | Lab L2 search must show agent name beside filtered panels | SHIP | epic atom 1/3.
+2026-05-31 | lab-sidebar-search-agent-hint | a61a45b9 | Lab L2 search must show agent name beside filtered panels | SHIP | epic atom 1/3.
 
 2026-05-31 | lab-og-gamelog-player-default | Lab export URLs must carry player_id for Reddit copy-paste | SHIP | live-fetch epic 3/3.
 
