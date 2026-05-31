@@ -30,7 +30,7 @@ export function BureauTradeNetworkShareBar({ leagueId }: Props) {
   }, [networkPath]);
 
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
         {copied ? "copied!" : "copy network link"}
       </button>
