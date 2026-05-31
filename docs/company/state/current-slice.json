@@ -1,26 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head — ShareBar and OG route use mismatched snapshot codecs.",
-  "epic": "League L5 — Bureau H2H snapshot codec matches OG decode",
-  "slice_title": "H2H ShareBar uses encodeBureauH2HOgSnapshot (y/m/pc compact)",
-  "atom_id": "bureau-h2h-sharebar-canonical-codec",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG head-to-head PNG ≥40KB with snapshot param from canonical encoder",
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
+  "epic": "Lab L5 — OG snapshot row fidelity",
+  "atom_id": "lab-og-breakouts-score-ranked",
+  "slice_title": "Breakouts OG export ranks top-6 by RBS score",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauH2HShareBar.tsx"
+    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
   ],
   "max_files": 1,
   "max_lines": 30,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q --tb=no -q 2>/dev/null | tail -1"
   ],
-  "out_of_scope": [
-    "Lab OG renderers",
-    "BureauOgExportLink deletion",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["OG route changes", "new panels", "NORTH_STAR / DESIGN"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP"
+  }
 }

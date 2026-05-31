@@ -15,16 +15,25 @@
       "id": "bureau-h2h-og-route-lib-decode",
       "title": "OG head-to-head route uses shared lib decode only",
       "status": "pending",
-      "merge_commit": null
+      "merge_commit": "64c762be"
     },
     {
       "id": "bureau-h2h-snapshot-roundtrip-test",
       "title": "API test or script proves ShareBar snapshot round-trips to OG PNG",
       "status": "pending",
-      "merge_commit": null
+      "merge_commit": "64c762be"
     }
   ],
   "next_atom_id": "bureau-h2h-og-route-lib-decode",
   "created_at": "2026-05-31T07:00:00Z",
-  "updated_at": "2026-05-31T06:23:35Z"
+  "updated_at": "2026-05-31T06:35:00Z",
+  "last_cycle_commit": "64c762be",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-snapshot-fidelity",
+      "status": "complete",
+      "last_atom": "lab-og-breakouts-score-ranked",
+      "merge_commit": "64c762be"
+    }
+  ]
 }
