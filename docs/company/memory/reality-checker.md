@@ -34,4 +34,5 @@ explicit checks in the verification routine.
 2026-05-31 | Bureau H2H OG Gate C | 044ee1e8 | PASS | curl h2h 59305B PNG | keep | docs/v2/evidence/2026-05-31-bureau-h2h-share-bar.md
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
 2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
-2026-05-31 | weekly OG snapshot Gate C | da33eafd | PASS | curl snapshot 47384B live 53320B | keep | evidence/2026-05-31-lab-og-weekly-snapshot-rows.md
+2026-05-31 | weekly OG snapshot Gate C | 2f2604c5 | PASS | curl snapshot 47384B live 53320B | keep | evidence/2026-05-31-lab-og-weekly-snapshot-rows.md
+2026-05-31 | prospects OG snapshot Gate C | da33eafd | PASS | curl snapshot 57867B live 58084B | keep | evidence/2026-05-31-lab-og-prospects-snapshot-rows.md

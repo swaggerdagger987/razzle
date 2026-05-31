@@ -32,4 +32,5 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | panelBlurbSuffix launch-10 | 6e98f4a2 | keep | 1 file; LAUNCH_10_OG_SLUGS mirrors LabSidebar STAFF_PICKS
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | WeeklyHeatmap ogSnapshotRows | da33eafd | keep | 1 file ≤25 lines; encodeOgSnapshot via LabOgExportLink
+2026-05-31 | WeeklyHeatmap ogSnapshotRows | 2f2604c5 | keep | 1 file ≤25 lines; encodeOgSnapshot via LabOgExportLink
+2026-05-31 | ProspectsRenderer ogSnapshotRows | da33eafd | keep | 1 file; school as team; RPS sort top-6

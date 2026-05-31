@@ -6,8 +6,8 @@ import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { useMemo, useState } from "react";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -51,6 +51,19 @@ export function ProspectsRenderer({ panel }: Props) {
 
   const prospects = q.data?.prospects ?? [];
   const top = prospects[0] ?? null;
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    return [...prospects]
+      .sort((a, b) => (b.rps ?? 0) - (a.rps ?? 0))
+      .slice(0, 6)
+      .map((p) => ({
+        name: p.player_name,
+        position: p.position,
+        team: p.school,
+        stat: p.rps ?? 0,
+        statLabel: "RPS",
+      }));
+  }, [prospects]);
 
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
@@ -145,7 +158,12 @@ export function ProspectsRenderer({ panel }: Props) {
           <Link href="/explore?universe=college" className="text-sm text-ink-medium underline">
             college screener →
           </Link>
-          <LabOgExportLink slug="prospects" downloadName="razzle-prospects.png" />
+          <LabOgExportLink
+            slug="prospects"
+            downloadName="razzle-prospects.png"
+            position={position}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

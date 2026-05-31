@@ -14,7 +14,7 @@
     {
       "id": "lab-og-prospects-snapshot-rows",
       "title": "Prospects export passes top-6 RPS snapshot rows",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {

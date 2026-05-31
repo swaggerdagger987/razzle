@@ -32,4 +32,5 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG launch10 label | 6e98f4a2 | keep | live cards without sample tag when API rows present
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
-2026-05-31 | Lab OG row fidelity | da33eafd | keep | snapshot param bridges panel table to share card without terminal.db
+2026-05-31 | Lab OG row fidelity | 2f2604c5 | keep | snapshot param bridges panel table to share card without terminal.db
+2026-05-31 | Prospects OG snapshot | da33eafd | keep | college big-board RPS rows encode to OG without API round-trip
