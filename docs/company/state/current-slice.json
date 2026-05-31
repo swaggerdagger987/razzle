@@ -1,23 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau H2H export snapshot must decode on OG route (encode uses m-key, inline decode used t-key).",
-  "epic": "League L5 — Bureau H2H export parity",
-  "atom_id": "bureau-h2h-og-snapshot-decode",
-  "slice_title": "H2H OG wire shared snapshot decode",
-  "parity_ref": "League L5 — Bureau H2H export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T1", "T5", "T6"],
+  "atom_id": "lab-og-breakouts-score-ranked",
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
+  "epic": "Lab L5 — OG snapshot row fidelity",
+  "slice_title": "BreakoutsRenderer sorts top-6 OG snapshot rows by RBS/formula score",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-h2h-og-snapshot.ts",
-    "apps/web/app/og/head-to-head/route.tsx"
+    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
   ],
-  "max_files": 2,
-  "max_lines": 100,
+  "max_files": 1,
+  "max_lines": 25,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/breakouts?download=1'"
   ],
-  "out_of_scope": ["Bureau UI", "NORTH_STAR / DESIGN"],
+  "out_of_scope": [
+    "OG route changes",
+    "Formula engine",
+    "NORTH_STAR / DESIGN edits"
+  ],
   "builder_mode": "composer-surgical"
 }
