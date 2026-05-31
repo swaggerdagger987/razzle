@@ -30,6 +30,10 @@ def test_default_og_player_tolab_rules():
     assert "TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS" in source
     assert '"gamelog"' in source
     assert '"dynasty-comps"' in source
+    assert '"strengths"' in source
+    idx = source.index("TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS")
+    block = source[idx : idx + 200]
+    assert '"strengths"' in block
     assert "includeDefaultPlayer" in source
     assert "watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
 
