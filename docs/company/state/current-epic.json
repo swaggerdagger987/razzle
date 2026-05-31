@@ -14,13 +14,13 @@
     {
       "id": "explore-og-margin-note-rows",
       "title": "Margin notes on top-3 OG screener rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "37a107eb6"
     },
     {
       "id": "explore-og-margin-note-sticker",
       "title": "LIVE staff sticker when OG rows carry margin notes",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -37,6 +37,10 @@
     {
       "epic_title": "Lab L5 — OG hallway deep links",
       "completed_at": "2026-05-31T11:25:00Z"
+    },
+    {
+      "epic_title": "Lab L5 — OG hallway position defaults",
+      "completed_at": "2026-05-31T11:32:00Z"
     }
   ]
 }
