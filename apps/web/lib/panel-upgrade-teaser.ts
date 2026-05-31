@@ -1,3 +1,5 @@
+import { PANELS } from "@razzle/panels";
+
 /** Static blur-preview rows + staff voice for Pro upgrade gates (Lab L4). */
 
 /** Launch-10 Staff Picks — mirrors `LabSidebar` STAFF_PICKS + PARITY Launch 10 table. */
@@ -145,9 +147,12 @@ export function upgradePitchForPanel(slug: string, agentName: string): string {
   return `${agentName}: this panel is Pro — the screener stays free, the intel doesn't.`;
 }
 
-/** Pro checkout perks — names match Launch-10 Staff Picks + visible Bureau tabs (Lab L4). */
-export const PRO_UPGRADE_PERKS = [
-  "10 launch Lab panels — weekly, big board, dynasty ranks, trade values, breakouts, game log, efficiency, aging, buy/sell, dashboard",
-  "12 Bureau tabs — self-scout, roster depth, H2H, pressure map, trade finder, Monte Carlo, and more",
-  "Situation Room — six pixel staff, your league in context",
-] as const;
+/** Launch-10 panel titles in PARITY table order — for Pro gate perks copy. */
+export function launch10PerkLabels(): string[] {
+  const bySlug = Object.fromEntries(PANELS.map((p) => [p.slug, p.title]));
+  return LAUNCH_10_STAFF_PICK_SLUGS.map((slug) => bySlug[slug] ?? slug);
+}
+
+export function formatPerkNameList(labels: readonly string[]): string {
+  return labels.join(", ");
+}
