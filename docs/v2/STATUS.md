@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 129 — Lab L4 ProGateFromPanelError breakouts)
+**Last updated:** 2026-05-31 (factory cycle 128 — Explore OG universe + query stickers)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -17,10 +17,10 @@ From `LOOP-STATE.md`:
 |-------|-------|
 | Cycle | 129 |
 | Last board | 54 |
-| Focus pillar | Lab |
-| Focus layer | L4 |
-| Next slice | lab-l4-pro-gate-error-tradevalues |
-| Last commit | `5721ee33` |
+| Focus pillar | Explore |
+| Focus layer | L5 |
+| Next slice | explore-og-college-demo-rows |
+| Last commit | `696373e4` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

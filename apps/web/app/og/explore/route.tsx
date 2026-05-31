@@ -89,6 +89,28 @@ function effectiveSortKey(universe: string, sort: string): string {
   return sort;
 }
 
+const EXPLORE_OG_DEMO_NFL: OgPlayer[] = [
+  { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 312.4 },
+  { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 298.1 },
+  { full_name: "Brock Bowers", position: "TE", team: "LV", stat: 241.6 },
+  { full_name: "Jayden Daniels", position: "QB", team: "WAS", stat: 228.9 },
+  { full_name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 215.2 },
+  { full_name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 201.8 },
+];
+
+const EXPLORE_OG_DEMO_COLLEGE: OgPlayer[] = [
+  { full_name: "Travis Hunter", position: "WR", team: "COLO", stat: 1421 },
+  { full_name: "Cam Ward", position: "QB", team: "MIA", stat: 4312 },
+  { full_name: "Ashton Jeanty", position: "RB", team: "BOISE", stat: 2587 },
+  { full_name: "Tyler Warren", position: "TE", team: "PSU", stat: 1198 },
+  { full_name: "Tre Harris", position: "WR", team: "OLE MISS", stat: 1104 },
+  { full_name: "Emeka Egbuka", position: "WR", team: "OSU", stat: 1042 },
+];
+
+function universeOgStickerLabel(universe: string): string {
+  return universe === "college" ? "COLLEGE · NCAA screener" : "NFL · dynasty screener";
+}
+
 function buildSubtitle(universe: string, sort: string, pos: string, q: string): string {
   const sortKey = effectiveSortKey(universe, sort);
   const parts: string[] = [];
@@ -129,7 +151,11 @@ export async function GET(req: Request) {
   if (teams.length) bandParams.set("team", teams.join(","));
   const exploreLink = `razzle.lol/explore?${bandParams.toString()}`;
 
-  const players = await fetchTopPlayers({ universe, sort, dir, q, pos, season, teams });
+  let players = await fetchTopPlayers({ universe, sort, dir, q, pos, season, teams });
+  const usingDemoRows = players.length === 0;
+  if (usingDemoRows) {
+    players = universe === "college" ? EXPLORE_OG_DEMO_COLLEGE : EXPLORE_OG_DEMO_NFL;
+  }
 
   return new ImageResponse(
     (
@@ -154,7 +180,48 @@ export async function GET(req: Request) {
         </div>
 
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, marginBottom: 8 }}>{title}</div>
-        <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>{subtitle}</div>
+        <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 12 }}>{subtitle}</div>
+
+        <div
+          style={{
+            display: "flex",
+            fontFamily: "Caveat",
+            fontSize: 30,
+            color: "#f7efe5",
+            background: universe === "college" ? "#5b7fff" : "#2ec4b6",
+            padding: "6px 16px",
+            alignSelf: "flex-start",
+            border: "3px solid #2d1f14",
+            borderRadius: 10,
+            boxShadow: "4px 4px 0 #2d1f14",
+            transform: "rotate(-1.5deg)",
+            marginBottom: 10,
+            fontWeight: 700,
+          }}
+        >
+          {`${universeOgStickerLabel(universe)}${usingDemoRows ? " · sample rows" : ""}`}
+        </div>
+
+        {q.trim() ? (
+          <div
+            style={{
+              display: "flex",
+              fontFamily: "Caveat",
+              fontSize: 28,
+              color: "#d97757",
+              padding: "4px 14px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              background: "#f7efe5",
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1deg)",
+              marginBottom: 12,
+            }}
+          >
+            {`"${q.trim()}"`}
+          </div>
+        ) : null}
 
         {players.length > 0 ? (
           <div

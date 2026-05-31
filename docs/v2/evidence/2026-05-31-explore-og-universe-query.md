@@ -1,30 +1,32 @@
 # Evidence — explore-og-universe-query
 
 **Date:** 2026-05-31  
-**Atom:** `explore-og-universe-query`  
-**Verdict:** PASS
+**Route:** `/og/explore?download=1`  
+**Verdict:** PASS (Gate C)
 
 ## Commands
 
 ```bash
-npm run build --workspace=apps/web   # exit 0
-JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q   # 58 passed, 5 skipped
-curl -s -o /tmp/og-college.png -w '%{http_code} %{size_download}\n' \
-  'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&season=2024'
-curl -s -o /tmp/og-nfl.png -w '%{http_code} %{size_download}\n' \
-  'http://127.0.0.1:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc'
-file /tmp/og-college.png /tmp/og-nfl.png
+npm run build --workspace=apps/web
+curl -s -o /tmp/og-explore-q.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3001/og/explore?download=1&universe=nfl&q=chase'
+curl -s -o /tmp/og-explore-college.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3001/og/explore?download=1&universe=college'
+JWT_SECRET=test pytest apps/api/tests -q
 ```
 
 ## Results
 
 | Check | Result |
 |-------|--------|
-| Web build | exit 0 |
-| College OG + season | `200 41427` PNG 1200×630 |
-| NFL OG | `200 38060` PNG 1200×630 |
-| Band link | includes `universe`, `sort`, `dir`, optional `season`/`team` |
+| web build | exit 0 |
+| curl NFL + query | `200 59238` |
+| curl college | `200 64392` |
+| PNG | 1200×630, ≥40KB |
+| pytest | 62 passed (snapshot tests need terminal.db in CI) |
 
-## Change
+## Notes
 
-`ExploreShareButton` forwards `season` and `team` into preview/export URLs; `/og/explore` reads them for screener query parity and watermark band deep link.
+- Universe sticker: teal NFL vs blue COLLEGE; search query in Caveat terracotta box.
+- Demo rows when screener API empty — Gate C sample fallback.
+- Explore L5 epic atom 1/3.

@@ -1,31 +1,50 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Explore screener OG share cards hide the active universe and search query — Reddit screenshots look generic.",
+  "epic_title": "Explore L5 — OG cards show universe + search on exports",
+  "parity_ref": "Explore L5 — shareable URL + watermarked export",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
+      "id": "explore-og-universe-query",
+      "title": "Explore OG — universe badge + search query sticker on share card",
       "status": "done",
-      "merge_commit": "5721ee33"
+      "merge_commit": "696373e4"
     },
     {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
+      "id": "explore-og-college-demo-rows",
+      "title": "Explore OG — college demo fallback rows when API empty",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
+      "id": "explore-og-formula-sort-label",
+      "title": "Explore OG — formula sort label on card subtitle",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
-  "created_at": "2026-05-31T09:25:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
-  "completed_epics": []
+  "next_atom_id": "explore-og-college-demo-rows",
+  "created_at": "2026-05-31T12:10:00Z",
+  "updated_at": "2026-05-31T12:30:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-live-rows-launch10",
+      "status": "complete",
+      "last_atom": "lab-og-live-demo-fallback-copy",
+      "merge_commit": "18d92f6b"
+    },
+    {
+      "id": "lab-l4-pro-gate-polish",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-hallway-teasers",
+      "merge_commit": "675044ea"
+    },
+    {
+      "id": "lab-l2-sidebar-groups-by-agent",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-picks-by-agent",
+      "merge_commit": "4e8b0e8e"
+    }
+  ]
 }
