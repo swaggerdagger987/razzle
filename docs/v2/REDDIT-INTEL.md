@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — cycle 79
+- **Pattern:** Trade-finder hero deals need deep links in league DMs — export-only cards under-share vs Explore.
+- **Slice:** bureau-trade-finder-share-bar — copy deal link + export row on hero deal card.
+
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
 - **Screenshot hook:** Atlas rivalry card with you/them records + position depth bars.

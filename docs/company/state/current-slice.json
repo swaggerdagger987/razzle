@@ -1,25 +1,24 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG share cards must render the same player rows as in-product panels when the API returns data — not generic demo shells (DEPTH Lab L5).",
-  "epic": "Lab L5 — OG live panel row parity",
-  "slice_title": "Dashboard OG extracts top5/risers + rank_diff for live rows",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/dashboard PNG ≥40KB with live or demo rows",
-  "trust_pillars": ["T5", "T6"],
+  "big_problem": "Bureau L5 OG cards travel in league group chats — every rivalry tab needs copy link plus export on one row like Explore.",
+  "epic": "League L5 — Bureau OG share row parity",
+  "atom_id": "bureau-trade-finder-share-bar",
+  "slice_title": "Trade Finder copy deal link + export card row",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/trade-finder PNG ≥40KB",
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx"
+    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
+    "apps/web/components/league/BureauTradeFinder.tsx"
   ],
-  "max_files": 1,
-  "max_lines": 25,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dashboard?download=1'"
+    "curl -s -o /tmp/og-trade-finder.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/trade-finder?download=1'"
   ],
-  "out_of_scope": [
-    "New panels",
-    "NORTH_STAR / DESIGN edits"
-  ],
+  "out_of_scope": ["OG route edits", "pressure-map", "trade-network", "billing"],
   "builder_mode": "composer-surgical"
 }
