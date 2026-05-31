@@ -23,3 +23,7 @@ curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}\n' \
 ## Layer claim
 
 Lab L5 — prospects/weekly OG cards show slug-specific LIVE stickers only when `/api/panels` returns live rows (not legacy-path fallback or demo).
+
+## Base merge note
+
+Weekly OG without `position` query defaults `apiParams.position=WR` on base (PR #720) so panel API returns rows for LIVE sticker.
