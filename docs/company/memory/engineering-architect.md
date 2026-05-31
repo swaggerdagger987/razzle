@@ -1,5 +1,9 @@
 # Memory — Engineering Architect
 
+- 2026-05-31: H2H OG snapshot guard mirrors Lab `decodeOgSnapshot` ordering.
+
+# Memory — Engineering Architect
+
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
 
 Format per entry:

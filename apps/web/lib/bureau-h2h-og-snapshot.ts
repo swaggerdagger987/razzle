@@ -38,3 +38,57 @@ export function encodeBureauH2HOgSnapshot(snap: BureauH2HOgSnapshot): string | u
   }
   return undefined;
 }
+
+interface CompactH2HSnapshot {
+  y?: { t: string; r: string; p: number };
+  m?: { t: string; r: string; p: number };
+  pc?: { p: string; y: number; m: number }[];
+  tf?: { o?: string[]; g?: string[] };
+}
+
+function decodeBase64Url(param: string): string | null {
+  try {
+    let b64 = param.replace(/-/g, "+").replace(/_/g, "/");
+    while (b64.length % 4) b64 += "=";
+    if (typeof atob === "function") return atob(b64);
+    if (typeof Buffer !== "undefined") return Buffer.from(b64, "base64").toString("utf8");
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/** Decode `snapshot` query param from Bureau H2H export links. */
+export function decodeBureauH2HOgSnapshot(param: string): BureauH2HOgSnapshot | null {
+  const json = decodeBase64Url(param.trim());
+  if (!json) return null;
+  try {
+    const compact = JSON.parse(json) as CompactH2HSnapshot;
+    const snap: BureauH2HOgSnapshot = {
+      you: {
+        team: compact.y?.t ?? "",
+        record: compact.y?.r ?? "",
+        ppg: compact.y?.p ?? 0,
+      },
+      them: {
+        team: compact.m?.t ?? "",
+        record: compact.m?.r ?? "",
+        ppg: compact.m?.p ?? 0,
+      },
+      position_compare: (compact.pc ?? []).map((row) => ({
+        position: row.p,
+        your_count: row.y,
+        their_count: row.m,
+      })),
+      trade_fit: compact.tf
+        ? {
+            you_could_offer: compact.tf.o ?? [],
+            you_could_target: compact.tf.g ?? [],
+          }
+        : undefined,
+    };
+    return hasSnapshotData(snap) ? snap : null;
+  } catch {
+    return null;
+  }
+}

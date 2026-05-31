@@ -1,5 +1,9 @@
 # Memory — Reality Checker
 
+- 2026-05-31: H2H OG snapshot curl 57048B — PASS without league params.
+
+# Memory — Reality Checker
+
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 

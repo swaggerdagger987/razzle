@@ -1,5 +1,7 @@
 # Memory — Builder
 
+- 2026-05-31: `decodeBureauH2HOgSnapshot` + edge `atob` — H2H OG skips API when export snapshot present.
+
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:

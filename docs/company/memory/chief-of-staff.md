@@ -1,5 +1,9 @@
 # Memory — Chief of Staff
 
+- 2026-05-31: Closed H2H export parity (snapshot decode) before resuming share-parity epic.
+
+# Memory — Chief of Staff
+
 Append-only log of coordination patterns, what worked, what didn't.
 
 Format per entry:

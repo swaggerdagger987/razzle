@@ -1,5 +1,9 @@
 # Memory — Product Strategist
 
+- 2026-05-31: Ship decode after encode — exported rivalry cards must not refetch stale API.
+
+# Memory — Product Strategist
+
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
 
 Format per entry:
