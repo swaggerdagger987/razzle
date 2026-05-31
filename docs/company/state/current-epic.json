@@ -9,11 +9,11 @@
       "id": "bureau-trade-finder-og-demo-label",
       "title": "Trade Finder OG demo row label polish",
       "status": "done",
-      "merge_commit": "PLACEHOLDER"
+      "merge_commit": "4279fe0f"
     }
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T05:28:00Z",
   "updated_at": "2026-05-31T06:10:00Z",
-  "last_cycle_commit": "PLACEHOLDER"
+  "last_cycle_commit": "4279fe0f"
 }
