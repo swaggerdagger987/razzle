@@ -261,21 +261,11 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.data as Record<string, unknown>[];
   } else if (Array.isArray(obj.rankings)) {
     candidates = obj.rankings as Record<string, unknown>[];
-<<<<<<< HEAD
-=======
   } else if (
     Array.isArray(obj.most_efficient) &&
     (obj.most_efficient as unknown[]).length > 0
   ) {
     candidates = obj.most_efficient as Record<string, unknown>[];
-  } else if (obj.positions && typeof obj.positions === "object" && !Array.isArray(obj.positions)) {
-    const posMap = obj.positions as Record<string, { players?: Record<string, unknown>[] }>;
-    const posKeys = Object.keys(posMap);
-    const block = posKeys.length === 1 ? posMap[posKeys[0]!] : posMap.RB ?? posMap.WR ?? posMap[posKeys[0]!];
-    if (block && Array.isArray(block.players)) {
-      candidates = block.players;
-    }
->>>>>>> a98f3674 (feat(og): efficiency live extract from most_efficient API rows)
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
   } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
