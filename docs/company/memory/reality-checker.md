@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-from-panel-breakouts-efficiency | f6e0985f3 | PASS | pytest 7; curl breakouts 58268B efficiency 58496B.
+2026-05-31 | lab-og-from-panel-breakouts-efficiency | 11c9c2a6 | PASS | pytest 7; curl breakouts 58268B efficiency 58496B.
 2026-05-31 | explore-in-product-margin-parity | d0f126be5 | PASS | pytest 14; web build; no OG route change.
 2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | PASS | pytest 9; curl college OG 71510B.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | pytest 6; curl h2h 76270B.

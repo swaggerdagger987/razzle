@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-from-panel-breakouts-efficiency | f6e0985f3 | SHIP | Lab L5 OG parity epic 1/4; breakouts/efficiency FROM PANEL guards.
+2026-05-31 | lab-og-from-panel-breakouts-efficiency | 11c9c2a6 | SHIP | Lab L5 OG parity epic 1/4; breakouts/efficiency FROM PANEL guards.
 2026-05-31 | explore-in-product-margin-parity | d0f126be5 | SHIP | Margin epic 3/3; Staff column OG parity.
 2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | Explore margin epic atom 2/3; campus demo Gate C.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | H2H snapshot EXPORTED trust — mirrors Trade Finder.

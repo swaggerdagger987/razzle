@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-from-panel-breakouts-efficiency | f6e0985f3 | SHIP | pytest 7; FROM PANEL breakouts/efficiency guards.
+2026-05-31 | lab-og-from-panel-breakouts-efficiency | 11c9c2a6 | SHIP | pytest 7; FROM PANEL breakouts/efficiency guards.
 2026-05-31 | explore-in-product-margin-parity | d0f126be5 | SHIP | ExploreMarginNote → marginNoteForOgExploreRow; pytest 14.
 2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | college demo pytest guards; curl 71510B.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | EXPORTED · panel rivalry rows.
