@@ -1,6 +1,6 @@
 cycle: 154
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
 next_slice: lab-dashboard-empty-export (epic atom 3/3)
 last_keep_cycle: 156
