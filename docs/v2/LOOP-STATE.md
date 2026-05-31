@@ -1,11 +1,8 @@
-cycle: 153
+cycle: 154
 last_board_cycle: 54
 focus_pillar: Lab
-focus_layer: L5
-next_slice: (pick from PARITY)
-last_keep_cycle: 153
-last_commit: 9be64d109
-lab_l5_empty_og_epic: complete
-lab_l5_og_hallway_epic: complete
-lab_l5_og_weekly_tolab_position: complete
-league_l5_trade_finder_gtm_epic: complete
+focus_layer: L2
+next_slice: lab-sidebar-staff-registry
+last_keep_cycle: 154
+last_commit: 026e7de6b
+lab_l2_sidebar_staff_epic: active
