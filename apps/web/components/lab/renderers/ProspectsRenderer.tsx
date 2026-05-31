@@ -52,8 +52,10 @@ export function ProspectsRenderer({ panel }: Props) {
   const prospects = q.data?.prospects ?? [];
   const top = prospects[0] ?? null;
 
+  /** Top RPS prospects on the big board — OG card matches in-product leaders (Lab L5). */
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     return [...prospects]
+      .filter((p) => p.rps != null && p.player_name)
       .sort((a, b) => (b.rps ?? 0) - (a.rps ?? 0))
       .slice(0, 6)
       .map((p) => ({
