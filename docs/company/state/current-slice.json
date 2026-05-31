@@ -1,33 +1,28 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic": "Lab L4 — shared pro-gate error surface",
-  "slice_title": "ProGateFromPanelError — tradevalues + efficiency",
-  "parity_ref": "Lab L4 — pro-gate polish",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "test_panel_pro_gate_surface.py",
-  "trust_pillars": ["T2", "T6"],
-  "allowed_paths": [
-    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
-    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
-  ],
-  "max_files": 3,
-  "max_lines": 80,
+  "atom_id": "lab-og-launch10-buysell-dashboard-labels",
+  "big_problem": "Launch-10 OG cards still read generic on Reddit — dashboard/buysell LIVE stickers missing.",
+  "epic": "Lab L5 — Launch-10 OG panel-native trust labels (atom 3/3)",
+  "slice_title": "dashboard/buysell LIVE stickers on Launch-10 OG",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T1", "T5", "T6"],
+  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "max_files": 1,
+  "max_lines": 12,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py -q"
+    "npm run build --workspace=apps/web 2>&1 | tail -5",
+    "curl -s -o /tmp/og-dashboard-live.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dashboard?download=1'",
+    "curl -s -o /tmp/og-buysell-live.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1'"
   ],
-  "out_of_scope": [
-    "remaining launch-10 renderers",
-    "OG routes",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["billing", "new panels"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
-  }
+    "verdict": "SHIP 3/3"
+  },
+  "status": "shipped"
 }
