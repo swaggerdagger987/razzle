@@ -65,3 +65,4 @@ cycle	commit	score	status	pillar	slice	description
 73	7066f4ab	depth+voice+simplicity	keep	Lab	L5 OG live data label	trust=T1,T5,T6; live data blurb when liveHasRows; curl rankings 59509B
 74	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
 75	433d8002	depth+voice+simplicity	keep	League	L5 Bureau Monte Carlo copy link export row	trust=T5,T6; copy link + export; curl monte-carlo OG 53350B
+76	da33eafd	depth+voice+simplicity	keep	League	L5 Bureau H2H copy link export row	trust=T5,T6; copy link + export; curl head-to-head OG 59305B

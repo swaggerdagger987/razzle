@@ -26,3 +26,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Factory open cycle 1 Lab live OG rows | 2cb898b6 | keep | workday open; epic atom 1/3 SHIP; PR standup 2026-05-31
 2026-05-31 | Factory open Bureau Monte Carlo share row | 433d8002 | keep | workday cycle 1; League L5 atom 3/3; merge pending PR
+2026-05-31 | Factory open H2H share row | da33eafd | keep | workday cycle 1; Bureau epic complete; PR standup 2026-05-31
