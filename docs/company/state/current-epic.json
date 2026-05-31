@@ -8,8 +8,8 @@
     {
       "id": "bureau-h2h-og-snapshot-decode",
       "title": "OG route uses shared decodeBureauH2HOgSnapshot (m-key)",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "39516855"
     }
   ],
   "next_atom_id": null,
