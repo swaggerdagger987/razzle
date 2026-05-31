@@ -7,12 +7,9 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
-
-/** Matches DEFAULT_OG_PLAYER_ID in apps/web/app/og/[panel]/route.tsx */
-const DEFAULT_PLAYER_ID = "00-0036900";
 
 interface CompRow {
   player_id: string;
@@ -45,7 +42,7 @@ export function DynastyCompsRenderer({ panel }: Props) {
   const searchParams = useSearchParams();
   const agent = panelAgent(panel.slug);
 
-  const playerId = searchParams.get("id") ?? DEFAULT_PLAYER_ID;
+  const playerId = searchParams.get("id") ?? DEFAULT_LAB_OG_PLAYER_ID;
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<SearchHit[]>([]);
 
