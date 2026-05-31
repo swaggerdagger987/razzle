@@ -28,5 +28,6 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "status": "shipped"
 }
