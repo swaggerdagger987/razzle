@@ -55,6 +55,8 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 86	e701e3bb	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; copy link + export; curl trade-network OG 68090B; behavioral share epic atom 3
 87	6dbe1ca1	depth+hallway+voice	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5; dedup on base 6dbe1ca1; factory cycle 1; next build-profiles
 88	2ee04975	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles unhidden; build PASS pytest 51; epic atom 1/3
+89	39516855	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot decode	trust=T1,T5,T6; shared decode m-key; curl demo 59305B snap 51310B; H2H export epic complete
 90	c9151786	depth+voice+simplicity	keep	Lab	L5 Dashboard comps OG snapshot rows	trust=T5,T6; DashboardRenderer snapshotRows; curl dynasty-comps 65961B; dedup prospects+tradevalues on base
 91	a2536dcc	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5; Hawkeye renderer; waiver-tendencies nav visible; web build PASS; epic atom 2/3
-91	2b4de845	depth+voice+simplicity	keep	Lab	L5 OG buy/sell dashboard live extractors	trust=T5,T6; buy_low+sell_high+fallers; curl buysell 58072B dashboard 60034B
+92	2b4de845	depth+voice+simplicity	keep	Lab	L5 OG buy/sell dashboard live extractors	trust=T5,T6; buy_low+sell_high+fallers; curl buysell 58072B dashboard 60034B; epic atom 2/3
+93	c0358ff3	depth+voice+simplicity	keep	Lab	L5 Prospects OG RPS-ranked snapshot	trust=T5,T6; sort top-6 RPS + position filter; curl 40842B; fidelity epic atom 1/3
