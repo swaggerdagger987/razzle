@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-efficiency-aging-formula-live | f6e0985f3 | 2 files ≤50 lines; stat key branches only.
+2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | 2 files ≤50 lines; stat key branches only.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 

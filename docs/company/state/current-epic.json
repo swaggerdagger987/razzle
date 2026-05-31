@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab formula panels re-sort in-product but OG share cards still rank by raw PPO/PPG — Reddit screenshots disagree with the composite the user picked.",
   "epic_title": "Lab L5 — formula-sorted OG live parity",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
@@ -20,11 +20,12 @@
     {
       "id": "lab-og-efficiency-aging-formula-live",
       "title": "Efficiency + Aging OG — formula_score before PPO/PPG",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "8db7cdf24"
     }
   ],
-  "next_atom_id": "lab-og-efficiency-aging-formula-live",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T11:15:00Z",
   "updated_at": "2026-05-31T11:15:00Z",
   "completed_epics": ["league-trade-finder-gtm-export-2026-05-31"]
