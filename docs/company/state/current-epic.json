@@ -21,7 +21,7 @@
       "id": "lab-og-buysell-dashboard-live-sort",
       "title": "Buy/Sell + Dashboard OG rank by dynasty_value / rank_diff on live fetch",
       "status": "done",
-      "merge_commit": "cb59494b"
+      "merge_commit": "43e13877"
     }
   ],
   "next_atom_id": null,
@@ -44,7 +44,7 @@
       "id": "lab-l5-og-live-sort",
       "status": "complete",
       "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "cb59494b"
+      "merge_commit": "43e13877"
     }
   ]
 }
