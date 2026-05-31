@@ -1,30 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau league intel must travel off-platform — copyable deep links plus OG cards on every flagship Bureau surface.",
-  "epic": "League L5 — Bureau share row (copy link + export)",
-  "atom_id": "bureau-monte-carlo-copy-link",
-  "slice_title": "Monte Carlo copy sim link + export via BureauMonteCarloShareBar",
-  "parity_ref": "League L5 — Bureau share / export",
+  "big_problem": "Bureau rivalry OG cards must label live league data vs sample previews honestly and match the in-product H2H matchup users export (NEXT.md Bureau H2H; PARITY League L5).",
+  "epic": "League L5 — Bureau H2H export parity",
+  "atom_id": "bureau-h2h-snapshot-export",
+  "slice_title": "H2H export encodes in-product you/them/position bars in OG snapshot param",
+  "parity_ref": "PARITY League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — monte-carlo OG PNG ≥40KB",
-  "trust_pillars": ["T2", "T5", "T6"],
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/head-to-head PNG ≥40KB; export href includes snapshot when panel has rows",
+  "trust_pillars": ["T1", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauMonteCarloShareBar.tsx",
-    "apps/web/components/league/BureauMonteCarlo.tsx"
+    "apps/web/lib/bureau-h2h-og-snapshot.ts",
+    "apps/web/components/league/BureauH2HShareBar.tsx",
+    "apps/web/components/league/BureauHeadToHead.tsx"
   ],
-  "max_files": 2,
-  "max_lines": 70,
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-mc.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/monte-carlo?download=1&league=test&user=test'"
+    "curl -s -o /tmp/og-h2h.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/head-to-head?download=1'"
   ],
-  "out_of_scope": ["API schema changes", "new npm deps", "NORTH_STAR/DESIGN edits"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "out_of_scope": [
+    "OG route snapshot decode (atom bureau-h2h-og-snapshot-decode)",
+    "BureauHeadToHead layout changes",
+    "NORTH_STAR / DESIGN edits"
+  ],
+  "builder_mode": "composer-surgical"
 }
