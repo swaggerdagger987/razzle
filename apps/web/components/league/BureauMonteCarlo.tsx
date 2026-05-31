@@ -5,7 +5,7 @@ import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Route } from "next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getSleeperUser } from "@/lib/sleeper";
 import { BureauRowsTable } from "./BureauRowsTable";
 
@@ -31,7 +31,19 @@ function barColor(pct: number): string {
 export function BureauMonteCarlo({ data, leagueId }: Props) {
   const octo = AGENT_BY_ID.octo;
   const searchParams = useSearchParams();
+  const [copied, setCopied] = useState(false);
   const [scenario, setScenario] = useState<Record<string, unknown> | null>(null);
+
+  const copyMonteCarloLink = useCallback(async () => {
+    if (typeof window === "undefined") return;
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, []);
   const giveId = searchParams.get("give");
   const getId = searchParams.get("get");
   const partnerRoster = searchParams.get("partner");
@@ -281,16 +293,21 @@ export function BureauMonteCarlo({ data, leagueId }: Props) {
             const user = getSleeperUser();
             if (!user?.user_id) return null;
             return (
-              <a
-                href={`/og/monte-carlo?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                  user.user_id,
-                )}&download=1`}
-                download="razzle-monte-carlo.png"
-                className="btn-chunky active text-xs"
-                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-              >
-                export card
-              </a>
+              <>
+                <button type="button" className="btn-chunky text-xs" onClick={() => void copyMonteCarloLink()}>
+                  {copied ? "copied!" : "copy link"}
+                </button>
+                <a
+                  href={`/og/monte-carlo?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
+                    user.user_id,
+                  )}&download=1`}
+                  download="razzle-monte-carlo.png"
+                  className="btn-chunky active text-xs"
+                  style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+                >
+                  export card
+                </a>
+              </>
             );
           })()}
         </div>
