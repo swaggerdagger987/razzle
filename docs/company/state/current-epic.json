@@ -32,37 +32,19 @@
   ],
   "next_atom_id": "lab-og-gamelog-player-default",
   "created_at": "2026-05-31T08:25:32Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "updated_at": "2026-05-31T08:40:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-gamelog-live-week-rows",
+      "id": "lab-l4-pro-gate-upgrade-funnel",
       "status": "complete",
-      "last_atom": "lab-og-launch10-snapshot-default",
-      "merge_commit": "e2a3ce8a"
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "f56fdbd8"
     },
     {
-      "id": "lab-l5-launch10-og-live-sticker",
+      "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
-      "last_atom": "lab-og-live-sticker-prospects-weekly",
-      "merge_commit": "5bb77346"
-    },
-    {
-      "id": "lab-l5-og-watermark-band",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-band-panel-route",
-      "merge_commit": "742028c0"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
-    },
-    {
-      "id": "league-l5-h2h-og-watermark",
-      "status": "complete",
-      "last_atom": "league-h2h-og-watermark-band",
-      "merge_commit": "945e4656"
+      "last_atom": "lab-og-live-demo-fallback-copy",
+      "merge_commit": "18d92f6b"
     }
   ]
 }
