@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | gamelog weeks extract | da33eafd | 1-file ~35 lines; player-scoped weeks[] not players[]; no PANEL_OG_STAT_KEY.
 
 2026-05-31 | tradevalues snapshot contract | 5ed39e14 | 1-file ≤25 lines; rank+formula statLabel pattern matches buysell
 

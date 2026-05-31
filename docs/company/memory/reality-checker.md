@@ -1,5 +1,6 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | curl gamelog 56390B PASS | Wk N rows; extractGamelogWeekRows on live weeks[].
 
 2026-05-31 | lab-og-position-gamelog | curl gamelog WR 48035B PASS | player_id+position on OG URL
 

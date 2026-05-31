@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | da33eafd | SHIP | Peak-week OG rows match Game Log export — screenshot parity for trades.
 
 2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
 

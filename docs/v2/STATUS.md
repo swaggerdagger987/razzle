@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 105 — Lab OG weekly/prospects/breakouts live extract)  
+**Last updated:** 2026-05-31 (factory cycle 106 — Lab OG gamelog peak weeks by FPTS)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 105 |
+| Cycle | 106 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-og-gamelog-weeks-fpts-sort |
-| Last commit | `8d8b2635` |
+| Next slice | lab-og-dynasty-comps-pro-teaser |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
