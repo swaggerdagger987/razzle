@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau Build Profiles share OG (cycle 95)
+- Atlas archetype grid on export cards — Win Now vs Zero RB splits are construction-intel screenshots for r/DynastyFF trade threads.
+- Copy link + OG closes the gap between in-product Bureau and Reddit travel.
+
 ### 2026-05-31 — Bureau waiver tendencies (cycle 94)
 - FAAB hoarder / streamer archetype cards are waiver-wire screenshot bait on r/fantasyfootball.
 - Hawkeye-owned tab closes the Bureau unhide epic — league managers can scout opponent pickup habits.

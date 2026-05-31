@@ -16,6 +16,7 @@ explicit checks in the verification routine.
 
 ## Entries
 
+2026-05-31 | build-profiles share OG | curl 72409B PNG; build+pytest 51 | League L5 Gate C2 | PASS | keep | evidence/2026-05-31-league-build-profiles-share-og.md
 2026-05-31 | waiver tendencies unhide | build+pytest 51 passed | League L5 | PASS | keep | no OG gate; grep FeatureBody wire
 2026-05-31 | weekly OG PPG snapshot | curl RB 44781B snap WR 53256B; build+pytest 51 | Lab L5 | PASS | keep | evidence/2026-05-31-lab-weekly-og-snapshot-verify.md
 2026-05-31 | Pressure Map copy link Gate C | curl pressure-map 200 60661B; build+pytest | PASS | keep | docs/v2/evidence/2026-05-31-bureau-pressure-map-copy-link.md

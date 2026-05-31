@@ -15,6 +15,7 @@ new evidence.
 
 ## Entries
 
+2026-05-31 | share-export ship epic atom 1 | build-profiles OG to base | League L5 DEPTH | SHIP | keep | dedup waiver/SOS on base; next roster-depth share
 2026-05-31 | Bureau unhide epic atom 3 | waiver tendencies Hawkeye renderer | League L5 PARITY hidden tabs | SHIP | keep | epic complete; NEXT Lab L5 OG live rows
 2026-05-31 | Bureau behavioral share atom 2 | pressure-map copy link | SHIP | keep | Explore-parity travel on deadline pressure tab
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
