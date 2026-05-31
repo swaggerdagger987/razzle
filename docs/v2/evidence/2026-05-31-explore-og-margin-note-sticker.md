@@ -22,7 +22,7 @@ curl -s -o /tmp/explore-og-sticker.png -w '%{http_code} %{size_download}\n' \
 
 ## Change
 
-When live screener rows carry Hawkeye/Dolphin margin notes on ranks 1–3, Explore OG shows a teal Caveat **LIVE · staff margin notes** sticker (mirrors Bureau H2H LIVE trust pattern).
+When live screener rows carry Hawkeye/Dolphin margin notes on ranks 1–3, Explore OG shows a rotated teal Caveat **LIVE · staff margin notes** sticker (demo/sample paths excluded via `!isDemo`).
 
 ## Verdict
 

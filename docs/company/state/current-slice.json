@@ -6,7 +6,7 @@
   "slice_title": "LIVE staff sticker when OG rows carry margin notes",
   "parity_ref": "Explore L5 — agent margin notes on rows",
   "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB; LIVE sticker when live rows have margin notes",
+  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB; LIVE Caveat sticker when live rows have margin notes",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/explore/route.tsx",
@@ -31,6 +31,6 @@
     "builder": "SHIP"
   },
   "status": "shipped",
-  "content_commit": "4e0b1af6f",
+  "content_commit": null,
   "reality": "PASS"
 }

@@ -12,6 +12,7 @@ def test_explore_og_staff_margin_notes_flag():
     source = EXPLORE_OG.read_text(encoding="utf-8")
     assert "hasStaffMarginNotes" in source
     assert "marginNoteForOgExploreRow(p, universe)" in source
+    assert "!isDemo &&" in source
 
 
 def test_explore_og_live_staff_sticker_when_margin_notes_and_not_demo():

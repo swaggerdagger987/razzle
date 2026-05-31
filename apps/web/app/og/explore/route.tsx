@@ -249,9 +249,11 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
-  const hasStaffMarginNotes = players
-    .slice(0, TOP_MARGIN_NOTE_ROWS)
-    .some((p) => marginNoteForOgExploreRow(p, universe) != null);
+  const hasStaffMarginNotes =
+    !isDemo &&
+    players
+      .slice(0, TOP_MARGIN_NOTE_ROWS)
+      .some((p) => marginNoteForOgExploreRow(p, universe) != null);
   return new ImageResponse(
     (
       <div

@@ -21,7 +21,7 @@
       "id": "explore-og-margin-note-sticker",
       "title": "LIVE staff sticker when OG rows carry margin notes",
       "status": "done",
-      "merge_commit": "4e0b1af6f"
+      "merge_commit": null
     },
     {
       "id": "explore-og-margin-note-college",
@@ -32,32 +32,11 @@
   ],
   "next_atom_id": "explore-og-margin-note-college",
   "created_at": "2026-05-31T11:22:30Z",
-  "updated_at": "2026-05-31T12:05:00Z",
+  "updated_at": "2026-05-31T20:30:00Z",
   "completed_epics": [
-    {
-      "id": "lab-l5-og-watermark-display-names",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-display-name",
-      "merge_commit": "338709883"
-    },
-    {
-      "id": "lab-l5-launch10-og-demo-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-demo-blurbs",
-      "merge_commit": "3705fdce8"
-    },
-    {
-      "id": "lab-l5-og-hallway-deep-links",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-snapshot-player",
-      "merge_commit": "1a12d9c0b"
-    },
-    {
-      "id": "league-l5-og-bureau-watermark-parity",
-      "status": "paused",
-      "last_atom": "league-og-self-scout-watermark",
-      "merge_commit": "a76b2e4e0",
-      "note": "Self-Scout watermark merged on base; resume pressure-map after Explore margin epic"
-    }
+    "lab-l5-og-export-live-panel-rows",
+    "lab-l5-og-hallway-deep-links",
+    "lab-l5-og-hallway-position-defaults",
+    "lab-l5-pro-profile-og-live-parity"
   ]
 }
