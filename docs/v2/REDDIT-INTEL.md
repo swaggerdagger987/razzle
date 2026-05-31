@@ -290,6 +290,10 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 1. **Trade partnership lanes are collusion bait** — "these two trade every week" screenshots spark DM threads; OG card must show partner pairs + trade counts, not a graph stub.
 2. **Bones trade-network OG closes atom 3/4** — Bureau export trilogy (pressure, managers, network) now screenshot-ready for deadline season.
 
+## 2026-05-31 — Cycle 69 (factory morning)
+
+1. **Export must match what’s on screen** — DynastyFF threads roast “generic rankings card” exports that don’t match the filtered panel; passing in-panel rows into OG URL closes the trust gap when API/CI has no terminal.db.
+
 ## 2026-05-31 — Cycle 59
 
 ### r/DynastyFF — panel-specific stat labels on share cards (pattern)

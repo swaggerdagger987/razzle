@@ -24,4 +24,6 @@ new evidence.
 2026-05-31 | League L5 Bureau OG atom 3 | trade-network partner lanes | SHIP | keep | collusion-thread partnership screenshots
 2026-05-31 | League L5 Bureau OG epic complete | self-scout depth grades OG | SHIP | keep | flagship Bureau screenshot; A–F grid for trade threads
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
+2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
+2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | NEXT.md live-row mirror epic opened

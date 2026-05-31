@@ -1,21 +1,21 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch-10 Lab panels need in-product OG export links so every screenshot-worthy panel travels like Explore and Bureau cards (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — launch-10 OG export link parity",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction / Lab L5 OG per panel",
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards must show the same player rows the user sees in-panel — not generic demo fallbacks when live data is already on screen (DEPTH Lab L5).",
+  "epic_title": "Lab L5 — OG cards mirror in-product rows",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-export-gamelog-efficiency-aging",
-      "title": "OG export links on gamelog, efficiency, aging-curves renderers",
-      "status": "done",
-      "merge_commit": "45a5e79b"
+      "id": "lab-og-snapshot-rows",
+      "title": "Pass in-panel top-6 snapshot to OG via LabOgExportLink; OG prefers snapshot over demo",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-export-buysell-dashboard",
-      "title": "OG export links on buy-sell and dashboard renderers",
-      "status": "done",
-      "merge_commit": "497d1df5"
+      "id": "lab-og-api-origin-rewrite",
+      "title": "OG panel fetch uses request origin + Next /api rewrite when API origin unset",
+      "status": "pending",
+      "merge_commit": null
     },
     {
       "id": "lab-og-export-player-scoped",

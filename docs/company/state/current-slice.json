@@ -23,8 +23,16 @@
     "curl -s -o /tmp/og-comps-scoped.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1&player_id=00-0036900'"
   ],
   "out_of_scope": [
-    "OG route handler changes",
-    "NORTH_STAR / DESIGN edits"
+    "Wire all launch-10 renderers (atom 3)",
+    "Bureau H2H export",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "new npm deps"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }

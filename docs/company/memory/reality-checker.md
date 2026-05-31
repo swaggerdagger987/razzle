@@ -25,4 +25,6 @@ explicit checks in the verification routine.
 2026-05-31 | trade-network OG Gate C | curl 200 67677B PNG | PASS | keep | docs/v2/evidence/2026-05-31-league-og-trade-network.md
 2026-05-31 | self-scout OG Gate C | curl 200 66997B PNG | PASS | keep | docs/v2/evidence/2026-05-31-league-og-self-scout.md
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
+2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
+2026-05-31 | Lab OG snapshot rows Gate C | curl dashboard snapshot 45249B | PASS | keep | docs/v2/evidence/2026-05-31-lab-og-snapshot-rows.md
