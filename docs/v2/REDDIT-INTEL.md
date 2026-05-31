@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab trade values loading export (cycle 162)
+- **Angle:** Trade-deadline threads screenshot value curves before API returns — sample Chase/Bijan curve on export while film loads.
+- **Trust:** T5/T6 — sample rows match OG demo board; live board still uses panel snapshot when loaded.
+
 ### 2026-05-31 — Lab prospects loading export (cycle 161)
 - **Angle:** Draft-season big board screenshots while film loads — sample RPS rows on export link beat blank loading cards.
 - **Trust:** T5/T6 — sample card matches OG demo board; live board still uses panel snapshot when loaded.

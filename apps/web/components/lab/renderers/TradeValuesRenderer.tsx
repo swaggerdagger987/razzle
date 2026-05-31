@@ -21,6 +21,16 @@ import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
+/** Sample value curve while trade values load or board is empty — matches OG demo rows (Gate C). */
+const TRADEVALUES_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 10200, statLabel: "Value" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 9800, statLabel: "Value" },
+  { name: "Brock Bowers", position: "TE", team: "LV", stat: 7600, statLabel: "Value" },
+  { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 8900, statLabel: "Value" },
+  { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 6200, statLabel: "Value" },
+  { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 5800, statLabel: "Value" },
+];
+
 const POS_COLORS: Record<string, string> = {
   QB: "#5b7fff",
   RB: "#2ec4b6",
@@ -115,7 +125,21 @@ export function TradeValuesRenderer({ panel }: Props) {
   }, [players, formula]);
 
   if (q.isPending) {
-    return <PanelAgentLoading agent={agent} />;
+    return (
+      <div className="trade-values">
+        <PanelAgentHeader agent={agent} slug={panel.slug} />
+        <PanelAgentLoading agent={agent} />
+        <footer className="mt-4 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
+          <LabOgExportLink
+            slug="tradevalues"
+            downloadName="razzle-trade-values.png"
+            position={position || undefined}
+            snapshotRows={TRADEVALUES_SAMPLE_OG_ROWS}
+            label="export sample card"
+          />
+        </footer>
+      </div>
+    );
   }
 
   if (q.isError) {
@@ -160,7 +184,18 @@ export function TradeValuesRenderer({ panel }: Props) {
       )}
 
       {!players.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="tradevalues"
+              downloadName="razzle-trade-values.png"
+              position={position || undefined}
+              snapshotRows={TRADEVALUES_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="chart-panel chunky bg-bg-card p-4">
           {players.slice(0, 40).map((p, i) => {

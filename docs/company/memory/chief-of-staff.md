@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-tradevalues-loading-snapshot | f6e0985f3 | SHIP | Factory open workday cycle 1; loading OG epic atom 1/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-og-dashboard-live-extract | 869c9321c | SHIP | Factory open cycle 1; Lab L5 live rows epic atom 1/3; NO_LOCK_GUARDRAIL.
 2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | SHIP | Factory open cycle 1; lock #1457; Bureau watermark epic complete.
 2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | SHIP | Factory open cycle 1; lock #1434; watermark epic atom 3/3.

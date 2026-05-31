@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-tradevalues-loading-snapshot | f6e0985f3 | PASS | curl tradevalues snap 50462B demo 67267B; pytest 6.
 2026-05-31 | lab-og-prospects-loading-snapshot | 75ff53361 | PASS | curl prospects snap 50038B demo 63453B; pytest 14.
 2026-05-31 | lab-og-dashboard-live-extract | 869c9321c | PASS | curl dashboard 65370B snapshot; pytest 4.
 2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | PASS | curl waiver 68595B; pytest 5; Gate C evidence.

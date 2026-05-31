@@ -1,32 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG export cards still diverge from in-product panel rows — Reddit screenshots show generic ranks instead of the dynasty pulse the user just saw.",
-  "epic": "Lab L5 — OG export cards match in-product panel rows",
-  "slice_title": "Prospects loading-state sample snapshot for export preview",
-  "parity_ref": "PARITY Explore L5 / Lab panel OG data rows",
+  "big_problem": "Dynasty trade-season screenshots die on slow panels — users hit export while trade values still load and get no shareable card.",
+  "epic": "Lab L5 — loading-state OG sample exports (remaining Launch-10)",
+  "slice_title": "Trade values loading + empty board sample OG snapshot",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with sample rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
-    "apps/api/tests/test_lab_og_export_link.py",
-    "apps/api/tests/test_og_prospects_loading_snapshot.py",
-    "docs/v2/evidence/2026-05-31-lab-og-prospects-loading-snapshot.md"
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
+    "apps/api/tests/test_og_tradevalues_loading_snapshot.py"
   ],
-  "max_files": 4,
+  "max_files": 2,
   "max_lines": 120,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_lab_og_export_link.py apps/api/tests/test_og_prospects_loading_snapshot.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?download=1&snapshot=eyJyIjpbeyJuIjoiVHJhdmlzIEh1bnRlciIsInAiOiJXUiIsInQiOiJKQVgiLCJzIjo5NCwic2wiOiJSUFMifV19'"
+    "pytest apps/api/tests/test_og_tradevalues_loading_snapshot.py -q",
+    "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "OG route behavior changes",
-    "New panels",
-    "Bureau OG routes",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
+    "OG route.tsx changes",
+    "breakouts/buysell/dashboard renderers",
+    "NORTH_STAR edits"
   ],
-  "builder_mode": "composer-surgical",
-  "status": "shipped",
-  "content_commit": "75ff53361"
+  "builder_mode": "composer-surgical"
 }

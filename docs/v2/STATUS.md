@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 161 — Lab prospects loading OG sample snapshot)
+**Last updated:** 2026-05-31 (factory cycle 162 — Lab trade values loading OG sample snapshot)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 161 |
+| Cycle | 162 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | PARITY next Lab L5 or Bureau slice |
-| Last commit | `75ff53361` |
+| Next slice | Lab loading-state OG exports (breakouts atom 2/4) |
+| Last commit | `f6e0985f3` |
 
-Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
+Recent completions (cycle 162): Trade values sample export on loading/empty board.
 
 ---
 
