@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 150 — Trade Finder OG preview link on share bar)
+**Last updated:** 2026-05-31 (factory cycle 154 — Trade Finder OG preview link on share bar)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 150 |
+| Cycle | 154 |
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | (Trade Finder GTM epic complete — see PARITY) |
-| Last commit | `3d0932f30` |
+| Last commit | `TBDHASH` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

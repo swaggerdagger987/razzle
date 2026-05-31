@@ -1,6 +1,9 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import Link from "next/link";
+import type { Route } from "next";
+import { toRoom } from "@razzle/hallway";
 import {
   encodeBureauTradeFinderOgSnapshot,
   type BureauTradeFinderOgSnapshot,
@@ -33,6 +36,21 @@ export function BureauTradeFinderShareBar({ leagueId, userId, snapshot }: Props)
   const previewPath = `/og/trade-finder?${previewParams.toString()}`;
   const exportParams = new URLSearchParams(previewParams);
   exportParams.set("download", "1");
+
+  const hero = snapshot?.hero_match ?? snapshot?.matches?.[0];
+  const bonesRoomHref = hero
+    ? (toRoom({
+        agentId: "bones",
+        question: `Should I offer ${hero.give.name} for ${hero.get.name} from ${hero.partner_team}? Value gap is ${hero.gap_pct}%.`,
+        panelSlug: "trade-finder",
+        player: {
+          playerId: hero.give.player_id,
+          name: hero.give.name,
+          slug: hero.give.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          position: hero.give.position,
+        },
+      }) as Route)
+    : null;
 
   const copyTradeLink = useCallback(async () => {
     const url =
@@ -84,6 +102,11 @@ export function BureauTradeFinderShareBar({ leagueId, userId, snapshot }: Props)
       >
         export card
       </a>
+      {bonesRoomHref && hero ? (
+        <Link href={bonesRoomHref} className="text-xs text-orange underline">
+          ask Bones about {hero.partner_team} →
+        </Link>
+      ) : null}
     </div>
   );
 }
