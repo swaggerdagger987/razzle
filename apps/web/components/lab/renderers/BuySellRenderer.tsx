@@ -17,6 +17,7 @@ import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
+import { LabOgExportLink } from "../LabOgExportLink";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -315,6 +316,7 @@ export function BuySellRenderer({ panel }: Props) {
               Ask Bones about {topSell.name} (sell) →
             </Link>
           )}
+          <LabOgExportLink slug="buysell" downloadName="razzle-buy-sell.png" />
         </footer>
       )}
     </div>

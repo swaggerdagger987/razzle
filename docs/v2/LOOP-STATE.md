@@ -1,10 +1,10 @@
-cycle: 66
+cycle: 67
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-export-buysell-dashboard (atom 2/3)
-last_keep_cycle: 66
-last_commit: 45a5e79b
+next_slice: lab-og-export-player-scoped (atom 3/3)
+last_keep_cycle: 67
+last_commit: 497d1df5
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -16,3 +16,4 @@ league_l5_og_pressure_map: complete
 league_l5_bureau_og_epic: complete
 lab_l5_og_export_link_epic: in_progress
 lab_l5_og_export_gamelog_efficiency_aging: complete
+lab_l5_og_export_buysell_dashboard: in_progress
