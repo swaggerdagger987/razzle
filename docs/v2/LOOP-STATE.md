@@ -4,8 +4,8 @@ focus_pillar: League
 focus_layer: L5
 next_slice: bureau-self-scout-snapshot-roundtrip-test
 last_keep_cycle: 129
-last_commit: da33eafd
+last_commit: 7bc24c3a
 lab_l5_og_live_rows_epic: complete
 lab_l4_pro_gate_epic: complete
 lab_l5_og_panel_native_live_epic: active
-league_l5_self_scout_export_epic: active
+league_l5_self_scout_export_epic: complete

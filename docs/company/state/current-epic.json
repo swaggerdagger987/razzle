@@ -19,12 +19,12 @@
     {
       "id": "bureau-self-scout-snapshot-roundtrip-test",
       "title": "Self-Scout — pytest roundtrip for snapshot codec",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7bc24c3a"
     }
   ],
-  "next_atom_id": "bureau-self-scout-snapshot-roundtrip-test",
-  "epic_status": "active",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T12:15:00Z",
   "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
@@ -75,6 +75,12 @@
       "status": "complete",
       "last_atom": "lab-sidebar-staff-picks-by-agent",
       "merge_commit": "4e8b0e8e"
+    },
+    {
+      "id": "league-l5-self-scout-export",
+      "status": "complete",
+      "last_atom": "bureau-self-scout-snapshot-roundtrip-test",
+      "merge_commit": "7bc24c3a"
     }
   ]
 }
