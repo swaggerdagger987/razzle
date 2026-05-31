@@ -6,11 +6,11 @@ interface Props {
   leagueId: string;
 }
 
-/** Copyable Trade Network URL + OG export — mirrors BureauMonteCarloShareBar. */
-export function BureauTradeNetworkShareBar({ leagueId }: Props) {
+/** Copyable Pressure Map URL + OG export — mirrors BureauH2HShareBar. */
+export function BureauPressureMapShareBar({ leagueId }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const networkPath = `/league/${leagueId}/trade-network`;
+  const pressurePath = `/league/${leagueId}/pressure-map`;
 
   const ogParams = new URLSearchParams({
     league: leagueId,
@@ -19,7 +19,9 @@ export function BureauTradeNetworkShareBar({ leagueId }: Props) {
 
   const copyLink = useCallback(async () => {
     const url =
-      typeof window !== "undefined" ? `${window.location.origin}${networkPath}` : networkPath;
+      typeof window !== "undefined"
+        ? `${window.location.origin}${pressurePath}`
+        : pressurePath;
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
@@ -27,16 +29,16 @@ export function BureauTradeNetworkShareBar({ leagueId }: Props) {
     } catch {
       setCopied(false);
     }
-  }, [networkPath]);
+  }, [pressurePath]);
 
   return (
     <div className="flex flex-wrap items-center gap-2">
       <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
-        {copied ? "copied!" : "copy network link"}
+        {copied ? "copied!" : "copy pressure link"}
       </button>
       <a
-        href={`/og/trade-network?${ogParams.toString()}`}
-        download="razzle-trade-network.png"
+        href={`/og/pressure-map?${ogParams.toString()}`}
+        download="razzle-pressure-map.png"
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
       >

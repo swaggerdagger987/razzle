@@ -92,9 +92,8 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
         </section>
       )}
 
-      <footer className="flex flex-col gap-4 text-sm">
+      <footer className="flex flex-wrap items-center gap-4 text-sm">
         <BureauTradeNetworkShareBar leagueId={leagueId} />
-        <div className="flex flex-wrap items-center gap-4">
         <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
           manager profiles →
         </Link>
@@ -104,7 +103,6 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
         <Link href={`/league/${leagueId}/trade-finder` as Route} className="text-orange underline">
           trade finder →
         </Link>
-        </div>
       </footer>
     </div>
   );
