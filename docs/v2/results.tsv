@@ -13,4 +13,4 @@
 HEAD
 127	f56fdbd8	depth+voice+simplicity	keep	Lab	L4 Pro gate perks PARITY catalog titles + Bureau-7	trust=T2,T6; launch10PerkLabels; bureau7PerkLabels; pytest 6; L4 epic atom 3/3 complete
 128	7abe91fa	depth+voice+simplicity	keep	Explore	L5 Explore OG universe+college export params	trust=T5,T6; buildExploreOgExportParams; pytest 4; curl college 37393B; L5 epic atom 2/3
-129	da33eafd	depth+voice+simplicity	keep	Lab	L5 Gamelog OG default player_id on export	trust=T5,T6; buildLabOgExportParams; pytest 3; curl gamelog 60634B; L5 epic atom 3/3 complete
+129	db8d5904	depth+voice+simplicity	keep	Lab	L5 Gamelog OG default player_id on export	trust=T5,T6; buildLabOgExportParams; pytest 3; curl gamelog 60634B; L5 epic atom 3/3 complete

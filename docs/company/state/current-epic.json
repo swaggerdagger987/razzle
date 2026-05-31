@@ -20,14 +20,20 @@
     {
       "id": "lab-og-gamelog-player-default",
       "title": "Gamelog OG — default player_id when export omits query",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "db8d5904"
     }
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T08:25:32Z",
   "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-og-live-fetch-epic",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "db8d5904"
+    },
     {
       "id": "lab-l4-pro-gate-epic",
       "status": "complete",
