@@ -60,4 +60,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY + tradevalues formula_score order
-2026-05-31 | lab-og-gamelog-player-default | da33eafd | SHIP | gamelog OG blank player_id → Chase default; curl 60634B.
+2026-05-31 | lab-og-gamelog-player-default | c09a8f9e | SHIP | gamelog OG blank player_id → Chase default; curl 60634B.

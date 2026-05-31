@@ -25,8 +25,9 @@
     }
   ],
   "next_atom_id": "lab-og-gamelog-player-default",
+  "epic_status": "active",
   "created_at": "2026-05-31T08:25:32Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "updated_at": "2026-05-31T08:55:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-gamelog-live-week-rows",
