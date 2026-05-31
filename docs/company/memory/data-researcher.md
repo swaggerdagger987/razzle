@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-og-tolab-watermark | da33eafd | No new Reddit intel; hallway slice only.
+2026-05-31 | lab-og-tolab-watermark | b80512bb4 | No new Reddit intel; hallway slice only.
 
 2026-05-31 | lab-og-sample-labels | 54443bc8 | No new intel; OG trust-label slice only.
 

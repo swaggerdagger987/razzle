@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-tolab-watermark | da33eafd | SHIP | toLab on panel OG band; position query when filtered.
+2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | toLab on panel OG band; position query when filtered.
 
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | NFL share URLs drop universe=nfl; college keeps param.
 2026-05-31 | lab-l4-pro-gate-error-dynasty-comps | a3f07d1e5 | SHIP | DynastyCompsRenderer ProGateFromPanelError; pytest 9.
