@@ -1,8 +1,8 @@
-cycle: 134
+cycle: 135
 last_board_cycle: 54
-focus_pillar: Lab
-focus_layer: L4
-next_slice: explore-og-college-gate-c
-last_keep_cycle: 134
-last_commit: 1bed81fb
-lab_l4_pro_gate_upgrade_epic: complete
+focus_pillar: Explore
+focus_layer: L5
+next_slice: explore-og-nfl-universe-default
+last_keep_cycle: 135
+last_commit: da33eafd
+explore_l5_universe_epic: atom 2/3

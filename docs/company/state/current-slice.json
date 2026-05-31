@@ -1,24 +1,24 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-universe-query",
+  "atom_id": "explore-og-college-gate-c",
   "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
   "epic": "Explore L5 — universe-aware share exports",
-  "slice_title": "Explore OG college export filename + pytest guard",
+  "slice_title": "College explore OG demo rows for Gate C PNG ≥40KB",
   "parity_ref": "Explore L5 — share card matches screener universe",
   "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG contract",
+  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/explore/ExploreShareButton.tsx",
-    "apps/api/tests/test_explore_share_og_universe.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_college_gate_c.py"
   ],
   "max_files": 2,
-  "max_lines": 60,
+  "max_lines": 120,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_explore_share_og_universe.py -q",
+    "pytest apps/api/tests/test_explore_og_college_gate_c.py -q",
     "npm run build --workspace=apps/web 2>&1 | tail -8"
   ],
-  "out_of_scope": ["OG route logic", "screener API", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": ["ExploreShareButton", "screener API", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

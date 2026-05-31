@@ -1,14 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | explore-og-universe-query | b098d64c | keep | college vs NFL OG download filename for Reddit.
-
-2026-05-31 | FROM PANEL evidence | 164159413 | Rankings + weekly snapshot curls guard highest-traffic export panels; atom 2/3.
-
-2026-05-31 | FROM PANEL sticker | 7d49e4f0c | Snapshot exports need glance trust like LIVE/SAMPLE stickers; epic atom 1/3.
-
-2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | SHIP | keep | atom 3/3 closes Launch-10 LIVE sticker epic.
-
-2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | SHIP | keep | atom 2/3 Gate C evidence for Bones/Octo panels.
+2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | SAMPLE stickers mirror LIVE dynasty/RBS/value curve; T1/T5/T6.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
