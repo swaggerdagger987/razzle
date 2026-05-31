@@ -1,26 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-pro-gate-panel-pitches",
-  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
-  "epic": "Lab L4 — pro gates feel like upgrade, not error",
-  "slice_title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE — Lab pro gates",
-  "trust_pillars": ["T2", "T6"],
-  "allowed_paths": ["apps/web/lib/panel-upgrade-teaser.ts"],
-  "max_files": 1,
-  "max_lines": 15,
-  "acceptance_commands": [
-    "npm run build --workspace=apps/web 2>&1 | tail -3",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q 2>&1 | tail -3"
+  "big_problem": "Lab OG exports without snapshot still fall back to demo — Explore college exports need universe + search query wired through share URLs.",
+  "epic": "Lab L5 — OG live fetch + sticker parity",
+  "slice_title": "Explore OG — universe + search query in export URL with college badge",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Explore L2",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/lib/explore-params.ts",
+    "apps/web/components/explore/ExploreShareButton.tsx",
+    "apps/web/app/og/explore/route.tsx"
   ],
-  "out_of_scope": ["ProUpgradeGate.tsx", "pricing", "OG routes"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "max_files": 3,
+  "max_lines": 120,
+  "acceptance_commands": [
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-college-q.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/explore?universe=college&sort=total_yards&dir=desc&q=ward&download=1'",
+    "curl -s -o /tmp/og-nfl-q.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc&q=chase&download=1'"
+  ],
+  "out_of_scope": [
+    "Formula sort on OG export",
+    "New API routes",
+    "Auth/billing"
+  ],
+  "builder_mode": "composer-surgical"
 }

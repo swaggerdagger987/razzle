@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { buildExploreOgSearchParams } from "@/lib/explore-params";
 
 interface Props {
-  universe: string;
+  universe: "nfl" | "college";
   sort: string;
   dir: string;
   q: string;
@@ -13,12 +14,8 @@ interface Props {
 export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const previewParams = new URLSearchParams({ universe, sort, dir });
-  if (q) previewParams.set("q", q);
-  if (pos.length) previewParams.set("pos", pos.join(","));
-
-  const ogParams = new URLSearchParams(previewParams);
-  ogParams.set("download", "1");
+  const previewParams = buildExploreOgSearchParams({ universe, sort, dir, q, pos });
+  const ogParams = buildExploreOgSearchParams({ universe, sort, dir, q, pos, download: true });
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
