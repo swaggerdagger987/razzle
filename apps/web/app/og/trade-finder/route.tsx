@@ -80,6 +80,16 @@ function bonesTradeFinderRoomQuestion(hero: BureauTradeFinderOgMatch): string {
   return `Should I offer ${hero.give.name} for ${hero.get.name} from ${hero.partner_team}? Value gap is ${hero.gap_pct}%.`;
 }
 
+/** Typed hallway path for OG watermark band (T6 — click back into Bureau Trade Finder). */
+function tradeFinderOgWatermarkLink(league: string, user: string): string {
+  if (!league) return "/league/trade-finder";
+  let path = toLeague(league, "trade-finder");
+  if (user) {
+    path = `${path}?${new URLSearchParams({ user }).toString()}`;
+  }
+  return path;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -103,7 +113,7 @@ export async function GET(req: Request) {
   const hero = panelData.hero_match ?? matches[0];
   const needs = panelData.needs ?? [];
   const surplus = panelData.surplus ?? [];
-  const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
+  const leagueDeepLink = tradeFinderOgWatermarkLink(league, user);
   const bonesRoomPath = hero
     ? toRoom({
         agentId: "bones",

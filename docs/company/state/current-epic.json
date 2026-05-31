@@ -32,6 +32,13 @@
   "next_atom_id": "league-og-pressure-map-watermark",
   "epic_status": "active",
   "created_at": "2026-05-31T11:45:03Z",
-  "updated_at": "2026-05-31T11:55:00Z",
-  "completed_epics": []
+  "updated_at": "2026-05-31T12:00:00Z",
+  "completed_epics": [
+    {
+      "id": "league-l5-bureau-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "league-h2h-og-toleague-watermark",
+      "merge_commit": "6eea07576"
+    }
+  ]
 }
