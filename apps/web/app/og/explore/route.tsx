@@ -254,7 +254,6 @@ export async function GET(req: Request) {
     players
       .slice(0, TOP_MARGIN_NOTE_ROWS)
       .some((p) => marginNoteForOgExploreRow(p, universe) != null);
-
   return new ImageResponse(
     (
       <div
@@ -313,23 +312,6 @@ export async function GET(req: Request) {
               SAMPLE · not live data
             </div>
           ) : null}
-          {hasStaffMarginNotes ? (
-            <div
-              style={{
-                display: "flex",
-                fontSize: 16,
-                fontWeight: 700,
-                background: "#2ec4b6",
-                color: "#f7efe5",
-                padding: "4px 12px",
-                border: "3px solid #2d1f14",
-                borderRadius: 6,
-                boxShadow: "3px 3px 0 #2d1f14",
-              }}
-            >
-              LIVE · staff margin notes
-            </div>
-          ) : null}
         </div>
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>
           {isDemo
@@ -338,6 +320,28 @@ export async function GET(req: Request) {
               }`
             : subtitle}
         </div>
+
+        {hasStaffMarginNotes && !isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · staff margin notes
+          </div>
+        ) : null}
 
         {players.length > 0 ? (
           <div
