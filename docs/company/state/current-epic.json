@@ -9,7 +9,7 @@
       "id": "lab-og-watermark-display-name",
       "title": "Gamelog export passes player name into OG watermark toLab",
       "status": "done",
-      "merge_commit": "PLACEHOLDER"
+      "merge_commit": "338709883"
     }
   ],
   "next_atom_id": null,
@@ -20,7 +20,7 @@
       "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
       "last_atom": "lab-og-watermark-display-name",
-      "merge_commit": "PLACEHOLDER"
+      "merge_commit": "338709883"
     }
   ]
 }
