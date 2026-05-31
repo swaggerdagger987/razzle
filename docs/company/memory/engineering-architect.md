@@ -1,11 +1,16 @@
 # Memory — Engineering Architect
 
-2026-05-31 | explore-og-universe-query | f3ff7fda | buildExploreShareQuery in explore-params; 2 files ≤80 lines.
+2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
+2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
 2026-05-31 | fetchOgLiveRows launch-10 | e2a3ce8a | panel API + pro header before panels slug; demo last.
 2026-05-31 | Cycle 118 | e00217d1 | prospectSources loop in route.tsx.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | 1-file panel route; LIVE sticker gated on showingLiveData.
+
+2026-05-31 | launch10 teaser audit | b0405d43 | keep | 2 files; LAUNCH_10_* exports + pytest guard.
+
+2026-05-31 | gamelog weeks extract | 40c80f0e | 1-file ~35 lines; player-scoped weeks[] not players[]; no PANEL_OG_STAT_KEY.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | 1-file H2H OG; band copied from panel route; atlas link above band.
 

@@ -36,6 +36,8 @@ export function buildExploreShareQuery(params: {
   dir: string;
   q?: string;
   pos?: string[];
+  season?: number;
+  team?: string[];
   download?: boolean;
 }): URLSearchParams {
   const qs = new URLSearchParams({
@@ -45,6 +47,8 @@ export function buildExploreShareQuery(params: {
   });
   if (params.q) qs.set("q", params.q);
   if (params.pos?.length) qs.set("pos", params.pos.join(","));
+  if (params.season && params.season > 0) qs.set("season", String(params.season));
+  if (params.team?.length) qs.set("team", params.team.join(","));
   if (params.download) qs.set("download", "1");
   return qs;
 }

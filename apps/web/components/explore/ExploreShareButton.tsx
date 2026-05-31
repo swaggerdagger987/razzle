@@ -9,18 +9,28 @@ interface Props {
   dir: string;
   q: string;
   pos: string[];
+  season?: number;
+  team?: string[];
 }
 
-export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
+export function ExploreShareButton({
+  universe,
+  sort,
+  dir,
+  q,
+  pos,
+  season = 0,
+  team = [],
+}: Props) {
   const [copied, setCopied] = useState(false);
 
   const previewParams = useMemo(
-    () => buildExploreShareQuery({ universe, sort, dir, q, pos }),
-    [universe, sort, dir, q, pos],
+    () => buildExploreShareQuery({ universe, sort, dir, q, pos, season, team }),
+    [universe, sort, dir, q, pos, season, team],
   );
   const ogParams = useMemo(
-    () => buildExploreShareQuery({ universe, sort, dir, q, pos, download: true }),
-    [universe, sort, dir, q, pos],
+    () => buildExploreShareQuery({ universe, sort, dir, q, pos, season, team, download: true }),
+    [universe, sort, dir, q, pos, season, team],
   );
 
   const shareUrl = useMemo(() => {
