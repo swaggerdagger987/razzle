@@ -1,14 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-college-gate-c",
-  "slice_title": "College explore OG Gate C pytest + campus SAMPLE copy",
+  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
+  "epic": "Room L5 — briefing GTM export",
+  "atom_id": "room-briefing-watermark",
+  "slice_title": "Briefing OG — terracotta watermark + Room hallway deep link",
+  "parity_ref": "Room L5 — GTM export slice",
+  "depth_ref": "Room L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_college_gate_c.py"
+    "apps/web/app/og/briefing/route.tsx",
+    "apps/api/tests/test_briefing_og_route.py"
   ],
+  "max_files": 2,
+  "max_lines": 40,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_explore_og_college_gate_c.py -q --noconftest"
+    "python3 -m pytest apps/api/tests/test_briefing_og_route.py -q --noconftest"
   ],
+  "out_of_scope": [
+    "BriefingCard UI changes",
+    "new npm deps",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",

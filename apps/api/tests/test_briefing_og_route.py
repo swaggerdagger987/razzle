@@ -21,3 +21,12 @@ def test_briefing_card_export_link():
     text = path.read_text(encoding="utf-8")
     assert "/og/briefing" in text
     assert "export card" in text
+
+
+def test_briefing_og_terracotta_watermark_and_room_hallway():
+    path = _repo_root() / "apps/web/app/og/briefing/route.tsx"
+    text = path.read_text(encoding="utf-8")
+    assert "toRoom" in text
+    assert "Always-on watermark band" in text
+    assert 'background: "#d97757"' in text
+    assert "razzle.lol${roomPath}" in text

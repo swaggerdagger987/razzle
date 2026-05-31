@@ -158,12 +158,13 @@ export async function GET(req: Request) {
           {`razzle.lol${roomPath} · continue in the Room`}
         </div>
 
+        {/* Always-on watermark band — terracotta + Room hallway deep link (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginTop: 14,
+            marginTop: 16,
             padding: "10px 18px",
             background: "#d97757",
             color: "#f7efe5",
@@ -173,7 +174,10 @@ export async function GET(req: Request) {
             fontSize: 20,
           }}
         >
-          <div style={{ display: "flex", fontWeight: 700 }}>razzle.lol/room</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${roomPath}`}</div>
+            <div style={{ display: "flex", fontSize: 16, fontFamily: "Caveat" }}>Situation Room</div>
+          </div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>

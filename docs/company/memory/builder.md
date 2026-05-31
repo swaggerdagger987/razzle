@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | room-briefing-watermark | da33eafd | SHIP | Briefing OG watermark uses razzle.lol${roomPath}; pytest 3.
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | NFL share URLs drop universe=nfl; college keeps param.
 2026-05-31 | lab-l4-pro-gate-error-dynasty-comps | a3f07d1e5 | SHIP | DynastyCompsRenderer ProGateFromPanelError; pytest 9.
 
