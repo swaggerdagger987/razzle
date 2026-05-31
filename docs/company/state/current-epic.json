@@ -1,50 +1,16 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
-  "epic_title": "Lab L5 — formula-sorted OG live parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
+  "epic_title": "Lab L5 — OG hallway deep links",
+  "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
-    {
-      "id": "lab-og-breakouts-rankings-formula-live",
-      "title": "Breakouts + rankings OG live extract prefers formula_score",
-      "status": "done",
-      "merge_commit": "ceadf0402"
-    },
-    {
-      "id": "lab-og-weekly-prospects-live-sticker-guard",
-      "title": "Weekly + prospects LIVE sticker pytest guard",
-      "status": "done",
-      "merge_commit": "d03cb653b"
-    },
-    {
-      "id": "lab-og-buysell-formula-live",
-      "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "lab-og-from-panel-gate-c-rest",
-      "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
-      "status": "pending",
-      "merge_commit": null
-    }
+    {"id": "lab-og-tolab-watermark", "title": "Launch-10 toLab watermark band", "status": "done", "merge_commit": "b80512bb4"},
+    {"id": "lab-og-tolab-gamelog-default", "title": "Gamelog/dynasty-comps default player in toLab", "status": "in_progress", "merge_commit": null},
+    {"id": "lab-og-tolab-snapshot-player", "title": "Snapshot exports preserve player in watermark", "status": "pending", "merge_commit": null}
   ],
-  "next_atom_id": "lab-og-buysell-formula-live",
-  "created_at": "2026-05-31T10:36:02Z",
-  "updated_at": "2026-05-31T12:15:00Z",
-  "completed_epics": [
-    {
-      "id": "room-l5-briefing-gtm-export",
-      "status": "complete",
-      "last_atom": "room-briefing-watermark",
-      "merge_commit": "f6e0985f3"
-    },
-    {
-      "id": "lab-l5-og-empty-panel-states",
-      "status": "active",
-      "last_atom": "lab-gamelog-empty-weeks-export",
-      "merge_commit": "ac0280a20"
-    }
-  ]
+  "next_atom_id": "lab-og-tolab-gamelog-default",
+  "created_at": "2026-05-31T11:00:00Z",
+  "updated_at": "2026-05-31T11:15:00Z",
+  "completed_epics": ["lab-l5-og-export-live-panel-rows"]
 }
