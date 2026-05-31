@@ -12,6 +12,7 @@
 
 ```text
 npm run build --workspace=apps/web  → exit 0
+python3 -m pytest apps/api/tests -q  → 59 passed, 5 skipped
 ```
 
 ## Notes

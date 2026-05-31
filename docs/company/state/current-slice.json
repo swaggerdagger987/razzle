@@ -14,7 +14,8 @@
   "max_files": 1,
   "max_lines": 80,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web",
+    "python3 -m pytest apps/api/tests -q"
   ],
   "out_of_scope": [
     "OG routes",
@@ -28,5 +29,8 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "content_commit": "1cecde2a",
+  "reality": "PASS",
+  "merge": "pending"
 }
