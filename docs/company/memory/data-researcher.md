@@ -1,4 +1,5 @@
 2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
+2026-05-31 | explore-og-margin-note-rows | f6e0985f3 | PASS | No new Reddit intel; OG rows match screener margin pattern.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.
