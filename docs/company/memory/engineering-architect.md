@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tolab-snapshot-weekly-player | f6e0985f3 | 2 files ≤5 lines; hot-row playerId on export link.
+2026-05-31 | lab-og-tolab-snapshot-weekly-player | e516797e6 | 2 files ≤5 lines; hot-row playerId on export link.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
