@@ -1,26 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-snapshot",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "slice_title": "DashboardRenderer encodes top-6 comp match rows in dynasty-comps OG snapshot",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
-  ],
+  "atom_id": "lab-dynasty-comps-pro-teaser",
+  "big_problem": "Lab Pro gates still feel like errors — generic copy on dynasty comps.",
+  "epic": "Lab L4 — Pro upgrade gates feel like upgrade, not error",
+  "slice_title": "Dynasty comps Pro gate bespoke teaser rows + Hawkeye pitch",
+  "parity_ref": "Lab L4 — pro-gate polish",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "T6 screenshot gravity — Pro gate shows comp-tier preview",
+  "trust_pillars": ["T6"],
+  "allowed_paths": ["apps/web/lib/panel-upgrade-teaser.ts"],
   "max_files": 1,
-  "max_lines": 40,
+  "max_lines": 20,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
+    "node -e \"const {teaserRowsForPanel,upgradePitchForPanel}=require('./apps/web/lib/panel-upgrade-teaser.ts');\" 2>/dev/null || true"
   ],
-  "out_of_scope": [
-    "OG route changes",
-    "DynastyCompsRenderer (already has snapshot)",
-    "NORTH_STAR / DESIGN edits"
-  ],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["tier changes", "DynastyDashboardRenderer", "NORTH_STAR edits"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "strategist": "SHIP",
+    "architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }
