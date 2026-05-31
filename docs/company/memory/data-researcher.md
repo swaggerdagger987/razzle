@@ -2,6 +2,8 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | PASS | No new Reddit intel; hallway snapshot pid slice.
+
 2026-05-31 | lab-og-tolab-gamelog-default | — | PASS | No new Reddit intel; hallway slice only.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | No new intel; Lab formula OG slice only.
 

@@ -1,6 +1,8 @@
-2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.
+2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | Snapshot pid wrapper; hallway epic complete (T6).
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
+
+2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | SHIP | Formula OG epic complete; prospects/tradevalues snapshot trust.
 
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Default Ja'Marr exports deep-link back into gamelog tape (T6).
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Buy/sell OG matches formula-sorted panel lanes.
