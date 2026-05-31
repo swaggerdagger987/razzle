@@ -1,27 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "bureau-self-scout-snapshot-export",
+  "atom_id": "bureau-self-scout-sharebar-extract",
   "big_problem": "Bureau exports still diverge from in-product views — Self-Scout cards rely on live API while rivals use snapshot codecs.",
   "epic": "League L5 — Self-Scout export travels with depth grades",
-  "slice_title": "Self-Scout — snapshot param on export card matches OG",
+  "slice_title": "Self-Scout — BureauSelfScoutShareBar mirrors H2H pattern",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with real grade rows",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot or demo rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-self-scout-og-snapshot.ts",
-    "apps/web/app/og/self-scout/route.tsx",
+    "apps/web/components/league/BureauSelfScoutShareBar.tsx",
     "apps/web/components/league/BureauSelfScout.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 280,
+  "max_files": 2,
+  "max_lines": 120,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web 2>&1 | tail -5",
-    "curl -s -o /tmp/self-scout-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/self-scout?download=1'"
+    "npm run build --workspace=apps/web 2>&1 | tail -8",
+    "curl -s -o /tmp/self-scout-share.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/self-scout?download=1'"
   ],
   "out_of_scope": [
-    "ShareBar extraction",
-    "pricing/auth",
+    "OG route changes",
+    "snapshot codec changes",
+    "pytest roundtrip atom",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
