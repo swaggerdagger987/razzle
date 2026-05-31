@@ -7,13 +7,13 @@
     {
       "id": "lab-pro-gate-hallway-teasers",
       "title": "Pro gate hallway screener link + teasers for comps/tiers/vorp/stocks",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "675044ea"
     },
     {
       "id": "lab-pro-gate-launch10-teasers",
       "title": "Launch-10 pro panel teasers audit — fill any slug gaps in generic renderer",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {

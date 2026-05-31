@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 116 — Lab L4 pro-gate hallway + teasers)
+**Last updated:** 2026-05-31 (factory cycle 117 — Lab L4 Launch-10 pro gate teaser gaps)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 116 |
+| Cycle | 117 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L4 |
-| Next slice | lab-pro-gate-launch10-teasers |
-| Last commit | `675044ea` |
+| Next slice | lab-pro-gate-perks-copy |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
