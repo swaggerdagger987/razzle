@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Factory cycle 1 atom 3 (player-scoped OG export)
+
+1. **Share links must echo the player on screen** — comps and gamelog exports need `player_id` in the URL.
+2. **Dynasty comps** gets a dedicated renderer (search + export), not a generic JSON panel.
+3. Standing: Lab L5 OG export epic complete.
+
 ## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
 
 1. **Export must live on the panel** — users screenshot from the tool they are in; buried OG routes without an "export card" link do not travel.

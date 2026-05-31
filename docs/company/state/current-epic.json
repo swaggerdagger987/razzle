@@ -20,7 +20,7 @@
     {
       "id": "lab-og-export-player-scoped",
       "title": "Player-scoped OG export links with default player_id on dynasty-comps and gamelog",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
