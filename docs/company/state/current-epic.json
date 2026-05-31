@@ -27,11 +27,11 @@
       "id": "lab-og-position-gamelog",
       "title": "Gamelog export passes player position to OG",
       "status": "done",
-      "merge_commit": "a24756c0"
+      "merge_commit": "228c4b59"
     }
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T06:45:00Z",
   "updated_at": "2026-05-31T07:30:00Z",
-  "last_cycle_commit": "a24756c0"
+  "last_cycle_commit": "228c4b59"
 }
