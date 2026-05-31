@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Explore college OG export URL (cycle 125)
+- **Angle:** College screener share cards carry `universe=college` + search query in export URL; CFB badge on card.
+- **Trust:** T5/T6 — Hawkeye college lane screenshots stay honest vs NFL dynasty exports.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
