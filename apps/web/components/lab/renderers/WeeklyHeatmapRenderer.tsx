@@ -8,7 +8,7 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
@@ -70,6 +70,31 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
       }
     }
     return best;
+  }, [players]);
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const withPeak = players.map((p) => {
+      let peakWeek = 0;
+      let peakPts = 0;
+      for (const [wk, pts] of Object.entries(p.weeks ?? {})) {
+        if (pts != null && pts > peakPts) {
+          peakPts = pts;
+          peakWeek = Number(wk);
+        }
+      }
+      return { p, peakWeek, peakPts };
+    });
+    return withPeak
+      .filter((row) => row.peakPts > 0)
+      .sort((a, b) => b.peakPts - a.peakPts)
+      .slice(0, 6)
+      .map(({ p, peakWeek, peakPts }) => ({
+        name: p.name,
+        position: p.position,
+        team: p.team,
+        stat: peakPts,
+        statLabel: peakWeek ? `W${peakWeek}` : "FPTS",
+      }));
   }, [players]);
 
   if (q.isPending) {
@@ -180,7 +205,11 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {hotPlayer.p.name} →
           </Link>
-          <LabOgExportLink slug="weekly" downloadName="razzle-weekly-heatmap.png" />
+          <LabOgExportLink
+            slug="weekly"
+            downloadName="razzle-weekly-heatmap.png"
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>
