@@ -1,36 +1,36 @@
 {
-  "epic_status": "active",
-  "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product (PARITY League L5).",
-  "epic_title": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "big_problem": "Lab OG export cards must mirror the filters on screen — position on the URL should drive API rows and demo fallbacks, not a generic top-six.",
+  "epic_title": "Lab L5 — OG cards match in-product filter state",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "league-power-rankings-tab",
-      "title": "Unhide Power Rankings tab with Octo renderer + hallway",
+      "id": "lab-og-filter-position-rankings",
+      "title": "Position filter on dynasty rankings OG export + API wiring",
       "status": "done",
-      "merge_commit": "20c7940a"
+      "merge_commit": "348f614c"
     },
     {
-      "id": "league-power-rankings-og",
-      "title": "OG share card at /og/power-rankings with demo fallback",
+      "id": "lab-og-filter-breakouts-weekly",
+      "title": "Position filter on breakouts and weekly heatmap OG exports",
+      "status": "done",
+      "merge_commit": "348f614c"
+    },
+    {
+      "id": "lab-og-filter-prospects-tradevalues",
+      "title": "Filter params on prospects and trade-values OG exports",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "league-roster-depth-tab",
-      "title": "Unhide Roster Depth tab with Dolphin renderer",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "league-build-profiles-tab",
-      "title": "Unhide Build Profiles tab with Atlas renderer",
+      "id": "lab-og-live-row-label",
+      "title": "OG card subtitle distinguishes live rows vs sample preview",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-power-rankings-og",
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z"
+  "next_atom_id": "lab-og-filter-prospects-tradevalues",
+  "epic_status": "active",
+  "created_at": "2026-05-31T04:20:00Z",
+  "updated_at": "2026-05-31T04:50:00Z"
 }

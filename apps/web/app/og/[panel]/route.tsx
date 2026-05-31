@@ -341,7 +341,8 @@ export async function GET(
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const query = url.searchParams.get("q") ?? "";
-  const positionFilter = url.searchParams.get("position") ?? "";
+  const positionFilter =
+    url.searchParams.get("position") ?? url.searchParams.get("pos") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
   const playerId =
     url.searchParams.get("player_id") ??
@@ -386,6 +387,9 @@ export async function GET(
   let rows = isSnapshot ? snapshotRows : liveHasRows ? liveRows : demoRowsForPanel(slug);
   if (!isSnapshot && positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
+    if (isDemo && rows.length === 0) {
+      rows = demoRowsForPanel(slug).filter((r) => r.position === positionFilter);
+    }
   }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
