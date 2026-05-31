@@ -21,13 +21,13 @@
       "id": "lab-og-buysell-formula-live",
       "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
       "status": "pending",
-      "merge_commit": "d03cb653b"
+      "merge_commit": null
     },
     {
       "id": "lab-og-from-panel-gate-c-rest",
       "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
       "status": "pending",
-      "merge_commit": "d03cb653b"
+      "merge_commit": null
     }
   ],
   "next_atom_id": "lab-og-buysell-formula-live",
