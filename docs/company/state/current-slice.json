@@ -1,8 +1,8 @@
 {
   "date": "2026-05-31",
   "atom_id": "lab-weekly-og-snapshot-verify",
-  "big_problem": "Position-filtered Lab panels export OG cards with wrong stat labels or unfiltered rows — screenshots break trust (DEPTH Lab L5).",
-  "epic": "Lab L5 — OG snapshot fidelity on filtered panels",
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — PPG labels and export parity on weekly heatmap.",
+  "epic": "Lab L5 — OG snapshot row fidelity",
   "slice_title": "Weekly heatmap OG snapshot row parity audit",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",

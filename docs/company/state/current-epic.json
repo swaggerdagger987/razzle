@@ -1,31 +1,31 @@
 {
   "epic_status": "active",
-  "big_problem": "Position-filtered Lab panels export OG cards with wrong stat labels or unfiltered rows — screenshots break trust (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — OG snapshot fidelity on filtered panels",
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
+  "epic_title": "Lab L5 — OG snapshot row fidelity",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-prospects-og-rps-position",
-      "title": "Prospects OG: RPS column + position filter on export",
+      "id": "lab-og-prospects-rps-ranked",
+      "title": "Prospects OG export ranks top-6 by RPS with position filter",
       "status": "done",
-      "merge_commit": "17a40c65"
+      "merge_commit": "c0358ff3"
     },
     {
-      "id": "lab-efficiency-og-position-filter",
-      "title": "Efficiency OG export passes position filter",
-      "status": "done",
-      "merge_commit": "b2d304e7"
-    },
-    {
-      "id": "lab-weekly-og-snapshot-verify",
-      "title": "Weekly heatmap OG snapshot row parity audit",
+      "id": "lab-og-weekly-ppg-ranked",
+      "title": "Weekly OG export ranks top-6 by PPG for active position tab",
       "status": "done",
       "merge_commit": "f60168e1"
+    },
+    {
+      "id": "lab-og-breakouts-score-ranked",
+      "title": "Breakouts OG export ranks top-6 by breakout score",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
+  "next_atom_id": "lab-og-breakouts-score-ranked",
   "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T12:30:00Z"
+  "updated_at": "2026-05-31T13:00:00Z",
+  "last_cycle_commit": "f60168e1"
 }
