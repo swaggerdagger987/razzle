@@ -1,28 +1,28 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
-  "epic": "Lab L4 — Pro gates feel like upgrade, not error",
-  "slice_title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
+  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
+  "epic": "Lab L4 — pro gates feel like upgrade, not error",
+  "slice_title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
+  "atom_id": "lab-pro-gate-panel-pitches",
   "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
   "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — Pro gate shows upgrade message, not blank",
+  "acceptance_ref": "DEPTH Lab L4 — Pro gates feel like upgrade, not error",
   "trust_pillars": ["T2", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
     "apps/web/lib/panel-upgrade-teaser.ts",
-    "apps/web/components/lab/ProUpgradeGate.tsx",
     "apps/api/tests/test_panel_upgrade_teaser.py"
   ],
-  "max_files": 4,
-  "max_lines": 150,
+  "max_files": 2,
+  "max_lines": 45,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q"
   ],
   "out_of_scope": [
+    "ProUpgradeGate.tsx",
     "OG routes",
-    "pricing page",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "new npm deps"
   ],
   "builder_mode": "composer-surgical",
   "votes": {

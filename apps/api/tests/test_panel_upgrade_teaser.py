@@ -130,3 +130,11 @@ def test_pro_gate_perks_list_bureau7_labels():
     assert "bureau7PerkLabels" in bureau
     missing = [label for label in BUREAU_7_PERK_LABELS if f'label: "{label}"' not in bureau]
     assert not missing, f"bureau-features missing Bureau-7 labels: {missing}"
+
+
+def test_launch_panel_pitches_are_screenshot_native():
+    """Lab L4 atom — sharpened copy on rankings, tradevalues, breakouts."""
+    source = _teaser_source()
+    assert "before the thread does" in source
+    assert "before your league posts the screenshot" in source
+    assert "beat the waiver wire" in source
