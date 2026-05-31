@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: league-l5-bureau-h2h-export
 last_keep_cycle: 98
-last_commit: fbe64185
+last_commit: 69334f8b
 lab_l5_live_og_epic: complete
 lab_l5_efficiency_og_live_extract: complete
