@@ -8,6 +8,8 @@ Format per entry:
 YYYY-MM-DD | slice | approach | commit hash | outcome | keep | discard | revisit | evidence
 ```
 
+2026-05-31 | league-build-profiles-tab | BureauBuildProfiles Atlas card grid + HIDDEN unhide | da33eafd | SHIP | keep | — | — | evidence/2026-05-31-league-build-profiles-tab.md
+
 Read this file before implementing. Reuse working patterns; avoid repeating known
 failure modes. Karpathy: simplicity first, surgical changes.
 
