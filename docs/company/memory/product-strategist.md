@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | Snapshot exports must deep-link player context in OG watermark (T6).
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Default Ja'Marr exports deep-link back into gamelog tape (T6).
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG LIVE comp matches sticker.

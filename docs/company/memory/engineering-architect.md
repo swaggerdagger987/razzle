@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | Extend includeDefaultPlayer when isSnapshot && playerScoped.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | 2 files; includeDefaultPlayer guard in labOgWatermarkLink.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | PLAYER_SCOPED_LIVE_STICKER_SLUGS excludes Launch-10 gamelog.
 
