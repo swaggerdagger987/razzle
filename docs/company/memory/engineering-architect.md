@@ -1,3 +1,4 @@
+2026-05-31 | lab-panel-share-bar-breakouts-buysell | f6e0985f3 | 3 files ≤80 lines; swap export link for share bar.
 2026-05-31 | lab-panel-share-bar-rankings | 691bd5e1b | 3 files ≤120 lines; share bar reuses LabOgExportLink encode.
 2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | 2 files ≤50 lines; stat key branches only.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
