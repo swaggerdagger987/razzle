@@ -1,9 +1,9 @@
-cycle: 95
+cycle: 94
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-position-tradevalues-prospects
-last_keep_cycle: 95
-last_commit: f358349d
-lab_l5_og_position_epic: active
-lab_l5_og_position_atom: efficiency-aging
+next_slice: lab-weekly-hot-week-snapshot
+last_keep_cycle: 94
+last_commit: 0fb16034
+lab_l5_og_mirror_rows_epic: active
+lab_l5_dashboard_top5_og_snapshot: complete
