@@ -19,8 +19,8 @@
     {
       "id": "league-og-pressure-map-watermark",
       "title": "Pressure Map OG terracotta watermark band",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "8572b2567"
     },
     {
       "id": "league-og-power-rankings-watermark",
@@ -29,7 +29,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-og-pressure-map-watermark",
+  "next_atom_id": "league-og-power-rankings-watermark",
   "epic_status": "active",
   "created_at": "2026-05-31T11:45:03Z",
   "updated_at": "2026-05-31T11:55:00Z",

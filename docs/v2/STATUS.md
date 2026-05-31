@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | Power Rankings OG watermark (bureau epic 4/4) |
-| Last commit | `f6e0985f3` |
+| Last commit | `8572b2567` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
