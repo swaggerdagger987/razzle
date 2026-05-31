@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | explore-og-formula-sort-label | da33eafd | PASS | curl formula OG 73889B; build exit 0.
+2026-05-31 | explore-og-formula-sort-label | 6e643fec | PASS | curl formula OG 73889B; build exit 0.
 
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | PASS | curl force_demo 64789B; build ok; Gate C.
 

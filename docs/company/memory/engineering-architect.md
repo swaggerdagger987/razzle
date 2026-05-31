@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | explore-og-formula-sort-label | da33eafd | keep | api_sort query; 3-file contract.
+2026-05-31 | explore-og-formula-sort-label | 6e643fec | keep | api_sort query; 3-file contract.
 
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | keep | 1 file; force_demo query; SAMPLE sticker.
 

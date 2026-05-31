@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | explore-og-formula-sort-label | da33eafd | PASS | no new intel; formula label trust pattern.
+2026-05-31 | explore-og-formula-sort-label | 6e643fec | PASS | no new intel; formula label trust pattern.
 
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | PASS | no new intel; demo rows pattern from Lab OG.
 

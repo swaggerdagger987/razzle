@@ -4,6 +4,6 @@ focus_pillar: Explore
 focus_layer: L5
 next_slice: pick from PARITY/NEXT — Bureau H2H export or Lab L5 depth
 last_keep_cycle: 130
-last_commit: da33eafd
+last_commit: 6e643fec
 explore_l5_og_query_epic: complete
 lab_l4_pro_gate_epic: complete

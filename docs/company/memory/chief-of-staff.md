@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | explore-og-formula-sort-label | da33eafd | keep | Explore L5 OG epic complete; factory cycle 130.
+2026-05-31 | explore-og-formula-sort-label | 6e643fec | keep | Explore L5 OG epic complete; factory cycle 130.
 
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | keep | workday cycle 1 atom 2/3 Explore L5.
 

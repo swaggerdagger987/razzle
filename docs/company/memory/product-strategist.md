@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | explore-og-formula-sort-label | da33eafd | SHIP | keep | T1 formula honesty on OG; epic 3/3 done.
+2026-05-31 | explore-og-formula-sort-label | 6e643fec | SHIP | keep | T1 formula honesty on OG; epic 3/3 done.
 
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | SHIP | keep | Gate C empty API; atom 2/3.
 
