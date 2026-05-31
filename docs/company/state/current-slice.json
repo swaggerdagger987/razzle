@@ -1,22 +1,22 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-efficiency-aging-live-sort",
-  "big_problem": "Lab OG share cards without panel stat keys sort by wrong fields when live API rows load — screenshots disagree with in-product Lab tables.",
-  "epic": "Lab L5 — OG live panel rows match in-product sort keys",
-  "slice_title": "Efficiency + Aging OG rank by ppo / ppg on live fetch",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "atom_id": "lab-og-watermark-band-panel-route",
+  "big_problem": "Lab OG share cards lack the terracotta watermark band Explore exports have — Reddit screenshots don't carry razzle.lol brand gravity.",
+  "epic": "Lab L5 — OG watermark band on Launch-10 cards",
+  "slice_title": "Launch-10 panel OG route — always-on terracotta watermark band",
+  "parity_ref": "Explore L5 — OG watermark band",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 80,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web 2>&1 | tail -3",
-    "curl -s -o /tmp/og-eff.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?position=RB&download=1'",
-    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/aging?position=RB&download=1'"
+    "curl -s -o /tmp/rankings-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1'",
+    "curl -s -o /tmp/buysell-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1'"
   ],
-  "out_of_scope": ["Lab renderers", "auth/billing", "new panels"],
+  "out_of_scope": ["head-to-head route", "Explore route", "new panels"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
