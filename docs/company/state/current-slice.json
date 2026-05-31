@@ -1,31 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 branches across launch-10 renderers drift from teaser/perks polish.",
-  "epic": "Lab L4 — shared pro-gate error surface",
-  "slice_title": "ProGateFromPanelError on breakouts + pytest guard",
-  "atom_id": "lab-l4-pro-gate-error-surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — pro panel shows upgrade message (402)",
-  "trust_pillars": ["T2", "T6"],
-  "allowed_paths": [
-    "apps/web/components/lab/ProGateFromPanelError.tsx",
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
-  ],
-  "max_files": 3,
-  "max_lines": 140,
+  "big_problem": "Lab search surfaces agent owners but buries panel names behind an agent prefix — power users cannot scan filtered results.",
+  "epic": "Lab L2 — search labels readable at a glance",
+  "slice_title": "Search hits show panel title first with agent suffix",
+  "atom_id": "lab-sidebar-search-title-first",
+  "parity_ref": "docs/v2/AGENTS.md — LabSidebar H-04",
+  "depth_ref": "Lab L2",
+  "acceptance_ref": "H-04 six agents same ids everywhere",
+  "trust_pillars": ["T4", "T6"],
+  "allowed_paths": ["apps/web/components/lab/LabSidebar.tsx"],
+  "max_files": 1,
+  "max_lines": 25,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q"
   ],
-  "out_of_scope": ["Tradevalues/efficiency this cycle"],
+  "out_of_scope": ["ProUpgradeGate", "OG routes", "NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "status": "shipped"
+  }
 }

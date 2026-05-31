@@ -151,7 +151,7 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
                   key={panel.slug}
                   panel={panel}
                   activeSlug={activeSlug}
-                  showOwnerInTitle={Boolean(query)}
+                  showAgentInTitle={Boolean(query)}
                   onNavigate={onCloseMobile}
                 />
               ))}
@@ -172,20 +172,27 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
-  showOwnerInTitle = false,
+  showAgentInTitle,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
-  /** When searching, prefix visible title with agent owner (hallway H-04). */
-  showOwnerInTitle?: boolean;
+  /** When searching, surface agent owner after panel title (hallway H-04). */
+  showAgentInTitle?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
   const owner = agentForPanel(panel.slug);
   const label =
-    showOwnerInTitle && owner ? `${owner.name} · ${panel.title}` : panel.title;
+    showAgentInTitle && owner ? (
+      <>
+        {panel.title}
+        <span className="lab-sidebar-owner text-xs text-ink-medium"> · {owner.name}</span>
+      </>
+    ) : (
+      panel.title
+    );
   return (
     <Link
       href={`/lab/${panel.slug}`}
