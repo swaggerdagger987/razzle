@@ -1,9 +1,8 @@
-cycle: 154
+cycle: 157
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-h2h-og-exported-pytest
-last_keep_cycle: 154
-last_commit: 5b60ea23d
-league_l5_h2h_gtm_epic: active
+next_slice: (trade-finder GTM epic complete — pick from PARITY)
+last_keep_cycle: 157
+last_commit: 15a78eada
 league_l5_trade_finder_gtm_epic: complete

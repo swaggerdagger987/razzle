@@ -27,4 +27,4 @@ def test_trade_finder_share_bar_sets_snapshot():
     bar = _repo_root() / "apps/web/components/league/BureauTradeFinderShareBar.tsx"
     text = bar.read_text(encoding="utf-8")
     assert "encodeBureauTradeFinderOgSnapshot" in text
-    assert 'ogParams.set("snapshot"' in text
+    assert 'params.set("snapshot"' in text

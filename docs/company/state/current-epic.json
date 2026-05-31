@@ -1,38 +1,31 @@
 {
-  "epic_status": "active",
-  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust \u2014 group chats can't tell exported rivalry rows from live Sleeper pulls.",
-  "epic_title": "League L5 \u2014 Bureau H2H GTM export",
-  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
+  "epic_status": "complete",
+  "big_problem": "Bureau Trade Finder GTM threads need a copyable OG preview URL, not just the in-app trade-finder route.",
+  "epic_title": "League L5 — Bureau Trade Finder GTM export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-h2h-og-exported-sticker",
-      "title": "H2H OG EXPORTED sticker when snapshot param present",
+      "id": "league-trade-finder-og-watermark-live",
+      "title": "Trade Finder OG LIVE watermark band",
       "status": "done",
-      "merge_commit": "5b60ea23d"
+      "merge_commit": "db6537faf"
     },
     {
-      "id": "bureau-h2h-og-exported-pytest",
-      "title": "pytest guard for H2H snapshot EXPORTED sticker + ShareBar encode",
-      "status": "pending",
-      "merge_commit": null
+      "id": "league-trade-finder-og-snapshot",
+      "title": "Snapshot encodes panel trade rows on OG",
+      "status": "done",
+      "merge_commit": "19a1af0e9"
     },
     {
-      "id": "bureau-h2h-og-gate-c-snapshot",
-      "title": "Gate C curl evidence for H2H snapshot OG PNG",
-      "status": "pending",
-      "merge_commit": null
+      "id": "league-trade-finder-og-preview-link",
+      "title": "Share bar copies OG preview URL + preview card",
+      "status": "done",
+      "merge_commit": "15a78eada"
     }
   ],
-  "next_atom_id": "bureau-h2h-og-exported-pytest",
-  "created_at": "2026-05-31T20:00:00Z",
-  "updated_at": "2026-05-31T20:30:00Z",
-  "completed_epics": [
-    {
-      "id": "league-l5-trade-finder-gtm",
-      "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
-    }
-  ]
+  "next_atom_id": null,
+  "created_at": "2026-05-31T11:23:27Z",
+  "updated_at": "2026-05-31T11:40:00Z",
+  "completed_epics": ["league-l5-bureau-trade-finder-gtm-export"]
 }
