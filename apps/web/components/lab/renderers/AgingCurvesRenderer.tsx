@@ -19,6 +19,17 @@ import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHe
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
+
+/** Sample PPG board when aging curve API returns no rows — OG export still screenshots. */
+const AGING_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Christian McCaffrey", position: "RB", team: "SF", stat: 18.2, statLabel: "PPG" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 17.4, statLabel: "PPG" },
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 16.8, statLabel: "PPG" },
+  { name: "Justin Jefferson", position: "WR", team: "MIN", stat: 16.1, statLabel: "PPG" },
+  { name: "Travis Kelce", position: "TE", team: "KC", stat: 12.4, statLabel: "PPG" },
+  { name: "Josh Allen", position: "QB", team: "BUF", stat: 22.1, statLabel: "PPG" },
+];
+
 const POS_COLORS: Record<(typeof POSITIONS)[number], string> = {
   QB: "#5b7fff",
   RB: "#2ec4b6",
@@ -299,7 +310,18 @@ export function AgingCurvesRenderer({ panel }: Props) {
       )}
 
       {!posData?.curve?.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="aging"
+              downloadName="razzle-aging-curves.png"
+              position={position}
+              snapshotRows={AGING_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <>
           <AgingChart
