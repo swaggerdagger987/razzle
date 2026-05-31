@@ -1,3 +1,4 @@
+2026-05-31 | league-mc-og-scenario-delta | f6e0985f3 | PASS | No new Reddit intel this cycle.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.

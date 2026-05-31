@@ -1,3 +1,4 @@
+2026-05-31 | league-mc-og-scenario-delta | f6e0985f3 | SHIP | BureauMonteCarloScenarioOg on /og/monte-carlo.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.

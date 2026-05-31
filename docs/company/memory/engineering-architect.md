@@ -1,3 +1,4 @@
+2026-05-31 | league-mc-og-scenario-delta | f6e0985f3 | SHIP | snapshot `s` block + OG route; 3 files ≤120 lines.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.
