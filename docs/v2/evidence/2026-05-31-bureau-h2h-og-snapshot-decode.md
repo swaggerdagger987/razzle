@@ -10,7 +10,7 @@
 | `npm run build --workspace=apps/web` | PASS |
 | `JWT_SECRET=test python3 -m pytest apps/api/tests -q` | 51 passed, 5 skipped |
 | Baseline OG (demo fallback) | `200 59305` bytes PNG |
-| Snapshot OG (exported matchup) | `200 57091` bytes PNG |
+| Snapshot OG (exported matchup) | `200 51310` bytes PNG |
 
 ## Routes
 

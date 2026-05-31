@@ -1,10 +1,10 @@
-cycle: 79
+cycle: 80
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-h2h-og-snapshot-decode
-last_keep_cycle: 79
-last_commit: 6c8da85f
+next_slice: lab-l5-og-live-data-rows
+last_keep_cycle: 80
+last_commit: bbbd1b3c
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -30,6 +30,7 @@ league_l5_bureau_h2h_copy_link: complete
 league_l5_bureau_self_scout_copy_link: complete
 league_l5_bureau_h2h_og_live_label: complete
 league_l5_bureau_h2h_snapshot_export: complete
-league_l5_bureau_h2h_export_epic: in_progress
+league_l5_bureau_h2h_og_snapshot_decode: complete
+league_l5_bureau_h2h_export_epic: complete
 league_l5_power_rankings_tab: complete
 league_l5_unhide_bureau_epic: active

@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Bureau rivalry OG cards must label live league data vs sample previews honestly and match the in-product H2H matchup users export (NEXT.md Bureau H2H; PARITY League L5).",
   "epic_title": "League L5 — Bureau H2H export parity",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -20,11 +20,11 @@
     {
       "id": "bureau-h2h-og-snapshot-decode",
       "title": "OG route prefers snapshot param over refetch when present",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "bbbd1b3c"
     }
   ],
-  "next_atom_id": "bureau-h2h-og-snapshot-decode",
+  "next_atom_id": null,
   "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T18:00:00Z"
+  "updated_at": "2026-05-31T20:15:00Z"
 }
