@@ -1,18 +1,38 @@
 {
-  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
-  "epic_title": "Lab L4 — Pro gates feel like upgrade, not error",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "epic_status": "active",
+  "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
+  "epic_title": "Lab L5 — Launch-10 OG panel-native LIVE labels",
+  "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
+  "depth_ref": "Lab L5",
   "atoms": [
-    {"id": "lab-pro-gate-hallway-teasers", "title": "Pro gate hallway screener link + teasers for comps/tiers/vorp/stocks", "status": "done", "merge_commit": "675044ea"},
-    {"id": "lab-pro-gate-launch10-teasers", "title": "Launch-10 pro panel teasers audit — fill any slug gaps in generic renderer", "status": "done", "merge_commit": "b0405d43"},
-    {"id": "lab-pro-gate-perks-copy", "title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names", "status": "done", "merge_commit": "73fdbf9c"}
+    {
+      "id": "lab-og-live-sticker-rankings-breakouts-tv",
+      "title": "rankings/breakouts/tradevalues dynasty ranks RBS board value curve LIVE labels",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-live-sticker-gamelog-efficiency",
+      "title": "gamelog/efficiency OG LIVE sticker + blurb parity",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-live-sticker-aging-buysell",
+      "title": "aging/buysell OG LIVE sticker + blurb parity",
+      "status": "pending",
+      "merge_commit": null
+    }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T12:40:00Z",
+  "next_atom_id": "lab-og-live-sticker-rankings-breakouts-tv",
+  "created_at": "2026-05-31T08:34:07Z",
+  "updated_at": "2026-05-31T08:34:07Z",
   "completed_epics": [
-    {"id": "lab-l4-pro-gate-polish", "status": "complete", "last_atom": "lab-pro-gate-perks-copy", "merge_commit": "73fdbf9c"}
+    {
+      "id": "lab-l2-sidebar-groups-by-agent",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-picks-by-agent",
+      "merge_commit": "4e8b0e8e"
+    }
   ]
 }

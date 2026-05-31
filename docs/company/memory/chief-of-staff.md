@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 125 OG LIVE labels | da33eafd | Workday open; panel-native LIVE epic 1/3; lock #842.
+
 2026-05-31 | Factory cycle 121 pro gate panel pitches | da33eafd | L4 epic atom 2/3; factory open.
 
 2026-05-31 | Factory cycle 120 pro-gate loading copy | da33eafd | Deduped OG on base #753; L4 epic atom 1/3.
