@@ -1,10 +1,10 @@
-cycle: 120
+cycle: 127
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: explore-og-universe-query
-last_keep_cycle: 120
-last_commit: 3f0411ec
+next_slice: lab-og-gamelog-player-default
+last_keep_cycle: 127
+last_commit: da33eafd
 lab_l5_og_live_fetch_epic: active
 lab_l5_og_watermark_epic: complete
 lab_l5_og_live_sort_epic: complete

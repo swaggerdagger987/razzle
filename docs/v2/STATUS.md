@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 118 — Prospects+Weekly OG LIVE panel labels)  
+**Last updated:** 2026-05-31 (factory cycle 127 — Explore OG universe + LIVE sticker)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 118 |
+| Cycle | 127 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | Explore |
 | Focus layer | L5 |
-| Next slice | lab-og-live-demo-fallback-copy |
+| Next slice | lab-og-gamelog-player-default |
 | Last commit | `da33eafd` |
+
+Recent completions: Explore OG college/nfl LIVE sticker; Lab L4 pro gate perks on base.
 
 ---
 
@@ -28,20 +30,31 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Workday | open (`good morning team`) |
-| Epic | Lab L5 — OG live panel rows on Launch-10 (atom 2/3 shipped) |
-| PR | #739 — prospects + weekly LIVE RPS/PPG stickers |
+| Status | open |
+| Cycles today | 1 |
+| Last trigger | good morning team |
 
 ---
 
-## Recent ship (cycle 118)
+## Product surface summary
 
-- Panel-specific LIVE sticker + blurb on `/og/prospects` and `/og/weekly` when live rows render.
-- Preserves L4 dynasty-comps pro teaser rows on base (`teaserRowsForPanel`).
-- Gate C: curl PNG ≥40KB on both routes.
+| Area | State | Notes |
+|------|-------|-------|
+| Explore (screener) | Shipping | NFL + college OG export with LIVE sticker |
+| Lab (panels) | Shipping | Launch 10 at L1+; L5 OG live-fetch epic active |
+| Bureau (league) | Shipping | Self-Scout default; Bureau-7 wired |
+| Situation Room | Partial | Chat + orchestration live; pixel canvas shipped |
+| Auth / billing | Scaffold | Legacy bridge |
+| Data pipeline | OK | `terminal.db` via nflverse adapters |
+
+---
+
+## Vertical position
+
+Per **`PARITY.md`**: Explore L5 OG universe in export URL; Lab L5 OG live-fetch epic atom 2/4.
 
 ---
 
 ## Blockers
 
-- None for build. Merge API hit GitHub rate limit — PR #739 CI green, merge queued.
+None for factory cycle 127 publish.
