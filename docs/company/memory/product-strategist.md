@@ -92,3 +92,4 @@ new evidence.
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Build Profiles unhide atom 1/3 | c7b50c707 | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
 2026-05-31 | Lab OG rankings/tradevalues live sort | 7f78b631 | SHIP | keep | NEXT.md Lab L5 live row keys; atom 1/3
+2026-05-31 | Waiver Tendencies OG Hawkeye Room | f6e0985f3 | SHIP | keep | LOOP-STATE atom 4; closes League L5 waiver GTM epic

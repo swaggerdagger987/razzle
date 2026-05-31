@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague, toRoom } from "@razzle/hallway";
 
 export const runtime = "edge";
 
@@ -115,6 +116,11 @@ function pickHero(rows: WaiverRow[]): WaiverRow {
   return hoarder ?? active ?? topFaab ?? rows[0]!;
 }
 
+function hawkeyeWaiverRoomQuestion(team: string, archetype: string, faabSpent: number): string {
+  const label = archetype.split(" (")[0]?.replace(/^The /, "") ?? archetype;
+  return `Is ${team}'s ${label} waiver pattern exploitable before FAAB clears? They spent $${faabSpent} so far.`;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -123,12 +129,19 @@ export async function GET(req: Request) {
   const hawkeye = AGENT_BY_ID.hawkeye;
   const live = await fetchWaiverTendencies(league);
   const isDemo = !live?.rows?.length;
+  const isLive = !isDemo;
   const rows = (isDemo ? DEMO_ROWS : live!.rows!).slice(0, 4);
   const hero = pickHero(rows);
   const pulse = isDemo ? DEMO_META.league_pulse : leaguePulse(live!.rows!);
   const heroTeam = isDemo ? DEMO_META.hero_team : hero.team;
   const heroArchetype = isDemo ? DEMO_META.hero_archetype : hero.archetype;
   const totalAdds = rows.reduce((n, r) => n + r.adds, 0);
+  const leagueDeepLink = league ? toLeague(league, "waiver-tendencies") : "/league/waiver-tendencies";
+  const hawkeyeRoomPath = toRoom({
+    agentId: "hawkeye",
+    question: hawkeyeWaiverRoomQuestion(heroTeam, heroArchetype, hero.faab_spent),
+    panelSlug: "waiver-tendencies",
+  });
 
   return new ImageResponse(
     (
@@ -174,8 +187,52 @@ export async function GET(req: Request) {
           Waiver Tendencies
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 10 }}>
-          {`${rows.length} managers · ${totalAdds} adds · ${pulse}${isDemo ? " · sample preview" : ""}`}
+          {`${rows.length} managers · ${totalAdds} adds · ${pulse}`}
         </div>
+
+        {isLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · Sleeper waiver archetypes
+          </div>
+        ) : null}
+
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · demo waiver rows
+          </div>
+        ) : null}
 
         {heroTeam && heroArchetype ? (
           <div
@@ -257,22 +314,30 @@ export async function GET(req: Request) {
           })}
         </div>
 
+        <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
+          {`razzle.lol${hawkeyeRoomPath} · ask ${hawkeye.name} about ${teamLabel(heroTeam)}`}
+        </div>
+
+        {/* Always-on watermark band — matches Trade Finder + H2H OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 12,
           }}
         >
-          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/waiver-tendencies`}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),
