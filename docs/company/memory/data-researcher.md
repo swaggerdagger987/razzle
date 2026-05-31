@@ -1,6 +1,9 @@
+2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 
 2026-05-31 | lab-og-tolab-gamelog-default | — | PASS | No new Reddit intel; hallway slice only.
+2026-05-31 | lab-og-buysell-formula-live | fb4483341 | No new intel; Lab formula OG slice only.
+
 2026-05-31 | lab-og-dynasty-comps-live-sticker | — | PASS | No Reddit intel change this atom.
 
 2026-05-31 | room-briefing-watermark | f6e0985f3 | No new intel; Room export slice only.

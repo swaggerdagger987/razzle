@@ -75,10 +75,11 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   buysell: "mismatch_score",
   dashboard: "rank_diff",
   "dynasty-comps": "similarity",
+  strengths: "percentile",
 };
 
 /** Pro player-scoped Lab panels (not Launch-10) — LIVE trust sticker when API returns rows. */
-const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps"]);
+const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"]);
 
 /** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
 const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
@@ -126,6 +127,7 @@ function launch10LiveBlurbSuffix(slug: string): string {
 
 function playerScopedLiveStickerLabel(slug: string): string {
   if (slug === "dynasty-comps") return "LIVE · comp matches";
+  if (slug === "strengths") return "LIVE · top strengths";
   if (slug === "gamelog") return "LIVE · Wk tape";
   return "LIVE · panel rows";
 }
@@ -186,6 +188,9 @@ function panelBlurbSuffix(
   if (slug === "dynasty-comps" && showingDemoRows) {
     return `${pos} · Pro comp preview · sample`;
   }
+  if (slug === "strengths" && showingDemoRows) {
+    return `${pos} · sample strength grades`;
+  }
   if (isSnapshot) {
     return `${pos} · from your panel`;
   }
@@ -200,6 +205,9 @@ function panelBlurbSuffix(
   }
   if (showingLiveData && slug === "dynasty-comps") {
     return `${pos} · live comp matches`;
+  }
+  if (showingLiveData && slug === "strengths") {
+    return `${pos} · live positional strengths`;
   }
   if (showingLiveData) {
     return `${pos} · live data`;
@@ -302,6 +310,14 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Xavier Worthy", position: "WR", team: "KC", stat: 7.5, statLabel: "Chg" },
     { name: "Stefon Diggs", position: "WR", team: "HOU", stat: -5.4, statLabel: "Chg" },
   ],
+  strengths: [
+    { name: "Target Share", position: "WR", team: "CIN", stat: 94, statLabel: "A+" },
+    { name: "Air Yards Share", position: "WR", team: "CIN", stat: 91, statLabel: "A" },
+    { name: "YAC/R", position: "WR", team: "CIN", stat: 88, statLabel: "B+" },
+    { name: "Red Zone Targets", position: "WR", team: "CIN", stat: 85, statLabel: "B+" },
+    { name: "Catch Rate", position: "WR", team: "CIN", stat: 82, statLabel: "B" },
+    { name: "First Downs", position: "WR", team: "CIN", stat: 79, statLabel: "B" },
+  ],
   "dynasty-comps": [
     { name: "Amon-Ra St. Brown", position: "WR", team: "DET", stat: 96, statLabel: "Match %" },
     { name: "CeeDee Lamb", position: "WR", team: "DAL", stat: 94, statLabel: "Match %" },
@@ -325,8 +341,17 @@ function dynastyCompsTeaserOgRows(): OgRow[] {
   }));
 }
 
+function strengthsTeaserOgRows(): OgRow[] {
+  const grades = ["A+", "A", "B+", "B+", "B", "B"];
+  return (DEMO_ROWS_BY_SLUG.strengths ?? DEFAULT_DEMO_ROWS).map((row, i) => ({
+    ...row,
+    statLabel: grades[i] ?? "Pct",
+  }));
+}
+
 function demoRowsForPanel(slug: string): OgRow[] {
   if (slug === "dynasty-comps") return dynastyCompsTeaserOgRows();
+  if (slug === "strengths") return strengthsTeaserOgRows();
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
@@ -417,6 +442,26 @@ function extractProspectsRows(
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
 }
 
+/** Strengths OG — top percentile metrics (matches legacy player-strengths payload). */
+function extractStrengthsRows(
+  strengths: Record<string, unknown>[],
+  player?: Record<string, unknown>,
+): OgRow[] {
+  const position = String(player?.position ?? player?.pos ?? "");
+  const team = String(player?.team ?? player?.team_abbr ?? "");
+  return strengths
+    .map((s) => ({
+      name: String(s.label ?? s.stat ?? s.metric ?? ""),
+      position,
+      team,
+      stat: Number(s.percentile ?? 0),
+      statLabel: String(s.grade ?? "Pct"),
+    }))
+    .filter((r) => r.name.trim().length > 0 && r.stat > 0)
+    .sort((a, b) => b.stat - a.stat)
+    .slice(0, 6);
+}
+
 /** Dynasty comps OG — match % sort (matches DynastyCompsRenderer ogSnapshotRows). */
 function extractDynastyCompsRows(comps: Record<string, unknown>[]): OgRow[] {
   return [...comps]
@@ -468,14 +513,66 @@ function statLabelForKey(k: string): string {
   if (k === "formula_score") statLabel = "Score";
   if (k === "rbs_score" || k === "breakout_score") statLabel = "RBS";
   if (k === "similarity") statLabel = "Match %";
+  if (k === "percentile") statLabel = "Pct";
   if (k === "rank_diff") statLabel = "Chg";
   return statLabel;
+}
+
+const BUYSELL_STAT_KEYS: string[] = [
+  "formula_score",
+  "mismatch_score",
+  "efficiency_pct",
+  "dynasty_rank_pct",
+  ...STAT_CANDIDATE_KEYS.filter(
+    (k) => !["formula_score", "mismatch_score", "efficiency_pct", "dynasty_rank_pct"].includes(k),
+  ),
+];
+
+function pickRowStat(row: Record<string, unknown>, statKeys: string[]): { stat: number; statLabel: string } {
+  for (const k of statKeys) {
+    if (k in row && row[k] != null) {
+      return { stat: Number(row[k] ?? 0), statLabel: statLabelForKey(k) };
+    }
+  }
+  return { stat: 0, statLabel: "Value" };
+}
+
+/** Buy/sell OG — mirrors BuySellRenderer lanes + formula_score priority. */
+function extractBuySellRows(obj: Record<string, unknown>, positionFilter: string): OgRow[] {
+  const buyLow = Array.isArray(obj.buy_low) ? (obj.buy_low as Record<string, unknown>[]) : [];
+  const sellHigh = Array.isArray(obj.sell_high) ? (obj.sell_high as Record<string, unknown>[]) : [];
+  if (!buyLow.length && !sellHigh.length) return [];
+
+  const filterPos = (rows: Record<string, unknown>[]) =>
+    positionFilter
+      ? rows.filter((r) => String(r.position ?? r.pos ?? "") === positionFilter)
+      : rows;
+
+  const toRow = (row: Record<string, unknown>, lane: "Buy" | "Sell"): OgRow => {
+    const { stat, statLabel } = pickRowStat(row, BUYSELL_STAT_KEYS);
+    return {
+      name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
+      position: String(row.position ?? row.pos ?? ""),
+      team: String(row.team ?? row.team_abbr ?? ""),
+      stat,
+      statLabel: `${lane} · ${statLabel}`,
+    };
+  };
+
+  const buyRows = filterPos(buyLow).slice(0, 3).map((r) => toRow(r, "Buy"));
+  const sellRows = filterPos(sellHigh).slice(0, 3).map((r) => toRow(r, "Sell"));
+  return [...buyRows, ...sellRows].slice(0, 6);
 }
 
 function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
   const obj = data as Record<string, unknown>;
+
+  if (slug === "buysell") {
+    const buySellRows = extractBuySellRows(obj, positionFilter);
+    if (buySellRows.length > 0) return buySellRows;
+  }
 
   if (slug === "weekly" && Array.isArray(obj.players)) {
     const weeklyRows = extractWeeklyHeatmapRows(
@@ -507,6 +604,18 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   if (slug === "dynasty-comps" && Array.isArray(obj.comps) && obj.comps.length > 0) {
     const compRows = extractDynastyCompsRows(obj.comps as Record<string, unknown>[]);
     if (compRows.length > 0) return compRows;
+  }
+
+  if (slug === "strengths" && Array.isArray(obj.strengths) && obj.strengths.length > 0) {
+    const player =
+      obj.player && typeof obj.player === "object"
+        ? (obj.player as Record<string, unknown>)
+        : undefined;
+    const strengthRows = extractStrengthsRows(
+      obj.strengths as Record<string, unknown>[],
+      player,
+    );
+    if (strengthRows.length > 0) return strengthRows;
   }
 
   let candidates: Record<string, unknown>[] = [];
@@ -591,6 +700,7 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "dynasty_value",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "dynasty_value"),
   ];
+  const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const statKeys =
     slug === "tradevalues"
       ? tradeValueStatKeys
@@ -598,9 +708,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
         ? breakoutsStatKeys
         : slug === "rankings"
           ? rankingsStatKeys
-          : preferredKey
-            ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
-            : [...STAT_CANDIDATE_KEYS];
+          : slug === "buysell"
+            ? buysellStatKeys
+            : preferredKey
+              ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+              : [...STAT_CANDIDATE_KEYS];
 
   let statKey = "";
   let statLabel = "";

@@ -1,7 +1,11 @@
+2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Factory cycle 2; hallway epic atom 2/3.
+2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | Trade Finder snapshot atom 2/3.
+2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | buy/sell formula OG parity.
 2026-05-31 | cycle 142 formula OG live | ceadf0402 | SHIP | Lab breakouts/rankings formula_score parity.
+
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Lab L5 OG rows epic atom 1/3.
 
 2026-05-31 | lab-efficiency-empty-export | 5283c3eb4 | SHIP | PR #1170 merged; Lab empty OG epic atom 2/3.
