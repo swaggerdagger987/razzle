@@ -1,32 +1,38 @@
 {
-  "big_problem": "Lab OG exports still dead-end when trust stickers drift from Launch-10 panel set — FROM PANEL registry only guarded four snapshot slugs.",
-  "epic_title": "Lab L5 — OG live panel data rows",
-  "parity_ref": "Explore L5 / Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic_title": "Explore L5 — OG screener agent margin notes",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-og-weekly-tolab-watermark-position",
-      "title": "Weekly OG watermark toLab includes default WR position",
+      "id": "explore-og-margin-note-lead",
+      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
       "status": "done",
-      "merge_commit": "bac90beaa"
+      "merge_commit": "0fc4932b7"
     },
     {
-      "id": "lab-og-from-panel-launch10-registry",
-      "title": "FROM PANEL pytest registry covers all Launch-10 slugs",
-      "status": "done",
-      "merge_commit": "a3d651b25"
+      "id": "explore-og-margin-note-rows",
+      "title": "Margin notes on top-3 OG screener rows",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-dashboard-live-gate-c",
-      "title": "Dashboard OG Gate C curl proves live dynasty-dashboard rows",
-      "status": "done",
-      "merge_commit": "cf76b86ee"
+      "id": "explore-og-margin-note-sticker",
+      "title": "LIVE staff sticker when OG rows carry margin notes",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-margin-note-college",
+      "title": "College universe margin notes on OG export",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:20:00Z",
+  "next_atom_id": "explore-og-margin-note-rows",
+  "created_at": "2026-05-31T11:22:30Z",
+  "updated_at": "2026-05-31T18:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-panel-rows",
@@ -39,6 +45,18 @@
       "status": "complete",
       "last_atom": "lab-og-watermark-display-name",
       "merge_commit": "338709883"
+    },
+    {
+      "id": "lab-l5-launch10-og-demo-trust-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-demo-blurbs",
+      "merge_commit": "3705fdce8"
+    },
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
     }
   ]
 }
