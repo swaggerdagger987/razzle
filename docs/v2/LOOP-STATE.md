@@ -1,12 +1,11 @@
-cycle: 129
+cycle: 130
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-live-sticker-aging-buysell
-last_keep_cycle: 129
+last_keep_cycle: 130
 last_commit: fb27acd7
-lab_l5_og_panel_native_live_epic: active
+lab_l5_og_panel_native_live_epic: partial
+lab_l4_pro_gate_error_epic: active
 lab_l2_sidebar_agent_epic: complete
-lab_l5_og_watermark_epic: complete
-lab_l5_og_live_sort_epic: complete
 bureau_h2h_codec_epic: complete
