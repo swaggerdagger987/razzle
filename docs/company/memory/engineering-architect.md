@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | schedule OG route | da33eafd | 3 files ≤280 lines; mirrors waiver/roster depth ShareBar pattern.
+
 2026-05-31 | tradevalues snapshot contract | 5ed39e14 | 1-file ≤25 lines; rank+formula statLabel pattern matches buysell
 
 2026-05-31 | buysell snapshot contract | 98ae0ef2 | 1-file ≤35 lines; reuse encodeOgSnapshot; no route touch

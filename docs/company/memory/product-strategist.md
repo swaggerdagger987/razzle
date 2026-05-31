@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | Bureau depth OG epic complete | da33eafd | Schedule OG closes 4-tab export gap; pick new epic from PARITY/NEXT.
+
 2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
 
 2026-05-31 | lab-tradevalues-formula-snapshot | 5ed39e14 | SHIP | Lab L5 OG mirror epic complete; Bureau H2H is next lead
