@@ -54,6 +54,8 @@ export async function GET(req: Request) {
   const isDemo = !fromSnapshot?.length && !live?.length;
   const odds = (fromSnapshot ?? (isDemo ? DEMO_ODDS : live!)).slice(0, 3);
   const fromPanel = Boolean(fromSnapshot?.length);
+  const scenario = snapshot?.scenario;
+  const hasScenario = Boolean(scenario?.giveName && scenario?.getName);
 
   return new ImageResponse(
     (
@@ -98,9 +100,48 @@ export async function GET(req: Request) {
         <div style={{ display: "flex", fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
           Monte Carlo
         </div>
-        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 20 }}>
+        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: hasScenario ? 12 : 20 }}>
           {`playoff + title odds from roster sims${fromPanel ? " · from your board" : isDemo ? " · sample preview" : ""}`}
         </div>
+
+        {hasScenario && scenario ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              background: "#f7efe5",
+              border: "3px solid #d97757",
+              borderRadius: 8,
+              padding: "12px 16px",
+              marginBottom: 12,
+              boxShadow: "4px 4px 0 #2d1f14",
+            }}
+          >
+            <div style={{ display: "flex", fontSize: 14, color: "#d97757", textTransform: "uppercase", marginBottom: 6 }}>
+              what-if trade
+            </div>
+            <div style={{ display: "flex", fontSize: 18, color: "#2d1f14", marginBottom: 8 }}>
+              {`Send ${scenario.giveName} to ${scenario.partnerTeam} for ${scenario.getName}.`}
+            </div>
+            <div style={{ display: "flex", gap: 20 }}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", fontSize: 32, color: "#d97757", fontWeight: 700 }}>
+                  {`${scenario.deltaChamp >= 0 ? "+" : ""}${scenario.deltaChamp}%`}
+                </div>
+                <div style={{ display: "flex", fontSize: 12, color: "#5c4a3d" }}>title odds shift</div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", fontSize: 32, color: "#2ec4b6", fontWeight: 700 }}>
+                  {`${scenario.deltaPlayoff >= 0 ? "+" : ""}${scenario.deltaPlayoff}%`}
+                </div>
+                <div style={{ display: "flex", fontSize: 12, color: "#5c4a3d" }}>playoff odds shift</div>
+              </div>
+              <div style={{ display: "flex", alignItems: "flex-end", fontSize: 16, color: "#5c4a3d" }}>
+                {`${scenario.baselineChamp}% → ${scenario.scenarioChamp}% title`}
+              </div>
+            </div>
+          </div>
+        ) : null}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
           {odds.map((o, i) => (

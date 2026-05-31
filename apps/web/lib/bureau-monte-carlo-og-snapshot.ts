@@ -8,8 +8,20 @@ export type BureauMonteCarloOgRow = {
   roster_power: number;
 };
 
+/** What-if trade delta — mirrors BureauMonteCarlo scenario panel for OG export. */
+export type BureauMonteCarloScenarioOg = {
+  giveName: string;
+  getName: string;
+  partnerTeam: string;
+  deltaChamp: number;
+  deltaPlayoff: number;
+  baselineChamp: number;
+  scenarioChamp: number;
+};
+
 export type BureauMonteCarloOgSnapshot = {
   rows: BureauMonteCarloOgRow[];
+  scenario?: BureauMonteCarloScenarioOg;
 };
 
 type CompactRow = {
@@ -20,10 +32,45 @@ type CompactRow = {
   rp: number;
 };
 
-type CompactMonte = { r: CompactRow[] };
+type CompactScenario = {
+  g: string;
+  n: string;
+  p: string;
+  dc: number;
+  dp: number;
+  bc: number;
+  sc: number;
+};
+
+type CompactMonte = { r: CompactRow[]; s?: CompactScenario };
 
 function hasSnapshotData(snap: BureauMonteCarloOgSnapshot): boolean {
   return snap.rows?.length > 0 && Boolean(snap.rows[0]?.manager);
+}
+
+function scenarioFromCompact(s?: CompactScenario): BureauMonteCarloScenarioOg | undefined {
+  if (!s?.g || !s?.n) return undefined;
+  return {
+    giveName: s.g,
+    getName: s.n,
+    partnerTeam: s.p ?? "",
+    deltaChamp: s.dc,
+    deltaPlayoff: s.dp,
+    baselineChamp: s.bc,
+    scenarioChamp: s.sc,
+  };
+}
+
+function scenarioToCompact(scenario: BureauMonteCarloScenarioOg): CompactScenario {
+  return {
+    g: scenario.giveName,
+    n: scenario.getName,
+    p: scenario.partnerTeam,
+    dc: scenario.deltaChamp,
+    dp: scenario.deltaPlayoff,
+    bc: scenario.baselineChamp,
+    sc: scenario.scenarioChamp,
+  };
 }
 
 function fromCompact(c: CompactMonte): BureauMonteCarloOgSnapshot | null {
@@ -37,11 +84,12 @@ function fromCompact(c: CompactMonte): BureauMonteCarloOgSnapshot | null {
     }))
     .filter((row) => row.manager);
   if (!rows.length) return null;
-  return { rows };
+  const scenario = scenarioFromCompact(c.s);
+  return scenario ? { rows, scenario } : { rows };
 }
 
 function toCompact(snap: BureauMonteCarloOgSnapshot): CompactMonte {
-  return {
+  const compact: CompactMonte = {
     r: snap.rows.slice(0, 3).map((row) => ({
       id: row.roster_id,
       m: row.manager,
@@ -50,6 +98,8 @@ function toCompact(snap: BureauMonteCarloOgSnapshot): CompactMonte {
       rp: row.roster_power,
     })),
   };
+  if (snap.scenario) compact.s = scenarioToCompact(snap.scenario);
+  return compact;
 }
 
 export function encodeBureauMonteCarloOgSnapshot(
