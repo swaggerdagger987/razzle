@@ -24,13 +24,19 @@ From `LOOP-STATE.md`:
 
 ---
 
-## Factory / workday
+## Product surface summary
 
 | Field | Value |
 |-------|-------|
 | Workday | open (`good morning team`) |
-| Epic | Lab L5 — Launch-10 OG panel-native LIVE labels (atom 1/3) |
-| PR | https://github.com/swaggerdagger987/razzle/pull/828 |
+| Epic | Lab L5 — Launch-10 OG panel-native LIVE labels (atom 2/3) |
+| PR | https://github.com/swaggerdagger987/razzle/pull/868 |
+
+| Area | State | Notes |
+|------|-------|-------|
+| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
+| Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
+| Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |
 
 ---
 
@@ -43,4 +49,4 @@ From `LOOP-STATE.md`:
 
 ## Blockers
 
-- None for build. Merge API hit GitHub rate limit — PR #739 CI green, merge queued.
+- None for build.
