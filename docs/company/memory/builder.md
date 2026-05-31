@@ -1,3 +1,4 @@
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | c3893abdc | keep | Weekly+Gamelog LabPanelShareBar; pytest 6.
 2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
 2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.

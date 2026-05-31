@@ -1,3 +1,4 @@
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | c3893abdc | SHIP | Factory open cycle 1; share bar epic 3/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | 792e9f77d | SHIP | efficiency/aging formula_score OG; PR #1318.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4; lock #1415.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
