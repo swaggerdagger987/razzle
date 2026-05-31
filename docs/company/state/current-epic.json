@@ -29,6 +29,12 @@
   "updated_at": "2026-05-31T09:30:00Z",
   "completed_epics": [
     {
+      "id": "lab-l2-sidebar-agent-ownership",
+      "status": "complete",
+      "last_atom": "lab-panel-grid-agent-avatars",
+      "merge_commit": "da33eafd"
+    },
+    {
       "id": "lab-l5-og-live-fetch-merge",
       "status": "complete",
       "last_atom": "lab-og-gamelog-player-default",
