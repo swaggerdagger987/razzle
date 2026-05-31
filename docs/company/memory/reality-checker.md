@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | room-briefing-watermark | da33eafd | PASS | pytest 3; curl briefing OG 89235B PNG.
+2026-05-31 | room-briefing-watermark | f6e0985f3 | PASS | pytest 3; curl briefing OG 89235B PNG.
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | PASS | pytest 5; curl NFL OG 65431B without universe param.
 2026-05-31 | lab-l4-pro-gate-dynasty-comps | a3f07d1e5 | PASS | pytest 9; web build exit 0; no OG slice.
 
