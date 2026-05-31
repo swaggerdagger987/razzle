@@ -1,32 +1,40 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab formula panels re-sort in-product but OG share cards still rank by raw PPO/PPG — Reddit screenshots disagree with the composite the user picked.",
-  "epic_title": "Lab L5 — formula-sorted OG live parity",
+  "epic_status": "active",
+  "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
+  "epic_title": "Lab L5 — GTM panel share bar parity",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-breakouts-rankings-formula-live",
-      "title": "Breakouts + Rankings OG — formula_score before native stat",
+      "id": "lab-panel-share-bar-rankings",
+      "title": "Dynasty Rankings — LabPanelShareBar copy/preview/export + snapshot",
       "status": "done",
-      "merge_commit": "ceadf0402"
+      "merge_commit": "f6e0985f3"
     },
     {
-      "id": "lab-og-buysell-formula-live",
-      "title": "Buy/Sell OG — formula_score + Buy/Sell lanes",
-      "status": "done",
-      "merge_commit": "fb4483341"
+      "id": "lab-panel-share-bar-breakouts-buysell",
+      "title": "Breakouts + Buy/Sell — share bar with formula snapshot rows",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-efficiency-aging-formula-live",
-      "title": "Efficiency + Aging OG — formula_score before PPO/PPG",
-      "status": "done",
-      "merge_commit": "8db7cdf24"
+      "id": "lab-panel-share-bar-weekly-gamelog",
+      "title": "Weekly + Gamelog — player-scoped share bar",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-panel-share-bar-launch10-rest",
+      "title": "Remaining Launch-10 panels — share bar rollout",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T11:15:00Z",
-  "updated_at": "2026-05-31T11:15:00Z",
-  "completed_epics": ["league-trade-finder-gtm-export-2026-05-31"]
+  "next_atom_id": "lab-panel-share-bar-breakouts-buysell",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
+  "completed_epics": [
+    "league-trade-finder-gtm-export-2026-05-31",
+    "lab-formula-sorted-og-live-parity-2026-05-31"
+  ]
 }

@@ -17,7 +17,8 @@ import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import type { OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -261,11 +262,12 @@ export function DynastyRankingsRenderer({ panel }: Props) {
           >
             Ask Octo about {topPlayer.full_name} →
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="rankings"
             downloadName="razzle-dynasty-rankings.png"
             position={position || undefined}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy rankings link"
           />
         </footer>
       )}

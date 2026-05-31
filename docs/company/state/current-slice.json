@@ -1,28 +1,34 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab formula panels re-sort in-product but OG share cards still rank by raw PPO/PPG — Reddit screenshots disagree with the composite the user picked.",
-  "epic": "Lab L5 — formula-sorted OG live parity",
-  "slice_title": "Efficiency + Aging OG — formula_score before PPO/PPG",
+  "atom_id": "lab-panel-share-bar-rankings",
+  "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
+  "epic": "Lab L5 — GTM panel share bar parity",
+  "slice_title": "Dynasty Rankings — LabPanelShareBar copy/preview/export + snapshot",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with demo rows",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot or live demo",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_launch10_formula_live.py"
+    "apps/web/components/lab/LabPanelShareBar.tsx",
+    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx",
+    "apps/api/tests/test_lab_panel_share_bar.py"
   ],
-  "max_files": 2,
-  "max_lines": 80,
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_panel_share_bar.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/eff-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/efficiency?download=1&force_demo=1'",
-    "curl -s -o /tmp/aging-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/aging?download=1&force_demo=1'"
+    "curl -s -o /tmp/rankings-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1&force_demo=1'"
   ],
   "out_of_scope": [
-    "Trade values / weekly / prospects formula keys",
+    "Roll share bar to all Launch-10 panels",
     "NORTH_STAR/DESIGN/DECISIONS edits",
     "New npm deps"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP"
+  }
 }
