@@ -4,7 +4,11 @@ import { toExplore, toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
-import { teaserRowsForPanel, upgradePitchForPanel } from "@/lib/panel-upgrade-teaser";
+import {
+  PRO_UPGRADE_PERKS,
+  teaserRowsForPanel,
+  upgradePitchForPanel,
+} from "@/lib/panel-upgrade-teaser";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "./PanelAgentHeader";
 
 interface Props {
@@ -79,9 +83,9 @@ export function ProUpgradeGate({
         </div>
         <p className="mt-3 text-xs text-ink-light">dev? flip plan in the toolbar ↑</p>
         <ul className="pro-upgrade-perks mt-6 text-left text-sm text-ink-medium">
-          <li>10 launch Lab panels — trade values, breakouts, aging curves</li>
-          <li>7 Bureau behavioral tabs — H2H, pressure map, trade finder</li>
-          <li>Situation Room — six pixel staff, your league in context</li>
+          {PRO_UPGRADE_PERKS.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
         </ul>
       </div>
     </div>
