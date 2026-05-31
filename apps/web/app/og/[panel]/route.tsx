@@ -111,6 +111,7 @@ const TOLAB_DEFAULT_POSITION: Record<string, string> = {
   weekly: "WR",
   efficiency: "RB",
   percentiles: "WR",
+  breakouts: "WR",
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([

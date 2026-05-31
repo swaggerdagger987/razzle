@@ -117,8 +117,10 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 154	c1a0bcaad	depth+voice+simplicity	keep	Explore	L5 Explore OG top-3 margin notes	trust=T5,T6; pytest 8; curl explore 73163B; margin epic 2/4
 156	338709883	depth+voice+simplicity	keep	Lab	L5 gamelog OG watermark uses player display name	trust=T5,T6; pytest 7; curl gamelog 62741B; display-name epic complete
 154	8327741	depth+voice+simplicity	keep	Lab	L5 efficiency OG toLab includes RB position	trust=T5,T6; pytest 7; curl 65774B; position defaults epic 2/3
+155	4907c8327	depth+voice+simplicity	keep	League	L5 H2H OG Gate C snapshot pytest+curl	trust=T5,T6; pytest 9; curl h2h snap 76270B; H2H GTM epic 3/3 complete
 157	026e7de6b	depth+voice+simplicity	keep	Lab	L2 sidebar Category Staff toggle groups by agent	trust=T5,T6; web build exit 0; H-04 staff epic 1/2
 157	792e9f77d	depth+voice+simplicity	keep	Lab	L5 efficiency/aging OG formula_score	trust=T5,T6; pytest 6; curl 67267B 64569B 63841B; formula follow-up
+157	1ebb9dc73	depth+voice+simplicity	keep	Lab	L5 breakouts OG toLab includes WR position	trust=T5,T6; pytest 10; curl 67718B; position defaults epic 3/3 complete
 158	a76b2e4e0	depth+voice+simplicity	keep	League	L5 Self-Scout OG terracotta watermark	trust=T5,T6; pytest 1; curl 68720B; bureau OG watermark epic 2/4
 159	f62007e5e	depth+voice+simplicity	keep	League	L5 Trade Finder OG FROM BUREAU trust sticker	trust=T5,T6; pytest 4; dedup snapshot on base; GTM epic 2/3 polish
 159	81d081604	depth+voice+simplicity	keep	Lab	L5 Breakouts+BuySell LabPanelShareBar GTM export	trust=T5,T6; pytest 5; curl breakouts 66253B buysell 64866B; share bar epic 2/4
