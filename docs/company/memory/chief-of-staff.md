@@ -1,6 +1,8 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 120 pro-gate loading copy | da33eafd | Deduped OG on base #753; L4 epic atom 1/3.
+2026-05-31 | Factory cycle 121 pro-gate panel pitches | da33eafd | L4 epic atom 2/3; rankings/tradevalues/breakouts.
+
+2026-05-31 | Factory cycle 120 pro-gate loading copy | 7236be3e | Deduped OG on base #753; L4 epic atom 1/3.
 
 2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
 

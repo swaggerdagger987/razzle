@@ -1,6 +1,8 @@
 # Memory — Builder
 
-2026-05-31 | lab-pro-gate-loading-copy | da33eafd | PanelAgentLoading wired into ProUpgradeGate; 1 file.
+2026-05-31 | lab-pro-gate-panel-pitches | da33eafd | Sharpened Octo/Bones/Hawkeye pitches in panel-upgrade-teaser.ts.
+
+2026-05-31 | lab-pro-gate-loading-copy | 7236be3e | PanelAgentLoading wired into ProUpgradeGate; 1 file.
 
 2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
 

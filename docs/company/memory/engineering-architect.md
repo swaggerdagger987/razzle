@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-pro-gate-panel-pitches | da33eafd | panel-upgrade-teaser.ts only; pitches must stay single-line for pytest slug scan.
+
 2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | force_demo=1 for factory curl; SAMPLE/LIVE mutual exclusive badges.
 
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly WR default in OG apiParams only.
