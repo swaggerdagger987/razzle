@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: league-monte-carlo-og-snapshot
 last_keep_cycle: 98
-last_commit: da33eafd
+last_commit: aaee0ccc
 lab_l5_og_snapshot_row_fidelity_epic: complete
 league_l5_bureau_og_snapshots_epic: active
