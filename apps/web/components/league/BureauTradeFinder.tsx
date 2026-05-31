@@ -95,11 +95,6 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           >
             re-sim odds →
           </Link>
-          {(() => {
-            const user = getSleeperUser();
-            if (!user?.user_id) return null;
-            return <BureauTradeFinderShareBar leagueId={leagueId} userId={user.user_id} />;
-          })()}
         </section>
       )}
 
@@ -130,6 +125,11 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           ))}
         </section>
       )}
+
+      <BureauTradeFinderShareBar
+        leagueId={leagueId}
+        userId={getSleeperUser()?.user_id ?? "demo"}
+      />
 
       <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/pressure-map` as Route} className="text-orange underline">
