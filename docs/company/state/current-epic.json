@@ -14,8 +14,8 @@
     {
       "id": "explore-og-universe-query",
       "title": "Explore OG — pass universe/college in export URL",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "4cda3aad"
     },
     {
       "id": "lab-og-gamelog-player-default",
@@ -30,7 +30,7 @@
       "merge_commit": "675044ea"
     }
   ],
-  "next_atom_id": "explore-og-universe-query",
+  "next_atom_id": "lab-og-gamelog-player-default",
   "created_at": "2026-05-31T08:25:32Z",
   "updated_at": "2026-05-31T08:35:00Z",
   "completed_epics": [
