@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 160 — Explore OG college lead margin note)
+**Last updated:** 2026-05-31 (factory cycle 161 — Explore OG margin notes Gate C; epic complete)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 160 |
+| Cycle | 161 |
 | Last board | 54 |
 | Focus pillar | Explore |
 | Focus layer | L5 |
-| Next slice | explore-og-margin-note-gate-c (margin epic 4/4) |
-| Last commit | `c633ba357` |
+| Next slice | PARITY next Explore/Lab slice (margin epic complete) |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
@@ -30,6 +30,6 @@ Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export f
 
 | Area | State | Notes |
 |------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export + margin note on OG lead row |
+| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export + Hawkeye margin notes rows 1–2 (Gate C) |
 | Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
 | Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |

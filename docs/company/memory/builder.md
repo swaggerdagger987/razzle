@@ -1,3 +1,4 @@
+2026-05-31 | explore-og-margin-note-gate-c | f6e0985f3 | keep | test_explore_og_margin_note_gate_c.py; pytest 18; curl NFL+college.
 2026-05-31 | explore-og-margin-note-college-lead | c633ba357 | keep | college lead pytest; curl 74573B.
 2026-05-31 | explore-og-margin-note-row2 | 7793850a9 | keep | i<2 row margins; pytest 4; curl 67971B.
 2026-05-31 | lab-og-dashboard-live-gate-c | cf76b86ee | keep | test_og_dashboard_gate_c.py; curl 66547B; epic complete.

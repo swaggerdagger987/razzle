@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Explore OG margin Gate C (cycle 161)
+- **Angle:** NFL + CFB screener share cards now ship Hawkeye staff notes on both lead rows — Gate C locks curl params for Reddit screenshot QA.
+- **Trust:** T5/T6 — documented `force_demo` fixtures; PNG ≥40KB on NFL and college explore OG.
+
 ### 2026-05-31 — Explore OG college lead margin (cycle 160)
 - **Angle:** CFB screener OG lead row shows Hawkeye volume-passer campus note — draft radar on Cam Ward demo shares.
 - **Trust:** T5/T6 — `passing_yards: 4312` guards college lead; curl college OG 74KB.
