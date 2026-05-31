@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | H2H LIVE sticker PASS | da33eafd | curl 67846B PNG; pytest 3 passed; LIVE only when isLive.
+2026-05-31 | H2H LIVE sticker PASS | 08e1824c | curl 67846B PNG; pytest 3 passed; LIVE only when isLive.
 
 2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | curl force_demo 66345B weekly 63522B PASS | Gate C.
 

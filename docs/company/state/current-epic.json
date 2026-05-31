@@ -8,8 +8,8 @@
     {
       "id": "bureau-h2h-og-live-sticker",
       "title": "H2H OG — teal LIVE sticker when league API returns you/them",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "08e1824c"
     },
     {
       "id": "bureau-h2h-og-sample-sticker",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-og-live-sticker",
+  "next_atom_id": "bureau-h2h-og-sample-sticker",
   "created_at": "2026-05-31T08:20:00Z",
   "updated_at": "2026-05-31T08:20:00Z",
   "completed_epics": [

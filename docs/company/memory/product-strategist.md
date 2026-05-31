@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | League H2H OG LIVE sticker | da33eafd | After Lab live-rows epic; NEXT backup Bureau H2H export now lead.
+2026-05-31 | League H2H OG LIVE sticker | 08e1824c | After Lab live-rows epic; NEXT backup Bureau H2H export now lead.
 
 2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | SHIP | T1 sample vs live at a glance closes live-rows epic.
 

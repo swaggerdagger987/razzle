@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | H2H OG LIVE badge | da33eafd | Single-file head-to-head route; mirrors [panel] LIVE Caveat block.
+2026-05-31 | H2H OG LIVE badge | 08e1824c | Single-file head-to-head route; mirrors [panel] LIVE Caveat block.
 
 2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | SAMPLE badge mirrors LIVE block; force_demo skips fetch.
 
