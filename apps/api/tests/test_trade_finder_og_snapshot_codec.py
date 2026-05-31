@@ -154,8 +154,8 @@ def test_route_uses_snapshot_decoder():
     )
     text = path.read_text(encoding="utf-8")
     assert "decodeBureauTradeFinderOgSnapshot" in text
+    assert "bureauTradeFinderOgSnapshotToData" in text
     assert 'searchParams.get("snapshot")' in text
-    assert "PANEL · Bones trade board" in text
 
 
 def test_malformed_snapshot_returns_none():
