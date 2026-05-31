@@ -1,37 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-trade-finder-og-room-hallway",
-  "big_problem": "Trade Finder screenshots travel without the in-panel Bones matches — export cards fall back to generic demo rows when league/user params are missing.",
+  "atom_id": "league-trade-finder-room-hallway",
+  "big_problem": "Bureau Trade Finder screenshots look like a draft — no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
   "epic": "League L5 — Bureau Trade Finder GTM export (atom 3/3)",
-  "slice_title": "Trade Finder OG watermark includes Bones Room ask deep link",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "slice_title": "Trade Finder OG — Bones Room ask link on hero deal",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with hallway link",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/trade-finder/route.tsx",
-    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
     "apps/api/tests/test_trade_finder_og_room_hallway.py"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_trade_finder_og_room_hallway.py apps/api/tests/test_trade_finder_og_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/tf-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/trade-finder?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_trade_finder_og_room_hallway.py -q",
+    "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps",
-    "snapshot codec changes"
+    "ShareBar changes",
+    "snapshot codec changes",
+    "NORTH_STAR edits"
   ],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
-  "status": "shipped",
-  "content_commit": "c8091030c"
+  "builder_mode": "composer-surgical"
 }

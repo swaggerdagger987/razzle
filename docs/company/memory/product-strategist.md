@@ -1,20 +1,16 @@
-2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.
+2026-05-31 | league-trade-finder-room-hallway | 1e294e385 | SHIP | League L5 Trade Finder GTM epic 3/3 — Bones Room on OG.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
 
-<<<<<<< HEAD
-2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | SHIP | Trade Finder GTM epic complete; Bones hallway on export (T6).
-=======
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | SHIP | Formula OG epic complete; prospects/tradevalues snapshot trust.
+2026-05-31 | league-trade-finder-og-snapshot | c3a46f51b | Snapshot export closes panel↔OG parity gap for Bones deal screenshots.
 
->>>>>>> origin/razzle-v2-redesign
-2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Default Ja'Marr exports deep-link back into gamelog tape (T6).
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Buy/sell OG matches formula-sorted panel lanes.
-2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3.
-2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG LIVE comp matches sticker.
 
+2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3; deferred empty-OG atom 2.
 
-2026-05-31 | room-briefing-watermark | 088cebc07 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
+2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG signals LIVE comp matches for Reddit trust.
+
+2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | Lab OG exports click back via toLab; T6 hallway on Launch-10.

@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 148 — Lab weekly empty-board OG sample export)
+**Last updated:** 2026-05-31 (factory cycle 147 — League Trade Finder OG Bones Room hallway)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 148 |
+| Cycle | 147 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | (empty OG epic complete — pick PARITY/NEXT) |
-| Last commit | `088cebc07` |
+| Next slice | lab-og-panel-live-rows |
+| Last commit | `1e294e385` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
