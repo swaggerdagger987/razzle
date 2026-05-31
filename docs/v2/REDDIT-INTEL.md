@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab OG panel-native stickers (cycle 125)
+- **Angle:** Rankings/tradevalues/breakouts OG thumbnails say dynasty ranks, value curve, RBS board — not generic nflverse rows.
+- **Trust:** T5/T6 — demo SAMPLE + live LIVE labels match panel stat keys.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.

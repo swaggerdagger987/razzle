@@ -92,13 +92,30 @@ const LAUNCH_10_OG_SLUGS = new Set([
 function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "prospects") return " · live RPS board";
   if (slug === "weekly") return " · live PPG heatmap";
+  if (slug === "rankings") return " · live dynasty ranks";
+  if (slug === "tradevalues") return " · live value curve";
+  if (slug === "breakouts") return " · live RBS board";
   return " · live nflverse rows";
 }
 
 function launch10LiveStickerLabel(slug: string): string {
   if (slug === "prospects") return "LIVE · RPS board";
   if (slug === "weekly") return "LIVE · PPG heatmap";
+  if (slug === "rankings") return "LIVE · dynasty ranks";
+  if (slug === "tradevalues") return "LIVE · value curve";
+  if (slug === "breakouts") return "LIVE · RBS board";
   return "LIVE · nflverse rows";
+}
+
+/** Panel-specific SAMPLE copy when demo rows render (teal LIVE sticker contrast). */
+function launch10SampleStickerLabel(slug: string): string {
+  if (slug === "prospects") return "SAMPLE · RPS board";
+  if (slug === "weekly") return "SAMPLE · PPG heatmap";
+  if (slug === "dynasty-comps") return "SAMPLE · comp preview";
+  if (slug === "rankings") return "SAMPLE · dynasty ranks";
+  if (slug === "tradevalues") return "SAMPLE · value curve";
+  if (slug === "breakouts") return "SAMPLE · RBS board";
+  return "SAMPLE · preview rows";
 }
 
 function panelBlurbSuffix(
@@ -770,7 +787,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            SAMPLE · not live data
+            {launch10SampleStickerLabel(slug)}
           </div>
         ) : null}
 
