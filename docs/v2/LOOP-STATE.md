@@ -1,12 +1,16 @@
-cycle: 129
+cycle: 131
 last_board_cycle: 54
-focus_pillar: Lab
-focus_layer: L4
-next_slice: lab-l4-pro-gate-error-tradevalues
-last_keep_cycle: 129
-last_commit: 5721ee33
-lab_l4_pro_gate_error_epic: active
-lab_l5_og_panel_native_live_epic: active
+focus_pillar: Explore
+focus_layer: L5
+next_slice: explore-og-live-sticker
+<<<<<<< HEAD
+last_keep_cycle: 131
+last_commit: da33eafd
+=======
+last_keep_cycle: 130
+last_commit: 92252c54
+>>>>>>> 06125f12 (standup metadata: 2026-05-31 — record 92252c54)
+explore_l5_og_demo_epic: active
 lab_l5_og_live_fetch_epic: complete
 lab_l2_sidebar_agent_epic: complete
 lab_l5_og_watermark_epic: complete

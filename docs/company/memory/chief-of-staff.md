@@ -1,6 +1,11 @@
 # Memory — Chief of Staff
 
+2026-05-31 | cycle 131 | SHIP | Factory cycle 1: Explore SAMPLE sticker; PR #993; NO_LOCK_GUARDRAIL.
+
+2026-05-31 | Factory cycle 129 explore OG demo | cd16858d | workday cycle 1; NO_LOCK_GUARDRAIL; new Explore L5 epic.
 2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
+2026-05-31 | Factory cycle 121 explore OG query | 7dbd4b11 | workday cycle 1; lock #813; live-fetch epic atom 2/3.
+2026-05-31 | Factory cycle 121 pro gate panel pitches | da33eafd | L4 epic atom 2/3; factory open.
 
 2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
 
