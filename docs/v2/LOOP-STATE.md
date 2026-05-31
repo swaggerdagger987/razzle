@@ -1,8 +1,5 @@
-cycle: 160
-last_board_cycle: 54
-focus_pillar: Lab
+cycle: 158
+focus_pillar: Explore
 focus_layer: L5
-next_slice: lab-panel-share-bar-weekly-gamelog or Bureau per PARITY
-last_keep_cycle: 160
-last_commit: 62e147bb8
-lab_l5_pro_profile_og_epic: complete
+last_commit: 1172bddee
+explore_l5_og_margin_epic: complete

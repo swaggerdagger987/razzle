@@ -43,12 +43,40 @@ const DEMO_NFL_ROWS: OgPlayer[] = [
 ];
 
 const DEMO_COLLEGE_ROWS: OgPlayer[] = [
-  { full_name: "Cam Ward", position: "QB", team: "MIA", stat: 4120, passing_yards: 4312 },
-  { full_name: "Travis Hunter", position: "WR", team: "COLO", stat: 1189, total_yards: 1420 },
-  { full_name: "Ashton Jeanty", position: "RB", team: "BOISE", stat: 1924, rushing_yards: 1924 },
-  { full_name: "Tyler Warren", position: "TE", team: "PSU", stat: 812 },
-  { full_name: "Tre Harris", position: "WR", team: "OLE MISS", stat: 1056, receptions: 88 },
-  { full_name: "Emeka Egbuka", position: "WR", team: "OSU", stat: 989 },
+  {
+    full_name: "Cam Ward",
+    position: "QB",
+    team: "MIA",
+    stat: 4120,
+    passing_yards: 4312,
+    total_yards: 4312,
+  },
+  {
+    full_name: "Travis Hunter",
+    position: "WR",
+    team: "COLO",
+    stat: 1420,
+    total_yards: 1420,
+    receptions: 92,
+  },
+  {
+    full_name: "Ashton Jeanty",
+    position: "RB",
+    team: "BOISE",
+    stat: 1924,
+    rushing_yards: 1924,
+    total_yards: 1924,
+  },
+  { full_name: "Tyler Warren", position: "TE", team: "PSU", stat: 812, total_yards: 812 },
+  {
+    full_name: "Tre Harris",
+    position: "WR",
+    team: "OLE MISS",
+    stat: 1056,
+    receptions: 88,
+    total_yards: 1056,
+  },
+  { full_name: "Emeka Egbuka", position: "WR", team: "OSU", stat: 989, total_yards: 989 },
 ];
 
 function demoRowsForExplore(universe: string): OgPlayer[] {
