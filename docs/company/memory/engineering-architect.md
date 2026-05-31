@@ -2,6 +2,8 @@
 
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
 
+- 2026-05-31: OG snapshot fidelity — explicit sort in renderer, not API order assumption.
+
 Format per entry:
 
 ```

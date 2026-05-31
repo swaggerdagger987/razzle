@@ -3,6 +3,8 @@
 Append-only log of recurring user pain patterns, language signals, and feature-gap
 candidates that became (or didn't become) PARITY rows.
 
+- 2026-05-31: No new Reddit intel — OG fidelity is export UX, not data source.
+
 Format per entry:
 
 ```

@@ -2,6 +2,8 @@
 
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
+- 2026-05-31: Breakouts OG — sort by rbs_score/formula_score before slice(0,6); mirrors prospects RPS pattern.
+
 Format per entry:
 
 ```

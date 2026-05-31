@@ -3,6 +3,8 @@
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 
+- 2026-05-31: curl /og/breakouts 60649B PASS after RBS-ranked snapshot sort.
+
 Format per entry:
 
 ```

@@ -2,6 +2,8 @@
 
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
 
+- 2026-05-31: Lab OG fidelity epic closed — breakouts export now ranks same leaders as panel.
+
 Format per entry:
 
 ```
