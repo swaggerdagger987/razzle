@@ -15,19 +15,19 @@
       "id": "lab-weekly-hot-week-snapshot",
       "title": "Weekly heatmap export snapshot includes hottest week rows",
       "status": "pending",
-      "merge_commit": "5615a8df"
+      "merge_commit": null
     },
     {
       "id": "lab-buysell-combined-snapshot",
       "title": "Buy/sell export snapshot merges buy and sell lanes",
       "status": "pending",
-      "merge_commit": "5615a8df"
+      "merge_commit": null
     },
     {
       "id": "lab-tradevalues-formula-snapshot",
       "title": "Trade values export snapshot uses formula-ranked visible rows",
       "status": "pending",
-      "merge_commit": "5615a8df"
+      "merge_commit": null
     }
   ],
   "next_atom_id": "lab-weekly-hot-week-snapshot",
