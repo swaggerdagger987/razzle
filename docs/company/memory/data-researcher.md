@@ -3,6 +3,7 @@
 2026-05-31 | explore-og-margin-note-row2 | — | PASS | WR target-share callouts drive r/DynastyFF screenshot engagement.
 2026-05-31 | lab-og-dashboard-live-gate-c | — | PASS | Dynasty dashboard OC = risers + value picks aggregate (REDDIT-INTEL).
 2026-05-31 | lab-og-from-panel-launch10-registry | — | PASS | No new Reddit intel.
+2026-05-31 | explore-og-margin-note-rows | — | PASS | No new Reddit intel.
 2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 

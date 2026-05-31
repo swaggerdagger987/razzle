@@ -10,8 +10,8 @@ EXPLORE_OG = ROOT / "apps/web/app/og/explore/route.tsx"
 
 def test_explore_og_renders_margin_on_first_two_rows():
     source = EXPLORE_OG.read_text(encoding="utf-8")
-    assert "i < 2" in source
-    assert "marginNoteForOgRow" in source
+    assert "TOP_MARGIN_NOTE_ROWS" in source
+    assert "marginNoteForOgExploreRow" in source
     assert "rowMarginNote" in source
     assert "rowAgent.emoji" in source
 

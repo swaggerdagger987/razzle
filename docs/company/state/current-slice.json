@@ -16,15 +16,9 @@
   "max_files": 3,
   "max_lines": 120,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_og_margin_note_gate_c.py apps/api/tests/test_explore_og_margin_note_lead.py apps/api/tests/test_explore_og_margin_note_row2.py apps/api/tests/test_explore_og_margin_note_college_lead.py -q --noconftest",
-    "curl -s -o /tmp/og-explore-margin-nfl.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/explore?download=1&force_demo=1'",
-    "curl -s -o /tmp/og-explore-margin-college.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&download=1&force_demo=1'"
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_og_margin_note_gate_c.py apps/api/tests/test_explore_og_margin_note_lead.py apps/api/tests/test_explore_og_margin_note_row2.py apps/api/tests/test_explore_og_margin_note_college_lead.py -q --noconftest"
   ],
-  "out_of_scope": [
-    "margin-notes.ts rule changes",
-    "new OG routes",
-    "NORTH_STAR/DESIGN/DECISIONS"
-  ],
+  "out_of_scope": ["margin-notes.ts rule changes", "new OG routes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

@@ -11,6 +11,9 @@ const POS_COLOR: Record<string, string> = {
   TE: "#8b5cf6",
 };
 
+/** Staff margin notes on screenshot ranks 1–3 (Explore L5 parity with screener). */
+const TOP_MARGIN_NOTE_ROWS = 3;
+
 interface OgPlayer extends OgExploreMarginRow {
   stat: number;
 }
@@ -26,7 +29,14 @@ const DEMO_NFL_ROWS: OgPlayer[] = [
     fantasy_points_ppr: 312.4,
   },
   { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 298.1, targets: 128 },
-  { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 285.6 },
+  {
+    full_name: "Bijan Robinson",
+    position: "RB",
+    team: "ATL",
+    stat: 285.6,
+    age: 21,
+    fantasy_points_ppr: 285.6,
+  },
   { full_name: "Brock Bowers", position: "TE", team: "LV", stat: 241.2 },
   { full_name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 228.4 },
   { full_name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 215.8 },
@@ -239,7 +249,11 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
-  const marginNoteForOgRow = (row: OgPlayer) => marginNoteForOgExploreRow(row, universe);
+  const hasStaffMarginNotes =
+    !isDemo &&
+    players
+      .slice(0, TOP_MARGIN_NOTE_ROWS)
+      .some((p) => marginNoteForOgExploreRow(p, universe) != null);
 
   return new ImageResponse(
     (
@@ -299,6 +313,23 @@ export async function GET(req: Request) {
               SAMPLE · not live data
             </div>
           ) : null}
+          {hasStaffMarginNotes ? (
+            <div
+              style={{
+                display: "flex",
+                fontSize: 16,
+                fontWeight: 700,
+                background: "#2ec4b6",
+                color: "#f7efe5",
+                padding: "4px 12px",
+                border: "3px solid #2d1f14",
+                borderRadius: 6,
+                boxShadow: "3px 3px 0 #2d1f14",
+              }}
+            >
+              LIVE · staff margin notes
+            </div>
+          ) : null}
         </div>
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>
           {isDemo
@@ -338,7 +369,8 @@ export async function GET(req: Request) {
               <div style={{ width: 80, textAlign: "right", display: "flex" }}>{colHeader}</div>
             </div>
             {players.map((p, i) => {
-              const rowMarginNote = i < 2 ? marginNoteForOgRow(p) : null;
+              const rowMarginNote =
+                i < TOP_MARGIN_NOTE_ROWS ? marginNoteForOgExploreRow(p, universe) : null;
               const rowAgent = rowMarginNote ? AGENT_BY_ID[rowMarginNote.agentId] : null;
               return (
               <div

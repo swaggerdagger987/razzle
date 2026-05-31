@@ -26,9 +26,9 @@ def test_college_explore_og_gate_c_fixture_params_documented():
     assert "force_demo=1" in COLLEGE_EXPLORE_OG_GATE_C_PARAMS
 
 
-def test_explore_og_margin_on_first_two_rows_for_gate_c():
+def test_explore_og_margin_on_top_rows_for_gate_c():
     source = EXPLORE_OG.read_text(encoding="utf-8")
-    assert "i < 2" in source
+    assert "TOP_MARGIN_NOTE_ROWS" in source
     assert "rowMarginNote" in source
     assert "rowAgent.emoji" in source
     assert "marginNoteForOgExploreRow" in source

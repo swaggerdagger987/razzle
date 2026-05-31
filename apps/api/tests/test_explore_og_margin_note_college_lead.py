@@ -25,7 +25,7 @@ def test_margin_notes_college_volume_passer_rule():
 def test_explore_og_renders_margin_on_college_lead_via_row_helper():
     source = EXPLORE_OG.read_text(encoding="utf-8")
     assert "marginNoteForOgExploreRow" in source
-    assert "i < 2" in source
+    assert "TOP_MARGIN_NOTE_ROWS" in source
     assert "universe === \"college\"" in source
 
 
