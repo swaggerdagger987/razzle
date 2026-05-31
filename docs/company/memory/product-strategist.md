@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | c686fadb | SHIP | Gamelog OG peak-week PPR matches in-panel sort.
+
 2026-05-31 | Cycle 116 bureau H2H pytest | 5e75875e | CI guardrail ShareBar↔OG.
 
 

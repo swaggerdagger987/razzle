@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | cycle 117 | No new intel; peak-week PPR matches dynasty gamelog discourse.
+
 2026-05-31 | Cycle 116 | 5e75875e | League export codec.
 
 

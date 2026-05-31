@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | c686fadb | curl gamelog 61145B PASS | Gate C ≥40KB PNG demo rows.
+
 2026-05-31 | Cycle 116 | 5e75875e | PASS pytest 4.
 
 
