@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-position-efficiency-tradevalues-buysell | 35abd959 | SHIP | Lab L5 position epic 1/2; code was missing on base despite prior doc claims
+
 2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
 
 2026-05-31 | lab-tradevalues-formula-snapshot | 5ed39e14 | SHIP | Lab L5 OG mirror epic complete; Bureau H2H is next lead

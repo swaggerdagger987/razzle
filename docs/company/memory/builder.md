@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | Lab OG position 3-up | 35abd959 | position on EfficiencyRenderer, TradeValuesRenderer, BuySellRenderer.
+
 2026-05-31 | H2H canonical codec | da33eafd | BureauH2HShareBar uses encodeBureauH2HOgSnapshot; OG route decodeBureauH2HOgSnapshot.
 
 2026-05-31 | Trade values OG rank labels | 5ed39e14 | TradeValuesRenderer ogSnapshotRows uses `rank · Value` or `rank · formula.name` on top 6 sorted rows.
