@@ -9,7 +9,7 @@
 | Check | Result |
 |-------|--------|
 | `npm run build --workspace=apps/web` | exit 0 |
-| `pytest apps/api/tests/test_panel_upgrade_teaser.py -q` | 4 passed |
+| `pytest apps/api/tests/test_panel_upgrade_teaser.py -q` | 7 passed |
 
 ## Change summary
 
