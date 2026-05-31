@@ -6,12 +6,8 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 
-<<<<<<< HEAD
 2026-05-31 | explore-screener-razzle-loading | 6afecf078 | 2 files ≤25 lines; source contract pytest.
-
-=======
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | 3 files; marginNoteForOgExploreRow on edge OG route.
->>>>>>> origin/razzle-v2-redesign
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | 3 files; mirrors H2H atlasRoomPath pattern for Bones.
 2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | 2 files pytest-only; SNAPSHOT_FROM_PANEL_SLUGS extended.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | 2 files; includeDefaultPlayer guard in labOgWatermarkLink.
