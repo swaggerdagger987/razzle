@@ -1,6 +1,4 @@
-{
-  "date": "2026-05-31",
-  "big_problem": "Bureau behavioral tabs need copy-link + export rows so deadline pressure screenshots travel in group chats.",
+"big_problem": "Bureau behavioral tabs need copy-link + export rows so deadline pressure screenshots travel in group chats.",
   "epic": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
   "slice_title": "Pressure Map copy link beside export card",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -17,4 +15,3 @@
   ],
   "out_of_scope": ["OG route edits", "new Bureau tabs", "auth/billing", "shared share-bar refactor"],
   "builder_mode": "composer-surgical"
-}
