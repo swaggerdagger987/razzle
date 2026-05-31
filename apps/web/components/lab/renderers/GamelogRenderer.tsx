@@ -260,7 +260,6 @@ export function GamelogRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="gamelog"
             downloadName="razzle-gamelog.png"
-            playerId={DEFAULT_LAB_OG_PLAYER_ID}
             label="export sample card"
           />
         </footer>
