@@ -9,7 +9,7 @@ import {
   teaserRowsForPanel,
   upgradePitchForPanel,
 } from "@/lib/panel-upgrade-teaser";
-import { PanelAgentHeader, panelAgent } from "./PanelAgentHeader";
+import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "./PanelAgentHeader";
 
 interface Props {
   panelSlug: string;
@@ -35,6 +35,7 @@ export function ProUpgradeGate({
   return (
     <div className="pro-upgrade-gate">
       <PanelAgentHeader agent={agent} slug={panelSlug} />
+      <PanelAgentLoading agent={agent} />
 
       <div className="pro-upgrade-preview-wrap chunky bg-bg-card">
         <div className="pro-upgrade-preview" aria-hidden>
