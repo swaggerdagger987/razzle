@@ -1,33 +1,32 @@
 {
   "date": "2026-05-31",
+  "atom_id": "explore-og-universe-query",
   "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
   "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Merge base LIVE sticker + fetchOgLiveRows for Launch-10",
-  "atom_id": "lab-og-launch10-live-fetch-merge",
-  "parity_ref": "PARITY Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with live rows + LIVE sticker",
+  "slice_title": "Explore OG — pass universe/college in export URL + same-origin screener fetch",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/explore college + nfl PNG ≥35KB",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
-  "max_files": 1,
-  "max_lines": 120,
+  "allowed_paths": [
+    "apps/web/components/explore/ExploreShareButton.tsx",
+    "apps/web/components/explore/ExplorePageClient.tsx",
+    "apps/web/app/og/explore/route.tsx"
+  ],
+  "max_files": 3,
+  "max_lines": 80,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q",
-    "curl -s -o /tmp/rankings-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1'",
-    "curl -s -o /tmp/weekly-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?download=1'",
-    "file /tmp/rankings-og.png /tmp/weekly-og.png"
+    "npm run build --workspace=apps/web 2>&1 | tail -8",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-nfl.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc&download=1'",
+    "curl -s -o /tmp/og-college.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&download=1'"
   ],
-  "out_of_scope": [
-    "Explore OG universe param",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "new npm deps"
-  ],
+  "out_of_scope": ["Lab panel OG route", "NORTH_STAR/DESIGN edits", "new npm deps"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
