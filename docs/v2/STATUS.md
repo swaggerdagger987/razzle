@@ -15,9 +15,9 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 56 |
+| Cycle | 92 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | Bureau H2H export or Lab panel OG live data rows |
 | Last commit | `da33eafd` |
