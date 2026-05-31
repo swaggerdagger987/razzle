@@ -1,25 +1,44 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic_title": "Lab L5 — OG hallway position defaults (multi-panel)",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "big_problem": "Explore screener OG cards look like stat tables — they need agent margin notes on the lead row so Reddit screenshots feel like The Lab.",
+  "epic_title": "Explore L5 — OG margin notes on share cards",
+  "parity_ref": "Explore L5 — Agent margin notes on rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-og-tolab-weekly-position",
-      "title": "weekly OG watermark includes default WR position in toLab",
+      "id": "explore-og-margin-note-lead",
+      "title": "Lead-row staff margin note on Explore OG export",
       "status": "done",
-      "merge_commit": "9be64d109"
+      "merge_commit": "0fc4932b7"
     },
     {
-      "id": "lab-og-tolab-efficiency-position",
-      "title": "efficiency OG watermark includes default RB position in toLab",
-      "status": "done",
-      "merge_commit": "8327741"
+      "id": "explore-og-margin-note-demo-college",
+      "title": "College demo OG rows trigger campus margin notes",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-in-product-margin-parity",
+      "title": "Verify in-product Explore margin note matches OG lead copy",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T14:45:00Z",
-  "updated_at": "2026-05-31T15:00:00Z",
-  "completed_epics": []
+  "next_atom_id": "explore-og-margin-note-demo-college",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T11:40:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-watermark-display-names",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
+    },
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
+    }
+  ]
 }

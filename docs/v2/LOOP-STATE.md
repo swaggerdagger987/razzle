@@ -1,8 +1,9 @@
 cycle: 154
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: lab-og-tolab-rankings-position or Bureau per PARITY
+next_slice: explore-og-margin-note-demo-college
 last_keep_cycle: 154
-last_commit: 8327741
-lab_l5_og_hallway_position_defaults_epic: active
+last_commit: 75d90aca8
+explore_l5_og_margin_epic: active
+explore_og_margin_lead_atom: done_on_base_0fc4932b7

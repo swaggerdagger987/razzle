@@ -1,3 +1,4 @@
+2026-05-31 | explore-og-margin-note-lead | 75d90aca8 | keep | Screener OG lead mirrors ExploreMarginNote rules for Reddit GTM.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | No new Reddit intel.
 2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
@@ -74,6 +75,7 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | manager archetype OG | PANIC SELLER labels are trade-DM shorthand | manager-profiles atom | keep | cycle 62 briefing
 2026-05-31 | trade partnership OG | collusion bait in trade threads | trade-network atom | keep | cycle 63 briefing
 2026-05-31 | position grade OG | A–F roster grid for trade threads | self-scout atom | keep | factory cycle 1 briefing
+2026-05-31 | explore-og-margin-note-lead | f6e0985f3 | keep | Screener OG lead row mirrors in-product margin note rules.
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live

@@ -1,29 +1,34 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
-  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-efficiency-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "big_problem": "Explore screener OG cards look like stat tables — they need agent margin notes on the lead row so Reddit screenshots feel like The Lab.",
+  "epic": "Explore L5 — OG margin notes on share cards",
+  "slice_title": "Lead-row staff margin note on Explore OG export (dedup + factory verify)",
+  "atom_id": "explore-og-margin-note-lead",
+  "parity_ref": "Explore L5 — Agent margin notes on rows",
+  "depth_ref": "Explore L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/lib/margin-notes.ts",
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_margin_note_lead.py"
   ],
-  "max_files": 2,
-  "max_lines": 25,
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_og_margin_note_lead.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
+  "out_of_scope": ["Lab OG routes", "new npm deps", "NORTH_STAR edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+    "verdict": "SHIP"
+  },
+  "content_commit": "75d90aca8",
+  "reality": "PASS",
+  "merge": "pending",
+  "dedup_base_commit": "0fc4932b7"
 }
