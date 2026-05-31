@@ -8,8 +8,8 @@
     {
       "id": "lab-og-buysell-dashboard-live",
       "title": "Buy/sell + dashboard OG live row extractors",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "dcb560ea"
     },
     {
       "id": "lab-og-prospects-rps-live",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-buysell-dashboard-live",
+  "next_atom_id": "lab-og-prospects-rps-live",
   "created_at": "2026-05-31T06:30:00Z",
-  "updated_at": "2026-05-31T06:30:00Z"
+  "updated_at": "2026-05-31T13:00:00Z"
 }
