@@ -1,33 +1,39 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG exports die on empty boards — dynasty Twitter cannot screenshot a heatmap or tape panel when the API returns zero rows.",
-  "epic_title": "Lab L5 — empty-board OG export sample cards",
-  "parity_ref": "Launch 10 — Lab panel OG data rows",
+  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
+  "epic_title": "Lab L5 — OG hallway deep links",
+  "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-gamelog-empty-weeks-export",
-      "title": "Gamelog export sample card when player has zero weeks",
+      "id": "lab-og-tolab-watermark",
+      "title": "Launch-10 toLab watermark band",
       "status": "done",
-      "merge_commit": "ac0280a20"
+      "merge_commit": "b80512bb4"
     },
     {
-      "id": "lab-efficiency-empty-export",
-      "title": "Efficiency export sample card when position board empty",
+      "id": "lab-og-tolab-gamelog-default",
+      "title": "Gamelog/dynasty-comps default player in toLab",
       "status": "done",
-      "merge_commit": "5283c3eb4"
+      "merge_commit": "c311a15a8"
     },
     {
-      "id": "lab-weekly-empty-export",
-      "title": "Weekly heatmap export sample card when board has no hot weeks",
-      "status": "in_progress",
+      "id": "lab-og-tolab-snapshot-player",
+      "title": "Snapshot exports preserve player in watermark",
+      "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-weekly-empty-export",
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "next_atom_id": "lab-og-tolab-snapshot-player",
+  "created_at": "2026-05-31T11:00:00Z",
+  "updated_at": "2026-05-31T12:30:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-empty-board-og-sample-cards",
+      "status": "complete",
+      "last_atom": "lab-weekly-empty-export",
+      "merge_commit": "088cebc07"
+    },
     {
       "id": "lab-l5-formula-og-live-parity",
       "status": "complete",

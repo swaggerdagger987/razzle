@@ -2,6 +2,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | 2 files; includeDefaultPlayer guard in labOgWatermarkLink.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | 2 files; extractBuySellRows + buysellStatKeys.
 
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | PLAYER_SCOPED_LIVE_STICKER_SLUGS excludes Launch-10 gamelog.

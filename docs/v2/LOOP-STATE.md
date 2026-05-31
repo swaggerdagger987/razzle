@@ -2,7 +2,8 @@ cycle: 148
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: pick from PARITY/NEXT (empty OG epic complete)
+next_slice: lab-og-tolab-snapshot-player
 last_keep_cycle: 148
 last_commit: 088cebc07
 lab_l5_empty_og_epic: complete
+lab_l5_og_hallway_epic: active

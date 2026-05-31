@@ -81,6 +81,9 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
 /** Pro player-scoped Lab panels (not Launch-10) — LIVE trust sticker when API returns rows. */
 const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"]);
 
+/** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
+const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
+
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
   "prospects",
@@ -846,8 +849,11 @@ function labOgWatermarkLink(
   slug: string,
   opts: { positionFilter: string; playerId: string; playerScoped: boolean },
 ): string {
+  const includeDefaultPlayer = TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS.has(slug);
   const usePlayer =
-    opts.playerScoped && opts.playerId && opts.playerId !== DEFAULT_OG_PLAYER_ID;
+    opts.playerScoped &&
+    opts.playerId &&
+    (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
   let path = toLab(
     slug,
     usePlayer
