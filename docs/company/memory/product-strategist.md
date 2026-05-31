@@ -1,6 +1,8 @@
 # Memory — Product Strategist
 
-2026-05-31 | FROM PANEL sticker | da33eafd | Snapshot exports need glance trust like LIVE/SAMPLE stickers; epic atom 1/3.
+2026-05-31 | FROM PANEL evidence | da33eafd | Rankings + weekly snapshot curls guard highest-traffic export panels; atom 2/3.
+
+2026-05-31 | FROM PANEL sticker | 7d49e4f0c | Snapshot exports need glance trust like LIVE/SAMPLE stickers; epic atom 1/3.
 
 2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | SHIP | keep | atom 3/3 closes Launch-10 LIVE sticker epic.
 

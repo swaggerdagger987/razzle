@@ -1,6 +1,8 @@
 # Memory — Engineering Architect
 
-2026-05-31 | FROM PANEL sticker contract | da33eafd | isSnapshot && LAUNCH_10; QB blue #5b7fff.
+2026-05-31 | FROM PANEL evidence contract | da33eafd | pytest rankings+weekly in LAUNCH_10; no route churn.
+
+2026-05-31 | FROM PANEL sticker contract | 7d49e4f0c | isSnapshot && LAUNCH_10; QB blue #5b7fff.
 
 2026-05-31 | og sticker breakouts-dashboard | 96d43d1b | keep | 2-file pytest+curl evidence; epic complete.
 
