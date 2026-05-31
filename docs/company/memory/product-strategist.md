@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-gamelog-player-default | da33eafd | SHIP | keep | PLAYER_SCOPED export defaults; T5/T6.
+2026-05-31 | lab-og-gamelog-player-default | cb757cc2 | SHIP | keep | PLAYER_SCOPED export defaults; T5/T6.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.

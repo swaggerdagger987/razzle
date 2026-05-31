@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-gamelog-player-default | da33eafd | keep | PLAYER_SCOPED_OG_SLUGS in LabOgExportLink; effectivePlayerId.
+2026-05-31 | lab-og-gamelog-player-default | cb757cc2 | keep | PLAYER_SCOPED_OG_SLUGS in LabOgExportLink; effectivePlayerId.
 
 2026-05-31 | lab-sidebar-search-agent-labels | e75ec714 | keep | showOwnerInTitle prefixes search hits with agent name.
 

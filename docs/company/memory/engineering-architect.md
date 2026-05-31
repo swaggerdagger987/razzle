@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | gamelog OG default | da33eafd | keep | 2 files; PLAYER_SCOPED_OG_SLUGS in LabOgExportLink.
+2026-05-31 | gamelog OG default | cb757cc2 | keep | 2 files; PLAYER_SCOPED_OG_SLUGS in LabOgExportLink.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
