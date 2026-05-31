@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | league-strength-of-schedule-og-share | da33eafd | keep | SOS OG verdict card; panel rank/ppg/opp query params; epic 4/4 done
+2026-05-31 | league-strength-of-schedule-og-share | 3196e65a | keep | SOS OG verdict card; panel rank/ppg/opp query params; epic 4/4 done
 
 2026-05-31 | league-power-rankings-og-snapshot | 26a22f69 | keep | compact encode/decode lib + ShareBar rows prop
 
