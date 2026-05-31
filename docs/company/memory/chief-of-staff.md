@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | lab-og-dynasty-comps-live-sticker | da33eafd | SHIP | Factory cycle 2; Lab L5 OG rows epic atom 1/3.
+
 2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Factory open cycle 1; Room L5 briefing GTM epic complete.
 2026-05-31 | Factory cycle 139 gamelog empty OG export | ac0280a20 | Workday open cycle 1; merged after base sync; empty OG epic atom 1/3.
 
