@@ -8,8 +8,8 @@
     {
       "id": "lab-prospects-og-rps-position",
       "title": "Prospects OG: RPS column + position filter on export",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "17a40c65"
     },
     {
       "id": "lab-efficiency-og-position-filter",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-prospects-og-rps-position",
+  "next_atom_id": "lab-efficiency-og-position-filter",
   "created_at": "2026-05-31T05:30:00Z",
   "updated_at": "2026-05-31T05:30:00Z"
 }
