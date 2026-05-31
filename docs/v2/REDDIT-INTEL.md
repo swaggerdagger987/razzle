@@ -18,6 +18,10 @@
 - **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
 - **Trust:** T1 honest labeling; sample suffix only on demo fallback.
 
+### 2026-05-31 — Explore OG honesty (cycle 124)
+
+- r/DynastyFF shares screener screenshots; SAMPLE vs LIVE stickers on Explore OG match Lab export honesty.
+
 ### 2026-05-31 — Bureau H2H codec (cycle 96)
 - **Angle:** League group chats break when export PNG shows demo rows after a real rivalry snapshot — canonical y/m/pc codec keeps ShareBar honest.
 

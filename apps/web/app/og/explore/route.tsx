@@ -16,6 +16,28 @@ interface OgPlayer {
   stat: number;
 }
 
+const DEMO_NFL_PLAYERS: OgPlayer[] = [
+  { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 312.4 },
+  { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 298.1 },
+  { full_name: "CeeDee Lamb", position: "WR", team: "DAL", stat: 285.6 },
+  { full_name: "Justin Jefferson", position: "WR", team: "MIN", stat: 271.2 },
+  { full_name: "Brock Bowers", position: "TE", team: "LV", stat: 198.4 },
+  { full_name: "Jayden Daniels", position: "QB", team: "WAS", stat: 412.8 },
+];
+
+const DEMO_COLLEGE_PLAYERS: OgPlayer[] = [
+  { full_name: "Travis Hunter", position: "WR", team: "COLO", stat: 1247 },
+  { full_name: "Quinn Ewers", position: "QB", team: "TEX", stat: 3189 },
+  { full_name: "Marvin Harrison Jr.", position: "WR", team: "OSU", stat: 1103 },
+  { full_name: "Malachi Corley", position: "WR", team: "WKU", stat: 986 },
+  { full_name: "Bo Nix", position: "QB", team: "ORE", stat: 2954 },
+  { full_name: "Rome Odunze", position: "WR", team: "WASH", stat: 912 },
+];
+
+function demoPlayersForUniverse(universe: string): OgPlayer[] {
+  return universe === "college" ? DEMO_COLLEGE_PLAYERS : DEMO_NFL_PLAYERS;
+}
+
 async function fetchTopPlayers(params: {
   universe: string;
   sort: string;
@@ -106,6 +128,7 @@ function buildSubtitle(universe: string, sort: string, pos: string, q: string): 
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
+  const forceDemo = url.searchParams.get("force_demo") === "1";
   const universe = url.searchParams.get("universe") ?? "nfl";
   const sort = url.searchParams.get("sort") ?? "fantasy_points_ppr";
   const dir = url.searchParams.get("dir") ?? "desc";
@@ -118,7 +141,14 @@ export async function GET(req: Request) {
   const exploreLink =
     universe === "college" ? "razzle.lol/explore?universe=college" : "razzle.lol/explore";
 
-  const players = await fetchTopPlayers({ universe, sort, dir, q, pos });
+  const livePlayers = forceDemo
+    ? []
+    : await fetchTopPlayers({ universe, sort, dir, q, pos });
+  const namedLive = livePlayers.filter((p) => p.full_name.trim().length > 0);
+  const showingLiveData = namedLive.length > 0;
+  const rows = showingLiveData ? namedLive : demoPlayersForUniverse(universe);
+  const showLiveSticker = showingLiveData;
+  const showDemoSticker = !showingLiveData && rows.length > 0;
 
   return new ImageResponse(
     (
@@ -145,7 +175,49 @@ export async function GET(req: Request) {
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, marginBottom: 8 }}>{title}</div>
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>{subtitle}</div>
 
-        {players.length > 0 ? (
+        {showLiveSticker ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            LIVE · screener rows
+          </div>
+        ) : null}
+
+        {showDemoSticker ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            SAMPLE · demo screener
+          </div>
+        ) : null}
+
+        {rows.length > 0 ? (
           <div
             style={{
               display: "flex",
@@ -174,7 +246,7 @@ export async function GET(req: Request) {
               <div style={{ width: 72, display: "flex" }}>{universe === "college" ? "School" : "Team"}</div>
               <div style={{ width: 80, textAlign: "right", display: "flex" }}>{colHeader}</div>
             </div>
-            {players.map((p, i) => (
+            {rows.map((p, i) => (
               <div
                 key={`${p.full_name}-${i}`}
                 style={{ display: "flex", alignItems: "center", fontSize: 20 }}
@@ -204,9 +276,7 @@ export async function GET(req: Request) {
               </div>
             ))}
           </div>
-        ) : (
-          <div style={{ flex: 1, fontSize: 24, color: "#5c4a3d" }}>pulling film…</div>
-        )}
+        ) : null}
 
         {/* Always-on watermark band — visible on preview + download (T6 screenshot gravity) */}
         <div
