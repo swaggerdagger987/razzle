@@ -1,6 +1,8 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 129 explore college export filename | 70eb4e5d | Workday open; Explore L5 universe epic atom 1/3; merged base season/team params.
+2026-05-31 | PR 1017 explore college filename | 70eb4e5d | CI green; merge blocked gh rate limit — retry merge or auto-merge.
+
+2026-05-31 | Factory cycle 130 explore college export filename | 70eb4e5d | Workday open cycle 1; Explore L5 universe epic atom 1/3.
 
 2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
 
