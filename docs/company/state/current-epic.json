@@ -1,32 +1,32 @@
 {
   "epic_status": "active",
-  "big_problem": "Launch-10 Lab panels dead-end on empty API boards — managers cannot export screenshot-worthy OG cards when filters return zero rows.",
-  "epic_title": "Lab L5 — Launch-10 empty OG sample exports",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust — group chats can't tell exported rivalry rows from live Sleeper pulls.",
+  "epic_title": "League L5 — Bureau H2H GTM export",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-breakouts-empty-export",
-      "title": "Breakouts empty board OG sample export card",
+      "id": "bureau-h2h-og-exported-sticker",
+      "title": "H2H OG EXPORTED sticker when snapshot param present",
       "status": "done",
-      "merge_commit": "8b6f3117b"
+      "merge_commit": "5b60ea23d"
     },
     {
-      "id": "lab-prospects-empty-export",
-      "title": "Prospects empty board OG sample export card",
-      "status": "done",
-      "merge_commit": "8e2ca7f29"
+      "id": "bureau-h2h-og-exported-pytest",
+      "title": "pytest guard for H2H snapshot EXPORTED sticker + ShareBar encode",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-dashboard-empty-export",
-      "title": "Dashboard empty roster OG sample export card",
-      "status": "in_progress",
+      "id": "bureau-h2h-og-gate-c-snapshot",
+      "title": "Gate C curl evidence for H2H snapshot OG PNG",
+      "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-dashboard-empty-export",
-  "created_at": "2026-05-31T11:26:20Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "next_atom_id": "bureau-h2h-og-exported-pytest",
+  "created_at": "2026-05-31T20:00:00Z",
+  "updated_at": "2026-05-31T11:45:00Z",
   "completed_epics": [
     {
       "id": "league-l5-trade-finder-gtm",
@@ -45,6 +45,12 @@
       "status": "complete",
       "last_atom": "lab-og-tolab-weekly-position",
       "merge_commit": "9be64d109"
+    },
+    {
+      "id": "lab-l5-launch10-empty-og-exports",
+      "status": "complete",
+      "last_atom": "lab-dashboard-empty-export",
+      "merge_commit": "75c5bae56"
     }
   ]
 }

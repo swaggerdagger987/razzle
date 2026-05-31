@@ -17,9 +17,9 @@ From `LOOP-STATE.md`:
 |-------|-------|
 | Cycle | 157 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | Bureau H2H export or Lab panel OG live data rows (NEXT.md) |
+| Next slice | Bureau H2H GTM pytest atom (`bureau-h2h-og-exported-pytest`) |
 | Last commit | `75c5bae56` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
