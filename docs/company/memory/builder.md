@@ -15,8 +15,6 @@
 2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | ac0280a20 | curl gamelog OG 59323B; empty weeks footer export.
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | toLab on panel OG band; position query when filtered.
-2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | ac0280a20 | curl gamelog OG 59323B; empty weeks footer export.
-2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | NFL share URLs drop universe=nfl; college keeps param.
 2026-05-31 | lab-l4-pro-gate-error-dynasty-comps | a3f07d1e5 | SHIP | DynastyCompsRenderer ProGateFromPanelError; pytest 9.
@@ -41,7 +39,6 @@
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
 
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | keep | extractGamelogWeekRows; Wk N + fpts sort; curl 56390B.
 
