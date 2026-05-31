@@ -19,7 +19,7 @@ From `LOOP-STATE.md`:
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-og-tolab-gamelog-default |
+| Next slice | lab-og-tolab-dynasty-comps-default |
 | Last commit | `b80512bb4` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
