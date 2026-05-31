@@ -1,25 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-universe-query",
-  "big_problem": "College Explore exports must encode universe in OG URLs so share cards match in-product screener state.",
-  "epic": "Lab L5 — OG live fetch + sticker parity (atom 2/3)",
-  "slice_title": "Explore OG export params — universe + college sort in toolbar URLs",
-  "parity_ref": "Explore L5 — shareable URL + watermarked export",
-  "depth_ref": "Explore L5",
+  "atom_id": "lab-og-gamelog-player-default",
+  "big_problem": "Lab OG exports without snapshot still fall back to demo — gamelog share URLs must always carry a player_id so Reddit gets Chase week rows, not a bare /og/gamelog link.",
+  "epic": "Lab L5 — OG live fetch + sticker parity (atom 3/3)",
+  "slice_title": "Gamelog OG — default player_id on Lab export when query omits id",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/explore-og-export-params.ts",
-    "apps/web/components/explore/ExploreShareButton.tsx",
-    "apps/api/tests/test_explore_og_export_params.py"
+    "apps/web/lib/lab-og-export-params.ts",
+    "apps/web/components/lab/LabOgExportLink.tsx",
+    "apps/web/components/lab/renderers/GamelogRenderer.tsx",
+    "apps/api/tests/test_lab_og_gamelog_export.py"
   ],
-  "max_files": 3,
+  "max_files": 4,
   "max_lines": 120,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_explore_og_export_params.py -q",
-    "npm run build --workspace=apps/web 2>&1 | tail -5"
+    "python3 -m pytest apps/api/tests/test_lab_og_gamelog_export.py -q",
+    "npm run build --workspace=apps/web 2>&1 | tail -8"
   ],
-  "out_of_scope": ["og/explore/route.tsx redesign", "new panels", "pricing"],
+  "out_of_scope": ["og route refactor", "new panels", "dynasty-comps UI"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

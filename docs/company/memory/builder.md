@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-gamelog-player-default | da33eafd | keep | lab-og-export-params.ts; Gamelog empty export; pytest 3.
+
 2026-05-31 | explore-og-universe-query | 7abe91fa | keep | explore-og-export-params.ts; ExploreShareButton helper; pytest 4.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
