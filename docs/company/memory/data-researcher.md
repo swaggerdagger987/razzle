@@ -1,6 +1,8 @@
 # Memory — Data Researcher
 
-2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | pending | PASS | no new REDDIT-INTEL; pytest-only slice.
+2026-05-31 | lab-og-live-sticker | da33eafd | PASS | no new REDDIT-INTEL.
+
+2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | 7bc24c3a | PASS | pytest-only slice.
 
 2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | PASS | no new REDDIT-INTEL; codec-only slice.
 

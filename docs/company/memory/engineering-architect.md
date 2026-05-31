@@ -1,6 +1,8 @@
 # Memory — Engineering Architect
 
-2026-05-31 | self-scout roundtrip | pending | keep | 1-file pytest mirror; H2H codec pattern.
+2026-05-31 | lab-og-live-sticker | da33eafd | keep | route.tsx only; ≤20 lines sticker+blurb.
+
+2026-05-31 | self-scout roundtrip | 7bc24c3a | keep | pytest mirror; H2H codec pattern.
 
 2026-05-31 | self-scout snapshot | c2de8dad | keep | 3-file contract; mirrors power-rankings codec pattern.
 

@@ -1,6 +1,8 @@
 # Memory — Product Strategist
 
-2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | pending | SHIP | League L5 epic atom 3/3; CI codec closes export epic.
+2026-05-31 | lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog | da33eafd | SHIP | Lab L5 sticker epic atom 1/3; NEXT.md OG live rows.
+
+2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | 7bc24c3a | SHIP | League L5 epic complete.
 
 2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | SHIP | keep | League L5 PARITY export atom 1/3 done.
 

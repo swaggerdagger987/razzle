@@ -1,6 +1,8 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 129 Self-Scout roundtrip | pending | workday cycle 1 reopen; League L5 epic atom 3/3.
+2026-05-31 | Factory cycle 130 Lab OG LIVE stickers | da33eafd | keep | Lab L5 sticker epic atom 1/3; workday cycle 1.
+
+2026-05-31 | Factory cycle 129 Self-Scout roundtrip | 7bc24c3a | keep | League L5 epic complete.
 
 2026-05-31 | Factory cycle 128 Self-Scout ShareBar | 0bbfc1bb | keep | League L5 epic atom 2/3.
 

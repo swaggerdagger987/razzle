@@ -1,27 +1,30 @@
 {
   "date": "2026-05-31",
-  "atom_id": "bureau-self-scout-snapshot-roundtrip-test",
-  "big_problem": "Bureau exports still diverge from in-product views — Self-Scout snapshot codec has no CI guardrail like H2H.",
-  "epic": "League L5 — Self-Scout export travels with depth grades",
-  "slice_title": "Self-Scout — pytest roundtrip for snapshot codec",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot param",
+  "atom_id": "lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog",
+  "big_problem": "Lab OG share cards still read generic on half of Launch-10 — Reddit cannot tell efficiency from gamelog at a glance.",
+  "epic": "Lab L5 — Launch-10 OG LIVE stickers name the board",
+  "slice_title": "Launch-10 OG — panel-specific LIVE stickers for eff/aging/buysell/dashboard/gamelog",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with LIVE sticker",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py",
-    "docs/v2/evidence/2026-05-31-bureau-self-scout-snapshot-roundtrip-test.md"
+    "apps/web/app/og/[panel]/route.tsx",
+    "docs/v2/evidence/2026-05-31-lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog.md"
   ],
   "max_files": 2,
-  "max_lines": 150,
+  "max_lines": 40,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py -q",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q --tb=no 2>&1 | tail -3"
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-eff.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1&force_demo=1'",
+    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/aging?download=1&force_demo=1'",
+    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1&force_demo=1'",
+    "curl -s -o /tmp/og-dash.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dashboard?download=1&force_demo=1'",
+    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&force_demo=1'"
   ],
   "out_of_scope": [
-    "TS codec changes",
-    "OG route changes",
-    "ShareBar changes",
+    "New extractors or API changes",
+    "Explore OG routes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",

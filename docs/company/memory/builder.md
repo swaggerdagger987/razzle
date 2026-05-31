@@ -1,6 +1,8 @@
 # Memory — Builder
 
-2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | pending | keep | test_bureau_self_scout_og_snapshot_codec.py; 4 pytest.
+2026-05-31 | lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog | da33eafd | keep | launch10LiveStickerLabel 5 slugs.
+
+2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | 7bc24c3a | keep | test_bureau_self_scout_og_snapshot_codec.py.
 
 2026-05-31 | bureau-self-scout-sharebar-extract | 0bbfc1bb | keep | BureauSelfScoutShareBar mirrors H2H; snapshot on export href.
 

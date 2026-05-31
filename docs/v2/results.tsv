@@ -94,3 +94,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 127	e75ec714	depth+voice+simplicity	keep	Lab	L2 sidebar search agent owner labels	trust=T2,T6; Hawkeye · Rankings on search; web build PASS pytest 58; L2 sidebar epic 2/2 complete
 128	e37cd230	depth+voice+simplicity	keep	Lab	L5 Gamelog OG default player export	trust=T5,T6; empty state LabOgExportLink; curl gamelog 60634B; live-fetch epic atom 3/3
 129	7bc24c3a	depth+voice+simplicity	keep	League	L5 Self-Scout pytest snapshot roundtrip	trust=T5,T6; tm/rc/pos codec 4 pytest; api 63 passed; league epic atom 3/3 complete
+130	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG LIVE stickers eff aging buysell dashboard gamelog	trust=T5,T6; PPO/peak-age/mismatch/pulse/week tape; curl 65-67KB; sticker epic atom 1/3

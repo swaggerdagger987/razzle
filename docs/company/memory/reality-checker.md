@@ -1,6 +1,8 @@
 # Memory — Reality Checker
 
-2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | pending | pytest 4 codec + 63 api; no curl (test-only slice).
+2026-05-31 | lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog | da33eafd | PASS | curl 5 OG panels 60-67KB; web build.
+
+2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | 7bc24c3a | PASS | pytest 4 codec + 63 api.
 
 2026-05-31 | bureau-self-scout-snapshot-export | c2de8dad | PASS | curl self-scout 66997B PNG; web build ok; PR915 merged.
 
