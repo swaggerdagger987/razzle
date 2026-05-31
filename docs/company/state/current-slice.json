@@ -22,8 +22,8 @@
     "College-only atom",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "content_commit": null,
-  "reality": null,
+  "content_commit": "64fff1115",
+  "reality": "PASS",
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
