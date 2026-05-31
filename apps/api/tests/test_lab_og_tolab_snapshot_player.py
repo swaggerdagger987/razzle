@@ -19,8 +19,8 @@ def test_encode_og_snapshot_supports_player_context():
 def test_decode_og_snapshot_reads_v1_player_meta():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert "function decodeOgSnapshot(param: string): OgSnapshotPayload" in source
-    assert "parsed.pi" in source
-    assert "parsed.pn" in source
+    assert "v1.pi" in source
+    assert "v1.pn" in source
     assert "snapshotPayload.playerId" in source
     assert "watermarkPlayerName" in source
 
