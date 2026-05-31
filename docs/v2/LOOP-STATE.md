@@ -1,10 +1,10 @@
-cycle: 73
+cycle: 77
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-monte-carlo-copy-link
-last_keep_cycle: 73
-last_commit: 99f8a2aa
+next_slice: bureau-h2h-snapshot (epic atom 3/3)
+last_keep_cycle: 77
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -24,5 +24,6 @@ lab_l5_og_snapshot_efficiency_aging: complete
 lab_l5_og_rankings_snapshot: complete
 lab_l5_og_live_data_label: complete
 league_l5_bureau_h2h_copy_link: complete
+league_l5_bureau_h2h_opponent_subtitle: complete
 league_l5_bureau_self_scout_copy_link: complete
-league_l5_bureau_share_row_epic: in_progress
+league_l5_bureau_h2h_export_epic: in_progress
