@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
 import { getPanel } from "@razzle/panels";
 import { agentForPanel } from "@razzle/agents";
-import { toLab } from "@razzle/hallway";
+import type { AgentId } from "@razzle/agents";
+import { toLab, toRoom, type PlayerRef } from "@razzle/hallway";
 import { teaserRowsForPanel } from "@/lib/panel-upgrade-teaser";
 
 export const runtime = "edge";
@@ -1083,6 +1084,85 @@ function slugifyPlayerName(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
+const DEFAULT_OG_PLAYER: PlayerRef = {
+  playerId: DEFAULT_OG_PLAYER_ID,
+  slug: "ja-marr-chase",
+  name: DEFAULT_OG_PLAYER_NAME,
+  position: "WR",
+  team: "CIN",
+};
+
+function playerRefFromOgUrl(url: URL, playerId: string): PlayerRef {
+  const name = url.searchParams.get("name")?.trim();
+  const position =
+    url.searchParams.get("pos")?.trim() ?? url.searchParams.get("position")?.trim() ?? "";
+  const team = url.searchParams.get("team")?.trim() ?? "";
+  if (name) {
+    return {
+      playerId,
+      slug: slugifyPlayerName(name),
+      name,
+      position: position || undefined,
+      team: team || undefined,
+    };
+  }
+  if (playerId === DEFAULT_OG_PLAYER_ID) return DEFAULT_OG_PLAYER;
+  return { playerId, slug: playerId, name: "Player" };
+}
+
+function playerRefFromPanelJson(
+  playerId: string,
+  data: Record<string, unknown>,
+): PlayerRef | undefined {
+  const raw =
+    data.player && typeof data.player === "object"
+      ? (data.player as Record<string, unknown>)
+      : data;
+  const name = String(raw.full_name ?? raw.name ?? "").trim();
+  if (!name) return undefined;
+  return {
+    playerId: String(raw.player_id ?? playerId),
+    slug: slugifyPlayerName(name),
+    name,
+    position: String(raw.position ?? raw.pos ?? "") || undefined,
+    team: String(raw.team ?? raw.team_abbr ?? "") || undefined,
+  };
+}
+
+async function fetchPanelPlayerRef(
+  req: Request,
+  slug: string,
+  apiPath: string,
+  method: string,
+  playerId: string,
+  params?: Record<string, unknown>,
+): Promise<PlayerRef | undefined> {
+  const apiOrigin = resolveApiOrigin(req);
+  try {
+    let res: Response;
+    if (method === "POST") {
+      res = await fetch(`${apiOrigin}${apiPath}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...OG_FETCH_HEADERS },
+        body: JSON.stringify({ limit: 6, ...(params ?? {}) }),
+      });
+    } else {
+      const fetchUrl = new URL(`${apiOrigin}${apiPath}`);
+      if (params) {
+        for (const [k, v] of Object.entries(params)) {
+          if (v != null) fetchUrl.searchParams.set(k, String(v));
+        }
+      }
+      res = await fetch(fetchUrl.toString(), { headers: OG_FETCH_HEADERS });
+    }
+    if (!res.ok) return undefined;
+    const data = (await res.json()) as Record<string, unknown>;
+    return playerRefFromPanelJson(playerId, data);
+  } catch {
+    return undefined;
+  }
+}
+
 function labOgWatermarkLink(
   slug: string,
   opts: {
@@ -1091,6 +1171,7 @@ function labOgWatermarkLink(
     playerScoped: boolean;
     snapshotPlayerId?: string;
     playerDisplayName?: string;
+    player?: PlayerRef;
   },
 ): string {
   const watermarkPlayerId = opts.snapshotPlayerId ?? opts.playerId;
@@ -1100,10 +1181,11 @@ function labOgWatermarkLink(
     watermarkPlayerId &&
     (watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
   const resolvedName =
+    opts.player?.name?.trim() ||
     opts.playerDisplayName?.trim() ||
     (watermarkPlayerId === DEFAULT_OG_PLAYER_ID && includeDefaultPlayer
       ? DEFAULT_OG_PLAYER_NAME
-      : "player");
+      : "Player");
   let path = toLab(
     slug,
     usePlayer
@@ -1217,13 +1299,41 @@ export async function GET(
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
   const watermarkPosition =
     positionFilter || TOLAB_DEFAULT_POSITION[slug] || "";
+  const isPlayerScopedPanel = PLAYER_SCOPED_SLUGS.has(slug);
+  let playerRef: PlayerRef | undefined;
+  if (isPlayerScopedPanel) {
+    playerRef =
+      (await fetchPanelPlayerRef(
+        req,
+        slug,
+        apiPath,
+        panel.api.method,
+        playerId,
+        apiParams,
+      )) ?? playerRefFromOgUrl(url, playerId);
+  }
   const labLink = labOgWatermarkLink(slug, {
     positionFilter: watermarkPosition,
     playerId: watermarkPlayerId,
-    playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+    playerScoped: isPlayerScopedPanel,
     snapshotPlayerId: snapshotExportPlayerId,
-    playerDisplayName: url.searchParams.get("name") ?? undefined,
+    playerDisplayName: url.searchParams.get("name") ?? playerRef?.name,
+    player: playerRef,
   });
+  const agentId = (agent?.id ?? "razzle") as AgentId;
+  const roomPath =
+    isPlayerScopedPanel && playerRef
+      ? toRoom({
+          agentId,
+          player: playerRef,
+          panelSlug: slug,
+          question: `${playerRef.name} — ${panel.title}?`,
+        })
+      : null;
+  const watermarkSubtitle =
+    isPlayerScopedPanel && playerRef
+      ? `continue in Lab · ${playerRef.name}`
+      : null;
 
   return new ImageResponse(
     (
@@ -1455,7 +1565,7 @@ export async function GET(
           </div>
         ) : null}
 
-        {/* Always-on watermark band — matches Explore OG (T6 screenshot gravity) */}
+        {/* Always-on watermark band — player-scoped Lab + Room hallway (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
@@ -1471,7 +1581,19 @@ export async function GET(
             fontSize: 20,
           }}
         >
-          <div style={{ display: "flex", fontWeight: 700 }}>{labLink}</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <div style={{ display: "flex", fontWeight: 700 }}>{labLink}</div>
+            {watermarkSubtitle ? (
+              <div style={{ display: "flex", fontSize: 16, fontFamily: "Caveat" }}>
+                {watermarkSubtitle}
+              </div>
+            ) : null}
+            {roomPath ? (
+              <div style={{ display: "flex", fontSize: 15, fontFamily: "Caveat", opacity: 0.95 }}>
+                {`razzle.lol${roomPath}`}
+              </div>
+            ) : null}
+          </div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>
