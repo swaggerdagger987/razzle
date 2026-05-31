@@ -1,15 +1,20 @@
-# Evidence — Lab Gamelog OG default player export (2026-05-31)
+# Evidence — lab-og-gamelog-player-default (cycle 129)
 
+**Date:** 2026-05-31  
 **Atom:** `lab-og-gamelog-player-default`  
-**Cycle:** 124
+**Gate C:** `/og/gamelog` export path
 
-## Acceptance
+## Curl
 
-```text
-npm run build --workspace=apps/web → exit 0
-curl 'http://127.0.0.1:3000/og/gamelog?download=1' → 200 60634 bytes PNG 1200×630
+```bash
+curl -s -o /tmp/gamelog-og.png -w "%{http_code} %{size_download}\n" \
+  "http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900"
+# 200 60634 — PNG 1200×630
 ```
 
-## Verdict
+## Contract
 
-PASS — Gate C ≥40KB PNG with default player before search.
+- `LabOgExportLink` sets `player_id=00-0036900` when slug is `gamelog` or `dynasty-comps` and `playerId` is omitted.
+- Complements cycle 128 empty-state gamelog export on base (`e37cd230`).
+
+**Verdict:** PASS

@@ -24,9 +24,14 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
   const ogParams = new URLSearchParams(previewParams);
   ogParams.set("download", "1");
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const exportFileName =
+    universe === "college" ? "razzle-college-screener.png" : "razzle-explore.png";
+
+  const explorePath = `/explore?${previewParams.toString()}`;
 
   const copyLink = useCallback(async () => {
+    const shareUrl =
+      typeof window !== "undefined" ? `${window.location.origin}${explorePath}` : explorePath;
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
@@ -34,7 +39,7 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
     } catch {
       setCopied(false);
     }
-  }, [shareUrl]);
+  }, [explorePath]);
 
   return (
     <div className="explore-share flex shrink-0 items-center gap-2">
@@ -51,7 +56,7 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
       </a>
       <a
         href={`/og/explore?${ogParams.toString()}`}
-        download="razzle-explore.png"
+        download={exportFileName}
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
       >

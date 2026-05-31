@@ -100,6 +100,13 @@ export async function GET(req: Request) {
   const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
   const themSummary = them!;
+  const leagueDeepLink = league
+    ? opponent
+      ? `/league/${league}/head-to-head?user=${encodeURIComponent(user)}&opponent=${encodeURIComponent(opponent)}`
+      : user
+        ? `/league/${league}/head-to-head?user=${encodeURIComponent(user)}`
+        : `/league/${league}/head-to-head`
+    : "";
   const atlasRoomPath = hasData
     ? toRoom({
         agentId: "atlas",
@@ -161,6 +168,50 @@ export async function GET(req: Request) {
                   : " · sample preview"
           }`}
         </div>
+
+        {isLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · Sleeper rivalry
+          </div>
+        ) : null}
+
+        {isDemo && !isSnapshot ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · demo rivalry rows
+          </div>
+        ) : null}
 
         {hasData ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14, flex: 1 }}>
@@ -270,7 +321,7 @@ export async function GET(req: Request) {
           }}
         >
           <div style={{ display: "flex", fontWeight: 700 }}>
-            razzle.lol/league{league ? `/${league}` : ""}/head-to-head
+            razzle.lol{leagueDeepLink || "/league/head-to-head"}
           </div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}

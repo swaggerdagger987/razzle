@@ -1,0 +1,28 @@
+"""Lab OG export link — player-scoped default player_id in export URL."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+
+def _export_link_source() -> str:
+    root = Path(__file__).resolve().parents[3]
+    return (root / "apps/web/components/lab/LabOgExportLink.tsx").read_text(encoding="utf-8")
+
+
+def test_player_scoped_slugs_default_player_id_in_export_url():
+    source = _export_link_source()
+    assert "PLAYER_SCOPED_OG_SLUGS" in source
+    assert "DEFAULT_LAB_OG_PLAYER_ID" in source
+    assert 'params.set("player_id", resolvedPlayerId)' in source
+    assert '"gamelog"' in source and '"dynasty-comps"' in source
+
+
+def test_default_lab_og_player_matches_og_route():
+    route = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/app/og/[panel]/route.tsx"
+    ).read_text(encoding="utf-8")
+    link = _export_link_source()
+    assert 'DEFAULT_OG_PLAYER_ID = "00-0036900"' in route
+    assert 'DEFAULT_LAB_OG_PLAYER_ID = "00-0036900"' in link

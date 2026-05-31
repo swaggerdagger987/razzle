@@ -90,25 +90,75 @@ const LAUNCH_10_OG_SLUGS = new Set([
 
 /** Panel-specific LIVE copy when `/api/panels/{slug}` returns real rows (Launch-10). */
 function launch10LiveBlurbSuffix(slug: string): string {
-  if (slug === "prospects") return " · live RPS board";
-  if (slug === "weekly") return " · live PPG heatmap";
-  if (slug === "rankings") return " · live dynasty ranks";
-  if (slug === "breakouts") return " · live RBS board";
-  if (slug === "tradevalues") return " · live value curve";
-  if (slug === "gamelog") return " · live week log";
-  if (slug === "efficiency") return " · live efficiency ranks";
-  return " · live nflverse rows";
+  switch (slug) {
+    case "prospects":
+      return " · live RPS board";
+    case "weekly":
+      return " · live PPG heatmap";
+    case "rankings":
+      return " · live dynasty values";
+    case "tradevalues":
+      return " · live trade values";
+    case "breakouts":
+      return " · live breakout board";
+    case "gamelog":
+      return " · live game log";
+    case "efficiency":
+      return " · live PPO board";
+    case "aging":
+      return " · live aging curve";
+    case "buysell":
+      return " · live buy/sell board";
+    case "dashboard":
+      return " · live roster grades";
+    default:
+      return " · live nflverse rows";
+  }
 }
 
 function launch10LiveStickerLabel(slug: string): string {
-  if (slug === "prospects") return "LIVE · RPS board";
-  if (slug === "weekly") return "LIVE · PPG heatmap";
-  if (slug === "rankings") return "LIVE · dynasty ranks";
-  if (slug === "breakouts") return "LIVE · RBS board";
-  if (slug === "tradevalues") return "LIVE · value curve";
-  if (slug === "gamelog") return "LIVE · week log";
-  if (slug === "efficiency") return "LIVE · efficiency ranks";
-  return "LIVE · nflverse rows";
+  switch (slug) {
+    case "prospects":
+      return "LIVE · RPS board";
+    case "weekly":
+      return "LIVE · PPG heatmap";
+    case "rankings":
+      return "LIVE · dynasty values";
+    case "tradevalues":
+      return "LIVE · trade values";
+    case "breakouts":
+      return "LIVE · breakout board";
+    case "gamelog":
+      return "LIVE · game log";
+    case "efficiency":
+      return "LIVE · PPO board";
+    case "aging":
+      return "LIVE · aging curve";
+    case "buysell":
+      return "LIVE · buy/sell board";
+    case "dashboard":
+      return "LIVE · roster grades";
+    default:
+      return "LIVE · nflverse rows";
+  }
+}
+
+function launch10DemoBlurbSuffix(slug: string): string {
+  if (slug === "prospects") return " · demo RPS board";
+  if (slug === "weekly") return " · demo PPG heatmap";
+  if (slug === "rankings") return " · demo dynasty ranks";
+  if (slug === "breakouts") return " · demo RBS board";
+  if (slug === "tradevalues") return " · demo value curve";
+  return " · demo nflverse rows";
+}
+
+function launch10DemoStickerLabel(slug: string): string {
+  if (slug === "prospects") return "SAMPLE · RPS board";
+  if (slug === "weekly") return "SAMPLE · PPG heatmap";
+  if (slug === "rankings") return "SAMPLE · dynasty ranks";
+  if (slug === "breakouts") return "SAMPLE · RBS board";
+  if (slug === "tradevalues") return "SAMPLE · value curve";
+  return "SAMPLE · demo rows";
 }
 
 function panelBlurbSuffix(
@@ -127,7 +177,7 @@ function panelBlurbSuffix(
   }
   if (showingDemoRows) {
     if (LAUNCH_10_OG_SLUGS.has(slug)) {
-      return `${pos} · SAMPLE rows — not live nflverse`;
+      return `${pos}${launch10DemoBlurbSuffix(slug)}`;
     }
     return `${pos} · sample preview`;
   }
@@ -780,7 +830,28 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            SAMPLE · not live data
+            {launch10DemoStickerLabel(slug)}
+          </div>
+        ) : null}
+
+        {isSnapshot && LAUNCH_10_OG_SLUGS.has(slug) ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#5b7fff",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            FROM PANEL · your rows
           </div>
         ) : null}
 
