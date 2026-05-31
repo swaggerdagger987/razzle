@@ -1,34 +1,30 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
-  "epic": "Lab L4 — Pro gates feel like upgrade, not error",
-  "slice_title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — Pro gate shows upgrade message, not blank",
-  "trust_pillars": ["T2", "T6"],
+  "atom_id": "bureau-self-scout-sharebar",
+  "big_problem": "Bureau tabs share rows are inconsistent — Self-Scout still inlines copy/export while other tabs use ShareBar components.",
+  "epic": "League L5 — Bureau share bar parity on flagship tabs",
+  "slice_title": "Self-Scout — BureauSelfScoutShareBar copy link + OG export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "ACCEPTANCE Gate 3 — Bureau features",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/lib/panel-upgrade-teaser.ts",
-    "apps/web/components/lab/ProUpgradeGate.tsx",
-    "apps/api/tests/test_panel_upgrade_teaser.py"
+    "apps/web/components/league/BureauSelfScoutShareBar.tsx",
+    "apps/web/components/league/BureauSelfScout.tsx"
   ],
-  "max_files": 4,
-  "max_lines": 150,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web 2>&1 | tail -8",
+    "curl -s -o /tmp/og-self-scout.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/self-scout?download=1'",
+    "file /tmp/og-self-scout.png | head -1"
   ],
-  "out_of_scope": [
-    "OG routes",
-    "pricing page",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["API changes", "new Bureau tabs", "OG route edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
