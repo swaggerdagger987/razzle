@@ -92,12 +92,16 @@ const LAUNCH_10_OG_SLUGS = new Set([
 function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "prospects") return " · live RPS board";
   if (slug === "weekly") return " · live PPG heatmap";
+  if (slug === "breakouts") return " · live RBS ranks";
+  if (slug === "buysell") return " · live mismatch rows";
   return " · live nflverse rows";
 }
 
 function launch10LiveStickerLabel(slug: string): string {
   if (slug === "prospects") return "LIVE · RPS board";
   if (slug === "weekly") return "LIVE · PPG heatmap";
+  if (slug === "breakouts") return "LIVE · RBS board";
+  if (slug === "buysell") return "LIVE · mismatch board";
   return "LIVE · nflverse rows";
 }
 

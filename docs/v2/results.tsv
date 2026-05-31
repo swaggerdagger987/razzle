@@ -78,3 +78,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 121	7236be3e	depth+voice+simplicity	keep	Lab	L4 Pro gate agent loading copy on upgrade card	trust=T2,T6; PanelAgentLoading on ProUpgradeGate; teaser pytest 3 passed; L4 epic atom 3/5
 122	73fdbf9c	depth+voice+simplicity	keep	Lab	L4 Pro gate perks catalog names	trust=T2,T6; proUpgradePerkLines launch-10+Bureau-7; pytest 4; build ok; L4 epic atom 4/5
 123	7dbd4b11	depth+voice+simplicity	keep	Explore	L5 Explore OG universe season team export URL	trust=T5,T6; ShareButton+OG route; curl college 41427B; live-fetch epic atom 2/3
+124	806dee0e	depth+voice+simplicity	keep	Lab	L5 Breakouts+buysell OG Hawkeye LIVE labels	trust=T5,T6; RBS+mismatch board; curl breakouts 63254B buysell 47075B
