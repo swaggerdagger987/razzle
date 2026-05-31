@@ -1,7 +1,7 @@
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.
-2026-05-31 | league-manager-profiles-og-watermark | f6e0985f3 | SHIP | 4 files; toLeague watermark band.
+2026-05-31 | league-manager-profiles-og-watermark | 4854dd6e3 | SHIP | 4 files; toLeague watermark band.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 

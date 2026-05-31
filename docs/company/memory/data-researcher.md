@@ -1,7 +1,7 @@
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.
-2026-05-31 | league-manager-profiles-og-watermark | f6e0985f3 | PASS | No new Reddit intel.
+2026-05-31 | league-manager-profiles-og-watermark | 4854dd6e3 | PASS | No new Reddit intel.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 
