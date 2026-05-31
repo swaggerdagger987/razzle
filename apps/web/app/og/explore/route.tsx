@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import type { PlayerRow } from "@/lib/api";
+import { marginNoteForRow } from "@/lib/margin-notes";
 
 export const runtime = "edge";
 
@@ -16,13 +18,13 @@ interface OgPlayer {
   stat: number;
 }
 
-async function fetchTopPlayers(params: {
+async function fetchScreenerData(params: {
   universe: string;
   sort: string;
   dir: string;
   q: string;
   pos: string;
-}): Promise<OgPlayer[]> {
+}): Promise<{ players: OgPlayer[]; items: Record<string, unknown>[] }> {
   const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
   let sortKey = params.sort;
   if (params.universe === "college" && sortKey === "fantasy_points_ppr") {
@@ -58,17 +60,27 @@ async function fetchTopPlayers(params: {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    if (!res.ok) return [];
+    if (!res.ok) return { players: [], items: [] };
     const data = (await res.json()) as { items?: Record<string, unknown>[] };
-    return (data.items ?? []).map((row) => ({
+    const items = data.items ?? [];
+    const players = items.map((row) => ({
       full_name: String(row.full_name ?? ""),
       position: String(row.position ?? ""),
       team: String(row.team ?? ""),
       stat: Number(row[sortKey] ?? row.fantasy_points_ppr ?? row.total_yards ?? 0),
     }));
+    return { players, items };
   } catch {
-    return [];
+    return { players: [], items: [] };
   }
+}
+
+function firstCollegeStaffNote(items: Record<string, unknown>[]) {
+  for (const row of items) {
+    const note = marginNoteForRow(row as PlayerRow, "college");
+    if (note) return note;
+  }
+  return null;
 }
 
 function statLabel(universe: string, sort: string): string {
@@ -118,7 +130,9 @@ export async function GET(req: Request) {
   const exploreLink =
     universe === "college" ? "razzle.lol/explore?universe=college" : "razzle.lol/explore";
 
-  const players = await fetchTopPlayers({ universe, sort, dir, q, pos });
+  const { players, items } = await fetchScreenerData({ universe, sort, dir, q, pos });
+  const collegeStaffNote =
+    universe === "college" && players.length > 0 ? firstCollegeStaffNote(items) : null;
 
   return new ImageResponse(
     (
@@ -207,6 +221,30 @@ export async function GET(req: Request) {
         ) : (
           <div style={{ flex: 1, fontSize: 24, color: "#5c4a3d" }}>pulling film…</div>
         )}
+
+        {collegeStaffNote ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginTop: 12,
+              fontFamily: "Caveat",
+              fontSize: 28,
+              color: "#2d1f14",
+              background: "#f7efe5",
+              border: "3px solid #2d1f14",
+              borderRadius: 8,
+              padding: "8px 14px",
+              boxShadow: "3px 3px 0 #2d1f14",
+            }}
+          >
+            <span style={{ display: "flex" }}>🦅</span>
+            <span style={{ display: "flex", fontWeight: 700 }}>
+              Hawkeye: {collegeStaffNote.text}
+            </span>
+          </div>
+        ) : null}
 
         {/* Always-on watermark band — visible on preview + download (T6 screenshot gravity) */}
         <div

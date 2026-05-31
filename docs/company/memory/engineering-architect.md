@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | explore-og-college-hawkeye-note | da33eafd | firstCollegeStaffNote via marginNoteForRow on screener items.
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
 2026-05-31 | fetchOgLiveRows launch-10 | e2a3ce8a | panel API + pro header before panels slug; demo last.
 2026-05-31 | Cycle 118 | e00217d1 | prospectSources loop in route.tsx.

@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 118 — Prospects+Weekly OG LIVE panel labels)  
+**Last updated:** 2026-05-31 (factory cycle 127 — College Explore OG Hawkeye staff note)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,11 +15,11 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 118 |
+| Cycle | 127 |
 | Last board | 54 |
-| Focus pillar | Lab |
-| Focus layer | L5 |
-| Next slice | lab-og-live-demo-fallback-copy |
+| Focus pillar | Explore |
+| Focus layer | L2 |
+| Next slice | explore-og-college-hawkeye-note |
 | Last commit | `da33eafd` |
 
 ---
@@ -29,8 +29,8 @@ From `LOOP-STATE.md`:
 | Field | Value |
 |-------|-------|
 | Workday | open (`good morning team`) |
-| Epic | Lab L5 — OG live panel rows on Launch-10 (atom 2/3 shipped) |
-| PR | #739 — prospects + weekly LIVE RPS/PPG stickers |
+| Epic | Explore L2 — college OG GTM staff note (atom 1/1) |
+| PR | pending publish |
 
 ---
 
