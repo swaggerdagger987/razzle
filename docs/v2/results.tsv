@@ -56,3 +56,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 87	6dbe1ca1	depth+hallway+voice	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5; dedup on base 6dbe1ca1; factory cycle 1; next build-profiles
 88	69e4c732	depth+voice+simplicity	keep	Lab	L5 OG snapshot prospects tradevalues	trust=T5,T6; snapshotRows on prospects+tradevalues; curl snap 58084B 62488B; mirror-rows epic complete
 89	17a40c65	depth+voice+simplicity	keep	Lab	L5 prospects OG RPS+position export	trust=T1,T5,T6; RPS label+position on LabOgExportLink; curl prospects snap; filtered-panel epic atom 1/3
+90	da33eafd	depth+voice+simplicity	keep	Lab	L5 efficiency OG position filter export	trust=T1,T5,T6; position on Efficiency LabOgExportLink; curl eff RB 45113B snap WR 44195B; filtered-panel epic atom 2/3

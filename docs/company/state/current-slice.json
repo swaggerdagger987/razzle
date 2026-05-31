@@ -1,23 +1,23 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-prospects-og-rps-position",
+  "atom_id": "lab-efficiency-og-position-filter",
   "big_problem": "Position-filtered Lab panels export OG cards with wrong stat labels or unfiltered rows — screenshots break trust (DEPTH Lab L5).",
   "epic": "Lab L5 — OG snapshot fidelity on filtered panels",
-  "slice_title": "Prospects OG: RPS column + position filter on export",
+  "slice_title": "Efficiency OG export passes position filter",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T1", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
-    "docs/v2/evidence/2026-05-31-lab-prospects-og-rps-position.md"
+    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
+    "docs/v2/evidence/2026-05-31-lab-efficiency-og-position-filter.md"
   ],
   "max_files": 2,
-  "max_lines": 15,
+  "max_lines": 10,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/prospects?download=1&snapshot=eyJuIjoiVHJhdmlzIEh1bnRlciIsInAiOiJXUiIsInQiOiJDT0xPIiwicyI6OTQuMCwic2wiOiJSUFMifSx7Im4iOiJDYW0gV2FyZCIsInAiOiJRQiIsInQiOiJURU4iLCJzIjo5MS4wLCJzbCI6IlJQUyJ9XQ'"
+    "curl -s -o /tmp/og-eff-rb.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?position=RB&download=1'",
+    "curl -s -o /tmp/og-eff-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?position=WR&download=1&snapshot=eyJuIjoiQW1vbi1SYSBTdC4gQnJvd24iLCJwIjoiV1IiLCJ0IjoiREVUIiwicyI6MC4zNywic2wiOiJQUE8ifSx7Im4iOiJUZWVrIEhpbGwiLCJwIjoiV1IiLCJ0IjoiTUlBIiwicyI6MC4zOSwic2wiOiJQUE8ifV0'"
   ],
   "out_of_scope": ["OG route rewrite", "new panels", "API schema"],
   "votes": {

@@ -35,3 +35,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | prospects tradevalues snapshot | da33eafd | keep | mirrors DynastyRankingsRenderer ogSnapshotRows pattern
+2026-05-31 | Efficiency position on LabOgExportLink | da33eafd | keep | 1-line; OG route already filters by position param
