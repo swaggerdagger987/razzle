@@ -4,5 +4,5 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: Bureau H2H export or Lab L4 polish per NEXT.md
 last_keep_cycle: 155
-last_commit: f6e0985f3
+last_commit: c401934bc
 lab_l5_og_hallway_position_defaults_epic: complete

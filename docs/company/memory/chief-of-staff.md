@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tolab-breakouts-position | f6e0985f3 | SHIP | Factory cycle 1; position-defaults epic complete.
+2026-05-31 | lab-og-tolab-breakouts-position | c401934bc | SHIP | Factory cycle 1; position-defaults epic complete.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Factory cycle 1; dedup snapshot on base.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
