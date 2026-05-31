@@ -8,13 +8,13 @@
     {
       "id": "explore-og-margin-note-lead",
       "title": "Lead-row staff margin note on Explore OG export",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0fc4932b7"
     },
     {
       "id": "explore-og-margin-note-demo-college",
       "title": "College demo OG rows trigger campus margin notes",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -24,15 +24,21 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-margin-note-lead",
+  "next_atom_id": "explore-og-margin-note-demo-college",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T11:40:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-hallway-position-defaults",
+      "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
-      "last_atom": "lab-og-tolab-weekly-position",
-      "merge_commit": "9be64d109"
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
+    },
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
     }
   ]
 }

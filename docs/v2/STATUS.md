@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 154 — Explore OG lead-row margin note)
+**Last updated:** 2026-05-31 (factory cycle 154 — Explore OG lead-row margin note, dedup verified on base)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -30,6 +30,6 @@ Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export f
 
 | Area | State | Notes |
 |------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
+| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export + lead margin note |
 | Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
 | Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |

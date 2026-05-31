@@ -3,6 +3,10 @@
 **Atom:** `explore-og-margin-note-lead` (Explore L5 epic 1/3)  
 **Trust:** T5, T6
 
+## Dedup
+
+Feature landed on base via PR #1364 (`0fc4932b7`). Factory cycle 154 re-verified Gate C and recorded standup state.
+
 ## Commands
 
 ```bash
@@ -15,10 +19,12 @@ npm run build --workspace=apps/web
 curl -s -o /tmp/explore-og.png -w "%{http_code} %{size_download}\n" \
   "http://localhost:3000/og/explore?force_demo=1&download=1"
 # 200 65482
-file /tmp/explore-og.png
-# PNG 1200x630
+
+curl -s -o /tmp/explore-college.png -w "%{http_code} %{size_download}\n" \
+  "http://localhost:3000/og/explore?universe=college&force_demo=1&download=1"
+# 200 71510
 ```
 
 ## Verdict
 
-PASS — demo NFL lead row (Jayden Daniels, age 22, 312 FPTS) renders Hawkeye `youth breakout tape` under name on OG card; PNG ≥40KB.
+PASS — NFL demo lead row shows Hawkeye youth breakout tape; college demo Cam Ward has passing_yards for campus margin rules; PNGs ≥40KB.

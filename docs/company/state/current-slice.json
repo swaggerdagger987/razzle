@@ -2,7 +2,7 @@
   "date": "2026-05-31",
   "big_problem": "Explore screener OG cards look like stat tables — they need agent margin notes on the lead row so Reddit screenshots feel like The Lab.",
   "epic": "Explore L5 — OG margin notes on share cards",
-  "slice_title": "Lead-row staff margin note on Explore OG export",
+  "slice_title": "Lead-row staff margin note on Explore OG export (dedup + factory verify)",
   "atom_id": "explore-og-margin-note-lead",
   "parity_ref": "Explore L5 — Agent margin notes on rows",
   "depth_ref": "Explore L5",
@@ -16,7 +16,7 @@
   "max_files": 3,
   "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_og_margin_note_lead.py -q",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_og_margin_note_lead.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": ["Lab OG routes", "new npm deps", "NORTH_STAR edits"],
@@ -29,5 +29,6 @@
   },
   "content_commit": "75d90aca8",
   "reality": "PASS",
-  "merge": "pending"
+  "merge": "pending",
+  "dedup_base_commit": "0fc4932b7"
 }
