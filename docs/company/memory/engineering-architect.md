@@ -1,13 +1,10 @@
 # Memory — Engineering Architect
 
-<<<<<<< HEAD
-2026-05-31 | LabOgExportLink scoped default | 1 file | PLAYER_SCOPED_LAB_OG_SLUGS mirrors route PLAYER_SCOPED_SLUGS.
-=======
+2026-05-31 | bureau-self-scout-snapshot | 1a1def3e | 5 files; encode/decode lib + ShareBar + OG route.
 2026-05-31 | lab-og-sample-labels | 54443bc8 | 1 file route.tsx; launch10DemoStickerLabel + blurbs ≤30 lines.
-
+2026-05-31 | LabOgExportLink scoped default | 1 file | PLAYER_SCOPED_LAB_OG_SLUGS mirrors route PLAYER_SCOPED_SLUGS.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
->>>>>>> origin/razzle-v2-redesign
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
 2026-05-31 | fetchOgLiveRows launch-10 | e2a3ce8a | panel API + pro header before panels slug; demo last.

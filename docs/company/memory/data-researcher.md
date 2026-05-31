@@ -1,13 +1,10 @@
 # Memory — Data Researcher
 
-<<<<<<< HEAD
-2026-05-31 | gamelog OG player default | No new intel; export URL parity with OG route default.
-=======
+2026-05-31 | bureau-self-scout-snapshot | No new intel; depth-grade OG mirrors in-panel export.
 2026-05-31 | lab-og-sample-labels | 54443bc8 | No new intel; OG trust-label slice only.
-
+2026-05-31 | gamelog OG player default | No new intel; export URL parity with OG route default.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
->>>>>>> origin/razzle-v2-redesign
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.
 2026-05-31 | launch10 no-snapshot | e2a3ce8a | Direct /og links need live API path without panel snapshot param.

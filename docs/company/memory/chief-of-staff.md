@@ -1,12 +1,9 @@
 # Memory — Chief of Staff
 
-<<<<<<< HEAD
-2026-05-31 | Factory cycle 122 gamelog OG player default | 96a69ddf | workday cycle 2; lock #881; live-fetch epic atom 3/3 complete.
-=======
-2026-05-31 | Factory cycle 129 SAMPLE OG labels | 54443bc8 | Workday open cycle 1; panel-labels epic atom 1/3 complete after merge.
-
-2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
->>>>>>> origin/razzle-v2-redesign
+2026-05-31 | Factory cycle 132 Self-Scout OG snapshot | 1a1def3e | workday cycle 2; NO_LOCK_GUARDRAIL; League L5 scout epic atom 1/3.
+2026-05-31 | Factory cycle 131 SAMPLE OG labels | 54443bc8 | panel-labels epic atom 1/3 on base.
+2026-05-31 | Factory cycle 122 gamelog OG player default | 96a69ddf | live-fetch epic atom 3/3 complete.
+2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | panel-native LIVE epic 1/3.
 
 2026-05-31 | Factory cycle 121 explore OG universe | d3c6c873 | workday cycle 1; lock #847; live-fetch epic atom 2/3.
 
