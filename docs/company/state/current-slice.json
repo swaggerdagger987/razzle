@@ -1,23 +1,22 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-universe-demo",
+  "atom_id": "explore-og-sample-sticker",
   "big_problem": "Explore OG cards go blank when the screener API is cold — Reddit screenshots need universe-aware sample rows, not pulling film alone.",
   "epic": "Explore L5 — OG universe query demo rows",
-  "slice_title": "Explore OG — NFL/college demo rows when screener query empty",
+  "slice_title": "Explore OG — terracotta SAMPLE sticker on demo path",
   "parity_ref": "Explore L5 — screener OG export",
   "depth_ref": "Explore L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/explore/route.tsx"],
   "max_files": 1,
-  "max_lines": 120,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web 2>&1 | tail -3",
-    "curl -s -o /tmp/og-explore-nfl-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc&force_demo=1'",
-    "curl -s -o /tmp/og-explore-college-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&force_demo=1'",
+    "curl -s -o /tmp/og-explore-sample.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=nfl&force_demo=1'",
     "JWT_SECRET=test python3 -m pytest apps/api/tests/test_smoke.py -q 2>&1 | tail -2"
   ],
-  "out_of_scope": ["SAMPLE/LIVE stickers", "ExploreShareButton", "screener API schema"],
+  "out_of_scope": ["LIVE sticker", "ExploreShareButton", "demo row data changes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

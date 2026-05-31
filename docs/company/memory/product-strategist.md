@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | explore-og-sample-sticker | SHIP | SAMPLE sticker closes Reddit trust gap on cold API OG cards.
+
 2026-05-31 | explore-og-universe-demo | cd16858d | SHIP | Cold API OG must show rows for Reddit, not pulling film.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
