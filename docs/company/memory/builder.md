@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-from-panel-gate-c-gamelog | f6e0985f3 | SHIP | test_og_from_panel_gate_c_gamelog.py gamelog+efficiency fixtures.
 2026-05-31 | lab-og-from-panel-gate-c-curl | 9fe6cc134 | SHIP | test_og_from_panel_gate_c_curl.py breakouts+buysell snapshot fixtures.
 2026-05-31 | lab-og-from-panel-gate-c-rest | 15a363f89 | SHIP | LAUNCH_10_OG_SLUGS pytest tuple + registry count test.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
