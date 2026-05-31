@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-gamelog-empty-weeks-export | da33eafd | SHIP | GamelogRenderer LabOgExportLink on empty weeks; rebase from clean base.
+2026-05-31 | lab-gamelog-empty-weeks-export | 288f840f5 | SHIP | GamelogRenderer LabOgExportLink on empty weeks; rebase from clean base.
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | NFL share URLs drop universe=nfl; college keeps param.
 2026-05-31 | lab-l4-pro-gate-error-dynasty-comps | a3f07d1e5 | SHIP | DynastyCompsRenderer ProGateFromPanelError; pytest 9.
 
