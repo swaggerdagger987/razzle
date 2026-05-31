@@ -25,8 +25,8 @@
 =======
       "id": "league-trade-finder-og-snapshot",
       "title": "Trade Finder OG — snapshot param for in-panel export rows",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "769b19657"
 >>>>>>> origin/razzle-v2-redesign
     },
     {
@@ -55,7 +55,7 @@
     }
   ]
 =======
-  "next_atom_id": "league-trade-finder-og-snapshot",
+  "next_atom_id": "league-trade-finder-room-hallway",
   "epic_status": "active",
   "created_at": "2026-05-31T10:35:00Z",
   "updated_at": "2026-05-31T10:58:00Z",

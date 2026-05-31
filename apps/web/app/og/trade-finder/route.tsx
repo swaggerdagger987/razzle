@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toLeague } from "@razzle/hallway";
+import { decodeBureauTradeFinderOgSnapshot } from "@/lib/bureau-trade-finder-og-snapshot";
 
 export const runtime = "edge";
 
@@ -99,13 +100,33 @@ export async function GET(req: Request) {
   const user = url.searchParams.get("user") ?? "";
 
   const bones = AGENT_BY_ID.bones;
-  const live = await fetchTradeFinder(req, league, user);
-  const isLive = Boolean(live?.matches?.length);
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const fromSnapshot = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
+  const live =
+    fromSnapshot?.matches?.length ? null : await fetchTradeFinder(req, league, user);
+  const isSnapshot = Boolean(fromSnapshot?.matches?.length);
+  const isLive = isSnapshot || Boolean(live?.matches?.length);
   const isDemo = !isLive;
-  const matches = isDemo ? DEMO_MATCHES : live!.matches!.slice(0, 3);
-  const hero = isDemo ? DEMO_MATCHES[0] : (live!.hero_match ?? matches[0]);
-  const needs = isDemo ? DEMO_META.needs : (live!.needs ?? []);
-  const surplus = isDemo ? DEMO_META.surplus : (live!.surplus ?? []);
+  const snapMatches = fromSnapshot?.matches ?? [];
+  const matches = isSnapshot
+    ? snapMatches.slice(0, 3).map((m) => ({
+        partner_roster_id: 0,
+        partner_team: m.partner_team,
+        give: { player_id: "", ...m.give },
+        get: { player_id: "", ...m.get },
+        value_gap: 0,
+        gap_pct: m.gap_pct,
+      }))
+    : isDemo
+      ? DEMO_MATCHES
+      : live!.matches!.slice(0, 3);
+  const hero = matches[0];
+  const needs = isSnapshot ? (fromSnapshot!.needs ?? []) : isDemo ? DEMO_META.needs : (live!.needs ?? []);
+  const surplus = isSnapshot
+    ? (fromSnapshot!.surplus ?? [])
+    : isDemo
+      ? DEMO_META.surplus
+      : (live!.surplus ?? []);
   const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
 
   return new ImageResponse(
@@ -157,7 +178,29 @@ export async function GET(req: Request) {
           {surplus.length ? ` · surplus ${surplus.join(", ")}` : ""}
         </div>
 
-        {isLive ? (
+        {isSnapshot ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#5b7fff",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-1deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            FROM PANEL · your deals
+          </div>
+        ) : null}
+
+        {isLive && !isSnapshot ? (
           <div
             style={{
               fontFamily: "Caveat",

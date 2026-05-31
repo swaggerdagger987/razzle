@@ -98,7 +98,26 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           {(() => {
             const user = getSleeperUser();
             if (!user?.user_id) return null;
-            return <BureauTradeFinderShareBar leagueId={leagueId} userId={user.user_id} />;
+            return (
+              <BureauTradeFinderShareBar
+                leagueId={leagueId}
+                userId={user.user_id}
+                snapshot={
+                  matches.length
+                    ? {
+                        matches: matches.map((m) => ({
+                          partner_team: m.partner_team,
+                          give: m.give,
+                          get: m.get,
+                          gap_pct: m.gap_pct,
+                        })),
+                        needs,
+                        surplus,
+                      }
+                    : undefined
+                }
+              />
+            );
           })()}
         </section>
       )}
