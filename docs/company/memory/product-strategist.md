@@ -1,7 +1,7 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 141; formula OG epic 1/3; deferred empty-OG atom 2.
-2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
+2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3; deferred empty-OG atom 2.
+2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | Dynasty share links cleaner; college stays explicit.
 
