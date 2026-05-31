@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: lab-og-position-filters-followup
 last_keep_cycle: 97
-last_commit: da33eafd
+last_commit: 7f652a98
 bureau_depth_og_epic: complete
 league_strength_of_schedule_og_share: done
