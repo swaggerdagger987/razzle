@@ -30,6 +30,15 @@ export function BriefingCard({
   error,
   cost,
 }: Props) {
+  const canExport = !pending && !error && Boolean(briefing?.trim());
+  const ogParams = new URLSearchParams({
+    question,
+    briefing: briefing.slice(0, 600),
+    urgency,
+    download: "1",
+  });
+  if (specialists.length > 0) ogParams.set("specialists", specialists.join(","));
+
   return (
     <article className={`briefing-card chunky bg-bg-card p-4 ${URGENCY_CLASS[urgency]}`}>
       <header className="briefing-header">
@@ -47,6 +56,18 @@ export function BriefingCard({
         <p className="briefing-cross-trigger text-ink-medium mt-2 text-sm">
           {crossTriggers.map((t) => `${t.agent}: ${t.label}`).join(" · ")}
         </p>
+      )}
+      {canExport && (
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <a
+            href={`/og/briefing?${ogParams.toString()}`}
+            download="razzle-briefing.png"
+            className="btn-chunky active text-xs"
+            style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+          >
+            export card
+          </a>
+        </div>
       )}
     </article>
   );
