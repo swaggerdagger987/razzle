@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 130 — Lab L5 OG breakouts/dashboard sticker evidence; epic complete)
+**Last updated:** 2026-05-31 (factory cycle 130 — Lab L5 OG breakouts/dashboard sticker evidence; L5 sticker epic complete)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -18,8 +18,8 @@ From `LOOP-STATE.md`:
 | Cycle | 130 |
 | Last board | 54 |
 | Focus pillar | Lab |
-| Focus layer | L5 |
-| Next slice | (sticker epic complete — see PARITY/NEXT) |
+| Focus layer | L4 |
+| Next slice | lab-l4-pro-gate-error-tradevalues |
 | Last commit | `96d43d1b` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.

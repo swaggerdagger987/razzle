@@ -2,6 +2,10 @@
 
 2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | keep | pytest EXPECTED breakouts/dashboard; curl 67621B/67113B.
 
+2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
+
+2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
+
 2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | keep | pytest EXPECTED tradevalues/aging; curl 68974B/65088B.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.

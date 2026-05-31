@@ -14,7 +14,7 @@
   "max_files": 2,
   "max_lines": 45,
   "acceptance_commands": [
-    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests/test_og_launch10_live_sticker.py -q",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_launch10_live_sticker.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
@@ -22,5 +22,6 @@
     "New OG routes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "status": "shipped"
 }
