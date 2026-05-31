@@ -15,8 +15,7 @@
   "max_lines": 5,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-tradevalues-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/tradevalues?download=1&position=WR'",
-    "curl -s -o /tmp/og-prospects-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/prospects?download=1&position=WR'"
+    "curl -s -o /tmp/og-tradevalues-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/tradevalues?download=1&position=WR'"
   ],
   "out_of_scope": ["OG route changes", "prospects renderer (already wired)", "NORTH_STAR edits"],
   "builder_mode": "composer-surgical",

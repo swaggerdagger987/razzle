@@ -14,8 +14,8 @@
     {
       "id": "lab-og-position-tradevalues-prospects",
       "title": "Trade values + prospects export passes position filter",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "c4cfe914"
     },
     {
       "id": "lab-og-position-buysell",
@@ -24,8 +24,16 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-prospects",
+  "next_atom_id": "lab-og-position-buysell",
   "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:15:00Z",
-  "last_cycle_commit": "f358349d"
+  "updated_at": "2026-05-31T06:42:00Z",
+  "last_cycle_commit": "c4cfe914",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-snapshot-row-fidelity",
+      "status": "complete",
+      "last_atom": "lab-og-breakouts-score-ranked",
+      "merge_commit": "d9548870"
+    }
+  ]
 }
