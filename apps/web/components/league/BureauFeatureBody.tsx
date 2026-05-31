@@ -10,9 +10,8 @@ import { BureauTradeFinder } from "./BureauTradeFinder";
 import { BureauHeadToHead } from "./BureauHeadToHead";
 import { BureauRosterDepth } from "./BureauRosterDepth";
 import { BureauBuildProfiles } from "./BureauBuildProfiles";
-import { BureauPowerRankings } from "./BureauPowerRankings";
 import { BureauWaiverTendencies } from "./BureauWaiverTendencies";
-import { BureauStrengthOfSchedule } from "./BureauStrengthOfSchedule";
+import { BureauPowerRankings } from "./BureauPowerRankings";
 
 interface Props {
   feature: BureauFeatureSlug;
@@ -31,10 +30,7 @@ export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "roster-depth") return <BureauRosterDepth data={data} leagueId={leagueId} />;
   if (feature === "build-profiles") return <BureauBuildProfiles data={data} leagueId={leagueId} />;
   if (feature === "power-rankings") return <BureauPowerRankings data={data} leagueId={leagueId} />;
-  if (feature === "waiver-tendencies")
-    return <BureauWaiverTendencies data={data} leagueId={leagueId} />;
-  if (feature === "strength-of-schedule")
-    return <BureauStrengthOfSchedule data={data} leagueId={leagueId} />;
+  if (feature === "waiver-tendencies") return <BureauWaiverTendencies data={data} leagueId={leagueId} />;
 
   return null;
 }
