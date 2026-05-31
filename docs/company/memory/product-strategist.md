@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | SAMPLE OG dynasty/RBS/value | ebc4b722 | Panel-labels epic atom 1/3; pairs with LIVE on base.
+
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
