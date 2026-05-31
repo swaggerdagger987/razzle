@@ -50,3 +50,4 @@ ontract or prompt is broken. Fix the prompt, not the memory.
 ontract or prompt is broken. Fix the prompt, not the memory.
 ontract or prompt is broken. Fix the prompt, not the memory.
 ontract or prompt is broken. Fix the prompt, not the memory.
+2026-05-31 | prospects OG snapshot | ogSnapshotRows on ProspectsRenderer | da33eafd | SHIP | KEEP pattern | — | — | evidence/2026-05-31-lab-og-snapshot-prospects.md

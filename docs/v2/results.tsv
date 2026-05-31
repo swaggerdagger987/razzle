@@ -74,3 +74,4 @@ cycle	commit	score	status	pillar	slice	description
 82	a9db965d	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link	trust=T5,T6; copy link + export row; curl trade-network OG 68199B; epic atom 4/5
 87	2230b18e	depth+voice+simplicity	keep	Lab	L5 Breakouts OG snapshot rows	trust=T5,T6; snapshotRows on BreakoutsRenderer; curl breakouts snap OG 45080B; epic atom 1/5
 88	4f0eb89f	depth+voice+simplicity	keep	Lab	L5 Weekly heatmap OG snapshot rows	trust=T5,T6; snapshotRows on WeeklyHeatmapRenderer; curl weekly snap OG 53320B; epic atom 2/5
+89	da33eafd	depth+voice+simplicity	keep	Lab	L5 Prospects OG snapshot rows	trust=T5,T6; snapshotRows on ProspectsRenderer; curl prospects snap OG 49000B; epic atom 3/5
