@@ -15,7 +15,7 @@
       "id": "lab-aging-og-live-extract",
       "title": "Aging OG extracts live players from positions map",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "b8c3a019"
     },
     {
       "id": "lab-og-position-tradevalues-prospects",
