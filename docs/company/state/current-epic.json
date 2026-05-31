@@ -1,31 +1,31 @@
 {
   "epic_status": "active",
-  "big_problem": "Bureau rivalry screenshots die in DMs — copied H2H links drop opponent context so managers reopen the wrong matchup.",
-  "epic_title": "League L5 — Bureau H2H export deep-links",
-  "parity_ref": "PARITY Explore L5 — Bureau H2H export",
-  "depth_ref": "League L5",
+  "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
+  "epic_title": "Explore L5 — universe-aware share exports",
+  "parity_ref": "Explore L5",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "bureau-h2h-rivalry-url-user-opponent",
-      "title": "H2H copy link + OG watermark include user and opponent query params",
-      "status": "done",
-      "merge_commit": "261c3166"
-    },
-    {
-      "id": "bureau-h2h-og-opponent-watermark-label",
-      "title": "OG card subtitle names opponent team when snapshot or live fetch",
+      "id": "explore-og-universe-query",
+      "title": "College export filename on ExploreShareButton",
       "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "bureau-h2h-pick-opponent-preserve-user",
-      "title": "Opponent picker preserves user= in URL when rivalry link shared",
+      "id": "explore-og-college-gate-c",
+      "title": "College explore OG PNG ≥40KB with fixture params",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-nfl-universe-default",
+      "title": "NFL explore OG omits redundant universe when default",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-pick-opponent-preserve-user",
-  "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T15:00:00Z",
+  "next_atom_id": "explore-og-universe-query",
+  "created_at": "2026-05-31T08:44:01Z",
+  "updated_at": "2026-05-31T10:00:00Z",
   "completed_epics": []
 }

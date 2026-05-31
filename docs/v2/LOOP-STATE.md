@@ -1,10 +1,8 @@
-cycle: 135
+cycle: 133
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: lab-og-from-panel-sticker-gamelog
-last_keep_cycle: 135
-last_commit: 9ef503929
-lab_l5_og_trust_sticker_epic: active
-league_l5_self_scout_snapshot_epic: active
-lab_l5_og_live_fetch_epic: complete
+next_slice: explore-og-college-gate-c
+last_keep_cycle: 133
+last_commit: b098d64c
+explore_l5_universe_export_epic: active
