@@ -56,6 +56,46 @@ const PLAYER_SCOPED_SLUGS = new Set([
   "archetypes",
 ]);
 
+/** Launch-10 Lab panels — live OG cards use panel blurb only (no sample/live suffix). */
+const LAUNCH_10_OG_SLUGS = new Set([
+  "weekly",
+  "prospects",
+  "dashboard",
+  "rankings",
+  "tradevalues",
+  "breakouts",
+  "gamelog",
+  "efficiency",
+  "aging",
+  "buysell",
+]);
+
+function panelBlurbSuffix(
+  slug: string,
+  positionFilter: string,
+  isDemo: boolean,
+  isSnapshot: boolean,
+  liveHasRows: boolean,
+): string {
+  const pos = positionFilter ? ` · ${positionFilter} only` : "";
+  if (slug === "dynasty-comps" && isDemo) {
+    return `${pos} · comps for Ja'Marr Chase · sample preview`;
+  }
+  if (isSnapshot) {
+    return `${pos} · from your panel`;
+  }
+  if (isDemo) {
+    return `${pos} · sample preview`;
+  }
+  if (liveHasRows && LAUNCH_10_OG_SLUGS.has(slug)) {
+    return pos;
+  }
+  if (liveHasRows) {
+    return `${pos} · live data`;
+  }
+  return pos;
+}
+
 function resolvePanelApiPath(path: string, playerId: string): string {
   return path.replace(/\{player_id\}/g, encodeURIComponent(playerId));
 }
@@ -450,17 +490,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${positionFilter ? ` · ${positionFilter} only` : ""}${
-            slug === "dynasty-comps" && isDemo
-              ? " · comps for Ja'Marr Chase · sample preview"
-              : isSnapshot
-                ? " · from your panel"
-                : isDemo
-                  ? " · sample preview"
-                  : liveHasRows
-                    ? " · live data"
-                    : ""
-          }`}
+          {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isDemo, isSnapshot, liveHasRows)}`}
         </div>
 
         {query && (
