@@ -7,7 +7,7 @@
 ## Build / tests
 
 - `npm run build --workspace=apps/web` — exit 0
-- `JWT_SECRET=test pytest apps/api/tests -q` — 61 passed, 5 skipped
+- `JWT_SECRET=test python3 -m pytest apps/api/tests -q` — 63 passed, 4 failed (intel/snapshot env — not slice paths)
 
 ## Gate C — OG PNG curl
 
