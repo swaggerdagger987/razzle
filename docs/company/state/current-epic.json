@@ -1,50 +1,38 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
-  "epic_title": "Lab L5 — formula-sorted OG live parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Lab OG dynasty cards read like a generic value table — Reddit cannot see overall rank at a glance on shared screenshots.",
+  "epic_title": "Lab L5 — OG live panel rows match in-product rank readout",
+  "parity_ref": "Explore L5 / Lab panel OG data rows — PARITY.md",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-breakouts-rankings-formula-live",
-      "title": "Breakouts + rankings OG live extract prefers formula_score",
-      "status": "done",
-      "merge_commit": "ceadf0402"
+      "id": "lab-og-rankings-live-rank-labels",
+      "title": "Rankings OG — #rank statLabel on live dynasty rows",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-weekly-prospects-live-sticker-guard",
-      "title": "Weekly + prospects LIVE sticker pytest guard",
-      "status": "done",
-      "merge_commit": "d03cb653b"
-    },
-    {
-      "id": "lab-og-buysell-formula-live",
-      "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
+      "id": "lab-og-tradevalues-live-rank-labels",
+      "title": "Trade Values OG — #rank statLabel on live value rows",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-from-panel-gate-c-rest",
-      "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
+      "id": "lab-og-breakouts-live-rank-labels",
+      "title": "Breakouts OG — #rank statLabel on live RBS board rows",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-buysell-formula-live",
-  "created_at": "2026-05-31T10:36:02Z",
-  "updated_at": "2026-05-31T12:15:00Z",
+  "next_atom_id": "lab-og-tradevalues-live-rank-labels",
+  "created_at": "2026-05-31T10:39:20Z",
+  "updated_at": "2026-05-31T10:57:00Z",
   "completed_epics": [
     {
-      "id": "room-l5-briefing-gtm-export",
-      "status": "complete",
-      "last_atom": "room-briefing-watermark",
-      "merge_commit": "f6e0985f3"
-    },
-    {
-      "id": "lab-l5-og-empty-panel-states",
+      "id": "lab-l5-formula-sorted-og-live-parity",
       "status": "active",
-      "last_atom": "lab-gamelog-empty-weeks-export",
-      "merge_commit": "ac0280a20"
+      "last_atom": "lab-og-weekly-prospects-live-sticker-guard",
+      "merge_commit": "d03cb653b"
     }
   ]
 }
