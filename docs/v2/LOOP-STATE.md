@@ -1,9 +1,9 @@
-cycle: 94
+cycle: 96
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-snapshot-dashboard
-last_keep_cycle: 94
-last_commit: a755f51f
-lab_l5_og_fidelity_epic: active
-lab_l5_tradevalues_formula_statlabel: complete
+next_slice: lab-og-position-buysell
+last_keep_cycle: 96
+last_commit: 07d240f5
+lab_l5_og_position_filter_epic: active
+lab_l5_tradevalues_og_position: in_progress
