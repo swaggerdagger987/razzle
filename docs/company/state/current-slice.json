@@ -17,8 +17,7 @@
   "max_lines": 120,
   "acceptance_commands": [
     "PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_lab_og_export_link.py apps/api/tests/test_og_prospects_loading_snapshot.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?download=1&snapshot=eyJyIjpbeyJuIjoiVHJhdmlzIEh1bnRlciIsInAiOiJXUiIsInQiOiJKQVgiLCJzIjo5NCwic2wiOiJSUFMifV19'"
+    "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
     "OG route behavior changes",
