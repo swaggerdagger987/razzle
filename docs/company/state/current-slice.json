@@ -9,6 +9,7 @@
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/components/league/BureauOgExportLink.tsx",
+    "apps/web/components/league/BureauH2HShareBar.tsx",
     "apps/web/components/league/BureauHeadToHead.tsx",
     "apps/web/app/og/head-to-head/route.tsx"
   ],
