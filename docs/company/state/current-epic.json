@@ -9,30 +9,24 @@
       "id": "league-sos-og-export",
       "title": "Bureau Schedule OG share card with snapshot rows",
       "status": "done",
-      "merge_commit": "bf91c891"
+      "merge_commit": "pending"
     }
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T06:20:00Z",
-  "updated_at": "2026-05-31T06:25:00Z",
+  "updated_at": "2026-05-31T06:40:00Z",
   "completed_epics": [
-    {
-      "id": "league-l5-unhide-bureau-tabs",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-tab",
-      "merge_commit": "eb542d51"
-    },
     {
       "id": "league-l5-sos-export",
       "status": "complete",
       "last_atom": "league-sos-og-export",
-      "merge_commit": "bf91c891"
+      "merge_commit": "pending"
     }
   ],
   "next_epic": {
     "epic_status": "active",
-    "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
-    "epic_title": "Lab L5 — OG export matches in-panel position filters",
-    "next_atom_id": "lab-og-position-tradevalues-prospects"
+    "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head — ShareBar and OG route use mismatched snapshot codecs.",
+    "epic_title": "League L5 — Bureau H2H snapshot codec matches OG decode",
+    "next_atom_id": "bureau-h2h-og-route-lib-decode"
   }
 }

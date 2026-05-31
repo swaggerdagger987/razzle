@@ -1,9 +1,9 @@
-cycle: 96
+cycle: 97
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: lab-og-position-tradevalues-prospects
-last_keep_cycle: 96
-last_commit: bf91c891
+next_slice: bureau-h2h-og-route-lib-decode
+last_keep_cycle: 97
+last_commit: pending
 league_l5_sos_export_epic: complete
-lab_l5_og_position_epic: active
+league_l5_h2h_codec_epic: active
