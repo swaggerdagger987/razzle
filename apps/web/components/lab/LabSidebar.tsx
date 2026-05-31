@@ -151,7 +151,6 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
                   key={panel.slug}
                   panel={panel}
                   activeSlug={activeSlug}
-                  showOwnerInTitle={Boolean(query)}
                   onNavigate={onCloseMobile}
                 />
               ))}
@@ -172,20 +171,15 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
-  showOwnerInTitle = false,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
-  /** When searching, prefix visible title with agent owner (hallway H-04). */
-  showOwnerInTitle?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
   const owner = agentForPanel(panel.slug);
-  const label =
-    showOwnerInTitle && owner ? `${owner.name} · ${panel.title}` : panel.title;
   return (
     <Link
       href={`/lab/${panel.slug}`}
@@ -203,22 +197,49 @@ function SidebarItem({
           height={18}
         />
       )}
-      {label}
+      {panel.title}
       {panel.tier === "pro" && <span className="lab-pro-lock"> 🔒</span>}
       {badge && <span className="lab-staff-pick"> {badge}</span>}
     </Link>
   );
 }
 
+const STAFF_PICK_ORDER: AgentId[] = ["hawkeye", "bones", "octo", "atlas", "razzle"];
+
+function staffPickPanels(): PanelDefinition[] {
+  return PANELS.filter((p) => STAFF_PICKS.has(p.slug));
+}
+
+function panelsByAgentDesk(): { agent: AgentDefinition; panels: PanelDefinition[] }[] {
+  const launch = staffPickPanels();
+  const buckets = new Map<AgentId, PanelDefinition[]>();
+  for (const panel of launch) {
+    const owner = agentForPanel(panel.slug) ?? AGENT_BY_ID.razzle;
+    const list = buckets.get(owner.id) ?? [];
+    list.push(panel);
+    buckets.set(owner.id, list);
+  }
+  return STAFF_PICK_ORDER.filter((id) => buckets.has(id)).map((id) => ({
+    agent: AGENT_BY_ID[id],
+    panels: buckets.get(id) ?? [],
+  }));
+}
+
 export function LabPanelGrid() {
-  const grouped = panelsByCategory();
+  const desks = panelsByAgentDesk();
   return (
     <div className="lab-panel-grid">
-            {Array.from(new Set(PANELS.map((p) => p.category))).map((cat) => (
-        <section key={cat} className="lab-grid-section">
-          <h2 className="lab-grid-heading">{CATEGORY_LABELS[cat]}</h2>
+      {desks.map(({ agent, panels }) => (
+        <section key={agent.id} className="lab-grid-section lab-agent-desk">
+          <div className="lab-desk-header">
+            <img src={`/agents/${agent.avatar}.svg`} alt="" className="lab-desk-avatar" width={28} height={28} />
+            <div>
+              <h2 className="lab-grid-heading">{agent.name}</h2>
+              <p className="lab-desk-role text-ink-medium text-xs">{agent.role}</p>
+            </div>
+          </div>
           <div className="lab-grid-cards">
-            {panelsByCategory(cat).map((panel) => (
+            {panels.map((panel) => (
               <Link key={panel.slug} href={`/lab/${panel.slug}`} className="lab-grid-card chunky bg-bg-card">
                 <span className="lab-grid-icon" aria-hidden>
                   {panel.icon}
@@ -231,6 +252,13 @@ export function LabPanelGrid() {
           </div>
         </section>
       ))}
+      <p className="lab-index-footnote text-ink-medium text-sm">
+        90+ more panels in the sidebar on any panel page — start with{" "}
+        <Link href="/explore" className="underline hover:text-orange">
+          Explore
+        </Link>{" "}
+        for the full screener.
+      </p>
     </div>
   );
 }

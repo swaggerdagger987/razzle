@@ -1,31 +1,31 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "The Lab index still reads like a 100-panel catalog — launch-10 Staff Picks should show agent desks, not generic category sprawl.",
+  "epic_title": "Lab L2 — agent-owned catalog surfaces",
+  "parity_ref": "Lab L2 — 20 panels with agent-owned headers",
+  "depth_ref": "Lab L2",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
+      "id": "lab-index-agent-desks",
+      "title": "Lab index Staff Picks grid grouped by agent desk",
       "status": "done",
-      "merge_commit": "5721ee33"
+      "merge_commit": "922b830a"
     },
     {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
+      "id": "lab-sidebar-agent-sections",
+      "title": "Lab sidebar category headers show owning agent avatar",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
+      "id": "lab-index-browse-all-nudge",
+      "title": "Lab index footer nudge to Explore screener + Room ask",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
-  "created_at": "2026-05-31T09:25:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
+  "next_atom_id": "lab-sidebar-agent-sections",
+  "epic_status": "active",
+  "created_at": "2026-05-31T09:00:00Z",
+  "updated_at": "2026-05-31T09:15:00Z",
   "completed_epics": []
 }

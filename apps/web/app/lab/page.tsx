@@ -14,7 +14,7 @@ export default function LabIndexPage() {
           The Lab
         </h1>
         <p className="text-ink-medium">
-          10 launch panels with staff-owned headers. Pick one — or start with Explore for the full screener.
+          Staff desks — each agent owns their launch panels. Pick a desk, or start with Explore for the full screener.
         </p>
       </header>
       <AgentNudgeBar source="lab" />
