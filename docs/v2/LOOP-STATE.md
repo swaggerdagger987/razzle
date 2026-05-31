@@ -1,9 +1,9 @@
-cycle: 78
+cycle: 85
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
 next_slice: PARITY — league-roster-depth-tab
-last_keep_cycle: 80
+last_keep_cycle: 85
 last_commit: 9a04ae07
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -28,7 +28,11 @@ lab_l5_og_snapshot_efficiency_aging: complete
 lab_l5_og_live_data_label: complete
 league_l5_bureau_h2h_copy_link: complete
 league_l5_bureau_self_scout_copy_link: complete
+league_l5_bureau_h2h_og_live_label: complete
+league_l5_bureau_h2h_snapshot_export: complete
 league_l5_power_rankings_tab: complete
 league_l5_power_rankings_og: complete
 league_l5_unhide_bureau_epic: active
-league_l5_bureau_monte_carlo_share: complete
+league_l5_bureau_monte_carlo_share_bar: complete
+league_l5_bureau_pressure_map_copy_link: complete
+league_l5_bureau_manager_profiles_copy_link: complete
