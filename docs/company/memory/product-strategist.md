@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | bureau-mc-og-live-sample-sticker | da33eafd | SHIP | Bureau Monte Carlo OG trust stickers; epic atom 2/3.
 2026-05-31 | bureau-h2h-og-live-sample-sticker | 2681462c | SHIP | League H2H trust stickers; T2/T5/T6; epic atom 1/3.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.

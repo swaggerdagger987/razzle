@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 131 — League L5 Bureau H2H OG trust stickers)
+**Last updated:** 2026-05-31 (factory cycle 132 — League L5 Bureau Monte Carlo OG trust stickers)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 131 |
+| Cycle | 132 |
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | bureau-mc-og-live-sample-sticker |
-| Last commit | `2681462c` |
+| Next slice | bureau-pressure-og-live-sample-sticker |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

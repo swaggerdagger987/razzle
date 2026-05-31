@@ -1,5 +1,6 @@
 # Memory — Data Researcher
 
+2026-05-31 | bureau-mc-og-live-sample-sticker | cycle 132 | DynastyFF playoff odds screenshots need LIVE vs SAMPLE on MC cards.
 2026-05-31 | bureau-h2h-og-live-sample-sticker | cycle 131 | Reddit rivalry threads need visible live vs sample on H2H exports.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.

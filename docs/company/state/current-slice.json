@@ -1,28 +1,27 @@
 {
   "date": "2026-05-31",
   "big_problem": "Bureau H2H rivalry cards label live vs sample only in subtitle text — Reddit cannot tell a real league export from demo at a glance.",
-  "epic": "League L5 — Bureau H2H export trust stickers (atom 1/3)",
-  "slice_title": "H2H OG — LIVE, SAMPLE, and EXPORTED rotated trust stickers",
-  "atom_id": "bureau-h2h-og-live-sample-sticker",
-  "parity_ref": "PARITY League L5 — hidden Bureau renderers or watermarked export",
+  "epic": "League L5 — Bureau H2H export trust stickers (atom 2/3)",
+  "slice_title": "Monte Carlo OG — LIVE, SAMPLE, and EXPORTED trust stickers",
+  "atom_id": "bureau-mc-og-live-sample-sticker",
+  "parity_ref": "PARITY League L5 — Bureau Monte Carlo export / Bureau-7 parity",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — H2H OG PNG ≥40KB demo + snapshot paths",
+  "acceptance_ref": "FACTORY-DOD Gate C — Monte Carlo OG PNG ≥40KB demo + snapshot",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/head-to-head/route.tsx",
-    "docs/v2/evidence/2026-05-31-bureau-h2h-og-live-sample-sticker.md"
+    "apps/web/app/og/monte-carlo/route.tsx",
+    "docs/v2/evidence/2026-05-31-bureau-mc-og-live-sample-sticker.md"
   ],
   "max_files": 2,
-  "max_lines": 55,
+  "max_lines": 70,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_h2h_og_snapshot_codec.py -q",
-    "curl -s -o /tmp/h2h-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/head-to-head?download=1'",
-    "curl -s -o /tmp/h2h-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/head-to-head?download=1&snapshot=eyJ5Ijp7InQiOiJZb3VyIFNxdWFkIiwiciI6IjgtNSIsInAiOjExOC40fSwibSI6eyJ0IjoiUml2YWwgRkMiLCJyIjoiNy02IiwicCI6MTEyLjF9LCJwYyI6W3sicCI6IlJCIiwieSI6NCwidCI6Mn0seyJwIjoiV1IiLCJ5Ijo1LCJ0Ijo2fV19'",
-    "file /tmp/h2h-demo.png /tmp/h2h-snap.png"
+    "curl -s -o /tmp/mc-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/monte-carlo?download=1'",
+    "curl -s -o /tmp/mc-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/monte-carlo?download=1&snapshot=eyJyIjpbeyJpZCI6MSwibSI6IkR5bmFzdHkgRHVrZXMiLCJjcCI6MjgsInBwIjo5MSwicnAiOjk0fV19'",
+    "file /tmp/mc-demo.png /tmp/mc-snap.png"
   ],
   "out_of_scope": [
-    "Other Bureau OG routes",
+    "Pressure Map OG",
     "NORTH_STAR/DESIGN/DECISIONS edits",
     "new npm deps"
   ],

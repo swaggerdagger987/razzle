@@ -8,13 +8,13 @@
     {
       "id": "bureau-h2h-og-live-sample-sticker",
       "title": "H2H OG — LIVE, SAMPLE, and EXPORTED rotated trust stickers",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "2681462c"
     },
     {
       "id": "bureau-mc-og-live-sample-sticker",
       "title": "Monte Carlo OG — LIVE vs SAMPLE stickers (Bureau-7 parity)",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-og-live-sample-sticker",
+  "next_atom_id": "bureau-mc-og-live-sample-sticker",
   "created_at": "2026-05-31T09:01:04Z",
-  "updated_at": "2026-05-31T09:01:04Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-fetch-sticker",

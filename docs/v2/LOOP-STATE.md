@@ -1,10 +1,11 @@
-cycle: 131
+cycle: 132
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-mc-og-live-sample-sticker
-last_keep_cycle: 131
-last_commit: 2681462c
+next_slice: bureau-pressure-og-live-sample-sticker
+last_keep_cycle: 132
+last_commit: da33eafd
+lab_l4_pro_gate_error_epic: active
 lab_l5_og_live_fetch_epic: complete
 league_l5_h2h_trust_stickers_epic: active
 lab_l2_sidebar_agent_epic: complete
