@@ -88,3 +88,7 @@ def test_pro_gate_from_panel_error_wired_in_tradevalues_and_efficiency():
 )
 def test_pro_gate_from_panel_error_wired_in_remaining_launch10(path: str):
     _assert_pro_gate_renderer_path(path)
+
+
+def test_pro_gate_from_panel_error_wired_in_dynasty_comps():
+    _assert_pro_gate_renderer_path("apps/web/components/lab/renderers/DynastyCompsRenderer.tsx")

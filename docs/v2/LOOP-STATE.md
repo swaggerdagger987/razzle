@@ -1,8 +1,10 @@
-cycle: 133
+cycle: 137
 last_board_cycle: 54
-focus_pillar: Room
-focus_layer: L5
-next_slice: room-briefing-watermark
-last_keep_cycle: 133
-last_commit: 75dc2d65a
-room_l5_briefing_gtm_epic: active
+focus_pillar: Lab
+focus_layer: L4
+next_slice: explore-og-nfl-universe-default
+last_keep_cycle: 137
+last_commit: a3f07d1e5
+lab_l4_pro_gate_error_epic: complete
+explore_l5_universe_export_epic: active
+room_l5_briefing_gtm_export_epic: active
