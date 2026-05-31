@@ -88,9 +88,6 @@ const LAUNCH_10_OG_SLUGS = new Set([
   "buysell",
 ]);
 
-/** Panel-API LIVE sticker — prospects/weekly only show sticker when /api/panels returned rows. */
-const PANEL_API_LIVE_STICKER_SLUGS = new Set(["prospects", "weekly"]);
-
 /** Panel-specific LIVE copy when `/api/panels/{slug}` returns real rows (Launch-10). */
 function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "prospects") return " · live RPS board";
@@ -104,11 +101,6 @@ function launch10LiveStickerLabel(slug: string): string {
   return "LIVE · nflverse rows";
 }
 
-function demoStickerLabel(slug: string): string {
-  if (slug === "prospects") return "SAMPLE · demo board";
-  if (slug === "weekly") return "SAMPLE · demo heatmap";
-  return "SAMPLE · demo rows";
-}
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -125,7 +117,7 @@ function panelBlurbSuffix(
   }
   if (showingDemoRows) {
     if (LAUNCH_10_OG_SLUGS.has(slug)) {
-      return pos;
+      return `${pos} · SAMPLE rows — not live nflverse`;
     }
     return `${pos} · sample preview`;
   }
@@ -398,12 +390,18 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     if (weeklyRows.length > 0) return weeklyRows;
   }
 
-  if (slug === "prospects" && Array.isArray(obj.prospects)) {
-    const prospectRows = extractProspectsRows(
-      obj.prospects as Record<string, unknown>[],
-      positionFilter,
-    );
-    if (prospectRows.length > 0) return prospectRows;
+  if (slug === "prospects") {
+    const prospectSources: Record<string, unknown>[][] = [];
+    if (Array.isArray(obj.prospects) && obj.prospects.length > 0) {
+      prospectSources.push(obj.prospects as Record<string, unknown>[]);
+    }
+    if (Array.isArray(obj.items) && obj.items.length > 0) {
+      prospectSources.push(obj.items as Record<string, unknown>[]);
+    }
+    for (const source of prospectSources) {
+      const prospectRows = extractProspectsRows(source, positionFilter);
+      if (prospectRows.length > 0) return prospectRows;
+    }
   }
 
   if (slug === "gamelog" && Array.isArray(obj.weeks)) {
@@ -545,9 +543,7 @@ async function fetchLiveOgRows(
   }
   url.searchParams.set("limit", "6");
   try {
-    const res = await fetch(url.toString(), {
-      headers: { [OG_PRO_PREVIEW_HEADER]: "pro" },
-    });
+    const res = await fetch(url.toString(), { headers: OG_FETCH_HEADERS });
     if (!res.ok) return [];
     const pos = params?.position != null ? String(params.position) : "";
     return extractRows(await res.json(), slug, pos);
@@ -555,6 +551,10 @@ async function fetchLiveOgRows(
     return [];
   }
 }
+
+const OG_FETCH_HEADERS: Record<string, string> = {
+  [OG_PRO_PREVIEW_HEADER]: "pro",
+};
 
 async function fetchPanelData(
   req: Request,
@@ -570,7 +570,7 @@ async function fetchPanelData(
     if (method === "POST") {
       res = await fetch(`${apiOrigin}${apiPath}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...OG_FETCH_HEADERS },
         body: JSON.stringify({ limit: 6, ...(params ?? {}) }),
       });
     } else {
@@ -581,7 +581,7 @@ async function fetchPanelData(
         }
       }
       url.searchParams.set("limit", "6");
-      res = await fetch(url.toString());
+      res = await fetch(url.toString(), { headers: OG_FETCH_HEADERS });
     }
     if (!res.ok) return [];
     const data = await res.json();
@@ -590,6 +590,29 @@ async function fetchPanelData(
   } catch {
     return [];
   }
+}
+
+/** Launch-10 OG without snapshot — panel API first, then /api/panels slug (demo only if both empty). */
+async function fetchOgLiveRows(
+  req: Request,
+  slug: string,
+  apiPath: string,
+  method: string,
+  apiParams: Record<string, unknown>,
+): Promise<OgRow[]> {
+  const named = (rows: OgRow[]) => rows.filter((r) => r.name.trim().length > 0);
+
+  if (LAUNCH_10_OG_SLUGS.has(slug)) {
+    const fromPanelApi = named(
+      await fetchPanelData(req, slug, apiPath, method, apiParams),
+    );
+    if (fromPanelApi.length > 0) return fromPanelApi;
+    return fetchLiveOgRows(req, slug, apiParams);
+  }
+
+  const fromPanels = named(await fetchLiveOgRows(req, slug, apiParams));
+  if (fromPanels.length > 0) return fromPanels;
+  return fetchPanelData(req, slug, apiPath, method, apiParams);
 }
 
 function formatStat(n: number, label?: string): string {
@@ -648,14 +671,14 @@ export async function GET(
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
-  let liveViaPanelApi = false;
   if (apiPath && !snapshotHasRows && !forceDemo) {
-    liveRows = await fetchLiveOgRows(req, slug, apiParams);
-    if (liveRows.length > 0) {
-      liveViaPanelApi = true;
-    } else {
-      liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
-    }
+    liveRows = await fetchOgLiveRows(
+      req,
+      slug,
+      apiPath,
+      panel.api.method,
+      apiParams,
+    );
   }
   const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
   const liveHasRows = namedLiveRows.length > 0;
@@ -672,11 +695,6 @@ export async function GET(
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
-  const showLiveSticker =
-    showingLiveData &&
-    LAUNCH_10_OG_SLUGS.has(slug) &&
-    (!PANEL_API_LIVE_STICKER_SLUGS.has(slug) || liveViaPanelApi);
-  const showDemoSticker = showingDemoRows && LAUNCH_10_OG_SLUGS.has(slug);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
 
   return new ImageResponse(
@@ -735,7 +753,28 @@ export async function GET(
           {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData)}`}
         </div>
 
-        {showLiveSticker ? (
+        {showingDemoRows && LAUNCH_10_OG_SLUGS.has(slug) ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            SAMPLE · not live data
+          </div>
+        ) : null}
+
+        {showingLiveData && LAUNCH_10_OG_SLUGS.has(slug) ? (
           <div
             style={{
               fontFamily: "Caveat",
@@ -753,27 +792,6 @@ export async function GET(
             }}
           >
             {launch10LiveStickerLabel(slug)}
-          </div>
-        ) : null}
-
-        {showDemoSticker ? (
-          <div
-            style={{
-              fontFamily: "Caveat",
-              fontSize: 32,
-              color: "#f7efe5",
-              background: "#d97757",
-              padding: "6px 18px",
-              alignSelf: "flex-start",
-              border: "3px solid #2d1f14",
-              borderRadius: 10,
-              boxShadow: "4px 4px 0 #2d1f14",
-              transform: "rotate(2deg)",
-              marginBottom: 12,
-              fontWeight: 700,
-            }}
-          >
-            {demoStickerLabel(slug)}
           </div>
         ) : null}
 
