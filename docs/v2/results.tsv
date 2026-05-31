@@ -61,4 +61,4 @@ cycle	commit	score	status	pillar	slice	description
 68	ffccedf4	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped links	trust=T5,T6; LabOgExportLink player_id param; curl gamelog+comps scoped 58-66KB
 69	2cb898b6	depth+voice+simplicity	keep	Lab	L5 OG live panel rows	trust=T5,T6; panels slug fetch + candidates extract; curl rankings 59509B breakouts 60649B
 72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
-73	pending	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B
+73	91f2ed9a	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B
