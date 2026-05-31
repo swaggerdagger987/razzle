@@ -14,18 +14,18 @@
     {
       "id": "lab-og-weekly-ppg-ranked",
       "title": "Weekly OG export ranks top-6 by PPG for active position tab",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "c0358ff3"
     },
     {
       "id": "lab-og-breakouts-score-ranked",
       "title": "Breakouts OG export ranks top-6 by breakout score",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-weekly-ppg-ranked",
+  "next_atom_id": "lab-og-breakouts-score-ranked",
   "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T05:50:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "last_cycle_commit": "c0358ff3"
 }

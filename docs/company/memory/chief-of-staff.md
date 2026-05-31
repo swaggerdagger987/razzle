@@ -2,6 +2,8 @@
 
 Append-only log of coordination patterns, what worked, what didn't.
 
+- 2026-05-31: Factory cycle 1 — deduped weekly atom on base; shipped breakouts OG fidelity.
+
 Format per entry:
 
 ```
