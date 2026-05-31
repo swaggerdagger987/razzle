@@ -3,6 +3,8 @@
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 
+2026-05-31 | Gate C position-scoped OG | lab-og-position-tradevalues-prospects | curl 51115B/41941B | PASS | keep | | | build pytest green
+
 Format per entry:
 
 ```

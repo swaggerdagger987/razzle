@@ -10,6 +10,8 @@
 
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
+2026-05-31 | lab-og-position-tradevalues-prospects | position prop on TradeValuesRenderer | e20743e9 | SHIP | keep | | | 1 line diff
+
 Format per entry:
 
 ```

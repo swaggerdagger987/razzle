@@ -1,26 +1,24 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-weekly-ppg-ranked",
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
-  "epic": "Lab L5 — OG snapshot row fidelity",
-  "slice_title": "Weekly OG export ranks top-6 by PPG for active position tab",
+  "atom_id": "lab-og-position-tradevalues-prospects",
+  "big_problem": "Trade values panel filters by position but OG export omitted position — exported cards could show unscoped rows.",
+  "epic": "Lab L5 — OG export matches in-panel position filters",
+  "slice_title": "Trade values LabOgExportLink passes position query param",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with ranked rows",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with position param",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx"
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx"
   ],
   "max_files": 1,
-  "max_lines": 80,
+  "max_lines": 5,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-weekly-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-tradevalues-wr.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/tradevalues?download=1&position=WR'",
+    "curl -s -o /tmp/og-prospects-rb.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1&position=RB'"
   ],
-  "out_of_scope": [
-    "Breakouts atom",
-    "Bureau tabs",
-    "NORTH_STAR / DESIGN edits"
-  ],
+  "out_of_scope": ["EfficiencyRenderer fix", "buysell atom 3", "OG route rewrite"],
   "builder_mode": "composer-surgical"
 }

@@ -5,6 +5,8 @@
 Append-only log of recurring user pain patterns, language signals, and feature-gap
 candidates that became (or didn't become) PARITY rows.
 
+2026-05-31 | Trade value charts are screenshot fuel | lab-og-position-tradevalues-prospects | Lab L5 | PASS | keep | | | no web scan this cycle
+
 Format per entry:
 
 ```
