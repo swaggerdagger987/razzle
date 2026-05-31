@@ -2,6 +2,8 @@
 
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | SHIP | keep | all Staff Picks domain blur; T2/T6.
 
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | SHIP | Peak-week OG rows match Game Log export — screenshot parity for trades.
+
 2026-05-31 | H2H OG watermark | 44d05684 | League rivalry exports now match Lab/Explore screenshot brand — epic closed.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | SHIP | Lab L5 live-sort epic closed; ppo beats efficiency_score for in-panel parity.

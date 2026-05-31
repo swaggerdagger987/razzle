@@ -2,6 +2,8 @@
 
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | no new REDDIT-INTEL; teaser audit only.
 
+2026-05-31 | gamelog OG weeks | 40c80f0e | PASS | No new intel; in-panel ogSnapshotRows already defined peak-week sort.
+
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | cycle 110 | No new Reddit intel; ppo/ppg sort matches in-panel export semantics.
