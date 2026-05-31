@@ -22,6 +22,12 @@
       "title": "Gamelog OG — default player_id when export omits query",
       "status": "pending",
       "merge_commit": null
+    },
+    {
+      "id": "lab-pro-gate-hallway-teasers",
+      "title": "Pro gate — screener hallway + domain teasers",
+      "status": "done",
+      "merge_commit": "675044ea"
     }
   ],
   "next_atom_id": "explore-og-universe-query",
