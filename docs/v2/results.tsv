@@ -76,4 +76,4 @@ cycle	commit	score	status	pillar	slice	description
 84	90bf2dd5	depth+hallway+voice+simplicity	keep	League	L5 Power Rankings OG + share row	trust=T2,T5,T6; /og/power-rankings curl 59807B; BureauPowerRankingsShareBar
 85	309f8a8b	depth+hallway+voice	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5; Atlas renderer; build-profiles out of HIDDEN; build+pytest PASS
 86	2c74e05c	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; BureauTradeNetworkShareBar; curl trade-network OG 68090B; share epic complete
-87	da33eafd	depth+voice+simplicity	keep	Lab	L5 Weekly heatmap OG snapshot rows	trust=T5,T6; ogSnapshotRows peak-week FPTS; curl weekly 53320B live 44549B snapshot
+87	4a6ef16b	depth+voice+simplicity	keep	Lab	L5 Weekly heatmap OG snapshot rows	trust=T5,T6; ogSnapshotRows peak-week FPTS; curl weekly 53320B live 44549B snapshot

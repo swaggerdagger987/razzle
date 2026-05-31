@@ -10,15 +10,15 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
-2026-05-31 | good morning factory | Lab L5 OG snapshot epic atom 1/4 weekly | da33eafd | SHIP | KEEP one panel per atom | — | prospects next | standup cycle 88
+2026-05-31 | good morning factory | Lab L5 OG snapshot epic atom 1/4 weekly | 4a6ef16b | SHIP | KEEP one panel per atom | — | prospects next | standup cycle 88
 
-2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
+2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | 4a6ef16b | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 
 ---
 
 ## Entries
 
-2026-05-31 | Factory cycle 2 Pressure Map copy link | da33eafd | keep | workday open; behavioral share epic 2/4 SHIP
+2026-05-31 | Factory cycle 2 Pressure Map copy link | 4a6ef16b | keep | workday open; behavioral share epic 2/4 SHIP
 2026-05-30 | NEXT.md eliminates slice selection ambiguity for morning standups | SHIP 3/3 on Lab L5 OG live data rows | keep | NEXT.md lead candidate matched PARITY/DEPTH/ACCEPTANCE; single-file touch kept scope tight
 2026-05-31 | Factory cycle 1 — epic.json + FACTORY-DOD Gate C for Lab OG | SHIP 3/3 demo rows atom | keep | Workday opened; curl PNG ~59KB proves Gate C; standup-pr-autopen on branch from PR #18
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B

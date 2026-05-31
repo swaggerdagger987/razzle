@@ -11,11 +11,11 @@ YYYY-MM-DD | slice | approach | commit hash | outcome | keep | discard | revisit
 Read this file before implementing. Reuse working patterns; avoid repeating known
 failure modes. Karpathy: simplicity first, surgical changes.
 
-2026-05-31 | lab-weekly-og-snapshot | peak-week FPTS ogSnapshotRows on WeeklyHeatmapRenderer | da33eafd | SHIP | KEEP snapshot+position on LabOgExportLink | — | prospects/breakouts/tradevalues | evidence 2026-05-31-lab-weekly-og-snapshot.md
+2026-05-31 | lab-weekly-og-snapshot | peak-week FPTS ogSnapshotRows on WeeklyHeatmapRenderer | 4a6ef16b | SHIP | KEEP snapshot+position on LabOgExportLink | — | prospects/breakouts/tradevalues | evidence 2026-05-31-lab-weekly-og-snapshot.md
 
 ---
 
-2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
+2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 4a6ef16b | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 
 ---
 

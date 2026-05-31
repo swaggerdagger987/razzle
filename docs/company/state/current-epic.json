@@ -8,13 +8,13 @@
     {
       "id": "lab-weekly-og-snapshot",
       "title": "Weekly heatmap OG snapshot rows from loaded players",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "4a6ef16b"
     },
     {
       "id": "lab-prospects-og-snapshot",
       "title": "Prospects OG snapshot rows from ranked cards",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -30,7 +30,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-weekly-og-snapshot",
+  "next_atom_id": "lab-prospects-og-snapshot",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z"
+  "updated_at": "2026-05-31T12:30:00Z"
 }
