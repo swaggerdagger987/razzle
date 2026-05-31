@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-27 (repo organization cleanup)  
+**Last updated:** 2026-05-31 (factory cycle 92)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 56 |
+| Cycle | 92 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | Bureau H2H export or Lab panel OG live data rows |
-| Last commit | `da33eafd` |
+| Next slice | Lab L5 OG export live data rows |
+| Last commit | `cba3578f` |
 
-Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
+Recent completions (cycle 92): Bureau Schedule/SOS tab unhidden — final hidden Bureau tab; unhide epic 3/3 complete.
 
 ---
 
