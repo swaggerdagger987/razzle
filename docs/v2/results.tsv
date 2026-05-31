@@ -62,4 +62,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 93	eb542d51	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule tab unhidden	trust=T2,T5,T6; Octo SOS renderer; HIDDEN_BUREAU_SLUGS empty; bureau unhide epic complete; factory cycle 1
 94	92fb53d0	depth+voice+simplicity	keep	Lab	L5 DashboardRenderer OG dashboard slug	trust=T5,T6; riser/faller snapshot; curl dashboard 60034B; pytest 51; factory cycle 1
 95	e55e982f	depth+voice+simplicity	keep	Lab	L5 Dashboard OG top5 fallback when flat movers	trust=T5,T6; Dynasty+OG movers-first; curl dashboard 60034B; pytest 51; factory cycle 1; epic 2/2
-96	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau roster depth OG export card	trust=T2,T5,T6; /og/roster-depth snapshot; curl 61102B; pytest 51; factory cycle 1; epic atom 1/3
+96	14a4401d	depth+hallway+voice+simplicity	keep	League	L5 Bureau roster depth OG export card	trust=T2,T5,T6; /og/roster-depth snapshot; curl 61102B; pytest 51; factory cycle 1; epic atom 1/3
