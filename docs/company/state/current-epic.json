@@ -1,33 +1,39 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic_title": "Lab L5 — OG hallway deep links",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "complete",
+  "big_problem": "Trade Finder screenshots travel without the in-panel Bones matches — export cards fall back to generic demo rows when league/user params are missing.",
+  "epic_title": "League L5 — Bureau Trade Finder GTM export",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-tolab-watermark",
-      "title": "Launch-10 toLab watermark band",
+      "id": "league-trade-finder-og-watermark-live",
+      "title": "Trade Finder OG LIVE watermark band",
       "status": "done",
-      "merge_commit": "b80512bb4"
+      "merge_commit": "db6537faf"
     },
     {
-      "id": "lab-og-tolab-gamelog-default",
-      "title": "Gamelog/dynasty-comps default player in toLab",
+      "id": "league-trade-finder-og-snapshot",
+      "title": "Trade Finder OG snapshot encodes in-panel matches",
       "status": "done",
-      "merge_commit": "c311a15a8"
+      "merge_commit": "19a1af0e9"
     },
     {
-      "id": "lab-og-tolab-snapshot-player",
-      "title": "Snapshot exports preserve player in watermark",
-      "status": "pending",
-      "merge_commit": null
+      "id": "league-trade-finder-og-room-hallway",
+      "title": "Trade Finder OG watermark includes Bones Room ask deep link",
+      "status": "done",
+      "merge_commit": "c8091030c"
     }
   ],
-  "next_atom_id": "lab-og-tolab-snapshot-player",
-  "created_at": "2026-05-31T11:00:00Z",
-  "updated_at": "2026-05-31T12:45:00Z",
+  "next_atom_id": null,
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T19:00:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-empty-og-hallway",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-gamelog-default",
+      "merge_commit": "9d163e9d5"
+    },
     {
       "id": "lab-l5-empty-board-og-sample-cards",
       "status": "complete",
@@ -35,16 +41,10 @@
       "merge_commit": "088cebc07"
     },
     {
-      "id": "lab-l5-formula-og-live-parity",
-      "status": "complete",
-      "last_atom": "lab-og-from-panel-gate-c-rest",
-      "merge_commit": "0b6730166"
-    },
-    {
       "id": "league-l5-trade-finder-gtm",
       "status": "complete",
-      "last_atom": "bureau-trade-finder-copy-link",
-      "merge_commit": "a6930ca13"
+      "last_atom": "league-trade-finder-og-room-hallway",
+      "merge_commit": "c8091030c"
     }
   ]
 }
