@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-sticker | c60c98409 | SHIP | LIVE · staff margin notes sticker when !isDemo + margin rows.
+2026-05-31 | explore-og-margin-note-sticker | 4e0b1af6f | SHIP | LIVE · staff margin notes sticker when !isDemo + margin rows.
 2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
 2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
