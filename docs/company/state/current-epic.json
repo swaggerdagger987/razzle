@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab sidebar Staff Picks hide which specialist owns each launch panel — the hallway band should be visible in nav.",
   "epic_title": "Lab L2 — Staff Picks sidebar by agent",
   "parity_ref": "Lab L2 / AGENTS.md connective tissue",
@@ -14,14 +14,20 @@
     {
       "id": "lab-sidebar-staff-picks-polish",
       "title": "Staff Picks banner + hide duplicate avatars under agent groups",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "c9f6eaf8"
     }
   ],
-  "next_atom_id": "lab-sidebar-staff-picks-polish",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:00:00Z",
-  "updated_at": "2026-05-31T08:45:00Z",
+  "updated_at": "2026-05-31T08:50:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l2-sidebar-staff-picks",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-picks-polish",
+      "merge_commit": "c9f6eaf8"
+    },
     {
       "id": "lab-l4-pro-gate-convert",
       "status": "complete",
