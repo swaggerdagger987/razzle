@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | bureau-self-scout-snapshot-codec | da33eafd | SHIP | League L5 epic atom 1/3; Self-Scout OG snapshot after Lab L5 complete.
+2026-05-31 | bureau-self-scout-snapshot-codec | 249b317b | SHIP | League L5 epic atom 1/3; Self-Scout OG snapshot after Lab L5 complete.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 

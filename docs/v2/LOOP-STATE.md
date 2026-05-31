@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: bureau-self-scout-share-bar
 last_keep_cycle: 130
-last_commit: da33eafd
+last_commit: 249b317b
 lab_l5_og_live_fetch_epic: complete
 league_l5_self_scout_og_epic: active
