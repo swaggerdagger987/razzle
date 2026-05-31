@@ -1,0 +1,28 @@
+"""Launch-10 OG LIVE sticker labels are panel-specific (Lab L5)."""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+ROUTE_TS = ROOT / "apps/web/app/og/[panel]/route.tsx"
+
+EXPECTED = {
+    "rankings": "LIVE · dynasty ranks",
+    "gamelog": "LIVE · game log",
+    "efficiency": "LIVE · PPO board",
+    "buysell": "LIVE · buy/sell board",
+}
+
+
+def test_launch10_live_sticker_labels_in_route():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    for slug, label in EXPECTED.items():
+        assert label in source, f"missing LIVE sticker copy for {slug}"
+
+
+def test_launch10_live_blurb_suffix_in_route():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "live dynasty ranks" in source
+    assert "live PPO board" in source
+    assert "live buy/sell board" in source

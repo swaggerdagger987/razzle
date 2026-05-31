@@ -27,5 +27,13 @@
   "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
   "created_at": "2026-05-31T09:25:00Z",
   "updated_at": "2026-05-31T09:25:00Z",
-  "completed_epics": []
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-panel-native-live-labels",
+      "status": "partial",
+      "last_atom": "lab-og-live-sticker-gamelog-efficiency",
+      "merge_commit": "2d5b545d",
+      "note": "atom 2/3 shipped cycle 130; aging-buysell pending"
+    }
+  ]
 }
