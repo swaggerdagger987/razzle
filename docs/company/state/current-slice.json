@@ -1,27 +1,28 @@
 {
   "date": "2026-05-31",
+  "atom_id": "bureau-trade-network-copy-link",
   "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
   "epic": "League L5 — Bureau behavioral share parity",
-  "atom_id": "league-power-rankings-og",
-  "slice_title": "Power Rankings OG card + copy board link",
+  "slice_title": "Trade Network copy link beside export card",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — power-rankings OG PNG ≥40KB",
+  "acceptance_ref": "FACTORY-DOD Gate C2 — trade-network OG PNG ≥40KB",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/power-rankings/route.tsx",
-    "apps/web/components/league/BureauPowerRankingsShareBar.tsx",
-    "apps/web/components/league/BureauPowerRankings.tsx"
+    "apps/web/components/league/BureauTradeNetworkShareBar.tsx",
+    "apps/web/components/league/BureauTradeNetwork.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 220,
+  "max_files": 2,
+  "max_lines": 70,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-pr.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/power-rankings?download=1&league=test'"
+    "curl -s -o /tmp/og-tn.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/trade-network?download=1&league=test'"
   ],
-  "out_of_scope": ["Trade Network share bar", "API schema changes", "NORTH_STAR / DESIGN edits"],
-  "builder_mode": "composer-surgical",
-  "verdict": "SHIP",
-  "content_commit": "90bf2dd5"
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }

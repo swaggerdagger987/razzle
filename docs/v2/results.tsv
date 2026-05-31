@@ -45,3 +45,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 80	6c8da85f	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot export	trust=T1,T5,T6; encode you/them/position bars in snapshot param; curl h2h OG 59305B; epic atom 2/3
 78	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
 81	e62721a6	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings OG card	trust=T5,T6; /og/power-rankings demo rows; curl 68555B PNG; export link on tab
+86	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau Trade Network share bar	trust=T2,T5,T6; BureauTradeNetworkShareBar copy link + export; curl trade-network OG 68090B
