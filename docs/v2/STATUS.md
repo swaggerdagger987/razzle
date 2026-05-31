@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | Lab L4 pro-gate polish or PARITY next row |
-| Last commit | `f6e0985f3` |
+| Last commit | `c751bcfbd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

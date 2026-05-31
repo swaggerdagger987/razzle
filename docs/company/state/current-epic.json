@@ -21,7 +21,7 @@
       "id": "lab-og-tolab-rankings-position",
       "title": "rankings OG watermark includes default WR position in toLab",
       "status": "done",
-      "merge_commit": "f6e0985f3"
+      "merge_commit": "c751bcfbd"
     }
   ],
   "next_atom_id": null,
@@ -32,7 +32,7 @@
       "id": "lab-l5-og-hallway-position-defaults",
       "status": "complete",
       "last_atom": "lab-og-tolab-rankings-position",
-      "merge_commit": "f6e0985f3"
+      "merge_commit": "c751bcfbd"
     }
   ]
 }
