@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-sidebar-agent-role-taglines | da33eafd | SHIP | L2 sidebar epic atom 2/3 — role scan before panel open.
+2026-05-31 | lab-sidebar-agent-role-taglines | c6b70016 | SHIP | L2 sidebar epic atom 2/3 — role scan before panel open.
 
 2026-05-31 | lab-pro-gate-panel-pitches | da33eafd | SHIP | Rankings/breakouts/tradevalues pitches = dynasty screenshot hooks.
 
