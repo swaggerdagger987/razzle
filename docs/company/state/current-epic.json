@@ -1,32 +1,32 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab OG cards are screenshot dead-ends — dynasty Twitter can't click back into the panel with the same filters they exported.",
-  "epic_title": "Lab L5 — OG hallway deep links",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Bureau Trade Finder export cards ignore in-panel deal rows — Reddit screenshots show generic demo trades instead of the Bones board the manager just evaluated.",
+  "epic_title": "League L5 — Bureau Trade Finder GTM export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-tolab-watermark",
-      "title": "Launch-10 panel OG — toLab() watermark path with position/player",
-      "status": "in_progress",
-      "merge_commit": null
+      "id": "league-trade-finder-og-snapshot",
+      "title": "Trade Finder OG — snapshot param for in-panel export rows",
+      "status": "done",
+      "merge_commit": "db81b4f97"
     },
     {
-      "id": "lab-og-tolab-gamelog-default",
-      "title": "Gamelog OG — toLab preserves default player_id deep link",
+      "id": "league-trade-finder-og-watermark-live",
+      "title": "Trade Finder OG — LIVE/SAMPLE stickers + terracotta watermark band",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-tolab-snapshot-query",
-      "title": "Snapshot OG exports — hallway path notes from-panel context",
+      "id": "league-trade-finder-room-hallway",
+      "title": "Trade Finder OG — Bones Room ask link on hero deal",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-tolab-watermark",
-  "created_at": "2026-05-31T12:30:00Z",
-  "updated_at": "2026-05-31T12:45:00Z",
+  "next_atom_id": "league-trade-finder-og-watermark-live",
+  "epic_status": "active",
+  "created_at": "2026-05-31T10:40:32Z",
+  "updated_at": "2026-05-31T10:45:00Z",
   "completed_epics": [
     {
       "id": "room-l5-briefing-gtm-export",

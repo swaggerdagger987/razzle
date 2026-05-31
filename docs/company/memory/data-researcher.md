@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | league-trade-finder-og-snapshot | db81b4f97 | No new intel; panel snapshot unblocks Reddit OG without live API.
+
 2026-05-31 | room-briefing-watermark | f6e0985f3 | No new intel; Room export slice only.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | No new Reddit intel; empty-state export unblocks tape screenshots.
 

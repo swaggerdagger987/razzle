@@ -1,27 +1,41 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG cards are screenshot dead-ends — dynasty Twitter can't click back into the panel with the same filters they exported.",
-  "epic": "Lab L5 — OG hallway deep links (atom 1/3)",
-  "slice_title": "lab-og-tolab-watermark — Launch-10 OG band uses typed toLab() path",
-  "parity_ref": "PARITY Explore L5 — Lab panel OG data rows + hallway",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with live rows",
+  "big_problem": "Bureau Trade Finder export cards ignore in-panel deal rows — Reddit screenshots show generic demo trades instead of the Bones board the manager just evaluated.",
+  "epic": "League L5 — Bureau Trade Finder GTM export (atom 1/3)",
+  "slice_title": "Trade Finder OG — snapshot param for in-panel export rows",
+  "atom_id": "league-trade-finder-og-snapshot",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/lib/bureau-trade-finder-og-snapshot.ts",
+    "apps/web/app/og/trade-finder/route.tsx",
+    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
+    "apps/web/components/league/BureauTradeFinder.tsx",
+    "apps/api/tests/test_trade_finder_og_snapshot_codec.py"
   ],
-  "max_files": 2,
-  "max_lines": 120,
+  "max_files": 5,
+  "max_lines": 280,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_trade_finder_og_snapshot_codec.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "New npm deps",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "Explore or Bureau OG routes",
-    "Snapshot query round-trip"
+    "watermark band rework",
+    "Bones Room hallway on OG card",
+    "new npm deps",
+    "NORTH_STAR/DESIGN/DECISIONS"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  },
+  "status": "shipped",
+  "content_commit": "db81b4f97",
+  "reality": "PASS",
+  "merge": "pending"
 }
