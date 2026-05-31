@@ -15,7 +15,7 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 128 |
+| Cycle | 129 |
 | Last board | 54 |
 | Focus pillar | Explore |
 | Focus layer | L5 |
