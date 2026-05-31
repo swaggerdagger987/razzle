@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-live-sticker-breakouts-dashboard | da33eafd | PASS | no web; Hawkeye/Atlas panel curl only.
+
 2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | PASS | no web research; curl evidence only.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.

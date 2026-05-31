@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | og sticker breakouts-dashboard | da33eafd | keep | 2-file pytest+curl evidence; epic complete.
+
 2026-05-31 | og sticker tradevalues-aging | a74c2afe | keep | 2-file contract; pytest-only atom.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.

@@ -14,6 +14,8 @@ EXPECTED = {
     "buysell": "LIVE · buy/sell board",
     "tradevalues": "LIVE · trade values",
     "aging": "LIVE · aging curve",
+    "breakouts": "LIVE · breakout board",
+    "dashboard": "LIVE · roster grades",
 }
 
 
@@ -30,3 +32,5 @@ def test_launch10_live_blurb_suffix_in_route():
     assert "live buy/sell board" in source
     assert "live trade values" in source
     assert "live aging curve" in source
+    assert "live breakout board" in source
+    assert "live roster grades" in source
