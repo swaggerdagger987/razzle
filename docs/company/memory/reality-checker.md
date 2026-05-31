@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | lab-og-tradevalues-live-rank-labels | da33eafd | PASS | pytest 2; curl tradevalues OG ≥40KB; web build exit 0.
+2026-05-31 | lab-og-tradevalues-live-rank-labels | bd083cf41 | PASS | pytest 2; curl tradevalues OG ≥40KB; web build exit 0.
 2026-05-31 | lab-og-rankings-live-rank-labels | 0d011e7df | PASS | pytest 2; curl rankings OG 66806B; web build exit 0.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | PASS | curl 200 59323B PNG; web build + pytest green.
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | PASS | pytest 5; curl NFL OG 65431B without universe param.
