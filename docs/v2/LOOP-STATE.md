@@ -1,8 +1,8 @@
-cycle: 158
+cycle: 159
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: NEXT.md Lab L5 OG live data rows (epic complete)
-last_keep_cycle: 158
-last_commit: 845d9d1a1
-bureau_l5_og_watermark_epic: complete (Gate C pytest atom 3/3)
+next_slice: lab-og-breakouts-gate-c-live (epic atom 2/3)
+last_keep_cycle: 159
+last_commit: f6e0985f3
+lab_l5_og_live_rows_epic: active (dashboard live extract atom 1/3)

@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 158 — Bureau waiver OG Gate C pytest guards)
+**Last updated:** 2026-05-31 (factory cycle 159 — Lab dashboard OG live extract)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 158 |
+| Cycle | 159 |
 | Last board | 54 |
-| Focus pillar | League |
+| Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | Lab L5 OG live data rows (NEXT.md lead) |
-| Last commit | `845d9d1a1` |
+| Next slice | lab-og-breakouts-gate-c-live (epic atom 2/3) |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

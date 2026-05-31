@@ -591,6 +591,47 @@ function extractBuySellRows(obj: Record<string, unknown>, positionFilter: string
   return [...buyRows, ...sellRows].slice(0, 6);
 }
 
+/** Dynasty dashboard OG — top5 → movers → value picks (matches DynastyDashboardRenderer). */
+function extractDashboardRows(obj: Record<string, unknown>): OgRow[] {
+  const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
+  const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
+  const fallers = Array.isArray(obj.fallers) ? (obj.fallers as Record<string, unknown>[]) : [];
+  const valuePicks = Array.isArray(obj.value_picks)
+    ? (obj.value_picks as Record<string, unknown>[])
+    : [];
+  const movers = [...risers, ...fallers];
+  const seen = new Set<string>();
+  const rows: OgRow[] = [];
+
+  const push = (p: Record<string, unknown>, stat: number, statLabel: string) => {
+    const id = String(p.player_id ?? p.full_name ?? "");
+    const name = String(p.full_name ?? p.name ?? p.player_name ?? "");
+    if (!name.trim() || (id && seen.has(id))) return;
+    if (id) seen.add(id);
+    rows.push({
+      name,
+      position: String(p.position ?? p.pos ?? ""),
+      team: String(p.team ?? p.team_abbr ?? ""),
+      stat,
+      statLabel,
+    });
+  };
+
+  for (const p of top5) {
+    push(p, Number(p.trade_value ?? 0), "Value");
+    if (rows.length >= 6) return rows;
+  }
+  for (const p of movers) {
+    push(p, Number(p.rank_diff ?? 0), "Chg");
+    if (rows.length >= 6) return rows;
+  }
+  for (const p of valuePicks) {
+    push(p, Number(p.trade_value ?? 0), "Value");
+    if (rows.length >= 6) return rows;
+  }
+  return rows;
+}
+
 function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
@@ -599,6 +640,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   if (slug === "buysell") {
     const buySellRows = extractBuySellRows(obj, positionFilter);
     if (buySellRows.length > 0) return buySellRows;
+  }
+
+  if (slug === "dashboard") {
+    const dashboardRows = extractDashboardRows(obj);
+    if (dashboardRows.length > 0) return dashboardRows;
   }
 
   if (slug === "weekly" && Array.isArray(obj.players)) {

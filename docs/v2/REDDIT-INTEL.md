@@ -339,6 +339,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 59
 - **Screenshot potential:** Weekly heatmap + prospect big board cards now match in-product column semantics on preview hosts
 
+## 2026-05-31 — Dynasty dashboard pulse cards
+
+- **Pattern:** r/DynastyFF threads screenshot riser/faller boards with rank-diff callouts, not flat top-5 lists.
+- **Razzle slice:** Lab L5 atom 1 — dashboard OG export mirrors panel top5 → movers → value picks order.
+
 ## 2026-05-31 — Strengths OG shares
 
 - **Pattern:** Dynasty Twitter shares graded strength callouts (A+/B tiers) more than raw percentile tables.

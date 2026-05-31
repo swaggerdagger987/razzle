@@ -7,6 +7,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-dashboard-live-extract | f6e0985f3 | SHIP | NEXT.md Lab L5 epic opened; dashboard OG matches panel row order.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Explore L5 margin epic 1/4; OG matches screener staff notes.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | SHIP | Trade Finder GTM epic complete; Bones hallway on export (T6).
 2026-05-31 | lab-og-from-panel-gate-c-rest | ee6b78ea6 | SHIP | Formula OG epic complete; prospects/tradevalues snapshot trust.

@@ -1,33 +1,32 @@
 {
   "epic_status": "active",
-  "big_problem": "Bureau waiver and schedule exports lack the terracotta watermark band — league screenshots don't match H2H/Lab brand gravity.",
-  "epic_title": "League L5 — Bureau advanced tabs OG watermark parity",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "big_problem": "Lab OG export cards still diverge from in-product panel rows — Reddit screenshots show generic ranks instead of the dynasty pulse the user just saw.",
+  "epic_title": "Lab L5 — OG export cards match in-product panel rows",
+  "parity_ref": "Explore L5 / Lab L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-waiver-og-watermark-band",
-      "title": "Waiver tendencies OG terracotta watermark band",
-      "status": "done",
-      "merge_commit": "7f7a22676"
+      "id": "lab-og-dashboard-live-extract",
+      "title": "Dashboard OG live extract mirrors DynastyDashboardRenderer snapshot",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-sos-og-watermark-band",
-      "title": "Strength of schedule OG terracotta watermark band",
-      "status": "done",
-      "merge_commit": "ee6b78ea6"
+      "id": "lab-og-breakouts-gate-c-live",
+      "title": "Breakouts OG Gate C pytest for live fetch path",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "bureau-waiver-og-gate-c-pytest",
-      "title": "Waiver OG Gate C pytest + curl guard",
-      "status": "done",
-      "merge_commit": "845d9d1a1"
+      "id": "lab-og-prospects-loading-snapshot",
+      "title": "Prospects loading-state sample snapshot for export preview",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:15:00Z",
+  "next_atom_id": "lab-og-dashboard-live-extract",
+  "created_at": "2026-05-31T18:00:00Z",
+  "updated_at": "2026-05-31T18:00:00Z",
   "completed_epics": [
     {
       "id": "league-l5-bureau-og-watermark-parity",
@@ -40,18 +39,6 @@
       "status": "complete",
       "last_atom": "lab-og-watermark-display-name",
       "merge_commit": "338709883"
-    },
-    {
-      "id": "lab-l5-og-hallway-deep-links",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-snapshot-player",
-      "merge_commit": "1a12d9c0b"
-    },
-    {
-      "id": "league-l5-trade-finder-gtm",
-      "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
     }
   ]
 }

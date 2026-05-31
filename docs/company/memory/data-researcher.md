@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-dashboard-live-extract | f6e0985f3 | PASS | Dynasty pulse riser/faller cards match r/DynastyFF share patterns.
 2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | PASS | Gate C guards keep waiver OG screenshot-ready without manual curl.
 2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | PASS | Waiver archetype OG cards match league-thread share pattern.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
