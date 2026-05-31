@@ -75,6 +75,13 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   dashboard: "rank_diff",
 };
 
+/** Panel-specific LIVE sticker copy when nflverse rows render (Launch-10). */
+function liveStickerLabel(slug: string): string {
+  if (slug === "weekly") return "LIVE · hottest week";
+  if (slug === "prospects") return "LIVE · big board";
+  return "LIVE · nflverse rows";
+}
+
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
   "prospects",
@@ -716,7 +723,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            LIVE · nflverse rows
+            {liveStickerLabel(slug)}
           </div>
         ) : null}
 
