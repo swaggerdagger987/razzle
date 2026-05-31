@@ -1,7 +1,7 @@
 {
   "date": "2026-05-31",
   "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product.",
-  "epic": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
+  "epic": "League L5 — Unhide Bureau tabs (atom) + Bureau behavioral share parity (active epic)",
   "atom_id": "league-build-profiles-tab",
   "slice_title": "Unhide Build Profiles tab with Atlas renderer",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
