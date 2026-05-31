@@ -1,35 +1,27 @@
 {
   "date": "2026-05-31",
   "big_problem": "Lab OG export cards must show the same player rows the user sees in-panel — not generic demo fallbacks when live data is already on screen.",
-  "epic": "Lab L5 — OG cards mirror in-product rows (4 atoms)",
-  "slice_title": "In-panel snapshot rows on dashboard OG export",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "epic": "Lab L5 — OG cards mirror in-product rows",
+  "slice_title": "In-panel snapshot rows on buy-sell OG export",
+  "parity_ref": "Explore L5 — Lab panel OG live data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — PNG ≥40KB with rows matching snapshot",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/buysell with snapshot shows from your panel",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/LabOgExportLink.tsx",
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx"
+    "apps/web/components/lab/renderers/BuySellRenderer.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 1,
+  "max_lines": 45,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-dash-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1&snapshot=...'"
+    "node -e \"const c=[{n:'JaMarr Chase',p:'WR',t:'CIN',s:92,sl:'Grade'},{n:'Bijan Robinson',p:'RB',t:'ATL',s:88,sl:'Grade'}]; console.log(Buffer.from(JSON.stringify(c)).toString('base64url'))\" | read SNAP && curl -s -o /tmp/og-buysell-snap.png -w '%{http_code} %{size_download}' \"http://localhost:3000/og/buysell?download=1&snapshot=$SNAP\"",
+    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/buysell?download=1'"
   ],
   "out_of_scope": [
-    "Wire all launch-10 renderers (atom 3)",
-    "Bureau H2H export",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "new npm deps"
+    "OG route changes",
+    "Other launch-10 renderers",
+    "NORTH_STAR / DESIGN edits"
   ],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "builder_mode": "composer-surgical"
 }
