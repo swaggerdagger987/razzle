@@ -20,10 +20,7 @@
   ],
   "out_of_scope": ["route.tsx changes", "NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  }
+  "content_commit": "5a32e03de",
+  "reality": "PASS",
+  "merge": "pending"
 }
