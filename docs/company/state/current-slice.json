@@ -1,5 +1,36 @@
 {
   "date": "2026-05-31",
+<<<<<<< HEAD
+  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
+  "epic": "Room L5 — briefing GTM export",
+  "slice_title": "Briefing OG terracotta watermark + Room deep link",
+  "atom_id": "room-briefing-watermark",
+  "parity_ref": "Room L5 — GTM export slice",
+  "depth_ref": "Room L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "trust_pillars": ["T1", "T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/briefing/route.tsx",
+    "apps/api/tests/test_briefing_og_route.py"
+  ],
+  "max_files": 2,
+  "max_lines": 60,
+  "acceptance_commands": [
+    "pytest apps/api/tests/test_briefing_og_route.py -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-briefing.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/briefing?download=1'"
+  ],
+  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  },
+  "status": "shipped",
+  "content_commit": "2b9c85dbd"
+=======
   "big_problem": "Lab OG cards are screenshot dead-ends — dynasty Twitter can't click back into the panel with the same filters they exported.",
   "epic": "Lab L5 — OG hallway deep links (atom 1/3)",
   "slice_title": "lab-og-tolab-watermark — Launch-10 OG band uses typed toLab() path",
@@ -24,4 +55,5 @@
     "Snapshot query round-trip"
   ],
   "builder_mode": "composer-surgical"
+>>>>>>> origin/razzle-v2-redesign
 }
