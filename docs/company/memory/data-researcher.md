@@ -39,4 +39,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Cycle 86 Trade Network copy link | f6ca80c9 | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | weekly OG PPG | f6ca80c9 | skip | no new Reddit intel
-2026-05-31 | breakouts OG RBS | da33eafd | skip | legacy API uses rbs_score field
+2026-05-31 | breakouts OG RBS | 9f5ef781 | skip | legacy API uses rbs_score field

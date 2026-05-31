@@ -42,4 +42,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 Build Profiles tab | f6ca80c9 | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
 2026-05-31 | Factory open cycle 1 Schedule tab | f6ca80c9 | keep | dedup waiver a2536dcc; HIDDEN empty; epic complete
 2026-05-31 | Factory open cycle 1 weekly OG PPG | f6ca80c9 | keep | L5 fidelity epic atom 2/3
-2026-05-31 | Factory open cycle 1 breakouts OG RBS | da33eafd | keep | L5 fidelity epic complete 3/3
+2026-05-31 | Factory open cycle 1 breakouts OG RBS | 9f5ef781 | keep | L5 fidelity epic complete 3/3
