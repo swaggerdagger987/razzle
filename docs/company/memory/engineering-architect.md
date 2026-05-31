@@ -2,6 +2,7 @@
 
 2026-05-31 | self-scout snapshot | c2de8dad | keep | 3-file contract; mirrors power-rankings codec pattern.
 
+2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
