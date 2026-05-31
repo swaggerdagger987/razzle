@@ -1,10 +1,8 @@
-cycle: 153
+cycle: 150
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: League
 focus_layer: L5
-next_slice: explore-og-margin-note-rows
-last_keep_cycle: 153
-last_commit: 0fc4932b7
-explore_l5_og_margin_epic: active
-lab_l5_og_demo_trust_epic: complete
-lab_l5_og_hallway_epic: complete
+next_slice: league-monte-carlo-og-snapshot
+last_keep_cycle: 150
+last_commit: 4cebb6143
+league_l5_monte_carlo_gtm_epic: atom 1/3

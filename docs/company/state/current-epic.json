@@ -1,66 +1,34 @@
 {
   "epic_status": "active",
-  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
-  "epic_title": "Explore L5 — OG screener agent margin notes",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
-  "depth_ref": "Explore L5",
+  "big_problem": "Bureau Monte Carlo screenshots don't route viewers back into the sim — OG footer lacks the terracotta hallway band.",
+  "epic_title": "League L5 — Bureau Monte Carlo GTM export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "explore-og-margin-note-lead",
-      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
+      "id": "league-monte-carlo-og-watermark",
+      "title": "Monte Carlo OG terracotta watermark + toLeague band",
       "status": "done",
-      "merge_commit": "0fc4932b7"
+      "merge_commit": "4cebb6143"
     },
     {
-      "id": "explore-og-margin-note-rows",
-      "title": "Margin notes on top-3 OG screener rows",
+      "id": "league-monte-carlo-og-snapshot",
+      "title": "Monte Carlo OG snapshot matches in-panel odds board",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "explore-og-margin-note-sticker",
-      "title": "LIVE staff sticker when OG rows carry margin notes",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "explore-og-margin-note-college",
-      "title": "College universe margin notes on OG export",
+      "id": "league-monte-carlo-og-live-sticker",
+      "title": "LIVE vs SAMPLE stickers on Monte Carlo OG",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-margin-note-rows",
-  "created_at": "2026-05-31T11:22:30Z",
-  "updated_at": "2026-05-31T11:30:00Z",
+  "next_atom_id": "league-monte-carlo-og-snapshot",
+  "created_at": "2026-05-31T11:25:00Z",
+  "updated_at": "2026-05-31T11:35:00Z",
   "completed_epics": [
-    {
-      "id": "lab-l5-launch10-og-demo-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-demo-blurbs",
-      "merge_commit": "3705fdce8"
-    },
-    {
-      "id": "lab-l5-empty-board-og-sample-cards",
-      "status": "complete",
-      "last_atom": "lab-weekly-empty-export",
-      "merge_commit": "088cebc07"
-    },
-    {
-      "id": "lab-l5-formula-og-live-parity",
-      "status": "complete",
-      "last_atom": "lab-og-from-panel-gate-c-rest",
-      "merge_commit": "0b6730166"
-    },
-    {
-      "id": "league-l5-trade-finder-gtm",
-      "status": "complete",
-      "last_atom": "bureau-trade-finder-copy-link",
-      "merge_commit": "a6930ca13"
-    },
-    {
-      "epic_title": "Lab L5 — OG hallway deep links",
-      "completed_at": "2026-05-31T16:30:00Z"
-    }
+    "lab-l5-og-hallway-deep-links",
+    "lab-l5-og-export-live-panel-rows"
   ]
 }

@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 153 — Explore OG lead-row margin note)
+**Last updated:** 2026-05-31 (factory cycle 150 — Monte Carlo OG terracotta watermark band)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 153 |
+| Cycle | 150 |
 | Last board | 54 |
-| Focus pillar | Explore |
+| Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | explore-og-margin-note-rows (epic atom 2/4) |
-| Last commit | `0fc4932b7` |
+| Next slice | league-monte-carlo-og-snapshot |
+| Last commit | `4cebb6143` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
@@ -30,6 +30,6 @@ Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export f
 
 | Area | State | Notes |
 |------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export + margin note on OG lead row |
+| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
 | Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
 | Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |
