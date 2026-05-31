@@ -1,4 +1,4 @@
-2026-05-31 | league-monte-carlo-og-watermark | f6e0985f3 | SHIP | Factory cycle 1; Monte Carlo GTM epic atom 1/3.
+2026-05-31 | league-monte-carlo-og-watermark | 4cebb6143 | SHIP | Factory cycle 1; Monte Carlo GTM epic atom 1/3.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 

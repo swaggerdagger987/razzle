@@ -4,5 +4,5 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-monte-carlo-og-snapshot
 last_keep_cycle: 150
-last_commit: f6e0985f3
+last_commit: 4cebb6143
 league_l5_monte_carlo_gtm_epic: atom 1/3
