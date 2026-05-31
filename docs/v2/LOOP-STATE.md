@@ -1,9 +1,9 @@
-cycle: 150
+cycle: 154
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: pick from PARITY/NEXT (Lab live OG rows or Bureau H2H)
-last_keep_cycle: 150
-last_commit: 792e9f77d
-lab_l5_formula_og_epic: complete
-lab_l5_og_hallway_deep_links_epic: active
+next_slice: bureau-h2h-og-exported-pytest
+last_keep_cycle: 154
+last_commit: 5b60ea23d
+league_l5_h2h_gtm_epic: active
+league_l5_trade_finder_gtm_epic: complete
