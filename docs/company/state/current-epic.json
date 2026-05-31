@@ -9,12 +9,12 @@
       "id": "lab-og-live-sticker-rankings-trade-breakouts",
       "title": "OG LIVE stickers — rankings, tradevalues, breakouts",
       "status": "done",
-      "merge_commit": "4c42539e"
+      "merge_commit": "ad24a219"
     },
     {
       "id": "lab-og-live-sticker-efficiency-aging-buysell",
       "title": "OG LIVE stickers — efficiency, aging, buysell",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -26,7 +26,7 @@
   ],
   "next_atom_id": "lab-og-live-sticker-efficiency-aging-buysell",
   "created_at": "2026-05-31T12:30:00Z",
-  "updated_at": "2026-05-31T13:00:00Z",
+  "updated_at": "2026-05-31T13:15:00Z",
   "completed_epics": [
     {
       "id": "lab-l2-sidebar-agent-groups",
@@ -35,28 +35,10 @@
       "merge_commit": "e75ec714"
     },
     {
-      "id": "lab-l5-og-gamelog-live-week-rows",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-snapshot-default",
-      "merge_commit": "e2a3ce8a"
-    },
-    {
-      "id": "lab-l5-launch10-og-live-sticker",
-      "status": "complete",
-      "last_atom": "lab-og-live-sticker-prospects-weekly",
-      "merge_commit": "5bb77346"
-    },
-    {
       "id": "lab-l5-og-live-fetch-merge",
       "status": "complete",
       "last_atom": "lab-og-gamelog-player-default",
       "merge_commit": "e37cd230"
-    },
-    {
-      "id": "lab-l4-pro-gates-upgrade-not-error",
-      "status": "complete",
-      "last_atom": "lab-pro-gate-hallway-teasers",
-      "merge_commit": "f56fdbd8"
     }
   ]
 }

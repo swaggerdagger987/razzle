@@ -1,27 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab L5 OG cards still say generic LIVE nflverse rows on flagship panels — screenshots don't signal dynasty tiers, trade curves, or RBS boards.",
+  "big_problem": "Lab L5 OG cards still say generic LIVE nflverse rows on mid-tier Launch-10 panels — efficiency, aging, and buy/sell exports don't name the intel.",
   "epic": "Lab L5 — OG LIVE stickers name the intel",
-  "slice_title": "OG LIVE stickers — rankings, tradevalues, breakouts",
-  "atom_id": "lab-og-live-sticker-rankings-trade-breakouts",
+  "slice_title": "OG LIVE stickers — efficiency, aging, buysell",
+  "atom_id": "lab-og-live-sticker-efficiency-aging-buysell",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "ACCEPTANCE Gate 6 — OG PNG ≥40KB with live rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 35,
+  "max_lines": 20,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/rankings?download=1'",
-    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/tradevalues?download=1'",
-    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/breakouts?download=1'"
+    "curl -s -o /tmp/og-efficiency.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/efficiency?download=1'",
+    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/aging?download=1'",
+    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/buysell?download=1'"
   ],
   "out_of_scope": [
-    "New OG routes",
+    "rankings/tradevalues/breakouts (deduped on base ad24a219)",
     "API changes",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "Other Launch-10 panels (next atoms)"
+    "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
   "votes": {

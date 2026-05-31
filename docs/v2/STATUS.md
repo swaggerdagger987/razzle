@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 129 — Lab L5 OG LIVE stickers rankings/tradevalues/breakouts)
+**Last updated:** 2026-05-31 (factory cycle 130 — Lab L5 OG LIVE stickers efficiency/aging/buysell)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 129 |
+| Cycle | 130 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-og-live-sticker-efficiency-aging-buysell |
-| Last commit | `4c42539e` |
-
-Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
+| Next slice | lab-og-live-sticker-dashboard-gamelog |
+| Last commit | pending |
 
 ---
 
