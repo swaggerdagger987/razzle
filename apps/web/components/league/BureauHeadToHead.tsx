@@ -174,7 +174,7 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
             {you?.user_id && (
               <BureauH2HShareBar
                 leagueId={leagueId}
-                userId={String(you.user_id ?? searchParams.get("user") ?? "")}
+                userId={you.user_id}
                 opponentId={opponentId || undefined}
                 snapshot={{
                   you: { team: you.team, record: you.record, ppg: you.ppg },

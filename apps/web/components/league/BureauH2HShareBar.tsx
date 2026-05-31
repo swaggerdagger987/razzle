@@ -7,6 +7,7 @@ interface Props {
   leagueId: string;
   userId: string;
   opponentId?: string;
+  /** Encodes in-panel rivalry so OG card matches Bureau view. */
   snapshot?: H2hSnapshotPayload;
 }
 
