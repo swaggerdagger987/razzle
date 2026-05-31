@@ -180,13 +180,14 @@ export async function GET(req: Request) {
               transform: "rotate(-2deg)",
               marginBottom: 12,
               fontWeight: 700,
+              display: "flex",
             }}
           >
-            LIVE · league rivalry
+            LIVE · Sleeper rivalry
           </div>
         ) : null}
 
-        {isDemo ? (
+        {isDemo && !isSnapshot ? (
           <div
             style={{
               fontFamily: "Caveat",
@@ -201,6 +202,7 @@ export async function GET(req: Request) {
               transform: "rotate(2deg)",
               marginBottom: 12,
               fontWeight: 700,
+              display: "flex",
             }}
           >
             SAMPLE · demo rivalry preview
