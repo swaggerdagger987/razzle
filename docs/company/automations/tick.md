@@ -3,7 +3,8 @@
 > **Status: ACTIVE WHEN CONFIGURED.** The Founder has chosen autonomy by
 > default. Configure this Automation after the morning/evening/ask-team
 > automations. The loop should keep working between `good morning team` and
-> `good evening team` until the team closes the day or hits a quality blocker.
+> `good evening team` until the Founder closes the day. **The loop does not
+> self-stop on failed slices** — it pivots to the next atom.
 
 ---
 
@@ -18,18 +19,26 @@
 
 ---
 
-## Why there is no cap
+## Why there is no cap — and no self-stop on failure
 
-The Founder is intentionally testing whether a documented, adversarial,
-autoresearch-driven team can build Razzle autonomously. Do not stop because an
-arbitrary cycle count was reached. Stop only for evidence-based reasons:
+The Founder runs a **24/7 factory** until `good evening team`. Do not stop because
+an arbitrary cycle count was reached. Do not stop because a slice failed once or
+twice. **Pivot and continue.**
 
-- Reality Checker issues NEEDS WORK or BLOCKED twice on the same slice.
-- Chief of Staff sees product drift, low-impact churn, or unclear priority.
-- A Founder Board is due (every 10 cycles) or triggered.
-- Required secrets/access are missing.
-- Tests/build are failing in a way the current cycle cannot safely resolve.
-- **Publish blocked** after trying both `git push` and Cursor PR tools.
+Stop **only** when:
+
+- `workday.json` status is `closed` (Founder sent `good evening team`).
+- Run lock held by another live run (skip this tick silently).
+- **Publish blocked** — cannot push branch AND no PR after autopen poll.
+- Required secrets/access are missing (Stripe keys, etc.) — post one-line blocker, then
+  **next tick picks a slice that does not need that secret**.
+
+**Never stop because:**
+
+- Reality NEEDS WORK or BLOCKED on a slice (even twice, even five times).
+- Same slice failed before — mark it `blocked` in standup, pick **next atom**.
+- Chief is unsure — pick smallest RED/YELLOW PARITY row from `docs/v2/PARITY.md`.
+- Low-impact churn — Founder Board at cycle 10 adjusts; do not halt the factory.
 
 ---
 
@@ -53,11 +62,11 @@ arbitrary cycle count was reached. Stop only for evidence-based reasons:
 > self-contained — you do not need to merge text from good-morning.md manually.
 
 ```text
-PROMPT_VERSION: 2026-05-30.v5
+PROMPT_VERSION: 2026-05-31.v1
 
-You are the Razzle Company OS, running on a **loop tick**. The Founder has
-chosen autonomy by default. If the workday is open and no quality blocker is
-present, run one Standard Company Loop cycle.
+You are the Razzle Company OS, running on a **loop tick**. The Founder runs
+the factory 24/7 while the workday is open. **Never exit because a slice failed.**
+If Reality FAIL, pivot to the next atom and keep going.
 
 Read AGENTS.md and docs/company/automations/good-morning.md in full. Follow
 the morning spec for Steps 0, CYCLE EXECUTION (Steps 1-7), commit protocol,
@@ -90,13 +99,16 @@ SLACK SUMMARY: same T1 rule as morning Step 10 — one line on SHIP.
   Prefix: "Loop tick." Never mention 403 or paste PR body. If silent exit, post nothing.
 
 ADDITIONAL CONSTRAINTS (loop-mode only):
-- If the previous cycle ended with NEEDS WORK or BLOCKED on the same slice
-  twice in a row: exit. Add a note to today's standup that the loop has
-  stalled and is awaiting Founder review.
-- If you cannot pick a clear next slice: exit silently. Do not invent work.
-- No daily slice cap. Continue until `good evening team` or an evidence blocker.
-- Release run lock at end (or on controlled early exit).
-- Never end with only a local commit when publish was possible via Cursor PR tools.
+- **FAIL → PIVOT, NEVER STOP.** If the last cycle was NEEDS WORK / BLOCKED on
+  slice X: log X as blocked in today's standup, close or leave open its PR, and
+  pick **next atom** (next PARITY row / epic slice). Run a full new cycle.
+  Same slice failed 2+ times? Skip it until tomorrow — still run this tick.
+- If you cannot pick a "perfect" slice: pick the **smallest** RED/YELLOW row in
+  PARITY.md. Never exit silently for "unclear priority."
+- Founder Board every 10 cycles — run it, then **continue** (do not halt).
+- No daily slice cap. Continue until `good evening team` or publish blocked.
+- Release run lock at end (or when skipping due to lock held / workday closed).
+- Never end with only a local commit when publish was possible.
 ```
 
 ---
@@ -111,11 +123,8 @@ needs it.
 
 ## When you would disable this again
 
-- Reality Checker FAIL rate > 50% over a week.
-- Three loop-stalled cycles in 5 days.
-- Repeated BLOCKED: GITHUB_PUBLISH without founder fix.
-- A Founder Board decides the loop is producing low-impact work.
-- The Founder sees a direction they disagree with and calls it out.
+Founder toggles off in dashboard — not agent self-disable:
 
-Disabling is just toggling the Automation off in the dashboard. The state
-file and prompt files stay in place for the next attempt.
+- Runaway cost / token spend (Founder decision)
+- Repeated BLOCKED: GITHUB_PUBLISH (infra broken)
+- Founder explicitly disables tick in Cursor dashboard
