@@ -1,26 +1,19 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-snapshot",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "slice_title": "DashboardRenderer encodes top-6 comp match rows in dynasty-comps OG snapshot",
+  "big_problem": "Lab OG export cards ignore position tabs — WR filter still exports the full board.",
+  "epic": "Lab L5 — OG export honors position filters",
+  "slice_title": "Trade values export passes active position filter",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
+  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB with position param",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
-  ],
+  "allowed_paths": ["apps/web/components/lab/renderers/TradeValuesRenderer.tsx"],
   "max_files": 1,
-  "max_lines": 40,
+  "max_lines": 5,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
+    "curl -s -o /tmp/og-tv-wr.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/tradevalues?download=1&position=WR'"
   ],
-  "out_of_scope": [
-    "OG route changes",
-    "DynastyCompsRenderer (already has snapshot)",
-    "NORTH_STAR / DESIGN edits"
-  ],
+  "out_of_scope": ["OG route changes", "other panels", "API schema"],
   "builder_mode": "composer-surgical"
 }
