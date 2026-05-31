@@ -12,7 +12,7 @@
 
 ```text
 npm run build --workspace=apps/web → exit 0
-JWT_SECRET=test-secret pytest apps/api/tests -q → 59 passed, 5 skipped
+JWT_SECRET=test-secret pytest apps/api/tests -q → 62 passed, 5 skipped (post base sync)
 curl http://127.0.0.1:3000/og/rankings?position=WR&download=1 → 200 58065 bytes PNG
 curl http://127.0.0.1:3000/og/buysell?position=WR&download=1 → 200 51950 bytes PNG
 ```
