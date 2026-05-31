@@ -477,6 +477,51 @@ function extractDynastyCompsRows(comps: Record<string, unknown>[]): OgRow[] {
     .slice(0, 6);
 }
 
+/** Dynasty dashboard OG — mirrors DynastyDashboardRenderer ogSnapshotRows. */
+function extractDashboardRows(obj: Record<string, unknown>): OgRow[] {
+  const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
+  const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
+  const fallers = Array.isArray(obj.fallers) ? (obj.fallers as Record<string, unknown>[]) : [];
+  const valuePicks = Array.isArray(obj.value_picks)
+    ? (obj.value_picks as Record<string, unknown>[])
+    : [];
+  if (!top5.length && !risers.length && !fallers.length && !valuePicks.length) {
+    return [];
+  }
+
+  const seen = new Set<string>();
+  const rows: OgRow[] = [];
+
+  const push = (row: Record<string, unknown>, stat: number, statLabel: string) => {
+    const name = String(row.full_name ?? row.name ?? row.player_name ?? "");
+    const playerId = String(row.player_id ?? name);
+    if (!name.trim() || seen.has(playerId)) return;
+    seen.add(playerId);
+    rows.push({
+      name,
+      position: String(row.position ?? row.pos ?? ""),
+      team: String(row.team ?? row.team_abbr ?? ""),
+      stat,
+      statLabel,
+    });
+  };
+
+  for (const p of top5) {
+    push(p, Number(p.trade_value ?? 0), "Value");
+    if (rows.length >= 6) return rows;
+  }
+  for (const p of [...risers, ...fallers]) {
+    push(p, Number(p.rank_diff ?? 0), "Chg");
+    if (rows.length >= 6) return rows;
+  }
+  for (const p of valuePicks) {
+    push(p, Number(p.trade_value ?? 0), "Value");
+    if (rows.length >= 6) return rows;
+  }
+
+  return rows;
+}
+
 /** Gamelog OG — top weeks by FPTS (matches GamelogRenderer ogSnapshotRows). */
 function extractGamelogWeekRows(data: Record<string, unknown>): OgRow[] {
   const weeks = data.weeks as Array<{ week?: number; fpts?: number }> | undefined;
@@ -591,6 +636,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
       const prospectRows = extractProspectsRows(source, positionFilter);
       if (prospectRows.length > 0) return prospectRows;
     }
+  }
+
+  if (slug === "dashboard") {
+    const dashboardRows = extractDashboardRows(obj);
+    if (dashboardRows.length > 0) return dashboardRows;
   }
 
   if (slug === "gamelog" && Array.isArray(obj.weeks)) {
@@ -740,6 +790,10 @@ function rankOgRowsForPanel(slug: string, rows: OgRow[], positionFilter: string)
   let out = rows.filter((r) => r.name.trim().length > 0);
   if (positionFilter) {
     out = out.filter((r) => r.position === positionFilter);
+  }
+  // Dashboard OG preserves renderer order (top5 Value → movers Chg → value picks).
+  if (slug === "dashboard") {
+    return out.slice(0, 6);
   }
   if (PANEL_OG_STAT_KEY[slug]) {
     out = [...out].sort((a, b) => b.stat - a.stat).slice(0, 6);

@@ -1,28 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau Trade Finder screenshots look like a draft — no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
-  "epic": "League L5 — Bureau Trade Finder GTM export (atom 2/3)",
-  "slice_title": "Trade Finder OG — snapshot param for in-panel export rows",
-  "atom_id": "league-trade-finder-og-snapshot",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "big_problem": "Lab OG cards still flatten dynasty dashboard into one stat column — exports do not match the Value/Chg rows users see in-panel, so Reddit screenshots look generic.",
+  "epic": "Lab L5 — OG live panel rows parity (atom 1/3)",
+  "slice_title": "Dashboard OG — live extract mirrors top5 Value + riser Chg rows",
+  "atom_id": "lab-og-dashboard-live-extract",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-trade-finder-og-snapshot.ts",
-    "apps/web/app/og/trade-finder/route.tsx",
-    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
-    "apps/web/components/league/BureauTradeFinder.tsx",
-    "apps/api/tests/test_trade_finder_og_snapshot.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_og_dashboard_live_extract.py"
   ],
-  "max_files": 5,
-  "max_lines": 220,
+  "max_files": 2,
+  "max_lines": 120,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_trade_finder_og_snapshot.py apps/api/tests/test_trade_finder_og_watermark.py -q --noconftest",
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_dashboard_live_extract.py apps/api/tests/test_og_launch10_formula_live.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-trade-finder.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/trade-finder?download=1'"
+    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dashboard?download=1'"
   ],
-  "out_of_scope": ["Room hallway atom", "API schema changes", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": [
+    "efficiency/aging formula atoms",
+    "API schema changes",
+    "NORTH_STAR/DESIGN/DECISIONS"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -30,6 +31,5 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "19a1af0e9"
+  "status": "in_progress"
 }
