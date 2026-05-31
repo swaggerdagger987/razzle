@@ -5,17 +5,12 @@ import {
   bureauTradeFinderOgSnapshotToData,
   decodeBureauTradeFinderOgSnapshot,
   type BureauTradeFinderOgMatch,
+  type TradeFinderOgData,
 } from "@/lib/bureau-trade-finder-og-snapshot";
 
 export const runtime = "edge";
 
-type TradeFinderData = {
-  matches?: BureauTradeFinderOgMatch[];
-  hero_match?: BureauTradeFinderOgMatch | null;
-  needs?: string[];
-  surplus?: string[];
-  error?: string;
-};
+type TradeFinderData = TradeFinderOgData & { error?: string };
 
 const DEMO_MATCHES: BureauTradeFinderOgMatch[] = [
   {
@@ -100,17 +95,18 @@ export async function GET(req: Request) {
   const snapshot = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
   const isSnapshot = Boolean(snapshot);
   const live = isSnapshot ? null : await fetchTradeFinder(req, league, user);
-  const isLive = isSnapshot || Boolean(live?.matches?.length);
+  const isLive = !isSnapshot && Boolean(live?.matches?.length);
   const isDemo = !isSnapshot && !isLive;
-  const fromSnapshot = isSnapshot && snapshot ? bureauTradeFinderOgSnapshotToData(snapshot) : null;
-  const matches = isDemo
-    ? DEMO_MATCHES
-    : (fromSnapshot?.matches ?? live!.matches)!.slice(0, 3);
-  const hero = isDemo
-    ? DEMO_MATCHES[0]
-    : (fromSnapshot?.hero_match ?? live!.hero_match ?? matches[0]);
-  const needs = isDemo ? DEMO_META.needs : (fromSnapshot?.needs ?? live!.needs ?? []);
-  const surplus = isDemo ? DEMO_META.surplus : (fromSnapshot?.surplus ?? live!.surplus ?? []);
+  const panelData: TradeFinderOgData =
+    isSnapshot && snapshot
+      ? bureauTradeFinderOgSnapshotToData(snapshot)
+      : isLive
+        ? live!
+        : { matches: DEMO_MATCHES, hero_match: DEMO_MATCHES[0], needs: DEMO_META.needs, surplus: DEMO_META.surplus };
+  const matches = (panelData.matches ?? DEMO_MATCHES).slice(0, 3);
+  const hero = panelData.hero_match ?? matches[0];
+  const needs = panelData.needs ?? [];
+  const surplus = panelData.surplus ?? [];
   const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
   const bonesRoomPath = hero
     ? toRoom({
@@ -125,13 +121,6 @@ export async function GET(req: Request) {
         },
       })
     : "/room?agent=bones&from=trade-finder";
-  const subtitleSuffix = isSnapshot
-    ? " · exported from Bureau"
-    : isLive
-      ? ""
-      : league && user
-        ? " · sample preview (API unavailable)"
-        : " · sample preview";
 
   return new ImageResponse(
     (
@@ -177,12 +166,36 @@ export async function GET(req: Request) {
           Trade Finder
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {`value-matched league trades${subtitleSuffix}`}
+          {`value-matched league trades${
+            isSnapshot ? " · exported from panel" : isDemo ? " · sample preview" : ""
+          }`}
           {needs.length ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length ? ` · surplus ${surplus.join(", ")}` : ""}
         </div>
 
-        {isLive && !isDemo ? (
+        {isSnapshot ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#8b5cf6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            EXPORTED · panel trade rows
+          </div>
+        ) : null}
+
+        {isLive ? (
           <div
             style={{
               fontFamily: "Caveat",
@@ -200,11 +213,11 @@ export async function GET(req: Request) {
               display: "flex",
             }}
           >
-            {isSnapshot ? "LIVE · exported trade rows" : "LIVE · Sleeper trade paths"}
+            LIVE · Sleeper trade paths
           </div>
         ) : null}
 
-        {isDemo && !isSnapshot ? (
+        {isDemo ? (
           <div
             style={{
               fontFamily: "Caveat",

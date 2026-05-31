@@ -9,7 +9,7 @@ import {
 interface Props {
   leagueId: string;
   userId: string;
-  /** Encodes in-panel matches so OG card matches Bureau view. */
+  /** Encodes in-panel trade rows so OG card matches Bureau view. */
   snapshot?: BureauTradeFinderOgSnapshot;
 }
 

@@ -5,8 +5,8 @@ import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
 import { getSleeperUser } from "@/lib/sleeper";
-import { BureauTradeFinderShareBar } from "./BureauTradeFinderShareBar";
 import type { BureauTradeFinderOgSnapshot } from "@/lib/bureau-trade-finder-og-snapshot";
+import { BureauTradeFinderShareBar } from "./BureauTradeFinderShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -37,12 +37,7 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
   const surplus = (data.surplus as string[]) ?? [];
   const ogSnapshot: BureauTradeFinderOgSnapshot | undefined =
     matches.length > 0
-      ? {
-          matches,
-          hero_match: hero,
-          needs,
-          surplus,
-        }
+      ? { matches, hero_match: hero, needs, surplus }
       : undefined;
 
   return (
