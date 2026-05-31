@@ -2,7 +2,7 @@ cycle: 116
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-live-sticker-prospects-weekly
+next_slice: lab-og-live-demo-fallback-copy
 last_keep_cycle: 116
 last_commit: 4e905360
 lab_l5_og_live_rows_epic: active
