@@ -1,3 +1,11 @@
+2026-05-31 | lab-og-from-panel-breakouts-efficiency | 11c9c2a6 | SHIP | Factory cycle 1; Lab OG parity epic 1/4; NO_LOCK_GUARDRAIL.
+2026-05-31 | explore-in-product-margin-parity | d0f126be5 | SHIP | Factory cycle 1; margin epic complete; NO_LOCK_GUARDRAIL.
+2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | Factory cycle 1; dedup lead atom 7705dbf01 on base; lock #1462.
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | Factory cycle 1; H2H GTM epic 1/3; PR #1350.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Factory cycle 1; dedup snapshot on base.
+2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
+2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | 792e9f77d | SHIP | efficiency/aging formula_score OG; PR #1318.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4; lock #1415.
 2026-05-31 | league-og-pressure-map-watermark | 73d87cf79 | SHIP | Factory cycle 1 PR #1526.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | Factory open cycle 1; position-default epic 3/3; NO_LOCK_GUARDRAIL.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | Factory cycle 1; H2H GTM epic complete; dedup pytest on base.

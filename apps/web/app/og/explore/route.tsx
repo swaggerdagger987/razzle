@@ -35,6 +35,7 @@ const DEMO_NFL_ROWS: OgPlayer[] = [
   { full_name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 215.8 },
 ];
 
+/** Lead row fields must satisfy marginNoteForCollegeRow (QB pass volume → Hawkeye note). */
 const DEMO_COLLEGE_ROWS: OgPlayer[] = [
   { full_name: "Cam Ward", position: "QB", team: "MIA", stat: 4120, passing_yards: 4312 },
   { full_name: "Travis Hunter", position: "WR", team: "COLO", stat: 1189, total_yards: 1420 },

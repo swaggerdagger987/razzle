@@ -1,36 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-percentiles-tolab-wr",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity (atom 4/4 WR position)",
-  "slice_title": "Percentiles OG toLab WR position hallway",
-  "parity_ref": "Lab panel OG data rows",
+  "atom_id": "lab-og-from-panel-buysell-dashboard",
+  "big_problem": "Lab Launch-10 OG exports still need trust contracts on every panel — snapshot cards must prove live row extractors match in-product boards.",
+  "epic": "Lab L5 — OG live panel row parity (atom 2/4)",
+  "slice_title": "Buysell + dashboard FROM PANEL pytest and Gate C",
+  "parity_ref": "PARITY Explore/Lab L5 OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — percentiles OG PNG ≥40KB; watermark includes WR position",
+  "acceptance_ref": "FACTORY-DOD Gate C — snapshot PNG ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/api/tests/test_og_from_panel_sticker.py",
+    "docs/v2/evidence/2026-05-31-lab-og-from-panel-buysell-dashboard.md"
   ],
   "max_files": 2,
-  "max_lines": 20,
+  "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/percentiles-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/percentiles?force_demo=1&download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "Percentiles live API wiring",
-    "New panels",
+    "OG route behavior changes beyond extract guards",
+    "new panels",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP"
-  },
-  "status": "shipped",
-  "content_commit": "930e13926",
-  "reality": "PASS"
+  "status": "pending"
 }

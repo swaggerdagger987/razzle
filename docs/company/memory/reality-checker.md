@@ -1,3 +1,9 @@
+2026-05-31 | lab-og-from-panel-breakouts-efficiency | 11c9c2a6 | PASS | pytest 7; curl breakouts 58268B efficiency 58496B.
+2026-05-31 | explore-in-product-margin-parity | d0f126be5 | PASS | pytest 14; web build; no OG route change.
+2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | PASS | pytest 9; curl college OG 71510B.
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | pytest 6; curl h2h 76270B.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | pytest 7; curl efficiency 65774B.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
 2026-05-31 | league-og-pressure-map-watermark | 73d87cf79 | PASS | pytest 1; curl 63349B.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | PASS | pytest 10; curl breakouts 67718B.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | PASS | pytest 9; curl snapshot OG 76270B.

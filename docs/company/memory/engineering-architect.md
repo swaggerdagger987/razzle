@@ -1,3 +1,9 @@
+2026-05-31 | lab-og-from-panel-breakouts-efficiency | 11c9c2a6 | SHIP | pytest-only; SNAPSHOT_FROM_PANEL_SLUGS +2 slugs.
+2026-05-31 | explore-in-product-margin-parity | d0f126be5 | SHIP | Shared marginNoteForOgExploreRow path; 3 files.
+2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | 3 files; college demo pytest guards ≤80 lines.
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | 2 files; isSnapshot EXPORTED sticker.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | 2 files; generalized default position.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | 2 files; breakouts WR + rankings no-default pytest.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | 2 files; gate-c pytest imports codec DEMO_SNAPSHOT_PARAM.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.

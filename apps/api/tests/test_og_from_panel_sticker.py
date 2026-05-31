@@ -10,7 +10,14 @@ ROOT = Path(__file__).resolve().parents[3]
 ROUTE_TS = ROOT / "apps/web/app/og/[panel]/route.tsx"
 
 # Snapshot export panels with Gate C curl evidence — FROM PANEL trust sticker.
-SNAPSHOT_FROM_PANEL_SLUGS = ("rankings", "weekly", "prospects", "tradevalues")
+SNAPSHOT_FROM_PANEL_SLUGS = (
+    "rankings",
+    "weekly",
+    "prospects",
+    "tradevalues",
+    "breakouts",
+    "efficiency",
+)
 
 
 def _encode_snapshot(rows: list[dict]) -> str:
@@ -54,6 +61,24 @@ def test_tradevalues_live_extract_prefers_trade_value():
     assert '"formula_score"' in block
     assert '"trade_value"' in block
     assert block.index('"formula_score"') < block.index('"trade_value"')
+
+
+def test_breakouts_live_extract_prefers_rbs_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'slug === "breakouts"' in source
+    assert "breakoutsStatKeys" in source
+    idx = source.index("breakoutsStatKeys")
+    block = source[idx : idx + 360]
+    assert '"formula_score"' in block
+    assert '"rbs_score"' in block
+    assert block.index('"formula_score"') < block.index('"rbs_score"')
+
+
+def test_efficiency_live_extract_prefers_ppo():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'efficiency: "ppo"' in source
+    assert "most_efficient" in source
+    assert "Array.isArray(obj.most_efficient)" in source
 
 
 def test_snapshot_codec_matches_lab_export_link():
