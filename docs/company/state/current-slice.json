@@ -1,28 +1,31 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau Head-to-Head export cards must show the same rivalry matchup users see in-product — not generic demo squads when the panel has live league context.",
-  "epic": "League L5 — Bureau H2H export matches in-product rivalry",
-  "slice_title": "H2H export footer Atlas room deep-link with opponent team name",
-  "parity_ref": "Explore L5 — Bureau H2H export",
+  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
+  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
+  "slice_title": "Build Profiles tab unhidden with Atlas roster archetype renderer",
+  "atom_id": "league-build-profiles-tab",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3 + HALLWAY crossRoomLinkPresent",
-  "trust_pillars": ["T5", "T6"],
+  "acceptance_ref": "ACCEPTANCE Gate 3 — Bureau behavioral tabs return data",
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/head-to-head/route.tsx",
-    "apps/web/components/league/BureauH2HShareBar.tsx",
-    "apps/web/components/league/BureauHeadToHead.tsx"
+    "apps/web/components/league/BureauBuildProfiles.tsx",
+    "apps/web/components/league/BureauFeatureBody.tsx",
+    "apps/web/lib/bureau-features.ts"
   ],
   "max_files": 3,
-  "max_lines": 90,
+  "max_lines": 200,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/h2h-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/head-to-head?download=1'"
+    "node -e \"const fs=require('fs'); const s=fs.readFileSync('apps/web/lib/bureau-features.ts','utf8'); if(!/HIDDEN_BUREAU_SLUGS[^]*build-profiles/.test(s)) process.exit(0); else { console.error('build-profiles still hidden'); process.exit(1); }\""
   ],
-  "out_of_scope": [
-    "New API routes",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "Other Bureau tabs"
-  ],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["OG route", "API changes", "unhide waiver/SOS tabs", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  }
 }
