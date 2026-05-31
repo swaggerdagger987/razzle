@@ -16,7 +16,7 @@
   "max_files": 3,
   "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
@@ -26,6 +26,7 @@
   ],
   "content_commit": "cae3ed2aa",
   "reality": "PASS",
+  "merge": "pending",
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
