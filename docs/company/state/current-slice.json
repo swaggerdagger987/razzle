@@ -1,26 +1,28 @@
 {
   "date": "2026-05-31",
-<<<<<<< HEAD
-  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
-  "epic": "Lab L5 — formula-sorted OG live parity (atom 2/3)",
-  "slice_title": "Buy/sell OG live extract prefers formula_score + buy/sell lanes",
-  "atom_id": "lab-og-buysell-formula-live",
-  "parity_ref": "Lab L5 — panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "big_problem": "Bureau Trade Finder screenshots look like a draft — no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
+  "epic": "League L5 — Bureau Trade Finder GTM export",
+  "slice_title": "Trade Finder OG — snapshot param for in-panel export rows",
+  "atom_id": "league-trade-finder-og-snapshot",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_launch10_formula_live.py"
+    "apps/web/lib/bureau-trade-finder-og-snapshot.ts",
+    "apps/web/app/og/trade-finder/route.tsx",
+    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
+    "apps/web/components/league/BureauTradeFinder.tsx",
+    "apps/api/tests/test_trade_finder_og_watermark.py"
   ],
-  "max_files": 2,
-  "max_lines": 80,
+  "max_files": 5,
+  "max_lines": 120,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q --noconftest",
+    "JWT_SECRET=test pytest apps/api/tests/test_trade_finder_og_watermark.py -q",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1&position=WR&force_demo=1'"
+    "curl -s -o /tmp/tf-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/trade-finder?download=1&snapshot=<encoded>'"
   ],
-  "out_of_scope": ["BuySellRenderer UI", "rankings/breakouts", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS", "Stripe/billing"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -28,12 +30,7 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "fb4483341"
-=======
-  "atom_id": "league-trade-finder-og-watermark-live",
-  "slice_title": "Trade Finder OG — LIVE/SAMPLE stickers + terracotta watermark band",
-  "status": "shipped",
-  "content_commit": "db6537faf"
->>>>>>> origin/razzle-v2-redesign
+  "content_commit": "8530f40ff",
+  "reality": "PASS",
+  "merge": "pending"
 }
