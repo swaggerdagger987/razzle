@@ -23,7 +23,13 @@ def test_lab_og_watermark_helper_preserves_position_and_player():
     assert "{labLink}" in source
 
 
-def test_default_og_player_not_forced_into_tolab():
+def test_default_og_player_not_forced_into_tolab_except_gamelog():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert "DEFAULT_OG_PLAYER_ID" in source
-    assert "opts.playerId !== DEFAULT_OG_PLAYER_ID" in source
+    assert 'slug === "gamelog"' in source
+    assert "includeDefaultPlayer" in source
+
+
+def test_gamelog_tolab_includes_default_player_query():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "includeDefaultPlayer || opts.playerId !== DEFAULT_OG_PLAYER_ID" in source

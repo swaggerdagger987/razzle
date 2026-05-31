@@ -846,8 +846,11 @@ function labOgWatermarkLink(
   slug: string,
   opts: { positionFilter: string; playerId: string; playerScoped: boolean },
 ): string {
+  const includeDefaultPlayer = slug === "gamelog";
   const usePlayer =
-    opts.playerScoped && opts.playerId && opts.playerId !== DEFAULT_OG_PLAYER_ID;
+    opts.playerScoped &&
+    opts.playerId &&
+    (includeDefaultPlayer || opts.playerId !== DEFAULT_OG_PLAYER_ID);
   let path = toLab(
     slug,
     usePlayer
