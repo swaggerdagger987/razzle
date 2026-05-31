@@ -32,7 +32,7 @@
       "id": "league-l5-bureau-h2h-codec",
       "status": "complete",
       "last_atom": "bureau-h2h-snapshot-roundtrip-test",
-      "merge_commit": "d822b18d"
+      "merge_commit": "5e75875e"
     },
     {
       "id": "lab-l5-og-watermark-band",
