@@ -1,38 +1,44 @@
 {
+  "big_problem": "Bureau Trade Finder screenshots look like a draft \u2014 no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
+  "epic_title": "League L5 \u2014 Bureau Trade Finder GTM export",
+  "parity_ref": "League L5 \u2014 hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "epic_status": "complete",
-  "big_problem": "Lab OG snapshot exports deep-link as generic \"player\" — Reddit shares lose recognizable hallway context.",
-  "epic_title": "Lab L5 — OG export display names in watermark",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-watermark-display-name",
-      "title": "Gamelog export passes player name into OG watermark toLab",
+      "id": "league-trade-finder-og-watermark-live",
+      "title": "Trade Finder OG \u2014 LIVE/SAMPLE stickers + terracotta watermark band",
       "status": "done",
-      "merge_commit": "338709883"
+      "merge_commit": "db6537faf"
+    },
+    {
+      "id": "league-trade-finder-og-snapshot",
+      "title": "Trade Finder OG \u2014 snapshot param for in-panel export rows",
+      "status": "done",
+      "merge_commit": "19a1af0e9"
+    },
+    {
+      "id": "league-trade-finder-room-hallway",
+      "title": "Trade Finder OG \u2014 Bones Room ask link on hero deal",
+      "status": "done",
+      "merge_commit": "83de5122f"
     }
   ],
   "next_atom_id": null,
-  "created_at": "2026-05-31T11:35:00Z",
-  "updated_at": "2026-05-31T11:45:00Z",
+  "created_at": "2026-05-31T10:35:00Z",
+  "updated_at": "2026-05-31T11:42:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-watermark-display-names",
+      "id": "room-l5-briefing-gtm-export",
       "status": "complete",
-      "last_atom": "lab-og-watermark-display-name",
-      "merge_commit": "338709883"
+      "last_atom": "room-briefing-watermark",
+      "merge_commit": "f6e0985f3"
     },
     {
-      "id": "lab-l5-og-hallway-deep-links",
+      "id": "league-l5-trade-finder-gtm-export",
       "status": "complete",
-      "last_atom": "lab-og-tolab-snapshot-player",
-      "merge_commit": "1a12d9c0b"
-    },
-    {
-      "id": "league-l5-trade-finder-gtm",
-      "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
+      "last_atom": "league-trade-finder-room-hallway",
+      "merge_commit": "83de5122f"
     }
   ]
 }
