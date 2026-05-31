@@ -27,18 +27,6 @@
       "title": "Explore OG — force_demo QA param for Gate C curl",
       "status": "pending",
       "merge_commit": null
-    },
-    {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
-      "status": "pending",
-      "merge_commit": null
     }
   ],
   "next_atom_id": "explore-og-sample-sticker",
