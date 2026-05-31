@@ -15,7 +15,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 6c8da85f | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | League L5 Power Rankings OG | monte-carlo OG pattern + BureauPowerRankingsShareBar | f6e8fb40 | PASS | keep demo rows + league-only POST | — | — | evidence/2026-05-31-league-power-rankings-og.md
-2026-05-31 | League L5 Roster Depth tab | BureauRosterDepth Dolphin grades + HIDDEN remove | da33eafd | PASS | keep Self-Scout depth pattern | — | OG export follow-up | build+pytest PASS
+2026-05-31 | League L5 Roster Depth tab | BureauRosterDepth Dolphin grades + HIDDEN remove | 0fd96dd8 | PASS | keep Self-Scout depth pattern | — | OG export follow-up | build+pytest PASS
 
 ---
 
