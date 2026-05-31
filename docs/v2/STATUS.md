@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | lab-og-efficiency-live-extract |
-| Last commit | `f6e0985f3` |
+| Last commit | `f5e1ef917` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

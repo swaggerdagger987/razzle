@@ -8,8 +8,8 @@
     {
       "id": "lab-og-dashboard-live-extract",
       "title": "Dashboard OG live extract mirrors DynastyDashboardRenderer rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "f5e1ef917"
     },
     {
       "id": "lab-og-efficiency-live-extract",
@@ -30,9 +30,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-dashboard-live-extract",
+  "next_atom_id": "lab-og-efficiency-live-extract",
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T11:54:27Z",
   "completed_epics": [
     {
       "id": "lab-l4-generic-pro-gate-polish",

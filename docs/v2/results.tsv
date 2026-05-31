@@ -113,4 +113,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 156	338709883	depth+voice+simplicity	keep	Lab	L5 gamelog OG watermark uses player display name	trust=T5,T6; pytest 7; curl gamelog 62741B; display-name epic complete
 157	4c4f7d8f2	depth+voice+simplicity	keep	Lab	L4 catalog pro-gate pytest routing guards	trust=T2,T6; pytest 20; web build ok; L4 epic atom 2/3
 158	5946f096c	depth+voice+simplicity	keep	Lab	L4 catalog pro-gate teaser batch rows+pitches	trust=T2,T5; pytest 21; web build ok; L4 epic complete 3/3
-159	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 dashboard OG live Value/Chg extract	trust=T5,T6; pytest 2; curl dashboard 66547B; L5 epic 1/4
+159	f5e1ef917	depth+voice+simplicity	keep	Lab	L5 dashboard OG live Value/Chg extract	trust=T5,T6; pytest 2; curl dashboard 66547B; L5 epic 1/4
