@@ -246,6 +246,7 @@ export function TradeValuesRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="tradevalues"
             downloadName="razzle-trade-values.png"
+            position={position || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
