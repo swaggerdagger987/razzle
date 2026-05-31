@@ -4,7 +4,7 @@ focus_pillar: League
 focus_layer: L5
 next_slice: bureau-manager-profiles-sharebar-snapshot
 last_keep_cycle: 131
-last_commit: da33eafd
+last_commit: 709660c
 league_l5_self_scout_snapshot_epic: active
 lab_l5_og_live_fetch_epic: complete
 lab_l2_sidebar_agent_epic: complete
