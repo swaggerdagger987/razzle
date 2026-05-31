@@ -1,21 +1,28 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG gamelog exports fail before a player is picked — empty state had no sample card for Reddit screenshots.",
-  "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Gamelog OG — default player_id when export omits query",
-  "atom_id": "lab-og-gamelog-player-default",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/lab/renderers/GamelogRenderer.tsx"],
-  "max_files": 1,
-  "max_lines": 40,
+  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 branches across launch-10 renderers drift from teaser/perks polish.",
+  "epic": "Lab L4 — shared pro-gate error surface",
+  "slice_title": "ProGateFromPanelError on breakouts + pytest guard",
+  "atom_id": "lab-l4-pro-gate-error-surface",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "ACCEPTANCE Gate 2 — pro panel shows upgrade message (402)",
+  "trust_pillars": ["T2", "T6"],
+  "allowed_paths": [
+    "apps/web/components/lab/ProGateFromPanelError.tsx",
+    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
+    "apps/api/tests/test_panel_pro_gate_surface.py"
+  ],
+  "max_files": 3,
+  "max_lines": 140,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q"
   ],
-  "out_of_scope": ["og route changes", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": [
+    "Tradevalues/efficiency renderers this cycle",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -23,7 +30,8 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "content_commit": "e37cd230",
+  "status": "shipped",
+  "content_commit": "684cc1c4",
   "reality": "PASS",
   "merge": "pending"
 }
