@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-gamelog-weeks-fpts-sort | da33eafd | keep | extractGamelogWeekRows; Wk labels; curl ≥40KB.
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | b14d0419 | keep | extractGamelogWeekRows; Wk labels; curl ≥40KB.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
 

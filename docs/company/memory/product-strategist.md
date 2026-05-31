@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-gamelog-weeks-fpts-sort | da33eafd | Atlas gamelog OG peak weeks — screenshot parity with in-panel export.
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | b14d0419 | Atlas gamelog OG peak weeks — screenshot parity with in-panel export.
 
 2026-05-31 | H2H OG watermark | 44d05684 | League rivalry exports now match Lab/Explore screenshot brand — epic closed.
 
