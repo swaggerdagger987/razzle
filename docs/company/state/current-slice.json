@@ -3,7 +3,7 @@
   "atom_id": "lab-player-scoped-og-watermark",
   "slice_title": "Player-scoped OG — hallway deep link in watermark band",
   "status": "shipped",
-  "content_commit": null,
+  "content_commit": "73c91c120",
   "reality": "PASS",
   "merge": "pending"
 }
