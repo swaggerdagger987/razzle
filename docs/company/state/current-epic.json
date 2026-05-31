@@ -1,38 +1,50 @@
 {
   "epic_status": "active",
-  "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
-  "epic_title": "Lab L5 — Launch-10 OG panel-native LIVE labels",
-  "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
+  "big_problem": "Lab OG export URLs omit player context — gamelog/comps share links aren't self-describing for Reddit screenshots.",
+  "epic_title": "Lab L5 — OG export URL defaults",
+  "parity_ref": "PARITY Lab L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-live-sticker-rankings-breakouts-tv",
-      "title": "rankings/breakouts/tradevalues dynasty ranks RBS board value curve LIVE labels",
-      "status": "in_progress",
-      "merge_commit": null
+      "id": "lab-og-gamelog-player-default",
+      "title": "Gamelog OG — default player_id when export omits query",
+      "status": "done",
+      "merge_commit": "d7b5b3f8"
     },
     {
-      "id": "lab-og-live-sticker-gamelog-efficiency",
-      "title": "gamelog/efficiency OG LIVE sticker + blurb parity",
-      "status": "pending",
-      "merge_commit": null
+      "id": "explore-og-universe-query",
+      "title": "Explore OG — pass universe/college in export URL",
+      "status": "done",
+      "merge_commit": "7dbd4b11"
     },
     {
-      "id": "lab-og-live-sticker-aging-buysell",
-      "title": "aging/buysell OG LIVE sticker + blurb parity",
+      "id": "lab-og-dynasty-comps-export-default",
+      "title": "Dynasty comps OG — verify default player_id in export link",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-rankings-breakouts-tv",
-  "created_at": "2026-05-31T08:34:07Z",
-  "updated_at": "2026-05-31T08:34:07Z",
+  "next_atom_id": "lab-og-dynasty-comps-export-default",
+  "created_at": "2026-05-31T12:30:00Z",
+  "updated_at": "2026-05-31T14:15:00Z",
   "completed_epics": [
     {
-      "id": "lab-l2-sidebar-groups-by-agent",
+      "id": "lab-l4-pro-gate-epic",
       "status": "complete",
-      "last_atom": "lab-sidebar-staff-picks-by-agent",
-      "merge_commit": "4e8b0e8e"
+      "last_atom": "lab-pro-gate-hallway-teasers",
+      "merge_commit": "675044ea"
+    },
+    {
+      "id": "lab-l5-og-live-fetch-sticker",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-live-fetch-merge",
+      "merge_commit": "3f0411ec"
+    },
+    {
+      "id": "lab-l2-sidebar-agent-groups",
+      "status": "complete",
+      "last_atom": "lab-sidebar-search-agent-labels",
+      "merge_commit": "e75ec714"
     }
   ]
 }
