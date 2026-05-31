@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 154 |
+| Cycle | 157 |
 | Last board | 54 |
 | Focus pillar | Lab |
-| Focus layer | L5 |
-| Next slice | position-default hallway atom 3 or Bureau per PARITY |
-| Last commit | `8327741` |
+| Focus layer | L4 |
+| Next slice | lab-l4-pro-gate-error-dashboard |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
