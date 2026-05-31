@@ -22,6 +22,16 @@ import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
+/** Sample mismatch board when filters return no buy/sell rows — OG export still screenshots. */
+const BUYSELL_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Davante Adams", position: "WR", team: "NYJ", stat: 184.2, statLabel: "Value" },
+  { name: "Joe Mixon", position: "RB", team: "HOU", stat: 162.5, statLabel: "Value" },
+  { name: "Mark Andrews", position: "TE", team: "BAL", stat: 148.1, statLabel: "Value" },
+  { name: "Kirk Cousins", position: "QB", team: "ATL", stat: 121.4, statLabel: "Value" },
+  { name: "Stefon Diggs", position: "WR", team: "HOU", stat: 118.9, statLabel: "Value" },
+  { name: "Aaron Jones", position: "RB", team: "MIN", stat: 112.3, statLabel: "Value" },
+];
+
 interface Candidate extends WithFormulaScore {
   player_id: string;
   name: string;
@@ -252,7 +262,18 @@ export function BuySellRenderer({ panel }: Props) {
       )}
 
       {!buyLow.length && !sellHigh.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="buysell"
+              downloadName="razzle-buy-sell.png"
+              position={position || undefined}
+              snapshotRows={BUYSELL_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="grid gap-6 lg:grid-cols-2">
           <section>
