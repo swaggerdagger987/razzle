@@ -64,4 +64,4 @@ cycle	commit	score	status	pillar	slice	description
 71	33808392	depth+voice+simplicity	keep	Lab	L5 OG snapshot buysell efficiency aging	trust=T5,T6; snapshotRows on 3 launch-10 panels; curl buysell snapshot 58072B PNG
 72	75c88d30	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows gamelog Wk rows + comps Match %; curl gamelog 40520B comps 47292B PNG
 73	e31a59f1	depth+voice+simplicity	keep	Lab	L5 OG live snapshot demo subtitles	trust=T5,T6; ogSourceSuffix live tape / from panel / sample; curl rankings 59509B PNG
-74	da33eafd	depth+hallway+simplicity	keep	League	L5 Bureau roster depth renderer	trust=T2,T5,T6; BureauRosterDepth unhide roster-depth; build+pytest PASS
+74	6dbe1ca1	depth+hallway+simplicity	keep	League	L5 Bureau roster depth renderer	trust=T2,T5,T6; BureauRosterDepth unhide roster-depth; build+pytest PASS
