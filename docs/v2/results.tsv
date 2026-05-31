@@ -116,4 +116,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 156	338709883	depth+voice+simplicity	keep	Lab	L5 gamelog OG watermark uses player display name	trust=T5,T6; pytest 7; curl gamelog 62741B; display-name epic complete
 157	9d19930cf	depth+voice+simplicity	keep	Lab	L5 career-compare OG overlay rows	trust=T5,T6; pytest 2; curl career-compare 52967B; pro profile OG epic 3/4
 154	8327741	depth+voice+simplicity	keep	Lab	L5 efficiency OG toLab includes RB position	trust=T5,T6; pytest 7; curl 65774B; position defaults epic 2/3
-161	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 percentiles OG toLab default player WR	trust=T5,T6; pytest 9; curl percentiles 65326B; pro profile OG epic 4/4 complete
+161	40a9cb7b9	depth+voice+simplicity	keep	Lab	L5 percentiles OG toLab default player WR	trust=T5,T6; pytest 9; curl percentiles 65326B; pro profile OG epic 4/4 complete
