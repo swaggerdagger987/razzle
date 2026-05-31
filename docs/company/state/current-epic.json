@@ -8,8 +8,8 @@
     {
       "id": "league-roster-depth-og-share",
       "title": "Roster Depth tab copy link + OG grade card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "688cea64"
     },
     {
       "id": "league-build-profiles-og-share",
@@ -30,7 +30,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-roster-depth-og-share",
+  "next_atom_id": "league-build-profiles-og-share",
   "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T06:00:00Z"
+  "updated_at": "2026-05-31T06:15:00Z"
 }
