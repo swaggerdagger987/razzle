@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 123 — Lab L4 ProGateFromPanelError tradevalues+efficiency)
+**Last updated:** 2026-05-31 (factory cycle 130 — Lab L4 ProGateFromPanelError tradevalues+efficiency)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,7 +15,7 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 123 |
+| Cycle | 130 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L4 |
