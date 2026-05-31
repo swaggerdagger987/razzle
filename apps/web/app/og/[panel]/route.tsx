@@ -33,6 +33,9 @@ const STAT_CANDIDATE_KEYS = [
   "rank_diff",
   "composite_score",
   "efficiency_score",
+  "efficiency_pct",
+  "mismatch_score",
+  "dynasty_rank_pct",
   "total_yards",
   "pts",
   "rank",
@@ -255,16 +258,27 @@ function extractRows(data: unknown): OgRow[] {
     const buy = Array.isArray(obj.buy) ? (obj.buy as Record<string, unknown>[]) : [];
     const sell = Array.isArray(obj.sell) ? (obj.sell as Record<string, unknown>[]) : [];
     candidates = [...buy, ...sell];
+  } else if (Array.isArray(obj.buy_low) || Array.isArray(obj.sell_high)) {
+    const buy = Array.isArray(obj.buy_low) ? (obj.buy_low as Record<string, unknown>[]) : [];
+    const sell = Array.isArray(obj.sell_high) ? (obj.sell_high as Record<string, unknown>[]) : [];
+    candidates = [...buy, ...sell];
+  } else if (obj.positions && typeof obj.positions === "object") {
+    for (const posData of Object.values(obj.positions as Record<string, unknown>)) {
+      if (posData && typeof posData === "object" && Array.isArray((posData as { players?: unknown }).players)) {
+        candidates.push(...((posData as { players: Record<string, unknown>[] }).players));
+      }
+    }
   } else if (Array.isArray(obj.data)) {
     candidates = obj.data as Record<string, unknown>[];
   } else if (Array.isArray(obj.rankings)) {
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
-  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
+  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers) || Array.isArray(obj.fallers)) {
     const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
     const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
-    candidates = [...top5, ...risers];
+    const fallers = Array.isArray(obj.fallers) ? (obj.fallers as Record<string, unknown>[]) : [];
+    candidates = [...top5, ...risers, ...fallers];
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
@@ -436,6 +450,20 @@ export async function GET(
       : demoRowsForPanel(slug);
   if (!isSnapshot && positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
+  }
+  const DIRECT_STAT_SORT_SLUGS = new Set([
+    "breakouts",
+    "weekly",
+    "prospects",
+    "tradevalues",
+    "efficiency",
+    "buysell",
+    "aging",
+    "rankings",
+    "dashboard",
+  ]);
+  if (!isSnapshot && DIRECT_STAT_SORT_SLUGS.has(slug)) {
+    rows = [...rows].sort((a, b) => b.stat - a.stat);
   }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);

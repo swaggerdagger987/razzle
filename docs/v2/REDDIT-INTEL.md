@@ -2,24 +2,21 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
-### 2026-05-31 — Lab trade values export (cycle 95)
-- **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
-- **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
+### 2026-05-31 — Lab OG rankings / dashboard (cycle 97)
+- **Angle:** Octo dynasty tier lists and dashboard riser/faller cards need ranked `/og/rankings` and `/og/dashboard` — not API insertion order.
+- **Screenshot hook:** WR dynasty value leaders + biggest |rank_diff| movers on share PNG.
 
-### 2026-05-31 — Lab buy/sell export (cycle 94)
-- **Angle:** Buy-low vs sell-high on one share card — Bones lane labels match the two-column panel Reddit traders screenshot.
-- **Trust:** T5/T6 — top 3 per lane in snapshot; formula name on label when composite sort active.
+### 2026-05-31 — Lab OG buysell / aging (cycle 96)
+- **Angle:** Bones buy-low cards and Octo aging cliffs need ranked `/og/buysell` and `/og/aging` leaders — not insertion-order API rows.
+- **Screenshot hook:** WR buy/sell mismatch leaders + RB past-peak PPG sorted on share PNG.
 
-### 2026-05-31 — Lab dashboard export (cycle 92)
-- **Angle:** Dynasty pulse export shows top5 trade values on the card — matches the hero grid users screenshot, not only rank movers.
-- **Trust:** T5/T6 — snapshot encodes what was on screen; demo fallback unchanged when API empty.
+### 2026-05-31 — Lab OG trade values / efficiency (cycle 95)
+- **Angle:** Bones trade-value bar charts and Octo PPO boards need the same top-6 leaders on `/og/*` direct links as in-panel exports.
+- **Screenshot hook:** WR trade-value card with highest bars first; RB efficiency leaders sorted by PPO.
 
 ### 2026-05-31 — Lab launch-10 OG (cycle 77)
 - **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
 - **Trust:** T1 honest labeling; sample suffix only on demo fallback.
-
-### 2026-05-31 — Bureau H2H codec (cycle 96)
-- **Angle:** League group chats break when export PNG shows demo rows after a real rivalry snapshot — canonical y/m/pc codec keeps ShareBar honest.
 
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.

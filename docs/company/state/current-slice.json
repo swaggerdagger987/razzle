@@ -1,6 +1,38 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-breakouts-score-ranked",
-  "slice_title": "Breakouts OG export ranks top-6 by breakout score",
-  "builder_mode": "composer-surgical"
+  "big_problem": "Launch-10 Lab OG direct links must rank leaders by the same stat the panel exports — not API insertion order.",
+  "epic": "Lab L5 — OG direct-link stat sort (launch-10 remainder)",
+  "atom_id": "lab-og-rankings-dashboard-sort",
+  "slice_title": "Rankings + dashboard OG direct links sort top-6 by dynasty value / rank change",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with ranked rows",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx",
+    "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx"
+  ],
+  "max_files": 3,
+  "max_lines": 60,
+  "acceptance_commands": [
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/rankings?position=WR&download=1'",
+    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1'"
+  ],
+  "out_of_scope": [
+    "new panels",
+    "Bureau tabs",
+    "NORTH_STAR edits"
+  ],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  },
+  "verdict": "SHIP",
+  "content_commit": "6c8704cb"
 }

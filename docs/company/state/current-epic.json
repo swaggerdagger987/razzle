@@ -1,6 +1,31 @@
 {
   "epic_status": "complete",
-  "epic_title": "Lab L5 — OG snapshot row fidelity",
+  "big_problem": "Launch-10 Lab OG direct links must rank leaders by the same stat the panel exports — not API insertion order.",
+  "epic_title": "Lab L5 — OG direct-link stat sort (launch-10 remainder)",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "atoms": [
+    {
+      "id": "lab-og-tradevalues-efficiency-sort",
+      "title": "Trade values + efficiency OG direct links sort top-6 by value/PPO",
+      "status": "done",
+      "merge_commit": "e0819084"
+    },
+    {
+      "id": "lab-og-buysell-aging-sort",
+      "title": "Buy-sell + aging OG direct links sort top-6 by panel stat",
+      "status": "done",
+      "merge_commit": "4a62c72e"
+    },
+    {
+      "id": "lab-og-rankings-dashboard-sort",
+      "title": "Rankings + dashboard OG direct links sort top-6 by dynasty value",
+      "status": "done",
+      "merge_commit": "6c8704cb"
+    }
+  ],
   "next_atom_id": null,
-  "last_cycle_commit": "d9548870"
+  "created_at": "2026-05-31T06:11:19Z",
+  "updated_at": "2026-05-31T06:36:00Z",
+  "last_cycle_commit": "6c8704cb"
 }

@@ -1,3 +1,8 @@
-cycle: 94
-last_commit: d9548870
-lab_l5_og_snapshot_fidelity_epic: complete
+cycle: 97
+last_board_cycle: 54
+focus_pillar: Lab
+focus_layer: L5
+next_slice: bureau-h2h-export-or-next-parity
+last_keep_cycle: 97
+last_commit: 6c8704cb
+lab_l5_og_direct_sort_epic: complete
