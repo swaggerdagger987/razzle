@@ -88,4 +88,4 @@ cycle	commit	score	status	pillar	slice	description
 86	e701e3bb	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; copy link + export; curl trade-network OG 68090B; behavioral share epic atom 3
 87	6dbe1ca1	depth+hallway+voice	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5; dedup on base 6dbe1ca1; factory cycle 1; next build-profiles
 88	69e4c732	depth+voice+simplicity	keep	Lab	L5 OG snapshot prospects tradevalues	trust=T5,T6; snapshotRows on prospects+tradevalues; curl snap 58084B 62488B; mirror-rows epic complete
-89	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles out of HIDDEN; build+pytest PASS
+89	68876e5a	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles out of HIDDEN; build+pytest PASS
