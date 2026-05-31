@@ -33,4 +33,4 @@ explicit checks in the verification routine.
 2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
 2026-05-31 | weekly OG snapshot Gate C | e06f1820 | PASS | curl weekly snapshot 47861B | keep | docs/v2/evidence/2026-05-31-lab-weekly-og-snapshot.md
 2026-05-31 | breakouts OG snapshot Gate C | 8c00227e | PASS | curl breakouts snapshot 49199B | keep | docs/v2/evidence/2026-05-31-lab-breakouts-og-snapshot.md
-2026-05-31 | prospects OG snapshot Gate C | da33eafd | PASS | curl prospects snapshot 60628B | keep | docs/v2/evidence/2026-05-31-lab-prospects-og-snapshot.md
+2026-05-31 | prospects OG snapshot Gate C | 488d0053 | PASS | curl prospects snapshot 60628B | keep | docs/v2/evidence/2026-05-31-lab-prospects-og-snapshot.md
