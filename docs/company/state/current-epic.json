@@ -20,8 +20,14 @@
   ],
   "next_atom_id": "league-pressure-map-og-watermark-band",
   "created_at": "2026-05-31T11:34:11Z",
-  "updated_at": "2026-05-31T11:34:11Z",
+  "updated_at": "2026-05-31T11:36:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-og-watermark-display-names",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
+    },
     {
       "id": "explore-l5-og-screener-margin-notes",
       "status": "active",

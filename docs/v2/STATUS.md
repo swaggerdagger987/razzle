@@ -30,6 +30,6 @@ Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export f
 
 | Area | State | Notes |
 |------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export + margin note on OG lead row |
+| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
 | Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
 | Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |

@@ -6,6 +6,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Builder
 
+2026-05-31 | lab-og-watermark-display-name | 338709883 | SHIP | playerName on export + watermark display name; pytest 6.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | encodeOgSnapshot pid + decode snapshotPlayerId in OG route.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | SHIP | toRoom bones on Trade Finder OG + ShareBar.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
