@@ -14,8 +14,8 @@
     {
       "id": "lab-og-position-tradevalues-prospects",
       "title": "Trade values + prospects export passes position filter",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "6f77b2f7"
     },
     {
       "id": "lab-og-position-buysell",
