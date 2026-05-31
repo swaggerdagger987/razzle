@@ -1,7 +1,9 @@
-2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | PASS | No new Reddit intel.
-2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | PASS | No new Reddit intel.
-2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
+2026-05-31 | lab-og-tradevalues-loading-snapshot | 789d7fb9f | PASS | Trade-deadline sample value curve matches OG demo board.
+2026-05-31 | lab-og-dashboard-live-extract | 869c9321c | PASS | Dynasty pulse riser/faller cards match r/DynastyFF share patterns.
+2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | PASS | Gate C guards keep waiver OG screenshot-ready without manual curl.
+2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | PASS | Waiver archetype OG cards match league-thread share pattern.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
+2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | PASS | Schedule verdict exports travel in league chats.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -10,7 +12,7 @@
 2026-05-31 | explore-og-margin-note-lead | — | PASS | No new Reddit intel; Explore OG margin slice only.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | PASS | No new Reddit intel; hallway snapshot pid slice.
 2026-05-31 | league-trade-finder-og-room-hallway | — | PASS | No new Reddit intel; Bureau export hallway only.
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | No new intel; pytest contract only.
+2026-05-31 | lab-og-from-panel-gate-c-rest | ee6b78ea6 | PASS | No new intel; pytest contract only.
 2026-05-31 | lab-og-tolab-gamelog-default | — | PASS | No new Reddit intel; hallway slice only.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | No new intel; Lab formula OG slice only.
 

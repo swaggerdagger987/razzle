@@ -1,7 +1,10 @@
-2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | PASS | pytest 10; curl breakouts 67718B.
-2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | PASS | pytest 9; curl snapshot OG 76270B.
-2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
+2026-05-31 | lab-og-tradevalues-loading-snapshot | 789d7fb9f | PASS | curl tradevalues snap 50462B demo 67267B; pytest 6.
+2026-05-31 | lab-og-prospects-loading-snapshot | 75ff53361 | PASS | curl prospects snap 50038B demo 63453B; pytest 14.
+2026-05-31 | lab-og-dashboard-live-extract | 869c9321c | PASS | curl dashboard 65370B snapshot; pytest 4.
+2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | PASS | curl waiver 68595B; pytest 5; Gate C evidence.
+2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | PASS | curl waiver 68595B; pytest 1; evidence file.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
+2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | PASS | curl 60588B; pytest 1; evidence file.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | PASS | pytest 4; curl 58533B.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -9,7 +12,7 @@
 
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | PASS | pytest 4; curl explore 65482B; web build exit 0.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | PASS | pytest 5; curl snapshot 54427B; web build green.
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | pytest 5; web build; Gate C evidence on file.
+2026-05-31 | lab-og-from-panel-gate-c-rest | ee6b78ea6 | PASS | pytest 5; web build; Gate C evidence on file.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | PASS | pytest 2; curl 82365B; web build exit 0.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | PASS | pytest 3; curl gamelog 62232B; web build exit 0.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | PASS | pytest 4; curl 57910B + snapshot 55930B.

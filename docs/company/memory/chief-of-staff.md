@@ -1,7 +1,9 @@
-2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | Factory open cycle 1; position-default epic 3/3; NO_LOCK_GUARDRAIL.
-2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | Factory cycle 1; H2H GTM epic complete; dedup pytest on base.
-2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
+2026-05-31 | lab-og-tradevalues-loading-snapshot | 789d7fb9f | SHIP | Factory open workday cycle 1; loading OG epic atom 1/4; NO_LOCK_GUARDRAIL.
+2026-05-31 | lab-og-dashboard-live-extract | 869c9321c | SHIP | Factory open cycle 1; Lab L5 live rows epic atom 1/3; NO_LOCK_GUARDRAIL.
+2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | SHIP | Factory open cycle 1; lock #1457; Bureau watermark epic complete.
+2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | SHIP | Factory open cycle 1; lock #1434; watermark epic atom 3/3.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
+2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | SHIP | Factory open cycle 1; lock #1407; epic atom 2/3.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Workday cycle 1; demo trust epic complete.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.

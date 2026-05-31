@@ -1,11 +1,8 @@
-cycle: 157
+cycle: 162
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-percentiles-tolab
-last_keep_cycle: 157
-last_commit: 1ebb9dc73
-lab_l5_position_default_epic: complete
-lab_l5_pro_profile_og_epic: active
-explore_l5_og_margin_epic: partial
-league_l5_h2h_gtm_epic: complete
+next_slice: lab-og-breakouts-loading-snapshot (loading OG epic atom 2/4)
+last_keep_cycle: 162
+last_commit: 789d7fb9f
+lab_l5_og_loading_epic: active (tradevalues loading snapshot atom 1/4)

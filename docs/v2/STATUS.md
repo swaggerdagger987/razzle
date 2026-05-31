@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 157 — Lab breakouts OG toLab WR position)
+**Last updated:** 2026-05-31 (factory cycle 162 — Lab trade values loading OG sample snapshot)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 157 |
+| Cycle | 162 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | Explore margin atom 2/4 or Lab OG live rows per NEXT.md |
-| Last commit | `1ebb9dc73` |
+| Next slice | Lab loading-state OG exports (breakouts atom 2/4) |
+| Last commit | `789d7fb9f` |
 
-Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
+Recent completions (cycle 162): Trade values sample export on loading/empty board.
 
 ---
 
@@ -30,6 +30,6 @@ Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export f
 
 | Area | State | Notes |
 |------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
+| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export + margin note on OG lead row |
 | Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
 | Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |

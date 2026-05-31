@@ -2,6 +2,18 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab trade values loading export (cycle 162)
+- **Angle:** Trade-deadline threads screenshot value curves before API returns — sample Chase/Bijan curve on export while film loads.
+- **Trust:** T5/T6 — sample rows match OG demo board; live board still uses panel snapshot when loaded.
+
+### 2026-05-31 — Lab prospects loading export (cycle 161)
+- **Angle:** Draft-season big board screenshots while film loads — sample RPS rows on export link beat blank loading cards.
+- **Trust:** T5/T6 — sample card matches OG demo board; live board still uses panel snapshot when loaded.
+
+### 2026-05-31 — Bureau waiver OG watermark (cycle 157)
+- **Angle:** FAAB archetype card with terracotta band — league managers screenshot waiver psychology threads.
+- **Trust:** T5/T6 — demo rows show hoarder/streamer lanes; hallway path on band.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
@@ -334,6 +346,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Razzle slice:** Lab L5 atom 2 — launch-10 OG demo rows with FPTS/Score/Rank/Peak Age/Chg stat headers per panel slug.
 - **Council cycle:** 59
 - **Screenshot potential:** Weekly heatmap + prospect big board cards now match in-product column semantics on preview hosts
+
+## 2026-05-31 — Dynasty dashboard pulse cards
+
+- **Pattern:** r/DynastyFF threads screenshot riser/faller boards with rank-diff callouts, not flat top-5 lists.
+- **Razzle slice:** Lab L5 atom 1 — dashboard OG export mirrors panel top5 → movers → value picks order.
 
 ## 2026-05-31 — Strengths OG shares
 

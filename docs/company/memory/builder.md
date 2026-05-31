@@ -1,9 +1,9 @@
-2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | breakouts WR in TOLAB_DEFAULT_POSITION.
-2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
-2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
-2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
-2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | Gate C pytest + 76270B snapshot OG.
+2026-05-31 | lab-og-tradevalues-loading-snapshot | 789d7fb9f | SHIP | TRADEVALUES_SAMPLE_OG_ROWS on pending/empty + pytest 6.
+2026-05-31 | lab-og-prospects-loading-snapshot | 75ff53361 | SHIP | PROSPECTS_SAMPLE_OG_ROWS on pending/empty + pytest guards.
+2026-05-31 | lab-og-dashboard-live-extract | 869c9321c | SHIP | extractDashboardRows + test_og_dashboard_live.py.
+2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | SHIP | WAIVER_OG_GATE_C_PARAMS + demo/share/gate pytest guards.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
+2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | SHIP | SOS route band + test_bureau_sos_og_watermark.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -13,7 +13,7 @@
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | encodeOgSnapshot pid + decode snapshotPlayerId in OG route.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | SHIP | toRoom bones on Trade Finder OG + ShareBar.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
-2026-05-31 | lab-og-from-panel-gate-c-rest | a76b2e4e0 | SHIP | prospects+tradevalues SNAPSHOT_FROM_PANEL_SLUGS; 5 pytest guards.
+2026-05-31 | lab-og-from-panel-gate-c-rest | ee6b78ea6 | SHIP | prospects+tradevalues SNAPSHOT_FROM_PANEL_SLUGS; 5 pytest guards.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS for gamelog + dynasty-comps.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | bureau-trade-finder-og-snapshot encode on ShareBar.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | extractBuySellRows + formula_score priority on OG route.
@@ -88,6 +88,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | bureau-waiver-og-watermark-band | SOS/H2H terracotta band on waiver OG | 7f7a22676 | SHIP | KEEP demo rows + FAAB bars | — | — | evidence/2026-05-31-bureau-waiver-og-watermark-band.md
 2026-05-31 | weekly-hot-week-og | ogSnapshotRows max week pts + Wk label | 7f652a98 | SHIP | KEEP hottest-week not PPG | — | — | evidence/2026-05-31-lab-weekly-hot-week-snapshot.md
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 7f652a98 | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md

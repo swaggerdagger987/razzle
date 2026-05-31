@@ -1,7 +1,9 @@
-2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | 2 files; breakouts WR + rankings no-default pytest.
-2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | 2 files; gate-c pytest imports codec DEMO_SNAPSHOT_PARAM.
-2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
+2026-05-31 | lab-og-tradevalues-loading-snapshot | 789d7fb9f | 2-file contract; TRADEVALUES_SAMPLE_OG_ROWS + pytest 6.
+2026-05-31 | lab-og-dashboard-live-extract | 869c9321c | 2-file contract; extractDashboardRows ≤45 lines.
+2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | 1-file contract; 5 pytest Gate C guards.
+2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | 2-file contract; pytest source guard on waiver route.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
+2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | SHIP | 2-file contract; pytest guard.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -9,7 +11,7 @@
 
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | 3 files; marginNoteForOgExploreRow on edge OG route.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | 3 files; mirrors H2H atlasRoomPath pattern for Bones.
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | 2 files pytest-only; SNAPSHOT_FROM_PANEL_SLUGS extended.
+2026-05-31 | lab-og-from-panel-gate-c-rest | ee6b78ea6 | 2 files pytest-only; SNAPSHOT_FROM_PANEL_SLUGS extended.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | 2 files; includeDefaultPlayer guard in labOgWatermarkLink.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | 2 files; extractBuySellRows + buysellStatKeys.
 
