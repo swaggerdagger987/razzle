@@ -1,31 +1,50 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Lab export cards still read like generic value tables — dynasty rankings OG should show the same #1–#6 board order Reddit sees in-panel.",
+  "epic_title": "Lab L5 — Launch-10 OG rows match in-product rank labels",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
-      "status": "done",
-      "merge_commit": "5721ee33"
+      "id": "lab-og-rankings-live-rank-labels",
+      "title": "Dynasty rankings OG — live #rank labels on share card",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
+      "id": "lab-og-breakouts-live-rank-labels",
+      "title": "Breakouts OG — live #rank + RBS labels when API returns rank",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
+      "id": "league-h2h-og-force-demo",
+      "title": "Bureau H2H OG — force_demo sample rivalry for factory Gate C",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
-  "created_at": "2026-05-31T09:25:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
-  "completed_epics": []
+  "next_atom_id": "lab-og-breakouts-live-rank-labels",
+  "epic_status": "active",
+  "created_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T14:00:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l4-pro-gate-epic",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "f56fdbd8"
+    },
+    {
+      "id": "lab-l5-og-live-rows-launch10",
+      "status": "complete",
+      "last_atom": "lab-og-live-demo-fallback-copy",
+      "merge_commit": "18d92f6b"
+    },
+    {
+      "id": "explore-l5-og-query-epic",
+      "status": "complete",
+      "last_atom": "explore-og-formula-sort-label",
+      "merge_commit": "6e643fec"
+    }
+  ]
 }

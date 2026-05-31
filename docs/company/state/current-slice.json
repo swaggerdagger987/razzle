@@ -1,31 +1,30 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 branches across launch-10 renderers drift from teaser/perks polish.",
-  "epic": "Lab L4 — shared pro-gate error surface",
-  "slice_title": "ProGateFromPanelError on breakouts + pytest guard",
-  "atom_id": "lab-l4-pro-gate-error-surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — pro panel shows upgrade message (402)",
-  "trust_pillars": ["T2", "T6"],
-  "allowed_paths": [
-    "apps/web/components/lab/ProGateFromPanelError.tsx",
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
-  ],
-  "max_files": 3,
-  "max_lines": 140,
+  "big_problem": "Lab export cards still read like generic value tables — dynasty rankings OG should show the same #1–#6 board order Reddit sees in-panel.",
+  "epic": "Lab L5 — Launch-10 OG rows match in-product rank labels",
+  "slice_title": "Dynasty rankings OG — live #rank labels on share card",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with visible rank labels",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "max_files": 1,
+  "max_lines": 60,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q"
+    "curl -s -o /tmp/rankings-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1'",
+    "file /tmp/rankings-og.png"
   ],
-  "out_of_scope": ["Tradevalues/efficiency this cycle"],
+  "out_of_scope": [
+    "Breakouts/tradevalues OG changes",
+    "Explore OG routes",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "status": "shipped"
+  }
 }

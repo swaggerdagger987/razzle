@@ -346,6 +346,45 @@ function extractProspectsRows(
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
 }
 
+/** Dynasty rankings — value sort with #rank labels (matches DynastyRankingsRenderer). */
+function extractRankingsRows(
+  players: Record<string, unknown>[],
+  positionFilter: string,
+): OgRow[] {
+  let rows = players
+    .map((p, i) => {
+      const rank = p.rank != null ? Number(p.rank) : null;
+      const value = Number(p.dynasty_value ?? p.value ?? 0);
+      const formulaScore = Number(p.formula_score ?? 0);
+      const useFormula = formulaScore > 0 && value <= 0;
+      const stat = useFormula ? formulaScore : value > 0 ? value : rank ?? i + 1;
+      return {
+        name: String(p.full_name ?? p.name ?? p.player_name ?? ""),
+        position: String(p.position ?? p.pos ?? ""),
+        team: String(p.team ?? p.team_abbr ?? ""),
+        stat,
+        statLabel:
+          rank != null && rank > 0
+            ? `#${rank}`
+            : useFormula
+              ? "Score"
+              : value > 0
+                ? "Value"
+                : "Rank",
+      };
+    })
+    .filter((r) => r.name.trim().length > 0 && r.stat > 0);
+  if (positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+  }
+  rows = [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
+  return rows.map((r, i) => ({
+    ...r,
+    statLabel:
+      r.statLabel.startsWith("#") ? r.statLabel : r.statLabel === "Score" ? "Score" : `#${i + 1}`,
+  }));
+}
+
 /** Gamelog OG — top weeks by FPTS (matches GamelogRenderer ogSnapshotRows). */
 function extractGamelogWeekRows(data: Record<string, unknown>): OgRow[] {
   const weeks = data.weeks as Array<{ week?: number; fpts?: number }> | undefined;
@@ -407,6 +446,27 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     for (const source of prospectSources) {
       const prospectRows = extractProspectsRows(source, positionFilter);
       if (prospectRows.length > 0) return prospectRows;
+    }
+  }
+
+  if (slug === "rankings") {
+    const rankingSources: Record<string, unknown>[][] = [];
+    if (Array.isArray(obj.tiers)) {
+      for (const tier of obj.tiers as Record<string, unknown>[]) {
+        if (Array.isArray(tier.players)) {
+          rankingSources.push(tier.players as Record<string, unknown>[]);
+        }
+      }
+    }
+    if (Array.isArray(obj.players)) {
+      rankingSources.push(obj.players as Record<string, unknown>[]);
+    }
+    if (Array.isArray(obj.rankings)) {
+      rankingSources.push(obj.rankings as Record<string, unknown>[]);
+    }
+    for (const source of rankingSources) {
+      const rankingRows = extractRankingsRows(source, positionFilter);
+      if (rankingRows.length > 0) return rankingRows;
     }
   }
 

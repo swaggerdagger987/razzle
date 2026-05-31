@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | lab-og-rankings-live-rank-labels | da33eafd | Factory open cycle 1; Lab L5 rank-label epic 1/3; NO_LOCK gh rate limit.
+
 2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
 
 2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
