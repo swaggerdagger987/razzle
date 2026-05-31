@@ -6,7 +6,7 @@
   "depth_ref": "Lab L5",
   "atoms": [
     {"id": "lab-og-dynasty-comps-live-sticker", "title": "Dynasty Comps OG LIVE sticker", "status": "done", "merge_commit": "2e1dfea15"},
-    {"id": "lab-og-gamelog-from-panel-sticker", "title": "Gamelog FROM PANEL sticker", "status": "done", "merge_commit": "f6e0985f3"}
+    {"id": "lab-og-gamelog-from-panel-sticker", "title": "Gamelog FROM PANEL sticker", "status": "done", "merge_commit": "c89f9898a"}
   ],
   "next_atom_id": null,
   "epic_status": "complete",
