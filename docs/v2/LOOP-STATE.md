@@ -1,10 +1,9 @@
-cycle: 144
+cycle: 145
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-from-panel-gate-c-rest
-last_keep_cycle: 144
+next_slice: league-trade-finder-og-snapshot
+last_keep_cycle: 145
 last_commit: e4204015f
-lab_l5_formula_og_epic: active
-room_l5_briefing_gtm_epic: complete
-explore_l5_universe_share_epic: complete
+lab_l5_formula_og_epic: complete
+league_l5_trade_finder_gtm_epic: active

@@ -1,50 +1,38 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
-  "epic_title": "Lab L5 — formula-sorted OG live parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Bureau Trade Finder screenshots look like a draft \u2014 no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
+  "epic_title": "League L5 \u2014 Bureau Trade Finder GTM export",
+  "parity_ref": "League L5 \u2014 hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-breakouts-rankings-formula-live",
-      "title": "Breakouts + rankings OG live extract prefers formula_score",
+      "id": "league-trade-finder-og-watermark-live",
+      "title": "Trade Finder OG \u2014 LIVE/SAMPLE stickers + terracotta watermark band",
       "status": "done",
-      "merge_commit": "ceadf0402"
+      "merge_commit": "db6537faf"
     },
     {
-      "id": "lab-og-weekly-prospects-live-sticker-guard",
-      "title": "Weekly + prospects LIVE sticker pytest guard",
-      "status": "done",
-      "merge_commit": "d03cb653b"
+      "id": "league-trade-finder-og-snapshot",
+      "title": "Trade Finder OG \u2014 snapshot param for in-panel export rows",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-buysell-formula-live",
-      "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
-      "status": "done",
-      "merge_commit": "e4204015f"
-    },
-    {
-      "id": "lab-og-from-panel-gate-c-rest",
-      "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
+      "id": "league-trade-finder-room-hallway",
+      "title": "Trade Finder OG \u2014 Bones Room ask link on hero deal",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-from-panel-gate-c-rest",
-  "created_at": "2026-05-31T10:36:02Z",
-  "updated_at": "2026-05-31T12:15:00Z",
+  "next_atom_id": "league-trade-finder-og-snapshot",
+  "epic_status": "active",
+  "created_at": "2026-05-31T10:35:00Z",
+  "updated_at": "2026-05-31T10:58:00Z",
   "completed_epics": [
     {
-      "id": "room-l5-briefing-gtm-export",
+      "id": "lab-l5-formula-sorted-og-live-parity",
       "status": "complete",
-      "last_atom": "room-briefing-watermark",
-      "merge_commit": "f6e0985f3"
-    },
-    {
-      "id": "lab-l5-og-empty-panel-states",
-      "status": "active",
-      "last_atom": "lab-gamelog-empty-weeks-export",
-      "merge_commit": "ac0280a20"
+      "last_atom": "lab-og-buysell-formula-live",
+      "merge_commit": "e4204015f"
     }
   ]
 }
