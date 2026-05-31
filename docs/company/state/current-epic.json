@@ -14,8 +14,8 @@
     {
       "id": "room-briefing-og-card",
       "title": "Briefing OG — /og/briefing snapshot route",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "75dc2d65a"
     },
     {
       "id": "room-briefing-watermark",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "room-briefing-og-card",
+  "next_atom_id": "room-briefing-watermark",
   "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T09:55:00Z",
+  "updated_at": "2026-05-31T10:05:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-launch10-og-panel-native-trust-labels",
