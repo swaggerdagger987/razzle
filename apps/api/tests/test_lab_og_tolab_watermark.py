@@ -46,3 +46,11 @@ def test_lab_og_export_link_encodes_snapshot_player_id():
     assert "encodeOgSnapshot(snapshotRows, {" in source
     assert "OgSnapshotEncodeContext" in source
     assert '"pi": playerId' in source or "pi: playerId" in source
+
+
+def test_weekly_og_watermark_includes_default_wr_position():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "TOLAB_DEFAULT_POSITION" in source
+    assert 'weekly: "WR"' in source
+    assert "watermarkPosition" in source
+    assert "positionFilter: watermarkPosition" in source

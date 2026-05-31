@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tolab-snapshot-player | e5e35fc38 | 3 files; v1 snapshot + legacy pid decode in one decoder.
+2026-05-31 | lab-og-tolab-snapshot-player | e5e35fc38 | 3 files; v1 snapshot + legacy pid + TOLAB_DEFAULT_POSITION weekly.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.
 # Memory — Engineering Architect

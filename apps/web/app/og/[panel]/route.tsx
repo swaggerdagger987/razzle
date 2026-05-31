@@ -85,6 +85,9 @@ const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"])
 /** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
 const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
 
+/** Panels that default API position when URL omits position — mirror in OG watermark (T6). */
+const TOLAB_DEFAULT_POSITION: Record<string, string> = { weekly: "WR" };
+
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
   "prospects",
@@ -983,7 +986,7 @@ export async function GET(
     apiParams.position = positionFilter;
   } else if (slug === "weekly" && apiParams.position == null) {
     // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
-    apiParams.position = "WR";
+    apiParams.position = TOLAB_DEFAULT_POSITION.weekly;
   }
   const snapshotPayload = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] };
   const snapshotRows = snapshotPayload.rows;
@@ -1024,8 +1027,10 @@ export async function GET(
     (isSnapshot && snapshotPayload.playerName ? snapshotPayload.playerName : "") ||
     url.searchParams.get("name") ||
     "";
+  const watermarkPosition =
+    positionFilter || TOLAB_DEFAULT_POSITION[slug] || "";
   const labLink = labOgWatermarkLink(slug, {
-    positionFilter,
+    positionFilter: watermarkPosition,
     playerId,
     playerName: watermarkPlayerName,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
