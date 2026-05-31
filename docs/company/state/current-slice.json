@@ -1,37 +1,8 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-trade-finder-og-room-hallway",
-  "big_problem": "Trade Finder screenshots travel without the in-panel Bones matches — export cards fall back to generic demo rows when league/user params are missing.",
-  "epic": "League L5 — Bureau Trade Finder GTM export (atom 3/3)",
-  "slice_title": "Trade Finder OG watermark includes Bones Room ask deep link",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/app/og/trade-finder/route.tsx",
-    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
-    "apps/api/tests/test_trade_finder_og_room_hallway.py"
-  ],
-  "max_files": 3,
-  "max_lines": 120,
-  "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_trade_finder_og_room_hallway.py apps/api/tests/test_trade_finder_og_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/tf-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/trade-finder?download=1'"
-  ],
-  "out_of_scope": [
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps",
-    "snapshot codec changes"
-  ],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
-  "status": "shipped",
-  "content_commit": "c8091030c"
+  "atom_id": "lab-og-launch10-demo-blurbs",
+  "slice_title": "Panel-specific demo blurb + SAMPLE stickers for gamelog, efficiency, aging, buysell, dashboard",
+  "content_commit": "3705fdce8",
+  "reality": "PASS",
+  "merge": "merged"
 }
