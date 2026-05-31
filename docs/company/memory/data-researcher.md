@@ -1,9 +1,5 @@
-2026-05-31 | explore-og-margin-note-gate-c | — | PASS | Documented curl fixtures for screenshot QA on NFL+CFB screener OG.
-2026-05-31 | explore-og-margin-note-college-lead | — | PASS | CFB draft-context on QB OG rows matches campus screener shares.
-2026-05-31 | explore-og-margin-note-row2 | — | PASS | WR target-share callouts drive r/DynastyFF screenshot engagement.
-2026-05-31 | lab-og-dashboard-live-gate-c | — | PASS | Dynasty dashboard OC = risers + value picks aggregate (REDDIT-INTEL).
-2026-05-31 | lab-og-from-panel-launch10-registry | — | PASS | No new Reddit intel.
-2026-05-31 | explore-og-margin-note-rows | — | PASS | No new Reddit intel.
+2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | PASS | No new Reddit intel.
+2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | PASS | No new Reddit intel.
 2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 

@@ -1,9 +1,5 @@
-2026-05-31 | explore-og-margin-note-gate-c | 74990e08f | PASS | pytest 18; curl NFL 67971B college 72088B PNG Gate C.
-2026-05-31 | explore-og-margin-note-college-lead | c633ba357 | PASS | pytest 8; curl college 74573B PNG Gate C.
-2026-05-31 | explore-og-margin-note-row2 | 7793850a9 | PASS | pytest 4; curl explore 67971B PNG Gate C.
-2026-05-31 | lab-og-dashboard-live-gate-c | cf76b86ee | PASS | pytest 4; curl dashboard 66547B PNG Gate C.
-2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | PASS | pytest 7 executed; pytest-only atom.
-2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
+2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | PASS | pytest 10; curl breakouts 67718B.
+2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | PASS | pytest 9; curl snapshot OG 76270B.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 

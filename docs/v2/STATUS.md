@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 161 — Explore OG margin notes Gate C; margin epic complete)
+**Last updated:** 2026-05-31 (factory cycle 157 — Lab breakouts OG toLab WR position)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 161 |
+| Cycle | 157 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-og-percentiles-tolab (pro profile OG epic) |
-| Last commit | `74990e08f` |
+| Next slice | Explore margin atom 2/4 or Lab OG live rows per NEXT.md |
+| Last commit | `1ebb9dc73` |
 
-Recent completions (cycle 161): Explore L5 margin notes Gate C contract; margin epic 4/4 complete.
+Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
 ---
 
@@ -30,6 +30,6 @@ Recent completions (cycle 161): Explore L5 margin notes Gate C contract; margin 
 
 | Area | State | Notes |
 |------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export + Hawkeye margin notes top 3 rows (Gate C) |
-| Lab (panels) | Shipping | Launch 10 at L1+; pro profile OG live parity epic active |
+| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
+| Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
 | Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |

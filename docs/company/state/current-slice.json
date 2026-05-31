@@ -1,31 +1,31 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Explore screener OG cards look like stat tables — they need Hawkeye/Dolphin staff margin notes on every screenshot row Reddit shares.",
-  "epic": "Explore L5 — OG screener agent margin notes (atom 4/4)",
-  "slice_title": "Explore OG margin notes Gate C pytest + curl",
-  "atom_id": "explore-og-margin-note-gate-c",
-  "parity_ref": "Explore L5 — Agent margin notes (FACTORY-DOD Gate C)",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — NFL + college explore OG ≥40KB with margin on rows 1–2",
+  "big_problem": "Lab OG watermarks omit default position filters — exported breakouts cards click back to an unscoped board while demo rows are WR-only.",
+  "epic": "Lab L5 — OG hallway position defaults (atom 3/3)",
+  "slice_title": "breakouts WR in OG toLab watermark",
+  "atom_id": "lab-og-tolab-breakouts-position",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_explore_og_margin_note_gate_c.py",
-    "docs/v2/evidence/2026-05-31-explore-og-margin-note-gate-c.md",
-    "docs/v2/REDDIT-INTEL.md"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 2,
+  "max_lines": 25,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_og_margin_note_gate_c.py apps/api/tests/test_explore_og_margin_note_lead.py apps/api/tests/test_explore_og_margin_note_row2.py apps/api/tests/test_explore_og_margin_note_college_lead.py -q --noconftest"
+    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["margin-notes.ts rule changes", "new OG routes"],
+  "out_of_scope": ["rankings default (cross-position by design)", "new panels", "billing"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   },
-  "status": "shipped",
-  "content_commit": "74990e08f"
+  "content_commit": "1ebb9dc73",
+  "reality": "PASS"
 }
