@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-gamelog-blank-player-trim | da33eafd | 2 files; trim before DEFAULT_OG_PLAYER_ID; pytest source guard.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
