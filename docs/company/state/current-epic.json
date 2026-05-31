@@ -8,8 +8,8 @@
     {
       "id": "lab-pro-weekly-paywall-copy",
       "title": "Weekly panel pro gate uses Hawkeye upgrade copy + hallway CTA",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "15eb7a5e"
     },
     {
       "id": "lab-pro-prospects-badge",
@@ -26,6 +26,6 @@
   ],
   "next_atom_id": "lab-pro-prospects-badge",
   "created_at": "2026-05-31T06:22:04Z",
-  "updated_at": "2026-05-31T06:50:00Z",
-  "last_cycle_commit": null
+  "updated_at": "2026-05-31T06:55:00Z",
+  "last_cycle_commit": "15eb7a5e"
 }

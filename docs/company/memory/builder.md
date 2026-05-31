@@ -25,6 +25,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
+2026-05-31 | league-waiver-tendencies-og-share | Hawkeye OG + share bar; pickHero hoarder-first | 6dcb0f72 | SHIP | KEEP FAAB bar from faab_spent | — | — | evidence 2026-05-31-league-waiver-tendencies-og-share.md
 
 ---
 
@@ -54,5 +55,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
-2026-05-31 | league-strength-of-schedule-tab | da33eafd | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
-- **2026-05-31 cycle 96:** Lab L4 weekly export ProUpgradeGate + Hawkeye teaser rows.
+2026-05-31 | league-roster-depth-og-share | 688cea64 | keep | /og/roster-depth Hawkeye grades; curl 57282B; BureauRosterDepthShareBar
+2026-05-31 | league-build-profiles-og-share | 77d4f765 | keep | /og/build-profiles Atlas archetypes; curl 73228B; BureauBuildProfilesShareBar
+2026-05-31 | league-waiver-tendencies-og-share | 6dcb0f72 | SHIP | /og/waiver-tendencies 73121B; BureauWaiverTendenciesShareBar
+2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
