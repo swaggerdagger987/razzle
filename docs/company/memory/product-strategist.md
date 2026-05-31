@@ -2,6 +2,7 @@
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Demo OG panel-branded.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
+2026-05-31 | bureau-waiver-og-watermark-band | f6e0985f3 | SHIP | League L5 watermark epic atom 1/3; dedup snapshot hallway on base.
 # Memory — Product Strategist
 
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | SHIP | Trade Finder GTM epic complete; Bones hallway on export (T6).

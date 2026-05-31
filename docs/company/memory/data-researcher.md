@@ -1,3 +1,5 @@
+2026-05-31 | bureau-waiver-og-watermark-band | f6e0985f3 | PASS | Waiver FAAB screenshots travel in league group chats.
+
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.

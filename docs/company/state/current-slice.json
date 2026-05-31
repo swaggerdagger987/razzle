@@ -1,31 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic": "Lab L5 — OG hallway deep links (atom 3/3)",
-  "slice_title": "Snapshot exports preserve player in OG toLab watermark band",
-  "atom_id": "lab-og-tolab-snapshot-player",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — snapshot OG PNG ≥40KB + pid in watermark",
+  "atom_id": "bureau-waiver-og-watermark-band",
+  "big_problem": "Bureau waiver and schedule exports lack the terracotta watermark band — league screenshots don't match H2H/Lab brand gravity.",
+  "epic": "League L5 — Bureau advanced tabs OG watermark parity (atom 1/3)",
+  "slice_title": "Waiver tendencies OG terracotta watermark band",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — waiver OG PNG ≥40KB with terracotta band",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/LabOgExportLink.tsx",
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/app/og/waiver-tendencies/route.tsx",
+    "apps/api/tests/test_bureau_waiver_og_watermark.py"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "JWT_SECRET=test PATH=/home/ubuntu/.local/bin:$PATH python3 -m pytest apps/api/tests/test_bureau_waiver_og_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
+    "strength-of-schedule route",
     "NORTH_STAR/DESIGN/DECISIONS edits",
-    "other Launch-10 renderers",
-    "snapshot row shape changes beyond optional pid wrapper"
+    "snapshot codec changes"
   ],
-  "builder_mode": "composer-surgical",
-  "content_commit": "1a12d9c0b",
-  "reality": "PASS",
-  "merge": "pending"
+  "builder_mode": "composer-surgical"
 }
