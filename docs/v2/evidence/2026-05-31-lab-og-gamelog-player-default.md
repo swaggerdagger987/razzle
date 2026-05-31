@@ -1,15 +1,23 @@
-# Evidence — Lab Gamelog OG default player export (2026-05-31)
+# Evidence — lab-og-gamelog-player-default
 
+**Date:** 2026-05-31  
 **Atom:** `lab-og-gamelog-player-default`  
-**Cycle:** 124
+**Verdict:** PASS (FACTORY-DOD Gate C2)
 
-## Acceptance
+## Build / tests
 
-```text
-npm run build --workspace=apps/web → exit 0
-curl 'http://127.0.0.1:3000/og/gamelog?download=1' → 200 60634 bytes PNG 1200×630
-```
+- `npm run build --workspace=apps/web` — exit 0
+- `JWT_SECRET=test pytest apps/api/tests -q` — 61 passed, 5 skipped
 
-## Verdict
+## Gate C — OG PNG curl
 
-PASS — Gate C ≥40KB PNG with default player before search.
+| Route | HTTP | Bytes | Verdict |
+|-------|------|-------|---------|
+| `/og/gamelog?download=1&player_id=00-0036900` | 200 | 60634 | PASS |
+| `/og/gamelog?download=1` (PLAYER_SCOPED default) | 200 | 60634 | PASS |
+
+Both PNGs: 1200×630, ≥40KB.
+
+## Layer claim
+
+Lab L5 — `LabOgExportLink` centralizes `player_id=00-0036900` for gamelog/dynasty-comps when export omits query; `GamelogRenderer` delegates default to helper.
