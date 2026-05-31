@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: league-power-rankings-og or bureau-monte-carlo-copy-link
 last_keep_cycle: 78
-last_commit: d2baccff
+last_commit: 7c78a6fc
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
