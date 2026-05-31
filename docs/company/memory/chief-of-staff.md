@@ -3,6 +3,8 @@
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Workday cycle 1; demo trust epic complete.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
+2026-05-31 | lab-og-efficiency-live-extract | 80544d483 | SHIP | Good morning cycle 1; live parity epic 1/3; lock #1368.
+
 # Memory — Chief of Staff
 
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Good morning cycle 1; hallway epic 3/3 closed; NO_LOCK_GUARDRAIL.

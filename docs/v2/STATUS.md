@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 156 — Lab OG watermark player display name)
+**Last updated:** 2026-05-31 (factory cycle 154 — Lab efficiency OG live lane extract)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 156 |
+| Cycle | 154 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | PARITY next RED/YELLOW row |
-| Last commit | `338709883` |
+| Next slice | lab-og-aging-live-extract |
+| Last commit | `80544d483` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
@@ -30,6 +30,6 @@ Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export f
 
 | Area | State | Notes |
 |------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export + margin note on OG lead row |
+| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
 | Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
 | Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |

@@ -3,6 +3,8 @@
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
+2026-05-31 | lab-og-efficiency-live-extract | 80544d483 | SHIP | extractEfficiencyRows Eff/Vol lanes.
+
 # Memory — Builder
 
 2026-05-31 | lab-og-watermark-display-name | 338709883 | SHIP | playerName on export + watermark display name; pytest 6.

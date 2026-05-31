@@ -564,6 +564,53 @@ function pickRowStat(row: Record<string, unknown>, statKeys: string[]): { stat: 
   return { stat: 0, statLabel: "Value" };
 }
 
+const EFFICIENCY_STAT_KEYS = [
+  "formula_score",
+  "ppo",
+  "efficiency_score",
+  ...STAT_CANDIDATE_KEYS.filter((k) => !["formula_score", "ppo", "efficiency_score"].includes(k)),
+];
+
+/** Efficiency OG — mirrors EfficiencyRenderer most_efficient + volume_kings lanes. */
+function extractEfficiencyRows(obj: Record<string, unknown>, positionFilter: string): OgRow[] {
+  const efficient = Array.isArray(obj.most_efficient)
+    ? (obj.most_efficient as Record<string, unknown>[])
+    : [];
+  const volume = Array.isArray(obj.volume_kings)
+    ? (obj.volume_kings as Record<string, unknown>[])
+    : [];
+  if (!efficient.length && !volume.length) return [];
+
+  const filterPos = (rows: Record<string, unknown>[]) =>
+    positionFilter
+      ? rows.filter((r) => String(r.position ?? r.pos ?? "") === positionFilter)
+      : rows;
+
+  const toRow = (row: Record<string, unknown>, lane: "Eff" | "Vol"): OgRow => {
+    const { stat, statLabel } = pickRowStat(row, EFFICIENCY_STAT_KEYS);
+    return {
+      name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
+      position: String(row.position ?? row.pos ?? ""),
+      team: String(row.team ?? row.team_abbr ?? ""),
+      stat,
+      statLabel: `${lane} · ${statLabel}`,
+    };
+  };
+
+  const effRows = filterPos(efficient).slice(0, 4).map((r) => toRow(r, "Eff"));
+  const volRows = filterPos(volume).slice(0, 4).map((r) => toRow(r, "Vol"));
+  const seen = new Set<string>();
+  const merged: OgRow[] = [];
+  for (const row of [...effRows, ...volRows]) {
+    const key = row.name.trim().toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    merged.push(row);
+    if (merged.length >= 6) break;
+  }
+  return merged;
+}
+
 /** Buy/sell OG — mirrors BuySellRenderer lanes + formula_score priority. */
 function extractBuySellRows(obj: Record<string, unknown>, positionFilter: string): OgRow[] {
   const buyLow = Array.isArray(obj.buy_low) ? (obj.buy_low as Record<string, unknown>[]) : [];
@@ -599,6 +646,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   if (slug === "buysell") {
     const buySellRows = extractBuySellRows(obj, positionFilter);
     if (buySellRows.length > 0) return buySellRows;
+  }
+
+  if (slug === "efficiency") {
+    const efficiencyRows = extractEfficiencyRows(obj, positionFilter);
+    if (efficiencyRows.length > 0) return efficiencyRows;
   }
 
   if (slug === "weekly" && Array.isArray(obj.players)) {

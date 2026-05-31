@@ -3,6 +3,8 @@
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
+2026-05-31 | lab-og-efficiency-live-extract | 80544d483 | PASS | No new Reddit intel.
+
 # Memory — Data Researcher
 
 2026-05-31 | explore-og-margin-note-lead | — | PASS | No new Reddit intel; Explore OG margin slice only.

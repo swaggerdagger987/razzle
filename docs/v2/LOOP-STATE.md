@@ -1,8 +1,10 @@
-cycle: 156
+cycle: 154
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: PARITY next RED/YELLOW row
-last_keep_cycle: 156
-last_commit: 338709883
-lab_l5_og_watermark_display_name_epic: complete
+next_slice: lab-og-aging-live-extract
+last_keep_cycle: 154
+last_commit: 80544d483
+lab_l5_og_live_parity_epic: active atom 1/3
+lab_l5_og_hallway_epic: complete
+lab_l5_og_weekly_tolab_position: complete

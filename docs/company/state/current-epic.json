@@ -1,27 +1,33 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG snapshot exports deep-link as generic \"player\" — Reddit shares lose recognizable hallway context.",
-  "epic_title": "Lab L5 — OG export display names in watermark",
+  "epic_status": "active",
+  "big_problem": "Lab OG live fetch still mis-reads some Launch-10 API shapes — exports don't match the in-product board.",
+  "epic_title": "Lab L5 — OG live panel row parity",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-watermark-display-name",
-      "title": "Gamelog export passes player name into OG watermark toLab",
+      "id": "lab-og-efficiency-live-extract",
+      "title": "Efficiency OG reads most_efficient + volume_kings lanes",
       "status": "done",
-      "merge_commit": "338709883"
+      "merge_commit": "80544d483"
+    },
+    {
+      "id": "lab-og-aging-live-extract",
+      "title": "Aging OG reads positions[].players curve board",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-dashboard-live-extract",
+      "title": "Dashboard OG reads roster grade board rows",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:35:00Z",
-  "updated_at": "2026-05-31T11:45:00Z",
+  "next_atom_id": "lab-og-aging-live-extract",
+  "created_at": "2026-05-31T11:32:00Z",
+  "updated_at": "2026-05-31T11:36:00Z",
   "completed_epics": [
-    {
-      "id": "lab-l5-og-watermark-display-names",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-display-name",
-      "merge_commit": "338709883"
-    },
     {
       "id": "lab-l5-og-hallway-deep-links",
       "status": "complete",
@@ -29,10 +35,10 @@
       "merge_commit": "1a12d9c0b"
     },
     {
-      "id": "league-l5-trade-finder-gtm",
+      "id": "lab-l5-og-hallway-weekly-position",
       "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
+      "last_atom": "lab-og-tolab-weekly-position",
+      "merge_commit": "9be64d109"
     }
   ]
 }
