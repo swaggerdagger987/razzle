@@ -56,6 +56,7 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 87	6dbe1ca1	depth+hallway+voice	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5; dedup on base 6dbe1ca1; factory cycle 1; next build-profiles
 88	2ee04975	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles unhidden; build PASS pytest 51; epic atom 1/3
 <<<<<<< HEAD
+<<<<<<< HEAD
 89	39516855	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot decode	trust=T1,T5,T6; shared decode m-key; curl demo 59305B snap 51310B; H2H export epic complete
 90	c9151786	depth+voice+simplicity	keep	Lab	L5 Dashboard comps OG snapshot rows	trust=T5,T6; DashboardRenderer snapshotRows; curl dynasty-comps 65961B; dedup prospects+tradevalues on base
 91	a2536dcc	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5; Hawkeye renderer; waiver-tendencies nav visible; web build PASS; epic atom 2/3
@@ -73,3 +74,9 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 96	7ec8f82a	depth+voice+simplicity	keep	League	L5 H2H ShareBar canonical snapshot codec	trust=T5,T6; encodeBureauH2HOgSnapshot; curl h2h demo 71895B snap 70829B; pytest 51; web build; epic atom 1/3
 >>>>>>> origin/razzle-v2-redesign
 97	26a22f69	depth+voice+simplicity	keep	League	L5 Power Rankings OG snapshot rows	trust=T5,T6; encode top-5 board; curl snap 50084B; Bureau OG epic atom 1/3
+=======
+89	17a40c65	depth+voice+simplicity	keep	Lab	L5 prospects OG RPS+position export	trust=T1,T5,T6; RPS label+position on LabOgExportLink; curl prospects snap; filtered-panel epic atom 1/3
+90	b2d304e7	depth+voice+simplicity	keep	Lab	L5 efficiency OG position filter export	trust=T1,T5,T6; position on Efficiency LabOgExportLink; curl eff RB 45113B snap WR 44195B; filtered-panel epic atom 2/3
+91	f60168e1	depth+voice+simplicity	keep	Lab	L5 weekly OG PPG snapshot parity	trust=T1,T5,T6; PPG demo+export always; curl weekly RB 44781B snap WR 53256B; filtered-panel epic complete 3/3
+92	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles share OG	trust=T2,T5,T6; ShareBar+OG route; curl build-profiles demo 72409B; share-export epic atom 1/3
+>>>>>>> 246052ec (standup: 2026-05-31 — SHIP Build Profiles share OG)

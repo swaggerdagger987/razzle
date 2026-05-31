@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauBuildProfilesShareBar } from "./BureauBuildProfilesShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -60,6 +61,7 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
           {rows.length} teams · league {leagueLabel}
         </p>
+        <BureauBuildProfilesShareBar leagueId={leagueId} />
       </header>
 
       {Object.keys(archetypeCounts).length > 0 && (
