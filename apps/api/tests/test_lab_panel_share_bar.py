@@ -38,3 +38,25 @@ def test_buysell_uses_share_bar():
     assert "LabPanelShareBar" in renderer
     assert "copy buy/sell link" in renderer
     assert "<LabOgExportLink" not in renderer
+
+
+def test_weekly_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy weekly link" in renderer
+    assert "<LabOgExportLink" not in renderer
+
+
+def test_gamelog_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/GamelogRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy gamelog link" in renderer
+    assert "playerId=" in renderer
+    assert "playerName={displayName}" in renderer
+    assert "<LabOgExportLink" not in renderer
+
+
+def test_share_bar_passes_player_name_to_og():
+    source = _read("apps/web/components/lab/LabPanelShareBar.tsx")
+    assert 'params.set("name"' in source
+    assert "playerName" in source

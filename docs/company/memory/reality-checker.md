@@ -1,9 +1,17 @@
+<<<<<<< HEAD
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | 138614555 | PASS | pytest 6; curl weekly 65110B gamelog 62741B.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
+2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | PASS | pytest 10; curl breakouts 67718B.
+2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | PASS | pytest 9; curl snapshot OG 76270B.
+
+=======
 2026-05-31 | league-og-pressure-map-watermark | 73d87cf79 | PASS | pytest 1; curl 63349B.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | PASS | pytest 10; curl breakouts 67718B.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | PASS | pytest 9; curl snapshot OG 76270B.
 2026-05-31 | league-og-power-rankings-watermark | f6e0985f3 | PASS | curl power-rankings OG 70764B; pytest 1; Gate C demo rows.
 2026-05-31 | league-og-pressure-map-watermark | 7b942533a | PASS | curl pressure-map OG 64347B; pytest 1; Gate C demo rows.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
+>>>>>>> origin/razzle-v2-redesign
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
@@ -13,7 +21,7 @@
 
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | PASS | pytest 4; curl explore 65482B; web build exit 0.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | PASS | pytest 5; curl snapshot 54427B; web build green.
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | pytest 5; web build; Gate C evidence on file.
+2026-05-31 | lab-og-from-panel-gate-c-rest | 138614555 | PASS | pytest 5; web build; Gate C evidence on file.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | PASS | pytest 2; curl 82365B; web build exit 0.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | PASS | pytest 3; curl gamelog 62232B; web build exit 0.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | PASS | pytest 4; curl 57910B + snapshot 55930B.

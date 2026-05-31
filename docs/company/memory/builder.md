@@ -1,5 +1,13 @@
+<<<<<<< HEAD
+2026-05-31 | lab-og-tolab-aging-position | 369773e97 | SHIP | aging RB in TOLAB_DEFAULT_POSITION + pytest guard.
+2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | 138614555 | SHIP | weekly+gamelog share bar + pytest.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
+2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
+=======
 2026-05-31 | explore-og-margin-note-rows | cae3ed2aa | SHIP | topMarginNotes on OG rows 1–3 + demo fields for Gate C.
 2026-05-31 | explore-og-margin-note-lead | f6e0985f3 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
+>>>>>>> origin/razzle-v2-redesign
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.

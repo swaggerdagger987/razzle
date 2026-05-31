@@ -1,4 +1,62 @@
 {
+<<<<<<< HEAD
+<<<<<<< HEAD
+  "epic_status": "active",
+  "big_problem": "Lab panel exports hide behind a single underline link \u2014 GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
+  "epic_title": "Lab L5 \u2014 GTM panel share bar parity",
+  "parity_ref": "Explore L5 \u2014 Lab panel OG data rows",
+=======
+  "epic_status": "complete",
+  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
+  "epic_title": "Lab L5 — pro profile OG live parity",
+  "parity_ref": "Lab panel OG data rows",
+>>>>>>> origin/razzle-v2-redesign
+  "depth_ref": "Lab L5",
+  "atoms": [
+    {
+      "id": "lab-panel-share-bar-rankings",
+      "title": "Dynasty Rankings \u2014 LabPanelShareBar copy/preview/export + snapshot",
+      "status": "done",
+      "merge_commit": "81d081604"
+    },
+    {
+      "id": "lab-panel-share-bar-breakouts-buysell",
+      "title": "Breakouts + Buy/Sell \u2014 share bar with formula snapshot rows",
+      "status": "done",
+      "merge_commit": "81d081604"
+    },
+    {
+      "id": "lab-panel-share-bar-weekly-gamelog",
+      "title": "Weekly + Gamelog \u2014 player-scoped share bar",
+      "status": "done",
+      "merge_commit": "138614555"
+    },
+    {
+<<<<<<< HEAD
+      "id": "lab-panel-share-bar-launch10-rest",
+      "title": "Remaining Launch-10 panels \u2014 share bar rollout",
+      "status": "pending",
+      "merge_commit": null
+    }
+  ],
+  "next_atom_id": "lab-panel-share-bar-launch10-rest",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:25:00Z",
+  "completed_epics": [
+    "league-trade-finder-gtm-export-2026-05-31",
+    "lab-formula-sorted-og-live-parity-2026-05-31",
+    "league-og-bureau-watermark-2026-05-31"
+=======
+      "id": "lab-og-percentiles-tolab",
+      "title": "Percentiles OG toLab default player hallway",
+      "status": "done",
+      "merge_commit": "62e147bb8"
+    }
+  ],
+  "next_atom_id": null,
+  "created_at": "2026-05-31T11:20:00Z",
+  "updated_at": "2026-05-31T12:15:00Z",
+=======
   "epic_status": "active",
   "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
   "epic_title": "Explore L5 — OG screener agent margin notes",
@@ -33,6 +91,7 @@
   "next_atom_id": "explore-og-margin-note-sticker",
   "created_at": "2026-05-31T11:22:30Z",
   "updated_at": "2026-05-31T11:40:00Z",
+>>>>>>> origin/razzle-v2-redesign
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-display-names",
@@ -49,8 +108,17 @@
     {
       "id": "lab-l5-og-hallway-deep-links",
       "status": "complete",
+<<<<<<< HEAD
+      "last_atom": "bureau-h2h-og-gate-c-snapshot",
+      "merge_commit": "4907c8327"
+    },
+    "league-h2h-gtm-export-2026-05-31",
+    "lab-l5-pro-profile-og-live-parity"
+>>>>>>> origin/razzle-v2-redesign
+=======
       "last_atom": "lab-og-tolab-snapshot-player",
       "merge_commit": "1a12d9c0b"
     }
+>>>>>>> origin/razzle-v2-redesign
   ]
 }
