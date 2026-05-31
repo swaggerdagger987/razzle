@@ -1,5 +1,8 @@
 # Memory — Builder
 
+2026-05-31 | Cycle 116 bureau H2H pytest | 5e75875e | 4 pytest cases.
+
+
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | keep | ppo+most_efficient; aging ppg+positions unwrap; merged base buysell/dashboard keys.

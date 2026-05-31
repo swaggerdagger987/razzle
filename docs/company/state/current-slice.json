@@ -16,10 +16,7 @@
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
     "curl -s -o /tmp/og-prospects-wr.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?position=WR&download=1'"
   ],
-  "out_of_scope": [
-    "Weekly/breakouts extracts (already on base)",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

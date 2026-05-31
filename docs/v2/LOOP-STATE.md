@@ -8,5 +8,4 @@ last_commit: ab6ae8d7
 lab_l5_og_live_fetch_epic: complete
 lab_l4_pro_gate_epic: active
 lab_l5_og_watermark_epic: complete
-lab_l5_og_live_sort_epic: complete
-lab_l5_og_position_epic: complete
+bureau_h2h_codec_epic: complete
