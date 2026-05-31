@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | route.tsx fromSnapshot flag; 2 files ≤25 lines.
+2026-05-31 | lab-og-tolab-snapshot-player | 6b7feb828 | SHIP | route.tsx fromSnapshot flag; 2 files ≤25 lines.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
