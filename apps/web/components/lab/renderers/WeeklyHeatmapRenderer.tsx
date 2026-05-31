@@ -8,6 +8,7 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { LabOgExportLink } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
@@ -179,9 +180,11 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {hotPlayer.p.name} →
           </Link>
-          <a href="/og/weekly?download=1" className="text-sm text-ink-medium underline" download="razzle-weekly-heatmap.png">
-            export card
-          </a>
+          <LabOgExportLink
+            slug="weekly"
+            downloadName="razzle-weekly-heatmap.png"
+            position={position}
+          />
         </footer>
       )}
     </div>

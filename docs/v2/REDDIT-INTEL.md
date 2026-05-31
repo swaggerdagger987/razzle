@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Factory cycle 1 (breakouts + weekly OG position filter)
+
+1. **Filter must ride on export URL** — Hawkeye breakouts and weekly heatmap tabs set `position=` on `LabOgExportLink`; OG card shows position badge and WR-only demo rows.
+2. **Breakouts vs weekly both travel** — launch-10 panels that users filter by position need parity before prospects/trade-values (atom 3).
+3. Standing: filtered OG smaller or different row set vs unfiltered proves filter is live, not decorative.
+
 ## 2026-05-31 — Workday cycle 1 atom 3 (player-scoped OG export)
 
 1. **Player context must ride on the export URL** — dynasty comps and gamelog screenshots are about *this* asset; `player_id` on the OG link matches in-panel selection.
