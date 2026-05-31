@@ -2,19 +2,25 @@
   "date": "2026-05-31",
   "big_problem": "Lab export cards must show the same board the user sees — not generic demo names.",
   "epic": "Lab L5 — OG snapshot parity on launch-10 panels",
-  "slice_title": "Prospects OG snapshot from ranked board",
+  "slice_title": "Prospects OG snapshot from ranked board (epic atom 3/5; tradevalues deduped on base)",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB with real row layout",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/lab/renderers/ProspectsRenderer.tsx"],
-  "max_files": 1,
-  "max_lines": 35,
-  "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/prospects?download=1&position=WR&snapshot=eyJuIjoiVHJhdmlzIEh1bnRlciIsInAiOiJXUiIsInQiOiJDT0xPIiwicyI6OTQuMCwic2wiOiJSUFMifSx7Im4iOiJDYW0gV2FyZCIsInAiOiJRQiIsInQiOiJNSUFNIiwicyI6OTEuMCwic2wiOiJSUFMifSx7Im4iOiJBc2h0b24gSmVhbnR5IiwicCI6IlJCIiwidCI6IkJPSVNFIiwicyI6ODkuMCwic2wiOiJSUFMifV0'"
+  "allowed_paths": [
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
   ],
-  "out_of_scope": ["OG route changes", "new panels", "API schema", "auth/billing"],
+  "max_files": 1,
+  "max_lines": 30,
+  "acceptance_commands": [
+    "pytest apps/api/tests -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/prospects?snap=eyJuYW1lIjoiVHJhdmlzIEh1bnRlciIsInBvc2l0aW9uIjoiV1IiLCJ0ZWFtIjoiSkFYIiwic3RhdCI6OTQsInN0YXRMYWJlbCI6IlJQUyJ9' && test $(stat -c%s /tmp/og-prospects.png) -ge 40000"
+  ],
+  "out_of_scope": [
+    "TradeValuesRenderer (already on base 69e4c732)",
+    "OG route changes",
+    "NORTH_STAR edits"
+  ],
   "builder_mode": "composer-surgical"
 }
