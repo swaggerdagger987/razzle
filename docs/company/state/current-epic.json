@@ -8,8 +8,8 @@
     {
       "id": "bureau-self-scout-sharebar-snapshot",
       "title": "Self-Scout ShareBar + OG snapshot codec matches panel grades",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0f94a7c0c"
     },
     {
       "id": "bureau-manager-profiles-sharebar-snapshot",
