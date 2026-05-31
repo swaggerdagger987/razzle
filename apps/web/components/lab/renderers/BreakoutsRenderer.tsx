@@ -18,7 +18,7 @@ import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -93,6 +93,16 @@ export function BreakoutsRenderer({ panel }: Props) {
   }, [formula, rawCandidates, statsQ.data]);
 
   const top = candidates[0] ?? null;
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    return candidates.slice(0, 6).map((p) => ({
+      name: p.name,
+      position: p.position,
+      team: p.team,
+      stat: formula ? (p.formula_score ?? 0) : (p.rbs_score ?? 0),
+      statLabel: "Score",
+    }));
+  }, [candidates, formula]);
 
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
@@ -251,7 +261,11 @@ export function BreakoutsRenderer({ panel }: Props) {
           >
             Ask Hawkeye about {top.name} →
           </Link>
-          <LabOgExportLink slug="breakouts" downloadName="razzle-breakouts.png" />
+          <LabOgExportLink
+            slug="breakouts"
+            downloadName="razzle-breakouts.png"
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

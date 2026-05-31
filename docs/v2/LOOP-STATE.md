@@ -19,6 +19,7 @@ lab_l5_og_export_gamelog_efficiency_aging: complete
 lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
 lab_l5_og_live_extractors: complete
+lab_l5_og_launch10_live_label: complete
 lab_l5_og_live_row_epic: complete
 lab_l5_og_snapshot_efficiency_aging: complete
 lab_l5_og_rankings_snapshot: complete
