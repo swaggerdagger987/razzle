@@ -1,9 +1,8 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | force_demo documents sample path without blocking live curl.
-
-2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | Weekly heatmap OG must match Lab position default.
-
+2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.
+2026-05-31 | launch10 no-snapshot | e2a3ce8a | Direct /og links need live API path without panel snapshot param.
+2026-05-31 | Cycle 118 | e00217d1 | No new intel.
 2026-05-31 | lab-og-live-sticker-launch10 | cycle 116 | Reddit needs visible live vs sample on OG exports.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.
