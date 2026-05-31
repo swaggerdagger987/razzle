@@ -32,7 +32,7 @@
     {
       "id": "league-waiver-tendencies-tab",
       "title": "Unhide Waiver Tendencies tab with Hawkeye renderer",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {

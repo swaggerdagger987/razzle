@@ -2,14 +2,14 @@
   "date": "2026-05-31",
   "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product (PARITY League L5).",
   "epic": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
-  "atom_id": "league-build-profiles-tab",
-  "slice_title": "Unhide Build Profiles tab with Atlas renderer",
+  "atom_id": "league-waiver-tendencies-tab",
+  "slice_title": "Unhide Waiver Tendencies tab with Hawkeye renderer",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "Bureau build-profiles tab renders archetype grid (no scaffold fallback)",
+  "acceptance_ref": "Bureau waiver-tendencies tab renders archetype grid (no scaffold fallback)",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauBuildProfiles.tsx",
+    "apps/web/components/league/BureauWaiverTendencies.tsx",
     "apps/web/components/league/BureauFeatureBody.tsx",
     "apps/web/lib/bureau-features.ts"
   ],
@@ -20,9 +20,9 @@
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
   ],
   "out_of_scope": [
-    "OG export for build-profiles",
+    "OG export for waiver-tendencies",
     "API schema changes",
-    "Other Bureau tab unhides"
+    "Schedule tab unhide"
   ],
   "builder_mode": "composer-surgical",
   "votes": {

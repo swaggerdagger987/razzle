@@ -1,10 +1,10 @@
-cycle: 83
+cycle: 84
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-waiver-tendencies-tab (epic atom 5/6)
-last_keep_cycle: 83
-last_commit: 367786d3
+next_slice: league-schedule-tab (epic atom 6/6)
+last_keep_cycle: 84
+last_commit: da33eafd
 league_l5_unhide_bureau_epic: in_progress
 league_l5_roster_depth_tab: complete
 league_l5_power_rankings_tab: complete
