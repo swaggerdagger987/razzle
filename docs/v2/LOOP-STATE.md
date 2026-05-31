@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-prospects-items-live
 last_keep_cycle: 117
-last_commit: da33eafd
+last_commit: 89b19df2
 lab_l5_gamelog_og_epic: active
 lab_l5_og_watermark_epic: complete
 lab_l5_og_live_sort_epic: complete
