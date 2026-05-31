@@ -1,3 +1,4 @@
+2026-05-31 | lab-panel-share-bar-breakouts-buysell | f6e0985f3 | Breakout/buy-low threads share panel URL + OG preview before export.
 2026-05-31 | lab-panel-share-bar-rankings | 6c62faf8c | DynastyFF tier posts want link + preview before PNG download.
 2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | Octo composite exports must match formula bar sort.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
