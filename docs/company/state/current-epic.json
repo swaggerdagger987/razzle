@@ -1,50 +1,50 @@
 {
   "epic_status": "active",
-  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
-  "epic_title": "Explore L5 — OG screener agent margin notes",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
-  "depth_ref": "Explore L5",
+  "big_problem": "Bureau waiver and schedule exports lack the terracotta watermark band — league screenshots don't match H2H/Lab brand gravity.",
+  "epic_title": "League L5 — Bureau advanced tabs OG watermark parity",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "explore-og-margin-note-lead",
-      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
+      "id": "bureau-waiver-og-watermark-band",
+      "title": "Waiver tendencies OG terracotta watermark band",
       "status": "done",
-      "merge_commit": "0fc4932b7"
+      "merge_commit": "3bb457789"
     },
     {
-      "id": "explore-og-margin-note-rows",
-      "title": "Margin notes on top-3 OG screener rows",
-      "status": "in_progress",
-      "merge_commit": null
-    },
-    {
-      "id": "explore-og-margin-note-sticker",
-      "title": "LIVE staff sticker when OG rows carry margin notes",
+      "id": "bureau-sos-og-watermark-band",
+      "title": "Strength of schedule OG terracotta watermark band",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "explore-og-margin-note-college",
-      "title": "College universe margin notes on OG export",
+      "id": "bureau-waiver-og-gate-c-pytest",
+      "title": "Waiver OG Gate C pytest + curl guard",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-margin-note-rows",
-  "created_at": "2026-05-31T11:22:30Z",
-  "updated_at": "2026-05-31T18:00:00Z",
+  "next_atom_id": "bureau-sos-og-watermark-band",
+  "created_at": "2026-05-31T11:31:47Z",
+  "updated_at": "2026-05-31T11:45:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-watermark-display-names",
+      "id": "lab-l5-empty-board-og-sample-cards",
       "status": "complete",
-      "last_atom": "lab-og-watermark-display-name",
-      "merge_commit": "338709883"
+      "last_atom": "lab-weekly-empty-export",
+      "merge_commit": "088cebc07"
     },
     {
-      "id": "lab-l5-launch10-og-demo-trust-labels",
+      "id": "lab-l5-formula-og-live-parity",
       "status": "complete",
-      "last_atom": "lab-og-launch10-demo-blurbs",
-      "merge_commit": "3705fdce8"
+      "last_atom": "lab-og-from-panel-gate-c-rest",
+      "merge_commit": "d6503c669"
+    },
+    {
+      "id": "league-l5-trade-finder-gtm",
+      "status": "complete",
+      "last_atom": "league-trade-finder-og-room-hallway",
+      "merge_commit": "c8091030c"
     },
     {
       "id": "lab-l5-og-hallway-deep-links",

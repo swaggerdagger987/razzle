@@ -1,4 +1,7 @@
+2026-05-31 | bureau-waiver-og-watermark-band | 3bb457789 | PASS | curl waiver 70937B; pytest 1; web build green.
+
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | pytest 7; curl efficiency 65774B.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 

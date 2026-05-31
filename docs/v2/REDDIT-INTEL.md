@@ -2,6 +2,9 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau waiver OG watermark (cycle 153)
+- Waiver tendency cards in league chats need the same terracotta brand band as H2H rivalry exports — FAAB hoarder screenshots should click back to Bureau.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.

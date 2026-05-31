@@ -1,9 +1,8 @@
-cycle: 154
+cycle: 155
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: League
 focus_layer: L5
-next_slice: explore-og-margin-note-sticker
-last_keep_cycle: 154
-last_commit: c1a0bcaad
-explore_l5_og_margin_epic: active
-lab_l5_og_watermark_display_name_epic: complete
+next_slice: bureau-sos-og-watermark-band
+last_keep_cycle: 155
+last_commit: 3bb457789
+league_l5_bureau_og_watermark_epic: active
