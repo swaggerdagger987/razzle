@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
   "epic_title": "Lab L5 — GTM panel share bar parity",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
@@ -26,15 +26,16 @@
     {
       "id": "lab-panel-share-bar-launch10-rest",
       "title": "Remaining Launch-10 panels — share bar rollout",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "3c73735c9"
     }
   ],
-  "next_atom_id": "lab-panel-share-bar-launch10-rest",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     "league-trade-finder-gtm-export-2026-05-31",
-    "lab-formula-sorted-og-live-parity-2026-05-31"
+    "lab-formula-sorted-og-live-parity-2026-05-31",
+    "lab-l5-gtm-panel-share-bar-parity-2026-05-31"
   ]
 }
