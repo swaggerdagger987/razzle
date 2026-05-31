@@ -2,6 +2,12 @@
 
 2026-05-31 | Factory cycle 105 weekly/prospects/breakouts OG extract | 8d8b2635 | Workday open; launch-10 live extract epic atom 1/3 SHIP.
 
+2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
+
+2026-05-31 | Factory cycle 113 Lab OG watermark band | 010241ea | Dedup live-sort cb59494b on base; watermark epic atom 1/2.
+
+2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab L5 live-sort epic complete; PR #643/#635 merged; ppo/ppg on base.
+
 2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab live-sort epic atom 2/3; deduped rankings atom on base.
 
 2026-05-31 | Factory cycle 111 efficiency+aging OG sort | 2bba7622 | Workday cycle 1; live-sort epic atom 2/3; PANEL_OG_STAT_KEY peak_age + efficiency_score.

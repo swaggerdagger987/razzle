@@ -2,6 +2,8 @@
 
 2026-05-31 | lab-og-weekly-prospects-breakouts | 8d8b2635 | PASS | curl weekly 53249B prospects 48881B breakouts 61629B | keep
 
+2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | curl efficiency 45113B aging 44952B PASS | post-merge base sync; Gate C both routes.
+
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | curl efficiency 45113B aging 44952B PASS | Gate C ≥40KB PNG both routes.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | curl eff 59068B aging 57916B | PASS | Gate C live-sort atom 2/3

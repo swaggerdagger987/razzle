@@ -1,5 +1,8 @@
 # Memory — Builder
+
 2026-05-31 | lab-og-weekly-prospects-breakouts-live-extract | 8d8b2635 | keep | prospects[] + hot-week weekly; rbs_score breakouts; curl ≥48KB.
+
+2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | keep | ppo+most_efficient; aging ppg+positions unwrap; merged base buysell/dashboard keys.
 
 2026-05-31 | lab-og-buysell-dashboard-live-sort | cb59494b | keep | dynasty_value/rank_diff; buy_low/sell_high extract; curl ≥44KB.
 

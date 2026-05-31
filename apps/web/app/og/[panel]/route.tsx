@@ -66,9 +66,9 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   breakouts: "rbs_score",
   rankings: "dynasty_value",
   tradevalues: "trade_value",
-  efficiency: "ppo",
-  aging: "ppg",
-  buysell: "dynasty_value",
+  efficiency: "efficiency_score",
+  aging: "peak_age",
+  buysell: "value",
   dashboard: "rank_diff",
 };
 
@@ -743,23 +743,26 @@ export async function GET(
           </div>
         ) : null}
 
-        {/* Footer */}
+        {/* Always-on watermark band — matches Explore OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>razzle.lol/lab/{slug}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>razzle.lol/lab/{slug}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),
