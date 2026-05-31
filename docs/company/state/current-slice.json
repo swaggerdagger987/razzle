@@ -1,18 +1,33 @@
 {
   "date": "2026-05-31",
-  "atom_id": "explore-og-college-gate-c",
-  "slice_title": "College explore OG Gate C pytest + campus SAMPLE copy",
+  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
+  "epic": "Room L5 — briefing GTM export",
+  "slice_title": "Briefing OG — terracotta watermark + Room hallway link",
+  "atom_id": "room-briefing-watermark",
+  "parity_ref": "Room L5 — GTM export slice",
+  "depth_ref": "Room L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB; hallway deep link in watermark band",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_college_gate_c.py"
+    "apps/web/app/og/briefing/route.tsx",
+    "apps/web/components/room/BriefingCard.tsx",
+    "apps/api/tests/test_briefing_og_route.py"
   ],
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_explore_og_college_gate_c.py -q --noconftest"
+    "pytest apps/api/tests/test_briefing_og_route.py -q",
+    "npm run build --workspace=apps/web"
   ],
+  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS edits", "new npm deps"],
+  "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+    "verdict": "SHIP"
+  },
+  "content_commit": "da33eafd",
+  "reality": "PASS",
+  "merge": "pending"
 }
