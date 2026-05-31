@@ -14,8 +14,8 @@
     {
       "id": "lab-og-tradevalues-live-rank-labels",
       "title": "Trade Values OG — rank · Value statLabel on live value rows",
-      "status": "done",
-      "merge_commit": "bd083cf41"
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
       "id": "lab-og-breakouts-live-rank-labels",
