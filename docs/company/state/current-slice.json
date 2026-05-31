@@ -17,5 +17,7 @@
     "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1'"
   ],
   "out_of_scope": ["tradevalues panel", "OG route changes", "NORTH_STAR / DESIGN edits"],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "verdict": "SHIP",
+  "content_commit": "95dfef56"
 }
