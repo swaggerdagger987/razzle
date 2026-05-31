@@ -1,4 +1,4 @@
-# Memory — Builder
+2026-05-31 | Cycle 115 bureau H2H pytest | d822b18d | test_bureau_h2h_og_snapshot_codec.py 4 cases.
 
 2026-05-31 | lab-og-weekly-prospects-breakouts-live-extract | 8d8b2635 | keep | prospects[] + hot-week weekly; rbs_score breakouts; curl ≥48KB.
 

@@ -1,4 +1,4 @@
-# Memory — Data Researcher
+2026-05-31 | Cycle 115 | d822b18d | League export codec fidelity.
 
 2026-05-31 | weekly OG hot-week | 8d8b2635 | keep | DynastyFF shares peak-week spikes not season PPG on heatmaps
 
