@@ -31,3 +31,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Trade Network copy | da33eafd | keep | no new intel; share row parity only
 2026-05-31 | cycle 87 breakouts OG snapshot | Lab L5 atom 1/5 | 2230b18e | SHIP | keep | snapshotRows pattern | — | weekly/prospects next
+2026-05-31 | cycle 88 weekly OG snapshot | Lab L5 atom 2/5 | da33eafd | SHIP | keep | snapshotRows on WeeklyHeatmapRenderer | — | prospects/tradevalues next

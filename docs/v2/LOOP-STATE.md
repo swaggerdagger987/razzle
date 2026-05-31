@@ -1,10 +1,10 @@
-cycle: 87
+cycle: 88
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-snapshot-weekly — weekly heatmap OG snapshot
-last_keep_cycle: 87
-last_commit: 2230b18e
+next_slice: lab-og-snapshot-prospects — prospects OG snapshot
+last_keep_cycle: 88
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_link_epic: complete
 lab_l5_og_snapshot_epic: active

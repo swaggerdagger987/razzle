@@ -14,7 +14,7 @@
     {
       "id": "lab-og-snapshot-weekly",
       "title": "Weekly heatmap OG snapshot from visible weeks",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {

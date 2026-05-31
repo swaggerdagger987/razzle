@@ -33,3 +33,4 @@ explicit checks in the verification routine.
 2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
 2026-05-31 | trade-network OG Gate C | da33eafd | PASS | curl 200 68199B regression | keep | docs/v2/evidence/2026-05-31-bureau-trade-network-copy-link.md
 2026-05-31 | cycle 87 breakouts OG snapshot | Lab L5 atom 1/5 | 2230b18e | SHIP | keep | snapshotRows pattern | — | weekly/prospects next
+2026-05-31 | cycle 88 weekly OG snapshot | Lab L5 atom 2/5 | da33eafd | SHIP | keep | snapshotRows on WeeklyHeatmapRenderer | — | prospects/tradevalues next

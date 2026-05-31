@@ -2,18 +2,18 @@
   "date": "2026-05-31",
   "big_problem": "Lab export cards must show the same breakout board the user sees — not generic demo names.",
   "epic": "Lab L5 — OG snapshot parity on launch-10 panels",
-  "slice_title": "Breakouts OG snapshot from in-panel RBS leaders",
+  "slice_title": "Weekly heatmap OG snapshot from visible weeks",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB with real row layout",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/lab/renderers/BreakoutsRenderer.tsx"],
+  "allowed_paths": ["apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx"],
   "max_files": 1,
-  "max_lines": 35,
+  "max_lines": 30,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-breakouts-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/breakouts?download=1&snapshot=eyJuIjoiUm9tZSBPZHVuemUiLCJwIjoiV1IiLCJ0IjoiQ0hJIiwicyI6OTIsInNsIjoiU2NvcmUifSx7Im4iOiJMYWRkIE1jQ29ua2V5IiwicCI6IldSIiwidCI6IkxBQyIsInMiOjg4LCJzbCI6IlNjb3JlIn1d'"
+    "curl -s -o /tmp/og-weekly-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/weekly?download=1&position=WR&snapshot=eyJuIjoiSmEnTWFyciBDaGFzZSIsInAiOiJXUiIsInQiOiJDTU4iLCJzIjoyNC42LCJzbCI6IkZUUFMifSx7Im4iOiJCaWphbiBSb2JpbnNvbiIsInAiOiJSQiIsInQiOiJBVEwiLCJzIjoyMi4xLCJzbCI6IkZUUFMifSx7Im4iOiJNYXJ2aW4gSGFycmlzb24gSXIuIiwicCI6IldSIiwidCI6IkFSSSIsInMiOjE0LjIsInNsIjoiRlRQUyJ9XQ'"
   ],
   "out_of_scope": ["OG route changes", "new panels", "API schema", "auth/billing"],
   "builder_mode": "composer-surgical"

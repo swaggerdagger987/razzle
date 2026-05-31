@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab weekly heatmap export (cycle 88)
+- **Angle:** Hawkeye weekly FPTS leaders as share card — top grid rows encoded from the panel, not generic demo names.
+- **Screenshot hook:** Top-6 weekly leaders with FPTS on terracotta OG card.
+
 ### 2026-05-31 — Lab breakouts export (cycle 87)
 - **Angle:** Hawkeye breakout board as a share card — RBS leaders encoded from the panel, not generic demo names.
 - **Screenshot hook:** Top-6 breakout names with scores on terracotta OG card.
