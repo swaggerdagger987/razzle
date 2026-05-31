@@ -18,6 +18,8 @@
     "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_college.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
+  "content_commit": "bfa1b5d35",
+  "reality": "PASS",
   "out_of_scope": [
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
