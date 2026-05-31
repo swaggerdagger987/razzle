@@ -112,12 +112,12 @@ const DEFAULT_DEMO_ROWS: OgRow[] = [
 
 const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
   weekly: [
-    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 24.6, statLabel: "FPTS" },
-    { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 22.1, statLabel: "FPTS" },
-    { name: "Brock Bowers", position: "TE", team: "LV", stat: 18.4, statLabel: "FPTS" },
-    { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 26.8, statLabel: "FPTS" },
-    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 14.2, statLabel: "FPTS" },
-    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 19.7, statLabel: "FPTS" },
+    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 24.6, statLabel: "PPG" },
+    { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 22.1, statLabel: "PPG" },
+    { name: "Brock Bowers", position: "TE", team: "LV", stat: 18.4, statLabel: "PPG" },
+    { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 26.8, statLabel: "PPG" },
+    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 14.2, statLabel: "PPG" },
+    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 19.7, statLabel: "PPG" },
   ],
   prospects: [
     { name: "Travis Hunter", position: "WR", team: "JAX", stat: 94, statLabel: "Score" },

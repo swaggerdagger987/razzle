@@ -1,25 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-efficiency-og-position-filter",
+  "atom_id": "lab-weekly-og-snapshot-verify",
   "big_problem": "Position-filtered Lab panels export OG cards with wrong stat labels or unfiltered rows — screenshots break trust (DEPTH Lab L5).",
   "epic": "Lab L5 — OG snapshot fidelity on filtered panels",
-  "slice_title": "Efficiency OG export passes position filter",
+  "slice_title": "Weekly heatmap OG snapshot row parity audit",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T1", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
-    "docs/v2/evidence/2026-05-31-lab-efficiency-og-position-filter.md"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
+    "docs/v2/evidence/2026-05-31-lab-weekly-og-snapshot-verify.md"
   ],
-  "max_files": 2,
-  "max_lines": 10,
+  "max_files": 3,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-eff-rb.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?position=RB&download=1'",
-    "curl -s -o /tmp/og-eff-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?position=WR&download=1&snapshot=eyJuIjoiQW1vbi1SYSBTdC4gQnJvd24iLCJwIjoiV1IiLCJ0IjoiREVUIiwicyI6MC4zNywic2wiOiJQUE8ifSx7Im4iOiJUZWVrIEhpbGwiLCJwIjoiV1IiLCJ0IjoiTUlBIiwicyI6MC4zOSwic2wiOiJQUE8ifV0'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-weekly-rb.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?position=RB&download=1'",
+    "curl -s -o /tmp/og-weekly-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1&snapshot=eyJuIjoiQW1vbi1SYSBTdC4gQnJvd24iLCJwIjoiV1IiLCJ0IjoiREVUIiwicyI6MTguNCwic2wiOiJQUEcifSx7Im4iOiJUZWVrIEhpbGwiLCJwIjoiV1IiLCJ0IjoiTUlBIiwicyI6MTcuMiwic2wiOiJQUEcifV0'"
   ],
-  "out_of_scope": ["OG route rewrite", "new panels", "API schema"],
+  "out_of_scope": ["New panels", "API schema", "OG layout redesign"],
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
