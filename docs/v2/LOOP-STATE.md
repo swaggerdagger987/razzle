@@ -1,10 +1,10 @@
-cycle: 81
+cycle: 82
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-trade-network-share
-last_keep_cycle: 81
-last_commit: b11ed616
+next_slice: lab-l5-og-live-rows
+last_keep_cycle: 82
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete

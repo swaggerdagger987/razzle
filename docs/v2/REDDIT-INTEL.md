@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau Trade Network (cycle 82)
+- **Angle:** Partnership graphs travel — copy network link + Bones OG card with hottest trade pairs for league chat.
+- **Screenshot hook:** Hottest partnership callout + edge list on export card.
+
 ### 2026-05-31 — Bureau Trade Finder (cycle 81)
 - **Angle:** Fair-trade ideas travel — copy finder link + Bones OG card with give/get rows for league chat.
 - **Screenshot hook:** Top match callout + three value-matched deal rows on export card.

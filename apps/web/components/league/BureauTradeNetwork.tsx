@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { useCallback, useState } from "react";
 
 interface Props {
   data: Record<string, unknown>;
@@ -19,6 +20,20 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
   const edges = (data.edges as Edge[]) ?? [];
   const teamById = new Map(nodes.map((n) => [n.roster_id, n.team]));
   const hero = edges[0] ?? null;
+  const [copied, setCopied] = useState(false);
+  const networkPath = `/league/${leagueId}/trade-network`;
+
+  const copyNetworkLink = useCallback(async () => {
+    const url =
+      typeof window !== "undefined" ? `${window.location.origin}${networkPath}` : networkPath;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, [networkPath]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -40,6 +55,19 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
           {edges.length} partnerships · {nodes.length} managers
         </p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <button type="button" className="btn-chunky text-xs" onClick={() => void copyNetworkLink()}>
+            {copied ? "copied!" : "copy network link"}
+          </button>
+          <a
+            href={`/og/trade-network?league=${encodeURIComponent(leagueId)}&download=1`}
+            download="razzle-trade-network.png"
+            className="btn-chunky active text-xs"
+            style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+          >
+            export card
+          </a>
+        </div>
       </header>
 
       {hero && (
@@ -92,14 +120,6 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
       )}
 
       <footer className="flex flex-wrap items-center gap-4 text-sm">
-        <a
-          href={`/og/trade-network?league=${encodeURIComponent(leagueId)}&download=1`}
-          download="razzle-trade-network.png"
-          className="btn-chunky active text-xs"
-          style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-        >
-          export card
-        </a>
         <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
           manager profiles →
         </Link>

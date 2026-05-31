@@ -31,3 +31,4 @@ new evidence.
 2026-05-31 | Bureau Pressure Map copy atom 4 | 2c3cd3a2 | SHIP | keep | share-row epic closed; next league-power-rankings-og
 2026-05-31 | Bureau Power Rankings OG atom 1 | 131ee281 | SHIP | keep | Octo differential board travels; epic atoms 2-3 trade share
 2026-05-31 | Bureau Trade Finder share atom 2 | b11ed616 | SHIP | keep | Bones fair-trade ideas copy+export in header; epic atom 3 trade-network
+2026-05-31 | Bureau Trade Network share atom 3 | da33eafd | SHIP | keep | partnership graph copy+export in header; power OG epic complete
