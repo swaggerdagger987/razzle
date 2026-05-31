@@ -1,30 +1,36 @@
 # Evidence — lab-og-tolab-snapshot-player
 
 **Date:** 2026-05-31  
-**Atom:** `lab-og-tolab-snapshot-player` — snapshot exports preserve player in OG toLab watermark.
+**Cycle:** 153  
+**Verdict:** PASS (Gate C)
 
 ## Commands
 
 ```bash
-python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest
-# 5 passed
+JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_snapshot_player.py apps/api/tests/test_lab_og_tolab_watermark.py -q
+# 6 passed
 
 npm run build --workspace=apps/web
 # exit 0
 
-SNAPSHOT=$(node -e "const p={r:[{n:'Christian McCaffrey',p:'RB',t:'SF',s:24.5,sl:'Wk 12'}],pid:'00-0033280'}; console.log(Buffer.from(JSON.stringify(p)).toString('base64').replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,''))")
-curl -s -o /tmp/og-gamelog-snap.png -w '%{http_code} %{size_download}' \
-  "http://127.0.0.1:3000/og/gamelog?download=1&snapshot=${SNAPSHOT}"
-# 200 54427
-file /tmp/og-gamelog-snap.png
-# PNG 1200x630
+curl -s -o /tmp/og-rankings.png -w "rankings %{http_code} %{size_download}\n" \
+  "http://localhost:3000/og/rankings?download=1"
+# rankings 200 66806
+
+curl -s -o /tmp/og-gamelog.png -w "gamelog %{http_code} %{size_download}\n" \
+  "http://localhost:3000/og/gamelog?download=1&player_id=00-0036900"
+# gamelog 200 62741
 ```
 
-## Change
+## Gate C
 
-- `encodeOgSnapshot` wraps rows with optional `pid` when export has a resolved player id.
-- OG route decodes `pid` and passes `snapshotPlayerId` into `labOgWatermarkLink` so snapshot-only share URLs deep-link back with player context.
+| Route | HTTP | Bytes | PNG |
+|-------|------|-------|-----|
+| `/og/rankings?download=1` | 200 | 66806 | yes |
+| `/og/gamelog?download=1&player_id=00-0036900` | 200 | 62741 | yes |
 
-## Verdict
+## Change summary
 
-PASS — FACTORY-DOD Gate C (PNG ≥ 40KB); hallway epic atom 3/3 complete.
+- `encodeOgSnapshot` v1 embeds `pi`/`pn` for player-scoped panels.
+- `decodeOgSnapshot` returns `OgSnapshotPayload` with player hallway context.
+- OG watermark `toLab` uses resolved player name (snapshot or `name` query param).
