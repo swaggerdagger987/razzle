@@ -172,7 +172,17 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
               open Trade Finder →
             </Link>
             {you?.user_id && (
-              <BureauH2HShareBar leagueId={leagueId} userId={you.user_id} opponentId={opponentId || undefined} />
+              <BureauH2HShareBar
+                leagueId={leagueId}
+                userId={you.user_id}
+                opponentId={opponentId || undefined}
+                snapshot={{
+                  you: { team: you.team, record: you.record, ppg: you.ppg },
+                  them: { team: them.team, record: them.record, ppg: them.ppg },
+                  position_compare: positionCompare,
+                  trade_fit: tradeFit,
+                }}
+              />
             )}
           </section>
         </>
