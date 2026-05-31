@@ -1,5 +1,5 @@
 # Memory — Builder
-2026-05-31 | lab-og-gamelog-weeks-fpts-sort | da33eafd | keep | extractGamelogWeekRows; Wk N + fpts sort; curl 56390B.
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | keep | extractGamelogWeekRows; Wk N + fpts sort; curl 56390B.
 
 2026-05-31 | lab-og-weekly-prospects-breakouts-live-extract | 8d8b2635 | keep | prospects[] + hot-week weekly; rbs_score breakouts; curl ≥48KB.
 
