@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-watermark-band-head-to-head | 92d93935 | H2H OG terracotta band; curl 67846B.
+2026-05-31 | lab-og-watermark-band-head-to-head | 220dd211 | H2H OG terracotta band; curl 67846B.
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | keep | ppo+most_efficient; aging ppg+positions unwrap; merged base buysell/dashboard keys.
 
