@@ -4,6 +4,7 @@ import { toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
+import { BUREAU_FEATURES } from "@/lib/bureau-features";
 import { teaserRowsForPanel, upgradePitchForPanel } from "@/lib/panel-upgrade-teaser";
 import { PanelAgentHeader, panelAgent } from "./PanelAgentHeader";
 
@@ -73,7 +74,9 @@ export function ProUpgradeGate({
         <p className="mt-3 text-xs text-ink-light">dev? flip plan in the toolbar ↑</p>
         <ul className="pro-upgrade-perks mt-6 text-left text-sm text-ink-medium">
           <li>10 launch Lab panels — trade values, breakouts, aging curves</li>
-          <li>7 Bureau behavioral tabs — H2H, pressure map, trade finder</li>
+          <li>
+            {BUREAU_FEATURES.length} Bureau intel tabs — H2H, waivers, schedule, trade finder
+          </li>
           <li>Situation Room — six pixel staff, your league in context</li>
         </ul>
       </div>
