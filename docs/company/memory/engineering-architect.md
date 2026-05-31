@@ -15,6 +15,8 @@ which migrations were painful, which test patterns caught bugs.
 
 ## Entries
 
+2026-05-31 | league-schedule-tab | 3 files BureauStrengthOfSchedule + FeatureBody + bureau-features | build+pytest | SHIP | keep | mirror roster-depth unhide pattern
+
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | use client + useMemo; 1 file mirrors DynastyCompsRenderer
 2026-05-31 | BureauPressureMap copy link | 1 file ≤35 lines | SHIP | keep | mirrors ManagerProfiles clipboard row
 2026-05-30 | Generic extractRows() with 7 response shapes handles all 100 panels without per-panel switch | apps/web/app/og/[panel]/route.tsx | ACCEPTANCE Gate 2 (Lab renderers) | keep | Satori constraints: display:flex everywhere, no grid; agentForPanel() from @razzle/agents avoids metadata duplication; parameterized API paths ({player_id}) correctly skipped
@@ -36,3 +38,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
+2026-05-31 | BureauStrengthOfSchedule | ce0cdcb2 | keep | 3 files ≤160 lines; unhide slug; Octo hallway toRoom

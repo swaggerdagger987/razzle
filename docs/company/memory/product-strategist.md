@@ -15,6 +15,7 @@ new evidence.
 
 ## Entries
 
+2026-05-31 | League schedule tab unhide | league-schedule-tab | League L5 PARITY | SHIP | keep | Octo SOS renderer completes hidden-tab epic atom 1/2
 2026-05-31 | Lab dashboard comps OG snapshot | c9151786 | SHIP | keep | roster-grade comps export matches DynastyComps pattern
 2026-05-31 | Bureau behavioral share atom 2 | pressure-map copy link | SHIP | keep | Explore-parity travel on deadline pressure tab
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
@@ -36,3 +37,4 @@ new evidence.
 2026-05-31 | Trade Network share atom 2/4 | da33eafd | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Build Profiles unhide atom 1/3 | da33eafd | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
+2026-05-31 | Schedule tab final unhide | ce0cdcb2 | SHIP | keep | Octo SOS verdict — last Bureau tab screenshot-ready
