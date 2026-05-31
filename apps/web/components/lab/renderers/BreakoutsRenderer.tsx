@@ -253,6 +253,8 @@ export function BreakoutsRenderer({ panel }: Props) {
             slug="breakouts"
             downloadName="razzle-breakouts.png"
             position={position || undefined}
+            playerId={top?.player_id}
+            playerName={top?.name}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
