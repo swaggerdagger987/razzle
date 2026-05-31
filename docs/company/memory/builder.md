@@ -44,4 +44,5 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
+2026-05-31 | league-roster-depth-og-share | da33eafd | keep | /og/roster-depth Hawkeye grades; curl 57282B; BureauRosterDepthShareBar
 2026-05-31 | league-strength-of-schedule-tab | 49e5421f | keep | BureauStrengthOfSchedule Octo SOS; HIDDEN_BUREAU_SLUGS empty; pytest 51
