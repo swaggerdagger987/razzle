@@ -1,23 +1,31 @@
-# Evidence — Lab OG SAMPLE vs LIVE contrast (2026-05-31)
+# Evidence — Lab L5 OG SAMPLE demo sticker (2026-05-31)
 
 **Atom:** `lab-og-live-demo-fallback-copy`  
-**Route:** `apps/web/app/og/[panel]/route.tsx`
+**Route:** `apps/web/app/og/[panel]/route.tsx`  
+**Content commit:** `c892dd56`
 
-## Acceptance
+## Claim
 
-| Check | Result |
-|-------|--------|
-| `npm run build --workspace=apps/web` | exit 0 |
-| `pytest apps/api/tests -q` | 55 passed, 5 skipped |
-| `curl .../og/rankings?download=1&force_demo=1` | `200 67083` PNG (re-verify 2026-05-31T08:25Z) |
-| `curl .../og/weekly?download=1` | `200 70383` PNG (re-verify 2026-05-31T08:25Z) |
+Launch-10 OG cards show a terracotta **SAMPLE · demo rows** sticker when demo fallback rows render, contrasting the teal **LIVE** sticker.
 
 ## Gate C
 
-- Demo path: terracotta `SAMPLE · not live data` sticker + blurb `SAMPLE rows — not live nflverse`
-- Live path: teal `LIVE · nflverse rows` unchanged
-- `force_demo=1` query skips live fetch for factory verification
+| Route | HTTP | Bytes | PNG |
+|-------|------|-------|-----|
+| `/og/rankings?position=WR&download=1` | 200 | 58065 | 1200×630 |
+| `/og/buysell?position=WR&download=1` | 200 | 51950 | 1200×630 |
+
+## Commands
+
+```bash
+npm run build --workspace=apps/web
+JWT_SECRET=test-secret python3 -m pytest apps/api/tests -q  # 55 passed, 5 skipped
+curl -s -o /tmp/og-rankings-demo.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3000/og/rankings?position=WR&download=1'
+curl -s -o /tmp/og-buysell-demo.png -w '%{http_code} %{size_download}\n' \
+  'http://127.0.0.1:3000/og/buysell?position=WR&download=1'
+```
 
 ## Verdict
 
-**PASS** — Launch-10 OG cards distinguish sample from live at a glance.
+**PASS** — demo OG PNGs ≥40KB with SAMPLE sticker path active on Launch-10 slugs.

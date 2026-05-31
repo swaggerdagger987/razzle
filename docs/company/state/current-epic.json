@@ -1,38 +1,50 @@
 {
-  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
-  "epic_title": "Lab L4 — pro gates feel like upgrade, not error",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "epic_status": "complete",
+  "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
+  "epic_title": "Lab L5 — OG live panel rows visible on Launch-10 cards",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-pro-gate-loading-copy",
-      "title": "Pro gate — agent-owned loading line on upgrade card",
+      "id": "lab-og-live-sticker-launch10",
+      "title": "Launch-10 OG — LIVE sticker + blurb when nflverse rows render",
       "status": "done",
-      "merge_commit": "7236be3e"
+      "merge_commit": "4e905360"
     },
     {
-      "id": "lab-pro-gate-panel-pitches",
-      "title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
+      "id": "lab-og-live-sticker-prospects-weekly",
+      "title": "Prospects + Weekly OG — verify live sticker with panel API",
       "status": "done",
-      "merge_commit": "0b59daee"
+      "merge_commit": "4cd32a84"
     },
     {
-      "id": "lab-pro-gate-hallway-teasers",
-      "title": "Pro gate — screener hallway + domain teasers",
+      "id": "lab-og-live-demo-fallback-copy",
+      "title": "Sample preview copy — sharper contrast vs live sticker",
       "status": "done",
-      "merge_commit": "675044ea"
+      "merge_commit": "c892dd56"
     }
   ],
   "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "created_at": "2026-05-31T08:05:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-live-rows-launch10",
+      "id": "lab-l5-og-live-rows-visible",
       "status": "complete",
       "last_atom": "lab-og-live-demo-fallback-copy",
-      "merge_commit": "18d92f6b"
+      "merge_commit": "c892dd56"
+    },
+    {
+      "id": "lab-l5-og-watermark-band",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-band-head-to-head",
+      "merge_commit": "44d05684"
+    },
+    {
+      "id": "lab-l5-og-live-sort-keys",
+      "status": "complete",
+      "last_atom": "lab-og-buysell-dashboard-live-sort",
+      "merge_commit": "7afc0b03"
     }
   ]
 }

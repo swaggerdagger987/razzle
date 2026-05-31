@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 118 — Lab L4 pro gate perks PARITY names)
+**Last updated:** 2026-05-31 (factory cycle 119 — Launch-10 OG SAMPLE demo sticker)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 118 |
+| Cycle | 119 |
 | Last board | 54 |
 | Focus pillar | Lab |
-| Focus layer | L4 |
-| Next slice | explore-og-universe-query |
-| Last commit | `f56fdbd8` |
+| Focus layer | L5 |
+| Next slice | (epic complete — pick Lab L4 or Explore L2 from PARITY) |
+| Last commit | `c892dd56` |
 
-Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
+Recent completions (cycle 119): Launch-10 OG SAMPLE vs LIVE sticker; live-rows epic 3/3 complete.
 
 ---
 

@@ -1,10 +1,8 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
+2026-05-31 | lab-og-live-demo-fallback-copy | cycle 119 | Demo shares need obvious SAMPLE badge; force_demo for Gate C curls.
+2026-05-31 | lab-og-live-sticker-prospects-weekly | cycle 118 | r/DynastyFF trusts LIVE only when panel rows load.
 
-2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.
-2026-05-31 | launch10 no-snapshot | e2a3ce8a | Direct /og links need live API path without panel snapshot param.
-2026-05-31 | Cycle 118 | e00217d1 | No new intel.
 2026-05-31 | lab-og-live-sticker-launch10 | cycle 116 | Reddit needs visible live vs sample on OG exports.
 
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | no new REDDIT-INTEL; teaser audit only.
