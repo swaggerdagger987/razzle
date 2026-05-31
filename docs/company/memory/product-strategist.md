@@ -17,6 +17,7 @@ new evidence.
 
 2026-05-31 | Lab launch-10 LabOgExportLink epic complete | weekly+prospects atom 2/2 | e84acacf | keep | T5/T6 export consistency on Hawkeye panels
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
+2026-05-31 | Filtered rankings OG must match position pill — new epic atom 1/3 | lab-og-position-rankings | SHIP | keep | NEXT.md live-row parity; WR-only export for dynasty screenshot threads
 2026-05-31 | Lab OG demo rows close cycle 57 CI/preview gap without inventing new scope | lab-og-demo-rows atom | SHIP | keep | Lab L5 epic atom 1/3; labeled sample preview protects trust vs fake-live claims
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
 2026-05-31 | lab-og-param-defaults closes Lab L5 OG epic | SHIP | keep | shareable /og/dynasty-comps without manual player_id
@@ -25,4 +26,4 @@ new evidence.
 2026-05-31 | League L5 Bureau OG atom 3 | trade-network partner lanes | SHIP | keep | collusion-thread partnership screenshots
 2026-05-31 | League L5 Bureau OG epic complete | self-scout depth grades OG | SHIP | keep | flagship Bureau screenshot; A–F grid for trade threads
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
-2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
+2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog

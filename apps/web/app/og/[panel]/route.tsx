@@ -274,6 +274,7 @@ export async function GET(
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const query = url.searchParams.get("q") ?? "";
+  const positionFilter = url.searchParams.get("position") ?? "";
   const playerId =
     url.searchParams.get("player_id") ??
     url.searchParams.get("id") ??
@@ -298,12 +299,18 @@ export async function GET(
   if (PLAYER_SCOPED_SLUGS.has(slug)) {
     apiParams.player_id = playerId;
   }
+  if (positionFilter) {
+    apiParams.position = positionFilter;
+  }
   const liveRows = apiPath
     ? await fetchPanelData(slug, apiPath, panel.api.method, apiParams)
     : [];
   const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
   const isDemo = !liveHasRows;
-  const rows = isDemo ? demoRowsForPanel(slug) : liveRows;
+  let rows = isDemo ? demoRowsForPanel(slug) : liveRows;
+  if (positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+  }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
@@ -362,6 +369,8 @@ export async function GET(
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
           {`${panel.blurb}${
+            positionFilter ? ` · ${positionFilter} only` : ""
+          }${
             slug === "dynasty-comps" && isDemo
               ? " · comps for Ja'Marr Chase · sample preview"
               : isDemo

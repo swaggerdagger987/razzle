@@ -271,7 +271,11 @@ export function DynastyRankingsRenderer({ panel }: Props) {
           >
             Ask Octo about {topPlayer.full_name} →
           </Link>
-          <LabOgExportLink slug="rankings" downloadName="razzle-dynasty-rankings.png" />
+          <LabOgExportLink
+            slug="rankings"
+            downloadName="razzle-dynasty-rankings.png"
+            position={position || undefined}
+          />
         </footer>
       )}
     </div>

@@ -1,24 +1,30 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Five launch-10 Lab panels still use hand-rolled OG export anchors instead of LabOgExportLink — inconsistent download params and no path to player-scoped OG URLs (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — launch-10 LabOgExportLink consolidation",
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards ignore in-product filters, so downloaded screenshots do not match the filtered table the user is researching (DEPTH Lab L5 live data parity).",
+  "epic_title": "Lab L5 — OG export matches in-product filters",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-link-rankings-trade-breakouts",
-      "title": "LabOgExportLink on dynasty-rankings, trade-values, breakouts renderers",
-      "status": "done",
-      "merge_commit": "8a8ec279"
+      "id": "lab-og-position-rankings",
+      "title": "Pass position filter from dynasty rankings panel to OG route",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-link-weekly-prospects",
-      "title": "LabOgExportLink on weekly heatmap and prospects renderers",
-      "status": "done",
-      "merge_commit": "e84acacf"
+      "id": "lab-og-position-breakouts",
+      "title": "Pass position filter from breakouts panel to OG route",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-position-prospects",
+      "title": "Pass class/year filter from prospects panel to OG route when applicable",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T14:00:00Z"
+  "next_atom_id": "lab-og-position-rankings",
+  "created_at": "2026-05-31T16:00:00Z",
+  "updated_at": "2026-05-31T16:00:00Z"
 }
