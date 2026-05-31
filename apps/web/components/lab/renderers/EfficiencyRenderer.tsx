@@ -176,14 +176,25 @@ export function EfficiencyRenderer({ panel }: Props) {
   const top = efficient[0] ?? volume[0] ?? null;
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    return efficient.slice(0, 6).map((p) => ({
+    const statLabel = formula?.name ?? "PPO";
+    const ranked = [...efficient].sort((a, b) => {
+      const aScore =
+        formula && a.formula_score != null ? a.formula_score : (a.ppo ?? 0);
+      const bScore =
+        formula && b.formula_score != null ? b.formula_score : (b.ppo ?? 0);
+      return bScore - aScore;
+    });
+    return ranked.slice(0, 6).map((p) => ({
       name: p.name,
       position: p.position,
       team: p.team,
-      stat: p.ppo ?? p.formula_score ?? 0,
-      statLabel: "PPO",
+      stat:
+        formula && p.formula_score != null
+          ? p.formula_score
+          : (p.ppo ?? 0),
+      statLabel,
     }));
-  }, [efficient]);
+  }, [efficient, formula]);
 
   const open = (p: EfficiencyPlayer) =>
     openPlayer({

@@ -1,31 +1,45 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
-  "epic_title": "Lab L5 — OG export matches in-panel position filters",
+  "big_problem": "Lab OG cards still export table order for several launch panels — Reddit screenshots need the same leaders the panel highlights.",
+  "epic_title": "Lab L5 — OG metric-ranked snapshots (phase 2)",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-position-efficiency-aging",
-      "title": "Efficiency + aging export passes position filter to OG",
-      "status": "done",
-      "merge_commit": "f358349d"
+      "id": "lab-og-efficiency-ppo-ranked",
+      "title": "Efficiency OG export ranks top-6 by PPO before encode",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-position-tradevalues-prospects",
-      "title": "Trade values + prospects export passes position filter",
+      "id": "lab-og-trade-values-ranked",
+      "title": "Trade Values OG export ranks top-6 by value/score",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-position-buysell",
-      "title": "Buy/sell export passes position filter to OG",
+      "id": "lab-og-dynasty-rankings-ranked",
+      "title": "Dynasty Rankings OG export ranks top-6 by dynasty value",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-gamelog-fpts-ranked",
+      "title": "Gamelog OG export confirms top-6 by fantasy points",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-prospects",
-  "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:15:00Z",
-  "last_cycle_commit": "f358349d"
+  "next_atom_id": "lab-og-efficiency-ppo-ranked",
+  "created_at": "2026-05-31T06:19:12Z",
+  "updated_at": "2026-05-31T06:19:12Z",
+  "last_cycle_commit": null,
+  "completed_epics": [
+    {
+      "id": "lab-og-snapshot-row-fidelity",
+      "status": "complete",
+      "last_atom": "lab-og-breakouts-score-ranked",
+      "merge_commit": "8dde70b9"
+    }
+  ]
 }
