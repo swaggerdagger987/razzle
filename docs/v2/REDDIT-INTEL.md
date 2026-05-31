@@ -15,11 +15,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
-## 2026-05-31 — Factory cycle 1 atom 3 (player-scoped OG export)
+## 2026-05-31 — Workday cycle 1 atom 3 (player-scoped OG export)
 
-1. **Share links must echo the player on screen** — comps and gamelog exports need `player_id` in the URL.
-2. **Dynasty comps** gets a dedicated renderer (search + export), not a generic JSON panel.
-3. Standing: Lab L5 OG export epic complete.
+1. **Player context must ride on the export URL** — dynasty comps and gamelog screenshots are about *this* asset; `player_id` on the OG link matches in-panel selection.
+2. **Default to Chase when no pick** — same gsis_id as OG route default keeps cold previews screenshot-ready without terminal.db.
+3. Standing: panel footer export beats orphan `/og/*` bookmarks.
 
 ## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
 
