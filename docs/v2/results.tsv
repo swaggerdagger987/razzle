@@ -63,4 +63,4 @@ cycle	commit	score	status	pillar	slice	description
 70	2cb898b6	depth+voice+simplicity	keep	Lab	L5 OG live panel rows	trust=T5,T6; panels slug fetch + candidates extract; curl rankings 59509B breakouts 60649B
 71	6737e6ae	depth+voice+simplicity	keep	Lab	L5 OG launch10 live label drop sample preview	trust=T1,T5,T6; namedLiveRows + ogBlurbSuffix; curl rankings 59509B breakouts 60649B weekly 63819B
 72	e8959a44	depth+voice+simplicity	keep	League	L5 Bureau H2H copy link export row	trust=T5,T6; copy link + export card; curl h2h OG 59305B
-73	da33eafd	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
+73	86ea9242	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
