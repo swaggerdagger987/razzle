@@ -55,6 +55,18 @@ function demoRowsForExplore(universe: string): OgPlayer[] {
   return universe === "college" ? DEMO_COLLEGE_ROWS : DEMO_NFL_ROWS;
 }
 
+/** Teal LIVE sticker when live screener rows show staff margin notes (Explore L5 trust). */
+function exploreOgShowsStaffMarginNotes(
+  players: OgPlayer[],
+  universe: string,
+  isDemo: boolean,
+): boolean {
+  if (isDemo) return false;
+  return players
+    .slice(0, TOP_MARGIN_NOTE_ROWS)
+    .some((p) => marginNoteForOgExploreRow(p, universe) != null);
+}
+
 function parseTeams(teamParam: string): string[] {
   if (!teamParam) return [];
   return teamParam
@@ -249,6 +261,7 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
+  const showStaffLiveSticker = exploreOgShowsStaffMarginNotes(players, universe, isDemo);
   return new ImageResponse(
     (
       <div
@@ -305,6 +318,23 @@ export async function GET(req: Request) {
               }}
             >
               SAMPLE · not live data
+            </div>
+          ) : null}
+          {showStaffLiveSticker ? (
+            <div
+              style={{
+                display: "flex",
+                fontSize: 16,
+                fontWeight: 700,
+                background: "#2ec4b6",
+                color: "#f7efe5",
+                padding: "4px 12px",
+                border: "3px solid #2d1f14",
+                borderRadius: 6,
+                boxShadow: "3px 3px 0 #2d1f14",
+              }}
+            >
+              LIVE · staff notes
             </div>
           ) : null}
         </div>
