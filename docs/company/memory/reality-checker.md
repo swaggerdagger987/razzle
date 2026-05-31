@@ -2,8 +2,6 @@
 
 2026-05-31 | lab-gamelog-empty-weeks-export | PASS | curl 200 59323B PNG; web build + pytest 82.
 
-# Memory — Reality Checker
-
 2026-05-31 | lab-l4-pro-gate-dynasty-comps | pending | PASS pytest 9; web build exit 0; no OG slice.
 
 2026-05-31 | lab-og-sample-labels Gate C | 54443bc8 | PASS | build exit 0; curl 66806/66253/67267 B; PNG verified.
