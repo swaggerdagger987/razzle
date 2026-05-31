@@ -14,8 +14,8 @@
     {
       "id": "lab-og-breakouts-snapshot",
       "title": "Breakouts export encodes formula-sorted top candidates",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "5aa2f4f3"
     },
     {
       "id": "lab-og-tradevalues-snapshot",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-breakouts-snapshot",
+  "next_atom_id": "lab-og-tradevalues-snapshot",
   "created_at": "2026-05-31T05:01:06Z",
-  "updated_at": "2026-05-31T05:01:06Z"
+  "updated_at": "2026-05-31T05:05:57Z"
 }
