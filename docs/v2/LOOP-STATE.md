@@ -1,8 +1,9 @@
-cycle: 158
+cycle: 154
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Explore
 focus_layer: L5
-next_slice: league-og-sos-watermark (Bureau OG watermark epic atom 2/3)
-last_keep_cycle: 158
-last_commit: 6ce480e68
-league_l5_bureau_og_watermark_epic: active (1/3)
+next_slice: explore-og-margin-note-sticker
+last_keep_cycle: 154
+last_commit: c1a0bcaad
+explore_l5_og_margin_epic: active
+lab_l5_og_watermark_display_name_epic: complete
