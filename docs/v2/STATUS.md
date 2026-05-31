@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 117 — Lab L4 launch-10 pro gate teasers audit)
+**Last updated:** 2026-05-31 (factory cycle 118 — Lab L4 pro gate perks PARITY names)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 117 |
+| Cycle | 118 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L4 |
-| Next slice | lab-pro-gate-perks-copy |
-| Last commit | `b0405d43` |
+| Next slice | (PARITY / NEXT — L4 pro-gate epic complete) |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
