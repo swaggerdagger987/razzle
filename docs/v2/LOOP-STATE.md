@@ -1,8 +1,8 @@
-cycle: 143
+cycle: 144
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Room
 focus_layer: L5
-next_slice: lab-og-buysell-formula-live
-last_keep_cycle: 143
-last_commit: da33eafd
-lab_l5_formula_og_live_parity_epic: active
+next_slice: pick from PARITY/NEXT
+last_keep_cycle: 144
+last_commit: PLACEHOLDER
+room_briefing_gtm_share_row: complete

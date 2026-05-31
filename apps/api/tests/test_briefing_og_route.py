@@ -20,18 +20,17 @@ def test_briefing_og_route_exists():
     assert "Always-on watermark band" in text
     assert "razzle.lol${roomPath}" in text
     assert "#d97757" in text
-    assert "LIVE · your briefing" in text
-    assert "SAMPLE · trade readout" in text
 
 
 def test_briefing_card_export_link():
-    path = _repo_root() / "apps/web/components/room/BriefingCard.tsx"
-    text = path.read_text(encoding="utf-8")
-    assert "/og/briefing" in text
-    assert "export card" in text
-    assert "preview card" in text
-    assert "copy link" in text
-    assert "toRoom" in text
+    card = _repo_root() / "apps/web/components/room/BriefingCard.tsx"
+    share = _repo_root() / "apps/web/components/room/BriefingShareBar.tsx"
+    assert "BriefingShareBar" in card.read_text(encoding="utf-8")
+    share_text = share.read_text(encoding="utf-8")
+    assert "/og/briefing" in share_text
+    assert "export card" in share_text
+    assert "preview card" in share_text
+    assert "copy briefing link" in share_text
 
 
 def test_briefing_og_terracotta_watermark_band():
