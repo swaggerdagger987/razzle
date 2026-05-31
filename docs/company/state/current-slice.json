@@ -1,31 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 branches across launch-10 renderers drift from teaser/perks polish.",
-  "epic": "Lab L4 — shared pro-gate error surface",
-  "slice_title": "ProGateFromPanelError on breakouts + pytest guard",
-  "atom_id": "lab-l4-pro-gate-error-surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — pro panel shows upgrade message (402)",
-  "trust_pillars": ["T2", "T6"],
-  "allowed_paths": [
-    "apps/web/components/lab/ProGateFromPanelError.tsx",
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
-  ],
-  "max_files": 3,
-  "max_lines": 140,
+  "atom_id": "lab-og-slug-sample-sticker",
+  "big_problem": "Lab OG demo cards still read generic on Reddit — SAMPLE vs LIVE must be obvious at a glance.",
+  "epic": "Lab L5 — OG SAMPLE vs LIVE sticker clarity",
+  "slice_title": "Launch-10 OG — slug-specific SAMPLE sticker on demo fallback",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "max_files": 1,
+  "max_lines": 15,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q"
+    "npm run build --workspace=apps/web 2>&1 | tail -5",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests -q --tb=no 2>&1 | tail -3",
+    "curl -s -o /tmp/og-rankings-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?position=WR&download=1'",
+    "curl -s -o /tmp/og-buysell-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?position=WR&download=1'"
   ],
-  "out_of_scope": ["Tradevalues/efficiency this cycle"],
+  "out_of_scope": ["billing", "new panels", "ProUpgradeGate"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   },
   "status": "shipped"
 }
