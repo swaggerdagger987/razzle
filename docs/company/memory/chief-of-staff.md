@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | f6e0985f3 | SHIP | Factory cycle 1; formula OG epic 3/3 complete.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 

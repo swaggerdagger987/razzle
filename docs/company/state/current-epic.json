@@ -1,16 +1,38 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic_title": "Lab L5 — OG hallway deep links",
-  "parity_ref": "Lab panel OG data rows",
+  "big_problem": "Lab OG share cards still rank on PPO/PPG/trade_value when FormulaPanelBar is active — screenshots disagree with in-panel composite sorts.",
+  "epic_title": "Lab L5 — OG formula_score live extract",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
+  "epic_status": "active",
   "atoms": [
-    {"id": "lab-og-tolab-watermark", "title": "Launch-10 toLab watermark band", "status": "done", "merge_commit": "b80512bb4"},
-    {"id": "lab-og-tolab-gamelog-default", "title": "Gamelog/dynasty-comps default player in toLab", "status": "done", "merge_commit": "c311a15a8"},
-    {"id": "lab-og-tolab-snapshot-player", "title": "Snapshot exports preserve player in watermark", "status": "pending", "merge_commit": null}
+    {
+      "id": "lab-og-breakouts-rankings-formula-live",
+      "title": "Breakouts + rankings OG prefer formula_score on live extract",
+      "status": "done",
+      "merge_commit": "ceadf0402"
+    },
+    {
+      "id": "lab-og-buysell-formula-live",
+      "title": "Buy/sell OG formula_score lanes + extractBuySellRows",
+      "status": "done",
+      "merge_commit": "fb4483341"
+    },
+    {
+      "id": "lab-og-efficiency-aging-tradevalues-formula-live",
+      "title": "Trade values, efficiency, aging OG formula_score priority + pytest guards",
+      "status": "in_progress",
+      "merge_commit": null
+    }
   ],
-  "next_atom_id": "lab-og-tolab-snapshot-player",
-  "created_at": "2026-05-31T11:00:00Z",
-  "updated_at": "2026-05-31T11:30:00Z",
-  "completed_epics": ["lab-l5-og-export-live-panel-rows"]
+  "next_atom_id": "lab-og-efficiency-aging-tradevalues-formula-live",
+  "created_at": "2026-05-31T11:15:08Z",
+  "updated_at": "2026-05-31T11:15:08Z",
+  "completed_epics": [
+    {
+      "id": "league-l5-trade-finder-gtm",
+      "status": "complete",
+      "last_atom": "league-trade-finder-room-hallway",
+      "merge_commit": "33d29929a"
+    }
+  ]
 }

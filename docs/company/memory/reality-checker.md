@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | f6e0985f3 | PASS | pytest 6; curl 67267B/64569B/63841B; web build.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker
 

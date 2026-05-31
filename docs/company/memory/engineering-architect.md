@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | f6e0985f3 | SHIP | 2 files; formula_score stat key chains.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 
