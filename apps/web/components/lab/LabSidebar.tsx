@@ -1,6 +1,6 @@
 "use client";
 
-import { agentForPanel } from "@razzle/agents";
+import { AGENT_BY_ID, AGENTS, agentForPanel, type AgentDefinition } from "@razzle/agents";
 import {
   PANELS,
   panelsByCategory,
@@ -63,6 +63,21 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
     return map;
   }, [panels]);
 
+  const staffByAgent = useMemo(() => {
+    const buckets = new Map<string, PanelDefinition[]>();
+    for (const panel of PANELS) {
+      if (!STAFF_PICKS.has(panel.slug)) continue;
+      const owner = agentForPanel(panel.slug) ?? AGENT_BY_ID.razzle;
+      const list = buckets.get(owner.id) ?? [];
+      list.push(panel);
+      buckets.set(owner.id, list);
+    }
+    return AGENTS.filter((agent) => buckets.has(agent.id)).map((agent) => ({
+      agent,
+      panels: buckets.get(agent.id) ?? [],
+    }));
+  }, []);
+
   function toggleCategory(cat: string) {
     setCollapsedCats((prev) => {
       const next = new Set(prev);
@@ -89,20 +104,27 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
 
       <div className="lab-sidebar-inner">
         {!query && (
-          <div className="lab-sidebar-category">
-            <span className="cat-text">Staff Picks</span>
-          </div>
+          <>
+            <div className="lab-sidebar-category lab-sidebar-staff-heading">
+              <span className="cat-text">Staff Picks</span>
+            </div>
+            {staffByAgent.map(({ agent, panels: staffPanels }) => (
+              <div key={agent.id} className="lab-sidebar-staff-agent">
+                <StaffAgentHeading agent={agent} />
+                {staffPanels.map((panel) => (
+                  <SidebarItem
+                    key={`staff-${panel.slug}`}
+                    panel={panel}
+                    activeSlug={activeSlug}
+                    badge="★"
+                    nested
+                    onNavigate={onCloseMobile}
+                  />
+                ))}
+              </div>
+            ))}
+          </>
         )}
-        {!query &&
-          PANELS.filter((p) => STAFF_PICKS.has(p.slug)).map((panel) => (
-            <SidebarItem
-              key={`staff-${panel.slug}`}
-              panel={panel}
-              activeSlug={activeSlug}
-              badge="★"
-              onNavigate={onCloseMobile}
-            />
-          ))}
 
         {Array.from(grouped.entries()).map(([category, items]) => (
           <div key={category}>
@@ -136,15 +158,32 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
   );
 }
 
+function StaffAgentHeading({ agent }: { agent: AgentDefinition }) {
+  return (
+    <div className="lab-sidebar-category lab-sidebar-agent-group" aria-label={`${agent.name} panels`}>
+      <img
+        src={`/agents/${agent.avatar}.svg`}
+        alt=""
+        className="lab-sidebar-agent-head"
+        width={20}
+        height={20}
+      />
+      <span className="cat-text">{agent.name}</span>
+    </div>
+  );
+}
+
 function SidebarItem({
   panel,
   activeSlug,
   badge,
+  nested,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
+  nested?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
@@ -152,7 +191,7 @@ function SidebarItem({
   return (
     <Link
       href={`/lab/${panel.slug}`}
-      className={`lab-sidebar-item${active ? " active" : ""}`}
+      className={`lab-sidebar-item${active ? " active" : ""}${nested ? " nested" : ""}`}
       data-icon={panel.icon}
       title={owner ? `${owner.name} · ${panel.blurb}` : panel.blurb}
       onClick={onNavigate}
