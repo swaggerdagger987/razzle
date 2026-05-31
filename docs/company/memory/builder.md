@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | lab-panel-grid-agent-avatars | da33eafd | LabPanelGrid agentForPanel row on every card.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | ExploreShareButton season/team → OG screener + band deep link.
 2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
 
