@@ -26,3 +26,4 @@ explicit checks in the verification routine.
 2026-05-31 | self-scout OG Gate C | curl 200 66997B PNG | PASS | keep | docs/v2/evidence/2026-05-31-league-og-self-scout.md
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG export links atom 2 | 30d10728 | keep | buysell dashboard footers; curl 58-60KB PNGs
+2026-05-31 | player-scoped OG export Gate C | curl gamelog 58408B comps 65961B | PASS | keep | docs/v2/evidence/2026-05-31-lab-og-export-player-scoped.md

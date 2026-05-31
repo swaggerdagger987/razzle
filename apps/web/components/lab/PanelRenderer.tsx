@@ -3,6 +3,8 @@
 import { LoadingState } from "@razzle/ui";
 import type { PanelDefinition } from "@razzle/panels";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { LabOgExportLink } from "./LabOgExportLink";
 import { fetchPanelData, isUpgradeRequiredError } from "@/lib/panel-api";
 import { CardsRenderer } from "./renderers/CardsRenderer";
 import { ChartRenderer } from "./renderers/ChartRenderer";
@@ -29,6 +31,23 @@ import { ProUpgradeGate } from "./ProUpgradeGate";
 
 interface Props {
   panel: PanelDefinition;
+}
+
+function DynastyCompsPanel({ panel }: Props) {
+  const searchParams = useSearchParams();
+  const playerId = searchParams.get("id") ?? "";
+  return (
+    <>
+      <GenericPanelRenderer panel={panel} />
+      <footer className="mt-6 flex flex-wrap gap-4 border-t-3 border-ink pt-4">
+        <LabOgExportLink
+          slug="dynasty-comps"
+          downloadName="razzle-dynasty-comps.png"
+          playerId={playerId || undefined}
+        />
+      </footer>
+    </>
+  );
 }
 
 function GenericPanelRenderer({ panel }: Props) {
@@ -141,6 +160,10 @@ export function PanelRenderer({ panel }: Props) {
 
   if (panel.slug === "dashboard") {
     return <DynastyDashboardRenderer panel={panel} />;
+  }
+
+  if (panel.slug === "dynasty-comps") {
+    return <DynastyCompsPanel panel={panel} />;
   }
 
   return <GenericPanelRenderer panel={panel} />;

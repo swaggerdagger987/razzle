@@ -58,3 +58,4 @@ cycle	commit	score	status	pillar	slice	description
 65	e732f973	depth+hallway+voice+simplicity	keep	League	L5 OG self scout	trust=T2,T5,T6; /og/self-scout depth grades demo; curl 66997B PNG; Bureau OG epic complete
 66	45a5e79b	depth+voice+simplicity	keep	Lab	L5 OG export links gamelog efficiency aging	trust=T5,T6; LabOgExportLink footers; curl gamelog 58408B efficiency 59068B aging 57934B
 67	30d10728	depth+voice+simplicity	keep	Lab	L5 OG export links buysell dashboard	trust=T5,T6; LabOgExportLink on BuySell DynastyDashboard; curl buysell 58072B dashboard 60034B
+68	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped links	trust=T5,T6; LabOgExportLink player_id on gamelog dynasty-comps; curl gamelog 58408B comps 65961B; epic complete

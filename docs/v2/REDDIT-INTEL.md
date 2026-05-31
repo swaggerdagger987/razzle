@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Workday cycle 1 atom 3 (player-scoped export)
+
+1. **Export must match the player on screen** — gamelog/comps OG without `player_id` in the link exports the default star, not the tape you are studying.
+2. **Dynasty comps is path-templated** — footer export with query param closes the last launch-10 OG parity gap (atom 3/3).
+3. Standing: sample preview when API empty — T1 trust.
+
 ## 2026-05-31 — Workday cycle 1 atom 2 (buy-sell + dashboard export)
 
 1. **Market-mover panels need export too** — buy/sell and dynasty dashboard are trade-thread staples; footer export card closes launch-10 discoverability (atom 2/3).
