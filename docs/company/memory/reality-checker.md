@@ -91,4 +91,5 @@ explicit checks in the verification routine.
 2026-05-31 | Build Profiles OG Gate C | 77d4f765 | PASS | curl build-profiles 73228B PNG | keep | evidence/2026-05-31-league-build-profiles-og-share.md
 2026-05-31 | Waiver Tendencies OG Gate C | 6dcb0f72 | PASS | curl waiver-tendencies 73121B PNG | keep | evidence/2026-05-31-league-waiver-tendencies-og-share.md
 2026-05-31 | Lab OG snapshot Gate C | 70af534a | PASS | curl prospects snap 45583B tradevalues 62488B | keep | evidence/2026-05-31-lab-og-snapshot-tradevalues-prospects.md
+2026-05-31 | Monte Carlo OG watermark Gate C | 0a6cbef9e | PASS | curl 58867B PNG | keep | evidence/2026-05-31-league-og-monte-carlo-watermark.md
 2026-05-31 | Lab OG live sort Gate C | 7f78b631 | PASS | curl rankings 50251B tradevalues 51115B | keep | evidence/2026-05-31-lab-og-rankings-tradevalues-live-sort.md
