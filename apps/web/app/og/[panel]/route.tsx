@@ -590,6 +590,8 @@ export async function GET(
     url.searchParams.get("position") ?? "",
   );
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  /** QA/dev only — skip live fetch so Gate C can curl SAMPLE sticker path. */
+  const forceDemo = url.searchParams.get("force_demo") === "1";
   const playerId =
     url.searchParams.get("player_id") ??
     url.searchParams.get("id") ??
@@ -621,7 +623,7 @@ export async function GET(
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
-  if (apiPath && !snapshotHasRows) {
+  if (apiPath && !snapshotHasRows && !forceDemo) {
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
     if (liveRows.length === 0) {
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
@@ -718,6 +720,27 @@ export async function GET(
             }}
           >
             LIVE · nflverse rows
+          </div>
+        ) : null}
+
+        {showingDemoRows && LAUNCH_10_OG_SLUGS.has(slug) ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            SAMPLE · demo rows only
           </div>
         ) : null}
 

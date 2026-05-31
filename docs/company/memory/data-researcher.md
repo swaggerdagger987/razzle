@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-live-demo-fallback-copy | cycle 119 | Reddit trust needs obvious SAMPLE vs LIVE on OG cards.
+
 2026-05-31 | lab-og-live-sticker-prospects-weekly | cycle 118 | Free Launch-10 panels share same /api/panels path as Lab.
 
 2026-05-31 | lab-og-live-sticker-launch10 | cycle 116 | Reddit needs visible live vs sample on OG exports.

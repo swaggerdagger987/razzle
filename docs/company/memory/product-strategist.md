@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-live-demo-fallback-copy | da33eafd | SHIP | T1 sample vs live at a glance closes live-rows epic.
+
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | SHIP | Weekly WR default unlocks panel API rows for LIVE badge.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | SHIP | NEXT.md live-rows epic atom 1/3.

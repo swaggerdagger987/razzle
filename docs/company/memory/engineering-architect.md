@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-live-demo-fallback-copy | da33eafd | SAMPLE badge mirrors LIVE block; force_demo skips fetch.
+
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | ogPositionFilter + PANEL_API_OG_LIMIT; ≤40 lines route.tsx.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | 1-file panel route; LIVE sticker gated on showingLiveData.

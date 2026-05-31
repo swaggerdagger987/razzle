@@ -1,23 +1,23 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-live-sticker-prospects-weekly",
+  "atom_id": "lab-og-live-demo-fallback-copy",
   "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
   "epic": "Lab L5 — OG live panel rows visible on Launch-10 cards",
-  "slice_title": "Prospects + Weekly OG LIVE sticker via panel API",
+  "slice_title": "Launch-10 SAMPLE sticker — terracotta contrast vs teal LIVE",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
+  "trust_pillars": ["T1", "T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 60,
+  "max_lines": 45,
   "acceptance_commands": [
     "npm run build --workspace=apps/web 2>&1 | tail -3",
-    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?download=1'",
-    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/prospects?download=1'",
-    "JWT_SECRET=test npm test --workspace=apps/api 2>&1 | tail -3 || JWT_SECRET=test python3 -m pytest apps/api/tests/test_smoke.py -q 2>&1 | tail -2"
+    "curl -s -o /tmp/og-rankings-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1&force_demo=1'",
+    "curl -s -o /tmp/og-weekly-live.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?download=1'",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_smoke.py -q 2>&1 | tail -2"
   ],
-  "out_of_scope": ["pro gate L4", "NORTH_STAR/DESIGN edits", "new panels"],
+  "out_of_scope": ["pro gate L4", "NORTH_STAR/DESIGN edits", "new panels", "force_demo prod exposure"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
