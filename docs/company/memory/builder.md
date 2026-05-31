@@ -1,3 +1,4 @@
+2026-05-31 | lab-l4-pro-gate-surface-pytest-catalog | f6e0985f3 | SHIP | GENERIC_CATALOG_PRO_GATE_SLUGS + routing pytest guards.
 2026-05-31 | explore-og-margin-note-lead | f6e0985f3 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 

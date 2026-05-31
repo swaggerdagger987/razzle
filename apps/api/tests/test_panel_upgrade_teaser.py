@@ -36,6 +36,8 @@ GENERIC_PRO_GATE_SLUGS = (
     "dynasty-comps",
 )
 
+GENERIC_CATALOG_PRO_GATE_SLUGS = ("tiers", "vorp", "stocks", "waivers")
+
 BUREAU_7_FEATURE_SLUGS = (
     "self-scout",
     "head-to-head",
@@ -100,6 +102,13 @@ def test_generic_pro_gate_slugs_have_custom_teasers():
     source = _teaser_source()
     missing = [s for s in GENERIC_PRO_GATE_SLUGS if not _slug_has_custom_teaser(source, s)]
     assert not missing, f"generic pro gate slugs missing teaser: {missing}"
+
+
+def test_generic_catalog_pro_gate_slugs_exported_in_teaser():
+    source = _teaser_source()
+    assert "export const GENERIC_CATALOG_PRO_GATE_SLUGS" in source
+    for slug in GENERIC_CATALOG_PRO_GATE_SLUGS:
+        assert f'"{slug}"' in source
 
 
 def test_pro_upgrade_perks_list_launch10_and_bureau7_names():

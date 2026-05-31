@@ -1,8 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-watermark-display-name",
-  "slice_title": "Gamelog export passes player name into OG watermark toLab",
-  "content_commit": "338709883",
-  "reality": "PASS",
-  "merge": "pending"
+  "big_problem": "Catalog pro panels still show raw errors instead of the shared L4 upgrade card.",
+  "epic": "Lab L4 — generic pro-gate polish (atom 2/3)",
+  "slice_title": "lab-l4-pro-gate-surface-pytest-catalog",
+  "parity_ref": "Lab L4 pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "GENERIC_CATALOG_PRO_GATE_SLUGS exported; pytest guards generic renderer routing",
+  "trust_pillars": ["T2", "T6"],
+  "allowed_paths": [
+    "apps/web/lib/panel-upgrade-teaser.ts",
+    "apps/api/tests/test_panel_pro_gate_surface.py",
+    "apps/api/tests/test_panel_upgrade_teaser.py"
+  ],
+  "max_files": 3,
+  "max_lines": 60,
+  "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q --noconftest",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [
+    "Catalog teaser batch expansion",
+    "PanelRenderer behavior changes",
+    "OG routes"
+  ],
+  "builder_mode": "composer-surgical"
 }

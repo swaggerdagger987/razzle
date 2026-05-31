@@ -29,6 +29,14 @@ export const LAUNCH_10_PRO_GATE_SLUGS = [
   "buysell",
 ] as const;
 
+/** Catalog panels on GenericPanelRenderer + ProGateFromPanelError (not dedicated renderers). */
+export const GENERIC_CATALOG_PRO_GATE_SLUGS = [
+  "tiers",
+  "vorp",
+  "stocks",
+  "waivers",
+] as const;
+
 /** Bureau-7 behavioral moat tabs — mirrors COUNCIL + `LeagueDashboard` screenshot set. */
 export const BUREAU_7_FEATURE_SLUGS = [
   "self-scout",

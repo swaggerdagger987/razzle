@@ -1,20 +1,32 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG snapshot exports deep-link as generic \"player\" — Reddit shares lose recognizable hallway context.",
-  "epic_title": "Lab L5 — OG export display names in watermark",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Catalog pro panels still show raw errors instead of the shared L4 upgrade card.",
+  "epic_title": "Lab L4 — generic pro-gate polish",
+  "parity_ref": "Lab L4 pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
   "atoms": [
     {
-      "id": "lab-og-watermark-display-name",
-      "title": "Gamelog export passes player name into OG watermark toLab",
+      "id": "lab-l4-pro-gate-generic-renderer",
+      "title": "GenericPanelRenderer uses ProGateFromPanelError",
       "status": "done",
-      "merge_commit": "338709883"
+      "merge_commit": null
+    },
+    {
+      "id": "lab-l4-pro-gate-surface-pytest-catalog",
+      "title": "Pytest guard catalog slugs use GenericPanelRenderer path",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-l4-catalog-teaser-batch-1",
+      "title": "Expand GENERIC_PRO_GATE_SLUGS teaser rows + pitch copy",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:35:00Z",
-  "updated_at": "2026-05-31T11:45:00Z",
+  "next_atom_id": "lab-l4-catalog-teaser-batch-1",
+  "created_at": "2026-05-31T13:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-display-names",
@@ -27,12 +39,6 @@
       "status": "complete",
       "last_atom": "lab-og-tolab-snapshot-player",
       "merge_commit": "1a12d9c0b"
-    },
-    {
-      "id": "league-l5-trade-finder-gtm",
-      "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
     }
   ]
 }

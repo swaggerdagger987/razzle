@@ -1,3 +1,4 @@
+2026-05-31 | lab-l4-pro-gate-surface-pytest-catalog | f6e0985f3 | PASS | pytest 20; web build exit 0; no OG slice.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
