@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauPowerRankingsShareBar } from "./BureauPowerRankingsShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -53,6 +54,7 @@ export function BureauPowerRankings({ data, leagueId }: Props) {
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
           sorted by scoring differential · pythagorean luck index
         </p>
+        <BureauPowerRankingsShareBar leagueId={leagueId} />
       </header>
 
       {leader && (

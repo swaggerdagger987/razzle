@@ -13,6 +13,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | League L5 Power Rankings OG | monte-carlo OG pattern + BureauPowerRankingsShareBar | da33eafd | PASS | keep demo rows + league-only POST | — | — | evidence/2026-05-31-league-power-rankings-og.md
+
 ## Entries
 
 2026-05-31 | Bureau Self-Scout copy link | 3fc08ebc | keep | copyScoutLink row; curl self-scout 66997B
