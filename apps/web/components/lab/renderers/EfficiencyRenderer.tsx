@@ -238,7 +238,17 @@ export function EfficiencyRenderer({ panel }: Props) {
       )}
 
       {!efficient.length && !volume.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="efficiency"
+              downloadName="razzle-efficiency.png"
+              position={position || undefined}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <>
           <PlayerTable

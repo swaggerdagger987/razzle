@@ -28,6 +28,16 @@ def test_gamelog_empty_state_passes_snapshot_to_export_link():
     assert "snapshotRows={sampleOgSnapshotRows.length ? sampleOgSnapshotRows : undefined}" in renderer
 
 
+def test_efficiency_empty_state_shows_export_sample_link():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/EfficiencyRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "!efficient.length && !volume.length" in renderer
+    assert 'label="export sample card"' in renderer
+    assert "LabOgExportLink" in renderer
+
+
 def test_default_lab_og_player_matches_og_route():
     route = (
         Path(__file__).resolve().parents[3]
