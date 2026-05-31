@@ -34,4 +34,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
-2026-05-31 | OG extractRows nested keys | 1598b57e | keep | buy_low/sell_high/fallers; 1-file contract honored
+2026-05-31 | OG extractRows nested keys | 29c959cf | keep | buy_low/sell_high/fallers; 1-file contract honored

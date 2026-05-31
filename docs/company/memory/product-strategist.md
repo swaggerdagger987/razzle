@@ -34,4 +34,4 @@ new evidence.
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | Trade Network share atom 2/4 | da33eafd | SHIP | keep | partnership graphs travel in league group chats
-2026-05-31 | Lab OG live epic atom 1 | 1598b57e | SHIP | keep | League share epic complete; resume Lab L5 NEXT lead on base
+2026-05-31 | Lab OG live epic atom 1 | 29c959cf | SHIP | keep | League share epic complete; resume Lab L5 NEXT lead on base

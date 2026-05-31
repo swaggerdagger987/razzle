@@ -36,4 +36,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Pressure Map share | 864e1d14 | keep | deadline desperation URLs for trade-DM hooks
 2026-05-31 | Trade Network share | da33eafd | keep | collusion/partnership cards sized for Reddit screenshot gravity
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
-2026-05-31 | Buy/sell dashboard API keys | 1598b57e | keep | buy_low/sell_high + risers/fallers match panel renderers
+2026-05-31 | Buy/sell dashboard API keys | 29c959cf | keep | buy_low/sell_high + risers/fallers match panel renderers

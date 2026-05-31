@@ -42,4 +42,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
 2026-05-31 | Bureau power-rankings OG | e62721a6 | keep | /og/power-rankings route + export link; curl 68555B
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
-2026-05-31 | OG buy/sell dashboard extractRows | 1598b57e | keep | buy_low/sell_high + fallers branches; ≤25 LOC
+2026-05-31 | OG buy/sell dashboard extractRows | 29c959cf | keep | buy_low/sell_high + fallers branches; ≤25 LOC
