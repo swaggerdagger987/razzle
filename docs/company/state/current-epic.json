@@ -7,8 +7,8 @@
     {
       "id": "lab-og-prospects-tradevalues-snapshot",
       "title": "Prospects + tradevalues export snapshot rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "73d74dca"
     },
     {
       "id": "lab-og-dashboard-comps-snapshot",
@@ -23,9 +23,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-prospects-tradevalues-snapshot",
+  "next_atom_id": "lab-og-dashboard-comps-snapshot",
   "epic_status": "active",
   "created_at": "2026-05-31T14:00:00Z",
   "updated_at": "2026-05-31T14:00:00Z",
-  "last_cycle_commit": null
+  "last_cycle_commit": "73d74dca"
 }
