@@ -38,6 +38,17 @@ def test_efficiency_empty_board_exports_sample_card():
     assert "snapshotRows={EFFICIENCY_SAMPLE_OG_ROWS}" in renderer
 
 
+def test_breakouts_empty_state_shows_sample_export_link():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "!candidates.length" in renderer
+    assert "BREAKOUTS_SAMPLE_OG_ROWS" in renderer
+    assert 'slug="breakouts"' in renderer
+    assert 'label="export sample card"' in renderer
+
+
 def test_default_lab_og_player_matches_og_route():
     route = (
         Path(__file__).resolve().parents[3]
