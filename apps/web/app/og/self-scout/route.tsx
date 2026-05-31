@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { decodeBureauSelfScoutOgSnapshot } from "@/lib/bureau-self-scout-og-snapshot";
 
 export const runtime = "edge";
 
@@ -86,32 +87,88 @@ export async function GET(req: Request) {
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const decodedSnap = snapshotParam ? decodeBureauSelfScoutOgSnapshot(snapshotParam) : null;
 
   const hawkeye = AGENT_BY_ID.hawkeye;
-  const live = await fetchSelfScout(league, user);
-  const isDemo = !live?.depth || Object.keys(live.depth).length === 0;
-  const depth = isDemo ? DEMO_DEPTH : live!.depth!;
-  const teamName = isDemo ? DEMO_META.team : live!.team?.name ?? "Your Team";
-  const record = isDemo ? DEMO_META.record : live!.team?.record ?? "";
-  const leagueName = isDemo ? DEMO_META.league : live!.league?.name ?? "";
-  const season = isDemo ? DEMO_META.season : String(live!.league?.season ?? "");
-  const archetype = isDemo ? DEMO_META.archetype : live!.build_profile?.archetype ?? "";
-  const rank = isDemo ? DEMO_META.rank : live!.power_rank?.rank ?? 0;
-  const total = isDemo ? DEMO_META.total : live!.power_rank?.total ?? 0;
+  const live = decodedSnap ? null : await fetchSelfScout(league, user);
+  const isDemo = decodedSnap ? false : !live?.depth || Object.keys(live.depth).length === 0;
+  const depth = decodedSnap
+    ? Object.fromEntries(
+        decodedSnap.depth.map((row) => [
+          row.position,
+          {
+            count: row.count,
+            elite: row.elite,
+            depth: row.topName !== "—" ? [{ name: row.topName }] : [],
+          },
+        ]),
+      )
+    : isDemo
+      ? DEMO_DEPTH
+      : live?.depth ?? DEMO_DEPTH;
+  const teamName = decodedSnap
+    ? decodedSnap.team
+    : isDemo
+      ? DEMO_META.team
+      : live?.team?.name ?? "Your Team";
+  const record = decodedSnap
+    ? decodedSnap.record
+    : isDemo
+      ? DEMO_META.record
+      : live?.team?.record ?? "";
+  const leagueName = decodedSnap
+    ? (decodedSnap.league ?? "")
+    : isDemo
+      ? DEMO_META.league
+      : live?.league?.name ?? "";
+  const season = decodedSnap
+    ? (decodedSnap.season ?? "")
+    : isDemo
+      ? DEMO_META.season
+      : String(live?.league?.season ?? "");
+  const archetype = decodedSnap
+    ? (decodedSnap.archetype ?? "")
+    : isDemo
+      ? DEMO_META.archetype
+      : live?.build_profile?.archetype ?? "";
+  const rank = decodedSnap
+    ? (decodedSnap.rank ?? 0)
+    : isDemo
+      ? DEMO_META.rank
+      : live?.power_rank?.rank ?? 0;
+  const total = decodedSnap
+    ? (decodedSnap.total ?? 0)
+    : isDemo
+      ? DEMO_META.total
+      : live?.power_rank?.total ?? 0;
+  const fromSnapshot = Boolean(decodedSnap);
 
-  const rows = POS_ORDER.map((pos) => {
-    const block = depth[pos] ?? {};
-    const top = [...(block.depth ?? [])].sort((a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0))[0];
-    return {
-      pos,
-      grade: depthGrade(block),
-      score: depthScore(block),
-      count: block.count ?? 0,
-      elite: block.elite ?? 0,
-      topName: top?.name ?? "—",
-      color: POS_COLORS[pos] ?? "#5c4a3d",
-    };
-  });
+  const rows = decodedSnap
+    ? decodedSnap.depth.map((row) => ({
+        pos: row.position,
+        grade: row.grade,
+        score: depthScore({ count: row.count, elite: row.elite }),
+        count: row.count,
+        elite: row.elite,
+        topName: row.topName,
+        color: POS_COLORS[row.position] ?? "#5c4a3d",
+      }))
+    : POS_ORDER.map((pos) => {
+        const block = depth[pos] ?? {};
+        const top = [...(block.depth ?? [])].sort(
+          (a, b) => ((b as { dynasty_value?: number }).dynasty_value ?? 0) - ((a as { dynasty_value?: number }).dynasty_value ?? 0),
+        )[0];
+        return {
+          pos,
+          grade: depthGrade(block),
+          score: depthScore(block),
+          count: block.count ?? 0,
+          elite: block.elite ?? 0,
+          topName: top?.name ?? "—",
+          color: POS_COLORS[pos] ?? "#5c4a3d",
+        };
+      });
 
   const weakest = rows.reduce(
     (min, r) => (r.count < min.count ? r : min),
@@ -163,7 +220,7 @@ export async function GET(req: Request) {
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 8 }}>
           {`${teamName} · ${record} · #${rank} of ${total}`}
-          {isDemo ? " · sample preview" : ""}
+          {fromSnapshot ? " · from your panel" : isDemo ? " · sample preview" : ""}
         </div>
 
         {archetype ? (

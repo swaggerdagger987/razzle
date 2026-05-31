@@ -1,26 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-gamelog-player-default",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo — gamelog share URLs must always carry a player_id so Reddit gets Chase week rows, not a bare /og/gamelog link.",
-  "epic": "Lab L5 — OG live fetch + sticker parity (atom 3/3)",
-  "slice_title": "Gamelog OG — default player_id on Lab export when query omits id",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "atom_id": "bureau-self-scout-snapshot-codec",
+  "big_problem": "Bureau Self-Scout is the default league tab but OG export cards ignore in-panel depth grades — Reddit screenshots show generic demo rows instead of your roster tape.",
+  "epic": "League L5 — Self-Scout OG snapshot parity (atom 1/3)",
+  "slice_title": "Self-Scout OG snapshot codec — export encodes in-panel depth grades",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/lab-og-export-params.ts",
-    "apps/web/components/lab/LabOgExportLink.tsx",
-    "apps/web/components/lab/renderers/GamelogRenderer.tsx",
-    "apps/api/tests/test_lab_og_gamelog_export.py"
+    "apps/web/lib/bureau-self-scout-og-snapshot.ts",
+    "apps/web/app/og/self-scout/route.tsx",
+    "apps/web/components/league/BureauSelfScout.tsx",
+    "apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py"
   ],
   "max_files": 4,
-  "max_lines": 120,
+  "max_lines": 180,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_gamelog_export.py -q",
+    "python3 -m pytest apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py -q",
     "npm run build --workspace=apps/web 2>&1 | tail -8"
   ],
-  "out_of_scope": ["og route refactor", "new panels", "dynasty-comps UI"],
+  "out_of_scope": ["ShareBar extraction", "new API routes", "billing"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

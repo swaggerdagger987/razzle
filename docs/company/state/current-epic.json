@@ -1,32 +1,32 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
-  "epic_title": "Lab L5 — OG live fetch + sticker parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Bureau Self-Scout is the default league tab but OG export cards ignore in-panel depth grades — Reddit screenshots show generic demo rows instead of your roster tape.",
+  "epic_title": "League L5 — Self-Scout OG snapshot parity",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-launch10-live-fetch-merge",
-      "title": "Merge base LIVE sticker + fetchOgLiveRows for Launch-10 without snapshot",
-      "status": "done",
-      "merge_commit": "3f0411ec"
+      "id": "bureau-self-scout-snapshot-codec",
+      "title": "Self-Scout OG snapshot codec + export encodes in-panel depth grades",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "explore-og-universe-query",
-      "title": "Explore OG — pass universe/college in export URL",
-      "status": "done",
-      "merge_commit": "7abe91fa"
+      "id": "bureau-self-scout-share-bar",
+      "title": "Extract BureauSelfScoutShareBar mirroring H2H copy+export pattern",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-gamelog-player-default",
-      "title": "Gamelog OG — default player_id when export omits query",
-      "status": "done",
-      "merge_commit": "db8d5904"
+      "id": "bureau-self-scout-snapshot-roundtrip-test",
+      "title": "pytest roundtrip + curl evidence for snapshot OG card",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T08:25:32Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "next_atom_id": "bureau-self-scout-snapshot-codec",
+  "created_at": "2026-05-31T14:30:00Z",
+  "updated_at": "2026-05-31T14:30:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-fetch-epic",

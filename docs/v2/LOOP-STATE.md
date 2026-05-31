@@ -1,9 +1,9 @@
-cycle: 129
+cycle: 130
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: bureau-h2h-export-or-lab-og-followup
-last_keep_cycle: 129
-last_commit: db8d5904
+next_slice: bureau-self-scout-share-bar
+last_keep_cycle: 130
+last_commit: da33eafd
 lab_l5_og_live_fetch_epic: complete
-lab_l4_pro_gate_epic: complete
+league_l5_self_scout_og_epic: active

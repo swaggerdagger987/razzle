@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | bureau-self-scout-snapshot-codec | da33eafd | PASS | pytest 3; curl snap 66419B; Gate C PASS.
+
 2026-05-31 | lab-og-gamelog-player-default | db8d5904 | PASS | pytest 3; curl gamelog 60634B; Gate C PASS.
 
 2026-05-31 | explore-og-universe-query | 7abe91fa | PASS | pytest 4; build ok; curl college OG 37393B PNG.
