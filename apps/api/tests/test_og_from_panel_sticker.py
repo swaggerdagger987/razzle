@@ -7,8 +7,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 ROUTE_TS = ROOT / "apps/web/app/og/[panel]/route.tsx"
 
-# Highest-traffic snapshot export panels — Gate C evidence targets.
-SNAPSHOT_FROM_PANEL_SLUGS = ("rankings", "weekly")
+# Snapshot export panels with FROM PANEL trust sticker — Gate C evidence targets.
+SNAPSHOT_FROM_PANEL_SLUGS = ("rankings", "weekly", "gamelog")
 
 
 def test_from_panel_sticker_on_snapshot_path():
@@ -24,3 +24,17 @@ def test_from_panel_sticker_covers_rankings_and_weekly():
         assert f'"{slug}"' in launch_block, f"{slug} must be in LAUNCH_10_OG_SLUGS"
     assert "from your panel" in source
     assert "#5b7fff" in source, "FROM PANEL sticker uses trust blue"
+
+
+def test_from_panel_sticker_covers_gamelog():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert '"gamelog"' in source.split("const LAUNCH_10_OG_SLUGS", 1)[1].split(");", 1)[0]
+    assert "extractGamelogWeekRows" in source
+
+
+def test_gamelog_renderer_passes_snapshot_rows():
+    renderer = ROOT / "apps/web/components/lab/renderers/GamelogRenderer.tsx"
+    text = renderer.read_text(encoding="utf-8")
+    assert "snapshotRows={ogSnapshotRows}" in text
+    assert "statLabel: \"PPR\"" in text
+    assert "Wk ${w.week}" in text
