@@ -1,56 +1,44 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
-  "epic_title": "Lab L5 — OG live fetch + sticker parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Bureau H2H rivalry OG cards don't scream LIVE vs SAMPLE on Reddit — Lab Launch-10 got stickers; league exports still blend into generic previews.",
+  "epic_title": "League L5 — Bureau H2H OG screenshot parity",
+  "parity_ref": "PARITY Explore L5 — Bureau H2H export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-launch10-live-fetch-merge",
-      "title": "Merge base LIVE sticker + fetchOgLiveRows for Launch-10 without snapshot",
+      "id": "league-h2h-og-live-sample-stickers",
+      "title": "H2H OG — teal LIVE + terracotta SAMPLE stickers (mirror Lab)",
       "status": "done",
-      "merge_commit": "3f0411ec"
+      "merge_commit": "af2f174b"
     },
     {
-      "id": "explore-og-universe-query",
-      "title": "Explore OG — pass universe/college in export URL",
+      "id": "league-h2h-og-snapshot-sticker",
+      "title": "H2H OG — EXPORTED sticker on snapshot rivalry cards",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-gamelog-player-default",
-      "title": "Gamelog OG — default player_id when export omits query",
+      "id": "league-h2h-share-bar-og-copy",
+      "title": "BureauH2HShareBar — LIVE/SAMPLE hint in export link label",
       "status": "pending",
       "merge_commit": null
-    },
-    {
-      "id": "lab-pro-gate-hallway-teasers",
-      "title": "Pro gate — screener hallway + domain teasers",
-      "status": "done",
-      "merge_commit": "675044ea"
     }
   ],
-  "next_atom_id": "explore-og-universe-query",
-  "created_at": "2026-05-31T08:25:32Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "next_atom_id": "league-h2h-og-snapshot-sticker",
+  "created_at": "2026-05-31T08:22:10Z",
+  "updated_at": "2026-05-31T14:45:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-gamelog-live-week-rows",
+      "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
-      "last_atom": "lab-og-launch10-snapshot-default",
-      "merge_commit": "e2a3ce8a"
-    },
-    {
-      "id": "lab-l5-launch10-og-live-sticker",
-      "status": "complete",
-      "last_atom": "lab-og-live-sticker-prospects-weekly",
-      "merge_commit": "5bb77346"
+      "last_atom": "lab-og-live-demo-fallback-copy",
+      "merge_commit": "9cd6a5cf"
     },
     {
       "id": "lab-l5-og-watermark-band",
       "status": "complete",
-      "last_atom": "lab-og-watermark-band-panel-route",
-      "merge_commit": "742028c0"
+      "last_atom": "lab-og-watermark-band-head-to-head",
+      "merge_commit": "44d05684"
     },
     {
       "id": "lab-l5-og-live-sort-keys",
@@ -59,10 +47,10 @@
       "merge_commit": "7afc0b03"
     },
     {
-      "id": "league-l5-h2h-og-watermark",
+      "id": "lab-l4-pro-gate-polish",
       "status": "complete",
-      "last_atom": "league-h2h-og-watermark-band",
-      "merge_commit": "945e4656"
+      "last_atom": "lab-pro-gate-launch10-teasers",
+      "merge_commit": "b0405d43"
     }
   ]
 }
