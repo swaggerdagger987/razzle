@@ -1,68 +1,34 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
+2026-05-31 | lab-og-gamelog-player-default | c34a1a6f | keep | PLAYER_SCOPED_OG_SLUGS centralizes default player_id; curl 60634B; epic complete.
 
-2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
-
-2026-05-31 | lab-pro-gate-loading-copy | 7236be3e | PanelAgentLoading wired into ProUpgradeGate.
-
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
-
-2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
-
-2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | terracotta SAMPLE sticker + blurb on Launch-10 demo path.
-
-2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly OG defaults position=WR for panel API live rows.
+2026-05-31 | lab-og-gamelog-player-default | 72647966 | keep | LabOgExportLink effectivePlayerId for player-scoped slugs; curl 60634B.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
-
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
-
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | keep | extractGamelogWeekRows; Wk N + fpts sort; curl 56390B.
-
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
-
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | keep | ppo+most_efficient; aging ppg+positions unwrap; merged base buysell/dashboard keys.
-
 2026-05-31 | lab-og-buysell-dashboard-live-sort | cb59494b | keep | dynasty_value/rank_diff; buy_low/sell_high extract; curl ≥44KB.
-
-
 2026-05-31 | lab-og-efficiency-aging-live-sort | OG route ppo/ppg + aging positions unwrap | aefbf6ef | SHIP | keep | 1 file | curl 45KB×2
-
 2026-05-31 | lab-og-position-gamelog | GamelogRenderer position on LabOgExportLink | 228c4b59 | SHIP | keep | 1 file | curl 48035B
-
 2026-05-31 | league-strength-of-schedule-og-share | ShareBar + OG route | 7f652a98 | SHIP | keep | | | 3 files
 2026-05-31 | league-power-rankings-og-snapshot | 26a22f69 | keep | compact encode/decode lib + ShareBar rows prop
-
 2026-05-31 | H2H canonical codec | 7f652a98 | BureauH2HShareBar uses encodeBureauH2HOgSnapshot; OG route decodeBureauH2HOgSnapshot.
-
 2026-05-31 | Trade values OG rank labels | 5ed39e14 | TradeValuesRenderer ogSnapshotRows uses `rank · Value` or `rank · formula.name` on top 6 sorted rows.
-
 2026-05-31 | Buy/Sell OG lane labels | 98ae0ef2 | BuySellRenderer splits buyRows/sellRows with Buy/Sell statLabel before encodeOgSnapshot.
-
 Append-only log of implementation patterns, surgical wins, things to avoid.
-
 Format per entry:
-
 ```
 YYYY-MM-DD | slice | approach | commit hash | outcome | keep | discard | revisit | evidence
-```
-
 Read this file before implementing. Reuse working patterns; avoid repeating known
 failure modes. Karpathy: simplicity first, surgical changes.
-
 ---
-
 2026-05-31 | weekly-hot-week-og | ogSnapshotRows max week pts + Wk label | 7f652a98 | SHIP | KEEP hottest-week not PPG | — | — | evidence/2026-05-31-lab-weekly-hot-week-snapshot.md
-
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 7f652a98 | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
 2026-05-31 | league-waiver-tendencies-og-share | Hawkeye OG + share bar; pickHero hoarder-first | 6dcb0f72 | SHIP | KEEP FAAB bar from faab_spent | — | — | evidence 2026-05-31-league-waiver-tendencies-og-share.md
-
----
-
 ## Entries
-
 2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
 2026-05-31 | Bureau Manager Profiles copy link | 04c19959 | keep | copyProfilesLink row; curl manager-profiles 77194B

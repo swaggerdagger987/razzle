@@ -1,43 +1,27 @@
 # Memory — Reality Checker
-
-2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
+2026-05-31 | lab-og-gamelog-player-default | 72647966 | PASS | curl gamelog 60634B; build + pytest 61; Gate C PASS.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 
 2026-05-31 | launch10 live-fetch merge Gate C | 3f0411ec | PASS curl rankings 62355B weekly 66512B; build + pytest 58.
 2026-05-31 | launch10 snapshot-default Gate C | e2a3ce8a | PASS curl rankings 62355B weekly 66512B; build + pytest 55.
 2026-05-31 | Cycle 118 | e00217d1 | PASS curl prospects 60688B + build + pytest 55.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | curl rankings 62355B PASS | Gate C.
-
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | pytest 12; web build ok; Gate C N/A.
-
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | curl gamelog 56390B PASS | Wk N rows; extractGamelogWeekRows on live weeks[].
-
 2026-05-31 | lab-og-watermark-band-head-to-head | 4d84af9a | curl H2H 67846B PASS | Gate C terracotta band on export.
-
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | curl efficiency 45113B aging 44952B PASS | post-merge base sync; Gate C both routes.
-
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | curl efficiency 45113B aging 44952B PASS | Gate C ≥40KB PNG both routes.
-
 2026-05-31 | lab-og-position-gamelog | curl gamelog WR 48035B PASS | player_id+position on OG URL
-
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
-
 Format per entry:
-
 ```
 YYYY-MM-DD | claim under review | evidence type (curl/screenshot/test) | layer/PARITY claim | verdict | issue class | keep | discard | revisit
-```
-
 Read this file before reviewing a claim. Recurring failure classes deserve
 explicit checks in the verification routine.
-
 2026-05-31 | waiver-tendencies OG | curl 73121B demo league | PASS | KEEP Gate C on Bureau OG pattern | — | — | evidence 2026-05-31-league-waiver-tendencies-og-share.md
-
 ---
-
 ## Entries
-
 2026-05-31 | Dashboard comps OG Gate C | c9151786 | PASS | curl dynasty-comps 65961B PNG | keep | evidence/2026-05-31-lab-dashboard-og-snapshot.md
 2026-05-31 | Pressure Map copy link Gate C | curl pressure-map 200 60661B; build+pytest | PASS | keep | docs/v2/evidence/2026-05-31-bureau-pressure-map-copy-link.md
 2026-05-30 | Lab L5 OG live data rows | test (npm run build + pytest + tsc) | Lab L5 DEPTH claim verified | PASS | no terminal.db on CI VM means data-path is untested end-to-end; fallback path (empty data → icon + loading copy) verified; production needs NEXT_PUBLIC_API_ORIGIN env var | keep | future: add OG snapshot test with fixture data

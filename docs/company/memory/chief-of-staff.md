@@ -1,61 +1,26 @@
 # Memory — Chief of Staff
-
-2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
-
-2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
-
-2026-05-31 | Factory cycle 120 pro-gate loading copy | ad24a219 | Deduped OG on base #753; L4 epic atom 1/3.
+2026-05-31 | Factory cycle 128 gamelog OG default | 72647966 | keep | workday open; L5 live-fetch epic atom 1/3.
 
 2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
-
 2026-05-31 | Factory cycle 119 SAMPLE vs LIVE OG | 9cd6a5cf | Live-rows epic 3/3 complete; force_demo for Gate C.
-
 2026-05-31 | Factory cycle 118 prospects-weekly OG | 5bb77346 | Deduped PR720 gamelog on base; live-rows epic 2/3.
-
 2026-05-31 | Factory cycle 116 LIVE OG sticker | 4e905360 | Dedup H2H on base #666; live-rows epic 1/3.
-
 2026-05-31 | Factory cycle 115 H2H OG watermark band | 44d05684 | Watermark epic 2/2 complete; curl H2H 67846B.
-
 2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
-
 2026-05-31 | Factory cycle 113 Lab OG watermark band | 010241ea | Dedup live-sort cb59494b on base; watermark epic atom 1/2.
-
 2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab L5 live-sort epic complete; PR #643/#635 merged; ppo/ppg on base.
-
 2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab live-sort epic atom 2/3; deduped rankings atom on base.
-
 2026-05-31 | Factory cycle 109 gamelog position OG | 228c4b59 | Lab L5 position epic gamelog atom; workday cycle 1.
-
-2026-05-31 | Factory cycle 96 H2H codec | ad24a219 | Workday open; League L5 codec epic atom 1/3 SHIP.
-
 2026-05-31 | Lab L5 OG epic complete | 5ed39e14 | Four atoms merged in one workday branch; next PARITY lead is Bureau H2H export.
-
 2026-05-31 | Factory open cycle 94 buysell OG | 98ae0ef2 | keep | workday open atom 3/4 Lab L5 epic
-
 Append-only log of coordination patterns, what worked, what didn't.
-
 Format per entry:
-
 ```
 YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
-```
-
 A good entry changes future behavior. A bad entry is a diary.
-
-2026-05-31 | factory cycle 1 | Lab weekly hot-week OG atom 2/4 | ad24a219 | SHIP | KEEP epic atom chain | — | — | standup 2026-05-31 cycle 93
-
-2026-05-31 | factory cycle 1 | Lab epic after League unhide complete | ad24a219 | SHIP | KEEP NEXT.md lead for slice pick | — | — | standup 2026-05-31 cycle 92
-
-2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | ad24a219 | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
-
 2026-05-31 | Factory cycle 1 dashboard OG snapshot | c9151786 | keep | dedup prospects+tradevalues on base 1a56450e
-
 ---
-
 ## Entries
-
-2026-05-31 | Factory open cycle 90 waiver tendencies | ad24a219 | keep | League L5 epic atom 2/3 merged path
-2026-05-31 | Factory cycle 2 Pressure Map copy link | ad24a219 | keep | workday open; behavioral share epic 2/4 SHIP
 2026-05-30 | NEXT.md eliminates slice selection ambiguity for morning standups | SHIP 3/3 on Lab L5 OG live data rows | keep | NEXT.md lead candidate matched PARITY/DEPTH/ACCEPTANCE; single-file touch kept scope tight
 2026-05-31 | Factory cycle 1 — epic.json + FACTORY-DOD Gate C for Lab OG | SHIP 3/3 demo rows atom | keep | Workday opened; curl PNG ~59KB proves Gate C; standup-pr-autopen on branch from PR #18
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B

@@ -1,15 +1,21 @@
-# Evidence — Lab Gamelog OG default player export (2026-05-31)
+# Evidence — lab-og-gamelog-player-default
 
+**Date:** 2026-05-31  
 **Atom:** `lab-og-gamelog-player-default`  
-**Cycle:** 124
+**Room:** Lab L5
 
-## Acceptance
+## Gate C — PNG curl
 
-```text
-npm run build --workspace=apps/web → exit 0
-curl 'http://127.0.0.1:3000/og/gamelog?download=1' → 200 60634 bytes PNG 1200×630
-```
+| Route | HTTP | Bytes | Verdict |
+|-------|------|-------|---------|
+| `/og/gamelog?download=1` | 200 | 60634 | PASS |
+| `/og/gamelog?download=1&player_id=00-0036900` | 200 | 60634 | PASS |
 
-## Verdict
+## Build / tests
 
-PASS — Gate C ≥40KB PNG with default player before search.
+- `npm run build --workspace=apps/web` — exit 0
+- `JWT_SECRET=test python3 -m pytest apps/api/tests -q` — 61 passed, 5 skipped
+
+## Change
+
+`LabOgExportLink` injects `DEFAULT_LAB_OG_PLAYER_ID` on player-scoped OG slugs (including gamelog) when the export link omits `playerId`, so share URLs always carry `player_id` for live nflverse rows.

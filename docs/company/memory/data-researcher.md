@@ -1,41 +1,26 @@
 # Memory — Data Researcher
-
-2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
+2026-05-31 | lab-og-gamelog-player-default | 72647966 | PASS | Chase gsis_id 00-0036900 matches nflverse default in OG route.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.
 2026-05-31 | launch10 no-snapshot | e2a3ce8a | Direct /og links need live API path without panel snapshot param.
 2026-05-31 | Cycle 118 | e00217d1 | No new intel.
 2026-05-31 | lab-og-live-sticker-launch10 | cycle 116 | Reddit needs visible live vs sample on OG exports.
-
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | no new REDDIT-INTEL; teaser audit only.
-
 2026-05-31 | gamelog OG weeks | 40c80f0e | PASS | No new intel; in-panel ogSnapshotRows already defined peak-week sort.
-
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.
-
 2026-05-31 | lab-og-efficiency-aging-live-sort | cycle 110 | No new Reddit intel; ppo/ppg sort matches in-panel export semantics.
-
 2026-05-31 | Lab OG live sort | 7f78b631 | PASS | No web scan; dynasty value sort matches Reddit board vocabulary.
-
 2026-05-31 | trade values formula OG | cycle 95 | DynastyFF threads rank custom formulas before sharing trade boards
-
 Append-only log of recurring user pain patterns, language signals, and feature-gap
 candidates that became (or didn't become) PARITY rows.
-
 Format per entry:
-
 ```
 YYYY-MM-DD | source URLs | pattern | exact quotes | mapped to PARITY/DEPTH | outcome | keep | discard | revisit
-```
-
 Read this file before a briefing. Distinguish recurring signal from one-off
 anecdotes (>=3 independent threads = signal).
-
 ---
-
 ## Entries
-
 2026-05-31 | explore watermark band | — | PASS | no new intel; REDDIT-INTEL already cites watermark GTM
 2026-05-31 | Dashboard comps OG snapshot | c9151786 | keep | roster builder comps export matches in-panel match %
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"

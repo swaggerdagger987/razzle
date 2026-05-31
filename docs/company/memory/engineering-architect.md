@@ -1,44 +1,27 @@
 # Memory — Engineering Architect
-
-2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
+2026-05-31 | lab-og-gamelog-player-default | 72647966 | keep | 1 file LabOgExportLink; mirrors route PLAYER_SCOPED set.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
 2026-05-31 | fetchOgLiveRows launch-10 | e2a3ce8a | panel API + pro header before panels slug; demo last.
 2026-05-31 | Cycle 118 | e00217d1 | prospectSources loop in route.tsx.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | 1-file panel route; LIVE sticker gated on showingLiveData.
-
 2026-05-31 | launch10 teaser audit | b0405d43 | keep | 2 files; LAUNCH_10_* exports + pytest guard.
-
 2026-05-31 | gamelog weeks extract | 40c80f0e | 1-file ~35 lines; player-scoped weeks[] not players[]; no PANEL_OG_STAT_KEY.
-
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | 1-file H2H OG; band copied from panel route; atlas link above band.
-
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | merge most_efficient + aging single-position unwrap; buysell/dashboard keys from base.
-
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | 1-file contract; pass position into extractRows for aging nested API.
-
 2026-05-31 | tradevalues snapshot contract | 5ed39e14 | 1-file ≤25 lines; rank+formula statLabel pattern matches buysell
-
 2026-05-31 | buysell snapshot contract | 98ae0ef2 | 1-file ≤35 lines; reuse encodeOgSnapshot; no route touch
-
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
-
 Format per entry:
-
 ```
 YYYY-MM-DD | hypothesis | implementation boundary | ACCEPTANCE check | outcome | keep | discard | revisit | evidence
-```
-
 Read this file before scoping a new slice. Track which boundaries failed before,
 which migrations were painful, which test patterns caught bugs.
-
 ---
-
 ## Entries
-
 2026-05-31 | WeeklyHeatmap hot-week snapshot | 1 file ≤45 lines | SHIP | keep | max-week map sort mirrors panel hotPlayer logic
-
 2026-05-31 | BureauPressureMap copy link | 1 file ≤35 lines | SHIP | keep | mirrors ManagerProfiles clipboard row
 2026-05-30 | Generic extractRows() with 7 response shapes handles all 100 panels without per-panel switch | apps/web/app/og/[panel]/route.tsx | ACCEPTANCE Gate 2 (Lab renderers) | keep | Satori constraints: display:flex everywhere, no grid; agentForPanel() from @razzle/agents avoids metadata duplication; parameterized API paths ({player_id}) correctly skipped
 2026-05-31 | demoRowsForPanel() + isDemo mirrors H2H; blurb must be single JSX text child for Satori | apps/web/app/og/[panel]/route.tsx | FACTORY-DOD Gate C | keep | Two adjacent text children in blurb div caused Satori pipe failure — template string fix
