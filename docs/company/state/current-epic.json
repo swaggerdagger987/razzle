@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Launch-10 Lab panels need copy-link + preview + export GTM row like rankings, not export-only.",
   "epic_title": "Lab L5 — panel share bar on Launch-10",
   "parity_ref": "Lab panel OG data rows",
@@ -20,12 +20,15 @@
     {
       "id": "lab-panel-share-bar-weekly-gamelog",
       "title": "Weekly heatmap + gamelog share bar",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "178289183"
     }
   ],
-  "next_atom_id": "lab-panel-share-bar-weekly-gamelog",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:20:00Z",
-  "updated_at": "2026-05-31T12:20:00Z",
-  "completed_epics": ["lab-l5-pro-profile-og-live-parity"]
+  "updated_at": "2026-05-31T12:25:00Z",
+  "completed_epics": [
+    "lab-l5-pro-profile-og-live-parity",
+    "lab-l5-panel-share-bar-launch10"
+  ]
 }
