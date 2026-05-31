@@ -14,8 +14,8 @@
     {
       "id": "explore-og-universe-query",
       "title": "Explore OG — pass universe/college in export URL",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7dbd4b11"
     },
     {
       "id": "lab-og-dynasty-comps-export-default",
@@ -26,7 +26,7 @@
   ],
   "next_atom_id": "lab-og-gamelog-player-default",
   "created_at": "2026-05-31T12:30:00Z",
-  "updated_at": "2026-05-31T12:45:00Z",
+  "updated_at": "2026-05-31T14:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l4-pro-gate-epic",
@@ -39,6 +39,18 @@
       "status": "complete",
       "last_atom": "lab-og-live-demo-fallback-copy",
       "merge_commit": "18d92f6b"
+    },
+    {
+      "id": "lab-l5-og-live-fetch-sticker",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-live-fetch-merge",
+      "merge_commit": "3f0411ec"
+    },
+    {
+      "id": "lab-l2-sidebar-agent-groups",
+      "status": "complete",
+      "last_atom": "lab-sidebar-search-agent-labels",
+      "merge_commit": "e75ec714"
     }
   ]
 }

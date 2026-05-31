@@ -11,15 +11,13 @@
 
 ## Gate C — OG PNG curl
 
-Re-verified 2026-05-31T08:50Z on `cursor/workday-cycle-initiation-9ffc`.
-
 | Route | HTTP | Bytes | Verdict |
 |-------|------|-------|---------|
 | `/og/gamelog?download=1&player_id=00-0036900` | 200 | 60634 | PASS |
-| `/og/gamelog?download=1` (route default) | 200 | 60634 | PASS |
+| `/og/gamelog?download=1` (PLAYER_SCOPED default) | 200 | 60634 | PASS |
 
 Both PNGs: 1200×630, ≥40KB.
 
 ## Layer claim
 
-Lab L5 — `LabOgExportLink` appends `player_id=00-0036900` for gamelog/dynasty-comps when export omits query; GamelogRenderer delegates default to helper.
+Lab L5 — `LabOgExportLink` centralizes `player_id=00-0036900` for gamelog/dynasty-comps when export omits query; `GamelogRenderer` delegates default to helper.
