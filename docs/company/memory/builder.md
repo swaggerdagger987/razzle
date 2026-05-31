@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-pro-gate-perks-copy | 05a6dc12 | launch10PerksLine + bureau7PerksLine in ProUpgradeGate.
+
 2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | terracotta SAMPLE sticker + blurb on Launch-10 demo path.
 
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly OG defaults position=WR for panel API live rows.
