@@ -453,7 +453,7 @@ export async function GET(
                 : isDemo
                   ? " · sample preview"
                   : liveHasRows
-                    ? " · live data"
+                    ? " · live preview"
                     : ""
           }`}
         </div>

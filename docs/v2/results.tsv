@@ -63,3 +63,4 @@ cycle	commit	score	status	pillar	slice	description
 71	33808392	depth+voice+simplicity	keep	Lab	L5 OG snapshot efficiency aging	trust=T5,T6; snapshotRows on efficiency+aging LabOgExportLink; curl buysell snapshot 58072B PNG
 72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
 73	1578f75e	depth+voice+simplicity	keep	Lab	L5 OG rankings position filter	trust=T5,T6; LabOgExportLink.position; curl WR 50210B
+76	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG live preview label	trust=T1,T5,T6; liveHasRows blurb live preview; curl rankings 59509B; epic atom 4/4
