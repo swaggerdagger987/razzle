@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 117 gamelog OG | da33eafd | L5 live-extract atom 2/3; rebased after L4 merge.
+
 2026-05-31 | Factory cycle 115 H2H OG watermark band | 44d05684 | Watermark epic 2/2 complete; curl H2H 67846B.
 
 2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
