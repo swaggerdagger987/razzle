@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-trade-values-snapshot
 last_keep_cycle: 90
-last_commit: da33eafd
+last_commit: 3c2b46e7
 lab_l5_og_prospects_snapshot: complete
 lab_l5_og_snapshot_weekly_breakouts: complete
 explore_l5_watermarked_export: complete

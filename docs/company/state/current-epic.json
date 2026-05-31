@@ -8,8 +8,8 @@
     {
       "id": "lab-og-prospects-snapshot",
       "title": "Prospects export passes top-6 RPS snapshot rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "3c2b46e7"
     },
     {
       "id": "lab-og-trade-values-snapshot",
@@ -18,7 +18,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-prospects-snapshot",
+  "next_atom_id": "lab-og-trade-values-snapshot",
   "created_at": "2026-05-31T12:30:00Z",
   "updated_at": "2026-05-31T12:30:00Z"
 }
