@@ -32,14 +32,16 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
       return;
     }
 
-    const user = getSleeperUser();
+    const sleeper = getSleeperUser();
+    const rivalryUserId = searchParams.get("user");
     const body: Record<string, unknown> = { league_id: leagueId };
     if (config.needsUser) {
-      if (!user?.user_id) {
+      const userId = rivalryUserId ?? sleeper?.user_id;
+      if (!userId) {
         setErr("connect your sleeper account first");
         return;
       }
-      body.user_id = user.user_id;
+      body.user_id = userId;
     }
     if (feature === "head-to-head") {
       const opponent = searchParams.get("opponent");

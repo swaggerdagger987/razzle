@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau H2H shared rivalry URL (cycle 131)
+- **Angle:** Group-chat H2H links must open the sender's matchup, not the viewer's Sleeper login — `?user=` survives opponent picker changes.
+- **Trust:** T5/T6 — deep-link parity between ShareBar copy and Bureau fetch.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.

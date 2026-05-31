@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | keep | URL user before Sleeper; 2-file contract.
+
 2026-05-31 | explore-og-formula-sort-label | 710ec33e | keep | api_sort query; 3-file contract.
 
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | keep | 1 file; force_demo query; SAMPLE sticker.

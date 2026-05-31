@@ -1,33 +1,31 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Explore share cards don't mirror the screener URL — college toggles and filters get lost on export, so Reddit screenshots lie about the view.",
-  "epic": "Explore L5 — OG card matches screener query state",
-  "slice_title": "Explore OG — formula sort label on card when apiSort differs",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with visible rows",
-  "trust_pillars": ["T1", "T5", "T6"],
+  "big_problem": "Bureau rivalry screenshots die in DMs — copied H2H links drop opponent context so managers reopen the wrong matchup.",
+  "epic": "League L5 — Bureau H2H export deep-links",
+  "slice_title": "H2H opponent picker preserves user= on shared rivalry URLs",
+  "atom_id": "bureau-h2h-pick-opponent-preserve-user",
+  "parity_ref": "PARITY Explore L5 — Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/web/components/explore/ExploreShareButton.tsx",
-    "apps/web/components/explore/ExplorePageClient.tsx"
+    "apps/web/components/league/LeagueDashboard.tsx",
+    "apps/web/components/league/BureauHeadToHead.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 80,
+  "max_files": 2,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/explore-og-formula.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?download=1&force_demo=1&universe=nfl&sort=formula_dynasty_pulse&api_sort=fantasy_points_ppr&dir=desc&pos=QB'",
-    "file /tmp/explore-og-formula.png"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
   ],
-  "out_of_scope": [
-    "Formula computation on OG edge route",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["OG route changes", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "status": "in_progress",
+  "content_commit": null
 }

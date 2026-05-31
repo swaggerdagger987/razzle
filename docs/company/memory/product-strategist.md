@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | SHIP | keep | T5 shared rivalry URLs; Bureau H2H epic 3/3 done.
+
 2026-05-31 | explore-og-formula-sort-label | 710ec33e | SHIP | keep | T1 formula honesty on OG; epic 3/3 done.
 
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | SHIP | keep | Gate C empty API; atom 2/3.
