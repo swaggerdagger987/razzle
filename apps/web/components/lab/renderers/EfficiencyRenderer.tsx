@@ -296,6 +296,7 @@ export function EfficiencyRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="efficiency"
             downloadName="razzle-efficiency.png"
+            position={position || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
