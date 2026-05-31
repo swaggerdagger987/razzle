@@ -62,3 +62,4 @@ cycle	commit	score	status	pillar	slice	description
 69	b7deed67	depth+voice+simplicity	keep	Lab	L5 OG dynasty-comps panel export default player_id	trust=T5,T6; DynastyCompsPanel footer; DEFAULT_LAB_OG_PLAYER_ID on gamelog export
 71	72597329	depth+voice+simplicity	keep	Lab	L5 OG buy-sell snapshot rows	trust=T5,T6; BuySellRenderer ogSnapshotRows; curl buysell snapshot 42380B demo 58072B
 70	916ba843	depth+voice+simplicity	keep	Lab	L5 OG snapshot rows from panel	trust=T5,T6; snapshot query on LabOgExportLink; curl dashboard snapshot 45249B PNG
+71	72597329	depth+voice+simplicity	keep	Lab	L5 OG buy-sell snapshot rows	trust=T5,T6; BuySellRenderer ogSnapshotRows; curl buysell snapshot 42380B demo 58072B

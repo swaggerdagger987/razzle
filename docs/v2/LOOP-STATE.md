@@ -2,7 +2,7 @@ cycle: 71
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-api-origin-rewrite or wire launch-10 snapshots
+next_slice: lab-og-export-link-prospects-weekly-tradevalues (epic atom 3/3)
 last_keep_cycle: 71
 last_commit: 72597329
 explore_l5_watermarked_export: complete
@@ -18,5 +18,5 @@ lab_l5_og_export_link_epic: complete
 lab_l5_og_export_gamelog_efficiency_aging: complete
 lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
-lab_l5_og_dynasty_comps_panel_export: complete
 lab_l5_og_snapshot_rows: complete
+lab_l5_og_buysell_snapshot: complete
