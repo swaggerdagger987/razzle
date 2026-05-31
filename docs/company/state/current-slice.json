@@ -23,5 +23,7 @@
     "new npm deps",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "status": "shipped",
+  "content_commit": "845d9d1a1"
 }

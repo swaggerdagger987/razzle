@@ -19,7 +19,7 @@ From `LOOP-STATE.md`:
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | Lab L5 OG live data rows (NEXT.md lead) |
+| Next slice | league-og-pressure-map-watermark (active epic) |
 | Last commit | `845d9d1a1` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
