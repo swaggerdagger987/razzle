@@ -237,8 +237,15 @@ function resolveApiOrigin(req: Request): string {
 const PANEL_OG_LEADER_STAT: Partial<Record<string, string>> = {
   weekly: "ppg",
   prospects: "rps",
-  breakouts: "breakout_score",
+  breakouts: "rbs_score",
 };
+
+/** Fetch a wider pool before position filter + leader sort (see Lab renderers). */
+const OG_LEADER_POOL_SLUGS = new Set(["weekly", "prospects", "breakouts"]);
+
+function ogFetchLimit(slug: string): string {
+  return OG_LEADER_POOL_SLUGS.has(slug) ? "25" : "6";
+}
 
 function rankPanelOgRows(slug: string, rows: OgRow[]): OgRow[] {
   if (!PANEL_OG_LEADER_STAT[slug]) return rows.slice(0, 6);
@@ -341,8 +348,7 @@ async function fetchLiveOgRows(
       if (v != null) url.searchParams.set(k, String(v));
     }
   }
-  const ogLimit = slug === "weekly" ? "25" : "6";
-  url.searchParams.set("limit", ogLimit);
+  url.searchParams.set("limit", ogFetchLimit(slug));
   try {
     const res = await fetch(url.toString(), {
       headers: { [OG_PRO_PREVIEW_HEADER]: "pro" },
@@ -378,8 +384,7 @@ async function fetchPanelData(
           if (v != null) url.searchParams.set(k, String(v));
         }
       }
-      const ogLimit = slug === "weekly" ? "25" : "6";
-      url.searchParams.set("limit", ogLimit);
+      url.searchParams.set("limit", ogFetchLimit(slug));
       res = await fetch(url.toString());
     }
     if (!res.ok) return [];

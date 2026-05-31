@@ -39,3 +39,4 @@ explicit checks in the verification routine.
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles tab | da33eafd | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
 2026-05-31 | lab-og-weekly-ppg-ranked | Weekly OG PPG rank on live path | SHIP | keep | Lab L5 fidelity atom 2/3
+2026-05-31 | lab-og-breakouts-score-ranked | curl breakouts WR 61718B | PASS | keep | Gate C; web build exit 0

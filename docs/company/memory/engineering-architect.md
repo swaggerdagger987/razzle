@@ -37,3 +37,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | lab-og-weekly-ppg-ranked | Weekly OG PPG rank on live path | SHIP | keep | Lab L5 fidelity atom 2/3
+2026-05-31 | lab-og-breakouts-score-ranked | ogFetchLimit + rbs_score | SHIP | keep | 2 files ≤60 lines; closes fidelity epic

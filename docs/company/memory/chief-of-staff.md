@@ -43,3 +43,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 Schedule tab | da33eafd | keep | dedup waiver a2536dcc; HIDDEN empty; epic complete
 2026-05-31 | Factory cycle 1 Schedule tab | eb542d51 | SHIP | merged base 8d54afd7; PR 463; web build PASS
 2026-05-31 | lab-og-weekly-ppg-ranked | Weekly OG PPG rank on live path | SHIP | keep | Lab L5 fidelity atom 2/3
+2026-05-31 | lab-og-breakouts-score-ranked | Breakouts OG RBS rank | SHIP | keep | Lab L5 fidelity epic complete atom 3/3

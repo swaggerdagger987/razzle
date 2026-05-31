@@ -39,3 +39,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | lab-og-weekly-ppg-ranked | Weekly OG PPG rank on live path | SHIP | keep | Lab L5 fidelity atom 2/3
+2026-05-31 | lab-og-breakouts-score-ranked | no new intel | PASS | skip | OG fidelity slice only
