@@ -8,25 +8,25 @@
     {
       "id": "explore-og-universe-query",
       "title": "Explore OG — pass universe, season, team in export URL",
-      "status": "done",
-      "merge_commit": "feec2e19"
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
       "id": "lab-og-gamelog-player-default",
       "title": "Gamelog OG — default player_id when export omits query",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "ef908a99"
     },
     {
       "id": "lab-og-launch10-live-fetch-merge",
       "title": "Merge base LIVE sticker + fetchOgLiveRows for Launch-10 without snapshot",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "3f0411ec"
     }
   ],
-  "next_atom_id": "lab-og-gamelog-player-default",
+  "next_atom_id": "explore-og-universe-query",
   "created_at": "2026-05-31T12:45:00Z",
-  "updated_at": "2026-05-31T12:55:00Z",
+  "updated_at": "2026-05-31T08:46:54Z",
   "completed_epics": [
     {
       "id": "lab-l4-pro-gate-epic",

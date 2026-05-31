@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 128 — Explore L5 OG season/team export URL)
+**Last updated:** 2026-05-31 (factory cycle 129 — Explore L5 OG season/team export URL ship)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,11 +15,11 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 128 |
+| Cycle | 129 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | Explore |
 | Focus layer | L5 |
-| Next slice | lab-og-gamelog-player-default |
+| Next slice | bureau-h2h-export-og |
 | Last commit | `feec2e19` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
