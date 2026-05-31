@@ -65,3 +65,15 @@ def test_generic_pro_gate_slugs_have_custom_teasers():
     source = _teaser_source()
     missing = [s for s in GENERIC_PRO_GATE_SLUGS if not _slug_has_custom_teaser(source, s)]
     assert not missing, f"generic pro gate slugs missing teaser: {missing}"
+
+
+def test_pro_upgrade_perks_cover_launch10_and_bureau():
+    from pathlib import Path
+
+    source = _teaser_source()
+    assert "PRO_UPGRADE_PERKS" in source
+    assert "weekly" in source and "dashboard" in source
+    assert "self-scout" in source and "Monte Carlo" in source
+    root = Path(__file__).resolve().parents[3]
+    gate = (root / "apps/web/components/lab/ProUpgradeGate.tsx").read_text(encoding="utf-8")
+    assert "PRO_UPGRADE_PERKS" in gate
