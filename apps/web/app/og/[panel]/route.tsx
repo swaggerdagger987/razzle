@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getPanel } from "@razzle/panels";
 import { agentForPanel } from "@razzle/agents";
+import { teaserRowsForPanel } from "@/lib/panel-upgrade-teaser";
 
 export const runtime = "edge";
 
@@ -96,7 +97,7 @@ function panelBlurbSuffix(
 ): string {
   const pos = positionFilter ? ` · ${positionFilter} only` : "";
   if (slug === "dynasty-comps" && showingDemoRows) {
-    return `${pos} · comps for Ja'Marr Chase · sample preview`;
+    return `${pos} · Pro comp preview · sample`;
   }
   if (isSnapshot) {
     return `${pos} · from your panel`;
@@ -218,7 +219,21 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
   ],
 };
 
+/** Pro-gate teaser rows for OG when live comps unavailable (matches ProUpgradeGate preview). */
+function dynastyCompsTeaserOgRows(): OgRow[] {
+  const stats = [94, 91, 88];
+  const teams = ["CIN", "IND", "TB"];
+  return teaserRowsForPanel("dynasty-comps").map((row, i) => ({
+    name: row.name,
+    position: row.position,
+    team: teams[i] ?? "—",
+    stat: stats[i] ?? 85,
+    statLabel: "Match %",
+  }));
+}
+
 function demoRowsForPanel(slug: string): OgRow[] {
+  if (slug === "dynasty-comps") return dynastyCompsTeaserOgRows();
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
