@@ -8,6 +8,7 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
+import { LabOgExportLink } from "../LabOgExportLink";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -144,9 +145,7 @@ export function ProspectsRenderer({ panel }: Props) {
           <Link href="/explore?universe=college" className="text-sm text-ink-medium underline">
             college screener →
           </Link>
-          <a href="/og/prospects?download=1" className="text-sm text-ink-medium underline" download="razzle-prospects.png">
-            export card
-          </a>
+          <LabOgExportLink slug="prospects" downloadName="razzle-prospects.png" />
         </footer>
       )}
     </div>

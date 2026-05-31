@@ -17,6 +17,7 @@ import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
+import { LabOgExportLink } from "../LabOgExportLink";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -232,9 +233,7 @@ export function TradeValuesRenderer({ panel }: Props) {
           >
             Ask Bones about {topPlayer.full_name} →
           </Link>
-          <a href="/og/tradevalues?download=1" className="text-sm text-ink-medium underline" download="razzle-trade-values.png">
-            export card
-          </a>
+          <LabOgExportLink slug="tradevalues" downloadName="razzle-trade-values.png" />
         </footer>
       )}
     </div>
