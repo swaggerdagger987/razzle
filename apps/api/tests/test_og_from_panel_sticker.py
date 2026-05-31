@@ -41,7 +41,8 @@ def test_prospects_snapshot_extract_uses_rps():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert "function extractProspectsRows" in source
     assert 'slug === "prospects"' in source
-    assert 'stat: Number(p.rps ?? 0)' in source
+    assert "const rps = Number(p.rps ?? 0)" in source
+    assert "formulaScore > 0 ? formulaScore : rps" in source
     assert 'statLabel: rank != null' in source or "RPS" in source
 
 
