@@ -8,8 +8,8 @@
     {
       "id": "bureau-roster-depth-renderer",
       "title": "BureauRosterDepth renderer + unhide roster-depth tab",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "6dbe1ca1"
     },
     {
       "id": "bureau-power-rankings-renderer",
@@ -36,7 +36,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-roster-depth-renderer",
+  "next_atom_id": "bureau-power-rankings-renderer",
   "created_at": "2026-05-31T04:37:27Z",
-  "updated_at": "2026-05-31T04:37:27Z"
+  "updated_at": "2026-05-31T04:42:00Z"
 }

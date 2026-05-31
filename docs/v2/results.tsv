@@ -49,7 +49,7 @@ cycle	commit	score	status	pillar	slice	description
 56	409a4ca0	gates+simplicity	keep	Lab	L5 OG export fix	Satori display:flex on /og/[panel] unblocks launch-10 export cards
 57	2e11270	depth+hallway+reddit+voice+simplicity	keep	Lab	L5 OG live data	/og/[panel] fetches live rows, agent badge, position pills, watermark, graceful fallback
 58	0019814f	depth+simplicity+voice	keep	Lab	L5 OG demo rows	trust=T5,T6; /og/[panel] static demo rows when API empty, sample preview label, Gate C PNG ~59KB
-59	da33eafd	depth+hallway+reddit+voice+simplicity	keep	League	L5 MC OG export	/og/monte-carlo top-3 title/playoff bars demo fallback Bureau export button trust=T5,T6
+59	ffccedf4	depth+hallway+reddit+voice+simplicity	keep	League	L5 MC OG export	/og/monte-carlo top-3 title/playoff bars demo fallback Bureau export button trust=T5,T6
 60	2e0aa724	depth+hallway+reddit+voice+simplicity	keep	League	L5 Trade Finder OG export	/og/trade-finder hero match value-gap rows demo fallback Bureau export button trust=T5,T6
 61	ddc28666	depth+simplicity+voice	keep	Lab	L5 OG launch10+param defaults	trust=T5,T6; launch-10 demo stat labels; DEFAULT_OG_PLAYER_ID; curl dynasty-comps 65961B
 62	0d39635e	depth+hallway+voice+simplicity	keep	League	L5 OG pressure map	trust=T2,T5,T6; /og/pressure-map demo bars + export button; curl 60104B PNG
@@ -58,10 +58,10 @@ cycle	commit	score	status	pillar	slice	description
 65	e732f973	depth+hallway+voice+simplicity	keep	League	L5 OG self scout	trust=T2,T5,T6; /og/self-scout depth grades demo; curl 66997B PNG; Bureau OG epic complete
 66	45a5e79b	depth+voice+simplicity	keep	Lab	L5 OG export links gamelog efficiency aging	trust=T5,T6; LabOgExportLink footers; curl gamelog 58408B efficiency 59068B aging 57934B
 67	497d1df5	depth+voice+simplicity	keep	Lab	L5 OG export links buy-sell dashboard	trust=T5,T6; LabOgExportLink footers; curl buysell 58072B dashboard 60034B
-68	6070c774	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped gamelog comps	trust=T5,T6; LabOgExportLink playerId; DynastyCompsRenderer; curl gamelog 58408B comps 65961B scoped
-69	916ba843	depth+voice+simplicity	keep	Lab	L5 OG snapshot rows from panel	trust=T5,T6; snapshot query on LabOgExportLink; curl dashboard snapshot 45249B PNG
-70	32d682ab	depth+voice+simplicity	keep	Lab	L5 OG export links rankings breakouts	trust=T5,T6; LabOgExportLink footers; curl rankings 59509B breakouts 60649B; epic atom 2/3
-71	33808392	depth+voice+simplicity	keep	Lab	L5 OG snapshot buysell efficiency aging	trust=T5,T6; snapshotRows on 3 launch-10 panels; curl buysell snapshot 58072B PNG
-72	75c88d30	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows gamelog Wk rows + comps Match %; curl gamelog 40520B comps 47292B PNG
-73	e31a59f1	depth+voice+simplicity	keep	Lab	L5 OG live snapshot demo subtitles	trust=T5,T6; ogSourceSuffix live tape / from panel / sample; curl rankings 59509B PNG
-74	6dbe1ca1	depth+hallway+simplicity	keep	League	L5 Bureau roster depth renderer	trust=T2,T5,T6; BureauRosterDepth unhide roster-depth; build+pytest PASS
+68	ffccedf4	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped links	trust=T5,T6; LabOgExportLink player_id param; curl gamelog+comps scoped 58-66KB
+69	2cb898b6	depth+voice+simplicity	keep	Lab	L5 OG live panel rows	trust=T5,T6; panels slug fetch + candidates extract; curl rankings 59509B breakouts 60649B
+71	33808392	depth+voice+simplicity	keep	Lab	L5 OG snapshot efficiency aging	trust=T5,T6; snapshotRows on efficiency+aging LabOgExportLink; curl buysell snapshot 58072B PNG
+72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
+73	7066f4ab	depth+voice+simplicity	keep	Lab	L5 OG live data label	trust=T1,T5,T6; live data blurb when liveHasRows; curl rankings 59509B
+74	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
+75	6dbe1ca1	depth+hallway+simplicity	keep	League	L5 Bureau roster depth renderer	trust=T2,T5,T6; BureauRosterDepth unhide roster-depth; build+pytest PASS
