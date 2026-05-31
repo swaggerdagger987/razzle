@@ -18,6 +18,12 @@
       "merge_commit": "6c8da85f"
     },
     {
+      "id": "league-power-rankings-og",
+      "title": "OG share card at /og/power-rankings with demo fallback",
+      "status": "done",
+      "merge_commit": "f433e3ca"
+    },
+    {
       "id": "bureau-h2h-og-snapshot-decode",
       "title": "OG route prefers snapshot param over refetch when present",
       "status": "pending",
@@ -26,5 +32,6 @@
   ],
   "next_atom_id": "bureau-h2h-og-snapshot-decode",
   "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T19:00:00Z"
+  "updated_at": "2026-05-31T06:05:00Z",
+  "last_cycle_commit": "f433e3ca"
 }
