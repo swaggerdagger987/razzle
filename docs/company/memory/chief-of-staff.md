@@ -1,4 +1,5 @@
-2026-05-31 | league-h2h-og-toleague-watermark | f6e0985f3 | SHIP | Factory cycle 157; Bureau hallway epic 1/3; PR #1491.
+2026-05-31 | league-trade-finder-og-watermark-user | 16118e6a7 | SHIP | Factory cycle 158; hallway epic 2/3; PR #1501.
+2026-05-31 | league-h2h-og-toleague-watermark | 6eea07576 | SHIP | Factory cycle 157; Bureau hallway epic 1/3; PR #1501.
 2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | 792e9f77d | SHIP | efficiency/aging formula_score OG; PR #1318.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4; lock #1415.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
