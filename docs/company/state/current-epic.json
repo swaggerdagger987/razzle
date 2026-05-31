@@ -1,30 +1,30 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch-10 Lab panels need in-product OG export links so every screenshot-worthy panel travels like Explore and Bureau cards (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — launch-10 OG export link parity",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction / Lab L5 OG per panel",
+  "epic_status": "active",
+  "big_problem": "Lab OG share cards must render the same player rows as in-product panels when the API returns data — not generic demo shells (DEPTH Lab L5).",
+  "epic_title": "Lab L5 — OG live panel row parity",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-export-gamelog-efficiency-aging",
-      "title": "OG export links on gamelog, efficiency, aging-curves renderers",
+      "id": "lab-og-live-extractors",
+      "title": "OG route extracts candidates/tiers via panels API with pro preview header",
       "status": "done",
-      "merge_commit": "45a5e79b"
+      "merge_commit": "2cb898b6"
     },
     {
-      "id": "lab-og-export-buysell-dashboard",
-      "title": "OG export links on buy-sell and dashboard renderers",
+      "id": "lab-og-dynasty-comps-lab",
+      "title": "Dynasty-comps Lab renderer + scoped export footer",
       "status": "done",
-      "merge_commit": "497d1df5"
+      "merge_commit": "b7deed67"
     },
     {
-      "id": "lab-og-export-player-scoped",
-      "title": "Player-scoped OG export links with default player_id on dynasty-comps and gamelog",
-      "status": "done",
-      "merge_commit": "ffccedf4"
+      "id": "lab-og-launch10-live-label",
+      "title": "Launch-10 OG cards drop sample label when live rows render",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T02:13:03Z",
-  "updated_at": "2026-05-31T04:20:00Z"
+  "next_atom_id": "lab-og-launch10-live-label",
+  "created_at": "2026-05-31T05:00:00Z",
+  "updated_at": "2026-05-31T04:25:00Z"
 }
