@@ -1,10 +1,10 @@
-cycle: 77
+cycle: 78
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: PARITY — league-power-rankings-og or bureau-monte-carlo-copy-link
-last_keep_cycle: 77
-last_commit: 20c7940a
+next_slice: league-power-rankings-og or bureau-monte-carlo-copy-link
+last_keep_cycle: 78
+last_commit: d2baccff
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -12,6 +12,7 @@ lab_l5_og_demo_rows: complete
 lab_l5_og_launch10_demos: complete
 lab_l5_og_param_defaults: complete
 lab_l5_og_epic: complete
+lab_l5_og_live_row_epic: complete
 league_l5_og_pressure_map: complete
 league_l5_bureau_og_epic: complete
 lab_l5_og_export_link_epic: complete
@@ -26,6 +27,7 @@ lab_l5_og_live_extractors: complete
 lab_l5_og_live_rows_epic: complete
 lab_l5_og_snapshot_efficiency_aging: complete
 lab_l5_og_live_data_label: complete
+lab_l5_og_launch10_live_label: complete
 league_l5_bureau_h2h_copy_link: complete
 league_l5_bureau_self_scout_copy_link: complete
 league_l5_power_rankings_tab: complete
