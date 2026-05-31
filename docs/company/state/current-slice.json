@@ -3,6 +3,7 @@
   "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
   "epic": "Lab L5 — OG export on empty panel states",
   "slice_title": "Gamelog — export card when player loaded but weeks empty",
+  "atom_id": "lab-gamelog-empty-weeks-export",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with visible rows",
@@ -28,5 +29,8 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "content_commit": "202981c8f",
+  "reality": "PASS",
+  "merge": "merged"
 }
