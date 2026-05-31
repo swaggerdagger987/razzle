@@ -1,9 +1,9 @@
-cycle: 151
+cycle: 152
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
 next_slice: PARITY next RED/YELLOW row
-last_keep_cycle: 151
+last_keep_cycle: 152
 last_commit: c8091030c
 room_l5_briefing_gtm_epic: complete
 lab_l5_empty_og_epic: complete
