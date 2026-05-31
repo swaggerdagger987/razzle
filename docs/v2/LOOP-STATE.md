@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-trade-values-ranked
 last_keep_cycle: 96
-last_commit: fa0940cf
+last_commit: ef59426e
 lab_l5_og_metric_ranked_epic: active
 lab_l5_og_metric_ranked_atom: efficiency-ppo
