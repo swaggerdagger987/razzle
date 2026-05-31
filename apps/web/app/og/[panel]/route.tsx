@@ -86,7 +86,10 @@ const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"])
 const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
 
 /** Panels that default API position when URL omits position — mirror in OG watermark (T6). */
-const TOLAB_DEFAULT_POSITION: Record<string, string> = { weekly: "WR" };
+const TOLAB_DEFAULT_POSITION: Record<string, string> = {
+  weekly: "WR",
+  efficiency: "RB",
+};
 
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
@@ -773,6 +776,19 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "dynasty_value",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "dynasty_value"),
   ];
+  const efficiencyStatKeys: string[] = [
+    "formula_score",
+    "efficiency_score",
+    "ppo",
+    ...STAT_CANDIDATE_KEYS.filter(
+      (k) => k !== "formula_score" && k !== "efficiency_score" && k !== "ppo",
+    ),
+  ];
+  const agingStatKeys: string[] = [
+    "formula_score",
+    "ppg",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
+  ];
   const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const statKeys =
     slug === "tradevalues"
@@ -783,9 +799,13 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
           ? rankingsStatKeys
           : slug === "buysell"
             ? buysellStatKeys
-            : preferredKey
-              ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
-              : [...STAT_CANDIDATE_KEYS];
+            : slug === "efficiency"
+              ? efficiencyStatKeys
+              : slug === "aging"
+                ? agingStatKeys
+                : preferredKey
+                  ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+                  : [...STAT_CANDIDATE_KEYS];
 
   let statKey = "";
   let statLabel = "";
@@ -1010,9 +1030,8 @@ export async function GET(
   }
   if (positionFilter) {
     apiParams.position = positionFilter;
-  } else if (slug === "weekly" && apiParams.position == null) {
-    // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
-    apiParams.position = TOLAB_DEFAULT_POSITION.weekly;
+  } else if (TOLAB_DEFAULT_POSITION[slug] && apiParams.position == null) {
+    apiParams.position = TOLAB_DEFAULT_POSITION[slug];
   }
   const snapshotDecoded = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] as OgRow[] };
   const snapshotRows = snapshotDecoded.rows;
