@@ -1,8 +1,8 @@
-cycle: 143
+cycle: 146
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Room
 focus_layer: L5
-next_slice: lab-player-scoped-og-watermark
-last_keep_cycle: 143
-last_commit: 1bc1f1e2b
-lab_l5_player_scoped_og_epic: in_progress
+next_slice: pick from PARITY/NEXT
+last_keep_cycle: 146
+last_commit: 252e421fa
+room_briefing_gtm_share_row: complete
