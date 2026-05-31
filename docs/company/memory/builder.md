@@ -1,9 +1,7 @@
 # Memory — Builder
 
 2026-05-31 | Cycle 118 prospects OG items | e00217d1 | items[] RPS extract when prospects empty; curl 60688B.
-2026-05-31 | Cycle 117 gamelog OG | 89b19df2 | weeks fpts sort; curl 61129B.
-2026-05-31 | Cycle 116 bureau H2H pytest | 5e75875e | 4 pytest cases.
-
+2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
 

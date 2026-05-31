@@ -1,9 +1,7 @@
 # Memory — Product Strategist
 
-2026-05-31 | Cycle 118 prospects items | e00217d1 | items[] path when handler returns empty prospects.
-2026-05-31 | Cycle 117 gamelog OG | 89b19df2 | Live weeks[] beats demo fallback for screenshots.
-2026-05-31 | Cycle 116 bureau H2H pytest | 5e75875e | CI guardrail ShareBar↔OG.
-
+2026-05-31 | Cycle 118 prospects items | e00217d1 | items[] when prospects empty.
+2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | SHIP | NEXT.md live-rows epic atom 1/3.
 
 2026-05-31 | H2H OG watermark | 44d05684 | League rivalry exports now match Lab/Explore screenshot brand — epic closed.
 

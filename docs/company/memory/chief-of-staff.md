@@ -1,9 +1,9 @@
 # Memory — Chief of Staff
 
 2026-05-31 | Factory cycle 118 prospects items | e00217d1 | Lab L5 epic atom 2/3; lock #728.
-2026-05-31 | Factory cycle 117 gamelog OG weeks | da33eafd | Lab L5 gamelog OG epic atom 1/3.
-2026-05-31 | Factory cycle 116 H2H codec roundtrip | 5e75875e | League L5 codec epic complete.
+2026-05-31 | Factory cycle 117 prospects #rank OG | ab6ae8d7 | L5 live-fetch epic closes.
 
+2026-05-31 | Factory cycle 116 LIVE OG sticker | 4e905360 | Dedup H2H on base #666; live-rows epic 1/3.
 
 2026-05-31 | Factory cycle 115 H2H OG watermark band | 44d05684 | Watermark epic 2/2 complete; curl H2H 67846B.
 

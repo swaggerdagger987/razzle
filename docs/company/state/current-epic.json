@@ -14,8 +14,8 @@
     {
       "id": "lab-og-prospects-items-live",
       "title": "Prospects OG — items[] path when prospects array empty",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "e00217d1"
     },
     {
       "id": "lab-og-launch10-snapshot-default",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-prospects-items-live",
+  "next_atom_id": "lab-og-launch10-snapshot-default",
   "created_at": "2026-05-31T08:08:00Z",
-  "updated_at": "2026-05-31T08:12:00Z",
+  "updated_at": "2026-05-31T08:30:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-band",
@@ -45,6 +45,12 @@
       "status": "complete",
       "last_atom": "league-h2h-og-watermark-band",
       "merge_commit": "945e4656"
+    },
+    {
+      "id": "lab-l5-og-live-sort-keys",
+      "status": "complete",
+      "last_atom": "lab-og-buysell-dashboard-live-sort",
+      "merge_commit": "7afc0b03"
     }
   ]
 }
