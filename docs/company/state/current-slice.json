@@ -1,6 +1,34 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-breakouts-score-ranked",
-  "slice_title": "Breakouts OG export ranks top-6 by breakout score",
-  "builder_mode": "composer-surgical"
+  "big_problem": "Lab OG export cards still omit position filter on several launch panels — live fallback cards disagree with filtered in-product rows.",
+  "epic": "Lab L5 — OG export position filters on remaining launch panels",
+  "atom_id": "lab-og-position-tradevalues-efficiency-buysell",
+  "slice_title": "Trade values, efficiency, buy/sell LabOgExportLink passes position filter",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with position=WR",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
+    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
+    "apps/web/components/lab/renderers/BuySellRenderer.tsx",
+    "docs/v2/results.tsv"
+  ],
+  "max_files": 4,
+  "max_lines": 12,
+  "acceptance_commands": [
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-tv-wr.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/tradevalues?download=1&position=WR'",
+    "curl -s -o /tmp/og-eff-wr.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/efficiency?download=1&position=WR'",
+    "curl -s -o /tmp/og-bs-wr.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/buysell?download=1&position=WR'"
+  ],
+  "out_of_scope": ["OG route rewrite", "new panels", "Bureau H2H"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }

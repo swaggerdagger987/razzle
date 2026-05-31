@@ -1,3 +1,8 @@
-cycle: 94
-last_commit: d9548870
-lab_l5_og_snapshot_fidelity_epic: complete
+cycle: 97
+last_board_cycle: 54
+focus_pillar: Lab
+focus_layer: L5
+next_slice: lab-og-position-aging-verify
+last_keep_cycle: 97
+last_commit: da33eafd
+lab_l5_og_position_remaining_epic: active

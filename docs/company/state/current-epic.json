@@ -1,6 +1,25 @@
 {
-  "epic_status": "complete",
-  "epic_title": "Lab L5 — OG snapshot row fidelity",
-  "next_atom_id": null,
-  "last_cycle_commit": "d9548870"
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards still omit position filter on several launch panels — live fallback cards disagree with filtered in-product rows.",
+  "epic_title": "Lab L5 — OG export position filters on remaining launch panels",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "atoms": [
+    {
+      "id": "lab-og-position-tradevalues-efficiency-buysell",
+      "title": "Trade values, efficiency, buy/sell export passes position filter",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-position-aging-verify",
+      "title": "Verify aging curves export position filter (already wired)",
+      "status": "pending",
+      "merge_commit": null
+    }
+  ],
+  "next_atom_id": "lab-og-position-tradevalues-efficiency-buysell",
+  "created_at": "2026-05-31T08:00:00Z",
+  "updated_at": "2026-05-31T08:00:00Z",
+  "last_cycle_commit": null
 }
