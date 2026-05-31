@@ -77,7 +77,7 @@ async function fetchTopPlayers(params: {
   q: string;
   pos: string;
   season: number;
-  team: string;
+  teams: string[];
 }): Promise<OgPlayer[]> {
   const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
   let sortKey = params.sort;
@@ -95,7 +95,7 @@ async function fetchTopPlayers(params: {
   const body = {
     search: params.q,
     positions,
-    teams: parseTeams(params.team),
+    teams: params.teams,
     season: params.season > 0 ? params.season : 0,
     week: 0,
     sort_key: sortKey,
@@ -170,6 +170,7 @@ export async function GET(req: Request) {
   const pos = url.searchParams.get("pos") ?? "";
   const team = url.searchParams.get("team") ?? "";
   const season = Number(url.searchParams.get("season") ?? "0") || 0;
+  const teams = parseTeams(team);
 
   const title = universe === "college" ? "College Screener" : "Dynasty Screener";
   const subtitle = buildSubtitle(universe, sort, pos, q);
@@ -178,7 +179,7 @@ export async function GET(req: Request) {
 
   const livePlayers = forceDemo
     ? []
-    : await fetchTopPlayers({ universe, sort, dir, q, pos, season, team });
+    : await fetchTopPlayers({ universe, sort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
 
