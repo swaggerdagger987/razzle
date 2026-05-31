@@ -1,10 +1,10 @@
-cycle: 69
+cycle: 70
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: Bureau H2H export or next Lab depth (epic complete)
-last_keep_cycle: 69
-last_commit: b7deed67
+next_slice: lab-og-api-origin-rewrite or wire launch-10 snapshots
+last_keep_cycle: 70
+last_commit: 916ba843
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -19,3 +19,4 @@ lab_l5_og_export_gamelog_efficiency_aging: complete
 lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
 lab_l5_og_dynasty_comps_panel_export: complete
+lab_l5_og_snapshot_rows: complete
