@@ -2,7 +2,7 @@
   "epic_status": "active",
   "big_problem": "Lab L5 OG cards still say generic LIVE nflverse rows on flagship panels — screenshots don't signal dynasty tiers, trade curves, or RBS boards.",
   "epic_title": "Lab L5 — OG LIVE stickers name the intel",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
@@ -26,19 +26,37 @@
   ],
   "next_atom_id": "lab-og-live-sticker-efficiency-aging-buysell",
   "created_at": "2026-05-31T12:30:00Z",
-  "updated_at": "2026-05-31T12:45:00Z",
+  "updated_at": "2026-05-31T13:00:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l2-sidebar-agent-groups",
+      "status": "complete",
+      "last_atom": "lab-sidebar-search-agent-labels",
+      "merge_commit": "e75ec714"
+    },
+    {
+      "id": "lab-l5-og-gamelog-live-week-rows",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-snapshot-default",
+      "merge_commit": "e2a3ce8a"
+    },
+    {
+      "id": "lab-l5-launch10-og-live-sticker",
+      "status": "complete",
+      "last_atom": "lab-og-live-sticker-prospects-weekly",
+      "merge_commit": "5bb77346"
+    },
+    {
+      "id": "lab-l5-og-live-fetch-merge",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "e37cd230"
+    },
     {
       "id": "lab-l4-pro-gates-upgrade-not-error",
       "status": "complete",
       "last_atom": "lab-pro-gate-hallway-teasers",
       "merge_commit": "f56fdbd8"
-    },
-    {
-      "id": "lab-l5-og-live-rows-launch10",
-      "status": "complete",
-      "last_atom": "lab-og-live-demo-fallback-copy",
-      "merge_commit": "18d92f6b"
     }
   ]
 }
