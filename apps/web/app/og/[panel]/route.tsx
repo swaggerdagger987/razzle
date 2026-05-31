@@ -104,12 +104,18 @@ function launch10LiveBlurbSuffix(slug: string): string {
 function launch10LiveStickerLabel(slug: string): string {
   if (slug === "prospects") return "LIVE · RPS board";
   if (slug === "weekly") return "LIVE · PPG heatmap";
+<<<<<<< HEAD
   if (slug === "rankings") return "LIVE · dynasty tiers";
   if (slug === "tradevalues") return "LIVE · trade curves";
   if (slug === "breakouts") return "LIVE · RBS board";
   if (slug === "efficiency") return "LIVE · PPO board";
   if (slug === "aging") return "LIVE · peak-age curves";
   if (slug === "buysell") return "LIVE · buy/sell board";
+=======
+  if (slug === "rankings") return "LIVE · dynasty ranks";
+  if (slug === "breakouts") return "LIVE · RBS board";
+  if (slug === "tradevalues") return "LIVE · value curve";
+>>>>>>> origin/razzle-v2-redesign
   return "LIVE · nflverse rows";
 }
 
