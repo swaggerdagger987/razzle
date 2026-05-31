@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
   "epic_title": "Lab L5 — OG snapshot row fidelity",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
@@ -20,14 +20,14 @@
     {
       "id": "lab-og-breakouts-score-ranked",
       "title": "Breakouts OG export ranks top-6 by breakout score",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "d9548870"
     }
   ],
-  "next_atom_id": "lab-og-breakouts-score-ranked",
+  "next_atom_id": null,
   "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T05:50:00Z",
-  "last_cycle_commit": "c0358ff3",
+  "updated_at": "2026-05-31T14:15:00Z",
+  "last_cycle_commit": "d9548870",
   "completed_epics": [
     {
       "id": "league-l5-unhide-bureau-tabs",

@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-fidelity-epic-complete
 last_keep_cycle: 94
-last_commit: PLACEHOLDER
-lab_l5_og_snapshot_fidelity_epic: active
-lab_l5_breakouts_og_score_ranked: in_progress
+last_commit: d9548870
+lab_l5_og_snapshot_fidelity_epic: complete
+lab_l5_breakouts_og_score_ranked: complete
