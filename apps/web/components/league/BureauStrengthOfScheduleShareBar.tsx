@@ -1,14 +1,20 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import {
+  encodeBureauSosOgSnapshot,
+  type BureauSosOgSnapshot,
+} from "@/lib/bureau-sos-og-snapshot";
 
 interface Props {
   leagueId: string;
   userId: string;
+  /** Encodes in-panel Octo verdict so OG card matches Bureau view. */
+  snapshot?: BureauSosOgSnapshot;
 }
 
-/** Copyable Schedule URL + OG export — mirrors BureauMonteCarloShareBar. */
-export function BureauStrengthOfScheduleShareBar({ leagueId, userId }: Props) {
+/** Copyable Schedule URL + OG export — mirrors BureauH2HShareBar. */
+export function BureauStrengthOfScheduleShareBar({ leagueId, userId, snapshot }: Props) {
   const [copied, setCopied] = useState(false);
 
   const boardPath = `/league/${leagueId}/strength-of-schedule`;
@@ -18,6 +24,8 @@ export function BureauStrengthOfScheduleShareBar({ leagueId, userId }: Props) {
     user: userId,
     download: "1",
   });
+  const snap = snapshot ? encodeBureauSosOgSnapshot(snapshot) : undefined;
+  if (snap) ogParams.set("snapshot", snap);
 
   const copyLink = useCallback(async () => {
     const url =

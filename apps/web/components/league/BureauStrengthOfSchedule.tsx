@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import type { BureauSosOgSnapshot } from "@/lib/bureau-sos-og-snapshot";
 import { BureauStrengthOfScheduleShareBar } from "./BureauStrengthOfScheduleShareBar";
 
 interface Props {
@@ -22,6 +23,17 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
     yourPpg != null && oppAvg != null && !Number.isNaN(yourPpg) && !Number.isNaN(oppAvg)
       ? Math.round((yourPpg - oppAvg) * 10) / 10
       : null;
+
+  const ogSnapshot: BureauSosOgSnapshot | undefined =
+    verdict && yourPpg != null && oppAvg != null
+      ? {
+          verdict,
+          your_ppg: yourPpg,
+          opponent_avg_ppg: oppAvg,
+          your_rank: yourRank,
+          league_id: String(data.league_id ?? leagueId),
+        }
+      : undefined;
 
   return (
     <div className="flex flex-col gap-6">
@@ -108,7 +120,13 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
       )}
 
       <footer className="flex flex-col gap-3">
-        {userId ? <BureauStrengthOfScheduleShareBar leagueId={leagueId} userId={userId} /> : null}
+        {userId ? (
+          <BureauStrengthOfScheduleShareBar
+            leagueId={leagueId}
+            userId={userId}
+            snapshot={ogSnapshot}
+          />
+        ) : null}
         <div className="flex flex-wrap gap-4 text-sm">
           <Link href={`/league/${leagueId}/power-rankings` as Route} className="text-orange underline">
             full power rankings →
