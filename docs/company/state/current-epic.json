@@ -19,20 +19,26 @@
     },
     {
       "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
+      "title": "Wire ProGateFromPanelError on gamelog, rankings, buysell",
       "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-error-remaining",
+  "next_atom_id": "lab-l4-pro-gate-aging-comps",
   "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T09:35:00Z",
+  "updated_at": "2026-05-31T09:45:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-fetch-merge",
       "status": "complete",
       "last_atom": "lab-og-gamelog-player-default",
       "merge_commit": "4bc3913e"
+    },
+    {
+      "id": "lab-l5-og-live-labels-rankings-tv-breakouts",
+      "status": "complete",
+      "last_atom": "cycle-125-merge",
+      "merge_commit": "5dcbbc01"
     }
   ]
 }
