@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Bureau Power Rankings must travel in league chats — copy link + OG card with real differential rows, not a dead-end tab (DEPTH League L5).",
   "epic_title": "League L5 — Bureau Power Rankings OG travels",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -20,11 +20,11 @@
     {
       "id": "bureau-trade-network-share",
       "title": "Trade Network copy link + export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "07e4fc71"
     }
   ],
-  "next_atom_id": "bureau-trade-network-share",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T14:45:00Z"
+  "updated_at": "2026-05-31T05:05:00Z"
 }
