@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-launch10-demo-blurbs | da33eafd | SHIP | Demo OG cards panel-branded; NEXT Lab L5 lead.
+2026-05-31 | lab-og-launch10-demo-blurbs | f3c1c9466 | SHIP | Demo OG cards panel-branded; NEXT Lab L5 lead.
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3; deferred empty-OG atom 2.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG signals LIVE comp matches for Reddit trust.
 2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.

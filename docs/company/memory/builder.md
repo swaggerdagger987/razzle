@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-launch10-demo-blurbs | da33eafd | SHIP | launch10Demo* helpers + pytest guard.
+2026-05-31 | lab-og-launch10-demo-blurbs | f3c1c9466 | SHIP | launch10Demo* helpers + pytest guard.
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | breakoutsStatKeys + rankingsStatKeys in OG route.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | extractDynastyCompsRows + pytest contract.
 2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing OG watermark uses razzle.lol${roomPath}; pytest 4.

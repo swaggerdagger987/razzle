@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-launch10-demo-blurbs | da33eafd | 2 files; demo blurb parity with LIVE stickers.
+2026-05-31 | lab-og-launch10-demo-blurbs | f3c1c9466 | 2 files; demo blurb parity with LIVE stickers.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | PLAYER_SCOPED_LIVE_STICKER_SLUGS excludes Launch-10 gamelog.
 
 2026-05-31 | room-briefing-watermark | f6e0985f3 | 2 files; watermark band matches Explore/H2H OG pattern.
