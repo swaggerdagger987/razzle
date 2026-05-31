@@ -1,28 +1,6 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG cards still miss Octo panel row shapes — buy/sell and dashboard APIs return buy_low/sell_high and risers/fallers payloads that fall back to sample preview.",
-  "epic": "Lab L5 — OG cards mirror Octo panel API rows",
   "atom_id": "lab-og-buysell-dashboard-live",
   "slice_title": "OG extractRows for buy/sell buy_low+sell_high and dashboard risers+fallers",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "ACCEPTANCE OG PNG ≥40KB with rows",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
-  "max_files": 1,
-  "max_lines": 40,
-  "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/buysell?download=1'",
-    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1'"
-  ],
-  "out_of_scope": ["new panels", "Bureau routes", "NORTH_STAR edits"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "status": "shipped"
 }
