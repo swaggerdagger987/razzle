@@ -4,6 +4,6 @@ focus_pillar: Room
 focus_layer: L5
 next_slice: room-briefing-watermark
 last_keep_cycle: 130
-last_commit: da33eafd
+last_commit: c701525a
 room_l5_briefing_gtm_epic: active
 lab_l4_pro_gate_error_epic: paused
