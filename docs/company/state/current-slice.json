@@ -1,5 +1,6 @@
 {
   "date": "2026-05-31",
+<<<<<<< HEAD
   "atom_id": "lab-og-position-tradevalues-prospects",
   "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
   "epic": "Lab L5 — OG export matches in-panel position filters",
@@ -13,8 +14,27 @@
   ],
   "max_files": 1,
   "max_lines": 5,
+=======
+  "atom_id": "league-waiver-tendencies-og-share",
+  "big_problem": "Four newly unhidden Bureau depth tabs have no group-chat export cards while rival tabs ship OG share rows.",
+  "epic": "League L5 — Bureau depth tab OG export cards (atom 3/4)",
+  "slice_title": "Waiver Tendencies tab OG FAAB card",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — Bureau export PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/waiver-tendencies/route.tsx",
+    "apps/web/components/league/BureauWaiverTendenciesShareBar.tsx",
+    "apps/web/components/league/BureauWaiverTendencies.tsx"
+  ],
+  "max_files": 3,
+  "max_lines": 300,
+>>>>>>> origin/razzle-v2-redesign
   "acceptance_commands": [
+    "pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
+<<<<<<< HEAD
     "curl -s -o /tmp/og-tradevalues-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/tradevalues?download=1&position=WR'"
   ],
   "out_of_scope": ["OG route changes", "prospects renderer (already wired)", "NORTH_STAR edits"],
@@ -25,4 +45,12 @@
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
   }
+=======
+    "curl -s -o /tmp/og-waiver-tendencies.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/waiver-tendencies?league=demo&download=1'"
+  ],
+  "out_of_scope": [],
+  "builder_mode": "composer-surgical",
+  "content_commit": "6dcb0f72",
+  "verdict": "SHIP"
+>>>>>>> origin/razzle-v2-redesign
 }
