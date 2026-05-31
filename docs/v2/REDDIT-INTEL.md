@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau Pressure Map (cycle 79)
+- **Angle:** Deadline panic charts travel in league chats — copy chart link drops managers on Bones' pressure board.
+- **Screenshot hook:** Red/orange panic bars + export card for the most desperate roster.
+
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
 - **Screenshot hook:** Atlas rivalry card with you/them records + position depth bars.

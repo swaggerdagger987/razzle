@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { useCallback, useState } from "react";
 
 interface Props {
   data: Record<string, unknown>;
@@ -31,6 +32,20 @@ export function BureauPressureMap({ data, leagueId }: Props) {
   const rows = (data.rows as PressureRow[]) ?? [];
   const hero = rows[0] ?? null;
   const season = data.season ?? "";
+  const [copied, setCopied] = useState(false);
+  const chartPath = `/league/${leagueId}/pressure-map`;
+
+  const copyChartLink = useCallback(async () => {
+    const url =
+      typeof window !== "undefined" ? `${window.location.origin}${chartPath}` : chartPath;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, [chartPath]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -121,6 +136,9 @@ export function BureauPressureMap({ data, leagueId }: Props) {
       </section>
 
       <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <button type="button" className="btn-chunky text-xs" onClick={() => void copyChartLink()}>
+          {copied ? "copied!" : "copy chart link"}
+        </button>
         <a
           href={`/og/pressure-map?league=${encodeURIComponent(leagueId)}&download=1`}
           download="razzle-pressure-map.png"
