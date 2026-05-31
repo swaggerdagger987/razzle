@@ -1,19 +1,31 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG watermarks must mirror in-card scope (position defaults) so exports click back correctly.",
-  "epic_title": "Lab L5 — OG hallway position defaults",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Bureau OG exports dead-end on Reddit — share cards lack Room hallway deep links like H2H and Trade Finder.",
+  "epic_title": "League L5 — Bureau OG Room hallway",
+  "parity_ref": "League L5 — Bureau OG exports with hallway context",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-tolab-weekly-position",
-      "title": "weekly OG watermark includes default WR position in toLab",
-      "status": "done",
-      "merge_commit": "9be64d109"
+      "id": "league-og-pressure-map-room-hallway",
+      "title": "Pressure Map OG Bones Room hallway + watermark band",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "league-og-manager-profiles-atlas-room",
+      "title": "Manager Profiles OG Atlas Room hallway + watermark band",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "league-og-h2h-room-hallway",
+      "title": "H2H OG Room hallway parity (if not already on base)",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:26:34Z",
-  "updated_at": "2026-05-31T11:32:00Z",
+  "next_atom_id": "league-og-pressure-map-room-hallway",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": []
 }

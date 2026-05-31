@@ -1,5 +1,6 @@
 2026-05-31 | league-og-pressure-map-room-hallway | 5578c64e1 | SHIP | Factory open cycle 1; League L5 Bureau OG hallway epic started.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
+2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Workday cycle 1; demo trust epic complete.
