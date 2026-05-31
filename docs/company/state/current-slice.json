@@ -2,20 +2,23 @@
   "date": "2026-05-31",
   "big_problem": "Lab OG export cards still diverge from in-product panel rows — Reddit screenshots show generic ranks instead of the dynasty pulse the user just saw.",
   "epic": "Lab L5 — OG export cards match in-product panel rows",
-  "slice_title": "Breakouts OG Gate C pytest for live fetch path",
+  "slice_title": "Prospects loading-state sample snapshot for export preview",
   "parity_ref": "PARITY Explore L5 / Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_og_breakouts_gate_c_live.py",
-    "docs/v2/evidence/2026-05-31-lab-og-breakouts-gate-c-live.md"
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
+    "apps/api/tests/test_lab_og_export_link.py",
+    "apps/api/tests/test_og_prospects_loading_snapshot.py",
+    "docs/v2/evidence/2026-05-31-lab-og-prospects-loading-snapshot.md"
   ],
-  "max_files": 2,
-  "max_lines": 90,
+  "max_files": 4,
+  "max_lines": 120,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_og_breakouts_gate_c_live.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_lab_og_export_link.py apps/api/tests/test_og_prospects_loading_snapshot.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?download=1&snapshot=eyJyIjpbeyJuIjoiVHJhdmlzIEh1bnRlciIsInAiOiJXUiIsInQiOiJKQVgiLCJzIjo5NCwic2wiOiJSUFMifV19'"
   ],
   "out_of_scope": [
     "OG route behavior changes",
@@ -25,5 +28,5 @@
   ],
   "builder_mode": "composer-surgical",
   "status": "shipped",
-  "content_commit": "0557d20d2"
+  "content_commit": "f6e0985f3"
 }

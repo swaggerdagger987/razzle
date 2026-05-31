@@ -60,6 +60,18 @@ def test_aging_empty_curve_exports_sample_card():
     assert "!posData?.curve?.length" in renderer
 
 
+def test_prospects_loading_and_empty_exports_sample_card():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "PROSPECTS_SAMPLE_OG_ROWS" in renderer
+    assert 'label="export sample card"' in renderer
+    assert "snapshotRows={PROSPECTS_SAMPLE_OG_ROWS}" in renderer
+    assert "q.isPending" in renderer
+    assert "!prospects.length" in renderer
+
+
 def test_rankings_empty_filter_exports_sample_card():
     renderer = (
         Path(__file__).resolve().parents[3]

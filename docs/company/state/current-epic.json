@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG export cards still diverge from in-product panel rows — Reddit screenshots show generic ranks instead of the dynasty pulse the user just saw.",
   "epic_title": "Lab L5 — OG export cards match in-product panel rows",
   "parity_ref": "Explore L5 / Lab L5 — Bureau H2H export or Lab panel OG data rows",
@@ -20,13 +20,13 @@
     {
       "id": "lab-og-prospects-loading-snapshot",
       "title": "Prospects loading-state sample snapshot for export preview",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "f6e0985f3"
     }
   ],
-  "next_atom_id": "lab-og-prospects-loading-snapshot",
+  "next_atom_id": null,
   "created_at": "2026-05-31T18:00:00Z",
-  "updated_at": "2026-05-31T11:55:17Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "id": "league-l5-bureau-og-watermark-parity",
@@ -39,6 +39,12 @@
       "status": "complete",
       "last_atom": "lab-og-watermark-display-name",
       "merge_commit": "338709883"
+    },
+    {
+      "id": "lab-l5-og-live-rows-epic",
+      "status": "complete",
+      "last_atom": "lab-og-prospects-loading-snapshot",
+      "merge_commit": "f6e0985f3"
     }
   ]
 }
