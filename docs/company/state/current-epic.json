@@ -1,33 +1,33 @@
 {
-  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
-  "epic_title": "Lab L4 — pro gates feel like upgrade, not error",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "epic_status": "active",
+  "big_problem": "Lab sidebar Staff Picks hide which specialist owns each launch panel — the hallway band should be visible in nav.",
+  "epic_title": "Lab L2 — Staff Picks sidebar by agent",
+  "parity_ref": "Lab L2 / AGENTS.md connective tissue",
+  "depth_ref": "Lab L2",
   "atoms": [
     {
-      "id": "lab-pro-gate-loading-copy",
-      "title": "Pro gate — agent-owned loading line on upgrade card",
+      "id": "lab-sidebar-staff-picks-by-agent",
+      "title": "Group Staff Picks under agent headers in LabSidebar",
       "status": "done",
-      "merge_commit": "7236be3e"
+      "merge_commit": "4e8b0e8e"
     },
     {
-      "id": "lab-pro-gate-panel-pitches",
-      "title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
-      "status": "done",
-      "merge_commit": "0b59daee"
-    },
-    {
-      "id": "lab-pro-gate-hallway-teasers",
-      "title": "Pro gate — screener hallway + domain teasers",
-      "status": "done",
-      "merge_commit": "675044ea"
+      "id": "lab-sidebar-staff-picks-polish",
+      "title": "Staff Picks banner + hide duplicate avatars under agent groups",
+      "status": "in_progress",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "next_atom_id": "lab-sidebar-staff-picks-polish",
+  "created_at": "2026-05-31T08:00:00Z",
+  "updated_at": "2026-05-31T08:45:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l4-pro-gate-convert",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "0c46d46f"
+    },
     {
       "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
