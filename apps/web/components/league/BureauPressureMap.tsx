@@ -120,7 +120,15 @@ export function BureauPressureMap({ data, leagueId }: Props) {
         </ul>
       </section>
 
-      <footer className="flex flex-wrap gap-4 text-sm">
+      <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <a
+          href={`/og/pressure-map?league=${encodeURIComponent(leagueId)}&download=1`}
+          download="razzle-pressure-map.png"
+          className="btn-chunky active text-xs"
+          style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+        >
+          export card
+        </a>
         <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
           manager profiles →
         </Link>

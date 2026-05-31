@@ -1,30 +1,36 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab export cards must screenshot with real row layout even when the API has no live data (FACTORY-DOD Gate C).",
-  "epic_title": "Lab L5 — OG cards are always screenshot-ready",
-  "parity_ref": "Lab L4–L5 OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Bureau-7 moat tabs need shareable OG cards so league intel screenshots travel in trade group chats (PARITY League L5).",
+  "epic_title": "League L5 — Bureau OG cards for Bureau-7",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-demo-rows",
-      "title": "Static demo player rows on /og/[panel] when live fetch is empty",
-      "status": "done",
-      "merge_commit": "0019814f"
+      "id": "league-og-pressure-map",
+      "title": "Pressure Map OG export card with demo desperation bars",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-panel-specific-demos",
-      "title": "Per-panel demo stat labels tuned to launch-10 shapes",
-      "status": "done",
-      "merge_commit": "da09d5b4"
+      "id": "league-og-manager-profiles",
+      "title": "Manager Profiles OG export card with archetype rows",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-param-defaults",
-      "title": "Default player_id params for parameterized panel OG routes",
-      "status": "done",
-      "merge_commit": "ef908a99"
+      "id": "league-og-trade-network",
+      "title": "Trade Network OG export card with partner lanes",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "league-og-self-scout",
+      "title": "Self-Scout OG export card with depth grades snapshot",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T01:31:00Z",
-  "updated_at": "2026-05-31T01:54:00Z"
+  "next_atom_id": "league-og-pressure-map",
+  "created_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T14:00:00Z"
 }

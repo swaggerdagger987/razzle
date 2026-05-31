@@ -257,6 +257,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 58
 - **Screenshot potential:** Dynasty rankings / breakout cards droppable in threads even before API sync on preview hosts
 
+## 2026-05-31 — Cycle 61 (workday cycle 1)
+
+1. **Deadline pressure screenshots travel.** Trade threads share "who's desperate" bar charts before deadline — Pressure Map OG completes Bureau export parity with H2H/MC/Trade Finder.
+2. **Bones owns trade-deadline intel** — OG card shows Bones badge + desperation labels (desperate/motivated/comfortable) matching in-product Bureau tab.
+
 ## 2026-05-31 — Cycle 59
 
 ### r/DynastyFF — panel-specific stat labels on share cards (pattern)

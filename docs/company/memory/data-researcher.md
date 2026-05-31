@@ -20,3 +20,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | light scan | loading-only OG reads as broken tool in screenshot culture | demo rows + sample preview label | keep | cycle 58 REDDIT-INTEL entry
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
 2026-05-31 | default OG player_id | share links work without query params | keep | Chase anchor matches demo row culture
+2026-05-31 | deadline pressure OG | trade threads share desperation bars | pressure-map atom | keep | cycle 61 briefing
