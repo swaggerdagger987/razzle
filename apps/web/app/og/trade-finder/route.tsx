@@ -76,12 +76,8 @@ function playerLabel(name: string): string {
   return name.length > 16 ? `${name.slice(0, 14)}…` : name;
 }
 
-function bonesTradeFinderRoomQuestion(match: BureauTradeFinderOgMatch): string {
-  return `Should I offer ${match.give.name} for ${match.get.name} from ${match.partner_team}? Value gap is ${match.gap_pct}%.`;
-}
-
-function slugifyPlayerName(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+function bonesTradeFinderRoomQuestion(hero: BureauTradeFinderOgMatch): string {
+  return `Should I offer ${hero.give.name} for ${hero.get.name} from ${hero.partner_team}? Value gap is ${hero.gap_pct}%.`;
 }
 
 export async function GET(req: Request) {
@@ -116,7 +112,7 @@ export async function GET(req: Request) {
         player: {
           playerId: hero.give.player_id,
           name: hero.give.name,
-          slug: slugifyPlayerName(hero.give.name),
+          slug: hero.give.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
           position: hero.give.position,
         },
       })
@@ -310,7 +306,7 @@ export async function GET(req: Request) {
 
         {hero ? (
           <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
-            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about this deal`}
+            {`razzle.lol${bonesRoomPath} · ask ${bones.name} about ${playerLabel(hero.partner_team)}`}
           </div>
         ) : null}
 
