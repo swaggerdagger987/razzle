@@ -1,56 +1,40 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic_title": "Lab L5 — OG hallway deep links",
-  "parity_ref": "Lab panel OG data rows",
+  "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
+  "epic_title": "Lab L5 — GTM panel share bar parity",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-tolab-watermark",
-      "title": "Launch-10 toLab watermark band",
+      "id": "lab-panel-share-bar-rankings",
+      "title": "Dynasty Rankings — LabPanelShareBar copy/preview/export + snapshot",
       "status": "done",
-      "merge_commit": "b80512bb4"
+      "merge_commit": "f6e0985f3"
     },
     {
-      "id": "lab-og-tolab-gamelog-default",
-      "title": "Gamelog/dynasty-comps default player in toLab",
-      "status": "done",
-      "merge_commit": "c311a15a8"
+      "id": "lab-panel-share-bar-breakouts-buysell",
+      "title": "Breakouts + Buy/Sell — share bar with formula snapshot rows",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-tolab-snapshot-player",
-      "title": "Snapshot exports preserve player in watermark",
+      "id": "lab-panel-share-bar-weekly-gamelog",
+      "title": "Weekly + Gamelog — player-scoped share bar",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-panel-share-bar-launch10-rest",
+      "title": "Remaining Launch-10 panels — share bar rollout",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-tolab-snapshot-player",
-  "created_at": "2026-05-31T11:00:00Z",
-  "updated_at": "2026-05-31T12:45:00Z",
+  "next_atom_id": "lab-panel-share-bar-breakouts-buysell",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
-    {
-      "id": "lab-l5-launch10-og-demo-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-demo-blurbs",
-      "merge_commit": "3705fdce8"
-    },
-    {
-      "id": "lab-l5-empty-board-og-sample-cards",
-      "status": "complete",
-      "last_atom": "lab-weekly-empty-export",
-      "merge_commit": "088cebc07"
-    },
-    {
-      "id": "lab-l5-formula-og-live-parity",
-      "status": "complete",
-      "last_atom": "lab-og-from-panel-gate-c-rest",
-      "merge_commit": "0b6730166"
-    },
-    {
-      "id": "league-l5-trade-finder-gtm",
-      "status": "complete",
-      "last_atom": "bureau-trade-finder-copy-link",
-      "merge_commit": "a6930ca13"
-    }
+    "league-trade-finder-gtm-export-2026-05-31",
+    "lab-formula-sorted-og-live-parity-2026-05-31"
   ]
 }

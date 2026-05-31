@@ -1,20 +1,16 @@
-2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
-
-2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
+2026-05-31 | lab-panel-share-bar-rankings | f6e0985f3 | SHIP | LabPanelShareBar + DynastyRankingsRenderer footer.
+2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | SHIP | efficiencyStatKeys + agingStatKeys on OG route.
+2026-05-31 | league-trade-finder-og-snapshot | a319e8953 | SHIP | bureau-trade-finder-og-snapshot + share bar encode.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Builder
 
-2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | SHIP | prospects+tradevalues SNAPSHOT_FROM_PANEL_SLUGS; 5 pytest guards.
-
-2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS for gamelog + dynasty-comps.
-2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | bureau-trade-finder-og-snapshot encode on ShareBar.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | extractBuySellRows + formula_score priority on OG route.
+
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | breakoutsStatKeys + rankingsStatKeys in OG route.
 
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | extractDynastyCompsRows + pytest contract.
 
-2026-05-31 | room-briefing-watermark | 088cebc07 | SHIP | Briefing OG watermark uses razzle.lol${roomPath}; pytest 4.
+2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing OG watermark uses razzle.lol${roomPath}; pytest 4.
 2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | ac0280a20 | curl gamelog OG 59323B; empty weeks footer export.
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | toLab on panel OG band; position query when filtered.
@@ -120,3 +116,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | league-waiver-tendencies-og-share | 6dcb0f72 | SHIP | /og/waiver-tendencies 73121B; BureauWaiverTendenciesShareBar
 2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | dynasty_value + trade_value OG sort; curl 50KB PNGs
+2026-05-31 | trade-finder room hallway | f6e0985f3 | SHIP | bones toRoom on OG hero + ShareBar; curl 82552B; epic 3/3
