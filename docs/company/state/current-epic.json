@@ -9,7 +9,7 @@
       "id": "league-h2h-og-toleague-watermark",
       "title": "H2H OG watermark uses toLeague with user/opponent",
       "status": "done",
-      "merge_commit": "db7ec3ce6"
+      "merge_commit": "f030f77d0"
     },
     {
       "id": "league-trade-finder-og-watermark-user",
