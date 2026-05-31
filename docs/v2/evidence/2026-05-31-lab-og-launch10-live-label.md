@@ -5,7 +5,8 @@
 
 ## Change
 
-Blurb suffix now keys off **displayed row source** (`showingLiveData` / `showingDemoRows`) after position filter, so `sample preview` never appears when live API rows are on the card.
+- `showingLiveData` / `showingDemoRows` — blurb suffix keys off displayed row source after position filter.
+- `LAUNCH_10_OG_SLUGS` + `panelBlurbSuffix()` — launch-10 live cards omit `sample preview` and extra `live data` suffix; demo fallback still labeled.
 
 ## Gate C — curl
 
