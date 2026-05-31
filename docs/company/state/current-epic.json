@@ -21,7 +21,7 @@
       "id": "bureau-h2h-snapshot-roundtrip-test",
       "title": "API test or script proves ShareBar snapshot round-trips to OG PNG",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "a427bc8c"
     }
   ],
   "next_atom_id": null,
