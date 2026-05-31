@@ -14,8 +14,8 @@
     {
       "id": "lab-og-live-sticker-tradevalues-aging",
       "title": "OG curl evidence bundle for tradevalues + aging LIVE stickers",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "a74c2afe"
     },
     {
       "id": "lab-og-live-sticker-breakouts-dashboard",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-tradevalues-aging",
+  "next_atom_id": "lab-og-live-sticker-breakouts-dashboard",
   "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T09:05:00Z",
+  "updated_at": "2026-05-31T12:30:00Z",
   "completed_epics": [
     {
       "id": "lab-l4-pro-gate-convert",
