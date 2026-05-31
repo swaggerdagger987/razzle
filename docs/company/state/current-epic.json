@@ -8,8 +8,8 @@
     {
       "id": "lab-og-snapshot-rows",
       "title": "Pass in-panel top-6 snapshot to OG via LabOgExportLink; OG prefers snapshot over demo",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "916ba843"
     },
     {
       "id": "lab-og-api-origin-rewrite",
@@ -30,7 +30,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-snapshot-rows",
+  "next_atom_id": "lab-og-api-origin-rewrite",
   "created_at": "2026-05-31T04:20:00Z",
   "updated_at": "2026-05-31T04:22:00Z"
 }
