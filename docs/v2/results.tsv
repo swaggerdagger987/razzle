@@ -72,4 +72,4 @@ cycle	commit	score	status	pillar	slice	description
 82	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
 83	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
 84	04c19959	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic atom 1
-85	da33eafd	depth+voice+simplicity	keep	League	L5 Bureau Trade Network share bar	trust=T5,T6; BureauTradeNetworkShareBar copy network link+export; curl trade-network OG 68090B
+85	1616484c	depth+voice+simplicity	keep	League	L5 Bureau Trade Network share bar	trust=T5,T6; BureauTradeNetworkShareBar copy network link+export; curl trade-network OG 68090B
