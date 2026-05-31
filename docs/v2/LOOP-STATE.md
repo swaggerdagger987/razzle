@@ -2,9 +2,9 @@ cycle: 78
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-power-rankings-og
-last_keep_cycle: 78
-last_commit: 30454811
+next_slice: league-roster-depth-tab
+last_keep_cycle: 79
+last_commit: 9746c8d1
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
