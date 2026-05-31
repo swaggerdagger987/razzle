@@ -588,6 +588,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "dynasty_value",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "dynasty_value"),
   ];
+  const buysellStatKeys: string[] = [
+    "formula_score",
+    "mismatch_score",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "mismatch_score"),
+  ];
   const statKeys =
     slug === "tradevalues"
       ? tradeValueStatKeys
@@ -595,9 +600,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
         ? breakoutsStatKeys
         : slug === "rankings"
           ? rankingsStatKeys
-          : preferredKey
-            ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
-            : [...STAT_CANDIDATE_KEYS];
+          : slug === "buysell"
+            ? buysellStatKeys
+            : preferredKey
+              ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+              : [...STAT_CANDIDATE_KEYS];
 
   let statKey = "";
   let statLabel = "";
