@@ -1,9 +1,8 @@
-cycle: 158
+cycle: 157
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: Lab
 focus_layer: L5
-next_slice: explore-og-margin-note-rows
-last_keep_cycle: 158
-last_commit: cf76b86ee
-explore_l5_og_margin_epic: active (2/4)
-lab_l5_og_live_panel_rows_epic: complete (3/3)
+next_slice: lab-og-percentiles-tolab
+last_keep_cycle: 157
+last_commit: 9d19930cf
+lab_l5_pro_profile_og_epic: atom 4/4 percentiles-tolab next
