@@ -114,5 +114,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 154	977de7e31	depth+voice+simplicity	keep	Lab	L5 breakouts empty board OG sample export	trust=T5,T6; BREAKOUTS_SAMPLE_OG_ROWS; curl 66253B; empty OG epic 1/3
 156	338709883	depth+voice+simplicity	keep	Lab	L5 gamelog OG watermark uses player display name	trust=T5,T6; pytest 7; curl gamelog 62741B; display-name epic complete
 157	d5af3acfe	depth+voice+simplicity	keep	Lab	L5 buysell empty lanes OG sample export	trust=T5,T6; BUYSELL_SAMPLE_OG_ROWS; curl 64866B; empty OG epic 2/3
-159	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 prospects empty class OG sample export	trust=T5,T6; PROSPECTS_SAMPLE_OG_ROWS; curl 52990B; empty OG round-2 epic 1/2
+159	df03cde22	depth+voice+simplicity	keep	Lab	L5 prospects empty class OG sample export	trust=T5,T6; PROSPECTS_SAMPLE_OG_ROWS; curl 52990B; empty OG round-2 epic 1/2
 158	a3f0ab258	depth+voice+simplicity	keep	Lab	L5 dashboard empty board OG sample export	trust=T5,T6; DASHBOARD_SAMPLE_OG_ROWS; curl 66547B; empty OG epic 3/3 complete

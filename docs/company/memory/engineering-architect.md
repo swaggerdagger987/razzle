@@ -1,4 +1,4 @@
-2026-05-31 | lab-prospects-empty-export | f6e0985f3 | SHIP | ProspectsRenderer + pytest; ≤2 files.
+2026-05-31 | lab-prospects-empty-export | df03cde22 | SHIP | ProspectsRenderer + pytest; ≤2 files.
 2026-05-31 | lab-dashboard-empty-export | a3f0ab258 | SHIP | 2 files; isEmptyBoard + DASHBOARD_SAMPLE_OG_ROWS.
 2026-05-31 | lab-buysell-empty-export | d5af3acfe | SHIP | 2 files; mirrors BreakoutsRenderer empty export.
 2026-05-31 | lab-breakouts-empty-export | 977de7e31 | SHIP | 2 files; mirrors WeeklyHeatmapRenderer empty export.

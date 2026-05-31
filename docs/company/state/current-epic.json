@@ -8,8 +8,8 @@
     {
       "id": "lab-prospects-empty-export",
       "title": "Prospects empty class exports sample OG card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "df03cde22"
     },
     {
       "id": "lab-tradevalues-empty-export",
@@ -18,9 +18,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-prospects-empty-export",
+  "next_atom_id": "lab-tradevalues-empty-export",
   "created_at": "2026-05-31T11:48:19Z",
-  "updated_at": "2026-05-31T11:48:19Z",
+  "updated_at": "2026-05-31T11:52:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-launch10-empty-board-og-exports",

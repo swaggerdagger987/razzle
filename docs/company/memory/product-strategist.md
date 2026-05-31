@@ -1,4 +1,4 @@
-2026-05-31 | lab-prospects-empty-export | f6e0985f3 | SHIP | Empty college prospects board exports RPS sample card (T5); round-2 epic 1/2.
+2026-05-31 | lab-prospects-empty-export | df03cde22 | SHIP | Empty college prospects board exports RPS sample card (T5); round-2 epic 1/2.
 2026-05-31 | lab-dashboard-empty-export | a3f0ab258 | SHIP | Empty dynasty dashboard exports sample movers card (T5); epic closed.
 2026-05-31 | lab-buysell-empty-export | d5af3acfe | SHIP | Empty buy/sell lanes export sample card (T5).
 2026-05-31 | lab-breakouts-empty-export | 977de7e31 | SHIP | Empty RBS board still exports sample card (T5).
