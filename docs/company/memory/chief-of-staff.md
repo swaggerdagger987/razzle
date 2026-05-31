@@ -1,3 +1,4 @@
+2026-05-31 | league-manager-profiles-og-watermark | f6e0985f3 | SHIP | Factory cycle 1; behavioral OG epic atom 1/2.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Workday cycle 1; demo trust epic complete.
