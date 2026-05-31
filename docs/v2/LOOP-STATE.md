@@ -1,13 +1,8 @@
-cycle: 141
+cycle: 146
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Room
 focus_layer: L5
-next_slice: lab-og-prospects-gate-c-evidence
-last_keep_cycle: 141
-last_commit: e4bc2cc0c
-lab_l5_weekly_prospects_og_trust_epic: active
-lab_l5_formula_og_live_epic: active
-lab_l5_empty_og_epic: active
-room_l5_briefing_gtm_epic: complete
-explore_l5_universe_export_epic: complete
-lab_l4_pro_gate_error_epic: complete
+next_slice: pick from PARITY/NEXT
+last_keep_cycle: 146
+last_commit: 252e421fa
+room_briefing_gtm_share_row: complete
