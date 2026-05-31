@@ -176,7 +176,7 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
                 leagueId={leagueId}
                 userId={you.user_id}
                 opponentId={opponentId || undefined}
-                ogSnapshot={{
+                snapshot={{
                   you: { team: you.team, record: you.record, ppg: you.ppg },
                   them: { team: them.team, record: them.record, ppg: them.ppg },
                   position_compare: positionCompare,
