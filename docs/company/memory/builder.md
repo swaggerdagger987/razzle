@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | Buy/Sell OG lane labels | da33eafd | BuySellRenderer splits buyRows/sellRows with Buy/Sell statLabel before encodeOgSnapshot.
+2026-05-31 | Buy/Sell OG lane labels | 98ae0ef2 | BuySellRenderer splits buyRows/sellRows with Buy/Sell statLabel before encodeOgSnapshot.
 
 Append-only log of implementation patterns, surgical wins, things to avoid.
 

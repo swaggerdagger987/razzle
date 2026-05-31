@@ -59,4 +59,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 91	3a02e2a8	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS tab unhidden	trust=T2,T5,T6; Octo verdict bars; pytest 51; web build; epic atom 3/3 complete
 92	5615a8df	depth+voice+simplicity	keep	Lab	L5 Dashboard top5 OG snapshot rows	trust=T5,T6; top5+movers snapshot; curl dashboard 57413B; pytest 51; web build; epic atom 1/4
 93	9d353d84	depth+voice+simplicity	keep	Lab	L5 Weekly heatmap hot-week OG snapshot	trust=T5,T6; hottest Wk N rows; curl weekly snap 51665B demo 63819B; pytest 51; web build; epic atom 2/4
-94	da33eafd	depth+voice+simplicity	keep	Lab	L5 Buy/sell combined OG snapshot lanes	trust=T5,T6; Buy/Sell labels 3+3; curl buysell snap 57884B demo 58072B; pytest 51; web build; epic atom 3/4
+94	98ae0ef2	depth+voice+simplicity	keep	Lab	L5 Buy/sell combined OG snapshot lanes	trust=T5,T6; Buy/Sell labels 3+3; curl buysell snap 57884B demo 58072B; pytest 51; web build; epic atom 3/4
