@@ -1,5 +1,8 @@
 # Memory — Data Researcher
 
+2026-05-31 | bureau-self-scout-snapshot | No new intel; depth-grade OG mirrors in-panel export.
+2026-05-31 | lab-og-sample-labels | 54443bc8 | No new intel; OG trust-label slice only.
+2026-05-31 | gamelog OG player default | No new intel; export URL parity with OG route default.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 
@@ -7,10 +10,6 @@
 2026-05-31 | launch10 no-snapshot | e2a3ce8a | Direct /og links need live API path without panel snapshot param.
 2026-05-31 | Cycle 118 | e00217d1 | No new intel.
 2026-05-31 | lab-og-live-sticker-launch10 | cycle 116 | Reddit needs visible live vs sample on OG exports.
-
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | no new REDDIT-INTEL; teaser audit only.
-
-2026-05-31 | gamelog OG weeks | 40c80f0e | PASS | No new intel; in-panel ogSnapshotRows already defined peak-week sort.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.
 
