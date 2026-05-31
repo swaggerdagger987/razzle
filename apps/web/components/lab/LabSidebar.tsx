@@ -218,8 +218,30 @@ export function LabPanelGrid() {
         <section key={cat} className="lab-grid-section">
           <h2 className="lab-grid-heading">{CATEGORY_LABELS[cat]}</h2>
           <div className="lab-grid-cards">
-            {panelsByCategory(cat).map((panel) => (
-              <Link key={panel.slug} href={`/lab/${panel.slug}`} className="lab-grid-card chunky bg-bg-card">
+            {panelsByCategory(cat).map((panel) => {
+              const owner = agentForPanel(panel.slug);
+              return (
+              <Link
+                key={panel.slug}
+                href={`/lab/${panel.slug}`}
+                className="lab-grid-card chunky bg-bg-card"
+                title={owner ? `${owner.name} · ${panel.blurb}` : panel.blurb}
+              >
+                {owner ? (
+                  <div
+                    className="flex items-center gap-2 text-xs text-ink-medium"
+                    style={{ marginBottom: 6 }}
+                  >
+                    <img
+                      src={`/agents/${owner.avatar}.svg`}
+                      alt=""
+                      className="lab-sidebar-agent"
+                      width={20}
+                      height={20}
+                    />
+                    <span>{owner.name}</span>
+                  </div>
+                ) : null}
                 <span className="lab-grid-icon" aria-hidden>
                   {panel.icon}
                 </span>
@@ -227,7 +249,8 @@ export function LabPanelGrid() {
                 <p className="text-ink-medium text-xs">{panel.blurb}</p>
                 {panel.tier === "pro" && <span className="lab-pro-badge">PRO</span>}
               </Link>
-            ))}
+            );
+            })}
           </div>
         </section>
       ))}
