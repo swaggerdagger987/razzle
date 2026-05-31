@@ -1,7 +1,5 @@
-2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | H2H snapshot EXPORTED trust — mirrors Trade Finder.
-2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Position hallway epic atom 2/3.
-2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
-2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Snapshot pid wrapper; hallway epic complete (T6).
+2026-05-31 | lab-prospects-empty-export | 8e2ca7f29 | SHIP | Lab L5 empty OG epic 2/3; prospects RPS sample export on empty board.
+2026-05-31 | lab-breakouts-empty-export | 8b6f3117b | SHIP | Lab L5 empty OG epic 1/3; breakouts sample export on empty board.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Demo OG panel-branded.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -20,6 +18,8 @@
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | Lab OG exports click back via toLab; T6 hallway on Launch-10.
+2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
+2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
 
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | Dynasty share links cleaner; college stays explicit.
 
@@ -91,3 +91,4 @@ new evidence.
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Build Profiles unhide atom 1/3 | c7b50c707 | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
 2026-05-31 | Lab OG rankings/tradevalues live sort | 7f78b631 | SHIP | keep | NEXT.md Lab L5 live row keys; atom 1/3
+2026-05-31 | lab-breakouts-empty-export | 056892b6b | SHIP | keep | Launch-10 empty OG epic atom 1/3 after aging gap fill

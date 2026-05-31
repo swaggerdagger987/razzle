@@ -1,29 +1,65 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab sidebar lists 100 panels by category — users think in staff desks (Hawkeye tape, Octo quant) per AGENTS.md wiring checklist.",
-  "epic_title": "Lab L2 — sidebar groups panels by analyst desk",
-  "parity_ref": "H-04 — Six agents same ids everywhere",
-  "depth_ref": "Lab L2",
+  "big_problem": "Launch-10 Lab panels dead-end on empty API boards — managers cannot export screenshot-worthy OG cards when filters return zero rows.",
+  "epic_title": "Lab L5 — Launch-10 empty OG sample exports",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-sidebar-staff-toggle",
-      "title": "Category | Staff toggle groups all panels via agentForPanel()",
+      "id": "lab-breakouts-empty-export",
+      "title": "Breakouts empty board OG sample export card",
       "status": "done",
-      "merge_commit": "026e7de6b"
+      "merge_commit": "8b6f3117b"
     },
     {
-      "id": "lab-sidebar-staff-registry",
-      "title": "Expand labPanels registry so staff view has fewer Razzle catch-alls",
+      "id": "lab-prospects-empty-export",
+      "title": "Prospects empty board OG sample export card",
+      "status": "done",
+      "merge_commit": "8e2ca7f29"
+    },
+    {
+      "id": "lab-dashboard-empty-export",
+      "title": "Dashboard empty roster OG sample export card",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-sidebar-staff-registry",
-  "created_at": "2026-05-31T14:30:00Z",
-  "updated_at": "2026-05-31T14:45:00Z",
+  "next_atom_id": "lab-dashboard-empty-export",
+  "created_at": "2026-05-31T11:26:20Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-hallway-position-defaults",
+      "id": "lab-l2-sidebar-staff-desks",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-toggle",
+      "merge_commit": "026e7de6b"
+    },
+    {
+      "id": "lab-l5-og-watermark-display-names",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
+    },
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
+    },
+    {
+      "id": "league-l5-trade-finder-gtm",
+      "status": "complete",
+      "last_atom": "league-trade-finder-og-room-hallway",
+      "merge_commit": "c8091030c"
+    },
+    {
+      "id": "lab-l5-launch10-empty-og-aging",
+      "status": "complete",
+      "last_atom": "lab-aging-empty-export",
+      "merge_commit": "2210182a4"
+    },
+    {
+      "id": "lab-l5-og-hallway-position",
       "status": "complete",
       "last_atom": "lab-og-tolab-weekly-position",
       "merge_commit": "9be64d109"
