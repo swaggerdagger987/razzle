@@ -20,7 +20,7 @@
     {
       "id": "lab-og-buysell-dashboard-live-sort",
       "title": "Buy/Sell + Dashboard OG rank by value / rank_diff on live fetch",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
