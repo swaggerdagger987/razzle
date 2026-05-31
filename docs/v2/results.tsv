@@ -51,4 +51,5 @@ cycle	commit	score	status	pillar	slice	description
 58	0019814f	depth+simplicity+voice	keep	Lab	L5 OG demo rows	trust=T5,T6; /og/[panel] static demo rows when API empty, sample preview label, Gate C PNG ~59KB
 59	da33eafd	depth+hallway+reddit+voice+simplicity	keep	League	L5 MC OG export	/og/monte-carlo top-3 title/playoff bars demo fallback Bureau export button trust=T5,T6
 60	2e0aa724	depth+hallway+reddit+voice+simplicity	keep	League	L5 Trade Finder OG export	/og/trade-finder hero match value-gap rows demo fallback Bureau export button trust=T5,T6
-61	PENDING_HASH	depth+simplicity+voice	keep	Lab	L5 OG launch10+param defaults	trust=T5,T6; launch-10 demo stat labels; DEFAULT_OG_PLAYER_ID; curl dynasty-comps 65961B
+61	ddc28666	depth+simplicity+voice	keep	Lab	L5 OG launch10+param defaults	trust=T5,T6; launch-10 demo stat labels; DEFAULT_OG_PLAYER_ID; curl dynasty-comps 65961B
+62	0d39635e	depth+hallway+voice+simplicity	keep	League	L5 OG pressure map	trust=T2,T5,T6; /og/pressure-map demo bars + export button; curl 60104B PNG

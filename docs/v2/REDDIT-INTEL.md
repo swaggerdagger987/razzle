@@ -257,16 +257,15 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 58
 - **Screenshot potential:** Dynasty rankings / breakout cards droppable in threads even before API sync on preview hosts
 
+## 2026-05-31 — Cycle 61 (workday cycle 1)
+
+1. **Deadline pressure screenshots travel.** Trade threads share "who's desperate" bar charts before deadline — Pressure Map OG completes Bureau export parity with H2H/MC/Trade Finder.
+2. **Bones owns trade-deadline intel** — OG card shows Bones badge + desperation labels (desperate/motivated/comfortable) matching in-product Bureau tab.
+
 ## 2026-05-31 — Cycle 59
 
-### r/DynastyFF — playoff odds screenshot posts (pattern)
-- **Pattern:** Managers share "who wins my league" sim cards before playoffs; comment threads want the tool name when odds look league-specific.
-- **Razzle move:** Monte Carlo OG card mirrors in-product top-3 title/playoff bars + Octo badge; export from Bureau tab.
+### r/DynastyFF — panel-specific stat labels on share cards (pattern)
+- **Pattern:** Users screenshot **tool-specific** views — weekly FPTS grids, prospect scores, aging curves — and comment using that vocabulary. Generic "Value" columns on a heatmap card read as lazy export.
+- **Razzle slice:** Lab L5 atom 2 — launch-10 OG demo rows with FPTS/Score/Rank/Peak Age/Chg stat headers per panel slug.
 - **Council cycle:** 59
-
-## 2026-05-31 — Cycle 60
-
-### r/DynastyFF — fair-trade screenshot posts (pattern)
-- **Pattern:** Trade deadline threads ask "is this fair?" with player names + value context; generic trade-value charts get ignored.
-- **Razzle move:** Trade Finder OG shows hero match with gap % + partner team; Bones badge; export from Bureau tab.
-- **Council cycle:** 60
+- **Screenshot potential:** Weekly heatmap + prospect big board cards now match in-product column semantics on preview hosts
