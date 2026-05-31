@@ -13,7 +13,9 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
-2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
+2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 6c8da85f | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
+2026-05-31 | League L5 Power Rankings OG | monte-carlo OG pattern + BureauPowerRankingsShareBar | f6e8fb40 | PASS | keep demo rows + league-only POST | — | — | evidence/2026-05-31-league-power-rankings-og.md
+2026-05-31 | League L5 Roster Depth tab | BureauRosterDepth Dolphin grades + HIDDEN remove | 0fd96dd8 | PASS | keep Self-Scout depth pattern | — | OG export follow-up | build+pytest PASS
 
 ---
 
@@ -36,3 +38,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
 2026-05-31 | Bureau power-rankings OG | e62721a6 | keep | /og/power-rankings route + export link; curl 68555B
+2026-05-31 | Bureau build-profiles tab | 1f58a7ff | keep | BureauBuildProfiles Atlas; build-profiles out of HIDDEN; build+pytest PASS

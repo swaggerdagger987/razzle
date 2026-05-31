@@ -54,6 +54,7 @@ export function BureauPowerRankings({ data, leagueId }: Props) {
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
           sorted by scoring differential · pythagorean luck index
         </p>
+        <BureauPowerRankingsShareBar leagueId={leagueId} />
       </header>
 
       {leader && (
