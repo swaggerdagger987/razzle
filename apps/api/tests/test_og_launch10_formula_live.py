@@ -28,6 +28,16 @@ def test_rankings_live_extract_prefers_formula_score():
     assert block.index('"formula_score"') < block.index('"dynasty_value"')
 
 
+def test_efficiency_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'slug === "efficiency"' in source
+    assert "efficiencyStatKeys" in source
+    idx = source.index("efficiencyStatKeys")
+    block = source[idx : idx + 320]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"ppo"')
+
+
 def test_buysell_live_extract_prefers_formula_score_and_lanes():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert "extractBuySellRows" in source

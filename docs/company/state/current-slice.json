@@ -1,35 +1,32 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
-  "epic": "Explore L5 — OG screener agent margin notes (atom 2/4)",
-  "slice_title": "Margin notes on top-3 OG screener rows",
-  "atom_id": "explore-og-margin-note-rows",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB with margin notes on ranks 1–3",
+  "big_problem": "Lab OG cards mislabel stats when users sort by custom formulas — export shows PPO while the panel shows formula_score.",
+  "epic": "Lab L5 — Launch-10 OG formula_score stat parity (atom 1/4)",
+  "slice_title": "Efficiency OG prefers formula_score over PPO when present",
+  "parity_ref": "Launch 10 — Lab panel OG live data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "ACCEPTANCE Gate 6 — OG export cards show real stat columns",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_margin_note_rows.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
+    "apps/api/tests/test_og_launch10_formula_live.py"
   ],
-  "max_files": 2,
+  "max_files": 3,
   "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_og_launch10_formula_live.py -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-efficiency.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/efficiency?download=1&position=RB'"
   ],
   "out_of_scope": [
-    "LIVE staff sticker atom",
-    "College-only atom",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
+    "Other Launch-10 panels",
+    "API schema changes",
+    "NORTH_STAR or DESIGN edits"
   ],
-  "content_commit": "c1a0bcaad",
-  "reality": "PASS",
   "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  }
+  "atom_id": "lab-efficiency-formula-og-live",
+  "content_commit": "7dddf86b9",
+  "reality": "PASS",
+  "merge": "merged"
 }

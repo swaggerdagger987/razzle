@@ -189,10 +189,10 @@ export function EfficiencyRenderer({ panel }: Props) {
       name: p.name,
       position: p.position,
       team: p.team,
-      stat: p.ppo ?? p.formula_score ?? 0,
-      statLabel: "PPO",
+      stat: formula && p.formula_score != null ? p.formula_score : (p.ppo ?? 0),
+      statLabel: formula && p.formula_score != null ? "Score" : "PPO",
     }));
-  }, [efficient]);
+  }, [efficient, formula]);
 
   const open = (p: EfficiencyPlayer) =>
     openPlayer({
