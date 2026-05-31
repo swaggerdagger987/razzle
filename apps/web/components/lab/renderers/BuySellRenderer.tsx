@@ -344,6 +344,7 @@ export function BuySellRenderer({ panel }: Props) {
             slug="buysell"
             downloadName="razzle-buy-sell.png"
             snapshotRows={ogSnapshotRows}
+            position={position || undefined}
           />
         </footer>
       )}
