@@ -1,24 +1,25 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import {
+  buildExploreOgExportParams,
+  type ExploreOgExportInput,
+} from "@/lib/explore-og-export-params";
 
-interface Props {
-  universe: string;
-  sort: string;
-  dir: string;
-  q: string;
-  pos: string[];
-}
+type Props = Omit<ExploreOgExportInput, "download">;
 
 export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const previewParams = new URLSearchParams({ universe, sort, dir });
-  if (q) previewParams.set("q", q);
-  if (pos.length) previewParams.set("pos", pos.join(","));
-
-  const ogParams = new URLSearchParams(previewParams);
-  ogParams.set("download", "1");
+  const previewParams = buildExploreOgExportParams({ universe, sort, dir, q, pos });
+  const ogParams = buildExploreOgExportParams({
+    universe,
+    sort,
+    dir,
+    q,
+    pos,
+    download: true,
+  });
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
@@ -31,6 +32,8 @@ export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
       setCopied(false);
     }
   }, [shareUrl]);
+
+  const exportLabel = universe === "college" ? "export college card" : "export card";
 
   return (
     <div className="explore-share flex shrink-0 items-center gap-2">
@@ -50,8 +53,9 @@ export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
         download="razzle-explore.png"
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+        title={exportLabel}
       >
-        export card
+        {exportLabel}
       </a>
     </div>
   );
