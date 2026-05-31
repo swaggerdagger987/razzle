@@ -159,9 +159,9 @@ const PITCH_BY_SLUG: Record<string, string> = {
   stocks: "rising and falling dynasty assets before your league reacts",
   waivers: "waiver-wire risers ranked by recent production and role",
   "dynasty-comps": "statistical comp cards with match % — price any dynasty asset like a desk",
-  weekly: "weekly heatmap streaks before your league mates spot the run",
-  prospects: "rookie big board with combine and college context",
-  dashboard: "dynasty pulse — risers, fallers, and value picks in one view",
+  weekly: "PPG heatmap with hot/cold cells — spot the spike week before your league trades for it",
+  prospects: "RPS rookie board with combine context — draft the room, not the hype thread",
+  dashboard: "dynasty pulse on risers, fallers, and mispriced value — one screen, zero spreadsheet",
 };
 
 export function hasCustomTeaser(slug: string): boolean {
