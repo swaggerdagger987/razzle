@@ -24,6 +24,8 @@
     "College-only atom",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
+  "content_commit": "cae3ed2aa",
+  "reality": "PASS",
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
