@@ -257,6 +257,8 @@ export async function GET(req: Request) {
   const marginNotesByIndex = players
     .slice(0, MARGIN_NOTE_ROW_LIMIT)
     .map((row) => marginNoteForOgExploreRow(row, universe));
+  const hasMarginNotes = marginNotesByIndex.some((note) => note != null);
+  const showStaffLiveSticker = hasMarginNotes && !isDemo;
 
   return new ImageResponse(
     (
@@ -297,6 +299,25 @@ export async function GET(req: Request) {
               }}
             >
               FORMULA SORT
+            </div>
+          ) : null}
+          {showStaffLiveSticker ? (
+            <div
+              style={{
+                fontFamily: "Caveat",
+                fontSize: 28,
+                fontWeight: 700,
+                color: "#f7efe5",
+                background: "#2ec4b6",
+                padding: "4px 14px",
+                display: "flex",
+                border: "3px solid #2d1f14",
+                borderRadius: 8,
+                boxShadow: "3px 3px 0 #2d1f14",
+                transform: "rotate(-2deg)",
+              }}
+            >
+              LIVE · staff notes
             </div>
           ) : null}
           {isDemo ? (
