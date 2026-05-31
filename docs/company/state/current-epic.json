@@ -14,6 +14,6 @@
   "updated_at": "2026-05-31T12:40:00Z",
   "completed_epics": [
     {"id": "lab-l4-pro-gate-polish", "status": "complete", "last_atom": "lab-pro-gate-perks-copy", "merge_commit": "73fdbf9c"},
-    {"id": "lab-l2-sidebar-agent-epic", "status": "complete", "last_atom": "lab-sidebar-search-agent-labels", "merge_commit": "37a8cf1d"}
+    {"id": "lab-l2-sidebar-agent-epic", "status": "complete", "last_atom": "lab-sidebar-search-agent-labels", "merge_commit": "d0b8a109"}
   ]
 }
