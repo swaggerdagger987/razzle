@@ -13,8 +13,8 @@
     {
       "id": "league-waiver-tendencies-tab",
       "title": "Waiver Tendencies — Hawkeye wire-style grid",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "832429ec"
     },
     {
       "id": "league-strength-of-schedule-tab",
