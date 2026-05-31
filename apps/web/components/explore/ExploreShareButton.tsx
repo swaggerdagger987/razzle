@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { buildExploreShareQuery } from "@/lib/explore-params";
 
 interface Props {
   universe: string;
@@ -13,14 +14,19 @@ interface Props {
 export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const previewParams = new URLSearchParams({ universe, sort, dir });
-  if (q) previewParams.set("q", q);
-  if (pos.length) previewParams.set("pos", pos.join(","));
+  const previewParams = useMemo(
+    () => buildExploreShareQuery({ universe, sort, dir, q, pos }),
+    [universe, sort, dir, q, pos],
+  );
+  const ogParams = useMemo(
+    () => buildExploreShareQuery({ universe, sort, dir, q, pos, download: true }),
+    [universe, sort, dir, q, pos],
+  );
 
-  const ogParams = new URLSearchParams(previewParams);
-  ogParams.set("download", "1");
-
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const shareUrl = useMemo(() => {
+    if (typeof window === "undefined") return "";
+    return `${window.location.origin}/explore?${previewParams.toString()}`;
+  }, [previewParams]);
 
   const copyLink = useCallback(async () => {
     try {
@@ -31,6 +37,8 @@ export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
       setCopied(false);
     }
   }, [shareUrl]);
+
+  const exportLabel = universe === "college" ? "export college card" : "export card";
 
   return (
     <div className="explore-share flex shrink-0 items-center gap-2">
@@ -51,7 +59,7 @@ export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
       >
-        export card
+        {exportLabel}
       </a>
     </div>
   );
