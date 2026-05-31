@@ -17,6 +17,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | BureauStrengthOfSchedule Octo bars | league-strength-of-schedule-tab | 3 files web-only | da33eafd | SHIP | KEEP empty HIDDEN_BUREAU_SLUGS pattern | — | evidence/2026-05-31-league-strength-of-schedule-tab.md
+
 ## Entries
 
 2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B

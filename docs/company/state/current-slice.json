@@ -2,14 +2,14 @@
   "date": "2026-05-31",
   "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
   "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "atom_id": "league-waiver-tendencies-tab",
-  "slice_title": "Waiver Tendencies tab unhidden with Hawkeye transaction pattern renderer",
+  "atom_id": "league-strength-of-schedule-tab",
+  "slice_title": "Schedule tab unhidden with SOS matchup renderer",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "Bureau nav shows Waiver Tendencies; bespoke renderer; build + pytest pass",
+  "acceptance_ref": "Bureau nav shows Schedule; bespoke Octo renderer; build + pytest pass",
   "trust_pillars": ["T2", "T5"],
   "allowed_paths": [
-    "apps/web/components/league/BureauWaiverTendencies.tsx",
+    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
     "apps/web/components/league/BureauFeatureBody.tsx",
     "apps/web/lib/bureau-features.ts"
   ],
@@ -22,8 +22,8 @@
   "out_of_scope": [
     "OG export",
     "API schema changes",
-    "strength-of-schedule tab",
-    "NORTH_STAR / DESIGN edits"
+    "NORTH_STAR / DESIGN edits",
+    "Sleeper matchup week pull (Phase 5.5)"
   ],
   "builder_mode": "composer-surgical"
 }

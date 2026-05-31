@@ -12,6 +12,7 @@ import { BureauRosterDepth } from "./BureauRosterDepth";
 import { BureauBuildProfiles } from "./BureauBuildProfiles";
 import { BureauWaiverTendencies } from "./BureauWaiverTendencies";
 import { BureauPowerRankings } from "./BureauPowerRankings";
+import { BureauStrengthOfSchedule } from "./BureauStrengthOfSchedule";
 
 interface Props {
   feature: BureauFeatureSlug;
@@ -32,6 +33,8 @@ export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "waiver-tendencies")
     return <BureauWaiverTendencies data={data} leagueId={leagueId} />;
   if (feature === "power-rankings") return <BureauPowerRankings data={data} leagueId={leagueId} />;
+  if (feature === "strength-of-schedule")
+    return <BureauStrengthOfSchedule data={data} leagueId={leagueId} />;
 
   return null;
 }
