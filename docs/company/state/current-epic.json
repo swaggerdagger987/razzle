@@ -1,30 +1,37 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG share cards must render the same live panel rows users see in-product (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — OG cards match in-product live panel rows",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic_title": "League L5 — Bureau behavioral share parity",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-panels-api-live",
-      "title": "OG fetch via /api/panels/{slug} with dashboard/breakout extractors + live tape label",
-      "status": "done",
-      "merge_commit": "997c5e5f"
+      "id": "bureau-manager-profiles-copy-link",
+      "title": "Manager Profiles copy link beside export card",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-export-link-rankings-breakouts",
-      "title": "LabOgExportLink on dynasty-rankings and breakouts renderers",
-      "status": "done",
-      "merge_commit": "32d682ab"
+      "id": "bureau-pressure-map-copy-link",
+      "title": "Pressure Map copy link beside export card",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-export-link-prospects-weekly-tradevalues",
-      "title": "LabOgExportLink on prospects, weekly, tradevalues renderers",
-      "status": "done",
-      "merge_commit": "2b5ef212"
+      "id": "bureau-trade-network-copy-link",
+      "title": "Trade Network copy link beside export card",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "bureau-monte-carlo-copy-link",
+      "title": "Monte Carlo copy link beside export card",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T04:15:00Z",
-  "updated_at": "2026-05-31T12:00:00Z"
+  "next_atom_id": "bureau-manager-profiles-copy-link",
+  "created_at": "2026-05-31T04:44:00Z",
+  "updated_at": "2026-05-31T04:44:00Z",
+  "last_cycle_commit": null
 }

@@ -66,3 +66,4 @@ cycle	commit	score	status	pillar	slice	description
 74	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
 75	99f8a2aa	depth+hallway+voice+simplicity	keep	League	L5 Bureau H2H share bar	trust=T2,T5,T6; copy rivalry link + export; curl h2h OG 59305B; epic atom 1/3
 76	2b5ef212	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink 3 renderers; curl tradevalues 62488B weekly 63819B prospects 58084B
+77	da33eafd	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic 1/4
