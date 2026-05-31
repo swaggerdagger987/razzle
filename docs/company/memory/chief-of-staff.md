@@ -32,4 +32,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 1 Bureau MC share | 3392bc29 | keep | deduped lab-og-live-label; Bureau share epic 3/3
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | unhide epic atom 2/4; curl 59807B
 2026-05-31 | Factory cycle 86 Trade Network copy | da33eafd | keep | resumed share epic atom 4/5 on clean base; PR standup 2026-05-31
-2026-05-31 | cycle 87 breakouts OG snapshot | Lab L5 atom 1/5 | da33eafd | SHIP | keep | snapshotRows pattern | — | weekly/prospects next
+2026-05-31 | cycle 87 breakouts OG snapshot | Lab L5 atom 1/5 | 2230b18e | SHIP | keep | snapshotRows pattern | — | weekly/prospects next
