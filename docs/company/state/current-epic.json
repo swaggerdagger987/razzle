@@ -45,6 +45,12 @@
       "status": "active",
       "last_atom": "lab-gamelog-empty-weeks-export",
       "merge_commit": "ac0280a20"
+    },
+    {
+      "id": "lab-l5-launch10-og-demo-trust-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-demo-blurbs",
+      "merge_commit": "da33eafd"
     }
   ]
 }

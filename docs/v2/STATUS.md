@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 140 — Lab OG toLab hallway watermark)
+**Last updated:** 2026-05-31 (factory cycle 144 — Lab Launch-10 OG demo blurbs)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,7 +15,7 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 140 |
+| Cycle | 144 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |

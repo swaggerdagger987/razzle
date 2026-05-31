@@ -1,5 +1,6 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-launch10-demo-blurbs | da33eafd | No new intel; demo trust labels only.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | — | PASS | No Reddit intel change this atom.
 
 2026-05-31 | room-briefing-watermark | f6e0985f3 | No new intel; Room export slice only.
