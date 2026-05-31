@@ -7,8 +7,8 @@
     {
       "id": "lab-og-dashboard-live-extract",
       "title": "Dashboard OG — live extract mirrors top5 Value + riser Chg rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "1c39d0bd7"
     },
     {
       "id": "lab-og-efficiency-aging-formula-live",
@@ -23,7 +23,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-dashboard-live-extract",
+  "next_atom_id": "lab-og-efficiency-aging-formula-live",
   "epic_status": "active",
   "created_at": "2026-05-31T13:00:00Z",
   "updated_at": "2026-05-31T13:00:00Z",
