@@ -26,7 +26,7 @@
   ],
   "next_atom_id": "bureau-waiver-og-gate-c-pytest",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T11:38:12Z",
+  "updated_at": "2026-05-31T11:45:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-display-names",
@@ -45,6 +45,12 @@
       "status": "complete",
       "last_atom": "league-trade-finder-og-room-hallway",
       "merge_commit": "c8091030c"
+    },
+    {
+      "id": "league-l5-bureau-h2h-gtm",
+      "status": "complete",
+      "last_atom": "bureau-h2h-og-exported-sticker",
+      "merge_commit": "5b60ea23d"
     }
   ]
 }

@@ -6,3 +6,4 @@ next_slice: bureau-waiver-og-gate-c-pytest
 last_keep_cycle: 157
 last_commit: 7f7a22676
 bureau_l5_og_watermark_epic: band routes complete
+league_l5_trade_finder_gtm_epic: complete
