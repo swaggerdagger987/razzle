@@ -7,11 +7,13 @@
 
 ```bash
 npm run build --workspace=apps/web
+python3 -m pytest apps/api/tests -q
 ```
 
 | Check | Result |
 |-------|--------|
 | Build | PASS |
+| pytest | 51 passed, 5 skipped |
 | `HIDDEN_BUREAU_SLUGS` | Empty — all Bureau tabs visible |
 
 ## Code
