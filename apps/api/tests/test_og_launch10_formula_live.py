@@ -50,11 +50,31 @@ def test_dashboard_live_extract_prefers_formula_score():
     assert block.index('"formula_score"') < block.index('"rank_diff"')
 
 
+def test_tradevalues_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'slug === "tradevalues"' in source
+    assert "tradeValueStatKeys" in source
+    idx = source.index("tradeValueStatKeys")
+    block = source[idx : idx + 280]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"trade_value"')
+
+
 def test_efficiency_live_extract_prefers_formula_score():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert 'slug === "efficiency"' in source
     assert "efficiencyStatKeys" in source
     idx = source.index("efficiencyStatKeys")
-    block = source[idx : idx + 280]
+    block = source[idx : idx + 320]
     assert '"formula_score"' in block
-    assert block.index('"formula_score"') < block.index('"efficiency_score"')
+    assert block.index('"formula_score"') < block.index('"ppo"')
+
+
+def test_aging_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'slug === "aging"' in source
+    assert "agingStatKeys" in source
+    idx = source.index("agingStatKeys")
+    block = source[idx : idx + 240]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"ppg"')

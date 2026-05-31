@@ -26,13 +26,13 @@
   ],
   "next_atom_id": "lab-og-dashboard-efficiency-formula-live",
   "created_at": "2026-05-31T20:30:00Z",
-  "updated_at": "2026-05-31T20:30:00Z",
+  "updated_at": "2026-05-31T20:45:00Z",
   "completed_epics": [
     {
-      "id": "explore-l5-og-margin-notes",
-      "status": "active",
-      "last_atom": "explore-og-margin-note-rows",
-      "merge_commit": "c1a0bcaad"
+      "id": "lab-l5-og-formula-efficiency-aging",
+      "status": "complete",
+      "last_atom": "lab-og-efficiency-aging-tradevalues-formula-live",
+      "merge_commit": "792e9f77d"
     }
   ]
 }

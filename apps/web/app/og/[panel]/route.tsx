@@ -700,6 +700,19 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "dynasty_value",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "dynasty_value"),
   ];
+  const efficiencyStatKeys: string[] = [
+    "formula_score",
+    "efficiency_score",
+    "ppo",
+    ...STAT_CANDIDATE_KEYS.filter(
+      (k) => k !== "formula_score" && k !== "efficiency_score" && k !== "ppo",
+    ),
+  ];
+  const agingStatKeys: string[] = [
+    "formula_score",
+    "ppg",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
+  ];
   const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const dashboardStatKeys: string[] = [
     "formula_score",
@@ -730,7 +743,9 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
               ? dashboardStatKeys
               : slug === "efficiency"
                 ? efficiencyStatKeys
-                : preferredKey
+                : slug === "aging"
+                  ? agingStatKeys
+                  : preferredKey
                   ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
                   : [...STAT_CANDIDATE_KEYS];
 
