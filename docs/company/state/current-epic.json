@@ -1,19 +1,24 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic_title": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards still fall back to generic demo rows on launch-10 panels without snapshot wiring — screenshots do not match in-product leaders (PARITY Lab L5, NEXT.md).",
+  "epic_title": "Lab L5 — OG export matches in-product panel rows",
+  "parity_ref": "Explore L5 / Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-dashboard-og-snapshot",
-      "title": "DashboardRenderer passes top-6 comp rows into dynasty-comps OG snapshot",
+      "id": "lab-og-prospects-snapshot",
+      "title": "Prospects export passes top-6 RPS snapshot rows",
       "status": "done",
-      "merge_commit": "c9151786"
+      "merge_commit": "3c2b46e7"
+    },
+    {
+      "id": "lab-og-trade-values-snapshot",
+      "title": "Trade values export passes buy/sell snapshot rows",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T12:45:00Z",
-  "updated_at": "2026-05-31T12:55:00Z",
-  "last_cycle_commit": "c9151786"
+  "next_atom_id": "lab-og-trade-values-snapshot",
+  "created_at": "2026-05-31T12:30:00Z",
+  "updated_at": "2026-05-31T12:45:00Z"
 }

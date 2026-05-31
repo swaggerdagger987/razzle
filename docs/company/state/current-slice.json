@@ -1,26 +1,37 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-snapshot",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "slice_title": "DashboardRenderer encodes top-6 comp match rows in dynasty-comps OG snapshot",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Lab OG export cards still fall back to generic demo rows on launch-10 panels without snapshot wiring — screenshots do not match in-product leaders.",
+  "epic": "Lab L5 — OG export matches in-product panel rows",
+  "atom_id": "lab-og-prospects-snapshot",
+  "slice_title": "Prospects export passes top-6 RPS snapshot rows",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — snapshot OG ≥40KB with from-your-panel suffix",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
   ],
   "max_files": 1,
-  "max_lines": 40,
+  "max_lines": 30,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/prospects?download=1&snapshot=eyJuIjoiQ2VjZSBPZGF1bmV6IiwicCI6IldSIiwidCI6Ik9IQSIsInMiOjk1LjIsInNsIjoiUlBTIn0seyJuIjoiTWFydmluIEhhcmlzb24gSnIuIiwicCI6IldSIiwidCI6Ik9IQSIsInMiOjk0LjEsInNsIjoiUlBTIn0seyJuIjoiTWFsdWsgTmFiZXJzIiwicCI6IldSIiwidCI6Ik5ZRyIsInMiOjkyLjAsInNsIjoiUlBTIn1d'",
+    "curl -s -o /tmp/og-prospects-demo.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/prospects?download=1'"
   ],
   "out_of_scope": [
     "OG route changes",
-    "DynastyCompsRenderer (already has snapshot)",
-    "NORTH_STAR / DESIGN edits"
+    "Other launch-10 panels",
+    "API schema changes",
+    "Auth/billing"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  },
+  "content_commit": "3c2b46e7",
+  "verdict": "SHIP"
 }

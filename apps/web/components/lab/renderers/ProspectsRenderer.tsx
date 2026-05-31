@@ -52,14 +52,19 @@ export function ProspectsRenderer({ panel }: Props) {
   const prospects = q.data?.prospects ?? [];
   const top = prospects[0] ?? null;
 
+  /** Top RPS prospects on the big board — OG card matches in-product leaders (Lab L5). */
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    return prospects.slice(0, 6).map((p) => ({
-      name: p.player_name,
-      position: p.position,
-      team: p.school,
-      stat: p.rps ?? p.rank ?? 0,
-      statLabel: "Score",
-    }));
+    return [...prospects]
+      .filter((p) => p.rps != null && p.player_name)
+      .sort((a, b) => (b.rps ?? 0) - (a.rps ?? 0))
+      .slice(0, 6)
+      .map((p) => ({
+        name: p.player_name,
+        position: p.position,
+        team: p.school,
+        stat: p.rps ?? 0,
+        statLabel: "RPS",
+      }));
   }, [prospects]);
 
   if (q.isPending) {
@@ -158,6 +163,7 @@ export function ProspectsRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="prospects"
             downloadName="razzle-prospects.png"
+            position={position || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
