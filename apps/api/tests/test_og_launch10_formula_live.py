@@ -26,3 +26,17 @@ def test_rankings_live_extract_prefers_formula_score():
     block = source[idx : idx + 280]
     assert '"formula_score"' in block
     assert block.index('"formula_score"') < block.index('"dynasty_value"')
+
+
+def test_buysell_live_extract_prefers_formula_score_and_lanes():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "extractBuysellRows" in source
+    assert 'slug === "buysell"' in source
+    assert "buysellStatKeys" in source
+    idx = source.index("buysellStatKeys")
+    block = source[idx : idx + 280]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"mismatch_score"')
+    fn = source.split("function extractBuysellRows", 1)[1].split("function extractGamelogWeekRows", 1)[0]
+    assert 'mapLane(buyLow, "Buy")' in fn
+    assert 'mapLane(sellHigh, "Sell")' in fn
