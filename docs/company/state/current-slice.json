@@ -1,5 +1,6 @@
 {
   "date": "2026-05-31",
+<<<<<<< HEAD
   "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
   "epic": "Explore L5 — OG screener agent margin notes (atom 2/4)",
   "slice_title": "Margin notes on top-3 OG screener rows",
@@ -32,4 +33,29 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   }
+=======
+  "big_problem": "Lab sidebar lists 100 panels by category — users think in staff desks per AGENTS.md.",
+  "epic": "Lab L2 — sidebar groups panels by analyst desk (atom 2/2)",
+  "slice_title": "lab-sidebar-staff-registry",
+  "parity_ref": "H-04 — Six agents same ids everywhere",
+  "depth_ref": "Lab L2",
+  "acceptance_ref": "Gate 5 — pytest staff registry guards",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "packages/agents/registry.ts",
+    "apps/api/tests/test_lab_sidebar_staff_registry.py"
+  ],
+  "max_files": 2,
+  "max_lines": 45,
+  "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_sidebar_staff_registry.py -q --noconftest",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [
+    "LabSidebar.tsx changes",
+    "New panels in catalog",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical"
+>>>>>>> d9fb0cce2 (standup: 2026-05-31 — PASS lab-sidebar-staff-registry)
 }

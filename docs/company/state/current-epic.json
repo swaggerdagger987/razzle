@@ -35,6 +35,12 @@
   "updated_at": "2026-05-31T18:00:00Z",
   "completed_epics": [
     {
+      "id": "lab-l2-sidebar-staff-desks",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-registry",
+      "merge_commit": "d9fb0cce2"
+    },
+    {
       "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
       "last_atom": "lab-og-watermark-display-name",

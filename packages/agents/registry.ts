@@ -46,7 +46,7 @@ export const AGENTS: AgentDefinition[] = [
     emptyCopy: "Clean bill of health. For now.",
     injuryPriority: true,
     surfaces: ["lab", "bureau", "room", "player-sheet", "explore"],
-    labPanels: ["injury-report", "durability", "workload"],
+    labPanels: ["injury-report", "durability", "workload", "strengths"],
     bureauSections: ["roster-depth", "self-scout"],
   },
   {
@@ -58,7 +58,15 @@ export const AGENTS: AgentDefinition[] = [
     loadingCopy: "scanning the tape...",
     emptyCopy: "Nothing worth your time right now.",
     surfaces: ["lab", "bureau", "room", "player-sheet"],
-    labPanels: ["weekly", "breakouts", "prospects", "waiver-wire", "usage-trends"],
+    labPanels: [
+      "weekly",
+      "breakouts",
+      "prospects",
+      "waiver-wire",
+      "usage-trends",
+      "weeklyleaders",
+      "weeklymvp",
+    ],
     bureauSections: ["self-scout", "roster-depth", "waiver-tendencies"],
   },
   {
@@ -70,7 +78,14 @@ export const AGENTS: AgentDefinition[] = [
     loadingCopy: "reading the room...",
     emptyCopy: "Market's quiet. Check back Wednesday.",
     surfaces: ["lab", "bureau", "room", "player-sheet"],
-    labPanels: ["tradevalues", "trade-values", "buysell", "trade-finder"],
+    labPanels: [
+      "tradevalues",
+      "trade-values",
+      "buysell",
+      "trade-finder",
+      "tradefinder",
+      "dynasty-comps",
+    ],
     bureauSections: ["trade-network", "trade-finder", "pressure-map", "manager-profiles"],
   },
   {
@@ -82,7 +97,16 @@ export const AGENTS: AgentDefinition[] = [
     loadingCopy: "running the numbers...",
     emptyCopy: "Insufficient data. Octo needs more.",
     surfaces: ["lab", "bureau", "room", "player-sheet"],
-    labPanels: ["rankings", "monte-carlo", "projections", "efficiency", "aging"],
+    labPanels: [
+      "rankings",
+      "monte-carlo",
+      "projections",
+      "efficiency",
+      "aging",
+      "leaders",
+      "screener",
+      "percentiles",
+    ],
     bureauSections: ["monte-carlo", "power-rankings", "strength-of-schedule"],
   },
   {
@@ -94,7 +118,7 @@ export const AGENTS: AgentDefinition[] = [
     loadingCopy: "pulling the archives...",
     emptyCopy: "No precedent found. That's rare.",
     surfaces: ["lab", "bureau", "room", "player-sheet"],
-    labPanels: ["career-stats", "gamelog", "dynasty-history"],
+    labPanels: ["career-stats", "gamelog", "dynasty-history", "career", "career-compare"],
     bureauSections: ["manager-profiles", "build-profiles", "trade-network", "head-to-head"],
   },
 ];
