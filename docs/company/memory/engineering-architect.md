@@ -1,6 +1,9 @@
 # Memory — Engineering Architect
 
-2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
+2026-05-31 | explore OG ship cycle 129 | 27ae252f | keep | dedup ef908a99 + 3f0411ec on base; no rebuild.
+
+2026-05-31 | explore OG season team | feec2e19 | keep | 3 files ≤45 lines; screener body parity.
+
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
