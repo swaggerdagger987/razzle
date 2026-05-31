@@ -6,7 +6,7 @@ interface Props {
   leagueId: string;
 }
 
-/** Copyable Power Rankings URL + OG export — mirrors BureauMonteCarloShareBar. */
+/** Copyable power board URL + OG export — mirrors BureauMonteCarloShareBar. */
 export function BureauPowerRankingsShareBar({ leagueId }: Props) {
   const [copied, setCopied] = useState(false);
 

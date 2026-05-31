@@ -6,18 +6,6 @@
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "league-power-rankings-tab",
-      "title": "Unhide Power Rankings tab with Octo renderer + hallway",
-      "status": "done",
-      "merge_commit": "20c7940a"
-    },
-    {
-      "id": "league-power-rankings-og",
-      "title": "OG share card at /og/power-rankings with demo fallback",
-      "status": "done",
-      "merge_commit": "f6e8fb40"
-    },
-    {
       "id": "bureau-manager-profiles-copy-link",
       "title": "Manager Profiles copy link beside export card",
       "status": "done",
@@ -30,6 +18,12 @@
       "merge_commit": "c4ce09b7"
     },
     {
+      "id": "league-power-rankings-og",
+      "title": "Power Rankings OG + copy board link",
+      "status": "done",
+      "merge_commit": "90bf2dd5"
+    },
+    {
       "id": "bureau-trade-network-copy-link",
       "title": "Trade Network copy link beside export card",
       "status": "pending",
@@ -40,15 +34,10 @@
       "title": "Monte Carlo copy link beside export card",
       "status": "done",
       "merge_commit": "30454811"
-    },
-    {
-      "id": "league-roster-depth-tab",
-      "title": "Unhide Roster Depth tab with Dolphin renderer",
-      "status": "pending",
-      "merge_commit": null
     }
   ],
   "next_atom_id": "bureau-trade-network-copy-link",
   "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T21:00:00Z"
+  "updated_at": "2026-05-31T13:20:00Z",
+  "last_cycle_commit": "90bf2dd5"
 }
