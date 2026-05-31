@@ -30,3 +30,5 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
 2026-05-31 | Power Rankings OG | da33eafd | keep | /og/power-rankings DEMO_ROWS + Bureau export link; curl 66050B
+2026-05-31 | Bureau Roster Depth tab | 5b6d3dc3 | keep | BureauRosterDepth Dolphin grid; HIDDEN removed roster-depth
+2026-05-31 | Bureau Roster Depth tab | da33eafd | keep | BureauRosterDepth Dolphin grid; HIDDEN removed roster-depth
