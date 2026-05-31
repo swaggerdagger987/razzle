@@ -2,7 +2,7 @@
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | route.tsx PANEL_OG_STAT_KEY | 2bba7622 | SHIP | keep | efficiency_score peak_age labels
 
-2026-05-31 | lab-og-position-gamelog | GamelogRenderer position prop | 7e109165 | SHIP | keep | 1 line on LabOgExportLink
+2026-05-31 | lab-og-position-gamelog | GamelogRenderer position on LabOgExportLink | 228c4b59 | SHIP | keep | 1 file | curl 48035B
 
 2026-05-31 | league-strength-of-schedule-og-share | ShareBar + OG route | 7f652a98 | SHIP | keep | | | 3 files
 2026-05-31 | league-power-rankings-og-snapshot | 26a22f69 | keep | compact encode/decode lib + ShareBar rows prop

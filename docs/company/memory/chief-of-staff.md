@@ -2,7 +2,7 @@
 
 2026-05-31 | Factory cycle 111 efficiency+aging OG sort | 2bba7622 | Workday cycle 1; live-sort epic atom 2/3; PANEL_OG_STAT_KEY peak_age + efficiency_score.
 
-2026-05-31 | Factory cycle 110 gamelog position | 7e109165 | Workday open cycle 1; tail position filter on gamelog; live-sort epic atom 1 deduped on base.
+2026-05-31 | Factory cycle 109 gamelog position OG | 228c4b59 | Lab L5 position epic gamelog atom; workday cycle 1.
 
 2026-05-31 | Factory cycle 96 H2H codec | da33eafd | Workday open; League L5 codec epic atom 1/3 SHIP.
 
