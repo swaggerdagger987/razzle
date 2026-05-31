@@ -8,14 +8,14 @@
     {
       "id": "lab-og-gamelog-player-default",
       "title": "Gamelog OG — default player_id when export omits query",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "49b4f755"
     },
     {
       "id": "explore-og-universe-query",
       "title": "Explore OG — pass universe/college in export URL",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7dbd4b11"
     },
     {
       "id": "lab-og-dynasty-comps-export-default",
@@ -24,10 +24,16 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-gamelog-player-default",
+  "next_atom_id": "lab-og-dynasty-comps-export-default",
   "created_at": "2026-05-31T12:30:00Z",
-  "updated_at": "2026-05-31T12:45:00Z",
+  "updated_at": "2026-05-31T13:45:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l2-sidebar-groups-by-agent",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-picks-by-agent",
+      "merge_commit": "4e8b0e8e"
+    },
     {
       "id": "lab-l4-pro-gate-epic",
       "status": "complete",
@@ -35,10 +41,46 @@
       "merge_commit": "675044ea"
     },
     {
+      "id": "lab-l5-og-live-fetch-sticker",
+      "status": "complete",
+      "last_atom": "explore-og-universe-query",
+      "merge_commit": "7dbd4b11"
+    },
+    {
       "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
       "last_atom": "lab-og-live-demo-fallback-copy",
       "merge_commit": "18d92f6b"
+    },
+    {
+      "id": "lab-l5-og-gamelog-live-week-rows",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-snapshot-default",
+      "merge_commit": "e2a3ce8a"
+    },
+    {
+      "id": "lab-l5-launch10-og-live-sticker",
+      "status": "complete",
+      "last_atom": "lab-og-live-sticker-prospects-weekly",
+      "merge_commit": "5bb77346"
+    },
+    {
+      "id": "lab-l5-og-watermark-band",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-band-panel-route",
+      "merge_commit": "742028c0"
+    },
+    {
+      "id": "lab-l5-og-live-sort-keys",
+      "status": "complete",
+      "last_atom": "lab-og-buysell-dashboard-live-sort",
+      "merge_commit": "7afc0b03"
+    },
+    {
+      "id": "league-l5-h2h-og-watermark",
+      "status": "complete",
+      "last_atom": "league-h2h-og-watermark-band",
+      "merge_commit": "945e4656"
     }
   ]
 }

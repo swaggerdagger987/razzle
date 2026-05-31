@@ -2,24 +2,20 @@
 
 **Date:** 2026-05-31  
 **Atom:** `lab-og-gamelog-player-default`  
-**Verdict:** PASS (FACTORY-DOD Gate C2)
+**Verdict:** PASS (FACTORY-DOD Gate C2) — on base via PR #888 (`49b4f755`)
 
 ## Build / tests
 
 - `npm run build --workspace=apps/web` — exit 0
-- `JWT_SECRET=test pytest apps/api/tests -q` — 61 passed, 5 skipped
+- `JWT_SECRET=test pytest apps/api/tests -q` — 59 passed, 5 skipped (includes `test_lab_og_export_link.py`)
 
 ## Gate C — OG PNG curl
-
-Re-verified 2026-05-31T08:50Z on `cursor/workday-cycle-initiation-9ffc`.
 
 | Route | HTTP | Bytes | Verdict |
 |-------|------|-------|---------|
 | `/og/gamelog?download=1&player_id=00-0036900` | 200 | 60634 | PASS |
-| `/og/gamelog?download=1` (route default) | 200 | 60634 | PASS |
-
-Both PNGs: 1200×630, ≥40KB.
+| `/og/gamelog?download=1` (export default) | 200 | 60634 | PASS |
 
 ## Layer claim
 
-Lab L5 — `LabOgExportLink` appends `player_id=00-0036900` for gamelog/dynasty-comps when export omits query; GamelogRenderer delegates default to helper.
+Lab L5 — `LabOgExportLink` resolves `player_id=00-0036900` for gamelog/dynasty-comps when export omits query (`PLAYER_SCOPED_OG_SLUGS`).
