@@ -1,3 +1,4 @@
+2026-05-31 | lab-weekly-empty-export | f6e0985f3 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 
