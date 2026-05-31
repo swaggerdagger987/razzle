@@ -244,7 +244,7 @@ dedicated Slack channel. The Founder operates the team from their phone:
 | `good morning team` | Open the workday, run the first Standard Company Loop cycle, merge if gates pass, post Slack summary | `docs/company/automations/good-morning.md` |
 | `Razzle:` / `Strategist:` / `Architect:` / `Builder:` / `Researcher:` / `Reality:` / `Team:` / `Board:` | Talk to a specific role or the whole team; write files only when the answer changes future behavior | `docs/company/automations/ask-team.md` |
 | `good evening team` | Produce CEO nightly review over today's open/merged PRs, write reflection + per-role memory updates, open/merge a review PR, post Slack goodnight | `docs/company/automations/good-evening.md` |
-| loop tick | While workday is open, run additional cycles on a schedule until the Founder closes the day or a quality blocker appears | `docs/company/automations/tick.md` |
+| loop tick | While workday is open, run cycles on schedule; **fail → pivot to next atom**, never self-stop | `docs/company/automations/tick.md` |
 
 State is shared via `docs/company/state/workday.json` (`status: open | closed`,
 cycle counter, last trigger), but open PRs are the daytime source of truth.

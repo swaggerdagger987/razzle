@@ -308,7 +308,7 @@ export function DynastyDashboardRenderer({ panel }: Props) {
       )}
 
       {topRiser && (
-        <footer className="mt-6 border-t border-ink pt-4">
+        <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
           <Link
             href={
               toRoom({

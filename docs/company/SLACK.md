@@ -155,11 +155,10 @@ You should mostly use the two trigger phrases plus role prefixes.
 
 ## Looping mode
 
-The tick automation is now part of the setup. It keeps cycling between
-`good morning team` and `good evening team` while `workday.json` is open.
+The tick automation keeps cycling while `workday.json` is open.
 
-The team stops itself only for evidence-based reasons: repeated NEEDS WORK,
-missing access, Founder-only decisions, product drift, or Founder Board.
+The factory **does not stop** because a slice failed. It pivots to the next atom.
+Only `good evening team`, publish blocked, or Founder disabling tick stops runs.
 
 ---
 
