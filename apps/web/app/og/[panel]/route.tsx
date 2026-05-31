@@ -357,13 +357,17 @@ function demoRowsForPanel(slug: string): OgRow[] {
 
 type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
 
-function decodeOgSnapshot(param: string): OgRow[] {
+type DecodedOgSnapshot = { rows: OgRow[]; playerId?: string };
+
+function decodeOgSnapshot(param: string): DecodedOgSnapshot {
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    const arr = JSON.parse(json) as CompactOgRow[];
-    if (!Array.isArray(arr)) return [];
-    return arr
+    const parsed = JSON.parse(json) as CompactOgRow[] | { pid?: string; r?: CompactOgRow[] };
+    const arr = Array.isArray(parsed) ? parsed : (parsed.r ?? []);
+    const snapshotPlayerId =
+      !Array.isArray(parsed) && typeof parsed.pid === "string" ? parsed.pid.trim() : undefined;
+    const rows = arr
       .filter((r) => r?.n)
       .slice(0, 6)
       .map((r) => ({
@@ -373,8 +377,9 @@ function decodeOgSnapshot(param: string): OgRow[] {
         stat: Number(r.s ?? 0),
         statLabel: r.sl ?? "",
       }));
+    return { rows, playerId: snapshotPlayerId || undefined };
   } catch {
-    return [];
+    return { rows: [] };
   }
 }
 
@@ -925,7 +930,8 @@ export async function GET(
     // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
     apiParams.position = "WR";
   }
-  const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
+  const snapshotDecoded = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] };
+  const snapshotRows = snapshotDecoded.rows;
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
@@ -941,6 +947,8 @@ export async function GET(
   const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
   const liveHasRows = namedLiveRows.length > 0;
   const isSnapshot = snapshotHasRows;
+  const effectivePlayerId =
+    (isSnapshot && snapshotDecoded.playerId) || playerId;
   let rows = isSnapshot
     ? snapshotRows.slice(0, 6)
     : liveHasRows
@@ -956,7 +964,7 @@ export async function GET(
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
   const labLink = labOgWatermarkLink(slug, {
     positionFilter,
-    playerId,
+    playerId: effectivePlayerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
   });
 
