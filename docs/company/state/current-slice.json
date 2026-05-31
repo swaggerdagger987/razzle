@@ -27,5 +27,7 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "merge_commit": "a49abe94",
+  "status": "shipped"
 }
