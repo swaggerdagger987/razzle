@@ -1,26 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-build-profiles-share-og",
+  "atom_id": "league-roster-depth-share-og",
   "big_problem": "Newly unhidden Bureau tabs lack share/export cards — league construction intel doesn't travel to Reddit (DEPTH League L5).",
   "epic": "League L5 — Bureau Build/Roster share-export parity",
-  "slice_title": "Build Profiles copy link + OG export card",
+  "slice_title": "Roster Depth copy link + OG export card",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauBuildProfilesShareBar.tsx",
-    "apps/web/app/og/build-profiles/route.tsx",
-    "apps/web/components/league/BureauBuildProfiles.tsx"
+    "apps/web/components/league/BureauRosterDepthShareBar.tsx",
+    "apps/web/app/og/roster-depth/route.tsx",
+    "apps/web/components/league/BureauRosterDepth.tsx"
   ],
   "max_files": 3,
   "max_lines": 280,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-build-profiles.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/build-profiles?league=demo&download=1'"
+    "curl -s -o /tmp/og-roster-depth.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/roster-depth?league=demo&user=demo-user&download=1'"
   ],
-  "out_of_scope": ["Roster Depth OG", "API changes", "waiver-tendencies unhide"],
+  "out_of_scope": ["waiver-tendencies unhide", "API changes", "build-profiles changes"],
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
