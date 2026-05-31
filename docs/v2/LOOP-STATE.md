@@ -1,10 +1,11 @@
-cycle: 153
+cycle: 154
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: (pick from PARITY)
-last_keep_cycle: 153
-last_commit: 9be64d109
+next_slice: explore-og-margin-note-demo-college
+last_keep_cycle: 154
+last_commit: f6e0985f3
+explore_l5_og_margin_epic: active
 lab_l5_empty_og_epic: complete
 lab_l5_og_hallway_epic: complete
 lab_l5_og_weekly_tolab_position: complete
