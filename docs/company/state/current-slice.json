@@ -1,26 +1,22 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head — ShareBar and OG route use mismatched snapshot codecs.",
+  "atom_id": "bureau-h2h-og-route-lib-decode",
+  "big_problem": "Bureau H2H export cards must decode ShareBar snapshots with the same codec.",
   "epic": "League L5 — Bureau H2H snapshot codec matches OG decode",
-  "slice_title": "H2H ShareBar uses encodeBureauH2HOgSnapshot (y/m/pc compact)",
-  "atom_id": "bureau-h2h-sharebar-canonical-codec",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "slice_title": "Verify OG head-to-head route uses shared lib decode only",
+  "parity_ref": "Explore L5 — Bureau H2H export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG head-to-head PNG ≥40KB with snapshot param from canonical encoder",
+  "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauH2HShareBar.tsx"
+    "docs/v2/evidence/2026-05-31-bureau-h2h-og-route-lib-decode.md",
+    "docs/company/state/current-epic.json"
   ],
-  "max_files": 1,
+  "max_files": 2,
   "max_lines": 30,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests -q"
+    "curl -s -o /tmp/h2h-demo.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/head-to-head?download=1'"
   ],
-  "out_of_scope": [
-    "Lab OG renderers",
-    "BureauOgExportLink deletion",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["Route rewrite — already uses @/lib/bureau-h2h-og-snapshot"],
+  "builder_mode": "verify-only"
 }

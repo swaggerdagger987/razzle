@@ -14,7 +14,7 @@
     {
       "id": "bureau-h2h-og-route-lib-decode",
       "title": "OG head-to-head route uses shared lib decode only",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
