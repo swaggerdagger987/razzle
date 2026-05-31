@@ -274,10 +274,11 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
-  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
+  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers) || Array.isArray(obj.fallers)) {
     const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
     const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
-    candidates = [...top5, ...risers];
+    const fallers = Array.isArray(obj.fallers) ? (obj.fallers as Record<string, unknown>[]) : [];
+    candidates = [...top5, ...risers, ...fallers];
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
@@ -458,6 +459,8 @@ export async function GET(
     "efficiency",
     "buysell",
     "aging",
+    "rankings",
+    "dashboard",
   ]);
   if (!isSnapshot && DIRECT_STAT_SORT_SLUGS.has(slug)) {
     rows = [...rows].sort((a, b) => b.stat - a.stat);

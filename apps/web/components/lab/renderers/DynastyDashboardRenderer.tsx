@@ -116,13 +116,16 @@ export function DynastyDashboardRenderer({ panel }: Props) {
   const topRiser = q.data?.risers?.[0];
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     const movers = [...(q.data?.risers ?? []), ...(q.data?.fallers ?? [])];
-    return movers.slice(0, 6).map((p) => ({
-      name: p.full_name,
-      position: p.position,
-      team: p.team,
-      stat: p.rank_diff ?? 0,
-      statLabel: "Chg",
-    }));
+    return [...movers]
+      .sort((a, b) => Math.abs(b.rank_diff ?? 0) - Math.abs(a.rank_diff ?? 0))
+      .slice(0, 6)
+      .map((p) => ({
+        name: p.full_name,
+        position: p.position,
+        team: p.team,
+        stat: p.rank_diff ?? 0,
+        statLabel: "Chg",
+      }));
   }, [q.data?.risers, q.data?.fallers]);
   const maxDropoff = useMemo(() => {
     const rows = q.data?.position_scarcity ?? {};

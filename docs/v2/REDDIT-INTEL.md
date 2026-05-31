@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab OG rankings / dashboard (cycle 97)
+- **Angle:** Octo dynasty tier lists and dashboard riser/faller cards need ranked `/og/rankings` and `/og/dashboard` — not API insertion order.
+- **Screenshot hook:** WR dynasty value leaders + biggest |rank_diff| movers on share PNG.
+
 ### 2026-05-31 — Lab OG buysell / aging (cycle 96)
 - **Angle:** Bones buy-low cards and Octo aging cliffs need ranked `/og/buysell` and `/og/aging` leaders — not insertion-order API rows.
 - **Screenshot hook:** WR buy/sell mismatch leaders + RB past-peak PPG sorted on share PNG.
