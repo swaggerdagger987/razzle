@@ -8,8 +8,8 @@
     {
       "id": "league-waiver-tendencies-tab",
       "title": "Waiver Tendencies tab unhidden with Hawkeye renderer",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "71e42577"
     },
     {
       "id": "league-strength-of-schedule-tab",
@@ -18,7 +18,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-waiver-tendencies-tab",
+  "next_atom_id": "league-strength-of-schedule-tab",
   "created_at": "2026-05-31T14:00:00Z",
   "updated_at": "2026-05-31T14:00:00Z"
 }
