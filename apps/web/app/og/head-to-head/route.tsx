@@ -1,27 +1,13 @@
-import { decodeBureauH2HOgSnapshot } from "@/lib/bureau-h2h-og-snapshot";
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toRoom } from "@razzle/hallway";
+import {
+  bureauH2HOgSnapshotToData,
+  decodeBureauH2HOgSnapshot,
+  type H2HData,
+} from "@/lib/bureau-h2h-og-snapshot";
 
 export const runtime = "edge";
-
-interface TeamSummary {
-  team: string;
-  record: string;
-  ppg: number;
-}
-
-interface PosCompare {
-  position: string;
-  your_count: number;
-  their_count: number;
-}
-
-interface H2HData {
-  you?: TeamSummary;
-  them?: TeamSummary;
-  position_compare?: PosCompare[];
-  trade_fit?: { you_could_offer?: string[]; you_could_target?: string[] };
-}
 
 /** Sample rivalry for OG preview when league params/API unavailable (FACTORY-DOD Gate C). */
 const DEMO_H2H: Required<Pick<H2HData, "you" | "them" | "position_compare" | "trade_fit">> = {
@@ -38,13 +24,21 @@ const DEMO_H2H: Required<Pick<H2HData, "you" | "them" | "position_compare" | "tr
   },
 };
 
-async function fetchH2H(params: {
-  league: string;
-  user: string;
-  opponent: string;
-}): Promise<H2HData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchH2H(
+  req: Request,
+  params: {
+    league: string;
+    user: string;
+    opponent: string;
+  },
+): Promise<H2HData | null> {
   if (!params.league || !params.user) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/head-to-head`, {
@@ -69,19 +63,35 @@ function teamLabel(name: string): string {
   return name.length > 18 ? `${name.slice(0, 16)}…` : name;
 }
 
+function atlasH2hRoomQuestion(
+  them: { team: string; record: string; ppg: number },
+  offer: string,
+  want: string,
+): string {
+  return `How do I beat ${them.team} (${them.record})? I'm deeper at ${offer} and thin at ${want}.`;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
   const opponent = url.searchParams.get("opponent") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
 
   const atlas = AGENT_BY_ID.atlas;
-  const snapshotParam = url.searchParams.get("snapshot") ?? "";
   const snapshot = snapshotParam ? decodeBureauH2HOgSnapshot(snapshotParam) : null;
-  const live = snapshot ? null : await fetchH2H({ league, user, opponent });
-  const isDemo = !snapshot && (!live?.you || !live?.them);
-  const data = snapshot ?? (isDemo ? DEMO_H2H : live) ?? DEMO_H2H;
+  const isSnapshot = Boolean(snapshot);
+  const hasLeagueParams = Boolean(league && user);
+  const live = isSnapshot ? null : await fetchH2H(req, { league, user, opponent });
+  const isLive = !isSnapshot && Boolean(live?.you && live?.them);
+  const isDemo = !isSnapshot && !isLive;
+  const data: H2HData =
+    isSnapshot && snapshot
+      ? bureauH2HOgSnapshotToData(snapshot)
+      : isLive
+        ? live!
+        : DEMO_H2H;
 
   const you = data.you;
   const them = data.them;
@@ -89,12 +99,14 @@ export async function GET(req: Request) {
   const offer = (data.trade_fit?.you_could_offer ?? []).join(", ") || "—";
   const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
-
-  const rivalrySubtitle = isDemo
-    ? "rivalry dossier — your roster vs one leaguemate · sample preview"
-    : them?.team
-      ? `rivalry dossier — vs ${teamLabel(them.team)}${snapshot ? " · from panel" : ""}`
-      : "rivalry dossier — your roster vs one leaguemate";
+  const themSummary = them!;
+  const atlasRoomPath = hasData
+    ? toRoom({
+        agentId: "atlas",
+        question: atlasH2hRoomQuestion(themSummary, offer, want),
+        panelSlug: "head-to-head",
+      })
+    : "/room?agent=atlas&from=head-to-head";
 
   return new ImageResponse(
     (
@@ -111,12 +123,10 @@ export async function GET(req: Request) {
           border: "10px solid #2d1f14",
         }}
       >
-        {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 12 }}>
           <div style={{ fontSize: 48, display: "flex" }}>🐯</div>
           <div style={{ display: "flex", fontSize: 36, fontWeight: 700 }}>
-            <span style={{ display: "flex" }}>Razzle</span>
-            <span style={{ display: "flex", color: "#d97757" }}>.lol</span>
+            Razzle<span style={{ color: "#d97757" }}>.lol</span>
           </div>
           <div style={{ flex: 1, display: "flex" }} />
           <div
@@ -137,21 +147,27 @@ export async function GET(req: Request) {
           </div>
         </div>
 
-        {/* Title */}
-        <div style={{ display: "flex", fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
+        <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
           Head-to-Head
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
-          {rivalrySubtitle}
+          {`rivalry dossier — your roster vs one leaguemate${
+            isSnapshot
+              ? " · exported matchup"
+              : isLive
+                ? " · live league data"
+                : hasLeagueParams && isDemo
+                  ? " · sample preview (API unavailable)"
+                  : " · sample preview"
+          }`}
         </div>
 
         {hasData ? (
           <div style={{ display: "flex", flexDirection: "column", gap: 14, flex: 1 }}>
-            {/* Team matchup */}
             <div style={{ display: "flex", gap: 14 }}>
               {[
-                { label: "YOU", t: you as TeamSummary, accent: "#d97757" },
-                { label: "THEM", t: them as TeamSummary, accent: "#5c4a3d" },
+                { label: "YOU", t: you!, accent: "#d97757" },
+                { label: "THEM", t: them!, accent: "#5c4a3d" },
               ].map((side) => (
                 <div
                   key={side.label}
@@ -179,7 +195,6 @@ export async function GET(req: Request) {
               ))}
             </div>
 
-            {/* Position depth bars */}
             <div
               style={{
                 display: "flex",
@@ -226,14 +241,12 @@ export async function GET(req: Request) {
               })}
             </div>
 
-            {/* Trade lanes */}
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30, color: "#d97757" }}>
-              {`You offer depth at ${offer} · target their surplus at ${want}`}
+              You offer depth at {offer} · target their surplus at {want}
             </div>
           </div>
         ) : null}
 
-        {/* Footer */}
         <div
           style={{
             display: "flex",
@@ -244,8 +257,13 @@ export async function GET(req: Request) {
             marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>
-            {`razzle.lol/league${league ? `/${league}` : ""}/head-to-head`}
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <div style={{ display: "flex" }}>razzle.lol/league{league ? `/${league}` : ""}/head-to-head</div>
+            {hasData ? (
+              <div style={{ display: "flex", fontSize: 18, color: "#d97757" }}>
+                {`razzle.lol${atlasRoomPath} · ask ${atlas.name} about ${teamLabel(themSummary.team)}`}
+              </div>
+            ) : null}
           </div>
           {isDownload ? (
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>

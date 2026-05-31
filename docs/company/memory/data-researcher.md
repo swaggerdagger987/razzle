@@ -16,6 +16,7 @@ anecdotes (>=3 independent threads = signal).
 
 ## Entries
 
+2026-05-31 | Dashboard comps OG snapshot | c9151786 | keep | roster builder comps export matches in-panel match %
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"
 2026-05-31 | light scan | loading-only OG reads as broken tool in screenshot culture | demo rows + sample preview label | keep | cycle 58 REDDIT-INTEL entry
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
@@ -32,8 +33,8 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG launch10 label | 6e98f4a2 | keep | live cards without sample tag when API rows present
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
+2026-05-31 | Pressure Map share | 864e1d14 | keep | deadline desperation URLs for trade-DM hooks
 2026-05-31 | Trade Network share | da33eafd | keep | collusion/partnership cards sized for Reddit screenshot gravity
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
-2026-05-31 | Build Profiles archetypes | da33eafd | keep | league construction tape for trade-DM screenshots
-2026-05-31 | Lab OG snapshot export | 70af534a | keep | share cards carry same RPS/trade-value rows as in-panel table
+2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots

@@ -14,12 +14,12 @@ failure modes. Karpathy: simplicity first, surgical changes.
 ---
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
+2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
 
 ---
 
 ## Entries
 
-2026-05-31 | Bureau Schedule SOS tab | BureauStrengthOfSchedule Octo 3-file | da33eafd | keep | verdict+PPG bars; pytest 51; epic 3/3
 2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
 2026-05-31 | Bureau Manager Profiles copy link | 04c19959 | keep | copyProfilesLink row; curl manager-profiles 77194B
@@ -44,5 +44,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
-2026-05-31 | league-waiver-tendencies-tab | da33eafd | keep | BureauWaiverTendencies Hawkeye waiver grid; unhide slug; build PASS pytest 51
-2026-05-31 | lab-og-snapshot-tradevalues-prospects | 70af534a | keep | ogSnapshotRows on LabOgExportLink; curl snap ≥40KB
+2026-05-31 | league-strength-of-schedule-tab | da33eafd | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3

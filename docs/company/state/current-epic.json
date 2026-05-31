@@ -1,30 +1,39 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG export cards for Trade Values and Big Board still fall back to generic demo rows — Reddit screenshots don't match the table the user filtered.",
-  "epic_title": "Lab L5 — OG export mirrors in-panel rows on Launch-10 panels",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
+  "epic_title": "Lab L5 — OG snapshot row fidelity",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-snapshot-tradevalues-prospects",
-      "title": "Wire snapshotRows on Trade Values + Prospects export links",
+      "id": "lab-og-prospects-rps-ranked",
+      "title": "Prospects OG export ranks top-6 by RPS with position filter",
       "status": "done",
-      "merge_commit": "70af534a"
+      "merge_commit": "c0358ff3"
     },
     {
-      "id": "lab-og-snapshot-dashboard",
-      "title": "Dynasty Dashboard export passes visible riser/faller snapshot rows",
+      "id": "lab-og-weekly-ppg-ranked",
+      "title": "Weekly OG export ranks top-6 by PPG for active position tab",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "bureau-h2h-export",
-      "title": "Bureau H2H tab share bar + OG snapshot export row",
+      "id": "lab-og-breakouts-score-ranked",
+      "title": "Breakouts OG export ranks top-6 by breakout score",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-snapshot-dashboard",
-  "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T06:15:00Z"
+  "next_atom_id": "lab-og-weekly-ppg-ranked",
+  "created_at": "2026-05-31T05:30:00Z",
+  "updated_at": "2026-05-31T05:50:00Z",
+  "last_cycle_commit": "c0358ff3",
+  "completed_epics": [
+    {
+      "id": "league-l5-unhide-bureau-tabs",
+      "status": "complete",
+      "last_atom": "league-strength-of-schedule-tab",
+      "merge_commit": "eb542d51"
+    }
+  ]
 }

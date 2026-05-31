@@ -10,28 +10,16 @@ interface Props {
   leagueId: string;
 }
 
-function barWidth(value: number, max: number): string {
-  if (max <= 0) return "0%";
-  return `${Math.min(100, Math.round((value / max) * 100))}%`;
-}
-
-function verdictTone(verdict: string): string {
-  if (verdict.toLowerCase().includes("brutal")) return "var(--red)";
-  if (verdict.toLowerCase().includes("easy")) return "var(--green)";
-  if (verdict.toLowerCase().includes("tough")) return "var(--pos-wr)";
-  return "var(--orange)";
-}
-
 export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
   const octo = AGENT_BY_ID.octo;
-  const yourPpg = Number(data.your_ppg ?? 0);
-  const oppAvg = Number(data.opponent_avg_ppg ?? 0);
   const yourRank = data.your_rank != null ? Number(data.your_rank) : null;
-  const verdict = String(data.verdict ?? "Schedule tape loading…");
-  const userId = String(data.user_id ?? "");
-  const leagueLabel = String(data.league_id ?? leagueId);
-  const delta = Math.round((yourPpg - oppAvg) * 10) / 10;
-  const maxBar = Math.max(yourPpg, oppAvg, 1);
+  const yourPpg = data.your_ppg != null ? Number(data.your_ppg) : null;
+  const oppAvg = data.opponent_avg_ppg != null ? Number(data.opponent_avg_ppg) : null;
+  const verdict = String(data.verdict ?? "");
+  const delta =
+    yourPpg != null && oppAvg != null && !Number.isNaN(yourPpg) && !Number.isNaN(oppAvg)
+      ? Math.round((yourPpg - oppAvg) * 10) / 10
+      : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -43,7 +31,7 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
               {octo.name} · {octo.role}
             </p>
             <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              rest-of-season matchup power — your scoring vs the league&apos;s average opponent
+              remaining slate strength from live power rankings — not vibes
             </p>
           </div>
         </div>
@@ -51,116 +39,78 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
           Strength of Schedule
         </h1>
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          league {leagueLabel}
-          {yourRank != null ? ` · power rank #${yourRank}` : ""}
+          league {String(data.league_id ?? leagueId)}
         </p>
       </header>
-
-      <section
-        className="chunky bg-bg-card p-6"
-        style={{ borderColor: verdictTone(verdict) }}
-      >
-        <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-          slate verdict
-        </p>
-        <p
-          className="mt-2 text-xl font-bold"
-          style={{ fontFamily: "var(--font-display)", color: verdictTone(verdict) }}
-        >
-          {verdict}
-        </p>
-        <p className="text-ink-medium mt-2 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {delta >= 0 ? "+" : ""}
-          {delta} PPG vs league-average opponent scoring
-        </p>
-      </section>
-
-      <section className="chunky bg-bg-card p-6">
-        <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-          matchup power bars
-        </p>
-        <div className="mt-4 flex flex-col gap-4">
-          <div>
-            <div className="mb-1 flex justify-between text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-              <span>Your scoring (PPG)</span>
-              <span className="font-bold">{yourPpg}</span>
-            </div>
-            <div className="h-4 border-2 border-ink bg-bg" style={{ boxShadow: "3px 3px 0 var(--ink)" }}>
-              <div
-                className="h-full bg-orange"
-                style={{ width: barWidth(yourPpg, maxBar) }}
-              />
-            </div>
-          </div>
-          <div>
-            <div className="mb-1 flex justify-between text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-              <span>Avg opponent PPG (league)</span>
-              <span className="font-bold">{oppAvg}</span>
-            </div>
-            <div className="h-4 border-2 border-ink bg-bg" style={{ boxShadow: "3px 3px 0 var(--ink)" }}>
-              <div
-                className="h-full"
-                style={{ width: barWidth(oppAvg, maxBar), background: "var(--pos-qb)" }}
-              />
-            </div>
-          </div>
-        </div>
-        <Link
-          href={
-            toRoom({
-              agentId: "octo",
-              question: `My schedule verdict is "${verdict}" — should I sell win-now pieces or buy for playoffs?`,
-              panelSlug: "strength-of-schedule",
-            }) as Route
-          }
-          className="mt-4 inline-block text-sm text-orange underline"
-        >
-          ask Octo about your slate →
-        </Link>
-      </section>
 
       <section className="grid gap-4 sm:grid-cols-3">
         <div className="chunky bg-bg-card p-4" style={{ transform: "rotate(-0.5deg)" }}>
           <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-            your PPG
+            your rank
           </p>
-          <p className="text-3xl font-bold text-orange" style={{ fontFamily: "var(--font-display)" }}>
-            {yourPpg}
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--pos-qb)" }}>
+            {yourRank != null ? `#${yourRank}` : "—"}
           </p>
         </div>
         <div className="chunky bg-bg-card p-4">
           <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-            opp avg PPG
+            your PPG
           </p>
-          <p className="text-3xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--pos-qb)" }}>
-            {oppAvg}
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
+            {yourPpg != null ? yourPpg.toFixed(1) : "—"}
           </p>
         </div>
         <div className="chunky bg-bg-card p-4" style={{ transform: "rotate(0.5deg)" }}>
           <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-            power rank
+            avg opponent PPG
           </p>
-          <p className="text-3xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
-            {yourRank != null ? `#${yourRank}` : "—"}
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--orange)" }}>
+            {oppAvg != null ? oppAvg.toFixed(1) : "—"}
           </p>
         </div>
       </section>
 
-      {userId && (
-        <p className="text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-          sleeper user {userId.slice(0, 8)}…
-        </p>
+      {delta != null && (
+        <section className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            pace edge vs field
+          </p>
+          <p className="mt-1 text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
+            {delta >= 0 ? "+" : ""}
+            {delta} PPG vs average opponent
+          </p>
+        </section>
+      )}
+
+      {verdict && (
+        <section className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            Octo read
+          </p>
+          <p className="mt-2 text-lg text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+            {verdict}
+          </p>
+          <Link
+            href={
+              toRoom({
+                agentId: "octo",
+                question: `My strength of schedule says: ${verdict} — how should I attack the next three weeks?`,
+                panelSlug: "strength-of-schedule",
+              }) as Route
+            }
+            className="mt-3 inline-block text-sm text-orange underline"
+          >
+            ask Octo about your slate →
+          </Link>
+        </section>
       )}
 
       <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/power-rankings` as Route} className="text-orange underline">
-          full league power board →
+          full power rankings →
         </Link>
         <Link href={`/league/${leagueId}/monte-carlo` as Route} className="text-orange underline">
-          monte carlo playoff odds →
-        </Link>
-        <Link href={`/league/${leagueId}/build-profiles` as Route} className="text-orange underline">
-          roster build archetypes →
+          playoff odds sim →
         </Link>
       </footer>
     </div>

@@ -106,10 +106,7 @@ export function TradeValuesRenderer({ panel }: Props) {
       name: p.full_name,
       position: p.position,
       team: p.team,
-      stat:
-        formula && p.formula_score != null
-          ? p.formula_score
-          : (p.trade_value ?? 0),
+      stat: formula ? (p.formula_score ?? 0) : (p.trade_value ?? 0),
       statLabel,
     }));
   }, [players, formula]);
