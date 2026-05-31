@@ -1,31 +1,36 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
-  "epic": "League L5 — Bureau OG terracotta watermark parity (atom 2/4)",
-  "slice_title": "Self-Scout OG terracotta watermark band",
-  "atom_id": "league-og-self-scout-watermark",
-  "parity_ref": "League L5 — watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "atom_id": "explore-og-margin-note-sticker",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 3/4)",
+  "slice_title": "LIVE staff sticker when OG rows carry margin notes",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB; LIVE sticker when live rows have margin notes",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/self-scout/route.tsx",
-    "apps/api/tests/test_self_scout_og_watermark.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_margin_note_sticker.py"
   ],
   "max_files": 2,
-  "max_lines": 130,
+  "max_lines": 60,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_self_scout_og_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_sticker.py apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/explore-og-sticker.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/explore?force_demo=1&download=1'"
   ],
-  "out_of_scope": ["Other Bureau OG routes"],
+  "out_of_scope": [
+    "College-only margin atom",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "Screener table UI changes"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
+    "builder": "SHIP"
   },
   "status": "shipped",
-  "content_commit": "a76b2e4e0"
+  "content_commit": "c60c98409",
+  "reality": "PASS"
 }
