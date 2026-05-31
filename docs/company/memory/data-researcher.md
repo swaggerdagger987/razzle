@@ -29,4 +29,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
-2026-05-31 | Trade Network copy | PLACEHOLDER | keep | partnership graph links for league chat
+2026-05-31 | Trade Network copy | 4ec2ca34 | keep | partnership graph links for league chat
