@@ -1,18 +1,30 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Bureau rivalry OG cards must label live vs sample honestly and match exported H2H snapshot.",
-  "epic_title": "League L5 — Bureau H2H export parity",
-  "parity_ref": "League L5 — Bureau H2H export",
+  "epic_status": "active",
+  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
+  "epic_title": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-h2h-og-snapshot-decode",
-      "title": "OG route uses shared decodeBureauH2HOgSnapshot (m-key)",
+      "id": "league-build-profiles-tab",
+      "title": "Build Profiles tab unhidden with Atlas renderer",
       "status": "done",
-      "merge_commit": "39516855"
+      "merge_commit": "2ee04975"
+    },
+    {
+      "id": "league-waiver-tendencies-tab",
+      "title": "Waiver Tendencies tab unhidden with Hawkeye renderer",
+      "status": "done",
+      "merge_commit": "a2536dcc"
+    },
+    {
+      "id": "league-strength-of-schedule-tab",
+      "title": "Schedule tab unhidden with SOS renderer",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T20:30:00Z",
-  "updated_at": "2026-05-31T20:30:00Z"
+  "next_atom_id": "league-strength-of-schedule-tab",
+  "created_at": "2026-05-31T12:05:00Z",
+  "updated_at": "2026-05-31T06:30:00Z"
 }
