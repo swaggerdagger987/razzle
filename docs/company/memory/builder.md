@@ -17,6 +17,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+<<<<<<< HEAD
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 4a6ef16b | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 
 ---
@@ -25,6 +26,11 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
 2026-05-31 | Bureau Manager Profiles copy link | 04c19959 | keep | copyProfilesLink row; curl manager-profiles 77194B
+=======
+## Entries
+
+2026-05-31 | bureau-h2h-room-hallway | toRoom atlas on OG footer + ShareBar | 389cab8e | SHIP | keep | duplicate question strings later | H2H epic done | evidence/2026-05-31-bureau-h2h-room-hallway.md
+>>>>>>> origin/razzle-v2-redesign
 2026-05-31 | Bureau Self-Scout copy link | 3fc08ebc | keep | copyScoutLink row; curl self-scout 66997B
 2026-05-30 | Lab L5 OG — rewrite /og/[panel]/route.tsx with live data fetch, agent badge, position pills | 2e11270 | keep | Single file ~250 lines; follows Explore OG pattern from cycle 55; 13 stat candidate keys; graceful fallback to icon+loadingCopy when API returns empty
 2026-05-31 | Lab OG demo rows — DEFAULT_DEMO_ROWS + slug overrides, isDemo flag, Satori blurb fix | 0019814f | keep | Mirrors H2H demo pattern; removed loading-only empty state; Gate C curl 59KB PNG
@@ -39,7 +45,12 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Lab OG live panel rows | 2cb898b6 | keep | fetchLiveOgRows panels slug + candidates extract; curl rankings 59509B breakouts 60649B
 2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
+<<<<<<< HEAD
 2026-05-31 | Power Rankings OG | 90bf2dd5 | keep | /og/power-rankings + BureauPowerRankingsShareBar; curl 59807B
 2026-05-31 | Roster Depth tab | 2d11a65f | keep | BureauRosterDepth Dolphin; unhide roster-depth; 3 files
 2026-05-31 | Build Profiles tab | 309f8a8b | keep | BureauBuildProfiles Atlas; unhide build-profiles; 3 files
 2026-05-31 | Trade Network copy link | 2c74e05c | keep | BureauTradeNetworkShareBar; curl trade-network 68090B
+=======
+2026-05-31 | Bureau H2H snapshot export | 3d498394 | keep | encodeH2hSnapshot on BureauH2HShareBar; curl 59305B demo 54444B snap
+2026-05-31 | Bureau H2H live API OG | 59a54b72 | keep | resolveApiOrigin on head-to-head route; curl params 62718B
+>>>>>>> origin/razzle-v2-redesign
