@@ -40,6 +40,8 @@ export function ExplorePageClient() {
         ? defaultSortForUniverse(universe)
         : params.sort;
   const sortKey = params.sort;
+  const exploreLoadingAgent = universe === "college" ? "hawkeye" : "razzle";
+  const exploreLoadingCopy = loadingCopyForAgent(exploreLoadingAgent);
 
   useEffect(() => {
     document.body.classList.toggle("college-mode", universe === "college");
@@ -182,7 +184,7 @@ export function ExplorePageClient() {
               <strong>{query.data.count}</strong> {statLabel}
             </>
           ) : (
-            universe === "college" ? loadingCopyForAgent("hawkeye") : "pulling film..."
+            exploreLoadingCopy
           )}
         </span>
         <button
@@ -236,7 +238,7 @@ export function ExplorePageClient() {
         onInstalled={onFormulaSaved}
       />
 
-      {query.isPending && <LoadingState className="p-8" />}
+      {query.isPending && <LoadingState className="p-8" message={exploreLoadingCopy} />}
       {query.isError && (
         <p className="p-6 text-red">something fumbled: {(query.error as Error).message}</p>
       )}
