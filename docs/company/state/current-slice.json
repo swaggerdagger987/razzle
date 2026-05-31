@@ -2,28 +2,26 @@
   "date": "2026-05-31",
   "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
   "epic": "Lab L5 — formula-sorted OG live parity",
-  "slice_title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
-  "atom_id": "lab-og-buysell-formula-live",
+  "slice_title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
+  "atom_id": "lab-og-from-panel-gate-c-rest",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_launch10_formula_live.py"
+    "apps/api/tests/test_og_from_panel_sticker.py",
+    "apps/api/tests/test_lab_og_snapshot_codec.py"
   ],
   "max_files": 2,
-  "max_lines": 80,
+  "max_lines": 120,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q --noconftest",
-    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/buysell?download=1&position=WR'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py apps/api/tests/test_lab_og_snapshot_codec.py -q --noconftest",
+    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?download=1&snapshot=<PROSPECTS_SNAP>'",
+    "curl -s -o /tmp/og-tradevalues-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/tradevalues?download=1&snapshot=<TRADEVALUES_SNAP>'"
   ],
-  "out_of_scope": ["BuySellRenderer UI", "new API fields", "snapshot FROM PANEL gate"],
+  "out_of_scope": ["route.tsx changes", "new panels", "formula_score live paths"],
   "builder_mode": "composer-surgical",
-  "content_commit": "21efb7ef3",
-  "reality": "PASS",
-  "merge": "pending",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",

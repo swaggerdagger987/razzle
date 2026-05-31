@@ -20,7 +20,7 @@
     {
       "id": "lab-og-from-panel-gate-c-rest",
       "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
