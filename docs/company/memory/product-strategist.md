@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-tolab-snapshot-player | d2677f2cb | SHIP | Lab L5 hallway epic complete; snapshot pid preserves toLab player.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
 

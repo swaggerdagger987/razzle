@@ -1,33 +1,31 @@
 {
   "date": "2026-05-31",
   "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic": "Lab L5 — OG hallway deep links",
-  "slice_title": "Gamelog + dynasty-comps default player in OG toLab band",
-  "atom_id": "lab-og-tolab-gamelog-default",
+  "epic": "Lab L5 — OG hallway deep links (atom 3/3)",
+  "slice_title": "Snapshot exports preserve player in OG toLab watermark",
+  "atom_id": "lab-og-tolab-snapshot-player",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
+    "apps/web/components/lab/LabOgExportLink.tsx",
     "apps/web/app/og/[panel]/route.tsx",
     "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
-  "max_files": 2,
-  "max_lines": 35,
+  "max_files": 3,
+  "max_lines": 90,
   "acceptance_commands": [
     "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog-tolab.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/gamelog?download=1'"
+    "curl -s -o /tmp/og-gamelog-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/gamelog?download=1&snapshot=eyJwaWQiOiIwMC0wMDM5OTAwIiwiciI6W3sibiI6IkouIENoYXNlIiwicCI6IldSIiwidCI6IkNJTiIsInMiOjI0LjIsInNsIjoiRlBUUyJ9XX0'"
   ],
-  "out_of_scope": ["FROM PANEL sticker changes", "New panels", "Bureau H2H"],
+  "out_of_scope": ["Bureau OG", "New panels", "FROM PANEL sticker copy"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "content_commit": "c311a15a8",
-  "reality": "PASS",
-  "merge": "pending"
+  }
 }
