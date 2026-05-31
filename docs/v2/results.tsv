@@ -59,4 +59,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 99	7fb236c5	depth+voice+simplicity	keep	Lab	L5 Buy/sell OG position filter	trust=T5,T6; position on LabOgExportLink; curl buysell WR 44258B
 101	7fb236c5	depth+voice+simplicity	keep	Lab	L5 Efficiency OG position filter	trust=T5,T6; position on export; curl 48610B; position epic atom 2/3
 102	b99dbd76	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS OG snapshot	trust=T2,T5,T6; encode/decode snapshot; curl demo 58624B; ShareBar wired
-109	a24756c0	depth+voice+simplicity	keep	Lab	L5 Gamelog OG position filter	trust=T5,T6; position on export; curl gamelog WR 48035B; position epic gamelog atom
+109	228c4b59	depth+voice+simplicity	keep	Lab	L5 Gamelog OG position filter	trust=T5,T6; position on export; curl gamelog WR 48035B; position epic gamelog atom
