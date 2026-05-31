@@ -1,32 +1,33 @@
 {
   "date": "2026-05-31",
-  "atom_id": "bureau-self-scout-sharebar-snapshot",
-  "big_problem": "Self-Scout export cards still hit live API or demo — share URLs must encode in-panel depth grades so OG matches Bureau without Sleeper on curl.",
-  "epic": "League L5 — Bureau Self-Scout snapshot export (atom 1/3)",
-  "slice_title": "Self-Scout ShareBar + OG snapshot codec matches panel depth grades",
-  "parity_ref": "League L5 — watermarked export / Bureau H2H export",
+  "big_problem": "Bureau rivalry screenshots die in DMs — copied H2H links drop opponent context so managers reopen the wrong matchup.",
+  "epic": "League L5 — Bureau H2H export deep-links",
+  "slice_title": "Opponent picker preserves user= in URL when rivalry link shared",
+  "atom_id": "bureau-h2h-pick-opponent-preserve-user",
+  "parity_ref": "PARITY Explore L5 — Bureau H2H export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "acceptance_ref": "FACTORY-DOD Gate C — H2H rivalry URL self-describing",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-self-scout-og-snapshot.ts",
-    "apps/web/components/league/BureauSelfScoutShareBar.tsx",
-    "apps/web/components/league/BureauSelfScout.tsx",
-    "apps/web/app/og/self-scout/route.tsx",
-    "apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py"
+    "apps/web/components/league/BureauHeadToHead.tsx",
+    "apps/web/components/league/LeagueDashboard.tsx",
+    "apps/api/tests/test_bureau_h2h_rivalry_url.py"
   ],
-  "max_files": 5,
-  "max_lines": 220,
+  "max_files": 3,
+  "max_lines": 50,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_bureau_self_scout_og_snapshot_codec.py -q",
-    "npm run build --workspace=apps/web 2>&1 | tail -8"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests/test_bureau_h2h_rivalry_url.py -q"
   ],
-  "out_of_scope": ["manager-profiles", "API schema changes", "new npm deps"],
+  "out_of_scope": [
+    "OG route changes",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   }
 }
