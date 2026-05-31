@@ -1,9 +1,9 @@
-cycle: 90
+cycle: 93
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: league-waiver-tendencies-tab
-last_keep_cycle: 90
-last_commit: c9151786
-lab_l5_dashboard_og_snapshot: complete
-lab_l5_og_snapshot_epic: complete
+next_slice: explore-og-preview-watermark
+last_keep_cycle: 93
+last_commit: da33eafd
+explore_l5_watermark_band_epic: active
+explore_l5_og_watermark_band: in_progress
