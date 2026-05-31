@@ -106,7 +106,8 @@ export async function GET(req: Request) {
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 12 }}>
           <div style={{ fontSize: 48, display: "flex" }}>🐯</div>
           <div style={{ display: "flex", fontSize: 36, fontWeight: 700 }}>
-            Razzle<span style={{ color: "#d97757" }}>.lol</span>
+            <span style={{ display: "flex" }}>Razzle</span>
+            <span style={{ display: "flex", color: "#d97757" }}>.lol</span>
           </div>
           <div style={{ flex: 1, display: "flex" }} />
           <div
@@ -128,7 +129,7 @@ export async function GET(req: Request) {
         </div>
 
         {/* Title */}
-        <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
+        <div style={{ display: "flex", fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
           Head-to-Head
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
@@ -218,7 +219,7 @@ export async function GET(req: Request) {
 
             {/* Trade lanes */}
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30, color: "#d97757" }}>
-              You offer depth at {offer} · target their surplus at {want}
+              {`You offer depth at ${offer} · target their surplus at ${want}`}
             </div>
           </div>
         ) : null}
@@ -234,7 +235,9 @@ export async function GET(req: Request) {
             marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>razzle.lol/league{league ? `/${league}` : ""}/head-to-head</div>
+          <div style={{ display: "flex" }}>
+            {`razzle.lol/league${league ? `/${league}` : ""}/head-to-head`}
+          </div>
           {isDownload ? (
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
               made with 🐯 razzle.lol
