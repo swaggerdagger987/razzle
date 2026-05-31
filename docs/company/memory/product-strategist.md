@@ -40,4 +40,4 @@ new evidence.
 2026-05-31 | Lab OG snapshot atom 1/3 | 70af534a | SHIP | keep | export card matches filtered bar chart for Reddit screenshots
 =======
 2026-05-31 | L4 dynasty comps Pro teaser | da33eafd | SHIP | keep | Comps gate shows match-tier preview not generic blur
->>>>>>> 6803961f (standup: 2026-05-31 — PASS Lab L4 dynasty comps Pro teaser)
+>>>>>>> 33cba725 (standup: 2026-05-31 — PASS Lab L4 dynasty comps Pro teaser)

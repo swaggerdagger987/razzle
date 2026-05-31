@@ -48,4 +48,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | league-strength-of-schedule-tab | da33eafd | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
 =======
 2026-05-31 | lab-dynasty-comps-pro-teaser | da33eafd | keep | dynasty-comps comp-tier teaser rows; build PASS
->>>>>>> 6803961f (standup: 2026-05-31 — PASS Lab L4 dynasty comps Pro teaser)
+>>>>>>> 33cba725 (standup: 2026-05-31 — PASS Lab L4 dynasty comps Pro teaser)
