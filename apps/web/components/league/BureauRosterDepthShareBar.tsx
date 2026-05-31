@@ -1,30 +1,23 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import {
-  encodeBureauPowerRankingsOgSnapshot,
-  type BureauPowerRankingsOgRow,
-} from "@/lib/bureau-power-rankings-og-snapshot";
 
 interface Props {
   leagueId: string;
-  /** Top rows visible in Bureau — OG card matches this board without live API. */
-  rows?: BureauPowerRankingsOgRow[];
+  userId: string;
 }
 
-/** Copyable power board URL + OG export — mirrors BureauH2HShareBar. */
-export function BureauPowerRankingsShareBar({ leagueId, rows }: Props) {
+/** Copyable roster depth URL + OG export — mirrors BureauPowerRankingsShareBar. */
+export function BureauRosterDepthShareBar({ leagueId, userId }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const boardPath = `/league/${leagueId}/power-rankings`;
+  const boardPath = `/league/${leagueId}/roster-depth`;
 
   const ogParams = new URLSearchParams({
     league: leagueId,
+    user: userId,
     download: "1",
   });
-  const snap =
-    rows?.length ? encodeBureauPowerRankingsOgSnapshot({ rows: rows.slice(0, 5) }) : undefined;
-  if (snap) ogParams.set("snapshot", snap);
 
   const copyLink = useCallback(async () => {
     const url =
@@ -41,11 +34,11 @@ export function BureauPowerRankingsShareBar({ leagueId, rows }: Props) {
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2">
       <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
-        {copied ? "copied!" : "copy board link"}
+        {copied ? "copied!" : "copy depth link"}
       </button>
       <a
-        href={`/og/power-rankings?${ogParams.toString()}`}
-        download="razzle-power-rankings.png"
+        href={`/og/roster-depth?${ogParams.toString()}`}
+        download="razzle-roster-depth.png"
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
       >

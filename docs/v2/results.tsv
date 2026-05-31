@@ -62,5 +62,7 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 94	98ae0ef2	depth+voice+simplicity	keep	Lab	L5 Buy/sell combined OG snapshot lanes	trust=T5,T6; Buy/Sell labels 3+3; curl buysell snap 57884B demo 58072B; pytest 51; web build; epic atom 3/4
 95	5ed39e14	depth+voice+simplicity	keep	Lab	L5 Trade values formula-ranked OG rows	trust=T5,T6; rank·Value or rank·formula on snapshot; curl tradevalues snap 62441B demo 62488B; pytest 51; web build; epic atom 4/4 complete
 96	7ec8f82a	depth+voice+simplicity	keep	League	L5 H2H ShareBar canonical snapshot codec	trust=T5,T6; encodeBureauH2HOgSnapshot; curl h2h demo 71895B snap 70829B; pytest 51; web build; epic atom 1/3
-97	e0819084	depth+voice+simplicity	keep	Lab	L5 OG tradevalues+efficiency direct sort	trust=T5,T6; DIRECT_STAT_SORT_SLUGS; curl tradevalues 51115B efficiency 45113B; direct-sort epic 1/3
-98	4a62c72e	depth+voice+simplicity	keep	Lab	L5 OG buysell+aging direct sort	trust=T5,T6; DIRECT_STAT_SORT buysell aging; curl 44258B/44952B; epic atom 2/3
+97	26a22f69	depth+voice+simplicity	keep	League	L5 Power Rankings OG snapshot rows	trust=T5,T6; encode top-5 board; curl snap 50084B; Bureau OG epic atom 1/3
+98	3f584f61	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies OG FAAB card	trust=T5,T6; /og/waiver-tendencies 73121B; share bar; pytest 51; depth OG epic atom 3/4
+99	e0819084	depth+voice+simplicity	keep	Lab	L5 OG tradevalues+efficiency direct sort	trust=T5,T6; DIRECT_STAT_SORT_SLUGS; curl tradevalues 51115B efficiency 45113B; direct-sort epic 1/3
+100	4a62c72e	depth+voice+simplicity	keep	Lab	L5 OG buysell+aging direct sort	trust=T5,T6; DIRECT_STAT_SORT buysell aging; curl 44258B/44952B; epic atom 2/3

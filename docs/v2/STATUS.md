@@ -22,7 +22,7 @@ From `LOOP-STATE.md`:
 | Next slice | lab-og-rankings-dashboard-sort (OG direct-link epic atom 3/3) |
 | Last commit | `4a62c72e` |
 
-Recent completions (cycle 96): Lab OG buysell + aging direct-link stat sort; cycle 95 tradevalues/efficiency on branch pending merge.
+Recent completions (cycle 98): Lab OG buysell + aging direct-link stat sort; tradevalues/efficiency direct sort in same PR.
 
 ---
 
