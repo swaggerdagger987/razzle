@@ -22,12 +22,11 @@
   "created_at": "2026-05-31T14:30:00Z",
   "updated_at": "2026-05-31T15:12:00Z",
   "completed_epics": [
+    "lab-l2-sidebar-staff-desks",
     {
-      "id": "lab-l5-og-hallway-position-defaults",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-weekly-position",
-      "merge_commit": "9be64d109"
-    },
-    "lab-l2-sidebar-staff-desks"
+      "id": "league-l5-bureau-og-watermark",
+      "status": "active",
+      "next_atom_id": "league-og-pressure-map-watermark"
+    }
   ]
 }
