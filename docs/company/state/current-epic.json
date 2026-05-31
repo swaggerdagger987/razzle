@@ -1,32 +1,32 @@
 {
-  "big_problem": "Explore share cards don't mirror the screener URL — college toggles and filters get lost on export, so Reddit screenshots lie about the view.",
-  "epic_title": "Explore L5 — OG card matches screener query state",
+  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
+  "epic_title": "Lab L5 — OG export on empty panel states",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "Explore L5",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "explore-og-universe-query",
-      "title": "Explore OG — season/team/universe query on card + share URLs",
-      "status": "done",
-      "merge_commit": "7dbd4b11"
+      "id": "lab-gamelog-empty-weeks-export",
+      "title": "Gamelog — export card when player loaded but weeks empty",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "explore-og-demo-fallback-rows",
-      "title": "Explore OG — static demo rows when API empty (not pulling film)",
-      "status": "done",
-      "merge_commit": "2d0d3bde"
+      "id": "lab-efficiency-empty-export",
+      "title": "Efficiency — export sample card on empty position board",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "explore-og-formula-sort-label",
-      "title": "Explore OG — formula sort label on card when apiSort differs",
-      "status": "done",
-      "merge_commit": "710ec33e"
+      "id": "lab-rankings-empty-export",
+      "title": "Rankings — export sample card when filter returns zero rows",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:45:00Z",
-  "updated_at": "2026-05-31T12:05:00Z",
+  "next_atom_id": "lab-gamelog-empty-weeks-export",
+  "epic_status": "active",
+  "created_at": "2026-05-31T10:05:27Z",
+  "updated_at": "2026-05-31T10:05:27Z",
   "completed_epics": [
     {
       "id": "explore-l5-og-query-epic",

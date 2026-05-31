@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-gamelog-empty-weeks-export | da33eafd | PASS | curl gamelog 59323B; pytest 78; Gate C.
+
 2026-05-31 | explore-og-formula-sort-label | 710ec33e | PASS | curl formula OG 73889B; build exit 0.
 
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | PASS | curl force_demo 64789B; build ok; Gate C.

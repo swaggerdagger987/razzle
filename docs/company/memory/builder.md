@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-gamelog-empty-weeks-export | da33eafd | keep | GamelogRenderer empty-week export footer; curl 59323B.
+
 2026-05-31 | explore-og-formula-sort-label | 710ec33e | keep | sort+api_sort on ShareButton; FORMULA SORT OG badge; curl 73889B.
 
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | keep | DEMO_NFL/COLLEGE + force_demo; curl 64789B.
