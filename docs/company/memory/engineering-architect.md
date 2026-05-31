@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | launch10 teaser audit | b0405d43 | keep | 2 files; LAUNCH_10_* exports + pytest guard.
+2026-05-31 | lab-pro-gate-profile-teasers | pending | Atlas percentiles+strengths blur rows; cycle 123.
 
 2026-05-31 | gamelog weeks extract | 40c80f0e | 1-file ~35 lines; player-scoped weeks[] not players[]; no PANEL_OG_STAT_KEY.
 

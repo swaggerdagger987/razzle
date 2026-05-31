@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | no new REDDIT-INTEL; teaser audit only.
+2026-05-31 | lab-pro-gate-profile-teasers | pending | Atlas percentiles+strengths blur rows; cycle 123.
 
 2026-05-31 | gamelog OG weeks | 40c80f0e | PASS | No new intel; in-panel ogSnapshotRows already defined peak-week sort.
 

@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
+2026-05-31 | lab-pro-gate-profile-teasers | pending | Atlas percentiles+strengths blur rows; cycle 123.
 
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | keep | extractGamelogWeekRows; Wk N + fpts sort; curl 56390B.
 
