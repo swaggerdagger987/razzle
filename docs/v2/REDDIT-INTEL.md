@@ -256,3 +256,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Slice:** Lab L5 — `/og/[panel]` demo player rows + "sample preview" when API empty.
 - **Council cycle:** 58
 - **Screenshot potential:** Dynasty rankings / breakout cards droppable in threads even before API sync on preview hosts
+
+## 2026-05-31 — Cycle 59
+
+### r/DynastyFF — panel-specific stat labels on share cards (pattern)
+- **Pattern:** Users screenshot **tool-specific** views — weekly FPTS grids, prospect scores, aging curves — and comment using that vocabulary. Generic "Value" columns on a heatmap card read as lazy export.
+- **Razzle slice:** Lab L5 atom 2 — launch-10 OG demo rows with FPTS/Score/Rank/Peak Age/Chg stat headers per panel slug.
+- **Council cycle:** 59
+- **Screenshot potential:** Weekly heatmap + prospect big board cards now match in-product column semantics on preview hosts

@@ -221,7 +221,8 @@ async function fetchPanelData(
 function formatStat(n: number): string {
   if (n === 0) return "—";
   if (Number.isInteger(n)) return n.toLocaleString();
-  return n.toFixed(1);
+  const sign = n > 0 ? "+" : "";
+  return `${sign}${n.toFixed(1)}`;
 }
 
 export async function GET(
