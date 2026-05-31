@@ -20,23 +20,11 @@ type WaiverRow = {
   archetype: string;
 };
 
-const STYLE_COLORS: Record<string, string> = {
-  "The Streamer (cheap, frequent)": "var(--pos-rb)",
-  "The Hoarder (rare, expensive)": "var(--pos-qb)",
-  "The Active Manager (aggressive on both axes)": "var(--orange)",
-  "The Set-and-Forget": "var(--ink-medium)",
-  "The Opportunist": "var(--pos-wr)",
-};
-
-function styleColor(archetype: string): string {
-  return STYLE_COLORS[archetype] ?? "var(--orange)";
-}
-
 export function BureauWaiverTendencies({ data, leagueId }: Props) {
   const hawkeye = AGENT_BY_ID.hawkeye;
   const rows = (data.rows as WaiverRow[]) ?? [];
-  const aggressor = rows.find((r) => r.archetype.includes("Active")) ?? rows[0] ?? null;
-  const maxAdds = Math.max(1, ...rows.map((r) => r.adds));
+  const hero = rows.find((r) => r.archetype.includes("Hoarder")) ?? rows[0] ?? null;
+  const totalAdds = rows.reduce((n, r) => n + r.adds, 0);
 
   return (
     <div className="flex flex-col gap-6">
@@ -48,7 +36,7 @@ export function BureauWaiverTendencies({ data, leagueId }: Props) {
               {hawkeye.name} · {hawkeye.role}
             </p>
             <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              who hoards FAAB, who panic-drops, who streams every week
+              who hammers waivers, who hoards FAAB, who panic-drops
             </p>
           </div>
         </div>
@@ -56,78 +44,62 @@ export function BureauWaiverTendencies({ data, leagueId }: Props) {
           Waiver Tendencies
         </h1>
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {rows.length} managers · transaction tape classified
+          {rows.length} managers · {totalAdds} adds tracked
         </p>
       </header>
 
-      {aggressor && (
+      {hero && (
         <section className="chunky bg-bg-card p-4">
           <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-            waiver radar
+            watch list
           </p>
-          <p className="mt-1 text-sm" style={{ fontFamily: "var(--font-hand)" }}>
-            {aggressor.team} — {aggressor.archetype}. {aggressor.adds} adds, ${aggressor.faab_spent} FAAB,{" "}
-            {aggressor.drops} drops.
+          <p className="mt-1 font-bold" style={{ fontFamily: "var(--font-display)" }}>
+            {hero.team} — {hero.archetype}
+          </p>
+          <p className="mt-1 text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+            {hero.adds} adds · ${hero.faab_spent} FAAB · {hero.drops} drops
           </p>
           <Link
             href={
               toRoom({
                 agentId: "hawkeye",
-                question: `Who should I stash before ${aggressor.team} claims them on waivers?`,
+                question: `What waiver move should I expect from ${hero.team} this week?`,
                 panelSlug: "waiver-tendencies",
               }) as Route
             }
             className="mt-3 inline-block text-sm text-orange underline"
           >
-            ask Hawkeye about {aggressor.team} →
+            ask {hawkeye.name} →
           </Link>
         </section>
       )}
 
-      <section className="chunky bg-bg-card p-4">
-        <p className="mb-4 text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-          league waiver board
-        </p>
-        {!rows.length ? (
-          <p className="text-ink-medium text-sm">no waiver moves logged yet — sync a league with transactions.</p>
-        ) : (
-          <ul className="flex flex-col gap-3">
-            {rows.map((row) => {
-              const color = styleColor(row.archetype);
-              const addWidth = Math.min(100, Math.max(8, (row.adds / maxAdds) * 100));
-              return (
-                <li key={row.roster_id} className="pressure-bar-row">
-                  <div className="pressure-bar-name">
-                    <span className="font-bold" style={{ fontFamily: "var(--font-display)" }}>
-                      {row.team}
-                    </span>
-                    <span className="text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-                      {" "}
-                      {row.adds} adds · {row.drops} drops · ${row.faab_spent} FAAB
-                    </span>
-                  </div>
-                  <div className="pressure-bar-track">
-                    <div className="pressure-bar-fill" style={{ width: `${addWidth}%`, background: color }} />
-                  </div>
-                  <span className="pressure-bar-tag text-xs" style={{ color, borderColor: color }}>
-                    {row.archetype.replace("The ", "")}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+      <section className="grid gap-4 sm:grid-cols-2">
+        {rows.map((row, i) => (
+          <div
+            key={row.roster_id}
+            className="chunky bg-bg-card p-4"
+            style={{ transform: i % 2 === 0 ? "rotate(-0.3deg)" : "rotate(0.3deg)" }}
+          >
+            <p className="font-bold" style={{ fontFamily: "var(--font-display)" }}>
+              {row.team}
+            </p>
+            <p className="text-xs text-ink-light mt-1" style={{ fontFamily: "var(--font-mono)" }}>
+              {row.adds} adds · {row.drops} drops · ${row.faab_spent} FAAB
+            </p>
+            <p className="mt-2 text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+              {row.archetype}
+            </p>
+          </div>
+        ))}
       </section>
 
-      <footer className="flex flex-wrap items-center gap-4 text-sm">
-        <Link href={`/league/${leagueId}/roster-depth` as Route} className="text-orange underline">
-          roster depth →
-        </Link>
+      <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/trade-finder` as Route} className="text-orange underline">
           trade finder →
         </Link>
-        <Link href={`/league/${leagueId}/self-scout` as Route} className="text-orange underline">
-          self-scout →
+        <Link href={`/league/${leagueId}/build-profiles` as Route} className="text-orange underline">
+          build profiles →
         </Link>
       </footer>
     </div>

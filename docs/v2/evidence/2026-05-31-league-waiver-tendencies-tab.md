@@ -1,15 +1,15 @@
-# Evidence — League L5 Waiver Tendencies Bureau tab
+# Evidence — League L5 waiver-tendencies tab
 
 **Date:** 2026-05-31  
-**Atom:** `league-waiver-tendencies-tab`  
-**Slice:** Unhide `waiver-tendencies` with `BureauWaiverTendencies` Hawkeye renderer
+**Atom:** `league-waiver-tendencies-tab`
 
-| Check | Result |
-|-------|--------|
-| `npm run build --workspace=apps/web` | exit 0 |
-| `JWT_SECRET=test python3 -m pytest apps/api/tests -q` | 52 passed; 4 screener snapshot failures pre-existing on base (unrelated to web diff) |
-| Tab visible | `waiver-tendencies` removed from `HIDDEN_BUREAU_SLUGS` |
-| Renderer wired | `BureauFeatureBody` → `BureauWaiverTendencies` |
-| Hallway | Hawkeye ask link + footer to roster-depth, trade-finder, self-scout |
+## In-product
 
-**Verdict:** PASS — in-product Bureau tab.
+- `waiver-tendencies` removed from `HIDDEN_BUREAU_SLUGS`
+- `BureauWaiverTendencies` Hawkeye renderer wired
+
+## Build
+
+- `npm run build --workspace=apps/web` — PASS
+
+**Verdict:** PASS
