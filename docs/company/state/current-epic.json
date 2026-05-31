@@ -21,7 +21,7 @@
       "id": "lab-og-tolab-snapshot-player",
       "title": "Snapshot exports preserve player in watermark",
       "status": "done",
-      "merge_commit": "f6e0985f3"
+      "merge_commit": "106d508"
     }
   ],
   "next_atom_id": null,
@@ -44,7 +44,7 @@
       "id": "lab-l5-og-hallway-deep-links",
       "status": "complete",
       "last_atom": "lab-og-tolab-snapshot-player",
-      "merge_commit": "f6e0985f3"
+      "merge_commit": "106d508"
     },
     {
       "id": "league-l5-trade-finder-gtm",

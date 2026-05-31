@@ -1,9 +1,9 @@
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | PASS | pytest 4; build exit 0; curl gamelog snap 53756B.
+2026-05-31 | lab-og-tolab-snapshot-player | 106d508 | PASS | pytest 4; build exit 0; curl gamelog snap 53756B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker
 
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | pytest 5; web build; Gate C evidence on file.
+2026-05-31 | lab-og-from-panel-gate-c-rest | 106d508 | PASS | pytest 5; web build; Gate C evidence on file.
 
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | PASS | pytest 3; curl gamelog 62232B; web build exit 0.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | PASS | pytest 4; curl 57910B + snapshot 55930B.

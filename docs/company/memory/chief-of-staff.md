@@ -1,9 +1,9 @@
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | Factory cycle 1; hallway epic 3/3 complete.
+2026-05-31 | lab-og-tolab-snapshot-player | 106d508 | SHIP | Factory cycle 1; hallway epic 3/3 complete.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | SHIP | Good morning cycle 1; formula OG epic closed; PR #1267.
+2026-05-31 | lab-og-from-panel-gate-c-rest | 106d508 | SHIP | Good morning cycle 1; formula OG epic closed; PR #1267.
 
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Factory cycle 2; hallway epic atom 2/3.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | Trade Finder snapshot atom 2/3.
