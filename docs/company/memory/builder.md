@@ -30,4 +30,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | LabOgExportLink rankings+breakouts | 32d682ab | keep | 2 renderer footers on latest base; curl rankings 59509B breakouts 60649B
 2026-05-31 | Lab OG snapshot buysell/efficiency/aging | snapshotRows useMemo | 33808392 | keep | 3 renderers | — | — | evidence/2026-05-31-lab-og-snapshot-launch10-panels.md
 2026-05-31 | Lab OG snapshot gamelog/comps | Wk N + Match % rows | 75c88d30 | keep | 2 renderers | curl gamelog 40520B comps 47292B
-2026-05-31 | Lab OG live-label subtitles | ogSourceSuffix in route.tsx | da33eafd | keep | 1 file | curl rankings 59509B
+2026-05-31 | Lab OG live-label subtitles | ogSourceSuffix in route.tsx | e31a59f1 | keep | 1 file | curl rankings 59509B

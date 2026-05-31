@@ -29,4 +29,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | base64url snapshot + request-origin API fallback
 2026-05-31 | Lab OG snapshot buysell/efficiency/aging | snapshotRows useMemo | 33808392 | keep | 3 renderers | — | — | evidence/2026-05-31-lab-og-snapshot-launch10-panels.md
 2026-05-31 | Lab OG snapshot gamelog/comps | Wk N row encoding | 75c88d30 | keep | 2 files ≤80 lines
-2026-05-31 | Lab OG live-label | ogSourceSuffix priority chain | da33eafd | keep | 1 file route.tsx
+2026-05-31 | Lab OG live-label | ogSourceSuffix priority chain | e31a59f1 | keep | 1 file route.tsx
