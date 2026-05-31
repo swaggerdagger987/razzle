@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Roster Depth tab (cycle 81)
+- **Angle:** Injury-risk depth grades with named players beat generic "roster analysis" posts.
+- **Screenshot hook:** Dolphin A–F grid with dynasty values + thin-spot Room ask.
+
 ### 2026-05-31 — Power Rankings OG (cycle 80)
 - **Angle:** Pythagorean luck + differential boards travel better than W-L tables in dynasty league chats.
 - **Screenshot hook:** Octo power board with demo teams + luck tags on `/og/power-rankings`.
