@@ -1,9 +1,8 @@
-cycle: 90
+cycle: 94
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: league-waiver-tendencies-tab
-last_keep_cycle: 90
-last_commit: c9151786
-lab_l5_dashboard_og_snapshot: complete
-lab_l5_og_snapshot_epic: complete
+next_slice: PARITY — Bureau H2H export or next Lab L5 depth
+last_keep_cycle: 94
+last_commit: da33eafd
+lab_l5_og_fidelity_epic: complete
