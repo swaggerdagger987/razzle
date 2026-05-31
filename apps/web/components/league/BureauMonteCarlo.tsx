@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import type { Route } from "next";
 import { useEffect, useState } from "react";
 import { getSleeperUser } from "@/lib/sleeper";
+import { BureauMonteCarloShareBar } from "./BureauMonteCarloShareBar";
 import { BureauRowsTable } from "./BureauRowsTable";
 
 interface Props {
@@ -265,32 +266,33 @@ export function BureauMonteCarlo({ data, leagueId }: Props) {
       )}
 
       {top && (
-        <div className="flex flex-wrap items-center gap-3">
-          <Link
-            href={
-              toRoom({
-                agentId: "octo",
-                question: `${top.manager} leads at ${top.championship_pct}% title / ${top.playoff_pct ?? 0}% playoff odds — what moves the needle?`,
-              }) as Route
-            }
-            className="btn-chunky w-fit text-sm"
-          >
-            ask {octo.name} in film room →
-          </Link>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href={
+                toRoom({
+                  agentId: "octo",
+                  question: `${top.manager} leads at ${top.championship_pct}% title / ${top.playoff_pct ?? 0}% playoff odds — what moves the needle?`,
+                }) as Route
+              }
+              className="btn-chunky w-fit text-sm"
+            >
+              ask {octo.name} in film room →
+            </Link>
+          </div>
           {(() => {
             const user = getSleeperUser();
             if (!user?.user_id) return null;
+            const scenarioParts: string[] = [];
+            if (giveId) scenarioParts.push(`give=${encodeURIComponent(giveId)}`);
+            if (getId) scenarioParts.push(`get=${encodeURIComponent(getId)}`);
+            if (partnerRoster) scenarioParts.push(`partner=${encodeURIComponent(partnerRoster)}`);
             return (
-              <a
-                href={`/og/monte-carlo?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                  user.user_id,
-                )}&download=1`}
-                download="razzle-monte-carlo.png"
-                className="btn-chunky active text-xs"
-                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-              >
-                export card
-              </a>
+              <BureauMonteCarloShareBar
+                leagueId={leagueId}
+                userId={user.user_id}
+                scenarioQuery={scenarioParts.length ? scenarioParts.join("&") : undefined}
+              />
             );
           })()}
         </div>
