@@ -10,6 +10,7 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
+2026-05-31 | factory cycle 96 build-profiles merged PR 577 | da33eafd | SHIP | KEEP resolve docs conflicts before merge — never ship CONFLICTING PR | — | — | share-export ship epic 1/2 done
 2026-05-31 | factory cycle 95 build-profiles share to base | 8a08b2f4 | SHIP | KEEP merge base before publish — restores SOS tab | — | — | share-export ship epic 1/2
 2026-05-31 | factory cycle 94 waiver tendencies unhide | 42069a46 | SHIP | KEEP sync from base without re-hiding share OG work | — | — | share-export epic 3/3 complete
 2026-05-31 | factory cycle 91 weekly PPG snapshot | f60168e1 | SHIP | KEEP PPG label parity on OG fallbacks | — | — | epic filtered-panel 3/3 complete

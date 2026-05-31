@@ -1,26 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-build-profiles-share-og",
+  "atom_id": "league-roster-depth-share-og",
   "big_problem": "Bureau Build/Roster share cards exist locally but never merged — dynasty league intel still can't screenshot to Reddit (DEPTH League L5).",
   "epic": "League L5 — Bureau share-export ship to base",
-  "slice_title": "Build Profiles copy link + OG export card on base",
+  "slice_title": "Roster Depth copy link + OG export card on base",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB with demo rows",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauBuildProfilesShareBar.tsx",
-    "apps/web/app/og/build-profiles/route.tsx",
-    "apps/web/components/league/BureauBuildProfiles.tsx"
+    "apps/web/components/league/BureauRosterDepthShareBar.tsx",
+    "apps/web/app/og/roster-depth/route.tsx",
+    "apps/web/components/league/BureauRosterDepth.tsx"
   ],
   "max_files": 3,
-  "max_lines": 280,
+  "max_lines": 300,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/build-profiles-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/build-profiles?league=demo&download=1'"
+    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/roster-depth-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/roster-depth?league=demo&user=demo&download=1'"
   ],
-  "out_of_scope": ["roster-depth share (next atom)", "new Bureau tabs", "API schema changes"],
+  "out_of_scope": ["new Bureau tabs", "API schema changes"],
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",

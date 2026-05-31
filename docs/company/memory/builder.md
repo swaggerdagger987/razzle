@@ -13,6 +13,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | league-build-profiles-share-og | merge base conflicts + PR 577 | da33eafd | SHIP | KEEP demo fallback ≥40KB | — | — | curl 72409B; pytest 51
 2026-05-31 | league-build-profiles-share-og | merge base + verify ShareBar/OG route | 8a08b2f4 | SHIP | KEEP demo fallback ≥40KB | — | — | curl 72409B
 2026-05-31 | league-waiver-tendencies-unhide | cherry-pick BureauWaiverTendencies from base + unhide slug | 42069a46 | SHIP | KEEP 3-file contract | — | — | evidence/2026-05-31-league-waiver-tendencies-unhide.md
 
