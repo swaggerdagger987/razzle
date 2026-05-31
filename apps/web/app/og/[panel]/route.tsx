@@ -187,9 +187,8 @@ function decodeOgSnapshot(param: string): OgRow[] {
   }
 }
 
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
 function resolveApiOrigin(req: Request): string {
-  const env = process.env.NEXT_PUBLIC_API_ORIGIN?.replace(/\/$/, "");
-  if (env) return env;
   return new URL(req.url).origin;
 }
 

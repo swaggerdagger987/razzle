@@ -1,10 +1,11 @@
-cycle: 73
+cycle: 77
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: bureau-monte-carlo-copy-link
-last_keep_cycle: 73
-last_commit: 99f8a2aa
+next_slice: bureau-monte-carlo-copy-link or lab snapshot launch-10
+last_keep_cycle: 77
+last_commit: da33eafd
+lab_l5_og_api_origin_rewrite: complete
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
