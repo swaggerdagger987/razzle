@@ -1,43 +1,30 @@
 {
   "epic_status": "active",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau behavioral share parity",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "big_problem": "Lab OG export cards still miss Octo panel row shapes — nested API keys fall back to sample preview instead of live rows (NEXT Lab L5).",
+  "epic_title": "Lab L5 — OG cards mirror Octo panel API rows",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-manager-profiles-copy-link",
-      "title": "Manager Profiles copy link beside export card",
-      "status": "done",
-      "merge_commit": "04c19959"
-    },
-    {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy link beside export card",
-      "status": "done",
-      "merge_commit": "c4ce09b7"
-    },
-    {
-      "id": "league-power-rankings-og",
-      "title": "Power Rankings OG + copy board link",
-      "status": "done",
-      "merge_commit": "90bf2dd5"
-    },
-    {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
+      "id": "lab-og-efficiency-aging-extract",
+      "title": "OG extractRows for efficiency most_efficient + aging positions.players",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
-      "status": "done",
-      "merge_commit": "30454811"
+      "id": "lab-og-buysell-dashboard-live",
+      "title": "Buy/sell + dashboard OG live row extractors",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-weekly-prospects-live",
+      "title": "Weekly + prospects OG live row polish",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-trade-network-copy-link",
-  "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T13:20:00Z",
-  "last_cycle_commit": "90bf2dd5"
+  "next_atom_id": "lab-og-buysell-dashboard-live",
+  "created_at": "2026-05-31T05:18:34Z",
+  "updated_at": "2026-05-31T05:18:34Z"
 }
