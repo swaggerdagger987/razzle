@@ -1,38 +1,31 @@
 {
   "epic_status": "complete",
-  "big_problem": "Lab OG snapshot exports deep-link as generic \"player\" — Reddit shares lose recognizable hallway context.",
-  "epic_title": "Lab L5 — OG export display names in watermark",
+  "big_problem": "Lab OG watermark dead-ends when snapshot rows omit pid — player context lost in toLab.",
+  "epic_title": "Lab L5 — OG hallway deep links",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-watermark-display-name",
-      "title": "Gamelog export passes player name into OG watermark toLab",
+      "id": "lab-og-tolab-watermark",
+      "title": "Launch-10 toLab watermark band",
       "status": "done",
-      "merge_commit": "338709883"
+      "merge_commit": "b80512bb4"
+    },
+    {
+      "id": "lab-og-tolab-gamelog-default",
+      "title": "Gamelog/dynasty-comps default player in toLab",
+      "status": "done",
+      "merge_commit": "c311a15a8"
+    },
+    {
+      "id": "lab-og-tolab-snapshot-player",
+      "title": "Snapshot exports preserve player in watermark",
+      "status": "in_progress",
+      "merge_commit": null
     }
   ],
   "next_atom_id": null,
-  "created_at": "2026-05-31T11:35:00Z",
+  "created_at": "2026-05-31T11:45:00Z",
   "updated_at": "2026-05-31T11:45:00Z",
-  "completed_epics": [
-    {
-      "id": "lab-l5-og-watermark-display-names",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-display-name",
-      "merge_commit": "338709883"
-    },
-    {
-      "id": "lab-l5-og-hallway-deep-links",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-snapshot-player",
-      "merge_commit": "1a12d9c0b"
-    },
-    {
-      "id": "league-l5-trade-finder-gtm",
-      "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
-    }
-  ]
+  "completed_epics": []
 }

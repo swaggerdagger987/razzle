@@ -884,14 +884,22 @@ function labOgWatermarkLink(
     playerScoped: boolean;
     snapshotPlayerId?: string;
     playerDisplayName?: string;
+    /** Snapshot exports must deep-link with the same player context as the panel rows. */
+    snapshotExport?: boolean;
   },
 ): string {
   const watermarkPlayerId = opts.snapshotPlayerId ?? opts.playerId;
   const includeDefaultPlayer = TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS.has(slug);
+  const snapshotPreservesPlayer =
+    Boolean(opts.snapshotExport) &&
+    opts.playerScoped &&
+    Boolean(opts.playerId);
   const usePlayer =
     (opts.playerScoped || Boolean(opts.snapshotPlayerId)) &&
     watermarkPlayerId &&
-    (watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+    (watermarkPlayerId !== DEFAULT_OG_PLAYER_ID ||
+      includeDefaultPlayer ||
+      snapshotPreservesPlayer);
   const resolvedName =
     opts.playerDisplayName?.trim() ||
     (watermarkPlayerId === DEFAULT_OG_PLAYER_ID && includeDefaultPlayer
@@ -1005,6 +1013,7 @@ export async function GET(
     positionFilter: watermarkPosition,
     playerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+    snapshotExport: isSnapshot,
     snapshotPlayerId: snapshotExportPlayerId,
     playerDisplayName: url.searchParams.get("name") ?? undefined,
   });
