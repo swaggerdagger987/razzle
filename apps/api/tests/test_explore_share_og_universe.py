@@ -14,9 +14,16 @@ def _explore_share_source() -> str:
 
 def test_explore_share_og_params_include_universe():
     source = _explore_share_source()
-    assert "new URLSearchParams({ universe, sort, dir })" in source
+    assert 'new URLSearchParams({ sort, dir })' in source
+    assert 'universe === "college"' in source
+    assert 'previewParams.set("universe", "college")' in source
     assert "/og/explore?" in source
     assert 'ogParams.set("download", "1")' in source
+
+
+def test_explore_share_nfl_omits_redundant_universe_param():
+    source = _explore_share_source()
+    assert "new URLSearchParams({ universe, sort, dir })" not in source
 
 
 def test_explore_share_college_export_filename():
