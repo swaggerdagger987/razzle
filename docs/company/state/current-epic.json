@@ -7,7 +7,7 @@
   "atoms": [
     {"id": "lab-og-tolab-watermark", "title": "Launch-10 toLab watermark band", "status": "done", "merge_commit": "b80512bb4"},
     {"id": "lab-og-tolab-gamelog-default", "title": "Gamelog/dynasty-comps default player in toLab", "status": "done", "merge_commit": "c311a15a8"},
-    {"id": "lab-og-tolab-snapshot-player", "title": "Snapshot exports preserve player in watermark", "status": "done", "merge_commit": "f6e0985f3"}
+    {"id": "lab-og-tolab-snapshot-player", "title": "Snapshot exports preserve player in watermark", "status": "done", "merge_commit": "05357b3a1"}
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T11:00:00Z",
