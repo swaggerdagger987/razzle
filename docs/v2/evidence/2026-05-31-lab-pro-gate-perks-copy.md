@@ -1,19 +1,24 @@
-# Evidence — lab-pro-gate-perks-copy (2026-05-31)
+# Evidence — Lab L4 pro gate perks copy
 
-## Slice
+**Date:** 2026-05-31  
+**Slice:** `lab-pro-gate-perks-copy`  
+**Atom:** 3/3 — L4 epic complete
 
-Pro gate perks list uses PARITY Launch-10 panel titles (`@razzle/panels` via `launch10PerkLabels`) and Bureau-7 tab labels (`BUREAU_7_SLUGS` + `bureau7PerkLabels`).
+## Change
+
+- `proUpgradePerkLines()` builds perks from `@razzle/panels` launch-10 titles + `BUREAU_7_FEATURE_SLUGS` labels via `bureau-features.ts`.
+- `ProUpgradeGate` renders dynamic `<li>` lines (no hardcoded "trade values, breakouts" placeholders).
 
 ## Commands
 
-```bash
+```text
 JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q
-# 6 passed
+→ 4 passed
 
 npm run build --workspace=apps/web
-# exit 0
+→ exit 0
 ```
 
 ## Verdict
 
-PASS — no OG route changes; conversion copy aligned with landing/pricing moat framing.
+**PASS** — non-OG slice; Gate C N/A. FACTORY-DOD Gates A–B pending merge.
