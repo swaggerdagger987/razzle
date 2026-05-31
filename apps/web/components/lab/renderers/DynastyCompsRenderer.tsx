@@ -5,9 +5,9 @@ import { PositionPill } from "@razzle/ui";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
-import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink } from "../LabOgExportLink";
+import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -81,6 +81,17 @@ export function DynastyCompsRenderer({ panel }: Props) {
     setQuery("");
     setSuggestions([]);
   }
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const comps = q.data?.comps ?? [];
+    return comps.slice(0, 6).map((c) => ({
+      name: c.full_name,
+      position: c.position,
+      team: c.team,
+      stat: Math.round(c.similarity * 100),
+      statLabel: "Match %",
+    }));
+  }, [q.data?.comps]);
 
   if (q.isPending) return <PanelAgentLoading agent={agent} />;
 
@@ -163,7 +174,12 @@ export function DynastyCompsRenderer({ panel }: Props) {
 
       {(target || comps.length > 0) && (
         <footer className="mt-6 border-t border-ink pt-4">
-          <LabOgExportLink slug="dynasty-comps" downloadName="razzle-dynasty-comps.png" playerId={exportPlayerId} />
+          <LabOgExportLink
+            slug="dynasty-comps"
+            downloadName="razzle-dynasty-comps.png"
+            playerId={exportPlayerId}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>
