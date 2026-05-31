@@ -33,6 +33,8 @@ const STAT_CANDIDATE_KEYS = [
   "rank_diff",
   "composite_score",
   "efficiency_score",
+  "ppo",
+  "yards_per_touch",
   "total_yards",
   "pts",
   "rank",
@@ -259,6 +261,21 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.data as Record<string, unknown>[];
   } else if (Array.isArray(obj.rankings)) {
     candidates = obj.rankings as Record<string, unknown>[];
+<<<<<<< HEAD
+=======
+  } else if (
+    Array.isArray(obj.most_efficient) &&
+    (obj.most_efficient as unknown[]).length > 0
+  ) {
+    candidates = obj.most_efficient as Record<string, unknown>[];
+  } else if (obj.positions && typeof obj.positions === "object" && !Array.isArray(obj.positions)) {
+    const posMap = obj.positions as Record<string, { players?: Record<string, unknown>[] }>;
+    const posKeys = Object.keys(posMap);
+    const block = posKeys.length === 1 ? posMap[posKeys[0]!] : posMap.RB ?? posMap.WR ?? posMap[posKeys[0]!];
+    if (block && Array.isArray(block.players)) {
+      candidates = block.players;
+    }
+>>>>>>> a98f3674 (feat(og): efficiency live extract from most_efficient API rows)
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
   } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
@@ -283,6 +300,8 @@ function extractRows(data: unknown): OgRow[] {
       if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
       if (k === "similarity") statLabel = "Match %";
       if (k === "rank_diff") statLabel = "Chg";
+      if (k === "ppo") statLabel = "PPO";
+      if (k === "yards_per_touch") statLabel = "Y/T";
       break;
     }
   }
@@ -421,6 +440,9 @@ export async function GET(
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
   if (apiPath && !snapshotHasRows) {
+    if (slug === "efficiency") {
+      apiParams.limit = 6;
+    }
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
     if (liveRows.length === 0) {
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
