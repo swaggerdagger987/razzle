@@ -4,7 +4,6 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
-import { useCallback, useState } from "react";
 
 interface Props {
   data: Record<string, unknown>;
@@ -22,32 +21,24 @@ type BuildRow = {
 const ARCHETYPE_COLORS: Record<string, string> = {
   "Hero RB": "var(--pos-rb)",
   "Zero RB": "var(--pos-wr)",
-  "Stars & Scrubs": "var(--orange)",
-  "Win Now": "var(--pos-qb)",
-  "Youth Movement": "var(--pos-te)",
+  "Stars & Scrubs": "var(--pos-te)",
+  "Win Now": "var(--orange)",
+  "Youth Movement": "var(--pos-qb)",
   Balanced: "var(--ink-medium)",
 };
 
 export function BureauBuildProfiles({ data, leagueId }: Props) {
-  const [copied, setCopied] = useState(false);
-  const copyLink = useCallback(async () => {
-    if (typeof window === "undefined") return;
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  }, []);
-
   const atlas = AGENT_BY_ID.atlas;
   const rows = (data.rows as BuildRow[]) ?? [];
-  const hero = rows[0] ?? null;
+  const leagueLabel = String(data.league_id ?? leagueId);
+  const winNow = rows.filter((r) => r.archetype === "Win Now");
+  const zeroRb = rows.filter((r) => r.archetype === "Zero RB");
+  const hero = winNow[0] ?? zeroRb[0] ?? rows[0] ?? null;
 
-  if (data.error) {
-    return <p className="text-red p-6">something fumbled: {String(data.error)}</p>;
-  }
+  const archetypeCounts = rows.reduce<Record<string, number>>((acc, row) => {
+    acc[row.archetype] = (acc[row.archetype] ?? 0) + 1;
+    return acc;
+  }, {});
 
   return (
     <div className="flex flex-col gap-6">
@@ -59,7 +50,7 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
               {atlas.name} · {atlas.role}
             </p>
             <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              every roster classified by construction — who is win-now vs rebuilding
+              roster construction tape — who built win-now vs rebuild vs zero RB
             </p>
           </div>
         </div>
@@ -67,29 +58,60 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
           Build Profiles
         </h1>
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {rows.length} teams · archetype from depth chart + elite counts
+          {rows.length} teams · league {leagueLabel}
         </p>
       </header>
+
+      {Object.keys(archetypeCounts).length > 0 && (
+        <section className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            league shape
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {Object.entries(archetypeCounts)
+              .sort((a, b) => b[1] - a[1])
+              .map(([name, count]) => (
+                <span
+                  key={name}
+                  className="text-xs font-bold uppercase"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: ARCHETYPE_COLORS[name] ?? "var(--ink)",
+                    border: "2px solid var(--ink)",
+                    padding: "0.15rem 0.4rem",
+                    background: "var(--bg)",
+                    transform: "rotate(-1deg)",
+                  }}
+                >
+                  {name} ×{count}
+                </span>
+              ))}
+          </div>
+        </section>
+      )}
 
       {hero && (
         <section className="chunky bg-bg-card p-4">
           <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-            league snapshot
+            trade lens
           </p>
-          <p className="mt-1 text-sm" style={{ fontFamily: "var(--font-hand)" }}>
-            {hero.team} leads the tape as {hero.archetype} — {hero.reasoning}
+          <p className="mt-1 font-bold" style={{ fontFamily: "var(--font-display)" }}>
+            {hero.team} · {hero.archetype}
+          </p>
+          <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+            {hero.reasoning}
           </p>
           <Link
             href={
               toRoom({
                 agentId: "atlas",
-                question: `In this league, ${hero.team} is a ${hero.archetype} build. Who should I target in trades based on roster construction?`,
+                question: `${hero.team} runs a ${hero.archetype} build — who should I trade with?`,
                 panelSlug: "build-profiles",
               }) as Route
             }
             className="mt-3 inline-block text-sm text-orange underline"
           >
-            ask Atlas about league builds →
+            ask Atlas about {hero.team} →
           </Link>
         </section>
       )}
@@ -99,7 +121,7 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
           <div
             key={row.roster_id}
             className="chunky bg-bg-card p-4"
-            style={{ transform: i % 2 === 0 ? "rotate(-0.4deg)" : "rotate(0.4deg)" }}
+            style={{ transform: i % 2 === 0 ? "rotate(-0.35deg)" : "rotate(0.35deg)" }}
           >
             <div className="mb-2 flex items-start justify-between gap-2">
               <div>
@@ -131,15 +153,15 @@ export function BureauBuildProfiles({ data, leagueId }: Props) {
         ))}
       </section>
 
-      <footer className="flex flex-wrap items-center gap-4 text-sm">
-        <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
-          {copied ? "copied!" : "copy link"}
-        </button>
+      <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/roster-depth` as Route} className="text-orange underline">
-          roster depth chart →
+          position depth grades →
         </Link>
-        <Link href={`/league/${leagueId}/head-to-head` as Route} className="text-orange underline">
-          head-to-head →
+        <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
+          manager behavior profiles →
+        </Link>
+        <Link href={`/league/${leagueId}/trade-finder` as Route} className="text-orange underline">
+          find a trade partner →
         </Link>
       </footer>
     </div>

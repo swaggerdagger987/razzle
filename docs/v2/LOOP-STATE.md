@@ -1,6 +1,6 @@
 cycle: 90
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
 next_slice: league-sos-tab
 last_keep_cycle: 90
