@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 118 — Prospects+Weekly OG LIVE panel labels)  
+**Last updated:** 2026-05-31 (factory cycle 123 — Lab L4 pro gate perks PARITY names)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 118 |
+| Cycle | 123 |
 | Last board | 54 |
 | Focus pillar | Lab |
-| Focus layer | L5 |
-| Next slice | lab-og-live-demo-fallback-copy |
-| Last commit | `da33eafd` |
+| Focus layer | L4 |
+| Next slice | (PARITY / NEXT — L4 pro-gate epic complete) |
+| Last commit | `f56fdbd8` |
+
+Recent completions: Lab L5 OG SAMPLE vs LIVE contrast; Lab L4 Pro gate perks.
 
 ---
 
@@ -28,20 +30,31 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Workday | open (`good morning team`) |
-| Epic | Lab L5 — OG live panel rows on Launch-10 (atom 2/3 shipped) |
-| PR | #739 — prospects + weekly LIVE RPS/PPG stickers |
+| Status | open |
+| Cycles today | 1 |
+| Last trigger | good morning team |
 
 ---
 
-## Recent ship (cycle 118)
+## Product surface summary
 
-- Panel-specific LIVE sticker + blurb on `/og/prospects` and `/og/weekly` when live rows render.
-- Preserves L4 dynasty-comps pro teaser rows on base (`teaserRowsForPanel`).
-- Gate C: curl PNG ≥40KB on both routes.
+| Area | State | Notes |
+|------|-------|-------|
+| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
+| Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
+| Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |
+| Situation Room | Partial | Chat + orchestration live; pixel canvas shipped (see FEATURES F-06) |
+| Auth / billing | Scaffold | Legacy bridge; Pro yearly on launch per DECISIONS |
+| Data pipeline | OK | `terminal.db` via nflverse adapters; sync scripts in `scripts/` |
+
+---
+
+## Vertical position
+
+Per **`PARITY.md`**: Launch 10 lab panels GREEN at L1; L4 pro-gate epic complete; L5 OG live-rows epic complete on base.
 
 ---
 
 ## Blockers
 
-- None for build. Merge API hit GitHub rate limit — PR #739 CI green, merge queued.
+None for factory cycle 123 merge publish.
