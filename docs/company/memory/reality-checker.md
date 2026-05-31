@@ -4,7 +4,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker
 
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | PASS | pytest 4; curl snap 61435B; web build exit 0.
+2026-05-31 | lab-og-tolab-snapshot-player | facf1afd9 | PASS | pytest 4; curl snap 61435B; web build exit 0.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | PASS | pytest 2; curl 82365B; web build exit 0.
 2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | pytest 5; web build; Gate C evidence on file.
 

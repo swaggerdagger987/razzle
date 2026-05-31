@@ -1,6 +1,6 @@
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.
 
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | Hallway epic done; pick League/Bureau next from PARITY.
+2026-05-31 | lab-og-tolab-snapshot-player | facf1afd9 | SHIP | Hallway epic done; pick League/Bureau next from PARITY.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Demo OG panel-branded.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist

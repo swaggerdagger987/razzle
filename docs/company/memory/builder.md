@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | fromSnapshot + snapshotPreservesPlayer in labOgWatermarkLink.
+2026-05-31 | lab-og-tolab-snapshot-player | facf1afd9 | SHIP | fromSnapshot + snapshotPreservesPlayer in labOgWatermarkLink.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.

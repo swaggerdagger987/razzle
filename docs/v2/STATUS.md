@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | PARITY pick — Bureau H2H or League L5 hidden renderers |
-| Last commit | `f6e0985f3` |
+| Last commit | `facf1afd9` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
