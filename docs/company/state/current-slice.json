@@ -1,25 +1,25 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab export cards must screenshot with real row layout even when the API has no live data (FACTORY-DOD Gate C).",
-  "epic": "Lab L5 — OG cards are always screenshot-ready",
-  "slice_title": "Lab L5 — OG panel static demo rows when live API empty",
-  "parity_ref": "Lab L4–L5 OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — PNG shows player rows, not loading-copy-only",
+  "big_problem": "Bureau playoff odds need screenshot-worthy share cards like Explore and H2H so league managers post Razzle sims on Reddit.",
+  "epic": "League L5 — Bureau watermarked OG exports",
+  "slice_title": "Trade Finder OG share card",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "ACCEPTANCE Gate 6 — OG export cards",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
-  "max_files": 1,
-  "max_lines": 120,
+  "allowed_paths": [
+    "apps/web/app/og/trade-finder/route.tsx",
+    "apps/web/components/league/BureauTradeFinder.tsx"
+  ],
+  "max_files": 2,
+  "max_lines": 300,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "pytest apps/api/tests -q",
-    "npx tsc --noEmit -p apps/web"
+    "curl -s -o /tmp/tf-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/trade-finder?download=1'"
   ],
   "out_of_scope": [
-    "New panels",
-    "API schema changes",
-    "Per-player parameterized routes",
-    "NORTH_STAR or DESIGN edits"
+    "Pressure Map OG (next atom)",
+    "API schema changes"
   ],
   "builder_mode": "composer-surgical"
 }
