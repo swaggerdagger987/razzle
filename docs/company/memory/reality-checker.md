@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | FROM PANEL evidence PASS | da33eafd | pytest 2; rankings-snap 56682B weekly-snap 58270B.
+2026-05-31 | FROM PANEL evidence PASS | 164159413 | pytest 2; rankings-snap 56682B weekly-snap 58270B.
 
 2026-05-31 | FROM PANEL sticker PASS | 7d49e4f0c | pytest 1; rankings-snap 55060B weekly-snap 56660B.
 

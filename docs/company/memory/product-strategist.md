@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | FROM PANEL evidence | da33eafd | Rankings + weekly snapshot curls guard highest-traffic export panels; atom 2/3.
+2026-05-31 | FROM PANEL evidence | 164159413 | Rankings + weekly snapshot curls guard highest-traffic export panels; atom 2/3.
 
 2026-05-31 | FROM PANEL sticker | 7d49e4f0c | Snapshot exports need glance trust like LIVE/SAMPLE stickers; epic atom 1/3.
 
