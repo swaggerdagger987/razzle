@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | explore-og-universe-query | da33eafd | SHIP | keep | Explore L5 season/team on OG export; T5/T6.
+2026-05-31 | explore-og-universe-query | feec2e19 | SHIP | keep | Explore L5 season/team on OG export; T5/T6.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
