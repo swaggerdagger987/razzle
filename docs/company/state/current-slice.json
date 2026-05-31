@@ -1,7 +1,7 @@
 {
   "date": "2026-05-31",
   "big_problem": "Bureau rivalry screenshots die in DMs — copied H2H links drop opponent context so managers reopen the wrong matchup.",
-  "epic": "League L5 — Bureau H2H export deep-links",
+  "epic": "League L5 — Bureau H2H export deep-links (atom 3/3)",
   "slice_title": "H2H opponent picker preserves user= on shared rivalry URLs",
   "atom_id": "bureau-h2h-pick-opponent-preserve-user",
   "parity_ref": "PARITY Explore L5 — Bureau H2H export",
@@ -16,7 +16,8 @@
   "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/h2h-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/head-to-head?download=1&user=123&opponent=456'"
   ],
   "out_of_scope": ["OG route changes", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
@@ -26,6 +27,5 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "d01ddf71a"
+  "status": "in_progress"
 }

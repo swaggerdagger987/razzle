@@ -1,25 +1,92 @@
+cycle	hash	pillars	verdict	pillar	slice	notes
+1	none	depth+voice+simplicity	keep	Explore	L1 screener URL state	nuqs filters in URL; shareable screener links
+2	none	depth+voice+simplicity	keep	Explore	L1 Player Sheet shell	PlayerSheet drawer; click row opens sheet
+3	none	depth+voice+simplicity	keep	Lab	L1 panel registry	@razzle/panels catalog; Lab index grid
+4	none	depth+voice+simplicity	keep	Lab	L1 rankings renderer	DynastyRankingsRenderer; tier badges
+5	none	depth+voice+simplicity	keep	Lab	L1 trade values renderer	TradeValuesRenderer bar chart
+6	none	depth+voice+simplicity	keep	Lab	L1 breakouts renderer	BreakoutsRenderer waiver wire
+7	none	depth+voice+simplicity	keep	Lab	L1 weekly heatmap renderer	WeeklyHeatmapRenderer
+8	none	depth+voice+simplicity	keep	Lab	L1 prospects renderer	ProspectsRenderer big board
+9	none	depth+voice+simplicity	keep	Lab	L1 gamelog renderer	GamelogRenderer week tape
+10	none	depth+voice+simplicity	keep	Lab	L1 dashboard renderer	DynastyDashboardRenderer roster pulse
+11	none	depth+voice+simplicity	keep	Lab	L1 efficiency renderer	EfficiencyRenderer PPO tables
+12	none	depth+voice+simplicity	keep	Lab	L1 aging renderer	AgingCurvesRenderer peak-age SVG
+13	none	depth+voice+simplicity	keep	Lab	L1 buysell renderer	BuySellRenderer mismatch cards
+14	none	depth+voice+simplicity	keep	League	L1 bureau shell	BureauFeatureBody tab router
+15	none	depth+voice+simplicity	keep	League	L1 self-scout default	BureauSelfScout default tab
+16	none	depth+voice+simplicity	keep	Room	L1 chat shell	SituationRoom chat + agent roster
+17	none	depth+voice+simplicity	keep	Room	L1 pixel canvas	pixel-room six sprites
+18	none	hallway+simplicity	keep	Hallway	H-01 player sheet click	openPlayer from Lab/Explore rows
+19	none	hallway+simplicity	keep	Hallway	H-02 room prefill	toRoom links with agent+question
+20	none	hallway+simplicity	keep	Hallway	H-03 explore margin notes	Explore L5 agent margin annotations
+21	none	hallway+simplicity	keep	Hallway	H-06 launch-10	panelSlug on all 9 launch-10 Lab renderers toRoom links agent prompt referrer
+22	none	depth+voice	keep	Lab	L2 sidebar	agentForPanel avatars on launch-10 Staff Picks LabSidebar registry-aligned
+28	271f0e21	simplicity+hallway	keep	Lab	PanelAgentHeader L2	unified agent header+loading on launch-10 via agentForPanel registry
+49	none	depth+voice+simplicity	keep	Room	L3 pixel sprites	six agent sprites in pixel-room canvas
+56	409a4ca0	gates+simplicity	keep	Lab	L5 OG export fix	Satori display:flex on /og/[panel] unblocks launch-10 export cards
+61	ddc28666	depth+simplicity+voice	keep	Lab	L5 OG launch10+param defaults	trust=T5,T6; launch-10 demo stat labels; DEFAULT_OG_PLAYER_ID; curl dynasty-comps 65961B
+67	497d1df5	depth+voice+simplicity	keep	Lab	L5 OG export links buy-sell dashboard	trust=T5,T6; LabOgExportLink footers; curl buysell 58072B dashboard 60034B
+68	ffccedf4	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped links	trust=T5,T6; LabOgExportLink player_id param; curl gamelog+comps scoped 58-66KB
+69	2cb898b6	depth+voice+simplicity	keep	Lab	L5 OG live panel rows	trust=T5,T6; panels slug fetch + candidates extract; curl rankings 59509B breakouts 60649B
+71	33808392	depth+voice+simplicity	keep	Lab	L5 OG snapshot efficiency aging	trust=T5,T6; snapshotRows on efficiency+aging LabOgExportLink; curl buysell snapshot 58072B PNG
+72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
+73	1578f75e	depth+voice+simplicity	keep	Lab	L5 OG rankings position filter	trust=T5,T6; LabOgExportLink.position; curl WR 50210B
+74	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
+75	d5d44123	depth+voice+simplicity	keep	Lab	L5 OG dashboard top5 risers extractors	trust=T5,T6; extractRows top5+risers rank_diff; curl dashboard 60034B; live-row epic complete
+76	3c1237df	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B; export-link epic complete
+77	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
+78	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
+79	6e98f4a2	depth+voice+simplicity	keep	Lab	L5 OG launch10 live label drop sample	trust=T1,T5,T6; panelBlurbSuffix LAUNCH_10; curl rankings 59509B breakouts 60649B
+80	6c8da85f	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot export	trust=T1,T5,T6; encode you/them/position bars in snapshot param; curl h2h OG 59305B; epic atom 2/3
+81	e62721a6	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings OG card	trust=T5,T6; /og/power-rankings demo rows; curl 68555B PNG; export link on tab
+82	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
+83	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
+84	04c19959	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic atom 1
+85	1616484c	depth+voice+simplicity	keep	League	L5 Bureau Trade Network share bar	trust=T5,T6; BureauTradeNetworkShareBar copy network link+export; curl trade-network OG 68090B; behavioral share epic complete
+86	e701e3bb	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; copy link + export; curl trade-network OG 68090B; behavioral share epic atom 3
+87	6dbe1ca1	depth+hallway+voice	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5; dedup on base 6dbe1ca1; factory cycle 1; next build-profiles
+88	2ee04975	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles unhidden; build PASS pytest 51; epic atom 1/3
+89	39516855	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot decode	trust=T1,T5,T6; shared decode m-key; curl demo 59305B snap 51310B; H2H export epic complete
+90	d159ec6c	depth+hallway+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5; Hawkeye wire archetypes; pytest 51; web build; epic atom 2/3
+91	3a02e2a8	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS tab unhidden	trust=T2,T5,T6; Octo verdict bars; pytest 51; web build; epic atom 3/3 complete
+92	5615a8df	depth+voice+simplicity	keep	Lab	L5 Dashboard top5 OG snapshot rows	trust=T5,T6; top5+movers snapshot; curl dashboard 57413B; pytest 51; web build; epic atom 1/4
+93	9d353d84	depth+voice+simplicity	keep	Lab	L5 Weekly heatmap hot-week OG snapshot	trust=T5,T6; hottest Wk N rows; curl weekly snap 51665B demo 63819B; pytest 51; web build; epic atom 2/4
+94	98ae0ef2	depth+voice+simplicity	keep	Lab	L5 Buy/sell combined OG snapshot lanes	trust=T5,T6; Buy/Sell labels 3+3; curl buysell snap 57884B demo 58072B; pytest 51; web build; epic atom 3/4
+95	5ed39e14	depth+voice+simplicity	keep	Lab	L5 Trade values formula-ranked OG rows	trust=T5,T6; rank·Value or rank·formula on snapshot; curl tradevalues snap 62441B demo 62488B; pytest 51; web build; epic atom 4/4 complete
+96	3e96ab7f	depth+voice+simplicity	keep	Explore	L5 Explore OG always-on watermark band	trust=T5,T6; terracotta band /og/explore; curl 200 PNG; atom 1/3
+97	7f652a98	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS OG share	trust=T2,T5,T6; ShareBar+OG route; curl sos 57260B; depth tab epic 4/4 complete
+98	1dd9d62f	depth+voice+simplicity	keep	Explore	L5 Explore OG college subtitle band	trust=T5,T6; college tagline+band URL; curl college 36128B; epic atom 3/3 complete
+99	7fb236c5	depth+voice+simplicity	keep	Lab	L5 Buy/sell OG position filter	trust=T5,T6; position on LabOgExportLink; curl buysell WR 44258B
+101	7fb236c5	depth+voice+simplicity	keep	Lab	L5 Efficiency OG position filter	trust=T5,T6; position on export; curl 48610B; position epic atom 2/3
+102	b99dbd76	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS OG snapshot	trust=T2,T5,T6; encode/decode snapshot; curl demo 58624B; ShareBar wired
+100	7f78b631	depth+voice+simplicity	keep	Lab	L5 Rankings+Trade Values OG live sort keys	trust=T5,T6; dynasty_value+trade_value; curl rankings 50251B tradevalues 51115B; epic atom 1/3
+109	228c4b59	depth+voice+simplicity	keep	Lab	L5 Gamelog OG position filter	trust=T5,T6; position on export; curl gamelog WR 48035B; position epic gamelog atom
+110	c95a8b59	depth+voice+simplicity	keep	Lab	L5 Efficiency+Aging OG live sort keys	trust=T5,T6; ppo+ppg+most_efficient; curl 45113B/44952B; live-sort epic complete PR643
+111	2bba7622	depth+voice+simplicity	keep	Lab	L5 Efficiency+Aging OG live sort keys	trust=T5,T6; efficiency_score+peak_age; curl eff 59068B aging 57916B; epic atom 2/3
+104	cb59494b	depth+voice+simplicity	keep	Lab	L5 Buy/Sell+Dashboard OG live sort keys	trust=T5,T6; dynasty_value+rank_diff; buy_low/sell_high extract; curl buysell 44258B dashboard 57657B; epic atom 3/3 complete
+105	8d8b2635	depth+voice+simplicity	keep	Lab	L5 Weekly+Prospects+Breakouts OG live extract	trust=T5,T6; hot-week+RPS+RBS; curl weekly 53249B prospects 48881B breakouts 61629B; epic atom 1/3
+106	40c80f0e	depth+voice+simplicity	keep	Lab	L5 Gamelog OG peak weeks by FPTS	trust=T5,T6; extractGamelogWeekRows; curl gamelog 56390B; epic atom 2/3
+113	010241ea	depth+voice+simplicity	keep	Lab	L5 Lab OG terracotta watermark band	trust=T5,T6; explore parity band on panel route; curl rankings 62355B buysell 60820B; watermark epic atom 1/2
+114	7afc0b03	depth+voice+simplicity	keep	Lab	L5 OG live sort keys restore	trust=T5,T6; value+efficiency_score+peak_age; curl buysell 58072B eff 59068B aging 57916B; live-sort epic complete
+115	44d05684	depth+voice+simplicity	keep	League	L5 Bureau H2H OG terracotta watermark band	trust=T5,T6; matches Explore/Lab panel band; curl h2h 67846B; watermark epic atom 2/2 complete
+116	4e905360	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG LIVE nflverse sticker	trust=T5,T6; teal sticker+blurb when live rows; curl rankings 62355B; live-rows epic atom 1/3
 107	4e8b0e8e	depth+voice+simplicity	keep	Lab	L2 Staff Picks sidebar by agent	trust=T2,T6; Hawkeye/Octo/Bones/Atlas/Razzle groups; web build PASS; sidebar epic atom 1/2
-117	ab6ae8d7	depth+voice+simplicity	keep	Lab	L5 Prospects OG live #rank labels	trust=T5,T6; prospects[] #rank statLabel; curl prospects WR 51431B; live-fetch epic atom 3/3 complete
-117	89b19df2	depth+voice+simplicity	keep	Lab	L5 Gamelog OG weeks PPR sort	trust=T5,T6; extractGamelogWeekRows; curl gamelog 61129B; gamelog og epic atom 1/3
-118	26a590c9	depth+voice+simplicity	keep	Lab	L5 Dynasty comps OG Pro teaser rows	trust=T2,T6; teaserRowsForPanel comps; curl dynasty-comps 54807B; live-extract epic atom 3/3 complete
-118	5bb77346	depth+voice+simplicity	keep	Lab	L5 Weekly+Prospects OG LIVE sticker defaults	trust=T5,T6; weekly WR apiParams; curl weekly 66512B prospects 60688B; live-rows epic atom 2/3
-118	e00217d1	depth+voice+simplicity	keep	Lab	L5 Prospects OG items[] live path	trust=T5,T6; extractProspectsRows on items; curl prospects 60688B; gamelog og epic atom 2/3
-119	9cd6a5cf	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG SAMPLE vs LIVE contrast	trust=T5,T6; terracotta SAMPLE sticker; curl rankings-demo 67083B weekly-live 70383B; live-rows epic 3/3 complete
-119	5bb77346	depth+voice+simplicity	keep	Lab	L5 Weekly+Prospects OG LIVE sticker defaults	trust=T5,T6; launch10LiveStickerLabel; curl weekly 66512B prospects 60688B; on base
-120	7236be3e	depth+voice+simplicity	keep	Lab	L4 Pro gate agent loading copy on upgrade card	trust=T2,T6; PanelAgentLoading on ProUpgradeGate; teaser pytest 3 passed; L4 epic atom 1/3
-120	3f0411ec	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG live fetch + sticker merge	trust=T5,T6; fetchOgLiveRows+sticker; curl rankings 62355B weekly 66512B; live-fetch epic atom 1/3
-121	0b59daee	depth+voice+simplicity	keep	Lab	L4 Pro gate sharpened pitches on 3 panels	trust=T2,T6; tradevalues/breakouts/dynasty-comps PITCH_BY_SLUG; teaser pytest 3 passed; L4 epic atom 2/3
-126	0c46d46f	depth+voice+simplicity	keep	Lab	L4 Pro gate perks Launch-10 Bureau names	trust=T2,T6; PRO_UPGRADE_PERKS; pytest 4; build ok; L4 epic atom 3/3 complete
 117	675044ea	depth+voice+simplicity	keep	Lab	L4 Pro gate screener hallway + teasers	trust=T2,T6; toExplore link; tiers/vorp/stocks/waivers/dynasty-comps; pytest 51; build ok; L4 epic atom 1/3
 118	b0405d43	depth+voice+simplicity	keep	Lab	L4 Launch-10 pro gate teaser audit	trust=T2,T6; weekly/prospects/dashboard teasers; test_panel_upgrade_teaser; pytest 12; build ok; L4 epic atom 2/3
+119	5bb77346	depth+voice+simplicity	keep	Lab	L5 Weekly+Prospects OG LIVE sticker defaults	trust=T5,T6; weekly WR apiParams; curl weekly 66512B prospects 60688B; live-rows epic atom 2/3
+120	9cd6a5cf	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG SAMPLE vs LIVE contrast	trust=T5,T6; terracotta SAMPLE sticker; curl rankings-demo 67083B weekly-live 70383B; live-rows epic 3/3 complete
+121	7236be3e	depth+voice+simplicity	keep	Lab	L4 Pro gate agent loading copy on upgrade card	trust=T2,T6; PanelAgentLoading on ProUpgradeGate; teaser pytest 3 passed; L4 epic atom 3/5
 122	73fdbf9c	depth+voice+simplicity	keep	Lab	L4 Pro gate perks catalog names	trust=T2,T6; proUpgradePerkLines launch-10+Bureau-7; pytest 4; build ok; L4 epic atom 4/5
 123	7dbd4b11	depth+voice+simplicity	keep	Explore	L5 Explore OG universe season team export URL	trust=T5,T6; ShareButton+OG route; curl college 41427B; live-fetch epic atom 2/3
 125	ad24a219	depth+voice+simplicity	keep	Lab	L5 rankings/breakouts/tradevalues OG LIVE labels	trust=T1,T5,T6; dynasty ranks RBS board value curve; curl 67083B 67621B 68974B; panel-native epic 1/3
 127	e75ec714	depth+voice+simplicity	keep	Lab	L2 sidebar search agent owner labels	trust=T2,T6; Hawkeye · Rankings on search; web build PASS pytest 58; L2 sidebar epic 2/2 complete
-127	f56fdbd8	depth+voice+simplicity	keep	Lab	L4 Pro gate perks PARITY catalog titles + Bureau-7	trust=T2,T6; launch10PerkLabels; bureau7PerkLabels; pytest 6; L4 epic atom 3/3 complete
 128	e37cd230	depth+voice+simplicity	keep	Lab	L5 Gamelog OG default player export	trust=T5,T6; empty state LabOgExportLink; curl gamelog 60634B; live-fetch epic atom 3/3
 129	5721ee33	depth+voice+simplicity	keep	Lab	L4 ProGateFromPanelError breakouts + pytest	trust=T2,T6; shared 402 gate; pytest 7; error-surface epic atom 1/3
+130	4bc3913e	depth+voice+simplicity	keep	Lab	L5 LabOgExportLink default player_id for scoped OG	trust=T5,T6; PLAYER_SCOPED_OG_SLUGS; pytest 2; live-fetch epic complete
+131	54443bc8	depth+voice+simplicity	keep	Lab	L5 SAMPLE OG labels rankings tradevalues breakouts	trust=T1,T5,T6; launch10DemoStickerLabel; curl 66806B 66253B 67267B; panel-labels epic 1/3 done
+132	adbf6c7	depth+voice+simplicity	keep	Lab	L5 dashboard/buysell OG LIVE stickers	trust=T1,T5,T6; rank movers buy/sell board; curl 63775B 61908B; panel-labels epic 3/3
+133	d0add0455	depth+voice+simplicity	keep	Lab	L4 ProGate rankings + buysell	trust=T2,T6; shared 402 gate; pytest 13; L4 epic atom 3/3
 128	a7fdf9b3	depth+voice+simplicity	keep	Explore	Explore OG season/team/universe query on share card	trust=T5,T6; buildExplorePageLink; curl college season 36951B; Explore L5 epic atom 1/3
 129	2d0d3bde	depth+voice+simplicity	keep	Explore	Explore OG demo rows when API empty	trust=T5,T6; force_demo curl 64789B; SAMPLE sticker; Explore L5 epic atom 2/3
 130	710ec33e	depth+voice+simplicity	keep	Explore	Explore OG formula sort label when apiSort differs	trust=T1,T5,T6; api_sort param; curl formula 73889B; Explore L5 epic atom 3/3 complete
-131	d01ddf71a	depth+voice+simplicity	keep	League	L5 H2H opponent picker preserves user URL	trust=T5,T6; LeagueDashboard user param; pytest 78; curl H2H 78250B; epic 3/3
+134	da33eafd	depth+voice+simplicity	keep	League	L5 H2H opponent picker preserves user URL	trust=T5,T6; LeagueDashboard user param; pytest 78; curl H2H 78250B; epic 3/3

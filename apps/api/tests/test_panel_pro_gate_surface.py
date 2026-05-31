@@ -50,38 +50,31 @@ def test_bureau7_perk_labels_match_parity_slugs():
         assert f'"{slug}"' in bureau
 
 
-def test_pro_gate_from_panel_error_wired_in_breakouts():
+def _assert_pro_gate_renderer_slug(slug: str) -> None:
     renderer = (
-        _repo_root() / "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
+        _repo_root() / f"apps/web/components/lab/renderers/{slug}Renderer.tsx"
     ).read_text(encoding="utf-8")
     assert "ProGateFromPanelError" in renderer
     assert "ProUpgradeGate" not in renderer
+
+
+def _assert_pro_gate_renderer_path(path: str) -> None:
+    renderer = (_repo_root() / path).read_text(encoding="utf-8")
+    assert "ProGateFromPanelError" in renderer
+    assert "ProUpgradeGate" not in renderer
+
+
+def test_pro_gate_from_panel_error_wired_in_breakouts():
+    _assert_pro_gate_renderer_slug("Breakouts")
+
+
+def test_pro_gate_from_panel_error_wired_in_tradevalues_and_efficiency():
+    _assert_pro_gate_renderer_slug("TradeValues")
+    _assert_pro_gate_renderer_slug("Efficiency")
     surface = (
         _repo_root() / "apps/web/components/lab/ProGateFromPanelError.tsx"
     ).read_text(encoding="utf-8")
     assert re.search(r"export function ProGateFromPanelError", surface)
-
-
-def test_pro_gate_from_panel_error_wired_in_tradevalues():
-    renderer = (
-        _repo_root() / "apps/web/components/lab/renderers/TradeValuesRenderer.tsx"
-    ).read_text(encoding="utf-8")
-    assert "ProGateFromPanelError" in renderer
-    assert "ProUpgradeGate" not in renderer
-
-
-def test_pro_gate_from_panel_error_wired_in_efficiency():
-    renderer = (
-        _repo_root() / "apps/web/components/lab/renderers/EfficiencyRenderer.tsx"
-    ).read_text(encoding="utf-8")
-    assert "ProGateFromPanelError" in renderer
-    assert "ProUpgradeGate" not in renderer
-
-
-def _assert_pro_gate_renderer(path: str) -> None:
-    renderer = (_repo_root() / path).read_text(encoding="utf-8")
-    assert "ProGateFromPanelError" in renderer
-    assert "ProUpgradeGate" not in renderer
 
 
 @pytest.mark.parametrize(
@@ -94,4 +87,4 @@ def _assert_pro_gate_renderer(path: str) -> None:
     ],
 )
 def test_pro_gate_from_panel_error_wired_in_remaining_launch10(path: str):
-    _assert_pro_gate_renderer(path)
+    _assert_pro_gate_renderer_path(path)

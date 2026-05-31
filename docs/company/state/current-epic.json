@@ -3,6 +3,8 @@
   "epic_title": "League L5 — Bureau H2H export deep-links",
   "parity_ref": "PARITY Explore L5 — Bureau H2H export",
   "depth_ref": "League L5",
+  "epic_status": "active",
+  "next_atom_id": "bureau-h2h-pick-opponent-preserve-user",
   "atoms": [
     {
       "id": "bureau-h2h-rivalry-url-user-opponent",
@@ -19,26 +21,29 @@
     {
       "id": "bureau-h2h-pick-opponent-preserve-user",
       "title": "Opponent picker preserves user= in URL when rivalry link shared",
-      "status": "done",
-      "merge_commit": "d01ddf71a"
+      "status": "in_progress"
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
   "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T16:00:00Z",
+  "updated_at": "2026-05-31T10:10:00Z",
   "completed_epics": [
     {
-      "id": "explore-l5-og-query-epic",
+      "id": "lab-l5-og-live-labels-rankings-tv-breakouts",
       "status": "complete",
-      "last_atom": "explore-og-formula-sort-label",
-      "merge_commit": "710ec33e"
+      "last_atom": "cycle-125-merge",
+      "merge_commit": "5dcbbc01"
     },
     {
-      "id": "league-l5-bureau-h2h-deep-links",
+      "id": "lab-l5-launch10-og-panel-native-trust-labels",
       "status": "complete",
-      "last_atom": "bureau-h2h-pick-opponent-preserve-user",
-      "merge_commit": "d01ddf71a"
+      "last_atom": "lab-og-launch10-buysell-dashboard-labels",
+      "merge_commit": "adbf6c7"
+    },
+    {
+      "id": "lab-l4-pro-gate-error-surface",
+      "status": "complete",
+      "last_atom": "lab-l4-pro-gate-error-surface",
+      "merge_commit": "5721ee33"
     }
   ]
 }
