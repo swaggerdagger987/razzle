@@ -1,6 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-breakouts-score-ranked",
-  "slice_title": "Breakouts OG export ranks top-6 by breakout score",
-  "builder_mode": "composer-surgical"
+  "big_problem": "Bureau H2H export snapshot must round-trip through OG decode without silent key mismatches.",
+  "epic": "League L5 — Bureau H2H snapshot codec matches OG decode",
+  "atom_id": "bureau-h2h-snapshot-roundtrip-test",
+  "slice_title": "Pytest proves H2H compact snapshot encode/decode roundtrip",
+  "parity_ref": "Explore L5 — Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C follow-up",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/api/tests/test_bureau_h2h_snapshot_roundtrip.py",
+    "docs/v2/results.tsv"
+  ],
+  "max_files": 2,
+  "max_lines": 50,
+  "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_h2h_snapshot_roundtrip.py -q",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": ["OG route rewrite", "ShareBar changes"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP"
+  }
 }
