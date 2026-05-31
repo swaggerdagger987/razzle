@@ -649,6 +649,7 @@ export async function GET(
   const { panel: slug } = await params;
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
+  /** QA/dev only — skip live fetch so Gate C can curl SAMPLE sticker path. */
   const forceDemo = url.searchParams.get("force_demo") === "1";
   const query = url.searchParams.get("q") ?? "";
   const positionFilter = ogPositionFilter(
@@ -656,8 +657,6 @@ export async function GET(
     url.searchParams.get("position") ?? "",
   );
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
-  /** QA/dev only — skip live fetch so Gate C can curl SAMPLE sticker path. */
-  const forceDemo = url.searchParams.get("force_demo") === "1";
   const playerId =
     url.searchParams.get("player_id") ??
     url.searchParams.get("id") ??
