@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toLeague } from "@razzle/hallway";
+import { decodeBureauTradeFinderOgSnapshot } from "@/lib/bureau-trade-finder-og-snapshot";
 
 export const runtime = "edge";
 
@@ -97,15 +98,23 @@ export async function GET(req: Request) {
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
 
   const bones = AGENT_BY_ID.bones;
-  const live = await fetchTradeFinder(req, league, user);
-  const isLive = Boolean(live?.matches?.length);
+  const snapshot = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
+  const isSnapshot = Boolean(snapshot?.matches?.length);
+  const live = isSnapshot ? null : await fetchTradeFinder(req, league, user);
+  const isLive = isSnapshot || Boolean(live?.matches?.length);
   const isDemo = !isLive;
-  const matches = isDemo ? DEMO_MATCHES : live!.matches!.slice(0, 3);
-  const hero = isDemo ? DEMO_MATCHES[0] : (live!.hero_match ?? matches[0]);
-  const needs = isDemo ? DEMO_META.needs : (live!.needs ?? []);
-  const surplus = isDemo ? DEMO_META.surplus : (live!.surplus ?? []);
+  const panelData = isSnapshot
+    ? snapshot!
+    : live?.matches?.length
+      ? live
+      : null;
+  const matches = isDemo ? DEMO_MATCHES : panelData!.matches!.slice(0, 3);
+  const hero = isDemo ? DEMO_MATCHES[0] : (panelData!.hero_match ?? matches[0]);
+  const needs = isDemo ? DEMO_META.needs : (panelData!.needs ?? []);
+  const surplus = isDemo ? DEMO_META.surplus : (panelData!.surplus ?? []);
   const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
 
   return new ImageResponse(
@@ -152,12 +161,34 @@ export async function GET(req: Request) {
           Trade Finder
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {`value-matched league trades${isDemo ? " · sample preview" : ""}`}
+          {`value-matched league trades${isDemo ? " · sample preview" : isSnapshot ? " · your board" : ""}`}
           {needs.length ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length ? ` · surplus ${surplus.join(", ")}` : ""}
         </div>
 
-        {isLive ? (
+        {isSnapshot ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            PANEL · Bones trade board
+          </div>
+        ) : null}
+
+        {isLive && !isSnapshot ? (
           <div
             style={{
               fontFamily: "Caveat",
