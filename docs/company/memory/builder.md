@@ -1,3 +1,4 @@
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | f6e0985f3 | SHIP | WeeklyHeatmapRenderer + GamelogRenderer LabPanelShareBar footers.
 2026-05-31 | lab-panel-share-bar-breakouts-buysell | d4cf33c26 | SHIP | BreakoutsRenderer + BuySellRenderer LabPanelShareBar footers.
 2026-05-31 | lab-panel-share-bar-rankings | 6c62faf8c | SHIP | LabPanelShareBar + DynastyRankingsRenderer footer.
 2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | SHIP | efficiencyStatKeys + agingStatKeys on OG route.

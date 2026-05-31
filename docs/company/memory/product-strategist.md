@@ -1,3 +1,4 @@
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | f6e0985f3 | SHIP | Weekly + Gamelog player-scoped share bar atom 3/4.
 2026-05-31 | lab-panel-share-bar-breakouts-buysell | f6e0985f3 | SHIP | Breakouts + Buy/Sell GTM share bar atom 2/4.
 2026-05-31 | lab-panel-share-bar-rankings | 6c62faf8c | SHIP | NEXT GTM export bar; rankings copy/preview/export atom 1/4.
 2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | SHIP | Closes formula OG epic; efficiency/aging formula_score on OG.

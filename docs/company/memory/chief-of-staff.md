@@ -1,3 +1,4 @@
+2026-05-31 | lab-panel-share-bar-weekly-gamelog | f6e0985f3 | SHIP | Factory cycle 2; Lab GTM share bar epic 3/4.
 2026-05-31 | lab-panel-share-bar-breakouts-buysell | d4cf33c26 | SHIP | Factory open; Lab GTM share bar epic 2/4.
 2026-05-31 | lab-panel-share-bar-rankings | 6c62faf8c | SHIP | Factory open; Lab GTM share bar epic 1/4.
 2026-05-31 | lab-og-efficiency-aging-formula-live | 8db7cdf24 | SHIP | Factory open cycle 1; Lab formula OG epic 3/3 complete.

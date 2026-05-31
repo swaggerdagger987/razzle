@@ -1,30 +1,30 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-panel-share-bar-breakouts-buysell",
+  "atom_id": "lab-panel-share-bar-weekly-gamelog",
   "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
   "epic": "Lab L5 — GTM panel share bar parity",
-  "slice_title": "Breakouts + Buy/Sell — LabPanelShareBar copy/preview/export + snapshot",
+  "slice_title": "Weekly + Gamelog — LabPanelShareBar copy/preview/export + player-scoped snapshot",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot or live demo",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
-    "apps/web/components/lab/renderers/BuySellRenderer.tsx",
+    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
+    "apps/web/components/lab/renderers/GamelogRenderer.tsx",
     "apps/api/tests/test_lab_panel_share_bar.py"
   ],
   "max_files": 3,
-  "max_lines": 80,
+  "max_lines": 90,
   "acceptance_commands": [
     "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_panel_share_bar.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/breakouts-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/breakouts?download=1&force_demo=1'",
-    "curl -s -o /tmp/buysell-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1&force_demo=1'"
+    "curl -s -o /tmp/weekly-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?download=1&force_demo=1&position=WR'",
+    "curl -s -o /tmp/gamelog-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&force_demo=1'"
   ],
   "out_of_scope": [
-    "Weekly/gamelog share bars",
+    "Launch-10 remainder panels",
     "NORTH_STAR/DESIGN/DECISIONS edits",
-    "New npm deps"
+    "LabPanelShareBar.tsx changes"
   ],
   "builder_mode": "composer-surgical",
   "votes": {
