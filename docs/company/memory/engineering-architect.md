@@ -20,3 +20,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | launch-10 OG demo stat labels | atom 2/3 SHIP | keep | curl weekly 63819B tradevalues 62488B gamelog 58408B
 2026-05-31 | PLAYER_SCOPED_SLUGS + path resolver | ef908a99 | keep | only dynasty-comps has {player_id} in catalog path today
 2026-05-31 | pressure-map OG | H2H pattern POST + DEMO_ROWS | 0d39635e | keep | 2 files ≤280 lines
+2026-05-31 | manager-profiles OG | same pattern + archetype color map | da33eafd | keep | 2 files; ARCHETYPE_COLORS on OG card
