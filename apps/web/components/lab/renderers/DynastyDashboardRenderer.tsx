@@ -7,9 +7,11 @@ import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
+import { ProUpgradeGate } from "../ProUpgradeGate";
 
 interface DashboardPlayer {
   player_id: string;
@@ -108,6 +110,11 @@ export function DynastyDashboardRenderer({ panel }: Props) {
     queryFn: async () => {
       const qs = season ? `?season=${season}` : "";
       const res = await fetch(`/api/panels/${panel.slug}${qs}`);
+      if (res.status === 402) {
+        const body = await res.json().catch(() => ({}));
+        const detail = (body as { detail?: Record<string, string> }).detail ?? {};
+        throw Object.assign(new Error(detail.message ?? "Pro plan required"), { upgrade: detail });
+      }
       if (!res.ok) throw new Error(`API ${res.status}`);
       return res.json() as Promise<DashboardData>;
     },
@@ -144,7 +151,30 @@ export function DynastyDashboardRenderer({ panel }: Props) {
   }
 
   if (q.isError) {
-    return <p className="p-6 text-red">something fumbled: {(q.error as Error).message}</p>;
+    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
+    if (err.upgrade) {
+      return (
+        <ProUpgradeGate
+          panelSlug={panel.slug}
+          panelTitle={panel.title}
+          required={err.upgrade.required ?? "pro"}
+          current={err.upgrade.current ?? "free"}
+          message={err.upgrade.message}
+        />
+      );
+    }
+    if (isUpgradeRequiredError(err)) {
+      return (
+        <ProUpgradeGate
+          panelSlug={panel.slug}
+          panelTitle={panel.title}
+          required={err.required}
+          current={err.current}
+          message={err.message}
+        />
+      );
+    }
+    return <p className="p-6 text-red">something fumbled: {err.message}</p>;
   }
 
   const data = q.data!;

@@ -1,21 +1,25 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dynasty-comps-pro-teaser",
-  "big_problem": "Lab Pro gates still feel like errors — generic copy on dynasty comps.",
+  "atom_id": "lab-dashboard-pro-teaser",
+  "big_problem": "Lab Pro gates still feel like errors — generic copy on dynasty dashboard.",
   "epic": "Lab L4 — Pro upgrade gates feel like upgrade, not error",
-  "slice_title": "Dynasty comps Pro gate bespoke teaser rows + Hawkeye pitch",
+  "slice_title": "Dynasty dashboard Pro gate bespoke teaser rows + Razzle pitch",
   "parity_ref": "Lab L4 — pro-gate polish",
   "depth_ref": "Lab L4",
-  "acceptance_ref": "T6 screenshot gravity — Pro gate shows comp-tier preview",
+  "acceptance_ref": "T6 screenshot gravity — Pro gate shows riser/faller preview",
   "trust_pillars": ["T6"],
-  "allowed_paths": ["apps/web/lib/panel-upgrade-teaser.ts"],
-  "max_files": 1,
-  "max_lines": 20,
+  "allowed_paths": [
+    "apps/web/lib/panel-upgrade-teaser.ts",
+    "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx",
+    "packages/panels/catalog.ts"
+  ],
+  "max_files": 3,
+  "max_lines": 45,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "node -e \"const {teaserRowsForPanel,upgradePitchForPanel}=require('./apps/web/lib/panel-upgrade-teaser.ts');\" 2>/dev/null || true"
+    "node --input-type=module -e \"import { teaserRowsForPanel, upgradePitchForPanel } from './apps/web/lib/panel-upgrade-teaser.ts'; const r=teaserRowsForPanel('dashboard'); if(r.length!==3||!r[0].detail.includes('Riser')) throw new Error('bad rows'); const p=upgradePitchForPanel('dashboard','Razzle'); if(!p.includes('risers')) throw new Error('bad pitch'); console.log('OK', r[0].name);\""
   ],
-  "out_of_scope": ["tier changes", "DynastyDashboardRenderer", "NORTH_STAR edits"],
+  "out_of_scope": ["NORTH_STAR edits", "billing", "OG routes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "strategist": "SHIP",

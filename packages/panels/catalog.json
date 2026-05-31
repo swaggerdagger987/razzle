@@ -53,7 +53,7 @@
     "title": "Dashboard",
     "blurb": "Dynasty pulse check: risers, fallers, and value picks.",
     "icon": "▣",
-    "tier": "free",
+    "tier": "pro",
     "category": "tools",
     "renderType": "dashboard",
     "api": {

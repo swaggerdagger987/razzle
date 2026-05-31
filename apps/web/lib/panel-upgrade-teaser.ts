@@ -51,6 +51,11 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Marvin Harrison Jr.", position: "WR", detail: "Comp tier · 91% match" },
     { name: "Brian Thomas Jr.", position: "WR", detail: "Comp tier · 87% match" },
   ],
+  dashboard: [
+    { name: "Nico Collins", position: "WR", detail: "Riser · +12 rank" },
+    { name: "Garrett Wilson", position: "WR", detail: "Value pick · 94 TV" },
+    { name: "James Cook", position: "RB", detail: "Faller · −8 rank" },
+  ],
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
@@ -62,6 +67,7 @@ const PITCH_BY_SLUG: Record<string, string> = {
   buysell: "buy-low and sell-high mismatches ranked by market lag",
   gamelog: "week-by-week game logs with peak-week context for trades",
   "dynasty-comps": "player comp tiers and similarity scores for trade framing",
+  dashboard: "dynasty pulse — risers, fallers, and value picks before your league reacts",
 };
 
 export function teaserRowsForPanel(slug: string): TeaserRow[] {

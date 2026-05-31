@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-FREE_PANELS = ["weekly", "prospects", "dashboard", "leaders", "screener"]
+FREE_PANELS = ["weekly", "prospects", "leaders", "screener"]
 
 
 def test_panels_list_count(app_client):
