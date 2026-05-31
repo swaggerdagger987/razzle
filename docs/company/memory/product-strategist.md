@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-efficiency-formula-live | bb5c83d99 | SHIP | Lab L5 formula parity epic 1/2; NEXT.md OG live rows.
+2026-05-31 | lab-og-efficiency-formula-live | ff3a280d8 | SHIP | Lab L5 formula parity epic 1/2; NEXT.md OG live rows.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Position hallway epic atom 2/3.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Snapshot pid wrapper; hallway epic complete (T6).

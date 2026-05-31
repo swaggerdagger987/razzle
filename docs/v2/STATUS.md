@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | lab-og-aging-formula-live (formula parity epic 2/2) |
-| Last commit | `bb5c83d99` |
+| Last commit | `ff3a280d8` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

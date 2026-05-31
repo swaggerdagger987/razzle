@@ -24,7 +24,7 @@
     "new npm deps"
   ],
   "builder_mode": "composer-surgical",
-  "content_commit": "bb5c83d99",
+  "content_commit": "ff3a280d8",
   "reality": "PASS",
   "merge": "merged"
 }
