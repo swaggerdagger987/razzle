@@ -27,6 +27,18 @@
       "title": "Explore OG — force_demo QA param for Gate C curl",
       "status": "pending",
       "merge_commit": null
+    },
+    {
+      "id": "lab-og-live-sticker-gamelog-efficiency",
+      "title": "gamelog/efficiency OG LIVE sticker + blurb parity",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-live-sticker-aging-buysell",
+      "title": "aging/buysell OG LIVE sticker + blurb parity",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
   "next_atom_id": "explore-og-sample-sticker",
