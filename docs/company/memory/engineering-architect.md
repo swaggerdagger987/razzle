@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-rankings-live-rank-labels | HASH147 | 2 files; extractRankingsRows before generic extractRows.
+2026-05-31 | lab-og-rankings-live-rank-labels | 7bad44782 | 2 files; extractRankingsRows before generic extractRows.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | 2 files; extractBuySellRows + buysellStatKeys.
 
