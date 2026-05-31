@@ -2,23 +2,22 @@
   "date": "2026-05-31",
   "big_problem": "Explore share cards hide the Razzle watermark unless download=1 — OS screenshots miss the growth loop.",
   "epic": "Explore L5 — OG watermark band always visible on screener share cards",
-  "slice_title": "Screener OG card shows always-on terracotta watermark band",
-  "atom_id": "explore-og-watermark-band",
+  "slice_title": "Explore toolbar preview URL includes watermark band on embed",
+  "atom_id": "explore-og-preview-watermark",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Explore L5",
   "acceptance_ref": "ACCEPTANCE Gate 5 — Explore OG export",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx"
+    "apps/web/components/explore/ExploreShareButton.tsx"
   ],
   "max_files": 1,
-  "max_lines": 80,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "node -e \"const fs=require('fs'); const s=fs.readFileSync('apps/web/app/og/explore/route.tsx','utf8'); if(!/watermark band/i.test(s)&&!/(?:always|Always).*(?:band|Band)/.test(s)) { console.error('missing watermark band'); process.exit(1); } if(!/#d97757/.test(s)) process.exit(1);\""
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
   ],
-  "out_of_scope": ["Lab OG routes", "API schema", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "out_of_scope": ["og/explore route changes", "API schema", "NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

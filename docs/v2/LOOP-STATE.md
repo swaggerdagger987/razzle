@@ -1,11 +1,12 @@
-cycle: 96
+cycle: 97
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
-next_slice: explore-og-preview-watermark
-last_keep_cycle: 96
-last_commit: 64ed5b0b
+next_slice: explore-og-college-band-copy
+last_keep_cycle: 97
+last_commit: 6c3b0954
 explore_l5_watermark_band_epic: active
 explore_l5_og_watermark_band: complete
+explore_l5_og_preview_watermark: complete
 league_l5_unhide_bureau_tabs_epic: complete
 lab_l5_og_fidelity_epic: active

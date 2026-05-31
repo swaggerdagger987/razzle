@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | ExploreShareButton previewParams | 6c3b0954 | keep | preview card omits download=1; export still uses download
+
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:
