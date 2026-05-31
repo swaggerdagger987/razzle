@@ -444,6 +444,7 @@ export function GamelogRenderer({ panel }: Props) {
             slug="gamelog"
             downloadName="razzle-gamelog.png"
             playerId={(data?.player_id ?? playerId) || DEFAULT_LAB_OG_PLAYER_ID}
+            position={displayPos || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
