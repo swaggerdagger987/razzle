@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-efficiency-aging-live-sort | cycle 110 | No new Reddit intel; ppo/ppg sort matches in-panel export semantics.
+
 2026-05-31 | trade values formula OG | cycle 95 | DynastyFF threads rank custom formulas before sharing trade boards
 
 Append-only log of recurring user pain patterns, language signals, and feature-gap

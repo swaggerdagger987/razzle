@@ -34,6 +34,7 @@ const STAT_CANDIDATE_KEYS = [
   "rank_diff",
   "composite_score",
   "efficiency_score",
+  "ppo",
   "total_yards",
   "pts",
   "rank",
@@ -65,6 +66,8 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   breakouts: "breakout_score",
   rankings: "dynasty_value",
   tradevalues: "trade_value",
+  efficiency: "ppo",
+  aging: "ppg",
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([
@@ -249,6 +252,7 @@ function statLabelForKey(k: string): string {
   if (k === "ppg") statLabel = "PPG";
   if (k === "rps") statLabel = "RPS";
   if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
+  if (k === "ppo") statLabel = "PPO";
   if (k === "formula_score") statLabel = "Score";
   if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
   if (k === "similarity") statLabel = "Match %";
@@ -256,13 +260,25 @@ function statLabelForKey(k: string): string {
   return statLabel;
 }
 
-function extractRows(data: unknown, slug?: string): OgRow[] {
+function extractRows(data: unknown, slug?: string, positionFilter?: string): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
   const obj = data as Record<string, unknown>;
   let candidates: Record<string, unknown>[] = [];
 
-  if (Array.isArray(obj.items)) {
+  if (slug === "aging" && obj.positions && typeof obj.positions === "object") {
+    const positions = obj.positions as Record<
+      string,
+      { players?: Record<string, unknown>[] }
+    >;
+    const pos =
+      positionFilter && positions[positionFilter]
+        ? positionFilter
+        : Object.keys(positions)[0];
+    if (pos && Array.isArray(positions[pos]?.players)) {
+      candidates = positions[pos]!.players!;
+    }
+  } else if (Array.isArray(obj.items)) {
     candidates = obj.items as Record<string, unknown>[];
   } else if (Array.isArray(obj.tiers)) {
     for (const tier of obj.tiers as Record<string, unknown>[]) {
@@ -369,7 +385,9 @@ async function fetchLiveOgRows(
       headers: { [OG_PRO_PREVIEW_HEADER]: "pro" },
     });
     if (!res.ok) return [];
-    return extractRows(await res.json(), slug);
+    const position =
+      params?.position != null ? String(params.position) : undefined;
+    return extractRows(await res.json(), slug, position);
   } catch {
     return [];
   }
@@ -404,7 +422,9 @@ async function fetchPanelData(
     }
     if (!res.ok) return [];
     const data = await res.json();
-    return extractRows(data, slug);
+    const position =
+      params?.position != null ? String(params.position) : undefined;
+    return extractRows(data, slug, position);
   } catch {
     return [];
   }
