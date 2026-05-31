@@ -4,5 +4,5 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-breakouts-score-ranked
 last_keep_cycle: 99
-last_commit: d11aff0f
+last_commit: d995676c
 lab_l5_og_fidelity_weekly_ppg: complete
