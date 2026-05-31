@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 150 — Lab Dynasty Rankings GTM share bar)
+**Last updated:** 2026-05-31 (factory cycle 154 — Lab efficiency OG toLab RB position)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 150 |
+| Cycle | 154 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-panel-share-bar-breakouts-buysell |
-| Last commit | (pending publish) |
+| Next slice | position-default hallway atom 3 or Bureau per PARITY |
+| Last commit | `8327741` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
