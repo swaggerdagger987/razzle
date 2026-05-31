@@ -26,5 +26,8 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "content_commit": "f0f8e27cf",
+  "reality": "PASS",
+  "merge": "open — gh rate limit blocked PR create"
 }
