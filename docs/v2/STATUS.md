@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 153 — Explore screener Razzle loading copy)
+**Last updated:** 2026-05-31 (factory cycle 154 — Explore screener Razzle loading copy)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,7 +15,7 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 153 |
+| Cycle | 154 |
 | Last board | 54 |
 | Focus pillar | Explore |
 | Focus layer | L2 |
