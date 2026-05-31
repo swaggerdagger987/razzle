@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Room |
 | Focus layer | L5 |
 | Next slice | room-og-briefing-pytest or Lab L4 pro-gate polish |
-| Last commit | `da33eafd` |
+| Last commit | `e1c97484` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

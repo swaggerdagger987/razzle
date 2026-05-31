@@ -8,8 +8,8 @@
     {
       "id": "room-og-briefing-export",
       "title": "Briefing OG route + snapshot codec + export card on completed briefings",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "e1c97484"
     },
     {
       "id": "room-og-briefing-pytest",
@@ -18,15 +18,15 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "room-og-briefing-export",
+  "next_atom_id": "room-og-briefing-pytest",
   "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:30:00Z",
+  "updated_at": "2026-05-31T08:45:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-prospects-rank-labels",
       "status": "complete",
       "last_atom": "lab-og-prospects-live-tiers",
-      "merge_commit": "5474d112"
+      "merge_commit": "ab6ae8d7"
     }
   ]
 }
