@@ -2,6 +2,7 @@
 
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
+import { encodeH2hSnapshot } from "@/lib/bureau-h2h-snapshot";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
@@ -49,6 +50,16 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
 
   const offer = tradeFit.you_could_offer.join(", ") || "—";
   const want = tradeFit.you_could_target.join(", ") || "—";
+
+  const h2hSnapshot =
+    you && them
+      ? encodeH2hSnapshot({
+          you: { team: you.team, record: you.record, ppg: you.ppg },
+          them: { team: them.team, record: them.record, ppg: them.ppg },
+          position_compare: positionCompare,
+          trade_fit: tradeFit,
+        })
+      : undefined;
 
   return (
     <div className="flex flex-col gap-6">
@@ -172,9 +183,16 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
             </Link>
             {you?.user_id && (
               <a
-                href={`/og/head-to-head?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                  you.user_id,
-                )}${opponentId ? `&opponent=${encodeURIComponent(opponentId)}` : ""}&download=1`}
+                href={(() => {
+                  const params = new URLSearchParams({
+                    league: leagueId,
+                    user: String(you.user_id),
+                    download: "1",
+                  });
+                  if (opponentId) params.set("opponent", opponentId);
+                  if (h2hSnapshot) params.set("snapshot", h2hSnapshot);
+                  return `/og/head-to-head?${params.toString()}`;
+                })()}
                 download="razzle-head-to-head.png"
                 className="btn-chunky active mt-3 inline-block text-xs"
                 style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}

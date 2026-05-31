@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { decodeH2hSnapshot } from "@/lib/bureau-h2h-snapshot";
 
 export const runtime = "edge";
 
@@ -76,9 +77,22 @@ export async function GET(req: Request) {
   const opponent = url.searchParams.get("opponent") ?? "";
 
   const atlas = AGENT_BY_ID.atlas;
-  const live = await fetchH2H({ league, user, opponent });
-  const isDemo = !live?.you || !live?.them;
-  const data = isDemo ? DEMO_H2H : live;
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const snapshot = snapshotParam ? decodeH2hSnapshot(snapshotParam) : null;
+  const snapshotHasTeams = Boolean(snapshot?.you?.team && snapshot?.them?.team);
+
+  const live = snapshotHasTeams ? null : await fetchH2H({ league, user, opponent });
+  const isDemo = !snapshotHasTeams && (!live?.you || !live?.them);
+  const data = snapshotHasTeams
+    ? {
+        you: snapshot!.you,
+        them: snapshot!.them,
+        position_compare: snapshot!.position_compare,
+        trade_fit: snapshot!.trade_fit,
+      }
+    : isDemo
+      ? DEMO_H2H
+      : live!;
 
   const you = data.you;
   const them = data.them;
@@ -131,9 +145,10 @@ export async function GET(req: Request) {
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
           Head-to-Head
         </div>
-        <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
-          rivalry dossier — your roster vs one leaguemate
-          {isDemo ? " · sample preview" : ""}
+        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
+          {`rivalry dossier — your roster vs one leaguemate${
+            snapshotHasTeams ? " · from your league" : isDemo ? " · sample preview" : ""
+          }`}
         </div>
 
         {hasData ? (
