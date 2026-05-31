@@ -1,6 +1,8 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 110 efficiency/aging OG sort | da33eafd | Lab L5 live-sort epic complete; PR #643 merged; ppo/ppg keys aligned with renderers.
+2026-05-31 | Factory cycle 113 Lab OG watermark band | 010241ea | Dedup live-sort cb59494b on base; watermark epic atom 1/2.
+
+2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab L5 live-sort epic complete; PR #643/#635 merged; ppo/ppg on base.
 
 2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab live-sort epic atom 2/3; deduped rankings atom on base.
 
