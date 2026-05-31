@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | explore-og-college-gate-c | da33eafd | PASS | No new intel; season fixture matches college screener defaults.
+2026-05-31 | explore-og-college-gate-c | df6ffb773 | PASS | No new intel; season fixture matches college screener defaults.
 
 2026-05-31 | cycle 132 | — | No new intel; rankings/weekly are dynasty screenshot staples.
 
@@ -60,13 +60,13 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | Bureau share rows | 433d8002 | keep | Monte Carlo export row now matches Explore copy+export pattern
-2026-05-31 | Monte Carlo share row | da33eafd | keep | Bureau group-chat export parity; H2H already on base
+2026-05-31 | Monte Carlo share row | df6ffb773 | keep | Bureau group-chat export parity; H2H already on base
 2026-05-31 | Lab OG launch10 label | 6e98f4a2 | keep | live cards without sample tag when API rows present
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Pressure Map share | 864e1d14 | keep | deadline desperation URLs for trade-DM hooks
-2026-05-31 | Trade Network share | da33eafd | keep | collusion/partnership cards sized for Reddit screenshot gravity
+2026-05-31 | Trade Network share | df6ffb773 | keep | collusion/partnership cards sized for Reddit screenshot gravity
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
+2026-05-31 | Cycle 86 Trade Network copy link | df6ffb773 | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | Lab OG live sort | 7f78b631 | skip | no new Reddit intel this cycle

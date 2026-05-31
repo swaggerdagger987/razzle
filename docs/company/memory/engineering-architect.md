@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | explore-og-college-gate-c | da33eafd | SHIP | explore/route.tsx only; season=2024 fixture; Gate C pytest guard.
+2026-05-31 | explore-og-college-gate-c | df6ffb773 | SHIP | explore/route.tsx only; season=2024 fixture; Gate C pytest guard.
 
 2026-05-31 | FROM PANEL evidence contract | 164159413 | pytest rankings+weekly in LAUNCH_10; no route churn.
 
@@ -62,11 +62,11 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
 2026-05-31 | BureauMonteCarlo clipboard | 433d8002 | keep | useCallback + copied state mirrors Self-Scout; no OG route change
-2026-05-31 | Bureau Monte Carlo clipboard | da33eafd | keep | merge sync base Lab epic; OG Razzle spans; dedup H2H ShareBar
+2026-05-31 | Bureau Monte Carlo clipboard | df6ffb773 | keep | merge sync base Lab epic; OG Razzle spans; dedup H2H ShareBar
 2026-05-31 | panelBlurbSuffix launch-10 | 6e98f4a2 | keep | 1 file; LAUNCH_10_OG_SLUGS mirrors LabSidebar STAFF_PICKS
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
+2026-05-31 | BureauTradeNetworkShareBar | df6ffb773 | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
-2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
+2026-05-31 | BureauBuildProfiles | df6ffb773 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY + tradevalues formula_score order
