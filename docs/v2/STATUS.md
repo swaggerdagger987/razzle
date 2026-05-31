@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 157 — Bureau H2H OG toLeague watermark)
+**Last updated:** 2026-05-31 (factory cycle 158 — Trade Finder OG watermark user query)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 157 |
+| Cycle | 158 |
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | Bureau OG hallway deep links atom 2/3 |
-| Last commit | `f030f77d0` |
+| Next slice | Bureau OG hallway deep links atom 3/3 |
+| Last commit | `f6e0985f3` |
 
 ---
 

@@ -1,25 +1,25 @@
 {
   "date": "2026-05-31",
   "big_problem": "Bureau OG export watermarks dead-end without rivalry context — screenshots cannot click back into the right league matchup.",
-  "epic": "League L5 — Bureau OG hallway deep links (atom 1/3)",
-  "slice_title": "H2H OG watermark uses toLeague with user/opponent",
-  "atom_id": "league-h2h-og-toleague-watermark",
+  "epic": "League L5 — Bureau OG hallway deep links (atom 2/3)",
+  "slice_title": "Trade Finder OG watermark includes user query",
+  "atom_id": "league-trade-finder-og-watermark-user",
   "parity_ref": "Explore L5 — Bureau H2H export",
   "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/head-to-head/route.tsx",
-    "apps/api/tests/test_league_h2h_og_toleague_watermark.py"
+    "apps/web/app/og/trade-finder/route.tsx",
+    "apps/api/tests/test_league_trade_finder_og_toleague_watermark.py"
   ],
   "max_files": 2,
-  "max_lines": 50,
+  "max_lines": 40,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_league_h2h_og_toleague_watermark.py apps/api/tests/test_bureau_h2h_og_snapshot_codec.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_league_trade_finder_og_toleague_watermark.py apps/api/tests/test_trade_finder_og_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-h2h.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/head-to-head?download=1'"
+    "curl -s -o /tmp/og-trade-finder.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/trade-finder?download=1'"
   ],
-  "out_of_scope": ["Trade Finder", "Monte Carlo", "Lab panels"],
+  "out_of_scope": ["Monte Carlo", "H2H route", "Lab panels"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
