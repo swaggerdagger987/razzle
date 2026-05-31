@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Factory cycle 1 (Company OS)
+
+1. **Position-grade roster screenshots** still win trade threads — A–F grid + thinnest-spot callout beats prose rankings.
+2. **Hawkeye on Self-Scout OG** matches in-product agent ownership; keeps Bureau-7 hallway consistent.
+3. Standing pattern: sample preview on OG when Sleeper not linked — protects trust (T1).
+
 ## Standing gaps to validate
 
 - ~~College stats in same screener as NFL~~ → F-02 GREEN (Cycle 1)

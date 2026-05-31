@@ -22,3 +22,4 @@ new evidence.
 2026-05-31 | League L5 Bureau OG epic atom 1 | pressure-map | SHIP | keep | PARITY League L5; trade-deadline screenshot moat
 2026-05-31 | League L5 Bureau OG atom 2 | manager-profiles archetypes | SHIP | keep | PANIC SELLER badges for trade-DM screenshots
 2026-05-31 | League L5 Bureau OG atom 3 | trade-network partner lanes | SHIP | keep | collusion-thread partnership screenshots
+2026-05-31 | League L5 Bureau OG epic complete | self-scout depth grades OG | SHIP | keep | flagship Bureau screenshot; A–F grid for trade threads

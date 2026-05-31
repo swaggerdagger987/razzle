@@ -22,3 +22,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | pressure-map OG | H2H pattern POST + DEMO_ROWS | 0d39635e | keep | 2 files ≤280 lines
 2026-05-31 | manager-profiles OG | same pattern + archetype color map | da33eafd | keep | 2 files; ARCHETYPE_COLORS on OG card
 2026-05-31 | trade-network OG | POST /api/bureau/trade-network + DEMO_EDGES | 2bd28752 | keep | 2 files; hero collusion callout on OG
+2026-05-31 | self-scout OG | POST /api/bureau/self-scout + grade helpers | da33eafd | keep | 2 files; POS_COLORS; Hawkeye badge

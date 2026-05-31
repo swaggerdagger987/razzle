@@ -21,3 +21,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 1 League OG epic open | 0d39635e | keep | workday reopen; Bureau OG atom 1 pressure-map SHIP
 2026-05-31 | Factory cycle 2 manager-profiles OG | da33eafd | keep | workday open; Bureau OG atom 2/4 SHIP; curl 76684B
 2026-05-31 | Factory reopen cycle 1 trade-network OG | 2bd28752 | keep | workday reopen; Bureau OG atom 3/4 SHIP; curl 67677B
+2026-05-31 | Factory open cycle 1 self-scout OG epic complete | da33eafd | keep | workday open; Bureau OG atom 4/4 SHIP; curl 66997B; epic complete

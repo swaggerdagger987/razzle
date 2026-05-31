@@ -157,7 +157,17 @@ export function BureauSelfScout({ data }: Props) {
           })}
         </div>
         {leagueId && (
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <a
+              href={`/og/self-scout?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
+                String(team?.user_id ?? ""),
+              )}&download=1`}
+              download="razzle-self-scout.png"
+              className="btn-chunky active text-xs"
+              style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+            >
+              export card
+            </a>
             <Link
               href={
                 toRoom({
