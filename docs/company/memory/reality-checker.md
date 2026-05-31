@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | explore-og-demo-fallback-rows | da33eafd | PASS | curl force_demo 64789B; build ok; Gate C.
+
 2026-05-31 | explore-og-universe-query | a7fdf9b3 | PASS | curl college season 36951B; build ok; Gate C.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.

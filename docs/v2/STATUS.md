@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 128 — Explore OG universe query on share card)
+**Last updated:** 2026-05-31 (factory cycle 129 — Explore OG demo rows when API empty)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 128 |
+| Cycle | 129 |
 | Last board | 54 |
 | Focus pillar | Explore |
 | Focus layer | L5 |
-| Next slice | explore-og-demo-fallback-rows |
-| Last commit | `a7fdf9b3` |
+| Next slice | explore-og-formula-sort-label |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

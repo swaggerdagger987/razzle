@@ -16,6 +16,29 @@ interface OgPlayer {
   stat: number;
 }
 
+/** Sample screener rows when API/terminal.db unavailable (FACTORY-DOD Gate C). */
+const DEMO_NFL_ROWS: OgPlayer[] = [
+  { full_name: "Jayden Daniels", position: "QB", team: "WAS", stat: 312.4 },
+  { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 298.1 },
+  { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 285.6 },
+  { full_name: "Brock Bowers", position: "TE", team: "LV", stat: 241.2 },
+  { full_name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 228.4 },
+  { full_name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 215.8 },
+];
+
+const DEMO_COLLEGE_ROWS: OgPlayer[] = [
+  { full_name: "Cam Ward", position: "QB", team: "MIA", stat: 4120 },
+  { full_name: "Travis Hunter", position: "WR", team: "COLO", stat: 1189 },
+  { full_name: "Ashton Jeanty", position: "RB", team: "BOISE", stat: 1924 },
+  { full_name: "Tyler Warren", position: "TE", team: "PSU", stat: 812 },
+  { full_name: "Tre Harris", position: "WR", team: "OLE MISS", stat: 1056 },
+  { full_name: "Emeka Egbuka", position: "WR", team: "OSU", stat: 989 },
+];
+
+function demoRowsForExplore(universe: string): OgPlayer[] {
+  return universe === "college" ? DEMO_COLLEGE_ROWS : DEMO_NFL_ROWS;
+}
+
 function parseTeams(teamParam: string): string[] {
   if (!teamParam) return [];
   return teamParam
@@ -139,6 +162,7 @@ function buildSubtitle(universe: string, sort: string, pos: string, q: string): 
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
+  const forceDemo = url.searchParams.get("force_demo") === "1";
   const universe = url.searchParams.get("universe") ?? "nfl";
   const sort = url.searchParams.get("sort") ?? "fantasy_points_ppr";
   const dir = url.searchParams.get("dir") ?? "desc";
@@ -152,7 +176,11 @@ export async function GET(req: Request) {
   const colHeader = statLabel(universe, effectiveSortKey(universe, sort));
   const exploreLink = buildExplorePageLink({ universe, sort, dir, q, pos, season, team });
 
-  const players = await fetchTopPlayers({ universe, sort, dir, q, pos, season, team });
+  const livePlayers = forceDemo
+    ? []
+    : await fetchTopPlayers({ universe, sort, dir, q, pos, season, team });
+  const isDemo = forceDemo || livePlayers.length === 0;
+  const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
 
   return new ImageResponse(
     (
@@ -176,8 +204,31 @@ export async function GET(req: Request) {
           </div>
         </div>
 
-        <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, marginBottom: 8 }}>{title}</div>
-        <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>{subtitle}</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+          <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, display: "flex" }}>{title}</div>
+          {isDemo ? (
+            <div
+              style={{
+                display: "flex",
+                fontSize: 16,
+                fontWeight: 700,
+                background: "#d97757",
+                color: "#f7efe5",
+                padding: "4px 12px",
+                border: "3px solid #2d1f14",
+                borderRadius: 6,
+                boxShadow: "3px 3px 0 #2d1f14",
+              }}
+            >
+              SAMPLE · not live data
+            </div>
+          ) : null}
+        </div>
+        <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>
+          {isDemo
+            ? `${subtitle} · SAMPLE rows — not live nflverse`
+            : subtitle}
+        </div>
 
         {players.length > 0 ? (
           <div
@@ -238,9 +289,7 @@ export async function GET(req: Request) {
               </div>
             ))}
           </div>
-        ) : (
-          <div style={{ flex: 1, fontSize: 24, color: "#5c4a3d" }}>pulling film…</div>
-        )}
+        ) : null}
 
         {/* Always-on watermark band — visible on preview + download (T6 screenshot gravity) */}
         <div

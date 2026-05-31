@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | explore-og-demo-fallback-rows | da33eafd | SHIP | keep | Gate C empty API; atom 2/3.
+
 2026-05-31 | explore-og-universe-query | a7fdf9b3 | SHIP | keep | OG band link mirrors nuqs; T5/T6.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.

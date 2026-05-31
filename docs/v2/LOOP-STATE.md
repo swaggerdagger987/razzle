@@ -1,9 +1,9 @@
-cycle: 128
+cycle: 129
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
-next_slice: explore-og-demo-fallback-rows
-last_keep_cycle: 128
-last_commit: a7fdf9b3
+next_slice: explore-og-formula-sort-label
+last_keep_cycle: 129
+last_commit: da33eafd
 explore_l5_og_query_epic: active
 lab_l4_pro_gate_epic: complete
