@@ -55,4 +55,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 86	e701e3bb	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; copy link + export; curl trade-network OG 68090B; behavioral share epic atom 3
 87	6dbe1ca1	depth+hallway+voice	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5; dedup on base 6dbe1ca1; factory cycle 1; next build-profiles
 88	69e4c732	depth+voice+simplicity	keep	Lab	L5 OG snapshot prospects tradevalues	trust=T5,T6; snapshotRows on prospects+tradevalues; curl snap 58084B 62488B; mirror-rows epic complete
-89	da33eafd	depth+voice+simplicity	keep	Lab	L5 Prospects OG snapshot RPS rows	trust=T5,T6; position filter on export; tradevalues dedup 69e4c732; epic complete
+89	d6358e6d	depth+voice+simplicity	keep	Lab	L5 Prospects OG snapshot RPS rows	trust=T5,T6; position filter on export; curl snap 43961B; epic complete

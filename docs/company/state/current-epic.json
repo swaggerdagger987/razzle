@@ -21,7 +21,7 @@
       "id": "lab-og-snapshot-prospects",
       "title": "Prospects OG snapshot from ranked board",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "d6358e6d"
     },
     {
       "id": "lab-og-snapshot-tradevalues",
@@ -39,5 +39,5 @@
   "next_atom_id": null,
   "created_at": "2026-05-31T05:24:00Z",
   "updated_at": "2026-05-31T06:00:00Z",
-  "last_cycle_commit": null
+  "last_cycle_commit": "d6358e6d"
 }
