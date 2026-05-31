@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-from-panel-launch10-registry | f6e0985f3 | SHIP | LAUNCH_10_OG_TRUST_REGISTRY; pytest 7; no route edit.
 2026-05-31 | explore-og-margin-note-lead | f6e0985f3 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 

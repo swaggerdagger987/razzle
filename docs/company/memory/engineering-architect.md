@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-from-panel-launch10-registry | f6e0985f3 | SHIP | 2 files; registry parses route LAUNCH_10 set.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.

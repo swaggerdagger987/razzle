@@ -1,8 +1,33 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-watermark-display-name",
-  "slice_title": "Gamelog export passes player name into OG watermark toLab",
-  "content_commit": "338709883",
-  "reality": "PASS",
-  "merge": "pending"
+  "big_problem": "Lab OG exports still dead-end when live panel scope (position filters) is not reflected in the terracotta toLab watermark.",
+  "epic": "Lab L5 — OG live panel data rows (atom 2/3)",
+  "slice_title": "FROM PANEL pytest registry covers all Launch-10 slugs",
+  "atom_id": "lab-og-from-panel-launch10-registry",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C trust stickers",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/api/tests/test_og_from_panel_sticker.py",
+    "docs/v2/evidence/2026-05-31-lab-og-from-panel-launch10-registry.md"
+  ],
+  "max_files": 2,
+  "max_lines": 80,
+  "acceptance_commands": [
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py -q --noconftest"
+  ],
+  "out_of_scope": [
+    "route.tsx edits",
+    "Dashboard Gate C",
+    "NORTH_STAR/DESIGN/DECISIONS"
+  ],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  },
+  "status": "in_progress"
 }
