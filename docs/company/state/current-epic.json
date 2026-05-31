@@ -20,7 +20,7 @@
     {
       "id": "lab-l4-pro-gate-error-remaining",
       "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],

@@ -1,10 +1,10 @@
-cycle: 123
+cycle: 124
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L4
-next_slice: lab-l4-pro-gate-error-remaining
-last_keep_cycle: 123
-last_commit: 9037b8e4
+next_slice: lab-l4-pro-gate-aging-comps
+last_keep_cycle: 124
+last_commit: da33eafd
 lab_l4_pro_gate_error_epic: active
 lab_l5_og_live_fetch_epic: complete
 lab_l5_og_watermark_epic: complete
