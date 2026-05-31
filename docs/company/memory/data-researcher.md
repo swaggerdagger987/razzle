@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | gamelog OG weeks | da33eafd | PASS | No new intel; in-panel ogSnapshotRows already defined peak-week sort.
+2026-05-31 | gamelog OG weeks | 40c80f0e | PASS | No new intel; in-panel ogSnapshotRows already defined peak-week sort.
 
 2026-05-31 | Lab OG live sort | 7f78b631 | PASS | No web scan; dynasty value sort matches Reddit board vocabulary.
 

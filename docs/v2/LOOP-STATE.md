@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-dynasty-comps-pro-teaser
 last_keep_cycle: 106
-last_commit: da33eafd
+last_commit: 40c80f0e
 lab_l5_og_live_extract_epic: active
 lab_og_gamelog_weeks_fpts_sort: in_progress
