@@ -8,18 +8,20 @@ import {
 
 type Props = Omit<ExploreOgExportInput, "download">;
 
-export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
+export function ExploreShareButton({
+  universe,
+  sort,
+  dir,
+  q,
+  pos,
+  season = 0,
+  team = [],
+}: Props) {
   const [copied, setCopied] = useState(false);
 
-  const previewParams = buildExploreOgExportParams({ universe, sort, dir, q, pos });
-  const ogParams = buildExploreOgExportParams({
-    universe,
-    sort,
-    dir,
-    q,
-    pos,
-    download: true,
-  });
+  const base = { universe, sort, dir, q, pos, season, team };
+  const previewParams = buildExploreOgExportParams(base);
+  const ogParams = buildExploreOgExportParams({ ...base, download: true });
 
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 

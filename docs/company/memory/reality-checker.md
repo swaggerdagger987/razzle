@@ -1,7 +1,8 @@
 # Memory — Reality Checker
 
-2026-05-31 | explore-og-universe-query | 7abe91fa | PASS | pytest 4; build ok; curl college OG 37393B PNG.
+2026-05-31 | explore-og-universe-query refine | TBD | PASS | pytest 5; build ok; curl college 37393B; base #123 had season/team.
 
+2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 
 2026-05-31 | launch10 live-fetch merge Gate C | 3f0411ec | PASS curl rankings 62355B weekly 66512B; build + pytest 58.

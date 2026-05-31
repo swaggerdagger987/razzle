@@ -25,6 +25,13 @@ def test_share_button_uses_export_helper():
     assert "new URLSearchParams({ universe" not in share
 
 
+def test_export_params_include_season_and_team_when_set():
+    root = Path(__file__).resolve().parents[3]
+    lib = (root / "apps/web/lib/explore-og-export-params.ts").read_text(encoding="utf-8")
+    assert "season" in lib
+    assert '"team"' in lib
+
+
 def test_college_export_params_include_universe_and_yards_sort():
     """Contract: college OG URLs must carry universe=college and yards sort key."""
     root = Path(__file__).resolve().parents[3]

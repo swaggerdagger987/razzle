@@ -1,9 +1,10 @@
-cycle: 128
+cycle: 129
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
-next_slice: lab-og-gamelog-player-default
-last_keep_cycle: 128
-last_commit: 7abe91fa
-lab_l5_og_live_fetch_epic: active
-lab_l4_pro_gate_epic: complete
+next_slice: lab-og-live-sticker-gamelog-efficiency
+last_keep_cycle: 129
+last_commit: TBD
+lab_l5_og_panel_native_live_epic: active
+lab_l5_og_live_fetch_epic: complete
+lab_l2_sidebar_agent_epic: complete
