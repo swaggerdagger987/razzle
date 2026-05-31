@@ -1,29 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
-  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-efficiency-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
+  "big_problem": "Free Launch-10 panels still show generic API errors on 402 — conversion dies before users see catalog perks.",
+  "epic": "Lab L4 — Launch-10 pro-gate error surface (prospects atom)",
+  "slice_title": "lab-l4-pro-gate-error-prospects",
+  "atom_id": "lab-l4-pro-gate-error-prospects",
+  "parity_ref": "Lab L4 — pro-gate polish",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "ACCEPTANCE Gate 2 pro gate",
+  "trust_pillars": ["T2", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
+    "apps/api/tests/test_panel_pro_gate_surface.py"
   ],
   "max_files": 2,
-  "max_lines": 25,
+  "max_lines": 45,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "out_of_scope": [
+    "WeeklyHeatmapRenderer (already on base)",
+    "OG routes",
+    "NORTH_STAR/DESIGN/DECISIONS"
+  ],
+  "builder_mode": "composer-surgical"
 }

@@ -92,3 +92,7 @@ def test_pro_gate_from_panel_error_wired_in_remaining_launch10(path: str):
 
 def test_pro_gate_from_panel_error_wired_in_dynasty_comps():
     _assert_pro_gate_renderer_path("apps/web/components/lab/renderers/DynastyCompsRenderer.tsx")
+
+
+def test_pro_gate_from_panel_error_wired_in_prospects():
+    _assert_pro_gate_renderer_path("apps/web/components/lab/renderers/ProspectsRenderer.tsx")
