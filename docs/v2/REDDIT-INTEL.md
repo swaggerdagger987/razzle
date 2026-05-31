@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Explore OG row-2 margin (cycle 159)
+- **Angle:** Second screener row carries Hawkeye target-volume callout — mirrors in-app margin column on share cards.
+- **Trust:** T5/T6 — demo Chase 128 targets triggers same rule as Explore table.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.

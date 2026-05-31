@@ -239,9 +239,7 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
-  const leadMarginNote =
-    players.length > 0 ? marginNoteForOgExploreRow(players[0]!, universe) : null;
-  const leadAgent = leadMarginNote ? AGENT_BY_ID[leadMarginNote.agentId] : null;
+  const marginNoteForOgRow = (row: OgPlayer) => marginNoteForOgExploreRow(row, universe);
 
   return new ImageResponse(
     (
@@ -339,7 +337,10 @@ export async function GET(req: Request) {
               <div style={{ width: 72, display: "flex" }}>{universe === "college" ? "School" : "Team"}</div>
               <div style={{ width: 80, textAlign: "right", display: "flex" }}>{colHeader}</div>
             </div>
-            {players.map((p, i) => (
+            {players.map((p, i) => {
+              const rowMarginNote = i < 2 ? marginNoteForOgRow(p) : null;
+              const rowAgent = rowMarginNote ? AGENT_BY_ID[rowMarginNote.agentId] : null;
+              return (
               <div
                 key={`${p.full_name}-${i}`}
                 style={{ display: "flex", alignItems: "center", fontSize: 20 }}
@@ -357,7 +358,7 @@ export async function GET(req: Request) {
                   <div style={{ display: "flex" }}>
                     {p.full_name.length > 22 ? `${p.full_name.slice(0, 20)}…` : p.full_name}
                   </div>
-                  {i === 0 && leadMarginNote && leadAgent ? (
+                  {rowMarginNote && rowAgent ? (
                     <div
                       style={{
                         display: "flex",
@@ -369,8 +370,8 @@ export async function GET(req: Request) {
                         marginTop: 2,
                       }}
                     >
-                      <span style={{ display: "flex" }}>{leadAgent.emoji}</span>
-                      <span style={{ display: "flex" }}>{leadMarginNote.text}</span>
+                      <span style={{ display: "flex" }}>{rowAgent.emoji}</span>
+                      <span style={{ display: "flex" }}>{rowMarginNote.text}</span>
                     </div>
                   ) : null}
                 </div>
@@ -393,7 +394,8 @@ export async function GET(req: Request) {
                   {p.stat % 1 === 0 ? p.stat : p.stat.toFixed(1)}
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         ) : null}
 
