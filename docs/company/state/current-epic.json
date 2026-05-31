@@ -13,8 +13,8 @@
     {
       "id": "lab-pro-gate-panel-pitches",
       "title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "d63a4a0f"
     },
     {
       "id": "lab-pro-gate-hallway-teasers",
@@ -23,7 +23,7 @@
       "merge_commit": "675044ea"
     }
   ],
-  "next_atom_id": "lab-pro-gate-panel-pitches",
+  "next_atom_id": "lab-pro-gate-hallway-teasers",
   "epic_status": "active",
   "created_at": "2026-05-31T08:30:00Z",
   "updated_at": "2026-05-31T08:32:30Z",

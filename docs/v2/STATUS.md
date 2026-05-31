@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | lab-og-live-demo-fallback-copy |
-| Last commit | `da33eafd` |
+| Last commit | `d63a4a0f` |
 
 ---
 
