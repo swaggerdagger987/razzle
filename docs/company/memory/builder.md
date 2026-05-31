@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-sidebar-agent-role-taglines | c6b70016 | agent.role tagline under Staff Picks headers; 1 file.
+
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | merged base sticker + fetchOgLiveRows + prospects items.

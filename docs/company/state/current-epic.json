@@ -1,38 +1,44 @@
 {
-  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
-  "epic_title": "Lab L4 — pro gates feel like upgrade, not error",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "epic_status": "active",
+  "big_problem": "Lab Staff Picks show agent avatars but not what each specialist owns — users cannot scan the band before opening a panel.",
+  "epic_title": "Lab L2 — Staff Picks sidebar shows agent domain at a glance",
+  "parity_ref": "Lab L2 — agent-owned headers",
+  "depth_ref": "Lab L2",
   "atoms": [
     {
-      "id": "lab-pro-gate-loading-copy",
-      "title": "Pro gate — agent-owned loading line on upgrade card",
+      "id": "lab-sidebar-staff-picks-by-agent",
+      "title": "Staff Picks grouped by agent owner",
       "status": "done",
-      "merge_commit": "7236be3e"
+      "merge_commit": "4e8b0e8e"
     },
     {
-      "id": "lab-pro-gate-panel-pitches",
-      "title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
-      "status": "done",
-      "merge_commit": "0b59daee"
+      "id": "lab-sidebar-agent-role-taglines",
+      "title": "Staff Picks — agent role tagline under group headers",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-pro-gate-hallway-teasers",
-      "title": "Pro gate — screener hallway + domain teasers",
-      "status": "done",
-      "merge_commit": "675044ea"
+      "id": "lab-sidebar-staff-ask-link",
+      "title": "Staff Picks — ask this agent link to Situation Room",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "next_atom_id": "lab-sidebar-agent-role-taglines",
+  "created_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T14:10:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
       "last_atom": "lab-og-live-demo-fallback-copy",
       "merge_commit": "18d92f6b"
+    },
+    {
+      "id": "lab-l4-pro-gate-upgrade-not-error",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-hallway-teasers",
+      "merge_commit": "675044ea"
     }
   ]
 }
