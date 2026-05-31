@@ -1,4 +1,4 @@
-2026-05-31 | league-og-power-rankings-watermark | f6e0985f3 | PASS | curl power-rankings OG 70764B; pytest 1; Gate C demo rows.
+2026-05-31 | league-og-power-rankings-watermark | 3bc0b450b | PASS | curl power-rankings OG 70764B; pytest 1; Gate C demo rows.
 2026-05-31 | league-og-pressure-map-watermark | 7b942533a | PASS | curl pressure-map OG 64347B; pytest 1; Gate C demo rows.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.

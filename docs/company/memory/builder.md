@@ -1,4 +1,4 @@
-2026-05-31 | league-og-power-rankings-watermark | f6e0985f3 | SHIP | Power Rankings OG toLeague + LIVE/SAMPLE stickers.
+2026-05-31 | league-og-power-rankings-watermark | 3bc0b450b | SHIP | Power Rankings OG toLeague + LIVE/SAMPLE stickers.
 2026-05-31 | league-og-pressure-map-watermark | 7b942533a | SHIP | Pressure Map OG toLeague + LIVE/SAMPLE stickers.
 2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
