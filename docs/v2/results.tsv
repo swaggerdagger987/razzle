@@ -63,4 +63,4 @@ cycle	commit	score	status	pillar	slice	description
 71	72597329	depth+voice+simplicity	keep	Lab	L5 OG buy-sell snapshot rows	trust=T5,T6; BuySellRenderer ogSnapshotRows; curl buysell snapshot 42380B demo 58072B
 70	916ba843	depth+voice+simplicity	keep	Lab	L5 OG snapshot rows from panel	trust=T5,T6; snapshot query on LabOgExportLink; curl dashboard snapshot 45249B PNG
 71	72597329	depth+voice+simplicity	keep	Lab	L5 OG buy-sell snapshot rows	trust=T5,T6; BuySellRenderer ogSnapshotRows; curl buysell snapshot 42380B demo 58072B
-72	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG dynasty rankings position filter	trust=T5,T6; LabOgExportLink.position+snapshotRows; curl rankings WR 50793B
+72	2eff2cb4	depth+voice+simplicity	keep	Lab	L5 OG dynasty rankings position filter	trust=T5,T6; LabOgExportLink.position+snapshotRows; curl rankings WR 50793B
