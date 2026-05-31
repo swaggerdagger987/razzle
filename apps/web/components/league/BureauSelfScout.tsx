@@ -8,6 +8,10 @@ import type { Route } from "next";
 import { useParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import {
+  encodeBureauSelfScoutOgSnapshot,
+  type BureauSelfScoutOgSnapshot,
+} from "@/lib/bureau-self-scout-og-snapshot";
 
 interface Props {
   data: Record<string, unknown>;
@@ -74,6 +78,41 @@ export function BureauSelfScout({ data }: Props) {
     (min, pos) => ((depth[pos]?.count ?? 0) < (depth[min]?.count ?? 0) ? pos : min),
     "QB" as (typeof POS_ORDER)[number],
   );
+
+  const ogSnapshot: BureauSelfScoutOgSnapshot | undefined =
+    leagueId && userId && team?.name
+      ? {
+          team: String(team.name),
+          record: String(team.record ?? ""),
+          league: league?.name ? String(league.name) : undefined,
+          season: league?.season != null ? String(league.season) : undefined,
+          archetype: build?.archetype ? String(build.archetype) : undefined,
+          rank: rank?.rank != null ? Number(rank.rank) : undefined,
+          total: rank?.total != null ? Number(rank.total) : undefined,
+          positions: POS_ORDER.map((pos) => {
+            const block = depth[pos] ?? {};
+            const top = [...(block.depth ?? [])].sort(
+              (a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0),
+            )[0];
+            return {
+              position: pos,
+              grade: depthGrade(block),
+              score: depthScore(block),
+              count: block.count ?? 0,
+              elite: block.elite ?? 0,
+              top_name: top?.name ?? "—",
+            };
+          }),
+        }
+      : undefined;
+
+  const ogParams = new URLSearchParams({
+    league: leagueId,
+    user: userId,
+    download: "1",
+  });
+  const snap = ogSnapshot ? encodeBureauSelfScoutOgSnapshot(ogSnapshot) : undefined;
+  if (snap) ogParams.set("snapshot", snap);
 
   return (
     <div className="flex flex-col gap-6">
@@ -176,7 +215,7 @@ export function BureauSelfScout({ data }: Props) {
               {copied ? "copied!" : "copy link"}
             </button>
             <a
-              href={`/og/self-scout?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(userId)}&download=1`}
+              href={`/og/self-scout?${ogParams.toString()}`}
               download="razzle-self-scout.png"
               className="btn-chunky active text-xs"
               style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
