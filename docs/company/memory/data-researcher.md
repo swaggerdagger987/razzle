@@ -23,11 +23,13 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | deadline pressure OG | trade threads share desperation bars | pressure-map atom | keep | cycle 61 briefing
 2026-05-31 | manager archetype OG | PANIC SELLER labels are trade-DM shorthand | manager-profiles atom | keep | cycle 62 briefing
 2026-05-31 | trade partnership OG | collusion bait in trade threads | trade-network atom | keep | cycle 63 briefing
-2026-05-31 | power rankings OG | luck-adjusted boards beat W-L in dynasty chats | league-power-rankings-og | keep | cycle 80 briefing
 2026-05-31 | position grade OG | A–F roster grid for trade threads | self-scout atom | keep | factory cycle 1 briefing
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
+2026-05-31 | Bureau share rows | 433d8002 | keep | Monte Carlo export row now matches Explore copy+export pattern
+2026-05-31 | Monte Carlo share row | da33eafd | keep | Bureau group-chat export parity; H2H already on base
+2026-05-31 | Lab OG launch10 label | 6e98f4a2 | keep | live cards without sample tag when API rows present
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
-2026-05-31 | Roster depth tab | da33eafd | keep | named player depth lists beat generic roster posts
+2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
