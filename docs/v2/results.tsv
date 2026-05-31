@@ -63,5 +63,5 @@ cycle	commit	score	status	pillar	slice	description
 71	33808392	depth+voice+simplicity	keep	Lab	L5 OG snapshot efficiency aging	trust=T5,T6; snapshotRows on efficiency+aging LabOgExportLink; curl buysell snapshot 58072B PNG
 72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
 73	1578f75e	depth+voice+simplicity	keep	Lab	L5 OG rankings position filter	trust=T5,T6; LabOgExportLink.position; curl WR 50210B
-74	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot respects position	trust=T5,T6; ogSnapshotRows filtered when WR tab selected
+74	f71f0c5d	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot respects position	trust=T5,T6; ogSnapshotRows filtered when WR tab selected
 74	ac046c85	depth+voice+simplicity	keep	Lab	L5 OG API origin rewrite	trust=T5,T6; request-origin /api fetch; curl rankings 61061B dashboard 60034B
