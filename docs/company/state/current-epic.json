@@ -15,19 +15,19 @@
       "id": "lab-og-weekly-prospects-live-sticker-guard",
       "title": "Weekly + prospects LIVE sticker pytest guard",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "d03cb653b"
     },
     {
       "id": "lab-og-buysell-formula-live",
       "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
       "status": "pending",
-      "merge_commit": null
+      "merge_commit": "d03cb653b"
     },
     {
       "id": "lab-og-from-panel-gate-c-rest",
       "title": "Gate C pytest + curl for prospects/tradevalues snapshot FROM PANEL",
       "status": "pending",
-      "merge_commit": null
+      "merge_commit": "d03cb653b"
     }
   ],
   "next_atom_id": "lab-og-buysell-formula-live",
