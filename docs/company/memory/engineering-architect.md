@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | league-trade-finder-room-hallway | f6e0985f3 | 3 files; toRoom bones mirrors H2H atlas pattern.
+2026-05-31 | league-trade-finder-room-hallway | d351e675d | 3 files; toRoom bones mirrors H2H atlas pattern.
 
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | 2 files; extractBuySellRows + buysellStatKeys.
 
