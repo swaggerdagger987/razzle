@@ -1,26 +1,32 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab sidebar still lists Staff Picks as a flat catalog — agents own panels in headers but not in navigation, so the hallway band is invisible until you open a panel.",
-  "epic_title": "Lab L2 — sidebar groups launch-10 by agent owner",
-  "parity_ref": "docs/v2/AGENTS.md — LabSidebar group by agent",
-  "depth_ref": "Lab L2",
+  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
+  "epic_title": "Lab L4 — pro gates feel like upgrade, not error",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
   "atoms": [
     {
-      "id": "lab-sidebar-staff-picks-by-agent",
-      "title": "Staff Picks grouped under agent owner headers in LabSidebar",
-      "status": "in_progress",
-      "merge_commit": null
+      "id": "lab-pro-gate-loading-copy",
+      "title": "Pro gate — agent-owned loading line on upgrade card",
+      "status": "done",
+      "merge_commit": "7236be3e"
     },
     {
-      "id": "lab-sidebar-search-agent-labels",
-      "title": "Search results show agent owner in sidebar item title",
-      "status": "pending",
-      "merge_commit": null
+      "id": "lab-pro-gate-panel-pitches",
+      "title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
+      "status": "done",
+      "merge_commit": "0b59daee"
+    },
+    {
+      "id": "lab-pro-gate-hallway-teasers",
+      "title": "Pro gate — screener hallway + domain teasers",
+      "status": "done",
+      "merge_commit": "675044ea"
     }
   ],
-  "next_atom_id": "lab-sidebar-staff-picks-by-agent",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:40:00Z",
+  "updated_at": "2026-05-31T08:45:00Z",
   "completed_epics": [
     {
       "id": "bureau-h2h-og-live-vs-sample-stickers",
@@ -29,28 +35,10 @@
       "merge_commit": "b4d91213"
     },
     {
-      "id": "lab-l5-launch10-og-live-extract",
-      "status": "complete",
-      "last_atom": "lab-og-dynasty-comps-pro-teaser",
-      "merge_commit": "26a590c9"
-    },
-    {
       "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
       "last_atom": "lab-og-live-demo-fallback-copy",
-      "merge_commit": "45d4a448"
-    },
-    {
-      "id": "lab-l5-og-watermark-band",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-band-head-to-head",
-      "merge_commit": "44d05684"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
+      "merge_commit": "18d92f6b"
     }
   ]
 }

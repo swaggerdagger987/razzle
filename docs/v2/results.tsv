@@ -1,4 +1,5 @@
-cycle	hash	pillars	verdict	pillar	slice	notes
+<<<<<<< HEAD
+HEAD
 1	none	depth+voice+simplicity	keep	Explore	L1 screener URL state	nuqs filters in URL; shareable screener links
 2	none	depth+voice+simplicity	keep	Explore	L1 Player Sheet shell	PlayerSheet drawer; click row opens sheet
 3	none	depth+voice+simplicity	keep	Lab	L1 panel registry	@razzle/panels catalog; Lab index grid
@@ -75,4 +76,7 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 118	15109115	depth+voice+simplicity	keep	Lab	L5 Weekly+Prospects OG LIVE sticker via panel API	trust=T5,T6; WR default+limit 25; curl weekly 55816B prospects 60688B; live-rows epic atom 2/3
 119	45d4a448	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG SAMPLE demo sticker	trust=T1,T5,T6; terracotta vs teal LIVE; curl rankings demo 66345B weekly 63522B; live-rows epic 3/3 complete
 120	08e1824c	depth+voice+simplicity	keep	League	L5 Bureau H2H OG LIVE league sticker	trust=T5,T6; teal LIVE when fetchH2H; curl h2h 67846B; h2h-stickers epic atom 1/3
+121	0b59daee	depth+voice+simplicity	keep	Lab	L4 Pro gate sharpened pitches on 3 panels	trust=T2,T6; tradevalues/breakouts/dynasty-comps PITCH_BY_SLUG; teaser pytest 3 passed; L4 epic atom 2/3
 122	b4d91213	depth+voice+simplicity	keep	League	L5 Bureau H2H OG force_demo QA param	trust=T5,T6; skip fetch when force_demo=1; curl 77736B; h2h-stickers epic 3/3 complete
+126	0c46d46f	depth+voice+simplicity	keep	Lab	L4 Pro gate perks Launch-10 Bureau names	trust=T2,T6; PRO_UPGRADE_PERKS; pytest 4; build ok; L4 epic atom 3/3 complete
+127	f56fdbd8	depth+voice+simplicity	keep	Lab	L4 Pro gate perks PARITY catalog titles + Bureau-7	trust=T2,T6; launch10PerkLabels; bureau7PerkLabels; pytest 6; L4 epic atom 3/3 complete
