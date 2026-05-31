@@ -1,14 +1,13 @@
 # Memory — Product Strategist
 
 2026-05-31 | bureau-self-scout-sharebar-snapshot | 709660c | SHIP | League L5 scout epic atom 1/3; Self-Scout OG mirrors panel grades.
+2026-05-31 | lab-og-gamelog-player-default | Lab export URLs must carry player_id for Reddit copy-paste | SHIP | live-fetch epic 3/3.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
 2026-05-31 | lab-og-launch10-snapshot-default | e2a3ce8a | SHIP | closes gamelog OG epic; live rows when no snapshot.
-
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | SHIP | keep | all Staff Picks domain blur; T2/T6.
 
 2026-05-31 | Cycle 118 prospects items | e00217d1 | items[] when prospects empty.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | SHIP | NEXT.md live-rows epic atom 1/3.

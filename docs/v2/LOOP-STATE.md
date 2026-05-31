@@ -1,9 +1,9 @@
-cycle: 131
+cycle: 132
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
 next_slice: bureau-manager-profiles-sharebar-snapshot
-last_keep_cycle: 131
+last_keep_cycle: 132
 last_commit: 709660c
 league_l5_self_scout_snapshot_epic: active
 lab_l5_og_live_fetch_epic: complete
