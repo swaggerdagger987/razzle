@@ -249,6 +249,10 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
+  const hasStaffMarginNotes = players
+    .slice(0, TOP_MARGIN_NOTE_ROWS)
+    .some((p) => marginNoteForOgExploreRow(p, universe) !== null);
+  const showStaffLiveSticker = !isDemo && hasStaffMarginNotes;
   return new ImageResponse(
     (
       <div
@@ -305,6 +309,25 @@ export async function GET(req: Request) {
               }}
             >
               SAMPLE · not live data
+            </div>
+          ) : null}
+          {showStaffLiveSticker ? (
+            <div
+              style={{
+                display: "flex",
+                fontSize: 16,
+                fontWeight: 700,
+                fontFamily: "Caveat",
+                background: "#2ec4b6",
+                color: "#f7efe5",
+                padding: "4px 12px",
+                border: "3px solid #2d1f14",
+                borderRadius: 6,
+                boxShadow: "3px 3px 0 #2d1f14",
+                transform: "rotate(-2deg)",
+              }}
+            >
+              LIVE · staff notes
             </div>
           ) : null}
         </div>

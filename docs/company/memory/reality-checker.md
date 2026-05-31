@@ -1,3 +1,4 @@
+2026-05-31 | explore-og-margin-note-sticker | f6e0985f3 | PASS | pytest 11; curl explore 73163B; web build exit 0.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
@@ -6,6 +7,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker
 
+2026-05-31 | explore-og-margin-note-sticker | f6e0985f3 | PASS | pytest 11; curl explore 73163B; web build exit 0.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | PASS | pytest 4; curl explore 65482B; web build exit 0.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | PASS | pytest 5; curl snapshot 54427B; web build green.
 2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | pytest 5; web build; Gate C evidence on file.
