@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-gamelog-empty-weeks-export | da33eafd | 1 file GamelogRenderer; footer LabOgExportLink ≤15 lines.
 2026-05-31 | lab-og-sample-labels | 54443bc8 | 1 file route.tsx; launch10DemoStickerLabel + blurbs ≤30 lines.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
