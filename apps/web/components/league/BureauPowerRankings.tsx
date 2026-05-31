@@ -121,6 +121,19 @@ export function BureauPowerRankings({ data, leagueId }: Props) {
         )}
       </section>
 
+      {leagueId && (
+        <div className="flex flex-wrap items-center gap-2">
+          <a
+            href={`/og/power-rankings?league=${encodeURIComponent(leagueId)}&download=1`}
+            download="razzle-power-rankings.png"
+            className="btn-chunky active text-xs"
+            style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+          >
+            export card
+          </a>
+        </div>
+      )}
+
       <footer className="flex flex-wrap items-center gap-4 text-sm">
         <Link href={`/league/${leagueId}/monte-carlo` as Route} className="text-orange underline">
           monte carlo →
