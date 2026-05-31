@@ -1,5 +1,13 @@
 # Memory — Data Researcher
 
+2026-05-31 | cycle 132 | — | No new intel; rankings/weekly are dynasty screenshot staples.
+
+2026-05-31 | cycle 131 | — | No new Reddit intel; snapshot trust is product signal.
+
+2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | PASS | no web; Hawkeye/Atlas panel curl only.
+
+2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | PASS | no web research; curl evidence only.
+
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 

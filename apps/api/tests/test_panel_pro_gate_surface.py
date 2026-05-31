@@ -5,6 +5,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import pytest
+
 LAUNCH_10_STAFF_PICK_SLUGS = (
     "weekly",
     "prospects",
@@ -58,3 +60,38 @@ def test_pro_gate_from_panel_error_wired_in_breakouts():
         _repo_root() / "apps/web/components/lab/ProGateFromPanelError.tsx"
     ).read_text(encoding="utf-8")
     assert re.search(r"export function ProGateFromPanelError", surface)
+
+
+def test_pro_gate_from_panel_error_wired_in_tradevalues():
+    renderer = (
+        _repo_root() / "apps/web/components/lab/renderers/TradeValuesRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "ProGateFromPanelError" in renderer
+    assert "ProUpgradeGate" not in renderer
+
+
+def test_pro_gate_from_panel_error_wired_in_efficiency():
+    renderer = (
+        _repo_root() / "apps/web/components/lab/renderers/EfficiencyRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "ProGateFromPanelError" in renderer
+    assert "ProUpgradeGate" not in renderer
+
+
+def _assert_pro_gate_renderer(path: str) -> None:
+    renderer = (_repo_root() / path).read_text(encoding="utf-8")
+    assert "ProGateFromPanelError" in renderer
+    assert "ProUpgradeGate" not in renderer
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx",
+        "apps/web/components/lab/renderers/GamelogRenderer.tsx",
+        "apps/web/components/lab/renderers/BuySellRenderer.tsx",
+        "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx",
+    ],
+)
+def test_pro_gate_from_panel_error_wired_in_remaining_launch10(path: str):
+    _assert_pro_gate_renderer(path)
