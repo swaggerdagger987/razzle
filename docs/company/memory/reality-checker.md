@@ -35,3 +35,4 @@ explicit checks in the verification routine.
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
 2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
+2026-05-31 | prospects tradevalues snap Gate C | da33eafd | PASS | curl 58084B 62488B | keep | evidence/2026-05-31-lab-og-prospects-tradevalues-snapshot.md

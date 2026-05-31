@@ -1,20 +1,24 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic": "League L5 — Bureau behavioral share parity",
-  "slice_title": "Trade Network copy link beside export card",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/trade-network PNG ≥40KB",
+  "big_problem": "Lab export cards still ship demo rows on panels where the table already has live data — screenshots don't match what the user sees.",
+  "epic": "Lab L5 — OG export cards mirror in-panel rows",
+  "slice_title": "Prospects + tradevalues export snapshot rows",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — snapshot OG PNG ≥40KB",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/league/BureauTradeNetwork.tsx"],
-  "max_files": 1,
-  "max_lines": 40,
+  "allowed_paths": [
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx"
+  ],
+  "max_files": 2,
+  "max_lines": 60,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-trade-network.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/trade-network?league=test&download=1'"
+    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/prospects?download=1&snapshot=eyJuIjoiVHJhdmlzIEh1bnRlciIsInAiOiJXUiIsInQiOiJKQVgiLCJzIjo5NCwic2wiOiJTY29yZSJ9XQ'",
+    "curl -s -o /tmp/og-tradevalues-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/tradevalues?download=1&snapshot=eyJuIjoiSmEnTWFyciBDaGFzZSIsInAiOiJXUiIsInQiOiJDSU4iLCJzIjoxMDIwMCwic2wiOiJWYWx1ZSJ9XQ'"
   ],
-  "out_of_scope": ["New OG route", "API changes", "auth/billing"],
+  "out_of_scope": ["OG route changes", "new panels", "auth/billing"],
   "builder_mode": "composer-surgical"
 }
