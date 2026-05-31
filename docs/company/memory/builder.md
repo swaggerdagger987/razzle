@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | bureau-h2h-og-force-demo-qa | da33eafd | force_demo skips H2H fetch; curl 77736B with league params.
+
 2026-05-31 | bureau-h2h-og-sample-sticker | 7b9639d9 | terracotta SAMPLE on H2H demo path; curl 75595B.
 
 2026-05-31 | bureau-h2h-og-live-sticker | 08e1824c | curl head-to-head 67846B; build+pytest green.
