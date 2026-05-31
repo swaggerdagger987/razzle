@@ -106,7 +106,7 @@ export function TradeValuesRenderer({ panel }: Props) {
       position: p.position,
       team: p.team,
       stat: formula ? (p.formula_score ?? 0) : (p.trade_value ?? 0),
-      statLabel: formula ? formula.name : "Value",
+      statLabel: formula ? "Score" : "Value",
     }));
   }, [players, formula]);
 
@@ -246,7 +246,6 @@ export function TradeValuesRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="tradevalues"
             downloadName="razzle-trade-values.png"
-            position={position || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
