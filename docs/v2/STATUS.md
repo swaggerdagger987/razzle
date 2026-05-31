@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 129 — Lab L4 ProGateFromPanelError breakouts)
+**Last updated:** 2026-05-31 (factory cycle 128 — College Explore OG Hawkeye staff note)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,21 +15,26 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 129 |
+| Cycle | 128 |
 | Last board | 54 |
-| Focus pillar | Lab |
-| Focus layer | L4 |
-| Next slice | lab-l4-pro-gate-error-tradevalues |
-| Last commit | `5721ee33` |
-
-Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
+| Focus pillar | Explore |
+| Focus layer | L2 |
+| Next slice | explore-og-college-hawkeye-note |
+| Last commit | `0a4536df` |
 
 ---
 
-## Product surface summary
+## Factory / workday
 
-| Area | State | Notes |
-|------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
-| Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
-| Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |
+| Field | Value |
+|-------|-------|
+| Workday | open (`good morning team`) |
+| Epic | Explore L2 — college OG GTM staff note (atom 1/1) |
+| PR | #774 |
+
+---
+
+## Recent ship (cycle 128)
+
+- College `/og/explore` export shows first Hawkeye margin note (e.g. target hog on campus) above watermark band.
+- Deduped Lab OG live-sticker atoms already on base; universe param already on ExploreShareButton.

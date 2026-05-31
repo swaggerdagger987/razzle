@@ -1,6 +1,11 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
+<<<<<<< HEAD
+2026-05-31 | explore-og-college-hawkeye-note | 0a4536df | Factory open cycle 1; college GTM epic atom 1/1.
+=======
+2026-05-31 | Factory cycle 121 explore OG query | 7dbd4b11 | workday cycle 1; lock #813; live-fetch epic atom 2/3.
+>>>>>>> origin/razzle-v2-redesign
+2026-05-31 | Factory cycle 121 pro gate panel pitches | da33eafd | L4 epic atom 2/3; factory open.
 
 2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
 
