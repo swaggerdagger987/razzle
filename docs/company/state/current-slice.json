@@ -1,36 +1,32 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-percentiles-tolab-wr",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity (atom 4/4 WR position)",
-  "slice_title": "Percentiles OG toLab WR position hallway",
-  "parity_ref": "Lab panel OG data rows",
+  "big_problem": "Aging curves default to RB in Lab but OG export omitted position=RB in toLab.",
+  "epic": "Lab L5 — OG hallway position defaults (Launch-10)",
+  "slice_title": "aging OG watermark includes default RB position in toLab",
+  "atom_id": "lab-og-tolab-aging-position",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — percentiles OG PNG ≥40KB; watermark includes WR position",
+  "acceptance_ref": "HALLWAY T6 + FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/api/tests/test_lab_og_tolab_watermark.py",
+    "docs/v2/evidence/2026-05-31-lab-og-tolab-aging-position.md"
   ],
-  "max_files": 2,
-  "max_lines": 20,
+  "max_files": 3,
+  "max_lines": 40,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/percentiles-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/percentiles?force_demo=1&download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": [
-    "Percentiles live API wiring",
-    "New panels",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["New panels", "NORTH_STAR/DESIGN/DECISIONS", "Bureau H2H"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
-    "builder": "SHIP"
+    "builder": "SHIP",
+    "verdict": "SHIP"
   },
   "status": "shipped",
-  "content_commit": "930e13926",
-  "reality": "PASS"
+  "content_commit": "28ab12fd3"
 }
