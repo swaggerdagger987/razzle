@@ -9,7 +9,7 @@
       "id": "lab-l4-pro-gate-error-surface",
       "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
       "status": "done",
-      "merge_commit": "5721ee33"
+      "merge_commit": "a6954c61"
     },
     {
       "id": "lab-l4-pro-gate-error-tradevalues",
