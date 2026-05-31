@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | Unhide Roster Depth tab |
-| Last commit | `da33eafd` |
+| Last commit | `46aeb445` |
 
 Recent completions (cycle 79): Power Rankings OG share card at `/og/power-rankings` with demo fallback.
 
