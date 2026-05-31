@@ -45,12 +45,6 @@
       "status": "complete",
       "last_atom": "league-strength-of-schedule-og-share",
       "merge_commit": "7f652a98"
-    },
-    {
-      "id": "lab-l5-og-position-filter",
-      "status": "complete",
-      "last_atom": "lab-og-position-gamelog",
-      "merge_commit": "228c4b59"
     }
   ]
 }
