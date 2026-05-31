@@ -12,6 +12,8 @@ A good entry changes future behavior. A bad entry is a diary.
 
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 
+2026-05-31 | Factory cycle 1 schedule tab | ce0cdcb2 | keep | Bureau last hidden tab on base was schedule; PR #436
+
 2026-05-31 | Factory cycle 1 dashboard OG snapshot | c9151786 | keep | dedup prospects+tradevalues on base 1a56450e
 
 ---
@@ -40,3 +42,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | unhide epic atom 2/4; curl 59807B
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Factory open cycle 1 Build Profiles tab | da33eafd | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
+2026-05-31 | Factory open cycle 1 Schedule tab | ce0cdcb2 | keep | workday 05:56Z; League unhide epic complete; PR #452; Lab OG epic resumes on base

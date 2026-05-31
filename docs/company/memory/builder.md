@@ -20,6 +20,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
+2026-05-31 | league-schedule-tab | BureauStrengthOfSchedule Octo renderer | ce0cdcb2 | SHIP | keep | unhide strength-of-schedule slug only
+
 2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
 2026-05-31 | Bureau Manager Profiles copy link | 04c19959 | keep | copyProfilesLink row; curl manager-profiles 77194B
@@ -44,3 +46,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
+2026-05-31 | league-schedule-tab | ce0cdcb2 | keep | BureauStrengthOfSchedule Octo renderer; HIDDEN_BUREAU_SLUGS cleared

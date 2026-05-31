@@ -1,5 +1,5 @@
 /** Scaffolded tabs hidden until bespoke renderers ship (board cycle 43). */
-export const HIDDEN_BUREAU_SLUGS = new Set(["strength-of-schedule"]);
+export const HIDDEN_BUREAU_SLUGS = new Set<string>();
 
 export const BUREAU_FEATURES = [
   { slug: "self-scout", label: "Self-Scout", default: true },
