@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (cycle 87 — Trade Network copy link)  
+**Last updated:** 2026-05-27 (repo organization cleanup)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 87 |
+| Cycle | 56 |
 | Last board | 54 |
-| Focus pillar | League |
+| Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | PARITY — next League L5 unhidden tab or Lab OG live rows |
-| Last commit | `2c74e05c` |
+| Next slice | Bureau H2H export or Lab panel OG live data rows |
+| Last commit | `da33eafd` |
 
-Recent completions (cycle 87): Trade Network copy link + export row; Bureau behavioral share parity epic complete (6/6 atoms).
+Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
 ---
 

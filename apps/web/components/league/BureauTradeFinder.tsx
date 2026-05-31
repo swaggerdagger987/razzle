@@ -5,6 +5,7 @@ import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
 import { getSleeperUser } from "@/lib/sleeper";
+import { BureauTradeFinderShareBar } from "./BureauTradeFinderShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -97,18 +98,7 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           {(() => {
             const user = getSleeperUser();
             if (!user?.user_id) return null;
-            return (
-              <a
-                href={`/og/trade-finder?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                  user.user_id,
-                )}&download=1`}
-                download="razzle-trade-finder.png"
-                className="btn-chunky active mt-3 inline-block text-xs"
-                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-              >
-                export card
-              </a>
-            );
+            return <BureauTradeFinderShareBar leagueId={leagueId} userId={user.user_id} />;
           })()}
         </section>
       )}

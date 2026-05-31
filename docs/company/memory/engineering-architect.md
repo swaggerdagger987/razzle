@@ -27,9 +27,10 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
+2026-05-31 | BureauMonteCarlo clipboard | 433d8002 | keep | useCallback + copied state mirrors Self-Scout; no OG route change
+2026-05-31 | Bureau Monte Carlo clipboard | da33eafd | keep | merge sync base Lab epic; OG Razzle spans; dedup H2H ShareBar
+2026-05-31 | panelBlurbSuffix launch-10 | 6e98f4a2 | keep | 1 file; LAUNCH_10_OG_SLUGS mirrors LabSidebar STAFF_PICKS
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | power-rankings OG route | 46aeb445 | keep | mirrors pressure-map; diff bars + luck tags
-2026-05-31 | BureauRosterDepth | 2d11a65f | keep | Self-Scout depth grade pattern; 3-file contract
-2026-05-31 | BureauBuildProfiles | 19445fa1 | keep | build-profiles API rows; Atlas hallway; 3-file contract
-2026-05-31 | BureauTradeNetworkShareBar | 2c74e05c | keep | mirrors PowerRankingsShareBar; 2-file contract ≤80 lines
+2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
+2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout

@@ -6,15 +6,14 @@
 
 ## Change
 
-- `BureauTradeNetworkShareBar.tsx`: copy network link button beside export card (mirrors Power Rankings share bar).
-- `BureauTradeNetwork.tsx`: footer wired to share bar component.
+- `BureauTradeNetwork.tsx`: copy link button beside export card (mirrors Pressure Map / Manager Profiles).
 
 ## Verification
 
 ```bash
 curl -s -o /tmp/og-trade-network.png -w '%{http_code} %{size_download}\n' \
   'http://localhost:3000/og/trade-network?league=test&download=1'
-# 200 68090
+# 200 67677
 
 file /tmp/og-trade-network.png
 # PNG image data, 1200 x 630
