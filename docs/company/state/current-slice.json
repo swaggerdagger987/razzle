@@ -1,9 +1,9 @@
 {
   "date": "2026-05-31",
   "atom_id": "bureau-pressure-map-share-bar",
-  "big_problem": "Bureau-7 surfaces need copyable league URLs plus OG export on every tab — trade-deadline screenshots travel in group chats (DEPTH League L5).",
-  "epic": "League L5 — Bureau share row parity (copy link + export)",
-  "slice_title": "Pressure Map copy league URL + export card share row",
+  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic": "League L5 — Bureau behavioral share parity",
+  "slice_title": "Pressure Map BureauPressureMapShareBar component refactor",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C",

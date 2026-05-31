@@ -69,5 +69,7 @@ cycle	commit	score	status	pillar	slice	description
 77	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
 78	30454811	depth+hallway+voice+simplicity	keep	League	L5 Bureau Monte Carlo share bar	trust=T2,T5,T6; BureauMonteCarloShareBar copy sim + export; curl monte-carlo OG 53767B
 80	6c8da85f	depth+voice+simplicity	keep	League	L5 Bureau H2H OG snapshot export	trust=T1,T5,T6; encode you/them/position bars in snapshot param; curl h2h OG 59305B; epic atom 2/3
-81	864e1d14	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map share bar	trust=T5,T6; BureauPressureMapShareBar component; curl pressure-map OG 60104B
-82	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
+82	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
+83	0c5112c5	depth+voice+simplicity	keep	Lab	L5 OG snapshot gamelog comps weeks	trust=T5,T6; snapshotRows; curl gamelog 40520B comps 47292B
+84	04c19959	depth+voice+simplicity	keep	League	L5 Bureau Manager Profiles copy link export row	trust=T5,T6; copy link + export; curl manager-profiles OG 77194B; behavioral share epic atom 1
+85	864e1d14	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map share bar component	trust=T5,T6; BureauPressureMapShareBar; curl pressure-map OG 60104B
