@@ -29,6 +29,7 @@ const STAT_CANDIDATE_KEYS = [
   "score",
   "rbs_score",
   "breakout_score",
+  "rps",
   "similarity",
   "rank_diff",
   "composite_score",
@@ -55,6 +56,13 @@ const PLAYER_SCOPED_SLUGS = new Set([
   "fptsbreakdown",
   "archetypes",
 ]);
+
+/** Panel-specific stat for OG ranking (matches in-product Lab renderers). */
+const PANEL_OG_STAT_KEY: Record<string, string> = {
+  weekly: "ppg",
+  prospects: "rps",
+  breakouts: "rbs_score",
+};
 
 /** Launch-10 Lab panels — live OG cards use panel blurb only (no sample/live suffix). */
 const LAUNCH_10_OG_SLUGS = new Set([
@@ -112,12 +120,12 @@ const DEFAULT_DEMO_ROWS: OgRow[] = [
 
 const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
   weekly: [
-    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 24.6, statLabel: "FPTS" },
-    { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 22.1, statLabel: "FPTS" },
-    { name: "Brock Bowers", position: "TE", team: "LV", stat: 18.4, statLabel: "FPTS" },
-    { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 26.8, statLabel: "FPTS" },
-    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 14.2, statLabel: "FPTS" },
-    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 19.7, statLabel: "FPTS" },
+    { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 26.8, statLabel: "PPG" },
+    { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 24.6, statLabel: "PPG" },
+    { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 22.1, statLabel: "PPG" },
+    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 19.7, statLabel: "PPG" },
+    { name: "Brock Bowers", position: "TE", team: "LV", stat: 18.4, statLabel: "PPG" },
+    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 14.2, statLabel: "PPG" },
   ],
   prospects: [
     { name: "Travis Hunter", position: "WR", team: "JAX", stat: 94, statLabel: "Score" },
@@ -233,7 +241,19 @@ function resolveApiOrigin(req: Request): string {
   return new URL(req.url).origin;
 }
 
-function extractRows(data: unknown): OgRow[] {
+function statLabelForKey(k: string): string {
+  let statLabel = k.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  if (k === "fantasy_points_ppr") statLabel = "FPTS";
+  if (k === "ppg") statLabel = "PPG";
+  if (k === "rps") statLabel = "RPS";
+  if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
+  if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
+  if (k === "similarity") statLabel = "Match %";
+  if (k === "rank_diff") statLabel = "Chg";
+  return statLabel;
+}
+
+function extractRows(data: unknown, slug?: string): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
   const obj = data as Record<string, unknown>;
@@ -271,23 +291,22 @@ function extractRows(data: unknown): OgRow[] {
 
   if (candidates.length === 0) return [];
 
+  const preferredKey = slug ? PANEL_OG_STAT_KEY[slug] : undefined;
+  const statKeys = preferredKey
+    ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+    : [...STAT_CANDIDATE_KEYS];
+
   let statKey = "";
   let statLabel = "";
-  for (const k of STAT_CANDIDATE_KEYS) {
+  for (const k of statKeys) {
     if (candidates[0] && k in candidates[0] && candidates[0][k] != null) {
       statKey = k;
-      statLabel = k.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-      if (k === "fantasy_points_ppr") statLabel = "FPTS";
-      if (k === "ppg") statLabel = "PPG";
-      if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
-      if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
-      if (k === "similarity") statLabel = "Match %";
-      if (k === "rank_diff") statLabel = "Chg";
+      statLabel = statLabelForKey(k);
       break;
     }
   }
 
-  return candidates.slice(0, 6).map((row) => ({
+  return candidates.map((row) => ({
     name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
     position: String(row.position ?? row.pos ?? ""),
     team: String(row.team ?? row.team_abbr ?? ""),
@@ -299,6 +318,18 @@ function extractRows(data: unknown): OgRow[] {
           : 0,
     statLabel,
   }));
+}
+
+/** Top-N leaders for OG share cards — mirrors Lab renderer sort + position tab. */
+function rankOgRowsForPanel(slug: string, rows: OgRow[], positionFilter: string): OgRow[] {
+  let out = rows.filter((r) => r.name.trim().length > 0);
+  if (positionFilter) {
+    out = out.filter((r) => r.position === positionFilter);
+  }
+  if (PANEL_OG_STAT_KEY[slug]) {
+    out = [...out].sort((a, b) => b.stat - a.stat).slice(0, 6);
+  }
+  return out;
 }
 
 function siteOrigin(req: Request): string {
@@ -327,7 +358,7 @@ async function fetchLiveOgRows(
       headers: { [OG_PRO_PREVIEW_HEADER]: "pro" },
     });
     if (!res.ok) return [];
-    return extractRows(await res.json());
+    return extractRows(await res.json(), slug);
   } catch {
     return [];
   }
@@ -362,7 +393,7 @@ async function fetchPanelData(
     }
     if (!res.ok) return [];
     const data = await res.json();
-    return extractRows(data);
+    return extractRows(data, slug);
   } catch {
     return [];
   }
@@ -432,9 +463,9 @@ export async function GET(
   let rows = isSnapshot
     ? snapshotRows.slice(0, 6)
     : liveHasRows
-      ? namedLiveRows.slice(0, 6)
-      : demoRowsForPanel(slug);
-  if (!isSnapshot && positionFilter) {
+      ? rankOgRowsForPanel(slug, namedLiveRows, positionFilter)
+      : rankOgRowsForPanel(slug, demoRowsForPanel(slug), positionFilter);
+  if (isSnapshot && positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
   }
 
