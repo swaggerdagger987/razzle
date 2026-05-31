@@ -1,4 +1,4 @@
-2026-05-31 | bureau-waiver-og-watermark-band | f6e0985f3 | PASS | Waiver archetype OG cards match league-thread share pattern.
+2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | PASS | Waiver archetype OG cards match league-thread share pattern.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
 2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | PASS | Schedule verdict exports travel in league chats.
 

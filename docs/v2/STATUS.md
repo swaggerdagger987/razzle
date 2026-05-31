@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | bureau-waiver-og-gate-c-pytest |
-| Last commit | `f6e0985f3` |
+| Last commit | `7f7a22676` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

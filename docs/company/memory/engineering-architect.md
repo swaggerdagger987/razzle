@@ -1,4 +1,4 @@
-2026-05-31 | bureau-waiver-og-watermark-band | f6e0985f3 | 2-file contract; pytest source guard on waiver route.
+2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | 2-file contract; pytest source guard on waiver route.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | SHIP | 2-file contract; pytest guard.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
