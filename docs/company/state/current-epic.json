@@ -7,8 +7,8 @@
     {
       "id": "explore-loading-razzle-nfl",
       "title": "NFL screener count uses Razzle loadingCopyForAgent",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "87c03e1b"
     },
     {
       "id": "explore-feed-loading-voice",
@@ -23,7 +23,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-loading-razzle-nfl",
+  "next_atom_id": "explore-feed-loading-voice",
   "epic_status": "active",
   "created_at": "2026-05-31T08:45:00Z",
   "updated_at": "2026-05-31T08:45:00Z",

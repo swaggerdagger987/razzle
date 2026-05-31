@@ -4,6 +4,6 @@ focus_pillar: Explore
 focus_layer: L2
 next_slice: explore-feed-loading-voice
 last_keep_cycle: 128
-last_commit: da33eafd
+last_commit: 87c03e1b
 explore_l2_voice_epic: active
 lab_l4_pro_gate_epic: complete
