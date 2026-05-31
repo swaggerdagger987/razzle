@@ -1,9 +1,9 @@
-cycle: 121
+cycle: 124
 last_board_cycle: 54
 focus_pillar: Lab
-focus_layer: L5
+focus_layer: L4
 next_slice: explore-og-universe-query
-last_keep_cycle: 121
+last_keep_cycle: 124
 last_commit: d63a4a0f
-lab_l5_og_live_fetch_epic: active
 lab_l4_pro_gate_epic: complete
+lab_l5_og_live_fetch_epic: active
