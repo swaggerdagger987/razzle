@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import { AGENT_BY_ID } from "@razzle/agents";
+import { marginNoteForOgExploreRow, type OgExploreMarginRow } from "@/lib/margin-notes";
 
 export const runtime = "edge";
 
@@ -9,29 +11,47 @@ const POS_COLOR: Record<string, string> = {
   TE: "#8b5cf6",
 };
 
-interface OgPlayer {
-  full_name: string;
-  position: string;
-  team: string;
+interface OgPlayer extends OgExploreMarginRow {
   stat: number;
 }
 
 /** Sample screener rows when API/terminal.db unavailable (FACTORY-DOD Gate C). */
 const DEMO_NFL_ROWS: OgPlayer[] = [
-  { full_name: "Jayden Daniels", position: "QB", team: "WAS", stat: 312.4 },
-  { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 298.1 },
-  { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 285.6 },
+  {
+    full_name: "Jayden Daniels",
+    position: "QB",
+    team: "WAS",
+    stat: 312.4,
+    age: 22,
+    fantasy_points_ppr: 312.4,
+  },
+  {
+    full_name: "Ja'Marr Chase",
+    position: "WR",
+    team: "CIN",
+    stat: 298.1,
+    targets: 128,
+    fantasy_points_ppr: 298.1,
+  },
+  {
+    full_name: "Bijan Robinson",
+    position: "RB",
+    team: "ATL",
+    stat: 285.6,
+    age: 22,
+    fantasy_points_ppr: 285.6,
+  },
   { full_name: "Brock Bowers", position: "TE", team: "LV", stat: 241.2 },
   { full_name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 228.4 },
   { full_name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 215.8 },
 ];
 
 const DEMO_COLLEGE_ROWS: OgPlayer[] = [
-  { full_name: "Cam Ward", position: "QB", team: "MIA", stat: 4120 },
-  { full_name: "Travis Hunter", position: "WR", team: "COLO", stat: 1189 },
-  { full_name: "Ashton Jeanty", position: "RB", team: "BOISE", stat: 1924 },
+  { full_name: "Cam Ward", position: "QB", team: "MIA", stat: 4120, passing_yards: 4312 },
+  { full_name: "Travis Hunter", position: "WR", team: "COLO", stat: 1189, total_yards: 1420 },
+  { full_name: "Ashton Jeanty", position: "RB", team: "BOISE", stat: 1924, rushing_yards: 1924 },
   { full_name: "Tyler Warren", position: "TE", team: "PSU", stat: 812 },
-  { full_name: "Tre Harris", position: "WR", team: "OLE MISS", stat: 1056 },
+  { full_name: "Tre Harris", position: "WR", team: "OLE MISS", stat: 1056, receptions: 88 },
   { full_name: "Emeka Egbuka", position: "WR", team: "OSU", stat: 989 },
 ];
 
@@ -128,6 +148,14 @@ async function fetchTopPlayers(
       full_name: String(row.full_name ?? ""),
       position: String(row.position ?? ""),
       team: String(row.team ?? ""),
+      player_id: String(row.player_id ?? ""),
+      age: row.age != null ? Number(row.age) : null,
+      fantasy_points_ppr: Number(row.fantasy_points_ppr ?? 0),
+      targets: Number(row.targets ?? row.receiving_targets ?? 0),
+      total_yards: Number(row.total_yards ?? 0),
+      receptions: Number(row.receptions ?? 0),
+      passing_yards: Number(row.passing_yards ?? 0),
+      rushing_yards: Number(row.rushing_yards ?? 0),
       stat: Number(row[sortKey] ?? row.fantasy_points_ppr ?? row.total_yards ?? 0),
     }));
   } catch {
@@ -225,6 +253,10 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
+  const MARGIN_NOTE_ROW_LIMIT = 3;
+  const marginNotesByIndex = players
+    .slice(0, MARGIN_NOTE_ROW_LIMIT)
+    .map((row) => marginNoteForOgExploreRow(row, universe));
 
   return new ImageResponse(
     (
@@ -328,8 +360,39 @@ export async function GET(req: Request) {
                 style={{ display: "flex", alignItems: "center", fontSize: 20 }}
               >
                 <div style={{ width: 36, color: "#8a7565", display: "flex" }}>{i + 1}</div>
-                <div style={{ flex: 1, fontWeight: 600, overflow: "hidden", display: "flex" }}>
-                  {p.full_name.length > 22 ? `${p.full_name.slice(0, 20)}…` : p.full_name}
+                <div
+                  style={{
+                    flex: 1,
+                    fontWeight: 600,
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <div style={{ display: "flex" }}>
+                    {p.full_name.length > 22 ? `${p.full_name.slice(0, 20)}…` : p.full_name}
+                  </div>
+                  {(() => {
+                    const note = i < MARGIN_NOTE_ROW_LIMIT ? marginNotesByIndex[i] : null;
+                    const agent = note ? AGENT_BY_ID[note.agentId] : null;
+                    if (!note || !agent) return null;
+                    return (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 6,
+                          fontFamily: "Caveat",
+                          fontSize: 22,
+                          color: "#5c4a3d",
+                          marginTop: 2,
+                        }}
+                      >
+                        <span style={{ display: "flex" }}>{agent.emoji}</span>
+                        <span style={{ display: "flex" }}>{note.text}</span>
+                      </div>
+                    );
+                  })()}
                 </div>
                 <div style={{ width: 56, display: "flex" }}>
                   <span

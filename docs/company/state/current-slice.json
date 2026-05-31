@@ -1,31 +1,24 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic": "Lab L5 — OG hallway deep links (atom 3/3)",
-  "slice_title": "Snapshot exports preserve player in OG toLab watermark band",
-  "atom_id": "lab-og-tolab-snapshot-player",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — snapshot OG PNG ≥40KB + pid in watermark",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic": "Explore L5 — OG screener agent margin notes",
+  "slice_title": "Margin notes on top-3 OG screener rows",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/LabOgExportLink.tsx",
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/web/lib/margin-notes.ts",
+    "apps/api/tests/test_explore_og_margin_note_rows.py",
+    "apps/api/tests/test_explore_og_margin_note_lead.py"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 4,
+  "max_lines": 150,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "pytest apps/api/tests/test_explore_og_margin_note_rows.py apps/api/tests/test_explore_og_margin_note_lead.py -q",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": [
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "other Launch-10 renderers",
-    "snapshot row shape changes beyond optional pid wrapper"
-  ],
-  "builder_mode": "composer-surgical",
-  "content_commit": "1a12d9c0b",
-  "reality": "PASS",
-  "merge": "pending"
+  "out_of_scope": ["LIVE sticker atom", "college-only rules"],
+  "builder_mode": "composer-surgical"
 }
