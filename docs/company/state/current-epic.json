@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG watermarks omit default position filters — exported breakouts cards click back to an unscoped board while demo rows are WR-only.",
   "epic_title": "Lab L5 — OG hallway position defaults",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
@@ -20,13 +20,13 @@
     {
       "id": "lab-og-tolab-breakouts-position",
       "title": "breakouts WR in OG toLab watermark",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "1ebb9dc73"
     }
   ],
-  "next_atom_id": "lab-og-tolab-breakouts-position",
+  "next_atom_id": null,
   "created_at": "2026-05-31T11:00:00Z",
-  "updated_at": "2026-06-01T00:00:00Z",
+  "updated_at": "2026-06-01T00:15:00Z",
   "completed_epics": [
     {
       "id": "league-l5-trade-finder-gtm",
@@ -39,6 +39,12 @@
       "status": "complete",
       "last_atom": "bureau-h2h-og-gate-c-snapshot",
       "merge_commit": "4907c8327"
+    },
+    {
+      "id": "lab-l5-position-default-hallway",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-breakouts-position",
+      "merge_commit": "1ebb9dc73"
     }
   ]
 }
