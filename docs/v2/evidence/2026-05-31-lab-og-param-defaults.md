@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-31  
 **Atom:** `lab-og-param-defaults`  
-**Commit:** PENDING_HASH
+**Commit:** ef908a99
 
 ## Gate C — PNG curl
 

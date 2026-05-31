@@ -50,3 +50,4 @@ cycle	commit	score	status	pillar	slice	description
 57	2e11270	depth+hallway+reddit+voice+simplicity	keep	Lab	L5 OG live data	/og/[panel] fetches live rows, agent badge, position pills, watermark, graceful fallback
 58	0019814f	depth+simplicity+voice	keep	Lab	L5 OG demo rows	trust=T5,T6; /og/[panel] static demo rows when API empty, sample preview label, Gate C PNG ~59KB
 59	da09d5b4	depth+simplicity+voice	keep	Lab	L5 OG launch10 demos	trust=T5,T6; launch-10 slug demo stat labels FPTS/Score/Peak Age/Chg, Gate C PNG 58-64KB
+60	ef908a99	depth+simplicity+voice	keep	Lab	L5 OG param defaults	trust=T5,T6; DEFAULT_OG_PLAYER_ID + dynasty-comps Match % demo; curl dynasty-comps 65961B
