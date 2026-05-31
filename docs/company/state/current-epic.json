@@ -25,8 +25,8 @@
     {
       "id": "league-og-power-rankings-watermark",
       "title": "Power Rankings OG terracotta watermark band",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "12ba50588"
     }
   ],
   "next_atom_id": "league-og-monte-carlo-watermark",
