@@ -4,13 +4,34 @@ from __future__ import annotations
 
 import base64
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 ROUTE_TS = ROOT / "apps/web/app/og/[panel]/route.tsx"
 
-# Snapshot export panels with Gate C curl evidence — FROM PANEL trust sticker.
-SNAPSHOT_FROM_PANEL_SLUGS = ("rankings", "weekly", "prospects", "tradevalues")
+# Trust sticker channel per Launch-10 OG slug — must mirror LAUNCH_10_OG_SLUGS in route.tsx.
+LAUNCH_10_OG_TRUST_REGISTRY: dict[str, str] = {
+    "rankings": "from_panel_snapshot",
+    "weekly": "from_panel_snapshot",
+    "prospects": "from_panel_snapshot",
+    "tradevalues": "from_panel_snapshot",
+    "dashboard": "live",
+    "breakouts": "live",
+    "gamelog": "live",
+    "efficiency": "live",
+    "aging": "live",
+    "buysell": "live",
+}
+
+SNAPSHOT_FROM_PANEL_SLUGS = tuple(
+    slug for slug, mode in LAUNCH_10_OG_TRUST_REGISTRY.items() if mode == "from_panel_snapshot"
+)
+
+
+def _parse_launch10_og_slugs(source: str) -> frozenset[str]:
+    launch_block = source.split("const LAUNCH_10_OG_SLUGS", 1)[1].split(");", 1)[0]
+    return frozenset(re.findall(r'"([a-z0-9-]+)"', launch_block))
 
 
 def _encode_snapshot(rows: list[dict]) -> str:
@@ -20,6 +41,14 @@ def _encode_snapshot(rows: list[dict]) -> str:
     ]
     raw = base64.urlsafe_b64encode(json.dumps(compact).encode()).decode()
     return raw.rstrip("=")
+
+
+def test_launch10_og_trust_registry_covers_all_route_slugs():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    route_slugs = _parse_launch10_og_slugs(source)
+    assert set(LAUNCH_10_OG_TRUST_REGISTRY) == set(route_slugs), (
+        "registry must list every LAUNCH_10_OG_SLUGS member exactly once"
+    )
 
 
 def test_from_panel_sticker_on_snapshot_path():
@@ -35,6 +64,15 @@ def test_from_panel_sticker_covers_launch10_snapshot_slugs():
         assert f'"{slug}"' in launch_block, f"{slug} must be in LAUNCH_10_OG_SLUGS"
     assert "from your panel" in source
     assert "#5b7fff" in source, "FROM PANEL sticker uses trust blue"
+
+
+def test_live_registry_slugs_have_live_sticker_copy():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    for slug in LAUNCH_10_OG_TRUST_REGISTRY:
+        if LAUNCH_10_OG_TRUST_REGISTRY[slug] != "live":
+            continue
+        assert f'case "{slug}"' in source, f"missing launch10LiveBlurbSuffix for {slug}"
+        assert "launch10LiveStickerLabel" in source
 
 
 def test_prospects_snapshot_extract_uses_rps():
