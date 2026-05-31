@@ -1,27 +1,27 @@
 {
   "date": "2026-05-31",
   "big_problem": "Explore screener OG cards look like stat tables — they need Hawkeye/Dolphin staff margin notes on every screenshot row Reddit shares.",
-  "epic": "Explore L5 — OG screener agent margin notes (atom 2/4)",
-  "slice_title": "Explore OG row-2 Hawkeye target-volume margin note",
-  "atom_id": "explore-og-margin-note-row2",
-  "parity_ref": "Explore L5 — Agent margin notes",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 3/4)",
+  "slice_title": "Explore OG college lead-row campus margin note",
+  "atom_id": "explore-og-margin-note-college-lead",
+  "parity_ref": "Explore L5 — Agent margin notes (college campus Hawkeye)",
   "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — explore OG ≥40KB with staff notes",
+  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG ≥40KB with lead margin",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_margin_note_row2.py",
-    "docs/v2/evidence/2026-05-31-explore-og-margin-note-row2.md"
+    "apps/api/tests/test_explore_og_margin_note_college_lead.py",
+    "apps/api/tests/test_explore_og_margin_note_lead.py",
+    "docs/v2/evidence/2026-05-31-explore-og-margin-note-college-lead.md"
   ],
   "max_files": 3,
-  "max_lines": 120,
+  "max_lines": 80,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_og_margin_note_row2.py -q --noconftest",
-    "curl -s -o /tmp/og-explore.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/explore?download=1&force_demo=1'"
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_og_margin_note_college_lead.py apps/api/tests/test_explore_og_margin_note_lead.py -q --noconftest",
+    "curl -s -o /tmp/og-college-margin.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/explore?universe=college&download=1&force_demo=1'"
   ],
   "out_of_scope": [
     "margin-notes.ts rule changes",
-    "college universe this atom",
+    "NFL row-3+ margin",
     "NORTH_STAR/DESIGN/DECISIONS"
   ],
   "builder_mode": "composer-surgical",
@@ -31,6 +31,5 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "7793850a9"
+  "status": "in_progress"
 }
