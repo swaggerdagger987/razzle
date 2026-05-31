@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
   "epic_title": "Lab L4 — pro gates feel like upgrade, not error",
   "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
@@ -14,8 +14,8 @@
     {
       "id": "lab-pro-gate-panel-pitches",
       "title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "a4df9ae7"
     },
     {
       "id": "lab-pro-gate-hallway-teasers",
@@ -24,15 +24,21 @@
       "merge_commit": "675044ea"
     }
   ],
-  "next_atom_id": "lab-pro-gate-panel-pitches",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:30:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
       "last_atom": "lab-og-live-demo-fallback-copy",
       "merge_commit": "18d92f6b"
+    },
+    {
+      "id": "lab-l4-pro-gate",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-panel-pitches",
+      "merge_commit": "a4df9ae7"
     }
   ]
 }
