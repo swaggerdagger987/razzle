@@ -83,7 +83,11 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
 const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"]);
 
 /** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
-const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
+const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set([
+  "gamelog",
+  "dynasty-comps",
+  "strengths",
+]);
 
 /** Panels that default API position when URL omits position — mirror in OG watermark (T6). */
 const TOLAB_DEFAULT_POSITION: Record<string, string> = {
