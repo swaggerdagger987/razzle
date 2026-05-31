@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | room-briefing-og-card | da33eafd | keep | /og/briefing route + BriefingCard export card; curl 68635B.
+2026-05-31 | room-briefing-og-card | 2121055c | keep | /og/briefing route + BriefingCard export card; curl 68635B.
 
 2026-05-31 | room-briefing-copy-export | 612d9638 | keep | formatBriefingForExport + BriefingCard copy button; pytest 2; web build ok.
 

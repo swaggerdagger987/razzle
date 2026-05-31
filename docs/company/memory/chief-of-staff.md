@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 130 briefing OG | da33eafd | keep | workday cycle 1; Room atom 2/3; NO_LOCK_GUARDRAIL.
+2026-05-31 | Factory cycle 130 briefing OG | 2121055c | keep | workday cycle 1; Room atom 2/3; NO_LOCK_GUARDRAIL.
 
 2026-05-31 | Factory cycle 129 briefing copy | 612d9638 | keep | workday open; Room L5 atom 1/3; NO_LOCK_GUARDRAIL.
 

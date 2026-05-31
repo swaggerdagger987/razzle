@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | room-briefing-og-card | da33eafd | PASS | no new REDDIT-INTEL; OG demo rivalry readout.
+2026-05-31 | room-briefing-og-card | 2121055c | PASS | no new REDDIT-INTEL; OG demo rivalry readout.
 
 2026-05-31 | room-briefing-copy-export | 612d9638 | PASS | no new REDDIT-INTEL; Room share is paste not screenshot yet.
 

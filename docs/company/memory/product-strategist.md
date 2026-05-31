@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | room-briefing-og-card | da33eafd | SHIP | keep | OG snapshot for Reddit threads; T5/T6 after copy path.
+2026-05-31 | room-briefing-og-card | 2121055c | SHIP | keep | OG snapshot for Reddit threads; T5/T6 after copy path.
 
 2026-05-31 | room-briefing-copy-export | 612d9638 | SHIP | keep | Slack/Reddit paste before OG snapshot; T5/T6 GTM.
 

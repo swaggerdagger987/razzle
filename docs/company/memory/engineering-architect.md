@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | room-briefing-og-card | da33eafd | keep | edge OG route; demo fallback; BriefingCard link.
+2026-05-31 | room-briefing-og-card | 2121055c | keep | edge OG route; demo fallback; BriefingCard link.
 
 2026-05-31 | room-briefing-copy-export | 612d9638 | keep | 3 files; pure format fn + card button; pytest mirror.
 
