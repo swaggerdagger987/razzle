@@ -39,3 +39,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | Efficiency OG position | b2d304e7 | keep | dynasty Twitter shares PPO leaderboards by position slot
 2026-05-31 | Build Profiles share OG | 246052ec | keep | construction archetype cards for trade-DM screenshots
+2026-05-31 | Roster Depth share OG | da33eafd | keep | position grades + top names for thin-spot trade threads

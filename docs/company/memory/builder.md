@@ -48,3 +48,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Prospects RPS+position export | 17a40c65 | keep | statLabel RPS; position on LabOgExportLink
 2026-05-31 | Efficiency position prop | b2d304e7 | keep | position on LabOgExportLink; 1 file
 2026-05-31 | league-build-profiles-share-og | 246052ec | keep | ShareBar + OG route; curl 72409B; pytest 51
+2026-05-31 | league-roster-depth-share-og | da33eafd | keep | ShareBar + OG route; curl 54072B; pytest 51
