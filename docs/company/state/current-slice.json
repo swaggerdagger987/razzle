@@ -1,26 +1,28 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG snapshot exports only whisper from your panel in blurb — Reddit cannot see at a glance that the card matches the user's filter.",
-  "epic": "Lab L5 — OG trust stickers for export cards (atom 2/3)",
-  "slice_title": "pytest + Gate C curl for rankings/weekly FROM PANEL snapshot stickers",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "atom_id": "explore-og-universe-demo",
+  "big_problem": "Explore OG cards go blank when the screener API is cold — Reddit screenshots need universe-aware sample rows, not pulling film alone.",
+  "epic": "Explore L5 — OG universe query demo rows",
+  "slice_title": "Explore OG — NFL/college demo rows when screener query empty",
+  "parity_ref": "Explore L5 — screener OG export",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/api/tests/test_og_from_panel_sticker.py",
-    "docs/v2/evidence/2026-05-31-lab-og-from-panel-sticker-evidence.md"
-  ],
-  "max_files": 2,
-  "max_lines": 40,
+  "allowed_paths": ["apps/web/app/og/explore/route.tsx"],
+  "max_files": 1,
+  "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests/test_og_from_panel_sticker.py -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web 2>&1 | tail -3",
+    "curl -s -o /tmp/og-explore-nfl-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=nfl&sort=fantasy_points_ppr&dir=desc&force_demo=1'",
+    "curl -s -o /tmp/og-explore-college-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?universe=college&sort=total_yards&dir=desc&force_demo=1'",
+    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests/test_smoke.py -q 2>&1 | tail -2"
   ],
-  "out_of_scope": [
-    "OG route sticker JSX (shipped atom 1)",
-    "LIVE/SAMPLE sticker changes",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["SAMPLE/LIVE stickers", "ExploreShareButton", "screener API schema"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }
