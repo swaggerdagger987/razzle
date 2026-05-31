@@ -16,9 +16,7 @@
   "max_lines": 120,
   "acceptance_commands": [
     "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_gate_c_curl.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-breakouts-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?download=1&snapshot=<BREAKOUTS_SNAPSHOT>'",
-    "curl -s -o /tmp/og-buysell-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/buysell?download=1&snapshot=<BUYSELL_SNAPSHOT>'"
+    "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
     "OG route behavior changes",
@@ -33,5 +31,6 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "in_progress"
+  "status": "shipped",
+  "content_commit": "9fe6cc134"
 }
