@@ -1,26 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-snapshot",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "slice_title": "DashboardRenderer encodes top-6 comp match rows in dynasty-comps OG snapshot",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
-  "trust_pillars": ["T5", "T6"],
+  "atom_id": "league-waiver-tendencies-tab",
+  "big_problem": "Hidden Bureau tabs still dump raw JSON — users hit scaffolding instead of league intel cards.",
+  "epic": "League L5 — Bureau hidden tabs to bespoke renderers",
+  "slice_title": "Waiver Tendencies — Hawkeye renderer, unhide nav",
+  "parity_ref": "League L5 — hidden Bureau renderers",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — Bureau page renders without generic table fallback",
+  "trust_pillars": ["T2", "T5"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
+    "apps/web/components/league/BureauWaiverTendencies.tsx",
+    "apps/web/components/league/BureauFeatureBody.tsx",
+    "apps/web/lib/bureau-features.ts"
   ],
-  "max_files": 1,
-  "max_lines": 40,
+  "max_files": 3,
+  "max_lines": 180,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
+    "cd apps/api && ../.venv-v2/bin/python -m pytest tests -q --maxfail=1"
   ],
   "out_of_scope": [
-    "OG route changes",
-    "DynastyCompsRenderer (already has snapshot)",
-    "NORTH_STAR / DESIGN edits"
+    "OG export route",
+    "strength-of-schedule tab",
+    "API changes"
   ],
   "builder_mode": "composer-surgical"
 }

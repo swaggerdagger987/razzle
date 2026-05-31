@@ -33,8 +33,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG launch10 label | 6e98f4a2 | keep | live cards without sample tag when API rows present
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
-2026-05-31 | Pressure Map share | 864e1d14 | keep | deadline desperation URLs for trade-DM hooks
-2026-05-31 | Trade Network share | da33eafd | keep | collusion/partnership cards sized for Reddit screenshot gravity
-2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
-2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
+2026-05-31 | cycle 90 waiver tendencies | 1d33cf0b | keep | BureauWaiverTendencies Hawkeye cards; hidden-tabs epic 2/3
