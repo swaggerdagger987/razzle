@@ -1,3 +1,4 @@
+2026-05-31 | lab-buysell-empty-export | f6e0985f3 | SHIP | 2 files; mirrors BreakoutsRenderer empty export.
 2026-05-31 | lab-breakouts-empty-export | 977de7e31 | SHIP | 2 files; mirrors WeeklyHeatmapRenderer empty export.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
@@ -6,6 +7,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 
+2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | 3 files; marginNoteForOgExploreRow on edge OG route.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | 3 files; mirrors H2H atlasRoomPath pattern for Bones.
 2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | 2 files pytest-only; SNAPSHOT_FROM_PANEL_SLUGS extended.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | 2 files; includeDefaultPlayer guard in labOgWatermarkLink.
