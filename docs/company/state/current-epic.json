@@ -8,8 +8,8 @@
     {
       "id": "explore-og-demo-fallback-rows",
       "title": "Explore OG — demo screener rows when API empty",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "b6a233e6"
     },
     {
       "id": "explore-og-formula-subtitle",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-demo-fallback-rows",
+  "next_atom_id": "explore-og-formula-subtitle",
   "created_at": "2026-05-31T08:40:00Z",
   "updated_at": "2026-05-31T08:40:00Z",
   "completed_epics": [
