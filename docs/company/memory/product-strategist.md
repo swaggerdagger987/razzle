@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-sidebar-agent-role-taglines | da33eafd | SHIP | L2 sidebar epic atom 2/3 — role scan before panel open.
+
 2026-05-31 | lab-pro-gate-panel-pitches | da33eafd | SHIP | Rankings/breakouts/tradevalues pitches = dynasty screenshot hooks.
 
 2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | SHIP | SAMPLE terracotta vs LIVE teal closes live-rows epic.

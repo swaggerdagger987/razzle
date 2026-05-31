@@ -112,7 +112,7 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
             <div key={`staff-${agent.id}`}>
               <div
                 className="lab-sidebar-category"
-                style={{ display: "flex", alignItems: "center", gap: 8, cursor: "default" }}
+                style={{ display: "flex", alignItems: "flex-start", gap: 8, cursor: "default" }}
               >
                 <img
                   src={`/agents/${agent.avatar}.svg`}
@@ -121,7 +121,15 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
                   width={20}
                   height={20}
                 />
-                <span className="cat-text">{agent.name}</span>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2, minWidth: 0 }}>
+                  <span className="cat-text">{agent.name}</span>
+                  <span
+                    className="text-ink-medium"
+                    style={{ fontSize: 10, lineHeight: 1.2, fontFamily: "var(--font-mono)" }}
+                  >
+                    {agent.role}
+                  </span>
+                </div>
               </div>
               {staffPanels.map((panel) => (
                 <SidebarItem
