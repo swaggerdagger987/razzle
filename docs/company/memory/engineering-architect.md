@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | tradevalues snapshot contract | da33eafd | 1-file ≤25 lines; rank+formula statLabel pattern matches buysell
+
 2026-05-31 | buysell snapshot contract | 98ae0ef2 | 1-file ≤35 lines; reuse encodeOgSnapshot; no route touch
 
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.

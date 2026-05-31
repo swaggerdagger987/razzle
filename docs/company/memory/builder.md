@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | Trade values OG rank labels | da33eafd | TradeValuesRenderer ogSnapshotRows uses `rank · Value` or `rank · formula.name` on top 6 sorted rows.
+
 2026-05-31 | Buy/Sell OG lane labels | 98ae0ef2 | BuySellRenderer splits buyRows/sellRows with Buy/Sell statLabel before encodeOgSnapshot.
 
 Append-only log of implementation patterns, surgical wins, things to avoid.

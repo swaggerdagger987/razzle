@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-tradevalues-formula-snapshot | da33eafd | SHIP | Lab L5 OG mirror epic complete; Bureau H2H is next lead
+
 2026-05-31 | lab-buysell-combined-snapshot | 98ae0ef2 | SHIP | Bones two-lane OG beats generic Grade label for Reddit
 
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.

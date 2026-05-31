@@ -26,11 +26,11 @@
     {
       "id": "lab-tradevalues-formula-snapshot",
       "title": "Trade values export snapshot uses formula-ranked visible rows",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
   "next_atom_id": "lab-tradevalues-formula-snapshot",
   "created_at": "2026-05-31T05:48:00Z",
-  "updated_at": "2026-05-31T06:10:00Z"
+  "updated_at": "2026-05-31T06:11:02Z"
 }
