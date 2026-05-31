@@ -1,7 +1,13 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-live-sticker-gamelog-efficiency | 9ef503929 | SHIP | gamelog LIVE Wk tape vocabulary (2 lines).
+
 2026-05-31 | bureau-self-scout-sharebar-snapshot | 709660c | keep | ShareBar + snapshot lib + OG decode.
-2026-05-31 | LabOgExportLink player-scoped default | PLAYER_SCOPED_LAB_OG_SLUGS; gamelog export always has player_id | SHIP | keep | curl 60634B
+
+2026-05-31 | FROM PANEL evidence | 164159413 | test_og_from_panel_sticker 2 tests; curl 56682B/58270B.
+
+2026-05-31 | FROM PANEL OG sticker | 7d49e4f0c | route.tsx + pytest; snapshot curl ≥40KB.
+
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
 
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.

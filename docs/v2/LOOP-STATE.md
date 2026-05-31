@@ -1,11 +1,10 @@
-cycle: 132
+cycle: 135
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: bureau-manager-profiles-sharebar-snapshot
-last_keep_cycle: 132
-last_commit: 709660c
+next_slice: lab-og-from-panel-sticker-gamelog
+last_keep_cycle: 135
+last_commit: 9ef503929
+lab_l5_og_trust_sticker_epic: active
 league_l5_self_scout_snapshot_epic: active
 lab_l5_og_live_fetch_epic: complete
-lab_l2_sidebar_agent_epic: complete
-lab_l4_pro_gate_error_epic: active
