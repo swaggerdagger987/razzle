@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | Cycle 118 prospects OG items | pending | items[] RPS extract when prospects empty; curl 60688B.
 2026-05-31 | Cycle 117 gamelog OG | 89b19df2 | weeks fpts sort; curl 61129B.
 2026-05-31 | Cycle 116 bureau H2H pytest | 5e75875e | 4 pytest cases.
 

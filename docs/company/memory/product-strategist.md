@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | Cycle 118 prospects items | pending | items[] path when handler returns empty prospects.
 2026-05-31 | Cycle 117 gamelog OG | 89b19df2 | Live weeks[] beats demo fallback for screenshots.
 2026-05-31 | Cycle 116 bureau H2H pytest | 5e75875e | CI guardrail ShareBar↔OG.
 

@@ -2,7 +2,7 @@ cycle: 117
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-prospects-items-live
+next_slice: lab-og-launch10-snapshot-default
 last_keep_cycle: 117
 last_commit: 89b19df2
 lab_l5_gamelog_og_epic: active
