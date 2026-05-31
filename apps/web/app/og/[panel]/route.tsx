@@ -743,6 +743,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "ppg",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
   ];
+  const dashboardStatKeys: string[] = [
+    "formula_score",
+    "rank_diff",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "rank_diff"),
+  ];
   const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const statKeys =
     slug === "tradevalues"
@@ -757,6 +762,8 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
               ? efficiencyStatKeys
               : slug === "aging"
                 ? agingStatKeys
+                : slug === "dashboard"
+                  ? dashboardStatKeys
                 : preferredKey
                   ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
                   : [...STAT_CANDIDATE_KEYS];
