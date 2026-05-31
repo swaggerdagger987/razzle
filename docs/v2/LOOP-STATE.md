@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: bureau-h2h-export
 last_keep_cycle: 133
-last_commit: da33eafd
+last_commit: 060b8e6
 lab_l5_og_panel_labels_epic: complete
 lab_l4_pro_gate_error_epic: active
 lab_l5_og_live_fetch_epic: complete
