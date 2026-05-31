@@ -27,5 +27,12 @@
   "next_atom_id": "lab-og-launch10-demo-blurbs",
   "created_at": "2026-05-31T10:55:00Z",
   "updated_at": "2026-05-31T10:55:00Z",
-  "completed_epics": []
+  "completed_epics": [
+    {
+      "id": "league-l5-trade-finder-gtm-export",
+      "status": "active",
+      "last_atom": "league-trade-finder-og-watermark-live",
+      "merge_commit": "db6537faf"
+    }
+  ]
 }
