@@ -2,6 +2,13 @@
 
 2026-05-31 | league-trade-finder-og-snapshot | db81b4f97 | SHIP | Workday open cycle 1; lock #1177; Trade Finder GTM epic 1/3.
 
+2026-05-31 | lab-efficiency-empty-export | 5283c3eb4 | SHIP | PR #1170 merged; Lab empty OG epic atom 2/3.
+
+2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | Factory cycle 1; Lab L5 hallway epic atom 1/3.
+
+2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Factory open cycle 1; Room L5 briefing GTM epic complete.
+2026-05-31 | Factory cycle 139 gamelog empty OG export | ac0280a20 | Workday open cycle 1; merged after base sync; empty OG epic atom 1/3.
+
 2026-05-31 | Factory cycle 139 Room briefing watermark | eca00c3f0 | Room L5 GTM epic complete; NO_LOCK_GUARDRAIL.
 2026-05-31 | Factory cycle 139 gamelog empty OG export | ac0280a20 | Workday open cycle 1; merged after base sync; empty OG epic atom 1/3.
 
