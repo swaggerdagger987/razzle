@@ -36,4 +36,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | prospects tradevalues snapshot | 69e4c732 | keep | mirrors DynastyRankingsRenderer ogSnapshotRows pattern
 2026-05-31 | BureauWaiverTendencies | 920304a2 | keep | Hawkeye archetype cards; waiver-tendencies unhidden; mirrors roster-depth pattern
-2026-05-31 | BureauStrengthOfSchedule | da33eafd | keep | single-user SOS API → bars; empty HIDDEN set; 3-file contract
+2026-05-31 | BureauStrengthOfSchedule | 12b51b1e | keep | single-user SOS API → bars; empty HIDDEN set; 3-file contract

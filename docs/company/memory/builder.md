@@ -38,4 +38,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau H2H snapshot export | 3d498394 | keep | encodeH2hSnapshot on BureauH2HShareBar; curl 59305B demo 54444B snap
 2026-05-31 | Bureau H2H live API OG | 59a54b72 | keep | resolveApiOrigin on head-to-head route; curl params 62718B
 2026-05-31 | Bureau Waiver Tendencies tab | 920304a2 | keep | BureauWaiverTendencies Hawkeye archetype cards; HIDDEN removed waiver-tendencies
-2026-05-31 | Bureau Schedule tab | da33eafd | keep | BureauStrengthOfSchedule Octo verdict+bars; HIDDEN_BUREAU_SLUGS empty
+2026-05-31 | Bureau Schedule tab | 12b51b1e | keep | BureauStrengthOfSchedule Octo verdict+bars; HIDDEN_BUREAU_SLUGS empty

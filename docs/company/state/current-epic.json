@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Two Bureau intel tabs still hide while APIs return live waiver and schedule rows — Sunday prep can't see who hoards FAAB or chases streamers (PARITY League L5).",
   "epic_title": "League L5 — Unhide waiver + schedule Bureau tabs",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -14,12 +14,12 @@
     {
       "id": "league-strength-of-schedule-tab",
       "title": "Unhide Schedule tab with bespoke renderer",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "12b51b1e"
     }
   ],
-  "next_atom_id": "league-strength-of-schedule-tab",
+  "next_atom_id": null,
   "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T05:48:00Z",
-  "last_cycle_commit": "920304a2"
+  "updated_at": "2026-05-31T12:15:00Z",
+  "last_cycle_commit": "12b51b1e"
 }
