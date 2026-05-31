@@ -49,6 +49,17 @@ def test_efficiency_empty_board_exports_sample_card():
     assert "snapshotRows={EFFICIENCY_SAMPLE_OG_ROWS}" in renderer
 
 
+def test_breakouts_empty_board_exports_sample_card():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/BreakoutsRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "BREAKOUTS_SAMPLE_OG_ROWS" in renderer
+    assert 'label="export sample card"' in renderer
+    assert "snapshotRows={BREAKOUTS_SAMPLE_OG_ROWS}" in renderer
+    assert "!candidates.length" in renderer
+
+
 def test_aging_empty_curve_exports_sample_card():
     renderer = (
         Path(__file__).resolve().parents[3]
