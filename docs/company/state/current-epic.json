@@ -1,41 +1,56 @@
 {
   "epic_status": "active",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic_title": "Lab L5 — pro profile OG live parity",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
+  "epic_title": "Explore L5 — OG screener agent margin notes",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-og-percentiles-live-extract",
-      "title": "Percentiles OG live percentile extract + LIVE sticker",
+      "id": "explore-og-margin-note-lead",
+      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
       "status": "done",
-      "merge_commit": "454db1c1d"
+      "merge_commit": "0fc4932b7"
     },
     {
-      "id": "lab-og-career-live-extract",
-      "title": "Career OG live season arc rows",
+      "id": "explore-og-margin-note-rows",
+      "title": "Margin notes on top-3 OG screener rows",
       "status": "done",
-      "merge_commit": "4bbdfe1e1"
+      "merge_commit": "c1a0bcaad"
     },
     {
-      "id": "lab-og-career-compare-live",
-      "title": "Career compare OG multi-player overlay rows",
+      "id": "explore-og-margin-note-sticker",
+      "title": "LIVE staff sticker when OG rows carry margin notes",
       "status": "done",
-      "merge_commit": "9d19930cf"
+      "merge_commit": "ec3a23254"
     },
     {
-      "id": "lab-og-percentiles-tolab",
-      "title": "Percentiles OG toLab default player hallway",
-      "status": "pending",
+      "id": "explore-og-margin-note-college",
+      "title": "College universe margin notes on OG export",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-percentiles-tolab",
-  "created_at": "2026-05-31T11:20:00Z",
-  "updated_at": "2026-05-31T15:00:00Z",
+  "next_atom_id": "explore-og-margin-note-college",
+  "created_at": "2026-05-31T11:22:30Z",
+  "updated_at": "2026-05-31T12:15:00Z",
   "completed_epics": [
-    "lab-l5-og-export-live-panel-rows",
-    "lab-l5-og-hallway-deep-links",
-    "lab-l5-og-hallway-position-defaults"
+    {
+      "id": "lab-l5-og-watermark-display-names",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
+    },
+    {
+      "id": "lab-l5-launch10-og-demo-trust-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-demo-blurbs",
+      "merge_commit": "3705fdce8"
+    },
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
+    }
   ]
 }

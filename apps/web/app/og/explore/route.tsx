@@ -254,6 +254,12 @@ export async function GET(req: Request) {
     players
       .slice(0, TOP_MARGIN_NOTE_ROWS)
       .some((p) => marginNoteForOgExploreRow(p, universe) != null);
+  const hasCollegeDemoMarginNotes =
+    isDemo &&
+    universe === "college" &&
+    players
+      .slice(0, TOP_MARGIN_NOTE_ROWS)
+      .some((p) => marginNoteForOgExploreRow(p, universe) != null);
 
   return new ImageResponse(
     (
@@ -296,7 +302,24 @@ export async function GET(req: Request) {
               FORMULA SORT
             </div>
           ) : null}
-          {isDemo ? (
+          {hasCollegeDemoMarginNotes ? (
+            <div
+              style={{
+                display: "flex",
+                fontSize: 16,
+                fontWeight: 700,
+                background: "#8b5cf6",
+                color: "#f7efe5",
+                padding: "4px 12px",
+                border: "3px solid #2d1f14",
+                borderRadius: 6,
+                boxShadow: "3px 3px 0 #2d1f14",
+              }}
+            >
+              SAMPLE · campus margin notes
+            </div>
+          ) : null}
+          {isDemo && !hasCollegeDemoMarginNotes ? (
             <div
               style={{
                 display: "flex",
