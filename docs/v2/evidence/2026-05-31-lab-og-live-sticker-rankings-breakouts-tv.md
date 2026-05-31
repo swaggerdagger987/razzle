@@ -1,6 +1,6 @@
 # Evidence — lab-og-live-sticker-rankings-breakouts-tv
 
-**Cycle:** 125 | **Content commit:** da33eafd | **Date:** 2026-05-31
+**Cycle:** 125 | **Content commit:** ad24a219 | **Date:** 2026-05-31
 
 ## Gate C — OG PNG curl (force_demo=1)
 
