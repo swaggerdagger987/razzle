@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: bureau-h2h-og-route-lib-decode
 last_keep_cycle: 97
-last_commit: pending
+last_commit: a0396fee
 league_l5_sos_export_epic: complete
 league_l5_h2h_codec_epic: active
