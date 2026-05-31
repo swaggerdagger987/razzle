@@ -13,6 +13,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | lab-og-trade-values-ranked | TradeValuesRenderer sort trade_value desc for ogSnapshotRows | da33eafd | SHIP | KEEP Prospects sort pattern | — | curl 62178B | evidence/2026-05-31-lab-og-trade-values-ranked.md
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
 

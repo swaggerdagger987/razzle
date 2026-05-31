@@ -1,29 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-strength-of-schedule-tab",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
-  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "slice_title": "Schedule tab unhidden with SOS matchup renderer",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C (in-product renderer; no OG this atom)",
-  "trust_pillars": ["T2", "T5", "T6"],
+  "atom_id": "lab-og-trade-values-ranked",
+  "big_problem": "Lab OG cards still show table-order noise on Bones/Octo panels — exports must rank leaders like Prospects and Breakouts.",
+  "epic": "Lab L5 — OG leaders on remaining launch-10",
+  "slice_title": "Trade Values OG export ranks top-6 by trade value with position filter",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with ranked snapshot rows",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx",
-    "apps/web/lib/bureau-features.ts"
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 130,
+  "max_files": 1,
+  "max_lines": 25,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/tradevalues?download=1&position=WR&snapshot=W3sibiI6IkphJ01hcnIgQ2hhc2UiLCJwIjoiV1IiLCJ0IjoiQ0lOIiwicyI6OTUsInNsIjoiVmFsdWUifSx7Im4iOiJDaHJpc3RpYW4gTWNDYWZmcmV5IiwicCI6IldSIiwidCI6IlNGIiwicyI6ODgsInNsIjoiVmFsdWUifSx7Im4iOiJBbW9uLVJhIFN0LiBCcm93biIsInAiOiJXUiIsInQiOiJERVQiLCJzIjo4NCwic2wiOiJWYWx1ZSJ9LHsibiI6IkRhdmFudGUgQWRhbXMiLCJwIjoiV1IiLCJ0IjoiTEFSIiwicyI6ODIsInNsIjoiVmFsdWUifSx7Im4iOiJNYXJ2aW4gSGFycmlzb24gSnIuIiwicCI6IldSIiwidCI6IkFSSSIsInMiOjc4LCJzbCI6IlZhbHVlIn0seyJuIjoiR2VvcmdlIFBpY2tlbnMiLCJwIjoiV1IiLCJ0IjoiUElUIiwicyI6NzUsInNsIjoiVmFsdWUifV0='"
   ],
-  "out_of_scope": ["OG export", "API changes", "NORTH_STAR/DESIGN/DECISIONS"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP"
-  }
+  "out_of_scope": [
+    "Other Lab panels",
+    "OG route.tsx changes",
+    "NORTH_STAR / DESIGN edits"
+  ],
+  "builder_mode": "composer-surgical"
 }

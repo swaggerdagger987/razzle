@@ -1,39 +1,37 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
-  "epic_title": "Lab L5 — OG snapshot row fidelity",
+  "big_problem": "Lab OG cards still show table-order noise on Bones/Octo panels — exports must rank leaders like Prospects and Breakouts.",
+  "epic_title": "Lab L5 — OG leaders on remaining launch-10",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-prospects-rps-ranked",
-      "title": "Prospects OG export ranks top-6 by RPS with position filter",
-      "status": "done",
-      "merge_commit": "c0358ff3"
+      "id": "lab-og-trade-values-ranked",
+      "title": "Trade Values OG export ranks top-6 by trade value",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-weekly-ppg-ranked",
-      "title": "Weekly OG export ranks top-6 by PPG for active position tab",
+      "id": "lab-og-dynasty-rankings-ranked",
+      "title": "Dynasty Rankings OG export ranks top-6 by dynasty value",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-breakouts-score-ranked",
-      "title": "Breakouts OG export ranks top-6 by breakout score",
+      "id": "lab-og-buy-sell-ranked",
+      "title": "Buy/Sell OG export ranks top-6 by signal score",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-efficiency-ranked",
+      "title": "Efficiency OG export ranks top-6 by efficiency metric",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-weekly-ppg-ranked",
-  "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T05:50:00Z",
-  "last_cycle_commit": "c0358ff3",
-  "completed_epics": [
-    {
-      "id": "league-l5-unhide-bureau-tabs",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-tab",
-      "merge_commit": "eb542d51"
-    }
-  ]
+  "next_atom_id": "lab-og-trade-values-ranked",
+  "created_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T14:00:00Z",
+  "last_cycle_commit": null
 }
