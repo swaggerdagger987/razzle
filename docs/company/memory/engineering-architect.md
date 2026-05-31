@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-sticker | f6e0985f3 | SHIP | hasStaffMarginNotes + LIVE sticker; 2 files ≤45 lines.
+2026-05-31 | explore-og-margin-note-sticker | c60c98409 | SHIP | hasStaffMarginNotes + LIVE sticker; 2 files ≤45 lines.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
