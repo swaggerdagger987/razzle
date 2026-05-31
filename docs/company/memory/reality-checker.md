@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | explore-og-formula-sort-label | da33eafd | PASS | curl formula OG 73889B; build exit 0.
+
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | PASS | curl force_demo 64789B; build ok; Gate C.
 
 2026-05-31 | explore-og-universe-query | a7fdf9b3 | PASS | curl college season 36951B; build ok; Gate C.

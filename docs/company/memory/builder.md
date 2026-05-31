@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | explore-og-formula-sort-label | da33eafd | keep | sort+api_sort on ShareButton; FORMULA SORT OG badge; curl 73889B.
+
 2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | keep | DEMO_NFL/COLLEGE + force_demo; curl 64789B.
 
 2026-05-31 | explore-og-universe-query | a7fdf9b3 | keep | season/team in ShareButton + OG fetch; buildExplorePageLink.

@@ -1,9 +1,9 @@
-cycle: 129
+cycle: 130
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
-next_slice: explore-og-formula-sort-label
-last_keep_cycle: 129
-last_commit: 2d0d3bde
-explore_l5_og_query_epic: active
+next_slice: pick from PARITY/NEXT — Bureau H2H export or Lab L5 depth
+last_keep_cycle: 130
+last_commit: da33eafd
+explore_l5_og_query_epic: complete
 lab_l4_pro_gate_epic: complete
