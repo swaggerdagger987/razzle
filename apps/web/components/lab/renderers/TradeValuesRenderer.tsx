@@ -102,13 +102,18 @@ export function TradeValuesRenderer({ panel }: Props) {
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     const statLabel = formula?.name ?? "Value";
-    return players.slice(0, 6).map((p) => ({
-      name: p.full_name,
-      position: p.position,
-      team: p.team,
-      stat: formula ? (p.formula_score ?? 0) : (p.trade_value ?? 0),
-      statLabel,
-    }));
+    const scoreFor = (p: (typeof players)[number]) =>
+      formula ? (p.formula_score ?? 0) : (p.trade_value ?? 0);
+    return [...players]
+      .sort((a, b) => scoreFor(b) - scoreFor(a))
+      .slice(0, 6)
+      .map((p) => ({
+        name: p.full_name,
+        position: p.position,
+        team: p.team,
+        stat: scoreFor(p),
+        statLabel,
+      }));
   }, [players, formula]);
 
   if (q.isPending) {
@@ -247,6 +252,7 @@ export function TradeValuesRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="tradevalues"
             downloadName="razzle-trade-values.png"
+            position={position || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
