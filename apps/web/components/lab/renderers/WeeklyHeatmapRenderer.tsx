@@ -81,7 +81,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
         position: p.position,
         team: p.team,
         stat: p.ppg ?? 0,
-        statLabel: "PPG",
+        statLabel: "FPTS",
       }));
   }, [players]);
 

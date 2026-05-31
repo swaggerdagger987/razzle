@@ -53,13 +53,16 @@ export function ProspectsRenderer({ panel }: Props) {
   const top = prospects[0] ?? null;
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    return prospects.slice(0, 6).map((p) => ({
-      name: p.player_name,
-      position: p.position,
-      team: p.school,
-      stat: p.rps ?? p.rank ?? 0,
-      statLabel: "Score",
-    }));
+    return [...prospects]
+      .sort((a, b) => (b.rps ?? 0) - (a.rps ?? 0))
+      .slice(0, 6)
+      .map((p) => ({
+        name: p.player_name,
+        position: p.position,
+        team: p.school,
+        stat: p.rps ?? 0,
+        statLabel: "RPS",
+      }));
   }, [prospects]);
 
   if (q.isPending) {
@@ -158,6 +161,7 @@ export function ProspectsRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="prospects"
             downloadName="razzle-prospects.png"
+            position={position}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
