@@ -76,4 +76,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 120	d3a469f8	depth+voice+simplicity	keep	Lab	L5 OG renderer sort parity fix	trust=T5,T6; mismatch_score+ppo+ppg; curl buysell 44258B; supersedes wrong OG stat keys
 121	5e75875e	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot roundtrip pytest	trust=T5,T6; y/m/pc contract 4 tests; pytest 4 passed; codec epic 3/3 complete
 122	26a590c9	depth+voice+simplicity	keep	Lab	L5 Dynasty comps OG Pro teaser rows	trust=T2,T6; teaserRowsForPanel comps; curl dynasty-comps 54807B; live-extract epic atom 3/3 complete
-123	da33eafd	depth+voice+simplicity	keep	Lab	L4 Pro gate perks PARITY launch-10 + Bureau-7	trust=T2,T6; launch10PerkLabels; bureau7PerkLabels; pytest 6; build ok; L4 epic atom 3/3 complete
+123	f56fdbd8	depth+voice+simplicity	keep	Lab	L4 Pro gate perks PARITY launch-10 + Bureau-7	trust=T2,T6; launch10PerkLabels; bureau7PerkLabels; pytest 6; build ok; L4 epic atom 3/3 complete

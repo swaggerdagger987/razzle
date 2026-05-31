@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-pro-gate-perks-copy | da33eafd | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
+2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | SHIP | keep | all Staff Picks domain blur; T2/T6.
 
