@@ -218,16 +218,30 @@ export function LabPanelGrid() {
         <section key={cat} className="lab-grid-section">
           <h2 className="lab-grid-heading">{CATEGORY_LABELS[cat]}</h2>
           <div className="lab-grid-cards">
-            {panelsByCategory(cat).map((panel) => (
-              <Link key={panel.slug} href={`/lab/${panel.slug}`} className="lab-grid-card chunky bg-bg-card">
-                <span className="lab-grid-icon" aria-hidden>
-                  {panel.icon}
-                </span>
-                <h3 style={{ fontFamily: "var(--font-display)" }}>{panel.title}</h3>
-                <p className="text-ink-medium text-xs">{panel.blurb}</p>
-                {panel.tier === "pro" && <span className="lab-pro-badge">PRO</span>}
-              </Link>
-            ))}
+            {panelsByCategory(cat).map((panel) => {
+              const owner = STAFF_PICKS.has(panel.slug) ? agentForPanel(panel.slug) : undefined;
+              return (
+                <Link
+                  key={panel.slug}
+                  href={`/lab/${panel.slug}`}
+                  className="lab-grid-card chunky bg-bg-card"
+                  title={owner ? `${owner.name} · ${panel.blurb}` : panel.blurb}
+                >
+                  {owner && (
+                    <span className="lab-grid-agent-chip">
+                      <img src={`/agents/${owner.avatar}.svg`} alt="" width={16} height={16} />
+                      <span>{owner.name}</span>
+                    </span>
+                  )}
+                  <span className="lab-grid-icon" aria-hidden>
+                    {panel.icon}
+                  </span>
+                  <h3 style={{ fontFamily: "var(--font-display)" }}>{panel.title}</h3>
+                  <p className="text-ink-medium text-xs">{panel.blurb}</p>
+                  {panel.tier === "pro" && <span className="lab-pro-badge">PRO</span>}
+                </Link>
+              );
+            })}
           </div>
         </section>
       ))}
