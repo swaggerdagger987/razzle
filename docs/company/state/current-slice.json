@@ -1,31 +1,37 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
-  "epic": "League L5 — Bureau OG terracotta watermark parity (atom 2/4)",
-  "slice_title": "Self-Scout OG terracotta watermark band",
-  "atom_id": "league-og-self-scout-watermark",
-  "parity_ref": "League L5 — watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 3/4)",
+  "slice_title": "LIVE staff sticker when OG rows carry margin notes",
+  "atom_id": "explore-og-margin-note-sticker",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB with LIVE staff sticker",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/self-scout/route.tsx",
-    "apps/api/tests/test_self_scout_og_watermark.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_margin_note_sticker.py",
+    "docs/v2/evidence/2026-05-31-explore-og-margin-note-sticker.md"
   ],
-  "max_files": 2,
-  "max_lines": 130,
+  "max_files": 3,
+  "max_lines": 80,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_self_scout_og_watermark.py -q --noconftest",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_sticker.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["Other Bureau OG routes"],
+  "out_of_scope": [
+    "College-only margin atom",
+    "Lab sidebar changes",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "content_commit": "496a27188",
+  "reality": "PASS",
+  "merge": "open checks pending",
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "status": "shipped",
-  "content_commit": "a76b2e4e0"
+  }
 }
