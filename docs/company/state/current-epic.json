@@ -14,8 +14,8 @@
     {
       "id": "lab-og-live-sticker-efficiency-aging-buysell",
       "title": "OG LIVE stickers — efficiency, aging, buysell",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "e60c62ee"
     },
     {
       "id": "lab-og-live-sticker-dashboard-gamelog",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-efficiency-aging-buysell",
+  "next_atom_id": "lab-og-live-sticker-dashboard-gamelog",
   "created_at": "2026-05-31T12:30:00Z",
-  "updated_at": "2026-05-31T13:15:00Z",
+  "updated_at": "2026-05-31T13:20:00Z",
   "completed_epics": [
     {
       "id": "lab-l2-sidebar-agent-groups",
