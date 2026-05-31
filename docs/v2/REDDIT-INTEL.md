@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
+
+1. **Export must live on the panel** — users screenshot from the tool they are in; buried OG routes without an "export card" link do not travel.
+2. **Gamelog / efficiency / aging** are tape-and-window panels — same footer pattern as weekly heatmap closes launch-10 export parity (atom 1/3).
+3. Standing: sample preview on OG when API empty — T1 trust.
+
 ## 2026-05-31 — Factory cycle 1 (Company OS)
 
 1. **Position-grade roster screenshots** still win trade threads — A–F grid + thinnest-spot callout beats prose rankings.

@@ -15,6 +15,7 @@ import {
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
+import { LabOgExportLink } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -387,6 +388,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
           >
             Ask Octo about {position} aging →
           </Link>
+          <LabOgExportLink slug="aging" downloadName="razzle-aging-curves.png" />
         </footer>
       )}
     </div>

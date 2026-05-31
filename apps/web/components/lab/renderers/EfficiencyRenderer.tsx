@@ -16,6 +16,7 @@ import {
 } from "@/lib/panel-formula-sort";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
+import { LabOgExportLink } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -282,6 +283,7 @@ export function EfficiencyRenderer({ panel }: Props) {
           >
             Ask Octo about {top.name} →
           </Link>
+          <LabOgExportLink slug="efficiency" downloadName="razzle-efficiency.png" />
         </footer>
       )}
     </div>

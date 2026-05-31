@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
+import { LabOgExportLink } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -423,6 +424,7 @@ export function GamelogRenderer({ panel }: Props) {
           >
             open in Explore
           </Link>
+          <LabOgExportLink slug="gamelog" downloadName="razzle-gamelog.png" />
         </footer>
       )}
     </div>
