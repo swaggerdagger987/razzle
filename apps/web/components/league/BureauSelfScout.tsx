@@ -6,12 +6,9 @@ import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
 import { useParams } from "next/navigation";
-import { useCallback, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import {
-  encodeBureauSelfScoutOgSnapshot,
-  type BureauSelfScoutOgSnapshot,
-} from "@/lib/bureau-self-scout-og-snapshot";
+import type { BureauSelfScoutOgSnapshot } from "@/lib/bureau-self-scout-og-snapshot";
+import { BureauSelfScoutShareBar } from "./BureauSelfScoutShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -51,18 +48,6 @@ export function BureauSelfScout({ data }: Props) {
   const { openPlayer } = usePlayerSheet();
   const params = useParams();
   const leagueId = String(params?.id ?? (data.league as Record<string, unknown>)?.id ?? "");
-  const [copied, setCopied] = useState(false);
-
-  const copyScoutLink = useCallback(async () => {
-    if (typeof window === "undefined") return;
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  }, []);
   const hawkeye = AGENT_BY_ID.hawkeye;
   const dolphin = AGENT_BY_ID.dolphin;
 
@@ -105,14 +90,6 @@ export function BureauSelfScout({ data }: Props) {
           }),
         }
       : undefined;
-
-  const ogParams = new URLSearchParams({
-    league: leagueId,
-    user: userId,
-    download: "1",
-  });
-  const snap = ogSnapshot ? encodeBureauSelfScoutOgSnapshot(ogSnapshot) : undefined;
-  if (snap) ogParams.set("snapshot", snap);
 
   return (
     <div className="flex flex-col gap-6">
@@ -209,32 +186,14 @@ export function BureauSelfScout({ data }: Props) {
             );
           })}
         </div>
-        {leagueId && userId && (
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <button type="button" className="btn-chunky text-xs" onClick={() => void copyScoutLink()}>
-              {copied ? "copied!" : "copy link"}
-            </button>
-            <a
-              href={`/og/self-scout?${ogParams.toString()}`}
-              download="razzle-self-scout.png"
-              className="btn-chunky active text-xs"
-              style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-            >
-              export card
-            </a>
-            <Link
-              href={
-                toRoom({
-                  agentId: "hawkeye",
-                  question: `Self-Scout says ${weakest} is my thinnest spot — who should I target?`,
-                }) as Route
-              }
-              className="btn-chunky text-sm bg-bg"
-            >
-              ask {hawkeye.name} in film room →
-            </Link>
-          </div>
-        )}
+        {leagueId && userId ? (
+          <BureauSelfScoutShareBar
+            leagueId={leagueId}
+            userId={userId}
+            weakestPosition={weakest}
+            snapshot={ogSnapshot}
+          />
+        ) : null}
       </section>
 
       {build && (
