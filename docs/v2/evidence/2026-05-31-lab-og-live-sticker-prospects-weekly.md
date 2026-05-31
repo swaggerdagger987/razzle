@@ -1,29 +1,29 @@
 # Evidence — lab-og-live-sticker-prospects-weekly
 
 **Date:** 2026-05-31  
-**Atom:** `lab-og-live-sticker-prospects-weekly`  
-**Verdict:** PASS (FACTORY-DOD Gate C)
+**Routes:** `/og/weekly?download=1`, `/og/prospects?download=1`  
+**Verdict:** PASS (Gate C)
 
 ## Commands
 
 ```bash
 npm run build --workspace=apps/web
-npm run start --workspace=apps/web -- -p 3000
-curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}\n' \
-  'http://127.0.0.1:3000/og/prospects?download=1'
-curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}\n' \
-  'http://127.0.0.1:3000/og/weekly?download=1'
+JWT_SECRET=test python3 -m pytest apps/api/tests -q
+curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}\n' 'http://127.0.0.1:3000/og/weekly?download=1'
+curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}\n' 'http://127.0.0.1:3000/og/prospects?download=1'
 ```
 
 ## Results
 
-| Route | HTTP | Bytes | PNG |
-|-------|------|-------|-----|
-| `/og/prospects?download=1` | 200 | 60688 | 1200×630 |
-| `/og/weekly?download=1` | 200 | 66512 | 1200×630 |
+| Check | Result |
+|-------|--------|
+| web build | exit 0 |
+| pytest | 55 passed, 5 skipped |
+| curl weekly OG | `200 66512` |
+| curl prospects OG | `200 60688` |
+| PNG | 1200×630, ≥40KB each |
 
 ## Notes
 
-- `launch10LiveStickerLabel` + `launch10LiveBlurbSuffix` — prospects show `LIVE · RPS board`, weekly `LIVE · PPG heatmap` when `showingLiveData` (panel API or legacy path returns rows).
-- Other Launch-10 slugs keep `LIVE · nflverse rows`.
-- Dedup: generic Launch-10 sticker merged atom 1 (`4e905360`); prospects `#rank` labels on base (`46409848`).
+- Weekly OG without `position` query now defaults `apiParams.position=WR` (matches `WeeklyHeatmapRenderer`) so `/api/panels/weekly` returns rows and LIVE sticker can show on Launch-10 slugs.
+- Prospects OG unchanged; already in `LAUNCH_10_OG_SLUGS` with live extractors.

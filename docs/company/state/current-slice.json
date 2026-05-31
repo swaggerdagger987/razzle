@@ -1,27 +1,32 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-live-sticker-prospects-weekly",
   "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
   "epic": "Lab L5 — OG live panel rows visible on Launch-10 cards",
-  "slice_title": "Prospects + Weekly OG — panel-specific LIVE sticker when panel API returns rows",
-  "parity_ref": "PARITY Explore L5 — Lab panel OG data rows",
+  "slice_title": "Prospects + Weekly OG — LIVE sticker with panel API defaults",
+  "atom_id": "lab-og-live-sticker-prospects-weekly",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "acceptance_ref": "ACCEPTANCE Gate 6 — Share / OG export cards",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 35,
+  "max_lines": 25,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web 2>&1 | tail -3",
-    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/prospects?download=1'",
-    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?download=1'"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/weekly?download=1'",
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?download=1'"
   ],
-  "out_of_scope": ["new panels", "Bureau routes", "demo fallback copy atom 3"],
+  "out_of_scope": [
+    "dynasty-comps teaser",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "new npm deps"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   }
 }

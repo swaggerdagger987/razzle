@@ -1,11 +1,8 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-og-live-sticker-prospects-weekly | cycle 118 | DynastyFF wants panel-specific live signal on Big Board exports.
+2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | Weekly heatmap OG must match Lab position default.
 
 2026-05-31 | lab-og-live-sticker-launch10 | cycle 116 | Reddit needs visible live vs sample on OG exports.
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | no new REDDIT-INTEL; teaser audit only.
-
-2026-05-31 | gamelog OG weeks | 40c80f0e | PASS | No new intel; in-panel ogSnapshotRows already defined peak-week sort.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.
 
