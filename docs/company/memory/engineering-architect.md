@@ -2,6 +2,8 @@
 
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
 
+2026-05-31 | 1-file surgical position on LabOgExportLink | TradeValuesRenderer only | Gate C curl | SHIP | keep | | | prospects dedup on base
+
 Format per entry:
 
 ```

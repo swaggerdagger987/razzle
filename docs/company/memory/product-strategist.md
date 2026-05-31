@@ -2,6 +2,8 @@
 
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
 
+2026-05-31 | OG export must match position filter | lab-og-position-tradevalues-prospects | Lab L5 / Explore L5 | SHIP | keep | | | curl WR/RB PNG ≥40KB
+
 Format per entry:
 
 ```
