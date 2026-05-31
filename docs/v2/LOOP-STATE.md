@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-strength-of-schedule-tab
 last_keep_cycle: 91
-last_commit: PLACEHOLDER
+last_commit: 4b75ba1c
 lab_l5_dashboard_og_snapshot: complete
 lab_l5_og_snapshot_epic: complete
