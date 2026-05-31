@@ -11,6 +11,16 @@ import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
+/** Sample roster grades when the API returns no dynasty board — OG export still screenshots. */
+const DASHBOARD_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Ladd McConkey", position: "WR", team: "LAC", stat: 12.4, statLabel: "Chg" },
+  { name: "Malik Nabers", position: "WR", team: "NYG", stat: 9.8, statLabel: "Chg" },
+  { name: "Davante Adams", position: "WR", team: "NYJ", stat: -8.2, statLabel: "Chg" },
+  { name: "Joe Mixon", position: "RB", team: "HOU", stat: -6.1, statLabel: "Chg" },
+  { name: "Xavier Worthy", position: "WR", team: "KC", stat: 7.5, statLabel: "Chg" },
+  { name: "Stefon Diggs", position: "WR", team: "HOU", stat: -5.4, statLabel: "Chg" },
+];
+
 interface DashboardPlayer {
   player_id: string;
   full_name: string;
@@ -173,6 +183,8 @@ export function DynastyDashboardRenderer({ panel }: Props) {
 
   const data = q.data!;
   const seasons = data.available_seasons ?? [];
+  const isEmptyBoard =
+    !(data.top5?.length || data.risers?.length || data.fallers?.length || data.value_picks?.length);
 
   return (
     <div className="dynasty-dashboard">
@@ -341,7 +353,19 @@ export function DynastyDashboardRenderer({ panel }: Props) {
         </section>
       )}
 
-      {topRiser && (
+      {isEmptyBoard && (
+        <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
+          <p className="text-ink-medium text-sm">{agent.emptyCopy}</p>
+          <LabOgExportLink
+            slug="dashboard"
+            downloadName="razzle-dashboard.png"
+            snapshotRows={DASHBOARD_SAMPLE_OG_ROWS}
+            label="export sample card"
+          />
+        </footer>
+      )}
+
+      {!isEmptyBoard && topRiser && (
         <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
           <Link
             href={

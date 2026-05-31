@@ -2,7 +2,13 @@
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | 2 files; breakouts WR + rankings no-default pytest.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | 2 files; gate-c pytest imports codec DEMO_SNAPSHOT_PARAM.
+<<<<<<< HEAD
 
+=======
+2026-05-31 | league-og-power-rankings-watermark | f6e0985f3 | SHIP | Mirror pressure-map OG; resolveApiOrigin + toLeague.
+2026-05-31 | league-og-pressure-map-watermark | 7b942533a | SHIP | Mirror self-scout OG; resolveApiOrigin + toLeague.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
+>>>>>>> origin/razzle-v2-redesign
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
@@ -91,3 +97,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | 088cebc07 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY + tradevalues formula_score order
+2026-05-31 | lab-og-percentiles-tolab | f6e0985f3 | keep | 2 files; percentiles WR in TOLAB_DEFAULT_POSITION mirrors breakouts
