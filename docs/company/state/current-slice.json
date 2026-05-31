@@ -1,9 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-strengths-live-og",
-  "slice_title": "Strengths OG — live extract + player-scoped stickers",
-  "content_commit": "1bc1f1e2b",
-  "status": "shipped",
-  "reality": "PASS",
-  "merge": "pending"
+  "big_problem": "Lab OG cards still look generic when comps export.",
+  "epic": "Lab L5 — OG export live panel rows",
+  "slice_title": "Gamelog FROM PANEL snapshot sticker + Gate C pytest",
+  "atom_id": "lab-og-gamelog-from-panel-sticker",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/api/tests/test_og_from_panel_sticker.py"
+  ],
+  "max_files": 1,
+  "max_lines": 25,
+  "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py -q --noconftest",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": ["OG route rewrite", "GamelogRenderer changes"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  }
 }
