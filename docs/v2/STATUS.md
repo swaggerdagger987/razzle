@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | PARITY pick — Bureau OG hallway epic complete |
-| Last commit | `f6e0985f3` |
+| Last commit | `de90dbd4a` |
 
 ---
 
