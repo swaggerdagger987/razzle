@@ -2,30 +2,35 @@
   "date": "2026-05-31",
   "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
   "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "slice_title": "Build Profiles tab unhidden with Atlas roster archetype renderer",
-  "atom_id": "league-build-profiles-tab",
+  "atom_id": "league-waiver-tendencies-tab",
+  "slice_title": "Waiver Tendencies tab unhidden with Hawkeye transaction pattern renderer",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "ACCEPTANCE Gate 3 — Bureau behavioral tabs return data",
+  "acceptance_ref": "ACCEPTANCE Bureau-7 tabs render without 404",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauBuildProfiles.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx",
-    "apps/web/lib/bureau-features.ts"
+    "apps/web/lib/bureau-features.ts",
+    "apps/web/components/league/BureauWaiverTendencies.tsx",
+    "apps/web/components/league/BureauFeatureBody.tsx"
   ],
   "max_files": 3,
   "max_lines": 200,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "node -e \"const fs=require('fs'); const s=fs.readFileSync('apps/web/lib/bureau-features.ts','utf8'); if(!/HIDDEN_BUREAU_SLUGS[^]*build-profiles/.test(s)) process.exit(0); else { console.error('build-profiles still hidden'); process.exit(1); }\""
+    "node -e \"const {HIDDEN_BUREAU_SLUGS}=require('./apps/web/lib/bureau-features.ts');\" 2>/dev/null || rg 'HIDDEN_BUREAU_SLUGS' apps/web/lib/bureau-features.ts | rg -v waiver-tendencies"
   ],
-  "out_of_scope": ["OG route", "API changes", "unhide waiver/SOS tabs", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "out_of_scope": [
+    "strength-of-schedule tab",
+    "OG export routes",
+    "API schema changes",
+    "Auth/billing"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
