@@ -1,27 +1,25 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
-  "epic": "Lab L4 — Pro gates feel like upgrade, not error",
-  "slice_title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — Pro gate shows upgrade message, not blank",
-  "trust_pillars": ["T2", "T6"],
+  "big_problem": "Lab OG gamelog exports fail before a player is picked — empty state had no sample card for Reddit screenshots.",
+  "epic": "Lab L5 — OG export paths before player context",
+  "slice_title": "Gamelog OG — default player_id when export omits query",
+  "atom_id": "lab-og-gamelog-player-default",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/gamelog PNG ≥40KB with default player",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/lib/panel-upgrade-teaser.ts",
-    "apps/web/components/lab/ProUpgradeGate.tsx",
-    "apps/api/tests/test_panel_upgrade_teaser.py"
+    "apps/web/components/lab/renderers/GamelogRenderer.tsx"
   ],
-  "max_files": 4,
-  "max_lines": 150,
+  "max_files": 1,
+  "max_lines": 40,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'"
   ],
   "out_of_scope": [
-    "OG routes",
-    "pricing page",
+    "og/[panel]/route.tsx changes",
+    "new API endpoints",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
@@ -30,5 +28,8 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "content_commit": null,
+  "reality": null,
+  "merge": null
 }
