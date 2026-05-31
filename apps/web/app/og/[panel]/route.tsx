@@ -77,13 +77,24 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   "dynasty-comps": "similarity",
   strengths: "percentile",
   percentiles: "percentile",
+  career: "ppg",
 };
 
 /** Pro player-scoped Lab panels (not Launch-10) — LIVE trust sticker when API returns rows. */
-const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths", "percentiles"]);
+const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set([
+  "dynasty-comps",
+  "strengths",
+  "percentiles",
+  "career",
+]);
 
 /** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
-const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps", "percentiles"]);
+const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set([
+  "gamelog",
+  "dynasty-comps",
+  "percentiles",
+  "career",
+]);
 
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
@@ -130,6 +141,7 @@ function playerScopedLiveStickerLabel(slug: string): string {
   if (slug === "dynasty-comps") return "LIVE · comp matches";
   if (slug === "strengths") return "LIVE · top strengths";
   if (slug === "percentiles") return "LIVE · peer percentiles";
+  if (slug === "career") return "LIVE · career arc";
   if (slug === "gamelog") return "LIVE · Wk tape";
   return "LIVE · panel rows";
 }
@@ -196,6 +208,9 @@ function panelBlurbSuffix(
   if (slug === "percentiles" && showingDemoRows) {
     return `${pos} · sample percentile bars`;
   }
+  if (slug === "career" && showingDemoRows) {
+    return `${pos} · sample season arc`;
+  }
   if (isSnapshot) {
     return `${pos} · from your panel`;
   }
@@ -216,6 +231,9 @@ function panelBlurbSuffix(
   }
   if (showingLiveData && slug === "percentiles") {
     return `${pos} · live peer percentiles`;
+  }
+  if (showingLiveData && slug === "career") {
+    return `${pos} · live season arc`;
   }
   if (showingLiveData) {
     return `${pos} · live data`;
@@ -318,6 +336,14 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Xavier Worthy", position: "WR", team: "KC", stat: 7.5, statLabel: "Chg" },
     { name: "Stefon Diggs", position: "WR", team: "HOU", stat: -5.4, statLabel: "Chg" },
   ],
+  career: [
+    { name: "2024", position: "WR", team: "CIN", stat: 24.6, statLabel: "PPG" },
+    { name: "2023", position: "WR", team: "CIN", stat: 22.1, statLabel: "PPG" },
+    { name: "2022", position: "WR", team: "CIN", stat: 19.8, statLabel: "PPG" },
+    { name: "2021", position: "WR", team: "CIN", stat: 11.2, statLabel: "PPG" },
+    { name: "2020", position: "WR", team: "LSU", stat: 0, statLabel: "—" },
+    { name: "2019", position: "WR", team: "LSU", stat: 0, statLabel: "—" },
+  ].filter((r) => r.stat > 0),
   percentiles: [
     { name: "PPG", position: "WR", team: "CIN", stat: 96, statLabel: "24.6" },
     { name: "Rec/G", position: "WR", team: "CIN", stat: 94, statLabel: "7.2" },
@@ -466,6 +492,35 @@ function extractProspectsRows(
     rows = rows.filter((r) => r.position === positionFilter);
   }
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
+}
+
+/** Career OG — season PPG arc (matches /api/career-stats seasons payload). */
+function extractCareerRows(
+  seasons: Record<string, unknown>[],
+  player?: Record<string, unknown>,
+): OgRow[] {
+  const position = String(player?.position ?? "");
+  const team = String(player?.team ?? "");
+  return seasons
+    .map((s) => {
+      const season = s.season;
+      const totalPpr = s.total_ppr != null ? Number(s.total_ppr) : null;
+      return {
+        name: season != null ? String(season) : "",
+        position,
+        team,
+        stat: Number(s.ppg ?? 0),
+        statLabel:
+          totalPpr != null && totalPpr > 0
+            ? `${Math.round(totalPpr)} PPR`
+            : s.games != null
+              ? `${s.games} gm`
+              : "PPG",
+      };
+    })
+    .filter((r) => r.name.trim().length > 0 && r.stat > 0)
+    .sort((a, b) => Number(b.name) - Number(a.name))
+    .slice(0, 6);
 }
 
 /** Percentiles OG — top peer metrics (matches fetch_player_percentiles payload). */
@@ -674,6 +729,18 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
       player,
     );
     if (percentileRows.length > 0) return percentileRows;
+  }
+
+  if (slug === "career" && Array.isArray(obj.seasons) && obj.seasons.length > 0) {
+    const player =
+      obj.player && typeof obj.player === "object"
+        ? (obj.player as Record<string, unknown>)
+        : undefined;
+    const careerRows = extractCareerRows(
+      obj.seasons as Record<string, unknown>[],
+      player,
+    );
+    if (careerRows.length > 0) return careerRows;
   }
 
   let candidates: Record<string, unknown>[] = [];
