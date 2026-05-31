@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Self-Scout export cards still hit live API or demo — Reddit screenshots should mirror in-panel depth grades without Sleeper auth on the OG route.",
   "epic_title": "League L5 — Bureau Self-Scout snapshot export",
   "parity_ref": "League L5 — Scenario explorer / what-if outputs that travel",
@@ -8,25 +8,25 @@
     {
       "id": "bureau-self-scout-sharebar-snapshot",
       "title": "Self-Scout ShareBar + OG snapshot codec matches panel grades",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "261c3166"
     },
     {
       "id": "bureau-manager-profiles-sharebar-snapshot",
       "title": "Manager Profiles ShareBar + OG snapshot for archetype rows",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "261c3166"
     },
     {
       "id": "bureau-self-scout-snapshot-roundtrip-test",
       "title": "Pytest roundtrip for Self-Scout OG snapshot param",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "261c3166"
     }
   ],
-  "next_atom_id": "bureau-self-scout-sharebar-snapshot",
+  "next_atom_id": null,
   "created_at": "2026-05-31T09:30:00Z",
-  "updated_at": "2026-05-31T09:50:00Z",
+  "updated_at": "2026-05-31T10:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l4-pro-gate-upgrade",
@@ -51,6 +51,12 @@
       "status": "partial",
       "last_atom": "lab-l4-pro-gate-error-surface",
       "merge_commit": "5721ee33"
+    },
+    {
+      "id": "league-l5-self-scout-export",
+      "status": "complete",
+      "last_atom": "bureau-self-scout-sharebar-snapshot",
+      "merge_commit": "261c3166"
     }
   ]
 }
