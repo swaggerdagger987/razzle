@@ -1,4 +1,5 @@
 2026-05-31 | bureau-waiver-og-watermark-band | 3bb457789 | 2 files; H2H band pattern on waiver OG.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | 2 files; generalized default position.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
