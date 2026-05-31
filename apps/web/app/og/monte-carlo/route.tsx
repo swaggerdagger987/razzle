@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague } from "@razzle/hallway";
 import { decodeBureauMonteCarloOgSnapshot } from "@/lib/bureau-monte-carlo-og-snapshot";
 
 export const runtime = "edge";
@@ -40,6 +41,16 @@ function barWidth(pct: number, scale = 2): string {
   return `${Math.min(100, pct * scale)}%`;
 }
 
+/** Typed hallway path for OG watermark band (T6 — click back into Bureau Monte Carlo). */
+function monteCarloOgWatermarkLink(league: string, user: string): string {
+  if (!league) return "/league/monte-carlo";
+  let path = toLeague(league, "monte-carlo");
+  if (user) {
+    path = `${path}?${new URLSearchParams({ user }).toString()}`;
+  }
+  return path;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -54,6 +65,7 @@ export async function GET(req: Request) {
   const isDemo = !fromSnapshot?.length && !live?.length;
   const odds = (fromSnapshot ?? (isDemo ? DEMO_ODDS : live!)).slice(0, 3);
   const fromPanel = Boolean(fromSnapshot?.length);
+  const leagueDeepLink = monteCarloOgWatermarkLink(league, user);
 
   return new ImageResponse(
     (
@@ -169,24 +181,26 @@ export async function GET(req: Request) {
           ))}
         </div>
 
+        {/* Always-on watermark band — matches H2H + Trade Finder OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>
-            razzle.lol/league{league ? `/${league}` : ""}/monte-carlo
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
         </div>
       </div>
     ),
