@@ -1,8 +1,9 @@
 # Memory — Reality Checker
 
 
-2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 2; build exit 0.
+2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 5; build exit 0.
 
+2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | PASS | pytest 5; curl NFL OG 65431B without universe param.
 2026-05-31 | lab-l4-pro-gate-dynasty-comps | a3f07d1e5 | PASS | pytest 9; web build exit 0; no OG slice.
 
 2026-05-31 | lab-og-sample-labels Gate C | 54443bc8 | PASS | build exit 0; curl 66806/66253/67267 B; PNG verified.
