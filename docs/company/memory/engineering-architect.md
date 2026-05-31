@@ -1,3 +1,5 @@
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | 2 files; isSnapshot EXPORTED sticker.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | 2 files; generalized default position.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
@@ -5,6 +7,7 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 
+2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | 3 files; marginNoteForOgExploreRow on edge OG route.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | 3 files; mirrors H2H atlasRoomPath pattern for Bones.
 2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | 2 files pytest-only; SNAPSHOT_FROM_PANEL_SLUGS extended.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | 2 files; includeDefaultPlayer guard in labOgWatermarkLink.
@@ -18,9 +21,7 @@
 2026-05-31 | room-briefing-watermark | eca00c3f0 | 3 files; BriefingCard mirrors ExploreShareButton; OG band uses roomPath.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | 2 files; labOgWatermarkLink mirrors briefing toRoom pattern.
 
-2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | 1 file GamelogRenderer; footer LabOgExportLink ≤15 lines.
 
-2026-05-31 | room-briefing-watermark | eca00c3f0 | 3 files; BriefingCard mirrors ExploreShareButton; OG band uses roomPath.
 
 
 2026-05-31 | lab-og-sample-labels | 54443bc8 | 1 file route.tsx; launch10DemoStickerLabel + blurbs ≤30 lines.

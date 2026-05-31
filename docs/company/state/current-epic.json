@@ -15,5 +15,11 @@
   "next_atom_id": null,
   "created_at": "2026-05-31T12:00:00Z",
   "updated_at": "2026-05-31T12:00:00Z",
-  "completed_epics": []
+  "completed_epics": [
+    {
+      "epic_title": "Lab L5 — player-scoped OG toLab follow-up",
+      "completed_at": "2026-05-31T12:00:00Z",
+      "final_merge_commit": "6726f52d7"
+    }
+  ]
 }
