@@ -24,6 +24,8 @@
     "New API endpoints",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
+  "content_commit": "0fc4932b7",
+  "reality": "PASS",
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
