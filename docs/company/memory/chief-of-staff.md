@@ -1,6 +1,8 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 141 weekly OG Gate C | e4bc2cc0c | Lab L5 trust epic 1/3; lock #1175.
+
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Factory cycle 2; buy/sell formula OG parity.
 
 2026-05-31 | cycle 142 formula OG live | ceadf0402 | SHIP | Factory open; Lab breakouts/rankings formula_score parity.
