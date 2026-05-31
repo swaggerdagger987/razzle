@@ -1,8 +1,9 @@
-cycle: 159
+cycle: 160
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: lab-panel-share-bar-weekly-gamelog (GTM share bar epic atom 3/4)
-last_keep_cycle: 159
-last_commit: 81d081604
+next_slice: lab-panel-share-bar-weekly-gamelog
+last_keep_cycle: 160
+last_commit: 0d82ee049
+explore_l5_og_margin_epic: complete
 lab_l5_gtm_share_bar_epic: active
