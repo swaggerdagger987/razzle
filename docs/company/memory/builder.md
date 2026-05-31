@@ -20,6 +20,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
+2026-05-31 | league-schedule-tab | BureauStrengthOfSchedule Octo renderer | ce0cdcb2 | SHIP | keep | unhide strength-of-schedule slug only
+
 2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
 2026-05-31 | Bureau Manager Profiles copy link | 04c19959 | keep | copyProfilesLink row; curl manager-profiles 77194B
