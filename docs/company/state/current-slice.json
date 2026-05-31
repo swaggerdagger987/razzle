@@ -1,32 +1,31 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
-  "epic": "Lab L5 — Launch-10 OG panel-native LIVE labels",
-  "slice_title": "gamelog/efficiency OG LIVE sticker + blurb parity",
-  "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
+  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
+  "epic": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
+  "slice_title": "Rankings + tradevalues + breakouts — SAMPLE panel-native stickers",
+  "atom_id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with LIVE sticker text",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx"
-  ],
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T1", "T5", "T6"],
+  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 20,
+  "max_lines": 30,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/gamelog-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'",
-    "curl -s -o /tmp/efficiency-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1'"
+    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1'",
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/breakouts?download=1'",
+    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/tradevalues?download=1'"
   ],
-  "out_of_scope": [
-    "aging/buysell panels",
-    "new API routes",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["gamelog/efficiency/aging atoms", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "content_commit": "54443bc8",
+  "reality": "PASS",
+  "merge": "pending"
 }
