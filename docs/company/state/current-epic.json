@@ -1,19 +1,30 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic_title": "Lab L5 — Dashboard/comps OG snapshot parity",
+  "epic_status": "active",
+  "big_problem": "Position-filtered Lab panels export OG cards with wrong stat labels or unfiltered rows — screenshots break trust (DEPTH Lab L5).",
+  "epic_title": "Lab L5 — OG snapshot fidelity on filtered panels",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-dashboard-og-snapshot",
-      "title": "DashboardRenderer passes top-6 comp rows into dynasty-comps OG snapshot",
+      "id": "lab-prospects-og-rps-position",
+      "title": "Prospects OG: RPS column + position filter on export",
       "status": "done",
-      "merge_commit": "c9151786"
+      "merge_commit": "17a40c65"
+    },
+    {
+      "id": "lab-efficiency-og-position-filter",
+      "title": "Efficiency OG export passes position filter",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-weekly-og-snapshot-verify",
+      "title": "Weekly heatmap OG snapshot row parity audit",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T12:45:00Z",
-  "updated_at": "2026-05-31T12:55:00Z",
-  "last_cycle_commit": "c9151786"
+  "next_atom_id": "lab-efficiency-og-position-filter",
+  "created_at": "2026-05-31T05:30:00Z",
+  "updated_at": "2026-05-31T05:35:00Z"
 }
