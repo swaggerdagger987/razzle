@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | Manager Profiles OG Atlas Room hallway (epic atom 2/3) |
-| Last commit | `f6e0985f3` |
+| Last commit | `5578c64e1` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
