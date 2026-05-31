@@ -1,6 +1,5 @@
 {
   "date": "2026-05-31",
-<<<<<<< HEAD
   "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
   "epic": "Explore L5 — OG screener agent margin notes (atom 3/4)",
   "slice_title": "LIVE staff sticker when Explore OG rows carry margin notes",
@@ -21,28 +20,6 @@
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": ["College OG margin notes", "NORTH_STAR/DESIGN/DECISIONS"],
-=======
-  "big_problem": "Aging curves default to RB in Lab but OG export omitted position=RB in toLab.",
-  "epic": "Lab L5 — OG hallway position defaults (Launch-10)",
-  "slice_title": "aging OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-aging-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "HALLWAY T6 + FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py",
-    "docs/v2/evidence/2026-05-31-lab-og-tolab-aging-position.md"
-  ],
-  "max_files": 3,
-  "max_lines": 40,
-  "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
-  ],
-  "out_of_scope": ["New panels", "NORTH_STAR/DESIGN/DECISIONS", "Bureau H2H"],
->>>>>>> origin/cursor/workday-cycle-initiation-58ef
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -51,9 +28,5 @@
     "verdict": "SHIP"
   },
   "status": "shipped",
-<<<<<<< HEAD
   "content_commit": "3d4d44c"
-=======
-  "content_commit": "d56e382"
->>>>>>> origin/cursor/workday-cycle-initiation-58ef
 }
