@@ -57,7 +57,8 @@ def test_watermark_uses_player_display_name_from_export_url():
     assert "playerDisplayName" in route
     assert "DEFAULT_OG_PLAYER_NAME" in route
     assert 'params.set("name"' in export
-    assert "playerName={displayName}" in gamelog
+    assert "LabPanelShareBar" in gamelog
+    assert "playerId={(data?.player_id ?? playerId)" in gamelog
 
 
 def test_weekly_og_watermark_includes_default_wr_position():
