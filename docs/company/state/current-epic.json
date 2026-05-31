@@ -14,8 +14,8 @@
     {
       "id": "league-sos-og-export",
       "title": "SOS Bureau OG share card with verdict + PPG bars",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "33b19e45"
     },
     {
       "id": "league-sos-self-scout-cta",
