@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 128 — Lab L5 gamelog OG default player export)
+**Last updated:** 2026-05-31 (factory cycle 129 — Room L5 briefing copy for Slack/Reddit)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 128 |
+| Cycle | 129 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | Room |
 | Focus layer | L5 |
-| Next slice | room-briefing-copy-export |
-| Last commit | `8e7297c8` |
+| Next slice | room-briefing-og-card |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

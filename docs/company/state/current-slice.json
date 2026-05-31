@@ -1,25 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG gamelog exports fail before a player is picked — empty state had no sample card for Reddit screenshots.",
-  "epic": "Lab L5 — OG export paths before player context",
-  "slice_title": "Gamelog OG — default player_id when export omits query",
-  "atom_id": "lab-og-gamelog-player-default",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/gamelog PNG ≥40KB with default player",
+  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
+  "epic": "Room L5 — briefing GTM export",
+  "slice_title": "Briefing card — copy formatted text for Slack/Reddit",
+  "atom_id": "room-briefing-copy-export",
+  "parity_ref": "Room L5 — GTM export slice",
+  "depth_ref": "Room L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — UI copy path; build + format unit check",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/GamelogRenderer.tsx"
+    "apps/web/lib/format-briefing-export.ts",
+    "apps/web/components/room/BriefingCard.tsx",
+    "apps/api/tests/test_briefing_export_format.py"
   ],
-  "max_files": 1,
-  "max_lines": 40,
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'"
+    "pytest apps/api/tests/test_briefing_export_format.py -q",
+    "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "og/[panel]/route.tsx changes",
-    "new API endpoints",
+    "og/briefing route",
+    "API changes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
@@ -28,8 +30,5 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "content_commit": "8e7297c8",
-  "reality": "PASS",
-  "merge": "pending"
+  }
 }
