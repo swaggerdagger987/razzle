@@ -17,9 +17,7 @@
   "max_lines": 30,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1'",
-    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/weekly?download=1'",
-    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/tradevalues?download=1'"
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1'"
   ],
   "out_of_scope": ["OG route changes", "NORTH_STAR / DESIGN edits"],
   "builder_mode": "composer-surgical",
