@@ -1,9 +1,9 @@
-cycle: 100
+cycle: 109
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-efficiency-aging-live-sort
-last_keep_cycle: 100
-last_commit: 7f78b631
+next_slice: lab-og-rankings-tradevalues-live-sort
+last_keep_cycle: 109
+last_commit: 228c4b59
+lab_l5_og_position_epic: complete
 lab_l5_og_live_sort_epic: active
-lab_l5_og_rankings_tradevalues_live_sort: in_progress
