@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-dynasty-comps-pro-teaser | da33eafd | teaserOgRowsForPanel + extractDynastyCompsRows; curl dynasty-comps 55031B.
+
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | bc79925e | extractGamelogWeekRows in route.tsx; curl gamelog 55055B.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.

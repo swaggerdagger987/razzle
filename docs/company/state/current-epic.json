@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Launch-10 Lab OG cards for weekly, prospects, and breakouts still mis-rank live API rows — Reddit screenshots disagree with in-product heatmaps and big boards.",
   "epic_title": "Lab L5 — launch-10 OG live extract matches renderers",
   "parity_ref": "Lab L4/L5 — OG card per panel matches in-product export",
@@ -20,13 +20,13 @@
     {
       "id": "lab-og-dynasty-comps-pro-teaser",
       "title": "Dynasty comps Pro gate panel-specific teaser rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "da33eafd"
     }
   ],
-  "next_atom_id": "lab-og-dynasty-comps-pro-teaser",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:00:00Z",
-  "updated_at": "2026-05-31T08:12:00Z",
+  "updated_at": "2026-05-31T08:20:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-band",
@@ -51,6 +51,12 @@
       "status": "complete",
       "last_atom": "lab-og-position-gamelog",
       "merge_commit": "228c4b59"
+    },
+    {
+      "id": "lab-l5-og-live-extract-matches-renderers",
+      "status": "complete",
+      "last_atom": "lab-og-dynasty-comps-pro-teaser",
+      "merge_commit": "da33eafd"
     }
   ]
 }

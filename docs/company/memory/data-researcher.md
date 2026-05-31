@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-dynasty-comps-pro-teaser | cycle 117 | Comp-card OG matches Pro blur preview — dynasty pricing screenshot hook.
+
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | cycle 116 | Peak-week PPR on OG card — boom-week screenshot hook for r/DynastyFF.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.

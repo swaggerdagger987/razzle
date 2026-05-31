@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-og-dynasty-comps-pro-teaser | da33eafd | curl dynasty-comps 55031B PASS | Gate C teaser rows + match % layout.
+
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | bc79925e | curl gamelog 55055B PASS | Gate C peak-week rows not player leaderboard.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 4d84af9a | curl H2H 67846B PASS | Gate C terracotta band on export.
