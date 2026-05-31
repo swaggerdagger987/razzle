@@ -1,10 +1,10 @@
-cycle: 72
+cycle: 74
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: PARITY — Bureau H2H export or Lab L4 polish
-last_keep_cycle: 72
-last_commit: 8b5acdbe
+next_slice: PARITY — league-power-rankings-og or roster-depth tab
+last_keep_cycle: 74
+last_commit: 20c7940a
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -24,3 +24,5 @@ lab_l5_og_export_rankings_breakouts: complete
 lab_l5_og_export_prospects_weekly_tradevalues: complete
 lab_l5_og_live_extractors: complete
 lab_l5_og_live_rows_epic: complete
+league_l5_power_rankings_tab: complete
+league_l5_unhide_bureau_epic: active
