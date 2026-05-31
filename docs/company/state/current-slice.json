@@ -18,7 +18,7 @@
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "node -e \"const {HIDDEN_BUREAU_SLUGS,VISIBLE_BUREAU_FEATURES}=require('./apps/web/lib/bureau-features.ts');\" 2>/dev/null || grep -q 'VISIBLE_BUREAU_FEATURES' apps/web/lib/bureau-features.ts && ! grep -q '\"power-rankings\"' apps/web/lib/bureau-features.ts | head -1; rg 'power-rankings' apps/web/lib/bureau-features.ts apps/web/components/league/BureauFeatureBody.tsx"
+    "rg 'power-rankings' apps/web/lib/bureau-features.ts apps/web/components/league/BureauFeatureBody.tsx"
   ],
   "out_of_scope": [
     "OG route /og/power-rankings (atom 2)",
