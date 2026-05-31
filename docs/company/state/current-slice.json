@@ -1,33 +1,9 @@
 {
   "date": "2026-05-31",
   "atom_id": "lab-strengths-live-og",
-  "big_problem": "Lab panel OG cards still fall back to generic demo rows — strength exports do not prove live percentile grades when the API returns strengths.",
-  "epic": "Lab L5 — player-scoped OG live rows (atom 2/3)",
   "slice_title": "Strengths OG — live extract + player-scoped stickers",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/strengths PNG ≥40KB; LIVE sticker when API returns strengths",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_strengths_live.py"
-  ],
-  "max_files": 2,
-  "max_lines": 120,
-  "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_og_strengths_live.py -q --noconftest",
-    "npm run build --workspace=apps/web 2>&1 | tail -8"
-  ],
-  "out_of_scope": ["new panels", "ProUpgradeGate", "NORTH_STAR/DESIGN/DECISIONS edits"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
-  "status": "shipped",
   "content_commit": "1bc1f1e2b",
+  "status": "shipped",
   "reality": "PASS",
   "merge": "pending"
 }
