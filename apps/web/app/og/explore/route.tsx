@@ -24,7 +24,13 @@ async function fetchScreenerData(params: {
   dir: string;
   q: string;
   pos: string;
+<<<<<<< HEAD
 }): Promise<{ players: OgPlayer[]; items: Record<string, unknown>[] }> {
+=======
+  season: number;
+  teams: string[];
+}): Promise<OgPlayer[]> {
+>>>>>>> origin/razzle-v2-redesign
   const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
   let sortKey = params.sort;
   if (params.universe === "college" && sortKey === "fantasy_points_ppr") {
@@ -41,8 +47,7 @@ async function fetchScreenerData(params: {
   const body = {
     search: params.q,
     positions,
-    teams: [],
-    season: 0,
+    season: params.season,
     week: 0,
     sort_key: sortKey,
     sort_direction: params.dir === "asc" ? "asc" : "desc",
@@ -52,6 +57,7 @@ async function fetchScreenerData(params: {
     relevance: "fantasy",
     min_gp: 0,
     universe: params.universe,
+    teams: params.teams,
   };
 
   try {
@@ -123,16 +129,29 @@ export async function GET(req: Request) {
   const dir = url.searchParams.get("dir") ?? "desc";
   const q = url.searchParams.get("q") ?? "";
   const pos = url.searchParams.get("pos") ?? "";
+  const season = Number(url.searchParams.get("season") ?? "0") || 0;
+  const teams = (url.searchParams.get("team") ?? "")
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
 
   const title = universe === "college" ? "College Screener" : "Dynasty Screener";
   const subtitle = buildSubtitle(universe, sort, pos, q);
   const colHeader = statLabel(universe, effectiveSortKey(universe, sort));
-  const exploreLink =
-    universe === "college" ? "razzle.lol/explore?universe=college" : "razzle.lol/explore";
+  const bandParams = new URLSearchParams({ universe, sort, dir });
+  if (q) bandParams.set("q", q);
+  if (pos) bandParams.set("pos", pos);
+  if (season > 0) bandParams.set("season", String(season));
+  if (teams.length) bandParams.set("team", teams.join(","));
+  const exploreLink = `razzle.lol/explore?${bandParams.toString()}`;
 
+<<<<<<< HEAD
   const { players, items } = await fetchScreenerData({ universe, sort, dir, q, pos });
   const collegeStaffNote =
     universe === "college" && players.length > 0 ? firstCollegeStaffNote(items) : null;
+=======
+  const players = await fetchTopPlayers({ universe, sort, dir, q, pos, season, teams });
+>>>>>>> origin/razzle-v2-redesign
 
   return new ImageResponse(
     (

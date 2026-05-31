@@ -1,6 +1,10 @@
 # Memory — Data Researcher
 
+<<<<<<< HEAD
 2026-05-31 | explore-og-college-hawkeye-note | cycle 128 | Campus screener shares need Hawkeye notes on OG export.
+=======
+2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
+>>>>>>> origin/razzle-v2-redesign
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.
