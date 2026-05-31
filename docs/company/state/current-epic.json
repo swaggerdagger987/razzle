@@ -8,8 +8,8 @@
     {
       "id": "explore-og-universe-query",
       "title": "Explore OG — universe badge + search query sticker on share card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "696373e4"
     },
     {
       "id": "explore-og-college-demo-rows",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-universe-query",
+  "next_atom_id": "explore-og-college-demo-rows",
   "created_at": "2026-05-31T12:10:00Z",
   "updated_at": "2026-05-31T12:10:00Z",
   "completed_epics": [
