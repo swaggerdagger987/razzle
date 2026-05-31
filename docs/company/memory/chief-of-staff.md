@@ -10,6 +10,8 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
+2026-05-31 | factory cycle 1 | Lab weekly hot-week OG atom 2/4 | da33eafd | SHIP | KEEP epic atom chain | — | — | standup 2026-05-31 cycle 93
+
 2026-05-31 | factory cycle 1 | Lab epic after League unhide complete | da33eafd | SHIP | KEEP NEXT.md lead for slice pick | — | — | standup 2026-05-31 cycle 92
 
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77

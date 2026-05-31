@@ -14,7 +14,7 @@
     {
       "id": "lab-weekly-hot-week-snapshot",
       "title": "Weekly heatmap export snapshot includes hottest week rows",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {

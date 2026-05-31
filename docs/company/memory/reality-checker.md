@@ -12,6 +12,8 @@ YYYY-MM-DD | claim under review | evidence type (curl/screenshot/test) | layer/P
 Read this file before reviewing a claim. Recurring failure classes deserve
 explicit checks in the verification routine.
 
+2026-05-31 | weekly OG hot-week snapshot ≥40KB | curl localhost PNG snap 51665B demo 63819B | Lab L5 OG | PASS | — | KEEP Wk N label in snapshot curl | — | evidence 2026-05-31-lab-weekly-hot-week-snapshot
+
 2026-05-31 | dashboard OG snapshot ≥40KB | curl localhost PNG | Lab L5 OG | PASS | — | KEEP snapshot param curl | — | evidence 2026-05-31-lab-dashboard-top5-og-snapshot
 
 ---
