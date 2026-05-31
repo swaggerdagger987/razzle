@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 130 — Lab L5 OG LIVE stickers eff/aging/buysell/dashboard/gamelog)
+**Last updated:** 2026-05-31 (factory cycle 131 — Lab L5 OG LIVE stickers eff/aging/buysell/dashboard/gamelog)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,7 +15,7 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 130 |
+| Cycle | 131 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
