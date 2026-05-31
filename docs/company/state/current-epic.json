@@ -20,13 +20,13 @@
   ],
   "next_atom_id": "lab-og-watermark-band-head-to-head",
   "created_at": "2026-05-31T08:20:00Z",
-  "updated_at": "2026-05-31T08:50:00Z",
+  "updated_at": "2026-05-31T08:55:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-sort-keys",
       "status": "complete",
       "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "cb59494b"
+      "merge_commit": "7afc0b03"
     },
     {
       "id": "league-l5-bureau-depth-og",
