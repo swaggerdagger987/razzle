@@ -93,8 +93,11 @@ function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "prospects") return " · live RPS board";
   if (slug === "weekly") return " · live PPG heatmap";
   if (slug === "rankings") return " · live dynasty ranks";
-  if (slug === "breakouts") return " · live RBS board";
-  if (slug === "tradevalues") return " · live value curve";
+  if (slug === "tradevalues") return " · live trade values";
+  if (slug === "breakouts") return " · live breakout board";
+  if (slug === "gamelog") return " · live game log";
+  if (slug === "efficiency") return " · live efficiency board";
+  if (slug === "aging") return " · live aging curves";
   return " · live nflverse rows";
 }
 
@@ -102,9 +105,36 @@ function launch10LiveStickerLabel(slug: string): string {
   if (slug === "prospects") return "LIVE · RPS board";
   if (slug === "weekly") return "LIVE · PPG heatmap";
   if (slug === "rankings") return "LIVE · dynasty ranks";
-  if (slug === "breakouts") return "LIVE · RBS board";
-  if (slug === "tradevalues") return "LIVE · value curve";
+  if (slug === "tradevalues") return "LIVE · trade values";
+  if (slug === "breakouts") return "LIVE · breakout board";
+  if (slug === "gamelog") return "LIVE · game log";
+  if (slug === "efficiency") return "LIVE · efficiency board";
+  if (slug === "aging") return "LIVE · aging curves";
   return "LIVE · nflverse rows";
+}
+
+function launch10DemoBlurbSuffix(slug: string): string {
+  if (slug === "prospects") return " · demo RPS board";
+  if (slug === "weekly") return " · demo PPG heatmap";
+  if (slug === "rankings") return " · demo dynasty ranks";
+  if (slug === "tradevalues") return " · demo trade values";
+  if (slug === "breakouts") return " · demo breakout board";
+  if (slug === "gamelog") return " · demo game log";
+  if (slug === "efficiency") return " · demo efficiency board";
+  if (slug === "aging") return " · demo aging curves";
+  return " · demo nflverse rows";
+}
+
+function launch10DemoStickerLabel(slug: string): string {
+  if (slug === "prospects") return "SAMPLE · RPS board";
+  if (slug === "weekly") return "SAMPLE · PPG heatmap";
+  if (slug === "rankings") return "SAMPLE · dynasty ranks";
+  if (slug === "tradevalues") return "SAMPLE · trade values";
+  if (slug === "breakouts") return "SAMPLE · breakout board";
+  if (slug === "gamelog") return "SAMPLE · game log";
+  if (slug === "efficiency") return "SAMPLE · efficiency board";
+  if (slug === "aging") return "SAMPLE · aging curves";
+  return "SAMPLE · demo rows";
 }
 
 function panelBlurbSuffix(
@@ -123,7 +153,7 @@ function panelBlurbSuffix(
   }
   if (showingDemoRows) {
     if (LAUNCH_10_OG_SLUGS.has(slug)) {
-      return `${pos} · SAMPLE rows — not live nflverse`;
+      return `${pos}${launch10DemoBlurbSuffix(slug)}`;
     }
     return `${pos} · sample preview`;
   }
@@ -776,7 +806,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            SAMPLE · not live data
+            {launch10DemoStickerLabel(slug)}
           </div>
         ) : null}
 
