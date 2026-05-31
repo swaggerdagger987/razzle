@@ -74,6 +74,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     return [...players]
+      .filter((p) => p.position === position)
       .sort((a, b) => (b.ppg ?? 0) - (a.ppg ?? 0))
       .slice(0, 6)
       .map((p) => ({
@@ -83,7 +84,7 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
         stat: p.ppg ?? 0,
         statLabel: "PPG",
       }));
-  }, [players]);
+  }, [players, position]);
 
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
