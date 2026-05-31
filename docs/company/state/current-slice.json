@@ -1,35 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
-  "epic": "Explore L5 — OG screener agent margin notes (atom 2/4)",
-  "slice_title": "Margin notes on top-3 OG screener rows",
-  "atom_id": "explore-og-margin-note-rows",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB with margin notes on ranks 1–3",
+  "big_problem": "Waiver wire export cards need GTM polish — LIVE stickers, hallway watermark, and Hawkeye Room ask on the FAAB hoarder hero.",
+  "epic": "League L5 — Waiver Tendencies GTM export (atom 4/4)",
+  "slice_title": "league-waiver-tendencies-og-hawkeye-room",
+  "parity_ref": "League L5 — watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with hallway deep link",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/explore/route.tsx",
-    "apps/api/tests/test_explore_og_margin_note_rows.py"
+    "apps/web/app/og/waiver-tendencies/route.tsx",
+    "apps/api/tests/test_waiver_tendencies_og_hawkeye_room.py"
   ],
   "max_files": 2,
-  "max_lines": 80,
+  "max_lines": 90,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_waiver_tendencies_og_hawkeye_room.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "LIVE staff sticker atom",
-    "College-only atom",
+    "New OG routes",
+    "Share bar changes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "content_commit": "c1a0bcaad",
-  "reality": "PASS",
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  }
+  "builder_mode": "composer-surgical"
 }
