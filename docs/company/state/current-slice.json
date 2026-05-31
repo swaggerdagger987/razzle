@@ -1,23 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau share cards still fall back to demo rows when edge OG cannot reach live league APIs.",
-  "epic": "League L5 — Bureau OG snapshots match in-product boards",
-  "slice_title": "Monte Carlo export encodes playoff odds grid snapshot",
-  "parity_ref": "League L5 — Bureau OG snapshots",
-  "depth_ref": "League L5",
+  "atom_id": "lab-og-position-buysell",
+  "big_problem": "Lab OG export cards must mirror in-panel position filters.",
+  "epic": "Lab L5 — OG export matches in-panel position filters",
+  "slice_title": "Buy/sell export passes position filter to OG",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T2", "T5", "T6"],
-  "allowed_paths": [
-    "apps/web/lib/bureau-monte-carlo-og-snapshot.ts",
-    "apps/web/components/league/BureauMonteCarloShareBar.tsx",
-    "apps/web/components/league/BureauMonteCarlo.tsx",
-    "apps/web/app/og/monte-carlo/route.tsx"
-  ],
-  "max_files": 4,
-  "max_lines": 120,
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/components/lab/renderers/BuySellRenderer.tsx"],
+  "max_files": 1,
+  "max_lines": 5,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web 2>&1 | tail -3",
+    "curl -s -o /tmp/bs-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/buysell?download=1&position=WR'"
   ],
-  "out_of_scope": ["trade network atom", "API changes"],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["OG route", "auth/billing"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }
