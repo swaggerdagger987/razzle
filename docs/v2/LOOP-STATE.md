@@ -1,8 +1,9 @@
-cycle: 155
+cycle: 154
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: Bureau H2H export or Lab L4 polish per NEXT.md
-last_keep_cycle: 155
-last_commit: c401934bc
-lab_l5_og_hallway_position_defaults_epic: complete
+next_slice: explore-og-margin-note-sticker
+last_keep_cycle: 154
+last_commit: c1a0bcaad
+explore_l5_og_margin_epic: active
+lab_l5_og_watermark_display_name_epic: complete

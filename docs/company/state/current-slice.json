@@ -1,25 +1,28 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — breakouts exports click back to an unscoped waiver board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 3/3)",
-  "slice_title": "Breakouts OG watermark includes default WR position in toLab",
-  "atom_id": "lab-og-tolab-breakouts-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 2/4)",
+  "slice_title": "Margin notes on top-3 OG screener rows",
+  "atom_id": "explore-og-margin-note-rows",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB with margin notes on ranks 1–3",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_margin_note_rows.py"
   ],
   "max_files": 2,
-  "max_lines": 15,
+  "max_lines": 80,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?download=1'"
+    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_explore_og_margin_note_rows.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["rankings default", "new panels", "billing"],
+  "out_of_scope": [
+    "LIVE staff sticker atom",
+    "College-only atom",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
