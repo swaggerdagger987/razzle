@@ -1,31 +1,32 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Lab OG demo cards still read generic on Reddit — SAMPLE vs LIVE must be obvious at a glance.",
+  "epic_title": "Lab L5 — OG SAMPLE vs LIVE sticker clarity",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
-      "status": "done",
-      "merge_commit": "5721ee33"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
-      "status": "pending",
+      "id": "lab-og-slug-sample-sticker",
+      "title": "Launch-10 OG — slug-specific SAMPLE sticker on demo fallback",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
-  "created_at": "2026-05-31T09:25:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
-  "completed_epics": []
+  "next_atom_id": "lab-og-slug-sample-sticker",
+  "created_at": "2026-05-31T09:12:36Z",
+  "updated_at": "2026-05-31T09:12:36Z",
+  "completed_epics": [
+    {
+      "id": "lab-l4-pro-gate-error-surface",
+      "status": "complete",
+      "last_atom": "lab-l4-pro-gate-error-surface",
+      "merge_commit": "5721ee33"
+    },
+    {
+      "id": "lab-l5-og-gamelog-player-default",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "e37cd230"
+    }
+  ]
 }
