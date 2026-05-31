@@ -10,6 +10,7 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
+2026-05-31 | factory cycle 1 weekly OG PPG | lab-og-weekly-ppg-ranked atom 2/3 | da33eafd | SHIP | KEEP rebase-on-base before merge | — | breakouts atom | standup cycle 94
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 
 2026-05-31 | Factory cycle 1 dashboard OG snapshot | c9151786 | keep | dedup prospects+tradevalues on base 1a56450e
