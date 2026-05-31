@@ -86,4 +86,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Cycle 86 Trade Network copy link | 088cebc07 | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | Lab OG live sort | 7f78b631 | skip | no new Reddit intel this cycle
-2026-05-31 | lab-breakouts-empty-export | f6e0985f3 | skip | Hawkeye breakout empty-export pattern already in REDDIT-INTEL
+2026-05-31 | lab-breakouts-empty-export | 056892b6b | skip | Hawkeye breakout empty-export pattern already in REDDIT-INTEL

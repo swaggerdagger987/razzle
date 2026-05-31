@@ -8,8 +8,8 @@
     {
       "id": "lab-breakouts-empty-export",
       "title": "Breakouts empty board OG sample export card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "056892b6b"
     },
     {
       "id": "lab-prospects-empty-export",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-breakouts-empty-export",
+  "next_atom_id": "lab-prospects-empty-export",
   "created_at": "2026-05-31T11:26:20Z",
-  "updated_at": "2026-05-31T11:26:20Z",
+  "updated_at": "2026-05-31T11:35:00Z",
   "completed_epics": [
     {
       "id": "league-l5-trade-finder-gtm",
