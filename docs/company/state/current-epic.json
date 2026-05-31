@@ -20,12 +20,19 @@
     {
       "id": "lab-og-tolab-snapshot-player",
       "title": "Snapshot exports preserve player in watermark",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "b50ae755a"
     }
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T11:45:00Z",
-  "updated_at": "2026-05-31T11:45:00Z",
-  "completed_epics": []
+  "updated_at": "2026-05-31T12:00:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "b50ae755a"
+    }
+  ]
 }
