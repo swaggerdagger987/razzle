@@ -72,4 +72,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 95	5ed39e14	depth+voice+simplicity	keep	Lab	L5 Trade values formula-ranked OG rows	trust=T5,T6; rank·Value or rank·formula on snapshot; curl tradevalues snap 62441B demo 62488B; pytest 51; web build; epic atom 4/4 complete
 96	7ec8f82a	depth+voice+simplicity	keep	League	L5 H2H ShareBar canonical snapshot codec	trust=T5,T6; encodeBureauH2HOgSnapshot; curl h2h demo 71895B snap 70829B; pytest 51; web build; epic atom 1/3
 97	26a22f69	depth+voice+simplicity	keep	League	L5 Power Rankings OG snapshot rows	trust=T5,T6; encode top-5 board; curl snap 50084B; Bureau OG epic atom 1/3
-98	fbe64185	depth+voice+simplicity	keep	Lab	L5 Efficiency OG live most_efficient extract	trust=T5,T6; extractRows most_efficient ppo; curl efficiency 59068B; pytest 51; live OG epic atom 3/3 complete
+98	69334f8b	depth+voice+simplicity	keep	Lab	L5 Efficiency OG live most_efficient extract	trust=T5,T6; extractRows most_efficient ppo; curl efficiency 59068B; pytest 51; live OG epic atom 3/3 complete
