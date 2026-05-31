@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-gamelog-player-default | da33eafd | SHIP | keep | export URLs screenshot-ready without manual player_id; T5/T6.
+
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.

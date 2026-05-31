@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab gamelog OG player default (cycle 128)
+- **Angle:** Gamelog export card always carries Chase nflverse id — shared `/og/gamelog` links work without hunting query params.
+- **Trust:** T5/T6 — player_id on export URL; curl 60634B PNG without manual id.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
