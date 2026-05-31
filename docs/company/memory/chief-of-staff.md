@@ -33,4 +33,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | behavioral share epic; curl 59807B
 2026-05-31 | Roster Depth tab | 2d11a65f | keep | Factory cycle 1; Dolphin bureau tab unhidden
 2026-05-31 | Build Profiles tab | 309f8a8b | keep | Factory cycle 1; Atlas bureau tab SHIP merged
-2026-05-31 | Trade Network copy link | da33eafd | keep | Factory cycle 1; Bureau share epic 6/6 complete
+2026-05-31 | Trade Network copy link | 2c74e05c | keep | Factory cycle 1; Bureau share epic 6/6 complete

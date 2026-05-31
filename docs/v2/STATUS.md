@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | PARITY — next League L5 unhidden tab or Lab OG live rows |
-| Last commit | `da33eafd` |
+| Last commit | `2c74e05c` |
 
 Recent completions (cycle 87): Trade Network copy link + export row; Bureau behavioral share parity epic complete (6/6 atoms).
 
