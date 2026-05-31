@@ -22,6 +22,7 @@ interface OgRow {
 const STAT_CANDIDATE_KEYS = [
   "fantasy_points_ppr",
   "dynasty_value",
+  "formula_score",
   "trade_value",
   "value",
   "ppg",
@@ -62,6 +63,8 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   weekly: "ppg",
   prospects: "rps",
   breakouts: "breakout_score",
+  rankings: "dynasty_value",
+  tradevalues: "trade_value",
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([
@@ -246,6 +249,7 @@ function statLabelForKey(k: string): string {
   if (k === "ppg") statLabel = "PPG";
   if (k === "rps") statLabel = "RPS";
   if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
+  if (k === "formula_score") statLabel = "Score";
   if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
   if (k === "similarity") statLabel = "Match %";
   if (k === "rank_diff") statLabel = "Chg";
@@ -291,9 +295,17 @@ function extractRows(data: unknown, slug?: string): OgRow[] {
   if (candidates.length === 0) return [];
 
   const preferredKey = slug ? PANEL_OG_STAT_KEY[slug] : undefined;
-  const statKeys = preferredKey
-    ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
-    : [...STAT_CANDIDATE_KEYS];
+  const tradeValueStatKeys: string[] = [
+    "formula_score",
+    "trade_value",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "trade_value"),
+  ];
+  const statKeys =
+    slug === "tradevalues"
+      ? tradeValueStatKeys
+      : preferredKey
+        ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+        : [...STAT_CANDIDATE_KEYS];
 
   let statKey = "";
   let statLabel = "";

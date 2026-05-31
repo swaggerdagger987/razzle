@@ -60,3 +60,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | league-build-profiles-og-share | 77d4f765 | keep | /og/build-profiles Atlas archetypes; curl 73228B; BureauBuildProfilesShareBar
 2026-05-31 | league-waiver-tendencies-og-share | 6dcb0f72 | SHIP | /og/waiver-tendencies 73121B; BureauWaiverTendenciesShareBar
 2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
+2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | dynasty_value + trade_value OG sort; curl 50KB PNGs
