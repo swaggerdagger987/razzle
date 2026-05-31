@@ -37,3 +37,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | f6ca80c9 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | rankOgRowsForPanel | f6ca80c9 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY shared for L5 epic
+2026-05-31 | breakouts rbs_score key | da33eafd | keep | 1-line fix; API field is rbs_score not breakout_score

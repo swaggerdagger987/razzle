@@ -1,9 +1,9 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-weekly-ppg-ranked",
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — weekly heatmap was not PPG-ranked.",
+  "atom_id": "lab-og-breakouts-score-ranked",
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — breakouts export was not RBS-ranked.",
   "epic": "Lab L5 — OG snapshot row fidelity",
-  "slice_title": "Weekly OG export ranks top-6 by PPG for active position tab",
+  "slice_title": "Breakouts OG export ranks top-6 by RBS score with position filter",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with ranked rows",
@@ -12,12 +12,12 @@
     "apps/web/app/og/[panel]/route.tsx"
   ],
   "max_files": 1,
-  "max_lines": 90,
+  "max_lines": 15,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/weekly?download=1&position=WR'"
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?download=1&position=WR'"
   ],
-  "out_of_scope": ["breakouts atom", "NORTH_STAR edits", "WeeklyHeatmapRenderer changes"],
+  "out_of_scope": ["BreakoutsRenderer changes", "NORTH_STAR edits", "new panels"],
   "builder_mode": "composer-surgical",
   "votes": {
     "strategist": "SHIP",

@@ -61,7 +61,7 @@ const PLAYER_SCOPED_SLUGS = new Set([
 const PANEL_OG_STAT_KEY: Record<string, string> = {
   weekly: "ppg",
   prospects: "rps",
-  breakouts: "breakout_score",
+  breakouts: "rbs_score",
 };
 
 /** Launch-10 Lab panels — live OG cards use panel blurb only (no sample/live suffix). */
