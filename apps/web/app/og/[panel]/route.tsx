@@ -292,13 +292,16 @@ function extractProspectsRows(
   positionFilter: string,
 ): OgRow[] {
   let rows = prospects
-    .map((p) => ({
-      name: String(p.player_name ?? p.name ?? ""),
-      position: String(p.position ?? ""),
-      team: String(p.school ?? p.team ?? ""),
-      stat: Number(p.rps ?? 0),
-      statLabel: "RPS",
-    }))
+    .map((p) => {
+      const rank = p.rank != null ? Number(p.rank) : null;
+      return {
+        name: String(p.player_name ?? p.name ?? p.full_name ?? ""),
+        position: String(p.position ?? p.pos ?? ""),
+        team: String(p.school ?? p.team ?? p.team_abbr ?? ""),
+        stat: Number(p.rps ?? 0),
+        statLabel: rank != null && rank > 0 ? `#${rank}` : "RPS",
+      };
+    })
     .filter((r) => r.name.trim().length > 0 && r.stat > 0);
   if (positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
