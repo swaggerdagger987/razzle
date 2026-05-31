@@ -1,11 +1,11 @@
+2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
 
 2026-05-31 | lab-og-tolab-snapshot-player | 2c89a1a6b | SHIP | Snapshot exports must deep-link player context in OG watermark (T6).
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Default Ja'Marr exports deep-link back into gamelog tape (T6).
+2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Buy/sell OG matches formula-sorted panel lanes.
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG LIVE comp matches sticker.
-
-2026-05-31 | room-briefing-watermark | 2c89a1a6b | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | Lab OG exports click back via toLab; T6 hallway on Launch-10.
