@@ -34,3 +34,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | bureau-h2h-og-snapshot-decode | da33eafd | keep | no new intel
+2026-05-31 | bureau-trade-network-copy-link | da33eafd | keep | collusion-thread screenshots need copy+export pair
