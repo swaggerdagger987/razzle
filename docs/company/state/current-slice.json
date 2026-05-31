@@ -2,26 +2,26 @@
   "date": "2026-05-31",
   "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product (PARITY League L5).",
   "epic": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
-  "atom_id": "league-roster-depth-tab",
-  "slice_title": "BureauRosterDepth renderer + unhide roster-depth tab",
+  "atom_id": "league-power-rankings-og",
+  "slice_title": "OG share card at /og/power-rankings with demo fallback",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "ACCEPTANCE Gate 3 — Bureau behavioral tabs return real UI",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3 — Bureau OG PNG ≥40KB with row layout",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauRosterDepth.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx",
-    "apps/web/lib/bureau-features.ts"
+    "apps/web/app/og/power-rankings/route.tsx",
+    "apps/web/components/league/BureauPowerRankings.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 280,
+  "max_files": 2,
+  "max_lines": 220,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-power.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/power-rankings?download=1'",
+    "file /tmp/og-power.png"
   ],
   "out_of_scope": [
-    "OG export routes",
-    "Unhide other hidden Bureau tabs",
+    "Unhide other Bureau tabs",
     "API schema changes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
