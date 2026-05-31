@@ -1,68 +1,42 @@
 {
   "epic_status": "active",
-  "big_problem": "Explore screener screenshots look like spreadsheets — OG exports miss the staff margin notes that make the in-product table feel alive.",
-  "epic_title": "Explore L5 — OG screener agent margin notes",
-  "parity_ref": "Explore L5 — agent margin notes on rows",
-  "depth_ref": "Explore L5",
+  "big_problem": "Lab panel exports hide behind a single underline link \u2014 GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
+  "epic_title": "Lab L5 \u2014 GTM panel share bar parity",
+  "parity_ref": "Explore L5 \u2014 Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "explore-og-margin-note-lead",
-      "title": "Lead-row Hawkeye/Dolphin margin note on Explore OG card",
+      "id": "lab-panel-share-bar-rankings",
+      "title": "Dynasty Rankings \u2014 LabPanelShareBar copy/preview/export + snapshot",
       "status": "done",
-      "merge_commit": "0fc4932b7"
+      "merge_commit": "81d081604"
     },
     {
-      "id": "explore-og-margin-note-rows",
-      "title": "Margin notes on top-3 OG screener rows",
+      "id": "lab-panel-share-bar-breakouts-buysell",
+      "title": "Breakouts + Buy/Sell \u2014 share bar with formula snapshot rows",
       "status": "done",
-      "merge_commit": "c1a0bcaad"
+      "merge_commit": "81d081604"
     },
     {
-      "id": "explore-og-margin-note-sticker",
-      "title": "LIVE staff sticker when OG rows carry margin notes",
+      "id": "lab-panel-share-bar-weekly-gamelog",
+      "title": "Weekly + Gamelog \u2014 player-scoped share bar",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "explore-og-margin-note-college",
-      "title": "College universe margin notes on OG export",
+      "id": "lab-panel-share-bar-launch10-rest",
+      "title": "Remaining Launch-10 panels \u2014 share bar rollout",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "explore-og-margin-note-sticker",
-  "created_at": "2026-05-31T11:22:30Z",
-  "updated_at": "2026-05-31T12:00:00Z",
+  "next_atom_id": "lab-panel-share-bar-weekly-gamelog",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T11:45:00Z",
   "completed_epics": [
-    {
-      "id": "lab-l5-og-watermark-display-names",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-display-name",
-      "merge_commit": "338709883"
-    },
-    {
-      "id": "lab-l5-launch10-og-demo-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-demo-blurbs",
-      "merge_commit": "3705fdce8"
-    },
-    {
-      "id": "lab-l5-og-hallway-deep-links",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-snapshot-player",
-      "merge_commit": "1a12d9c0b"
-    },
-    {
-      "id": "league-l5-bureau-h2h-gtm",
-      "status": "complete",
-      "last_atom": "bureau-h2h-og-gate-c-snapshot",
-      "merge_commit": "4907c8327"
-    },
-    {
-      "id": "league-l5-trade-finder-gtm",
-      "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
-    }
+    "league-trade-finder-gtm-export-2026-05-31",
+    "lab-formula-sorted-og-live-parity-2026-05-31",
+    "league-og-bureau-watermark-2026-05-31",
+    "league-h2h-gtm-export-2026-05-31"
   ]
 }
