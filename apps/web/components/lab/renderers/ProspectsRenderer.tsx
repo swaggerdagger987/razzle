@@ -7,7 +7,8 @@ import Link from "next/link";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -158,11 +159,12 @@ export function ProspectsRenderer({ panel }: Props) {
           <Link href="/explore?universe=college" className="text-sm text-ink-medium underline">
             college screener →
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="prospects"
             downloadName="razzle-prospects.png"
             position={position || undefined}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy prospects link"
           />
         </footer>
       )}

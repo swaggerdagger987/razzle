@@ -15,7 +15,8 @@ import {
 } from "@/lib/panel-formula-sort";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
@@ -251,12 +252,12 @@ export function EfficiencyRenderer({ panel }: Props) {
         <div className="p-6">
           <p className="text-ink-medium">{agent.emptyCopy}</p>
           <footer className="mt-4 flex flex-wrap items-center gap-4">
-            <LabOgExportLink
+            <LabPanelShareBar
               slug="efficiency"
               downloadName="razzle-efficiency.png"
               position={position || undefined}
               snapshotRows={EFFICIENCY_SAMPLE_OG_ROWS}
-              label="export sample card"
+              copyLabel="copy efficiency link"
             />
           </footer>
         </div>
@@ -293,11 +294,12 @@ export function EfficiencyRenderer({ panel }: Props) {
           >
             Ask Octo about {top.name} →
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="efficiency"
             downloadName="razzle-efficiency.png"
             position={position || undefined}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy efficiency link"
           />
         </footer>
       )}

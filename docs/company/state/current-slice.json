@@ -1,25 +1,26 @@
 {
   "date": "2026-05-31",
   "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
-  "epic": "Lab L5 — GTM panel share bar parity (atom 3/4)",
-  "slice_title": "Weekly + Gamelog — player-scoped LabPanelShareBar",
+  "epic": "Lab L5 — GTM panel share bar parity (atom 4/4)",
+  "slice_title": "Efficiency + Aging + Trade Values — LabPanelShareBar rollout",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "ACCEPTANCE Lab OG export ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
-    "apps/web/components/lab/renderers/GamelogRenderer.tsx",
+    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
+    "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx",
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx",
     "apps/api/tests/test_lab_panel_share_bar.py"
   ],
-  "max_files": 3,
+  "max_files": 4,
   "max_lines": 120,
   "acceptance_commands": [
     "pytest apps/api/tests/test_lab_panel_share_bar.py -q",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "Launch-10 remaining panels",
+    "Prospects/Dashboard/Dynasty panels (follow-up if file cap)",
     "OG route changes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],

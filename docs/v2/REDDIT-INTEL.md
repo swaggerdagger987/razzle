@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab Launch-10 share bar complete (cycle 153)
+- **Angle:** Efficiency/aging/trade/prospects/dynasty boards — copy link + preview before PNG closes the GTM share-bar epic.
+- **Trust:** T5/T6 — pytest 13; curl 6 slugs ≥60KB.
+
 ### 2026-05-31 — Lab weekly + gamelog share bar (cycle 152)
 - **Angle:** Hawkeye heatmap + Atlas gamelog — copy player-scoped panel link before PNG; weekly WR filter rides on OG query string.
 - **Trust:** T5/T6 — curl weekly 65110B gamelog 61435B; pytest guards no LabOgExportLink regressions.

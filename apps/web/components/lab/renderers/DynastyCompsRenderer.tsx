@@ -6,7 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { DEFAULT_LAB_OG_PLAYER_ID, type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
@@ -159,11 +160,12 @@ export function DynastyCompsRenderer({ panel }: Props) {
 
       {(target || comps.length > 0) && (
         <footer className="mt-6 border-t border-ink pt-4">
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="dynasty-comps"
             downloadName="razzle-dynasty-comps.png"
             playerId={exportPlayerId}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy dynasty comps link"
           />
         </footer>
       )}

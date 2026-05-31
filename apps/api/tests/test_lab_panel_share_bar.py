@@ -53,3 +53,52 @@ def test_gamelog_uses_share_bar():
     assert "copy gamelog link" in renderer
     assert "playerId=" in renderer
     assert "<LabOgExportLink" not in renderer
+
+
+def test_efficiency_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/EfficiencyRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy efficiency link" in renderer
+    assert "<LabOgExportLink" not in renderer
+
+
+def test_aging_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/AgingCurvesRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy aging link" in renderer
+    assert "<LabOgExportLink" not in renderer
+
+
+def test_tradevalues_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/TradeValuesRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy trade values link" in renderer
+    assert "<LabOgExportLink" not in renderer
+
+
+def test_prospects_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/ProspectsRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy prospects link" in renderer
+    assert "<LabOgExportLink" not in renderer
+
+
+def test_dynasty_dashboard_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy dashboard link" in renderer
+    assert "<LabOgExportLink" not in renderer
+
+
+def test_dynasty_comps_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/DynastyCompsRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy dynasty comps link" in renderer
+    assert "<LabOgExportLink" not in renderer
+
+
+def test_dashboard_renderer_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/DashboardRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy dynasty comps link" in renderer
+    assert "<LabOgExportLink" not in renderer

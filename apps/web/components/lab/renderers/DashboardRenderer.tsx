@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 
 interface Props {
   data: unknown;
@@ -52,11 +53,12 @@ export function DashboardRenderer({ data }: Props) {
       )}
       {hasComps && (
         <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="dynasty-comps"
             downloadName="razzle-dynasty-comps.png"
             playerId={scopedPlayerId}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy dynasty comps link"
           />
         </footer>
       )}

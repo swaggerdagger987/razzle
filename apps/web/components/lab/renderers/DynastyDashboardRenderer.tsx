@@ -8,7 +8,8 @@ import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
 interface DashboardPlayer {
@@ -355,10 +356,11 @@ export function DynastyDashboardRenderer({ panel }: Props) {
           >
             Ask Razzle about {topRiser.full_name} (rising stock) →
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="dashboard"
             downloadName="razzle-dashboard.png"
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy dashboard link"
           />
         </footer>
       )}

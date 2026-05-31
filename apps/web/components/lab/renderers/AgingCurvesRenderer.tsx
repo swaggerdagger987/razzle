@@ -14,7 +14,8 @@ import {
 } from "@/lib/panel-formula-sort";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
@@ -313,12 +314,12 @@ export function AgingCurvesRenderer({ panel }: Props) {
         <div className="p-6">
           <p className="text-ink-medium">{agent.emptyCopy}</p>
           <footer className="mt-4 flex flex-wrap items-center gap-4">
-            <LabOgExportLink
+            <LabPanelShareBar
               slug="aging"
               downloadName="razzle-aging-curves.png"
               position={position}
               snapshotRows={AGING_SAMPLE_OG_ROWS}
-              label="export sample card"
+              copyLabel="copy aging link"
             />
           </footer>
         </div>
@@ -400,11 +401,12 @@ export function AgingCurvesRenderer({ panel }: Props) {
           >
             Ask Octo about {position} aging →
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="aging"
             downloadName="razzle-aging-curves.png"
             position={position}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy aging link"
           />
         </footer>
       )}

@@ -15,7 +15,8 @@ import {
 } from "@/lib/panel-formula-sort";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
-import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import { type OgSnapshotRow } from "../LabOgExportLink";
+import { LabPanelShareBar } from "../LabPanelShareBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
@@ -227,11 +228,12 @@ export function TradeValuesRenderer({ panel }: Props) {
           >
             Ask Bones about {topPlayer.full_name} →
           </Link>
-          <LabOgExportLink
+          <LabPanelShareBar
             slug="tradevalues"
             downloadName="razzle-trade-values.png"
             position={position || undefined}
             snapshotRows={ogSnapshotRows}
+            copyLabel="copy trade values link"
           />
         </footer>
       )}
