@@ -95,6 +95,9 @@ function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "rankings") return " · live dynasty ranks";
   if (slug === "tradevalues") return " · live trade values";
   if (slug === "breakouts") return " · live breakout board";
+  if (slug === "gamelog") return " · live game log";
+  if (slug === "efficiency") return " · live efficiency board";
+  if (slug === "aging") return " · live aging curves";
   return " · live nflverse rows";
 }
 
@@ -104,6 +107,9 @@ function launch10LiveStickerLabel(slug: string): string {
   if (slug === "rankings") return "LIVE · dynasty ranks";
   if (slug === "tradevalues") return "LIVE · trade values";
   if (slug === "breakouts") return "LIVE · breakout board";
+  if (slug === "gamelog") return "LIVE · game log";
+  if (slug === "efficiency") return "LIVE · efficiency board";
+  if (slug === "aging") return "LIVE · aging curves";
   return "LIVE · nflverse rows";
 }
 
@@ -113,6 +119,9 @@ function launch10DemoBlurbSuffix(slug: string): string {
   if (slug === "rankings") return " · demo dynasty ranks";
   if (slug === "tradevalues") return " · demo trade values";
   if (slug === "breakouts") return " · demo breakout board";
+  if (slug === "gamelog") return " · demo game log";
+  if (slug === "efficiency") return " · demo efficiency board";
+  if (slug === "aging") return " · demo aging curves";
   return " · demo nflverse rows";
 }
 
@@ -122,6 +131,9 @@ function launch10DemoStickerLabel(slug: string): string {
   if (slug === "rankings") return "SAMPLE · dynasty ranks";
   if (slug === "tradevalues") return "SAMPLE · trade values";
   if (slug === "breakouts") return "SAMPLE · breakout board";
+  if (slug === "gamelog") return "SAMPLE · game log";
+  if (slug === "efficiency") return "SAMPLE · efficiency board";
+  if (slug === "aging") return "SAMPLE · aging curves";
   return "SAMPLE · demo rows";
 }
 
