@@ -1,36 +1,40 @@
 {
-  "big_problem": "Lab OG snapshot exports only guard rankings/weekly in pytest \u2014 the other Launch-10 panels can regress FROM PANEL trust without CI catching it.",
-  "epic_title": "Lab L5 \u2014 FROM PANEL Gate C (Launch-10 rest)",
-  "parity_ref": "Lab L5 \u2014 OG card per panel matches in-product export",
+  "big_problem": "Lab OG snapshot exports only guard rankings/weekly in pytest — the other Launch-10 panels can regress FROM PANEL trust without CI catching it.",
+  "epic_title": "Lab L5 — FROM PANEL Gate C (Launch-10 rest)",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "epic_status": "active",
+  "epic_status": "complete",
   "atoms": [
     {
       "id": "lab-og-from-panel-gate-c-rest",
-      "title": "FROM PANEL pytest guard \u2014 remaining Launch-10 snapshot slugs",
+      "title": "FROM PANEL pytest guard — remaining Launch-10 snapshot slugs",
       "status": "done",
       "merge_commit": "15a363f89"
     },
     {
       "id": "lab-og-from-panel-gate-c-curl",
-      "title": "Gate C curl evidence \u2014 breakouts + buysell snapshot PNG \u226540KB",
+      "title": "Gate C curl evidence — breakouts + buysell snapshot PNG ≥40KB",
       "status": "done",
       "merge_commit": "9fe6cc134"
     },
     {
       "id": "lab-og-from-panel-gate-c-gamelog",
-      "title": "Gate C curl evidence \u2014 gamelog + efficiency snapshot PNG",
-      "status": "in_progress",
-      "merge_commit": null
+      "title": "Gate C curl evidence — gamelog + efficiency snapshot PNG",
+      "status": "done",
+      "merge_commit": "185241b4f"
     }
   ],
-  "next_atom_id": "lab-og-from-panel-gate-c-gamelog",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T11:21:01Z",
+  "updated_at": "2026-05-31T11:23:13Z",
   "completed_epics": [
     {
-      "epic_title": "League L5 \u2014 Bureau Trade Finder GTM export",
+      "epic_title": "League L5 — Bureau Trade Finder GTM export",
       "completed_at": "2026-05-31T11:12:03Z"
+    },
+    {
+      "epic_title": "Lab L5 — FROM PANEL Gate C (Launch-10 rest)",
+      "completed_at": "2026-05-31T11:23:13Z"
     }
   ]
 }

@@ -31,5 +31,6 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "in_progress"
+  "status": "shipped",
+  "content_commit": "185241b4f"
 }
