@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-pro-gate-hallway-teasers | da33eafd | 2-file contract ≤120 lines; panel-upgrade-teaser.ts shared teaser map.
+2026-05-31 | lab-pro-gate-hallway-teasers | 73f6db41 | 2-file contract ≤120 lines; panel-upgrade-teaser.ts shared teaser map.
 
 2026-05-31 | lab-og-weekly-prospects-breakouts-live-extract | 8d8b2635 | keep | extractWeeklyHeatmapRows + extractProspectsRows before generic extractRows
 

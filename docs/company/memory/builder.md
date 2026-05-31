@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-pro-gate-hallway-teasers | da33eafd | keep | toExplore hallway + panel-upgrade-teaser slugs; 2 files; pytest 51.
+2026-05-31 | lab-pro-gate-hallway-teasers | 73f6db41 | keep | toExplore hallway + panel-upgrade-teaser slugs; 2 files; pytest 51.
 
 2026-05-31 | lab-og-weekly-prospects-breakouts-live-extract | 8d8b2635 | keep | prospects[] + hot-week weekly; rbs_score breakouts; curl ≥48KB.
 
