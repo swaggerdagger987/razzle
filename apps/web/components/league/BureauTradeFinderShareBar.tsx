@@ -1,23 +1,38 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import {
+  encodeBureauTradeFinderOgSnapshot,
+  tradeFinderPanelToOgSnapshot,
+  type BureauTradeFinderOgSnapshot,
+} from "@/lib/bureau-trade-finder-og-snapshot";
 
 interface Props {
   leagueId: string;
   userId: string;
+  /** In-panel trade rows — encoded on export so OG matches Bureau view. */
+  panelData?: Record<string, unknown>;
+  snapshot?: BureauTradeFinderOgSnapshot;
 }
 
 /** Copyable trade-finder URL + OG export — mirrors BureauH2HShareBar. */
-export function BureauTradeFinderShareBar({ leagueId, userId }: Props) {
+export function BureauTradeFinderShareBar({ leagueId, userId, panelData, snapshot }: Props) {
   const [copied, setCopied] = useState(false);
 
   const tradePath = `/league/${leagueId}/trade-finder`;
+
+  const resolvedSnapshot = useMemo(
+    () => snapshot ?? (panelData ? tradeFinderPanelToOgSnapshot(panelData) : undefined),
+    [panelData, snapshot],
+  );
 
   const ogParams = new URLSearchParams({
     league: leagueId,
     user: userId,
     download: "1",
   });
+  const snap = resolvedSnapshot ? encodeBureauTradeFinderOgSnapshot(resolvedSnapshot) : undefined;
+  if (snap) ogParams.set("snapshot", snap);
 
   const copyLink = useCallback(async () => {
     const url =

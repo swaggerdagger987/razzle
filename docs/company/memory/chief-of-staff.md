@@ -1,3 +1,4 @@
+2026-05-31 | league-trade-finder-og-snapshot | ad6a5ce5b | SHIP | Factory cycle 1; Trade Finder snapshot OG on clean base.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 
