@@ -33,7 +33,7 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
     }
 
     const sleeper = getSleeperUser();
-    const rivalryUserId = searchParams.get("user");
+    const rivalryUserId = searchParams.get("user")?.trim() || null;
     const body: Record<string, unknown> = { league_id: leagueId };
     if (config.needsUser) {
       const userId = rivalryUserId ?? sleeper?.user_id;
