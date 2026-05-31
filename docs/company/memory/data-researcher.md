@@ -35,3 +35,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | bureau-h2h-og-snapshot-decode | bbbd1b3c | keep | no new intel
 2026-05-31 | bureau-trade-network-copy-link | 3fd83bde | keep | collusion-thread screenshots need copy+export pair
+2026-05-31 | bureau-trade-finder-copy-link | da33eafd | keep | deal-room screenshots need pasteable league link before export

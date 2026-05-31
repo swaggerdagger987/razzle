@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { useCallback, useState } from "react";
 import { getSleeperUser } from "@/lib/sleeper";
 
 interface Props {
@@ -28,6 +29,18 @@ type Match = {
 };
 
 export function BureauTradeFinder({ data, leagueId }: Props) {
+  const [copied, setCopied] = useState(false);
+  const copyFinderLink = useCallback(async () => {
+    if (typeof window === "undefined") return;
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, []);
+
   const bones = AGENT_BY_ID.bones;
   const matches = (data.matches as Match[]) ?? [];
   const hero = (data.hero_match as Match | null) ?? matches[0] ?? null;
@@ -98,16 +111,26 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
             const user = getSleeperUser();
             if (!user?.user_id) return null;
             return (
-              <a
-                href={`/og/trade-finder?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                  user.user_id,
-                )}&download=1`}
-                download="razzle-trade-finder.png"
-                className="btn-chunky active mt-3 inline-block text-xs"
-                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-              >
-                export card
-              </a>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => void copyFinderLink()}
+                  className="btn-chunky active text-xs"
+                  style={{ background: "var(--bg-card)", color: "var(--ink)" }}
+                >
+                  {copied ? "copied!" : "copy link"}
+                </button>
+                <a
+                  href={`/og/trade-finder?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
+                    user.user_id,
+                  )}&download=1`}
+                  download="razzle-trade-finder.png"
+                  className="btn-chunky active text-xs"
+                  style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+                >
+                  export card
+                </a>
+              </div>
             );
           })()}
         </section>

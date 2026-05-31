@@ -1,42 +1,30 @@
 {
   "epic_status": "active",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau behavioral share parity",
+  "big_problem": "Trade Finder is the last Bureau tab that cannot paste a league link before exporting — group chats still break on the Bones deal room.",
+  "epic_title": "League L5 — Bureau share parity finish",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-manager-profiles-copy-link",
-      "title": "Manager Profiles copy link beside export card",
-      "status": "done",
-      "merge_commit": "04c19959"
+      "id": "bureau-trade-finder-copy-link",
+      "title": "Trade Finder copy link beside export card",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy link beside export card",
-      "status": "done",
-      "merge_commit": "c4ce09b7"
+      "id": "lab-l4-pro-gate-voice",
+      "title": "ProUpgradeGate copy feels like upgrade not error",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "league-power-rankings-og",
-      "title": "Power Rankings OG + copy board link",
-      "status": "done",
-      "merge_commit": "90bf2dd5"
-    },
-    {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
-      "status": "done",
-      "merge_commit": "3fd83bde"
-    },
-    {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
-      "status": "done",
-      "merge_commit": "30454811"
+      "id": "explore-l5-injury-row-chip",
+      "title": "Explore screener Dolphin injury chip on flagged rows",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T05:12:38Z"
+  "next_atom_id": "bureau-trade-finder-copy-link",
+  "created_at": "2026-05-31T05:17:00Z",
+  "updated_at": "2026-05-31T05:17:00Z"
 }
