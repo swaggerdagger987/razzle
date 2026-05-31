@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  buildExploreOgSearchParams,
+  type ExploreUniverse,
+} from "@/lib/explore-params";
 import { useCallback, useState } from "react";
 
 interface Props {
@@ -12,15 +16,23 @@ interface Props {
 
 export function ExploreShareButton({ universe, sort, dir, q, pos }: Props) {
   const [copied, setCopied] = useState(false);
+  const exploreUniverse = universe as ExploreUniverse;
 
-  const previewParams = new URLSearchParams({ universe, sort, dir });
-  if (q) previewParams.set("q", q);
-  if (pos.length) previewParams.set("pos", pos.join(","));
+  const previewParams = buildExploreOgSearchParams({
+    universe: exploreUniverse,
+    sort,
+    dir,
+    q,
+    pos,
+  });
 
   const ogParams = new URLSearchParams(previewParams);
   ogParams.set("download", "1");
 
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const shareUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/explore?${previewParams.toString()}`
+      : "";
 
   const copyLink = useCallback(async () => {
     try {
