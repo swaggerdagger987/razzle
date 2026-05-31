@@ -15,7 +15,7 @@
       "id": "lab-og-live-sticker-prospects-weekly",
       "title": "Prospects + Weekly OG — panel-specific LIVE sticker when panel API returns rows",
       "status": "done",
-      "merge_commit": "5e07a9da"
+      "merge_commit": "a12a9ba3"
     },
     {
       "id": "lab-og-live-demo-fallback-copy",
