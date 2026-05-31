@@ -1,37 +1,42 @@
 {
   "epic_status": "active",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau behavioral share parity",
+  "big_problem": "Bureau L5 tabs need copyable deep links plus OG export on every feature — Reddit shares rivalry dossiers and trade ideas, not raw screenshots alone.",
+  "epic_title": "League L5 — Bureau share row (copy link + export)",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-manager-profiles-copy-link",
-      "title": "Manager Profiles copy link beside export card",
+      "id": "bureau-h2h-copy-link",
+      "title": "BureauH2HShareBar — copy rivalry link + OG export",
       "status": "done",
-      "merge_commit": "04c19959"
+      "merge_commit": "044ee1e8"
     },
     {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy link beside export card",
+      "id": "bureau-self-scout-copy-link",
+      "title": "Self-Scout copy link + export row",
       "status": "done",
-      "merge_commit": "c4ce09b7"
-    },
-    {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
-      "status": "pending",
-      "merge_commit": null
+      "merge_commit": "99f8a2aa"
     },
     {
       "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
+      "title": "BureauMonteCarloShareBar — copy sim link + OG export",
       "status": "done",
       "merge_commit": "30454811"
+    },
+    {
+      "id": "bureau-trade-finder-copy-link",
+      "title": "Trade Finder copy link + export row",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "bureau-pressure-map-copy-link",
+      "title": "Pressure Map copy link + export row",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-trade-network-copy-link",
-  "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T04:55:00Z",
-  "last_cycle_commit": "04c19959"
+  "next_atom_id": "bureau-trade-finder-copy-link",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z"
 }
