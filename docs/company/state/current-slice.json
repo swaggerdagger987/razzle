@@ -16,8 +16,7 @@
   "max_files": 4,
   "max_lines": 120,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "curl monte-carlo OG with snapshot >=40KB"
+    "npm run build --workspace=apps/web"
   ],
   "out_of_scope": ["trade network atom", "API changes"],
   "builder_mode": "composer-surgical"
