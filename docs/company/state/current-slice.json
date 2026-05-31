@@ -1,9 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-trade-finder-og-snapshot",
-  "slice_title": "Trade Finder OG — snapshot param encodes in-panel trade rows",
-  "content_commit": "c3a46f51b",
-  "status": "shipped",
-  "reality": "PASS",
-  "merge": "pending"
+  "atom_id": "league-trade-finder-room-hallway",
+  "big_problem": "Bureau Trade Finder screenshots look like a draft — no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
+  "epic": "League L5 — Bureau Trade Finder GTM export (atom 3/3)",
+  "slice_title": "Trade Finder OG — Bones Room ask link on hero deal",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with hallway link",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/trade-finder/route.tsx",
+    "apps/api/tests/test_trade_finder_og_room_hallway.py"
+  ],
+  "max_files": 2,
+  "max_lines": 80,
+  "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_trade_finder_og_room_hallway.py -q",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [
+    "ShareBar changes",
+    "snapshot codec changes",
+    "NORTH_STAR edits"
+  ],
+  "builder_mode": "composer-surgical"
 }
