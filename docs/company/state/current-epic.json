@@ -9,13 +9,13 @@
       "id": "bureau-h2h-og-live-sticker",
       "title": "H2H OG — teal LIVE sticker when league API returns you/them",
       "status": "done",
-      "merge_commit": "08e1824c"
+      "merge_commit": "32e30a7c"
     },
     {
       "id": "bureau-h2h-og-sample-sticker",
       "title": "H2H OG — terracotta SAMPLE sticker on demo rivalry path",
       "status": "done",
-      "merge_commit": "7b9639d9"
+      "merge_commit": "32e30a7c"
     },
     {
       "id": "bureau-h2h-og-force-demo-qa",
