@@ -8,8 +8,8 @@
     {
       "id": "lab-og-live-sticker-launch10-rest",
       "title": "Panel-specific LIVE sticker + blurb for remaining Launch-10 slugs",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "444c7699"
     },
     {
       "id": "lab-og-live-sticker-tradevalues-aging",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-launch10-rest",
+  "next_atom_id": "lab-og-live-sticker-tradevalues-aging",
   "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T09:00:00Z",
+  "updated_at": "2026-05-31T09:05:00Z",
   "completed_epics": [
     {
       "id": "lab-l4-pro-gate-convert",
