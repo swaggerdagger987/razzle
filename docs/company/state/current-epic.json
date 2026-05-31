@@ -7,8 +7,8 @@
     {
       "id": "bureau-self-scout-sharebar",
       "title": "Self-Scout — extract BureauSelfScoutShareBar (copy + OG export)",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "5ce55a58"
     },
     {
       "id": "bureau-roster-depth-sharebar-audit",
