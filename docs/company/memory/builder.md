@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-tolab-snapshot-rankings-top-row | f6e0985f3 | SHIP | topPlayer playerId+playerName on DynastyRankings LabOgExportLink.
 2026-05-31 | lab-og-tolab-snapshot-weekly-player | e516797e6 | SHIP | hotPlayer.p.player_id on WeeklyHeatmap LabOgExportLink.
 2026-05-31 | explore-og-margin-note-lead | f6e0985f3 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.

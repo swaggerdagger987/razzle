@@ -73,3 +73,11 @@ def test_weekly_heatmap_export_passes_hot_row_player_id():
         ROOT / "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx"
     ).read_text(encoding="utf-8")
     assert "playerId={hotPlayer.p.player_id}" in renderer
+
+
+def test_rankings_export_passes_top_row_player_id():
+    renderer = (
+        ROOT / "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "playerId={topPlayer.player_id}" in renderer
+    assert "playerName={topPlayer.full_name}" in renderer

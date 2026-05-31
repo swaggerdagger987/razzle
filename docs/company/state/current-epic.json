@@ -14,7 +14,7 @@
     {
       "id": "lab-og-tolab-snapshot-rankings-top-row",
       "title": "Rankings export passes top-row player_id into OG URL",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {

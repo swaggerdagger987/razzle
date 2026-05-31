@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 156 — Lab OG watermark player display name)
+**Last updated:** 2026-05-31 (factory cycle 158 — Lab rankings OG top-row player hallway)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
