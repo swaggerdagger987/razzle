@@ -1,6 +1,11 @@
 # Memory — Chief of Staff
 
 2026-05-31 | Factory cycle 123 Explore OG demo rows | e2d4e429 | workday cycle 1; explore-og epic 1/4; lock #820.
+2026-05-31 | Factory cycle 121 pro gate panel pitches | da33eafd | L4 epic atom 2/3; factory open.
+
+2026-05-31 | Factory cycle 120 pro-gate loading copy | da33eafd | Deduped OG on base #753; L4 epic atom 1/3.
+
+2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
 
 2026-05-31 | Factory cycle 122 H2H force_demo QA | b4d91213 | workday cycle 3; h2h-stickers epic complete 3/3; NO_LOCK_GUARDRAIL.
 
@@ -11,6 +16,11 @@
 2026-05-31 | Factory cycle 119 SAMPLE demo sticker | 45d4a448 | live-rows epic complete 3/3; NO_LOCK_GUARDRAIL.
 
 2026-05-31 | Factory cycle 118 prospects-weekly LIVE | 15109115 | Lock #734; live-rows epic 2/3.
+2026-05-31 | Factory cycle 118 prospects-weekly OG | 5bb77346 | Deduped PR720 gamelog on base; live-rows epic 2/3.
+2026-05-31 | Factory cycle 120 live fetch merge | 3f0411ec | workday cycle 1; NO_LOCK_GUARDRAIL; live-fetch epic atom 1/3.
+2026-05-31 | Factory cycle 119 launch10 live default | e2a3ce8a | workday cycle 3; gamelog OG epic 3/3 complete.
+2026-05-31 | Factory cycle 118 prospects items | e00217d1 | Lab L5 epic atom 2/3; lock #728.
+2026-05-31 | Factory cycle 117 prospects #rank OG | ab6ae8d7 | L5 live-fetch epic closes.
 
 2026-05-31 | Factory cycle 116 LIVE OG sticker | 4e905360 | Dedup H2H on base #666; live-rows epic 1/3.
 

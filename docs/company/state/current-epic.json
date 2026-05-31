@@ -35,6 +35,12 @@
   "updated_at": "2026-05-31T08:33:00Z",
   "completed_epics": [
     {
+      "id": "lab-l4-pro-gate-upgrade",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-hallway-teasers",
+      "merge_commit": "675044ea"
+    },
+    {
       "id": "bureau-h2h-og-live-vs-sample-stickers",
       "status": "complete",
       "last_atom": "bureau-h2h-og-force-demo-qa",
@@ -44,7 +50,7 @@
       "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
       "last_atom": "lab-og-live-demo-fallback-copy",
-      "merge_commit": "45d4a448"
+      "merge_commit": "18d92f6b"
     }
   ]
 }
