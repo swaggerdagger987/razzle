@@ -140,6 +140,14 @@ function resolvePanelApiPath(path: string, playerId: string): string {
   return path.replace(/\{player_id\}/g, encodeURIComponent(playerId));
 }
 
+/** Watermark band deep-link — player-scoped panels include default player when omitted. */
+function labPanelBandLink(slug: string, playerId: string): string {
+  const base = `razzle.lol/lab/${slug}`;
+  if (!PLAYER_SCOPED_SLUGS.has(slug)) return base;
+  const id = playerId || DEFAULT_OG_PLAYER_ID;
+  return `${base}?player_id=${encodeURIComponent(id)}`;
+}
+
 /** Sample rows for OG preview when API/terminal.db unavailable (FACTORY-DOD Gate C). */
 const DEFAULT_DEMO_ROWS: OgRow[] = [
   { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 312.4, statLabel: "Value" },
@@ -907,7 +915,7 @@ export async function GET(
             fontSize: 20,
           }}
         >
-          <div style={{ display: "flex", fontWeight: 700 }}>razzle.lol/lab/{slug}</div>
+          <div style={{ display: "flex", fontWeight: 700 }}>{labPanelBandLink(slug, playerId)}</div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>
