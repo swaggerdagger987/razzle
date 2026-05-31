@@ -1,26 +1,36 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-snapshot",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "slice_title": "DashboardRenderer encodes top-6 comp match rows in dynasty-comps OG snapshot",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
-  "trust_pillars": ["T5", "T6"],
+  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
+  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
+  "atom_id": "league-strength-of-schedule-tab",
+  "slice_title": "Schedule tab unhidden with Octo SOS matchup renderer",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "ACCEPTANCE Bureau-7 tabs render without 404",
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
+    "apps/web/lib/bureau-features.ts",
+    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
+    "apps/web/components/league/BureauFeatureBody.tsx"
   ],
-  "max_files": 1,
-  "max_lines": 40,
+  "max_files": 3,
+  "max_lines": 200,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
+    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q",
+    "rg 'HIDDEN_BUREAU_SLUGS' apps/web/lib/bureau-features.ts"
   ],
   "out_of_scope": [
-    "OG route changes",
-    "DynastyCompsRenderer (already has snapshot)",
-    "NORTH_STAR / DESIGN edits"
+    "OG export routes",
+    "API schema changes",
+    "Auth/billing"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  },
+  "verdict": "SHIP"
 }
