@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague } from "@razzle/hallway";
 
 export const runtime = "edge";
 
@@ -66,6 +67,8 @@ export async function GET(req: Request) {
   const bones = AGENT_BY_ID.bones;
   const live = await fetchPressureMap(league);
   const isDemo = !live?.rows?.length;
+  const isLive = !isDemo;
+  const leagueDeepLink = league ? toLeague(league, "pressure-map") : "/league/pressure-map";
   const rows = (isDemo ? DEMO_ROWS : live!.rows!).slice(0, 5);
   const season = isDemo ? DEMO_META.season : live!.season;
   const heroTeam = isDemo ? DEMO_META.hero_manager : live!.hero_manager;
@@ -118,6 +121,50 @@ export async function GET(req: Request) {
           {`trade deadline desperation · ${season} season`}
           {isDemo ? " · sample preview" : ""}
         </div>
+
+        {isLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · trade pressure board
+          </div>
+        ) : null}
+
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · demo pressure rows
+          </div>
+        ) : null}
 
         {heroTeam && heroScore != null ? (
           <div
@@ -188,18 +235,21 @@ export async function GET(req: Request) {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/pressure-map`}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),
