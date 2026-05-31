@@ -367,11 +367,13 @@ function demoRowsForPanel(slug: string): OgRow[] {
 }
 
 type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
+type SnapshotPayloadLegacy = { r: CompactOgRow[]; pid?: string };
 
 interface OgSnapshotPayload {
   rows: OgRow[];
   playerId?: string;
   playerName?: string;
+  exportPlayerId?: string;
 }
 
 function compactRowsToOgRows(arr: CompactOgRow[]): OgRow[] {
@@ -394,6 +396,7 @@ function decodeOgSnapshot(param: string): OgSnapshotPayload {
     const json = atob(b64);
     const parsed = JSON.parse(json) as
       | CompactOgRow[]
+      | SnapshotPayloadLegacy
       | { v?: number; pi?: string; pn?: string; rows?: CompactOgRow[] };
     if (Array.isArray(parsed)) {
       return { rows: compactRowsToOgRows(parsed) };
@@ -403,6 +406,14 @@ function decodeOgSnapshot(param: string): OgSnapshotPayload {
         rows: compactRowsToOgRows(parsed.rows),
         playerId: typeof parsed.pi === "string" ? parsed.pi : undefined,
         playerName: typeof parsed.pn === "string" ? parsed.pn : undefined,
+      };
+    }
+    if (parsed && typeof parsed === "object" && Array.isArray(parsed.r)) {
+      const pid = typeof parsed.pid === "string" ? parsed.pid : undefined;
+      return {
+        rows: compactRowsToOgRows(parsed.r),
+        exportPlayerId: pid,
+        playerId: pid,
       };
     }
     return { rows: [] };
@@ -889,16 +900,18 @@ function labOgWatermarkLink(
     playerId: string;
     playerName: string;
     playerScoped: boolean;
+    snapshotPlayerId?: string;
   },
 ): string {
+  const watermarkPlayerId = opts.snapshotPlayerId ?? opts.playerId;
   const includeDefaultPlayer = TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS.has(slug);
   const usePlayer =
-    opts.playerScoped &&
-    opts.playerId &&
-    (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+    (opts.playerScoped || Boolean(opts.snapshotPlayerId)) &&
+    watermarkPlayerId &&
+    (watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
   const resolvedName =
     opts.playerName.trim() ||
-    (opts.playerId === DEFAULT_OG_PLAYER_ID && includeDefaultPlayer
+    (watermarkPlayerId === DEFAULT_OG_PLAYER_ID && includeDefaultPlayer
       ? DEFAULT_OG_PLAYER_NAME
       : "player");
   let path = toLab(
@@ -906,8 +919,8 @@ function labOgWatermarkLink(
     usePlayer
       ? {
           player: {
-            playerId: opts.playerId,
-            slug: slugifyPlayerName(resolvedName) || opts.playerId,
+            playerId: watermarkPlayerId,
+            slug: slugifyPlayerName(resolvedName) || watermarkPlayerId,
             name: resolvedName,
           },
         }
@@ -1002,17 +1015,21 @@ export async function GET(
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const snapshotExportPlayerId = snapshotPayload.exportPlayerId;
   const watermarkPlayerId =
-    isSnapshot && snapshotPayload.playerId ? snapshotPayload.playerId : playerId;
+    isSnapshot && (snapshotPayload.playerId || snapshotExportPlayerId)
+      ? (snapshotPayload.playerId || snapshotExportPlayerId)!
+      : playerId;
   const watermarkPlayerName =
     (isSnapshot && snapshotPayload.playerName ? snapshotPayload.playerName : "") ||
     url.searchParams.get("name") ||
     "";
   const labLink = labOgWatermarkLink(slug, {
     positionFilter,
-    playerId: watermarkPlayerId,
+    playerId,
     playerName: watermarkPlayerName,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+    snapshotPlayerId: isSnapshot ? watermarkPlayerId : undefined,
   });
 
   return new ImageResponse(

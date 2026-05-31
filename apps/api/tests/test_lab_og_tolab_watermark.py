@@ -30,4 +30,19 @@ def test_default_og_player_tolab_rules():
     assert '"gamelog"' in source
     assert '"dynasty-comps"' in source
     assert "includeDefaultPlayer" in source
-    assert "opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+    assert "watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+
+
+def test_snapshot_export_player_id_in_watermark():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "snapshotPlayerId" in source
+    assert "exportPlayerId" in source
+    assert "exportPlayerId: snapshotExportPlayerId" in source.replace("\n", " ") or "snapshotExportPlayerId" in source
+
+
+def test_lab_og_export_link_encodes_snapshot_player_id():
+    link_ts = ROOT / "apps/web/components/lab/LabOgExportLink.tsx"
+    source = link_ts.read_text(encoding="utf-8")
+    assert "encodeOgSnapshot(snapshotRows, {" in source
+    assert "OgSnapshotEncodeContext" in source
+    assert '"pi": playerId' in source or "pi: playerId" in source
