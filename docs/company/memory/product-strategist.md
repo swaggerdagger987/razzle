@@ -1,3 +1,9 @@
+2026-05-31 | lab-og-from-panel-breakouts-efficiency | 11c9c2a6 | SHIP | Lab L5 OG parity epic 1/4; breakouts/efficiency FROM PANEL guards.
+2026-05-31 | explore-in-product-margin-parity | d0f126be5 | SHIP | Margin epic 3/3; Staff column OG parity.
+2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | Explore margin epic atom 2/3; campus demo Gate C.
+2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | H2H snapshot EXPORTED trust — mirrors Trade Finder.
+2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Position hallway epic atom 2/3.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Explore margin epic 2/4; OG top-3 matches screener staff column.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | Lab L5 position-default epic 3/3; breakouts WR hallway.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | League L5 H2H GTM epic closed — Gate C evidence on snapshot path.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
