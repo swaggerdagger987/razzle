@@ -1,25 +1,20 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau playoff odds need screenshot-worthy share cards like Explore and H2H so league managers post Razzle sims on Reddit.",
-  "epic": "League L5 — Bureau watermarked OG exports",
-  "slice_title": "Trade Finder OG share card",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "ACCEPTANCE Gate 6 — OG export cards",
+  "big_problem": "Lab export cards must screenshot with real row layout even when the API has no live data (FACTORY-DOD Gate C).",
+  "epic": "Lab L5 — OG cards are always screenshot-ready",
+  "slice_title": "Launch-10 OG demo labels + default player_id params",
+  "parity_ref": "Lab L4–L5 OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": [
-    "apps/web/app/og/trade-finder/route.tsx",
-    "apps/web/components/league/BureauTradeFinder.tsx"
-  ],
-  "max_files": 2,
-  "max_lines": 300,
+  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "max_files": 1,
+  "max_lines": 150,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/tf-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/trade-finder?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
   ],
-  "out_of_scope": [
-    "Pressure Map OG (next atom)",
-    "API schema changes"
-  ],
+  "out_of_scope": ["Porting comps API to v2", "Pressure Map OG"],
   "builder_mode": "composer-surgical"
 }
