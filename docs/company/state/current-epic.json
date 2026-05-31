@@ -1,68 +1,44 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab OG exports without snapshot still fall back to demo \u2014 Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
-  "epic_title": "Lab L5 \u2014 OG live fetch + sticker parity",
-  "parity_ref": "Explore L5 \u2014 Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Explore OG cards go blank when the screener API is cold — Reddit screenshots need universe-aware sample rows, not pulling film alone.",
+  "epic_title": "Explore L5 — OG universe query demo rows",
+  "parity_ref": "Explore L5 — screener OG export",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-og-launch10-live-fetch-merge",
-      "title": "Merge base LIVE sticker + fetchOgLiveRows for Launch-10 without snapshot",
-      "status": "done",
-      "merge_commit": "3f0411ec"
-    },
-    {
-      "id": "explore-og-universe-query",
-      "title": "Explore OG \u2014 pass universe/college in export URL",
-      "status": "done",
-      "merge_commit": "7dbd4b11"
-    },
-    {
-      "id": "lab-og-gamelog-player-default",
-      "title": "Gamelog OG — default player_id when export omits query",
+      "id": "explore-og-universe-demo",
+      "title": "Explore OG — NFL/college demo rows when screener query empty",
       "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-sample-sticker",
+      "title": "Explore OG — terracotta SAMPLE sticker on demo path",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-live-sticker",
+      "title": "Explore OG — teal LIVE sticker when screener returns rows",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-force-demo-qa",
+      "title": "Explore OG — force_demo QA param for Gate C curl",
+      "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-gamelog-player-default",
-  "created_at": "2026-05-31T08:25:32Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "next_atom_id": "explore-og-universe-demo",
+  "epic_status": "active",
+  "created_at": "2026-05-31T08:58:00Z",
+  "updated_at": "2026-05-31T08:58:00Z",
   "completed_epics": [
     {
-      "id": "lab-l2-sidebar-agent-groups",
+      "id": "lab-l5-og-live-fetch-sticker-parity",
       "status": "complete",
-      "last_atom": "lab-sidebar-search-agent-labels",
-      "merge_commit": "e75ec714"
-    },
-    {
-      "id": "lab-l5-og-gamelog-live-week-rows",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-snapshot-default",
-      "merge_commit": "e2a3ce8a"
-    },
-    {
-      "id": "lab-l5-launch10-og-live-sticker",
-      "status": "complete",
-      "last_atom": "lab-og-live-sticker-prospects-weekly",
-      "merge_commit": "5bb77346"
-    },
-    {
-      "id": "lab-l5-og-watermark-band",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-band-panel-route",
-      "merge_commit": "742028c0"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
-    },
-    {
-      "id": "league-l5-h2h-og-watermark",
-      "status": "complete",
-      "last_atom": "league-h2h-og-watermark-band",
-      "merge_commit": "945e4656"
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "e37cd230"
     }
   ]
 }
