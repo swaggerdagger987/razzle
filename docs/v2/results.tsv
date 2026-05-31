@@ -40,4 +40,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 78	30454811	depth+hallway+voice+simplicity	keep	League	L5 Bureau Monte Carlo share bar	trust=T2,T5,T6; BureauMonteCarloShareBar copy sim + export; curl monte-carlo OG 53767B
 78	3c1237df	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B; export-link epic complete
 79	6e98f4a2	depth+voice+simplicity	keep	Lab	L5 OG launch10 live label drop sample	trust=T1,T5,T6; panelBlurbSuffix LAUNCH_10; curl rankings 59509B breakouts 60649B
-80	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau power rankings OG + export row	trust=T2,T5,T6; /og/power-rankings demo rows; curl 54939B; BureauPowerRankingsShareBar
+80	2cd7c3ad	depth+hallway+voice+simplicity	keep	League	L5 Bureau power rankings OG + export row	trust=T2,T5,T6; /og/power-rankings demo rows; curl 54939B; BureauPowerRankingsShareBar
