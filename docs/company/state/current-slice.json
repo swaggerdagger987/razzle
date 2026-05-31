@@ -1,27 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-waiver-tendencies-og-share",
-  "big_problem": "Four newly unhidden Bureau depth tabs have no group-chat export cards while rival tabs ship OG share rows.",
-  "epic": "League L5 — Bureau depth tab OG export cards (atom 3/4)",
-  "slice_title": "Waiver Tendencies tab OG FAAB card",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — Bureau export PNG ≥40KB",
+  "atom_id": "lab-og-weekly-ppg-ranked",
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
+  "epic": "Lab L5 — OG snapshot row fidelity",
+  "slice_title": "Weekly OG export ranks top-6 by PPG for active position tab",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with ranked rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/waiver-tendencies/route.tsx",
-    "apps/web/components/league/BureauWaiverTendenciesShareBar.tsx",
-    "apps/web/components/league/BureauWaiverTendencies.tsx"
+    "apps/web/app/og/[panel]/route.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 300,
+  "max_files": 1,
+  "max_lines": 80,
   "acceptance_commands": [
-    "pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-waiver-tendencies.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/waiver-tendencies?league=demo&download=1'"
+    "curl -s -o /tmp/og-weekly-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1'"
   ],
-  "out_of_scope": [],
-  "builder_mode": "composer-surgical",
-  "content_commit": "6dcb0f72",
-  "verdict": "SHIP"
+  "out_of_scope": [
+    "Breakouts atom",
+    "Bureau tabs",
+    "NORTH_STAR / DESIGN edits"
+  ],
+  "builder_mode": "composer-surgical"
 }
