@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Reset to base before atom pick avoids wrong-epic drift | SHIP | keep | — | — | cycle 96 tradevalues position after hard reset
+
 Append-only log of coordination patterns, what worked, what didn't.
 
 Format per entry:

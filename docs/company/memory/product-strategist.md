@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | Dedup prospects when atom title names two panels | SHIP | keep | — | — | only tradevalues needed code
+
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
 
 Format per entry:
