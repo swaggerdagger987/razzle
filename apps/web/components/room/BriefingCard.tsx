@@ -1,6 +1,7 @@
 "use client";
 
 import type { Urgency } from "@razzle/types";
+import { BriefingShareBar } from "./BriefingShareBar";
 
 interface Props {
   question: string;
@@ -48,6 +49,14 @@ export function BriefingCard({
           {crossTriggers.map((t) => `${t.agent}: ${t.label}`).join(" · ")}
         </p>
       )}
+      {!pending && !error && briefing ? (
+        <BriefingShareBar
+          question={question}
+          briefing={briefing}
+          urgency={urgency}
+          specialists={specialists}
+        />
+      ) : null}
     </article>
   );
 }

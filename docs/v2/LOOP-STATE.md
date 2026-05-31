@@ -1,13 +1,9 @@
-cycle: 125
+cycle: 128
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Room
 focus_layer: L5
-next_slice: lab-og-live-sticker-gamelog-efficiency
-last_keep_cycle: 125
-last_commit: ad24a219
-lab_l5_og_panel_native_live_epic: active
-lab_l5_og_live_fetch_epic: active
-lab_l2_sidebar_agent_epic: complete
-lab_l5_og_watermark_epic: complete
-lab_l5_og_live_sort_epic: complete
-bureau_h2h_codec_epic: complete
+next_slice: room-og-briefing-pytest (epic atom 2/2)
+last_keep_cycle: 128
+last_commit: cd0115e2
+room_l5_briefing_og_epic: active
+lab_l4_pro_gate_epic: complete
