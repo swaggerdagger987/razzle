@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-gamelog-player-default | d7b5b3f8 | PASS | no new REDDIT-INTEL; PLAYER_SCOPED export URLs.
+
 2026-05-31 | lab-og-gamelog-player-default | ffee5321 | PASS | no new REDDIT-INTEL; export URL slice.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.

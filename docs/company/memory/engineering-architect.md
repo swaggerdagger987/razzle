@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | gamelog OG default | d7b5b3f8 | keep | base sync; PLAYER_SCOPED_OG_SLUGS; 2 files.
+
 2026-05-31 | gamelog OG default | ffee5321 | keep | 2 files; PLAYER_SCOPED_OG_SLUGS in LabOgExportLink.
 
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.

@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-gamelog-player-default | da33eafd | keep | PLAYER_SCOPED_OG_SLUGS on LabOgExportLink; base sync + curl re-verify.
+2026-05-31 | lab-og-gamelog-player-default | d7b5b3f8 | keep | PLAYER_SCOPED_OG_SLUGS on LabOgExportLink; base sync + curl re-verify.
 
 2026-05-31 | lab-og-gamelog-player-default | ffee5321 | keep | LabOgExportLink PLAYER_SCOPED_OG_SLUGS defaults player_id for gamelog/comps.
 

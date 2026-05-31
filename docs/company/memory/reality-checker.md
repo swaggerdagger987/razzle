@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-og-gamelog-player-default | d7b5b3f8 | PASS | curl gamelog 60634B×2; pytest 61; build ok post base sync.
+
 2026-05-31 | lab-og-gamelog-player-default | ffee5321 | PASS | curl gamelog 60634B; pytest 61; Gate C2.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.

@@ -9,7 +9,7 @@
       "id": "lab-og-gamelog-player-default",
       "title": "Gamelog OG — default player_id when export omits query",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "d7b5b3f8"
     },
     {
       "id": "explore-og-universe-query",

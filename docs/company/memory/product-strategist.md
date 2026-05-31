@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-gamelog-player-default | d7b5b3f8 | SHIP | keep | PLAYER_SCOPED in LabOgExportLink; URL defaults epic atom 1/3.
+
 2026-05-31 | lab-og-gamelog-player-default | ffee5321 | SHIP | keep | self-describing OG export URLs; T5/T6.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
