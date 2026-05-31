@@ -1,9 +1,32 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-strengths-live-og",
-  "slice_title": "Strengths OG — live extract + player-scoped stickers",
-  "content_commit": "1bc1f1e2b",
-  "status": "shipped",
+  "big_problem": "Bureau Trade Finder screenshots look like a draft — no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
+  "epic": "League L5 — Bureau Trade Finder GTM export",
+  "slice_title": "Trade Finder OG — snapshot param for in-panel export rows",
+  "atom_id": "league-trade-finder-og-snapshot",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/lib/bureau-trade-finder-og-snapshot.ts",
+    "apps/web/app/og/trade-finder/route.tsx",
+    "apps/web/components/league/BureauTradeFinderShareBar.tsx"
+  ],
+  "max_files": 3,
+  "max_lines": 200,
+  "acceptance_commands": [
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_trade_finder_og_snapshot.py -q --noconftest",
+    "curl -s -o /tmp/tf-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/trade-finder?download=1&snapshot=...'"
+  ],
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP"
+  },
+  "content_commit": "dae78b584",
   "reality": "PASS",
   "merge": "pending"
 }
