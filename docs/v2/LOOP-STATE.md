@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: bureau-schedule-unhide
 last_keep_cycle: 91
-last_commit: da33eafd
+last_commit: 0be7c1f8
 league_l5_bureau_waiver_tendencies_unhide: in_progress
 league_l5_unhide_bureau_epic: active
