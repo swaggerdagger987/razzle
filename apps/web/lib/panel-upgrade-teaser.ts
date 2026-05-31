@@ -29,6 +29,14 @@ export const LAUNCH_10_PRO_GATE_SLUGS = [
   "buysell",
 ] as const;
 
+/** Catalog panels on GenericPanelRenderer + ProGateFromPanelError (not dedicated renderers). */
+export const GENERIC_CATALOG_PRO_GATE_SLUGS = [
+  "tiers",
+  "vorp",
+  "stocks",
+  "waivers",
+] as const;
+
 /** Bureau-7 behavioral moat tabs — mirrors COUNCIL + `LeagueDashboard` screenshot set. */
 export const BUREAU_7_FEATURE_SLUGS = [
   "self-scout",
@@ -104,24 +112,24 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Josh Allen", position: "QB", detail: "Wk 10 · 41.2 pts" },
   ],
   tiers: [
-    { name: "CeeDee Lamb", position: "WR", detail: "Tier S · win-now anchor" },
-    { name: "Bijan Robinson", position: "RB", detail: "Tier S · youth + volume" },
-    { name: "Brock Bowers", position: "TE", detail: "Tier A · positional scarcity" },
+    { name: "CeeDee Lamb", position: "WR", detail: "Tier S · 94.2 · win-now WR1" },
+    { name: "Bijan Robinson", position: "RB", detail: "Tier S · 96.1 · youth + 22 touches" },
+    { name: "Brock Bowers", position: "TE", detail: "Tier A · 88.4 · TE scarcity cliff" },
   ],
   vorp: [
-    { name: "Christian McCaffrey", position: "RB", detail: "VORP +4.2 · RB1 gap" },
-    { name: "Tyreek Hill", position: "WR", detail: "VORP +3.1 · spike weeks" },
-    { name: "Travis Kelce", position: "TE", detail: "VORP +2.8 · TE cliff" },
+    { name: "Christian McCaffrey", position: "RB", detail: "VORP +4.2 · RB1 over RB12" },
+    { name: "Tyreek Hill", position: "WR", detail: "VORP +3.1 · spike-week equity" },
+    { name: "Travis Kelce", position: "TE", detail: "VORP +2.8 · TE2 replacement gap" },
   ],
   stocks: [
-    { name: "Garrett Wilson", position: "WR", detail: "Rising · +12 rank wk" },
-    { name: "Deebo Samuel", position: "WR", detail: "Falling · sell window" },
-    { name: "James Cook", position: "RB", detail: "Rising · market lag" },
+    { name: "Garrett Wilson", position: "WR", detail: "Stock ↑ · +12 rank · buy window" },
+    { name: "Deebo Samuel", position: "WR", detail: "Stock ↓ · sell before bye skid" },
+    { name: "James Cook", position: "RB", detail: "Stock ↑ · market still prices RB3" },
   ],
   waivers: [
-    { name: "Jayden Higgins", position: "WR", detail: "FAAB 18% · snap climb" },
-    { name: "Cam Skattebo", position: "RB", detail: "FAAB 12% · role emerging" },
-    { name: "Elic Ayomanor", position: "WR", detail: "FAAB 9% · targets ↑" },
+    { name: "Jayden Higgins", position: "WR", detail: "FAAB 18% · 78% routes · add now" },
+    { name: "Cam Skattebo", position: "RB", detail: "FAAB 12% · goal-line role emerging" },
+    { name: "Elic Ayomanor", position: "WR", detail: "FAAB 9% · 7 targets last 2 wks" },
   ],
   "dynasty-comps": [
     { name: "Ja'Marr Chase", position: "WR", detail: "Comp: CeeDee Lamb · 94% match" },
@@ -153,15 +161,21 @@ const PITCH_BY_SLUG: Record<string, string> = {
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",
   gamelog: "week-by-week game logs with peak-week context for trades",
-  tiers: "S/A/B/C tiers so trades stop feeling random",
-  vorp: "value-over-replacement ranks that show who actually moves the needle",
-  stocks: "rising and falling dynasty assets before your league reacts",
-  waivers: "waiver-wire risers ranked by recent production and role",
+  tiers: "S/A/B/C dynasty tiers with value scores — price trades before you DM your league",
+  vorp: "value-over-replacement at every position — see the RB1 cliff, not just ranks",
+  stocks: "rising and falling dynasty stocks with weekly rank deltas before waivers clear",
+  waivers: "FAAB targets ranked by snap share, routes, and recent production spikes",
   "dynasty-comps": "statistical comp cards with match % — price any dynasty asset like a desk",
   weekly: "weekly heatmap streaks before your league mates spot the run",
   prospects: "rookie big board with combine and college context",
   dashboard: "dynasty pulse — risers, fallers, and value picks in one view",
 };
+
+export function isGenericCatalogProGateSlug(
+  slug: string,
+): slug is (typeof GENERIC_CATALOG_PRO_GATE_SLUGS)[number] {
+  return (GENERIC_CATALOG_PRO_GATE_SLUGS as readonly string[]).includes(slug);
+}
 
 export function hasCustomTeaser(slug: string): boolean {
   return slug in ROWS_BY_SLUG && slug in PITCH_BY_SLUG;

@@ -36,6 +36,8 @@ GENERIC_PRO_GATE_SLUGS = (
     "dynasty-comps",
 )
 
+GENERIC_CATALOG_PRO_GATE_SLUGS = ("tiers", "vorp", "stocks", "waivers")
+
 BUREAU_7_FEATURE_SLUGS = (
     "self-scout",
     "head-to-head",
@@ -100,6 +102,32 @@ def test_generic_pro_gate_slugs_have_custom_teasers():
     source = _teaser_source()
     missing = [s for s in GENERIC_PRO_GATE_SLUGS if not _slug_has_custom_teaser(source, s)]
     assert not missing, f"generic pro gate slugs missing teaser: {missing}"
+
+
+def test_generic_catalog_pro_gate_slugs_exported_in_teaser():
+    source = _teaser_source()
+    assert "export const GENERIC_CATALOG_PRO_GATE_SLUGS" in source
+    assert "isGenericCatalogProGateSlug" in source
+    for slug in GENERIC_CATALOG_PRO_GATE_SLUGS:
+        assert f'"{slug}"' in source
+
+
+def test_generic_catalog_pro_gate_slugs_have_unique_teaser_details():
+    source = _teaser_source()
+    markers = {
+        "tiers": ("Tier S", "dynasty tiers with value scores"),
+        "vorp": ("VORP", "value-over-replacement"),
+        "stocks": ("Stock", "rank deltas"),
+        "waivers": ("FAAB", "snap share"),
+    }
+    pitch_block = source.split("const PITCH_BY_SLUG", 1)[1]
+    for slug in GENERIC_CATALOG_PRO_GATE_SLUGS:
+        assert _slug_has_custom_teaser(source, slug), f"catalog slug missing teaser: {slug}"
+        rows_block = source.split(f"{slug}:", 1)[1].split("\n  ],", 1)[0]
+        row_marker, pitch_marker = markers[slug]
+        assert row_marker in rows_block, f"{slug} missing batch-1 domain rows"
+        assert "Ja'Marr Chase" not in rows_block, f"{slug} still on default teaser rows"
+        assert pitch_marker in pitch_block, f"{slug} missing batch-1 pitch copy"
 
 
 def test_pro_upgrade_perks_list_launch10_and_bureau7_names():
