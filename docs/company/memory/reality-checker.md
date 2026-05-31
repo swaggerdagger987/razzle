@@ -1,12 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | FROM PANEL evidence PASS | 164159413 | pytest 2; rankings-snap 56682B weekly-snap 58270B.
-
-2026-05-31 | FROM PANEL sticker PASS | 7d49e4f0c | pytest 1; rankings-snap 55060B weekly-snap 56660B.
-
-2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | PASS | pytest 2; curl PNG ≥40KB breakouts/dashboard.
-
-2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | PASS | pytest 2; curl PNG ≥40KB tradevalues/aging.
+2026-05-31 | lab-og-sample-labels Gate C | 54443bc8 | PASS | build exit 0; curl 66806/66253/67267 B; PNG verified.
 
 2026-05-31 | explore-og-universe-query Gate C | 7dbd4b11 | PASS college OG 41427B; build + pytest 58.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
