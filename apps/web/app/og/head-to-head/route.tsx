@@ -1,26 +1,12 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import {
+  bureauH2HOgSnapshotToData,
+  decodeBureauH2HOgSnapshot,
+  type H2HData,
+} from "@/lib/bureau-h2h-og-snapshot";
 
 export const runtime = "edge";
-
-interface TeamSummary {
-  team: string;
-  record: string;
-  ppg: number;
-}
-
-interface PosCompare {
-  position: string;
-  your_count: number;
-  their_count: number;
-}
-
-interface H2HData {
-  you?: TeamSummary;
-  them?: TeamSummary;
-  position_compare?: PosCompare[];
-  trade_fit?: { you_could_offer?: string[]; you_could_target?: string[] };
-}
 
 /** Sample rivalry for OG preview when league params/API unavailable (FACTORY-DOD Gate C). */
 const DEMO_H2H: Required<Pick<H2HData, "you" | "them" | "position_compare" | "trade_fit">> = {
@@ -76,9 +62,16 @@ export async function GET(req: Request) {
   const opponent = url.searchParams.get("opponent") ?? "";
 
   const atlas = AGENT_BY_ID.atlas;
-  const live = await fetchH2H({ league, user, opponent });
-  const isDemo = !live?.you || !live?.them;
-  const data = isDemo ? DEMO_H2H : live;
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const snapshot = snapshotParam ? decodeBureauH2HOgSnapshot(snapshotParam) : null;
+  const live = snapshot ? null : await fetchH2H({ league, user, opponent });
+  const isSnapshot = Boolean(snapshot);
+  const isDemo = !isSnapshot && (!live?.you || !live?.them);
+  const data: H2HData = isSnapshot && snapshot
+    ? bureauH2HOgSnapshotToData(snapshot)
+    : isDemo
+      ? DEMO_H2H
+      : (live ?? DEMO_H2H);
 
   const you = data.you;
   const them = data.them;
@@ -132,7 +125,9 @@ export async function GET(req: Request) {
           Head-to-Head
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
-          {`rivalry dossier — your roster vs one leaguemate${isDemo ? " · sample preview" : ""}`}
+          {`rivalry dossier — your roster vs one leaguemate${
+            isDemo ? " · sample preview" : isSnapshot ? " · exported matchup" : ""
+          }`}
         </div>
 
         {hasData ? (
@@ -140,8 +135,8 @@ export async function GET(req: Request) {
             {/* Team matchup */}
             <div style={{ display: "flex", gap: 14 }}>
               {[
-                { label: "YOU", t: you as TeamSummary, accent: "#d97757" },
-                { label: "THEM", t: them as TeamSummary, accent: "#5c4a3d" },
+                { label: "YOU", t: you!, accent: "#d97757" },
+                { label: "THEM", t: them!, accent: "#5c4a3d" },
               ].map((side) => (
                 <div
                   key={side.label}
