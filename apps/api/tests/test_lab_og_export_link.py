@@ -71,6 +71,17 @@ def test_breakouts_empty_board_exports_sample_card():
     assert "!candidates.length" in renderer
 
 
+def test_buysell_empty_board_exports_sample_card():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/BuySellRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "BUYSELL_SAMPLE_OG_ROWS" in renderer
+    assert 'label="export sample card"' in renderer
+    assert "snapshotRows={BUYSELL_SAMPLE_OG_ROWS}" in renderer
+    assert "!buyLow.length && !sellHigh.length" in renderer
+
+
 def test_rankings_empty_filter_exports_sample_card():
     renderer = (
         Path(__file__).resolve().parents[3]
