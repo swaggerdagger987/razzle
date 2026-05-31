@@ -23,6 +23,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Cycle 76 (Bureau roster depth tab)
+
+1. **Hidden tabs were a trust leak** — users who found Bureau via Self-Scout could not see depth chart as its own lane; unhide + bespoke renderer restores moat narrative.
+2. **Full player lists beat grade-only cards** for trade DM screenshots — roster-depth complements Self-Scout summary.
+
 ## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
 
 1. **Export must live on the panel** — users screenshot from the tool they are in; buried OG routes without an "export card" link do not travel.
