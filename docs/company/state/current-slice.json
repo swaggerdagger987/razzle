@@ -1,35 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
-  "epic": "Lab L4 — Pro gates feel like upgrade, not error",
-  "slice_title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
-  "atom_id": "lab-pro-gate-perks-copy",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — Pro gate shows upgrade message, not blank",
-  "trust_pillars": ["T2", "T6"],
-  "allowed_paths": [
-    "apps/web/lib/panel-upgrade-teaser.ts",
-    "apps/web/components/lab/ProUpgradeGate.tsx",
-    "apps/api/tests/test_panel_upgrade_teaser.py"
-  ],
-  "max_files": 3,
-  "max_lines": 120,
+  "atom_id": "bureau-h2h-og-sample-sticker",
+  "big_problem": "Bureau H2H OG cards don't signal live Sleeper rivalry vs sample preview — Reddit can't tell real league exports from demo.",
+  "epic": "League L5 — Bureau H2H OG live vs sample stickers",
+  "slice_title": "H2H OG — terracotta SAMPLE sticker on demo rivalry path",
+  "parity_ref": "Explore L5 — Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T1", "T5", "T6"],
+  "allowed_paths": ["apps/web/app/og/head-to-head/route.tsx"],
+  "max_files": 1,
+  "max_lines": 45,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web 2>&1 | tail -3",
+    "curl -s -o /tmp/og-h2h-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/head-to-head?download=1'",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_smoke.py -q 2>&1 | tail -2"
   ],
-  "out_of_scope": [
-    "OG routes",
-    "pricing page",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "new npm deps"
-  ],
+  "out_of_scope": ["force_demo param", "Lab panel route", "snapshot encode changes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
