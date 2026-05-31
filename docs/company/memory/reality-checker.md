@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog | da33eafd | PASS | curl 5 OG panels 60-67KB; web build.
+2026-05-31 | lab-og-live-sticker-efficiency-aging-buysell-dashboard-gamelog | 14c759de1 | PASS | curl 5 OG panels 60-67KB; web build.
 
 2026-05-31 | bureau-self-scout-snapshot-roundtrip-test | 7bc24c3a | PASS | pytest 4 codec + 63 api.
 

@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-live-sticker | da33eafd | keep | route.tsx only; ≤20 lines sticker+blurb.
+2026-05-31 | lab-og-live-sticker | 14c759de1 | keep | route.tsx only; ≤20 lines sticker+blurb.
 
 2026-05-31 | self-scout roundtrip | 7bc24c3a | keep | pytest mirror; H2H codec pattern.
 
