@@ -1,36 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product.",
-  "epic": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
-  "atom_id": "league-roster-depth-tab",
-  "slice_title": "Unhide Roster Depth tab with Dolphin renderer + hallway",
+  "atom_id": "bureau-trade-network-share-bar",
+  "big_problem": "Bureau-7 surfaces need copyable league URLs plus OG export on every tab.",
+  "epic": "League L5 — Bureau behavioral share parity",
+  "slice_title": "Trade Network ShareBar copy link + export",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "ACCEPTANCE Bureau-7 bespoke renderer; no OG gate this atom",
-  "trust_pillars": ["T2", "T5", "T6"],
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauRosterDepth.tsx",
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/components/league/BureauFeatureBody.tsx"
+    "apps/web/components/league/BureauTradeNetworkShareBar.tsx",
+    "apps/web/components/league/BureauTradeNetwork.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 280,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "npm run typecheck --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-trade-network.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/trade-network?league=test&download=1'"
   ],
-  "out_of_scope": [
-    "OG share card for roster-depth",
-    "Unhide build-profiles or waiver-tendencies",
-    "API schema changes",
-    "NORTH_STAR / DESIGN edits"
-  ],
+  "out_of_scope": ["OG route changes", "new Bureau tabs", "NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
-  "content_commit": "9afe6a01"
+  "verdict": "SHIP",
+  "content_commit": "1616484c"
 }
