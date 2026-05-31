@@ -7,8 +7,8 @@
     {
       "id": "lab-og-rankings-live-rank-labels",
       "title": "Dynasty rankings OG — live #rank labels on share card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "78384933e"
     },
     {
       "id": "lab-og-breakouts-live-rank-labels",
