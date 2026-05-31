@@ -1,10 +1,6 @@
+import { decodeBureauH2HOgSnapshot, type H2HData } from "@/lib/bureau-h2h-og-snapshot";
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
-import {
-  bureauH2HOgSnapshotToData,
-  decodeBureauH2HOgSnapshot,
-  type H2HData,
-} from "@/lib/bureau-h2h-og-snapshot";
 
 export const runtime = "edge";
 
@@ -65,13 +61,8 @@ export async function GET(req: Request) {
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
   const snapshot = snapshotParam ? decodeBureauH2HOgSnapshot(snapshotParam) : null;
   const live = snapshot ? null : await fetchH2H({ league, user, opponent });
-  const isSnapshot = Boolean(snapshot);
-  const isDemo = !isSnapshot && (!live?.you || !live?.them);
-  const data: H2HData = isSnapshot && snapshot
-    ? bureauH2HOgSnapshotToData(snapshot)
-    : isDemo
-      ? DEMO_H2H
-      : (live ?? DEMO_H2H);
+  const isDemo = !snapshot && (!live?.you || !live?.them);
+  const data = snapshot ?? (isDemo ? DEMO_H2H : live) ?? DEMO_H2H;
 
   const you = data.you;
   const them = data.them;
@@ -79,6 +70,12 @@ export async function GET(req: Request) {
   const offer = (data.trade_fit?.you_could_offer ?? []).join(", ") || "—";
   const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
+
+  const rivalrySubtitle = isDemo
+    ? "rivalry dossier — your roster vs one leaguemate · sample preview"
+    : them?.team
+      ? `rivalry dossier — vs ${teamLabel(them.team)}${snapshot ? " · from panel" : ""}`
+      : "rivalry dossier — your roster vs one leaguemate";
 
   return new ImageResponse(
     (
@@ -99,7 +96,8 @@ export async function GET(req: Request) {
         <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 12 }}>
           <div style={{ fontSize: 48, display: "flex" }}>🐯</div>
           <div style={{ display: "flex", fontSize: 36, fontWeight: 700 }}>
-            Razzle<span style={{ color: "#d97757" }}>.lol</span>
+            <span style={{ display: "flex" }}>Razzle</span>
+            <span style={{ display: "flex", color: "#d97757" }}>.lol</span>
           </div>
           <div style={{ flex: 1, display: "flex" }} />
           <div
@@ -121,13 +119,11 @@ export async function GET(req: Request) {
         </div>
 
         {/* Title */}
-        <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
+        <div style={{ display: "flex", fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
           Head-to-Head
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
-          {`rivalry dossier — your roster vs one leaguemate${
-            isDemo ? " · sample preview" : isSnapshot ? " · exported matchup" : ""
-          }`}
+          {rivalrySubtitle}
         </div>
 
         {hasData ? (
@@ -213,7 +209,7 @@ export async function GET(req: Request) {
 
             {/* Trade lanes */}
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30, color: "#d97757" }}>
-              You offer depth at {offer} · target their surplus at {want}
+              {`You offer depth at ${offer} · target their surplus at ${want}`}
             </div>
           </div>
         ) : null}
@@ -229,7 +225,9 @@ export async function GET(req: Request) {
             marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>razzle.lol/league{league ? `/${league}` : ""}/head-to-head</div>
+          <div style={{ display: "flex" }}>
+            {`razzle.lol/league${league ? `/${league}` : ""}/head-to-head`}
+          </div>
           {isDownload ? (
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
               made with 🐯 razzle.lol

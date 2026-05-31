@@ -1,30 +1,42 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab Hawkeye export cards must encode the rows users see in weekly, prospects, and breakouts — not generic demo fallbacks (NEXT.md Lab L5; DEPTH Lab L5 OG parity).",
-  "epic_title": "Lab L5 — Hawkeye OG snapshot export",
-  "parity_ref": "Explore L5 / Lab L5 — panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic_title": "League L5 — Bureau behavioral share parity",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-weekly-prospects-snapshot",
-      "title": "Weekly + prospects LabOgExportLink pass snapshotRows",
+      "id": "bureau-manager-profiles-copy-link",
+      "title": "Manager Profiles copy link beside export card",
       "status": "done",
-      "merge_commit": "67159562"
+      "merge_commit": "04c19959"
     },
     {
-      "id": "lab-og-breakouts-snapshot",
-      "title": "Breakouts export encodes formula-sorted top candidates",
+      "id": "bureau-pressure-map-copy-link",
+      "title": "Pressure Map copy link beside export card",
       "status": "done",
-      "merge_commit": "5aa2f4f3"
+      "merge_commit": "c4ce09b7"
     },
     {
-      "id": "lab-og-tradevalues-snapshot",
-      "title": "Trade values export encodes visible chart rows",
+      "id": "league-power-rankings-og",
+      "title": "Power Rankings OG + copy board link",
       "status": "done",
-      "merge_commit": "e0d8a5fa"
+      "merge_commit": "90bf2dd5"
+    },
+    {
+      "id": "bureau-trade-network-copy-link",
+      "title": "Trade Network copy link beside export card",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "bureau-monte-carlo-copy-link",
+      "title": "Monte Carlo copy link beside export card",
+      "status": "done",
+      "merge_commit": "30454811"
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T05:01:06Z",
-  "updated_at": "2026-05-31T05:07:32Z"
+  "next_atom_id": "bureau-trade-network-copy-link",
+  "created_at": "2026-05-31T04:44:00Z",
+  "updated_at": "2026-05-31T05:12:38Z"
 }

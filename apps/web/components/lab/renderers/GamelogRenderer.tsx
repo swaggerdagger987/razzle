@@ -10,7 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink } from "../LabOgExportLink";
+import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -165,6 +165,22 @@ export function GamelogRenderer({ panel }: Props) {
     }
     return best;
   }, [q.data?.weeks]);
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const weekRows = q.data?.weeks ?? [];
+    const pos = q.data?.position ?? playerPos ?? "WR";
+    const team = q.data?.team ?? "";
+    return [...weekRows]
+      .sort((a, b) => b.fpts - a.fpts)
+      .slice(0, 6)
+      .map((w) => ({
+        name: `Wk ${w.week}`,
+        position: pos,
+        team,
+        stat: w.fpts,
+        statLabel: "PPR",
+      }));
+  }, [q.data?.weeks, q.data?.position, q.data?.team, playerPos]);
 
   function selectPlayer(hit: SearchHit) {
     const q = new URLSearchParams(searchParams.toString());
@@ -428,6 +444,7 @@ export function GamelogRenderer({ panel }: Props) {
             slug="gamelog"
             downloadName="razzle-gamelog.png"
             playerId={(data?.player_id ?? playerId) || DEFAULT_LAB_OG_PLAYER_ID}
+            snapshotRows={ogSnapshotRows}
           />
         </footer>
       )}
