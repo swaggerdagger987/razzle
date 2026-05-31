@@ -81,6 +81,11 @@ def test_percentiles_og_tolab_default_player_and_wr_position():
     assert "TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS" in source
     assert "includeDefaultPlayer" in source
     assert "watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+    idx = source.index("TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS")
+    block = source[idx : idx + 200]
+    assert '"percentiles"' in block
+    export = EXPORT_TS.read_text(encoding="utf-8")
+    assert '"percentiles"' in export
 
 
 def test_breakouts_og_watermark_includes_default_wr_position():
