@@ -1,10 +1,10 @@
-cycle: 80
+cycle: 82
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-power-rankings-og (epic atom 2/6)
-last_keep_cycle: 80
-last_commit: 929fccf1
+next_slice: league-build-profiles-tab (epic atom 4/6)
+last_keep_cycle: 82
+last_commit: da33eafd
 league_l5_unhide_bureau_epic: in_progress
 league_l5_roster_depth_tab: complete
 league_l5_power_rankings_tab: complete
