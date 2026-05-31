@@ -5,5 +5,6 @@ focus_layer: L5
 next_slice: lab-og-buysell-dashboard-live-sort
 last_keep_cycle: 110
 last_commit: aefbf6ef
-lab_l5_og_position_epic: complete
 lab_l5_og_live_sort_epic: active
+lab_l5_og_position_epic: complete
+lab_l5_og_efficiency_aging_live_sort: in_progress

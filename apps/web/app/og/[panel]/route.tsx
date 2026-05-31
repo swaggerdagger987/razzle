@@ -257,6 +257,8 @@ function statLabelForKey(k: string): string {
   if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
   if (k === "similarity") statLabel = "Match %";
   if (k === "rank_diff") statLabel = "Chg";
+  if (k === "efficiency_score") statLabel = "Efficiency";
+  if (k === "peak_age") statLabel = "Peak Age";
   return statLabel;
 }
 
