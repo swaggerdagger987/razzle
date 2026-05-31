@@ -65,3 +65,4 @@ cycle	commit	score	status	pillar	slice	description
 73	7066f4ab	depth+voice+simplicity	keep	Lab	L5 OG live data label	trust=T1,T5,T6; live data blurb when liveHasRows; curl rankings 59509B
 74	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
 75	99f8a2aa	depth+hallway+voice+simplicity	keep	League	L5 Bureau H2H share bar	trust=T2,T5,T6; copy rivalry link + export; curl h2h OG 59305B; epic atom 1/3
+76	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG launch10 live label cleanup	trust=T1,T5,T6; namedLiveRows + ogBlurbSuffix drops live-data suffix; curl rankings 59509B
