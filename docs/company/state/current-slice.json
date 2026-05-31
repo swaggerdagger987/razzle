@@ -1,34 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
-  "epic": "Lab L4 — Pro gates feel like upgrade, not error",
-  "slice_title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — Pro gate shows upgrade message, not blank",
-  "trust_pillars": ["T2", "T6"],
+  "atom_id": "lab-sidebar-staff-picks-agent-order",
+  "big_problem": "Lab Staff Picks agent groups shipped without styles — collapsed rail and headings need polish.",
+  "epic": "Lab L2 — Staff Picks sidebar agent polish",
+  "slice_title": "Agent group CSS + scout-first order + collapsed avatar rail",
+  "parity_ref": "PARITY Lab L2; AGENTS.md LabSidebar group by agent",
+  "depth_ref": "Lab L2",
+  "acceptance_ref": "ACCEPTANCE hallway — six agents on launch surfaces",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/lib/panel-upgrade-teaser.ts",
-    "apps/web/components/lab/ProUpgradeGate.tsx",
-    "apps/api/tests/test_panel_upgrade_teaser.py"
+    "apps/web/components/lab/LabSidebar.tsx",
+    "packages/ui/styles/lab.css"
   ],
-  "max_files": 4,
-  "max_lines": 150,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web 2>&1 | tail -5",
+    "npm run lint --workspace=apps/web 2>&1 | tail -5"
   ],
-  "out_of_scope": [
-    "OG routes",
-    "pricing page",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["LabPanelGrid", "OG routes", "pro-gate copy"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }

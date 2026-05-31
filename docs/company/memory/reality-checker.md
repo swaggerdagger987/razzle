@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-sidebar-staff-picks-agent-order | da33eafd | PASS | web build+lint exit 0.
+
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 
 2026-05-31 | launch10 live-fetch merge Gate C | 3f0411ec | PASS curl rankings 62355B weekly 66512B; build + pytest 58.

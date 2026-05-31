@@ -107,21 +107,23 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
       </div>
 
       <div className="lab-sidebar-inner">
+        {!query && (
+          <div className="lab-sidebar-category" style={{ cursor: "default" }}>
+            <span className="cat-text">Staff Picks</span>
+          </div>
+        )}
         {!query &&
           staffByAgent.map(({ agent, panels: staffPanels }) => (
-            <div key={`staff-${agent.id}`}>
-              <div
-                className="lab-sidebar-category"
-                style={{ display: "flex", alignItems: "center", gap: 8, cursor: "default" }}
-              >
+            <div key={`staff-${agent.id}`} className="lab-sidebar-agent-group">
+              <div className="lab-sidebar-agent-heading" title={agent.role}>
                 <img
                   src={`/agents/${agent.avatar}.svg`}
                   alt=""
                   className="lab-sidebar-agent"
-                  width={20}
-                  height={20}
+                  width={16}
+                  height={16}
                 />
-                <span className="cat-text">{agent.name}</span>
+                <span className="lab-sidebar-agent-name">{agent.name}</span>
               </div>
               {staffPanels.map((panel) => (
                 <SidebarItem

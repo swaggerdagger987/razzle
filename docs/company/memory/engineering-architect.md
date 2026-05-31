@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-sidebar-staff-picks-agent-order | da33eafd | 2 files; semantic classes replace inline flex on category.
+
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.
