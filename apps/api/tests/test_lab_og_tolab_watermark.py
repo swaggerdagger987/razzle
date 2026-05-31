@@ -31,3 +31,5 @@ def test_default_og_player_tolab_rules():
     assert '"dynasty-comps"' in source
     assert "includeDefaultPlayer" in source
     assert "opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+    assert "isSnapshot" in source
+    assert "opts.isSnapshot && opts.playerId !== DEFAULT_OG_PLAYER_ID" in source
