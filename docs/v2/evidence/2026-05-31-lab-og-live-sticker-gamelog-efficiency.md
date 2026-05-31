@@ -1,6 +1,6 @@
 # Evidence — lab-og-live-sticker-gamelog-efficiency
 
-**Cycle:** 129 | **Content commit:** 72af0cb6 | **Date:** 2026-05-31
+**Cycle:** 129 | **Content commit:** b74544ab | **Date:** 2026-05-31
 
 ## Gate C — OG PNG curl (force_demo=1)
 
