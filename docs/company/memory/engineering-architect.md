@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-tradevalues-efficiency-sort | 3-file contract; OG slug set extension | da33eafd | SHIP | KEEP DIRECT_STAT_SORT_SLUGS for launch-10 remainder
+2026-05-31 | lab-og-tradevalues-efficiency-sort | 3-file contract; OG slug set extension | e0819084 | SHIP | KEEP DIRECT_STAT_SORT_SLUGS for launch-10 remainder
 
 
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.

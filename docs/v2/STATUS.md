@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | lab-og-buysell-aging-sort (OG direct-link epic atom 2/3) |
-| Last commit | `da33eafd` |
+| Last commit | `e0819084` |
 
 Recent completions (cycle 95): Lab OG tradevalues + efficiency direct-link stat sort; prior branch includes breakouts RBS + Bureau SOS tab.
 
