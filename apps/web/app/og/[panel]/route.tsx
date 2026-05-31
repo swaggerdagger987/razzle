@@ -280,10 +280,15 @@ function extractRows(data: unknown, slug?: string): OgRow[] {
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
-  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
-    const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
+  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers) || Array.isArray(obj.fallers)) {
     const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
-    candidates = [...top5, ...risers];
+    const fallers = Array.isArray(obj.fallers) ? (obj.fallers as Record<string, unknown>[]) : [];
+    const movers = [...risers, ...fallers];
+    if (movers.length > 0) {
+      candidates = movers;
+    } else {
+      candidates = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
+    }
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
