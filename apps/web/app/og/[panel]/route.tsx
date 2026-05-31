@@ -30,6 +30,7 @@ const STAT_CANDIDATE_KEYS = [
   "rbs_score",
   "breakout_score",
   "similarity",
+  "rank_diff",
   "composite_score",
   "efficiency_score",
   "total_yards",
@@ -220,6 +221,10 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
+  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
+    const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
+    const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
+    candidates = [...top5, ...risers];
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
@@ -237,6 +242,7 @@ function extractRows(data: unknown): OgRow[] {
       if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
       if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
       if (k === "similarity") statLabel = "Match %";
+      if (k === "rank_diff") statLabel = "Chg";
       break;
     }
   }
@@ -389,6 +395,8 @@ export async function GET(
   }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
+  const showingLiveData = !isSnapshot && liveHasRows && hasRows;
+  const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
 
   return new ImageResponse(
@@ -445,13 +453,13 @@ export async function GET(
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
           {`${panel.blurb}${positionFilter ? ` · ${positionFilter} only` : ""}${
-            slug === "dynasty-comps" && isDemo
+            slug === "dynasty-comps" && showingDemoRows
               ? " · comps for Ja'Marr Chase · sample preview"
               : isSnapshot
                 ? " · from your panel"
-                : isDemo
+                : showingDemoRows
                   ? " · sample preview"
-                  : liveHasRows
+                  : showingLiveData
                     ? " · live data"
                     : ""
           }`}

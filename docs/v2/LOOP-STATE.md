@@ -1,9 +1,9 @@
-cycle: 81
+cycle: 86
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
 next_slice: league-build-profiles-tab
-last_keep_cycle: 81
+last_keep_cycle: 86
 last_commit: 9afe6a01
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
@@ -28,6 +28,11 @@ lab_l5_og_snapshot_efficiency_aging: complete
 lab_l5_og_live_data_label: complete
 league_l5_bureau_h2h_copy_link: complete
 league_l5_bureau_self_scout_copy_link: complete
+league_l5_bureau_h2h_snapshot_export: complete
 league_l5_power_rankings_tab: complete
 league_l5_roster_depth_tab: complete
 league_l5_bureau_monte_carlo_share: complete
+league_l5_bureau_manager_profiles_copy_link: complete
+league_l5_bureau_pressure_map_copy_link: complete
+league_l5_power_rankings_og: complete
+league_l5_unhide_bureau_epic: active

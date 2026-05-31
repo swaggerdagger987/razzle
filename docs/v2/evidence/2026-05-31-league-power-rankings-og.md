@@ -1,26 +1,25 @@
-# Evidence — league-power-rankings-og (cycle 80)
+# Evidence — League L5 Power Rankings OG
 
 **Date:** 2026-05-31  
 **Atom:** `league-power-rankings-og`  
-**Content commit:** `28f39b4a`
+**Route:** `/og/power-rankings?download=1&league=test`
 
-## Gate C2 — OG PNG
+## Gate C
 
 ```text
 curl -s -o /tmp/og-pr.png -w '%{http_code} %{size_download}\n' \
   'http://localhost:3000/og/power-rankings?download=1&league=test'
-# 200 59807
-file /tmp/og-pr.png
-# PNG image data, 1200 x 630
+→ 200 59807
+file /tmp/og-pr.png → PNG 1200×630
 ```
 
-Demo fallback when league API cold (`DEMO_ROWS` in route). Live fetch via `POST /api/bureau/power-rankings`.
+Demo rows render (#1 Dynasty Dukes, diff bars, luck index). Sample preview label when API empty.
 
-## Build / API
+## Build
 
 - `npm run build --workspace=apps/web` — PASS
-- `JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q` — 51 passed, 5 skipped
+- `JWT_SECRET=test python3 -m pytest apps/api/tests -q` — 51 passed
 
 ## Verdict
 
-**PASS** — FACTORY-DOD Gate C2 satisfied (59807B ≥ 40KB).
+**Reality: PASS** — FACTORY-DOD Gate C2 satisfied.
