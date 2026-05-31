@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
   "epic_title": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -14,17 +14,17 @@
     {
       "id": "league-waiver-tendencies-tab",
       "title": "Waiver Tendencies tab unhidden with transaction pattern renderer",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "beb9d60f"
     },
     {
       "id": "league-strength-of-schedule-tab",
       "title": "Schedule tab unhidden with SOS matchup renderer",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "4e8df727"
     }
   ],
-  "next_atom_id": "league-waiver-tendencies-tab",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:05:00Z",
-  "updated_at": "2026-05-31T12:30:00Z"
+  "updated_at": "2026-05-31T05:36:00Z"
 }
