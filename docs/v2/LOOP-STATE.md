@@ -4,7 +4,7 @@ focus_pillar: Explore
 focus_layer: L5
 next_slice: explore-og-live-rows-fallback
 last_keep_cycle: 94
-last_commit: da33eafd
+last_commit: b395bbba
 explore_l5_watermark_epic: active
 explore_l5_watermark_band: in_progress
 factory_workday_open: 2026-05-31
