@@ -1,3 +1,4 @@
+2026-05-31 | league-trade-finder-room-hallway | f6e0985f3 | SHIP | Factory cycle 1; dedup snapshot; Trade Finder epic 3/3.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 

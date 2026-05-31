@@ -1,35 +1,30 @@
 {
   "date": "2026-05-31",
   "big_problem": "Bureau Trade Finder screenshots look like a draft — no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
-  "epic": "League L5 — Bureau Trade Finder GTM export (atom 2/3)",
-  "slice_title": "Trade Finder OG — snapshot param for in-panel export rows",
-  "atom_id": "league-trade-finder-og-snapshot",
+  "epic": "League L5 — Bureau Trade Finder GTM export",
+  "slice_title": "Trade Finder OG — Bones Room ask link on hero deal",
+  "atom_id": "league-trade-finder-room-hallway",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "acceptance_ref": "FACTORY-DOD Gate C + HALLWAY",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-trade-finder-og-snapshot.ts",
     "apps/web/app/og/trade-finder/route.tsx",
-    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
-    "apps/web/components/league/BureauTradeFinder.tsx",
-    "apps/api/tests/test_trade_finder_og_snapshot.py"
+    "apps/api/tests/test_trade_finder_og_room_hallway.py"
   ],
-  "max_files": 5,
-  "max_lines": 220,
+  "max_files": 2,
+  "max_lines": 60,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_trade_finder_og_snapshot.py apps/api/tests/test_trade_finder_og_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-trade-finder.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/trade-finder?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_trade_finder_og_room_hallway.py apps/api/tests/test_trade_finder_og_snapshot.py apps/api/tests/test_trade_finder_og_watermark.py -q --noconftest",
+    "curl -s -o /tmp/og-tf-room.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/trade-finder?download=1'"
   ],
-  "out_of_scope": ["Room hallway atom", "API schema changes", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": ["Trade Finder API", "new snapshot fields"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "status": "shipped",
-  "content_commit": "19a1af0e9"
+  }
 }
