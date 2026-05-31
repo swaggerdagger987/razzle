@@ -9,3 +9,6 @@ lab_l4_pro_gate_error_epic: complete
 explore_l5_universe_export_epic: complete
 room_l5_briefing_gtm_epic: complete
 lab_l5_og_hallway_epic: active
+explore_l5_og_query_epic: complete
+lab_l5_empty_og_epic: active
+league_l5_h2h_epic: complete

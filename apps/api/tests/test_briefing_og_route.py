@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+BRIEFING_OG_GATE_C_PARAMS = "download=1"
+
 
 def _repo_root() -> Path:
     return Path(__file__).resolve().parents[3]
@@ -21,3 +23,21 @@ def test_briefing_card_export_link():
     text = path.read_text(encoding="utf-8")
     assert "/og/briefing" in text
     assert "export card" in text
+
+
+def test_briefing_og_terracotta_watermark_band():
+    """Briefing OG must include terracotta watermark band — matches Explore/Lab/H2H exports."""
+    text = (_repo_root() / "apps/web/app/og/briefing/route.tsx").read_text(encoding="utf-8")
+    assert 'background: "#d97757"' in text
+    assert "made with 🐯 razzle.lol" in text
+    assert "razzle.lol/room" in text
+
+
+def test_briefing_og_room_hallway_link():
+    text = (_repo_root() / "apps/web/app/og/briefing/route.tsx").read_text(encoding="utf-8")
+    assert "toRoom" in text
+    assert "continue in the Room" in text
+
+
+def test_briefing_og_gate_c_fixture_params_documented():
+    assert "download=1" in BRIEFING_OG_GATE_C_PARAMS
