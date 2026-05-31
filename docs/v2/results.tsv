@@ -107,3 +107,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 148	c311a15a8	depth+voice+simplicity	keep	Lab	L5 gamelog default player in OG toLab band	trust=T5,T6; pytest 3; curl gamelog 62232B; hallway epic 2/3
 149	11525e22c	depth+voice+simplicity	keep	Lab	Rankings empty filter export sample card	trust=T5,T6; RANKINGS_SAMPLE_OG_ROWS; curl 49412B; empty OG epic 3/3 done
 150	088cebc07	depth+voice+simplicity	keep	Lab	L5 weekly empty board OG sample export card	trust=T5,T6; pytest 5; curl weekly 65110B; empty OG epic weekly atom
+151	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 snapshot OG preserves player in toLab watermark	trust=T5,T6; pytest 5; curl gamelog snap 52932B; hallway epic 3/3
