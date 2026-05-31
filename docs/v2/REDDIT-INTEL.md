@@ -319,3 +319,10 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Razzle slice:** Lab L5 atom 2 — launch-10 OG demo rows with FPTS/Score/Rank/Peak Age/Chg stat headers per panel slug.
 - **Council cycle:** 59
 - **Screenshot potential:** Weekly heatmap + prospect big board cards now match in-product column semantics on preview hosts
+
+## 2026-05-31 — Waiver archetype board (cycle 88)
+
+- **Pattern:** Pre-waiver threads ask who will block FAAB targets — users want manager behavioral tags, not raw transaction counts.
+- **Razzle slice:** Bureau L5 atom 1 — Hawkeye Waiver Tendencies tab with archetype stickers (Streamer/Hoarder/Opportunist).
+- **Council cycle:** 88
+- **Screenshot potential:** League-pulse summary + per-manager archetype cards before Sunday waiver runs.
