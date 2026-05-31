@@ -1,31 +1,25 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Explore screener loading still reads generic — NFL universe should hear Razzle's voice like college hears Hawkeye.",
+  "epic_title": "Explore L2 — agent-owned loading copy on screener",
+  "parity_ref": "Explore L2 — college toggle + agent connective tissue",
+  "depth_ref": "Explore L2",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
-      "status": "done",
-      "merge_commit": "5721ee33"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
-      "status": "pending",
+      "id": "explore-nfl-razzle-loading",
+      "title": "NFL screener loading — Razzle loadingCopyForAgent",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
+      "id": "explore-table-empty-razzle",
+      "title": "Empty screener state — Razzle voice when zero rows",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
-  "created_at": "2026-05-31T09:25:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
+  "next_atom_id": "explore-nfl-razzle-loading",
+  "created_at": "2026-05-31T09:30:00Z",
+  "updated_at": "2026-05-31T09:30:00Z",
   "completed_epics": []
 }
