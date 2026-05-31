@@ -1,19 +1,38 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG watermarks must mirror in-card scope (position defaults) so exports click back correctly.",
-  "epic_title": "Lab L5 — OG hallway position defaults",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "epic_status": "active",
+  "big_problem": "Launch-10 Lab panels with zero API rows still cannot export a screenshot-worthy OG card from the empty state.",
+  "epic_title": "Lab L5 — Launch-10 empty-board OG exports",
+  "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-tolab-weekly-position",
-      "title": "weekly OG watermark includes default WR position in toLab",
-      "status": "done",
-      "merge_commit": "9be64d109"
+      "id": "lab-breakouts-empty-export",
+      "title": "Breakouts empty board exports sample OG card",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-buysell-empty-export",
+      "title": "Buy/sell empty lanes export sample OG card",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-dashboard-empty-export",
+      "title": "Dashboard empty risers export sample OG card",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:26:34Z",
-  "updated_at": "2026-05-31T11:32:00Z",
-  "completed_epics": []
+  "next_atom_id": "lab-breakouts-empty-export",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-hallway-position-defaults",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-weekly-position",
+      "merge_commit": "9be64d109"
+    }
+  ]
 }
