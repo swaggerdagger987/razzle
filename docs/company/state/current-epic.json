@@ -14,7 +14,7 @@
     {
       "id": "league-waiver-tendencies-tab",
       "title": "Waiver Tendencies tab unhidden with transaction pattern renderer",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
