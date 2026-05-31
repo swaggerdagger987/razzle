@@ -287,7 +287,9 @@ export async function GET(req: Request) {
         </div>
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>
           {isDemo
-            ? `${subtitle} · SAMPLE rows — not live nflverse`
+            ? `${subtitle} · SAMPLE rows — ${
+                universe === "college" ? "campus stats preview" : "not live nflverse"
+              }`
             : subtitle}
         </div>
 
@@ -371,6 +373,7 @@ export async function GET(req: Request) {
           <div style={{ display: "flex", fontWeight: 700 }}>{exploreLink}</div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             made with 🐯 razzle.lol
+            {isDemo ? " · sample" : ""}
             {isDownload ? " · export" : ""}
           </div>
         </div>

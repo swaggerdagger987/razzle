@@ -1,37 +1,29 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-l4-pro-gate-error-dynasty-comps",
-  "big_problem": "Lab Pro gates still drift — DynastyComps is the last renderer with duplicated 402 ProUpgradeGate branches.",
-  "epic": "Lab L4 — shared pro-gate error surface (close-out)",
-  "slice_title": "DynastyComps ProGateFromPanelError — final L4 renderer",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "Lab L4 pro gates feel like upgrade not error",
-  "trust_pillars": [
-    "T2",
-    "T6"
-  ],
+  "atom_id": "explore-og-college-gate-c",
+  "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
+  "epic": "Explore L5 — universe-aware share exports",
+  "slice_title": "College explore OG campus SAMPLE copy + Gate C pytest",
+  "parity_ref": "Explore L5 — share card matches screener universe",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DynastyCompsRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_college_gate_c.py"
   ],
   "max_files": 2,
-  "max_lines": 40,
+  "max_lines": 120,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web 2>&1 | tail -5",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py -q"
+    "pytest apps/api/tests/test_explore_og_college_gate_c.py -q",
+    "npm run build --workspace=apps/web 2>&1 | tail -8"
   ],
-  "out_of_scope": [
-    "billing",
-    "new panels",
-    "OG routes"
-  ],
+  "out_of_scope": ["ExploreShareButton", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
-  },
-  "status": "shipped"
+  }
 }

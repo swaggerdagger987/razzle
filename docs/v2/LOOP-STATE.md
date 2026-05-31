@@ -1,10 +1,8 @@
-cycle: 137
+cycle: 135
 last_board_cycle: 54
-focus_pillar: Lab
-focus_layer: L4
+focus_pillar: Explore
+focus_layer: L5
 next_slice: explore-og-nfl-universe-default
-last_keep_cycle: 137
-last_commit: a3f07d1e5
-lab_l4_pro_gate_error_epic: complete
-explore_l5_universe_export_epic: active
-room_l5_briefing_gtm_export_epic: active
+last_keep_cycle: 135
+last_commit: da33eafd
+explore_l5_universe_epic: atom 2/3 done; next nfl-universe-default
