@@ -28,6 +28,17 @@ def test_gamelog_empty_state_passes_snapshot_to_export_link():
     assert "snapshotRows={sampleOgSnapshotRows.length ? sampleOgSnapshotRows : undefined}" in renderer
 
 
+def test_prospects_empty_board_exports_sample_card():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "PROSPECTS_SAMPLE_OG_ROWS" in renderer
+    assert 'label="export sample card"' in renderer
+    assert "snapshotRows={PROSPECTS_SAMPLE_OG_ROWS}" in renderer
+    assert "!prospects.length" in renderer
+
+
 def test_weekly_empty_board_exports_sample_card():
     renderer = (
         Path(__file__).resolve().parents[3]
