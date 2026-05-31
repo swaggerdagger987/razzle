@@ -37,4 +37,4 @@ new evidence.
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Build Profiles unhide atom 1/3 | da33eafd | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
 2026-05-31 | Lab OG snapshot atom 1/3 | 70af534a | SHIP | keep | export card matches filtered bar chart for Reddit screenshots
-2026-05-31 | Lab OG position atom 2/3 | e54e26b2 | SHIP | keep | prospects dedup on base; tradevalues+efficiency position param
+2026-05-31 | Lab OG position atom 2/3 | b4c6bba9 | SHIP | keep | prospects dedup on base; tradevalues+efficiency position param

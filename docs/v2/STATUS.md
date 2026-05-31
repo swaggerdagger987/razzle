@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | Lab OG position on buy/sell (epic atom 3/3) |
-| Last commit | `da33eafd` |
+| Last commit | `b4c6bba9` |
 
 Recent completions (cycle 96): Trade values + efficiency OG export pass in-panel `position`; prospects dedup on base.
 
