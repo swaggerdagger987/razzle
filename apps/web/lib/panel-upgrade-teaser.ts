@@ -96,6 +96,11 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Bijan Robinson", position: "RB", detail: "Comp: Jonathan Taylor · 91%" },
     { name: "Marvin Harrison Jr.", position: "WR", detail: "Comp: Mike Evans · 88%" },
   ],
+  percentiles: [
+    { name: "Ja'Marr Chase", position: "WR", detail: "P99 target share · WR1 band" },
+    { name: "Bijan Robinson", position: "RB", detail: "P95 rush share · bellcow" },
+    { name: "Brock Bowers", position: "TE", detail: "P92 route rate · elite TE" },
+  ],
   weekly: [
     { name: "Tyreek Hill", position: "WR", detail: "Wk 12 · 31.4 pts · hot cell" },
     { name: "Amon-Ra St. Brown", position: "WR", detail: "Wk 11 · 28.2 pts" },
@@ -126,6 +131,8 @@ const PITCH_BY_SLUG: Record<string, string> = {
   stocks: "rising and falling dynasty assets before your league reacts",
   waivers: "waiver-wire risers ranked by recent production and role",
   "dynasty-comps": "statistical comps for any dynasty asset you're pricing",
+  percentiles:
+    "percentile bands across usage, efficiency, and age — see where your guy actually sits",
   weekly: "weekly heatmap streaks before your league mates spot the run",
   prospects: "rookie big board with combine and college context",
   dashboard: "dynasty pulse — risers, fallers, and value picks in one view",
