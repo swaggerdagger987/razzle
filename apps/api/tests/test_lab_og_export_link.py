@@ -18,6 +18,16 @@ def test_player_scoped_slugs_default_player_id_in_export_url():
     assert '"gamelog"' in source and '"dynasty-comps"' in source
 
 
+def test_efficiency_empty_state_export_sample_card():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/EfficiencyRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "!efficient.length && !volume.length" in renderer
+    assert 'slug="efficiency"' in renderer
+    assert 'label="export sample card"' in renderer
+
+
 def test_gamelog_empty_state_passes_snapshot_to_export_link():
     renderer = (
         Path(__file__).resolve().parents[3]
