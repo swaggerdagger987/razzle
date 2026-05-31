@@ -1,4 +1,4 @@
-"""Launch-10 + generic pro gate teaser coverage (Lab L4)."""
+"""Launch-10 + generic pro gate teaser coverage (Lab L4 pro gates)."""
 
 from __future__ import annotations
 
