@@ -1,8 +1,10 @@
-cycle: 97
+cycle: 98
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L4
 next_slice: lab-pro-gate-dashboard-teaser
-last_keep_cycle: 97
-last_commit: da33eafd
+last_keep_cycle: 98
+last_commit: ce0fb94e
 lab_l4_staff_picks_by_agent: complete
+league_l5_bureau_og_snapshot_epic: active
+league_l5_power_rankings_og_snapshot: shipped
