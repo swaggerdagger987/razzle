@@ -1,10 +1,10 @@
-cycle: 77
+cycle: 79
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: bureau-h2h-export-or-next-parity
-last_keep_cycle: 77
-last_commit: da33eafd
+next_slice: league-power-rankings-og
+last_keep_cycle: 79
+last_commit: 6e98f4a2
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete

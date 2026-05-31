@@ -5,8 +5,9 @@ import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Route } from "next";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getSleeperUser } from "@/lib/sleeper";
+import { BureauMonteCarloShareBar } from "./BureauMonteCarloShareBar";
 import { BureauRowsTable } from "./BureauRowsTable";
 
 interface Props {
@@ -31,19 +32,7 @@ function barColor(pct: number): string {
 export function BureauMonteCarlo({ data, leagueId }: Props) {
   const octo = AGENT_BY_ID.octo;
   const searchParams = useSearchParams();
-  const [copied, setCopied] = useState(false);
   const [scenario, setScenario] = useState<Record<string, unknown> | null>(null);
-
-  const copyMonteCarloLink = useCallback(async () => {
-    if (typeof window === "undefined") return;
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  }, []);
   const giveId = searchParams.get("give");
   const getId = searchParams.get("get");
   const partnerRoster = searchParams.get("partner");
@@ -277,37 +266,33 @@ export function BureauMonteCarlo({ data, leagueId }: Props) {
       )}
 
       {top && (
-        <div className="flex flex-wrap items-center gap-3">
-          <Link
-            href={
-              toRoom({
-                agentId: "octo",
-                question: `${top.manager} leads at ${top.championship_pct}% title / ${top.playoff_pct ?? 0}% playoff odds — what moves the needle?`,
-              }) as Route
-            }
-            className="btn-chunky w-fit text-sm"
-          >
-            ask {octo.name} in film room →
-          </Link>
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href={
+                toRoom({
+                  agentId: "octo",
+                  question: `${top.manager} leads at ${top.championship_pct}% title / ${top.playoff_pct ?? 0}% playoff odds — what moves the needle?`,
+                }) as Route
+              }
+              className="btn-chunky w-fit text-sm"
+            >
+              ask {octo.name} in film room →
+            </Link>
+          </div>
           {(() => {
             const user = getSleeperUser();
             if (!user?.user_id) return null;
+            const scenarioParts: string[] = [];
+            if (giveId) scenarioParts.push(`give=${encodeURIComponent(giveId)}`);
+            if (getId) scenarioParts.push(`get=${encodeURIComponent(getId)}`);
+            if (partnerRoster) scenarioParts.push(`partner=${encodeURIComponent(partnerRoster)}`);
             return (
-              <>
-                <button type="button" className="btn-chunky text-xs" onClick={() => void copyMonteCarloLink()}>
-                  {copied ? "copied!" : "copy link"}
-                </button>
-                <a
-                  href={`/og/monte-carlo?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                    user.user_id,
-                  )}&download=1`}
-                  download="razzle-monte-carlo.png"
-                  className="btn-chunky active text-xs"
-                  style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-                >
-                  export card
-                </a>
-              </>
+              <BureauMonteCarloShareBar
+                leagueId={leagueId}
+                userId={user.user_id}
+                scenarioQuery={scenarioParts.length ? scenarioParts.join("&") : undefined}
+              />
             );
           })()}
         </div>
