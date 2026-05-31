@@ -24,13 +24,9 @@ async function fetchScreenerData(params: {
   dir: string;
   q: string;
   pos: string;
-<<<<<<< HEAD
-}): Promise<{ players: OgPlayer[]; items: Record<string, unknown>[] }> {
-=======
   season: number;
   teams: string[];
-}): Promise<OgPlayer[]> {
->>>>>>> origin/razzle-v2-redesign
+}): Promise<{ players: OgPlayer[]; items: Record<string, unknown>[] }> {
   const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
   let sortKey = params.sort;
   if (params.universe === "college" && sortKey === "fantasy_points_ppr") {
@@ -145,13 +141,17 @@ export async function GET(req: Request) {
   if (teams.length) bandParams.set("team", teams.join(","));
   const exploreLink = `razzle.lol/explore?${bandParams.toString()}`;
 
-<<<<<<< HEAD
-  const { players, items } = await fetchScreenerData({ universe, sort, dir, q, pos });
+  const { players, items } = await fetchScreenerData({
+    universe,
+    sort,
+    dir,
+    q,
+    pos,
+    season,
+    teams,
+  });
   const collegeStaffNote =
     universe === "college" && players.length > 0 ? firstCollegeStaffNote(items) : null;
-=======
-  const players = await fetchTopPlayers({ universe, sort, dir, q, pos, season, teams });
->>>>>>> origin/razzle-v2-redesign
 
   return new ImageResponse(
     (
