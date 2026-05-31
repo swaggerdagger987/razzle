@@ -4,8 +4,16 @@ import { toExplore, toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
-import { proUpgradePerkLines, teaserRowsForPanel, upgradePitchForPanel } from "@/lib/panel-upgrade-teaser";
+import {
+  proUpgradePerkLines,
+  teaserRowsForPanel,
+  teaserRowsToOgSnapshot,
+  upgradePitchForPanel,
+} from "@/lib/panel-upgrade-teaser";
+import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink } from "./LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "./PanelAgentHeader";
+
+const PLAYER_SCOPED_OG_SLUGS = new Set(["gamelog", "dynasty-comps"]);
 
 interface Props {
   panelSlug: string;
@@ -26,6 +34,8 @@ export function ProUpgradeGate({
   const pitch = upgradePitchForPanel(panelSlug, agent.name);
   const rows = teaserRowsForPanel(panelSlug);
   const perks = proUpgradePerkLines();
+  const ogSnapshot = teaserRowsToOgSnapshot(panelSlug);
+  const ogPlayerId = PLAYER_SCOPED_OG_SLUGS.has(panelSlug) ? DEFAULT_LAB_OG_PLAYER_ID : undefined;
   const roomQuestion = `What should I know about ${panelTitle.toLowerCase()} for my dynasty roster?`;
 
   return (
@@ -79,6 +89,15 @@ export function ProUpgradeGate({
           </Link>
         </div>
         <p className="mt-3 text-xs text-ink-light">dev? flip plan in the toolbar ↑</p>
+        <p className="mt-4">
+          <LabOgExportLink
+            slug={panelSlug}
+            downloadName={`razzle-${panelSlug}-sample.png`}
+            label="export sample card →"
+            playerId={ogPlayerId}
+            snapshotRows={ogSnapshot}
+          />
+        </p>
         <ul className="pro-upgrade-perks mt-6 text-left text-sm text-ink-medium">
           {perks.map((line) => (
             <li key={line}>{line}</li>

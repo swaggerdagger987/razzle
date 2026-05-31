@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 132 — Lab L5 FROM PANEL snapshot sticker evidence; trust-sticker epic 2/3)
+**Last updated:** 2026-05-31 (factory cycle 134 — Lab L4 pro gate OG sample export; PR 1000)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 132 |
+| Cycle | 134 |
 | Last board | 54 |
 | Focus pillar | Lab |
-| Focus layer | L5 |
-| Next slice | lab-og-from-panel-sticker-gamelog (trust-sticker epic 3/3) |
-| Last commit | `164159413` |
+| Focus layer | L4 |
+| Next slice | lab-l4-pro-gate-error-tradevalues |
+| Last commit | `1bed81fb` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
