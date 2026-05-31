@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 152 — Lab OG Launch-10 demo blurbs)
+**Last updated:** 2026-05-31 (factory cycle 154 — League Pressure Map OG Bones Room hallway)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 152 |
+| Cycle | 154 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | lab-og-tolab-snapshot-player |
-| Last commit | `3705fdce8` |
+| Next slice | Manager Profiles OG Atlas Room hallway (epic atom 2/3) |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
