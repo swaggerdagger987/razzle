@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Explore |
 | Focus layer | L5 |
 | Next slice | explore-og-margin-note-college-lead (margin epic 3/4) |
-| Last commit | `f6e0985f3` |
+| Last commit | `7793850a9` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
