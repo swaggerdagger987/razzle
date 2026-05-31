@@ -1,26 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-slug-snapshot",
+  "atom_id": "lab-dashboard-og-top5-fallback",
   "big_problem": "Lab dashboard export still points at dynasty-comps OG when generic dashboard renderers load pulse data.",
   "epic": "Lab L5 — Dashboard OG cards match in-panel movers",
-  "slice_title": "DashboardRenderer export uses /og/dashboard with riser/faller snapshot rows",
+  "slice_title": "OG snapshot falls back to top5 when no risers/fallers",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/dashboard PNG ≥40KB with snapshot",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/dashboard PNG ≥40KB with snapshot or live top5",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
+    "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx",
+    "apps/web/app/og/[panel]/route.tsx"
   ],
-  "max_files": 1,
-  "max_lines": 80,
+  "max_files": 2,
+  "max_lines": 60,
   "acceptance_commands": [
     "JWT_SECRET=test pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
-    "npm run start --workspace=apps/web & sleep 8 && curl -s -o /tmp/og-dash.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1' && file /tmp/og-dash.png && kill %1 2>/dev/null || true"
+    "npm run start --workspace=apps/web & sleep 8 && curl -s -o /tmp/og-dash-top5.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1' && file /tmp/og-dash-top5.png && kill %1 2>/dev/null || true"
   ],
   "out_of_scope": [
-    "DynastyDashboardRenderer changes",
-    "OG route changes",
+    "New shared package helpers",
+    "Dynasty-comps OG",
     "NORTH_STAR / DESIGN edits"
   ],
   "builder_mode": "composer-surgical"

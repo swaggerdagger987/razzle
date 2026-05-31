@@ -116,14 +116,24 @@ export function DynastyDashboardRenderer({ panel }: Props) {
   const topRiser = q.data?.risers?.[0];
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     const movers = [...(q.data?.risers ?? []), ...(q.data?.fallers ?? [])];
-    return movers.slice(0, 6).map((p) => ({
+    if (movers.length > 0) {
+      return movers.slice(0, 6).map((p) => ({
+        name: p.full_name,
+        position: p.position,
+        team: p.team,
+        stat: p.rank_diff ?? 0,
+        statLabel: "Chg",
+      }));
+    }
+    return (q.data?.top5 ?? []).slice(0, 6).map((p) => ({
       name: p.full_name,
       position: p.position,
       team: p.team,
-      stat: p.rank_diff ?? 0,
-      statLabel: "Chg",
+      stat: p.ppg ?? 0,
+      statLabel: "PPG",
     }));
-  }, [q.data?.risers, q.data?.fallers]);
+  }, [q.data?.risers, q.data?.fallers, q.data?.top5]);
+  const hasOgExportRows = ogSnapshotRows.length > 0;
   const maxDropoff = useMemo(() => {
     const rows = q.data?.position_scarcity ?? {};
     return Math.max(0, ...Object.values(rows).map((s) => s.dropoff ?? 0));
@@ -317,20 +327,22 @@ export function DynastyDashboardRenderer({ panel }: Props) {
         </section>
       )}
 
-      {topRiser && (
+      {hasOgExportRows && (
         <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
-          <Link
-            href={
-              toRoom({
-                agentId: "razzle",
-                panelSlug: "dashboard",
-                question: `${topRiser.full_name} is a rising stock (+${topRiser.rank_diff} rank diff) at ${topRiser.trade_value} dynasty value — buy window or noise?`,
-              }) as Route
-            }
-            className="text-sm text-orange underline"
-          >
-            Ask Razzle about {topRiser.full_name} (rising stock) →
-          </Link>
+          {topRiser && (
+            <Link
+              href={
+                toRoom({
+                  agentId: "razzle",
+                  panelSlug: "dashboard",
+                  question: `${topRiser.full_name} is a rising stock (+${topRiser.rank_diff} rank diff) at ${topRiser.trade_value} dynasty value — buy window or noise?`,
+                }) as Route
+              }
+              className="text-sm text-orange underline"
+            >
+              Ask Razzle about {topRiser.full_name} (rising stock) →
+            </Link>
+          )}
           <LabOgExportLink
             slug="dashboard"
             downloadName="razzle-dashboard.png"

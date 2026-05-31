@@ -14,7 +14,7 @@
     {
       "id": "lab-dashboard-og-top5-fallback",
       "title": "OG snapshot falls back to top5 when no risers/fallers",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],

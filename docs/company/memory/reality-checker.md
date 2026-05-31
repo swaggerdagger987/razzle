@@ -16,6 +16,7 @@ explicit checks in the verification routine.
 
 ## Entries
 
+2026-05-31 | Dashboard OG top5 fallback Gate C | curl /og/dashboard 200 60034B | PASS | keep | evidence/2026-05-31-lab-dashboard-og-top5-fallback.md
 2026-05-31 | Dashboard OG slug Gate C | curl /og/dashboard 200 60034B | PASS | keep | evidence/2026-05-31-lab-dashboard-og-slug-snapshot.md
 
 2026-05-31 | Dashboard comps OG Gate C | c9151786 | PASS | curl dynasty-comps 65961B PNG | keep | evidence/2026-05-31-lab-dashboard-og-snapshot.md
