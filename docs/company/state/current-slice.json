@@ -1,33 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Launch-10 Lab OG cards for weekly, prospects, and breakouts still mis-rank live API rows — Reddit screenshots disagree with in-product heatmaps and big boards.",
-  "epic": "Lab L5 — launch-10 OG live extract matches renderers",
-  "slice_title": "Weekly hot-week + prospects RPS + breakouts RBS live OG extract",
-  "atom_id": "lab-og-weekly-prospects-breakouts-live-extract",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "big_problem": "Lab OG live fetch still ranks weekly heatmap by season PPG while in-panel highlights spike weeks — share cards without snapshot disagree with the heatmap users screenshot.",
+  "epic": "Lab L5 — OG live fetch mirrors in-product row logic",
+  "slice_title": "Prospects OG live fetch ranks by RPS with #rank labels",
+  "atom_id": "lab-og-prospects-live-tiers",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "ACCEPTANCE Gate 6 — Share / OG export cards",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 120,
+  "max_lines": 25,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1'",
-    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?position=WR&download=1'",
-    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?position=WR&download=1'"
+    "curl -s -o /tmp/og-prospects-wr.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/prospects?position=WR&download=1'"
   ],
   "out_of_scope": [
-    "gamelog player-scoped weeks",
-    "NORTH_STAR/DESIGN/DECISIONS edits",
-    "new npm deps"
+    "Weekly/breakouts extracts (already on base)",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
+    "builder": "SHIP"
   }
 }

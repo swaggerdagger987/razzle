@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 116 prospects #rank OG | da33eafd | Workday open; live-fetch epic closes.
+
 2026-05-31 | Factory cycle 115 H2H OG watermark band | 44d05684 | Watermark epic 2/2 complete; curl H2H 67846B.
 
 2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
