@@ -174,18 +174,27 @@ export function BuySellRenderer({ panel }: Props) {
   const topSell = sellHigh[0] ?? null;
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    const statLabel = formula?.name ?? "Grade";
-    const toRow = (p: Candidate): OgSnapshotRow => ({
+    const statFor = (p: Candidate) =>
+      formula && p.formula_score != null
+        ? p.formula_score
+        : Number(p.efficiency_pct ?? p.dynasty_rank_pct ?? 0);
+    const buyLabel = formula ? `Buy · ${formula.name}` : "Buy";
+    const sellLabel = formula ? `Sell · ${formula.name}` : "Sell";
+    const buyRows = buyLow.slice(0, 3).map((p) => ({
       name: p.name,
       position: p.position,
       team: p.team,
-      stat:
-        formula && p.formula_score != null
-          ? p.formula_score
-          : Number(p.efficiency_pct ?? p.dynasty_rank_pct ?? 0),
-      statLabel,
-    });
-    return [...buyLow.slice(0, 3), ...sellHigh.slice(0, 3)].slice(0, 6).map(toRow);
+      stat: statFor(p),
+      statLabel: buyLabel,
+    }));
+    const sellRows = sellHigh.slice(0, 3).map((p) => ({
+      name: p.name,
+      position: p.position,
+      team: p.team,
+      stat: statFor(p),
+      statLabel: sellLabel,
+    }));
+    return [...buyRows, ...sellRows].slice(0, 6);
   }, [buyLow, sellHigh, formula]);
 
   const open = (p: Candidate) =>
