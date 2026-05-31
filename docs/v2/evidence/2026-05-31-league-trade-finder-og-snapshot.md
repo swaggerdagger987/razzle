@@ -27,3 +27,4 @@ curl -s -o /tmp/og-tf-snap.png -w '%{http_code} %{size_download}\n' \
 
 - `BureauTradeFinderShareBar` encodes in-panel matches via `encodeBureauTradeFinderOgSnapshot`.
 - OG route shows `EXPORTED · panel trade rows` sticker when snapshot param present.
+- Cycle 146 dedup: content already on `razzle-v2-redesign` at `19a1af0e9`.
