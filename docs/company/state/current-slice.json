@@ -1,31 +1,19 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau rivalry OG cards must label live league data vs sample previews honestly and match the in-product H2H matchup users export (NEXT.md Bureau H2H; PARITY League L5).",
-  "epic": "League L5 — Bureau H2H export parity",
-  "atom_id": "bureau-h2h-snapshot-export",
-  "slice_title": "H2H export encodes in-product you/them/position bars in OG snapshot param",
-  "parity_ref": "PARITY League L5 — hidden Bureau renderers or watermarked export",
+  "atom_id": "bureau-monte-carlo-copy-link",
+  "slice_title": "Monte Carlo copy link beside export card (dedup)",
+  "big_problem": "Bureau rivalry screens must travel in group chats like Explore.",
+  "epic": "League L5 — Bureau share row parity",
+  "parity_ref": "League L5 — Bureau H2H export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/head-to-head PNG ≥40KB; export href includes snapshot when panel has rows",
-  "trust_pillars": ["T1", "T5", "T6"],
-  "allowed_paths": [
-    "apps/web/lib/bureau-h2h-og-snapshot.ts",
-    "apps/web/components/league/BureauH2HShareBar.tsx",
-    "apps/web/components/league/BureauHeadToHead.tsx"
-  ],
-  "max_files": 3,
-  "max_lines": 120,
+  "acceptance_ref": "FACTORY-DOD Gate C dedup",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [],
+  "max_files": 0,
+  "max_lines": 0,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-h2h.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/head-to-head?download=1'"
+    "git show origin/razzle-v2-redesign:apps/web/components/league/BureauMonteCarloShareBar.tsx"
   ],
-  "out_of_scope": [
-    "OG route snapshot decode (atom bureau-h2h-og-snapshot-decode)",
-    "BureauHeadToHead layout changes",
-    "NORTH_STAR / DESIGN edits"
-  ],
-  "builder_mode": "composer-surgical",
-  "verdict": "SHIP",
-  "content_commit": "6c8da85f"
+  "out_of_scope": ["Duplicate implementation"],
+  "builder_mode": "dedup"
 }
