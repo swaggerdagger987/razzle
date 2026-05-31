@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 154 — Lab efficiency OG toLab RB position)
+**Last updated:** 2026-05-31 (factory cycle 155 — Explore screener Razzle loading copy)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 154 |
+| Cycle | 155 |
 | Last board | 54 |
-| Focus pillar | Lab |
-| Focus layer | L5 |
-| Next slice | position-default hallway atom 3 or Bureau per PARITY |
-| Last commit | `8327741` |
+| Focus pillar | Explore |
+| Focus layer | L2 |
+| Next slice | explore-screener-error-razzle |
+| Last commit | `6afecf078` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
