@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 133 — Lab L4 pro gate OG sample export)
+**Last updated:** 2026-05-31 (factory cycle 134 — Lab L4 pro gate OG sample export)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 133 |
+| Cycle | 134 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L4 |
 | Next slice | lab-l4-pro-gate-error-tradevalues |
-| Last commit | `1025abd5` |
+| Last commit | `1bed81fb` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
