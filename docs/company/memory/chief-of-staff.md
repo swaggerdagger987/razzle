@@ -1,6 +1,8 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Chief of Staff
 
+2026-05-31 | cycle 149 | SHIP | Factory cycle 1 atom 3/3 closes Trade Finder GTM epic; gh rate limit NO_LOCK.
+
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Factory cycle 2; hallway epic atom 2/3.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | SHIP | Trade Finder snapshot atom 2/3.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | buy/sell formula OG parity.
