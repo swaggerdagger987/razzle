@@ -9,7 +9,7 @@
       "id": "lab-og-tolab-snapshot-rankings-top-row",
       "title": "Rankings export passes top-row player_id into OG URL",
       "status": "done",
-      "merge_commit": "PENDING"
+      "merge_commit": "13a5640ce"
     },
     {
       "id": "lab-og-tolab-snapshot-weekly-player",
