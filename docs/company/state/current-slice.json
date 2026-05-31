@@ -20,6 +20,6 @@
   ],
   "out_of_scope": [],
   "builder_mode": "composer-surgical",
-  "content_commit": null,
+  "content_commit": "c9a23999",
   "verdict": "SHIP"
 }
