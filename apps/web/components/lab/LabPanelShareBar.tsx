@@ -15,6 +15,8 @@ export interface LabPanelShareBarProps {
   snapshotRows?: OgSnapshotRow[];
   position?: string;
   playerId?: string;
+  /** Display name for OG toLab watermark on player-scoped panels (e.g. gamelog). */
+  playerName?: string;
   copyLabel?: string;
 }
 
@@ -25,6 +27,7 @@ export function LabPanelShareBar({
   snapshotRows,
   position,
   playerId,
+  playerName,
   copyLabel = "copy panel link",
 }: LabPanelShareBarProps) {
   const [copied, setCopied] = useState(false);
@@ -42,11 +45,12 @@ export function LabPanelShareBar({
     const resolvedPlayerId =
       playerId?.trim() || (isPlayerScoped ? DEFAULT_LAB_OG_PLAYER_ID : undefined);
     if (resolvedPlayerId) params.set("player_id", resolvedPlayerId);
+    if (playerName?.trim()) params.set("name", playerName.trim());
     if (position) params.set("position", position);
     const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows) : undefined;
     if (snapshot) params.set("snapshot", snapshot);
     return params;
-  }, [slug, snapshotRows, position, playerId]);
+  }, [slug, snapshotRows, position, playerId, playerName]);
 
   const previewPath = `/og/${slug}?${ogParams.toString()}`;
   const exportParams = new URLSearchParams(ogParams);
