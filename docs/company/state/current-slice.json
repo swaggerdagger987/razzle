@@ -1,0 +1,27 @@
+{
+  "date": "2026-05-31",
+  "big_problem": "Bureau playoff odds need screenshot-worthy share cards like Explore and H2H so league managers post Razzle sims on Reddit.",
+  "epic": "League L5 — Bureau watermarked OG exports",
+  "slice_title": "Monte Carlo OG card + Bureau export button",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "ACCEPTANCE Gate 6 — OG export cards",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/app/og/monte-carlo/route.tsx",
+    "apps/web/components/league/BureauMonteCarlo.tsx"
+  ],
+  "max_files": 2,
+  "max_lines": 300,
+  "acceptance_commands": [
+    "JWT_SECRET=test .venv-v2/bin/pytest apps/api/tests -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/mc-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/monte-carlo?download=1'"
+  ],
+  "out_of_scope": [
+    "New Bureau tabs",
+    "API schema changes",
+    "Trade Finder / Pressure Map OG (next atoms)"
+  ],
+  "builder_mode": "composer-surgical"
+}

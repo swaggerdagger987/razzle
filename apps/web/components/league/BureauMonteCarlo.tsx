@@ -265,17 +265,35 @@ export function BureauMonteCarlo({ data, leagueId }: Props) {
       )}
 
       {top && (
-        <Link
-          href={
-            toRoom({
-              agentId: "octo",
-              question: `${top.manager} leads at ${top.championship_pct}% title / ${top.playoff_pct ?? 0}% playoff odds — what moves the needle?`,
-            }) as Route
-          }
-          className="btn-chunky w-fit text-sm"
-        >
-          ask {octo.name} in film room →
-        </Link>
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href={
+              toRoom({
+                agentId: "octo",
+                question: `${top.manager} leads at ${top.championship_pct}% title / ${top.playoff_pct ?? 0}% playoff odds — what moves the needle?`,
+              }) as Route
+            }
+            className="btn-chunky w-fit text-sm"
+          >
+            ask {octo.name} in film room →
+          </Link>
+          {(() => {
+            const user = getSleeperUser();
+            if (!user?.user_id) return null;
+            return (
+              <a
+                href={`/og/monte-carlo?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
+                  user.user_id,
+                )}&download=1`}
+                download="razzle-monte-carlo.png"
+                className="btn-chunky active text-xs"
+                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+              >
+                export card
+              </a>
+            );
+          })()}
+        </div>
       )}
 
       {rows && rows.length > 0 && (

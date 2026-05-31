@@ -247,3 +247,10 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:** 55
 - **Screenshot potential:** RB-only FPTS card droppable in r/DynastyFF trade/value threads — data-first, not SaaS promo
 - **Bot-fact potential:** `!razzle confirm top RB PPR FPTS` — future intel layer
+
+## 2026-05-31 — Cycle 58
+
+### r/DynastyFF — playoff odds screenshot posts (pattern)
+- **Pattern:** Managers share "who wins my league" sim cards before playoffs; comment threads want the tool name when odds look league-specific.
+- **Razzle move:** Monte Carlo OG card mirrors in-product top-3 title/playoff bars + Octo badge; export from Bureau tab.
+- **Council cycle:** 58
