@@ -14,8 +14,8 @@
     {
       "id": "lab-og-export-link-rankings-breakouts",
       "title": "LabOgExportLink on dynasty-rankings and breakouts renderers",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "32d682ab"
     },
     {
       "id": "lab-og-export-link-prospects-weekly-tradevalues",
