@@ -15,11 +15,11 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 56 |
+| Cycle | 88 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | Bureau H2H export or Lab panel OG live data rows |
+| Next slice | lab-og-prospects-snapshot-rows |
 | Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.

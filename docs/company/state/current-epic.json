@@ -1,43 +1,37 @@
 {
   "epic_status": "active",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau behavioral share parity",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "big_problem": "Lab OG export cards must show the same rows the user sees in-panel — not generic demo fallbacks.",
+  "epic_title": "Lab L5 — OG export matches in-panel rows",
+  "parity_ref": "Explore L5 / Lab L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-manager-profiles-copy-link",
-      "title": "Manager Profiles copy link beside export card",
-      "status": "done",
-      "merge_commit": "04c19959"
+      "id": "lab-og-weekly-snapshot-rows",
+      "title": "Weekly heatmap export passes top-6 PPG snapshot rows",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy link beside export card",
-      "status": "done",
-      "merge_commit": "c4ce09b7"
-    },
-    {
-      "id": "league-power-rankings-og",
-      "title": "Power Rankings OG + copy board link",
-      "status": "done",
-      "merge_commit": "90bf2dd5"
-    },
-    {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
+      "id": "lab-og-prospects-snapshot-rows",
+      "title": "Prospects export passes top-6 RPS snapshot rows",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
-      "status": "done",
-      "merge_commit": "30454811"
+      "id": "lab-og-breakouts-snapshot-rows",
+      "title": "Breakouts export passes top-6 score snapshot rows",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-tradevalues-snapshot-rows",
+      "title": "Trade values export passes top-6 value snapshot rows",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-trade-network-copy-link",
-  "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T13:20:00Z",
-  "last_cycle_commit": "90bf2dd5"
+  "next_atom_id": "lab-og-weekly-snapshot-rows",
+  "created_at": "2026-05-31T06:00:00Z",
+  "updated_at": "2026-05-31T06:00:00Z",
+  "last_cycle_commit": null
 }

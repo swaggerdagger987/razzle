@@ -1,27 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic": "League L5 — Bureau behavioral share parity",
-  "atom_id": "league-power-rankings-og",
-  "slice_title": "Power Rankings OG card + copy board link",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — power-rankings OG PNG ≥40KB",
-  "trust_pillars": ["T2", "T5", "T6"],
+  "big_problem": "Lab OG export cards must show the same rows the user sees in-panel — not generic demo fallbacks.",
+  "epic": "Lab L5 — OG export matches in-panel rows",
+  "atom_id": "lab-og-weekly-snapshot-rows",
+  "slice_title": "Weekly heatmap export passes top-6 PPG snapshot rows",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2 — /og/weekly with snapshot ≥40KB",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/power-rankings/route.tsx",
-    "apps/web/components/league/BureauPowerRankingsShareBar.tsx",
-    "apps/web/components/league/BureauPowerRankings.tsx"
+    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 220,
+  "max_files": 1,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-pr.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/power-rankings?download=1&league=test'"
+    "curl -s -o /tmp/og-weekly.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/weekly?download=1&position=WR&snapshot=PLACEHOLDER'"
   ],
-  "out_of_scope": ["Trade Network share bar", "API schema changes", "NORTH_STAR / DESIGN edits"],
+  "out_of_scope": ["OG route changes", "new panels", "API schema", "NORTH_STAR/DESIGN edits"],
   "builder_mode": "composer-surgical",
-  "verdict": "SHIP",
-  "content_commit": "90bf2dd5"
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }
