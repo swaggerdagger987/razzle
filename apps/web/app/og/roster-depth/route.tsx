@@ -95,8 +95,9 @@ function topPlayer(block: PosBlock): string {
   const players = [...(block.depth ?? [])].sort(
     (a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0),
   );
-  if (!players.length) return "—";
-  const name = players[0].name;
+  const top = players[0];
+  if (!top) return "—";
+  const name = top.name;
   return name.length > 18 ? `${name.slice(0, 16)}…` : name;
 }
 
