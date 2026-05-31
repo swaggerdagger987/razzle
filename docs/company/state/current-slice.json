@@ -1,26 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-waiver-tendencies-unhide",
-  "big_problem": "Newly unhidden Bureau tabs lack share/export cards — league construction intel doesn't travel to Reddit (DEPTH League L5).",
-  "epic": "League L5 — Bureau Build/Roster share-export parity",
-  "slice_title": "Waiver Tendencies tab unhidden with Hawkeye renderer",
+  "atom_id": "league-build-profiles-share-og",
+  "big_problem": "Bureau Build/Roster share cards exist locally but never merged — dynasty league intel still can't screenshot to Reddit (DEPTH League L5).",
+  "epic": "League L5 — Bureau share-export ship to base",
+  "slice_title": "Build Profiles copy link + OG export card on base",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "Bureau tab visible in nav; bespoke renderer not scaffold dump",
+  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB with demo rows",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/components/league/BureauWaiverTendencies.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx"
+    "apps/web/components/league/BureauBuildProfilesShareBar.tsx",
+    "apps/web/app/og/build-profiles/route.tsx",
+    "apps/web/components/league/BureauBuildProfiles.tsx"
   ],
   "max_files": 3,
-  "max_lines": 150,
+  "max_lines": 280,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "node -e \"const {HIDDEN_BUREAU_SLUGS}=require('./apps/web/lib/bureau-features.ts');\" 2>/dev/null || grep -q 'waiver-tendencies' apps/web/components/league/BureauFeatureBody.tsx"
+    "curl -s -o /tmp/build-profiles-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/build-profiles?league=demo&download=1'"
   ],
-  "out_of_scope": ["strength-of-schedule unhide", "OG share bars", "API changes"],
+  "out_of_scope": ["roster-depth share (next atom)", "new Bureau tabs", "API schema changes"],
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
