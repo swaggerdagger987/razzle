@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Newly unhidden Bureau tabs lack share/export cards — league construction intel doesn't travel to Reddit (DEPTH League L5).",
   "epic_title": "League L5 — Bureau Build/Roster share-export parity",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -20,11 +20,11 @@
     {
       "id": "league-waiver-tendencies-unhide",
       "title": "Waiver Tendencies tab unhidden with renderer",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "42069a46"
     }
   ],
-  "next_atom_id": "league-waiver-tendencies-unhide",
+  "next_atom_id": null,
   "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T12:30:00Z"
+  "updated_at": "2026-05-31T06:30:00Z"
 }
