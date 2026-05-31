@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-pro-gate-hallway-teasers | da33eafd | pytest 51 + web build PASS | no OG Gate C; UI hallway only.
+
 2026-05-31 | lab-og-weekly-prospects-breakouts | 8d8b2635 | PASS | curl weekly 53249B prospects 48881B breakouts 61629B | keep
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | curl efficiency 45113B aging 44952B PASS | post-merge base sync; Gate C both routes.

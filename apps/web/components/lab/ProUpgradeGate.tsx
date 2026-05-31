@@ -1,6 +1,6 @@
 "use client";
 
-import { toRoom } from "@razzle/hallway";
+import { toExplore, toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
@@ -68,6 +68,12 @@ export function ProUpgradeGate({
             className="chunky chunky-hover bg-bg-card px-4 py-3 text-sm"
           >
             ask {agent.name} →
+          </Link>
+          <Link
+            href={toExplore({}) as Route}
+            className="chunky chunky-hover bg-bg-card px-4 py-3 text-sm"
+          >
+            free screener →
           </Link>
         </div>
         <p className="mt-3 text-xs text-ink-light">dev? flip plan in the toolbar ↑</p>

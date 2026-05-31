@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 105 — Lab OG weekly/prospects/breakouts live extract)  
+**Last updated:** 2026-05-31 (factory cycle 115 — Lab L4 pro-gate hallway + teasers)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 105 |
+| Cycle | 115 |
 | Last board | 54 |
 | Focus pillar | Lab |
-| Focus layer | L5 |
-| Next slice | lab-og-gamelog-weeks-fpts-sort |
-| Last commit | `8d8b2635` |
+| Focus layer | L4 |
+| Next slice | lab-pro-gate-launch10-teasers |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
