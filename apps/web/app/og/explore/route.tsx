@@ -239,9 +239,9 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
-  const leadMarginNote =
-    players.length > 0 ? marginNoteForOgExploreRow(players[0]!, universe) : null;
-  const leadAgent = leadMarginNote ? AGENT_BY_ID[leadMarginNote.agentId] : null;
+  const topMarginNotes = players
+    .slice(0, 3)
+    .map((p) => marginNoteForOgExploreRow(p, universe));
 
   return new ImageResponse(
     (
@@ -339,7 +339,10 @@ export async function GET(req: Request) {
               <div style={{ width: 72, display: "flex" }}>{universe === "college" ? "School" : "Team"}</div>
               <div style={{ width: 80, textAlign: "right", display: "flex" }}>{colHeader}</div>
             </div>
-            {players.map((p, i) => (
+            {players.map((p, i) => {
+              const marginNote = i < 3 ? topMarginNotes[i] : null;
+              const noteAgent = marginNote ? AGENT_BY_ID[marginNote.agentId] : null;
+              return (
               <div
                 key={`${p.full_name}-${i}`}
                 style={{ display: "flex", alignItems: "center", fontSize: 20 }}
@@ -357,20 +360,20 @@ export async function GET(req: Request) {
                   <div style={{ display: "flex" }}>
                     {p.full_name.length > 22 ? `${p.full_name.slice(0, 20)}…` : p.full_name}
                   </div>
-                  {i === 0 && leadMarginNote && leadAgent ? (
+                  {marginNote && noteAgent ? (
                     <div
                       style={{
                         display: "flex",
                         alignItems: "center",
                         gap: 6,
                         fontFamily: "Caveat",
-                        fontSize: 22,
+                        fontSize: i === 0 ? 22 : 20,
                         color: "#5c4a3d",
                         marginTop: 2,
                       }}
                     >
-                      <span style={{ display: "flex" }}>{leadAgent.emoji}</span>
-                      <span style={{ display: "flex" }}>{leadMarginNote.text}</span>
+                      <span style={{ display: "flex" }}>{noteAgent.emoji}</span>
+                      <span style={{ display: "flex" }}>{marginNote.text}</span>
                     </div>
                   ) : null}
                 </div>
@@ -393,7 +396,8 @@ export async function GET(req: Request) {
                   {p.stat % 1 === 0 ? p.stat : p.stat.toFixed(1)}
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         ) : null}
 
