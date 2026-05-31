@@ -292,6 +292,12 @@ export function BureauMonteCarlo({ data, leagueId }: Props) {
                 leagueId={leagueId}
                 userId={user.user_id}
                 scenarioQuery={scenarioParts.length ? scenarioParts.join("&") : undefined}
+                oddsRows={odds.map((o) => ({
+                  manager: o.manager,
+                  championship_pct: o.championship_pct,
+                  playoff_pct: o.playoff_pct,
+                  roster_power: o.roster_power,
+                }))}
               />
             );
           })()}

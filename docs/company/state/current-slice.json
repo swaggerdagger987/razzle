@@ -1,26 +1,25 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-weekly-ppg-ranked",
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
-  "epic": "Lab L5 — OG snapshot row fidelity",
-  "slice_title": "Weekly OG export ranks top-6 by PPG for active position tab",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with ranked rows",
+  "atom_id": "league-monte-carlo-og-snapshot",
+  "big_problem": "Bureau share cards still fall back to demo rows when edge OG cannot reach live league APIs.",
+  "epic": "League L5 — Bureau OG snapshots match in-product boards",
+  "slice_title": "Monte Carlo export encodes playoff odds grid snapshot",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx"
+    "apps/web/lib/bureau-monte-carlo-og-snapshot.ts",
+    "apps/web/components/league/BureauMonteCarloShareBar.tsx",
+    "apps/web/app/og/monte-carlo/route.tsx",
+    "apps/web/components/league/BureauMonteCarlo.tsx"
   ],
-  "max_files": 1,
-  "max_lines": 80,
+  "max_files": 4,
+  "max_lines": 120,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-weekly-wr.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/weekly?position=WR&download=1'"
+    "curl -s -o /tmp/og-mc.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/monte-carlo?download=1&league=demo&user=demo&snapshot=eyJyIjpbeyJtIjoiRHluYXN0eSBCdWtlcyIsImNwIjoyOCwicHAiOjkxLCJycCI6OTR9LHsibSI6IlJlYnVpbGQgRkMiLCJjcCI6MTkscHAiOjc4LCJycCI6ODZ9LHsibSI6IllvdXIgU3F1YWQiLCJjcCI6MTQscHAiOjYyLCJycCI6ODF9XX0'"
   ],
-  "out_of_scope": [
-    "Breakouts atom",
-    "Bureau tabs",
-    "NORTH_STAR / DESIGN edits"
-  ],
+  "out_of_scope": ["Trade Network", "NORTH_STAR edits"],
   "builder_mode": "composer-surgical"
 }

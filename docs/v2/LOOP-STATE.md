@@ -1,8 +1,9 @@
-cycle: 99
+cycle: 98
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: lab-og-breakouts-score-ranked
-last_keep_cycle: 99
-last_commit: d11aff0f
-lab_l5_og_fidelity_weekly_ppg: complete
+next_slice: league-trade-network-og-snapshot
+last_keep_cycle: 98
+last_commit: da33eafd
+league_l5_bureau_og_epic: active
+league_l5_bureau_og_atom: monte-carlo
