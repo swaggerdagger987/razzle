@@ -26,3 +26,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | position grade OG | A–F roster grid for trade threads | self-scout atom | keep | factory cycle 1 briefing
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG export links atom 2 | 30d10728 | keep | buysell dashboard footers; curl 58-60KB PNGs
+2026-05-31 | player-scoped export URLs | on-screen player must flow to OG | a1be26d5 | keep | cycle 68 briefing
