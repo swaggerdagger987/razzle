@@ -6,10 +6,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { ProUpgradeGate } from "../ProUpgradeGate";
+import { ProGateFromPanelError } from "../ProGateFromPanelError";
 
 interface CompRow {
   player_id: string;
@@ -96,23 +95,9 @@ export function DynastyCompsRenderer({ panel }: Props) {
   if (q.isPending) return <PanelAgentLoading agent={agent} />;
 
   if (q.isError) {
-    const err = q.error as Error & { upgrade?: { required?: string; current?: string; message?: string } };
-    if (err.upgrade) {
-      return (
-        <ProUpgradeGate
-          panelSlug={panel.slug}
-          panelTitle={panel.title}
-          required={err.upgrade.required ?? "pro"}
-          current={err.upgrade.current ?? "free"}
-          message={err.upgrade.message}
-        />
-      );
-    }
-    if (isUpgradeRequiredError(err)) {
-      return (
-        <ProUpgradeGate panelSlug={panel.slug} panelTitle={panel.title} required={err.required} current={err.current} message={err.message} />
-      );
-    }
+    const gate = ProGateFromPanelError({ panel, error: q.error });
+    if (gate) return gate;
+    const err = q.error as Error;
     return <p className="p-6 text-red">something fumbled: {err.message}</p>;
   }
 
