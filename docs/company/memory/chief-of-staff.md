@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 123 Explore OG demo rows | da33eafd | workday cycle 1; explore-og epic 1/4; lock #820.
+2026-05-31 | Factory cycle 123 Explore OG demo rows | e2d4e429 | workday cycle 1; explore-og epic 1/4; lock #820.
 
 2026-05-31 | Factory cycle 122 H2H force_demo QA | b4d91213 | workday cycle 3; h2h-stickers epic complete 3/3; NO_LOCK_GUARDRAIL.
 

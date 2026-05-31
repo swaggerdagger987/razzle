@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | Explore OG demo PASS | da33eafd | curl nfl 60059B college 62556B; build exit 0.
+2026-05-31 | Explore OG demo PASS | e2d4e429 | curl nfl 60059B college 62556B; build exit 0.
 
 2026-05-31 | H2H force_demo PASS | b4d91213 | curl force_demo 77736B; pytest 3 passed.
 
