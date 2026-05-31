@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-dynasty-comps-live-sticker | da33eafd | SHIP | PLAYER_SCOPED_LIVE_STICKER_SLUGS excludes Launch-10 gamelog.
+2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | PLAYER_SCOPED_LIVE_STICKER_SLUGS excludes Launch-10 gamelog.
 
 2026-05-31 | room-briefing-watermark | f6e0985f3 | 2 files; watermark band matches Explore/H2H OG pattern.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | 1 file GamelogRenderer; footer LabOgExportLink ≤15 lines.
