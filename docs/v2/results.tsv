@@ -64,3 +64,5 @@ cycle	commit	score	status	pillar	slice	description
 72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
 73	1578f75e	depth+voice+simplicity	keep	Lab	L5 OG rankings position filter	trust=T5,T6; LabOgExportLink.position; curl WR 50210B
 74	d5d44123	depth+voice+simplicity	keep	Lab	L5 OG dashboard top5 risers extractors	trust=T5,T6; extractRows top5+risers rank_diff; curl dashboard 60034B; live-row epic complete
+77	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
+78	7dd690fb	depth+voice+simplicity	keep	League	L5 OG power rankings share card	trust=T2,T5,T6; /og/power-rankings demo rows; curl 66050B PNG

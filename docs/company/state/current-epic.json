@@ -1,42 +1,36 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG share cards must render the same player rows as in-product panels when the API returns data — not generic demo shells (DEPTH Lab L5).",
-  "epic_title": "Lab L5 — OG live panel row parity",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product (PARITY League L5).",
+  "epic_title": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-live-extractors",
-      "title": "OG route extracts candidates/tiers via panels API with pro preview header",
+      "id": "league-power-rankings-tab",
+      "title": "Unhide Power Rankings tab with Octo renderer + hallway",
       "status": "done",
-      "merge_commit": "2cb898b6"
+      "merge_commit": "20c7940a"
     },
     {
-      "id": "lab-og-position-rankings",
-      "title": "Pass position filter from dynasty rankings to OG export URL",
-      "status": "done",
-      "merge_commit": "1578f75e"
-    },
-    {
-      "id": "lab-og-dynasty-comps-lab",
-      "title": "Dynasty-comps Lab renderer + scoped export footer",
-      "status": "done",
-      "merge_commit": "527d9cc2"
-    },
-    {
-      "id": "lab-og-launch10-live-label",
-      "title": "Launch-10 OG cards drop sample label when live rows render",
-      "status": "done",
+      "id": "league-power-rankings-og",
+      "title": "OG share card at /og/power-rankings with demo fallback",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "lab-og-dashboard-extractors",
-      "title": "Dashboard OG extractRows uses top5/risers + rank_diff",
-      "status": "done",
+      "id": "league-roster-depth-tab",
+      "title": "Unhide Roster Depth tab with Dolphin renderer",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "league-build-profiles-tab",
+      "title": "Unhide Build Profiles tab with Atlas renderer",
+      "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T05:00:00Z",
-  "updated_at": "2026-05-31T04:50:00Z"
+  "next_atom_id": "league-power-rankings-og",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z"
 }
