@@ -64,5 +64,7 @@ cycle	commit	score	status	pillar	slice	description
 72	734a4542	depth+voice+simplicity	keep	Lab	L5 OG rankings snapshot + live label	trust=T1,T5,T6; snapshotRows on rankings; curl snap 41658B
 73	7066f4ab	depth+voice+simplicity	keep	Lab	L5 OG live data label	trust=T1,T5,T6; live data blurb when liveHasRows; curl rankings 59509B
 74	3fc08ebc	depth+voice+simplicity	keep	League	L5 Bureau Self-Scout copy link export row	trust=T5,T6; copy link + export; curl self-scout OG 66997B
-75	433d8002	depth+voice+simplicity	keep	League	L5 Bureau Monte Carlo copy link export row	trust=T5,T6; copy link + export; curl monte-carlo OG 53350B
-76	a14cfabc	depth+voice+simplicity	keep	League	L5 Bureau Monte Carlo copy link export row	trust=T5,T6; copy link + export; curl monte-carlo OG 53350B; H2H dedup base ShareBar
+75	1578f75e	depth+voice+simplicity	keep	Lab	L5 OG rankings position filter	trust=T5,T6; LabOgExportLink.position; curl WR 50210B
+76	ac046c85	depth+voice+simplicity	keep	Lab	L5 OG API origin rewrite	trust=T5,T6; request-origin /api fetch; curl rankings 61061B dashboard 60034B
+77	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
+78	a14cfabc	depth+voice+simplicity	keep	League	L5 Bureau Monte Carlo copy link export row	trust=T5,T6; copy link + export; curl monte-carlo OG 53350B; H2H dedup base ShareBar
