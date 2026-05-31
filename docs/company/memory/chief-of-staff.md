@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | lab-og-buysell-formula-live | da33eafd | SHIP | Factory cycle 2; buy/sell formula OG parity.
+2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Factory cycle 2; buy/sell formula OG parity.
 
 2026-05-31 | cycle 142 formula OG live | ceadf0402 | SHIP | Factory open; Lab breakouts/rankings formula_score parity.
 

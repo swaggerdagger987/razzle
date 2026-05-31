@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-og-buysell-formula-live | da33eafd | No new intel; Lab formula OG slice only.
+2026-05-31 | lab-og-buysell-formula-live | fb4483341 | No new intel; Lab formula OG slice only.
 
 2026-05-31 | lab-og-dynasty-comps-live-sticker | — | PASS | No Reddit intel change this atom.
 
