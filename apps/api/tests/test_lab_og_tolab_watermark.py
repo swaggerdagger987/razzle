@@ -89,6 +89,15 @@ def test_breakouts_og_watermark_includes_default_wr_position():
     assert 'breakouts: "WR"' in source
 
 
+def test_aging_og_watermark_includes_default_rb_position():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'aging: "RB"' in source
+    renderer = (
+        ROOT / "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert 'useState<(typeof POSITIONS)[number]>("RB")' in renderer
+
+
 def test_rankings_og_has_no_tolab_default_position():
     """Dynasty rankings board is cross-position when unfiltered — no watermark default."""
     source = ROUTE_TS.read_text(encoding="utf-8")
