@@ -1,10 +1,11 @@
 cycle: 78
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: league-power-rankings-og
-last_keep_cycle: 78
-last_commit: 30454811
+next_slice: bureau-monte-carlo-copy-link or lab snapshot launch-10
+last_keep_cycle: 77
+last_commit: 7a078f3a
+lab_l5_og_api_origin_rewrite: complete
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
