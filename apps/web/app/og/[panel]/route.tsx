@@ -597,6 +597,9 @@ export async function GET(
   }
   if (positionFilter) {
     apiParams.position = positionFilter;
+  } else if (slug === "weekly" && apiParams.position == null) {
+    // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
+    apiParams.position = "WR";
   }
   const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
   const snapshotHasRows =

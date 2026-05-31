@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-live-sticker-prospects-weekly | da33eafd | weekly OG defaults position=WR for panel API live rows.
+
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
