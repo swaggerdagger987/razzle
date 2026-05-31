@@ -1,29 +1,29 @@
 {
-  "big_problem": "Bureau tabs unhidden in cycles 90\u201391 ship OG cards but waiver/SOS/build lack the terracotta watermark band H2H and Trade Finder have \u2014 Reddit exports look off-brand.",
-  "epic_title": "League L5 \u2014 Bureau OG watermark GTM parity",
-  "parity_ref": "League L5 \u2014 hidden Bureau renderers or watermarked export",
+  "big_problem": "Bureau tabs unhidden in cycles 90–91 ship OG cards but waiver/SOS/build lack the terracotta watermark band H2H and Trade Finder have — Reddit exports look off-brand.",
+  "epic_title": "League L5 — Bureau OG watermark GTM parity",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
       "id": "league-og-waiver-watermark",
-      "title": "Waiver Tendencies OG \u2014 terracotta watermark band + LIVE/SAMPLE stickers",
-      "status": "in_progress",
-      "merge_commit": null
+      "title": "Waiver Tendencies OG — terracotta watermark band + LIVE/SAMPLE stickers",
+      "status": "done",
+      "merge_commit": "6ce480e68"
     },
     {
       "id": "league-og-sos-watermark",
-      "title": "Strength of Schedule OG \u2014 terracotta watermark band",
+      "title": "Strength of Schedule OG — terracotta watermark band",
       "status": "pending",
       "merge_commit": null
     },
     {
       "id": "league-og-build-profiles-watermark",
-      "title": "Build Profiles OG \u2014 terracotta watermark band",
+      "title": "Build Profiles OG — terracotta watermark band",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-og-waiver-watermark",
+  "next_atom_id": "league-og-sos-watermark",
   "epic_status": "active",
   "created_at": "2026-05-31T11:45:00Z",
   "updated_at": "2026-05-31T11:45:00Z",
