@@ -1,14 +1,11 @@
 # Memory — Builder
 
-<<<<<<< HEAD
-2026-05-31 | LabOgExportLink player-scoped default | PLAYER_SCOPED_LAB_OG_SLUGS; gamelog export always has player_id | SHIP | keep | curl 60634B
-=======
+2026-05-31 | lab-l4-pro-gate-error-tradevalues | 1daa6b84 | ProGateFromPanelError on TradeValues + Efficiency; pytest 4.
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | launch10DemoStickerLabel 3 slugs; curl triple PASS.
 
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
 
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
->>>>>>> origin/razzle-v2-redesign
 
 2026-05-31 | explore OG universe export | resolveApiOrigin + explicit copy URL + apiSortKey | SHIP | keep | 3 files | curl nfl/college ≥34KB
 
