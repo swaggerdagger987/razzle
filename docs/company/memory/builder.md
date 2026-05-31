@@ -1,3 +1,4 @@
+2026-05-31 | bureau-h2h-preview-card | 452e67951 | SHIP | BureauH2HShareBar preview card + pytest contract.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | EXPORTED · panel rivalry rows.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | TOLAB_DEFAULT_POSITION efficiency RB.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | weekly WR watermarkPosition on OG route.

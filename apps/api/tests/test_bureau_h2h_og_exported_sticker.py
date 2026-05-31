@@ -20,4 +20,4 @@ def test_h2h_share_bar_sets_snapshot_on_export():
     bar = _repo_root() / "apps/web/components/league/BureauH2HShareBar.tsx"
     text = bar.read_text(encoding="utf-8")
     assert "encodeBureauH2HOgSnapshot" in text
-    assert 'ogParams.set("snapshot"' in text
+    assert 'previewParams.set("snapshot"' in text

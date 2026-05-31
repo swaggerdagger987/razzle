@@ -1,29 +1,28 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
-  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-efficiency-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "big_problem": "Bureau rivalry cards lack preview-before-export — managers can't eyeball the OG card before downloading like Explore and Room Briefing.",
+  "epic": "League L5 — Bureau H2H GTM preview export (atom 1/3)",
+  "slice_title": "H2H share bar preview card link before export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG preview without download param",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/components/league/BureauH2HShareBar.tsx",
+    "apps/api/tests/test_bureau_h2h_share_bar.py"
   ],
   "max_files": 2,
-  "max_lines": 25,
+  "max_lines": 80,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_h2h_share_bar.py -q",
+    "curl -s -o /tmp/h2h-preview.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/head-to-head?league=demo&user=u1&opponent=u2'"
   ],
-  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "out_of_scope": [
+    "Monte Carlo preview",
+    "copy-link URL change",
+    "OG route changes",
+    "NORTH_STAR edits"
+  ],
+  "builder_mode": "composer-surgical"
 }
