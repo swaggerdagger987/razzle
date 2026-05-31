@@ -1,10 +1,10 @@
-cycle: 88
+cycle: 89
 last_board_cycle: 54
-focus_pillar: Lab
-focus_layer: L4
-next_slice: explore-l5-injury-row-chip
-last_keep_cycle: 88
-last_commit: 8f0201f7
+focus_pillar: Explore
+focus_layer: L5
+next_slice: lab-l5-og-live-rows
+last_keep_cycle: 89
+last_commit: 9ad5757b
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete

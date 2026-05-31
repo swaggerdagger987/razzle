@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | Explore L5 injury chip | da33eafd | SHIP | keep | Dolphin on flagged screener rows; epic 3/3 complete
 2026-05-31 | Lab L4 pro-gate voice | 8f0201f7 | SHIP | keep | F-09 invitation copy; epic atom 2/3 before Explore injury chip
 
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.

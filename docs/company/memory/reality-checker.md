@@ -1,5 +1,6 @@
 # Memory — Reality Checker
 
+2026-05-31 | Explore injury chip | da33eafd | PASS | keep | npm run build exit 0; pytest 51 passed 5 skipped
 2026-05-31 | Lab pro-gate voice | 8f0201f7 | PASS | keep | UI slice: build + pytest + pricing 200; no OG gate required
 
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
