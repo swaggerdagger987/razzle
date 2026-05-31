@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | 202981c8f | curl gamelog OG 59323B.
+
 2026-05-31 | lab-l4-pro-gate-error-dynasty-comps | pending | DynastyCompsRenderer ProGateFromPanelError; pytest 9.
 
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | launch10DemoStickerLabel 3 slugs; curl triple PASS.
