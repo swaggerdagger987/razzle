@@ -1,24 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
-  "epic": "League L5 — Bureau OG terracotta watermark parity (atom 2/4)",
-  "slice_title": "Self-Scout OG terracotta watermark band",
-  "atom_id": "league-og-self-scout-watermark",
-  "parity_ref": "League L5 — watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "atom_id": "lab-dashboard-formula-og-live",
+  "big_problem": "Lab OG cards mislabel stats when users sort by custom formulas — dashboard export shows rank_diff while the panel shows formula_score.",
+  "epic": "Lab L5 — Launch-10 OG formula_score stat parity (atom 4/4)",
+  "slice_title": "Dashboard OG live extract prefers formula_score on risers/top5",
+  "parity_ref": "Launch 10 — Lab panel OG live data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "ACCEPTANCE Gate 6 — OG export cards show real stat columns",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/self-scout/route.tsx",
-    "apps/api/tests/test_self_scout_og_watermark.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_og_launch10_formula_live.py"
   ],
   "max_files": 2,
-  "max_lines": 130,
+  "max_lines": 40,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_self_scout_og_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py::test_dashboard_live_extract_prefers_formula_score -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1'"
   ],
-  "out_of_scope": ["Other Bureau OG routes"],
+  "out_of_scope": [
+    "Other Launch-10 panels",
+    "Renderer UI changes",
+    "NORTH_STAR or DESIGN edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -26,6 +31,5 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "a76b2e4e0"
+  "status": "in_progress"
 }

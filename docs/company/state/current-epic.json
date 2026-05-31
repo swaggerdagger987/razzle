@@ -3,6 +3,7 @@
   "epic_title": "League L5 — Bureau OG terracotta watermark parity",
   "parity_ref": "League L5 — hidden Bureau renderers / watermarked export",
   "depth_ref": "League L5",
+  "epic_status": "active",
   "atoms": [
     {
       "id": "league-og-monte-carlo-watermark",
@@ -30,8 +31,14 @@
     }
   ],
   "next_atom_id": "league-og-pressure-map-watermark",
-  "epic_status": "active",
   "created_at": "2026-05-31T11:45:03Z",
-  "updated_at": "2026-05-31T11:55:00Z",
-  "completed_epics": []
+  "updated_at": "2026-05-31T12:04:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-formula-og-stat-parity",
+      "status": "complete",
+      "last_atom": "lab-dashboard-formula-og-live",
+      "merge_commit": null
+    }
+  ]
 }
