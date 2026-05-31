@@ -84,5 +84,5 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauTradeNetworkShareBar | 088cebc07 | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | 088cebc07 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
-2026-05-31 | explore-og-margin-note-lead | f6e0985f3 | keep | marginNoteForOgExploreRow edge helper; 3 files ≤120 lines.
+2026-05-31 | explore-og-margin-note-lead | 75d90aca8 | keep | marginNoteForOgExploreRow edge helper; 3 files ≤120 lines.
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY + tradevalues formula_score order
