@@ -1,8 +1,8 @@
-cycle: 149
+cycle: 150
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: PARITY next RED/YELLOW (Lab OG hallway epic complete)
-last_keep_cycle: 149
-last_commit: d2677f2cb
-lab_l5_og_hallway_epic: complete
+next_slice: league-trade-finder-og-watermark-user (Bureau OG hallway epic atom 2/3)
+last_keep_cycle: 150
+last_commit: f6e0985f3
+league_l5_bureau_og_hallway_epic: active

@@ -106,3 +106,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 147	19a1af0e9	depth+voice+simplicity	keep	League	L5 Trade Finder OG snapshot panel rows	trust=T5,T6; pytest 4; curl 57910B snap 55930B; trade-finder GTM epic 2/3
 148	c311a15a8	depth+voice+simplicity	keep	Lab	L5 gamelog default player in OG toLab band	trust=T5,T6; pytest 3; curl gamelog 62232B; hallway epic 2/3
 149	d2677f2cb	depth+hallway+voice+simplicity	keep	Lab	L5 snapshot pid in OG toLab watermark	trust=T5,T6; pytest 4; curl gamelog snap 53016B; hallway epic 3/3 complete
+150	f6e0985f3	depth+hallway+voice+simplicity	keep	League	L5 H2H OG toLeague watermark rivalry params	trust=T5,T6; pytest 7; curl h2h 75614B; bureau hallway epic 1/3

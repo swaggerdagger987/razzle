@@ -1,32 +1,32 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic_title": "Lab L5 — OG hallway deep links",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Bureau OG export watermarks dead-end without rivalry context — screenshots cannot click back into the right league matchup.",
+  "epic_title": "League L5 — Bureau OG hallway deep links",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-tolab-watermark",
-      "title": "Launch-10 toLab watermark band",
-      "status": "done",
-      "merge_commit": "b80512bb4"
+      "id": "league-h2h-og-toleague-watermark",
+      "title": "H2H OG watermark uses toLeague with user/opponent",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-tolab-gamelog-default",
-      "title": "Gamelog/dynasty-comps default player in toLab",
-      "status": "done",
-      "merge_commit": "c311a15a8"
+      "id": "league-trade-finder-og-watermark-user",
+      "title": "Trade Finder OG watermark includes user query",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-tolab-snapshot-player",
-      "title": "Snapshot exports preserve player in watermark",
-      "status": "done",
-      "merge_commit": "d2677f2cb"
+      "id": "league-monte-carlo-og-toleague-watermark",
+      "title": "Monte Carlo OG watermark uses toLeague with league context",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:00:00Z",
-  "updated_at": "2026-05-31T11:20:00Z",
+  "next_atom_id": "league-h2h-og-toleague-watermark",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-hallway-deep-links",

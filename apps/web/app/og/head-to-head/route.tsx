@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
-import { toRoom } from "@razzle/hallway";
+import { toLeague, toRoom } from "@razzle/hallway";
 import {
   bureauH2HOgSnapshotToData,
   decodeBureauH2HOgSnapshot,
@@ -71,6 +71,18 @@ function atlasH2hRoomQuestion(
   return `How do I beat ${them.team} (${them.record})? I'm deeper at ${offer} and thin at ${want}.`;
 }
 
+/** Typed hallway path for OG watermark band (T6 — click back into Bureau H2H). */
+function h2hOgWatermarkLink(league: string, user: string, opponent: string): string {
+  if (!league) return "razzle.lol/league/head-to-head";
+  let path = toLeague(league, "head-to-head");
+  if (user) {
+    const q = new URLSearchParams({ user });
+    if (opponent) q.set("opponent", opponent);
+    path = `${path}?${q.toString()}`;
+  }
+  return `razzle.lol${path}`;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -116,13 +128,7 @@ export async function GET(req: Request) {
         : opponentTeamLabel
           ? ` · vs ${opponentTeamLabel} (sample)`
           : " · sample preview";
-  const leagueDeepLink = league
-    ? opponent
-      ? `/league/${league}/head-to-head?user=${encodeURIComponent(user)}&opponent=${encodeURIComponent(opponent)}`
-      : user
-        ? `/league/${league}/head-to-head?user=${encodeURIComponent(user)}`
-        : `/league/${league}/head-to-head`
-    : "";
+  const leagueWatermark = h2hOgWatermarkLink(league, user, opponent);
   const atlasRoomPath = hasData
     ? toRoom({
         agentId: "atlas",
@@ -329,9 +335,7 @@ export async function GET(req: Request) {
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <div style={{ display: "flex", fontWeight: 700 }}>
-              razzle.lol{leagueDeepLink || "/league/head-to-head"}
-            </div>
+            <div style={{ display: "flex", fontWeight: 700 }}>{leagueWatermark}</div>
             {opponentTeamLabel ? (
               <div style={{ display: "flex", fontSize: 16, fontFamily: "Caveat" }}>
                 {`vs ${opponentTeamLabel}`}

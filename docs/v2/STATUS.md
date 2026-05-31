@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 149 — Lab OG snapshot player in toLab watermark)
+**Last updated:** 2026-05-31 (factory cycle 150 — Bureau H2H OG toLeague watermark)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 149 |
+| Cycle | 150 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | PARITY next RED/YELLOW (hallway epic complete) |
-| Last commit | `d2677f2cb` |
+| Next slice | Bureau OG hallway deep links atom 2/3 |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

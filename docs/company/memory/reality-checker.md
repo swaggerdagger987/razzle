@@ -1,3 +1,4 @@
+2026-05-31 | league-h2h-og-toleague-watermark | f6e0985f3 | PASS | pytest 7; curl h2h 75614B; web build exit 0.
 2026-05-31 | lab-og-tolab-snapshot-player | d2677f2cb | PASS | pytest 4; curl gamelog snap 53016B; web build.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Reality Checker

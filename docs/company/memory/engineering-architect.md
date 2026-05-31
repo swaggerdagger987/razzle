@@ -1,3 +1,4 @@
+2026-05-31 | league-h2h-og-toleague-watermark | f6e0985f3 | SHIP | h2hOgWatermarkLink mirrors labOgWatermarkLink; 2 files ≤40 lines.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect
 
