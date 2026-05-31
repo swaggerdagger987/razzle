@@ -14,6 +14,14 @@ const POS_COLOR: Record<string, string> = {
 /** Staff margin notes on screenshot ranks 1–3 (Explore L5 parity with screener). */
 const TOP_MARGIN_NOTE_ROWS = 3;
 
+const EXPLORE_OG_LIVE_STAFF_STICKER = "LIVE · staff notes";
+
+function exploreOgHasStaffMarginNotes(players: OgPlayer[], universe: string): boolean {
+  return players
+    .slice(0, TOP_MARGIN_NOTE_ROWS)
+    .some((p) => marginNoteForOgExploreRow(p, universe) != null);
+}
+
 interface OgPlayer extends OgExploreMarginRow {
   stat: number;
 }
@@ -249,12 +257,8 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
-  const hasStaffMarginNotes =
-    !isDemo &&
-    players
-      .slice(0, TOP_MARGIN_NOTE_ROWS)
-      .some((p) => marginNoteForOgExploreRow(p, universe) != null);
-
+  const showLiveStaffSticker =
+    !isDemo && exploreOgHasStaffMarginNotes(players, universe);
   return new ImageResponse(
     (
       <div
@@ -313,21 +317,23 @@ export async function GET(req: Request) {
               SAMPLE · not live data
             </div>
           ) : null}
-          {hasStaffMarginNotes ? (
+          {showLiveStaffSticker ? (
             <div
               style={{
                 display: "flex",
-                fontSize: 16,
+                fontFamily: "Caveat",
+                fontSize: 28,
                 fontWeight: 700,
                 background: "#2ec4b6",
                 color: "#f7efe5",
-                padding: "4px 12px",
+                padding: "4px 14px",
                 border: "3px solid #2d1f14",
-                borderRadius: 6,
+                borderRadius: 8,
                 boxShadow: "3px 3px 0 #2d1f14",
+                transform: "rotate(-2deg)",
               }}
             >
-              LIVE · staff margin notes
+              {EXPLORE_OG_LIVE_STAFF_STICKER}
             </div>
           ) : null}
         </div>
@@ -336,7 +342,9 @@ export async function GET(req: Request) {
             ? `${subtitle} · SAMPLE rows — ${
                 universe === "college" ? "campus stats preview" : "not live nflverse"
               }`
-            : subtitle}
+            : showLiveStaffSticker
+              ? `${subtitle} · Hawkeye/Dolphin staff on top rows`
+              : subtitle}
         </div>
 
         {players.length > 0 ? (
