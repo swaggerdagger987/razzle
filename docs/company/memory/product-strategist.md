@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | SHIP | Launch-10 trust registry prevents sticker drift; epic atom 2/3.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Snapshot pid wrapper; hallway epic complete (T6).
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.
