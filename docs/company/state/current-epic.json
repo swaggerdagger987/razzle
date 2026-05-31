@@ -33,6 +33,12 @@
       "status": "complete",
       "last_atom": "lab-sidebar-staff-picks-by-agent",
       "merge_commit": "4e8b0e8e"
+    },
+    {
+      "id": "lab-l5-og-live-fetch-merge",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "4bc3913e"
     }
   ]
 }
