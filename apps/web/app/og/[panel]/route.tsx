@@ -95,6 +95,9 @@ function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "rankings") return " · live dynasty ranks";
   if (slug === "breakouts") return " · live RBS board";
   if (slug === "tradevalues") return " · live value curve";
+  if (slug === "efficiency") return " · live PPO ranks";
+  if (slug === "aging") return " · live peak-age curves";
+  if (slug === "buysell") return " · live buy/sell mismatches";
   return " · live nflverse rows";
 }
 
@@ -104,6 +107,9 @@ function launch10LiveStickerLabel(slug: string): string {
   if (slug === "rankings") return "LIVE · dynasty ranks";
   if (slug === "breakouts") return "LIVE · RBS board";
   if (slug === "tradevalues") return "LIVE · value curve";
+  if (slug === "efficiency") return "LIVE · PPO ranks";
+  if (slug === "aging") return "LIVE · peak-age curves";
+  if (slug === "buysell") return "LIVE · buy/sell gaps";
   return "LIVE · nflverse rows";
 }
 
