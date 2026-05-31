@@ -25,7 +25,7 @@
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 
-2026-05-31 | lab-panel-share-bar-launch10-rest | f6e0985f3 | GTM threads need one-click copy+preview on all Staff Picks.
+2026-05-31 | lab-panel-share-bar-launch10-rest | 1919d69eb | GTM threads need one-click copy+preview on all Staff Picks.
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.
 2026-05-31 | launch10 no-snapshot | e2a3ce8a | Direct /og links need live API path without panel snapshot param.
 2026-05-31 | Cycle 118 | e00217d1 | No new intel.
