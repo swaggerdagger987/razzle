@@ -1,33 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic": "Lab L5 — OG hallway deep links",
-  "slice_title": "Gamelog + dynasty-comps default player in OG toLab band",
-  "atom_id": "lab-og-tolab-gamelog-default",
+  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
+  "epic": "Lab L5 — OG export on empty panel states",
+  "slice_title": "Rankings — export sample card when filter returns zero rows",
+  "atom_id": "lab-rankings-empty-export",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx",
+    "apps/api/tests/test_lab_og_export_link.py"
   ],
   "max_files": 2,
-  "max_lines": 35,
+  "max_lines": 55,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog-tolab.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/gamelog?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_export_link.py -q --noconftest"
   ],
-  "out_of_scope": ["FROM PANEL sticker changes", "New panels", "Bureau H2H"],
+  "out_of_scope": ["OG route refactor", "new panels", "billing"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "content_commit": "c311a15a8",
-  "reality": "PASS",
-  "merge": "pending"
+  }
 }
