@@ -470,6 +470,27 @@ body {
   color: var(--orange);
 }
 
+.lab-sidebar-staff-heading {
+  cursor: default;
+}
+
+.lab-sidebar-agent-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: default;
+  padding-top: 10px;
+}
+
+.lab-sidebar-agent-head {
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.lab-sidebar-item.nested {
+  padding-left: 34px;
+}
+
 /* ===== PANEL RENDERERS ===== */
 .panel-cards {
   display: grid;
