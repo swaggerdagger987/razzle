@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-cycle: 122
-last_board_cycle: 54
-focus_pillar: Lab
-focus_layer: L5
-next_slice: lab-og-gamelog-player-default
-last_keep_cycle: 122
-last_commit: 96a69ddf
-lab_l5_og_live_fetch_epic: active
-lab_l5_og_watermark_epic: complete
-lab_l5_og_live_sort_epic: complete
-bureau_h2h_codec_epic: complete
-=======
 cycle: 130
 last_board_cycle: 54
 focus_pillar: Lab
@@ -20,4 +7,3 @@ last_keep_cycle: 130
 last_commit: 4bc3913e
 lab_l5_og_live_fetch_epic: complete
 lab_l4_pro_gate_error_epic: active
->>>>>>> origin/razzle-v2-redesign
