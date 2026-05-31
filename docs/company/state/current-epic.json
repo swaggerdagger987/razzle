@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
   "epic_title": "League L5 — Bureau behavioral share parity",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
@@ -18,6 +18,12 @@
       "merge_commit": "c4ce09b7"
     },
     {
+      "id": "league-power-rankings-og",
+      "title": "Power Rankings OG + copy board link",
+      "status": "done",
+      "merge_commit": "90bf2dd5"
+    },
+    {
       "id": "bureau-trade-network-copy-link",
       "title": "Trade Network copy link beside export card",
       "status": "done",
@@ -30,8 +36,8 @@
       "merge_commit": "30454811"
     }
   ],
-  "next_atom_id": "bureau-trade-network-copy-link",
+  "next_atom_id": null,
   "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T04:55:00Z",
-  "last_cycle_commit": "04c19959"
+  "updated_at": "2026-05-31T19:30:00Z",
+  "last_cycle_commit": "fb7337c3"
 }

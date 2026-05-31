@@ -18,5 +18,7 @@
     "curl -s -o /tmp/og-trade-network.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/trade-network?download=1&league=test'"
   ],
   "out_of_scope": ["NORTH_STAR / DESIGN edits", "new OG routes"],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "verdict": "SHIP",
+  "content_commit": "fb7337c3"
 }
