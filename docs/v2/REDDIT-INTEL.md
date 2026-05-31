@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Weekly heatmap export gate (cycle 96)
+- **Angle:** r/dynastyff waiver threads share "who's heating up" — exportable streak cards are the screenshot hook.
+- **Gate:** Free heatmap stays; Pro unlocks share card + Hawkeye Room ask.
+
 ### 2026-05-31 — Lab launch-10 OG (cycle 77)
 - **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
 - **Trust:** T1 honest labeling; sample suffix only on demo fallback.

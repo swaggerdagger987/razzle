@@ -1,9 +1,9 @@
-cycle: 95
+cycle: 96
 last_board_cycle: 54
 focus_pillar: Lab
-focus_layer: L5
-next_slice: lab-og-position-tradevalues-prospects
-last_keep_cycle: 95
-last_commit: f358349d
-lab_l5_og_position_epic: active
-lab_l5_og_position_atom: efficiency-aging
+focus_layer: L4
+next_slice: lab-pro-prospects-badge
+last_keep_cycle: 96
+last_commit: da33eafd
+lab_l4_pro_gate_epic: active
+lab_l4_pro_gate_atom: weekly-paywall-copy

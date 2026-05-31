@@ -46,6 +46,16 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Josh Allen", position: "QB", detail: "Wk 11 · 28.1 pts" },
     { name: "Josh Allen", position: "QB", detail: "Wk 10 · 41.2 pts" },
   ],
+  weekly: [
+    { name: "Nico Collins", position: "WR", detail: "Wk 14 · 28.4 pts · heater" },
+    { name: "Jahmyr Gibbs", position: "RB", detail: "Wk 14 · 24.1 pts · 3-week climb" },
+    { name: "Brock Bowers", position: "TE", detail: "Wk 13 · 19.8 pts · target spike" },
+  ],
+  weeklyleaders: [
+    { name: "Ja'Marr Chase", position: "WR", detail: "Wk 14 leader · 31.2 pts" },
+    { name: "Saquon Barkley", position: "RB", detail: "Wk 14 leader · 27.6 pts" },
+    { name: "George Kittle", position: "TE", detail: "Wk 14 leader · 22.4 pts" },
+  ],
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
@@ -56,6 +66,8 @@ const PITCH_BY_SLUG: Record<string, string> = {
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",
   gamelog: "week-by-week game logs with peak-week context for trades",
+  weekly: "full-season heatmaps and streak alerts before your league mates adjust",
+  weeklyleaders: "positional week winners and cold-streak fades in one grid",
 };
 
 export function teaserRowsForPanel(slug: string): TeaserRow[] {
