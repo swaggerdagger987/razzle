@@ -1,44 +1,37 @@
 {
   "epic_status": "complete",
-  "big_problem": "Explore share cards hide the Razzle watermark unless download=1 — OS screenshots miss the growth loop.",
-  "epic_title": "Explore L5 — OG watermark band always visible on screener share cards",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "Explore L5",
+  "big_problem": "Four newly unhidden Bureau depth tabs have no group-chat export cards while rival tabs ship OG share rows.",
+  "epic_title": "League L5 — Bureau depth tab OG export cards",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "explore-og-watermark-band",
-      "title": "Screener OG card shows always-on terracotta watermark band",
+      "id": "league-roster-depth-og-share",
+      "title": "Roster Depth tab copy link + OG grade card",
       "status": "done",
-      "merge_commit": "3e96ab7f"
+      "merge_commit": "688cea64"
     },
     {
-      "id": "explore-og-preview-watermark",
-      "title": "Explore toolbar preview URL includes watermark band on embed",
+      "id": "league-build-profiles-og-share",
+      "title": "Build Profiles tab OG archetype card",
       "status": "done",
-      "merge_commit": "6c3b0954"
+      "merge_commit": "77d4f765"
     },
     {
-      "id": "explore-og-college-band-copy",
-      "title": "College universe subtitle + band copy matches NFL screener",
+      "id": "league-waiver-tendencies-og-share",
+      "title": "Waiver Tendencies tab OG FAAB card",
       "status": "done",
-      "merge_commit": "1dd9d62f"
+      "merge_commit": "6dcb0f72"
+    },
+    {
+      "id": "league-strength-of-schedule-og-share",
+      "title": "Schedule tab OG power verdict card",
+      "status": "done",
+      "merge_commit": "7f652a98"
     }
   ],
   "next_atom_id": null,
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T06:30:00Z",
-  "completed_epics": [
-    {
-      "id": "league-l5-unhide-bureau-tabs",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-tab",
-      "merge_commit": "eb542d51"
-    },
-    {
-      "id": "explore-l5-og-watermark-band",
-      "status": "complete",
-      "last_atom": "explore-og-college-band-copy",
-      "merge_commit": "1dd9d62f"
-    }
-  ]
+  "created_at": "2026-05-31T06:00:00Z",
+  "updated_at": "2026-05-31T06:45:00Z",
+  "last_cycle_commit": "7f652a98"
 }
