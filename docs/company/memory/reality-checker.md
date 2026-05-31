@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | league-trade-finder-og-snapshot | f6e0985f3 | PASS | pytest 4; curl 57910B + snapshot 55930B; web build.
+
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | PASS | pytest 3; curl buysell 55234B.
 
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | PASS | pytest 2; curl breakouts 66253B rankings 66806B.
