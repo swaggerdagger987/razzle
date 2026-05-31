@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 115 H2H OG watermark band | 4d84af9a | Watermark epic 2/2 complete; curl H2H 67846B.
+
 2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
 
 2026-05-31 | Factory cycle 113 Lab OG watermark band | 010241ea | Dedup live-sort cb59494b on base; watermark epic atom 1/2.

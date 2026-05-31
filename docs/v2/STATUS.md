@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 103 — Lab OG efficiency/aging live sort keys)  
+**Last updated:** 2026-05-31 (factory cycle 114 — Bureau H2H OG terracotta watermark band)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 103 |
+| Cycle | 114 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | lab-og-buysell-dashboard-live-sort |
-| Last commit | `ccb58697` |
+| Next slice | PARITY next — Lab L4 formula or Room GTM export |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
