@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-buysell-combined-snapshot | 98ae0ef2 | SHIP | Bones two-lane OG beats generic Grade label for Reddit
+
 Append-only log of product hypotheses, slice picks, KILL verdicts, and outcomes.
 
 Format per entry:
@@ -11,11 +13,16 @@ YYYY-MM-DD | hypothesis | slice | PARITY/DEPTH/ACCEPTANCE cited | outcome | keep
 Read this file before proposing a new slice. Do not repeat discarded ideas without
 new evidence.
 
+2026-05-31 | weekly hot-week OG | lab-weekly-hot-week-snapshot | PARITY Explore L5, DEPTH Lab L5 | SHIP | KEEP spike-week stat over PPG | — | buysell atom next | standup cycle 93
+
+2026-05-31 | Lab OG mirror rows epic | lab-dashboard-top5-og-snapshot | PARITY Explore L5, DEPTH Lab L5, NEXT.md | SHIP | KEEP top5-before-movers snapshot order | — | weekly hot-week atom | standup cycle 92
+
 ---
 
 ## Entries
 
-2026-05-31 | Lab dashboard comps OG snapshot | c9151786 | SHIP | keep | roster-grade comps export matches DynastyComps pattern
+2026-05-31 | waiver tendencies unhide | SHIP | Hawkeye wire archetypes screenshot bait | keep | — | standup cycle 90
+
 2026-05-31 | Bureau behavioral share atom 2 | pressure-map copy link | SHIP | keep | Explore-parity travel on deadline pressure tab
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS
 2026-05-31 | Lab OG demo rows close cycle 57 CI/preview gap without inventing new scope | lab-og-demo-rows atom | SHIP | keep | Lab L5 epic atom 1/3; labeled sample preview protects trust vs fake-live claims
