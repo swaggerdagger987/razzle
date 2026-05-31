@@ -1,36 +1,26 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-career-compare-live",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity (atom 3/4)",
-  "slice_title": "Career compare OG multi-player overlay rows",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
+  "epic": "League L5 — Bureau OG terracotta watermark parity (atom 3/4)",
+  "slice_title": "league-og-pressure-map-watermark",
+  "parity_ref": "League L5 — hidden Bureau renderers / watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/pressure-map PNG ≥40KB with terracotta band + LIVE/SAMPLE",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_career_compare_live.py"
+    "apps/web/app/og/pressure-map/route.tsx",
+    "apps/api/tests/test_pressure_map_og_watermark.py"
   ],
   "max_files": 2,
-  "max_lines": 180,
+  "max_lines": 120,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_career_compare_live.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_pressure_map_og_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "percentiles toLab atom",
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps"
+    "Monte Carlo OG",
+    "Power Rankings OG",
+    "API schema changes"
   ],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
-  "content_commit": "9d19930cf",
-  "reality": "PASS",
-  "status": "done"
+  "builder_mode": "composer-surgical"
 }

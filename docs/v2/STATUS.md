@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 154 — Lab efficiency OG toLab RB position)
+**Last updated:** 2026-05-31 (factory cycle 160 — League Pressure Map OG terracotta watermark)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 154 |
+| Cycle | 160 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | position-default hallway atom 3 or Bureau per PARITY |
-| Last commit | `8327741` |
+| Next slice | league-og-power-rankings-watermark |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
