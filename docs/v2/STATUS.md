@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | Lab trade-values OG snapshot rows |
-| Last commit | `da33eafd` |
+| Last commit | `95dfef56` |
 
 Recent completions (cycle 88): Prospects OG snapshot rows; weekly/breakouts snapshots already on base.
 
