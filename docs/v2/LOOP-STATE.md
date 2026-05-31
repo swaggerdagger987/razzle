@@ -1,12 +1,8 @@
-cycle: 153
+cycle: 156
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: PARITY pick — Bureau H2H or League L5 hidden renderers
-last_keep_cycle: 153
-last_commit: facf1afd9
-lab_l5_og_demo_trust_epic: complete
-lab_l5_og_hallway_epic: complete
-explore_l5_universe_export_epic: complete
-lab_l4_pro_gate_error_epic: complete
-room_l5_briefing_gtm_epic: complete
+next_slice: PARITY next RED/YELLOW row
+last_keep_cycle: 156
+last_commit: 338709883
+lab_l5_og_watermark_display_name_epic: complete
