@@ -1,56 +1,37 @@
 {
-  "epic_status": "active",
-  "big_problem": "Self-Scout export cards still hit live API or demo — Reddit screenshots should mirror in-panel depth grades without Sleeper auth on the OG route.",
-  "epic_title": "League L5 — Bureau Self-Scout snapshot export",
-  "parity_ref": "League L5 — Scenario explorer / what-if outputs that travel",
-  "depth_ref": "League L5",
+  "big_problem": "Explore OG cards go blank when the screener API is cold — Reddit screenshots need universe-aware sample rows, not pulling film alone.",
+  "epic_title": "Explore L5 — OG universe query demo rows",
+  "parity_ref": "Explore L5 — screener OG export",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "bureau-self-scout-sharebar-snapshot",
-      "title": "Self-Scout ShareBar + OG snapshot codec matches panel grades",
+      "id": "explore-og-college-filename",
+      "title": "Explore OG — college export filename",
+      "status": "done",
+      "merge_commit": "b098d64c"
+    },
+    {
+      "id": "explore-og-universe-demo",
+      "title": "Explore OG — NFL/college demo rows when screener query empty",
       "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "bureau-manager-profiles-sharebar-snapshot",
-      "title": "Manager Profiles ShareBar + OG snapshot for archetype rows",
+      "id": "explore-og-sample-sticker",
+      "title": "Explore OG — terracotta SAMPLE sticker on demo path",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "bureau-self-scout-snapshot-roundtrip-test",
-      "title": "Pytest roundtrip for Self-Scout OG snapshot param",
+      "id": "explore-og-live-sticker",
+      "title": "Explore OG — teal LIVE sticker when screener returns rows",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-self-scout-sharebar-snapshot",
-  "created_at": "2026-05-31T09:30:00Z",
-  "updated_at": "2026-05-31T09:50:00Z",
-  "completed_epics": [
-    {
-      "id": "lab-l4-pro-gate-upgrade",
-      "status": "complete",
-      "last_atom": "lab-pro-gate-og-sample-export",
-      "merge_commit": "1bed81fb"
-    },
-    {
-      "id": "lab-l5-og-live-fetch-merge",
-      "status": "complete",
-      "last_atom": "lab-og-gamelog-player-default",
-      "merge_commit": "4bc3913e"
-    },
-    {
-      "id": "lab-l5-launch10-sample-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
-      "merge_commit": "54443bc8"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "partial",
-      "last_atom": "lab-l4-pro-gate-error-surface",
-      "merge_commit": "5721ee33"
-    }
-  ]
+  "next_atom_id": "explore-og-universe-demo",
+  "epic_status": "active",
+  "created_at": "2026-05-31T10:55:00Z",
+  "updated_at": "2026-05-31T10:55:00Z",
+  "completed_epics": []
 }
