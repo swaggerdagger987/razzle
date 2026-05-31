@@ -10,8 +10,8 @@ import { BureauTradeFinder } from "./BureauTradeFinder";
 import { BureauHeadToHead } from "./BureauHeadToHead";
 import { BureauRosterDepth } from "./BureauRosterDepth";
 import { BureauBuildProfiles } from "./BureauBuildProfiles";
-import { BureauWaiverTendencies } from "./BureauWaiverTendencies";
 import { BureauPowerRankings } from "./BureauPowerRankings";
+import { BureauWaiverTendencies } from "./BureauWaiverTendencies";
 
 interface Props {
   feature: BureauFeatureSlug;

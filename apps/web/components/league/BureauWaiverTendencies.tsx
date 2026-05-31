@@ -24,7 +24,6 @@ export function BureauWaiverTendencies({ data, leagueId }: Props) {
   const hawkeye = AGENT_BY_ID.hawkeye;
   const rows = (data.rows as WaiverRow[]) ?? [];
   const hero = rows.find((r) => r.archetype.includes("Hoarder")) ?? rows[0] ?? null;
-  const totalAdds = rows.reduce((n, r) => n + r.adds, 0);
 
   return (
     <div className="flex flex-col gap-6">
@@ -36,7 +35,7 @@ export function BureauWaiverTendencies({ data, leagueId }: Props) {
               {hawkeye.name} · {hawkeye.role}
             </p>
             <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              who hammers waivers, who hoards FAAB, who panic-drops
+              who chases waivers, who hoards FAAB, who panic-drops
             </p>
           </div>
         </div>
@@ -44,7 +43,7 @@ export function BureauWaiverTendencies({ data, leagueId }: Props) {
           Waiver Tendencies
         </h1>
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {rows.length} managers · {totalAdds} adds tracked
+          {rows.length} managers · sorted by adds
         </p>
       </header>
 
@@ -53,17 +52,14 @@ export function BureauWaiverTendencies({ data, leagueId }: Props) {
           <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
             watch list
           </p>
-          <p className="mt-1 font-bold" style={{ fontFamily: "var(--font-display)" }}>
-            {hero.team} — {hero.archetype}
-          </p>
-          <p className="mt-1 text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-            {hero.adds} adds · ${hero.faab_spent} FAAB · {hero.drops} drops
+          <p className="mt-1 text-sm" style={{ fontFamily: "var(--font-hand)" }}>
+            {hero.team} — {hero.archetype}. {hero.adds} adds, ${hero.faab_spent} FAAB burned.
           </p>
           <Link
             href={
               toRoom({
                 agentId: "hawkeye",
-                question: `What waiver move should I expect from ${hero.team} this week?`,
+                question: `${hero.team} is "${hero.archetype}" on waivers — who will they target next week?`,
                 panelSlug: "waiver-tendencies",
               }) as Route
             }
@@ -74,32 +70,41 @@ export function BureauWaiverTendencies({ data, leagueId }: Props) {
         </section>
       )}
 
-      <section className="grid gap-4 sm:grid-cols-2">
-        {rows.map((row, i) => (
-          <div
-            key={row.roster_id}
-            className="chunky bg-bg-card p-4"
-            style={{ transform: i % 2 === 0 ? "rotate(-0.3deg)" : "rotate(0.3deg)" }}
-          >
-            <p className="font-bold" style={{ fontFamily: "var(--font-display)" }}>
-              {row.team}
-            </p>
-            <p className="text-xs text-ink-light mt-1" style={{ fontFamily: "var(--font-mono)" }}>
-              {row.adds} adds · {row.drops} drops · ${row.faab_spent} FAAB
-            </p>
-            <p className="mt-2 text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              {row.archetype}
-            </p>
-          </div>
-        ))}
+      <section className="flex flex-col gap-3">
+        {rows.length === 0 ? (
+          <p className="text-ink-medium text-sm">no waiver moves yet — check back after week 2.</p>
+        ) : (
+          rows.map((row, i) => (
+            <div
+              key={row.roster_id}
+              className="chunky bg-bg-card p-4"
+              style={{ transform: i % 2 === 0 ? "rotate(-0.2deg)" : "rotate(0.2deg)" }}
+            >
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <p className="font-bold" style={{ fontFamily: "var(--font-display)" }}>
+                  {row.team}
+                </p>
+                <span
+                  className="text-[10px] font-bold uppercase text-orange"
+                  style={{ fontFamily: "var(--font-mono)", transform: "rotate(-2deg)" }}
+                >
+                  {row.archetype}
+                </span>
+              </div>
+              <p className="mt-2 text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                {row.adds} adds · {row.drops} drops · ${row.faab_spent} FAAB · {row.claim_attempts} claims
+              </p>
+            </div>
+          ))
+        )}
       </section>
 
-      <footer className="flex flex-wrap gap-4 text-sm">
+      <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <Link href={"/lab/breakouts" as Route} className="text-orange underline">
+          lab breakouts →
+        </Link>
         <Link href={`/league/${leagueId}/trade-finder` as Route} className="text-orange underline">
           trade finder →
-        </Link>
-        <Link href={`/league/${leagueId}/build-profiles` as Route} className="text-orange underline">
-          build profiles →
         </Link>
       </footer>
     </div>
