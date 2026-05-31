@@ -130,9 +130,9 @@ sustainability rules.
 | Research bulk extraction | `composer-2.5-fast` | Pattern fuzzy → Sonnet |
 | Review / FACTORY-DOD | `gpt-5.3-codex` | Brand/voice claim → Opus |
 
-**Sustainable morning:** Planner finds big problem → writes atom contract → Composer
-executes. One Opus run that re-reads everything and codes like Opus is **not**
-sustainable.
+**Sustainable factory:** Two-lane split — [strategy-review.md](./automations/strategy-review.md)
+(Sonnet) writes contracts; [team-build.md](./automations/team-build.md) (Auto/Composer)
+implements. See [MODEL-ECONOMICS.md](./MODEL-ECONOMICS.md).
 
 Escalation is not failure. It is model-market fit.
 
@@ -241,15 +241,15 @@ dedicated Slack channel. The Founder operates the team from their phone:
 
 | Trigger (Slack) | Effect | Spec |
 |-----------------|--------|------|
-| `good morning team` | Open the workday, run the first Standard Company Loop cycle, merge if gates pass, post Slack summary | `docs/company/automations/good-morning.md` |
-| `Razzle:` / `Strategist:` / `Architect:` / `Builder:` / `Researcher:` / `Reality:` / `Team:` / `Board:` | Talk to a specific role or the whole team; write files only when the answer changes future behavior | `docs/company/automations/ask-team.md` |
-| `good evening team` | Produce CEO nightly review over today's open/merged PRs, write reflection + per-role memory updates, open/merge a review PR, post Slack goodnight | `docs/company/automations/good-evening.md` |
-| loop tick | While workday is open, run additional cycles on a schedule until the Founder closes the day or a quality blocker appears | `docs/company/automations/tick.md` |
+| `good morning team` | Open workday (`workday.json`); no product build | `docs/company/automations/good-morning.md` |
+| Schedule 4h + `plan team` | Strategy & Review — epic + slice contract | `docs/company/automations/strategy-review.md` |
+| Schedule ~60min | Team Build — implement contract, merge standup PR | `docs/company/automations/team-build.md` |
+| `Razzle:` / role prefixes / `Team:` / `Board:` | Ask Team Q&A | `docs/company/automations/ask-team.md` |
+| `good evening team` | Brake factory, CEO review PR, close workday | `docs/company/automations/good-evening.md` |
+| loop tick | **Deprecated** — use Team Build | `docs/company/automations/tick.md` |
 
-State is shared via `docs/company/state/workday.json` (`status: open | closed`,
-cycle counter, last trigger), but open PRs are the daytime source of truth.
-Because the Founder reviews at night, passing work may merge autonomously during
-the day. Open PRs represent blockers, checks pending, or direction questions.
+State: `workday.json`, `current-epic.json`, `current-slice.json`, `strategy-last-run.json`.
+See `docs/company/MODEL-ECONOMICS.md` § Two-lane factory.
 
 The operator-facing cheat sheet is `docs/company/SLACK.md`. The full SOP is
 `docs/company/SOP.md`. Guardrails are `docs/company/GUARDRAILS.md`.

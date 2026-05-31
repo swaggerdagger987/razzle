@@ -52,8 +52,7 @@ If any automation violates these, the automation is wrong.
 
 This is the first live version:
 
-- `good morning team` opens the workday, runs the first Standard Company Loop
-  cycle, and starts scheduled tick cycles.
+- `good morning team` opens the workday only (Strategy + Team Build automations ship atoms).
 - Role-addressed Slack questions let the Founder talk to specific team members.
 - `good evening team` produces a CEO digest by reading the day's open and merged
   PRs, standups, memory updates, and results rows.
@@ -64,16 +63,13 @@ This is the first live version:
 Important: merged commits, PRs, standups, evidence, and memory are the truth.
 Slack is a conversational surface, not the system of record.
 
-### Stage B — Continuous Looping
+### Stage B — Two-lane continuous build
 
-`docs/company/automations/tick.md` is active once configured in Cursor:
+- **Strategy & Review** ([strategy-review.md](./automations/strategy-review.md)) ~every 4h + `plan team`
+- **Team Build** ([team-build.md](./automations/team-build.md)) ~every 60min while workday open
+- Deprecated monolithic [tick.md](./automations/tick.md)
 
-- The loop runs additional cycles while the workday is open.
-- No artificial daily cycle cap by default.
-- Reality Checker, Chief of Staff, or Founder can pause if the loop is producing
-  low-quality work, repeated failures, or product drift.
-- Founder still reviews at night, but the team does not wait for nighttime to
-  merge clean work.
+See [MODEL-ECONOMICS.md](./MODEL-ECONOMICS.md).
 
 ### Stage C — CEO Review Only
 

@@ -1,12 +1,13 @@
 # Automation Prompt Version
 
-Current version: `2026-05-31.v1`
+Current version: `2026-06-01.v1`
 
-This version string should be copied into the top of each prompt body in the
-Cursor dashboard automation config.
+Two-lane factory split:
+- [strategy-review.md](./strategy-review.md) — Sonnet, no Auto
+- [team-build.md](./team-build.md) — Auto or Composer 2.5 Fast
+- [good-morning.md](./good-morning.md) — workday open only
+- [tick.md](./tick.md) — deprecated
 
-Nightly review should include:
+Copy `PROMPT_VERSION: 2026-06-01.v1` into each Cursor dashboard automation.
 
-- repo prompt version
-- dashboard prompt version (as reported by the operator)
-- sync status: in-sync / drift
+Nightly review reports repo vs dashboard sync status.

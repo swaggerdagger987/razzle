@@ -1,147 +1,90 @@
 # Model Economics — Sustainable Factory
 
-The factory must ship **and** stay affordable. One Opus run that re-reads the
-entire repo, re-debates strategy, and re-implements from scratch is not
-sustainable — that is how you get cycle 58 in one day with empty previews.
-
-**Law:** Expensive models **decide and decompose**. Cheap execution **types**.
-Reality ** verifies** with curl, not essays.
+**Law:** Expensive models **decide** (Strategy lane). **Auto / Composer** **types**
+(Team Build lane). One VM = one billed model — split automations, do not "behave
+like Composer" on Opus.
 
 ---
 
-## Two tiers
+## Two-lane factory (required)
 
-| Tier | Roles | Job | Model intent | Token budget |
-|------|-------|-----|--------------|--------------|
-| **Planner** | Chief, Strategist, Architect, Researcher (light) | Find the big problem, pick **one** atomic slice, write the contract | Opus / Sonnet thinking | ≤ 25k input |
-| **Executor** | Builder | Implement the contract only | **Composer-class** (fast, surgical) | ≤ 40k input |
-| **Verifier** | Reality | Execute checks, FACTORY-DOD | Codex / medium | ≤ 15k input |
+```text
+Strategy & Review (~every 4h)  →  current-epic.json + current-slice.json
+Team Build (~every 60min)     →  implement contract → merge → T1 Slack
+```
 
-**Total per morning cycle: ≤ 80k input.** If you exceed, stop and write a
-blocker — the run is over-scoped.
+| Lane | Automation | Dashboard model | Input budget |
+|------|------------|-----------------|--------------|
+| **Strategy** | [strategy-review.md](./automations/strategy-review.md) | **Sonnet thinking** (Opus when new epic / PARITY fork) | ≤ 20k |
+| **Build** | [team-build.md](./automations/team-build.md) | **Auto** or **Composer 2.5 Fast** | ≤ 50k |
+| **Open factory** | [good-morning.md](./automations/good-morning.md) | Auto or Sonnet | ≤ 5k |
+| **Brake** | [good-evening.md](./automations/good-evening.md) | Sonnet | ≤ 30k |
+| **Q&A** | [ask-team.md](./automations/ask-team.md) | Auto or Sonnet | ≤ 15k |
 
-Cursor Automations often run **one model per trigger**. Simulate tiers inside
-one run by **strict phase boundaries** (below). When the platform allows split
-automations, prefer:
+**Do not use Auto on Strategy.** Judgment-heavy; unpredictable cost.
 
-| Trigger | Model | Does |
-|---------|-------|------|
-| `good morning team` | Opus thinking | Plan only → writes `current-slice.json`, no code |
-| `team build` | Composer 2.5 Fast | Read contract → code → merge |
+**Auto on Build:** experiment 48h. If spend ≈ Opus, pin **Composer 2.5 Fast**.
 
-Until then, one morning run must **honor phases** as if the model changed.
-
----
-
-## Phase 1 — PLAN (Planner tier)
-
-**Goal:** Answer two questions in writing before any code:
-
-1. **Big problem** — What is the highest-leverage gap for Razzle this week?
-   (One sentence. Football-native. Tied to PARITY / DEPTH / ACCEPTANCE / North Star.)
-2. **Today's atom** — What is the **smallest shippable slice** that moves that
-   problem? One vertical cut. One PR. Merge today.
-
-### Strategist rules
-
-- Do **not** pick a slice because it is easy. Pick because it advances the big problem.
-- Decompose: `Big problem → epic (3–5 slices max) → today's atom only`.
-- If today's atom was **already merged today** (check `results.tsv` + base branch),
-  pick the **next atom** in the epic or a new problem — do not rebuild the same route.
-- **KILL** slices that are docs-only churn, prompt thrashing, or horizontal sprawl.
-
-### Architect rules
-
-- Turn the atom into a **slice contract** (see `docs/company/state/current-slice.json`).
-- `allowed_paths`: explicit file list (typically 1–3 files).
-- `max_lines`: hard cap (default 300; OG routes may be 400 with justification).
-- `acceptance_commands`: exact curl/pytest/build commands Reality will run.
-- If the atom needs >3 files or >400 lines, **DEFER** — split the epic.
-
-### Researcher rules (light)
-
-- **≤ 5 minutes.** Scan `REDDIT-INTEL.md` + memory only. At most 3 bullets.
-- No web scraping unless it changes slice choice.
-
-### Planner read list (only these in Phase 1)
-
-1. `docs/company/MODEL-ECONOMICS.md` (this file)
-2. `docs/company/state/workday.json`
-3. `docs/company/NEXT.md`
-4. `docs/v2/STATUS.md` (skim)
-5. `docs/v2/LOOP-STATE.md`
-6. Last standup **verdict + slice title only** (do not re-read full history)
-7. Last **5** rows of `docs/v2/results.tsv` (not 20)
-
-Do **not** re-read `NORTH_STAR.md`, `DESIGN.md`, or all six role files every
-cycle. Reference them; open only when the slice touches voice or trust rules.
-
-**Output:** Write `docs/company/state/current-slice.json` before Phase 2.
+Deprecated: monolithic [tick.md](./automations/tick.md) (plan+build on one Opus run).
 
 ---
 
-## Phase 2 — BUILD (Executor tier)
+## Per-run budgets
 
-**Behave like Composer** even if the VM model is Opus:
+| Phase | Where | Budget |
+|-------|-------|--------|
+| Strategy review + contract | strategy-review.md | ≤ 20k |
+| Build + verify | team-build.md | ≤ 50k |
 
-- Read **only** `current-slice.json` + files in `allowed_paths` + `DESIGN.md`
-  if UI (skim colors/borders section).
-- No architecture essays. No refactors outside `allowed_paths`.
-- Smallest diff that clears `acceptance_commands`.
-- Stop when contract satisfied — do not gold-plate.
-
-If stuck after one focused attempt: append `blocked_reason` to the standup and
-**ESCALATE** to Codex in a follow-up run — do not burn 200k tokens looping.
+Target mix while workday open: **~6 strategy runs + ~24 build runs** → majority
+build spend if Build dashboard is Auto/Composer.
 
 ---
 
-## Phase 3 — VERIFY (Verifier tier)
+## Strategy read list
 
-- Run `acceptance_commands` from the slice contract.
-- Run `docs/company/FACTORY-DOD.md` gates.
-- PASS only with execution output in standup or `docs/v2/evidence/`.
+1. `current-epic.json`, `strategy-last-run.json`, `workday.json`
+2. Last 5 `results.tsv` rows
+3. PARITY rows **cited by epic only**
+4. Last 1–3 merged standup diffs
 
-No product audits longer than 10 bullets. No re-reading the diff for "vibes."
-
----
-
-## Cost anti-patterns (instant Chief review)
-
-| Pattern | Why it burns money | Fix |
-|---------|-------------------|-----|
-| Re-read 30+ docs every cycle | Opus tax on static content | Tiered read lists |
-| Same slice shipped twice same day | Re-fire without checking base | Check `results.tsv` + merge-base |
-| 50+ cycles/day | Tick spam or duplicate triggers | One slice per morning; disable extra triggers |
-| Reality PASS on build only | Rework + Founder debug | FACTORY-DOD Gate C |
-| Builder picks slice | Strategist skipped | KILL — contract must exist first |
-| 800-line OG route in one atom | Epic not decomposed | Split epic in contract |
+No AGENTS.md, no six role files, no full PARITY every run.
 
 ---
 
-## Scorecard (nightly)
+## Build read list
 
-Chief of Staff / evening review logs:
+1. `current-slice.json`
+2. `allowed_paths` only
+3. `FACTORY-DOD.md`, `SLACK-FORMATS.md`
 
-- `plan_tokens_est`: low / ok / over
-- `big_problem_clear`: y/n
-- `atom_sh shipped`: y/n
-- `duplicate_slice`: y/n
-- `merge_on_base`: y/n
-
-Founder tunes model choices in the dashboard when `over` repeats.
+No epic decomposition. No PARITY browse.
 
 ---
 
-## Dashboard model guidance
+## Cost anti-patterns
 
-| Automation | Recommended model | Why |
-|------------|-------------------|-----|
-| Morning (plan+build in one) | Opus thinking **only if phases honored**; otherwise split | Planning quality |
-| Morning plan-only (future) | Opus thinking | Cheap when no code |
-| `team build` (future) | **Composer 2.5 Fast** | Throughput |
-| Ask Team (routine) | Sonnet thinking | Q&A |
-| Ask Team (`Board:`) | Opus | Founder-level |
-| Evening review | Sonnet thinking | Read diffs, digest |
+| Pattern | Fix |
+|---------|-----|
+| Opus on Team Build dashboard | Auto or Composer |
+| Auto on Strategy | Sonnet / Opus explicit |
+| Build without `next_slice_ready` | Gate on strategy-last-run.json |
+| Monolithic tick | team-build.md + strategy-review.md |
+| Re-read 30+ docs per build | Build read list only |
 
-**Sustainability target:** One `good morning team` ≈ one merged PR ≈ one atom.
-Founder touches direction at night, not merge or preview debug.
+---
+
+## Scorecard (evening review)
+
+- `plan_tokens_est`: low / ok / over (build:strategy run ratio)
+- `atoms_shipped`, `duplicate_slice`, `merge_on_base`, `guardrail_incidents`
+- `strategy_runs_today`, `build_runs_today`
+
+Founder pins Composer on Build when `over` repeats.
+
+---
+
+## Sustainability target
+
+Many atoms per open workday. Strategy ~4h; Build ~60min. Slack T1 per merge.
+Brake with `good evening team` when cost spikes.

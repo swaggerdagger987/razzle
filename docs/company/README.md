@@ -21,11 +21,13 @@ into `OPERATING_SYSTEM.md`.
 6. `HIRING_AND_FIRING.md` — How roles are created, rewritten, merged, or retired
 7. `SOP.md` — CEO-mode operating procedure and old-loop ethos preserved
 8. `GUARDRAILS.md` — Branch protection, run lock, prompt-sync, and founder-only boundaries
-9. **`HARNESS.md`** — **One-time factory setup** (GitHub, CI, Cursor Automations, Slack)
-10. `NEXT.md` — First slice candidates so the team has something concrete to bite
-11. `AUTOMATION.md` — How to run the company recursively, "Never Automate" rules
-12. `SLACK.md` — Operator cheat sheet: how to start, question, and stop the team from Slack
-13. `automations/README.md` — Cursor Automation specs (good-morning, ask-team, good-evening, tick)
+9. **`HARNESS.md`** — Factory setup (five automations, model picks)
+10. **`MODEL-ECONOMICS.md`** — Two-lane factory (Strategy vs Team Build)
+11. **`FACTORY-VISION.md`** — 24/7 build narrative
+12. `NEXT.md` — Lead slice candidates
+13. `AUTOMATION.md` — Never Automate rules
+14. `SLACK.md` — Operator cheat sheet (`plan team`, triggers)
+15. `automations/README.md` — strategy-review, team-build, good-morning, evening, ask-team
 
 Then read the role file for the role being invoked, plus that role's memory file.
 
@@ -110,23 +112,12 @@ The company exists to serve the product, not the other way around.
 
 ## Current Operating Mode
 
-**Stage 0 — Autonomous Slack workday.** Run roles by:
+**Two-lane factory (Stage B).**
 
-- Sending `good morning team` in `#razzle-team` Slack — the Morning Standup
-  Cursor Automation runs the first Standard Company Loop cycle, opens a PR, and
-  merges it if gates pass.
-- Scheduled loop ticks continue building while the workday is open.
-- Asking role-prefixed questions (`Strategist:`, `Architect:`, `Reality:`,
-  `Team:`, etc.) in Slack — the Ask The Team Automation answers from repo
-  memory and writes files only when the answer changes future behavior.
-- Sending `good evening team` in `#razzle-team` Slack — the CEO Nightly Review
-  Automation reviews the day's open/merged PRs and writes the action digest.
+- `good morning team` — open workday
+- Strategy & Review — 4h schedule + `plan team` (Sonnet)
+- Team Build — 60min schedule (Auto / Composer)
+- `good evening team` — brake factory
+- Ask Team — role prefixes
 
-Autonomy is the default. Passing PRs can merge without waiting for Founder
-review. Founder review happens at night and handles exceptions, direction, and
-overrides.
-
-If you want to run a role manually outside Slack, use the `Prompt Template`
-in `AUTOMATION.md` against the role file and memory file directly.
-
-Do not automate unclear judgment. Automate stable handoffs.
+See [MODEL-ECONOMICS.md](./MODEL-ECONOMICS.md) and [HARNESS.md](./HARNESS.md).

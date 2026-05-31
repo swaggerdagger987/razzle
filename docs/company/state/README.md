@@ -1,11 +1,18 @@
 # Company State
 
-Small, machine-readable state files the Automations share. **Not** the
-canonical state of the product — that lives in `docs/v2/STATUS.md` and
-`docs/v2/results.tsv`.
+Machine-readable state files Automations share. Product truth lives in
+`docs/v2/STATUS.md` and `docs/v2/results.tsv`.
 
-These files are an **operating semaphore** for the Slack-driven workday. Merged
-PRs are the durable source of truth; open PRs are exceptions or checks pending.
+---
+
+## Two-lane handoff
+
+| Lane | Automation | Writes |
+|------|------------|--------|
+| Strategy | [strategy-review.md](../automations/strategy-review.md) | `current-epic.json`, `current-slice.json`, `strategy-last-run.json` |
+| Build | [team-build.md](../automations/team-build.md) | `workday.json` cycle counters, standups, `results.tsv` |
+
+Team Build **must not** run when `strategy-last-run.json` → `next_slice_ready` is false.
 
 ---
 
@@ -13,14 +20,23 @@ PRs are the durable source of truth; open PRs are exceptions or checks pending.
 
 | File | Purpose | Owner |
 |------|---------|-------|
-| `workday.json` | Is the team currently working? When did the workday start? How many cycles ran? | Morning + Nightly Review |
-| `current-slice.json` | Planner → Builder handoff: big problem, today's atom, allowed paths, acceptance commands | Morning (Phase PLAN) |
+| `workday.json` | Open/closed factory semaphore | Morning open, Evening close, Build reads |
+| `current-epic.json` | Epic + atom queue | Strategy |
+| `current-slice.json` | Builder contract (`atom_id` must match epic `next_atom_id`) | Strategy writes, Build reads |
+| `strategy-last-run.json` | Last strategy run + contract freshness | Strategy writes, Build gates on |
+
+---
+
+## `strategy-last-run.json`
+
+Schema: [strategy-last-run.schema.json](./strategy-last-run.schema.json).
+
+- **Strategy** sets `next_slice_ready: true` after writing aligned epic + slice.
+- **Team Build** exits silently if `next_slice_ready` is false or `atom_id` mismatch.
 
 ---
 
 ## `workday.json`
-
-Schema (illustrative):
 
 ```json
 {
@@ -28,50 +44,27 @@ Schema (illustrative):
   "started_at": "<ISO 8601 UTC>" | null,
   "closed_at": "<ISO 8601 UTC>" | null,
   "cycle_count_today": 0,
-  "last_trigger": "good morning team" | "good evening team" | "loop tick" | null,
+  "last_trigger": "good morning team" | "good evening team" | "team build" | null,
   "last_cycle_commit": "<7-char SHA>" | null
 }
 ```
 
-### Read/write protocol
-
-- Morning Standup ("good morning team") writes the file and merges it when gates pass:
-  `status=open`, `started_at=now`, `closed_at=null`, `cycle_count_today=0`.
-- CEO Nightly Review ("good evening team") writes the file and merges it when gates pass:
-  `status=closed`, `closed_at=now`. Other fields preserved.
-- Loop Tick **reads** the file. If `status=closed`, exits silently.
-  If `status=open`, runs one cycle and increments `cycle_count_today`.
-
-Do not rely only on `workday.json` to know what happened today. The evening
-automation must inspect today's open and merged PRs.
-
-### Concurrency
-
-Cursor Cloud Agents run in isolated VMs. Two agents writing to this file
-concurrently would race, but in practice the day's workflow is:
-
-- One Morning trigger
-- (Optionally) Loop ticks, one at a time on a schedule
-- One Evening trigger
-
-If you ever fire two morning triggers in the same day, the second one
-overwrites the first's `started_at`. Don't do that.
-
-### Why JSON, not Markdown
-
-The Tick automation needs to parse this programmatically with `jq` or
-equivalent. Markdown front-matter would work too, but JSON is simpler and
-git-friendly.
+- **Morning:** `status=open`, reset `cycle_count_today=0`.
+- **Evening:** `status=closed`.
+- **Team Build:** increment `cycle_count_today` after merge.
 
 ---
 
-## What this is **not**
+## `current-epic.json` / `current-slice.json`
 
-- Not a queue. The slice queue is `docs/v2/PARITY.md`.
-- Not a status board. Live build status is `docs/v2/STATUS.md`.
-- Not a memory file. Per-role memory is `docs/company/memory/<role>.md`.
-- Not a results log. Cycle outcomes go in `docs/v2/results.tsv`.
+See [current-epic.schema.json](./current-epic.schema.json) and
+[current-slice.schema.json](./current-slice.schema.json).
 
-This file exists for one reason: so that "good morning team", loop ticks, and
-"good evening team" have a small shared shape. The PR list and results ledger
-remain the living history.
+Strategy advances epic after reviewing merges — not Team Build.
+
+---
+
+## What this is not
+
+- Backlog catalog: `docs/v2/PARITY.md`
+- Active sprint pointer: `current-epic.json`

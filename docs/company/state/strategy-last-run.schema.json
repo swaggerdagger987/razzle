@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Razzle Company OS — strategy last run",
+  "type": "object",
+  "required": ["last_run_at", "next_slice_ready"],
+  "properties": {
+    "last_run_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 UTC when Strategy & Review last completed."
+    },
+    "last_merge_reviewed": {
+      "type": ["string", "null"],
+      "description": "7-char SHA of last standup content commit reviewed."
+    },
+    "next_slice_ready": {
+      "type": "boolean",
+      "description": "True when current-slice.json matches current-epic next_atom_id."
+    },
+    "next_atom_id": {
+      "type": ["string", "null"],
+      "description": "Copy of epic next_atom_id after this run."
+    },
+    "last_strategy_commit": {
+      "type": ["string", "null"],
+      "description": "7-char SHA of last strategy docs PR commit."
+    },
+    "last_trigger": {
+      "type": "string",
+      "enum": ["schedule", "plan team", "good morning team"]
+    }
+  }
+}

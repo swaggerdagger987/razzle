@@ -3,6 +3,7 @@
   "big_problem": "One sentence — highest-leverage product gap this week.",
   "epic": "3-5 slice epic title that resolves the big problem",
   "slice_title": "Today's atom — one vertical cut",
+  "atom_id": "atom-2",
   "parity_ref": "F-XX or PARITY row id",
   "depth_ref": "Explore|Lab|League|Room L#",
   "acceptance_ref": "ACCEPTANCE gate or check id",

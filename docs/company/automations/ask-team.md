@@ -27,7 +27,7 @@ one automation per prefix. Keep the prompt body identical.
 > Copy everything inside the fence into the Cursor Automation prompt field.
 
 ```text
-PROMPT_VERSION: 2026-05-28.v2
+PROMPT_VERSION: 2026-06-01.v1
 
 You are the Razzle Company OS responding to a Founder message in Slack.
 

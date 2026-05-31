@@ -138,30 +138,28 @@ Full specs: `docs/company/automations/README.md`
 2. Install Cursor Slack app; link your Cursor account
 3. Connect repo `swaggerdagger987/razzle`, base **`razzle-v2-redesign`**
 
-### Create four automations
+### Create five automations
 
-Copy prompt bodies from repo files. Start each with `PROMPT_VERSION` line.
+Copy prompt bodies from repo. Start with `PROMPT_VERSION: 2026-06-01.v1`.
 
-| Automation | Trigger | Prompt file | Model (starting point) |
-|------------|---------|-------------|----------------------|
-| **Morning Standup** | Slack keyword `good morning team` | `good-morning.md` | Opus thinking (plan) + Composer behavior (build) |
-| **Team Build** (optional) | Slack keyword `team build` | `team-build.md` (future) | **Composer 2.5 Fast** — reads `current-slice.json` only |
-| **Ask The Team** | Prefix `Strategist:` etc. | `ask-team.md` | Sonnet 4.6 thinking |
-| **CEO Nightly** | Slack keyword `good evening team` | `good-evening.md` | Sonnet 4.6 thinking |
-| **Loop Tick** | Schedule every 60–90 min | `tick.md` + morning body | Opus or GPT-5.5 medium |
+| Automation | Trigger | Prompt file | Model (dashboard) |
+|------------|---------|-------------|-------------------|
+| **Morning** | Slack `good morning team` | [good-morning.md](./automations/good-morning.md) | **Auto** or Sonnet — opens workday only |
+| **Strategy & Review** | Schedule **4h** + Slack `plan team` | [strategy-review.md](./automations/strategy-review.md) | **Sonnet thinking** (Opus when new epic) — **not Auto** |
+| **Team Build** | Schedule **~60 min** | [team-build.md](./automations/team-build.md) | **Auto** or **Composer 2.5 Fast** — **not Opus** |
+| **Ask The Team** | Prefix `Strategist:` etc. | [ask-team.md](./automations/ask-team.md) | Auto or Sonnet |
+| **CEO Nightly** | Slack `good evening team` | [good-evening.md](./automations/good-evening.md) | Sonnet — **not Auto** |
 
-**Tools to enable:** Open Pull Request (required), Send to Slack, Memories.
+**Deprecated:** Loop Tick monolith ([tick.md](./automations/tick.md)) — retarget schedule to Team Build.
 
-**Scope:** Team Owned for morning + tick (see §3b above).
-
-PR merge when checks pass — configure auto-merge or bot bypass (§3c).
+**Tools:** Open Pull Request, Send to Slack, Memories. **Scope:** Team Owned for morning, strategy, build.
 
 **Test order:**
 
-1. `Team: Are we ready to run a morning cycle?` (no PR expected)
-2. `good morning team` (expect standup PR + Slack roll call)
-3. One manual tick (only after morning PR merged or workday open on branch)
-4. `good evening team` (digest, close workday)
+1. `good morning team` → workday open + T1 Slack
+2. `plan team` or wait for Strategy schedule → `strategy-last-run.json` `next_slice_ready: true`
+3. Team Build schedule → standup PR + T1 Slack
+4. `good evening team` → T3 brake digest
 
 ---
 
@@ -170,17 +168,10 @@ PR merge when checks pass — configure auto-merge or bot bypass (§3c).
 When you send **`good morning team`**:
 
 ```text
-Slack → Cursor Automation → Cloud VM (/workspace)
-  → read AGENTS.md + NORTH_STAR.md (T1–T7)
-  → read automations/good-morning.md
-  → Outside Reality (1–3 signals)
-  → Standup + three-equals vote
-  → Build slice from PARITY/NEXT.md
-  → Reality Checker (curl / screenshot / pytest)
-  → Score Trust pillars T1–T7 in standup
-  → commit → push → PR standup: YYYY-MM-DD
-  → merge if api + web + web-build green
-  → Slack summary with PR link
+Slack → good morning team → workday open
+Strategy (4h / plan team) → epic + current-slice.json
+Team Build (60min, Auto/Composer) → merge standup PR → T1 Slack
+good evening team → workday closed → T3 digest
 ```
 
 **Your phone job:** read Slack at night. Override only if direction is wrong.

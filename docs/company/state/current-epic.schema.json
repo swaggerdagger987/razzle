@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Razzle Company OS — current epic",
+  "type": "object",
+  "required": [
+    "big_problem",
+    "epic_title",
+    "atoms",
+    "next_atom_id",
+    "epic_status",
+    "last_updated"
+  ],
+  "properties": {
+    "big_problem": { "type": "string" },
+    "epic_title": { "type": "string" },
+    "atoms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "parity_ref": { "type": "string" },
+          "depth_ref": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "next", "in_progress", "done", "blocked", "skipped"]
+          },
+          "merge_commit": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "completed_atom_ids": { "type": "array", "items": { "type": "string" } },
+    "next_atom_id": { "type": ["string", "null"] },
+    "epic_status": { "type": "string", "enum": ["active", "complete", "blocked"] },
+    "last_updated": { "type": "string", "format": "date-time" },
+    "last_merge_commit": { "type": ["string", "null"] }
+  }
+}
