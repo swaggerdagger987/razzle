@@ -8,8 +8,8 @@
     {
       "id": "lab-og-live-sticker-launch10",
       "title": "Launch-10 OG — LIVE sticker + blurb when nflverse rows render",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "4e905360"
     },
     {
       "id": "lab-og-live-sticker-prospects-weekly",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-launch10",
+  "next_atom_id": "lab-og-live-sticker-prospects-weekly",
   "created_at": "2026-05-31T08:05:00Z",
   "updated_at": "2026-05-31T08:05:00Z",
   "completed_epics": [
