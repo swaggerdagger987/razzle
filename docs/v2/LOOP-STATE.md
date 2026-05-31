@@ -8,4 +8,5 @@ last_commit: 8e2ca7f29
 lab_l5_empty_og_sample_epic: active
 lab_l5_og_hallway_epic: complete
 lab_l5_og_weekly_tolab_position: complete
+lab_l5_og_watermark_display_names: complete
 league_l5_trade_finder_gtm_epic: complete
