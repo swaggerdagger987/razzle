@@ -32,3 +32,5 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | power-rankings OG | e62721a6 | keep | 2 files; pressure-map pattern; POST power-rankings
 2026-05-31 | roster-depth tab | 059108d4 | keep | 3 files; Self-Scout depth grid pattern; Dolphin header
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
+2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
+2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link

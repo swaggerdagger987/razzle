@@ -32,3 +32,5 @@ new evidence.
 2026-05-31 | League power-rankings OG atom 2 | e62721a6 | SHIP | keep | Octo league board screenshot path; T5 T6
 2026-05-31 | League roster-depth tab atom 3 | 059108d4 | SHIP | keep | Dolphin injury exposure; closes hidden-slug hallway lie; T2 T5
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
+2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
+2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
