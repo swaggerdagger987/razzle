@@ -1,27 +1,22 @@
-# Evidence — Lab OG rankings/breakouts/tradevalues LIVE stickers
+# Evidence — lab-og-live-sticker-rankings-breakouts-tv
 
-**Atom:** `lab-og-live-sticker-rankings-breakouts-tv`  
-**Epic:** Lab L5 — Launch-10 OG panel-native LIVE labels (atom 1/3)  
-**Date:** 2026-05-31
+**Cycle:** 125 | **Content commit:** dec54078 | **Date:** 2026-05-31
 
-## Change
+## Gate C — OG PNG curl (force_demo=1)
 
-- `launch10LiveStickerLabel` + `launch10LiveBlurbSuffix` — rankings `dynasty ranks`, breakouts `RBS board`, tradevalues `value curve`.
+```
+rankings 200 67083
+breakouts 200 67621
+tradevalues 200 68974
+```
+
+PNG: 1200×630, all ≥40KB.
 
 ## Acceptance
 
-```text
-npm run build --workspace=apps/web → exit 0
+- `npm run build --workspace=apps/web` — PASS
+- `JWT_SECRET=test python3 -m pytest apps/api/tests -q` — 58 passed, 5 skipped
 
-curl /og/rankings?download=1 → 200 67083 PNG 1200×630
-curl /og/breakouts?position=WR&download=1 → 200 68647
-curl /og/tradevalues?download=1 → 200 68974
-```
+## Code
 
-## Gate C
-
-PASS — all three routes ≥40KB PNG with demo/live layout.
-
-## Verdict
-
-PASS
+`launch10LiveBlurbSuffix` + `launch10LiveStickerLabel` add rankings/breakouts/tradevalues branches.

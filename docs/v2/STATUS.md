@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | lab-og-live-sticker-gamelog-efficiency |
-| Last commit | `815ce56d` |
+| Last commit | `dec54078` |
 
 ---
 
@@ -30,7 +30,7 @@ From `LOOP-STATE.md`:
 |-------|-------|
 | Workday | open (`good morning team`) |
 | Epic | Lab L5 — Launch-10 OG panel-native LIVE labels (atom 1/3) |
-| PR | pending publish |
+| PR | https://github.com/swaggerdagger987/razzle/pull/828 |
 
 ---
 
