@@ -10,6 +10,7 @@ import { BureauTradeFinder } from "./BureauTradeFinder";
 import { BureauHeadToHead } from "./BureauHeadToHead";
 import { BureauRosterDepth } from "./BureauRosterDepth";
 import { BureauPowerRankings } from "./BureauPowerRankings";
+import { BureauWaiverTendencies } from "./BureauWaiverTendencies";
 
 interface Props {
   feature: BureauFeatureSlug;
@@ -27,6 +28,7 @@ export function BureauFeatureBody({ feature, data, leagueId }: Props) {
   if (feature === "head-to-head") return <BureauHeadToHead data={data} leagueId={leagueId} />;
   if (feature === "roster-depth") return <BureauRosterDepth data={data} leagueId={leagueId} />;
   if (feature === "power-rankings") return <BureauPowerRankings data={data} leagueId={leagueId} />;
+  if (feature === "waiver-tendencies") return <BureauWaiverTendencies data={data} leagueId={leagueId} />;
 
   return null;
 }
