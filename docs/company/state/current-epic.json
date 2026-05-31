@@ -1,38 +1,44 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 handling across launch-10 renderers drifts from teaser/perks polish.",
-  "epic_title": "Lab L4 — shared pro-gate error surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
+  "epic_title": "Room L5 — briefing GTM export",
+  "parity_ref": "Room L5 — GTM export slice",
+  "depth_ref": "Room L5",
   "atoms": [
     {
-      "id": "lab-l4-pro-gate-error-surface",
-      "title": "ProGateFromPanelError — breakouts renderer + perks pytest guard",
+      "id": "room-briefing-copy-export",
+      "title": "Briefing card — copy formatted text for Slack/Reddit",
       "status": "done",
-      "merge_commit": "5721ee33"
+      "merge_commit": "612d9638"
     },
     {
-      "id": "lab-l4-pro-gate-error-tradevalues",
-      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
-      "status": "pending",
-      "merge_commit": null
+      "id": "room-briefing-og-card",
+      "title": "Briefing OG — /og/briefing snapshot route",
+      "status": "done",
+      "merge_commit": "bf200753"
     },
     {
-      "id": "lab-l4-pro-gate-error-remaining",
-      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
+      "id": "room-briefing-watermark",
+      "title": "Briefing OG — terracotta watermark + Room hallway link",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-l4-pro-gate-error-tradevalues",
-  "created_at": "2026-05-31T09:25:00Z",
-  "updated_at": "2026-05-31T09:30:00Z",
+  "next_atom_id": "room-briefing-watermark",
+  "created_at": "2026-05-31T09:00:00Z",
+  "updated_at": "2026-05-31T09:35:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-fetch-merge",
       "status": "complete",
       "last_atom": "lab-og-gamelog-player-default",
       "merge_commit": "4bc3913e"
+    },
+    {
+      "id": "lab-l4-pro-gate-error-surface",
+      "status": "active",
+      "last_atom": "lab-l4-pro-gate-error-surface",
+      "merge_commit": "5721ee33"
     }
   ]
 }
