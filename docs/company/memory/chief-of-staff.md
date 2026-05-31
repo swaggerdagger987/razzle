@@ -10,7 +10,7 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
-2026-05-31 | factory cycle 91 weekly PPG snapshot | da33eafd | SHIP | KEEP PPG label parity on OG fallbacks | — | — | epic filtered-panel 3/3 complete
+2026-05-31 | factory cycle 91 weekly PPG snapshot | f60168e1 | SHIP | KEEP PPG label parity on OG fallbacks | — | — | epic filtered-panel 3/3 complete
 2026-05-31 | factory cycle 89 prospects RPS+position | 17a40c65 | SHIP | KEEP position on filtered Lab exports | — | — | standup cycle 89
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | 17a40c65 | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 

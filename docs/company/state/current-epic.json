@@ -21,7 +21,7 @@
       "id": "lab-weekly-og-snapshot-verify",
       "title": "Weekly heatmap OG snapshot row parity audit",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "f60168e1"
     }
   ],
   "next_atom_id": null,

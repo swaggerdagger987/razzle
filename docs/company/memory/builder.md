@@ -19,7 +19,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
-2026-05-31 | weekly PPG demo + export footer | route demo PPG + footer when players | da33eafd | SHIP | KEEP statLabel parity on DEMO_ROWS | — | — | cycle 91 evidence
+2026-05-31 | weekly PPG demo + export footer | route demo PPG + footer when players | f60168e1 | SHIP | KEEP statLabel parity on DEMO_ROWS | — | — | cycle 91 evidence
 
 2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
