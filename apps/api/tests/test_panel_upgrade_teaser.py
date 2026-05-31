@@ -104,16 +104,9 @@ def test_generic_pro_gate_slugs_have_custom_teasers():
 
 def test_pro_upgrade_perks_list_launch10_and_bureau7_names():
     teaser = _teaser_source()
-    gate = (
-        Path(__file__).resolve().parents[3]
-        / "apps/web/components/lab/ProUpgradeGate.tsx"
-    ).read_text(encoding="utf-8")
-    bureau = (
-        Path(__file__).resolve().parents[3] / "apps/web/lib/bureau-features.ts"
-    ).read_text(encoding="utf-8")
-    catalog = (
-        Path(__file__).resolve().parents[3] / "packages/panels/catalog.ts"
-    ).read_text(encoding="utf-8")
+    gate = (ROOT / "apps/web/components/lab/ProUpgradeGate.tsx").read_text(encoding="utf-8")
+    bureau = (ROOT / "apps/web/lib/bureau-features.ts").read_text(encoding="utf-8")
+    catalog = (ROOT / "packages/panels/catalog.ts").read_text(encoding="utf-8")
 
     assert "proUpgradePerkLines" in teaser
     assert "BUREAU_7_FEATURE_SLUGS" in teaser
@@ -126,3 +119,11 @@ def test_pro_upgrade_perks_list_launch10_and_bureau7_names():
         assert title in catalog, f"catalog missing launch-10 title: {title}"
     for label in BUREAU_7_PERK_LABELS:
         assert label in bureau, f"bureau-features missing label: {label}"
+
+
+def test_launch_panel_pitches_are_screenshot_native():
+    """Lab L4 atom — sharpened copy on rankings, tradevalues, breakouts."""
+    source = _teaser_source()
+    assert "before the thread does" in source
+    assert "before your league posts the screenshot" in source
+    assert "beat the waiver wire" in source

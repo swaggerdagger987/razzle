@@ -1,16 +1,25 @@
-# Evidence — Lab L4 pro gate panel pitches
+# Evidence — Lab L4 pro-gate panel pitches
 
-**Date:** 2026-05-31  
+**Cycle:** 122  
 **Atom:** `lab-pro-gate-panel-pitches`  
-**Verdict:** PASS
+**Date:** 2026-05-31
 
-## Change
+## Acceptance
 
-Sharpened `PITCH_BY_SLUG` for `tradevalues`, `breakouts`, and `dynasty-comps` on Pro upgrade gates.
+| Check | Result |
+|-------|--------|
+| `npm run build --workspace=apps/web` | exit 0 |
+| `pytest apps/api/tests/test_panel_upgrade_teaser.py -q` | 7 passed |
 
-## Commands
+## Change summary
 
-```text
-npm run build --workspace=apps/web → success
-JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q → 3 passed
-```
+- `panel-upgrade-teaser.ts`: sharpened `PITCH_BY_SLUG` for rankings, tradevalues, breakouts (thread/screenshot-native copy).
+- `test_panel_upgrade_teaser.py`: regression guard for sharpened phrase markers.
+
+## Gate C
+
+N/A — no OG/export routes.
+
+## Verdict
+
+**PASS** — Launch-10 pro trio pitches sell upgrade in agent voice.
