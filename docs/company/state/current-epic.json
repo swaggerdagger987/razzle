@@ -1,58 +1,31 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic_title": "Lab L5 — pro profile OG live parity",
+  "epic_status": "active",
+  "big_problem": "Lab OG snapshot exports watermark to generic /lab routes — rankings lose top-row Player Sheet hallway.",
+  "epic_title": "Lab L5 — snapshot OG toLab player hallway",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-percentiles-live-extract",
-      "title": "Percentiles OG live percentile extract + LIVE sticker",
+      "id": "lab-og-tolab-snapshot-rankings-top-row",
+      "title": "Rankings export passes top-row player_id into OG URL",
       "status": "done",
-      "merge_commit": "454db1c1d"
+      "merge_commit": "13a5640ce"
     },
     {
-      "id": "lab-og-career-live-extract",
-      "title": "Career OG live season arc rows",
-      "status": "done",
-      "merge_commit": "4bbdfe1e1"
+      "id": "lab-og-tolab-snapshot-weekly-player",
+      "title": "Weekly heatmap export passes hot-row player_id into OG URL",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-career-compare-live",
-      "title": "Career compare OG multi-player overlay rows",
-      "status": "done",
-      "merge_commit": "9d19930cf"
-    },
-    {
-      "id": "lab-og-percentiles-tolab",
-      "title": "Percentiles OG toLab default player hallway",
-      "status": "done",
-      "merge_commit": "62e147bb8"
+      "id": "lab-og-tolab-strengths-default",
+      "title": "Strengths OG watermark — toLab includes default player_id",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:20:00Z",
-  "updated_at": "2026-05-31T12:15:00Z",
-  "completed_epics": [
-    {
-      "id": "lab-l5-og-hallway-position-defaults",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-breakouts-position",
-      "merge_commit": "1ebb9dc73"
-    },
-    {
-      "id": "explore-l5-og-margin-notes",
-      "status": "partial",
-      "last_atom": "explore-og-margin-note-rows",
-      "merge_commit": "c1a0bcaad"
-    },
-    {
-      "id": "league-l5-bureau-h2h-gtm",
-      "status": "complete",
-      "last_atom": "bureau-h2h-og-gate-c-snapshot",
-      "merge_commit": "4907c8327"
-    },
-    "league-h2h-gtm-export-2026-05-31",
-    "lab-l5-pro-profile-og-live-parity"
-  ]
+  "next_atom_id": "lab-og-tolab-snapshot-weekly-player",
+  "created_at": "2026-05-31T12:25:00Z",
+  "updated_at": "2026-05-31T12:25:00Z",
+  "completed_epics": ["lab-l5-gtm-panel-share-bar-parity"]
 }

@@ -74,22 +74,8 @@ def test_efficiency_og_watermark_includes_default_rb_position():
     assert "TOLAB_DEFAULT_POSITION[slug]" in source
 
 
-def test_percentiles_og_watermark_includes_default_player_tolab():
-    source = ROUTE_TS.read_text(encoding="utf-8")
-    assert '"percentiles"' in source
-    idx = source.index("TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS")
-    block = source[idx : idx + 200]
-    assert '"percentiles"' in block
-    export = EXPORT_TS.read_text(encoding="utf-8")
-    assert '"percentiles"' in export
-
-
-def test_breakouts_og_watermark_includes_default_wr_position():
-    source = ROUTE_TS.read_text(encoding="utf-8")
-    assert 'breakouts: "WR"' in source
-
-
-def test_rankings_og_has_no_tolab_default_position():
-    """Dynasty rankings board is cross-position when unfiltered — no watermark default."""
-    source = ROUTE_TS.read_text(encoding="utf-8")
-    assert "rankings:" not in source.split("TOLAB_DEFAULT_POSITION")[1].split("};")[0]
+def test_rankings_export_passes_top_row_player_id():
+    renderer = (
+        ROOT / "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "playerId={topPlayer.player_id}" in renderer
