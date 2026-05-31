@@ -1,28 +1,28 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-strength-of-schedule-tab",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
-  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "slice_title": "Schedule tab unhidden with Octo SOS renderer",
-  "parity_ref": "League L5 — hidden Bureau renderers",
+  "big_problem": "Four newly unhidden Bureau depth tabs have no group-chat export cards while rival tabs ship OG share rows.",
+  "epic": "League L5 — Bureau depth tab OG export cards (atom 1/4)",
+  "slice_title": "Roster Depth tab copy link + OG grade card",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "ACCEPTANCE — Bureau tab bespoke renderer, nav visible",
-  "trust_pillars": ["T2", "T5", "T6"],
+  "acceptance_ref": "FACTORY-DOD Gate C — Bureau export PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx"
+    "apps/web/app/og/roster-depth/route.tsx",
+    "apps/web/components/league/BureauRosterDepthShareBar.tsx",
+    "apps/web/components/league/BureauRosterDepth.tsx"
   ],
   "max_files": 3,
-  "max_lines": 120,
+  "max_lines": 280,
   "acceptance_commands": [
-    "pytest apps/api/tests -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-roster-depth.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/roster-depth?download=1'",
+    "test $(stat -c%s /tmp/og-roster-depth.png) -ge 40000"
   ],
   "out_of_scope": [
-    "API strength_of_schedule.py changes",
-    "OG share card",
-    "NORTH_STAR / DESIGN edits"
+    "Other Bureau OG routes this cycle",
+    "API schema changes",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical"
 }
