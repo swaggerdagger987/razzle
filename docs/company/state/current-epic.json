@@ -14,8 +14,8 @@
     {
       "id": "bureau-h2h-copy-og-preview-link",
       "title": "H2H copy link targets OG preview URL for GTM embeds",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "6651cdc00"
     },
     {
       "id": "bureau-mc-preview-card",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-copy-og-preview-link",
+  "next_atom_id": "bureau-mc-preview-card",
   "created_at": "2026-05-31T11:34:00Z",
-  "updated_at": "2026-05-31T11:43:30Z",
+  "updated_at": "2026-05-31T11:48:00Z",
   "completed_epics": [
     {
       "id": "league-l5-h2h-og-exported-sticker",

@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | bureau-mc-preview-card (H2H GTM epic 3/3) |
-| Last commit | `f6e0985f3` |
+| Last commit | `6651cdc00` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

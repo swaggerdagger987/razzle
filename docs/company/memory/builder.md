@@ -1,4 +1,4 @@
-2026-05-31 | bureau-h2h-copy-og-preview-link | f6e0985f3 | SHIP | H2H copy card link → previewPath OG URL.
+2026-05-31 | bureau-h2h-copy-og-preview-link | 6651cdc00 | SHIP | H2H copy card link → previewPath OG URL.
 2026-05-31 | bureau-h2h-preview-card | 452e67951 | SHIP | BureauH2HShareBar preview card + pytest contract.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | EXPORTED · panel rivalry rows.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | TOLAB_DEFAULT_POSITION efficiency RB.

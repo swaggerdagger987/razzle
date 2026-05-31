@@ -1,4 +1,4 @@
-2026-05-31 | bureau-h2h-copy-og-preview-link | f6e0985f3 | SHIP | Copy OG URL closes Briefing parity for H2H GTM.
+2026-05-31 | bureau-h2h-copy-og-preview-link | 6651cdc00 | SHIP | Copy OG URL closes Briefing parity for H2H GTM.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | H2H snapshot EXPORTED trust — mirrors Trade Finder.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Position hallway epic atom 2/3.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
