@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | H2H SAMPLE sticker PASS | pending | curl 75595B demo PNG; SAMPLE on isDemo only.
+2026-05-31 | H2H SAMPLE sticker PASS | 7b9639d9 | curl 75595B demo PNG; SAMPLE on isDemo only.
 
 2026-05-31 | H2H LIVE sticker PASS | 08e1824c | curl 67846B PNG; pytest 3 passed; LIVE only when isLive.
 

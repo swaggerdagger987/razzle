@@ -14,8 +14,8 @@
     {
       "id": "bureau-h2h-og-sample-sticker",
       "title": "H2H OG — terracotta SAMPLE sticker on demo rivalry path",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7b9639d9"
     },
     {
       "id": "bureau-h2h-og-force-demo-qa",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-og-sample-sticker",
+  "next_atom_id": "bureau-h2h-og-force-demo-qa",
   "created_at": "2026-05-31T08:20:00Z",
-  "updated_at": "2026-05-31T08:20:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-rows-launch10",

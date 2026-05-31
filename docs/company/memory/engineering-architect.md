@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | H2H OG SAMPLE badge | pending | isDemo terracotta block; symmetric to LIVE teal.
+2026-05-31 | H2H OG SAMPLE badge | 7b9639d9 | isDemo terracotta block; symmetric to LIVE teal.
 
 2026-05-31 | H2H OG LIVE badge | 08e1824c | Single-file head-to-head route; mirrors [panel] LIVE Caveat block.
 
