@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: bureau-h2h-og-exported-pytest
 last_keep_cycle: 154
-last_commit: PLACEHOLDER
+last_commit: 5b60ea23d
 league_l5_h2h_gtm_epic: active
 league_l5_trade_finder_gtm_epic: complete

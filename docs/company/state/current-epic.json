@@ -1,15 +1,15 @@
 {
   "epic_status": "active",
-  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust — group chats can't tell exported rivalry rows from live Sleeper pulls.",
-  "epic_title": "League L5 — Bureau H2H GTM export",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust \u2014 group chats can't tell exported rivalry rows from live Sleeper pulls.",
+  "epic_title": "League L5 \u2014 Bureau H2H GTM export",
+  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "League L5",
   "atoms": [
     {
       "id": "bureau-h2h-og-exported-sticker",
       "title": "H2H OG EXPORTED sticker when snapshot param present",
       "status": "done",
-      "merge_commit": "PLACEHOLDER"
+      "merge_commit": "5b60ea23d"
     },
     {
       "id": "bureau-h2h-og-exported-pytest",
