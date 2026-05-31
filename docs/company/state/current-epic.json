@@ -20,8 +20,8 @@
     {
       "id": "lab-dashboard-empty-export",
       "title": "Dashboard empty risers export sample OG card",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "a3f0ab258"
     }
   ],
   "next_atom_id": null,
@@ -32,7 +32,7 @@
       "id": "lab-l5-launch10-empty-board-og-exports",
       "status": "complete",
       "last_atom": "lab-dashboard-empty-export",
-      "merge_commit": null
+      "merge_commit": "a3f0ab258"
     },
     {
       "id": "lab-l5-og-watermark-display-names",
