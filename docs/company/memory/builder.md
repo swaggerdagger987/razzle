@@ -3,6 +3,11 @@
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | breakoutsStatKeys + rankingsStatKeys in OG route.
 2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing OG watermark uses razzle.lol${roomPath}; pytest 4.
 2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | ac0280a20 | curl gamelog OG 59323B; empty weeks footer export.
+2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
+2026-05-31 | lab-og-tolab-watermark | b80512bb4 | SHIP | toLab on panel OG band; position query when filtered.
+2026-05-31 | GamelogRenderer LabOgExportLink on zero-week empty state | ac0280a20 | curl gamelog OG 59323B; empty weeks footer export.
+2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | preview+copy+export on BriefingCard; OG watermark band.
+
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | NFL share URLs drop universe=nfl; college keeps param.
 2026-05-31 | lab-l4-pro-gate-error-dynasty-comps | a3f07d1e5 | SHIP | DynastyCompsRenderer ProGateFromPanelError; pytest 9.
 

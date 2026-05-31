@@ -25,50 +25,20 @@
     }
   ],
   "next_atom_id": "lab-og-buysell-formula-live",
-  "created_at": "2026-05-31T10:40:00Z",
-  "updated_at": "2026-05-31T10:42:00Z",
+  "created_at": "2026-05-31T10:36:02Z",
+  "updated_at": "2026-05-31T12:15:00Z",
   "completed_epics": [
     {
       "id": "room-l5-briefing-gtm-export",
       "status": "complete",
       "last_atom": "room-briefing-watermark",
-      "merge_commit": "eca00c3f0"
+      "merge_commit": "f6e0985f3"
     },
     {
-      "id": "lab-l5-empty-og-export",
-      "status": "deferred",
+      "id": "lab-l5-og-empty-panel-states",
+      "status": "active",
       "last_atom": "lab-gamelog-empty-weeks-export",
       "merge_commit": "ac0280a20"
-    },
-    {
-      "id": "explore-l5-og-query-epic",
-      "status": "complete",
-      "last_atom": "explore-og-formula-sort-label",
-      "merge_commit": "710ec33e"
-    },
-    {
-      "id": "lab-l5-launch10-og-panel-native-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-buysell-dashboard-labels",
-      "merge_commit": "adbf6c7"
-    },
-    {
-      "id": "league-l5-bureau-h2h-deep-links",
-      "status": "complete",
-      "last_atom": "bureau-h2h-pick-opponent-preserve-user",
-      "merge_commit": "c7ad88bd3"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "complete",
-      "last_atom": "lab-l4-pro-gate-error-dynasty-comps",
-      "merge_commit": "a3f07d1e5"
-    },
-    {
-      "id": "explore-l5-universe-aware-share-exports",
-      "status": "complete",
-      "last_atom": "explore-og-nfl-universe-default",
-      "merge_commit": "c7b50c707"
     }
   ]
 }

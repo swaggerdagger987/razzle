@@ -15,10 +15,11 @@
   "max_files": 2,
   "max_lines": 40,
   "acceptance_commands": [
-    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests/test_og_launch10_formula_live.py apps/api/tests/test_og_launch10_live_sticker.py -q",
-    "npm run build --workspace=apps/web"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py apps/api/tests/test_og_launch10_live_sticker.py -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?download=1'"
   ],
-  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS", "new npm deps"],
+  "out_of_scope": ["NORTH_STAR/DESIGN/DECISIONS", "new npm deps", "Bureau H2H"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
