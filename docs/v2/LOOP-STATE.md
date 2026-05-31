@@ -5,8 +5,9 @@ focus_layer: L5
 next_slice: lab-og-live-sticker-dashboard-gamelog
 last_keep_cycle: 130
 last_commit: aeadb931
+lab_l4_pro_gate_error_epic: active
 lab_l5_og_panel_native_live_epic: active
-lab_l5_og_live_fetch_epic: active
+lab_l5_og_live_fetch_epic: complete
 lab_l2_sidebar_agent_epic: complete
 lab_l5_og_watermark_epic: complete
 lab_l5_og_live_sort_epic: complete
