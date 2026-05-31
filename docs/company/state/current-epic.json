@@ -1,51 +1,44 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG share cards lack the terracotta watermark band Explore exports have \u2014 Reddit screenshots don't carry razzle.lol brand gravity.",
-  "epic_title": "Lab L5 \u2014 OG watermark band on Launch-10 cards",
-  "parity_ref": "Explore L5 \u2014 OG watermark band",
+  "epic_status": "active",
+  "big_problem": "Launch-10 Lab OG cards for weekly, prospects, and breakouts still mis-rank live API rows — Reddit screenshots disagree with in-product heatmaps and big boards.",
+  "epic_title": "Lab L5 — launch-10 OG live extract matches renderers",
+  "parity_ref": "Lab L4/L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-watermark-band-panel-route",
-      "title": "Launch-10 panel OG route \u2014 always-on terracotta watermark band",
+      "id": "lab-og-weekly-prospects-breakouts-live-extract",
+      "title": "Weekly hot-week + prospects RPS + breakouts RBS live OG extract",
       "status": "done",
-      "merge_commit": "010241ea"
-    },
-    {
-      "id": "lab-og-watermark-band-head-to-head",
-      "title": "Bureau H2H OG \u2014 match terracotta band styling",
-      "status": "done",
-      "merge_commit": "44d05684"
-    }
-  ],
-  "next_atom_id": "lab-pro-gate-hallway-teasers",
-  "epic_status": "active",
-  "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T09:15:00Z",
-  "completed_epics": [
-    {
-      "id": "league-l5-bureau-h2h-codec",
-      "status": "complete",
-      "last_atom": "bureau-h2h-snapshot-roundtrip-test",
-      "merge_commit": "5e75875e"
-    },
-    {
-      "id": "lab-l5-og-watermark-band",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-band-head-to-head",
-      "merge_commit": "44d05684"
-    },
-    {
-      "id": "lab-l5-launch10-og-live-extract",
-      "status": "active",
-      "last_atom": "lab-og-weekly-prospects-breakouts-live-extract",
       "merge_commit": "8d8b2635"
     },
+    {
+      "id": "lab-og-gamelog-weeks-fpts-sort",
+      "title": "Gamelog OG ranks peak weeks by FPTS on live fetch",
+      "status": "done",
+      "merge_commit": "40c80f0e"
+    },
+    {
+      "id": "lab-og-dynasty-comps-pro-teaser",
+      "title": "Dynasty comps Pro gate panel-specific teaser rows",
+      "status": "pending",
+      "merge_commit": null
+    }
+  ],
+  "next_atom_id": "lab-og-dynasty-comps-pro-teaser",
+  "created_at": "2026-05-31T08:00:00Z",
+  "updated_at": "2026-05-31T08:05:00Z",
+  "completed_epics": [
     {
       "id": "lab-l5-og-live-sort-keys",
       "status": "complete",
       "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
+      "merge_commit": "d3a469f8"
+    },
+    {
+      "id": "lab-l5-og-watermark-band",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-band-panel-route",
+      "merge_commit": "010241ea"
     },
     {
       "id": "league-l5-bureau-depth-og",

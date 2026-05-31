@@ -1,9 +1,8 @@
 # Memory — Reality Checker
 
-2026-05-31 | Cycle 116 | 5e75875e | PASS pytest 4.
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | curl gamelog 56390B PASS | Wk N rows; extractGamelogWeekRows on live weeks[].
 
-
-2026-05-31 | lab-og-watermark-band-head-to-head | 4d84af9a | curl H2H 67846B PASS | Gate C terracotta band on export.
+2026-05-31 | lab-og-weekly-prospects-breakouts | 8d8b2635 | PASS | curl weekly 53249B prospects 48881B breakouts 61629B | keep
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | curl efficiency 45113B aging 44952B PASS | post-merge base sync; Gate C both routes.
 

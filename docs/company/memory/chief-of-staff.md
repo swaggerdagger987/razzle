@@ -1,9 +1,8 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 116 H2H codec roundtrip | 5e75875e | League L5 codec epic complete.
+2026-05-31 | Factory cycle 106 gamelog weeks FPTS OG | 40c80f0e | Lab L5 live-extract epic atom 2/3 merged PR669; workday cycle 1.
 
-
-2026-05-31 | Factory cycle 115 H2H OG watermark band | 44d05684 | Watermark epic 2/2 complete; curl H2H 67846B.
+2026-05-31 | Factory cycle 105 weekly/prospects/breakouts OG extract | 8d8b2635 | Workday open; launch-10 live extract epic atom 1/3 SHIP.
 
 2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
 
@@ -11,7 +10,6 @@
 
 2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab L5 live-sort epic complete; PR #643/#635 merged; ppo/ppg on base.
 
-2026-05-31 | Factory cycle 110 efficiency/aging OG sort | aefbf6ef | Lab live-sort epic atom 2/3; deduped rankings atom on base.
 
 2026-05-31 | Factory cycle 109 gamelog position OG | 228c4b59 | Lab L5 position epic gamelog atom; workday cycle 1.
 

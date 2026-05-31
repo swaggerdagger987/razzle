@@ -1,9 +1,8 @@
 # Memory — Engineering Architect
 
-2026-05-31 | Cycle 116 | 5e75875e | pytest mirrors bureau-h2h-og-snapshot.ts.
+2026-05-31 | gamelog weeks extract | 40c80f0e | 1-file ~35 lines; player-scoped weeks[] not players[]; no PANEL_OG_STAT_KEY.
 
-
-2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | 1-file H2H OG; band copied from panel route; atlas link above band.
+2026-05-31 | lab-og-weekly-prospects-breakouts-live-extract | 8d8b2635 | keep | extractWeeklyHeatmapRows + extractProspectsRows before generic extractRows
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | merge most_efficient + aging single-position unwrap; buysell/dashboard keys from base.
 
