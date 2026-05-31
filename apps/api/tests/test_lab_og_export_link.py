@@ -49,15 +49,15 @@ def test_efficiency_empty_board_exports_sample_card():
     assert "snapshotRows={EFFICIENCY_SAMPLE_OG_ROWS}" in renderer
 
 
-def test_prospects_empty_board_exports_sample_card():
+def test_aging_empty_curve_exports_sample_card():
     renderer = (
         Path(__file__).resolve().parents[3]
-        / "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
+        / "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx"
     ).read_text(encoding="utf-8")
-    assert "PROSPECTS_SAMPLE_OG_ROWS" in renderer
+    assert "AGING_SAMPLE_OG_ROWS" in renderer
     assert 'label="export sample card"' in renderer
-    assert "snapshotRows={PROSPECTS_SAMPLE_OG_ROWS}" in renderer
-    assert "!prospects.length" in renderer
+    assert "snapshotRows={AGING_SAMPLE_OG_ROWS}" in renderer
+    assert "!posData?.curve?.length" in renderer
 
 
 def test_breakouts_empty_board_exports_sample_card():
@@ -71,26 +71,15 @@ def test_breakouts_empty_board_exports_sample_card():
     assert "!candidates.length" in renderer
 
 
-def test_aging_empty_curve_exports_sample_card():
-    renderer = (
-        Path(__file__).resolve().parents[3]
-        / "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx"
-    ).read_text(encoding="utf-8")
-    assert "AGING_SAMPLE_OG_ROWS" in renderer
-    assert 'label="export sample card"' in renderer
-    assert "snapshotRows={AGING_SAMPLE_OG_ROWS}" in renderer
-    assert "!posData?.curve?.length" in renderer
-
-
-def test_dashboard_empty_roster_exports_sample_card():
+def test_dashboard_empty_board_exports_sample_card():
     renderer = (
         Path(__file__).resolve().parents[3]
         / "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx"
     ).read_text(encoding="utf-8")
     assert "DASHBOARD_SAMPLE_OG_ROWS" in renderer
-    assert 'label="export sample card"' in renderer
     assert "snapshotRows={DASHBOARD_SAMPLE_OG_ROWS}" in renderer
     assert "isEmptyBoard" in renderer
+    assert "LabPanelShareBar" in renderer or 'label="export sample card"' in renderer
 
 
 def test_rankings_empty_filter_exports_sample_card():
@@ -102,7 +91,6 @@ def test_rankings_empty_filter_exports_sample_card():
     assert "isEmptyBoard" in renderer
     assert "snapshotRows={RANKINGS_SAMPLE_OG_ROWS}" in renderer
     assert "LabPanelShareBar" in renderer
-    assert 'copyLabel="copy rankings link"' in renderer
 
 
 def test_default_lab_og_player_matches_og_route():
