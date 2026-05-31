@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | explore-og-sample-sticker | da33eafd | SHIP | SAMPLE sticker on demo path; epic 2/4.
 2026-05-31 | explore-og-universe-query | 478eee02 | SHIP | Explore L5 cold API → screenshotable demo rows; epic 1/4.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
