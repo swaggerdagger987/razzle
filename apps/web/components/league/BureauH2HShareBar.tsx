@@ -25,15 +25,19 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
   if (opponentId) rivalryQuery.set("opponent", opponentId);
   const rivalryPath = `/league/${leagueId}/head-to-head?${rivalryQuery.toString()}`;
 
-  const ogParams = new URLSearchParams({
+  const previewParams = new URLSearchParams({
     league: leagueId,
     user: userId,
-    download: "1",
   });
-  if (opponentId) ogParams.set("opponent", opponentId);
+  if (opponentId) previewParams.set("opponent", opponentId);
+  const ogParams = new URLSearchParams(previewParams);
+  ogParams.set("download", "1");
   // Export card encodes in-panel rivalry; direct OG URLs with league/user try live API first.
   const snap = snapshot ? encodeBureauH2HOgSnapshot(snapshot) : undefined;
-  if (snap) ogParams.set("snapshot", snap);
+  if (snap) {
+    previewParams.set("snapshot", snap);
+    ogParams.set("snapshot", snap);
+  }
 
   const offer = (snapshot?.trade_fit?.you_could_offer ?? []).join(", ") || "—";
   const want = (snapshot?.trade_fit?.you_could_target ?? []).join(", ") || "—";
@@ -65,6 +69,14 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
       <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
         {copied ? "copied!" : "copy rivalry link"}
       </button>
+      <a
+        href={`/og/head-to-head?${previewParams.toString()}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn-chunky text-xs"
+      >
+        preview card
+      </a>
       <a
         href={`/og/head-to-head?${ogParams.toString()}`}
         download="razzle-head-to-head.png"
