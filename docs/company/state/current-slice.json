@@ -1,35 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab sidebar lists 100 panels by category — users think in staff desks (Hawkeye tape, Octo quant) per AGENTS.md wiring checklist.",
-  "epic": "Lab L2 — sidebar groups panels by analyst desk",
-  "slice_title": "Category | Staff toggle groups all panels via agentForPanel()",
-  "atom_id": "lab-sidebar-staff-toggle",
-  "parity_ref": "H-04 — Six agents same ids everywhere",
-  "depth_ref": "Lab L2",
-  "acceptance_ref": "docs/v2/AGENTS.md wiring checklist",
+  "big_problem": "Lab OG watermark dead-ends when snapshot rows omit pid.",
+  "epic": "Lab L5 — OG hallway deep links (atom 3/3)",
+  "slice_title": "Snapshot exports preserve player in OG toLab watermark",
+  "atom_id": "lab-og-tolab-snapshot-player",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/LabSidebar.tsx",
-    "packages/ui/styles/lab.css"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
   "max_files": 2,
-  "max_lines": 220,
+  "max_lines": 30,
   "acceptance_commands": [
+    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": [
-    "labPanels registry expansion",
-    "NORTH_STAR/DESIGN edits",
-    "new npm deps"
-  ],
+  "out_of_scope": ["LabOgExportLink refactor", "new panels", "billing"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
-  },
-  "content_commit": "026e7de6b",
-  "reality": "PASS",
-  "merge": "pending"
+  }
 }

@@ -1,32 +1,38 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab sidebar lists 100 panels by category — users think in staff desks (Hawkeye tape, Octo quant) per AGENTS.md wiring checklist.",
-  "epic_title": "Lab L2 — sidebar groups panels by analyst desk",
-  "parity_ref": "H-04 — Six agents same ids everywhere",
-  "depth_ref": "Lab L2",
+  "epic_status": "complete",
+  "big_problem": "Lab OG watermark dead-ends when snapshot rows omit pid — player context lost in toLab.",
+  "epic_title": "Lab L5 — OG hallway deep links",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-sidebar-staff-toggle",
-      "title": "Category | Staff toggle groups all panels via agentForPanel()",
+      "id": "lab-og-tolab-watermark",
+      "title": "Launch-10 toLab watermark band",
       "status": "done",
-      "merge_commit": "026e7de6b"
+      "merge_commit": "b80512bb4"
     },
     {
-      "id": "lab-sidebar-staff-registry",
-      "title": "Expand labPanels registry so staff view has fewer Razzle catch-alls",
-      "status": "pending",
-      "merge_commit": null
+      "id": "lab-og-tolab-gamelog-default",
+      "title": "Gamelog/dynasty-comps default player in toLab",
+      "status": "done",
+      "merge_commit": "c311a15a8"
+    },
+    {
+      "id": "lab-og-tolab-snapshot-player",
+      "title": "Snapshot exports preserve player in watermark",
+      "status": "done",
+      "merge_commit": "b50ae755a"
     }
   ],
-  "next_atom_id": "lab-sidebar-staff-registry",
-  "created_at": "2026-05-31T14:30:00Z",
-  "updated_at": "2026-05-31T14:45:00Z",
+  "next_atom_id": null,
+  "created_at": "2026-05-31T11:45:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-hallway-position-defaults",
+      "id": "lab-l5-og-hallway-deep-links",
       "status": "complete",
-      "last_atom": "lab-og-tolab-weekly-position",
-      "merge_commit": "9be64d109"
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "b50ae755a"
     }
   ]
 }

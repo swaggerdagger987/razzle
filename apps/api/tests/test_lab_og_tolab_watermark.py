@@ -31,7 +31,8 @@ def test_default_og_player_tolab_rules():
     assert '"gamelog"' in source
     assert '"dynasty-comps"' in source
     assert "includeDefaultPlayer" in source
-    assert "watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+    assert "watermarkPlayerId !== DEFAULT_OG_PLAYER_ID" in source
+    assert "snapshotPreservesPlayer" in source
 
 
 def test_snapshot_export_player_id_in_watermark():
@@ -39,6 +40,13 @@ def test_snapshot_export_player_id_in_watermark():
     assert "snapshotPlayerId" in source
     assert "exportPlayerId" in source
     assert "exportPlayerId: snapshotExportPlayerId" in source.replace("\n", " ") or "snapshotExportPlayerId" in source
+
+
+def test_snapshot_exports_preserve_player_in_tolab_watermark():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "snapshotExport: isSnapshot" in source
+    assert "snapshotPreservesPlayer" in source
+    assert "opts.snapshotExport" in source
 
 
 def test_lab_og_export_link_encodes_snapshot_player_id():
