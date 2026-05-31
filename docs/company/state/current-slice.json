@@ -1,26 +1,25 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-waiver-tendencies-unhide",
-  "big_problem": "Newly unhidden Bureau tabs lack share/export cards — league construction intel doesn't travel to Reddit (DEPTH League L5).",
-  "epic": "League L5 — Bureau Build/Roster share-export parity",
-  "slice_title": "Waiver Tendencies tab unhidden — epic close (deduped on PR branch)",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "Bureau tab visible in nav; bespoke renderer not scaffold dump",
-  "trust_pillars": ["T2", "T5", "T6"],
-  "allowed_paths": ["docs/company/state/current-epic.json"],
-  "max_files": 3,
-  "max_lines": 50,
+  "atom_id": "lab-og-position-efficiency-aging",
+  "big_problem": "Efficiency and aging panels filter by position in-product but OG export URLs omitted position — live fallback cards showed wrong scope.",
+  "epic": "Lab L5 — OG export matches in-panel position filters",
+  "slice_title": "Efficiency + aging LabOgExportLink passes position query param",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with position param",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/components/lab/renderers/EfficiencyRenderer.tsx",
+    "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx"
+  ],
+  "max_files": 2,
+  "max_lines": 10,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "grep -q waiver-tendencies apps/web/components/league/BureauFeatureBody.tsx"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-eff-rb.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/efficiency?download=1&position=RB'",
+    "curl -s -o /tmp/og-aging-wr.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/aging?download=1&position=WR'"
   ],
-  "out_of_scope": ["rebuild waiver renderer", "OG share bars"],
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
+  "out_of_scope": ["OG route rewrite", "tradevalues/prospects/buysell this cycle"],
   "builder_mode": "composer-surgical"
 }
