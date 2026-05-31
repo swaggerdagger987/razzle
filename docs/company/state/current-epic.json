@@ -1,4 +1,5 @@
 {
+  "epic_status": "active",
   "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
   "epic_title": "Lab L4 — Pro gates feel like upgrade, not error",
   "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
@@ -24,33 +25,20 @@
     }
   ],
   "next_atom_id": "lab-pro-gate-perks-copy",
-  "epic_status": "active",
   "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T09:15:00Z",
+  "updated_at": "2026-05-31T08:05:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-launch10-og-live-extract",
+      "status": "complete",
+      "last_atom": "lab-og-dynasty-comps-pro-teaser",
+      "merge_commit": "26a590c9"
+    },
     {
       "id": "lab-l5-og-watermark-band",
       "status": "complete",
       "last_atom": "lab-og-watermark-band-head-to-head",
       "merge_commit": "44d05684"
-    },
-    {
-      "id": "lab-l5-launch10-og-live-extract",
-      "status": "active",
-      "last_atom": "lab-og-weekly-prospects-breakouts-live-extract",
-      "merge_commit": "8d8b2635"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
-    },
-    {
-      "id": "league-l5-bureau-depth-og",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-og-share",
-      "merge_commit": "7f652a98"
     }
   ]
 }
