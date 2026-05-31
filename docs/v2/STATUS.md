@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 95)  
+**Last updated:** 2026-05-31 (factory cycle 96)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 95 |
+| Cycle | 96 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-og-buysell-aging-sort (OG direct-link epic atom 2/3) |
-| Last commit | `e0819084` |
+| Next slice | lab-og-rankings-dashboard-sort (OG direct-link epic atom 3/3) |
+| Last commit | `da33eafd` |
 
-Recent completions (cycle 95): Lab OG tradevalues + efficiency direct-link stat sort; prior branch includes breakouts RBS + Bureau SOS tab.
+Recent completions (cycle 96): Lab OG buysell + aging direct-link stat sort; cycle 95 tradevalues/efficiency on branch pending merge.
 
 ---
 

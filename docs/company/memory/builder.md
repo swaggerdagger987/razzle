@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-buysell-aging-sort | buy_low/sell_high extractRows; buysell+aging DIRECT_STAT_SORT; renderer PPG/mismatch sort | da33eafd | SHIP | KEEP before rankings atom | evidence/2026-05-31-lab-og-buysell-aging-sort.md
+
 2026-05-31 | lab-og-tradevalues-efficiency-sort | trade value + PPO renderer sort; OG DIRECT_STAT_SORT_SLUGS | e0819084 | SHIP | KEEP pattern for buysell/aging atoms | evidence/2026-05-31-lab-og-tradevalues-efficiency-sort.md
 
 Append-only log of implementation patterns, surgical wins, things to avoid.

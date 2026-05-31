@@ -161,13 +161,19 @@ export function BuySellRenderer({ panel }: Props) {
   });
 
   const buyLow = useMemo(() => {
-    if (!formula || !statsQ.data) return rawBuy;
-    return sortPlayersByFormula(rawBuy, statsQ.data, formula);
+    if (formula && statsQ.data) return sortPlayersByFormula(rawBuy, statsQ.data, formula);
+    const score = (p: Candidate) =>
+      Number(p.mismatch_score ?? p.efficiency_pct ?? p.dynasty_rank_pct ?? 0);
+    return [...rawBuy].sort((a, b) => score(b) - score(a));
   }, [formula, rawBuy, statsQ.data]);
 
   const sellHigh = useMemo(() => {
-    if (!formula || !statsQ.data) return rawSell;
-    return [...sortPlayersByFormula(rawSell, statsQ.data, formula)].reverse();
+    if (formula && statsQ.data) {
+      return [...sortPlayersByFormula(rawSell, statsQ.data, formula)].reverse();
+    }
+    const score = (p: Candidate) =>
+      Number(p.mismatch_score ?? p.efficiency_pct ?? p.dynasty_rank_pct ?? 0);
+    return [...rawSell].sort((a, b) => score(b) - score(a));
   }, [formula, rawSell, statsQ.data]);
 
   const topBuy = buyLow[0] ?? null;

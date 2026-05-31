@@ -33,6 +33,9 @@ const STAT_CANDIDATE_KEYS = [
   "rank_diff",
   "composite_score",
   "efficiency_score",
+  "efficiency_pct",
+  "mismatch_score",
+  "dynasty_rank_pct",
   "total_yards",
   "pts",
   "rank",
@@ -255,6 +258,16 @@ function extractRows(data: unknown): OgRow[] {
     const buy = Array.isArray(obj.buy) ? (obj.buy as Record<string, unknown>[]) : [];
     const sell = Array.isArray(obj.sell) ? (obj.sell as Record<string, unknown>[]) : [];
     candidates = [...buy, ...sell];
+  } else if (Array.isArray(obj.buy_low) || Array.isArray(obj.sell_high)) {
+    const buy = Array.isArray(obj.buy_low) ? (obj.buy_low as Record<string, unknown>[]) : [];
+    const sell = Array.isArray(obj.sell_high) ? (obj.sell_high as Record<string, unknown>[]) : [];
+    candidates = [...buy, ...sell];
+  } else if (obj.positions && typeof obj.positions === "object") {
+    for (const posData of Object.values(obj.positions as Record<string, unknown>)) {
+      if (posData && typeof posData === "object" && Array.isArray((posData as { players?: unknown }).players)) {
+        candidates.push(...((posData as { players: Record<string, unknown>[] }).players));
+      }
+    }
   } else if (Array.isArray(obj.data)) {
     candidates = obj.data as Record<string, unknown>[];
   } else if (Array.isArray(obj.rankings)) {
@@ -443,6 +456,8 @@ export async function GET(
     "prospects",
     "tradevalues",
     "efficiency",
+    "buysell",
+    "aging",
   ]);
   if (!isSnapshot && DIRECT_STAT_SORT_SLUGS.has(slug)) {
     rows = [...rows].sort((a, b) => b.stat - a.stat);

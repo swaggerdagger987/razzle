@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab OG buysell / aging (cycle 96)
+- **Angle:** Bones buy-low cards and Octo aging cliffs need ranked `/og/buysell` and `/og/aging` leaders — not insertion-order API rows.
+- **Screenshot hook:** WR buy/sell mismatch leaders + RB past-peak PPG sorted on share PNG.
+
 ### 2026-05-31 — Lab OG trade values / efficiency (cycle 95)
 - **Angle:** Bones trade-value bar charts and Octo PPO boards need the same top-6 leaders on `/og/*` direct links as in-panel exports.
 - **Screenshot hook:** WR trade-value card with highest bars first; RB efficiency leaders sorted by PPO.

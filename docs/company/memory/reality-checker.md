@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | Lab OG buysell/aging Gate C | da33eafd | PASS | curl buysell 44258B aging 44952B PNG | keep | evidence/2026-05-31-lab-og-buysell-aging-sort.md
+
 2026-05-31 | Lab OG tradevalues/efficiency Gate C | da33eafd | PASS | curl tradevalues 51115B efficiency 45113B PNG | keep | docs/v2/evidence/2026-05-31-lab-og-tradevalues-efficiency-sort.md
 
 

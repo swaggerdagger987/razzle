@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-buysell-aging-sort | extractRows buy_low/positions; 3-file ≤80 lines | da33eafd | SHIP | KEEP before rankings atom
+
 2026-05-31 | lab-og-tradevalues-efficiency-sort | 3-file contract; OG slug set extension | e0819084 | SHIP | KEEP DIRECT_STAT_SORT_SLUGS for launch-10 remainder
 
 
