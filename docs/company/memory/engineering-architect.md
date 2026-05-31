@@ -1,6 +1,9 @@
 # Memory — Engineering Architect
 
-2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
+2026-05-31 | OG live stickers atom 2 | 9801127f | keep | +6 lines route.tsx; efficiency/aging/buysell suffix+sticker.
+
+2026-05-31 | OG live stickers | 4c42539e | keep | 1 file route.tsx; launch10LiveBlurbSuffix + launch10LiveStickerLabel.
+
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | route.tsx merge; sticker + fetchOgLiveRows + extractors.

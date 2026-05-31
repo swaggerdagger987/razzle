@@ -92,18 +92,30 @@ const LAUNCH_10_OG_SLUGS = new Set([
 function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "prospects") return " · live RPS board";
   if (slug === "weekly") return " · live PPG heatmap";
-  if (slug === "rankings") return " · live dynasty ranks";
+  if (slug === "rankings") return " · live dynasty tiers";
+  if (slug === "tradevalues") return " · live trade curves";
   if (slug === "breakouts") return " · live RBS board";
-  if (slug === "tradevalues") return " · live value curve";
+  if (slug === "efficiency") return " · live PPO board";
+  if (slug === "aging") return " · live peak-age curves";
+  if (slug === "buysell") return " · live buy/sell board";
   return " · live nflverse rows";
 }
 
 function launch10LiveStickerLabel(slug: string): string {
   if (slug === "prospects") return "LIVE · RPS board";
   if (slug === "weekly") return "LIVE · PPG heatmap";
+<<<<<<< HEAD
+  if (slug === "rankings") return "LIVE · dynasty tiers";
+  if (slug === "tradevalues") return "LIVE · trade curves";
+  if (slug === "breakouts") return "LIVE · RBS board";
+  if (slug === "efficiency") return "LIVE · PPO board";
+  if (slug === "aging") return "LIVE · peak-age curves";
+  if (slug === "buysell") return "LIVE · buy/sell board";
+=======
   if (slug === "rankings") return "LIVE · dynasty ranks";
   if (slug === "breakouts") return "LIVE · RBS board";
   if (slug === "tradevalues") return "LIVE · value curve";
+>>>>>>> origin/razzle-v2-redesign
   return "LIVE · nflverse rows";
 }
 
