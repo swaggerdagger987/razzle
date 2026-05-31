@@ -37,3 +37,4 @@ explicit checks in the verification routine.
 2026-05-31 | Trade Network share Gate C | 1616484c | PASS | curl trade-network 68090B PNG | keep | evidence/2026-05-31-bureau-trade-network-share-bar.md
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | prospects tradevalues snap Gate C | da33eafd | PASS | curl 58084B 62488B | keep | evidence/2026-05-31-lab-og-prospects-tradevalues-snapshot.md
+2026-05-31 | Cycle 88 re-verify post-merge-sync | da33eafd | PASS | pytest 51; build ok; PNG 1200x630 | keep | PR #335
