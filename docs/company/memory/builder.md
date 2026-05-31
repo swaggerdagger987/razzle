@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-live-demo-fallback-copy | da33eafd | terracotta SAMPLE sticker + force_demo QA; curl ≥63KB.
+2026-05-31 | lab-og-live-demo-fallback-copy | 45d4a448 | terracotta SAMPLE sticker + force_demo QA; curl ≥63KB.
 
 2026-05-31 | lab-og-live-sticker-prospects-weekly | 15109115 | ogPositionFilter weekly WR; panel limit 25; curl weekly+prospects ≥55KB.
 
