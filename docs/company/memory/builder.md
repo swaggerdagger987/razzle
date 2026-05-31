@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | league-monte-carlo-og-snapshot | da33eafd | keep | `o[]` compact codec + ShareBar odds prop (mirrors power board)
+2026-05-31 | league-monte-carlo-og-snapshot | e0e61569 | keep | `o[]` compact codec + ShareBar odds prop (mirrors power board)
 2026-05-31 | league-power-rankings-og-snapshot | 26a22f69 | keep | compact encode/decode lib + ShareBar rows prop
 
 Append-only log of implementation patterns, surgical wins, things to avoid.

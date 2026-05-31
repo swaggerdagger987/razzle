@@ -10,7 +10,7 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
-2026-05-31 | factory cycle 1 monte-carlo OG | da33eafd | SHIP | Bureau OG atom 2/3 stacked PR | — | — | standup 2026-05-31 cycle 95
+2026-05-31 | factory cycle 1 monte-carlo OG | e0e61569 | SHIP | Bureau OG atom 2/3 stacked PR | — | — | standup 2026-05-31 cycle 95
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 
 2026-05-31 | Factory cycle 1 dashboard OG snapshot | c9151786 | keep | dedup prospects+tradevalues on base 1a56450e
