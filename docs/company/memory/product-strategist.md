@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | explore-og-universe-query | f7abf9b0 | SHIP | College export URL honesty for Hawkeye lane.
+
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
 2026-05-31 | lab-og-launch10-snapshot-default | e2a3ce8a | SHIP | closes gamelog OG epic; live rows when no snapshot.
 
