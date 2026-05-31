@@ -1,8 +1,8 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-weekly-og-snapshot-verify",
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — PPG labels and export parity on weekly heatmap.",
-  "epic": "Lab L5 — OG snapshot row fidelity",
+  "atom_id": "lab-og-weekly-ppg-ranked",
+  "big_problem": "Lab OG export cards must mirror in-panel position filters — weekly heatmap used FPTS on demo fallback and hid export without a hot week.",
+  "epic": "Lab L5 — OG export matches in-panel position filters",
   "slice_title": "Weekly heatmap OG snapshot row parity audit",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
