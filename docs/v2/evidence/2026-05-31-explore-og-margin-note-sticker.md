@@ -14,7 +14,7 @@ npm run build --workspace=apps/web
 ## Gate C (dev server localhost:3000)
 
 ```bash
-curl -s -o /tmp/explore-og.png -w "%{http_code} %{size_download}\n" \
+curl -s -o /tmp/explore-og-demo.png -w "%{http_code} %{size_download}\n" \
   "http://localhost:3000/og/explore?download=1&force_demo=1"
 # 200 73163 — PNG 1200×630
 ```
