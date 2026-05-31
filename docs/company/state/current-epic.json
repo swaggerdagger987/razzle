@@ -14,18 +14,18 @@
     {
       "id": "league-sos-og-export",
       "title": "SOS Bureau OG share card with verdict + PPG bars",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "bb475fc3"
     },
     {
       "id": "league-sos-self-scout-cta",
       "title": "Self-Scout CTA links to live Schedule tab",
       "status": "pending",
-      "merge_commit": null
+      "merge_commit": "bb475fc3"
     }
   ],
-  "next_atom_id": "league-sos-og-export",
+  "next_atom_id": "league-sos-self-scout-cta",
   "created_at": "2026-05-31T06:15:00Z",
   "updated_at": "2026-05-31T06:25:00Z",
-  "last_cycle_commit": null
+  "last_cycle_commit": "bb475fc3"
 }
