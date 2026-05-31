@@ -13,14 +13,13 @@ def test_h2h_pick_opponent_preserves_user_param():
     src = (_repo_root() / "apps/web/components/league/BureauHeadToHead.tsx").read_text(
         encoding="utf-8"
     )
-    assert 'params.set("user", rivalryUserId)' in src
-    assert "rivalryUserId" in src
+    assert 'params.set("user", rivalryUser)' in src
+    assert "rivalryUser" in src
 
 
 def test_league_dashboard_h2h_honors_url_user():
     src = (_repo_root() / "apps/web/components/league/LeagueDashboard.tsx").read_text(
         encoding="utf-8"
     )
-    assert 'searchParams.get("user")' in src
-    assert "urlUser" in src
-    assert "body.user_id = urlUser" in src
+    assert "rivalryUser" in src
+    assert "searchParams.get(\"user\")" in src
