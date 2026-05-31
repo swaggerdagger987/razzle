@@ -6,6 +6,7 @@ import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
 import { useParams } from "next/navigation";
+import { useCallback, useState } from "react";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 
 interface Props {
@@ -46,10 +47,23 @@ export function BureauSelfScout({ data }: Props) {
   const { openPlayer } = usePlayerSheet();
   const params = useParams();
   const leagueId = String(params?.id ?? (data.league as Record<string, unknown>)?.id ?? "");
+  const [copied, setCopied] = useState(false);
+
+  const copyScoutLink = useCallback(async () => {
+    if (typeof window === "undefined") return;
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, []);
   const hawkeye = AGENT_BY_ID.hawkeye;
   const dolphin = AGENT_BY_ID.dolphin;
 
   const team = data.team as Record<string, unknown> | undefined;
+  const userId = String(team?.user_id ?? "");
   const league = data.league as Record<string, unknown> | undefined;
   const build = data.build_profile as Record<string, unknown> | undefined;
   const rank = data.power_rank as Record<string, unknown> | undefined;
@@ -156,12 +170,13 @@ export function BureauSelfScout({ data }: Props) {
             );
           })}
         </div>
-        {leagueId && (
-          <div className="mt-4 flex flex-wrap items-center gap-3">
+        {leagueId && userId && (
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <button type="button" className="btn-chunky text-xs" onClick={() => void copyScoutLink()}>
+              {copied ? "copied!" : "copy link"}
+            </button>
             <a
-              href={`/og/self-scout?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                String(team?.user_id ?? ""),
-              )}&download=1`}
+              href={`/og/self-scout?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(userId)}&download=1`}
               download="razzle-self-scout.png"
               className="btn-chunky active text-xs"
               style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
