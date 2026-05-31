@@ -9,7 +9,7 @@ ROUTE_TS = ROOT / "apps/web/app/og/[panel]/route.tsx"
 
 EXPECTED = {
     "rankings": "LIVE · dynasty values",
-    "gamelog": "LIVE · game log",
+    "gamelog": "LIVE · Wk tape",
     "efficiency": "LIVE · PPO board",
     "buysell": "LIVE · buy/sell board",
     "tradevalues": "LIVE · trade values",
@@ -28,6 +28,7 @@ def test_launch10_live_sticker_labels_in_route():
 def test_launch10_live_blurb_suffix_in_route():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert "live dynasty values" in source
+    assert "live Wk tape" in source
     assert "live PPO board" in source
     assert "live buy/sell board" in source
     assert "live trade values" in source
