@@ -1,11 +1,18 @@
 {
+<<<<<<< HEAD
   "epic_status": "complete",
   "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
   "epic_title": "Lab L5 — OG live fetch + sticker parity",
+=======
+  "epic_status": "active",
+  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
+  "epic_title": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
+>>>>>>> origin/razzle-v2-redesign
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
+<<<<<<< HEAD
       "id": "lab-og-launch10-live-fetch-merge",
       "title": "Merge base LIVE sticker + fetchOgLiveRows for Launch-10 without snapshot",
       "status": "done",
@@ -63,6 +70,41 @@
       "status": "complete",
       "last_atom": "league-h2h-og-watermark-band",
       "merge_commit": "945e4656"
+=======
+      "id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+      "title": "Rankings + tradevalues + breakouts — SAMPLE panel-native stickers (LIVE on base)",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
+      "title": "Gamelog + efficiency + aging — panel-native LIVE/SAMPLE stickers",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-launch10-buysell-dashboard-labels",
+      "title": "Buy-sell + dashboard — panel-native LIVE/SAMPLE stickers",
+      "status": "pending",
+      "merge_commit": null
+    }
+  ],
+  "next_atom_id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+  "created_at": "2026-05-31T09:00:00Z",
+  "updated_at": "2026-05-31T09:09:46Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-live-labels-rankings-tv-breakouts",
+      "status": "complete",
+      "last_atom": "cycle-125-merge",
+      "merge_commit": "5dcbbc01"
+    },
+    {
+      "id": "lab-l4-pro-gate-error-surface",
+      "status": "complete",
+      "last_atom": "lab-l4-pro-gate-error-surface",
+      "merge_commit": "5721ee33"
+>>>>>>> origin/razzle-v2-redesign
     }
   ]
 }
