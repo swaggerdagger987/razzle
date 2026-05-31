@@ -2,26 +2,26 @@
   "date": "2026-05-31",
   "big_problem": "Bureau waiver and schedule exports lack the terracotta watermark band — league screenshots don't match H2H/Lab brand gravity.",
   "epic": "League L5 — Bureau advanced tabs OG watermark parity",
-  "slice_title": "Waiver tendencies OG terracotta watermark band",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "slice_title": "Waiver OG Gate C pytest + curl guard",
+  "parity_ref": "League L5 — Bureau export / OG share",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with demo rows",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/waiver-tendencies/route.tsx",
-    "apps/api/tests/test_bureau_waiver_og_watermark.py"
+    "apps/api/tests/test_bureau_waiver_og_watermark.py",
+    "docs/v2/evidence/2026-05-31-bureau-waiver-og-gate-c-pytest.md",
+    "docs/company/state/current-epic.json"
   ],
-  "max_files": 2,
-  "max_lines": 80,
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_bureau_waiver_og_watermark.py -q",
-    "npm run build --workspace=apps/web 2>&1 | tail -5",
-    "curl -s -o /tmp/waiver-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/waiver-tendencies?download=1' && file /tmp/waiver-og.png"
+    "PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_bureau_waiver_og_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "bureau-waiver-og-gate-c-pytest atom (next)",
-    "API schema changes",
-    "new npm deps"
+    "OG route visual changes",
+    "new npm deps",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical"
 }
