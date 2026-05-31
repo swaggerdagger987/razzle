@@ -1,4 +1,5 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
+2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | 3 files; {rows,pid} snapshot wrapper backward-compat.
 # Memory — Engineering Architect
 
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | 2 files; includeDefaultPlayer guard in labOgWatermarkLink.

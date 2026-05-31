@@ -105,3 +105,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 146	252e421fa	depth+voice+simplicity	keep	Room	L5 Briefing OG preview copy link	trust=T5,T6; BriefingShareBar; pytest 7; curl 72168B; GTM share row
 147	19a1af0e9	depth+voice+simplicity	keep	League	L5 Trade Finder OG snapshot panel rows	trust=T5,T6; pytest 4; curl 57910B snap 55930B; trade-finder GTM epic 2/3
 148	c311a15a8	depth+voice+simplicity	keep	Lab	L5 gamelog default player in OG toLab band	trust=T5,T6; pytest 3; curl gamelog 62232B; hallway epic 2/3
+149	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 snapshot pid in OG toLab watermark	trust=T5,T6; pytest 4; curl gamelog 62232B; hallway epic 3/3 complete

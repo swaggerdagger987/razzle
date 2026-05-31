@@ -356,25 +356,36 @@ function demoRowsForPanel(slug: string): OgRow[] {
 }
 
 type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
+type SnapshotPayload = CompactOgRow[] | { rows: CompactOgRow[]; pid?: string };
 
-function decodeOgSnapshot(param: string): OgRow[] {
+function compactRowsToOgRows(arr: CompactOgRow[]): OgRow[] {
+  return arr
+    .filter((r) => r?.n)
+    .slice(0, 6)
+    .map((r) => ({
+      name: r.n,
+      position: r.p ?? "",
+      team: r.t ?? "",
+      stat: Number(r.s ?? 0),
+      statLabel: r.sl ?? "",
+    }));
+}
+
+function decodeOgSnapshot(param: string): { rows: OgRow[]; playerId?: string } {
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    const arr = JSON.parse(json) as CompactOgRow[];
-    if (!Array.isArray(arr)) return [];
-    return arr
-      .filter((r) => r?.n)
-      .slice(0, 6)
-      .map((r) => ({
-        name: r.n,
-        position: r.p ?? "",
-        team: r.t ?? "",
-        stat: Number(r.s ?? 0),
-        statLabel: r.sl ?? "",
-      }));
+    const parsed = JSON.parse(json) as SnapshotPayload;
+    if (Array.isArray(parsed)) {
+      return { rows: compactRowsToOgRows(parsed) };
+    }
+    if (parsed && typeof parsed === "object" && Array.isArray(parsed.rows)) {
+      const pid = typeof parsed.pid === "string" ? parsed.pid.trim() : "";
+      return { rows: compactRowsToOgRows(parsed.rows), playerId: pid || undefined };
+    }
+    return { rows: [] };
   } catch {
-    return [];
+    return { rows: [] };
   }
 }
 
@@ -925,7 +936,9 @@ export async function GET(
     // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
     apiParams.position = "WR";
   }
-  const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
+  const snapshotDecoded = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] };
+  const snapshotRows = snapshotDecoded.rows;
+  const snapshotPlayerId = snapshotDecoded.playerId;
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
@@ -954,9 +967,10 @@ export async function GET(
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const watermarkPlayerId = snapshotPlayerId || playerId;
   const labLink = labOgWatermarkLink(slug, {
     positionFilter,
-    playerId,
+    playerId: watermarkPlayerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
   });
 

@@ -1,4 +1,5 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
+2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | PASS | pytest 4; curl gamelog 62232B PNG.
 # Memory — Reality Checker
 
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | PASS | pytest 3; curl gamelog 62232B; web build exit 0.

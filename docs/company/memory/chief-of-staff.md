@@ -1,4 +1,5 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
+2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | SHIP | Factory cycle 1; Lab hallway epic closed; NO_LOCK_GUARDRAIL.
 # Memory — Chief of Staff
 
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Factory cycle 2; hallway epic atom 2/3.

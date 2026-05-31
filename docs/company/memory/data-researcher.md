@@ -1,4 +1,5 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
+2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | PASS | FROM PANEL shares need pid in payload for hallway.
 # Memory — Data Researcher
 
 2026-05-31 | lab-og-tolab-gamelog-default | — | PASS | No new Reddit intel; hallway slice only.
