@@ -56,4 +56,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 87	6dbe1ca1	depth+hallway+voice	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5; dedup on base 6dbe1ca1; factory cycle 1; next build-profiles
 88	2ee04975	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles unhidden; build PASS pytest 51; epic atom 1/3
 90	c9151786	depth+voice+simplicity	keep	Lab	L5 Dashboard comps OG snapshot rows	trust=T5,T6; DashboardRenderer snapshotRows; curl dynasty-comps 65961B; dedup prospects+tradevalues on base
-91	c0358ff3	depth+voice+simplicity	keep	Lab	L5 Prospects OG RPS-ranked snapshot	trust=T5,T6; sort top-6 RPS + position filter; curl 40842B; fidelity epic atom 1/3
+91	a2536dcc	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5; Hawkeye renderer; waiver-tendencies nav visible; web build PASS; epic atom 2/3
+92	c0358ff3	depth+voice+simplicity	keep	Lab	L5 Prospects OG RPS-ranked snapshot	trust=T5,T6; sort top-6 RPS + position filter; curl 40842B; fidelity epic atom 1/3
