@@ -15,24 +15,30 @@
       "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
       "title": "Gamelog + efficiency + aging — panel-native LIVE stickers",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "adbf6c7"
     },
     {
       "id": "lab-og-launch10-buysell-dashboard-labels",
       "title": "Buy-sell + dashboard — panel-native LIVE stickers",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "adbf6c7"
     }
   ],
-  "next_atom_id": "lab-og-launch10-buysell-dashboard-labels",
+  "next_atom_id": null,
   "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T16:10:00Z",
+  "updated_at": "2026-05-31T16:15:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-labels-rankings-tv-breakouts",
       "status": "complete",
       "last_atom": "cycle-125-merge",
       "merge_commit": "5dcbbc01"
+    },
+    {
+      "id": "lab-l5-launch10-og-panel-native-trust-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-buysell-dashboard-labels",
+      "merge_commit": "adbf6c7"
     },
     {
       "id": "lab-l4-pro-gate-error-surface",
