@@ -1,36 +1,36 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-career-compare-live",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity (atom 3/4)",
-  "slice_title": "Career compare OG multi-player overlay rows",
-  "parity_ref": "Lab panel OG data rows",
+  "atom_id": "lab-dashboard-formula-og-live",
+  "big_problem": "Lab OG cards mislabel stats when users sort by custom formulas — dashboard export shows rank_diff while the panel shows formula_score.",
+  "epic": "Lab L5 — Launch-10 OG formula_score stat parity (atom 4/4)",
+  "slice_title": "Dashboard OG live extract prefers formula_score on risers/top5",
+  "parity_ref": "Launch 10 — Lab panel OG live data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "acceptance_ref": "ACCEPTANCE Gate 6 — OG export cards show real stat columns",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_career_compare_live.py"
+    "apps/api/tests/test_og_launch10_formula_live.py"
   ],
   "max_files": 2,
-  "max_lines": 180,
+  "max_lines": 40,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_career_compare_live.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py::test_dashboard_live_extract_prefers_formula_score -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1'"
   ],
   "out_of_scope": [
-    "percentiles toLab atom",
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps"
+    "Other Launch-10 panels",
+    "Renderer UI changes",
+    "NORTH_STAR or DESIGN edits"
   ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   },
-  "content_commit": "9d19930cf",
-  "reality": "PASS",
-  "status": "done"
+  "status": "shipped",
+  "content_commit": "37a725078"
 }
