@@ -1,29 +1,36 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-percentiles-tolab",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity",
-  "slice_title": "Percentiles OG toLab default player hallway",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "big_problem": "Explore OG exports miss staff margin notes — screenshots look like dead spreadsheets.",
+  "epic": "Explore L5 — OG screener agent margin notes (atom 3/4)",
+  "slice_title": "LIVE staff sticker when OG rows carry margin notes",
+  "atom_id": "explore-og-margin-note-sticker",
+  "parity_ref": "Explore L5 — agent margin notes on rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — explore OG PNG ≥40KB; LIVE sticker when live rows have margin notes",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_margin_note_sticker.py"
   ],
-  "max_files": 1,
-  "max_lines": 20,
+  "max_files": 2,
+  "max_lines": 60,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/pct-og.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/percentiles?download=1&force_demo=1'"
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_sticker.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["percentiles live extract (done)", "NORTH_STAR/DESIGN edits"],
+  "out_of_scope": [
+    "College-only margin atom",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "SAMPLE sticker copy changes"
+  ],
   "builder_mode": "composer-surgical",
+  "content_commit": "76443615b",
+  "reality": "PASS",
+  "status": "shipped",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   }
 }

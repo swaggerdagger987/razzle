@@ -14,6 +14,14 @@ const POS_COLOR: Record<string, string> = {
 /** Staff margin notes on screenshot ranks 1–3 (Explore L5 parity with screener). */
 const TOP_MARGIN_NOTE_ROWS = 3;
 
+const LIVE_STAFF_MARGIN_STICKER = "LIVE · staff margin notes";
+
+function topRowsHaveStaffMarginNotes(players: OgPlayer[], universe: string): boolean {
+  return players
+    .slice(0, TOP_MARGIN_NOTE_ROWS)
+    .some((p) => marginNoteForOgExploreRow(p, universe) != null);
+}
+
 interface OgPlayer extends OgExploreMarginRow {
   stat: number;
 }
@@ -249,12 +257,7 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
-  const hasStaffMarginNotes =
-    !isDemo &&
-    players
-      .slice(0, TOP_MARGIN_NOTE_ROWS)
-      .some((p) => marginNoteForOgExploreRow(p, universe) != null);
-
+  const showLiveStaffSticker = !isDemo && topRowsHaveStaffMarginNotes(players, universe);
   return new ImageResponse(
     (
       <div
@@ -276,6 +279,28 @@ export async function GET(req: Request) {
             Razzle<span style={{ color: "#d97757" }}>.lol</span>
           </div>
         </div>
+
+        {showLiveStaffSticker ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            {LIVE_STAFF_MARGIN_STICKER}
+          </div>
+        ) : null}
 
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
           <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, display: "flex" }}>{title}</div>
@@ -311,23 +336,6 @@ export async function GET(req: Request) {
               }}
             >
               SAMPLE · not live data
-            </div>
-          ) : null}
-          {hasStaffMarginNotes ? (
-            <div
-              style={{
-                display: "flex",
-                fontSize: 16,
-                fontWeight: 700,
-                background: "#2ec4b6",
-                color: "#f7efe5",
-                padding: "4px 12px",
-                border: "3px solid #2d1f14",
-                borderRadius: 6,
-                boxShadow: "3px 3px 0 #2d1f14",
-              }}
-            >
-              LIVE · staff margin notes
             </div>
           ) : null}
         </div>
