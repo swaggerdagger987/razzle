@@ -1,5 +1,5 @@
-2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
-2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
+2026-05-31 | lab-prospects-empty-export | 8e2ca7f29 | PASS | curl prospects 63453B; pytest 9; web build exit 0.
+2026-05-31 | lab-breakouts-empty-export | 8b6f3117b | PASS | curl breakouts 66253B; pytest 8; web build exit 0.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | PASS | pytest 4; curl 58533B.
@@ -7,9 +7,6 @@
 # Memory — Reality Checker
 
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | PASS | pytest 4; curl explore 65482B; web build exit 0.
-2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | PASS | pytest 5; curl snapshot 54427B; web build green.
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | pytest 5; web build; Gate C evidence on file.
-2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | PASS | pytest 2; curl 82365B; web build exit 0.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | PASS | pytest 3; curl gamelog 62232B; web build exit 0.
 2026-05-31 | league-trade-finder-og-snapshot | 19a1af0e9 | PASS | pytest 4; curl 57910B + snapshot 55930B.
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | PASS | pytest 3; curl buysell 55234B.
@@ -92,3 +89,4 @@ explicit checks in the verification routine.
 2026-05-31 | Waiver Tendencies OG Gate C | 6dcb0f72 | PASS | curl waiver-tendencies 73121B PNG | keep | evidence/2026-05-31-league-waiver-tendencies-og-share.md
 2026-05-31 | Lab OG snapshot Gate C | 70af534a | PASS | curl prospects snap 45583B tradevalues 62488B | keep | evidence/2026-05-31-lab-og-snapshot-tradevalues-prospects.md
 2026-05-31 | Lab OG live sort Gate C | 7f78b631 | PASS | curl rankings 50251B tradevalues 51115B | keep | evidence/2026-05-31-lab-og-rankings-tradevalues-live-sort.md
+2026-05-31 | lab-breakouts-empty-export Gate C | 056892b6b | PASS | curl breakouts 66253B snap 58268B | keep | evidence/2026-05-31-lab-breakouts-empty-export.md

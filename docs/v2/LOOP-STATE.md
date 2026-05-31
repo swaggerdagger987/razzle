@@ -2,8 +2,11 @@ cycle: 154
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
-next_slice: explore-og-margin-note-sticker
-last_keep_cycle: 154
-last_commit: c1a0bcaad
-explore_l5_og_margin_epic: active
-lab_l5_og_watermark_display_name_epic: complete
+next_slice: lab-dashboard-empty-export (epic atom 3/3)
+last_keep_cycle: 156
+last_commit: 8e2ca7f29
+lab_l5_empty_og_sample_epic: active
+lab_l5_og_hallway_epic: complete
+lab_l5_og_weekly_tolab_position: complete
+lab_l5_og_watermark_display_names: complete
+league_l5_trade_finder_gtm_epic: complete

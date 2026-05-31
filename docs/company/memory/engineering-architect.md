@@ -1,6 +1,5 @@
-2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | route map loop + pytest rows; ≤80 lines.
-2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
-2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
+2026-05-31 | lab-prospects-empty-export | 8e2ca7f29 | SHIP | ProspectsRenderer + pytest; ≤45 lines.
+2026-05-31 | lab-breakouts-empty-export | 8b6f3117b | SHIP | BreakoutsRenderer + pytest; ≤40 lines.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -87,3 +86,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | 088cebc07 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | 1 file route.tsx; PANEL_OG_STAT_KEY + tradevalues formula_score order
+2026-05-31 | lab-breakouts-empty-export | 056892b6b | keep | 2 files; BREAKOUTS_SAMPLE_OG_ROWS mirrors weekly/aging
