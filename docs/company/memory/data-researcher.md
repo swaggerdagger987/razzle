@@ -38,3 +38,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
+2026-05-31 | Cycle 93 breakouts OG score-ranked | da33eafd | keep | fidelity epic 3/3; weekly dedup 98e51602
