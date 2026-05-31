@@ -1,5 +1,5 @@
-2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | pytest 6; curl h2h 76270B.
-2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | pytest 7; curl efficiency 65774B.
+2026-05-31 | explore-og-margin-note-rows | f3ab5c966 | PASS | pytest 6; curl explore 67176B; web build.
+origin/razzle-v2-redesign
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
