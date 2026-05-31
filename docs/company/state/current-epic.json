@@ -8,8 +8,8 @@
     {
       "id": "lab-og-tradevalues-loading-snapshot",
       "title": "Trade values loading + empty board sample OG snapshot",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "789d7fb9f"
     },
     {
       "id": "lab-og-breakouts-loading-snapshot",
@@ -30,9 +30,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-tradevalues-loading-snapshot",
+  "next_atom_id": "lab-og-breakouts-loading-snapshot",
   "created_at": "2026-05-31T12:05:00Z",
-  "updated_at": "2026-05-31T12:05:00Z",
+  "updated_at": "2026-05-31T12:12:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-rows-epic",

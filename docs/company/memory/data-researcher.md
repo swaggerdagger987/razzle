@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tradevalues-loading-snapshot | f6e0985f3 | PASS | Trade-deadline sample value curve matches OG demo board.
+2026-05-31 | lab-og-tradevalues-loading-snapshot | 789d7fb9f | PASS | Trade-deadline sample value curve matches OG demo board.
 2026-05-31 | lab-og-dashboard-live-extract | 869c9321c | PASS | Dynasty pulse riser/faller cards match r/DynastyFF share patterns.
 2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | PASS | Gate C guards keep waiver OG screenshot-ready without manual curl.
 2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | PASS | Waiver archetype OG cards match league-thread share pattern.

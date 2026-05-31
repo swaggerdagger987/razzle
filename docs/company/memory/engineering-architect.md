@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tradevalues-loading-snapshot | f6e0985f3 | 2-file contract; TRADEVALUES_SAMPLE_OG_ROWS + pytest 6.
+2026-05-31 | lab-og-tradevalues-loading-snapshot | 789d7fb9f | 2-file contract; TRADEVALUES_SAMPLE_OG_ROWS + pytest 6.
 2026-05-31 | lab-og-dashboard-live-extract | 869c9321c | 2-file contract; extractDashboardRows ≤45 lines.
 2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | 1-file contract; 5 pytest Gate C guards.
 2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | 2-file contract; pytest source guard on waiver route.
