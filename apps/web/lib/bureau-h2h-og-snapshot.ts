@@ -27,11 +27,19 @@ type CompactH2H = {
   tf?: { o: string[]; g: string[] };
 };
 
+/** Legacy ShareBar compact (y/t full teams, pc.position/y/t) — still decoded for in-flight links. */
+type LegacyCompactH2H = {
+  y: { team: string; record: string; ppg: number };
+  t: { team: string; record: string; ppg: number };
+  pc: { position: string; y: number; t: number }[];
+  tf?: { o: string[]; g: string[] };
+};
+
 function hasSnapshotData(snap: BureauH2HOgSnapshot): boolean {
   return Boolean(snap.you?.team && snap.them?.team && snap.position_compare?.length > 0);
 }
 
-function fromCompact(c: CompactH2H): BureauH2HOgSnapshot | null {
+function fromCanonicalCompact(c: CompactH2H): BureauH2HOgSnapshot | null {
   if (!c?.y?.t || !c?.m?.t || !Array.isArray(c.pc) || c.pc.length === 0) return null;
   const snap: BureauH2HOgSnapshot = {
     you: { team: c.y.t, record: c.y.r, ppg: c.y.p },
@@ -44,6 +52,34 @@ function fromCompact(c: CompactH2H): BureauH2HOgSnapshot | null {
     trade_fit: c.tf ? { you_could_offer: c.tf.o ?? [], you_could_target: c.tf.g ?? [] } : undefined,
   };
   return hasSnapshotData(snap) ? snap : null;
+}
+
+function fromLegacyCompact(c: LegacyCompactH2H): BureauH2HOgSnapshot | null {
+  if (!c?.y?.team || !c?.t?.team || !Array.isArray(c.pc) || c.pc.length === 0) return null;
+  const snap: BureauH2HOgSnapshot = {
+    you: { team: c.y.team, record: c.y.record, ppg: c.y.ppg },
+    them: { team: c.t.team, record: c.t.record, ppg: c.t.ppg },
+    position_compare: c.pc.map((row) => ({
+      position: row.position,
+      your_count: row.y,
+      their_count: row.t,
+    })),
+    trade_fit: c.tf ? { you_could_offer: c.tf.o ?? [], you_could_target: c.tf.g ?? [] } : undefined,
+  };
+  return hasSnapshotData(snap) ? snap : null;
+}
+
+function fromCompactPayload(parsed: unknown): BureauH2HOgSnapshot | null {
+  if (!parsed || typeof parsed !== "object") return null;
+  const c = parsed as Record<string, unknown>;
+  if (c.m && c.y && typeof c.y === "object" && typeof c.m === "object") {
+    return fromCanonicalCompact(parsed as CompactH2H);
+  }
+  if (c.t && c.y && typeof c.y === "object" && typeof c.t === "object") {
+    const y = c.y as Record<string, unknown>;
+    if ("team" in y) return fromLegacyCompact(parsed as LegacyCompactH2H);
+  }
+  return null;
 }
 
 /** Base64url JSON for `snapshot` query param on `/og/head-to-head`. */
@@ -73,7 +109,7 @@ export function decodeBureauH2HOgSnapshot(param: string): BureauH2HOgSnapshot | 
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    return fromCompact(JSON.parse(json) as CompactH2H);
+    return fromCompactPayload(JSON.parse(json));
   } catch {
     return null;
   }
