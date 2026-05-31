@@ -72,3 +72,10 @@ def test_efficiency_og_watermark_includes_default_rb_position():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert 'efficiency: "RB"' in source
     assert "TOLAB_DEFAULT_POSITION[slug]" in source
+
+
+def test_percentiles_og_watermark_includes_default_wr_position():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'percentiles: "WR"' in source
+    assert '"percentiles"' in source
+    assert "TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS" in source
