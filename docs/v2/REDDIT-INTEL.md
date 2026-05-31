@@ -2,6 +2,9 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau share-export epic close (cycle 95)
+- Waiver FAAB hoarder cards close League L5 Bureau unhide — managers scout pickup habits before wire runs.
+
 ### 2026-05-31 — Bureau share-export (cycle 92)
 - Build archetype cards travel well on r/DynastyFF trade threads — construction intel is screenshot bait.
 

@@ -1,26 +1,21 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-roster-depth-share-og",
+  "atom_id": "league-waiver-tendencies-unhide",
   "big_problem": "Newly unhidden Bureau tabs lack share/export cards — league construction intel doesn't travel to Reddit (DEPTH League L5).",
   "epic": "League L5 — Bureau Build/Roster share-export parity",
-  "slice_title": "Roster Depth copy link + OG export card",
+  "slice_title": "Waiver Tendencies tab unhidden — epic close (deduped on PR branch)",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "acceptance_ref": "Bureau tab visible in nav; bespoke renderer not scaffold dump",
   "trust_pillars": ["T2", "T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/league/BureauRosterDepthShareBar.tsx",
-    "apps/web/app/og/roster-depth/route.tsx",
-    "apps/web/components/league/BureauRosterDepth.tsx"
-  ],
+  "allowed_paths": ["docs/company/state/current-epic.json"],
   "max_files": 3,
-  "max_lines": 280,
+  "max_lines": 50,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-roster-depth.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/roster-depth?league=demo&user=demo-user&download=1'"
+    "grep -q waiver-tendencies apps/web/components/league/BureauFeatureBody.tsx"
   ],
-  "out_of_scope": ["waiver-tendencies unhide", "API changes", "build-profiles changes"],
+  "out_of_scope": ["rebuild waiver renderer", "OG share bars"],
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
