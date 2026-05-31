@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-27 (repo organization cleanup)  
+**Last updated:** 2026-05-31 (cycle 89 — prospects OG snapshot epic complete)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 56 |
+| Cycle | 89 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | Bureau H2H export or Lab panel OG live data rows |
-| Last commit | `da33eafd` |
+| Next slice | League L5 bureau build-profiles or next PARITY slice |
+| Last commit | `d6358e6d` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

@@ -307,6 +307,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 1. **Breakout cards must show names users recognize** — `candidates` extraction on OG `/og/breakouts` aligns share cards with Hawkeye's in-panel list when API data exists.
 2. **Same API path as Lab** — `/api/panels/{slug}` prevents OG drift from tier/breakout response shapes.
 
+## 2026-05-31 — Cycle 88 (workday cycle 1)
+
+1. **Draft-class prospect boards travel with RPS labels** — Hawkeye big-board screenshots need school + RPS on the export card, not generic demo names.
+2. **Lab OG snapshot epic atom 3/5** — trade values tier table is next atom.
+
 ## 2026-05-31 — Cycle 77 (workday cycle 1)
 
 1. **Manager archetype cards travel with copy+export** — PANIC SELLER / exploit-window screenshots need the same share row as Self-Scout and H2H.
