@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-live-sticker-aging-buysell | da33eafd | SHIP | T1 aging curves + market movers; epic 3/3 done.
+2026-05-31 | lab-og-live-sticker-aging-buysell | 09d5f38f0 | SHIP | T1 aging curves + market movers; epic 3/3 done.
 
 2026-05-31 | lab-og-live-sticker-gamelog-efficiency | 72af0cb6 | SHIP | T1 honest LIVE on gamelog + efficiency OG.
 

@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
   "epic_title": "Lab L5 — Launch-10 OG panel-native LIVE labels",
   "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
@@ -20,19 +20,25 @@
     {
       "id": "lab-og-live-sticker-aging-buysell",
       "title": "aging/buysell OG LIVE sticker + blurb parity",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "09d5f38f0"
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-aging-buysell",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:34:07Z",
-  "updated_at": "2026-05-31T09:11:11Z",
+  "updated_at": "2026-05-31T09:20:00Z",
   "completed_epics": [
     {
       "id": "lab-l2-sidebar-groups-by-agent",
       "status": "complete",
       "last_atom": "lab-sidebar-staff-picks-by-agent",
       "merge_commit": "4e8b0e8e"
+    },
+    {
+      "id": "lab-l5-launch10-og-panel-native-live-labels",
+      "status": "complete",
+      "last_atom": "lab-og-live-sticker-aging-buysell",
+      "merge_commit": "09d5f38f0"
     }
   ]
 }
