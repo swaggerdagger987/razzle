@@ -1,12 +1,8 @@
-<<<<<<< HEAD
 {
   "status": "open",
-  "started_at": "2026-05-31T09:09:06Z",
+  "started_at": "2026-05-31T12:00:00Z",
   "closed_at": null,
   "cycle_count_today": 1,
   "last_trigger": "good morning team",
-  "last_cycle_commit": "1bed81fb"
+  "last_cycle_commit": null
 }
-=======
-{"status":"open","started_at":"2026-05-31T13:00:00Z","closed_at":null,"cycle_count_today":1,"last_trigger":"good morning team","last_cycle_commit":"cfbf3e49"}
->>>>>>> origin/razzle-v2-redesign
