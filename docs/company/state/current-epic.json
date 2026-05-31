@@ -9,7 +9,7 @@
       "id": "lab-og-rankings-live-rank-labels",
       "title": "Rankings OG — #rank statLabel on live dynasty rows",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "7bad44782"
     },
     {
       "id": "lab-og-tradevalues-live-rank-labels",
