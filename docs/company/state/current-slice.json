@@ -1,29 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
-  "epic": "Lab L5 — OG export on empty panel states",
-  "slice_title": "Rankings — export sample card when filter returns zero rows",
-  "atom_id": "lab-rankings-empty-export",
+  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
+  "epic": "Lab L5 — OG hallway deep links",
+  "slice_title": "Snapshot exports preserve player in OG toLab watermark",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "acceptance_ref": "FACTORY-DOD Gate C — gamelog snapshot OG PNG ≥40KB with player in watermark",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx",
-    "apps/api/tests/test_lab_og_export_link.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
   "max_files": 2,
-  "max_lines": 55,
+  "max_lines": 40,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_export_link.py -q --noconftest"
+    "python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["OG route refactor", "new panels", "billing"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  }
+  "out_of_scope": [
+    "LabOgExportLink changes",
+    "new npm deps",
+    "NORTH_STAR edits"
+  ],
+  "builder_mode": "composer-surgical"
 }
