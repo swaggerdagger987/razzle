@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | explore-og-college-gate-c | da33eafd | SHIP | explore/route.tsx only; season=2024 fixture; Gate C pytest guard.
+
 2026-05-31 | FROM PANEL evidence contract | 164159413 | pytest rankings+weekly in LAUNCH_10; no route churn.
 
 2026-05-31 | FROM PANEL sticker contract | 7d49e4f0c | isSnapshot && LAUNCH_10; QB blue #5b7fff.

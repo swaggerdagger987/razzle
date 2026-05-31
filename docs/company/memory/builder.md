@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | explore-og-college-gate-c | da33eafd | SHIP | collegeOgDemoRows; curl 63592B; build PASS.
+
 2026-05-31 | lab-l4-pro-gate-error-remaining | f8ab89f25 | ProGate on all launch-10 402 renderers; pytest 9; L4 epic done.
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | launch10DemoStickerLabel 3 slugs; curl triple PASS.
 

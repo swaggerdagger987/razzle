@@ -97,6 +97,18 @@ function effectiveSortKey(universe: string, sort: string): string {
   return sort;
 }
 
+/** Fixture-friendly demo rows when screener API is empty (CI / offline OG Gate C). */
+function collegeOgDemoRows(): OgPlayer[] {
+  return [
+    { full_name: "Travis Hunter", position: "WR", team: "COL", stat: 1421 },
+    { full_name: "Ashton Jeanty", position: "RB", team: "BOIS", stat: 2587 },
+    { full_name: "Dillon Gabriel", position: "QB", team: "ORE", stat: 3864 },
+    { full_name: "Emmanuel Henderson", position: "RB", team: "ALA", stat: 1198 },
+    { full_name: "Jeremiah Smith", position: "WR", team: "OSU", stat: 1314 },
+    { full_name: "Cam Ward", position: "QB", team: "MIA", stat: 4313 },
+  ];
+}
+
 function buildSubtitle(universe: string, sort: string, pos: string, q: string): string {
   const sortKey = effectiveSortKey(universe, sort);
   const parts: string[] = [];
@@ -137,15 +149,26 @@ export async function GET(req: Request) {
   if (teams.length) bandParams.set("team", teams.join(","));
   const exploreLink = `razzle.lol/explore?${bandParams.toString()}`;
 
-  const players = await fetchTopPlayers(req, {
+  const effectiveSeason =
+    universe === "college" && season === 0 ? 2024 : season;
+
+  let players = await fetchTopPlayers(req, {
     universe,
     sort,
     dir,
     q,
     pos,
-    season,
+    season: effectiveSeason,
     teams,
   });
+
+  const isCollegeDemo =
+    universe === "college" && players.length === 0;
+  if (isCollegeDemo) {
+    players = collegeOgDemoRows();
+  }
+
+  const isCollegeLive = universe === "college" && !isCollegeDemo;
 
   return new ImageResponse(
     (
@@ -171,6 +194,50 @@ export async function GET(req: Request) {
 
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, marginBottom: 8 }}>{title}</div>
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>{subtitle}</div>
+
+        {isCollegeLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · college screener
+          </div>
+        ) : null}
+
+        {isCollegeDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · demo college rows
+          </div>
+        ) : null}
 
         {players.length > 0 ? (
           <div

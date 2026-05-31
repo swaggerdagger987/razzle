@@ -1,5 +1,7 @@
 # Memory — Product Strategist
 
+2026-05-31 | explore-og-college-gate-c | da33eafd | SHIP | College OG SAMPLE/LIVE stickers + demo rows for honest Reddit shares.
+
 2026-05-31 | explore-og-universe-query | b098d64c | keep | college vs NFL OG download filename for Reddit.
 
 2026-05-31 | FROM PANEL evidence | 164159413 | Rankings + weekly snapshot curls guard highest-traffic export panels; atom 2/3.
