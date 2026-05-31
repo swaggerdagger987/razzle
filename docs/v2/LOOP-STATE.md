@@ -1,8 +1,6 @@
-cycle: 99
-last_board_cycle: 54
+cycle: 100
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-breakouts-score-ranked
-last_keep_cycle: 99
-last_commit: d11aff0f
-lab_l5_og_fidelity_weekly_ppg: complete
+next_slice: lab-og-position-buysell
+last_keep_cycle: 100
+lab_l5_og_position_filter_epic: active
