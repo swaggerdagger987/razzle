@@ -14,8 +14,8 @@
     {
       "id": "lab-og-tolab-gamelog-default",
       "title": "Gamelog OG toLab includes default Ja'Marr player query",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "d5594b837"
     },
     {
       "id": "lab-og-tolab-dynasty-comps-default",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-tolab-gamelog-default",
+  "next_atom_id": "lab-og-tolab-dynasty-comps-default",
   "created_at": "2026-05-31T10:36:02Z",
   "updated_at": "2026-05-31T18:00:00Z",
   "completed_epics": [
