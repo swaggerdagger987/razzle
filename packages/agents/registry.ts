@@ -94,7 +94,7 @@ export const AGENTS: AgentDefinition[] = [
     loadingCopy: "pulling the archives...",
     emptyCopy: "No precedent found. That's rare.",
     surfaces: ["lab", "bureau", "room", "player-sheet"],
-    labPanels: ["career-stats", "gamelog", "dynasty-history"],
+    labPanels: ["career-stats", "gamelog", "dynasty-history", "percentiles", "strengths"],
     bureauSections: ["manager-profiles", "build-profiles", "trade-network", "head-to-head"],
   },
 ];

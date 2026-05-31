@@ -129,6 +129,16 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Bijan Robinson", position: "RB", detail: "Comp: Jonathan Taylor · 91%" },
     { name: "Marvin Harrison Jr.", position: "WR", detail: "Comp: Mike Evans · 88%" },
   ],
+  percentiles: [
+    { name: "Ja'Marr Chase", position: "WR", detail: "96th pctl · rec yd/g" },
+    { name: "Ja'Marr Chase", position: "WR", detail: "91st pctl · tgt/g" },
+    { name: "Ja'Marr Chase", position: "WR", detail: "88th pctl · catch%" },
+  ],
+  strengths: [
+    { name: "Ja'Marr Chase", position: "WR", detail: "Strength · 96th pctl targets" },
+    { name: "Ja'Marr Chase", position: "WR", detail: "Strength · 91st pctl rec yds" },
+    { name: "Ja'Marr Chase", position: "WR", detail: "Weakness · 34th pctl rushing" },
+  ],
   weekly: [
     { name: "Tyreek Hill", position: "WR", detail: "Wk 12 · 31.4 pts · hot cell" },
     { name: "Amon-Ra St. Brown", position: "WR", detail: "Wk 11 · 28.2 pts" },
@@ -159,6 +169,10 @@ const PITCH_BY_SLUG: Record<string, string> = {
   stocks: "rising and falling dynasty assets before your league reacts",
   waivers: "waiver-wire risers ranked by recent production and role",
   "dynasty-comps": "statistical comp cards with match % — price any dynasty asset like a desk",
+  percentiles:
+    "position-relative percentile ranks on every stat — see where they really land vs peers",
+  strengths:
+    "top stat strengths and weaknesses vs positional peers — know what they do best",
   weekly: "weekly heatmap streaks before your league mates spot the run",
   prospects: "rookie big board with combine and college context",
   dashboard: "dynasty pulse — risers, fallers, and value picks in one view",
