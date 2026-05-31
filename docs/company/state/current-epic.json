@@ -14,12 +14,12 @@
     {
       "id": "lab-og-tolab-efficiency-position",
       "title": "efficiency OG watermark includes default RB position in toLab",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "8327741"
     }
   ],
-  "next_atom_id": "lab-og-tolab-efficiency-position",
+  "next_atom_id": null,
   "created_at": "2026-05-31T14:45:00Z",
-  "updated_at": "2026-05-31T14:45:00Z",
+  "updated_at": "2026-05-31T15:00:00Z",
   "completed_epics": []
 }

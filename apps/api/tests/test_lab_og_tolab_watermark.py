@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 ROUTE_TS = ROOT / "apps/web/app/og/[panel]/route.tsx"
+EXPORT_TS = ROOT / "apps/web/components/lab/LabOgExportLink.tsx"
 
 
 def test_panel_og_imports_tolab():
@@ -41,11 +42,22 @@ def test_snapshot_export_player_id_in_watermark():
 
 
 def test_lab_og_export_link_encodes_snapshot_player_id():
-    link_ts = ROOT / "apps/web/components/lab/LabOgExportLink.tsx"
-    source = link_ts.read_text(encoding="utf-8")
+    source = EXPORT_TS.read_text(encoding="utf-8")
     assert "encodeOgSnapshot(snapshotRows, resolvedPlayerId)" in source
     assert "exportPlayerId?: string" in source
     assert '{ r: compact, pid }' in source or "pid }" in source
+
+
+def test_watermark_uses_player_display_name_from_export_url():
+    route = ROUTE_TS.read_text(encoding="utf-8")
+    export = EXPORT_TS.read_text(encoding="utf-8")
+    gamelog = (ROOT / "apps/web/components/lab/renderers/GamelogRenderer.tsx").read_text(
+        encoding="utf-8",
+    )
+    assert "playerDisplayName" in route
+    assert "DEFAULT_OG_PLAYER_NAME" in route
+    assert 'params.set("name"' in export
+    assert "playerName={displayName}" in gamelog
 
 
 def test_weekly_og_watermark_includes_default_wr_position():
