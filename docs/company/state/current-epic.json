@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG share cards lack the terracotta watermark band Explore exports have — Reddit screenshots don't carry razzle.lol brand gravity.",
   "epic_title": "Lab L5 — OG watermark band on Launch-10 cards",
   "parity_ref": "Explore L5 — OG watermark band",
@@ -14,14 +14,20 @@
     {
       "id": "lab-og-watermark-band-head-to-head",
       "title": "Bureau H2H OG — match terracotta band styling",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "1be90766"
     }
   ],
-  "next_atom_id": "lab-og-watermark-band-head-to-head",
+  "next_atom_id": null,
   "created_at": "2026-05-31T08:20:00Z",
-  "updated_at": "2026-05-31T08:55:00Z",
+  "updated_at": "2026-05-31T07:57:57Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-og-watermark-band",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-band-head-to-head",
+      "merge_commit": "1be90766"
+    },
     {
       "id": "lab-l5-og-live-sort-keys",
       "status": "complete",

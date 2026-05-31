@@ -70,4 +70,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | league-waiver-tendencies-og-share | 6dcb0f72 | SHIP | /og/waiver-tendencies 73121B; BureauWaiverTendenciesShareBar
 2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | dynasty_value + trade_value OG sort; curl 50KB PNGs
-2026-05-31 | lab-og-watermark-band-head-to-head | da33eafd | keep | terracotta band on /og/head-to-head; curl 67846B demo PNG
+2026-05-31 | lab-og-watermark-band-head-to-head | 1be90766 | keep | terracotta band on /og/head-to-head; curl 67846B demo PNG

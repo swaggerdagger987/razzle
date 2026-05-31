@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | lab-l4-percentiles-pro-teaser (Lab L4 pro-gate epic) |
-| Last commit | `da33eafd` |
+| Last commit | `1be90766` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
