@@ -1,3 +1,5 @@
+import { PANELS } from "@razzle/panels";
+
 /** Static blur-preview rows + staff voice for Pro upgrade gates (Lab L4). */
 
 /** Launch-10 Staff Picks — mirrors `LabSidebar` STAFF_PICKS + PARITY Launch 10 table. */
@@ -114,9 +116,9 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
-  rankings: "tiered dynasty value with trade windows — the screener shows names, not what they're worth in your league",
-  tradevalues: "production vs market value curves — spot sell-high windows before your league thread catches up",
-  breakouts: "RBS breakout scores and snap climbs before your league's waiver wire post goes live",
+  rankings: "full dynasty tiers and trade-value curves — not just the free screener",
+  tradevalues: "trade-value curves and deal inefficiencies — price trades before you send the offer",
+  breakouts: "RBS breakout scores and usage spikes before the waiver wire notices",
   efficiency: "points-per-opportunity ranks that separate luck from role",
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",
@@ -125,7 +127,7 @@ const PITCH_BY_SLUG: Record<string, string> = {
   vorp: "value-over-replacement ranks that show who actually moves the needle",
   stocks: "rising and falling dynasty assets before your league reacts",
   waivers: "waiver-wire risers ranked by recent production and role",
-  "dynasty-comps": "statistical comps for any dynasty asset you're pricing",
+  "dynasty-comps": "statistical comp cards with match % — price any dynasty asset like a desk",
   weekly: "weekly heatmap streaks before your league mates spot the run",
   prospects: "rookie big board with combine and college context",
   dashboard: "dynasty pulse — risers, fallers, and value picks in one view",
@@ -143,4 +145,14 @@ export function upgradePitchForPanel(slug: string, agentName: string): string {
   const pitch = PITCH_BY_SLUG[slug];
   if (pitch) return `${agentName}: unlock ${pitch}.`;
   return `${agentName}: this panel is Pro — the screener stays free, the intel doesn't.`;
+}
+
+/** Launch-10 panel titles in PARITY table order — for Pro gate perks copy. */
+export function launch10PerkLabels(): string[] {
+  const bySlug = Object.fromEntries(PANELS.map((p) => [p.slug, p.title]));
+  return LAUNCH_10_STAFF_PICK_SLUGS.map((slug) => bySlug[slug] ?? slug);
+}
+
+export function formatPerkNameList(labels: readonly string[]): string {
+  return labels.join(", ");
 }

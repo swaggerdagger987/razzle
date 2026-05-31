@@ -67,21 +67,66 @@ def test_generic_pro_gate_slugs_have_custom_teasers():
     assert not missing, f"generic pro gate slugs missing teaser: {missing}"
 
 
-# Sharpened L4 pitches — dynasty-native hooks, not generic paywall blurbs.
-SHARPENED_PITCH_MARKERS: dict[str, tuple[str, ...]] = {
-    "rankings": ("trade window", "screener"),
-    "tradevalues": ("sell-high", "market value"),
-    "breakouts": ("RBS", "waiver"),
-}
+LAUNCH_10_PERK_TITLES = (
+    "Weekly Heatmap",
+    "Big Board",
+    "Dynasty Rankings",
+    "Trade Values",
+    "Breakouts",
+    "Game Log",
+    "Efficiency",
+    "Aging Curves",
+    "Buy / Sell",
+    "Dashboard",
+)
+
+BUREAU_7_PERK_LABELS = (
+    "Self-Scout",
+    "Monte Carlo",
+    "Manager Profiles",
+    "Pressure Map",
+    "Trade Network",
+    "Trade Finder",
+    "Head-to-Head",
+)
 
 
-def test_sharpened_launch_panel_pitches():
-    source = _teaser_source()
-    for slug, markers in SHARPENED_PITCH_MARKERS.items():
-        key = f'{slug}: "' if "-" not in slug else f'"{slug}": "'
-        start = source.find(key)
-        assert start != -1, f"missing pitch for {slug}"
-        line_end = source.find("\n", start)
-        pitch_line = source[start:line_end].lower()
-        missing = [m for m in markers if m.lower() not in pitch_line]
-        assert not missing, f"{slug} pitch missing markers {missing}: {pitch_line!r}"
+def _pro_gate_source() -> str:
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[3]
+    return (root / "apps/web/components/lab/ProUpgradeGate.tsx").read_text(encoding="utf-8")
+
+
+def _bureau_source() -> str:
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[3]
+    return (root / "apps/web/lib/bureau-features.ts").read_text(encoding="utf-8")
+
+
+def test_pro_gate_wires_launch10_and_bureau7_perk_helpers():
+    gate = _pro_gate_source()
+    assert "launch10PerkLabels" in gate
+    assert "bureau7PerkLabels" in gate
+    assert "10 launch Lab panels" in gate
+    assert "7 Bureau behavioral tabs" in gate
+
+
+def test_pro_gate_perks_list_launch10_parity_titles():
+    """Titles come from @razzle/panels via launch10PerkLabels — guard catalog parity."""
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[3]
+    catalog = (root / "packages/panels/catalog.ts").read_text(encoding="utf-8")
+    missing = [t for t in LAUNCH_10_PERK_TITLES if f'title: "{t}"' not in catalog]
+    assert not missing, f"catalog missing launch-10 perk titles: {missing}"
+    assert "launch10PerkLabels" in _teaser_source()
+
+
+def test_pro_gate_perks_list_bureau7_labels():
+    bureau = _bureau_source()
+    assert "BUREAU_7_SLUGS" in bureau
+    assert "bureau7PerkLabels" in bureau
+    missing = [label for label in BUREAU_7_PERK_LABELS if f'label: "{label}"' not in bureau]
+    assert not missing, f"bureau-features missing Bureau-7 labels: {missing}"

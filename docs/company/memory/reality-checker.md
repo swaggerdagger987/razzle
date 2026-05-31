@@ -1,12 +1,15 @@
 # Memory — Reality Checker
 
-2026-05-31 | lab-pro-gate-panel-pitches | da33eafd | build exit 0; teaser pytest 4 passed | Gate C N/A.
+2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 
-2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | curl rankings-demo 67083B weekly-live 70383B PASS | Gate C.
-
-2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | curl weekly 66512B prospects 60688B PASS | Gate C.
-
+2026-05-31 | launch10 live-fetch merge Gate C | 3f0411ec | PASS curl rankings 62355B weekly 66512B; build + pytest 58.
+2026-05-31 | launch10 snapshot-default Gate C | e2a3ce8a | PASS curl rankings 62355B weekly 66512B; build + pytest 55.
+2026-05-31 | Cycle 118 | e00217d1 | PASS curl prospects 60688B + build + pytest 55.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | curl rankings 62355B PASS | Gate C.
+
+2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | pytest 12; web build ok; Gate C N/A.
+
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | curl gamelog 56390B PASS | Wk N rows; extractGamelogWeekRows on live weeks[].
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 4d84af9a | curl H2H 67846B PASS | Gate C terracotta band on export.
 
