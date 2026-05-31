@@ -25,7 +25,10 @@ export interface OgSnapshotRow {
 }
 
 /** Compact base64url payload for OG route — mirrors rows visible in the Lab panel. */
-export function encodeOgSnapshot(rows: OgSnapshotRow[]): string | undefined {
+export function encodeOgSnapshot(
+  rows: OgSnapshotRow[],
+  exportPlayerId?: string,
+): string | undefined {
   const trimmed = rows.filter((r) => r.name).slice(0, 6);
   if (trimmed.length === 0) return undefined;
   const compact = trimmed.map((r) => ({
@@ -35,7 +38,9 @@ export function encodeOgSnapshot(rows: OgSnapshotRow[]): string | undefined {
     s: r.stat,
     sl: r.statLabel,
   }));
-  const json = JSON.stringify(compact);
+  const pid = exportPlayerId?.trim();
+  const payload = pid ? { r: compact, pid } : compact;
+  const json = JSON.stringify(payload);
   if (typeof btoa === "function") {
     return btoa(json).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   }
@@ -67,7 +72,7 @@ export function LabOgExportLink({
     playerId?.trim() || (isPlayerScoped ? DEFAULT_LAB_OG_PLAYER_ID : undefined);
   if (resolvedPlayerId) params.set("player_id", resolvedPlayerId);
   if (position) params.set("position", position);
-  const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows) : undefined;
+  const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows, resolvedPlayerId) : undefined;
   if (snapshot) params.set("snapshot", snapshot);
   return (
     <a
