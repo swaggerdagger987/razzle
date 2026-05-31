@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Room |
 | Focus layer | L5 |
 | Next slice | room-briefing-watermark |
-| Last commit | `8f52b584` |
+| Last commit | `bf200753` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

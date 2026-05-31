@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 130 room briefing OG | da33eafd | workday open; NO_LOCK_GUARDRAIL; PR #985 rebase merge.
+2026-05-31 | Factory cycle 130 room briefing OG | bf200753 | workday open; NO_LOCK_GUARDRAIL; PR #985 rebase merge.
 
 2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | panel-native LIVE epic 1/3; lock #842.
 

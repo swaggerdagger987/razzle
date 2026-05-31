@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | room-briefing-og-card | 82a74870 | keep | /og/briefing route + BriefingCard export link; curl 72KB PNG.
+2026-05-31 | room-briefing-og-card | bf200753 | keep | /og/briefing route + BriefingCard export link; curl 72KB PNG.
 
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
 
