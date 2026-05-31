@@ -8,8 +8,8 @@
     {
       "id": "lab-dynasty-comps-pro-teaser",
       "title": "Dynasty comps Pro gate gets bespoke teaser rows + Hawkeye pitch",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0853a9ba"
     },
     {
       "id": "lab-dashboard-pro-teaser",
@@ -18,7 +18,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-dynasty-comps-pro-teaser",
+  "next_atom_id": "lab-dashboard-pro-teaser",
   "created_at": "2026-05-31T05:45:00Z",
-  "updated_at": "2026-05-31T05:45:00Z"
+  "updated_at": "2026-05-31T05:50:00Z"
 }
