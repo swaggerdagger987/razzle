@@ -366,25 +366,38 @@ function demoRowsForPanel(slug: string): OgRow[] {
 }
 
 type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
+type SnapshotPayload = { r: CompactOgRow[]; pid?: string };
 
-function decodeOgSnapshot(param: string): OgRow[] {
+function mapCompactOgRows(arr: CompactOgRow[]): OgRow[] {
+  return arr
+    .filter((r) => r?.n)
+    .slice(0, 6)
+    .map((r) => ({
+      name: r.n,
+      position: r.p ?? "",
+      team: r.t ?? "",
+      stat: Number(r.s ?? 0),
+      statLabel: r.sl ?? "",
+    }));
+}
+
+function decodeOgSnapshot(param: string): { rows: OgRow[]; exportPlayerId?: string } {
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    const arr = JSON.parse(json) as CompactOgRow[];
-    if (!Array.isArray(arr)) return [];
-    return arr
-      .filter((r) => r?.n)
-      .slice(0, 6)
-      .map((r) => ({
-        name: r.n,
-        position: r.p ?? "",
-        team: r.t ?? "",
-        stat: Number(r.s ?? 0),
-        statLabel: r.sl ?? "",
-      }));
+    const parsed = JSON.parse(json) as CompactOgRow[] | SnapshotPayload;
+    if (Array.isArray(parsed)) {
+      return { rows: mapCompactOgRows(parsed) };
+    }
+    if (parsed && Array.isArray(parsed.r)) {
+      return {
+        rows: mapCompactOgRows(parsed.r),
+        exportPlayerId: typeof parsed.pid === "string" ? parsed.pid : undefined,
+      };
+    }
+    return { rows: [] };
   } catch {
-    return [];
+    return { rows: [] };
   }
 }
 
@@ -857,20 +870,26 @@ async function fetchOgLiveRows(
 /** Typed hallway path for OG watermark band (T6 — click back into Lab). */
 function labOgWatermarkLink(
   slug: string,
-  opts: { positionFilter: string; playerId: string; playerScoped: boolean },
+  opts: {
+    positionFilter: string;
+    playerId: string;
+    playerScoped: boolean;
+    snapshotPlayerId?: string;
+  },
 ): string {
+  const watermarkPlayerId = opts.snapshotPlayerId ?? opts.playerId;
   const includeDefaultPlayer = TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS.has(slug);
   const usePlayer =
-    opts.playerScoped &&
-    opts.playerId &&
-    (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+    (opts.playerScoped || Boolean(opts.snapshotPlayerId)) &&
+    watermarkPlayerId &&
+    (watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
   let path = toLab(
     slug,
     usePlayer
       ? {
           player: {
-            playerId: opts.playerId,
-            slug: opts.playerId,
+            playerId: watermarkPlayerId,
+            slug: watermarkPlayerId,
             name: "player",
           },
         }
@@ -935,7 +954,9 @@ export async function GET(
     // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
     apiParams.position = "WR";
   }
-  const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
+  const snapshotDecoded = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] as OgRow[] };
+  const snapshotRows = snapshotDecoded.rows;
+  const snapshotExportPlayerId = snapshotDecoded.exportPlayerId;
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
@@ -968,6 +989,7 @@ export async function GET(
     positionFilter,
     playerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+    snapshotPlayerId: snapshotExportPlayerId,
   });
 
   return new ImageResponse(
