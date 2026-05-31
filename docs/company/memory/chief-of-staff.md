@@ -1,3 +1,4 @@
+2026-05-31 | explore-og-margin-note-sticker | 9a1a2de8a | SHIP | Factory cycle 1; Caveat LIVE sticker PR #1516; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-og-tolab-aging-position | d56e382 | SHIP | Good morning cycle 1; NO_LOCK_GUARDRAIL; aging RB toLab.
 2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | 792e9f77d | SHIP | efficiency/aging formula_score OG; PR #1318 on base.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4; on base.
