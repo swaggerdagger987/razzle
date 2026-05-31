@@ -847,13 +847,23 @@ async function fetchOgLiveRows(
 /** Typed hallway path for OG watermark band (T6 — click back into Lab). */
 function labOgWatermarkLink(
   slug: string,
-  opts: { positionFilter: string; playerId: string; playerScoped: boolean },
+  opts: {
+    positionFilter: string;
+    playerId: string;
+    playerScoped: boolean;
+    isSnapshot: boolean;
+  },
 ): string {
   const includeDefaultPlayer = TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS.has(slug);
-  const usePlayer =
-    opts.playerScoped &&
+  const snapshotPlayer =
+    opts.isSnapshot &&
     opts.playerId &&
-    (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+    opts.playerId !== DEFAULT_OG_PLAYER_ID;
+  const usePlayer =
+    opts.playerId &&
+    ((opts.playerScoped &&
+      (opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer)) ||
+      snapshotPlayer);
   let path = toLab(
     slug,
     usePlayer
@@ -869,6 +879,10 @@ function labOgWatermarkLink(
   if (opts.positionFilter) {
     const sep = path.includes("?") ? "&" : "?";
     path = `${path}${sep}position=${encodeURIComponent(opts.positionFilter)}`;
+  }
+  if (opts.isSnapshot) {
+    const sep = path.includes("?") ? "&" : "?";
+    path = `${path}${sep}from=panel`;
   }
   return `razzle.lol${path}`;
 }
@@ -958,6 +972,7 @@ export async function GET(
     positionFilter,
     playerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+    isSnapshot,
   });
 
   return new ImageResponse(
