@@ -14,8 +14,8 @@
     {
       "id": "lab-efficiency-og-position-filter",
       "title": "Efficiency OG export passes position filter",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "b2d304e7"
     },
     {
       "id": "lab-weekly-og-snapshot-verify",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-efficiency-og-position-filter",
+  "next_atom_id": "lab-weekly-og-snapshot-verify",
   "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T05:30:00Z"
+  "updated_at": "2026-05-31T06:15:00Z"
 }

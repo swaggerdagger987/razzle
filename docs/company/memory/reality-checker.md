@@ -35,8 +35,6 @@ explicit checks in the verification routine.
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
 2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
 2026-05-31 | Trade Network share Gate C | 1616484c | PASS | curl trade-network 68090B PNG | keep | evidence/2026-05-31-bureau-trade-network-share-bar.md
-2026-05-31 | Cycle 86 Trade Network copy link | 17a40c65 | keep | Bureau behavioral share atom 3
-2026-05-31 | prospects tradevalues snap Gate C | 17a40c65 | PASS | curl 58084B 62488B | keep | evidence/2026-05-31-lab-og-prospects-tradevalues-snapshot.md
+2026-05-31 | Build Profiles tab | 2ee04975 | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
 2026-05-31 | prospects RPS snap Gate C | 17a40c65 | PASS | curl prospects snap ≥40KB; sl=RPS in payload | keep | evidence/2026-05-31-lab-prospects-og-rps-position.md
-2026-05-31 | Cycle 88 re-verify post-merge-sync | 17a40c65 | PASS | pytest 51; build ok; PNG 1200x630 | keep | PR #335
 2026-05-31 | Efficiency OG position Gate C | b2d304e7 | PASS | curl RB 45113B WR snap 44195B PNG 1200x630 | keep | evidence/2026-05-31-lab-efficiency-og-position-filter.md
