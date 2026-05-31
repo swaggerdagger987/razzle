@@ -95,14 +95,14 @@ P3 — Vote: 2/3 SHIP to build. KILL/VETO → standup only, no code, still publi
    (not Slack).
 
 6. Memory: one line per role in docs/company/memory/<role>.md.
-   Prepare results.tsv row (placeholder hash f6e0985f3 until metadata commit).
+   Prepare results.tsv row (placeholder hash 6692f503e until metadata commit).
 
 === PUBLISH (non-negotiable) ===
 
 Two commits:
   (1) git add -A && git commit -m "standup: YYYY-MM-DD — <verdict> <slice>"
       CONTENT_HASH=$(git rev-parse --short HEAD)
-  (2) Fix f6e0985f3 → CONTENT_HASH in results.tsv, standup, workday.json
+  (2) Fix 6692f503e → CONTENT_HASH in results.tsv, standup, workday.json
       git commit -m "standup metadata: YYYY-MM-DD — record <CONTENT_HASH>"
 
 Push:
