@@ -34,6 +34,8 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
   const hero = (data.hero_match as Match | null) ?? matches[0] ?? null;
   const needs = (data.needs as string[]) ?? [];
   const surplus = (data.surplus as string[]) ?? [];
+  const sleeperUser = getSleeperUser();
+  const exportUserId = sleeperUser?.user_id ?? "demo";
 
   return (
     <div className="flex flex-col gap-6">
@@ -57,6 +59,7 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           {needs.length > 0 ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length > 0 ? ` · surplus ${surplus.join(", ")}` : ""}
         </p>
+        <BureauTradeFinderShareBar leagueId={leagueId} userId={exportUserId} />
       </header>
 
       {hero && (
@@ -95,11 +98,6 @@ export function BureauTradeFinder({ data, leagueId }: Props) {
           >
             re-sim odds →
           </Link>
-          {(() => {
-            const user = getSleeperUser();
-            if (!user?.user_id) return null;
-            return <BureauTradeFinderShareBar leagueId={leagueId} userId={user.user_id} />;
-          })()}
         </section>
       )}
 
