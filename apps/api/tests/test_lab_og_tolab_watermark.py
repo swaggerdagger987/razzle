@@ -30,8 +30,20 @@ def test_default_og_player_tolab_rules():
     assert "TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS" in source
     assert '"gamelog"' in source
     assert '"dynasty-comps"' in source
+    assert '"percentiles"' in source
+    assert '"career"' in source
     assert "includeDefaultPlayer" in source
     assert "watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+
+
+def test_percentiles_og_watermark_includes_default_player_tolab():
+    """Ja'Marr default on percentiles export deep-links back into pro profile panel (T6)."""
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    idx = source.index("TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS")
+    block = source[idx : idx + 200]
+    assert '"percentiles"' in block
+    assert "PLAYER_SCOPED_SLUGS" in source
+    assert '"percentiles"' in source.split("PLAYER_SCOPED_SLUGS")[1].split(");")[0]
 
 
 def test_snapshot_export_player_id_in_watermark():
