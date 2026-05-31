@@ -38,7 +38,7 @@
     {
       "id": "lab-og-live-label",
       "title": "Subtitle distinguishes live API vs in-panel snapshot vs sample preview",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],

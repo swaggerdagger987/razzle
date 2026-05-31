@@ -29,4 +29,5 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
 2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | export must match on-screen rows REDDIT-INTEL
 2026-05-31 | Lab OG snapshot buysell/efficiency/aging | snapshotRows useMemo | 33808392 | keep | 3 renderers | — | — | evidence/2026-05-31-lab-og-snapshot-launch10-panels.md
-2026-05-31 | Lab OG snapshot gamelog/comps | week-level OG for dynasty tape posts | da33eafd | keep | REDDIT-INTEL pattern extended
+2026-05-31 | Lab OG snapshot gamelog/comps | week-level OG for dynasty tape posts | 75c88d30 | keep | REDDIT-INTEL pattern extended
+2026-05-31 | Lab OG live-label | labeled sample vs live reduces broken-tool perception | da33eafd | keep | standing intel

@@ -30,3 +30,4 @@ explicit checks in the verification routine.
 2026-05-31 | Lab OG snapshot rows Gate C | curl dashboard snapshot 45249B | PASS | keep | docs/v2/evidence/2026-05-31-lab-og-snapshot-rows.md
 2026-05-31 | Lab OG snapshot buysell/efficiency/aging | snapshotRows useMemo | 33808392 | keep | 3 renderers | — | — | evidence/2026-05-31-lab-og-snapshot-launch10-panels.md
 2026-05-31 | Lab OG snapshot gamelog/comps Gate C | curl gamelog 40520B comps 47292B | PASS | keep | evidence/2026-05-31-lab-og-snapshot-gamelog-comps.md
+2026-05-31 | Lab OG live-label Gate C | curl rankings 59509B demo+snapshot | PASS | keep | evidence/2026-05-31-lab-og-live-label.md

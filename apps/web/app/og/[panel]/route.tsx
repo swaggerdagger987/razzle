@@ -296,6 +296,20 @@ function formatStat(n: number, label?: string): string {
   return `${sign}${n.toFixed(1)}`;
 }
 
+/** Blurb suffix — honest data source for screenshot trust (Lab L5). */
+function ogSourceSuffix(
+  slug: string,
+  opts: { isSnapshot: boolean; isDemo: boolean; liveHasRows: boolean },
+): string {
+  if (slug === "dynasty-comps" && opts.isDemo) {
+    return " · comps for Ja'Marr Chase · sample preview";
+  }
+  if (opts.isSnapshot) return " · from your panel";
+  if (opts.liveHasRows) return " · live tape";
+  if (opts.isDemo) return " · sample preview";
+  return "";
+}
+
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ panel: string }> },
@@ -396,15 +410,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${
-            slug === "dynasty-comps" && isDemo
-              ? " · comps for Ja'Marr Chase · sample preview"
-              : isSnapshot
-                ? " · from your panel"
-                : isDemo
-                  ? " · sample preview"
-                  : ""
-          }`}
+          {`${panel.blurb}${ogSourceSuffix(slug, { isSnapshot, isDemo, liveHasRows })}`}
         </div>
 
         {query && (
