@@ -3,6 +3,9 @@
 2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 
+
+2026-05-31 | league-monte-carlo-og-watermark-live | f6e0985f3 | SHIP | LIVE/SAMPLE stickers + terracotta toLeague watermark on monte-carlo OG.
+
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Builder

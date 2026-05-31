@@ -1,24 +1,25 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
-  "epic": "League L5 — Bureau OG terracotta watermark parity (atom 2/4)",
-  "slice_title": "Self-Scout OG terracotta watermark band",
-  "atom_id": "league-og-self-scout-watermark",
-  "parity_ref": "League L5 — watermarked export",
+  "big_problem": "Monte Carlo OG cards lack LIVE/SAMPLE trust stickers and the terracotta hallway watermark band.",
+  "epic": "League L5 — Bureau Monte Carlo GTM export (atom 1/3)",
+  "slice_title": "Monte Carlo OG — LIVE/SAMPLE stickers + terracotta watermark band",
+  "atom_id": "league-monte-carlo-og-watermark-live",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "acceptance_ref": "FACTORY-DOD Gate C2",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/self-scout/route.tsx",
-    "apps/api/tests/test_self_scout_og_watermark.py"
+    "apps/web/app/og/monte-carlo/route.tsx",
+    "apps/api/tests/test_monte_carlo_og_watermark.py"
   ],
   "max_files": 2,
-  "max_lines": 130,
+  "max_lines": 120,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_self_scout_og_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_monte_carlo_og_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-monte-carlo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/monte-carlo?download=1'"
   ],
-  "out_of_scope": ["Other Bureau OG routes"],
+  "out_of_scope": ["ShareBar changes", "API schema", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
@@ -27,5 +28,5 @@
     "verdict": "SHIP"
   },
   "status": "shipped",
-  "content_commit": "a76b2e4e0"
+  "content_commit": "3b88b2ac3"
 }
