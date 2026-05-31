@@ -68,3 +68,4 @@ cycle	commit	score	status	pillar	slice	description
 78	30454811	depth+hallway+voice+simplicity	keep	League	L5 Bureau Monte Carlo share bar	trust=T2,T5,T6; BureauMonteCarloShareBar copy sim + export; curl monte-carlo OG 53767B
 78	3c1237df	depth+voice+simplicity	keep	Lab	L5 OG export links prospects weekly tradevalues	trust=T5,T6; LabOgExportLink footers; curl prospects 58084B weekly 63819B tradevalues 62488B; export-link epic complete
 80	28f39b4a	depth+hallway+voice+simplicity	keep	League	L5 Power Rankings OG + share row	trust=T2,T5,T6; /og/power-rankings curl 59807B; BureauPowerRankingsShareBar
+81	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 Bureau Roster Depth tab unhidden	trust=T2,T5,T6; Dolphin renderer; roster-depth out of HIDDEN; build+pytest PASS
