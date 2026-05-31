@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | cycle 123 | No new intel; Explore OG demo rows for cold API screenshots.
+
 2026-05-31 | cycle 122 | No new intel; force_demo completes H2H OG Gate C tooling.
 
 2026-05-31 | cycle 121 | No new intel; SAMPLE sticker completes demo/live pair on H2H OG.

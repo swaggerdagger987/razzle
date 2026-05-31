@@ -76,3 +76,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 119	45d4a448	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG SAMPLE demo sticker	trust=T1,T5,T6; terracotta vs teal LIVE; curl rankings demo 66345B weekly 63522B; live-rows epic 3/3 complete
 120	08e1824c	depth+voice+simplicity	keep	League	L5 Bureau H2H OG LIVE league sticker	trust=T5,T6; teal LIVE when fetchH2H; curl h2h 67846B; h2h-stickers epic atom 1/3
 122	b4d91213	depth+voice+simplicity	keep	League	L5 Bureau H2H OG force_demo QA param	trust=T5,T6; skip fetch when force_demo=1; curl 77736B; h2h-stickers epic 3/3 complete
+123	da33eafd	depth+voice+simplicity	keep	Explore	L5 Explore OG universe demo rows	trust=T5,T6; NFL+college demo when API cold; curl nfl 60059B college 62556B; explore-og epic atom 1/4

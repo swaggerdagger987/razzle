@@ -1,26 +1,38 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab sidebar still lists Staff Picks as a flat catalog — agents own panels in headers but not in navigation, so the hallway band is invisible until you open a panel.",
-  "epic_title": "Lab L2 — sidebar groups launch-10 by agent owner",
-  "parity_ref": "docs/v2/AGENTS.md — LabSidebar group by agent",
-  "depth_ref": "Lab L2",
+  "big_problem": "Explore OG cards go blank when the screener API is cold — Reddit screenshots need universe-aware sample rows, not pulling film alone.",
+  "epic_title": "Explore L5 — OG universe query demo rows",
+  "parity_ref": "Explore L5 — screener OG export",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-sidebar-staff-picks-by-agent",
-      "title": "Staff Picks grouped under agent owner headers in LabSidebar",
+      "id": "explore-og-universe-query",
+      "title": "Explore OG — NFL/college demo rows when screener query empty",
       "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "lab-sidebar-search-agent-labels",
-      "title": "Search results show agent owner in sidebar item title",
+      "id": "explore-og-sample-sticker",
+      "title": "Explore OG — terracotta SAMPLE sticker on demo path",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-live-sticker",
+      "title": "Explore OG — teal LIVE sticker when screener returns rows",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "explore-og-force-demo-qa",
+      "title": "Explore OG — force_demo QA param for Gate C curl",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-sidebar-staff-picks-by-agent",
-  "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:40:00Z",
+  "next_atom_id": "explore-og-universe-query",
+  "epic_status": "active",
+  "created_at": "2026-05-31T08:33:00Z",
+  "updated_at": "2026-05-31T08:33:00Z",
   "completed_epics": [
     {
       "id": "bureau-h2h-og-live-vs-sample-stickers",
@@ -29,28 +41,10 @@
       "merge_commit": "b4d91213"
     },
     {
-      "id": "lab-l5-launch10-og-live-extract",
-      "status": "complete",
-      "last_atom": "lab-og-dynasty-comps-pro-teaser",
-      "merge_commit": "26a590c9"
-    },
-    {
       "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
       "last_atom": "lab-og-live-demo-fallback-copy",
       "merge_commit": "45d4a448"
-    },
-    {
-      "id": "lab-l5-og-watermark-band",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-band-head-to-head",
-      "merge_commit": "44d05684"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
     }
   ]
 }
