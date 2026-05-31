@@ -1,29 +1,27 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-strength-of-schedule-tab",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
-  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "slice_title": "Schedule tab unhidden with SOS matchup renderer",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C (in-product renderer; no OG this atom)",
-  "trust_pillars": ["T2", "T5", "T6"],
+  "atom_id": "lab-dashboard-og-slug-snapshot",
+  "big_problem": "Lab dashboard export still points at dynasty-comps OG when generic dashboard renderers load pulse data.",
+  "epic": "Lab L5 — Dashboard OG cards match in-panel movers",
+  "slice_title": "DashboardRenderer export uses /og/dashboard with riser/faller snapshot rows",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/dashboard PNG ≥40KB with snapshot",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx",
-    "apps/web/lib/bureau-features.ts"
+    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 130,
+  "max_files": 1,
+  "max_lines": 80,
   "acceptance_commands": [
+    "JWT_SECRET=test pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "npm run start --workspace=apps/web & sleep 8 && curl -s -o /tmp/og-dash.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1' && file /tmp/og-dash.png && kill %1 2>/dev/null || true"
   ],
-  "out_of_scope": ["OG export", "API changes", "NORTH_STAR/DESIGN/DECISIONS"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP"
-  }
+  "out_of_scope": [
+    "DynastyDashboardRenderer changes",
+    "OG route changes",
+    "NORTH_STAR / DESIGN edits"
+  ],
+  "builder_mode": "composer-surgical"
 }

@@ -7,33 +7,52 @@ interface Props {
   data: unknown;
 }
 
-interface CompRow {
+interface DashboardPlayer {
   full_name?: string;
+  name?: string;
   position?: string;
   team?: string;
-  similarity?: number;
+  rank_diff?: number;
+  ppg?: number;
+}
+
+function playerName(p: DashboardPlayer): string {
+  return p.full_name ?? p.name ?? "—";
+}
+
+function snapshotFromDashboard(obj: Record<string, unknown>): OgSnapshotRow[] {
+  const risers = Array.isArray(obj.risers) ? (obj.risers as DashboardPlayer[]) : [];
+  const fallers = Array.isArray(obj.fallers) ? (obj.fallers as DashboardPlayer[]) : [];
+  const movers = [...risers, ...fallers];
+  if (movers.length > 0) {
+    return movers.slice(0, 6).map((p) => ({
+      name: playerName(p),
+      position: p.position ?? "",
+      team: p.team ?? "",
+      stat: p.rank_diff ?? 0,
+      statLabel: "Chg",
+    }));
+  }
+  const top5 = Array.isArray(obj.top5) ? (obj.top5 as DashboardPlayer[]) : [];
+  return top5.slice(0, 6).map((p) => ({
+    name: playerName(p),
+    position: p.position ?? "",
+    team: p.team ?? "",
+    stat: p.ppg ?? 0,
+    statLabel: "PPG",
+  }));
 }
 
 export function DashboardRenderer({ data }: Props) {
   const obj = (data ?? {}) as Record<string, unknown>;
-  const comps = Array.isArray(obj.comps) ? (obj.comps as CompRow[]) : [];
-  const hasComps = comps.length > 0;
-  const scopedPlayerId = typeof obj.player_id === "string" ? obj.player_id : undefined;
-  const sections = ["risers", "fallers", "highlights", "summary", "cards", "items"]
+  const sections = ["risers", "fallers", "highlights", "summary", "cards", "items", "top5", "value_picks"]
     .map((k) => ({ key: k, value: obj[k] }))
     .filter((s) => s.value != null);
 
-  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    return comps.slice(0, 6).map((c) => ({
-      name: c.full_name ?? "—",
-      position: c.position ?? "",
-      team: c.team ?? "",
-      stat: Math.round((c.similarity ?? 0) * 100),
-      statLabel: "Match %",
-    }));
-  }, [comps]);
+  const ogSnapshotRows = useMemo(() => snapshotFromDashboard(obj), [data]);
+  const hasExportRows = ogSnapshotRows.length > 0;
 
-  if (!sections.length && !hasComps) {
+  if (!sections.length && !hasExportRows) {
     return (
       <pre className="chunky overflow-auto bg-bg-card p-4 text-xs">{JSON.stringify(data, null, 2)}</pre>
     );
@@ -47,15 +66,11 @@ export function DashboardRenderer({ data }: Props) {
           <pre className="text-xs">{JSON.stringify(value, null, 2)}</pre>
         </section>
       ))}
-      {hasComps && !sections.length && (
-        <pre className="chunky overflow-auto bg-bg-card p-4 text-xs">{JSON.stringify(obj, null, 2)}</pre>
-      )}
-      {hasComps && (
+      {hasExportRows && (
         <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
           <LabOgExportLink
-            slug="dynasty-comps"
-            downloadName="razzle-dynasty-comps.png"
-            playerId={scopedPlayerId}
+            slug="dashboard"
+            downloadName="razzle-dashboard.png"
             snapshotRows={ogSnapshotRows}
           />
         </footer>

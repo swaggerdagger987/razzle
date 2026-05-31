@@ -1,39 +1,24 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
-  "epic_title": "Lab L5 — OG snapshot row fidelity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Lab dashboard export still points at dynasty-comps OG when generic dashboard renderers load pulse data.",
+  "epic_title": "Lab L5 — Dashboard OG cards match in-panel movers",
+  "parity_ref": "Explore L5 / Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-prospects-rps-ranked",
-      "title": "Prospects OG export ranks top-6 by RPS with position filter",
-      "status": "done",
-      "merge_commit": "c0358ff3"
-    },
-    {
-      "id": "lab-og-weekly-ppg-ranked",
-      "title": "Weekly OG export ranks top-6 by PPG for active position tab",
-      "status": "pending",
+      "id": "lab-dashboard-og-slug-snapshot",
+      "title": "DashboardRenderer export uses /og/dashboard with riser/faller snapshot rows",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "lab-og-breakouts-score-ranked",
-      "title": "Breakouts OG export ranks top-6 by breakout score",
+      "id": "lab-dashboard-og-top5-fallback",
+      "title": "OG snapshot falls back to top5 when no risers/fallers",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-weekly-ppg-ranked",
-  "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T05:50:00Z",
-  "last_cycle_commit": "c0358ff3",
-  "completed_epics": [
-    {
-      "id": "league-l5-unhide-bureau-tabs",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-tab",
-      "merge_commit": "eb542d51"
-    }
-  ]
+  "next_atom_id": "lab-dashboard-og-slug-snapshot",
+  "created_at": "2026-05-31T14:30:00Z",
+  "updated_at": "2026-05-31T14:30:00Z"
 }
