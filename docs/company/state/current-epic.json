@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
   "epic_title": "Lab L5 — OG export matches in-panel position filters",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
@@ -20,12 +20,12 @@
     {
       "id": "lab-og-position-buysell",
       "title": "Buy/sell export passes position filter to OG",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "25f46b19"
     }
   ],
-  "next_atom_id": "lab-og-position-buysell",
+  "next_atom_id": null,
   "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T21:30:00Z",
-  "last_cycle_commit": "516bcca1"
+  "updated_at": "2026-05-31T21:35:00Z",
+  "last_cycle_commit": "25f46b19"
 }
