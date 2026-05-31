@@ -1,36 +1,24 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-career-compare-live",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity (atom 3/4)",
-  "slice_title": "Career compare OG multi-player overlay rows",
-  "parity_ref": "Lab panel OG data rows",
+  "big_problem": "Launch-10 Lab OG cards need Gate C proof that breakouts live fetch + demo RBS rows ship.",
+  "epic": "Lab L5 OG export trust",
+  "slice_title": "Breakouts OG Gate C pytest for live fetch path",
+  "parity_ref": "PARITY Explore L5 / Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_career_compare_live.py"
+    "apps/api/tests/test_og_breakouts_gate_c_live.py",
+    "docs/v2/evidence/2026-05-31-lab-og-breakouts-gate-c-live.md"
   ],
   "max_files": 2,
-  "max_lines": 180,
+  "max_lines": 90,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_career_compare_live.py -q --noconftest",
+    "PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_og_breakouts_gate_c_live.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": [
-    "percentiles toLab atom",
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps"
-  ],
+  "out_of_scope": ["OG route behavior changes", "NORTH_STAR/DESIGN/DECISIONS edits"],
   "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
-  "content_commit": "9d19930cf",
-  "reality": "PASS",
-  "status": "done"
+  "status": "shipped",
+  "content_commit": "70bb0a893"
 }
