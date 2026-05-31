@@ -31,3 +31,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | LabOgExportLink rankings+breakouts | 4b9d0464 | keep | 2 renderer footers on latest base; curl rankings 59509B breakouts 60649B
 2026-05-31 | LabOgExportLink prospects+weekly+tradevalues | 8b5acdbe | keep | 3 renderer footers; curl 58084B/63819B/62488B; epic complete
 2026-05-31 | Bureau power-rankings OG | e62721a6 | keep | /og/power-rankings route + export link; curl 68555B
+2026-05-31 | Bureau roster-depth tab | da33eafd | keep | BureauRosterDepth Dolphin renderer; unhide slug; build+pytest PASS

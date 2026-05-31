@@ -31,3 +31,4 @@ explicit checks in the verification routine.
 2026-05-31 | Lab OG snapshot rows Gate C | curl dashboard snapshot 45249B | PASS | keep | docs/v2/evidence/2026-05-31-lab-og-snapshot-rows.md
 2026-05-31 | Lab OG prospects weekly tradevalues Gate C | curl 58084B 63819B 62488B | PASS | keep | docs/v2/evidence/2026-05-31-lab-og-export-prospects-weekly-tradevalues.md
 2026-05-31 | power-rankings OG Gate C | curl 200 68555B | PASS | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
+2026-05-31 | roster-depth tab | build+pytest+grep HIDDEN | PASS | keep | docs/v2/evidence/2026-05-31-league-roster-depth-tab.md
