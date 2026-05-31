@@ -15,7 +15,7 @@
       "id": "lab-og-live-sticker-prospects-weekly",
       "title": "Prospects + Weekly OG — verify live sticker with panel API",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "53ce5031"
     },
     {
       "id": "lab-og-live-demo-fallback-copy",
