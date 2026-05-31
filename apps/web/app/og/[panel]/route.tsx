@@ -92,28 +92,28 @@ const LAUNCH_10_OG_SLUGS = new Set([
 function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "prospects") return " · live RPS board";
   if (slug === "weekly") return " · live PPG heatmap";
-  if (slug === "rankings") return " · live dynasty ranks";
-  if (slug === "breakouts") return " · live RBS board";
-  if (slug === "tradevalues") return " · live value curve";
-  if (slug === "efficiency") return " · live PPO leaders";
-  if (slug === "aging") return " · live peak-age curve";
-  if (slug === "buysell") return " · live mismatch board";
-  if (slug === "dashboard") return " · live dynasty pulse";
-  if (slug === "gamelog") return " · live week tape";
+  if (slug === "rankings") return " · live dynasty values";
+  if (slug === "breakouts") return " · live breakout board";
+  if (slug === "tradevalues") return " · live trade values";
+  if (slug === "efficiency") return " · live PPO board";
+  if (slug === "aging") return " · live aging curve";
+  if (slug === "buysell") return " · live buy/sell board";
+  if (slug === "dashboard") return " · live roster grades";
+  if (slug === "gamelog") return " · live game log";
   return " · live nflverse rows";
 }
 
 function launch10LiveStickerLabel(slug: string): string {
   if (slug === "prospects") return "LIVE · RPS board";
   if (slug === "weekly") return "LIVE · PPG heatmap";
-  if (slug === "rankings") return "LIVE · dynasty ranks";
-  if (slug === "breakouts") return "LIVE · RBS board";
-  if (slug === "tradevalues") return "LIVE · value curve";
-  if (slug === "efficiency") return "LIVE · PPO leaders";
-  if (slug === "aging") return "LIVE · peak-age curve";
-  if (slug === "buysell") return "LIVE · mismatch board";
-  if (slug === "dashboard") return "LIVE · dynasty pulse";
-  if (slug === "gamelog") return "LIVE · week tape";
+  if (slug === "rankings") return "LIVE · dynasty values";
+  if (slug === "breakouts") return "LIVE · breakout board";
+  if (slug === "tradevalues") return "LIVE · trade values";
+  if (slug === "efficiency") return "LIVE · PPO board";
+  if (slug === "aging") return "LIVE · aging curve";
+  if (slug === "buysell") return "LIVE · buy/sell board";
+  if (slug === "dashboard") return "LIVE · roster grades";
+  if (slug === "gamelog") return "LIVE · game log";
   return "LIVE · nflverse rows";
 }
 
