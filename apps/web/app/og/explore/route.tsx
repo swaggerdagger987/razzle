@@ -42,7 +42,6 @@ async function fetchTopPlayers(params: {
     search: params.q,
     positions,
     season: params.season,
-    teams: params.teams,
     week: 0,
     sort_key: sortKey,
     sort_direction: params.dir === "asc" ? "asc" : "desc",
@@ -52,6 +51,7 @@ async function fetchTopPlayers(params: {
     relevance: "fantasy",
     min_gp: 0,
     universe: params.universe,
+    teams: params.teams,
   };
 
   try {
