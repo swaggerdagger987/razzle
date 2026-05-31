@@ -7,4 +7,4 @@ last_keep_cycle: 117
 last_commit: b0405d43
 lab_l4_pro_gate_epic: active
 lab_l5_og_watermark_epic: complete
-lab_l5_launch10_og_extract_epic: active
+lab_l5_launch10_og_extract_epic: complete
