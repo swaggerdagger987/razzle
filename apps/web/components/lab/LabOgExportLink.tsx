@@ -56,7 +56,8 @@ export function LabOgExportLink({
   return (
     <a
       href={`/og/${slug}?${params.toString()}`}
-      className="text-sm text-ink-medium underline"
+      className="btn-chunky active text-xs"
+      style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
       download={file}
     >
       {label}
