@@ -1,10 +1,10 @@
-cycle: 86
+cycle: 87
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-build-profiles-tab
-last_keep_cycle: 86
-last_commit: 309f8a8b
+next_slice: bureau-trade-network-copy-link
+last_keep_cycle: 87
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
