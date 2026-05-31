@@ -1,37 +1,34 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-trade-finder-og-room-hallway",
-  "big_problem": "Trade Finder screenshots travel without the in-panel Bones matches — export cards fall back to generic demo rows when league/user params are missing.",
-  "epic": "League L5 — Bureau Trade Finder GTM export (atom 3/3)",
-  "slice_title": "Trade Finder OG watermark includes Bones Room ask deep link",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "big_problem": "Lab OG watermark dead-ends when snapshot-only shares drop player_id from the URL.",
+  "epic": "Lab L5 — OG hallway deep links",
+  "slice_title": "Snapshot exports preserve player in watermark",
+  "atom_id": "lab-og-tolab-snapshot-player",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/trade-finder/route.tsx",
-    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
-    "apps/api/tests/test_trade_finder_og_room_hallway.py"
+    "apps/web/components/lab/LabOgExportLink.tsx",
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
   "max_files": 3,
-  "max_lines": 120,
+  "max_lines": 80,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_trade_finder_og_room_hallway.py apps/api/tests/test_trade_finder_og_watermark.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/tf-og.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/trade-finder?download=1'"
+    "curl -s -o /tmp/og-gamelog-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/gamelog?download=1&snapshot=eyJyIjpbeyJuIjoiV2sgMSIsInAiOiJXUiIsInQiOiJDRU4iLCJzIjoxOC41LCJzbCI6IlBQUiJ9XSwicCI6IjAwLTAwMzY5MDAifQ'"
   ],
-  "out_of_scope": [
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps",
-    "snapshot codec changes"
-  ],
+  "out_of_scope": ["Bureau snapshots", "New panels", "NORTH_STAR edits"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "verdict": "SHIP"
   },
-  "status": "shipped",
-  "content_commit": "c8091030c"
+  "content_commit": null,
+  "reality": "PASS",
+  "merge": "pending"
 }
