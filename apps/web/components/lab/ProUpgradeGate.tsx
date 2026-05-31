@@ -10,10 +10,14 @@ import {
   teaserRowsToOgSnapshot,
   upgradePitchForPanel,
 } from "@/lib/panel-upgrade-teaser";
-import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink } from "./LabOgExportLink";
+import {
+  DEFAULT_LAB_OG_PLAYER_ID,
+  DEFAULT_LAB_OG_PLAYER_NAME,
+  LabOgExportLink,
+} from "./LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "./PanelAgentHeader";
 
-const PLAYER_SCOPED_OG_SLUGS = new Set(["gamelog", "dynasty-comps"]);
+const PLAYER_SCOPED_OG_SLUGS = new Set(["gamelog", "dynasty-comps", "percentiles"]);
 
 interface Props {
   panelSlug: string;
@@ -35,7 +39,9 @@ export function ProUpgradeGate({
   const rows = teaserRowsForPanel(panelSlug);
   const perks = proUpgradePerkLines();
   const ogSnapshot = teaserRowsToOgSnapshot(panelSlug);
-  const ogPlayerId = PLAYER_SCOPED_OG_SLUGS.has(panelSlug) ? DEFAULT_LAB_OG_PLAYER_ID : undefined;
+  const playerScopedOg = PLAYER_SCOPED_OG_SLUGS.has(panelSlug);
+  const ogPlayerId = playerScopedOg ? DEFAULT_LAB_OG_PLAYER_ID : undefined;
+  const ogPlayerName = playerScopedOg ? DEFAULT_LAB_OG_PLAYER_NAME : undefined;
   const roomQuestion = `What should I know about ${panelTitle.toLowerCase()} for my dynasty roster?`;
 
   return (
@@ -95,6 +101,7 @@ export function ProUpgradeGate({
             downloadName={`razzle-${panelSlug}-sample.png`}
             label="export sample card →"
             playerId={ogPlayerId}
+            playerName={ogPlayerName}
             snapshotRows={ogSnapshot}
           />
         </p>

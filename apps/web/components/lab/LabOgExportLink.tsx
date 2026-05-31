@@ -1,5 +1,6 @@
 /** Ja'Marr Chase gsis_id — matches DEFAULT_OG_PLAYER_ID in /og/[panel]/route.tsx */
 export const DEFAULT_LAB_OG_PLAYER_ID = "00-0036900";
+export const DEFAULT_LAB_OG_PLAYER_NAME = "Ja'Marr Chase";
 
 /** Panels whose OG route reads player_id from the export URL (see /og/[panel]/route.tsx). */
 export const PLAYER_SCOPED_OG_SLUGS = [

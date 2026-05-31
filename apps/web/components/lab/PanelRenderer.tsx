@@ -27,6 +27,12 @@ import { DynastyDashboardRenderer } from "./renderers/DynastyDashboardRenderer";
 import { DynastyCompsRenderer } from "./renderers/DynastyCompsRenderer";
 import { TierRenderer } from "./renderers/TierRenderer";
 import { ProUpgradeGate } from "./ProUpgradeGate";
+import {
+  DEFAULT_LAB_OG_PLAYER_ID,
+  DEFAULT_LAB_OG_PLAYER_NAME,
+  LabOgExportLink,
+  type OgSnapshotRow,
+} from "./LabOgExportLink";
 
 interface Props {
   panel: PanelDefinition;
@@ -148,5 +154,71 @@ export function PanelRenderer({ panel }: Props) {
     return <DynastyDashboardRenderer panel={panel} />;
   }
 
+  if (panel.slug === "percentiles") {
+    return <PercentilesPanelRenderer panel={panel} />;
+  }
+
   return <GenericPanelRenderer panel={panel} />;
+}
+
+function percentilesToOgRows(data: Record<string, unknown>): OgSnapshotRow[] {
+  const raw = data.percentiles;
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .slice(0, 6)
+    .map((row) => {
+      const r = row as Record<string, unknown>;
+      const stat = Number(r.percentile ?? r.value ?? 0);
+      return {
+        name: String(r.stat ?? r.label ?? "stat"),
+        position: String(r.position ?? "WR"),
+        team: String(r.team ?? ""),
+        stat,
+        statLabel: "pct",
+      };
+    })
+    .filter((row) => row.name);
+}
+
+function PercentilesPanelRenderer({ panel }: Props) {
+  const q = useQuery({
+    queryKey: ["panel", panel.slug, panel.api],
+    queryFn: () => fetchPanelData(panel),
+  });
+
+  if (q.isPending) return <LoadingState message="pulling film..." className="p-8" />;
+  if (q.isError) {
+    const err = q.error;
+    if (isUpgradeRequiredError(err)) {
+      return (
+        <ProUpgradeGate
+          panelSlug={panel.slug}
+          panelTitle={panel.title}
+          required={err.required}
+          current={err.current}
+          message={err.message}
+        />
+      );
+    }
+    return <p className="p-6 text-red">something fumbled: {(err as Error).message}</p>;
+  }
+
+  const record = q.data as Record<string, unknown>;
+  const ogSnapshotRows = percentilesToOgRows(record);
+
+  return (
+    <div>
+      <ChartRenderer data={record} type="bar-chart" />
+      <footer className="mt-4 flex flex-wrap items-center gap-4 border-t border-ink px-6 pb-6 pt-4">
+        <LabOgExportLink
+          slug="percentiles"
+          downloadName="razzle-percentiles.png"
+          playerId={DEFAULT_LAB_OG_PLAYER_ID}
+          playerName={DEFAULT_LAB_OG_PLAYER_NAME}
+          snapshotRows={ogSnapshotRows.length ? ogSnapshotRows : undefined}
+          label={ogSnapshotRows.length ? "export card" : "export sample card"}
+        />
+      </footer>
+    </div>
+  );
 }
