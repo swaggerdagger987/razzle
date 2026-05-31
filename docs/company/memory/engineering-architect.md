@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-career-compare-live | 9a32bf547 | SHIP | 2-file contract; p1/p2/p3 career-stats fetch path.
+2026-05-31 | lab-og-career-compare-live | 9d19930cf | SHIP | 2-file contract; p1/p2/p3 career-stats fetch path.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | TOLAB_DEFAULT_POSITION + watermarkPosition.
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | 3 files; decodeOgSnapshot pid + labOgWatermarkLink snapshotPlayerId.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.

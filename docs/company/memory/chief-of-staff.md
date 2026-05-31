@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-career-compare-live | 9a32bf547 | SHIP | Factory open cycle 1; career-compare OG atom 3/4; lock #1435.
+2026-05-31 | lab-og-career-compare-live | 9d19930cf | SHIP | Factory open cycle 1; career-compare OG atom 3/4; lock #1435.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 
