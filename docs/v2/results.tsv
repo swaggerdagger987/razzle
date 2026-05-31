@@ -86,8 +86,12 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 131	54443bc8	depth+voice+simplicity	keep	Lab	L5 SAMPLE OG labels rankings tradevalues breakouts	trust=T1,T5,T6; launch10DemoStickerLabel; curl 66806B 66253B 67267B; panel-labels epic 1/3 done
 132	adbf6c7	depth+voice+simplicity	keep	Lab	L5 dashboard/buysell OG LIVE stickers	trust=T1,T5,T6; rank movers buy/sell board; curl 63775B 61908B; panel-labels epic 3/3
 133	75dc2d65a	depth+voice+simplicity	keep	Room	L5 Briefing OG export card	trust=T5,T6; /og/briefing; curl 72168B; pytest 2; room GTM epic atom 2/3
+<<<<<<< HEAD
 134	d0add0455	depth+voice+simplicity	keep	Lab	L4 ProGate rankings + buysell	trust=T2,T6; shared 402 gate; pytest 13; L4 epic atom 3/3
 136	839ac5cb	depth+voice+simplicity	keep	Explore	L5 college OG Gate C pytest guard	trust=T5,T6; curl college 67491B; pytest 4; universe epic atom 2/3
 137	a3f07d1e5	depth+voice+simplicity	keep	Lab	L4 ProGate DynastyComps closes epic	trust=T2,T6; last Lab renderer; pytest 9; L4 epic complete
 138	c7b50c707	depth+voice+simplicity	keep	Explore	L5 NFL explore OG omits default universe param	trust=T5,T6; ExploreShareButton; pytest 5; curl NFL OG 65431B; universe epic 3/3 complete
 139	2b9c85dbd	depth+voice+simplicity	keep	Room	L5 briefing OG LIVE sticker + room deep link	trust=T1,T5,T6; watermark roomPath; curl 82808B; briefing epic 3/3
+=======
+134	2b9c85dbd	depth+voice+simplicity	keep	Room	L5 briefing OG LIVE sticker + room deep link	trust=T1,T5,T6; watermark roomPath; curl 82808B; briefing epic 3/3
+>>>>>>> 63d3171d0 (standup metadata: 2026-05-31 — record 2b9c85dbd)
