@@ -238,7 +238,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
               downloadName="razzle-dynasty-rankings.png"
               position={position || undefined}
               snapshotRows={RANKINGS_SAMPLE_OG_ROWS}
-              copyLabel="copy sample rankings link"
+              copyLabel="copy rankings link"
             />
           </footer>
         </div>

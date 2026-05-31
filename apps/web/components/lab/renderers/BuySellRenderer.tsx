@@ -16,7 +16,7 @@ import {
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import type { OgSnapshotRow } from "../LabOgExportLink";
+import { type OgSnapshotRow } from "../LabOgExportLink";
 import { LabPanelShareBar } from "../LabPanelShareBar";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
 

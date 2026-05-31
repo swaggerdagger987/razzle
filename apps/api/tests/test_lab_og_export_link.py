@@ -69,7 +69,7 @@ def test_rankings_empty_filter_exports_sample_card():
     assert "isEmptyBoard" in renderer
     assert "snapshotRows={RANKINGS_SAMPLE_OG_ROWS}" in renderer
     assert "LabPanelShareBar" in renderer
-    assert "copy sample rankings link" in renderer
+    assert 'copyLabel="copy rankings link"' in renderer
 
 
 def test_default_lab_og_player_matches_og_route():
