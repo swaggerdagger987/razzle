@@ -84,3 +84,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 129	5721ee33	depth+voice+simplicity	keep	Lab	L4 ProGateFromPanelError breakouts + pytest	trust=T2,T6; shared 402 gate; pytest 7; error-surface epic atom 1/3
 130	4bc3913e	depth+voice+simplicity	keep	Lab	L5 LabOgExportLink default player_id for scoped OG	trust=T5,T6; PLAYER_SCOPED_OG_SLUGS; pytest 2; live-fetch epic complete
 131	54443bc8	depth+voice+simplicity	keep	Lab	L5 SAMPLE OG labels rankings tradevalues breakouts	trust=T1,T5,T6; launch10DemoStickerLabel; curl 66806B 66253B 67267B; panel-labels epic 1/3 done
+132	da33eafd	depth+voice+simplicity	keep	Lab	L5 LabOgExportLink full PLAYER_SCOPED slug set	trust=T5,T6; 9 slugs match OG route; pytest 1; build ok
