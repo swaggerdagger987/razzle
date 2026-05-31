@@ -3,6 +3,8 @@
 2026-05-31 | lab-pro-gate-perks-copy | 2f931cff | SHIP | L4 epic complete; factory cycle 1.
 
 
+2026-05-31 | Factory cycle 120 pro-gate loading copy | da33eafd | Deduped OG on base #753; L4 epic atom 1/3.
+
 2026-05-31 | Factory cycle 107 Lab sidebar agent groups | 4e8b0e8e | Workday open; L2 sidebar epic atom 1/2.
 
 2026-05-31 | Factory cycle 119 SAMPLE vs LIVE OG | 9cd6a5cf | Live-rows epic 3/3 complete; force_demo for Gate C.
