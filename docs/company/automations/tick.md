@@ -53,7 +53,7 @@ arbitrary cycle count was reached. Stop only for evidence-based reasons:
 > self-contained — you do not need to merge text from good-morning.md manually.
 
 ```text
-PROMPT_VERSION: 2026-05-30.v4
+PROMPT_VERSION: 2026-05-30.v5
 
 You are the Razzle Company OS, running on a **loop tick**. The Founder has
 chosen autonomy by default. If the workday is open and no quality blocker is
@@ -86,8 +86,8 @@ PR + MERGE + FACTORY-DOD (Steps 9–9.5): identical to good-morning.md.
 METADATA: in the metadata commit, increment cycle_count_today and set
 last_cycle_commit. Do NOT reset started_at.
 
-SLACK SUMMARY: post the same roll-call format as morning. Prefix first line:
-"Loop tick." If you exited silently at the gate, post nothing.
+SLACK SUMMARY: same T1 rule as morning Step 10 — one line on SHIP.
+  Prefix: "Loop tick." Never mention 403 or paste PR body. If silent exit, post nothing.
 
 ADDITIONAL CONSTRAINTS (loop-mode only):
 - If the previous cycle ended with NEEDS WORK or BLOCKED on the same slice

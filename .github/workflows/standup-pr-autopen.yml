@@ -1,5 +1,4 @@
-# Opens standup PRs when Slack Automations push but cannot call createPullRequest
-# on the VM integration token (403). Push still works; this workflow completes Gate A.
+# Opens standup PRs after Slack Automation push (Gate A). Uses GITHUB_TOKEN in Actions.
 name: standup-pr-autopen
 
 on:
@@ -74,17 +73,13 @@ jobs:
               head: "${{ steps.meta.outputs.branch }}",
               base,
               body: [
-                "## Standup PR (auto-opened)",
+                "## Standup",
                 "",
-                "Slack Automation pushed this branch but the VM integration token",
-                "cannot call `createPullRequest` (403). This workflow completes **Gate A**.",
-                "",
+                `- **Date:** ${today}`,
                 `- **Branch:** \`${{ steps.meta.outputs.branch }}\``,
-                `- **Head commit:** \`${sha}\``,
-                `- **Standup:** \`docs/company/standups/${today}.md\` (if present on branch)`,
+                `- **Content commit:** \`${sha}\``,
                 "",
-                "Agent: poll `gh pr list --head ${{ steps.meta.outputs.branch }} --json url,number`",
-                "then proceed with merge when CI is green.",
+                "See `docs/company/standups/" + today + ".md` on this branch.",
               ].join("\n"),
             });
             core.setOutput("number", String(pr.number));
