@@ -11,7 +11,7 @@ YYYY-MM-DD | hypothesis | implementation boundary | ACCEPTANCE check | outcome |
 Read this file before scoping a new slice. Track which boundaries failed before,
 which migrations were painful, which test patterns caught bugs.
 
-2026-05-31 | lab-og-position-tradevalues | 1-line contract on TradeValuesRenderer | da33eafd | SHIP | prospects dedup on base | — | — | curl Gate C
+2026-05-31 | lab-og-position-tradevalues | 1-line contract on TradeValuesRenderer | c4cfe914 | SHIP | prospects dedup on base | — | — | curl Gate C
 
 ---
 

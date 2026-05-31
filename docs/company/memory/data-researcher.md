@@ -12,7 +12,7 @@ YYYY-MM-DD | source URLs | pattern | exact quotes | mapped to PARITY/DEPTH | out
 Read this file before a briefing. Distinguish recurring signal from one-off
 anecdotes (>=3 independent threads = signal).
 
-2026-05-31 | lab-og-position-tradevalues | Position-scoped dynasty DM cards | da33eafd | PASS | REDDIT-INTEL bullet | — | — | —
+2026-05-31 | lab-og-position-tradevalues | Position-scoped dynasty DM cards | c4cfe914 | PASS | REDDIT-INTEL bullet | — | — | —
 
 ---
 
