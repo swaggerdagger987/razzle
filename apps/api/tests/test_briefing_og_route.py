@@ -17,7 +17,7 @@ def test_briefing_og_route_exists():
     assert "DEMO" in text
     assert "ImageResponse" in text
     assert "toRoom" in text
-    assert "Always-on watermark band" in text
+    assert "Always-on terracotta watermark" in text
     assert "razzle.lol${roomPath}" in text
     assert "#d97757" in text
 

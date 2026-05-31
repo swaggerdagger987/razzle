@@ -154,7 +154,11 @@ export async function GET(req: Request) {
           </div>
         </div>
 
-        {/* Always-on watermark band — Room hallway deep link (T6 screenshot gravity) */}
+        <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 12 }}>
+          {`razzle.lol${roomPath} · continue in the Room`}
+        </div>
+
+        {/* Always-on terracotta watermark band — matches Explore + Bureau OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
@@ -173,7 +177,7 @@ export async function GET(req: Request) {
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${roomPath}`}</div>
             <div style={{ display: "flex", fontSize: 16, fontFamily: "Caveat" }}>
-              continue in the Room
+              Situation Room · continue the thread
             </div>
           </div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
