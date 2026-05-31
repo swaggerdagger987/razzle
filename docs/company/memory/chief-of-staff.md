@@ -30,3 +30,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 prospects-weekly-tradevalues | 8b5acdbe | keep | workday open; Lab live-rows epic complete; curl 58–63KB
 2026-05-31 | Workday reopen cycle 1 power-rankings OG | e62721a6 | keep | League epic atom 2/4; curl 68555B; next roster-depth
 2026-05-31 | Factory open cycle 1 roster-depth tab | 059108d4 | keep | workday open; League epic atom 3/4; next build-profiles
+2026-05-31 | Factory cycle 1 Bureau H2H export | 044ee1e8 | keep | workday open; League L5 epic atom 1/3; copy link + export bar

@@ -32,3 +32,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | launch-10 OG export sweep | 8b5acdbe | keep | college board + heatmap + trade chart shareable
 2026-05-31 | league power OG | e62721a6 | keep | differential boards share when record lies
 2026-05-31 | roster depth tab | 059108d4 | keep | thin-position vulnerability flags for trade-thread injury angle
+2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param

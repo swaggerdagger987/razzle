@@ -18,7 +18,7 @@ import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
 
@@ -97,6 +97,17 @@ export function DynastyRankingsRenderer({ panel }: Props) {
   }, [formula, rawPlayers, statsQ.data]);
 
   const topPlayer = sortedPlayers[0] ?? null;
+
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const players = formula ? sortedPlayers : rawPlayers;
+    return players.slice(0, 6).map((p, i) => ({
+      name: p.full_name,
+      position: p.position,
+      team: p.team,
+      stat: formula ? (p.formula_score ?? 0) : (p.dynasty_value ?? i + 1),
+      statLabel: formula ? "Score" : "Value",
+    }));
+  }, [formula, sortedPlayers, rawPlayers]);
 
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
@@ -271,7 +282,12 @@ export function DynastyRankingsRenderer({ panel }: Props) {
           >
             Ask Octo about {topPlayer.full_name} →
           </Link>
-          <LabOgExportLink slug="rankings" downloadName="razzle-dynasty-rankings.png" />
+          <LabOgExportLink
+            slug="rankings"
+            downloadName="razzle-dynasty-rankings.png"
+            position={position || undefined}
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>
