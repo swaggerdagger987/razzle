@@ -14,8 +14,8 @@
     {
       "id": "league-trade-finder-og-snapshot",
       "title": "Trade Finder OG — snapshot param for in-panel export rows",
-      "status": "in_progress",
-      "merge_commit": "f6e0985f3"
+      "status": "done",
+      "merge_commit": "a319e8953"
     },
     {
       "id": "league-trade-finder-room-hallway",

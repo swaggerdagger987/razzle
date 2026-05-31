@@ -1,9 +1,40 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-strengths-live-og",
-  "slice_title": "Strengths OG — live extract + player-scoped stickers",
-  "content_commit": "1bc1f1e2b",
+  "big_problem": "Bureau Trade Finder screenshots look like a draft — no LIVE/SAMPLE honesty or terracotta export band, so Bones deals do not travel on Reddit like H2H cards.",
+  "epic": "League L5 — Bureau Trade Finder GTM export",
+  "atom_id": "league-trade-finder-og-snapshot",
+  "slice_title": "Trade Finder OG snapshot param mirrors in-panel deal rows",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/trade-finder PNG ≥40KB with snapshot or live",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/lib/bureau-trade-finder-og-snapshot.ts",
+    "apps/web/app/og/trade-finder/route.tsx",
+    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
+    "apps/web/components/league/BureauTradeFinder.tsx",
+    "apps/api/tests/test_trade_finder_og_snapshot.py",
+    "docs/v2/evidence/2026-05-31-league-trade-finder-og-snapshot.md"
+  ],
+  "max_files": 6,
+  "max_lines": 280,
+  "acceptance_commands": [
+    "python3 -m pytest apps/api/tests/test_trade_finder_og_snapshot.py apps/api/tests/test_trade_finder_og_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web"
+  ],
+  "out_of_scope": [
+    "Room hallway link on OG card",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "new npm deps"
+  ],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  },
+  "content_commit": "a319e8953",
   "status": "shipped",
-  "reality": "PASS",
-  "merge": "pending"
+  "reality": "PASS"
 }
