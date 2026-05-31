@@ -21,3 +21,34 @@ export type ExploreUniverse = "nfl" | "college";
 export function defaultSortForUniverse(universe: ExploreUniverse): string {
   return universe === "college" ? "total_yards" : "fantasy_points_ppr";
 }
+
+/** Sort key for /og/explore and share URLs — mirrors apps/web/app/og/explore/route.tsx. */
+export function ogSortForUniverse(universe: ExploreUniverse | string, sort: string): string {
+  if (universe === "college" && (sort === "fantasy_points_ppr" || sort.startsWith("formula_"))) {
+    return "total_yards";
+  }
+  return sort;
+}
+
+export function buildExploreShareQuery(params: {
+  universe: ExploreUniverse | string;
+  sort: string;
+  dir: string;
+  q?: string;
+  pos?: string[];
+  season?: number;
+  team?: string[];
+  download?: boolean;
+}): URLSearchParams {
+  const qs = new URLSearchParams({
+    universe: params.universe,
+    sort: ogSortForUniverse(params.universe, params.sort),
+    dir: params.dir,
+  });
+  if (params.q) qs.set("q", params.q);
+  if (params.pos?.length) qs.set("pos", params.pos.join(","));
+  if (params.season && params.season > 0) qs.set("season", String(params.season));
+  if (params.team?.length) qs.set("team", params.team.join(","));
+  if (params.download) qs.set("download", "1");
+  return qs;
+}

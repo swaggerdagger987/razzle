@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { buildExploreShareQuery } from "@/lib/explore-params";
 
 interface Props {
   universe: string;
@@ -12,19 +13,30 @@ interface Props {
   team?: string[];
 }
 
-export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, team = [] }: Props) {
+export function ExploreShareButton({
+  universe,
+  sort,
+  dir,
+  q,
+  pos,
+  season = 0,
+  team = [],
+}: Props) {
   const [copied, setCopied] = useState(false);
 
-  const previewParams = new URLSearchParams({ universe, sort, dir });
-  if (q) previewParams.set("q", q);
-  if (pos.length) previewParams.set("pos", pos.join(","));
-  if (season > 0) previewParams.set("season", String(season));
-  if (team.length) previewParams.set("team", team.join(","));
+  const previewParams = useMemo(
+    () => buildExploreShareQuery({ universe, sort, dir, q, pos, season, team }),
+    [universe, sort, dir, q, pos, season, team],
+  );
+  const ogParams = useMemo(
+    () => buildExploreShareQuery({ universe, sort, dir, q, pos, season, team, download: true }),
+    [universe, sort, dir, q, pos, season, team],
+  );
 
-  const ogParams = new URLSearchParams(previewParams);
-  ogParams.set("download", "1");
-
-  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  const shareUrl = useMemo(() => {
+    if (typeof window === "undefined") return "";
+    return `${window.location.origin}/explore?${previewParams.toString()}`;
+  }, [previewParams]);
 
   const copyLink = useCallback(async () => {
     try {
@@ -35,6 +47,8 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
       setCopied(false);
     }
   }, [shareUrl]);
+
+  const exportLabel = universe === "college" ? "export college card" : "export card";
 
   return (
     <div className="explore-share flex shrink-0 items-center gap-2">
@@ -55,7 +69,7 @@ export function ExploreShareButton({ universe, sort, dir, q, pos, season = 0, te
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
       >
-        export card
+        {exportLabel}
       </a>
     </div>
   );
