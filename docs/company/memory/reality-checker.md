@@ -16,6 +16,7 @@ explicit checks in the verification routine.
 
 ## Entries
 
+2026-05-31 | waiver tendencies unhide | build+pytest 51 passed | League L5 | PASS | keep | no OG gate; grep FeatureBody wire
 2026-05-31 | weekly OG PPG snapshot | curl RB 44781B snap WR 53256B; build+pytest 51 | Lab L5 | PASS | keep | evidence/2026-05-31-lab-weekly-og-snapshot-verify.md
 2026-05-31 | Pressure Map copy link Gate C | curl pressure-map 200 60661B; build+pytest | PASS | keep | docs/v2/evidence/2026-05-31-bureau-pressure-map-copy-link.md
 2026-05-30 | Lab L5 OG live data rows | test (npm run build + pytest + tsc) | Lab L5 DEPTH claim verified | PASS | no terminal.db on CI VM means data-path is untested end-to-end; fallback path (empty data → icon + loading copy) verified; production needs NEXT_PUBLIC_API_ORIGIN env var | keep | future: add OG snapshot test with fixture data

@@ -1,11 +1,11 @@
-cycle: 93
+cycle: 94
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: league-waiver-tendencies-unhide
-last_keep_cycle: 93
-last_commit: 1b769554
-league_l5_build_roster_share_epic: active
+next_slice: strength-of-schedule-unhide
+last_keep_cycle: 94
+last_commit: da33eafd
+league_l5_build_roster_share_epic: complete
 league_l5_build_profiles_share_og: complete
 lab_l5_og_filtered_panel_epic: complete
 lab_l5_og_prospects_rps_position: complete

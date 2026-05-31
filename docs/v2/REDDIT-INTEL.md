@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau waiver tendencies (cycle 94)
+- FAAB hoarder / streamer archetype cards are waiver-wire screenshot bait on r/fantasyfootball.
+- Hawkeye-owned tab closes the Bureau unhide epic — league managers can scout opponent pickup habits.
+
 ### 2026-05-31 — Bureau share-export (cycle 92)
 - Build archetype cards travel well on r/DynastyFF trade threads — construction intel is screenshot bait.
 

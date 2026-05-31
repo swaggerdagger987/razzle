@@ -13,6 +13,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | league-waiver-tendencies-unhide | cherry-pick BureauWaiverTendencies from base + unhide slug | da33eafd | SHIP | KEEP 3-file contract | — | — | evidence/2026-05-31-league-waiver-tendencies-unhide.md
+
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 246052ec | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 
 ---

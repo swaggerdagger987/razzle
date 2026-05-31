@@ -20,7 +20,7 @@
     {
       "id": "league-waiver-tendencies-unhide",
       "title": "Waiver Tendencies tab unhidden with renderer",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
