@@ -1,16 +1,30 @@
-# Evidence — Lab L4 pro gate panel pitches
+# Evidence — Lab L4 pro-gate panel pitches
 
-**Date:** 2026-05-31  
+**Cycle:** 121  
 **Atom:** `lab-pro-gate-panel-pitches`  
-**Verdict:** PASS
+**Date:** 2026-05-31
 
-## Change
+## Acceptance
 
-Sharpened `PITCH_BY_SLUG` for `tradevalues`, `breakouts`, and `dynasty-comps` on Pro upgrade gates.
+| Check | Result |
+|-------|--------|
+| `npm run build --workspace=apps/web` | exit 0 |
+| `pytest apps/api/tests/test_panel_upgrade_teaser.py -q` | 4 passed (post-merge) |
 
-## Commands
+## Change summary
 
-```text
-npm run build --workspace=apps/web → success
-JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q → 3 passed
-```
+- `panel-upgrade-teaser.ts`: sharpened upgrade pitches for launch-10 flagship pro gates **rankings** (Octo), **tradevalues** (Bones), **breakouts** (Hawkeye).
+
+## Sample pitches (via `upgradePitchForPanel`)
+
+- Rankings: `Octo: unlock tiered dynasty boards with trade curves your league chat can't hand-wave away.`
+- Trade values: `Bones: unlock curve peaks and buy windows your trade partner won't quote back to you.`
+- Breakouts: `Hawkeye: unlock RBS and target-share climbs flagged before the waiver wire blows up.`
+
+## Gate C
+
+N/A — no OG/export routes.
+
+## Verdict
+
+**PASS** — three launch pro gates read as staff intel, not paywall error.
