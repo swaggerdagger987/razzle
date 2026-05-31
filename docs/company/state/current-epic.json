@@ -20,7 +20,7 @@
     {
       "id": "lab-og-tolab-snapshot-player",
       "title": "Snapshot exports preserve player in watermark",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],

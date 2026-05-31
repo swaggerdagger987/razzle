@@ -31,3 +31,17 @@ def test_default_og_player_tolab_rules():
     assert '"dynasty-comps"' in source
     assert "includeDefaultPlayer" in source
     assert "opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+
+
+def test_snapshot_export_embeds_player_id_in_compact_payload():
+    lib = ROOT / "apps/web/components/lab/LabOgExportLink.tsx"
+    text = lib.read_text(encoding="utf-8")
+    assert "encodeOgSnapshot(snapshotRows, { playerId: resolvedPlayerId })" in text
+    assert '{ i: pid }' in text or "i: pid" in text
+
+
+def test_snapshot_decode_preserves_player_for_watermark():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "snapshotDecoded.playerId" in source
+    assert "effectivePlayerId" in source
+    assert "playerId: effectivePlayerId" in source
