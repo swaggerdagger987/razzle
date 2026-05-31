@@ -1,9 +1,10 @@
-cycle: 120
+cycle: 121
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L2
-next_slice: lab-pro-gate-perks-copy
-last_keep_cycle: 120
+next_slice: explore-og-universe-query
+last_keep_cycle: 121
 last_commit: 0ddf7f6b
 lab_l2_sidebar_agent_epic: complete
-lab_l5_og_live_extract_epic: complete
+lab_l5_og_live_fetch_epic: active
+lab_l5_og_watermark_epic: complete

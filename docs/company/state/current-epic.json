@@ -1,25 +1,37 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab sidebar still lists Staff Picks as a flat catalog — agents own panels in headers but not in navigation, so the hallway band is invisible until you open a panel.",
-  "epic_title": "Lab L2 — sidebar groups launch-10 by agent owner",
-  "parity_ref": "docs/v2/AGENTS.md — LabSidebar group by agent",
-  "depth_ref": "Lab L2",
+  "epic_status": "active",
+  "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
+  "epic_title": "Lab L5 — OG live fetch + sticker parity",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-sidebar-staff-picks-by-agent",
-      "title": "Staff Picks grouped under agent owner headers in LabSidebar",
+      "id": "lab-og-launch10-live-fetch-merge",
+      "title": "Merge base LIVE sticker + fetchOgLiveRows for Launch-10 without snapshot",
       "status": "done",
-      "merge_commit": "a1386ee9"
+      "merge_commit": "3f0411ec"
     },
     {
-      "id": "lab-sidebar-search-agent-labels",
-      "title": "Search results show agent owner in sidebar item title",
+      "id": "explore-og-universe-query",
+      "title": "Explore OG — pass universe/college in export URL",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-gamelog-player-default",
+      "title": "Gamelog OG — default player_id when export omits query",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-pro-gate-hallway-teasers",
+      "title": "Pro gate — screener hallway + domain teasers",
       "status": "done",
-      "merge_commit": "0ddf7f6b"
+      "merge_commit": "675044ea"
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T08:30:00Z",
+  "next_atom_id": "explore-og-universe-query",
+  "created_at": "2026-05-31T08:25:32Z",
   "updated_at": "2026-05-31T08:35:00Z",
   "completed_epics": [
     {
@@ -29,10 +41,34 @@
       "merge_commit": "0ddf7f6b"
     },
     {
-      "id": "lab-l5-launch10-og-live-extract",
+      "id": "lab-l5-og-gamelog-live-week-rows",
       "status": "complete",
-      "last_atom": "lab-og-dynasty-comps-pro-teaser",
-      "merge_commit": "26a590c9"
+      "last_atom": "lab-og-launch10-snapshot-default",
+      "merge_commit": "e2a3ce8a"
+    },
+    {
+      "id": "lab-l5-launch10-og-live-sticker",
+      "status": "complete",
+      "last_atom": "lab-og-live-sticker-prospects-weekly",
+      "merge_commit": "5bb77346"
+    },
+    {
+      "id": "lab-l5-og-watermark-band",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-band-panel-route",
+      "merge_commit": "742028c0"
+    },
+    {
+      "id": "lab-l5-og-live-sort-keys",
+      "status": "complete",
+      "last_atom": "lab-og-buysell-dashboard-live-sort",
+      "merge_commit": "7afc0b03"
+    },
+    {
+      "id": "league-l5-h2h-og-watermark",
+      "status": "complete",
+      "last_atom": "league-h2h-og-watermark-band",
+      "merge_commit": "945e4656"
     }
   ]
 }
