@@ -15,7 +15,7 @@ import {
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -215,6 +215,17 @@ export function AgingCurvesRenderer({ panel }: Props) {
 
   const top = chartPlayers[0] ?? null;
 
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const source = pastPeak.length > 0 ? pastPeak : chartPlayers;
+    return source.slice(0, 6).map((p) => ({
+      name: p.name,
+      position,
+      team: p.team,
+      stat: p.ppg,
+      statLabel: "PPG",
+    }));
+  }, [pastPeak, chartPlayers, position]);
+
   const open = (p: AgingPlayer) =>
     openPlayer({
       playerId: p.player_id,
@@ -388,7 +399,11 @@ export function AgingCurvesRenderer({ panel }: Props) {
           >
             Ask Octo about {position} aging →
           </Link>
-          <LabOgExportLink slug="aging" downloadName="razzle-aging-curves.png" />
+          <LabOgExportLink
+            slug="aging"
+            downloadName="razzle-aging-curves.png"
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

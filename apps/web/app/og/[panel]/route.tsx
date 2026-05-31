@@ -27,14 +27,17 @@ const STAT_CANDIDATE_KEYS = [
   "ppg",
   "fpts",
   "score",
+  "rbs_score",
+  "breakout_score",
   "similarity",
   "composite_score",
   "efficiency_score",
-  "breakout_score",
   "total_yards",
   "pts",
   "rank",
 ] as const;
+
+const OG_PRO_PREVIEW_HEADER = "X-Razzle-Plan";
 
 /** Ja'Marr Chase — nflverse gsis_id for OG previews when no player_id in URL. */
 const DEFAULT_OG_PLAYER_ID = "00-0036900";
@@ -206,6 +209,8 @@ function extractRows(data: unknown): OgRow[] {
     }
   } else if (Array.isArray(obj.players)) {
     candidates = obj.players as Record<string, unknown>[];
+  } else if (Array.isArray(obj.candidates)) {
+    candidates = obj.candidates as Record<string, unknown>[];
   } else if (Array.isArray(obj.buy) || Array.isArray(obj.sell)) {
     const buy = Array.isArray(obj.buy) ? (obj.buy as Record<string, unknown>[]) : [];
     const sell = Array.isArray(obj.sell) ? (obj.sell as Record<string, unknown>[]) : [];
@@ -231,6 +236,7 @@ function extractRows(data: unknown): OgRow[] {
       if (k === "fantasy_points_ppr") statLabel = "FPTS";
       if (k === "ppg") statLabel = "PPG";
       if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
+      if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
       if (k === "similarity") statLabel = "Match %";
       break;
     }
@@ -248,6 +254,38 @@ function extractRows(data: unknown): OgRow[] {
           : 0,
     statLabel,
   }));
+}
+
+function siteOrigin(req: Request): string {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_ORIGIN;
+  if (fromEnv) return fromEnv.replace(/\/$/, "");
+  const vercel = process.env.VERCEL_URL;
+  if (vercel) return vercel.startsWith("http") ? vercel.replace(/\/$/, "") : `https://${vercel}`;
+  return new URL(req.url).origin;
+}
+
+/** Same panels slug path Lab uses — pro preview header for OG share cards. */
+async function fetchLiveOgRows(
+  req: Request,
+  slug: string,
+  params?: Record<string, unknown>,
+): Promise<OgRow[]> {
+  const url = new URL(`/api/panels/${slug}`, siteOrigin(req));
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      if (v != null) url.searchParams.set(k, String(v));
+    }
+  }
+  url.searchParams.set("limit", "6");
+  try {
+    const res = await fetch(url.toString(), {
+      headers: { [OG_PRO_PREVIEW_HEADER]: "pro" },
+    });
+    if (!res.ok) return [];
+    return extractRows(await res.json());
+  } catch {
+    return [];
+  }
 }
 
 async function fetchPanelData(
@@ -332,9 +370,13 @@ export async function GET(
   const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
-  const liveRows = apiPath
-    ? await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams)
-    : [];
+  let liveRows: OgRow[] = [];
+  if (apiPath && !snapshotHasRows) {
+    liveRows = await fetchLiveOgRows(req, slug, apiParams);
+    if (liveRows.length === 0) {
+      liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
+    }
+  }
   const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
   const isSnapshot = snapshotHasRows;
   const isDemo = !isSnapshot && !liveHasRows;
@@ -403,7 +445,7 @@ export async function GET(
                 ? " · from your panel"
                 : isDemo
                   ? " · sample preview"
-                  : ""
+                  : " · live preview"
           }`}
         </div>
 
