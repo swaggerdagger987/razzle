@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-sticker | f6e0985f3 | SHIP | LIVE/STAFF margin sticker on explore OG when topMarginNotes present.
+2026-05-31 | explore-og-margin-note-sticker | 496a27188 | SHIP | LIVE/STAFF margin sticker on explore OG when topMarginNotes present.
 2026-05-31 | explore-og-margin-note-rows | cae3ed2aa | SHIP | topMarginNotes on OG rows 1–3 + demo fields for Gate C.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | EXPORTED · panel rivalry rows.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | TOLAB_DEFAULT_POSITION efficiency RB.

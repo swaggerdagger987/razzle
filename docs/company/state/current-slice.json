@@ -24,6 +24,9 @@
     "Lab sidebar changes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
+  "content_commit": "496a27188",
+  "reality": "PASS",
+  "merge": "pending",
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
