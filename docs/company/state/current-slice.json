@@ -1,34 +1,37 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
-  "epic": "Room L5 — briefing GTM export",
-  "slice_title": "Briefing OG — /og/briefing snapshot route",
-  "atom_id": "room-briefing-og-card",
-  "parity_ref": "Room L5 — GTM export slice",
-  "depth_ref": "Room L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with demo rows",
-  "trust_pillars": ["T5", "T6"],
+  "atom_id": "lab-l4-pro-gate-error-dynasty-comps",
+  "big_problem": "Lab Pro gates still drift — DynastyComps is the last renderer with duplicated 402 ProUpgradeGate branches.",
+  "epic": "Lab L4 — shared pro-gate error surface (close-out)",
+  "slice_title": "DynastyComps ProGateFromPanelError — final L4 renderer",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
+  "acceptance_ref": "Lab L4 pro gates feel like upgrade not error",
+  "trust_pillars": [
+    "T2",
+    "T6"
+  ],
   "allowed_paths": [
-    "apps/web/app/og/briefing/route.tsx",
-    "apps/web/components/room/BriefingCard.tsx",
-    "apps/api/tests/test_briefing_og_route.py"
+    "apps/web/components/lab/renderers/DynastyCompsRenderer.tsx",
+    "apps/api/tests/test_panel_pro_gate_surface.py"
   ],
-  "max_files": 3,
-  "max_lines": 320,
+  "max_files": 2,
+  "max_lines": 40,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_briefing_og_route.py -q",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-briefing.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/briefing?download=1'"
+    "npm run build --workspace=apps/web 2>&1 | tail -5",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py -q"
   ],
-  "out_of_scope": ["watermark atom", "NORTH_STAR/DESIGN/DECISIONS edits"],
+  "out_of_scope": [
+    "billing",
+    "new panels",
+    "OG routes"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   },
-  "content_commit": "75dc2d65a",
-  "reality": "PASS",
-  "merge": "pending"
+  "status": "shipped"
 }
