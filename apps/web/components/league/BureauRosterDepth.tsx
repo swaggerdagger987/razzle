@@ -34,13 +34,16 @@ function depthGrade(block: PosBlock): string {
   return "D";
 }
 
+function thinAtPosition(pos: string, block: PosBlock): boolean {
+  const count = block.count ?? 0;
+  return count <= (pos === "QB" || pos === "TE" ? 1 : 2);
+}
+
 export function BureauRosterDepth({ data, leagueId }: Props) {
   const { openPlayer } = usePlayerSheet();
-  const hawkeye = AGENT_BY_ID.hawkeye;
   const dolphin = AGENT_BY_ID.dolphin;
-
   const depth = (data.depth as Record<string, PosBlock>) ?? {};
-  const totalPlayers = Number(data.total_players ?? 0);
+  const total = Number(data.total_players ?? 0);
   const starters = (data.starters as string[]) ?? [];
 
   const weakest = POS_ORDER.reduce(
@@ -52,67 +55,62 @@ export function BureauRosterDepth({ data, leagueId }: Props) {
     <div className="flex flex-col gap-6">
       <header className="chunky bg-bg-card p-6">
         <div className="mb-4 flex items-center gap-3">
-          <img src={`/agents/${hawkeye.avatar}.svg`} alt="" className="h-10 w-10" />
+          <img src={`/agents/${dolphin.avatar}.svg`} alt="" className="h-10 w-10" />
           <div>
             <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-              {hawkeye.name} · {hawkeye.role}
+              {dolphin.name} · {dolphin.role}
             </p>
             <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              full depth chart — every roster spot graded
+              position depth chart — elite count, dynasty tape, injury exposure
             </p>
           </div>
         </div>
         <h1 className="text-3xl" style={{ fontFamily: "var(--font-display)" }}>
           Roster Depth
         </h1>
-        <p className="text-ink-medium text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {totalPlayers} players · {starters.length} starters flagged
+        <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
+          {total} rostered · {starters.length} starters flagged
         </p>
       </header>
 
       <section className="chunky bg-bg-card p-6">
         <h2 className="text-xl" style={{ fontFamily: "var(--font-display)" }}>
-          Position depth chart
+          Position depth board
         </h2>
         <p className="mt-1 text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-          tap a name for Player Sheet — thin {weakest} gets Dolphin health lane
+          screenshot this before waivers — grades mirror Self-Scout, sorted by dynasty value
         </p>
-        <div className="mt-4 flex flex-col gap-6">
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">
           {POS_ORDER.map((pos) => {
             const block = depth[pos] ?? {};
             const grade = depthGrade(block);
             const players = [...(block.depth ?? [])].sort(
               (a, b) => (b.dynasty_value ?? 0) - (a.dynasty_value ?? 0),
             );
-            const thin = (block.count ?? 0) <= (pos === "QB" || pos === "TE" ? 1 : 2);
-
+            const thin = thinAtPosition(pos, block);
             return (
               <div key={pos} className="chunky bg-bg p-4">
-                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <PositionPill position={pos} />
-                    <span
-                      className="text-2xl font-bold"
-                      style={{ fontFamily: "var(--font-display)", transform: "rotate(-2deg)" }}
-                    >
-                      {grade}
-                    </span>
-                  </div>
-                  <span className="text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-                    {block.count ?? 0} rostered · {block.elite ?? 0} elite
+                <div className="flex items-center justify-between">
+                  <PositionPill position={pos} />
+                  <span
+                    className="text-3xl font-bold"
+                    style={{ fontFamily: "var(--font-display)", transform: "rotate(-2deg)" }}
+                  >
+                    {grade}
                   </span>
                 </div>
-                <ul className="flex flex-col gap-1">
-                  {players.length === 0 ? (
-                    <li className="text-sm text-ink-light" style={{ fontFamily: "var(--font-hand)" }}>
-                      no {pos} on roster
-                    </li>
-                  ) : (
-                    players.map((p) => (
+                <p className="mt-2 text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                  {block.count ?? 0} rostered · {block.elite ?? 0} elite tier
+                </p>
+                {!players.length ? (
+                  <p className="mt-3 text-sm text-ink-medium">no {pos} on roster yet.</p>
+                ) : (
+                  <ul className="mt-3 flex flex-col gap-1">
+                    {players.slice(0, 6).map((p) => (
                       <li key={p.player_id}>
                         <button
                           type="button"
-                          className="flex w-full items-center justify-between gap-2 rounded px-1 py-1 text-left text-sm hover:bg-bg-warm"
+                          className="text-left text-sm font-bold hover:text-orange"
                           onClick={() =>
                             openPlayer({
                               playerId: p.player_id,
@@ -122,58 +120,58 @@ export function BureauRosterDepth({ data, leagueId }: Props) {
                             })
                           }
                         >
-                          <span className="font-bold">
-                            {p.name}
-                            {starters.includes(p.player_id) ? (
-                              <span className="text-ink-light ml-1 text-xs">· starter</span>
-                            ) : null}
-                          </span>
-                          <span className="text-ink-light text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-                            {p.dynasty_value != null ? p.dynasty_value : "—"}
-                          </span>
+                          {p.name}
+                          {p.dynasty_value != null ? (
+                            <span className="text-xs text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+                              {" "}
+                              · {p.dynasty_value}
+                            </span>
+                          ) : null}
                         </button>
                       </li>
-                    ))
-                  )}
-                </ul>
+                    ))}
+                  </ul>
+                )}
                 {thin && (
                   <Link
                     href={
                       toRoom({
                         agentId: "dolphin",
-                        question: `${pos} depth is thin on my roster — injury risk?`,
+                        question: `${pos} depth is thin on my roster — who is the injury risk?`,
                         panelSlug: "roster-depth",
                       }) as Route
                     }
-                    className="mt-2 block text-xs text-purple hover:underline"
+                    className="mt-3 block text-xs text-purple hover:underline"
                     style={{ fontFamily: "var(--font-hand)" }}
                   >
-                    {dolphin.name}: check {pos} health →
+                    {dolphin.name}: stress-test {pos} health →
                   </Link>
                 )}
               </div>
             );
           })}
         </div>
+      </section>
+
+      <footer className="flex flex-wrap items-center gap-4 text-sm">
+        <Link href={`/league/${leagueId}` as Route} className="text-orange underline">
+          self-scout →
+        </Link>
+        <Link href={`/league/${leagueId}/trade-finder` as Route} className="text-orange underline">
+          trade finder →
+        </Link>
         <Link
           href={
             toRoom({
-              agentId: "hawkeye",
-              question: `Roster depth says ${weakest} is my thinnest spot — who should I stash or trade for?`,
-              panelSlug: "roster-depth",
+              agentId: "dolphin",
+              question: `Roster depth says ${weakest} is my thinnest spot — who should I stash or cut?`,
             }) as Route
           }
-          className="btn-chunky mt-4 inline-block text-sm bg-bg"
+          className="text-purple underline"
         >
-          ask {hawkeye.name} in film room →
+          ask {dolphin.name} in film room →
         </Link>
-        <Link
-          href={`/league/${leagueId}/self-scout` as Route}
-          className="ml-3 inline-block text-sm text-ink-medium underline"
-        >
-          open Self-Scout →
-        </Link>
-      </section>
+      </footer>
     </div>
   );
 }
