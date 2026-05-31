@@ -31,10 +31,12 @@ const STAT_CANDIDATE_KEYS = [
   "rbs_score",
   "breakout_score",
   "similarity",
+  "mismatch_score",
   "rank_diff",
   "composite_score",
   "efficiency_score",
   "ppo",
+  "rps",
   "total_yards",
   "pts",
   "rank",
@@ -63,12 +65,12 @@ const PLAYER_SCOPED_SLUGS = new Set([
 const PANEL_OG_STAT_KEY: Record<string, string> = {
   weekly: "ppg",
   prospects: "rps",
-  breakouts: "breakout_score",
+  breakouts: "rbs_score",
   rankings: "dynasty_value",
   tradevalues: "trade_value",
-  efficiency: "efficiency_score",
-  aging: "peak_age",
-  buysell: "value",
+  efficiency: "ppo",
+  aging: "ppg",
+  buysell: "mismatch_score",
   dashboard: "rank_diff",
 };
 
@@ -135,12 +137,12 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 14.2, statLabel: "PPG" },
   ],
   prospects: [
-    { name: "Travis Hunter", position: "WR", team: "JAX", stat: 94, statLabel: "Score" },
-    { name: "Cam Ward", position: "QB", team: "TEN", stat: 91, statLabel: "Score" },
-    { name: "Ashton Jeanty", position: "RB", team: "LV", stat: 89, statLabel: "Score" },
-    { name: "Tyler Warren", position: "TE", team: "IND", stat: 86, statLabel: "Score" },
-    { name: "Tre Harris", position: "WR", team: "LAC", stat: 83, statLabel: "Score" },
-    { name: "Emeka Egbuka", position: "WR", team: "TB", stat: 80, statLabel: "Score" },
+    { name: "Travis Hunter", position: "WR", team: "JAX", stat: 94, statLabel: "RPS" },
+    { name: "Cam Ward", position: "QB", team: "TEN", stat: 91, statLabel: "RPS" },
+    { name: "Ashton Jeanty", position: "RB", team: "LV", stat: 89, statLabel: "RPS" },
+    { name: "Tyler Warren", position: "TE", team: "IND", stat: 86, statLabel: "RPS" },
+    { name: "Tre Harris", position: "WR", team: "LAC", stat: 83, statLabel: "RPS" },
+    { name: "Emeka Egbuka", position: "WR", team: "TB", stat: 80, statLabel: "RPS" },
   ],
   rankings: [
     { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 1, statLabel: "Rank" },
@@ -159,12 +161,12 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
     { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 5800, statLabel: "Value" },
   ],
   breakouts: [
-    { name: "Rome Odunze", position: "WR", team: "CHI", stat: 92, statLabel: "Score" },
-    { name: "Ladd McConkey", position: "WR", team: "LAC", stat: 88, statLabel: "Score" },
-    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 85, statLabel: "Score" },
-    { name: "Malik Nabers", position: "WR", team: "NYG", stat: 81, statLabel: "Score" },
-    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 78, statLabel: "Score" },
-    { name: "Xavier Worthy", position: "WR", team: "KC", stat: 74, statLabel: "Score" },
+    { name: "Rome Odunze", position: "WR", team: "CHI", stat: 92, statLabel: "RBS" },
+    { name: "Ladd McConkey", position: "WR", team: "LAC", stat: 88, statLabel: "RBS" },
+    { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 85, statLabel: "RBS" },
+    { name: "Malik Nabers", position: "WR", team: "NYG", stat: 81, statLabel: "RBS" },
+    { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 78, statLabel: "RBS" },
+    { name: "Xavier Worthy", position: "WR", team: "KC", stat: 74, statLabel: "RBS" },
   ],
   gamelog: [
     { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 28.4, statLabel: "FPTS" },
@@ -248,17 +250,73 @@ function resolveApiOrigin(req: Request): string {
   return new URL(req.url).origin;
 }
 
+/** Weekly heatmap OG — rank by hottest single week (matches WeeklyHeatmapRenderer). */
+function extractWeeklyHeatmapRows(
+  players: Record<string, unknown>[],
+  positionFilter: string,
+): OgRow[] {
+  let rows = players
+    .map((p) => {
+      const weeks = p.weeks as Record<string, number | null> | undefined;
+      let bestWeek = 0;
+      let bestPts = 0;
+      if (weeks && typeof weeks === "object") {
+        for (const [wk, pts] of Object.entries(weeks)) {
+          if (pts != null && pts > bestPts) {
+            bestPts = pts;
+            bestWeek = Number(wk);
+          }
+        }
+      }
+      const ppg = Number(p.ppg ?? 0);
+      const stat = bestPts > 0 ? bestPts : ppg;
+      const statLabel = bestPts > 0 ? `Wk ${bestWeek}` : "PPG";
+      return {
+        name: String(p.name ?? ""),
+        position: String(p.position ?? ""),
+        team: String(p.team ?? ""),
+        stat,
+        statLabel,
+      };
+    })
+    .filter((r) => r.name.trim().length > 0 && r.stat > 0);
+  if (positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+  }
+  return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
+}
+
+/** Prospects big board — RPS sort (matches ProspectsRenderer). */
+function extractProspectsRows(
+  prospects: Record<string, unknown>[],
+  positionFilter: string,
+): OgRow[] {
+  let rows = prospects
+    .map((p) => ({
+      name: String(p.player_name ?? p.name ?? ""),
+      position: String(p.position ?? ""),
+      team: String(p.school ?? p.team ?? ""),
+      stat: Number(p.rps ?? 0),
+      statLabel: "RPS",
+    }))
+    .filter((r) => r.name.trim().length > 0 && r.stat > 0);
+  if (positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+  }
+  return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
+}
+
 function statLabelForKey(k: string): string {
   let statLabel = k.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   if (k === "fantasy_points_ppr") statLabel = "FPTS";
   if (k === "ppg") statLabel = "PPG";
   if (k === "rps") statLabel = "RPS";
   if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
-  if (k === "ppo" || k === "efficiency_score") statLabel = "PPO";
-  if (k === "ppg") statLabel = "PPG";
+  if (k === "ppo" || k === "efficiency_score") statLabel = "Efficiency";
   if (k === "age" || k === "peak_age") statLabel = "Peak Age";
+  if (k === "mismatch_score") statLabel = "Value";
   if (k === "formula_score") statLabel = "Score";
-  if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
+  if (k === "rbs_score" || k === "breakout_score") statLabel = "RBS";
   if (k === "similarity") statLabel = "Match %";
   if (k === "rank_diff") statLabel = "Chg";
   return statLabel;
@@ -268,6 +326,23 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   if (!data || typeof data !== "object") return [];
 
   const obj = data as Record<string, unknown>;
+
+  if (slug === "weekly" && Array.isArray(obj.players)) {
+    const weeklyRows = extractWeeklyHeatmapRows(
+      obj.players as Record<string, unknown>[],
+      positionFilter,
+    );
+    if (weeklyRows.length > 0) return weeklyRows;
+  }
+
+  if (slug === "prospects" && Array.isArray(obj.prospects)) {
+    const prospectRows = extractProspectsRows(
+      obj.prospects as Record<string, unknown>[],
+      positionFilter,
+    );
+    if (prospectRows.length > 0) return prospectRows;
+  }
+
   let candidates: Record<string, unknown>[] = [];
 
   if (Array.isArray(obj.most_efficient)) {
