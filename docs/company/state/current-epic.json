@@ -20,8 +20,8 @@
     {
       "id": "lab-og-buysell-formula-live",
       "title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "901120b3d"
     },
     {
       "id": "lab-og-from-panel-gate-c-rest",
@@ -30,9 +30,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-buysell-formula-live",
+  "next_atom_id": "lab-og-from-panel-gate-c-rest",
   "created_at": "2026-05-31T10:36:02Z",
-  "updated_at": "2026-05-31T12:15:00Z",
+  "updated_at": "2026-05-31T11:20:00Z",
   "completed_epics": [
     {
       "id": "room-l5-briefing-gtm-export",
