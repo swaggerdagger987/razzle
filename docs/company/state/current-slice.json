@@ -1,26 +1,29 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-dashboard-og-snapshot",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "slice_title": "DashboardRenderer encodes top-6 comp match rows in dynasty-comps OG snapshot",
+  "big_problem": "Lab OG export cards must show the same rows the user sees in-panel — not generic demo fallbacks.",
+  "epic": "Lab L5 — OG snapshot rows for launch-10 panels",
+  "atom_id": "lab-og-prospects-rps-sort",
+  "slice_title": "Prospects OG sorts top-6 by RPS with position filter",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2 — OG PNG ≥40KB",
+  "acceptance_ref": "FACTORY-DOD Gate C2 — /og/prospects snapshot ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DashboardRenderer.tsx"
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx"
   ],
   "max_files": 1,
-  "max_lines": 40,
+  "max_lines": 25,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-dynasty-comps.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dynasty-comps?download=1'"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/prospects?download=1&snapshot=PLACEHOLDER'"
   ],
-  "out_of_scope": [
-    "OG route changes",
-    "DynastyCompsRenderer (already has snapshot)",
-    "NORTH_STAR / DESIGN edits"
-  ],
-  "builder_mode": "composer-surgical"
+  "out_of_scope": ["OG route changes", "new panels", "NORTH_STAR/DESIGN edits"],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  }
 }
