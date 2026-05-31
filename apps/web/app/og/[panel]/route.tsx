@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getPanel } from "@razzle/panels";
 import { agentForPanel } from "@razzle/agents";
+import { teaserRowsForPanel } from "@/lib/panel-upgrade-teaser";
 
 export const runtime = "edge";
 
@@ -96,7 +97,7 @@ function panelBlurbSuffix(
 ): string {
   const pos = positionFilter ? ` · ${positionFilter} only` : "";
   if (slug === "dynasty-comps" && showingDemoRows) {
-    return `${pos} · comps for Ja'Marr Chase · sample preview`;
+    return `${pos} · Pro comp preview · sample`;
   }
   if (isSnapshot) {
     return `${pos} · from your panel`;
@@ -105,7 +106,7 @@ function panelBlurbSuffix(
     return `${pos} · sample preview`;
   }
   if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
-    return pos;
+    return `${pos} · live nflverse rows`;
   }
   if (showingLiveData) {
     return `${pos} · live data`;
@@ -218,7 +219,21 @@ const DEMO_ROWS_BY_SLUG: Record<string, OgRow[]> = {
   ],
 };
 
+/** Pro-gate teaser rows for OG when live comps unavailable (matches ProUpgradeGate preview). */
+function dynastyCompsTeaserOgRows(): OgRow[] {
+  const stats = [94, 91, 88];
+  const teams = ["CIN", "IND", "TB"];
+  return teaserRowsForPanel("dynasty-comps").map((row, i) => ({
+    name: row.name,
+    position: row.position,
+    team: teams[i] ?? "—",
+    stat: stats[i] ?? 85,
+    statLabel: "Match %",
+  }));
+}
+
 function demoRowsForPanel(slug: string): OgRow[] {
+  if (slug === "dynasty-comps") return dynastyCompsTeaserOgRows();
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
@@ -292,13 +307,16 @@ function extractProspectsRows(
   positionFilter: string,
 ): OgRow[] {
   let rows = prospects
-    .map((p) => ({
-      name: String(p.player_name ?? p.name ?? ""),
-      position: String(p.position ?? ""),
-      team: String(p.school ?? p.team ?? ""),
-      stat: Number(p.rps ?? 0),
-      statLabel: "RPS",
-    }))
+    .map((p) => {
+      const rank = p.rank != null ? Number(p.rank) : null;
+      return {
+        name: String(p.player_name ?? p.name ?? p.full_name ?? ""),
+        position: String(p.position ?? p.pos ?? ""),
+        team: String(p.school ?? p.team ?? p.team_abbr ?? ""),
+        stat: Number(p.rps ?? 0),
+        statLabel: rank != null && rank > 0 ? `#${rank}` : "RPS",
+      };
+    })
     .filter((r) => r.name.trim().length > 0 && r.stat > 0);
   if (positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
@@ -680,6 +698,27 @@ export async function GET(
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
           {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData)}`}
         </div>
+
+        {showingLiveData && LAUNCH_10_OG_SLUGS.has(slug) ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            LIVE · nflverse rows
+          </div>
+        ) : null}
 
         {query && (
           <div
