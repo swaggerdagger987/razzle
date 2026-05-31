@@ -46,3 +46,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
 2026-05-31 | league-strength-of-schedule-tab | da33eafd | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
 2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | Octo SOS renderer; merge-base sync; pytest 52 pass snapshot pre-existing fail on base
+2026-05-31 | lab-og-weekly-ppg-ranked | Weekly OG PPG rank on live path | SHIP | keep | Lab L5 fidelity atom 2/3
