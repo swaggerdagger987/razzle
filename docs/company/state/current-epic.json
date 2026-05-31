@@ -8,8 +8,8 @@
     {
       "id": "league-build-profiles-tab",
       "title": "Build Profiles tab unhidden with Atlas roster archetype renderer",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "2ee04975"
     },
     {
       "id": "league-waiver-tendencies-tab",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-build-profiles-tab",
+  "next_atom_id": "league-waiver-tendencies-tab",
   "created_at": "2026-05-31T12:05:00Z",
-  "updated_at": "2026-05-31T12:05:00Z"
+  "updated_at": "2026-05-31T12:30:00Z"
 }
