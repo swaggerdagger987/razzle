@@ -1,6 +1,5 @@
 {
   "date": "2026-05-31",
-<<<<<<< HEAD
   "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
   "epic": "Lab L5 — formula-sorted OG live parity",
   "slice_title": "Buy/sell OG live extract prefers formula_score + mismatch lanes",
@@ -28,11 +27,6 @@
     "builder": "SHIP",
     "verdict": "SHIP"
   },
-  "status": "in_progress"
-=======
-  "atom_id": "league-trade-finder-og-watermark-live",
-  "slice_title": "Trade Finder OG — LIVE/SAMPLE stickers + terracotta watermark band",
   "status": "shipped",
-  "content_commit": "db6537faf"
->>>>>>> origin/razzle-v2-redesign
+  "content_commit": "e4204015f"
 }
