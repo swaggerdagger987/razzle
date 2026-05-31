@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG export cards still mismatch the hero rows users see in-panel — snapshots omit top dynasty assets and read like generic demos.",
   "epic_title": "Lab L5 — OG export cards mirror in-panel live rows",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
@@ -26,11 +26,11 @@
     {
       "id": "lab-tradevalues-formula-snapshot",
       "title": "Trade values export snapshot uses formula-ranked visible rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "5ed39e14"
     }
   ],
-  "next_atom_id": "lab-tradevalues-formula-snapshot",
+  "next_atom_id": null,
   "created_at": "2026-05-31T05:48:00Z",
-  "updated_at": "2026-05-31T06:11:02Z"
+  "updated_at": "2026-05-31T06:15:00Z"
 }
