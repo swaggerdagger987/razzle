@@ -10,7 +10,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
-import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
+import {
+  DEFAULT_LAB_OG_PLAYER_ID,
+  LabOgExportLink,
+  type OgSnapshotRow,
+} from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -449,7 +453,7 @@ export function GamelogRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="gamelog"
             downloadName="razzle-gamelog.png"
-            playerId={(data?.player_id ?? playerId) || DEFAULT_LAB_OG_PLAYER_ID}
+            playerId={(data?.player_id ?? playerId) || undefined}
             position={displayPos || undefined}
             snapshotRows={ogSnapshotRows}
           />
