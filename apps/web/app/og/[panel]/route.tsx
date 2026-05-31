@@ -251,9 +251,22 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.players as Record<string, unknown>[];
   } else if (Array.isArray(obj.candidates)) {
     candidates = obj.candidates as Record<string, unknown>[];
-  } else if (Array.isArray(obj.buy) || Array.isArray(obj.sell)) {
-    const buy = Array.isArray(obj.buy) ? (obj.buy as Record<string, unknown>[]) : [];
-    const sell = Array.isArray(obj.sell) ? (obj.sell as Record<string, unknown>[]) : [];
+  } else if (
+    Array.isArray(obj.buy) ||
+    Array.isArray(obj.sell) ||
+    Array.isArray(obj.buy_low) ||
+    Array.isArray(obj.sell_high)
+  ) {
+    const buy = Array.isArray(obj.buy)
+      ? (obj.buy as Record<string, unknown>[])
+      : Array.isArray(obj.buy_low)
+        ? (obj.buy_low as Record<string, unknown>[])
+        : [];
+    const sell = Array.isArray(obj.sell)
+      ? (obj.sell as Record<string, unknown>[])
+      : Array.isArray(obj.sell_high)
+        ? (obj.sell_high as Record<string, unknown>[])
+        : [];
     candidates = [...buy, ...sell];
   } else if (Array.isArray(obj.data)) {
     candidates = obj.data as Record<string, unknown>[];
@@ -261,10 +274,15 @@ function extractRows(data: unknown): OgRow[] {
     candidates = obj.rankings as Record<string, unknown>[];
   } else if (Array.isArray(obj.comps)) {
     candidates = obj.comps as Record<string, unknown>[];
-  } else if (Array.isArray(obj.top5) || Array.isArray(obj.risers)) {
+  } else if (
+    Array.isArray(obj.top5) ||
+    Array.isArray(obj.risers) ||
+    Array.isArray(obj.fallers)
+  ) {
     const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
     const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
-    candidates = [...top5, ...risers];
+    const fallers = Array.isArray(obj.fallers) ? (obj.fallers as Record<string, unknown>[]) : [];
+    candidates = [...top5, ...risers, ...fallers];
   } else if (Array.isArray(data)) {
     candidates = data as Record<string, unknown>[];
   }
