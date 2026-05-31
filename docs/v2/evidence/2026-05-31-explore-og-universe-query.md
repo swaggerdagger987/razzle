@@ -12,10 +12,10 @@
 
 ## Contract
 
-- Preview + export links include `universe`, `sort`, `dir` query params
+- Preview + export links include `universe`, `sort`, `dir` (plus `season`/`team` when set on base)
 - College universe uses download filename `razzle-college-screener.png`
 - NFL/default uses `razzle-explore.png`
 
 ## Verdict
 
-**PASS** — Explore share toolbar passes universe into OG URLs for Reddit college vs NFL screenshots.
+**PASS** — Explore share toolbar passes universe into OG URLs; college exports get a distinct filename for Reddit screenshots.
