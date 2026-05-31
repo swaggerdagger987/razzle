@@ -14,8 +14,8 @@
     {
       "id": "lab-pro-gate-launch10-teasers",
       "title": "Launch-10 dashboard teasers + perks list match PARITY launch-10 + Bureau-7",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "ae44616e"
     },
     {
       "id": "lab-pro-gate-perks-copy",
@@ -26,7 +26,7 @@
   ],
   "next_atom_id": "lab-pro-gate-perks-copy",
   "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T09:30:00Z",
+  "updated_at": "2026-05-31T09:35:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-watermark-band",
