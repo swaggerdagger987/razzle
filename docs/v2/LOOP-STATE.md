@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-tolab-snapshot-weekly-player
 last_keep_cycle: 153
-last_commit: f6e0985f3
+last_commit: 7a1f4ea21
 lab_l5_pro_panel_tolab_epic: active
 lab_l5_og_hallway_epic: complete
 league_l5_trade_finder_gtm_epic: complete
