@@ -1,36 +1,53 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { decodeBureauSosOgSnapshot } from "@/lib/bureau-sos-og-snapshot";
 
 export const runtime = "edge";
 
 type SosData = {
-  your_rank?: number;
+  verdict?: string;
   your_ppg?: number;
   opponent_avg_ppg?: number;
-  verdict?: string;
-  error?: string;
+  your_rank?: number | null;
+  league_id?: string;
 };
 
-const DEMO: SosData = {
-  your_rank: 3,
+const DEMO_SOS: Required<Pick<SosData, "verdict" | "your_ppg" | "opponent_avg_ppg" | "your_rank">> = {
+  verdict: "Brutal playoff slate ahead",
   your_ppg: 118.4,
-  opponent_avg_ppg: 112.1,
-  verdict: "Even slate — you should beat the average opponent.",
+  opponent_avg_ppg: 124.2,
+  your_rank: 4,
 };
 
-async function fetchSos(leagueId: string, userId: string): Promise<SosData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
-  if (!leagueId || !userId) return null;
+function barWidth(value: number, max: number): string {
+  if (max <= 0) return "0%";
+  return `${Math.min(100, Math.round((value / max) * 100))}%`;
+}
 
+function verdictColor(verdict: string): string {
+  const v = verdict.toLowerCase();
+  if (v.includes("brutal")) return "#e63946";
+  if (v.includes("easy")) return "#2ec4b6";
+  if (v.includes("tough")) return "#d97757";
+  return "#d97757";
+}
+
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchSos(req: Request, league: string, user: string): Promise<SosData | null> {
+  if (!league || !user) return null;
+  const apiOrigin = resolveApiOrigin(req);
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/strength-of-schedule`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ league_id: leagueId, user_id: userId }),
+      body: JSON.stringify({ league_id: league, user_id: user }),
     });
     if (!res.ok) return null;
-    const data = (await res.json()) as SosData;
-    if (data.error || data.your_rank == null) return null;
+    const data = (await res.json()) as SosData & { error?: string };
+    if (data.error || !data.verdict) return null;
     return data;
   } catch {
     return null;
@@ -42,15 +59,23 @@ export async function GET(req: Request) {
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
 
   const octo = AGENT_BY_ID.octo;
-  const live = await fetchSos(league, user);
-  const isDemo = !live;
-  const data = live ?? DEMO;
-  const rank = data.your_rank != null ? `#${data.your_rank}` : "—";
-  const yourPpg = data.your_ppg != null ? data.your_ppg.toFixed(1) : "—";
-  const oppPpg = data.opponent_avg_ppg != null ? data.opponent_avg_ppg.toFixed(1) : "—";
-  const verdict = String(data.verdict ?? "Schedule read from live power rankings.");
+  const fromSnapshot = snapshotParam ? decodeBureauSosOgSnapshot(snapshotParam) : null;
+  const live = fromSnapshot ? null : await fetchSos(req, league, user);
+  const isDemo = !fromSnapshot && !live?.verdict;
+  const data = fromSnapshot ?? live ?? DEMO_SOS;
+
+  const verdict = String(data.verdict ?? DEMO_SOS.verdict);
+  const yourPpg = Number(data.your_ppg ?? DEMO_SOS.your_ppg);
+  const oppAvg = Number(data.opponent_avg_ppg ?? DEMO_SOS.opponent_avg_ppg);
+  const yourRank = data.your_rank != null ? Number(data.your_rank) : DEMO_SOS.your_rank;
+  const delta = Math.round((yourPpg - oppAvg) * 10) / 10;
+  const maxBar = Math.max(yourPpg, oppAvg, 1);
+  const tone = verdictColor(verdict);
+  const leagueLabel =
+    String("league_id" in data && data.league_id ? data.league_id : league) || "sample";
 
   return new ImageResponse(
     (
@@ -92,72 +117,82 @@ export async function GET(req: Request) {
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            fontFamily: "Luckiest Guy",
-            fontSize: 56,
-            lineHeight: 1.1,
-            marginBottom: 4,
-          }}
-        >
+        <div style={{ display: "flex", fontFamily: "Luckiest Guy", fontSize: 52, lineHeight: 1.1, marginBottom: 4 }}>
           Strength of Schedule
         </div>
-        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 24 }}>
-          {`remaining slate from power rankings${isDemo ? " · sample preview" : ""}`}
-        </div>
-
-        <div style={{ display: "flex", gap: 20, marginBottom: 20 }}>
-          {[
-            { label: "your rank", value: rank, color: "#5b7fff" },
-            { label: "your PPG", value: yourPpg, color: "#2d1f14" },
-            { label: "avg opp PPG", value: oppPpg, color: "#d97757" },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                flex: 1,
-                background: "#f7efe5",
-                border: "3px solid #2d1f14",
-                borderRadius: 8,
-                padding: "16px 20px",
-                boxShadow: "4px 4px 0 #2d1f14",
-              }}
-            >
-              <div style={{ display: "flex", fontSize: 14, color: "#5c4a3d", marginBottom: 8 }}>
-                {stat.label}
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  fontFamily: "Luckiest Guy",
-                  fontSize: 44,
-                  color: stat.color,
-                }}
-              >
-                {stat.value}
-              </div>
-            </div>
-          ))}
+        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
+          {`rest-of-season matchup power · league ${leagueLabel}${isDemo ? " · sample preview" : ""}`}
         </div>
 
         <div
           style={{
             display: "flex",
-            flex: 1,
+            flexDirection: "column",
             background: "#f7efe5",
-            border: "3px solid #2d1f14",
+            border: "4px solid #2d1f14",
             borderRadius: 8,
             padding: "20px 24px",
+            marginBottom: 20,
             boxShadow: "4px 4px 0 #2d1f14",
-            fontFamily: "Caveat",
-            fontSize: 32,
-            lineHeight: 1.3,
           }}
         >
-          {verdict}
+          <div style={{ display: "flex", fontSize: 16, color: "#5c4a3d", textTransform: "uppercase" }}>
+            slate verdict
+          </div>
+          <div
+            style={{
+              display: "flex",
+              fontFamily: "Luckiest Guy",
+              fontSize: 40,
+              color: tone,
+              marginTop: 8,
+            }}
+          >
+            {verdict}
+          </div>
+          <div style={{ display: "flex", fontSize: 18, color: "#5c4a3d", marginTop: 8 }}>
+            {`${delta >= 0 ? "+" : ""}${delta} PPG vs league-average opponent`}
+            {yourRank != null ? ` · power rank #${yourRank}` : ""}
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, flex: 1 }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 18, marginBottom: 6 }}>
+              <span>Your scoring (PPG)</span>
+              <span style={{ display: "flex", fontWeight: 700 }}>{yourPpg}</span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                height: 20,
+                background: "#e5d6c4",
+                border: "3px solid #2d1f14",
+                borderRadius: 4,
+                overflow: "hidden",
+              }}
+            >
+              <div style={{ display: "flex", width: barWidth(yourPpg, maxBar), background: "#d97757" }} />
+            </div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 18, marginBottom: 6 }}>
+              <span>Avg opponent PPG (league)</span>
+              <span style={{ display: "flex", fontWeight: 700 }}>{oppAvg}</span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                height: 20,
+                background: "#e5d6c4",
+                border: "3px solid #2d1f14",
+                borderRadius: 4,
+                overflow: "hidden",
+              }}
+            >
+              <div style={{ display: "flex", width: barWidth(oppAvg, maxBar), background: "#5b7fff" }} />
+            </div>
+          </div>
         </div>
 
         <div
@@ -171,7 +206,7 @@ export async function GET(req: Request) {
           }}
         >
           <div style={{ display: "flex" }}>
-            {`razzle.lol/league${league ? `/${league}` : ""}/strength-of-schedule`}
+            razzle.lol/league{league ? `/${league}` : ""}/strength-of-schedule
           </div>
           {isDownload ? (
             <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
