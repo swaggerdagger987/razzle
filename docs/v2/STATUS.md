@@ -17,7 +17,7 @@ From `LOOP-STATE.md`:
 |-------|-------|
 | Cycle | 106 |
 | Last board | 54 |
-| Focus pillar | Lab |
+| Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | lab-og-dynasty-comps-pro-teaser |
 | Last commit | `40c80f0e` |

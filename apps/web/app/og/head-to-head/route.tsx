@@ -247,29 +247,34 @@ export async function GET(req: Request) {
           </div>
         ) : null}
 
+        {hasData ? (
+          <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
+            {`razzle.lol${atlasRoomPath} · ask ${atlas.name} about ${teamLabel(themSummary.team)}`}
+          </div>
+        ) : null}
+
+        {/* Always-on watermark band — matches Explore + Lab panel OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 14,
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <div style={{ display: "flex" }}>razzle.lol/league{league ? `/${league}` : ""}/head-to-head</div>
-            {hasData ? (
-              <div style={{ display: "flex", fontSize: 18, color: "#d97757" }}>
-                {`razzle.lol${atlasRoomPath} · ask ${atlas.name} about ${teamLabel(themSummary.team)}`}
-              </div>
-            ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>
+            razzle.lol/league{league ? `/${league}` : ""}/head-to-head
           </div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),
