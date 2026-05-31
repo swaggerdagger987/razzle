@@ -23,5 +23,7 @@
     "BureauHeadToHead.tsx",
     "API route changes"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "verdict": "SHIP",
+  "content_commit": "521e8482"
 }
