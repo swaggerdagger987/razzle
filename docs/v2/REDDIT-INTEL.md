@@ -334,3 +334,8 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Razzle slice:** Lab L5 atom 2 — launch-10 OG demo rows with FPTS/Score/Rank/Peak Age/Chg stat headers per panel slug.
 - **Council cycle:** 59
 - **Screenshot potential:** Weekly heatmap + prospect big board cards now match in-product column semantics on preview hosts
+
+## 2026-05-31 — Strengths OG shares
+
+- **Pattern:** Dynasty Twitter shares graded strength callouts (A+/B tiers) more than raw percentile tables.
+- **Razzle slice:** Lab L5 atom 2 — `/og/strengths` LIVE · top strengths sticker + graded demo rows.
