@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 147 — League Trade Finder OG snapshot)
+**Last updated:** 2026-05-31 (factory cycle 148 — League Trade Finder OG Bones hallway)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 147 |
+| Cycle | 148 |
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | league-trade-finder-room-hallway |
-| Last commit | `a319e8953` |
+| Next slice | (Strategist: next PARITY RED/YELLOW atom) |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
