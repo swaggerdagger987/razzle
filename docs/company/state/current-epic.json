@@ -19,15 +19,21 @@
     {
       "id": "lab-pro-gate-perks-copy",
       "title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "73fdbf9c"
     }
   ],
-  "next_atom_id": "lab-pro-gate-perks-copy",
-  "epic_status": "active",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T08:25:00Z",
+  "updated_at": "2026-05-31T12:30:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l4-pro-gate-polish",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "73fdbf9c"
+    },
     {
       "id": "lab-l5-og-watermark-band",
       "status": "complete",

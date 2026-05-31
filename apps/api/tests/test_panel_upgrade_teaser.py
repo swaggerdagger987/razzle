@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 # Mirrors apps/web/lib/panel-upgrade-teaser.ts LAUNCH_10_* exports.
 LAUNCH_10_STAFF_PICK_SLUGS = (
     "weekly",
@@ -67,9 +69,6 @@ BUREAU_7_PERK_LABELS = (
     "Manager Profiles",
     "Monte Carlo",
 )
-
-
-from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 

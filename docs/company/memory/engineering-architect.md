@@ -1,8 +1,10 @@
 # Memory — Engineering Architect
 
-2026-05-31 | launch10 teaser audit | b0405d43 | keep | 2 files; LAUNCH_10_* exports + pytest guard.
+2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | force_demo=1 for factory curl; SAMPLE/LIVE mutual exclusive badges.
 
-2026-05-31 | gamelog weeks extract | 40c80f0e | 1-file ~35 lines; player-scoped weeks[] not players[]; no PANEL_OG_STAT_KEY.
+2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly WR default in OG apiParams only.
+
+2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | 1-file panel route; LIVE sticker gated on showingLiveData.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | 1-file H2H OG; band copied from panel route; atlas link above band.
 
