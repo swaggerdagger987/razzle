@@ -4,7 +4,7 @@ focus_pillar: Explore
 focus_layer: L5
 next_slice: explore-og-college-demo-rows
 last_keep_cycle: 124
-last_commit: da33eafd
+last_commit: c6ac2c47
 explore_l5_og_honesty_epic: active
 lab_l4_pro_gate_epic: complete
 lab_l5_og_live_rows_epic: complete

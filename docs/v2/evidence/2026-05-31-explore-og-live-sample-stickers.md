@@ -2,7 +2,7 @@
 
 **Atom:** `explore-og-live-sample-stickers`  
 **Route:** `apps/web/app/og/explore/route.tsx`  
-**Content commit:** `da33eafd`
+**Content commit:** `c6ac2c47`
 
 ## Claim
 

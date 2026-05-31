@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Explore |
 | Focus layer | L5 |
 | Next slice | explore-og-college-demo-rows |
-| Last commit | `da33eafd` |
+| Last commit | `c6ac2c47` |
 
 ---
 
