@@ -8,11 +8,13 @@
   "depth_ref": "Lab L5",
   "acceptance_ref": "ACCEPTANCE Gate 6 — Share / OG export cards",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
+  "allowed_paths": [
+    "apps/api/tests/test_bureau_h2h_og_snapshot_codec.py"
+  ],
   "max_files": 1,
   "max_lines": 80,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_h2h_og_snapshot_codec.py -q",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
     "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900&position=WR'"
   ],
@@ -21,11 +23,12 @@
     "NORTH_STAR/DESIGN/DECISIONS edits",
     "new npm deps"
   ],
+  "out_of_scope": ["OG route refactors", "ShareBar UI changes", "new npm deps"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
