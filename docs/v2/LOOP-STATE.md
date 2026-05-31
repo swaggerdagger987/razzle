@@ -1,10 +1,11 @@
-cycle: 70
+cycle: 71
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-api-origin-rewrite or wire launch-10 snapshots
-last_keep_cycle: 70
-last_commit: 916ba843
+next_slice: lab-og-snapshot-gamelog-comps
+last_keep_cycle: 71
+last_commit: da33eafd
+lab_l5_og_snapshot_launch10_partial: complete
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
