@@ -1,9 +1,9 @@
 cycle: 130
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: Lab
 focus_layer: L5
-next_slice: pick from PARITY/NEXT — Bureau H2H export or Lab L5 depth
+next_slice: lab-l4-pro-gate-error-tradevalues
 last_keep_cycle: 130
-last_commit: 710ec33e
-explore_l5_og_query_epic: complete
-lab_l4_pro_gate_epic: complete
+last_commit: 4bc3913e
+lab_l5_og_live_fetch_epic: complete
+lab_l4_pro_gate_error_epic: active

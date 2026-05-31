@@ -1,50 +1,50 @@
 {
-  "big_problem": "Explore share cards don't mirror the screener URL — college toggles and filters get lost on export, so Reddit screenshots lie about the view.",
-  "epic_title": "Explore L5 — OG card matches screener query state",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "Explore L5",
+  "epic_status": "complete",
+  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
+  "epic_title": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "explore-og-universe-query",
-      "title": "Explore OG — season/team/universe query on card + share URLs",
+      "id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+      "title": "Rankings + tradevalues + breakouts — SAMPLE panel-native stickers",
       "status": "done",
-      "merge_commit": "7dbd4b11"
+      "merge_commit": "54443bc8"
     },
     {
-      "id": "explore-og-demo-fallback-rows",
-      "title": "Explore OG — static demo rows when API empty (not pulling film)",
+      "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
+      "title": "Gamelog + efficiency + aging — panel-native LIVE stickers",
       "status": "done",
-      "merge_commit": "2d0d3bde"
+      "merge_commit": "adbf6c7"
     },
     {
-      "id": "explore-og-formula-sort-label",
-      "title": "Explore OG — formula sort label on card when apiSort differs",
+      "id": "lab-og-launch10-buysell-dashboard-labels",
+      "title": "Buy-sell + dashboard — panel-native LIVE stickers",
       "status": "done",
-      "merge_commit": "710ec33e"
+      "merge_commit": "adbf6c7"
     }
   ],
   "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:45:00Z",
-  "updated_at": "2026-05-31T12:05:00Z",
+  "created_at": "2026-05-31T09:00:00Z",
+  "updated_at": "2026-05-31T16:15:00Z",
   "completed_epics": [
     {
-      "id": "explore-l5-og-query-epic",
+      "id": "lab-l5-og-live-labels-rankings-tv-breakouts",
       "status": "complete",
-      "last_atom": "explore-og-formula-sort-label",
-      "merge_commit": "710ec33e"
+      "last_atom": "cycle-125-merge",
+      "merge_commit": "5dcbbc01"
     },
     {
-      "id": "lab-l4-pro-gate-epic",
+      "id": "lab-l5-launch10-og-panel-native-trust-labels",
       "status": "complete",
-      "last_atom": "lab-pro-gate-perks-copy",
-      "merge_commit": "f56fdbd8"
+      "last_atom": "lab-og-launch10-buysell-dashboard-labels",
+      "merge_commit": "adbf6c7"
     },
     {
-      "id": "lab-l5-og-live-rows-launch10",
+      "id": "lab-l4-pro-gate-error-surface",
       "status": "complete",
-      "last_atom": "lab-og-live-demo-fallback-copy",
-      "merge_commit": "18d92f6b"
+      "last_atom": "lab-l4-pro-gate-error-surface",
+      "merge_commit": "5721ee33"
     }
   ]
 }
