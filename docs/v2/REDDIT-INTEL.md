@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab OG trade values / efficiency (cycle 95)
+- **Angle:** Bones trade-value bar charts and Octo PPO boards need the same top-6 leaders on `/og/*` direct links as in-panel exports.
+- **Screenshot hook:** WR trade-value card with highest bars first; RB efficiency leaders sorted by PPO.
+
 ### 2026-05-31 — Lab launch-10 OG (cycle 77)
 - **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
 - **Trust:** T1 honest labeling; sample suffix only on demo fallback.

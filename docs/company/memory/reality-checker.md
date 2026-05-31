@@ -1,5 +1,8 @@
 # Memory — Reality Checker
 
+2026-05-31 | Lab OG tradevalues/efficiency Gate C | da33eafd | PASS | curl tradevalues 51115B efficiency 45113B PNG | keep | docs/v2/evidence/2026-05-31-lab-og-tradevalues-efficiency-sort.md
+
+
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 

@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 95 OG direct sort | da33eafd | keep | workday open; Lab L5 direct-sort epic atom 1/3
+
 Append-only log of coordination patterns, what worked, what didn't.
 
 Format per entry:

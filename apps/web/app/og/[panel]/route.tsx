@@ -437,7 +437,14 @@ export async function GET(
   if (!isSnapshot && positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
   }
-  if (!isSnapshot && (slug === "breakouts" || slug === "weekly" || slug === "prospects")) {
+  const DIRECT_STAT_SORT_SLUGS = new Set([
+    "breakouts",
+    "weekly",
+    "prospects",
+    "tradevalues",
+    "efficiency",
+  ]);
+  if (!isSnapshot && DIRECT_STAT_SORT_SLUGS.has(slug)) {
     rows = [...rows].sort((a, b) => b.stat - a.stat);
   }
 

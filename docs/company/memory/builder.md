@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-tradevalues-efficiency-sort | trade value + PPO renderer sort; OG DIRECT_STAT_SORT_SLUGS | da33eafd | SHIP | KEEP pattern for buysell/aging atoms | evidence/2026-05-31-lab-og-tradevalues-efficiency-sort.md
+
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:
