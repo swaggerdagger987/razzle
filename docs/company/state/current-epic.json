@@ -20,13 +20,19 @@
   ],
   "next_atom_id": "lab-sidebar-category-agent-hint",
   "created_at": "2026-05-31T08:57:00Z",
-  "updated_at": "2026-05-31T09:00:00Z",
+  "updated_at": "2026-05-31T09:05:00Z",
   "completed_epics": [
     {
       "id": "lab-l2-sidebar-search-agent-labels",
       "status": "complete",
       "last_atom": "lab-sidebar-search-agent-labels",
       "merge_commit": "e75ec714"
+    },
+    {
+      "id": "lab-l5-og-live-fetch-merge",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "4bc3913e"
     },
     {
       "id": "lab-l4-pro-gate-error-surface",

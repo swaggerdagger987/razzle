@@ -1,10 +1,7 @@
 # Memory — Builder
 
-<<<<<<< HEAD
+2026-05-31 | lab-sidebar-search-title-first | 446c6c92 | showAgentInTitle renders title · agent suffix in search.
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
-=======
-2026-05-31 | lab-sidebar-search-title-first | PLACEHOLDER | showAgentInTitle renders title · agent suffix in search.
->>>>>>> f10093ed (standup: 2026-05-31 — SHIP Lab search title-first labels)
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
 
 2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
