@@ -1,6 +1,8 @@
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Builder
 
+2026-05-31 | league-trade-finder-og-snapshot | f6e0985f3 | bureau-trade-finder-og-snapshot.ts + ShareBar snapshot param.
+
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | extractBuySellRows + formula_score priority on OG route.
 
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | breakoutsStatKeys + rankingsStatKeys in OG route.

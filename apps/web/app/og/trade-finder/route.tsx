@@ -1,34 +1,23 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toLeague } from "@razzle/hallway";
+import {
+  bureauTradeFinderOgSnapshotToData,
+  decodeBureauTradeFinderOgSnapshot,
+  type BureauTradeFinderOgMatch,
+} from "@/lib/bureau-trade-finder-og-snapshot";
 
 export const runtime = "edge";
 
-type PlayerRef = {
-  player_id: string;
-  name: string;
-  position: string;
-  dynasty_value: number;
-};
-
-type Match = {
-  partner_roster_id: number;
-  partner_team: string;
-  give: PlayerRef;
-  get: PlayerRef;
-  value_gap: number;
-  gap_pct: number;
-};
-
 type TradeFinderData = {
-  matches?: Match[];
-  hero_match?: Match | null;
+  matches?: BureauTradeFinderOgMatch[];
+  hero_match?: BureauTradeFinderOgMatch | null;
   needs?: string[];
   surplus?: string[];
   error?: string;
 };
 
-const DEMO_MATCHES: Match[] = [
+const DEMO_MATCHES: BureauTradeFinderOgMatch[] = [
   {
     partner_roster_id: 2,
     partner_team: "Rebuild FC",
@@ -97,16 +86,31 @@ export async function GET(req: Request) {
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
 
   const bones = AGENT_BY_ID.bones;
-  const live = await fetchTradeFinder(req, league, user);
-  const isLive = Boolean(live?.matches?.length);
-  const isDemo = !isLive;
-  const matches = isDemo ? DEMO_MATCHES : live!.matches!.slice(0, 3);
-  const hero = isDemo ? DEMO_MATCHES[0] : (live!.hero_match ?? matches[0]);
-  const needs = isDemo ? DEMO_META.needs : (live!.needs ?? []);
-  const surplus = isDemo ? DEMO_META.surplus : (live!.surplus ?? []);
+  const snapshot = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
+  const isSnapshot = Boolean(snapshot);
+  const live = isSnapshot ? null : await fetchTradeFinder(req, league, user);
+  const isLive = isSnapshot || Boolean(live?.matches?.length);
+  const isDemo = !isSnapshot && !isLive;
+  const fromSnapshot = isSnapshot && snapshot ? bureauTradeFinderOgSnapshotToData(snapshot) : null;
+  const matches = isDemo
+    ? DEMO_MATCHES
+    : (fromSnapshot?.matches ?? live!.matches)!.slice(0, 3);
+  const hero = isDemo
+    ? DEMO_MATCHES[0]
+    : (fromSnapshot?.hero_match ?? live!.hero_match ?? matches[0]);
+  const needs = isDemo ? DEMO_META.needs : (fromSnapshot?.needs ?? live!.needs ?? []);
+  const surplus = isDemo ? DEMO_META.surplus : (fromSnapshot?.surplus ?? live!.surplus ?? []);
   const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
+  const subtitleSuffix = isSnapshot
+    ? " · exported from Bureau"
+    : isLive
+      ? ""
+      : league && user
+        ? " · sample preview (API unavailable)"
+        : " · sample preview";
 
   return new ImageResponse(
     (
@@ -152,12 +156,12 @@ export async function GET(req: Request) {
           Trade Finder
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {`value-matched league trades${isDemo ? " · sample preview" : ""}`}
+          {`value-matched league trades${subtitleSuffix}`}
           {needs.length ? ` · need ${needs.join(", ")}` : ""}
           {surplus.length ? ` · surplus ${surplus.join(", ")}` : ""}
         </div>
 
-        {isLive ? (
+        {isLive && !isDemo ? (
           <div
             style={{
               fontFamily: "Caveat",
@@ -175,11 +179,11 @@ export async function GET(req: Request) {
               display: "flex",
             }}
           >
-            LIVE · Sleeper trade paths
+            {isSnapshot ? "LIVE · exported trade rows" : "LIVE · Sleeper trade paths"}
           </div>
         ) : null}
 
-        {isDemo ? (
+        {isDemo && !isSnapshot ? (
           <div
             style={{
               fontFamily: "Caveat",
