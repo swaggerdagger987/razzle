@@ -1,56 +1,31 @@
 {
   "epic_status": "active",
-  "big_problem": "Self-Scout export cards still hit live API or demo — Reddit screenshots should mirror in-panel depth grades without Sleeper auth on the OG route.",
-  "epic_title": "League L5 — Bureau Self-Scout snapshot export",
-  "parity_ref": "League L5 — Scenario explorer / what-if outputs that travel",
+  "big_problem": "Bureau rivalry screenshots die in DMs — copied H2H links drop opponent context so managers reopen the wrong matchup.",
+  "epic_title": "League L5 — Bureau H2H export deep-links",
+  "parity_ref": "PARITY Explore L5 — Bureau H2H export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-self-scout-sharebar-snapshot",
-      "title": "Self-Scout ShareBar + OG snapshot codec matches panel grades",
+      "id": "bureau-h2h-rivalry-url-user-opponent",
+      "title": "H2H copy link + OG watermark include user and opponent query params",
+      "status": "done",
+      "merge_commit": "261c3166"
+    },
+    {
+      "id": "bureau-h2h-og-opponent-watermark-label",
+      "title": "OG card subtitle names opponent team when snapshot or live fetch",
       "status": "in_progress",
       "merge_commit": null
     },
     {
-      "id": "bureau-manager-profiles-sharebar-snapshot",
-      "title": "Manager Profiles ShareBar + OG snapshot for archetype rows",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "bureau-self-scout-snapshot-roundtrip-test",
-      "title": "Pytest roundtrip for Self-Scout OG snapshot param",
+      "id": "bureau-h2h-pick-opponent-preserve-user",
+      "title": "Opponent picker preserves user= in URL when rivalry link shared",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-self-scout-sharebar-snapshot",
-  "created_at": "2026-05-31T09:30:00Z",
-  "updated_at": "2026-05-31T09:50:00Z",
-  "completed_epics": [
-    {
-      "id": "lab-l4-pro-gate-upgrade",
-      "status": "complete",
-      "last_atom": "lab-pro-gate-og-sample-export",
-      "merge_commit": "1bed81fb"
-    },
-    {
-      "id": "lab-l5-og-live-fetch-merge",
-      "status": "complete",
-      "last_atom": "lab-og-gamelog-player-default",
-      "merge_commit": "4bc3913e"
-    },
-    {
-      "id": "lab-l5-launch10-sample-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
-      "merge_commit": "54443bc8"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "partial",
-      "last_atom": "lab-l4-pro-gate-error-surface",
-      "merge_commit": "5721ee33"
-    }
-  ]
+  "next_atom_id": "bureau-h2h-pick-opponent-preserve-user",
+  "created_at": "2026-05-31T14:00:00Z",
+  "updated_at": "2026-05-31T15:00:00Z",
+  "completed_epics": []
 }
