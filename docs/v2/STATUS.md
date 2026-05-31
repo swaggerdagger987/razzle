@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 118 — Prospects+Weekly OG LIVE panel labels)  
+**Last updated:** 2026-05-31 (factory cycle 119 — Launch-10 OG SAMPLE demo sticker)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 118 |
+| Cycle | 119 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-og-live-demo-fallback-copy |
-| Last commit | `da33eafd` |
+| Next slice | (epic complete — pick from PARITY) |
+| Last commit | `c892dd56` |
+
+Recent completions (cycle 119): Lab L5 OG SAMPLE vs LIVE stickers on Launch-10 cards.
 
 ---
 

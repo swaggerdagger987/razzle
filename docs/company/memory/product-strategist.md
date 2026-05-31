@@ -1,8 +1,8 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | SHIP | SAMPLE terracotta vs LIVE teal closes live-rows epic.
+2026-05-31 | lab-og-live-demo-fallback-copy | c892dd56 | SHIP | SAMPLE terracotta vs LIVE teal closes OG honesty epic.
 
-2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | SHIP | weekly+prospects LIVE path; epic atom 2/3.
+2026-05-31 | lab-og-live-sticker-prospects-weekly | 4cd32a84 | SHIP | panel-API sticker honesty for Hawkeye boards.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | SHIP | NEXT.md live-rows epic atom 1/3.
 
@@ -12,7 +12,7 @@
 
 2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | SHIP | ppo/ppg align Octo efficiency + aging Lab tables for OG screenshots.
 
-2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
+2026-05-31 | bureau-h2h-sharebar-canonical-codec | 4cd32a84 | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
 
 2026-05-31 | lab-tradevalues-formula-snapshot | 5ed39e14 | SHIP | Lab L5 OG mirror epic complete; Bureau H2H is next lead
 
@@ -53,11 +53,11 @@ new evidence.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live row parity epic atom 1 | 2cb898b6 | SHIP | keep | NEXT.md lead; panels slug + candidates on OG
 2026-05-31 | Bureau Monte Carlo share row | 433d8002 | SHIP | keep | League L5 atom 3/3; group-chat parity before H2H
-2026-05-31 | Bureau Monte Carlo share row | da33eafd | SHIP | keep | League L5 atom; H2H dedup base ShareBar
+2026-05-31 | Bureau Monte Carlo share row | 4cd32a84 | SHIP | keep | League L5 atom; H2H dedup base ShareBar
 2026-05-31 | Lab launch10 OG live label | 6e98f4a2 | SHIP | keep | T1/T5/T6; sample suffix only on demo fallback
 2026-05-31 | Bureau H2H export epic atom 1 | 044ee1e8 | SHIP | keep | PARITY Explore L5 H2H; Lab epic atoms deduped on base
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
-2026-05-31 | Trade Network share atom 2/4 | da33eafd | SHIP | keep | partnership graphs travel in league group chats
+2026-05-31 | Trade Network share atom 2/4 | 4cd32a84 | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
-2026-05-31 | Build Profiles unhide atom 1/3 | da33eafd | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
+2026-05-31 | Build Profiles unhide atom 1/3 | 4cd32a84 | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
 2026-05-31 | Lab OG rankings/tradevalues live sort | 7f78b631 | SHIP | keep | NEXT.md Lab L5 live row keys; atom 1/3

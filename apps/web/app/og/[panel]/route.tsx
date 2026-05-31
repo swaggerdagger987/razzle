@@ -88,6 +88,9 @@ const LAUNCH_10_OG_SLUGS = new Set([
   "buysell",
 ]);
 
+/** Panel-API LIVE sticker — prospects/weekly only show sticker when /api/panels returned rows. */
+const PANEL_API_LIVE_STICKER_SLUGS = new Set(["prospects", "weekly"]);
+
 /** Panel-specific LIVE copy when `/api/panels/{slug}` returns real rows (Launch-10). */
 function launch10LiveBlurbSuffix(slug: string): string {
   if (slug === "prospects") return " · live RPS board";
@@ -101,6 +104,11 @@ function launch10LiveStickerLabel(slug: string): string {
   return "LIVE · nflverse rows";
 }
 
+function demoStickerLabel(slug: string): string {
+  if (slug === "prospects") return "SAMPLE · demo board";
+  if (slug === "weekly") return "SAMPLE · demo heatmap";
+  return "SAMPLE · demo rows";
+}
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -117,7 +125,7 @@ function panelBlurbSuffix(
   }
   if (showingDemoRows) {
     if (LAUNCH_10_OG_SLUGS.has(slug)) {
-      return `${pos} · SAMPLE rows — not live nflverse`;
+      return pos;
     }
     return `${pos} · sample preview`;
   }
@@ -640,9 +648,12 @@ export async function GET(
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
+  let liveViaPanelApi = false;
   if (apiPath && !snapshotHasRows && !forceDemo) {
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
-    if (liveRows.length === 0) {
+    if (liveRows.length > 0) {
+      liveViaPanelApi = true;
+    } else {
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
     }
   }
@@ -661,6 +672,11 @@ export async function GET(
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
+  const showLiveSticker =
+    showingLiveData &&
+    LAUNCH_10_OG_SLUGS.has(slug) &&
+    (!PANEL_API_LIVE_STICKER_SLUGS.has(slug) || liveViaPanelApi);
+  const showDemoSticker = showingDemoRows && LAUNCH_10_OG_SLUGS.has(slug);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
 
   return new ImageResponse(
@@ -719,28 +735,7 @@ export async function GET(
           {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData)}`}
         </div>
 
-        {showingDemoRows && LAUNCH_10_OG_SLUGS.has(slug) ? (
-          <div
-            style={{
-              fontFamily: "Caveat",
-              fontSize: 32,
-              color: "#f7efe5",
-              background: "#d97757",
-              padding: "6px 18px",
-              alignSelf: "flex-start",
-              border: "3px solid #2d1f14",
-              borderRadius: 10,
-              boxShadow: "4px 4px 0 #2d1f14",
-              transform: "rotate(2deg)",
-              marginBottom: 12,
-              fontWeight: 700,
-            }}
-          >
-            SAMPLE · not live data
-          </div>
-        ) : null}
-
-        {showingLiveData && LAUNCH_10_OG_SLUGS.has(slug) ? (
+        {showLiveSticker ? (
           <div
             style={{
               fontFamily: "Caveat",
@@ -758,6 +753,27 @@ export async function GET(
             }}
           >
             {launch10LiveStickerLabel(slug)}
+          </div>
+        ) : null}
+
+        {showDemoSticker ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            {demoStickerLabel(slug)}
           </div>
         ) : null}
 
