@@ -28,4 +28,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | Bureau share rows | 433d8002 | keep | Monte Carlo export row now matches Explore copy+export pattern
-2026-05-31 | H2H rivalry share | da33eafd | keep | copy link completes Bureau-7 group-chat export parity
+2026-05-31 | Monte Carlo share row | da33eafd | keep | Bureau group-chat export parity; H2H already on base

@@ -1,8 +1,8 @@
 cycle: 76
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-export-from-next
+next_slice: lab-og-launch10-live-label
 last_keep_cycle: 76
 last_commit: da33eafd
 explore_l5_watermarked_export: complete

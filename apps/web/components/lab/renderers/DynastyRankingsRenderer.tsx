@@ -285,6 +285,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="rankings"
             downloadName="razzle-dynasty-rankings.png"
+            position={position || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>

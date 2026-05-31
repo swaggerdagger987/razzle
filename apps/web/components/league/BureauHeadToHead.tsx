@@ -3,9 +3,9 @@
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
+import { BureauH2HShareBar } from "./BureauH2HShareBar";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
-import { useCallback, useState } from "react";
 
 interface Props {
   data: Record<string, unknown>;
@@ -31,18 +31,6 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
   const atlas = AGENT_BY_ID.atlas;
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [copied, setCopied] = useState(false);
-
-  const copyH2HLink = useCallback(async () => {
-    if (typeof window === "undefined") return;
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
-  }, []);
   const managers = (data.managers as Manager[]) ?? [];
   const opponentId = String(data.opponent_user_id ?? searchParams.get("opponent") ?? "");
   const you = data.you as TeamSummary;
@@ -165,41 +153,27 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
             <p className="mt-1 text-sm" style={{ fontFamily: "var(--font-hand)" }}>
               You could offer depth at {offer}. Target their surplus at {want}.
             </p>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <button type="button" className="btn-chunky text-xs" onClick={() => void copyH2HLink()}>
-                {copied ? "copied!" : "copy link"}
-              </button>
-              {you?.user_id && (
-                <a
-                  href={`/og/head-to-head?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                    you.user_id,
-                  )}${opponentId ? `&opponent=${encodeURIComponent(opponentId)}` : ""}&download=1`}
-                  download="razzle-head-to-head.png"
-                  className="btn-chunky active text-xs"
-                  style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-                >
-                  export card
-                </a>
-              )}
-              <Link
-                href={
-                  toRoom({
-                    agentId: "atlas",
-                    question: `How do I beat ${them.team} (${them.record})? I'm deeper at ${offer} and thin at ${want}.`,
-                    panelSlug: "head-to-head",
-                  }) as Route
-                }
-                className="text-sm text-orange underline"
-              >
-                ask Atlas about this rivalry →
-              </Link>
-              <Link
-                href={`/league/${leagueId}/trade-finder` as Route}
-                className="text-sm text-ink-medium underline"
-              >
-                open Trade Finder →
-              </Link>
-            </div>
+            <Link
+              href={
+                toRoom({
+                  agentId: "atlas",
+                  question: `How do I beat ${them.team} (${them.record})? I'm deeper at ${offer} and thin at ${want}.`,
+                  panelSlug: "head-to-head",
+                }) as Route
+              }
+              className="mt-3 inline-block text-sm text-orange underline"
+            >
+              ask Atlas about this rivalry →
+            </Link>
+            <Link
+              href={`/league/${leagueId}/trade-finder` as Route}
+              className="ml-4 inline-block text-sm text-ink-medium underline"
+            >
+              open Trade Finder →
+            </Link>
+            {you?.user_id && (
+              <BureauH2HShareBar leagueId={leagueId} userId={you.user_id} opponentId={opponentId || undefined} />
+            )}
           </section>
         </>
       )}
