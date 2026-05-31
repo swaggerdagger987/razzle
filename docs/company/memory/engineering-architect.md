@@ -29,14 +29,12 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | fetchLiveOgRows + candidates | 2cb898b6 | keep | X-Razzle-Plan pro header; legacy API fallback chain
 2026-05-31 | BureauMonteCarlo clipboard | 433d8002 | keep | useCallback + copied state mirrors Self-Scout; no OG route change
-2026-05-31 | Bureau Monte Carlo clipboard | 246052ec | keep | merge sync base Lab epic; OG Razzle spans; dedup H2H ShareBar
+2026-05-31 | Bureau Monte Carlo clipboard | da33eafd | keep | merge sync base Lab epic; OG Razzle spans; dedup H2H ShareBar
 2026-05-31 | panelBlurbSuffix launch-10 | 6e98f4a2 | keep | 1 file; LAUNCH_10_OG_SLUGS mirrors LabSidebar STAFF_PICKS
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
-2026-05-31 | BureauTradeNetworkShareBar | 246052ec | keep | mirrors MC share bar; league OG param unchanged
+2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
-2026-05-31 | BureauBuildProfiles | 2ee04975 | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
-2026-05-31 | Prospects RPS+position export | 17a40c65 | keep | statLabel RPS; position on LabOgExportLink
-2026-05-31 | Efficiency position on LabOgExportLink | b2d304e7 | keep | 1-line; OG route already filters by position param
-2026-05-31 | /og/build-profiles | 246052ec | keep | ShareBar + OG route; mirrors power-rankings; 3 files ≤280 lines
-2026-05-31 | /og/roster-depth | 1b769554 | keep | league+user params; depthGrade in OG; 3 files ≤300 lines
+2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
+2026-05-31 | BureauWaiverTendencies | da33eafd | keep | 3 files ≤175 lines; mirrors BuildProfiles; no API change
+2026-05-31 | TradeValues+Prospects snapshot | 70af534a | keep | 2 files ≤40 lines; Breakouts ogSnapshotRows pattern
