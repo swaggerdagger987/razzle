@@ -1,29 +1,20 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-strength-of-schedule-tab",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
-  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "slice_title": "Schedule tab unhidden with SOS matchup renderer",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C (in-product renderer; no OG this atom)",
-  "trust_pillars": ["T2", "T5", "T6"],
-  "allowed_paths": [
-    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx",
-    "apps/web/lib/bureau-features.ts"
-  ],
-  "max_files": 3,
-  "max_lines": 130,
+  "atom_id": "lab-og-breakouts-score-ranked",
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
+  "epic": "Lab L5 — OG snapshot row fidelity",
+  "slice_title": "Breakouts OG export ranks top-6 by breakout score",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/components/lab/renderers/BreakoutsRenderer.tsx"],
+  "max_files": 1,
+  "max_lines": 25,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/breakouts?download=1&position=WR'"
   ],
-  "out_of_scope": ["OG export", "API changes", "NORTH_STAR/DESIGN/DECISIONS"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP"
-  }
+  "out_of_scope": ["OG route", "weekly dedup on base 98e51602"],
+  "builder_mode": "composer-surgical"
 }
