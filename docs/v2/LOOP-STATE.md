@@ -10,3 +10,4 @@ lab_l5_empty_og_epic: active
 lab_l4_pro_gate_epic: complete
 room_l5_briefing_gtm_epic: complete
 explore_l5_universe_share_epic: complete
+league_l5_h2h_epic: complete
