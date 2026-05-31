@@ -20,7 +20,7 @@
     {
       "id": "lab-og-gamelog-player-default",
       "title": "Gamelog OG — default player_id when export omits query",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],

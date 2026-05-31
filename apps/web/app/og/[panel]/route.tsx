@@ -637,10 +637,9 @@ export async function GET(
   const query = url.searchParams.get("q") ?? "";
   const positionFilter = url.searchParams.get("position") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
-  const playerId =
-    url.searchParams.get("player_id") ??
-    url.searchParams.get("id") ??
-    DEFAULT_OG_PLAYER_ID;
+  const rawPlayerId =
+    url.searchParams.get("player_id") ?? url.searchParams.get("id");
+  const playerId = rawPlayerId?.trim() || DEFAULT_OG_PLAYER_ID;
 
   const panel = getPanel(slug);
   if (!panel) {
