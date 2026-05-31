@@ -66,3 +66,4 @@ cycle	commit	score	status	pillar	slice	description
 74	ac046c85	depth+voice+simplicity	keep	Lab	L5 OG API origin rewrite	trust=T5,T6; request-origin /api fetch; curl rankings 61061B dashboard 60034B
 77	20c7940a	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings tab unhidden	trust=T2,T5; Octo renderer; power-rankings out of HIDDEN; build+pytest PASS
 78	30454811	depth+hallway+voice+simplicity	keep	League	L5 Bureau Monte Carlo share bar	trust=T2,T5,T6; BureauMonteCarloShareBar copy sim + export; curl monte-carlo OG 53767B
+79	62a6041a	depth+voice+simplicity	keep	Lab	L5 OG prospects tradevalues snapshot export	trust=T5,T6; snapshotRows on ProspectsRenderer TradeValuesRenderer; curl prospects 58084B tradevalues 62488B
