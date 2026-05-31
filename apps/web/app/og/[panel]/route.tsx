@@ -437,6 +437,9 @@ export async function GET(
   if (!isSnapshot && positionFilter) {
     rows = rows.filter((r) => r.position === positionFilter);
   }
+  if (!isSnapshot && (slug === "breakouts" || slug === "weekly" || slug === "prospects")) {
+    rows = [...rows].sort((a, b) => b.stat - a.stat);
+  }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;

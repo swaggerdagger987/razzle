@@ -1,29 +1,28 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Schedule tab still hid behind HIDDEN_BUREAU_SLUGS while SOS API returned live slate rows.",
-  "epic": "League L5 — Bureau unhide (final tab)",
-  "atom_id": "league-strength-of-schedule-tab",
-  "slice_title": "Schedule tab unhidden with Octo SOS matchup renderer",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "ACCEPTANCE Bureau-7 tabs render without 404",
-  "trust_pillars": ["T2", "T5", "T6"],
+  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
+  "epic": "Lab L5 — OG snapshot row fidelity",
+  "atom_id": "lab-og-breakouts-score-ranked",
+  "slice_title": "Breakouts OG export ranks top-6 by RBS score with position filter",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with ranked rows",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx"
+    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
+    "apps/web/app/og/[panel]/route.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 200,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q",
-    "rg 'HIDDEN_BUREAU_SLUGS' apps/web/lib/bureau-features.ts"
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/breakouts?position=WR&download=1'"
   ],
   "out_of_scope": [
-    "OG export routes",
+    "Bureau tabs",
     "API schema changes",
-    "Auth/billing"
+    "New panels"
   ],
   "builder_mode": "composer-surgical",
   "votes": {
@@ -32,6 +31,5 @@
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
   },
-  "verdict": "SHIP",
-  "content_commit": "0b9dfe7e"
+  "verdict": "SHIP"
 }

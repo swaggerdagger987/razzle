@@ -1,8 +1,8 @@
-cycle: 93
+cycle: 94
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-weekly-ppg-ranked
-last_keep_cycle: 93
-last_commit: 0b9dfe7e
-league_l5_bureau_unhide_epic: complete
+next_slice: lab-og-fidelity-complete
+last_keep_cycle: 94
+last_commit: da33eafd
+lab_l5_og_fidelity_epic: complete

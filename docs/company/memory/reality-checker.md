@@ -12,6 +12,8 @@ YYYY-MM-DD | claim under review | evidence type (curl/screenshot/test) | layer/P
 Read this file before reviewing a claim. Recurring failure classes deserve
 explicit checks in the verification routine.
 
+2026-05-31 cycle 94: PASS breakouts OG curl 200 61718B + pytest 51 + web build 0.
+
 ---
 
 ## Entries

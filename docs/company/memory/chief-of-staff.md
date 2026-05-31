@@ -14,6 +14,8 @@ A good entry changes future behavior. A bad entry is a diary.
 
 2026-05-31 | Factory cycle 1 dashboard OG snapshot | c9151786 | keep | dedup prospects+tradevalues on base 1a56450e
 
+2026-05-31 | Factory cycle 1 | Lab OG fidelity epic closed (breakouts atom); weekly deduped on base.
+
 ---
 
 ## Entries
