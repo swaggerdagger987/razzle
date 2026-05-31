@@ -63,8 +63,10 @@ export async function GET(req: Request) {
 
   const octo = AGENT_BY_ID.octo;
   const fromSnapshot = snapshotParam ? decodeBureauSosOgSnapshot(snapshotParam) : null;
-  const live = fromSnapshot ? null : await fetchSos(req, league, user);
-  const isDemo = !fromSnapshot && !live?.verdict;
+  const isSnapshot = Boolean(fromSnapshot);
+  const live = isSnapshot ? null : await fetchSos(req, league, user);
+  const isLive = !isSnapshot && Boolean(live?.verdict);
+  const isDemo = !isSnapshot && !isLive;
   const data = fromSnapshot ?? live ?? DEMO_SOS;
 
   const verdict = String(data.verdict ?? DEMO_SOS.verdict);
@@ -121,8 +123,76 @@ export async function GET(req: Request) {
           Strength of Schedule
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 16 }}>
-          {`rest-of-season matchup power · league ${leagueLabel}${isDemo ? " · sample preview" : ""}`}
+          {`rest-of-season matchup power · league ${leagueLabel}${
+            isSnapshot ? " · exported from panel" : isDemo ? " · sample preview" : ""
+          }`}
         </div>
+
+        {isSnapshot ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#8b5cf6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            EXPORTED · panel schedule rows
+          </div>
+        ) : null}
+
+        {isLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · Sleeper schedule slate
+          </div>
+        ) : null}
+
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · demo schedule slate
+          </div>
+        ) : null}
 
         <div
           style={{
