@@ -1,19 +1,31 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic_title": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Hidden Bureau tabs still ship scaffold/null bodies while APIs return live league rows.",
+  "epic_title": "League L5 — unhide hidden Bureau bespoke renderers",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-dashboard-og-snapshot",
-      "title": "DashboardRenderer passes top-6 comp rows into dynasty-comps OG snapshot",
+      "id": "league-build-profiles-tab",
+      "title": "Build Profiles tab — Atlas archetype grid",
       "status": "done",
-      "merge_commit": "c9151786"
+      "merge_commit": "3d0809b5"
+    },
+    {
+      "id": "league-waiver-tendencies-tab",
+      "title": "Waiver Tendencies — Hawkeye wire-style grid",
+      "status": "in_progress",
+      "merge_commit": null
+    },
+    {
+      "id": "league-strength-of-schedule-tab",
+      "title": "Strength of Schedule bespoke renderer",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T12:45:00Z",
-  "updated_at": "2026-05-31T12:55:00Z",
-  "last_cycle_commit": "c9151786"
+  "next_atom_id": "league-strength-of-schedule-tab",
+  "epic_status": "active",
+  "created_at": "2026-05-31T05:42:00Z",
+  "updated_at": "2026-05-31T05:42:00Z",
+  "last_cycle_commit": null
 }
