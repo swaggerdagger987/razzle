@@ -1,27 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG share cards must render the same player rows as in-product panels when the API returns data — not generic demo shells (DEPTH Lab L5).",
-  "epic": "Lab L5 — OG live panel row parity",
-  "slice_title": "OG route live row extraction via panels API",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/rankings and /og/breakouts PNG ≥40KB",
+  "big_problem": "Bureau Head-to-Head export cards must show the same rivalry matchup users see in-product — not generic demo squads when the panel has live league context.",
+  "epic": "League L5 — Bureau H2H export matches in-product rivalry",
+  "slice_title": "BureauOgExportLink + H2H OG snapshot from in-panel rivalry",
+  "parity_ref": "Explore L5 — Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx"
+    "apps/web/components/league/BureauOgExportLink.tsx",
+    "apps/web/components/league/BureauHeadToHead.tsx",
+    "apps/web/app/og/head-to-head/route.tsx"
   ],
-  "max_files": 1,
+  "max_files": 3,
   "max_lines": 120,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-rankings-live.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/rankings?download=1'",
-    "curl -s -o /tmp/og-breakouts-live.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/breakouts?download=1'"
+    "curl -s -o /tmp/og-h2h-demo.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/head-to-head?download=1'",
+    "curl -s -o /tmp/og-h2h-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/head-to-head?download=1&snapshot=eyJ5Ijp7InRlYW0iOiJUZXN0IFlvdSIsInJlY29yZCI6IjktNCIsInBwZyI6MTIwLjV9LCJ0Ijp7InRlYW0iOiJUZXN0IFRIRU0iLCJyZWNvcmQiOiI4LTUiLCJwcGciOjExNS4yfSwicGMiOlt7InBvc2l0aW9uIjoiUkIiLCJ5IjozLCJ0IjoyfV0sInRmIjp7Im8iOlsiUkIiXSwiZyI6WyJXUiJdfX0'"
   ],
   "out_of_scope": [
-    "PanelRenderer dynasty-comps",
-    "new panels",
-    "NORTH_STAR / DESIGN edits"
+    "Other Bureau OG routes",
+    "API head-to-head changes",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical"
 }

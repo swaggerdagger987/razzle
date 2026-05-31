@@ -22,6 +22,34 @@ interface H2HData {
   trade_fit?: { you_could_offer?: string[]; you_could_target?: string[] };
 }
 
+type H2hSnapshotCompact = {
+  y?: TeamSummary;
+  t?: TeamSummary;
+  pc?: Array<PosCompare | { position: string; y?: number; t?: number }>;
+  tf?: { o?: string[]; g?: string[] };
+};
+
+function decodeH2hSnapshot(param: string): H2HData | null {
+  try {
+    const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
+    const json = atob(b64);
+    const raw = JSON.parse(json) as H2hSnapshotCompact;
+    if (!raw.y?.team || !raw.t?.team) return null;
+    return {
+      you: raw.y,
+      them: raw.t,
+      position_compare: (raw.pc ?? []).map((row) => ({
+        position: row.position,
+        your_count: "your_count" in row ? Number(row.your_count) : Number((row as { y?: number }).y ?? 0),
+        their_count: "their_count" in row ? Number(row.their_count) : Number((row as { t?: number }).t ?? 0),
+      })),
+      trade_fit: raw.tf ? { you_could_offer: raw.tf.o ?? [], you_could_target: raw.tf.g ?? [] } : undefined,
+    };
+  } catch {
+    return null;
+  }
+}
+
 /** Sample rivalry for OG preview when league params/API unavailable (FACTORY-DOD Gate C). */
 const DEMO_H2H: Required<Pick<H2HData, "you" | "them" | "position_compare" | "trade_fit">> = {
   you: { team: "Your Squad", record: "8-5", ppg: 118.4 },
@@ -74,11 +102,14 @@ export async function GET(req: Request) {
   const league = url.searchParams.get("league") ?? "";
   const user = url.searchParams.get("user") ?? "";
   const opponent = url.searchParams.get("opponent") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
 
   const atlas = AGENT_BY_ID.atlas;
-  const live = await fetchH2H({ league, user, opponent });
-  const isDemo = !live?.you || !live?.them;
-  const data = isDemo ? DEMO_H2H : live;
+  const snapshotData = snapshotParam ? decodeH2hSnapshot(snapshotParam) : null;
+  const isSnapshot = Boolean(snapshotData?.you && snapshotData?.them);
+  const live = isSnapshot ? null : await fetchH2H({ league, user, opponent });
+  const isDemo = !isSnapshot && (!live?.you || !live?.them);
+  const data = isSnapshot ? snapshotData! : isDemo ? DEMO_H2H : live!;
 
   const you = data.you;
   const them = data.them;
@@ -131,9 +162,10 @@ export async function GET(req: Request) {
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
           Head-to-Head
         </div>
-        <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
-          rivalry dossier — your roster vs one leaguemate
-          {isDemo ? " · sample preview" : ""}
+        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
+          {`rivalry dossier — your roster vs one leaguemate${
+            isSnapshot ? " · from your panel" : isDemo ? " · sample preview" : ""
+          }`}
         </div>
 
         {hasData ? (

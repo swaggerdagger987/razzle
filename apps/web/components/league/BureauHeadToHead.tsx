@@ -3,6 +3,7 @@
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
+import { BureauOgExportLink } from "./BureauOgExportLink";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
 
@@ -171,16 +172,26 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
               open Trade Finder →
             </Link>
             {you?.user_id && (
-              <a
-                href={`/og/head-to-head?league=${encodeURIComponent(leagueId)}&user=${encodeURIComponent(
-                  you.user_id,
-                )}${opponentId ? `&opponent=${encodeURIComponent(opponentId)}` : ""}&download=1`}
-                download="razzle-head-to-head.png"
-                className="btn-chunky active mt-3 inline-block text-xs"
-                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-              >
-                export card
-              </a>
+              <BureauOgExportLink
+                feature="head-to-head"
+                leagueId={leagueId}
+                userId={String(you.user_id ?? searchParams.get("user") ?? "")}
+                opponentId={opponentId || undefined}
+                snapshot={{
+                  you: {
+                    team: you.team,
+                    record: you.record,
+                    ppg: you.ppg,
+                  },
+                  them: {
+                    team: them.team,
+                    record: them.record,
+                    ppg: them.ppg,
+                  },
+                  position_compare: positionCompare,
+                  trade_fit: tradeFit,
+                }}
+              />
             )}
           </section>
         </>
