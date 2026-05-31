@@ -26,6 +26,25 @@
   "next_atom_id": "league-mc-sharebar-scenario-encode",
   "epic_status": "active",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:00:00Z",
-  "completed_epics": ["Lab L5 — OG live panel rows parity"]
+  "updated_at": "2026-05-31T12:35:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-og-watermark-display-names",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-display-name",
+      "merge_commit": "338709883"
+    },
+    {
+      "id": "lab-l5-og-hallway-deep-links",
+      "status": "complete",
+      "last_atom": "lab-og-tolab-snapshot-player",
+      "merge_commit": "1a12d9c0b"
+    },
+    {
+      "id": "league-l5-trade-finder-gtm",
+      "status": "complete",
+      "last_atom": "league-trade-finder-og-room-hallway",
+      "merge_commit": "c8091030c"
+    }
+  ]
 }
