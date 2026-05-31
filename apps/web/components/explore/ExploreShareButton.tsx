@@ -27,7 +27,8 @@ export function ExploreShareButton({
 }: Props) {
   const [copied, setCopied] = useState(false);
 
-  const previewParams = new URLSearchParams({ universe, sort, dir });
+  const previewParams = new URLSearchParams({ sort, dir });
+  if (universe === "college") previewParams.set("universe", "college");
   if (q) previewParams.set("q", q);
   if (pos.length) previewParams.set("pos", pos.join(","));
   if (season > 0) previewParams.set("season", String(season));
