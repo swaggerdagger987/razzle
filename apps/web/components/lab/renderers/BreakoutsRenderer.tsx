@@ -92,21 +92,26 @@ export function BreakoutsRenderer({ panel }: Props) {
     return sortPlayersByFormula(rawCandidates, statsQ.data, formula);
   }, [formula, rawCandidates, statsQ.data]);
 
-  const top = candidates[0] ?? null;
+  const rankedCandidates = useMemo(() => {
+    const score = (p: Candidate) =>
+      formula && p.formula_score != null ? p.formula_score : (p.rbs_score ?? 0);
+    return [...candidates].sort((a, b) => score(b) - score(a));
+  }, [candidates, formula]);
+
+  const top = rankedCandidates[0] ?? null;
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     const statLabel = formula?.name ?? "RBS";
-    return candidates.slice(0, 6).map((p) => ({
+    const score = (p: Candidate) =>
+      formula && p.formula_score != null ? p.formula_score : (p.rbs_score ?? 0);
+    return rankedCandidates.slice(0, 6).map((p) => ({
       name: p.name,
       position: p.position,
       team: p.team,
-      stat:
-        formula && p.formula_score != null
-          ? p.formula_score
-          : (p.rbs_score ?? 0),
+      stat: score(p),
       statLabel,
     }));
-  }, [candidates, formula]);
+  }, [rankedCandidates, formula]);
 
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
