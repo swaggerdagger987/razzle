@@ -1,10 +1,6 @@
 # Memory — Builder
 
 2026-05-31 | explore OG universe demo rows | 478eee02 | DEMO_NFL/COLLEGE + force_demo; curl 60KB/62KB.
-2026-05-31 | explore OG universe demo rows | 478eee02 | DEMO_NFL/COLLEGE + force_demo; curl 60KB/62KB.
-2026-05-31 | launch10 live-fetch merge | 3f0411ec | merged base sticker + fetchOgLiveRows + prospects items.
-2026-05-31 | launch10 snapshot-default | e2a3ce8a | fetchOgLiveRows; OG_FETCH_HEADERS; curl rankings 62355B weekly 66512B.
-2026-05-31 | Cycle 118 prospects OG items | e00217d1 | items[] RPS extract when prospects empty; curl 60688B.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
