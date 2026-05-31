@@ -35,6 +35,12 @@
       "merge_commit": "63214bee7"
     },
     {
+      "id": "lab-l5-launch10-og-demo-trust-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-demo-blurbs",
+      "merge_commit": "3705fdce8"
+    },
+    {
       "id": "lab-l5-empty-board-og-sample-cards",
       "status": "complete",
       "last_atom": "lab-weekly-empty-export",

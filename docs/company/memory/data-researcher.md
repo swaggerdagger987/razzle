@@ -1,7 +1,11 @@
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | No new Reddit intel; empty weekly export unblocks heatmap tape screenshots.
+
+2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-tolab-snapshot-player | — | PASS | No new Reddit intel.
+2026-05-31 | league-trade-finder-og-room-hallway | — | PASS | No new Reddit intel; Bureau export hallway only.
 2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | PASS | No new intel; pytest contract only.
 
 2026-05-31 | lab-og-tolab-gamelog-default | — | PASS | No new Reddit intel; hallway slice only.
