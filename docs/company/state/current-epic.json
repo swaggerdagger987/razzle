@@ -1,6 +1,6 @@
 {
   "epic_status": "complete",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
+  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when live panel APIs return real data.",
   "epic_title": "Lab L5 — pro profile OG live parity",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
@@ -15,7 +15,7 @@
       "id": "lab-og-career-live-extract",
       "title": "Career OG live season arc rows",
       "status": "done",
-      "merge_commit": "4bbdfe1e1"
+      "merge_commit": "8cd30eaa3"
     },
     {
       "id": "lab-og-career-compare-live",
@@ -32,27 +32,10 @@
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T11:20:00Z",
-  "updated_at": "2026-05-31T12:15:00Z",
+  "updated_at": "2026-05-31T12:10:00Z",
   "completed_epics": [
-    {
-      "id": "lab-l5-og-hallway-position-defaults",
-      "status": "complete",
-      "last_atom": "lab-og-tolab-breakouts-position",
-      "merge_commit": "1ebb9dc73"
-    },
-    {
-      "id": "explore-l5-og-margin-notes",
-      "status": "partial",
-      "last_atom": "explore-og-margin-note-rows",
-      "merge_commit": "c1a0bcaad"
-    },
-    {
-      "id": "league-l5-bureau-h2h-gtm",
-      "status": "complete",
-      "last_atom": "bureau-h2h-og-gate-c-snapshot",
-      "merge_commit": "4907c8327"
-    },
-    "league-h2h-gtm-export-2026-05-31",
+    "lab-l5-og-export-live-panel-rows",
+    "lab-l5-og-hallway-deep-links",
     "lab-l5-pro-profile-og-live-parity"
   ]
 }
