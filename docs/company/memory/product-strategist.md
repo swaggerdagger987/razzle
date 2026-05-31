@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | room-briefing-og-card | bf200753 | SHIP | Room L5 screenshot path after copy-export; OG atom 2/3.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 
