@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 118 — Lab L4 pro gate perks catalog names)
+**Last updated:** 2026-05-31 (factory cycle 124 — Explore OG LIVE/SAMPLE stickers)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,21 +15,33 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 118 |
+| Cycle | 124 |
 | Last board | 54 |
-| Focus pillar | Lab |
-| Focus layer | L4 |
-| Next slice | explore-og-universe-query |
-| Last commit | `f56fdbd8` |
-
-Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
+| Focus pillar | Explore |
+| Focus layer | L5 |
+| Next slice | explore-og-college-demo-rows |
+| Last commit | `c6ac2c47` |
 
 ---
 
-## Product surface summary
+## Factory / workday
 
-| Area | State | Notes |
-|------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
-| Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
-| Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |
+| Field | Value |
+|-------|-------|
+| Workday | open (`good morning team`, cycle 2) |
+| Epic | Explore L5 — screener OG LIVE/SAMPLE honesty (atom 1/3) |
+| PR | autopen after push |
+
+---
+
+## Recent ship (cycle 118)
+
+- Panel-specific LIVE sticker + blurb on `/og/prospects` and `/og/weekly` when live rows render.
+- Preserves L4 dynasty-comps pro teaser rows on base (`teaserRowsForPanel`).
+- Gate C: curl PNG ≥40KB on both routes.
+
+---
+
+## Blockers
+
+- None for build. Merge API hit GitHub rate limit — PR #739 CI green, merge queued.
