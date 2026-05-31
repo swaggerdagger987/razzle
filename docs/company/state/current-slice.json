@@ -2,7 +2,7 @@
   "date": "2026-05-31",
   "atom_id": "league-build-profiles-og-share",
   "big_problem": "Four newly unhidden Bureau depth tabs have no group-chat export cards while rival tabs ship OG share rows.",
-  "epic": "League L5 — Bureau depth tab OG export cards (atom 2/4)",
+  "epic": "League L5 — Bureau depth tab OG export cards (atom 2/4 — shipped)",
   "slice_title": "Build Profiles tab OG archetype card",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
@@ -20,12 +20,8 @@
     "npm run build --workspace=apps/web",
     "curl -s -o /tmp/og-build-profiles.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/build-profiles?league=demo&download=1'"
   ],
-  "out_of_scope": ["waiver-tendencies", "strength-of-schedule"],
+  "out_of_scope": [],
   "builder_mode": "composer-surgical",
-  "votes": {
-    "strategist": "SHIP",
-    "architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  }
+  "content_commit": "77d4f765",
+  "verdict": "SHIP"
 }
