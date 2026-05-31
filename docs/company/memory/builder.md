@@ -1,6 +1,9 @@
 # Memory — Builder
 
-# Memory — Builder
+2026-05-31 | lab-pro-gate-perks-copy | 2f931cff | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
+
+
+2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
 
 2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | terracotta SAMPLE sticker + blurb on Launch-10 demo path.
 
