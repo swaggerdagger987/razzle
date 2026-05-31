@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-31  
 **Atom:** `lab-sidebar-search-agent-labels`  
-**Cycle:** 128
+**Cycle:** 123
 
 ## Changes
 
