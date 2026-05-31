@@ -8,8 +8,8 @@
     {
       "id": "lab-og-efficiency-live-extract",
       "title": "Efficiency OG reads most_efficient + volume_kings lanes",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "80544d483"
     },
     {
       "id": "lab-og-aging-live-extract",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-efficiency-live-extract",
+  "next_atom_id": "lab-og-aging-live-extract",
   "created_at": "2026-05-31T11:32:00Z",
   "updated_at": "2026-05-31T11:32:00Z",
   "completed_epics": [

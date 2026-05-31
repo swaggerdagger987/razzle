@@ -2,7 +2,7 @@
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WeeklyHeatmapRenderer + pytest; ≤55 lines.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
-2026-05-31 | lab-og-efficiency-live-extract | f6e0985f3 | SHIP | 2 files; extractEfficiencyRows + formula_score keys.
+2026-05-31 | lab-og-efficiency-live-extract | 80544d483 | SHIP | 2 files; extractEfficiencyRows + formula_score keys.
 
 # Memory — Engineering Architect
 

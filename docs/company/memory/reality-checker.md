@@ -2,7 +2,7 @@
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | PASS | pytest 4; curl 58533B.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
-2026-05-31 | lab-og-efficiency-live-extract | f6e0985f3 | PASS | pytest 4; web build exit 0.
+2026-05-31 | lab-og-efficiency-live-extract | 80544d483 | PASS | pytest 4; web build exit 0.
 
 # Memory — Reality Checker
 

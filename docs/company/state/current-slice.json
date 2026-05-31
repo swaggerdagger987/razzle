@@ -25,5 +25,9 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "content_commit": "80544d483",
+  "reality": "PASS",
+  "merge": "pending",
+  "reality_evidence": "pytest 4 passed; npm run build --workspace=apps/web exit 0"
 }
