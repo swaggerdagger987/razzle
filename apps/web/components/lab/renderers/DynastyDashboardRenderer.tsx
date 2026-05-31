@@ -11,6 +11,16 @@ import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 
+/** Sample roster grades when dashboard API returns no movers — OG export still screenshots. */
+const DASHBOARD_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Ladd McConkey", position: "WR", team: "LAC", stat: 12.4, statLabel: "Chg" },
+  { name: "Malik Nabers", position: "WR", team: "NYG", stat: 9.8, statLabel: "Chg" },
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 98.2, statLabel: "Value" },
+  { name: "Justin Jefferson", position: "WR", team: "MIN", stat: 96.1, statLabel: "Value" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 7.2, statLabel: "Chg" },
+  { name: "Christian McCaffrey", position: "RB", team: "SF", stat: 94.5, statLabel: "Value" },
+];
+
 interface DashboardPlayer {
   player_id: string;
   full_name: string;
@@ -173,6 +183,27 @@ export function DynastyDashboardRenderer({ panel }: Props) {
 
   const data = q.data!;
   const seasons = data.available_seasons ?? [];
+  const isEmptyBoard =
+    !(data.top5?.length || data.risers?.length || data.fallers?.length || data.value_picks?.length);
+
+  if (isEmptyBoard) {
+    return (
+      <div className="dynasty-dashboard">
+        <PanelAgentHeader agent={agent} slug={panel.slug} />
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="dashboard"
+              downloadName="razzle-dashboard.png"
+              snapshotRows={DASHBOARD_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dynasty-dashboard">
