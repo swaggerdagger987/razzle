@@ -17,8 +17,8 @@ curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}\n' 'http://12
 | Check | Result |
 |-------|--------|
 | web build | exit 0 |
-| pytest | 59 passed, 5 skipped |
-| curl breakouts OG | `200 67621` |
+| pytest | 59 passed, 5 skipped (cycle 122 re-verify) |
+| curl breakouts OG | `200 67621` (1200×630 PNG) |
 | PNG | 1200×630, ≥40KB |
 
 ## Notes
