@@ -31,3 +31,4 @@ league_l5_bureau_self_scout_copy_link: complete
 league_l5_power_rankings_tab: complete
 league_l5_bureau_h2h_og_live_label: complete
 league_l5_unhide_bureau_epic: active
+league_l5_bureau_monte_carlo_share: complete
