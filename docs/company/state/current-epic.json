@@ -1,38 +1,32 @@
 {
   "epic_status": "active",
-  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust \u2014 group chats can't tell exported rivalry rows from live Sleeper pulls.",
-  "epic_title": "League L5 \u2014 Bureau H2H GTM export",
-  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "League L5",
+  "big_problem": "Lab sidebar lists 100 panels by category — users think in staff desks (Hawkeye tape, Octo quant) per AGENTS.md wiring checklist.",
+  "epic_title": "Lab L2 — sidebar groups panels by analyst desk",
+  "parity_ref": "H-04 — Six agents same ids everywhere",
+  "depth_ref": "Lab L2",
   "atoms": [
     {
-      "id": "bureau-h2h-og-exported-sticker",
-      "title": "H2H OG EXPORTED sticker when snapshot param present",
+      "id": "lab-sidebar-staff-toggle",
+      "title": "Category | Staff toggle groups all panels via agentForPanel()",
       "status": "done",
-      "merge_commit": "5b60ea23d"
+      "merge_commit": "026e7de6b"
     },
     {
-      "id": "bureau-h2h-og-exported-pytest",
-      "title": "pytest guard for H2H snapshot EXPORTED sticker + ShareBar encode",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "bureau-h2h-og-gate-c-snapshot",
-      "title": "Gate C curl evidence for H2H snapshot OG PNG",
+      "id": "lab-sidebar-staff-registry",
+      "title": "Expand labPanels registry so staff view has fewer Razzle catch-alls",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-og-exported-pytest",
-  "created_at": "2026-05-31T20:00:00Z",
-  "updated_at": "2026-05-31T20:30:00Z",
+  "next_atom_id": "lab-sidebar-staff-registry",
+  "created_at": "2026-05-31T14:30:00Z",
+  "updated_at": "2026-05-31T14:45:00Z",
   "completed_epics": [
     {
-      "id": "league-l5-trade-finder-gtm",
+      "id": "lab-l5-og-hallway-position-defaults",
       "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
+      "last_atom": "lab-og-tolab-weekly-position",
+      "merge_commit": "9be64d109"
     }
   ]
 }
