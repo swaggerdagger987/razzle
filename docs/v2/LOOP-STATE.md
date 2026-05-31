@@ -2,7 +2,7 @@ cycle: 73
 last_board_cycle: 54
 focus_pillar: League
 focus_layer: L5
-next_slice: bureau-h2h-opponent-subtitle (epic atom 2/3)
+next_slice: league-power-rankings-og (epic atom)
 last_keep_cycle: 73
 last_commit: 12cad263
 explore_l5_watermarked_export: complete
@@ -20,5 +20,6 @@ lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
 lab_l5_og_live_extractors: complete
 lab_l5_og_live_row_epic: in_progress
-league_l5_bureau_h2h_snapshot_epic: in_progress
-league_l5_bureau_h2h_snapshot_atom1: complete
+league_l5_bureau_h2h_snapshot: complete
+league_l5_power_rankings_tab: complete
+league_l5_bureau_unhide_epic: in_progress

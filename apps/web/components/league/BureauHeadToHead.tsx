@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import { encodeH2hSnapshot } from "@/lib/bureau-h2h-snapshot";
 import Link from "next/link";
+import { BureauH2HShareBar } from "./BureauH2HShareBar";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
 
@@ -182,23 +183,12 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
               open Trade Finder →
             </Link>
             {you?.user_id && (
-              <a
-                href={(() => {
-                  const params = new URLSearchParams({
-                    league: leagueId,
-                    user: String(you.user_id),
-                    download: "1",
-                  });
-                  if (opponentId) params.set("opponent", opponentId);
-                  if (h2hSnapshot) params.set("snapshot", h2hSnapshot);
-                  return `/og/head-to-head?${params.toString()}`;
-                })()}
-                download="razzle-head-to-head.png"
-                className="btn-chunky active mt-3 inline-block text-xs"
-                style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-              >
-                export card
-              </a>
+              <BureauH2HShareBar
+                leagueId={leagueId}
+                userId={you.user_id}
+                opponentId={opponentId || undefined}
+                snapshot={h2hSnapshot}
+              />
             )}
           </section>
         </>
