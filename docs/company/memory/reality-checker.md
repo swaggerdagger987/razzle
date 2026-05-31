@@ -1,5 +1,6 @@
 # Memory — Reality Checker
 
+2026-05-31 | lab-og-buysell-formula-live | f6e0985f3 | PASS | pytest 4; web build exit 0.
 2026-05-31 | lab-og-launch10-demo-blurbs | f3c1c9466 | PASS | pytest 4; web build exit 0.
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | PASS | pytest 2; curl breakouts 66253B rankings 66806B.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | PASS | curl dynasty-comps 54807B; pytest 2; web build exit 0.

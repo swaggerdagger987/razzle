@@ -463,6 +463,45 @@ function extractGamelogWeekRows(data: Record<string, unknown>): OgRow[] {
     }));
 }
 
+const buysellStatKeys: string[] = [
+  "formula_score",
+  "mismatch_score",
+  "efficiency_pct",
+  "dynasty_rank_pct",
+  ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "mismatch_score"),
+];
+
+/** Buy-low / sell-high lanes — mirrors BuySellRenderer ogSnapshotRows. */
+function extractBuysellLaneRows(
+  buy: Record<string, unknown>[],
+  sell: Record<string, unknown>[],
+): OgRow[] {
+  const mapLane = (rows: Record<string, unknown>[], lane: "Buy" | "Sell"): OgRow[] =>
+    rows.map((row) => {
+      let statKey = "";
+      for (const k of buysellStatKeys) {
+        if (k in row && row[k] != null) {
+          statKey = k;
+          break;
+        }
+      }
+      const laneLabel =
+        statKey === "formula_score"
+          ? `${lane} · Score`
+          : statKey === "mismatch_score"
+            ? `${lane} · Value`
+            : lane;
+      return {
+        name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
+        position: String(row.position ?? row.pos ?? ""),
+        team: String(row.team ?? row.team_abbr ?? ""),
+        stat: statKey ? Number(row[statKey] ?? 0) : 0,
+        statLabel: laneLabel,
+      };
+    });
+  return [...mapLane(buy, "Buy"), ...mapLane(sell, "Sell")];
+}
+
 function statLabelForKey(k: string): string {
   let statLabel = k.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   if (k === "fantasy_points_ppr") statLabel = "FPTS";
@@ -556,10 +595,16 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   } else if (Array.isArray(obj.buy_low) || Array.isArray(obj.sell_high)) {
     const buyLow = Array.isArray(obj.buy_low) ? (obj.buy_low as Record<string, unknown>[]) : [];
     const sellHigh = Array.isArray(obj.sell_high) ? (obj.sell_high as Record<string, unknown>[]) : [];
+    if (slug === "buysell" && (buyLow.length > 0 || sellHigh.length > 0)) {
+      return extractBuysellLaneRows(buyLow, sellHigh);
+    }
     candidates = [...buyLow, ...sellHigh];
   } else if (Array.isArray(obj.buy) || Array.isArray(obj.sell)) {
     const buy = Array.isArray(obj.buy) ? (obj.buy as Record<string, unknown>[]) : [];
     const sell = Array.isArray(obj.sell) ? (obj.sell as Record<string, unknown>[]) : [];
+    if (slug === "buysell" && (buy.length > 0 || sell.length > 0)) {
+      return extractBuysellLaneRows(buy, sell);
+    }
     candidates = [...buy, ...sell];
   } else if (Array.isArray(obj.data)) {
     candidates = obj.data as Record<string, unknown>[];
@@ -605,6 +650,8 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
         ? breakoutsStatKeys
         : slug === "rankings"
           ? rankingsStatKeys
+          : slug === "buysell"
+            ? buysellStatKeys
           : preferredKey
             ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
             : [...STAT_CANDIDATE_KEYS];

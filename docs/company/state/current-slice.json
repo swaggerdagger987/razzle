@@ -1,24 +1,24 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-launch10-demo-blurbs",
-  "big_problem": "Lab OG export cards still read generic on demo fallback — five Launch-10 panels lack panel-specific SAMPLE copy when live API is empty.",
-  "epic": "Lab L5 — Launch-10 OG demo trust labels (atom 1/3)",
-  "slice_title": "Panel-specific demo blurb + SAMPLE stickers for gamelog, efficiency, aging, buysell, dashboard",
-  "parity_ref": "PARITY Explore L5 / Lab OG data rows",
+  "atom_id": "lab-og-buysell-formula-live",
+  "big_problem": "Lab OG cards without a snapshot can rank by the wrong stat — formula-sorted panels export nflverse defaults instead of what the user sees.",
+  "epic": "Lab L5 — formula-sorted OG live parity (atom 3/4)",
+  "slice_title": "Buy/sell OG live extract prefers formula_score with Buy/Sell mismatch lanes",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — demo rows must be panel-branded",
+  "acceptance_ref": "FACTORY-DOD Gate C — live OG rows match in-product formula sort",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_launch10_demo_sticker.py"
+    "apps/api/tests/test_og_launch10_formula_live.py"
   ],
   "max_files": 2,
-  "max_lines": 30,
+  "max_lines": 55,
   "acceptance_commands": [
-    "JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests/test_og_launch10_demo_sticker.py apps/api/tests/test_og_launch10_live_sticker.py -q",
+    "JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests/test_og_launch10_formula_live.py -q",
     "npm run build --workspace=apps/web 2>&1 | tail -5"
   ],
-  "out_of_scope": ["API schema changes", "new OG routes", "formula epic atoms"],
+  "out_of_scope": ["API schema changes", "new OG routes", "gate C atom"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
