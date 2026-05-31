@@ -1,6 +1,9 @@
 # Memory — Builder
 
-2026-05-31 | explore-og-universe-query ship | 27ae252f | keep | re-verify Gate C; PR 910; content feec2e19.
+2026-05-31 | explore-og-universe-query merge | pending | keep | rebase base into PR 939; Gate C re-verify.
+2026-05-31 | explore-og-universe-query ship | 27ae252f | keep | re-verify Gate C; PR 939; content feec2e19.
+2026-05-31 | lab-sidebar-search-agent-labels | e75ec714 | keep | showOwnerInTitle prefixes search hits with agent name.
+2026-05-31 | explore-og-universe-query | 7dbd4b11 | ExploreShareButton season/team → OG screener + band deep link.
 
 2026-05-31 | explore-og-universe-query | feec2e19 | keep | 3-file ExploreShareButton + OG route season/team parity.
 

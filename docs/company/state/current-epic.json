@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG exports without snapshot still fall back to demo — Reddit can't screenshot real Launch-10 nflverse rows alongside the LIVE sticker.",
   "epic_title": "Lab L5 — OG live fetch + sticker parity",
   "parity_ref": "Explore L5 — shareable URL + watermarked export",
@@ -8,7 +8,7 @@
     {
       "id": "explore-og-universe-query",
       "title": "Explore OG — pass universe, season, team in export URL",
-      "status": "in_progress",
+      "status": "done",
       "merge_commit": null
     },
     {
@@ -24,15 +24,57 @@
       "merge_commit": "3f0411ec"
     }
   ],
-  "next_atom_id": "explore-og-universe-query",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:45:00Z",
-  "updated_at": "2026-05-31T08:46:54Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-og-live-fetch-sticker",
+      "status": "complete",
+      "last_atom": "explore-og-universe-query",
+      "merge_commit": null
+    },
     {
       "id": "lab-l4-pro-gate-epic",
       "status": "complete",
       "last_atom": "lab-pro-gate-hallway-teasers",
       "merge_commit": "675044ea"
+    },
+    {
+      "id": "lab-l2-sidebar-agent-groups",
+      "status": "complete",
+      "last_atom": "lab-sidebar-search-agent-labels",
+      "merge_commit": "e75ec714"
+    },
+    {
+      "id": "lab-l5-og-gamelog-live-week-rows",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-snapshot-default",
+      "merge_commit": "e2a3ce8a"
+    },
+    {
+      "id": "lab-l5-launch10-og-live-sticker",
+      "status": "complete",
+      "last_atom": "lab-og-live-sticker-prospects-weekly",
+      "merge_commit": "5bb77346"
+    },
+    {
+      "id": "lab-l5-og-watermark-band",
+      "status": "complete",
+      "last_atom": "lab-og-watermark-band-panel-route",
+      "merge_commit": "742028c0"
+    },
+    {
+      "id": "lab-l5-og-live-sort-keys",
+      "status": "complete",
+      "last_atom": "lab-og-buysell-dashboard-live-sort",
+      "merge_commit": "7afc0b03"
+    },
+    {
+      "id": "league-l5-h2h-og-watermark",
+      "status": "complete",
+      "last_atom": "league-h2h-og-watermark-band",
+      "merge_commit": "945e4656"
     }
   ]
 }

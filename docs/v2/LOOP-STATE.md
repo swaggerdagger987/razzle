@@ -1,9 +1,10 @@
-cycle: 129
+cycle: 130
 last_board_cycle: 54
 focus_pillar: Explore
 focus_layer: L5
 next_slice: bureau-h2h-export-og
-last_keep_cycle: 129
-last_commit: 27ae252f
+last_keep_cycle: 130
+last_commit: pending
 lab_l5_og_live_fetch_epic: complete
 lab_l4_pro_gate_epic: complete
+lab_l2_sidebar_agent_epic: complete
