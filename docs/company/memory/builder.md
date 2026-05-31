@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | rivalryUser + pickOpponent user=.
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | 3860f0f8e | rivalryUser + pickOpponent user=.
 
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | launch10DemoStickerLabel 3 slugs; curl triple PASS.
 

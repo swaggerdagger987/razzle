@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | lab-og-launch10-gamelog-efficiency-aging-labels |
-| Last commit | `da33eafd` |
+| Last commit | `3860f0f8e` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
