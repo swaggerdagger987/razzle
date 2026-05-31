@@ -1,6 +1,10 @@
 # Memory — Builder
 
-2026-05-31 | FROM PANEL OG sticker | da33eafd | route.tsx + pytest; snapshot curl ≥40KB.
+2026-05-31 | FROM PANEL OG sticker | 7d49e4f0c | route.tsx + pytest; snapshot curl ≥40KB.
+
+2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
+
+2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
 
 2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | keep | pytest EXPECTED breakouts/dashboard; curl 67621B/67113B.
 

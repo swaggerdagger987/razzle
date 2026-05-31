@@ -33,6 +33,12 @@
       "status": "complete",
       "last_atom": "lab-og-live-sticker-breakouts-dashboard",
       "merge_commit": "96d43d1b"
+    },
+    {
+      "id": "lab-l5-og-live-fetch-merge",
+      "status": "complete",
+      "last_atom": "lab-og-gamelog-player-default",
+      "merge_commit": "4bc3913e"
     }
   ]
 }
