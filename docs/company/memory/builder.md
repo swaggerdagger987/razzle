@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | c686fadb | keep | extractGamelogRows weeks by fpts; curl gamelog 61145B.
+
 2026-05-31 | Cycle 116 bureau H2H pytest | 5e75875e | 4 pytest cases.
 
 

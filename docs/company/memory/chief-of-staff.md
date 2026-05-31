@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 117 gamelog OG FPTS weeks | c686fadb | Workday cycle 1; launch-10 epic atom 2/3.
+
 2026-05-31 | Factory cycle 116 H2H codec roundtrip | 5e75875e | League L5 codec epic complete.
 
 
