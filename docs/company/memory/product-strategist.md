@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-efficiency-aging-live-sort | da33eafd | SHIP | ppo/ppg align Octo efficiency + aging Lab tables for OG screenshots.
+2026-05-31 | lab-og-efficiency-aging-live-sort | aefbf6ef | SHIP | ppo/ppg align Octo efficiency + aging Lab tables for OG screenshots.
 
 2026-05-31 | bureau-h2h-sharebar-canonical-codec | da33eafd | SHIP | H2H codec epic atom 1/3; ShareBar must match OG y/m/pc decode
 
