@@ -80,6 +80,29 @@ function statLabel(universe: string, sort: string): string {
   return sort.replace(/_/g, " ");
 }
 
+function effectiveSortKey(universe: string, sort: string): string {
+  if (universe === "college" && (sort === "fantasy_points_ppr" || sort.startsWith("formula_"))) {
+    return "total_yards";
+  }
+  return sort;
+}
+
+function buildSubtitle(universe: string, sort: string, pos: string, q: string): string {
+  const sortKey = effectiveSortKey(universe, sort);
+  const parts: string[] = [];
+  if (pos) parts.push(`${pos} only`);
+  const isDefaultSort =
+    universe === "college" ? sortKey === "total_yards" : sortKey === "fantasy_points_ppr";
+  if (!isDefaultSort || pos || q) {
+    parts.push(statLabel(universe, sortKey));
+  }
+  if (q) parts.push(`"${q}"`);
+  if (parts.length) return parts.join(" · ");
+  return universe === "college"
+    ? "college stats · filter any stat · build any view"
+    : "filter any stat · build any view";
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
@@ -90,10 +113,10 @@ export async function GET(req: Request) {
   const pos = url.searchParams.get("pos") ?? "";
 
   const title = universe === "college" ? "College Screener" : "Dynasty Screener";
-  const subtitle = [pos && `${pos} only`, sort.replace(/_/g, " "), q && `"${q}"`]
-    .filter(Boolean)
-    .join(" · ");
-  const colHeader = statLabel(universe, sort);
+  const subtitle = buildSubtitle(universe, sort, pos, q);
+  const colHeader = statLabel(universe, effectiveSortKey(universe, sort));
+  const exploreLink =
+    universe === "college" ? "razzle.lol/explore?universe=college" : "razzle.lol/explore";
 
   const players = await fetchTopPlayers({ universe, sort, dir, q, pos });
 
@@ -120,9 +143,7 @@ export async function GET(req: Request) {
         </div>
 
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, marginBottom: 8 }}>{title}</div>
-        <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>
-          {subtitle || "filter any stat · build any view"}
-        </div>
+        <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>{subtitle}</div>
 
         {players.length > 0 ? (
           <div
@@ -187,22 +208,27 @@ export async function GET(req: Request) {
           <div style={{ flex: 1, fontSize: 24, color: "#5c4a3d" }}>pulling film…</div>
         )}
 
+        {/* Always-on watermark band — visible on preview + download (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
-            fontSize: 22,
-            color: "#5c4a3d",
+            alignItems: "center",
             marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
+            fontSize: 20,
           }}
         >
-          <div style={{ display: "flex" }}>razzle.lol/explore</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 32, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>{exploreLink}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            made with 🐯 razzle.lol
+            {isDownload ? " · export" : ""}
+          </div>
         </div>
       </div>
     ),

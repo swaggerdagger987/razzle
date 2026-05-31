@@ -67,3 +67,8 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 98	3f584f61	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies OG FAAB card	trust=T5,T6; /og/waiver-tendencies 73121B; share bar; pytest 51; depth OG epic atom 3/4
 99	d995676c	depth+voice+simplicity	keep	Lab	L5 Weekly OG PPG-ranked snapshot	trust=T5,T6; rankOgRowsForPanel ppg; curl weekly WR 53249B; fidelity epic atom 2/3
 100	099bf89a	depth+voice+simplicity	keep	Lab	L5 Trade values OG position filter	trust=T5,T6; LabOgExportLink position WR; curl 51115B; pytest 51; web build; position epic atom 1/3
+101	01acc653	depth+voice+simplicity	keep	Lab	L5 OG breakouts position filter verify	trust=T1,T5,T6; dedup grep+curl WR 61718B RB 35543B; factory cycle 2
+102	3e96ab7f	depth+voice+simplicity	keep	Explore	L5 Explore OG always-on watermark band	trust=T5,T6; terracotta band /og/explore; curl 200 PNG; atom 1/3
+103	6c3b0954	depth+voice+simplicity	keep	Explore	L5 Explore OG preview card link	trust=T5,T6; previewParams no download; curl preview 33148B; atom 2/3
+104	1dd9d62f	depth+voice+simplicity	keep	Explore	L5 Explore OG college subtitle band	trust=T5,T6; college tagline+band URL; curl college 36128B; epic atom 3/3 complete
+105	7f652a98	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS OG share	trust=T2,T5,T6; ShareBar+OG route; curl sos 57260B; depth tab epic 4/4 complete

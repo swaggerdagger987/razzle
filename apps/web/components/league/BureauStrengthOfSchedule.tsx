@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauStrengthOfScheduleShareBar } from "./BureauStrengthOfScheduleShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -16,6 +17,7 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
   const yourPpg = data.your_ppg != null ? Number(data.your_ppg) : null;
   const oppAvg = data.opponent_avg_ppg != null ? Number(data.opponent_avg_ppg) : null;
   const verdict = String(data.verdict ?? "");
+  const userId = String(data.user_id ?? "");
   const delta =
     yourPpg != null && oppAvg != null && !Number.isNaN(yourPpg) && !Number.isNaN(oppAvg)
       ? Math.round((yourPpg - oppAvg) * 10) / 10
@@ -105,13 +107,16 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
         </section>
       )}
 
-      <footer className="flex flex-wrap gap-4 text-sm">
-        <Link href={`/league/${leagueId}/power-rankings` as Route} className="text-orange underline">
-          full power rankings →
-        </Link>
-        <Link href={`/league/${leagueId}/monte-carlo` as Route} className="text-orange underline">
-          playoff odds sim →
-        </Link>
+      <footer className="flex flex-col gap-3">
+        {userId ? <BureauStrengthOfScheduleShareBar leagueId={leagueId} userId={userId} /> : null}
+        <div className="flex flex-wrap gap-4 text-sm">
+          <Link href={`/league/${leagueId}/power-rankings` as Route} className="text-orange underline">
+            full power rankings →
+          </Link>
+          <Link href={`/league/${leagueId}/monte-carlo` as Route} className="text-orange underline">
+            playoff odds sim →
+          </Link>
+        </div>
       </footer>
     </div>
   );
