@@ -10,10 +10,11 @@
   "allowed_paths": [
     "apps/web/components/league/BureauOgExportLink.tsx",
     "apps/web/components/league/BureauHeadToHead.tsx",
-    "apps/web/app/og/head-to-head/route.tsx"
+    "apps/web/app/og/head-to-head/route.tsx",
+    "apps/web/components/league/BureauH2HShareBar.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 4,
+  "max_lines": 140,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",

@@ -28,3 +28,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live panel rows | 2cb898b6 | keep | fetchLiveOgRows panels slug + candidates extract; curl rankings 59509B breakouts 60649B
 2026-05-31 | Bureau H2H snapshot export | 3d498394 | keep | BureauOgExportLink + H2H OG snapshot decode; curl 59305B demo 54444B snap
+2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B

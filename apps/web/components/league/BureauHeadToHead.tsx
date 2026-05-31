@@ -3,7 +3,7 @@
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
-import { BureauOgExportLink } from "./BureauOgExportLink";
+import { BureauH2HShareBar } from "./BureauH2HShareBar";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
 
@@ -172,22 +172,13 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
               open Trade Finder →
             </Link>
             {you?.user_id && (
-              <BureauOgExportLink
-                feature="head-to-head"
+              <BureauH2HShareBar
                 leagueId={leagueId}
                 userId={String(you.user_id ?? searchParams.get("user") ?? "")}
                 opponentId={opponentId || undefined}
                 snapshot={{
-                  you: {
-                    team: you.team,
-                    record: you.record,
-                    ppg: you.ppg,
-                  },
-                  them: {
-                    team: them.team,
-                    record: them.record,
-                    ppg: them.ppg,
-                  },
+                  you: { team: you.team, record: you.record, ppg: you.ppg },
+                  them: { team: them.team, record: them.record, ppg: them.ppg },
                   position_compare: positionCompare,
                   trade_fit: tradeFit,
                 }}
