@@ -15,6 +15,7 @@ new evidence.
 
 ## Entries
 
+2026-05-31 | Lab OG live extractors epic atom 1 | buy/sell+dashboard nested keys | SHIP | keep | NEXT Lab L5; T5/T6 screenshot parity with Octo tables
 2026-05-31 | Lab dashboard comps OG snapshot | c9151786 | SHIP | keep | roster-grade comps export matches DynastyComps pattern
 2026-05-31 | Bureau behavioral share atom 2 | pressure-map copy link | SHIP | keep | Explore-parity travel on deadline pressure tab
 2026-05-30 | Lab L5 OG export cards with live data compound the Explore L5 watermarked export pattern | Lab L5 OG — DEPTH.md L5 "OG card per panel matches in-product export" | SHIP | keep | T5+T6 — screenshot gravity via real data rows not branding cards; agent badges differentiate from generic SaaS

@@ -1,31 +1,30 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
-  "epic_title": "Lab L5 — OG export matches in-panel position filters",
+  "big_problem": "Lab OG cards still miss Octo panel row shapes — nested API keys fall back to sample preview instead of live rows.",
+  "epic_title": "Lab L5 — OG cards mirror Octo panel API rows",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-position-efficiency-aging",
-      "title": "Efficiency + aging export passes position filter to OG",
+      "id": "lab-og-buysell-dashboard-live",
+      "title": "Buy/sell + dashboard OG live row extractors",
+      "status": "done",
+      "merge_commit": "dcb560ea"
+    },
+    {
+      "id": "lab-og-prospects-rps-live",
+      "title": "Prospects OG live rows from prospects[] + rps",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-og-efficiency-aging-nested",
+      "title": "Efficiency most_efficient + aging positions.players extractors",
       "status": "done",
       "merge_commit": "f358349d"
-    },
-    {
-      "id": "lab-og-position-tradevalues-prospects",
-      "title": "Trade values + prospects export passes position filter",
-      "status": "pending",
-      "merge_commit": null
-    },
-    {
-      "id": "lab-og-position-buysell",
-      "title": "Buy/sell export passes position filter to OG",
-      "status": "pending",
-      "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-prospects",
-  "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:15:00Z",
-  "last_cycle_commit": "f358349d"
+  "next_atom_id": "lab-og-prospects-rps-live",
+  "created_at": "2026-05-31T06:30:00Z",
+  "updated_at": "2026-05-31T14:15:00Z"
 }
