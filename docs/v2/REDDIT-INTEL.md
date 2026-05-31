@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab launch-10 OG (cycle 77)
+- **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
+- **Trust:** T1 honest labeling; sample suffix only on demo fallback.
+
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
 - **Screenshot hook:** Atlas rivalry card with you/them records + position depth bars.
@@ -18,6 +22,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Feature ID:** F-XX
 - **Council cycle:**
 ```
+
+## 2026-05-31 — Cycle 76 (Bureau roster depth tab)
+
+1. **Hidden tabs were a trust leak** — users who found Bureau via Self-Scout could not see depth chart as its own lane; unhide + bespoke renderer restores moat narrative.
+2. **Full player lists beat grade-only cards** for trade DM screenshots — roster-depth complements Self-Scout summary.
 
 ## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
 
