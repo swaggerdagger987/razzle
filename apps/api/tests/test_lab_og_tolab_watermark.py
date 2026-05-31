@@ -30,4 +30,12 @@ def test_default_og_player_tolab_rules():
     assert '"gamelog"' in source
     assert '"dynasty-comps"' in source
     assert "includeDefaultPlayer" in source
-    assert "opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+    assert "includeDefaultPlayer ||" in source
+    assert "snapshotPreservesPlayer" in source
+
+
+def test_snapshot_exports_preserve_player_in_tolab_watermark():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "snapshotExport: isSnapshot" in source
+    assert "snapshotPreservesPlayer" in source
+    assert "opts.snapshotExport && opts.playerScoped" in source
