@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab prospects/weekly LIVE sticker (cycle 118)
+- **Angle:** "LIVE · RPS board" / "LIVE · weekly heatmap" only when panel API rows load — Reddit can trust the sticker vs sample preview.
+- **Trust:** T5/T6 — sticker gated on `/api/panels` success for prospects/weekly.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.

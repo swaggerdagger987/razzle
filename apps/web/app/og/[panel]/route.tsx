@@ -87,6 +87,15 @@ const LAUNCH_10_OG_SLUGS = new Set([
   "buysell",
 ]);
 
+/** Panel-API LIVE sticker — prospects/weekly only show sticker when /api/panels returned rows. */
+const PANEL_API_LIVE_STICKER_SLUGS = new Set(["prospects", "weekly"]);
+
+function liveStickerLabel(slug: string): string {
+  if (slug === "prospects") return "LIVE · RPS board";
+  if (slug === "weekly") return "LIVE · weekly heatmap";
+  return "LIVE · nflverse rows";
+}
+
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -605,9 +614,12 @@ export async function GET(
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
   let liveRows: OgRow[] = [];
+  let liveViaPanelApi = false;
   if (apiPath && !snapshotHasRows) {
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
-    if (liveRows.length === 0) {
+    if (liveRows.length > 0) {
+      liveViaPanelApi = true;
+    } else {
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
     }
   }
@@ -626,6 +638,10 @@ export async function GET(
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
+  const showLiveSticker =
+    showingLiveData &&
+    LAUNCH_10_OG_SLUGS.has(slug) &&
+    (!PANEL_API_LIVE_STICKER_SLUGS.has(slug) || liveViaPanelApi);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
 
   return new ImageResponse(
@@ -684,7 +700,7 @@ export async function GET(
           {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData)}`}
         </div>
 
-        {showingLiveData && LAUNCH_10_OG_SLUGS.has(slug) ? (
+        {showLiveSticker ? (
           <div
             style={{
               fontFamily: "Caveat",
@@ -701,7 +717,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            LIVE · nflverse rows
+            {liveStickerLabel(slug)}
           </div>
         ) : null}
 
