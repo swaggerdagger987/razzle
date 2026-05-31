@@ -9,7 +9,7 @@
       "id": "lab-og-position-efficiency-aging",
       "title": "Efficiency + Aging export links pass position filter",
       "status": "done",
-      "merge_commit": "3cbd834f"
+      "merge_commit": "f358349d"
     },
     {
       "id": "lab-og-position-tradevalues-prospects",
@@ -26,6 +26,6 @@
   ],
   "next_atom_id": "lab-og-position-tradevalues-prospects",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T14:30:00Z",
-  "last_cycle_commit": "3cbd834f"
+  "updated_at": "2026-05-31T14:45:00Z",
+  "last_cycle_commit": "f358349d"
 }
