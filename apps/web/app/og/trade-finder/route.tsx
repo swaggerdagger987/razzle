@@ -175,7 +175,7 @@ export async function GET(req: Request) {
               fontFamily: "Caveat",
               fontSize: 32,
               color: "#f7efe5",
-              background: "#8b5cf6",
+              background: "#5b7fff",
               padding: "6px 18px",
               alignSelf: "flex-start",
               border: "3px solid #2d1f14",
@@ -187,7 +187,7 @@ export async function GET(req: Request) {
               display: "flex",
             }}
           >
-            EXPORTED · panel trade rows
+            FROM BUREAU · your trade rows
           </div>
         ) : null}
 
