@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | breakouts OG sticker | c2c5f6a9 | 2-line launch10Live* branch; 1 file route.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
