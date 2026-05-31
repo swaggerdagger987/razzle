@@ -1,38 +1,44 @@
 {
-  "epic_status": "active",
-  "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
-  "epic_title": "Lab L5 — Launch-10 OG panel-native LIVE labels",
-  "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
-  "depth_ref": "Lab L5",
+  "big_problem": "Explore share cards don't mirror the screener URL — college toggles and filters get lost on export, so Reddit screenshots lie about the view.",
+  "epic_title": "Explore L5 — OG card matches screener query state",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-og-live-sticker-rankings-breakouts-tv",
-      "title": "rankings/breakouts/tradevalues dynasty ranks RBS board value curve LIVE labels",
-      "status": "in_progress",
-      "merge_commit": null
+      "id": "explore-og-universe-query",
+      "title": "Explore OG — season/team/universe query on card + share URLs",
+      "status": "done",
+      "merge_commit": "7dbd4b11"
     },
     {
-      "id": "lab-og-live-sticker-gamelog-efficiency",
-      "title": "gamelog/efficiency OG LIVE sticker + blurb parity",
-      "status": "pending",
-      "merge_commit": null
+      "id": "explore-og-demo-fallback-rows",
+      "title": "Explore OG — static demo rows when API empty (not pulling film)",
+      "status": "done",
+      "merge_commit": "2d0d3bde"
     },
     {
-      "id": "lab-og-live-sticker-aging-buysell",
-      "title": "aging/buysell OG LIVE sticker + blurb parity",
+      "id": "explore-og-formula-sort-label",
+      "title": "Explore OG — formula sort label on card when apiSort differs",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-rankings-breakouts-tv",
-  "created_at": "2026-05-31T08:34:07Z",
-  "updated_at": "2026-05-31T08:34:07Z",
+  "next_atom_id": "explore-og-formula-sort-label",
+  "epic_status": "active",
+  "created_at": "2026-05-31T08:45:00Z",
+  "updated_at": "2026-05-31T09:00:00Z",
   "completed_epics": [
     {
-      "id": "lab-l2-sidebar-groups-by-agent",
+      "id": "lab-l4-pro-gate-epic",
       "status": "complete",
-      "last_atom": "lab-sidebar-staff-picks-by-agent",
-      "merge_commit": "4e8b0e8e"
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "f56fdbd8"
+    },
+    {
+      "id": "lab-l5-og-live-rows-launch10",
+      "status": "complete",
+      "last_atom": "lab-og-live-demo-fallback-copy",
+      "merge_commit": "18d92f6b"
     }
   ]
 }

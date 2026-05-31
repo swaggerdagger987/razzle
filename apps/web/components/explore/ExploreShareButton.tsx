@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 
 interface Props {
   universe: string;
+  /** API sort key — matches screener fetch (formula_* maps to universe default). */
   sort: string;
   dir: string;
   q: string;

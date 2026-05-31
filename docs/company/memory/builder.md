@@ -1,19 +1,14 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
+2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | keep | DEMO_NFL/COLLEGE + force_demo; curl 64789B.
 
-2026-05-31 | lab-pro-gate-perks-copy | 73fdbf9c | keep | proUpgradePerkLines from getPanel + BUREAU_7 slugs.
+2026-05-31 | explore-og-universe-query | a7fdf9b3 | keep | season/team in ShareButton + OG fetch; buildExplorePageLink.
 
-2026-05-31 | lab-pro-gate-loading-copy | 7236be3e | PanelAgentLoading wired into ProUpgradeGate.
+2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
-
-2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
-
-2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | terracotta SAMPLE sticker + blurb on Launch-10 demo path.
-
-2026-05-31 | lab-og-live-sticker-prospects-weekly | 5bb77346 | weekly OG defaults position=WR for panel API live rows.
-
+2026-05-31 | launch10 live-fetch merge | 3f0411ec | merged base sticker + fetchOgLiveRows + prospects items.
+2026-05-31 | launch10 snapshot-default | e2a3ce8a | fetchOgLiveRows; OG_FETCH_HEADERS; curl rankings 62355B weekly 66512B.
+2026-05-31 | Cycle 118 prospects OG items | e00217d1 | items[] RPS extract when prospects empty; curl 60688B.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
 2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
