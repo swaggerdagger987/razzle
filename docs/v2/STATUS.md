@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Lab |
 | Focus layer | L5 |
 | Next slice | lab-og-from-panel-sticker-evidence (trust-sticker epic 2/3) |
-| Last commit | `da33eafd` |
+| Last commit | `7d49e4f0c` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
