@@ -15,7 +15,7 @@
     "python3 -m pytest apps/api/tests/test_lab_og_career_compare_live.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["rebuild route — already on base 9d19930cf"],
+  "out_of_scope": ["rebuild route — already on base 68dfd0cca"],
   "builder_mode": "dedup",
   "votes": {
     "product_strategist": "SHIP",
@@ -24,5 +24,5 @@
     "verdict": "SHIP 3/3 dedup"
   },
   "status": "shipped",
-  "content_commit": "9d19930cf"
+  "content_commit": "68dfd0cca"
 }
