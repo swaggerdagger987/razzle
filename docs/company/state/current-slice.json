@@ -1,23 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
-  "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "slice_title": "Schedule tab unhidden with Octo SOS matchup renderer",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "ACCEPTANCE bureau tab not scaffold",
-  "trust_pillars": ["T2", "T5", "T6"],
+  "big_problem": "Lab OG export cards still mismatch the hero rows users see in-panel — snapshots omit top dynasty assets and read like generic demos.",
+  "epic": "Lab L5 — OG export cards mirror in-panel live rows",
+  "slice_title": "Dashboard export snapshot uses top5 dynasty assets plus movers",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot rows from panel",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauStrengthOfSchedule.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx",
-    "apps/web/lib/bureau-features.ts"
+    "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx"
   ],
-  "max_files": 3,
-  "max_lines": 220,
+  "max_files": 1,
+  "max_lines": 80,
   "acceptance_commands": [
-    "pytest apps/api/tests -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web",
+    "JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests -q"
   ],
-  "out_of_scope": ["OG export", "API schema changes", "new npm deps"],
+  "out_of_scope": [
+    "OG route changes",
+    "new panels",
+    "Bureau/League tabs",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical"
 }
