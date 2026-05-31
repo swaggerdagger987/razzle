@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 154 — Lab OG snapshot player in toLab PR #1302)
+**Last updated:** 2026-05-31 (factory cycle 152 — Lab OG Launch-10 demo blurbs)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 154 |
+| Cycle | 152 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | (hallway OG epic complete — pick PARITY/NEXT) |
-| Last commit | `d2fb42540` |
+| Next slice | lab-og-tolab-snapshot-player |
+| Last commit | `3705fdce8` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

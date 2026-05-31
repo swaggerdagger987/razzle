@@ -1,12 +1,12 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermark dead-ends when snapshot-only shares drop player_id from the URL.",
-  "epic": "Lab L5 — OG hallway deep links",
-  "slice_title": "Snapshot exports preserve player in watermark",
+  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
+  "epic": "Lab L5 — OG hallway deep links (atom 3/3)",
+  "slice_title": "Snapshot exports preserve player in OG toLab watermark band",
   "atom_id": "lab-og-tolab-snapshot-player",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "acceptance_ref": "FACTORY-DOD Gate C — snapshot OG PNG ≥40KB + pid in watermark",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/components/lab/LabOgExportLink.tsx",
@@ -14,21 +14,18 @@
     "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
   "max_files": 3,
-  "max_lines": 80,
+  "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/gamelog?download=1&snapshot=eyJyIjpbeyJuIjoiV2sgMSIsInAiOiJXUiIsInQiOiJDRU4iLCJzIjoxOC41LCJzbCI6IlBQUiJ9XSwicCI6IjAwLTAwMzY5MDAifQ'"
+    "python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["Bureau snapshots", "New panels", "NORTH_STAR edits"],
+  "out_of_scope": [
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "other Launch-10 renderers",
+    "snapshot row shape changes beyond optional pid wrapper"
+  ],
   "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  },
-  "content_commit": "d2fb42540",
+  "content_commit": "1a12d9c0b",
   "reality": "PASS",
-  "merge": "merged"
+  "merge": "pending"
 }

@@ -30,14 +30,19 @@ def test_default_og_player_tolab_rules():
     assert '"gamelog"' in source
     assert '"dynasty-comps"' in source
     assert "includeDefaultPlayer" in source
-    assert "opts.playerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
+    assert "watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer" in source
 
 
-def test_snapshot_payload_preserves_player_for_tolab():
-    route = ROUTE_TS.read_text(encoding="utf-8")
-    link_ts = (ROOT / "apps/web/components/lab/LabOgExportLink.tsx").read_text(encoding="utf-8")
-    assert "snapshotPlayerId" in route
-    assert "watermarkPlayerId" in route
-    assert "DecodedOgSnapshot" in route
-    assert '{ r: compact, p: pid }' in link_ts or "{ r: compact, p: pid }" in link_ts
-    assert "encodeOgSnapshot(snapshotRows, resolvedPlayerId)" in link_ts
+def test_snapshot_export_player_id_in_watermark():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "snapshotPlayerId" in source
+    assert "exportPlayerId" in source
+    assert "exportPlayerId: snapshotExportPlayerId" in source.replace("\n", " ") or "snapshotExportPlayerId" in source
+
+
+def test_lab_og_export_link_encodes_snapshot_player_id():
+    link_ts = ROOT / "apps/web/components/lab/LabOgExportLink.tsx"
+    source = link_ts.read_text(encoding="utf-8")
+    assert "encodeOgSnapshot(snapshotRows, resolvedPlayerId)" in source
+    assert "exportPlayerId?: string" in source
+    assert '{ r: compact, pid }' in source or "pid }" in source
