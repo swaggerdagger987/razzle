@@ -73,15 +73,27 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
   }, [players]);
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    return [...players]
-      .sort((a, b) => (b.ppg ?? 0) - (a.ppg ?? 0))
+    const withPeak = players.map((p) => {
+      let peakWeek = 0;
+      let peakPts = 0;
+      for (const [wk, pts] of Object.entries(p.weeks ?? {})) {
+        if (pts != null && pts > peakPts) {
+          peakPts = pts;
+          peakWeek = Number(wk);
+        }
+      }
+      return { p, peakWeek, peakPts };
+    });
+    return withPeak
+      .filter((row) => row.peakPts > 0)
+      .sort((a, b) => b.peakPts - a.peakPts)
       .slice(0, 6)
-      .map((p) => ({
+      .map(({ p, peakWeek, peakPts }) => ({
         name: p.name,
         position: p.position,
         team: p.team,
-        stat: p.ppg ?? 0,
-        statLabel: "PPG",
+        stat: peakPts,
+        statLabel: peakWeek ? `W${peakWeek}` : "FPTS",
       }));
   }, [players]);
 
