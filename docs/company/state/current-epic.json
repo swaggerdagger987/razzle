@@ -5,16 +5,16 @@
   "depth_ref": "League L5",
   "atoms": [
     {
+      "id": "league-trade-finder-og-watermark-live",
+      "title": "Trade Finder OG — LIVE/SAMPLE stickers + terracotta watermark band",
+      "status": "done",
+      "merge_commit": "db6537faf"
+    },
+    {
       "id": "league-trade-finder-og-snapshot",
       "title": "Trade Finder OG — snapshot param for in-panel export rows",
       "status": "done",
       "merge_commit": "db81b4f97"
-    },
-    {
-      "id": "league-trade-finder-og-watermark-live",
-      "title": "Trade Finder OG — LIVE/SAMPLE stickers + terracotta watermark band",
-      "status": "pending",
-      "merge_commit": null
     },
     {
       "id": "league-trade-finder-room-hallway",
@@ -23,46 +23,28 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-trade-finder-og-watermark-live",
+  "next_atom_id": "league-trade-finder-room-hallway",
   "epic_status": "active",
   "created_at": "2026-05-31T10:40:32Z",
-  "updated_at": "2026-05-31T10:48:00Z",
+  "updated_at": "2026-05-31T11:00:00Z",
   "completed_epics": [
     {
       "id": "room-l5-briefing-gtm-export",
       "status": "complete",
       "last_atom": "room-briefing-watermark",
-      "merge_commit": "eca00c3f0"
-    },
-    {
-      "id": "lab-l5-launch10-og-panel-native-trust-labels",
-      "status": "complete",
-      "last_atom": "lab-og-launch10-buysell-dashboard-labels",
-      "merge_commit": "adbf6c7"
-    },
-    {
-      "id": "league-l5-bureau-h2h-deep-links",
-      "status": "complete",
-      "last_atom": "bureau-h2h-pick-opponent-preserve-user",
-      "merge_commit": "c7ad88bd3"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "complete",
-      "last_atom": "lab-l4-pro-gate-error-dynasty-comps",
-      "merge_commit": "a3f07d1e5"
-    },
-    {
-      "id": "explore-l5-universe-aware-share-exports",
-      "status": "complete",
-      "last_atom": "explore-og-nfl-universe-default",
-      "merge_commit": "c7b50c707"
+      "merge_commit": "f6e0985f3"
     },
     {
       "id": "lab-l5-og-hallway-deep-links",
       "status": "complete",
       "last_atom": "lab-og-tolab-watermark",
       "merge_commit": "b80512bb4"
+    },
+    {
+      "id": "lab-l5-og-formula-score-live-extract",
+      "status": "active",
+      "last_atom": "lab-og-buysell-formula-live",
+      "merge_commit": "fb4483341"
     }
   ]
 }

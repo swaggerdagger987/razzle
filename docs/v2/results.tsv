@@ -96,5 +96,10 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 139	eca00c3f0	depth+voice+simplicity	keep	Room	L5 Briefing OG watermark hallway preview	trust=T5,T6; toRoom band; curl 51866B; room GTM epic 3/3 complete
 141	e1eb68fe8	depth+voice+simplicity	keep	Room	L5 factory cycle 1 — briefing watermark on base	trust=T5,T6; workday open; dedup merge; pytest 5
 141	b80512bb4	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG toLab watermark band	trust=T5,T6; hallway deep link; pytest 3; curl rankings 66806B; hallway epic 1/3
-141	db81b4f97	depth+voice+simplicity	keep	League	L5 Trade Finder OG snapshot panel rows	trust=T5,T6; snapshot codec; pytest 4; curl 58163B; trade-finder GTM epic 1/3
+141	db81b4f97	depth+voice+simplicity	keep	League	L5 Trade Finder OG snapshot panel rows	trust=T5,T6; snapshot codec; pytest 4; curl 58163B; trade-finder GTM epic 2/3
 142	5283c3eb4	depth+voice+simplicity	keep	Lab	Efficiency empty board export sample card	trust=T5,T6; EFFICIENCY_SAMPLE_OG_ROWS; curl 44632B; empty OG epic 2/3
+142	ceadf0402	depth+voice+simplicity	keep	Lab	L5 breakouts+rankings OG formula_score live extract	trust=T5,T6; breakoutsStatKeys rankingsStatKeys; pytest 4; curl breakouts 66253B rankings 66806B; formula epic 1/3
+141	8f8a802da	depth+voice+simplicity	keep	Room	L5 briefing OG LIVE/SAMPLE trust stickers	trust=T1; pytest 5; T1 on briefing export
+143	d03cb653b	depth+voice+simplicity	keep	Lab	L5 weekly+prospects LIVE sticker pytest guard	trust=T5,T6; pytest 2; formula epic guard atom
+144	db6537faf	depth+voice+simplicity	keep	League	L5 Trade Finder OG LIVE watermark band	trust=T5,T6; curl 57910B; pytest 1; trade-finder GTM epic 1/3
+145	fb4483341	depth+voice+simplicity	keep	Lab	L5 buy/sell OG formula_score + Buy Sell lanes	trust=T5,T6; extractBuySellRows; pytest 3; curl buysell 55234B; formula epic 2/3

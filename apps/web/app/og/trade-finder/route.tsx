@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague } from "@razzle/hallway";
 import { decodeBureauTradeFinderOgSnapshot } from "@/lib/bureau-trade-finder-og-snapshot";
 
 export const runtime = "edge";
@@ -60,9 +61,18 @@ const DEMO_META = {
   surplus: ["RB"],
 };
 
-async function fetchTradeFinder(leagueId: string, userId: string): Promise<TradeFinderData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchTradeFinder(
+  req: Request,
+  leagueId: string,
+  userId: string,
+): Promise<TradeFinderData | null> {
   if (!leagueId || !userId) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/trade-finder`, {
@@ -93,7 +103,7 @@ export async function GET(req: Request) {
   const bones = AGENT_BY_ID.bones;
   const snapshot = snapshotParam ? decodeBureauTradeFinderOgSnapshot(snapshotParam) : null;
   const isSnapshot = Boolean(snapshot?.matches?.length);
-  const live = isSnapshot ? null : await fetchTradeFinder(league, user);
+  const live = isSnapshot ? null : await fetchTradeFinder(req, league, user);
   const isLive = isSnapshot || Boolean(live?.matches?.length);
   const isDemo = !isLive;
   const panelData = isSnapshot
@@ -105,6 +115,7 @@ export async function GET(req: Request) {
   const hero = isDemo ? DEMO_MATCHES[0] : (panelData!.hero_match ?? matches[0]);
   const needs = isDemo ? DEMO_META.needs : (panelData!.needs ?? []);
   const surplus = isDemo ? DEMO_META.surplus : (panelData!.surplus ?? []);
+  const leagueDeepLink = league ? toLeague(league, "trade-finder") : "/league/trade-finder";
 
   return new ImageResponse(
     (
@@ -290,24 +301,26 @@ export async function GET(req: Request) {
           ))}
         </div>
 
+        {/* Always-on watermark band — matches H2H + Lab panel OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>
-            razzle.lol/league{league ? `/${league}` : ""}/trade-finder
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
         </div>
       </div>
     ),
