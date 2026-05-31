@@ -12,6 +12,8 @@ EXPECTED = {
     "gamelog": "LIVE · game log",
     "efficiency": "LIVE · PPO board",
     "buysell": "LIVE · buy/sell board",
+    "tradevalues": "LIVE · trade values",
+    "aging": "LIVE · aging curve",
 }
 
 
@@ -26,3 +28,5 @@ def test_launch10_live_blurb_suffix_in_route():
     assert "live dynasty values" in source
     assert "live PPO board" in source
     assert "live buy/sell board" in source
+    assert "live trade values" in source
+    assert "live aging curve" in source
