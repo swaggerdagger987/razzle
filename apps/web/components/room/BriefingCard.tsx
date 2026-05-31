@@ -78,6 +78,19 @@ export function BriefingCard({
           <button type="button" className="btn-chunky text-xs" onClick={() => void copyBriefing()}>
             {copied ? "copied!" : "copy for Slack/Reddit"}
           </button>
+          <a
+            href={`/og/briefing?${new URLSearchParams({
+              download: "1",
+              question,
+              briefing,
+              urgency,
+              specialists: specialists.join(","),
+            }).toString()}`}
+            className="text-sm text-ink-medium underline"
+            download="razzle-briefing.png"
+          >
+            export card
+          </a>
         </div>
       )}
     </article>

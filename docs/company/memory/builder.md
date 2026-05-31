@@ -1,6 +1,8 @@
 # Memory — Builder
 
-2026-05-31 | room-briefing-copy-export | da33eafd | keep | formatBriefingForExport + BriefingCard copy button; pytest 2; web build ok.
+2026-05-31 | room-briefing-og-card | da33eafd | keep | /og/briefing route + BriefingCard export card; curl 68635B.
+
+2026-05-31 | room-briefing-copy-export | 612d9638 | keep | formatBriefingForExport + BriefingCard copy button; pytest 2; web build ok.
 
 2026-05-31 | lab-og-gamelog-player-default | 8e7297c8 | keep | empty-state LabOgExportLink DEFAULT_LAB_OG_PLAYER_ID; curl gamelog 60634B.
 

@@ -2,26 +2,26 @@
   "date": "2026-05-31",
   "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
   "epic": "Room L5 — briefing GTM export",
-  "slice_title": "Briefing card — copy formatted text for Slack/Reddit",
-  "atom_id": "room-briefing-copy-export",
+  "slice_title": "Briefing OG — /og/briefing snapshot route",
+  "atom_id": "room-briefing-og-card",
   "parity_ref": "Room L5 — GTM export slice",
   "depth_ref": "Room L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — UI copy path; build + format unit check",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with demo briefing layout",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/format-briefing-export.ts",
+    "apps/web/app/og/briefing/route.tsx",
     "apps/web/components/room/BriefingCard.tsx",
-    "apps/api/tests/test_briefing_export_format.py"
+    "apps/api/tests/test_briefing_og_route.py"
   ],
   "max_files": 3,
-  "max_lines": 120,
+  "max_lines": 280,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_briefing_export_format.py -q",
+    "pytest apps/api/tests/test_briefing_og_route.py -q",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "og/briefing route",
-    "API changes",
+    "watermark atom",
+    "API orchestrator changes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
@@ -30,5 +30,8 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "content_commit": "da33eafd",
+  "reality": "PASS",
+  "merge": "pending"
 }

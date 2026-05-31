@@ -12,4 +12,5 @@
 126	0c46d46f	depth+voice+simplicity	keep	Lab	L4 Pro gate perks Launch-10 Bureau names	trust=T2,T6; PRO_UPGRADE_PERKS; pytest 4; build ok; L4 epic atom 3/3 complete
 127	f56fdbd8	depth+voice+simplicity	keep	Lab	L4 Pro gate perks PARITY catalog titles + Bureau-7	trust=T2,T6; launch10PerkLabels; bureau7PerkLabels; pytest 6; L4 epic atom 3/3 complete
 128	8e7297c8	depth+voice+simplicity	keep	Lab	L5 Gamelog OG default player export	trust=T5,T6; empty state LabOgExportLink; curl gamelog 60634B; gamelog og epic complete
-129	da33eafd	depth+voice+simplicity	keep	Room	L5 Briefing copy for Slack/Reddit	trust=T5,T6; formatBriefingForExport; pytest 2; web build ok; room GTM epic atom 1/3
+129	612d9638	depth+voice+simplicity	keep	Room	L5 Briefing copy for Slack/Reddit	trust=T5,T6; formatBriefingForExport; pytest 2; web build ok; room GTM epic atom 1/3
+130	da33eafd	depth+voice+simplicity	keep	Room	L5 Briefing OG /og/briefing snapshot	trust=T5,T6; curl briefing 68635B; pytest 4; room GTM epic atom 2/3

@@ -1,9 +1,9 @@
-cycle: 129
+cycle: 130
 last_board_cycle: 54
 focus_pillar: Room
 focus_layer: L5
-next_slice: room-briefing-og-card
-last_keep_cycle: 129
+next_slice: room-briefing-watermark
+last_keep_cycle: 130
 last_commit: da33eafd
 lab_l5_og_gamelog_epic: complete
 room_l5_briefing_gtm_epic: active

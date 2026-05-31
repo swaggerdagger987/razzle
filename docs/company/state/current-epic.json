@@ -8,13 +8,13 @@
     {
       "id": "room-briefing-copy-export",
       "title": "Briefing card — copy formatted text for Slack/Reddit",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "612d9638"
     },
     {
       "id": "room-briefing-og-card",
       "title": "Briefing OG — /og/briefing snapshot route",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "room-briefing-copy-export",
+  "next_atom_id": "room-briefing-og-card",
   "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T09:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-gamelog-default-export",

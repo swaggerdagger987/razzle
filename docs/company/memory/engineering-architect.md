@@ -1,6 +1,8 @@
 # Memory — Engineering Architect
 
-2026-05-31 | room-briefing-copy-export | da33eafd | keep | 3 files; pure format fn + card button; pytest mirror.
+2026-05-31 | room-briefing-og-card | da33eafd | keep | edge OG route; demo fallback; BriefingCard link.
+
+2026-05-31 | room-briefing-copy-export | 612d9638 | keep | 3 files; pure format fn + card button; pytest mirror.
 
 2026-05-31 | lab-og-gamelog-player-default | 8e7297c8 | keep | 1-file slice GamelogRenderer footer LabOgExportLink.
 

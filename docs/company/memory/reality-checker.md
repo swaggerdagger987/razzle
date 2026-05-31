@@ -1,6 +1,8 @@
 # Memory — Reality Checker
 
-2026-05-31 | room-briefing-copy-export | da33eafd | PASS | pytest 2; web build exit 0; Gate C N/A (no OG).
+2026-05-31 | room-briefing-og-card | da33eafd | PASS | curl briefing 68635B; pytest 4; build ok.
+
+2026-05-31 | room-briefing-copy-export | 612d9638 | PASS | pytest 2; web build exit 0; Gate C N/A (no OG).
 
 2026-05-31 | lab-og-gamelog-player-default | 8e7297c8 | PASS | curl gamelog 60634B; build ok.
 
