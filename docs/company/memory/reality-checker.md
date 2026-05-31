@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | lab-pro-gate-launch10-teasers | da33eafd | PASS | pytest 12; web build ok; Gate C N/A.
+2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | pytest 12; web build ok; Gate C N/A.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 4d84af9a | curl H2H 67846B PASS | Gate C terracotta band on export.
 

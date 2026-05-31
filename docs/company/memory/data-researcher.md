@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-pro-gate-launch10-teasers | da33eafd | PASS | no new REDDIT-INTEL; teaser audit only.
+2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | no new REDDIT-INTEL; teaser audit only.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.
 
