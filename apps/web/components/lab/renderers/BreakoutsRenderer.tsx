@@ -95,17 +95,26 @@ export function BreakoutsRenderer({ panel }: Props) {
   const top = candidates[0] ?? null;
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
-    const statLabel = formula?.name ?? "RBS";
-    return candidates.slice(0, 6).map((p) => ({
-      name: p.name,
-      position: p.position,
-      team: p.team,
-      stat:
-        formula && p.formula_score != null
-          ? p.formula_score
-          : (p.rbs_score ?? 0),
-      statLabel,
-    }));
+    const statLabel = formula?.name ?? "Score";
+    return [...candidates]
+      .sort((a, b) => {
+        const aScore =
+          formula && a.formula_score != null ? a.formula_score : (a.rbs_score ?? 0);
+        const bScore =
+          formula && b.formula_score != null ? b.formula_score : (b.rbs_score ?? 0);
+        return bScore - aScore;
+      })
+      .slice(0, 6)
+      .map((p) => ({
+        name: p.name,
+        position: p.position,
+        team: p.team,
+        stat:
+          formula && p.formula_score != null
+            ? p.formula_score
+            : (p.rbs_score ?? 0),
+        statLabel,
+      }));
   }, [candidates, formula]);
 
   if (q.isPending) {

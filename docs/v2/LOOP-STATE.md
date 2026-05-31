@@ -1,9 +1,9 @@
-cycle: 93
+cycle: 94
 last_board_cycle: 54
-focus_pillar: League
-focus_layer: L5
-next_slice: lab-og-weekly-ppg-ranked
-last_keep_cycle: 93
-last_commit: eb542d51
-league_l5_unhide_bureau_tabs_epic: complete
-league_l5_strength_of_schedule_tab: complete
+focus_pillar: Lab
+focus_layer: L4
+next_slice: lab-pro-weekly-paywall-copy
+last_keep_cycle: 94
+last_commit: da33eafd
+lab_l5_og_snapshot_epic: complete
+lab_l4_pro_gate_epic: active
