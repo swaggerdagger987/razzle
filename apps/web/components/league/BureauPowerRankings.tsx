@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { useCallback, useState } from "react";
 
 interface Props {
   data: Record<string, unknown>;
@@ -32,6 +33,21 @@ export function BureauPowerRankings({ data, leagueId }: Props) {
   const octo = AGENT_BY_ID.octo;
   const rows = (data.rows as PowerRow[]) ?? [];
   const leader = rows[0] ?? null;
+  const [copied, setCopied] = useState(false);
+  const boardPath = `/league/${leagueId}/power-rankings`;
+  const ogParams = new URLSearchParams({ league: leagueId, download: "1" });
+
+  const copyBoardLink = useCallback(async () => {
+    const url =
+      typeof window !== "undefined" ? `${window.location.origin}${boardPath}` : boardPath;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, [boardPath]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -53,6 +69,19 @@ export function BureauPowerRankings({ data, leagueId }: Props) {
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
           sorted by scoring differential · pythagorean luck index
         </p>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <button type="button" className="btn-chunky text-xs" onClick={() => void copyBoardLink()}>
+            {copied ? "copied!" : "copy board link"}
+          </button>
+          <a
+            href={`/og/power-rankings?${ogParams.toString()}`}
+            download="razzle-power-rankings.png"
+            className="btn-chunky active text-xs"
+            style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+          >
+            export card
+          </a>
+        </div>
       </header>
 
       {leader && (

@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Bureau Power Rankings (cycle 80)
+- **Angle:** Beyond W-L boards travel — managers share differential + luck bars in league chats.
+- **Screenshot hook:** Octo power board OG with green/orange diff bars and #1 callout.
+
 ### 2026-05-31 — Bureau Pressure Map (cycle 79)
 - **Angle:** Deadline panic charts travel in league chats — copy chart link drops managers on Bones' pressure board.
 - **Screenshot hook:** Red/orange panic bars + export card for the most desperate roster.

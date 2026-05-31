@@ -1,36 +1,30 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Bureau L5 share rows must let managers copy a league-scoped URL and export an OG card — same travel pattern as Explore and Self-Scout (DEPTH League L5).",
-  "epic_title": "League L5 — Bureau share row export travels",
+  "epic_status": "active",
+  "big_problem": "Bureau Power Rankings must travel in league chats — copy link + OG card with real differential rows, not a dead-end tab (DEPTH League L5).",
+  "epic_title": "League L5 — Bureau Power Rankings OG travels",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-h2h-share-bar",
-      "title": "H2H copy rivalry link + export card with league/user/opponent params",
-      "status": "done",
-      "merge_commit": "on_base"
+      "id": "bureau-power-rankings-og",
+      "title": "Power Rankings OG route + copy/export share row",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-self-scout-copy-link",
-      "title": "Self-Scout copy link beside export card",
-      "status": "done",
-      "merge_commit": "on_base"
+      "id": "bureau-trade-finder-share",
+      "title": "Trade Finder copy link + export card",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy sim link beside export card",
-      "status": "done",
-      "merge_commit": "348f614c"
-    },
-    {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy deadline chart link beside export card",
-      "status": "done",
-      "merge_commit": "2c3cd3a2"
+      "id": "bureau-trade-network-share",
+      "title": "Trade Network copy link + export card",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T04:49:44Z",
-  "updated_at": "2026-05-31T04:55:00Z"
+  "next_atom_id": "bureau-power-rankings-og",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z"
 }
