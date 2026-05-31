@@ -1,31 +1,31 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau rivalry OG cards must label live league data vs sample previews honestly and match the in-product H2H matchup users export (NEXT.md Bureau H2H; PARITY League L5).",
-  "epic": "League L5 — Bureau H2H export parity",
-  "atom_id": "bureau-h2h-og-snapshot-decode",
-  "slice_title": "H2H OG route prefers snapshot param over API refetch",
-  "parity_ref": "PARITY League L5 — Bureau H2H export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — snapshot curl PNG ≥40KB shows exported teams not demo",
-  "trust_pillars": ["T1", "T5", "T6"],
+  "big_problem": "Lab OG export cards must show the same player rows users see in-panel, not generic demo fallbacks (NEXT.md lead; DEPTH Lab L5).",
+  "epic": "Lab L5 — OG snapshot rows on remaining launch panels",
+  "atom_id": "lab-og-snapshot-weekly-prospects-tradevalues",
+  "slice_title": "Weekly, prospects, tradevalues OG snapshot from visible table rows",
+  "parity_ref": "PARITY Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — curl snapshot PNG ≥40KB with encoded names",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-h2h-og-snapshot.ts",
-    "apps/web/app/og/head-to-head/route.tsx"
+    "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx",
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
+    "apps/web/components/lab/renderers/TradeValuesRenderer.tsx"
   ],
-  "max_files": 2,
-  "max_lines": 80,
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "node -e \"const s=require('fs');const j=JSON.stringify({y:{t:'Snap Squad',r:'9-4',p:121},m:{t:'Export FC',r:'6-7',p:109},pc:[{p:'RB',y:5,m:2}]});const snap=Buffer.from(j).toString('base64').replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');console.log(snap);\"",
-    "curl -s -o /tmp/og-h2h-snap.png -w '%{http_code} %{size_download}' \"http://localhost:3000/og/head-to-head?download=1&snapshot=SNAP_PLACEHOLDER\""
+    "node -e \"const j=JSON.stringify([{n:'Test WR',p:'WR',t:'CIN',s:24.6,sl:'FPTS'}]);const snap=Buffer.from(j).toString('base64').replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');console.log(snap);\"",
+    "curl -s -o /tmp/og-weekly-snap.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/weekly?download=1&snapshot=SNAP_PLACEHOLDER'",
+    "curl -s -o /tmp/og-prospects-snap.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1&snapshot=SNAP_PLACEHOLDER'"
   ],
   "out_of_scope": [
-    "BureauHeadToHead UI changes",
-    "New encode format",
+    "OG route changes",
+    "Breakouts panel",
     "NORTH_STAR / DESIGN edits"
   ],
-  "builder_mode": "composer-surgical",
-  "verdict": "SHIP",
-  "content_commit": "92d53190"
+  "builder_mode": "composer-surgical"
 }

@@ -1,31 +1,30 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Bureau rivalry OG cards must label live league data vs sample previews honestly and match the in-product H2H matchup users export (NEXT.md Bureau H2H; PARITY League L5).",
-  "epic_title": "League L5 — Bureau H2H export parity",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards must show the same player rows users see in-panel, not generic demo fallbacks (NEXT.md lead; DEPTH Lab L5).",
+  "epic_title": "Lab L5 — OG snapshot rows on remaining launch panels",
+  "parity_ref": "Explore L5 / Lab L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-h2h-og-live-label",
-      "title": "H2H OG · live rivalry data when API returns matchup",
-      "status": "done",
-      "merge_commit": "5a974b46"
+      "id": "lab-og-snapshot-weekly-prospects-tradevalues",
+      "title": "Weekly, prospects, tradevalues pass snapshotRows to LabOgExportLink",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-h2h-snapshot-export",
-      "title": "BureauOgExportLink encodes in-product you/them/position bars for OG",
-      "status": "done",
-      "merge_commit": "6c8da85f"
+      "id": "lab-og-snapshot-breakouts",
+      "title": "Breakouts panel passes top-6 breakout scores as OG snapshot",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "bureau-h2h-og-snapshot-decode",
-      "title": "OG route prefers snapshot param over refetch when present",
-      "status": "done",
-      "merge_commit": "92d53190"
+      "id": "lab-og-snapshot-gamelog-restore",
+      "title": "Gamelog + dynasty-comps snapshot rows (sync with base if regressed)",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T19:00:00Z"
+  "next_atom_id": "lab-og-snapshot-weekly-prospects-tradevalues",
+  "created_at": "2026-05-31T05:01:00Z",
+  "updated_at": "2026-05-31T05:01:00Z"
 }

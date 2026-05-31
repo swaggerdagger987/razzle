@@ -33,3 +33,4 @@ league_l5_bureau_h2h_snapshot_export: complete
 league_l5_bureau_h2h_export_epic: in_progress
 league_l5_power_rankings_tab: complete
 league_l5_unhide_bureau_epic: active
+league_l5_bureau_pressure_map_copy_link: complete
