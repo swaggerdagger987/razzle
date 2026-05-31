@@ -36,4 +36,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
 2026-05-31 | bureau-h2h-og-snapshot-decode | da33eafd | keep | decodeBureauH2HOgSnapshot snapshot-first OG route
-2026-05-31 | lab-og-weekly-prospects-snapshot | da33eafd | keep | ogSnapshotRows PPG+RPS on Hawkeye panels; curl weekly 48814B prospects 58084B
+2026-05-31 | lab-og-weekly-prospects-snapshot | 67159562 | keep | ogSnapshotRows PPG+RPS on Hawkeye panels; curl weekly 48814B prospects 58084B

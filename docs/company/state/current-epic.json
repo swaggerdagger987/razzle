@@ -8,8 +8,8 @@
     {
       "id": "lab-og-weekly-prospects-snapshot",
       "title": "Weekly + prospects LabOgExportLink pass snapshotRows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "67159562"
     },
     {
       "id": "lab-og-breakouts-snapshot",
@@ -24,7 +24,7 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-weekly-prospects-snapshot",
+  "next_atom_id": "lab-og-breakouts-snapshot",
   "created_at": "2026-05-31T05:01:06Z",
   "updated_at": "2026-05-31T05:01:06Z"
 }
