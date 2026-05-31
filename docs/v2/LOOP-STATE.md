@@ -16,4 +16,4 @@ league_l5_og_pressure_map: complete
 league_l5_bureau_og_epic: complete
 lab_l5_og_export_link_epic: in_progress
 lab_l5_og_export_gamelog_efficiency_aging: complete
-lab_l5_og_export_buysell_dashboard: in_progress
+lab_l5_og_export_buysell_dashboard: complete
