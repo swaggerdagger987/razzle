@@ -1,8 +1,8 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau Head-to-Head rivalry views must travel off-platform with copyable URLs and screenshot-ready export cards that preserve league and opponent context (DEPTH League L5).",
-  "epic": "League L5 — Bureau H2H export travels",
-  "atom_id": "bureau-h2h-share-bar",
+  "big_problem": "Bureau rivalry screens must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic": "League L5 — Bureau share row parity",
+  "atom_id": "bureau-h2h-copy-link",
   "slice_title": "H2H copy rivalry URL + export card with league/user/opponent params",
   "parity_ref": "PARITY Explore L5 — Bureau H2H export",
   "depth_ref": "League L5",
@@ -21,8 +21,7 @@
     "curl -s -o /tmp/og-h2h.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/head-to-head?download=1'"
   ],
   "out_of_scope": [
-    "OG route rewrite",
-    "API schema changes",
+    "Monte Carlo tab",
     "NORTH_STAR / DESIGN edits"
   ],
   "builder_mode": "composer-surgical"
