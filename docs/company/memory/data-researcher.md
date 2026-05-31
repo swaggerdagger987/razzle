@@ -14,6 +14,8 @@ anecdotes (>=3 independent threads = signal).
 
 ---
 
+2026-05-31 | cycle 95 | no web research | da33eafd | PASS | — | — | — | —
+
 ## Entries
 
 2026-05-31 | Dashboard comps OG snapshot | c9151786 | keep | roster builder comps export matches in-panel match %

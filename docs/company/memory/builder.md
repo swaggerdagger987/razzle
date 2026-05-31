@@ -14,6 +14,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 ---
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 1d6b31b5 | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
+2026-05-31 | BureauStrengthOfSchedule publish | da33eafd | SHIP | verify-only cycle 95; pytest 51; web build PASS | — | position on LabOgExportLink next | evidence/2026-05-31-league-strength-of-schedule-tab.md
 2026-05-31 | BureauStrengthOfSchedule | 1d6b31b5 | keep | Octo SOS renderer; empty HIDDEN_BUREAU_SLUGS; build+pytest PASS
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
 

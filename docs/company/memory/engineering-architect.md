@@ -13,6 +13,8 @@ which migrations were painful, which test patterns caught bugs.
 
 ---
 
+2026-05-31 | league-strength-of-schedule-tab | verify publish cycle | da33eafd | SHIP | KEEP 3-file Bureau pattern | — | lab-og-position 2-file atoms | current-slice.json
+
 ## Entries
 
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | use client + useMemo; 1 file mirrors DynastyCompsRenderer

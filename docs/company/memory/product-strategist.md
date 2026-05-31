@@ -13,6 +13,8 @@ new evidence.
 
 ---
 
+2026-05-31 | league SOS ship | closes hidden Bureau tabs epic | da33eafd | SHIP | KEEP Lab L5 position OG next | — | efficiency/aging atom first | NEXT.md
+
 ## Entries
 
 2026-05-31 | Lab dashboard comps OG snapshot | c9151786 | SHIP | keep | roster-grade comps export matches DynastyComps pattern

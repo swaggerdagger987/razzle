@@ -1,12 +1,12 @@
 {
   "date": "2026-05-31",
   "atom_id": "league-strength-of-schedule-tab",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 roster archetypes are invisible in-product.",
+  "big_problem": "Schedule tab was last hidden Bureau slug — APIs return SOS rows but export was blocked in-product.",
   "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
-  "slice_title": "Schedule tab unhidden with SOS matchup renderer",
-  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "slice_title": "Ship Schedule SOS tab (pending merge from cycle 94)",
+  "parity_ref": "League L5 — hidden Bureau renderers",
   "depth_ref": "League L5",
-  "acceptance_ref": "Bureau tab visible; bespoke renderer; pytest + web build",
+  "acceptance_ref": "Bureau tab visible; Octo SOS renderer; pytest + web build",
   "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
     "apps/web/components/league/BureauStrengthOfSchedule.tsx",
@@ -18,8 +18,8 @@
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "grep -q 'BureauStrengthOfSchedule' apps/web/components/league/BureauFeatureBody.tsx && ! grep -q 'strength-of-schedule' apps/web/lib/bureau-features.ts || test $(grep -c strength-of-schedule apps/web/lib/bureau-features.ts) -ge 1"
+    "grep -q BureauStrengthOfSchedule apps/web/components/league/BureauFeatureBody.tsx"
   ],
-  "out_of_scope": ["API changes", "OG routes", "remaining hidden tabs"],
+  "out_of_scope": ["Lab OG changes", "new epic atoms this cycle"],
   "builder_mode": "composer-surgical"
 }

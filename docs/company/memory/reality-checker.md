@@ -14,6 +14,8 @@ explicit checks in the verification routine.
 
 ---
 
+2026-05-31 | league SOS ship | pytest 51 passed; npm run build exit 0 | da33eafd | PASS | KEEP executed commands in standup | — | — | evidence/2026-05-31-league-strength-of-schedule-tab.md
+
 ## Entries
 
 2026-05-31 | Dashboard comps OG Gate C | c9151786 | PASS | curl dynasty-comps 65961B PNG | keep | evidence/2026-05-31-lab-dashboard-og-snapshot.md

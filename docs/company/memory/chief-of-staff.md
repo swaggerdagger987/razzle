@@ -16,6 +16,8 @@ A good entry changes future behavior. A bad entry is a diary.
 
 ---
 
+2026-05-31 | cycle 95 morning | ship SOS verify-only when code pre-landed | da33eafd | SHIP | KEEP NO_LOCK when gh rate limited | — | Lab position OG epic tick 2 | standups/2026-05-31.md
+
 ## Entries
 
 2026-05-31 | Factory cycle 2 Pressure Map copy link | 1d6b31b5 | keep | workday open; behavioral share epic 2/4 SHIP
