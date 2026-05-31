@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 118 — Lab L4 pro gate perks PARITY names)
+**Last updated:** 2026-05-31 (factory cycle 124 — Explore OG universe in share URLs)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,21 +15,27 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 118 |
+| Cycle | 124 |
 | Last board | 54 |
-| Focus pillar | Lab |
-| Focus layer | L4 |
-| Next slice | explore-og-universe-query |
-| Last commit | `f56fdbd8` |
+| Focus pillar | Explore |
+| Focus layer | L5 |
+| Next slice | lab-og-gamelog-player-default |
+| Last commit | `cc8210da` |
 
-Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
+Recent completions: Explore OG universe in share URLs; Lab L4 pro gate perks on base.
 
 ---
 
-## Product surface summary
+## Factory / workday
 
-| Area | State | Notes |
-|------|-------|-------|
-| Explore (screener) | Shipping | NFL + college, URL state, Player Sheet, OG export |
-| Lab (panels) | Shipping | Launch 10 at L1+; depth work continues per PARITY |
-| Bureau (league) | Shipping | Self-Scout default; 8 features wired; some heuristics remain |
+| Field | Value |
+|-------|-------|
+| Status | open |
+| Cycles today | 1 |
+| Last trigger | good morning team |
+
+---
+
+## Blockers
+
+None for factory cycle 124 merge publish.

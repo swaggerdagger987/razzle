@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | explore-og-universe-query | cc8210da | buildExploreShareParams + canonical copy URL.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | merged base sticker + fetchOgLiveRows + prospects items.

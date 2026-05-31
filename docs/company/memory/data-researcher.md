@@ -1,5 +1,6 @@
 # Memory — Data Researcher
 
+2026-05-31 | explore-og-universe-query | cc8210da | No new intel; hallway share URL fix only.
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.
