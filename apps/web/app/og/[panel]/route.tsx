@@ -469,10 +469,61 @@ function statLabelForKey(k: string): string {
   return statLabel;
 }
 
+const BUYSELL_STAT_KEYS: string[] = [
+  "formula_score",
+  "mismatch_score",
+  "efficiency_pct",
+  "dynasty_rank_pct",
+  ...STAT_CANDIDATE_KEYS.filter(
+    (k) => !["formula_score", "mismatch_score", "efficiency_pct", "dynasty_rank_pct"].includes(k),
+  ),
+];
+
+function pickRowStat(row: Record<string, unknown>, statKeys: string[]): { stat: number; statLabel: string } {
+  for (const k of statKeys) {
+    if (k in row && row[k] != null) {
+      return { stat: Number(row[k] ?? 0), statLabel: statLabelForKey(k) };
+    }
+  }
+  return { stat: 0, statLabel: "Value" };
+}
+
+/** Buy/sell OG — mirrors BuySellRenderer lanes + formula_score priority. */
+function extractBuySellRows(obj: Record<string, unknown>, positionFilter: string): OgRow[] {
+  const buyLow = Array.isArray(obj.buy_low) ? (obj.buy_low as Record<string, unknown>[]) : [];
+  const sellHigh = Array.isArray(obj.sell_high) ? (obj.sell_high as Record<string, unknown>[]) : [];
+  if (!buyLow.length && !sellHigh.length) return [];
+
+  const filterPos = (rows: Record<string, unknown>[]) =>
+    positionFilter
+      ? rows.filter((r) => String(r.position ?? r.pos ?? "") === positionFilter)
+      : rows;
+
+  const toRow = (row: Record<string, unknown>, lane: "Buy" | "Sell"): OgRow => {
+    const { stat, statLabel } = pickRowStat(row, BUYSELL_STAT_KEYS);
+    return {
+      name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
+      position: String(row.position ?? row.pos ?? ""),
+      team: String(row.team ?? row.team_abbr ?? ""),
+      stat,
+      statLabel: `${lane} · ${statLabel}`,
+    };
+  };
+
+  const buyRows = filterPos(buyLow).slice(0, 3).map((r) => toRow(r, "Buy"));
+  const sellRows = filterPos(sellHigh).slice(0, 3).map((r) => toRow(r, "Sell"));
+  return [...buyRows, ...sellRows].slice(0, 6);
+}
+
 function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
   const obj = data as Record<string, unknown>;
+
+  if (slug === "buysell") {
+    const buySellRows = extractBuySellRows(obj, positionFilter);
+    if (buySellRows.length > 0) return buySellRows;
+  }
 
   if (slug === "weekly" && Array.isArray(obj.players)) {
     const weeklyRows = extractWeeklyHeatmapRows(
@@ -588,6 +639,7 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "dynasty_value",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "dynasty_value"),
   ];
+  const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const statKeys =
     slug === "tradevalues"
       ? tradeValueStatKeys
@@ -595,9 +647,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
         ? breakoutsStatKeys
         : slug === "rankings"
           ? rankingsStatKeys
-          : preferredKey
-            ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
-            : [...STAT_CANDIDATE_KEYS];
+          : slug === "buysell"
+            ? buysellStatKeys
+            : preferredKey
+              ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+              : [...STAT_CANDIDATE_KEYS];
 
   let statKey = "";
   let statLabel = "";
