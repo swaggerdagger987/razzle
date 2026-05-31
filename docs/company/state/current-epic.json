@@ -1,30 +1,37 @@
 {
   "epic_status": "active",
-  "big_problem": "Bureau rivalry OG cards must label live league data vs sample previews honestly and match the in-product H2H matchup users export (NEXT.md Bureau H2H; PARITY League L5).",
-  "epic_title": "League L5 — Bureau H2H export parity",
+  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic_title": "League L5 — Bureau behavioral share parity",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-h2h-og-live-label",
-      "title": "H2H OG · live rivalry data when API returns matchup",
+      "id": "bureau-manager-profiles-copy-link",
+      "title": "Manager Profiles copy link beside export card",
       "status": "done",
-      "merge_commit": "5a974b46"
+      "merge_commit": "04c19959"
     },
     {
-      "id": "bureau-h2h-snapshot-export",
-      "title": "BureauOgExportLink encodes in-product you/them/position bars for OG",
+      "id": "bureau-pressure-map-copy-link",
+      "title": "Pressure Map copy link beside export card",
       "status": "done",
-      "merge_commit": "6c8da85f"
+      "merge_commit": "c4ce09b7"
     },
     {
-      "id": "bureau-h2h-og-snapshot-decode",
-      "title": "OG route prefers snapshot param over refetch when present",
+      "id": "bureau-trade-network-copy-link",
+      "title": "Trade Network copy link beside export card",
       "status": "pending",
       "merge_commit": null
+    },
+    {
+      "id": "bureau-monte-carlo-copy-link",
+      "title": "Monte Carlo copy link beside export card",
+      "status": "done",
+      "merge_commit": "30454811"
     }
   ],
-  "next_atom_id": "bureau-h2h-og-snapshot-decode",
-  "created_at": "2026-05-31T06:00:00Z",
-  "updated_at": "2026-05-31T19:00:00Z"
+  "next_atom_id": "bureau-trade-network-copy-link",
+  "created_at": "2026-05-31T04:44:00Z",
+  "updated_at": "2026-05-31T04:55:00Z",
+  "last_cycle_commit": "04c19959"
 }
