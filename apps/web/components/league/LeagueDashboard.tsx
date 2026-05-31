@@ -47,6 +47,8 @@ export function LeagueDashboard({ leagueId, feature }: Props) {
       }
     }
     if (feature === "head-to-head") {
+      const urlUser = searchParams.get("user");
+      if (urlUser) body.user_id = urlUser;
       const opponent = searchParams.get("opponent");
       if (opponent) body.opponent_user_id = opponent;
     }

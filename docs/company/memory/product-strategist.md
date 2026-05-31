@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | 4fd093f1d | SHIP | H2H deep-links epic complete.
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | SAMPLE stickers mirror LIVE dynasty/RBS/value curve; T1/T5/T6.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | SHIP | Explore L5 export URL carries college season filter.

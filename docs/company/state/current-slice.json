@@ -1,18 +1,1 @@
-{
-  "date": "2026-05-31",
-  "big_problem": "Explore college OG Gate C lacked pytest guard — demo fallback shipped in #1058 but unverified in CI.",
-  "epic": "Explore L5 — universe-aware share exports",
-  "slice_title": "College explore OG Gate C pytest + fixture params",
-  "parity_ref": "Explore L5",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/api/tests/test_explore_share_og_universe.py"],
-  "max_files": 1,
-  "max_lines": 40,
-  "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_share_og_universe.py -q --noconftest"
-  ],
-  "out_of_scope": ["route.tsx changes — demo rows already on base"],
-  "builder_mode": "composer-surgical"
-}
+{"date":"2026-05-31","atom_id":"bureau-h2h-pick-opponent-preserve-user","status":"shipped","content_commit":"4fd093f1d"}

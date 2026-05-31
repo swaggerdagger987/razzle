@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | 4fd093f1d | rivalryUserId in pickOpponent; pytest 2.
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | launch10DemoStickerLabel 3 slugs; curl triple PASS.
 
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
