@@ -4,6 +4,6 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-monte-carlo-og-snapshot
 last_keep_cycle: 94
-last_commit: da33eafd
+last_commit: 26a22f69
 league_l5_bureau_og_snapshot_epic: active
 league_l5_power_rankings_og_snapshot: shipped
