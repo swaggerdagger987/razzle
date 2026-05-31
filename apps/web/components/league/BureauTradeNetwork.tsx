@@ -41,6 +41,7 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
           {edges.length} partnerships · {nodes.length} managers
         </p>
+        <BureauTradeNetworkShareBar leagueId={leagueId} />
       </header>
 
       {hero && (
@@ -93,7 +94,6 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
       )}
 
       <footer className="flex flex-wrap items-center gap-4 text-sm">
-        <BureauTradeNetworkShareBar leagueId={leagueId} />
         <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
           manager profiles →
         </Link>
