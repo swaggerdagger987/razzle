@@ -1,26 +1,17 @@
-# Evidence — explore-og-margin-note-sticker
+# Evidence — Explore OG LIVE staff margin sticker
 
 **Date:** 2026-05-31  
-**Atom:** LIVE staff sticker when Explore OG rows carry margin notes  
+**Atom:** `explore-og-margin-note-sticker`  
 **Verdict:** PASS
 
-## Gate C — demo Explore OG (sticker hidden on demo)
-
 ```bash
-curl -s -o /tmp/og-explore-sticker.png -w '%{http_code} %{size_download}\n' \
-  'http://127.0.0.1:3000/og/explore?download=1&force_demo=1'
-# 200 ≥40KB — LIVE sticker only when !isDemo && margin notes present
-```
-
-## Contract guards
-
-```bash
-pytest apps/api/tests/test_explore_og_margin_note_sticker.py -q --noconftest
-# 1 passed
+JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_lead.py apps/api/tests/test_explore_og_margin_note_sticker.py -q --noconftest
 npm run build --workspace=apps/web
-# exit 0
 ```
 
-## Verdict
+| Check | Result |
+|-------|--------|
+| pytest | 7 passed |
+| web build | exit 0 |
 
-PASS — LIVE · staff margin notes sticker when live rows qualify.
+**Verdict:** PASS

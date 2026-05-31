@@ -1,5 +1,5 @@
 cycle	hash	pillars	verdict	pillar	slice	notes
-161	13a5640ce	depth+hallway+voice+simplicity	keep	Lab	L5 rankings OG top-row player_id in export URL	trust=T5,T6; pytest 9; web build exit 0; snapshot hallway epic 1/3
+162	13a5640ce	depth+hallway+voice+simplicity	keep	Lab	L5 rankings OG top-row player_id in export URL	trust=T5,T6; pytest 9; web build exit 0; snapshot hallway epic 1/3
 159	f62007e5e	depth+voice+simplicity	keep	League	L5 Trade Finder OG FROM BUREAU trust sticker	trust=T5,T6; pytest 4; dedup snapshot on base; GTM epic 2/3 polish
 1	none	depth+voice+simplicity	keep	Explore	L1 screener URL state	nuqs filters in URL; shareable screener links
 2	none	depth+voice+simplicity	keep	Explore	L1 Player Sheet shell	PlayerSheet drawer; click row opens sheet
@@ -128,3 +128,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 159	f62007e5e	depth+voice+simplicity	keep	League	L5 Trade Finder OG FROM BUREAU trust sticker	trust=T5,T6; pytest 4; dedup snapshot on base; GTM epic 2/3 polish
 160	a2c226fa7	depth+voice+simplicity	keep	Lab	L4 generic catalog pro-gate upgrade card	trust=T2,T6; pytest 14; web build ok; L4 epic atom 1/3
 160	73d87cf79	depth+voice+simplicity	keep	League	L5 Pressure Map OG terracotta watermark	trust=T5,T6; pytest 1; curl 63349B; bureau OG watermark epic 3/4
+161	8462ae15d	depth+voice+simplicity	keep	Explore	L5 Explore OG LIVE staff margin sticker	trust=T5,T6; pytest 7; margin epic complete
