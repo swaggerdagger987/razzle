@@ -21,6 +21,9 @@
   ],
   "out_of_scope": ["BuySellRenderer UI", "new API fields", "snapshot FROM PANEL gate"],
   "builder_mode": "composer-surgical",
+  "content_commit": "21efb7ef3",
+  "reality": "PASS",
+  "merge": "pending",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
