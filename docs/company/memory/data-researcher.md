@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | PASS | No new Reddit intel; hallway slice only.
+2026-05-31 | lab-og-tolab-snapshot-player | e5e35fc38 | PASS | No new Reddit intel; hallway slice only.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | No new intel.
 # Memory — Data Researcher

@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tolab-snapshot-player | f6e0985f3 | 3 files ≤120 lines; v1 snapshot backward compatible.
+2026-05-31 | lab-og-tolab-snapshot-player | e5e35fc38 | 3 files ≤120 lines; v1 snapshot backward compatible.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | 2 files; demo blurb parity.
 # Memory — Engineering Architect
