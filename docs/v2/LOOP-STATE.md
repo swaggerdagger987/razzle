@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: Bureau H2H export (NEXT.md backup)
 last_keep_cycle: 73
-last_commit: da33eafd
+last_commit: 98ef3e07
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -20,5 +20,5 @@ lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
 lab_l5_og_live_extractors: complete
 lab_l5_og_export_rankings_breakouts: complete
-lab_l5_og_export_prospects_weekly_tradevalues: in_progress
-lab_l5_og_live_row_epic: in_progress
+lab_l5_og_export_prospects_weekly_tradevalues: complete
+lab_l5_og_live_row_epic: complete
