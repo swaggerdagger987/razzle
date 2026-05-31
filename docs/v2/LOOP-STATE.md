@@ -1,6 +1,6 @@
 cycle: 85
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
 next_slice: bureau-trade-network-copy-link
 last_keep_cycle: 85
