@@ -1,9 +1,8 @@
-cycle: 154
+cycle: 159
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: Lab
 focus_layer: L5
-next_slice: explore-og-margin-note-sticker
-last_keep_cycle: 154
-last_commit: c1a0bcaad
-explore_l5_og_margin_epic: active
-lab_l5_og_watermark_display_name_epic: complete
+next_slice: lab-og-prospects-weekly-formula-live
+last_keep_cycle: 159
+last_commit: 97937271a
+lab_l5_formula_og_rest_epic: active

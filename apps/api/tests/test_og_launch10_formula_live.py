@@ -40,6 +40,16 @@ def test_buysell_live_extract_prefers_formula_score_and_lanes():
     assert 'toRow(r, "Sell")' in source
 
 
+def test_dashboard_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'slug === "dashboard"' in source
+    assert "dashboardStatKeys" in source
+    idx = source.index("dashboardStatKeys")
+    block = source[idx : idx + 280]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"rank_diff"')
+
+
 def test_tradevalues_live_extract_prefers_formula_score():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert 'slug === "tradevalues"' in source
