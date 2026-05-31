@@ -46,6 +46,11 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Josh Allen", position: "QB", detail: "Wk 11 · 28.1 pts" },
     { name: "Josh Allen", position: "QB", detail: "Wk 10 · 41.2 pts" },
   ],
+  "dynasty-comps": [
+    { name: "Ja'Marr Chase", position: "WR", detail: "Comp tier · 98% match" },
+    { name: "Marvin Harrison Jr.", position: "WR", detail: "Comp tier · 91% match" },
+    { name: "Brian Thomas Jr.", position: "WR", detail: "Comp tier · 87% match" },
+  ],
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
@@ -56,6 +61,7 @@ const PITCH_BY_SLUG: Record<string, string> = {
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",
   gamelog: "week-by-week game logs with peak-week context for trades",
+  "dynasty-comps": "player comp tiers and similarity scores for trade framing",
 };
 
 export function teaserRowsForPanel(slug: string): TeaserRow[] {
