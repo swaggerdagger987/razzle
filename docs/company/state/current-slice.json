@@ -1,27 +1,26 @@
 {
   "date": "2026-05-31",
   "big_problem": "Catalog pro panels still show raw errors instead of the shared L4 upgrade card.",
-  "epic": "Lab L4 — generic pro-gate polish (atom 2/3)",
-  "slice_title": "lab-l4-pro-gate-surface-pytest-catalog",
+  "epic": "Lab L4 — generic pro-gate polish (atom 3/3)",
+  "slice_title": "lab-l4-catalog-teaser-batch-1",
   "parity_ref": "Lab L4 pro-gate polish or formula extraction",
   "depth_ref": "Lab L4",
-  "acceptance_ref": "GENERIC_CATALOG_PRO_GATE_SLUGS exported; pytest guards generic renderer routing",
-  "trust_pillars": ["T2", "T6"],
+  "acceptance_ref": "GENERIC_CATALOG_PRO_GATE_SLUGS have distinct screenshot-worthy teaser rows + pitches",
+  "trust_pillars": ["T2", "T5"],
   "allowed_paths": [
     "apps/web/lib/panel-upgrade-teaser.ts",
-    "apps/api/tests/test_panel_pro_gate_surface.py",
     "apps/api/tests/test_panel_upgrade_teaser.py"
   ],
-  "max_files": 3,
-  "max_lines": 60,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "Catalog teaser batch expansion",
-    "PanelRenderer behavior changes",
-    "OG routes"
+    "PanelRenderer changes",
+    "OG routes",
+    "New catalog panels"
   ],
   "builder_mode": "composer-surgical"
 }

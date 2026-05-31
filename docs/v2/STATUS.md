@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 157 — Lab L4 catalog pro-gate pytest guards)
+**Last updated:** 2026-05-31 (factory cycle 158 — Lab L4 catalog pro-gate teaser batch)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 157 |
+| Cycle | 158 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L4 |
-| Next slice | lab-l4-catalog-teaser-batch-1 |
-| Last commit | `4c4f7d8f2` |
+| Next slice | lab-l4-formula-extraction-or-next-parity |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
