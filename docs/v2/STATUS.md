@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (cycle 80 — Roster Depth Bureau tab)  
+**Last updated:** 2026-05-31 (cycle 81 — Build Profiles Bureau tab)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,14 +15,14 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 80 |
+| Cycle | 81 |
 | Last board | 54 |
 | Focus pillar | League |
 | Focus layer | L5 |
-| Next slice | Unhide Build Profiles tab |
-| Last commit | `2d11a65f` |
+| Next slice | Pick next PARITY row (unhide epic complete) |
+| Last commit | `da33eafd` |
 
-Recent completions (cycle 80): Roster Depth Bureau tab unhidden with Dolphin renderer and position depth board.
+Recent completions (cycle 81): Build Profiles Bureau tab unhidden with Atlas archetype board; unhide Bureau epic complete.
 
 ---
 

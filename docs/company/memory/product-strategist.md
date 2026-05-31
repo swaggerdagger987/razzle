@@ -30,3 +30,4 @@ new evidence.
 2026-05-31 | Bureau MC share epic atom 3 | 3392bc29 | SHIP | keep | sim deep links complete Bureau share row
 2026-05-31 | Power Rankings OG atom 2 | 46aeb445 | SHIP | keep | unhide epic; Octo power board shareable
 2026-05-31 | Roster Depth tab atom 3 | 2d11a65f | SHIP | keep | Dolphin depth grades in Bureau nav
+2026-05-31 | Build Profiles atom 4 | da33eafd | SHIP | keep | Atlas archetype board; unhide epic complete
