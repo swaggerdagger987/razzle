@@ -29,3 +29,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | Bureau share rows | 433d8002 | keep | Monte Carlo export row now matches Explore copy+export pattern
 2026-05-31 | Monte Carlo share row | da33eafd | keep | Bureau group-chat export parity; H2H already on base
+2026-05-31 | Lab OG launch10 label | da33eafd | keep | live cards without sample tag when API rows present

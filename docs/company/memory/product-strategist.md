@@ -28,3 +28,4 @@ new evidence.
 2026-05-31 | Lab OG live row parity epic atom 1 | 2cb898b6 | SHIP | keep | NEXT.md lead; panels slug + candidates on OG
 2026-05-31 | Bureau Monte Carlo share row | 433d8002 | SHIP | keep | League L5 atom 3/3; group-chat parity before H2H
 2026-05-31 | Bureau Monte Carlo share row | da33eafd | SHIP | keep | League L5 atom; H2H dedup base ShareBar
+2026-05-31 | Lab launch10 OG live label | da33eafd | SHIP | keep | T1/T5/T6; sample suffix only on demo fallback
