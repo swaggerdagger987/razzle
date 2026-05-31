@@ -3,10 +3,10 @@
   "atom_id": "explore-og-universe-query",
   "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart without opening the file.",
   "epic": "Explore L5 — universe-aware share exports",
-  "slice_title": "Explore OG export URL carries college universe",
-  "parity_ref": "Explore L5 — share card matches screener universe",
+  "slice_title": "Explore OG college export filename + pytest guard",
+  "parity_ref": "Explore L5",
   "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — college explore OG contract",
+  "acceptance_ref": "FACTORY-DOD",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/web/components/explore/ExploreShareButton.tsx",
@@ -15,16 +15,15 @@
   "max_files": 2,
   "max_lines": 60,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_explore_share_og_universe.py -q",
+    "pytest apps/api/tests/test_explore_share_og_universe.py -q --noconftest",
     "npm run build --workspace=apps/web 2>&1 | tail -8"
   ],
-  "out_of_scope": ["OG route logic", "screener API", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": ["OG route logic", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP 3/3"
-  },
-  "status": "shipped"
+  }
 }

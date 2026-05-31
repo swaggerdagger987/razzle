@@ -6,12 +6,3 @@ next_slice: explore-og-college-gate-c
 last_keep_cycle: 133
 last_commit: b098d64c
 explore_l5_universe_export_epic: active
-lab_l4_pro_gate_error_epic: active
-lab_l5_og_panel_native_live_epic: active
-lab_l5_og_live_fetch_epic: complete
-lab_l2_sidebar_agent_epic: complete
-lab_l4_pro_gate_epic: complete
-lab_l5_og_live_rows_epic: complete
-lab_l5_og_watermark_epic: complete
-lab_l5_og_live_sort_epic: complete
-bureau_h2h_codec_epic: complete
