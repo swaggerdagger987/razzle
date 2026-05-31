@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-efficiency-aging-formula-live | f6e0985f3 | SHIP | efficiencyStatKeys + agingStatKeys; 2 files ≤45 lines.
+2026-05-31 | lab-og-efficiency-aging-formula-live | a17391fad | SHIP | efficiencyStatKeys + agingStatKeys; 2 files ≤45 lines.
 2026-05-31 | lab-og-dashboard-live-extract | 1c39d0bd7 | SHIP | extractDashboardRows; skip dashboard re-sort in rankOgRowsForPanel.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Engineering Architect

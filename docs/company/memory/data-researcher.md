@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-efficiency-aging-formula-live | f6e0985f3 | PASS | No new intel; Lab formula OG slice only.
+2026-05-31 | lab-og-efficiency-aging-formula-live | a17391fad | PASS | No new intel; Lab formula OG slice only.
 2026-05-31 | lab-og-dashboard-live-extract | 1c39d0bd7 | PASS | No new intel; Lab dashboard OG slice only.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher

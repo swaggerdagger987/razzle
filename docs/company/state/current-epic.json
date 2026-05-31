@@ -13,8 +13,8 @@
     {
       "id": "lab-og-efficiency-aging-formula-live",
       "title": "Efficiency + Aging OG — formula_score priority on live fetch",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "a17391fad"
     },
     {
       "id": "lab-og-weekly-prospects-formula-live",
@@ -23,9 +23,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-efficiency-aging-formula-live",
+  "next_atom_id": "lab-og-weekly-prospects-formula-live",
   "epic_status": "active",
   "created_at": "2026-05-31T13:00:00Z",
-  "updated_at": "2026-05-31T13:00:00Z",
+  "updated_at": "2026-05-31T11:20:00Z",
   "completed_epics": ["League L5 — Bureau Trade Finder GTM export"]
 }
