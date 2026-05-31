@@ -1,50 +1,32 @@
 {
-  "big_problem": "Explore share cards don't mirror the screener URL — college toggles and filters get lost on export, so Reddit screenshots lie about the view.",
-  "epic_title": "Explore L5 — OG card matches screener query state",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "big_problem": "Explore OG cards show SAMPLE when cold but never signal LIVE nflverse rows — Reddit can't contrast demo vs real screener exports.",
+  "epic_title": "Explore L5 — LIVE/SAMPLE trust labels on screener OG",
+  "parity_ref": "Explore L5 — screener OG export",
   "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "explore-og-universe-query",
-      "title": "Explore OG — season/team/universe query on card + share URLs",
-      "status": "done",
-      "merge_commit": "7dbd4b11"
+      "id": "explore-og-live-sticker",
+      "title": "Explore OG — teal LIVE sticker when screener returns rows",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "explore-og-demo-fallback-rows",
-      "title": "Explore OG — static demo rows when API empty (not pulling film)",
-      "status": "done",
-      "merge_commit": "2d0d3bde"
-    },
-    {
-      "id": "explore-og-formula-sort-label",
-      "title": "Explore OG — formula sort label on card when apiSort differs",
-      "status": "done",
-      "merge_commit": "710ec33e"
+      "id": "explore-og-live-subtitle",
+      "title": "Explore OG — LIVE subtitle suffix on live path",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:45:00Z",
-  "updated_at": "2026-05-31T12:05:00Z",
+  "next_atom_id": "explore-og-live-sticker",
+  "epic_status": "active",
+  "created_at": "2026-05-31T11:00:00Z",
+  "updated_at": "2026-05-31T11:00:00Z",
   "completed_epics": [
     {
       "id": "explore-l5-og-query-epic",
       "status": "complete",
       "last_atom": "explore-og-formula-sort-label",
       "merge_commit": "710ec33e"
-    },
-    {
-      "id": "lab-l4-pro-gate-epic",
-      "status": "complete",
-      "last_atom": "lab-pro-gate-perks-copy",
-      "merge_commit": "f56fdbd8"
-    },
-    {
-      "id": "lab-l5-og-live-rows-launch10",
-      "status": "complete",
-      "last_atom": "lab-og-live-demo-fallback-copy",
-      "merge_commit": "18d92f6b"
     }
   ]
 }

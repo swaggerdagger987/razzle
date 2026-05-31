@@ -283,7 +283,23 @@ export async function GET(req: Request) {
             >
               SAMPLE · not live data
             </div>
-          ) : null}
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                fontSize: 16,
+                fontWeight: 700,
+                background: "#2ec4b6",
+                color: "#f7efe5",
+                padding: "4px 12px",
+                border: "3px solid #2d1f14",
+                borderRadius: 6,
+                boxShadow: "3px 3px 0 #2d1f14",
+              }}
+            >
+              LIVE · nflverse rows
+            </div>
+          )}
         </div>
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>
           {isDemo
