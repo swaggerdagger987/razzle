@@ -1,24 +1,23 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab L5 OG cards still say generic LIVE nflverse rows on flagship panels — screenshots don't signal dynasty tiers, trade curves, or RBS boards.",
-  "epic": "Lab L5 — OG LIVE stickers name the intel",
-  "slice_title": "OG LIVE stickers — efficiency, aging, buysell",
-  "atom_id": "lab-og-live-sticker-efficiency-aging-buysell",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Launch-10 OG Reddit screenshots still read generic — panel-native LIVE labels missing on half the Staff Picks export set.",
+  "epic": "Lab L5 — Launch-10 OG panel-native LIVE labels",
+  "slice_title": "OG LIVE stickers — gamelog + dashboard",
+  "atom_id": "lab-og-live-sticker-gamelog-efficiency",
+  "parity_ref": "docs/v2/PARITY.md — Lab L5 OG card per panel",
   "depth_ref": "Lab L5",
   "acceptance_ref": "ACCEPTANCE Gate 6 — OG PNG ≥40KB with live rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 20,
+  "max_lines": 12,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-efficiency.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/efficiency?download=1'",
-    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/aging?download=1'",
-    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/buysell?download=1'"
+    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/gamelog?download=1'",
+    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1'"
   ],
   "out_of_scope": [
-    "dashboard/gamelog (atom 3)",
+    "efficiency/aging/buysell (atom 2 — on branch, merges with PR)",
     "API changes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],

@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | lab-og-live-sticker-gamelog-dashboard | da33eafd | SHIP | launch10Live* week tape + dynasty pulse on gamelog/dashboard.
 2026-05-31 | lab-og-live-sticker-efficiency-aging-buysell | aeadb931 | SHIP | launch10Live* PPO/peak/movers on efficiency aging buysell.
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
 
