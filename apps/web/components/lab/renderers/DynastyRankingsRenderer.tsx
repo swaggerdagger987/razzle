@@ -100,14 +100,15 @@ export function DynastyRankingsRenderer({ panel }: Props) {
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     const players = formula ? sortedPlayers : rawPlayers;
-    return players.slice(0, 6).map((p, i) => ({
+    const filtered = position ? players.filter((p) => p.position === position) : players;
+    return filtered.slice(0, 6).map((p, i) => ({
       name: p.full_name,
       position: p.position,
       team: p.team,
       stat: formula ? (p.formula_score ?? 0) : (p.dynasty_value ?? i + 1),
       statLabel: formula ? "Score" : "Value",
     }));
-  }, [formula, sortedPlayers, rawPlayers]);
+  }, [formula, sortedPlayers, rawPlayers, position]);
 
   if (q.isPending) {
     return <PanelAgentLoading agent={agent} />;
@@ -285,6 +286,7 @@ export function DynastyRankingsRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="rankings"
             downloadName="razzle-dynasty-rankings.png"
+            position={position || undefined}
             snapshotRows={ogSnapshotRows}
           />
         </footer>
