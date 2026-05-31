@@ -1,26 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Launch-10 Lab panels with zero API rows still cannot export a screenshot-worthy OG card from the empty state.",
-  "epic": "Lab L5 — Launch-10 empty-board OG exports (atom 3/3)",
-  "slice_title": "lab-dashboard-empty-export",
-  "atom_id": "lab-dashboard-empty-export",
+  "big_problem": "Launch-10 Lab panels still missing empty-state OG exports cannot screenshot a college prospect board when the API returns zero rows.",
+  "epic": "Lab L5 — Launch-10 empty-board OG exports (round 2) (atom 1/2)",
+  "slice_title": "lab-prospects-empty-export",
+  "atom_id": "lab-prospects-empty-export",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/renderers/DynastyDashboardRenderer.tsx",
+    "apps/web/components/lab/renderers/ProspectsRenderer.tsx",
     "apps/api/tests/test_lab_og_export_link.py"
   ],
   "max_files": 2,
-  "max_lines": 55,
+  "max_lines": 45,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_export_link.py::test_dashboard_empty_board_exports_sample_card -q --noconftest",
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_export_link.py::test_prospects_empty_board_exports_sample_card -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
     "OG route changes",
-    "Other Lab panels",
+    "Trade values panel",
     "NORTH_STAR/DESIGN/DECISIONS"
   ],
   "builder_mode": "composer-surgical",

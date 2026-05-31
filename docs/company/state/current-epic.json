@@ -1,32 +1,26 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch-10 Lab panels with zero API rows still cannot export a screenshot-worthy OG card from the empty state.",
-  "epic_title": "Lab L5 — Launch-10 empty-board OG exports",
+  "epic_status": "active",
+  "big_problem": "Launch-10 Lab panels still missing empty-state OG exports cannot screenshot a college prospect board when the API returns zero rows.",
+  "epic_title": "Lab L5 — Launch-10 empty-board OG exports (round 2)",
   "parity_ref": "Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-breakouts-empty-export",
-      "title": "Breakouts empty board exports sample OG card",
-      "status": "done",
-      "merge_commit": "977de7e31"
+      "id": "lab-prospects-empty-export",
+      "title": "Prospects empty class exports sample OG card",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-buysell-empty-export",
-      "title": "Buy/sell empty lanes export sample OG card",
-      "status": "done",
-      "merge_commit": "d5af3acfe"
-    },
-    {
-      "id": "lab-dashboard-empty-export",
-      "title": "Dashboard empty risers export sample OG card",
-      "status": "done",
-      "merge_commit": "a3f0ab258"
+      "id": "lab-tradevalues-empty-export",
+      "title": "Trade values empty board exports sample OG card",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T12:20:00Z",
+  "next_atom_id": "lab-prospects-empty-export",
+  "created_at": "2026-05-31T11:48:19Z",
+  "updated_at": "2026-05-31T11:48:19Z",
   "completed_epics": [
     {
       "id": "lab-l5-launch10-empty-board-og-exports",
