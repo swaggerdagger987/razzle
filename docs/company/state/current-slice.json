@@ -29,5 +29,7 @@
   },
   "content_commit": "1ee4afe6",
   "reality": "PASS",
-  "merge": "pending"
+  "merge": "open",
+  "pr_url": "https://github.com/swaggerdagger987/razzle/pull/1007",
+  "pr_number": 1007
 }
