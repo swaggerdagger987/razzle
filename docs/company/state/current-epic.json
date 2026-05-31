@@ -32,7 +32,7 @@
       "id": "lab-l2-sidebar-agent-groups",
       "status": "complete",
       "last_atom": "lab-sidebar-search-agent-labels",
-      "merge_commit": null
+      "merge_commit": "828712da"
     },
     {
       "id": "lab-l4-pro-gate-polish",
