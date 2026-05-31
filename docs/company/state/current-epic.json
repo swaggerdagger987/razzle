@@ -9,7 +9,7 @@
       "id": "lab-og-efficiency-aging-formula-live",
       "title": "Efficiency + Aging OG — formula_score priority on live fetch",
       "status": "done",
-      "merge_commit": "b8d76ed7b"
+      "merge_commit": "276a3f9ca"
     }
   ],
   "next_atom_id": null,
@@ -20,7 +20,7 @@
       "id": "lab-l5-efficiency-aging-formula-og",
       "status": "complete",
       "last_atom": "lab-og-efficiency-aging-formula-live",
-      "merge_commit": "b8d76ed7b"
+      "merge_commit": "276a3f9ca"
     }
   ]
 }
