@@ -4,6 +4,10 @@
 
 Opus updates this on odd cycles. Link real threads — no invented research.
 
+### 2026-05-31 — factory cycle 1
+- **Pattern:** OG cards must not say "sample preview" when API returns named player rows — mislabeling kills screenshot trust.
+- **Slice:** lab-og-launch10-live-label
+
 ## Template
 
 ```markdown

@@ -164,6 +164,13 @@ function demoRowsForPanel(slug: string): OgRow[] {
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
+/** Sample preview suffix only when demo fallback — launch-10 + all panel slugs. */
+function ogBlurbSuffix(slug: string, usingLiveData: boolean): string {
+  if (usingLiveData) return "";
+  if (slug === "dynasty-comps") return " · comps for Ja'Marr Chase · sample preview";
+  return " · sample preview";
+}
+
 function extractRows(data: unknown): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
@@ -343,9 +350,9 @@ export async function GET(
       liveRows = await fetchPanelData(slug, apiPath, panel.api.method, apiParams);
     }
   }
-  const liveHasRows = liveRows.length > 0 && liveRows.some((r) => r.name);
-  const isDemo = !liveHasRows;
-  const rows = isDemo ? demoRowsForPanel(slug) : liveRows;
+  const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
+  const usingLiveData = namedLiveRows.length > 0;
+  const rows = usingLiveData ? namedLiveRows.slice(0, 6) : demoRowsForPanel(slug);
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
@@ -403,13 +410,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${
-            slug === "dynasty-comps" && isDemo
-              ? " · comps for Ja'Marr Chase · sample preview"
-              : isDemo
-                ? " · sample preview"
-                : ""
-          }`}
+          {`${panel.blurb}${ogBlurbSuffix(slug, usingLiveData)}`}
         </div>
 
         {query && (

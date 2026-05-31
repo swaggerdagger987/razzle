@@ -1,10 +1,10 @@
-cycle: 70
+cycle: 71
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-launch10-live-label (epic atom 3/3)
-last_keep_cycle: 70
-last_commit: 2cb898b6
+next_slice: pick from PARITY/NEXT — Bureau H2H or next Lab depth
+last_keep_cycle: 71
+last_commit: da33eafd
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
@@ -20,4 +20,5 @@ lab_l5_og_export_buysell_dashboard: complete
 lab_l5_og_export_player_scoped: complete
 lab_l5_og_dynasty_comps_panel_export: complete
 lab_l5_og_live_extractors: complete
-lab_l5_og_live_row_epic: in_progress
+lab_l5_og_live_row_epic: complete
+lab_l5_og_launch10_live_label: complete

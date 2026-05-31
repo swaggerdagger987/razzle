@@ -61,3 +61,4 @@ cycle	commit	score	status	pillar	slice	description
 68	ffccedf4	depth+voice+simplicity	keep	Lab	L5 OG export player-scoped links	trust=T5,T6; LabOgExportLink player_id param; curl gamelog+comps scoped 58-66KB
 69	b7deed67	depth+voice+simplicity	keep	Lab	L5 OG dynasty-comps panel export default player_id	trust=T5,T6; DynastyCompsPanel footer; DEFAULT_LAB_OG_PLAYER_ID on gamelog export
 70	2cb898b6	depth+voice+simplicity	keep	Lab	L5 OG live panel rows	trust=T5,T6; panels slug fetch + candidates extract; curl rankings 59509B breakouts 60649B
+71	da33eafd	depth+voice+simplicity	keep	Lab	L5 OG launch10 live label drop sample preview	trust=T1,T5,T6; namedLiveRows + ogBlurbSuffix; curl rankings 59509B breakouts 60649B weekly 63819B
