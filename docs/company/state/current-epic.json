@@ -21,7 +21,7 @@
       "id": "league-trade-finder-room-hallway",
       "title": "Trade Finder OG — Bones Room ask link on hero deal",
       "status": "done",
-      "merge_commit": "f6e0985f3"
+      "merge_commit": "3a5762ecb"
     }
   ],
   "next_atom_id": null,
@@ -32,7 +32,7 @@
       "id": "league-l5-trade-finder-gtm-export",
       "status": "complete",
       "last_atom": "league-trade-finder-room-hallway",
-      "merge_commit": "f6e0985f3"
+      "merge_commit": "3a5762ecb"
     }
   ]
 }
