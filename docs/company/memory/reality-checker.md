@@ -39,3 +39,4 @@ explicit checks in the verification routine.
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles tab | da33eafd | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
 2026-05-31 | Cycle 93 breakouts OG score-ranked | da33eafd | keep | fidelity epic 3/3; weekly dedup 98e51602
+2026-05-31 | Cycle 93 breakouts OG score-ranked | eaf2545a | PASS | curl breakouts 60649B

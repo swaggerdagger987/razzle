@@ -37,3 +37,4 @@ new evidence.
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Build Profiles unhide atom 1/3 | da33eafd | SHIP | keep | Zero RB / Win Now labels for dynasty trade threads
 2026-05-31 | Cycle 93 breakouts OG score-ranked | da33eafd | keep | fidelity epic 3/3; weekly dedup 98e51602
+2026-05-31 | Cycle 93 breakouts OG score-ranked | eaf2545a | keep | dedup weekly 98e51602; close fidelity epic

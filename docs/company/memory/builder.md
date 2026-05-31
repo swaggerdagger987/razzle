@@ -45,3 +45,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
 2026-05-31 | Cycle 93 breakouts OG score-ranked | da33eafd | keep | fidelity epic 3/3; weekly dedup 98e51602
+2026-05-31 | Cycle 93 breakouts OG score-ranked | eaf2545a | keep | BreakoutsRenderer sort before snapshot
