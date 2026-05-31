@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | Pick next PARITY row (unhide epic complete) |
-| Last commit | `da33eafd` |
+| Last commit | `19445fa1` |
 
 Recent completions (cycle 81): Build Profiles Bureau tab unhidden with Atlas archetype board; unhide Bureau epic complete.
 

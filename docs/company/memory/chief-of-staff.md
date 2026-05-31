@@ -29,4 +29,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 1 Bureau MC share | 3392bc29 | keep | deduped lab-og-live-label; Bureau share epic 3/3
 2026-05-31 | Power Rankings OG | 46aeb445 | keep | /og/power-rankings demo fallback; curl 66584B; unhide epic atom 2/4
 2026-05-31 | Roster Depth tab | 2d11a65f | keep | Factory cycle 1; Dolphin bureau tab; atom 3/4
-2026-05-31 | Build Profiles tab | da33eafd | keep | Factory cycle 1; Atlas bureau tab; unhide epic 4/4 complete
+2026-05-31 | Build Profiles tab | 19445fa1 | keep | Factory cycle 1; Atlas bureau tab; unhide epic 4/4 complete

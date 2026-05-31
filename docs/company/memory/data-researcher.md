@@ -31,4 +31,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Power Rankings OG | 46aeb445 | keep | diff/luck cards travel to league group chats
 2026-05-31 | Roster Depth tab | 2d11a65f | keep | position grade screenshots for trade threads
-2026-05-31 | Build Profiles tab | da33eafd | keep | archetype labels for dynasty trade-thread screenshots
+2026-05-31 | Build Profiles tab | 19445fa1 | keep | archetype labels for dynasty trade-thread screenshots
