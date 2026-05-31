@@ -17,9 +17,18 @@ const DEMO_ODDS: OddsRow[] = [
   { manager: "Your Squad", championship_pct: 14, playoff_pct: 62, roster_power: 81 },
 ];
 
-async function fetchMonteCarlo(leagueId: string, userId: string): Promise<OddsRow[] | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchMonteCarlo(
+  req: Request,
+  leagueId: string,
+  userId: string,
+): Promise<OddsRow[] | null> {
   if (!leagueId || !userId) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/monte-carlo`, {
@@ -49,11 +58,12 @@ export async function GET(req: Request) {
   const snapshot = snapshotParam ? decodeBureauMonteCarloOgSnapshot(snapshotParam) : null;
 
   const octo = AGENT_BY_ID.octo;
-  const live = snapshot?.rows?.length ? null : await fetchMonteCarlo(league, user);
-  const fromSnapshot = snapshot?.rows?.length ? snapshot.rows : null;
-  const isDemo = !fromSnapshot?.length && !live?.length;
-  const odds = (fromSnapshot ?? (isDemo ? DEMO_ODDS : live!)).slice(0, 3);
-  const fromPanel = Boolean(fromSnapshot?.length);
+  const isSnapshot = Boolean(snapshot?.rows?.length);
+  const hasLeagueParams = Boolean(league && user);
+  const live = isSnapshot ? null : await fetchMonteCarlo(req, league, user);
+  const isLive = !isSnapshot && Boolean(live?.length);
+  const isDemo = !isSnapshot && !isLive;
+  const odds = (isSnapshot ? snapshot!.rows : isLive ? live! : DEMO_ODDS).slice(0, 3);
 
   return new ImageResponse(
     (
@@ -98,9 +108,83 @@ export async function GET(req: Request) {
         <div style={{ display: "flex", fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
           Monte Carlo
         </div>
-        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 20 }}>
-          {`playoff + title odds from roster sims${fromPanel ? " · from your board" : isDemo ? " · sample preview" : ""}`}
+        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 12 }}>
+          {`playoff + title odds from roster sims${
+            isSnapshot
+              ? " · exported board"
+              : isLive
+                ? " · live league sims"
+                : hasLeagueParams && isDemo
+                  ? " · sample preview (API unavailable)"
+                  : " · sample preview"
+          }`}
         </div>
+
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · not live sims
+          </div>
+        ) : null}
+
+        {isLive ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · league sims
+          </div>
+        ) : null}
+
+        {isSnapshot ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#8b5cf6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            EXPORTED · saved odds board
+          </div>
+        ) : null}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
           {odds.map((o, i) => (

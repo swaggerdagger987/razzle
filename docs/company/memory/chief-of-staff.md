@@ -1,6 +1,8 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 125 OG LIVE labels | ad24a219 | Workday open; panel-native LIVE epic 1/3; lock #842.
+2026-05-31 | Factory cycle 132 MC trust stickers | fc0bee2 | workday cycle 1; PR #1013; League L5 epic atom 2/3.
+2026-05-31 | Factory cycle 131 H2H trust stickers | 2681462c | workday cycle 1; NO_LOCK_GUARDRAIL; League L5 epic atom 1/3.
+2026-05-31 | Factory cycle 129 pro gate error surface | 5721ee33 | Lab L4 epic atom 1/3 merged on base.
 
 2026-05-31 | Factory cycle 121 pro gate panel pitches | ad24a219 | L4 epic atom 2/3; factory open.
 

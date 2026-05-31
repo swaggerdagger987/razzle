@@ -150,7 +150,7 @@ export async function GET(req: Request) {
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, lineHeight: 1.1, marginBottom: 4 }}>
           Head-to-Head
         </div>
-        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
+        <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 12 }}>
           {`rivalry dossier — your roster vs one leaguemate${
             isSnapshot
               ? " · exported matchup"
@@ -161,6 +161,28 @@ export async function GET(req: Request) {
                   : " · sample preview"
           }`}
         </div>
+
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#d97757",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · not live league data
+          </div>
+        ) : null}
 
         {isLive ? (
           <div
@@ -180,29 +202,29 @@ export async function GET(req: Request) {
               display: "flex",
             }}
           >
-            LIVE · Sleeper rivalry
+            LIVE · league matchup
           </div>
         ) : null}
 
-        {isDemo && !isSnapshot ? (
+        {isSnapshot ? (
           <div
             style={{
               fontFamily: "Caveat",
               fontSize: 32,
               color: "#f7efe5",
-              background: "#d97757",
+              background: "#8b5cf6",
               padding: "6px 18px",
               alignSelf: "flex-start",
               border: "3px solid #2d1f14",
               borderRadius: 10,
               boxShadow: "4px 4px 0 #2d1f14",
-              transform: "rotate(1.5deg)",
+              transform: "rotate(1deg)",
               marginBottom: 12,
               fontWeight: 700,
               display: "flex",
             }}
           >
-            SAMPLE · demo rivalry rows
+            EXPORTED · saved rivalry
           </div>
         ) : null}
 

@@ -1,31 +1,35 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — duplicated 402 branches across launch-10 renderers drift from teaser/perks polish.",
-  "epic": "Lab L4 — shared pro-gate error surface",
-  "slice_title": "ProGateFromPanelError on breakouts + pytest guard",
-  "atom_id": "lab-l4-pro-gate-error-surface",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — pro panel shows upgrade message (402)",
-  "trust_pillars": ["T2", "T6"],
+  "big_problem": "Bureau H2H rivalry cards label live vs sample only in subtitle text — Reddit cannot tell a real league export from demo at a glance.",
+  "epic": "League L5 — Bureau H2H export trust stickers (atom 2/3)",
+  "slice_title": "Monte Carlo OG — LIVE, SAMPLE, and EXPORTED trust stickers",
+  "atom_id": "bureau-mc-og-live-sample-sticker",
+  "parity_ref": "PARITY League L5 — Bureau Monte Carlo export / Bureau-7 parity",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — Monte Carlo OG PNG ≥40KB demo + snapshot",
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/ProGateFromPanelError.tsx",
-    "apps/web/components/lab/renderers/BreakoutsRenderer.tsx",
-    "apps/api/tests/test_panel_pro_gate_surface.py"
+    "apps/web/app/og/monte-carlo/route.tsx",
+    "docs/v2/evidence/2026-05-31-bureau-mc-og-live-sample-sticker.md"
   ],
-  "max_files": 3,
-  "max_lines": 140,
+  "max_files": 2,
+  "max_lines": 70,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_panel_pro_gate_surface.py apps/api/tests/test_panel_upgrade_teaser.py -q"
+    "curl -s -o /tmp/mc-demo.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/monte-carlo?download=1'",
+    "curl -s -o /tmp/mc-snap.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/monte-carlo?download=1&snapshot=eyJyIjpbeyJpZCI6MSwibSI6IkR5bmFzdHkgRHVrZXMiLCJjcCI6MjgsInBwIjo5MSwicnAiOjk0fV19'",
+    "file /tmp/mc-demo.png /tmp/mc-snap.png"
   ],
-  "out_of_scope": ["Tradevalues/efficiency this cycle"],
+  "out_of_scope": [
+    "Pressure Map OG",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "new npm deps"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "status": "shipped"
+  }
 }
