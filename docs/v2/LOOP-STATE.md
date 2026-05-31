@@ -4,7 +4,7 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-build-profiles-tab (epic atom 4/6)
 last_keep_cycle: 82
-last_commit: da33eafd
+last_commit: 9714bfa6
 league_l5_unhide_bureau_epic: in_progress
 league_l5_roster_depth_tab: complete
 league_l5_power_rankings_tab: complete
