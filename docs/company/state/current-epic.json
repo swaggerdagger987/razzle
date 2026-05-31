@@ -1,31 +1,31 @@
 {
-  "epic_status": "active",
-  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
-  "epic_title": "Lab L5 — OG export matches in-panel position filters",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "complete",
+  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
+  "epic_title": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-position-efficiency-aging",
-      "title": "Efficiency + aging export passes position filter to OG",
+      "id": "league-build-profiles-tab",
+      "title": "Build Profiles tab unhidden with Atlas renderer",
       "status": "done",
-      "merge_commit": "f358349d"
+      "merge_commit": "2ee04975"
     },
     {
-      "id": "lab-og-position-tradevalues-prospects",
-      "title": "Trade values + prospects export passes position filter",
-      "status": "pending",
-      "merge_commit": null
+      "id": "league-waiver-tendencies-tab",
+      "title": "Waiver Tendencies tab unhidden with Hawkeye renderer",
+      "status": "done",
+      "merge_commit": "a2536dcc"
     },
     {
-      "id": "lab-og-position-buysell",
-      "title": "Buy/sell export passes position filter to OG",
-      "status": "pending",
-      "merge_commit": null
+      "id": "league-strength-of-schedule-tab",
+      "title": "Schedule tab unhidden with SOS renderer",
+      "status": "done",
+      "merge_commit": "eb542d51"
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-prospects",
-  "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:15:00Z",
-  "last_cycle_commit": "f358349d"
+  "next_atom_id": null,
+  "created_at": "2026-05-31T12:05:00Z",
+  "updated_at": "2026-05-31T13:00:00Z",
+  "last_cycle_commit": "eb542d51"
 }
