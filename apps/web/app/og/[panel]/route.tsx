@@ -88,6 +88,13 @@ const LAUNCH_10_OG_SLUGS = new Set([
   "buysell",
 ]);
 
+/** Panel-specific LIVE sticker copy (Hawkeye panels get scout-native labels). */
+function liveOgStickerLabel(slug: string): string {
+  if (slug === "prospects") return "LIVE · RPS board";
+  if (slug === "weekly") return "LIVE · heatmap rows";
+  return "LIVE · nflverse rows";
+}
+
 function panelBlurbSuffix(
   slug: string,
   positionFilter: string,
@@ -106,6 +113,8 @@ function panelBlurbSuffix(
     return `${pos} · sample preview`;
   }
   if (showingLiveData && LAUNCH_10_OG_SLUGS.has(slug)) {
+    if (slug === "prospects") return `${pos} · live RPS ranks`;
+    if (slug === "weekly") return `${pos} · live heatmap`;
     return `${pos} · live nflverse rows`;
   }
   if (showingLiveData) {
@@ -716,7 +725,7 @@ export async function GET(
               fontWeight: 700,
             }}
           >
-            LIVE · nflverse rows
+            {liveOgStickerLabel(slug)}
           </div>
         ) : null}
 

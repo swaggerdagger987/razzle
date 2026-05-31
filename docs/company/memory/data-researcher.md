@@ -1,5 +1,7 @@
 # Memory — Data Researcher
 
+2026-05-31 | lab-og-live-sticker-prospects-weekly | cycle 119 | Scout panels need distinct LIVE copy on share cards.
+
 2026-05-31 | lab-og-live-sticker-launch10 | cycle 116 | Reddit needs visible live vs sample on OG exports.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.
