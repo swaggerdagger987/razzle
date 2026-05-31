@@ -55,4 +55,4 @@ cycle	commit	score	status	pillar	slice	description
 62	0d39635e	depth+hallway+voice+simplicity	keep	League	L5 OG pressure map	trust=T2,T5,T6; /og/pressure-map demo bars + export button; curl 60104B PNG
 63	c3470f64	depth+hallway+voice+simplicity	keep	League	L5 OG manager profiles	trust=T2,T5,T6; /og/manager-profiles archetype rows demo; curl 76684B PNG
 64	2bd28752	depth+hallway+voice+simplicity	keep	League	L5 OG trade network	trust=T2,T5,T6; /og/trade-network partner lanes demo; curl 67677B PNG
-65	da33eafd	depth+hallway+voice+simplicity	keep	League	L5 OG self scout	trust=T2,T5,T6; /og/self-scout depth grades demo; curl 66997B PNG; Bureau OG epic complete
+65	e732f973	depth+hallway+voice+simplicity	keep	League	L5 OG self scout	trust=T2,T5,T6; /og/self-scout depth grades demo; curl 66997B PNG; Bureau OG epic complete
