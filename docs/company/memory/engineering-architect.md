@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-rankings-live-rank-labels | da33eafd | 2 files; extractRankingsRows before generic extractRows.
+2026-05-31 | lab-og-rankings-live-rank-labels | 0d011e7df | 2 files; extractRankingsRows before generic extractRows.
 2026-05-31 | lab-og-sample-labels | 54443bc8 | 1 file route.tsx; launch10DemoStickerLabel + blurbs ≤30 lines.
 
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
