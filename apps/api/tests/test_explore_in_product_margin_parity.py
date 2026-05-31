@@ -19,7 +19,8 @@ def test_explore_margin_note_uses_og_shared_helper():
 
 def test_og_lead_row_uses_same_helper():
     og = EXPLORE_OG.read_text(encoding="utf-8")
-    assert "marginNoteForOgExploreRow(players[0]!, universe)" in og
+    assert "marginNoteForOgExploreRow(p, universe)" in og
+    assert "TOP_MARGIN_NOTE_ROWS" in og
 
 
 def test_margin_notes_og_helper_delegates_to_row_heuristics():

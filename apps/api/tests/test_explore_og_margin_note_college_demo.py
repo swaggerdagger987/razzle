@@ -18,7 +18,8 @@ def test_college_demo_lead_row_has_passing_volume_fields():
 
 def test_explore_og_passes_universe_into_margin_helper():
     source = EXPLORE_OG.read_text(encoding="utf-8")
-    assert "marginNoteForOgExploreRow(players[0]!, universe)" in source
+    assert "marginNoteForOgExploreRow(p, universe)" in source
+    assert "TOP_MARGIN_NOTE_ROWS" in source
 
 
 def test_margin_notes_define_college_campus_copy():
