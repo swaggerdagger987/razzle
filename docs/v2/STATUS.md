@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | League |
 | Focus layer | L5 |
 | Next slice | Unhide Build Profiles tab |
-| Last commit | `da33eafd` |
+| Last commit | `2d11a65f` |
 
 Recent completions (cycle 80): Roster Depth Bureau tab unhidden with Dolphin renderer and position depth board.
 

@@ -20,8 +20,8 @@
     {
       "id": "league-roster-depth-tab",
       "title": "Unhide Roster Depth tab with Dolphin renderer",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "2d11a65f"
     },
     {
       "id": "league-build-profiles-tab",
