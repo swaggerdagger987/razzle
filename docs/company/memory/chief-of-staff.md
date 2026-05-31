@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-from-panel-breakouts-efficiency | f6e0985f3 | SHIP | Factory cycle 1; Lab OG parity epic 1/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | explore-in-product-margin-parity | d0f126be5 | SHIP | Factory cycle 1; margin epic complete; NO_LOCK_GUARDRAIL.
 2026-05-31 | explore-og-margin-note-demo-college | c1cc75b15 | SHIP | Factory cycle 1; dedup lead atom 7705dbf01 on base; lock #1462.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | Factory cycle 1; H2H GTM epic 1/3; PR #1350.

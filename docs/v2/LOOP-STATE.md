@@ -1,9 +1,10 @@
-cycle: 156
+cycle: 157
 last_board_cycle: 54
-focus_pillar: Explore
+focus_pillar: Lab
 focus_layer: L5
-next_slice: NEXT.md Lab L5 OG live data rows
-last_keep_cycle: 156
-last_commit: d0f126be5
+next_slice: lab-og-from-panel-buysell-dashboard
+last_keep_cycle: 157
+last_commit: f6e0985f3
+lab_l5_og_live_panel_parity_epic: active atom 1/4
 explore_l5_og_margin_notes_epic: complete
 league_l5_trade_finder_gtm_epic: complete

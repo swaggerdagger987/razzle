@@ -1,30 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Explore screener OG cards look like stat tables — they need agent margin notes on the lead row so Reddit screenshots feel like The Lab.",
-  "epic": "Explore L5 — OG margin notes on share cards",
-  "slice_title": "In-product Explore Staff column matches OG lead margin copy",
-  "atom_id": "explore-in-product-margin-parity",
-  "parity_ref": "Explore L5 — Agent margin notes on rows",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — shared marginNoteForRow path",
+  "big_problem": "Lab Launch-10 OG exports still need trust contracts on every panel — snapshot cards must prove live row extractors match in-product boards.",
+  "epic": "Lab L5 — OG live panel row parity",
+  "slice_title": "Breakouts + efficiency FROM PANEL pytest and Gate C",
+  "parity_ref": "PARITY Explore/Lab L5 OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — snapshot PNG ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/api/tests/test_explore_in_product_margin_parity.py",
-    "apps/web/components/explore/ExploreMarginNote.tsx",
-    "docs/v2/evidence/2026-05-31-explore-in-product-margin-parity.md"
+    "apps/api/tests/test_og_from_panel_sticker.py",
+    "docs/v2/evidence/2026-05-31-lab-og-from-panel-breakouts-efficiency.md"
   ],
-  "max_files": 3,
-  "max_lines": 60,
+  "max_files": 2,
+  "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_in_product_margin_parity.py apps/api/tests/test_explore_og_margin_note_lead.py apps/api/tests/test_explore_og_margin_note_college_demo.py -q",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_from_panel_sticker.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["OG route layout", "new margin heuristics", "Lab OG"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  }
+  "out_of_scope": [
+    "OG route behavior changes",
+    "new panels",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical"
 }

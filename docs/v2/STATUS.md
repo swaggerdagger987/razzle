@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 156 — Explore in-product Staff margin OG parity)
+**Last updated:** 2026-05-31 (factory cycle 157 — Lab breakouts/efficiency FROM PANEL OG guards)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 156 |
+| Cycle | 157 |
 | Last board | 54 |
-| Focus pillar | Explore |
+| Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | NEXT.md Lab L5 OG live data rows |
-| Last commit | `d0f126be5` |
+| Next slice | lab-og-from-panel-buysell-dashboard |
+| Last commit | `f6e0985f3` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
