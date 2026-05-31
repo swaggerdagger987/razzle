@@ -445,7 +445,7 @@ export async function GET(
                 ? " · from your panel"
                 : isDemo
                   ? " · sample preview"
-                  : ""
+                  : " · live preview"
           }`}
         </div>
 
