@@ -1,50 +1,38 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch-10 OG cards still read generic on Reddit — only prospects/weekly say which panel you are sharing.",
-  "epic_title": "Lab L5 — Launch-10 OG panel-native trust labels (all 10)",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Situation Room briefings die in the chat — managers cannot share a formatted rivalry readout to league Slack or Reddit prep threads.",
+  "epic_title": "Room L5 — briefing GTM export",
+  "parity_ref": "Room L5 — GTM export slice",
+  "depth_ref": "Room L5",
   "atoms": [
     {
-      "id": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
-      "title": "Rankings + tradevalues + breakouts — SAMPLE panel-native stickers",
+      "id": "room-briefing-copy-export",
+      "title": "Briefing card — copy formatted text for Slack/Reddit",
       "status": "done",
-      "merge_commit": "54443bc8"
+      "merge_commit": "612d9638"
     },
     {
-      "id": "lab-og-launch10-gamelog-efficiency-aging-labels",
-      "title": "Gamelog + efficiency + aging — panel-native LIVE stickers",
-      "status": "done",
-      "merge_commit": "adbf6c7"
+      "id": "room-briefing-og-card",
+      "title": "Briefing OG — /og/briefing snapshot route",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-launch10-buysell-dashboard-labels",
-      "title": "Buy-sell + dashboard — panel-native LIVE stickers",
-      "status": "done",
-      "merge_commit": "adbf6c7"
+      "id": "room-briefing-watermark",
+      "title": "Briefing OG — terracotta watermark + Room hallway link",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
+  "next_atom_id": "room-briefing-og-card",
   "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T16:15:00Z",
+  "updated_at": "2026-05-31T09:55:00Z",
   "completed_epics": [
-    {
-      "id": "lab-l5-og-live-labels-rankings-tv-breakouts",
-      "status": "complete",
-      "last_atom": "cycle-125-merge",
-      "merge_commit": "5dcbbc01"
-    },
     {
       "id": "lab-l5-launch10-og-panel-native-trust-labels",
       "status": "complete",
       "last_atom": "lab-og-launch10-buysell-dashboard-labels",
       "merge_commit": "adbf6c7"
-    },
-    {
-      "id": "lab-l4-pro-gate-error-surface",
-      "status": "complete",
-      "last_atom": "lab-l4-pro-gate-error-surface",
-      "merge_commit": "5721ee33"
     }
   ]
 }
