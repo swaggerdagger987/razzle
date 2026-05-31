@@ -1,8 +1,34 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-watermark-display-name",
-  "slice_title": "Gamelog export passes player name into OG watermark toLab",
-  "content_commit": "338709883",
-  "reality": "PASS",
-  "merge": "pending"
+  "atom_id": "lab-panel-share-bar-rankings",
+  "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
+  "epic": "Lab L5 — GTM panel share bar parity",
+  "slice_title": "Dynasty Rankings — LabPanelShareBar copy/preview/export + snapshot",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot or live demo",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": [
+    "apps/web/components/lab/LabPanelShareBar.tsx",
+    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx",
+    "apps/api/tests/test_lab_panel_share_bar.py"
+  ],
+  "max_files": 3,
+  "max_lines": 120,
+  "acceptance_commands": [
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_panel_share_bar.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/rankings-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1&force_demo=1'"
+  ],
+  "out_of_scope": [
+    "Roll share bar to all Launch-10 panels",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "New npm deps"
+  ],
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP"
+  }
 }
