@@ -1,11 +1,7 @@
-2026-05-31 | league-og-pressure-map-watermark | 73d87cf79 | SHIP | pressure-map terracotta band.
-2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | breakouts WR in TOLAB_DEFAULT_POSITION.
-2026-05-31 | league-og-power-rankings-watermark | f6e0985f3 | SHIP | Power Rankings OG toLeague + LIVE/SAMPLE stickers.
-2026-05-31 | league-og-pressure-map-watermark | 7b942533a | SHIP | Pressure Map OG toLeague + LIVE/SAMPLE stickers.
+2026-05-31 | lab-og-tolab-aging-position | 369773e97 | SHIP | aging RB in TOLAB_DEFAULT_POSITION + pytest guard.
 2026-05-31 | league-og-self-scout-watermark | a76b2e4e0 | SHIP | Self-Scout OG terracotta band.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | TOP_MARGIN_NOTE_ROWS=3 per-row margin on explore OG.
 2026-05-31 | explore-og-margin-note-lead | a76b2e4e0 | SHIP | marginNoteForOgExploreRow + lead row on explore OG route.
-2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | Gate C pytest + 76270B snapshot OG.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | WEEKLY_SAMPLE_OG_ROWS + test_lab_og_export_link guard.
 
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | launch10Demo* helpers + pytest guard.
@@ -130,4 +126,3 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | league-waiver-tendencies-og-share | 6dcb0f72 | SHIP | /og/waiver-tendencies 73121B; BureauWaiverTendenciesShareBar
 2026-05-31 | league-strength-of-schedule-tab | eb542d51 | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
 2026-05-31 | lab-og-rankings-tradevalues-live-sort | 7f78b631 | keep | dynasty_value + trade_value OG sort; curl 50KB PNGs
-2026-05-31 | lab-og-percentiles-tolab | f6e0985f3 | keep | TOLAB_DEFAULT_POSITION percentiles WR; pytest 11; curl 65326B

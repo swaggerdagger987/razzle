@@ -110,12 +110,9 @@ const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set([
 const TOLAB_DEFAULT_POSITION: Record<string, string> = {
   weekly: "WR",
   efficiency: "RB",
-<<<<<<< HEAD
+  aging: "RB",
   breakouts: "WR",
   percentiles: "WR",
-=======
-  aging: "RB",
->>>>>>> 369773e97 (standup: 2026-05-31 — PASS aging OG toLab RB position)
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([
