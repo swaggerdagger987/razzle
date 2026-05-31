@@ -16,6 +16,29 @@ interface OgPlayer {
   stat: number;
 }
 
+/** Sample screener rows for OG when API is cold (FACTORY-DOD Gate C). */
+const NFL_DEMO_ROWS: OgPlayer[] = [
+  { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 312.4 },
+  { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 298.1 },
+  { full_name: "CeeDee Lamb", position: "WR", team: "DAL", stat: 287.6 },
+  { full_name: "Christian McCaffrey", position: "RB", team: "SF", stat: 276.2 },
+  { full_name: "Tyreek Hill", position: "WR", team: "MIA", stat: 264.8 },
+  { full_name: "Brock Bowers", position: "TE", team: "LV", stat: 241.3 },
+];
+
+const COLLEGE_DEMO_ROWS: OgPlayer[] = [
+  { full_name: "Travis Hunter", position: "WR", team: "COLO", stat: 1247 },
+  { full_name: "Cam Ward", position: "QB", team: "MIA", stat: 3821 },
+  { full_name: "Omarion Hampton", position: "RB", team: "UNC", stat: 1189 },
+  { full_name: "Elic Ayomanor", position: "WR", team: "NEB", stat: 1042 },
+  { full_name: "Jayden Higgins", position: "WR", team: "ISU", stat: 978 },
+  { full_name: "Quinn Ewers", position: "QB", team: "MIA", stat: 3654 },
+];
+
+function demoRowsForExplore(universe: string): OgPlayer[] {
+  return universe === "college" ? COLLEGE_DEMO_ROWS : NFL_DEMO_ROWS;
+}
+
 async function fetchTopPlayers(params: {
   universe: string;
   sort: string;
@@ -118,7 +141,15 @@ export async function GET(req: Request) {
   const exploreLink =
     universe === "college" ? "razzle.lol/explore?universe=college" : "razzle.lol/explore";
 
-  const players = await fetchTopPlayers({ universe, sort, dir, q, pos });
+  const forceDemo = url.searchParams.get("preview") === "demo";
+  let players = forceDemo ? [] : await fetchTopPlayers({ universe, sort, dir, q, pos });
+  const showingDemo = players.length === 0;
+  if (showingDemo) {
+    players = demoRowsForExplore(universe);
+  }
+  const cardSubtitle = showingDemo
+    ? `${subtitle} · sample preview`
+    : subtitle;
 
   return new ImageResponse(
     (
@@ -143,7 +174,7 @@ export async function GET(req: Request) {
         </div>
 
         <div style={{ fontFamily: "Luckiest Guy", fontSize: 56, marginBottom: 8 }}>{title}</div>
-        <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>{subtitle}</div>
+        <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>{cardSubtitle}</div>
 
         {players.length > 0 ? (
           <div
@@ -204,9 +235,7 @@ export async function GET(req: Request) {
               </div>
             ))}
           </div>
-        ) : (
-          <div style={{ flex: 1, fontSize: 24, color: "#5c4a3d" }}>pulling film…</div>
-        )}
+        ) : null}
 
         {/* Always-on watermark band — visible on preview + download (T6 screenshot gravity) */}
         <div

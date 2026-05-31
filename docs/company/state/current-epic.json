@@ -1,38 +1,44 @@
 {
-  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
-  "epic_title": "Lab L4 — pro gates feel like upgrade, not error",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "epic_status": "active",
+  "big_problem": "Explore share cards still show empty pulling film when API is cold — Reddit screenshots need visible rows.",
+  "epic_title": "Explore L5 — screener OG cards always screenshot-ready",
+  "parity_ref": "Explore L5 — watermarked export / GTM",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-pro-gate-loading-copy",
-      "title": "Pro gate — agent-owned loading line on upgrade card",
-      "status": "done",
-      "merge_commit": "7236be3e"
+      "id": "explore-og-demo-fallback-rows",
+      "title": "Explore OG — demo screener rows when API empty",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-pro-gate-panel-pitches",
-      "title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
-      "status": "done",
-      "merge_commit": "0b59daee"
+      "id": "explore-og-formula-subtitle",
+      "title": "Explore OG — formula name in subtitle when formula sort",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-pro-gate-hallway-teasers",
-      "title": "Pro gate — screener hallway + domain teasers",
-      "status": "done",
-      "merge_commit": "675044ea"
+      "id": "explore-og-preview-watermark-verify",
+      "title": "Explore OG — preview vs download watermark parity audit",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "next_atom_id": "explore-og-demo-fallback-rows",
+  "created_at": "2026-05-31T08:40:00Z",
+  "updated_at": "2026-05-31T08:40:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l4-pro-gate-upgrade",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-panel-pitches",
+      "merge_commit": "0b59daee"
+    },
     {
       "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",
       "last_atom": "lab-og-live-demo-fallback-copy",
-      "merge_commit": "18d92f6b"
+      "merge_commit": "9cd6a5cf"
     }
   ]
 }
