@@ -233,12 +233,12 @@ export function DynastyRankingsRenderer({ panel }: Props) {
         <div className="p-6">
           <p className="text-ink-medium">{agent.emptyCopy}</p>
           <footer className="mt-4 flex flex-wrap items-center gap-4">
-            <LabOgExportLink
+            <LabPanelShareBar
               slug="rankings"
               downloadName="razzle-dynasty-rankings.png"
               position={position || undefined}
               snapshotRows={RANKINGS_SAMPLE_OG_ROWS}
-              label="export sample card"
+              copyLabel="copy sample card"
             />
           </footer>
         </div>
