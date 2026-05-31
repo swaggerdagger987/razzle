@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-og-live-sticker-tradevalues-aging | da33eafd | SHIP | keep | atom 2/3 Gate C evidence for Bones/Octo panels.
+2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | SHIP | keep | atom 2/3 Gate C evidence for Bones/Octo panels.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | SHIP | keep | perks = launch-10 titles + Bureau-7 labels; T2/T6.
 

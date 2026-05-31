@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | lab-og-live-sticker-tradevalues-aging | da33eafd | PASS | pytest 2; curl PNG ≥40KB tradevalues/aging.
+2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | PASS | pytest 2; curl PNG ≥40KB tradevalues/aging.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | pytest 6; web build ok; Gate C N/A.
 

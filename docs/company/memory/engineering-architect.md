@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | og sticker tradevalues-aging | da33eafd | keep | 2-file contract; pytest-only atom.
+2026-05-31 | og sticker tradevalues-aging | a74c2afe | keep | 2-file contract; pytest-only atom.
 
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
 
