@@ -11,6 +11,14 @@ YYYY-MM-DD | slice | approach | commit hash | outcome | keep | discard | revisit
 Read this file before implementing. Reuse working patterns; avoid repeating known
 failure modes. Karpathy: simplicity first, surgical changes.
 
+2026-05-31 | lab-prospects-og-snapshot | top-6 RPS ogSnapshotRows on ProspectsRenderer | 66168c6e | SHIP | KEEP school-as-team for college OG | — | breakouts/tradevalues | evidence 2026-05-31-lab-prospects-og-snapshot.md
+
+2026-05-31 | lab-weekly-og-snapshot | peak-week FPTS ogSnapshotRows on WeeklyHeatmapRenderer | 4a6ef16b | SHIP | KEEP snapshot+position on LabOgExportLink | — | prospects/breakouts/tradevalues | evidence 2026-05-31-lab-weekly-og-snapshot.md
+
+---
+
+2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | 4a6ef16b | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
+
 ---
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
@@ -20,7 +28,6 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ## Entries
 
-2026-05-31 | Lab OG weekly+breakouts snapshotRows | 98e51602 | keep | PPG weekly + RBS breakouts; curl weekly snap 64762B
 2026-05-31 | Bureau Pressure Map copy link | c4ce09b7 | keep | copyPressureLink row; curl pressure-map 60661B
 2026-05-31 | Bureau Manager Profiles copy link | 04c19959 | keep | copyProfilesLink row; curl manager-profiles 77194B
 2026-05-31 | Bureau Self-Scout copy link | 3fc08ebc | keep | copyScoutLink row; curl self-scout 66997B
@@ -40,7 +47,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Lab OG launch10 live label | 6e98f4a2 | keep | panelBlurbSuffix + LAUNCH_10_OG_SLUGS; namedLiveRows; curl rankings 59509B
 2026-05-31 | Bureau H2H share bar | 044ee1e8 | keep | BureauH2HShareBar copy link + export; OG blurb Satori fix; curl 59305B
 2026-05-31 | Bureau Monte Carlo share bar | 3392bc29 | keep | BureauMonteCarloShareBar; curl monte-carlo OG 53767B
-2026-05-31 | Bureau power-rankings OG | e62721a6 | keep | /og/power-rankings route + export link; curl 68555B
-2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
-2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
+2026-05-31 | Power Rankings OG | 90bf2dd5 | keep | /og/power-rankings + BureauPowerRankingsShareBar; curl 59807B
+2026-05-31 | Roster Depth tab | 2d11a65f | keep | BureauRosterDepth Dolphin; unhide roster-depth; 3 files
+2026-05-31 | Build Profiles tab | 309f8a8b | keep | BureauBuildProfiles Atlas; unhide build-profiles; 3 files
+2026-05-31 | Trade Network copy link | 2c74e05c | keep | BureauTradeNetworkShareBar; curl trade-network 68090B

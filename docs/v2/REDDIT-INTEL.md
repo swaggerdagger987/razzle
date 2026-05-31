@@ -2,9 +2,13 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
-### 2026-05-31 — Lab launch-10 OG (cycle 77)
-- **Angle:** Screenshot cards without "sample preview" when API rows load — launch-10 exports read as live research, not demo shells.
-- **Trust:** T1 honest labeling; sample suffix only on demo fallback.
+### 2026-05-31 — Build Profiles tab (cycle 86)
+- **Angle:** League archetype board screenshots — "what build is everyone running?" without roster spelunking.
+- **Screenshot hook:** Atlas header + archetype badges + dominant-trend callout.
+
+### 2026-05-31 — Roster Depth tab (cycle 80)
+- **Angle:** Position grade grid screenshots for trade-thread replies — Dolphin thin-spot callout when a room is ≤2 deep.
+- **Screenshot hook:** A/B/C/F grade cards with elite count + top player row.
 
 ### 2026-05-31 — Bureau H2H (cycle 73)
 - **Angle:** League rivalry cards with copyable URLs — managers share H2H dossiers in league group chats.
@@ -23,21 +27,11 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
-## 2026-05-31 — Cycle 76 (Bureau roster depth tab)
-
-1. **Hidden tabs were a trust leak** — users who found Bureau via Self-Scout could not see depth chart as its own lane; unhide + bespoke renderer restores moat narrative.
-2. **Full player lists beat grade-only cards** for trade DM screenshots — roster-depth complements Self-Scout summary.
-
 ## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
 
 1. **Export must live on the panel** — users screenshot from the tool they are in; buried OG routes without an "export card" link do not travel.
 2. **Gamelog / efficiency / aging** are tape-and-window panels — same footer pattern as weekly heatmap closes launch-10 export parity (atom 1/3).
 3. Standing: sample preview on OG when API empty — T1 trust.
-
-## 2026-05-31 — Bureau Pressure Map share row (cycle 77)
-
-1. **Deadline pressure bars travel** — managers paste "who's desperate" league URLs before trade offers; copy link + export matches H2H/Monte Carlo pattern.
-2. **Bones-owned surface** — trade-deadline intel screenshots should include share row, not export-only footer.
 
 ## 2026-05-31 — Factory cycle 1 (Company OS)
 

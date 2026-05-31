@@ -1,19 +1,36 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Launch Lab dashboard/comps panels still export OG cards without in-panel comp rows when data loads.",
-  "epic_title": "Lab L5 — Dashboard/comps OG snapshot parity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards must match what users see in-panel — not generic demo rows when the heatmap already loaded real weeks.",
+  "epic_title": "Lab L5 — OG snapshot rows on launch panels",
+  "parity_ref": "Explore L5 / Lab L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-dashboard-og-snapshot",
-      "title": "DashboardRenderer passes top-6 comp rows into dynasty-comps OG snapshot",
+      "id": "lab-weekly-og-snapshot",
+      "title": "Weekly heatmap OG snapshot rows from loaded players",
       "status": "done",
-      "merge_commit": "c9151786"
+      "merge_commit": "4a6ef16b"
+    },
+    {
+      "id": "lab-prospects-og-snapshot",
+      "title": "Prospects OG snapshot rows from ranked cards",
+      "status": "done",
+      "merge_commit": "66168c6e"
+    },
+    {
+      "id": "lab-breakouts-og-snapshot",
+      "title": "Breakouts OG snapshot rows from formula leaders",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-tradevalues-og-snapshot",
+      "title": "Trade values OG snapshot rows from chart leaders",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T12:45:00Z",
-  "updated_at": "2026-05-31T12:55:00Z",
-  "last_cycle_commit": "c9151786"
+  "next_atom_id": "lab-breakouts-og-snapshot",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T13:00:00Z"
 }

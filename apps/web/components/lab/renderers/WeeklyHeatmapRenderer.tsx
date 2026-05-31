@@ -74,15 +74,22 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     return [...players]
-      .sort((a, b) => (b.ppg ?? 0) - (a.ppg ?? 0))
-      .slice(0, 6)
-      .map((p) => ({
-        name: p.name,
-        position: p.position,
-        team: p.team,
-        stat: p.ppg ?? 0,
-        statLabel: "PPG",
-      }));
+      .map((p) => {
+        const weekScores = Object.values(p.weeks ?? {}).filter(
+          (v): v is number => v != null,
+        );
+        const peakWeek = weekScores.length ? Math.max(...weekScores) : 0;
+        const stat = peakWeek > 0 ? peakWeek : (p.ppg ?? 0);
+        return {
+          name: p.name,
+          position: p.position,
+          team: p.team,
+          stat,
+          statLabel: "FPTS",
+        };
+      })
+      .sort((a, b) => b.stat - a.stat)
+      .slice(0, 6);
   }, [players]);
 
   if (q.isPending) {

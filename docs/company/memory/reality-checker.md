@@ -16,7 +16,7 @@ explicit checks in the verification routine.
 
 ## Entries
 
-2026-05-31 | Dashboard comps OG Gate C | c9151786 | PASS | curl dynasty-comps 65961B PNG | keep | evidence/2026-05-31-lab-dashboard-og-snapshot.md
+2026-05-31 | Prospects OG Gate C | curl prospects 58084B live+snapshot; build+pytest | PASS | keep | docs/v2/evidence/2026-05-31-lab-prospects-og-snapshot.md
 2026-05-31 | Pressure Map copy link Gate C | curl pressure-map 200 60661B; build+pytest | PASS | keep | docs/v2/evidence/2026-05-31-bureau-pressure-map-copy-link.md
 2026-05-30 | Lab L5 OG live data rows | test (npm run build + pytest + tsc) | Lab L5 DEPTH claim verified | PASS | no terminal.db on CI VM means data-path is untested end-to-end; fallback path (empty data → icon + loading copy) verified; production needs NEXT_PUBLIC_API_ORIGIN env var | keep | future: add OG snapshot test with fixture data
 2026-05-31 | Lab OG demo rows Gate C | curl /og/rankings 200 59509B; /og/breakouts 200 60649B; build+pytest | PASS | FACTORY-DOD C2/C3 | keep | docs/v2/evidence/2026-05-31-lab-og-demo-rows.md
@@ -29,12 +29,9 @@ explicit checks in the verification routine.
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | Lab OG live panel rows Gate C | 2cb898b6 | PASS | curl rankings 59509B breakouts 60649B | keep | docs/v2/evidence/2026-05-31-lab-og-live-extractors.md
-2026-05-31 | Bureau Monte Carlo copy link Gate C | 433d8002 | PASS | curl monte-carlo OG 53350B | keep | docs/v2/evidence/2026-05-31-bureau-monte-carlo-copy-link.md
-2026-05-31 | Bureau Monte Carlo copy link Gate C | da33eafd | PASS | curl monte-carlo OG 53350B | keep | docs/v2/evidence/2026-05-31-bureau-monte-carlo-copy-link.md
-2026-05-31 | Lab launch10 OG label Gate C | 6e98f4a2 | PASS | curl rankings 59509B breakouts 60649B | keep | docs/v2/evidence/2026-05-31-lab-og-launch10-live-label.md
 2026-05-31 | Bureau H2H OG Gate C | 044ee1e8 | PASS | curl h2h 59305B PNG | keep | docs/v2/evidence/2026-05-31-bureau-h2h-share-bar.md
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
-2026-05-31 | power-rankings OG Gate C | e62721a6 | PASS | curl 200 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og.md
-2026-05-31 | Trade Network share Gate C | 1616484c | PASS | curl trade-network 68090B PNG | keep | evidence/2026-05-31-bureau-trade-network-share-bar.md
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
-2026-05-31 | Build Profiles tab | da33eafd | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
+2026-05-31 | Power Rankings OG Gate C | 46aeb445 | PASS | curl power-rankings 66584B PNG | keep | evidence/2026-05-31-power-rankings-og.md
+2026-05-31 | Roster Depth tab | 2d11a65f | PASS | build+pytest executed | keep | evidence/2026-05-31-league-roster-depth-tab.md
+2026-05-31 | Build Profiles tab | 309f8a8b | PASS | build+pytest executed post-merge | keep | evidence/2026-05-31-league-build-profiles-tab.md
+2026-05-31 | Trade Network copy link Gate C | 2c74e05c | PASS | curl trade-network 200 68090B | keep | evidence/2026-05-31-bureau-trade-network-copy-link.md
