@@ -1,6 +1,8 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import type { Urgency } from "@razzle/types";
+import { formatBriefingForExport } from "@/lib/format-briefing-export";
 
 interface Props {
   question: string;
@@ -30,6 +32,29 @@ export function BriefingCard({
   error,
   cost,
 }: Props) {
+  const [copied, setCopied] = useState(false);
+  const canCopy = !pending && !error && Boolean(briefing?.trim());
+
+  const copyBriefing = useCallback(async () => {
+    const roomUrl =
+      typeof window !== "undefined" ? `${window.location.origin}/room` : "https://razzle.lol/room";
+    const text = formatBriefingForExport({
+      question,
+      briefing,
+      urgency,
+      specialists,
+      crossTriggers,
+      roomUrl,
+    });
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, [question, briefing, urgency, specialists, crossTriggers]);
+
   return (
     <article className={`briefing-card chunky bg-bg-card p-4 ${URGENCY_CLASS[urgency]}`}>
       <header className="briefing-header">
@@ -47,6 +72,26 @@ export function BriefingCard({
         <p className="briefing-cross-trigger text-ink-medium mt-2 text-sm">
           {crossTriggers.map((t) => `${t.agent}: ${t.label}`).join(" · ")}
         </p>
+      )}
+      {canCopy && (
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <button type="button" className="btn-chunky text-xs" onClick={() => void copyBriefing()}>
+            {copied ? "copied!" : "copy for Slack/Reddit"}
+          </button>
+          <a
+            href={`/og/briefing?${new URLSearchParams({
+              download: "1",
+              question,
+              briefing,
+              urgency,
+              specialists: specialists.join(","),
+            }).toString()}`}
+            className="text-sm text-ink-medium underline"
+            download="razzle-briefing.png"
+          >
+            export card
+          </a>
+        </div>
       )}
     </article>
   );

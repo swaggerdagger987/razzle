@@ -1,5 +1,6 @@
 # Memory — Builder
 
+2026-05-31 | room-briefing-og-card | da33eafd | SHIP | /og/briefing route + BriefingCard export card link.
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
 
