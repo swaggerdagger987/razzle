@@ -1,31 +1,35 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — exported breakouts cards click back to an unscoped board while demo rows are WR-only.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 3/3)",
-  "slice_title": "breakouts WR in OG toLab watermark",
-  "atom_id": "lab-og-tolab-breakouts-position",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "atom_id": "lab-og-tolab-snapshot-rankings-top-row",
+  "big_problem": "Lab OG snapshot exports still lose hot-row player context — weekly heatmap shares watermark to generic /lab/weekly without Player Sheet hallway.",
+  "epic": "Lab L5 — snapshot OG toLab player hallway",
+  "slice_title": "Rankings export passes top-row player_id into OG URL",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot pid in watermark",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
+    "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx",
     "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
   "max_files": 2,
-  "max_lines": 25,
+  "max_lines": 15,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/rankings?download=1&position=WR&player_id=00-0036900'"
   ],
-  "out_of_scope": ["rankings default (cross-position by design)", "new panels", "billing"],
+  "out_of_scope": [
+    "Strengths renderer wiring",
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "Weekly heatmap (shipped prior atom)"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
+    "builder": "SHIP"
   },
-  "content_commit": "1ebb9dc73",
-  "reality": "PASS"
+  "status": "shipped",
+  "content_commit": "892d34580"
 }

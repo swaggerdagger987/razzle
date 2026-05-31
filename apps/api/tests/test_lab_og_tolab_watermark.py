@@ -68,6 +68,21 @@ def test_weekly_og_watermark_includes_default_wr_position():
     assert "positionFilter: watermarkPosition" in source
 
 
+def test_weekly_heatmap_export_passes_hot_row_player_id():
+    renderer = (
+        ROOT / "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "playerId={hotPlayer.p.player_id}" in renderer
+
+
+def test_rankings_export_passes_top_row_player_id():
+    renderer = (
+        ROOT / "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "playerId={topPlayer.player_id}" in renderer
+    assert "playerName={topPlayer.full_name}" in renderer
+
+
 def test_efficiency_og_watermark_includes_default_rb_position():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert 'efficiency: "RB"' in source

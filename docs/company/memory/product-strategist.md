@@ -1,3 +1,5 @@
+2026-05-31 | lab-og-tolab-snapshot-rankings-top-row | 892d34580 | SHIP | Rankings #1 row hallway on OG export (T6); epic atom 2/3.
+2026-05-31 | lab-og-tolab-snapshot-weekly-player | e516797e6 | SHIP | Weekly hot-row hallway on OG export (T6); epic atom 1/3.
 2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | SHIP | Lab L5 position-default epic 3/3; breakouts WR hallway.
 2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | SHIP | League L5 H2H GTM epic closed — Gate C evidence on snapshot path.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
