@@ -43,6 +43,8 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
 
   function pickOpponent(nextId: string) {
     const params = new URLSearchParams(searchParams.toString());
+    const rivalryUser = searchParams.get("user") ?? String(you?.user_id ?? "");
+    if (rivalryUser) params.set("user", rivalryUser);
     if (nextId) params.set("opponent", nextId);
     else params.delete("opponent");
     router.push(`/league/${leagueId}/head-to-head?${params.toString()}` as Route);
