@@ -1,39 +1,18 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Explore college screener shares look like NFL exports — Reddit can't tell dynasty vs college OG cards apart.",
-  "epic": "Explore L5 — universe-aware share exports (atom 3/3)",
-  "slice_title": "NFL explore share/OG URLs omit redundant universe=nfl",
-  "atom_id": "explore-og-nfl-universe-default",
-  "parity_ref": "Explore L5",
-  "depth_ref": "Explore L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
-  "trust_pillars": [
-    "T5",
-    "T6"
-  ],
+  "atom_id": "explore-og-college-gate-c",
+  "slice_title": "College explore OG Gate C pytest + campus SAMPLE copy",
   "allowed_paths": [
-    "apps/web/components/explore/ExploreShareButton.tsx",
-    "apps/api/tests/test_explore_share_og_universe.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/api/tests/test_explore_og_college_gate_c.py"
   ],
-  "max_files": 2,
-  "max_lines": 40,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_explore_share_og_universe.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-nfl.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?sort=fantasy_points_ppr&dir=desc&download=1&force_demo=1'"
+    "python3 -m pytest apps/api/tests/test_explore_og_college_gate_c.py -q --noconftest"
   ],
-  "out_of_scope": [
-    "OG route rewrite",
-    "college demo rows",
-    "NORTH_STAR/DESIGN/DECISIONS"
-  ],
-  "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
-  },
-  "status": "shipped",
-  "content_commit": "c7b50c707"
+    "verdict": "SHIP 3/3"
+  }
 }
