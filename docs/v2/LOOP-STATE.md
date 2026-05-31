@@ -4,7 +4,7 @@ focus_pillar: Explore
 focus_layer: L5
 next_slice: explore-og-sample-sticker
 last_keep_cycle: 129
-last_commit: da33eafd
+last_commit: cd16858d
 explore_l5_og_demo_epic: active
 lab_l5_og_live_fetch_epic: complete
 lab_l2_sidebar_agent_epic: complete
