@@ -35,4 +35,4 @@ new evidence.
 2026-05-31 | Trade Network share atom 2/4 | da33eafd | SHIP | keep | partnership graphs travel in league group chats
 2026-05-31 | Bureau power rankings OG atom 2 | 9714bfa6 | SHIP | keep | Octo tab now has export card for trade DMs
 2026-05-31 | Lab prospects tradevalues snapshot | da33eafd | SHIP | keep | NEXT.md lead; closes launch-10 snapshot gap on prospects+tradevalues
-2026-05-31 | Efficiency OG position filter | da33eafd | SHIP | keep | filtered-panel epic 2/3; PPO cards match RB/WR tabs
+2026-05-31 | Efficiency OG position filter | b2d304e7 | SHIP | keep | filtered-panel epic 2/3; PPO cards match RB/WR tabs

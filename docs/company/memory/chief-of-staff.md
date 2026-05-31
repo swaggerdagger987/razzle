@@ -40,4 +40,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Cycle 86 Trade Network copy link | 17a40c65 | keep | Bureau behavioral share atom 3
 2026-05-31 | Cycle 87 Lab OG mirror epic | 17a40c65 | keep | factory open; Bureau epic complete; NEXT lead atom
 2026-05-31 | Cycle 88 workday publish | 17a40c65 | keep | PR #335; dedup dashboard/comps+blurb on base; prospects+tradevalues SHIP
-2026-05-31 | Factory cycle 1 efficiency OG filter | da33eafd | keep | workday open a3e1; filtered-panel epic atom 2/3
+2026-05-31 | Factory cycle 1 efficiency OG filter | b2d304e7 | keep | workday open a3e1; filtered-panel epic atom 2/3

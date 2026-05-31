@@ -39,4 +39,4 @@ explicit checks in the verification routine.
 2026-05-31 | prospects tradevalues snap Gate C | 17a40c65 | PASS | curl 58084B 62488B | keep | evidence/2026-05-31-lab-og-prospects-tradevalues-snapshot.md
 2026-05-31 | prospects RPS snap Gate C | 17a40c65 | PASS | curl prospects snap ≥40KB; sl=RPS in payload | keep | evidence/2026-05-31-lab-prospects-og-rps-position.md
 2026-05-31 | Cycle 88 re-verify post-merge-sync | 17a40c65 | PASS | pytest 51; build ok; PNG 1200x630 | keep | PR #335
-2026-05-31 | Efficiency OG position Gate C | da33eafd | PASS | curl RB 45113B WR snap 44195B PNG 1200x630 | keep | evidence/2026-05-31-lab-efficiency-og-position-filter.md
+2026-05-31 | Efficiency OG position Gate C | b2d304e7 | PASS | curl RB 45113B WR snap 44195B PNG 1200x630 | keep | evidence/2026-05-31-lab-efficiency-og-position-filter.md
