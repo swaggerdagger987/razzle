@@ -1,22 +1,21 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-live-sticker-launch10",
-  "big_problem": "Lab OG exports still look like generic sample cards on Reddit — live nflverse rows aren't obvious when API returns real data.",
-  "epic": "Lab L5 — OG live panel rows visible on Launch-10 cards",
-  "slice_title": "Launch-10 OG — LIVE sticker + blurb when nflverse rows render",
-  "parity_ref": "PARITY Explore L5 — Lab panel OG data rows",
+  "atom_id": "lab-og-dynasty-comps-pro-teaser",
+  "big_problem": "Launch-10 Lab OG cards for player-scoped panels still mis-rank live API rows — dynasty-comps exports should show Pro-gate teaser comps, not generic blur rows.",
+  "epic": "Lab L5 — launch-10 OG live extract matches renderers",
+  "slice_title": "Dynasty comps Pro gate panel-specific teaser rows",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
-  "trust_pillars": ["T5", "T6"],
+  "trust_pillars": ["T2", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 45,
+  "max_lines": 35,
   "acceptance_commands": [
     "npm run build --workspace=apps/web 2>&1 | tail -3",
-    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/rankings?download=1'",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q 2>&1 | tail -2"
+    "curl -s -o /tmp/og-comps.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dynasty-comps?player_id=00-0036900&download=1'"
   ],
-  "out_of_scope": ["new panels", "auth/billing", "Bureau OG routes"],
+  "out_of_scope": ["ProUpgradeGate component", "pricing", "API changes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
