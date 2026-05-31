@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | SHIP | keep | all Staff Picks domain blur; T2/T6.
+2026-05-31 | lab-pro-gate-profile-teasers | pending | Atlas percentiles+strengths blur rows; cycle 123.
 
 2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | SHIP | Peak-week OG rows match Game Log export — screenshot parity for trades.
 

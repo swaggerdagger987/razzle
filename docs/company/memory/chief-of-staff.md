@@ -1,10 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 117 launch10 teasers | b0405d43 | keep | workday open; L4 epic atom 2/3; lock #723.
-
-2026-05-31 | Factory cycle 106 gamelog weeks FPTS OG | 40c80f0e | Lab L5 live-extract epic atom 2/3 merged PR669; workday cycle 1.
-
-2026-05-31 | Factory cycle 115 H2H OG watermark band | 44d05684 | Watermark epic 2/2 complete; curl H2H 67846B.
+2026-05-31 | lab-pro-gate-profile-teasers | pending | Atlas percentiles+strengths blur rows; cycle 123.
 
 2026-05-31 | Factory cycle 114 OG sort keys restore | 7afc0b03 | Fixes merge regression ppo/ppg/dynasty_value; live-sort epic complete.
 
