@@ -92,3 +92,33 @@ def test_pro_gate_from_panel_error_wired_in_remaining_launch10(path: str):
 
 def test_pro_gate_from_panel_error_wired_in_dynasty_comps():
     _assert_pro_gate_renderer_path("apps/web/components/lab/renderers/DynastyCompsRenderer.tsx")
+
+
+def test_pro_gate_from_panel_error_wired_in_generic_panel_renderer():
+    panel_renderer = (
+        _repo_root() / "apps/web/components/lab/PanelRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "ProGateFromPanelError" in panel_renderer
+    assert "ProUpgradeGate" not in panel_renderer
+    assert "function GenericPanelRenderer" in panel_renderer
+
+
+GENERIC_CATALOG_PRO_GATE_SLUGS = ("tiers", "vorp", "stocks", "waivers")
+
+
+def test_generic_catalog_pro_gate_slugs_exported_in_teaser():
+    teaser = (
+        _repo_root() / "apps/web/lib/panel-upgrade-teaser.ts"
+    ).read_text(encoding="utf-8")
+    assert "export const GENERIC_CATALOG_PRO_GATE_SLUGS" in teaser
+    for slug in GENERIC_CATALOG_PRO_GATE_SLUGS:
+        assert f'"{slug}"' in teaser
+
+
+@pytest.mark.parametrize("slug", GENERIC_CATALOG_PRO_GATE_SLUGS)
+def test_catalog_pro_slugs_route_through_generic_panel_renderer(slug: str):
+    panel_renderer = (
+        _repo_root() / "apps/web/components/lab/PanelRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert f'panel.slug === "{slug}"' not in panel_renderer
+    assert "return <GenericPanelRenderer panel={panel} />" in panel_renderer

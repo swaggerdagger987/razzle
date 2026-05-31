@@ -1,31 +1,26 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau OG export cards dead-end without terracotta hallway bands — screenshots don't route back into league tabs.",
-  "epic": "League L5 — Bureau OG terracotta watermark parity (atom 2/4)",
-  "slice_title": "Self-Scout OG terracotta watermark band",
-  "atom_id": "league-og-self-scout-watermark",
-  "parity_ref": "League L5 — watermarked export",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2",
+  "big_problem": "Lab OG export cards without a snapshot can show generic merged rows instead of the dynasty dashboard leaders and movers users see in-product.",
+  "epic": "Lab L5 — OG live panel row parity (atom 1/4)",
+  "slice_title": "lab-og-dashboard-live-extract",
+  "parity_ref": "Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/dashboard PNG ≥40KB with Value/Chg row labels",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/self-scout/route.tsx",
-    "apps/api/tests/test_self_scout_og_watermark.py"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/api/tests/test_og_dashboard_live_extract.py"
   ],
   "max_files": 2,
-  "max_lines": 130,
+  "max_lines": 120,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_self_scout_og_watermark.py -q --noconftest",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_og_dashboard_live_extract.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["Other Bureau OG routes"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  },
-  "status": "shipped",
-  "content_commit": "a76b2e4e0"
+  "out_of_scope": [
+    "DynastyDashboardRenderer changes",
+    "Other Launch-10 panels",
+    "Explore OG"
+  ],
+  "builder_mode": "composer-surgical"
 }
