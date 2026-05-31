@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab breakouts + buy/sell share bar (cycle 151)
+- **Angle:** Hawkeye breakout + Bones buy-low cards now copy link + preview before PNG — dual-lane buy/sell snapshot matches the two-column panel.
+- **Trust:** T5/T6 — pytest guards share bar; curl breakouts 66253B buysell 63936B.
+
 ### 2026-05-31 — Lab rankings share bar (cycle 150)
 - **Angle:** Dynasty rankings GTM row — copy panel link + preview before export matches Explore/Bureau; formula snapshot rows ride on the PNG.
 - **Trust:** T5/T6 — `LabPanelShareBar` encodes visible top-6; curl demo 66806B.

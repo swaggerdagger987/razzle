@@ -24,3 +24,17 @@ def test_dynasty_rankings_uses_share_bar():
     assert "LabPanelShareBar" in renderer
     assert "copy rankings link" in renderer
     assert "snapshotRows={ogSnapshotRows}" in renderer
+
+
+def test_breakouts_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/BreakoutsRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy breakouts link" in renderer
+    assert "<LabOgExportLink" not in renderer
+
+
+def test_buysell_uses_share_bar():
+    renderer = _read("apps/web/components/lab/renderers/BuySellRenderer.tsx")
+    assert "LabPanelShareBar" in renderer
+    assert "copy buy/sell link" in renderer
+    assert "<LabOgExportLink" not in renderer

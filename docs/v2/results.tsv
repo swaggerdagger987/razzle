@@ -106,4 +106,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 147	a319e8953	depth+voice+simplicity	keep	League	L5 Trade Finder OG snapshot FROM PANEL rows	trust=T5,T6; pytest 3; curl snap 54790B demo 57910B; trade-finder GTM epic 2/3
 148	b1df7b303	depth+voice+simplicity	keep	League	L5 Trade Finder OG Bones Room hallway on hero	trust=T5,T6; pytest 3; curl 82552B; trade-finder GTM epic 3/3 complete
 149	8db7cdf24	depth+voice+simplicity	keep	Lab	L5 Efficiency+Aging OG formula_score live extract	trust=T5,T6; pytest 5; curl eff 64569B aging 63841B; formula OG epic 3/3 complete
-150	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 Dynasty Rankings LabPanelShareBar GTM export	trust=T5,T6; pytest 2; curl rankings 66806B; share bar epic 1/4
+150	691bd5e1b	depth+voice+simplicity	keep	Lab	L5 Dynasty Rankings LabPanelShareBar GTM export	trust=T5,T6; pytest 2; curl rankings 66806B; share bar epic 1/4
+151	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 Breakouts+BuySell LabPanelShareBar GTM export	trust=T5,T6; pytest 4; curl breakouts 66253B buysell 63936B; share bar epic 2/4
