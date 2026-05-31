@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | PASS | group-chat deep-link angle logged.
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | b71fcea5b | PASS | group-chat deep-link angle logged.
 
 2026-05-31 | explore-og-formula-sort-label | 710ec33e | PASS | no new intel; formula label trust pattern.
 

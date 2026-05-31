@@ -1,6 +1,6 @@
 # Memory — Chief of Staff
 
-2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | keep | League L5 H2H epic complete; factory cycle 131; lock #1090.
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | b71fcea5b | keep | League L5 H2H epic complete; factory cycle 131; lock #1090.
 
 2026-05-31 | explore-og-formula-sort-label | 710ec33e | keep | Explore L5 OG epic complete; factory cycle 130; PR #996.
 

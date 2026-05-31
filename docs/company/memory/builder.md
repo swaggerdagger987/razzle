@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | keep | LeagueDashboard rivalryUserId; pickOpponent sets user.
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | b71fcea5b | keep | LeagueDashboard rivalryUserId; pickOpponent sets user.
 
 2026-05-31 | explore-og-formula-sort-label | 710ec33e | keep | sort+api_sort on ShareButton; FORMULA SORT OG badge; curl 73889B.
 

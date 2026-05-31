@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | bureau-h2h-pick-opponent-preserve-user | da33eafd | PASS | build + pytest 78; curl H2H 78250B.
+2026-05-31 | bureau-h2h-pick-opponent-preserve-user | b71fcea5b | PASS | build + pytest 78; curl H2H 78250B.
 
 2026-05-31 | explore-og-formula-sort-label | 710ec33e | PASS | curl formula OG 73889B; build exit 0.
 
