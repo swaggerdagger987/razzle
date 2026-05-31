@@ -1,7 +1,13 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { toLeague, toRoom } from "@razzle/hallway";
 
 export const runtime = "edge";
+
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
 
 const POS_COLOR: Record<string, string> = {
   QB: "#5b7fff",
@@ -59,9 +65,13 @@ function rowsFromDepth(depth: Record<string, DepthBlock>): PosRow[] {
   });
 }
 
-async function fetchRosterDepth(leagueId: string, userId: string): Promise<DepthData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+async function fetchRosterDepth(
+  req: Request,
+  leagueId: string,
+  userId: string,
+): Promise<DepthData | null> {
   if (!leagueId || !userId) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/roster-depth`, {
@@ -85,7 +95,7 @@ export async function GET(req: Request) {
   const user = url.searchParams.get("user") ?? "";
 
   const hawkeye = AGENT_BY_ID.hawkeye;
-  const live = await fetchRosterDepth(league, user);
+  const live = await fetchRosterDepth(req, league, user);
   const isDemo = !live?.depth;
   const rows = isDemo ? DEMO_ROWS : rowsFromDepth(live!.depth!);
   const totalPlayers = isDemo ? 15 : Number(live?.total_players ?? 0);
@@ -93,6 +103,14 @@ export async function GET(req: Request) {
   for (const row of rows) {
     if (row.count < weakest.count) weakest = row;
   }
+  const leagueDeepLink = league ? toLeague(league, "roster-depth") : "/league/roster-depth";
+  const hawkeyeRoomPath = weakest
+    ? toRoom({
+        agentId: "hawkeye",
+        question: `How do I fix my ${weakest.position} room? Only ${weakest.count} rostered (grade ${weakest.grade}).`,
+        panelSlug: "roster-depth",
+      })
+    : "/room?agent=hawkeye&from=roster-depth";
 
   return new ImageResponse(
     (
@@ -140,6 +158,48 @@ export async function GET(req: Request) {
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 14 }}>
           {`position grades · ${totalPlayers} rostered${isDemo ? " · sample preview" : ""}`}
         </div>
+
+        {isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#8b5cf6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            SAMPLE · position depth grades
+          </div>
+        ) : (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · Sleeper roster depth
+          </div>
+        )}
 
         {weakest ? (
           <div
@@ -225,22 +285,32 @@ export async function GET(req: Request) {
           })}
         </div>
 
+        {weakest ? (
+          <div style={{ display: "flex", fontSize: 18, color: "#d97757", marginTop: 10 }}>
+            {`razzle.lol${hawkeyeRoomPath} · ask ${hawkeye.name} about ${weakest.position} depth`}
+          </div>
+        ) : null}
+
+        {/* Always-on watermark band — matches H2H + Trade Finder OG (T6 screenshot gravity) */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "center",
+            marginTop: 16,
+            padding: "10px 18px",
+            background: "#d97757",
+            color: "#f7efe5",
+            border: "3px solid #2d1f14",
+            borderRadius: 8,
+            boxShadow: "4px 4px 0 #2d1f14",
             fontSize: 20,
-            color: "#5c4a3d",
-            marginTop: 14,
           }}
         >
-          <div style={{ display: "flex" }}>{`razzle.lol/league${league ? `/${league}` : ""}/roster-depth`}</div>
-          {isDownload ? (
-            <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 28, color: "#d97757" }}>
-              made with 🐯 razzle.lol
-            </div>
-          ) : null}
+          <div style={{ display: "flex", fontWeight: 700 }}>{`razzle.lol${leagueDeepLink}`}</div>
+          <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
+            {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
+          </div>
         </div>
       </div>
     ),
