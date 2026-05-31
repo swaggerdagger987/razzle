@@ -8,8 +8,8 @@
     {
       "id": "lab-og-position-tradevalues-efficiency-buysell",
       "title": "Trade values, efficiency, buy/sell export passes position filter",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "aaacbb4e"
     },
     {
       "id": "lab-og-position-aging-verify",
@@ -18,8 +18,8 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-efficiency-buysell",
+  "next_atom_id": "lab-og-position-aging-verify",
   "created_at": "2026-05-31T08:00:00Z",
   "updated_at": "2026-05-31T08:00:00Z",
-  "last_cycle_commit": null
+  "last_cycle_commit": "aaacbb4e"
 }
