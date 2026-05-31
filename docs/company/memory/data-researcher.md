@@ -4,6 +4,7 @@
 
 2026-05-31 | Trade-value + PPO OG screenshot angle | cycle 95 | logged | REDDIT-INTEL | Bones/Octo ranked export cards for trade threads
 
+2026-05-31 | trade values formula OG | cycle 95 | DynastyFF threads rank custom formulas before sharing trade boards
 
 Append-only log of recurring user pain patterns, language signals, and feature-gap
 candidates that became (or didn't become) PARITY rows.

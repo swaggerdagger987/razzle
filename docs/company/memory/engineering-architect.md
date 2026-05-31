@@ -1,9 +1,12 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-buysell-aging-sort | extractRows buy_low/positions; 3-file ≤80 lines | da33eafd | SHIP | KEEP before rankings atom
+2026-05-31 | lab-og-buysell-aging-sort | extractRows buy_low/positions; 3-file ≤80 lines | 4a62c72e | SHIP | KEEP before rankings atom
 
 2026-05-31 | lab-og-tradevalues-efficiency-sort | 3-file contract; OG slug set extension | e0819084 | SHIP | KEEP DIRECT_STAT_SORT_SLUGS for launch-10 remainder
 
+2026-05-31 | tradevalues snapshot contract | 5ed39e14 | 1-file ≤25 lines; rank+formula statLabel pattern matches buysell
+
+2026-05-31 | buysell snapshot contract | 98ae0ef2 | 1-file ≤35 lines; reuse encodeOgSnapshot; no route touch
 
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
 
@@ -20,7 +23,8 @@ which migrations were painful, which test patterns caught bugs.
 
 ## Entries
 
-2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | use client + useMemo; 1 file mirrors DynastyCompsRenderer
+2026-05-31 | WeeklyHeatmap hot-week snapshot | 1 file ≤45 lines | SHIP | keep | max-week map sort mirrors panel hotPlayer logic
+
 2026-05-31 | BureauPressureMap copy link | 1 file ≤35 lines | SHIP | keep | mirrors ManagerProfiles clipboard row
 2026-05-30 | Generic extractRows() with 7 response shapes handles all 100 panels without per-panel switch | apps/web/app/og/[panel]/route.tsx | ACCEPTANCE Gate 2 (Lab renderers) | keep | Satori constraints: display:flex everywhere, no grid; agentForPanel() from @razzle/agents avoids metadata duplication; parameterized API paths ({player_id}) correctly skipped
 2026-05-31 | demoRowsForPanel() + isDemo mirrors H2H; blurb must be single JSX text child for Satori | apps/web/app/og/[panel]/route.tsx | FACTORY-DOD Gate C | keep | Two adjacent text children in blurb div caused Satori pipe failure — template string fix

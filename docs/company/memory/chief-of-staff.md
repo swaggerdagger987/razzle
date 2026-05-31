@@ -1,8 +1,13 @@
 # Memory — Chief of Staff
 
-2026-05-31 | Factory cycle 96 buysell/aging OG sort | da33eafd | keep | workday open; direct-sort epic atom 2/3
+2026-05-31 | Factory cycle 98 buysell/aging OG sort | 4a62c72e | keep | workday open; direct-sort epic atom 2/3
 
 2026-05-31 | Factory cycle 95 OG direct sort | e0819084 | keep | workday open; Lab L5 direct-sort epic atom 1/3
+2026-05-31 | Factory cycle 96 H2H codec | da33eafd | Workday open; League L5 codec epic atom 1/3 SHIP.
+
+2026-05-31 | Lab L5 OG epic complete | 5ed39e14 | Four atoms merged in one workday branch; next PARITY lead is Bureau H2H export.
+
+2026-05-31 | Factory open cycle 94 buysell OG | 98ae0ef2 | keep | workday open atom 3/4 Lab L5 epic
 
 Append-only log of coordination patterns, what worked, what didn't.
 
@@ -14,6 +19,10 @@ YYYY-MM-DD | hypothesis | outcome | keep | discard | revisit | evidence
 
 A good entry changes future behavior. A bad entry is a diary.
 
+2026-05-31 | factory cycle 1 | Lab weekly hot-week OG atom 2/4 | da33eafd | SHIP | KEEP epic atom chain | — | — | standup 2026-05-31 cycle 93
+
+2026-05-31 | factory cycle 1 | Lab epic after League unhide complete | da33eafd | SHIP | KEEP NEXT.md lead for slice pick | — | — | standup 2026-05-31 cycle 92
+
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 
 2026-05-31 | Factory cycle 1 dashboard OG snapshot | c9151786 | keep | dedup prospects+tradevalues on base 1a56450e
@@ -24,6 +33,7 @@ A good entry changes future behavior. A bad entry is a diary.
 
 ## Entries
 
+2026-05-31 | Factory open cycle 90 waiver tendencies | da33eafd | keep | League L5 epic atom 2/3 merged path
 2026-05-31 | Factory cycle 2 Pressure Map copy link | da33eafd | keep | workday open; behavioral share epic 2/4 SHIP
 2026-05-30 | NEXT.md eliminates slice selection ambiguity for morning standups | SHIP 3/3 on Lab L5 OG live data rows | keep | NEXT.md lead candidate matched PARITY/DEPTH/ACCEPTANCE; single-file touch kept scope tight
 2026-05-31 | Factory cycle 1 — epic.json + FACTORY-DOD Gate C for Lab OG | SHIP 3/3 demo rows atom | keep | Workday opened; curl PNG ~59KB proves Gate C; standup-pr-autopen on branch from PR #18
@@ -48,3 +58,4 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 Build Profiles tab | da33eafd | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
 - 2026-05-31 cycle 92: SOS BureauStrengthOfSchedule — mirror waiver/build 3-file pattern.
 - 2026-05-31 cycle 93: Rebase SOS onto Lab epic base; force-push bf03 for PR #456 merge.
+2026-05-31 | Factory open cycle 1 Schedule tab | da33eafd | keep | dedup waiver a2536dcc; HIDDEN empty; epic complete

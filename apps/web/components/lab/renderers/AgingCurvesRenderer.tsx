@@ -409,6 +409,7 @@ export function AgingCurvesRenderer({ panel }: Props) {
           <LabOgExportLink
             slug="aging"
             downloadName="razzle-aging-curves.png"
+            position={position}
             snapshotRows={ogSnapshotRows}
           />
         </footer>

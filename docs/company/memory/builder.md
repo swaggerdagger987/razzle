@@ -1,8 +1,13 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-buysell-aging-sort | buy_low/sell_high extractRows; buysell+aging DIRECT_STAT_SORT; renderer PPG/mismatch sort | da33eafd | SHIP | KEEP before rankings atom | evidence/2026-05-31-lab-og-buysell-aging-sort.md
+2026-05-31 | lab-og-buysell-aging-sort | buy_low/sell_high extractRows; buysell+aging DIRECT_STAT_SORT; renderer PPG/mismatch sort | 4a62c72e | SHIP | KEEP before rankings atom | evidence/2026-05-31-lab-og-buysell-aging-sort.md
 
 2026-05-31 | lab-og-tradevalues-efficiency-sort | trade value + PPO renderer sort; OG DIRECT_STAT_SORT_SLUGS | e0819084 | SHIP | KEEP pattern for buysell/aging atoms | evidence/2026-05-31-lab-og-tradevalues-efficiency-sort.md
+2026-05-31 | H2H canonical codec | da33eafd | BureauH2HShareBar uses encodeBureauH2HOgSnapshot; OG route decodeBureauH2HOgSnapshot.
+
+2026-05-31 | Trade values OG rank labels | 5ed39e14 | TradeValuesRenderer ogSnapshotRows uses `rank · Value` or `rank · formula.name` on top 6 sorted rows.
+
+2026-05-31 | Buy/Sell OG lane labels | 98ae0ef2 | BuySellRenderer splits buyRows/sellRows with Buy/Sell statLabel before encodeOgSnapshot.
 
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
@@ -16,6 +21,8 @@ Read this file before implementing. Reuse working patterns; avoid repeating know
 failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
+
+2026-05-31 | weekly-hot-week-og | ogSnapshotRows max week pts + Wk label | da33eafd | SHIP | KEEP hottest-week not PPG | — | — | evidence/2026-05-31-lab-weekly-hot-week-snapshot.md
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
@@ -51,3 +58,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
 - 2026-05-31 cycle 92: SOS BureauStrengthOfSchedule — mirror waiver/build 3-file pattern.
 - 2026-05-31 cycle 93: HIDDEN_BUREAU_SLUGS empty; BureauStrengthOfSchedule Octo bars; 0b9dfe7e.
+2026-05-31 | league-strength-of-schedule-tab | da33eafd | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3

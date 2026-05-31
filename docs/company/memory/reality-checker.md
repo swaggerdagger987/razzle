@@ -1,9 +1,14 @@
 # Memory — Reality Checker
 
-2026-05-31 | Lab OG buysell/aging Gate C | da33eafd | PASS | curl buysell 44258B aging 44952B PNG | keep | evidence/2026-05-31-lab-og-buysell-aging-sort.md
+2026-05-31 | Lab OG buysell/aging Gate C | 4a62c72e | PASS | curl buysell 44258B aging 44952B PNG | keep | evidence/2026-05-31-lab-og-buysell-aging-sort.md
 
-2026-05-31 | Lab OG tradevalues/efficiency Gate C | da33eafd | PASS | curl tradevalues 51115B efficiency 45113B PNG | keep | docs/v2/evidence/2026-05-31-lab-og-tradevalues-efficiency-sort.md
+2026-05-31 | Lab OG tradevalues/efficiency Gate C | e0819084 | PASS | curl tradevalues 51115B efficiency 45113B PNG | keep | docs/v2/evidence/2026-05-31-lab-og-tradevalues-efficiency-sort.md
 
+2026-05-31 | H2H codec Gate C | da33eafd | curl demo 71895B snapshot 70829B; PASS
+
+2026-05-31 | tradevalues OG Gate C | 5ed39e14 | curl demo 62488B snap 62441B; PASS
+
+2026-05-31 | buysell OG Gate C | 98ae0ef2 | curl demo 58072B snap 57884B; PASS
 
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
@@ -18,12 +23,16 @@ Read this file before reviewing a claim. Recurring failure classes deserve
 explicit checks in the verification routine.
 
 2026-05-31 cycle 94: PASS breakouts OG curl 200 61718B + pytest 51 + web build 0.
+2026-05-31 | weekly OG hot-week snapshot ≥40KB | curl localhost PNG snap 51665B demo 63819B | Lab L5 OG | PASS | — | KEEP Wk N label in snapshot curl | — | evidence 2026-05-31-lab-weekly-hot-week-snapshot
+
+2026-05-31 | dashboard OG snapshot ≥40KB | curl localhost PNG | Lab L5 OG | PASS | — | KEEP snapshot param curl | — | evidence 2026-05-31-lab-dashboard-top5-og-snapshot
 
 ---
 
 ## Entries
 
-2026-05-31 | Dashboard comps OG Gate C | c9151786 | PASS | curl dynasty-comps 65961B PNG | keep | evidence/2026-05-31-lab-dashboard-og-snapshot.md
+2026-05-31 | league-waiver-tendencies | PASS | pytest 51 + web build; no OG | keep | — | evidence/2026-05-31-league-waiver-tendencies-tab.md
+
 2026-05-31 | Pressure Map copy link Gate C | curl pressure-map 200 60661B; build+pytest | PASS | keep | docs/v2/evidence/2026-05-31-bureau-pressure-map-copy-link.md
 2026-05-30 | Lab L5 OG live data rows | test (npm run build + pytest + tsc) | Lab L5 DEPTH claim verified | PASS | no terminal.db on CI VM means data-path is untested end-to-end; fallback path (empty data → icon + loading copy) verified; production needs NEXT_PUBLIC_API_ORIGIN env var | keep | future: add OG snapshot test with fixture data
 2026-05-31 | Lab OG demo rows Gate C | curl /og/rankings 200 59509B; /og/breakouts 200 60649B; build+pytest | PASS | FACTORY-DOD C2/C3 | keep | docs/v2/evidence/2026-05-31-lab-og-demo-rows.md
