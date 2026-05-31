@@ -1,3 +1,4 @@
+2026-05-31 | league-pressure-map-og-room-hallway | bcf5cfaf4 | SHIP | Good morning cycle 1; League L5 OG hallway atom 1/2; PR #1384.
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | SHIP | Factory cycle 1; H2H GTM epic 1/3; PR #1350.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Factory cycle 1; dedup snapshot on base.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
