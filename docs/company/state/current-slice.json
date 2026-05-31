@@ -1,25 +1,24 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG share cards must render the same player rows as in-product panels when the API returns data — not generic demo shells (DEPTH Lab L5).",
-  "epic": "Lab L5 — OG live panel row parity",
-  "slice_title": "Dashboard OG extracts top5/risers + rank_diff for live rows",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — /og/dashboard PNG ≥40KB with live or demo rows",
+  "big_problem": "Bureau rivalry screens must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic": "League L5 — Bureau share row parity",
+  "slice_title": "Monte Carlo copy link beside export card (dedup: on base as ShareBar)",
+  "parity_ref": "Explore L5 — Bureau share row parity",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/monte-carlo PNG ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx"
+    "apps/web/components/league/BureauMonteCarloShareBar.tsx"
   ],
   "max_files": 1,
-  "max_lines": 25,
+  "max_lines": 35,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/dashboard?download=1'"
+    "curl -s -o /tmp/og-monte-carlo.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/monte-carlo?download=1'"
   ],
   "out_of_scope": [
-    "New panels",
-    "NORTH_STAR / DESIGN edits"
+    "Duplicate inline copy in BureauMonteCarlo.tsx — base uses ShareBar"
   ],
   "builder_mode": "composer-surgical"
 }
