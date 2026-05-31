@@ -24,5 +24,11 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory open cycle 1 self-scout OG epic complete | e732f973 | keep | workday open; Bureau OG atom 4/4 SHIP; curl 66997B; epic complete
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
+2026-05-31 | Lab OG dynasty-comps panel export supplement | b7deed67 | keep | DynastyCompsPanel + DEFAULT_LAB_OG_PLAYER_ID on gamelog
+2026-05-31 | Lab OG snapshot rows atom 1/4 | 916ba843 | keep | new epic; workday cycle 1
+2026-05-31 | Lab OG snapshot buysell/efficiency/aging | snapshotRows useMemo | 33808392 | keep | 3 renderers | — | — | evidence/2026-05-31-lab-og-snapshot-launch10-panels.md
+2026-05-31 | Lab OG snapshot gamelog/comps | workday cycle 1 atom 5/6 | 75c88d30 | keep | factory open 2026-05-31
+2026-05-31 | Lab OG live-label | epic atom 6/6 complete | e31a59f1 | keep | workday cycle 1
+2026-05-31 | League hidden Bureau epic | roster-depth atom 1/5 | da33eafd | keep | workday cycle 2; new epic after Lab OG complete
 2026-05-31 | Factory open cycle 1 Lab live OG rows | 2cb898b6 | keep | workday open; epic atom 1/3 SHIP; PR standup 2026-05-31
 2026-05-31 | Factory cycle 1 Bureau H2H export | 044ee1e8 | keep | workday open; League L5 epic atom 1/3; copy link + export bar
