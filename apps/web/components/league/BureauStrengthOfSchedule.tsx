@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauStrengthOfScheduleShareBar } from "./BureauStrengthOfScheduleShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -16,6 +17,7 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
   const yourPpg = data.your_ppg != null ? Number(data.your_ppg) : null;
   const oppAvg = data.opponent_avg_ppg != null ? Number(data.opponent_avg_ppg) : null;
   const verdict = String(data.verdict ?? "");
+  const userId = String(data.user_id ?? "");
   const delta =
     yourPpg != null && oppAvg != null && !Number.isNaN(yourPpg) && !Number.isNaN(oppAvg)
       ? Math.round((yourPpg - oppAvg) * 10) / 10
@@ -102,6 +104,16 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
           >
             ask Octo about your slate →
           </Link>
+          {userId ? (
+            <BureauStrengthOfScheduleShareBar
+              leagueId={leagueId}
+              userId={userId}
+              yourRank={yourRank}
+              yourPpg={yourPpg}
+              opponentAvgPpg={oppAvg}
+              verdict={verdict}
+            />
+          ) : null}
         </section>
       )}
 
