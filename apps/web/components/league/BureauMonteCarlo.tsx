@@ -5,7 +5,7 @@ import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Route } from "next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getSleeperUser } from "@/lib/sleeper";
 import { BureauRowsTable } from "./BureauRowsTable";
 
@@ -32,6 +32,18 @@ export function BureauMonteCarlo({ data, leagueId }: Props) {
   const octo = AGENT_BY_ID.octo;
   const searchParams = useSearchParams();
   const [scenario, setScenario] = useState<Record<string, unknown> | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const copyMonteCarloLink = useCallback(async () => {
+    if (typeof window === "undefined") return;
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, []);
   const giveId = searchParams.get("give");
   const getId = searchParams.get("get");
   const partnerRoster = searchParams.get("partner");
@@ -265,7 +277,10 @@ export function BureauMonteCarlo({ data, leagueId }: Props) {
       )}
 
       {top && (
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" className="btn-chunky text-xs" onClick={() => void copyMonteCarloLink()}>
+            {copied ? "copied!" : "copy link"}
+          </button>
           <Link
             href={
               toRoom({
