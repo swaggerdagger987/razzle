@@ -2,6 +2,7 @@
 
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
+import { encodeH2hSnapshot } from "@/lib/bureau-h2h-snapshot";
 import Link from "next/link";
 import { BureauH2HShareBar } from "./BureauH2HShareBar";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -50,6 +51,16 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
 
   const offer = tradeFit.you_could_offer.join(", ") || "—";
   const want = tradeFit.you_could_target.join(", ") || "—";
+
+  const h2hSnapshot =
+    you && them
+      ? encodeH2hSnapshot({
+          you: { team: you.team, record: you.record, ppg: you.ppg },
+          them: { team: them.team, record: them.record, ppg: them.ppg },
+          position_compare: positionCompare,
+          trade_fit: tradeFit,
+        })
+      : undefined;
 
   return (
     <div className="flex flex-col gap-6">
@@ -172,7 +183,12 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
               open Trade Finder →
             </Link>
             {you?.user_id && (
-              <BureauH2HShareBar leagueId={leagueId} userId={you.user_id} opponentId={opponentId || undefined} />
+              <BureauH2HShareBar
+                leagueId={leagueId}
+                userId={you.user_id}
+                opponentId={opponentId || undefined}
+                snapshot={h2hSnapshot}
+              />
             )}
           </section>
         </>
