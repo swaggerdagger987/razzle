@@ -33,3 +33,4 @@ explicit checks in the verification routine.
 2026-05-31 | Bureau H2H OG Gate C | 044ee1e8 | PASS | curl h2h 59305B PNG | keep | docs/v2/evidence/2026-05-31-bureau-h2h-share-bar.md
 2026-05-31 | Bureau MC share Gate C | 3392bc29 | PASS | curl monte-carlo 53767B PNG | keep | evidence/2026-05-31-bureau-monte-carlo-share-bar.md
 2026-05-31 | Bureau power rankings OG Gate C | 9714bfa6 | PASS | curl power-rankings 59358B PNG | keep | docs/v2/evidence/2026-05-31-bureau-power-rankings-og.md
+2026-05-31 | Lab L5 weekly OG snapshot | lab-og-weekly-snapshot | Lab L5 PARITY | SHIP cycle 86 | keep | — | — | evidence/2026-05-31-lab-og-weekly-snapshot.md

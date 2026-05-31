@@ -33,3 +33,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
+2026-05-31 | Lab L5 weekly OG snapshot | lab-og-weekly-snapshot | Lab L5 PARITY | SHIP cycle 86 | keep | — | — | evidence/2026-05-31-lab-og-weekly-snapshot.md

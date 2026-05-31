@@ -19,6 +19,10 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Cycle 86 (Lab weekly OG snapshot)
+
+1. **Heatmap exports should mirror PPG leaders** — managers screenshot the colored grid; OG must encode the same top rows, not generic value demos.
+
 ## 2026-05-31 — Cycle 83 (Bureau build profiles tab)
 
 1. **Archetype grids travel in league chats** — Hero RB / Zero RB labels are meme-ready for trade negotiation screenshots.

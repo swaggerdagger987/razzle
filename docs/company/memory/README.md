@@ -50,3 +50,4 @@ ontract or prompt is broken. Fix the prompt, not the memory.
 ontract or prompt is broken. Fix the prompt, not the memory.
 ontract or prompt is broken. Fix the prompt, not the memory.
 ontract or prompt is broken. Fix the prompt, not the memory.
+2026-05-31 | Lab L5 weekly OG snapshot | lab-og-weekly-snapshot | Lab L5 PARITY | SHIP cycle 86 | keep | — | — | evidence/2026-05-31-lab-og-weekly-snapshot.md
