@@ -1,9 +1,10 @@
-cycle: 95
+cycle: 97
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: (epic complete — pick next from PARITY/NEXT)
-last_keep_cycle: 95
+next_slice: lab-og-position-tradevalues-prospects
+last_keep_cycle: 97
 last_commit: e55e982f
 league_l5_unhide_bureau_tabs_epic: complete
-league_l5_strength_of_schedule_tab: complete
+lab_l5_dashboard_og_epic: complete
+lab_l5_og_fidelity_epic: active
