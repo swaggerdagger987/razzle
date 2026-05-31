@@ -34,6 +34,8 @@ GENERIC_PRO_GATE_SLUGS = (
     "stocks",
     "waivers",
     "dynasty-comps",
+    "percentiles",
+    "strengths",
 )
 
 BUREAU_7_FEATURE_SLUGS = (
