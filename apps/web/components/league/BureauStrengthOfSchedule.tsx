@@ -10,22 +10,16 @@ interface Props {
   leagueId: string;
 }
 
-function scheduleTone(yourPpg: number, oppPpg: number): { label: string; color: string } {
-  const delta = yourPpg - oppPpg;
-  if (delta >= 8) return { label: "easy road", color: "var(--green)" };
-  if (delta >= 0) return { label: "even slate", color: "var(--orange)" };
-  if (delta >= -8) return { label: "tough slate", color: "var(--red)" };
-  return { label: "brutal slate", color: "var(--red)" };
-}
-
 export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
   const octo = AGENT_BY_ID.octo;
-  const yourRank = data.your_rank as number | undefined;
-  const yourPpg = (data.your_ppg as number) ?? 0;
-  const oppPpg = (data.opponent_avg_ppg as number) ?? 0;
-  const verdict = (data.verdict as string) ?? "Schedule strength loading from league power model.";
-  const tone = scheduleTone(yourPpg, oppPpg);
-  const delta = Math.round((yourPpg - oppPpg) * 10) / 10;
+  const yourRank = data.your_rank != null ? Number(data.your_rank) : null;
+  const yourPpg = data.your_ppg != null ? Number(data.your_ppg) : null;
+  const oppAvg = data.opponent_avg_ppg != null ? Number(data.opponent_avg_ppg) : null;
+  const verdict = String(data.verdict ?? "");
+  const delta =
+    yourPpg != null && oppAvg != null && !Number.isNaN(yourPpg) && !Number.isNaN(oppAvg)
+      ? Math.round((yourPpg - oppAvg) * 10) / 10
+      : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -37,7 +31,7 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
               {octo.name} · {octo.role}
             </p>
             <p className="text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-              rest-of-season opponent power vs your scoring pace
+              remaining slate strength from live power rankings — not vibes
             </p>
           </div>
         </div>
@@ -45,70 +39,78 @@ export function BureauStrengthOfSchedule({ data, leagueId }: Props) {
           Strength of Schedule
         </h1>
         <p className="text-ink-medium mt-1 text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-          {yourRank != null ? `#${yourRank} in league power` : "league power model"} · avg opponent {oppPpg} PPG
+          league {String(data.league_id ?? leagueId)}
         </p>
       </header>
 
-      <section className="chunky bg-bg-card p-4">
-        <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-          schedule verdict
-        </p>
-        <p
-          className="mt-2 inline-block rounded px-2 py-0.5 text-xs font-bold uppercase text-white"
-          style={{ background: tone.color, fontFamily: "var(--font-mono)", transform: "rotate(-1deg)" }}
-        >
-          {tone.label}
-        </p>
-        <p className="mt-3 text-sm text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
-          {verdict}
-        </p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <div className="chunky bg-bg p-3">
-            <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-              your PPG
-            </p>
-            <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
-              {yourPpg}
-            </p>
-          </div>
-          <div className="chunky bg-bg p-3">
-            <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-              avg opp PPG
-            </p>
-            <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
-              {oppPpg}
-            </p>
-          </div>
-          <div className="chunky bg-bg p-3">
-            <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
-              edge vs field
-            </p>
-            <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: tone.color }}>
-              {delta > 0 ? "+" : ""}
-              {delta}
-            </p>
-          </div>
+      <section className="grid gap-4 sm:grid-cols-3">
+        <div className="chunky bg-bg-card p-4" style={{ transform: "rotate(-0.5deg)" }}>
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            your rank
+          </p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--pos-qb)" }}>
+            {yourRank != null ? `#${yourRank}` : "—"}
+          </p>
         </div>
-        <Link
-          href={
-            toRoom({
-              agentId: "octo",
-              question: `How should I plan around a ${tone.label} rest-of-season schedule?`,
-              panelSlug: "strength-of-schedule",
-            }) as Route
-          }
-          className="mt-4 inline-block text-sm text-orange underline"
-        >
-          ask {octo.name} →
-        </Link>
+        <div className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            your PPG
+          </p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
+            {yourPpg != null ? yourPpg.toFixed(1) : "—"}
+          </p>
+        </div>
+        <div className="chunky bg-bg-card p-4" style={{ transform: "rotate(0.5deg)" }}>
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            avg opponent PPG
+          </p>
+          <p className="text-4xl font-bold" style={{ fontFamily: "var(--font-display)", color: "var(--orange)" }}>
+            {oppAvg != null ? oppAvg.toFixed(1) : "—"}
+          </p>
+        </div>
       </section>
+
+      {delta != null && (
+        <section className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            pace edge vs field
+          </p>
+          <p className="mt-1 text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>
+            {delta >= 0 ? "+" : ""}
+            {delta} PPG vs average opponent
+          </p>
+        </section>
+      )}
+
+      {verdict && (
+        <section className="chunky bg-bg-card p-4">
+          <p className="text-xs uppercase text-ink-light" style={{ fontFamily: "var(--font-mono)" }}>
+            Octo read
+          </p>
+          <p className="mt-2 text-lg text-ink-medium" style={{ fontFamily: "var(--font-hand)" }}>
+            {verdict}
+          </p>
+          <Link
+            href={
+              toRoom({
+                agentId: "octo",
+                question: `My strength of schedule says: ${verdict} — how should I attack the next three weeks?`,
+                panelSlug: "strength-of-schedule",
+              }) as Route
+            }
+            className="mt-3 inline-block text-sm text-orange underline"
+          >
+            ask Octo about your slate →
+          </Link>
+        </section>
+      )}
 
       <footer className="flex flex-wrap gap-4 text-sm">
         <Link href={`/league/${leagueId}/power-rankings` as Route} className="text-orange underline">
-          power rankings →
+          full power rankings →
         </Link>
         <Link href={`/league/${leagueId}/monte-carlo` as Route} className="text-orange underline">
-          monte carlo →
+          playoff odds sim →
         </Link>
       </footer>
     </div>

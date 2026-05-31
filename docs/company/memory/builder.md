@@ -13,6 +13,7 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | league-roster-depth-og-share | /og/roster-depth + BureauRosterDepthShareBar | 688cea64 | SHIP | KEEP depthGrade parity on OG card | — | build-profiles OG atom 2 | evidence/2026-05-31-league-roster-depth-og-share.md
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 2026-05-31 | DashboardRenderer snapshotRows | c9151786 | keep | comps match % on dynasty-comps OG; curl 65961B
 
@@ -44,5 +45,4 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | league-build-profiles-tab | da33eafd | keep | BureauBuildProfiles Atlas archetype grid; unhide slug; build PASS pytest 51
-2026-05-31 | league-roster-depth-og-share | da33eafd | keep | /og/roster-depth Hawkeye grades; curl 57282B; BureauRosterDepthShareBar
-2026-05-31 | league-strength-of-schedule-tab | 49e5421f | keep | BureauStrengthOfSchedule Octo SOS; HIDDEN_BUREAU_SLUGS empty; pytest 51
+2026-05-31 | league-strength-of-schedule-tab | da33eafd | keep | BureauStrengthOfSchedule; HIDDEN_BUREAU_SLUGS empty; epic 3/3
