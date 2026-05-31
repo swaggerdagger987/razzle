@@ -1,31 +1,30 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
-  "epic_title": "Lab L5 — OG snapshot row fidelity",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "big_problem": "Pro Lab panels still read like a paywall error — free users bounce before they see why the intel is worth upgrading.",
+  "epic_title": "Lab L4 — Pro gate upgrade voice",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
   "atoms": [
     {
-      "id": "lab-og-prospects-rps-ranked",
-      "title": "Prospects OG export ranks top-6 by RPS with position filter",
-      "status": "done",
-      "merge_commit": "c0358ff3"
+      "id": "lab-l4-pro-gate-voice",
+      "title": "ProUpgradeGate copy feels like upgrade not error",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-weekly-ppg-ranked",
-      "title": "Weekly OG export ranks top-6 by PPG for active position tab",
+      "id": "lab-sidebar-agent-groups",
+      "title": "Lab sidebar Staff Picks grouped by agent owner",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-breakouts-score-ranked",
-      "title": "Breakouts OG export ranks top-6 by breakout score",
+      "id": "explore-l5-injury-margin-priority",
+      "title": "Explore margin notes prioritize Dolphin injury heuristics",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-weekly-ppg-ranked",
-  "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T05:50:00Z",
-  "last_cycle_commit": "c0358ff3"
+  "next_atom_id": "lab-l4-pro-gate-voice",
+  "created_at": "2026-05-31T05:45:00Z",
+  "updated_at": "2026-05-31T05:45:00Z"
 }
