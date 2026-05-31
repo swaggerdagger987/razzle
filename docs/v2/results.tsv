@@ -59,3 +59,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 91	a2536dcc	depth+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5; Hawkeye renderer; waiver-tendencies nav visible; web build PASS; epic atom 2/3
 92	49e5421f	depth+hallway+voice	keep	League	L5 Bureau Schedule SOS tab unhidden	trust=T2,T5,T6; Octo renderer; HIDDEN_BUREAU_SLUGS empty; pytest 51; web build PASS; epic complete
 93	688cea64	depth+voice+simplicity	keep	League	L5 Bureau Roster Depth OG export card	trust=T5,T6; /og/roster-depth 57282B; share bar; pytest 51; depth OG epic atom 1/4
+94	da33eafd	depth+voice+simplicity	keep	League	L5 Bureau Build Profiles OG archetype card	trust=T5,T6; /og/build-profiles 73228B; share bar; pytest 51; depth OG epic atom 2/4
