@@ -20,19 +20,19 @@
     {
       "id": "lab-og-dynasty-comps-pro-teaser",
       "title": "Dynasty comps Pro gate panel-specific teaser rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "26a590c9"
     }
   ],
   "next_atom_id": null,
   "created_at": "2026-05-31T08:00:00Z",
-  "updated_at": "2026-05-31T08:20:00Z",
+  "updated_at": "2026-05-31T08:22:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-launch10-og-live-extract",
       "status": "complete",
       "last_atom": "lab-og-dynasty-comps-pro-teaser",
-      "merge_commit": null
+      "merge_commit": "26a590c9"
     }
   ]
 }
