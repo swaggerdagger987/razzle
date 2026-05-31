@@ -1,32 +1,32 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG snapshots should surface the same leaders the panel highlights — not arbitrary table order.",
-  "epic_title": "Lab L5 — OG snapshot row fidelity",
+  "epic_status": "active",
+  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
+  "epic_title": "Lab L5 — OG export matches in-panel position filters",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-prospects-rps-ranked",
-      "title": "Prospects OG export ranks top-6 by RPS with position filter",
+      "id": "lab-og-position-efficiency-aging",
+      "title": "Efficiency + aging export passes position filter to OG",
       "status": "done",
-      "merge_commit": "c0358ff3"
+      "merge_commit": "f358349d"
     },
     {
-      "id": "lab-og-weekly-ppg-ranked",
-      "title": "Weekly OG export ranks top-6 by PPG for active position tab",
-      "status": "done",
-      "merge_commit": "98e51602"
+      "id": "lab-og-position-tradevalues-prospects",
+      "title": "Trade values + prospects export passes position filter",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-breakouts-score-ranked",
-      "title": "Breakouts OG export ranks top-6 by breakout score",
-      "status": "done",
-      "merge_commit": "8dde70b9"
+      "id": "lab-og-position-buysell",
+      "title": "Buy/sell export passes position filter to OG",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T05:30:00Z",
-  "updated_at": "2026-05-31T14:10:00Z",
+  "next_atom_id": "lab-og-position-tradevalues-prospects",
+  "created_at": "2026-05-31T06:10:00Z",
+  "updated_at": "2026-05-31T14:20:00Z",
   "last_cycle_commit": "8dde70b9",
   "completed_epics": [
     {
@@ -34,6 +34,12 @@
       "status": "complete",
       "last_atom": "league-strength-of-schedule-tab",
       "merge_commit": "eb542d51"
+    },
+    {
+      "id": "lab-l5-og-snapshot-fidelity",
+      "status": "complete",
+      "last_atom": "lab-og-breakouts-score-ranked",
+      "merge_commit": "8dde70b9"
     }
   ]
 }
