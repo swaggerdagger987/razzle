@@ -49,4 +49,4 @@ cycle	commit	score	status	pillar	slice	description
 56	409a4ca0	gates+simplicity	keep	Lab	L5 OG export fix	Satori display:flex on /og/[panel] unblocks launch-10 export cards
 57	2e11270	depth+hallway+reddit+voice+simplicity	keep	Lab	L5 OG live data	/og/[panel] fetches live rows, agent badge, position pills, watermark, graceful fallback
 58	0019814f	depth+simplicity+voice	keep	Lab	L5 OG demo rows	trust=T5,T6; /og/[panel] static demo rows when API empty, sample preview label, Gate C PNG ~59KB
-59	PENDING_HASH	depth+simplicity+voice	keep	Lab	L5 OG launch10 demos	trust=T5,T6; launch-10 slug demo stat labels FPTS/Score/Peak Age/Chg, Gate C PNG 58-64KB
+59	da09d5b4	depth+simplicity+voice	keep	Lab	L5 OG launch10 demos	trust=T5,T6; launch-10 slug demo stat labels FPTS/Score/Peak Age/Chg, Gate C PNG 58-64KB
