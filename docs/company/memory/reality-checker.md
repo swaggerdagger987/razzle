@@ -14,6 +14,8 @@ explicit checks in the verification routine.
 
 ---
 
+2026-05-31 | tradevalues OG snapshot ≥40KB | curl 62396B PNG | Lab L5 | PASS | — | snapshot encode in curl | — | evidence/2026-05-31-lab-tradevalues-og-snapshot.md
+
 ## Entries
 
 2026-05-31 | Pressure Map copy link Gate C | curl pressure-map 200 60661B; build+pytest | PASS | keep | docs/v2/evidence/2026-05-31-bureau-pressure-map-copy-link.md

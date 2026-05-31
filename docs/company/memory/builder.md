@@ -15,6 +15,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 2026-05-31 | bureau-h2h-snapshot-export | encodeBureauH2HOgSnapshot + BureauH2HShareBar ogSnapshot prop | da33eafd | SHIP | KEEP compact H2H snapshot lib | — | decode on OG route atom 3 | evidence/2026-05-31-bureau-h2h-snapshot-export.md
 
+2026-05-31 | lab-tradevalues-og-snapshot | useMemo top-6 players + formula branch on TradeValuesRenderer | pending | SHIP | KEEP mirror Breakouts/Prospects | — | — | evidence/2026-05-31-lab-tradevalues-og-snapshot.md
+
 ---
 
 ## Entries

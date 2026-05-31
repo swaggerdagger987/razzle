@@ -12,6 +12,8 @@ A good entry changes future behavior. A bad entry is a diary.
 
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 
+2026-05-31 | good morning cycle 88 | Lab tradevalues OG snapshot closes epic 4/4 | pending | SHIP | NO_LOCK_GUARDRAIL (gh rate limit) | — | NEXT Bureau H2H | standup 2026-05-31 cycle 88
+
 ---
 
 ## Entries
