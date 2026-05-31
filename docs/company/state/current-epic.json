@@ -9,7 +9,7 @@
       "id": "league-build-profiles-tab",
       "title": "Unhide Build Profiles tab with Atlas renderer",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "76545ad6"
     },
     {
       "id": "league-power-rankings-tab",

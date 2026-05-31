@@ -4,7 +4,7 @@ focus_pillar: League
 focus_layer: L5
 next_slice: PARITY — league-power-rankings-tab
 last_keep_cycle: 75
-last_commit: PLACEHOLDER
+last_commit: 76545ad6
 explore_l5_watermarked_export: complete
 lab_l5_og_export_fix: complete
 lab_l5_og_live_data: complete
