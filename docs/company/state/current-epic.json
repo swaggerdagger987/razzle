@@ -1,44 +1,38 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab export cards vanish when a panel has no rows yet — users can't screenshot an empty tape state for Reddit.",
-  "epic_title": "Lab L5 — OG export on empty panel states",
+  "big_problem": "Lab OG cards are screenshot dead-ends — dynasty Twitter can't click back into the panel with the same filters they exported.",
+  "epic_title": "Lab L5 — OG hallway deep links",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-gamelog-empty-weeks-export",
-      "title": "Gamelog — export card when player loaded but weeks empty",
-      "status": "done",
-      "merge_commit": "ac0280a20"
+      "id": "lab-og-tolab-watermark",
+      "title": "Launch-10 panel OG — toLab() watermark path with position/player",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-efficiency-empty-export",
-      "title": "Efficiency — export sample card on empty position board",
+      "id": "lab-og-tolab-gamelog-default",
+      "title": "Gamelog OG — toLab preserves default player_id deep link",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-rankings-empty-export",
-      "title": "Rankings — export sample card when filter returns zero rows",
+      "id": "lab-og-tolab-snapshot-query",
+      "title": "Snapshot OG exports — hallway path notes from-panel context",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-efficiency-empty-export",
-  "created_at": "2026-05-31T10:05:27Z",
-  "updated_at": "2026-05-31T12:20:00Z",
+  "next_atom_id": "lab-og-tolab-watermark",
+  "created_at": "2026-05-31T12:30:00Z",
+  "updated_at": "2026-05-31T12:45:00Z",
   "completed_epics": [
     {
       "id": "room-l5-briefing-gtm-export",
       "status": "complete",
       "last_atom": "room-briefing-watermark",
-      "merge_commit": "e1eb68fe8"
-    },
-    {
-      "id": "explore-l5-og-query-epic",
-      "status": "complete",
-      "last_atom": "explore-og-formula-sort-label",
-      "merge_commit": "710ec33e"
+      "merge_commit": "eca00c3f0"
     },
     {
       "id": "lab-l5-launch10-og-panel-native-trust-labels",
@@ -50,7 +44,7 @@
       "id": "league-l5-bureau-h2h-deep-links",
       "status": "complete",
       "last_atom": "bureau-h2h-pick-opponent-preserve-user",
-      "merge_commit": "b3a10109e"
+      "merge_commit": "c7ad88bd3"
     },
     {
       "id": "lab-l4-pro-gate-error-surface",
