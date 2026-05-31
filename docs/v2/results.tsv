@@ -73,3 +73,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 105	d3a469f8	depth+voice+simplicity	keep	Lab	L5 OG renderer sort parity fix	trust=T5,T6; mismatch_score+ppo+ppg; curl buysell 44258B; supersedes wrong OG stat keys
 116	5e75875e	depth+voice+simplicity	keep	League	L5 Bureau H2H snapshot roundtrip pytest	trust=T5,T6; y/m/pc contract 4 tests; pytest 4 passed; codec epic 3/3 complete
 118	5bb77346	depth+voice+simplicity	keep	Lab	L5 Weekly+Prospects OG LIVE sticker defaults	trust=T5,T6; weekly WR apiParams; curl weekly 66512B prospects 60688B; live-rows epic atom 2/3
+119	da33eafd	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG SAMPLE vs LIVE contrast	trust=T5,T6; terracotta SAMPLE sticker; curl rankings-demo 67083B weekly-live 70383B; live-rows epic 3/3 complete
