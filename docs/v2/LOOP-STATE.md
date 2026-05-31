@@ -1,8 +1,8 @@
-cycle: 152
+cycle: 154
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: Bureau H2H export or Lab L4 polish per NEXT.md
-last_keep_cycle: 152
-last_commit: 106d508
-lab_l5_og_hallway_deep_links_epic: complete
+next_slice: lab-og-tolab-rankings-position or Bureau per PARITY
+last_keep_cycle: 154
+last_commit: 8327741
+lab_l5_og_hallway_position_defaults_epic: active
