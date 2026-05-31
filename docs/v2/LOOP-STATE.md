@@ -4,5 +4,5 @@ focus_pillar: League
 focus_layer: L5
 next_slice: league-sos-og-export-complete
 last_keep_cycle: 94
-last_commit: PLACEHOLDER
+last_commit: 0f132c4d
 league_l5_sos_export_epic: in_progress
