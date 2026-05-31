@@ -1,4 +1,4 @@
-2026-05-31 | bureau-waiver-og-gate-c-pytest | f6e0985f3 | PASS | curl waiver 68595B; pytest 5; Gate C evidence.
+2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | PASS | curl waiver 68595B; pytest 5; Gate C evidence.
 2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | PASS | curl waiver 68595B; pytest 1; evidence file.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | PASS | curl 60588B; pytest 1; evidence file.

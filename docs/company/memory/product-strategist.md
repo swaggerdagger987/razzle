@@ -1,4 +1,4 @@
-2026-05-31 | bureau-waiver-og-gate-c-pytest | f6e0985f3 | SHIP | Gate C pytest closes Bureau OG watermark epic; next Lab live rows.
+2026-05-31 | bureau-waiver-og-gate-c-pytest | 845d9d1a1 | SHIP | Gate C pytest closes Bureau OG watermark epic; next Lab live rows.
 2026-05-31 | bureau-waiver-og-watermark-band | 7f7a22676 | SHIP | Waiver OG band completes Bureau advanced export parity (T6).
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Snapshot pid wrapper; hallway epic complete (T6).
 2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | SHIP | Resumed watermark epic; SOS matches waiver/H2H.
