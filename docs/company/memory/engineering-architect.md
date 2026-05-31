@@ -1,5 +1,9 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-og-buysell-aging-sort | extractRows buy_low/positions; 3-file ≤80 lines | 4a62c72e | SHIP | KEEP before rankings atom
+
+2026-05-31 | lab-og-tradevalues-efficiency-sort | 3-file contract; OG slug set extension | e0819084 | SHIP | KEEP DIRECT_STAT_SORT_SLUGS for launch-10 remainder
+
 2026-05-31 | tradevalues snapshot contract | 5ed39e14 | 1-file ≤25 lines; rank+formula statLabel pattern matches buysell
 
 2026-05-31 | buysell snapshot contract | 98ae0ef2 | 1-file ≤35 lines; reuse encodeOgSnapshot; no route touch
@@ -41,3 +45,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | mirrors MC share bar; league OG param unchanged
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
 2026-05-31 | BureauBuildProfiles | da33eafd | keep | 3 files ≤172 lines; mirrors ManagerProfiles card grid; no API change
+- 2026-05-31 cycle 93: 3-file SOS contract rebased clean onto Lab epic base.

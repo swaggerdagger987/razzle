@@ -1,5 +1,8 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Factory cycle 98 buysell/aging OG sort | 4a62c72e | keep | workday open; direct-sort epic atom 2/3
+
+2026-05-31 | Factory cycle 95 OG direct sort | e0819084 | keep | workday open; Lab L5 direct-sort epic atom 1/3
 2026-05-31 | Factory cycle 96 H2H codec | da33eafd | Workday open; League L5 codec epic atom 1/3 SHIP.
 
 2026-05-31 | Lab L5 OG epic complete | 5ed39e14 | Four atoms merged in one workday branch; next PARITY lead is Bureau H2H export.
@@ -23,6 +26,8 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | factory cycle 1 | H2H snapshot export atom 2/3 | da33eafd | SHIP | KEEP epic decomposition | — | — | standup 2026-05-31 cycle 77
 
 2026-05-31 | Factory cycle 1 dashboard OG snapshot | c9151786 | keep | dedup prospects+tradevalues on base 1a56450e
+
+2026-05-31 | Factory cycle 1 | Lab OG fidelity epic closed (breakouts atom); weekly deduped on base.
 
 ---
 
@@ -51,4 +56,6 @@ A good entry changes future behavior. A bad entry is a diary.
 2026-05-31 | Factory cycle 79 Power Rankings OG | 90bf2dd5 | keep | unhide epic atom 2/4; curl 59807B
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Factory open cycle 1 Build Profiles tab | da33eafd | keep | new unhide epic; roster-depth dedup on base; atom 1/3 SHIP
+- 2026-05-31 cycle 92: SOS BureauStrengthOfSchedule — mirror waiver/build 3-file pattern.
+- 2026-05-31 cycle 93: Rebase SOS onto Lab epic base; force-push bf03 for PR #456 merge.
 2026-05-31 | Factory open cycle 1 Schedule tab | da33eafd | keep | dedup waiver a2536dcc; HIDDEN empty; epic complete

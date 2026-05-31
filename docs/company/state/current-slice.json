@@ -1,26 +1,38 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head — ShareBar and OG route use mismatched snapshot codecs.",
-  "epic": "League L5 — Bureau H2H snapshot codec matches OG decode",
-  "slice_title": "H2H ShareBar uses encodeBureauH2HOgSnapshot (y/m/pc compact)",
-  "atom_id": "bureau-h2h-sharebar-canonical-codec",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG head-to-head PNG ≥40KB with snapshot param from canonical encoder",
+  "big_problem": "Launch-10 Lab OG direct links must rank leaders by the same stat the panel exports — not API insertion order.",
+  "epic": "Lab L5 — OG direct-link stat sort (launch-10 remainder)",
+  "atom_id": "lab-og-buysell-aging-sort",
+  "slice_title": "Buy-sell + aging OG direct links sort top-6 by panel stat",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "depth_ref": "Lab L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with ranked rows",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/league/BureauH2HShareBar.tsx"
+    "apps/web/app/og/[panel]/route.tsx",
+    "apps/web/components/lab/renderers/BuySellRenderer.tsx",
+    "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx"
   ],
-  "max_files": 1,
-  "max_lines": 30,
+  "max_files": 3,
+  "max_lines": 80,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=ci-secret ENVIRONMENT=development python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test .venv-v2/bin/python -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/buysell?position=WR&download=1'",
+    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/aging?position=RB&download=1'"
   ],
   "out_of_scope": [
-    "Lab OG renderers",
-    "BureauOgExportLink deletion",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
+    "rankings/dashboard slugs (atom 3)",
+    "Bureau tabs",
+    "NORTH_STAR edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "votes": {
+    "product_strategist": "SHIP",
+    "engineering_architect": "SHIP",
+    "builder": "SHIP",
+    "verdict": "SHIP 3/3"
+  },
+  "verdict": "SHIP",
+  "content_commit": "4a62c72e"
 }

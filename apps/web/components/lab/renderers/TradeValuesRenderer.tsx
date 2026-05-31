@@ -87,8 +87,12 @@ export function TradeValuesRenderer({ panel }: Props) {
   });
 
   const players = useMemo(() => {
-    if (!formula || !statsQ.data) return rawPlayers;
-    return sortPlayersByFormula(rawPlayers, statsQ.data, formula);
+    if (formula && statsQ.data) {
+      return sortPlayersByFormula(rawPlayers, statsQ.data, formula);
+    }
+    return [...rawPlayers].sort(
+      (a, b) => (b.trade_value ?? 0) - (a.trade_value ?? 0),
+    );
   }, [formula, rawPlayers, statsQ.data]);
 
   const maxVal = useMemo(() => {
