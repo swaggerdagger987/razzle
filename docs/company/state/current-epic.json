@@ -14,8 +14,8 @@
     {
       "id": "lab-og-breakouts-gate-c-live",
       "title": "Breakouts OG Gate C pytest for live fetch path",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0557d20d2"
     },
     {
       "id": "lab-og-prospects-loading-snapshot",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-breakouts-gate-c-live",
+  "next_atom_id": "lab-og-prospects-loading-snapshot",
   "created_at": "2026-05-31T18:00:00Z",
-  "updated_at": "2026-05-31T18:00:00Z",
+  "updated_at": "2026-05-31T11:55:17Z",
   "completed_epics": [
     {
       "id": "league-l5-bureau-og-watermark-parity",

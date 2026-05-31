@@ -2,26 +2,28 @@
   "date": "2026-05-31",
   "big_problem": "Lab OG export cards still diverge from in-product panel rows — Reddit screenshots show generic ranks instead of the dynasty pulse the user just saw.",
   "epic": "Lab L5 — OG export cards match in-product panel rows",
-  "slice_title": "Dashboard OG live extract mirrors DynastyDashboardRenderer snapshot",
+  "slice_title": "Breakouts OG Gate C pytest for live fetch path",
   "parity_ref": "PARITY Explore L5 / Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C2/C3",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_dashboard_live.py",
-    "docs/v2/evidence/2026-05-31-lab-og-dashboard-live-extract.md"
+    "apps/api/tests/test_og_breakouts_gate_c_live.py",
+    "docs/v2/evidence/2026-05-31-lab-og-breakouts-gate-c-live.md"
   ],
-  "max_files": 3,
-  "max_lines": 120,
+  "max_files": 2,
+  "max_lines": 90,
   "acceptance_commands": [
-    "PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_og_dashboard_live.py -q --noconftest",
+    "PATH=$HOME/.local/bin:$PATH python3 -m pytest apps/api/tests/test_og_breakouts_gate_c_live.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
+    "OG route behavior changes",
     "New panels",
     "Bureau OG routes",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "status": "shipped",
+  "content_commit": "0557d20d2"
 }
