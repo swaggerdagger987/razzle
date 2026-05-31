@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab OG export cards still fall back to generic demo rows when the in-panel table has live data — screenshots do not match what the user sees (NEXT.md + PARITY Explore/Lab L5).",
   "epic_title": "Lab L5 — OG cards mirror in-panel snapshot rows",
   "parity_ref": "Explore L5 / Lab — Bureau H2H export or Lab panel OG data rows",
@@ -26,11 +26,11 @@
     {
       "id": "lab-tradevalues-og-snapshot",
       "title": "Trade values panel passes snapshotRows from sorted list",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "caffc490"
     }
   ],
-  "next_atom_id": "lab-tradevalues-og-snapshot",
+  "next_atom_id": null,
   "created_at": "2026-05-31T05:10:00Z",
-  "updated_at": "2026-05-31T05:20:00Z"
+  "updated_at": "2026-05-31T05:25:00Z"
 }
