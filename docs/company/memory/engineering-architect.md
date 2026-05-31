@@ -17,4 +17,4 @@ which migrations were painful, which test patterns caught bugs.
 
 2026-05-30 | Generic extractRows() with 7 response shapes handles all 100 panels without per-panel switch | apps/web/app/og/[panel]/route.tsx | ACCEPTANCE Gate 2 (Lab renderers) | keep | Satori constraints: display:flex everywhere, no grid; agentForPanel() from @razzle/agents avoids metadata duplication; parameterized API paths ({player_id}) correctly skipped
 2026-05-31 | Lab demo rows in [panel] route | 0019814f | keep | H2H DEMO pattern; Satori single-child blurb
-2026-05-31 | MC OG two-file slice | PENDING_HASH | keep | POST /api/bureau/monte-carlo + DEMO_ODDS fallback; export gated on Sleeper user
+2026-05-31 | MC OG two-file slice | da33eafd | keep | POST /api/bureau/monte-carlo + DEMO_ODDS fallback; export gated on Sleeper user
