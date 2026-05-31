@@ -16,12 +16,14 @@
   "max_lines": 80,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/tradevalues?download=1&snapshot=eyJyb3dzIjpbeyJuIjoiSm9uYWggU3VwcGVyIiwicCI6IlFCIiwidCI6IkJGTiIsInMiOjExMiwibCI6IlZhbHVlIn1dfQ'",
+    "curl -s -o /tmp/og-prospects.png -w '%{http_code} %{size_download}' 'http://localhost:3000/og/prospects?download=1&snapshot=eyJyb3dzIjpbeyJuIjoiTWFydmluIEhhcmlzb24iLCJwIjoiUkIiLCJ0IjoiT0hTVCIsInMiOjkyLCJsIjoiUlBTIn1dfQ'"
   ],
   "out_of_scope": [
     "OG route changes",
     "new panels",
-    "Bureau H2H",
+    "Bureau H2H (already on base)",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
@@ -29,6 +31,6 @@
     "strategist": "SHIP",
     "architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP (3/3)"
+    "verdict": "SHIP (3/3) — dedup atoms 2/3 on base; merge atom 1"
   }
 }

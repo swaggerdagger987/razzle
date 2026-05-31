@@ -57,4 +57,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 88	2ee04975	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas archetype grid; build-profiles unhidden; build PASS pytest 51; epic atom 1/3
 89	beb9d60f	depth+hallway+voice+simplicity	keep	League	L5 Bureau Waiver Tendencies tab unhidden	trust=T2,T5,T6; Hawkeye waiver archetype grid; waiver-tendencies unhidden; build PASS pytest 51; epic atom 2/3
 90	4e8df727	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS tab unhidden	trust=T2,T5,T6; Octo verdict+PPG bars; strength-of-schedule unhidden; build PASS pytest 51; epic atom 3/3 complete
+92	70af534a	depth+voice+simplicity	keep	Lab	L5 OG snapshot tradevalues prospects merge	trust=T5,T6; dedup dashboard+H2H on base; curl tradevalues 62488B prospects 58084B; merge PR #444
 91	70af534a	depth+voice+simplicity	keep	Lab	L5 OG snapshot tradevalues prospects	trust=T5,T6; snapshotRows on export; curl prospects snap 45583B tradevalues 62488B; Lab epic atom 1/3

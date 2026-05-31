@@ -15,8 +15,8 @@ Fixture snapshot: 2-row base64url JSON (`RPS` labels).
 
 | Route | HTTP | Bytes | Notes |
 |-------|------|-------|-------|
-| `/og/tradevalues?download=1&snapshot=…` | 200 | 44849 | PNG 1200×630 |
-| `/og/prospects?download=1&snapshot=…` | 200 | 45209 | PNG 1200×630 |
+| `/og/tradevalues?download=1&snapshot=…` | 200 | 62488 | PNG 1200×630 |
+| `/og/prospects?download=1&snapshot=…` | 200 | 58084 | PNG 1200×630 |
 
 ## Dashboard (pre-existing snapshot wire)
 

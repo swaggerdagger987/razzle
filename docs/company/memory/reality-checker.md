@@ -40,3 +40,4 @@ explicit checks in the verification routine.
 2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles tab | da33eafd | PASS | build exit 0; pytest 51; slug unhidden | keep | docs/v2/evidence/2026-05-31-league-build-profiles-tab.md
 2026-05-31 | Lab OG snapshot Gate C | 70af534a | PASS | curl prospects snap 45583B tradevalues 62488B | keep | evidence/2026-05-31-lab-og-snapshot-tradevalues-prospects.md
+2026-05-31 | Cycle 92 Lab OG merge re-verify | 70af534a | PASS | build exit 0; pytest 51; curl tradevalues 62488B prospects 58084B | keep | merge PR #444
