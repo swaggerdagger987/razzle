@@ -1,31 +1,30 @@
 {
   "epic_status": "active",
-  "big_problem": "Lab OG export cards must mirror in-panel position filters — snapshot-less exports still fetch unscoped live rows.",
-  "epic_title": "Lab L5 — OG export matches in-panel position filters",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "big_problem": "Lab OG export cards for Trade Values and Big Board still fall back to generic demo rows — Reddit screenshots don't match the table the user filtered.",
+  "epic_title": "Lab L5 — OG export mirrors in-panel rows on Launch-10 panels",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-position-efficiency-aging",
-      "title": "Efficiency + aging export passes position filter to OG",
+      "id": "lab-og-snapshot-tradevalues-prospects",
+      "title": "Wire snapshotRows on Trade Values + Prospects export links",
       "status": "done",
-      "merge_commit": "f358349d"
+      "merge_commit": "70af534a"
     },
     {
-      "id": "lab-og-position-tradevalues-prospects",
-      "title": "Trade values + prospects export passes position filter",
+      "id": "lab-og-snapshot-dashboard",
+      "title": "Dynasty Dashboard export passes visible riser/faller snapshot rows",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-position-buysell",
-      "title": "Buy/sell export passes position filter to OG",
+      "id": "bureau-h2h-export",
+      "title": "Bureau H2H tab share bar + OG snapshot export row",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-position-tradevalues-prospects",
-  "created_at": "2026-05-31T06:10:00Z",
-  "updated_at": "2026-05-31T06:15:00Z",
-  "last_cycle_commit": "f358349d"
+  "next_atom_id": "lab-og-snapshot-dashboard",
+  "created_at": "2026-05-31T06:00:00Z",
+  "updated_at": "2026-05-31T06:00:00Z"
 }
