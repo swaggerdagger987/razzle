@@ -1,10 +1,9 @@
-cycle: 111
+cycle: 104
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-buysell-dashboard-live-sort
-last_keep_cycle: 111
-last_commit: 2bba7622
-lab_l5_og_live_sort_epic: active
-lab_l5_og_position_epic: complete
-lab_l5_og_efficiency_aging_live_sort: in_progress
+next_slice: PARITY next RED/YELLOW row
+last_keep_cycle: 104
+last_commit: cb59494b
+lab_l5_og_live_sort_epic: complete
+lab_l5_og_buysell_dashboard_live_sort: done

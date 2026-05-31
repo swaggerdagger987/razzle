@@ -1,5 +1,9 @@
 # Memory — Data Researcher
 
+2026-05-31 | Lab OG efficiency/aging | ccb58697 | PASS | No new intel; PPO/age align with dynasty efficiency discourse.
+
+2026-05-31 | Lab OG live sort | 7f78b631 | PASS | No web scan; dynasty value sort matches Reddit board vocabulary.
+
 2026-05-31 | trade values formula OG | cycle 95 | DynastyFF threads rank custom formulas before sharing trade boards
 
 Append-only log of recurring user pain patterns, language signals, and feature-gap
