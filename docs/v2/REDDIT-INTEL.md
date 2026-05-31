@@ -300,3 +300,8 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Razzle slice:** Lab L5 atom 2 — launch-10 OG demo rows with FPTS/Score/Rank/Peak Age/Chg stat headers per panel slug.
 - **Council cycle:** 59
 - **Screenshot potential:** Weekly heatmap + prospect big board cards now match in-product column semantics on preview hosts
+
+## 2026-05-31 — Factory cycle 1 (H2H opponent subtitle)
+
+1. **Rivalry posts name the opponent.** Trade/H2H threads caption "vs Dynasty Sharks" not "vs one leaguemate" — OG subtitle must mirror the Bureau picker when API live.
+2. **Sample preview label stays** when API cold so preview hosts do not fake a named rival.

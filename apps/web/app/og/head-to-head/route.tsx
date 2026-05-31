@@ -87,6 +87,12 @@ export async function GET(req: Request) {
   const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
 
+  const rivalrySubtitle = isDemo
+    ? "rivalry dossier — your roster vs one leaguemate · sample preview"
+    : them?.team
+      ? `rivalry dossier — vs ${teamLabel(them.team)}`
+      : "rivalry dossier — your roster vs one leaguemate";
+
   return new ImageResponse(
     (
       <div
@@ -132,7 +138,7 @@ export async function GET(req: Request) {
           Head-to-Head
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
-          {`rivalry dossier — your roster vs one leaguemate${isDemo ? " · sample preview" : ""}`}
+          {rivalrySubtitle}
         </div>
 
         {hasData ? (
