@@ -100,6 +100,13 @@ export async function GET(req: Request) {
   const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
   const themSummary = them!;
+  const leagueDeepLink = league
+    ? opponent
+      ? `/league/${league}/head-to-head?user=${encodeURIComponent(user)}&opponent=${encodeURIComponent(opponent)}`
+      : user
+        ? `/league/${league}/head-to-head?user=${encodeURIComponent(user)}`
+        : `/league/${league}/head-to-head`
+    : "";
   const atlasRoomPath = hasData
     ? toRoom({
         agentId: "atlas",
@@ -314,7 +321,7 @@ export async function GET(req: Request) {
           }}
         >
           <div style={{ display: "flex", fontWeight: 700 }}>
-            razzle.lol/league{league ? `/${league}` : ""}/head-to-head
+            razzle.lol{leagueDeepLink || "/league/head-to-head"}
           </div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
