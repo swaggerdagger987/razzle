@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | TradeValuesRenderer position on LabOgExportLink | pending | keep | One prop mirrors Breakouts/Prospects pattern
+
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:

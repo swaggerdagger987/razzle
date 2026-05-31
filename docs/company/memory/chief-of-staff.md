@@ -1,5 +1,7 @@
 # Memory — Chief of Staff
 
+2026-05-31 | Dedup League SOS on base before Lab atom 2 | SHIP | keep | Skip duplicate PR when merge conflicts = already on base
+
 Append-only log of coordination patterns, what worked, what didn't.
 
 Format per entry:

@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | Lab OG WR curl ≥49KB tradevalues+prospects | PASS | keep | Demo fallback OK when API proxy down
+
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 

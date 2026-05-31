@@ -1,5 +1,7 @@
 # Memory — Engineering Architect
 
+2026-05-31 | Lab OG position atom 2 | pending | keep | Single-file contract when prospects already wired
+
 Append-only log of architecture decisions, boundary lessons, recurring failure modes.
 
 Format per entry:
