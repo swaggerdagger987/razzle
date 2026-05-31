@@ -14,8 +14,8 @@
     {
       "id": "lab-og-from-panel-launch10-registry",
       "title": "FROM PANEL pytest registry covers all Launch-10 slugs",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "a3d651b25"
     },
     {
       "id": "lab-og-dashboard-live-gate-c",

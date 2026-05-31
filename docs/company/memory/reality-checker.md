@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-from-panel-launch10-registry | f6e0985f3 | PASS | pytest 7 executed; pytest-only atom.
+2026-05-31 | lab-og-from-panel-launch10-registry | a3d651b25 | PASS | pytest 7 executed; pytest-only atom.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
