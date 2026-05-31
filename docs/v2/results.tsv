@@ -106,4 +106,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 147	19a1af0e9	depth+voice+simplicity	keep	League	L5 Trade Finder OG snapshot panel rows	trust=T5,T6; pytest 4; curl 57910B snap 55930B; trade-finder GTM epic 2/3
 148	c311a15a8	depth+voice+simplicity	keep	Lab	L5 gamelog default player in OG toLab band	trust=T5,T6; pytest 3; curl gamelog 62232B; hallway epic 2/3
 149	11525e22c	depth+voice+simplicity	keep	Lab	Rankings empty filter export sample card	trust=T5,T6; RANKINGS_SAMPLE_OG_ROWS; curl 49412B; empty OG epic 3/3 done
-150	f6e0985f3	depth+voice+simplicity	keep	Lab	L5 snapshot exports preserve player in toLab watermark	trust=T5,T6; snapshotPreservesPlayer; pytest 4; curl gamelog snap 53756B; hallway epic 3/3
+150	99e370587	depth+voice+simplicity	keep	Lab	L5 snapshot exports preserve player in toLab watermark	trust=T5,T6; snapshotPreservesPlayer; pytest 4; curl gamelog snap 53756B; hallway epic 3/3
