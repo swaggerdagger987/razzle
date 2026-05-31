@@ -9,12 +9,12 @@
       "id": "lab-breakouts-empty-export",
       "title": "Breakouts empty board OG sample export card",
       "status": "done",
-      "merge_commit": "056892b6b"
+      "merge_commit": "8b6f3117b"
     },
     {
       "id": "lab-prospects-empty-export",
       "title": "Prospects empty board OG sample export card",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
