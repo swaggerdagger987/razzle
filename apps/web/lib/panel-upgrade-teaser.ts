@@ -46,6 +46,16 @@ const ROWS_BY_SLUG: Record<string, TeaserRow[]> = {
     { name: "Josh Allen", position: "QB", detail: "Wk 11 · 28.1 pts" },
     { name: "Josh Allen", position: "QB", detail: "Wk 10 · 41.2 pts" },
   ],
+  rosterbuilder: [
+    { name: "Ja'Marr Chase", position: "WR", detail: "Slot WR1 · 98 value" },
+    { name: "Bijan Robinson", position: "RB", detail: "Slot RB1 · 96 value" },
+    { name: "Brock Bowers", position: "TE", detail: "Slot TE · 88 value" },
+  ],
+  "roster-value": [
+    { name: "Your roster", position: "QB", detail: "Total · 412 dynasty pts" },
+    { name: "League avg", position: "RB", detail: "Bench depth · +18 vs field" },
+    { name: "Contender gap", position: "WR", detail: "Need WR2 · -12 vs top team" },
+  ],
 };
 
 const PITCH_BY_SLUG: Record<string, string> = {
@@ -56,6 +66,8 @@ const PITCH_BY_SLUG: Record<string, string> = {
   aging: "peak-age curves so you sell before the cliff, not after",
   buysell: "buy-low and sell-high mismatches ranked by market lag",
   gamelog: "week-by-week game logs with peak-week context for trades",
+  rosterbuilder: "hypothetical roster builds graded for dynasty value before you send offers",
+  "roster-value": "total dynasty points for any player list — trade packages, not vibes",
 };
 
 export function teaserRowsForPanel(slug: string): TeaserRow[] {
