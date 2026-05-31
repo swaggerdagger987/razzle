@@ -25,4 +25,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | self-scout OG | POST /api/bureau/self-scout + grade helpers | e732f973 | keep | 2 files; POS_COLORS; Hawkeye badge
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | LabOgExportLink footers buy-sell dashboard | 497d1df5 | keep | 2 renderer files; shared primitive; PR50 merged ON_BASE
-2026-05-31 | Lab OG export player-scoped atom 3 | da33eafd | keep | player_id on gamelog+dynasty-comps export; curl 58408B/65961B; epic complete
+2026-05-31 | Lab OG export player-scoped atom 3 | b7deed67 | keep | player_id on gamelog+dynasty-comps export; curl 58408B/65961B; epic complete

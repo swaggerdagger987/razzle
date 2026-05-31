@@ -26,4 +26,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | position grade OG | A–F roster grid for trade threads | self-scout atom | keep | factory cycle 1 briefing
 2026-05-31 | Lab OG export links atom 1 | 45a5e79b | keep | LabOgExportLink on gamelog efficiency aging; curl 58KB PNGs
 2026-05-31 | Trade-window export discoverability | 497d1df5 | keep | buy-sell dashboard footers; panel-local export beats orphan /og URLs
-2026-05-31 | Lab OG export player-scoped atom 3 | da33eafd | keep | player_id on gamelog+dynasty-comps export; curl 58408B/65961B; epic complete
+2026-05-31 | Lab OG export player-scoped atom 3 | b7deed67 | keep | player_id on gamelog+dynasty-comps export; curl 58408B/65961B; epic complete
