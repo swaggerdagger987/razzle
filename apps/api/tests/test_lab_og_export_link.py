@@ -28,6 +28,17 @@ def test_gamelog_empty_state_passes_snapshot_to_export_link():
     assert "snapshotRows={sampleOgSnapshotRows.length ? sampleOgSnapshotRows : undefined}" in renderer
 
 
+def test_weekly_empty_board_exports_sample_card():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/WeeklyHeatmapRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "WEEKLY_SAMPLE_OG_ROWS" in renderer
+    assert 'label="export sample card"' in renderer
+    assert "snapshotRows={WEEKLY_SAMPLE_OG_ROWS}" in renderer
+    assert "!players.length" in renderer
+
+
 def test_efficiency_empty_board_exports_sample_card():
     renderer = (
         Path(__file__).resolve().parents[3]
@@ -36,6 +47,28 @@ def test_efficiency_empty_board_exports_sample_card():
     assert "EFFICIENCY_SAMPLE_OG_ROWS" in renderer
     assert 'label="export sample card"' in renderer
     assert "snapshotRows={EFFICIENCY_SAMPLE_OG_ROWS}" in renderer
+
+
+def test_aging_empty_curve_exports_sample_card():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/AgingCurvesRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "AGING_SAMPLE_OG_ROWS" in renderer
+    assert 'label="export sample card"' in renderer
+    assert "snapshotRows={AGING_SAMPLE_OG_ROWS}" in renderer
+    assert "!posData?.curve?.length" in renderer
+
+
+def test_rankings_empty_filter_exports_sample_card():
+    renderer = (
+        Path(__file__).resolve().parents[3]
+        / "apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx"
+    ).read_text(encoding="utf-8")
+    assert "RANKINGS_SAMPLE_OG_ROWS" in renderer
+    assert "isEmptyBoard" in renderer
+    assert "snapshotRows={RANKINGS_SAMPLE_OG_ROWS}" in renderer
+    assert 'label="export sample card"' in renderer
 
 
 def test_default_lab_og_player_matches_og_route():
