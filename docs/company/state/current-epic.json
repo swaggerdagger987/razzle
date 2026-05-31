@@ -1,10 +1,16 @@
 {
   "epic_status": "active",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
-  "epic_title": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
+  "big_problem": "Every Bureau tab users screenshot must share copy-link + export on one row like Explore.",
+  "epic_title": "League L5 — Bureau share + unhide parity",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
+    {
+      "id": "bureau-self-scout-share-bar",
+      "title": "Self-Scout copy link + export share bar",
+      "status": "done",
+      "merge_commit": "4c920e64"
+    },
     {
       "id": "league-build-profiles-tab",
       "title": "Build Profiles tab unhidden with Atlas renderer",
@@ -22,9 +28,16 @@
       "title": "Schedule tab unhidden with SOS renderer",
       "status": "pending",
       "merge_commit": null
+    },
+    {
+      "id": "bureau-manager-profiles-share-bar",
+      "title": "Manager Profiles extract share bar component",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
   "next_atom_id": "league-strength-of-schedule-tab",
   "created_at": "2026-05-31T12:05:00Z",
-  "updated_at": "2026-05-31T06:30:00Z"
+  "updated_at": "2026-05-31T15:00:00Z",
+  "last_cycle_commit": "4c920e64"
 }
