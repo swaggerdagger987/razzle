@@ -1,12 +1,11 @@
-cycle: 125
+cycle: 129
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-og-live-sticker-gamelog-efficiency
-last_keep_cycle: 125
-last_commit: ad24a219
+next_slice: lab-og-live-sticker-aging-buysell
+last_keep_cycle: 129
+last_commit: da33eafd
 lab_l5_og_panel_native_live_epic: active
-lab_l5_og_live_fetch_epic: active
 lab_l2_sidebar_agent_epic: complete
 lab_l5_og_watermark_epic: complete
 lab_l5_og_live_sort_epic: complete
