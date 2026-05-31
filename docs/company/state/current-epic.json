@@ -1,19 +1,19 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG watermarks must mirror in-card scope (position defaults) so exports click back correctly.",
-  "epic_title": "Lab L5 — OG hallway position defaults",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "big_problem": "Pro Lab OG exports still miss default player context in toLab watermarks.",
+  "epic_title": "Lab L5 — player-scoped OG toLab follow-up",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
+  "epic_status": "complete",
   "atoms": [
     {
-      "id": "lab-og-tolab-weekly-position",
-      "title": "weekly OG watermark includes default WR position in toLab",
+      "id": "lab-og-tolab-strengths-default",
+      "title": "Strengths OG watermark — toLab includes default player_id",
       "status": "done",
-      "merge_commit": "9be64d109"
+      "merge_commit": null
     }
   ],
   "next_atom_id": null,
-  "created_at": "2026-05-31T11:26:34Z",
-  "updated_at": "2026-05-31T11:32:00Z",
+  "created_at": "2026-05-31T12:00:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": []
 }
