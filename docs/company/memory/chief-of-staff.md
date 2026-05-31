@@ -1,4 +1,5 @@
 2026-05-31 | bureau-waiver-og-watermark-band | 3bb457789 | SHIP | Factory open cycle 155; dedup snapshot hallway on base; NO_LOCK_GUARDRAIL.
+2026-05-31 | lab-og-efficiency-aging-tradevalues-formula-live | 792e9f77d | SHIP | efficiency/aging formula_score OG; PR #1318.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4; lock #1415.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Factory cycle 154; efficiency RB in OG watermark.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
