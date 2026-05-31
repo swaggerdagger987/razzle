@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "epic_status": "complete",
   "big_problem": "Bureau rivalry export cards still decode wrong when managers snapshot from Head-to-Head \u2014 ShareBar and OG route use mismatched snapshot codecs.",
   "epic_title": "League L5 \u2014 Bureau H2H snapshot codec matches OG decode",
@@ -29,3 +30,33 @@
   "updated_at": "2026-05-31T06:45:00Z",
   "last_cycle_commit": "0131dbc3"
 }
+=======
+  "epic_status": "active",
+  "big_problem": "Bureau share cards still fall back to demo rows when edge OG cannot reach live league APIs.",
+  "epic_title": "League L5 — Bureau OG snapshots match in-product boards",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "League L5",
+  "atoms": [
+    {
+      "id": "league-power-rankings-og-snapshot",
+      "title": "Power Rankings export encodes top-5 board rows in snapshot param",
+      "status": "done",
+      "merge_commit": "26a22f69"
+    },
+    {
+      "id": "league-monte-carlo-og-snapshot",
+      "title": "Monte Carlo export encodes playoff odds grid snapshot",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "league-trade-network-og-snapshot",
+      "title": "Trade Network export encodes partner lanes snapshot",
+      "status": "pending",
+      "merge_commit": null
+    }
+  ],
+  "next_atom_id": "league-monte-carlo-og-snapshot",
+  "updated_at": "2026-05-31T06:45:00Z"
+}
+>>>>>>> origin/razzle-v2-redesign
