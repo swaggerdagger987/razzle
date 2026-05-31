@@ -3,6 +3,7 @@
 import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
+import { mergeBureauH2HRivalrySearchParams } from "@/lib/bureau-h2h-rivalry-url";
 import { BureauH2HShareBar } from "./BureauH2HShareBar";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Route } from "next";
@@ -32,6 +33,9 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const managers = (data.managers as Manager[]) ?? [];
+  const rivalryUserId = String(
+    searchParams.get("user") ?? (data.you as TeamSummary | undefined)?.user_id ?? "",
+  );
   const opponentId = String(data.opponent_user_id ?? searchParams.get("opponent") ?? "");
   const you = data.you as TeamSummary;
   const them = data.them as TeamSummary;
@@ -42,12 +46,13 @@ export function BureauHeadToHead({ data, leagueId }: Props) {
   };
 
   function pickOpponent(nextId: string) {
-    const params = new URLSearchParams(searchParams.toString());
-    const rivalryUser = searchParams.get("user") ?? String(you?.user_id ?? "");
-    if (rivalryUser) params.set("user", rivalryUser);
-    if (nextId) params.set("opponent", nextId);
-    else params.delete("opponent");
-    router.push(`/league/${leagueId}/head-to-head?${params.toString()}` as Route);
+    const userId = rivalryUserId || you?.user_id;
+    if (!userId) return;
+    const query = mergeBureauH2HRivalrySearchParams(searchParams.toString(), {
+      userId,
+      opponentId: nextId || undefined,
+    });
+    router.push(`/league/${leagueId}/head-to-head?${query}` as Route);
   }
 
   const offer = tradeFit.you_could_offer.join(", ") || "—";
