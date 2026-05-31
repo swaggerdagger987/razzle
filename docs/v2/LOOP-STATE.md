@@ -1,9 +1,9 @@
-cycle: 89
+cycle: 91
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: league-strength-of-schedule-tab
-last_keep_cycle: 89
-last_commit: beb9d60f
-league_l5_unhide_bureau_tabs_epic: active
-league_l5_waiver_tendencies_tab: complete
+next_slice: lab-og-snapshot-dashboard
+last_keep_cycle: 91
+last_commit: 70af534a
+lab_l5_og_snapshot_epic: active
+lab_l5_snapshot_tradevalues_prospects: complete
