@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | pending | SHIP | T1 panel-native LIVE on dynasty/RBS/value OG; epic 1/3.
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
 2026-05-31 | lab-og-launch10-snapshot-default | e2a3ce8a | SHIP | closes gamelog OG epic; live rows when no snapshot.
 
