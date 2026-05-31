@@ -1,11 +1,10 @@
-cycle: 105
+cycle: 115
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: League
 focus_layer: L5
-next_slice: lab-og-gamelog-weeks-fpts-sort
-last_keep_cycle: 105
-last_commit: 8d8b2635
-lab_l5_og_live_extract_epic: active
+next_slice: PARITY next — Lab panel OG live data rows or Room GTM export
+last_keep_cycle: 115
+last_commit: 44d05684
+lab_l5_og_watermark_epic: complete
 lab_l5_og_live_sort_epic: complete
-lab_l5_og_watermark_epic: active
-lab_og_weekly_prospects_breakouts_live_extract: done
+lab_l5_og_position_epic: complete
