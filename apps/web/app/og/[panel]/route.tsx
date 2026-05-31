@@ -48,6 +48,7 @@ const OG_PRO_PREVIEW_HEADER = "X-Razzle-Plan";
 
 /** Ja'Marr Chase — nflverse gsis_id for OG previews when no player_id in URL. */
 const DEFAULT_OG_PLAYER_ID = "00-0036900";
+const DEFAULT_OG_PLAYER_NAME = "Ja'Marr Chase";
 
 /** Lab panels that require player_id on the API (path or query). */
 const PLAYER_SCOPED_SLUGS = new Set([
@@ -83,6 +84,12 @@ const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps", "strengths"])
 
 /** Panels where DEFAULT_OG_PLAYER_ID is the real export context — keep player in toLab (T6). */
 const TOLAB_INCLUDE_DEFAULT_PLAYER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
+
+/** Panels that default API position when URL omits position — mirror in OG watermark (T6). */
+const TOLAB_DEFAULT_POSITION: Record<string, string> = {
+  weekly: "WR",
+  efficiency: "RB",
+};
 
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
@@ -868,6 +875,10 @@ async function fetchOgLiveRows(
 }
 
 /** Typed hallway path for OG watermark band (T6 — click back into Lab). */
+function slugifyPlayerName(name: string): string {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 function labOgWatermarkLink(
   slug: string,
   opts: {
@@ -875,6 +886,7 @@ function labOgWatermarkLink(
     playerId: string;
     playerScoped: boolean;
     snapshotPlayerId?: string;
+    playerDisplayName?: string;
   },
 ): string {
   const watermarkPlayerId = opts.snapshotPlayerId ?? opts.playerId;
@@ -883,14 +895,19 @@ function labOgWatermarkLink(
     (opts.playerScoped || Boolean(opts.snapshotPlayerId)) &&
     watermarkPlayerId &&
     (watermarkPlayerId !== DEFAULT_OG_PLAYER_ID || includeDefaultPlayer);
+  const resolvedName =
+    opts.playerDisplayName?.trim() ||
+    (watermarkPlayerId === DEFAULT_OG_PLAYER_ID && includeDefaultPlayer
+      ? DEFAULT_OG_PLAYER_NAME
+      : "player");
   let path = toLab(
     slug,
     usePlayer
       ? {
           player: {
             playerId: watermarkPlayerId,
-            slug: watermarkPlayerId,
-            name: "player",
+            slug: slugifyPlayerName(resolvedName) || watermarkPlayerId,
+            name: resolvedName,
           },
         }
       : undefined,
@@ -950,9 +967,8 @@ export async function GET(
   }
   if (positionFilter) {
     apiParams.position = positionFilter;
-  } else if (slug === "weekly" && apiParams.position == null) {
-    // Match WeeklyHeatmapRenderer default so /api/panels/weekly returns live rows for OG.
-    apiParams.position = "WR";
+  } else if (TOLAB_DEFAULT_POSITION[slug] && apiParams.position == null) {
+    apiParams.position = TOLAB_DEFAULT_POSITION[slug];
   }
   const snapshotDecoded = snapshotParam ? decodeOgSnapshot(snapshotParam) : { rows: [] as OgRow[] };
   const snapshotRows = snapshotDecoded.rows;
@@ -985,11 +1001,14 @@ export async function GET(
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const watermarkPosition =
+    positionFilter || TOLAB_DEFAULT_POSITION[slug] || "";
   const labLink = labOgWatermarkLink(slug, {
-    positionFilter,
+    positionFilter: watermarkPosition,
     playerId,
     playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
     snapshotPlayerId: snapshotExportPlayerId,
+    playerDisplayName: url.searchParams.get("name") ?? undefined,
   });
 
   return new ImageResponse(
