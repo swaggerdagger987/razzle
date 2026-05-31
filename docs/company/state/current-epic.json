@@ -12,10 +12,10 @@
       "merge_commit": "5b60ea23d"
     },
     {
-      "id": "bureau-h2h-og-exported-pytest",
-      "title": "pytest guard for H2H snapshot EXPORTED sticker + ShareBar encode",
-      "status": "pending",
-      "merge_commit": null
+      "id": "explore-og-margin-note-rows",
+      "title": "Margin notes on top-3 OG screener rows",
+      "status": "done",
+      "merge_commit": "89d026dda"
     },
     {
       "id": "bureau-h2h-og-gate-c-snapshot",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "bureau-h2h-og-exported-pytest",
-  "created_at": "2026-05-31T20:00:00Z",
-  "updated_at": "2026-05-31T20:30:00Z",
+  "next_atom_id": "explore-og-margin-note-sticker",
+  "created_at": "2026-05-31T11:22:30Z",
+  "updated_at": "2026-05-31T11:30:00Z",
   "completed_epics": [
     {
       "id": "league-l5-trade-finder-gtm",
