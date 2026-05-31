@@ -249,6 +249,9 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
+  const hasStaffMarginNotes = players
+    .slice(0, TOP_MARGIN_NOTE_ROWS)
+    .some((p) => marginNoteForOgExploreRow(p, universe) != null);
   return new ImageResponse(
     (
       <div
@@ -315,6 +318,28 @@ export async function GET(req: Request) {
               }`
             : subtitle}
         </div>
+
+        {hasStaffMarginNotes && !isDemo ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#2ec4b6",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(-2deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+              display: "flex",
+            }}
+          >
+            LIVE · staff margin notes
+          </div>
+        ) : null}
 
         {players.length > 0 ? (
           <div
