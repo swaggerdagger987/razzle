@@ -65,13 +65,21 @@ const DEMO_H2H: Required<Pick<H2HData, "you" | "them" | "position_compare" | "tr
   },
 };
 
-async function fetchH2H(params: {
-  league: string;
-  user: string;
-  opponent: string;
-}): Promise<H2HData | null> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+/** Edge OG must hit same-origin `/api/*` so Next rewrites reach FastAPI (dev/preview/CI). */
+function resolveApiOrigin(req: Request): string {
+  return new URL(req.url).origin;
+}
+
+async function fetchH2H(
+  req: Request,
+  params: {
+    league: string;
+    user: string;
+    opponent: string;
+  },
+): Promise<H2HData | null> {
   if (!params.league || !params.user) return null;
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     const res = await fetch(`${apiOrigin}/api/bureau/head-to-head`, {
@@ -107,9 +115,11 @@ export async function GET(req: Request) {
   const atlas = AGENT_BY_ID.atlas;
   const snapshotData = snapshotParam ? decodeH2hSnapshot(snapshotParam) : null;
   const isSnapshot = Boolean(snapshotData?.you && snapshotData?.them);
-  const live = isSnapshot ? null : await fetchH2H({ league, user, opponent });
-  const isDemo = !isSnapshot && (!live?.you || !live?.them);
-  const data = isSnapshot ? snapshotData! : isDemo ? DEMO_H2H : live!;
+  const hasLeagueParams = Boolean(league && user);
+  const live = isSnapshot ? null : await fetchH2H(req, { league, user, opponent });
+  const isLive = !isSnapshot && Boolean(live?.you && live?.them);
+  const isDemo = !isSnapshot && !isLive;
+  const data = isSnapshot ? snapshotData! : isLive ? live! : DEMO_H2H;
 
   const you = data.you;
   const them = data.them;
@@ -164,7 +174,13 @@ export async function GET(req: Request) {
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
           {`rivalry dossier — your roster vs one leaguemate${
-            isSnapshot ? " · from your panel" : isDemo ? " · sample preview" : ""
+            isSnapshot
+              ? " · from your panel"
+              : isLive
+                ? " · live league data"
+                : hasLeagueParams && isDemo
+                  ? " · sample preview (API unavailable)"
+                  : " · sample preview"
           }`}
         </div>
 

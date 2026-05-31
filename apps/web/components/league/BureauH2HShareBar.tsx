@@ -25,6 +25,7 @@ export function BureauH2HShareBar({ leagueId, userId, opponentId, snapshot }: Pr
     download: "1",
   });
   if (opponentId) ogParams.set("opponent", opponentId);
+  // Export card encodes in-panel rivalry; direct OG URLs with league/user try live API first.
   const snap = snapshot ? encodeH2hSnapshot(snapshot) : undefined;
   if (snap) ogParams.set("snapshot", snap);
 

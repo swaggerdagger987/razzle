@@ -14,7 +14,7 @@
     {
       "id": "bureau-h2h-live-api-fallback",
       "title": "H2H OG prefers live API when league params present; snapshot when exported from Bureau",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     },
     {
