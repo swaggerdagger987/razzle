@@ -78,4 +78,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 118	5bb77346	depth+voice+simplicity	keep	Lab	L5 Weekly+Prospects OG LIVE sticker defaults	trust=T5,T6; weekly WR apiParams; curl weekly 66512B prospects 60688B; live-rows epic atom 2/3
 119	9cd6a5cf	depth+voice+simplicity	keep	Lab	L5 Launch-10 OG SAMPLE vs LIVE contrast	trust=T5,T6; terracotta SAMPLE sticker; curl rankings-demo 67083B weekly-live 70383B; live-rows epic 3/3 complete
 120	da33eafd	depth+voice+simplicity	keep	Lab	L4 Pro gate agent loading copy on upgrade card	trust=T2,T6; PanelAgentLoading on ProUpgradeGate; teaser pytest 3 passed; L4 epic atom 1/3
-121	da33eafd	depth+voice+simplicity	keep	Lab	L4 Pro gate sharpened pitches on 3 launch panels	trust=T2,T6; rankings/tradevalues/breakouts PITCH_BY_SLUG; teaser pytest 4 passed; L4 epic atom 2/3
+121	0d15d44d	depth+voice+simplicity	keep	Lab	L4 Pro gate sharpened pitches on 3 launch panels	trust=T2,T6; rankings/tradevalues/breakouts PITCH_BY_SLUG; teaser pytest 4 passed; L4 epic atom 2/3
