@@ -255,9 +255,10 @@ Agents should always report CONTENT_HASH even when publish fails so you can reco
 ## Done when
 
 - [ ] Branch protection + 3 CI checks green on a test PR
-- [ ] Four Cursor Automations live with repo prompts pasted
-- [ ] First `good morning team` produced standup PR + Slack + memory append
-- [ ] `results.tsv` row includes `trust=T…` in description
-- [ ] You reviewed one nightly digest without rewriting >30% of output
+- [ ] Five Cursor Automations live (Morning, Strategy, Team Build, Ask, Evening)
+- [ ] Team Build dashboard: **Auto** or Composer; Strategy: **Sonnet** (not Auto)
+- [ ] `plan team` sets `strategy-last-run.json` → `next_slice_ready: true`
+- [ ] First Team Build merge + T1 Slack line
+- [ ] Nightly T3 digest without rewriting >30%
 
-Then enable **Loop Tick** on a schedule and walk away until evening.
+Enable **Team Build** ~60min after Strategy contract is ready.
