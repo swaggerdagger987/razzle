@@ -350,6 +350,7 @@ export async function GET(
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const query = url.searchParams.get("q") ?? "";
+  const positionFilter = url.searchParams.get("position") ?? "";
   const snapshotParam = url.searchParams.get("snapshot") ?? "";
   const playerId =
     url.searchParams.get("player_id") ??
@@ -375,6 +376,9 @@ export async function GET(
   if (PLAYER_SCOPED_SLUGS.has(slug)) {
     apiParams.player_id = playerId;
   }
+  if (positionFilter) {
+    apiParams.position = positionFilter;
+  }
   const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
@@ -389,11 +393,14 @@ export async function GET(
   const usingLiveData = namedLiveRows.length > 0;
   const isSnapshot = snapshotHasRows;
   const isDemo = !isSnapshot && !usingLiveData;
-  const rows = isSnapshot
+  let rows = isSnapshot
     ? snapshotRows.slice(0, 6)
     : usingLiveData
       ? namedLiveRows.slice(0, 6)
       : demoRowsForPanel(slug);
+  if (!isSnapshot && positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+  }
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
@@ -451,7 +458,7 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${ogBlurbSuffix(slug, isSnapshot, isDemo)}`}
+          {`${panel.blurb}${positionFilter ? ` · ${positionFilter} only` : ""}${ogBlurbSuffix(slug, isSnapshot, isDemo)}`}
         </div>
 
         {query && (
