@@ -50,4 +50,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 78	c4ce09b7	depth+voice+simplicity	keep	League	L5 Bureau Pressure Map copy link export row	trust=T5,T6; copy link + export; curl pressure-map OG 60661B
 81	e62721a6	depth+voice+simplicity	keep	League	L5 Bureau Power Rankings OG card	trust=T5,T6; /og/power-rankings demo rows; curl 68555B PNG; export link on tab
 86	e701e3bb	depth+voice+simplicity	keep	League	L5 Bureau Trade Network copy link export row	trust=T5,T6; copy link + export; curl trade-network OG 68090B; behavioral share epic atom 3
-87	PLACEHOLDER	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas renderer; build-profiles out of HIDDEN; pytest+build PASS
+87	e1caebd1	depth+hallway+voice+simplicity	keep	League	L5 Bureau Build Profiles tab unhidden	trust=T2,T5,T6; Atlas renderer; build-profiles out of HIDDEN; pytest+build PASS
