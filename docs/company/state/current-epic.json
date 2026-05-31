@@ -6,10 +6,11 @@
   "depth_ref": "Lab L5",
   "atoms": [
     {"id": "lab-og-dynasty-comps-live-sticker", "title": "Dynasty Comps OG LIVE sticker", "status": "done", "merge_commit": "2e1dfea15"},
-    {"id": "lab-og-gamelog-from-panel-sticker", "title": "Gamelog FROM PANEL sticker", "status": "pending", "merge_commit": null}
+    {"id": "lab-og-gamelog-from-panel-sticker", "title": "Gamelog FROM PANEL sticker", "status": "done", "merge_commit": "f6e0985f3"}
   ],
-  "next_atom_id": "lab-og-gamelog-from-panel-sticker",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T11:00:00Z",
-  "updated_at": "2026-05-31T11:15:00Z",
-  "completed_epics": []
+  "updated_at": "2026-05-31T10:51:36Z",
+  "completed_epics": ["lab-l5-og-export-live-panel-rows"]
 }

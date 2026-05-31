@@ -80,6 +80,9 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
 /** Pro player-scoped Lab panels (not Launch-10) — LIVE trust sticker when API returns rows. */
 const PLAYER_SCOPED_LIVE_STICKER_SLUGS = new Set(["dynasty-comps"]);
 
+/** Pro panels that export in-panel rows via snapshot — FROM PANEL trust sticker (T5/T6). */
+const PLAYER_SCOPED_FROM_PANEL_STICKER_SLUGS = new Set(["gamelog", "dynasty-comps"]);
+
 const LAUNCH_10_OG_SLUGS = new Set([
   "weekly",
   "prospects",
@@ -881,7 +884,8 @@ export async function GET(
           {`${panel.blurb}${panelBlurbSuffix(slug, positionFilter, isSnapshot, showingDemoRows, showingLiveData)}`}
         </div>
 
-        {isSnapshot && LAUNCH_10_OG_SLUGS.has(slug) ? (
+        {isSnapshot &&
+        (LAUNCH_10_OG_SLUGS.has(slug) || PLAYER_SCOPED_FROM_PANEL_STICKER_SLUGS.has(slug)) ? (
           <div
             style={{
               fontFamily: "Caveat",

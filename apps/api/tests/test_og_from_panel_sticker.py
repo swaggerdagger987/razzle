@@ -14,7 +14,8 @@ SNAPSHOT_FROM_PANEL_SLUGS = ("rankings", "weekly")
 def test_from_panel_sticker_on_snapshot_path():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert "FROM PANEL · your rows" in source
-    assert "isSnapshot && LAUNCH_10_OG_SLUGS.has(slug)" in source
+    assert "PLAYER_SCOPED_FROM_PANEL_STICKER_SLUGS.has(slug)" in source
+    assert "LAUNCH_10_OG_SLUGS.has(slug)" in source
 
 
 def test_from_panel_sticker_covers_rankings_and_weekly():

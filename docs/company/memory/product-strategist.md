@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-gamelog-from-panel-sticker | f6e0985f3 | SHIP | Pro gamelog snapshot exports show FROM PANEL trust on Reddit cards.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | SHIP | Dynasty comps OG signals LIVE comp matches for Reddit trust.
 
 2026-05-31 | room-briefing-watermark | f6e0985f3 | SHIP | Briefing exports carry terracotta brand + deep Room link for Reddit.
