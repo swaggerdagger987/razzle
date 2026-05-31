@@ -732,20 +732,31 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
   ];
   const efficiencyStatKeys: string[] = [
     "formula_score",
+<<<<<<< HEAD
     "ppo",
     "efficiency_score",
     ...STAT_CANDIDATE_KEYS.filter(
       (k) => k !== "formula_score" && k !== "ppo" && k !== "efficiency_score",
+=======
+    "efficiency_score",
+    "ppo",
+    ...STAT_CANDIDATE_KEYS.filter(
+      (k) => k !== "formula_score" && k !== "efficiency_score" && k !== "ppo",
+>>>>>>> origin/razzle-v2-redesign
     ),
   ];
   const agingStatKeys: string[] = [
     "formula_score",
     "ppg",
+<<<<<<< HEAD
     "peak_age",
     "age",
     ...STAT_CANDIDATE_KEYS.filter(
       (k) => !["formula_score", "ppg", "peak_age", "age"].includes(k),
     ),
+=======
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
+>>>>>>> origin/razzle-v2-redesign
   ];
   const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const statKeys =
