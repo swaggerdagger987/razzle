@@ -1,31 +1,50 @@
 {
-  "epic_status": "active",
-  "big_problem": "Bureau rivalry screenshots die in DMs — copied H2H links drop opponent context so managers reopen the wrong matchup.",
-  "epic_title": "League L5 — Bureau H2H export deep-links",
-  "parity_ref": "PARITY Explore L5 — Bureau H2H export",
-  "depth_ref": "League L5",
+  "big_problem": "Explore share cards don't mirror the screener URL — college toggles and filters get lost on export, so Reddit screenshots lie about the view.",
+  "epic_title": "Explore L5 — OG card matches screener query state",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "bureau-h2h-rivalry-url-user-opponent",
-      "title": "H2H copy link + OG watermark include user and opponent query params",
+      "id": "explore-og-universe-query",
+      "title": "Explore OG — season/team/universe query on card + share URLs",
       "status": "done",
-      "merge_commit": "261c3166"
+      "merge_commit": "7dbd4b11"
     },
     {
-      "id": "bureau-h2h-og-opponent-watermark-label",
-      "title": "OG card subtitle names opponent team when snapshot or live fetch",
-      "status": "in_progress",
-      "merge_commit": null
+      "id": "explore-og-demo-fallback-rows",
+      "title": "Explore OG — static demo rows when API empty (not pulling film)",
+      "status": "done",
+      "merge_commit": "2d0d3bde"
     },
     {
-      "id": "bureau-h2h-pick-opponent-preserve-user",
-      "title": "Opponent picker preserves user= in URL when rivalry link shared",
-      "status": "pending",
-      "merge_commit": null
+      "id": "explore-og-formula-sort-label",
+      "title": "Explore OG — formula sort label on card when apiSort differs",
+      "status": "done",
+      "merge_commit": "710ec33e"
     }
   ],
-  "next_atom_id": "bureau-h2h-pick-opponent-preserve-user",
-  "created_at": "2026-05-31T14:00:00Z",
-  "updated_at": "2026-05-31T15:00:00Z",
-  "completed_epics": []
+  "next_atom_id": null,
+  "epic_status": "complete",
+  "created_at": "2026-05-31T08:45:00Z",
+  "updated_at": "2026-05-31T12:05:00Z",
+  "completed_epics": [
+    {
+      "id": "explore-l5-og-query-epic",
+      "status": "complete",
+      "last_atom": "explore-og-formula-sort-label",
+      "merge_commit": "710ec33e"
+    },
+    {
+      "id": "lab-l4-pro-gate-epic",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "f56fdbd8"
+    },
+    {
+      "id": "lab-l5-og-live-rows-launch10",
+      "status": "complete",
+      "last_atom": "lab-og-live-demo-fallback-copy",
+      "merge_commit": "18d92f6b"
+    }
+  ]
 }

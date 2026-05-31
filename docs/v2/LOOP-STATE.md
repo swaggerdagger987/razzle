@@ -1,10 +1,9 @@
-cycle: 135
+cycle: 130
 last_board_cycle: 54
-focus_pillar: Lab
+focus_pillar: Explore
 focus_layer: L5
-next_slice: lab-og-from-panel-sticker-gamelog
-last_keep_cycle: 135
-last_commit: 9ef503929
-lab_l5_og_trust_sticker_epic: active
-league_l5_self_scout_snapshot_epic: active
-lab_l5_og_live_fetch_epic: complete
+next_slice: pick from PARITY/NEXT — Bureau H2H export or Lab L5 depth
+last_keep_cycle: 130
+last_commit: 710ec33e
+explore_l5_og_query_epic: complete
+lab_l4_pro_gate_epic: complete

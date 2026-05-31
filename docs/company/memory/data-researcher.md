@@ -1,11 +1,31 @@
 # Memory — Data Researcher
 
-2026-05-31 | gamelog OG player default | No new intel; export URL parity with OG route default.
+2026-05-31 | explore-og-formula-sort-label | 710ec33e | PASS | no new intel; formula label trust pattern.
+
+2026-05-31 | explore-og-demo-fallback-rows | 2d0d3bde | PASS | no new intel; demo rows pattern from Lab OG.
+
+2026-05-31 | explore-og-universe-query | a7fdf9b3 | PASS | no new REDDIT-INTEL; query-param wiring only.
+
+2026-05-31 | lab-og-sample-labels | 54443bc8 | No new intel; OG trust-label slice only.
+2026-05-31 | cycle 132 | — | No new intel; rankings/weekly are dynasty screenshot staples.
+
+2026-05-31 | cycle 131 | — | No new Reddit intel; snapshot trust is product signal.
+
+2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | PASS | no web; Hawkeye/Atlas panel curl only.
+
+2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | PASS | no web research; curl evidence only.
+
+2026-05-31 | explore-og-universe-query | 7dbd4b11 | No new intel; college season in export matches r/CFB screener shares.
+2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 
 2026-05-31 | launch10 live-fetch merge | 3f0411ec | No new intel; merge unblocks Reddit OG screenshots.
 2026-05-31 | launch10 no-snapshot | e2a3ce8a | Direct /og links need live API path without panel snapshot param.
 2026-05-31 | Cycle 118 | e00217d1 | No new intel.
 2026-05-31 | lab-og-live-sticker-launch10 | cycle 116 | Reddit needs visible live vs sample on OG exports.
+
+2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | PASS | no new REDDIT-INTEL; teaser audit only.
+
+2026-05-31 | gamelog OG weeks | 40c80f0e | PASS | No new intel; in-panel ogSnapshotRows already defined peak-week sort.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | cycle 114 | No new intel; H2H watermark closes screenshot brand parity with Explore.
 
@@ -45,13 +65,13 @@ anecdotes (>=3 independent threads = signal).
 2026-05-31 | Lab OG player-scoped export | ffccedf4 | keep | LabOgExportLink player_id; gamelog+comps scoped curl
 2026-05-31 | breakout OG candidates | 2cb898b6 | keep | Hawkeye names on share card when API live
 2026-05-31 | Bureau share rows | 433d8002 | keep | Monte Carlo export row now matches Explore copy+export pattern
-2026-05-31 | Monte Carlo share row | da33eafd | keep | Bureau group-chat export parity; H2H already on base
+2026-05-31 | Monte Carlo share row | 710ec33e | keep | Bureau group-chat export parity; H2H already on base
 2026-05-31 | Lab OG launch10 label | 6e98f4a2 | keep | live cards without sample tag when API rows present
 2026-05-31 | Bureau H2H share | 044ee1e8 | keep | rivalry URLs travel with opponent query param
 2026-05-31 | Bureau MC share | 3392bc29 | keep | what-if trade URLs reopen scenario sims in league chat
 2026-05-31 | Pressure Map share | 864e1d14 | keep | deadline desperation URLs for trade-DM hooks
-2026-05-31 | Trade Network share | da33eafd | keep | collusion/partnership cards sized for Reddit screenshot gravity
+2026-05-31 | Trade Network share | 710ec33e | keep | collusion/partnership cards sized for Reddit screenshot gravity
 2026-05-31 | Bureau power OG | 9714bfa6 | keep | diff+luck bars match in-app power board story for screenshots
-2026-05-31 | Cycle 86 Trade Network copy link | da33eafd | keep | Bureau behavioral share atom 3
+2026-05-31 | Cycle 86 Trade Network copy link | 710ec33e | keep | Bureau behavioral share atom 3
 2026-05-31 | Build Profiles archetypes | 2ee04975 | keep | league construction tape for trade-DM screenshots
 2026-05-31 | Lab OG live sort | 7f78b631 | skip | no new Reddit intel this cycle
