@@ -4,7 +4,7 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-rankings-empty-export
 last_keep_cycle: 140
-last_commit: pending
+last_commit: d96f88dfb
 explore_l5_og_query_epic: complete
 lab_l5_empty_og_epic: active
 lab_l4_pro_gate_epic: complete
