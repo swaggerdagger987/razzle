@@ -1,9 +1,9 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
-  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-efficiency-position",
+  "big_problem": "Lab OG watermarks omit default position filters — breakouts exports click back to an unscoped waiver board.",
+  "epic": "Lab L5 — OG hallway position defaults (atom 3/3)",
+  "slice_title": "Breakouts OG watermark includes default WR position in toLab",
+  "atom_id": "lab-og-tolab-breakouts-position",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
@@ -13,12 +13,13 @@
     "apps/api/tests/test_lab_og_tolab_watermark.py"
   ],
   "max_files": 2,
-  "max_lines": 25,
+  "max_lines": 15,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/og-breakouts.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/breakouts?download=1'"
   ],
-  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
+  "out_of_scope": ["rankings default", "new panels", "billing"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
