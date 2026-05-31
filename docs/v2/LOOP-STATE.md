@@ -1,10 +1,11 @@
-cycle: 130
+cycle: 131
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: (pick from PARITY/NEXT — sticker epic complete)
-last_keep_cycle: 130
-last_commit: 96d43d1b
+next_slice: lab-og-from-panel-sticker-evidence
+last_keep_cycle: 131
+last_commit: da33eafd
+lab_l5_og_trust_sticker_epic: active
 lab_l5_og_live_sticker_epic: complete
 lab_l2_sidebar_agent_epic: complete
 lab_l5_og_watermark_epic: complete

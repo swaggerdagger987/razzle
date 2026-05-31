@@ -816,6 +816,27 @@ export async function GET(
           </div>
         ) : null}
 
+        {isSnapshot && LAUNCH_10_OG_SLUGS.has(slug) ? (
+          <div
+            style={{
+              fontFamily: "Caveat",
+              fontSize: 32,
+              color: "#f7efe5",
+              background: "#5b7fff",
+              padding: "6px 18px",
+              alignSelf: "flex-start",
+              border: "3px solid #2d1f14",
+              borderRadius: 10,
+              boxShadow: "4px 4px 0 #2d1f14",
+              transform: "rotate(1.5deg)",
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            FROM PANEL · your rows
+          </div>
+        ) : null}
+
         {showingLiveData && LAUNCH_10_OG_SLUGS.has(slug) ? (
           <div
             style={{

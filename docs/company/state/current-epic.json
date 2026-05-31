@@ -1,44 +1,38 @@
 {
-  "big_problem": "Lab OG LIVE stickers still say generic nflverse rows — Reddit cannot tell rankings from gamelog at a glance.",
-  "epic_title": "Lab L5 — Launch-10 OG LIVE stickers name the stat",
+  "big_problem": "Lab OG snapshot exports only whisper from your panel in blurb — Reddit cannot see at a glance that the card matches the user's filter.",
+  "epic_title": "Lab L5 — OG trust stickers for export cards",
   "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "lab-og-live-sticker-launch10-rest",
-      "title": "Panel-specific LIVE sticker + blurb for remaining Launch-10 slugs",
-      "status": "done",
-      "merge_commit": "444c7699"
+      "id": "lab-og-from-panel-sticker",
+      "title": "FROM PANEL sticker on Launch-10 OG when snapshot param present",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-live-sticker-tradevalues-aging",
-      "title": "OG curl evidence bundle for tradevalues + aging LIVE stickers",
-      "status": "done",
-      "merge_commit": "a74c2afe"
+      "id": "lab-og-from-panel-sticker-evidence",
+      "title": "pytest + Gate C curl for rankings/weekly snapshot stickers",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-live-sticker-breakouts-dashboard",
-      "title": "OG curl evidence for breakouts + dashboard LIVE stickers",
-      "status": "done",
-      "merge_commit": "96d43d1b"
+      "id": "lab-og-from-panel-sticker-gamelog",
+      "title": "FROM PANEL sticker on player-scoped gamelog snapshot export",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T09:00:00Z",
-  "updated_at": "2026-05-31T09:07:25Z",
+  "next_atom_id": "lab-og-from-panel-sticker",
+  "epic_status": "active",
+  "created_at": "2026-05-31T09:20:00Z",
+  "updated_at": "2026-05-31T09:20:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-sticker",
       "status": "complete",
       "last_atom": "lab-og-live-sticker-breakouts-dashboard",
       "merge_commit": "96d43d1b"
-    },
-    {
-      "id": "lab-l4-pro-gate-convert",
-      "status": "complete",
-      "last_atom": "lab-pro-gate-hallway-teasers",
-      "merge_commit": "675044ea"
     }
   ]
 }

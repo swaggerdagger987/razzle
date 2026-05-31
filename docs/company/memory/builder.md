@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | FROM PANEL OG sticker | da33eafd | route.tsx + pytest; snapshot curl ≥40KB.
+
 2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | keep | pytest EXPECTED breakouts/dashboard; curl 67621B/67113B.
 
 2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | keep | pytest EXPECTED tradevalues/aging; curl 68974B/65088B.
