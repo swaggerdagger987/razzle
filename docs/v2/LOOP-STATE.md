@@ -4,6 +4,6 @@ focus_pillar: Lab
 focus_layer: L5
 next_slice: lab-og-position-tradevalues
 last_keep_cycle: 97
-last_commit: da33eafd
+last_commit: b2abe6d6
 lab_l5_og_position_filters_epic: active
 lab_l5_og_position_atom: buysell
