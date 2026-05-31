@@ -19,4 +19,4 @@ anecdotes (>=3 independent threads = signal).
 2026-05-30 | no web scraping | screenshot culture on r/DynastyFF remains the primary distribution engine | existing REDDIT-INTEL.md signals (cycles 31, 55) directly support Lab L5 OG — agent voice on screenshots and filtered data cards | keep | Lab OG live data card addresses standing gap "screenshot-worthy share cards"
 2026-05-31 | Panel OG needs rows not shells | 0019814f | keep | Cycle 58 intel logged
 2026-05-31 | Playoff odds sim cards | da33eafd | keep | Cycle 59 intel — league-specific odds screenshots
-2026-05-31 | OG share links need default player | PENDING_HASH | keep | Chase gsis default for dynasty-comps previews
+2026-05-31 | OG share links need default player | ddc28666 | keep | Chase gsis default for dynasty-comps previews

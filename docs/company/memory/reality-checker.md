@@ -19,4 +19,4 @@ explicit checks in the verification routine.
 2026-05-30 | Lab L5 OG live data rows | test (npm run build + pytest + tsc) | Lab L5 DEPTH claim verified | PASS | no terminal.db on CI VM means data-path is untested end-to-end; fallback path (empty data → icon + loading copy) verified; production needs NEXT_PUBLIC_API_ORIGIN env var | keep | future: add OG snapshot test with fixture data
 2026-05-31 | Lab OG demo rows | build + curl PNG ~59KB | PASS | 0019814f on base via PR #23
 2026-05-31 | MC OG | build + curl PNG ≥40KB | PASS | da33eafd — see evidence file
-2026-05-31 | Lab OG param defaults | curl dynasty-comps 65961B | PASS | PENDING_HASH — docs/v2/evidence/2026-05-31-lab-og-param-defaults.md
+2026-05-31 | Lab OG param defaults | curl dynasty-comps 65961B | PASS | ddc28666 — docs/v2/evidence/2026-05-31-lab-og-param-defaults.md

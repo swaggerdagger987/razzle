@@ -15,13 +15,13 @@
       "id": "lab-og-panel-specific-demos",
       "title": "Per-panel demo stat labels tuned to launch-10 shapes",
       "status": "done",
-      "merge_commit": "PENDING_HASH"
+      "merge_commit": "ddc28666"
     },
     {
       "id": "lab-og-param-defaults",
       "title": "Default player_id params for parameterized panel OG routes",
       "status": "done",
-      "merge_commit": "PENDING_HASH"
+      "merge_commit": "ddc28666"
     }
   ],
   "next_atom_id": null,
