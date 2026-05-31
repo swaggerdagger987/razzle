@@ -17,7 +17,7 @@ import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProGateFromPanelError } from "../ProGateFromPanelError";
-import type { OgSnapshotRow } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { LabPanelShareBar } from "../LabPanelShareBar";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -233,12 +233,12 @@ export function DynastyRankingsRenderer({ panel }: Props) {
         <div className="p-6">
           <p className="text-ink-medium">{agent.emptyCopy}</p>
           <footer className="mt-4 flex flex-wrap items-center gap-4">
-            <LabPanelShareBar
+            <LabOgExportLink
               slug="rankings"
               downloadName="razzle-dynasty-rankings.png"
               position={position || undefined}
               snapshotRows={RANKINGS_SAMPLE_OG_ROWS}
-              copyLabel="copy sample card"
+              label="export sample card"
             />
           </footer>
         </div>
