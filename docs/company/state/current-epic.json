@@ -9,7 +9,7 @@
       "id": "lab-dashboard-top5-og-snapshot",
       "title": "Dashboard export snapshot uses top5 dynasty assets plus movers",
       "status": "done",
-      "merge_commit": null
+      "merge_commit": "0fb16034"
     },
     {
       "id": "lab-weekly-hot-week-snapshot",
