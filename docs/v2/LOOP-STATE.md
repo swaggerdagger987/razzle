@@ -7,6 +7,7 @@ last_keep_cycle: 122
 last_commit: 684cc1c4
 lab_l4_pro_gate_error_epic: active
 lab_l5_og_live_fetch_epic: complete
+lab_l2_sidebar_agent_epic: complete
 lab_l5_og_watermark_epic: complete
 lab_l5_og_live_sort_epic: complete
 bureau_h2h_codec_epic: complete
