@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { AGENT_BY_ID } from "@razzle/agents";
+import { decodeBureauPowerRankingsOgSnapshot } from "@/lib/bureau-power-rankings-og-snapshot";
 
 export const runtime = "edge";
 
@@ -64,12 +65,16 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const league = url.searchParams.get("league") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
+  const snapshot = snapshotParam ? decodeBureauPowerRankingsOgSnapshot(snapshotParam) : null;
 
   const octo = AGENT_BY_ID.octo;
-  const live = await fetchPowerRankings(league);
-  const isDemo = !live?.rows?.length;
-  const rows = (isDemo ? DEMO_ROWS : live!.rows!).slice(0, 5);
-  const leader = isDemo ? DEMO_LEADER : rows[0];
+  const live = snapshot?.rows?.length ? null : await fetchPowerRankings(league);
+  const fromSnapshot = snapshot?.rows?.length ? snapshot.rows : null;
+  const isDemo = !fromSnapshot?.length && !live?.rows?.length;
+  const rows = (fromSnapshot ?? (isDemo ? DEMO_ROWS : live!.rows!)).slice(0, 5);
+  const leader = rows[0] ?? DEMO_LEADER;
+  const fromPanel = Boolean(fromSnapshot?.length);
 
   return new ImageResponse(
     (
@@ -115,7 +120,9 @@ export async function GET(req: Request) {
           Power Rankings
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 14 }}>
-          {`points differential · pythagorean luck${isDemo ? " · sample preview" : ""}`}
+          {`points differential · pythagorean luck${
+            fromPanel ? " · from your board" : isDemo ? " · sample preview" : ""
+          }`}
         </div>
 
         {leader ? (
