@@ -1,4 +1,5 @@
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Factory open; Explore margin epic 2/4; lock #1415.
+2026-05-31 | lab-efficiency-formula-og-live | b3057e3d1 | SHIP | Factory open 2026-05-31 cycle 1; formula OG epic 1/4; PR #1414 merged.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Factory open cycle 1; empty OG epic 3/3 complete; NO_LOCK_GUARDRAIL.
 
