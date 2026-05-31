@@ -67,3 +67,18 @@ def test_pro_gate_from_panel_error_wired_in_tradevalues_and_efficiency():
         ).read_text(encoding="utf-8")
         assert "ProGateFromPanelError" in renderer, slug
         assert "ProUpgradeGate" not in renderer, slug
+
+
+def test_pro_gate_from_panel_error_wired_in_remaining_launch10():
+    for slug in (
+        "DynastyRankingsRenderer",
+        "GamelogRenderer",
+        "BuySellRenderer",
+        "AgingCurvesRenderer",
+        "DynastyCompsRenderer",
+    ):
+        renderer = (
+            _repo_root() / f"apps/web/components/lab/renderers/{slug}.tsx"
+        ).read_text(encoding="utf-8")
+        assert "ProGateFromPanelError" in renderer, slug
+        assert "ProUpgradeGate" not in renderer, slug
