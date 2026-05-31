@@ -1,15 +1,16 @@
 {
   "date": "2026-05-31",
+  "atom_id": "lab-og-from-panel-buysell-dashboard",
   "big_problem": "Lab Launch-10 OG exports still need trust contracts on every panel — snapshot cards must prove live row extractors match in-product boards.",
-  "epic": "Lab L5 — OG live panel row parity",
-  "slice_title": "Breakouts + efficiency FROM PANEL pytest and Gate C",
+  "epic": "Lab L5 — OG live panel row parity (atom 2/4)",
+  "slice_title": "Buysell + dashboard FROM PANEL pytest and Gate C",
   "parity_ref": "PARITY Explore/Lab L5 OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C — snapshot PNG ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
     "apps/api/tests/test_og_from_panel_sticker.py",
-    "docs/v2/evidence/2026-05-31-lab-og-from-panel-breakouts-efficiency.md"
+    "docs/v2/evidence/2026-05-31-lab-og-from-panel-buysell-dashboard.md"
   ],
   "max_files": 2,
   "max_lines": 80,
@@ -18,9 +19,10 @@
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
-    "OG route behavior changes",
+    "OG route behavior changes beyond extract guards",
     "new panels",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
-  "builder_mode": "composer-surgical"
+  "builder_mode": "composer-surgical",
+  "status": "pending"
 }
