@@ -18,7 +18,7 @@
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "grep -q 'HIDDEN_BUREAU_SLUGS = new Set' apps/web/lib/bureau-features.ts && ! grep -q 'strength-of-schedule' apps/web/lib/bureau-features.ts | head -1; test $(grep -c 'strength-of-schedule' apps/web/lib/bureau-features.ts) -gt 0"
+    "grep -q 'HIDDEN_BUREAU_SLUGS = new Set' apps/web/lib/bureau-features.ts && test $(grep -c 'strength-of-schedule' apps/web/lib/bureau-features.ts) -gt 0"
   ],
   "out_of_scope": ["OG export", "API changes", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
