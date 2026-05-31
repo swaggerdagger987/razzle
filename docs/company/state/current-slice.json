@@ -1,29 +1,32 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermarks omit default position filters — efficiency exports click back to an unscoped PPO board.",
-  "epic": "Lab L5 — OG hallway position defaults (atom 2/3)",
-  "slice_title": "Efficiency OG watermark includes default RB position in toLab",
-  "atom_id": "lab-og-tolab-efficiency-position",
-  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "big_problem": "Bureau H2H export cards dead-end when snapshot URLs drop league context from the watermark.",
+  "epic": "League L5 — Bureau H2H snapshot hallway",
+  "slice_title": "H2H snapshot embeds league/user for watermark deep link",
+  "atom_id": "bureau-h2h-snapshot-league-hallway",
+  "parity_ref": "Explore L5 Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C2 + HALLWAY crossRoomLinkPresent",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/lib/bureau-h2h-og-snapshot.ts",
+    "apps/web/app/og/head-to-head/route.tsx",
+    "apps/web/components/league/BureauH2HShareBar.tsx",
+    "apps/api/tests/test_bureau_h2h_og_snapshot_league.py"
   ],
-  "max_files": 2,
-  "max_lines": 25,
+  "max_files": 4,
+  "max_lines": 100,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
+    "PATH=$HOME/.local/bin:$PATH JWT_SECRET=test python3 -m pytest apps/api/tests/test_bureau_h2h_og_snapshot_league.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["other renderers", "billing", "NORTH_STAR edits"],
+  "out_of_scope": ["API schema", "Trade Finder", "NORTH_STAR/DESIGN/DECISIONS"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+    "verdict": "SHIP"
+  },
+  "status": "in_progress"
 }

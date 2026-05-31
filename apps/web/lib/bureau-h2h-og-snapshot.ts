@@ -20,11 +20,25 @@ export interface H2HData {
   trade_fit?: { you_could_offer?: string[]; you_could_target?: string[] };
 }
 
+export type BureauH2HOgLeagueContext = {
+  leagueId: string;
+  userId: string;
+  opponentId?: string;
+};
+
 type CompactH2H = {
   y: { t: string; r: string; p: number };
   m: { t: string; r: string; p: number };
   pc: { p: string; y: number; m: number }[];
   tf?: { o: string[]; g: string[] };
+  lg?: string;
+  u?: string;
+  o?: string;
+};
+
+export type DecodedBureauH2HOgSnapshot = {
+  snapshot: BureauH2HOgSnapshot;
+  leagueContext?: BureauH2HOgLeagueContext;
 };
 
 function hasSnapshotData(snap: BureauH2HOgSnapshot): boolean {
@@ -47,8 +61,13 @@ function fromCompact(c: CompactH2H): BureauH2HOgSnapshot | null {
 }
 
 /** Base64url JSON for `snapshot` query param on `/og/head-to-head`. */
-export function encodeBureauH2HOgSnapshot(snap: BureauH2HOgSnapshot): string | undefined {
+export function encodeBureauH2HOgSnapshot(
+  snap: BureauH2HOgSnapshot,
+  leagueContext?: BureauH2HOgLeagueContext,
+): string | undefined {
   if (!hasSnapshotData(snap)) return undefined;
+  const lg = leagueContext?.leagueId?.trim();
+  const u = leagueContext?.userId?.trim();
   const compact: CompactH2H = {
     y: { t: snap.you.team, r: snap.you.record, p: snap.you.ppg },
     m: { t: snap.them.team, r: snap.them.record, p: snap.them.ppg },
@@ -60,6 +79,13 @@ export function encodeBureauH2HOgSnapshot(snap: BureauH2HOgSnapshot): string | u
     tf: snap.trade_fit
       ? { o: snap.trade_fit.you_could_offer, g: snap.trade_fit.you_could_target }
       : undefined,
+    ...(lg && u
+      ? {
+          lg,
+          u,
+          o: leagueContext?.opponentId?.trim() || undefined,
+        }
+      : {}),
   };
   const json = JSON.stringify(compact);
   if (typeof btoa === "function") {
@@ -69,11 +95,24 @@ export function encodeBureauH2HOgSnapshot(snap: BureauH2HOgSnapshot): string | u
 }
 
 /** Decode `snapshot` query param from Bureau H2H export — matches encode compact keys (y/m/pc). */
-export function decodeBureauH2HOgSnapshot(param: string): BureauH2HOgSnapshot | null {
+export function decodeBureauH2HOgSnapshot(param: string): DecodedBureauH2HOgSnapshot | null {
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    return fromCompact(JSON.parse(json) as CompactH2H);
+    const compact = JSON.parse(json) as CompactH2H;
+    const snapshot = fromCompact(compact);
+    if (!snapshot) return null;
+    const lg = compact.lg?.trim();
+    const u = compact.u?.trim();
+    const leagueContext =
+      lg && u
+        ? {
+            leagueId: lg,
+            userId: u,
+            opponentId: compact.o?.trim() || undefined,
+          }
+        : undefined;
+    return { snapshot, leagueContext };
   } catch {
     return null;
   }
