@@ -1,29 +1,29 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG gamelog exports fail before a player is picked — empty state had no sample card for Reddit screenshots.",
+  "big_problem": "Lab OG export hrefs for player-scoped panels omit explicit player_id when renderers forget.",
   "epic": "Lab L5 — OG live fetch + sticker parity",
-  "slice_title": "Gamelog OG — default player_id when export omits query",
+  "slice_title": "Lab OG export — default player_id in share URL",
   "atom_id": "lab-og-gamelog-player-default",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
+  "parity_ref": "Lab L5 — OG card per panel",
   "depth_ref": "Lab L5",
   "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/lab/renderers/GamelogRenderer.tsx"],
-  "max_files": 1,
+  "allowed_paths": [
+    "apps/web/components/lab/LabOgExportLink.tsx",
+    "apps/web/components/lab/renderers/GamelogRenderer.tsx"
+  ],
+  "max_files": 2,
   "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1'"
+    "curl -s -o /tmp/og-gamelog.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/gamelog?download=1'"
   ],
-  "out_of_scope": ["og route changes", "NORTH_STAR/DESIGN/DECISIONS"],
+  "out_of_scope": ["OG route refactor"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  },
-  "content_commit": "e37cd230",
-  "reality": "PASS",
-  "merge": "pending"
+  }
 }
