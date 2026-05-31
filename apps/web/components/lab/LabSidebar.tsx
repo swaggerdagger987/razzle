@@ -151,6 +151,7 @@ export function LabSidebar({ activeSlug, collapsed = false, mobileOpen = false, 
                   key={panel.slug}
                   panel={panel}
                   activeSlug={activeSlug}
+                  showAgentInTitle={Boolean(query)}
                   onNavigate={onCloseMobile}
                 />
               ))}
@@ -171,15 +172,27 @@ function SidebarItem({
   panel,
   activeSlug,
   badge,
+  showAgentInTitle,
   onNavigate,
 }: {
   panel: PanelDefinition;
   activeSlug?: string;
   badge?: string;
+  /** When searching, surface agent owner in the visible label (hallway discoverability). */
+  showAgentInTitle?: boolean;
   onNavigate?: () => void;
 }) {
   const active = activeSlug === panel.slug;
   const owner = agentForPanel(panel.slug);
+  const label =
+    showAgentInTitle && owner ? (
+      <>
+        {panel.title}
+        <span className="lab-sidebar-owner text-xs text-ink-medium"> · {owner.name}</span>
+      </>
+    ) : (
+      panel.title
+    );
   return (
     <Link
       href={`/lab/${panel.slug}`}
@@ -197,7 +210,7 @@ function SidebarItem({
           height={18}
         />
       )}
-      {panel.title}
+      {label}
       {panel.tier === "pro" && <span className="lab-pro-lock"> 🔒</span>}
       {badge && <span className="lab-staff-pick"> {badge}</span>}
     </Link>

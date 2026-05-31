@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | lab-sidebar-search-agent-labels | da33eafd | keep | showAgentInTitle when query set.
+
 2026-05-31 | lab-sidebar-staff-picks-by-agent | 4e8b0e8e | keep | staffByAgent agent headers.
 
 2026-05-31 | lab-og-live-demo-fallback-copy | 9cd6a5cf | terracotta SAMPLE sticker + blurb on Launch-10 demo path.

@@ -8,19 +8,19 @@
     {
       "id": "lab-sidebar-staff-picks-by-agent",
       "title": "Staff Picks grouped under agent owner headers in LabSidebar",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "a1386ee9"
     },
     {
       "id": "lab-sidebar-search-agent-labels",
       "title": "Search results show agent owner in sidebar item title",
-      "status": "pending",
+      "status": "in_progress",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-sidebar-staff-picks-by-agent",
+  "next_atom_id": "lab-sidebar-search-agent-labels",
   "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:30:00Z",
+  "updated_at": "2026-05-31T08:32:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-launch10-og-live-extract",
