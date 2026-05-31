@@ -1,5 +1,5 @@
-2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).
 2026-05-31 | lab-og-tolab-snapshot-player | 1a12d9c0b | SHIP | Snapshot pid wrapper; hallway epic complete (T6).
+2026-05-31 | bureau-sos-og-watermark-band | ee6b78ea6 | SHIP | Resumed watermark epic; SOS matches waiver/H2H.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | SHIP | Lab L5 empty OG epic 3/3; weekly heatmap sample export on empty board.
 2026-05-31 | lab-og-launch10-demo-blurbs | 3705fdce8 | SHIP | Demo OG panel-branded.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
@@ -7,7 +7,7 @@
 
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Explore L5 margin epic 1/4; OG matches screener staff notes.
 2026-05-31 | league-trade-finder-og-room-hallway | c8091030c | SHIP | Trade Finder GTM epic complete; Bones hallway on export (T6).
-2026-05-31 | lab-og-from-panel-gate-c-rest | f6e0985f3 | SHIP | Formula OG epic complete; prospects/tradevalues snapshot trust.
+2026-05-31 | lab-og-from-panel-gate-c-rest | ee6b78ea6 | SHIP | Formula OG epic complete; prospects/tradevalues snapshot trust.
 2026-05-31 | lab-og-tolab-gamelog-default | c311a15a8 | SHIP | Default Ja'Marr exports deep-link back into gamelog tape (T6).
 2026-05-31 | lab-og-buysell-formula-live | fb4483341 | SHIP | Buy/sell OG matches formula-sorted panel lanes.
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | SHIP | Cycle 142; formula OG epic 1/3.
