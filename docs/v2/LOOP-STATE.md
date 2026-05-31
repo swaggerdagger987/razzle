@@ -4,5 +4,5 @@ focus_pillar: League
 focus_layer: L5
 next_slice: pick from PARITY/NEXT
 last_keep_cycle: 148
-last_commit: f6e0985f3
+last_commit: 47589a414
 league_l5_trade_finder_gtm_epic: complete
