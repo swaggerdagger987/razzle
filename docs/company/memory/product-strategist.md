@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-college | f6e0985f3 | SHIP | College OG Hawkeye notes close margin epic 4/4.
+2026-05-31 | explore-og-margin-note-college | 47ac3c7dc | SHIP | College OG Hawkeye notes close margin epic 4/4.
 2026-05-31 | explore-og-margin-note-sticker | 12831dd67 | SHIP | LIVE badge on live OG when top-3 carry staff notes; margin epic 3/4.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | SHIP | Explore margin epic 2/4; OG top-3 matches screener staff column.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Weekly OG toLab matches WR heatmap default (T6).

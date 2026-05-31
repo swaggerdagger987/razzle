@@ -4,6 +4,6 @@ focus_pillar: Explore
 focus_layer: L5
 next_slice: (epic complete — pick from PARITY/NEXT)
 last_keep_cycle: 159
-last_commit: f6e0985f3
+last_commit: 47ac3c7dc
 explore_l5_og_margin_epic: complete
 lab_l5_og_watermark_display_name_epic: complete

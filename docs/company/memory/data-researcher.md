@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-college | — | PASS | No new Reddit intel; college OG margin slice only.
+2026-05-31 | explore-og-margin-note-college | 47ac3c7dc | PASS | No new Reddit intel; college OG margin slice only.
 2026-05-31 | explore-og-margin-note-sticker | — | PASS | No new Reddit intel; LIVE sticker slice only.
 2026-05-31 | explore-og-margin-note-rows | — | PASS | No new Reddit intel.
 2026-05-31 | lab-og-tolab-weekly-position | — | PASS | No new Reddit intel.

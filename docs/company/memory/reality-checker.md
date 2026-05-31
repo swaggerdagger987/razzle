@@ -1,4 +1,4 @@
-2026-05-31 | explore-og-margin-note-college | f6e0985f3 | PASS | pytest 8; curl college 72814B; web build exit 0.
+2026-05-31 | explore-og-margin-note-college | 47ac3c7dc | PASS | pytest 8; curl college 72814B; web build exit 0.
 2026-05-31 | explore-og-margin-note-sticker | 12831dd67 | PASS | pytest 11; curl explore 73163B; web build exit 0.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
