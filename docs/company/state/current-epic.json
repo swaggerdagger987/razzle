@@ -1,6 +1,6 @@
 {
-  "epic_status": "active",
-  "big_problem": "Three Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows.",
+  "epic_status": "complete",
+  "big_problem": "Bureau hidden tabs lied about live league data — users hit scaffold dumps instead of intel.",
   "epic_title": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
@@ -20,11 +20,12 @@
     {
       "id": "league-strength-of-schedule-tab",
       "title": "Schedule tab unhidden with SOS renderer",
-      "status": "pending",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "7528b767"
     }
   ],
-  "next_atom_id": "league-strength-of-schedule-tab",
+  "next_atom_id": null,
   "created_at": "2026-05-31T12:05:00Z",
-  "updated_at": "2026-05-31T06:30:00Z"
+  "updated_at": "2026-05-31T13:20:00Z",
+  "last_cycle_commit": "7528b767"
 }
