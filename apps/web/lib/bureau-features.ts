@@ -1,6 +1,5 @@
 /** Scaffolded tabs hidden until bespoke renderers ship (board cycle 43). */
 export const HIDDEN_BUREAU_SLUGS = new Set([
-  "build-profiles",
   "waiver-tendencies",
   "strength-of-schedule",
 ]);

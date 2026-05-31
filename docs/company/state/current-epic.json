@@ -1,43 +1,36 @@
 {
-  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
-  "epic_title": "League L5 — Bureau behavioral share parity",
+  "epic_status": "active",
+  "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product (PARITY League L5).",
+  "epic_title": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "bureau-manager-profiles-copy-link",
-      "title": "Manager Profiles copy link beside export card",
-      "status": "done",
-      "merge_commit": "04c19959"
+      "id": "league-build-profiles-tab",
+      "title": "Unhide Build Profiles tab with Atlas renderer",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-pressure-map-copy-link",
-      "title": "Pressure Map copy link beside export card",
+      "id": "league-power-rankings-tab",
+      "title": "Unhide Power Rankings tab with Octo renderer + hallway",
       "status": "done",
-      "merge_commit": "c4ce09b7"
+      "merge_commit": "20c7940a"
+    },
+    {
+      "id": "league-roster-depth-tab",
+      "title": "Unhide Roster Depth tab with Dolphin renderer",
+      "status": "done",
+      "merge_commit": "9402de52"
     },
     {
       "id": "league-power-rankings-og",
-      "title": "Power Rankings OG + copy board link",
-      "status": "done",
-      "merge_commit": "90bf2dd5"
-    },
-    {
-      "id": "bureau-trade-network-copy-link",
-      "title": "Trade Network copy link beside export card",
-      "status": "done",
-      "merge_commit": "e701e3bb"
-    },
-    {
-      "id": "bureau-monte-carlo-copy-link",
-      "title": "Monte Carlo copy link beside export card",
-      "status": "done",
-      "merge_commit": "30454811"
+      "title": "OG share card at /og/power-rankings with demo fallback",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T04:44:00Z",
-  "updated_at": "2026-05-31T13:20:00Z",
-  "last_cycle_commit": "e701e3bb"
+  "next_atom_id": "league-build-profiles-tab",
+  "created_at": "2026-05-31T04:45:35Z",
+  "updated_at": "2026-05-31T05:38:00Z"
 }
