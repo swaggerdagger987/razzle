@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-gamelog-player-default | da33eafd | keep | LabOgExportLink effectivePlayerId for player-scoped slugs; curl 60634B.
+2026-05-31 | lab-og-gamelog-player-default | 72647966 | keep | LabOgExportLink effectivePlayerId for player-scoped slugs; curl 60634B.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
 

@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | lab-og-gamelog-player-default | da33eafd | PASS | Chase gsis_id 00-0036900 matches nflverse default in OG route.
+2026-05-31 | lab-og-gamelog-player-default | 72647966 | PASS | Chase gsis_id 00-0036900 matches nflverse default in OG route.
 
 2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | PASS | no new REDDIT-INTEL; copy-only slice.
 
