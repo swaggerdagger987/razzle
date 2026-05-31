@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   encodeBureauTradeFinderOgSnapshot,
   type BureauTradeFinderOgSnapshot,
@@ -13,39 +13,71 @@ interface Props {
   snapshot?: BureauTradeFinderOgSnapshot;
 }
 
-/** Copyable trade-finder URL + OG export — mirrors BureauH2HShareBar. */
+/** Copyable trade-finder URL + OG preview/export — mirrors BriefingShareBar. */
 export function BureauTradeFinderShareBar({ leagueId, userId, snapshot }: Props) {
-  const [copied, setCopied] = useState(false);
+  const [copiedTrade, setCopiedTrade] = useState(false);
+  const [copiedPreview, setCopiedPreview] = useState(false);
 
   const tradePath = `/league/${leagueId}/trade-finder`;
 
-  const ogParams = new URLSearchParams({
-    league: leagueId,
-    user: userId,
-    download: "1",
-  });
-  const snap = snapshot ? encodeBureauTradeFinderOgSnapshot(snapshot) : undefined;
-  if (snap) ogParams.set("snapshot", snap);
+  const previewParams = useMemo(() => {
+    const params = new URLSearchParams({
+      league: leagueId,
+      user: userId,
+    });
+    const snap = snapshot ? encodeBureauTradeFinderOgSnapshot(snapshot) : undefined;
+    if (snap) params.set("snapshot", snap);
+    return params;
+  }, [leagueId, userId, snapshot]);
 
-  const copyLink = useCallback(async () => {
+  const previewPath = `/og/trade-finder?${previewParams.toString()}`;
+  const exportParams = new URLSearchParams(previewParams);
+  exportParams.set("download", "1");
+
+  const copyTradeLink = useCallback(async () => {
     const url =
       typeof window !== "undefined" ? `${window.location.origin}${tradePath}` : tradePath;
     try {
       await navigator.clipboard.writeText(url);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+      setCopiedTrade(true);
+      window.setTimeout(() => setCopiedTrade(false), 2000);
     } catch {
-      setCopied(false);
+      setCopiedTrade(false);
     }
   }, [tradePath]);
 
+  const copyPreviewLink = useCallback(async () => {
+    const url =
+      typeof window !== "undefined"
+        ? `${window.location.origin}${previewPath}`
+        : previewPath;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedPreview(true);
+      window.setTimeout(() => setCopiedPreview(false), 2000);
+    } catch {
+      setCopiedPreview(false);
+    }
+  }, [previewPath]);
+
   return (
     <div className="mt-3 flex flex-wrap items-center gap-2">
-      <button type="button" className="btn-chunky text-xs" onClick={() => void copyLink()}>
-        {copied ? "copied!" : "copy trade link"}
+      <button type="button" className="btn-chunky text-xs" onClick={() => void copyTradeLink()}>
+        {copiedTrade ? "copied!" : "copy trade link"}
+      </button>
+      <button type="button" className="btn-chunky text-xs" onClick={() => void copyPreviewLink()}>
+        {copiedPreview ? "copied!" : "copy card link"}
       </button>
       <a
-        href={`/og/trade-finder?${ogParams.toString()}`}
+        href={previewPath}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn-chunky text-xs"
+      >
+        preview card
+      </a>
+      <a
+        href={`/og/trade-finder?${exportParams.toString()}`}
         download="razzle-trade-finder.png"
         className="btn-chunky active text-xs"
         style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}

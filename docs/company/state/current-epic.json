@@ -1,16 +1,31 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic_title": "Lab L5 — OG hallway deep links",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Bureau Trade Finder GTM threads need a copyable OG preview URL, not just the in-app trade-finder route.",
+  "epic_title": "League L5 — Bureau Trade Finder GTM export",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
+  "depth_ref": "League L5",
   "atoms": [
-    {"id": "lab-og-tolab-watermark", "title": "Launch-10 toLab watermark band", "status": "done", "merge_commit": "b80512bb4"},
-    {"id": "lab-og-tolab-gamelog-default", "title": "Gamelog/dynasty-comps default player in toLab", "status": "done", "merge_commit": "c311a15a8"},
-    {"id": "lab-og-tolab-snapshot-player", "title": "Snapshot exports preserve player in watermark", "status": "done", "merge_commit": "05357b3a1"}
+    {
+      "id": "league-trade-finder-og-watermark-live",
+      "title": "Trade Finder OG LIVE watermark band",
+      "status": "done",
+      "merge_commit": "db6537faf"
+    },
+    {
+      "id": "league-trade-finder-og-snapshot",
+      "title": "Snapshot encodes panel trade rows on OG",
+      "status": "done",
+      "merge_commit": "19a1af0e9"
+    },
+    {
+      "id": "league-trade-finder-og-preview-link",
+      "title": "Share bar copies OG preview URL + preview card",
+      "status": "in_progress",
+      "merge_commit": null
+    }
   ],
-  "next_atom_id": null,
-  "created_at": "2026-05-31T11:00:00Z",
-  "updated_at": "2026-05-31T12:15:00Z",
-  "completed_epics": ["lab-l5-og-export-live-panel-rows", "lab-l5-og-hallway-deep-links"]
+  "next_atom_id": "league-trade-finder-og-preview-link",
+  "created_at": "2026-05-31T11:23:27Z",
+  "updated_at": "2026-05-31T11:23:27Z",
+  "completed_epics": []
 }

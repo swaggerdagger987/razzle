@@ -1,34 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab OG watermark dead-ends when default Ja'Marr export omits player in toLab.",
-  "epic": "Lab L5 — OG hallway deep links",
-  "slice_title": "Snapshot exports preserve player in watermark",
-  "atom_id": "lab-og-tolab-snapshot-player",
-  "parity_ref": "Lab panel OG data rows",
-  "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C",
+  "big_problem": "Bureau Trade Finder GTM threads need a copyable OG preview URL, not just the in-app trade-finder route.",
+  "epic": "League L5 — Bureau Trade Finder GTM export (atom 3/3)",
+  "slice_title": "league-trade-finder-og-preview-link",
+  "parity_ref": "League L5 — watermarked export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C — Trade Finder OG PNG ≥40KB",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/components/lab/LabOgExportLink.tsx",
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_tolab_watermark.py"
+    "apps/web/components/league/BureauTradeFinderShareBar.tsx",
+    "apps/api/tests/test_trade_finder_og_preview_link.py"
   ],
-  "max_files": 3,
+  "max_files": 2,
   "max_lines": 80,
   "acceptance_commands": [
-    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_og_tolab_watermark.py -q --noconftest",
-    "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/og-gamelog-snap.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/gamelog?download=1&snapshot=eyJyIjpbeyJuIjoiV2sgMSIsInAiOiJXUiIsInQiOiJDRU4iLCJzIjoxOC41LCJzbCI6IlBQUiJ9XSwicCI6IjAwLTAwMzY5MDAifQ'"
+    "pytest apps/api/tests/test_trade_finder_og_preview_link.py -q",
+    "pytest apps/api/tests/test_trade_finder_og_snapshot.py -q",
+    "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["Bureau snapshots", "New panels", "NORTH_STAR edits"],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP"
-  },
-  "content_commit": "05357b3a1",
-  "reality": "PASS",
-  "merge": "pending"
+  "out_of_scope": [
+    "OG route changes",
+    "new npm deps",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
+  "builder_mode": "composer-surgical"
 }
