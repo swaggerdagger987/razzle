@@ -8,14 +8,14 @@
     {
       "id": "bureau-h2h-og-live-label",
       "title": "H2H OG · live rivalry data when API returns matchup",
-      "status": "done",
-      "merge_commit": "5a974b46"
+      "status": "pending",
+      "merge_commit": null
     },
     {
       "id": "bureau-h2h-snapshot-export",
       "title": "BureauOgExportLink encodes in-product you/them/position bars for OG",
       "status": "done",
-      "merge_commit": "6c8da85f"
+      "merge_commit": "de716f0e"
     },
     {
       "id": "bureau-h2h-og-snapshot-decode",
