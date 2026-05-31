@@ -1,44 +1,56 @@
 {
-  "big_problem": "Lab OG snapshot exports only whisper from your panel in blurb — Reddit cannot see at a glance that the card matches the user's filter.",
-  "epic_title": "Lab L5 — OG trust stickers for export cards",
-  "parity_ref": "Explore L5 — Lab panel OG data rows",
-  "depth_ref": "Lab L5",
+  "epic_status": "active",
+  "big_problem": "Self-Scout export cards still hit live API or demo — Reddit screenshots should mirror in-panel depth grades without Sleeper auth on the OG route.",
+  "epic_title": "League L5 — Bureau Self-Scout snapshot export",
+  "parity_ref": "League L5 — Scenario explorer / what-if outputs that travel",
+  "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "lab-og-from-panel-sticker",
-      "title": "FROM PANEL sticker on Launch-10 OG when snapshot param present",
-      "status": "done",
-      "merge_commit": "7d49e4f0c"
+      "id": "bureau-self-scout-sharebar-snapshot",
+      "title": "Self-Scout ShareBar + OG snapshot codec matches panel grades",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-from-panel-sticker-evidence",
-      "title": "pytest + Gate C curl for rankings/weekly snapshot stickers",
-      "status": "done",
-      "merge_commit": "164159413"
+      "id": "bureau-manager-profiles-sharebar-snapshot",
+      "title": "Manager Profiles ShareBar + OG snapshot for archetype rows",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-from-panel-sticker-gamelog",
-      "title": "FROM PANEL sticker on player-scoped gamelog snapshot export",
+      "id": "bureau-self-scout-snapshot-roundtrip-test",
+      "title": "Pytest roundtrip for Self-Scout OG snapshot param",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-from-panel-sticker-gamelog",
-  "epic_status": "active",
-  "created_at": "2026-05-31T09:20:00Z",
-  "updated_at": "2026-05-31T09:25:00Z",
+  "next_atom_id": "bureau-self-scout-sharebar-snapshot",
+  "created_at": "2026-05-31T09:30:00Z",
+  "updated_at": "2026-05-31T09:50:00Z",
   "completed_epics": [
     {
-      "id": "lab-l5-og-live-sticker",
+      "id": "lab-l4-pro-gate-upgrade",
       "status": "complete",
-      "last_atom": "lab-og-live-sticker-breakouts-dashboard",
-      "merge_commit": "96d43d1b"
+      "last_atom": "lab-pro-gate-og-sample-export",
+      "merge_commit": "1bed81fb"
     },
     {
       "id": "lab-l5-og-live-fetch-merge",
       "status": "complete",
       "last_atom": "lab-og-gamelog-player-default",
       "merge_commit": "4bc3913e"
+    },
+    {
+      "id": "lab-l5-launch10-sample-labels",
+      "status": "complete",
+      "last_atom": "lab-og-launch10-rankings-tradevalues-breakouts-labels",
+      "merge_commit": "54443bc8"
+    },
+    {
+      "id": "lab-l4-pro-gate-error-surface",
+      "status": "partial",
+      "last_atom": "lab-l4-pro-gate-error-surface",
+      "merge_commit": "5721ee33"
     }
   ]
 }

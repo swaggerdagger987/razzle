@@ -1,28 +1,23 @@
 # Memory — Builder
 
-2026-05-31 | FROM PANEL evidence | 164159413 | test_og_from_panel_sticker 2 tests; curl 56682B/58270B.
-
 2026-05-31 | lab-og-live-sticker-gamelog-efficiency | 9ef503929 | SHIP | gamelog LIVE Wk tape vocabulary (2 lines).
+
+2026-05-31 | bureau-self-scout-sharebar-snapshot | 709660c | keep | ShareBar + snapshot lib + OG decode.
+
+2026-05-31 | FROM PANEL evidence | 164159413 | test_og_from_panel_sticker 2 tests; curl 56682B/58270B.
 
 2026-05-31 | FROM PANEL OG sticker | 7d49e4f0c | route.tsx + pytest; snapshot curl ≥40KB.
 
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
 
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
+2026-05-31 | lab-sidebar-search-agent-labels | e75ec714 | keep | showOwnerInTitle prefixes search hits with agent name.
 
-2026-05-31 | lab-og-live-sticker-breakouts-dashboard | 96d43d1b | keep | pytest EXPECTED breakouts/dashboard; curl 67621B/67113B.
+2026-05-31 | explore OG universe export | resolveApiOrigin + explicit copy URL + apiSortKey | SHIP | keep | 3 files | curl nfl/college ≥34KB
 
-2026-05-31 | lab-og-live-sticker-tradevalues-aging | a74c2afe | keep | pytest EXPECTED tradevalues/aging; curl 68974B/65088B.
-
-2026-05-31 | lab-pro-gate-perks-copy | f56fdbd8 | keep | launch10PerkLabels + bureau7PerkLabels in ProUpgradeGate; pytest 6.
-
-2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | partial panel-native labels on base before full switch epic.
-
+2026-05-31 | launch10 snapshot-default | e2a3ce8a | fetchOgLiveRows; OG_FETCH_HEADERS; curl rankings 62355B weekly 66512B.
+2026-05-31 | Cycle 118 prospects OG items | e00217d1 | items[] RPS extract when prospects empty; curl 60688B.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
-
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | keep | weekly/prospects/dashboard teasers; test_panel_upgrade_teaser.
-
-2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 40c80f0e | keep | extractGamelogWeekRows; Wk N + fpts sort; curl 56390B.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | H2H OG terracotta band; curl 67846B.
 

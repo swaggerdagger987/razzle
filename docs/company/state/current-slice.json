@@ -22,5 +22,7 @@
     "engineering_architect": "SHIP",
     "builder": "SHIP",
     "verdict": "SHIP"
-  }
+  },
+  "status": "shipped",
+  "content_commit": "9ef503929"
 }
