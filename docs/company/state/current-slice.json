@@ -15,7 +15,7 @@
   "max_files": 2,
   "max_lines": 60,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret .venv-v2/bin/pytest apps/api/tests/test_explore_og_margin_note_sticker.py -q --noconftest",
+    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_explore_og_margin_note_sticker.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
   "out_of_scope": [
@@ -26,6 +26,7 @@
   "builder_mode": "composer-surgical",
   "content_commit": "76443615b",
   "reality": "PASS",
+  "status": "shipped",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
