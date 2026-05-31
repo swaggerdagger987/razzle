@@ -102,7 +102,7 @@ function launch10LiveBlurbSuffix(slug: string): string {
     case "breakouts":
       return " · live breakout board";
     case "gamelog":
-      return " · live Wk tape";
+      return " · live weeks PPR strip";
     case "efficiency":
       return " · live PPO board";
     case "aging":
@@ -129,7 +129,7 @@ function launch10LiveStickerLabel(slug: string): string {
     case "breakouts":
       return "LIVE · breakout board";
     case "gamelog":
-      return "LIVE · Wk tape";
+      return "LIVE · weeks PPR strip";
     case "efficiency":
       return "LIVE · PPO board";
     case "aging":
