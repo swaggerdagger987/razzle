@@ -1,4 +1,4 @@
-2026-05-31 | league-h2h-og-toleague-watermark | f6e0985f3 | SHIP | League L5 Bureau OG hallway epic 1/3; H2H rivalry deep links on export.
+2026-05-31 | league-h2h-og-toleague-watermark | f5e101c0b | SHIP | League L5 Bureau OG hallway epic 1/3; H2H rivalry deep links on export.
 2026-05-31 | lab-og-tolab-snapshot-player | d2677f2cb | SHIP | Lab L5 hallway epic complete; snapshot pid preserves toLab player.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Product Strategist
