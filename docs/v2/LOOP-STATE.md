@@ -4,7 +4,7 @@ focus_pillar: Explore
 focus_layer: L2
 next_slice: explore-og-college-hawkeye-note
 last_keep_cycle: 127
-last_commit: da33eafd
+last_commit: 0a4536df
 explore_l2_college_og_gtm_epic: active
 lab_l5_og_live_fetch_epic: complete
 lab_l5_og_watermark_epic: complete

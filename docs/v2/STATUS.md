@@ -20,7 +20,7 @@ From `LOOP-STATE.md`:
 | Focus pillar | Explore |
 | Focus layer | L2 |
 | Next slice | explore-og-college-hawkeye-note |
-| Last commit | `da33eafd` |
+| Last commit | `0a4536df` |
 
 ---
 
