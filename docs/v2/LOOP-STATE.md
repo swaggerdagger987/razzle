@@ -1,8 +1,8 @@
-cycle: 148
+cycle: 149
 last_board_cycle: 54
-focus_pillar: League
+focus_pillar: Lab
 focus_layer: L5
-next_slice: (pick from PARITY after Trade Finder GTM epic)
-last_keep_cycle: 148
+next_slice: (Strategist: next PARITY RED/YELLOW — Explore H2H or Lab hallway)
+last_keep_cycle: 149
 last_commit: f6e0985f3
-league_l5_trade_finder_gtm_epic: complete
+lab_l5_formula_og_epic: complete

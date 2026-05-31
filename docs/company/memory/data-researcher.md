@@ -1,3 +1,4 @@
+2026-05-31 | lab-og-efficiency-aging-formula-live | f6e0985f3 | Octo composite exports must match formula bar sort.
 2026-05-31 | lab-strengths-live-og | da33eafd | SHIP | Strengths OG LIVE sticker + extractStrengthsRows.
 # Memory — Data Researcher
 

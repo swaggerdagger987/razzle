@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Lab efficiency + aging formula OG (cycle 149)
+- **Angle:** Composite-sorted efficiency/aging exports match FormulaPanelBar — Octo screenshots show the score column users picked, not raw PPO/PPG alone.
+- **Trust:** T5/T6 — formula_score key priority in live extract; demo PNG still ≥40KB.
+
 ### 2026-05-31 — Lab trade values export (cycle 95)
 - **Angle:** Formula-ranked trade value card — rank + composite name on each row matches what Bones users sort before screenshotting.
 - **Trust:** T5/T6 — top 6 from visible sort; dynasty rank when no formula.
