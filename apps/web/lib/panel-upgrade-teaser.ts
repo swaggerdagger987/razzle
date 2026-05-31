@@ -1,5 +1,8 @@
 /** Static blur-preview rows + staff voice for Pro upgrade gates (Lab L4). */
 
+import { getPanel } from "@razzle/panels";
+import { BUREAU_FEATURES } from "@/lib/bureau-features";
+
 /** Launch-10 Staff Picks — mirrors `LabSidebar` STAFF_PICKS + PARITY Launch 10 table. */
 export const LAUNCH_10_STAFF_PICK_SLUGS = [
   "weekly",
@@ -24,6 +27,29 @@ export const LAUNCH_10_PRO_GATE_SLUGS = [
   "aging",
   "buysell",
 ] as const;
+
+/** Bureau-7 moat tabs — matches shipped OG routes + `VISIBLE_BUREAU_FEATURES` core set. */
+export const BUREAU_7_FEATURE_SLUGS = [
+  "self-scout",
+  "head-to-head",
+  "pressure-map",
+  "trade-finder",
+  "trade-network",
+  "manager-profiles",
+  "build-profiles",
+] as const;
+
+const bureauLabelBySlug = new Map(BUREAU_FEATURES.map((f) => [f.slug, f.label]));
+
+/** Comma list of Launch-10 panel titles for Pro gate perks (PARITY staff picks). */
+export function launch10PerksLine(): string {
+  return LAUNCH_10_STAFF_PICK_SLUGS.map((slug) => getPanel(slug)?.title ?? slug).join(", ");
+}
+
+/** Comma list of Bureau-7 tab labels for Pro gate perks. */
+export function bureau7PerksLine(): string {
+  return BUREAU_7_FEATURE_SLUGS.map((slug) => bureauLabelBySlug.get(slug) ?? slug).join(", ");
+}
 
 export type TeaserPosition = "QB" | "RB" | "WR" | "TE";
 

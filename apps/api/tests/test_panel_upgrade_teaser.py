@@ -34,6 +34,16 @@ GENERIC_PRO_GATE_SLUGS = (
     "dynasty-comps",
 )
 
+BUREAU_7_FEATURE_SLUGS = (
+    "self-scout",
+    "head-to-head",
+    "pressure-map",
+    "trade-finder",
+    "trade-network",
+    "manager-profiles",
+    "build-profiles",
+)
+
 
 def _teaser_source() -> str:
     from pathlib import Path
@@ -65,3 +75,25 @@ def test_generic_pro_gate_slugs_have_custom_teasers():
     source = _teaser_source()
     missing = [s for s in GENERIC_PRO_GATE_SLUGS if not _slug_has_custom_teaser(source, s)]
     assert not missing, f"generic pro gate slugs missing teaser: {missing}"
+
+
+def test_pro_gate_perks_export_launch10_and_bureau7():
+    source = _teaser_source()
+    assert "export function launch10PerksLine" in source
+    assert "export function bureau7PerksLine" in source
+    assert "export const BUREAU_7_FEATURE_SLUGS" in source
+    for slug in BUREAU_7_FEATURE_SLUGS:
+        assert f'"{slug}"' in source
+    for slug in LAUNCH_10_STAFF_PICK_SLUGS:
+        assert f'"{slug}"' in source
+
+
+def test_pro_upgrade_gate_uses_named_perks():
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[3]
+    gate = (root / "apps/web/components/lab/ProUpgradeGate.tsx").read_text(encoding="utf-8")
+    assert "launch10PerksLine()" in gate
+    assert "bureau7PerksLine()" in gate
+    assert "Launch-10 Lab —" in gate
+    assert "Bureau-7 —" in gate
