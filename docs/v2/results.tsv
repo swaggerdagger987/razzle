@@ -80,4 +80,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 123	7dbd4b11	depth+voice+simplicity	keep	Explore	L5 Explore OG universe season team export URL	trust=T5,T6; ShareButton+OG route; curl college 41427B; live-fetch epic atom 2/3
 127	e75ec714	depth+voice+simplicity	keep	Lab	L2 sidebar search agent owner labels	trust=T2,T6; Hawkeye · Rankings on search; web build PASS pytest 58; L2 sidebar epic 2/2 complete
 128	e37cd230	depth+voice+simplicity	keep	Lab	L5 Gamelog OG default player export link	trust=T5,T6; DEFAULT_LAB_OG_PLAYER_ID on empty state; curl gamelog 60634B; on base
-129	974c4c47	depth+voice+simplicity	keep	Lab	L4 Pro gate OG export teaser snapshot	trust=T2,T6; LabOgExportLink on ProUpgradeGate; curl rankings teaser 51200B; L4 og epic complete
+129	5721ee33	depth+voice+simplicity	keep	Lab	L4 Pro gate error surface on breakouts	trust=T2,T6; ProGateFromPanelError; pytest 7; on base
+130	974c4c47	depth+voice+simplicity	keep	Lab	L4 Pro gate OG export teaser snapshot	trust=T2,T6; LabOgExportLink on ProUpgradeGate; curl rankings teaser 51200B; L4 og epic complete
