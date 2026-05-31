@@ -1,8 +1,8 @@
 {
   "epic_status": "complete",
-  "big_problem": "Lab OG share cards must render the same live panel rows users see in-product — not legacy API paths or demo-only shells when terminal.db has tape (DEPTH Lab L5).",
+  "big_problem": "Lab OG share cards must render the same live panel rows users see in-product (DEPTH Lab L5).",
   "epic_title": "Lab L5 — OG cards match in-product live panel rows",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
   "atoms": [
     {
