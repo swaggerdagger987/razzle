@@ -29,6 +29,12 @@
   "updated_at": "2026-05-31T08:15:00Z",
   "completed_epics": [
     {
+      "id": "lab-l5-launch10-og-live-extract",
+      "status": "complete",
+      "last_atom": "lab-og-dynasty-comps-pro-teaser",
+      "merge_commit": "26a590c9"
+    },
+    {
       "id": "lab-l5-og-watermark-band",
       "status": "complete",
       "last_atom": "lab-og-watermark-band-head-to-head",
