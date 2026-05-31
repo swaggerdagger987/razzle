@@ -164,11 +164,41 @@ function demoRowsForPanel(slug: string): OgRow[] {
   return DEMO_ROWS_BY_SLUG[slug] ?? DEFAULT_DEMO_ROWS;
 }
 
+<<<<<<< HEAD
 /** Sample preview suffix only when demo fallback — launch-10 + all panel slugs. */
 function ogBlurbSuffix(slug: string, usingLiveData: boolean): string {
   if (usingLiveData) return "";
   if (slug === "dynasty-comps") return " · comps for Ja'Marr Chase · sample preview";
   return " · sample preview";
+=======
+type CompactOgRow = { n: string; p: string; t: string; s: number; sl: string };
+
+function decodeOgSnapshot(param: string): OgRow[] {
+  try {
+    const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
+    const json = atob(b64);
+    const arr = JSON.parse(json) as CompactOgRow[];
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .filter((r) => r?.n)
+      .slice(0, 6)
+      .map((r) => ({
+        name: r.n,
+        position: r.p ?? "",
+        team: r.t ?? "",
+        stat: Number(r.s ?? 0),
+        statLabel: r.sl ?? "",
+      }));
+  } catch {
+    return [];
+  }
+}
+
+function resolveApiOrigin(req: Request): string {
+  const env = process.env.NEXT_PUBLIC_API_ORIGIN?.replace(/\/$/, "");
+  if (env) return env;
+  return new URL(req.url).origin;
+>>>>>>> origin/razzle-v2-redesign
 }
 
 function extractRows(data: unknown): OgRow[] {
@@ -267,12 +297,13 @@ async function fetchLiveOgRows(
 }
 
 async function fetchPanelData(
+  req: Request,
   slug: string,
   apiPath: string,
   method: string,
   params?: Record<string, unknown>,
 ): Promise<OgRow[]> {
-  const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
+  const apiOrigin = resolveApiOrigin(req);
 
   try {
     let res: Response;
@@ -319,6 +350,7 @@ export async function GET(
   const url = new URL(req.url);
   const isDownload = url.searchParams.get("download") === "1";
   const query = url.searchParams.get("q") ?? "";
+  const snapshotParam = url.searchParams.get("snapshot") ?? "";
   const playerId =
     url.searchParams.get("player_id") ??
     url.searchParams.get("id") ??
@@ -343,16 +375,25 @@ export async function GET(
   if (PLAYER_SCOPED_SLUGS.has(slug)) {
     apiParams.player_id = playerId;
   }
+  const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
+  const snapshotHasRows =
+    snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
+
   let liveRows: OgRow[] = [];
   if (apiPath) {
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
     if (liveRows.length === 0) {
-      liveRows = await fetchPanelData(slug, apiPath, panel.api.method, apiParams);
+      liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
     }
   }
   const namedLiveRows = liveRows.filter((r) => r.name.trim().length > 0);
   const usingLiveData = namedLiveRows.length > 0;
-  const rows = usingLiveData ? namedLiveRows.slice(0, 6) : demoRowsForPanel(slug);
+  const isSnapshot = snapshotHasRows;
+  const rows = isSnapshot
+    ? snapshotRows.slice(0, 6)
+    : usingLiveData
+      ? namedLiveRows.slice(0, 6)
+      : demoRowsForPanel(slug);
 
   const hasRows = rows.length > 0 && rows.some((r) => r.name);
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
@@ -410,7 +451,9 @@ export async function GET(
           {panel.title}
         </div>
         <div style={{ fontSize: 20, color: "#5c4a3d", marginBottom: 16, maxWidth: 1000 }}>
-          {`${panel.blurb}${ogBlurbSuffix(slug, usingLiveData)}`}
+          {`${panel.blurb}${
+            isSnapshot ? " · from your panel" : ogBlurbSuffix(slug, usingLiveData)
+          }`}
         </div>
 
         {query && (
