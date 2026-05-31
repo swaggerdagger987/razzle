@@ -2,24 +2,23 @@
   "date": "2026-05-31",
   "big_problem": "Lab OG share cards without panel stat keys sort by wrong fields when live API rows load — screenshots disagree with in-product Lab tables.",
   "epic": "Lab L5 — OG live panel rows match in-product sort keys",
-  "slice_title": "Rankings + Trade Values OG rank by dynasty_value / trade_value on live fetch",
-  "atom_id": "lab-og-rankings-tradevalues-live-sort",
+  "slice_title": "Efficiency + Aging OG rank by ppo / age on live fetch",
+  "atom_id": "lab-og-efficiency-aging-live-sort",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
   "acceptance_ref": "ACCEPTANCE Gate 5 — Lab OG export",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 40,
+  "max_lines": 55,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-rankings.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/rankings?position=WR&download=1'",
-    "curl -s -o /tmp/og-tradevalues.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/tradevalues?position=WR&download=1'"
+    "curl -s -o /tmp/og-efficiency.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/efficiency?position=WR&download=1'",
+    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/aging?position=WR&download=1'"
   ],
   "out_of_scope": [
-    "Efficiency/aging/buysell stat keys (atom 2)",
-    "New LabOgExportLink wiring",
+    "buysell/dashboard stat keys (atom 3)",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",

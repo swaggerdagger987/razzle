@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | Lab OG efficiency/aging Gate C | da33eafd | PASS | build+pytest+curl 48610B/44093B PNG.
+
 2026-05-31 | Lab OG rankings/tradevalues Gate C | 7f78b631 | PASS | build+pytest+curl 50251B/51115B; PR619 merged.
 
 Append-only log of recurring failure patterns, evidence gaps, false-PASS

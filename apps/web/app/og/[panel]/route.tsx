@@ -65,6 +65,8 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   breakouts: "breakout_score",
   rankings: "dynasty_value",
   tradevalues: "trade_value",
+  efficiency: "ppo",
+  aging: "age",
 };
 
 const LAUNCH_10_OG_SLUGS = new Set([
@@ -249,6 +251,8 @@ function statLabelForKey(k: string): string {
   if (k === "ppg") statLabel = "PPG";
   if (k === "rps") statLabel = "RPS";
   if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
+  if (k === "ppo" || k === "efficiency_score") statLabel = "PPO";
+  if (k === "age" || k === "peak_age") statLabel = "Peak Age";
   if (k === "formula_score") statLabel = "Score";
   if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
   if (k === "similarity") statLabel = "Match %";
@@ -256,13 +260,24 @@ function statLabelForKey(k: string): string {
   return statLabel;
 }
 
-function extractRows(data: unknown, slug?: string): OgRow[] {
+function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[] {
   if (!data || typeof data !== "object") return [];
 
   const obj = data as Record<string, unknown>;
   let candidates: Record<string, unknown>[] = [];
 
-  if (Array.isArray(obj.items)) {
+  if (Array.isArray(obj.most_efficient)) {
+    candidates = obj.most_efficient as Record<string, unknown>[];
+  } else if (obj.positions && typeof obj.positions === "object") {
+    const positions = obj.positions as Record<string, { players?: Record<string, unknown>[] }>;
+    const keys = positionFilter && positions[positionFilter] ? [positionFilter] : Object.keys(positions);
+    for (const k of keys) {
+      const block = positions[k];
+      if (Array.isArray(block?.players)) {
+        candidates.push(...(block.players as Record<string, unknown>[]));
+      }
+    }
+  } else if (Array.isArray(obj.items)) {
     candidates = obj.items as Record<string, unknown>[];
   } else if (Array.isArray(obj.tiers)) {
     for (const tier of obj.tiers as Record<string, unknown>[]) {
@@ -369,7 +384,8 @@ async function fetchLiveOgRows(
       headers: { [OG_PRO_PREVIEW_HEADER]: "pro" },
     });
     if (!res.ok) return [];
-    return extractRows(await res.json(), slug);
+    const pos = params?.position != null ? String(params.position) : "";
+    return extractRows(await res.json(), slug, pos);
   } catch {
     return [];
   }
@@ -404,7 +420,8 @@ async function fetchPanelData(
     }
     if (!res.ok) return [];
     const data = await res.json();
-    return extractRows(data, slug);
+    const pos = params?.position != null ? String(params.position) : "";
+    return extractRows(data, slug, pos);
   } catch {
     return [];
   }

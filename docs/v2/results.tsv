@@ -60,3 +60,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 101	7fb236c5	depth+voice+simplicity	keep	Lab	L5 Efficiency OG position filter	trust=T5,T6; position on export; curl 48610B; position epic atom 2/3
 102	b99dbd76	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS OG snapshot	trust=T2,T5,T6; encode/decode snapshot; curl demo 58624B; ShareBar wired
 100	7f78b631	depth+voice+simplicity	keep	Lab	L5 Rankings+Trade Values OG live sort keys	trust=T5,T6; dynasty_value+trade_value; curl rankings 50251B tradevalues 51115B; epic atom 1/3
+103	da33eafd	depth+voice+simplicity	keep	Lab	L5 Efficiency+Aging OG live sort keys	trust=T5,T6; ppo+age; most_efficient+positions extract; curl efficiency 48610B aging 44093B; epic atom 2/3

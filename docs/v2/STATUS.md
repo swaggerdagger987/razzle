@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 96 — Waiver Tendencies OG FAAB card)  
+**Last updated:** 2026-05-31 (factory cycle 103 — Lab OG efficiency/aging live sort keys)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 96 |
+| Cycle | 103 |
 | Last board | 54 |
-| Focus pillar | League |
+| Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | league-strength-of-schedule-og-share |
-| Last commit | `3f584f61` |
+| Next slice | lab-og-buysell-dashboard-live-sort |
+| Last commit | `da33eafd` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
