@@ -1,5 +1,6 @@
 # Memory — Product Strategist
 
+2026-05-31 | lab-og-tradevalues-live-rank-labels | da33eafd | SHIP | Trade Values OG matches in-product rank · Value readout.
 2026-05-31 | lab-og-rankings-live-rank-labels | 0d011e7df | SHIP | NEXT.md Lab OG — rank visible on dynasty share cards.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | Dynasty share links cleaner; college stays explicit.

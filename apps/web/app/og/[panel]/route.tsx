@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getPanel } from "@razzle/panels";
 import { agentForPanel } from "@razzle/agents";
+import { toLab } from "@razzle/hallway";
 import { teaserRowsForPanel } from "@/lib/panel-upgrade-teaser";
 
 export const runtime = "edge";
@@ -400,6 +401,40 @@ function extractProspectsRows(
   return [...rows].sort((a, b) => b.stat - a.stat).slice(0, 6);
 }
 
+/** Trade values — trade_value sort with rank · Value (matches TradeValuesRenderer). */
+function extractTradeValuesRows(
+  players: Record<string, unknown>[],
+  positionFilter: string,
+): OgRow[] {
+  let rows = players
+    .map((row, idx) => {
+      const rankRaw = row.rank;
+      const rank =
+        rankRaw != null && Number(rankRaw) > 0 ? Number(rankRaw) : idx + 1;
+      const value = Number(row.trade_value ?? row.value ?? 0);
+      const formulaScore = Number(row.formula_score ?? 0);
+      const stat = formulaScore > 0 ? formulaScore : value > 0 ? value : rank;
+      return {
+        name: String(row.full_name ?? row.name ?? row.player_name ?? ""),
+        position: String(row.position ?? row.pos ?? ""),
+        team: String(row.team ?? row.team_abbr ?? ""),
+        stat,
+        statLabel: `${rank} · Value`,
+      };
+    })
+    .filter((r) => r.name.trim().length > 0);
+  if (positionFilter) {
+    rows = rows.filter((r) => r.position === positionFilter);
+  }
+  return [...rows]
+    .sort((a, b) => b.stat - a.stat)
+    .slice(0, 6)
+    .map((row, i) => ({
+      ...row,
+      statLabel: `${i + 1} · Value`,
+    }));
+}
+
 /** Dynasty rankings — dynasty_value sort with #rank column (matches DynastyRankingsRenderer). */
 function extractRankingsRows(
   players: Record<string, unknown>[],
@@ -569,6 +604,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     if (rankingRows.length > 0) return rankingRows;
   }
 
+  if (slug === "tradevalues") {
+    const tradeValueRows = extractTradeValuesRows(candidates, positionFilter);
+    if (tradeValueRows.length > 0) return tradeValueRows;
+  }
+
   const preferredKey = slug ? PANEL_OG_STAT_KEY[slug] : undefined;
   const tradeValueStatKeys: string[] = [
     "formula_score",
@@ -712,6 +752,32 @@ async function fetchOgLiveRows(
   return fetchPanelData(req, slug, apiPath, method, apiParams);
 }
 
+/** Typed hallway path for OG watermark band (T6 — click back into Lab). */
+function labOgWatermarkLink(
+  slug: string,
+  opts: { positionFilter: string; playerId: string; playerScoped: boolean },
+): string {
+  const usePlayer =
+    opts.playerScoped && opts.playerId && opts.playerId !== DEFAULT_OG_PLAYER_ID;
+  let path = toLab(
+    slug,
+    usePlayer
+      ? {
+          player: {
+            playerId: opts.playerId,
+            slug: opts.playerId,
+            name: "player",
+          },
+        }
+      : undefined,
+  );
+  if (opts.positionFilter) {
+    const sep = path.includes("?") ? "&" : "?";
+    path = `${path}${sep}position=${encodeURIComponent(opts.positionFilter)}`;
+  }
+  return `razzle.lol${path}`;
+}
+
 function formatStat(n: number, label?: string): string {
   if (n === 0) return "—";
   if (label === "Match %") {
@@ -793,6 +859,11 @@ export async function GET(
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const labLink = labOgWatermarkLink(slug, {
+    positionFilter,
+    playerId,
+    playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+  });
 
   return new ImageResponse(
     (
@@ -1019,7 +1090,7 @@ export async function GET(
             fontSize: 20,
           }}
         >
-          <div style={{ display: "flex", fontWeight: 700 }}>razzle.lol/lab/{slug}</div>
+          <div style={{ display: "flex", fontWeight: 700 }}>{labLink}</div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>

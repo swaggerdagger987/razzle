@@ -1,24 +1,24 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-rankings-live-rank-labels",
+  "atom_id": "lab-og-tradevalues-live-rank-labels",
   "big_problem": "Lab OG dynasty cards read like a generic value table — Reddit cannot see overall rank at a glance on shared screenshots.",
   "epic": "Lab L5 — OG live panel rows match in-product rank readout",
-  "slice_title": "Rankings OG — #rank statLabel on live dynasty rows",
+  "slice_title": "Trade Values OG — rank · Value statLabel on live value rows",
   "parity_ref": "Lab panel OG data rows — PARITY.md",
   "depth_ref": "Lab L5",
   "acceptance_ref": "Gate C OG PNG ≥40KB",
   "trust_pillars": ["T1", "T5", "T6"],
   "allowed_paths": [
     "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_og_rankings_live_rank_labels.py"
+    "apps/api/tests/test_og_tradevalues_live_rank_labels.py"
   ],
   "max_files": 2,
-  "max_lines": 300,
+  "max_lines": 120,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_og_rankings_live_rank_labels.py -q --noconftest",
+    "python3 -m pytest apps/api/tests/test_og_tradevalues_live_rank_labels.py -q --noconftest",
     "npm run build --workspace=apps/web"
   ],
-  "out_of_scope": ["tradevalues/breakouts OG", "NORTH_STAR edits", "new deps"],
+  "out_of_scope": ["breakouts OG", "NORTH_STAR edits", "new deps", "tolab watermark changes"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

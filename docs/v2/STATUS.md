@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 130 — Explore OG formula sort label)
+**Last updated:** 2026-05-31 (factory cycle 140 — Lab OG toLab hallway watermark)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 130 |
+| Cycle | 140 |
 | Last board | 54 |
-| Focus pillar | Explore |
+| Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | pick from PARITY/NEXT — Bureau H2H or Lab L5 |
-| Last commit | `710ec33e` |
+| Next slice | lab-og-tolab-gamelog-default |
+| Last commit | `b80512bb4` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 
