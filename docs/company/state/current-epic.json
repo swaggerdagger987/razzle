@@ -3,7 +3,6 @@
   "epic_title": "Lab L5 — OG live panel data rows",
   "parity_ref": "Explore L5 / Lab L5 — OG card per panel matches in-product export",
   "depth_ref": "Lab L5",
-  "epic_status": "active",
   "atoms": [
     {
       "id": "lab-og-weekly-tolab-watermark-position",
@@ -20,14 +19,21 @@
     {
       "id": "lab-og-dashboard-live-gate-c",
       "title": "Dashboard OG Gate C curl proves live dynasty-dashboard rows",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "cf76b86ee"
     }
   ],
-  "next_atom_id": "lab-og-dashboard-live-gate-c",
+  "next_atom_id": null,
+  "epic_status": "complete",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T11:38:00Z",
+  "updated_at": "2026-05-31T12:20:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l5-og-live-panel-rows",
+      "status": "complete",
+      "last_atom": "lab-og-dashboard-live-gate-c",
+      "merge_commit": "cf76b86ee"
+    },
     {
       "id": "lab-l5-og-watermark-display-names",
       "status": "complete",
