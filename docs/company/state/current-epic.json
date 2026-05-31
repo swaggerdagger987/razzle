@@ -1,57 +1,31 @@
 {
-  "epic_status": "complete",
-  "big_problem": "Lab OG share cards lack the terracotta watermark band Explore exports have \u2014 Reddit screenshots don't carry razzle.lol brand gravity.",
-  "epic_title": "Lab L5 \u2014 OG watermark band on Launch-10 cards",
-  "parity_ref": "Explore L5 \u2014 OG watermark band",
-  "depth_ref": "Lab L5",
+  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
+  "epic_title": "Lab L4 — Pro gates feel like upgrade, not error",
+  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
+  "depth_ref": "Lab L4",
   "atoms": [
     {
-      "id": "lab-og-watermark-band-panel-route",
-      "title": "Launch-10 panel OG route \u2014 always-on terracotta watermark band",
-      "status": "done",
-      "merge_commit": "010241ea"
+      "id": "lab-pro-gate-hallway-teasers",
+      "title": "Pro gate hallway screener link + teasers for comps/tiers/vorp/stocks",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "lab-og-watermark-band-head-to-head",
-      "title": "Bureau H2H OG \u2014 match terracotta band styling",
-      "status": "done",
-      "merge_commit": "44d05684"
+      "id": "lab-pro-gate-launch10-teasers",
+      "title": "Launch-10 pro panel teasers audit — fill any slug gaps in generic renderer",
+      "status": "pending",
+      "merge_commit": null
+    },
+    {
+      "id": "lab-pro-gate-perks-copy",
+      "title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
   "next_atom_id": "lab-pro-gate-hallway-teasers",
   "epic_status": "active",
-  "created_at": "2026-05-31T09:15:00Z",
-  "updated_at": "2026-05-31T09:15:00Z",
-  "completed_epics": [
-    {
-      "id": "league-l5-bureau-h2h-codec",
-      "status": "complete",
-      "last_atom": "bureau-h2h-snapshot-roundtrip-test",
-      "merge_commit": "5e75875e"
-    },
-    {
-      "id": "lab-l5-og-watermark-band",
-      "status": "complete",
-      "last_atom": "lab-og-watermark-band-head-to-head",
-      "merge_commit": "44d05684"
-    },
-    {
-      "id": "lab-l5-launch10-og-live-extract",
-      "status": "active",
-      "last_atom": "lab-og-weekly-prospects-breakouts-live-extract",
-      "merge_commit": "8d8b2635"
-    },
-    {
-      "id": "lab-l5-og-live-sort-keys",
-      "status": "complete",
-      "last_atom": "lab-og-buysell-dashboard-live-sort",
-      "merge_commit": "7afc0b03"
-    },
-    {
-      "id": "league-l5-bureau-depth-og",
-      "status": "complete",
-      "last_atom": "league-strength-of-schedule-og-share",
-      "merge_commit": "7f652a98"
-    }
-  ]
+  "created_at": "2026-05-31T08:00:00Z",
+  "updated_at": "2026-05-31T08:02:00Z",
+  "completed_epics": []
 }
