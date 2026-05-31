@@ -29,14 +29,14 @@
       "merge_commit": null
     },
     {
-      "id": "lab-og-live-sticker-gamelog-efficiency",
-      "title": "gamelog/efficiency OG LIVE sticker + blurb parity",
+      "id": "lab-l4-pro-gate-error-tradevalues",
+      "title": "Wire ProGateFromPanelError on tradevalues + efficiency",
       "status": "pending",
       "merge_commit": null
     },
     {
-      "id": "lab-og-live-sticker-aging-buysell",
-      "title": "aging/buysell OG LIVE sticker + blurb parity",
+      "id": "lab-l4-pro-gate-error-remaining",
+      "title": "Wire ProGateFromPanelError on remaining launch-10 renderers",
       "status": "pending",
       "merge_commit": null
     }
