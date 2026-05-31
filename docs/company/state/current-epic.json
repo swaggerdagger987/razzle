@@ -26,13 +26,19 @@
   ],
   "next_atom_id": "explore-og-universe-query",
   "created_at": "2026-05-31T08:44:01Z",
-  "updated_at": "2026-05-31T08:44:01Z",
+  "updated_at": "2026-05-31T09:05:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-og-live-fetch-sticker",
       "status": "complete",
       "last_atom": "lab-pro-gate-hallway-teasers",
       "merge_commit": "675044ea"
+    },
+    {
+      "id": "lab-l2-sidebar-groups-by-agent",
+      "status": "complete",
+      "last_atom": "lab-sidebar-staff-picks-by-agent",
+      "merge_commit": "4e8b0e8e"
     }
   ]
 }

@@ -10,3 +10,5 @@ lab_l4_pro_gate_epic: complete
 lab_l5_og_live_rows_epic: complete
 lab_l5_og_watermark_epic: complete
 lab_l5_launch10_og_extract_epic: complete
+lab_l5_og_panel_native_live_epic: active
+lab_l2_sidebar_agent_epic: complete

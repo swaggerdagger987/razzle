@@ -15,7 +15,7 @@
   "max_files": 2,
   "max_lines": 60,
   "acceptance_commands": [
-    "pytest apps/api/tests/test_explore_share_og_universe.py -q",
+    "pytest apps/api/tests/test_explore_share_og_universe.py -q --noconftest",
     "npm run build --workspace=apps/web 2>&1 | tail -8"
   ],
   "out_of_scope": ["OG route logic", "screener API", "NORTH_STAR/DESIGN/DECISIONS"],
