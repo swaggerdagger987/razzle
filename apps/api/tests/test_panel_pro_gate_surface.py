@@ -74,3 +74,29 @@ def test_pro_gate_from_panel_error_wired_in_efficiency():
     ).read_text(encoding="utf-8")
     assert "ProGateFromPanelError" in renderer
     assert "ProUpgradeGate" not in renderer
+
+
+def _assert_pro_gate_renderer(path: str) -> None:
+    renderer = (_repo_root() / path).read_text(encoding="utf-8")
+    assert "ProGateFromPanelError" in renderer
+    assert "ProUpgradeGate" not in renderer
+
+
+def test_pro_gate_from_panel_error_wired_in_rankings():
+    _assert_pro_gate_renderer("apps/web/components/lab/renderers/DynastyRankingsRenderer.tsx")
+
+
+def test_pro_gate_from_panel_error_wired_in_gamelog():
+    _assert_pro_gate_renderer("apps/web/components/lab/renderers/GamelogRenderer.tsx")
+
+
+def test_pro_gate_from_panel_error_wired_in_buysell():
+    _assert_pro_gate_renderer("apps/web/components/lab/renderers/BuySellRenderer.tsx")
+
+
+def test_pro_gate_from_panel_error_wired_in_aging():
+    _assert_pro_gate_renderer("apps/web/components/lab/renderers/AgingCurvesRenderer.tsx")
+
+
+def test_pro_gate_from_panel_error_wired_in_prospects_comps():
+    _assert_pro_gate_renderer("apps/web/components/lab/renderers/DynastyCompsRenderer.tsx")

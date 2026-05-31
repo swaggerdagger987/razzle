@@ -1,5 +1,6 @@
 # Memory — Engineering Architect
 
+2026-05-31 | lab-l4-pro-gate-error-remaining | da33eafd | 6-file mechanical slice; pytest helper _assert_pro_gate_renderer.
 2026-05-31 | lab-l4-pro-gate-error-tradevalues | b1ee6508 | 3-file slice; pytest wiring guards per renderer.
 2026-05-31 | explore-og-universe-query | 7dbd4b11 | 3-file slice; bandParams mirrors export query string.
 2026-05-31 | pro gate perks | f56fdbd8 | keep | 4 files; catalog-driven labels; pytest guards.
