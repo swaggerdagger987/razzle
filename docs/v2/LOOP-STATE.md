@@ -1,4 +1,4 @@
-cycle: 134
+cycle: 132
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5

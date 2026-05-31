@@ -12,8 +12,6 @@
 2026-05-31 | lab-og-launch10-live-fetch-merge | 3f0411ec | SHIP | live-fetch epic atom 1/3; sticker+fetch on base merge.
 2026-05-31 | lab-og-launch10-snapshot-default | e2a3ce8a | SHIP | closes gamelog OG epic; live rows when no snapshot.
 
-2026-05-31 | lab-pro-gate-launch10-teasers | b0405d43 | SHIP | keep | all Staff Picks domain blur; T2/T6.
-
 2026-05-31 | Cycle 118 prospects items | e00217d1 | items[] when prospects empty.
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | SHIP | NEXT.md live-rows epic atom 1/3.
 
