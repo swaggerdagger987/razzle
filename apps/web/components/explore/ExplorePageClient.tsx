@@ -182,7 +182,7 @@ export function ExplorePageClient() {
               <strong>{query.data.count}</strong> {statLabel}
             </>
           ) : (
-            universe === "college" ? loadingCopyForAgent("hawkeye") : "pulling film..."
+            universe === "college" ? loadingCopyForAgent("hawkeye") : loadingCopyForAgent("razzle")
           )}
         </span>
         <button
