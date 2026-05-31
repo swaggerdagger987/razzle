@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-career-compare-live | 9d19930cf | PASS | pytest 2; curl career-compare 52967B PNG.
+2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
@@ -16,10 +16,13 @@
 2026-05-31 | lab-og-breakouts-rankings-formula-live | ceadf0402 | PASS | pytest 2; curl breakouts 66253B rankings 66806B.
 2026-05-31 | lab-og-dynasty-comps-live-sticker | 2e1dfea15 | PASS | curl dynasty-comps 54807B; pytest 2.
 
+
 2026-05-31 | room-briefing-watermark | 088cebc07 | PASS | pytest 3; curl briefing OG 89235B PNG.
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | PASS | curl 200 59323B PNG; web build + pytest green.
 2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 5; build exit 0.
 2026-05-31 | lab-og-tolab-watermark | b80512bb4 | PASS | pytest 3; web build exit 0; curl rankings OG 66806B.
+2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | PASS | curl 200 59323B PNG; web build + pytest green.
+2026-05-31 | room-briefing-watermark Gate C | eca00c3f0 | PASS | curl 51866B export; pytest 5; build exit 0.
 
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | PASS | pytest 5; curl NFL OG 65431B without universe param.
 2026-05-31 | lab-l4-pro-gate-dynasty-comps | a3f07d1e5 | PASS | pytest 9; web build exit 0; no OG slice.
@@ -89,5 +92,3 @@ explicit checks in the verification routine.
 2026-05-31 | Waiver Tendencies OG Gate C | 6dcb0f72 | PASS | curl waiver-tendencies 73121B PNG | keep | evidence/2026-05-31-league-waiver-tendencies-og-share.md
 2026-05-31 | Lab OG snapshot Gate C | 70af534a | PASS | curl prospects snap 45583B tradevalues 62488B | keep | evidence/2026-05-31-lab-og-snapshot-tradevalues-prospects.md
 2026-05-31 | Lab OG live sort Gate C | 7f78b631 | PASS | curl rankings 50251B tradevalues 51115B | keep | evidence/2026-05-31-lab-og-rankings-tradevalues-live-sort.md
-2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | pytest 6; curl h2h 76270B.
-2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | pytest 7; curl efficiency 65774B.
