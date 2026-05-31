@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-tolab-aging-position | f6e0985f3 | SHIP | Good morning cycle 1; lock #1446; aging RB toLab.
+2026-05-31 | lab-og-tolab-aging-position | d56e382 | SHIP | Good morning cycle 1; lock #1446; aging RB toLab.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | SHIP | Factory cycle 1; dedup snapshot on base.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | SHIP | Factory cycle 153; weekly WR in OG watermark.
 2026-05-31 | explore-og-margin-note-lead | 0fc4932b7 | SHIP | Factory open cycle 1; Explore L5 margin epic 1/4; NO_LOCK_GUARDRAIL.
