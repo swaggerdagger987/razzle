@@ -38,3 +38,43 @@ def test_buysell_live_extract_prefers_formula_score_and_lanes():
     assert block.index('"formula_score"') < block.index('"mismatch_score"')
     assert 'toRow(r, "Buy")' in source
     assert 'toRow(r, "Sell")' in source
+
+
+def test_efficiency_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "efficiencyStatKeys" in source
+    idx = source.index("efficiencyStatKeys")
+    block = source[idx : idx + 320]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"ppo"')
+
+
+def test_aging_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "agingStatKeys" in source
+    idx = source.index("agingStatKeys")
+    block = source[idx : idx + 300]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"ppg"')
+
+
+def test_weekly_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "extractWeeklyHeatmapRows" in source
+    assert "weeklyStatKeys" in source
+    idx = source.index("weeklyStatKeys")
+    block = source[idx : idx + 280]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"ppg"')
+    assert "formulaScore > 0 ? formulaScore" in source
+
+
+def test_prospects_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert "extractProspectsRows" in source
+    assert "prospectsStatKeys" in source
+    idx = source.index("prospectsStatKeys")
+    block = source[idx : idx + 280]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"rps"')
+    assert "formulaScore > 0 ? formulaScore" in source

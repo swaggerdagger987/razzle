@@ -1,38 +1,31 @@
 {
-  "epic_status": "active",
-  "big_problem": "Bureau H2H rivalry exports don't signal in-panel snapshot trust \u2014 group chats can't tell exported rivalry rows from live Sleeper pulls.",
-  "epic_title": "League L5 \u2014 Bureau H2H GTM export",
-  "parity_ref": "Explore L5 \u2014 Bureau H2H export or Lab panel OG data rows",
-  "depth_ref": "League L5",
+  "big_problem": "Lab OG cards still flatten dynasty dashboard into one stat column — exports do not match the Value/Chg rows users see in-panel, so Reddit screenshots look generic.",
+  "epic_title": "Lab L5 — OG live panel rows parity",
+  "parity_ref": "Lab L5 — OG card per panel matches in-product export",
+  "depth_ref": "Lab L5",
   "atoms": [
     {
-      "id": "bureau-h2h-og-exported-sticker",
-      "title": "H2H OG EXPORTED sticker when snapshot param present",
+      "id": "lab-og-dashboard-live-extract",
+      "title": "Dashboard OG — live extract mirrors top5 Value + riser Chg rows",
       "status": "done",
-      "merge_commit": "5b60ea23d"
+      "merge_commit": "1c39d0bd7"
     },
     {
-      "id": "bureau-h2h-og-exported-pytest",
-      "title": "pytest guard for H2H snapshot EXPORTED sticker + ShareBar encode",
-      "status": "pending",
-      "merge_commit": null
+      "id": "lab-og-efficiency-aging-formula-live",
+      "title": "Efficiency + Aging OG — formula_score priority on live fetch",
+      "status": "done",
+      "merge_commit": "a17391fad"
     },
     {
-      "id": "bureau-h2h-og-gate-c-snapshot",
-      "title": "Gate C curl evidence for H2H snapshot OG PNG",
-      "status": "pending",
-      "merge_commit": null
+      "id": "lab-og-weekly-prospects-formula-live",
+      "title": "Weekly + Prospects OG — formula_score priority on live fetch",
+      "status": "done",
+      "merge_commit": "65fc0a87b"
     }
   ],
-  "next_atom_id": "bureau-h2h-og-exported-pytest",
-  "created_at": "2026-05-31T20:00:00Z",
-  "updated_at": "2026-05-31T20:30:00Z",
-  "completed_epics": [
-    {
-      "id": "league-l5-trade-finder-gtm",
-      "status": "complete",
-      "last_atom": "league-trade-finder-og-room-hallway",
-      "merge_commit": "c8091030c"
-    }
-  ]
+  "next_atom_id": null,
+  "epic_status": "complete",
+  "created_at": "2026-05-31T13:00:00Z",
+  "updated_at": "2026-05-31T11:20:00Z",
+  "completed_epics": ["League L5 — Bureau Trade Finder GTM export"]
 }

@@ -431,9 +431,12 @@ function extractWeeklyHeatmapRows(
           }
         }
       }
+      const formulaScore = Number(p.formula_score ?? 0);
       const ppg = Number(p.ppg ?? 0);
-      const stat = bestPts > 0 ? bestPts : ppg;
-      const statLabel = bestPts > 0 ? `Wk ${bestWeek}` : "PPG";
+      const stat =
+        formulaScore > 0 ? formulaScore : bestPts > 0 ? bestPts : ppg;
+      const statLabel =
+        formulaScore > 0 ? "Score" : bestPts > 0 ? `Wk ${bestWeek}` : "PPG";
       return {
         name: String(p.name ?? ""),
         position: String(p.position ?? ""),
@@ -457,12 +460,17 @@ function extractProspectsRows(
   let rows = prospects
     .map((p) => {
       const rank = p.rank != null ? Number(p.rank) : null;
+      const formulaScore = Number(p.formula_score ?? 0);
+      const rps = Number(p.rps ?? 0);
+      const stat = formulaScore > 0 ? formulaScore : rps;
+      const statLabel =
+        formulaScore > 0 ? "Score" : rank != null && rank > 0 ? `#${rank}` : "RPS";
       return {
         name: String(p.player_name ?? p.name ?? p.full_name ?? ""),
         position: String(p.position ?? p.pos ?? ""),
         team: String(p.school ?? p.team ?? p.team_abbr ?? ""),
-        stat: Number(p.rps ?? 0),
-        statLabel: rank != null && rank > 0 ? `#${rank}` : "RPS",
+        stat,
+        statLabel,
       };
     })
     .filter((r) => r.name.trim().length > 0 && r.stat > 0);
@@ -508,6 +516,51 @@ function extractDynastyCompsRows(comps: Record<string, unknown>[]): OgRow[] {
     .filter((r) => r.name.trim().length > 0 && r.stat > 0)
     .sort((a, b) => b.stat - a.stat)
     .slice(0, 6);
+}
+
+/** Dynasty dashboard OG — mirrors DynastyDashboardRenderer ogSnapshotRows. */
+function extractDashboardRows(obj: Record<string, unknown>): OgRow[] {
+  const top5 = Array.isArray(obj.top5) ? (obj.top5 as Record<string, unknown>[]) : [];
+  const risers = Array.isArray(obj.risers) ? (obj.risers as Record<string, unknown>[]) : [];
+  const fallers = Array.isArray(obj.fallers) ? (obj.fallers as Record<string, unknown>[]) : [];
+  const valuePicks = Array.isArray(obj.value_picks)
+    ? (obj.value_picks as Record<string, unknown>[])
+    : [];
+  if (!top5.length && !risers.length && !fallers.length && !valuePicks.length) {
+    return [];
+  }
+
+  const seen = new Set<string>();
+  const rows: OgRow[] = [];
+
+  const push = (row: Record<string, unknown>, stat: number, statLabel: string) => {
+    const name = String(row.full_name ?? row.name ?? row.player_name ?? "");
+    const playerId = String(row.player_id ?? name);
+    if (!name.trim() || seen.has(playerId)) return;
+    seen.add(playerId);
+    rows.push({
+      name,
+      position: String(row.position ?? row.pos ?? ""),
+      team: String(row.team ?? row.team_abbr ?? ""),
+      stat,
+      statLabel,
+    });
+  };
+
+  for (const p of top5) {
+    push(p, Number(p.trade_value ?? 0), "Value");
+    if (rows.length >= 6) return rows;
+  }
+  for (const p of [...risers, ...fallers]) {
+    push(p, Number(p.rank_diff ?? 0), "Chg");
+    if (rows.length >= 6) return rows;
+  }
+  for (const p of valuePicks) {
+    push(p, Number(p.trade_value ?? 0), "Value");
+    if (rows.length >= 6) return rows;
+  }
+
+  return rows;
 }
 
 /** Gamelog OG — top weeks by FPTS (matches GamelogRenderer ogSnapshotRows). */
@@ -626,6 +679,11 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     }
   }
 
+  if (slug === "dashboard") {
+    const dashboardRows = extractDashboardRows(obj);
+    if (dashboardRows.length > 0) return dashboardRows;
+  }
+
   if (slug === "gamelog" && Array.isArray(obj.weeks)) {
     const gamelogRows = extractGamelogWeekRows(obj);
     if (gamelogRows.length > 0) return gamelogRows;
@@ -730,6 +788,29 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
     "dynasty_value",
     ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "dynasty_value"),
   ];
+  const efficiencyStatKeys: string[] = [
+    "formula_score",
+    "ppo",
+    "efficiency_score",
+    ...STAT_CANDIDATE_KEYS.filter(
+      (k) => k !== "formula_score" && k !== "ppo" && k !== "efficiency_score",
+    ),
+  ];
+  const agingStatKeys: string[] = [
+    "formula_score",
+    "ppg",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
+  ];
+  const weeklyStatKeys: string[] = [
+    "formula_score",
+    "ppg",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "ppg"),
+  ];
+  const prospectsStatKeys: string[] = [
+    "formula_score",
+    "rps",
+    ...STAT_CANDIDATE_KEYS.filter((k) => k !== "formula_score" && k !== "rps"),
+  ];
   const buysellStatKeys: string[] = [...BUYSELL_STAT_KEYS];
   const statKeys =
     slug === "tradevalues"
@@ -738,11 +819,19 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
         ? breakoutsStatKeys
         : slug === "rankings"
           ? rankingsStatKeys
-          : slug === "buysell"
-            ? buysellStatKeys
-            : preferredKey
-              ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
-              : [...STAT_CANDIDATE_KEYS];
+          : slug === "efficiency"
+            ? efficiencyStatKeys
+            : slug === "aging"
+              ? agingStatKeys
+              : slug === "weekly"
+                ? weeklyStatKeys
+                : slug === "prospects"
+                  ? prospectsStatKeys
+                  : slug === "buysell"
+                    ? buysellStatKeys
+                    : preferredKey
+                  ? [preferredKey, ...STAT_CANDIDATE_KEYS.filter((k) => k !== preferredKey)]
+                  : [...STAT_CANDIDATE_KEYS];
 
   let statKey = "";
   let statLabel = "";
@@ -773,6 +862,10 @@ function rankOgRowsForPanel(slug: string, rows: OgRow[], positionFilter: string)
   let out = rows.filter((r) => r.name.trim().length > 0);
   if (positionFilter) {
     out = out.filter((r) => r.position === positionFilter);
+  }
+  // Dashboard OG preserves renderer order (top5 Value → movers Chg → value picks).
+  if (slug === "dashboard") {
+    return out.slice(0, 6);
   }
   if (PANEL_OG_STAT_KEY[slug]) {
     out = [...out].sort((a, b) => b.stat - a.stat).slice(0, 6);
