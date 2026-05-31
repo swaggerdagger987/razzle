@@ -2,6 +2,10 @@
 
 **GTM strategy:** `docs/v2/REDDIT.md` — Reddit is the only channel until MRR justifies expansion.
 
+### 2026-05-31 — Build Profiles tab (cycle 86)
+- **Angle:** League archetype board screenshots — "what build is everyone running?" without roster spelunking.
+- **Screenshot hook:** Atlas header + archetype badges + dominant-trend callout.
+
 ### 2026-05-31 — Roster Depth tab (cycle 80)
 - **Angle:** Position grade grid screenshots for trade-thread replies — Dolphin thin-spot callout when a room is ≤2 deep.
 - **Screenshot hook:** A/B/C/F grade cards with elite count + top player row.
