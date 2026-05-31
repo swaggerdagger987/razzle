@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | Lab OG rankings/tradevalues Gate C | 7f78b631 | PASS | build+pytest+curl 50251B/51115B; PR619 merged.
+
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 
