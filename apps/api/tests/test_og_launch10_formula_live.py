@@ -40,8 +40,6 @@ def test_buysell_live_extract_prefers_formula_score_and_lanes():
     assert 'toRow(r, "Sell")' in source
 
 
-<<<<<<< HEAD
-=======
 def test_tradevalues_live_extract_prefers_formula_score():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert 'slug === "tradevalues"' in source
@@ -52,17 +50,12 @@ def test_tradevalues_live_extract_prefers_formula_score():
     assert block.index('"formula_score"') < block.index('"trade_value"')
 
 
->>>>>>> origin/razzle-v2-redesign
 def test_efficiency_live_extract_prefers_formula_score():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert 'slug === "efficiency"' in source
     assert "efficiencyStatKeys" in source
     idx = source.index("efficiencyStatKeys")
-<<<<<<< HEAD
-    block = source[idx : idx + 280]
-=======
     block = source[idx : idx + 320]
->>>>>>> origin/razzle-v2-redesign
     assert '"formula_score"' in block
     assert block.index('"formula_score"') < block.index('"ppo"')
 
@@ -72,10 +65,6 @@ def test_aging_live_extract_prefers_formula_score():
     assert 'slug === "aging"' in source
     assert "agingStatKeys" in source
     idx = source.index("agingStatKeys")
-<<<<<<< HEAD
     block = source[idx : idx + 280]
-=======
-    block = source[idx : idx + 240]
->>>>>>> origin/razzle-v2-redesign
     assert '"formula_score"' in block
     assert block.index('"formula_score"') < block.index('"ppg"')
