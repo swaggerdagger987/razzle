@@ -4,6 +4,7 @@ import { AGENT_BY_ID } from "@razzle/agents";
 import { toRoom } from "@razzle/hallway";
 import Link from "next/link";
 import type { Route } from "next";
+import { BureauTradeNetworkShareBar } from "./BureauTradeNetworkShareBar";
 
 interface Props {
   data: Record<string, unknown>;
@@ -91,15 +92,9 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
         </section>
       )}
 
-      <footer className="flex flex-wrap items-center gap-4 text-sm">
-        <a
-          href={`/og/trade-network?league=${encodeURIComponent(leagueId)}&download=1`}
-          download="razzle-trade-network.png"
-          className="btn-chunky active text-xs"
-          style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
-        >
-          export card
-        </a>
+      <footer className="flex flex-col gap-3 text-sm">
+        <BureauTradeNetworkShareBar leagueId={leagueId} />
+        <div className="flex flex-wrap items-center gap-4">
         <Link href={`/league/${leagueId}/manager-profiles` as Route} className="text-orange underline">
           manager profiles →
         </Link>
@@ -109,6 +104,7 @@ export function BureauTradeNetwork({ data, leagueId }: Props) {
         <Link href={`/league/${leagueId}/trade-finder` as Route} className="text-orange underline">
           trade finder →
         </Link>
+        </div>
       </footer>
     </div>
   );

@@ -33,3 +33,4 @@ which migrations were painful, which test patterns caught bugs.
 2026-05-31 | BureauH2HShareBar | 044ee1e8 | keep | ExploreShareButton parity; OG subtitle template string for Satori
 2026-05-31 | BureauMonteCarloShareBar | 3392bc29 | keep | scenario query preserved in copy sim link
 2026-05-31 | /og/power-rankings | 9714bfa6 | keep | league-only POST; DEMO_ROWS; pressure-map OG layout
+2026-05-31 | BureauTradeNetworkShareBar | da33eafd | keep | 2 files; mirrors PowerRankingsShareBar
