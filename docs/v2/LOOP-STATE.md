@@ -1,9 +1,11 @@
-cycle: 96
+cycle: 97
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L4
 next_slice: lab-pro-prospects-badge
-last_keep_cycle: 96
+last_keep_cycle: 97
 last_commit: 15eb7a5e
 lab_l4_pro_gate_epic: active
 lab_l4_pro_gate_atom: weekly-paywall-copy
+bureau_h2h_codec_epic: active
+bureau_h2h_sharebar_canonical_codec: done

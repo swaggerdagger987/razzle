@@ -86,14 +86,26 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
 
   const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
     return [...players]
-      .sort((a, b) => (b.ppg ?? 0) - (a.ppg ?? 0))
+      .map((p) => {
+        let bestWeek = 0;
+        let bestPts = 0;
+        for (const [wk, pts] of Object.entries(p.weeks ?? {})) {
+          if (pts != null && pts > bestPts) {
+            bestPts = pts;
+            bestWeek = Number(wk);
+          }
+        }
+        return { p, bestWeek, bestPts };
+      })
+      .filter((row) => row.bestPts > 0)
+      .sort((a, b) => b.bestPts - a.bestPts)
       .slice(0, 6)
-      .map((p) => ({
+      .map(({ p, bestWeek, bestPts }) => ({
         name: p.name,
         position: p.position,
         team: p.team,
-        stat: p.ppg ?? 0,
-        statLabel: "PPG",
+        stat: bestPts,
+        statLabel: `Wk ${bestWeek}`,
       }));
   }, [players]);
 
