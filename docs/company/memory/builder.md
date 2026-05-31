@@ -35,4 +35,6 @@ failure modes. Karpathy: simplicity first, surgical changes.
 2026-05-31 | Bureau power-rankings OG | e62721a6 | keep | /og/power-rankings route + export link; curl 68555B
 2026-05-31 | Bureau Trade Network share bar | 1616484c | keep | BureauTradeNetworkShareBar; curl trade-network OG 68090B
 2026-05-31 | Lab prospects tradevalues snapshot | 69e4c732 | keep | ogSnapshotRows useMemo; 2 renderers; curl snap ≥40KB
+2026-05-31 | Bureau H2H snapshot export | 3d498394 | keep | encodeH2hSnapshot on BureauH2HShareBar; curl 59305B demo 54444B snap
+2026-05-31 | Bureau H2H live API OG | 59a54b72 | keep | resolveApiOrigin on head-to-head route; curl params 62718B
 2026-05-31 | Bureau Waiver Tendencies tab | 920304a2 | keep | BureauWaiverTendencies Hawkeye archetype cards; HIDDEN removed waiver-tendencies
