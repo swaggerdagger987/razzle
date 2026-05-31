@@ -16,7 +16,7 @@ import {
 } from "@/lib/panel-formula-sort";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
@@ -175,6 +175,16 @@ export function EfficiencyRenderer({ panel }: Props) {
 
   const top = efficient[0] ?? volume[0] ?? null;
 
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    return efficient.slice(0, 6).map((p) => ({
+      name: p.name,
+      position: p.position,
+      team: p.team,
+      stat: p.ppo ?? p.formula_score ?? 0,
+      statLabel: "PPO",
+    }));
+  }, [efficient]);
+
   const open = (p: EfficiencyPlayer) =>
     openPlayer({
       playerId: p.player_id,
@@ -283,7 +293,11 @@ export function EfficiencyRenderer({ panel }: Props) {
           >
             Ask Octo about {top.name} →
           </Link>
-          <LabOgExportLink slug="efficiency" downloadName="razzle-efficiency.png" />
+          <LabOgExportLink
+            slug="efficiency"
+            downloadName="razzle-efficiency.png"
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>
