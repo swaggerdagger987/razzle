@@ -14,8 +14,8 @@
     {
       "id": "lab-og-gamelog-weeks-fpts-sort",
       "title": "Gamelog OG ranks peak weeks by FPTS on live fetch",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "bc79925e"
     },
     {
       "id": "lab-og-dynasty-comps-pro-teaser",

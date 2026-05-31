@@ -1,6 +1,6 @@
 # Memory — Reality Checker
 
-2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 570a40e9 | curl gamelog 61129B PASS | Gate C peak-week rows not player leaderboard.
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | bc79925e | curl gamelog 55055B PASS | Gate C peak-week rows not player leaderboard.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 4d84af9a | curl H2H 67846B PASS | Gate C terracotta band on export.
 

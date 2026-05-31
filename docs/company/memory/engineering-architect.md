@@ -1,6 +1,6 @@
 # Memory — Engineering Architect
 
-2026-05-31 | lab-og-gamelog-weeks-fpts-sort | 570a40e9 | extractGamelogWeekRows mirrors GamelogRenderer; route.tsx only.
+2026-05-31 | lab-og-gamelog-weeks-fpts-sort | bc79925e | extractGamelogWeekRows mirrors GamelogRenderer; route.tsx only.
 
 2026-05-31 | lab-og-watermark-band-head-to-head | 44d05684 | 1-file H2H OG; band copied from panel route; atlas link above band.
 

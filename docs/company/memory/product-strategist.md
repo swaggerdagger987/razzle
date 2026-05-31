@@ -1,6 +1,6 @@
 # Memory — Product Strategist
 
-2026-05-31 | gamelog OG weeks FPTS | 570a40e9 | Atlas peak-week exports match in-panel sort — live-extract epic 2/3.
+2026-05-31 | gamelog OG weeks FPTS | bc79925e | Atlas peak-week exports match in-panel sort — live-extract epic atom 2/3 done.
 
 2026-05-31 | H2H OG watermark | 44d05684 | League rivalry exports now match Lab/Explore screenshot brand — epic closed.
 
