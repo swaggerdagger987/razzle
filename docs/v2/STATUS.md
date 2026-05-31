@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 146 — Trade Finder snapshot dedup on base)
+**Last updated:** 2026-05-31 (factory cycle 148 — Lab weekly empty-board OG sample export)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,12 +15,12 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 146 |
+| Cycle | 148 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L5 |
-| Next slice | lab-og-tolab-snapshot-player |
-| Last commit | `19a1af0e9` |
+| Next slice | (empty OG epic complete — pick PARITY/NEXT) |
+| Last commit | `088cebc07` |
 
 Recent completions (cycle 56): Explore L5 watermarked export, Lab L5 OG export fix.
 

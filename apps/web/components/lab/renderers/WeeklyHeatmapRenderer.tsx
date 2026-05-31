@@ -13,6 +13,16 @@ import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHe
 
 const POSITIONS = ["QB", "RB", "WR", "TE"] as const;
 
+/** Sample hot-week rows when the heatmap board is empty — OG still screenshots for Reddit tape. */
+const WEEKLY_SAMPLE_OG_ROWS: OgSnapshotRow[] = [
+  { name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 31.4, statLabel: "Wk 12" },
+  { name: "Bijan Robinson", position: "RB", team: "ATL", stat: 28.2, statLabel: "Wk 8" },
+  { name: "Jayden Daniels", position: "QB", team: "WAS", stat: 26.8, statLabel: "Wk 11" },
+  { name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 24.1, statLabel: "Wk 10" },
+  { name: "Brock Bowers", position: "TE", team: "LV", stat: 22.5, statLabel: "Wk 9" },
+  { name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 19.7, statLabel: "Wk 7" },
+];
+
 interface PlayerWeek {
   player_id: string;
   name: string;
@@ -131,7 +141,18 @@ export function WeeklyHeatmapRenderer({ panel }: Props) {
       )}
 
       {!players.length ? (
-        <p className="text-ink-medium p-6">{agent.emptyCopy}</p>
+        <div className="p-6">
+          <p className="text-ink-medium">{agent.emptyCopy}</p>
+          <footer className="mt-4 flex flex-wrap items-center gap-4">
+            <LabOgExportLink
+              slug="weekly"
+              downloadName="razzle-weekly-heatmap.png"
+              position={position}
+              snapshotRows={WEEKLY_SAMPLE_OG_ROWS}
+              label="export sample card"
+            />
+          </footer>
+        </div>
       ) : (
         <div className="heatmap-grid chunky bg-bg-card overflow-x-auto p-4">
           <table className="screener-table min-w-full">
