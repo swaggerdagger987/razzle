@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (cycle 88 — prospects OG snapshot)  
+**Last updated:** 2026-05-31 (cycle 89 — prospects OG snapshot epic complete)  
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
