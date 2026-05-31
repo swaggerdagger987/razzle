@@ -1,5 +1,5 @@
 {
-  "epic_status": "active",
+  "epic_status": "complete",
   "big_problem": "Lab efficiency and aging OG cards still rank by PPO/PPG when formula_score is on the panel row — exports miss the formula the user sorted by.",
   "epic_title": "Lab L5 — efficiency/aging OG formula_score live parity",
   "parity_ref": "Lab L5 — OG card per panel matches in-product export",
@@ -8,12 +8,19 @@
     {
       "id": "lab-og-efficiency-aging-formula-live",
       "title": "Efficiency + Aging OG — formula_score priority on live fetch",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "b8d76ed7b"
     }
   ],
-  "next_atom_id": "lab-og-efficiency-aging-formula-live",
+  "next_atom_id": null,
   "created_at": "2026-05-31T11:30:00Z",
-  "updated_at": "2026-05-31T11:30:00Z",
-  "completed_epics": []
+  "updated_at": "2026-05-31T11:35:00Z",
+  "completed_epics": [
+    {
+      "id": "lab-l5-efficiency-aging-formula-og",
+      "status": "complete",
+      "last_atom": "lab-og-efficiency-aging-formula-live",
+      "merge_commit": "b8d76ed7b"
+    }
+  ]
 }

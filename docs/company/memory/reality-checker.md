@@ -1,4 +1,4 @@
-2026-05-31 | lab-og-efficiency-aging-formula-live | f6e0985f3 | PASS | pytest 5; curl 64347B+64098B; web build.
+2026-05-31 | lab-og-efficiency-aging-formula-live | b8d76ed7b | PASS | pytest 5; curl 64347B+64098B; web build.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
