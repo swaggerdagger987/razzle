@@ -1,31 +1,27 @@
 {
   "date": "2026-05-31",
+  "atom_id": "lab-og-efficiency-aging-live-sort",
   "big_problem": "Lab OG share cards without panel stat keys sort by wrong fields when live API rows load — screenshots disagree with in-product Lab tables.",
   "epic": "Lab L5 — OG live panel rows match in-product sort keys",
-  "slice_title": "Buy/Sell + Dashboard OG rank by dynasty_value / rank_diff on live fetch",
-  "atom_id": "lab-og-buysell-dashboard-live-sort",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "slice_title": "Efficiency + Aging OG rank by ppo / ppg on live fetch",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "ACCEPTANCE Gate 5 — Lab OG export",
+  "acceptance_ref": "FACTORY-DOD Gate C",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": ["apps/web/app/og/[panel]/route.tsx"],
   "max_files": 1,
-  "max_lines": 45,
+  "max_lines": 80,
   "acceptance_commands": [
-    "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-buysell.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/buysell?position=WR&download=1'",
-    "curl -s -o /tmp/og-dashboard.png -w '%{http_code} %{size_download}' 'http://127.0.0.1:3000/og/dashboard?position=WR&download=1'"
+    "npm run build --workspace=apps/web 2>&1 | tail -3",
+    "curl -s -o /tmp/og-eff.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?position=RB&download=1'",
+    "curl -s -o /tmp/og-aging.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/aging?position=RB&download=1'"
   ],
-  "out_of_scope": [
-    "new panels",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["Lab renderers", "auth/billing", "new panels"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }

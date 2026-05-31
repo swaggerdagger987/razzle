@@ -1,6 +1,6 @@
 # Memory — Data Researcher
 
-2026-05-31 | Lab OG efficiency/aging | ccb58697 | PASS | No new intel; PPO/age align with dynasty efficiency discourse.
+2026-05-31 | lab-og-efficiency-aging-live-sort | cycle 110 | No new Reddit intel; ppo/ppg sort matches in-panel export semantics.
 
 2026-05-31 | Lab OG live sort | 7f78b631 | PASS | No web scan; dynasty value sort matches Reddit board vocabulary.
 

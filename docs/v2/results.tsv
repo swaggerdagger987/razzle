@@ -61,5 +61,5 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 102	b99dbd76	depth+hallway+voice+simplicity	keep	League	L5 Bureau Schedule SOS OG snapshot	trust=T2,T5,T6; encode/decode snapshot; curl demo 58624B; ShareBar wired
 100	7f78b631	depth+voice+simplicity	keep	Lab	L5 Rankings+Trade Values OG live sort keys	trust=T5,T6; dynasty_value+trade_value; curl rankings 50251B tradevalues 51115B; epic atom 1/3
 109	228c4b59	depth+voice+simplicity	keep	Lab	L5 Gamelog OG position filter	trust=T5,T6; position on export; curl gamelog WR 48035B; position epic gamelog atom
-111	2bba7622	depth+voice+simplicity	keep	Lab	L5 Efficiency+Aging OG live sort keys	trust=T5,T6; efficiency_score+peak_age; curl eff 59068B aging 57916B; epic atom 2/3
+110	aefbf6ef	depth+voice+simplicity	keep	Lab	L5 Efficiency+Aging OG live sort keys	trust=T5,T6; ppo+ppg; curl efficiency 45113B aging 44952B; live-sort epic atom 2/3
 104	cb59494b	depth+voice+simplicity	keep	Lab	L5 Buy/Sell+Dashboard OG live sort keys	trust=T5,T6; dynasty_value+rank_diff; buy_low/sell_high extract; curl buysell 44258B dashboard 57657B; epic atom 3/3 complete

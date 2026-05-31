@@ -34,6 +34,7 @@ const STAT_CANDIDATE_KEYS = [
   "rank_diff",
   "composite_score",
   "efficiency_score",
+  "ppo",
   "total_yards",
   "pts",
   "rank",
@@ -65,8 +66,8 @@ const PANEL_OG_STAT_KEY: Record<string, string> = {
   breakouts: "breakout_score",
   rankings: "dynasty_value",
   tradevalues: "trade_value",
-  efficiency: "efficiency_score",
-  aging: "peak_age",
+  efficiency: "ppo",
+  aging: "ppg",
   buysell: "dynasty_value",
   dashboard: "rank_diff",
 };
@@ -254,13 +255,12 @@ function statLabelForKey(k: string): string {
   if (k === "rps") statLabel = "RPS";
   if (k === "dynasty_value" || k === "trade_value" || k === "value") statLabel = "Value";
   if (k === "ppo" || k === "efficiency_score") statLabel = "PPO";
+  if (k === "ppg") statLabel = "PPG";
   if (k === "age" || k === "peak_age") statLabel = "Peak Age";
   if (k === "formula_score") statLabel = "Score";
   if (k === "rbs_score" || k === "breakout_score") statLabel = "Score";
   if (k === "similarity") statLabel = "Match %";
   if (k === "rank_diff") statLabel = "Chg";
-  if (k === "efficiency_score") statLabel = "Efficiency";
-  if (k === "peak_age") statLabel = "Peak Age";
   return statLabel;
 }
 
@@ -272,6 +272,18 @@ function extractRows(data: unknown, slug?: string, positionFilter = ""): OgRow[]
 
   if (Array.isArray(obj.most_efficient)) {
     candidates = obj.most_efficient as Record<string, unknown>[];
+  } else if (slug === "aging" && obj.positions && typeof obj.positions === "object") {
+    const positions = obj.positions as Record<
+      string,
+      { players?: Record<string, unknown>[] }
+    >;
+    const pos =
+      positionFilter && positions[positionFilter]
+        ? positionFilter
+        : Object.keys(positions)[0];
+    if (pos && Array.isArray(positions[pos]?.players)) {
+      candidates = positions[pos]!.players!;
+    }
   } else if (obj.positions && typeof obj.positions === "object") {
     const positions = obj.positions as Record<string, { players?: Record<string, unknown>[] }>;
     const keys = positionFilter && positions[positionFilter] ? [positionFilter] : Object.keys(positions);

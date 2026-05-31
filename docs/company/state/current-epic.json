@@ -13,20 +13,20 @@
     },
     {
       "id": "lab-og-efficiency-aging-live-sort",
-      "title": "Efficiency + Aging OG rank by efficiency_score / peak_age on live fetch",
-      "status": "done",
-      "merge_commit": "2bba7622"
+      "title": "Efficiency + Aging OG rank by ppo / ppg on live fetch",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
       "id": "lab-og-buysell-dashboard-live-sort",
       "title": "Buy/Sell + Dashboard OG rank by value / rank_diff on live fetch",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "cb59494b"
     }
   ],
-  "next_atom_id": "lab-og-buysell-dashboard-live-sort",
+  "next_atom_id": "lab-og-efficiency-aging-live-sort",
   "created_at": "2026-05-31T12:00:00Z",
-  "updated_at": "2026-05-31T07:42:00Z",
+  "updated_at": "2026-05-31T12:00:00Z",
   "completed_epics": [
     {
       "id": "league-l5-bureau-depth-og",
