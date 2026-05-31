@@ -6,6 +6,12 @@
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | No new Reddit intel; empty-state export unblocks tape screenshots.
 
 2026-05-31 | room-briefing-watermark | cycle 139 | No new intel; Room hallway export parity with Explore.
+2026-05-31 | lab-og-tolab-watermark | b80512bb4 | No new Reddit intel; hallway slice only.
+
+2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | No new Reddit intel; empty-state export unblocks tape screenshots.
+
+2026-05-31 | room-briefing-watermark | cycle 139 | No new intel; Room hallway export parity with Explore.
+
 
 2026-05-31 | lab-og-sample-labels | 54443bc8 | No new intel; OG trust-label slice only.
 

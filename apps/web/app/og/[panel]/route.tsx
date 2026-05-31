@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getPanel } from "@razzle/panels";
 import { agentForPanel } from "@razzle/agents";
+import { toLab } from "@razzle/hallway";
 import { teaserRowsForPanel } from "@/lib/panel-upgrade-teaser";
 
 export const runtime = "edge";
@@ -711,6 +712,32 @@ async function fetchOgLiveRows(
   return fetchPanelData(req, slug, apiPath, method, apiParams);
 }
 
+/** Typed hallway path for OG watermark band (T6 — click back into Lab). */
+function labOgWatermarkLink(
+  slug: string,
+  opts: { positionFilter: string; playerId: string; playerScoped: boolean },
+): string {
+  const usePlayer =
+    opts.playerScoped && opts.playerId && opts.playerId !== DEFAULT_OG_PLAYER_ID;
+  let path = toLab(
+    slug,
+    usePlayer
+      ? {
+          player: {
+            playerId: opts.playerId,
+            slug: opts.playerId,
+            name: "player",
+          },
+        }
+      : undefined,
+  );
+  if (opts.positionFilter) {
+    const sep = path.includes("?") ? "&" : "?";
+    path = `${path}${sep}position=${encodeURIComponent(opts.positionFilter)}`;
+  }
+  return `razzle.lol${path}`;
+}
+
 function formatStat(n: number, label?: string): string {
   if (n === 0) return "—";
   if (label === "Match %") {
@@ -792,6 +819,11 @@ export async function GET(
   const showingLiveData = !isSnapshot && liveHasRows && hasRows;
   const showingDemoRows = !isSnapshot && !showingLiveData && hasRows;
   const colHeader = hasRows ? (rows[0]?.statLabel ?? "") : "";
+  const labLink = labOgWatermarkLink(slug, {
+    positionFilter,
+    playerId,
+    playerScoped: PLAYER_SCOPED_SLUGS.has(slug),
+  });
 
   return new ImageResponse(
     (
@@ -1039,7 +1071,7 @@ export async function GET(
             fontSize: 20,
           }}
         >
-          <div style={{ display: "flex", fontWeight: 700 }}>razzle.lol/lab/{slug}</div>
+          <div style={{ display: "flex", fontWeight: 700 }}>{labLink}</div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
           </div>
