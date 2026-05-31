@@ -15,7 +15,7 @@ npm run build --workspace=apps/web
 SNAP=<base64url snapshot rows>
 curl -s -o /tmp/og-snap-gamelog.png -w '%{http_code} %{size_download}' \
   "http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900&snapshot=$SNAP"
-# 200 53752
+# 200 53812
 file /tmp/og-snap-gamelog.png
 # PNG 1200x630
 ```
