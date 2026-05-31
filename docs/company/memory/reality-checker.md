@@ -1,5 +1,7 @@
 # Memory — Reality Checker
 
+2026-05-31 | power-rankings OG snapshot Gate C | da33eafd | PASS | curl snap 50084B demo 68555B | keep | docs/v2/evidence/2026-05-31-league-power-rankings-og-snapshot.md
+
 Append-only log of recurring failure patterns, evidence gaps, false-PASS
 near-misses, and verification techniques that caught real issues.
 

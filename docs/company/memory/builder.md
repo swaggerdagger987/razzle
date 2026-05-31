@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | league-power-rankings-og-snapshot | da33eafd | keep | compact encode/decode lib + ShareBar rows prop
+
 Append-only log of implementation patterns, surgical wins, things to avoid.
 
 Format per entry:
