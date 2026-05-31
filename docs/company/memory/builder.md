@@ -1,5 +1,7 @@
 # Memory — Builder
 
+2026-05-31 | LabOgExportLink player-scoped default | PLAYER_SCOPED_LAB_OG_SLUGS; gamelog export always has player_id | SHIP | keep | curl 60634B
+
 2026-05-31 | explore OG universe export | resolveApiOrigin + explicit copy URL + apiSortKey | SHIP | keep | 3 files | curl nfl/college ≥34KB
 
 2026-05-31 | launch10 snapshot-default | e2a3ce8a | fetchOgLiveRows; OG_FETCH_HEADERS; curl rankings 62355B weekly 66512B.

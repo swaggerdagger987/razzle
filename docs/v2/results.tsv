@@ -74,3 +74,4 @@ cycle	hash	pillars	verdict	pillar	slice	notes
 118	e00217d1	depth+voice+simplicity	keep	Lab	L5 Prospects OG items[] live path	trust=T5,T6; extractProspectsRows on items; curl prospects 60688B; gamelog og epic atom 2/3
 119	5bb77346	depth+voice+simplicity	keep	Lab	L5 Weekly+Prospects OG LIVE sticker defaults	trust=T5,T6; launch10LiveStickerLabel; curl weekly 66512B prospects 60688B; on base
 121	d3c6c873	depth+voice+simplicity	keep	Explore	L5 Explore OG universe export URL	trust=T5,T6; resolveApiOrigin; apiSortKey; curl nfl 34561B college 37393B; live-fetch epic atom 2/3
+122	da33eafd	depth+voice+simplicity	keep	Lab	L5 Gamelog OG export player_id default	trust=T5,T6; LabOgExportLink PLAYER_SCOPED; curl gamelog 60634B; live-fetch epic atom 3/3
