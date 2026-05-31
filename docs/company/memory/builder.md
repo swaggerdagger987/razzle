@@ -13,6 +13,8 @@ failure modes. Karpathy: simplicity first, surgical changes.
 
 ---
 
+2026-05-31 | league-build-profiles-tab | BureauBuildProfiles Atlas card grid + HIDDEN unhide | da33eafd | SHIP | keep | — | — | evidence/2026-05-31-league-build-profiles-tab.md
+
 ## Entries
 
 2026-05-31 | Bureau Self-Scout copy link | 3fc08ebc | keep | copyScoutLink row; curl self-scout 66997B
