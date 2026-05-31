@@ -1,11 +1,11 @@
-cycle: 119
+cycle: 120
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: epic-complete-lab-og-gamelog
-last_keep_cycle: 119
-last_commit: e2a3ce8a
-lab_l5_gamelog_og_epic: active
+next_slice: lab-og-launch10-live-fetch-merge
+last_keep_cycle: 120
+last_commit: pending
+lab_l5_og_live_fetch_epic: active
 lab_l5_og_watermark_epic: complete
 lab_l5_og_live_sort_epic: complete
 bureau_h2h_codec_epic: complete
