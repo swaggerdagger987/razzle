@@ -9,7 +9,7 @@
       "id": "bureau-h2h-sharebar-canonical-codec",
       "title": "H2H ShareBar uses encodeBureauH2HOgSnapshot (y/m/pc compact)",
       "status": "done",
-      "merge_commit": "da33eafd"
+      "merge_commit": "7ec8f82a"
     },
     {
       "id": "bureau-h2h-og-route-lib-decode",
