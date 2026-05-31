@@ -17,7 +17,7 @@ import { isUpgradeRequiredError } from "@/lib/panel-api";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 import { FormulaPanelBar } from "../FormulaPanelBar";
 import { PanelAgentHeader, PanelAgentLoading, panelAgent } from "../PanelAgentHeader";
-import { LabOgExportLink } from "../LabOgExportLink";
+import { LabOgExportLink, type OgSnapshotRow } from "../LabOgExportLink";
 import { ProUpgradeGate } from "../ProUpgradeGate";
 
 const POSITIONS = ["", "QB", "RB", "WR", "TE"] as const;
@@ -173,6 +173,23 @@ export function BuySellRenderer({ panel }: Props) {
   const topBuy = buyLow[0] ?? null;
   const topSell = sellHigh[0] ?? null;
 
+  const ogSnapshotRows = useMemo((): OgSnapshotRow[] => {
+    const merged: Candidate[] = [];
+    for (let i = 0; i < 3; i++) {
+      const buy = buyLow[i];
+      const sell = sellHigh[i];
+      if (buy) merged.push(buy);
+      if (sell) merged.push(sell);
+    }
+    return merged.slice(0, 6).map((p) => ({
+      name: p.name,
+      position: p.position,
+      team: p.team,
+      stat: p.mismatch_score ?? p.efficiency_pct ?? p.ppg ?? 0,
+      statLabel: "Mismatch",
+    }));
+  }, [buyLow, sellHigh]);
+
   const open = (p: Candidate) =>
     openPlayer({
       playerId: p.player_id,
@@ -316,7 +333,11 @@ export function BuySellRenderer({ panel }: Props) {
               Ask Bones about {topSell.name} (sell) →
             </Link>
           )}
-          <LabOgExportLink slug="buysell" downloadName="razzle-buy-sell.png" />
+          <LabOgExportLink
+            slug="buysell"
+            downloadName="razzle-buy-sell.png"
+            snapshotRows={ogSnapshotRows}
+          />
         </footer>
       )}
     </div>

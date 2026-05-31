@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Cycle 71 (OG snapshot launch-10 panels)
+
+1. **Formula panels need snapshot too** — buy/sell mismatch and PPO tables are screenshot targets; dashboard-only snapshot was not enough.
+2. **Interleave buy + sell** — OG card shows both sides of the panel in one export.
+3. Standing: `snapshot` query param > demo when user has data on screen.
+
 ## 2026-05-31 — Workday cycle 1 atom 3 (player-scoped OG export)
 
 1. **Player context must ride on the export URL** — dynasty comps and gamelog screenshots are about *this* asset; `player_id` on the OG link matches in-panel selection.
