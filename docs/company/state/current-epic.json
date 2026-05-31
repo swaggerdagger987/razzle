@@ -1,33 +1,39 @@
 {
-  "big_problem": "Lab L4 pro gates feel like paywalls — free users hit generic blur without agent voice or a clear upgrade path.",
-  "epic_title": "Lab L4 — pro gates feel like upgrade, not error",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
+  "big_problem": "Explore share cards don't mirror the screener URL — college toggles and filters get lost on export, so Reddit screenshots lie about the view.",
+  "epic_title": "Explore L5 — OG card matches screener query state",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Explore L5",
   "atoms": [
     {
-      "id": "lab-pro-gate-loading-copy",
-      "title": "Pro gate — agent-owned loading line on upgrade card",
+      "id": "explore-og-universe-query",
+      "title": "Explore OG — season/team/universe query on card + share URLs",
       "status": "done",
-      "merge_commit": "7236be3e"
+      "merge_commit": "da33eafd"
     },
     {
-      "id": "lab-pro-gate-panel-pitches",
-      "title": "Pro gate — sharpen upgrade pitch on 3 launch panels",
-      "status": "done",
-      "merge_commit": "0b59daee"
+      "id": "explore-og-demo-fallback-rows",
+      "title": "Explore OG — static demo rows when API empty (not pulling film)",
+      "status": "pending",
+      "merge_commit": null
     },
     {
-      "id": "lab-pro-gate-hallway-teasers",
-      "title": "Pro gate — screener hallway + domain teasers",
-      "status": "done",
-      "merge_commit": "675044ea"
+      "id": "explore-og-formula-sort-label",
+      "title": "Explore OG — formula sort label on card when apiSort differs",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:30:00Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "next_atom_id": "explore-og-demo-fallback-rows",
+  "epic_status": "active",
+  "created_at": "2026-05-31T08:45:00Z",
+  "updated_at": "2026-05-31T08:45:00Z",
   "completed_epics": [
+    {
+      "id": "lab-l4-pro-gate-epic",
+      "status": "complete",
+      "last_atom": "lab-pro-gate-perks-copy",
+      "merge_commit": "f56fdbd8"
+    },
     {
       "id": "lab-l5-og-live-rows-launch10",
       "status": "complete",

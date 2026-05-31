@@ -16,12 +16,45 @@ interface OgPlayer {
   stat: number;
 }
 
+function parseTeams(teamParam: string): string[] {
+  if (!teamParam) return [];
+  return teamParam
+    .split(",")
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
+
+/** Band link mirrors nuqs explore state so OG screenshots route back to the same view. */
+function buildExplorePageLink(params: {
+  universe: string;
+  sort: string;
+  dir: string;
+  q: string;
+  pos: string;
+  season: number;
+  team: string;
+}): string {
+  const sp = new URLSearchParams();
+  if (params.universe === "college") sp.set("universe", "college");
+  const defaultSort = params.universe === "college" ? "total_yards" : "fantasy_points_ppr";
+  if (params.sort && params.sort !== defaultSort) sp.set("sort", params.sort);
+  if (params.dir && params.dir !== "desc") sp.set("dir", params.dir);
+  if (params.q) sp.set("q", params.q);
+  if (params.pos) sp.set("pos", params.pos);
+  if (params.season > 0) sp.set("season", String(params.season));
+  if (params.team) sp.set("team", params.team);
+  const qs = sp.toString();
+  return qs ? `razzle.lol/explore?${qs}` : "razzle.lol/explore";
+}
+
 async function fetchTopPlayers(params: {
   universe: string;
   sort: string;
   dir: string;
   q: string;
   pos: string;
+  season: number;
+  team: string;
 }): Promise<OgPlayer[]> {
   const apiOrigin = process.env.NEXT_PUBLIC_API_ORIGIN || "http://127.0.0.1:8000";
   let sortKey = params.sort;
@@ -39,8 +72,8 @@ async function fetchTopPlayers(params: {
   const body = {
     search: params.q,
     positions,
-    teams: [],
-    season: 0,
+    teams: parseTeams(params.team),
+    season: params.season > 0 ? params.season : 0,
     week: 0,
     sort_key: sortKey,
     sort_direction: params.dir === "asc" ? "asc" : "desc",
@@ -111,14 +144,15 @@ export async function GET(req: Request) {
   const dir = url.searchParams.get("dir") ?? "desc";
   const q = url.searchParams.get("q") ?? "";
   const pos = url.searchParams.get("pos") ?? "";
+  const team = url.searchParams.get("team") ?? "";
+  const season = Number(url.searchParams.get("season") ?? "0") || 0;
 
   const title = universe === "college" ? "College Screener" : "Dynasty Screener";
   const subtitle = buildSubtitle(universe, sort, pos, q);
   const colHeader = statLabel(universe, effectiveSortKey(universe, sort));
-  const exploreLink =
-    universe === "college" ? "razzle.lol/explore?universe=college" : "razzle.lol/explore";
+  const exploreLink = buildExplorePageLink({ universe, sort, dir, q, pos, season, team });
 
-  const players = await fetchTopPlayers({ universe, sort, dir, q, pos });
+  const players = await fetchTopPlayers({ universe, sort, dir, q, pos, season, team });
 
   return new ImageResponse(
     (

@@ -12,3 +12,4 @@
 126	0c46d46f	depth+voice+simplicity	keep	Lab	L4 Pro gate perks Launch-10 Bureau names	trust=T2,T6; PRO_UPGRADE_PERKS; pytest 4; build ok; L4 epic atom 3/3 complete
 HEAD
 127	f56fdbd8	depth+voice+simplicity	keep	Lab	L4 Pro gate perks PARITY catalog titles + Bureau-7	trust=T2,T6; launch10PerkLabels; bureau7PerkLabels; pytest 6; L4 epic atom 3/3 complete
+128	da33eafd	depth+voice+simplicity	keep	Explore	Explore OG season/team/universe query on share card	trust=T5,T6; buildExplorePageLink; curl college season 36951B; Explore L5 epic atom 1/3

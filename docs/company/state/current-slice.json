@@ -1,27 +1,27 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
-  "epic": "Lab L4 — Pro gates feel like upgrade, not error",
-  "slice_title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — Pro gate shows upgrade message, not blank",
-  "trust_pillars": ["T2", "T6"],
+  "big_problem": "Explore share cards don't mirror the screener URL — college toggles and filters get lost on export, so Reddit screenshots lie about the view.",
+  "epic": "Explore L5 — OG card matches screener query state",
+  "slice_title": "Explore OG — season/team/universe query on card + share URLs",
+  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "ACCEPTANCE Gate 1 — URL state preserved on share/export",
+  "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/lib/panel-upgrade-teaser.ts",
-    "apps/web/components/lab/ProUpgradeGate.tsx",
-    "apps/api/tests/test_panel_upgrade_teaser.py"
+    "apps/web/app/og/explore/route.tsx",
+    "apps/web/components/explore/ExploreShareButton.tsx",
+    "apps/web/components/explore/ExplorePageClient.tsx"
   ],
-  "max_files": 4,
-  "max_lines": 150,
+  "max_files": 3,
+  "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/explore-og-college.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?download=1&universe=college&sort=total_yards&dir=desc&pos=QB&season=2024'",
+    "file /tmp/explore-og-college.png"
   ],
   "out_of_scope": [
-    "OG routes",
-    "pricing page",
+    "Lab OG routes",
+    "formula column computation on OG",
     "NORTH_STAR/DESIGN/DECISIONS edits"
   ],
   "builder_mode": "composer-surgical",
