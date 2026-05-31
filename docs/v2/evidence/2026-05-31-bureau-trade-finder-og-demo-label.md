@@ -19,7 +19,7 @@ JWT_SECRET=test python3 -m pytest apps/api/tests -q
 
 curl -s -o /tmp/trade-finder-og.png -w '%{http_code} %{size_download}\n' \
   'http://127.0.0.1:3000/og/trade-finder?league=demo&user=demo&download=1'
-# 200 60325
+# 200 60325 (verified post-rebase 2026-05-31)
 
 file /tmp/trade-finder-og.png
 # PNG 1200×630
