@@ -377,9 +377,8 @@ export async function GET(
   const snapshotRows = snapshotParam ? decodeOgSnapshot(snapshotParam) : [];
   const snapshotHasRows =
     snapshotRows.length > 0 && snapshotRows.some((r) => r.name);
-
   let liveRows: OgRow[] = [];
-  if (apiPath) {
+  if (apiPath && !snapshotHasRows) {
     liveRows = await fetchLiveOgRows(req, slug, apiParams);
     if (liveRows.length === 0) {
       liveRows = await fetchPanelData(req, slug, apiPath, panel.api.method, apiParams);
