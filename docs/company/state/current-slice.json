@@ -5,16 +5,23 @@
   "slice_title": "Gamelog — export card when player loaded but weeks empty",
   "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with visible rows",
   "trust_pillars": ["T5", "T6"],
-  "allowed_paths": ["apps/web/components/lab/renderers/GamelogRenderer.tsx"],
+  "allowed_paths": [
+    "apps/web/components/lab/renderers/GamelogRenderer.tsx"
+  ],
   "max_files": 1,
   "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "curl -s -o /tmp/gamelog-og-empty.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'"
+    "JWT_SECRET=test pytest apps/api/tests -q",
+    "curl -s -o /tmp/gamelog-og-empty.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/gamelog?download=1&player_id=00-0036900'",
+    "file /tmp/gamelog-og-empty.png"
   ],
-  "out_of_scope": ["Other Lab panels this cycle"],
+  "out_of_scope": [
+    "Other Lab panels this cycle",
+    "NORTH_STAR/DESIGN/DECISIONS edits"
+  ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",

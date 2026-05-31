@@ -1,10 +1,10 @@
-cycle: 134
+cycle: 137
 last_board_cycle: 54
 focus_pillar: Lab
 focus_layer: L5
-next_slice: lab-efficiency-empty-export (empty OG epic 2/3)
-last_keep_cycle: 134
+next_slice: lab-efficiency-empty-export (epic atom 2/3)
+last_keep_cycle: 137
 last_commit: 202981c8f
+explore_l5_og_query_epic: complete
 lab_l5_empty_og_epic: active
-lab_l5_og_live_fetch_epic: complete
-lab_l4_pro_gate_error_epic: complete
+lab_l4_pro_gate_epic: complete
