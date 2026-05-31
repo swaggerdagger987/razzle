@@ -14,8 +14,8 @@
     {
       "id": "lab-og-live-sticker-prospects-weekly",
       "title": "Prospects + weekly OG Hawkeye LIVE sticker labels",
-      "status": "in_progress",
-      "merge_commit": null
+      "status": "done",
+      "merge_commit": "0666c631"
     },
     {
       "id": "lab-og-live-sticker-breakouts-buysell",
@@ -24,9 +24,9 @@
       "merge_commit": null
     }
   ],
-  "next_atom_id": "lab-og-live-sticker-prospects-weekly",
+  "next_atom_id": "lab-og-live-sticker-breakouts-buysell",
   "created_at": "2026-05-31T08:17:56Z",
-  "updated_at": "2026-05-31T08:17:56Z",
+  "updated_at": "2026-05-31T08:25:00Z",
   "completed_epics": [
     {
       "id": "lab-l5-launch10-og-live-extract",

@@ -1,6 +1,6 @@
 # Memory — Builder
 
-2026-05-31 | lab-og-live-sticker-prospects-weekly | da33eafd | RPS board + heatmap LIVE labels; curl both ≥51KB.
+2026-05-31 | lab-og-live-sticker-prospects-weekly | 0666c631 | RPS board + heatmap LIVE labels; curl both ≥51KB.
 
 2026-05-31 | lab-og-live-sticker-launch10 | 4e905360 | teal LIVE sticker on Launch-10 when showingLiveData.
 
