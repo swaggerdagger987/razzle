@@ -1,34 +1,28 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Lab Pro gates still feel like paywall errors — generic blur rows and no path back to the free screener break the conversion funnel.",
-  "epic": "Lab L4 — Pro gates feel like upgrade, not error",
-  "slice_title": "Pro gate perks list matches PARITY launch-10 + Bureau-7 names",
-  "parity_ref": "Lab L4 — pro-gate polish or formula extraction",
-  "depth_ref": "Lab L4",
-  "acceptance_ref": "ACCEPTANCE Gate 2 — Pro gate shows upgrade message, not blank",
-  "trust_pillars": ["T2", "T6"],
-  "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/lib/panel-upgrade-teaser.ts",
-    "apps/web/components/lab/ProUpgradeGate.tsx",
-    "apps/api/tests/test_panel_upgrade_teaser.py"
-  ],
-  "max_files": 4,
-  "max_lines": 150,
+  "atom_id": "explore-og-universe-query",
+  "big_problem": "Explore screener OG share cards hide the active universe and search query — Reddit screenshots look generic.",
+  "epic": "Explore L5 — OG cards show universe + search on exports",
+  "slice_title": "Explore OG — universe badge + search query sticker",
+  "parity_ref": "Explore L5 — shareable URL + watermarked export",
+  "depth_ref": "Explore L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/app/og/explore/route.tsx"],
+  "max_files": 1,
+  "max_lines": 120,
   "acceptance_commands": [
-    "JWT_SECRET=test-secret python3 -m pytest apps/api/tests/test_panel_upgrade_teaser.py -q",
-    "npm run build --workspace=apps/web"
+    "npm run build --workspace=apps/web 2>&1 | tail -3",
+    "curl -s -o /tmp/og-explore-q.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?download=1&universe=nfl&q=chase'",
+    "curl -s -o /tmp/og-explore-college.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/explore?download=1&universe=college'",
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q 2>&1 | tail -2"
   ],
-  "out_of_scope": [
-    "OG routes",
-    "pricing page",
-    "NORTH_STAR/DESIGN/DECISIONS edits"
-  ],
+  "out_of_scope": ["Lab OG routes", "auth/billing", "screener API schema"],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
     "builder": "SHIP",
-    "verdict": "SHIP"
+    "verdict": "SHIP 3/3"
   }
 }
