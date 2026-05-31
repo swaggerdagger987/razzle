@@ -28,15 +28,8 @@ const DEMO_NFL_ROWS: OgPlayer[] = [
     age: 22,
     fantasy_points_ppr: 312.4,
   },
-  { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 298.1, targets: 128 },
-  {
-    full_name: "Bijan Robinson",
-    position: "RB",
-    team: "ATL",
-    stat: 285.6,
-    age: 21,
-    fantasy_points_ppr: 285.6,
-  },
+  { full_name: "Ja'Marr Chase", position: "WR", team: "CIN", stat: 298.1, targets: 128, fantasy_points_ppr: 298.1 },
+  { full_name: "Bijan Robinson", position: "RB", team: "ATL", stat: 285.6, age: 21, fantasy_points_ppr: 285.6 },
   { full_name: "Brock Bowers", position: "TE", team: "LV", stat: 241.2 },
   { full_name: "Brian Thomas Jr.", position: "WR", team: "JAX", stat: 228.4 },
   { full_name: "Marvin Harrison Jr.", position: "WR", team: "ARI", stat: 215.8 },
@@ -250,11 +243,11 @@ export async function GET(req: Request) {
     : await fetchTopPlayers(req, { universe, sort: apiSort, dir, q, pos, season, teams });
   const isDemo = forceDemo || livePlayers.length === 0;
   const players = isDemo ? demoRowsForExplore(universe) : livePlayers;
-  const hasStaffMarginNotes =
-    !isDemo &&
-    players
-      .slice(0, TOP_MARGIN_NOTE_ROWS)
-      .some((p) => marginNoteForOgExploreRow(p, universe) != null);
+  const topMarginNotes = players
+    .slice(0, TOP_MARGIN_NOTE_ROWS)
+    .map((p) => marginNoteForOgExploreRow(p, universe));
+  const hasStaffMarginNotes = topMarginNotes.some((note) => note !== null);
+  const showLiveStaffSticker = !isDemo && hasStaffMarginNotes;
 
   return new ImageResponse(
     (
@@ -297,6 +290,24 @@ export async function GET(req: Request) {
               FORMULA SORT
             </div>
           ) : null}
+          {showLiveStaffSticker ? (
+            <div
+              style={{
+                display: "flex",
+                fontSize: 16,
+                fontWeight: 700,
+                fontFamily: "Caveat",
+                background: "#2ec4b6",
+                color: "#f7efe5",
+                padding: "4px 12px",
+                border: "3px solid #2d1f14",
+                borderRadius: 6,
+                boxShadow: "3px 3px 0 #2d1f14",
+              }}
+            >
+              LIVE · staff margins
+            </div>
+          ) : null}
           {isDemo ? (
             <div
               style={{
@@ -314,30 +325,15 @@ export async function GET(req: Request) {
               SAMPLE · not live data
             </div>
           ) : null}
-          {hasStaffMarginNotes ? (
-            <div
-              style={{
-                display: "flex",
-                fontSize: 16,
-                fontWeight: 700,
-                background: "#2ec4b6",
-                color: "#f7efe5",
-                padding: "4px 12px",
-                border: "3px solid #2d1f14",
-                borderRadius: 6,
-                boxShadow: "3px 3px 0 #2d1f14",
-              }}
-            >
-              LIVE · staff margin notes
-            </div>
-          ) : null}
         </div>
         <div style={{ fontSize: 22, color: "#5c4a3d", marginBottom: 20 }}>
           {isDemo
             ? `${subtitle} · SAMPLE rows — ${
                 universe === "college" ? "campus stats preview" : "not live nflverse"
-              }`
-            : subtitle}
+              }${hasStaffMarginNotes ? " · staff margin preview" : ""}`
+            : showLiveStaffSticker
+              ? `${subtitle} · live staff margins`
+              : subtitle}
         </div>
 
         {players.length > 0 ? (
@@ -371,7 +367,7 @@ export async function GET(req: Request) {
             </div>
             {players.map((p, i) => {
               const rowMarginNote =
-                i < TOP_MARGIN_NOTE_ROWS ? marginNoteForOgExploreRow(p, universe) : null;
+                i < TOP_MARGIN_NOTE_ROWS ? topMarginNotes[i] : null;
               const rowAgent = rowMarginNote ? AGENT_BY_ID[rowMarginNote.agentId] : null;
               return (
               <div

@@ -4,6 +4,9 @@
 2026-05-31 | bureau-h2h-og-exported-sticker | 5b60ea23d | PASS | pytest 6; curl h2h 76270B.
 2026-05-31 | lab-og-tolab-efficiency-position | 8327741 | PASS | pytest 7; curl efficiency 65774B.
 2026-05-31 | explore-og-margin-note-rows | c1a0bcaad | PASS | pytest 8; curl explore 73163B; web build exit 0.
+2026-05-31 | league-og-pressure-map-watermark | 73d87cf79 | PASS | pytest 1; curl 63349B.
+2026-05-31 | lab-og-tolab-breakouts-position | 1ebb9dc73 | PASS | pytest 10; curl breakouts 67718B.
+2026-05-31 | bureau-h2h-og-gate-c-snapshot | 4907c8327 | PASS | pytest 9; curl snapshot OG 76270B.
 2026-05-31 | lab-og-tolab-weekly-position | 9be64d109 | PASS | pytest 6; curl weekly 71581B.
 2026-05-31 | lab-weekly-empty-export | 088cebc07 | PASS | curl weekly snapshot 55675B; pytest 5; web build green.
 
@@ -97,3 +100,4 @@ explicit checks in the verification routine.
 2026-05-31 | Waiver Tendencies OG Gate C | 6dcb0f72 | PASS | curl waiver-tendencies 73121B PNG | keep | evidence/2026-05-31-league-waiver-tendencies-og-share.md
 2026-05-31 | Lab OG snapshot Gate C | 70af534a | PASS | curl prospects snap 45583B tradevalues 62488B | keep | evidence/2026-05-31-lab-og-snapshot-tradevalues-prospects.md
 2026-05-31 | Lab OG live sort Gate C | 7f78b631 | PASS | curl rankings 50251B tradevalues 51115B | keep | evidence/2026-05-31-lab-og-rankings-tradevalues-live-sort.md
+2026-05-31 | lab-og-percentiles-tolab Gate C | f6e0985f3 | PASS | curl percentiles 65326B | keep | evidence/2026-05-31-lab-og-percentiles-tolab.md
