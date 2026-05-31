@@ -1,29 +1,30 @@
 {
   "epic_status": "active",
-  "big_problem": "Bureau share cards still fall back to demo rows when edge OG cannot reach live league APIs.",
-  "epic_title": "League L5 — Bureau OG snapshots match in-product boards",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "big_problem": "Bureau roster depth is a Self-Scout hallway lane but has no screenshot-worthy export card for trade threads.",
+  "epic_title": "League L5 — Bureau roster depth export cards",
+  "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
   "atoms": [
     {
-      "id": "league-power-rankings-og-snapshot",
-      "title": "Power Rankings export encodes top-5 board rows in snapshot param",
+      "id": "league-roster-depth-og-route",
+      "title": "/og/roster-depth route with demo + snapshot decode",
       "status": "done",
-      "merge_commit": "26a22f69"
+      "merge_commit": "14a4401d"
     },
     {
-      "id": "league-monte-carlo-og-snapshot",
-      "title": "Monte Carlo export encodes playoff odds grid snapshot",
-      "status": "pending",
-      "merge_commit": null
+      "id": "league-roster-depth-share-bar",
+      "title": "BureauRosterDepth copy link + snapshot export bar",
+      "status": "done",
+      "merge_commit": "14a4401d"
     },
     {
-      "id": "league-trade-network-og-snapshot",
-      "title": "Trade Network export encodes partner lanes snapshot",
+      "id": "league-roster-depth-og-live-fetch",
+      "title": "OG route live API fetch when league+user params set",
       "status": "pending",
       "merge_commit": null
     }
   ],
-  "next_atom_id": "league-monte-carlo-og-snapshot",
-  "updated_at": "2026-05-31T06:45:00Z"
+  "next_atom_id": "league-roster-depth-og-live-fetch",
+  "created_at": "2026-05-31T16:00:00Z",
+  "updated_at": "2026-05-31T16:30:00Z"
 }

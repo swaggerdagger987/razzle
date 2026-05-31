@@ -1,25 +1,29 @@
 {
   "date": "2026-05-31",
-  "atom_id": "league-power-rankings-og-snapshot",
-  "big_problem": "Bureau share cards still fall back to demo rows when edge OG cannot reach live league APIs.",
-  "epic": "League L5 — Bureau OG snapshots match in-product boards",
-  "slice_title": "Power Rankings export encodes top-5 board rows in snapshot param",
-  "parity_ref": "Explore L5 — Bureau H2H export or Lab panel OG data rows",
+  "atom_id": "league-roster-depth-og-route",
+  "big_problem": "Bureau roster depth is a Self-Scout hallway lane but has no screenshot-worthy export card for trade threads.",
+  "epic": "League L5 — Bureau roster depth export cards",
+  "slice_title": "Roster depth OG card with demo rows + in-panel snapshot encode",
+  "parity_ref": "League L5 — Bureau export / hallway",
   "depth_ref": "League L5",
-  "acceptance_ref": "ACCEPTANCE Gate 6 — OG PNG ≥40KB with real rows",
-  "trust_pillars": ["T5", "T6"],
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/roster-depth PNG ≥40KB",
+  "trust_pillars": ["T2", "T5", "T6"],
   "allowed_paths": [
-    "apps/web/lib/bureau-power-rankings-og-snapshot.ts",
-    "apps/web/components/league/BureauPowerRankingsShareBar.tsx",
-    "apps/web/components/league/BureauPowerRankings.tsx",
-    "apps/web/app/og/power-rankings/route.tsx"
+    "apps/web/lib/bureau-roster-depth-og-snapshot.ts",
+    "apps/web/app/og/roster-depth/route.tsx",
+    "apps/web/components/league/BureauRosterDepth.tsx"
   ],
-  "max_files": 4,
-  "max_lines": 120,
+  "max_files": 3,
+  "max_lines": 280,
   "acceptance_commands": [
+    "JWT_SECRET=test pytest apps/api/tests -q",
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "npm run start --workspace=apps/web & sleep 8 && curl -s -o /tmp/og-roster-depth.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/roster-depth?download=1' && file /tmp/og-roster-depth.png && kill %1 2>/dev/null || true"
   ],
-  "out_of_scope": ["Monte Carlo OG", "API schema changes", "NORTH_STAR edits"],
+  "out_of_scope": [
+    "Separate ShareBar component file",
+    "NORTH_STAR / DESIGN edits",
+    "API schema changes"
+  ],
   "builder_mode": "composer-surgical"
 }

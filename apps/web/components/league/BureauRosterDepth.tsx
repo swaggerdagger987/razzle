@@ -5,6 +5,12 @@ import { toRoom } from "@razzle/hallway";
 import { PositionPill } from "@razzle/ui";
 import Link from "next/link";
 import type { Route } from "next";
+import { useCallback, useMemo, useState } from "react";
+import {
+  buildRosterDepthOgSnapshot,
+  encodeBureauRosterDepthOgSnapshot,
+} from "@/lib/bureau-roster-depth-og-snapshot";
+import { getSleeperUser } from "@/lib/sleeper";
 import { usePlayerSheet } from "@/lib/player-sheet-context";
 
 interface Props {
@@ -38,10 +44,34 @@ export function BureauRosterDepth({ data, leagueId }: Props) {
   const { openPlayer } = usePlayerSheet();
   const hawkeye = AGENT_BY_ID.hawkeye;
   const dolphin = AGENT_BY_ID.dolphin;
+  const [copied, setCopied] = useState(false);
+  const sleeperUser = getSleeperUser();
+  const userId = sleeperUser?.user_id ?? "";
 
   const depth = (data.depth as Record<string, PosBlock>) ?? {};
   const totalPlayers = Number(data.total_players ?? 0);
   const starters = (data.starters as string[]) ?? [];
+
+  const ogSnapshot = useMemo(
+    () => buildRosterDepthOgSnapshot(depth, { totalPlayers }),
+    [depth, totalPlayers],
+  );
+  const snapshotParam = encodeBureauRosterDepthOgSnapshot(ogSnapshot);
+  const depthPath = `/league/${leagueId}/roster-depth`;
+  const ogParams = new URLSearchParams({ league: leagueId, download: "1" });
+  if (userId) ogParams.set("user", userId);
+  if (snapshotParam) ogParams.set("snapshot", snapshotParam);
+
+  const copyDepthLink = useCallback(async () => {
+    const url = typeof window !== "undefined" ? `${window.location.origin}${depthPath}` : depthPath;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }, [depthPath]);
 
   const weakest = POS_ORDER.reduce(
     (min, pos) => ((depth[pos]?.count ?? 0) < (depth[min]?.count ?? 0) ? pos : min),
@@ -167,6 +197,21 @@ export function BureauRosterDepth({ data, leagueId }: Props) {
         >
           ask {hawkeye.name} in film room →
         </Link>
+        {leagueId && userId ? (
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <button type="button" className="btn-chunky text-xs" onClick={() => void copyDepthLink()}>
+              {copied ? "copied!" : "copy depth link"}
+            </button>
+            <a
+              href={`/og/roster-depth?${ogParams.toString()}`}
+              download="razzle-roster-depth.png"
+              className="btn-chunky active text-xs"
+              style={{ background: "var(--orange)", color: "var(--text-on-accent)" }}
+            >
+              export card
+            </a>
+          </div>
+        ) : null}
         <Link
           href={`/league/${leagueId}/self-scout` as Route}
           className="ml-3 inline-block text-sm text-ink-medium underline"
