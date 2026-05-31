@@ -1,5 +1,6 @@
 {
   "date": "2026-05-31",
+<<<<<<< HEAD
   "atom_id": "league-strength-of-schedule-tab",
   "big_problem": "Schedule tab still hidden while bureau API returns live SOS verdict for the signed-in roster.",
   "epic": "League L5 — Unhide remaining Bureau tabs with screenshot-ready renderers",
@@ -15,10 +16,30 @@
   ],
   "max_files": 3,
   "max_lines": 300,
+=======
+  "big_problem": "Bureau H2H export snapshot must decode on OG route (encode uses m-key, inline decode used t-key).",
+  "epic": "League L5 — Bureau H2H export parity",
+  "atom_id": "bureau-h2h-og-snapshot-decode",
+  "slice_title": "H2H OG wire shared snapshot decode",
+  "parity_ref": "League L5 — Bureau H2H export",
+  "depth_ref": "League L5",
+  "acceptance_ref": "FACTORY-DOD Gate C",
+  "trust_pillars": ["T1", "T5", "T6"],
+  "allowed_paths": [
+    "apps/web/lib/bureau-h2h-og-snapshot.ts",
+    "apps/web/app/og/head-to-head/route.tsx"
+  ],
+  "max_files": 2,
+  "max_lines": 100,
+>>>>>>> origin/razzle-v2-redesign
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
   ],
+<<<<<<< HEAD
   "out_of_scope": ["OG route", "API changes", "NORTH_STAR / DESIGN edits"],
+=======
+  "out_of_scope": ["Bureau UI", "NORTH_STAR / DESIGN"],
+>>>>>>> origin/razzle-v2-redesign
   "builder_mode": "composer-surgical"
 }
