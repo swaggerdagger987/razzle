@@ -15,6 +15,12 @@ Opus updates this on odd cycles. Link real threads — no invented research.
 - **Council cycle:**
 ```
 
+## 2026-05-31 — Workday cycle 1 atom 3 (player-scoped OG export)
+
+1. **Player context must ride on the export URL** — dynasty comps and gamelog screenshots are about *this* asset; `player_id` on the OG link matches in-panel selection.
+2. **Default to Chase when no pick** — same gsis_id as OG route default keeps cold previews screenshot-ready without terminal.db.
+3. Standing: panel footer export beats orphan `/og/*` bookmarks.
+
 ## 2026-05-31 — Workday cycle 1 (Lab OG export parity)
 
 1. **Export must live on the panel** — users screenshot from the tool they are in; buried OG routes without an "export card" link do not travel.

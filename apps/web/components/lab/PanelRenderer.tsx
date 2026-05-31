@@ -26,6 +26,8 @@ import { BuySellRenderer } from "./renderers/BuySellRenderer";
 import { DynastyDashboardRenderer } from "./renderers/DynastyDashboardRenderer";
 import { TierRenderer } from "./renderers/TierRenderer";
 import { ProUpgradeGate } from "./ProUpgradeGate";
+import { useSearchParams } from "next/navigation";
+import { DEFAULT_LAB_OG_PLAYER_ID, LabOgExportLink } from "./LabOgExportLink";
 
 interface Props {
   panel: PanelDefinition;
@@ -143,5 +145,27 @@ export function PanelRenderer({ panel }: Props) {
     return <DynastyDashboardRenderer panel={panel} />;
   }
 
+  if (panel.slug === "dynasty-comps") {
+    return <DynastyCompsPanel panel={panel} />;
+  }
+
   return <GenericPanelRenderer panel={panel} />;
+}
+
+function DynastyCompsPanel({ panel }: Props) {
+  const searchParams = useSearchParams();
+  const playerId = searchParams.get("id") ?? DEFAULT_LAB_OG_PLAYER_ID;
+
+  return (
+    <div>
+      <GenericPanelRenderer panel={panel} />
+      <footer className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink pt-4">
+        <LabOgExportLink
+          slug="dynasty-comps"
+          downloadName="razzle-dynasty-comps.png"
+          playerId={playerId}
+        />
+      </footer>
+    </div>
+  );
 }

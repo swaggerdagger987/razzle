@@ -17,7 +17,7 @@
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
     "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
-    "curl -s -o /tmp/og-dash-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1&snapshot=eyJuIjoiTGFkZCBNY0NvbmtleSIsInAiOiJXUiIsInQiOiJMQUMiLCJzIjoxMi40LCJzbCI6IkNoZyJ9'"
+    "curl -s -o /tmp/og-dash-snap.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/dashboard?download=1&snapshot=...'"
   ],
   "out_of_scope": [
     "Wire all launch-10 renderers (atom 3)",
