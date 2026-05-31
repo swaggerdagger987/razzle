@@ -397,27 +397,30 @@ function decodeOgSnapshot(param: string): OgSnapshotPayload {
   try {
     const b64 = param.replace(/-/g, "+").replace(/_/g, "/");
     const json = atob(b64);
-    const parsed = JSON.parse(json) as
-      | CompactOgRow[]
-      | SnapshotPayloadLegacy
-      | { v?: number; pi?: string; pn?: string; rows?: CompactOgRow[] };
+    const parsed: unknown = JSON.parse(json);
     if (Array.isArray(parsed)) {
-      return { rows: compactRowsToOgRows(parsed) };
+      return { rows: compactRowsToOgRows(parsed as CompactOgRow[]) };
     }
-    if (parsed && typeof parsed === "object" && Array.isArray(parsed.rows)) {
-      return {
-        rows: compactRowsToOgRows(parsed.rows),
-        playerId: typeof parsed.pi === "string" ? parsed.pi : undefined,
-        playerName: typeof parsed.pn === "string" ? parsed.pn : undefined,
-      };
+    if (parsed && typeof parsed === "object" && "rows" in parsed) {
+      const v1 = parsed as { pi?: string; pn?: string; rows?: CompactOgRow[] };
+      if (Array.isArray(v1.rows)) {
+        return {
+          rows: compactRowsToOgRows(v1.rows),
+          playerId: typeof v1.pi === "string" ? v1.pi : undefined,
+          playerName: typeof v1.pn === "string" ? v1.pn : undefined,
+        };
+      }
     }
-    if (parsed && typeof parsed === "object" && Array.isArray(parsed.r)) {
-      const pid = typeof parsed.pid === "string" ? parsed.pid : undefined;
-      return {
-        rows: compactRowsToOgRows(parsed.r),
-        exportPlayerId: pid,
-        playerId: pid,
-      };
+    if (parsed && typeof parsed === "object" && "r" in parsed) {
+      const legacy = parsed as SnapshotPayloadLegacy;
+      if (Array.isArray(legacy.r)) {
+        const pid = typeof legacy.pid === "string" ? legacy.pid : undefined;
+        return {
+          rows: compactRowsToOgRows(legacy.r),
+          exportPlayerId: pid,
+          playerId: pid,
+        };
+      }
     }
     return { rows: [] };
   } catch {
