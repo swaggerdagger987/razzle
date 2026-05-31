@@ -133,6 +133,42 @@
   image-rendering: pixelated;
 }
 
+.lab-sidebar-agent-group {
+  margin-bottom: 4px;
+}
+
+.lab-sidebar-agent-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px 2px 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-light);
+}
+
+.lab-sidebar-agent-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lab-sidebar.collapsed .lab-sidebar-agent-heading {
+  justify-content: center;
+  padding: 6px 0 2px;
+}
+
+.lab-sidebar.collapsed .lab-sidebar-agent-name {
+  display: none;
+}
+
+.lab-sidebar.collapsed .lab-sidebar-agent-group .lab-sidebar-item .lab-sidebar-agent {
+  display: none;
+}
+
 .lab-sidebar-item:hover {
   background: var(--bg-warm);
   color: var(--ink);
