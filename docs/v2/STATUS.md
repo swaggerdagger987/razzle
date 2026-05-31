@@ -1,6 +1,6 @@
 # Razzle V2 — Operational Status
 
-**Last updated:** 2026-05-31 (factory cycle 115 — Lab L4 pro-gate hallway + teasers)  
+**Last updated:** 2026-05-31 (factory cycle 116 — Lab L4 pro-gate hallway + teasers)
 **Branch context:** Active development on `razzle-v2-redesign`
 
 This is the **live status summary**. For operating procedure, read
@@ -15,7 +15,7 @@ From `LOOP-STATE.md`:
 
 | Field | Value |
 |-------|-------|
-| Cycle | 115 |
+| Cycle | 116 |
 | Last board | 54 |
 | Focus pillar | Lab |
 | Focus layer | L4 |
