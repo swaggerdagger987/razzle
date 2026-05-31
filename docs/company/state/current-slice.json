@@ -1,35 +1,20 @@
 {
   "date": "2026-05-31",
-  "big_problem": "Five Bureau tabs still hide behind HIDDEN_BUREAU_SLUGS while APIs return live league rows — League L5 depth is invisible in-product (PARITY League L5).",
-  "epic": "League L5 — Unhide Bureau tabs with screenshot-ready renderers",
-  "atom_id": "league-roster-depth-tab",
-  "slice_title": "Unhide Roster Depth tab with Dolphin renderer",
+  "big_problem": "Every Bureau behavioral tab must travel in group chats like Explore — copy link plus export on the same row.",
+  "epic": "League L5 — Bureau behavioral share parity",
+  "slice_title": "Trade Network copy link beside export card",
   "parity_ref": "League L5 — hidden Bureau renderers or watermarked export",
   "depth_ref": "League L5",
-  "acceptance_ref": "FACTORY-DOD Gate C3 (in-product Bureau tab with live rows)",
-  "trust_pillars": ["T2", "T5", "T6"],
-  "allowed_paths": [
-    "apps/web/lib/bureau-features.ts",
-    "apps/web/components/league/BureauRosterDepth.tsx",
-    "apps/web/components/league/BureauFeatureBody.tsx"
-  ],
-  "max_files": 3,
-  "max_lines": 300,
+  "acceptance_ref": "FACTORY-DOD Gate C — /og/trade-network PNG ≥40KB",
+  "trust_pillars": ["T5", "T6"],
+  "allowed_paths": ["apps/web/components/league/BureauTradeNetwork.tsx"],
+  "max_files": 1,
+  "max_lines": 40,
   "acceptance_commands": [
     "npm run build --workspace=apps/web",
-    "JWT_SECRET=test python3 -m pytest apps/api/tests -q"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests -q",
+    "curl -s -o /tmp/og-trade-network.png -w '%{http_code} %{size_download}\\n' 'http://localhost:3000/og/trade-network?league=test&download=1'"
   ],
-  "out_of_scope": [
-    "OG share card for roster-depth",
-    "build-profiles tab",
-    "API schema changes",
-    "NORTH_STAR edits"
-  ],
-  "builder_mode": "composer-surgical",
-  "votes": {
-    "product_strategist": "SHIP",
-    "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  }
+  "out_of_scope": ["New OG route", "API changes", "auth/billing"],
+  "builder_mode": "composer-surgical"
 }
