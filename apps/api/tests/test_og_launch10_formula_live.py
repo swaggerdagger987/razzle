@@ -40,12 +40,22 @@ def test_buysell_live_extract_prefers_formula_score_and_lanes():
     assert 'toRow(r, "Sell")' in source
 
 
+def test_tradevalues_live_extract_prefers_formula_score():
+    source = ROUTE_TS.read_text(encoding="utf-8")
+    assert 'slug === "tradevalues"' in source
+    assert "tradeValueStatKeys" in source
+    idx = source.index("tradeValueStatKeys")
+    block = source[idx : idx + 280]
+    assert '"formula_score"' in block
+    assert block.index('"formula_score"') < block.index('"trade_value"')
+
+
 def test_efficiency_live_extract_prefers_formula_score():
     source = ROUTE_TS.read_text(encoding="utf-8")
     assert 'slug === "efficiency"' in source
     assert "efficiencyStatKeys" in source
     idx = source.index("efficiencyStatKeys")
-    block = source[idx : idx + 280]
+    block = source[idx : idx + 320]
     assert '"formula_score"' in block
     assert block.index('"formula_score"') < block.index('"ppo"')
 
