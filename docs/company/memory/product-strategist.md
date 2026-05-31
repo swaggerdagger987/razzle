@@ -4,6 +4,9 @@
 
 2026-05-31 | lab-gamelog-empty-weeks-export | ac0280a20 | SHIP | Lab L5 empty OG epic atom 1/3; gamelog zero-week export for Reddit tape.
 
+2026-05-31 | room-briefing-watermark | eca00c3f0 | SHIP | Room GTM epic closed; briefing screenshots deep-link to Situation Room.
+
+
 2026-05-31 | explore-og-nfl-universe-default | c7b50c707 | SHIP | Dynasty share links cleaner; college stays explicit.
 
 2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | SAMPLE stickers mirror LIVE dynasty/RBS/value curve; T1/T5/T6.
