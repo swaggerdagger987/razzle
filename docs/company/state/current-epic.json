@@ -1,38 +1,38 @@
 {
-  "big_problem": "Bureau H2H OG cards don't signal live Sleeper rivalry vs sample preview — Reddit can't tell real league exports from demo.",
-  "epic_title": "League L5 — Bureau H2H OG live vs sample stickers",
-  "parity_ref": "Explore L5 — Bureau H2H export",
-  "depth_ref": "League L5",
+  "epic_status": "active",
+  "big_problem": "Lab sidebar still lists Staff Picks as a flat catalog — agents own panels in headers but not in navigation, so the hallway band is invisible until you open a panel.",
+  "epic_title": "Lab L2 — sidebar groups launch-10 by agent owner",
+  "parity_ref": "docs/v2/AGENTS.md — LabSidebar group by agent",
+  "depth_ref": "Lab L2",
   "atoms": [
     {
-      "id": "bureau-h2h-og-live-sticker",
-      "title": "H2H OG — teal LIVE sticker when league API returns you/them",
-      "status": "done",
-      "merge_commit": "08e1824c"
+      "id": "lab-sidebar-staff-picks-by-agent",
+      "title": "Staff Picks grouped under agent owner headers in LabSidebar",
+      "status": "in_progress",
+      "merge_commit": null
     },
     {
-      "id": "bureau-h2h-og-sample-sticker",
-      "title": "H2H OG — terracotta SAMPLE sticker on demo rivalry path",
-      "status": "done",
-      "merge_commit": "7b9639d9"
-    },
-    {
-      "id": "bureau-h2h-og-force-demo-qa",
-      "title": "H2H OG — force_demo QA param for Gate C SAMPLE curl",
-      "status": "done",
-      "merge_commit": "b4d91213"
+      "id": "lab-sidebar-search-agent-labels",
+      "title": "Search results show agent owner in sidebar item title",
+      "status": "pending",
+      "merge_commit": null
     }
   ],
-  "next_atom_id": null,
-  "epic_status": "complete",
-  "created_at": "2026-05-31T08:20:00Z",
-  "updated_at": "2026-05-31T08:35:00Z",
+  "next_atom_id": "lab-sidebar-staff-picks-by-agent",
+  "created_at": "2026-05-31T08:30:00Z",
+  "updated_at": "2026-05-31T08:40:00Z",
   "completed_epics": [
     {
       "id": "bureau-h2h-og-live-vs-sample-stickers",
       "status": "complete",
       "last_atom": "bureau-h2h-og-force-demo-qa",
       "merge_commit": "b4d91213"
+    },
+    {
+      "id": "lab-l5-launch10-og-live-extract",
+      "status": "complete",
+      "last_atom": "lab-og-dynasty-comps-pro-teaser",
+      "merge_commit": "26a590c9"
     },
     {
       "id": "lab-l5-og-live-rows-launch10",
