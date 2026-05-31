@@ -1,36 +1,35 @@
 {
   "date": "2026-05-31",
-  "atom_id": "lab-og-career-compare-live",
-  "big_problem": "Pro profile Lab OG cards still fall back to generic demo rows when the percentile API returns real peer bars.",
-  "epic": "Lab L5 — pro profile OG live parity (atom 3/4)",
-  "slice_title": "Career compare OG multi-player overlay rows",
-  "parity_ref": "Lab panel OG data rows",
+  "atom_id": "lab-gtm-share-bar-complete",
+  "big_problem": "Lab panel exports hide behind a single underline link — GTM threads need Explore/Bureau-style copy, preview, and export so screenshots match the rows on screen.",
+  "epic": "Lab L5 — GTM panel share bar parity",
+  "slice_title": "Launch-10 LabPanelShareBar — rankings through dashboard GTM export",
+  "parity_ref": "Explore L5 — Lab panel OG data rows",
   "depth_ref": "Lab L5",
-  "acceptance_ref": "FACTORY-DOD Gate C2/C3",
+  "acceptance_ref": "FACTORY-DOD Gate C — OG PNG ≥40KB with snapshot or force_demo",
   "trust_pillars": ["T5", "T6"],
   "allowed_paths": [
-    "apps/web/app/og/[panel]/route.tsx",
-    "apps/api/tests/test_lab_og_career_compare_live.py"
+    "apps/web/components/lab/LabPanelShareBar.tsx",
+    "apps/web/components/lab/LabOgExportLink.tsx",
+    "apps/api/tests/test_lab_panel_share_bar.py"
   ],
-  "max_files": 2,
-  "max_lines": 180,
+  "max_files": 8,
+  "max_lines": 300,
   "acceptance_commands": [
-    "python3 -m pytest apps/api/tests/test_lab_og_career_compare_live.py -q --noconftest",
-    "npm run build --workspace=apps/web"
+    "JWT_SECRET=test python3 -m pytest apps/api/tests/test_lab_panel_share_bar.py -q --noconftest",
+    "npm run build --workspace=apps/web",
+    "curl -s -o /tmp/eff-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/efficiency?download=1&force_demo=1&position=WR'",
+    "curl -s -o /tmp/tv-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/tradevalues?download=1&force_demo=1&position=WR'",
+    "curl -s -o /tmp/dash-og.png -w '%{http_code} %{size_download}\\n' 'http://127.0.0.1:3000/og/dashboard?download=1&force_demo=1'"
   ],
   "out_of_scope": [
-    "percentiles toLab atom",
-    "NORTH_STAR/DESIGN/DECISIONS",
-    "new npm deps"
+    "NORTH_STAR/DESIGN/DECISIONS edits",
+    "LabSidebar staff grouping (separate epic)"
   ],
   "builder_mode": "composer-surgical",
   "votes": {
     "product_strategist": "SHIP",
     "engineering_architect": "SHIP",
-    "builder": "SHIP",
-    "verdict": "SHIP 3/3"
-  },
-  "content_commit": "9d19930cf",
-  "reality": "PASS",
-  "status": "done"
+    "builder": "SHIP"
+  }
 }

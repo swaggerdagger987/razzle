@@ -1,3 +1,7 @@
+"use client";
+
+import { LabPanelShareBar } from "./LabPanelShareBar";
+
 /** Ja'Marr Chase gsis_id — matches DEFAULT_OG_PLAYER_ID in /og/[panel]/route.tsx */
 export const DEFAULT_LAB_OG_PLAYER_ID = "00-0036900";
 
@@ -47,12 +51,26 @@ export function encodeOgSnapshot(
   return undefined;
 }
 
+const LAUNCH10_COPY_LABELS: Record<string, string> = {
+  efficiency: "copy efficiency link",
+  aging: "copy aging link",
+  prospects: "copy prospects link",
+  tradevalues: "copy trade values link",
+  dashboard: "copy dashboard link",
+  "dynasty-comps": "copy dynasty comps link",
+};
+
+function resolveCopyLabel(slug: string, label?: string): string {
+  if (label?.toLowerCase().includes("copy")) return label;
+  return LAUNCH10_COPY_LABELS[slug] ?? `copy ${slug.replace(/-/g, " ")} link`;
+}
+
+/** @deprecated Prefer LabPanelShareBar in new footers; this wrapper keeps Launch-10 renderers on GTM share bar. */
 export function LabOgExportLink({
   slug,
   downloadName,
-  label = "export card",
+  label,
   playerId,
-  playerName,
   position,
   snapshotRows,
 }: {
@@ -68,23 +86,14 @@ export function LabOgExportLink({
   /** Top rows from the in-product panel — OG card matches what the user sees. */
   snapshotRows?: OgSnapshotRow[];
 }) {
-  const file = downloadName ?? `razzle-${slug}.png`;
-  const params = new URLSearchParams({ download: "1" });
-  const isPlayerScoped = (PLAYER_SCOPED_OG_SLUGS as readonly string[]).includes(slug);
-  const resolvedPlayerId =
-    playerId?.trim() || (isPlayerScoped ? DEFAULT_LAB_OG_PLAYER_ID : undefined);
-  if (resolvedPlayerId) params.set("player_id", resolvedPlayerId);
-  if (playerName?.trim()) params.set("name", playerName.trim());
-  if (position) params.set("position", position);
-  const snapshot = snapshotRows?.length ? encodeOgSnapshot(snapshotRows, resolvedPlayerId) : undefined;
-  if (snapshot) params.set("snapshot", snapshot);
   return (
-    <a
-      href={`/og/${slug}?${params.toString()}`}
-      className="text-sm text-ink-medium underline"
-      download={file}
-    >
-      {label}
-    </a>
+    <LabPanelShareBar
+      slug={slug}
+      downloadName={downloadName}
+      snapshotRows={snapshotRows}
+      position={position}
+      playerId={playerId}
+      copyLabel={resolveCopyLabel(slug, label)}
+    />
   );
 }
