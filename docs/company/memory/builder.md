@@ -1,11 +1,17 @@
 # Memory — Builder
 
-2026-05-31 | lab-l4-pro-gate-error-remaining | f8ab89f25 | ProGate on all launch-10 402 renderers; pytest 9; L4 epic done.
-2026-05-31 | lab-og-sample-labels-rankings-tv-breakouts | 54443bc8 | SHIP | launch10DemoStickerLabel 3 slugs; curl triple PASS.
+2026-05-31 | lab-og-live-sticker-gamelog-efficiency | 9ef503929 | SHIP | gamelog LIVE Wk tape vocabulary (2 lines).
+
+2026-05-31 | bureau-self-scout-sharebar-snapshot | 709660c | keep | ShareBar + snapshot lib + OG decode.
+
+2026-05-31 | FROM PANEL evidence | 164159413 | test_og_from_panel_sticker 2 tests; curl 56682B/58270B.
+
+2026-05-31 | FROM PANEL OG sticker | 7d49e4f0c | route.tsx + pytest; snapshot curl ≥40KB.
 
 2026-05-31 | lab-l4-pro-gate-error-surface | 5721ee33 | ProGateFromPanelError on BreakoutsRenderer; pytest 7.
 
 2026-05-31 | lab-og-live-sticker-rankings-breakouts-tv | ad24a219 | SHIP | launch10LiveStickerLabel 3 slugs.
+2026-05-31 | lab-sidebar-search-agent-labels | e75ec714 | keep | showOwnerInTitle prefixes search hits with agent name.
 
 2026-05-31 | explore OG universe export | resolveApiOrigin + explicit copy URL + apiSortKey | SHIP | keep | 3 files | curl nfl/college ≥34KB
 

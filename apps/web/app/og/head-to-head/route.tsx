@@ -100,6 +100,29 @@ export async function GET(req: Request) {
   const want = (data.trade_fit?.you_could_target ?? []).join(", ") || "—";
   const hasData = Boolean(you && them);
   const themSummary = them!;
+  const opponentTeamLabel = hasData ? teamLabel(themSummary.team) : "";
+  const subtitleSuffix = isSnapshot
+    ? opponentTeamLabel
+      ? ` · vs ${opponentTeamLabel} (exported)`
+      : " · exported matchup"
+    : isLive
+      ? opponentTeamLabel
+        ? ` · vs ${opponentTeamLabel} (live)`
+        : " · live league data"
+      : hasLeagueParams && isDemo
+        ? opponentTeamLabel
+          ? ` · vs ${opponentTeamLabel} (sample)`
+          : " · sample preview (API unavailable)"
+        : opponentTeamLabel
+          ? ` · vs ${opponentTeamLabel} (sample)`
+          : " · sample preview";
+  const leagueDeepLink = league
+    ? opponent
+      ? `/league/${league}/head-to-head?user=${encodeURIComponent(user)}&opponent=${encodeURIComponent(opponent)}`
+      : user
+        ? `/league/${league}/head-to-head?user=${encodeURIComponent(user)}`
+        : `/league/${league}/head-to-head`
+    : "";
   const atlasRoomPath = hasData
     ? toRoom({
         agentId: "atlas",
@@ -151,15 +174,7 @@ export async function GET(req: Request) {
           Head-to-Head
         </div>
         <div style={{ display: "flex", fontSize: 20, color: "#5c4a3d", marginBottom: 18 }}>
-          {`rivalry dossier — your roster vs one leaguemate${
-            isSnapshot
-              ? " · exported matchup"
-              : isLive
-                ? " · live league data"
-                : hasLeagueParams && isDemo
-                  ? " · sample preview (API unavailable)"
-                  : " · sample preview"
-          }`}
+          {`rivalry dossier — your roster vs one leaguemate${subtitleSuffix}`}
         </div>
 
         {isLive ? (
@@ -313,8 +328,15 @@ export async function GET(req: Request) {
             fontSize: 20,
           }}
         >
-          <div style={{ display: "flex", fontWeight: 700 }}>
-            razzle.lol/league{league ? `/${league}` : ""}/head-to-head
+          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <div style={{ display: "flex", fontWeight: 700 }}>
+              razzle.lol{leagueDeepLink || "/league/head-to-head"}
+            </div>
+            {opponentTeamLabel ? (
+              <div style={{ display: "flex", fontSize: 16, fontFamily: "Caveat" }}>
+                {`vs ${opponentTeamLabel}`}
+              </div>
+            ) : null}
           </div>
           <div style={{ display: "flex", fontFamily: "Caveat", fontSize: 30 }}>
             {`made with 🐯 razzle.lol${isDownload ? " · export" : ""}`}
